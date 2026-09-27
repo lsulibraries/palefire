@@ -143,3 +143,12 @@ user:
     component:
       css/components/user.css:
         weight: -10
+
+fontawesome:
+  version: 5.15.4
+  css:
+    theme:
+      libraries/fontawesome-pro/css/fontawesome.min.css: { minified: true }
+      libraries/fontawesome-pro/css/duotone.min.css: { minified: true }
+      libraries/fontawesome-pro/css/solid.min.css: { minified: true }
+      libraries/fontawesome-pro/css/brands.min.css: { minified: true }
