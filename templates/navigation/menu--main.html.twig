@@ -1,0 +1,68 @@
+{#
+/**
+ * @file
+ * Primary menu (machine name "main") as a Bootstrap 5 navbar.
+ *
+ * Parent items that have children render as a <button> that only opens the
+ * dropdown (disclosure pattern); clicking it never navigates. Bootstrap
+ * manages aria-expanded, Escape, and arrow keys.
+ *
+ * If the parent link points to a real page, that page is kept reachable as
+ * the first dropdown item ("@title overview"). To make a parent a pure label,
+ * set its link to <nolink> or <button> in the menu UI; no overview is added.
+ *
+ * - Only two levels render (set the menu block's depth to 2). For children to
+ *   appear, tick "Show as expanded" on the parent links or enable
+ *   "Expand all menu links" in the block settings.
+ * - core/drupal.active-link adds .is-active and aria-current="page".
+ */
+#}
+{% import _self as menus %}
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level, parent) %}
+  {% import _self as menus %}
+  {% if items %}
+    {% if menu_level == 0 %}
+      <ul{{ attributes.addClass('navbar-nav', 'pf-primary-nav') }}>
+    {% else %}
+      <ul class="dropdown-menu pf-primary-nav__submenu">
+      {# {% if parent %}
+        <li>
+          {{ link('@title overview'|t({'@title': parent.title}), parent.url, { 'class': ['dropdown-item', 'pf-primary-nav__overview'] }) }}
+        </li>
+        <li><hr class="dropdown-divider"></li>
+      {% endif %} #}
+    {% endif %}
+    {% for item in items %}
+      {% if menu_level == 0 %}
+        {% set has_children = item.below is not empty %}
+        {%
+          set classes = [
+            'nav-item',
+            has_children ? 'dropdown pf-primary-nav__parent',
+            item.in_active_trail ? 'pf-active-trail',
+          ]
+        %}
+        {% set link_classes = item.in_active_trail ? ['nav-link', 'pf-active-trail'] : ['nav-link'] %}
+        <li{{ item.attributes.addClass(classes) }}>
+          {% if has_children %}
+            {% set is_placeholder = item.url.routed and item.url.routeName in ['<nolink>', '<button>'] %}
+            <button type="button" class="{{ link_classes|merge(['dropdown-toggle'])|join(' ') }}"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              {{ item.title }}
+            </button>
+            {{ menus.menu_links(item.below, attributes, menu_level + 1, is_placeholder ? null : item) }}
+          {% else %}
+            {{ link(item.title, item.url, { 'class': link_classes }) }}
+          {% endif %}
+        </li>
+      {% else %}
+        <li{{ item.attributes }}>
+          {{ link(item.title, item.url, { 'class': ['dropdown-item'] }) }}
+        </li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

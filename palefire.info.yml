@@ -1,0 +1,49 @@
+name: Palefire
+type: theme
+description: 'Bootstrap 5.3 theme for LSU Libraries with modular, re-orderable page sections, scroll-snap, and WCAG 2.2 AA-minded markup.'
+package: Custom
+'base theme': false
+core_version_requirement: ^11
+version: 1.0.0
+logo: logo.svg
+screenshot: screenshot.png
+
+# Global assets. core/normalize is intentionally omitted: Bootstrap Reboot
+# (compiled into css/style.css) already normalizes browser defaults.
+libraries:
+  - palefire/global
+  - palefire/base
+  - palefire/messages
+
+libraries-extend:
+  user/drupal.user:
+    - palefire/user
+  core/drupal.dropbutton:
+    - palefire/dropbutton
+  core/drupal.dialog:
+    - palefire/dialog
+  file/drupal.file:
+    - palefire/file
+  core/drupal.item-list:
+    - palefire/item-list
+  core/drupal.progress:
+    - palefire/progress
+  core/drupal.tablesort:
+    - palefire/drupal.tablesort
+
+# Regions, in visual/DOM order. page_top and page_bottom are added by core.
+#
+# Top bar (left -> right): header (logo) | primary_menu | utility_menu (icons).
+# Modular pages print an auto-generated "On this page" table of contents at the
+# top of the Sidebar region; any blocks placed in Sidebar render beneath it.
+regions:
+  header: 'Header (logo / branding)'
+  primary_menu: 'Primary menu'
+  utility_menu: 'Utility menu (icons)'
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
+
+generator: 'starterkit_theme:11.4.7'

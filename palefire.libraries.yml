@@ -1,0 +1,145 @@
+# Compiled Bootstrap 5.3 + Palefire styles (npm run build) and theme behaviors.
+global:
+  version: 1.0.0
+  css:
+    theme:
+      css/style.css: {  }
+  js:
+    js/palefire.js: {  }
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/bootstrap
+
+# Bootstrap JS bundle (includes Popper) copied from node_modules by npm run build.
+bootstrap:
+  version: 5.3.8
+  js:
+    js/vendor/bootstrap.bundle.min.js: { minified: true }
+
+# Swup 4 page transitions. Attached for anonymous visitors only
+# (templates/layout/page.html.twig). js/vendor/swup.umd.js is copied from
+# node_modules by npm run build; palefire-swup.js does nothing without it.
+swup:
+  version: 1.1.0
+  js:
+    js/vendor/swup.umd.js: { minified: true }
+    js/palefire-swup.js: {  }
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/drupal.announce
+    - core/once
+    - palefire/global
+
+base:
+  version: VERSION
+  css:
+    component:
+      css/components/action-links.css:
+        weight: -10
+      css/components/button.css:
+        weight: -10
+      css/components/container-inline.css:
+        weight: -10
+      css/components/details.css:
+        weight: -10
+      css/components/exposed-filters.css:
+        weight: -10
+      css/components/field.css:
+        weight: -10
+      css/components/form.css:
+        weight: -10
+      css/components/icons.css:
+        weight: -10
+      css/components/inline-form.css:
+        weight: -10
+      css/components/link.css:
+        weight: -10
+      css/components/links.css:
+        weight: -10
+      css/components/menu.css:
+        weight: -10
+      css/components/more-link.css:
+        weight: -10
+      css/components/pager.css:
+        weight: -10
+      css/components/tabledrag.css:
+        weight: -10
+      css/components/tableselect.css:
+        weight: -10
+      css/components/tabs.css:
+        weight: -10
+      css/components/textarea.css:
+        weight: -10
+      css/components/ui-dialog.css:
+        weight: -10
+dialog:
+  version: VERSION
+  css:
+    component:
+      css/components/dialog.css:
+        weight: -10
+dropbutton:
+  version: VERSION
+  css:
+    component:
+      css/components/dropbutton.css:
+        weight: -10
+file:
+  version: VERSION
+  css:
+    component:
+      css/components/file.css:
+        weight: -10
+image-widget:
+  version: VERSION
+  css:
+    component:
+      css/components/image-widget.css: {  }
+indented:
+  version: VERSION
+  css:
+    component:
+      css/components/indented.css: {  }
+messages:
+  version: VERSION
+  css:
+    component:
+      css/components/messages.css:
+        weight: -10
+node:
+  version: VERSION
+  css:
+    component:
+      css/components/node.css:
+        weight: -10
+progress:
+  version: VERSION
+  css:
+    component:
+      css/components/progress.css:
+        weight: -10
+drupal.tablesort:
+  version: VERSION
+  css:
+    component:
+      css/components/tablesort.css:
+        weight: -10
+item-list:
+  version: VERSION
+  css:
+    component:
+      css/components/item-list.css:
+        weight: -10
+search-results:
+  version: VERSION
+  css:
+    component:
+      css/components/search-results.css: {  }
+user:
+  version: VERSION
+  css:
+    component:
+      css/components/user.css:
+        weight: -10

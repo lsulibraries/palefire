@@ -1,0 +1,26 @@
+{
+  "name": "palefire",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Palefire Drupal 11 theme (Bootstrap 5.3 + Sass + Swup 4), generated from starterkit_theme.",
+  "author": "Kyle Tanglao <ktanglao@lsu.edu>",
+  "homepage": "https://github.com/lsulibraries/palefire",
+  "repository": { "type": "git", "url": "https://github.com/lsulibraries/palefire.git" },
+  "bugs": { "url": "https://github.com/lsulibraries/palefire/issues" },
+  "scripts": {
+    "build": "npm run build:css && npm run copy:assets",
+    "build:css": "sass --style=compressed --no-source-map --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss css/style.css",
+    "watch": "sass --watch --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss css/style.css",
+    "copy:assets": "node build/copy-assets.js"
+  },
+  "license": "GPL-2.0-or-later",
+  "type": "commonjs",
+  "dependencies": {
+    "bootstrap": "5.3",
+    "bootstrap-icons": "^1.13.1",
+    "swup": "^4.6.0"
+  },
+  "devDependencies": {
+    "sass": "1.105.0"
+  }
+}

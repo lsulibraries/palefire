@@ -1,0 +1,37 @@
+{% extends "block.html.twig" %}
+{#
+/**
+ * @file
+ * Palefire branding block: logo (left-justified in the top bar).
+ *
+ * Logo and site name share ONE link to avoid redundant adjacent links.
+ * - Logo + name: the image is decorative (alt="") and the name is the label.
+ * - Logo only: the image alt provides the link's accessible name.
+ *
+ * The Palefire logo.svg is a wordmark that already reads "LSU Libraries", so
+ * showing the site name beside it repeats the text. Turn off "Site name" in
+ * the Site branding block (Block layout > Header > Configure); the logo then
+ * becomes the link's only content with alt="LSU Libraries home". Keep "Site
+ * name" on only for a logo that has no words in it (e.g. a shield icon).
+ *
+ * Extra variable: site_name_plain (PalefireHooks::preprocessBlock()).
+ * The site name is deliberately not an <h1>; each page has one <h1> (title).
+ */
+#}
+{% block content %}
+  {% if site_logo or site_name %}
+    <a href="{{ path('<front>') }}" rel="home" class="navbar-brand pf-brand d-inline-flex align-items-center gap-2 me-0">
+      {% if site_logo %}
+        <img src="{{ site_logo }}"
+             alt="{{ site_name ? '' : '@site home'|t({'@site': site_name_plain}) }}"
+             class="pf-brand__logo" fetchpriority="high" />
+      {% endif %}
+      {% if site_name %}
+        <span class="pf-brand__name">{{ site_name }}</span>
+      {% endif %}
+    </a>
+  {% endif %}
+  {% if site_slogan %}
+    <p class="pf-brand__slogan visually-hidden">{{ site_slogan }}</p>
+  {% endif %}
+{% endblock %}

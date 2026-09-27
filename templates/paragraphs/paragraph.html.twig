@@ -1,0 +1,69 @@
+{#
+/**
+ * @file
+ * Palefire paragraph template.
+ *
+ * Paragraph bundles with a "field_section_title" field render as a titled
+ * <section> landmark with a stable anchor ID shared with the table of
+ * contents. Other paragraphs (e.g. nested cards) use standard markup.
+ *
+ * Section variables (PalefireHooks::preprocessParagraph()):
+ * - is_section, section_id, section_title, section_full_page,
+ *   section_style (default|light|dark|brand), image_position (start|end).
+ *
+ * Bundle templates can extend this file and override {% block section_body %}.
+ */
+#}
+{% set control_fields = [
+  'field_section_title',
+  'field_section_anchor',
+  'field_show_in_toc',
+  'field_full_page',
+  'field_section_style',
+  'field_image_position',
+] %}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--type--' ~ paragraph.bundle|clean_class,
+    view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+  ]
+%}
+
+{% if is_section %}
+  {% set heading_id = section_id ~ '-heading' %}
+  {%
+    set section_classes = [
+      'pf-section',
+      'pf-section--' ~ section_style|clean_class,
+      section_full_page ? 'pf-section--full-page',
+    ]
+  %}
+  {% set attributes = attributes.addClass(classes, section_classes).setAttribute('id', section_id) %}
+  {% if section_title %}
+    {% set attributes = attributes.setAttribute('aria-labelledby', heading_id) %}
+  {% endif %}
+  {% if section_style in ['dark', 'brand'] %}
+    {% set attributes = attributes.setAttribute('data-bs-theme', 'dark') %}
+  {% endif %}
+
+  <section{{ attributes }}>
+    <div class="pf-section__inner">
+      {% if section_title %}
+        <h2 id="{{ heading_id }}" class="pf-section__title">{{ section_title }}</h2>
+      {% endif %}
+      {% block section_body %}
+        {{ content|without(control_fields) }}
+      {% endblock %}
+    </div>
+  </section>
+{% else %}
+  {% block paragraph %}
+    <div{{ attributes.addClass(classes) }}>
+      {% block content %}
+        {{ content }}
+      {% endblock %}
+    </div>
+  {% endblock %}
+{% endif %}

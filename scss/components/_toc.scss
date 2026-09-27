@@ -1,0 +1,86 @@
+// "On this page" table of contents (SDC palefire:toc).
+
+.pf-toc {
+  font-size: $font-size-sm;
+
+  &__heading {
+    margin: 0 0 .5rem;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+  }
+
+  // Mobile disclosure button.
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: .5rem 1rem;
+    font: inherit;
+    color: var(--bs-body-color);
+    background-color: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: $border-radius;
+
+    &::after {
+      content: "";
+      width: .6em;
+      height: .6em;
+      border-right: 2px solid currentcolor;
+      border-bottom: 2px solid currentcolor;
+      transform: rotate(45deg) translateY(-25%);
+      transition: transform .2s ease;
+    }
+
+    &[aria-expanded="true"]::after {
+      transform: rotate(-135deg);
+    }
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--bs-border-color);
+  }
+
+  &__link {
+    display: block;
+    margin-left: -1px;
+    padding: .4rem .75rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    // Current section: bar + weight, not color alone.
+    &[aria-current] {
+      font-weight: $font-weight-semibold;
+      color: $pf-purple;
+      border-left-color: $pf-purple;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    margin-bottom: $spacer;
+
+    &__panel {
+      padding-top: .75rem;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: calc(var(--pf-header-h) + #{$spacer});
+    max-height: calc(100vh - var(--pf-header-h) - #{$spacer * 2});
+    overflow-y: auto;
+
+    // Always expanded on desktop regardless of collapse state.
+    &__panel.collapse:not(.show) {
+      display: block;
+    }
+  }
+}

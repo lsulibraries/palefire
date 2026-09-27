@@ -1,0 +1,28 @@
+// Page fade-in. The .pf-fade / .pf-ready classes are set by the inline script
+// in html.html.twig. Without JS, or with reduced motion, nothing is hidden.
+
+@keyframes pf-reveal {
+  to { opacity: 1; }
+}
+
+.pf-fade body {
+  opacity: 0;
+}
+
+// Failsafe: reveal after 3s even if DOMContentLoaded never fires.
+.pf-fade:not(.pf-ready) body {
+  animation: pf-reveal 0s 3s forwards;
+}
+
+.pf-fade.pf-ready body {
+  opacity: 1;
+  transition: opacity $pf-fade-duration ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-fade body {
+    opacity: 1 !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

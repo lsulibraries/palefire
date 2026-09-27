@@ -1,0 +1,18 @@
+{
+  "name": "lsulibraries/palefire",
+  "description": "Bootstrap 5.3 Drupal 11 theme for LSU Libraries requiring several custom modules; not for public consumption",
+  "type": "drupal-theme",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://github.com/lsulibraries/palefire",
+  "authors": [
+    { "name": "Kyle Tanglao", "email": "ktanglao@lsu.edu", "role": "Maintainer" }
+  ],
+  "support": {
+    "source": "https://github.com/lsulibraries/palefire",
+    "issues": "https://github.com/lsulibraries/palefire/issues"
+  },
+  "require": { "drupal/core": "^11" },
+  "suggest": {
+    "drupal/paragraphs": "Required for Modular page sections (scripts/palefire_modular_setup.php)."
+  }
+}

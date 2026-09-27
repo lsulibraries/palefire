@@ -1,0 +1,29 @@
+{#
+  Table of contents (SDC palefire:toc). Styles live in scss/components/_toc.scss
+  so they share Bootstrap's breakpoint mixins.
+
+  - <nav> labelled by its heading (one named navigation landmark).
+  - Below lg: heading is a disclosure button (aria-expanded/aria-controls).
+  - lg and up: panel always visible; the button is display:none.
+  - toc.js marks the link for the section in view with aria-current="location".
+#}
+{% set toc_id = toc_id|default('pf-toc') %}
+{% set heading = heading|default('On this page'|t) %}
+<nav{{ attributes.addClass('pf-toc').setAttribute('aria-labelledby', toc_id ~ '-heading').setAttribute('data-pf-toc', '') }}>
+  <h2 id="{{ toc_id }}-heading" class="pf-toc__heading">
+    <button class="pf-toc__toggle d-lg-none" type="button"
+            data-bs-toggle="collapse" data-bs-target="#{{ toc_id }}-panel"
+            aria-expanded="false" aria-controls="{{ toc_id }}-panel">{{ heading }}</button>
+    <span class="pf-toc__label d-none d-lg-inline">{{ heading }}</span>
+  </h2>
+  <div id="{{ toc_id }}-panel" class="pf-toc__panel collapse">
+    {# role="list" restores list semantics in Safari/VoiceOver when list-style is none. #}
+    <ol class="pf-toc__list list-unstyled" role="list">
+      {% for item in items %}
+        <li class="pf-toc__item">
+          <a class="pf-toc__link" href="#{{ item.anchor }}">{{ item.label }}</a>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</nav>

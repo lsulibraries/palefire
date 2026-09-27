@@ -1,0 +1,22 @@
+// Footer uses Bootstrap's dark color mode (data-bs-theme="dark").
+
+.pf-footer {
+  background-color: $gray-900;
+  color: var(--bs-body-color);
+
+  .block + .block {
+    margin-top: $spacer * 1.5;
+  }
+
+  @include media-breakpoint-up(md) {
+    .region-footer {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: $spacer * 2;
+
+      .block + .block {
+        margin-top: 0;
+      }
+    }
+  }
+}

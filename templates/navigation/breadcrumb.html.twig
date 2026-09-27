@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Breadcrumb with Bootstrap styling and schema.org BreadcrumbList microdata
+ * (eligible for Google breadcrumb rich results).
+ */
+#}
+{% if breadcrumb %}
+  <nav class="pf-breadcrumb__nav" aria-labelledby="system-breadcrumb">
+    <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+    <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      {% for item in breadcrumb %}
+        <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          {% if item.url %}
+            <a href="{{ item.url }}" itemprop="item"><span itemprop="name">{{ item.text }}</span></a>
+          {% else %}
+            <span itemprop="name">{{ item.text }}</span>
+          {% endif %}
+          <meta itemprop="position" content="{{ loop.index }}">
+        </li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endif %}

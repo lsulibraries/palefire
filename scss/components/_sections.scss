@@ -1,0 +1,86 @@
+// Modular page sections (paragraphs) + full-page scroll-snap.
+
+.pf-sections {
+  display: flow-root;
+}
+
+.pf-section {
+  padding-block: $spacer * 3;
+
+  &__inner {
+    max-width: 72ch;
+
+    // Media/multi-column sections may use the full column width.
+    .paragraph--type--section-media & {
+      max-width: none;
+    }
+  }
+
+  &__title {
+    margin-bottom: $spacer * 1.25;
+  }
+
+  // Surface styles. Text/link colors come from Bootstrap color modes;
+  // dark & brand get data-bs-theme="dark" in paragraph.html.twig.
+  &--light,
+  &--dark,
+  &--brand {
+    padding-inline: $spacer * 1.5;
+    border-radius: $border-radius-lg;
+
+    @include media-breakpoint-up(md) {
+      padding-inline: $spacer * 3;
+    }
+  }
+
+  &--light {
+    background-color: var(--bs-tertiary-bg);
+  }
+
+  &--dark {
+    background-color: $gray-900;
+    color: var(--bs-body-color);
+  }
+
+  &--brand {
+    --bs-link-color-rgb: #{to-rgb($pf-gold)};
+    --bs-link-hover-color-rgb: #{to-rgb($white)};
+    background-color: $pf-purple;
+    color: $white; // ≈11:1 on LSU purple
+  }
+
+  & + & {
+    margin-top: $spacer;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+// Full-page sections -----------------------------------------------------------
+// "proximity" (not "mandatory") never traps users inside tall sections or
+// fights keyboard/zoom scrolling. min-height lets content grow past the
+// viewport instead of being clipped (WCAG 1.4.10 Reflow, 1.4.4 Resize text).
+
+@include media-breakpoint-up($pf-snap-breakpoint) {
+  html:has(.pf-section--full-page) {
+    scroll-snap-type: y proximity;
+  }
+
+  .pf-section--full-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - var(--pf-header-h));
+    min-height: calc(100svh - var(--pf-header-h));
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.pf-section--full-page) {
+    scroll-snap-type: none;
+  }
+}

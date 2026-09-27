@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Full view of a Modular page. The page <h1> comes from the Page title block;
+ * each section renders its own <h2> (see paragraph.html.twig), which keeps a
+ * clean, crawlable heading outline.
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+    'pf-modular',
+  ]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <div{{ content_attributes.addClass('node__content', 'pf-modular__content') }}>
+    {{ content }}
+  </div>
+</article>

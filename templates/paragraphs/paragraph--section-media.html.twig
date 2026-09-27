@@ -1,0 +1,19 @@
+{% extends '@palefire/paragraphs/paragraph.html.twig' %}
+{#
+/**
+ * @file
+ * "Section: Text + image". Text comes first in the DOM (reading order);
+ * image_position only changes the visual column order from md (768px) up.
+ */
+#}
+{% block section_body %}
+  <div class="row g-4 g-lg-5 align-items-center">
+    <div class="col-md-6 pf-section__text">
+      {{ content.field_section_body }}
+    </div>
+    <div class="col-md-6 pf-section__media{{ image_position == 'start' ? ' order-md-first' }}">
+      {{ content.field_section_image }}
+    </div>
+  </div>
+  {{ content|without(control_fields, 'field_section_body', 'field_section_image') }}
+{% endblock %}

@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Sections field on Modular pages: no per-item wrapper divs, so each
+ * <section> is a direct child of .pf-sections (simpler scroll-snap/CSS).
+ */
+#}
+<div{{ attributes.addClass('pf-sections') }}>
+  {% for item in items %}
+    {{ item.content }}
+  {% endfor %}
+</div>

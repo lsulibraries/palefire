@@ -1,0 +1,44 @@
+# Bootstrap 5.3 grid breakpoints, exposed to Drupal (Responsive Image, etc.).
+# Keep in sync with $grid-breakpoints in scss/_variables.scss (Bootstrap defaults).
+palefire.xs:
+  label: 'XS (<576px)'
+  mediaQuery: 'all and (max-width: 575.98px)'
+  weight: 0
+  multipliers:
+    - 1x
+    - 2x
+palefire.sm:
+  label: 'SM (≥576px)'
+  mediaQuery: 'all and (min-width: 576px)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+palefire.md:
+  label: 'MD (≥768px)'
+  mediaQuery: 'all and (min-width: 768px)'
+  weight: 2
+  multipliers:
+    - 1x
+    - 2x
+palefire.lg:
+  label: 'LG (≥992px)'
+  mediaQuery: 'all and (min-width: 992px)'
+  weight: 3
+  multipliers:
+    - 1x
+    - 2x
+palefire.xl:
+  label: 'XL (≥1200px)'
+  mediaQuery: 'all and (min-width: 1200px)'
+  weight: 4
+  multipliers:
+    - 1x
+    - 2x
+palefire.xxl:
+  label: 'XXL (≥1400px)'
+  mediaQuery: 'all and (min-width: 1400px)'
+  weight: 5
+  multipliers:
+    - 1x
+    - 2x

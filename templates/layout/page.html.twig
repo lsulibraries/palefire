@@ -1,0 +1,116 @@
+{#
+/**
+ * @file
+ * Palefire page template.
+ *
+ * Landmarks: banner (header) > navigation (menus) | main | complementary
+ * (sidebar) | contentinfo (footer). Every region is optional.
+ *
+ * Top bar, left to right: Header (logo) | Primary menu | Utility menu (icons).
+ * Below the Bootstrap "lg" breakpoint (992px) the primary menu collapses
+ * behind a toggle button and drops beneath the top bar.
+ *
+ * Extra variables (PalefireHooks::preprocessPage()):
+ * - is_modular_page: TRUE on "modular_page" nodes.
+ * - palefire_toc: "On this page" table of contents (SDC palefire:toc).
+ *
+ * Swup page transitions (js/palefire-swup.js, anonymous visitors only) swap
+ * #swup (breadcrumb + body) and #pf-primary-menu (active trail) on each
+ * visit. The header shell and footer persist between pages.
+ *
+ * @see html.html.twig
+ */
+#}
+{% set has_sidebar = page.sidebar or palefire_toc %}
+{% set toc_first = has_sidebar and is_modular_page %}
+{% if not logged_in %}
+  {{ attach_library('palefire/swup') }}
+{% endif %}
+
+<div class="pf-page position-relative d-flex flex-column min-vh-100">
+
+  {# Scroll marker: when it leaves the viewport, the header turns compact
+     (js/palefire.js, palefireHeaderCompact). #}
+  <div class="pf-header-sentinel" aria-hidden="true"></div>
+
+  <header class="pf-header sticky-top">
+    <div class="navbar navbar-expand-lg">
+      {# Full-width top bar: container-fluid instead of container-xxl.
+         Side padding grows with the viewport ($pf-header-gutters). #}
+      <div class="container-fluid pf-header__inner">
+
+        {% if page.header %}
+          <div class="pf-header__brand me-lg-4">
+            {{ page.header }}
+          </div>
+        {% endif %}
+
+        {% if page.primary_menu %}
+          {# DOM order = desktop visual order; mobile reorders with order-*. #}
+          <button class="navbar-toggler order-2 order-lg-0 ms-2" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#pf-primary-menu"
+                  aria-controls="pf-primary-menu" aria-expanded="false">
+            <span class="navbar-toggler-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">{{ 'Main menu'|t }}</span>
+          </button>
+          <div class="collapse navbar-collapse order-3 order-lg-0" id="pf-primary-menu">
+            {{ page.primary_menu }}
+          </div>
+        {% endif %}
+
+        {% if page.utility_menu %}
+          <div class="pf-header__utility order-1 order-lg-0 ms-auto">
+            {{ page.utility_menu }}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </header>
+
+  <div id="swup" class="pf-swup transition-fade d-flex flex-column flex-grow-1">
+
+  {% if page.breadcrumb %}
+    <div class="pf-breadcrumb container-xxl">
+      {{ page.breadcrumb }}
+    </div>
+  {% endif %}
+
+  <div class="pf-body container-xxl flex-grow-1">
+    <div class="row g-4 g-lg-5">
+
+      {# Modular pages: TOC first so keyboard/screen-reader users reach it
+         before the sections; shown as a collapsible panel on small screens
+         and a sticky left column from lg up. #}
+      {% if toc_first %}
+        <aside class="pf-sidebar pf-sidebar--toc col-lg-3">
+          {{ palefire_toc }}
+          {{ page.sidebar }}
+        </aside>
+      {% endif %}
+
+      <main id="main-content" tabindex="-1" class="pf-main {{ has_sidebar ? 'col-lg-9' : 'col-12' }}">
+        {{ page.highlighted }}
+        {{ page.content }}
+      </main>
+
+      {% if has_sidebar and not toc_first %}
+        <aside class="pf-sidebar col-lg-3">
+          {{ page.sidebar }}
+        </aside>
+      {% endif %}
+
+    </div>
+  </div>
+
+  </div>{# /#swup #}
+
+  {% if page.footer %}
+    <footer class="pf-footer mt-auto" data-bs-theme="dark">
+      <div class="container-xxl py-5">
+        {{ page.footer }}
+      </div>
+    </footer>
+  {% endif %}
+
+</div>

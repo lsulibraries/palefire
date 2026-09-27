@@ -1,0 +1,28 @@
+// Page body, main column, sidebar.
+
+.pf-breadcrumb {
+  padding-top: $spacer;
+
+  .breadcrumb {
+    margin-bottom: 0;
+    font-size: $font-size-sm;
+  }
+}
+
+.pf-body {
+  padding-block: $spacer * 2;
+}
+
+.pf-main {
+  min-width: 0; // Let wide content (tables, code) shrink inside the grid.
+
+  > .region + .region {
+    margin-top: $spacer;
+  }
+}
+
+.pf-sidebar {
+  .block + .block {
+    margin-top: $spacer * 2;
+  }
+}

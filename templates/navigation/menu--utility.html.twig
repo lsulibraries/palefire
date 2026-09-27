@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Utility menu (machine name "utility"): icon-only links, right-justified.
+ *
+ * Icon selection (first match wins):
+ * 1. A "data-icon" link attribute, e.g. data-icon="search" (add it with the
+ *    Menu Link Attributes module).
+ * 2. A keyword in the link title (see icon_map below).
+ * 3. Fallback: link-45deg.
+ * Icon names are Bootstrap Icons copied to images/bi/ by `npm run build`
+ * (list them in build/copy-assets.js).
+ *
+ * Accessibility: the link title is kept as visually hidden text, so every
+ * link has an accessible name; the SVG is aria-hidden. Targets are at least
+ * 44x44px (exceeds WCAG 2.2 SC 2.5.8).
+ */
+#}
+{%
+  set icon_map = {
+    'search': 'search',
+    'account': 'person-circle',
+    'login': 'box-arrow-in-right',
+    'log in': 'box-arrow-in-right',
+    'sign in': 'box-arrow-in-right',
+    'ask': 'chat-dots',
+    'chat': 'chat-dots',
+    'help': 'question-circle',
+    'hours': 'clock',
+    'calendar': 'calendar-event',
+    'events': 'calendar-event',
+    'contact': 'envelope',
+    'email': 'envelope',
+    'location': 'geo-alt',
+    'map': 'geo-alt',
+    'phone': 'telephone',
+  }
+%}
+{% if items %}
+  <ul{{ attributes.addClass('nav', 'pf-utility-nav', 'align-items-center', 'flex-nowrap') }}>
+    {% for item in items %}
+      {% set link_attributes = item.url.options.attributes|default({}) %}
+      {% set title_key = item.title|render|striptags|lower|trim %}
+      {% set icon = link_attributes['data-icon']|default('') %}
+      {% if not icon %}
+        {% for keyword, name in icon_map %}
+          {% if not icon and keyword in title_key %}
+            {% set icon = name %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      {% set icon = icon|default('link-45deg') %}
+      <li{{ item.attributes.addClass('nav-item') }}>
+        {# Plain <a> (not link()) so the inline SVG is not XSS-filtered. #}
+        <a href="{{ item.url }}" class="nav-link pf-utility-nav__link">
+          <span class="pf-icon" aria-hidden="true">{{ source(directory ~ '/images/bi/' ~ icon|clean_class ~ '.svg', ignore_missing = true) }}</span>
+          <span class="visually-hidden">{{ item.title }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

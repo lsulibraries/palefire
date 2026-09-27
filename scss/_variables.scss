@@ -1,0 +1,63 @@
+// -----------------------------------------------------------------------------
+// Palefire design tokens + Bootstrap overrides.
+// Loaded AFTER bootstrap/functions and BEFORE bootstrap/variables, so every
+// value here wins over Bootstrap's !default. Use literal values only.
+// -----------------------------------------------------------------------------
+
+// Brand (LSU purple & gold). Gold fails contrast on white: use it only on
+// purple/dark backgrounds.
+$pf-purple:   #461d7c;
+$pf-gold:     #fdd023;
+$pf-lavender: #cdb8ee; // Link color on dark surfaces (≈8:1 on #212529).
+
+// Bootstrap theme colors.
+$primary: $pf-purple;
+
+// Links stay underlined (WCAG 1.4.1: not color alone).
+$link-decoration: underline;
+$link-underline-offset: .2em;
+
+// Dark color mode (footer, dark/brand sections) — AA-safe link colors.
+$link-color-dark:       $pf-lavender;
+$link-hover-color-dark: #e6dbf7;
+
+// Stronger focus ring (paired with the :focus-visible outline in base/_base).
+$focus-ring-opacity: .5;
+
+// Motion: honor prefers-reduced-motion in Bootstrap components & smooth scroll.
+$enable-reduced-motion: true;
+$enable-smooth-scroll: true;
+
+// Breakpoints: intentionally NOT overridden — Bootstrap 5.3 defaults
+// (sm 576, md 768, lg 992, xl 1200, xxl 1400). Mirror any change in
+// palefire.breakpoints.yml.
+
+// Palefire settings.
+$pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
+$pf-fade-duration:   .45s; // Page fade-in duration.
+$pf-swup-duration:   .25s; // Swup page-to-page cross-fade (each direction).
+
+// Top bar spans the full page width; these are its left/right padding per
+// Bootstrap breakpoint (mobile first). Keep xs >= 1rem so nothing touches
+// the screen edge.
+$pf-header-gutters: (
+  xs: 1rem,
+  md: 1.5rem,
+  xl: 2.5rem,
+  xxl: 3rem,
+);
+$pf-header-fallback: 4.5rem; // Header height before JS measures it.
+
+// Compact header after scrolling (.pf-header--compact).
+$pf-header-compact-after:    4rem;    // Scroll distance before it shrinks.
+$pf-header-transition:       .2s ease-out;
+$pf-header-padding-y:        .5rem;   // Bar padding, top and bottom.
+$pf-header-compact-padding-y: .125rem;
+$pf-logo-height:             2.5rem;  // Logo, below lg / lg and up.
+$pf-logo-height-lg:          3rem;
+$pf-logo-compact-height:     2rem;
+$pf-logo-compact-height-lg:  2.25rem;
+// Links and icons stay at least 36px tall when compact (WCAG 2.2 SC 2.5.8
+// asks for 24px; 44px is kept for the expanded header).
+$pf-header-target:           2.75rem;
+$pf-header-compact-target:   2.25rem;

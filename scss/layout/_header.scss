@@ -1,0 +1,200 @@
+// Top bar: logo | primary menu | utility icons.
+
+.pf-header {
+  background-color: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
+
+  // Full-width bar (container-fluid) with responsive side padding.
+  &__inner {
+    @each $bp, $gutter in $pf-header-gutters {
+      @include media-breakpoint-up($bp) {
+        padding-inline: $gutter;
+      }
+    }
+  }
+
+  .navbar {
+    --bs-navbar-padding-y: #{$pf-header-padding-y};
+    --bs-navbar-nav-link-padding-x: .875rem;
+    --bs-navbar-color: var(--bs-body-color);
+    --bs-navbar-hover-color: #{$pf-purple};
+    --bs-navbar-active-color: #{$pf-purple};
+  }
+
+  // Block/region wrappers shouldn't add spacing inside the bar.
+  .region,
+  .block {
+    margin: 0;
+  }
+
+  // Menu block headings are visually hidden but still label each <nav>.
+  .block-menu > h2 {
+    margin: 0;
+  }
+}
+
+.pf-brand {
+  color: var(--bs-body-color);
+  font-weight: $font-weight-bold;
+  text-decoration: none;
+
+  &__logo {
+    height: $pf-logo-height;
+    width: auto;
+    max-height: 30px;
+    @include media-breakpoint-up(lg) {
+      height: $pf-logo-height-lg;
+    }
+  }
+}
+
+// Primary menu ---------------------------------------------------------------
+
+.pf-primary-nav {
+  .nav-link {
+    min-height: $pf-header-target;
+    display: flex;
+    align-items: center;
+    font-weight: $font-weight-medium;
+  }
+
+  // Current page / active trail: underline, not color alone (WCAG 1.4.1).
+  .nav-link.is-active,
+  .nav-link.pf-active-trail {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: .4em;
+    text-decoration-color: currentcolor;
+  }
+
+  &__parent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  // Parent items are <button>s that only open their dropdown.
+  button.nav-link {
+    width: 100%;
+    text-align: start;
+
+    @include media-breakpoint-up(lg) {
+      width: auto;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    &__parent > .nav-link {
+      flex: 1 1 auto;
+    }
+
+    // Submenu drops below its parent row on small screens.
+    &__submenu {
+      flex-basis: 100%;
+      border: 0;
+      padding-top: 0;
+      padding-left: 1rem;
+    }
+  }
+}
+
+// Long mobile menus scroll inside the sticky header.
+@include media-breakpoint-down(lg) {
+  .pf-header .navbar-collapse {
+    max-height: calc(100vh - var(--pf-header-h));
+    max-height: calc(100svh - var(--pf-header-h));
+    overflow-y: auto;
+  }
+}
+
+// Utility (icon) menu ----------------------------------------------------------
+
+.pf-utility-nav {
+  gap: .125rem;
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $pf-header-target;  // 44px targets (WCAG 2.2 SC 2.5.8 requires 24px)
+    min-height: $pf-header-target;
+    padding: .5rem;
+    color: var(--bs-body-color);
+    border-radius: 50%;
+
+    &:hover,
+    &:focus-visible {
+      color: $pf-purple;
+      background-color: var(--bs-tertiary-bg);
+    }
+  }
+}
+
+// Compact header after scrolling ---------------------------------------------
+// js/palefire.js toggles .pf-header--compact. The header's bottom margin
+// makes up the height it loses, so the page below never jumps; that margin
+// sits under the stuck header and is never visible.
+
+.pf-header-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: $pf-header-compact-after;
+  pointer-events: none;
+}
+
+.pf-header {
+  margin-bottom: max(0px, calc(var(--pf-header-full, var(--pf-header-h)) - var(--pf-header-h)));
+  transition: box-shadow $pf-header-transition;
+
+  .navbar,
+  .pf-brand__logo,
+  .nav-link,
+  .pf-utility-nav__link {
+    // Keeps Bootstrap's link color/background transitions.
+    transition:
+      color .15s ease-in-out,
+      background-color .15s ease-in-out,
+      padding $pf-header-transition,
+      height $pf-header-transition,
+      min-height $pf-header-transition,
+      min-width $pf-header-transition;
+  }
+
+  &--compact {
+    box-shadow: 0 .125rem .5rem rgba($black, .08);
+
+    .navbar {
+      --bs-navbar-padding-y: #{$pf-header-compact-padding-y};
+    }
+
+    .pf-brand__logo {
+      height: $pf-logo-compact-height;
+
+      @include media-breakpoint-up(lg) {
+        height: $pf-logo-compact-height-lg;
+      }
+    }
+
+    .pf-primary-nav .nav-link {
+      min-height: $pf-header-compact-target;
+    }
+
+    .pf-utility-nav__link {
+      min-width: $pf-header-compact-target;
+      min-height: $pf-header-compact-target;
+      padding: .375rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-header,
+  .pf-header .navbar,
+  .pf-header .pf-brand__logo,
+  .pf-header .nav-link,
+  .pf-header .pf-utility-nav__link {
+    transition: none;
+  }
+}
