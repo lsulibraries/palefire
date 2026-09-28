@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the Palefire theme.
+ */
+
+use Drupal\Core\Render\Markup;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_preprocess_breadcrumb().
+ *
+ * Adds the current page title so the breadcrumb template can show it
+ * as the final, non-linked item.
+ */
+function palefire_preprocess_breadcrumb(array &$variables) {
+  $route_match = \Drupal::routeMatch();
+  $title = NULL;
+
+  // Node pages: use the node's title.
+  $node = $route_match->getParameter('node');
+  if ($node instanceof NodeInterface) {
+    $title = $node->label();
+    $variables['#cache']['tags'] = array_merge(
+      $variables['#cache']['tags'] ?? [],
+      $node->getCacheTags()
+    );
+  }
+  // Other pages (Views, taxonomy terms, etc.): use the route's title.
+  elseif ($route = $route_match->getRouteObject()) {
+    $resolved = \Drupal::service('title_resolver')
+      ->getTitle(\Drupal::request(), $route);
+
+    if (is_array($resolved)) {
+      $resolved = \Drupal::service('renderer')->renderPlain($resolved);
+    }
+    if ($resolved) {
+      $title = strip_tags((string) $resolved);
+    }
+  }
+
+  if ($title) {
+    $variables['current_page_title'] = $title;
+  }
+
+  // Cache the breadcrumb separately for each page.
+  $variables['#cache']['contexts'][] = 'url.path';
+}
