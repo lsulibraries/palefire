@@ -1,0 +1,230 @@
+// Palefire modular_page layout: scroll sections, snap, sidebar column.
+// Assumes Bootstrap 5.3 SCSS (media-breakpoint-up) is already imported.
+
+:root {
+  --pf-header-h: 50px;      // keep in sync with the sticky header height
+  --pf-sidebar-w: 18.75rem; // 300px, same width as Origami's sidebar
+}
+
+// Anchor jumps and snap points land below the sticky header.
+html {
+  scroll-padding-top: var(--pf-header-h);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+// Snap is on the root scroller only, via the class set in
+// palefire_modular_preprocess_html(). Unlike Origami, html does not get
+// `height: 100%; overflow-y: auto`, which makes <html> its own scroll box
+// in some browsers and breaks sticky positioning and window scroll events.
+html.pf-snap-mandatory {
+  scroll-snap-type: y mandatory;
+}
+
+// Used when only some sections snap. With mandatory snapping, a section
+// that has no snap point gets skipped.
+html.pf-snap-proximity {
+  scroll-snap-type: y proximity;
+}
+
+html.pf-snap .site-footer {
+  scroll-snap-align: end;
+}
+
+// ---------------------------------------------------------------------
+// Sections
+// ---------------------------------------------------------------------
+.pf-section {
+  position: relative;
+  scroll-margin-top: var(--pf-header-h);
+}
+
+.pf-section__inner {
+  position: relative;
+  z-index: 1;
+  padding-inline: clamp(1rem, 4vw, 5rem);
+}
+
+// Height: auto, sized to its content (bento).
+.pf-section--auto {
+  padding-block: clamp(2rem, 6vh, 4.5rem);
+}
+
+// Height: screen, fills the viewport under the header (carousel).
+.pf-section--screen {
+  min-height: calc(100dvh - var(--pf-header-h));
+  display: grid;
+  align-content: center;
+
+  > .pf-section__inner {
+    padding-inline: 0;
+  }
+}
+
+.pf-section--snap {
+  scroll-snap-align: start;
+}
+
+// A full-screen snapping section is never skipped by a fast flick.
+.pf-section--snap.pf-section--screen {
+  scroll-snap-stop: always;
+}
+
+.pf-section__title {
+  scroll-margin-top: var(--pf-header-h);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+.pf-section--theme-dark {
+  color-scheme: dark;
+  color: #fff;
+  background: #000;
+  --pf-section-scrim: rgba(0, 0, 0, 0.5);
+}
+
+// ---------------------------------------------------------------------
+// Section background image (field_section_bg)
+// ---------------------------------------------------------------------
+// The image is a real responsive <img> from the "section_background"
+// responsive image style, laid behind the content with object-fit.
+// isolation keeps z-index: -1 above the section's own background colour.
+.pf-section--has-bg {
+  isolation: isolate;
+}
+
+.pf-section__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+
+  // The media, field and contextual-links wrappers must not become the
+  // image's containing block, or it collapses to zero height for editors.
+  * {
+    position: static;
+  }
+
+  .contextual {
+    display: none;
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--pf-section-bg-position, center);
+  }
+
+  // Scrim so text stays readable over the photo. Light sections get a
+  // light wash and dark sections a dark one; tune per site as needed.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--pf-section-scrim, rgba(255, 255, 255, 0.6));
+  }
+}
+
+// ---------------------------------------------------------------------
+// Bento section (first section, not full height)
+// ---------------------------------------------------------------------
+.pf-bento {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+.pf-bento__label {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.pf-bento__grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+
+.pf-bento__tile {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 18px;
+  padding: 1.25rem;
+  background: var(--bs-body-bg);
+}
+
+.pf-bento.is-loading .pf-bento__grid {
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+// ---------------------------------------------------------------------
+// Page layout with the sidebar column
+// ---------------------------------------------------------------------
+.pf-modular {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pf-modular__toc-toggle {
+  position: sticky;
+  top: calc(var(--pf-header-h) + 0.5rem);
+  z-index: 5;
+  justify-self: start;
+  margin: 0.5rem 1rem;
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-modular--has-toc {
+    grid-template-columns: var(--pf-sidebar-w) minmax(0, 1fr);
+  }
+
+  .pf-modular__sidebar {
+    position: sticky;
+    top: var(--pf-header-h);
+    align-self: start;
+    height: calc(100dvh - var(--pf-header-h));
+    overflow-y: auto;
+    padding: 2rem 2.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(26px);
+
+    .offcanvas-body {
+      flex-direction: column;
+    }
+  }
+}
+
+body[data-section-theme="dark"] .pf-modular__sidebar {
+  background: rgba(0, 0, 0, 0.5);
+  --pf-toc-color: #929292;
+  --pf-toc-active: #fff;
+  --pf-toc-rail: #272727;
+}
+
+// ---------------------------------------------------------------------
+// Events carousel section: hand Palefire's tokens to the block
+// ---------------------------------------------------------------------
+.pf-events-carousel .libcal-day-carousel {
+  --ldc-min-height: calc(100dvh - var(--pf-header-h));
+}
+
+.pf-section--theme-dark .libcal-day-carousel {
+  --ldc-control-filter: none;
+}
