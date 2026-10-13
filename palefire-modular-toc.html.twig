@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default TOC markup. Palefire overrides this template and attaches its
+ * modular-toc library there, so behaviour lives in the theme.
+ *
+ * Variables:
+ * - items: list of { id, label }.
+ * - heading: visible heading text.
+ * - depth: 1 = sections only, 2 = sections + h3 sub-links (added by JS).
+ * - mode: field_modular_type value.
+ */
+#}
+<nav class="pf-toc"{% if heading %} aria-labelledby="pf-toc-heading"{% else %} aria-label="{{ 'On this page'|t }}"{% endif %} data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
+  {% if heading %}<h2 id="pf-toc-heading" class="pf-toc__heading">{{ heading }}</h2>{% endif %}
+  <div class="pf-toc__rail">
+    <span class="pf-toc__indicator" aria-hidden="true"></span>
+    <ol class="pf-toc__list">
+      {% for item in items %}
+        <li class="pf-toc__item">
+          <a class="pf-toc__link" href="#{{ item.id }}">{{ item.label }}</a>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+  <a class="pf-toc__top" href="#top">{{ 'Back to top'|t }}</a>
+</nav>

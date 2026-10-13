@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Bento search section: one form, many result tiles.
+ *
+ * Variables from palefire_modular_preprocess_paragraph__bento_search():
+ * - bento.view_name, bento.identifier, bento.input_id, bento.query,
+ *   bento.placeholder, bento.action
+ * - bento.tiles: list of { id, title, heading_id, view }
+ *
+ * data-toc-skip keeps the tile h3s out of the TOC.
+ */
+#}
+{{ attach_library('palefire/bento-search') }}
+<div{{ attributes.addClass('pf-bento', bento.query ? 'has-query' : 'no-query') }}
+    data-pf-bento
+    data-view-name="{{ bento.view_name }}"
+    data-identifier="{{ bento.identifier }}"
+    data-toc-skip>
+
+  <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}">
+    <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>
+    <div class="input-group input-group-lg">
+      <input class="form-control" type="search" id="{{ bento.input_id }}" name="{{ bento.identifier }}"
+             value="{{ bento.query }}" placeholder="{{ bento.placeholder }}" autocomplete="off" enterkeyhint="search">
+      <button class="btn btn-primary pf-bento__submit" type="submit">{{ 'Search'|t }}</button>
+    </div>
+  </form>
+
+  <p class="visually-hidden" role="status" data-pf-bento-status></p>
+
+  <div class="pf-bento__grid"{{ bento.query ? '' : ' hidden' }} data-pf-bento-grid>
+    {% for tile in bento.tiles %}
+      <section class="pf-bento__tile" aria-labelledby="{{ tile.heading_id }}" data-bento-display="{{ tile.id }}">
+        <h3 id="{{ tile.heading_id }}" class="pf-bento__tile-title">{{ tile.title }}</h3>
+        {{ tile.view }}
+      </section>
+    {% endfor %}
+  </div>
+
+  <p class="pf-bento__empty" data-pf-bento-empty hidden>
+    {{ 'No results found. Try fewer or different words.'|t }}
+  </p>
+</div>

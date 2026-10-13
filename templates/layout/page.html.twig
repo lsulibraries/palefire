@@ -12,7 +12,13 @@
  *
  * Extra variables (PalefireHooks::preprocessPage()):
  * - is_modular_page: TRUE on "modular_page" nodes.
- * - palefire_toc: "On this page" table of contents (SDC palefire:toc).
+ *
+ * Modular pages: the "On this page" TOC is palefire_modular's block, placed
+ * in the modular_sidebar region. The region is rendered once into a variable
+ * so an empty TOC (Form mode, or no titled sections) leaves no empty column.
+ * Below lg the TOC column is a Bootstrap offcanvas opened by the "On this
+ * page" button; from lg up it is a sticky left column. The TOC comes before
+ * <main> so keyboard and screen-reader users reach it first.
  *
  * Swup page transitions (js/palefire-swup.js, anonymous visitors only) swap
  * #swup (breadcrumb + body) and #pf-primary-menu (active trail) on each
@@ -21,7 +27,9 @@
  * @see html.html.twig
  */
 #}
-{% set has_sidebar = page.sidebar or palefire_toc %}
+{% set modular_toc = is_modular_page ? page.modular_sidebar|render : '' %}
+{% set has_toc = is_modular_page and modular_toc|striptags|trim is not empty %}
+{% set has_sidebar = page.sidebar or has_toc %}
 {% set toc_first = has_sidebar and is_modular_page %}
 {% if not logged_in %}
   {{ attach_library('palefire/swup') }}
@@ -79,17 +87,34 @@
   <div class="pf-body container-xxl flex-grow-1">
     <div class="row g-4 g-lg-5">
 
-      {# Modular pages: TOC first so keyboard/screen-reader users reach it
-         before the sections; shown as a collapsible panel on small screens
-         and a sticky left column from lg up. #}
+      {# Modular pages: TOC (and any sidebar blocks) before <main>. #}
       {% if toc_first %}
-        <aside class="pf-sidebar pf-sidebar--toc col-lg-3">
-          {{ palefire_toc }}
-          {{ page.sidebar }}
+        <aside id="pf-modular-sidebar"
+               class="pf-sidebar pf-sidebar--toc col-lg-3{{ has_toc ? ' pf-modular__sidebar offcanvas-lg offcanvas-start' }}"
+               {% if has_toc %}tabindex="-1"{% endif %}
+               aria-label="{{ 'Page navigation'|t }}">
+          {% if has_toc %}
+            <div class="offcanvas-header">
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
+                      aria-label="{{ 'Close'|t }}"></button>
+            </div>
+            <div class="offcanvas-body">
+              {{ modular_toc }}
+              {{ page.sidebar }}
+            </div>
+          {% else %}
+            {{ page.sidebar }}
+          {% endif %}
         </aside>
       {% endif %}
 
       <main id="main-content" tabindex="-1" class="pf-main {{ has_sidebar ? 'col-lg-9' : 'col-12' }}">
+        {% if has_toc %}
+          <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
+                  data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
+            {{ 'On this page'|t }}
+          </button>
+        {% endif %}
         {{ page.highlighted }}
         {{ page.content }}
       </main>

@@ -44,6 +44,7 @@ regions:
   highlighted: Highlighted
   content: Content
   sidebar: Sidebar
+  modular_sidebar: Modular sidebar
   footer: Footer
 
 generator: 'starterkit_theme:11.4.7'
