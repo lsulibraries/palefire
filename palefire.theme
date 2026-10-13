@@ -47,3 +47,39 @@ function palefire_preprocess_breadcrumb(array &$variables) {
   // Cache the breadcrumb separately for each page.
   $variables['#cache']['contexts'][] = 'url.path';
 }
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Adds noindex to every page under /concept.
+ */
+function palefire_page_attachments_alter(array &$attachments) {
+  $path = \Drupal::request()->getPathInfo();
+
+  if (!preg_match('#^/concept(/|$)#i', $path)) {
+    return;
+  }
+
+  $found = FALSE;
+
+  // Overwrite Metatag's robots tag if it already added one.
+  if (!empty($attachments['#attached']['html_head'])) {
+    foreach ($attachments['#attached']['html_head'] as &$item) {
+      if (($item[1] ?? '') === 'robots') {
+        $item[0]['#attributes']['content'] = 'noindex, nofollow';
+        $found = TRUE;
+      }
+    }
+    unset($item);
+  }
+
+  // Otherwise, add one.
+  if (!$found) {
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#tag' => 'meta',
+        '#attributes' => ['name' => 'robots', 'content' => 'noindex, nofollow'],
+      ],
+      'robots',
+    ];
+  }
+}
