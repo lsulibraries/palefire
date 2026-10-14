@@ -8,7 +8,6 @@
   padding-block: $spacer * 3;
 
   &__inner {
-    max-width: 72ch;
 
     // Media/multi-column sections may use the full column width.
     .paragraph--type--section-media & {
