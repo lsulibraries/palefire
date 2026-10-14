@@ -1,86 +1,218 @@
-// "On this page" table of contents (SDC palefire:toc).
+// Palefire live TOC (markup: palefire-modular-toc.html.twig).
+//
+// Visual port of Origami's modular-page TOC (bentosearch.scss, nav.toc /
+// .sidebarIndicator / ul.subHeader): grey rail with a gold bar that covers
+// the active section and its open sub-list, monospace links, uppercase
+// one-line sub-headings that fade in, and the stacked "Back to top" arrow.
+//
+// The bar and the sub-lists share --pf-toc-speed and --pf-toc-ease, which
+// is what keeps the bar's growth in step with the list opening (see
+// placeIndicator() in js/modular-toc.js). Change them together.
+//
+// Colours are the --pf-toc-* custom properties from _modular-tokens.scss
+// (light on :root, dark under body[data-section-theme="dark"]). Change
+// them there, not here.
 
 .pf-toc {
-  font-size: $font-size-sm;
+  --pf-toc-rail-w: 4px;
+  --pf-toc-font: 'Consolas', 'Monaco', monospace;
+  --pf-toc-speed: 0.3s;
+  --pf-toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --pf-toc-indent: 2rem;          // Bootstrap's ul padding that Origami inherited
+  --pf-toc-sub-indent: calc(var(--pf-toc-indent) + 1rem + 10px);
 
-  &__heading {
-    margin: 0 0 .5rem;
-    font-size: $font-size-base;
-    font-weight: $font-weight-semibold;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  font-family: var(--pf-toc-font);
+}
+
+// Origami .sidebarTitle .mainTitle
+.pf-toc__heading {
+  margin: 0 0 1.25rem;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 400;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--pf-toc-color);
+}
+
+.pf-toc__rail {
+  position: relative;
+  border-inline-start: var(--pf-toc-rail-w) solid var(--pf-toc-rail);
+}
+
+.pf-toc__indicator {
+  position: absolute;
+  inset-inline-start: calc(var(--pf-toc-rail-w) * -1);
+  top: 0;
+  width: var(--pf-toc-rail-w);
+  height: 0;
+  border-radius: 2px;
+  background: var(--pf-toc-accent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, height;
+}
+
+.pf-toc.is-ready .pf-toc__indicator {
+  opacity: 1;
+  transition:
+    transform var(--pf-toc-speed) var(--pf-toc-ease),
+    height var(--pf-toc-speed) var(--pf-toc-ease),
+    background-color 0.3s ease;
+}
+
+.pf-toc__list,
+.pf-toc__sub {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Origami `.toc ul > li` spacing.
+.pf-toc__list > .pf-toc__item {
+  padding-bottom: 3px;
+
+  &:last-child {
+    padding-bottom: 10px;
+  }
+}
+
+.pf-toc__link,
+.pf-toc__sublink {
+  color: var(--pf-toc-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &:focus-visible,
+  &[aria-current] {
+    color: var(--pf-toc-active);
+  }
+}
+
+// Origami h2 links: 44px rows, regular weight.
+.pf-toc__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline-start: var(--pf-toc-indent);
+  font-weight: normal;
+}
+
+// Sub-lists open with a grid-rows transition (no Bootstrap Collapse) and
+// fade in, like Origami's .subHeader.collapse / .show opacity. Closed
+// lists are `inert`, so Tab skips their links. Transitions only start once
+// the bar has been placed (.is-ready), so nothing animates on page load.
+.pf-toc__subwrap {
+  display: grid;
+  grid-template-rows: 0fr;
+}
+
+.pf-toc__item.is-active > .pf-toc__subwrap {
+  grid-template-rows: 1fr;
+}
+
+.pf-toc__sub {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.pf-toc__item.is-active > .pf-toc__subwrap > .pf-toc__sub {
+  opacity: 1;
+}
+
+.pf-toc.is-ready {
+  .pf-toc__subwrap {
+    transition: grid-template-rows var(--pf-toc-speed) var(--pf-toc-ease);
   }
 
-  // Mobile disclosure button.
-  &__toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 2.75rem;
-    padding: .5rem 1rem;
-    font: inherit;
-    color: var(--bs-body-color);
-    background-color: var(--bs-tertiary-bg);
-    border: 1px solid var(--bs-border-color);
-    border-radius: $border-radius;
-
-    &::after {
-      content: "";
-      width: .6em;
-      height: .6em;
-      border-right: 2px solid currentcolor;
-      border-bottom: 2px solid currentcolor;
-      transform: rotate(45deg) translateY(-25%);
-      transition: transform .2s ease;
-    }
-
-    &[aria-expanded="true"]::after {
-      transform: rotate(-135deg);
-    }
+  .pf-toc__sub {
+    transition: opacity calc(var(--pf-toc-speed) * 0.6) ease;
   }
 
-  &__list {
-    margin: 0;
-    padding: 0;
-    border-left: 1px solid var(--bs-border-color);
+  // Fade in after the list has started opening, as Origami's 0.35s
+  // opacity trailed its 0.2s height.
+  .pf-toc__item.is-active > .pf-toc__subwrap > .pf-toc__sub {
+    transition: opacity calc(var(--pf-toc-speed) + 0.05s) ease calc(var(--pf-toc-speed) * 0.15);
   }
+}
 
-  &__link {
-    display: block;
-    margin-left: -1px;
-    padding: .4rem .75rem;
-    color: var(--bs-body-color);
-    text-decoration: none;
-    border-left: 3px solid transparent;
+.pf-toc__sub > li:last-child {
+  padding-bottom: 6px;
+}
 
-    &:hover {
-      text-decoration: underline;
-    }
+// Origami `ul ul li span`: uppercase, bold, one line, cut at 160px.
+.pf-toc__sublink {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  max-width: calc(160px + var(--pf-toc-sub-indent));
+  padding: 0.45rem 0 0.35rem var(--pf-toc-sub-indent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--pf-toc-sub-color);
+}
 
-    // Current section: bar + weight, not color alone.
-    &[aria-current] {
-      font-weight: $font-weight-semibold;
-      color: $pf-purple;
-      border-left-color: $pf-purple;
-    }
+// Origami span.back-to-top: stacked arrow + tiny caps label, pushed to
+// the bottom of the sidebar, arrow lights up gold on hover.
+.pf-toc__top {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding: 2.5rem 0 2.5rem;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--pf-toc-top-color);
+  transition: color 0.5s ease-out;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-toc-active);
+    transition-duration: 0.2s;
   }
+}
 
-  @include media-breakpoint-down(lg) {
-    margin-bottom: $spacer;
+.pf-toc__top-icon {
+  width: 30px;
+  height: 30px;
+  opacity: 0.2;
+  transition:
+    color 0.5s ease-out,
+    opacity 0.5s ease-out;
 
-    &__panel {
-      padding-top: .75rem;
-    }
+  .pf-toc__top:hover &,
+  .pf-toc__top:focus-visible & {
+    color: var(--pf-toc-accent);
+    opacity: 1;
+    transition-duration: 0.2s;
   }
+}
 
-  @include media-breakpoint-up(lg) {
-    position: sticky;
-    top: calc(var(--pf-header-h) + #{$spacer});
-    max-height: calc(100vh - var(--pf-header-h) - #{$spacer * 2});
-    overflow-y: auto;
+.pf-toc__rail {
+  transition: border-color 0.3s ease;
+}
 
-    // Always expanded on desktop regardless of collapse state.
-    &__panel.collapse:not(.show) {
-      display: block;
+@media (prefers-reduced-motion: reduce) {
+  .pf-toc.is-ready {
+    .pf-toc__indicator,
+    .pf-toc__subwrap,
+    .pf-toc__sub,
+    .pf-toc__item.is-active > .pf-toc__subwrap > .pf-toc__sub {
+      transition: none;
     }
   }
 }

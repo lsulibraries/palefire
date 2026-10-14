@@ -1,0 +1,77 @@
+// Palefire modular_page colour tokens.
+//
+// One place for every colour the modular page, its sidebar and its TOC
+// use. This file only defines Sass variables, maps and a mixin; it outputs
+// no CSS, so it is safe to @import from more than one partial.
+//
+// Two layers:
+// 1. Sass variables (compile time). All are !default, so Palefire's own
+//    variables file can override any of them before this file is imported,
+//    e.g. `$pf-toc-accent: $pf-lsu-gold;`.
+// 2. CSS custom properties (run time), written out in _modular.scss from
+//    the theme maps below. These are needed because dark mode switches
+//    while you scroll (modular-toc.js sets body[data-section-theme]),
+//    which Sass alone can't do.
+
+// ---------------------------------------------------------------------
+// Palette: raw colours, named for what they are
+// ---------------------------------------------------------------------
+$pf-white:     #fff !default;
+$pf-black:     #000 !default;
+$pf-gold:      #ffd700 !default; // Origami's `gold`
+$pf-lsu-gold:  #fdd023 !default; // LSU brand gold
+$pf-grey-100:  #e5e5e5 !default;
+$pf-grey-300:  #ccc !default;
+$pf-grey-400:  #ababab !default;
+$pf-grey-500:  #929292 !default;
+$pf-grey-600:  #686868 !default;
+$pf-grey-900:  #272727 !default;
+
+// ---------------------------------------------------------------------
+// Roles: the same in light and dark
+// ---------------------------------------------------------------------
+$pf-toc-accent: $pf-gold !default; // progress bar + Back to top hover
+
+// ---------------------------------------------------------------------
+// Page chrome (sidebar + TOC). Follows the active section:
+// light on :root, dark under body[data-section-theme="dark"].
+// Keys become custom properties: 'toc-color' -> --pf-toc-color.
+// ---------------------------------------------------------------------
+$pf-chrome-light: (
+  'sidebar-bg':    rgba($pf-white, 0.5),
+  'toc-color':     $pf-grey-600,
+  'toc-sub-color': $pf-grey-600,
+  'toc-active':    $pf-black,
+  'toc-rail':      $pf-grey-100,
+  'toc-top-color': $pf-grey-300,
+) !default;
+
+$pf-chrome-dark: (
+  'sidebar-bg':    rgba($pf-black, 0.5),
+  'toc-color':     $pf-grey-500,
+  'toc-sub-color': $pf-grey-400,
+  'toc-active':    $pf-white,
+  'toc-rail':      $pf-grey-900,
+  'toc-top-color': $pf-grey-300,
+) !default;
+
+// ---------------------------------------------------------------------
+// Sections. Set per section (.pf-section--theme-dark), not from <body>,
+// so a light section that is still partly in view keeps light colours.
+// ---------------------------------------------------------------------
+$pf-section-light: (
+  'section-scrim': rgba($pf-white, 0.6),
+) !default;
+
+$pf-section-dark: (
+  'section-fg':    $pf-white,
+  'section-bg':    $pf-black,
+  'section-scrim': rgba($pf-black, 0.5),
+) !default;
+
+// Writes a theme map out as --pf-* custom properties.
+@mixin pf-tokens($map) {
+  @each $name, $value in $map {
+    --pf-#{$name}: #{$value};
+  }
+}

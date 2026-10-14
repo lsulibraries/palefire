@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Palefire override of palefire_modular's TOC. Same markup as the module
+ * default, plus the scroll-tracking library and Origami's "Back to top"
+ * arrow (inline SVG, so it doesn't need Font Awesome).
+ */
+#}
+{{ attach_library('palefire/modular-toc') }}
+<nav class="pf-toc"{% if heading %} aria-labelledby="pf-toc-heading"{% else %} aria-label="{{ 'On this page'|t }}"{% endif %} data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
+  {% if heading %}<h2 id="pf-toc-heading" class="pf-toc__heading">{{ heading }}</h2>{% endif %}
+  <div class="pf-toc__rail">
+    <span class="pf-toc__indicator" aria-hidden="true"></span>
+    <ol class="pf-toc__list">
+      {% for item in items %}
+        <li class="pf-toc__item">
+          <a class="pf-toc__link" href="#{{ item.id }}">{{ item.label }}</a>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+  <a class="pf-toc__top" href="#top">
+    <svg class="pf-toc__top-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 4.5 11H9v10h6V11h4.5z"/></svg>
+    {{ 'Back to top'|t }}
+  </a>
+</nav>
