@@ -207,14 +207,19 @@ html.pf-snap .site-footer {
     grid-template-columns: var(--pf-sidebar-w) minmax(0, 1fr);
   }
 
-  .pf-modular__sidebar {
+  // Two classes so these beat Palefire's own .pf-sidebar rules and
+  // Bootstrap's .row > * / .offcanvas-lg, whatever order the CSS loads in.
+  .pf-sidebar.pf-modular__sidebar {
     position: sticky;
     top: var(--pf-header-h);
-    align-self: start;
+    align-self: flex-start; // a stretched column is as tall as the row, so it can't stick
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
     padding: 2rem 2.5rem;
-    background: var(--pf-sidebar-bg);
+    // Bootstrap sets `.offcanvas-lg { background-color: transparent
+    // !important }` from lg up, which hid the wash. Two classes plus
+    // !important wins without touching the mobile offcanvas.
+    background-color: var(--pf-sidebar-bg) !important;
     backdrop-filter: blur(26px);
     transition: background-color 0.3s ease;
 
@@ -223,9 +228,11 @@ html.pf-snap .site-footer {
       min-height: 100%;
     }
 
-    // Let the TOC block fill the column so "Back to top" sits at the
-    // bottom, like Origami's .sidebarFooter.
-    .offcanvas-body > :has(.pf-toc) {
+    // Every wrapper between .offcanvas-body and the nav (the region div
+    // and the block div) has to be a flex column too. Otherwise the TOC's
+    // `flex: 1 0 auto` has no effect and "Back to top" doesn't reach the
+    // bottom, like Origami's .sidebarFooter did.
+    .offcanvas-body :has(.pf-toc) {
       display: flex;
       flex: 1 0 auto;
       flex-direction: column;
