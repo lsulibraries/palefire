@@ -24,9 +24,15 @@
  * - Section changes are announced with a `palefire:sectionchange` event
  *   rather than body-class rewriting, so dark mode, background crossfades
  *   and similar features can subscribe on their own.
+ * - Dark chrome (Origami body.dark-mode): while a dark section is active
+ *   the TOC sidebar AND the top bar switch to their dark palette. See
+ *   applyChromeTheme() at the bottom of this file.
  * - Initial state is set directly. Origami's DOMContentLoaded listener
  *   was registered inside jQuery-ready, after that event had already
  *   fired, so it never ran.
+ * - Swup: the TOC detaches cleanly on 'unload' (observers and window
+ *   listeners are removed), so a page that has been swapped out can no
+ *   longer fire section changes or leave the header dark.
  */
 (function (Drupal, once) {
   'use strict';
@@ -35,9 +41,38 @@
   const SUB_HEADING_SELECTOR = 'h3';
   const SKIP_SELECTOR = '[data-toc-skip]';
 
+  // nav element -> teardown function (see initToc()).
+  const instances = new WeakMap();
+
   Drupal.behaviors.palefireModularToc = {
     attach(context) {
-      once('pf-toc', '[data-pf-toc]', context).forEach(initToc);
+      once('pf-toc', '[data-pf-toc]', context).forEach((nav) => {
+        const teardown = initToc(nav);
+        if (teardown) {
+          instances.set(nav, teardown);
+        }
+      });
+      // A page without a live TOC (not a modular_page, Form mode, or no
+      // titled sections) must not inherit the previous page's dark chrome
+      // after a Swup visit. The header lives outside #swup, so nothing else
+      // resets it.
+      if (!document.querySelector('[data-pf-toc]')) {
+        applyChromeTheme(null);
+      }
+    },
+    detach(context, settings, trigger) {
+      if (trigger !== 'unload') {
+        return;
+      }
+      once.remove('pf-toc', '[data-pf-toc]', context).forEach((nav) => {
+        const teardown = instances.get(nav);
+        if (teardown) {
+          teardown();
+        }
+        instances.delete(nav);
+      });
+      // The chrome theme is not reset here: the incoming page sets it on
+      // attach, so the header never flashes light between two dark pages.
     },
   };
 
@@ -67,17 +102,22 @@
       entries.push(entry);
     });
     if (!entries.length) {
-      return;
+      applyChromeTheme(null);
+      return null;
     }
 
     let active = null;
     let activeSub = null;
     let locked = false;
+    let destroyed = false;
+    // Removes every window listener added below in one go on teardown.
+    const listeners = new AbortController();
+    const { signal } = listeners;
 
     /* ---------------- Active state ---------------- */
 
     function setActive(entry) {
-      if (!entry || entry === active) {
+      if (destroyed || !entry || entry === active) {
         return;
       }
       if (active) {
@@ -97,7 +137,7 @@
       queueIndicator();
 
       document.dispatchEvent(new CustomEvent('palefire:sectionchange', {
-        detail: { id: entry.section.id, index: entries.indexOf(entry), section: entry.section },
+        detail: { id: entry.section.id, index: entries.indexOf(entry), section: entry.section, nav: nav },
       }));
     }
 
@@ -122,6 +162,9 @@
     // while it spans the line, however tall it is.
     let observer = null;
     function observe() {
+      if (destroyed) {
+        return;
+      }
       if (observer) {
         observer.disconnect();
       }
@@ -151,7 +194,7 @@
       ticking = true;
       requestAnimationFrame(() => {
         ticking = false;
-        if (locked) {
+        if (locked || destroyed) {
           return;
         }
         const doc = document.documentElement;
@@ -195,9 +238,14 @@
     // transitions share a duration and easing, so the bar keeps pace with
     // the list. Re-measuring partway through gives the same answer, so
     // ResizeObserver calls during the animation don't change its course.
+    //
+    // The bar only grows and shrinks when sections have sub-lists, i.e.
+    // when the TOC block renders with depth 2 ("Include h3 sub-links on
+    // these modes"). With depth 1 every item is one row tall, so the bar
+    // only slides.
     let indicatorQueued = false;
     function queueIndicator() {
-      if (indicatorQueued || !indicator) {
+      if (indicatorQueued || !indicator || destroyed) {
         return;
       }
       indicatorQueued = true;
@@ -208,7 +256,7 @@
     }
 
     function placeIndicator() {
-      if (!active) {
+      if (!active || destroyed) {
         return;
       }
       const railRect = rail.getBoundingClientRect();
@@ -270,7 +318,7 @@
         }
       });
       closeOffcanvas(nav);
-    });
+    }, { signal });
 
     function lockUntilScrollEnds(done) {
       locked = true;
@@ -280,7 +328,9 @@
         window.removeEventListener('scroll', debounce);
         clearTimeout(timer);
         locked = false;
-        done();
+        if (!destroyed) {
+          done();
+        }
       };
       // `scrollend` where supported, otherwise a scroll debounce.
       const debounce = () => {
@@ -288,10 +338,10 @@
         timer = setTimeout(finish, 150);
       };
       if ('onscrollend' in window) {
-        window.addEventListener('scrollend', finish, { once: true });
+        window.addEventListener('scrollend', finish, { once: true, signal });
       }
       else {
-        window.addEventListener('scroll', debounce, { passive: true });
+        window.addEventListener('scroll', debounce, { passive: true, signal });
       }
       timer = setTimeout(finish, 1200);
     }
@@ -299,14 +349,16 @@
     /* ---------------- Wire up ---------------- */
 
     observe();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(observe, 150);
-    });
+    }, { signal });
+    let resizeObserver = null;
     if ('ResizeObserver' in window) {
-      new ResizeObserver(queueIndicator).observe(list);
+      resizeObserver = new ResizeObserver(queueIndicator);
+      resizeObserver.observe(list);
     }
 
     // Initial state: the URL hash if there is one, otherwise whatever is
@@ -326,10 +378,26 @@
     requestAnimationFrame(titleTruncated);
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
+        if (destroyed) {
+          return;
+        }
         titleTruncated();
         queueIndicator();
       });
     }
+
+    // Swup 'unload': stop tracking a page that is being swapped out.
+    return function teardown() {
+      destroyed = true;
+      listeners.abort();
+      clearTimeout(resizeTimer);
+      if (observer) {
+        observer.disconnect();
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
   }
 
   function entryAtLine(entries) {
@@ -402,6 +470,53 @@
   }
 
   /* ------------------------------------------------------------------
+   * Dark chrome: the Origami body.dark-mode port.
+   *
+   * Origami added .dark-mode to <body> while a dark section was active,
+   * and #header plus .modularSidebar restyled themselves from that class.
+   * Palefire splits the same job in two:
+   *
+   *   body[data-section-theme="dark"]   TOC + sidebar colours, through the
+   *                                     --pf-toc-* / --pf-sidebar-bg tokens
+   *                                     (_modular-tokens.scss).
+   *   .pf-header[data-bs-theme="dark"]  Top bar. Bootstrap 5.3's own dark
+   *   .pf-modular__sidebar[...]         palette, so menu text, dropdowns,
+   *                                     the navbar toggler icon and the
+   *                                     mobile offcanvas (and its close
+   *                                     button) all switch with no
+   *                                     hand-written colours. Glass alpha
+   *                                     and hover colour: _chrome-dark.scss.
+   *
+   * Pass null to reset everything to the light default.
+   * ---------------------------------------------------------------- */
+  function applyChromeTheme(theme, nav) {
+    const dark = theme === 'dark';
+    const body = document.body;
+    if (theme) {
+      body.dataset.sectionTheme = theme;
+    }
+    else {
+      delete body.dataset.sectionTheme;
+      delete body.dataset.sectionIndex;
+      delete body.dataset.activeSection;
+    }
+    const sidebar = nav ? nav.closest('.pf-modular__sidebar') : null;
+    document.querySelectorAll('.pf-header').forEach((el) => setBsTheme(el, dark));
+    if (sidebar) {
+      setBsTheme(sidebar, dark);
+    }
+  }
+
+  function setBsTheme(el, dark) {
+    if (dark) {
+      el.setAttribute('data-bs-theme', 'dark');
+    }
+    else {
+      el.removeAttribute('data-bs-theme');
+    }
+  }
+
+  /* ------------------------------------------------------------------
    * Default subscriber: expose the active section to CSS on <body>, the
    * same role Origami's [slug][n] / firstSlide / dark-mode classes played.
    *   body[data-section-index="1"]        (was .firstSlide)
@@ -410,7 +525,7 @@
   document.addEventListener('palefire:sectionchange', (event) => {
     const section = event.detail.section;
     document.body.dataset.sectionIndex = String(event.detail.index + 1);
-    document.body.dataset.sectionTheme = section.dataset.sectionTheme || 'light';
     document.body.dataset.activeSection = event.detail.id;
+    applyChromeTheme(section.dataset.sectionTheme || 'light', event.detail.nav);
   });
 })(Drupal, once);

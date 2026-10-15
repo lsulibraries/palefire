@@ -1,0 +1,100 @@
+// Dark chrome: the top bar follows the active modular section.
+//
+// Port of Origami's `body.node--type-modular-page.dark-mode #header`
+// (bentosearch.scss): while a dark section is the active one, the header
+// turns dark along with the TOC sidebar.
+//
+// js/modular-toc.js (applyChromeTheme) sets, from palefire:sectionchange:
+//   body[data-section-theme="dark"]        TOC + sidebar tokens (_modular.scss)
+//   .pf-header[data-bs-theme="dark"]       this file
+//   .pf-modular__sidebar[data-bs-theme]    mobile offcanvas background
+//
+// data-bs-theme="dark" gives the header Bootstrap 5.3's dark palette, so
+// menu text, the border, dropdown menus and the navbar toggler icon switch
+// with no colours written here. This file only adds the glass tint, the gold
+// accent (Origami's hover colour) and the fade between the two.
+//
+// Import right after layout/header in style.scss:
+//   @import "layout/header";
+//   @import "layout/chrome-dark";
+
+// .7 black keeps $body-color-dark (#dee2e6) at about 6.5:1 and $pf-gold at
+// about 5.7:1 even over a white section, before the blur is counted. The top
+// bar can sit over the end of a light section while the dark one is already
+// active (the activation line is 30% down the viewport), so keep this at .7
+// or higher. Origami used #00000080 (.5), which fails 4.5:1 over white.
+$pf-header-bg-alpha-dark: .7 !default;
+// Same fade as the sidebar wash and the TOC rail (_modular.scss, _toc.scss).
+$pf-chrome-transition: .3s ease !default;
+// The logo is an <img>, so it can't take a fill colour. Set this to
+// `brightness(0) invert(1)` for a white wordmark on the dark bar, as Origami's
+// global dark mode did with its inline SVG.
+$pf-logo-filter-dark: none !default;
+
+.pf-header {
+  // Redeclares _header.scss's transition, adding the theme fade.
+  transition:
+    box-shadow $pf-header-transition,
+    background-color $pf-chrome-transition,
+    border-color $pf-chrome-transition;
+
+  &[data-bs-theme="dark"] {
+    --pf-header-bg: #{rgba($black, $pf-header-bg-alpha-dark)};
+
+    // Purple on near-black fails contrast. Gold matches Origami's hover.
+    .navbar {
+      --bs-navbar-hover-color: #{$pf-gold};
+      --bs-navbar-active-color: #{$pf-gold};
+    }
+
+    .pf-utility-nav__link {
+      &:hover,
+      &:focus-visible {
+        color: $pf-gold;
+      }
+    }
+
+    .pf-brand__logo {
+      filter: $pf-logo-filter-dark;
+    }
+  }
+}
+
+// The strip under a header that is growing back (.pf-page::before in
+// _header.scss) has to match the bar, or it shows as a light band.
+.pf-page::before {
+  transition: background-color $pf-chrome-transition;
+}
+
+body[data-section-theme="dark"] .pf-page::before {
+  background-color: rgba($black, $pf-header-bg-alpha-dark);
+}
+
+// No blur support: nearly opaque, as in light mode.
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pf-header[data-bs-theme="dark"] {
+    --pf-header-bg: #{rgba($black, $pf-header-bg-alpha-solid)};
+  }
+
+  body[data-section-theme="dark"] .pf-page::before {
+    background-color: rgba($black, $pf-header-bg-alpha-solid);
+  }
+}
+
+// Less transparency / more contrast: solid. The header already gets
+// var(--bs-body-bg) from _header.scss, which is the dark value under
+// data-bs-theme="dark". The strip is outside the header, so it needs its own.
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  body[data-section-theme="dark"] .pf-page::before {
+    background-color: $body-bg-dark;
+  }
+}
+
+// The transition above comes after _header.scss's reduced-motion rule, so
+// switch it off again here.
+@media (prefers-reduced-motion: reduce) {
+  .pf-header,
+  .pf-page::before {
+    transition: none;
+  }
+}
