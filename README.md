@@ -24,6 +24,25 @@ Any paragraph type with `field_section_title` placed in `field_sections` on a
 `modular_page` node becomes a `<section>` with an H2, a stable anchor, and a TOC
 entry. `field_full_page` turns on full-viewport scroll-snap (md and up).
 
+### Full-page backgrounds and frosted glass
+
+Section background images (`field_section_bg`) and bento background videos
+run past their section to fill the page: left under the "On this page"
+sidebar (lg and up) and, for the first section, up under the top bar. The top
+bar and the sidebar are frosted glass (translucent + `backdrop-filter`), so
+the background shows through, blurred. Only the decorative layer moves;
+section content and solid section colours stay in the main column.
+
+- Tune the glass in `scss/_variables.scss`: `$pf-glass-blur`,
+  `$pf-glass-saturate`, `$pf-header-bg-alpha`. The sidebar wash is
+  `sidebar-bg` in `scss/components/_modular-tokens.scss`.
+- `js/palefire.js` (`palefireBleedOffset`) measures how far the first
+  background has to reach up, so a breadcrumb, title or tabs above the
+  sections are covered too. Those stay on top of the image.
+- Users with `prefers-reduced-transparency` or `prefers-contrast: more` get
+  a solid top bar and sidebar. Browsers without `backdrop-filter` get a
+  nearly opaque top bar.
+
 ## Page transitions (Swup 4)
 
 `js/palefire-swup.js` swaps `#swup` (breadcrumb + body) and `#pf-primary-menu`

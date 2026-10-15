@@ -1,8 +1,19 @@
 // Top bar: logo | primary menu | utility icons.
 
 .pf-header {
-  background-color: var(--bs-body-bg);
-  border-bottom: 1px solid var(--bs-border-color);
+  // Frosted glass: on modular pages the first section's background image or
+  // video runs up under the bar, and every section scrolls beneath it.
+  --pf-header-bg: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha});
+  background-color: var(--pf-header-bg);
+  border-bottom: 1px solid rgba(var(--bs-emphasis-color-rgb), .08);
+  -webkit-backdrop-filter: var(--pf-glass-filter);
+  backdrop-filter: var(--pf-glass-filter);
+
+  // Open mobile menu: nearly opaque, so long link lists stay readable over
+  // a busy photo.
+  &:has(.navbar-collapse.show, .navbar-collapse.collapsing) {
+    --pf-header-bg: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha-solid});
+  }
 
   // Full-width bar (container-fluid) with responsive side padding.
   &__inner {
@@ -186,6 +197,23 @@
       min-height: $pf-header-compact-target;
       padding: .375rem;
     }
+  }
+}
+
+// No blur support: a nearly opaque bar instead of an unblurred see-through one.
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pf-header {
+    --pf-header-bg: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha-solid});
+  }
+}
+
+// Users who ask for less transparency or more contrast get a solid bar.
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .pf-header {
+    background-color: var(--bs-body-bg);
+    border-bottom-color: var(--bs-border-color);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

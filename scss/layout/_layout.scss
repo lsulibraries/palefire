@@ -9,6 +9,13 @@
   }
 }
 
+// Modular pages: the first section's background reaches up past the
+// breadcrumb to the top bar, so keep the breadcrumb above it.
+.pf-breadcrumb--modular {
+  position: relative;
+  z-index: 3;
+}
+
 .pf-body {
   padding-block: $spacer * 2;
 }

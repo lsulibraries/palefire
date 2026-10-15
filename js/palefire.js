@@ -73,6 +73,43 @@
   };
 
   /**
+   * Full-page backgrounds: the first section's background image or video
+   * reaches up under the top bar (--pf-bleed-block-start in _modular.scss).
+   * Measures the distance from the top of the page to that section, so the
+   * background also covers a breadcrumb, page title or tabs printed above
+   * it. Both points scroll with the page, and the compact header keeps the
+   * page from moving, so the value only changes when the layout does.
+   * .pf-body is replaced on every Swup visit, so this re-runs per page.
+   */
+  Drupal.behaviors.palefireBleedOffset = {
+    attach(context) {
+      once('pf-bleed-offset', '.pf-body--modular', context).forEach((body) => {
+        const section = body.querySelector('.pf-sections > .pf-section:first-child');
+        const pageTop = document.querySelector('.pf-header-sentinel');
+        if (!section || !pageTop) {
+          return;
+        }
+        const update = () => {
+          const offset = section.getBoundingClientRect().top - pageTop.getBoundingClientRect().top;
+          section.style.setProperty('--pf-bleed-block-start', `${Math.max(Math.round(offset), 0)}px`);
+        };
+        update();
+        if ('ResizeObserver' in window) {
+          // .pf-body resizes when the window does, and when anything above
+          // the section (title, tabs, messages) changes height. The
+          // breadcrumb sits outside it, so it is watched separately.
+          const observer = new ResizeObserver(update);
+          observer.observe(body);
+          const crumb = body.parentElement.querySelector(':scope > .pf-breadcrumb');
+          if (crumb) {
+            observer.observe(crumb);
+          }
+        }
+      });
+    },
+  };
+
+  /**
    * Escape closes the open mobile menu and returns focus to its toggle.
    */
   Drupal.behaviors.palefireMenuEscape = {

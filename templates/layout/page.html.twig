@@ -25,6 +25,12 @@
  * up, or a single full-width column when there is no sidebar. Other pages
  * keep the container-xxl + Bootstrap row layout.
  *
+ * Full-page backgrounds: on modular pages, section background images and
+ * bento background videos run past their section, left under the frosted
+ * TOC sidebar (pf-modular--has-toc, lg and up) and, for the first section,
+ * up under the frosted top bar. Only the decorative layer grows; the
+ * sections and their content keep their place in the main column.
+ *
  * Swup page transitions (js/palefire-swup.js, anonymous visitors only) swap
  * #swup (breadcrumb + body) and #pf-primary-menu (active trail) on each
  * visit. The header shell and footer persist between pages.
@@ -39,7 +45,7 @@
 
 {% if is_modular_page %}
   {% set body_classes = 'pf-body pf-body--modular flex-grow-1' %}
-  {% set row_classes = 'pf-modular' ~ (has_sidebar ? ' pf-modular--has-sidebar') %}
+  {% set row_classes = 'pf-modular' ~ (has_sidebar ? ' pf-modular--has-sidebar') ~ (has_toc ? ' pf-modular--has-toc') %}
   {% set main_classes = 'pf-main' %}
 {% else %}
   {% set body_classes = 'pf-body container-xxl flex-grow-1' %}
@@ -91,7 +97,7 @@
 
   <div id="swup" class="pf-swup transition-fade d-flex flex-column flex-grow-1">
     {% if page.breadcrumb %}
-      <div class="pf-breadcrumb container-xxl">
+      <div class="pf-breadcrumb container-xxl{{ is_modular_page ? ' pf-breadcrumb--modular' }}">
         {{ page.breadcrumb }}
       </div>
     {% endif %}

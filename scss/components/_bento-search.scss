@@ -1,5 +1,15 @@
 .pf-bento.has-bg-video { position: relative; isolation: isolate; }
-.pf-bento__media { position: absolute; inset: 0; overflow: hidden; } // no z-index here
+// The media layer bleeds like .pf-section__bg (see "Full-page backgrounds"
+// in _modular.scss): left under the TOC sidebar and, in the first section,
+// up under the top bar. The toggle moves down by the same amount, so it
+// stays 1rem inside the bento box.
+.pf-bento__media {
+  position: absolute;
+  inset: 0;
+  inset-block-start: calc(-1 * var(--pf-bleed-block-start, 0px));
+  inset-inline-start: calc(-1 * var(--pf-bleed-inline-start, 0px));
+  overflow: hidden;
+} // no z-index here
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 .pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .55); }
-.pf-bento__bg-toggle { position: absolute; top: 1rem; right: 1rem; z-index: 2; }
+.pf-bento__bg-toggle { position: absolute; top: calc(var(--pf-bleed-block-start, 0px) + 1rem); right: 1rem; z-index: 2; }

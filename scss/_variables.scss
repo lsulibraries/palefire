@@ -61,3 +61,13 @@ $pf-logo-compact-height-lg:  2.25rem;
 // asks for 24px; 44px is kept for the expanded header).
 $pf-header-target:           2.75rem;
 $pf-header-compact-target:   2.25rem;
+
+// Frosted-glass chrome: the top bar and the modular TOC sidebar let section
+// background images and videos show through, blurred. Lower the alpha for
+// more see-through, raise it for more contrast behind the menu text (.6
+// keeps #212529 text above 4.5:1 even over a black background).
+$pf-glass-blur:            26px;
+$pf-glass-saturate:        1.4;
+$pf-header-bg-alpha:       .6;
+// Used when the mobile menu is open, and when backdrop-filter isn't supported.
+$pf-header-bg-alpha-solid: .94;

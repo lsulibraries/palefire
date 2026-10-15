@@ -135,6 +135,40 @@ html.pf-snap .site-footer {
 }
 
 // ---------------------------------------------------------------------
+// Full-page backgrounds (bleed)
+// ---------------------------------------------------------------------
+// Section background images (below) and bento background videos
+// (_bento-search.scss) run past their section so they cover the whole
+// page: left under the frosted TOC sidebar, and, for the first section,
+// up under the frosted top bar. Only the decorative layer grows. The
+// section box, its content and its solid theme colour stay in the main
+// column, and nothing reflows.
+//
+// --pf-bleed-inline-start  how far a background reaches into the sidebar
+//                          column (the sidebar width, lg and up).
+// --pf-bleed-block-start   how far the first section's background reaches
+//                          up, to the top of the page. palefireBleedOffset
+//                          (js/palefire.js) measures it, so a breadcrumb,
+//                          page title or tabs above the sections are
+//                          covered too. Without JS it is the header height.
+//
+// To turn the side bleed off, set --pf-bleed-inline-start: 0px on a
+// section or wrapper. The top bleed is an inline style from the JS, so
+// switch it off with `.pf-section__bg { inset-block-start: 0; }` instead.
+.pf-body--modular .pf-sections > .pf-section:first-child {
+  --pf-bleed-block-start: var(--pf-header-full, var(--pf-header-h));
+}
+
+// Anything printed above the sections (page title, tabs, status messages)
+// stays on top of a background that bleeds up behind it. The breadcrumb
+// gets the same treatment in _layout.scss.
+.pf-body--modular .pf-main .block:not(:has(.pf-sections)):not(.pf-sections *),
+.pf-body--modular [data-drupal-messages] {
+  position: relative;
+  z-index: 3;
+}
+
+// ---------------------------------------------------------------------
 // Section background image (field_section_bg)
 // ---------------------------------------------------------------------
 // The image is a real responsive <img> from the "section_background"
@@ -147,6 +181,10 @@ html.pf-snap .site-footer {
 .pf-section__bg {
   position: absolute;
   inset: 0;
+  // Bleed (see above). The section is not clipped, so the layer can reach
+  // under the sidebar and the top bar.
+  inset-block-start: calc(-1 * var(--pf-bleed-block-start, 0px));
+  inset-inline-start: calc(-1 * var(--pf-bleed-inline-start, 0px));
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
@@ -266,6 +304,13 @@ html.pf-snap .site-footer {
     grid-template-columns: var(--pf-sidebar-w) minmax(0, 1fr);
   }
 
+  // Section backgrounds reach left under the frosted TOC column. Only with
+  // the TOC: a plain sidebar has no glass, so its text would sit straight
+  // on the photo.
+  .pf-modular--has-toc {
+    --pf-bleed-inline-start: var(--pf-sidebar-w);
+  }
+
   // Two classes so these beat Palefire's own .pf-sidebar rules and
   // Bootstrap's .row > * / .offcanvas-lg, whatever order the CSS loads in.
   .pf-sidebar.pf-modular__sidebar {
@@ -279,8 +324,12 @@ html.pf-snap .site-footer {
     // !important }` from lg up, which hid the wash. Two classes plus
     // !important wins without touching the mobile offcanvas.
     background-color: var(--pf-sidebar-bg) !important;
-    backdrop-filter: blur(26px);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
     transition: background-color 0.3s ease;
+    // Above the section backgrounds that bleed in under it (each
+    // .pf-section__inner is z-index 1); below the header (1020).
+    z-index: 2;
 
     .offcanvas-body {
       flex-direction: column;
@@ -296,6 +345,23 @@ html.pf-snap .site-footer {
       flex: 1 0 auto;
       flex-direction: column;
     }
+  }
+}
+
+// Less transparency / more contrast: a solid sidebar. The backgrounds still
+// run underneath it, they just don't show through.
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  :root {
+    --pf-sidebar-bg: var(--bs-body-bg);
+  }
+
+  body[data-section-theme="dark"] {
+    --pf-sidebar-bg: #{$pf-grey-900};
+  }
+
+  .pf-sidebar.pf-modular__sidebar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

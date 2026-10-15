@@ -2,6 +2,10 @@
 
 :root {
   --pf-header-h: #{$pf-header-fallback};
+  // Frosted glass (top bar, modular sidebar). Custom property values are
+  // passed through as plain CSS, so Sass never treats saturate() as its
+  // colour function.
+  --pf-glass-filter: blur(#{$pf-glass-blur}) saturate(#{$pf-glass-saturate});
   --pf-focus-color: #{$pf-purple};
 }
 
