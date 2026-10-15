@@ -11,6 +11,24 @@
   --pf-toc-accent: #{$pf-toc-accent};
   @include pf-tokens($pf-chrome-light);
   @include pf-tokens($pf-section-light);
+
+  // Section padding (.pf-section__inner). The bento video layer and the
+  // events carousel read these too, so change them here.
+  --pf-section-pad-block: 3rem;
+  --pf-section-pad-inline: 1.25rem;
+
+  @include media-breakpoint-up(md) {
+    --pf-section-pad-block: 5rem;
+    --pf-section-pad-inline: 3.75rem;
+  }
+}
+
+// Registered so the side bleed can animate with the sidebar column when
+// the TOC is hidden or shown (see "TOC sidebar toggle" below).
+@property --pf-bleed-inline-start {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
 }
 
 // Sidebar + TOC follow the active section (set by modular-toc.js).
@@ -55,7 +73,8 @@ html.pf-snap .site-footer {
   scroll-margin-top: var(--pf-header-h);
 }
 
-// Full bleed: no side padding. Paragraph content owns its own spacing.
+// Full bleed: the section box reaches both edges. The padding below only
+// moves the content in.
 .pf-section__inner {
   position: relative;
   z-index: 1;
@@ -69,6 +88,18 @@ html.pf-snap .site-footer {
 .pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek) {
   margin-block: 0;
   padding-block: 0;
+}
+
+// Inner padding. Only the content moves in: the section box, its theme
+// colour and every background layer still start at the section edge.
+.pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek) > .pf-section__inner {
+  padding: var(--pf-section-pad-block) var(--pf-section-pad-inline);
+}
+
+// Opt out per section (an edge-to-edge carousel, for example).
+.pf-section--flush {
+  --pf-section-pad-block: 0px;
+  --pf-section-pad-inline: 0px;
 }
 
 // Height: auto, sized to its content (bento). No extra rules needed.
@@ -131,18 +162,32 @@ html.pf-snap .site-footer {
   @include pf-tokens($pf-section-dark);
   color-scheme: dark;
   color: var(--pf-section-fg);
-  background: var(--pf-section-bg);
+  isolation: isolate;
+
+  // The colour is a layer, not the section's own background, so it bleeds
+  // under the sidebar and the top bar like images and videos (see below).
+  // It paints under .pf-section__bg, which comes later in the markup.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    inset-block-start: calc(-1 * var(--pf-bleed-block-start, 0px));
+    inset-inline-start: calc(-1 * var(--pf-bleed-inline-start));
+    z-index: -1;
+    background: var(--pf-section-bg);
+    pointer-events: none;
+  }
 }
 
 // ---------------------------------------------------------------------
 // Full-page backgrounds (bleed)
 // ---------------------------------------------------------------------
-// Section background images (below) and bento background videos
-// (_bento-search.scss) run past their section so they cover the whole
-// page: left under the frosted TOC sidebar, and, for the first section,
-// up under the frosted top bar. Only the decorative layer grows. The
-// section box, its content and its solid theme colour stay in the main
-// column, and nothing reflows.
+// Section background images (below), dark theme colours (above) and bento
+// background videos (_bento-search.scss) run past their section so they
+// cover the whole page: left under the frosted TOC sidebar, and, for the
+// first section, up under the frosted top bar. Only the decorative layers
+// grow. The section box and its content stay in the main column, and
+// nothing reflows.
 //
 // --pf-bleed-inline-start  how far a background reaches into the sidebar
 //                          column (the sidebar width, lg and up).
@@ -309,6 +354,9 @@ html.pf-snap .site-footer {
   // on the photo.
   .pf-modular--has-toc {
     --pf-bleed-inline-start: var(--pf-sidebar-w);
+    transition:
+      grid-template-columns 0.3s ease,
+      --pf-bleed-inline-start 0.3s ease;
   }
 
   // Two classes so these beat Palefire's own .pf-sidebar rules and
@@ -316,6 +364,7 @@ html.pf-snap .site-footer {
   .pf-sidebar.pf-modular__sidebar {
     position: sticky;
     top: var(--pf-header-h);
+    width: var(--pf-sidebar-w); // keeps the TOC from reflowing while the column animates
     align-self: flex-start; // a stretched column is as tall as the row, so it can't stick
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
@@ -334,6 +383,7 @@ html.pf-snap .site-footer {
     .offcanvas-body {
       flex-direction: column;
       min-height: 100%;
+      transition: opacity 0.2s ease;
     }
 
     // Every wrapper between .offcanvas-body and the nav (the region div
@@ -345,6 +395,103 @@ html.pf-snap .site-footer {
       flex: 1 0 auto;
       flex-direction: column;
     }
+  }
+
+  // -------------------------------------------------------------------
+  // TOC sidebar toggle
+  // -------------------------------------------------------------------
+  // js/modular-toc-collapse.js puts .pf-toc-collapsed on <html>. The
+  // column closes and the backgrounds stop reaching left, so they still
+  // cover the page edge to edge. Below lg the offcanvas is unaffected.
+  html.pf-toc-collapsed .pf-modular--has-toc {
+    grid-template-columns: 0px minmax(0, 1fr);
+    --pf-bleed-inline-start: 0px;
+  }
+
+  // visibility also takes the links out of the tab order and the
+  // accessibility tree. It switches after the fade, so the TOC doesn't
+  // vanish before the column has closed.
+  html.pf-toc-collapsed .pf-sidebar.pf-modular__sidebar {
+    visibility: hidden;
+    pointer-events: none;
+    background-color: transparent !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition:
+      background-color 0.3s ease,
+      visibility 0s linear 0.3s;
+
+    .offcanvas-body {
+      opacity: 0;
+    }
+  }
+
+  // Open: top right of the sidebar, level with the "On this page" heading.
+  .pf-modular__toc-collapse {
+    position: absolute;
+    top: 1.65rem;
+    inset-inline-end: 0.75rem;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 1px solid var(--pf-toc-rail);
+    border-radius: 50%;
+    color: var(--pf-toc-color);
+    background-color: transparent;
+    visibility: visible; // stays visible while the sidebar is hidden
+    pointer-events: auto;
+    transition:
+      color 0.2s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  // Closed: a small glass button that floats in the content's side
+  // padding (1rem + 2.25rem fits inside --pf-section-pad-inline).
+  html.pf-toc-collapsed .pf-modular__toc-collapse {
+    top: 1rem;
+    inset-inline-start: 1rem;
+    inset-inline-end: auto;
+    background-color: var(--pf-sidebar-bg);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  html[dir="rtl"] .pf-modular__toc-collapse svg {
+    transform: scaleX(-1);
+  }
+
+  html[dir="rtl"].pf-toc-collapsed .pf-modular__toc-collapse svg {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-modular--has-toc,
+  .pf-sidebar.pf-modular__sidebar,
+  .pf-sidebar.pf-modular__sidebar .offcanvas-body,
+  .pf-modular__toc-collapse,
+  .pf-modular__toc-collapse svg {
+    transition: none !important;
   }
 }
 
@@ -368,8 +515,10 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Events carousel section: hand Palefire's tokens to the block
 // ---------------------------------------------------------------------
+// Minus the section's block padding, so a screen-height section still
+// fits the viewport.
 .pf-events-carousel .libcal-day-carousel {
-  --ldc-min-height: calc(100dvh - var(--pf-header-h));
+  --ldc-min-height: calc(100dvh - var(--pf-header-h) - 2 * var(--pf-section-pad-block, 0px));
 }
 
 .pf-section--theme-dark .libcal-day-carousel {

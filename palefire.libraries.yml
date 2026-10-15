@@ -159,3 +159,26 @@ bento-video:
   dependencies:
     - core/drupal
     - core/once
+
+# "On this page" scroll tracking, moving indicator and Guide sub-links.
+# Attached by templates/navigation/palefire-modular-toc.html.twig.
+modular-toc:
+  version: 1.0.0
+  js:
+    js/modular-toc.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# Hide / show the TOC sidebar (lg and up). Attached by page.html.twig on
+# modular pages with a TOC. Loads in <head> so the saved state is on <html>
+# before the page paints (no flash, no animation on load); that also moves
+# its core/drupal and core/once dependencies to <head> on those pages.
+modular-toc-collapse:
+  version: 1.0.0
+  header: true
+  js:
+    js/modular-toc-collapse.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

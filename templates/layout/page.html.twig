@@ -111,11 +111,19 @@
                  {% if has_toc %}tabindex="-1"{% endif %}
                  aria-label="{{ 'Page navigation'|t }}">
             {% if has_toc %}
+              {# Hide / show the sidebar, lg and up (js/modular-toc-collapse.js).
+                 Below lg the "On this page" offcanvas button is used instead. #}
+              {{ attach_library('palefire/modular-toc-collapse') }}
+              <button type="button" class="pf-modular__toc-collapse d-none d-lg-inline-flex"
+                      data-pf-toc-collapse aria-controls="pf-modular-sidebar-body" aria-expanded="true">
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>
+                <span class="visually-hidden">{{ 'On this page sidebar'|t }}</span>
+              </button>
               <div class="offcanvas-header">
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
                         aria-label="{{ 'Close'|t }}"></button>
               </div>
-              <div class="offcanvas-body">
+              <div class="offcanvas-body" id="pf-modular-sidebar-body">
                 {{ modular_toc }}
                 {{ page.sidebar }}
               </div>
