@@ -55,10 +55,12 @@ html.pf-snap .site-footer {
   scroll-margin-top: var(--pf-header-h);
 }
 
+// Full width by default. A section that needs side gutters sets
+// --pf-section-gutter (see the bento section below).
 .pf-section__inner {
   position: relative;
   z-index: 1;
-  padding-inline: clamp(1rem, 4vw, 5rem);
+  padding-inline: var(--pf-section-gutter, 0);
 }
 
 // Height: auto, sized to its content (bento).
@@ -71,10 +73,19 @@ html.pf-snap .site-footer {
   min-height: calc(100dvh - var(--pf-header-h));
   display: grid;
   align-content: center;
+}
 
-  > .pf-section__inner {
-    padding-inline: 0;
-  }
+// Height: peek, about 90% of the viewport under the header, so the top of
+// the next section shows as a scroll cue. min-height (not height) lets long
+// content grow instead of being clipped (reflow / text resize). svh keeps
+// the peek visible while mobile browser toolbars are showing; the vh line
+// is the fallback for older browsers.
+.pf-section--peek {
+  --pf-section-peek: 0.9; // lower it (e.g. 0.85) to show more of the next section
+  min-height: calc((100vh - var(--pf-header-h)) * var(--pf-section-peek));
+  min-height: calc((100svh - var(--pf-header-h)) * var(--pf-section-peek));
+  display: grid;
+  align-content: center;
 }
 
 .pf-section--snap {
@@ -155,6 +166,12 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Bento section (first section, not full height)
 // ---------------------------------------------------------------------
+// Bordered tiles shouldn't touch the screen edge on phones, so this
+// section keeps a side gutter even though sections are full width.
+.pf-section--bento-search {
+  --pf-section-gutter: clamp(1rem, 4vw, 5rem);
+}
+
 .pf-bento {
   max-width: 1280px;
   margin-inline: auto;
