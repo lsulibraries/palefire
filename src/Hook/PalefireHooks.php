@@ -11,31 +11,6 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
-#[Hook('preprocess_paragraph')]
-public function preprocessBentoVideo(array &$variables): void {
-  $p = $variables['paragraph'];
-  if ($p->bundle() !== 'bento_search' || !$p->hasField('field_bg_videos') || $p->get('field_bg_videos')->isEmpty()) {
-    return;
-  }
-  $gen = \Drupal::service('file_url_generator');
-  $cache = CacheableMetadata::createFromRenderArray($variables);
-  $urls = [];
-  foreach ($p->get('field_bg_videos')->referencedEntities() as $media) {
-    $field = $media->getSource()->getConfiguration()['source_field'];
-    if ($file = $media->get($field)->entity) {
-      $urls[] = $gen->generateString($file->getFileUri());
-      $cache->addCacheableDependency($media)->addCacheableDependency($file);
-    }
-  }
-  if ($p->hasField('field_bg_poster') && ($poster = $p->get('field_bg_poster')->entity)) {
-    $variables['bg_poster'] = $gen->generateString($poster->getFileUri());
-  }
-  $variables['bg_videos'] = $urls;
-  $variables['#attached']['library'][] = 'palefire/bento-video';
-  $cache->applyTo($variables);
-}
-
-
 /**
  * Hook implementations for the Palefire theme.
  *
@@ -166,6 +141,48 @@ class PalefireHooks {
   }
 
   /**
+   * Implements hook_preprocess_paragraph() for bento background videos.
+   *
+   * Exposes bg_videos (ordered MP4 URLs) and bg_poster to the bento_search
+   * paragraph template. The template attaches palefire/bento-video itself.
+   */
+  #[Hook('preprocess_paragraph')]
+  public function preprocessBentoVideo(array &$variables): void {
+    $paragraph = $variables['paragraph'] ?? NULL;
+    if (!$paragraph instanceof FieldableEntityInterface
+      || $paragraph->bundle() !== 'bento_search'
+      || !$paragraph->hasField('field_bg_videos')
+      || $paragraph->get('field_bg_videos')->isEmpty()) {
+      return;
+    }
+
+    $generator = \Drupal::service('file_url_generator');
+    $cache = CacheableMetadata::createFromRenderArray($variables);
+    $cache->addCacheableDependency($paragraph);
+
+    $urls = [];
+    foreach ($paragraph->get('field_bg_videos')->referencedEntities() as $media) {
+      $source_field = $media->getSource()->getConfiguration()['source_field'] ?? NULL;
+      if (!$source_field || !$media->hasField($source_field)) {
+        continue;
+      }
+      $file = $media->get($source_field)->entity;
+      if ($file) {
+        $urls[] = $generator->generateString($file->getFileUri());
+        $cache->addCacheableDependency($media)->addCacheableDependency($file);
+      }
+    }
+
+    if ($paragraph->hasField('field_bg_poster') && ($poster = $paragraph->get('field_bg_poster')->entity)) {
+      $variables['bg_poster'] = $generator->generateString($poster->getFileUri());
+      $cache->addCacheableDependency($poster);
+    }
+
+    $variables['bg_videos'] = $urls;
+    $cache->applyTo($variables);
+  }
+
+  /**
    * Implements hook_preprocess_block().
    */
   #[Hook('preprocess_block')]
@@ -199,88 +216,4 @@ class PalefireHooks {
       }
     }
     return $visible;
-  }
-
-  /**
-   * Computes anchor/label/TOC data for every section on a host entity.
-   *
-   * @return array<string, array{anchor: string, label: string, toc: bool}>
-   *   Section data keyed by paragraph UUID.
-   */
-  public static function sectionData(FieldableEntityInterface $host): array {
-    $key = implode(':', [
-      $host->getEntityTypeId(),
-      $host->id() ?? 'new-' . $host->uuid(),
-      method_exists($host, 'getRevisionId') ? (string) $host->getRevisionId() : '',
-      $host->language()->getId(),
-    ]);
-    if (isset(self::$sectionData[$key])) {
-      return self::$sectionData[$key];
-    }
-
-    $data = [];
-    if ($host->hasField(self::SECTIONS_FIELD)) {
-      $repository = \Drupal::service('entity.repository');
-      $used = array_fill_keys(self::RESERVED_IDS, TRUE);
-      foreach ($host->get(self::SECTIONS_FIELD) as $delta => $item) {
-        $paragraph = $item->entity;
-        if (!$paragraph instanceof FieldableEntityInterface || !$paragraph->hasField('field_section_title')) {
-          continue;
-        }
-        $paragraph = $repository->getTranslationFromContext($paragraph);
-        $label = trim((string) $paragraph->get('field_section_title')->value);
-        $custom = self::stringValue($paragraph, 'field_section_anchor');
-
-        $base = self::slug($custom !== '' ? $custom : $label) ?: 'section-' . ($delta + 1);
-        $anchor = $base;
-        $i = 2;
-        while (isset($used[$anchor])) {
-          $anchor = $base . '-' . $i++;
-        }
-        $used[$anchor] = TRUE;
-
-        $data[$paragraph->uuid()] = [
-          'anchor' => $anchor,
-          'label' => $label,
-          'toc' => $label !== '' && (!$paragraph->hasField('field_show_in_toc') || self::boolValue($paragraph, 'field_show_in_toc', TRUE)),
-        ];
-      }
-    }
-    return self::$sectionData[$key] = $data;
-  }
-
-  /**
-   * Converts text to a URL-fragment-friendly, valid HTML ID.
-   */
-  public static function slug(string $text): string {
-    $text = mb_strtolower(trim($text));
-    if ($text === '') {
-      return '';
-    }
-    $text = \Drupal::transliteration()->transliterate($text, 'en', '');
-    $text = preg_replace('/[^a-z0-9]+/', '-', $text) ?? '';
-    $text = trim(substr($text, 0, 64), '-');
-    return $text === '' ? '' : Html::cleanCssIdentifier($text);
-  }
-
-  /**
-   * Reads a boolean field value with a default.
-   */
-  private static function boolValue(FieldableEntityInterface $entity, string $field, bool $default = FALSE): bool {
-    if (!$entity->hasField($field) || $entity->get($field)->isEmpty()) {
-      return $default;
-    }
-    return (bool) $entity->get($field)->value;
-  }
-
-  /**
-   * Reads a string field value, or '' when missing/empty.
-   */
-  private static function stringValue(FieldableEntityInterface $entity, string $field): string {
-    if (!$entity->hasField($field) || $entity->get($field)->isEmpty()) {
-      return '';
-    }
-    return trim((string) $entity->get($field)->value);
-  }
-
-}
+ 
