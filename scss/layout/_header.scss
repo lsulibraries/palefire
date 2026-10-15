@@ -143,8 +143,9 @@
 
 // Compact header after scrolling ---------------------------------------------
 // js/palefire.js toggles .pf-header--compact. The header's bottom margin
-// makes up the height it loses, so the page below never jumps; that margin
-// sits under the stuck header and is never visible.
+// makes up the height it loses, so the page below never jumps. Once the
+// page is scrolled, that margin sits under the stuck header and is out of
+// sight; near the top, .pf-page::before (below) covers it.
 //
 // The header shrinks once the sentinel has scrolled out of view. On pages
 // with the sticky TOC sidebar, palefireCompactAfter sets --pf-compact-after
@@ -205,20 +206,50 @@
   }
 }
 
+// Header glass over its bottom margin. When the header grows back while
+// the page is scrolled less than that margin (scrolling or jumping up to
+// the top), the bar is still shorter than the space it holds open. The
+// strip between the bar and the page used to show straight through to the
+// section background, so the TOC sidebar looked cut off from the header.
+// This layer fills the strip with the same glass. It sits in the page, not
+// in the header, so it scrolls away under the stuck header and never covers
+// content. Its height is the margin's, so it is 0px when the header is
+// expanded.
+.pf-page::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--pf-header-h) + 1px); // below the bar and its 1px border
+  inset-inline: 0;
+  height: max(0px, calc(var(--pf-header-full, var(--pf-header-h)) - var(--pf-header-h)));
+  z-index: $zindex-sticky - 1; // just under the header
+  pointer-events: none;
+  background-color: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha});
+  -webkit-backdrop-filter: var(--pf-glass-filter);
+  backdrop-filter: var(--pf-glass-filter);
+}
+
 // No blur support: a nearly opaque bar instead of an unblurred see-through one.
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .pf-header {
     --pf-header-bg: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha-solid});
   }
+
+  .pf-page::before {
+    background-color: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha-solid});
+  }
 }
 
 // Users who ask for less transparency or more contrast get a solid bar.
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .pf-header {
+  .pf-header,
+  .pf-page::before {
     background-color: var(--bs-body-bg);
-    border-bottom-color: var(--bs-border-color);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+  }
+
+  .pf-header {
+    border-bottom-color: var(--bs-border-color);
   }
 }
 
