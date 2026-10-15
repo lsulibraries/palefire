@@ -145,13 +145,18 @@
 // js/palefire.js toggles .pf-header--compact. The header's bottom margin
 // makes up the height it loses, so the page below never jumps; that margin
 // sits under the stuck header and is never visible.
+//
+// The header shrinks once the sentinel has scrolled out of view. On pages
+// with the sticky TOC sidebar, palefireCompactAfter sets --pf-compact-after
+// to the scroll distance the sidebar needs before it can rise to the
+// compact bar, so no gap opens under the header.
 
 .pf-header-sentinel {
   position: absolute;
   top: 0;
   left: 0;
   width: 1px;
-  height: $pf-header-compact-after;
+  height: max(#{$pf-header-compact-after}, var(--pf-compact-after, 0px));
   pointer-events: none;
 }
 

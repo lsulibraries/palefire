@@ -49,7 +49,7 @@ $pf-header-gutters: (
 $pf-header-fallback: 4.5rem; // Header height before JS measures it.
 
 // Compact header after scrolling (.pf-header--compact).
-$pf-header-compact-after:    4rem;    // Scroll distance before it shrinks.
+$pf-header-compact-after:    4rem;    // Minimum scroll distance before it shrinks.
 $pf-header-transition:       .2s ease-out;
 $pf-header-padding-y:        .5rem;   // Bar padding, top and bottom.
 $pf-header-compact-padding-y: .125rem;
