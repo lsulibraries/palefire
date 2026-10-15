@@ -106,13 +106,14 @@ class PalefireHooks {
   }
 
   /**
-   * Implements hook_preprocess_paragraph().
+   * Adds bento background video variables (bg_videos, bg_poster).
    *
-   * Exposes section variables consumed by paragraph.html.twig.
+   * Called from preprocessParagraph(); themes may implement each hook only
+   * once. The bento_search template attaches palefire/bento-video itself.
    */
-  #[Hook('preprocess_paragraph')]
-  public function preprocessParagraph(array &$variables): void {
+  private function bentoVideoVariables(array &$variables): void {
     $variables['is_section'] = FALSE;
+    $this->bentoVideoVariables($variables);
 
     /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
     $paragraph = $variables['paragraph'] ?? NULL;
