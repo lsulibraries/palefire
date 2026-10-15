@@ -1,0 +1,60 @@
+# Building floor maps. One entry per building drawing.
+#
+# Keys are stable machine names: they tie the drawing's regions to the
+# "Building spaces" taxonomy terms (field_map_key = building or
+# building.space). Don't rename a key once its terms exist.
+#
+# After adding or changing an entry, re-run
+#   drush php:script themes/custom/palefire/scripts/palefire_building_map_setup.php
+# to create the new terms and update the editor dropdowns. intro, access and
+# tooltip are starting values only: the script never overwrites a term that
+# already exists, so editors own the text from then on.
+#
+# List spaces in the order the map's list should show them: Floor 1 first.
+
+hill_memorial:
+  label: Hill Memorial Library
+  heading: Visit Hill Memorial Library
+  template: '@palefire/includes/hill-memorial-map.svg.twig'
+  intro: Exhibitions, the reading room and quiet study are open to everyone. Seminar, lecture, McIlhenny Room and oral history spaces are available by request.
+  spaces:
+    reading_room:
+      label: Reading Room
+      floor: 1
+      access: walk_in
+      tooltip: Use Special Collections materials at the reading room tables. No appointment needed during open hours.
+    gallery_1:
+      label: Floor 1 Gallery
+      floor: 1
+      access: walk_in
+      tooltip: Our current exhibition on the first floor. Open to everyone during building hours.
+    lecture_hall:
+      label: Lecture Hall
+      floor: 1
+      access: appointment
+      tooltip: Talks, class sessions and events. Request a date with your group size and AV needs.
+    gallery_2:
+      label: Floor 2 Gallery
+      floor: 2
+      access: walk_in
+      tooltip: Second-floor exhibition space overlooking the lobby. Open to everyone during building hours.
+    quiet_study:
+      label: Quiet Study
+      floor: 2
+      access: walk_in
+      tooltip: Individual, quiet study on the second floor. Walk in any time the building is open.
+    seminar_space:
+      label: Seminar Space
+      floor: 2
+      access: appointment
+      tooltip: A small-group room for classes and instruction sessions using collection materials.
+    mcilhenny_room:
+      label: McIlhenny Room
+      floor: 2
+      access: appointment
+      tooltip: Available by request for meetings and events. Contact Special Collections to book.
+    oral_history:
+      label: Oral History
+      floor: 2
+      access: appointment
+      tooltip: Meet with oral history staff or listen to recordings by appointment.

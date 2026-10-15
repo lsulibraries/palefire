@@ -7,9 +7,11 @@
  * Variables:
  *   uid    - unique prefix for ids (mask, title, tooltip sources).
  *   spaces - region key => { title, access, url, tip } built by
- *            paragraph--building-map.html.twig. A region renders only when
- *            its key is present: as a link when the space has one, otherwise
- *            as a focusable group that still shows its tooltip.
+ *            palefire_preprocess_paragraph__building_map() from the published
+ *            "Building spaces" room terms (hill_memorial.* keys). A region
+ *            renders only when its key is present: as a link when the room
+ *            has one, otherwise as a focusable group that still shows its
+ *            tooltip. Region keys match the spaces in maps/buildings.yml.
  *
  * Labels are plain, selectable <text>. Each carries only its position
  * (--x / --y, in map units); rotate and skew are applied in

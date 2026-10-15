@@ -2,45 +2,76 @@
 
 /**
  * @file
- * Creates the Building map content model (Option B: the map lives inside the
- * bento section, under the search form). Idempotent: safe to re-run.
+ * Creates the building map content model and syncs rooms from
+ * maps/buildings.yml. Idempotent: safe to re-run after editing that file.
  *
  *   drush php:script themes/custom/palefire/scripts/palefire_building_map_setup.php
+ *   drush php:script themes/custom/palefire/scripts/palefire_building_map_setup.php -- cleanup
  *   drush cr
  *
- * Paragraph types
- *   bento_search  (existing)
- *     field_bento_map    ERR -> building_map  optional map under the search form
- *   building_map  "Building map"      (only inside bento_search)
- *     field_map_heading  string           h3 above the map (shows in the TOC)
- *     field_map_intro    text_long        intro beside the map
- *     field_map_spaces   ERR -> map_space one per room
- *   map_space     "Map space"         (only inside building_map)
- *     field_map_region   list_string      which SVG region it switches on
- *     field_space_access list_string      walk_in | appointment
- *     field_space_title  string           tooltip heading + accessible name
- *     field_space_body   text_long        tooltip text (a sentence or two)
- *     field_space_link   link             optional: the room links here
+ * Taxonomy: Building spaces (building_space), hierarchical
+ *   Building term (field_map_key = building key, e.g. hill_memorial)
+ *     description         intro beside the map (default for every page)
+ *   └ Room term (field_map_key = building.space, e.g. hill_memorial.reading_room)
+ *     description         tooltip text
+ *     field_space_access  walk_in | appointment
+ *     field_space_link    optional: the room links here
+ *     Published           unpublish to draw the room as plain floor
+ *   Terms are created from buildings.yml; existing terms are never overwritten.
  *
- * Upgrading from the earlier "Section: Building map" version: the script
- * relabels the existing types/fields and adds McIlhenny Room. It does not
- * delete anything; see README for the old fields you can remove by hand.
+ * Paragraph types
+ *   bento_search  (existing)  field_bento_map -> building_map
+ *   building_map  "Building map"
+ *     field_map_building   list_string   which building (buildings.yml)
+ *     field_map_heading    string        optional heading override
+ *     field_map_intro      text_long     optional intro override
+ *     field_map_overrides  ERR -> map_room_override (rarely used)
+ *   map_room_override  "Room override"  (only inside building_map)
+ *     field_room_key       list_string   building.space
+ *     field_space_body / field_space_access / field_space_link: each optional,
+ *     replaces the room term's value on this map only.
+ *
+ * Upgrading from the per-page "Map space" version: map_space and
+ * building_map.field_map_spaces are no longer used. Run with "cleanup" to
+ * delete them (and any Map space paragraphs); without it they are only listed.
  */
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\paragraphs\Entity\ParagraphsType;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
+
+if (PHP_SAPI !== 'cli') {
+  return;
+}
+$cleanup = in_array('cleanup', $extra ?? [], TRUE);
 
 $installer = \Drupal::service('module_installer');
-foreach (['paragraphs', 'entity_reference_revisions', 'options', 'text', 'link'] as $module) {
+foreach (['taxonomy', 'paragraphs', 'entity_reference_revisions', 'options', 'text', 'link'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     $installer->install([$module]);
     echo "Enabled $module\n";
   }
 }
 
-$repo = \Drupal::service('entity_display.repository');
+$file = dirname(__DIR__) . '/maps/buildings.yml';
+$buildings = is_readable($file) ? (Yaml::decode(file_get_contents($file)) ?: []) : [];
+if (!$buildings) {
+  echo "No buildings in $file.\n";
+  return;
+}
+if (!ParagraphsType::load('bento_search')) {
+  echo "Paragraph type bento_search not found (palefire_modular). Install it first, then re-run.\n";
+  return;
+}
 
+$repo = \Drupal::service('entity_display.repository');
+$format = FilterFormat::load('basic_html') ? 'basic_html' : filter_fallback_format();
+
+// Helpers ---------------------------------------------------------------------
 $type = function (string $id, string $label, string $description) {
   $existing = ParagraphsType::load($id);
   if (!$existing) {
@@ -53,41 +84,58 @@ $type = function (string $id, string $label, string $description) {
   }
 };
 
-$storage = function (string $name, string $field_type, array $settings = [], int $cardinality = 1) {
-  if (!FieldStorageConfig::loadByName('paragraph', $name)) {
+$storage = function (string $entity_type, string $name, string $field_type, array $settings = [], int $cardinality = 1) {
+  if (!FieldStorageConfig::loadByName($entity_type, $name)) {
     FieldStorageConfig::create([
       'field_name' => $name,
-      'entity_type' => 'paragraph',
+      'entity_type' => $entity_type,
       'type' => $field_type,
       'settings' => $settings,
       'cardinality' => $cardinality,
     ])->save();
-    echo "Created storage $name\n";
+    echo "Created storage $entity_type.$name\n";
   }
 };
 
-// Creates the field, or brings label/description up to date on re-runs.
-$field = function (string $bundle, string $name, string $label, bool $required = FALSE, array $settings = [], string $description = '') {
-  $config = FieldConfig::loadByName('paragraph', $bundle, $name);
+// list_string options follow buildings.yml. Removing an option that content
+// still uses is refused by Drupal; that's reported, not fatal.
+$options = function (string $entity_type, string $name, array $allowed) {
+  $config = FieldStorageConfig::loadByName($entity_type, $name);
+  if ($config && $config->getSetting('allowed_values') != $allowed) {
+    try {
+      $config->setSetting('allowed_values', $allowed)->save();
+      echo "Updated options for $entity_type.$name\n";
+    }
+    catch (\Exception $e) {
+      echo "Could not update options for $entity_type.$name: " . $e->getMessage() . "\n";
+    }
+  }
+};
+
+// Creates the field, or brings label/description up to date.
+$field = function (string $entity_type, string $bundle, string $name, string $label, array $values = []) {
+  $config = FieldConfig::loadByName($entity_type, $bundle, $name);
+  $description = $values['description'] ?? '';
   if (!$config) {
     FieldConfig::create([
       'field_name' => $name,
-      'entity_type' => 'paragraph',
+      'entity_type' => $entity_type,
       'bundle' => $bundle,
       'label' => $label,
-      'required' => $required,
-      'settings' => $settings,
-      'description' => $description,
-    ])->save();
-    echo "Added $name to $bundle\n";
+    ] + $values)->save();
+    echo "Added $name to $entity_type.$bundle\n";
   }
-  elseif ($config->getLabel() !== $label || $config->getDescription() !== $description) {
-    $config->setLabel($label)->setDescription($description)->save();
-    echo "Updated $name on $bundle\n";
+  elseif ($config->getLabel() !== $label || $config->getDescription() !== $description || (isset($values['required']) && $config->isRequired() !== $values['required'])) {
+    $config->setLabel($label)->setDescription($description);
+    if (isset($values['required'])) {
+      $config->setRequired($values['required']);
+    }
+    $config->save();
+    echo "Updated $name on $entity_type.$bundle\n";
   }
 };
 
-$err_settings = fn (string $target) => [
+$err = fn (string $target) => [
   'handler' => 'default:paragraph',
   'handler_settings' => [
     'target_bundles' => [$target => $target],
@@ -96,158 +144,252 @@ $err_settings = fn (string $target) => [
   ],
 ];
 
-if (!ParagraphsType::load('bento_search')) {
-  echo "Paragraph type bento_search not found (palefire_modular). Install it first, then re-run.\n";
-  return;
-}
-
-// Paragraph types -------------------------------------------------------
-$type('building_map', 'Building map', 'Hill Memorial floor map shown in the bento under the search form. Each Map space switches one room on and supplies its tooltip.');
-$type('map_space', 'Map space', 'One room on the building map and the text of its tooltip.');
-
-// map_space ------------------------------------------------------------------
-// Order matters for editors only; the list on the page is always Floor 1 first.
-$regions = [
-  'reading_room' => 'Reading Room (Floor 1)',
-  'gallery_1' => 'Gallery (Floor 1)',
-  'lecture_hall' => 'Lecture Hall (Floor 1)',
-  'gallery_2' => 'Gallery (Floor 2)',
-  'quiet_study' => 'Quiet Study (Floor 2)',
-  'seminar_space' => 'Seminar Space (Floor 2)',
-  'mcilhenny_room' => 'McIlhenny Room (Floor 2)',
-  'oral_history' => 'Oral History (Floor 2)',
+$paragraphs_widget = fn (int $weight, string $title, string $plural, string $default) => [
+  'type' => 'paragraphs',
+  'weight' => $weight,
+  'settings' => [
+    'title' => $title,
+    'title_plural' => $plural,
+    'edit_mode' => 'closed',
+    'closed_mode' => 'summary',
+    'autocollapse' => 'all',
+    'add_mode' => 'button',
+    'form_display_mode' => 'default',
+    'default_paragraph_type' => $default,
+  ],
 ];
-$storage('field_map_region', 'list_string', ['allowed_values' => $regions]);
-$region_storage = FieldStorageConfig::loadByName('paragraph', 'field_map_region');
-if ($region_storage->getSetting('allowed_values') != $regions) {
-  $region_storage->setSetting('allowed_values', $regions)->save();
-  echo "Updated field_map_region rooms\n";
+
+$access_values = ['walk_in' => 'Public walk-in', 'appointment' => 'Request an appointment'];
+$link_settings = ['link_type' => 17, 'title' => 1];  // Generic link, optional link text.
+
+// Building spaces vocabulary ---------------------------------------------------
+if (!Vocabulary::load('building_space')) {
+  Vocabulary::create([
+    'vid' => 'building_space',
+    'name' => 'Building spaces',
+    'description' => 'Buildings and rooms shown on building maps. Rooms come from the theme (maps/buildings.yml); edit their text, access and links here.',
+  ])->save();
+  echo "Created vocabulary building_space\n";
 }
-$storage('field_space_access', 'list_string', ['allowed_values' => [
-  'walk_in' => 'Public walk-in',
-  'appointment' => 'Request an appointment',
-]]);
-$storage('field_space_title', 'string', ['max_length' => 120]);
-$storage('field_space_body', 'text_long');
-$storage('field_space_link', 'link');
 
-$field('map_space', 'field_map_region', 'Map region', TRUE, [], 'The room on the map this entry controls. Use each region once per map.');
-$field('map_space', 'field_space_access', 'Access', TRUE, [], 'Walk-in spaces get the full hatch; appointment spaces a lighter one.');
-$field('map_space', 'field_space_title', 'Title', TRUE, [], 'Room name in the list and at the top of the tooltip.');
-$field('map_space', 'field_space_body', 'Tooltip text', FALSE, [], 'One or two sentences shown when someone hovers or focuses the room. No links here: the room itself links to the field below.');
-$field('map_space', 'field_space_link', 'Link', FALSE, [
-  // 17 = LinkItemInterface::LINK_GENERIC, 1 = DRUPAL_OPTIONAL link text.
-  'link_type' => 17,
-  'title' => 1,
-], 'Optional. Clicking the room or its list entry goes here (e.g. the appointment request form). The link text becomes the hint at the bottom of the tooltip; leave it empty for "Request an appointment" / "Plan your visit".');
+$storage('taxonomy_term', 'field_map_key', 'string', ['max_length' => 128]);
+$storage('taxonomy_term', 'field_space_access', 'list_string', ['allowed_values' => $access_values]);
+$storage('taxonomy_term', 'field_space_link', 'link');
+$field('taxonomy_term', 'building_space', 'field_map_key', 'Map key', [
+  'required' => FALSE,
+  'description' => 'Set by the setup script. Ties the term to the drawing.',
+]);
+$field('taxonomy_term', 'building_space', 'field_space_access', 'Access', [
+  'description' => 'Rooms only. Walk-in rooms get the full hatch; appointment rooms a lighter one.',
+]);
+$field('taxonomy_term', 'building_space', 'field_space_link', 'Link', [
+  'settings' => $link_settings,
+  'description' => 'Rooms only, optional. Clicking the room or its list entry goes here (e.g. the appointment request form). The link text becomes the hint at the bottom of the tooltip; leave it empty for "Request an appointment" / "Plan your visit".',
+]);
 
-$form = $repo->getFormDisplay('paragraph', 'map_space', 'default')
-  ->setComponent('field_map_region', ['type' => 'options_select', 'weight' => 0])
-  ->setComponent('field_space_access', ['type' => 'options_buttons', 'weight' => 1])
-  ->setComponent('field_space_title', ['type' => 'string_textfield', 'weight' => 2])
-  ->setComponent('field_space_body', ['type' => 'text_textarea', 'weight' => 3, 'settings' => ['rows' => 3]])
-  ->setComponent('field_space_link', ['type' => 'link_default', 'weight' => 4]);
-// Earlier version had a dialog image; tooltips don't use it.
-if (FieldConfig::loadByName('paragraph', 'map_space', 'field_space_image')) {
-  $form->removeComponent('field_space_image');
+// Relabel the term description for this vocabulary.
+$definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', 'building_space');
+$desc_label = 'Tooltip text / intro';
+$desc_help = 'Rooms: one or two sentences shown on hover or focus (no links; use the Link field). Buildings: the intro beside the map.';
+$override = $definitions['description']->getConfig('building_space');
+if ($override->getLabel() !== $desc_label || $override->getDescription() !== $desc_help) {
+  $override->setLabel($desc_label)->setDescription($desc_help)->save();
+  echo "Relabelled term description\n";
 }
-$form->save();
 
-// Region, access, title and link are printed by the template directly.
-$view = $repo->getViewDisplay('paragraph', 'map_space', 'default')
-  ->setComponent('field_space_body', ['type' => 'text_default', 'label' => 'hidden', 'weight' => 0])
-  ->removeComponent('field_map_region')
-  ->removeComponent('field_space_access')
-  ->removeComponent('field_space_title')
-  ->removeComponent('field_space_link');
-if (FieldConfig::loadByName('paragraph', 'map_space', 'field_space_image')) {
-  $view->removeComponent('field_space_image');
-}
-$view->save();
-
-// building_map ---------------------------------------------------------------
-$storage('field_map_heading', 'string', ['max_length' => 120]);
-$storage('field_map_intro', 'text_long');
-$storage('field_map_spaces', 'entity_reference_revisions', ['target_type' => 'paragraph'], -1);
-
-$field('building_map', 'field_map_heading', 'Heading', FALSE, [], 'Shown as an h3 above the map and listed in the page TOC. Leave empty for "Visit Hill Memorial Library".');
-$field('building_map', 'field_map_intro', 'Intro', FALSE, [], 'A sentence or two beside the map (hours, address, how to request access).');
-$field('building_map', 'field_map_spaces', 'Spaces', FALSE, $err_settings('map_space'), 'One entry per room. Rooms without an entry show as plain floor.');
-
-$repo->getFormDisplay('paragraph', 'building_map', 'default')
-  ->setComponent('field_map_heading', ['type' => 'string_textfield', 'weight' => 0])
-  ->setComponent('field_map_intro', ['type' => 'text_textarea', 'weight' => 1, 'settings' => ['rows' => 3]])
-  ->setComponent('field_map_spaces', [
-    'type' => 'paragraphs',
-    'weight' => 2,
-    'settings' => [
-      'title' => 'Space',
-      'title_plural' => 'Spaces',
-      'edit_mode' => 'closed',
-      'add_mode' => 'button',
-      'form_display_mode' => 'default',
-      'default_paragraph_type' => 'map_space',
-    ],
-  ])
+$repo->getFormDisplay('taxonomy_term', 'building_space', 'default')
+  ->setComponent('name', ['type' => 'string_textfield', 'weight' => 0])
+  ->setComponent('description', ['type' => 'text_textarea', 'weight' => 1, 'settings' => ['rows' => 3]])
+  ->setComponent('field_space_access', ['type' => 'options_buttons', 'weight' => 2])
+  ->setComponent('field_space_link', ['type' => 'link_default', 'weight' => 3])
+  ->removeComponent('field_map_key')
   ->save();
 
-// Heading is printed by the template; spaces render as hidden tooltip sources.
-$repo->getViewDisplay('paragraph', 'building_map', 'default')
-  ->removeComponent('field_map_heading')
-  ->setComponent('field_map_intro', ['type' => 'text_default', 'label' => 'hidden', 'weight' => 0])
-  ->setComponent('field_map_spaces', [
-    'type' => 'entity_reference_revisions_entity_view',
-    'label' => 'hidden',
-    'weight' => 1,
-    'settings' => ['view_mode' => 'default'],
-  ])
-  ->save();
+// Sync terms from buildings.yml (create missing; never overwrite).
+$find = function (string $map_key): ?Term {
+  $ids = \Drupal::entityQuery('taxonomy_term')
+    ->accessCheck(FALSE)
+    ->condition('vid', 'building_space')
+    ->condition('field_map_key', $map_key)
+    ->range(0, 1)
+    ->execute();
+  return $ids ? Term::load(reset($ids)) : NULL;
+};
+$text = fn (?string $value) => $value ? ['value' => '<p>' . htmlspecialchars($value) . '</p>', 'format' => $format] : NULL;
 
-// bento_search: the map slot -------------------------------------------------
-$storage('field_bento_map', 'entity_reference_revisions', ['target_type' => 'paragraph'], 1);
-$field('bento_search', 'field_bento_map', 'Building map', FALSE, $err_settings('building_map'), 'Optional. Shows the Hill Memorial map under the search form.');
-
-$repo->getFormDisplay('paragraph', 'bento_search', 'default')
-  ->setComponent('field_bento_map', [
-    'type' => 'paragraphs',
-    'weight' => 50,
-    'settings' => [
-      'title' => 'Building map',
-      'title_plural' => 'Building maps',
-      'edit_mode' => 'closed',
-      'add_mode' => 'button',
-      'form_display_mode' => 'default',
-      'default_paragraph_type' => 'building_map',
-    ],
-  ])
-  ->save();
-$repo->getViewDisplay('paragraph', 'bento_search', 'default')
-  ->setComponent('field_bento_map', [
-    'type' => 'entity_reference_revisions_entity_view',
-    'label' => 'hidden',
-    'weight' => 50,
-    'settings' => ['view_mode' => 'default'],
-  ])
-  ->save();
-
-// Leftovers from the earlier stand-alone section version --------------------
-$old = [];
-foreach (FieldConfig::loadMultiple() as $config) {
-  if ($config->getTargetEntityTypeId() === 'paragraph' && $config->getTargetBundle() === 'building_map'
-    && !in_array($config->getName(), ['field_map_heading', 'field_map_intro', 'field_map_spaces'], TRUE)) {
-    $old[] = $config->getName();
+$building_options = [];
+$room_options = [];
+$known = [];
+$bw = 0;
+foreach ($buildings as $bkey => $building) {
+  $label = $building['label'] ?? $bkey;
+  $building_options[$bkey] = $label;
+  $known[$bkey] = TRUE;
+  $parent = $find($bkey);
+  if (!$parent) {
+    $parent = Term::create([
+      'vid' => 'building_space',
+      'name' => $label,
+      'description' => $text($building['intro'] ?? NULL),
+      'field_map_key' => $bkey,
+      'weight' => $bw,
+    ]);
+    $parent->save();
+    echo "Created building term \"$label\"\n";
+  }
+  $bw++;
+  $rw = 0;
+  foreach ($building['spaces'] ?? [] as $skey => $space) {
+    $map_key = "$bkey.$skey";
+    $known[$map_key] = TRUE;
+    $room_label = $space['label'] ?? $skey;
+    $room_options[$map_key] = "$label: $room_label (Floor " . ($space['floor'] ?? 1) . ')';
+    if (!$find($map_key)) {
+      Term::create([
+        'vid' => 'building_space',
+        'name' => $room_label,
+        'parent' => [$parent->id()],
+        'description' => $text($space['tooltip'] ?? NULL),
+        'field_map_key' => $map_key,
+        'field_space_access' => $space['access'] ?? 'walk_in',
+        'weight' => $rw,
+      ])->save();
+      echo "  Created room \"$room_label\"\n";
+    }
+    $rw++;
   }
 }
-if (FieldConfig::loadByName('paragraph', 'map_space', 'field_space_image')) {
-  $old[] = 'map_space.field_space_image';
+$orphans = [];
+$ids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)->condition('vid', 'building_space')->execute();
+foreach (Term::loadMultiple($ids) as $term) {
+  $mk = (string) $term->get('field_map_key')->value;
+  if (!isset($known[$mk])) {
+    $orphans[] = '"' . $term->label() . '"' . ($mk ? " ($mk)" : ' (no map key: added by hand?)');
+  }
 }
-if ($old) {
-  echo "Unused fields from the earlier version (safe to delete in the UI): " . implode(', ', $old) . "\n";
+if ($orphans) {
+  echo "Terms not in buildings.yml (not shown on any map): " . implode(', ', $orphans) . "\n";
 }
-$host = FieldConfig::loadByName('node', 'modular_page', 'field_scroll_section');
-$bundles = $host ? ($host->getSetting('handler_settings')['target_bundles'] ?? []) : [];
-if (isset($bundles['building_map'])) {
-  echo "building_map is still allowed in node.modular_page.field_scroll_section; remove it there so it is only added via the bento.\n";
+
+// building_map -------------------------------------------------------------------
+$type('building_map', 'Building map', 'A building floor map with hover tooltips, shown in the bento under the search form. Rooms and their text come from Building spaces.');
+$type('map_room_override', 'Room override', 'Replaces one room\'s tooltip text, access or link on this map only.');
+
+$storage('paragraph', 'field_map_building', 'list_string', ['allowed_values' => $building_options]);
+$options('paragraph', 'field_map_building', $building_options);
+$storage('paragraph', 'field_map_heading', 'string', ['max_length' => 120]);
+$storage('paragraph', 'field_map_intro', 'text_long');
+$storage('paragraph', 'field_map_overrides', 'entity_reference_revisions', ['target_type' => 'paragraph'], -1);
+
+$field('paragraph', 'building_map', 'field_map_building', 'Building', [
+  'required' => TRUE,
+  'default_value' => [['value' => array_key_first($building_options)]],
+  'description' => 'Rooms, tooltips and links come from Structure > Taxonomy > Building spaces.',
+]);
+$field('paragraph', 'building_map', 'field_map_heading', 'Heading', [
+  'description' => 'Optional. Shown as an h3 above the map and in the page TOC. Leave empty for the building\'s default (e.g. "Visit Hill Memorial Library").',
+]);
+$field('paragraph', 'building_map', 'field_map_intro', 'Intro', [
+  'description' => 'Optional. Leave empty to use the building\'s description from Building spaces.',
+]);
+$field('paragraph', 'building_map', 'field_map_overrides', 'Room overrides (optional)', [
+  'settings' => $err('map_room_override'),
+  'description' => 'Rarely needed. Changes one room\'s tooltip text, access or link on this page only.',
+]);
+
+$form = $repo->getFormDisplay('paragraph', 'building_map', 'default')
+  ->setComponent('field_map_building', ['type' => 'options_select', 'weight' => 0])
+  ->setComponent('field_map_heading', ['type' => 'string_textfield', 'weight' => 1])
+  ->setComponent('field_map_intro', ['type' => 'text_textarea', 'weight' => 2, 'settings' => ['rows' => 2]])
+  ->setComponent('field_map_overrides', $paragraphs_widget(20, 'Room override', 'Room overrides', 'map_room_override'));
+$view = $repo->getViewDisplay('paragraph', 'building_map', 'default');
+// The template prints everything from the preprocess.
+foreach (['field_map_building', 'field_map_heading', 'field_map_intro', 'field_map_overrides', 'field_map_spaces'] as $name) {
+  $view->removeComponent($name);
+}
+if (FieldConfig::loadByName('paragraph', 'building_map', 'field_map_spaces')) {
+  $form->removeComponent('field_map_spaces');
+}
+$form->save();
+$view->save();
+
+// map_room_override ------------------------------------------------------------------
+$storage('paragraph', 'field_room_key', 'list_string', ['allowed_values' => $room_options]);
+$options('paragraph', 'field_room_key', $room_options);
+$storage('paragraph', 'field_space_body', 'text_long');
+$storage('paragraph', 'field_space_access', 'list_string', ['allowed_values' => $access_values]);
+$storage('paragraph', 'field_space_link', 'link');
+
+$field('paragraph', 'map_room_override', 'field_room_key', 'Room', ['required' => TRUE]);
+$field('paragraph', 'map_room_override', 'field_space_body', 'Tooltip text', [
+  'description' => 'Optional. Leave empty to keep the room\'s text.',
+]);
+$field('paragraph', 'map_room_override', 'field_space_access', 'Access', [
+  'required' => FALSE,
+  'description' => 'Optional. Leave empty to keep the room\'s setting.',
+]);
+$field('paragraph', 'map_room_override', 'field_space_link', 'Link', [
+  'settings' => $link_settings,
+  'description' => 'Optional. Leave empty to keep the room\'s link.',
+]);
+
+$repo->getFormDisplay('paragraph', 'map_room_override', 'default')
+  ->setComponent('field_room_key', ['type' => 'options_select', 'weight' => 0])
+  ->setComponent('field_space_body', ['type' => 'text_textarea', 'weight' => 1, 'settings' => ['rows' => 2]])
+  ->setComponent('field_space_access', ['type' => 'options_buttons', 'weight' => 2])
+  ->setComponent('field_space_link', ['type' => 'link_default', 'weight' => 3])
+  ->save();
+$override_view = $repo->getViewDisplay('paragraph', 'map_room_override', 'default');
+foreach (['field_room_key', 'field_space_body', 'field_space_access', 'field_space_link'] as $name) {
+  $override_view->removeComponent($name);
+}
+$override_view->save();
+
+// bento_search: the map slot -----------------------------------------------------
+$storage('paragraph', 'field_bento_map', 'entity_reference_revisions', ['target_type' => 'paragraph'], 1);
+$field('paragraph', 'bento_search', 'field_bento_map', 'Building map', [
+  'settings' => $err('building_map'),
+  'description' => 'Optional. Shows a building map under the search form.',
+]);
+$repo->getFormDisplay('paragraph', 'bento_search', 'default')
+  ->setComponent('field_bento_map', $paragraphs_widget(50, 'Building map', 'Building maps', 'building_map'))
+  ->save();
+// Rendered by palefire_preprocess_paragraph__bento_search(), not the display.
+$repo->getViewDisplay('paragraph', 'bento_search', 'default')
+  ->removeComponent('field_bento_map')
+  ->save();
+
+// Earlier per-page "Map space" version ------------------------------------------------
+$legacy_ids = ParagraphsType::load('map_space')
+  ? \Drupal::entityQuery('paragraph')->accessCheck(FALSE)->condition('type', 'map_space')->execute()
+  : [];
+$legacy_field = FieldConfig::loadByName('paragraph', 'building_map', 'field_map_spaces');
+if (ParagraphsType::load('map_space') || $legacy_field) {
+  if ($cleanup) {
+    $storage_handler = \Drupal::entityTypeManager()->getStorage('paragraph');
+    foreach (array_chunk($legacy_ids, 50) as $chunk) {
+      $storage_handler->delete($storage_handler->loadMultiple($chunk));
+    }
+    if ($legacy_ids) {
+      echo 'Deleted ' . count($legacy_ids) . " Map space paragraph(s)\n";
+    }
+    if ($legacy_field) {
+      $legacy_field->delete();
+      echo "Deleted building_map.field_map_spaces\n";
+    }
+    foreach (['field_map_region', 'field_space_access', 'field_space_title', 'field_space_body', 'field_space_link', 'field_space_image'] as $name) {
+      if ($config = FieldConfig::loadByName('paragraph', 'map_space', $name)) {
+        $config->delete();
+      }
+    }
+    if ($legacy_type = ParagraphsType::load('map_space')) {
+      $legacy_type->delete();
+      echo "Deleted paragraph type map_space\n";
+    }
+  }
+  else {
+    echo 'Old per-page rooms are no longer used: paragraph type map_space (' . count($legacy_ids) . " paragraph(s)) and building_map.field_map_spaces. Re-run with \"-- cleanup\" to delete them.\n";
+  }
 }
 
 echo "Done. Run drush cr.\n";

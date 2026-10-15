@@ -24,27 +24,41 @@ Any paragraph type with `field_section_title` placed in `field_sections` on a
 `modular_page` node becomes a `<section>` with an H2, a stable anchor, and a TOC
 entry. `field_full_page` turns on full-viewport scroll-snap (md and up).
 
-### Hill Memorial building map
+### Building maps
 
-An optional `building_map` paragraph renders in the bento section, under the
-search form (`bento_search.field_bento_map`), with one `map_space` per room.
-Rooms show a tooltip on hover or focus. The legend & spaces list puts Floor 1
-first, and the background video dims and blurs while the map is in view.
-"Search LSU Libraries" and the map heading are h3s so the TOC lists them.
+A bento section can show a building floor map under its search form
+(`bento_search.field_bento_map` -> `building_map` paragraph). Rooms show a
+tooltip on hover or focus. The "Legend & spaces" list puts Floor 1 first, and
+the background video dims and blurs while the map is in view. "Search LSU
+Libraries" and the map heading are h3s so the TOC lists them.
+
+Each building is one drawing plus an entry in `maps/buildings.yml` (label,
+default heading, Twig include, rooms with floor). The content lives in the
+**Building spaces** taxonomy: one term per building (its description is the
+default intro) with a child term per room (tooltip text, access, optional
+link). Unpublish a room term to draw it as plain floor. Editors add a
+**Building map** to the bento and pick the building; nothing else is needed.
+**Room overrides (optional)** on the paragraph change one room's tooltip,
+access or link on that page only. It stays collapsed to an "Add Room
+override" button until used.
 
 ```bash
-npm run build      # compiles _building-map.scss into css/style.css
+npm run build      # compiles _building-map.scss into css/style.css; commit it
 drush php:script themes/custom/palefire/scripts/palefire_building_map_setup.php
-drush php:script themes/custom/palefire/scripts/palefire_building_map_seed.php -- /special
 drush cr
 ```
 
-The setup script creates the paragraph types and fields; it adds no content.
-The seed script adds a starter map (all eight rooms, placeholder text) to the
-bento on the given page and skips a bento that already has one. Edit the room
-text and add links in the bento's "Building map" field. Rooms: `reading_room`,
-`gallery_1`, `lecture_hall` (Floor 1); `gallery_2`, `quiet_study`,
-`seminar_space`, `mcilhenny_room`, `oral_history` (Floor 2).
+The setup script creates the vocabulary, paragraph types and fields, and
+creates any building/room terms missing from Building spaces (it never
+overwrites existing terms, so editors own the text). Re-run it after editing
+`buildings.yml`. To add a building: add its drawing under
+`templates/includes/`, add an entry to `buildings.yml`, and re-run.
+
+Upgrading from the per-page "Map space" version: the old `map_space` type
+and `building_map.field_map_spaces` are listed but kept. Run the script with
+`-- cleanup` to delete them. The bento's map is now rendered by
+`palefire_preprocess_paragraph__bento_search()`, so it no longer depends on
+the bento's view display.
 
 ### Full-page backgrounds and frosted glass
 

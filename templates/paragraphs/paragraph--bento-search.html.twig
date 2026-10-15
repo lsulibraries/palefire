@@ -10,7 +10,8 @@
  * - bento.tiles: list of { id, title, heading_id, view }
  * - bg_videos: ordered list of MP4 URLs (optional)
  * - bg_poster: poster image URL (optional)
- * Plus content.field_bento_map: building_map paragraph (optional).
+ * - bento_map: the building_map paragraph from field_bento_map, rendered
+ *   by palefire_preprocess_paragraph__bento_search() (optional).
  *
  * "Search LSU Libraries" and the map heading are h3s so the TOC lists them.
  * data-toc-skip sits on the tile grid (not the wrapper) to keep the tile h3s
@@ -60,7 +61,7 @@
     {{ 'No results found. Try fewer or different words.'|t }}
   </p>
 
-  {% if content.field_bento_map|render|trim %}
-    <div class="pf-bento__visit">{{ content.field_bento_map }}</div>
+  {% if bento_map %}
+    <div class="pf-bento__visit">{{ bento_map }}</div>
   {% endif %}
 </div>

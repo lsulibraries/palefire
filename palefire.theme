@@ -5,8 +5,13 @@
  * Functions to support theming in the Palefire theme.
  */
 
+use Drupal\Component\Serialization\Yaml;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Implements hook_preprocess_breadcrumb().
@@ -82,4 +87,157 @@ function palefire_page_attachments_alter(array &$attachments) {
       'robots',
     ];
   }
+}
+
+/**
+ * Building floor maps from maps/buildings.yml, keyed by building.
+ *
+ * Each entry: label, heading, template (Twig include of the drawing), intro,
+ * spaces (space key => label, floor, access, tooltip). See that file.
+ */
+function palefire_buildings(): array {
+  $buildings = &drupal_static(__FUNCTION__);
+  if (!isset($buildings)) {
+    $file = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.theme')->getPath('palefire') . '/maps/buildings.yml';
+    $buildings = is_readable($file) ? (Yaml::decode(file_get_contents($file)) ?: []) : [];
+  }
+  return $buildings;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--bento-search.
+ *
+ * Renders the bento's building map (field_bento_map) as bento_map. Built here
+ * from the referenced paragraph, so it doesn't depend on the bento's view
+ * display listing the field.
+ */
+function palefire_preprocess_paragraph__bento_search(array &$variables): void {
+  $variables['bento_map'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface || !$paragraph->hasField('field_bento_map')) {
+    return;
+  }
+  $map = $paragraph->get('field_bento_map')->entity;
+  if ($map instanceof ParagraphInterface && $map->isPublished()) {
+    $map = \Drupal::service('entity.repository')->getTranslationFromContext($map);
+    $variables['bento_map'] = \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($map, 'default');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--building-map.
+ *
+ * Builds `map` for the template: the building's drawing, and one entry per
+ * published "Building spaces" room term (title, access, floor, link, tooltip).
+ * A published Room override on this paragraph replaces that room's tooltip
+ * text, access or link (only the fields it fills in).
+ */
+function palefire_preprocess_paragraph__building_map(array &$variables): void {
+  $variables['map'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  $buildings = palefire_buildings();
+  if (!$paragraph instanceof ParagraphInterface || !$buildings) {
+    return;
+  }
+  $value = static fn (string $field) => $paragraph->hasField($field) ? $paragraph->get($field)->value : NULL;
+  $key = $value('field_map_building') ?: array_key_first($buildings);
+  $building = $buildings[$key] ?? NULL;
+  if (!$building) {
+    return;
+  }
+
+  // Any change to a Building spaces term re-renders the map.
+  $cache = (new CacheableMetadata())->addCacheTags(['taxonomy_term_list:building_space']);
+  $repository = \Drupal::service('entity.repository');
+  $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $ids = $terms->getQuery()
+    ->accessCheck(TRUE)
+    ->condition('vid', 'building_space')
+    ->condition('status', 1)
+    ->condition('field_map_key', $key, 'STARTS_WITH')
+    ->execute();
+  $building_term = NULL;
+  $rooms = [];
+  foreach ($terms->loadMultiple($ids) as $term) {
+    $term = $repository->getTranslationFromContext($term);
+    $map_key = (string) $term->get('field_map_key')->value;
+    if ($map_key === $key) {
+      $building_term = $term;
+    }
+    elseif (str_starts_with($map_key, $key . '.')) {
+      $rooms[substr($map_key, strlen($key) + 1)] = $term;
+    }
+  }
+
+  $overrides = [];
+  if ($paragraph->hasField('field_map_overrides')) {
+    foreach ($paragraph->get('field_map_overrides') as $item) {
+      $override = $item->entity;
+      $room_key = $override instanceof ParagraphInterface && $override->isPublished() ? (string) $override->get('field_room_key')->value : '';
+      if (str_starts_with($room_key, $key . '.')) {
+        $overrides[substr($room_key, strlen($key) + 1)] = $override;
+        $cache->addCacheableDependency($override);
+      }
+    }
+  }
+
+  // The override's field when it is filled in, otherwise the term's.
+  $pick = static function (string $field, $term, ?ParagraphInterface $override, ?string $term_field = NULL): ?FieldItemListInterface {
+    if ($override && $override->hasField($field) && !$override->get($field)->isEmpty()) {
+      return $override->get($field);
+    }
+    $term_field = $term_field ?? $field;
+    return $term->hasField($term_field) && !$term->get($term_field)->isEmpty() ? $term->get($term_field) : NULL;
+  };
+  $text = static fn (?FieldItemListInterface $items) => $items ? [
+    '#type' => 'processed_text',
+    '#text' => $items->value,
+    '#format' => $items->format,
+  ] : NULL;
+
+  $uid = 'pf-map-' . $paragraph->id();
+  $spaces = [];
+  foreach ($building['spaces'] ?? [] as $space_key => $def) {
+    $term = $rooms[$space_key] ?? NULL;
+    if (!$term) {
+      // Unpublished or missing: drawn as plain floor.
+      continue;
+    }
+    $cache->addCacheableDependency($term);
+    $override = $overrides[$space_key] ?? NULL;
+    $access = $pick('field_space_access', $term, $override)?->value ?: ($def['access'] ?? 'walk_in');
+    $link = $pick('field_space_link', $term, $override)?->first();
+    $spaces[$space_key] = [
+      'key' => $space_key,
+      'title' => $term->label(),
+      'access' => $access,
+      'floor' => (int) ($def['floor'] ?? 1),
+      'url' => $link ? $link->getUrl()->toString() : '',
+      'cta' => $link ? ($link->title ?: ($access === 'appointment' ? t('Request an appointment') : t('Plan your visit'))) : '',
+      'tip' => $uid . '-' . Html::cleanCssIdentifier($space_key) . '-tip',
+      'body' => $text($pick('field_space_body', $term, $override, 'description')),
+    ];
+  }
+  // Floor 1 before Floor 2; within a floor, the buildings.yml order.
+  uasort($spaces, static fn (array $a, array $b): int => $a['floor'] <=> $b['floor']);
+
+  if ($building_term) {
+    $cache->addCacheableDependency($building_term);
+  }
+  $intro = $paragraph->hasField('field_map_intro') && !$paragraph->get('field_map_intro')->isEmpty()
+    ? $paragraph->get('field_map_intro')
+    : ($building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL);
+
+  $cache_render = [];
+  $cache->applyTo($cache_render);
+  $variables['map'] = [
+    'uid' => $uid,
+    'key' => $key,
+    'label' => $building['label'] ?? $key,
+    'heading' => $value('field_map_heading') ?: ($building['heading'] ?? t('Visit @building', ['@building' => $building['label'] ?? $key])),
+    'intro' => $text($intro),
+    'template' => $building['template'],
+    'spaces' => $spaces,
+    'cache' => $cache_render,
+  ];
 }
