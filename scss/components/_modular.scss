@@ -203,6 +203,28 @@ html.pf-snap .site-footer {
 // switch it off with `.pf-section__bg { inset-block-start: 0; }` instead.
 .pf-body--modular .pf-sections > .pf-section:first-child {
   --pf-bleed-block-start: var(--pf-header-full, var(--pf-header-h));
+  // Height of what is printed above the sections (breadcrumb, <h1>):
+  // the bleed minus the expanded header.
+  --pf-above-sections: max(0px, var(--pf-bleed-block-start) - var(--pf-header-full, var(--pf-header-h)));
+  // Merged snap: the first section's snap point (and its anchor, #home)
+  // is the top of the page, not the section's own top edge, so the
+  // breadcrumb and title snap together with it instead of being a thin
+  // stop of their own. snap position = top - scroll-margin - scroll-padding,
+  // which clamps to 0. This is the one intended scroll-margin-top (see
+  // the note on scroll-padding-top above).
+  scroll-margin-top: var(--pf-bleed-block-start);
+}
+
+// Peek and screen heights count the head above the first section, so the
+// first screen (head + section) is still one screen, and peek still shows
+// the top of the next section.
+.pf-body--modular .pf-sections > .pf-section--peek:first-child {
+  min-height: calc((100vh - var(--pf-header-h)) * var(--pf-section-peek) - var(--pf-above-sections));
+  min-height: calc((100svh - var(--pf-header-h)) * var(--pf-section-peek) - var(--pf-above-sections));
+}
+
+.pf-body--modular .pf-sections > .pf-section--screen:first-child {
+  min-height: calc(100dvh - var(--pf-header-h) - var(--pf-above-sections));
 }
 
 // Anything printed above the sections (page title, tabs, status messages)
@@ -435,10 +457,12 @@ html.pf-snap .site-footer {
     }
   }
 
-  // Open: top right of the sidebar, level with the "On this page" heading.
+  // Open: top right of the sidebar, centred on the TOC title's first line
+  // (2rem + half of its 1.125rem line - half of 2.25rem), which is also
+  // the breadcrumb's line.
   .pf-modular__toc-collapse {
     position: absolute;
-    top: 1.65rem;
+    top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // nudge: js/modular-toc.js
     inset-inline-end: 0.75rem;
     z-index: 1;
     align-items: center;
@@ -447,7 +471,7 @@ html.pf-snap .site-footer {
     height: 2.25rem;
     padding: 0;
     border: 1px solid var(--pf-toc-rail);
-    border-radius: 50%;
+    border-radius: 4px;
     color: var(--pf-toc-color);
     background-color: transparent;
     visibility: visible; // stays visible while the sidebar is hidden
@@ -472,7 +496,7 @@ html.pf-snap .site-footer {
   // Closed: a small glass button that floats in the content's side
   // padding (1rem + 2.25rem fits inside --pf-section-pad-inline).
   html.pf-toc-collapsed .pf-modular__toc-collapse {
-    top: 1rem;
+    top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // still on the breadcrumb's line
     inset-inline-start: 1rem;
     inset-inline-end: auto;
     background-color: var(--pf-sidebar-bg);

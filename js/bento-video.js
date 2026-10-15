@@ -40,6 +40,34 @@
           setState();
           paused ? video.pause() : play();
         });
+        // In the first section, centre the button on the breadcrumb's line
+        // (.pf-modular__head, page.html.twig) instead of 1rem below the
+        // section's top. Measured against the button's positioned parent,
+        // so it holds at any scroll position; re-run when either resizes.
+        const align = () => {
+          const crumb = document.querySelector('.pf-modular__head .breadcrumb-item:not(.active)');
+          const host = btn.offsetParent;
+          let top = null;
+          if (crumb && host && wrap.closest('.pf-sections > .pf-section:first-child')) {
+            const c = crumb.getBoundingClientRect();
+            top = Math.round(c.top + c.height / 2 - host.getBoundingClientRect().top - btn.offsetHeight / 2);
+          }
+          if (top !== null && top >= 0) {
+            btn.style.setProperty('--pf-bento-toggle-top', `${top}px`);
+          }
+          else {
+            btn.style.removeProperty('--pf-bento-toggle-top');
+          }
+        };
+        requestAnimationFrame(align);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
+        if ('ResizeObserver' in window) {
+          const ro = new ResizeObserver(() => requestAnimationFrame(align));
+          [btn.offsetParent, document.querySelector('.pf-modular__head')].forEach((el) => el && ro.observe(el));
+        }
+        else {
+          window.addEventListener('resize', align, { passive: true });
+        }
         setState();
         load(0);
         new IntersectionObserver(([e]) => (e.isIntersecting ? play() : video.pause()),

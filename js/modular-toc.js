@@ -382,10 +382,46 @@
     // Sub-links are cut to one line, as in Origami. Show the full heading
     // as a tooltip only where the text is actually cut off.
     const titleTruncated = () => entries.forEach((entry) => entry.subs.forEach((sub) => {
-      const cut = sub.link.scrollHeight > sub.link.clientHeight + 1;
+      const cut = sub.link.scrollWidth > sub.link.clientWidth + 1
+        || sub.link.scrollHeight > sub.link.clientHeight + 1;
       sub.link.title = cut ? sub.label : '';
     }));
     requestAnimationFrame(titleTruncated);
+
+    // Line the TOC title up with the breadcrumb (lg and up, where the
+    // sidebar sits beside the content). Both start 2rem down in CSS, but
+    // the sidebar and <main> don't start at exactly the same height (header
+    // spacer, region wrappers), so measure once at the top of the page and
+    // nudge the title (and the hide/show button, which reads the same
+    // property) by the difference. Re-measured on resize and font load,
+    // only while the page is at the top, where the sticky sidebar is in
+    // its own place.
+    const sidebar = nav.closest('.pf-sidebar');
+    const title = nav.querySelector('.pf-toc__heading');
+    const wide = window.matchMedia('(min-width: 992px)');
+    let nudge = 0;
+    const alignTitle = () => {
+      const crumb = document.querySelector('.pf-modular__head .breadcrumb-item:not(.active)')
+        || document.querySelector('.pf-modular__head > :first-child');
+      if (!sidebar || !title || !crumb || !wide.matches || window.scrollY > 1) {
+        return;
+      }
+      const lineHeight = parseFloat(getComputedStyle(title).lineHeight) || title.getBoundingClientRect().height;
+      const crumbBox = crumb.getBoundingClientRect();
+      const crumbLine = crumb.matches('h1') ? parseFloat(getComputedStyle(crumb).lineHeight) || crumbBox.height : crumbBox.height;
+      const delta = (crumbBox.top + crumbLine / 2) - (title.getBoundingClientRect().top + lineHeight / 2);
+      if (Math.abs(delta) < 0.5) {
+        return;
+      }
+      nudge = Math.max(-48, Math.min(48, nudge + delta));
+      sidebar.style.setProperty('--pf-toc-title-nudge', nudge.toFixed(1) + 'px');
+    };
+    requestAnimationFrame(alignTitle);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignTitle);
+    }
+    window.addEventListener('resize', alignTitle, { passive: true, signal });
+    wide.addEventListener('change', alignTitle, { signal });
 
     // `palefire:tocrefresh`: a component that builds its content after the
     // TOC (the LibCal day carousel fetches its days) asks for its section's

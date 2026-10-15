@@ -143,24 +143,54 @@ section content and solid section colours stay in the main column.
   a solid top bar and sidebar. Browsers without `backdrop-filter` get a
   nearly opaque top bar.
 
-### Breadcrumb on Modular pages
+### Modular page head: breadcrumb and title
 
-Same `breadcrumb` region and System Breadcrumb block as every other page (no
-block layout change). On Modular pages `page.html.twig` prints it at the top
-of `<main>`, directly above the first section, instead of above the whole
-body: it lines up with the section content and sits on the line of the
-sidebar's "On this page" heading, and the sidebar no longer starts below it.
-It is styled like the TOC (`.pf-breadcrumb--modular` in
-`scss/layout/_layout.scss`): monospace, uppercase and tracked, muted links
-that brighten with a gold underline, slanted dividers, the current page in
-the active colour, `--pf-toc-*` colours so it follows light/dark sections.
-It has its own snap point, so mandatory snapping can't hide it. Other pages
-keep the Bootstrap breadcrumb above the body.
+`page.html.twig` prints a `<header class="pf-modular__head">` at the top of
+`<main>` on Modular pages, directly above the first section and over its
+background bleed. Styles: `.pf-modular__head` in `scss/layout/_layout.scss`.
+
+- Breadcrumb: the same `breadcrumb` region and System Breadcrumb block as
+  every other page (no block layout change). Styled like the TOC
+  (`.pf-breadcrumb--modular`): monospace, uppercase and tracked, muted links
+  with a gold underline, slanted dividers, `--pf-toc-*` colours so it follows
+  light/dark sections. The current page item is read by screen readers only
+  (the `<h1>` right below names the page), so it shows as "HOME /". Other
+  pages keep the Bootstrap breadcrumb above the body.
+- Title: the node's title as the page's `<h1>`. A placed Page title block is
+  emptied and hidden on Modular pages (`PalefireHooks::preprocessBlock()`),
+  so there is never a second `<h1>`.
+- Snapping: the head has no snap point of its own. The first section's
+  `scroll-margin-top` is `--pf-bleed-block-start`, which moves its snap point
+  (and its `#anchor`) to the top of the page, so the head and the first
+  section snap as one screen. Peek and screen heights on the first section
+  subtract the head's height (`--pf-above-sections`), so that screen is still
+  one screen tall.
+- Alignment: the breadcrumb, the TOC title, the TOC hide/show button and the
+  background-video button share one line. The TOC title and the breadcrumb
+  both start 2rem down with the same type; `modular-toc.js` measures them at
+  the top of the page and nudges the title and the button by any difference
+  (`--pf-toc-title-nudge`). `bento-video.js` centres the video button on the
+  breadcrumb (`--pf-bento-toggle-top`) when the bento is the first section.
+
+### TOC title
+
+The TOC's visible title is the page's title, not the block's "On this page"
+heading (`templates/navigation/palefire-modular-toc.html.twig`,
+`PalefireHooks::preprocessPalefireModularToc()`). It is a plain paragraph,
+since the `<h1>` already says it, set to match the breadcrumb (two lines at
+most). The block's heading setting still names the `<nav>` for screen
+readers, and shows as before if there is no page title. No block config
+change is needed.
+
+The hide/show button is a 4px-rounded square. Sub-links are cut to one line
+with an ellipsis (`white-space: nowrap`), not `-webkit-line-clamp`: a clamped
+box clips at its padding edge, so the top of the second line showed in the
+bottom padding. The full text is the link's tooltip where it is cut.
 
 ### Background-video button
 
 The bento's pause/play control is a round frosted button in the section's
-top corner (`paragraph--bento-search.html.twig`, `_bento-search.scss`): a
+top corner (on the breadcrumb's line when the bento is the first section) (`paragraph--bento-search.html.twig`, `_bento-search.scss`): a
 pause/play glyph that cross-fades, a gold ring that fills as the current
 clip plays (`--pf-bento-progress`, set by `bento-video.js`), and the label
 ("Pause background video" / "Play background video") sliding out on hover

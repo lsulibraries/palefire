@@ -38,6 +38,27 @@
   color: var(--pf-toc-color);
 }
 
+// Palefire: the TOC title is the page's title (palefire-modular-toc.html.twig),
+// set like the breadcrumb beside it (same size, weight, tracking and
+// line-height) so the two read as one line across the page. Wraps to two
+// lines at most; clears the hide/show button.
+.pf-toc__heading--page {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-block: var(--pf-toc-title-nudge, 0px) 1.75rem; // nudge: js/modular-toc.js
+  padding: 0;
+  margin-inline-end: 1.25rem;
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1.5;
+  text-wrap: balance;
+  color: var(--pf-toc-active);
+}
+
 .pf-toc__rail {
   position: relative;
   border-inline-start: var(--pf-toc-rail-w) solid var(--pf-toc-rail);
@@ -157,11 +178,14 @@
 }
 
 // Origami `ul ul li span`: uppercase, bold, one line, cut at 160px.
+// One line with an ellipsis (not -webkit-line-clamp): a clamped box clips
+// at its padding edge, so the top of the second line showed in the bottom
+// padding under "HILL MEMORIAL…". The padding stays for the tap target.
 .pf-toc__sublink {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+  display: block;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   max-width: calc(160px + var(--pf-toc-sub-indent));
   padding: 0.45rem 0 0.35rem var(--pf-toc-sub-indent);
   font-size: 12px;
@@ -169,7 +193,6 @@
   letter-spacing: 1px;
   line-height: 1.5;
   text-transform: uppercase;
-  text-wrap: balance;
   color: var(--pf-toc-sub-color);
 }
 

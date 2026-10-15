@@ -22,7 +22,9 @@
 .pf-bento__bg-toggle {
   --size: 2.75rem; // 44px target
   --ring: #fdd023; // LSU gold
-  position: absolute; top: calc(var(--pf-bleed-block-start, 0px) + 1rem); right: 1rem; z-index: 2;
+  // --pf-bento-toggle-top: set by js/bento-video.js to centre the button on
+  // the breadcrumb's line when the bento is the first section.
+  position: absolute; top: var(--pf-bento-toggle-top, calc(var(--pf-bleed-block-start, 0px) + 1rem)); right: 1rem; z-index: 2;
   display: inline-flex; align-items: center; flex-direction: row-reverse;
   min-width: var(--size); height: var(--size); padding: 0; margin: 0;
   border: 0; border-radius: calc(var(--size) / 2);

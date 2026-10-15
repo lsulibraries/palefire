@@ -160,6 +160,37 @@ class PalefireHooks {
     if (($variables['plugin_id'] ?? '') === 'system_branding_block') {
       $variables['site_name_plain'] = (string) \Drupal::config('system.site')->get('name');
     }
+
+    // Modular pages print their own <h1> under the breadcrumb
+    // (page.html.twig), so a placed Page title block would be a second one.
+    if (($variables['plugin_id'] ?? '') === 'page_title_block') {
+      $variables['#cache']['contexts'][] = 'route';
+      if ($this->currentModularNode()) {
+        $variables['content'] = [];
+        $variables['attributes']['hidden'] = 'hidden';
+      }
+    }
+  }
+
+  /**
+   * Implements hook_preprocess_HOOK() for palefire_modular_toc.
+   *
+   * The TOC's visible title is the page title (palefire-modular-toc.html.twig).
+   * The block already varies by route and carries the node's cache tags.
+   */
+  #[Hook('preprocess_palefire_modular_toc')]
+  public function preprocessPalefireModularToc(array &$variables): void {
+    $node = $this->currentModularNode();
+    $variables['page_title'] = $node ? $node->label() : NULL;
+    $variables['#cache']['contexts'][] = 'route';
+  }
+
+  /**
+   * The Modular page node shown on the current route, if any.
+   */
+  private function currentModularNode(): ?NodeInterface {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    return $node instanceof NodeInterface && $node->bundle() === self::MODULAR_BUNDLE ? $node : NULL;
   }
 
   /**

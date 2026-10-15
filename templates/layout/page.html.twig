@@ -139,14 +139,29 @@
         {% endif %}
 
         <main id="main-content" tabindex="-1" class="{{ main_classes }}">
-          {# Same "breadcrumb" region and System Breadcrumb block as other
-             pages; here it is the first thing in the content column, on the
-             line of the sidebar's "On this page" heading, over the first
-             section's bleed. Styles: .pf-breadcrumb--modular. #}
-          {% if is_modular_page and page.breadcrumb %}
-            <div class="pf-breadcrumb pf-breadcrumb--modular">
-              {{ page.breadcrumb }}
-            </div>
+          {# Modular page head: breadcrumb, then the page's <h1>, at the top
+             of the content column and over the first section's bleed.
+             - Breadcrumb: the same "breadcrumb" region and System Breadcrumb
+               block as other pages, on the line of the TOC's title.
+             - <h1>: the node title, printed here so every Modular page has
+               one. The Page title block is suppressed on these pages
+               (PalefireHooks::preprocessBlock()), so placing it can't add a
+               second <h1>.
+             It has no snap point of its own: the first section's snap point
+             is moved up to the top of the page (_modular.scss), so the head
+             and the first section snap as one screen.
+             Styles: .pf-modular__head (_layout.scss). #}
+          {% if is_modular_page %}
+            <header class="pf-modular__head">
+              {% if page.breadcrumb %}
+                <div class="pf-breadcrumb pf-breadcrumb--modular">
+                  {{ page.breadcrumb }}
+                </div>
+              {% endif %}
+              {% if node.label %}
+                <h1 class="pf-modular__title">{{ node.label }}</h1>
+              {% endif %}
+            </header>
           {% endif %}
           {% if has_toc %}
             <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"

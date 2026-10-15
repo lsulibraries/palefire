@@ -16,13 +16,44 @@
 // chrome tokens, so it follows the light/dark section theme with the
 // sidebar. The first section's background bleeds up behind it
 // (palefireBleedOffset), so it stays above that layer.
-.pf-breadcrumb--modular {
+// Wrapped in .pf-modular__head with the page <h1> (page.html.twig). The
+// first line (breadcrumb) lines up with the TOC title in the sidebar: both
+// start 2rem down (--pf-modular-head-top) with the same type and a 1.5
+// line-height; js/modular-toc.js nudges the TOC title by any difference.
+.pf-modular__head {
+  --pf-modular-head-top: 2rem;
   position: relative;
   z-index: 3;
-  padding: 2rem var(--pf-section-pad-inline, 1.25rem) 0;
-  // A snap point of its own, so mandatory snapping can't skip the top of
-  // the page and hide it.
-  scroll-snap-align: start;
+  padding: var(--pf-modular-head-top) var(--pf-section-pad-inline, 1.25rem) 0;
+  // Sits over the first section's bleed, where the video button now is
+  // (same line as the breadcrumb): let clicks through the empty parts.
+  pointer-events: none;
+
+  .breadcrumb-item,
+  .pf-modular__title {
+    pointer-events: auto;
+  }
+}
+
+.pf-modular__title {
+  margin: 0.85rem 0 0;
+  font-size: clamp(2rem, 1.25rem + 2vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--pf-toc-active);
+  width: fit-content; // don't cover the video button's corner
+  max-width: 100%;
+
+  // No breadcrumb: the title takes the first line.
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.pf-breadcrumb--modular {
+  padding: 0;
 
   .breadcrumb {
     --bs-breadcrumb-divider: '';
@@ -79,11 +110,27 @@
     }
   }
 
+  // The current page is the <h1> right below (and the TOC title), so on
+  // Modular pages it is only read by screen readers (aria-current and
+  // the schema.org list stay intact). The last link gets a trailing
+  // divider instead: "HOME /".
   .breadcrumb-item.active {
-    color: var(--pf-toc-active);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+  }
+
+  .breadcrumb-item:has(+ .breadcrumb-item.active)::after {
+    content: "";
+    width: 1px;
+    height: 0.9em;
+    margin-inline-start: 0.85rem;
+    background: currentColor;
+    opacity: 0.45;
+    transform: skewX(-20deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -91,7 +138,8 @@
   }
 
   @media (forced-colors: active) {
-    .breadcrumb-item + .breadcrumb-item::before { background: CanvasText; }
+    .breadcrumb-item + .breadcrumb-item::before,
+    .breadcrumb-item:has(+ .breadcrumb-item.active)::after { background: CanvasText; }
     a:hover, a:focus-visible { text-decoration: underline; }
   }
 }
