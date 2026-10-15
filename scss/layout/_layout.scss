@@ -16,9 +16,6 @@
 .pf-main {
   min-width: 0; // Let wide content (tables, code) shrink inside the grid.
 
-  > .region + .region {
-    margin-top: $spacer;
-  }
 }
 
 .pf-sidebar {
