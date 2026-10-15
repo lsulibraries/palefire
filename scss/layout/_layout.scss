@@ -110,27 +110,26 @@
     }
   }
 
-  // The current page is the <h1> right below (and the TOC title), so on
-  // Modular pages it is only read by screen readers (aria-current and
-  // the schema.org list stay intact). The last link gets a trailing
-  // divider instead: "HOME /".
+  // The current page: the last item, in the active colour, cut to one
+  // line with an ellipsis if it runs out of room (the <h1> right below has
+  // the full title).
   .breadcrumb-item.active {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
+    flex: 0 1 auto;
+    color: var(--pf-toc-active);
+
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
-  .breadcrumb-item:has(+ .breadcrumb-item.active)::after {
-    content: "";
-    width: 1px;
-    height: 0.9em;
-    margin-inline-start: 0.85rem;
-    background: currentColor;
-    opacity: 0.45;
-    transform: skewX(-20deg);
+  // Keep the breadcrumb clear of the background-video button when the
+  // bento (with a video) is the first section: the button sits on this
+  // line at the right (bento-video.js).
+  body:has(.pf-sections > .pf-section:first-child [data-bento-video-toggle]) & .breadcrumb {
+    padding-inline-end: 3.5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -138,8 +137,7 @@
   }
 
   @media (forced-colors: active) {
-    .breadcrumb-item + .breadcrumb-item::before,
-    .breadcrumb-item:has(+ .breadcrumb-item.active)::after { background: CanvasText; }
+    .breadcrumb-item + .breadcrumb-item::before { background: CanvasText; }
     a:hover, a:focus-visible { text-decoration: underline; }
   }
 }

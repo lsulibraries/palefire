@@ -295,6 +295,23 @@
       syncKey();
     }
 
+    // Sticky drawing (split layout, _building-map.scss): only while it fits
+    // in the window below the top bar. A taller drawing would stick with its
+    // bottom cut off, so .is-unstuck lets it scroll with the page instead.
+    const stageEl = root.querySelector('.pf-map__stage');
+    if (stageEl) {
+      const syncStick = () => {
+        root.classList.remove('is-unstuck');
+        const cs = getComputedStyle(stageEl);
+        if (cs.position !== 'sticky') return;
+        const top = parseFloat(cs.top) || 0;
+        root.classList.toggle('is-unstuck', stageEl.offsetHeight + top + 16 > window.innerHeight);
+      };
+      if ('ResizeObserver' in window) new ResizeObserver(() => requestAnimationFrame(syncStick)).observe(stageEl);
+      window.addEventListener('resize', syncStick, { passive: true });
+      syncStick();
+    }
+
     // Bento: dim + blur the background video while the map is in view.
     const bento = root.closest('.pf-bento');
     if (bento && 'IntersectionObserver' in window) {

@@ -1,29 +1,32 @@
 {#
 /**
  * @file
- * Bento search section: one form, many result tiles, and an optional
- * Hill Memorial building map under the form.
+ * Bento search section: a search form that sends the search to the
+ * library's Bento results page, and an optional Hill Memorial building map
+ * under it.
+ *
+ * The form is a plain GET form: submitting opens bento_action
+ * (https://lib.lsu.edu/bento) with the words in bento.identifier
+ * (search_api_fulltext_bento), the same query Origami's search box sends.
+ * There are no results on this page and no JavaScript; the result tiles
+ * that palefire_modular builds (bento.tiles) are not printed.
  *
  * Variables from palefire_modular_preprocess_paragraph__bento_search():
- * - bento.view_name, bento.identifier, bento.input_id, bento.query,
- *   bento.placeholder, bento.action
- * - bento.tiles: list of { id, title, heading_id, view }
+ * - bento.identifier, bento.input_id, bento.placeholder
  * - bg_videos: ordered list of MP4 URLs (optional)
  * - bg_poster: poster image URL (optional)
  * - bento_map: the building_map paragraph from field_bento_map, rendered
  *   by palefire_preprocess_paragraph__bento_search() (optional).
  *
  * "Search LSU Libraries" and the map heading are h3s so the TOC lists them.
- * data-toc-skip sits on the tile grid (not the wrapper) to keep the tile h3s
- * out. While the map is in view, building-map.js adds .is-map-in-view here to
+ * While the map is in view, building-map.js adds .is-map-in-view here to
  * dim and blur the background video.
  */
 #}
-{{ attach_library('palefire/bento-search') }}
-<div{{ attributes.addClass('pf-bento', bento.query ? 'has-query' : 'no-query', bg_videos ? 'has-bg-video') }}
-    data-pf-bento
-    data-view-name="{{ bento.view_name }}"
-    data-identifier="{{ bento.identifier }}">
+{% set bento_action = 'https://lib.lsu.edu/bento' %}
+{% set bento_name = bento.identifier|default('search_api_fulltext_bento') %}
+{% set input_id = bento.input_id|default('pf-bento-q') %}
+<div{{ attributes.addClass('pf-bento', bg_videos ? 'has-bg-video') }} data-pf-bento>
 
   {% if bg_videos %}
     {{ attach_library('palefire/bento-video') }}
@@ -31,14 +34,12 @@
       <video class="pf-bento__bg-video" muted playsinline preload="metadata"
              aria-hidden="true" tabindex="-1"
              {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
-      {# Round glass control: icon + progress ring for the current clip; the
-         label slides out on hover/focus and is always read by screen
-         readers. bento-video.js swaps the label and data-state. #}
+      {# Same look as the TOC hide/show button: icon square + a gold bar that
+         fills as the current clip plays; the label slides out on
+         hover/focus and is always read by screen readers. bento-video.js
+         swaps the label and data-state. #}
       <button type="button" class="pf-bento__bg-toggle" data-bento-video-toggle data-state="playing">
-        <svg class="pf-bento__bg-toggle-ring" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
-          <circle class="pf-bento__bg-toggle-track" cx="22" cy="22" r="20.5"/>
-          <circle class="pf-bento__bg-toggle-progress" cx="22" cy="22" r="20.5" pathLength="1"/>
-        </svg>
+        <span class="pf-bento__bg-toggle-progress" aria-hidden="true"></span>
         <svg class="pf-bento__bg-toggle-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
           <g class="pf-bento__bg-toggle-pause"><rect x="3.5" y="2.5" width="3.2" height="11" rx="1"/><rect x="9.3" y="2.5" width="3.2" height="11" rx="1"/></g>
           <path class="pf-bento__bg-toggle-play" d="M4.5 3.1v9.8c0 .8.9 1.3 1.6.9l7.6-4.9c.6-.4.6-1.3 0-1.7L6.1 2.2c-.7-.4-1.6.1-1.6.9z"/>
@@ -48,31 +49,21 @@
     </div>
   {% endif %}
 
-  <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}" aria-labelledby="{{ bento.input_id }}-heading">
-    <h3 class="pf-bento__heading" id="{{ bento.input_id }}-heading" data-toc>
-      <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>
+  <form class="pf-bento__form" role="search" method="get" action="{{ bento_action }}" aria-labelledby="{{ input_id }}-heading">
+    <h3 class="pf-bento__heading" id="{{ input_id }}-heading" data-toc>
+      <label class="pf-bento__label" for="{{ input_id }}">{{ 'Search LSU Libraries'|t }}</label>
     </h3>
-    <div class="input-group input-group-lg">
-      <input class="form-control" type="search" id="{{ bento.input_id }}" name="{{ bento.identifier }}"
-             value="{{ bento.query }}" placeholder="{{ bento.placeholder }}" autocomplete="off" enterkeyhint="search">
-      <button class="btn btn-primary pf-bento__submit" type="submit">{{ 'Search'|t }}</button>
+    <div class="pf-bento__field">
+      <svg class="pf-bento__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+      <input class="pf-bento__input" type="search" id="{{ input_id }}" name="{{ bento_name }}"
+             placeholder="{{ bento.placeholder|default('Search books, articles, databases, guides and more'|t) }}"
+             autocomplete="off" enterkeyhint="search">
+      <button class="pf-bento__submit" type="submit">
+        <span class="pf-bento__submit-text">{{ 'Search'|t }}</span>
+        <svg class="pf-bento__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
     </div>
   </form>
-
-  <p class="visually-hidden" role="status" data-pf-bento-status></p>
-
-  <div class="pf-bento__grid"{{ bento.query ? '' : ' hidden' }} data-pf-bento-grid data-toc-skip>
-    {% for tile in bento.tiles %}
-      <section class="pf-bento__tile" aria-labelledby="{{ tile.heading_id }}" data-bento-display="{{ tile.id }}">
-        <h3 id="{{ tile.heading_id }}" class="pf-bento__tile-title">{{ tile.title }}</h3>
-        {{ tile.view }}
-      </section>
-    {% endfor %}
-  </div>
-
-  <p class="pf-bento__empty" data-pf-bento-empty hidden>
-    {{ 'No results found. Try fewer or different words.'|t }}
-  </p>
 
   {% if bento_map %}
     <div class="pf-bento__visit">{{ bento_map }}</div>

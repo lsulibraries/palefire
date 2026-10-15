@@ -14,49 +14,135 @@
 } // no z-index here
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 .pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .55); }
-// Background-video toggle: a frosted round button in the section's top
-// corner. The gold ring fills as the current clip plays; the pause/play
-// glyph cross-fades; the label slides out of the button on hover or
-// keyboard focus (touch shows just the icon; screen readers always get the
-// label, which is never display: none).
+// Search form (paragraph--bento-search.html.twig): one field that sends
+// the search to https://lib.lsu.edu/bento. Drawn like the rest of the
+// modular chrome rather than as a Bootstrap input group: a 4px-cornered
+// box with a 1px border on the sidebar's glass, a thin search glyph, and a
+// "Search" button in the breadcrumb/TOC voice (monospace, uppercase,
+// tracked) behind a hairline divider. Muted (--pf-toc-color) at rest, the
+// active colour on hover, and the gold accent border while the field has
+// focus. Colours are the --pf-toc-* / --pf-section-* tokens, so it follows
+// light and dark sections.
+.pf-bento__form {
+  --pf-bento-field-h: 3.5rem;
+  --pf-bento-line: var(--pf-section-border, #{$pf-grey-500}); // 3:1 or more on light and dark (WCAG 1.4.11)
+}
+.pf-bento__heading { margin-bottom: 1rem; }
+.pf-bento__field {
+  position: relative;
+  display: flex; align-items: stretch;
+  min-height: var(--pf-bento-field-h);
+  border: 1px solid var(--pf-bento-line); border-radius: 4px;
+  color: var(--pf-toc-color, #{$pf-grey-500});
+  background-color: var(--pf-sidebar-bg, #{rgba($pf-black, .5)});
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+.pf-bento__field:hover { border-color: var(--pf-toc-color, #{$pf-grey-500}); }
+// Focus shows on the whole box (the input itself draws no outline): gold
+// border plus a 1px gold ring, about 3px of accent in all.
+.pf-bento__field:focus-within {
+  border-color: var(--pf-toc-accent, #{$pf-gold});
+  box-shadow: 0 0 0 1px var(--pf-toc-accent, #{$pf-gold});
+}
+.pf-bento__field-icon {
+  flex: none; align-self: center;
+  width: 1.25rem; height: 1.25rem; margin-inline: 1.125rem .75rem;
+  transition: color .2s ease;
+}
+.pf-bento__field:focus-within .pf-bento__field-icon { color: var(--pf-toc-active, #{$pf-white}); }
+.pf-bento__input {
+  flex: 1 1 auto; min-width: 0;
+  padding: .75rem .75rem .75rem 0; margin: 0;
+  border: 0; border-radius: 0; outline: 0;
+  font: inherit; font-size: 1.125rem; line-height: 1.4;
+  color: var(--pf-toc-active, #{$pf-white});
+  background: transparent;
+  -webkit-appearance: none; appearance: none;
+}
+.pf-bento__input::placeholder { color: var(--pf-toc-color, #{$pf-grey-500}); opacity: 1; }
+.pf-bento__input::-webkit-search-decoration { -webkit-appearance: none; }
+.pf-bento__input::-webkit-search-cancel-button { cursor: pointer; filter: grayscale(1); opacity: .6; }
+.pf-bento__submit {
+  flex: none; display: inline-flex; align-items: center; gap: .625rem;
+  margin: 0; padding: 0 1.25rem 0 1.375rem;
+  border: 0; border-inline-start: 1px solid var(--pf-bento-line); border-radius: 0 3px 3px 0;
+  color: var(--pf-toc-color, #{$pf-grey-500});
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+  background: transparent;
+  cursor: pointer;
+  transition: color .2s ease, background-color .3s ease;
+}
+[dir="rtl"] .pf-bento__submit { border-radius: 3px 0 0 3px; }
+.pf-bento__submit:hover,
+.pf-bento__submit:focus-visible { color: var(--pf-toc-active, #{$pf-white}); background-color: rgb(127 127 127 / .08); }
+.pf-bento__submit:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: -4px; }
+.pf-bento__submit-icon { width: 1rem; height: 1rem; transition: transform .25s ease; }
+[dir="rtl"] .pf-bento__submit-icon { transform: scaleX(-1); }
+.pf-bento__submit:hover .pf-bento__submit-icon,
+.pf-bento__submit:focus-visible .pf-bento__submit-icon { transform: translateX(3px); }
+[dir="rtl"] .pf-bento__submit:hover .pf-bento__submit-icon,
+[dir="rtl"] .pf-bento__submit:focus-visible .pf-bento__submit-icon { transform: scaleX(-1) translateX(3px); }
+// Phones: the button keeps only its arrow; "Search" stays for screen readers.
+@media (max-width: 479.98px) {
+  .pf-bento__field-icon { margin-inline: .875rem .5rem; }
+  .pf-bento__input { font-size: 1rem; }
+  .pf-bento__submit { padding-inline: 1rem; }
+  .pf-bento__submit-text {
+    position: absolute !important; width: 1px !important; height: 1px !important;
+    overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important;
+  }
+}
+
+// Background-video toggle: the same button as the TOC's hide/show toggle
+// (.pf-modular__toc-collapse in _modular.scss, its floating "closed" look):
+// 2.25rem tall, 4px corners, 1px --pf-toc-rail border, the sidebar's glass
+// background, --pf-toc-color text that turns --pf-toc-active on hover. The
+// background and border stay the same on hover, as on the TOC toggle. The
+// label is in the breadcrumb's voice (monospace, uppercase, tracked) and
+// slides out on hover or keyboard focus; touch shows just the icon, and
+// screen readers always get the label (never display: none). A thin gold
+// bar along the bottom (the TOC indicator's gold) fills as the clip plays.
 .pf-bento__bg-toggle {
-  --size: 2.75rem; // 44px target
-  --ring: #fdd023; // LSU gold
+  --size: 2.25rem; // the TOC toggle's size
   // --pf-bento-toggle-top: set by js/bento-video.js to centre the button on
   // the breadcrumb's line when the bento is the first section.
   position: absolute; top: var(--pf-bento-toggle-top, calc(var(--pf-bleed-block-start, 0px) + 1rem)); right: 1rem; z-index: 2;
   display: inline-flex; align-items: center; flex-direction: row-reverse;
   min-width: var(--size); height: var(--size); padding: 0; margin: 0;
-  border: 0; border-radius: calc(var(--size) / 2);
-  color: #fff; font: inherit; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; line-height: 1;
-  background: rgb(15 10 25 / .42);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .22), 0 6px 18px rgb(0 0 0 / .28);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  backdrop-filter: blur(10px) saturate(140%);
+  overflow: hidden; // clips the progress bar to the corners
+  border: 1px solid var(--pf-toc-rail, #{$pf-grey-900}); border-radius: 4px;
+  color: var(--pf-toc-color, #{$pf-grey-500});
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+  background-color: var(--pf-sidebar-bg, #{rgba($pf-black, .5)});
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .15);
   cursor: pointer;
-  transition: background-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  transition: color .2s ease, background-color .3s ease, border-color .3s ease;
 }
 .pf-bento__bg-toggle:hover,
-.pf-bento__bg-toggle:focus-visible { background: rgb(15 10 25 / .62); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .38), 0 8px 22px rgb(0 0 0 / .34); }
-.pf-bento__bg-toggle:active { transform: scale(.96); }
-.pf-bento__bg-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+.pf-bento__bg-toggle:focus-visible { color: var(--pf-toc-active, #{$pf-white}); }
+.pf-bento__bg-toggle:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: 3px; }
 
-.pf-bento__bg-toggle-ring {
-  position: absolute; top: 0; right: 0; width: var(--size); height: var(--size);
-  transform: rotate(-90deg); pointer-events: none;
-  fill: none; stroke-width: 2;
-}
-.pf-bento__bg-toggle-track { stroke: rgb(255 255 255 / .16); }
 .pf-bento__bg-toggle-progress {
-  stroke: var(--ring); stroke-linecap: round;
-  stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--pf-bento-progress, 0));
-  transition: stroke-dashoffset .3s linear, opacity .25s ease;
+  position: absolute; inset-inline: 0; bottom: 0; height: 2px;
+  background: var(--pf-toc-accent, #{$pf-gold});
+  transform: scaleX(var(--pf-bento-progress, 0)); transform-origin: left center;
+  pointer-events: none;
+  transition: transform .3s linear, opacity .25s ease;
 }
+[dir="rtl"] .pf-bento__bg-toggle-progress { transform-origin: right center; }
 .pf-bento__bg-toggle.is-rewinding .pf-bento__bg-toggle-progress { transition: none; }
 .pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-progress { opacity: .55; }
 
+// The icon fills the button's square end, so the collapsed button is the
+// same square as the TOC toggle.
 .pf-bento__bg-toggle-icon {
-  flex: none; display: grid; width: var(--size); height: 1rem; fill: currentColor; overflow: visible;
+  flex: none; display: grid; width: calc(var(--size) - 2px); height: .875rem; fill: currentColor; overflow: visible;
 }
 .pf-bento__bg-toggle-pause,
 .pf-bento__bg-toggle-play { transform-box: fill-box; transform-origin: center; transition: opacity .2s ease, transform .25s ease; }
@@ -64,20 +150,27 @@
 .pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-pause { opacity: 0; transform: scale(.6); }
 .pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-play { opacity: 1; transform: none; }
 
+// Label: .875rem in from the left edge and .25rem clear of the icon's
+// square on the right (about .875rem of space to the glyph), so the text
+// never runs into the icon.
 .pf-bento__bg-toggle-label {
   display: block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
-  padding-inline-start: 0;
+  padding-inline: 0;
   transition: max-width .35s ease, opacity .2s ease, padding .35s ease;
 }
 .pf-bento__bg-toggle:hover .pf-bento__bg-toggle-label,
-.pf-bento__bg-toggle:focus-visible .pf-bento__bg-toggle-label { max-width: 16rem; opacity: 1; padding-inline-start: 1.1rem; }
+.pf-bento__bg-toggle:focus-visible .pf-bento__bg-toggle-label { max-width: 18rem; opacity: 1; padding-inline: .875rem .25rem; }
 
 @media (prefers-reduced-motion: reduce) {
+  .pf-bento__field, .pf-bento__field *,
   .pf-bento__bg-toggle,
   .pf-bento__bg-toggle *,
   .pf-bento__bg-toggle-progress { transition: none !important; }
 }
 @media (forced-colors: active) {
-  .pf-bento__bg-toggle { border: 1px solid ButtonText; background: ButtonFace; color: ButtonText; }
-  .pf-bento__bg-toggle-progress { stroke: Highlight; }
+  .pf-bento__field { border-color: CanvasText; }
+  .pf-bento__field:focus-within { outline: 2px solid Highlight; outline-offset: 2px; }
+  .pf-bento__submit { border-inline-start-color: CanvasText; color: ButtonText; }
+  .pf-bento__bg-toggle { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+  .pf-bento__bg-toggle-progress { background: Highlight; }
 }

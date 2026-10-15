@@ -401,7 +401,7 @@
     const wide = window.matchMedia('(min-width: 992px)');
     let nudge = 0;
     const alignTitle = () => {
-      const crumb = document.querySelector('.pf-modular__head .breadcrumb-item:not(.active)')
+      const crumb = document.querySelector('.pf-modular__head .breadcrumb-item')
         || document.querySelector('.pf-modular__head > :first-child');
       if (!sidebar || !title || !crumb || !wide.matches || window.scrollY > 1) {
         return;

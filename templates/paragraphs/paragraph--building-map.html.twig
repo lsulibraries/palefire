@@ -19,16 +19,21 @@
  *                 (buildings.yml `legend`, e.g. [elevator])
  *   map.cache     cache metadata (room terms, overrides); print it
  *
- * The legend sits beside the map while the map keeps at least ~36rem; when
- * there is less room it moves under the map and starts collapsed
- * (_building-map.scss, building-map.js).
+ * Layout (_building-map.scss): heading, intro and legend in a column on
+ * the left, the drawing on the right starting level with the heading. While
+ * they are side by side the drawing is sticky, so it stays in view while the
+ * legend and page scroll (building-map.js turns that off when the drawing is
+ * taller than the window). When the map would drop under ~36rem, the
+ * drawing moves under the heading, the legend under the drawing, and the
+ * legend starts collapsed.
  */
 #}
 {% if map %}
 {{ attach_library('palefire/building-map') }}
 {{ map.cache }}
-<h3 class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</h3>
 <div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
+  {# Inside the grid, so the drawing starts level with the heading. #}
+  <h3 class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</h3>
   <div class="pf-map__aside">
     {% if map.intro %}
       <div class="pf-map__intro">{{ map.intro }}</div>

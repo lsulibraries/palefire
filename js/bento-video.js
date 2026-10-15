@@ -13,8 +13,9 @@
         const play = () => { if (!paused) video.play().catch(() => {}); };
         const load = (n) => { i = n % sources.length; video.src = sources[i]; };
         video.loop = sources.length === 1;
-        // Progress ring: how far through the current clip. A drop (next
-        // clip, loop) jumps back without animating the ring backwards.
+        // Progress bar (the gold line along the button's bottom edge): how
+        // far through the current clip. A drop (next clip, loop) jumps back
+        // without animating the bar backwards.
         let shown = 0;
         const progress = () => {
           const p = video.duration ? Math.min(1, video.currentTime / video.duration) : 0;
@@ -45,7 +46,7 @@
         // section's top. Measured against the button's positioned parent,
         // so it holds at any scroll position; re-run when either resizes.
         const align = () => {
-          const crumb = document.querySelector('.pf-modular__head .breadcrumb-item:not(.active)');
+          const crumb = document.querySelector('.pf-modular__head .breadcrumb-item');
           const host = btn.offsetParent;
           let top = null;
           if (crumb && host && wrap.closest('.pf-sections > .pf-section:first-child')) {

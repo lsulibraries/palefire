@@ -75,10 +75,15 @@ overwrites existing terms, so editors own the text). Re-run it after editing
 `buildings.yml`. To add a building: add its drawing under
 `templates/includes/`, add an entry to `buildings.yml`, and re-run.
 
-Layout: the legend sits beside the map (15-18rem column) while the map
-still gets about 36rem; in a narrower container (under 58rem, a container
+Layout: the heading, intro and legend form a 15-18rem column beside the
+map while the map still gets about 36rem. The drawing starts level with the
+heading (it used to be centred against the column, which left a tall gap
+above it as the legend grew) and is sticky (`position: sticky`, just under
+the top bar), so it stays in view while the legend and the page scroll.
+`building-map.js` adds `.is-unstuck` when the drawing is taller than the
+window below the top bar. In a narrower container (under 58rem, a container
 query on `.pf-bento__visit`, so the TOC sidebar is taken into account) it
-moves under the map. The "Legend & spaces" toggle always shows: open beside
+stacks: heading, drawing, then the legend. The "Legend & spaces" toggle always shows: open beside
 the map, collapsed under it. Inside a section the bento adds no padding of
 its own (the section's `--pf-section-pad-*` already applies).
 
@@ -153,9 +158,11 @@ background bleed. Styles: `.pf-modular__head` in `scss/layout/_layout.scss`.
   every other page (no block layout change). Styled like the TOC
   (`.pf-breadcrumb--modular`): monospace, uppercase and tracked, muted links
   with a gold underline, slanted dividers, `--pf-toc-*` colours so it follows
-  light/dark sections. The current page item is read by screen readers only
-  (the `<h1>` right below names the page), so it shows as "HOME /". Other
-  pages keep the Bootstrap breadcrumb above the body.
+  light/dark sections. The current page is the last item, in the active
+  colour, cut to one line with an ellipsis if it runs out of room; the
+  `<h1>` right below repeats it in full. When the bento with a background
+  video is the first section, the breadcrumb leaves room on the right for
+  the video button. Other pages keep the Bootstrap breadcrumb above the body.
 - Title: the node's title as the page's `<h1>`. A placed Page title block is
   emptied and hidden on Modular pages (`PalefireHooks::preprocessBlock()`),
   so there is never a second `<h1>`.
@@ -180,7 +187,16 @@ heading (`templates/navigation/palefire-modular-toc.html.twig`,
 since the `<h1>` already says it, set to match the breadcrumb (two lines at
 most). The block's heading setting still names the `<nav>` for screen
 readers, and shows as before if there is no page title. No block config
-change is needed.
+change is needed, and palefire_modular needs no change: the module only
+supplies the block and the default template, and this theme template
+overrides it.
+
+Keep exactly one `palefire-modular-toc.html.twig` in the theme
+(`templates/navigation/`). A stray copy of the module's default template
+sat in the theme root and won the theme registry, so the page title, the
+Back to top arrow and the attached library never rendered; it has been
+deleted. If the title still shows "On this page" after `drush cr`, look
+for another copy: `find . -name 'palefire-modular-toc.html.twig'`.
 
 The hide/show button is a 4px-rounded square. Sub-links are cut to one line
 with an ellipsis (`white-space: nowrap`), not `-webkit-line-clamp`: a clamped
@@ -189,13 +205,38 @@ bottom padding. The full text is the link's tooltip where it is cut.
 
 ### Background-video button
 
-The bento's pause/play control is a round frosted button in the section's
-top corner (on the breadcrumb's line when the bento is the first section) (`paragraph--bento-search.html.twig`, `_bento-search.scss`): a
-pause/play glyph that cross-fades, a gold ring that fills as the current
-clip plays (`--pf-bento-progress`, set by `bento-video.js`), and the label
-("Pause background video" / "Play background video") sliding out on hover
-or keyboard focus. Screen readers always get the label. Reduced motion
+The bento's pause/play control sits in the section's top corner (on the
+breadcrumb's line when the bento is the first section)
+(`paragraph--bento-search.html.twig`, `_bento-search.scss`). It is styled
+like the TOC hide/show button in its floating look: 2.25rem tall, 4px
+corners, a 1px `--pf-toc-rail` border, the sidebar's glass background and
+`--pf-toc-color` text that turns `--pf-toc-active` on hover. The background
+and border don't change on hover. The pause/play glyph cross-fades, a 2px
+gold bar along the bottom edge fills as the current clip plays
+(`--pf-bento-progress`, set by `bento-video.js`), and the label ("Pause
+background video" / "Play background video", monospace, uppercase and
+tracked like the breadcrumb) slides out on hover or keyboard focus with
+space on both sides. Screen readers always get the label. Reduced motion
 drops the transitions; forced colours get a system button.
+
+### Bento search form
+
+`paragraph--bento-search.html.twig` prints a plain GET form that sends the
+search to the library's Bento results page: `https://lib.lsu.edu/bento`
+with the words in `search_api_fulltext_bento` (palefire_modular's
+`bento.identifier`, the same query Origami's search box sends). Results are
+not shown on this page and there is no JavaScript. To change the
+destination, edit `bento_action` at the top of the template. The result
+tiles palefire_modular builds (`bento.tiles`) are no longer printed.
+
+Styles (`_bento-search.scss`): one 4px-cornered box with a 1px border on
+the sidebar's glass, a thin search glyph, the input, and a "Search" button
+in the breadcrumb/TOC voice (monospace, uppercase, tracked) behind a
+hairline divider. Muted at rest, the active colour on hover, a gold border
+and ring while the field has focus. Colours come from the `--pf-toc-*` and
+`--pf-section-*` tokens, so it follows light and dark sections; the border
+is at least 3:1 on both. On phones the button shows only its arrow
+("Search" stays for screen readers).
 
 ### Calendar events in "On this page"
 

@@ -29,32 +29,66 @@
   gap: clamp(1.5rem, 3vw, 3rem);
   color: var(--pf-map-ink);
 }
-/* Map with the legend + space list beside it (inside the bento, under search).
-   The split follows the width the map really gets: a container query on
-   .pf-bento__visit, not the viewport, since the TOC sidebar and the section
-   padding take part of the screen. The legend column is 15-18rem; below a
-   58rem container the map would drop under ~36rem, so the legend moves under
-   the map instead. --pf-map-layout tells building-map.js which layout is in
-   use (it collapses the legend when stacked). */
-.pf-map { --pf-map-layout: split; grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr); align-items: center; }
+/* Map with the heading, intro and legend in a column beside it (inside the
+   bento, under search). The split follows the width the map really gets: a
+   container query on .pf-bento__visit, not the viewport, since the TOC
+   sidebar and the section padding take part of the screen. The legend column
+   is 15-18rem; below a 58rem container the map would drop under ~36rem, so it
+   stacks instead: heading, drawing, legend. --pf-map-layout tells
+   building-map.js which layout is in use (it collapses the legend when
+   stacked).
+   Split: the drawing spans both rows and starts level with the heading (not
+   centred against the column, which left a tall gap above it once the
+   legend got long), and is sticky, so it stays in view while the legend and
+   the page scroll past. building-map.js adds .is-unstuck if the drawing is
+   taller than the window below the top bar. */
+.pf-map {
+  --pf-map-layout: split;
+  --pf-map-stick-gap: 1.5rem;          /* space between the top bar and the stuck drawing */
+  grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "head stage" "aside stage";
+  row-gap: 0;
+  align-items: start;
+}
+.pf-map > .pf-map__heading { grid-area: head; margin: 0 0 clamp(1rem, 2.5vw, 1.75rem); }
+.pf-map__aside { grid-area: aside; min-width: 0; }
+.pf-map__stage {
+  grid-area: stage;
+  position: sticky;
+  top: calc(var(--pf-header-h, 50px) + var(--pf-map-stick-gap));
+  z-index: 1;                          /* tooltips over the legend column */
+}
+.pf-map.is-unstuck .pf-map__stage { position: relative; top: auto; }
 @container pf-map (max-width: 57.99rem) {
-  .pf-map { --pf-map-layout: stacked; grid-template-columns: minmax(0, 1fr); }
-  .pf-map__aside { order: 2; }
+  .pf-map {
+    --pf-map-layout: stacked;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: "head" "stage" "aside";
+    row-gap: clamp(1.5rem, 3vw, 3rem);
+  }
+  .pf-map > .pf-map__heading { margin-bottom: 0; }
+  .pf-map__stage { position: relative; top: auto; }
 }
 /* No container queries: the same switch on the viewport (main column is
    about 58rem at 1240px with the sidebar showing). */
 @supports not (container-type: inline-size) {
   @media (max-width: 1239.98px) {
-    .pf-map { --pf-map-layout: stacked; grid-template-columns: minmax(0, 1fr); }
-    .pf-map__aside { order: 2; }
+    .pf-map {
+      --pf-map-layout: stacked;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      grid-template-areas: "head" "stage" "aside";
+      row-gap: clamp(1.5rem, 3vw, 3rem);
+    }
+    .pf-map > .pf-map__heading { margin-bottom: 0; }
+    .pf-map__stage { position: relative; top: auto; }
   }
 }
-/* The map heading is a plain h3: type comes from the modular page's h3 styles.
-   Only the gap above the drawing is set here. */
-.pf-map__heading { margin-bottom: clamp(1rem, 2.5vw, 1.75rem); }
 
 /* Stage + SVG ------------------------------------------------------------ */
-.pf-map__stage { position: relative; margin: 0; min-width: 0; }
+.pf-map__stage { margin: 0; min-width: 0; } /* position: sticky or relative, above */
 .pf-map__scroller { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
 .pf-map__svg { display: block; width: 100%; height: auto; overflow: visible; }
 @media (max-width: 575.98px) { .pf-map__svg { min-width: 40rem; } }
@@ -293,7 +327,7 @@
    the h3's type. */
 .pf-bento__heading .pf-bento__label { display: block; font: inherit; color: inherit; margin: 0; }
 /* Same 1280px cap as the form; also the container .pf-map's layout queries. */
-.pf-bento__visit { position: relative; width: 100%; max-width: 1280px; margin: clamp(3rem, 8vw, 6rem) auto 0; container-name: pf-map; container-type: inline-size; }
+.pf-bento__visit { position: relative; width: 100%; max-width: 1280px; margin: clamp(2.5rem, 6vw, 4.5rem) auto 0; container-name: pf-map; container-type: inline-size; }
 .pf-bento__bg-video { transition: filter .8s ease, transform .8s ease; }
 .pf-bento__media::after { transition: background-color .8s ease; }
 .pf-bento.is-map-in-view .pf-bento__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
