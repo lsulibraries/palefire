@@ -9,6 +9,8 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\file\FileInterface;
+use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -19,6 +21,9 @@ use Drupal\node\NodeInterface;
  * "field_section_title" field is treated as a section: it gets a stable anchor
  * ID, is rendered as a <section> landmark, and (optionally) appears in the
  * "On this page" table of contents printed in the Sidebar region.
+ *
+ * Note: a theme may implement each hook only once, so every
+ * preprocess_paragraph concern is routed through preprocessParagraph().
  */
 class PalefireHooks {
 
@@ -106,13 +111,16 @@ class PalefireHooks {
   }
 
   /**
-   * Adds bento background video variables (bg_videos, bg_poster).
+   * Implements hook_preprocess_paragraph().
    *
-   * Called from preprocessParagraph(); themes may implement each hook only
-   * once. The bento_search template attaches palefire/bento-video itself.
+   * Exposes section variables consumed by paragraph.html.twig, plus bento
+   * background video variables for the bento_search paragraph.
    */
-  private function bentoVideoVariables(array &$variables): void {
+  #[Hook('preprocess_paragraph')]
+  public function preprocessParagraph(array &$variables): void {
     $variables['is_section'] = FALSE;
+
+    // Runs before the section early-return so bento_search always gets it.
     $this->bentoVideoVariables($variables);
 
     /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
@@ -142,13 +150,25 @@ class PalefireHooks {
   }
 
   /**
-   * Implements hook_preprocess_paragraph() for bento background videos.
-   *
-   * Exposes bg_videos (ordered MP4 URLs) and bg_poster to the bento_search
-   * paragraph template. The template attaches palefire/bento-video itself.
+   * Implements hook_preprocess_block().
    */
-  #[Hook('preprocess_paragraph')]
-  public function preprocessBentoVideo(array &$variables): void {
+  #[Hook('preprocess_block')]
+  public function preprocessBlock(array &$variables): void {
+    // Always provide the site name to the branding block so the logo link has
+    // a meaningful accessible name even when "Site name" display is disabled.
+    // The block already carries the config:system.site cache tag.
+    if (($variables['plugin_id'] ?? '') === 'system_branding_block') {
+      $variables['site_name_plain'] = (string) \Drupal::config('system.site')->get('name');
+    }
+  }
+
+  /**
+   * Adds bento background video variables (bg_videos, bg_poster).
+   *
+   * Called from preprocessParagraph(). The bento_search template attaches
+   * palefire/bento-video itself.
+   */
+  private function bentoVideoVariables(array &$variables): void {
     $paragraph = $variables['paragraph'] ?? NULL;
     if (!$paragraph instanceof FieldableEntityInterface
       || $paragraph->bundle() !== 'bento_search'
@@ -162,21 +182,20 @@ class PalefireHooks {
     $cache->addCacheableDependency($paragraph);
 
     $urls = [];
-    foreach ($paragraph->get('field_bg_videos')->referencedEntities() as $media) {
-      $source_field = $media->getSource()->getConfiguration()['source_field'] ?? NULL;
-      if (!$source_field || !$media->hasField($source_field)) {
-        continue;
-      }
-      $file = $media->get($source_field)->entity;
-      if ($file) {
+    foreach ($paragraph->get('field_bg_videos')->referencedEntities() as $item) {
+      if ($file = self::fileFromReference($item)) {
         $urls[] = $generator->generateString($file->getFileUri());
-        $cache->addCacheableDependency($media)->addCacheableDependency($file);
+        $cache->addCacheableDependency($item)->addCacheableDependency($file);
       }
     }
 
-    if ($paragraph->hasField('field_bg_poster') && ($poster = $paragraph->get('field_bg_poster')->entity)) {
-      $variables['bg_poster'] = $generator->generateString($poster->getFileUri());
-      $cache->addCacheableDependency($poster);
+    // field_bg_poster may be a Media (image) reference or a plain image field.
+    if ($paragraph->hasField('field_bg_poster') && !$paragraph->get('field_bg_poster')->isEmpty()) {
+      $poster = $paragraph->get('field_bg_poster')->entity;
+      if ($file = self::fileFromReference($poster)) {
+        $variables['bg_poster'] = $generator->generateString($file->getFileUri());
+        $cache->addCacheableDependency($poster)->addCacheableDependency($file);
+      }
     }
 
     $variables['bg_videos'] = $urls;
@@ -184,16 +203,20 @@ class PalefireHooks {
   }
 
   /**
-   * Implements hook_preprocess_block().
+   * Returns the file behind a Media item or File entity, or NULL.
    */
-  #[Hook('preprocess_block')]
-  public function preprocessBlock(array &$variables): void {
-    // Always provide the site name to the branding block so the logo link has
-    // a meaningful accessible name even when "Site name" display is disabled.
-    // The block already carries the config:system.site cache tag.
-    if (($variables['plugin_id'] ?? '') === 'system_branding_block') {
-      $variables['site_name_plain'] = (string) \Drupal::config('system.site')->get('name');
+  private static function fileFromReference(?object $entity): ?FileInterface {
+    if ($entity instanceof FileInterface) {
+      return $entity;
     }
+    if ($entity instanceof MediaInterface) {
+      $field = $entity->getSource()->getConfiguration()['source_field'] ?? NULL;
+      if ($field && $entity->hasField($field)) {
+        $file = $entity->get($field)->entity;
+        return $file instanceof FileInterface ? $file : NULL;
+      }
+    }
+    return NULL;
   }
 
   /**
