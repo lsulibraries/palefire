@@ -36,7 +36,11 @@ body[data-section-theme="dark"] {
   @include pf-tokens($pf-chrome-dark);
 }
 
-// Anchor jumps and snap points land below the sticky header.
+// Anchor jumps and snap points land below the sticky header. This is the
+// only header offset: don't also give sections or titles a
+// scroll-margin-top. Snapping adds the scroller's scroll-padding to the
+// target's scroll-margin, so each section would stop two header heights
+// down and leave a strip of the previous section showing under the bar.
 html {
   scroll-padding-top: var(--pf-header-h);
 }
@@ -70,7 +74,6 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 .pf-section {
   position: relative;
-  scroll-margin-top: var(--pf-header-h);
 }
 
 // Full bleed: the section box reaches both edges. The padding below only
@@ -146,8 +149,6 @@ html.pf-snap .site-footer {
 }
 
 .pf-section__title {
-  scroll-margin-top: var(--pf-header-h);
-
   &:focus {
     outline: none;
   }
