@@ -54,6 +54,20 @@ overwrites existing terms, so editors own the text). Re-run it after editing
 `buildings.yml`. To add a building: add its drawing under
 `templates/includes/`, add an entry to `buildings.yml`, and re-run.
 
+Layout: the legend sits beside the map (15-18rem column) while the map
+still gets about 36rem; in a narrower container (under 58rem, a container
+query on `.pf-bento__visit`, so the TOC sidebar is taken into account) it
+moves under the map. The "Legend & spaces" toggle always shows: open beside
+the map, collapsed under it. Inside a section the bento adds no padding of
+its own (the section's `--pf-section-pad-*` already applies).
+
+Icons: the squares behind the galleries are the elevators. They are outline
+only (not part of a gallery region) with an elevator tile
+(`templates/includes/map-icon-elevator.svg.twig`). List the icons a drawing
+uses under `legend` in `buildings.yml` (currently `elevator`) to explain them
+in the legend; this is theme-only, so `npm run build` and `drush cr` are
+enough.
+
 Upgrading from the per-page "Map space" version: the old `map_space` type
 and `building_map.field_map_spaces` are listed but kept. Run the script with
 `-- cleanup` to delete them. The bento's map is now rendered by

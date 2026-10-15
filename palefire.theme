@@ -93,7 +93,8 @@ function palefire_page_attachments_alter(array &$attachments) {
  * Building floor maps from maps/buildings.yml, keyed by building.
  *
  * Each entry: label, heading, template (Twig include of the drawing), intro,
- * spaces (space key => label, floor, access, tooltip). See that file.
+ * legend (icons to explain, e.g. [elevator]) and spaces (space key => label,
+ * floor, access, tooltip). See that file.
  */
 function palefire_buildings(): array {
   $buildings = &drupal_static(__FUNCTION__);
@@ -238,6 +239,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'intro' => $text($intro),
     'template' => $building['template'],
     'spaces' => $spaces,
+    'legend' => array_values((array) ($building['legend'] ?? [])),
     'cache' => $cache_render,
   ];
 }

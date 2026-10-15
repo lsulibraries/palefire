@@ -269,7 +269,8 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // The bento box is full width so its background video reaches both edges.
 // The form, tiles and empty message are capped at 1280px and centred.
-// The padding keeps the bordered tiles off the screen edge on phones.
+// The padding keeps the bordered tiles off the screen edge on phones when
+// the bento is not in a padded section (see the next rule).
 .pf-bento {
   padding: clamp(2rem, 6vh, 4.5rem) clamp(1rem, 4vw, 5rem);
 
@@ -280,6 +281,14 @@ html.pf-snap .site-footer {
     max-width: 1280px;
     margin-inline: auto;
   }
+}
+
+// In a section, .pf-section__inner already pads the content
+// (--pf-section-pad-*), so the bento adds none of its own; the two together
+// doubled the space around the search form and map. A flush section has no
+// padding, so the bento keeps its own there.
+.pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek):not(.pf-section--flush) .pf-bento {
+  padding: 0;
 }
 
 // In a screen or peek section, the bento box grows to fill the section and

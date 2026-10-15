@@ -149,20 +149,22 @@
       if (current && !e.target.closest('.pf-map__region, .pf-map__tip, [data-map-label]')) hide(true);
     });
 
-    // Legend: collapsible below the map on narrow screens, always open
-    // otherwise. Only acts when that state flips, so a reader's own toggle is
-    // never overridden. Without JS it is simply open.
+    // Legend: open while it sits beside the map, collapsed when it moves
+    // under it. The layout comes from the stylesheet (--pf-map-layout, set by
+    // a container query in _building-map.scss), so this follows the space the
+    // map really has, TOC sidebar or not. Only acts when the layout flips, so
+    // a reader's own toggle is never overridden. Without JS it is open.
     const key = root.querySelector('[data-map-key]');
     if (key) {
-      const narrow = window.matchMedia('(max-width: 991.98px)');
-      let collapsible = null;
+      let stacked = null;
       const syncKey = () => {
-        if (narrow.matches === collapsible) return;
-        collapsible = narrow.matches;
-        root.classList.toggle('has-collapsible-key', collapsible);
-        key.open = !collapsible;
+        const now = getComputedStyle(root).getPropertyValue('--pf-map-layout').trim() === 'stacked';
+        if (now === stacked) return;
+        stacked = now;
+        key.open = !stacked;
       };
-      narrow.addEventListener('change', syncKey);
+      if ('ResizeObserver' in window) new ResizeObserver(syncKey).observe(root);
+      else window.addEventListener('resize', syncKey, { passive: true });
       syncKey();
     }
 
