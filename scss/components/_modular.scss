@@ -76,8 +76,6 @@ html.pf-snap .site-footer {
 // Height: screen, fills the viewport under the header (carousel).
 .pf-section--screen {
   min-height: calc(100dvh - var(--pf-header-h));
-  display: grid;
-  align-content: center;
 }
 
 // Height: peek, about 90% of the viewport under the header, so the top of
@@ -89,8 +87,22 @@ html.pf-snap .site-footer {
   --pf-section-peek: 0.9; // lower it (e.g. 0.85) to show more of the next section
   min-height: calc((100vh - var(--pf-header-h)) * var(--pf-section-peek));
   min-height: calc((100svh - var(--pf-header-h)) * var(--pf-section-peek));
-  display: grid;
-  align-content: center;
+}
+
+// Screen and peek: the content fills the section's full height, not just
+// its own height, so a paragraph with its own background (the bento video,
+// for example) covers the whole section. Content is centred vertically.
+.pf-section--screen,
+.pf-section--peek {
+  display: flex;
+  flex-direction: column;
+
+  > .pf-section__inner {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .pf-section--snap {
@@ -171,13 +183,29 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Bento section (first section, not full height)
 // ---------------------------------------------------------------------
-// The section itself is seamless; this padding is inside the bento
-// component so its bordered tiles don't touch the screen edge on phones.
-// Delete the padding line if you want the tiles flush too.
+// The bento box is full width so its background video reaches both edges.
+// The form, tiles and empty message are capped at 1280px and centred.
+// The padding keeps the bordered tiles off the screen edge on phones.
 .pf-bento {
-  max-width: 1280px;
-  margin-inline: auto;
   padding: clamp(2rem, 6vh, 4.5rem) clamp(1rem, 4vw, 5rem);
+
+  > .pf-bento__form,
+  > .pf-bento__grid,
+  > .pf-bento__empty {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+  }
+}
+
+// In a screen or peek section, the bento box grows to fill the section and
+// centres the search form inside it.
+.pf-section--screen .pf-bento,
+.pf-section--peek .pf-bento {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .pf-bento__label {
