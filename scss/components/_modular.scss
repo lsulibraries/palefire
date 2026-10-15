@@ -55,18 +55,23 @@ html.pf-snap .site-footer {
   scroll-margin-top: var(--pf-header-h);
 }
 
-// Full width by default. A section that needs side gutters sets
-// --pf-section-gutter (see the bento section below).
+// Full bleed: no side padding. Paragraph content owns its own spacing.
 .pf-section__inner {
   position: relative;
   z-index: 1;
-  padding-inline: var(--pf-section-gutter, 0);
 }
 
-// Height: auto, sized to its content (bento).
-.pf-section--auto {
-  padding-block: clamp(2rem, 6vh, 4.5rem);
+// Seamless: sections sit edge to edge with no gap between them.
+// _sections.scss (the older field_sections styles) gives every .pf-section
+// padding-block and a margin between siblings; this cancels both for the
+// sections palefire_modular renders, which always carry one height class.
+// Three classes so it beats `.pf-section + .pf-section` whatever the order.
+.pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek) {
+  margin-block: 0;
+  padding-block: 0;
 }
+
+// Height: auto, sized to its content (bento). No extra rules needed.
 
 // Height: screen, fills the viewport under the header (carousel).
 .pf-section--screen {
@@ -166,15 +171,13 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Bento section (first section, not full height)
 // ---------------------------------------------------------------------
-// Bordered tiles shouldn't touch the screen edge on phones, so this
-// section keeps a side gutter even though sections are full width.
-.pf-section--bento-search {
-  --pf-section-gutter: clamp(1rem, 4vw, 5rem);
-}
-
+// The section itself is seamless; this padding is inside the bento
+// component so its bordered tiles don't touch the screen edge on phones.
+// Delete the padding line if you want the tiles flush too.
 .pf-bento {
   max-width: 1280px;
   margin-inline: auto;
+  padding: clamp(2rem, 6vh, 4.5rem) clamp(1rem, 4vw, 5rem);
 }
 
 .pf-bento__label {
@@ -206,21 +209,32 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Page layout with the sidebar column
 // ---------------------------------------------------------------------
+// page.html.twig drops container-xxl and the Bootstrap row on modular
+// pages, so the body is edge to edge with no vertical padding.
+.pf-body--modular {
+  padding-block: 0;
+}
+
+// One full-width column; from lg up, sidebar width + the rest of the screen.
 .pf-modular {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
 }
 
+// "On this page" button (below lg only). Fixed, so it floats over the
+// sections instead of taking up a band of space above the first one.
+// z-index sits above the content and below the offcanvas (1045).
 .pf-modular__toc-toggle {
-  position: sticky;
-  top: calc(var(--pf-header-h) + 0.5rem);
-  z-index: 5;
-  justify-self: start;
-  margin: 0.5rem 1rem;
+  position: fixed;
+  inset-block-end: 1rem;
+  inset-inline-end: 1rem;
+  z-index: 1030;
+  background-color: var(--bs-body-bg);
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 @include media-breakpoint-up(lg) {
-  .pf-modular--has-toc {
+  .pf-modular--has-sidebar {
     grid-template-columns: var(--pf-sidebar-w) minmax(0, 1fr);
   }
 

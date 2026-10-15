@@ -20,6 +20,11 @@
  * page" button; from lg up it is a sticky left column. The TOC comes before
  * <main> so keyboard and screen-reader users reach it first.
  *
+ * Modular pages are full bleed: no container, no row gutters. The body is a
+ * CSS grid (.pf-modular in _modular.scss): sidebar width + the rest from lg
+ * up, or a single full-width column when there is no sidebar. Other pages
+ * keep the container-xxl + Bootstrap row layout.
+ *
  * Swup page transitions (js/palefire-swup.js, anonymous visitors only) swap
  * #swup (breadcrumb + body) and #pf-primary-menu (active trail) on each
  * visit. The header shell and footer persist between pages.
@@ -31,12 +36,22 @@
 {% set has_toc = is_modular_page and modular_toc|striptags|trim is not empty %}
 {% set has_sidebar = page.sidebar or has_toc %}
 {% set toc_first = has_sidebar and is_modular_page %}
+
+{% if is_modular_page %}
+  {% set body_classes = 'pf-body pf-body--modular flex-grow-1' %}
+  {% set row_classes = 'pf-modular' ~ (has_sidebar ? ' pf-modular--has-sidebar') %}
+  {% set main_classes = 'pf-main' %}
+{% else %}
+  {% set body_classes = 'pf-body container-xxl flex-grow-1' %}
+  {% set row_classes = 'row g-4 g-lg-5' %}
+  {% set main_classes = 'pf-main ' ~ (has_sidebar ? 'col-lg-9' : 'col-12') %}
+{% endif %}
+
 {% if not logged_in %}
   {{ attach_library('palefire/swup') }}
 {% endif %}
 
 <div class="pf-page position-relative d-flex flex-column min-vh-100">
-
   {# Scroll marker: when it leaves the viewport, the header turns compact
      (js/palefire.js, palefireHeaderCompact). #}
   <div class="pf-header-sentinel" aria-hidden="true"></div>
@@ -46,7 +61,6 @@
       {# Full-width top bar: container-fluid instead of container-xxl.
          Side padding grows with the viewport ($pf-header-gutters). #}
       <div class="container-fluid pf-header__inner">
-
         {% if page.header %}
           <div class="pf-header__brand me-lg-4">
             {{ page.header }}
@@ -71,63 +85,58 @@
             {{ page.utility_menu }}
           </div>
         {% endif %}
-
       </div>
     </div>
   </header>
 
   <div id="swup" class="pf-swup transition-fade d-flex flex-column flex-grow-1">
+    {% if page.breadcrumb %}
+      <div class="pf-breadcrumb container-xxl">
+        {{ page.breadcrumb }}
+      </div>
+    {% endif %}
 
-  {% if page.breadcrumb %}
-    <div class="pf-breadcrumb container-xxl">
-      {{ page.breadcrumb }}
-    </div>
-  {% endif %}
-
-  <div class="pf-body container-xxl flex-grow-1">
-    <div class="row g-4 g-lg-5">
-
-      {# Modular pages: TOC (and any sidebar blocks) before <main>. #}
-      {% if toc_first %}
-        <aside id="pf-modular-sidebar"
-               class="pf-sidebar pf-sidebar--toc col-lg-3{{ has_toc ? ' pf-modular__sidebar offcanvas-lg offcanvas-start' }}"
-               {% if has_toc %}tabindex="-1"{% endif %}
-               aria-label="{{ 'Page navigation'|t }}">
-          {% if has_toc %}
-            <div class="offcanvas-header">
-              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
-                      aria-label="{{ 'Close'|t }}"></button>
-            </div>
-            <div class="offcanvas-body">
-              {{ modular_toc }}
+    <div class="{{ body_classes }}">
+      <div class="{{ row_classes }}">
+        {# Modular pages: TOC (and any sidebar blocks) before <main>. #}
+        {% if toc_first %}
+          <aside id="pf-modular-sidebar"
+                 class="pf-sidebar pf-sidebar--toc{{ has_toc ? ' pf-modular__sidebar offcanvas-lg offcanvas-start' }}"
+                 {% if has_toc %}tabindex="-1"{% endif %}
+                 aria-label="{{ 'Page navigation'|t }}">
+            {% if has_toc %}
+              <div class="offcanvas-header">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
+                        aria-label="{{ 'Close'|t }}"></button>
+              </div>
+              <div class="offcanvas-body">
+                {{ modular_toc }}
+                {{ page.sidebar }}
+              </div>
+            {% else %}
               {{ page.sidebar }}
-            </div>
-          {% else %}
-            {{ page.sidebar }}
-          {% endif %}
-        </aside>
-      {% endif %}
-
-      <main id="main-content" tabindex="-1" class="pf-main {{ has_sidebar ? 'col-lg-9' : 'col-12' }}">
-        {% if has_toc %}
-          <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
-                  data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
-            {{ 'On this page'|t }}
-          </button>
+            {% endif %}
+          </aside>
         {% endif %}
-        {{ page.highlighted }}
-        {{ page.content }}
-      </main>
 
-      {% if has_sidebar and not toc_first %}
-        <aside class="pf-sidebar col-lg-3">
-          {{ page.sidebar }}
-        </aside>
-      {% endif %}
+        <main id="main-content" tabindex="-1" class="{{ main_classes }}">
+          {% if has_toc %}
+            <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
+              {{ 'On this page'|t }}
+            </button>
+          {% endif %}
+          {{ page.highlighted }}
+          {{ page.content }}
+        </main>
 
+        {% if has_sidebar and not toc_first %}
+          <aside class="pf-sidebar col-lg-3">
+            {{ page.sidebar }}
+          </aside>
+        {% endif %}
+      </div>
     </div>
-  </div>
-
   </div>{# /#swup #}
 
   {% if page.footer %}
@@ -137,5 +146,4 @@
       </div>
     </footer>
   {% endif %}
-
 </div>
