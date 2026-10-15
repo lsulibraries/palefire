@@ -44,7 +44,7 @@
   function sync(button) {
     const collapsed = root.classList.contains(CLASS);
     button.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    button.title = collapsed ? Drupal.t('Show sidebar') : Drupal.t('Hide sidebar');
+    button.title = collapsed ? Drupal.t('Show table of contents') : Drupal.t('Hide sidebar');
   }
 
   Drupal.behaviors.palefireTocCollapse = {

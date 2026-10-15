@@ -470,18 +470,30 @@ html.pf-snap .site-footer {
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
     box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+  }
 
-    svg {
-      transform: rotate(180deg);
+  // Icon: a chevron while the sidebar is open ("hide"), a list while it is
+  // closed, so the floating button reads as "show the table of contents".
+  // Both icons are in the markup and the <html> class picks one, so the
+  // right icon is there on first paint.
+  .pf-modular__toc-collapse-icon--show {
+    display: none;
+  }
+
+  html.pf-toc-collapsed .pf-modular__toc-collapse {
+    .pf-modular__toc-collapse-icon--hide {
+      display: none;
+    }
+
+    .pf-modular__toc-collapse-icon--show {
+      display: block;
     }
   }
 
+  // RTL: the chevron points at the sidebar edge and the list's bullets sit
+  // on the reading-start side.
   html[dir="rtl"] .pf-modular__toc-collapse svg {
     transform: scaleX(-1);
-  }
-
-  html[dir="rtl"].pf-toc-collapsed .pf-modular__toc-collapse svg {
-    transform: none;
   }
 }
 
