@@ -7,16 +7,28 @@
  * - bento.view_name, bento.identifier, bento.input_id, bento.query,
  *   bento.placeholder, bento.action
  * - bento.tiles: list of { id, title, heading_id, view }
+ * - bg_videos: ordered list of MP4 URLs (optional)
+ * - bg_poster: poster image URL (optional)
  *
  * data-toc-skip keeps the tile h3s out of the TOC.
  */
 #}
 {{ attach_library('palefire/bento-search') }}
-<div{{ attributes.addClass('pf-bento', bento.query ? 'has-query' : 'no-query') }}
+<div{{ attributes.addClass('pf-bento', bento.query ? 'has-query' : 'no-query', bg_videos ? 'has-bg-video') }}
     data-pf-bento
     data-view-name="{{ bento.view_name }}"
     data-identifier="{{ bento.identifier }}"
     data-toc-skip>
+
+  {% if bg_videos %}
+    {{ attach_library('palefire/bento-video') }}
+    <div class="pf-bento__media" data-bento-video data-sources="{{ bg_videos|json_encode }}">
+      <video class="pf-bento__bg-video" muted playsinline preload="metadata"
+             aria-hidden="true" tabindex="-1"
+             {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
+      <button type="button" class="pf-bento__bg-toggle" data-bento-video-toggle>{{ 'Pause background video'|t }}</button>
+    </div>
+  {% endif %}
 
   <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}">
     <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>

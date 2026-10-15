@@ -11,6 +11,31 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 
+#[Hook('preprocess_paragraph')]
+public function preprocessBentoVideo(array &$variables): void {
+  $p = $variables['paragraph'];
+  if ($p->bundle() !== 'bento_search' || !$p->hasField('field_bg_videos') || $p->get('field_bg_videos')->isEmpty()) {
+    return;
+  }
+  $gen = \Drupal::service('file_url_generator');
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $urls = [];
+  foreach ($p->get('field_bg_videos')->referencedEntities() as $media) {
+    $field = $media->getSource()->getConfiguration()['source_field'];
+    if ($file = $media->get($field)->entity) {
+      $urls[] = $gen->generateString($file->getFileUri());
+      $cache->addCacheableDependency($media)->addCacheableDependency($file);
+    }
+  }
+  if ($p->hasField('field_bg_poster') && ($poster = $p->get('field_bg_poster')->entity)) {
+    $variables['bg_poster'] = $gen->generateString($poster->getFileUri());
+  }
+  $variables['bg_videos'] = $urls;
+  $variables['#attached']['library'][] = 'palefire/bento-video';
+  $cache->applyTo($variables);
+}
+
+
 /**
  * Hook implementations for the Palefire theme.
  *
