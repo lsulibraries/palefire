@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Map space (paragraph type map_space): the hidden tooltip source for one
+ * building-map room. building-map.js copies it into the map's tooltip on
+ * hover / focus; screen readers get it through aria-describedby.
+ *
+ * The id must match the one paragraph--building-map.html.twig builds:
+ *   pf-map-{parent paragraph id}-{region key, clean_class}-tip
+ * Keep the text to a sentence or two; no links inside (tooltips can't be clicked
+ * into on touch). The room itself links to field_space_link.
+ */
+#}
+{% set region = paragraph.field_map_region.value %}
+{% set parent = paragraph.getParentEntity() %}
+{% set tip_id = 'pf-map-' ~ (parent ? parent.id() : paragraph.id()) ~ '-' ~ region|clean_class ~ '-tip' %}
+{% set access = paragraph.field_space_access.value ?: 'walk_in' %}
+{% set floor = region in ['reading_room', 'gallery_1', 'lecture_hall'] ? 1 : 2 %}
+{% set default_cta = access == 'appointment' ? 'Request an appointment'|t : 'Plan your visit'|t %}
+
+<div{{ attributes
+  .addClass('pf-map__tip-src')
+  .setAttribute('id', tip_id)
+  .setAttribute('data-map-tip', region)
+  .setAttribute('hidden', true) }}>
+  <div class="pf-map__tip-head">
+    <span class="pf-map__swatch{{ access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
+    <p class="pf-map__tip-eyebrow">
+      {{ 'Floor @n'|t({'@n': floor}) }} &middot; {{ access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}
+    </p>
+  </div>
+  <strong class="pf-map__tip-title">{{ paragraph.field_space_title.value }}</strong>
+  {% if content.field_space_body|render|striptags|trim %}
+    <div class="pf-map__tip-text">{{ content.field_space_body }}</div>
+  {% endif %}
+  {% if paragraph.field_space_link.uri %}
+    <p class="pf-map__tip-cta">{{ paragraph.field_space_link.title ?: default_cta }}</p>
+  {% endif %}
+</div>

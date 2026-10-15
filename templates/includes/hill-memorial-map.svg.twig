@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Hill Memorial isometric floor map (inline SVG, 1 user unit = 1px of the
+ * 4489x3801 draft). Floor 2 is drawn above Floor 1.
+ *
+ * Variables:
+ *   uid    - unique prefix for ids (mask, title, tooltip sources).
+ *   spaces - region key => { title, access, url, tip } built by
+ *            paragraph--building-map.html.twig. A region renders only when
+ *            its key is present: as a link when the space has one, otherwise
+ *            as a focusable group that still shows its tooltip.
+ *
+ * Labels are plain, selectable <text>. Each carries only its position
+ * (--x / --y, in map units); rotate and skew are applied in
+ * _building-map.scss to suggest the 3D perspective (the font stays upright):
+ *   room names:  rotate(-25deg) skewX(-25deg)  (--pf-map-skew-room)
+ *   floor names: rotate(-25deg) skewX(35deg)   (--pf-map-skew-floor, also the restroom tiles)
+ * data-map-label ties a name to its region so it turns gold on hover.
+ *
+ * The hatch mask has black cuts where two hatched areas meet so they read as
+ * separate rooms. The Floor 2 railing is outline only (dashed back edges,
+ * heavier front rail) and hovers with the Floor 2 gallery.
+ */
+#}
+<svg class="pf-map__svg" xmlns="http://www.w3.org/2000/svg" viewBox="100 240 4220 3170" role="group" aria-labelledby="{{ uid }}-title" data-map-svg="">
+<title id="{{ uid }}-title">Hill Memorial Library floor map. Floor 2 is drawn above Floor 1.</title>
+<defs><pattern id="{{ uid }}-hatch-lines" patternUnits="userSpaceOnUse" x="0" y="0" width="40" height="20"><rect x="0" y="7.5" width="40" height="5" fill="#fff"/></pattern><mask id="{{ uid }}-hatch" maskUnits="userSpaceOnUse" x="100" y="240" width="4220" height="3170"><rect x="100" y="240" width="4220" height="3170" fill="url(#{{ uid }}-hatch-lines)"/><path d="M947.5 1782 L529 1977.1 M1696.7 1432.6 L1987.4 1600.1 M2479.5 1071.5 L2668 1180.4 M2668 1213 L2080 1487 M2080 1487 L2079 1554 M3688.8 507.6 L3271.7 702.1" stroke="#000" stroke-width="40" fill="none"/></mask></defs>
+<g class="pf-map__regions">
+{% set s = spaces.reading_room %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="reading_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M2912 1982.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 L3398.3 1938.4 L3087.3 2083.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M2912 1982.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 L3398.3 1938.4 L3087.3 2083.5 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="reading_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M2912 1982.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 L3398.3 1938.4 L3087.3 2083.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M2912 1982.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 L3398.3 1938.4 L3087.3 2083.5 Z"/></g>{% endif %}
+{% set s = spaces.gallery_1 %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="gallery_1" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L2738.7 2212.4 L1953.5 2578.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L2738.7 2212.4 L1953.5 2578.5 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="gallery_1" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L2738.7 2212.4 L1953.5 2578.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L2738.7 2212.4 L1953.5 2578.5 Z"/></g>{% endif %}
+{% set s = spaces.lecture_hall %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="lecture_hall" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M620.5 3050.6 L1523.4 2629.6 L2042.1 2929.1 L1139.3 3350.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M620.5 3050.6 L1523.4 2629.6 L2042.1 2929.1 L1139.3 3350.1 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="lecture_hall" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M620.5 3050.6 L1523.4 2629.6 L2042.1 2929.1 L1139.3 3350.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M620.5 3050.6 L1523.4 2629.6 L2042.1 2929.1 L1139.3 3350.1 Z"/></g>{% endif %}
+{% set s = spaces.gallery_2 %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="gallery_2" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M1621.2 1389 L1963.6 1229.3 L1924.4 1206.7 L1882.8 1226 L1777.9 1165.5 L1939.2 1090.3 L2048.9 1153.6 L2014.5 1169.7 L2048.9 1189.6 L2400.2 1025.8 L2479.5 1071.5 L2668 1180.4 L2668 1213 L2080 1487 L2079 1554 L1987.6 1599.7 L1696.7 1432.6 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M1621.2 1389 L1963.6 1229.3 L1924.4 1206.7 L1882.8 1226 L1777.9 1165.5 L1939.2 1090.3 L2048.9 1153.6 L2014.5 1169.7 L2048.9 1189.6 L2400.2 1025.8 L2479.5 1071.5 L2668 1180.4 L2668 1213 L2080 1487 L2079 1554 L1987.6 1599.7 L1696.7 1432.6 Z M2080 1487 L2668 1213 L2664 1281.1 L2079 1554 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="gallery_2" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M1621.2 1389 L1963.6 1229.3 L1924.4 1206.7 L1882.8 1226 L1777.9 1165.5 L1939.2 1090.3 L2048.9 1153.6 L2014.5 1169.7 L2048.9 1189.6 L2400.2 1025.8 L2479.5 1071.5 L2668 1180.4 L2668 1213 L2080 1487 L2079 1554 L1987.6 1599.7 L1696.7 1432.6 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M1621.2 1389 L1963.6 1229.3 L1924.4 1206.7 L1882.8 1226 L1777.9 1165.5 L1939.2 1090.3 L2048.9 1153.6 L2014.5 1169.7 L2048.9 1189.6 L2400.2 1025.8 L2479.5 1071.5 L2668 1180.4 L2668 1213 L2080 1487 L2079 1554 L1987.6 1599.7 L1696.7 1432.6 Z M2080 1487 L2668 1213 L2664 1281.1 L2079 1554 Z"/></g>{% endif %}
+{% set s = spaces.quiet_study %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="quiet_study" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M529 1977.1 L947.5 1782 L1696.7 1432.6 L2310.9 1786.4 L1142.3 2331.3 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M529 1977.1 L947.5 1782 L1696.7 1432.6 L2310.9 1786.4 L1142.3 2331.3 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="quiet_study" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M529 1977.1 L947.5 1782 L1696.7 1432.6 L2310.9 1786.4 L1142.3 2331.3 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M529 1977.1 L947.5 1782 L1696.7 1432.6 L2310.9 1786.4 L1142.3 2331.3 Z"/></g>{% endif %}
+{% set s = spaces.seminar_space %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="seminar_space" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M2855.1 461.5 L3272.1 267.1 L3688.8 507.6 L3271.7 702.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M2855.1 461.5 L3272.1 267.1 L3688.8 507.6 L3271.7 702.1 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="seminar_space" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M2855.1 461.5 L3272.1 267.1 L3688.8 507.6 L3271.7 702.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M2855.1 461.5 L3272.1 267.1 L3688.8 507.6 L3271.7 702.1 Z"/></g>{% endif %}
+{% set s = spaces.mcilhenny_room %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="mcilhenny_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M3271.7 702.1 L3688.8 507.6 L4298.9 859.9 L3091.2 1423 L2772.9 1239.2 L2479.5 1071.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M3271.7 702.1 L3688.8 507.6 L4298.9 859.9 L3091.2 1423 L2772.9 1239.2 L2479.5 1071.5 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="mcilhenny_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M3271.7 702.1 L3688.8 507.6 L4298.9 859.9 L3091.2 1423 L2772.9 1239.2 L2479.5 1071.5 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M3271.7 702.1 L3688.8 507.6 L4298.9 859.9 L3091.2 1423 L2772.9 1239.2 L2479.5 1071.5 Z"/></g>{% endif %}
+{% set s = spaces.oral_history %}
+{% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="oral_history" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M121.2 1741.7 L539.7 1546.5 L947.5 1782 L529 1977.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M121.2 1741.7 L539.7 1546.5 L947.5 1782 L529 1977.1 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="oral_history" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 2}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="img"><path class="pf-map__hatch" d="M121.2 1741.7 L539.7 1546.5 L947.5 1782 L529 1977.1 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M121.2 1741.7 L539.7 1546.5 L947.5 1782 L529 1977.1 Z"/></g>{% endif %}
+</g>
+<g class="pf-map__lines" aria-hidden="true">
+<path d="M2772.9 1239.2 L3091.2 1423 L4298.9 859.9"/>
+<path d="M4298.9 859.9 L3272.1 267.1 L2855.1 461.5"/>
+<path d="M4298.9 859.9 L4298.9 895.9 L3091.2 1459 L2772.9 1275.2"/>
+<path d="M2855.1 461.5 L3271.7 702.1 L2479.5 1071.5 L2400.2 1025.8 L2048.9 1189.6"/>
+<path d="M2855.1 461.5 L2855.1 497.5 L3237.2 718.2"/>
+<path d="M2048.9 1189.6 L2014.5 1169.7 L2048.9 1153.6"/>
+<path d="M2048.9 1189.6 L2048.9 1153.6"/>
+<path d="M2048.9 1153.6 L1939.2 1090.3 L1777.9 1165.5"/>
+<path d="M1777.9 1165.5 L1882.8 1226 L1924.4 1206.7 L1963.6 1229.3 L1621.2 1389"/>
+<path d="M1777.9 1165.5 L1777.9 1201.5 L1887.6 1264.8"/>
+<path d="M1621.2 1389 L1696.7 1432.6 L947.5 1782 L539.7 1546.5 L121.2 1741.7"/>
+<path d="M1621.2 1389 L1621.2 1425 L1662.2 1448.7"/>
+<path d="M121.2 1741.7 L1142.3 2331.3 L2310.9 1786.4"/>
+<path d="M121.2 1741.7 L121.2 1777.7 L1142.3 2367.3 L2310.9 1822.4 L2310.9 1786.4"/>
+<path d="M2310.9 1786.4 L1987.6 1599.7"/>
+<path class="pf-map__rail" d="M2079 1553.9 L2664 1281.1"/>
+<path d="M620.5 3050.6 L1810.3 2495.8 L1587.1 2366.9"/>
+<path d="M620.5 3050.6 L1139.3 3350.1 L2659.5 2641.2 L2721.6 2677 L2840.7 2621.5"/>
+<path d="M620.5 3050.6 L620.5 3086.6 L1139.3 3386.1 L2659.5 2677.2 L2721.6 2713 L2840.7 2657.5 L2840.7 2621.5"/>
+<path d="M1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L3780.2 1577.5 L4299.1 1877"/>
+<path d="M1587.1 2366.9 L1587.1 2402.9 L1775.8 2511.9"/>
+<path d="M4299.1 1877 L2779 2585.9 L2840.7 2621.5"/>
+<path d="M4299.1 1877 L4299.1 1913 L2813.5 2605.8"/>
+<path d="M1793.1 2159.3 L1793.1 2195.3"/>
+<path d="M1793.1 2195.3 L1865.5 2237.1"/>
+</g>
+<g class="pf-map__lines pf-map__lines--hidden" aria-hidden="true">
+<path d="M620.5 2066 L620.5 3050.6"/>
+<path d="M1141 2367.3 L1140 3350.1"/>
+<path d="M3780.2 1137.7 L3780.2 1577.5"/>
+<path d="M4299 895.9 L4299 1877"/>
+<path d="M2079 1554 L2080 1487 L2668 1213 L2664 1281.1"/></g>
+<g class="pf-map__icons"><g class="pf-map__icon" style="--x: 2908; --y: 2223" role="img" aria-label="Women's restroom"><rect x="-72" y="-72" width="144" height="144" rx="18" class="pf-map__icon-tile"/><g class="pf-map__icon-glyph"><circle cx="0" cy="-36" r="12"/><path d="M-10 -18 H10 L28 26 H12 V52 H3 V26 H-3 V52 H-12 V26 H-28 Z"/></g></g><g class="pf-map__icon" style="--x: 1956; --y: 2667" role="img" aria-label="Men's restroom"><rect x="-72" y="-72" width="144" height="144" rx="18" class="pf-map__icon-tile"/><g class="pf-map__icon-glyph"><circle cx="0" cy="-36" r="12"/><path d="M-17 -18 H17 a6 6 0 0 1 6 6 V20 H11 V52 H2 V22 H-2 V52 H-11 V20 H-23 V-12 a6 6 0 0 1 6 -6 Z"/></g></g></g>
+<g class="pf-map__labels" aria-hidden="true"><text class="pf-map__label" style="--x: 3253; --y: 491" data-map-label="seminar_space"><tspan x="0" y="0">Seminar </tspan><tspan x="0" dy="1.1em">Space</tspan></text><text class="pf-map__label" style="--x: 3765; --y: 823" data-map-label="mcilhenny_room"><tspan x="0" y="0">McIlhenny </tspan><tspan x="0" dy="1.1em">Room</tspan></text><text class="pf-map__label" style="--x: 1993; --y: 1379" data-map-label="gallery_2"><tspan x="0" y="0">Gallery</tspan></text><text class="pf-map__label pf-map__label--floor" style="--x: 2316; --y: 1538"><tspan x="0" y="0">Floor 2</tspan></text><text class="pf-map__label" style="--x: 532; --y: 1749" data-map-label="oral_history"><tspan x="0" y="0">Oral </tspan><tspan x="0" dy="1.1em">History</tspan></text><text class="pf-map__label" style="--x: 1142; --y: 2057" data-map-label="quiet_study"><tspan x="0" y="0">Quiet </tspan><tspan x="0" dy="1.1em">Study</tspan></text><text class="pf-map__label" style="--x: 3765; --y: 1848" data-map-label="reading_room"><tspan x="0" y="0">Reading </tspan><tspan x="0" dy="1.1em">Room</tspan></text><text class="pf-map__label" style="--x: 1993; --y: 2376" data-map-label="gallery_1"><tspan x="0" y="0">Gallery</tspan></text><text class="pf-map__label" style="--x: 2374; --y: 2563"><tspan x="0" y="0">Lobby</tspan></text><text class="pf-map__label pf-map__label--floor" style="--x: 2650; --y: 2850"><tspan x="0" y="0">Entrance</tspan></text><text class="pf-map__label" style="--x: 1275; --y: 2994" data-map-label="lecture_hall"><tspan x="0" y="0">Lecture </tspan><tspan x="0" dy="1.1em">Hall</tspan></text></g>
+</svg>

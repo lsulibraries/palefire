@@ -182,3 +182,13 @@ modular-toc-collapse:
   dependencies:
     - core/drupal
     - core/once
+
+# Hill Memorial building map (bento section). Attached by
+# templates/paragraphs/paragraph--building-map.html.twig.
+building-map:
+  version: 1.0.0
+  js:
+    js/building-map.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

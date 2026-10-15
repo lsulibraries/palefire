@@ -1,7 +1,8 @@
 {#
 /**
  * @file
- * Bento search section: one form, many result tiles.
+ * Bento search section: one form, many result tiles, and an optional
+ * Hill Memorial building map under the form.
  *
  * Variables from palefire_modular_preprocess_paragraph__bento_search():
  * - bento.view_name, bento.identifier, bento.input_id, bento.query,
@@ -9,16 +10,19 @@
  * - bento.tiles: list of { id, title, heading_id, view }
  * - bg_videos: ordered list of MP4 URLs (optional)
  * - bg_poster: poster image URL (optional)
+ * Plus content.field_bento_map: building_map paragraph (optional).
  *
- * data-toc-skip keeps the tile h3s out of the TOC.
+ * "Search LSU Libraries" and the map heading are h3s so the TOC lists them.
+ * data-toc-skip sits on the tile grid (not the wrapper) to keep the tile h3s
+ * out. While the map is in view, building-map.js adds .is-map-in-view here to
+ * dim and blur the background video.
  */
 #}
 {{ attach_library('palefire/bento-search') }}
 <div{{ attributes.addClass('pf-bento', bento.query ? 'has-query' : 'no-query', bg_videos ? 'has-bg-video') }}
     data-pf-bento
     data-view-name="{{ bento.view_name }}"
-    data-identifier="{{ bento.identifier }}"
-    data-toc-skip>
+    data-identifier="{{ bento.identifier }}">
 
   {% if bg_videos %}
     {{ attach_library('palefire/bento-video') }}
@@ -30,8 +34,10 @@
     </div>
   {% endif %}
 
-  <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}">
-    <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>
+  <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}" aria-labelledby="{{ bento.input_id }}-heading">
+    <h3 class="pf-bento__heading" id="{{ bento.input_id }}-heading">
+      <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>
+    </h3>
     <div class="input-group input-group-lg">
       <input class="form-control" type="search" id="{{ bento.input_id }}" name="{{ bento.identifier }}"
              value="{{ bento.query }}" placeholder="{{ bento.placeholder }}" autocomplete="off" enterkeyhint="search">
@@ -41,7 +47,7 @@
 
   <p class="visually-hidden" role="status" data-pf-bento-status></p>
 
-  <div class="pf-bento__grid"{{ bento.query ? '' : ' hidden' }} data-pf-bento-grid>
+  <div class="pf-bento__grid"{{ bento.query ? '' : ' hidden' }} data-pf-bento-grid data-toc-skip>
     {% for tile in bento.tiles %}
       <section class="pf-bento__tile" aria-labelledby="{{ tile.heading_id }}" data-bento-display="{{ tile.id }}">
         <h3 id="{{ tile.heading_id }}" class="pf-bento__tile-title">{{ tile.title }}</h3>
@@ -53,4 +59,8 @@
   <p class="pf-bento__empty" data-pf-bento-empty hidden>
     {{ 'No results found. Try fewer or different words.'|t }}
   </p>
+
+  {% if content.field_bento_map|render|trim %}
+    <div class="pf-bento__visit">{{ content.field_bento_map }}</div>
+  {% endif %}
 </div>

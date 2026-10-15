@@ -1,0 +1,104 @@
+{#
+/**
+ * @file
+ * Building map (paragraph type building_map), rendered inside the bento
+ * section under the search form (field_bento_map on bento_search).
+ *
+ * Output: an h3 (picked up by the TOC's guide-mode sub-links), then the map
+ * with the legend + space list beside it. Below 992px the map comes first
+ * and the legend collapses (building-map.js).
+ *
+ * Each child map_space paragraph (field_map_spaces) switches one region on:
+ *   - field_map_region   which polygon in the SVG it controls
+ *   - field_space_access walk_in | appointment (hatch opacity + label)
+ *   - field_space_link   optional; makes the room and its list entry a link
+ * The children render as hidden tooltip sources
+ * (paragraph--map-space.html.twig). Regions without a published map_space
+ * render as plain, non-interactive floor.
+ */
+#}
+{{ attach_library('palefire/building-map') }}
+{% set uid = 'pf-map-' ~ paragraph.id() %}
+{% set floors = {
+  reading_room: 1, gallery_1: 1, lecture_hall: 1,
+  gallery_2: 2, quiet_study: 2, seminar_space: 2, mcilhenny_room: 2, oral_history: 2,
+} %}
+{% set spaces = {} %}
+{% for item in paragraph.field_map_spaces %}
+  {% set s = item.entity %}
+  {% if s and s.isPublished() and s.field_map_region.value %}
+    {% set key = s.field_map_region.value %}
+    {% set spaces = spaces|merge({ (key): {
+      key: key,
+      title: s.field_space_title.value,
+      access: s.field_space_access.value ?: 'walk_in',
+      floor: floors[key] ?: 2,
+      url: s.field_space_link.uri ? s.field_space_link.0.url.toString() : '',
+      tip: uid ~ '-' ~ key|clean_class ~ '-tip',
+    } }) %}
+  {% endif %}
+{% endfor %}
+{# Floor 1 before Floor 2 in the list; editor order within a floor. #}
+{% set spaces = spaces|sort((a, b) => a.floor <=> b.floor) %}
+{% set heading = paragraph.field_map_heading.value ?: 'Visit Hill Memorial Library'|t %}
+
+<h3 class="pf-map__heading" id="{{ uid }}-heading">{{ heading }}</h3>
+<div{{ attributes.addClass('pf-map').setAttribute('aria-labelledby', uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map>
+  <div class="pf-map__aside">
+    {% if content.field_map_intro|render|striptags|trim %}
+      <div class="pf-map__intro">{{ content.field_map_intro }}</div>
+    {% endif %}
+
+    {# Collapses under the map on narrow screens (building-map.js); open otherwise.
+       data-toc-skip keeps anything in here out of the TOC. #}
+    <details class="pf-map__key" open data-map-key data-toc-skip>
+      <summary class="pf-map__key-toggle">
+        <span>{{ 'Legend & spaces'|t }}</span>
+        <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': spaces|length}) }}</span>
+        <span class="pf-map__key-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="pf-map__key-body">
+        <ul class="pf-map__legend">
+          <li><span class="pf-map__swatch" aria-hidden="true"></span>{{ 'Public walk-in'|t }}</li>
+          <li><span class="pf-map__swatch pf-map__swatch--appointment" aria-hidden="true"></span>{{ 'Request an appointment'|t }}</li>
+        </ul>
+
+        {# Same spaces as the SVG regions: the keyboard / small-screen route in. #}
+        <div class="pf-map__list">
+          {% for group in [
+            { access: 'walk_in', title: 'Walk in'|t },
+            { access: 'appointment', title: 'By appointment'|t },
+          ] %}
+            {% set group_spaces = spaces|filter(s => s.access == group.access) %}
+            {% if group_spaces %}
+              <div class="pf-map__group">
+                <h4 class="pf-map__group-title">{{ group.title }}</h4>
+                <ul>
+                  {% for s in group_spaces %}
+                    {% set tag = s.url ? 'a' : 'span' %}
+                    <li>
+                      <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} tabindex="0"{% endif %}>
+                        <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
+                        <span class="pf-map__item-name">{{ s.title }}</span>
+                        <span class="pf-map__item-floor">{{ 'Floor @n'|t({'@n': s.floor}) }}</span>
+                      </{{ tag }}>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <figure class="pf-map__stage">
+    <div class="pf-map__scroller">
+      {% include '@palefire/includes/hill-memorial-map.svg.twig' with { uid: uid, spaces: spaces } only %}
+    </div>
+  </figure>
+
+  {# Hidden tooltip sources, one per space (also the regions' aria-describedby). #}
+  {{ content.field_map_spaces }}
+</div>

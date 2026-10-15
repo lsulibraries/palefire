@@ -1,0 +1,213 @@
+// Building map (paragraph--building-map), shown inside the bento under search.
+// Plain CSS syntax so it can be copied into the prototype unchanged.
+/* Building map (paragraph--building-map). Colours are custom properties so a
+   section theme, a print sheet or a light variant can swap them in one place. */
+.pf-map {
+  --pf-map-ink: #fff;                  /* outline + room names */
+  --pf-map-floor-ink: #9a9a9a;         /* floor names (FLOOR 2, ENTRANCE) */
+  --pf-map-hidden-ink: #5c5c5c;        /* dashed lines between floors */
+  --pf-map-hatch: #fff;
+  --pf-map-hatch-walk-in: .3;          /* matches the draft's #4d4d4d hatch on black */
+  --pf-map-hatch-appointment: .13;     /* appointment spaces read quieter */
+  --pf-map-hatch-hover: .5;            /* hover / focus: a slightly brighter grey */
+  --pf-map-hatch-appointment-hover: .3;
+  --pf-map-hover: #fdd023;             /* LSU gold: room name on hover, focus ring */
+  --pf-map-rotate: -25deg;             /* label + floor-tile angle */
+  --pf-map-skew-room: -25deg;          /* room names stand up */
+  --pf-map-skew-floor: 35deg;          /* floor names + restroom tiles lie flat */
+  --pf-map-lift: 28px;                 /* room-name bump on hover, in map units (about 6px at 1000px wide) */
+  --pf-map-in: .2s;                    /* hover in */
+  --pf-map-out: .5s;                   /* hover out */
+  --pf-map-surface: #000;
+  --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  color: var(--pf-map-ink);
+}
+/* Map with the legend + space list beside it (inside the bento, under search). */
+.pf-map { grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr); align-items: center; }
+/* Narrow: lead with the map; intro and the collapsible legend follow it. */
+@media (max-width: 991.98px) {
+  .pf-map { grid-template-columns: 1fr; }
+  .pf-map__aside { order: 2; }
+}
+.pf-map__heading { margin: 0 0 clamp(1rem, 2.5vw, 1.75rem); font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
+
+/* Stage + SVG ------------------------------------------------------------ */
+.pf-map__stage { position: relative; margin: 0; min-width: 0; }
+.pf-map__scroller { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.pf-map__svg { display: block; width: 100%; height: auto; overflow: visible; }
+@media (max-width: 575.98px) { .pf-map__svg { min-width: 40rem; } }
+
+.pf-map__lines path { fill: none; stroke: var(--pf-map-ink); stroke-width: var(--pf-map-line); stroke-linejoin: round; stroke-linecap: round; }
+.pf-map__lines .pf-map__rail { stroke-width: calc(var(--pf-map-line) * 2); }
+.pf-map__lines--hidden path { stroke: var(--pf-map-hidden-ink); stroke-dasharray: calc(var(--pf-map-line) * 6) calc(var(--pf-map-line) * 5); }
+
+/* Labels are plain SVG <text>. Position comes from --x/--y on each element
+   (map units); the rotate + skew live here, so the angles are one edit.
+   In SVG, CSS px = map units and the origin is the text's anchor point. */
+.pf-map__label, .pf-map__icon {
+  --skew: var(--pf-map-skew-room);
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px - var(--lift, 0px))) rotate(var(--pf-map-rotate)) skewX(var(--skew));
+}
+.pf-map__label--floor, .pf-map__icon { --skew: var(--pf-map-skew-floor); }
+.pf-map__label {
+  fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
+  /* Real, selectable text: the transforms only fake the 3D perspective. */
+  pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: text;
+  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
+}
+.pf-map__label--floor { fill: var(--pf-map-floor-ink); font-size: 54px; font-weight: 600; font-style: normal; letter-spacing: .28em; }
+.pf-map__label.is-active { --lift: var(--pf-map-lift); fill: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
+.pf-map__icons { pointer-events: none; }
+.pf-map__label::selection, .pf-map__label tspan::selection { fill: #000; background: var(--pf-map-hover); }
+.pf-map__icon-tile { fill: var(--pf-map-surface); stroke: var(--pf-map-hidden-ink); stroke-width: var(--pf-map-line); }
+.pf-map__icon-glyph { fill: var(--pf-map-floor-ink); }
+
+/* Clickable regions: the hatch is a mask, so one fill colour drives every line. */
+.pf-map__region { cursor: pointer; outline: none; }
+.pf-map__hatch {
+  fill: var(--pf-map-hatch);
+  fill-opacity: var(--pf-map-hatch-walk-in);
+  transition: fill var(--pf-map-out) ease, fill-opacity var(--pf-map-out) ease;
+}
+.pf-map__region.is-appointment .pf-map__hatch { fill-opacity: var(--pf-map-hatch-appointment); }
+.pf-map__region:hover .pf-map__hatch,
+.pf-map__region:focus-visible .pf-map__hatch,
+.pf-map__region.is-active .pf-map__hatch {
+  fill-opacity: var(--pf-map-hatch-hover);
+  transition-duration: var(--pf-map-in);
+}
+.pf-map__region.is-appointment:hover .pf-map__hatch,
+.pf-map__region.is-appointment:focus-visible .pf-map__hatch,
+.pf-map__region.is-appointment.is-active .pf-map__hatch { fill-opacity: var(--pf-map-hatch-appointment-hover); }
+.pf-map__hit { fill: transparent; pointer-events: all; stroke: none; }
+.pf-map__region:focus-visible .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 3); }
+
+/* Draw-on animation (building-map.js adds these; without JS nothing is hidden). */
+.pf-map.is-tracing .pf-map__regions,
+.pf-map.is-tracing .pf-map__labels,
+.pf-map.is-tracing .pf-map__icons,
+.pf-map.is-tracing .pf-map__lines--hidden { opacity: 0; }
+.pf-map.is-drawn .pf-map__regions,
+.pf-map.is-drawn .pf-map__labels,
+.pf-map.is-drawn .pf-map__icons,
+.pf-map.is-drawn .pf-map__lines--hidden { opacity: 1; transition: opacity .6s ease; }
+
+/* Aside: intro, legend, space list ------------------------------------- */
+.pf-map__intro { margin: 0 0 1.5rem; color: var(--pf-map-floor-ink); font-size: 1.0625rem; line-height: 1.55; }
+.pf-map__intro p:last-child { margin-bottom: 0; }
+/* Legend + space list sit in a <details>. building-map.js collapses it on
+   narrow screens (split layout) and keeps it open everywhere else; without
+   JS it is simply open with no toggle. */
+.pf-map__key-toggle { display: none; }
+.pf-map.has-collapsible-key .pf-map__key-toggle {
+  display: flex; align-items: center; gap: .75rem; min-height: 2.75rem; padding: .6rem 0;
+  border-top: 1px solid var(--pf-map-hidden-ink); border-bottom: 1px solid var(--pf-map-hidden-ink);
+  font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-ink);
+  list-style: none; cursor: pointer;
+}
+.pf-map__key-toggle::-webkit-details-marker { display: none; }
+.pf-map__key-toggle:focus-visible { outline: 2px solid var(--pf-map-hover); outline-offset: 2px; }
+.pf-map__key-count { margin-left: auto; font-weight: 600; letter-spacing: .08em; color: var(--pf-map-floor-ink); }
+.pf-map__key-icon { flex: none; width: .6rem; height: .6rem; margin: 0 .2rem -.1rem 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-25%) rotate(45deg); transition: transform .2s ease; }
+.pf-map__key[open] .pf-map__key-icon { transform: translateY(15%) rotate(-135deg); }
+.pf-map.has-collapsible-key .pf-map__key[open] .pf-map__key-body { padding-top: 1.25rem; }
+.pf-map__legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 0 0 1.5rem; padding: 0; list-style: none; font-size: .875rem; color: var(--pf-map-floor-ink); }
+.pf-map__legend li { display: flex; align-items: center; gap: .6rem; }
+.pf-map__swatch {
+  flex: none; width: 2.25rem; height: 1.15rem;
+  clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%);
+  background: repeating-linear-gradient(to bottom, var(--pf-map-hatch) 0 2px, transparent 2px 5px);
+  opacity: calc(var(--pf-map-hatch-walk-in) * 2.6);
+  transition: background var(--pf-map-out) ease, opacity var(--pf-map-out) ease;
+}
+.pf-map__swatch--appointment { opacity: calc(var(--pf-map-hatch-appointment) * 2.6); }
+.pf-map__list { display: grid; gap: 1.25rem; }
+.pf-map__group-title { margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
+.pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-hidden-ink); }
+.pf-map__item {
+  display: flex; align-items: center; gap: .75rem; width: 100%; min-height: 2.75rem;
+  padding: .55rem .25rem; border: 0; border-bottom: 1px solid var(--pf-map-hidden-ink);
+  background: none; color: var(--pf-map-ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer;
+}
+.pf-map__item-name { flex: 1; font-weight: 600; }
+.pf-map__item-floor { font-size: .8125rem; color: var(--pf-map-floor-ink); }
+.pf-map__item-name { transition: color var(--pf-map-out) ease; }
+.pf-map__item:hover .pf-map__swatch, .pf-map__item:focus-visible .pf-map__swatch, .pf-map__item.is-active .pf-map__swatch {
+  opacity: calc(var(--pf-map-hatch-hover) * 2); transition-duration: var(--pf-map-in);
+}
+.pf-map__item:hover .pf-map__swatch--appointment, .pf-map__item:focus-visible .pf-map__swatch--appointment, .pf-map__item.is-active .pf-map__swatch--appointment {
+  opacity: calc(var(--pf-map-hatch-appointment-hover) * 2.6);
+}
+.pf-map__item:hover .pf-map__item-name, .pf-map__item:focus-visible .pf-map__item-name, .pf-map__item.is-active .pf-map__item-name { color: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
+.pf-map__item:focus-visible { outline: 2px solid var(--pf-map-hover); outline-offset: 2px; }
+
+/* Tooltip ------------------------------------------------------------------
+   One per map, filled from the hidden .pf-map__tip-src for the active room and
+   placed above that room's name (below it when there is no room above). */
+.pf-map__tip-src { display: none; }
+.pf-map__tip {
+  position: absolute; z-index: 5; left: 0; top: 0;
+  width: max-content; max-width: min(19rem, calc(100% - 1rem));
+  padding: .9rem 1rem 1rem;
+  border: 1px solid #3a3a3a; border-radius: 14px;
+  background: rgb(10 10 10 / .92); color: var(--pf-map-ink);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 18px 48px rgb(0 0 0 / .5);
+  font-size: .875rem; line-height: 1.5; text-align: left;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translate(var(--tip-x, 0px), calc(var(--tip-y, 0px) + 6px));
+  transition: opacity var(--pf-map-in) ease, transform var(--pf-map-in) ease, visibility 0s linear var(--pf-map-in);
+}
+.pf-map__tip.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(var(--tip-x, 0px), var(--tip-y, 0px)); transition-delay: 0s; }
+.pf-map__tip.is-below { transform: translate(var(--tip-x, 0px), calc(var(--tip-y, 0px) - 6px)); }
+.pf-map__tip.is-below.is-open { transform: translate(var(--tip-x, 0px), var(--tip-y, 0px)); }
+/* Pointer: a small rotated square on the edge facing the room. */
+.pf-map__tip::after {
+  content: ""; position: absolute; left: var(--tip-arrow, 50%); bottom: -7px;
+  width: 12px; height: 12px; margin-left: -6px;
+  border: solid #3a3a3a; border-width: 0 1px 1px 0; background: rgb(10 10 10);
+  transform: rotate(45deg);
+}
+.pf-map__tip.is-below::after { top: -7px; bottom: auto; transform: rotate(-135deg); }
+.pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .35rem; }
+.pf-map__tip-head .pf-map__swatch { width: 1.75rem; height: .9rem; }
+.pf-map__tip-eyebrow { margin: 0; font-size: .6875rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
+.pf-map__tip-title { display: block; margin: 0 0 .3rem; font-size: 1rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; color: var(--pf-map-hover); }
+.pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
+.pf-map__tip-text { color: #d6d6d6; }
+.pf-map__tip-text p { margin: 0 0 .4rem; }
+.pf-map__tip-text > :last-child { margin-bottom: 0; }
+.pf-map__tip-cta { display: flex; align-items: center; gap: .4rem; margin: .6rem 0 0; padding-top: .55rem; border-top: 1px solid #2a2a2a; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--pf-map-ink); }
+.pf-map__tip-cta::after { content: "\2192"; color: var(--pf-map-hover); }
+.pf-map__region:is(a) { cursor: pointer; }
+.pf-map__region:not(a) { cursor: default; }
+
+/* Bento integration ------------------------------------------------------
+   The map sits in the bento under the search form. While it is in view,
+   building-map.js sets .is-map-in-view on .pf-bento and the background
+   video dims and blurs so the fine linework stays readable. */
+/* The search label now sits inside an h3 (TOC); keep the label's own look. */
+.pf-bento__heading { margin: 0 0 .75rem; font: inherit; }
+.pf-bento__heading .pf-bento__label { margin-bottom: 0; }
+.pf-bento__visit { position: relative; margin-top: clamp(3rem, 8vw, 6rem); }
+.pf-bento__bg-video { transition: filter .8s ease, transform .8s ease; }
+.pf-bento__media::after { transition: background-color .8s ease; }
+.pf-bento.is-map-in-view .pf-bento__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
+.pf-bento.is-map-in-view .pf-bento__media::after { background-color: rgb(0 0 0 / .72); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon { transition: none !important; }
+  .pf-map__label.is-active { --lift: 0px; }
+  .pf-map__tip, .pf-bento__bg-video, .pf-bento__media::after { transition: none !important; }
+  .pf-bento.is-map-in-view .pf-bento__bg-video { transform: none; }
+}
+@media print {
+  .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
+  .pf-map__scroller { overflow: visible; }
+  .pf-map__svg { min-width: 0; }
+  .pf-map__key-toggle, .pf-map__tip { display: none !important; }
+}
