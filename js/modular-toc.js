@@ -41,9 +41,11 @@
   'use strict';
 
   const ACTIVATION_LINE = 0.3;
-  const SUB_HEADING_SELECTOR = 'h3';
-  // Depth 1: only h3s that ask to be listed.
-  const OPT_IN_SELECTOR = 'h3[data-toc]';
+  // Depth 2: every h3, plus anything marked data-toc.
+  const SUB_HEADING_SELECTOR = 'h3, [data-toc]';
+  // Depth 1: only what asks to be listed (h3[data-toc], or any element with
+  // data-toc such as the LibCal day carousel's next events).
+  const OPT_IN_SELECTOR = '[data-toc]';
   const SKIP_SELECTOR = '[data-toc-skip]';
 
   // nav element -> teardown function (see initToc()).
@@ -217,7 +219,12 @@
       }
       const line = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
       let current = null;
+      // data-toc-passive items (side-by-side carousel events) are listed
+      // but never highlighted by scroll position.
       for (const sub of active.subs) {
+        if (sub.passive) {
+          continue;
+        }
         if (sub.heading.getBoundingClientRect().top <= line) {
           current = sub;
         }
@@ -376,9 +383,44 @@
     // as a tooltip only where the text is actually cut off.
     const titleTruncated = () => entries.forEach((entry) => entry.subs.forEach((sub) => {
       const cut = sub.link.scrollHeight > sub.link.clientHeight + 1;
-      sub.link.title = cut ? sub.link.textContent : '';
+      sub.link.title = cut ? sub.label : '';
     }));
     requestAnimationFrame(titleTruncated);
+
+    // `palefire:tocrefresh`: a component that builds its content after the
+    // TOC (the LibCal day carousel fetches its days) asks for its section's
+    // sub-list again. Dispatch it on (or inside) the section, bubbling. The
+    // new list opens from closed, the same way a list opens on a section
+    // change, and the bar grows with it.
+    document.addEventListener('palefire:tocrefresh', (event) => {
+      const source = event.target instanceof Element ? event.target : null;
+      entries.filter((entry) => !source || entry.section.contains(source)).forEach((entry) => {
+        if (activeSub && entry.subs.includes(activeSub)) {
+          setActiveSub(null);
+        }
+        if (entry.subwrap) {
+          entry.subwrap.remove();
+        }
+        entry.subs = [];
+        entry.subwrap = null;
+        entry.sublist = null;
+        buildSubList(entry, depth > 1 ? SUB_HEADING_SELECTOR : OPT_IN_SELECTOR);
+        const wrap = entry.subwrap;
+        if (!wrap) {
+          return;
+        }
+        wrap.inert = entry !== active;
+        if (entry === active && nav.classList.contains('is-ready')) {
+          wrap.classList.add('is-entering');
+          // eslint-disable-next-line no-unused-expressions
+          wrap.offsetHeight;
+          requestAnimationFrame(() => wrap.classList.remove('is-entering'));
+        }
+      });
+      requestAnimationFrame(titleTruncated);
+      trackSubHeadings();
+      queueIndicator();
+    }, { signal });
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
         if (destroyed) {
@@ -412,13 +454,23 @@
   }
 
   /**
-   * One sub-link per matching h3 in the section (all h3s at depth 2,
-   * h3[data-toc] at depth 1), ignoring headings in embedded components
+   * One sub-link per matching item in the section (all h3s at depth 2,
+   * [data-toc] items at depth 1), ignoring headings in embedded components
    * (bento tiles, carousel slides, the map legend) marked data-toc-skip.
+   * An element with data-toc is listed even inside a data-toc-skip area.
+   *
+   * Optional attributes on a listed element:
+   * - data-toc-label: link text (default: the element's text).
+   * - data-toc-detail: extra text for screen readers, e.g. a date.
+   * - data-toc-passive: listed, but not highlighted by scroll position.
    */
+  function tocLabel(el) {
+    return (el.dataset.tocLabel || el.textContent).replace(/\s+/g, ' ').trim();
+  }
+
   function buildSubList(entry, selector) {
     const headings = Array.from(entry.section.querySelectorAll(selector))
-      .filter((h) => !h.closest(SKIP_SELECTOR) && h.textContent.trim() !== '');
+      .filter((h) => (h.hasAttribute('data-toc') || !h.closest(SKIP_SELECTOR)) && tocLabel(h) !== '');
     if (!headings.length) {
       return;
     }
@@ -430,8 +482,9 @@
     sub.className = 'pf-toc__sub';
 
     headings.forEach((heading) => {
+      const label = tocLabel(heading);
       if (!heading.id) {
-        heading.id = uniqueId(entry.section.id + '-' + slug(heading.textContent));
+        heading.id = uniqueId(entry.section.id + '-' + slug(label));
       }
       if (!heading.hasAttribute('tabindex')) {
         heading.setAttribute('tabindex', '-1');
@@ -440,10 +493,16 @@
       const link = document.createElement('a');
       link.className = 'pf-toc__sublink';
       link.href = '#' + heading.id;
-      link.textContent = heading.textContent.trim();
+      link.textContent = label;
+      if (heading.dataset.tocDetail) {
+        const detail = document.createElement('span');
+        detail.className = 'visually-hidden';
+        detail.textContent = ', ' + heading.dataset.tocDetail;
+        link.appendChild(detail);
+      }
       li.appendChild(link);
       sub.appendChild(li);
-      entry.subs.push({ link: link, heading: heading });
+      entry.subs.push({ link: link, heading: heading, label: label, passive: heading.hasAttribute('data-toc-passive') });
     });
 
     wrap.appendChild(sub);

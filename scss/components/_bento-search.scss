@@ -14,4 +14,68 @@
 } // no z-index here
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 .pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .55); }
-.pf-bento__bg-toggle { position: absolute; top: calc(var(--pf-bleed-block-start, 0px) + 1rem); right: 1rem; z-index: 2; }
+// Background-video toggle: a frosted round button in the section's top
+// corner. The gold ring fills as the current clip plays; the pause/play
+// glyph cross-fades; the label slides out of the button on hover or
+// keyboard focus (touch shows just the icon; screen readers always get the
+// label, which is never display: none).
+.pf-bento__bg-toggle {
+  --size: 2.75rem; // 44px target
+  --ring: #fdd023; // LSU gold
+  position: absolute; top: calc(var(--pf-bleed-block-start, 0px) + 1rem); right: 1rem; z-index: 2;
+  display: inline-flex; align-items: center; flex-direction: row-reverse;
+  min-width: var(--size); height: var(--size); padding: 0; margin: 0;
+  border: 0; border-radius: calc(var(--size) / 2);
+  color: #fff; font: inherit; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; line-height: 1;
+  background: rgb(15 10 25 / .42);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .22), 0 6px 18px rgb(0 0 0 / .28);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  cursor: pointer;
+  transition: background-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.pf-bento__bg-toggle:hover,
+.pf-bento__bg-toggle:focus-visible { background: rgb(15 10 25 / .62); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .38), 0 8px 22px rgb(0 0 0 / .34); }
+.pf-bento__bg-toggle:active { transform: scale(.96); }
+.pf-bento__bg-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+
+.pf-bento__bg-toggle-ring {
+  position: absolute; top: 0; right: 0; width: var(--size); height: var(--size);
+  transform: rotate(-90deg); pointer-events: none;
+  fill: none; stroke-width: 2;
+}
+.pf-bento__bg-toggle-track { stroke: rgb(255 255 255 / .16); }
+.pf-bento__bg-toggle-progress {
+  stroke: var(--ring); stroke-linecap: round;
+  stroke-dasharray: 1 1; stroke-dashoffset: calc(1 - var(--pf-bento-progress, 0));
+  transition: stroke-dashoffset .3s linear, opacity .25s ease;
+}
+.pf-bento__bg-toggle.is-rewinding .pf-bento__bg-toggle-progress { transition: none; }
+.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-progress { opacity: .55; }
+
+.pf-bento__bg-toggle-icon {
+  flex: none; display: grid; width: var(--size); height: 1rem; fill: currentColor; overflow: visible;
+}
+.pf-bento__bg-toggle-pause,
+.pf-bento__bg-toggle-play { transform-box: fill-box; transform-origin: center; transition: opacity .2s ease, transform .25s ease; }
+.pf-bento__bg-toggle-play { opacity: 0; transform: scale(.6); }
+.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-pause { opacity: 0; transform: scale(.6); }
+.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-play { opacity: 1; transform: none; }
+
+.pf-bento__bg-toggle-label {
+  display: block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
+  padding-inline-start: 0;
+  transition: max-width .35s ease, opacity .2s ease, padding .35s ease;
+}
+.pf-bento__bg-toggle:hover .pf-bento__bg-toggle-label,
+.pf-bento__bg-toggle:focus-visible .pf-bento__bg-toggle-label { max-width: 16rem; opacity: 1; padding-inline-start: 1.1rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-bento__bg-toggle,
+  .pf-bento__bg-toggle *,
+  .pf-bento__bg-toggle-progress { transition: none !important; }
+}
+@media (forced-colors: active) {
+  .pf-bento__bg-toggle { border: 1px solid ButtonText; background: ButtonFace; color: ButtonText; }
+  .pf-bento__bg-toggle-progress { stroke: Highlight; }
+}

@@ -95,7 +95,23 @@ Swatches: the legend and tooltip swatches are the map's own hatch, a 5-unit
 line every 20 units at the same white and opacity as the rooms.
 `building-map.js` sets `--pf-map-hatch-period` to those 20 units in screen
 pixels whenever the map resizes, so the swatch lines keep the map's weight
-and spacing at any size.
+and spacing at any size. The period, line weight and offset are rounded to
+whole device pixels (`--pf-map-hatch-line`, `--pf-map-hatch-offset`), so all
+four swatch lines render at the same weight.
+
+- **Entrance:** the "Entrance" floor label (`--x: 2700; --y: 2850`) is a
+  label group with Font Awesome's `fa-arrow-alt-up` (solid, inlined as path
+  data so the SVG needs no icon font) above the word. It shares the label's
+  rotate and floor skew; `building-map.js` re-centres it over the word once
+  fonts load.
+- **Elevator icons:** drawn at `--scale: .68` on the map
+  (`.pf-map__icon--elevator`); the legend icon keeps its size.
+- **Load sequence:** the outlines trace; as the last lines land the rooms
+  fade in one after another (top of the drawing first), each room name a
+  beat after its room, then icons and hidden lines. Tune
+  `--pf-map-reveal-step` (gap between rooms, 70ms),
+  `--pf-map-reveal-label-lag` (room to name, 220ms) and
+  `--pf-map-reveal-fade` on `.pf-map`. Reduced motion skips it.
 
 Dark chrome: while a dark section is active, the top bar uses the TOC
 sidebar's wash and blur (`--pf-sidebar-bg`, `scss/layout/_chrome-dark.scss`),
@@ -126,6 +142,40 @@ section content and solid section colours stay in the main column.
 - Users with `prefers-reduced-transparency` or `prefers-contrast: more` get
   a solid top bar and sidebar. Browsers without `backdrop-filter` get a
   nearly opaque top bar.
+
+### Breadcrumb on Modular pages
+
+Same `breadcrumb` region and System Breadcrumb block as every other page (no
+block layout change). On Modular pages `page.html.twig` prints it at the top
+of `<main>`, directly above the first section, instead of above the whole
+body: it lines up with the section content and sits on the line of the
+sidebar's "On this page" heading, and the sidebar no longer starts below it.
+It is styled like the TOC (`.pf-breadcrumb--modular` in
+`scss/layout/_layout.scss`): monospace, uppercase and tracked, muted links
+that brighten with a gold underline, slanted dividers, the current page in
+the active colour, `--pf-toc-*` colours so it follows light/dark sections.
+It has its own snap point, so mandatory snapping can't hide it. Other pages
+keep the Bootstrap breadcrumb above the body.
+
+### Background-video button
+
+The bento's pause/play control is a round frosted button in the section's
+top corner (`paragraph--bento-search.html.twig`, `_bento-search.scss`): a
+pause/play glyph that cross-fades, a gold ring that fills as the current
+clip plays (`--pf-bento-progress`, set by `bento-video.js`), and the label
+("Pause background video" / "Play background video") sliding out on hover
+or keyboard focus. Screen readers always get the label. Reduced motion
+drops the transitions; forced colours get a system button.
+
+### Calendar events in "On this page"
+
+`modular-toc.js` lists any element with `data-toc` under its section, even
+inside a `data-toc-skip` area, with optional `data-toc-label` (link text),
+`data-toc-detail` (extra screen-reader text) and `data-toc-passive` (listed
+but not highlighted by scroll position). A component that renders after
+the TOC dispatches a bubbling `palefire:tocrefresh` event from inside its
+section, and that section's sub-list is rebuilt and opens like a section
+change. The LibCal day carousel uses this for its next three timed events.
 
 ## Page transitions (Swup 4)
 

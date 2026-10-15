@@ -46,13 +46,38 @@
       const scale = m ? Math.hypot(m.a, m.b) : 0;
       if (scale > 0) {
         root.style.setProperty('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
-        // Legend swatches draw the map's hatch at the map's current size.
-        root.style.setProperty('--pf-map-hatch-period', (SETTINGS.hatchPeriod * scale).toFixed(3) + 'px');
+        // Legend swatches draw the map's hatch at the map's current size,
+        // snapped to whole device pixels: with a fractional period every line
+        // lands on a different sub-pixel offset and is antialiased
+        // differently (the first one looked thinner). Snapped, all four lines
+        // render identically.
+        const dpr = window.devicePixelRatio || 1;
+        const period = Math.max(4, Math.round(SETTINGS.hatchPeriod * scale * dpr));
+        const line = Math.max(1, Math.round(period * 0.25));
+        const offset = Math.round((period - line) / 2);
+        root.style.setProperty('--pf-map-hatch-period', (period / dpr) + 'px');
+        root.style.setProperty('--pf-map-hatch-line', (line / dpr) + 'px');
+        root.style.setProperty('--pf-map-hatch-offset', (offset / dpr) + 'px');
       }
     };
     if ('ResizeObserver' in window) new ResizeObserver(fitStroke).observe(svg);
     else window.addEventListener('resize', fitStroke, { passive: true });
     fitStroke();
+
+    // Entrance arrow: centre it over its word once the web font has loaded
+    // (the markup carries a close estimate for no-JS). Measured in the
+    // label's own (pre-skew) units; half the trailing letter-spacing is
+    // dropped so it centres on the visible letters.
+    const centreArrows = () => svg.querySelectorAll('[data-map-center-over]').forEach((arrow) => {
+      const text = arrow.parentNode.querySelector('text');
+      if (!text || typeof text.getBBox !== 'function') return;
+      const box = text.getBBox();
+      if (!box.width) return;
+      const tracking = parseFloat(getComputedStyle(text).letterSpacing) || 0;
+      arrow.setAttribute('transform', `translate(${(box.x + (box.width - tracking) / 2).toFixed(1)} 0)`);
+    });
+    centreArrows();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(centreArrows);
 
     // Tooltip ---------------------------------------------------------------
     // Screen readers get the same text through aria-describedby on each
@@ -287,6 +312,21 @@
     // Draw-on trace (from the codepen), once, when the map scrolls into view.
     if (motion.matches || !lines.length || typeof lines[0].animate !== 'function') return;
     root.classList.add('is-tracing');
+    // Reveal order: rooms top to bottom (then left to right) through the
+    // drawing; each name shares its room's place in the order.
+    const centre = (el) => { const b = el.getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; };
+    const ordered = regions.map((el) => ({ el, c: centre(el) }))
+      .sort((a, b) => (Math.abs(a.c.y - b.c.y) > 8 ? a.c.y - b.c.y : a.c.x - b.c.x))
+      .map(({ el }) => el);
+    const seqOf = new Map(ordered.map((el, i) => [el.dataset.mapRegion, i]));
+    ordered.forEach((el, i) => el.style.setProperty('--pf-map-seq', String(i)));
+    const unlisted = Array.from(svg.querySelectorAll('.pf-map__label')).filter((l) => !seqOf.has(l.dataset.mapLabel));
+    labels.forEach((label) => {
+      if (seqOf.has(label.dataset.mapLabel)) label.style.setProperty('--pf-map-seq', String(seqOf.get(label.dataset.mapLabel)));
+    });
+    unlisted.forEach((label, i) => label.style.setProperty('--pf-map-seq', String(Math.round(ordered.length * 0.5) + i)));
+    const seqEnd = Math.max(ordered.length, Math.round(ordered.length * 0.5) + unlisted.length);
+    root.style.setProperty('--pf-map-seq-end', String(seqEnd));
     const records = lines.map((path) => ({ path, length: path.getTotalLength(), top: path.getBBox().y }))
       .sort((a, b) => a.top - b.top);
     const longest = Math.max(1, ...records.map((r) => r.length));
@@ -307,8 +347,14 @@
           fill: 'both',
         },
       ));
-      // Reveal hatch, labels and icons as the last lines land.
-      setTimeout(() => root.classList.add('is-drawn'), SETTINGS.duration * 0.7);
+      // Rooms start fading in as the last lines land (see the stylesheet for
+      // the order); .is-revealing carries the staggered delays and is
+      // dropped afterwards so hovers and focus never inherit them.
+      const revealMs = (seqEnd * 70) + 220 + 650;
+      setTimeout(() => {
+        root.classList.add('is-revealing', 'is-drawn');
+        setTimeout(() => root.classList.remove('is-revealing'), revealMs);
+      }, SETTINGS.duration * 0.72);
       Promise.all(animations.map((a) => a.finished.catch(() => {}))).then(() => {
         animations.forEach((a) => a.cancel());
         records.forEach(({ path }) => { path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; });

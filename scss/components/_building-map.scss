@@ -70,9 +70,18 @@
   --skew: var(--pf-map-skew-room);
   transform-box: view-box;
   transform-origin: 0 0;
-  transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px - var(--lift, 0px))) rotate(var(--pf-map-rotate)) skewX(var(--skew));
+  transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px - var(--lift, 0px))) rotate(var(--pf-map-rotate)) skewX(var(--skew)) scale(var(--scale, 1));
 }
 .pf-map__label--floor, .pf-map__icon { --skew: var(--pf-map-skew-floor); }
+/* Elevator arrows sit a little inside the shaft rather than filling it.
+   Map only: the legend draws the same fragment in its own <svg>. */
+.pf-map__icon--elevator { --scale: .68; }
+/* Entrance: Font Awesome's arrow-alt-up (solid, as path data, so it needs no
+   icon font inside the SVG), centred over the word and sharing its rotate +
+   skew because it is inside the same label group. building-map.js measures
+   the word and re-centres the arrow once fonts load. */
+.pf-map__entrance-arrow { fill: currentColor; }
+.pf-map__entrance { color: var(--pf-map-ink); }
 .pf-map__label {
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
@@ -111,14 +120,35 @@
 .pf-map__region:focus-visible .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 3); }
 
 /* Draw-on animation (building-map.js adds these; without JS nothing is hidden). */
-.pf-map.is-tracing .pf-map__regions,
-.pf-map.is-tracing .pf-map__labels,
+/* Order: outlines trace; as the last lines land the rooms fade in one after
+   another (top of the drawing first); each room's name follows its room a
+   beat later, overlapping the next rooms; icons and hidden lines last.
+   building-map.js sets --pf-map-seq (0, 1, 2...) on each room and label and
+   holds .is-revealing for the length of the sequence. */
+.pf-map {
+  --pf-map-reveal-fade: .55s;
+  --pf-map-reveal-step: 70ms;
+  --pf-map-reveal-label-lag: 220ms;
+}
+.pf-map.is-tracing .pf-map__region,
+.pf-map.is-tracing .pf-map__label,
 .pf-map.is-tracing .pf-map__icons,
 .pf-map.is-tracing .pf-map__lines--hidden { opacity: 0; }
-.pf-map.is-drawn .pf-map__regions,
-.pf-map.is-drawn .pf-map__labels,
+.pf-map.is-drawn .pf-map__region,
+.pf-map.is-drawn .pf-map__label,
 .pf-map.is-drawn .pf-map__icons,
-.pf-map.is-drawn .pf-map__lines--hidden { opacity: 1; transition: opacity .6s ease; }
+.pf-map.is-drawn .pf-map__lines--hidden { opacity: 1; }
+.pf-map.is-revealing .pf-map__region {
+  transition: opacity var(--pf-map-reveal-fade) ease calc(var(--pf-map-seq, 0) * var(--pf-map-reveal-step));
+}
+.pf-map.is-revealing .pf-map__label {
+  transition: opacity var(--pf-map-reveal-fade) ease calc(var(--pf-map-seq, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag)),
+    fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
+}
+.pf-map.is-revealing .pf-map__icons,
+.pf-map.is-revealing .pf-map__lines--hidden {
+  transition: opacity .6s ease calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag));
+}
 
 /* Aside: intro, legend, space list ------------------------------------- */
 .pf-map__intro { margin: 0 0 1.5rem; color: var(--pf-map-floor-ink); font-size: 1.0625rem; line-height: 1.55; }
@@ -152,12 +182,14 @@
    size. Four periods tall, so it always shows four whole lines. */
 .pf-map__swatch {
   --p: var(--pf-map-hatch-period);
+  --l: var(--pf-map-hatch-line, calc(var(--p) * .25));
+  --o: var(--pf-map-hatch-offset, calc(var(--p) * .375));
   flex: none; width: 36px; height: calc(var(--p) * 4);
   clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%);
   background: repeating-linear-gradient(to bottom,
-    transparent 0 calc(var(--p) * .375),
-    var(--pf-map-hatch) calc(var(--p) * .375) calc(var(--p) * .625),
-    transparent calc(var(--p) * .625) var(--p));
+    transparent 0 var(--o),
+    var(--pf-map-hatch) var(--o) calc(var(--o) + var(--l)),
+    transparent calc(var(--o) + var(--l)) var(--p));
   opacity: var(--pf-map-hatch-walk-in);
   transition: opacity var(--pf-map-out) ease;
 }

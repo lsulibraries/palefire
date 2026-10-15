@@ -9,11 +9,91 @@
   }
 }
 
-// Modular pages: the first section's background reaches up past the
-// breadcrumb to the top bar, so keep the breadcrumb above it.
+// Modular pages: printed at the top of <main>, above the first section,
+// in the TOC's voice: monospace, uppercase and tracked like "On this page"
+// and its sub-links, muted links that brighten with a gold underline,
+// the current page in the active colour. Colours are the --pf-toc-*
+// chrome tokens, so it follows the light/dark section theme with the
+// sidebar. The first section's background bleeds up behind it
+// (palefireBleedOffset), so it stays above that layer.
 .pf-breadcrumb--modular {
   position: relative;
   z-index: 3;
+  padding: 2rem var(--pf-section-pad-inline, 1.25rem) 0;
+  // A snap point of its own, so mandatory snapping can't skip the top of
+  // the page and hide it.
+  scroll-snap-align: start;
+
+  .breadcrumb {
+    --bs-breadcrumb-divider: '';
+    --bs-breadcrumb-item-padding-x: 0;
+    flex-wrap: wrap;
+    gap: 0.25rem 0;
+    margin: 0;
+    padding: 0;
+    font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--pf-toc-color);
+  }
+
+  .breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  // Separator: a short slanted rule, the map's and TOC's thin-line look.
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: "";
+    float: none;
+    width: 1px;
+    height: 0.9em;
+    margin-inline: 0.85rem;
+    padding: 0;
+    background: currentColor;
+    opacity: 0.45;
+    transform: skewX(-20deg);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    background: linear-gradient(var(--pf-toc-accent), var(--pf-toc-accent)) no-repeat 0 100% / 0 2px;
+    padding-block-end: 2px;
+    transition: color 0.2s ease, background-size 0.25s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      background-size: 100% 2px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-toc-accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  }
+
+  .breadcrumb-item.active {
+    color: var(--pf-toc-active);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .breadcrumb-item + .breadcrumb-item::before { background: CanvasText; }
+    a:hover, a:focus-visible { text-decoration: underline; }
+  }
 }
 
 .pf-body {

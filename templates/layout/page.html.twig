@@ -96,8 +96,11 @@
   </header>
 
   <div id="swup" class="pf-swup transition-fade d-flex flex-column flex-grow-1">
-    {% if page.breadcrumb %}
-      <div class="pf-breadcrumb container-xxl{{ is_modular_page ? ' pf-breadcrumb--modular' }}">
+    {# Modular pages print the breadcrumb inside <main>, above the first
+       section (see below), so it lines up with the content column, not
+       across the TOC sidebar. #}
+    {% if page.breadcrumb and not is_modular_page %}
+      <div class="pf-breadcrumb container-xxl">
         {{ page.breadcrumb }}
       </div>
     {% endif %}
@@ -136,6 +139,15 @@
         {% endif %}
 
         <main id="main-content" tabindex="-1" class="{{ main_classes }}">
+          {# Same "breadcrumb" region and System Breadcrumb block as other
+             pages; here it is the first thing in the content column, on the
+             line of the sidebar's "On this page" heading, over the first
+             section's bleed. Styles: .pf-breadcrumb--modular. #}
+          {% if is_modular_page and page.breadcrumb %}
+            <div class="pf-breadcrumb pf-breadcrumb--modular">
+              {{ page.breadcrumb }}
+            </div>
+          {% endif %}
           {% if has_toc %}
             <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">

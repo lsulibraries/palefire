@@ -31,7 +31,20 @@
       <video class="pf-bento__bg-video" muted playsinline preload="metadata"
              aria-hidden="true" tabindex="-1"
              {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
-      <button type="button" class="pf-bento__bg-toggle" data-bento-video-toggle>{{ 'Pause background video'|t }}</button>
+      {# Round glass control: icon + progress ring for the current clip; the
+         label slides out on hover/focus and is always read by screen
+         readers. bento-video.js swaps the label and data-state. #}
+      <button type="button" class="pf-bento__bg-toggle" data-bento-video-toggle data-state="playing">
+        <svg class="pf-bento__bg-toggle-ring" viewBox="0 0 44 44" aria-hidden="true" focusable="false">
+          <circle class="pf-bento__bg-toggle-track" cx="22" cy="22" r="20.5"/>
+          <circle class="pf-bento__bg-toggle-progress" cx="22" cy="22" r="20.5" pathLength="1"/>
+        </svg>
+        <svg class="pf-bento__bg-toggle-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <g class="pf-bento__bg-toggle-pause"><rect x="3.5" y="2.5" width="3.2" height="11" rx="1"/><rect x="9.3" y="2.5" width="3.2" height="11" rx="1"/></g>
+          <path class="pf-bento__bg-toggle-play" d="M4.5 3.1v9.8c0 .8.9 1.3 1.6.9l7.6-4.9c.6-.4.6-1.3 0-1.7L6.1 2.2c-.7-.4-1.6.1-1.6.9z"/>
+        </svg>
+        <span class="pf-bento__bg-toggle-label" data-bento-video-label>{{ 'Pause background video'|t }}</span>
+      </button>
     </div>
   {% endif %}
 

@@ -125,6 +125,17 @@
   opacity: 1;
 }
 
+// A sub-list rebuilt while its section is active (palefire:tocrefresh, e.g.
+// the day carousel's events arriving) starts closed for one frame, so it
+// opens with the same transition as a section change.
+.pf-toc__item.is-active > .pf-toc__subwrap.is-entering {
+  grid-template-rows: 0fr;
+}
+
+.pf-toc__item.is-active > .pf-toc__subwrap.is-entering > .pf-toc__sub {
+  opacity: 0;
+}
+
 .pf-toc.is-ready {
   .pf-toc__subwrap {
     transition: grid-template-rows var(--pf-toc-speed) var(--pf-toc-ease);
