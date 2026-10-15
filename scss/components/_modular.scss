@@ -487,12 +487,13 @@ html.pf-snap .site-footer {
 
     .pf-modular__toc-collapse-icon--show {
       display: block;
+      transform: none; // never flipped (outranks any leftover svg rotate)
     }
   }
 
-  // RTL: the chevron points at the sidebar edge and the list's bullets sit
-  // on the reading-start side.
-  html[dir="rtl"] .pf-modular__toc-collapse svg {
+  // RTL: only the chevron mirrors, so it still points at the sidebar edge.
+  // The list icon is never flipped.
+  html[dir="rtl"] .pf-modular__toc-collapse-icon--hide {
     transform: scaleX(-1);
   }
 }
