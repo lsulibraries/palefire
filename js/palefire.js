@@ -5,13 +5,17 @@
 ((Drupal, once) => {
   const root = document.documentElement;
   const COMPACT = 'pf-header--compact';
+  // Matches $pf-header-transition (.2s) with headroom for slow frames.
+  const RESIZE_MS = 400;
   // Set by palefireHeaderOffset; re-measures the header.
   let measureHeader = () => {};
 
   /**
    * Publishes the sticky header's height as --pf-header-h. Used for
    * scroll-padding (anchor/TOC jumps and scroll-snap land below the header,
-   * and focused elements are not obscured: WCAG 2.2 SC 2.4.11).
+   * and focused elements are not obscured: WCAG 2.2 SC 2.4.11), and as the
+   * sticky top of the modular TOC sidebar, which has to track the header
+   * frame by frame while it shrinks or grows.
    */
   Drupal.behaviors.palefireHeaderOffset = {
     attach(context) {
@@ -21,8 +25,10 @@
           // Measure the collapsed bar only, so opening the mobile menu does
           // not shift scroll offsets.
           const menu = header.querySelector('.navbar-collapse.show');
-          const menuHeight = menu && window.getComputedStyle(menu).position !== 'absolute' ? menu.offsetHeight : 0;
-          const height = Math.max(bar.offsetHeight - menuHeight, 0);
+          const menuHeight = menu && window.getComputedStyle(menu).position !== 'absolute' ? menu.getBoundingClientRect().height : 0;
+          // Unrounded, so the sidebar's top edge lands exactly on the bar's
+          // bottom edge mid-transition, not up to a pixel off.
+          const height = Math.max(bar.getBoundingClientRect().height - menuHeight, 0);
           root.style.setProperty('--pf-header-h', `${height}px`);
           // Expanded height, remembered while the header is compact or
           // changing size, so its bottom margin can hold the page in place.
@@ -33,7 +39,10 @@
         measureHeader = update;
         update();
         if ('ResizeObserver' in window) {
-          new ResizeObserver(update).observe(bar);
+          // border-box: the compact transition animates the bar's padding,
+          // which the default content-box observation never reports. The
+          // sidebar used to lag by that padding until the final re-measure.
+          new ResizeObserver(update).observe(bar, { box: 'border-box' });
         } else {
           window.addEventListener('resize', update, { passive: true });
         }
@@ -53,6 +62,23 @@
           return;
         }
         let timer;
+        let frame;
+        // Re-measure on every frame of the shrink/grow transition, so
+        // --pf-header-h (the sidebar's sticky top and the header's bottom
+        // margin) moves in lockstep with the bar. rAF callbacks run after
+        // this frame's transition progress is applied and before layout and
+        // paint, so the header and sidebar are drawn from the same value.
+        // This also covers browsers without border-box ResizeObserver.
+        const follow = (until) => {
+          window.cancelAnimationFrame(frame);
+          const tick = (now) => {
+            measureHeader();
+            if (now < until) {
+              frame = window.requestAnimationFrame(tick);
+            }
+          };
+          frame = window.requestAnimationFrame(tick);
+        };
         new IntersectionObserver(([entry]) => {
           const compact = !entry.isIntersecting;
           if (compact === header.classList.contains(COMPACT)) {
@@ -62,11 +88,12 @@
           // ($pf-header-transition) has finished.
           header.setAttribute('data-pf-resizing', '');
           header.classList.toggle(COMPACT, compact);
+          follow(window.performance.now() + RESIZE_MS);
           window.clearTimeout(timer);
           timer = window.setTimeout(() => {
             header.removeAttribute('data-pf-resizing');
             measureHeader();
-          }, 400);
+          }, RESIZE_MS);
         }).observe(sentinel);
       });
     },
