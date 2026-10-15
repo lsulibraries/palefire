@@ -212,7 +212,13 @@ html.pf-snap .site-footer {
   // stop of their own. snap position = top - scroll-margin - scroll-padding,
   // which clamps to 0. This is the one intended scroll-margin-top (see
   // the note on scroll-padding-top above).
-  scroll-margin-top: var(--pf-bleed-block-start);
+  //
+  // Plus 100vh: browsers snap on the first layout, before palefire.js has
+  // measured --pf-bleed-block-start. The CSS fallback (the header height)
+  // left the snap point about one page head below the top, so pages loaded
+  // part-way down and stayed there. Any extra margin past the top of the
+  // page is clamped, so the snap point is 0 before and after the JS runs.
+  scroll-margin-top: calc(var(--pf-bleed-block-start) + 100vh);
 }
 
 // Peek and screen heights count the head above the first section, so the
@@ -379,6 +385,7 @@ html.pf-snap .site-footer {
     align-self: flex-start; // a stretched column is as tall as the row, so it can't stick
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
+    overflow-x: hidden; // fixed-width column: never scroll sideways
     padding: 2rem 2.5rem;
     // Bootstrap sets `.offcanvas-lg { background-color: transparent
     // !important }` from lg up, which hid the wash. Two classes plus

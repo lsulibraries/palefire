@@ -38,9 +38,13 @@
 .pf-modular__title {
   margin: 0.85rem 0 0;
   font-size: clamp(2rem, 1.25rem + 2vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  font-weight: $pf-display-weight;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  // White-on-dark type looks heavier than it is on macOS; grayscale
+  // smoothing draws it at its true weight (no effect on Windows).
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-wrap: balance;
   color: var(--pf-toc-active);
   width: fit-content; // don't cover the video button's corner

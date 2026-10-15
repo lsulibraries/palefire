@@ -183,10 +183,15 @@
 // padding under "HILL MEMORIAL…". The padding stays for the tap target.
 .pf-toc__sublink {
   display: block;
+  // Positioned so the link is the containing block of its visually-hidden
+  // event detail (modular-toc.js). Otherwise that absolutely positioned
+  // span escaped the link's overflow: hidden, sat at the end of the full,
+  // uncut label, and made the sidebar scroll sideways.
+  position: relative;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: calc(160px + var(--pf-toc-sub-indent));
+  max-width: min(100%, calc(160px + var(--pf-toc-sub-indent))); // 218px was 2px wider than the rail
   padding: 0.45rem 0 0.35rem var(--pf-toc-sub-indent);
   font-size: 12px;
   font-weight: 700;

@@ -179,6 +179,18 @@ background bleed. Styles: `.pf-modular__head` in `scss/layout/_layout.scss`.
   (`--pf-toc-title-nudge`). `bento-video.js` centres the video button on the
   breadcrumb (`--pf-bento-toggle-top`) when the bento is the first section.
 
+- Title weight: the `<h1>` uses `$pf-display-weight` (600, in
+  `scss/_variables.scss`) with -0.02em tracking, a 1.1 line-height and
+  grayscale font smoothing. At 800 the system font (Segoe UI Variable on
+  Windows) drew close to Black and looked too heavy. The map tooltip's room
+  name uses the same variable, and its small caps labels are 600.
+- First load: the first section's `scroll-margin-top` is
+  `--pf-bleed-block-start` plus `100vh`. Browsers snap on the first layout,
+  before `palefireBleedOffset` runs, and the old fallback (header height
+  only) put the snap point below the top, so the page loaded part-way
+  down. The extra margin past the top is clamped, so the snap point is the
+  top of the page with or without JS.
+
 ### TOC title
 
 The TOC's visible title is the page's title, not the block's "On this page"
@@ -202,6 +214,14 @@ The hide/show button is a 4px-rounded square. Sub-links are cut to one line
 with an ellipsis (`white-space: nowrap`), not `-webkit-line-clamp`: a clamped
 box clips at its padding edge, so the top of the second line showed in the
 bottom padding. The full text is the link's tooltip where it is cut.
+
+Sideways scrolling: `.pf-toc__sublink` is `position: relative`, so the
+visually-hidden event detail that `modular-toc.js` adds to calendar
+sub-links (`data-toc-detail`) is clipped inside its link. Before, that
+absolutely positioned span escaped the link's `overflow: hidden`, sat at
+the end of the full label and gave the sidebar a horizontal scrollbar. The
+sublink is also capped at `100%` of the rail, and the sidebar sets
+`overflow-x: hidden` as a backstop.
 
 ### Background-video button
 
