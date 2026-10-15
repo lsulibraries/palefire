@@ -7,7 +7,9 @@
  * hidden tooltip sources) inside paragraph--bento-search.html.twig.
  * Hovering or focusing a room, its name on the map, or its entry in the list
  * lights the room, turns its name gold and shows a tooltip built from that
- * room's .pf-map__tip-src. Rooms with a link follow it on click.
+ * room's .pf-map__tip-src. Rooms with a link follow it on click; rooms
+ * without one are buttons that pin their tooltip. A page about one room
+ * (data-map-here) gets a "here" arrow above that room's name.
  */
 (function (Drupal, once) {
   'use strict';
@@ -19,7 +21,10 @@
     easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
     hideDelay: 140,      // ms; lets the pointer cross onto the tooltip (WCAG 1.4.13)
     tipGap: 14,          // px between the room name and the tooltip
+    hatchPeriod: 20,     // map units: the hatch <pattern> height in the drawing
+    hereGap: 36,         // map units between the "here" arrow and the room name
   };
+  const SVG_NS = 'http://www.w3.org/2000/svg';
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   function initMap(root) {
@@ -31,13 +36,19 @@
     const items = Array.from(root.querySelectorAll('.pf-map__item[data-map-region]'));
     const labels = Array.from(root.querySelectorAll('[data-map-label]'));
     const live = new Set(regions.map((r) => r.dataset.mapRegion));
+    const regionFor = (key) => regions.find((r) => r.dataset.mapRegion === key);
+    labels.forEach((label) => label.classList.toggle('is-live', live.has(label.dataset.mapLabel)));
 
     // Keep the outline at 0.5pt at any size without non-scaling-stroke, so
     // dash lengths and getTotalLength() share the same (user) units.
     const fitStroke = () => {
       const m = svg.getScreenCTM();
       const scale = m ? Math.hypot(m.a, m.b) : 0;
-      if (scale > 0) root.style.setProperty('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
+      if (scale > 0) {
+        root.style.setProperty('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
+        // Legend swatches draw the map's hatch at the map's current size.
+        root.style.setProperty('--pf-map-hatch-period', (SETTINGS.hatchPeriod * scale).toFixed(3) + 'px');
+      }
     };
     if ('ResizeObserver' in window) new ResizeObserver(fitStroke).observe(svg);
     else window.addEventListener('resize', fitStroke, { passive: true });
@@ -52,6 +63,13 @@
     stage.appendChild(tip);
     let current = null;
     let hideTimer = 0;
+    let showTimer = 0;
+    // Hover wait before a tooltip shows: --pf-map-tip-delay (s or ms).
+    const tipDelay = () => {
+      const v = getComputedStyle(root).getPropertyValue('--pf-map-tip-delay').trim();
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? (v.endsWith('ms') ? n : n * 1000) : 250;
+    };
 
     function setActive(key, on) {
       regions.concat(items).forEach((el) => {
@@ -85,6 +103,7 @@
 
     function show(key) {
       clearTimeout(hideTimer);
+      clearTimeout(showTimer);
       if (!live.has(key)) return;
       if (current !== key) {
         if (current) setActive(current, false);
@@ -98,7 +117,17 @@
       tip.classList.add('is-open');
     }
 
+    // Pointer hover: wait first, unless a tooltip is already open (moving
+    // from room to room then feels instant).
+    function showSoon(key) {
+      clearTimeout(hideTimer);
+      clearTimeout(showTimer);
+      if (current && tip.classList.contains('is-open')) { show(key); return; }
+      showTimer = setTimeout(() => show(key), tipDelay());
+    }
+
     function hide(now) {
+      clearTimeout(showTimer);
       clearTimeout(hideTimer);
       const done = () => {
         if (current) setActive(current, false);
@@ -118,10 +147,30 @@
 
     const focusVisible = (el) => { try { return el.matches(':focus-visible'); } catch (e) { return true; } };
     const hoverable = (el, key) => {
-      el.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') show(key); });
+      el.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') showSoon(key); });
       el.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'touch') hide(); });
       el.addEventListener('focus', () => { if (focusVisible(el)) show(key); });
       el.addEventListener('blur', () => hide());
+    };
+    // Rooms without a link are role="button" (map) or <button> (list):
+    // activating one shows its tooltip, as hover does. Space/Enter on the
+    // SVG <g> need handling by hand; a real <button> fires click itself.
+    // A pointer click toggles; a keyboard press (detail 0) only opens, since
+    // focus has usually opened it already. Escape closes.
+    const pressable = (el, key) => {
+      el.addEventListener('click', (e) => {
+        if (el.matches('a, [href]')) return;
+        e.preventDefault();
+        if (e.detail > 0 && current === key && tip.classList.contains('is-open')) hide(true);
+        else show(key);
+      });
+      if (el.tagName.toLowerCase() === 'button') return;
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+      });
     };
 
     regions.forEach((region) => {
@@ -132,22 +181,75 @@
       let touch = false;
       region.addEventListener('pointerdown', (e) => { touch = e.pointerType === 'touch'; });
       region.addEventListener('click', (e) => {
-        if (touch && current !== key) { e.preventDefault(); show(key); }
+        if (touch && current !== key && region.matches('a')) { e.preventDefault(); show(key); }
         touch = false;
       });
+      pressable(region, key);
     });
     // Room names are selectable text that sit above the hit area, so they
-    // carry the hover themselves. Clicking a name only selects text.
+    // carry the hover themselves. A click on a name (not a text selection)
+    // does what a click on the room does.
     labels.forEach((label) => {
       const key = label.dataset.mapLabel;
       if (!live.has(key)) return;
-      label.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') show(key); });
+      const region = regionFor(key);
+      let touch = false;
+      label.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') showSoon(key); });
       label.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'touch') hide(); });
+      label.addEventListener('pointerdown', (e) => { touch = e.pointerType === 'touch'; });
+      label.addEventListener('click', (e) => {
+        const wasTouch = touch;
+        touch = false;
+        const selection = window.getSelection && window.getSelection();
+        if (selection && !selection.isCollapsed && String(selection).trim()) return;
+        const href = region && region.getAttribute('href');
+        if (!href) { region.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, detail: 1 })); return; }
+        if (wasTouch && current !== key) { show(key); return; }
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) window.open(href, '_blank', 'noopener');
+        else window.location.assign(href);
+      });
     });
-    items.forEach((item) => hoverable(item, item.dataset.mapRegion));
+    items.forEach((item) => {
+      hoverable(item, item.dataset.mapRegion);
+      pressable(item, item.dataset.mapRegion);
+    });
     document.addEventListener('pointerdown', (e) => {
-      if (current && !e.target.closest('.pf-map__region, .pf-map__tip, [data-map-label]')) hide(true);
+      if (current && !e.target.closest('.pf-map__region, .pf-map__item, .pf-map__tip, [data-map-label]')) hide(true);
     });
+
+    // "Here" marker -----------------------------------------------------------
+    // data-map-here names the room this page is about (field_map_here). The
+    // arrow is drawn in map units over that room's name, so it scales with
+    // the drawing and only needs placing once the name has its final font.
+    const hereKey = root.dataset.mapHere;
+    if (hereKey && live.has(hereKey)) {
+      const hereRegion = regionFor(hereKey);
+      hereRegion.setAttribute('aria-current', 'location');
+      const hereLabel = labels.find((l) => l.dataset.mapLabel === hereKey);
+      const marker = document.createElementNS(SVG_NS, 'g');
+      marker.setAttribute('class', 'pf-map__here');
+      marker.setAttribute('aria-hidden', 'true');
+      const arrow = document.createElementNS(SVG_NS, 'path');
+      arrow.setAttribute('class', 'pf-map__here-arrow');
+      arrow.setAttribute('d', 'M-46 -92 H46 L0 0 Z');
+      arrow.setAttribute('stroke-linejoin', 'round');
+      marker.appendChild(arrow);
+      svg.appendChild(marker);
+      const placeHere = () => {
+        const target = hereLabel || hereRegion;
+        const m = svg.getScreenCTM();
+        const r = target.getBoundingClientRect();
+        if (!m || !r.width) return;
+        // Measure without the hover lift.
+        const lifted = target.classList.contains('is-active');
+        if (lifted) return;
+        const pt = new DOMPoint(r.left + r.width / 2, r.top).matrixTransform(m.inverse());
+        marker.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + (pt.y - SETTINGS.hereGap).toFixed(1) + ')');
+      };
+      placeHere();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeHere);
+      if ('ResizeObserver' in window) new ResizeObserver(placeHere).observe(svg);
+    }
 
     // Legend: open while it sits beside the map, collapsed when it moves
     // under it. The layout comes from the stylesheet (--pf-map-layout, set by

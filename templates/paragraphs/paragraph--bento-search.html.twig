@@ -36,7 +36,7 @@
   {% endif %}
 
   <form class="pf-bento__form" role="search" method="get" action="{{ bento.action }}" aria-labelledby="{{ bento.input_id }}-heading">
-    <h3 class="pf-bento__heading" id="{{ bento.input_id }}-heading">
+    <h3 class="pf-bento__heading" id="{{ bento.input_id }}-heading" data-toc>
       <label class="pf-bento__label" for="{{ bento.input_id }}">{{ 'Search LSU Libraries'|t }}</label>
     </h3>
     <div class="input-group input-group-lg">

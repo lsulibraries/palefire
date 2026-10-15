@@ -18,11 +18,16 @@
 //   @import "layout/header";
 //   @import "layout/chrome-dark";
 
-// .7 black keeps $body-color-dark (#dee2e6) at about 6.5:1 and $pf-gold at
-// about 5.7:1 even over a white section, before the blur is counted. The top
-// bar can sit over the end of a light section while the dark one is already
-// active (the activation line is 30% down the viewport), so keep this at .7
-// or higher. Origami used #00000080 (.5), which fails 4.5:1 over white.
+// The dark bar uses the TOC sidebar's wash and blur (--pf-sidebar-bg,
+// _modular-tokens.scss: .5 black), so the two read as one piece of chrome.
+// Contrast: .5 black over a plain white section would put $body-color-dark
+// under 4.5:1, and the bar can sit over the end of a light section while the
+// dark one is active (the activation line is 30% down the viewport). The
+// 26px blur mixes in the dark section above, which helps, but if that proves
+// too weak, darken 'sidebar-bg' in $pf-chrome-dark (both follow) rather than
+// the bar alone. More contrast / less transparency make both solid.
+$pf-header-bg-dark: var(--pf-sidebar-bg) !default;
+// Kept for the no-blur fallback below.
 $pf-header-bg-alpha-dark: .7 !default;
 // Same fade as the sidebar wash and the TOC rail (_modular.scss, _toc.scss).
 $pf-chrome-transition: .3s ease !default;
@@ -39,7 +44,9 @@ $pf-logo-filter-dark: none !default;
     border-color $pf-chrome-transition;
 
   &[data-bs-theme="dark"] {
-    --pf-header-bg: #{rgba($black, $pf-header-bg-alpha-dark)};
+    --pf-header-bg: #{$pf-header-bg-dark};
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
 
     // Purple on near-black fails contrast. Gold matches Origami's hover.
     .navbar {
@@ -67,7 +74,7 @@ $pf-logo-filter-dark: none !default;
 }
 
 body[data-section-theme="dark"] .pf-page::before {
-  background-color: rgba($black, $pf-header-bg-alpha-dark);
+  background-color: $pf-header-bg-dark;
 }
 
 // No blur support: nearly opaque, as in light mode.
@@ -85,6 +92,11 @@ body[data-section-theme="dark"] .pf-page::before {
 // var(--bs-body-bg) from _header.scss, which is the dark value under
 // data-bs-theme="dark". The strip is outside the header, so it needs its own.
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .pf-header[data-bs-theme="dark"] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   body[data-section-theme="dark"] .pf-page::before {
     background-color: $body-bg-dark;
   }

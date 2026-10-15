@@ -20,6 +20,11 @@
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
+  --pf-map-hatch-period: 4.7px;        /* the drawing's 20-unit hatch period on screen; building-map.js keeps it in step with the map */
+  --pf-map-tip-delay: .25s;            /* hover wait before a tooltip shows (building-map.js reads this) */
+  --pf-map-tip-in: .24s;               /* tooltip fade in */
+  --pf-map-tip-out: .16s;              /* tooltip fade out */
+  --pf-map-tip-ease: cubic-bezier(.34, 1.45, .64, 1); /* slight overshoot: the bump */
   display: grid;
   gap: clamp(1.5rem, 3vw, 3rem);
   color: var(--pf-map-ink);
@@ -44,7 +49,9 @@
     .pf-map__aside { order: 2; }
   }
 }
-.pf-map__heading { margin: 0 0 clamp(1rem, 2.5vw, 1.75rem); font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; }
+/* The map heading is a plain h3: type comes from the modular page's h3 styles.
+   Only the gap above the drawing is set here. */
+.pf-map__heading { margin-bottom: clamp(1rem, 2.5vw, 1.75rem); }
 
 /* Stage + SVG ------------------------------------------------------------ */
 .pf-map__stage { position: relative; margin: 0; min-width: 0; }
@@ -69,14 +76,18 @@
 .pf-map__label {
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
-  pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: text;
+  pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: default;
   transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
 }
+/* A live room's name works like the room (hover, click): pointer cursor. */
+.pf-map__label.is-live { cursor: pointer; }
 .pf-map__label--floor { fill: var(--pf-map-floor-ink); font-size: 54px; font-weight: 600; font-style: normal; letter-spacing: .28em; }
 .pf-map__label.is-active { --lift: var(--pf-map-lift); fill: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
 .pf-map__icons { pointer-events: none; }
 .pf-map__label::selection, .pf-map__label tspan::selection { fill: #000; background: var(--pf-map-hover); }
-.pf-map__icon-tile { fill: var(--pf-map-surface); stroke: var(--pf-map-hidden-ink); stroke-width: var(--pf-map-line); }
+/* Icons sit straight on the drawing: no fill behind them. Restroom tiles keep
+   their outline; the elevator has no tile at all. */
+.pf-map__icon-tile { fill: none; stroke: var(--pf-map-hidden-ink); stroke-width: var(--pf-map-line); }
 .pf-map__icon-glyph { fill: var(--pf-map-floor-ink); }
 
 /* Clickable regions: the hatch is a mask, so one fill colour drives every line. */
@@ -131,22 +142,26 @@
 .pf-map__key[open] .pf-map__key-body { padding-top: 1.25rem; }
 .pf-map__legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 0 0 1.5rem; padding: 0; list-style: none; font-size: .875rem; color: var(--pf-map-floor-ink); }
 .pf-map__legend li { display: flex; align-items: center; gap: .6rem; }
-/* Map icons explained in the legend (elevator): the same tile, upright. */
+/* Map icons explained in the legend (elevator): the same arrows, upright. */
 .pf-map__legend-icon { flex: none; width: 36px; height: 22px; overflow: visible; }
-.pf-map__legend-icon .pf-map__icon-tile { stroke-width: 1px; vector-effect: non-scaling-stroke; }
-/* Hatch swatch: 2px lines every 4px, inset 1px from the top and bottom so the
-   clip never trims a line. Sizes are px on purpose: with a whole-pixel
-   period every line lands on the same sub-pixel offset, so all lines render
-   at the same weight (the old 5px period fell on half pixels at 150%
-   scaling and alternate lines came out thin). */
+/* Hatch swatch: the map's own hatch. The drawing's pattern is a 5-unit line
+   every 20 units (7.5-12.5 in each period, see the <pattern> in the drawing),
+   filled white at the region's fill-opacity. building-map.js sets
+   --pf-map-hatch-period to 20 units in screen px, so the swatch lines have the
+   same period, weight, colour and opacity as the rooms at the map's current
+   size. Four periods tall, so it always shows four whole lines. */
 .pf-map__swatch {
-  flex: none; width: 36px; height: 16px;
+  --p: var(--pf-map-hatch-period);
+  flex: none; width: 36px; height: calc(var(--p) * 4);
   clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%);
-  background: repeating-linear-gradient(to bottom, transparent 0 1px, var(--pf-map-hatch) 1px 3px, transparent 3px 4px);
-  opacity: calc(var(--pf-map-hatch-walk-in) * 2.6);
-  transition: background var(--pf-map-out) ease, opacity var(--pf-map-out) ease;
+  background: repeating-linear-gradient(to bottom,
+    transparent 0 calc(var(--p) * .375),
+    var(--pf-map-hatch) calc(var(--p) * .375) calc(var(--p) * .625),
+    transparent calc(var(--p) * .625) var(--p));
+  opacity: var(--pf-map-hatch-walk-in);
+  transition: opacity var(--pf-map-out) ease;
 }
-.pf-map__swatch--appointment { opacity: calc(var(--pf-map-hatch-appointment) * 2.6); }
+.pf-map__swatch--appointment { opacity: var(--pf-map-hatch-appointment); }
 .pf-map__list { display: grid; gap: 1.25rem; }
 .pf-map__group-title { margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-hidden-ink); }
@@ -159,20 +174,48 @@
 .pf-map__item-floor { font-size: .8125rem; color: var(--pf-map-floor-ink); }
 .pf-map__item-name { transition: color var(--pf-map-out) ease; }
 .pf-map__item:hover .pf-map__swatch, .pf-map__item:focus-visible .pf-map__swatch, .pf-map__item.is-active .pf-map__swatch {
-  opacity: calc(var(--pf-map-hatch-hover) * 2); transition-duration: var(--pf-map-in);
+  opacity: var(--pf-map-hatch-hover); transition-duration: var(--pf-map-in);
 }
 .pf-map__item:hover .pf-map__swatch--appointment, .pf-map__item:focus-visible .pf-map__swatch--appointment, .pf-map__item.is-active .pf-map__swatch--appointment {
-  opacity: calc(var(--pf-map-hatch-appointment-hover) * 2.6);
+  opacity: var(--pf-map-hatch-appointment-hover);
 }
 .pf-map__item:hover .pf-map__item-name, .pf-map__item:focus-visible .pf-map__item-name, .pf-map__item.is-active .pf-map__item-name { color: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
 .pf-map__item:focus-visible { outline: 2px solid var(--pf-map-hover); outline-offset: 2px; }
 
+/* "Here" marker ------------------------------------------------------------
+   For a page about one room (building_map.field_map_here). building-map.js
+   draws a down-pointing arrow above that room's name, in map units, upright
+   (no floor skew) so it reads like the location pins in other UI. The room
+   and its list entry also get aria-current="location" and a "Here" badge. */
+.pf-map__here { pointer-events: none; }
+.pf-map__here-arrow {
+  fill: var(--pf-map-hover); stroke: var(--pf-map-surface); stroke-width: calc(var(--pf-map-line) * 2); paint-order: stroke;
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: pf-map-here 1.8s var(--pf-map-tip-ease) infinite alternate;
+}
+.pf-map.is-tracing .pf-map__here { opacity: 0; }
+.pf-map.is-drawn .pf-map__here { opacity: 1; transition: opacity .4s ease; }
+@keyframes pf-map-here { from { transform: translateY(-18px); } to { transform: translateY(0); } }
+.pf-map__here-badge {
+  display: inline-flex; align-items: center; gap: .3rem; flex: none;
+  padding: .1rem .45rem; border-radius: 999px;
+  background: var(--pf-map-hover); color: #000;
+  font-size: .6875rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; line-height: 1.4;
+}
+.pf-map__here-badge::before { content: ""; width: 0; height: 0; border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0; }
+.pf-map__item[aria-current] .pf-map__item-name { color: var(--pf-map-hover); }
+
 /* Tooltip ------------------------------------------------------------------
    One per map, filled from the hidden .pf-map__tip-src for the active room and
-   placed above that room's name (below it when there is no room above). */
+   placed above that room's name (below it when there is no room above).
+   Hover waits --pf-map-tip-delay (building-map.js), so sweeping across the
+   map doesn't flash tooltips; focus and taps show it straight away. It then
+   fades in and rises a few px with a slight overshoot (the bump), growing
+   from its pointer. Position is left/top so the bump's transform never moves
+   it across the map. */
 .pf-map__tip-src { display: none; }
 .pf-map__tip {
-  position: absolute; z-index: 5; left: 0; top: 0;
+  position: absolute; z-index: 5; left: var(--tip-x, 0px); top: var(--tip-y, 0px);
   width: max-content; max-width: min(19rem, calc(100% - 1rem));
   padding: .9rem 1rem 1rem;
   border: 1px solid #3a3a3a; border-radius: 14px;
@@ -181,12 +224,16 @@
   box-shadow: 0 18px 48px rgb(0 0 0 / .5);
   font-size: .875rem; line-height: 1.5; text-align: left;
   opacity: 0; visibility: hidden; pointer-events: none;
-  transform: translate(var(--tip-x, 0px), calc(var(--tip-y, 0px) + 6px));
-  transition: opacity var(--pf-map-in) ease, transform var(--pf-map-in) ease, visibility 0s linear var(--pf-map-in);
+  transform-origin: var(--tip-arrow, 50%) 100%;
+  transform: translateY(8px) scale(.96);
+  transition: opacity var(--pf-map-tip-out) ease, transform var(--pf-map-tip-out) ease, visibility 0s linear var(--pf-map-tip-out);
 }
-.pf-map__tip.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(var(--tip-x, 0px), var(--tip-y, 0px)); transition-delay: 0s; }
-.pf-map__tip.is-below { transform: translate(var(--tip-x, 0px), calc(var(--tip-y, 0px) - 6px)); }
-.pf-map__tip.is-below.is-open { transform: translate(var(--tip-x, 0px), var(--tip-y, 0px)); }
+.pf-map__tip.is-open {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: none;
+  transition: opacity var(--pf-map-tip-in) ease-out, transform calc(var(--pf-map-tip-in) * 1.4) var(--pf-map-tip-ease), visibility 0s;
+}
+.pf-map__tip.is-below { transform-origin: var(--tip-arrow, 50%) 0; transform: translateY(-8px) scale(.96); }
+.pf-map__tip.is-below.is-open { transform: none; }
 /* Pointer: a small rotated square on the edge facing the room. */
 .pf-map__tip::after {
   content: ""; position: absolute; left: var(--tip-arrow, 50%); bottom: -7px;
@@ -196,7 +243,7 @@
 }
 .pf-map__tip.is-below::after { top: -7px; bottom: auto; transform: rotate(-135deg); }
 .pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .35rem; }
-.pf-map__tip-head .pf-map__swatch { width: 28px; height: 12px; }
+.pf-map__tip-head .pf-map__swatch { width: 28px; height: calc(var(--p) * 3); }
 .pf-map__tip-eyebrow { margin: 0; font-size: .6875rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-title { display: block; margin: 0 0 .3rem; font-size: 1rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; color: var(--pf-map-hover); }
 .pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
@@ -205,16 +252,14 @@
 .pf-map__tip-text > :last-child { margin-bottom: 0; }
 .pf-map__tip-cta { display: flex; align-items: center; gap: .4rem; margin: .6rem 0 0; padding-top: .55rem; border-top: 1px solid #2a2a2a; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--pf-map-ink); }
 .pf-map__tip-cta::after { content: "\2192"; color: var(--pf-map-hover); }
-.pf-map__region:is(a) { cursor: pointer; }
-.pf-map__region:not(a) { cursor: default; }
 
 /* Bento integration ------------------------------------------------------
    The map sits in the bento under the search form. While it is in view,
    building-map.js sets .is-map-in-view on .pf-bento and the background
    video dims and blurs so the fine linework stays readable. */
-/* The search label now sits inside an h3 (TOC); keep the label's own look. */
-.pf-bento__heading { margin: 0 0 .75rem; font: inherit; }
-.pf-bento__heading .pf-bento__label { margin-bottom: 0; }
+/* The search heading is a plain h3 (modular h3 styles); its label just takes
+   the h3's type. */
+.pf-bento__heading .pf-bento__label { display: block; font: inherit; color: inherit; margin: 0; }
 /* Same 1280px cap as the form; also the container .pf-map's layout queries. */
 .pf-bento__visit { position: relative; width: 100%; max-width: 1280px; margin: clamp(3rem, 8vw, 6rem) auto 0; container-name: pf-map; container-type: inline-size; }
 .pf-bento__bg-video { transition: filter .8s ease, transform .8s ease; }
@@ -225,7 +270,11 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon { transition: none !important; }
   .pf-map__label.is-active { --lift: 0px; }
-  .pf-map__tip, .pf-bento__bg-video, .pf-bento__media::after { transition: none !important; }
+  .pf-bento__bg-video, .pf-bento__media::after { transition: none !important; }
+  /* Tooltip: a plain short fade, no movement. */
+  .pf-map__tip, .pf-map__tip.is-below { transform: none; }
+  .pf-map__tip.is-open { transition: opacity var(--pf-map-tip-in) linear, visibility 0s; }
+  .pf-map__here-arrow { animation: none !important; }
   .pf-bento.is-map-in-view .pf-bento__bg-video { transform: none; }
 }
 @media print {

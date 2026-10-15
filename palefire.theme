@@ -229,6 +229,13 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     ? $paragraph->get('field_map_intro')
     : ($building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL);
 
+  // "You are here": only a drawn (published) room in this building.
+  $here = (string) $value('field_map_here');
+  $here = str_starts_with($here, $key . '.') ? substr($here, strlen($key) + 1) : '';
+  if (!isset($spaces[$here])) {
+    $here = '';
+  }
+
   $cache_render = [];
   $cache->applyTo($cache_render);
   $variables['map'] = [
@@ -239,6 +246,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'intro' => $text($intro),
     'template' => $building['template'],
     'spaces' => $spaces,
+    'here' => $here,
     'legend' => array_values((array) ($building['legend'] ?? [])),
     'cache' => $cache_render,
   ];

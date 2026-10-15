@@ -5,7 +5,10 @@
  * Rewrite of the Origami TOC in bento.js. Changes from that version:
  * - Top-level links are rendered on the server (palefire_modular TOC
  *   block), so they exist without JS and the ids are stable. Only the
- *   Guide-mode h3 sub-links are added here.
+ *   h3 sub-links are added here: every h3 on modes the block lists under
+ *   "Include h3 sub-links on these modes" (depth 2), and on any other mode
+ *   just the h3s that opt in with data-toc (the bento search and building
+ *   map headings), so those show up whatever the page's mode.
  * - The active section is whichever one crosses a fixed "activation line"
  *   (ACTIVATION_LINE of the viewport below the sticky header). Origami
  *   used threshold 0.6, which a section taller than ~1.67 viewports can
@@ -39,6 +42,8 @@
 
   const ACTIVATION_LINE = 0.3;
   const SUB_HEADING_SELECTOR = 'h3';
+  // Depth 1: only h3s that ask to be listed.
+  const OPT_IN_SELECTOR = 'h3[data-toc]';
   const SKIP_SELECTOR = '[data-toc-skip]';
 
   // nav element -> teardown function (see initToc()).
@@ -96,9 +101,7 @@
         return;
       }
       const entry = { link: link, li: li, section: section, subs: [], subwrap: null, sublist: null };
-      if (depth > 1) {
-        buildSubList(entry);
-      }
+      buildSubList(entry, depth > 1 ? SUB_HEADING_SELECTOR : OPT_IN_SELECTOR);
       entries.push(entry);
     });
     if (!entries.length) {
@@ -239,9 +242,9 @@
     // the list. Re-measuring partway through gives the same answer, so
     // ResizeObserver calls during the animation don't change its course.
     //
-    // The bar only grows and shrinks when sections have sub-lists, i.e.
-    // when the TOC block renders with depth 2 ("Include h3 sub-links on
-    // these modes"). With depth 1 every item is one row tall, so the bar
+    // The bar only grows and shrinks when sections have sub-lists: every h3
+    // at depth 2 ("Include h3 sub-links on these modes"), only data-toc h3s
+    // at depth 1. Without sub-lists every item is one row tall, so the bar
     // only slides.
     let indicatorQueued = false;
     function queueIndicator() {
@@ -409,12 +412,12 @@
   }
 
   /**
-   * Guide mode: one sub-link per h3 in the section, ignoring headings in
-   * embedded components (bento tiles, carousel slides) marked
-   * data-toc-skip.
+   * One sub-link per matching h3 in the section (all h3s at depth 2,
+   * h3[data-toc] at depth 1), ignoring headings in embedded components
+   * (bento tiles, carousel slides, the map legend) marked data-toc-skip.
    */
-  function buildSubList(entry) {
-    const headings = Array.from(entry.section.querySelectorAll(SUB_HEADING_SELECTOR))
+  function buildSubList(entry, selector) {
+    const headings = Array.from(entry.section.querySelectorAll(selector))
       .filter((h) => !h.closest(SKIP_SELECTOR) && h.textContent.trim() !== '');
     if (!headings.length) {
       return;

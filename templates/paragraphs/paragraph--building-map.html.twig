@@ -7,11 +7,14 @@
  * The editor picks a building; everything else comes from `map`, built by
  * palefire_preprocess_paragraph__building_map() in palefire.theme:
  *   map.uid       id prefix (pf-map-{paragraph id})
- *   map.heading   h3 above the map (picked up by the TOC's guide sub-links)
+ *   map.heading   h3 above the map; data-toc lists it in the TOC in any mode
  *   map.intro     this paragraph's intro, else the building term's description
  *   map.template  the building's drawing (maps/buildings.yml)
  *   map.spaces    key => { key, title, access, floor, url, cta, tip, body },
  *                 one per published room term, Floor 1 first
+ *   map.here      key of the room this page is about (field_map_here), or ''.
+ *                 Its list entry gets aria-current="location" and a "Here"
+ *                 badge; building-map.js adds the arrow on the drawing.
  *   map.legend    extra legend entries for icons the drawing uses
  *                 (buildings.yml `legend`, e.g. [elevator])
  *   map.cache     cache metadata (room terms, overrides); print it
@@ -24,8 +27,8 @@
 {% if map %}
 {{ attach_library('palefire/building-map') }}
 {{ map.cache }}
-<h3 class="pf-map__heading" id="{{ map.uid }}-heading">{{ map.heading }}</h3>
-<div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map>
+<h3 class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</h3>
+<div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
   <div class="pf-map__aside">
     {% if map.intro %}
       <div class="pf-map__intro">{{ map.intro }}</div>
@@ -61,11 +64,13 @@
                 <h4 class="pf-map__group-title">{{ group.title }}</h4>
                 <ul>
                   {% for s in group_spaces %}
-                    {% set tag = s.url ? 'a' : 'span' %}
+                    {# Rooms without a link are buttons: they show the tooltip. #}
+                    {% set tag = s.url ? 'a' : 'button' %}
                     <li>
-                      <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} tabindex="0"{% endif %}>
+                      <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} type="button"{% endif %}{% if s.key == map.here %} aria-current="location"{% endif %}>
                         <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
                         <span class="pf-map__item-name">{{ s.title }}</span>
+                        {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
                         <span class="pf-map__item-floor">{{ 'Floor @n'|t({'@n': s.floor}) }}</span>
                       </{{ tag }}>
                     </li>
@@ -96,6 +101,7 @@
         </p>
       </div>
       <strong class="pf-map__tip-title">{{ s.title }}</strong>
+      {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
       {% if s.body %}
         <div class="pf-map__tip-text">{{ s.body }}</div>
       {% endif %}

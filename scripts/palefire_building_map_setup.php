@@ -25,6 +25,8 @@
  *     field_map_building   list_string   which building (buildings.yml)
  *     field_map_heading    string        optional heading override
  *     field_map_intro      text_long     optional intro override
+ *     field_map_here       list_string   optional: building.space this page is
+ *                                        about; marked "here" on the map
  *     field_map_overrides  ERR -> map_room_override (rarely used)
  *   map_room_override  "Room override"  (only inside building_map)
  *     field_room_key       list_string   building.space
@@ -280,6 +282,8 @@ $options('paragraph', 'field_map_building', $building_options);
 $storage('paragraph', 'field_map_heading', 'string', ['max_length' => 120]);
 $storage('paragraph', 'field_map_intro', 'text_long');
 $storage('paragraph', 'field_map_overrides', 'entity_reference_revisions', ['target_type' => 'paragraph'], -1);
+$storage('paragraph', 'field_map_here', 'list_string', ['allowed_values' => $room_options]);
+$options('paragraph', 'field_map_here', $room_options);
 
 $field('paragraph', 'building_map', 'field_map_building', 'Building', [
   'required' => TRUE,
@@ -292,6 +296,9 @@ $field('paragraph', 'building_map', 'field_map_heading', 'Heading', [
 $field('paragraph', 'building_map', 'field_map_intro', 'Intro', [
   'description' => 'Optional. Leave empty to use the building\'s description from Building spaces.',
 ]);
+$field('paragraph', 'building_map', 'field_map_here', 'You are here (optional)', [
+  'description' => 'For a page about one room: marks that room on the map with a "Here" arrow. Leave empty on general pages. Ignored if the room is in another building or unpublished.',
+]);
 $field('paragraph', 'building_map', 'field_map_overrides', 'Room overrides (optional)', [
   'settings' => $err('map_room_override'),
   'description' => 'Rarely needed. Changes one room\'s tooltip text, access or link on this page only.',
@@ -301,10 +308,11 @@ $form = $repo->getFormDisplay('paragraph', 'building_map', 'default')
   ->setComponent('field_map_building', ['type' => 'options_select', 'weight' => 0])
   ->setComponent('field_map_heading', ['type' => 'string_textfield', 'weight' => 1])
   ->setComponent('field_map_intro', ['type' => 'text_textarea', 'weight' => 2, 'settings' => ['rows' => 2]])
+  ->setComponent('field_map_here', ['type' => 'options_select', 'weight' => 3])
   ->setComponent('field_map_overrides', $paragraphs_widget(20, 'Room override', 'Room overrides', 'map_room_override'));
 $view = $repo->getViewDisplay('paragraph', 'building_map', 'default');
 // The template prints everything from the preprocess.
-foreach (['field_map_building', 'field_map_heading', 'field_map_intro', 'field_map_overrides', 'field_map_spaces'] as $name) {
+foreach (['field_map_building', 'field_map_heading', 'field_map_intro', 'field_map_here', 'field_map_overrides', 'field_map_spaces'] as $name) {
   $view->removeComponent($name);
 }
 if (FieldConfig::loadByName('paragraph', 'building_map', 'field_map_spaces')) {

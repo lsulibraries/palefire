@@ -301,11 +301,10 @@ html.pf-snap .site-footer {
   justify-content: center;
 }
 
+// The search label sits in a plain h3 (paragraph--bento-search.html.twig)
+// and takes the modular page's h3 type; no size or weight of its own.
 .pf-bento__label {
   display: block;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 700;
-  margin-bottom: 0.75rem;
 }
 
 .pf-bento__grid {
