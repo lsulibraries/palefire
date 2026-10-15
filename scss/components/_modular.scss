@@ -535,6 +535,16 @@ html.pf-snap .site-footer {
   --ldc-min-height: calc(100dvh - var(--pf-header-h) - 2 * var(--pf-section-pad-block, 0px));
 }
 
+// Dark sections. The block's defaults read Bootstrap's --bs-body-color,
+// --bs-secondary-color and --bs-border-color, which keep their light
+// values unless data-bs-theme="dark" is set, so the text came out near
+// black on black. Map every colour to the section tokens instead, so this
+// works with or without the Bootstrap colour mode.
 .pf-section--theme-dark .libcal-day-carousel {
+  --ldc-fg: var(--pf-section-fg);
+  --ldc-muted: var(--pf-section-muted);
+  --ldc-border: var(--pf-section-border);
+  --ldc-surface: var(--pf-section-bg);
+  --ldc-brand: var(--pf-section-accent); // "Today" eyebrow
   --ldc-control-filter: none;
 }

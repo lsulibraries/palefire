@@ -8,11 +8,19 @@
  *
  * item.section.bg is the rendered field_section_bg (a responsive <img>).
  * It is decorative, so it is hidden from assistive tech and made inert.
+ *
+ * Dark sections also get Bootstrap's dark colour mode (data-bs-theme), so
+ * anything inside that reads --bs-* variables (tiles, form controls, the
+ * events carousel) switches with the section, as _sections.scss does for
+ * the older field_sections.
  */
 #}
 <div{{ attributes.addClass('pf-sections') }}>
   {% for item in items %}
     {% if item.section %}
+      {% if item.attributes.hasClass('pf-section--theme-dark') %}
+        {% set item_attributes = item.attributes.setAttribute('data-bs-theme', 'dark') %}
+      {% endif %}
       <section{{ item.attributes }}>
         {% if item.section.bg %}
           <div class="pf-section__bg" aria-hidden="true" inert>{{ item.section.bg }}</div>

@@ -63,10 +63,17 @@ $pf-section-light: (
   'section-scrim': rgba($pf-white, 0.6),
 ) !default;
 
+$pf-lavender:  #cdb8ee !default; // LSU purple lightened for dark surfaces
+
 $pf-section-dark: (
-  'section-fg':    $pf-white,
-  'section-bg':    $pf-black,
-  'section-scrim': rgba($pf-black, 0.5),
+  'section-fg':     $pf-white,
+  'section-bg':     $pf-black,
+  'section-scrim':  rgba($pf-black, 0.5),
+  // Contrast on $pf-black: muted ~9:1, border ~3.8:1 (non-text 3:1),
+  // accent ~11.7:1. LSU purple (#461d7c) is only ~1.7:1 here.
+  'section-muted':  $pf-grey-400,
+  'section-border': $pf-grey-600,
+  'section-accent': $pf-lavender,
 ) !default;
 
 // Writes a theme map out as --pf-* custom properties.
