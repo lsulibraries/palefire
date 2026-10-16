@@ -14,9 +14,6 @@
  *   full-page (scroll-snap), style.
  * - node.modular_page.field_sections (unlimited, re-orderable Paragraphs).
  * - Form and view displays.
- * - Optional Visit info on node.modular_page: field_intro, field_hours_location
- *   (LibCal), field_location_name, field_location_query, field_location_display.
- * - A "light-map" value on palefire_modular's field_section_theme.
  *
  * Safe to re-run: existing config is left untouched.
  * Afterwards export config (drush cex) so it lives in your config sync dir.
@@ -36,6 +33,13 @@ if (PHP_SAPI !== 'cli') {
 $bundle = 'modular_page';
 
 // 0. Requirements. -------------------------------------------------------------
+// Not for sites that use palefire_modular: that module already provides the
+// Modular page sections (bento_search, field_section_theme, ...), and this
+// script would add a second, unused set. Use palefire_visit_setup.php there.
+if (\Drupal::moduleHandler()->moduleExists('palefire_modular')) {
+  echo 'palefire_modular is enabled: nothing to do here. For the Visit card run scripts/palefire_visit_setup.php.' . PHP_EOL;
+  return;
+}
 if (!NodeType::load($bundle)) {
   throw new \RuntimeException("Content type '$bundle' not found.");
 }
@@ -54,6 +58,11 @@ $displays = \Drupal::service('entity_display.repository');
 
 // Helpers. ---------------------------------------------------------------------
 $storage = function (string $entity_type, string $name, string $type, array $settings = [], int $cardinality = 1): void {
+  // allowed_values below are written as [['value' => .., 'label' => ..]]
+  // (the config YAML shape); create() wants [value => label].
+  if (isset($settings['allowed_values']) && is_array(reset($settings['allowed_values']))) {
+    $settings['allowed_values'] = array_column($settings['allowed_values'], 'label', 'value');
+  }
   if (!FieldStorageConfig::loadByName($entity_type, $name)) {
     FieldStorageConfig::create([
       'field_name' => $name,
@@ -256,103 +265,6 @@ foreach (['default', 'full'] as $mode) {
       'settings' => ['view_mode' => 'default'],
     ])
     ->save();
-}
-
-// 5. Visit info on Modular page (all optional). ------------------------------
-// Shown beside the page title as the "Visit" card (Option B): intro text,
-// today's hours from LibCal, and a Google Maps link / click-to-load map.
-// Each part only prints when its field is filled in.
-//
-// LibCal location IDs (the "lid" in LibCal's hours widget). Edit the labels
-// here, re-run the script, or change them later in Field UI.
-$libcal_locations = [
-  ['value' => '241', 'label' => 'LibCal location 241'],
-  ['value' => '236', 'label' => 'LibCal location 236'],
-];
-$storage('node', 'field_intro', 'text_long');
-$storage('node', 'field_hours_location', 'list_string', ['allowed_values' => $libcal_locations]);
-$storage('node', 'field_location_name', 'string', ['max_length' => 255]);
-$storage('node', 'field_location_query', 'string', ['max_length' => 255]);
-$storage('node', 'field_location_display', 'list_string', [
-  'allowed_values' => [
-    ['value' => 'link', 'label' => 'Link to Google Maps only'],
-    ['value' => 'embed', 'label' => 'Link + mini map (loads on click)'],
-  ],
-]);
-
-$visit = [
-  'field_intro' => [
-    'label' => 'Intro text',
-    'description' => 'A short paragraph shown under the page title, above the search form.',
-    'widget' => ['type' => 'text_textarea', 'settings' => ['rows' => 4]],
-    'formatter' => ['type' => 'text_default'],
-  ],
-  'field_hours_location' => [
-    'label' => 'Hours (LibCal location)',
-    'description' => 'Shows "Open now / Closed now" and today\'s hours from LibCal. Leave as "- None -" to hide hours.',
-    'widget' => ['type' => 'options_select'],
-    'formatter' => ['type' => 'list_key'],
-  ],
-  'field_location_name' => [
-    'label' => 'Location name',
-    'description' => 'e.g. Hill Memorial Library. Shown on the Visit card and used as the map link text.',
-    'widget' => ['type' => 'string_textfield', 'settings' => ['size' => 60, 'placeholder' => 'Hill Memorial Library']],
-    'formatter' => ['type' => 'string'],
-  ],
-  'field_location_query' => [
-    'label' => 'Map search',
-    'description' => 'What Google Maps should search for, e.g. "Hill Memorial Library, Baton Rouge, LA 70803". Leave blank to hide the map.',
-    'widget' => ['type' => 'string_textfield', 'settings' => ['size' => 60, 'placeholder' => 'Hill Memorial Library, Baton Rouge, LA 70803']],
-    'formatter' => ['type' => 'string'],
-  ],
-  'field_location_display' => [
-    'label' => 'Map display',
-    'description' => 'A link only, or a link plus a small map that loads when someone clicks it.',
-    'default_value' => [['value' => 'link']],
-    'widget' => ['type' => 'options_select'],
-    'formatter' => ['type' => 'list_key'],
-  ],
-];
-$weight = 1;
-$form = $displays->getFormDisplay('node', $bundle, 'default');
-foreach ($visit as $name => $info) {
-  $field('node', $bundle, $name, array_intersect_key($info, array_flip(['label', 'description', 'default_value'])));
-  if (!$form->getComponent($name)) {
-    $form->setComponent($name, $info['widget'] + ['weight' => $weight]);
-  }
-  $weight++;
-}
-$form->save();
-
-// The theme prints these fields itself (paragraph--bento-search.html.twig:
-// intro + "Visit" card, via _palefire_bento_visit() in palefire.theme), so
-// they stay hidden in the node's view displays.
-foreach (['default', 'full'] as $mode) {
-  if ($mode === 'full' && !array_key_exists('full', $displays->getViewModeOptionsByBundle('node', $bundle))) {
-    continue;
-  }
-  $view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (array_keys($visit) as $name) {
-    $view->removeComponent($name);
-  }
-  $view->save();
-}
-
-// 6. "Light, dark at the map" section theme. ---------------------------------
-// palefire_modular's field_section_theme: adds the light-map value, which
-// keeps the bento section light until its building map scrolls into view
-// (building-map.js), then switches the page chrome to dark.
-$theme_storage = FieldStorageConfig::loadByName('paragraph', 'field_section_theme');
-if ($theme_storage && $theme_storage->getType() === 'list_string') {
-  $allowed = $theme_storage->getSetting('allowed_values');
-  if (!isset($allowed['light-map'])) {
-    $allowed['light-map'] = 'Light, dark at the map';
-    $theme_storage->setSetting('allowed_values', $allowed)->save();
-    echo 'Added field_section_theme value light-map' . PHP_EOL;
-  }
-}
-else {
-  echo 'Note: paragraph.field_section_theme not found; add a "light-map" option to your section theme list by hand.' . PHP_EOL;
 }
 
 echo 'Palefire modular page setup complete. Run: drush cr && drush cex' . PHP_EOL;

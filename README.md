@@ -16,7 +16,9 @@ Drupal 11 theme (starterkit-generated) built on Bootstrap 5.3 + Dart Sass.
 - `components/toc/` – Single Directory Component: "On this page" navigation
 - `src/Hook/PalefireHooks.php` – OOP theme hooks (TOC, section anchors, branding)
 - `templates/paragraphs/` – section markup for Modular pages (bento head + Visit card: see below)
-- `scripts/palefire_modular_setup.php` – one-time Paragraphs/field setup (drush php:script)
+- `scripts/palefire_modular_setup.php` – one-time Paragraphs/field setup (drush php:script) for sites **without** palefire_modular; it exits without changes when palefire_modular is enabled
+- `scripts/palefire_visit_setup.php` – Visit card fields and the `light-map` section theme (sites with palefire_modular)
+- `scripts/palefire_modular_setup_undo.php` – removes the unused paragraph types/storages a partial `palefire_modular_setup.php` run leaves on a palefire_modular site
 
 ## Modular pages
 
@@ -309,7 +311,7 @@ an "Open in Google Maps" link and, if asked for, a mini map. Pages that
 leave the new fields empty keep the single-column bento they have today.
 
 Fields (all optional, on `node.modular_page`, added by
-`scripts/palefire_modular_setup.php`, sections 5 and 6):
+`scripts/palefire_visit_setup.php`):
 
 | Field | Type | Used for |
 | --- | --- | --- |
@@ -337,11 +339,11 @@ added to the bento, so edits show after save.
 - **LibCal locations**: the list offers `241` and `236`, the two IDs
   `bento.js` uses. Relabel them (or add more) at Structure > Content types >
   Modular page > Manage fields > Hours, or edit `$libcal_locations` in the
-  setup script before running it.
+  Visit setup script before running it (keys are IDs, values are labels).
 
 #### "Light, dark at the map" section theme
 
-Section 6 of the setup script adds `light-map` to palefire_modular's
+The Visit setup script also adds `light-map` to palefire_modular's
 `field_section_theme` list. A section with that theme starts light; when
 its bento's building map comes into view, `building-map.js` (the same
 check that dims the background video) adds `.is-map-dark` and
@@ -356,8 +358,26 @@ applies; the colours ease in over .45s (none with reduced motion).
 
 ```sh
 git pull
-drush php:script themes/custom/palefire/scripts/palefire_modular_setup.php
+drush php:script themes/custom/palefire/scripts/palefire_visit_setup.php
 drush cr
+```
+
+Use `palefire_visit_setup.php`, not `palefire_modular_setup.php`: the
+older script builds its own section paragraph types and only belongs on
+sites without palefire_modular. Its list fields also failed with
+`The configuration property settings.allowed_values.0.label.0 doesn't
+exist`, because it handed `FieldStorageConfig::create()` the YAML shape
+(`[['value' => …, 'label' => …]]`) instead of `[value => label]`; the
+helper now converts it, and the script exits early when palefire_modular
+is enabled.
+
+If that older script was already run on a palefire_modular site, clear
+what it left (unused types `section_text` and `section_media`, storages
+`paragraph.field_show_in_toc` and `paragraph.field_full_page`; anything in
+use is kept and reported):
+
+```sh
+drush php:script themes/custom/palefire/scripts/palefire_modular_setup_undo.php
 ```
 
 Then edit the page: fill in the Visit fields, set the bento's section theme
