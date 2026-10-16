@@ -31,6 +31,10 @@
  * from LibCal via visit-hours.js, mini map that loads on click, Google Maps
  * link), as wide as the map's legend and drawing together.
  *
+ * - map_only: the paragraph's "Hide search panel" box (field_bento_hide_lead)
+ *   is checked and there is a map. No lead panel: the map leads the bento.
+ *   The page <h1> stays, visually hidden, so the page keeps its heading.
+ *
  * "Search LSU Libraries" and the map heading are h3s so the TOC lists them.
  * While the map is in view, building-map.js adds .is-map-in-view here to
  * dim and blur the background video.
@@ -39,7 +43,7 @@
 {% set bento_action = 'https://lib.lsu.edu/bento' %}
 {% set bento_name = bento.identifier|default('search_api_fulltext_bento') %}
 {% set input_id = bento.input_id|default('pf-bento-q') %}
-<div{{ attributes.addClass('pf-bento', bg_videos ? 'has-bg-video') }} data-pf-bento>
+<div{{ attributes.addClass('pf-bento', bg_videos ? 'has-bg-video', map_only ? 'pf-bento--map-only') }} data-pf-bento>
 
   {% if bg_videos %}
     {{ attach_library('palefire/bento-video') }}
@@ -66,6 +70,11 @@
     </button>
   {% endif %}
 
+  {% if map_only %}
+    {% if page_title %}
+      <h1 class="visually-hidden">{{ page_title }}</h1>
+    {% endif %}
+  {% else %}
   {# Title, intro and search on one frosted panel (the Visit card's glass),
      so the text reads over the background video. #}
   <div class="pf-bento__lead">
@@ -91,6 +100,7 @@
       </div>
     </form>
   </div>
+  {% endif %}
 
   {% if bento_map %}
     <div class="pf-bento__visit">{{ bento_map }}</div>

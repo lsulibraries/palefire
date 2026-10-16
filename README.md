@@ -456,6 +456,35 @@ too white and the chrome too opaque.
   hero it gets its own strip of the sidebar glass (`_bento-swiss.scss`),
   its text still on the column edge.
 
+#### Map-only bento (2026-10-16)
+
+A bento can drop its lead panel (title, intro, search) and open on the
+building map. Add the field once in the UI (config is never exported from
+this repo):
+
+1. Structure > Paragraph types > **Bento search** > Manage fields > Create a
+   new field: **Boolean**, label "Hide search panel (map only)", machine
+   name **`field_bento_hide_lead`**. Default unchecked.
+2. Manage form display: show it (a single on/off checkbox). Leave it out of
+   Manage display: the bento template prints only what it needs.
+3. Edit the page, tick the box on its bento, save. `drush cr` once after
+   deploying this change.
+
+What the theme does (`palefire_preprocess_paragraph__bento_search()` sets
+`map_only`; the template adds `.pf-bento--map-only`):
+
+* The lead panel isn't printed. If the bento is the first section, the page
+  `<h1>` is still printed, visually hidden, so the page keeps its heading.
+* Only with a map: a bento without one ignores the box, so it can't render
+  empty.
+* The map starts on its dark backdrop (the in-view overlay and blur), is
+  never held back on light sections, and `building-map.js` arms the
+  "Light, dark at the map" switch at once instead of after the first scroll.
+* The Visit strip is unchanged: it comes from the page's Visit fields, so
+  leave those empty for the map alone.
+* Without the field the box simply doesn't exist and every bento stays as
+  it is.
+
 #### Hero: Swiss layer, TOC default, map replay (2026-10-16)
 
 - **Swiss layer** (`scss/components/_bento-swiss.scss`, after

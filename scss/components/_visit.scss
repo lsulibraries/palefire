@@ -259,7 +259,7 @@
 // header, the breadcrumb strip; _modular.scss, _bento-swiss.scss).
 // Map in view: the .is-map-in-view dark overlay (_building-map.scss) takes
 // over.
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view) .pf-bento__media::after {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__media::after {
   background-color: rgb(255 255 255 / .2);
 }
 

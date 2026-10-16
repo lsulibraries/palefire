@@ -118,10 +118,16 @@ function palefire_buildings(): array {
  * Renders the bento's building map (field_bento_map) as bento_map. Built here
  * from the referenced paragraph, so it doesn't depend on the bento's view
  * display listing the field.
+ *
+ * map_only: TRUE when the optional field_bento_hide_lead (Boolean, added in
+ * the UI) is checked and there is a map to show. The template then leaves
+ * out the lead panel (title, intro, search) and the map leads the bento. A
+ * bento without a map ignores it, so it can never render empty.
  */
 function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['bento_map'] = NULL;
   $variables['page_title'] = NULL;
+  $variables['map_only'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
     return;
@@ -133,6 +139,9 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
     $map = \Drupal::service('entity.repository')->getTranslationFromContext($map);
     $variables['bento_map'] = \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($map, 'default');
   }
+  $variables['map_only'] = $variables['bento_map'] !== NULL
+    && $paragraph->hasField('field_bento_hide_lead')
+    && (bool) $paragraph->get('field_bento_hide_lead')->value;
   _palefire_bento_visit($variables, $paragraph);
 }
 

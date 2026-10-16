@@ -120,8 +120,32 @@
   transition: opacity .6s ease;
 }
 
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view:not(.is-map-in-view) .pf-bento__visit {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__visit {
   opacity: 0;
+}
+
+// Map only (the paragraph's "Hide search panel", field_bento_hide_lead): no
+// lead panel, so the map opens the bento. It is never held back, it starts
+// on the in-view backdrop (the .is-map-in-view overlay and blur from
+// _building-map.scss; the light wash in _visit.scss leaves it out), and it
+// loses the gap that separated it from the lead.
+.pf-bento--map-only > .pf-bento__visit {
+  margin-top: 0;
+}
+
+.pf-bento--map-only .pf-bento__media::after {
+  background-color: rgb(0 0 0 / .72);
+}
+
+.pf-bento--map-only .pf-bento__bg-video {
+  filter: blur(12px) brightness(.55);
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-bento--map-only .pf-bento__bg-video {
+    transform: none;
+  }
 }
 
 // --- Visit strip ----------------------------------------------------------

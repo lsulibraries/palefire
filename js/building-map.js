@@ -382,7 +382,10 @@
       // the visitor has scrolled (or the page opened already scrolled: a
       // #anchor or a restored position); then the latest state applies.
       const ARM_AT = 8; // px
-      let armed = window.scrollY > ARM_AT;
+      // A map-only bento (no lead panel) opens on the map, so it is in view
+      // from the start: armed at once, and the CSS already starts it dark
+      // (_bento-swiss.scss), so there is no light frame to flip from.
+      let armed = window.scrollY > ARM_AT || bento.classList.contains('pf-bento--map-only');
       let latest = false;
       const apply = (inView) => {
         if (bento.classList.contains('is-map-in-view') === inView) return;
