@@ -277,14 +277,20 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
 }
 
 .pf-accordion__item {
+  // Drops css/components/details.css (the starterkit box every <details>
+  // gets: a full #ccc border and 1em margins), which drew each item as a
+  // separate box with gaps. Only the rule between items stays.
+  margin: 0;
+  padding: 0;
+  border: 0;
   border-bottom: 1px solid var(--pf-guide-rule);
 }
 
 .pf-accordion__summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  // The summary stays a block; the row inside it is the flex box. A
+  // display: flex <summary> is a known source of toggle and marker bugs
+  // in some browsers.
+  display: block;
   min-height: 2.75rem; // 44px target
   padding: 0.85rem 0.25rem;
   font-size: 1.1875rem;
@@ -300,6 +306,13 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
   &:hover {
     color: var(--pf-guide-accent);
   }
+}
+
+.pf-accordion__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .pf-accordion__icon {

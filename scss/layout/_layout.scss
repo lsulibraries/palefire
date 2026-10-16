@@ -80,7 +80,7 @@ body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
     font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
     font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 0.1667em; // 2px at 12px; em so Text size enlarges it too
     line-height: 1.5;
     text-transform: uppercase;
     color: var(--pf-toc-color);

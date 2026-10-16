@@ -20,7 +20,7 @@
   --pf-toc-speed: 0.3s;
   --pf-toc-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --pf-toc-indent: 2rem;          // Bootstrap's ul padding that Origami inherited
-  --pf-toc-sub-indent: calc(var(--pf-toc-indent) + 1rem + 10px);
+  --pf-toc-sub-indent: calc(var(--pf-toc-indent) + 1.625rem); // was + 1rem + 10px
 
   display: flex;
   flex: 1 0 auto;
@@ -34,7 +34,7 @@
   font-family: inherit;
   font-size: 1.125rem;
   font-weight: 400;
-  letter-spacing: 6px;
+  letter-spacing: 0.333em; // 6px at 18px; em so it grows with Text size
   text-transform: uppercase;
   color: var(--pf-toc-color);
 }
@@ -54,7 +54,7 @@
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 0.1667em; // 2px at 12px; em so it grows with Text size
   line-height: 1.5;
   text-wrap: balance;
   color: var(--pf-toc-active);
@@ -178,7 +178,9 @@
   padding-bottom: 6px;
 }
 
-// Origami `ul ul li span`: uppercase, bold, cut at 160px.
+// Origami `ul ul li span`: uppercase, bold, cut at 160px (10rem).
+// Sizes are rem/em, not px, so Settings > Text size enlarges them with
+// the rest of the page.
 // Up to two lines. The clamp sits on the inner .pf-toc__sublabel, which has
 // no padding: a clamped box clips at its padding edge, so clamping the
 // padded link itself let the top of the next line show in its bottom
@@ -192,11 +194,11 @@
   // uncut label, and made the sidebar scroll sideways.
   position: relative;
   overflow: hidden;
-  max-width: min(100%, calc(160px + var(--pf-toc-sub-indent))); // 218px was 2px wider than the rail
+  max-width: min(100%, calc(10rem + var(--pf-toc-sub-indent))); // 160px + indent; 218px was 2px wider than the rail
   padding: 0.45rem 0 0.35rem var(--pf-toc-sub-indent);
-  font-size: 12px;
+  font-size: 0.75rem; // 12px at 100%
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.0833em; // 1px at 12px
   line-height: 1.5;
   text-transform: uppercase;
   color: var(--pf-toc-sub-color);
@@ -221,8 +223,8 @@
   gap: 0.25rem;
   margin-top: auto;
   padding: 2.5rem 0 2.5rem;
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 0.625rem; // 10px at 100%
+  letter-spacing: 0.1em; // 1px at 10px
   text-transform: uppercase;
   text-decoration: none;
   color: var(--pf-toc-top-color);

@@ -758,6 +758,12 @@ help.
 * Accordions are native `<details>`/`<summary>`: no JavaScript, keyboard
   and screen reader support from the browser, 44px rows, and the browser's
   find-in-page opens a closed item that contains the match.
+  `.pf-accordion__item` resets the starterkit `details` box
+  (`css/components/details.css`: full grey border, 1em margins), which
+  otherwise draws every item as a separate bordered box. The `<summary>`
+  stays `display: block` with a flex row inside it, and the item prints its
+  stored text if its view display has `field_block_body` turned off, so a
+  panel is never empty.
 * Tables in guide text scroll inside their block on narrow screens (the
   block scrolls, not the table, so the table keeps its semantics).
 * Icons are inline Bootstrap Icons SVGs, like the utility menu, so guide
@@ -925,7 +931,7 @@ follows along (`storage` event).
 
 | Group | Setting | `<html>` | What it does |
 | --- | --- | --- | --- |
-| Text size | 100 / 115 / 130 / 150% | `data-pf-text-size` | Root font size, so the whole rem-based layout scales, not just the text |
+| Text size | 100 / 115 / 130 / 150% | `data-pf-text-size` | Root font size, so the whole rem-based layout scales, not just the text. The breadcrumb, TOC title, TOC sub-links and "Back to top" are rem with em tracking too (they were 12px/10px with px letter-spacing, so they stayed small) |
 | Reading | Easy-to-read font | `.pf-a11y-font` | Atkinson Hyperlegible Next (Google Fonts); only downloaded when someone turns it on |
 | Reading | More text spacing | `.pf-a11y-spacing` | The WCAG 1.4.12 test values: line 1.5, paragraph 2em, letter .12em, word .16em |
 | Reading | Underline all links | `.pf-a11y-underline` | Includes menus, dropdowns and link-buttons |

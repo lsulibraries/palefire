@@ -8,18 +8,29 @@
  * isn't listed either (it would point at hidden content).
  *
  * resources: palefire_preprocess_paragraph__accordion_item().
+ *
+ * The text comes from the paragraph's view display; if that display has
+ * field_block_body turned off, the stored text is printed instead, so an
+ * item is never an empty panel.
  */
 #}
 {% set icon = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
+{# |render keeps the markup safe to print; |trim only for the test. #}
+{% set body = content.field_block_body|render %}
+{% if body|trim is empty and paragraph.field_block_body.value %}
+  {% set body = paragraph.field_block_body.processed %}
+{% endif %}
 <details{{ attributes.addClass('pf-accordion__item') }}>
   <summary class="pf-accordion__summary">
-    <span class="pf-accordion__title">{{ paragraph.field_item_title.value }}</span>
-    {# Theme SVG file, so |raw is safe here. #}
-    <span class="pf-accordion__icon" aria-hidden="true">{{ icon|raw }}</span>
+    <span class="pf-accordion__row">
+      <span class="pf-accordion__title">{{ paragraph.field_item_title.value }}</span>
+      {# Theme SVG file, so |raw is safe here. #}
+      <span class="pf-accordion__icon" aria-hidden="true">{{ icon|raw }}</span>
+    </span>
   </summary>
   <div class="pf-accordion__panel" data-toc-skip>
-    {% if content.field_block_body|render|trim %}
-      <div class="pf-guide-prose">{{ content.field_block_body }}</div>
+    {% if body|trim is not empty %}
+      <div class="pf-guide-prose">{{ body }}</div>
     {% endif %}
     {% if resources %}
       <ul class="pf-resources">
