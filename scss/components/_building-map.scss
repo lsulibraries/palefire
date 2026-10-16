@@ -25,8 +25,8 @@
   --pf-map-tip-shift: -14px;           /* tooltip slides in from this far left */
   --pf-map-tip-slide: .38s;            /* tooltip slide-in duration */
   --pf-map-tip-slide-ease: cubic-bezier(.22, 1, .36, 1); /* fast start, soft landing, no overshoot */
-  --pf-map-label-halo: var(--pf-map-surface); /* room-name shadow: keeps a lifted name readable over the lines */
-  --pf-map-label-halo-width: 24;       /* map units; half shows around the letters (about 3px at 1000px wide) */
+  --pf-map-label-halo: var(--pf-map-surface); /* room-name shadow colour: keeps a lifted name readable over the lines */
+  --pf-map-label-halo-blur: 12px;      /* map units; three soft layers at 1x, 2.5x and 5x this (about 3, 7 and 15px at 1000px wide) */
   --pf-map-label-halo-in: .06s;        /* shadow on: almost at once, before the name moves */
   --pf-map-label-halo-out: .2s;        /* shadow off: after the name has settled (waits --pf-map-out) */
   --pf-map-tip-in: .24s;               /* tooltip fade in */
@@ -127,17 +127,19 @@
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
   pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: default;
-  /* Shadow: a halo in the map's surface colour under the letters
-     (paint-order), hidden until hover. */
-  stroke: var(--pf-map-label-halo); stroke-width: var(--pf-map-label-halo-width); stroke-linejoin: round; stroke-opacity: 0; paint-order: stroke fill;
-  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease, stroke-opacity var(--pf-map-label-halo-out) ease var(--pf-map-out);
+  /* Shadow: a soft glow in the map's surface colour behind the letters,
+     three stacked text-shadows with no hard edge, clear until hover. Only
+     the colour (--pf-map-label-glow) changes on hover, so the glow fades. */
+  --pf-map-label-glow: transparent;
+  text-shadow: 0 0 var(--pf-map-label-halo-blur) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 2.5) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 5) var(--pf-map-label-glow);
+  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease, text-shadow var(--pf-map-label-halo-out) ease var(--pf-map-out);
 }
 /* A live room's name works like the room (hover, click): pointer cursor. */
 .pf-map__label.is-live { cursor: pointer; }
 .pf-map__label--floor { fill: var(--pf-map-floor-ink); font-size: 54px; font-weight: 600; font-style: normal; letter-spacing: .28em; }
 .pf-map__label.is-active {
-  --lift: var(--pf-map-lift); fill: var(--pf-map-hover); stroke-opacity: 1;
-  transition: fill var(--pf-map-in) ease, transform var(--pf-map-in) ease, stroke-opacity var(--pf-map-label-halo-in) linear;
+  --lift: var(--pf-map-lift); --pf-map-label-glow: var(--pf-map-label-halo); fill: var(--pf-map-hover);
+  transition: fill var(--pf-map-in) ease, transform var(--pf-map-in) ease, text-shadow var(--pf-map-label-halo-in) linear;
 }
 .pf-map__icons { pointer-events: none; }
 .pf-map__label::selection, .pf-map__label tspan::selection { fill: #000; background: var(--pf-map-hover); }

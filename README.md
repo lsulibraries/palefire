@@ -139,13 +139,18 @@ and taps still open it straight away. The tooltip slides
 `--pf-map-tip-slide-ease` (no overshoot) and closes with a plain fade.
 `--pf-map-tip-ease` is still the "here" arrow's bob.
 
-Room-name shadow: a halo in `--pf-map-label-halo` (the map surface colour)
-is painted under each room name (`stroke` + `paint-order`), hidden until
-hover. It comes in over `--pf-map-label-halo-in` (60ms), before the name has
-moved, so the lifting name stays readable over the outlines and hatch it
-passes; on the way out it waits for the name to land (`--pf-map-out`) and
-fades over `--pf-map-label-halo-out`. Width: `--pf-map-label-halo-width`
-(24 map units).
+Room-name shadow: a soft glow in `--pf-map-label-halo` (the map surface
+colour) sits behind each room name, clear until hover. It is three stacked
+`text-shadow`s at 1x, 2.5x and 5x `--pf-map-label-halo-blur` (12 map units,
+so about 3, 7 and 15px at 1000px wide), not the old hard `stroke` +
+`paint-order` outline, so it knocks the outlines and hatch back around the
+letters without a visible edge. The shadow list never changes; hover only
+swaps its colour (`--pf-map-label-glow`, `transparent` at rest), so it
+fades. It comes in over `--pf-map-label-halo-in` (60ms), before the name has
+moved, so the lifting name stays readable over the lines it passes; on the
+way out it waits for the name to land (`--pf-map-out`) and fades over
+`--pf-map-label-halo-out`. Softer or tighter: change
+`--pf-map-label-halo-blur` only.
 
 Appointment rooms: `building-map.js` gives rooms with `access: appointment`
 a broken hatch, the walk-in lines cut into 20-unit dashes and staggered row
