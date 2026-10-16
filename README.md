@@ -649,6 +649,13 @@ so it out-ranks the block's own CSS.
   monospace label, the text large and light, the "Wikipedia" source link as
   a label with an accent underline. Also the thin stroke for the module's
   newer inline-SVG chevrons (`.libcal-day-carousel__chevron`).
+- **"On this day" toned down (later follow-up).** The fact is a fun add-on,
+  not the day's programme, so the module now puts it last in the column,
+  after the events, and Palefire styles it as a footnote instead of a wall
+  caption: no accent rule, 0.875rem muted text (`--ldc-muted`, about 9:1 on
+  the dark section), a smaller tracked label and a muted "Wikipedia" link
+  that brightens on hover. Needs the matching `libcal_gantt` change (fact
+  last in `buildSlide()`).
 
 ## Guide pages (LibGuides-style)
 

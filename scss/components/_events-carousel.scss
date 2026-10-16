@@ -353,50 +353,52 @@
   text-underline-offset: .3em;
 }
 
-// Quiet day (no timed events): Wikipedia "On this day" in the feature slot
-// (libcal_gantt_carousel's buildFact()). No box: a heavy accent rule over a
-// large light statement, the tracked label above it and the source below,
-// like a caption on a museum wall. Kept apart from the ruled event list so
-// it never reads as a library event.
+// Quiet day (no timed events): Wikipedia "On this day", the last thing in
+// the column (libcal_gantt_carousel's buildFact(), after the events). A fun
+// add-on, not the day's programme, so it reads like a footnote: no box or
+// accent rule, small muted text (--ldc-muted: about 9:1 on the dark
+// section, 4.5:1 and up on light), the tracked label above it and the
+// source as a small label link.
 .pf-events-carousel .libcal-day__fact {
-  padding: 1.25rem 0 1.5rem;
+  margin-top: 1rem;
+  padding: 0;
   border: 0;
-  border-top: 3px solid var(--pf-ev-accent);
   background: none;
-}
-
-.pf-events-carousel .libcal-day__fact-label {
-  margin: 0 0 1rem;
-  font-family: var(--pf-ev-label);
-  font-size: .6875rem;
-  font-weight: 700;
-  letter-spacing: .16em;
-  text-transform: uppercase;
   color: var(--ldc-muted);
 }
 
+.pf-events-carousel .libcal-day__fact-label {
+  margin: 0 0 .5rem;
+  font-family: var(--pf-ev-label);
+  font-size: .625rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
 .pf-events-carousel .libcal-day__fact-text {
-  margin: 0 0 1.25rem;
-  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
-  font-weight: 300;
-  letter-spacing: -.01em;
-  line-height: 1.35;
+  max-width: 34ch;
+  margin: 0 0 .5rem;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 .pf-events-carousel .libcal-day__fact-source {
   font-family: var(--pf-ev-label);
-  font-size: .6875rem;
+  font-size: .625rem;
   font-weight: 700;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ldc-fg);
-  text-decoration-color: var(--pf-ev-accent);
+  color: inherit;
+  text-decoration-color: currentColor;
   text-decoration-thickness: 1px;
   text-underline-offset: .4em;
 }
 
 .pf-events-carousel .libcal-day__fact-source:is(:hover, :focus-visible) {
-  text-decoration-thickness: 2px;
+  color: var(--ldc-fg);
+  text-decoration-color: var(--pf-ev-accent);
 }
 
 .pf-events-carousel .libcal-day__fact-source:focus-visible {
