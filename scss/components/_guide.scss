@@ -7,8 +7,12 @@
 // Dark guides, a page-coloured sidebar, a purple TOC bar on light pages,
 // hairlines between sections, and the preview's type sizes.
 //
+// Light guides are cream (#f7f4ec) with dark grey text (#2b2a28), like a
+// printed catalogue, instead of white and black.
+//
 // Contrast (normal text, WCAG AA 4.5:1):
-//   light  muted #595959 on #fff 7:1;     accent #461d7c on #fff 11:1
+//   light  text #2b2a28 on #f7f4ec 13:1;  muted #595959 6.4:1;
+//          accent #461d7c 10:1
 //   dark   text #ece9f0 on #121014 16:1;   muted #b3adbb 9:1;
 //          accent #cdb8ee 11:1
 // Rules (#e2dfe7 / #34303a) are dividers only, not the boundary of a
@@ -18,11 +22,14 @@
 // section keeps its own black and lavender.
 
 $pf-guide-light: (
-  'g-surface': #f6f4f9,
-  'g-rule': #e2dfe7,
+  'g-bg': #f7f4ec,
+  'g-fg': #2b2a28,
+  'g-heading': #1f1e1c,
+  'g-surface': #efebe1,
+  'g-rule': #e2ddd1,
   'g-muted': #595959,
   'g-accent': $pf-purple,
-  'g-accent-soft': #ede6f7,
+  'g-accent-soft': #ebe4f0,
 );
 
 $pf-guide-dark: (
@@ -37,6 +44,33 @@ $pf-guide-dark: (
 
 html[data-pf-mode="guide"] {
   @include pf-tokens($pf-guide-light);
+}
+
+// Light guides: cream page, dark grey text, for everything that reads
+// --bs-* (the header glass is built from --bs-body-bg-rgb, so it turns
+// cream too). Dark guides replace all of these below.
+html[data-pf-mode="guide"]:not(.pf-guide-dark) {
+  --bs-body-bg: var(--pf-g-bg);
+  --bs-body-bg-rgb: 247, 244, 236;
+  --bs-body-color: var(--pf-g-fg);
+  --bs-body-color-rgb: 43, 42, 40;
+  --bs-emphasis-color: var(--pf-g-heading);
+  --bs-emphasis-color-rgb: 31, 30, 28;
+  --bs-secondary-bg: var(--pf-g-surface);
+  --bs-tertiary-bg: var(--pf-g-surface);
+  --bs-border-color: var(--pf-g-rule);
+  background-color: var(--pf-g-bg);
+}
+
+// The page's own scrollbar: the same thin bar as the sidebar and drawers
+// (pf-thin-scrollbar), on the page colour, instead of the system bar.
+html[data-pf-mode="guide"] {
+  @include pf-thin-scrollbar;
+}
+
+html.pf-guide-dark[data-pf-mode="guide"] {
+  --pf-scroll-thumb: var(--pf-g-muted);
+  --pf-scroll-thumb-hover: var(--pf-g-fg);
 }
 
 // Settings > Dark guides. <html> also has data-bs-theme="dark"; these
@@ -125,6 +159,10 @@ html.pf-guide-dark[data-pf-mode="guide"] body {
 // under 1.4.11's 3:1); gold stays on dark.
 html[data-pf-mode="guide"]:not(.pf-guide-dark) body:not([data-section-theme="dark"]) {
   --pf-toc-accent: #{$pf-purple};
+  // Cream chrome: the title and active TOC link in the guide's near-black
+  // grey, the TOC rail in its rule colour.
+  --pf-toc-active: var(--pf-g-heading);
+  --pf-toc-rail: var(--pf-g-rule);
 }
 
 // Preview type: smaller monospace links, so long guides fit the rail.

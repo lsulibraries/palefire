@@ -817,6 +817,22 @@ Fix in the same change: `pf-solid-chrome` (`base/_mixins.scss`) nests its
 class version under `:root`, so selectors starting with `html.pf-guide-dark`
 inside it never matched; those rules are now written out beside the mixin.
 
+**Cream light theme** (2026-10-16): light guides are cream instead of white,
+with dark grey text instead of black, like a printed catalogue.
+
+* `--pf-g-*` gains `bg #f7f4ec`, `fg #2b2a28` and `heading #1f1e1c`, and
+  the surface and rules turn warm (`#efebe1`, `#e2ddd1`; accent tint
+  `#ebe4f0`). Bootstrap's `--bs-body-bg` / `-color` / `-emphasis-color` /
+  `-border-color` follow on light guides, so the page, the header glass
+  (built from `--bs-body-bg-rgb`) and the page-coloured sidebar all turn
+  cream. The page title and active TOC link use the heading grey, the TOC
+  rail the rule colour. Contrast: text 13:1, muted `#595959` 6.4:1, accent
+  10:1.
+* **Scrollbar:** the page's own scrollbar on guides is now the same thin bar
+  as the sidebar and drawers (`pf-thin-scrollbar` on `<html>`), on the page
+  colour, instead of the system bar. On Dark guides its thumb is the
+  guide's muted grey.
+
 ### TOC open by default
 
 Guides open with "On this page" shown (lg and up). The hide/show button
