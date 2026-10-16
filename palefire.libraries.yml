@@ -160,6 +160,18 @@ bento-video:
     - core/drupal
     - core/once
 
+# Visit card in the bento (Modular page Visit fields): LibCal hours and the
+# click-to-load Google map. Attached by _palefire_bento_visit() in
+# palefire.theme only when the page fills in a Visit field.
+visit:
+  version: 1.0.0
+  js:
+    js/visit-hours.js: {}
+    js/visit-map.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # "On this page" scroll tracking, moving indicator and Guide sub-links.
 # Attached by templates/navigation/palefire-modular-toc.html.twig.
 modular-toc:

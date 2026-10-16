@@ -17,6 +17,11 @@
  * - bg_poster: poster image URL (optional)
  * - bento_map: the building_map paragraph from field_bento_map, rendered
  *   by palefire_preprocess_paragraph__bento_search() (optional).
+ * - bento_intro, visit: the host Modular page's intro and Visit card
+ *   (field_intro, field_hours_location, field_location_*), from
+ *   _palefire_bento_visit() (optional). With either one, the bento head is
+ *   two columns: intro + search, then the Visit card (hours from LibCal via
+ *   visit-hours.js, Google Maps link, mini map that loads on click).
  *
  * "Search LSU Libraries" and the map heading are h3s so the TOC lists them.
  * While the map is in view, building-map.js adds .is-map-in-view here to
@@ -26,7 +31,7 @@
 {% set bento_action = 'https://lib.lsu.edu/bento' %}
 {% set bento_name = bento.identifier|default('search_api_fulltext_bento') %}
 {% set input_id = bento.input_id|default('pf-bento-q') %}
-<div{{ attributes.addClass('pf-bento', bg_videos ? 'has-bg-video') }} data-pf-bento>
+<div{{ attributes.addClass('pf-bento', bg_videos ? 'has-bg-video', (bento_intro or visit) ? 'has-head') }} data-pf-bento>
 
   {% if bg_videos %}
     {{ attach_library('palefire/bento-video') }}
@@ -49,6 +54,71 @@
     </div>
   {% endif %}
 
+  {% if bento_intro or visit %}
+  <div class="pf-bento__head">
+    <div class="pf-bento__lead">
+      {% if bento_intro %}
+        <div class="pf-bento__intro">{{ bento_intro }}</div>
+      {% endif %}
+    <form class="pf-bento__form" role="search" method="get" action="{{ bento_action }}" aria-labelledby="{{ input_id }}-heading">
+      <h3 class="pf-bento__heading" id="{{ input_id }}-heading" data-toc>
+        <label class="pf-bento__label" for="{{ input_id }}">{{ 'Search LSU Libraries'|t }}</label>
+      </h3>
+      <div class="pf-bento__field">
+        <svg class="pf-bento__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        <input class="pf-bento__input" type="search" id="{{ input_id }}" name="{{ bento_name }}"
+               placeholder="{{ bento.placeholder|default('Search books, articles, databases, guides and more'|t) }}"
+               autocomplete="off" enterkeyhint="search">
+        <button class="pf-bento__submit" type="submit">
+          <span class="pf-bento__submit-text">{{ 'Search'|t }}</span>
+          <svg class="pf-bento__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </form>
+    </div>
+
+    {% if visit %}
+      {% set visit_id = input_id ~ '-visit' %}
+      <aside class="pf-visit" aria-labelledby="{{ visit_id }}-heading">
+        <h3 class="pf-visit__heading" id="{{ visit_id }}-heading">
+          <span class="pf-visit__eyebrow">{{ 'Visit'|t }}</span>
+          {% if visit.name %}<span class="pf-visit__name">{{ visit.name }}</span>{% endif %}
+        </h3>
+
+        {% if visit.lid %}
+          <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
+            <p class="pf-visit__status" aria-live="polite">
+              <span class="pf-visit__dot" aria-hidden="true"></span>
+              <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
+              <span class="pf-visit__today" data-pf-hours-today></span>
+            </p>
+            <details class="pf-visit__week">
+              <summary>{{ 'This week'|t }}</summary>
+              <ol class="pf-visit__days" data-pf-hours-week></ol>
+            </details>
+            <a class="pf-visit__link pf-visit__all-hours" href="https://lsu.libcal.com/hours">{{ 'All library hours'|t }}</a>
+          </div>
+        {% endif %}
+
+        {% if visit.embed_url %}
+          <div class="pf-visit__map" data-pf-visit-map data-src="{{ visit.embed_url }}" data-title="{{ 'Map: @place'|t({'@place': visit.name ?: visit.query}) }}">
+            <button type="button" class="pf-visit__map-load" data-pf-visit-map-load>
+              <svg class="pf-visit__map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+              <span>{{ 'Show map'|t }}</span>
+              <small>{{ 'Loads Google Maps'|t }}</small>
+            </button>
+          </div>
+        {% endif %}
+
+        {% if visit.maps_url %}
+          <a class="pf-visit__link pf-visit__directions" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
+            {{ 'Open in Google Maps'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+          </a>
+        {% endif %}
+      </aside>
+    {% endif %}
+  </div>
+  {% else %}
   <form class="pf-bento__form" role="search" method="get" action="{{ bento_action }}" aria-labelledby="{{ input_id }}-heading">
     <h3 class="pf-bento__heading" id="{{ input_id }}-heading" data-toc>
       <label class="pf-bento__label" for="{{ input_id }}">{{ 'Search LSU Libraries'|t }}</label>
@@ -64,6 +134,7 @@
       </button>
     </div>
   </form>
+  {% endif %}
 
   {% if bento_map %}
     <div class="pf-bento__visit">{{ bento_map }}</div>

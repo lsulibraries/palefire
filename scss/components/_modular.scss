@@ -159,6 +159,13 @@ html.pf-snap .site-footer {
   }
 }
 
+// field_section_theme "light-map" ("Light, dark at the map"): light until the
+// bento's building map is in view, then every dark-section rule applies.
+// building-map.js toggles .is-map-dark (and data-bs-theme) on the section.
+.pf-section--theme-light-map.is-map-dark {
+  @extend .pf-section--theme-dark;
+}
+
 .pf-section--theme-dark {
   @include pf-tokens($pf-section-dark);
   color-scheme: dark;

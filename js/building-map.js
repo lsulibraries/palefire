@@ -363,6 +363,7 @@
     }
 
     // Bento: dim + blur the background video while the map is in view.
+    // Also drives the light-map section theme (see below).
     const bento = root.closest('.pf-bento');
     if (bento && 'IntersectionObserver' in window) {
       const steps = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
@@ -370,7 +371,18 @@
         const seen = entry.intersectionRect.height;
         const inView = entry.isIntersecting
           && (entry.intersectionRatio >= 0.3 || seen >= window.innerHeight * 0.45);
+        if (bento.classList.contains('is-map-in-view') === inView) return;
         bento.classList.toggle('is-map-in-view', inView);
+        // "Light, dark at the map" sections (field_section_theme = light-map):
+        // the same signal turns the section and the page chrome dark, so the
+        // overlay and the theme always switch together (modular-toc.js).
+        const section = bento.closest('[data-section-theme="light-map"]');
+        if (section) {
+          section.classList.toggle('is-map-dark', inView);
+          if (inView) section.setAttribute('data-bs-theme', 'dark');
+          else section.removeAttribute('data-bs-theme');
+        }
+        document.dispatchEvent(new CustomEvent('palefire:mapview', { detail: { inView, bento, section } }));
       }, { threshold: steps });
       dim.observe(root);
       root.pfMapDim = dim;
@@ -448,6 +460,11 @@
         if (root.pfMapDim) root.pfMapDim.disconnect();
         const bento = root.closest('.pf-bento');
         if (bento) bento.classList.remove('is-map-in-view');
+        const section = bento ? bento.closest('[data-section-theme="light-map"]') : null;
+        if (section) {
+          section.classList.remove('is-map-dark');
+          section.removeAttribute('data-bs-theme');
+        }
       });
     },
   };

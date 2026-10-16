@@ -15,7 +15,7 @@ Drupal 11 theme (starterkit-generated) built on Bootstrap 5.3 + Dart Sass.
 - `scss/` – `_variables.scss` (brand + Bootstrap overrides), `base/`, `layout/`, `components/`
 - `components/toc/` – Single Directory Component: "On this page" navigation
 - `src/Hook/PalefireHooks.php` – OOP theme hooks (TOC, section anchors, branding)
-- `templates/paragraphs/` – section markup for Modular pages
+- `templates/paragraphs/` – section markup for Modular pages (bento head + Visit card: see below)
 - `scripts/palefire_modular_setup.php` – one-time Paragraphs/field setup (drush php:script)
 
 ## Modular pages
@@ -299,6 +299,70 @@ and ring while the field has focus. Colours come from the `--pf-toc-*` and
 `--pf-section-*` tokens, so it follows light and dark sections; the border
 is at least 3:1 on both. On phones the button shows only its arrow
 ("Search" stays for screen readers).
+
+### Bento head and Visit card (Special Collections, Option B)
+
+A Modular page can give its bento search a two-column head: the page intro
+and the search form on the left, a **Visit** card on the right with today's
+status ("Open now", "Closes soon", "Opens tomorrow 9AM"), this week's hours,
+an "Open in Google Maps" link and, if asked for, a mini map. Pages that
+leave the new fields empty keep the single-column bento they have today.
+
+Fields (all optional, on `node.modular_page`, added by
+`scripts/palefire_modular_setup.php`, sections 5 and 6):
+
+| Field | Type | Used for |
+| --- | --- | --- |
+| `field_intro` | Text (formatted, long) | Intro paragraph above the search |
+| `field_hours_location` | List (text): LibCal location ID | Status line and week hours |
+| `field_location_name` | Text (plain) | Card heading, e.g. "Hill Memorial Library" |
+| `field_location_query` | Text (plain) | Google Maps link and embed (address or place name) |
+| `field_location_display` | List: `link` (default) / `embed` | Link only, or link + mini map |
+
+The fields are read by `_palefire_bento_visit()` in `palefire.theme`
+(walking up from the bento paragraph to its node) and printed by
+`paragraph--bento-search.html.twig`; hide them in the node's view display
+so they don't also print below the sections. The page's cache tags are
+added to the bento, so edits show after save.
+
+- **Hours** (`js/visit-hours.js`): Origami's `bento.js` LibCal logic without
+  jQuery. One JSON-LD request per location to
+  `lsu.libcal.com/widget/hours/grid?format=jsonld&lid=…` (JSONP), the same
+  rules (30-minute "soon" windows, next open day up to 14 days out), and a
+  re-check every minute. If LibCal does not answer, the status line hides
+  and the "All library hours" link stays.
+- **Map** (`js/visit-map.js`): with `embed`, a "Show map" button stands in
+  for the Google Maps iframe until it is clicked, so the page makes no
+  request to Google by default. The link works without JavaScript.
+- **LibCal locations**: the list offers `241` and `236`, the two IDs
+  `bento.js` uses. Relabel them (or add more) at Structure > Content types >
+  Modular page > Manage fields > Hours, or edit `$libcal_locations` in the
+  setup script before running it.
+
+#### "Light, dark at the map" section theme
+
+Section 6 of the setup script adds `light-map` to palefire_modular's
+`field_section_theme` list. A section with that theme starts light; when
+its bento's building map comes into view, `building-map.js` (the same
+check that dims the background video) adds `.is-map-dark` and
+`data-bs-theme="dark"` to the section and sends `palefire:mapview`.
+`modular-toc.js` listens and switches the header and sidebar to dark,
+then back to light when the map leaves. In SCSS,
+`.pf-section--theme-light-map.is-map-dark` `@extend`s
+`.pf-section--theme-dark` (`_modular.scss`), so every dark-section rule
+applies; the colours ease in over .45s (none with reduced motion).
+
+#### Turning it on (production)
+
+```sh
+git pull
+drush php:script themes/custom/palefire/scripts/palefire_modular_setup.php
+drush cr
+```
+
+Then edit the page: fill in the Visit fields, set the bento's section theme
+to "Light, dark at the map", and save. Staging gets the config from
+production downstream as usual.
 
 ### Calendar events in "On this page"
 

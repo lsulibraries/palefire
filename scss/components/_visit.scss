@@ -1,0 +1,196 @@
+// =========================================================================
+// Bento head (Option B): intro + search on the left, Visit card on the right.
+// Rendered by templates/paragraphs/paragraph--bento-search.html.twig when the
+// Modular page fills in field_intro or a Visit field (see
+// _palefire_bento_visit() in palefire.theme). Hours: js/visit-hours.js.
+// Mini map: js/visit-map.js (loads Google Maps only on click).
+//
+// Plain CSS on purpose (custom properties only, no Sass functions), so the
+// compiled block in css/style.css matches this file rule for rule.
+// =========================================================================
+
+.pf-bento__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+@media (min-width: 992px) {
+  .pf-bento__head {
+    grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 1fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+}
+.pf-bento__lead { min-width: 0; }
+.pf-bento__intro {
+  max-width: 62ch;
+  margin-bottom: 1.75rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.pf-bento__intro > :last-child,
+.pf-bento__intro .field > :last-child { margin-bottom: 0; }
+
+// --- Visit card ----------------------------------------------------------
+.pf-visit {
+  --pf-visit-line: var(--pf-section-border, #6c757d);
+  --pf-visit-open: #2f9e4f;
+  --pf-visit-soon: #fdd023;
+  --pf-visit-closed: #c8102e;
+  display: flex;
+  flex-direction: column;
+  gap: .875rem;
+  padding: 1.25rem 1.25rem 1.125rem;
+  border: 1px solid var(--pf-visit-line);
+  border-radius: 6px;
+  color: var(--pf-section-fg, inherit);
+  background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+.pf-visit__heading {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+.pf-visit__eyebrow {
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--pf-toc-color, inherit);
+}
+.pf-visit__name { font-weight: 600; }
+
+// Status line: dot + "Open now" + today's hours.
+.pf-visit__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem .5rem;
+  margin: 0;
+}
+.pf-visit__dot {
+  inline-size: .625rem;
+  block-size: .625rem;
+  border-radius: 50%;
+  background-color: var(--pf-visit-line);
+  box-shadow: 0 0 0 1px currentColor;
+}
+.pf-visit__status-label { font-weight: 600; }
+.pf-visit__today { color: var(--pf-toc-color, inherit); }
+.pf-visit__hours[data-hours-state="open"] .pf-visit__dot { background-color: var(--pf-visit-open); }
+.pf-visit__hours[data-hours-state="soon"] .pf-visit__dot { background-color: var(--pf-visit-soon); }
+.pf-visit__hours[data-hours-state="closed"] .pf-visit__dot { background-color: var(--pf-visit-closed); }
+.pf-visit__hours.is-loading .pf-visit__status { opacity: .6; }
+.pf-visit__hours.is-failed .pf-visit__status,
+.pf-visit__hours.is-failed .pf-visit__week,
+.pf-visit__hours:not(.is-ready) .pf-visit__week { display: none; }
+
+// This week (seven rows, today first).
+.pf-visit__week { margin-top: .625rem; }
+.pf-visit__week > summary {
+  cursor: pointer;
+  inline-size: fit-content;
+  font-size: .875rem;
+  font-weight: 600;
+}
+.pf-visit__days {
+  display: grid;
+  gap: .125rem;
+  margin: .5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+.pf-visit__day {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .125rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--pf-visit-line) 35%, transparent);
+}
+.pf-visit__day.is-today { font-weight: 600; }
+.pf-visit__day.is-closed .pf-visit__day-hours { color: var(--pf-toc-color, inherit); }
+
+.pf-visit__link {
+  display: inline-block;
+  margin-top: .5rem;
+  font-size: .875rem;
+  font-weight: 600;
+}
+.pf-visit__directions { margin-top: 0; }
+.pf-visit__directions::after { content: " \2197"; }
+
+// Mini map: a button until clicked, then the Google Maps iframe.
+.pf-visit__map {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--pf-visit-line);
+  border-radius: 4px;
+}
+.pf-visit__map-load {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 1rem;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-visit-line) 18%, transparent) 11px 12px),
+    transparent;
+  cursor: pointer;
+}
+.pf-visit__map-load small {
+  font-size: .75rem;
+  font-weight: 400;
+  color: var(--pf-toc-color, inherit);
+}
+.pf-visit__map-icon { inline-size: 1.75rem; block-size: 1.75rem; }
+.pf-visit__map-load:hover,
+.pf-visit__map-load:focus-visible { background-color: color-mix(in srgb, var(--pf-visit-line) 12%, transparent); }
+.pf-visit__map-load:focus-visible,
+.pf-visit__map-frame:focus-visible {
+  outline: 2px solid var(--pf-toc-accent, #fdd023);
+  outline-offset: -2px;
+}
+.pf-visit__map-frame {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+}
+
+// --- "Light, dark at the map" sections -----------------------------------
+// building-map.js adds .is-map-dark while the map is in view; the section
+// then uses the dark section tokens (the @extend in _modular.scss) and the
+// colour change eases in.
+.pf-section--theme-light-map,
+.pf-section--theme-light-map::before {
+  transition: color .45s ease, background-color .45s ease;
+}
+
+@media (forced-colors: active) {
+  .pf-visit,
+  .pf-visit__map { border-color: CanvasText; }
+  .pf-visit__dot { forced-color-adjust: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-section--theme-light-map,
+  .pf-section--theme-light-map::before { transition: none; }
+}
+@media print {
+  .pf-visit__map,
+  .pf-visit__week { display: none; }
+  .pf-visit { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
+}

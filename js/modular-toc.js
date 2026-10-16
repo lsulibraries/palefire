@@ -620,10 +620,31 @@
    *   body[data-section-index="1"]        (was .firstSlide)
    *   body[data-section-theme="dark"]     (was .dark-mode)
    * ---------------------------------------------------------------- */
+  // "light-map" sections (field_section_theme "Light, dark at the map") are
+  // light until their building map is in view, then dark: building-map.js
+  // adds .is-map-dark to the section and sends palefire:mapview, the same
+  // signal that dims the bento's background video.
+  function sectionTheme(section) {
+    const theme = section.dataset.sectionTheme || 'light';
+    if (theme === 'light-map') {
+      return section.classList.contains('is-map-dark') ? 'dark' : 'light';
+    }
+    return theme;
+  }
+  let activeNav = null;
+
   document.addEventListener('palefire:sectionchange', (event) => {
     const section = event.detail.section;
+    activeNav = event.detail.nav;
     document.body.dataset.sectionIndex = String(event.detail.index + 1);
     document.body.dataset.activeSection = event.detail.id;
-    applyChromeTheme(section.dataset.sectionTheme || 'light', event.detail.nav);
+    applyChromeTheme(sectionTheme(section), event.detail.nav);
+  });
+
+  document.addEventListener('palefire:mapview', (event) => {
+    const section = event.detail.section;
+    if (section && section.id && document.body.dataset.activeSection === section.id) {
+      applyChromeTheme(sectionTheme(section), activeNav);
+    }
   });
 })(Drupal, once);
