@@ -57,6 +57,9 @@
   {% if bento_intro or visit %}
   <div class="pf-bento__head">
     <div class="pf-bento__lead">
+      {% if node.label %}
+        <h1 class="pf-modular__title">{{ node.label }}</h1>
+      {% endif %}
       {% if bento_intro %}
         <div class="pf-bento__intro">{{ bento_intro }}</div>
       {% endif %}
