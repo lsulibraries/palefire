@@ -509,6 +509,35 @@ the TOC dispatches a bubbling `palefire:tocrefresh` event from inside its
 section, and that section's sub-list is rebuilt and opens like a section
 change. The LibCal day carousel uses this for its next three timed events.
 
+### Events carousel: Swiss styling (2026-10-16)
+
+`scss/components/_events-carousel.scss` restyles the LibCal Day Carousel
+block in the International Typographic Style, for a museum feel. Theme CSS
+only: no change to `libcal_gantt_carousel`. Colours still go through its
+`--ldc-*` properties, and every selector starts with `.pf-events-carousel`
+so it out-ranks the block's own CSS.
+
+- **One edge.** The block's own inset (`--ldc-pad`) is 0, so the day tabs
+  and the first column start on the "Events" title's edge. In the
+  three-day view the columns reach out by their padding and the rules
+  between them sit in the gutter.
+- **Strip, not pills.** Day tabs are a small monospace label over a large
+  light numeral, muted until in view; the days in view get a 3px accent
+  bar on the toolbar's hairline. The row never wraps: it scrolls sideways
+  inside the toolbar on phones and tablets.
+- **Square controls.** Previous/next are 48px squares sharing one hairline,
+  with a drawn arrow in the text colour; they fill solid on hover/focus.
+  This also fixes empty buttons on dark sections: Bootstrap's
+  `[data-bs-theme=dark]` carousel filter inverted the white chevron to
+  black.
+- **Type and rules.** Medium date, light weather numerals, a ruled hours
+  table and a ruled event list, with times as tracked monospace labels.
+  Square-cornered 3:2 feature image. Event titles keep an underline (WCAG
+  1.4.1) on a hairline in the border colour; it turns accent on hover/focus.
+- **Accent.** LSU purple on light sections (11:1), the TOC gold on dark.
+- **Title.** The Events section's `<h2>` is display size (up to 4rem),
+  medium weight, tight tracking.
+
 ## Header (Origami look)
 
 Top bar, left to right: logo | Primary menu | Utility menu (icons). Sizes

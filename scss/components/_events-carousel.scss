@@ -1,0 +1,364 @@
+// =========================================================================
+// Events carousel: Swiss / museum styling for the LibCal Day Carousel
+// block (libcal_gantt_carousel, rendered by its own JS inside
+// paragraph--events-carousel.html.twig).
+//
+// International Typographic Style: one left edge shared with the section
+// title, square corners, hairline rules instead of boxes and pills, a
+// strict type scale (large light numerals, medium headings, small tracked
+// monospace labels in the TOC/breadcrumb voice) and one accent: LSU purple
+// on light sections, the TOC gold on dark ones.
+//
+// Theme CSS only: colours go through the block's --ldc-* custom properties
+// (dark section mapping: "Events carousel section" in _modular.scss), and
+// selectors start with .pf-events-carousel so they out-rank the block's
+// own day-carousel.css without !important.
+// =========================================================================
+
+.pf-events-carousel .libcal-day-carousel {
+  --pf-ev-accent: #{$pf-purple}; // 11:1 on white
+  --pf-ev-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  --ldc-brand: var(--pf-ev-accent); // "Today" eyebrow
+  --ldc-radius: 0;
+  // The section already pads the content: no second inset, so the day
+  // tabs and the first column start on the section title's edge.
+  --ldc-pad: 0px;
+  --ldc-col-pad: clamp(1.25rem, 1.8vw, 2rem);
+}
+
+.pf-section--theme-dark .pf-events-carousel .libcal-day-carousel {
+  --pf-ev-accent: var(--pf-toc-accent, #{$pf-gold});
+  --ldc-brand: var(--pf-ev-accent);
+}
+
+// Section title: the display size, tight tracking.
+.pf-section:has(.pf-events-carousel) .pf-section__title {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  line-height: 1;
+}
+
+// --- Toolbar: a calendar strip on one hairline ---------------------------
+.pf-events-carousel .libcal-day-carousel__toolbar {
+  align-items: flex-end;
+  gap: 2rem;
+  padding: 0;
+  border-bottom: 1px solid var(--ldc-border);
+}
+
+// One row, never wrapped: it scrolls sideways inside the toolbar when the
+// days don't fit (phones, tablets), so the strip stays a strip and the page
+// itself never scrolls horizontally. The arrows stay put beside it.
+.pf-events-carousel .libcal-day-carousel .carousel-indicators.libcal-day-carousel__tabs {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: 0;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+
+.pf-events-carousel .libcal-day-carousel__tabs > .libcal-day-carousel__tab {
+  flex: none;
+}
+
+@media (max-width: 575.98px) {
+  .pf-events-carousel .libcal-day-carousel__toolbar {
+    gap: 1rem;
+  }
+
+  .pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab {
+    min-width: 3.25rem;
+    padding-inline-end: .875rem;
+  }
+}
+
+// Day tabs: no pill. Small label over a large light numeral, muted until
+// in view; the days in view get full colour and a 3px accent bar that sits
+// on the strip's hairline. 44px+ tall targets.
+.pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab {
+  align-items: flex-start;
+  gap: .375rem;
+  min-width: 4rem;
+  min-height: 4.25rem;
+  padding: .625rem 1.25rem .875rem 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--ldc-muted);
+  background: none;
+  box-shadow: inset 0 -3px 0 transparent;
+  transition: color .2s ease, box-shadow .25s ease;
+}
+
+.pf-events-carousel .libcal-day-carousel__tab-dow {
+  font-family: var(--pf-ev-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+}
+
+.pf-events-carousel .libcal-day-carousel__tab-num {
+  font-size: 1.75rem;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+
+.pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:hover {
+  color: var(--ldc-fg);
+}
+
+.pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:is(.active, .is-in-view) {
+  color: var(--ldc-fg);
+  background: none;
+  box-shadow: inset 0 -3px 0 var(--pf-ev-accent);
+}
+
+.pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:focus-visible {
+  outline: 2px solid var(--pf-ev-accent);
+  outline-offset: -2px;
+}
+
+// Previous / next: square, hairline, a thin drawn arrow in the text colour.
+// The arrow is a mask, not Bootstrap's white chevron image: Bootstrap's
+// [data-bs-theme=dark] filter inverted that to black on the dark section,
+// so the buttons looked empty.
+.pf-events-carousel .libcal-day-carousel__controls {
+  gap: 0;
+  margin-bottom: .75rem;
+}
+
+.pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--ldc-border);
+  border-radius: 0;
+  color: var(--ldc-fg);
+  background: transparent;
+  filter: none;
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+}
+
+.pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control + .libcal-day-carousel__control {
+  margin-inline-start: -1px; // one shared hairline between the two
+}
+
+.pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control:not(:disabled):is(:hover, :focus-visible) {
+  position: relative; // its border draws over the neighbour's
+  border-color: var(--ldc-fg);
+  color: var(--ldc-surface);
+  background-color: var(--ldc-fg);
+}
+
+.pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control:focus-visible {
+  outline: 2px solid var(--pf-ev-accent);
+  outline-offset: 2px;
+}
+
+.pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control > [class$="-icon"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: currentColor;
+  filter: none;
+  -webkit-mask: var(--pf-ev-arrow) center / contain no-repeat;
+  mask: var(--pf-ev-arrow) center / contain no-repeat;
+}
+
+.pf-events-carousel .carousel-control-prev-icon {
+  --pf-ev-arrow: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='square'%3e%3cpath d='M21 12H3.5M10 5.5 3.5 12l6.5 6.5'/%3e%3c/svg%3e");
+}
+
+.pf-events-carousel .carousel-control-next-icon {
+  --pf-ev-arrow: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='square'%3e%3cpath d='M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5'/%3e%3c/svg%3e");
+}
+
+[dir="rtl"] .pf-events-carousel .libcal-day-carousel__control > [class$="-icon"] {
+  transform: scaleX(-1);
+}
+
+// --- Day columns -----------------------------------------------------------
+// Three-up (xl+): the columns reach out by their padding, so the first
+// column's text lines up with the title and tabs, and the rules between
+// columns sit in the gutter. The clip hides the rule of whichever column is
+// first in view (it sits on the inner box's start edge).
+.pf-events-carousel .libcal-day-carousel.is-multi .carousel-inner {
+  width: auto;
+  margin-inline: calc(-1 * var(--ldc-col-pad));
+  clip-path: inset(0 0 0 1px);
+}
+
+[dir="rtl"] .pf-events-carousel .libcal-day-carousel.is-multi .carousel-inner {
+  clip-path: inset(0 1px 0 0);
+}
+
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__grid {
+  padding-block: clamp(1.5rem, 2.5vw, 2.5rem) var(--ldc-col-pad);
+}
+
+.pf-events-carousel .libcal-day__grid {
+  padding-block-start: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+.pf-events-carousel .libcal-day__eyebrow {
+  margin: 0 0 .75rem;
+  font-family: var(--pf-ev-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.pf-events-carousel .libcal-day__date,
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__date {
+  margin: 0 0 1.75rem;
+  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.05;
+}
+
+// Weather: large light numerals, the condition as a small label.
+.pf-events-carousel .libcal-day__weather,
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__weather {
+  column-gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.pf-events-carousel .libcal-day__weather-icon,
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__weather-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.pf-events-carousel .libcal-day__temps {
+  font-size: 1.75rem;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.pf-events-carousel .libcal-day__low {
+  font-weight: 300;
+}
+
+.pf-events-carousel .libcal-day__condition {
+  font-size: .875rem;
+}
+
+// Hours: a ruled table, one hairline per building.
+// No column gap: it broke each row's hairline in two. The hours keep
+// their distance with padding instead.
+.pf-events-carousel .libcal-day__hours {
+  gap: 0;
+  padding-top: 0;
+  border-top: 1px solid var(--ldc-border);
+  font-size: .9375rem;
+}
+
+.pf-events-carousel .libcal-day__hours :is(dt, dd) {
+  padding-block: .625rem;
+  border-bottom: 1px solid var(--ldc-border);
+}
+
+.pf-events-carousel .libcal-day__hours dt {
+  font-weight: 500;
+}
+
+.pf-events-carousel .libcal-day__hours dd {
+  padding-inline-start: 1rem;
+}
+
+// Featured image: square corners, a little air above.
+.pf-events-carousel .libcal-day__feature,
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__feature {
+  aspect-ratio: 3 / 2;
+  border-radius: 0;
+}
+
+// Events: a ruled list. Time as a small label, then the title.
+.pf-events-carousel .libcal-day__events {
+  border-top: 1px solid var(--ldc-border);
+}
+
+.pf-events-carousel .libcal-day__event,
+.pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__event {
+  gap: .375rem 1.5rem;
+  padding: 1rem 0 1.125rem;
+}
+
+.pf-events-carousel .libcal-day__event-time {
+  font-family: var(--pf-ev-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.pf-events-carousel .libcal-day__event-body {
+  gap: .25rem;
+}
+
+// Titles stay underlined so links read as links (WCAG 1.4.1), but on a
+// hairline in the border colour; the accent takes over on hover/focus.
+.pf-events-carousel .libcal-day__event-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+  text-decoration-line: underline;
+  text-decoration-color: var(--ldc-border);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: text-decoration-color .2s ease;
+}
+
+.pf-events-carousel a.libcal-day__event-title:is(:hover, :focus-visible) {
+  text-decoration-color: var(--pf-ev-accent);
+  text-decoration-thickness: 2px;
+}
+
+.pf-events-carousel a.libcal-day__event-title:focus-visible {
+  outline: 2px solid var(--pf-ev-accent);
+  outline-offset: 3px;
+}
+
+.pf-events-carousel span.libcal-day__event-title {
+  text-decoration: none;
+}
+
+.pf-events-carousel .libcal-day__event-location {
+  font-size: .875rem;
+}
+
+.pf-events-carousel .libcal-day__more a {
+  color: inherit;
+  text-decoration-color: var(--pf-ev-accent);
+  text-underline-offset: .3em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-events-carousel .libcal-day-carousel__tab,
+  .pf-events-carousel .libcal-day-carousel__control,
+  .pf-events-carousel .libcal-day__event-title {
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:is(.active, .is-in-view) {
+    box-shadow: none;
+    border-bottom: 3px solid Highlight;
+  }
+
+  .pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control > [class$="-icon"] {
+    background: ButtonText;
+  }
+}
