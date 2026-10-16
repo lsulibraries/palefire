@@ -112,7 +112,7 @@
 
         {% if visit.maps_url %}
           <a class="pf-visit__link pf-visit__directions" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
-            {{ 'Open in Google Maps'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+            {{ 'Open in Google Maps'|t }}<svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
           </a>
         {% endif %}
       </aside>

@@ -341,6 +341,14 @@ added to the bento, so edits show after save.
   Modular page > Manage fields > Hours, or edit `$libcal_locations` in the
   Visit setup script before running it (keys are IDs, values are labels).
 
+Stacking: `.pf-bento__media` is `position: fixed`, so it paints over any
+bento child that isn't positioned. `_visit.scss` gives every other direct
+child of `.pf-bento.has-bg-video` `position: relative`; without it the
+intro and the "Search LSU Libraries" heading sat under the video overlay.
+The "This week" `<details>` drops the starterkit details box, and the
+external-link arrow is an inline SVG (the `↗` character drew as an emoji
+on Windows).
+
 #### "Light, dark at the map" section theme
 
 The Visit setup script also adds `light-map` to palefire_modular's
@@ -353,6 +361,10 @@ then back to light when the map leaves. In SCSS,
 `.pf-section--theme-light-map.is-map-dark` `@extend`s
 `.pf-section--theme-dark` (`_modular.scss`), so every dark-section rule
 applies; the colours ease in over .45s (none with reduced motion).
+In the light state the video gets a white wash (`rgb(255 255 255 / .74)`)
+instead of the dark overlay, so the light tokens' dark text reads on it.
+palefire_modular's own list only has `light` and `dark`: pick "Light, dark
+at the map" on the bento's section, or the section stays dark throughout.
 
 #### Turning it on (production)
 

@@ -31,6 +31,12 @@
 .pf-bento__intro > :last-child,
 .pf-bento__intro .field > :last-child { margin-bottom: 0; }
 
+// .pf-bento__media is position: fixed, so it paints over every bento child
+// that isn't positioned: the intro and the "Search LSU Libraries" heading
+// were drawn under the video and its overlay. Positioning the children puts
+// them back on top, in DOM order (the media comes first).
+.pf-bento.has-bg-video > :not(.pf-bento__media) { position: relative; }
+
 // --- Visit card ----------------------------------------------------------
 .pf-visit {
   --pf-visit-line: var(--pf-section-border, #6c757d);
@@ -90,9 +96,21 @@
 .pf-visit__hours.is-failed .pf-visit__week,
 .pf-visit__hours:not(.is-ready) .pf-visit__week { display: none; }
 
-// This week (seven rows, today first).
-.pf-visit__week { margin-top: .625rem; }
-.pf-visit__week > summary {
+// This week (seven rows, today first). The resets drop the starterkit
+// details box (border, padding, margin), as .pf-map__key does.
+.pf-visit__week,
+.pf-visit__week[open] {
+  margin: .625rem 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.pf-visit__week > summary,
+.pf-visit__week[open] > summary {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
   inline-size: fit-content;
   font-size: .875rem;
@@ -124,7 +142,12 @@
   font-weight: 600;
 }
 .pf-visit__directions { margin-top: 0; }
-.pf-visit__directions::after { content: " \2197"; }
+.pf-visit__ext {
+  inline-size: .75em;
+  block-size: .75em;
+  margin-inline-start: .3em;
+  vertical-align: -.05em;
+}
 
 // Mini map: a button until clicked, then the Google Maps iframe.
 .pf-visit__map {
@@ -178,6 +201,12 @@
 .pf-section--theme-light-map,
 .pf-section--theme-light-map::before {
   transition: color .45s ease, background-color .45s ease;
+}
+// Light state: a white wash over the background video instead of the dark
+// one, so the light tokens' dark text reads on it. Map in view: the
+// .is-map-in-view dark overlay from _building-map.scss takes over.
+.pf-section--theme-light-map:not(.is-map-dark) .pf-bento__media::after {
+  background-color: rgb(255 255 255 / .74);
 }
 
 @media (forced-colors: active) {
