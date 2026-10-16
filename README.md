@@ -781,6 +781,42 @@ help.
   visitors who can't see them, with their cache tags kept, so publishing
   one shows it on every guide at once.
 
+### Guide theme
+
+Guide pages (`<html data-pf-mode="guide">`) get a look of their own,
+matching the guide preview, in `scss/components/_guide.scss`. No other page
+changes.
+
+* **Palette:** purple-tinted neutrals (`--pf-g-*`: surface `#f6f4f9`, rules
+  `#e2dfe7`, muted `#595959`, accent LSU purple). With Dark guides on,
+  `--pf-g-*` and Bootstrap's `--bs-*` switch to the guide's purple-black
+  (`#121014` page, `#1c1921` surfaces, `#b3adbb` muted, lavender accent)
+  instead of Bootstrap's `#212529`. Text contrast: 7:1 and up in light,
+  9:1 and up in dark.
+* **Chrome:** the TOC sidebar is the page colour, not a glass panel (while a
+  dark section is active on a light guide, Palefire's dark sidebar still
+  takes over so the TOC text keeps its contrast). The TOC bar is LSU purple
+  on light guides (gold is about 1.4:1 on white) and gold on dark. On dark
+  guides the header is the guide's black; Reduce transparency and High
+  contrast make it solid.
+* **Type and spacing:** smaller TOC links (0.875rem, sub-links 0.6875rem,
+  40px rows), section titles up to 2.375rem at weight 500, sections padded
+  2.5 to 4.5rem with a hairline between them, and a hairline under the page
+  head.
+* **Text blocks:** a Heading 4 plus the paragraph or list after it reads as
+  a term and its definition, on an accent rule. Numbered lists are steps,
+  with a large light numeral and a hairline per item (a leading **bold**
+  phrase becomes the step's title). Callouts use the accent tint.
+* **Head:** values are bold, and "First published" shows the created month
+  when it differs from the Updated month.
+* **Breadcrumb:** the preview showed Home / Research guides / page. The live
+  breadcrumb follows the URL, so it shows "Research guides" once
+  `/v2/guides` exists as a page (for example a guides landing page).
+
+Fix in the same change: `pf-solid-chrome` (`base/_mixins.scss`) nests its
+class version under `:root`, so selectors starting with `html.pf-guide-dark`
+inside it never matched; those rules are now written out beside the mixin.
+
 ### TOC open by default
 
 Guides open with "On this page" shown (lg and up). The hide/show button

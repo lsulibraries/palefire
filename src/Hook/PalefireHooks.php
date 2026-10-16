@@ -230,7 +230,7 @@ class PalefireHooks {
   /**
    * Variables for includes/guide-head.html.twig on a guide-mode page.
    *
-   * @return array{intro: ?array, owner: ?array, updated: array, subjects: array, cache: array}
+   * @return array{intro: ?array, owner: ?array, updated: array, published: ?array, subjects: array, cache: array}
    */
   private function guideHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -268,14 +268,21 @@ class PalefireHooks {
     }
 
     $changed = (int) $node->getChangedTime();
+    $created = (int) $node->getCreatedTime();
+    $formatter = \Drupal::service('date.formatter');
     $render = [];
     $cache->applyTo($render);
     return [
       'intro' => $intro,
       'owner' => $owner,
       'updated' => [
-        'label' => \Drupal::service('date.formatter')->format($changed, 'custom', 'M j, Y'),
+        'label' => $formatter->format($changed, 'custom', 'M j, Y'),
         'iso' => date('c', $changed),
+      ],
+      // Only when it says something the Updated date doesn't.
+      'published' => $formatter->format($created, 'custom', 'Y-m') === $formatter->format($changed, 'custom', 'Y-m') ? NULL : [
+        'label' => $formatter->format($created, 'custom', 'M Y'),
+        'iso' => date('c', $created),
       ],
       'subjects' => $subjects,
       'cache' => $render,

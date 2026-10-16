@@ -116,16 +116,30 @@ html.pf-guide-dark .pf-page::before {
 // var(--bs-body-bg) from _header.scss, which is the dark value under
 // data-bs-theme="dark". The strip is outside the header, so it needs its own.
 @include pf-solid-chrome {
-  .pf-header[data-bs-theme="dark"],
-  html.pf-guide-dark .pf-header {
+  .pf-header[data-bs-theme="dark"] {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
-  body[data-section-theme="dark"] .pf-page::before,
-  html.pf-guide-dark .pf-page::before {
+  body[data-section-theme="dark"] .pf-page::before {
     background-color: $body-bg-dark;
   }
+}
+
+// The same for Settings > Dark guides, written out by hand:
+// pf-solid-chrome nests its class version under :root, so a selector that
+// starts with html (html.pf-guide-dark) can't go inside it; it would never
+// match. The guide's own colours for these: _guide.scss.
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  html.pf-guide-dark .pf-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+:root.pf-guide-dark:is(.pf-a11y-solid, .pf-a11y-contrast) .pf-header {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 // The transition above comes after _header.scss's reduced-motion rule, so

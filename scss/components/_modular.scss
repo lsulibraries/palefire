@@ -610,8 +610,8 @@ html.pf-toc-instant {
 }
 
 @include pf-solid-chrome {
-  body[data-section-theme="dark"],
-  html.pf-guide-dark body {
+  // (Dark guides' sidebar is solid already: _guide.scss.)
+  body[data-section-theme="dark"] {
     --pf-sidebar-bg: #{$pf-grey-900};
   }
 

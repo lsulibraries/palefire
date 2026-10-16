@@ -6,6 +6,8 @@
  * - head.intro: field_intro (render array) or NULL
  * - head.owner: {name, url} or NULL (field_guide_owner)
  * - head.updated: {label, iso} (the node's changed time)
+ * - head.published: {label, iso} (created time) or NULL when it is in the
+ *   same month as the update
  * - head.subjects: list of {name, url} (field_guide_subjects)
  * - head.cache: empty render array carrying the owner's and terms' cache
  *   tags, so renaming either updates the page.
@@ -19,7 +21,10 @@
     {% if head.owner %}
       <span>{{ 'Guide by'|t }} <a href="{{ head.owner.url }}">{{ head.owner.name }}</a></span>
     {% endif %}
-    <span>{{ 'Updated'|t }} <time datetime="{{ head.updated.iso }}">{{ head.updated.label }}</time></span>
+    <span>{{ 'Updated'|t }} <strong><time datetime="{{ head.updated.iso }}">{{ head.updated.label }}</time></strong></span>
+    {% if head.published %}
+      <span>{{ 'First published'|t }} <time datetime="{{ head.published.iso }}">{{ head.published.label }}</time></span>
+    {% endif %}
   </p>
   {% if head.subjects %}
     <ul class="pf-guide-head__subjects" aria-label="{{ 'Subjects'|t }}">

@@ -1,30 +1,167 @@
 // Guide pages: Modular pages in guide mode (field_modular_type = guide) and
 // the guide_section blocks (scripts/palefire_guide_setup.php).
 //
-// Colours: Bootstrap's --bs-* properties, which switch inside dark sections
-// (data-bs-theme="dark" on the section), with the dark section tokens
-// (--pf-section-*, _modular-tokens.scss) first where a dark section sets
-// them. No literal colours here.
+// Guide theme (2026-10-16): guide pages carry the look of the guide preview
+// artifact, scoped to <html data-pf-mode="guide"> so no other page changes:
+// purple-tinted neutrals, a near-black (#121014) dark palette for Settings >
+// Dark guides, a page-coloured sidebar, a purple TOC bar on light pages,
+// hairlines between sections, and the preview's type sizes.
 //
-// Contrast: muted text uses --bs-secondary-color (about 5.7:1 on white) or
-// the dark section's muted grey (about 9:1 on black). Accent is LSU purple
-// on light (11:1) and lavender on dark (11.7:1).
+// Contrast (normal text, WCAG AA 4.5:1):
+//   light  muted #595959 on #fff 7:1;     accent #461d7c on #fff 11:1
+//   dark   text #ece9f0 on #121014 16:1;   muted #b3adbb 9:1;
+//          accent #cdb8ee 11:1
+// Rules (#e2dfe7 / #34303a) are dividers only, not the boundary of a
+// control, so 1.4.11's 3:1 doesn't apply to them.
+//
+// Inside a dark section the section tokens (--pf-section-*) win, so that
+// section keeps its own black and lavender.
+
+$pf-guide-light: (
+  'g-surface': #f6f4f9,
+  'g-rule': #e2dfe7,
+  'g-muted': #595959,
+  'g-accent': $pf-purple,
+  'g-accent-soft': #ede6f7,
+);
+
+$pf-guide-dark: (
+  'g-bg': #121014,
+  'g-fg': #ece9f0,
+  'g-surface': #1c1921,
+  'g-rule': #34303a,
+  'g-muted': #b3adbb,
+  'g-accent': $pf-lavender,
+  'g-accent-soft': #2a2235,
+);
+
+html[data-pf-mode="guide"] {
+  @include pf-tokens($pf-guide-light);
+}
+
+// Settings > Dark guides. <html> also has data-bs-theme="dark"; these
+// replace Bootstrap's blue-grey dark palette (#212529) with the guide's
+// purple-black one for everything that reads --bs-* on the page.
+html.pf-guide-dark[data-pf-mode="guide"][data-bs-theme="dark"] {
+  @include pf-tokens($pf-guide-dark);
+  --bs-body-bg: var(--pf-g-bg);
+  --bs-body-bg-rgb: 18, 16, 20;
+  --bs-body-color: var(--pf-g-fg);
+  --bs-body-color-rgb: 236, 233, 240;
+  --bs-emphasis-color: #{$pf-white};
+  --bs-secondary-color: var(--pf-g-muted);
+  --bs-secondary-bg: var(--pf-g-surface);
+  --bs-tertiary-bg: var(--pf-g-surface);
+  --bs-border-color: var(--pf-g-rule);
+  --bs-link-color: var(--pf-g-accent);
+  --bs-link-color-rgb: 205, 184, 238;
+  --bs-link-hover-color: #{$pf-white};
+  --bs-link-hover-color-rgb: 255, 255, 255;
+  background-color: var(--pf-g-bg);
+}
 
 .pf-guide,
 .pf-guide-head {
-  --pf-guide-accent: var(--pf-section-accent, var(--bs-primary));
-  --pf-guide-muted: var(--pf-section-muted, var(--bs-secondary-color));
-  --pf-guide-rule: var(--pf-section-border, var(--bs-border-color));
-  --pf-guide-surface: var(--bs-tertiary-bg);
+  --pf-guide-accent: var(--pf-section-accent, var(--pf-g-accent, var(--bs-primary)));
+  --pf-guide-accent-soft: var(--pf-g-accent-soft, var(--bs-tertiary-bg));
+  --pf-guide-muted: var(--pf-section-muted, var(--pf-g-muted, var(--bs-secondary-color)));
+  --pf-guide-rule: var(--pf-section-border, var(--pf-g-rule, var(--bs-border-color)));
+  --pf-guide-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
   --pf-guide-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
   --pf-guide-prose: 42rem;
 }
 
-// Settings > Dark guides (html.pf-guide-dark + data-bs-theme="dark"): light
-// sections now sit on Bootstrap's dark body colour, where LSU purple is
-// about 1.5:1, so the accent becomes lavender (about 8:1 on #212529).
-html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
-  --pf-guide-accent: var(--pf-section-accent, #{$pf-lavender});
+// A dark section on a light guide keeps its own surfaces.
+.pf-section--theme-dark .pf-guide {
+  --pf-guide-surface: #{rgba($pf-white, 0.06)};
+  --pf-guide-accent-soft: #{rgba($pf-lavender, 0.12)};
+}
+
+// Chrome: header, sidebar and TOC ------------------------------------------
+
+// Dark guides: the bar uses the guide's black, not Palefire's dark grey.
+html.pf-guide-dark[data-pf-mode="guide"] .pf-header {
+  --pf-header-bg: #{rgba(18, 16, 20, 0.78)};
+}
+
+html.pf-guide-dark[data-pf-mode="guide"] .pf-page::before {
+  background-color: #{rgba(18, 16, 20, 0.78)};
+}
+
+// Reduce transparency / High contrast (OS setting or Settings drawer): a
+// solid bar in the guide's black. Same specificity as the rules above and
+// later, so these win; written out because pf-solid-chrome can't take
+// html-first selectors (see _chrome-dark.scss).
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  html.pf-guide-dark[data-pf-mode="guide"] .pf-header {
+    --pf-header-bg: var(--pf-g-bg);
+  }
+
+  html.pf-guide-dark[data-pf-mode="guide"] .pf-page::before {
+    background-color: var(--pf-g-bg);
+  }
+}
+
+:root.pf-guide-dark[data-pf-mode="guide"]:is(.pf-a11y-solid, .pf-a11y-contrast) {
+  .pf-header {
+    --pf-header-bg: var(--pf-g-bg);
+  }
+
+  .pf-page::before {
+    background-color: var(--pf-g-bg);
+  }
+}
+
+// The sidebar is the page colour, like the preview, instead of a separate
+// glass panel. While a dark section is active on a light guide, Palefire's
+// dark sidebar still takes over (body[data-section-theme="dark"]), so the
+// TOC's light-on-dark text always has its dark background.
+html[data-pf-mode="guide"] body:not([data-section-theme="dark"]),
+html.pf-guide-dark[data-pf-mode="guide"] body {
+  --pf-sidebar-bg: var(--bs-body-bg);
+}
+
+// The TOC bar: LSU purple on light guides (gold is about 1.4:1 on white,
+// under 1.4.11's 3:1); gold stays on dark.
+html[data-pf-mode="guide"]:not(.pf-guide-dark) body:not([data-section-theme="dark"]) {
+  --pf-toc-accent: #{$pf-purple};
+}
+
+// Preview type: smaller monospace links, so long guides fit the rail.
+html[data-pf-mode="guide"] {
+  .pf-toc__link {
+    min-height: 2.5rem; // 40px, above 2.5.8's 24px
+    font-size: 0.875rem;
+    line-height: 1.35;
+  }
+
+  .pf-toc__sublink {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+}
+
+// Sections -------------------------------------------------------------------
+
+html[data-pf-mode="guide"] .pf-sections > .pf-section {
+  --pf-section-pad-block: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+html[data-pf-mode="guide"] .pf-sections > .pf-section + .pf-section:not(.pf-section--theme-dark) {
+  border-top: 1px solid var(--pf-g-rule);
+}
+
+html[data-pf-mode="guide"] .pf-sections > .pf-section--theme-dark + .pf-section {
+  border-top: 0;
+}
+
+html[data-pf-mode="guide"] .pf-section__title {
+  margin-bottom: 2.25rem;
+  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.375rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 // Page head (includes/guide-head.html.twig) --------------------------------
@@ -33,6 +170,8 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--pf-guide-rule);
 }
 
 .pf-guide-head__intro {
@@ -56,7 +195,8 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
   text-transform: uppercase;
   color: var(--pf-guide-muted);
 
-  a {
+  a,
+  strong {
     color: var(--bs-body-color);
     font-weight: 700;
   }
@@ -122,13 +262,82 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
     margin-bottom: 0;
   }
 
+  // A Heading 4 and the paragraph or list right after it read as one
+  // term and its definition: a bold term on an accent rule that runs down
+  // beside its text, as in the preview.
   h4 {
-    font-family: var(--pf-guide-mono);
-    font-size: 0.8125rem;
+    margin: 1.5rem 0 0;
+    padding: 0.1rem 0 0.3rem 1rem;
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--pf-guide-muted);
+    line-height: 1.4;
+    color: var(--bs-body-color);
+    border-inline-start: 3px solid var(--pf-guide-accent);
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    + :is(p, ul, ol) {
+      margin-top: 0;
+      padding-inline-start: 1rem;
+      padding-bottom: 0.25rem;
+      border-inline-start: 3px solid var(--pf-guide-accent);
+    }
+
+    + ul {
+      padding-inline-start: 2.25rem;
+    }
+  }
+
+  // Numbered lists are steps: a large light numeral beside each item, with
+  // a hairline between items. ::marker is emptied rather than using
+  // list-style: none, which makes Safari drop the list semantics.
+  ol:not(li ol) {
+    display: grid;
+    padding-inline-start: 0;
+    counter-reset: pf-step;
+
+    > li {
+      position: relative;
+      margin: 0;
+      padding-block: 0.9rem;
+      padding-inline-start: 3.25rem;
+      border-top: 1px solid var(--pf-guide-rule);
+      counter-increment: pf-step;
+
+      &::marker {
+        content: "";
+      }
+
+      &::before {
+        content: counter(pf-step, decimal-leading-zero);
+        position: absolute;
+        inset-inline-start: 0;
+        top: 0.85rem;
+        font-size: 1.5rem;
+        font-weight: 300;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+        color: var(--pf-guide-accent);
+      }
+
+      + li {
+        margin-top: 0;
+      }
+
+      > strong:first-child {
+        display: block;
+        font-size: 1.0625rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // An h4 + ol pair keeps the steps look, not the definition rule.
+  h4 + ol {
+    padding-inline-start: 0;
+    border-inline-start: 0;
   }
 
   li + li {
@@ -190,7 +399,7 @@ html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
 .pf-guide-callout {
   max-width: var(--pf-guide-prose);
   padding: 1rem 1.25rem;
-  background: var(--pf-guide-surface);
+  background: var(--pf-guide-accent-soft);
   border-inline-start: 3px solid var(--pf-guide-accent);
 }
 
