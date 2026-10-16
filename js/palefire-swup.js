@@ -48,7 +48,7 @@
     'script[type="application/ld+json"]',
   ].join(',');
 
-  const BODY_CLASS = /^(path-|page-node-type-)/;
+  const BODY_CLASS = /^(path-|page-node-type-|modular--)/;
 
   const reducedMotion = window.matchMedia
     ? window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -103,6 +103,18 @@
         document.documentElement.setAttribute(name, value);
       }
     });
+    // Page mode and TOC default (PalefireHooks::preprocessHtml()): present
+    // on some pages only, so copy or remove them.
+    ['data-pf-mode', 'data-pf-toc-default'].forEach((name) => {
+      const value = doc.documentElement.getAttribute(name);
+      if (value) {
+        document.documentElement.setAttribute(name, value);
+      }
+      else {
+        document.documentElement.removeAttribute(name);
+      }
+    });
+    document.dispatchEvent(new CustomEvent('palefire:pagemode'));
 
     const body = document.body.classList;
     Array.from(body).filter((name) => BODY_CLASS.test(name)).forEach((name) => body.remove(name));

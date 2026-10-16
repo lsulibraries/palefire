@@ -4,10 +4,13 @@
  *
  * The state is a class on <html> (pf-toc-collapsed), so it carries over
  * between Swup visits, and the visitor's choice is saved in localStorage:
- * '1' hidden, '0' shown. With no saved choice the page decides: a page that
- * opens with a bento hero (<html data-pf-toc-default="hidden">, set by
- * PalefireHooks::preprocessHtml()) starts hidden, so the hero is full
- * width; every other page starts shown. It never opens or closes by itself
+ * '1' hidden, '0' shown. Guide pages (<html data-pf-mode="guide">) keep
+ * their own saved choice (palefire.tocCollapsed.guide), so hiding the TOC
+ * on a hero page doesn't hide it on every guide: guides start shown until
+ * the visitor hides it on a guide. With no saved choice the page decides: a
+ * page that opens with a bento hero (<html data-pf-toc-default="hidden">,
+ * set by PalefireHooks::preprocessHtml()) starts hidden, so the hero is
+ * full width; every other page starts shown. It never opens or closes by itself
  * while the visitor scrolls: that would reflow the content column under
  * them (and count as layout shift).
  *
@@ -19,14 +22,19 @@
  * Markup: the [data-pf-toc-collapse] button in page.html.twig.
  */
 (function (Drupal, once) {
-  const KEY = 'palefire.tocCollapsed';
   const CLASS = 'pf-toc-collapsed';
   const root = document.documentElement;
+
+  // Read each time: a Swup visit can move between a guide and another page
+  // (palefire-swup.js syncs data-pf-mode before behaviors attach).
+  function key() {
+    return root.getAttribute('data-pf-mode') === 'guide' ? 'palefire.tocCollapsed.guide' : 'palefire.tocCollapsed';
+  }
 
   // TRUE (hidden), FALSE (shown) or NULL (no choice saved).
   function stored() {
     try {
-      const value = window.localStorage.getItem(KEY);
+      const value = window.localStorage.getItem(key());
       return value === '1' ? true : (value === '0' ? false : null);
     }
     catch (e) {
@@ -36,7 +44,7 @@
 
   function store(collapsed) {
     try {
-      window.localStorage.setItem(KEY, collapsed ? '1' : '0');
+      window.localStorage.setItem(key(), collapsed ? '1' : '0');
     }
     catch (e) {
       // Storage is blocked: the state lasts until the next full page load.
@@ -57,15 +65,13 @@
   // comes from the new page itself (its first section is a bento). Applied
   // without the slide, like a full load.
   function applyDefault(context) {
-    if (stored() !== null) {
-      return;
-    }
-    const hero = !!context.querySelector('.pf-sections > .pf-section:first-child .pf-bento');
-    if (root.classList.contains(CLASS) === hero) {
+    const saved = stored();
+    const collapsed = saved !== null ? saved : !!context.querySelector('.pf-sections > .pf-section:first-child .pf-bento');
+    if (root.classList.contains(CLASS) === collapsed) {
       return;
     }
     root.classList.add('pf-toc-instant');
-    root.classList.toggle(CLASS, hero);
+    root.classList.toggle(CLASS, collapsed);
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('pf-toc-instant')));
   }
 

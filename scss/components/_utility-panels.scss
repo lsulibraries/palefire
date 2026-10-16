@@ -315,7 +315,8 @@ html[data-pf-panel] .offcanvas-backdrop.show {
   opacity: $pf-panel-backdrop-light;
 }
 
-html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show {
+html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show,
+html.pf-guide-dark[data-pf-panel] .offcanvas-backdrop.show {
   opacity: $pf-panel-backdrop-dark;
 }
 

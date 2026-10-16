@@ -37,7 +37,10 @@
 }
 
 // Sidebar + TOC follow the active section (set by modular-toc.js).
-body[data-section-theme="dark"] {
+// Settings > Dark guides (html.pf-guide-dark) sets them from the first
+// paint, before modular-toc.js runs.
+body[data-section-theme="dark"],
+html.pf-guide-dark body {
   @include pf-tokens($pf-chrome-dark);
 }
 
@@ -597,7 +600,8 @@ html.pf-toc-instant {
 }
 
 @include pf-solid-chrome {
-  body[data-section-theme="dark"] {
+  body[data-section-theme="dark"],
+  html.pf-guide-dark body {
     --pf-sidebar-bg: #{$pf-grey-900};
   }
 

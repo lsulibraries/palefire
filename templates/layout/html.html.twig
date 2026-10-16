@@ -57,7 +57,9 @@
          choices (localStorage "pf-a11y") become classes on <html>
          (base/_a11y-settings.scss). js/utility-panels.js keeps the keys in
          step: size, font, spacing, underline, contrast, solid, focus,
-         motion, pausevideo.
+         motion, pausevideo, dark. "Dark guides" only takes effect on
+         guide-mode pages (<html data-pf-mode="guide">): it adds
+         pf-guide-dark and Bootstrap's data-bs-theme="dark" to <html>.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
          the page even if DOMContentLoaded never fires. Skipped when the OS
@@ -70,9 +72,13 @@
         var h = d.documentElement, s = {};
         try { s = JSON.parse(w.localStorage.getItem('pf-a11y')) || {}; } catch (e) {}
         if (/^(115|130|150)$/.test(s.size)) { h.setAttribute('data-pf-text-size', s.size); }
-        ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'].forEach(function (k) {
+        ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'].forEach(function (k) {
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
+        if (s.dark && h.getAttribute('data-pf-mode') === 'guide') {
+          h.classList.add('pf-guide-dark');
+          h.setAttribute('data-bs-theme', 'dark');
+        }
         if (s.font) {
           var l = d.createElement('link');
           l.rel = 'stylesheet';

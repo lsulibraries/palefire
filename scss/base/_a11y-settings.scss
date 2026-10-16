@@ -14,6 +14,10 @@
 //   .pf-a11y-focus                      Strong focus outline
 //   .pf-a11y-motion                     Reduce motion
 //   .pf-a11y-pausevideo                 Pause background videos (JS only)
+//   .pf-a11y-dark                       Dark guides: on guide-mode pages also
+//                                       .pf-guide-dark + data-bs-theme="dark"
+//                                       (styles: _chrome-dark.scss,
+//                                       _modular.scss, _guide.scss)
 //
 // "Solid chrome" (no glass on the header, sidebar and drawers) is the same
 // set of rules the OS settings trigger: pf-solid-chrome, base/_mixins.scss.

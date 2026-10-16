@@ -167,7 +167,7 @@
 
   const STORE = 'pf-a11y';
   const SIZES = ['100', '115', '130', '150'];
-  const SWITCHES = ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
+  const SWITCHES = ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'];
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 
@@ -195,6 +195,26 @@
     }
   }
 
+  // Dark guides: only on guide-mode pages (<html data-pf-mode="guide">,
+  // PalefireHooks::preprocessHtml()). Bootstrap's data-bs-theme="dark" on
+  // <html> switches every --bs-* colour; pf-guide-dark switches the
+  // Palefire chrome (header glass, TOC tokens) in CSS, so it is right from
+  // the first paint. modular-toc.js listens for palefire:a11ychange.
+  function applyGuideDark(settings) {
+    const on = !!settings.dark && ROOT.getAttribute('data-pf-mode') === 'guide';
+    ROOT.classList.toggle('pf-guide-dark', on);
+    if (on) {
+      ROOT.setAttribute('data-bs-theme', 'dark');
+    }
+    else {
+      ROOT.removeAttribute('data-bs-theme');
+    }
+  }
+
+  // Swup visit: the new page may be a guide or not (palefire-swup.js syncs
+  // data-pf-mode first).
+  document.addEventListener('palefire:pagemode', () => applyGuideDark(readSettings()));
+
   // The same job as the inline script in html.html.twig, for live changes.
   function applySettings(settings) {
     if (SIZES.includes(settings.size) && settings.size !== '100') {
@@ -204,6 +224,7 @@
       ROOT.removeAttribute('data-pf-text-size');
     }
     SWITCHES.forEach((key) => ROOT.classList.toggle(`pf-a11y-${key}`, !!settings[key]));
+    applyGuideDark(settings);
     // The font file is only requested once someone turns it on.
     if (settings.font && !document.getElementById(FONT_ID)) {
       const link = document.createElement('link');

@@ -20,6 +20,13 @@
   --pf-guide-prose: 42rem;
 }
 
+// Settings > Dark guides (html.pf-guide-dark + data-bs-theme="dark"): light
+// sections now sit on Bootstrap's dark body colour, where LSU purple is
+// about 1.5:1, so the accent becomes lavender (about 8:1 on #212529).
+html.pf-guide-dark :is(.pf-guide, .pf-guide-head) {
+  --pf-guide-accent: var(--pf-section-accent, #{$pf-lavender});
+}
+
 // Page head (includes/guide-head.html.twig) --------------------------------
 
 .pf-guide-head {

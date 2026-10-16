@@ -89,6 +89,10 @@ class PalefireHooks {
     if (self::titleBentoUuid($node) !== NULL) {
       $variables['html_attributes']->setAttribute('data-pf-toc-default', 'hidden');
     }
+    // Page mode (field_modular_type: page, guide, form) for scripts that run
+    // before <body> exists: the TOC hide/show default
+    // (modular-toc-collapse.js) and Settings > Dark guides (html.html.twig).
+    $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
   }
 
   /**

@@ -601,10 +601,12 @@
    * Pass null to reset everything to the light default.
    * ---------------------------------------------------------------- */
   function applyChromeTheme(theme, nav) {
-    const dark = theme === 'dark';
+    // Settings > Dark guides: every section is dark, so the chrome is too.
+    const guideDark = document.documentElement.classList.contains('pf-guide-dark');
+    const dark = theme === 'dark' || (guideDark && theme !== null);
     const body = document.body;
     if (theme) {
-      body.dataset.sectionTheme = theme;
+      body.dataset.sectionTheme = dark ? 'dark' : theme;
     }
     else {
       delete body.dataset.sectionTheme;
@@ -657,6 +659,16 @@
   document.addEventListener('palefire:mapview', (event) => {
     const section = event.detail.section;
     if (section && section.id && document.body.dataset.activeSection === section.id) {
+      applyChromeTheme(sectionTheme(section), activeNav);
+    }
+  });
+
+  // Dark guides switched on or off in Settings: re-apply to the active
+  // section.
+  document.addEventListener('palefire:a11ychange', () => {
+    const id = document.body.dataset.activeSection;
+    const section = id ? document.getElementById(id) : null;
+    if (section) {
       applyChromeTheme(sectionTheme(section), activeNav);
     }
   });

@@ -43,7 +43,9 @@ $pf-logo-filter-dark: none !default;
     background-color $pf-chrome-transition,
     border-color $pf-chrome-transition;
 
-  &[data-bs-theme="dark"] {
+  // Settings > Dark guides: html.pf-guide-dark, from the first paint.
+  &[data-bs-theme="dark"],
+  html.pf-guide-dark & {
     --pf-header-bg: #{$pf-header-bg-dark};
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -92,17 +94,20 @@ $pf-logo-filter-dark: none !default;
   transition: background-color $pf-chrome-transition;
 }
 
-body[data-section-theme="dark"] .pf-page::before {
+body[data-section-theme="dark"] .pf-page::before,
+html.pf-guide-dark .pf-page::before {
   background-color: $pf-header-bg-dark;
 }
 
 // No blur support: nearly opaque, as in light mode.
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .pf-header[data-bs-theme="dark"] {
+  .pf-header[data-bs-theme="dark"],
+  html.pf-guide-dark .pf-header {
     --pf-header-bg: #{rgba($black, $pf-header-bg-alpha-solid)};
   }
 
-  body[data-section-theme="dark"] .pf-page::before {
+  body[data-section-theme="dark"] .pf-page::before,
+  html.pf-guide-dark .pf-page::before {
     background-color: rgba($black, $pf-header-bg-alpha-solid);
   }
 }
@@ -111,12 +116,14 @@ body[data-section-theme="dark"] .pf-page::before {
 // var(--bs-body-bg) from _header.scss, which is the dark value under
 // data-bs-theme="dark". The strip is outside the header, so it needs its own.
 @include pf-solid-chrome {
-  .pf-header[data-bs-theme="dark"] {
+  .pf-header[data-bs-theme="dark"],
+  html.pf-guide-dark .pf-header {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
-  body[data-section-theme="dark"] .pf-page::before {
+  body[data-section-theme="dark"] .pf-page::before,
+  html.pf-guide-dark .pf-page::before {
     background-color: $body-bg-dark;
   }
 }

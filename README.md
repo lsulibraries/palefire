@@ -460,8 +460,11 @@ grey-white haze. Now:
   puts `data-pf-toc-default="hidden"` on `<html>` when the first section is
   a bento; `modular-toc-collapse.js` (in `<head>`) starts the TOC hidden
   from it, before the first paint. A saved choice wins (now stored as `1`
-  hidden / `0` shown; no key means the page default). Swup visits read the
-  new page's first section instead, applied without the slide
+  hidden / `0` shown; no key means the page default). Guide pages keep their
+  own saved choice (`palefire.tocCollapsed.guide`, 2026-10-16), so a TOC
+  hidden on a hero page no longer hides it on every guide; guides open with
+  it shown. Swup visits apply the new page's saved choice or default
+  (`data-pf-mode`, synced by `palefire-swup.js`), without the slide
   (`html.pf-toc-instant`). It never opens by itself on scroll: that would
   reflow the content under the reader and count as layout shift.
 - **Map draw:** the trace takes 1.8s (was 3.2s), rooms follow faster
@@ -730,6 +733,45 @@ pair (it treats any paragraph with `field_section_title` as a section).
   visitors who can't see them, with their cache tags kept, so publishing
   one shows it on every guide at once.
 
+### TOC open by default
+
+Guides open with "On this page" shown (lg and up). The hide/show button
+still works, and its choice on a guide is saved for guides only
+(`palefire.tocCollapsed.guide` in `localStorage`); hero pages keep theirs
+(`palefire.tocCollapsed`). The mode comes from
+`<html data-pf-mode="guide">` (`PalefireHooks::preprocessHtml()`), which
+`modular-toc-collapse.js` reads in `<head>`, before the first paint. Below
+lg the TOC is the "Table of contents" button and offcanvas, as on every
+Modular page.
+
+### Dark guides
+
+Settings > Display > **Dark guides** (key `dark` in `pf-a11y`). On a
+guide-mode page it puts `pf-guide-dark` and Bootstrap's
+`data-bs-theme="dark"` on `<html>`; on other pages it does nothing.
+
+* **First paint:** the inline script in `html.html.twig` applies it before
+  the page paints, like the other settings. The Palefire chrome that
+  normally waits for `modular-toc.js` (header glass, TOC and sidebar
+  tokens, the strip under the header, the drawer backdrop) also matches
+  `html.pf-guide-dark` in CSS (`_chrome-dark.scss`, `_modular.scss`,
+  `_utility-panels.scss`), so nothing flashes light.
+* **Live:** `utility-panels.js` (`applyGuideDark()`) toggles it when the
+  switch changes; `modular-toc.js` re-applies the chrome theme on
+  `palefire:a11ychange` and treats every section as dark while it is on.
+* **Swup:** `palefire-swup.js` syncs `data-pf-mode` (and
+  `data-pf-toc-default`) and the `modular--{mode}` body class, then sends
+  `palefire:pagemode`, so leaving a guide turns the dark palette off and
+  entering one turns it on.
+* **Colours:** everything on a guide reads `--bs-*` or the dark section
+  tokens, so it follows Bootstrap's dark palette (body text about 13:1,
+  muted text about 8:1 on `#212529`). LSU purple fails on dark, so the
+  guide accent becomes lavender (`$pf-lavender`, about 8:1;
+  `_guide.scss`). Sections already set to dark stay as they are.
+* To extend it to other page types later, widen the
+  `data-pf-mode === 'guide'` check in `html.html.twig` and
+  `utility-panels.js` and check those pages' components on a dark body.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
@@ -848,6 +890,7 @@ follows along (`storage` event).
 | Display | High contrast | `.pf-a11y-contrast` | Solid backgrounds, full-strength text, brighter borders, heavier video wash, no stripes |
 | Display | Reduce transparency | `.pf-a11y-solid` | No see-through glass on the header, sidebar and drawers |
 | Display | Strong focus outline | `.pf-a11y-focus` | 3px gold ring around a 3px black one |
+| Display | Dark guides | `.pf-a11y-dark` (+ `.pf-guide-dark` and `data-bs-theme="dark"` on guide pages) | Guide-mode pages use the dark palette; other pages are unchanged. See "Dark guides" under Guide pages |
 | Motion | Reduce motion | `.pf-a11y-motion` | Stops animations, page transitions (Swup), the map trace and smooth scrolling |
 | Motion | Pause background videos | `.pf-a11y-pausevideo` | Bento background videos start paused (and pause at once when switched on) |
 
