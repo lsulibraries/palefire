@@ -1,0 +1,198 @@
+// =========================================================================
+// Bento hero: Swiss / museum layer, to match the events carousel
+// (_events-carousel.scss).
+//
+// Square corners, hairlines, a display-size title with tight tracking, the
+// search heading and the Visit strip's labels in the small tracked
+// monospace of the TOC and breadcrumb, links as labels with an accent
+// underline. One accent: LSU purple on light sections (11:1 on white, also
+// the focus ring there: gold was 1.4:1), the TOC gold on dark ones.
+//
+// Also: on light sections the map is held back until it is in view.
+//
+// No scroll-snap point at the map: tested in Chromium with wheel input, a
+// snap point there (with the section's own snap area removed so it can take
+// effect) trapped the page at the top. Each wheel step snaps back to the
+// nearest point, and the map is about a screen away.
+//
+// Imported after _visit.scss, so these rules follow the ones they adjust.
+// =========================================================================
+
+.pf-bento {
+  --pf-bento-accent: #{$pf-purple};
+  --pf-bento-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  --pf-bento-line: var(--pf-section-border, #6c757d);
+}
+
+.pf-section--theme-dark .pf-bento,
+.pf-section.is-map-dark .pf-bento {
+  --pf-bento-accent: var(--pf-toc-accent, #{$pf-gold});
+}
+
+// Small tracked monospace label (search heading, Visit labels, links).
+%pf-bento-label {
+  font-family: var(--pf-bento-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+// --- Lead panel -------------------------------------------------------------
+.pf-bento__lead {
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  border-color: var(--pf-bento-line);
+  border-radius: 0;
+}
+
+.pf-bento .pf-bento__title {
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.5rem);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: .95;
+}
+
+.pf-bento__intro {
+  max-width: 58ch;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.0625rem, .95rem + .35vw, 1.25rem);
+  line-height: 1.55;
+}
+
+// Search: a hairline across the panel, then the label and the field.
+.pf-bento__lead > .pf-bento__form {
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--pf-bento-line);
+}
+
+.pf-bento__heading {
+  @extend %pf-bento-label;
+  margin-bottom: .875rem;
+  color: var(--pf-toc-color);
+}
+
+.pf-bento__field {
+  min-height: 4rem;
+  border-radius: 0;
+}
+
+.pf-bento__field:focus-within {
+  border-color: var(--pf-bento-accent);
+  box-shadow: 0 0 0 1px var(--pf-bento-accent);
+}
+
+.pf-bento__input {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.pf-bento__submit,
+[dir="rtl"] .pf-bento__submit {
+  border-radius: 0;
+}
+
+.pf-bento__submit:focus-visible {
+  outline-color: var(--pf-bento-accent);
+}
+
+.pf-bento__bg-toggle {
+  border-radius: 0;
+}
+
+// --- Map --------------------------------------------------------------------
+.pf-bento__visit .pf-map > .pf-map__heading {
+  font-size: clamp(2rem, 1.25rem + 2.4vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+
+// Light sections: the map is drawn for a dark backdrop (white ink), which it
+// only gets once it is in view (the .is-map-in-view overlay, or "Light, dark
+// at the map" turning the section dark). Until then it peeked out under the
+// lead panel as white on a pale wash. Held back until in view, so the hero
+// opens on the lead panel alone. .has-map-view is set by building-map.js:
+// without it the map always shows. Still focusable while held back: focus
+// scrolls it into view, which shows it.
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view .pf-bento__visit {
+  transition: opacity .6s ease;
+}
+
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view:not(.is-map-in-view) .pf-bento__visit {
+  opacity: 0;
+}
+
+// --- Visit strip ----------------------------------------------------------
+.pf-visit,
+.pf-visit__map {
+  border-radius: 0;
+}
+
+.pf-visit__heading {
+  gap: .5rem;
+}
+
+.pf-visit__eyebrow {
+  @extend %pf-bento-label;
+}
+
+.pf-visit__name {
+  font-size: clamp(1.375rem, 1.1rem + .8vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.pf-visit__status-label {
+  font-weight: 500;
+}
+
+.pf-visit__week > summary,
+.pf-visit__week[open] > summary {
+  @extend %pf-bento-label;
+}
+
+.pf-visit__day {
+  border-bottom-color: var(--pf-visit-line);
+}
+
+// Links as labels with an accent underline, like the events fact source.
+.pf-visit__link {
+  @extend %pf-bento-label;
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-decoration-color: var(--pf-bento-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .45em;
+}
+
+.pf-visit__link:is(:hover, :focus-visible) {
+  text-decoration-thickness: 2px;
+}
+
+.pf-visit__link:focus-visible,
+.pf-visit__map-load:focus-visible {
+  outline-color: var(--pf-bento-accent);
+}
+
+.pf-visit__map-load {
+  font-weight: 500;
+}
+
+.pf-visit__map-load small {
+  @extend %pf-bento-label;
+  font-size: .625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-section .pf-bento.has-map-view .pf-bento__visit {
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-bento__field:focus-within {
+    box-shadow: none;
+  }
+}

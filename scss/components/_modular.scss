@@ -572,6 +572,16 @@ html.pf-snap .site-footer {
   }
 }
 
+// A default state applied on a Swup visit (js/modular-toc-collapse.js):
+// no slide, like a full page load.
+html.pf-toc-instant {
+  .pf-modular--has-toc,
+  .pf-sidebar.pf-modular__sidebar,
+  .pf-modular__toc-collapse {
+    transition: none !important;
+  }
+}
+
 // Less transparency / more contrast: a solid sidebar. The backgrounds still
 // run underneath it, they just don't show through.
 // (The Settings drawer's switches add html.pf-a11y-solid / -contrast:

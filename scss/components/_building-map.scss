@@ -174,10 +174,12 @@
    beat later, overlapping the next rooms; icons and hidden lines last.
    building-map.js sets --pf-map-seq (0, 1, 2...) on each room and label and
    holds .is-revealing for the length of the sequence. */
+/* Keep in step with SETTINGS.revealStep / revealFade / revealLabelLag in
+   building-map.js (the trace itself is SETTINGS.duration, 1.8s). */
 .pf-map {
-  --pf-map-reveal-fade: .55s;
-  --pf-map-reveal-step: 70ms;
-  --pf-map-reveal-label-lag: 220ms;
+  --pf-map-reveal-fade: .45s;
+  --pf-map-reveal-step: 45ms;
+  --pf-map-reveal-label-lag: 150ms;
 }
 .pf-map.is-tracing .pf-map__region,
 .pf-map.is-tracing .pf-map__label,

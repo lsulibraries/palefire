@@ -67,6 +67,31 @@ class PalefireHooks {
   }
 
   /**
+   * Implements hook_preprocess_html().
+   *
+   * Marks a Modular page that opens with a bento hero (the same test as the
+   * bento's page title: titleBentoUuid()) with data-pf-toc-default="hidden"
+   * on <html>. js/modular-toc-collapse.js runs in <head> and starts the TOC
+   * hidden from it, before the first paint, unless the visitor has chosen.
+   * The page cache entry already carries the node's cache tags, so editing
+   * the sections updates it.
+   */
+  #[Hook('preprocess_html')]
+  public function preprocessHtml(array &$variables): void {
+    $route_match = \Drupal::routeMatch();
+    if (!in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.latest_version'], TRUE)) {
+      return;
+    }
+    $node = $route_match->getParameter('node');
+    if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
+      return;
+    }
+    if (self::titleBentoUuid($node) !== NULL) {
+      $variables['html_attributes']->setAttribute('data-pf-toc-default', 'hidden');
+    }
+  }
+
+  /**
    * Implements hook_preprocess_page().
    *
    * Flags modular pages and builds the table of contents render array.

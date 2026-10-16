@@ -424,6 +424,42 @@ grey-white haze. Now:
   high-contrast switches are unchanged (the override is
   `:root:where(:has(...))`, so those rules still win).
 
+#### Hero: Swiss layer, TOC default, map replay (2026-10-16)
+
+- **Swiss layer** (`scss/components/_bento-swiss.scss`, after
+  `_visit.scss`): the bento hero in the events carousel's language. Square
+  lead panel, Visit strip and mini map; display title (up to 5.5rem, medium,
+  -0.035em); a hairline over the search; the search heading, Visit labels,
+  "This week" and the Visit links as small tracked monospace labels; links
+  with an accent underline; larger map heading. Accent: LSU purple on light
+  sections (it is also the field's focus ring there: gold on white was
+  1.4:1), gold on dark.
+- **Map on light sections:** the map is drawn for a dark backdrop, which it
+  gets once it is in view. Until then it showed under the lead panel as
+  white on a pale wash. It is now held back (opacity) until in view;
+  `building-map.js` adds `.has-map-view` to the bento, so without JS the
+  map always shows.
+- **TOC hidden by default on hero pages.** `PalefireHooks::preprocessHtml()`
+  puts `data-pf-toc-default="hidden"` on `<html>` when the first section is
+  a bento; `modular-toc-collapse.js` (in `<head>`) starts the TOC hidden
+  from it, before the first paint. A saved choice wins (now stored as `1`
+  hidden / `0` shown; no key means the page default). Swup visits read the
+  new page's first section instead, applied without the slide
+  (`html.pf-toc-instant`). It never opens by itself on scroll: that would
+  reflow the content under the reader and count as layout shift.
+- **Map draw:** the trace takes 1.8s (was 3.2s), rooms follow faster
+  (45ms steps, 0.45s fades). After 5s off screen the map resets, so the
+  next visit draws it again; back within 5s it stays drawn.
+  `SETTINGS.duration`, `stagger`, `reveal*` and `replayAfter` in
+  `building-map.js`; the reveal timings are mirrored in `_building-map.scss`.
+- **No snap point at the map.** Tested in Chromium with wheel input: with
+  the section as one snap area the browser never stops at the map, and
+  with the blocks as snap points instead, every wheel step snaps back to
+  the top (the map is a screen away), so the page traps mouse users.
+
+Production: `git pull`, then `drush cr` (registers the new
+`preprocess_html` hook).
+
 #### "Light, dark at the map" section theme
 
 The Visit setup script also adds `light-map` to palefire_modular's
@@ -537,6 +573,13 @@ so it out-ranks the block's own CSS.
 - **Accent.** LSU purple on light sections (11:1), the TOC gold on dark.
 - **Title.** The Events section's `<h2>` is display size (up to 4rem),
   medium weight, tight tracking.
+- **"On this day" (follow-up).** `libcal_gantt_carousel` now shows a
+  Wikipedia anniversary on days with no timed events (see its README) and
+  no longer features all-day events' images. Palefire styles the fact
+  (`.libcal-day__fact`) as a wall caption: a 3px accent rule, a tracked
+  monospace label, the text large and light, the "Wikipedia" source link as
+  a label with an accent underline. Also the thin stroke for the module's
+  newer inline-SVG chevrons (`.libcal-day-carousel__chevron`).
 
 ## Header (Origami look)
 

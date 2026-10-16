@@ -15,8 +15,14 @@
   'use strict';
 
   const SETTINGS = {
-    duration: 3200,      // trace window, ms (codepen: 5000)
-    stagger: 900,        // spread of path start times, ms
+    duration: 1800,      // trace window, ms (codepen: 5000; was 3200)
+    stagger: 500,        // spread of path start times, ms (was 900)
+    // Room reveal after the trace: keep these three in step with
+    // --pf-map-reveal-step / -fade / -label-lag in _building-map.scss.
+    revealStep: 45,      // ms between one room and the next (was 70)
+    revealFade: 450,     // ms each room takes to fade in (was 550)
+    revealLabelLag: 150, // ms a room's name follows its room (was 220)
+    replayAfter: 5000,   // ms off screen before the map resets to replay
     strokeWidthPt: 0.5,  // outline weight as displayed
     easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
     hideDelay: 140,      // ms; lets the pointer cross onto the tooltip (WCAG 1.4.13)
@@ -400,6 +406,9 @@
         if (armed) apply(latest);
       }, { threshold: steps });
       dim.observe(root);
+      // Lets CSS hold the map back on light sections until it is in view
+      // (_bento-swiss.scss); without this script the map always shows.
+      bento.classList.add('has-map-view');
       const arm = new AbortController();
       if (!armed) {
         window.addEventListener('scroll', () => {
@@ -413,7 +422,10 @@
       root.pfMapDim = { disconnect() { dim.disconnect(); arm.abort(); } };
     }
 
-    // Draw-on trace (from the codepen), once, when the map scrolls into view.
+    // Draw-on trace (from the codepen) when the map scrolls into view. After
+    // SETTINGS.replayAfter ms off screen it resets, so the next visit draws
+    // it again; coming back sooner leaves it drawn, so scrolling past it
+    // doesn't restart the animation every time.
     if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') return;
     root.classList.add('is-tracing');
     // Reveal order: rooms top to bottom (then left to right) through the
@@ -434,19 +446,29 @@
     const records = lines.map((path) => ({ path, length: path.getTotalLength(), top: path.getBBox().y }))
       .sort((a, b) => a.top - b.top);
     const longest = Math.max(1, ...records.map((r) => r.length));
-    records.forEach(({ path, length }) => {
+    const hideLines = () => records.forEach(({ path, length }) => {
       path.style.strokeDasharray = `${length} ${length}`;
       path.style.strokeDashoffset = String(length);
     });
+    hideLines();
+    // 'hidden' (ready to draw), 'drawing' or 'drawn'. `run` tells a draw
+    // that finished apart from one a reset cancelled.
+    let state = 'hidden';
+    let run = 0;
+    let animations = [];
+    let timers = [];
+    const later = (fn, ms) => { timers.push(setTimeout(fn, ms)); };
     const draw = () => {
+      const current = ++run;
+      state = 'drawing';
       fitStroke();
       const spread = Math.min(SETTINGS.stagger, SETTINGS.duration * 0.5);
       const windowMs = SETTINGS.duration - spread;
-      const animations = records.map(({ path, length }, i) => path.animate(
+      animations = records.map(({ path, length }, i) => path.animate(
         [{ strokeDashoffset: length }, { strokeDashoffset: 0 }],
         {
-          duration: Math.max(350, windowMs * Math.pow(length / longest, 0.55)),
-          delay: 120 + (i / Math.max(1, records.length - 1)) * spread,
+          duration: Math.max(250, windowMs * Math.pow(length / longest, 0.55)),
+          delay: 80 + (i / Math.max(1, records.length - 1)) * spread,
           easing: SETTINGS.easing,
           fill: 'both',
         },
@@ -454,24 +476,53 @@
       // Rooms start fading in as the last lines land (see the stylesheet for
       // the order); .is-revealing carries the staggered delays and is
       // dropped afterwards so hovers and focus never inherit them.
-      const revealMs = (seqEnd * 70) + 220 + 650;
-      setTimeout(() => {
+      const revealMs = (seqEnd * SETTINGS.revealStep) + SETTINGS.revealLabelLag + SETTINGS.revealFade + 100;
+      later(() => {
         root.classList.add('is-revealing', 'is-drawn');
-        setTimeout(() => root.classList.remove('is-revealing'), revealMs);
+        later(() => root.classList.remove('is-revealing'), revealMs);
       }, SETTINGS.duration * 0.72);
       Promise.all(animations.map((a) => a.finished.catch(() => {}))).then(() => {
+        if (current !== run) return;
         animations.forEach((a) => a.cancel());
+        animations = [];
         records.forEach(({ path }) => { path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; });
         root.classList.remove('is-tracing');
+        state = 'drawn';
       });
     };
+    // Back to the start, hidden. Only ever runs off screen, so nothing
+    // visibly disappears.
+    const reset = () => {
+      run++;
+      timers.forEach(clearTimeout);
+      timers = [];
+      animations.forEach((a) => a.cancel());
+      animations = [];
+      root.classList.remove('is-revealing', 'is-drawn');
+      root.classList.add('is-tracing');
+      hideLines();
+      state = 'hidden';
+    };
     if (!('IntersectionObserver' in window)) { draw(); return; }
+    let away = 0;
     const io = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      io.disconnect();
-      draw();
-    }, { threshold: 0.25 });
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+        clearTimeout(away);
+        away = 0;
+        if (state === 'hidden') draw();
+      }
+      else if (state !== 'hidden' && !away) {
+        away = setTimeout(() => { away = 0; reset(); }, SETTINGS.replayAfter);
+      }
+    }, { threshold: [0, 0.25] });
     io.observe(svg);
+    root.pfMapDraw = {
+      disconnect() {
+        io.disconnect();
+        clearTimeout(away);
+        timers.forEach(clearTimeout);
+      },
+    };
   }
 
   Drupal.behaviors.palefireBuildingMap = {
@@ -483,8 +534,9 @@
       if (trigger !== 'unload') return;
       context.querySelectorAll('[data-pf-map]').forEach((root) => {
         if (root.pfMapDim) root.pfMapDim.disconnect();
+        if (root.pfMapDraw) root.pfMapDraw.disconnect();
         const bento = root.closest('.pf-bento');
-        if (bento) bento.classList.remove('is-map-in-view');
+        if (bento) bento.classList.remove('is-map-in-view', 'has-map-view');
         const section = bento ? bento.closest('[data-section-theme="light-map"]') : null;
         if (section) {
           section.classList.remove('is-map-dark');

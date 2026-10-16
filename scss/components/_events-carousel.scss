@@ -183,6 +183,15 @@
   transform: scaleX(-1);
 }
 
+// libcal_gantt 53a2d6a and later draw the chevron as an inline SVG in
+// currentColor (.libcal-day-carousel__chevron) instead of the -icon span:
+// the same thin line here. It follows the hover colour flip above.
+.pf-events-carousel .libcal-day-carousel__chevron {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 1.25;
+}
+
 // --- Day columns -----------------------------------------------------------
 // Three-up (xl+): the columns reach out by their padding, so the first
 // column's text lines up with the title and tabs, and the rules between
@@ -342,6 +351,57 @@
   color: inherit;
   text-decoration-color: var(--pf-ev-accent);
   text-underline-offset: .3em;
+}
+
+// Quiet day (no timed events): Wikipedia "On this day" in the feature slot
+// (libcal_gantt_carousel's buildFact()). No box: a heavy accent rule over a
+// large light statement, the tracked label above it and the source below,
+// like a caption on a museum wall. Kept apart from the ruled event list so
+// it never reads as a library event.
+.pf-events-carousel .libcal-day__fact {
+  padding: 1.25rem 0 1.5rem;
+  border: 0;
+  border-top: 3px solid var(--pf-ev-accent);
+  background: none;
+}
+
+.pf-events-carousel .libcal-day__fact-label {
+  margin: 0 0 1rem;
+  font-family: var(--pf-ev-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ldc-muted);
+}
+
+.pf-events-carousel .libcal-day__fact-text {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+}
+
+.pf-events-carousel .libcal-day__fact-source {
+  font-family: var(--pf-ev-label);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ldc-fg);
+  text-decoration-color: var(--pf-ev-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .4em;
+}
+
+.pf-events-carousel .libcal-day__fact-source:is(:hover, :focus-visible) {
+  text-decoration-thickness: 2px;
+}
+
+.pf-events-carousel .libcal-day__fact-source:focus-visible {
+  outline: 2px solid var(--pf-ev-accent);
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
