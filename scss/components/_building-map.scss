@@ -124,7 +124,7 @@
 .pf-map__entrance-arrow { fill: currentColor; }
 .pf-map__entrance { color: var(--pf-map-ink); }
 .pf-map__label {
-  fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
+  fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 700; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
   pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: default;
   /* Shadow: a soft glow in the map's surface colour behind the letters,
