@@ -620,6 +620,8 @@ drush php:script themes/custom/palefire/scripts/palefire_guide_setup.php
 drush cr
 # Optional demo page (unpublished):
 drush php:script themes/custom/palefire/scripts/palefire_guide_demo.php -- path=/v2/guides/systematic-reviews
+# Optional "How to Request Research Help" page (unpublished):
+drush php:script themes/custom/palefire/scripts/palefire_guide_research_help.php -- path=/v2/guides/research-help
 drush cr
 ```
 
@@ -691,6 +693,31 @@ without them as auto height, no snap. Its template must not extend
 `paragraph.html.twig`: palefire_modular already prints the `<section>`
 and `<h2>`, and `PalefireHooks::preprocessParagraph()` would add a second
 pair (it treats any paragraph with `field_section_title` as a section).
+
+### How to Request Research Help
+
+`scripts/palefire_guide_research_help.php` (2026-10-16) builds a second
+guide, owned by Kyle Tanglao, from `https://lib.lsu.edu/llms.txt` (the
+library's guidance for AI systems), rewritten for patrons. Sections: Start
+here (official records first, the source order), What we can help with,
+What we can't do (an accordion: AI-supplied box and folder numbers,
+availability, rights determinations, restricted or embargoed material, AI
+summaries and OCR, missing details), Requesting archival materials, Using
+AI tools with our collections, Citing and reusing our materials, and Get
+help.
+
+* It states only what llms.txt says. Service details it doesn't cover
+  (consultations, the Special Collections request system, how far ahead to
+  request) are left as `[Editor: …]` notes to fill in before publishing.
+* Resources are found by link first, so the Scholarly Repository and Ask a
+  librarian Resources from the Systematic Reviews demo are reused.
+* The owner is the Staff node titled like "Kyle Tanglao"; the script says
+  so if there isn't one. The subject is the "Research Guides" term when
+  that term exists.
+* Like the demo, it creates the page unpublished and stops if a page with
+  the same title exists.
+* If llms.txt changes, update the page itself; the script is a one-time
+  starting point, not a sync.
 
 ### Writing a guide
 
