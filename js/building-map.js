@@ -22,13 +22,48 @@
     hideDelay: 140,      // ms; lets the pointer cross onto the tooltip (WCAG 1.4.13)
     tipGap: 14,          // px between the room name and the tooltip
     hatchPeriod: 20,     // map units: the hatch <pattern> height in the drawing
+    appointmentHatch: 'broken', // 'broken' (staggered dashes) or 'lines' (the drawing's own hatch)
     hereGap: 36,         // map units between the "here" arrow and the room name
   };
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // Appointment rooms: the walk-in hatch cut into 20-unit dashes, staggered
+  // row to row, so access reads from the texture and not only from a dimmer
+  // grey. Built from the drawing's own mask (same period, same black cuts
+  // between rooms), so no drawing needs editing. Adds .has-broken-hatch to
+  // the map, which switches the appointment opacity and legend swatch.
+  function brokenHatch(root, svg) {
+    const mask = svg.querySelector('mask[id$="-hatch"]');
+    const fill = mask && mask.querySelector('rect[fill^="url("]');
+    const rooms = svg.querySelectorAll('.pf-map__region.is-appointment .pf-map__hatch');
+    if (!fill || !rooms.length) return;
+    const id = mask.id + '-broken';
+    const pattern = document.createElementNS(SVG_NS, 'pattern');
+    pattern.setAttribute('id', id + '-lines');
+    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+    pattern.setAttribute('width', '40');
+    pattern.setAttribute('height', '40');
+    [[0, 7.5], [20, 27.5]].forEach(([x, y]) => {
+      const dash = document.createElementNS(SVG_NS, 'rect');
+      dash.setAttribute('x', x);
+      dash.setAttribute('y', y);
+      dash.setAttribute('width', '20');
+      dash.setAttribute('height', '5');
+      dash.setAttribute('fill', '#fff');
+      pattern.appendChild(dash);
+    });
+    const broken = mask.cloneNode(true);
+    broken.setAttribute('id', id);
+    broken.querySelector('rect[fill^="url("]').setAttribute('fill', 'url(#' + id + '-lines)');
+    mask.parentNode.append(pattern, broken);
+    rooms.forEach((room) => room.setAttribute('mask', 'url(#' + id + ')'));
+    root.classList.add('has-broken-hatch');
+  }
+
   function initMap(root) {
     const svg = root.querySelector('[data-map-svg]');
+    if (svg && SETTINGS.appointmentHatch === 'broken') brokenHatch(root, svg);
     if (!svg) return;
     const stage = root.querySelector('.pf-map__stage') || root;
     const lines = Array.from(svg.querySelectorAll('.pf-map__lines:not(.pf-map__lines--hidden) path'));

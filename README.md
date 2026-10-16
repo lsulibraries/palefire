@@ -147,6 +147,17 @@ passes; on the way out it waits for the name to land (`--pf-map-out`) and
 fades over `--pf-map-label-halo-out`. Width: `--pf-map-label-halo-width`
 (24 map units).
 
+Appointment rooms: `building-map.js` gives rooms with `access: appointment`
+a broken hatch, the walk-in lines cut into 20-unit dashes and staggered row
+to row, so "by request" reads from the texture and not only from a dimmer
+grey (the old .13 vs .3 opacity was easy to miss on a dim screen). It
+clones the drawing's hatch mask (same period and room cuts) with a dashed
+pattern, so drawings need no changes, and adds `.has-broken-hatch` to the
+map: appointment opacity becomes .42 (hover .7) and the legend and tooltip
+swatches are masked into the same dashes. Without JS, or with
+`SETTINGS.appointmentHatch: 'lines'`, rooms keep the plain hatch at the old
+opacity.
+
 ### Full-page backgrounds and frosted glass
 
 Section background images (`field_section_bg`) and bento background videos
