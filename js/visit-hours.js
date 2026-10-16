@@ -190,9 +190,22 @@
     el.classList.remove('is-loading', 'is-failed');
   }
 
+  // Bootstrap lg; mirrors the two-column bento head in _visit.scss.
+  const LG = window.matchMedia('(min-width: 992px)');
+
   Drupal.behaviors.palefireVisitHours = {
     attach(context) {
       once('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {
+        // "This week" starts open on lg screens (992px up, the two-column
+        // bento head) and closed below. Crossing the breakpoint resets it;
+        // otherwise visitors can open and close it as they like.
+        const week = el.querySelector('.pf-visit__week');
+        if (week) {
+          const sync = () => { week.open = LG.matches; };
+          sync();
+          LG.addEventListener('change', sync);
+          el.pfHoursSync = sync;
+        }
         el.classList.add('is-loading');
         load(el.dataset.lid).then((data) => {
           render(el, data);
@@ -220,6 +233,9 @@
       }
       once.remove('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {
         window.clearInterval(el.pfHoursTimer);
+        if (el.pfHoursSync) {
+          LG.removeEventListener('change', el.pfHoursSync);
+        }
       });
     },
   };

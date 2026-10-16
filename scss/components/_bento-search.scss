@@ -14,6 +14,20 @@
 } // no z-index here
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 .pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .55); }
+// Playlists (two or more clips): bento-video.js adds a second <video> and
+// .is-buffered, and moves .is-current to whichever layer is playing. The
+// incoming clip goes on top and fades in over the outgoing one, which stays
+// fully opaque until the fade is done, so there is no dip to black between
+// clips. Keep --pf-bento-fade in step with FADE_MS in bento-video.js.
+.pf-bento__media { --pf-bento-fade: 1s; }
+.pf-bento__media.is-buffered .pf-bento__bg-video {
+  z-index: -2; opacity: 0;
+  transition: opacity 0s linear var(--pf-bento-fade), filter .8s ease, transform .8s ease;
+}
+.pf-bento__media.is-buffered .pf-bento__bg-video.is-current {
+  z-index: -1; opacity: 1;
+  transition: opacity var(--pf-bento-fade) ease, filter .8s ease, transform .8s ease;
+}
 // Search form (paragraph--bento-search.html.twig): one field that sends
 // the search to https://lib.lsu.edu/bento. Drawn like the rest of the
 // modular chrome rather than as a Bootstrap input group: a 4px-cornered

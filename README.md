@@ -396,6 +396,34 @@ Then edit the page: fill in the Visit fields, set the bento's section theme
 to "Light, dark at the map", and save. Staging gets the config from
 production downstream as usual.
 
+### Background video playlists, "This week" and the light-map check
+
+- **No black between clips.** With two or more videos, `js/bento-video.js`
+  keeps two `<video>` layers. While one plays, the other has already loaded
+  the next clip. About a second before the clip ends, the next one starts on
+  top and fades in over it (`--pf-bento-fade` in `_bento-search.scss`,
+  `FADE_MS` in the script; keep them equal). The new layer only shows once it
+  is really playing, so on a slow connection the last frame of the old clip
+  stays up instead of black. One video still uses the native `loop`. The
+  pause button, the progress line and the off-screen pause cover both layers.
+  With reduced motion the swap is instant.
+- **"This week" open on lg.** `js/visit-hours.js` opens the hours list at
+  992px and up (the two-column bento head) and closes it below. It only
+  changes when the window crosses that width, so visitors can still open or
+  close it themselves.
+- **Checking the section theme.** If a light-map page is dark from the top,
+  the section is not actually saved as "Light, dark at the map". Run, from
+  the theme folder on production:
+
+  ```sh
+  drush php:script scripts/palefire_section_theme_check.php /special
+  ```
+
+  It lists the theme options (light-map must be there; if not, run
+  `scripts/palefire_visit_setup.php`) and each section's saved theme on the
+  published revision, plus the latest draft if there is an unpublished one.
+  It changes nothing.
+
 ### Calendar events in "On this page"
 
 `modular-toc.js` lists any element with `data-toc` under its section, even
