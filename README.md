@@ -709,6 +709,13 @@ follows along (`storage` event).
 - To add a setting: an item in `settings_groups`
   (`utility-panels.html.twig`), its key in `SWITCHES` (`utility-panels.js`)
   and in the inline script's list (`html.html.twig`), and its CSS.
+- **Scrollbar** (2026-10-16): every drawer body (`.pf-panel__body`) scrolls
+  with a thin bar in the TOC's muted grey on no track, instead of the
+  system bar with arrow buttons (Windows). Firefox gets `scrollbar-width:
+  thin` and `scrollbar-color`; Chromium and Safari get `::-webkit-scrollbar`
+  (the only way to drop the arrows; Chromium ignores it while the standard
+  properties are set, so `@supports selector(::-webkit-scrollbar)` resets
+  them to auto).
 
 ### Light-map sections: no dark flash on load
 
