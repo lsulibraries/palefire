@@ -16,6 +16,7 @@ Drupal 11 theme (starterkit-generated) built on Bootstrap 5.3 + Dart Sass.
 - `components/toc/` – Single Directory Component: "On this page" navigation
 - `src/Hook/PalefireHooks.php` – OOP theme hooks (TOC, section anchors, branding)
 - `templates/paragraphs/` – section markup for Modular pages (bento head + Visit card: see below)
+- `templates/includes/` – inline SVG logo (`logo-lsu-libraries.svg.twig`), utility panels (`utility-panels.html.twig`), building maps
 - `scripts/palefire_modular_setup.php` – one-time Paragraphs/field setup (drush php:script) for sites **without** palefire_modular; it exits without changes when palefire_modular is enabled
 - `scripts/palefire_visit_setup.php` – Visit card fields and the `light-map` section theme (sites with palefire_modular)
 - `scripts/palefire_modular_setup_undo.php` – removes the unused paragraph types/storages a partial `palefire_modular_setup.php` run leaves on a palefire_modular site
@@ -271,7 +272,15 @@ sublink is also capped at `100%` of the rail, and the sidebar sets
 
 The bento's pause/play control sits in the section's top corner (on the
 breadcrumb's line when the bento is the first section)
-(`paragraph--bento-search.html.twig`, `_bento-search.scss`). It is styled
+(`paragraph--bento-search.html.twig`, `_bento-search.scss`). The button is
+a sibling of `.pf-bento__media`, not inside it, and is positioned against
+`.pf-bento`: since the media layer became `position: fixed` (with negative
+insets that reach under the top bar and sidebar), a button inside it was
+measured from a box running past the viewport by the section padding, and
+`right: 1rem` put it off screen. `bento-video.js` finds the button from the
+bento box, sets a negative `--pf-bento-toggle-top` to reach the breadcrumb
+line, and watches the bento (not the always-in-view fixed layer) to pause
+the clip when it scrolls away. It is styled
 like the TOC hide/show button in its floating look: 2.25rem tall, 4px
 corners, a 1px `--pf-toc-rail` border, the sidebar's glass background and
 `--pf-toc-color` text that turns `--pf-toc-active` on hover. The background
@@ -282,6 +291,20 @@ background video" / "Play background video", monospace, uppercase and
 tracked like the breadcrumb) slides out on hover or keyboard focus with
 space on both sides. Screen readers always get the label. Reduced motion
 drops the transitions; forced colours get a system button.
+
+### Page title (h1) in the bento
+
+When a Modular page's first section is a bento search, the bento prints the
+page `<h1>` (the node title) right above its intro text, in the bento head's
+left column; `page.html.twig` then leaves its own `<h1>` out of
+`.pf-modular__head`, which keeps only the breadcrumb. On every other Modular
+page the `<h1>` stays under the breadcrumb. Paragraph templates don't get a
+`node` variable, so the title comes from the host node in
+`palefire_preprocess_paragraph__bento_search()` (`page_title`), and
+`PalefireHooks::titleBentoUuid()` decides which bento (if any) owns it; both
+the page and the paragraph use that one check, so there is always exactly
+one `<h1>`. Styles: `.pf-modular__title` (`_layout.scss`) plus
+`.pf-bento__title` spacing (`_visit.scss`).
 
 ### Bento search form
 
@@ -433,6 +456,57 @@ but not highlighted by scroll position). A component that renders after
 the TOC dispatches a bubbling `palefire:tocrefresh` event from inside its
 section, and that section's sub-list is rebuilt and opens like a section
 change. The LibCal day carousel uses this for its next three timed events.
+
+## Header (Origami look)
+
+Top bar, left to right: logo | Primary menu | Utility menu (icons).
+
+- **Logo**: the theme's `logo.svg` is printed as inline SVG
+  (`templates/includes/logo-lsu-libraries.svg.twig`, from
+  `block--system-branding-block.html.twig`) filled with `currentColor`:
+  grey (`$pf-logo-color`) at rest, LSU purple on hover in the light bar,
+  light grey and LSU gold on hover in the dark bar (`--pf-brand-color` /
+  `--pf-brand-hover-color`, `_header.scss` and `_chrome-dark.scss`). A
+  custom logo uploaded in the theme settings stays an `<img>`.
+- **Primary menu**: uppercase, tracked (`$pf-nav-tracking`), bold, with a
+  small faded caret that turns while open. Dropdowns (lg and up) are a plain
+  sheet under the item, left edge on the item's text: uppercase tracked
+  links, generous padding, no item background on hover; the hover/focus is
+  a colour change (purple / gold on the dark bar) plus an underline.
+- **Utility menu**: solid Bootstrap Icons (`*-fill`, copied by
+  `build/copy-assets.js`; falls back to the outline icon), colour-only
+  hover. Icons with a panel open it instead of following the link.
+
+### Utility panels (offcanvas)
+
+`templates/includes/utility-panels.html.twig`, printed once by
+`page.html.twig` outside the header (its `backdrop-filter` would clip fixed
+drawers) and outside `#swup` (kept between Swup visits). Each panel is a
+Bootstrap 5.3 offcanvas from the left in the dark TOC sidebar's look: the
+`$pf-chrome-dark` / `$pf-section-dark` tokens, sidebar glass, monospace,
+gold accent, a TOC-style close button (`_utility-panels.scss`).
+
+- **Search** (icon `search`): the bento search form; focus moves to the box.
+- **Hours** (icon `clock`): today's date, a dot-matrix clock (ticks on the
+  minute, only while open) and an OPEN / CLOSED row per LibCal location
+  (`hours_locations` at the top of the template: `lid`, optional `name`;
+  empty uses LibCal's name). LibCal is asked the first time the panel opens,
+  through `Drupal.palefireHours` (`visit-hours.js`), so the Visit card and
+  the panel share one request per location. "See full hours" goes to the
+  Hours menu link's own URL.
+- The menu link stays a real `<a href>` (works without JavaScript).
+  Choose a panel with a `data-panel` link attribute, or by icon
+  (`panel_map` in `menu--utility.html.twig`). To add a panel: markup in
+  `utility-panels.html.twig`, key in `panels`.
+- **Dimming**: Bootstrap's backdrop is a fixed .5. While a utility panel is
+  open (`<html data-pf-panel>`, `utility-panels.js`) it is
+  `$pf-panel-backdrop-light` (.72) on light pages and
+  `$pf-panel-backdrop-dark` (.55) on dark ones. The mobile "On this page"
+  offcanvas keeps the default.
+- Accessibility: Bootstrap's dialog role, focus trap, Escape, backdrop click
+  and focus return; the clock is not a live region; reduced transparency /
+  more contrast give a solid drawer; forced colours drop the dot mask and
+  stripes.
 
 ## Page transitions (Swup 4)
 

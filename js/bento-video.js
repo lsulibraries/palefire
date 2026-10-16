@@ -7,7 +7,11 @@
     attach(context) {
       once('bento-video', '[data-bento-video]', context).forEach((wrap) => {
         const first = wrap.querySelector('video');
-        const btn = wrap.querySelector('[data-bento-video-toggle]');
+        // The button is the media layer's sibling (paragraph--bento-search),
+        // so look it up from the bento box.
+        const bento = wrap.closest('[data-pf-bento]') || wrap.parentElement;
+        const btn = bento.querySelector('[data-bento-video-toggle]');
+        if (!first || !btn) return;
         const label = btn.querySelector('[data-bento-video-label]') || btn;
         const sources = JSON.parse(wrap.dataset.sources || '[]');
         if (!sources.length) return;
@@ -118,8 +122,10 @@
         });
         // In the first section, centre the button on the breadcrumb's line
         // (.pf-modular__head, page.html.twig) instead of 1rem below the
-        // section's top. Measured against the button's positioned parent,
-        // so it holds at any scroll position; re-run when either resizes.
+        // section's top. Measured against the button's positioned parent
+        // (.pf-bento), so it holds at any scroll position; re-run when
+        // either resizes. The breadcrumb is above the bento, so the value
+        // is negative.
         const align = () => {
           const crumb = document.querySelector('.pf-modular__head .breadcrumb-item');
           const host = btn.offsetParent;
@@ -128,7 +134,7 @@
             const c = crumb.getBoundingClientRect();
             top = Math.round(c.top + c.height / 2 - host.getBoundingClientRect().top - btn.offsetHeight / 2);
           }
-          if (top !== null && top >= 0) {
+          if (top !== null) {
             btn.style.setProperty('--pf-bento-toggle-top', `${top}px`);
           }
           else {
@@ -148,11 +154,14 @@
         first.classList.add('is-current');
         first.src = sources[0];
         preload();
+        // Watch the bento box, not the media layer: the layer is
+        // position: fixed and always covers the viewport, so it never
+        // reported leaving it and the clip kept playing off screen.
         new IntersectionObserver(([e]) => {
           inView = e.isIntersecting;
           if (inView) play();
           else pauseAll();
-        }, { threshold: 0.25 }).observe(wrap);
+        }, { threshold: 0.25 }).observe(bento);
       });
     },
   };

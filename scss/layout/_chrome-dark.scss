@@ -31,9 +31,9 @@ $pf-header-bg-dark: var(--pf-sidebar-bg) !default;
 $pf-header-bg-alpha-dark: .7 !default;
 // Same fade as the sidebar wash and the TOC rail (_modular.scss, _toc.scss).
 $pf-chrome-transition: .3s ease !default;
-// The logo is an <img>, so it can't take a fill colour. Set this to
-// `brightness(0) invert(1)` for a white wordmark on the dark bar, as Origami's
-// global dark mode did with its inline SVG.
+// Only for a custom logo uploaded as an <img> (the theme's own logo is inline
+// SVG and takes --pf-brand-color below). Set to `brightness(0) invert(1)` for
+// a white wordmark on the dark bar.
 $pf-logo-filter-dark: none !default;
 
 .pf-header {
@@ -56,13 +56,28 @@ $pf-logo-filter-dark: none !default;
 
     .pf-utility-nav__link {
       &:hover,
-      &:focus-visible {
+      &:focus-visible,
+      &[aria-expanded="true"] {
         color: $pf-gold;
       }
     }
 
-    .pf-brand__logo {
+    // Inline SVG logo: light grey, gold on hover.
+    .pf-brand {
+      --pf-brand-color: #{$pf-logo-color-dark};
+      --pf-brand-hover-color: #{$pf-gold};
+    }
+
+    img.pf-brand__logo {
       filter: $pf-logo-filter-dark;
+    }
+
+    // Dropdown sheet on the dark bar: gold links on hover.
+    .pf-primary-nav__submenu.dropdown-menu {
+      --bs-dropdown-link-hover-color: #{$pf-gold};
+      --bs-dropdown-link-active-color: #{$pf-gold};
+      --bs-dropdown-border-color: rgba(255, 255, 255, .08);
+      --bs-dropdown-box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .45);
     }
   }
 }

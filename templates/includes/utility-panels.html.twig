@@ -1,0 +1,101 @@
+{#
+/**
+ * @file
+ * Utility panels: offcanvas drawers opened from the utility menu's icons.
+ *
+ * Printed once by page.html.twig (outside the header and #swup) when the
+ * Utility menu region has content. Each panel is a Bootstrap 5.3 offcanvas
+ * that slides in from the left, in the dark TOC sidebar's look (dark
+ * glass, monospace tracked labels, gold accent): _utility-panels.scss.
+ * Behaviour (clock, LibCal hours, "See full hours" link): utility-panels.js.
+ *
+ * The trigger is the menu link itself (menu--utility.html.twig): its icon
+ * picks the panel, data-bs-target="#pf-panel-{key}". Keys printed here must
+ * match the `panels` list in that template.
+ *
+ * Hours: one row per LibCal location (`lid`, the same IDs the Visit card
+ * uses in field_hours_location). Leave `name` empty to use the name LibCal
+ * sends back, or fill it in to override it.
+ *
+ * Accessibility: Bootstrap gives each panel role="dialog" and aria-modal
+ * while open, traps focus inside it, closes it on Escape or a backdrop
+ * click, and returns focus to the icon. The live clock is not announced
+ * (no aria-live), so screen readers aren't interrupted every minute.
+ */
+#}
+{%
+  set hours_locations = [
+    { lid: '241', name: '' },
+    { lid: '236', name: '' },
+  ]
+%}
+{% set close_icon %}
+  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+{% endset %}
+{% set ext_icon %}
+  <svg class="pf-panel__cta-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 7 9M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+{% endset %}
+
+<div class="pf-panels" data-pf-panels>
+
+  {# Search ------------------------------------------------------------- #}
+  <div class="offcanvas offcanvas-start pf-panel pf-panel--search" id="pf-panel-search" tabindex="-1"
+       aria-labelledby="pf-panel-search-title" data-bs-theme="dark" data-pf-panel="search">
+    <div class="pf-panel__header">
+      <h2 class="pf-panel__title" id="pf-panel-search-title">{{ 'Search'|t }}</h2>
+      <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
+        {{ close_icon }}<span class="visually-hidden">{{ 'Close search'|t }}</span>
+      </button>
+    </div>
+    <div class="pf-panel__body">
+      {# Same GET form as the bento search (paragraph--bento-search). #}
+      <form class="pf-bento__form pf-panel__search" role="search" method="get" action="https://lib.lsu.edu/bento" aria-labelledby="pf-panel-search-title">
+        <label class="visually-hidden" for="pf-panel-search-q">{{ 'Search LSU Libraries'|t }}</label>
+        <div class="pf-bento__field">
+          <svg class="pf-bento__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+          <input class="pf-bento__input" type="search" id="pf-panel-search-q" name="search_api_fulltext_bento"
+                 placeholder="{{ 'Books, articles, databases, guides'|t }}" autocomplete="off" enterkeyhint="search" data-pf-panel-autofocus>
+          <button class="pf-bento__submit" type="submit">
+            <span class="pf-bento__submit-text">{{ 'Search'|t }}</span>
+            <svg class="pf-bento__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {# Hours -------------------------------------------------------------- #}
+  <div class="offcanvas offcanvas-start pf-panel pf-panel--hours" id="pf-panel-hours" tabindex="-1"
+       aria-labelledby="pf-panel-hours-title" data-bs-theme="dark" data-pf-panel="hours">
+    <div class="pf-panel__header">
+      <h2 class="pf-panel__title" id="pf-panel-hours-title">{{ 'Hours'|t }}</h2>
+      <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
+        {{ close_icon }}<span class="visually-hidden">{{ 'Close hours'|t }}</span>
+      </button>
+    </div>
+    <div class="pf-panel__body pf-hours" data-pf-hours-panel>
+      {# Filled in by utility-panels.js (the page may be cached, so the
+         server's date would go stale). #}
+      <p class="pf-hours__date" data-pf-clock-date></p>
+      <p class="pf-hours__clock"><time data-pf-clock></time></p>
+      <ul class="pf-hours__list">
+        {% for loc in hours_locations %}
+          <li class="pf-hours__loc is-loading" data-pf-hours-loc data-lid="{{ loc.lid }}">
+            <span class="pf-hours__badge" data-pf-hours-badge></span>
+            <span class="pf-hours__text">
+              <span class="pf-hours__when" data-pf-hours-when>{{ 'Loading hours…'|t }}</span>
+              <span class="pf-hours__name" data-pf-hours-name{% if loc.name %} data-fixed{% endif %}>{{ loc.name }}</span>
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="pf-panel__footer">
+      {# href: the Hours menu link's URL, copied from the icon on open. #}
+      <a class="pf-panel__cta" href="https://lsu.libcal.com/hours" data-pf-panel-href>
+        <span>{{ 'See full hours'|t }}</span>{{ ext_icon }}
+      </a>
+    </div>
+  </div>
+
+</div>

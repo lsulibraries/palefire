@@ -204,3 +204,16 @@ building-map:
   dependencies:
     - core/drupal
     - core/once
+
+# Utility menu panels (offcanvas drawers from the left): live clock and
+# LibCal hours. Attached by page.html.twig when the Utility menu region has
+# content. Needs palefire/visit for Drupal.palefireHours (visit-hours.js).
+utility-panels:
+  version: 1.0.0
+  js:
+    js/utility-panels.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/global
+    - palefire/visit

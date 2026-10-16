@@ -16,6 +16,11 @@ const icons = [
   'search', 'person-circle', 'chat-dots', 'clock', 'calendar-event',
   'envelope', 'question-circle', 'box-arrow-in-right', 'geo-alt',
   'telephone', 'link-45deg', 'chevron-down',
+  // Solid versions for the utility menu (Origami look; menu--utility.html.twig
+  // falls back to the outline icon when one is missing).
+  'person-fill', 'chat-dots-fill', 'clock-fill', 'question-circle-fill',
+  'calendar-event-fill', 'envelope-fill', 'geo-alt-fill', 'telephone-fill',
+  'gear', 'gear-fill',
 ];
 
 function copy(from, to) {

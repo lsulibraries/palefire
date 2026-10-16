@@ -26,7 +26,7 @@
 
   .navbar {
     --bs-navbar-padding-y: #{$pf-header-padding-y};
-    --bs-navbar-nav-link-padding-x: .875rem;
+    --bs-navbar-nav-link-padding-x: 1.125rem;
     --bs-navbar-color: var(--bs-body-color);
     --bs-navbar-hover-color: #{$pf-purple};
     --bs-navbar-active-color: #{$pf-purple};
@@ -45,11 +45,28 @@
 }
 
 .pf-brand {
-  color: var(--bs-body-color);
+  // The inline SVG logo (logo-lsu-libraries.svg.twig) is filled with
+  // currentColor: grey at rest, LSU purple on hover. The dark bar switches
+  // these to light grey and gold (_chrome-dark.scss).
+  --pf-brand-color: #{$pf-logo-color};
+  --pf-brand-hover-color: #{$pf-purple};
+  color: var(--pf-brand-color);
   font-weight: $font-weight-bold;
   text-decoration: none;
+  transition: color .15s ease-in-out;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-brand-hover-color);
+  }
+
+  // Keep the site name (if shown) in the body colour; only the mark changes.
+  .pf-brand__name {
+    color: var(--bs-body-color);
+  }
 
   &__logo {
+    display: block;
     height: $pf-logo-height;
     width: auto;
     max-height: 30px;
@@ -60,13 +77,34 @@
 }
 
 // Primary menu ---------------------------------------------------------------
+// Origami look: uppercase, widely tracked, bold; a small faded caret.
 
 .pf-primary-nav {
   .nav-link {
     min-height: $pf-header-target;
     display: flex;
     align-items: center;
-    font-weight: $font-weight-medium;
+    font-size: $pf-nav-font-size;
+    font-weight: $font-weight-bold;
+    letter-spacing: $pf-nav-tracking;
+    text-transform: uppercase;
+  }
+
+  .dropdown-toggle::after {
+    margin-inline-start: .45em;
+    border-top-width: .28em;
+    border-inline-width: .28em;
+    opacity: .35;
+    transition: opacity .15s ease-in-out, transform .2s ease;
+  }
+
+  .dropdown-toggle:hover::after,
+  .dropdown-toggle[aria-expanded="true"]::after {
+    opacity: .8;
+  }
+
+  .dropdown-toggle[aria-expanded="true"]::after {
+    transform: rotate(180deg);
   }
 
   // Current page / active trail: underline, not color alone (WCAG 1.4.1).
@@ -109,6 +147,65 @@
   }
 }
 
+// Dropdown panel (Origami): a plain white sheet under the menu item, its
+// left edge on the item's text, uppercase tracked links with lots of air.
+// Desktop only; below lg the submenu stays an indented list in the
+// collapsed menu (above).
+@include media-breakpoint-up(lg) {
+  .pf-primary-nav__submenu.dropdown-menu {
+    --bs-dropdown-min-width: 14rem;
+    --bs-dropdown-padding-y: .75rem;
+    --bs-dropdown-spacer: .625rem;
+    --bs-dropdown-bg: rgba(var(--bs-body-bg-rgb), .97);
+    --bs-dropdown-border-color: rgba(var(--bs-emphasis-color-rgb), .08);
+    --bs-dropdown-border-radius: 2px;
+    --bs-dropdown-box-shadow: 0 .75rem 2rem #{rgba($black, .12)};
+    --bs-dropdown-item-padding-x: 2.25rem;
+    --bs-dropdown-item-padding-y: 1.125rem;
+    --bs-dropdown-link-color: var(--bs-emphasis-color);
+    --bs-dropdown-link-hover-color: #{$pf-purple};
+    --bs-dropdown-link-hover-bg: transparent;
+    --bs-dropdown-link-active-color: #{$pf-purple};
+    --bs-dropdown-link-active-bg: transparent;
+    --bs-dropdown-divider-bg: rgba(var(--bs-emphasis-color-rgb), .08);
+    --bs-dropdown-divider-margin-y: .25rem;
+    // Text starts where the parent item's text starts.
+    left: var(--bs-navbar-nav-link-padding-x);
+    box-shadow: var(--bs-dropdown-box-shadow);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+
+    &.show {
+      animation: pf-dropdown-in .18s ease-out;
+    }
+
+    .dropdown-item {
+      font-size: $pf-dropdown-font-size;
+      font-weight: $font-weight-bold;
+      letter-spacing: $pf-dropdown-tracking;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-decoration: none;
+
+      // Hover/focus: colour plus an underline, so it isn't colour alone.
+      &:hover,
+      &:focus-visible,
+      &.is-active {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: .45em;
+      }
+    }
+  }
+}
+
+@keyframes pf-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-.25rem);
+  }
+}
+
 // Long mobile menus scroll inside the sticky header.
 @include media-breakpoint-down(lg) {
   .pf-header .navbar-collapse {
@@ -130,14 +227,24 @@
     min-width: $pf-header-target;  // 44px targets (WCAG 2.2 SC 2.5.8 requires 24px)
     min-height: $pf-header-target;
     padding: .5rem;
-    color: var(--bs-body-color);
+    color: var(--bs-emphasis-color);
     border-radius: 50%;
 
+    // Origami: solid icons, a colour change on hover (no filled circle).
     &:hover,
-    &:focus-visible {
+    &:focus-visible,
+    &[aria-expanded="true"] {
       color: $pf-purple;
-      background-color: var(--bs-tertiary-bg);
     }
+
+    .pf-icon svg {
+      width: 1.375rem;
+      height: 1.375rem;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    gap: .875rem;
   }
 }
 
@@ -256,9 +363,15 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-header,
   .pf-header .navbar,
+  .pf-header .pf-brand,
   .pf-header .pf-brand__logo,
   .pf-header .nav-link,
-  .pf-header .pf-utility-nav__link {
+  .pf-header .pf-utility-nav__link,
+  .pf-primary-nav .dropdown-toggle::after {
     transition: none;
+  }
+
+  .pf-primary-nav__submenu.dropdown-menu.show {
+    animation: none;
   }
 }

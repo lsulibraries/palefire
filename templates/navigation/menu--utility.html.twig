@@ -11,9 +11,23 @@
  * Icon names are Bootstrap Icons copied to images/bi/ by `npm run build`
  * (list them in build/copy-assets.js).
  *
+ * Solid icons (Origami look): when images/bi/{name}-fill.svg exists it is
+ * used instead of the outline one (see solid_map; copy both in
+ * build/copy-assets.js).
+ *
+ * Panels: an icon that has a panel opens it as a Bootstrap offcanvas drawer
+ * from the left instead of following the link (search, hours; markup in
+ * templates/includes/utility-panels.html.twig, printed by page.html.twig).
+ * The link stays a real <a href>: without JavaScript it still goes to its
+ * page, and the Hours panel's "See full hours" button goes to the same URL.
+ * Pick a panel with a "data-panel" link attribute (e.g. data-panel="hours"),
+ * or let the icon decide (panel_map). To add a panel, add its markup to
+ * utility-panels.html.twig and its key to `panels` below.
+ *
  * Accessibility: the link title is kept as visually hidden text, so every
  * link has an accessible name; the SVG is aria-hidden. Targets are at least
- * 44x44px (exceeds WCAG 2.2 SC 2.5.8).
+ * 44x44px (exceeds WCAG 2.2 SC 2.5.8). Bootstrap's offcanvas traps focus,
+ * closes on Escape and returns focus to the icon.
  */
 #}
 {%
@@ -34,8 +48,27 @@
     'location': 'geo-alt',
     'map': 'geo-alt',
     'phone': 'telephone',
+    'settings': 'gear',
+    'preferences': 'gear',
   }
 %}
+{# Outline icon => solid Bootstrap Icon, when the file is there. #}
+{%
+  set solid_map = {
+    'person-circle': 'person-fill',
+    'chat-dots': 'chat-dots-fill',
+    'clock': 'clock-fill',
+    'question-circle': 'question-circle-fill',
+    'calendar-event': 'calendar-event-fill',
+    'envelope': 'envelope-fill',
+    'geo-alt': 'geo-alt-fill',
+    'telephone': 'telephone-fill',
+    'gear': 'gear-fill',
+  }
+%}
+{# Icon => panel key, and the panels utility-panels.html.twig prints. #}
+{% set panel_map = { 'search': 'search', 'clock': 'hours' } %}
+{% set panels = ['search', 'hours'] %}
 {% if items %}
   <ul{{ attributes.addClass('nav', 'pf-utility-nav', 'align-items-center', 'flex-nowrap') }}>
     {% for item in items %}
@@ -50,10 +83,23 @@
         {% endfor %}
       {% endif %}
       {% set icon = icon|default('link-45deg') %}
+      {% set panel = link_attributes['data-panel']|default(panel_map[icon]|default('')) %}
+      {% set panel = panel in panels ? panel : '' %}
+      {# Theme SVG files, so |raw is safe here. #}
+      {% set svg = solid_map[icon] is defined ? source(directory ~ '/images/bi/' ~ solid_map[icon]|clean_class ~ '.svg', ignore_missing = true) : '' %}
+      {% if svg is empty %}
+        {% set svg = source(directory ~ '/images/bi/' ~ icon|clean_class ~ '.svg', ignore_missing = true) %}
+      {% endif %}
       <li{{ item.attributes.addClass('nav-item') }}>
         {# Plain <a> (not link()) so the inline SVG is not XSS-filtered. #}
-        <a href="{{ item.url }}" class="nav-link pf-utility-nav__link">
-          <span class="pf-icon" aria-hidden="true">{{ source(directory ~ '/images/bi/' ~ icon|clean_class ~ '.svg', ignore_missing = true) }}</span>
+        {% if panel %}
+          <a href="{{ item.url }}" class="nav-link pf-utility-nav__link" role="button"
+             data-bs-toggle="offcanvas" data-bs-target="#pf-panel-{{ panel }}" aria-controls="pf-panel-{{ panel }}"
+             data-pf-panel-trigger="{{ panel }}">
+        {% else %}
+          <a href="{{ item.url }}" class="nav-link pf-utility-nav__link">
+        {% endif %}
+          <span class="pf-icon" aria-hidden="true">{{ svg|raw }}</span>
           <span class="visually-hidden">{{ item.title }}</span>
         </a>
       </li>

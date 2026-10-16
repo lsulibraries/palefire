@@ -190,6 +190,16 @@
     el.classList.remove('is-loading', 'is-failed');
   }
 
+  // Shared with the utility menu's Hours panel (utility-panels.js), so both
+  // use one LibCal request per location and the same open/closed rules.
+  Drupal.palefireHours = {
+    load,
+    status,
+    today: (specs, now) => window_(specFor(specs, now), now),
+    range,
+    formatTime,
+  };
+
   // Bootstrap lg; mirrors the two-column bento head in _visit.scss.
   const LG = window.matchMedia('(min-width: 992px)');
 

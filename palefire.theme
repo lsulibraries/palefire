@@ -13,6 +13,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\palefire\Hook\PalefireHooks;
 
 /**
  * Implements hook_preprocess_breadcrumb().
@@ -115,11 +116,14 @@ function palefire_buildings(): array {
  */
 function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['bento_map'] = NULL;
+  $variables['page_title'] = NULL;
   $paragraph = $variables['paragraph'] ?? NULL;
-  if (!$paragraph instanceof ParagraphInterface || !$paragraph->hasField('field_bento_map')) {
+  if (!$paragraph instanceof ParagraphInterface) {
     return;
   }
-  $map = $paragraph->get('field_bento_map')->entity;
+  // A bento without the map field still gets its intro, Visit card and
+  // page title (this used to return early and skip them).
+  $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
   if ($map instanceof ParagraphInterface && $map->isPublished()) {
     $map = \Drupal::service('entity.repository')->getTranslationFromContext($map);
     $variables['bento_map'] = \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($map, 'default');
@@ -128,11 +132,13 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
 }
 
 /**
- * Adds the host Modular page's intro and Visit card to a bento search.
+ * Adds the host Modular page's title, intro and Visit card to a bento search.
  *
  * Reads the optional node fields added by scripts/palefire_modular_setup.php
  * (field_intro, field_hours_location, field_location_name,
  * field_location_query, field_location_display). Sets:
+ * - page_title: the node title when this bento is the first section (it
+ *   then prints the page <h1>), or NULL.
  * - bento_intro: render array of field_intro, or NULL.
  * - visit: NULL, or ['name', 'lid', 'maps_url', 'embed_url', 'query'] for
  *   the Visit card (hours via js/visit-hours.js, the map loads on click).
@@ -151,6 +157,15 @@ function _palefire_bento_visit(array &$variables, ParagraphInterface $paragraph)
     return;
   }
   $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $host->getCacheTags());
+
+  // The page <h1>: printed by the bento (above the intro) only when it is
+  // the Modular page's first section. Paragraph templates don't get a
+  // `node` variable, which is why {{ node.label }} printed nothing.
+  // PalefireHooks::preprocessPage() uses the same check, so page.html.twig
+  // prints the <h1> itself on every other Modular page.
+  if ($host->bundle() === PalefireHooks::MODULAR_BUNDLE && PalefireHooks::titleBentoUuid($host) === $paragraph->uuid()) {
+    $variables['page_title'] = $host->label();
+  }
 
   $value = static function (string $name) use ($host): string {
     return ($host->hasField($name) && !$host->get($name)->isEmpty())

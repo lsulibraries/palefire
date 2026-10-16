@@ -74,6 +74,7 @@ class PalefireHooks {
   #[Hook('preprocess_page')]
   public function preprocessPage(array &$variables): void {
     $variables['is_modular_page'] = FALSE;
+    $variables['modular_title_in_bento'] = FALSE;
     $variables['palefire_toc'] = [];
 
     $node = $variables['node'] ?? NULL;
@@ -81,6 +82,11 @@ class PalefireHooks {
       return;
     }
     $variables['is_modular_page'] = TRUE;
+
+    // The bento search prints the page <h1> above its intro when it is the
+    // first section (paragraph--bento-search.html.twig); page.html.twig then
+    // leaves its own <h1> out, so there is always exactly one.
+    $variables['modular_title_in_bento'] = self::titleBentoUuid($node) !== NULL;
 
     // Only build the TOC on routes that display the node itself.
     $route = \Drupal::routeMatch()->getRouteName();
@@ -161,8 +167,9 @@ class PalefireHooks {
       $variables['site_name_plain'] = (string) \Drupal::config('system.site')->get('name');
     }
 
-    // Modular pages print their own <h1> under the breadcrumb
-    // (page.html.twig), so a placed Page title block would be a second one.
+    // Modular pages print their own <h1> (page.html.twig, or the bento
+    // search when it is the first section), so a placed Page title block
+    // would be a second one.
     if (($variables['plugin_id'] ?? '') === 'page_title_block') {
       $variables['#cache']['contexts'][] = 'route';
       if ($this->currentModularNode()) {
@@ -191,6 +198,40 @@ class PalefireHooks {
   private function currentModularNode(): ?NodeInterface {
     $node = \Drupal::routeMatch()->getParameter('node');
     return $node instanceof NodeInterface && $node->bundle() === self::MODULAR_BUNDLE ? $node : NULL;
+  }
+
+  /**
+   * Paragraph fields that hold a Modular page's sections, newest first.
+   *
+   * field_scroll_section is palefire_modular's field; field_sections is the
+   * older one this class was written for.
+   */
+  public const SECTION_FIELDS = ['field_scroll_section', self::SECTIONS_FIELD];
+
+  /**
+   * UUID of the bento_search that prints the page <h1>, or NULL.
+   *
+   * That is the first section the current user can see, when it is a
+   * bento_search. Used by preprocessPage() (page.html.twig skips its own
+   * <h1>) and palefire_preprocess_paragraph__bento_search() (the bento
+   * prints it above the intro), so the two always agree.
+   */
+  public static function titleBentoUuid(NodeInterface $node): ?string {
+    foreach (self::SECTION_FIELDS as $field) {
+      if (!$node->hasField($field)) {
+        continue;
+      }
+      foreach ($node->get($field)->referencedEntities() as $paragraph) {
+        if (method_exists($paragraph, 'isPublished') && !$paragraph->isPublished()) {
+          continue;
+        }
+        if (!$paragraph->access('view')) {
+          continue;
+        }
+        return $paragraph->bundle() === 'bento_search' ? $paragraph->uuid() : NULL;
+      }
+    }
+    return NULL;
   }
 
   /**

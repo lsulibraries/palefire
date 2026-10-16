@@ -1,0 +1,322 @@
+// Utility panels: offcanvas drawers from the left, opened by the utility
+// menu's icons (templates/includes/utility-panels.html.twig,
+// js/utility-panels.js).
+//
+// Always dark, in the dark TOC sidebar's look: the same glass and colour
+// tokens (_modular-tokens.scss), monospace tracked labels and a gold accent.
+// Bootstrap 5.3 does the slide, focus trap and backdrop.
+
+@import 'modular-tokens';
+
+.pf-panel.offcanvas {
+  @include pf-tokens($pf-chrome-dark);
+  @include pf-tokens($pf-section-dark);
+  --bs-offcanvas-width: min(#{$pf-panel-width}, 100vw);
+  --bs-offcanvas-padding-x: 2.5rem;
+  --bs-offcanvas-padding-y: 2rem;
+  --bs-offcanvas-color: var(--pf-section-fg);
+  --bs-offcanvas-bg: var(--pf-sidebar-bg);
+  --bs-offcanvas-border-color: var(--pf-toc-rail);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  font-family: var(--bs-font-monospace);
+}
+
+.pf-panel {
+  &__header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(2.25rem + var(--bs-offcanvas-padding-y)); // border-box: + the top padding
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x) 0;
+  }
+
+  // "H O U R S": centred, light and widely tracked, like Origami.
+  &__title {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: 1.125rem;
+    font-weight: $font-weight-light;
+    letter-spacing: .4em;
+    text-indent: .4em; // the tracking after the last letter, so it centres
+    text-transform: uppercase;
+    color: var(--pf-toc-sub-color);
+  }
+
+  // Same box as the TOC hide/show button (.pf-modular__toc-collapse).
+  &__close {
+    position: absolute;
+    top: var(--bs-offcanvas-padding-y);
+    inset-inline-end: .75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    color: var(--pf-toc-color);
+    background-color: transparent;
+    border: 1px solid var(--pf-section-border);
+    border-radius: 4px;
+    transition: color .15s ease, border-color .15s ease;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      border-color: var(--pf-toc-accent);
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 2rem var(--bs-offcanvas-padding-x);
+    overflow-y: auto;
+  }
+
+  &__footer {
+    padding: 0 var(--bs-offcanvas-padding-x) var(--bs-offcanvas-padding-y);
+  }
+
+  // "SEE FULL HOURS ↗"
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .875rem 1.25rem;
+    color: var(--pf-toc-active);
+    font-size: .8125rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--pf-section-border);
+    transition: color .15s ease, border-color .15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-accent);
+      border-color: var(--pf-toc-accent);
+    }
+  }
+
+  &__cta-icon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  // Search panel: the bento form, top of the drawer.
+  &__search {
+    margin-top: 1rem;
+  }
+}
+
+// Hours panel ---------------------------------------------------------------
+
+.pf-hours {
+  justify-content: center;
+  gap: 1.25rem;
+
+  &__date {
+    margin: 0;
+    padding-bottom: 1.25rem;
+    font-family: var(--bs-body-font-family);
+    font-size: 1.125rem;
+    font-weight: $font-weight-medium;
+    letter-spacing: .14em;
+    text-align: center;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--pf-section-border);
+
+    &:empty {
+      display: none; // no JavaScript
+    }
+  }
+
+  // Dot-matrix clock: bold monospace digits seen through a grid of dots.
+  &__clock {
+    margin: .25rem 0 .5rem;
+    font-size: clamp(3rem, 14vw, 4.75rem);
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--pf-toc-active);
+
+    time {
+      display: inline-block;
+      -webkit-mask-image: radial-gradient(circle, #000 0 42%, transparent 52%);
+      mask-image: radial-gradient(circle, #000 0 42%, transparent 52%);
+      -webkit-mask-size: 5px 5px;
+      mask-size: 5px 5px;
+    }
+
+    &:has(time:empty) {
+      display: none;
+    }
+  }
+
+  &__list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  // One location: vertical OPEN / CLOSED badge, then hours and name.
+  &__loc {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    min-height: 5.5rem;
+    background-color: rgba($pf-white, .03);
+    border: 1px solid var(--pf-section-border);
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: .75rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--pf-toc-sub-color);
+    background-color: $pf-black;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .375rem;
+    padding: 1rem 1.25rem;
+  }
+
+  // Open: "7AM – 12AM", large and light. Closed: tracked caps.
+  &__when {
+    font-family: var(--bs-body-font-family);
+    font-size: .875rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--pf-toc-active);
+  }
+
+  &__when-lead {
+    font-weight: $font-weight-normal;
+    color: var(--pf-toc-sub-color);
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: $font-weight-semibold;
+    color: var(--pf-toc-active);
+  }
+
+  &__loc[data-hours-state="open"],
+  &__loc[data-hours-state="closing"] {
+    .pf-hours__badge {
+      color: $pf-black;
+      background-color: var(--pf-toc-accent);
+    }
+
+    .pf-hours__when {
+      font-size: 1.75rem;
+      font-weight: $font-weight-light;
+      letter-spacing: .02em;
+      text-transform: none;
+    }
+  }
+
+  // Closes within 30 minutes: say so in gold.
+  &__loc[data-hours-state="closing"] .pf-hours__when {
+    font-size: 1rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--pf-toc-accent);
+  }
+
+  // Closed: Origami's diagonal stripes.
+  &__loc[data-hours-state="closed"],
+  &__loc[data-hours-state="opening"] {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba($pf-white, .05) 0 .375rem,
+      transparent .375rem .875rem
+    );
+  }
+
+  &__loc.is-loading .pf-hours__when,
+  &__loc.is-failed .pf-hours__when {
+    font-weight: $font-weight-normal;
+    color: var(--pf-toc-sub-color);
+  }
+}
+
+// Backdrop ------------------------------------------------------------------
+// Bootstrap prints a fixed .5 opacity. Light pages get a heavier wash so the
+// content behind the drawer recedes; dark pages are already dark.
+// js/utility-panels.js sets <html data-pf-panel> while a panel is open, so
+// the mobile "On this page" offcanvas keeps Bootstrap's default.
+html[data-pf-panel] .offcanvas-backdrop.show {
+  opacity: $pf-panel-backdrop-light;
+}
+
+html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show {
+  opacity: $pf-panel-backdrop-dark;
+}
+
+// Without blur, or when asked for less transparency / more contrast, the
+// drawer is solid.
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pf-panel.offcanvas {
+    --bs-offcanvas-bg: #{rgba($pf-black, .94)};
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .pf-panel.offcanvas {
+    --bs-offcanvas-bg: #{$pf-black};
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+// Windows High Contrast: drop the dot mask and stripes, keep borders.
+@media (forced-colors: active) {
+  .pf-hours__clock time {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .pf-hours__loc {
+    background-image: none;
+  }
+
+  .pf-hours__badge {
+    forced-color-adjust: none;
+    color: CanvasText;
+    background-color: Canvas;
+    border-inline-end: 1px solid CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-panel__close,
+  .pf-panel__cta {
+    transition: none;
+  }
+}

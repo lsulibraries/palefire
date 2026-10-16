@@ -3,8 +3,10 @@
 // in _modular.scss): left under the TOC sidebar and, in the first section,
 // up under the top bar. The bento box sits inside .pf-section__inner's
 // padding, so the layer first reaches back out by that padding to the
-// section edge. The toggle moves down by the bleed, so it stays 1rem
-// inside the section's top corner.
+// section edge. The video toggle is not in this layer any more (see
+// .pf-bento__bg-toggle below): with position: fixed its right: 1rem was
+// measured from a box that runs past the viewport by the section padding,
+// so the button was drawn off screen.
 .pf-bento__media {
   position: fixed;
   inset: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px));
@@ -121,9 +123,17 @@
 // bar along the bottom (the TOC indicator's gold) fills as the clip plays.
 .pf-bento__bg-toggle {
   --size: 2.25rem; // the TOC toggle's size
+  // Positioned against .pf-bento (the button is the media layer's sibling,
+  // not its child). The bento box sits inside .pf-section__inner's padding,
+  // so the offsets reach back out by that padding: 1rem in from the
+  // section's top right corner, as before the media layer became fixed.
   // --pf-bento-toggle-top: set by js/bento-video.js to centre the button on
-  // the breadcrumb's line when the bento is the first section.
-  position: absolute; top: var(--pf-bento-toggle-top, calc(var(--pf-bleed-block-start, 0px) + 1rem)); right: 1rem; z-index: 2;
+  // the breadcrumb's line when the bento is the first section (negative:
+  // the breadcrumb is above the bento).
+  position: absolute;
+  top: var(--pf-bento-toggle-top, calc(1rem - var(--pf-section-pad-block, 0px)));
+  inset-inline-end: calc(1rem - var(--pf-section-pad-inline, 0px));
+  z-index: 4; // above the bento head (positioned, z-index auto)
   display: inline-flex; align-items: center; flex-direction: row-reverse;
   min-width: var(--size); height: var(--size); padding: 0; margin: 0;
   overflow: hidden; // clips the progress bar to the corners

@@ -73,3 +73,18 @@ $pf-glass-saturate:        1.4;
 $pf-header-bg-alpha:       .6;
 // Used when the mobile menu is open, and when backdrop-filter isn't supported.
 $pf-header-bg-alpha-solid: .94;
+
+// Origami header (layout/_header.scss) -------------------------------------
+$pf-nav-tracking:        .2em;     // Primary menu letter-spacing (uppercase).
+$pf-nav-font-size:       .9375rem;
+$pf-dropdown-tracking:   .15em;
+$pf-dropdown-font-size:  .8125rem;
+$pf-logo-color:          #999;     // The wordmark's own grey (logo.svg).
+$pf-logo-color-dark:     #c8c8c8;  // On the dark bar.
+
+// Utility panels (components/_utility-panels.scss) -------------------------
+// The page behind an open drawer dims more on light pages, where a .5 black
+// wash (Bootstrap's default) left the content competing with the drawer.
+$pf-panel-width:             24rem;
+$pf-panel-backdrop-light:    .72;
+$pf-panel-backdrop-dark:     .55;

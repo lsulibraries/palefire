@@ -35,7 +35,14 @@
 // that isn't positioned: the intro and the "Search LSU Libraries" heading
 // were drawn under the video and its overlay. Positioning the children puts
 // them back on top, in DOM order (the media comes first).
-.pf-bento.has-bg-video > :not(.pf-bento__media) { position: relative; }
+// The video toggle is left out: it is position: absolute (_bento-search.scss).
+.pf-bento.has-bg-video > :not(.pf-bento__media, .pf-bento__bg-toggle) { position: relative; }
+
+// Page <h1> above the intro, when the bento is the first section
+// (page_title, paragraph--bento-search.html.twig). Type: .pf-modular__title
+// in _layout.scss.
+.pf-bento__title { margin: 0 0 1.25rem; }
+.pf-bento__lead > .pf-bento__title + .pf-bento__intro { margin-top: 0; }
 
 // --- Visit card ----------------------------------------------------------
 .pf-visit {

@@ -8,10 +8,14 @@
  *
  * Top bar, left to right: Header (logo) | Primary menu | Utility menu (icons).
  * Below the Bootstrap "lg" breakpoint (992px) the primary menu collapses
- * behind a toggle button and drops beneath the top bar.
+ * behind a toggle button and drops beneath the top bar. Utility icons that
+ * have a panel (search, hours) open it as an offcanvas drawer from the left
+ * (templates/includes/utility-panels.html.twig).
  *
  * Extra variables (PalefireHooks::preprocessPage()):
  * - is_modular_page: TRUE on "modular_page" nodes.
+ * - modular_title_in_bento: TRUE when the first section is a bento search,
+ *   which then prints the page <h1> itself.
  *
  * Modular pages: the "On this page" TOC is palefire_modular's block, placed
  * in the modular_sidebar region. The region is rendered once into a variable
@@ -95,6 +99,16 @@
     </div>
   </header>
 
+  {# Utility panels: Bootstrap offcanvas drawers (from the left) opened by
+     the utility menu's icons (menu--utility.html.twig). Printed outside
+     the header on purpose: the header's backdrop-filter would make it the
+     containing block of the fixed drawers and clip them to the bar. They
+     also sit outside #swup, so Swup visits keep them (and their clock). #}
+  {% if page.utility_menu %}
+    {{ attach_library('palefire/utility-panels') }}
+    {% include '@palefire/includes/utility-panels.html.twig' %}
+  {% endif %}
+
   <div id="swup" class="pf-swup transition-fade d-flex flex-column flex-grow-1">
     {# Modular pages print the breadcrumb inside <main>, above the first
        section (see below), so it lines up with the content column, not
@@ -144,7 +158,8 @@
              - Breadcrumb: the same "breadcrumb" region and System Breadcrumb
                block as other pages, on the line of the TOC's title.
              - <h1>: the node title, printed here so every Modular page has
-               one. The Page title block is suppressed on these pages
+               one, unless the first section is a bento search: then the
+               bento prints it right above its intro. The Page title block is suppressed on these pages
                (PalefireHooks::preprocessBlock()), so placing it can't add a
                second <h1>.
              It has no snap point of its own: the first section's snap point
@@ -157,6 +172,13 @@
                 <div class="pf-breadcrumb pf-breadcrumb--modular">
                   {{ page.breadcrumb }}
                 </div>
+              {% endif %}
+              {# When the first section is a bento search, the bento prints
+                 the <h1> above its intro (paragraph--bento-search.html.twig)
+                 and this one is left out (modular_title_in_bento,
+                 PalefireHooks::preprocessPage()). #}
+              {% if node.label and not modular_title_in_bento %}
+                <h1 class="pf-modular__title">{{ node.label }}</h1>
               {% endif %}
             </header>
           {% endif %}

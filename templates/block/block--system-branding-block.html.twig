@@ -14,14 +14,29 @@
  * becomes the link's only content with alt="LSU Libraries home". Keep "Site
  * name" on only for a logo that has no words in it (e.g. a shield icon).
  *
+ * The default logo (the theme's logo.svg) is printed as inline SVG from
+ * templates/includes/logo-lsu-libraries.svg.twig, filled with currentColor:
+ * grey at rest, purple on hover (light header), gold on hover (dark header).
+ * A custom logo uploaded in the theme settings stays an <img>.
+ *
  * Extra variable: site_name_plain (PalefireHooks::preprocessBlock()).
  * The site name is deliberately not an <h1>; each page has one <h1> (title).
  */
 #}
 {% block content %}
+  {# The theme's own logo.svg is printed inline; an uploaded custom logo
+     (Appearance > Settings > Logo image) stays an <img>. #}
+  {% set inline_logo = site_logo ends with '/palefire/logo.svg' %}
   {% if site_logo or site_name %}
     <a href="{{ path('<front>') }}" rel="home" class="navbar-brand pf-brand d-inline-flex align-items-center gap-2 me-0">
-      {% if site_logo %}
+      {% if site_logo and inline_logo %}
+        {# Inline SVG (currentColor) so the logo follows the header theme and
+           hover colour. The SVG is aria-hidden; this text names the link. #}
+        {% include '@palefire/includes/logo-lsu-libraries.svg.twig' %}
+        {% if not site_name %}
+          <span class="visually-hidden">{{ '@site home'|t({'@site': site_name_plain}) }}</span>
+        {% endif %}
+      {% elseif site_logo %}
         <img src="{{ site_logo }}"
              alt="{{ site_name ? '' : '@site home'|t({'@site': site_name_plain}) }}"
              class="pf-brand__logo" fetchpriority="high" />
