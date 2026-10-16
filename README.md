@@ -861,6 +861,15 @@ with dark grey text instead of black, like a printed catalogue.
   as the sidebar and drawers (`pf-thin-scrollbar` on `<html>`), on the page
   colour, instead of the system bar. On Dark guides its thumb is the
   guide's muted grey.
+* **Scrollbars like the TOC rail** (follow-up): on guides, the page
+  scrollbar and the sidebar's (which was a long dark bar, the TOC's full
+  grey) are a 4px track in the rail colour (`--pf-g-rule`) with a lighter
+  thumb (`--pf-g-scroll`, `#7a7772`; hover `#595959`). That thumb is as light
+  as it can go and pass 1.4.11: about 3.3:1 on the rail, 4:1 on the cream
+  (the rail colour itself would be about 1.2:1). Dark guides: `#b3adbb` on
+  the dark rail. `pf-thin-scrollbar` gained `--pf-scroll-track`
+  (transparent by default, so the drawers don't change). While a dark
+  section is active on a light guide, the sidebar keeps the default bar.
 
 ### TOC open by default
 

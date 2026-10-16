@@ -30,6 +30,8 @@ $pf-guide-light: (
   'g-muted': #595959,
   'g-accent': $pf-purple,
   'g-accent-soft': #ebe4f0,
+  'g-scroll': #7a7772,
+  'g-scroll-hover': #595959,
 );
 
 $pf-guide-dark: (
@@ -40,6 +42,8 @@ $pf-guide-dark: (
   'g-muted': #b3adbb,
   'g-accent': $pf-lavender,
   'g-accent-soft': #2a2235,
+  'g-scroll': #b3adbb,
+  'g-scroll-hover': #ece9f0,
 );
 
 html[data-pf-mode="guide"] {
@@ -62,15 +66,24 @@ html[data-pf-mode="guide"]:not(.pf-guide-dark) {
   background-color: var(--pf-g-bg);
 }
 
-// The page's own scrollbar: the same thin bar as the sidebar and drawers
-// (pf-thin-scrollbar), on the page colour, instead of the system bar.
+// Scrollbars: the page's own (instead of the system bar) and the sidebar's
+// look like the TOC rail: a 4px track in the rail colour with a lighter
+// thumb than the TOC grey. The thumb is as light as it can go and still
+// pass 1.4.11 (3:1 for a control): #7a7772 is about 3.3:1 on the rail and
+// 4:1 on the cream; the rail colour itself would be about 1.2:1. Dark guides:
+// the muted grey on the dark rail, 5:1 and up. While a dark section is
+// active on a light guide the sidebar is Palefire's dark one, so it keeps
+// the default bar (no :not() match).
 html[data-pf-mode="guide"] {
   @include pf-thin-scrollbar;
 }
 
-html.pf-guide-dark[data-pf-mode="guide"] {
-  --pf-scroll-thumb: var(--pf-g-muted);
-  --pf-scroll-thumb-hover: var(--pf-g-fg);
+html[data-pf-mode="guide"],
+html[data-pf-mode="guide"] body:not([data-section-theme="dark"]) .pf-sidebar.pf-modular__sidebar,
+html.pf-guide-dark[data-pf-mode="guide"] .pf-sidebar.pf-modular__sidebar {
+  --pf-scroll-thumb: var(--pf-g-scroll);
+  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover);
+  --pf-scroll-track: var(--pf-g-rule);
 }
 
 // Settings > Dark guides. <html> also has data-bs-theme="dark"; these
