@@ -137,16 +137,9 @@
                  {% if has_toc %}tabindex="-1"{% endif %}
                  aria-label="{{ 'Page navigation'|t }}">
             {% if has_toc %}
-              {# Hide / show the sidebar, lg and up (js/modular-toc-collapse.js).
-                 Below lg the "On this page" offcanvas button is used instead. #}
-              {{ attach_library('palefire/modular-toc-collapse') }}
-              <button type="button" class="pf-modular__toc-collapse d-none d-lg-inline-flex"
-                      data-pf-toc-collapse aria-controls="pf-modular-sidebar-body" aria-expanded="true">
-                {# Open: chevron (hide). Closed: list (show the TOC). CSS picks one. #}
-                <svg class="pf-modular__toc-collapse-icon pf-modular__toc-collapse-icon--hide" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>
-                <svg class="pf-modular__toc-collapse-icon pf-modular__toc-collapse-icon--show" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>
-                <span class="visually-hidden">{{ 'On this page sidebar'|t }}</span>
-              </button>
+              {# lg and up the TOC is always shown: it is the page's main
+                 navigation, so there is no hide/show button. Below lg it is
+                 an offcanvas opened by the list-icon button. #}
               <div class="offcanvas-header">
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
                         aria-label="{{ 'Close'|t }}"></button>
@@ -197,9 +190,9 @@
             </header>
           {% endif %}
           {% if has_toc %}
-            {# Below lg: a square list icon (the same icon as the hidden-TOC
-               button on lg); the name stays for screen readers and shows as a
-               tooltip. #}
+            {# Below lg: a square list icon that opens the TOC offcanvas (lg
+               and up the TOC is always shown); the name stays for screen
+               readers and shows as a tooltip. #}
             <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar"
                     title="{{ 'Table of contents'|t }}">

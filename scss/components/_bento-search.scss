@@ -135,11 +135,11 @@
   }
 }
 
-// Background-video toggle: the same button as the TOC's hide/show toggle
-// (.pf-modular__toc-collapse in _modular.scss, its floating "closed" look):
-// 2.25rem tall, 4px corners, 1px --pf-toc-rail border, the sidebar's glass
-// background, --pf-toc-color text that turns --pf-toc-active on hover. The
-// background and border stay the same on hover, as on the TOC toggle. The
+// Background-video toggle: a small glass button (it was modelled on the
+// TOC's hide/show button, since removed): 2.25rem tall, 1px --pf-toc-rail
+// border, the sidebar's glass background, --pf-toc-color text that turns
+// --pf-toc-active on hover. The background and border stay the same on
+// hover. The
 // label is in the breadcrumb's voice (monospace, uppercase, tracked) and
 // slides out on hover or keyboard focus; touch shows just the icon, and
 // screen readers always get the label (never display: none). A thin gold

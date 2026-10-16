@@ -889,16 +889,22 @@ with dark grey text instead of black, like a printed catalogue.
   guide colours apply on hover). `scrollbar-gutter: stable` keeps its space,
   so nothing shifts when it appears.
 
-### TOC open by default
+### TOC always shown on large screens (2026-10-16)
 
-Guides open with "On this page" shown (lg and up). The hide/show button
-still works, and its choice on a guide is saved for guides only
-(`palefire.tocCollapsed.guide` in `localStorage`); hero pages keep theirs
-(`palefire.tocCollapsed`). The mode comes from
-`<html data-pf-mode="guide">` (`PalefireHooks::preprocessHtml()`), which
-`modular-toc-collapse.js` reads in `<head>`, before the first paint. Below
-lg the TOC is the "Table of contents" button and offcanvas, as on every
-Modular page.
+From lg up the table of contents is always shown, on every Modular page
+(guides and hero pages alike): it is the page's main navigation, so the
+hide/show button is gone. Below lg nothing changes: the list-icon button
+opens the TOC offcanvas.
+
+Removed with it: the button (`page.html.twig`), `js/modular-toc-collapse.js`
+and its `palefire/modular-toc-collapse` library, the collapsed and
+slide-out styles in `_modular.scss` (`html.pf-toc-collapsed`,
+`.pf-modular__toc-collapse`, `html.pf-toc-instant`, the column and slide
+transitions), the `data-pf-toc-default` attribute (hero pages used to open
+with the TOC hidden) in `PalefireHooks::preprocessHtml()` and its Swup
+sync. `data-pf-mode` stays (Dark guides uses it). Visitors' saved
+`palefire.tocCollapsed*` keys in `localStorage` are simply ignored now.
+One less script in `<head>` on Modular pages.
 
 ### Dark guides
 

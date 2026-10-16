@@ -103,9 +103,9 @@
         document.documentElement.setAttribute(name, value);
       }
     });
-    // Page mode and TOC default (PalefireHooks::preprocessHtml()): present
-    // on some pages only, so copy or remove them.
-    ['data-pf-mode', 'data-pf-toc-default'].forEach((name) => {
+    // Page mode (PalefireHooks::preprocessHtml()): present on some pages
+    // only, so copy or remove it.
+    ['data-pf-mode'].forEach((name) => {
       const value = doc.documentElement.getAttribute(name);
       if (value) {
         document.documentElement.setAttribute(name, value);

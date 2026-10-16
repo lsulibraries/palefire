@@ -28,8 +28,9 @@
   }
 }
 
-// Registered so the side bleed can animate with the sidebar column when
-// the TOC is hidden or shown (see "TOC sidebar toggle" below).
+// Registered so it is always a length (0px when not set): dark sections
+// and backgrounds use it without a fallback. (It also used to animate with
+// the TOC hide/show button, which is gone.)
 @property --pf-bleed-inline-start {
   syntax: "<length>";
   inherits: true;
@@ -417,13 +418,10 @@ html.pf-snap .site-footer {
   // Section backgrounds reach left under the frosted TOC column. Only with
   // the TOC: a plain sidebar has no glass, so its text would sit straight
   // on the photo.
+  // lg and up the TOC column is always there: it is the page's main
+  // navigation, so there is no hide/show button (removed 2026-10-16).
   .pf-modular--has-toc {
     --pf-bleed-inline-start: var(--pf-sidebar-w);
-    // Bootstrap's offcanvas timing ($offcanvas-transition-duration, ease-in-out),
-    // so the column closes in step with the sidebar sliding out.
-    transition:
-      grid-template-columns 0.3s ease-in-out,
-      --pf-bleed-inline-start 0.3s ease-in-out;
   }
 
   // Two classes so these beat Palefire's own .pf-sidebar rules and
@@ -431,7 +429,7 @@ html.pf-snap .site-footer {
   .pf-sidebar.pf-modular__sidebar {
     position: sticky;
     top: var(--pf-header-h);
-    width: var(--pf-sidebar-w); // keeps the TOC from reflowing while the column animates
+    width: var(--pf-sidebar-w);
     align-self: flex-start; // a stretched column is as tall as the row, so it can't stick
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
@@ -454,9 +452,7 @@ html.pf-snap .site-footer {
     background-color: var(--pf-sidebar-bg) !important;
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
-    transition:
-      background-color 0.3s ease,
-      transform 0.3s ease-in-out;
+    transition: background-color 0.3s ease;
     // Above the section backgrounds that bleed in under it (each
     // .pf-section__inner is z-index 1); below the header (1020).
     z-index: 2;
@@ -485,140 +481,11 @@ html.pf-snap .site-footer {
     --pf-scroll-thumb: transparent;
     --pf-scroll-track: transparent;
   }
-
-  // -------------------------------------------------------------------
-  // TOC sidebar toggle
-  // -------------------------------------------------------------------
-  // js/modular-toc-collapse.js puts .pf-toc-collapsed on <html>. The
-  // column closes and the backgrounds stop reaching left, so they still
-  // cover the page edge to edge. Below lg the offcanvas is unaffected.
-  html.pf-toc-collapsed .pf-modular--has-toc {
-    grid-template-columns: 0px minmax(0, 1fr);
-    --pf-bleed-inline-start: 0px;
-  }
-
-  // The sidebar slides out whole, glass and all, like Bootstrap's
-  // .offcanvas-start (translateX(-100%), .3s ease-in-out), while the column
-  // closes behind it. visibility also takes the links out of the tab order
-  // and the accessibility tree; it switches after the slide.
-  // overflow: visible lets the toggle (inside the sidebar) ride along just
-  // past its edge and stay on screen; the sidebar's own scroll clip would
-  // hide it. Anything taller than the sidebar spills below the viewport,
-  // where it can't be seen.
-  html.pf-toc-collapsed .pf-sidebar.pf-modular__sidebar {
-    visibility: hidden;
-    pointer-events: none;
-    overflow: visible;
-    transform: translateX(-100%);
-    transition:
-      background-color 0.3s ease,
-      transform 0.3s ease-in-out,
-      visibility 0s linear 0.3s;
-  }
-
-  html[dir="rtl"].pf-toc-collapsed .pf-sidebar.pf-modular__sidebar {
-    transform: translateX(100%);
-  }
-
-  // Open: top right of the sidebar, centred on the TOC title's first line
-  // (2rem + half of its 1.125rem line - half of 2.25rem), which is also
-  // the breadcrumb's line.
-  .pf-modular__toc-collapse {
-    position: absolute;
-    top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // nudge: js/modular-toc.js
-    inset-inline-end: 0.75rem;
-    z-index: 1;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    padding: 0;
-    border: 1px solid var(--pf-toc-rail);
-    border-radius: 4px;
-    color: var(--pf-toc-color);
-    background-color: transparent;
-    visibility: visible; // stays visible while the sidebar is hidden
-    pointer-events: auto;
-    transition:
-      color 0.2s ease,
-      background-color 0.3s ease,
-      border-color 0.3s ease;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--pf-toc-active);
-    }
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-      transition: transform 0.3s ease;
-    }
-  }
-
-  // Closed: a small glass button that floats in the content's side
-  // padding (1rem + 2.25rem fits inside --pf-section-pad-inline). It sits
-  // 1rem past the sidebar's edge (-(1rem + 2.25rem)), so once the sidebar
-  // has slid off by its full width the button is 1rem from the page edge.
-  // Closing, it moves out in step with the slide. Opening, it jumps back
-  // inside at once (no inset transition in the open rule) and slides in
-  // with the sidebar, so the sidebar's clip never hides it.
-  html.pf-toc-collapsed .pf-modular__toc-collapse {
-    top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // still on the breadcrumb's line
-    inset-inline-end: -3.25rem;
-    transition:
-      color 0.2s ease,
-      background-color 0.3s ease,
-      border-color 0.3s ease,
-      inset-inline-end 0.3s ease-in-out;
-    background-color: var(--pf-sidebar-bg);
-    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-    backdrop-filter: var(--pf-glass-filter, blur(26px));
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
-  }
-
-  // Icon: a chevron while the sidebar is open ("hide"), a list while it is
-  // closed, so the floating button reads as "show the table of contents".
-  // Both icons are in the markup and the <html> class picks one, so the
-  // right icon is there on first paint.
-  .pf-modular__toc-collapse-icon--show {
-    display: none;
-  }
-
-  html.pf-toc-collapsed .pf-modular__toc-collapse {
-    .pf-modular__toc-collapse-icon--hide {
-      display: none;
-    }
-
-    .pf-modular__toc-collapse-icon--show {
-      display: block;
-      transform: none; // never flipped (outranks any leftover svg rotate)
-    }
-  }
-
-  // RTL: only the chevron mirrors, so it still points at the sidebar edge.
-  // The list icon is never flipped.
-  html[dir="rtl"] .pf-modular__toc-collapse-icon--hide {
-    transform: scaleX(-1);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-modular--has-toc,
   .pf-sidebar.pf-modular__sidebar,
-  .pf-sidebar.pf-modular__sidebar .offcanvas-body,
-  .pf-modular__toc-collapse,
-  .pf-modular__toc-collapse svg {
-    transition: none !important;
-  }
-}
-
-// A default state applied on a Swup visit (js/modular-toc-collapse.js):
-// no slide, like a full page load.
-html.pf-toc-instant {
-  .pf-modular--has-toc,
-  .pf-sidebar.pf-modular__sidebar,
-  .pf-modular__toc-collapse {
+  .pf-sidebar.pf-modular__sidebar .offcanvas-body {
     transition: none !important;
   }
 }

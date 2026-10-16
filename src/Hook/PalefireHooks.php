@@ -69,12 +69,10 @@ class PalefireHooks {
   /**
    * Implements hook_preprocess_html().
    *
-   * Marks a Modular page that opens with a bento hero (the same test as the
-   * bento's page title: titleBentoUuid()) with data-pf-toc-default="hidden"
-   * on <html>. js/modular-toc-collapse.js runs in <head> and starts the TOC
-   * hidden from it, before the first paint, unless the visitor has chosen.
-   * The page cache entry already carries the node's cache tags, so editing
-   * the sections updates it.
+   * Puts the page mode (field_modular_type: page, guide, form) on <html> as
+   * data-pf-mode, for CSS and for scripts that run before <body> exists
+   * (Settings > Dark guides, html.html.twig). The page cache entry already
+   * carries the node's cache tags, so editing the node updates it.
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
@@ -86,12 +84,6 @@ class PalefireHooks {
     if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
       return;
     }
-    if (self::titleBentoUuid($node) !== NULL) {
-      $variables['html_attributes']->setAttribute('data-pf-toc-default', 'hidden');
-    }
-    // Page mode (field_modular_type: page, guide, form) for scripts that run
-    // before <body> exists: the TOC hide/show default
-    // (modular-toc-collapse.js) and Settings > Dark guides (html.html.twig).
     $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
   }
 
