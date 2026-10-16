@@ -197,9 +197,14 @@
             </header>
           {% endif %}
           {% if has_toc %}
+            {# Below lg: a square list icon (the same icon as the hidden-TOC
+               button on lg); the name stays for screen readers and shows as a
+               tooltip. #}
             <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
-              {{ 'Table of contents'|t }}
+                    data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar"
+                    title="{{ 'Table of contents'|t }}">
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>
+              <span class="visually-hidden">{{ 'Table of contents'|t }}</span>
             </button>
           {% endif %}
           {{ page.highlighted }}

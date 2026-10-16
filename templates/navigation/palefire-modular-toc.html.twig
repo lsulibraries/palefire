@@ -5,22 +5,17 @@
  * default, plus the scroll-tracking library and Origami's "Back to top"
  * arrow (inline SVG, so it doesn't need Font Awesome).
  *
- * Title: the page's own title (page_title, from
- * PalefireHooks::preprocessPalefireModularToc()), set to match the
- * breadcrumb beside it. It is a plain paragraph, not a heading, since the
- * page's <h1> already says it; the nav is named by the block's heading
- * setting ("On this page") for screen readers. Without a page title the
- * block heading shows as before.
+ * Title: "Table of contents" on every page, in the label style that lines
+ * up with the breadcrumb beside it (.pf-toc__heading--page). It used to be
+ * the page title, which the page's <h1> already says. A plain paragraph,
+ * not a heading, because the sidebar comes before the <h1> in the page;
+ * it names the nav (aria-labelledby), so screen readers hear "Table of
+ * contents, navigation". The mobile button says the same.
  */
 #}
 {{ attach_library('palefire/modular-toc') }}
-{% if page_title %}
-<nav class="pf-toc" aria-label="{{ heading ?: 'On this page'|t }}" data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
-  <p class="pf-toc__heading pf-toc__heading--page">{{ page_title }}</p>
-{% else %}
-<nav class="pf-toc"{% if heading %} aria-labelledby="pf-toc-heading"{% else %} aria-label="{{ 'On this page'|t }}"{% endif %} data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
-  {% if heading %}<h2 id="pf-toc-heading" class="pf-toc__heading">{{ heading }}</h2>{% endif %}
-{% endif %}
+<nav class="pf-toc" aria-labelledby="pf-toc-title" data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
+  <p id="pf-toc-title" class="pf-toc__heading pf-toc__heading--page">{{ 'Table of contents'|t }}</p>
   <div class="pf-toc__rail">
     <span class="pf-toc__indicator" aria-hidden="true"></span>
     <ol class="pf-toc__list">

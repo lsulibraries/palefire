@@ -390,8 +390,23 @@ html.pf-snap .site-footer {
   inset-block-end: 1rem;
   inset-inline-end: 1rem;
   z-index: 1030;
+  // A 48px square with the list icon (the name is visually hidden): the
+  // same square as the lg TOC toggle and the video button, above 2.5.8's
+  // 24px target.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border-radius: 0;
   background-color: var(--bs-body-bg);
   box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 @include media-breakpoint-up(lg) {

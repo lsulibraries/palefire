@@ -246,15 +246,18 @@ background bleed. Styles: `.pf-modular__head` in `scss/layout/_layout.scss`.
 
 ### TOC title
 
-The TOC's visible title is the page's title, not the block's "On this page"
-heading (`templates/navigation/palefire-modular-toc.html.twig`,
-`PalefireHooks::preprocessPalefireModularToc()`). It is a plain paragraph,
-since the `<h1>` already says it, set to match the breadcrumb (two lines at
-most). The block's heading setting still names the `<nav>` for screen
-readers, and shows as before if there is no page title. No block config
-change is needed, and palefire_modular needs no change: the module only
-supplies the block and the default template, and this theme template
-overrides it.
+The TOC's visible title is **"Table of contents"** on every page
+(`templates/navigation/palefire-modular-toc.html.twig`; 2026-10-16, was the
+page's title, which the `<h1>` already says). It is a plain paragraph in the
+label style that lines up with the breadcrumb, not a heading, because the
+sidebar comes before the `<h1>`; it names the `<nav>` (`aria-labelledby`).
+The block's own heading setting is no longer shown. No block config change
+is needed, and palefire_modular needs no change: the module only supplies
+the block and the default template, and this theme template overrides it.
+
+Below lg the floating TOC button is a 48px square with the list icon (the
+lg hidden-TOC icon) instead of the words "Table of contents"; the words stay
+for screen readers (visually hidden) and as the tooltip.
 
 Keep exactly one `palefire-modular-toc.html.twig` in the theme
 (`templates/navigation/`). A stray copy of the module's default template
