@@ -159,6 +159,7 @@
         sub.link.classList.add('is-active');
         sub.link.setAttribute('aria-current', 'location');
       }
+      queueIndicator();
     }
 
     /* ---------------- Section tracking ---------------- */
@@ -237,22 +238,24 @@
 
     /* ---------------- Indicator ---------------- */
 
-    // The bar covers the active item (link + open sub-list). Its target
-    // is where that item will sit once every sub-list has finished opening
-    // or closing, worked out from the current layout:
-    //   top    = the item's current top, minus the sub-lists above it that
-    //            are still open or closing (they will end at 0).
-    //   height = the item without its sub-list, plus the sub-list's full
-    //            content height (where it ends once open).
-    // The sub-list's grid-rows transition and the bar's transform/height
-    // transitions share a duration and easing, so the bar keeps pace with
-    // the list. Re-measuring partway through gives the same answer, so
-    // ResizeObserver calls during the animation don't change its course.
+    // The bar covers only the link for what is on screen: the active h3
+    // sub-link when there is one, otherwise the section link. It never
+    // spans a whole open sub-list (2026-10-16), which made a tall,
+    // unreadable bar on guide pages with many h3s.
     //
-    // The bar only grows and shrinks when sections have sub-lists: every h3
-    // at depth 2 ("Include h3 sub-links on these modes"), only data-toc h3s
-    // at depth 1. Without sub-lists every item is one row tall, so the bar
-    // only slides.
+    // Its target is where that link will sit once every sub-list has
+    // finished opening or closing, worked out from the current layout:
+    //   section link: its current top, minus the sub-lists above it that
+    //                 are still open or closing (they will end at 0).
+    //   sub-link:     the same, plus the sub-list's start below the section
+    //                 link, plus the sub-link's offset inside the list. The
+    //                 list lays out at full height even while its grid row
+    //                 is still opening, so that offset is already final.
+    //   height:       the link's own height (one or two lines).
+    // The bar's transform/height transitions share the sub-list's duration
+    // and easing, so a jump into a newly opened list lands with the list.
+    // Re-measuring partway through gives the same answer, so
+    // ResizeObserver calls during the animation don't change its course.
     let indicatorQueued = false;
     function queueIndicator() {
       if (indicatorQueued || !indicator || destroyed) {
@@ -276,8 +279,8 @@
         nav.classList.remove('is-ready');
         return;
       }
-      const itemRect = active.li.getBoundingClientRect();
-      let top = itemRect.top - railRect.top;
+      const linkRect = active.link.getBoundingClientRect();
+      let top = linkRect.top - railRect.top;
       for (const entry of entries) {
         if (entry === active) {
           break;
@@ -286,9 +289,13 @@
           top -= entry.subwrap.getBoundingClientRect().height;
         }
       }
-      let height = itemRect.height;
-      if (active.subwrap) {
-        height += active.sublist.scrollHeight - active.subwrap.getBoundingClientRect().height;
+      let height = linkRect.height;
+      const sub = activeSub && active.subs.includes(activeSub) ? activeSub : null;
+      if (sub && active.sublist) {
+        const subRect = sub.link.getBoundingClientRect();
+        top += active.subwrap.getBoundingClientRect().top - linkRect.top
+          + subRect.top - active.sublist.getBoundingClientRect().top;
+        height = subRect.height;
       }
 
       indicator.style.transform = 'translateY(' + Math.round(top) + 'px)';

@@ -261,6 +261,14 @@ Back to top arrow and the attached library never rendered; it has been
 deleted. If the title still shows "On this page" after `drush cr`, look
 for another copy: `find . -name 'palefire-modular-toc.html.twig'`.
 
+The gold bar covers only the active link (2026-10-16): the current h3
+sub-link while you are reading under one, otherwise the section link. It
+used to stretch over the section link and its whole open sub-list, which
+on guide pages with many h3s made a bar taller than the screen. It slides
+from the section link to each h3 as you scroll and keeps pace with a
+sub-list that is still opening (`placeIndicator()` in `js/modular-toc.js`).
+`aria-current` is unchanged, so this is visual only.
+
 The hide/show button is a 4px-rounded square. Sub-links (h3s) wrap to two
 lines and are clamped after that (2026-10-16; they used to be one line with
 an ellipsis). `modular-toc.js` puts the label in its own
