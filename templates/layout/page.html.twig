@@ -9,7 +9,8 @@
  * Top bar, left to right: Header (logo) | Primary menu | Utility menu (icons).
  * Below the Bootstrap "lg" breakpoint (992px) the primary menu collapses
  * behind a toggle button and drops beneath the top bar. Utility icons that
- * have a panel (search, hours) open it as an offcanvas drawer from the left
+ * have a panel (search, hours, ask us, accounts, settings) open it as an
+ * offcanvas drawer from the left
  * (templates/includes/utility-panels.html.twig).
  *
  * Extra variables (PalefireHooks::preprocessPage()):
@@ -71,11 +72,19 @@
       {# Full-width top bar: container-fluid instead of container-xxl.
          Side padding grows with the viewport ($pf-header-gutters). #}
       <div class="container-fluid pf-header__inner">
-        {% if page.header %}
-          <div class="pf-header__brand me-lg-4">
+        {# Logo. A block placed in the Header region (Site branding) wins;
+           with the region empty, the theme prints the inline LSU Libraries
+           wordmark itself, so the logo needs no block layout config. #}
+        <div class="pf-header__brand">
+          {% if page.header %}
             {{ page.header }}
-          </div>
-        {% endif %}
+          {% else %}
+            <a href="{{ path('<front>') }}" rel="home" class="navbar-brand pf-brand d-inline-flex align-items-center me-0">
+              {% include '@palefire/includes/logo-lsu-libraries.svg.twig' %}
+              <span class="visually-hidden">{{ 'LSU Libraries home'|t }}</span>
+            </a>
+          {% endif %}
+        </div>
 
         {% if page.primary_menu %}
           {# DOM order = desktop visual order; mobile reorders with order-*. #}

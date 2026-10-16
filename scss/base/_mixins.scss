@@ -1,0 +1,20 @@
+// Palefire mixins.
+
+// Solid chrome: what the header, sidebar and drawers do when the visitor
+// asks for less transparency or more contrast. Applies for the OS setting
+// (prefers-reduced-transparency / prefers-contrast) and for the Settings
+// drawer's "Reduce transparency" and "High contrast" switches
+// (html.pf-a11y-solid / html.pf-a11y-contrast, utility-panels.js).
+//
+// Write the content as top-level rules (`.pf-header { ... }`): the class
+// version nests them under html. Rules for :root itself can't nest; write
+// those twice by hand (see _modular.scss).
+@mixin pf-solid-chrome {
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    @content;
+  }
+
+  :root:is(.pf-a11y-solid, .pf-a11y-contrast) {
+    @content;
+  }
+}

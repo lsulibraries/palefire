@@ -13,6 +13,15 @@ $pf-lavender: #cdb8ee; // Link color on dark surfaces (≈8:1 on #212529).
 // Bootstrap theme colors.
 $primary: $pf-purple;
 
+// Type: Roboto (Google Fonts, html.html.twig). "Roboto Fallback" is local
+// Arial sized to Roboto's metrics (base/_fonts.scss), so the swap when
+// Roboto arrives doesn't shift the layout.
+$font-family-sans-serif: Roboto, "Roboto Fallback", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+// Hours drawer clock (Origami's dot-matrix time).
+$pf-font-clock: Handjet, "Arial Narrow", sans-serif;
+// Settings drawer > "Easy-to-read font" (base/_a11y-settings.scss).
+$pf-font-readable: "Atkinson Hyperlegible Next", Verdana, Arial, sans-serif;
+
 // Links stay underlined (WCAG 1.4.1: not color alone).
 $link-decoration: underline;
 $link-underline-offset: .2em;
@@ -48,17 +57,12 @@ $pf-header-gutters: (
   xl: 2.5rem,
   xxl: 3rem,
 );
-$pf-header-fallback: 4.5rem; // Header height before JS measures it.
+$pf-header-fallback: 4rem; // Header height before JS measures it (below lg; lg and up: $pf-header-bar-h).
 
 // Compact header after scrolling (.pf-header--compact).
 $pf-header-compact-after:    4rem;    // Minimum scroll distance before it shrinks.
 $pf-header-transition:       .2s ease-out;
-$pf-header-padding-y:        .5rem;   // Bar padding, top and bottom.
-$pf-header-compact-padding-y: .125rem;
-$pf-logo-height:             2.5rem;  // Logo, below lg / lg and up.
-$pf-logo-height-lg:          3rem;
-$pf-logo-compact-height:     2rem;
-$pf-logo-compact-height-lg:  2.25rem;
+// Bar heights and logo widths: $pf-header-bar-h etc. (Origami header, below).
 // Links and icons stay at least 36px tall when compact (WCAG 2.2 SC 2.5.8
 // asks for 24px; 44px is kept for the expanded header).
 $pf-header-target:           2.75rem;
@@ -75,12 +79,28 @@ $pf-header-bg-alpha:       .6;
 $pf-header-bg-alpha-solid: .94;
 
 // Origami header (layout/_header.scss) -------------------------------------
-$pf-nav-tracking:        .2em;     // Primary menu letter-spacing (uppercase).
-$pf-nav-font-size:       .9375rem;
+// Origami's .mainMenu: an 87px bar (49px once scrolled), 13px uppercase
+// bold menu with 2px tracking in #434343, a 150px logo, 20px icons in
+// 44px cells (70px from 1600px up).
+$pf-header-bar-h:           5.4375rem; // 87px, lg and up
+$pf-header-bar-h-sm:        4rem;      // below lg
+$pf-header-bar-compact-h:   3.0625rem; // 49px
+$pf-nav-color:           #434343;  // ~9.9:1 on white, 8.5:1 on the light glass
+$pf-nav-tracking:        .15em;    // ~2px at 13px
+$pf-nav-font-size:       .8125rem; // 13px
+$pf-nav-gap:             1.875rem; // 30px between items
+$pf-brand-gap:           3.75rem;  // 60px from the logo to the menu
+$pf-logo-width:          150px;
+$pf-logo-width-sm:       120px;
+$pf-logo-width-xs:       88px;     // below 576px (phones)
+$pf-logo-compact-width:  120px;
+$pf-utility-icon-size:   1.25rem;  // 20px
+$pf-utility-cell-wide:   4.375rem; // 70px cells from 1600px
+$pf-utility-wide-bp:     1600px;
 $pf-dropdown-tracking:   .15em;
 $pf-dropdown-font-size:  .8125rem;
 $pf-logo-color:          #999;     // The wordmark's own grey (logo.svg).
-$pf-logo-color-dark:     #c8c8c8;  // On the dark bar.
+$pf-logo-color-dark:     #fff;     // On the dark bar (Origami: white, gold on hover).
 
 // Utility panels (components/_utility-panels.scss) -------------------------
 // The page behind an open drawer dims more on light pages, where a .5 black

@@ -17,6 +17,13 @@
  *   time the panel opens, and through Drupal.palefireHours
  *   (visit-hours.js), so a location the Visit card already loaded is not
  *   requested again.
+ * - Ask Us: each tab's LibAnswers iframe gets its src the first time the
+ *   tab is shown, so nothing loads from LibAnswers until the drawer opens.
+ * - Settings: saves the visitor's choices (localStorage "pf-a11y") and
+ *   applies them to <html> at once. html.html.twig applies the saved
+ *   copy before the first paint on every page load. Sends
+ *   palefire:a11ychange (bento-video.js pauses on it).
+ * - Utility icon tooltips: Escape hides the one showing (WCAG 1.4.13).
  */
 ((Drupal, once) => {
   const ROOT = document.documentElement;
@@ -135,8 +142,185 @@
     panel.addEventListener('hidden.bs.offcanvas', stop);
   }
 
+  /* ---------------- Ask Us ---------------- */
+
+  function loadFrame(pane) {
+    const frame = pane && pane.querySelector('iframe[data-src]');
+    if (frame) {
+      frame.src = frame.dataset.src;
+      frame.removeAttribute('data-src');
+    }
+  }
+
+  function initAsk(panel) {
+    panel.addEventListener('show.bs.offcanvas', () => {
+      loadFrame(panel.querySelector('.pf-ask__pane.active'));
+    });
+    panel.querySelectorAll('[data-bs-toggle="tab"]').forEach((tab) => {
+      tab.addEventListener('show.bs.tab', () => {
+        loadFrame(panel.querySelector(tab.dataset.bsTarget));
+      });
+    });
+  }
+
+  /* ---------------- Settings ---------------- */
+
+  const STORE = 'pf-a11y';
+  const SIZES = ['100', '115', '130', '150'];
+  const SWITCHES = ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
+  const FONT_ID = 'pf-font-atkinson';
+  const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
+
+  function readSettings() {
+    try {
+      return JSON.parse(window.localStorage.getItem(STORE)) || {};
+    }
+    catch (e) {
+      return {};
+    }
+  }
+
+  function saveSettings(settings) {
+    try {
+      if (Object.keys(settings).length) {
+        window.localStorage.setItem(STORE, JSON.stringify(settings));
+      }
+      else {
+        window.localStorage.removeItem(STORE);
+      }
+      return true;
+    }
+    catch (e) {
+      return false; // Private mode or storage blocked: still applied to this page.
+    }
+  }
+
+  // The same job as the inline script in html.html.twig, for live changes.
+  function applySettings(settings) {
+    if (SIZES.includes(settings.size) && settings.size !== '100') {
+      ROOT.setAttribute('data-pf-text-size', settings.size);
+    }
+    else {
+      ROOT.removeAttribute('data-pf-text-size');
+    }
+    SWITCHES.forEach((key) => ROOT.classList.toggle(`pf-a11y-${key}`, !!settings[key]));
+    // The font file is only requested once someone turns it on.
+    if (settings.font && !document.getElementById(FONT_ID)) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.id = FONT_ID;
+      link.href = FONT_URL;
+      document.head.appendChild(link);
+    }
+    document.dispatchEvent(new CustomEvent('palefire:a11ychange', { detail: { settings } }));
+  }
+
+  function initSettings(panel) {
+    const form = panel.querySelector('[data-pf-settings]');
+    const status = panel.querySelector('[data-pf-settings-status]');
+    const reset = panel.querySelector('[data-pf-settings-reset]');
+    if (!form) {
+      return;
+    }
+    let statusTimer = null;
+
+    // Show the saved state each time the drawer opens (another tab may
+    // have changed it).
+    const fill = () => {
+      const settings = readSettings();
+      const size = SIZES.includes(settings.size) ? settings.size : '100';
+      form.querySelectorAll('input[name="size"]').forEach((input) => {
+        input.checked = input.value === size;
+      });
+      SWITCHES.forEach((key) => {
+        const input = form.elements[key];
+        if (input) {
+          input.checked = !!settings[key];
+        }
+      });
+    };
+
+    const announce = (text) => {
+      // Clear, then set on the next frame, so the same words are read again.
+      window.clearTimeout(statusTimer);
+      status.textContent = '';
+      window.requestAnimationFrame(() => {
+        status.textContent = text;
+        statusTimer = window.setTimeout(() => { status.textContent = ''; }, 4000);
+      });
+    };
+
+    const collect = () => {
+      const settings = {};
+      const size = form.querySelector('input[name="size"]:checked');
+      if (size && size.value !== '100') {
+        settings.size = size.value;
+      }
+      SWITCHES.forEach((key) => {
+        const input = form.elements[key];
+        if (input && input.checked) {
+          settings[key] = 1;
+        }
+      });
+      return settings;
+    };
+
+    form.addEventListener('change', () => {
+      const settings = collect();
+      applySettings(settings);
+      announce(saveSettings(settings)
+        ? Drupal.t('Saved on this device.')
+        : Drupal.t('Applied to this page. This browser is not saving settings.'));
+    });
+    form.addEventListener('submit', (event) => event.preventDefault());
+
+    if (reset) {
+      reset.addEventListener('click', () => {
+        saveSettings({});
+        applySettings({});
+        fill();
+        announce(Drupal.t('Settings reset to default.'));
+      });
+    }
+
+    panel.addEventListener('show.bs.offcanvas', fill);
+    fill();
+
+    // Another tab changed the settings: follow along.
+    window.addEventListener('storage', (event) => {
+      if (event.key === STORE) {
+        applySettings(readSettings());
+        fill();
+      }
+    });
+  }
+
+  /* ---------------- Utility icon tooltips ---------------- */
+
+  // The label shows on hover/focus (CSS). Escape hides it until the pointer
+  // or focus leaves that icon.
+  function initTooltips() {
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+      document.querySelectorAll('.pf-utility-nav__link:is(:hover, :focus-visible)').forEach((link) => {
+        link.classList.add('is-tip-hidden');
+      });
+    });
+    const clear = (event) => {
+      const link = event.target.closest && event.target.closest('.pf-utility-nav__link');
+      if (link && !link.contains(event.relatedTarget)) {
+        link.classList.remove('is-tip-hidden');
+      }
+    };
+    document.addEventListener('pointerout', clear);
+    document.addEventListener('focusout', clear);
+  }
+
   Drupal.behaviors.palefireUtilityPanels = {
     attach(context) {
+      once('pf-utility-tips', 'html').forEach(initTooltips);
       once('pf-utility-panels', '[data-pf-panels]', context).forEach((wrap) => {
         wrap.querySelectorAll('[data-pf-panel]').forEach((panel) => {
           const key = panel.dataset.pfPanel;
@@ -175,6 +359,12 @@
 
           if (key === 'hours') {
             initHours(panel);
+          }
+          else if (key === 'ask') {
+            initAsk(panel);
+          }
+          else if (key === 'settings') {
+            initSettings(panel);
           }
         });
       });

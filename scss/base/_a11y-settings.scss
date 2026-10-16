@@ -1,0 +1,157 @@
+// Settings drawer: reading and display preferences.
+//
+// templates/includes/utility-panels.html.twig (the drawer),
+// js/utility-panels.js (saves to localStorage "pf-a11y") and the inline
+// script in html.html.twig (applies the saved copy before the first paint)
+// set these on <html>:
+//
+//   [data-pf-text-size="115|130|150"]  Text size
+//   .pf-a11y-font                       Easy-to-read font
+//   .pf-a11y-spacing                    More text spacing (WCAG 1.4.12)
+//   .pf-a11y-underline                  Underline all links
+//   .pf-a11y-contrast                   High contrast (+ solid chrome)
+//   .pf-a11y-solid                      Reduce transparency (solid chrome)
+//   .pf-a11y-focus                      Strong focus outline
+//   .pf-a11y-motion                     Reduce motion
+//   .pf-a11y-pausevideo                 Pause background videos (JS only)
+//
+// "Solid chrome" (no glass on the header, sidebar and drawers) is the same
+// set of rules the OS settings trigger: pf-solid-chrome, base/_mixins.scss.
+//
+// Imported last in style.scss, so these win over component styles; the
+// !importants are for component rules that set the same property with a
+// more specific selector.
+
+// Text size -----------------------------------------------------------------
+// The root size, so everything in rem (type, spacing, the header, drawers)
+// grows together: the layout scales, not just the text.
+@each $size in (115, 130, 150) {
+  html[data-pf-text-size="#{$size}"] {
+    font-size: $size * 1%;
+  }
+}
+
+// Easy-to-read font -----------------------------------------------------------
+// Atkinson Hyperlegible Next for body text and for the monospace UI voice
+// (TOC, breadcrumb, drawers). The Hours clock keeps Handjet: it's a large
+// display figure, and the time is also in its <time> element.
+html.pf-a11y-font {
+  --bs-body-font-family: #{$pf-font-readable};
+  --bs-font-monospace: #{$pf-font-readable};
+  --pf-toc-font: #{$pf-font-readable};
+
+  body,
+  .tooltip,
+  .popover {
+    font-family: $pf-font-readable;
+  }
+}
+
+// More text spacing -------------------------------------------------------------
+// The WCAG 1.4.12 test values: line height 1.5, paragraph spacing 2x the
+// font size, letter spacing .12em, word spacing .16em. Text in the content,
+// drawers and footer; the menus keep their own tracking.
+html.pf-a11y-spacing {
+  :is(.pf-main, .pf-panel, .pf-footer, .pf-sidebar) :is(p, li, dt, dd, td, th, label, legend, blockquote, figcaption, h1, h2, h3, h4, h5, h6, a, button, input, textarea, select, summary) {
+    line-height: 1.5 !important;
+    letter-spacing: .12em !important;
+    word-spacing: .16em !important;
+  }
+
+  :is(.pf-main, .pf-panel, .pf-footer) p {
+    margin-bottom: 2em !important;
+  }
+}
+
+// Underline all links -----------------------------------------------------------
+// Menus, dropdowns, TOC links and link-styled buttons too. Icon-only links
+// (the logo, the utility icons) have no text to underline.
+html.pf-a11y-underline {
+  :is(a, .nav-link, .dropdown-item, .btn-link, .pf-panel__cta, .pf-ask__tab):not(.pf-brand, .pf-utility-nav__link, .skip-link) {
+    text-decoration-line: underline !important;
+    text-decoration-thickness: max(1px, .08em);
+    text-underline-offset: .2em;
+  }
+}
+
+// High contrast -----------------------------------------------------------------
+// Solid backgrounds (pf-solid-chrome), full-strength text, brighter borders,
+// no stripes.
+html.pf-a11y-contrast {
+  --bs-secondary-color: var(--bs-emphasis-color);
+
+  // Muted text and borders go to full strength wherever the tokens are set:
+  // the page, a dark <body> (dark section active), dark sections, drawers.
+  &,
+  body[data-section-theme],
+  .pf-section,
+  .pf-panel.offcanvas {
+    --pf-toc-color: var(--pf-toc-active);
+    --pf-toc-sub-color: var(--pf-toc-active);
+    --pf-section-muted: var(--pf-section-fg, var(--bs-emphasis-color));
+    --pf-section-border: currentColor;
+    --pf-toc-rail: currentColor;
+  }
+
+  // Light bar: black text instead of #434343.
+  .pf-header:not([data-bs-theme="dark"]) {
+    --pf-utility-color: #{$black};
+
+    .navbar {
+      --bs-navbar-color: #{$black};
+    }
+
+    .pf-brand {
+      --pf-brand-color: #{$black};
+    }
+  }
+
+  // Background videos and photos sit further back behind the text.
+  .pf-bento__media::after {
+    background-color: rgb(0 0 0 / .85);
+  }
+
+  .pf-section--theme-light-map:not(.is-map-dark) .pf-bento__media::after {
+    background-color: rgb(255 255 255 / .94);
+  }
+
+  // No stripes.
+  .pf-hours__loc {
+    background-image: none !important;
+  }
+
+  .pf-utility-nav__label {
+    background-color: $black;
+    outline: 1px solid $white;
+  }
+}
+
+// Strong focus outline ----------------------------------------------------------
+// A gold ring around a black one: one of the two always contrasts with
+// what's behind it.
+html.pf-a11y-focus {
+  :focus-visible,
+  .pf-section__title:focus-visible {
+    outline: 3px solid $pf-gold !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 3px $black !important;
+  }
+}
+
+// Reduce motion -----------------------------------------------------------------
+// The same as the OS setting: no animation, transitions end at once, no
+// smooth scrolling. JS checks the class too (page transitions, the map
+// trace, the video crossfade).
+html.pf-a11y-motion {
+  scroll-behavior: auto !important;
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

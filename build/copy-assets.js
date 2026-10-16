@@ -21,6 +21,8 @@ const icons = [
   'person-fill', 'chat-dots-fill', 'clock-fill', 'question-circle-fill',
   'calendar-event-fill', 'envelope-fill', 'geo-alt-fill', 'telephone-fill',
   'gear', 'gear-fill',
+  // Accounts drawer (utility-panels.html.twig).
+  'book', 'journal-bookmark', 'truck', 'bank', 'mortarboard', 'credit-card',
 ];
 
 function copy(from, to) {

@@ -46,6 +46,8 @@
 @import "bootstrap/scss/utilities/api";
 
 // 3. Palefire
+@import "base/mixins";
+@import "base/fonts";
 @import "base/base";
 @import "base/fade";
 @import "base/swup";
@@ -61,3 +63,4 @@
 @import "components/building-map";
 @import "components/visit";
 @import "components/utility-panels";
+@import "base/a11y-settings"; // last: the Settings drawer overrides everything above

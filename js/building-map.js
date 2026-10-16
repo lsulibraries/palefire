@@ -27,6 +27,8 @@
   };
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // OS setting, or the Settings drawer's "Reduce motion" (html.pf-a11y-motion).
+  const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
 
   // Appointment rooms: the walk-in hatch cut into 20-unit dashes, staggered
   // row to row, so access reads from the texture and not only from a dimmer
@@ -367,10 +369,17 @@
     const bento = root.closest('.pf-bento');
     if (bento && 'IntersectionObserver' in window) {
       const steps = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
-      const dim = new IntersectionObserver(([entry]) => {
-        const seen = entry.intersectionRect.height;
-        const inView = entry.isIntersecting
-          && (entry.intersectionRatio >= 0.3 || seen >= window.innerHeight * 0.45);
+      // Load flash fix: a page opened at the top always starts light. The
+      // observer's first report comes before fonts, the "This week" list
+      // (visit-hours.js opens it on lg) and the snap settle, so it could
+      // call the map "in view" for a frame and flip the section, header and
+      // sidebar dark, then straight back to light. Nothing changes until
+      // the visitor has scrolled (or the page opened already scrolled: a
+      // #anchor or a restored position); then the latest state applies.
+      const ARM_AT = 8; // px
+      let armed = window.scrollY > ARM_AT;
+      let latest = false;
+      const apply = (inView) => {
         if (bento.classList.contains('is-map-in-view') === inView) return;
         bento.classList.toggle('is-map-in-view', inView);
         // "Light, dark at the map" sections (field_section_theme = light-map):
@@ -383,13 +392,29 @@
           else section.removeAttribute('data-bs-theme');
         }
         document.dispatchEvent(new CustomEvent('palefire:mapview', { detail: { inView, bento, section } }));
+      };
+      const dim = new IntersectionObserver(([entry]) => {
+        const seen = entry.intersectionRect.height;
+        latest = entry.isIntersecting
+          && (entry.intersectionRatio >= 0.3 || seen >= window.innerHeight * 0.45);
+        if (armed) apply(latest);
       }, { threshold: steps });
       dim.observe(root);
-      root.pfMapDim = dim;
+      const arm = new AbortController();
+      if (!armed) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY <= ARM_AT) return;
+          armed = true;
+          arm.abort();
+          apply(latest);
+        }, { passive: true, signal: arm.signal });
+      }
+      // detach() calls disconnect(): stop the observer and the arm listener.
+      root.pfMapDim = { disconnect() { dim.disconnect(); arm.abort(); } };
     }
 
     // Draw-on trace (from the codepen), once, when the map scrolls into view.
-    if (motion.matches || !lines.length || typeof lines[0].animate !== 'function') return;
+    if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') return;
     root.classList.add('is-tracing');
     // Reveal order: rooms top to bottom (then left to right) through the
     // drawing; each name shares its room's place in the order.

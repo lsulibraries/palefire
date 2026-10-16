@@ -44,32 +44,31 @@
     color: var(--pf-toc-sub-color);
   }
 
-  // Same box as the TOC hide/show button (.pf-modular__toc-collapse).
+  // Origami: a plain thin ×, no box. 44px target (WCAG 2.5.8).
   &__close {
     position: absolute;
-    top: var(--bs-offcanvas-padding-y);
+    top: calc(var(--bs-offcanvas-padding-y) - .25rem);
     inset-inline-end: .75rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     padding: 0;
     color: var(--pf-toc-color);
     background-color: transparent;
-    border: 1px solid var(--pf-section-border);
+    border: 0;
     border-radius: 4px;
-    transition: color .15s ease, border-color .15s ease;
+    transition: color .15s ease;
 
     svg {
-      width: 1rem;
-      height: 1rem;
+      width: 1.375rem;
+      height: 1.375rem;
     }
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-toc-active);
-      border-color: var(--pf-toc-accent);
+      color: var(--pf-toc-accent);
     }
   }
 
@@ -85,9 +84,12 @@
     padding: 0 var(--bs-offcanvas-padding-x) var(--bs-offcanvas-padding-y);
   }
 
-  // "SEE FULL HOURS ↗"
+  // "SEE FULL HOURS ↗" (also the Settings drawer's Reset <button>)
   &__cta {
     display: flex;
+    width: 100%;
+    background-color: transparent;
+    font-family: inherit;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
@@ -123,6 +125,7 @@
 // Hours panel ---------------------------------------------------------------
 
 .pf-hours {
+  container-type: inline-size;
   justify-content: center;
   gap: 1.25rem;
 
@@ -142,23 +145,20 @@
     }
   }
 
-  // Dot-matrix clock: bold monospace digits seen through a grid of dots.
+  // Dot-matrix clock: Origami's Handjet (Google Fonts, html.html.twig).
+  // The font file is only fetched once this text is on screen.
   &__clock {
     margin: .25rem 0 .5rem;
-    font-size: clamp(3rem, 14vw, 4.75rem);
-    font-weight: $font-weight-bold;
+    font-family: $pf-font-clock;
+    // Sized to the drawer's width (container query units), so the time
+    // fills it like Origami's without running past the edge.
+    font-size: min(5.5rem, 24cqi);
+    font-weight: 400;
     line-height: 1;
+    letter-spacing: .02em;
     text-align: center;
     white-space: nowrap;
     color: var(--pf-toc-active);
-
-    time {
-      display: inline-block;
-      -webkit-mask-image: radial-gradient(circle, #000 0 42%, transparent 52%);
-      mask-image: radial-gradient(circle, #000 0 42%, transparent 52%);
-      -webkit-mask-size: 5px 5px;
-      mask-size: 5px 5px;
-    }
 
     &:has(time:empty) {
       display: none;
@@ -287,7 +287,7 @@ html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show {
   }
 }
 
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+@include pf-solid-chrome {
   .pf-panel.offcanvas {
     --bs-offcanvas-bg: #{$pf-black};
     -webkit-backdrop-filter: none;
@@ -295,13 +295,8 @@ html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show {
   }
 }
 
-// Windows High Contrast: drop the dot mask and stripes, keep borders.
+// Windows High Contrast: drop the stripes, keep borders.
 @media (forced-colors: active) {
-  .pf-hours__clock time {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
   .pf-hours__loc {
     background-image: none;
   }
@@ -316,7 +311,329 @@ html[data-pf-panel] body[data-section-theme="dark"] .offcanvas-backdrop.show {
 
 @media (prefers-reduced-motion: reduce) {
   .pf-panel__close,
-  .pf-panel__cta {
+  .pf-panel__cta,
+  .pf-ask__tab,
+  .pf-accounts__link,
+  .pf-settings__size,
+  .pf-settings__switch {
     transition: none;
+  }
+}
+
+// Ask Us panel --------------------------------------------------------------
+// Origami's three LibAnswers widgets as tabs. The widget fills the rest of
+// the drawer's height.
+
+.pf-ask {
+  gap: 1rem;
+  padding-top: 1.5rem;
+
+  &__tabs {
+    display: grid;
+    gap: .5rem;
+  }
+
+  // Origami's bordered rows: label left, icon right.
+  &__tab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: .625rem 1rem;
+    color: var(--pf-toc-color);
+    font-family: inherit;
+    font-size: .8125rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .14em;
+    text-align: start;
+    text-transform: uppercase;
+    background-color: transparent;
+    border: 1px solid var(--pf-section-border);
+    border-radius: 2px;
+    transition: color .15s ease, border-color .15s ease;
+
+    .pf-icon svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      border-color: var(--pf-toc-accent);
+    }
+
+    // Selected: gold edge, not colour alone.
+    &.active {
+      color: var(--pf-toc-active);
+      border-color: var(--pf-toc-accent);
+      box-shadow: inset 4px 0 0 var(--pf-toc-accent);
+    }
+  }
+
+  &__panes {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 28rem;
+  }
+
+  &__pane {
+    display: none;
+    flex: 1 1 auto;
+
+    &.active {
+      display: flex;
+    }
+  }
+
+  // The widgets draw their own light form.
+  &__frame {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 28rem;
+    background-color: $white;
+    border: 0;
+    border-radius: 2px;
+  }
+}
+
+// Accounts panel ------------------------------------------------------------
+
+.pf-accounts {
+  justify-content: center;
+
+  &__list {
+    display: grid;
+    gap: .625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding: .875rem 1.25rem;
+    color: var(--pf-toc-active);
+    font-family: var(--bs-body-font-family);
+    font-size: .875rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background-color: rgba($pf-white, .03);
+    border: 1px solid var(--pf-section-border);
+    border-radius: 2px;
+    transition: color .15s ease, border-color .15s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-accent);
+      border-color: var(--pf-toc-accent);
+    }
+  }
+
+  &__icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+// Settings panel ------------------------------------------------------------
+
+.pf-settings {
+  gap: 1.75rem;
+  padding-top: 1.5rem;
+
+  &__intro {
+    margin: 0;
+    font-size: .8125rem;
+    color: var(--pf-toc-sub-color);
+  }
+
+  &__group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  // Tracked caps over a hairline, like the Hours date.
+  &__legend {
+    float: none; // Bootstrap reboot floats legends.
+    width: 100%;
+    margin-bottom: .75rem;
+    padding-bottom: .5rem;
+    font-size: .75rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--pf-toc-sub-color);
+    border-bottom: 1px solid var(--pf-section-border);
+  }
+
+  // Text size: four segments.
+  &__sizes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .375rem;
+  }
+
+  &__size {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .25rem;
+    min-height: 3.75rem;
+    padding: .5rem .25rem;
+    font-size: .75rem;
+    color: var(--pf-toc-color);
+    cursor: pointer;
+    border: 1px solid var(--pf-section-border);
+    border-radius: 2px;
+    transition: color .15s ease, border-color .15s ease;
+
+    &:hover {
+      color: var(--pf-toc-active);
+      border-color: var(--pf-toc-accent);
+    }
+  }
+
+  &__size-a {
+    font-family: var(--bs-body-font-family);
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    color: var(--pf-toc-active);
+  }
+
+  &__size[data-size="100"] &__size-a { font-size: 1rem; }
+  &__size[data-size="115"] &__size-a { font-size: 1.15rem; }
+  &__size[data-size="130"] &__size-a { font-size: 1.3rem; }
+  &__size[data-size="150"] &__size-a { font-size: 1.5rem; }
+
+  // Selected: gold border and a gold bar, not colour alone.
+  &__size-input:checked + &__size {
+    color: var(--pf-toc-active);
+    border-color: var(--pf-toc-accent);
+    box-shadow: inset 0 -3px 0 var(--pf-toc-accent);
+  }
+
+  &__size-input:focus-visible + &__size {
+    outline: 3px solid var(--pf-focus-color);
+    outline-offset: 2px;
+  }
+
+  // One switch: control | label, help text under the label.
+  &__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: .875rem;
+    align-items: center;
+    padding: .375rem 0;
+
+    + .pf-settings__item {
+      margin-top: .375rem;
+    }
+  }
+
+  &__label {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--bs-body-font-family);
+    font-size: .9375rem;
+    font-weight: $font-weight-medium;
+    color: var(--pf-toc-active);
+    cursor: pointer;
+  }
+
+  &__help {
+    grid-column: 2;
+    margin: -.375rem 0 0;
+    font-size: .75rem;
+    line-height: 1.45;
+    color: var(--pf-toc-sub-color);
+  }
+
+  // Native checkbox drawn as a switch (role="switch" in the markup). The
+  // track is 2.75rem wide (44px target with the label beside it).
+  &__switch {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 2.75rem;
+    height: 1.5rem;
+    margin: 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid var(--pf-toc-color); // ~5:1 on the drawer
+    border-radius: 1rem;
+    transition: background-color .15s ease, border-color .15s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: .1875rem;
+      width: 1rem;
+      height: 1rem;
+      background-color: var(--pf-toc-color);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      transition: transform .15s ease, background-color .15s ease;
+    }
+
+    &:checked {
+      background-color: var(--pf-toc-accent);
+      border-color: var(--pf-toc-accent);
+
+      &::before {
+        background-color: $pf-black;
+        transform: translate(1.1875rem, -50%);
+      }
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--pf-focus-color);
+      outline-offset: 2px;
+    }
+  }
+
+  // "Saved on this device." Visible too, for sighted keyboard users.
+  &__status {
+    min-height: 1.25rem;
+    margin: 0;
+    font-size: .75rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--pf-toc-accent);
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-settings__switch {
+    forced-color-adjust: none;
+    border-color: ButtonText;
+
+    &::before {
+      background-color: ButtonText;
+    }
+
+    &:checked {
+      background-color: Highlight;
+
+      &::before {
+        background-color: HighlightText;
+      }
+    }
+  }
+
+  .pf-ask__tab.active,
+  .pf-settings__size-input:checked + .pf-settings__size {
+    border-width: 3px;
   }
 }

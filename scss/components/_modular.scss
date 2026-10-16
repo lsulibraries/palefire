@@ -5,7 +5,12 @@
 @import 'modular-tokens';
 
 :root {
-  --pf-header-h: 50px;      // keep in sync with the sticky header height
+  // Header height before js/palefire.js measures it: the bar's min-height
+  // ($pf-header-bar-h*, _header.scss).
+  --pf-header-h: #{$pf-header-bar-h-sm};
+  @include media-breakpoint-up(lg) {
+    --pf-header-h: #{$pf-header-bar-h};
+  }
   --pf-sidebar-w: 18.75rem; // 300px, same width as Origami's sidebar
 
   --pf-toc-accent: #{$pf-toc-accent};
@@ -537,11 +542,19 @@ html.pf-snap .site-footer {
 
 // Less transparency / more contrast: a solid sidebar. The backgrounds still
 // run underneath it, they just don't show through.
+// (The Settings drawer's switches add html.pf-a11y-solid / -contrast:
+// pf-solid-chrome, base/_mixins.scss. :root can't nest, so it's repeated.)
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   :root {
     --pf-sidebar-bg: var(--bs-body-bg);
   }
+}
 
+:root:is(.pf-a11y-solid, .pf-a11y-contrast) {
+  --pf-sidebar-bg: var(--bs-body-bg);
+}
+
+@include pf-solid-chrome {
   body[data-section-theme="dark"] {
     --pf-sidebar-bg: #{$pf-grey-900};
   }

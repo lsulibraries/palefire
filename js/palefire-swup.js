@@ -189,7 +189,7 @@
     swup.hooks.on('visit:start', (visit) => {
       hardNavigation = false;
       incoming = null;
-      if (reducedMotion.matches) {
+      if (reducedMotion.matches || document.documentElement.classList.contains('pf-a11y-motion')) {
         visit.animation.animate = false;
       }
       closeMenu();

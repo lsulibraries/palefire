@@ -459,23 +459,45 @@ change. The LibCal day carousel uses this for its next three timed events.
 
 ## Header (Origami look)
 
-Top bar, left to right: logo | Primary menu | Utility menu (icons).
+Top bar, left to right: logo | Primary menu | Utility menu (icons). Sizes
+follow Origami's `.mainMenu` (`$pf-header-bar-h` etc. in
+`scss/_variables.scss`):
 
-- **Logo**: the theme's `logo.svg` is printed as inline SVG
-  (`templates/includes/logo-lsu-libraries.svg.twig`, from
-  `block--system-branding-block.html.twig`) filled with `currentColor`:
-  grey (`$pf-logo-color`) at rest, LSU purple on hover in the light bar,
-  light grey and LSU gold on hover in the dark bar (`--pf-brand-color` /
-  `--pf-brand-hover-color`, `_header.scss` and `_chrome-dark.scss`). A
-  custom logo uploaded in the theme settings stays an `<img>`.
-- **Primary menu**: uppercase, tracked (`$pf-nav-tracking`), bold, with a
-  small faded caret that turns while open. Dropdowns (lg and up) are a plain
-  sheet under the item, left edge on the item's text: uppercase tracked
-  links, generous padding, no item background on hover; the hover/focus is
-  a colour change (purple / gold on the dark bar) plus an underline.
+| | Expanded | Compact (scrolled) |
+| --- | --- | --- |
+| Bar height | 87px (lg+), 4rem below lg | 49px |
+| Logo width | 150px (lg+), 120px, 88px on phones | 120px |
+| Primary menu | 13px, bold, uppercase, .15em (~2px) tracking, `#434343`, 30px apart | same |
+| Utility icons | 20px in 44px cells, 70px wide from 1600px | 36px tall (70px wide from 1600px) |
+
+- **Type**: Roboto is the body and menu font; Handjet is the Hours drawer
+  clock. Both come from Google Fonts (`html.html.twig`): preconnect, then a
+  non-blocking stylesheet, so they don't delay the first paint. The browser
+  downloads a font file only when text uses it, so Handjet costs nothing
+  until the Hours drawer opens. Until Roboto arrives the page uses
+  "Roboto Fallback" (local Arial resized to Roboto's metrics,
+  `scss/base/_fonts.scss`), so the swap doesn't move the layout (CLS).
+- **Logo**: the inline LSU Libraries wordmark
+  (`templates/includes/logo-lsu-libraries.svg.twig`), filled with
+  `currentColor`: grey at rest and LSU purple on hover in the light bar;
+  white and LSU gold on hover in the dark bar (`--pf-brand-color` /
+  `--pf-brand-hover-color`, `_header.scss` and `_chrome-dark.scss`).
+  `page.html.twig` prints it itself when the Header region is empty, so no
+  block placement is needed. A Site branding block placed in Header still
+  wins, and a custom logo uploaded in the theme settings stays an `<img>`.
+- **Primary menu**: uppercase, tracked, bold, with a small faded caret that
+  turns while open. Dropdowns (lg and up) are a plain sheet under the item,
+  left edge on the item's text: uppercase tracked links, generous padding,
+  no item background on hover; the hover/focus is a colour change (purple /
+  gold on the dark bar) plus an underline.
 - **Utility menu**: solid Bootstrap Icons (`*-fill`, copied by
   `build/copy-assets.js`; falls back to the outline icon), colour-only
-  hover. Icons with a panel open it instead of following the link.
+  hover. Each icon's name shows as a tooltip on hover and keyboard focus
+  (the link's own text, so screen readers hear it once; Escape hides it,
+  WCAG 1.4.13). Icons with a panel open it instead of following the link.
+- **Phones** (Origami never had mobile styles, so this is Palefire's own):
+  logo, five icons and the menu button share one row down to about 360px;
+  icon cells are 40x44px there. Drawers are full width.
 
 ### Utility panels (offcanvas)
 
@@ -484,29 +506,82 @@ Top bar, left to right: logo | Primary menu | Utility menu (icons).
 drawers) and outside `#swup` (kept between Swup visits). Each panel is a
 Bootstrap 5.3 offcanvas from the left in the dark TOC sidebar's look: the
 `$pf-chrome-dark` / `$pf-section-dark` tokens, sidebar glass, monospace,
-gold accent, a TOC-style close button (`_utility-panels.scss`).
+gold accent and Origami's plain × close button (`_utility-panels.scss`).
 
-- **Search** (icon `search`): the bento search form; focus moves to the box.
-- **Hours** (icon `clock`): today's date, a dot-matrix clock (ticks on the
-  minute, only while open) and an OPEN / CLOSED row per LibCal location
-  (`hours_locations` at the top of the template: `lid`, optional `name`;
-  empty uses LibCal's name). LibCal is asked the first time the panel opens,
-  through `Drupal.palefireHours` (`visit-hours.js`), so the Visit card and
-  the panel share one request per location. "See full hours" goes to the
-  Hours menu link's own URL.
+| Icon | Panel | Contents |
+| --- | --- | --- |
+| `search` | Search | The bento search form; focus moves to the box. |
+| `clock` | Hours | Today's date, a Handjet clock (ticks on the minute, only while open) and an OPEN / CLOSED row per LibCal location (`hours_locations`). LibCal is asked the first time the panel opens, through `Drupal.palefireHours` (`visit-hours.js`). "See full hours" goes to the Hours menu link's own URL. |
+| `chat-dots` | Ask Us | Origami's three LibAnswers widgets as tabs (Live Chat, Email Main Library, Email Special Collections; `ask_tabs`). Each iframe gets its `src` the first time its tab shows, so nothing loads from LibAnswers until the drawer opens. |
+| `person-circle` | Accounts | Origami's six account links (`accounts`: label, URL, Bootstrap Icon) and "Account descriptions" (`/accounts`). |
+| `gear` | Settings | Reading and display preferences (below). |
+
 - The menu link stays a real `<a href>` (works without JavaScript).
   Choose a panel with a `data-panel` link attribute, or by icon
-  (`panel_map` in `menu--utility.html.twig`). To add a panel: markup in
-  `utility-panels.html.twig`, key in `panels`.
+  (`panel_map` in `menu--utility.html.twig`, outline and `-fill` names).
+  To add a panel: markup in `utility-panels.html.twig`, key in `panels`.
 - **Dimming**: Bootstrap's backdrop is a fixed .5. While a utility panel is
   open (`<html data-pf-panel>`, `utility-panels.js`) it is
   `$pf-panel-backdrop-light` (.72) on light pages and
   `$pf-panel-backdrop-dark` (.55) on dark ones. The mobile "On this page"
   offcanvas keeps the default.
 - Accessibility: Bootstrap's dialog role, focus trap, Escape, backdrop click
-  and focus return; the clock is not a live region; reduced transparency /
-  more contrast give a solid drawer; forced colours drop the dot mask and
-  stripes.
+  and focus return; Ask Us tabs are a WAI-ARIA tablist (arrow keys) and each
+  iframe has a title; the clock is not a live region; reduced transparency /
+  more contrast give a solid drawer; forced colours drop the stripes.
+
+### Settings drawer
+
+Each change applies and saves as soon as it's made, in this browser only
+(`localStorage` key `pf-a11y`), and a status line tells screen-reader users
+"Saved on this device." "Reset to default" clears it. Another open tab
+follows along (`storage` event).
+
+| Group | Setting | `<html>` | What it does |
+| --- | --- | --- | --- |
+| Text size | 100 / 115 / 130 / 150% | `data-pf-text-size` | Root font size, so the whole rem-based layout scales, not just the text |
+| Reading | Easy-to-read font | `.pf-a11y-font` | Atkinson Hyperlegible Next (Google Fonts); only downloaded when someone turns it on |
+| Reading | More text spacing | `.pf-a11y-spacing` | The WCAG 1.4.12 test values: line 1.5, paragraph 2em, letter .12em, word .16em |
+| Reading | Underline all links | `.pf-a11y-underline` | Includes menus, dropdowns and link-buttons |
+| Display | High contrast | `.pf-a11y-contrast` | Solid backgrounds, full-strength text, brighter borders, heavier video wash, no stripes |
+| Display | Reduce transparency | `.pf-a11y-solid` | No see-through glass on the header, sidebar and drawers |
+| Display | Strong focus outline | `.pf-a11y-focus` | 3px gold ring around a 3px black one |
+| Motion | Reduce motion | `.pf-a11y-motion` | Stops animations, page transitions (Swup), the map trace and smooth scrolling |
+| Motion | Pause background videos | `.pf-a11y-pausevideo` | Bento background videos start paused (and pause at once when switched on) |
+
+- **No flash**: the inline script in `html.html.twig` applies the saved
+  copy to `<html>` before the first paint, on every page load.
+- Styles: `scss/base/_a11y-settings.scss` (imported last). "High contrast"
+  and "Reduce transparency" reuse the OS-preference rules through the
+  `pf-solid-chrome` mixin (`scss/base/_mixins.scss`): one set of rules for
+  `prefers-reduced-transparency` / `prefers-contrast` and for the classes.
+- JavaScript reads the classes too: `bento-video.js`, `building-map.js`
+  and `palefire-swup.js` treat `.pf-a11y-motion` like the OS setting, and
+  `utility-panels.js` sends `palefire:a11ychange` when a setting changes.
+- To add a setting: an item in `settings_groups`
+  (`utility-panels.html.twig`), its key in `SWITCHES` (`utility-panels.js`)
+  and in the inline script's list (`html.html.twig`), and its CSS.
+
+### Light-map sections: no dark flash on load
+
+A page whose first section is "Light, dark at the map" used to flash dark
+for a frame on load, then turn light. `building-map.js`'s first
+IntersectionObserver report comes before fonts, the "This week" list
+(opened on lg by `visit-hours.js`) and the scroll snap settle, so it could
+call the map "in view" and switch the section, header and sidebar dark.
+The map-dark switch now waits until the visitor has scrolled (8px), or
+applies at once when the page opens already scrolled (an anchor or a
+restored position). A page opened at the top always loads light.
+
+### Production
+
+Theme files only (templates, compiled CSS, JS, icons): no config, no
+update hooks.
+
+```sh
+git pull
+drush cr
+```
 
 ## Page transitions (Swup 4)
 

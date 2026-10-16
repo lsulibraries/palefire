@@ -48,8 +48,12 @@ $pf-logo-filter-dark: none !default;
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
 
+    // Light text on the dark bar (the light bar's #434343 would vanish).
+    --pf-utility-color: var(--bs-body-color);
+
     // Purple on near-black fails contrast. Gold matches Origami's hover.
     .navbar {
+      --bs-navbar-color: var(--bs-body-color);
       --bs-navbar-hover-color: #{$pf-gold};
       --bs-navbar-active-color: #{$pf-gold};
     }
@@ -106,7 +110,7 @@ body[data-section-theme="dark"] .pf-page::before {
 // Less transparency / more contrast: solid. The header already gets
 // var(--bs-body-bg) from _header.scss, which is the dark value under
 // data-bs-theme="dark". The strip is outside the header, so it needs its own.
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+@include pf-solid-chrome {
   .pf-header[data-bs-theme="dark"] {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

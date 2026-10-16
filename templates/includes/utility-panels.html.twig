@@ -7,7 +7,19 @@
  * Utility menu region has content. Each panel is a Bootstrap 5.3 offcanvas
  * that slides in from the left, in the dark TOC sidebar's look (dark
  * glass, monospace tracked labels, gold accent): _utility-panels.scss.
- * Behaviour (clock, LibCal hours, "See full hours" link): utility-panels.js.
+ * Behaviour (clock, LibCal hours, "See full hours" link, Ask Us iframes,
+ * Settings): utility-panels.js.
+ *
+ * Panels, in the utility menu's order: Search, Hours, Ask Us, Accounts,
+ * Settings (Origami's drawers; Settings is new).
+ * - Ask Us: Origami's three LibAnswers widgets as tabs. Each iframe is
+ *   loaded the first time its tab is shown (data-src), so the page makes no
+ *   request to LibAnswers until the drawer opens.
+ * - Accounts: `accounts` below (label, url, icon = a Bootstrap Icon copied
+ *   to images/bi/ by build/copy-assets.js).
+ * - Settings: reading and display preferences, saved in this browser only
+ *   (localStorage "pf-a11y") and applied before the page paints by the
+ *   inline script in html.html.twig. Styles: base/_a11y-settings.scss.
  *
  * The trigger is the menu link itself (menu--utility.html.twig): its icon
  * picks the panel, data-bs-target="#pf-panel-{key}". Keys printed here must
@@ -27,6 +39,44 @@
   set hours_locations = [
     { lid: '241', name: '' },
     { lid: '236', name: '' },
+  ]
+%}
+{%
+  set ask_tabs = [
+    { key: 'chat', label: 'Live Chat'|t, icon: 'chat-dots-fill', title: 'AskUs live chat'|t, src: 'https://askus.lib.lsu.edu/chat/widget/429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d' },
+    { key: 'main', label: 'Email Main Library'|t, icon: 'envelope-fill', title: 'Email the Main Library'|t, src: '/askus/widgets/19448' },
+    { key: 'special', label: 'Email Special Collections'|t, icon: 'envelope-fill', title: 'Email Special Collections'|t, src: 'https://askus.lib.lsu.edu/widget_standalone.php?la_widget_id=19447' },
+  ]
+%}
+{%
+  set accounts = [
+    { label: 'Catalog Account'|t, icon: 'book', url: 'https://lsu.ent.sirsi.net/client/en_US/lsu/search/patronlogin/https:%24002f%24002flsu.ent.sirsi.net%24002fclient%24002fen_US%24002flsu%24002fsearch%24002faccount%24003f/' },
+    { label: 'Special Collections Account'|t, icon: 'journal-bookmark', url: 'https://specialcollections.lib.lsu.edu/logon' },
+    { label: 'Interlibrary Loan Account'|t, icon: 'truck', url: 'https://louis.hosts.atlas-sys.com/remoteauth/luu/illiad.dll' },
+    { label: 'Scholarly Repository Account'|t, icon: 'bank', url: 'https://repository.lsu.edu/cgi/login.cgi?return_to=https%3A%2F%2Frepository.lsu.edu%2Fcgi%2Fmyaccount.cgi%3Fcontext%3D&context=https://repository.lsu.edu' },
+    { label: 'myLSU Account'|t, icon: 'mortarboard', url: 'https://mylsu.apps.lsu.edu/c/portal/login' },
+    { label: 'TigerCASH Account'|t, icon: 'credit-card', url: 'https://tcard.lsu.edu/' },
+  ]
+%}
+{# Settings: group > settings. type 'size' is the radio group; the rest are
+   switches whose key becomes html.pf-a11y-{key}. Keep the keys in step with
+   html.html.twig and utility-panels.js. #}
+{%
+  set settings_groups = [
+    { key: 'reading', label: 'Reading'|t, items: [
+      { key: 'font', label: 'Easy-to-read font'|t, help: 'Atkinson Hyperlegible Next, made for low-vision readers.'|t },
+      { key: 'spacing', label: 'More text spacing'|t, help: 'Wider line, letter, word and paragraph spacing.'|t },
+      { key: 'underline', label: 'Underline all links'|t, help: 'Includes menus and link buttons.'|t },
+    ] },
+    { key: 'display', label: 'Display'|t, items: [
+      { key: 'contrast', label: 'High contrast'|t, help: 'Solid backgrounds, full-strength text, brighter borders, no stripes.'|t },
+      { key: 'solid', label: 'Reduce transparency'|t, help: 'No see-through glass on the header, sidebar and drawers.'|t },
+      { key: 'focus', label: 'Strong focus outline'|t, help: 'A thick gold-and-black ring around whatever has keyboard focus.'|t },
+    ] },
+    { key: 'motion', label: 'Motion'|t, items: [
+      { key: 'motion', label: 'Reduce motion'|t, help: 'Stops animations, page transitions, map animation and smooth scrolling.'|t },
+      { key: 'pausevideo', label: 'Pause background videos'|t, help: 'Background videos start paused.'|t },
+    ] },
   ]
 %}
 {% set close_icon %}
@@ -95,6 +145,118 @@
       <a class="pf-panel__cta" href="https://lsu.libcal.com/hours" data-pf-panel-href>
         <span>{{ 'See full hours'|t }}</span>{{ ext_icon }}
       </a>
+    </div>
+  </div>
+
+  {# Ask Us ------------------------------------------------------------- #}
+  <div class="offcanvas offcanvas-start pf-panel pf-panel--ask" id="pf-panel-ask" tabindex="-1"
+       aria-labelledby="pf-panel-ask-title" data-bs-theme="dark" data-pf-panel="ask">
+    <div class="pf-panel__header">
+      <h2 class="pf-panel__title" id="pf-panel-ask-title">{{ 'Ask Us'|t }}</h2>
+      <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
+        {{ close_icon }}<span class="visually-hidden">{{ 'Close Ask Us'|t }}</span>
+      </button>
+    </div>
+    <div class="pf-panel__body pf-ask">
+      <div class="pf-ask__tabs" role="tablist" aria-label="{{ 'Ways to ask'|t }}">
+        {% for tab in ask_tabs %}
+          <button type="button" class="pf-ask__tab{{ loop.first ? ' active' }}" role="tab"
+                  id="pf-ask-tab-{{ tab.key }}" data-bs-toggle="tab" data-bs-target="#pf-ask-pane-{{ tab.key }}"
+                  aria-controls="pf-ask-pane-{{ tab.key }}" aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                  {% if not loop.first %}tabindex="-1"{% endif %}>
+            <span class="pf-ask__tab-text">{{ tab.label }}</span>
+            <span class="pf-icon" aria-hidden="true">{{ source(directory ~ '/images/bi/' ~ tab.icon ~ '.svg', ignore_missing = true)|raw }}</span>
+          </button>
+        {% endfor %}
+      </div>
+      <div class="pf-ask__panes">
+        {% for tab in ask_tabs %}
+          <div class="pf-ask__pane tab-pane{{ loop.first ? ' active' }}" id="pf-ask-pane-{{ tab.key }}" role="tabpanel"
+               aria-labelledby="pf-ask-tab-{{ tab.key }}" tabindex="0">
+            {# src is set by utility-panels.js the first time this tab shows. #}
+            <iframe class="pf-ask__frame" title="{{ tab.title }}" data-src="{{ tab.src }}" loading="lazy"></iframe>
+            <noscript><a href="{{ tab.src }}">{{ tab.title }}</a></noscript>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="pf-panel__footer">
+      <a class="pf-panel__cta" href="https://askus.lib.lsu.edu/">
+        <span>{{ 'AskUs homepage'|t }}</span>{{ ext_icon }}
+      </a>
+    </div>
+  </div>
+
+  {# Accounts ----------------------------------------------------------- #}
+  <div class="offcanvas offcanvas-start pf-panel pf-panel--accounts" id="pf-panel-accounts" tabindex="-1"
+       aria-labelledby="pf-panel-accounts-title" data-bs-theme="dark" data-pf-panel="accounts">
+    <div class="pf-panel__header">
+      <h2 class="pf-panel__title" id="pf-panel-accounts-title">{{ 'Accounts'|t }}</h2>
+      <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
+        {{ close_icon }}<span class="visually-hidden">{{ 'Close accounts'|t }}</span>
+      </button>
+    </div>
+    <div class="pf-panel__body pf-accounts">
+      <ul class="pf-accounts__list">
+        {% for account in accounts %}
+          <li>
+            <a class="pf-accounts__link" href="{{ account.url }}">
+              <span class="pf-accounts__text">{{ account.label }}</span>
+              <span class="pf-icon pf-accounts__icon" aria-hidden="true">{{ source(directory ~ '/images/bi/' ~ account.icon ~ '.svg', ignore_missing = true)|raw }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="pf-panel__footer">
+      <a class="pf-panel__cta" href="/accounts">
+        <span>{{ 'Account descriptions'|t }}</span>{{ ext_icon }}
+      </a>
+    </div>
+  </div>
+
+  {# Settings ----------------------------------------------------------- #}
+  <div class="offcanvas offcanvas-start pf-panel pf-panel--settings" id="pf-panel-settings" tabindex="-1"
+       aria-labelledby="pf-panel-settings-title" data-bs-theme="dark" data-pf-panel="settings">
+    <div class="pf-panel__header">
+      <h2 class="pf-panel__title" id="pf-panel-settings-title">{{ 'Settings'|t }}</h2>
+      <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
+        {{ close_icon }}<span class="visually-hidden">{{ 'Close settings'|t }}</span>
+      </button>
+    </div>
+    <form class="pf-panel__body pf-settings" data-pf-settings aria-labelledby="pf-panel-settings-title">
+      <p class="pf-settings__intro">{{ 'Changes apply right away and are saved in this browser.'|t }}</p>
+
+      <fieldset class="pf-settings__group">
+        <legend class="pf-settings__legend">{{ 'Text size'|t }}</legend>
+        <div class="pf-settings__sizes">
+          {% for size in ['100', '115', '130', '150'] %}
+            <input class="pf-settings__size-input visually-hidden" type="radio" name="size" id="pf-set-size-{{ size }}" value="{{ size }}"{{ loop.first ? ' checked' }}>
+            <label class="pf-settings__size" for="pf-set-size-{{ size }}" data-size="{{ size }}"><span class="pf-settings__size-a" aria-hidden="true">A</span>{{ size }}%</label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      {% for group in settings_groups %}
+        <fieldset class="pf-settings__group">
+          <legend class="pf-settings__legend">{{ group.label }}</legend>
+          {% for item in group.items %}
+            <div class="pf-settings__item">
+              <input class="pf-settings__switch" type="checkbox" role="switch" name="{{ item.key }}" id="pf-set-{{ item.key }}" aria-describedby="pf-set-{{ item.key }}-help">
+              <label class="pf-settings__label" for="pf-set-{{ item.key }}">{{ item.label }}</label>
+              <p class="pf-settings__help" id="pf-set-{{ item.key }}-help">{{ item.help }}</p>
+            </div>
+          {% endfor %}
+        </fieldset>
+      {% endfor %}
+
+      <p class="pf-settings__status" role="status" data-pf-settings-status></p>
+    </form>
+    <div class="pf-panel__footer">
+      <button type="button" class="pf-panel__cta pf-settings__reset" data-pf-settings-reset>
+        <span>{{ 'Reset to default'|t }}</span>
+        <svg class="pf-panel__cta-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-3.97M2.5 2.5v2.5H5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 

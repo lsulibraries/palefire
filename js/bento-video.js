@@ -1,5 +1,10 @@
 (function (Drupal, once) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // Settings drawer (utility-panels.js): html.pf-a11y-motion stands in for
+  // the OS setting; html.pf-a11y-pausevideo starts the clip paused.
+  const html = document.documentElement;
+  const reduceMotion = () => reduce.matches || html.classList.contains('pf-a11y-motion');
+  const startPaused = () => reduceMotion() || html.classList.contains('pf-a11y-pausevideo');
   // Crossfade between clips; keep in step with --pf-bento-fade
   // (_bento-search.scss).
   const FADE_MS = 1000;
@@ -15,7 +20,7 @@
         const label = btn.querySelector('[data-bento-video-label]') || btn;
         const sources = JSON.parse(wrap.dataset.sources || '[]');
         if (!sources.length) return;
-        let paused = reduce.matches;
+        let paused = startPaused();
         let inView = false;
         const setState = () => {
           btn.dataset.state = paused ? 'paused' : 'playing';
@@ -109,7 +114,7 @@
           ['timeupdate', 'loadedmetadata', 'seeked'].forEach((type) => v.addEventListener(type, progress));
           v.addEventListener('timeupdate', () => {
             if (v !== video() || !v.duration || paused) return;
-            if (v.duration - v.currentTime <= (reduce.matches ? 0.15 : FADE_MS / 1000)) swap();
+            if (v.duration - v.currentTime <= (reduceMotion() ? 0.15 : FADE_MS / 1000)) swap();
           });
           v.addEventListener('ended', () => { if (v === video()) swap(); });
         });
@@ -119,6 +124,16 @@
           setState();
           if (paused) pauseAll();
           else play();
+        });
+        // Settings drawer: turning on "Pause background videos" or
+        // "Reduce motion" pauses a playing clip at once. Turning them off
+        // leaves it paused; the visitor presses Play when they want it.
+        document.addEventListener('palefire:a11ychange', () => {
+          if (wrap.isConnected && !paused && startPaused()) {
+            paused = true;
+            setState();
+            pauseAll();
+          }
         });
         // In the first section, centre the button on the breadcrumb's line
         // (.pf-modular__head, page.html.twig) instead of 1rem below the

@@ -1,0 +1,16 @@
+// Font fallbacks.
+//
+// Roboto and Handjet come from Google Fonts (html.html.twig) and load
+// without blocking the first paint, so the page first draws in a local font
+// and swaps when Roboto arrives. "Roboto Fallback" is local Arial resized to
+// Roboto's metrics (the values Next.js and Fontaine use), so the swap keeps
+// line breaks and heights and costs no layout shift (Lighthouse CLS).
+
+@font-face {
+  font-family: "Roboto Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");
+  size-adjust: 100.3%;
+  ascent-override: 92.77%;
+  descent-override: 24.41%;
+  line-gap-override: 0%;
+}

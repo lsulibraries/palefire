@@ -38,18 +38,49 @@
     <title>{{ head_title|safe_join(' | ') }}</title>
     <meta name="theme-color" content="#461d7c">
     {#
-      Page fade-in (progressive enhancement).
-      - Runs before first paint, so there is no flash of content.
-      - Only hides the page when JS is available; CSS (base/_fade.scss) has a
-        3s failsafe that reveals the page even if DOMContentLoaded never fires.
-      - Skipped entirely when the user prefers reduced motion.
+      Google Fonts: Roboto (body and menus) and Handjet (the Hours drawer
+      clock). Loaded without blocking the first paint (preload, then
+      rel=stylesheet on load). The browser only downloads a font file when
+      text on the page uses it, so Handjet costs nothing until the Hours
+      drawer opens. "Roboto Fallback" (base/_fonts.scss) is Arial resized to
+      Roboto's metrics, so the swap doesn't move the layout (CLS).
+      Atkinson Hyperlegible Next is requested only when a visitor turns on
+      "Easy-to-read font" in the Settings drawer (script below).
+    #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Handjet:wght@300..500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Handjet:wght@300..500&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
+    {#
+      Runs before first paint, so nothing flashes:
+      1. Settings drawer (utility-panels.html.twig): the visitor's saved
+         choices (localStorage "pf-a11y") become classes on <html>
+         (base/_a11y-settings.scss). js/utility-panels.js keeps the keys in
+         step: size, font, spacing, underline, contrast, solid, focus,
+         motion, pausevideo.
+      2. Page fade-in (progressive enhancement). Only hides the page when JS
+         is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
+         the page even if DOMContentLoaded never fires. Skipped when the OS
+         or the Settings drawer asks for reduced motion.
       If you enable a strict Content-Security-Policy, add this script's hash
       or move it into a library with header: true.
     #}
     <script>
       (function (d, w) {
-        var h = d.documentElement;
-        if (w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+        var h = d.documentElement, s = {};
+        try { s = JSON.parse(w.localStorage.getItem('pf-a11y')) || {}; } catch (e) {}
+        if (/^(115|130|150)$/.test(s.size)) { h.setAttribute('data-pf-text-size', s.size); }
+        ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'].forEach(function (k) {
+          if (s[k]) { h.classList.add('pf-a11y-' + k); }
+        });
+        if (s.font) {
+          var l = d.createElement('link');
+          l.rel = 'stylesheet';
+          l.id = 'pf-font-atkinson';
+          l.href = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
+          d.head.appendChild(l);
+        }
+        if (s.motion || (w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches)) { return; }
         h.classList.add('pf-fade');
         d.addEventListener('DOMContentLoaded', function () {
           w.requestAnimationFrame(function () { h.classList.add('pf-ready'); });

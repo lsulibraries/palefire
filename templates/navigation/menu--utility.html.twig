@@ -16,7 +16,8 @@
  * build/copy-assets.js).
  *
  * Panels: an icon that has a panel opens it as a Bootstrap offcanvas drawer
- * from the left instead of following the link (search, hours; markup in
+ * from the left instead of following the link (search, hours, ask, accounts,
+ * settings; markup in
  * templates/includes/utility-panels.html.twig, printed by page.html.twig).
  * The link stays a real <a href>: without JavaScript it still goes to its
  * page, and the Hours panel's "See full hours" button goes to the same URL.
@@ -24,8 +25,10 @@
  * or let the icon decide (panel_map). To add a panel, add its markup to
  * utility-panels.html.twig and its key to `panels` below.
  *
- * Accessibility: the link title is kept as visually hidden text, so every
- * link has an accessible name; the SVG is aria-hidden. Targets are at least
+ * Accessibility: the link title is the link's text, so every link has an
+ * accessible name; it shows as a tooltip on hover and keyboard focus
+ * (Origami's Bootstrap tooltips, without the tooltip JS), and Escape hides
+ * it (WCAG 1.4.13, utility-panels.js). The SVG is aria-hidden. Targets are at least
  * 44x44px (exceeds WCAG 2.2 SC 2.5.8). Bootstrap's offcanvas traps focus,
  * closes on Escape and returns focus to the icon.
  */
@@ -66,9 +69,22 @@
     'gear': 'gear-fill',
   }
 %}
-{# Icon => panel key, and the panels utility-panels.html.twig prints. #}
-{% set panel_map = { 'search': 'search', 'clock': 'hours' } %}
-{% set panels = ['search', 'hours'] %}
+{# Icon => panel key, and the panels utility-panels.html.twig prints.
+   Solid names are listed too, for links that set data-icon="…-fill". #}
+{%
+  set panel_map = {
+    'search': 'search',
+    'clock': 'hours',
+    'clock-fill': 'hours',
+    'chat-dots': 'ask',
+    'chat-dots-fill': 'ask',
+    'person-circle': 'accounts',
+    'person-fill': 'accounts',
+    'gear': 'settings',
+    'gear-fill': 'settings',
+  }
+%}
+{% set panels = ['search', 'hours', 'ask', 'accounts', 'settings'] %}
 {% if items %}
   <ul{{ attributes.addClass('nav', 'pf-utility-nav', 'align-items-center', 'flex-nowrap') }}>
     {% for item in items %}
@@ -100,7 +116,10 @@
           <a href="{{ item.url }}" class="nav-link pf-utility-nav__link">
         {% endif %}
           <span class="pf-icon" aria-hidden="true">{{ svg|raw }}</span>
-          <span class="visually-hidden">{{ item.title }}</span>
+          {# The link's name, and its tooltip: visually hidden until the
+             icon is hovered or focused (_header.scss). One element, so
+             screen readers hear the name once. #}
+          <span class="pf-utility-nav__label">{{ item.title }}</span>
         </a>
       </li>
     {% endfor %}
