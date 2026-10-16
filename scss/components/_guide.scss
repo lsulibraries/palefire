@@ -78,9 +78,11 @@ html[data-pf-mode="guide"] {
   @include pf-thin-scrollbar;
 }
 
+// The sidebar's bar only shows on hover / focus (_modular.scss), so its
+// guide colours do too.
 html[data-pf-mode="guide"],
-html[data-pf-mode="guide"] body:not([data-section-theme="dark"]) .pf-sidebar.pf-modular__sidebar,
-html.pf-guide-dark[data-pf-mode="guide"] .pf-sidebar.pf-modular__sidebar {
+html[data-pf-mode="guide"] body:not([data-section-theme="dark"]) .pf-sidebar.pf-modular__sidebar:is(:hover, :focus-within),
+html.pf-guide-dark[data-pf-mode="guide"] .pf-sidebar.pf-modular__sidebar:is(:hover, :focus-within) {
   --pf-scroll-thumb: var(--pf-g-scroll);
   --pf-scroll-thumb-hover: var(--pf-g-scroll-hover);
   --pf-scroll-track: var(--pf-g-rule);

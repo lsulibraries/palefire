@@ -870,6 +870,14 @@ with dark grey text instead of black, like a printed catalogue.
   the dark rail. `pf-thin-scrollbar` gained `--pf-scroll-track`
   (transparent by default, so the drawers don't change). While a dark
   section is active on a light guide, the sidebar keeps the default bar.
+* **Sidebar bar on hover only** (follow-up, every Modular page): a long TOC
+  often overflows the sidebar by a few pixels while the header is
+  expanded, so a nearly full-height thumb showed at the top of the page and
+  vanished once the header compacted on scroll, which looked like a bug.
+  The sidebar's bar is now invisible until the pointer is over the sidebar
+  or focus is in it (`:not(:hover, :focus-within)` in `_modular.scss`; the
+  guide colours apply on hover). `scrollbar-gutter: stable` keeps its space,
+  so nothing shifts when it appears.
 
 ### TOC open by default
 

@@ -427,6 +427,11 @@ html.pf-snap .site-footer {
     // column starts to scroll.
     @include pf-thin-scrollbar;
     scrollbar-gutter: stable;
+    // Shown only while the pointer is over the sidebar or focus is in it
+    // (rule below). A long TOC often overflows by only a few pixels while
+    // the header is expanded, so a nearly full-height thumb appeared at the
+    // top of the page and vanished once the header compacted on scroll; it
+    // read as a bug. The gutter stays, so nothing shifts when it shows.
     padding: 2rem 2.5rem;
     // Bootstrap sets `.offcanvas-lg { background-color: transparent
     // !important }` from lg up, which hid the wash. Two classes plus
@@ -456,6 +461,14 @@ html.pf-snap .site-footer {
       flex: 1 0 auto;
       flex-direction: column;
     }
+  }
+
+  // At rest the bar is invisible (see the note above); hovering the sidebar
+  // or tabbing into it shows it. Three classes: beats the mixin's own
+  // values; guides' colours apply on :hover / :focus-within (_guide.scss).
+  .pf-sidebar.pf-modular__sidebar:not(:hover, :focus-within) {
+    --pf-scroll-thumb: transparent;
+    --pf-scroll-track: transparent;
   }
 
   // -------------------------------------------------------------------
