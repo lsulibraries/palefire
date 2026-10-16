@@ -18,3 +18,52 @@
     @content;
   }
 }
+
+// Thin scrollbar: a 4px thumb in the TOC's grey on no track, with no arrow
+// buttons, instead of the system bar. Used by the drawers
+// (.pf-panel__body) and the "On this page" sidebar, so the two match.
+// The thumb reads --pf-toc-color (hover: --pf-toc-active), which follows
+// light and dark chrome (dark sections, Settings > Dark guides). At full
+// strength it is about 5:1 on the light sidebar and on the dark one, so
+// it passes WCAG 1.4.11 (3:1 for UI parts).
+//
+// Firefox: the standard properties. Chromium and Safari: only
+// ::-webkit-scrollbar drops the arrow buttons, and Chromium ignores it while
+// scrollbar-width/-color are set, so those go back to auto there.
+@mixin pf-thin-scrollbar {
+  --pf-scroll-thumb: var(--pf-toc-color);
+  --pf-scroll-thumb-hover: var(--pf-toc-active);
+  scrollbar-width: thin;
+  scrollbar-color: var(--pf-scroll-thumb) transparent;
+
+  @supports selector(::-webkit-scrollbar) {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    // 4px thumb: an 8px gutter minus a 2px transparent border each side.
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--pf-scroll-thumb);
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: var(--pf-scroll-thumb-hover);
+    }
+  }
+}

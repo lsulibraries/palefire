@@ -906,13 +906,19 @@ follows along (`storage` event).
 - To add a setting: an item in `settings_groups`
   (`utility-panels.html.twig`), its key in `SWITCHES` (`utility-panels.js`)
   and in the inline script's list (`html.html.twig`), and its CSS.
-- **Scrollbar** (2026-10-16): every drawer body (`.pf-panel__body`) scrolls
-  with a thin bar in the TOC's muted grey on no track, instead of the
-  system bar with arrow buttons (Windows). Firefox gets `scrollbar-width:
-  thin` and `scrollbar-color`; Chromium and Safari get `::-webkit-scrollbar`
-  (the only way to drop the arrows; Chromium ignores it while the standard
-  properties are set, so `@supports selector(::-webkit-scrollbar)` resets
-  them to auto).
+- **Scrollbar** (2026-10-16): every drawer body (`.pf-panel__body`) and
+  the "On this page" sidebar (`.pf-modular__sidebar`, lg and up) scroll
+  with the same thin bar: a 4px thumb in the TOC grey (`--pf-toc-color`,
+  `--pf-toc-active` on hover) on no track, with no arrow buttons. One mixin,
+  `pf-thin-scrollbar` in `scss/base/_mixins.scss`, so the two can't drift
+  apart. It follows light and dark chrome (dark sections, Dark guides, the
+  always-dark drawers) and is about 5:1 against each, for WCAG 1.4.11.
+  Firefox gets `scrollbar-width: thin` and `scrollbar-color`; Chromium and
+  Safari get `::-webkit-scrollbar` (the only way to drop the arrows;
+  Chromium ignores it while the standard properties are set, so the mixin
+  resets them there). The sidebar also keeps its gutter
+  (`scrollbar-gutter: stable`), so the links don't shift when an opening
+  sub-list makes it scroll.
 
 ### Light-map sections: no dark flash on load
 

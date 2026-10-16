@@ -78,46 +78,8 @@
     flex-direction: column;
     padding: 2rem var(--bs-offcanvas-padding-x);
     overflow-y: auto;
-    // A thin bar in the TOC's muted grey on no track, instead of the
-    // system bar with arrow buttons. Firefox: the standard properties.
-    --pf-scroll-thumb: color-mix(in srgb, var(--pf-toc-color) 55%, transparent);
-    scrollbar-width: thin;
-    scrollbar-color: var(--pf-scroll-thumb) transparent;
-  }
-
-  // Chromium and Safari: only ::-webkit-scrollbar drops the arrow buttons,
-  // and Chromium ignores it while scrollbar-width/-color are set, so they
-  // go back to auto here. A 4px thumb in an 8px gutter (transparent
-  // border), full grey on hover.
-  @supports selector(::-webkit-scrollbar) {
-    &__body {
-      scrollbar-width: auto;
-      scrollbar-color: auto;
-
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      &::-webkit-scrollbar-track,
-      &::-webkit-scrollbar-corner {
-        background: transparent;
-      }
-
-      &::-webkit-scrollbar-button {
-        display: none;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: var(--pf-scroll-thumb);
-        background-clip: padding-box;
-        border: 2px solid transparent;
-        border-radius: 4px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: var(--pf-toc-color);
-      }
-    }
+    // Thin scrollbar, shared with the TOC sidebar (base/_mixins.scss).
+    @include pf-thin-scrollbar;
   }
 
   &__footer {

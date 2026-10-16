@@ -417,6 +417,12 @@ html.pf-snap .site-footer {
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
     overflow-x: hidden; // fixed-width column: never scroll sideways
+    // Thin scrollbar like the drawers (base/_mixins.scss), not the system
+    // bar with arrow buttons. The gutter is kept even when the TOC is short,
+    // so the links don't shift sideways when a sub-list opens and the
+    // column starts to scroll.
+    @include pf-thin-scrollbar;
+    scrollbar-gutter: stable;
     padding: 2rem 2.5rem;
     // Bootstrap sets `.offcanvas-lg { background-color: transparent
     // !important }` from lg up, which hid the wash. Two classes plus
