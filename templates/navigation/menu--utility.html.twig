@@ -15,6 +15,12 @@
  * used instead of the outline one (see solid_map; copy both in
  * build/copy-assets.js).
  *
+ * Font Awesome: an icon listed in fa_map prints that Font Awesome 5 Pro SVG
+ * instead (Ask: duotone comments-alt), read from the site's
+ * /libraries/fontawesome-pro/svgs (licensed, so not in this repo). No FA
+ * CSS or webfont. Falls back to the Bootstrap Icon when the file is missing.
+ * The icon name (chat-dots) still picks the panel.
+ *
  * Panels: an icon that has a panel opens it as a Bootstrap offcanvas drawer
  * from the left instead of following the link (search, hours, ask, accounts,
  * settings; markup in
@@ -69,6 +75,13 @@
     'gear': 'gear-fill',
   }
 %}
+{# Icon => Font Awesome 5 Pro SVG (style/name under svgs/), used first. #}
+{%
+  set fa_map = {
+    'chat-dots': 'duotone/comments-alt',
+    'chat-dots-fill': 'duotone/comments-alt',
+  }
+%}
 {# Icon => panel key, and the panels utility-panels.html.twig prints.
    Solid names are listed too, for links that set data-icon="…-fill". #}
 {%
@@ -101,8 +114,11 @@
       {% set icon = icon|default('link-45deg') %}
       {% set panel = link_attributes['data-panel']|default(panel_map[icon]|default('')) %}
       {% set panel = panel in panels ? panel : '' %}
-      {# Theme SVG files, so |raw is safe here. #}
-      {% set svg = solid_map[icon] is defined ? source(directory ~ '/images/bi/' ~ solid_map[icon]|clean_class ~ '.svg', ignore_missing = true) : '' %}
+      {# Theme and site-library SVG files, so |raw is safe here. #}
+      {% set svg = fa_map[icon] is defined ? source('libraries/fontawesome-pro/svgs/' ~ fa_map[icon] ~ '.svg', ignore_missing = true) : '' %}
+      {% if svg is empty and solid_map[icon] is defined %}
+        {% set svg = source(directory ~ '/images/bi/' ~ solid_map[icon]|clean_class ~ '.svg', ignore_missing = true) %}
+      {% endif %}
       {% if svg is empty %}
         {% set svg = source(directory ~ '/images/bi/' ~ icon|clean_class ~ '.svg', ignore_missing = true) %}
       {% endif %}

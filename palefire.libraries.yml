@@ -144,15 +144,20 @@ user:
       css/components/user.css:
         weight: -10
 
+# Font Awesome Pro 5.15.4. Licensed, so it is not in this (public) repo: the
+# files live in the site's /libraries/fontawesome-pro (Drupal root), hence the
+# leading slash. Not attached by the theme: menu--utility.html.twig inlines
+# FA SVGs instead (no CSS or webfont). Attach it only where an FA icon class
+# is printed.
 fontawesome:
   version: 5.15.4
   css:
     theme:
-      libraries/fontawesome-pro/css/fontawesome.min.css: { minified: true }
-      libraries/fontawesome-pro/css/duotone.min.css: { minified: true }
-      libraries/fontawesome-pro/css/solid.min.css: { minified: true }
-      libraries/fontawesome-pro/css/brands.min.css: { minified: true }
-      
+      /libraries/fontawesome-pro/css/fontawesome.min.css: { minified: true }
+      /libraries/fontawesome-pro/css/duotone.min.css: { minified: true }
+      /libraries/fontawesome-pro/css/solid.min.css: { minified: true }
+      /libraries/fontawesome-pro/css/brands.min.css: { minified: true }
+
 bento-video:
   js:
     js/bento-video.js: {}

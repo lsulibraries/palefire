@@ -495,9 +495,31 @@ follow Origami's `.mainMenu` (`$pf-header-bar-h` etc. in
   hover. Each icon's name shows as a tooltip on hover and keyboard focus
   (the link's own text, so screen readers hear it once; Escape hides it,
   WCAG 1.4.13). Icons with a panel open it instead of following the link.
+  Ask Us is Font Awesome's duotone `comments-alt` SVG instead (see below).
 - **Phones** (Origami never had mobile styles, so this is Palefire's own):
   logo, five icons and the menu button share one row down to about 360px;
   icon cells are 40x44px there. Drawers are full width.
+
+### Ask Us icon: Font Awesome duotone
+
+The Ask Us utility icon is now Font Awesome 5 Pro's duotone `comments-alt`
+(`fad fa-comments-alt`), as intended, instead of Bootstrap Icons'
+`chat-dots-fill`. It is printed as an inline SVG, like the other utility
+icons: no FA stylesheet or webfont, so nothing render-blocking and no late
+icon. `fa_map` in `menu--utility.html.twig` maps the icon name to a file
+under `/libraries/fontawesome-pro/svgs/`; the name still picks the Ask
+panel. If the file is missing, the Bootstrap Icon is used. `.pf-icon svg`
+now sets `fill: currentColor` (FA SVGs have no fill of their own), so the
+icon follows the hover colours; the duotone layer keeps its 40% opacity.
+
+Font Awesome Pro is licensed, so it is not in this public repo: it lives in
+the site's `/libraries/fontawesome-pro` (Drupal root), including `svgs/`.
+The `palefire/fontawesome` library pointed at the theme folder
+(`libraries/...`, which doesn't exist); its paths now start with `/`. It is
+still not attached anywhere.
+
+Production: make sure `/libraries/fontawesome-pro/svgs/duotone/comments-alt.svg`
+exists (and on libstage), then `git pull` and `drush cr`. No config.
 
 ### Utility panels (offcanvas)
 
