@@ -22,7 +22,6 @@
     revealStep: 45,      // ms between one room and the next (was 70)
     revealFade: 450,     // ms each room takes to fade in (was 550)
     revealLabelLag: 150, // ms a room's name follows its room (was 220)
-    replayAfter: 5000,   // ms off screen before the map resets to replay
     strokeWidthPt: 0.5,  // outline weight as displayed
     easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
     hideDelay: 140,      // ms; lets the pointer cross onto the tooltip (WCAG 1.4.13)
@@ -422,10 +421,8 @@
       root.pfMapDim = { disconnect() { dim.disconnect(); arm.abort(); } };
     }
 
-    // Draw-on trace (from the codepen) when the map scrolls into view. After
-    // SETTINGS.replayAfter ms off screen it resets, so the next visit draws
-    // it again; coming back sooner leaves it drawn, so scrolling past it
-    // doesn't restart the animation every time.
+    // Draw-on trace (from the codepen) every time the map scrolls into view:
+    // it resets once fully off screen.
     if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') return;
     root.classList.add('is-tracing');
     // Reveal order: rooms top to bottom (then left to right) through the
@@ -504,22 +501,20 @@
       state = 'hidden';
     };
     if (!('IntersectionObserver' in window)) { draw(); return; }
-    let away = 0;
+    // Draws each time a quarter of it comes into view; resets only once it
+    // is fully off screen, so it never vanishes while partly visible.
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
-        clearTimeout(away);
-        away = 0;
         if (state === 'hidden') draw();
       }
-      else if (state !== 'hidden' && !away) {
-        away = setTimeout(() => { away = 0; reset(); }, SETTINGS.replayAfter);
+      else if (!entry.isIntersecting && state !== 'hidden') {
+        reset();
       }
     }, { threshold: [0, 0.25] });
     io.observe(svg);
     root.pfMapDraw = {
       disconnect() {
         io.disconnect();
-        clearTimeout(away);
         timers.forEach(clearTimeout);
       },
     };

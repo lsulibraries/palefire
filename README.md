@@ -448,10 +448,12 @@ grey-white haze. Now:
   (`html.pf-toc-instant`). It never opens by itself on scroll: that would
   reflow the content under the reader and count as layout shift.
 - **Map draw:** the trace takes 1.8s (was 3.2s), rooms follow faster
-  (45ms steps, 0.45s fades). After 5s off screen the map resets, so the
-  next visit draws it again; back within 5s it stays drawn.
-  `SETTINGS.duration`, `stagger`, `reveal*` and `replayAfter` in
-  `building-map.js`; the reveal timings are mirrored in `_building-map.scss`.
+  (45ms steps, 0.45s fades). It redraws every time it comes into view: it
+  resets once fully off screen (not before, so it never vanishes while
+  partly visible). Follow-up: the first version waited 5s off screen
+  before resetting; dropped, redrawing each visit is fine.
+  `SETTINGS.duration`, `stagger` and `reveal*` in `building-map.js`; the
+  reveal timings are mirrored in `_building-map.scss`.
 - **No snap point at the map.** Tested in Chromium with wheel input: with
   the section as one snap area the browser never stops at the map, and
   with the blocks as snap points instead, every wheel step snaps back to
