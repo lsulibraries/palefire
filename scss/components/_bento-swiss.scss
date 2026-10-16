@@ -185,6 +185,43 @@
   font-size: .625rem;
 }
 
+// --- Light chrome over a bento video ----------------------------------------
+// The video's white wash is only 20% (_visit.scss), so the chrome carries
+// the contrast itself. Worst case is a black frame under the glass.
+// Header: 45% glass (was 60%) with black nav, icons and logo (was #434343):
+// 51 + 0.45 * 204 = 143, about 6.4:1 for black. The "Reduce transparency"
+// and "High contrast" settings still make it solid: they set the
+// background colour directly, not this variable (_header.scss).
+:where(:root:has(.pf-bento.has-bg-video)) .pf-header:not([data-bs-theme="dark"]) {
+  --pf-header-bg: rgba(var(--bs-body-bg-rgb), .45);
+  --pf-utility-color: #{$black};
+
+  .navbar {
+    --bs-navbar-color: #{$black};
+  }
+
+  .pf-brand {
+    --pf-brand-color: #{$black};
+  }
+}
+
+// The strip under the compact header (_header.scss) matches it.
+:where(:root:has(.pf-bento.has-bg-video)) .pf-page::before {
+  background-color: rgba(var(--bs-body-bg-rgb), .45);
+}
+
+// Breadcrumb: it sits straight on the video above the lead panel, so on a
+// light hero it gets its own strip of the sidebar's glass. Text keeps its
+// edge (the padding is pulled back out).
+.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-bento.has-bg-video) .pf-breadcrumb--modular .breadcrumb {
+  width: fit-content;
+  margin-inline-start: -.75rem;
+  padding: .375rem .75rem;
+  background-color: var(--pf-sidebar-bg);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pf-section .pf-bento.has-map-view .pf-bento__visit {
     transition: none !important;

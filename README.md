@@ -441,6 +441,21 @@ grey-white haze. Now:
   high-contrast switches are unchanged (the override is
   `:root:where(:has(...))`, so those rules still win).
 
+**Lighter still** (later follow-up, /v2/mapsandevents): the video was still
+too white and the chrome too opaque.
+
+- The white band behind the top bar and breadcrumb is gone, and the wash is
+  20% (was 40%).
+- Light glass on bento-video pages (`--pf-sidebar-bg`: TOC sidebar, lead
+  panel, Visit strip, breadcrumb) is 62% (was 80%), with the muted grey at
+  #404040 (was #595959): worst case about 4.8:1.
+- Header: 45% glass (was 60%) with black nav, utility icons and logo (was
+  #434343): worst case about 6.4:1. The strip under the compact header
+  matches. Reduce transparency / High contrast still make it solid.
+- Breadcrumb: without the band it sat straight on the video, so on a light
+  hero it gets its own strip of the sidebar glass (`_bento-swiss.scss`),
+  its text still on the column edge.
+
 #### Hero: Swiss layer, TOC default, map replay (2026-10-16)
 
 - **Swiss layer** (`scss/components/_bento-swiss.scss`, after

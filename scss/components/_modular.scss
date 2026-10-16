@@ -51,10 +51,14 @@ html.pf-guide-dark body {
 // field text above 4.5:1 even over a black frame. :where() keeps this at
 // :root's specificity: it beats the tokens above (later), and the
 // reduced-transparency / Settings drawer solid rules below still win.
+// 62% glass (was 80%) so more of the video shows; the grey goes to #404040
+// to make up for it. Worst case, a black frame under the 20% wash
+// (_visit.scss): (0.2 * 255) + 0.62 * (255 - 51) = 177, about 4.8:1 for
+// #404040. Black text is about 9:1 there.
 :root:where(:has(.pf-bento.has-bg-video)) {
-  --pf-sidebar-bg: #{rgba($pf-white, 0.8)};
-  --pf-toc-color: #{$pf-grey-700};
-  --pf-toc-sub-color: #{$pf-grey-700};
+  --pf-sidebar-bg: #{rgba($pf-white, 0.62)};
+  --pf-toc-color: #{$pf-grey-800};
+  --pf-toc-sub-color: #{$pf-grey-800};
 }
 
 // Anchor jumps and snap points land below the sticky header. This is the
