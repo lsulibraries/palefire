@@ -21,7 +21,14 @@
   --pf-map-surface: #000;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
   --pf-map-hatch-period: 4.7px;        /* the drawing's 20-unit hatch period on screen; building-map.js keeps it in step with the map */
-  --pf-map-tip-delay: .25s;            /* hover wait before a tooltip shows (building-map.js reads this) */
+  --pf-map-tip-delay: 1.75s;           /* hover wait before a tooltip shows (building-map.js reads this); the room lights at once */
+  --pf-map-tip-shift: -14px;           /* tooltip slides in from this far left */
+  --pf-map-tip-slide: .38s;            /* tooltip slide-in duration */
+  --pf-map-tip-slide-ease: cubic-bezier(.22, 1, .36, 1); /* fast start, soft landing, no overshoot */
+  --pf-map-label-halo: var(--pf-map-surface); /* room-name shadow: keeps a lifted name readable over the lines */
+  --pf-map-label-halo-width: 24;       /* map units; half shows around the letters (about 3px at 1000px wide) */
+  --pf-map-label-halo-in: .06s;        /* shadow on: almost at once, before the name moves */
+  --pf-map-label-halo-out: .2s;        /* shadow off: after the name has settled (waits --pf-map-out) */
   --pf-map-tip-in: .24s;               /* tooltip fade in */
   --pf-map-tip-out: .16s;              /* tooltip fade out */
   --pf-map-tip-ease: cubic-bezier(.34, 1.45, .64, 1); /* slight overshoot: the bump */
@@ -120,12 +127,18 @@
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 800; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
   pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: default;
-  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
+  /* Shadow: a halo in the map's surface colour under the letters
+     (paint-order), hidden until hover. */
+  stroke: var(--pf-map-label-halo); stroke-width: var(--pf-map-label-halo-width); stroke-linejoin: round; stroke-opacity: 0; paint-order: stroke fill;
+  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease, stroke-opacity var(--pf-map-label-halo-out) ease var(--pf-map-out);
 }
 /* A live room's name works like the room (hover, click): pointer cursor. */
 .pf-map__label.is-live { cursor: pointer; }
 .pf-map__label--floor { fill: var(--pf-map-floor-ink); font-size: 54px; font-weight: 600; font-style: normal; letter-spacing: .28em; }
-.pf-map__label.is-active { --lift: var(--pf-map-lift); fill: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
+.pf-map__label.is-active {
+  --lift: var(--pf-map-lift); fill: var(--pf-map-hover); stroke-opacity: 1;
+  transition: fill var(--pf-map-in) ease, transform var(--pf-map-in) ease, stroke-opacity var(--pf-map-label-halo-in) linear;
+}
 .pf-map__icons { pointer-events: none; }
 .pf-map__label::selection, .pf-map__label tspan::selection { fill: #000; background: var(--pf-map-hover); }
 /* Icons sit straight on the drawing: no fill behind them. Restroom tiles keep
@@ -292,14 +305,16 @@
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; /* true weight on macOS, as the page <h1> */
   opacity: 0; visibility: hidden; pointer-events: none;
   transform-origin: var(--tip-arrow, 50%) 100%;
-  transform: translateY(8px) scale(.96);
-  transition: opacity var(--pf-map-tip-out) ease, transform var(--pf-map-tip-out) ease, visibility 0s linear var(--pf-map-tip-out);
+  transform: translateX(var(--pf-map-tip-shift));
+  /* Closing is a plain fade; the offset resets once it is hidden. */
+  transition: opacity var(--pf-map-tip-out) ease, transform 0s linear var(--pf-map-tip-out), visibility 0s linear var(--pf-map-tip-out);
 }
 .pf-map__tip.is-open {
   opacity: 1; visibility: visible; pointer-events: auto; transform: none;
-  transition: opacity var(--pf-map-tip-in) ease-out, transform calc(var(--pf-map-tip-in) * 1.4) var(--pf-map-tip-ease), visibility 0s;
+  /* Opening: fades in while it slides in from the left (no bump). */
+  transition: opacity var(--pf-map-tip-in) ease-out, transform var(--pf-map-tip-slide) var(--pf-map-tip-slide-ease), visibility 0s;
 }
-.pf-map__tip.is-below { transform-origin: var(--tip-arrow, 50%) 0; transform: translateY(-8px) scale(.96); }
+.pf-map__tip.is-below { transform-origin: var(--tip-arrow, 50%) 0; }
 .pf-map__tip.is-below.is-open { transform: none; }
 /* Pointer: a small rotated square on the edge facing the room. */
 .pf-map__tip::after {

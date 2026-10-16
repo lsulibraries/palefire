@@ -35,6 +35,17 @@
   }
 }
 
+// On wide screens the bento (search form + map) is capped at
+// $pf-content-max and centred, so its left edge moves in past
+// --pf-section-pad-inline while the head stayed at the padding: with the
+// TOC collapsed the breadcrumb and <h1> sat left of "Search LSU
+// Libraries". When the first section is a bento, the head uses the same
+// edge: the section padding, or half the space left beside the cap,
+// whichever is larger (100% is the main column, as for the sections).
+body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
+  padding-inline: max(var(--pf-section-pad-inline, 1.25rem), calc((100% - #{$pf-content-max}) / 2));
+}
+
 .pf-modular__title {
   margin: 0.85rem 0 0;
   font-size: clamp(2rem, 1.25rem + 2vw, 3.25rem);

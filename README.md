@@ -27,10 +27,11 @@ entry. `field_full_page` turns on full-viewport scroll-snap (md and up).
 ### Building maps
 
 A bento section can show a building floor map under its search form
-(`bento_search.field_bento_map` -> `building_map` paragraph). Rooms show a
-tooltip on hover (after a short wait, `--pf-map-tip-delay`, so sweeping the
-pointer across the map doesn't flash tooltips), on keyboard focus, or on tap;
-it fades in with a small bump (just a fade under reduced motion). The
+(`bento_search.field_bento_map` -> `building_map` paragraph). Pointing at a
+room lights it at once; its tooltip opens after a wait
+(`--pf-map-tip-delay`, 1.75s, so sweeping the pointer across the map doesn't
+flash tooltips), or at once on keyboard focus or tap. It fades in while it
+slides in from the left (just a fade under reduced motion). The
 "Legend & spaces" list puts Floor 1 first, and the background video dims and
 blurs while the map is in view.
 
@@ -129,6 +130,23 @@ and `building_map.field_map_spaces` are listed but kept. Run the script with
 `palefire_preprocess_paragraph__bento_search()`, so it no longer depends on
 the bento's view display.
 
+Hover timing: pointing at a room, its name or its list entry lights it at
+once (hatch, gold name, lift); only the tooltip waits `--pf-map-tip-delay`.
+Moving from a room onto its name, or back, keeps the wait running; once a
+tooltip is open, moving to another room switches it at once. Keyboard focus
+and taps still open it straight away. The tooltip slides
+`--pf-map-tip-shift` (14px) in from the left over `--pf-map-tip-slide` with
+`--pf-map-tip-slide-ease` (no overshoot) and closes with a plain fade.
+`--pf-map-tip-ease` is still the "here" arrow's bob.
+
+Room-name shadow: a halo in `--pf-map-label-halo` (the map surface colour)
+is painted under each room name (`stroke` + `paint-order`), hidden until
+hover. It comes in over `--pf-map-label-halo-in` (60ms), before the name has
+moved, so the lifting name stays readable over the outlines and hatch it
+passes; on the way out it waits for the name to land (`--pf-map-out`) and
+fades over `--pf-map-label-halo-out`. Width: `--pf-map-label-halo-width`
+(24 map units).
+
 ### Full-page backgrounds and frosted glass
 
 Section background images (`field_section_bg`) and bento background videos
@@ -190,6 +208,14 @@ background bleed. Styles: `.pf-modular__head` in `scss/layout/_layout.scss`.
   only) put the snap point below the top, so the page loaded part-way
   down. The extra margin past the top is clamped, so the snap point is the
   top of the page with or without JS.
+- Wide screens: when the first section is a bento, the head's inline
+  padding is `max(--pf-section-pad-inline, (100% - $pf-content-max) / 2)`.
+  The bento's search form and map are capped at `$pf-content-max` (1280px)
+  and centred, so once the main column is wider than the cap plus padding
+  (TOC collapsed on a laptop, or any large monitor) their left edge moved
+  in while the breadcrumb and `<h1>` stayed at the padding. Now all three
+  share one edge at every width. Other first sections keep the plain
+  section padding.
 
 ### TOC title
 

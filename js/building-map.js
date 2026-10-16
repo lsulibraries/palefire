@@ -89,6 +89,7 @@
     let current = null;
     let hideTimer = 0;
     let showTimer = 0;
+    let hovered = null; // room lit by hover while its tooltip waits
     // Hover wait before a tooltip shows: --pf-map-tip-delay (s or ms).
     const tipDelay = () => {
       const v = getComputedStyle(root).getPropertyValue('--pf-map-tip-delay').trim();
@@ -130,6 +131,8 @@
       clearTimeout(hideTimer);
       clearTimeout(showTimer);
       if (!live.has(key)) return;
+      if (hovered && hovered !== key) setActive(hovered, false);
+      hovered = null;
       if (current !== key) {
         if (current) setActive(current, false);
         const src = root.querySelector('.pf-map__tip-src[data-map-tip="' + key + '"]');
@@ -146,17 +149,29 @@
     // from room to room then feels instant).
     function showSoon(key) {
       clearTimeout(hideTimer);
+      if (current && tip.classList.contains('is-open')) { clearTimeout(showTimer); show(key); return; }
+      if (!live.has(key)) return;
+      // The room, its name and its list entry light at once; only the
+      // tooltip waits. Moving between a room and its name keeps the wait.
+      if (key === hovered && showTimer) return;
       clearTimeout(showTimer);
-      if (current && tip.classList.contains('is-open')) { show(key); return; }
-      showTimer = setTimeout(() => show(key), tipDelay());
+      if (hovered && hovered !== key) setActive(hovered, false);
+      hovered = key;
+      setActive(key, true);
+      showTimer = setTimeout(() => { showTimer = 0; show(key); }, tipDelay());
     }
 
     function hide(now) {
-      clearTimeout(showTimer);
       clearTimeout(hideTimer);
       const done = () => {
+        // The tooltip's wait ends here, not on pointerleave, so crossing
+        // from a room onto its name (or back) doesn't restart it.
+        clearTimeout(showTimer);
+        showTimer = 0;
         if (current) setActive(current, false);
+        if (hovered && hovered !== current) setActive(hovered, false);
         current = null;
+        hovered = null;
         tip.classList.remove('is-open');
       };
       if (now) done();
