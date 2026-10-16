@@ -41,6 +41,19 @@ body[data-section-theme="dark"] {
   @include pf-tokens($pf-chrome-dark);
 }
 
+// Pages with a bento background video, light chrome: the TOC sidebar, the
+// breadcrumb and the bento's lead panel and Visit strip (which share
+// --pf-sidebar-bg) sit over the video under a light wash (_visit.scss),
+// not on white. Denser glass and a darker grey keep TOC, breadcrumb and
+// field text above 4.5:1 even over a black frame. :where() keeps this at
+// :root's specificity: it beats the tokens above (later), and the
+// reduced-transparency / Settings drawer solid rules below still win.
+:root:where(:has(.pf-bento.has-bg-video)) {
+  --pf-sidebar-bg: #{rgba($pf-white, 0.8)};
+  --pf-toc-color: #{$pf-grey-700};
+  --pf-toc-sub-color: #{$pf-grey-700};
+}
+
 // Anchor jumps and snap points land below the sticky header. This is the
 // only header offset: don't also give sections or titles a
 // scroll-margin-top. Snapping adds the scroller's scroll-padding to the

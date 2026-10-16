@@ -148,7 +148,10 @@
 
   const shouldIgnore = (url, { el } = {}) => {
     if (el) {
-      if (el.closest('[data-no-swup], .use-ajax, #toolbar-administration, .contextual')) {
+      // [data-bs-toggle]: links that open a Bootstrap component (the utility
+      // menu's offcanvas drawers). Bootstrap prevents their default, but
+      // Swup doesn't check defaultPrevented, so it followed the link too.
+      if (el.closest('[data-no-swup], [data-bs-toggle], .use-ajax, #toolbar-administration, .contextual')) {
         return true;
       }
       if (el.hasAttribute('download') || (el.target && el.target !== '_self')) {

@@ -409,6 +409,21 @@ on Windows).
 Production: theme files only. Switch the bento's section theme to Dark if
 it isn't yet, then `git pull` and `drush cr`.
 
+**Light bento sections over video** (Light, or "Light, dark at the map"
+before the map; follow-up, same day). The 74% white wash made the video a
+grey-white haze. Now:
+
+- The wash is 40%, so the video's colour shows, plus a band behind the top
+  bar and breadcrumb line that takes it to 85% there and fades out above
+  the lead panel (the breadcrumb has no glass of its own).
+- On pages with a bento video, the light glass (TOC sidebar, lead panel,
+  Visit strip: `--pf-sidebar-bg`) is 80% instead of 50%, and the muted grey
+  (`--pf-toc-color`) is #595959 instead of #686868. Worst case, a black frame
+  under the glass, the TOC, breadcrumb and search field text stay above 4.5:1.
+- Dark sections, the map's dark overlay and the Settings drawer's solid /
+  high-contrast switches are unchanged (the override is
+  `:root:where(:has(...))`, so those rules still win).
+
 #### "Light, dark at the map" section theme
 
 The Visit setup script also adds `light-map` to palefire_modular's
@@ -648,3 +663,8 @@ drush cr
 for anonymous visitors, re-running Drupal behaviors and syncing drupalSettings,
 meta tags, and body classes. Pages that need new assets or contain inline
 scripts fall back to a full load. Opt out per link with `data-no-swup`.
+
+Links with `data-bs-toggle` are skipped too (2026-10-16). The utility
+menu's icons are real `<a href>` links that open offcanvas drawers; Bootstrap
+prevents their default, but Swup 4 doesn't check `defaultPrevented`, so for
+anonymous visitors it also followed the link and left the page.

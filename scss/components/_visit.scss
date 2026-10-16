@@ -251,11 +251,24 @@
 .pf-section--theme-light-map::before {
   transition: color .45s ease, background-color .45s ease;
 }
-// Light state: a white wash over the background video instead of the dark
-// one, so the light tokens' dark text reads on it. Map in view: the
-// .is-map-in-view dark overlay from _building-map.scss takes over.
-.pf-section--theme-light-map:not(.is-map-dark) .pf-bento__media::after {
-  background-color: rgb(255 255 255 / .74);
+// Light bento sections (Light, or "Light, dark at the map" before the map):
+// a white wash over the background video instead of the dark one, so the
+// light tokens' dark text reads on it. 40% lets the video's colour through;
+// the text sits on the lead panel and the sidebar's denser light glass
+// (_modular.scss). The breadcrumb has no glass, so a band behind the top bar
+// and the breadcrumb line takes the wash to 85% there (.4 + .75 of the
+// rest), easing out above the lead panel. The layer is fixed and starts
+// (bleed + section padding) above the viewport, hence the offset.
+// Map in view: the .is-map-in-view dark overlay (_building-map.scss) takes
+// over; the band (an image) drops at once while the colour fades.
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view) .pf-bento__media::after {
+  --pf-wash-top: calc(var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px) + var(--pf-header-h, 0px));
+  background-color: rgb(255 255 255 / .4);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / .75) calc(var(--pf-wash-top) + 4.5rem),
+    rgb(255 255 255 / 0) calc(var(--pf-wash-top) + 10rem)
+  );
 }
 
 @media (forced-colors: active) {
