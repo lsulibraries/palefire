@@ -308,14 +308,15 @@ html.pf-snap .site-footer {
 // Bento section (first section, not full height)
 // ---------------------------------------------------------------------
 // The bento box is full width so its background video reaches both edges.
-// The search form is capped at 1280px and centred (the map, in
-// .pf-bento__visit, has the same cap). The padding keeps the form off the
-// screen edge on phones when the bento is not in a padded section (see the
-// next rule). Form styles: _bento-search.scss.
+// The lead panel (title, intro, search) is capped at 1280px and centred
+// (the map, in .pf-bento__visit, and the Visit strip have the same cap).
+// The padding keeps the panel off the screen edge on phones when the bento
+// is not in a padded section (see the next rule). Form styles:
+// _bento-search.scss; panel and Visit strip: _visit.scss.
 .pf-bento {
   padding: clamp(2rem, 6vh, 4.5rem) clamp(1rem, 4vw, 5rem);
 
-  > .pf-bento__form {
+  > .pf-bento__lead {
     width: 100%;
     max-width: 1280px;
     margin-inline: auto;
@@ -383,9 +384,11 @@ html.pf-snap .site-footer {
   // on the photo.
   .pf-modular--has-toc {
     --pf-bleed-inline-start: var(--pf-sidebar-w);
+    // Bootstrap's offcanvas timing ($offcanvas-transition-duration, ease-in-out),
+    // so the column closes in step with the sidebar sliding out.
     transition:
-      grid-template-columns 0.3s ease,
-      --pf-bleed-inline-start 0.3s ease;
+      grid-template-columns 0.3s ease-in-out,
+      --pf-bleed-inline-start 0.3s ease-in-out;
   }
 
   // Two classes so these beat Palefire's own .pf-sidebar rules and
@@ -405,7 +408,9 @@ html.pf-snap .site-footer {
     background-color: var(--pf-sidebar-bg) !important;
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
-    transition: background-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease-in-out;
     // Above the section backgrounds that bleed in under it (each
     // .pf-section__inner is z-index 1); below the header (1020).
     z-index: 2;
@@ -438,22 +443,27 @@ html.pf-snap .site-footer {
     --pf-bleed-inline-start: 0px;
   }
 
-  // visibility also takes the links out of the tab order and the
-  // accessibility tree. It switches after the fade, so the TOC doesn't
-  // vanish before the column has closed.
+  // The sidebar slides out whole, glass and all, like Bootstrap's
+  // .offcanvas-start (translateX(-100%), .3s ease-in-out), while the column
+  // closes behind it. visibility also takes the links out of the tab order
+  // and the accessibility tree; it switches after the slide.
+  // overflow: visible lets the toggle (inside the sidebar) ride along just
+  // past its edge and stay on screen; the sidebar's own scroll clip would
+  // hide it. Anything taller than the sidebar spills below the viewport,
+  // where it can't be seen.
   html.pf-toc-collapsed .pf-sidebar.pf-modular__sidebar {
     visibility: hidden;
     pointer-events: none;
-    background-color: transparent !important;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    overflow: visible;
+    transform: translateX(-100%);
     transition:
       background-color 0.3s ease,
+      transform 0.3s ease-in-out,
       visibility 0s linear 0.3s;
+  }
 
-    .offcanvas-body {
-      opacity: 0;
-    }
+  html[dir="rtl"].pf-toc-collapsed .pf-sidebar.pf-modular__sidebar {
+    transform: translateX(100%);
   }
 
   // Open: top right of the sidebar, centred on the TOC title's first line
@@ -493,11 +503,20 @@ html.pf-snap .site-footer {
   }
 
   // Closed: a small glass button that floats in the content's side
-  // padding (1rem + 2.25rem fits inside --pf-section-pad-inline).
+  // padding (1rem + 2.25rem fits inside --pf-section-pad-inline). It sits
+  // 1rem past the sidebar's edge (-(1rem + 2.25rem)), so once the sidebar
+  // has slid off by its full width the button is 1rem from the page edge.
+  // Closing, it moves out in step with the slide. Opening, it jumps back
+  // inside at once (no inset transition in the open rule) and slides in
+  // with the sidebar, so the sidebar's clip never hides it.
   html.pf-toc-collapsed .pf-modular__toc-collapse {
     top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // still on the breadcrumb's line
-    inset-inline-start: 1rem;
-    inset-inline-end: auto;
+    inset-inline-end: -3.25rem;
+    transition:
+      color 0.2s ease,
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      inset-inline-end 0.3s ease-in-out;
     background-color: var(--pf-sidebar-bg);
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));

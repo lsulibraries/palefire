@@ -1,27 +1,35 @@
 // =========================================================================
-// Bento head (Option B): intro + search on the left, Visit card on the right.
-// Rendered by templates/paragraphs/paragraph--bento-search.html.twig when the
-// Modular page fills in field_intro or a Visit field (see
-// _palefire_bento_visit() in palefire.theme). Hours: js/visit-hours.js.
-// Mini map: js/visit-map.js (loads Google Maps only on click).
+// Bento lead panel and Visit strip, one 1280px column:
+// 1. Lead panel: page <h1>, intro and search on frosted glass.
+// 2. The building map (.pf-bento__visit, _building-map.scss).
+// 3. Visit strip: hours, mini map, Google Maps link, as wide as the map's
+//    legend and drawing together; a stacked card below md.
+// Rendered by templates/paragraphs/paragraph--bento-search.html.twig; the
+// intro and Visit fields come from _palefire_bento_visit() in
+// palefire.theme. Hours: js/visit-hours.js. Mini map: js/visit-map.js
+// (loads Google Maps only on click).
 //
 // Plain CSS on purpose (custom properties only, no Sass functions), so the
 // compiled block in css/style.css matches this file rule for rule.
 // =========================================================================
 
-.pf-bento__head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
-  align-items: start;
+// Same glass as the Visit strip, the TOC sidebar and the top bar
+// (--pf-sidebar-bg + --pf-glass-filter), so the panel follows light and
+// dark sections and the Settings drawer's solid-chrome switch.
+.pf-bento__lead {
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--pf-section-border, #6c757d);
+  border-radius: 6px;
+  color: var(--pf-section-fg, inherit);
+  background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
-@media (min-width: 992px) {
-  .pf-bento__head {
-    grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 1fr);
-    gap: clamp(2rem, 4vw, 3.5rem);
-  }
-}
-.pf-bento__lead { min-width: 0; }
+// Dark: the search field's muted text (placeholder, "Search", icon) sits on
+// two layers of glass over a bright frame of video; the section's muted grey
+// (#ababab) keeps it above 4.5:1 where the chrome grey (#929292) did not.
+.pf-section--theme-dark .pf-bento__lead { --pf-toc-color: var(--pf-section-muted); }
 .pf-bento__intro {
   max-width: 62ch;
   margin-bottom: 1.75rem;
@@ -44,7 +52,7 @@
 .pf-bento__title { margin: 0 0 1.25rem; }
 .pf-bento__lead > .pf-bento__title + .pf-bento__intro { margin-top: 0; }
 
-// --- Visit card ----------------------------------------------------------
+// --- Visit strip -----------------------------------------------------------
 .pf-visit {
   --pf-visit-line: var(--pf-section-border, #6c757d);
   --pf-visit-open: #2f9e4f;
@@ -53,6 +61,9 @@
   display: flex;
   flex-direction: column;
   gap: .875rem;
+  width: 100%;
+  max-width: 1280px;
+  margin: clamp(1.5rem, 3vw, 2rem) auto 0;
   padding: 1.25rem 1.25rem 1.125rem;
   border: 1px solid var(--pf-visit-line);
   border-radius: 6px;
@@ -60,6 +71,37 @@
   background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+// md and up: a horizontal strip. Name, hours and directions | mini map.
+// 1200px and up (about 780px of column even with the TOC open): name and
+// directions | hours | mini map. Empty areas (no LibCal id, no map) just
+// leave their track empty.
+@media (min-width: 768px) {
+  .pf-visit {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "head map"
+      "hours map"
+      "link map";
+    gap: .875rem clamp(1.5rem, 3vw, 2.5rem);
+    align-items: start;
+    padding: 1.5rem;
+  }
+  .pf-visit__heading { grid-area: head; }
+  .pf-visit__hours { grid-area: hours; }
+  .pf-visit__map { grid-area: map; }
+  .pf-visit__directions { grid-area: link; align-self: end; }
+}
+@media (min-width: 1200px) {
+  .pf-visit {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(14rem, 20rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "head hours map"
+      "link hours map";
+  }
 }
 .pf-visit__heading {
   display: flex;
@@ -228,5 +270,9 @@
 @media print {
   .pf-visit__map,
   .pf-visit__week { display: none; }
-  .pf-visit { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
+  .pf-visit,
+  .pf-bento__lead { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
+}
+@media (forced-colors: active) {
+  .pf-bento__lead { border-color: CanvasText; }
 }

@@ -1,4 +1,25 @@
 .pf-bento.has-bg-video { position: relative; isolation: isolate; }
+// The media layer is position: fixed, so overflow can't clip it: it showed
+// through every transparent section after the bento (Events). clip-path
+// does clip fixed descendants, so the video stays put while the bento
+// scrolls past and is gone once the next section comes up. The clip is the
+// media layer's own reach: the section edges plus the top and side bleed.
+.pf-bento.has-bg-video {
+  clip-path: inset(
+    calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
+    calc(-1 * var(--pf-section-pad-inline, 0px))
+    calc(-1 * var(--pf-section-pad-block, 0px))
+    calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
+  );
+}
+[dir="rtl"] .pf-bento.has-bg-video {
+  clip-path: inset(
+    calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
+    calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
+    calc(-1 * var(--pf-section-pad-block, 0px))
+    calc(-1 * var(--pf-section-pad-inline, 0px))
+  );
+}
 // The media layer bleeds like .pf-section__bg (see "Full-page backgrounds"
 // in _modular.scss): left under the TOC sidebar and, in the first section,
 // up under the top bar. The bento box sits inside .pf-section__inner's
@@ -15,7 +36,9 @@
   overflow: hidden;
 } // no z-index here
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
-.pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .55); }
+// A light scrim, so the video keeps its colour; the text sits on the lead
+// panel's glass (_visit.scss), not straight on the video.
+.pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .3); }
 // Playlists (two or more clips): bento-video.js adds a second <video> and
 // .is-buffered, and moves .is-current to whichever layer is playing. The
 // incoming clip goes on top and fades in over the outgoing one, which stays

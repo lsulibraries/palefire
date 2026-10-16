@@ -333,11 +333,12 @@ is at least 3:1 on both. On phones the button shows only its arrow
 
 ### Bento head and Visit card (Special Collections, Option B)
 
-A Modular page can give its bento search a two-column head: the page intro
-and the search form on the left, a **Visit** card on the right with today's
-status ("Open now", "Closes soon", "Opens tomorrow 9AM"), this week's hours,
-an "Open in Google Maps" link and, if asked for, a mini map. Pages that
-leave the new fields empty keep the single-column bento they have today.
+A Modular page can give its bento search a page intro above the search
+form and a **Visit** strip under the building map, with today's status
+("Open now", "Closes soon", "Opens tomorrow 9AM"), this week's hours, an
+"Open in Google Maps" link and, if asked for, a mini map. The bento is one
+1280px column: the lead panel (title, intro, search), the map, then the
+Visit strip (see "Bento layout: lead panel, Visit strip" below).
 
 Fields (all optional, on `node.modular_page`, added by
 `scripts/palefire_visit_setup.php`):
@@ -370,13 +371,43 @@ added to the bento, so edits show after save.
   Modular page > Manage fields > Hours, or edit `$libcal_locations` in the
   Visit setup script before running it (keys are IDs, values are labels).
 
-Stacking: `.pf-bento__media` is `position: fixed`, so it paints over any
-bento child that isn't positioned. `_visit.scss` gives every other direct
+Stacking: `.pf-bento__media` is `position: fixed` (clipped to the bento,
+see below), so it paints over any bento child that isn't positioned. `_visit.scss` gives every other direct
 child of `.pf-bento.has-bg-video` `position: relative`; without it the
 intro and the "Search LSU Libraries" heading sat under the video overlay.
 The "This week" `<details>` drops the starterkit details box, and the
 external-link arrow is an inline SVG (the `↗` character drew as an emoji
 on Windows).
+
+#### Bento layout: lead panel, Visit strip, video (2026-10-16)
+
+- **Video stays in the bento.** `.pf-bento__media` is `position: fixed`,
+  which `overflow` can't clip, so the video showed through every
+  transparent section after it (Events). `.pf-bento.has-bg-video` now has a
+  `clip-path` the size of the video's reach (section edges plus the top and
+  side bleed), which does clip fixed children: the video holds still while
+  the bento scrolls past, then scrolls away with it.
+- **More colour.** The video's dark scrim is 30% (was 55%). Meant for a
+  bento section with the **Dark** theme (Special Collections: switch its
+  bento section from "Light, dark at the map" to Dark in the UI). The map still
+  dims and blurs the video when it comes into view.
+- **Lead panel.** The `<h1>`, intro and search sit on one frosted panel
+  (`.pf-bento__lead`), the Visit card's glass (`--pf-sidebar-bg` +
+  `--pf-glass-filter`), so the text reads over the brighter video. In dark
+  sections the field's muted text uses `--pf-section-muted` (#ababab): over
+  a bright frame the chrome grey (#929292) fell just under 4.5:1. Every
+  bento gets the panel, with or without an intro.
+- **Visit strip.** The Visit card moved from beside the search to under the
+  map, as wide as legend + map. From md up it is one row: name and
+  directions | hours | mini map; below md it stacks as before. The
+  `.pf-bento__head` wrapper and `.has-head` class are gone.
+- **TOC hide slides.** The lg sidebar used to fade its links out while the
+  column closed. It now slides out whole, like Bootstrap's
+  `.offcanvas-start` (`translateX(-100%)`, .3s ease-in-out), with the column
+  closing in step; the toggle rides along at its edge.
+
+Production: theme files only. Switch the bento's section theme to Dark if
+it isn't yet, then `git pull` and `drush cr`.
 
 #### "Light, dark at the map" section theme
 
@@ -437,7 +468,7 @@ production downstream as usual.
   pause button, the progress line and the off-screen pause cover both layers.
   With reduced motion the swap is instant.
 - **"This week" open on lg.** `js/visit-hours.js` opens the hours list at
-  992px and up (the two-column bento head) and closes it below. It only
+  992px and up (the Visit strip's hours column) and closes it below. It only
   changes when the window crosses that width, so visitors can still open or
   close it themselves.
 - **Checking the section theme.** If a light-map page is dark from the top,

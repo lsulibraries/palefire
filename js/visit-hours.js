@@ -200,14 +200,14 @@
     formatTime,
   };
 
-  // Bootstrap lg; mirrors the two-column bento head in _visit.scss.
+  // Bootstrap lg: the Visit strip (_visit.scss) has room for the open list.
   const LG = window.matchMedia('(min-width: 992px)');
 
   Drupal.behaviors.palefireVisitHours = {
     attach(context) {
       once('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {
-        // "This week" starts open on lg screens (992px up, the two-column
-        // bento head) and closed below. Crossing the breakpoint resets it;
+        // "This week" starts open on lg screens (992px up, the Visit strip's
+        // hours column) and closed below. Crossing the breakpoint resets it;
         // otherwise visitors can open and close it as they like.
         const week = el.querySelector('.pf-visit__week');
         if (week) {
