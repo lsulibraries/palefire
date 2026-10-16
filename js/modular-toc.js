@@ -379,11 +379,12 @@
     setActive(hashed || entryAtLine(entries) || entries[0]);
     trackSubHeadings();
 
-    // Sub-links are cut to one line, as in Origami. Show the full heading
-    // as a tooltip only where the text is actually cut off.
+    // Sub-links are clamped to two lines. Show the full heading as a
+    // tooltip only where the text is actually cut off.
     const titleTruncated = () => entries.forEach((entry) => entry.subs.forEach((sub) => {
-      const cut = sub.link.scrollWidth > sub.link.clientWidth + 1
-        || sub.link.scrollHeight > sub.link.clientHeight + 1;
+      const box = sub.link.querySelector('.pf-toc__sublabel') || sub.link;
+      const cut = box.scrollWidth > box.clientWidth + 1
+        || box.scrollHeight > box.clientHeight + 1;
       sub.link.title = cut ? sub.label : '';
     }));
     requestAnimationFrame(titleTruncated);
@@ -529,7 +530,12 @@
       const link = document.createElement('a');
       link.className = 'pf-toc__sublink';
       link.href = '#' + heading.id;
-      link.textContent = label;
+      // The label gets its own span so the two-line clamp (_toc.scss)
+      // doesn't touch the link's padding or the visually-hidden detail.
+      const text = document.createElement('span');
+      text.className = 'pf-toc__sublabel';
+      text.textContent = label;
+      link.appendChild(text);
       if (heading.dataset.tocDetail) {
         const detail = document.createElement('span');
         detail.className = 'visually-hidden';

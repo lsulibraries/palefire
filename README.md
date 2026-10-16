@@ -261,10 +261,17 @@ Back to top arrow and the attached library never rendered; it has been
 deleted. If the title still shows "On this page" after `drush cr`, look
 for another copy: `find . -name 'palefire-modular-toc.html.twig'`.
 
-The hide/show button is a 4px-rounded square. Sub-links are cut to one line
-with an ellipsis (`white-space: nowrap`), not `-webkit-line-clamp`: a clamped
-box clips at its padding edge, so the top of the second line showed in the
-bottom padding. The full text is the link's tooltip where it is cut.
+The hide/show button is a 4px-rounded square. Sub-links (h3s) wrap to two
+lines and are clamped after that (2026-10-16; they used to be one line with
+an ellipsis). `modular-toc.js` puts the label in its own
+`<span class="pf-toc__sublabel">`, and the clamp (`-webkit-line-clamp: 2`)
+goes on that span, not the link: a clamped box clips at its padding edge, so
+clamping the padded link let the top of the next line show in its bottom
+padding. The link keeps its padding for the tap target, and the
+visually-hidden `data-toc-detail` text stays outside the clamp, so screen
+readers still get the full label and detail. The full text is the link's
+tooltip where it is cut. To change the line count, edit
+`.pf-toc__sublabel` in `scss/components/_toc.scss`.
 
 Sideways scrolling: `.pf-toc__sublink` is `position: relative`, so the
 visually-hidden event detail that `modular-toc.js` adds to calendar

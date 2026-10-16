@@ -177,10 +177,12 @@
   padding-bottom: 6px;
 }
 
-// Origami `ul ul li span`: uppercase, bold, one line, cut at 160px.
-// One line with an ellipsis (not -webkit-line-clamp): a clamped box clips
-// at its padding edge, so the top of the second line showed in the bottom
-// padding under "HILL MEMORIAL…". The padding stays for the tap target.
+// Origami `ul ul li span`: uppercase, bold, cut at 160px.
+// Up to two lines. The clamp sits on the inner .pf-toc__sublabel, which has
+// no padding: a clamped box clips at its padding edge, so clamping the
+// padded link itself let the top of the next line show in its bottom
+// padding (the old "HILL MEMORIAL…" bug). The link keeps the padding for
+// the tap target.
 .pf-toc__sublink {
   display: block;
   // Positioned so the link is the containing block of its visually-hidden
@@ -189,8 +191,6 @@
   // uncut label, and made the sidebar scroll sideways.
   position: relative;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   max-width: min(100%, calc(160px + var(--pf-toc-sub-indent))); // 218px was 2px wider than the rail
   padding: 0.45rem 0 0.35rem var(--pf-toc-sub-indent);
   font-size: 12px;
@@ -199,6 +199,15 @@
   line-height: 1.5;
   text-transform: uppercase;
   color: var(--pf-toc-sub-color);
+}
+
+.pf-toc__sublabel {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere; // one long word can't widen the rail
 }
 
 // Origami span.back-to-top: stacked arrow + tiny caps label, pushed to
