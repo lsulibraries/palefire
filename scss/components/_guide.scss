@@ -179,6 +179,41 @@ html[data-pf-mode="guide"] {
   }
 }
 
+// Reader font (Settings > Reading > "Reader font for guides") ---------------
+// The book serif and measure of Edge's Reader view: Sitka on Windows (what
+// Reader view uses), Charter / Iowan Old Style on Apple, Georgia elsewhere.
+// System fonts only, nothing downloaded. Only the page title, the guide head
+// and the sections change; the header, TOC, breadcrumb and the monospace
+// labels (which set their own font) keep theirs. "Easy-to-read font" wins
+// when both are on: it is the accessibility setting.
+$pf-font-reader: 'Sitka Text', 'Sitka', Charter, 'Bitstream Charter', 'Iowan Old Style', Cambria, Georgia, serif;
+$pf-font-reader-heading: 'Sitka Heading', 'Sitka', Charter, 'Bitstream Charter', 'Iowan Old Style', Cambria, Georgia, serif;
+
+html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="guide"] {
+  :is(.pf-sections, .pf-guide-head, .pf-modular__title) {
+    font-family: $pf-font-reader;
+    font-kerning: normal;
+  }
+
+  :is(.pf-sections, .pf-guide-head) :is(p, li, dd, dt, blockquote, td, th) {
+    font-size: 1.1875rem;
+    line-height: 1.7;
+  }
+
+  .pf-guide-head__intro {
+    font-size: 1.3125rem;
+    line-height: 1.6;
+  }
+
+  // Serif headings are bold, as in Reader view (Sitka has no medium).
+  :is(.pf-sections, .pf-guide-head) :is(h2, h3, h4, h5, h6),
+  .pf-modular__title {
+    font-family: $pf-font-reader-heading;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+}
+
 // Sections -------------------------------------------------------------------
 
 html[data-pf-mode="guide"] .pf-sections > .pf-section {

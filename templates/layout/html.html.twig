@@ -56,10 +56,11 @@
       1. Settings drawer (utility-panels.html.twig): the visitor's saved
          choices (localStorage "pf-a11y") become classes on <html>
          (base/_a11y-settings.scss). js/utility-panels.js keeps the keys in
-         step: size, font, spacing, underline, contrast, solid, focus,
-         motion, pausevideo, dark. "Dark guides" only takes effect on
-         guide-mode pages (<html data-pf-mode="guide">): it adds
-         pf-guide-dark and Bootstrap's data-bs-theme="dark" to <html>.
+         step: size, font, spacing, underline, reader, contrast, solid, focus,
+         motion, pausevideo, dark. "Reader font for guides" (reader) and
+         "Dark guides" (dark) only take effect on guide-mode pages
+         (<html data-pf-mode="guide">): reader through CSS alone; dark also
+         adds pf-guide-dark and Bootstrap's data-bs-theme="dark" to <html>.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
          the page even if DOMContentLoaded never fires. Skipped when the OS
@@ -72,7 +73,7 @@
         var h = d.documentElement, s = {};
         try { s = JSON.parse(w.localStorage.getItem('pf-a11y')) || {}; } catch (e) {}
         if (/^(115|130|150)$/.test(s.size)) { h.setAttribute('data-pf-text-size', s.size); }
-        ['font', 'spacing', 'underline', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'].forEach(function (k) {
+        ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'].forEach(function (k) {
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
         if (s.dark && h.getAttribute('data-pf-mode') === 'guide') {

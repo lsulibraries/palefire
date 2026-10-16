@@ -872,6 +872,24 @@ guide-mode page it puts `pf-guide-dark` and Bootstrap's
   `data-pf-mode === 'guide'` check in `html.html.twig` and
   `utility-panels.js` and check those pages' components on a dark body.
 
+### Reader font for guides (2026-10-16)
+
+Settings > Reading > **Reader font for guides** (key `reader`, class
+`html.pf-a11y-reader`) sets guides in the book serif of Edge's Reader view:
+Sitka (what Reader view uses, on Windows), Charter or Iowan Old Style on
+Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
+
+* Only on guide pages (`<html data-pf-mode="guide">`), through CSS alone
+  (`_guide.scss`); other pages keep their fonts.
+* The page title, guide head and sections change: body text 1.1875rem at
+  1.7 line height, the intro 1.3125rem, headings bold serif (Sitka has no
+  medium weight). The header, TOC, breadcrumb and the monospace labels keep
+  their fonts.
+* "Easy-to-read font" wins when both are on: it is the accessibility setting.
+* Saved like the other switches: the key is in `SWITCHES`
+  (`utility-panels.js`), the inline `<head>` script (`html.html.twig`, so
+  there's no flash) and `settings_groups` (`utility-panels.html.twig`).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
