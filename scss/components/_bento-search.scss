@@ -6,7 +6,7 @@
 // section edge. The toggle moves down by the bleed, so it stays 1rem
 // inside the section's top corner.
 .pf-bento__media {
-  position: absolute;
+  position: fixed;
   inset: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px));
   inset-block-start: calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)));
   inset-inline-start: calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)));
