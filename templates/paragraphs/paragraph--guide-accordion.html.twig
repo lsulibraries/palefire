@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Guide: Accordion (paragraph type guide_accordion).
+ *
+ * Native <details> items (paragraph--accordion-item.html.twig): no
+ * JavaScript, keyboard and screen reader support from the browser, and the
+ * text is still found by the browser's find-in-page.
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+<div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--accordion') }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  <div class="pf-accordion">
+    {{ content.field_accordion_items }}
+  </div>
+</div>

@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Guide section (paragraph type guide_section) on a Modular page.
+ *
+ * palefire_modular already wraps each field_scroll_section item in the
+ * <section>, its <h2> and its optional background
+ * (field--node--field-scroll-section--modular-page.html.twig), so this
+ * template prints only the section's blocks. It must not extend
+ * paragraph.html.twig: that template would add a second <section> and <h2>,
+ * because PalefireHooks::preprocessParagraph() treats any paragraph with
+ * field_section_title as an older field_sections section.
+ *
+ * Blocks: guide_text, resource_list, guide_accordion, librarian_card,
+ * guide_video. Each prints its heading as an <h3>, which modular-toc.js
+ * lists under the section in guide mode.
+ */
+#}
+<div{{ attributes.addClass('pf-guide') }}>
+  {{ content.field_guide_blocks }}
+</div>

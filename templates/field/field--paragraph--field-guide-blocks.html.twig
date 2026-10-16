@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * A guide section's blocks (and an accordion's items), with no field
+ * wrappers: the blocks are direct children of .pf-guide (or .pf-accordion),
+ * so the section's grid gap spaces them.
+ */
+#}
+{% for item in items %}
+  {{ item.content }}
+{% endfor %}

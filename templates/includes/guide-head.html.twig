@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Guide page head, under the <h1> (page.html.twig), on Modular pages in
+ * guide mode. Built by PalefireHooks::preprocessPage():
+ * - head.intro: field_intro (render array) or NULL
+ * - head.owner: {name, url} or NULL (field_guide_owner)
+ * - head.updated: {label, iso} (the node's changed time)
+ * - head.subjects: list of {name, url} (field_guide_subjects)
+ * - head.cache: empty render array carrying the owner's and terms' cache
+ *   tags, so renaming either updates the page.
+ */
+#}
+<div class="pf-guide-head">
+  {% if head.intro %}
+    <div class="pf-guide-head__intro">{{ head.intro }}</div>
+  {% endif %}
+  <p class="pf-guide-head__meta">
+    {% if head.owner %}
+      <span>{{ 'Guide by'|t }} <a href="{{ head.owner.url }}">{{ head.owner.name }}</a></span>
+    {% endif %}
+    <span>{{ 'Updated'|t }} <time datetime="{{ head.updated.iso }}">{{ head.updated.label }}</time></span>
+  </p>
+  {% if head.subjects %}
+    <ul class="pf-guide-head__subjects" aria-label="{{ 'Subjects'|t }}">
+      {% for subject in head.subjects %}
+        <li>{% if subject.url %}<a href="{{ subject.url }}">{{ subject.name }}</a>{% else %}<span>{{ subject.name }}</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {{ head.cache }}
+</div>

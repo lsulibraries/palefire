@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Guide: Text (paragraph type guide_text).
+ *
+ * - field_block_title: optional <h3> (a sub-link in "On this page").
+ * - field_text_style: "callout" puts the block in a highlighted box.
+ *
+ * Inside a block that has a heading, use Heading 4 in the editor: every h3
+ * in a guide section becomes a TOC sub-link.
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set callout = paragraph.field_text_style.value == 'callout' %}
+{%
+  set classes = [
+    'pf-guide-block',
+    'pf-guide-block--text',
+    callout ? 'pf-guide-callout',
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  <div class="pf-guide-prose">
+    {{ content.field_block_body }}
+  </div>
+</div>

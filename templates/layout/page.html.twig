@@ -189,6 +189,11 @@
               {% if node.label and not modular_title_in_bento %}
                 <h1 class="pf-modular__title">{{ node.label }}</h1>
               {% endif %}
+              {# Guide mode: intro, owner, updated date, subjects
+                 (includes/guide-head.html.twig). #}
+              {% if guide_head %}
+                {% include '@palefire/includes/guide-head.html.twig' with { head: guide_head } only %}
+              {% endif %}
             </header>
           {% endif %}
           {% if has_toc %}

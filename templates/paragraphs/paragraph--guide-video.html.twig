@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Guide: Video (paragraph type guide_video).
+ *
+ * Click to load: the page shows the media item's own (locally stored)
+ * thumbnail and a link to the video. js/guide-video.js swaps in the
+ * YouTube (privacy-enhanced) or Vimeo player when the link is pressed, so
+ * no third-party script, cookie or request loads until then. Without
+ * JavaScript, or for other providers, the link opens the video's page.
+ *
+ * video: palefire_preprocess_paragraph__guide_video() — url, embed (or
+ * empty), title, thumb (or empty), thumb_width, thumb_height.
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% if video %}
+  {{ attach_library('palefire/guide-video') }}
+  {% set play = source(directory ~ '/images/bi/play-fill.svg', ignore_missing = true) %}
+  <div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--video') }}>
+    {% if title %}
+      <h3 class="pf-guide-block__title">{{ title }}</h3>
+    {% endif %}
+    <div class="pf-video"{% if video.embed %} data-pf-video="{{ video.embed }}"{% endif %} data-title="{{ video.title }}">
+      <a class="pf-video__link" href="{{ video.url }}">
+        {% if video.thumb %}
+          <img class="pf-video__thumb" src="{{ video.thumb }}" alt="" loading="lazy" decoding="async"{% if video.thumb_width %} width="{{ video.thumb_width }}" height="{{ video.thumb_height }}"{% endif %}>
+        {% endif %}
+        {# Theme SVG file, so |raw is safe here. #}
+        <span class="pf-video__play" aria-hidden="true">{{ play|raw }}</span>
+        <span class="pf-video__label">{{ 'Play video'|t }}<span class="visually-hidden">: {{ video.title }}</span></span>
+      </a>
+    </div>
+  </div>
+{% endif %}

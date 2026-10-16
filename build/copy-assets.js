@@ -23,6 +23,11 @@ const icons = [
   'gear', 'gear-fill',
   // Accounts drawer (utility-panels.html.twig).
   'book', 'journal-bookmark', 'truck', 'bank', 'mortarboard', 'credit-card',
+  // Guide pages: resource type icons, accordion and video
+  // (PALEFIRE_RESOURCE_ICONS in palefire.theme, paragraph templates).
+  'file-earmark-text', 'database', 'tools', 'card-checklist', 'easel',
+  'play-fill', 'file-earmark-pdf', 'file-earmark-word', 'download', 'person',
+  'globe2', 'plus-lg',
 ];
 
 function copy(from, to) {

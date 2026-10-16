@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * A Resource in a guide's resource list or accordion (view mode guide_item).
+ *
+ * resource: palefire_preprocess_node() — title, url (through the libezp
+ * proxy when "Requires LSU login" is ticked), icon (Bootstrap Icons name),
+ * labels, citation, desc.
+ *
+ * The root is an <li>: the resource list template prints the <ul>.
+ */
+#}
+{% set svg = source(directory ~ '/images/bi/' ~ resource.icon ~ '.svg', ignore_missing = true) %}
+<li{{ attributes.addClass('pf-resource', not node.isPublished() ? 'node--unpublished') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {# Theme SVG file, so |raw is safe here. #}
+  <span class="pf-resource__icon" aria-hidden="true">{{ svg|raw }}</span>
+  <div class="pf-resource__body">
+    <p class="pf-resource__head">
+      <a class="pf-resource__title" href="{{ resource.url }}">{{ resource.title }}</a>
+      {% for label in resource.labels %}
+        <span class="pf-label">{{ label }}</span>
+      {% endfor %}
+    </p>
+    {% if resource.citation %}
+      <p class="pf-resource__meta">{{ resource.citation }}</p>
+    {% endif %}
+    {% if resource.desc %}
+      <p class="pf-resource__desc">{{ resource.desc }}</p>
+    {% endif %}
+  </div>
+</li>

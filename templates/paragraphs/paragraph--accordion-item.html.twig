@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * One accordion item (paragraph type accordion_item).
+ *
+ * The title is the <summary>, not a heading, so long accordions don't fill
+ * "On this page". The panel is data-toc-skip, so an h3 typed into its text
+ * isn't listed either (it would point at hidden content).
+ *
+ * resources: palefire_preprocess_paragraph__accordion_item().
+ */
+#}
+{% set icon = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
+<details{{ attributes.addClass('pf-accordion__item') }}>
+  <summary class="pf-accordion__summary">
+    <span class="pf-accordion__title">{{ paragraph.field_item_title.value }}</span>
+    {# Theme SVG file, so |raw is safe here. #}
+    <span class="pf-accordion__icon" aria-hidden="true">{{ icon|raw }}</span>
+  </summary>
+  <div class="pf-accordion__panel" data-toc-skip>
+    {% if content.field_block_body|render|trim %}
+      <div class="pf-guide-prose">{{ content.field_block_body }}</div>
+    {% endif %}
+    {% if resources %}
+      <ul class="pf-resources">
+        {% for resource in resources %}
+          {{ resource }}
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</details>

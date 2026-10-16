@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Guide: Librarian card (paragraph type librarian_card).
+ *
+ * card: the staff node in the guide_card view mode
+ * (node--guide-card.html.twig), from
+ * palefire_preprocess_paragraph__librarian_card(). Which staff fields show
+ * is set in Staff > Manage display > Guide card.
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% if card %}
+  <div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--person') }}>
+    {% if title %}
+      <h3 class="pf-guide-block__title">{{ title }}</h3>
+    {% endif %}
+    {{ card }}
+  </div>
+{% endif %}

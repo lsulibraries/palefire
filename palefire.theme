@@ -11,6 +11,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\palefire\Hook\PalefireHooks;
@@ -57,12 +58,16 @@ function palefire_preprocess_breadcrumb(array &$variables) {
 /**
  * Implements hook_page_attachments_alter().
  *
- * Adds noindex to every page under /concept.
+ * Adds noindex to every page under /concept, and to Resource nodes' own
+ * pages: a Resource exists to be listed on guides, and its node page would
+ * be a thin duplicate in search results.
  */
 function palefire_page_attachments_alter(array &$attachments) {
   $path = \Drupal::request()->getPathInfo();
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $is_resource = $node instanceof NodeInterface && $node->bundle() === 'resource';
 
-  if (!preg_match('#^/concept(/|$)#i', $path)) {
+  if (!$is_resource && !preg_match('#^/concept(/|$)#i', $path)) {
     return;
   }
 
@@ -318,5 +323,211 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'here' => $here,
     'legend' => array_values((array) ($building['legend'] ?? [])),
     'cache' => $cache_render,
+  ];
+}
+
+/* ---------------------------------------------------------------------------
+ * Guide pages (scripts/palefire_guide_setup.php)
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Proxy prefix for Resources with "Requires LSU login" ticked.
+ */
+const PALEFIRE_PROXY_PREFIX = 'https://libezp.lib.lsu.edu/login?url=';
+
+/**
+ * Resource type (field_resource_type) => Bootstrap Icons file in images/bi.
+ */
+const PALEFIRE_RESOURCE_ICONS = [
+  'article' => 'file-earmark-text',
+  'book' => 'book',
+  'database' => 'database',
+  'guide' => 'journal-bookmark',
+  'standard' => 'card-checklist',
+  'tool' => 'tools',
+  'course' => 'easel',
+  'video' => 'play-fill',
+  'pdf' => 'file-earmark-pdf',
+  'word' => 'file-earmark-word',
+  'download' => 'download',
+  'search' => 'search',
+  'person' => 'person',
+  'website' => 'globe2',
+];
+
+/**
+ * Renders the Resources in $field that the visitor can see (guide_item).
+ *
+ * Unpublished or otherwise inaccessible Resources are left out; their cache
+ * tags are kept, so publishing one shows it on every guide that lists it.
+ */
+function _palefire_guide_resources(ParagraphInterface $paragraph, string $field, array &$variables): array {
+  $items = [];
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  if ($paragraph->hasField($field)) {
+    $builder = \Drupal::entityTypeManager()->getViewBuilder('node');
+    $repository = \Drupal::service('entity.repository');
+    foreach ($paragraph->get($field) as $item) {
+      $resource = $item->entity;
+      if (!$resource instanceof NodeInterface) {
+        continue;
+      }
+      $cache->addCacheableDependency($resource);
+      $access = $resource->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($access);
+      if ($access->isAllowed()) {
+        $items[] = $builder->view($repository->getTranslationFromContext($resource), 'guide_item');
+      }
+    }
+  }
+  $cache->applyTo($variables);
+  return $items;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--resource-list.
+ */
+function palefire_preprocess_paragraph__resource_list(array &$variables): void {
+  $variables['resources'] = _palefire_guide_resources($variables['paragraph'], 'field_resources', $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--accordion-item.
+ */
+function palefire_preprocess_paragraph__accordion_item(array &$variables): void {
+  $variables['resources'] = _palefire_guide_resources($variables['paragraph'], 'field_resources', $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--librarian-card.
+ *
+ * card: the referenced staff node in the guide_card view mode, or NULL when
+ * it is missing or the visitor can't see it (the card is then left out).
+ */
+function palefire_preprocess_paragraph__librarian_card(array &$variables): void {
+  $variables['card'] = NULL;
+  $paragraph = $variables['paragraph'];
+  if (!$paragraph->hasField('field_librarian')) {
+    return;
+  }
+  $person = $paragraph->get('field_librarian')->entity;
+  if (!$person instanceof NodeInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($person);
+  $access = $person->access('view', NULL, TRUE);
+  $cache->addCacheableDependency($access)->applyTo($variables);
+  if ($access->isAllowed()) {
+    $person = \Drupal::service('entity.repository')->getTranslationFromContext($person);
+    $variables['card'] = \Drupal::entityTypeManager()->getViewBuilder('node')->view($person, 'guide_card');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--guide-video.
+ *
+ * video: url (the video's page), embed (privacy-enhanced YouTube or Vimeo
+ * player URL, '' for other providers), title, and the media item's local
+ * thumbnail (thumb, thumb_width, thumb_height) when it has one.
+ */
+function palefire_preprocess_paragraph__guide_video(array &$variables): void {
+  $variables['video'] = NULL;
+  $paragraph = $variables['paragraph'];
+  if (!$paragraph->hasField('field_video')) {
+    return;
+  }
+  $media = $paragraph->get('field_video')->entity;
+  if (!$media instanceof MediaInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($media);
+  $access = $media->access('view', NULL, TRUE);
+  $cache->addCacheableDependency($access)->applyTo($variables);
+  if (!$access->isAllowed()) {
+    return;
+  }
+
+  $url = trim((string) $media->getSource()->getSourceFieldValue($media));
+  if (!preg_match('#^https?://#i', $url)) {
+    return;
+  }
+  $embed = '';
+  if (preg_match('#(?:youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/)|youtu\.be/)([\w-]{11})#i', $url, $m)) {
+    $embed = 'https://www.youtube-nocookie.com/embed/' . $m[1] . '?autoplay=1&rel=0';
+  }
+  elseif (preg_match('#vimeo\.com/(?:video/)?(\d+)#i', $url, $m)) {
+    $embed = 'https://player.vimeo.com/video/' . $m[1] . '?autoplay=1&dnt=1';
+  }
+
+  $thumb = '';
+  $width = $height = NULL;
+  $file = $media->get('thumbnail')->entity ?? NULL;
+  if ($file) {
+    $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('large');
+    $uri = $file->getFileUri();
+    $thumb = $style ? $style->buildUrl($uri) : \Drupal::service('file_url_generator')->generateString($uri);
+    $item = $media->get('thumbnail')->first();
+    if ($item && $item->width && $item->height) {
+      $width = (int) $item->width;
+      $height = (int) $item->height;
+      if ($style) {
+        $dimensions = ['width' => $width, 'height' => $height];
+        $style->transformDimensions($dimensions, $uri);
+        [$width, $height] = [$dimensions['width'], $dimensions['height']];
+      }
+    }
+  }
+
+  $variables['video'] = [
+    'url' => $url,
+    'embed' => $embed,
+    'title' => $media->label(),
+    'thumb' => $thumb,
+    'thumb_width' => $width,
+    'thumb_height' => $height,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * Resources in the guide_item view mode get `resource`: title, url, icon,
+ * labels, citation, desc (node--resource--guide-item.html.twig).
+ */
+function palefire_preprocess_node(array &$variables): void {
+  $node = $variables['node'] ?? NULL;
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'resource' || ($variables['view_mode'] ?? '') !== 'guide_item') {
+    return;
+  }
+  $value = fn (string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty() ? trim((string) $node->get($field)->value) : '';
+
+  $url = '';
+  if ($node->hasField('field_resource_link') && !$node->get('field_resource_link')->isEmpty()) {
+    $url = $node->get('field_resource_link')->first()->getUrl()->toString();
+  }
+  $labels = [];
+  if ($node->hasField('field_resource_labels')) {
+    foreach ($node->get('field_resource_labels') as $item) {
+      if (trim((string) $item->value) !== '') {
+        $labels[] = trim((string) $item->value);
+      }
+    }
+  }
+  $proxy = $node->hasField('field_resource_proxy') && (bool) $node->get('field_resource_proxy')->value;
+  if ($proxy && $url !== '') {
+    if (!str_starts_with($url, PALEFIRE_PROXY_PREFIX) && !str_contains((string) parse_url($url, PHP_URL_HOST), 'libezp.')) {
+      $url = PALEFIRE_PROXY_PREFIX . $url;
+    }
+    array_unshift($labels, (string) t('LSU login'));
+  }
+
+  $type = $value('field_resource_type');
+  $variables['resource'] = [
+    'title' => $node->label(),
+    'url' => $url ?: $node->toUrl()->toString(),
+    'icon' => PALEFIRE_RESOURCE_ICONS[$type] ?? 'globe2',
+    'labels' => array_slice(array_unique($labels), 0, 4),
+    'citation' => $value('field_resource_citation'),
+    'desc' => $value('field_resource_desc'),
   ];
 }

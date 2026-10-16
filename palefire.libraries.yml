@@ -177,6 +177,17 @@ visit:
     - core/drupal
     - core/once
 
+# Guide: Video blocks. Swaps the thumbnail link for the YouTube
+# (privacy-enhanced) or Vimeo player on click. Attached by
+# templates/paragraphs/paragraph--guide-video.html.twig.
+guide-video:
+  version: 1.0.0
+  js:
+    js/guide-video.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # "On this page" scroll tracking, moving indicator and Guide sub-links.
 # Attached by templates/navigation/palefire-modular-toc.html.twig.
 modular-toc:

@@ -26,6 +26,8 @@ Production needs only the build output in the repo: `css/style.css`,
 - `scripts/palefire_modular_setup.php` – one-time Paragraphs/field setup (drush php:script) for sites **without** palefire_modular; it exits without changes when palefire_modular is enabled
 - `scripts/palefire_visit_setup.php` – Visit card fields and the `light-map` section theme (sites with palefire_modular)
 - `scripts/palefire_modular_setup_undo.php` – removes the unused paragraph types/storages a partial `palefire_modular_setup.php` run leaves on a palefire_modular site
+- `scripts/palefire_guide_setup.php` – Guide pages content model: Resource content type, guide paragraph types, guide fields on Modular page (sites with palefire_modular)
+- `scripts/palefire_guide_demo.php` – builds the Systematic Reviews LibGuide as an unpublished guide page, as a demo
 
 ## Modular pages
 
@@ -597,6 +599,143 @@ so it out-ranks the block's own CSS.
   monospace label, the text large and light, the "Wikipedia" source link as
   a label with an accent underline. Also the thin stroke for the module's
   newer inline-SVG chevrons (`.libcal-day-carousel__chevron`).
+
+## Guide pages (LibGuides-style)
+
+Added 2026-10-16. A Modular page with **Type = guide**
+(`field_modular_type`) can hold a whole research guide on one page: every
+LibGuide tab becomes a section, every box a block. "On this page" lists
+the sections and, in guide mode, each block heading (h3) under them, so it
+replaces the LibGuide tab menu. The first guide is the Systematic Reviews
+LibGuide (`scripts/palefire_guide_demo.php`).
+
+### Set up (production, once)
+
+```bash
+git pull
+drush php:script themes/custom/palefire/scripts/palefire_guide_setup.php
+drush cr
+# Optional demo page (unpublished):
+drush php:script themes/custom/palefire/scripts/palefire_guide_demo.php -- path=/v2/guides/systematic-reviews
+drush cr
+```
+
+The setup script only adds config, and it is safe to re-run. It finds the
+Staff content type and the Subjects vocabulary by name. If it can't tell
+which to use, it lists the candidates and leaves out the parts that need
+them; re-run with `-- staff=<type> vocab=<vocabulary>`. It never changes
+an existing view display, so later edits in Manage display stand.
+
+After the script:
+
+* **Permissions.** Give the editor roles that build guides "Resource:
+  Create new content" and "Edit any content" (People > Permissions). The
+  script doesn't touch roles.
+* **Text format.** Guide text uses tables, lists and Heading 4. Make sure
+  the format editors use allows `<table>`, `<caption>`, `<th scope>`,
+  `<h4>`, `<ol>`, `<ul>` and `<code>` (CKEditor 5: Table, Heading, Code).
+* **Guide card.** Check Staff > Manage display > Guide card. The script
+  turns on the Staff fields that look like an email, phone, photo, job
+  title, pronouns or office; add or remove fields there.
+
+### Content model
+
+`node.modular_page` (guide fields, all optional; printed in the page head,
+hidden in the node's display):
+
+| Field | Type | Used for |
+| --- | --- | --- |
+| `field_modular_type` | existing | `guide` turns on guide mode |
+| `field_intro` | existing | The lede under the `<h1>` |
+| `field_guide_owner` | Entity reference → Staff | "Guide by" link |
+| `field_guide_subjects` | Entity reference → Subjects terms | Subject tags |
+| `field_guide_source` | Link | The LibGuide it replaces (for redirects; not shown) |
+
+**Resource** (`node.resource`). One link, database, book or tool, shared
+by every guide that lists it, like a LibGuides asset: change a URL once and
+every guide updates. Unpublish one to hide it everywhere. Its own page gets
+`noindex` (`palefire_page_attachments_alter()`).
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `title` | | Link text |
+| `field_resource_link` | Link | The plain address |
+| `field_resource_proxy` | Boolean | "Requires LSU login": adds the libezp prefix and an "LSU login" label (`PALEFIRE_PROXY_PREFIX`) |
+| `field_resource_type` | List | Picks the icon (`PALEFIRE_RESOURCE_ICONS`, Bootstrap Icons in `images/bi/`) |
+| `field_resource_citation` | Text | Short line under the title |
+| `field_resource_desc` | Long text (plain) | One or two sentences |
+| `field_resource_labels` | Text, up to 3 | Tags such as Free, Paid, Online, 30 min |
+
+Paragraph types:
+
+| Type | Fields | Template |
+| --- | --- | --- |
+| `guide_section` | palefire_modular's shared section fields (title, anchor, theme, TOC hide, background) + `field_guide_blocks` | `paragraph--guide-section.html.twig` |
+| `guide_text` | `field_block_title`, `field_block_body`, `field_text_style` (plain / callout) | `paragraph--guide-text.html.twig` |
+| `resource_list` | `field_block_title`, `field_block_intro`, `field_resources` (→ Resource) | `paragraph--resource-list.html.twig` |
+| `guide_accordion` | `field_block_title`, `field_block_intro`, `field_accordion_items` | `paragraph--guide-accordion.html.twig` |
+| `accordion_item` | `field_item_title`, `field_block_body`, `field_resources` | `paragraph--accordion-item.html.twig` |
+| `librarian_card` | `field_block_title`, `field_librarian` (→ Staff) | `paragraph--librarian-card.html.twig` |
+| `guide_video` | `field_block_title`, `field_video` (→ Remote video media) | `paragraph--guide-video.html.twig` |
+
+View modes: `node.guide_item` (a Resource in a list,
+`node--resource--guide-item.html.twig`) and `node.guide_card` (a staff
+member, `node--guide-card.html.twig`, any Staff type).
+
+`guide_section` has no snap or height fields on purpose: long text
+sections don't scroll-snap well, and palefire_modular treats a section
+without them as auto height, no snap. Its template must not extend
+`paragraph.html.twig`: palefire_modular already prints the `<section>`
+and `<h2>`, and `PalefireHooks::preprocessParagraph()` would add a second
+pair (it treats any paragraph with `field_section_title` as a section).
+
+### Writing a guide
+
+* One section per LibGuide tab. Subpages become blocks in their parent's
+  section, so they show as sub-links under it.
+* Every block heading is an h3 and a sub-link in "On this page". Inside a
+  block, use **Heading 4**: an h3 typed into the text would be listed too.
+  Accordion item titles and anything inside an open accordion are not
+  listed (`data-toc-skip`).
+* Add Resources first (Content > Add content > Resource), then pick them
+  in a Resource list by title. Paste the plain address and tick "Requires
+  LSU login" rather than pasting a libezp link.
+* Leave the TOC to do navigation: no "Next / Previous" or "see the tab
+  above" text.
+
+### Markup, styles and behaviour
+
+* Styles: `scss/components/_guide.scss`. Colours are the `--bs-*`
+  properties (they switch in dark sections, which set
+  `data-bs-theme="dark"`), with the dark section tokens first
+  (`--pf-section-accent`, `--pf-section-muted`, `--pf-section-border`).
+  No literal colours.
+* Accordions are native `<details>`/`<summary>`: no JavaScript, keyboard
+  and screen reader support from the browser, 44px rows, and the browser's
+  find-in-page opens a closed item that contains the match.
+* Tables in guide text scroll inside their block on narrow screens (the
+  block scrolls, not the table, so the table keeps its semantics).
+* Icons are inline Bootstrap Icons SVGs, like the utility menu, so guide
+  pages load no icon font. `build/copy-assets.js` lists the new ones.
+* Video (`js/guide-video.js`, library `palefire/guide-video`): the block
+  shows the media item's locally stored thumbnail and a "Play video" link.
+  Pressing it swaps in the youtube-nocookie.com or Vimeo (`dnt=1`) player,
+  so nothing loads from the provider until then. Other providers, and
+  visitors without JavaScript, follow the link to the video's page.
+* Page head: `templates/includes/guide-head.html.twig` under the `<h1>`
+  (page.html.twig), built by `PalefireHooks::guideHead()`. It is left out
+  when a bento search prints the `<h1>`. The owner's and subjects' cache
+  tags are on the head, so renaming either updates the page.
+* Access: unpublished Resources, staff nodes and media are left out for
+  visitors who can't see them, with their cache tags kept, so publishing
+  one shows it on every guide at once.
+
+### LibGuides
+
+The LibGuides site will be restyled to match later. Keep the class names
+here (`.pf-resource`, `.pf-accordion__*`, `.pf-guide-block__title`,
+`.pf-label`) stable: a LibGuides group-level stylesheet can reuse
+`_guide.scss` almost as is.
 
 ## Header (Origami look)
 

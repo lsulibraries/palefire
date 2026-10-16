@@ -1,0 +1,481 @@
+// Guide pages: Modular pages in guide mode (field_modular_type = guide) and
+// the guide_section blocks (scripts/palefire_guide_setup.php).
+//
+// Colours: Bootstrap's --bs-* properties, which switch inside dark sections
+// (data-bs-theme="dark" on the section), with the dark section tokens
+// (--pf-section-*, _modular-tokens.scss) first where a dark section sets
+// them. No literal colours here.
+//
+// Contrast: muted text uses --bs-secondary-color (about 5.7:1 on white) or
+// the dark section's muted grey (about 9:1 on black). Accent is LSU purple
+// on light (11:1) and lavender on dark (11.7:1).
+
+.pf-guide,
+.pf-guide-head {
+  --pf-guide-accent: var(--pf-section-accent, var(--bs-primary));
+  --pf-guide-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-guide-rule: var(--pf-section-border, var(--bs-border-color));
+  --pf-guide-surface: var(--bs-tertiary-bg);
+  --pf-guide-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  --pf-guide-prose: 42rem;
+}
+
+// Page head (includes/guide-head.html.twig) --------------------------------
+
+.pf-guide-head {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pf-guide-head__intro {
+  max-width: var(--pf-guide-prose);
+  font-size: 1.1875rem;
+  font-weight: 300;
+  line-height: 1.5;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-guide-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  font: 0.75rem/1.5 var(--pf-guide-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+
+  a {
+    color: var(--bs-body-color);
+    font-weight: 700;
+  }
+}
+
+.pf-guide-head__subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a,
+  span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.8125rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+    background: var(--pf-guide-surface);
+    border: 1px solid var(--pf-guide-rule);
+  }
+
+  a:hover,
+  a:focus-visible {
+    border-color: var(--pf-guide-accent);
+    text-decoration: underline;
+  }
+}
+
+// Section and blocks -------------------------------------------------------
+
+.pf-guide {
+  display: grid;
+  gap: 2.25rem;
+  max-width: 52rem;
+}
+
+.pf-guide-block {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.pf-guide-block__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.pf-guide-prose {
+  max-width: var(--pf-guide-prose);
+  min-width: 0;
+
+  > :last-child,
+  .field__item > :last-child {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    font-family: var(--pf-guide-mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pf-guide-muted);
+  }
+
+  li + li {
+    margin-top: 0.4rem;
+  }
+
+  // Wide tables scroll inside the block, not the page. The block (not the
+  // table) scrolls, so the table keeps its table semantics.
+  &:has(table) {
+    max-width: none;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 32rem;
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+    border-collapse: collapse;
+    border: 1px solid var(--pf-guide-rule);
+  }
+
+  caption {
+    caption-side: top;
+    padding: 0.75rem 1rem;
+    font: 700 0.6875rem var(--pf-guide-mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pf-guide-muted);
+  }
+
+  th,
+  td {
+    padding: 0.7rem 1rem;
+    text-align: start;
+    vertical-align: top;
+    border-bottom: 1px solid var(--pf-guide-rule);
+  }
+
+  thead th {
+    font: 700 0.6875rem var(--pf-guide-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pf-guide-muted);
+    background: var(--pf-guide-surface);
+  }
+
+  code {
+    padding: 0.1em 0.35em;
+    font-size: 0.875em;
+    color: inherit;
+    overflow-wrap: anywhere;
+    background: var(--pf-guide-surface);
+    border: 1px solid var(--pf-guide-rule);
+  }
+}
+
+// guide_text with Style = Callout.
+.pf-guide-callout {
+  max-width: var(--pf-guide-prose);
+  padding: 1rem 1.25rem;
+  background: var(--pf-guide-surface);
+  border-inline-start: 3px solid var(--pf-guide-accent);
+}
+
+// Resources (node--resource--guide-item.html.twig) -------------------------
+
+.pf-resources {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+.pf-resource {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.9rem;
+  border-bottom: 1px solid var(--pf-guide-rule);
+}
+
+.pf-resource__icon {
+  display: flex;
+  padding-top: 0.2rem;
+  color: var(--pf-guide-accent);
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+}
+
+.pf-resource__body {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  max-width: var(--pf-guide-prose);
+
+  p {
+    margin: 0;
+  }
+}
+
+.pf-resource__title {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.pf-resource__meta,
+.pf-label {
+  font-family: var(--pf-guide-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+}
+
+.pf-resource__meta {
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+.pf-resource__desc {
+  font-size: 0.9375rem;
+  color: var(--pf-guide-muted);
+}
+
+.pf-label {
+  display: inline-block;
+  margin-inline-start: 0.4rem;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: 0.15em;
+  border: 1px solid currentColor;
+}
+
+// Accordion (native <details>) ---------------------------------------------
+
+.pf-accordion {
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+.pf-accordion__item {
+  border-bottom: 1px solid var(--pf-guide-rule);
+}
+
+.pf-accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem; // 44px target
+  padding: 0.85rem 0.25rem;
+  font-size: 1.1875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:hover {
+    color: var(--pf-guide-accent);
+  }
+}
+
+.pf-accordion__icon {
+  display: flex;
+  flex: none;
+  color: var(--pf-guide-accent);
+  transition: transform 0.2s ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  [open] > .pf-accordion__summary & {
+    transform: rotate(45deg);
+  }
+}
+
+.pf-accordion__panel {
+  display: grid;
+  gap: 0.9rem;
+  padding: 0 0.25rem 1.25rem;
+}
+
+// Librarian card (node--guide-card.html.twig) ------------------------------
+
+.pf-person {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 38rem;
+  padding: 1.25rem;
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+
+  p {
+    margin: 0;
+  }
+}
+
+.pf-person__name {
+  font-size: 1.1875rem;
+  font-weight: 500;
+}
+
+.pf-person__details {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9375rem;
+
+  .field--label-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+  }
+
+  .field__label {
+    font: 700 0.6875rem/1.9 var(--pf-guide-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pf-guide-muted);
+
+    &::after {
+      content: none;
+    }
+  }
+
+  .field__item {
+    overflow-wrap: anywhere;
+  }
+
+  // A photo sits beside the name and details from md up.
+  .field--type-image img {
+    display: block;
+    width: 4.5rem;
+    height: 4.5rem;
+    object-fit: cover;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .pf-person:has(.field--type-image) {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    column-gap: 1.25rem;
+
+    .pf-person__name {
+      grid-column: 2;
+    }
+
+    .pf-person__details {
+      display: contents;
+    }
+
+    .field--type-image {
+      grid-column: 1;
+      grid-row: 1 / span 4;
+    }
+
+    .pf-person__details > :not(.field--type-image) {
+      grid-column: 2;
+    }
+  }
+}
+
+// Video (click to load; js/guide-video.js) ---------------------------------
+
+.pf-video {
+  position: relative;
+  max-width: 40rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bs-black);
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.pf-video__link {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--bs-body-bg);
+  text-decoration: none;
+
+  &:focus-visible {
+    outline-offset: -4px;
+  }
+}
+
+.pf-video__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pf-video__play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  color: var(--bs-white);
+  background: var(--bs-primary);
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    margin-inline-start: 0.2rem;
+    fill: currentColor;
+  }
+
+  .pf-video__link:hover &,
+  .pf-video__link:focus-visible & {
+    transform: scale(1.08);
+  }
+}
+
+// The label is on a solid strip so it stays readable over any thumbnail.
+.pf-video__label {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  padding: 0.45rem 0.75rem;
+  font: 700 0.6875rem var(--pf-guide-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-white);
+  background: var(--bs-black);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-accordion__icon,
+  .pf-video__play {
+    transition: none;
+  }
+}

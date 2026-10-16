@@ -101,6 +101,7 @@ class PalefireHooks {
     $variables['is_modular_page'] = FALSE;
     $variables['modular_title_in_bento'] = FALSE;
     $variables['palefire_toc'] = [];
+    $variables['guide_head'] = NULL;
 
     $node = $variables['node'] ?? NULL;
     if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
@@ -112,6 +113,11 @@ class PalefireHooks {
     // first section (paragraph--bento-search.html.twig); page.html.twig then
     // leaves its own <h1> out, so there is always exactly one.
     $variables['modular_title_in_bento'] = self::titleBentoUuid($node) !== NULL;
+
+    // Guide mode: intro, owner, updated date and subjects under the <h1>.
+    if (!$variables['modular_title_in_bento'] && self::stringValue($node, 'field_modular_type') === 'guide') {
+      $variables['guide_head'] = $this->guideHead($node);
+    }
 
     // Only build the TOC on routes that display the node itself.
     $route = \Drupal::routeMatch()->getRouteName();
@@ -215,6 +221,61 @@ class PalefireHooks {
     $node = $this->currentModularNode();
     $variables['page_title'] = $node ? $node->label() : NULL;
     $variables['#cache']['contexts'][] = 'route';
+  }
+
+  /**
+   * Variables for includes/guide-head.html.twig on a guide-mode page.
+   *
+   * @return array{intro: ?array, owner: ?array, updated: array, subjects: array, cache: array}
+   */
+  private function guideHead(NodeInterface $node): array {
+    $cache = CacheableMetadata::createFromObject($node);
+    $repository = \Drupal::service('entity.repository');
+
+    $intro = NULL;
+    if ($node->hasField('field_intro') && !$node->get('field_intro')->isEmpty()) {
+      $intro = $node->get('field_intro')->view(['label' => 'hidden', 'type' => 'text_default']);
+    }
+
+    $owner = NULL;
+    if ($node->hasField('field_guide_owner') && ($person = $node->get('field_guide_owner')->entity) instanceof NodeInterface) {
+      $access = $person->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($person)->addCacheableDependency($access);
+      if ($access->isAllowed()) {
+        $person = $repository->getTranslationFromContext($person);
+        $owner = ['name' => $person->label(), 'url' => $person->toUrl()->toString()];
+      }
+    }
+
+    $subjects = [];
+    if ($node->hasField('field_guide_subjects')) {
+      foreach ($node->get('field_guide_subjects') as $item) {
+        $term = $item->entity;
+        if (!$term) {
+          continue;
+        }
+        $access = $term->access('view', NULL, TRUE);
+        $cache->addCacheableDependency($term)->addCacheableDependency($access);
+        if ($access->isAllowed()) {
+          $term = $repository->getTranslationFromContext($term);
+          $subjects[] = ['name' => $term->label(), 'url' => $term->toUrl()->toString()];
+        }
+      }
+    }
+
+    $changed = (int) $node->getChangedTime();
+    $render = [];
+    $cache->applyTo($render);
+    return [
+      'intro' => $intro,
+      'owner' => $owner,
+      'updated' => [
+        'label' => \Drupal::service('date.formatter')->format($changed, 'custom', 'M j, Y'),
+        'iso' => date('c', $changed),
+      ],
+      'subjects' => $subjects,
+      'cache' => $render,
+    ];
   }
 
   /**

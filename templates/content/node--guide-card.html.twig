@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * A staff member on a guide's Librarian card (view mode guide_card).
+ *
+ * Works with any Staff content type: the name links to the staff page, and
+ * the fields come from Manage display > Guide card (image, job title,
+ * pronouns, email, phone, office). The name is a paragraph, not a heading,
+ * so it isn't listed in "On this page".
+ */
+#}
+<div{{ attributes.addClass('pf-person', not node.isPublished() ? 'node--unpublished') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <p class="pf-person__name"><a href="{{ url }}">{{ label }}</a></p>
+  <div{{ content_attributes.addClass('pf-person__details') }}>
+    {{ content }}
+  </div>
+</div>

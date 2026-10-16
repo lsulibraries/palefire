@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Guide: Resource list (paragraph type resource_list).
+ *
+ * resources: the referenced Resource nodes the visitor can see, rendered in
+ * the guide_item view mode (node--resource--guide-item.html.twig prints each
+ * <li>). Built by palefire_preprocess_paragraph__resource_list().
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+<div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--resources') }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  {% if resources %}
+    <ul class="pf-resources">
+      {% for resource in resources %}
+        {{ resource }}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
