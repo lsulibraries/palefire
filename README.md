@@ -8,6 +8,12 @@ Drupal 11 theme (starterkit-generated) built on Bootstrap 5.3 + Dart Sass.
     npm run build      # scss/style.scss -> css/style.css, copies Bootstrap JS, Swup + icons
     npm run watch      # recompile on save
 
+`node_modules/` is not committed (`.gitignore`); run `npm install` after
+cloning. It used to be tracked, and Windows checkouts kept rewriting its
+files (the `.bin/sass` symlink, file modes), so they ended up in commits.
+Production needs only the build output in the repo: `css/style.css`,
+`js/vendor/` and `images/bi/`.
+
 ## Structure
 
 - `palefire.info.yml` – regions, global libraries, `core_version_requirement: ^11`

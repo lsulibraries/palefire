@@ -1,0 +1,3 @@
+# npm packages: install with `npm install`. Only build output is committed
+# (css/style.css, js/vendor/, images/bi/).
+node_modules/
