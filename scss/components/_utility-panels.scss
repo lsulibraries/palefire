@@ -11,14 +11,20 @@
 .pf-panel.offcanvas {
   @include pf-tokens($pf-chrome-dark);
   @include pf-tokens($pf-section-dark);
+  // Always gold, like Origami. The drawers are always dark, but the accent
+  // used to come from the page: light guides set it to purple, which turned
+  // the Hours drawer's OPEN badges purple.
+  --pf-toc-accent: #{$pf-toc-accent};
   --bs-offcanvas-width: min(#{$pf-panel-width}, 100vw);
   --bs-offcanvas-padding-x: 2.5rem;
   --bs-offcanvas-padding-y: 2rem;
   --bs-offcanvas-color: var(--pf-section-fg);
-  --bs-offcanvas-bg: var(--pf-sidebar-bg);
+  // Origami's drawer: 66% black with a light 6px blur, so the page shows
+  // faintly through (the backdrop behind it is already a dark wash).
+  --bs-offcanvas-bg: #{rgba($pf-black, .66)};
   --bs-offcanvas-border-color: var(--pf-toc-rail);
-  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   font-family: var(--bs-font-monospace);
 }
 
@@ -135,9 +141,9 @@
     margin: 0;
     padding-bottom: 1.25rem;
     font-family: var(--bs-body-font-family);
-    font-size: 1.125rem;
-    font-weight: $font-weight-medium;
-    letter-spacing: .14em;
+    font-size: 1.25rem;
+    font-weight: $font-weight-normal; // Origami: regular, not bold
+    letter-spacing: .1em;
     text-align: center;
     text-transform: uppercase;
     border-bottom: 1px solid var(--pf-section-border);
@@ -153,11 +159,13 @@
     margin: .25rem 0 .5rem;
     font-family: $pf-font-clock;
     // Sized to the drawer's width (container query units), so the time
-    // fills it like Origami's without running past the edge.
-    font-size: min(5.5rem, 24cqi);
-    font-weight: 400;
+    // fills it like Origami's without running past the edge. Origami:
+    // 5.625rem at weight 300, the weight that draws Handjet as dots.
+    font-size: min(5.625rem, 24cqi);
+    font-weight: 300;
     line-height: 1;
-    letter-spacing: .02em;
+    letter-spacing: .0625rem;
+    text-transform: uppercase;
     text-align: center;
     white-space: nowrap;
     color: var(--pf-toc-active);
@@ -222,8 +230,8 @@
   }
 
   &__name {
-    font-size: 1rem;
-    font-weight: $font-weight-semibold;
+    font-size: 1.0625rem;
+    font-weight: $font-weight-medium;
     color: var(--pf-toc-active);
   }
 
@@ -234,10 +242,12 @@
       background-color: var(--pf-toc-accent);
     }
 
+    // Origami: large and thin.
     .pf-hours__when {
-      font-size: 1.75rem;
-      font-weight: $font-weight-light;
-      letter-spacing: .02em;
+      font-size: 2rem;
+      font-weight: 200;
+      letter-spacing: .01em;
+      line-height: 1.1;
       text-transform: none;
     }
   }

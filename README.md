@@ -1048,6 +1048,24 @@ gold accent and Origami's plain × close button (`_utility-panels.scss`).
   iframe has a title; the clock is not a live region; reduced transparency /
   more contrast give a solid drawer; forced colours drop the stripes.
 
+### Hours drawer: Origami look (2026-10-16)
+
+The Hours drawer now matches Origami's on every page:
+
+- **Gold OPEN badges everywhere.** The drawers set their own dark tokens
+  but took the accent from the page, so on light guides (purple accent)
+  the badges, close hover and links turned purple. `.pf-panel.offcanvas`
+  now sets `--pf-toc-accent` to gold itself.
+- **Origami's panel:** 66% black with a 6px blur (was the sidebar's 50%
+  glass with a 26px blur), so the page shows faintly through. Over the
+  backdrop wash (72% light pages, 55% dark) muted text stays about 5:1.
+  Reduce transparency / High contrast still make it solid black.
+- **Type:** the date regular weight (was medium); the clock Handjet at
+  5.625rem and weight 300, the weight that draws it as dots (was 400,
+  solid); open hours 2rem at weight 200; the location name medium.
+- **"Main Library"** for LibCal location 241 (LibCal calls it "LSU
+  Library"), set in `hours_locations` in `utility-panels.html.twig`.
+
 ### Settings drawer
 
 Each change applies and saves as soon as it's made, in this browser only
