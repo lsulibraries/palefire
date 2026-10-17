@@ -1275,6 +1275,25 @@ Follow-up to "Mobile header and menu, redesigned" (above).
   in (.2s, after .2s); closing fades them out first and then shrinks the
   section. No fade with reduced motion (`_header.scss`).
 
+### Mobile menu in the drawers' glass (2026-10-17)
+
+The mobile menu drawer now has the same glass as Search, Hours and the
+other drawers: the same transparency over the same 26px blur, and their
+text colours. It was solid because it lives inside the header (it is the
+desktop menu too), and the header's own blur stopped anything inside it
+from blurring the page.
+
+- **Header blur on a layer:** the header's `backdrop-filter` moved to
+  `.pf-header::before`, behind the bar (`--pf-header-filter`, set to
+  `none` for the solid modes; `_header.scss`, `_chrome-dark.scss`). The
+  bar looks the same, but no longer traps its contents.
+- **One set of glass values:** `$pf-panel-glass` (.65, light) and
+  `$pf-panel-glass-dark` (30%, dark swatches) in `_variables.scss`, used by
+  the utility drawers and the menu drawer (`_utility-panels.scss`), so
+  they stay matched. The menu drawer's glass, tokens and solid fallbacks
+  (Reduce transparency, no blur support) sit next to the drawers' there,
+  below lg only.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

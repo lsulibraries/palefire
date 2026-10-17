@@ -44,7 +44,7 @@
   --bs-offcanvas-padding-x: 2.5rem;
   --bs-offcanvas-padding-y: 2rem;
   --bs-offcanvas-color: var(--pf-section-fg);
-  --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), .65);
+  --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), #{$pf-panel-glass});
   --bs-offcanvas-border-color: var(--pf-toc-rail);
   color: var(--pf-section-fg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -55,8 +55,38 @@
 // Dark swatches: a shade darker than the page, still glass (78%; over a
 // white pixel under the dark wash, Dusk's muted text is about 4.8:1).
 html.pf-reading-dark .pf-panel.offcanvas {
-  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 30%, transparent);
+  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent);
   --pf-sidebar-bg: #{rgba($pf-black, .25)};
+}
+
+// The mobile menu drawer (#pf-primary-menu, _header.scss) wears the same
+// glass and colours as these drawers. Below lg only: from lg up the same
+// element is the bar's menu. Its text is the drawers' too (not the
+// header's), so it reads on the glass whatever the bar is doing.
+@include media-breakpoint-down(lg) {
+  .pf-menu-drawer {
+    --pf-panel-bg-rgb: var(--pf-g-bg-rgb, 247, 244, 236);
+    --pf-section-border: var(--pf-g-panel-muted, #505050);
+    --pf-toc-color: var(--pf-g-panel-muted, #505050);
+    --pf-toc-sub-color: var(--pf-g-panel-muted, #505050);
+    --pf-toc-active: var(--pf-g-panel-text, #1f1e1c);
+    --pf-toc-rail: var(--pf-g-rule, #e2ddd1);
+    --pf-toc-accent: var(--pf-g-accent, #{$pf-purple});
+    --pf-menu-line: var(--pf-g-rule, #e2ddd1);
+    --bs-emphasis-color: var(--pf-g-panel-text, #1f1e1c);
+    --bs-body-color: var(--pf-g-panel-text, #1f1e1c);
+    --bs-secondary-color: var(--pf-g-panel-muted, #505050);
+    --bs-navbar-hover-color: var(--pf-g-accent, #{$pf-purple});
+    --bs-offcanvas-color: var(--pf-g-panel-text, #1f1e1c);
+    --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), #{$pf-panel-glass});
+    --bs-offcanvas-border-color: var(--pf-toc-rail);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+  }
+
+  html.pf-reading-dark .pf-menu-drawer {
+    --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent);
+  }
 }
 
 .pf-panel {
@@ -346,13 +376,15 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 // Without blur, or when asked for less transparency / more contrast, the
 // drawer is solid: its page colour (a shade darker on the dark swatches).
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .pf-panel.offcanvas {
+  .pf-panel.offcanvas,
+  .pf-menu-drawer {
     --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), .96);
   }
 }
 
 @include pf-solid-chrome {
-  .pf-panel.offcanvas {
+  .pf-panel.offcanvas,
+  .pf-menu-drawer {
     --bs-offcanvas-bg: rgb(var(--pf-panel-bg-rgb));
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -363,14 +395,14 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 // html-first selectors, and the dark glass rule above outranks it. (High
 // contrast keeps a swatch's glass: it pushes its colours apart instead.)
 @media (prefers-reduced-transparency: reduce) {
-  html.pf-reading-dark .pf-panel.offcanvas {
+  html.pf-reading-dark :is(.pf-panel.offcanvas, .pf-menu-drawer) {
     --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 }
 
-:root.pf-reading-dark.pf-a11y-solid .pf-panel.offcanvas {
+:root.pf-reading-dark.pf-a11y-solid :is(.pf-panel.offcanvas, .pf-menu-drawer) {
   --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;

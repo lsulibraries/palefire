@@ -4,10 +4,24 @@
   // Frosted glass: on modular pages the first section's background image or
   // video runs up under the bar, and every section scrolls beneath it.
   --pf-header-bg: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha});
+  --pf-header-filter: var(--pf-glass-filter);
   background-color: var(--pf-header-bg);
   border-bottom: 1px solid rgba(var(--bs-emphasis-color-rgb), .08);
-  -webkit-backdrop-filter: var(--pf-glass-filter);
-  backdrop-filter: var(--pf-glass-filter);
+
+  // The blur is on a layer behind the bar, not on the bar itself. A
+  // backdrop-filter on the header would make it the containing block and
+  // the backdrop root for everything inside it, so the mobile menu drawer
+  // (which is inside it) could neither cover the screen nor blur the page
+  // like the other drawers. Set --pf-header-filter to change it.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-backdrop-filter: var(--pf-header-filter);
+    backdrop-filter: var(--pf-header-filter);
+  }
 
   // Full-width bar (container-fluid) with responsive side padding.
   &__inner {
@@ -401,11 +415,15 @@
   .pf-header,
   .pf-page::before {
     background-color: var(--bs-body-bg);
+  }
+
+  .pf-page::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
   .pf-header {
+    --pf-header-filter: none;
     border-bottom-color: var(--bs-border-color);
   }
 }
@@ -514,20 +532,14 @@
     }
   }
 
-  // The drawer: the utility drawers' width, header and close button, in
-  // the page colour (solid: the header's glass is a backdrop root, so a
-  // second blur inside it would have nothing to blur). The header's
-  // backdrop-filter also makes it the containing block for this fixed
-  // element; the header is stuck to the top of the screen, so top: 0 is
-  // still the screen's top, and the height is set (bottom: 0 would be the
-  // bar's bottom).
+  // The drawer: the utility drawers' width, header and close button. Its
+  // glass and colours are theirs too (_utility-panels.scss). The full
+  // screen height is set explicitly, so it doesn't depend on what the
+  // header contains.
   .pf-menu-drawer {
     --bs-offcanvas-width: min(#{$pf-panel-width}, 100vw);
     --bs-offcanvas-padding-x: 1.5rem;
     --bs-offcanvas-padding-y: 2rem;
-    --bs-offcanvas-color: var(--bs-body-color);
-    --bs-offcanvas-bg: var(--bs-body-bg);
-    --bs-offcanvas-border-color: var(--pf-menu-line);
     top: 0;
     bottom: auto;
     height: 100vh;

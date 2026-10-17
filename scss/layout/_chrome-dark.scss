@@ -48,8 +48,7 @@ $pf-logo-filter-dark: none !default;
   &[data-bs-theme="dark"],
   html.pf-reading-dark & {
     --pf-header-bg: #{$pf-header-bg-dark};
-    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-    backdrop-filter: var(--pf-glass-filter, blur(26px));
+    --pf-header-filter: var(--pf-glass-filter, blur(26px));
 
     // Light text on the dark bar (the light bar's #434343 would vanish).
     --pf-utility-color: var(--bs-body-color);
@@ -118,8 +117,7 @@ html.pf-reading-dark .pf-page::before {
 // data-bs-theme="dark". The strip is outside the header, so it needs its own.
 @include pf-solid-chrome {
   .pf-header[data-bs-theme="dark"] {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    --pf-header-filter: none;
   }
 
   body[data-section-theme="dark"] .pf-page::before {
@@ -134,14 +132,12 @@ html.pf-reading-dark .pf-page::before {
 // contrast leaves a swatch's glass alone (it pushes its colours apart).
 @media (prefers-reduced-transparency: reduce) {
   html.pf-reading-dark .pf-header {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    --pf-header-filter: none;
   }
 }
 
 :root.pf-reading-dark.pf-a11y-solid .pf-header {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  --pf-header-filter: none;
 }
 
 // The transition above comes after _header.scss's reduced-motion rule, so
