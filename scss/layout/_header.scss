@@ -617,6 +617,11 @@
     // Closing waits for the pages to fade out first (the .1s delay).
     &__parent {
       display: grid;
+      // Rows sit at the top: while the pages row is between 0fr and 1fr
+      // it takes only part of the free space, and the default (stretch)
+      // gave the rest to the heading's row, so the heading slid down and
+      // back mid-animation.
+      align-content: start;
       grid-template-rows: auto 0fr;
       transition: grid-template-rows .3s ease .1s;
 

@@ -1294,6 +1294,17 @@ from blurring the page.
   (Reduce transparency, no blur support) sit next to the drawers' there,
   below lg only.
 
+### Mobile menu sections: headings no longer bounce (2026-10-17)
+
+Opening or closing a section in the mobile menu made its heading slide down
+about 19px and back, and the sections below overshoot with it. Measured
+frame by frame (headless Edge over the DevTools protocol): mid-animation
+the pages row is between 0fr and 1fr and takes only part of the free
+space, and the grid's default `align-content` (stretch) gave the rest to
+the heading's row, which swelled from 56px to about 95px. The section is
+now `align-content: start` (`_header.scss`): the heading holds still and
+the sections below slide straight down and back.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
