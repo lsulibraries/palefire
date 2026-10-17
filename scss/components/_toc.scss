@@ -262,7 +262,7 @@
 
   .pf-toc__top:hover &,
   .pf-toc__top:focus-visible & {
-    color: var(--pf-toc-accent);
+    color: var(--pf-g-hover, var(--pf-toc-accent));
     transform: translateY(-2px);
   }
 }

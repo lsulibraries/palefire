@@ -330,7 +330,7 @@
 }
 
 .pf-events-carousel a.libcal-day__event-title:is(:hover, :focus-visible) {
-  text-decoration-color: var(--pf-ev-accent);
+  text-decoration-color: var(--pf-g-hover, var(--pf-ev-accent));
   text-decoration-thickness: 2px;
 }
 
@@ -398,7 +398,7 @@
 
 .pf-events-carousel .libcal-day__fact-source:is(:hover, :focus-visible) {
   color: var(--ldc-fg);
-  text-decoration-color: var(--pf-ev-accent);
+  text-decoration-color: var(--pf-g-hover, var(--pf-ev-accent));
 }
 
 .pf-events-carousel .libcal-day__fact-source:focus-visible {

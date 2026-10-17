@@ -186,7 +186,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 
   a:hover,
   a:focus-visible {
-    border-color: var(--pf-guide-accent);
+    border-color: var(--pf-g-hover, var(--pf-guide-accent));
     text-decoration: underline;
   }
 }
@@ -481,7 +481,7 @@ html[data-pf-mode="guide"] .pf-section__title {
   }
 
   &:hover {
-    color: var(--pf-guide-accent);
+    color: var(--pf-g-hover, var(--pf-guide-accent));
   }
 }
 
@@ -592,7 +592,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-guide-accent);
+      color: var(--pf-g-hover, var(--pf-guide-accent));
       text-decoration-thickness: 2px;
     }
   }
@@ -653,7 +653,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-guide-accent);
+      color: var(--pf-g-hover, var(--pf-guide-accent));
     }
   }
 

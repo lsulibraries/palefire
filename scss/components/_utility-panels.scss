@@ -88,7 +88,7 @@ html.pf-over-menu .pf-panel.offcanvas {
     --bs-emphasis-color: var(--pf-g-panel-text, #1f1e1c);
     --bs-body-color: var(--pf-g-panel-text, #1f1e1c);
     --bs-secondary-color: var(--pf-g-panel-muted, #505050);
-    --bs-navbar-hover-color: var(--pf-g-accent, #{$pf-purple});
+    --bs-navbar-hover-color: var(--pf-g-hover, var(--pf-g-accent, #{$pf-purple}));
     --bs-offcanvas-color: var(--pf-g-panel-text, #1f1e1c);
     --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), #{$pf-panel-glass});
     --bs-offcanvas-border-color: var(--pf-toc-rail);
@@ -147,7 +147,7 @@ html.pf-over-menu .pf-panel.offcanvas {
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-toc-accent);
+      color: var(--pf-g-hover, var(--pf-toc-accent));
     }
   }
 
@@ -191,7 +191,7 @@ html.pf-over-menu .pf-panel.offcanvas {
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-toc-accent);
+      color: var(--pf-g-hover, var(--pf-toc-accent));
     }
 
     &:focus-visible {
@@ -562,7 +562,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
     &:hover,
     &:focus-visible {
-      color: var(--pf-toc-accent);
+      color: var(--pf-g-hover, var(--pf-toc-accent));
     }
 
     &:focus-visible {
@@ -636,7 +636,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
     &:hover {
       color: var(--pf-toc-active);
-      border-color: var(--pf-toc-accent);
+      border-color: var(--pf-g-hover, var(--pf-toc-accent));
     }
   }
 
@@ -690,7 +690,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
     &:hover {
       color: var(--pf-toc-active);
-      border-color: var(--pf-toc-accent);
+      border-color: var(--pf-g-hover, var(--pf-toc-accent));
     }
   }
 

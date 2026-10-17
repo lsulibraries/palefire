@@ -76,6 +76,9 @@ $pf-reading-themes: (
     bg: #251d30, fg: #b2a6c1, heading: #e1d8ec, muted: #9e92ad, rule: #392f47,
     surface: #2b2238, accent: #fdd023, accent-soft: #2d223b,
     scroll: #8b7d9e, panel-muted: #aca0ba,
+    // Calm hovers: text brightens toward near-white instead of turning
+    // gold, and gold links brighten instead of turning lavender.
+    hover: #f7f3fc, link-hover: #ffe27a,
   ),
   'cream': (
     label: 'Cream', dark: false,
@@ -210,7 +213,7 @@ $pf-reading-header-glass-dark: .78 !default;
       $t: map.merge($t, ($key: pf-mix($page-to, map.get($t, $key), $pf-reading-hc-page)));
     }
   }
-  @each $key in (fg, heading, muted, panel-muted, accent, title, strong, em) {
+  @each $key in (fg, heading, muted, panel-muted, accent, title, strong, em, hover, link-hover) {
     @if map.has-key($t, $key) {
       $t: map.merge($t, ($key: pf-mix($ink-to, map.get($t, $key), $pf-reading-hc-ink)));
     }
@@ -248,6 +251,20 @@ $pf-reading-header-glass-dark: .78 !default;
   --pf-g-accent: #{map.get($t, accent)};
   --pf-g-accent-rgb: #{pf-rgb(map.get($t, accent))};
   --pf-g-accent-soft: #{map.get($t, accent-soft)};
+  // Hover colours. A swatch can set its own (Twilight: brighter text, not
+  // gold); otherwise text hovers to the accent and links to the heading
+  // colour, as before.
+  $hover: map.get($t, accent);
+  @if map.has-key($t, hover) {
+    $hover: map.get($t, hover);
+  }
+  $link-hover: map.get($t, heading);
+  @if map.has-key($t, link-hover) {
+    $link-hover: map.get($t, link-hover);
+  }
+  --pf-g-hover: #{$hover};
+  --pf-g-link-hover: #{$link-hover};
+  --pf-g-link-hover-rgb: #{pf-rgb($link-hover)};
   // Text on an accent fill (the Settings switch, the Hours badge): white on
   // the dark accents of light swatches, black on the light ones of dark.
   @if $dark {
@@ -287,8 +304,8 @@ $pf-reading-header-glass-dark: .78 !default;
   --bs-border-color: var(--pf-g-rule);
   --bs-link-color: var(--pf-g-accent);
   --bs-link-color-rgb: var(--pf-g-accent-rgb);
-  --bs-link-hover-color: var(--pf-g-heading);
-  --bs-link-hover-color-rgb: var(--pf-g-heading-rgb);
+  --bs-link-hover-color: var(--pf-g-link-hover);
+  --bs-link-hover-color-rgb: var(--pf-g-link-hover-rgb);
 }
 
 // --- The swatch -----------------------------------------------------------
@@ -400,17 +417,17 @@ html#{$pf-themed} .pf-header {
 
   .navbar {
     --bs-navbar-color: var(--pf-g-heading);
-    --bs-navbar-hover-color: var(--pf-g-accent);
-    --bs-navbar-active-color: var(--pf-g-accent);
+    --bs-navbar-hover-color: var(--pf-g-hover);
+    --bs-navbar-active-color: var(--pf-g-hover);
   }
 
   .pf-brand {
     --pf-brand-color: var(--pf-g-heading);
-    --pf-brand-hover-color: var(--pf-g-accent);
+    --pf-brand-hover-color: var(--pf-g-hover);
   }
 
   .pf-utility-nav__link:is(:hover, :focus-visible, [aria-expanded="true"]) {
-    color: var(--pf-g-accent);
+    color: var(--pf-g-hover);
   }
 
   // The dropdown sheet is the header's glass, nearly solid.
@@ -418,8 +435,8 @@ html#{$pf-themed} .pf-header {
     --bs-dropdown-bg: rgba(var(--pf-g-chrome-rgb), .97);
     --bs-dropdown-color: var(--pf-g-fg);
     --bs-dropdown-link-color: var(--pf-g-heading);
-    --bs-dropdown-link-hover-color: var(--pf-g-accent);
-    --bs-dropdown-link-active-color: var(--pf-g-accent);
+    --bs-dropdown-link-hover-color: var(--pf-g-hover);
+    --bs-dropdown-link-active-color: var(--pf-g-hover);
     --bs-dropdown-border-color: rgba(var(--pf-g-heading-rgb), .08);
     --bs-dropdown-divider-bg: rgba(var(--pf-g-heading-rgb), .08);
   }

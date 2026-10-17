@@ -1497,6 +1497,25 @@ heading lights up as it arrives rather than once it has climbed to the
 middle. The orientation check is gone. The same line still switches the
 header to dark for dark sections on pages without a swatch.
 
+### Twilight: calm hovers, no gold (2026-10-17)
+
+On Twilight, hovering used to turn menus, icons and drawer controls gold.
+Hovers there now just brighten the text's own colour:
+
+- Menu, dropdown and icon links, drawer controls, accordion titles: to a
+  near-white lavender (`#f7f3fc`); the dropdown's drawn underline follows.
+- Gold links: to a lighter gold (`#ffe27a`), not lavender.
+- TOC links already brightened (muted to heading colour).
+
+How: two new tokens, `--pf-g-hover` (text) and `--pf-g-link-hover` (links).
+A swatch can set them (`hover` / `link-hover` in `$pf-reading-themes`);
+otherwise they are the accent and the heading colour, so every other
+swatch hovers as before. Hover rules read `--pf-g-hover` with the old
+accent as fallback (`_reading-themes.scss`, `_utility-panels.scss`,
+`_guide.scss`, `_toc.scss`, `_events-carousel.scss`). Focus rings, the TOC
+bar and other markers that aren't hovers stay gold. Measured with a
+forced :hover in headless Edge.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
