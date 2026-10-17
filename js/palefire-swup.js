@@ -151,12 +151,18 @@
     target.focus({ preventScroll: true });
   };
 
-  const shouldIgnore = (url, { el } = {}) => {
+  const shouldIgnore = (url, { el, event } = {}) => {
+    // A script already handled this click (called preventDefault). Swup
+    // doesn't check that itself, so it would follow the link too.
+    if (event && event.defaultPrevented) {
+      return true;
+    }
     if (el) {
       // [data-bs-toggle]: links that open a Bootstrap component (the utility
-      // menu's offcanvas drawers). Bootstrap prevents their default, but
-      // Swup doesn't check defaultPrevented, so it followed the link too.
-      if (el.closest('[data-no-swup], [data-bs-toggle], .use-ajax, #toolbar-administration, .contextual')) {
+      // menu's offcanvas drawers). [data-pf-over-menu]: the mobile menu's
+      // quick-link tiles, which open their drawer over the menu
+      // (openOverMenu, palefire.js) instead of through Bootstrap's data API.
+      if (el.closest('[data-no-swup], [data-bs-toggle], [data-pf-over-menu], .use-ajax, #toolbar-administration, .contextual')) {
         return true;
       }
       if (el.hasAttribute('download') || (el.target && el.target !== '_self')) {

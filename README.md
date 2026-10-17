@@ -1350,6 +1350,18 @@ under `theme:`). It matched nothing, so every URL kept `?v=1.0.0`.
   the `css_….css` / `js_….js` names should change after a deploy that
   changed CSS or JS.
 
+### Mobile menu tiles open their drawers again (2026-10-17)
+
+After the layered menu (above), the quick-link tiles in the mobile menu
+followed their links (Hours went to the hours page) instead of opening the
+drawer. The tiles open drawers with their own click handler now, without
+Bootstrap's `data-bs-toggle`, and Swup only skipped links carrying that
+attribute, so it navigated. `palefire-swup.js` now also skips the tiles
+(`[data-pf-over-menu]`) and, as a general rule, any link whose click a
+script already handled (`event.defaultPrevented`; Swup passes the event
+to `ignoreVisit` but doesn't check it itself). Reproduced and fixed in
+headless Edge with Swup running.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
