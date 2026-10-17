@@ -110,9 +110,13 @@ $pf-panel-width:             24rem;
 // swatches. The mobile menu drawer uses the same (_utility-panels.scss).
 $pf-panel-glass:             .65;
 $pf-panel-glass-dark:        30%;
-// Mobile menu: the gap between one page fading in and the next when a
-// section opens (_header.scss).
-$pf-menu-stagger:            .04s;
+// Menu pages fading in one after another (_header.scss): the gap between
+// one and the next, and each one's fade. Mobile is calmer; the desktop
+// dropdown is quicker, since the pointer is already on its way.
+$pf-menu-stagger:            .06s;
+$pf-menu-fade:               .35s;
+$pf-dropdown-stagger:        .04s;
+$pf-dropdown-fade:           .25s;
 $pf-panel-backdrop-light:    .45; // a wash of the page colour (Cream or the guide swatch), not black
 $pf-panel-backdrop-dark:     .55;
 

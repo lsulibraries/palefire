@@ -167,8 +167,8 @@
 
 // Dropdown panel (Origami): a plain white sheet under the menu item, its
 // left edge on the item's text, uppercase tracked links with lots of air.
-// Desktop only; below lg the submenu stays an indented list in the
-// collapsed menu (above).
+// Desktop only; below lg each section is an accordion in the menu drawer
+// ("Phones and tablets", below).
 @include media-breakpoint-up(lg) {
   .pf-primary-nav__submenu.dropdown-menu {
     --bs-dropdown-min-width: 14rem;
@@ -197,6 +197,20 @@
       animation: pf-dropdown-in .18s ease-out;
     }
 
+    // Its links arrive one after another, like the mobile menu's, but
+    // straight away and quicker ($pf-dropdown-stagger apart). Closing is
+    // instant (Bootstrap hides the sheet).
+    &.show > li {
+      animation: pf-dropdown-item-in $pf-dropdown-fade ease both;
+      animation-delay: var(--pf-dropdown-item-delay, 0s);
+    }
+
+    @for $i from 2 through 12 {
+      &.show > li:nth-child(#{$i}) {
+        --pf-dropdown-item-delay: #{($i - 1) * $pf-dropdown-stagger};
+      }
+    }
+
     .dropdown-item {
       font-size: $pf-dropdown-font-size;
       font-weight: $font-weight-bold;
@@ -218,6 +232,13 @@
 }
 
 @keyframes pf-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-.25rem);
+  }
+}
+
+@keyframes pf-dropdown-item-in {
   from {
     opacity: 0;
     transform: translateY(-.25rem);
@@ -732,8 +753,8 @@
           opacity: 1;
           transform: none;
           transition:
-            opacity .25s ease calc(.2s + var(--pf-menu-item-delay)),
-            transform .25s ease calc(.2s + var(--pf-menu-item-delay));
+            opacity $pf-menu-fade ease calc(.2s + var(--pf-menu-item-delay)),
+            transform $pf-menu-fade ease calc(.2s + var(--pf-menu-item-delay));
         }
 
         @for $i from 2 through 12 {
@@ -849,7 +870,8 @@
     transition: none;
   }
 
-  .pf-primary-nav__submenu.dropdown-menu.show {
+  .pf-primary-nav__submenu.dropdown-menu.show,
+  .pf-primary-nav__submenu.dropdown-menu.show > li {
     animation: none;
   }
 }

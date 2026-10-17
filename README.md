@@ -1381,6 +1381,21 @@ Measured in headless Edge: a section of four is fully in by about .55s.
 Closing still fades them all out at once. No fade or movement with reduced
 motion.
 
+### Menu pages arrive in sequence, calmer, on desktop too (2026-10-17)
+
+- **Mobile menu:** the page-by-page fade is slower, to match the calm of
+  the rest of the site: 60ms apart (was 40ms), each fading in over .35s
+  (was .25s). A section of four is fully in by about .73s.
+- **Desktop dropdowns** now do the same, quicker: links start fading in
+  straight away, 40ms apart over .25s, so a four-link dropdown is fully in
+  by about .37s (the pointer is already on its way; links are clickable
+  while they fade). A keyframe animation (`pf-dropdown-item-in`), since the
+  sheet appears from `display: none`. Closing is instant.
+- Timings: `$pf-menu-stagger` / `$pf-menu-fade` (mobile) and
+  `$pf-dropdown-stagger` / `$pf-dropdown-fade` (desktop) in
+  `_variables.scss`. None of it with reduced motion. Measured in headless
+  Edge.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
