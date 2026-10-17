@@ -1330,6 +1330,26 @@ Tested in headless Edge over the DevTools protocol against the real
 Bootstrap bundle and theme scripts: menu, Hours over it, Back, Escape, 40
 Tabs staying in the menu, and × closing both.
 
+### Cache busting, fixed (2026-10-17)
+
+The cache busting added on 2026-10-16 ("Cache busting for CSS and JS",
+above) never took effect: after a deploy, phones kept the old CSS and JS.
+`palefire_library_info_alter()` expected each file in Drupal's processed
+form (a `data` path), but Drupal calls the hook with the definitions as
+written in `palefire.libraries.yml` (files keyed by path, CSS grouped
+under `theme:`). It matched nothing, so every URL kept `?v=1.0.0`.
+
+- It now reads that form (and the processed one, via
+  `palefire_library_files()`), and sets each library's version to a
+  10-character hash of all its files' contents. Drupal copies the version
+  onto each file's URL and into the aggregate names, so a library gets a new
+  URL whenever one of its files changes.
+- Takes effect on the next `drush cr` after deploying.
+- To check: view the page source. With CSS/JS aggregation off, look for
+  `style.css?v=` followed by a hash instead of `?v=1.0.0`; with it on,
+  the `css_….css` / `js_….js` names should change after a deploy that
+  changed CSS or JS.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

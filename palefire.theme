@@ -100,44 +100,96 @@ function palefire_page_attachments_alter(array &$attachments) {
  * Implements hook_library_info_alter().
  *
  * Cache busting. Drupal adds a library's version to its CSS and JS URLs
- * (?v=1.0.0), so with fixed versions in palefire.libraries.yml a changed
- * file kept its old URL and browsers or a CDN served the old copy. Each of
- * the theme's own files now gets a short hash of its contents as its
- * version, and each library the hashes of all its files: a file that changes
- * gets a new URL, one that doesn't keeps its cached copy. Library info is
- * cached, so the files are only hashed when caches are rebuilt (drush cr,
- * part of every deploy). Files outside the theme (Font Awesome Pro in
- * /libraries) and external URLs keep their declared versions.
+ * (?v=1.0.0) and to the names of its aggregates, so with fixed versions in
+ * palefire.libraries.yml a changed file kept its old URL and browsers or a
+ * CDN served the old copy. Each library's version is now a short hash of
+ * the contents of its files: change a file and its library gets a new URL;
+ * the others keep theirs, so their caches stay warm.
+ *
+ * Library info is cached, so files are only hashed when caches are rebuilt
+ * (drush cr, part of every deploy). External files are skipped.
+ *
+ * Drupal calls this with the definitions as written in the .libraries.yml
+ * (files keyed by path, CSS grouped by category such as "theme"), and
+ * copies the library version onto each file afterwards. The first version
+ * of this hook expected the processed form (a "data" key per file), found
+ * nothing and changed nothing; palefire_library_files() reads both forms.
  */
 function palefire_library_info_alter(array &$libraries, string $extension): void {
   if ($extension !== 'palefire') {
     return;
   }
-  $theme_path = \Drupal::service('extension.list.theme')->getPath('palefire') . '/';
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('palefire');
   foreach ($libraries as &$library) {
-    $hashes = [];
+    $files = [];
     foreach (['css', 'js'] as $type) {
-      if (empty($library[$type]) || !is_array($library[$type])) {
-        continue;
+      if (!empty($library[$type]) && is_array($library[$type])) {
+        palefire_library_files($library[$type], $theme_path, $files);
       }
-      foreach ($library[$type] as &$asset) {
-        $data = is_array($asset) ? ($asset['data'] ?? NULL) : NULL;
-        if (!is_string($data) || ($asset['type'] ?? 'file') !== 'file' || !str_starts_with($data, $theme_path)) {
-          continue;
-        }
-        $file = DRUPAL_ROOT . '/' . $data;
-        if (is_file($file)) {
-          $asset['version'] = substr(hash_file('xxh3', $file), 0, 10);
-          $hashes[] = $asset['version'];
-        }
-      }
-      unset($asset);
     }
-    if ($hashes) {
-      $library['version'] = substr(hash('xxh3', implode('.', $hashes)), 0, 10);
+    $hashes = [];
+    foreach (array_unique($files) as $file) {
+      if (is_file($file)) {
+        $hashes[] = hash_file('xxh3', $file);
+      }
+    }
+    if (!$hashes) {
+      continue;
+    }
+    $version = substr(hash('xxh3', implode('.', $hashes)), 0, 10);
+    $library['version'] = $version;
+    // Processed form: each file carries its own copy of the version.
+    foreach (['css', 'js'] as $type) {
+      if (!empty($library[$type]) && is_array($library[$type]) && array_is_list($library[$type])) {
+        foreach ($library[$type] as &$asset) {
+          if (is_array($asset) && isset($asset['data'])) {
+            $asset['version'] = $version;
+          }
+        }
+        unset($asset);
+      }
     }
   }
   unset($library);
+}
+
+/**
+ * Collects the local file paths of a library's CSS or JS definitions.
+ *
+ * @param array $assets
+ *   The library's "css" or "js" array, as written in the .libraries.yml
+ *   (path => options, CSS nested under categories) or processed (a list of
+ *   arrays with a "data" path).
+ * @param string $theme_path
+ *   The theme's path, which relative file paths are relative to.
+ * @param string[] $files
+ *   Absolute file paths, added to.
+ */
+function palefire_library_files(array $assets, string $theme_path, array &$files): void {
+  foreach ($assets as $key => $value) {
+    // Processed: ['data' => 'themes/custom/palefire/css/style.css', ...].
+    if (is_array($value) && isset($value['data']) && is_string($value['data'])) {
+      if (($value['type'] ?? 'file') === 'file') {
+        $files[] = DRUPAL_ROOT . '/' . ltrim($value['data'], '/');
+      }
+      continue;
+    }
+    if (!is_string($key) || !is_array($value)) {
+      continue;
+    }
+    // As written: 'css/style.css' => [options], or '/libraries/…' from the
+    // Drupal root.
+    if (preg_match('/\.(css|js)$/i', $key)) {
+      if (($value['type'] ?? 'file') === 'external' || preg_match('#^(//|[a-z][a-z0-9+.-]*:)#i', $key)) {
+        continue;
+      }
+      $files[] = str_starts_with($key, '/') ? DRUPAL_ROOT . $key : DRUPAL_ROOT . '/' . $theme_path . '/' . $key;
+    }
+    // A CSS category (theme, component, base, layout, state).
+    else {
+      palefire_library_files($value, $theme_path, $files);
+    }
+  }
 }
 
 /**
