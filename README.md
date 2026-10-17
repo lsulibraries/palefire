@@ -1133,6 +1133,16 @@ URL; unchanged files keep theirs, so their caches stay warm.
   after a CSS change. If the hook ever finds nothing to change it does
   nothing, so it can't break asset loading.
 
+### Active TOC link in the heading colour (2026-10-17)
+
+The current section in the TOC (`.pf-toc__link[aria-current]` and its
+sub-links) now takes the content's heading colour: on a multicolour swatch
+its own (`--pf-g-title`, Material's green, 10:1 on its sidebar), otherwise
+the usual active text colour as before. On swatches like Soft cream the
+headings are the body grey, almost the TOC's muted grey, so matching them
+there would hide which link is current. Other links, hover and focus are
+unchanged (`_toc.scss`).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

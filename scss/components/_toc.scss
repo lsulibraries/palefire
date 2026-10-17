@@ -109,9 +109,15 @@
   transition: color 0.2s ease;
 
   &:hover,
-  &:focus-visible,
-  &[aria-current] {
+  &:focus-visible {
     color: var(--pf-toc-active);
+  }
+
+  // The current section in the content's heading colour, so the TOC and
+  // the headings match: a multicolour swatch's own (Material's green,
+  // --pf-g-title, _reading-themes.scss), otherwise the usual active text.
+  &[aria-current] {
+    color: var(--pf-g-title, var(--pf-toc-active));
   }
 }
 
