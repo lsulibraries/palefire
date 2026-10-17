@@ -263,6 +263,24 @@
   };
 
   /**
+   * Guide accordions: numbers each panel's blocks (the text's paragraphs,
+   * lists and tables, then each resource) in page order, so they fade in
+   * one after another when the accordion opens (.pf-seq / --pf-seq,
+   * _guide.scss). Capped at 5: anything later arrives with the sixth.
+   */
+  Drupal.behaviors.palefireAccordionSequence = {
+    attach(context) {
+      once('pf-accordion-seq', '.pf-accordion__panel', context).forEach((panel) => {
+        const blocks = panel.querySelectorAll(':scope > .pf-guide-prose > *, :scope > .pf-resources > li, :scope > :not(.pf-guide-prose, .pf-resources)');
+        blocks.forEach((block, i) => {
+          block.classList.add('pf-seq');
+          block.style.setProperty('--pf-seq', String(Math.min(i, 5)));
+        });
+      });
+    },
+  };
+
+  /**
    * Opens a utility drawer over the open menu drawer, keeping the menu
    * underneath (Bootstrap would close it: one offcanvas at a time). While
    * it is up, <html class="pf-over-menu"> lifts the drawer and its backdrop

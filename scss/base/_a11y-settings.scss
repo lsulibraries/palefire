@@ -156,6 +156,7 @@ html.pf-a11y-motion {
   *::before,
   *::after {
     animation-duration: .01ms !important;
+    animation-delay: 0s !important; // or staggered items wait, then pop in
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
     transition-delay: 0s !important;

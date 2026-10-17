@@ -515,6 +515,42 @@ html[data-pf-mode="guide"] .pf-section__title {
   padding: 0 0.25rem 1.25rem;
 }
 
+// Opening, calmly (the mobile menu's timing, $pf-menu-*):
+// - Chrome and Edge glide the panel open (::details-content, with
+//   interpolate-size); other browsers open it at once, as before. Closing
+//   is instant everywhere (the transition is on the open state only).
+// - Its blocks (the text's paragraphs, lists and tables, then each
+//   resource) fade in one after another with a slight drop. palefire.js
+//   (palefireAccordionSequence) numbers them (.pf-seq, --pf-seq, capped at
+//   5 so long lists don't trickle); without it they fade in together.
+@supports (interpolate-size: allow-keywords) {
+  .pf-accordion__item {
+    interpolate-size: allow-keywords;
+
+    &::details-content {
+      block-size: 0;
+      overflow: hidden;
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+      transition: block-size $pf-menu-fade ease, content-visibility $pf-menu-fade allow-discrete;
+    }
+  }
+}
+
+.pf-accordion__item[open] .pf-seq {
+  animation: pf-accordion-in $pf-menu-fade ease both;
+  animation-delay: calc(var(--pf-seq, 0) * #{$pf-menu-stagger});
+}
+
+@keyframes pf-accordion-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
 // Librarian card (node--guide-card.html.twig) ------------------------------
 // Set like a museum staff listing: the name, the role straight under it,
 // then a hairline and the contact details as a two-column list (labels in
@@ -752,7 +788,16 @@ html[data-pf-mode="guide"] .pf-section__title {
 
 @media (prefers-reduced-motion: reduce) {
   .pf-accordion__icon,
-  .pf-video__play {
+  .pf-video__play,
+  .pf-accordion__item[open]::details-content {
     transition: none;
   }
+
+  .pf-accordion__item[open] .pf-seq {
+    animation: none;
+  }
+}
+
+html.pf-a11y-motion .pf-accordion__item[open]::details-content {
+  transition: none;
 }

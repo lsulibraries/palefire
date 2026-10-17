@@ -1396,6 +1396,27 @@ motion.
   `_variables.scss`. None of it with reduced motion. Measured in headless
   Edge.
 
+### Guide accordions open calmly (2026-10-17)
+
+Guide accordions (native `<details>`) now open with the mobile menu's calm
+timing (`$pf-menu-stagger` 60ms, `$pf-menu-fade` .35s; `_guide.scss`):
+
+- **The panel glides open** in Chrome and Edge (`::details-content` with
+  `interpolate-size`, behind `@supports`); Safari and Firefox open it at
+  once, as before. Closing is instant everywhere.
+- **Its blocks fade in one after another** with a slight drop: the text's
+  paragraphs, lists and tables, then each resource. `palefire.js`
+  (`palefireAccordionSequence`) numbers them in page order, capped at the
+  sixth so long resource lists arrive together instead of trickling in.
+  Without JavaScript they fade in together. Individual lines and list
+  items inside the text don't stagger: it is reading content.
+- Measured in headless Edge: an eleven-block panel glides open in about
+  .35s and is fully in by about .6s; closing takes one frame.
+- None of it with reduced motion (OS setting or Settings drawer). The
+  Settings drawer's Reduce motion now also zeroes animation delays
+  site-wide (`_a11y-settings.scss`), so staggered items don't wait and then
+  pop in.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
