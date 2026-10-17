@@ -610,11 +610,13 @@
     overscroll-behavior: contain;
   }
 
-  // Quick links: two labelled tiles a row.
+  // Quick links: four tiles a row, set like the reading colour swatches
+  // below (_utility-panels.scss): the icon in a hairline chip where a
+  // swatch shows "Aa", the name under it in small tracked caps.
   .pf-menu-actions__list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .5rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .375rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -622,40 +624,55 @@
 
   .pf-menu-actions__link {
     display: flex;
-    align-items: center;
-    gap: .75rem;
-    min-height: 3.5rem;
-    padding: .75rem 1rem;
-    color: var(--bs-emphasis-color);
-    font-size: .9375rem;
-    font-weight: $font-weight-medium;
-    line-height: 1.2;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .5rem;
+    padding: .25rem;
+    color: var(--pf-toc-color);
+    font-size: .625rem;
+    letter-spacing: .08em;
+    line-height: 1.5;
+    text-align: center;
+    text-transform: uppercase;
     text-decoration: none;
-    border: 1px solid var(--pf-menu-line);
-    transition: color $pf-hover-out ease, border-color .15s ease;
+    transition: color $pf-hover-out ease;
 
     .pf-icon {
-      display: inline-flex;
-      flex: none;
+      display: grid;
+      place-items: center;
+      height: 2.25rem;
+      color: var(--pf-toc-active);
+      box-shadow: inset 0 0 0 1px var(--pf-toc-rail);
+      outline: 1px solid transparent;
+      outline-offset: 3px;
+      transition: outline-color $pf-hover-out ease;
     }
 
     .pf-icon svg {
-      width: 1.25rem;
-      height: 1.25rem;
+      width: 1.125rem;
+      height: 1.125rem;
       fill: currentColor;
     }
 
     &:hover,
     &:focus-visible {
-      color: var(--bs-navbar-hover-color);
-      border-color: currentColor;
-      transition: color $pf-hover-in ease, border-color .15s ease;
+      color: var(--pf-toc-active);
+      transition: color $pf-hover-in ease;
+
+      .pf-icon {
+        outline-color: var(--pf-section-border);
+        transition-duration: $pf-hover-in;
+      }
     }
 
     &:focus-visible {
-      outline: 2px solid currentColor;
+      outline: 3px solid var(--pf-focus-color);
       outline-offset: 2px;
     }
+  }
+
+  .pf-menu-actions__label {
+    overflow-wrap: anywhere;
   }
 
   // The menu: one row per section between hairlines.

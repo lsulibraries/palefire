@@ -604,6 +604,17 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Mobile menu: quick links styled like the swatches (2026-10-17)
+
+The quick-link tiles at the top of the mobile menu (Hours, Ask Us,
+Accounts, Settings) now match the reading colour tiles below them:
+- four in a row, with no box;
+- the icon centred in a hairline chip where a swatch shows "Aa";
+- the name under it in small tracked caps.
+
+Hover and focus brighten the name and add the same faint ring around the
+chip. CSS only (`_header.scss`).
+
 ### Mobile menu: text size above the reading colours (2026-10-17)
 
 Below lg, the menu drawer now offers the four Settings text sizes above the
