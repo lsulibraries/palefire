@@ -59,8 +59,44 @@
   // nav element -> teardown function (see initToc()).
   const instances = new WeakMap();
 
+  // Below lg the TOC is an offcanvas (#pf-modular-sidebar). While it is
+  // open, <html data-pf-panel="toc"> gives its backdrop the same page-colour
+  // wash as the menu and utility drawers (_utility-panels.scss) instead of
+  // Bootstrap's black. iOS Safari tints its bottom toolbar from the fixed
+  // layer at the bottom of the screen and ignores that layer's opacity, so
+  // the black backdrop painted the toolbar solid black (2026-10-17).
+  // Delegated from the document: the offcanvas sits inside Swup's
+  // container and is replaced on every visit; Bootstrap's events bubble.
+  const TOC_DRAWER = 'pf-modular-sidebar';
+  const ROOT = document.documentElement;
+
+  function isTocDrawer(event) {
+    return event.target instanceof Element && event.target.id === TOC_DRAWER;
+  }
+
+  document.addEventListener('show.bs.offcanvas', (event) => {
+    if (isTocDrawer(event)) {
+      ROOT.dataset.pfPanel = 'toc';
+    }
+  });
+
+  document.addEventListener('hidden.bs.offcanvas', (event) => {
+    if (isTocDrawer(event) && ROOT.dataset.pfPanel === 'toc') {
+      delete ROOT.dataset.pfPanel;
+    }
+  });
+
+  // A Swup visit can swap the drawer out while it is open, so no
+  // hidden.bs.offcanvas fires: drop a flag no open drawer backs up.
+  function clearStaleTocFlag() {
+    if (ROOT.dataset.pfPanel === 'toc' && !document.querySelector('#' + TOC_DRAWER + '.show, #' + TOC_DRAWER + '.showing')) {
+      delete ROOT.dataset.pfPanel;
+    }
+  }
+
   Drupal.behaviors.palefireModularToc = {
     attach(context) {
+      clearStaleTocFlag();
       once('pf-toc', '[data-pf-toc]', context).forEach((nav) => {
         const teardown = initToc(nav);
         if (teardown) {

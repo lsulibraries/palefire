@@ -604,6 +604,18 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Mobile "On this page" drawer backdrop (2026-10-17)
+
+Below lg the TOC opens as a Bootstrap offcanvas (`#pf-modular-sidebar`).
+It used to keep Bootstrap's black backdrop, and iOS Safari tints its bottom
+toolbar from the fixed layer at the bottom of the screen (ignoring that
+layer's opacity), so the toolbar turned solid black while the TOC was open.
+`modular-toc.js` now sets `<html data-pf-panel="toc">` while the drawer is
+open, so it gets the same page-colour wash as the menu and utility drawers
+(`_utility-panels.scss`) and the toolbar matches the page. The flag is
+cleared on close, and on the next attach if a Swup visit swapped the drawer
+out while it was open. JS only: no CSS rebuild, no config.
+
 ### Calendar events in "On this page"
 
 `modular-toc.js` lists any element with `data-toc` under its section, even

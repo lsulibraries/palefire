@@ -375,8 +375,10 @@ html.pf-over-menu .pf-panel.offcanvas {
 // The page recedes under a wash of the drawer's own page colour (Cream, or
 // the reading swatch) instead of Bootstrap's black, so the light glass
 // still reads as glass. The dark swatches keep a dark wash.
-// js/utility-panels.js sets <html data-pf-panel> while a panel is open, so
-// the mobile "On this page" offcanvas keeps Bootstrap's default.
+// js/utility-panels.js sets <html data-pf-panel> while a panel is open (and
+// js/palefire.js for the menu, js/modular-toc.js for the mobile "On this
+// page" offcanvas, 2026-10-17: Bootstrap's black wash turned iOS Safari's
+// bottom toolbar solid black).
 html[data-pf-panel] .offcanvas-backdrop.show {
   background-color: rgb(var(--pf-g-bg-rgb, 247, 244, 236));
   opacity: $pf-panel-backdrop-light;
