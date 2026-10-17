@@ -1542,6 +1542,16 @@ nav and pager links. They used .15s to .2s, some `ease-in-out`.
 - Measured with a forced :hover in headless Edge (bar, dropdown, TOC and
   body links).
 
+### Twilight: hovers to a richer purple (2026-10-17)
+
+Twilight's text hover (`hover` in `$pf-reading-themes`) was a near-white
+(`#f7f3fc`), barely different from the pale lavender menu links, so the
+dropdown links hardly changed. It is now a richer purple, `#c19df1` (LSU
+purple's hue at 75% saturation, from the links' 34%): 7.2:1 on the page,
+7.4:1 on the bar and dropdowns. Still never purple to gold. It applies to
+all of Twilight's text hovers (bar, dropdowns, icons, drawer controls) and
+the dropdowns' drawn underline; gold links still brighten to `#ffe27a`.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

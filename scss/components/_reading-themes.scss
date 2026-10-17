@@ -76,9 +76,11 @@ $pf-reading-themes: (
     bg: #251d30, fg: #b2a6c1, heading: #e1d8ec, muted: #9e92ad, rule: #392f47,
     surface: #2b2238, accent: #fdd023, accent-soft: #2d223b,
     scroll: #8b7d9e, panel-muted: #aca0ba,
-    // Calm hovers: text brightens toward near-white instead of turning
-    // gold, and gold links brighten instead of turning lavender.
-    hover: #f7f3fc, link-hover: #ffe27a,
+    // Calm hovers, never purple to gold: text goes from its pale lavender
+    // to a richer purple (#c19df1, LSU purple's hue at 75% saturation;
+    // 7.2:1 on the page, 7.4:1 on the bar and dropdowns), and gold links
+    // brighten to a lighter gold.
+    hover: #c19df1, link-hover: #ffe27a,
   ),
   'cream': (
     label: 'Cream', dark: false,
