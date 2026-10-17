@@ -1516,6 +1516,32 @@ accent as fallback (`_reading-themes.scss`, `_utility-panels.scss`,
 bar and other markers that aren't hovers stay gold. Measured with a
 forced :hover in headless Edge.
 
+### One hover timing everywhere: .2s in, .5s out (2026-10-17)
+
+Text colour on hover and focus now comes in over .2s and fades out over .5s,
+with `ease`, everywhere: the bar's links, icons and logo, dropdowns, the
+mobile menu, drawer controls and tiles, the TOC and "Back to top", the
+breadcrumb, guide accordions and the librarian card, the bento search and
+video buttons, the events carousel, plain links, and Bootstrap's buttons,
+nav and pager links. They used .15s to .2s, some `ease-in-out`.
+
+- `$pf-hover-in` / `$pf-hover-out` (`_variables.scss`). Each element's resting
+  style has `color $pf-hover-out ease` and its own hover/focus style
+  `color $pf-hover-in ease` (CSS uses the new state's transition). Not one
+  shared variable: hovering a link also hovers its parents, so moving to the
+  next link would have faded the last one out at .2s.
+- Plain links (`:where(a)`) and Bootstrap's `.btn`, `.nav-link` and
+  `.page-link` get it through `_base.scss` and Bootstrap's
+  `$btn-transition` / `$nav-link-transition` / `$pagination-transition`.
+- The events carousel's prev/next buttons swap text and fill on hover, so
+  their fill and border keep the same timing (else the text would briefly
+  match its background).
+- Not hovers, so unchanged: the current-heading highlight on guides (.3s)
+  and the light-to-dark map section (.45s). The building map's room names
+  already used .2s in, .5s out.
+- Measured with a forced :hover in headless Edge (bar, dropdown, TOC and
+  body links).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

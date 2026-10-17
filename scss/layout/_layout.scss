@@ -110,12 +110,13 @@ body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
     text-decoration: none;
     background: linear-gradient(var(--pf-toc-accent), var(--pf-toc-accent)) no-repeat 0 100% / 0 2px;
     padding-block-end: 2px;
-    transition: color 0.2s ease, background-size 0.25s ease;
+    transition: color $pf-hover-out ease, background-size 0.25s ease;
 
     &:hover,
     &:focus-visible {
       color: var(--pf-toc-active);
       background-size: 100% 2px;
+      transition: color $pf-hover-in ease, background-size 0.25s ease;
     }
 
     &:focus-visible {

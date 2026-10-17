@@ -106,11 +106,12 @@
 .pf-toc__sublink {
   color: var(--pf-toc-color);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color $pf-hover-out ease;
 
   &:hover,
   &:focus-visible {
     color: var(--pf-toc-active);
+    transition-duration: $pf-hover-in;
   }
 
   // The current section in the content's heading colour, so the TOC and
@@ -241,11 +242,12 @@
   text-transform: uppercase;
   text-decoration: none;
   color: var(--pf-toc-color);
-  transition: color 0.2s ease, border-color 0.3s ease;
+  transition: color $pf-hover-out ease, border-color 0.3s ease;
 
   &:hover,
   &:focus-visible {
     color: var(--pf-toc-active);
+    transition: color $pf-hover-in ease, border-color 0.3s ease;
   }
 
   &:focus-visible {
@@ -258,22 +260,24 @@
   flex: none;
   width: 1rem;
   height: 1rem;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color $pf-hover-out ease, transform 0.2s ease;
 
   .pf-toc__top:hover &,
   .pf-toc__top:focus-visible & {
     color: var(--pf-g-hover, var(--pf-toc-accent));
     transform: translateY(-2px);
+    transition: color $pf-hover-in ease, transform 0.2s ease;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-toc__top-icon {
-    transition: color 0.2s ease;
+    transition: color $pf-hover-out ease;
 
     .pf-toc__top:hover &,
     .pf-toc__top:focus-visible & {
       transform: none;
+      transition: color $pf-hover-in ease;
     }
   }
 }

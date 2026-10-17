@@ -78,11 +78,12 @@
   color: var(--pf-brand-color);
   font-weight: $font-weight-bold;
   text-decoration: none;
-  transition: color .15s ease-in-out;
+  transition: color $pf-hover-out ease;
 
   &:hover,
   &:focus-visible {
     color: var(--pf-brand-hover-color);
+    transition-duration: $pf-hover-in;
   }
 
   // Keep the site name (if shown) in the body colour; only the mark changes.
@@ -220,10 +221,10 @@
       text-decoration: none;
       // The accent colour comes in quickly (.2s, the hover state's
       // transition) and fades out slowly (.5s, this one).
-      transition: color .5s ease;
+      transition: color $pf-hover-out ease;
 
       &:is(:hover, :focus-visible) {
-        transition-duration: .2s;
+        transition-duration: $pf-hover-in;
       }
     }
 
@@ -375,9 +376,21 @@
   .pf-brand__logo,
   .nav-link,
   .pf-utility-nav__link {
-    // Keeps Bootstrap's link color/background transitions.
+    // Colour: the site's hover timing; the rest follows the compact bar.
     transition:
-      color .15s ease-in-out,
+      color $pf-hover-out ease,
+      background-color .15s ease-in-out,
+      padding $pf-header-transition,
+      width $pf-header-transition,
+      height $pf-header-transition,
+      min-height $pf-header-transition,
+      min-width $pf-header-transition;
+  }
+
+  .nav-link:is(:hover, :focus-visible),
+  .pf-utility-nav__link:is(:hover, :focus-visible) {
+    transition:
+      color $pf-hover-in ease,
       background-color .15s ease-in-out,
       padding $pf-header-transition,
       width $pf-header-transition,
@@ -542,10 +555,11 @@
     text-transform: uppercase;
     border: 0;
     border-radius: 0;
-    transition: color .15s ease;
+    transition: color $pf-hover-out ease;
 
     &:hover {
       color: var(--bs-navbar-hover-color);
+      transition-duration: $pf-hover-in;
     }
 
     &:focus {
@@ -618,7 +632,7 @@
     line-height: 1.2;
     text-decoration: none;
     border: 1px solid var(--pf-menu-line);
-    transition: color .15s ease, border-color .15s ease;
+    transition: color $pf-hover-out ease, border-color .15s ease;
 
     .pf-icon {
       display: inline-flex;
@@ -635,6 +649,7 @@
     &:focus-visible {
       color: var(--bs-navbar-hover-color);
       border-color: currentColor;
+      transition: color $pf-hover-in ease, border-color .15s ease;
     }
 
     &:focus-visible {
@@ -696,11 +711,12 @@
       text-transform: uppercase;
       background: none;
       border: 0;
-      transition: color .15s ease;
+      transition: color $pf-hover-out ease;
 
       &:hover,
       &:focus-visible {
         color: var(--bs-navbar-hover-color);
+        transition-duration: $pf-hover-in;
       }
 
       &:focus-visible {
@@ -801,10 +817,12 @@
       text-transform: none;
       white-space: normal;
       background: none;
+      transition: color $pf-hover-out ease;
 
       &:hover,
       &:focus-visible {
         color: var(--bs-navbar-hover-color);
+        transition-duration: $pf-hover-in;
         text-decoration: underline;
         text-decoration-thickness: 1px;
         text-underline-offset: .25em;

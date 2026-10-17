@@ -117,6 +117,18 @@ $pf-menu-stagger:            .06s;
 $pf-menu-fade:               .35s;
 $pf-dropdown-stagger:        .04s;
 $pf-dropdown-fade:           .25s;
+// Text colour on hover and focus, everywhere: comes in quickly, fades out
+// slowly. Each element's resting style carries color $pf-hover-out and its
+// own :hover / :focus-visible style color $pf-hover-in (CSS uses the new
+// state's transition), so moving from one link to the next fades the old
+// one out slowly.
+$pf-hover-in:                .2s;
+$pf-hover-out:               .5s;
+// Bootstrap's buttons, nav links and pager links use the same colour
+// timing (their hover side: _base.scss).
+$btn-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+$nav-link-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out;
+$pagination-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 $pf-panel-backdrop-light:    .45; // a wash of the page colour (Cream or the guide swatch), not black
 $pf-panel-backdrop-dark:     .55;
 

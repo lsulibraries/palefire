@@ -90,7 +90,7 @@
   color: var(--ldc-muted);
   background: none;
   box-shadow: inset 0 -3px 0 transparent;
-  transition: color .2s ease, box-shadow .25s ease;
+  transition: color $pf-hover-out ease, box-shadow .25s ease;
 }
 
 .pf-events-carousel .libcal-day-carousel__tab-dow {
@@ -110,6 +110,7 @@
 
 .pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:hover {
   color: var(--ldc-fg);
+  transition: color $pf-hover-in ease, box-shadow .25s ease;
 }
 
 .pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab:is(.active, .is-in-view) {
@@ -143,7 +144,7 @@
   color: var(--ldc-fg);
   background: transparent;
   filter: none;
-  transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease;
 }
 
 .pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control + .libcal-day-carousel__control {
@@ -152,6 +153,8 @@
 
 .pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control:not(:disabled):is(:hover, :focus-visible) {
   position: relative; // its border draws over the neighbour's
+  // Text and fill swap places, so they keep the same timing.
+  transition-duration: $pf-hover-in;
   border-color: var(--ldc-fg);
   color: var(--ldc-surface);
   background-color: var(--ldc-fg);

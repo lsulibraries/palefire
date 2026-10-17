@@ -480,8 +480,11 @@ html[data-pf-mode="guide"] .pf-section__title {
     display: none;
   }
 
+  transition: color $pf-hover-out ease;
+
   &:hover {
     color: var(--pf-g-hover, var(--pf-guide-accent));
+    transition-duration: $pf-hover-in;
   }
 }
 
@@ -588,12 +591,13 @@ html[data-pf-mode="guide"] .pf-section__title {
     text-decoration-thickness: 1px;
     text-decoration-color: var(--pf-guide-accent);
     text-underline-offset: 0.3em;
-    transition: color 0.15s ease, text-decoration-thickness 0.15s ease;
+    transition: color $pf-hover-out ease, text-decoration-thickness 0.15s ease;
 
     &:hover,
     &:focus-visible {
       color: var(--pf-g-hover, var(--pf-guide-accent));
       text-decoration-thickness: 2px;
+      transition: color $pf-hover-in ease, text-decoration-thickness 0.15s ease;
     }
   }
 }

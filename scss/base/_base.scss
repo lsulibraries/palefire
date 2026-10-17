@@ -22,6 +22,22 @@ html {
   --pf-focus-color: #{$pf-gold};
 }
 
+// Links fade their hover colour (in $pf-hover-in, out $pf-hover-out).
+// Zero specificity: components that set their own transition keep it.
+:where(a) {
+  transition: color $pf-hover-out ease;
+}
+
+:where(a):is(:hover, :focus-visible) {
+  transition-duration: $pf-hover-in;
+}
+
+// Bootstrap's buttons, nav links and pager links (their resting timing:
+// $btn-transition and friends, _variables.scss).
+:where(.btn, .nav-link, .page-link):is(:hover, :focus-visible) {
+  transition-duration: $pf-hover-in;
+}
+
 // Clear, consistent focus indicator for keyboard users (WCAG 2.4.7).
 :focus-visible {
   outline: 3px solid var(--pf-focus-color);
