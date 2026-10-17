@@ -1487,6 +1487,17 @@ darkness in LSU purple's hue, with LSU gold as the accent:
   now see Twilight until they pick Cream again.
 - The Settings help text now says the colours apply to the whole site.
 
+### Sections turn active three-quarters down, on every screen (2026-10-17)
+
+Phones in portrait already switched sections (the TOC link, and on guides
+the lit heading) once a section reached three-quarters of the way down the
+screen; desktops and landscape screens switched halfway. Every screen now
+uses three-quarters (`ACTIVATION_LINE = 0.75`, `js/modular-toc.js`), so a
+heading lights up as it arrives rather than once it has climbed to the
+middle. The orientation check is gone. The same line still switches the
+header to dark for dark sections on pages without a swatch.
+
+### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
 here (`.pf-resource`, `.pf-accordion__*`, `.pf-guide-block__title`,
