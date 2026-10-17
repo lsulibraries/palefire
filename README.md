@@ -914,7 +914,8 @@ Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 
 | Swatch | Page | Text | Text contrast |
 | --- | --- | --- | --- |
-| Cream (default) | #f7f4ec | #2b2a28 | 13.1:1 |
+| Purple & Gold (default since 2026-10-17) | #251d30 | #b2a6c1 | 7.0:1 |
+| Cream (the default until 2026-10-17) | #f7f4ec | #2b2a28 | 13.1:1 |
 | Soft cream (light grey on cream) | #f7f4ec | #676561 | 5.3:1 |
 | Lavender (muted LSU purple on cream) | #f7f4ec | #6b5a8e | 5.5:1 |
 | Sepia | #f4ecd8 | #5b4636 | 7.5:1 |
@@ -1450,7 +1451,38 @@ is now always the hover colour (`--bs-dropdown-link-hover-color`,
 `_header.scss`): it simply draws in and out. The text keeps its own calm
 colour change (.2s in, .5s out).
 
-### LibGuides
+### Purple & Gold, the new default (2026-10-17)
+
+Every page now opens in a new reading swatch, **Purple & Gold**, until a
+visitor picks another in Settings > Reading colours. It has Midnight's
+darkness in LSU purple's hue, with LSU gold as the accent:
+
+| Role | Colour | Contrast on the page |
+| --- | --- | --- |
+| Page | #251d30 | |
+| Body text | #b2a6c1 | 7.0:1 (AAA) |
+| Headings | #e1d8ec | 11.8:1 |
+| Muted labels | #9e92ad | 5.5:1 |
+| Accent (links, TOC bar, hover underline, focus) | #fdd023 | 11.0:1 |
+| Text on gold (Hours badge, switches) | black | 14.2:1 |
+
+- Body text is stronger than Midnight's (rotating Midnight's grey would
+  give 5.0:1): a default has to suit people who never open Settings.
+- Over a background video, in the worst case (a white frame), panel
+  headings are 9.5:1, labels 5.3:1 and gold 8.9:1. High contrast pushes
+  it to 10.9:1 body text. Audited in the compiled CSS.
+- **How:** `html.html.twig` puts `data-pf-theme="purple"`, `pf-reading-dark`
+  and `data-bs-theme="dark"` on `<html>`, so pages are right before any
+  script runs and without JavaScript; the inline head script swaps in a
+  saved choice (and clears the dark markers for light swatches).
+  `DEFAULT_THEME` in `utility-panels.js` and `$pf-reading-default` in
+  `_reading-themes.scss` name the same key. The default isn't saved; only
+  a different pick is, so Reset goes back to it.
+- **Cream** is now a regular choice (`data-pf-theme="cream"`), no longer
+  "no attribute". Visitors who had picked Cream had nothing saved, so they
+  now see Purple & Gold until they pick Cream again.
+- The Settings help text now says the colours apply to the whole site.
+
 
 The LibGuides site will be restyled to match later. Keep the class names
 here (`.pf-resource`, `.pf-accordion__*`, `.pf-guide-block__title`,

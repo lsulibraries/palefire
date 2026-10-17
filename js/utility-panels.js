@@ -170,8 +170,11 @@
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colours (_reading-themes.scss). Cream is the default: no
   // attribute, not saved. See DARK_THEMES.
-  const THEMES = ['cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
-  const DARK_THEMES = ['dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  const THEMES = ['purple', 'cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  const DARK_THEMES = ['purple', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  // What every page opens in (html.html.twig sets it on <html>). Not saved:
+  // only a different choice is.
+  const DEFAULT_THEME = 'purple';
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 
@@ -194,7 +197,7 @@
   }
 
   function themeOf(settings) {
-    return THEMES.includes(settings.theme) ? settings.theme : 'cream';
+    return THEMES.includes(settings.theme) ? settings.theme : DEFAULT_THEME;
   }
 
   function saveSettings(settings) {
@@ -213,18 +216,13 @@
   }
 
   // Reading colours: <html data-pf-theme> on every page, which the whole
-  // page follows (_reading-themes.scss). A dark swatch also adds
-  // pf-reading-dark and Bootstrap's data-bs-theme="dark". The same job as
-  // the inline script in html.html.twig; modular-toc.js listens for
-  // palefire:a11ychange.
+  // page follows (_reading-themes.scss); the default when none is saved. A
+  // dark swatch also adds pf-reading-dark and Bootstrap's
+  // data-bs-theme="dark". The same job as the inline script in
+  // html.html.twig; modular-toc.js listens for palefire:a11ychange.
   function applyTheme(settings) {
     const theme = themeOf(settings);
-    if (theme === 'cream') {
-      ROOT.removeAttribute('data-pf-theme');
-    }
-    else {
-      ROOT.setAttribute('data-pf-theme', theme);
-    }
+    ROOT.setAttribute('data-pf-theme', theme);
     const on = DARK_THEMES.includes(theme);
     ROOT.classList.toggle('pf-reading-dark', on);
     if (on) {
@@ -306,7 +304,7 @@
         settings.size = size.value;
       }
       const theme = form.querySelector('input[name="theme"]:checked');
-      if (theme && THEMES.includes(theme.value) && theme.value !== 'cream') {
+      if (theme && THEMES.includes(theme.value) && theme.value !== DEFAULT_THEME) {
         settings.theme = theme.value;
       }
       SWITCHES.forEach((key) => {

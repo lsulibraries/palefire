@@ -31,6 +31,14 @@
     db_offline ? 'db-offline',
   ]
 %}
+{#
+  The default reading colours, Purple & Gold, set here so every page is
+  right before any script runs (and without JavaScript). The inline script
+  below swaps in a visitor's saved choice. Keep the key in step with
+  $pf-reading-default (_reading-themes.scss) and DEFAULT_THEME
+  (utility-panels.js).
+#}
+{% set html_attributes = html_attributes.addClass('pf-reading-dark').setAttribute('data-pf-theme', 'purple').setAttribute('data-bs-theme', 'dark') %}
 <!DOCTYPE html>
 <html{{ html_attributes }}>
   <head>
@@ -59,10 +67,10 @@
          step: size, font, spacing, underline, reader, contrast, solid, focus,
          motion, pausevideo, theme. "Reader font for guides" (reader) only
          takes effect on guide-mode pages (<html data-pf-mode="guide">).
-         Reading colours (theme) become <html data-pf-theme> on every page
-         (Cream, the default, has none; _reading-themes.scss); the dark
-         swatches also add pf-reading-dark and Bootstrap's
-         data-bs-theme="dark".
+         Reading colours (theme): <html> arrives with the default (Purple &
+         Gold, above); a saved choice replaces data-pf-theme, and
+         pf-reading-dark plus Bootstrap's data-bs-theme="dark" follow
+         whether it is dark (_reading-themes.scss).
          The old "Dark guides" switch (dark) reads as Night.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
@@ -80,11 +88,15 @@
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
         var t = s.theme || (s.dark ? 'night' : '');
-        if (/^(soft|lavender|sepia|sage|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
+        if (/^(purple|cream|soft|lavender|sepia|sage|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
           h.setAttribute('data-pf-theme', t);
-          if (/^(dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
+          if (/^(purple|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
             h.classList.add('pf-reading-dark');
             h.setAttribute('data-bs-theme', 'dark');
+          }
+          else {
+            h.classList.remove('pf-reading-dark');
+            h.removeAttribute('data-bs-theme');
           }
         }
         if (s.font) {

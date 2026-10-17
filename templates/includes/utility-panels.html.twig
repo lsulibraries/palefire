@@ -60,10 +60,12 @@
 %}
 {# Reading colours (Settings): page and text colour pairs. Keys must match
    $pf-reading-themes (_reading-themes.scss), the THEMES list in
-   utility-panels.js and the pattern in html.html.twig. Cream is the default
-   (no attribute on <html>). #}
+   utility-panels.js and the pattern in html.html.twig. The first is the
+   default every page opens in (Purple & Gold, set on <html> by
+   html.html.twig); its radio is checked when nothing is saved. #}
 {%
   set reading_themes = [
+    { key: 'purple', label: 'Purple & Gold'|t },
     { key: 'cream', label: 'Cream'|t },
     { key: 'soft', label: 'Soft cream'|t },
     { key: 'lavender', label: 'Lavender'|t },
@@ -266,7 +268,7 @@
             <label class="pf-settings__theme" for="pf-set-theme-{{ theme.key }}" data-theme="{{ theme.key }}"><span class="pf-settings__theme-chip" aria-hidden="true">Aa</span>{{ theme.label }}</label>
           {% endfor %}
         </div>
-        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colours. On research guides the header, table of contents and these drawers change too.'|t }}</p>
+        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colours for the whole site, including the header, menus and these drawers.'|t }}</p>
       </fieldset>
 
       {% for group in settings_groups %}

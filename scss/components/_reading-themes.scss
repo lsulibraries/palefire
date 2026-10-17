@@ -43,6 +43,7 @@
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
+//   purple   text  7.0  muted 5.5  accent 11.0   (default; LSU gold accent)
 //   midnight text  5.15 muted 5.0  accent  8.4
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
@@ -65,6 +66,17 @@
 // =========================================================================
 
 $pf-reading-themes: (
+  // The default (2026-10-17): every page opens in it until a visitor picks
+  // another ($pf-reading-default; html.html.twig marks <html> with it).
+  // Midnight's darkness in LSU purple's hue (265.9deg), LSU gold (#fdd023)
+  // as the accent. Body text is stronger than Midnight's (7:1, AAA, where
+  // Midnight's rotated grey would be 5.0:1): a default has to suit everyone.
+  'purple': (
+    label: 'Purple & Gold', dark: true,
+    bg: #251d30, fg: #b2a6c1, heading: #e1d8ec, muted: #9e92ad, rule: #392f47,
+    surface: #2b2238, accent: #fdd023, accent-soft: #2d223b,
+    scroll: #8b7d9e, panel-muted: #aca0ba,
+  ),
   'cream': (
     label: 'Cream', dark: false,
     bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
@@ -148,6 +160,10 @@ $pf-reading-themes: (
     title: #c3e88d, strong: #ffcb6b, em: #c792ea,
   ),
 ) !default;
+
+// The swatch every page opens in. Keep in step with html.html.twig and
+// DEFAULT_THEME in utility-panels.js.
+$pf-reading-default: 'purple' !default;
 
 // Chrome glass: the page colour with this much black (none on light
 // swatches; 7.5% on dark, half the 15% first tried).
@@ -276,25 +292,23 @@ $pf-reading-header-glass-dark: .78 !default;
 }
 
 // --- The swatch -----------------------------------------------------------
-// Guides: Cream when none is picked. Then each picked swatch, any page.
-html[data-pf-mode="guide"] {
-  @include pf-reading-tokens(map.get($pf-reading-themes, 'cream'));
+// Every page carries <html data-pf-theme> (the default from the server,
+// html.html.twig, or the visitor's pick). A page without it (a guide
+// rendered by something other than this theme's html template) gets the
+// default too.
+html[data-pf-mode="guide"]:not([data-pf-theme]) {
+  @include pf-reading-tokens(map.get($pf-reading-themes, $pf-reading-default));
 }
 
 @each $name, $t in $pf-reading-themes {
-  @if $name != 'cream' {
-    html[data-pf-theme="#{$name}"] {
-      @include pf-reading-tokens($t);
-    }
+  html[data-pf-theme="#{$name}"] {
+    @include pf-reading-tokens($t);
   }
 }
 
 // High contrast: the same swatch, pushed apart.
 @each $name, $t in $pf-reading-themes {
   $page: 'html[data-pf-theme="#{$name}"]';
-  @if $name == 'cream' {
-    $page: 'html[data-pf-mode="guide"]:not([data-pf-theme])';
-  }
 
   html.pf-a11y-contrast#{string.slice($page, 5)} {
     @include pf-reading-tokens(pf-reading-hc($t));
