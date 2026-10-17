@@ -602,10 +602,11 @@
 
     // A section: its heading button over its pages, which open by growing
     // a grid row from 0fr to 1fr (a smooth height change, no measuring).
+    // Closing waits for the pages to fade out first (the .1s delay).
     &__parent {
       display: grid;
       grid-template-rows: auto 0fr;
-      transition: grid-template-rows .3s ease;
+      transition: grid-template-rows .3s ease .1s;
 
       > .dropdown-toggle {
         display: none;
@@ -613,6 +614,7 @@
 
       &:has(> .pf-primary-nav__heading[aria-expanded="true"]) {
         grid-template-rows: auto 1fr;
+        transition-delay: 0s;
       }
     }
 
@@ -677,6 +679,8 @@
     }
 
     // A section's pages: hidden (and out of the tab order) until opened.
+    // They fade in once the row has mostly opened, so they never show
+    // while the section is still growing, and fade out before it closes.
     &__submenu.dropdown-menu {
       --bs-dropdown-link-active-bg: transparent;
       --bs-dropdown-link-hover-bg: transparent;
@@ -688,14 +692,16 @@
       padding: 0;
       overflow: hidden;
       visibility: hidden;
+      opacity: 0;
       background: none;
       border: 0;
       box-shadow: none;
-      transition: visibility 0s linear .3s;
+      transition: opacity .1s ease, visibility 0s linear .4s;
 
       [aria-expanded="true"] + & {
         visibility: visible;
-        transition-delay: 0s;
+        opacity: 1;
+        transition: opacity .2s ease .2s, visibility 0s;
       }
 
       > li:last-child {
@@ -736,10 +742,41 @@
   }
 }
 
+// Reading colours under the menu (below lg): the Settings drawer's swatch
+// tiles (_utility-panels.scss), copied in by initMenuThemes
+// (js/utility-panels.js). The tiles read the drawer tokens, set here.
+@include media-breakpoint-down(lg) {
+  .pf-menu-drawer {
+    --pf-section-border: var(--pf-g-panel-muted, var(--bs-secondary-color));
+  }
+
+  .pf-menu-themes {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .pf-menu-themes__legend {
+    float: none;
+    width: auto;
+    margin-bottom: .75rem;
+    padding: 0;
+    font-family: var(--pf-toc-font, #{$font-family-monospace});
+    font-size: .6875rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .16em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+  }
+}
+
 // Desktop: the drawer is the bar's menu (.navbar-expand-lg); its quick
-// links step aside.
+// links and reading colours step aside.
 @include media-breakpoint-up(lg) {
-  .pf-menu-actions {
+  .pf-menu-actions,
+  .pf-menu-themes {
     display: none;
   }
 }
@@ -747,9 +784,11 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-menu-toggle,
   .pf-primary-nav__parent,
+  .pf-primary-nav__submenu.dropdown-menu,
   .pf-primary-nav__heading,
   .pf-primary-nav__heading-mark::before,
-  .pf-primary-nav__heading-mark::after {
+  .pf-primary-nav__heading-mark::after,
+  [aria-expanded="true"] + .pf-primary-nav__submenu.dropdown-menu {
     transition: none;
   }
 }

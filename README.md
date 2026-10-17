@@ -1258,6 +1258,23 @@ Follow-up to "Mobile header and menu, redesigned" (above).
   old collapse leftovers (toggle reset, header-height subtraction, the
   open-menu glass rules) are gone.
 
+### Mobile menu: reading colours, and sections that open cleanly (2026-10-17)
+
+- **Reading colours under the menu** (phones and tablets): the twelve
+  swatches from Settings, so they're one tap from the Menu button. They
+  are copies of the Settings tiles made by `initMenuThemes`
+  (`js/utility-panels.js`) into a fieldset in the menu drawer
+  (`page.html.twig`). Picking one ticks the same swatch in the Settings
+  form and lets that form apply and save it, so there is still one way
+  settings are saved (including the "not saving" case when storage is
+  blocked). Both stay in step through `palefire:a11ychange`. Hidden on
+  desktop, where the menu is in the bar.
+- **Opening a section** showed its pages at once while the section was
+  still growing, so they spilled over the rows below for a moment. The
+  pages now stay invisible until the section has mostly opened, then fade
+  in (.2s, after .2s); closing fades them out first and then shrinks the
+  section. No fade with reduced motion (`_header.scss`).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

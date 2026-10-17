@@ -117,6 +117,16 @@
                 </nav>
               {% endif %}
               {{ page.primary_menu }}
+              {# Reading colours, so they can be changed from the menu on a
+                 phone: copies of the Settings drawer's swatches, built and
+                 kept in step by initMenuThemes (js/utility-panels.js). Below
+                 lg only. #}
+              {% if page.utility_menu %}
+                <fieldset class="pf-menu-themes" data-pf-menu-themes hidden>
+                  <legend class="pf-menu-themes__legend">{{ 'Reading colours'|t }}</legend>
+                  <div class="pf-settings__themes" data-pf-menu-themes-grid></div>
+                </fieldset>
+              {% endif %}
             </div>
           </div>
         {% endif %}
