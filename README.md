@@ -1371,6 +1371,16 @@ with focus on the tile that opened it; the back button is gone
 (`openOverMenu`, `js/palefire.js`; its styles left
 `_utility-panels.scss`). To leave, close the menu itself.
 
+### Mobile menu: pages fade in one after another (2026-10-17)
+
+Opening a section in the mobile menu faded all its pages in at once. They
+now arrive top to bottom, each 40ms after the one above with a slight 4px
+drop (`$pf-menu-stagger` in `_variables.scss`; delays set per item up to 12
+in `_header.scss`), starting once the section has mostly opened (.2s).
+Measured in headless Edge: a section of four is fully in by about .55s.
+Closing still fades them all out at once. No fade or movement with reduced
+motion.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

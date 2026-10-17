@@ -697,8 +697,10 @@
     }
 
     // A section's pages: hidden (and out of the tab order) until opened.
-    // They fade in once the row has mostly opened, so they never show
-    // while the section is still growing, and fade out before it closes.
+    // Once the row has mostly opened they fade in one after another, top
+    // to bottom ($pf-menu-stagger apart, a slight drop as each arrives), so
+    // they never show while the section is still growing. Closing fades
+    // them all out at once, before the section shrinks.
     &__submenu.dropdown-menu {
       --bs-dropdown-link-active-bg: transparent;
       --bs-dropdown-link-hover-bg: transparent;
@@ -710,16 +712,35 @@
       padding: 0;
       overflow: hidden;
       visibility: hidden;
-      opacity: 0;
       background: none;
       border: 0;
       box-shadow: none;
-      transition: opacity .1s ease, visibility 0s linear .4s;
+      transition: visibility 0s linear .4s;
+
+      > li {
+        opacity: 0;
+        transform: translateY(-.25rem);
+        transition: opacity .1s ease, transform .1s ease;
+      }
 
       [aria-expanded="true"] + & {
         visibility: visible;
-        opacity: 1;
-        transition: opacity .2s ease .2s, visibility 0s;
+        transition: visibility 0s;
+
+        > li {
+          --pf-menu-item-delay: 0s;
+          opacity: 1;
+          transform: none;
+          transition:
+            opacity .25s ease calc(.2s + var(--pf-menu-item-delay)),
+            transform .25s ease calc(.2s + var(--pf-menu-item-delay));
+        }
+
+        @for $i from 2 through 12 {
+          > li:nth-child(#{$i}) {
+            --pf-menu-item-delay: #{($i - 1) * $pf-menu-stagger};
+          }
+        }
       }
 
       > li:last-child {
@@ -806,8 +827,14 @@
   .pf-primary-nav__heading,
   .pf-primary-nav__heading-mark::before,
   .pf-primary-nav__heading-mark::after,
-  [aria-expanded="true"] + .pf-primary-nav__submenu.dropdown-menu {
+  [aria-expanded="true"] + .pf-primary-nav__submenu.dropdown-menu,
+  .pf-primary-nav__submenu.dropdown-menu > li,
+  [aria-expanded="true"] + .pf-primary-nav__submenu.dropdown-menu > li {
     transition: none;
+  }
+
+  .pf-primary-nav__submenu.dropdown-menu > li {
+    transform: none;
   }
 }
 
