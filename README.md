@@ -1185,6 +1185,19 @@ on after it, so editors don't need to put punctuation inside the bold. The
 numbers were already positioned outside the text (`::before`, absolute),
 so nothing else changes (`_guide.scss`).
 
+### Phones: no doubled step numbers; headings light up sooner (2026-10-17)
+
+- **Numbered steps on iOS** showed the browser's own "1." beside the styled
+  "01": iOS Safari ignores `content` on `::marker`, which was how it was
+  hidden. The steps now also set `list-style-type: "\200B"` (a zero-width
+  space), which hides the number in every browser and, unlike
+  `list-style: none`, keeps Safari announcing the list (`_guide.scss`).
+- **Portrait screens** move to the next section (TOC, and the lit heading
+  on guides) once it reaches three-quarters of the way down the screen
+  instead of halfway, so a heading lights up as it arrives on a phone.
+  Landscape and desktop stay at halfway (`activationLine()`,
+  `js/modular-toc.js`; re-read on rotation).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

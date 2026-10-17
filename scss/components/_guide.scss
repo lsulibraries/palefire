@@ -252,8 +252,10 @@ html[data-pf-mode="guide"] .pf-section__title {
   }
 
   // Numbered lists are steps: a large light numeral beside each item, with
-  // a hairline between items. ::marker is emptied rather than using
-  // list-style: none, which makes Safari drop the list semantics.
+  // a hairline between items. The browser's own number is hidden with a
+  // zero-width string as the list style, not list-style: none, which makes
+  // Safari drop the list semantics. (iOS Safari ignores content on
+  // ::marker, so emptying the marker alone left "1." beside "01".)
   ol:not(li ol) {
     display: grid;
     padding-inline-start: 0;
@@ -266,6 +268,7 @@ html[data-pf-mode="guide"] .pf-section__title {
       padding-inline-start: 3.25rem;
       border-top: 1px solid var(--pf-guide-rule);
       counter-increment: pf-step;
+      list-style-type: "\200B";
 
       &::marker {
         content: "";

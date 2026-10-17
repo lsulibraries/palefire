@@ -10,7 +10,7 @@
  *   just the h3s that opt in with data-toc (the bento search and building
  *   map headings), so those show up whatever the page's mode.
  * - The active section is whichever one crosses a fixed "activation line"
- *   (ACTIVATION_LINE of the viewport below the sticky header). Origami
+ *   (activationLine() of the viewport below the sticky header). Origami
  *   used threshold 0.6, which a section taller than ~1.67 viewports can
  *   never reach, so tall sections never became active.
  * - No jQuery, no Bootstrap Collapse, no MutationObserver. Sub-lists
@@ -40,11 +40,19 @@
 (function (Drupal, once) {
   'use strict';
 
-  // Halfway down the viewport below the header (was 0.3): a section turns
-  // active once it fills the lower half of the screen, which is when its
-  // heading is the most prominent thing in view. At 0.3 a heading could sit
-  // mid-screen while the TOC still marked the section above it.
+  // How far down the viewport (below the header) a section must reach to
+  // turn active. Landscape: halfway (was 0.3), so a section turns active
+  // once it fills the lower half of the screen, when its heading is the most
+  // prominent thing in view. Portrait (phones): three-quarters down, since a
+  // tall narrow screen shows a heading well before it reaches the middle,
+  // and the lit heading (guides) should come on as it arrives. Read on each
+  // use; rotating fires resize, which re-observes.
   const ACTIVATION_LINE = 0.5;
+  const ACTIVATION_LINE_PORTRAIT = 0.75;
+  const portrait = window.matchMedia('(orientation: portrait)');
+  function activationLine() {
+    return portrait.matches ? ACTIVATION_LINE_PORTRAIT : ACTIVATION_LINE;
+  }
   // Depth 2: every h3, plus anything marked data-toc.
   const SUB_HEADING_SELECTOR = 'h3, [data-toc]';
   // Depth 1: only what asks to be listed (h3[data-toc], or any element with
@@ -189,7 +197,7 @@
       if (observer) {
         observer.disconnect();
       }
-      const top = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
+      const top = headerHeight() + (window.innerHeight - headerHeight()) * activationLine();
       const bottom = window.innerHeight - top - 1;
       observer = new IntersectionObserver((records) => {
         if (locked) {
@@ -233,7 +241,7 @@
       if (!active || !active.subs.length) {
         return;
       }
-      const line = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
+      const line = headerHeight() + (window.innerHeight - headerHeight()) * activationLine();
       let current = null;
       // data-toc-passive items (side-by-side carousel events) are listed
       // but never highlighted by scroll position.
@@ -505,7 +513,7 @@
   }
 
   function entryAtLine(entries) {
-    const line = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
+    const line = headerHeight() + (window.innerHeight - headerHeight()) * activationLine();
     return entries.find((entry) => {
       const rect = entry.section.getBoundingClientRect();
       return rect.top <= line && rect.bottom > line;
