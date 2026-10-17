@@ -22,7 +22,7 @@
 // _modular-tokens.scss: .5 black), so the two read as one piece of chrome.
 // Contrast: .5 black over a plain white section would put $body-color-dark
 // under 4.5:1, and the bar can sit over the end of a light section while the
-// dark one is active (the activation line is 50% down the viewport). The
+// dark one is active (the activation line is 75% down the viewport). The
 // 26px blur mixes in the dark section above, which helps, but if that proves
 // too weak, darken 'sidebar-bg' in $pf-chrome-dark (both follow) rather than
 // the bar alone. More contrast / less transparency make both solid.
