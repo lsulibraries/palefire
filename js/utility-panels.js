@@ -170,11 +170,11 @@
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colours (_reading-themes.scss). Cream is the default: no
   // attribute, not saved. See DARK_THEMES.
-  const THEMES = ['purple', 'cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
-  const DARK_THEMES = ['purple', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  const THEMES = ['twilight', 'cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  const DARK_THEMES = ['twilight', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
   // What every page opens in (html.html.twig sets it on <html>). Not saved:
   // only a different choice is.
-  const DEFAULT_THEME = 'purple';
+  const DEFAULT_THEME = 'twilight';
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 

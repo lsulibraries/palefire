@@ -914,7 +914,7 @@ Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 
 | Swatch | Page | Text | Text contrast |
 | --- | --- | --- | --- |
-| Purple & Gold (default since 2026-10-17) | #251d30 | #b2a6c1 | 7.0:1 |
+| Twilight (default since 2026-10-17) | #251d30 | #b2a6c1 | 7.0:1 |
 | Cream (the default until 2026-10-17) | #f7f4ec | #2b2a28 | 13.1:1 |
 | Soft cream (light grey on cream) | #f7f4ec | #676561 | 5.3:1 |
 | Lavender (muted LSU purple on cream) | #f7f4ec | #6b5a8e | 5.5:1 |
@@ -1451,9 +1451,13 @@ is now always the hover colour (`--bs-dropdown-link-hover-color`,
 `_header.scss`): it simply draws in and out. The text keeps its own calm
 colour change (.2s in, .5s out).
 
-### Purple & Gold, the new default (2026-10-17)
+### Twilight, the new default (2026-10-17)
 
-Every page now opens in a new reading swatch, **Purple & Gold**, until a
+(First named "Purple & Gold", key `purple`; renamed Twilight, key `twilight`,
+the same day. The default is never saved, so no stored settings used the
+old key.)
+
+Every page now opens in a new reading swatch, **Twilight**, until a
 visitor picks another in Settings > Reading colours. It has Midnight's
 darkness in LSU purple's hue, with LSU gold as the accent:
 
@@ -1471,7 +1475,7 @@ darkness in LSU purple's hue, with LSU gold as the accent:
 - Over a background video, in the worst case (a white frame), panel
   headings are 9.5:1, labels 5.3:1 and gold 8.9:1. High contrast pushes
   it to 10.9:1 body text. Audited in the compiled CSS.
-- **How:** `html.html.twig` puts `data-pf-theme="purple"`, `pf-reading-dark`
+- **How:** `html.html.twig` puts `data-pf-theme="twilight"`, `pf-reading-dark`
   and `data-bs-theme="dark"` on `<html>`, so pages are right before any
   script runs and without JavaScript; the inline head script swaps in a
   saved choice (and clears the dark markers for light swatches).
@@ -1480,7 +1484,7 @@ darkness in LSU purple's hue, with LSU gold as the accent:
   a different pick is, so Reset goes back to it.
 - **Cream** is now a regular choice (`data-pf-theme="cream"`), no longer
   "no attribute". Visitors who had picked Cream had nothing saved, so they
-  now see Purple & Gold until they pick Cream again.
+  now see Twilight until they pick Cream again.
 - The Settings help text now says the colours apply to the whole site.
 
 
