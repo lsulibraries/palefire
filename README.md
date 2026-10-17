@@ -1417,6 +1417,23 @@ timing (`$pf-menu-stagger` 60ms, `$pf-menu-fade` .35s; `_guide.scss`):
   site-wide (`_a11y-settings.scss`), so staggered items don't wait and then
   pop in.
 
+### Dropdown links: an underline that draws in (2026-10-17)
+
+Desktop dropdown links (Main Library, Special Collections…) showed a
+static underline on hover. It now draws in from the left under the words,
+and when the pointer leaves it carries on out to the right instead of
+snapping back: .35s, quick at first and settling softly
+(`cubic-bezier(.22, 1, .36, 1)`). The current page keeps a full, still
+underline; keyboard focus draws it the same way.
+
+- The words are now wrapped in `<span class="pf-primary-nav__text">`
+  (`menu--main.html.twig`), so the underline (a 2px background line under
+  the span) runs under the text only, not the full width of the dropdown.
+- No animation with reduced motion; in Windows High Contrast (which drops
+  background images) a regular underline shows instead (`_header.scss`).
+- Measured in headless Edge with a forced :hover: grows 0 to 100% in
+  about .35s, then shrinks toward the right edge on leave.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

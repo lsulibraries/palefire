@@ -218,15 +218,24 @@
       text-transform: uppercase;
       white-space: nowrap;
       text-decoration: none;
+    }
 
-      // Hover/focus: colour plus an underline, so it isn't colour alone.
-      &:hover,
-      &:focus-visible,
-      &.is-active {
-        text-decoration: underline;
-        text-decoration-thickness: 2px;
-        text-underline-offset: .45em;
-      }
+    // Hover/focus: colour plus an underline, so it isn't colour alone. The
+    // underline draws in from the left under the words, and on leaving
+    // carries on out to the right (it shrinks toward the right edge),
+    // rather than snapping back. The current page keeps a full, still one.
+    .pf-primary-nav__text {
+      padding-bottom: .45em;
+      background-image: linear-gradient(currentColor, currentColor);
+      background-position: 100% 100%;
+      background-repeat: no-repeat;
+      background-size: 0 2px;
+      transition: background-size .35s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .dropdown-item:is(:hover, :focus-visible, .is-active) .pf-primary-nav__text {
+      background-position: 0 100%;
+      background-size: 100% 2px;
     }
   }
 }
@@ -873,5 +882,17 @@
   .pf-primary-nav__submenu.dropdown-menu.show,
   .pf-primary-nav__submenu.dropdown-menu.show > li {
     animation: none;
+  }
+
+  .pf-primary-nav__submenu.dropdown-menu .pf-primary-nav__text {
+    transition: none;
+  }
+}
+
+// Windows High Contrast drops background images: underline the words.
+@media (forced-colors: active) {
+  .dropdown-item:is(:hover, :focus-visible, .is-active) .pf-primary-nav__text {
+    text-decoration: underline;
+    text-underline-offset: .45em;
   }
 }

@@ -66,8 +66,11 @@
           {% endif %}
         </li>
       {% else %}
+        {# The words in their own span, so the hover underline (drawn on
+           desktop, _header.scss) runs under the text only. #}
+        {% set text %}<span class="pf-primary-nav__text">{{ item.title }}</span>{% endset %}
         <li{{ item.attributes }}>
-          {{ link(item.title, item.url, { 'class': ['dropdown-item'] }) }}
+          {{ link(text, item.url, { 'class': ['dropdown-item'] }) }}
         </li>
       {% endif %}
     {% endfor %}
