@@ -38,7 +38,7 @@
 }
 
 // Sidebar + TOC follow the active section (set by modular-toc.js).
-// Settings > Dark guides (html.pf-guide-dark) sets them from the first
+// A dark reading swatch on a guide (html.pf-guide-dark) sets them from the first
 // paint, before modular-toc.js runs.
 body[data-section-theme="dark"],
 html.pf-guide-dark body {
@@ -505,7 +505,7 @@ html.pf-snap .site-footer {
 }
 
 @include pf-solid-chrome {
-  // (Dark guides' sidebar is solid already: _guide.scss.)
+  // (A dark-swatch guide's sidebar is solid already: _guide.scss.)
   body[data-section-theme="dark"] {
     --pf-sidebar-bg: #{$pf-grey-900};
   }

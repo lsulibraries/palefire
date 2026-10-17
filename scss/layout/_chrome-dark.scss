@@ -43,7 +43,8 @@ $pf-logo-filter-dark: none !default;
     background-color $pf-chrome-transition,
     border-color $pf-chrome-transition;
 
-  // Settings > Dark guides: html.pf-guide-dark, from the first paint.
+  // Dusk or Night reading colours on a guide: html.pf-guide-dark, from the
+  // first paint.
   &[data-bs-theme="dark"],
   html.pf-guide-dark & {
     --pf-header-bg: #{$pf-header-bg-dark};
@@ -126,7 +127,7 @@ html.pf-guide-dark .pf-page::before {
   }
 }
 
-// The same for Settings > Dark guides, written out by hand:
+// The same for Dusk / Night on guides (html.pf-guide-dark), written out by hand:
 // pf-solid-chrome nests its class version under :root, so a selector that
 // starts with html (html.pf-guide-dark) can't go inside it; it would never
 // match. The guide's own colours for these: _guide.scss.

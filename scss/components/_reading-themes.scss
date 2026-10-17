@@ -1,0 +1,246 @@
+@use "sass:color";
+@use "sass:map";
+@use "sass:math";
+@use "sass:string";
+
+// =========================================================================
+// Reading colours (Settings > Reading colours): page and text colour pairs
+// popular in reading modes. They replace "Dark guides".
+//
+// <html data-pf-theme="sepia"> (no attribute: Cream, the default), set by
+// the inline script in html.html.twig before the first paint and by
+// js/utility-panels.js. Dusk and Night are dark: on guides they also add
+// .pf-guide-dark and data-bs-theme="dark" to <html>, which turn the header,
+// TOC and drawers dark (_chrome-dark.scss, _guide.scss, _utility-panels.scss).
+//
+// Where they apply:
+// - Guides (<html data-pf-mode="guide">): the whole page, including the
+//   header, the TOC and the drawers.
+// - Every other page: the main content only (#main-content), so the
+//   header, sidebar and drawers keep their usual colours. Sections that
+//   carry their own colours keep them: dark sections set their own tokens
+//   and data-bs-theme, and bento sections with a background video are reset
+//   to the default here. Cream on other pages is the default (no change).
+//
+// Contrast, measured (normal text, WCAG AA 4.5:1; Lavender and Dusk are the
+// deliberately soft ones, closest to the minimum):
+//   cream    text 13.1  muted 6.4  accent 11.1
+//   lavender text  5.5  muted 5.0  accent 11.1   (muted LSU purple on cream)
+//   sepia    text  7.5  muted 5.5  accent  7.0
+//   sage     text  7.7  muted 5.4  accent  6.5
+//   mist     text  7.1  muted 5.5  accent  6.7
+//   dusk     text  6.9  muted 5.4  accent  7.9
+//   night    text 14.8  muted 8.7  accent 10.5
+// Muted text on the surface colour is 4.6:1 and up. Scrollbar thumbs are
+// 3:1 and up on both the page and the rail (1.4.11). High contrast (the
+// Settings switch or the OS) swaps in each swatch's own stronger text
+// (11:1 and up, AAA) and makes muted text and rules full strength, so the
+// swatch keeps its hue.
+// =========================================================================
+
+$pf-reading-themes: (
+  'cream': (
+    label: 'Cream', dark: false,
+    bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
+    surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
+    scroll: #7a7772, fg-hc: #141413,
+  ),
+  'lavender': (
+    label: 'Lavender', dark: false,
+    bg: #f7f4ec, fg: #6b5a8e, heading: #4f3f73, muted: #6e6679, rule: #e4dde8,
+    surface: #efeaf0, accent: $pf-purple, accent-soft: #e9e1f1,
+    scroll: #857a96, fg-hc: #3a2a5c,
+  ),
+  'sepia': (
+    label: 'Sepia', dark: false,
+    bg: #f4ecd8, fg: #5b4636, heading: #3e2e22, muted: #6f5a47, rule: #e2d6bc,
+    surface: #ece2c9, accent: #7a3e1d, accent-soft: #eadcc4,
+    scroll: #85705a, fg-hc: #3a2a1d,
+  ),
+  'sage': (
+    label: 'Sage', dark: false,
+    bg: #e3eadb, fg: #3b4a3a, heading: #263326, muted: #52604f, rule: #cad5c0,
+    surface: #d9e2cf, accent: #2f5a3a, accent-soft: #d2dfc8,
+    scroll: #647260, fg-hc: #1e2a1e,
+  ),
+  'mist': (
+    label: 'Mist', dark: false,
+    bg: #eceeef, fg: #4a4f55, heading: #2e3237, muted: #5a6066, rule: #d6dadd,
+    surface: #e2e5e7, accent: #3d4f8a, accent-soft: #dde2ee,
+    scroll: #747a80, fg-hc: #1f2327,
+  ),
+  'dusk': (
+    label: 'Dusk', dark: true,
+    bg: #2b2a33, fg: #b7b3c0, heading: #dcd8e4, muted: #a29eab, rule: #45434f,
+    surface: #34333d, accent: $pf-lavender, accent-soft: #3a3446,
+    scroll: #9a96a3, fg-hc: #ece9f2,
+  ),
+  'night': (
+    label: 'Night', dark: true,
+    bg: #121014, fg: #e6e2ea, heading: #ffffff, muted: #b3adbb, rule: #34303a,
+    surface: #1c1921, accent: $pf-lavender, accent-soft: #2a2235,
+    scroll: #b3adbb, fg-hc: #ffffff,
+  ),
+) !default;
+
+@function pf-rgb($c) {
+  @return math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb));
+}
+
+// The swatch's guide tokens (--pf-g-*, read by _guide.scss, the chrome and
+// the drawers) and Bootstrap's body colours, for everything that reads
+// --bs-* (links, borders, form controls).
+@mixin pf-reading-tokens($t) {
+  $dark: map.get($t, dark);
+  --pf-g-bg: #{map.get($t, bg)};
+  --pf-g-bg-rgb: #{pf-rgb(map.get($t, bg))};
+  --pf-g-fg: #{map.get($t, fg)};
+  --pf-g-fg-rgb: #{pf-rgb(map.get($t, fg))};
+  --pf-g-heading: #{map.get($t, heading)};
+  --pf-g-muted: #{map.get($t, muted)};
+  --pf-g-rule: #{map.get($t, rule)};
+  --pf-g-surface: #{map.get($t, surface)};
+  --pf-g-accent: #{map.get($t, accent)};
+  --pf-g-accent-soft: #{map.get($t, accent-soft)};
+  // Text on an accent fill (the Settings switch): white on the dark accents
+  // of light swatches, black on the lavender of dark ones.
+  @if $dark {
+    --pf-g-on-accent: #000;
+  }
+  @else {
+    --pf-g-on-accent: #fff;
+  }
+  --pf-g-scroll: #{map.get($t, scroll)};
+  --pf-g-scroll-hover: #{map.get($t, muted)};
+  --bs-body-bg: #{map.get($t, bg)};
+  --bs-body-bg-rgb: #{pf-rgb(map.get($t, bg))};
+  --bs-body-color: #{map.get($t, fg)};
+  --bs-body-color-rgb: #{pf-rgb(map.get($t, fg))};
+  --bs-emphasis-color: #{map.get($t, heading)};
+  --bs-emphasis-color-rgb: #{pf-rgb(map.get($t, heading))};
+  --bs-secondary-color: #{map.get($t, muted)};
+  --bs-secondary-bg: #{map.get($t, surface)};
+  --bs-tertiary-bg: #{map.get($t, surface)};
+  --bs-border-color: #{map.get($t, rule)};
+  --bs-link-color: #{map.get($t, accent)};
+  --bs-link-color-rgb: #{pf-rgb(map.get($t, accent))};
+  --bs-link-hover-color: #{map.get($t, heading)};
+  --bs-link-hover-color-rgb: #{pf-rgb(map.get($t, heading))};
+  @if $dark {
+    color-scheme: dark;
+  }
+  @else {
+    color-scheme: light;
+  }
+}
+
+// High contrast: the swatch's own stronger text; muted text and rules go
+// to full strength.
+@mixin pf-reading-contrast($t) {
+  --pf-g-fg: #{map.get($t, fg-hc)};
+  --pf-g-fg-rgb: #{pf-rgb(map.get($t, fg-hc))};
+  --pf-g-heading: #{map.get($t, fg-hc)};
+  --pf-g-muted: #{map.get($t, fg-hc)};
+  --pf-g-rule: #{map.get($t, muted)};
+  --bs-body-color: #{map.get($t, fg-hc)};
+  --bs-body-color-rgb: #{pf-rgb(map.get($t, fg-hc))};
+  --bs-emphasis-color: #{map.get($t, fg-hc)};
+  --bs-secondary-color: #{map.get($t, fg-hc)};
+  --bs-border-color: #{map.get($t, muted)};
+}
+
+// --- Guides: the whole page ----------------------------------------------
+// Cream with no attribute, every other swatch with its attribute.
+html[data-pf-mode="guide"] {
+  @include pf-reading-tokens(map.get($pf-reading-themes, 'cream'));
+  background-color: var(--pf-g-bg);
+}
+
+@each $name, $t in $pf-reading-themes {
+  @if $name != 'cream' {
+    html[data-pf-mode="guide"][data-pf-theme="#{$name}"] {
+      @include pf-reading-tokens($t);
+    }
+  }
+}
+
+// --- Every other page: the main content ----------------------------------
+// Cream is the default there too (no attribute: no change).
+@each $name, $t in $pf-reading-themes {
+  @if $name != 'cream' {
+    html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
+      @include pf-reading-tokens($t);
+      color: var(--bs-body-color);
+      background-color: var(--bs-body-bg);
+    }
+  }
+}
+
+// The page head (breadcrumb, <h1>) is in the main content but coloured with
+// the chrome's TOC tokens, so it gets the swatch's too. Not on pages that
+// open with a bento video: there the breadcrumb sits on its own light glass
+// strip over the video (_bento-swiss.scss), drawn for the default colours.
+@each $name, $t in $pf-reading-themes {
+  @if $name != 'cream' {
+    html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content:not(:has(.pf-sections > .pf-section:first-child .pf-bento.has-bg-video)) .pf-modular__head {
+      --pf-toc-color: #{map.get($t, muted)};
+      --pf-toc-active: #{map.get($t, heading)};
+      --pf-toc-accent: #{map.get($t, accent)};
+    }
+  }
+}
+
+// A bento section with a background video keeps the default colours: its
+// glass panels and the video's wash are drawn for them.
+html[data-pf-theme]:not([data-pf-mode="guide"]) #main-content .pf-section:has(.pf-bento.has-bg-video):not(.pf-section--theme-dark, .is-map-dark) {
+  --bs-body-bg: #{$body-bg};
+  --bs-body-bg-rgb: #{pf-rgb($body-bg)};
+  --bs-body-color: #{$body-color};
+  --bs-body-color-rgb: #{pf-rgb($body-color)};
+  --bs-emphasis-color: #{$black};
+  --bs-secondary-color: #{rgba($body-color, .75)};
+  --bs-border-color: #{$border-color};
+  --bs-link-color: #{$link-color};
+  --bs-link-color-rgb: #{pf-rgb($link-color)};
+  color: var(--bs-body-color);
+  color-scheme: light;
+}
+
+// --- High contrast: each swatch's stronger alternate ----------------------
+@each $name, $t in $pf-reading-themes {
+  $guide: 'html[data-pf-mode="guide"][data-pf-theme="#{$name}"]';
+  @if $name == 'cream' {
+    $guide: 'html[data-pf-mode="guide"]:not([data-pf-theme])';
+  }
+
+  html.pf-a11y-contrast#{string.slice($guide, 5)} {
+    @include pf-reading-contrast($t);
+  }
+
+  @media (prefers-contrast: more) {
+    #{$guide} {
+      @include pf-reading-contrast($t);
+    }
+  }
+
+  @if $name != 'cream' {
+    html.pf-a11y-contrast[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
+      @include pf-reading-contrast($t);
+    }
+
+    @media (prefers-contrast: more) {
+      html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
+        @include pf-reading-contrast($t);
+      }
+    }
+  }
+}
+
+// --- Settings drawer swatches --------------------------------------------
+// Each tile shows "Aa" in the swatch's own text on its own page colour.
+@each $name, $t in $pf-reading-themes {
+  .pf-settings__theme[data-theme="#{$name}"] .pf-settings__theme-chip {
+    color: map.get($t, fg);
+    background-color: map.get($t, bg);
+  }
+}

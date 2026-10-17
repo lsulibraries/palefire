@@ -58,6 +58,21 @@
     { label: 'TigerCASH Account'|t, icon: 'credit-card', url: 'https://tcard.lsu.edu/' },
   ]
 %}
+{# Reading colours (Settings): page and text colour pairs. Keys must match
+   $pf-reading-themes (_reading-themes.scss), the THEMES list in
+   utility-panels.js and the pattern in html.html.twig. Cream is the default
+   (no attribute on <html>). #}
+{%
+  set reading_themes = [
+    { key: 'cream', label: 'Cream'|t },
+    { key: 'lavender', label: 'Lavender'|t },
+    { key: 'sepia', label: 'Sepia'|t },
+    { key: 'sage', label: 'Sage'|t },
+    { key: 'mist', label: 'Mist'|t },
+    { key: 'dusk', label: 'Dusk'|t },
+    { key: 'night', label: 'Night'|t },
+  ]
+%}
 {# Settings: group > settings. type 'size' is the radio group; the rest are
    switches whose key becomes html.pf-a11y-{key}. Keep the keys in step with
    html.html.twig and utility-panels.js. #}
@@ -73,7 +88,6 @@
       { key: 'contrast', label: 'High contrast'|t, help: 'Solid backgrounds, full-strength text, brighter borders, no stripes.'|t },
       { key: 'solid', label: 'Reduce transparency'|t, help: 'No see-through glass on the header, sidebar and drawers.'|t },
       { key: 'focus', label: 'Strong focus outline'|t, help: 'A thick gold-and-black ring around whatever has keyboard focus.'|t },
-      { key: 'dark', label: 'Dark guides'|t, help: 'Research guides use a dark background. Other pages keep their own colours.'|t },
     ] },
     { key: 'motion', label: 'Motion'|t, items: [
       { key: 'motion', label: 'Reduce motion'|t, help: 'Stops animations, page transitions, map animation and smooth scrolling.'|t },
@@ -92,7 +106,7 @@
 
   {# Search ------------------------------------------------------------- #}
   <div class="offcanvas offcanvas-start pf-panel pf-panel--search" id="pf-panel-search" tabindex="-1"
-       aria-labelledby="pf-panel-search-title" data-bs-theme="dark" data-pf-panel="search">
+       aria-labelledby="pf-panel-search-title" data-pf-panel="search">
     <div class="pf-panel__header">
       <h2 class="pf-panel__title" id="pf-panel-search-title">{{ 'Search'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
@@ -118,7 +132,7 @@
 
   {# Hours -------------------------------------------------------------- #}
   <div class="offcanvas offcanvas-start pf-panel pf-panel--hours" id="pf-panel-hours" tabindex="-1"
-       aria-labelledby="pf-panel-hours-title" data-bs-theme="dark" data-pf-panel="hours">
+       aria-labelledby="pf-panel-hours-title" data-pf-panel="hours">
     <div class="pf-panel__header">
       <h2 class="pf-panel__title" id="pf-panel-hours-title">{{ 'Hours'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
@@ -152,7 +166,7 @@
 
   {# Ask Us ------------------------------------------------------------- #}
   <div class="offcanvas offcanvas-start pf-panel pf-panel--ask" id="pf-panel-ask" tabindex="-1"
-       aria-labelledby="pf-panel-ask-title" data-bs-theme="dark" data-pf-panel="ask">
+       aria-labelledby="pf-panel-ask-title" data-pf-panel="ask">
     <div class="pf-panel__header">
       <h2 class="pf-panel__title" id="pf-panel-ask-title">{{ 'Ask Us'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
@@ -191,7 +205,7 @@
 
   {# Accounts ----------------------------------------------------------- #}
   <div class="offcanvas offcanvas-start pf-panel pf-panel--accounts" id="pf-panel-accounts" tabindex="-1"
-       aria-labelledby="pf-panel-accounts-title" data-bs-theme="dark" data-pf-panel="accounts">
+       aria-labelledby="pf-panel-accounts-title" data-pf-panel="accounts">
     <div class="pf-panel__header">
       <h2 class="pf-panel__title" id="pf-panel-accounts-title">{{ 'Accounts'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
@@ -219,7 +233,7 @@
 
   {# Settings ----------------------------------------------------------- #}
   <div class="offcanvas offcanvas-start pf-panel pf-panel--settings" id="pf-panel-settings" tabindex="-1"
-       aria-labelledby="pf-panel-settings-title" data-bs-theme="dark" data-pf-panel="settings">
+       aria-labelledby="pf-panel-settings-title" data-pf-panel="settings">
     <div class="pf-panel__header">
       <h2 class="pf-panel__title" id="pf-panel-settings-title">{{ 'Settings'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
@@ -237,6 +251,17 @@
             <label class="pf-settings__size" for="pf-set-size-{{ size }}" data-size="{{ size }}"><span class="pf-settings__size-a" aria-hidden="true">A</span>{{ size }}%</label>
           {% endfor %}
         </div>
+      </fieldset>
+
+      <fieldset class="pf-settings__group">
+        <legend class="pf-settings__legend">{{ 'Reading colours'|t }}</legend>
+        <div class="pf-settings__themes">
+          {% for theme in reading_themes %}
+            <input class="pf-settings__theme-input visually-hidden" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-describedby="pf-set-theme-help">
+            <label class="pf-settings__theme" for="pf-set-theme-{{ theme.key }}" data-theme="{{ theme.key }}"><span class="pf-settings__theme-chip" aria-hidden="true">Aa</span>{{ theme.label }}</label>
+          {% endfor %}
+        </div>
+        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colours. On research guides the header, table of contents and these drawers change too.'|t }}</p>
       </fieldset>
 
       {% for group in settings_groups %}

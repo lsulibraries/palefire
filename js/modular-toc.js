@@ -601,7 +601,8 @@
    * Pass null to reset everything to the light default.
    * ---------------------------------------------------------------- */
   function applyChromeTheme(theme, nav) {
-    // Settings > Dark guides: every section is dark, so the chrome is too.
+    // Dusk / Night reading colours on a guide: every section is dark, so the
+    // chrome is too.
     const guideDark = document.documentElement.classList.contains('pf-guide-dark');
     const dark = theme === 'dark' || (guideDark && theme !== null);
     const body = document.body;
@@ -663,7 +664,7 @@
     }
   });
 
-  // Dark guides switched on or off in Settings: re-apply to the active
+  // Reading colours changed in Settings (dark on or off): re-apply to the active
   // section.
   document.addEventListener('palefire:a11ychange', () => {
     const id = document.body.dataset.activeSection;

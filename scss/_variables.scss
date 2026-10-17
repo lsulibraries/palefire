@@ -106,5 +106,5 @@ $pf-logo-color-dark:     #fff;     // On the dark bar (Origami: white, gold on h
 // The page behind an open drawer dims more on light pages, where a .5 black
 // wash (Bootstrap's default) left the content competing with the drawer.
 $pf-panel-width:             24rem;
-$pf-panel-backdrop-light:    .72;
+$pf-panel-backdrop-light:    .45; // a wash of the page colour (Cream or the guide swatch), not black
 $pf-panel-backdrop-dark:     .55;

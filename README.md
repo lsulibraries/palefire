@@ -906,34 +906,74 @@ sync. `data-pf-mode` stays (Dark guides uses it). Visitors' saved
 `palefire.tocCollapsed*` keys in `localStorage` are simply ignored now.
 One less script in `<head>` on Modular pages.
 
-### Dark guides
+### Reading colours (2026-10-16, replaces Dark guides)
 
-Settings > Display > **Dark guides** (key `dark` in `pf-a11y`). On a
-guide-mode page it puts `pf-guide-dark` and Bootstrap's
-`data-bs-theme="dark"` on `<html>`; on other pages it does nothing.
+Settings > **Reading colours**: seven page and text colour pairs popular in
+reading modes, picked as tiles that show "Aa" in each swatch's own colours.
+Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 
-* **First paint:** the inline script in `html.html.twig` applies it before
-  the page paints, like the other settings. The Palefire chrome that
-  normally waits for `modular-toc.js` (header glass, TOC and sidebar
-  tokens, the strip under the header, the drawer backdrop) also matches
-  `html.pf-guide-dark` in CSS (`_chrome-dark.scss`, `_modular.scss`,
-  `_utility-panels.scss`), so nothing flashes light.
-* **Live:** `utility-panels.js` (`applyGuideDark()`) toggles it when the
-  switch changes; `modular-toc.js` re-applies the chrome theme on
-  `palefire:a11ychange` and treats every section as dark while it is on.
-* **Swup:** `palefire-swup.js` syncs `data-pf-mode` (and
-  `data-pf-toc-default`) and the `modular--{mode}` body class, then sends
-  `palefire:pagemode`, so leaving a guide turns the dark palette off and
-  entering one turns it on.
-* **Colours:** everything on a guide reads `--bs-*` or the dark section
-  tokens, so it follows Bootstrap's dark palette (body text about 13:1,
-  muted text about 8:1 on `#212529`). LSU purple fails on dark, so the
-  guide accent becomes lavender (`$pf-lavender`, about 8:1;
-  `_guide.scss`). Sections already set to dark stay as they are.
-* To extend it to other page types later, widen the
-  `data-pf-mode === 'guide'` check in `html.html.twig` and
-  `utility-panels.js` and check those pages' components on a dark body.
+| Swatch | Page | Text | Text contrast |
+| --- | --- | --- | --- |
+| Cream (default) | #f7f4ec | #2b2a28 | 13.1:1 |
+| Lavender (muted LSU purple on cream) | #f7f4ec | #6b5a8e | 5.5:1 |
+| Sepia | #f4ecd8 | #5b4636 | 7.5:1 |
+| Sage | #e3eadb | #3b4a3a | 7.7:1 |
+| Mist | #eceeef | #4a4f55 | 7.1:1 |
+| Dusk (soft dark) | #2b2a33 | #b7b3c0 | 6.9:1 |
+| Night | #121014 | #e6e2ea | 14.8:1 |
 
+Lavender and Dusk are the deliberately soft ones, closest to AA. Every
+swatch's muted text is 4.5:1 and up (on its surface colour too), its accent
+(links) 6.4:1 and up, its scrollbar thumb 3:1 and up on page and rail.
+
+- **Where:** on guides the whole page, including the header (glass in the
+  swatch's page colour, menu, icons and logo in its text colour), the TOC
+  (muted links, heading-colour active link, accent bar) and the drawers. On
+  every other page only the main content (`#main-content`); the header,
+  sidebar and drawers keep their usual colours there, and bento sections
+  with a background video, dark sections and the events calendar keep
+  their own. Cream changes nothing outside guides.
+- **How:** `<html data-pf-theme="sepia">` (Cream: none), set before the
+  first paint by the inline script in `html.html.twig` and live by
+  `utility-panels.js` (`THEMES`). Each swatch sets the guide tokens
+  (`--pf-g-*`) and Bootstrap's `--bs-body-*`, link and border colours. Dusk
+  and Night on a guide also add `.pf-guide-dark` and `data-bs-theme="dark"`,
+  which drive the existing dark chrome (`_chrome-dark.scss`, `_guide.scss`,
+  `modular-toc.js`). Saved as `theme` in `pf-a11y`; a saved "Dark guides"
+  (`dark`) reads as Night.
+- **High contrast** (Settings switch or the OS): each swatch swaps in its own
+  stronger text (11:1 and up, AAA) and makes muted text and rules full
+  strength, so the swatch keeps its hue.
+- **Logo:** the header logo's fill is now the bar's text colour by default
+  (was a fixed #999), and the swatch's text colour on guides.
+- **To add a swatch:** an entry in `$pf-reading-themes` (check contrast), its
+  key in `reading_themes` (`utility-panels.html.twig`), `THEMES`
+  (`utility-panels.js`) and the pattern in `html.html.twig`; dark ones in
+  `DARK_THEMES` and the dark pattern too.
+
+### Drawers in the guides' style (2026-10-16)
+
+The utility drawers (Search, Hours, Ask Us, Accounts, Settings) now follow
+the guides' art direction everywhere instead of being always dark: frosted
+glass in the guide's page colour (84%, the existing 26px blur), dark grey
+text, muted grey labels in tracked monospace, body text in the sans, hairline
+rules, square corners, the accent (LSU purple) for hover, focus and the
+selected marks. Control borders use the swatch's scrollbar grey (3:1 and
+up). On guides they take the reader's swatch: light glass on light swatches,
+a shade darker than the page on Dusk and Night. Elsewhere they are Cream.
+
+- The backdrop is a 45% wash of the page colour instead of black, so the
+  glass still reads as glass (Dusk and Night keep a dark wash). Worst case,
+  a black pixel under the drawer still leaves it about #e0ddd5: text 11:1,
+  muted 5:1.
+- The Hours drawer keeps Origami's gold OPEN badges (black on gold, 13:1)
+  and the dotted Handjet clock; cards, the closed badge and the closed
+  stripes are now tints of the text colour, so they work on any swatch.
+- The Settings switch's thumb is white on the light swatches' accent, black
+  on lavender (`--pf-g-on-accent`).
+- `data-bs-theme="dark"` is gone from the drawers' markup; on Dusk and Night
+  guides they inherit it from `<html>`. Reduce transparency / High contrast
+  still make them solid.
 ### Reader font for guides (2026-10-16)
 
 Settings > Reading > **Reader font for guides** (key `reader`, class

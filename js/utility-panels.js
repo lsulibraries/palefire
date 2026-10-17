@@ -167,17 +167,34 @@
 
   const STORE = 'pf-a11y';
   const SIZES = ['100', '115', '130', '150'];
-  const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'];
+  const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
+  // Reading colours (_reading-themes.scss). Cream is the default: no
+  // attribute, not saved. Dusk and Night are dark.
+  const THEMES = ['cream', 'lavender', 'sepia', 'sage', 'mist', 'dusk', 'night'];
+  const DARK_THEMES = ['dusk', 'night'];
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 
   function readSettings() {
+    let settings = {};
     try {
-      return JSON.parse(window.localStorage.getItem(STORE)) || {};
+      settings = JSON.parse(window.localStorage.getItem(STORE)) || {};
     }
     catch (e) {
       return {};
     }
+    // "Dark guides" (the old switch) becomes the Night reading colours.
+    if (settings.dark) {
+      if (!settings.theme) {
+        settings.theme = 'night';
+      }
+      delete settings.dark;
+    }
+    return settings;
+  }
+
+  function themeOf(settings) {
+    return THEMES.includes(settings.theme) ? settings.theme : 'cream';
   }
 
   function saveSettings(settings) {
@@ -195,13 +212,21 @@
     }
   }
 
-  // Dark guides: only on guide-mode pages (<html data-pf-mode="guide">,
-  // PalefireHooks::preprocessHtml()). Bootstrap's data-bs-theme="dark" on
-  // <html> switches every --bs-* colour; pf-guide-dark switches the
-  // Palefire chrome (header glass, TOC tokens) in CSS, so it is right from
-  // the first paint. modular-toc.js listens for palefire:a11ychange.
-  function applyGuideDark(settings) {
-    const on = !!settings.dark && ROOT.getAttribute('data-pf-mode') === 'guide';
+  // Reading colours: <html data-pf-theme> on every page (the CSS limits it
+  // to the main content outside guides). A dark swatch on a guide-mode page
+  // (<html data-pf-mode="guide">, PalefireHooks::preprocessHtml()) also adds
+  // pf-guide-dark and Bootstrap's data-bs-theme="dark", which switch the
+  // header, TOC and drawers dark. The same job as the inline script in
+  // html.html.twig; modular-toc.js listens for palefire:a11ychange.
+  function applyTheme(settings) {
+    const theme = themeOf(settings);
+    if (theme === 'cream') {
+      ROOT.removeAttribute('data-pf-theme');
+    }
+    else {
+      ROOT.setAttribute('data-pf-theme', theme);
+    }
+    const on = DARK_THEMES.includes(theme) && ROOT.getAttribute('data-pf-mode') === 'guide';
     ROOT.classList.toggle('pf-guide-dark', on);
     if (on) {
       ROOT.setAttribute('data-bs-theme', 'dark');
@@ -213,7 +238,7 @@
 
   // Swup visit: the new page may be a guide or not (palefire-swup.js syncs
   // data-pf-mode first).
-  document.addEventListener('palefire:pagemode', () => applyGuideDark(readSettings()));
+  document.addEventListener('palefire:pagemode', () => applyTheme(readSettings()));
 
   // The same job as the inline script in html.html.twig, for live changes.
   function applySettings(settings) {
@@ -224,7 +249,7 @@
       ROOT.removeAttribute('data-pf-text-size');
     }
     SWITCHES.forEach((key) => ROOT.classList.toggle(`pf-a11y-${key}`, !!settings[key]));
-    applyGuideDark(settings);
+    applyTheme(settings);
     // The font file is only requested once someone turns it on.
     if (settings.font && !document.getElementById(FONT_ID)) {
       const link = document.createElement('link');
@@ -253,6 +278,10 @@
       form.querySelectorAll('input[name="size"]').forEach((input) => {
         input.checked = input.value === size;
       });
+      const theme = themeOf(settings);
+      form.querySelectorAll('input[name="theme"]').forEach((input) => {
+        input.checked = input.value === theme;
+      });
       SWITCHES.forEach((key) => {
         const input = form.elements[key];
         if (input) {
@@ -276,6 +305,10 @@
       const size = form.querySelector('input[name="size"]:checked');
       if (size && size.value !== '100') {
         settings.size = size.value;
+      }
+      const theme = form.querySelector('input[name="theme"]:checked');
+      if (theme && THEMES.includes(theme.value) && theme.value !== 'cream') {
+        settings.theme = theme.value;
       }
       SWITCHES.forEach((key) => {
         const input = form.elements[key];

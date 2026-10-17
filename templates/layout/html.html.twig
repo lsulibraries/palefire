@@ -57,10 +57,12 @@
          choices (localStorage "pf-a11y") become classes on <html>
          (base/_a11y-settings.scss). js/utility-panels.js keeps the keys in
          step: size, font, spacing, underline, reader, contrast, solid, focus,
-         motion, pausevideo, dark. "Reader font for guides" (reader) and
-         "Dark guides" (dark) only take effect on guide-mode pages
-         (<html data-pf-mode="guide">): reader through CSS alone; dark also
-         adds pf-guide-dark and Bootstrap's data-bs-theme="dark" to <html>.
+         motion, pausevideo, theme. "Reader font for guides" (reader) only
+         takes effect on guide-mode pages (<html data-pf-mode="guide">).
+         Reading colours (theme) become <html data-pf-theme> (Cream, the
+         default, has none; _reading-themes.scss); Dusk and Night on a
+         guide also add pf-guide-dark and Bootstrap's data-bs-theme="dark".
+         The old "Dark guides" switch (dark) reads as Night.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
          the page even if DOMContentLoaded never fires. Skipped when the OS
@@ -73,12 +75,16 @@
         var h = d.documentElement, s = {};
         try { s = JSON.parse(w.localStorage.getItem('pf-a11y')) || {}; } catch (e) {}
         if (/^(115|130|150)$/.test(s.size)) { h.setAttribute('data-pf-text-size', s.size); }
-        ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo', 'dark'].forEach(function (k) {
+        ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'].forEach(function (k) {
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
-        if (s.dark && h.getAttribute('data-pf-mode') === 'guide') {
-          h.classList.add('pf-guide-dark');
-          h.setAttribute('data-bs-theme', 'dark');
+        var t = s.theme || (s.dark ? 'night' : '');
+        if (/^(lavender|sepia|sage|mist|dusk|night)$/.test(t)) {
+          h.setAttribute('data-pf-theme', t);
+          if (/^(dusk|night)$/.test(t) && h.getAttribute('data-pf-mode') === 'guide') {
+            h.classList.add('pf-guide-dark');
+            h.setAttribute('data-bs-theme', 'dark');
+          }
         }
         if (s.font) {
           var l = d.createElement('link');
