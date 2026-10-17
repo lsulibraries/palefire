@@ -604,6 +604,16 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Mobile menu: text size above the reading colours (2026-10-17)
+
+Below lg, the menu drawer now offers the four Settings text sizes above the
+reading colours. Both are copies of the Settings tiles, made by
+`initMenuSetting` (`js/utility-panels.js`, which replaces `initMenuThemes`)
+for each `data-pf-menu-setting` fieldset in `page.html.twig` ("size" or
+"theme"). Picking a tile ticks the matching Settings radio, and the
+Settings form applies and saves the choice. `palefire:a11ychange` keeps
+the copies in step. No CSS rebuild, no config.
+
 ### Settings: reading colours reordered, "More colours", quieter tiles (2026-10-17)
 
 - **Order:** Twilight, Dusk, Cocoa and Forest come first, then the other
@@ -1296,7 +1306,7 @@ Follow-up to "Mobile header and menu, redesigned" (above).
 
 - **Reading colours under the menu** (phones and tablets): the twelve
   swatches from Settings, so they're one tap from the Menu button. They
-  are copies of the Settings tiles made by `initMenuThemes`
+  are copies of the Settings tiles made by `initMenuSetting`
   (`js/utility-panels.js`) into a fieldset in the menu drawer
   (`page.html.twig`). Picking one ticks the same swatch in the Settings
   form and lets that form apply and save it, so there is still one way

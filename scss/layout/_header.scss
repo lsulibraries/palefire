@@ -838,8 +838,8 @@
   }
 }
 
-// Reading colours under the menu (below lg): the Settings drawer's swatch
-// tiles (_utility-panels.scss), copied in by initMenuThemes
+// Text size and reading colours under the menu (below lg): the Settings
+// drawer's tiles (_utility-panels.scss), copied in by initMenuSetting
 // (js/utility-panels.js). The tiles read the drawer tokens, set here.
 @include media-breakpoint-down(lg) {
   .pf-menu-drawer {

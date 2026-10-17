@@ -117,14 +117,18 @@
                 </nav>
               {% endif %}
               {{ page.primary_menu }}
-              {# Reading colours, so they can be changed from the menu on a
-                 phone: copies of the Settings drawer's swatches, built and
-                 kept in step by initMenuThemes (js/utility-panels.js). Below
-                 lg only. #}
+              {# Text size and reading colours, so they can be changed from
+                 the menu on a phone: copies of the Settings drawer's
+                 choices, built and kept in step by initMenuSetting
+                 (js/utility-panels.js). Below lg only. #}
               {% if page.utility_menu %}
-                <fieldset class="pf-menu-themes" data-pf-menu-themes hidden>
+                <fieldset class="pf-menu-themes" data-pf-menu-setting="size" hidden>
+                  <legend class="pf-menu-themes__legend">{{ 'Text size'|t }}</legend>
+                  <div class="pf-settings__sizes" data-pf-menu-grid></div>
+                </fieldset>
+                <fieldset class="pf-menu-themes" data-pf-menu-setting="theme" hidden>
                   <legend class="pf-menu-themes__legend">{{ 'Reading colours'|t }}</legend>
-                  <div class="pf-settings__themes" id="pf-menu-themes-grid" data-pf-menu-themes-grid></div>
+                  <div class="pf-settings__themes" id="pf-menu-themes-grid" data-pf-menu-grid></div>
                   <button type="button" class="pf-settings__more" aria-controls="pf-menu-themes-grid" aria-expanded="false" data-pf-themes-more hidden>
                     <span data-pf-themes-more-label>{{ 'More colours'|t }}</span>
                     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
