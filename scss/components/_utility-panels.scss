@@ -55,7 +55,7 @@
 // Dark swatches: a shade darker than the page, still glass (78%; over a
 // white pixel under the dark wash, Dusk's muted text is about 4.8:1).
 html.pf-reading-dark .pf-panel.offcanvas {
-  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 78%, transparent);
+  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 30%, transparent);
   --pf-sidebar-bg: #{rgba($pf-black, .25)};
 }
 
