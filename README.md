@@ -1434,6 +1434,14 @@ underline; keyboard focus draws it the same way.
 - Measured in headless Edge with a forced :hover: grows 0 to 100% in
   about .35s, then shrinks toward the right edge on leave.
 
+### Dropdown links: a calmer colour change (2026-10-17)
+
+Desktop dropdown links changed to the accent colour instantly on hover.
+The colour now eases in over .2s and back out over .5s (the hover state's
+transition sets the way in, the resting state's the way out;
+`_header.scss`), alongside the drawn underline. None with reduced motion.
+Measured in headless Edge with a forced :hover.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

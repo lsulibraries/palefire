@@ -218,6 +218,13 @@
       text-transform: uppercase;
       white-space: nowrap;
       text-decoration: none;
+      // The accent colour comes in quickly (.2s, the hover state's
+      // transition) and fades out slowly (.5s, this one).
+      transition: color .5s ease;
+
+      &:is(:hover, :focus-visible) {
+        transition-duration: .2s;
+      }
     }
 
     // Hover/focus: colour plus an underline, so it isn't colour alone. The
@@ -884,7 +891,9 @@
     animation: none;
   }
 
-  .pf-primary-nav__submenu.dropdown-menu .pf-primary-nav__text {
+  .pf-primary-nav__submenu.dropdown-menu .pf-primary-nav__text,
+  .pf-primary-nav__submenu.dropdown-menu .dropdown-item,
+  .pf-primary-nav__submenu.dropdown-menu .dropdown-item:is(:hover, :focus-visible) {
     transition: none;
   }
 }
