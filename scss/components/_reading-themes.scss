@@ -9,7 +9,7 @@
 //
 // <html data-pf-theme="sepia"> (no attribute: Cream, the default), set by
 // the inline script in html.html.twig before the first paint and by
-// js/utility-panels.js. Dusk and Night are dark: on guides they also add
+// js/utility-panels.js. Dusk, Night, Solarized, Cocoa, Forest and Midnight are dark: on guides they also add
 // .pf-guide-dark and data-bs-theme="dark" to <html>, which turn the header,
 // TOC and drawers dark (_chrome-dark.scss, _guide.scss, _utility-panels.scss).
 //
@@ -32,8 +32,14 @@
 //   mist     text  7.1  muted 5.5  accent  6.7
 //   dusk     text  6.9  muted 5.4  accent  7.9
 //   night    text 14.8  muted 8.7  accent 10.5
-// Muted text on the surface colour is 4.6:1 and up. Scrollbar thumbs are
-// 3:1 and up on both the page and the rail (1.4.11). High contrast (the
+//   solarized text 4.75 muted 5.5  accent  4.75  (Solarized dark)
+//   cocoa    text  5.0  muted 4.9  accent  7.3
+//   forest   text  5.3  muted 5.1  accent  8.8
+//   midnight text  5.15 muted 5.0  accent  8.4
+// Muted text on the surface colour is 4.5:1 and up. The four later dark
+// swatches keep their surface and callout tints (surface, accent-soft) just
+// above their page colour so text, muted and accent stay 4.5:1 on them too.
+// Scrollbar thumbs are 3:1 and up on both the page and the rail (1.4.11). High contrast (the
 // Settings switch or the OS) swaps in each swatch's own stronger text
 // (11:1 and up, AAA) and makes muted text and rules full strength, so the
 // swatch keeps its hue.
@@ -87,6 +93,31 @@ $pf-reading-themes: (
     bg: #121014, fg: #e6e2ea, heading: #ffffff, muted: #b3adbb, rule: #34303a,
     surface: #1c1921, accent: $pf-lavender, accent-soft: #2a2235,
     scroll: #b3adbb, fg-hc: #ffffff, panel-muted: #b3adbb,
+  ),
+  // Low-contrast dark reading modes (follow-up): text just above AA.
+  'solarized': (
+    label: 'Solarized', dark: true,
+    bg: #002b36, fg: #839496, heading: #eee8d5, muted: #8fa0a2, rule: #0b3a46,
+    surface: #032e39, accent: #2aa198, accent-soft: #022e39,
+    scroll: #6f8a90, fg-hc: #eee8d5, panel-muted: #8fa0a2,
+  ),
+  'cocoa': (
+    label: 'Cocoa', dark: true,
+    bg: #26211c, fg: #9c8e7d, heading: #e6d9c6, muted: #9b8d7c, rule: #3a332d,
+    surface: #2a2420, accent: #d9a66b, accent-soft: #2e2720,
+    scroll: #91836f, fg-hc: #f1e8da, panel-muted: #ab9d8b,
+  ),
+  'forest': (
+    label: 'Forest', dark: true,
+    bg: #1c2420, fg: #869a8d, heading: #d6e4da, muted: #839789, rule: #2c3832,
+    surface: #212a25, accent: #8fcfa6, accent-soft: #202e27,
+    scroll: #7a9083, fg-hc: #e8f1eb, panel-muted: #93a799,
+  ),
+  'midnight': (
+    label: 'Midnight', dark: true,
+    bg: #1d2330, fg: #8a94a8, heading: #d8deec, muted: #8791a5, rule: #2f3747,
+    surface: #222938, accent: #a9bdf2, accent-soft: #22293b,
+    scroll: #7d889e, fg-hc: #ebeff8, panel-muted: #97a1b5,
   ),
 ) !default;
 

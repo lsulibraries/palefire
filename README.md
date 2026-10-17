@@ -908,7 +908,7 @@ One less script in `<head>` on Modular pages.
 
 ### Reading colours (2026-10-16, replaces Dark guides)
 
-Settings > **Reading colours**: eight page and text colour pairs popular in
+Settings > **Reading colours**: twelve page and text colour pairs popular in
 reading modes, picked as tiles that show "Aa" in each swatch's own colours.
 Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 
@@ -922,11 +922,18 @@ Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 | Mist | #eceeef | #4a4f55 | 7.1:1 |
 | Dusk (soft dark) | #2b2a33 | #b7b3c0 | 6.9:1 |
 | Night | #121014 | #e6e2ea | 14.8:1 |
+| Solarized (Solarized dark) | #002b36 | #839496 | 4.7:1 |
+| Cocoa (warm brown) | #26211c | #9c8e7d | 5.0:1 |
+| Forest (green) | #1c2420 | #869a8d | 5.3:1 |
+| Midnight (blue) | #1d2330 | #8a94a8 | 5.2:1 |
 
 Soft cream, Lavender and Dusk are the deliberately soft ones, closest to AA
-(Soft cream added as a follow-up: the Cream page with a lighter grey). Every
+(Soft cream added as a follow-up: the Cream page with a lighter grey). The
+last four are low-contrast dark modes added later, all just above AA; their
+code, chip and callout tints sit only just above the page colour so text
+stays 4.5:1 on them too (callouts still have their accent bar). Every
 swatch's muted text is 4.5:1 and up (on its surface colour too), its accent
-(links) 6.4:1 and up, its scrollbar thumb 3:1 and up on page and rail.
+(links) 4.7:1 and up, its scrollbar thumb 3:1 and up on page and rail.
 
 - **Where:** on guides the whole page, including the header (glass in the
   swatch's page colour, menu, icons and logo in its text colour), the TOC
@@ -938,8 +945,9 @@ swatch's muted text is 4.5:1 and up (on its surface colour too), its accent
 - **How:** `<html data-pf-theme="sepia">` (Cream: none), set before the
   first paint by the inline script in `html.html.twig` and live by
   `utility-panels.js` (`THEMES`). Each swatch sets the guide tokens
-  (`--pf-g-*`) and Bootstrap's `--bs-body-*`, link and border colours. Dusk
-  and Night on a guide also add `.pf-guide-dark` and `data-bs-theme="dark"`,
+  (`--pf-g-*`) and Bootstrap's `--bs-body-*`, link and border colours. The
+  dark swatches (`DARK_THEMES`: Dusk, Night, Solarized, Cocoa, Forest,
+  Midnight) on a guide also add `.pf-guide-dark` and `data-bs-theme="dark"`,
   which drive the existing dark chrome (`_chrome-dark.scss`, `_guide.scss`,
   `modular-toc.js`). Saved as `theme` in `pf-a11y`; a saved "Dark guides"
   (`dark`) reads as Night.
@@ -1014,6 +1022,24 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
   1.6:1 on the light sidebar. Hover/focus: full-strength text, the arrow in
   the accent and lifted 2px (no lift with reduced motion). 44px tall.
   The unused `toc-top-color` token is gone.
+
+### Hidden sidebar scrollbar, four dark swatches, drawers restyled (2026-10-16)
+
+- **Modular sidebar (`#pf-modular-sidebar`) never shows a scrollbar.** It
+  still scrolls the same way (wheel, touch, keyboard); only the bar is hidden
+  (`scrollbar-width: none` and `::-webkit-scrollbar`, `_modular.scss`). The
+  TOC list's own scrollbar (`.pf-toc__list`) is unchanged.
+- **Four more low-contrast dark reading colours:** Solarized, Cocoa, Forest
+  and Midnight (table above), all dark, so on guides they darken the whole
+  page like Dusk and Night.
+- **Drawers in the reader style, everything:** title in the sans (1.5rem
+  medium, heading colour) over a hairline; footer link as a tracked
+  monospace label over a hairline, its arrow nudging on hover; the Hours
+  date as a muted label; Ask Us tabs and My Accounts links as ruled rows
+  (no boxes), the selected tab marked by an accent bar; cards and legends on
+  the swatch's rule colour. The Hours OPEN badge drops Origami's gold for the
+  swatch's accent with its on-accent text (6.6:1 and up); the Handjet clock
+  stays. The `--pf-hours-badge-*` tokens are gone.
 
 ### LibGuides
 

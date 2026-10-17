@@ -169,9 +169,9 @@
   const SIZES = ['100', '115', '130', '150'];
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colours (_reading-themes.scss). Cream is the default: no
-  // attribute, not saved. Dusk and Night are dark.
-  const THEMES = ['cream', 'soft', 'lavender', 'sepia', 'sage', 'mist', 'dusk', 'night'];
-  const DARK_THEMES = ['dusk', 'night'];
+  // attribute, not saved. See DARK_THEMES.
+  const THEMES = ['cream', 'soft', 'lavender', 'sepia', 'sage', 'mist', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight'];
+  const DARK_THEMES = ['dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight'];
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 

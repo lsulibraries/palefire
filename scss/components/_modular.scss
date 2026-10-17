@@ -434,17 +434,7 @@ html.pf-snap .site-footer {
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
     overflow-x: hidden; // fixed-width column: never scroll sideways
-    // Thin scrollbar like the drawers (base/_mixins.scss), not the system
-    // bar with arrow buttons. The gutter is kept even when the TOC is short,
-    // so the links don't shift sideways when a sub-list opens and the
-    // column starts to scroll.
-    @include pf-thin-scrollbar;
-    scrollbar-gutter: stable;
-    // Shown only while the pointer is over the sidebar or focus is in it
-    // (rule below). A long TOC often overflows by only a few pixels while
-    // the header is expanded, so a nearly full-height thumb appeared at the
-    // top of the page and vanished once the header compacted on scroll; it
-    // read as a bug. The gutter stays, so nothing shifts when it shows.
+    // Scrolls as before, with no visible scrollbar (rule below).
     padding: 2rem 2.5rem;
     // Bootstrap sets `.offcanvas-lg { background-color: transparent
     // !important }` from lg up, which hid the wash. Two classes plus
@@ -474,12 +464,20 @@ html.pf-snap .site-footer {
     }
   }
 
-  // At rest the bar is invisible (see the note above); hovering the sidebar
-  // or tabbing into it shows it. Three classes: beats the mixin's own
-  // values; guides' colours apply on :hover / :focus-within (_guide.scss).
-  .pf-sidebar.pf-modular__sidebar:not(:hover, :focus-within) {
-    --pf-scroll-thumb: transparent;
-    --pf-scroll-track: transparent;
+}
+
+// The TOC sidebar (lg and up) and its offcanvas body (below lg) scroll as
+// before, by wheel, touch and keyboard (focus scrolls a link into view),
+// but never show a scrollbar (2026-10-16). A long TOC often overflows by
+// only a few pixels, so the bar came and went with the header's height.
+// Scrollbar styles aren't inherited, so nothing inside changes: the TOC
+// list keeps its own behaviour. The ID outranks the drawers' thin-bar mixin.
+#pf-modular-sidebar,
+#pf-modular-sidebar > .offcanvas-body {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 

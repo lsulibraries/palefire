@@ -8,7 +8,7 @@
 //
 // Colours: the reading swatch (Settings > Reading colours), as --pf-g-* and
 // Bootstrap's --bs-body-* tokens on <html>: _reading-themes.scss. Cream is
-// the default. Dusk and Night also add .pf-guide-dark (and
+// the default. The dark swatches also add .pf-guide-dark (and
 // data-bs-theme="dark"), which the dark chrome rules below key on. Rules
 // (--pf-g-rule) are dividers only, not the boundary of a control, so
 // 1.4.11's 3:1 doesn't apply to them.
@@ -16,24 +16,17 @@
 // Inside a dark section the section tokens (--pf-section-*) win, so that
 // section keeps its own black and lavender.
 
-// Scrollbars: the page's own (instead of the system bar) and the sidebar's
-// look like the TOC rail: a 4px track in the rail colour with a lighter
-// thumb than the TOC grey. The thumb is as light as it can go and still
-// pass 1.4.11 (3:1 for a control): #7a7772 is about 3.3:1 on the rail and
-// 4:1 on the cream; the rail colour itself would be about 1.2:1. Each reading
-// swatch has its own thumb (--pf-g-scroll, 3:1 and up). Dark swatches:
-// the muted grey on the dark rail, 5:1 and up. While a dark section is
-// active on a light guide the sidebar is Palefire's dark one, so it keeps
-// the default bar (no :not() match).
+// The page's own scrollbar looks like the TOC rail: a 4px track in the rail
+// colour with a lighter thumb than the TOC grey. The thumb is as light as it
+// can go and still pass 1.4.11 (3:1 for a control): #7a7772 is about 3.3:1
+// on the rail and 4:1 on the cream; the rail colour itself would be about
+// 1.2:1. Each reading swatch has its own thumb (--pf-g-scroll, 3:1 and up).
+// (The TOC sidebar shows no scrollbar at all: _modular.scss.)
 html[data-pf-mode="guide"] {
   @include pf-thin-scrollbar;
 }
 
-// The sidebar's bar only shows on hover / focus (_modular.scss), so its
-// guide colours do too.
-html[data-pf-mode="guide"],
-html[data-pf-mode="guide"] body:not([data-section-theme="dark"]) .pf-sidebar.pf-modular__sidebar:is(:hover, :focus-within),
-html.pf-guide-dark[data-pf-mode="guide"] .pf-sidebar.pf-modular__sidebar:is(:hover, :focus-within) {
+html[data-pf-mode="guide"] {
   --pf-scroll-thumb: var(--pf-g-scroll);
   --pf-scroll-thumb-hover: var(--pf-g-scroll-hover);
   --pf-scroll-track: var(--pf-g-rule);
