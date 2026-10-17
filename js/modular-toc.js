@@ -47,6 +47,9 @@
   // data-toc such as the LibCal day carousel's next events).
   const OPT_IN_SELECTOR = '[data-toc]';
   const SKIP_SELECTOR = '[data-toc-skip]';
+  // On the heading of the current section and sub-section, so the page can
+  // mirror the TOC (guides colour it like the active link, _guide.scss).
+  const CURRENT_HEADING = 'is-toc-current';
 
   // nav element -> teardown function (see initToc()).
   const instances = new WeakMap();
@@ -102,7 +105,7 @@
         li.hidden = true;
         return;
       }
-      const entry = { link: link, li: li, section: section, subs: [], subwrap: null, sublist: null };
+      const entry = { link: link, li: li, section: section, title: section.querySelector('.pf-section__title'), subs: [], subwrap: null, sublist: null };
       buildSubList(entry, depth > 1 ? SUB_HEADING_SELECTOR : OPT_IN_SELECTOR);
       entries.push(entry);
     });
@@ -128,6 +131,9 @@
       if (active) {
         active.li.classList.remove('is-active');
         active.link.removeAttribute('aria-current');
+        if (active.title) {
+          active.title.classList.remove(CURRENT_HEADING);
+        }
         if (active.subwrap) {
           active.subwrap.inert = true;
         }
@@ -135,6 +141,9 @@
       active = entry;
       entry.li.classList.add('is-active');
       entry.link.setAttribute('aria-current', 'location');
+      if (entry.title) {
+        entry.title.classList.add(CURRENT_HEADING);
+      }
       if (entry.subwrap) {
         entry.subwrap.inert = false;
       }
@@ -153,11 +162,13 @@
       if (activeSub) {
         activeSub.link.classList.remove('is-active');
         activeSub.link.removeAttribute('aria-current');
+        activeSub.heading.classList.remove(CURRENT_HEADING);
       }
       activeSub = sub;
       if (sub) {
         sub.link.classList.add('is-active');
         sub.link.setAttribute('aria-current', 'location');
+        sub.heading.classList.add(CURRENT_HEADING);
       }
       queueIndicator();
     }

@@ -94,6 +94,28 @@ html[data-pf-mode="guide"] .pf-sections > .pf-section + .pf-section {
   border-top: 1px solid var(--pf-g-rule);
 }
 
+// Wayfinding: the heading of the section (and sub-section) the TOC marks
+// as current takes the active TOC link's colour, so the two light up
+// together (js/modular-toc.js adds .is-toc-current). A colour change only,
+// eased like the TOC; none with reduced motion.
+html[data-pf-mode="guide"] .pf-sections :is(.pf-section__title, h3) {
+  transition: color 0.3s ease;
+}
+
+html[data-pf-mode="guide"] .pf-main .pf-sections .is-toc-current {
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-pf-mode="guide"] .pf-sections :is(.pf-section__title, h3) {
+    transition: none;
+  }
+}
+
+html.pf-a11y-motion[data-pf-mode="guide"] .pf-sections :is(.pf-section__title, h3) {
+  transition: none;
+}
+
 html[data-pf-mode="guide"] .pf-section__title {
   margin-bottom: 2.25rem;
   font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.375rem);

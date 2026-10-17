@@ -1143,6 +1143,17 @@ headings are the body grey, almost the TOC's muted grey, so matching them
 there would hide which link is current. Other links, hover and focus are
 unchanged (`_toc.scss`).
 
+### Current heading lights up with the TOC (2026-10-17)
+
+On guides, the heading of the section the TOC marks as current (and its
+current sub-heading) takes the active TOC link's colour, so the page and
+the TOC light up together: on Cocoa the heading goes from the body tone
+#9c8e7d to cream #e6d9c6. `modular-toc.js` adds `.is-toc-current` to the
+section's `.pf-section__title` and the matching h3 as it already updates
+`aria-current` on the links; `_guide.scss` colours them. A 0.3s colour
+ease, no movement or glow; no transition with reduced motion. On Material
+the headings are already the TOC's green, so nothing changes there.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
