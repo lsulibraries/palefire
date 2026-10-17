@@ -263,13 +263,97 @@
   };
 
   /**
+   * Opens a utility drawer over the open menu drawer, keeping the menu
+   * underneath (Bootstrap would close it: one offcanvas at a time). While
+   * it is up, <html class="pf-over-menu"> lifts the drawer and its backdrop
+   * above the menu (_utility-panels.scss) and shows its "Menu" back button.
+   * - Back, Escape or a tap on the backdrop close just this drawer; focus
+   *   goes back to the tile that opened it, and the menu's focus trap
+   *   (Bootstrap keeps one active at a time) is restored.
+   * - Its close button closes both, back to the page.
+   */
+  function openOverMenu(panel, tile) {
+    const bs = window.bootstrap;
+    const menu = document.getElementById('pf-primary-menu');
+    let closeAll = false;
+
+    const onClick = (event) => {
+      if (event.target.closest('[data-pf-panel-back]')) {
+        bs.Offcanvas.getOrCreateInstance(panel).hide();
+      }
+      else if (event.target.closest('.pf-panel__close')) {
+        closeAll = true;
+      }
+    };
+    const onHidden = (event) => {
+      if (event.target !== panel) {
+        return;
+      }
+      document.removeEventListener('hidden.bs.offcanvas', onHidden);
+      panel.removeEventListener('click', onClick);
+      root.classList.remove('pf-over-menu');
+      const menuDrawer = menu && bs.Offcanvas.getInstance(menu);
+      if (!menuDrawer || !menu.classList.contains('show')) {
+        return;
+      }
+      if (closeAll) {
+        menuDrawer.hide();
+        return;
+      }
+      // Back on the menu: its backdrop wash, its focus trap, the tile.
+      root.dataset.pfPanel = 'menu';
+      const trap = menuDrawer._focustrap;
+      if (trap && trap.activate) {
+        trap.deactivate();
+        trap.activate();
+      }
+      tile.focus();
+    };
+
+    // The back button, made once per drawer (shown by .pf-over-menu).
+    const header = panel.querySelector('.pf-panel__header');
+    if (header && !header.querySelector('[data-pf-panel-back]')) {
+      const back = document.createElement('button');
+      back.type = 'button';
+      back.className = 'pf-panel__back';
+      back.setAttribute('data-pf-panel-back', '');
+      back.setAttribute('aria-label', Drupal.t('Back to Menu'));
+      back.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      back.append(Drupal.t('Menu'));
+      header.prepend(back);
+    }
+
+    // Pause the menu's focus trap first: the drawer's own trap focuses
+    // the drawer before it takes over, and the menu's would pull focus
+    // back into the menu.
+    const menuDrawer = menu && bs.Offcanvas.getInstance(menu);
+    if (menuDrawer && menuDrawer._focustrap) {
+      menuDrawer._focustrap.deactivate();
+    }
+
+    root.classList.add('pf-over-menu');
+    panel.addEventListener('click', onClick);
+    // On document, so it runs after the drawer's own hidden handlers
+    // (utility-panels.js clears data-pf-panel there).
+    document.addEventListener('hidden.bs.offcanvas', onHidden);
+    bs.Offcanvas.getOrCreateInstance(panel).show(tile);
+    // Its backdrop was just added (Bootstrap appends it synchronously):
+    // lift it over the menu, so the menu dims under the new layer.
+    const backdrops = document.querySelectorAll('.offcanvas-backdrop');
+    if (backdrops.length) {
+      backdrops[backdrops.length - 1].classList.add('pf-backdrop--over-menu');
+    }
+  }
+
+  /**
    * Mobile menu quick links. Below lg the header bar keeps only Search and
    * the Menu button; the other utility icons (Hours, Ask Us, My Accounts,
-   * Settings) are copied into the menu sheet as labelled tiles, which open
-   * the same drawers (Bootstrap's data API works on the copies too). Their
-   * bar icons are hidden only once the copies exist (.pf-header--actions-in-
-   * menu), so without JavaScript nothing goes missing. The header sits
-   * outside Swup's container, so this runs once per page load.
+   * Settings) are copied into the menu drawer as labelled tiles. A tile
+   * opens its drawer over the menu (openOverMenu), not in its place, so
+   * people can go back to the menu. The bar icons are hidden only once the
+   * copies exist (.pf-header--actions-in-menu), so without JavaScript
+   * nothing goes missing (and a tile is still a link to its page). The
+   * header sits outside Swup's container, so this runs once per page load.
    */
   Drupal.behaviors.palefireMenuActions = {
     attach(context) {
@@ -286,6 +370,13 @@
           const copy = link.cloneNode(true);
           copy.className = 'pf-menu-actions__link';
           copy.removeAttribute('id');
+          // Opened by openOverMenu, not Bootstrap's data API (which would
+          // close the menu first).
+          if (copy.hasAttribute('data-bs-toggle')) {
+            copy.dataset.pfOverMenu = copy.getAttribute('data-bs-target') || '';
+            copy.removeAttribute('data-bs-toggle');
+            copy.removeAttribute('data-bs-target');
+          }
           const label = copy.querySelector('.pf-utility-nav__label');
           if (label) {
             label.className = 'pf-menu-actions__label';
@@ -299,6 +390,15 @@
           nav.hidden = false;
           header.classList.add('pf-header--actions-in-menu');
         }
+        list.addEventListener('click', (event) => {
+          const tile = event.target.closest('[data-pf-over-menu]');
+          const panel = tile && tile.dataset.pfOverMenu ? document.querySelector(tile.dataset.pfOverMenu) : null;
+          if (!panel || !window.bootstrap) {
+            return;
+          }
+          event.preventDefault();
+          openOverMenu(panel, tile);
+        });
       });
     },
   };

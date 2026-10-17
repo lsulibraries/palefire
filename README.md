@@ -1305,6 +1305,31 @@ the heading's row, which swelled from 56px to about 95px. The section is
 now `align-content: start` (`_header.scss`): the heading holds still and
 the sections below slide straight down and back.
 
+### Mobile menu as the base layer; drawers open over it (2026-10-17)
+
+Opening Hours (or Ask Us, My Accounts, Settings) from the mobile menu
+closed the menu, with no way back to it. Below lg now:
+
+- **The menu is full screen** (phones and tablets), the base layer.
+- **A quick-link tile opens its drawer over the menu** instead of in its
+  place (`openOverMenu`, `js/palefire.js`). The tiles no longer use
+  Bootstrap's data API, which allows one offcanvas at a time and closed the
+  menu first. While a drawer is over the menu, `html.pf-over-menu` lifts
+  it and its backdrop above the menu, so the menu dims underneath
+  (`_utility-panels.scss`).
+- **"‹ Menu"** above the drawer's title goes back to the menu; so do Escape
+  and a tap on the backdrop. Focus returns to the tile that opened it, and
+  the menu's focus trap is restored (Bootstrap keeps one trap active at a
+  time; this re-arms the menu's, `_focustrap`). The drawer's **×** closes
+  both, back to the page, with focus on the Menu button.
+- Drawers opened from the bar (Search) are unchanged: no back button.
+- Browser back and swipe don't step through the layers (left out on
+  purpose; they would need history entries that interact with Swup).
+
+Tested in headless Edge over the DevTools protocol against the real
+Bootstrap bundle and theme scripts: menu, Hours over it, Back, Escape, 40
+Tabs staying in the menu, and × closing both.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

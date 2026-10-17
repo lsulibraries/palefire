@@ -532,12 +532,13 @@
     }
   }
 
-  // The drawer: the utility drawers' width, header and close button. Its
-  // glass and colours are theirs too (_utility-panels.scss). The full
-  // screen height is set explicitly, so it doesn't depend on what the
-  // header contains.
+  // The drawer: full screen on phones and tablets, the base layer that
+  // the utility drawers open over (openOverMenu, js/palefire.js). Their
+  // header and close button, glass and colours (_utility-panels.scss).
+  // The full screen height is set explicitly, so it doesn't depend on what
+  // the header contains.
   .pf-menu-drawer {
-    --bs-offcanvas-width: min(#{$pf-panel-width}, 100vw);
+    --bs-offcanvas-width: 100vw;
     --bs-offcanvas-padding-x: 1.5rem;
     --bs-offcanvas-padding-y: 2rem;
     top: 0;
