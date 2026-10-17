@@ -604,6 +604,20 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Reading colours: "More colours" as a tile; mobile menu without end rules (2026-10-17)
+
+- **"More colours" is a tile:** it sits in the fourth cell, styled like
+  the swatches, with "+" in its chip where they show "Aa". While the list
+  is open it reads "−" and "Fewer colours" and sits after the last swatch.
+  - `initThemesMore` moves the button into the grid. Without JavaScript
+    the button stays hidden and every swatch shows.
+  - Material replaces Dusk in the first three. The order is now Twilight,
+    Material, Cocoa, then Forest, Dusk, Night, Midnight and Solarized,
+    then the lights.
+  - The same applies to the Settings drawer and the mobile menu.
+- **Mobile and tablet menu:** hairlines now run only between the sections,
+  so there's no rule above Help With and none below About (`_header.scss`).
+
 ### Tiles: one border for hover and selected (2026-10-17)
 
 Hovering or choosing a reading colour, or hovering a mobile quick link,

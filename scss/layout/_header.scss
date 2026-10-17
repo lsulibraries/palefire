@@ -674,13 +674,13 @@
     overflow-wrap: anywhere;
   }
 
-  // The menu: one row per section between hairlines.
+  // The menu: one row per section, hairlines between them only (the
+  // sheet's spacing already sets it apart from the tiles above and below).
   .pf-primary-nav {
     gap: 0;
-    border-top: 1px solid var(--pf-menu-line);
 
-    > .nav-item {
-      border-bottom: 1px solid var(--pf-menu-line);
+    > .nav-item + .nav-item {
+      border-top: 1px solid var(--pf-menu-line);
     }
 
     // A section: its heading button over its pages, which open by growing

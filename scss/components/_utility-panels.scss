@@ -448,7 +448,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-settings__theme,
   .pf-settings__theme-chip,
   .pf-settings__more,
-  .pf-settings__more svg {
+  .pf-settings__more-v {
     transition: none;
   }
 }
@@ -733,7 +733,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   }
 
   // "More colours" (initThemesMore, utility-panels.js): only the first
-  // four, and the chosen one wherever it is, until the list is opened.
+  // three, and the chosen one wherever it is, until the list is opened.
   &__themes.is-collapsed &__theme-input.is-more:not(:checked),
   &__themes.is-collapsed &__theme-input.is-more:not(:checked) + &__theme {
     display: none;
@@ -746,45 +746,46 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
       animation: pf-accordion-in $pf-menu-fade ease both;
     }
 
-    @for $i from 5 through 16 {
+    @for $i from 4 through 16 {
       &__themes.is-revealing &__theme:nth-of-type(#{$i}) {
-        animation-delay: ($i - 5) * $pf-menu-stagger;
+        animation-delay: ($i - 4) * $pf-menu-stagger;
       }
     }
   }
 
+  // The "More colours" tile: the swatch tile (.pf-settings__theme) with a
+  // "+" in its chip, turning to "−" while the list is open.
   &__more {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    min-height: 2.75rem;
-    margin-top: .25rem;
-    padding: 0;
     font-family: inherit;
-    font-size: .6875rem;
-    font-weight: $font-weight-bold;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--pf-toc-color);
     background: none;
     border: 0;
-    transition: color $pf-hover-out ease;
+
+    .pf-settings__theme-chip {
+      color: var(--pf-toc-active);
+    }
 
     svg {
-      width: .875rem;
-      height: .875rem;
-      transition: transform $pf-menu-fade ease;
+      width: 1rem;
+      height: 1rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
     }
 
-    &:hover,
     &:focus-visible {
-      color: var(--pf-toc-active);
-      transition-duration: $pf-hover-in;
+      outline: 3px solid var(--pf-focus-color);
+      outline-offset: 2px;
     }
+  }
 
-    &[aria-expanded="true"] svg {
-      transform: rotate(180deg);
-    }
+  &__more-v {
+    transform-origin: center;
+    transition: transform $pf-menu-fade ease;
+  }
+
+  &__more[aria-expanded="true"] &__more-v {
+    transform: scaleY(0);
   }
 
   &__theme-input:focus-visible + &__theme {

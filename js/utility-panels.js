@@ -170,7 +170,7 @@
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colours (_reading-themes.scss), in the drawer's order. See
   // DEFAULT_THEME and DARK_THEMES.
-  const THEMES = ['twilight', 'dusk', 'cocoa', 'forest', 'night', 'midnight', 'solarized', 'material', 'cream', 'soft', 'lavender', 'sepia', 'sage'];
+  const THEMES = ['twilight', 'material', 'cocoa', 'forest', 'dusk', 'night', 'midnight', 'solarized', 'cream', 'soft', 'lavender', 'sepia', 'sage'];
   const DARK_THEMES = ['twilight', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
   // What every page opens in (html.html.twig sets it on <html>). Not saved:
   // only a different choice is.
@@ -284,6 +284,9 @@
     button.addEventListener('click', () => {
       set(button.getAttribute('aria-expanded') !== 'true');
     });
+    // The button is a tile after the swatches (in the grid, so it sits in
+    // the next free cell). Not a radio, so arrow keys skip it.
+    grid.append(button);
     grid.classList.add('is-collapsed');
     button.hidden = false;
   }

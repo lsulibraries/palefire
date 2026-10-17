@@ -63,19 +63,19 @@
    utility-panels.js and the pattern in html.html.twig. The first is the
    default every page opens in (Twilight, set on <html> by
    html.html.twig); its radio is checked when nothing is saved. Order:
-   the four favourite darks, the other darks, then the lights. Only the
-   first four show until "More colours" is pressed (utility-panels.js);
-   the chosen one always stays in view. #}
+   favourite darks, the other darks, then the lights. Only the first
+   three show, then a "More colours" tile (utility-panels.js moves the
+   button into the grid); the chosen one always stays in view. #}
 {%
   set reading_themes = [
     { key: 'twilight', label: 'Twilight'|t },
-    { key: 'dusk', label: 'Dusk'|t },
+    { key: 'material', label: 'Material'|t },
     { key: 'cocoa', label: 'Cocoa'|t },
     { key: 'forest', label: 'Forest'|t },
+    { key: 'dusk', label: 'Dusk'|t },
     { key: 'night', label: 'Night'|t },
     { key: 'midnight', label: 'Midnight'|t },
     { key: 'solarized', label: 'Solarized'|t },
-    { key: 'material', label: 'Material'|t },
     { key: 'cream', label: 'Cream'|t },
     { key: 'soft', label: 'Soft cream'|t },
     { key: 'lavender', label: 'Lavender'|t },
@@ -267,14 +267,15 @@
         <legend class="pf-settings__legend">{{ 'Reading colours'|t }}</legend>
         <div class="pf-settings__themes" id="pf-set-themes" data-pf-themes>
           {% for theme in reading_themes %}
-            <input class="pf-settings__theme-input visually-hidden{{ loop.index > 4 ? ' is-more' }}" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-describedby="pf-set-theme-help">
+            <input class="pf-settings__theme-input visually-hidden{{ loop.index > 3 ? ' is-more' }}" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-describedby="pf-set-theme-help">
             <label class="pf-settings__theme" for="pf-set-theme-{{ theme.key }}" data-theme="{{ theme.key }}"><span class="pf-settings__theme-chip" aria-hidden="true">Aa</span>{{ theme.label }}</label>
           {% endfor %}
         </div>
-        {# Shown by utility-panels.js. #}
-        <button type="button" class="pf-settings__more" aria-controls="pf-set-themes" aria-expanded="false" data-pf-themes-more hidden>
+        {# A tile like the swatches, "+" in its chip ("−" when open). Moved
+           to the end of the grid and shown by utility-panels.js. #}
+        <button type="button" class="pf-settings__theme pf-settings__more" aria-controls="pf-set-themes" aria-expanded="false" data-pf-themes-more hidden>
+          <span class="pf-settings__theme-chip" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8h10"/><path class="pf-settings__more-v" d="M8 3v10"/></svg></span>
           <span data-pf-themes-more-label>{{ 'More colours'|t }}</span>
-          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colours for the whole site, including the header, menus and these drawers.'|t }}</p>
       </fieldset>
