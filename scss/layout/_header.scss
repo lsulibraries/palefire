@@ -151,18 +151,9 @@
     }
   }
 
-  @include media-breakpoint-down(lg) {
-    &__parent > .nav-link {
-      flex: 1 1 auto;
-    }
-
-    // Submenu drops below its parent row on small screens.
-    &__submenu {
-      flex-basis: 100%;
-      border: 0;
-      padding-top: 0;
-      padding-left: 1rem;
-    }
+  // A section's name as a label over its links: the mobile sheet only.
+  &__heading {
+    display: none;
   }
 }
 
@@ -222,41 +213,6 @@
   from {
     opacity: 0;
     transform: translateY(-.25rem);
-  }
-}
-
-// Phones: the logo, five icons and the menu button share one row down to
-// about 360px (below that the bar wraps, which is fine for reflow).
-// Icon cells stay 44px tall and 40px wide, side by side (WCAG 2.5.8 asks
-// for 24px).
-@include media-breakpoint-down(sm) {
-  .pf-header {
-    .pf-brand__logo {
-      width: $pf-logo-width-xs;
-    }
-
-    .pf-utility-nav {
-      gap: 0;
-    }
-
-    .pf-utility-nav__link {
-      min-width: 2.5rem;
-      padding-inline: .25rem;
-    }
-
-    .navbar-toggler {
-      margin-inline-start: .25rem !important; // Bootstrap's .ms-2 utility
-      padding: .25rem .5rem;
-    }
-  }
-}
-
-// Long mobile menus scroll inside the sticky header.
-@include media-breakpoint-down(lg) {
-  .pf-header .navbar-collapse {
-    max-height: calc(100vh - var(--pf-header-h));
-    max-height: calc(100svh - var(--pf-header-h));
-    overflow-y: auto;
   }
 }
 
@@ -457,6 +413,298 @@
 
   .pf-header {
     border-bottom-color: var(--bs-border-color);
+  }
+}
+
+// Phones and tablets (below lg) ---------------------------------------------
+// The bar: logo | Search | Menu. Five unlabelled icons side by side were
+// hard to hit; Search stays (the most used), and Hours, Ask Us, My Accounts
+// and Settings move into the menu sheet as labelled tiles once
+// palefireMenuActions (js/palefire.js) has copied them there. Both targets
+// are 48px with room between them.
+//
+// The sheet (the Menu button's collapse) fills the screen under the bar and
+// the page behind it stops scrolling: quick links first, then every menu
+// section expanded, its name as a small label over its links as tall rows,
+// so any page is two taps away (Menu, then the page) with no nested
+// dropdowns. Escape closes it (palefireMenuEscape). Desktop is unchanged.
+
+@include media-breakpoint-down(lg) {
+  .pf-header {
+    --pf-menu-line: rgba(var(--bs-emphasis-color-rgb), .12);
+    --pf-bar-h: #{$pf-header-bar-h-sm};
+
+    // The bar's row keeps its height when the sheet opens below it (the
+    // logo and buttons used to jump up as the row lost its centring).
+    .pf-header__brand,
+    .pf-header__utility,
+    .pf-menu-toggle {
+      min-height: var(--pf-bar-h);
+    }
+
+    .pf-header__utility {
+      display: flex;
+      align-items: center;
+    }
+
+    .pf-utility-nav__link {
+      min-width: 3rem;
+      min-height: 3rem;
+      padding: .75rem;
+    }
+
+    &--actions-in-menu .pf-utility-nav > .nav-item:not(:has([data-pf-panel-trigger="search"])) {
+      display: none;
+    }
+
+    // The bar's height doesn't change when it turns compact on scroll here,
+    // so the two targets never shrink.
+    &--compact {
+      --pf-bar-h: #{$pf-header-bar-compact-h};
+
+      .pf-utility-nav__link {
+        min-width: 3rem;
+        min-height: 3rem;
+      }
+    }
+  }
+
+  // Menu button: two lines and the word, the lines turning into an X while
+  // the sheet is open. Its name stays "Menu"; aria-expanded says open or
+  // closed.
+  .pf-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .625rem;
+    margin-inline-start: .5rem;
+    padding: 0 .25rem 0 .75rem;
+    color: var(--bs-navbar-color);
+    font-size: .75rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .14em;
+    line-height: 1;
+    text-transform: uppercase;
+    border: 0;
+    border-radius: 0;
+    transition: color .15s ease;
+
+    &:hover {
+      color: var(--bs-navbar-hover-color);
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+
+  .pf-menu-toggle__icon {
+    position: relative;
+    width: 1.25rem;
+    height: .625rem;
+
+    > span {
+      position: absolute;
+      inset-inline: 0;
+      height: 2px;
+      background-color: currentColor;
+      transition: top .25s ease, transform .25s ease;
+
+      &:first-child {
+        top: 0;
+      }
+
+      &:last-child {
+        top: calc(100% - 2px);
+      }
+    }
+
+    [aria-expanded="true"] > & > span {
+      top: calc(50% - 1px);
+
+      &:first-child {
+        transform: rotate(45deg);
+      }
+
+      &:last-child {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
+  // The sheet: at least the screen's height under the bar, scrolling inside
+  // when the menu is longer.
+  .pf-header .navbar-collapse {
+    @include pf-thin-scrollbar;
+    max-height: calc(100vh - var(--pf-header-h));
+    max-height: calc(100svh - var(--pf-header-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .pf-menu-sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: calc(100vh - var(--pf-header-h));
+    min-height: calc(100svh - var(--pf-header-h));
+    padding-block: 1.25rem 3rem;
+    border-top: 1px solid var(--pf-menu-line);
+  }
+
+  // The page behind doesn't scroll while the sheet is open.
+  html:has(#pf-primary-menu:is(.show, .collapsing)) {
+    overflow: hidden;
+  }
+
+  // Quick links: two labelled tiles a row (four on tablets).
+  .pf-menu-actions__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .pf-menu-actions__link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-height: 3.5rem;
+    padding: .75rem 1rem;
+    color: var(--bs-emphasis-color);
+    font-size: .9375rem;
+    font-weight: $font-weight-medium;
+    line-height: 1.2;
+    text-decoration: none;
+    border: 1px solid var(--pf-menu-line);
+    transition: color .15s ease, border-color .15s ease;
+
+    .pf-icon {
+      display: inline-flex;
+      flex: none;
+    }
+
+    .pf-icon svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      fill: currentColor;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--bs-navbar-hover-color);
+      border-color: currentColor;
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+
+  // The menu: sections stacked, each opening on a hairline.
+  .pf-primary-nav {
+    gap: 1.75rem;
+
+    > .nav-item {
+      padding-top: 1rem;
+      border-top: 1px solid var(--pf-menu-line);
+    }
+
+    // Parents: the label instead of the dropdown button.
+    &__parent {
+      display: block;
+
+      > .dropdown-toggle {
+        display: none;
+      }
+    }
+
+    &__heading {
+      display: block;
+      margin-bottom: .25rem;
+      font-family: var(--pf-toc-font, #{$font-family-monospace});
+      font-size: .6875rem;
+      font-weight: $font-weight-bold;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--bs-secondary-color);
+    }
+
+    // Every section is open: its links always show, as tall rows.
+    &__submenu.dropdown-menu {
+      --bs-dropdown-link-active-bg: transparent;
+      --bs-dropdown-link-hover-bg: transparent;
+      --bs-dropdown-link-active-color: var(--bs-navbar-hover-color);
+      display: block;
+      position: static;
+      margin: 0;
+      padding: 0;
+      background: none;
+      border: 0;
+      box-shadow: none;
+    }
+
+    // Section links and top-level links without a section: sentence-case
+    // rows in the sans, easy to read and to hit.
+    &__submenu .dropdown-item,
+    > .nav-item > a.nav-link {
+      display: flex;
+      align-items: center;
+      min-height: 3rem;
+      padding: .5rem 0;
+      color: var(--bs-emphasis-color);
+      font-size: 1.125rem;
+      font-weight: $font-weight-normal;
+      letter-spacing: -.005em;
+      line-height: 1.3;
+      text-transform: none;
+      white-space: normal;
+      background: none;
+
+      &:hover,
+      &:focus-visible {
+        color: var(--bs-navbar-hover-color);
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: .25em;
+      }
+
+      // The current page: underlined, not colour alone.
+      &.is-active {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: .25em;
+      }
+    }
+  }
+}
+
+// Desktop: the sheet wrapper and quick links step aside.
+@include media-breakpoint-up(lg) {
+  .pf-menu-sheet {
+    display: contents;
+  }
+
+  .pf-menu-actions {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-menu-toggle,
+  .pf-menu-toggle__icon > span {
+    transition: none;
   }
 }
 

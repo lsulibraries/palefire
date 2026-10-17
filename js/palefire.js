@@ -233,17 +233,18 @@
   };
 
   /**
-   * Escape closes the open mobile menu and returns focus to its toggle.
+   * Escape closes the open mobile menu and returns focus to its toggle,
+   * wherever focus is (the toggle itself, or inside the sheet).
    */
   Drupal.behaviors.palefireMenuEscape = {
     attach(context) {
       once('pf-menu-escape', '.pf-header .navbar-collapse', context).forEach((panel) => {
-        panel.addEventListener('keydown', (event) => {
+        document.addEventListener('keydown', (event) => {
           if (event.key !== 'Escape' || !panel.classList.contains('show')) {
             return;
           }
-          // Let Bootstrap close an open dropdown first.
-          if (panel.querySelector('.dropdown-menu.show')) {
+          // Let Bootstrap close an open dropdown or drawer first.
+          if (panel.querySelector('.dropdown-menu.show') || document.querySelector('.offcanvas.show')) {
             return;
           }
           const toggle = document.querySelector(`[aria-controls="${panel.id}"]`);
@@ -254,6 +255,46 @@
             toggle.focus();
           }
         });
+      });
+    },
+  };
+  /**
+   * Mobile menu quick links. Below lg the header bar keeps only Search and
+   * the Menu button; the other utility icons (Hours, Ask Us, My Accounts,
+   * Settings) are copied into the menu sheet as labelled tiles, which open
+   * the same drawers (Bootstrap's data API works on the copies too). Their
+   * bar icons are hidden only once the copies exist (.pf-header--actions-in-
+   * menu), so without JavaScript nothing goes missing. The header sits
+   * outside Swup's container, so this runs once per page load.
+   */
+  Drupal.behaviors.palefireMenuActions = {
+    attach(context) {
+      once('pf-menu-actions', '[data-pf-menu-actions]', context).forEach((nav) => {
+        const header = nav.closest('.pf-header');
+        const list = nav.querySelector('.pf-menu-actions__list');
+        if (!header || !list) {
+          return;
+        }
+        header.querySelectorAll('.pf-utility-nav .pf-utility-nav__link').forEach((link) => {
+          if (link.dataset.pfPanelTrigger === 'search') {
+            return;
+          }
+          const copy = link.cloneNode(true);
+          copy.className = 'pf-menu-actions__link';
+          copy.removeAttribute('id');
+          const label = copy.querySelector('.pf-utility-nav__label');
+          if (label) {
+            label.className = 'pf-menu-actions__label';
+          }
+          const item = document.createElement('li');
+          item.className = 'pf-menu-actions__item';
+          item.appendChild(copy);
+          list.appendChild(item);
+        });
+        if (list.children.length) {
+          nav.hidden = false;
+          header.classList.add('pf-header--actions-in-menu');
+        }
       });
     },
   };

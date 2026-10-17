@@ -1198,6 +1198,36 @@ so nothing else changes (`_guide.scss`).
   Landscape and desktop stay at halfway (`activationLine()`,
   `js/modular-toc.js`; re-read on rotation).
 
+### Mobile header and menu, redesigned (2026-10-17)
+
+Below lg (phones and tablets) the header was hard to use: the logo, five
+unlabelled icons butted together (40px wide each) and a hamburger shared one
+row, and the menu opened as a short scrolling strip inside the bar with each
+section a desktop dropdown to tap open. Desktop is unchanged.
+
+- **Bar:** logo | Search | **Menu**. Search stays in the bar (the most used);
+  the Menu button has a visible label, and its two lines turn into an X while
+  open. Both targets are 48px with room between them, and the row keeps its
+  height when the sheet opens.
+- **Sheet:** the menu opens as a full-height sheet under the bar, in the
+  header's glass (and reading swatch), and the page behind stops scrolling.
+  At the top, **quick links**: Hours, Ask Us, My Accounts and Settings as
+  labelled tiles (two a row, four on tablets) that open the same drawers.
+  Then **every section expanded**: its name as a small monospace label, its
+  pages as tall sentence-case rows, so any page is two taps away with no
+  nested dropdowns. The current page is underlined.
+- **Keyboard:** Escape closes the sheet from anywhere (the button or inside
+  the sheet) and returns focus to the Menu button, unless a drawer is open.
+- **How:** `page.html.twig` (button and sheet), `menu--main.html.twig` (a
+  `.pf-primary-nav__heading` label beside each section's button, shown only
+  in the sheet), `js/palefire.js` (`palefireMenuActions` copies the utility
+  links into the sheet and only then hides them from the bar, so nothing
+  goes missing without JavaScript; `palefireMenuEscape`), and the "Phones
+  and tablets" part of `_header.scss`. The menu items and their order
+  still come from the Main and Utility menus in Drupal.
+- The phone-only 88px logo is gone (`$pf-logo-width-xs`): with two targets
+  beside it, the 120px logo fits down to 320px.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
