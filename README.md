@@ -994,6 +994,27 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
   (`utility-panels.js`), the inline `<head>` script (`html.html.twig`, so
   there's no flash) and `settings_groups` (`utility-panels.html.twig`).
 
+### Lighter drawers and "Back to top" (2026-10-16)
+
+- **Drawers are more see-through:** the glass is 65% of the page colour
+  (was 84%), so about 19% of the page shows through (was about 9%); Dusk
+  and Night 78% (was 90%). Measured worst case, a black pixel under the
+  drawer, the old 84% already let Soft cream and Lavender labels fall under
+  4.5:1. So drawer text now uses each swatch's heading colour and labels a
+  muted tone darkened just enough for 4.5:1 on the thinner glass
+  (`--pf-g-panel-text` / `--pf-g-panel-muted`, `_reading-themes.scss`; on
+  Cream #1f1e1c and #505050). The swatches' softest greys stay for long
+  reading text on the page. Control borders (tiles, buttons, cards) use that
+  muted tone too: the scrollbar grey fell to about 2.5:1 on the thinner
+  glass.
+- **"Back to top"** (TOC sidebar, every Modular page) in the guides' label
+  style: a hairline in the rail colour, then a thin arrow and the label in
+  one row, tracked monospace caps in the TOC's muted colour, so it follows
+  the reading swatch on guides. It was #ccc with a 20%-opacity arrow, about
+  1.6:1 on the light sidebar. Hover/focus: full-strength text, the arrow in
+  the accent and lifted 2px (no lift with reduced motion). 44px tall.
+  The unused `toc-top-color` token is gone.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

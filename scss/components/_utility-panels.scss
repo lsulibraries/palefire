@@ -12,23 +12,28 @@
 // The Hours drawer keeps Origami's gold OPEN badges and dotted clock.
 // Bootstrap 5.3 does the slide, focus trap and backdrop.
 //
-// Contrast: the glass is 84% of the page colour over a 45% wash of the same
-// colour (backdrop, below), so even over a black pixel the drawer is about
-// #e0ddd5 on Cream: text 11:1, muted grey 5:1. Control borders use the
-// scrollbar grey (--pf-g-scroll, 3:1 and up, 1.4.11); hairlines between
-// items use the rule colour (dividers only).
+// Contrast: the glass is 65% of the page colour over a 45% wash of the same
+// colour (backdrop, below), so about 19% of the page shows through (it was
+// 84%, about 9%). The worst case, a black pixel under the drawer, leaves it
+// at 0.81 of the page colour. Drawer text is each swatch's heading colour
+// and labels a muted tone darkened just enough for 4.5:1 there
+// (--pf-g-panel-text / --pf-g-panel-muted, _reading-themes.scss); the
+// reading swatches' own softest greys (Soft cream, Lavender) are for long
+// text on the page, not for small labels on glass. Control borders use the
+// same muted tone (the scrollbar grey fell under 3:1 on the thinner glass);
+// hairlines between items use the rule colour (dividers only).
 
 @import 'modular-tokens';
 
 .pf-panel.offcanvas {
   --pf-panel-bg-rgb: var(--pf-g-bg-rgb, 247, 244, 236);
-  --pf-section-fg: var(--pf-g-fg, #2b2a28);
-  --pf-section-muted: var(--pf-g-muted, #595959);
-  --pf-section-border: var(--pf-g-scroll, #7a7772);
+  --pf-section-fg: var(--pf-g-panel-text, #1f1e1c);
+  --pf-section-muted: var(--pf-g-panel-muted, #505050);
+  --pf-section-border: var(--pf-g-panel-muted, #505050);
   --pf-section-accent: var(--pf-g-accent, #{$pf-purple});
-  --pf-toc-color: var(--pf-g-muted, #595959);
-  --pf-toc-sub-color: var(--pf-g-muted, #595959);
-  --pf-toc-active: var(--pf-g-heading, #1f1e1c);
+  --pf-toc-color: var(--pf-g-panel-muted, #505050);
+  --pf-toc-sub-color: var(--pf-g-panel-muted, #505050);
+  --pf-toc-active: var(--pf-g-panel-text, #1f1e1c);
   --pf-toc-rail: var(--pf-g-rule, #e2ddd1);
   --pf-toc-accent: var(--pf-g-accent, #{$pf-purple});
   --pf-on-accent: var(--pf-g-on-accent, #fff);
@@ -41,7 +46,7 @@
   --bs-offcanvas-padding-x: 2.5rem;
   --bs-offcanvas-padding-y: 2rem;
   --bs-offcanvas-color: var(--pf-section-fg);
-  --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), .84);
+  --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), .65);
   --bs-offcanvas-border-color: var(--pf-toc-rail);
   color: var(--pf-section-fg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -49,9 +54,10 @@
   font-family: var(--bs-font-monospace);
 }
 
-// Dusk and Night on guides: a shade darker than the page, still glass.
+// Dusk and Night on guides: a shade darker than the page, still glass (78%;
+// over a white pixel under the dark wash, Dusk's muted text is about 4.8:1).
 html.pf-guide-dark[data-pf-mode="guide"] .pf-panel.offcanvas {
-  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 90%, transparent);
+  --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 78%, transparent);
   --pf-sidebar-bg: #{rgba($pf-black, .25)};
 }
 

@@ -44,49 +44,49 @@ $pf-reading-themes: (
     label: 'Cream', dark: false,
     bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7a7772, fg-hc: #141413,
+    scroll: #7a7772, fg-hc: #141413, panel-muted: #505050,
   ),
   'soft': (
     label: 'Soft cream', dark: false,
     bg: #f7f4ec, fg: #676561, heading: #3d3c39, muted: #696763, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7f7c77, fg-hc: #2b2a28,
+    scroll: #7f7c77, fg-hc: #2b2a28, panel-muted: #514f4c,
   ),
   'lavender': (
     label: 'Lavender', dark: false,
     bg: #f7f4ec, fg: #6b5a8e, heading: #4f3f73, muted: #6e6679, rule: #e4dde8,
     surface: #efeaf0, accent: $pf-purple, accent-soft: #e9e1f1,
-    scroll: #857a96, fg-hc: #3a2a5c,
+    scroll: #857a96, fg-hc: #3a2a5c, panel-muted: #574975,
   ),
   'sepia': (
     label: 'Sepia', dark: false,
     bg: #f4ecd8, fg: #5b4636, heading: #3e2e22, muted: #6f5a47, rule: #e2d6bc,
     surface: #ece2c9, accent: #7a3e1d, accent-soft: #eadcc4,
-    scroll: #85705a, fg-hc: #3a2a1d,
+    scroll: #85705a, fg-hc: #3a2a1d, panel-muted: #5b4838,
   ),
   'sage': (
     label: 'Sage', dark: false,
     bg: #e3eadb, fg: #3b4a3a, heading: #263326, muted: #52604f, rule: #cad5c0,
     surface: #d9e2cf, accent: #2f5a3a, accent-soft: #d2dfc8,
-    scroll: #647260, fg-hc: #1e2a1e,
+    scroll: #647260, fg-hc: #1e2a1e, panel-muted: #404e3f,
   ),
   'mist': (
     label: 'Mist', dark: false,
     bg: #eceeef, fg: #4a4f55, heading: #2e3237, muted: #5a6066, rule: #d6dadd,
     surface: #e2e5e7, accent: #3d4f8a, accent-soft: #dde2ee,
-    scroll: #747a80, fg-hc: #1f2327,
+    scroll: #747a80, fg-hc: #1f2327, panel-muted: #484e53,
   ),
   'dusk': (
     label: 'Dusk', dark: true,
     bg: #2b2a33, fg: #b7b3c0, heading: #dcd8e4, muted: #a29eab, rule: #45434f,
     surface: #34333d, accent: $pf-lavender, accent-soft: #3a3446,
-    scroll: #9a96a3, fg-hc: #ece9f2,
+    scroll: #9a96a3, fg-hc: #ece9f2, panel-muted: #a29eab,
   ),
   'night': (
     label: 'Night', dark: true,
     bg: #121014, fg: #e6e2ea, heading: #ffffff, muted: #b3adbb, rule: #34303a,
     surface: #1c1921, accent: $pf-lavender, accent-soft: #2a2235,
-    scroll: #b3adbb, fg-hc: #ffffff,
+    scroll: #b3adbb, fg-hc: #ffffff, panel-muted: #b3adbb,
   ),
 ) !default;
 
@@ -119,6 +119,11 @@ $pf-reading-themes: (
   }
   --pf-g-scroll: #{map.get($t, scroll)};
   --pf-g-scroll-hover: #{map.get($t, muted)};
+  // Drawers (_utility-panels.scss): text in the heading colour and labels
+  // in a muted tone darkened just enough to pass 4.5:1 on the drawer's
+  // glass over a black pixel (the glass lets about 19% of the page show).
+  --pf-g-panel-text: #{map.get($t, heading)};
+  --pf-g-panel-muted: #{map.get($t, panel-muted)};
   --bs-body-bg: #{map.get($t, bg)};
   --bs-body-bg-rgb: #{pf-rgb(map.get($t, bg))};
   --bs-body-color: #{map.get($t, fg)};
@@ -149,6 +154,8 @@ $pf-reading-themes: (
   --pf-g-heading: #{map.get($t, fg-hc)};
   --pf-g-muted: #{map.get($t, fg-hc)};
   --pf-g-rule: #{map.get($t, muted)};
+  --pf-g-panel-text: #{map.get($t, fg-hc)};
+  --pf-g-panel-muted: #{map.get($t, fg-hc)};
   --bs-body-color: #{map.get($t, fg-hc)};
   --bs-body-color-rgb: #{pf-rgb(map.get($t, fg-hc))};
   --bs-emphasis-color: #{map.get($t, fg-hc)};

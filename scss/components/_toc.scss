@@ -213,43 +213,62 @@
   overflow-wrap: anywhere; // one long word can't widen the rail
 }
 
-// Origami span.back-to-top: stacked arrow + tiny caps label, pushed to
-// the bottom of the sidebar, arrow lights up gold on hover.
+// "Back to top" at the bottom of the sidebar, in the guides' label style
+// (2026-10-16): a hairline in the rail colour, then a thin arrow and the
+// label in one row, tracked monospace caps in the TOC's muted colour, so it
+// follows the reading swatch on guides and the chrome elsewhere (it was
+// #ccc with a 20%-opacity arrow, about 1.6:1 on the light sidebar). Hover
+// and focus: full-strength text, the arrow in the accent, lifted 2px.
+// 44px tall (2.5.8).
 .pf-toc__top {
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
   align-items: center;
-  align-self: flex-start;
-  gap: 0.25rem;
+  gap: 0.625rem;
+  min-height: 2.75rem;
   margin-top: auto;
-  padding: 2.5rem 0 2.5rem;
-  font-size: 0.625rem; // 10px at 100%
-  letter-spacing: 0.1em; // 1px at 10px
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--pf-toc-rail);
+  font-family: var(--pf-toc-font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--pf-toc-top-color);
-  transition: color 0.5s ease-out;
+  color: var(--pf-toc-color);
+  transition: color 0.2s ease, border-color 0.3s ease;
 
   &:hover,
   &:focus-visible {
     color: var(--pf-toc-active);
-    transition-duration: 0.2s;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-toc-accent);
+    outline-offset: 3px;
   }
 }
 
 .pf-toc__top-icon {
-  width: 30px;
-  height: 30px;
-  opacity: 0.2;
-  transition:
-    color 0.5s ease-out,
-    opacity 0.5s ease-out;
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  transition: color 0.2s ease, transform 0.2s ease;
 
   .pf-toc__top:hover &,
   .pf-toc__top:focus-visible & {
     color: var(--pf-toc-accent);
-    opacity: 1;
-    transition-duration: 0.2s;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-toc__top-icon {
+    transition: color 0.2s ease;
+
+    .pf-toc__top:hover &,
+    .pf-toc__top:focus-visible & {
+      transform: none;
+    }
   }
 }
 
