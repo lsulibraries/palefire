@@ -444,7 +444,11 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-ask__tab,
   .pf-accounts__link,
   .pf-settings__size,
-  .pf-settings__switch {
+  .pf-settings__switch,
+  .pf-settings__theme,
+  .pf-settings__theme-chip,
+  .pf-settings__more,
+  .pf-settings__more svg {
     transition: none;
   }
 }
@@ -618,11 +622,11 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     border-bottom: 1px solid var(--pf-toc-rail);
   }
 
-  // Text size: four segments.
+  // Text size: four tabs on one hairline; the chosen one carries a short
+  // accent bar on it (no boxes).
   &__sizes {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: .375rem;
   }
 
   &__size {
@@ -632,18 +636,18 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     justify-content: flex-end;
     gap: .25rem;
     min-height: 3.75rem;
-    padding: .5rem .25rem;
+    padding: .5rem .25rem .625rem;
     font-size: .75rem;
     color: var(--pf-toc-color);
     cursor: pointer;
-    border: 1px solid var(--pf-section-border);
-    border-radius: 0;
-    transition: color $pf-hover-out ease, border-color .15s ease;
+    border-bottom: 1px solid var(--pf-toc-rail);
+    box-shadow: inset 0 0 0 var(--pf-toc-accent);
+    transition: color $pf-hover-out ease, box-shadow $pf-hover-out ease;
 
     &:hover {
       color: var(--pf-toc-active);
-      border-color: var(--pf-g-hover, var(--pf-toc-accent));
-      transition: color $pf-hover-in ease, border-color .15s ease;
+      box-shadow: inset 0 -1px 0 var(--pf-section-border);
+      transition: color $pf-hover-in ease, box-shadow $pf-hover-in ease;
     }
   }
 
@@ -659,11 +663,10 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   &__size[data-size="130"] &__size-a { font-size: 1.3rem; }
   &__size[data-size="150"] &__size-a { font-size: 1.5rem; }
 
-  // Selected: gold border and a gold bar, not colour alone.
+  // Selected: the accent bar and full-strength text, not colour alone.
   &__size-input:checked + &__size {
     color: var(--pf-toc-active);
-    border-color: var(--pf-toc-accent);
-    box-shadow: inset 0 -3px 0 var(--pf-toc-accent);
+    box-shadow: inset 0 -2px 0 var(--pf-toc-accent);
   }
 
   &__size-input:focus-visible + &__size {
@@ -671,34 +674,32 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     outline-offset: 2px;
   }
 
-  // Reading colours: one tile per swatch, "Aa" in the swatch's own text on
-  // its own page colour (colours: _reading-themes.scss), the name under it.
-  // Same selected and focus marks as the text sizes.
+  // Reading colours: "Aa" in the swatch's own text on its own page colour
+  // (colours: _reading-themes.scss), the name under it, no box. The chosen
+  // one gets an accent ring around its chip and full-strength name.
   &__themes {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: .375rem;
+    gap: .75rem .375rem;
   }
 
   &__theme {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: .375rem;
-    padding: .375rem .375rem .5rem;
+    gap: .5rem;
+    padding: .25rem;
     font-size: .625rem;
     letter-spacing: .08em;
     text-align: center;
     text-transform: uppercase;
     color: var(--pf-toc-color);
     cursor: pointer;
-    border: 1px solid var(--pf-section-border);
-    transition: color $pf-hover-out ease, border-color .15s ease;
+    transition: color $pf-hover-out ease;
 
     &:hover {
       color: var(--pf-toc-active);
-      border-color: var(--pf-g-hover, var(--pf-toc-accent));
-      transition: color $pf-hover-in ease, border-color .15s ease;
+      transition: color $pf-hover-in ease;
     }
   }
 
@@ -713,12 +714,78 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     text-transform: none;
     // Separates a chip from a drawer of nearly the same colour.
     box-shadow: inset 0 0 0 1px var(--pf-toc-rail);
+    outline: 1px solid transparent;
+    outline-offset: 3px;
+    transition: outline-color $pf-hover-out ease;
+  }
+
+  &__theme:hover &__theme-chip {
+    outline-color: var(--pf-section-border);
+    transition-duration: $pf-hover-in;
   }
 
   &__theme-input:checked + &__theme {
     color: var(--pf-toc-active);
-    border-color: var(--pf-toc-accent);
-    box-shadow: inset 0 -3px 0 var(--pf-toc-accent);
+  }
+
+  &__theme-input:checked + &__theme &__theme-chip {
+    outline: 2px solid var(--pf-toc-accent);
+    outline-offset: 2px;
+  }
+
+  // "More colours" (initThemesMore, utility-panels.js): only the first
+  // four, and the chosen one wherever it is, until the list is opened.
+  &__themes.is-collapsed &__theme-input.is-more:not(:checked),
+  &__themes.is-collapsed &__theme-input.is-more:not(:checked) + &__theme {
+    display: none;
+  }
+
+  // Opened: the rest fade in one after another (.is-revealing is on for
+  // just that moment, so later picks don't replay it).
+  @media (prefers-reduced-motion: no-preference) {
+    &__themes.is-revealing &__theme-input.is-more:not(:checked) + &__theme {
+      animation: pf-accordion-in $pf-menu-fade ease both;
+    }
+
+    @for $i from 5 through 16 {
+      &__themes.is-revealing &__theme:nth-of-type(#{$i}) {
+        animation-delay: ($i - 5) * $pf-menu-stagger;
+      }
+    }
+  }
+
+  &__more {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 2.75rem;
+    margin-top: .25rem;
+    padding: 0;
+    font-family: inherit;
+    font-size: .6875rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--pf-toc-color);
+    background: none;
+    border: 0;
+    transition: color $pf-hover-out ease;
+
+    svg {
+      width: .875rem;
+      height: .875rem;
+      transition: transform $pf-menu-fade ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      transition-duration: $pf-hover-in;
+    }
+
+    &[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
   }
 
   &__theme-input:focus-visible + &__theme {
@@ -844,5 +911,13 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-ask__tab.active,
   .pf-settings__size-input:checked + .pf-settings__size {
     border-width: 3px;
+  }
+
+  .pf-settings__theme-chip {
+    outline-style: none;
+  }
+
+  .pf-settings__theme-input:checked + .pf-settings__theme .pf-settings__theme-chip {
+    outline: 3px solid Highlight;
   }
 }

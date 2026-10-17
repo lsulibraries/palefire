@@ -168,9 +168,9 @@
   const STORE = 'pf-a11y';
   const SIZES = ['100', '115', '130', '150'];
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
-  // Reading colours (_reading-themes.scss). Cream is the default: no
-  // attribute, not saved. See DARK_THEMES.
-  const THEMES = ['twilight', 'cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  // Reading colours (_reading-themes.scss), in the drawer's order. See
+  // DEFAULT_THEME and DARK_THEMES.
+  const THEMES = ['twilight', 'dusk', 'cocoa', 'forest', 'night', 'midnight', 'solarized', 'material', 'cream', 'soft', 'lavender', 'sepia', 'sage'];
   const DARK_THEMES = ['twilight', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
   // What every page opens in (html.html.twig sets it on <html>). Not saved:
   // only a different choice is.
@@ -258,6 +258,36 @@
     document.dispatchEvent(new CustomEvent('palefire:a11ychange', { detail: { settings } }));
   }
 
+  // "More colours": the swatches after the first four (.is-more) stay
+  // hidden until the button opens them. A hidden swatch that is chosen
+  // still shows (CSS: .is-more:checked), so the choice is never out of
+  // sight. Without JS the button stays hidden and every swatch shows.
+  function initThemesMore(grid, button) {
+    if (!grid || !button || !grid.querySelector('.is-more')) {
+      return;
+    }
+    const label = button.querySelector('[data-pf-themes-more-label]');
+    let revealTimer = null;
+    const set = (open) => {
+      grid.classList.toggle('is-collapsed', !open);
+      // Staggered fade-in of the rest (CSS), for this opening only.
+      window.clearTimeout(revealTimer);
+      grid.classList.toggle('is-revealing', open);
+      if (open) {
+        revealTimer = window.setTimeout(() => grid.classList.remove('is-revealing'), 1500);
+      }
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (label) {
+        label.textContent = open ? Drupal.t('Fewer colours') : Drupal.t('More colours');
+      }
+    };
+    button.addEventListener('click', () => {
+      set(button.getAttribute('aria-expanded') !== 'true');
+    });
+    grid.classList.add('is-collapsed');
+    button.hidden = false;
+  }
+
   function initSettings(panel) {
     const form = panel.querySelector('[data-pf-settings]');
     const status = panel.querySelector('[data-pf-settings-status]');
@@ -334,6 +364,7 @@
       });
     }
 
+    initThemesMore(form.querySelector('[data-pf-themes]'), form.querySelector('[data-pf-themes-more]'));
     panel.addEventListener('show.bs.offcanvas', fill);
     fill();
 
@@ -396,6 +427,7 @@
       sync((event.detail && event.detail.settings) || readSettings());
     });
     sync(readSettings());
+    initThemesMore(grid, box.querySelector('[data-pf-themes-more]'));
     box.hidden = false;
   }
 

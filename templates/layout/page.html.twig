@@ -124,7 +124,11 @@
               {% if page.utility_menu %}
                 <fieldset class="pf-menu-themes" data-pf-menu-themes hidden>
                   <legend class="pf-menu-themes__legend">{{ 'Reading colours'|t }}</legend>
-                  <div class="pf-settings__themes" data-pf-menu-themes-grid></div>
+                  <div class="pf-settings__themes" id="pf-menu-themes-grid" data-pf-menu-themes-grid></div>
+                  <button type="button" class="pf-settings__more" aria-controls="pf-menu-themes-grid" aria-expanded="false" data-pf-themes-more hidden>
+                    <span data-pf-themes-more-label>{{ 'More colours'|t }}</span>
+                    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
                 </fieldset>
               {% endif %}
             </div>

@@ -604,6 +604,27 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Settings: reading colours reordered, "More colours", quieter tiles (2026-10-17)
+
+- **Order:** Twilight, Dusk, Cocoa and Forest come first, then the other
+  darks (Night, Midnight, Solarized, Material), then the lights (Cream,
+  Soft cream, Lavender, Sepia, Sage). This applies to the Settings drawer
+  and the copy under the mobile menu (`utility-panels.html.twig`, `THEMES`
+  in `utility-panels.js`).
+- **More colours:** only the first four show. A "More colours" button
+  (`aria-expanded`) opens the rest, which fade in one after another, the
+  same as the accordions; with reduced motion they appear at once. The
+  chosen colour always stays visible, even when it's one of the hidden
+  ones. Without JS the button stays hidden and every swatch shows
+  (`initThemesMore`).
+- **Quieter selected state:** the boxes around every tile are gone.
+  - Text sizes sit on one hairline, and the chosen size gets a 2px accent
+    bar there.
+  - The chosen colour gets an accent ring around its chip, and its name
+    turns full-strength.
+  - Hover only brightens the text or adds a faint ring.
+  - Windows High Contrast keeps a 3px bar or ring.
+
 ### Mobile "On this page" drawer backdrop (2026-10-17)
 
 Below lg the TOC opens as a Bootstrap offcanvas (`#pf-modular-sidebar`).
