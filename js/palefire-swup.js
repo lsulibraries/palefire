@@ -122,22 +122,15 @@
   };
 
   /**
-   * Closes the mobile menu before leaving, and resets its toggle afterwards
-   * (the swapped-in menu always starts collapsed).
+   * Closes the mobile menu drawer (a Bootstrap offcanvas, page.html.twig)
+   * before leaving, so the new page doesn't open under it.
    */
   const closeMenu = () => {
     const panel = document.querySelector('#pf-primary-menu.show');
     if (panel && window.bootstrap) {
-      window.bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }).hide();
+      window.bootstrap.Offcanvas.getOrCreateInstance(panel).hide();
     }
   };
-  const resetMenuToggle = () => {
-    document.querySelectorAll('[aria-controls="pf-primary-menu"]').forEach((toggle) => {
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.classList.add('collapsed');
-    });
-  };
-
   const focusTarget = (hash) => {
     let target = null;
     if (hash && hash.length > 1) {
@@ -257,7 +250,6 @@
       }
       replaceSettings(incoming.settings);
       syncDocument(incoming.doc);
-      resetMenuToggle();
       containers.forEach((sel) => {
         document.querySelectorAll(sel).forEach((el) => Drupal.attachBehaviors(el, drupalSettings));
       });

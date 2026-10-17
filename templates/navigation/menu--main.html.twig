@@ -15,9 +15,10 @@
  *   appear, tick "Show as expanded" on the parent links or enable
  *   "Expand all menu links" in the block settings.
  * - core/drupal.active-link adds .is-active and aria-current="page".
- * - Below lg the menu is a full-height sheet with every section expanded:
- *   the parent's button is hidden and its title shows as a plain label
- *   (.pf-primary-nav__heading) over its links (_header.scss).
+ * - Below lg the menu is a drawer and each section an accordion: the
+ *   dropdown button is hidden and .pf-primary-nav__heading, a disclosure
+ *   button, opens the section's pages underneath it (palefireMenuSections,
+ *   js/palefire.js). The section holding the current page starts open.
  */
 #}
 {% import _self as menus %}
@@ -55,7 +56,10 @@
                     data-bs-toggle="dropdown" aria-expanded="false">
               {{ item.title }}
             </button>
-            <span class="pf-primary-nav__heading">{{ item.title }}</span>
+            <button type="button" class="pf-primary-nav__heading" aria-expanded="{{ item.in_active_trail ? 'true' : 'false' }}">
+              <span class="pf-primary-nav__heading-text">{{ item.title }}</span>
+              <span class="pf-primary-nav__heading-mark" aria-hidden="true"></span>
+            </button>
             {{ menus.menu_links(item.below, attributes, menu_level + 1, is_placeholder ? null : item) }}
           {% else %}
             {{ link(item.title, item.url, { 'class': link_classes }) }}

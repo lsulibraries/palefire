@@ -1228,6 +1228,36 @@ section a desktop dropdown to tap open. Desktop is unchanged.
 - The phone-only 88px logo is gone (`$pf-logo-width-xs`): with two targets
   beside it, the 120px logo fits down to 320px.
 
+### Mobile menu as a drawer, sections as toggles (2026-10-17)
+
+Follow-up to "Mobile header and menu, redesigned" (above).
+
+- **The menu is now a drawer** from the left, like Search, Hours and the
+  other utility drawers: a Bootstrap offcanvas (`#pf-primary-menu`,
+  `page.html.twig`) with the same "Menu" title, close button and backdrop
+  wash. The in-bar sheet it replaces stuttered while opening: it grew the
+  header's height, so the frosted glass re-blurred a larger area and the
+  page re-measured the header every frame. The drawer slides with a
+  transform. Bootstrap traps focus, closes it on Escape and returns focus
+  to the Menu button, so `palefireMenuEscape` is gone. From lg up
+  `.navbar-expand-lg` shows the same element inline as the desktop menu.
+- **Sections are toggles:** tapping "Help with", "Visit"… opens that
+  section's pages underneath it (a plus that turns into a minus) instead of
+  everything being listed at once; several can be open. The section holding
+  the current page starts open. Headings are disclosure buttons
+  (`aria-expanded`, `menu--main.html.twig`), toggled by
+  `palefireMenuDrawer` (`js/palefire.js`); closed sections are out of the
+  tab order. The open/close is a CSS grid-row transition (0fr to 1fr), off
+  with reduced motion.
+- The drawer lives inside the header (it is the desktop menu too), and the
+  header's glass makes it the containing block for fixed elements, so the
+  drawer sets its own full-screen height and the header rises above the
+  backdrop while it is open. The drawer is solid (the page colour): a blur
+  inside the header's blur would have nothing to blur.
+- Swup now closes the drawer before a page swap (`palefire-swup.js`); the
+  old collapse leftovers (toggle reset, header-height subtraction, the
+  open-menu glass rules) are gone.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

@@ -415,11 +415,6 @@ html#{$pf-themed}.pf-reading-dark .pf-header {
   --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-header-glass-dark});
 }
 
-// Open mobile menu: nearly opaque, as without a swatch.
-html#{$pf-themed} .pf-header:has(.navbar-collapse.show, .navbar-collapse.collapsing) {
-  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha-solid});
-}
-
 // The strip under a header that is growing back (_header.scss) matches it.
 html#{$pf-themed} .pf-page::before {
   background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha});

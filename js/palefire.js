@@ -25,13 +25,10 @@
       once('pf-header-offset', '.pf-header', context).forEach((header) => {
         const bar = header.querySelector('.navbar') || header;
         const update = () => {
-          // Measure the collapsed bar only, so opening the mobile menu does
-          // not shift scroll offsets.
-          const menu = header.querySelector('.navbar-collapse.show');
-          const menuHeight = menu && window.getComputedStyle(menu).position !== 'absolute' ? menu.getBoundingClientRect().height : 0;
           // Unrounded, so the sidebar's top edge lands exactly on the bar's
-          // bottom edge mid-transition, not up to a pixel off.
-          const height = Math.max(bar.getBoundingClientRect().height - menuHeight, 0);
+          // bottom edge mid-transition, not up to a pixel off. (The mobile
+          // menu is a fixed drawer, so it never adds to the bar's height.)
+          const height = bar.getBoundingClientRect().height;
           root.style.setProperty('--pf-header-h', `${height}px`);
           // Expanded height, remembered while the header is compact or
           // changing size, so its bottom margin can hold the page in place.
@@ -233,31 +230,38 @@
   };
 
   /**
-   * Escape closes the open mobile menu and returns focus to its toggle,
-   * wherever focus is (the toggle itself, or inside the sheet).
+   * The mobile menu drawer (#pf-primary-menu, a Bootstrap offcanvas below
+   * lg). Bootstrap handles Escape, the focus trap and returning focus to
+   * the Menu button. This adds:
+   * - <html data-pf-panel="menu"> while it is open, so the backdrop is the
+   *   same wash of the page colour as the utility drawers'
+   *   (_utility-panels.scss).
+   * - The sections as an accordion: each section's heading button
+   *   (.pf-primary-nav__heading, menu--main.html.twig) shows or hides its
+   *   pages underneath it. Several can be open at once.
+   * The header sits outside Swup's container, so this runs once.
    */
-  Drupal.behaviors.palefireMenuEscape = {
+  Drupal.behaviors.palefireMenuDrawer = {
     attach(context) {
-      once('pf-menu-escape', '.pf-header .navbar-collapse', context).forEach((panel) => {
-        document.addEventListener('keydown', (event) => {
-          if (event.key !== 'Escape' || !panel.classList.contains('show')) {
-            return;
+      once('pf-menu-drawer', '#pf-primary-menu', context).forEach((drawer) => {
+        drawer.addEventListener('show.bs.offcanvas', () => {
+          root.dataset.pfPanel = 'menu';
+        });
+        drawer.addEventListener('hidden.bs.offcanvas', () => {
+          if (root.dataset.pfPanel === 'menu') {
+            delete root.dataset.pfPanel;
           }
-          // Let Bootstrap close an open dropdown or drawer first.
-          if (panel.querySelector('.dropdown-menu.show') || document.querySelector('.offcanvas.show')) {
-            return;
-          }
-          const toggle = document.querySelector(`[aria-controls="${panel.id}"]`);
-          if (window.bootstrap) {
-            window.bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }).hide();
-          }
-          if (toggle) {
-            toggle.focus();
+        });
+        drawer.addEventListener('click', (event) => {
+          const heading = event.target.closest('.pf-primary-nav__heading');
+          if (heading && drawer.contains(heading)) {
+            heading.setAttribute('aria-expanded', heading.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
           }
         });
       });
     },
   };
+
   /**
    * Mobile menu quick links. Below lg the header bar keeps only Search and
    * the Menu button; the other utility icons (Hours, Ask Us, My Accounts,
