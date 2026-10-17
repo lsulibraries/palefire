@@ -908,13 +908,14 @@ One less script in `<head>` on Modular pages.
 
 ### Reading colours (2026-10-16, replaces Dark guides)
 
-Settings > **Reading colours**: seven page and text colour pairs popular in
+Settings > **Reading colours**: eight page and text colour pairs popular in
 reading modes, picked as tiles that show "Aa" in each swatch's own colours.
 Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 
 | Swatch | Page | Text | Text contrast |
 | --- | --- | --- | --- |
 | Cream (default) | #f7f4ec | #2b2a28 | 13.1:1 |
+| Soft cream (light grey on cream) | #f7f4ec | #676561 | 5.3:1 |
 | Lavender (muted LSU purple on cream) | #f7f4ec | #6b5a8e | 5.5:1 |
 | Sepia | #f4ecd8 | #5b4636 | 7.5:1 |
 | Sage | #e3eadb | #3b4a3a | 7.7:1 |
@@ -922,7 +923,8 @@ Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 | Dusk (soft dark) | #2b2a33 | #b7b3c0 | 6.9:1 |
 | Night | #121014 | #e6e2ea | 14.8:1 |
 
-Lavender and Dusk are the deliberately soft ones, closest to AA. Every
+Soft cream, Lavender and Dusk are the deliberately soft ones, closest to AA
+(Soft cream added as a follow-up: the Cream page with a lighter grey). Every
 swatch's muted text is 4.5:1 and up (on its surface colour too), its accent
 (links) 6.4:1 and up, its scrollbar thumb 3:1 and up on page and rail.
 

@@ -79,7 +79,7 @@
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
         var t = s.theme || (s.dark ? 'night' : '');
-        if (/^(lavender|sepia|sage|mist|dusk|night)$/.test(t)) {
+        if (/^(soft|lavender|sepia|sage|mist|dusk|night)$/.test(t)) {
           h.setAttribute('data-pf-theme', t);
           if (/^(dusk|night)$/.test(t) && h.getAttribute('data-pf-mode') === 'guide') {
             h.classList.add('pf-guide-dark');

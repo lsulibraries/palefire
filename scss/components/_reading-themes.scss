@@ -22,9 +22,10 @@
 //   and data-bs-theme, and bento sections with a background video are reset
 //   to the default here. Cream on other pages is the default (no change).
 //
-// Contrast, measured (normal text, WCAG AA 4.5:1; Lavender and Dusk are the
-// deliberately soft ones, closest to the minimum):
+// Contrast, measured (normal text, WCAG AA 4.5:1; Soft cream, Lavender and
+// Dusk are the deliberately soft ones, closest to the minimum):
 //   cream    text 13.1  muted 6.4  accent 11.1
+//   soft     text  5.3  muted 5.1  accent 11.1   (light grey on cream)
 //   lavender text  5.5  muted 5.0  accent 11.1   (muted LSU purple on cream)
 //   sepia    text  7.5  muted 5.5  accent  7.0
 //   sage     text  7.7  muted 5.4  accent  6.5
@@ -44,6 +45,12 @@ $pf-reading-themes: (
     bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
     scroll: #7a7772, fg-hc: #141413,
+  ),
+  'soft': (
+    label: 'Soft cream', dark: false,
+    bg: #f7f4ec, fg: #676561, heading: #3d3c39, muted: #696763, rule: #e2ddd1,
+    surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
+    scroll: #7f7c77, fg-hc: #2b2a28,
   ),
   'lavender': (
     label: 'Lavender', dark: false,
