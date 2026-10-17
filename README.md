@@ -1164,6 +1164,15 @@ the most prominent thing in view, while the TOC still marked the section
 above it. Sub-headings follow the same line. The top and bottom of the
 page are unaffected (the first and last sections still win there).
 
+### Room above a heading after a TOC jump (2026-10-17)
+
+Clicking a sub-heading in the TOC (an h3) used to land it a few pixels under
+the header. Those targets now have `scroll-margin-top: 2rem`
+(`_modular.scss`), so they stop with some air above them. Section links are
+unchanged: they land on the section, whose top padding already spaces its
+title, and sections must not take a scroll margin (it would double up with
+scroll-snap's padding).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

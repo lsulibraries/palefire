@@ -61,12 +61,20 @@ body[data-section-theme="dark"] {
 }
 
 // Anchor jumps and snap points land below the sticky header. This is the
-// only header offset: don't also give sections or titles a
-// scroll-margin-top. Snapping adds the scroller's scroll-padding to the
-// target's scroll-margin, so each section would stop two header heights
+// only header offset for sections: don't also give sections or section
+// titles a scroll-margin-top. Snapping adds the scroller's scroll-padding to
+// the target's scroll-margin, so each section would stop two header heights
 // down and leave a strip of the previous section showing under the bar.
 html {
   scroll-padding-top: var(--pf-header-h);
+}
+
+// Sub-headings the TOC links to (h3s, data-toc items) aren't snap points,
+// so they can take a margin: a TOC jump leaves them a breath below the
+// header instead of tucked under it. (Section links land on the section,
+// whose own top padding spaces its title.)
+.pf-sections :is(h3, [data-toc])[id] {
+  scroll-margin-top: 2rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
