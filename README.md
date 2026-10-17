@@ -1154,6 +1154,16 @@ section's `.pf-section__title` and the matching h3 as it already updates
 ease, no movement or glow; no transition with reduced motion. On Material
 the headings are already the TOC's green, so nothing changes there.
 
+### TOC switches sections at mid-screen (2026-10-17)
+
+The TOC (and on guides the lit heading, and the header's dark mode for dark
+sections) now moves to a section once it reaches halfway down the screen
+below the header, instead of 30% down (`ACTIVATION_LINE`,
+`js/modular-toc.js`). Before, a section's heading could sit mid-screen,
+the most prominent thing in view, while the TOC still marked the section
+above it. Sub-headings follow the same line. The top and bottom of the
+page are unaffected (the first and last sections still win there).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

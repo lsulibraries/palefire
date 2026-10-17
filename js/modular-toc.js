@@ -40,7 +40,11 @@
 (function (Drupal, once) {
   'use strict';
 
-  const ACTIVATION_LINE = 0.3;
+  // Halfway down the viewport below the header (was 0.3): a section turns
+  // active once it fills the lower half of the screen, which is when its
+  // heading is the most prominent thing in view. At 0.3 a heading could sit
+  // mid-screen while the TOC still marked the section above it.
+  const ACTIVATION_LINE = 0.5;
   // Depth 2: every h3, plus anything marked data-toc.
   const SUB_HEADING_SELECTOR = 'h3, [data-toc]';
   // Depth 1: only what asks to be listed (h3[data-toc], or any element with
