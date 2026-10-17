@@ -287,10 +287,14 @@ html[data-pf-mode="guide"] .pf-section__title {
         margin-top: 0;
       }
 
-      > strong:first-child {
-        display: block;
-        font-size: 1.0625rem;
-        font-weight: 500;
+      // Bold stays inline, so the sentence (and its punctuation) runs on
+      // after it, and every bold phrase in a step looks the same: the
+      // heading colour. A leading <strong> used to be display: block,
+      // which put whatever followed the </strong>, even a lone full stop,
+      // on a line of its own (and :first-child ignores text, so it also
+      // fired when text came before the bold).
+      strong {
+        color: var(--bs-emphasis-color);
       }
     }
   }

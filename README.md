@@ -1173,6 +1173,18 @@ unchanged: they land on the section, whose top padding already spaces its
 title, and sections must not take a scroll margin (it would double up with
 scroll-snap's padding).
 
+### Numbered steps: bold stays inline (2026-10-17)
+
+In guide numbered lists (the "01, 02" steps), a `<strong>` that was the
+first tag in an item was `display: block`, so anything after the closing
+`</strong>`, even a full stop, dropped to its own line ("**systematized
+review**" then "." underneath). `:first-child` ignores text, so it also
+fired when text came before the bold. Bold in the steps is now always
+inline, every bold phrase in the heading colour, with the sentence running
+on after it, so editors don't need to put punctuation inside the bold. The
+numbers were already positioned outside the text (`::before`, absolute),
+so nothing else changes (`_guide.scss`).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
