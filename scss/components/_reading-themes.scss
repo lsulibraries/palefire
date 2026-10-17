@@ -27,9 +27,9 @@
 // the footer), and the chrome, section, bento, map and calendar tokens
 // below. So a swatch, or high contrast, only ever changes --pf-g-*.
 //
-// Chrome glass (header, TOC sidebar, dropdowns, footer): the page colour
-// with a little black ($pf-reading-chrome-*), so it reads as a quiet layer
-// just under the page, light swatches and dark alike.
+// Chrome glass (header, TOC sidebar, dropdowns, footer): the page colour on
+// light swatches; on dark ones with a little black ($pf-reading-chrome-*),
+// so it reads as a quiet layer just under the page.
 //
 // Contrast, measured (normal text, WCAG AA 4.5:1; Soft cream, Lavender and
 // Dusk are the deliberately soft ones, closest to the minimum):
@@ -38,13 +38,14 @@
 //   lavender text  5.5  muted 5.0  accent 11.1   (muted LSU purple on cream)
 //   sepia    text  7.5  muted 5.5  accent  7.0
 //   sage     text  7.7  muted 5.4  accent  6.5
-//   mist     text  7.1  muted 5.5  accent  6.7
 //   dusk     text  6.9  muted 5.4  accent  7.9
 //   night    text 14.8  muted 8.7  accent 10.5
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
 //   midnight text  5.15 muted 5.0  accent  8.4
+//   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
+//                                                 italics 5.5)
 // On the chrome glass: text 4.9:1 and up, muted 4.6:1 and up. Muted text on
 // the surface colour is 4.5:1 and up. The four later dark swatches keep
 // their surface and callout tints (surface, accent-soft) just above their
@@ -94,17 +95,11 @@ $pf-reading-themes: (
     surface: #d9e2cf, accent: #2f5a3a, accent-soft: #d2dfc8,
     scroll: #647260, panel-muted: #404e3f,
   ),
-  'mist': (
-    label: 'Mist', dark: false,
-    bg: #eceeef, fg: #4a4f55, heading: #2e3237, muted: #5a6066, rule: #d6dadd,
-    surface: #e2e5e7, accent: #3d4f8a, accent-soft: #dde2ee,
-    scroll: #747a80, panel-muted: #484e53,
-  ),
   'dusk': (
     label: 'Dusk', dark: true,
     bg: #2b2a33, fg: #b7b3c0, heading: #dcd8e4, muted: #a29eab, rule: #45434f,
     surface: #34333d, accent: $pf-lavender, accent-soft: #3a3446,
-    scroll: #9a96a3, panel-muted: #a29eab,
+    scroll: #9a96a3, panel-muted: #a6a2af,
   ),
   'night': (
     label: 'Night', dark: true,
@@ -139,11 +134,25 @@ $pf-reading-themes: (
     surface: #222938, accent: #a9bdf2, accent-soft: #22293b,
     scroll: #7d889e, panel-muted: #97a1b5,
   ),
+  // Material (2026-10-16, replaces Mist): the Atom Material Theme's colours,
+  // sampled from the editor. Multicolour: headings green, bold yellow,
+  // italics purple, links cyan (the optional title / strong / em keys).
+  // Its header and TOC are the theme's own darker sidebar (chrome: #232e33),
+  // not a mix. The scrollbar thumb is a touch lighter than the editor's dim
+  // grey (#889799, 2.98:1 on the rail).
+  'material': (
+    label: 'Material', dark: true,
+    bg: #263238, fg: #eeffff, heading: #eeffff, muted: #a7b6b8, rule: #3e4b50,
+    surface: #2c383d, accent: #89ddff, accent-soft: #2c383d,
+    scroll: #94a3a5, panel-muted: #a7b6b8, chrome: #232e33,
+    title: #c3e88d, strong: #ffcb6b, em: #c792ea,
+  ),
 ) !default;
 
-// Chrome glass: the page colour with this much black.
-$pf-reading-chrome-light: 3% !default;
-$pf-reading-chrome-dark: 15% !default;
+// Chrome glass: the page colour with this much black (none on light
+// swatches; 7.5% on dark, half the 15% first tried).
+$pf-reading-chrome-light: 0% !default;
+$pf-reading-chrome-dark: 7.5% !default;
 
 // High contrast: how far the page moves toward white (light swatches) or
 // black (dark), and the text the other way.
@@ -180,11 +189,15 @@ $pf-reading-header-glass-dark: .78 !default;
     $page-to: #000;
     $ink-to: #fff;
   }
-  @each $key in (bg, surface, accent-soft) {
-    $t: map.merge($t, ($key: pf-mix($page-to, map.get($t, $key), $pf-reading-hc-page)));
+  @each $key in (bg, surface, accent-soft, chrome) {
+    @if map.has-key($t, $key) {
+      $t: map.merge($t, ($key: pf-mix($page-to, map.get($t, $key), $pf-reading-hc-page)));
+    }
   }
-  @each $key in (fg, heading, muted, panel-muted, accent) {
-    $t: map.merge($t, ($key: pf-mix($ink-to, map.get($t, $key), $pf-reading-hc-ink)));
+  @each $key in (fg, heading, muted, panel-muted, accent, title, strong, em) {
+    @if map.has-key($t, $key) {
+      $t: map.merge($t, ($key: pf-mix($ink-to, map.get($t, $key), $pf-reading-hc-ink)));
+    }
   }
   @return $t;
 }
@@ -195,6 +208,17 @@ $pf-reading-header-glass-dark: .78 !default;
   $chrome: pf-mix(#000, map.get($t, bg), $pf-reading-chrome-light);
   @if $dark {
     $chrome: pf-mix(#000, map.get($t, bg), $pf-reading-chrome-dark);
+  }
+  // A swatch can name its own chrome colour (Material).
+  @if map.has-key($t, chrome) {
+    $chrome: map.get($t, chrome);
+  }
+  // Multicolour swatches: content headings, bold and italics in their own
+  // colours (Material).
+  @each $key in (title, strong, em) {
+    @if map.has-key($t, $key) {
+      --pf-g-#{$key}: #{map.get($t, $key)};
+    }
   }
   --pf-g-bg: #{map.get($t, bg)};
   --pf-g-bg-rgb: #{pf-rgb(map.get($t, bg))};
@@ -467,6 +491,29 @@ html#{$pf-themed} :is(.pf-bento, .pf-bento__lead) {
     --pf-map-tip-solid: rgb(var(--pf-g-chrome-rgb));
     --pf-map-tip-line: var(--pf-g-rule);
     --pf-map-tip-text: var(--pf-g-fg);
+  }
+}
+
+// Multicolour swatches (Material): headings, bold and italics in the main
+// content take their own colours. Italics stay plain on the bento's glass
+// over a video, where purple would fall under 4.5:1.
+@each $name, $t in $pf-reading-themes {
+  @if map.has-key($t, title) {
+    html[data-pf-theme="#{$name}"] .pf-main :is(h1, h2, h3, h4, h5, h6) {
+      color: var(--pf-g-title);
+    }
+  }
+
+  @if map.has-key($t, strong) {
+    html[data-pf-theme="#{$name}"] .pf-main :is(strong, b) {
+      color: var(--pf-g-strong);
+    }
+  }
+
+  @if map.has-key($t, em) {
+    html[data-pf-theme="#{$name}"] .pf-main :is(em, i):not(.pf-bento *) {
+      color: var(--pf-g-em);
+    }
   }
 }
 

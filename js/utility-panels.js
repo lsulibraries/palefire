@@ -170,8 +170,8 @@
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colours (_reading-themes.scss). Cream is the default: no
   // attribute, not saved. See DARK_THEMES.
-  const THEMES = ['cream', 'soft', 'lavender', 'sepia', 'sage', 'mist', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight'];
-  const DARK_THEMES = ['dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight'];
+  const THEMES = ['cream', 'soft', 'lavender', 'sepia', 'sage', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
+  const DARK_THEMES = ['dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
   const FONT_ID = 'pf-font-atkinson';
   const FONT_URL = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
 

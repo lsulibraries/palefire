@@ -919,13 +919,13 @@ Defined once in `$pf-reading-themes` (`scss/components/_reading-themes.scss`).
 | Lavender (muted LSU purple on cream) | #f7f4ec | #6b5a8e | 5.5:1 |
 | Sepia | #f4ecd8 | #5b4636 | 7.5:1 |
 | Sage | #e3eadb | #3b4a3a | 7.7:1 |
-| Mist | #eceeef | #4a4f55 | 7.1:1 |
 | Dusk (soft dark) | #2b2a33 | #b7b3c0 | 6.9:1 |
 | Night | #121014 | #e6e2ea | 14.8:1 |
 | Solarized (Solarized dark) | #002b36 | #839496 | 4.7:1 |
 | Cocoa (warm brown) | #26211c | #9c8e7d | 5.0:1 |
 | Forest (green) | #1c2420 | #869a8d | 5.3:1 |
 | Midnight (blue) | #1d2330 | #8a94a8 | 5.2:1 |
+| Material (Atom Material Theme; replaced Mist) | #263238 | #eeffff | 12.8:1 |
 
 Soft cream, Lavender and Dusk are the deliberately soft ones, closest to AA
 (Soft cream added as a follow-up: the Cream page with a lighter grey). The
@@ -1061,6 +1061,7 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
 - **Glass:** the header, dropdowns, TOC sidebar and footer are the page
   colour with a little black (3% on light swatches, 15% on dark), so they
   read as a quiet layer just under the page. Same opacity as before.
+  (Changed the same day: see "Material swatch" below.)
 - **High contrast** with a swatch: the swatch's own colours pushed apart.
   Light swatches get a lighter page and darker text, dark ones a darker
   page and lighter text (page 50% toward white or black, text 30% the
@@ -1073,6 +1074,25 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
   colour).
 - **Solarized's accent** is a touch lighter (#33b5aa, was #2aa198), so links
   still pass over a background video (6.0:1 on its page).
+
+### Material swatch; lighter chrome glass (2026-10-16)
+
+- **Material replaces Mist.** The Atom Material Theme's colours, sampled
+  from the editor: page #263238, text #eeffff, labels and TOC links
+  #a7b6b8, links and the TOC bar cyan #89ddff. It is the first multicolour
+  swatch: in the main content, headings are green (#c3e88d, 9.6:1), bold
+  yellow (#ffcb6b, 8.8:1) and italics purple (#c792ea, 5.5:1; left plain on
+  the bento's glass over a video, where it would fall under 4.5:1). The
+  optional `title`, `strong` and `em` keys in `$pf-reading-themes` do
+  this, so any swatch can use them. The Settings tile shows just its page
+  and text colours. A visitor who had Mist saved gets Cream.
+- **Material's header and TOC are its own sidebar colour** (#232e33, the
+  editor's darker panel), set with the new optional `chrome` key instead of
+  the mix below.
+- **Chrome glass:** light swatches are back to the page colour itself (was
+  3% black); dark swatches have half the added darkness (7.5% black, was
+  15%). Dusk's panel label tone is a touch lighter (#a6a2af, was #a29eab)
+  so labels on its glass stay 4.5:1 over a background video.
 
 ### LibGuides
 

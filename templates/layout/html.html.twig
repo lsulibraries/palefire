@@ -80,9 +80,9 @@
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
         var t = s.theme || (s.dark ? 'night' : '');
-        if (/^(soft|lavender|sepia|sage|mist|dusk|night|solarized|cocoa|forest|midnight)$/.test(t)) {
+        if (/^(soft|lavender|sepia|sage|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
           h.setAttribute('data-pf-theme', t);
-          if (/^(dusk|night|solarized|cocoa|forest|midnight)$/.test(t)) {
+          if (/^(dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
             h.classList.add('pf-reading-dark');
             h.setAttribute('data-bs-theme', 'dark');
           }
