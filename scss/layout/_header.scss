@@ -231,9 +231,11 @@
     // underline draws in from the left under the words, and on leaving
     // carries on out to the right (it shrinks toward the right edge),
     // rather than snapping back. The current page keeps a full, still one.
+    // Always in the hover colour, so it doesn't change colour on its way
+    // out while the text fades back.
     .pf-primary-nav__text {
       padding-bottom: .45em;
-      background-image: linear-gradient(currentColor, currentColor);
+      background-image: linear-gradient(var(--bs-dropdown-link-hover-color), var(--bs-dropdown-link-hover-color));
       background-position: 100% 100%;
       background-repeat: no-repeat;
       background-size: 0 2px;

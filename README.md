@@ -1442,6 +1442,14 @@ transition sets the way in, the resting state's the way out;
 `_header.scss`), alongside the drawn underline. None with reduced motion.
 Measured in headless Edge with a forced :hover.
 
+### Dropdown underline stays the hover colour (2026-10-17)
+
+The dropdown links' drawn underline was in the text colour, so on its way
+out it faded from the hover colour back to the text's while it shrank. It
+is now always the hover colour (`--bs-dropdown-link-hover-color`,
+`_header.scss`): it simply draws in and out. The text keeps its own calm
+colour change (.2s in, .5s out).
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
