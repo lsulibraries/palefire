@@ -1094,6 +1094,22 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
   15%). Dusk's panel label tone is a touch lighter (#a6a2af, was #a29eab)
   so labels on its glass stay 4.5:1 over a background video.
 
+### Librarian card typography (2026-10-16)
+
+The guide Librarian card (`.pf-guide-block--person`, `.pf-person`) is set
+like a museum staff listing, CSS only (`_guide.scss`):
+
+- The name (1.375rem medium, tight tracking, a thin accent underline), then
+  the role straight under it in the muted colour. Any unlabelled text field
+  (job title, pronouns) is moved up to that role line with `order`, so
+  Manage display order no longer puts the job title last.
+- A hairline, then the labelled fields (phone, email, office) as a
+  two-column list: tracked monospace labels in a 7.5rem column, values in
+  the body sans on the same baseline, tabular figures so numbers align.
+  Email and phone links are body colour with an accent underline.
+- Photo 5.5rem square, cropped toward the face, its top on the name.
+  Below 576px the photo opens the card and each label sits over its value.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
