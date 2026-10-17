@@ -266,38 +266,23 @@
    * Opens a utility drawer over the open menu drawer, keeping the menu
    * underneath (Bootstrap would close it: one offcanvas at a time). While
    * it is up, <html class="pf-over-menu"> lifts the drawer and its backdrop
-   * above the menu (_utility-panels.scss) and shows its "Menu" back button.
-   * - Back, Escape or a tap on the backdrop close just this drawer; focus
-   *   goes back to the tile that opened it, and the menu's focus trap
-   *   (Bootstrap keeps one active at a time) is restored.
-   * - Its close button closes both, back to the page.
+   * above the menu (_utility-panels.scss). Closing it (its × button, Escape
+   * or a tap on the backdrop) goes back to the menu: focus returns to the
+   * tile that opened it, and the menu's focus trap (Bootstrap keeps one
+   * active at a time) is restored.
    */
   function openOverMenu(panel, tile) {
     const bs = window.bootstrap;
     const menu = document.getElementById('pf-primary-menu');
-    let closeAll = false;
 
-    const onClick = (event) => {
-      if (event.target.closest('[data-pf-panel-back]')) {
-        bs.Offcanvas.getOrCreateInstance(panel).hide();
-      }
-      else if (event.target.closest('.pf-panel__close')) {
-        closeAll = true;
-      }
-    };
     const onHidden = (event) => {
       if (event.target !== panel) {
         return;
       }
       document.removeEventListener('hidden.bs.offcanvas', onHidden);
-      panel.removeEventListener('click', onClick);
       root.classList.remove('pf-over-menu');
       const menuDrawer = menu && bs.Offcanvas.getInstance(menu);
       if (!menuDrawer || !menu.classList.contains('show')) {
-        return;
-      }
-      if (closeAll) {
-        menuDrawer.hide();
         return;
       }
       // Back on the menu: its backdrop wash, its focus trap, the tile.
@@ -310,19 +295,6 @@
       tile.focus();
     };
 
-    // The back button, made once per drawer (shown by .pf-over-menu).
-    const header = panel.querySelector('.pf-panel__header');
-    if (header && !header.querySelector('[data-pf-panel-back]')) {
-      const back = document.createElement('button');
-      back.type = 'button';
-      back.className = 'pf-panel__back';
-      back.setAttribute('data-pf-panel-back', '');
-      back.setAttribute('aria-label', Drupal.t('Back to Menu'));
-      back.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      back.append(Drupal.t('Menu'));
-      header.prepend(back);
-    }
-
     // Pause the menu's focus trap first: the drawer's own trap focuses
     // the drawer before it takes over, and the menu's would pull focus
     // back into the menu.
@@ -332,7 +304,6 @@
     }
 
     root.classList.add('pf-over-menu');
-    panel.addEventListener('click', onClick);
     // On document, so it runs after the drawer's own hidden handlers
     // (utility-panels.js clears data-pf-panel there).
     document.addEventListener('hidden.bs.offcanvas', onHidden);

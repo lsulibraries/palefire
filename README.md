@@ -1362,6 +1362,15 @@ script already handled (`event.defaultPrevented`; Swup passes the event
 to `ignoreVisit` but doesn't check it itself). Reproduced and fixed in
 headless Edge with Swup running.
 
+### Drawers over the mobile menu: × goes back (2026-10-17)
+
+Over the mobile menu, a drawer's × closed both it and the menu, next to a
+separate "‹ Menu" back button, which was confusing. Now × (like Escape and
+a tap on the backdrop) closes just that drawer and goes back to the menu,
+with focus on the tile that opened it; the back button is gone
+(`openOverMenu`, `js/palefire.js`; its styles left
+`_utility-panels.scss`). To leave, close the menu itself.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names
