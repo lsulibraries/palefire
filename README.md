@@ -1110,6 +1110,29 @@ like a museum staff listing, CSS only (`_guide.scss`):
 - Photo 5.5rem square, cropped toward the face, its top on the name.
   Below 576px the photo opens the card and each label sits over its value.
 
+### Cache busting for CSS and JS (2026-10-16)
+
+Drupal puts a library's version in its CSS and JS URLs (`?v=1.0.0`), and
+every Palefire library had a fixed version, so after a deploy a changed
+`style.css` or script kept its old URL and browsers (or a CDN) could keep
+serving the old copy. `palefire_library_info_alter()` (`palefire.theme`)
+now sets each theme file's version to a 10-character hash of its contents,
+and each library's version to a hash of those. A changed file gets a new
+URL; unchanged files keep theirs, so their caches stay warm.
+
+- Takes effect on `drush cr` (already part of every deploy): library info
+  is cached, so files are only hashed when caches are rebuilt.
+- Files outside the theme (Font Awesome Pro in `/libraries`) and external
+  URLs keep their declared versions.
+- The versions in `palefire.libraries.yml` are now just labels; no need to
+  bump them.
+- To check after a deploy: with CSS/JS aggregation off (Configuration >
+  Performance), the page source should show `style.css?v=` followed by a
+  10-character hash that changes whenever the file does. With aggregation
+  on, compare the `/sites/default/files/css/css_….css` name before and
+  after a CSS change. If the hook ever finds nothing to change it does
+  nothing, so it can't break asset loading.
+
 ### LibGuides
 
 The LibGuides site will be restyled to match later. Keep the class names

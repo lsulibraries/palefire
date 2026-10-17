@@ -1,3 +1,8 @@
+# Versions here are only labels: palefire_library_info_alter()
+# (palefire.theme) replaces the version of every file in this theme with a
+# hash of its contents when caches are rebuilt, so a changed CSS or JS file
+# always gets a new URL. No need to bump them by hand.
+
 # Compiled Bootstrap 5.3 + Palefire styles (npm run build) and theme behaviors.
 global:
   version: 1.0.0
