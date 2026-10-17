@@ -37,11 +37,9 @@
   initial-value: 0px;
 }
 
-// Sidebar + TOC follow the active section (set by modular-toc.js).
-// A dark reading swatch on a guide (html.pf-guide-dark) sets them from the first
-// paint, before modular-toc.js runs.
-body[data-section-theme="dark"],
-html.pf-guide-dark body {
+// Sidebar + TOC follow the active section (set by modular-toc.js). With a
+// reading swatch they follow the swatch instead (_reading-themes.scss).
+body[data-section-theme="dark"] {
   @include pf-tokens($pf-chrome-dark);
 }
 
@@ -492,6 +490,8 @@ html.pf-snap .site-footer {
 // run underneath it, they just don't show through.
 // (The Settings drawer's switches add html.pf-a11y-solid / -contrast:
 // pf-solid-chrome, base/_mixins.scss. :root can't nest, so it's repeated.)
+// With a reading swatch the sidebar's glass is set on <body>
+// (_reading-themes.scss), so these don't reach it.
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   :root {
     --pf-sidebar-bg: var(--bs-body-bg);

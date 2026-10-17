@@ -43,10 +43,10 @@ $pf-logo-filter-dark: none !default;
     background-color $pf-chrome-transition,
     border-color $pf-chrome-transition;
 
-  // Dusk or Night reading colours on a guide: html.pf-guide-dark, from the
-  // first paint.
+  // A dark reading swatch: html.pf-reading-dark, from the first paint. The
+  // swatch's own glass and accent: _reading-themes.scss.
   &[data-bs-theme="dark"],
-  html.pf-guide-dark & {
+  html.pf-reading-dark & {
     --pf-header-bg: #{$pf-header-bg-dark};
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -96,19 +96,19 @@ $pf-logo-filter-dark: none !default;
 }
 
 body[data-section-theme="dark"] .pf-page::before,
-html.pf-guide-dark .pf-page::before {
+html.pf-reading-dark .pf-page::before {
   background-color: $pf-header-bg-dark;
 }
 
 // No blur support: nearly opaque, as in light mode.
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .pf-header[data-bs-theme="dark"],
-  html.pf-guide-dark .pf-header {
+  html.pf-reading-dark .pf-header {
     --pf-header-bg: #{rgba($black, $pf-header-bg-alpha-solid)};
   }
 
   body[data-section-theme="dark"] .pf-page::before,
-  html.pf-guide-dark .pf-page::before {
+  html.pf-reading-dark .pf-page::before {
     background-color: rgba($black, $pf-header-bg-alpha-solid);
   }
 }
@@ -127,18 +127,19 @@ html.pf-guide-dark .pf-page::before {
   }
 }
 
-// The same for Dusk / Night on guides (html.pf-guide-dark), written out by hand:
+// The same for the dark reading swatches (html.pf-reading-dark), written out by hand:
 // pf-solid-chrome nests its class version under :root, so a selector that
-// starts with html (html.pf-guide-dark) can't go inside it; it would never
-// match. The guide's own colours for these: _guide.scss.
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  html.pf-guide-dark .pf-header {
+// starts with html (html.pf-reading-dark) can't go inside it; it would never
+// match. The swatch's own colours for these: _reading-themes.scss. High
+// contrast leaves a swatch's glass alone (it pushes its colours apart).
+@media (prefers-reduced-transparency: reduce) {
+  html.pf-reading-dark .pf-header {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 }
 
-:root.pf-guide-dark:is(.pf-a11y-solid, .pf-a11y-contrast) .pf-header {
+:root.pf-reading-dark.pf-a11y-solid .pf-header {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }

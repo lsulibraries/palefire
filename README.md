@@ -935,25 +935,19 @@ stays 4.5:1 on them too (callouts still have their accent bar). Every
 swatch's muted text is 4.5:1 and up (on its surface colour too), its accent
 (links) 4.7:1 and up, its scrollbar thumb 3:1 and up on page and rail.
 
-- **Where:** on guides the whole page, including the header (glass in the
-  swatch's page colour, menu, icons and logo in its text colour), the TOC
-  (muted links, heading-colour active link, accent bar) and the drawers. On
-  every other page only the main content (`#main-content`); the header,
-  sidebar and drawers keep their usual colours there, and bento sections
-  with a background video, dark sections and the events calendar keep
-  their own. Cream changes nothing outside guides.
+- **Where:** every page once a swatch is picked, and guides always (Cream
+  by default). Since "Reading colours everywhere" (below) that is the whole
+  page; it used to be guides only, with just the main content elsewhere.
 - **How:** `<html data-pf-theme="sepia">` (Cream: none), set before the
   first paint by the inline script in `html.html.twig` and live by
   `utility-panels.js` (`THEMES`). Each swatch sets the guide tokens
   (`--pf-g-*`) and Bootstrap's `--bs-body-*`, link and border colours. The
   dark swatches (`DARK_THEMES`: Dusk, Night, Solarized, Cocoa, Forest,
-  Midnight) on a guide also add `.pf-guide-dark` and `data-bs-theme="dark"`,
-  which drive the existing dark chrome (`_chrome-dark.scss`, `_guide.scss`,
-  `modular-toc.js`). Saved as `theme` in `pf-a11y`; a saved "Dark guides"
-  (`dark`) reads as Night.
-- **High contrast** (Settings switch or the OS): each swatch swaps in its own
-  stronger text (11:1 and up, AAA) and makes muted text and rules full
-  strength, so the swatch keeps its hue.
+  Midnight) also add `.pf-reading-dark` (was `.pf-guide-dark`) and
+  `data-bs-theme="dark"`. Saved as `theme` in `pf-a11y`; a saved "Dark
+  guides" (`dark`) reads as Night.
+- **High contrast** (Settings switch or the OS): see "Reading colours
+  everywhere" below.
 - **Logo:** the header logo's fill is now the bar's text colour by default
   (was a fixed #999), and the swatch's text colour on guides.
 - **To add a swatch:** an entry in `$pf-reading-themes` (check contrast), its
@@ -1040,6 +1034,45 @@ Apple, Georgia elsewhere. System fonts only, so nothing is downloaded.
   the swatch's rule colour. The Hours OPEN badge drops Origami's gold for the
   swatch's accent with its on-accent text (6.6:1 and up); the Handjet clock
   stays. The `--pf-hours-badge-*` tokens are gone.
+
+### Reading colours everywhere; high contrast reworked (2026-10-16)
+
+- **The swatch now colours every page and everything on it** (it was guides
+  only, with just the main content elsewhere): header and its dropdowns,
+  TOC sidebar, drawers, dark sections (they become the page colour), the
+  bento lead panel and Visit strip, the building map and its tooltips, the
+  events calendar and the footer. Background videos and maps keep playing
+  under a wash of the page colour (60%; the map's in-view wash 90%), with
+  the panels as 75% glass on top (80% on dark swatches). Text on that glass
+  is the heading colour and labels the panel muted tone, so it stays 4.5:1
+  over a black (light swatches) or white (dark) frame. Pages with no swatch
+  picked look as before.
+- **How:** each swatch only writes its `--pf-g-*` tokens on `<html>`.
+  Bootstrap's colours come from those (`pf-reading-bs`), declared again on
+  anything that resets them (`[data-bs-theme]`, dark sections, the footer),
+  so the dark header and dropdowns no longer fall back to Bootstrap's grey.
+  The chrome, bento, map and calendar read the same tokens. Background
+  washes and the map's tooltip colours are now custom properties
+  (`--pf-media-wash`, `--pf-media-wash-map`, `--pf-map-tip-*`,
+  `--pf-map-on-hover`) with their old values as defaults. With a swatch,
+  `modular-toc.js` keeps the chrome on the swatch instead of switching it
+  for dark sections. All in `_reading-themes.scss`; the guide-only chrome
+  rules in `_guide.scss` are gone. CSS is about 14 KB smaller.
+- **Glass:** the header, dropdowns, TOC sidebar and footer are the page
+  colour with a little black (3% on light swatches, 15% on dark), so they
+  read as a quiet layer just under the page. Same opacity as before.
+- **High contrast** with a swatch: the swatch's own colours pushed apart.
+  Light swatches get a lighter page and darker text, dark ones a darker
+  page and lighter text (page 50% toward white or black, text 30% the
+  other way). Text is 8.3:1 and up on every swatch (AAA), scrollbar thumbs
+  gain contrast, and rules, borders and glass stay as they are. It used to
+  swap in brighter text, make borders full strength (which darkened the
+  scrollbar's track) and make the chrome solid in Palefire's grey, which
+  clashed with the swatch. Pages without a swatch keep the old behaviour.
+  "Reduce transparency" still makes the chrome solid (in the swatch's
+  colour).
+- **Solarized's accent** is a touch lighter (#33b5aa, was #2aa198), so links
+  still pass over a background video (6.0:1 on its page).
 
 ### LibGuides
 

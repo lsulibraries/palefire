@@ -108,3 +108,9 @@ $pf-logo-color-dark:     #fff;     // On the dark bar (Origami: white, gold on h
 $pf-panel-width:             24rem;
 $pf-panel-backdrop-light:    .45; // a wash of the page colour (Cream or the guide swatch), not black
 $pf-panel-backdrop-dark:     .55;
+
+// Reading colours (components/_reading-themes.scss) ---------------------------
+// Pages that wear a reading swatch: every page once a visitor picks one
+// (<html data-pf-theme>), and guides always (Cream when none is picked).
+// Use after html: html#{$pf-themed}.
+$pf-themed: ':is([data-pf-theme], [data-pf-mode="guide"])';

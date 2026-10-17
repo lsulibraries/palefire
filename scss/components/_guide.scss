@@ -8,29 +8,11 @@
 //
 // Colours: the reading swatch (Settings > Reading colours), as --pf-g-* and
 // Bootstrap's --bs-body-* tokens on <html>: _reading-themes.scss. Cream is
-// the default. The dark swatches also add .pf-guide-dark (and
-// data-bs-theme="dark"), which the dark chrome rules below key on. Rules
-// (--pf-g-rule) are dividers only, not the boundary of a control, so
-// 1.4.11's 3:1 doesn't apply to them.
+// the default on guides. Rules (--pf-g-rule) are dividers only, not the
+// boundary of a control, so 1.4.11's 3:1 doesn't apply to them.
 //
-// Inside a dark section the section tokens (--pf-section-*) win, so that
-// section keeps its own black and lavender.
-
-// The page's own scrollbar looks like the TOC rail: a 4px track in the rail
-// colour with a lighter thumb than the TOC grey. The thumb is as light as it
-// can go and still pass 1.4.11 (3:1 for a control): #7a7772 is about 3.3:1
-// on the rail and 4:1 on the cream; the rail colour itself would be about
-// 1.2:1. Each reading swatch has its own thumb (--pf-g-scroll, 3:1 and up).
-// (The TOC sidebar shows no scrollbar at all: _modular.scss.)
-html[data-pf-mode="guide"] {
-  @include pf-thin-scrollbar;
-}
-
-html[data-pf-mode="guide"] {
-  --pf-scroll-thumb: var(--pf-g-scroll);
-  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover);
-  --pf-scroll-track: var(--pf-g-rule);
-}
+// Dark sections take the swatch too (_reading-themes.scss), so on a guide
+// they look like every other section.
 
 .pf-guide,
 .pf-guide-head {
@@ -43,95 +25,15 @@ html[data-pf-mode="guide"] {
   --pf-guide-prose: 42rem;
 }
 
-// A dark section on a light guide keeps its own surfaces.
+// A dark section without a reading swatch keeps its own surfaces (guides
+// always have one; _reading-themes.scss overrides this there).
 .pf-section--theme-dark .pf-guide {
   --pf-guide-surface: #{rgba($pf-white, 0.06)};
   --pf-guide-accent-soft: #{rgba($pf-lavender, 0.12)};
 }
 
-// Chrome: header, sidebar and TOC ------------------------------------------
-
-// Dark swatches (Dusk, Night): the bar is the swatch's own dark, as glass,
-// not Palefire's dark grey.
-html.pf-guide-dark[data-pf-mode="guide"] .pf-header {
-  --pf-header-bg: rgba(var(--pf-g-bg-rgb), 0.78);
-}
-
-html.pf-guide-dark[data-pf-mode="guide"] .pf-page::before {
-  background-color: rgba(var(--pf-g-bg-rgb), 0.78);
-}
-
-// Light swatches: the bar's glass is the page colour already (it is built
-// from --bs-body-bg-rgb); its menu text, icons and logo take the swatch's
-// text colour, and hover its accent.
-html[data-pf-mode="guide"]:not(.pf-guide-dark) .pf-header:not([data-bs-theme="dark"]) {
-  --pf-utility-color: var(--pf-g-fg);
-
-  .navbar {
-    --bs-navbar-color: var(--pf-g-fg);
-    --bs-navbar-hover-color: var(--pf-g-accent);
-    --bs-navbar-active-color: var(--pf-g-accent);
-  }
-
-  .pf-brand {
-    --pf-brand-color: var(--pf-g-fg);
-    --pf-brand-hover-color: var(--pf-g-accent);
-  }
-
-  .pf-utility-nav__link:is(:hover, :focus-visible, [aria-expanded="true"]) {
-    color: var(--pf-g-accent);
-  }
-}
-
-// Dark swatches: the logo in the swatch's text colour too.
-html.pf-guide-dark[data-pf-mode="guide"] .pf-header .pf-brand {
-  --pf-brand-color: var(--pf-g-fg);
-}
-
-// Reduce transparency / High contrast (OS setting or Settings drawer): a
-// solid bar in the guide's black. Same specificity as the rules above and
-// later, so these win; written out because pf-solid-chrome can't take
-// html-first selectors (see _chrome-dark.scss).
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  html.pf-guide-dark[data-pf-mode="guide"] .pf-header {
-    --pf-header-bg: var(--pf-g-bg);
-  }
-
-  html.pf-guide-dark[data-pf-mode="guide"] .pf-page::before {
-    background-color: var(--pf-g-bg);
-  }
-}
-
-:root.pf-guide-dark[data-pf-mode="guide"]:is(.pf-a11y-solid, .pf-a11y-contrast) {
-  .pf-header {
-    --pf-header-bg: var(--pf-g-bg);
-  }
-
-  .pf-page::before {
-    background-color: var(--pf-g-bg);
-  }
-}
-
-// The sidebar is the page colour, like the preview, instead of a separate
-// glass panel. While a dark section is active on a light guide, Palefire's
-// dark sidebar still takes over (body[data-section-theme="dark"]), so the
-// TOC's light-on-dark text always has its dark background.
-html[data-pf-mode="guide"] body:not([data-section-theme="dark"]),
-html.pf-guide-dark[data-pf-mode="guide"] body {
-  --pf-sidebar-bg: var(--bs-body-bg);
-}
-
-// The TOC in the swatch's colours: links in its muted text, the active link
-// and title in its heading colour, the rail in its rule colour, the bar in
-// its accent (gold is about 1.4:1 on cream, under 1.4.11's 3:1).
-html[data-pf-mode="guide"]:not(.pf-guide-dark) body:not([data-section-theme="dark"]),
-html.pf-guide-dark[data-pf-mode="guide"] body {
-  --pf-toc-accent: var(--pf-g-accent);
-  --pf-toc-color: var(--pf-g-muted);
-  --pf-toc-sub-color: var(--pf-g-muted);
-  --pf-toc-active: var(--pf-g-heading);
-  --pf-toc-rail: var(--pf-g-rule);
-}
+// Chrome (header, sidebar, TOC colours, the page scrollbar) and dark
+// sections follow the swatch on every page now: _reading-themes.scss.
 
 // Preview type: smaller monospace links, so long guides fit the rail.
 html[data-pf-mode="guide"] {
@@ -188,12 +90,8 @@ html[data-pf-mode="guide"] .pf-sections > .pf-section {
   --pf-section-pad-block: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-html[data-pf-mode="guide"] .pf-sections > .pf-section + .pf-section:not(.pf-section--theme-dark) {
+html[data-pf-mode="guide"] .pf-sections > .pf-section + .pf-section {
   border-top: 1px solid var(--pf-g-rule);
-}
-
-html[data-pf-mode="guide"] .pf-sections > .pf-section--theme-dark + .pf-section {
-  border-top: 0;
 }
 
 html[data-pf-mode="guide"] .pf-section__title {

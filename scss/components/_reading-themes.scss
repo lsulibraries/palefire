@@ -9,18 +9,27 @@
 //
 // <html data-pf-theme="sepia"> (no attribute: Cream, the default), set by
 // the inline script in html.html.twig before the first paint and by
-// js/utility-panels.js. Dusk, Night, Solarized, Cocoa, Forest and Midnight are dark: on guides they also add
-// .pf-guide-dark and data-bs-theme="dark" to <html>, which turn the header,
-// TOC and drawers dark (_chrome-dark.scss, _guide.scss, _utility-panels.scss).
+// js/utility-panels.js. Dusk, Night, Solarized, Cocoa, Forest and Midnight
+// are dark: they also add .pf-reading-dark and data-bs-theme="dark" to
+// <html>.
 //
-// Where they apply:
-// - Guides (<html data-pf-mode="guide">): the whole page, including the
-//   header, the TOC and the drawers.
-// - Every other page: the main content only (#main-content), so the
-//   header, sidebar and drawers keep their usual colours. Sections that
-//   carry their own colours keep them: dark sections set their own tokens
-//   and data-bs-theme, and bento sections with a background video are reset
-//   to the default here. Cream on other pages is the default (no change).
+// Where they apply (2026-10-16: site-wide, was guides only):
+// - Every page once a swatch is picked, and guides always (Cream when none
+//   is): $pf-themed. The swatch colours everything: page, header and its
+//   dropdowns, TOC sidebar, drawers, dark sections, the bento lead panel and
+//   Visit strip, the building map, the events calendar and the footer.
+//   Background videos and maps stay; their wash and glass take the swatch.
+// - Pages with no swatch (and not a guide) look as they always have.
+//
+// How: each swatch writes its --pf-g-* tokens on <html> (pf-reading-tokens).
+// Everything else reads those: Bootstrap's --bs-* colours (pf-reading-bs),
+// re-declared on anything that resets them ([data-bs-theme], dark sections,
+// the footer), and the chrome, section, bento, map and calendar tokens
+// below. So a swatch, or high contrast, only ever changes --pf-g-*.
+//
+// Chrome glass (header, TOC sidebar, dropdowns, footer): the page colour
+// with a little black ($pf-reading-chrome-*), so it reads as a quiet layer
+// just under the page, light swatches and dark alike.
 //
 // Contrast, measured (normal text, WCAG AA 4.5:1; Soft cream, Lavender and
 // Dusk are the deliberately soft ones, closest to the minimum):
@@ -32,17 +41,26 @@
 //   mist     text  7.1  muted 5.5  accent  6.7
 //   dusk     text  6.9  muted 5.4  accent  7.9
 //   night    text 14.8  muted 8.7  accent 10.5
-//   solarized text 4.75 muted 5.5  accent  4.75  (Solarized dark)
+//   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
 //   midnight text  5.15 muted 5.0  accent  8.4
-// Muted text on the surface colour is 4.5:1 and up. The four later dark
-// swatches keep their surface and callout tints (surface, accent-soft) just
-// above their page colour so text, muted and accent stay 4.5:1 on them too.
-// Scrollbar thumbs are 3:1 and up on both the page and the rail (1.4.11). High contrast (the
-// Settings switch or the OS) swaps in each swatch's own stronger text
-// (11:1 and up, AAA) and makes muted text and rules full strength, so the
-// swatch keeps its hue.
+// On the chrome glass: text 4.9:1 and up, muted 4.6:1 and up. Muted text on
+// the surface colour is 4.5:1 and up. The four later dark swatches keep
+// their surface and callout tints (surface, accent-soft) just above their
+// page colour so text, muted and accent stay 4.5:1 on them too. Scrollbar
+// thumbs are 3:1 and up on both the page and the rail (1.4.11).
+//
+// Over a background video (worst case, a black frame under a light swatch
+// or a white one under a dark swatch) text sits on two layers: a 60% wash of
+// the page colour, then 75% glass (80% on dark swatches). Panel text there
+// is the heading colour (6.3:1 and up) and labels the panel muted tone
+// (4.5:1 and up). The map's in-view wash is 90%.
+//
+// High contrast (the Settings switch or the OS): the swatch's own colours
+// pushed apart, so it keeps its hue and stays glass. Light swatches: page
+// lighter, text darker. Dark swatches: page darker, text lighter. Rules,
+// borders and scrollbar thumbs stay as they are (pf-reading-hc).
 // =========================================================================
 
 $pf-reading-themes: (
@@ -50,98 +68,148 @@ $pf-reading-themes: (
     label: 'Cream', dark: false,
     bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7a7772, fg-hc: #141413, panel-muted: #505050,
+    scroll: #7a7772, panel-muted: #505050,
   ),
   'soft': (
     label: 'Soft cream', dark: false,
     bg: #f7f4ec, fg: #676561, heading: #3d3c39, muted: #696763, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7f7c77, fg-hc: #2b2a28, panel-muted: #514f4c,
+    scroll: #7f7c77, panel-muted: #514f4c,
   ),
   'lavender': (
     label: 'Lavender', dark: false,
     bg: #f7f4ec, fg: #6b5a8e, heading: #4f3f73, muted: #6e6679, rule: #e4dde8,
     surface: #efeaf0, accent: $pf-purple, accent-soft: #e9e1f1,
-    scroll: #857a96, fg-hc: #3a2a5c, panel-muted: #574975,
+    scroll: #857a96, panel-muted: #574975,
   ),
   'sepia': (
     label: 'Sepia', dark: false,
     bg: #f4ecd8, fg: #5b4636, heading: #3e2e22, muted: #6f5a47, rule: #e2d6bc,
     surface: #ece2c9, accent: #7a3e1d, accent-soft: #eadcc4,
-    scroll: #85705a, fg-hc: #3a2a1d, panel-muted: #5b4838,
+    scroll: #85705a, panel-muted: #5b4838,
   ),
   'sage': (
     label: 'Sage', dark: false,
     bg: #e3eadb, fg: #3b4a3a, heading: #263326, muted: #52604f, rule: #cad5c0,
     surface: #d9e2cf, accent: #2f5a3a, accent-soft: #d2dfc8,
-    scroll: #647260, fg-hc: #1e2a1e, panel-muted: #404e3f,
+    scroll: #647260, panel-muted: #404e3f,
   ),
   'mist': (
     label: 'Mist', dark: false,
     bg: #eceeef, fg: #4a4f55, heading: #2e3237, muted: #5a6066, rule: #d6dadd,
     surface: #e2e5e7, accent: #3d4f8a, accent-soft: #dde2ee,
-    scroll: #747a80, fg-hc: #1f2327, panel-muted: #484e53,
+    scroll: #747a80, panel-muted: #484e53,
   ),
   'dusk': (
     label: 'Dusk', dark: true,
     bg: #2b2a33, fg: #b7b3c0, heading: #dcd8e4, muted: #a29eab, rule: #45434f,
     surface: #34333d, accent: $pf-lavender, accent-soft: #3a3446,
-    scroll: #9a96a3, fg-hc: #ece9f2, panel-muted: #a29eab,
+    scroll: #9a96a3, panel-muted: #a29eab,
   ),
   'night': (
     label: 'Night', dark: true,
     bg: #121014, fg: #e6e2ea, heading: #ffffff, muted: #b3adbb, rule: #34303a,
     surface: #1c1921, accent: $pf-lavender, accent-soft: #2a2235,
-    scroll: #b3adbb, fg-hc: #ffffff, panel-muted: #b3adbb,
+    scroll: #b3adbb, panel-muted: #b3adbb,
   ),
   // Low-contrast dark reading modes (follow-up): text just above AA.
+  // Solarized's cyan is a touch lighter than the original #2aa198, so links
+  // still pass over a background video.
   'solarized': (
     label: 'Solarized', dark: true,
     bg: #002b36, fg: #839496, heading: #eee8d5, muted: #8fa0a2, rule: #0b3a46,
-    surface: #032e39, accent: #2aa198, accent-soft: #022e39,
-    scroll: #6f8a90, fg-hc: #eee8d5, panel-muted: #8fa0a2,
+    surface: #032e39, accent: #33b5aa, accent-soft: #022e39,
+    scroll: #6f8a90, panel-muted: #8fa0a2,
   ),
   'cocoa': (
     label: 'Cocoa', dark: true,
     bg: #26211c, fg: #9c8e7d, heading: #e6d9c6, muted: #9b8d7c, rule: #3a332d,
     surface: #2a2420, accent: #d9a66b, accent-soft: #2e2720,
-    scroll: #91836f, fg-hc: #f1e8da, panel-muted: #ab9d8b,
+    scroll: #91836f, panel-muted: #ab9d8b,
   ),
   'forest': (
     label: 'Forest', dark: true,
     bg: #1c2420, fg: #869a8d, heading: #d6e4da, muted: #839789, rule: #2c3832,
     surface: #212a25, accent: #8fcfa6, accent-soft: #202e27,
-    scroll: #7a9083, fg-hc: #e8f1eb, panel-muted: #93a799,
+    scroll: #7a9083, panel-muted: #93a799,
   ),
   'midnight': (
     label: 'Midnight', dark: true,
     bg: #1d2330, fg: #8a94a8, heading: #d8deec, muted: #8791a5, rule: #2f3747,
     surface: #222938, accent: #a9bdf2, accent-soft: #22293b,
-    scroll: #7d889e, fg-hc: #ebeff8, panel-muted: #97a1b5,
+    scroll: #7d889e, panel-muted: #97a1b5,
   ),
 ) !default;
+
+// Chrome glass: the page colour with this much black.
+$pf-reading-chrome-light: 3% !default;
+$pf-reading-chrome-dark: 15% !default;
+
+// High contrast: how far the page moves toward white (light swatches) or
+// black (dark), and the text the other way.
+$pf-reading-hc-page: 50% !default;
+$pf-reading-hc-ink: 30% !default;
+
+// Glass over a background video, and the washes over the video itself.
+$pf-reading-media-wash: .6 !default;
+$pf-reading-media-wash-map: .9 !default;
+$pf-reading-media-glass: .75 !default;
+$pf-reading-media-glass-dark: .8 !default;
+// TOC sidebar glass elsewhere (it can sit over a section photo).
+$pf-reading-sidebar-glass: .9 !default;
+// Header glass on dark swatches (light ones use $pf-header-bg-alpha).
+$pf-reading-header-glass-dark: .78 !default;
 
 @function pf-rgb($c) {
   @return math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb));
 }
 
-// The swatch's guide tokens (--pf-g-*, read by _guide.scss, the chrome and
-// the drawers) and Bootstrap's body colours, for everything that reads
-// --bs-* (links, borders, form controls).
+// A mixed colour rounded to whole channels, so it prints as hex.
+@function pf-mix($a, $b, $weight) {
+  $c: color.mix($a, $b, $weight);
+  @return rgb(math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb)));
+}
+
+// High contrast version of a swatch: page colours pushed toward white (light
+// swatches) or black (dark), text toward the other end. Rules and scrollbar
+// thumbs are left alone, so borders don't get louder.
+@function pf-reading-hc($t) {
+  $page-to: #fff;
+  $ink-to: #000;
+  @if map.get($t, dark) {
+    $page-to: #000;
+    $ink-to: #fff;
+  }
+  @each $key in (bg, surface, accent-soft) {
+    $t: map.merge($t, ($key: pf-mix($page-to, map.get($t, $key), $pf-reading-hc-page)));
+  }
+  @each $key in (fg, heading, muted, panel-muted, accent) {
+    $t: map.merge($t, ($key: pf-mix($ink-to, map.get($t, $key), $pf-reading-hc-ink)));
+  }
+  @return $t;
+}
+
+// The swatch's tokens (--pf-g-*). Everything else reads these.
 @mixin pf-reading-tokens($t) {
   $dark: map.get($t, dark);
+  $chrome: pf-mix(#000, map.get($t, bg), $pf-reading-chrome-light);
+  @if $dark {
+    $chrome: pf-mix(#000, map.get($t, bg), $pf-reading-chrome-dark);
+  }
   --pf-g-bg: #{map.get($t, bg)};
   --pf-g-bg-rgb: #{pf-rgb(map.get($t, bg))};
   --pf-g-fg: #{map.get($t, fg)};
   --pf-g-fg-rgb: #{pf-rgb(map.get($t, fg))};
   --pf-g-heading: #{map.get($t, heading)};
+  --pf-g-heading-rgb: #{pf-rgb(map.get($t, heading))};
   --pf-g-muted: #{map.get($t, muted)};
   --pf-g-rule: #{map.get($t, rule)};
   --pf-g-surface: #{map.get($t, surface)};
   --pf-g-accent: #{map.get($t, accent)};
+  --pf-g-accent-rgb: #{pf-rgb(map.get($t, accent))};
   --pf-g-accent-soft: #{map.get($t, accent-soft)};
-  // Text on an accent fill (the Settings switch): white on the dark accents
-  // of light swatches, black on the lavender of dark ones.
+  // Text on an accent fill (the Settings switch, the Hours badge): white on
+  // the dark accents of light swatches, black on the light ones of dark.
   @if $dark {
     --pf-g-on-accent: #000;
   }
@@ -150,25 +218,12 @@ $pf-reading-themes: (
   }
   --pf-g-scroll: #{map.get($t, scroll)};
   --pf-g-scroll-hover: #{map.get($t, muted)};
-  // Drawers (_utility-panels.scss): text in the heading colour and labels
-  // in a muted tone darkened just enough to pass 4.5:1 on the drawer's
-  // glass over a black pixel (the glass lets about 19% of the page show).
+  // Text on glass (drawers, the bento lead panel, the TOC over a photo):
+  // the heading colour, and labels in a muted tone dark (or light) enough
+  // for 4.5:1 with the page showing through.
   --pf-g-panel-text: #{map.get($t, heading)};
   --pf-g-panel-muted: #{map.get($t, panel-muted)};
-  --bs-body-bg: #{map.get($t, bg)};
-  --bs-body-bg-rgb: #{pf-rgb(map.get($t, bg))};
-  --bs-body-color: #{map.get($t, fg)};
-  --bs-body-color-rgb: #{pf-rgb(map.get($t, fg))};
-  --bs-emphasis-color: #{map.get($t, heading)};
-  --bs-emphasis-color-rgb: #{pf-rgb(map.get($t, heading))};
-  --bs-secondary-color: #{map.get($t, muted)};
-  --bs-secondary-bg: #{map.get($t, surface)};
-  --bs-tertiary-bg: #{map.get($t, surface)};
-  --bs-border-color: #{map.get($t, rule)};
-  --bs-link-color: #{map.get($t, accent)};
-  --bs-link-color-rgb: #{pf-rgb(map.get($t, accent))};
-  --bs-link-hover-color: #{map.get($t, heading)};
-  --bs-link-hover-color-rgb: #{pf-rgb(map.get($t, heading))};
+  --pf-g-chrome-rgb: #{pf-rgb($chrome)};
   @if $dark {
     color-scheme: dark;
   }
@@ -177,108 +232,247 @@ $pf-reading-themes: (
   }
 }
 
-// High contrast: the swatch's own stronger text; muted text and rules go
-// to full strength.
-@mixin pf-reading-contrast($t) {
-  --pf-g-fg: #{map.get($t, fg-hc)};
-  --pf-g-fg-rgb: #{pf-rgb(map.get($t, fg-hc))};
-  --pf-g-heading: #{map.get($t, fg-hc)};
-  --pf-g-muted: #{map.get($t, fg-hc)};
-  --pf-g-rule: #{map.get($t, muted)};
-  --pf-g-panel-text: #{map.get($t, fg-hc)};
-  --pf-g-panel-muted: #{map.get($t, fg-hc)};
-  --bs-body-color: #{map.get($t, fg-hc)};
-  --bs-body-color-rgb: #{pf-rgb(map.get($t, fg-hc))};
-  --bs-emphasis-color: #{map.get($t, fg-hc)};
-  --bs-secondary-color: #{map.get($t, fg-hc)};
-  --bs-border-color: #{map.get($t, muted)};
+// Bootstrap's colours, from the tokens: on <html>, and again on anything
+// that resets them (data-bs-theme, dark sections, the footer).
+@mixin pf-reading-bs {
+  --bs-body-bg: var(--pf-g-bg);
+  --bs-body-bg-rgb: var(--pf-g-bg-rgb);
+  --bs-body-color: var(--pf-g-fg);
+  --bs-body-color-rgb: var(--pf-g-fg-rgb);
+  --bs-emphasis-color: var(--pf-g-heading);
+  --bs-emphasis-color-rgb: var(--pf-g-heading-rgb);
+  --bs-secondary-color: var(--pf-g-muted);
+  --bs-secondary-bg: var(--pf-g-surface);
+  --bs-tertiary-bg: var(--pf-g-surface);
+  --bs-border-color: var(--pf-g-rule);
+  --bs-link-color: var(--pf-g-accent);
+  --bs-link-color-rgb: var(--pf-g-accent-rgb);
+  --bs-link-hover-color: var(--pf-g-heading);
+  --bs-link-hover-color-rgb: var(--pf-g-heading-rgb);
 }
 
-// --- Guides: the whole page ----------------------------------------------
-// Cream with no attribute, every other swatch with its attribute.
+// --- The swatch -----------------------------------------------------------
+// Guides: Cream when none is picked. Then each picked swatch, any page.
 html[data-pf-mode="guide"] {
   @include pf-reading-tokens(map.get($pf-reading-themes, 'cream'));
-  background-color: var(--pf-g-bg);
 }
 
 @each $name, $t in $pf-reading-themes {
   @if $name != 'cream' {
-    html[data-pf-mode="guide"][data-pf-theme="#{$name}"] {
+    html[data-pf-theme="#{$name}"] {
       @include pf-reading-tokens($t);
     }
   }
 }
 
-// --- Every other page: the main content ----------------------------------
-// Cream is the default there too (no attribute: no change).
+// High contrast: the same swatch, pushed apart.
 @each $name, $t in $pf-reading-themes {
-  @if $name != 'cream' {
-    html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
-      @include pf-reading-tokens($t);
-      color: var(--bs-body-color);
-      background-color: var(--bs-body-bg);
-    }
-  }
-}
-
-// The page head (breadcrumb, <h1>) is in the main content but coloured with
-// the chrome's TOC tokens, so it gets the swatch's too. Not on pages that
-// open with a bento video: there the breadcrumb sits on its own light glass
-// strip over the video (_bento-swiss.scss), drawn for the default colours.
-@each $name, $t in $pf-reading-themes {
-  @if $name != 'cream' {
-    html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content:not(:has(.pf-sections > .pf-section:first-child .pf-bento.has-bg-video)) .pf-modular__head {
-      --pf-toc-color: #{map.get($t, muted)};
-      --pf-toc-active: #{map.get($t, heading)};
-      --pf-toc-accent: #{map.get($t, accent)};
-    }
-  }
-}
-
-// A bento section with a background video keeps the default colours: its
-// glass panels and the video's wash are drawn for them.
-html[data-pf-theme]:not([data-pf-mode="guide"]) #main-content .pf-section:has(.pf-bento.has-bg-video):not(.pf-section--theme-dark, .is-map-dark) {
-  --bs-body-bg: #{$body-bg};
-  --bs-body-bg-rgb: #{pf-rgb($body-bg)};
-  --bs-body-color: #{$body-color};
-  --bs-body-color-rgb: #{pf-rgb($body-color)};
-  --bs-emphasis-color: #{$black};
-  --bs-secondary-color: #{rgba($body-color, .75)};
-  --bs-border-color: #{$border-color};
-  --bs-link-color: #{$link-color};
-  --bs-link-color-rgb: #{pf-rgb($link-color)};
-  color: var(--bs-body-color);
-  color-scheme: light;
-}
-
-// --- High contrast: each swatch's stronger alternate ----------------------
-@each $name, $t in $pf-reading-themes {
-  $guide: 'html[data-pf-mode="guide"][data-pf-theme="#{$name}"]';
+  $page: 'html[data-pf-theme="#{$name}"]';
   @if $name == 'cream' {
-    $guide: 'html[data-pf-mode="guide"]:not([data-pf-theme])';
+    $page: 'html[data-pf-mode="guide"]:not([data-pf-theme])';
   }
 
-  html.pf-a11y-contrast#{string.slice($guide, 5)} {
-    @include pf-reading-contrast($t);
+  html.pf-a11y-contrast#{string.slice($page, 5)} {
+    @include pf-reading-tokens(pf-reading-hc($t));
   }
 
   @media (prefers-contrast: more) {
-    #{$guide} {
-      @include pf-reading-contrast($t);
+    #{$page} {
+      @include pf-reading-tokens(pf-reading-hc($t));
     }
   }
+}
 
-  @if $name != 'cream' {
-    html.pf-a11y-contrast[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
-      @include pf-reading-contrast($t);
-    }
+html#{$pf-themed} {
+  @include pf-reading-bs;
+  // Section photos (light sections) and dark ones: a scrim of the page.
+  --pf-section-scrim: rgba(var(--pf-g-bg-rgb), .8);
+  // Background videos and maps keep playing under a wash of the page
+  // colour (_bento-search.scss, _visit.scss, _building-map.scss).
+  --pf-media-wash: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash});
+  --pf-media-wash-map: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash-map});
+  background-color: var(--pf-g-bg);
+  // The page's own scrollbar looks like the TOC rail (_mixins.scss).
+  @include pf-thin-scrollbar;
+  --pf-scroll-thumb: var(--pf-g-scroll);
+  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover);
+  --pf-scroll-track: var(--pf-g-rule);
+}
 
-    @media (prefers-contrast: more) {
-      html[data-pf-theme="#{$name}"]:not([data-pf-mode="guide"]) #main-content {
-        @include pf-reading-contrast($t);
-      }
-    }
+// Anything that brings its own colours (Bootstrap's dark mode on dark
+// sections, the footer, the dark header and mobile TOC; the older section
+// styles) takes the swatch's instead.
+html#{$pf-themed} :is([data-bs-theme], .pf-section--theme-dark, .pf-section.is-map-dark, .pf-section--light, .pf-section--dark, .pf-section--brand, .pf-footer) {
+  @include pf-reading-bs;
+  color-scheme: inherit;
+}
+
+// Dark sections are the page colour too.
+html#{$pf-themed} :is(.pf-section--theme-dark, .pf-section.is-map-dark) {
+  --pf-section-fg: var(--pf-g-fg);
+  --pf-section-bg: var(--pf-g-bg);
+  --pf-section-muted: var(--pf-g-muted);
+  --pf-section-border: var(--pf-g-scroll); // 3:1 for control borders
+  --pf-section-accent: var(--pf-g-accent);
+}
+
+// Guide content inside one keeps the guide's surfaces and rules.
+html#{$pf-themed} :is(.pf-section--theme-dark, .pf-section.is-map-dark) .pf-guide {
+  --pf-guide-surface: var(--pf-g-surface);
+  --pf-guide-accent-soft: var(--pf-g-accent-soft);
+  --pf-guide-rule: var(--pf-g-rule);
+}
+
+html#{$pf-themed} :is(.pf-section--light, .pf-section--dark, .pf-section--brand) {
+  color: var(--pf-g-fg);
+  background-color: var(--pf-g-surface);
+}
+
+// --- Chrome: header, dropdowns, TOC sidebar, footer ----------------------
+// Glass a little darker than the page; text in the heading colour, hover
+// and the TOC bar in the accent.
+html#{$pf-themed} body {
+  --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-sidebar-glass});
+  --pf-toc-accent: var(--pf-g-accent);
+  --pf-toc-color: var(--pf-g-panel-muted);
+  --pf-toc-sub-color: var(--pf-g-panel-muted);
+  --pf-toc-active: var(--pf-g-heading);
+  --pf-toc-rail: var(--pf-g-rule);
+}
+
+// Guides: nothing runs under the sidebar, so the TOC keeps the swatch's own
+// softer muted text.
+html[data-pf-mode="guide"] body {
+  --pf-toc-color: var(--pf-g-muted);
+  --pf-toc-sub-color: var(--pf-g-muted);
+}
+
+// Over a background video the sidebar is thinner glass on the video's wash.
+html#{$pf-themed}:has(.pf-bento.has-bg-video) body {
+  --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass});
+}
+
+html#{$pf-themed}.pf-reading-dark:has(.pf-bento.has-bg-video) body {
+  --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass-dark});
+}
+
+html#{$pf-themed} .pf-header {
+  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha});
+  --pf-utility-color: var(--pf-g-heading);
+
+  .navbar {
+    --bs-navbar-color: var(--pf-g-heading);
+    --bs-navbar-hover-color: var(--pf-g-accent);
+    --bs-navbar-active-color: var(--pf-g-accent);
   }
+
+  .pf-brand {
+    --pf-brand-color: var(--pf-g-heading);
+    --pf-brand-hover-color: var(--pf-g-accent);
+  }
+
+  .pf-utility-nav__link:is(:hover, :focus-visible, [aria-expanded="true"]) {
+    color: var(--pf-g-accent);
+  }
+
+  // The dropdown sheet is the header's glass, nearly solid.
+  .pf-primary-nav__submenu.dropdown-menu {
+    --bs-dropdown-bg: rgba(var(--pf-g-chrome-rgb), .97);
+    --bs-dropdown-color: var(--pf-g-fg);
+    --bs-dropdown-link-color: var(--pf-g-heading);
+    --bs-dropdown-link-hover-color: var(--pf-g-accent);
+    --bs-dropdown-link-active-color: var(--pf-g-accent);
+    --bs-dropdown-border-color: rgba(var(--pf-g-heading-rgb), .08);
+    --bs-dropdown-divider-bg: rgba(var(--pf-g-heading-rgb), .08);
+  }
+}
+
+html#{$pf-themed}.pf-reading-dark .pf-header {
+  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-header-glass-dark});
+}
+
+// Open mobile menu: nearly opaque, as without a swatch.
+html#{$pf-themed} .pf-header:has(.navbar-collapse.show, .navbar-collapse.collapsing) {
+  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha-solid});
+}
+
+// The strip under a header that is growing back (_header.scss) matches it.
+html#{$pf-themed} .pf-page::before {
+  background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha});
+}
+
+html#{$pf-themed}.pf-reading-dark .pf-page::before {
+  background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-header-glass-dark});
+}
+
+html#{$pf-themed} .pf-footer {
+  background-color: rgb(var(--pf-g-chrome-rgb));
+}
+
+// No blur support, or Reduce transparency: solid glass.
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html#{$pf-themed} .pf-header {
+    --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha-solid});
+  }
+
+  html#{$pf-themed} .pf-page::before {
+    background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha-solid});
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  html#{$pf-themed} .pf-header,
+  html#{$pf-themed} .pf-page::before {
+    background-color: rgb(var(--pf-g-chrome-rgb));
+  }
+
+  html#{$pf-themed} body {
+    --pf-sidebar-bg: rgb(var(--pf-g-chrome-rgb));
+  }
+}
+
+html#{$pf-themed}.pf-a11y-solid .pf-header,
+html#{$pf-themed}.pf-a11y-solid .pf-page::before {
+  background-color: rgb(var(--pf-g-chrome-rgb));
+}
+
+html#{$pf-themed}.pf-a11y-solid body {
+  --pf-sidebar-bg: rgb(var(--pf-g-chrome-rgb));
+}
+
+// --- Bento, map, events --------------------------------------------------
+// The lead panel and the Visit strip are glass, often over a video: text in
+// the heading colour, labels and lines in the panel muted tone.
+html#{$pf-themed} :is(.pf-bento, .pf-bento__lead) {
+  --pf-bento-accent: var(--pf-g-accent);
+  --pf-section-fg: var(--pf-g-heading);
+  --pf-section-border: var(--pf-g-panel-muted);
+  --pf-toc-color: var(--pf-g-panel-muted);
+  --pf-toc-sub-color: var(--pf-g-panel-muted);
+  --pf-toc-active: var(--pf-g-heading);
+}
+
+// The building map in the swatch: ink in the heading colour, floor names
+// in the panel muted tone, hover in the accent. (Print keeps its own.)
+@media screen {
+  html#{$pf-themed} .pf-map {
+    --pf-map-ink: var(--pf-g-heading);
+    --pf-map-floor-ink: var(--pf-g-panel-muted);
+    --pf-map-hidden-ink: var(--pf-g-scroll);
+    --pf-map-hatch: var(--pf-g-heading);
+    --pf-map-hover: var(--pf-g-accent);
+    --pf-map-on-hover: var(--pf-g-on-accent);
+    --pf-map-surface: var(--pf-g-bg);
+    --pf-map-tip-bg: rgba(var(--pf-g-chrome-rgb), .96);
+    --pf-map-tip-solid: rgb(var(--pf-g-chrome-rgb));
+    --pf-map-tip-line: var(--pf-g-rule);
+    --pf-map-tip-text: var(--pf-g-fg);
+  }
+}
+
+html#{$pf-themed} .pf-events-carousel .libcal-day-carousel {
+  --pf-ev-accent: var(--pf-g-accent);
+  --ldc-brand: var(--pf-g-accent);
 }
 
 // --- Settings drawer swatches --------------------------------------------

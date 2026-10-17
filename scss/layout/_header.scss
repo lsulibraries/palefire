@@ -62,8 +62,8 @@
 .pf-brand {
   // The inline SVG logo (logo-lsu-libraries.svg.twig) is filled with
   // currentColor: the bar's text colour at rest (the menu's own colour, so
-  // the two read as one; on guides, the reading swatch's text colour,
-  // _guide.scss), LSU purple on hover. The dark bar switches these to light
+  // the two read as one; with a reading swatch, its heading colour,
+  // _reading-themes.scss), LSU purple on hover. The dark bar switches these to light
   // grey and gold (_chrome-dark.scss).
   --pf-brand-color: var(--bs-navbar-color, #{$pf-nav-color});
   --pf-brand-hover-color: #{$pf-purple};

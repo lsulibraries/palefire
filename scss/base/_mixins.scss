@@ -5,16 +5,25 @@
 // (prefers-reduced-transparency / prefers-contrast) and for the Settings
 // drawer's "Reduce transparency" and "High contrast" switches
 // (html.pf-a11y-solid / html.pf-a11y-contrast, utility-panels.js).
+// On pages with a reading swatch ($pf-themed) high contrast leaves the glass
+// alone: it pushes the swatch's own colours apart instead
+// (_reading-themes.scss). Reduce transparency still applies there.
 //
 // Write the content as top-level rules (`.pf-header { ... }`): the class
 // version nests them under html. Rules for :root itself can't nest; write
 // those twice by hand (see _modular.scss).
 @mixin pf-solid-chrome {
-  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  @media (prefers-reduced-transparency: reduce) {
     @content;
   }
 
-  :root:is(.pf-a11y-solid, .pf-a11y-contrast) {
+  @media (prefers-contrast: more) {
+    :root:not(#{$pf-themed}) {
+      @content;
+    }
+  }
+
+  :root:is(.pf-a11y-solid, .pf-a11y-contrast:not(#{$pf-themed})) {
     @content;
   }
 }
@@ -23,7 +32,7 @@
 // buttons, instead of the system bar. Used by the drawers
 // (.pf-panel__body) and the "On this page" sidebar, so the two match.
 // The thumb reads --pf-toc-color (hover: --pf-toc-active), which follows
-// light and dark chrome (dark sections, Dusk / Night on guides). At full
+// light and dark chrome (dark sections, the reading swatches). At full
 // strength it is about 5:1 on the light sidebar and on the dark one, so
 // it passes WCAG 1.4.11 (3:1 for UI parts).
 //

@@ -38,7 +38,7 @@
 .pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 // A light scrim, so the video keeps its colour; the text sits on the lead
 // panel's glass (_visit.scss), not straight on the video.
-.pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(0 0 0 / .3); }
+.pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--pf-media-wash, rgb(0 0 0 / .3)); }
 // Playlists (two or more clips): bento-video.js adds a second <video> and
 // .is-buffered, and moves .is-current to whichever layer is playing. The
 // incoming clip goes on top and fades in over the outgoing one, which stays

@@ -5,10 +5,10 @@
 // In the guides' art direction (2026-10-16): frosted glass in the guide's
 // page colour, its dark grey text, muted grey labels, hairline rules, an
 // accent for links, hover and focus, monospace tracked labels, square
-// corners. On guides the drawers take the reader's swatch (Settings >
+// corners. With a reading swatch the drawers take it (Settings >
 // Reading colours: the --pf-g-* tokens, _reading-themes.scss): light glass
 // on light swatches, a shade darker than the page on the dark swatches.
-// Everywhere else --pf-g-* isn't set, so the fallbacks give the Cream look.
+// Without one --pf-g-* isn't set, so the fallbacks give the Cream look.
 // The Hours drawer keeps Origami's Handjet clock; its OPEN badges take the
 // swatch's accent.
 // Bootstrap 5.3 does the slide, focus trap and backdrop.
@@ -52,9 +52,9 @@
   font-family: var(--bs-font-monospace);
 }
 
-// Dark swatches on guides: a shade darker than the page, still glass (78%;
-// over a white pixel under the dark wash, Dusk's muted text is about 4.8:1).
-html.pf-guide-dark[data-pf-mode="guide"] .pf-panel.offcanvas {
+// Dark swatches: a shade darker than the page, still glass (78%; over a
+// white pixel under the dark wash, Dusk's muted text is about 4.8:1).
+html.pf-reading-dark .pf-panel.offcanvas {
   --bs-offcanvas-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) 78%, transparent);
   --pf-sidebar-bg: #{rgba($pf-black, .25)};
 }
@@ -329,7 +329,7 @@ html.pf-guide-dark[data-pf-mode="guide"] .pf-panel.offcanvas {
 
 // Backdrop ------------------------------------------------------------------
 // The page recedes under a wash of the drawer's own page colour (Cream, or
-// the swatch on guides) instead of Bootstrap's black, so the light glass
+// the reading swatch) instead of Bootstrap's black, so the light glass
 // still reads as glass. The dark swatches keep a dark wash.
 // js/utility-panels.js sets <html data-pf-panel> while a panel is open, so
 // the mobile "On this page" offcanvas keeps Bootstrap's default.
@@ -338,7 +338,7 @@ html[data-pf-panel] .offcanvas-backdrop.show {
   opacity: $pf-panel-backdrop-light;
 }
 
-html.pf-guide-dark[data-pf-panel] .offcanvas-backdrop.show {
+html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   background-color: #{$pf-black};
   opacity: $pf-panel-backdrop-dark;
 }
@@ -360,16 +360,17 @@ html.pf-guide-dark[data-pf-panel] .offcanvas-backdrop.show {
 }
 
 // The same for the dark swatches, written out: pf-solid-chrome can't take
-// html-first selectors, and the dark glass rule above outranks it.
-@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  html.pf-guide-dark[data-pf-mode="guide"] .pf-panel.offcanvas {
+// html-first selectors, and the dark glass rule above outranks it. (High
+// contrast keeps a swatch's glass: it pushes its colours apart instead.)
+@media (prefers-reduced-transparency: reduce) {
+  html.pf-reading-dark .pf-panel.offcanvas {
     --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 }
 
-:root.pf-guide-dark[data-pf-mode="guide"]:is(.pf-a11y-solid, .pf-a11y-contrast) .pf-panel.offcanvas {
+:root.pf-reading-dark.pf-a11y-solid .pf-panel.offcanvas {
   --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;

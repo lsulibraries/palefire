@@ -134,7 +134,7 @@
 }
 
 .pf-bento--map-only .pf-bento__media::after {
-  background-color: rgb(0 0 0 / .72);
+  background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72));
 }
 
 .pf-bento--map-only .pf-bento__bg-video {

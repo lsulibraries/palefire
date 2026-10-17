@@ -601,13 +601,15 @@
    * Pass null to reset everything to the light default.
    * ---------------------------------------------------------------- */
   function applyChromeTheme(theme, nav) {
-    // Dusk / Night reading colours on a guide: every section is dark, so the
-    // chrome is too.
-    const guideDark = document.documentElement.classList.contains('pf-guide-dark');
-    const dark = theme === 'dark' || (guideDark && theme !== null);
+    // With a reading swatch (<html data-pf-theme>, and every guide) each
+    // section is the swatch's colour, so the chrome follows the swatch
+    // (dark ones: html.pf-reading-dark) instead of the section.
+    const root = document.documentElement;
+    const themed = root.hasAttribute('data-pf-theme') || root.getAttribute('data-pf-mode') === 'guide';
+    const dark = themed ? root.classList.contains('pf-reading-dark') && theme !== null : theme === 'dark';
     const body = document.body;
     if (theme) {
-      body.dataset.sectionTheme = dark ? 'dark' : theme;
+      body.dataset.sectionTheme = dark ? 'dark' : (themed ? 'light' : theme);
     }
     else {
       delete body.dataset.sectionTheme;

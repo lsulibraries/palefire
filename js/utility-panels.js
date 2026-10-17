@@ -212,12 +212,11 @@
     }
   }
 
-  // Reading colours: <html data-pf-theme> on every page (the CSS limits it
-  // to the main content outside guides). A dark swatch on a guide-mode page
-  // (<html data-pf-mode="guide">, PalefireHooks::preprocessHtml()) also adds
-  // pf-guide-dark and Bootstrap's data-bs-theme="dark", which switch the
-  // header, TOC and drawers dark. The same job as the inline script in
-  // html.html.twig; modular-toc.js listens for palefire:a11ychange.
+  // Reading colours: <html data-pf-theme> on every page, which the whole
+  // page follows (_reading-themes.scss). A dark swatch also adds
+  // pf-reading-dark and Bootstrap's data-bs-theme="dark". The same job as
+  // the inline script in html.html.twig; modular-toc.js listens for
+  // palefire:a11ychange.
   function applyTheme(settings) {
     const theme = themeOf(settings);
     if (theme === 'cream') {
@@ -226,8 +225,8 @@
     else {
       ROOT.setAttribute('data-pf-theme', theme);
     }
-    const on = DARK_THEMES.includes(theme) && ROOT.getAttribute('data-pf-mode') === 'guide';
-    ROOT.classList.toggle('pf-guide-dark', on);
+    const on = DARK_THEMES.includes(theme);
+    ROOT.classList.toggle('pf-reading-dark', on);
     if (on) {
       ROOT.setAttribute('data-bs-theme', 'dark');
     }

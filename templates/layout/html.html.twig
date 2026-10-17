@@ -59,9 +59,10 @@
          step: size, font, spacing, underline, reader, contrast, solid, focus,
          motion, pausevideo, theme. "Reader font for guides" (reader) only
          takes effect on guide-mode pages (<html data-pf-mode="guide">).
-         Reading colours (theme) become <html data-pf-theme> (Cream, the
-         default, has none; _reading-themes.scss); the dark swatches on a
-         guide also add pf-guide-dark and Bootstrap's data-bs-theme="dark".
+         Reading colours (theme) become <html data-pf-theme> on every page
+         (Cream, the default, has none; _reading-themes.scss); the dark
+         swatches also add pf-reading-dark and Bootstrap's
+         data-bs-theme="dark".
          The old "Dark guides" switch (dark) reads as Night.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
@@ -81,8 +82,8 @@
         var t = s.theme || (s.dark ? 'night' : '');
         if (/^(soft|lavender|sepia|sage|mist|dusk|night|solarized|cocoa|forest|midnight)$/.test(t)) {
           h.setAttribute('data-pf-theme', t);
-          if (/^(dusk|night|solarized|cocoa|forest|midnight)$/.test(t) && h.getAttribute('data-pf-mode') === 'guide') {
-            h.classList.add('pf-guide-dark');
+          if (/^(dusk|night|solarized|cocoa|forest|midnight)$/.test(t)) {
+            h.classList.add('pf-reading-dark');
             h.setAttribute('data-bs-theme', 'dark');
           }
         }

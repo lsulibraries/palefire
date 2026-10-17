@@ -14,11 +14,11 @@
 //   .pf-a11y-focus                      Strong focus outline
 //   .pf-a11y-motion                     Reduce motion
 //   .pf-a11y-pausevideo                 Pause background videos (JS only)
-//   [data-pf-theme="sepia"]             Reading colours (no attribute: Cream);
-//                                       Dusk / Night on guide-mode pages also
-//                                       add .pf-guide-dark + data-bs-theme="dark"
-//                                       (styles: _reading-themes.scss,
-//                                       _chrome-dark.scss, _guide.scss)
+//   [data-pf-theme="sepia"]             Reading colours, every page (no
+//                                       attribute: Cream on guides, the
+//                                       usual look elsewhere); dark swatches
+//                                       add .pf-reading-dark + data-bs-theme="dark"
+//                                       (styles: _reading-themes.scss)
 //
 // "Solid chrome" (no glass on the header, sidebar and drawers) is the same
 // set of rules the OS settings trigger: pf-solid-chrome, base/_mixins.scss.
@@ -80,9 +80,16 @@ html.pf-a11y-underline {
 }
 
 // High contrast -----------------------------------------------------------------
-// Solid backgrounds (pf-solid-chrome), full-strength text, brighter borders,
-// no stripes.
-html.pf-a11y-contrast {
+// Pages with a reading swatch ($pf-themed): the swatch's own colours pushed
+// apart (_reading-themes.scss); the glass, borders and washes stay as they
+// are. Only the stripes go (below).
+// Pages without one: solid backgrounds (pf-solid-chrome), full-strength
+// text, brighter borders, no stripes.
+html.pf-a11y-contrast .pf-hours__loc {
+  background-image: none !important;
+}
+
+html.pf-a11y-contrast:not(#{$pf-themed}) {
   --bs-secondary-color: var(--bs-emphasis-color);
 
   // Muted text and borders go to full strength wherever the tokens are set:
@@ -118,11 +125,6 @@ html.pf-a11y-contrast {
 
   .pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__media::after {
     background-color: rgb(255 255 255 / .94);
-  }
-
-  // No stripes.
-  .pf-hours__loc {
-    background-image: none !important;
   }
 
   .pf-utility-nav__label {

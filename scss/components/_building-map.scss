@@ -12,6 +12,7 @@
   --pf-map-hatch-hover: .5;            /* hover / focus: a slightly brighter grey */
   --pf-map-hatch-appointment-hover: .3;
   --pf-map-hover: #fdd023;             /* LSU gold: room name on hover, focus ring */
+  --pf-map-on-hover: #000;             /* text on a hover-colour fill ("You are here") */
   --pf-map-rotate: -25deg;             /* label + floor-tile angle */
   --pf-map-skew-room: -25deg;          /* room names stand up */
   --pf-map-skew-floor: 35deg;          /* floor names + restroom tiles lie flat */
@@ -19,6 +20,10 @@
   --pf-map-in: .2s;                    /* hover in */
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
+  --pf-map-tip-bg: rgb(10 10 10 / .92); /* tooltip glass, its pointer, lines, body text */
+  --pf-map-tip-solid: rgb(10 10 10);
+  --pf-map-tip-line: #3a3a3a;
+  --pf-map-tip-text: #d6d6d6;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
   --pf-map-hatch-period: 4.7px;        /* the drawing's 20-unit hatch period on screen; building-map.js keeps it in step with the map */
   --pf-map-tip-delay: 1.75s;           /* hover wait before a tooltip shows (building-map.js reads this); the room lights at once */
@@ -142,7 +147,7 @@
   transition: fill var(--pf-map-in) ease, transform var(--pf-map-in) ease, text-shadow var(--pf-map-label-halo-in) linear;
 }
 .pf-map__icons { pointer-events: none; }
-.pf-map__label::selection, .pf-map__label tspan::selection { fill: #000; background: var(--pf-map-hover); }
+.pf-map__label::selection, .pf-map__label tspan::selection { fill: var(--pf-map-on-hover); background: var(--pf-map-hover); }
 /* Icons sit straight on the drawing: no fill behind them. Restroom tiles keep
    their outline; the elevator has no tile at all. */
 .pf-map__icon-tile { fill: none; stroke: var(--pf-map-hidden-ink); stroke-width: var(--pf-map-line); }
@@ -294,7 +299,7 @@
 .pf-map__here-badge {
   display: inline-flex; align-items: center; gap: .3rem; flex: none;
   padding: .1rem .45rem; border-radius: 999px;
-  background: var(--pf-map-hover); color: #000;
+  background: var(--pf-map-hover); color: var(--pf-map-on-hover);
   font-size: .6875rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; line-height: 1.4;
 }
 .pf-map__here-badge::before { content: ""; width: 0; height: 0; border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0; }
@@ -313,8 +318,8 @@
   position: absolute; z-index: 5; left: var(--tip-x, 0px); top: var(--tip-y, 0px);
   width: max-content; max-width: min(19rem, calc(100% - 1rem));
   padding: .9rem 1rem 1rem;
-  border: 1px solid #3a3a3a; border-radius: 14px;
-  background: rgb(10 10 10 / .92); color: var(--pf-map-ink);
+  border: 1px solid var(--pf-map-tip-line); border-radius: 14px;
+  background: var(--pf-map-tip-bg); color: var(--pf-map-ink);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   box-shadow: 0 18px 48px rgb(0 0 0 / .5);
   font-size: .875rem; line-height: 1.5; text-align: left;
@@ -336,7 +341,7 @@
 .pf-map__tip::after {
   content: ""; position: absolute; left: var(--tip-arrow, 50%); bottom: -7px;
   width: 12px; height: 12px; margin-left: -6px;
-  border: solid #3a3a3a; border-width: 0 1px 1px 0; background: rgb(10 10 10);
+  border: solid var(--pf-map-tip-line); border-width: 0 1px 1px 0; background: var(--pf-map-tip-solid);
   transform: rotate(45deg);
 }
 .pf-map__tip.is-below::after { top: -7px; bottom: auto; transform: rotate(-135deg); }
@@ -345,10 +350,10 @@
 .pf-map__tip-eyebrow { margin: 0; font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-title { display: block; margin: 0 0 .3rem; font-size: 1rem; font-weight: $pf-display-weight; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; color: var(--pf-map-hover); }
 .pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
-.pf-map__tip-text { color: #d6d6d6; }
+.pf-map__tip-text { color: var(--pf-map-tip-text); }
 .pf-map__tip-text p { margin: 0 0 .4rem; }
 .pf-map__tip-text > :last-child { margin-bottom: 0; }
-.pf-map__tip-cta { display: flex; align-items: center; gap: .4rem; margin: .6rem 0 0; padding-top: .55rem; border-top: 1px solid #2a2a2a; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--pf-map-ink); }
+.pf-map__tip-cta { display: flex; align-items: center; gap: .4rem; margin: .6rem 0 0; padding-top: .55rem; border-top: 1px solid var(--pf-map-tip-line); font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--pf-map-ink); }
 .pf-map__tip-cta::after { content: "\2192"; color: var(--pf-map-hover); }
 
 /* Bento integration ------------------------------------------------------
@@ -363,7 +368,7 @@
 .pf-bento__bg-video { transition: filter .8s ease, transform .8s ease; }
 .pf-bento__media::after { transition: background-color .8s ease; }
 .pf-bento.is-map-in-view .pf-bento__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
-.pf-bento.is-map-in-view .pf-bento__media::after { background-color: rgb(0 0 0 / .72); }
+.pf-bento.is-map-in-view .pf-bento__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon { transition: none !important; }
