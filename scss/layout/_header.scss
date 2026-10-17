@@ -643,9 +643,7 @@
       height: 2.25rem;
       color: var(--pf-toc-active);
       box-shadow: inset 0 0 0 1px var(--pf-toc-rail);
-      outline: 1px solid transparent;
-      outline-offset: 3px;
-      transition: outline-color $pf-hover-out ease;
+      transition: box-shadow $pf-hover-out ease;
     }
 
     .pf-icon svg {
@@ -659,8 +657,9 @@
       color: var(--pf-toc-active);
       transition: color $pf-hover-in ease;
 
+      // The chip's own hairline brightens (as on the swatches).
       .pf-icon {
-        outline-color: var(--pf-section-border);
+        box-shadow: inset 0 0 0 1px var(--pf-section-border);
         transition-duration: $pf-hover-in;
       }
     }

@@ -604,6 +604,18 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Tiles: one border for hover and selected (2026-10-17)
+
+Hovering or choosing a reading colour, or hovering a mobile quick link,
+used to draw a second ring outside the chip. Now the chip's own hairline
+changes instead:
+- hover: it brightens;
+- chosen colour: it becomes a 2px accent line. The extra thickness means
+  colour isn't the only mark, and the name also turns full-strength.
+
+Windows High Contrast doesn't draw box shadows, so there the chosen chip
+gets a 3px outline. Files: `_utility-panels.scss` and `_header.scss`.
+
 ### Mobile menu: quick links styled like the swatches (2026-10-17)
 
 The quick-link tiles at the top of the mobile menu (Hours, Ask Us,
