@@ -16,19 +16,29 @@
 // adjust.
 // =========================================================================
 
+// Exhibitions a short band (9rem to 12rem with the window's height), then
+// the event and the post. A tall window's spare height goes between the two
+// rows, so the event and post stay at the panel's foot.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(9rem, 1fr) auto;
+  grid-template-rows: clamp(9rem, 20svh, 12rem) auto;
+  align-content: space-between;
   gap: clamp(.875rem, 1.5vw, 1rem);
 }
 
-// Less room above the panel on this hero: 2rem under the breadcrumb
-// instead of the section's 5rem. The section padding is one variable, so
+// Less room around the panel on this hero: 2rem under it instead of the
+// section's 5rem, and none above, so the panel starts right under the
+// header and its breadcrumb row lines up with the TOC's title beside it
+// (the panel's top padding, below). The section padding is one variable, so
 // the lead's height (_landing-swiss.scss) and the video's reach
-// (_landing.scss) follow it.
+// (_landing.scss) follow it; the top is only the inner box's padding.
 .pf-sections > .pf-section:first-child:has(.pf-landing--lead-screen .pf-landing__features) {
   --pf-section-pad-block: 2rem;
+
+  > .pf-section__inner {
+    padding-top: 0;
+  }
 }
 
 // The features fill the panel under the search instead of sitting at its
@@ -54,6 +64,21 @@
   gap: 1rem;
   min-height: 2.25rem; // the button's height, so the row is the same with or without it
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
+}
+
+// lg and up, beside the TOC: the breadcrumb's text on the TOC title's line.
+// The sidebar's title sits 2rem down (its padding); the panel takes the same
+// top padding, and the row (the button's 2.25rem) moves up by half of what
+// it adds to the text's 1.125rem line. Measured on /v2/special: both 120px
+// down at 1333x767.
+@include media-breakpoint-up(lg) {
+  .pf-landing__lead:has(> .pf-landing__features) {
+    padding-top: 2rem;
+
+    > .pf-landing__bar:first-child {
+      margin-top: calc((1.125rem - 2.25rem) / 2);
+    }
+  }
 }
 
 .pf-landing__bar .pf-breadcrumb--lead {
@@ -106,8 +131,11 @@
 }
 
 // --- Next event | Latest blog post ----------------------------------------
-// Side by side from md, each a hairline, its label, then its card. With no
-// event (no carousel, or nothing coming up) the post takes the first column.
+// Side by side from md, each a hairline, then its card: a 5x7 portrait
+// thumbnail (5rem by 7rem, cropped to fill) beside the text. The labels
+// ("Next event", "Latest from the blog") are for screen readers only. With
+// no event (no carousel, or nothing coming up) the post takes the first
+// column.
 .pf-landing__pair {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -121,14 +149,26 @@
 }
 
 .pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
-  --pf-hero-thumb: 3.5rem;
+  --pf-hero-thumb: 5rem;
   min-width: 0;
   padding-top: clamp(.75rem, 1.25vw, .875rem);
   border-top: 1px solid var(--pf-landing-line);
 }
 
 .pf-landing__features .pf-hero-event__label {
-  margin-bottom: .5rem;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+}
+
+// 5x7, portrait: the thumbnail and, while the feed loads, the hatched space
+// held for it.
+.pf-landing__features .pf-hero-event__thumb,
+.pf-landing__features .pf-hero-event:not(.is-ready)::after {
+  aspect-ratio: 5 / 7;
 }
 
 // Titles one size down from the solo Next event card.
@@ -148,8 +188,8 @@
   display: block;
 }
 
-// The post's excerpt: one line (two on phones, where the column is
-// narrow). Two classes, so the clamp's display wins.
+// The post's excerpt: two lines at most, beside the taller thumbnail. Two
+// classes, so the clamp's display wins.
 .pf-hero-post .pf-hero-post__excerpt {
   display: -webkit-box;
   overflow: hidden;
@@ -158,12 +198,6 @@
   line-clamp: 2;
 }
 
-@media (min-width: 768px) {
-  .pf-hero-post .pf-hero-post__excerpt {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-  }
-}
 
 // Placeholder (no blog category set yet): not a link, so no hover and no
 // underline.

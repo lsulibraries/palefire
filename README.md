@@ -605,6 +605,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero lead: flush under the header, shorter exhibitions, 5×7 thumbnails (2026-10-18)
+
+- **Panel flush under the header:** no gap above the hero's lead panel.
+  The section keeps 2rem below it.
+- **Breadcrumb on the TOC title's line:** from lg (beside the TOC) the
+  panel has the sidebar's 2rem top padding, and the breadcrumb row moves
+  up by half of what the 2.25rem button adds to the 1.125rem text line.
+  Measured at 1333×767: breadcrumb text 121px down, TOC title 120px.
+- **Exhibitions:** a shorter band, `clamp(9rem, 20svh, 12rem)`. It was
+  stretching to about 17rem. On a tall window the spare height goes
+  between the exhibitions and the event/post row
+  (`align-content: space-between`), so the row stays at the panel's foot.
+- **Next event | Latest blog post:**
+  - The "Next event" and "Latest from the blog" labels are visually
+    hidden but kept for screen readers.
+  - The thumbnails are 5×7 portrait, 5rem × 7rem (80 × 112px), cropped to
+    fill. So is the hatched space held while the event feed loads.
+  - The post excerpt is back to two lines beside the taller thumbnail.
+- **Fit:** the lead ends at 753 of 767px at 1333×767.
+
+Checked on /v2/special with the new CSS injected, in Twilight.
+
+File: `_landing-features.scss`.
+
 ### Twilight: one gold, the pale gold (2026-10-18)
 
 LSU gold (#fdd023) next to the pale gold headings (#f2dc9b) clashed, so
