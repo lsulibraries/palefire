@@ -53,18 +53,18 @@
 // A glass bar right under the header, across the whole content column (the
 // section's side padding is pulled back out), in the header and TOC's glass
 // with a hairline under it. Its content lines up with the lead panel's
-// text: the panel is at most 1280px, centred, with its own padding. The
+// outer edges (the breadcrumb on its left edge, the button on its right):
+// the panel is at most 1280px, centred in the section's padding. The
 // breadcrumb (PalefireHooks::crumbInLanding()) keeps the head's type
 // (.pf-breadcrumb--modular, _layout.scss) without its glass strip; the
 // button keeps its look but sits in the row (landing-video.js only places
 // it when the head has the breadcrumb). The TOC title lines up with the
 // breadcrumb (modular-toc.js measures it, as it did the head's).
 .pf-landing__bar {
-  --pf-bar-pad: clamp(1.25rem, 2.25vw, 2rem); // the lead panel's padding (below)
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-bottom: 1rem;
   padding-block: .375rem;
-  padding-inline: calc(var(--pf-section-pad-inline, 0px) + max(0px, (100% - 1280px) / 2) + var(--pf-bar-pad));
+  padding-inline: calc(var(--pf-section-pad-inline, 0px) + max(0px, (100% - 1280px) / 2));
   border-bottom: 1px solid var(--pf-toc-rail, #{$pf-hairline});
   background-color: var(--pf-sidebar-bg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));

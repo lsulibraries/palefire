@@ -605,6 +605,19 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Sub-header bar lines up with the lead panel's edges (2026-10-18)
+
+The bar's breadcrumb and video button now line up with the lead panel's
+outer edges. Before, they lined up with its text, a panel's padding further
+in. The bar's side padding is the section's plus the panel's centring
+margin, without the panel's own padding.
+
+Measured on /v2/special: breadcrumb left = panel left and button right =
+panel right (0px off) at 320, 1024, 1333 and 1920px wide. Nothing scrolls
+sideways at 320px.
+
+File: `_landing-features.scss`.
+
 ### Landing hero: sub-header bar; the video never moves; map heading by its summary (2026-10-18)
 
 - **Sub-header bar:** the breadcrumb and the video button left the lead
