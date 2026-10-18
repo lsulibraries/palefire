@@ -162,6 +162,27 @@ $pf-hero-media-wash: .8 !default;
   width: 100%;
 }
 
+// Hill Memorial only (field_map_building hill_memorial, .pf-map--hill-memorial),
+// wide enough for the whole drawing: the card lies over the drawing's empty
+// top-left corner instead (Hill's outline leaves it clear), above the
+// drawing so its link stays clickable. Other buildings may fill that
+// corner, and narrower the drawing scrolls sideways and fills its box, so
+// there the card keeps its own row above it.
+@container pf-map (min-width: 48rem) {
+  .pf-bento--hero .pf-map--hill-memorial:has(> .pf-hero-event) {
+    grid-template-areas: "head" "stage" "aside";
+  }
+
+  .pf-map--hill-memorial > .pf-hero-event.is-in-map {
+    position: relative;
+    z-index: 2;
+    grid-area: stage;
+    align-self: start;
+    width: min(36rem, 46%);
+    margin-top: clamp(1.5rem, 4cqi, 3.5rem);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .pf-hero-event__card {
     animation: pf-accordion-in $pf-menu-fade ease both;

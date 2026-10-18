@@ -604,6 +604,23 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" card over the map drawing (2026-10-17)
+
+When the map is Hill Memorial (`field_map_building` = `hill_memorial`,
+class `.pf-map--hill-memorial`) and its box is at least 48rem wide, the
+card now lies over the drawing's empty top-left corner instead of pushing
+the drawing down. Hill's outline leaves that corner clear. Other buildings
+may not, so with them the card keeps its own row above the drawing.
+
+- The card shares the drawing's grid cell and sits above it, so its link
+  stays clickable.
+- Its width is `min(36rem, 46%)` of the map, and it starts a little below
+  the drawing's top edge.
+- On narrower screens the drawing is wider than the screen and scrolls
+  sideways, so the card keeps its own row above it.
+
+Files: `_landing-hero.scss`, `@container pf-map`.
+
 ### Landing hero: "Next event" card under the map heading (2026-10-17)
 
 When the hero has no lead panel but has a building map, the card now sits
