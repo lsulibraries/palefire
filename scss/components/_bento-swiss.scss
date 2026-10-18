@@ -137,10 +137,10 @@
   background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72));
 }
 
-.pf-bento--map-only .pf-bento__bg-video {
-  filter: blur(12px) brightness(.55);
-  transform: scale(1.06);
-}
+// .pf-bento--map-only .pf-bento__bg-video {
+//   filter: blur(12px) brightness(.55);
+//   transform: scale(1.06);
+// }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-bento--map-only .pf-bento__bg-video {
