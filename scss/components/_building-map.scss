@@ -108,9 +108,20 @@
    here and brings the drawing into view when a space is tapped). The names
    would be ~4px at this size, so they hide; the legend lists them, and the
    group is aria-hidden already. visibility keeps their boxes, which the
-   tooltip and the "here" arrow are placed from. */
+   tooltip and the "here" arrow are placed from. The floor names (FLOOR 2,
+   ENTRANCE) and the restroom and elevator icons stay, held at a readable
+   size with --pf-map-px (map units per screen px, building-map.js): about
+   10px type, a 20px restroom tile and a 17px elevator. */
 .pf-map__stage { scroll-margin-top: calc(var(--pf-header-h, 50px) + 1rem); }
-@media (max-width: 575.98px) { .pf-map__labels { visibility: hidden; } }
+@media (max-width: 575.98px) {
+  .pf-map__labels > .pf-map__label:not(.pf-map__label--floor) { visibility: hidden; }
+  .pf-map__labels > .pf-map__label--floor { --scale: calc(var(--pf-map-px, 5.4) * .19); }
+  /* FLOOR 2, bigger, would run into the Floor 2 Gallery's number and up
+     over the railing: along the railing and down a little (map units). */
+  .pf-map__labels > .pf-map__label--floor:not(.pf-map__entrance) { translate: 220px 90px; }
+  .pf-map__icons > .pf-map__icon { --scale: calc(var(--pf-map-px, 7.2) * .14); }
+  .pf-map__icons > .pf-map__icon--elevator { --scale: calc(var(--pf-map-px, 5.2) * .13); }
+}
 
 /* Room numbers + hint (phones only). building-map.js numbers the list in
    order and puts the same number on each room, centred where its name is,

@@ -604,6 +604,20 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Building map on phones: icons, FLOOR 2 and ENTRANCE stay readable (2026-10-18)
+
+On phones only the room names hide now, since the numbers stand in for
+them. Before, "Floor 2" and "Entrance" hid with them, and the restroom and
+elevator icons shrank with the drawing to about 9px. These now keep a
+fixed size, the same way the numbers do:
+- type of about 10px;
+- a 20px restroom tile;
+- a 17px elevator.
+
+FLOOR 2 also moves a little along the railing so it clears the Floor 2
+Gallery's number. From 576px up, nothing changes. File:
+`_building-map.scss`.
+
 ### Building map on phones: numbered rooms and a tap hint (2026-10-18)
 
 On phones (under 576px) the room names are hidden, so the drawing looked
