@@ -21,6 +21,8 @@
  */
 #}
 {% if tiles %}
+  {# Scroll-in animation, as on the concept page (skipped for reduced motion). #}
+  {{ attach_library('palefire/tile-reveal') }}
   <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip>
     <ul class="pf-tiles__list" role="list">
       {% for tile in tiles %}

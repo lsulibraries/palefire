@@ -605,6 +605,43 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Tile showcase: cards animate in on scroll, as on the concept page (2026-10-18)
+
+The Tile showcase cards now animate in the way the Origami concept page's
+cards do. The concept uses ScrollReveal in Origami's `custom.js`; the
+values here are copied from it:
+
+| Layout | Motion |
+| --- | --- |
+| Staggered row | odd cards rise from 50px below, even cards drop from 50px above; 100ms after entering, 50ms apart |
+| Grid | cards rise from 30px below, 50ms apart |
+
+- **Timing:** all cards fade from opacity 0 over 500ms, ease-out.
+- **Replays:** as on the concept (`reset: true`), a card that scrolls out of
+  view hides again and replays when it comes back. In the swipeable row on
+  phones, cards reveal as they're swiped in.
+
+**How:** `js/tile-reveal.js` (library `palefire/tile-reveal`, attached by
+the paragraph template) instead of ScrollReveal. It sets up one
+IntersectionObserver per card list, and cards that enter together are
+staggered in source order. The `<li>` is watched while the card inside it
+(`.pf-tile`) moves, so a card at the screen edge can't move itself out of
+view and flicker. Transforms don't count toward layout shift, so CLS is
+unaffected.
+
+**Accessibility:**
+
+- With the OS "reduce motion" setting or Settings > Reduce motion, nothing
+  is hidden and nothing moves. Turning Reduce motion on mid-visit shows any
+  card the script had hidden.
+- Without JavaScript the cards are simply shown: the hidden state needs
+  `.pf-tiles--reveal`, which only the script adds.
+- A card that receives keyboard focus is shown at once.
+
+Files: `js/tile-reveal.js`, `palefire.libraries.yml`,
+`templates/paragraphs/paragraph--tile-showcase.html.twig`,
+`scss/components/_tile-showcase.scss` and `css/style.css`.
+
 ### Landing hero: "Next event" follows the carousel's calendars and libraries (2026-10-18)
 
 The "Next event" card (`hero-event.js`) read the carousel's feed with no

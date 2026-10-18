@@ -245,6 +245,52 @@ $pf-tile-break-two: 32rem;
   }
 }
 
+// Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
+// The hidden state only exists under .pf-tiles--reveal, which the script
+// adds when motion is allowed, so without JS (or with reduced motion) the
+// cards are simply there. The card (.pf-tile) moves; its <li> stays put, so
+// the observer watching the <li> never sees the card move out of view.
+// Hiding (scrolled away) is instant; showing waits --pf-reveal-delay
+// (the script staggers cards 50ms apart).
+.pf-tiles--reveal .pf-tiles__item {
+  --pf-reveal-from: 30px; // grid: rise from below
+
+  > .pf-tile {
+    opacity: 0;
+    transform: translateY(var(--pf-reveal-from));
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+
+  &.is-revealed > .pf-tile {
+    opacity: 1;
+    transform: none;
+    transition-delay: var(--pf-reveal-delay, 0ms);
+  }
+}
+
+// Stagger: odd cards rise from 50px below, even cards drop from 50px above.
+.pf-tiles--reveal.pf-tiles--stagger .pf-tiles__item {
+  --pf-reveal-from: 50px;
+
+  &:nth-child(even) {
+    --pf-reveal-from: -50px;
+  }
+}
+
+// Turned on mid-visit (Settings > Reduce motion), or the OS setting: show
+// everything at once, whatever the script already hid.
+html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > .pf-tile {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-tiles--reveal .pf-tiles__item > .pf-tile {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 // Windows High Contrast / forced colours: the scrim and image go, the
 // system colours draw the card and its focus ring.
 @media (forced-colors: active) {
