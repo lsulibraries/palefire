@@ -605,6 +605,40 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Building map: Intro is the summary, the building's description sits above the legend (2026-10-18)
+
+The map's two texts now have fixed roles. Before, the building's
+description was the summary when it existed, which pushed the Intro down
+to the note.
+
+- **Summary:** the map paragraph's **Intro** (`field_map_intro`), under
+  the heading. On the Hill hero, at desktop size, it is set into the
+  drawing's empty corner, 0–50% across. Keep it to about four lines there:
+  much longer and it reaches the upper Gallery. The note's row in the
+  corner is gone.
+- **Note:** the **building's description** (Taxonomy → Building spaces →
+  Hill Memorial Library), right above "Legend & spaces", for who can walk
+  in and what needs an appointment.
+  - It sits outside the legend's `<details>`, so it still shows while the
+    legend is collapsed. On the hero the legend starts collapsed, so a
+    note inside it would have been hidden.
+  - Text is 15px, up to 60ch wide.
+- Either text is optional.
+
+**For editors:** put the Hill Memorial history summary in the map's Intro.
+Move the access text ("Exhibitions, the reading room and quiet study are
+open to everyone…") to the Hill Memorial Library term's description.
+Until then, the access text stays as the summary in the corner.
+
+Checked on /v2/special at 1333×767 with test text injected:
+- **Summary:** covers 0–50% across and 4–18% down, with no room shape
+  under it (hit test).
+- **Note:** shows above the collapsed legend toggle, 16px clear of it.
+- **Width:** nothing scrolls sideways.
+
+Files: `palefire.theme`, `paragraph--building-map.html.twig`,
+`_building-map.scss` and `_landing-hero.scss`.
+
 ### Landing hero: new lead order, search, map typography, TOC Home and Map (2026-10-18)
 
 **Lead** (`landing.html.twig`, `_landing-features.scss`), top to bottom:

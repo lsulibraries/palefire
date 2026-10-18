@@ -282,9 +282,9 @@
   transition: opacity .6s ease calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag));
 }
 
-/* Summary and note (.pf-map__type) under the heading: a row of their own,
-   only when there is text, so no empty gap is left. In the split layout
-   they head the left column, above the legend. ------------------------- */
+/* Summary (.pf-map__type, the paragraph's Intro) under the heading: a row
+   of its own, only when there is text, so no empty gap is left. In the
+   split layout it heads the left column, above the legend. -------------- */
 .pf-map:has(> .pf-map__type) {
   grid-template-rows: auto auto 1fr;
   grid-template-areas: "head stage" "type stage" "aside stage";
@@ -303,8 +303,11 @@
   }
 }
 
-/* Aside: legend, space list; the note (.pf-map__intro) ------------------- */
+/* Aside: the note (.pf-map__intro, the building's description: who can
+   walk in, what needs an appointment) right above the legend, then the
+   legend and space list. ------------------------------------------------- */
 .pf-map__intro { margin: 0 0 1.5rem; color: var(--pf-map-floor-ink); font-size: 1.0625rem; line-height: 1.55; }
+.pf-map__aside > .pf-map__note { max-width: 60ch; margin-bottom: 1rem; font-size: .9375rem; line-height: 1.5; }
 .pf-map__intro p:last-child { margin-bottom: 0; }
 .pf-map__type > :last-child { margin-bottom: 0; }
 /* Legend + space list sit in a <details> with its toggle always showing.

@@ -8,8 +8,8 @@
  * palefire_preprocess_paragraph__building_map() in palefire.theme:
  *   map.uid       id prefix (pf-map-{paragraph id})
  *   map.heading   h3 above the map; data-toc lists it in the TOC in any mode
- *   map.summary   the building term's description, else this paragraph's intro
- *   map.note      this paragraph's intro, when the summary is the description
+ *   map.summary   this paragraph's Intro (field_map_intro), under the heading
+ *   map.note      the building term's description, above the legend
  *   map.template  the building's drawing (maps/buildings.yml)
  *   map.spaces    key => { key, title, access, floor, url, cta, tip, body },
  *                 one per published room term, Floor 1 first
@@ -35,18 +35,22 @@
 <div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
   {# Inside the grid, so the drawing starts level with the heading. #}
   <h3 class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</h3>
-  {# Summary (the building's description) and note (this paragraph's
-     intro) under the heading. On the landing hero, Hill Memorial only and
-     wide enough, they sit in the drawing's empty top-left corner instead
-     (_building-map.scss, "Typography in the drawing"). #}
-  {% if map.summary or map.note %}
+  {# Summary (this paragraph's Intro) under the heading. On the landing
+     hero, Hill Memorial only and wide enough, it sits in the drawing's
+     empty top-left corner instead (_landing-hero.scss, "Typography in the
+     drawing"). #}
+  {% if map.summary %}
     <div class="pf-map__type">
-      {% if map.summary %}<div class="pf-map__summary">{{ map.summary }}</div>{% endif %}
-      {% if map.note %}<div class="pf-map__intro pf-map__note">{{ map.note }}</div>{% endif %}
+      <div class="pf-map__summary">{{ map.summary }}</div>
     </div>
   {% endif %}
   <div class="pf-map__aside">
-
+    {# Note (the building term's description): who can walk in and what
+       needs an appointment, right above the legend it explains. Outside the
+       <details>, so it shows while the legend is collapsed. #}
+    {% if map.note %}
+      <div class="pf-map__intro pf-map__note">{{ map.note }}</div>
+    {% endif %}
     {# The toggle always shows. Open beside the map, collapsed when it moves
        under the map (building-map.js); the reader can open or close it either
        way. data-toc-skip keeps anything in here out of the TOC. #}

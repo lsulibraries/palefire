@@ -542,17 +542,14 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
   if ($building_term) {
     $cache->addCacheableDependency($building_term);
   }
-  // Summary: the building's own description (its Building spaces term).
-  // Note: this paragraph's intro (on Hill, who can walk in and what needs
-  // an appointment). Both show when both are filled in; the intro used to
-  // replace the description, so the building's summary never appeared.
-  // With only one of them it is the summary.
-  $description = $building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL;
-  $intro = $paragraph->hasField('field_map_intro') && !$paragraph->get('field_map_intro')->isEmpty()
+  // Summary: this paragraph's Intro (field_map_intro), under the heading or,
+  // on the Hill hero, set into the drawing. Note: the building's own
+  // description (its Building spaces term), at the top of the legend, for
+  // who can walk in and what needs an appointment. Each is optional.
+  $summary = $paragraph->hasField('field_map_intro') && !$paragraph->get('field_map_intro')->isEmpty()
     ? $paragraph->get('field_map_intro')
     : NULL;
-  $summary = $description ?: $intro;
-  $note = $description && $intro ? $intro : NULL;
+  $note = $building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL;
 
   // "You are here": only a drawn (published) room in this building.
   $here = (string) $value('field_map_here');

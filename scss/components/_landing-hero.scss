@@ -214,9 +214,9 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-// The map's summary and note (.pf-map__type, _building-map.scss) keep their
-// row under the heading in the hero's stacked map, above the event card when
-// there is one.
+// The map's summary (.pf-map__type, _building-map.scss) keeps its row under
+// the heading in the hero's stacked map, above the event card when there is
+// one.
 .pf-landing--hero .pf-map:has(> .pf-map__type) {
   grid-template-areas: "head" "type" "stage" "aside";
 }
@@ -236,11 +236,12 @@ $pf-hero-media-wash: .8 !default;
 // corner). Hill's outline never changes, so the text is set into the
 // drawing's empty top-left corner, on a grid measured from the drawing (in
 // cqi, the map's width; the drawing is 75cqi tall):
-//   row 1: the summary, display size, 0 to 50% across, from 3cqi down.
-//          Seminar Space starts at 65% and the upper Gallery's top corner
-//          at 48% across, 19cqi down.
-//   row 2: the note, 0 to 30% across, under the summary; Oral History
-//          starts 31cqi down.
+//   the summary (the map paragraph's Intro), display size, 0 to 50%
+//   across, from 3cqi down. Seminar Space starts at 65% and the upper
+//   Gallery's top corner at 48% across, 19cqi down; under it the corner
+//   narrows to 30% across until Oral History, 31cqi down. A summary much
+//   past four lines at this size would reach the Gallery: keep it short.
+// The note (the building's description) is in the legend, not here.
 // Nothing is drawn there, and the text stays above the drawing (z-index), so
 // it can be selected.
 @container pf-map (min-width: 64rem) {
@@ -253,9 +254,7 @@ $pf-hero-media-wash: .8 !default;
     z-index: 2;
     grid-area: stage;
     align-self: start;
-    display: grid;
-    grid-template-columns: 50cqi;
-    row-gap: 2.5cqi;
+    width: 50cqi;
     margin: 3cqi 0 0;
 
     .pf-map__summary {
@@ -264,12 +263,6 @@ $pf-hero-media-wash: .8 !default;
       font-weight: 400;
       letter-spacing: -.015em;
       line-height: 1.25;
-      text-wrap: pretty;
-    }
-
-    .pf-map__note {
-      width: 30cqi;
-      margin: 0;
       text-wrap: pretty;
     }
   }
