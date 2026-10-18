@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Landing hero: a bento search without the search form.
+ *
+ * Same markup as the bento (paragraph--bento-search.html.twig, with hero
+ * set by palefire_preprocess_paragraph__landing_hero()), so it shares the
+ * bento's background video, glass panels, map and Visit card. The
+ * differences, all from .pf-bento--hero:
+ * - no search form; the lead panel holds the page <h1> (when this is the
+ *   first section) and the page intro, and is left out when both are empty
+ *   or "Hide lead panel" is checked and there is a map;
+ * - the video has no wash and is not darkened when the map is in view;
+ * - the map's legend always sits under the drawing, never beside it
+ *   (_landing-hero.scss).
+ */
+#}
+{% include '@palefire/paragraphs/paragraph--bento-search.html.twig' with { hero: true } %}

@@ -35,6 +35,13 @@ class PalefireHooks {
   public const MODULAR_BUNDLE = 'modular_page';
 
   /**
+   * Paragraph types drawn as a bento: background video, the page <h1> when
+   * first, building map and Visit card. landing_hero is bento_search
+   * without the search form (paragraph--landing-hero.html.twig).
+   */
+  public const BENTO_BUNDLES = ['bento_search', 'landing_hero'];
+
+  /**
    * Paragraph reference field on the modular content type.
    */
   public const SECTIONS_FIELD = 'field_sections';
@@ -147,13 +154,13 @@ class PalefireHooks {
    * Implements hook_preprocess_paragraph().
    *
    * Exposes section variables consumed by paragraph.html.twig, plus bento
-   * background video variables for the bento_search paragraph.
+   * background video variables for the bento paragraphs (BENTO_BUNDLES).
    */
   #[Hook('preprocess_paragraph')]
   public function preprocessParagraph(array &$variables): void {
     $variables['is_section'] = FALSE;
 
-    // Runs before the section early-return so bento_search always gets it.
+    // Runs before the section early-return so bentos always get it.
     $this->bentoVideoVariables($variables);
 
     /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
@@ -298,10 +305,10 @@ class PalefireHooks {
   public const SECTION_FIELDS = ['field_scroll_section', self::SECTIONS_FIELD];
 
   /**
-   * UUID of the bento_search that prints the page <h1>, or NULL.
+   * UUID of the bento (BENTO_BUNDLES) that prints the page <h1>, or NULL.
    *
    * That is the first section the current user can see, when it is a
-   * bento_search. Used by preprocessPage() (page.html.twig skips its own
+   * bento. Used by preprocessPage() (page.html.twig skips its own
    * <h1>) and palefire_preprocess_paragraph__bento_search() (the bento
    * prints it above the intro), so the two always agree.
    */
@@ -317,7 +324,7 @@ class PalefireHooks {
         if (!$paragraph->access('view')) {
           continue;
         }
-        return $paragraph->bundle() === 'bento_search' ? $paragraph->uuid() : NULL;
+        return in_array($paragraph->bundle(), self::BENTO_BUNDLES, TRUE) ? $paragraph->uuid() : NULL;
       }
     }
     return NULL;
@@ -332,7 +339,7 @@ class PalefireHooks {
   private function bentoVideoVariables(array &$variables): void {
     $paragraph = $variables['paragraph'] ?? NULL;
     if (!$paragraph instanceof FieldableEntityInterface
-      || $paragraph->bundle() !== 'bento_search'
+      || !in_array($paragraph->bundle(), self::BENTO_BUNDLES, TRUE)
       || !$paragraph->hasField('field_bg_videos')
       || $paragraph->get('field_bg_videos')->isEmpty()) {
       return;

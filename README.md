@@ -604,6 +604,38 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero paragraph (2026-10-17)
+
+A new paragraph type, `landing_hero`, for pages that want the bento's
+opening without a search box.
+
+- **What it shows:** the background video, a lead panel with the page
+  `<h1>` (when it's the first section) and the page intro, the building
+  map, and the Visit strip.
+- **How it differs from `bento_search`:**
+  - No search form. The lead panel is left out when it would be empty,
+    and editors can hide it with "Hide lead panel" when there's a map.
+  - The video has no wash and isn't darkened when the map scrolls into
+    view.
+  - The map's legend always sits under the drawing, as the bento's map
+    does on narrow screens.
+- **Setup (once, on production):** run
+  `drush php:script themes/custom/palefire/scripts/palefire_landing_hero_setup.php`,
+  then `drush cr`.
+  - The script creates the type and gives it the bento's existing fields:
+    `field_bg_videos`, `field_bg_poster`, `field_bento_map` and
+    `field_bento_hide_lead`, with the same widgets and settings.
+  - It allows `landing_hero` wherever `bento_search` is allowed. It's safe
+    to re-run.
+- **Code:**
+  - `paragraph--landing-hero.html.twig` includes the bento template with
+    `hero: true`, so the two can't drift apart.
+  - `palefire_preprocess_paragraph__landing_hero()` reuses the bento's
+    preprocess.
+  - `PalefireHooks::BENTO_BUNDLES` lets the hero print the page title and
+    get its background videos.
+  - Styles are in `_landing-hero.scss` (`.pf-bento--hero`).
+
 ### Reading colours: "More colours" as a tile; mobile menu without end rules (2026-10-17)
 
 - **"More colours" is a tile:** it sits in the fourth cell, styled like
