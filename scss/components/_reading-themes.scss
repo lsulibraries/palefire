@@ -43,7 +43,8 @@
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
-//   twilight text  7.0  muted 5.5  accent 11.0   (default; LSU gold accent)
+//   twilight text 12.6  muted 7.1  accent 10.2   (default; LSU gold accent,
+//                                                 pale gold headings 11.1)
 //   midnight text  5.15 muted 5.0  accent  8.4
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
@@ -68,19 +69,25 @@
 $pf-reading-themes: (
   // The default (2026-10-17): every page opens in it until a visitor picks
   // another ($pf-reading-default; html.html.twig marks <html> with it).
-  // Midnight's darkness in LSU purple's hue (265.9deg), LSU gold (#fdd023)
-  // as the accent. Body text is stronger than Midnight's (7:1, AAA, where
-  // Midnight's rotated grey would be 5.0:1): a default has to suit everyone.
+  // LSU gold (#fdd023) as the accent.
+  // 2026-10-18, closer to Material, which reads better:
+  // - Near-white text everywhere, as Material has (12.6:1; was a grey
+  //   lavender at 7:1). Headings white.
+  // - Content headings and the current TOC link in a pale gold (title),
+  //   where Material has its bright green (11.1:1).
+  // - A softer, plum purple: the same darkness, hue 291deg at 16%
+  //   saturation (was LSU purple's 266deg at 25%), for the page, surfaces,
+  //   rules and hovers.
   'twilight': (
     label: 'Twilight', dark: true,
-    bg: #251d30, fg: #b2a6c1, heading: #e1d8ec, muted: #9e92ad, rule: #392f47,
-    surface: #2b2238, accent: #fdd023, accent-soft: #2d223b,
-    scroll: #8b7d9e, panel-muted: #aca0ba,
-    // Calm hovers, never purple to gold: text goes from its pale lavender
-    // to a richer purple (#c19df1, LSU purple's hue at 75% saturation;
-    // 7.2:1 on the page, 7.4:1 on the bar and dropdowns), and gold links
-    // brighten to a lighter gold.
-    hover: #c19df1, link-hover: #ffe27a,
+    bg: #2e2330, fg: #efe9f0, heading: #faf6fa, muted: #bcaebf, rule: #45384a,
+    surface: #352a37, accent: #fdd023, accent-soft: #372a39,
+    scroll: #9a8ca0, panel-muted: #c3b6c6,
+    title: #f2dc9b,
+    // Calm hovers, never purple to gold: text goes from near-white to a
+    // soft plum lilac (9.3:1 on the page), and gold links brighten to a
+    // lighter gold.
+    hover: #dcc3e2, link-hover: #ffe27a,
   ),
   'cream': (
     label: 'Cream', dark: false,

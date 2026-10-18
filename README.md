@@ -605,6 +605,45 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Twilight: white text, pale gold headings, a softer plum (2026-10-18)
+
+Twilight (the default reading colours) now reads more like Material.
+
+| Token | Was | Now | On the page |
+|---|---|---|---|
+| Body text (`fg`) | #b2a6c1 grey lavender, 7.0:1 | #efe9f0 near-white | 12.6:1 |
+| Headings (`heading`) | #e1d8ec | #faf6fa | 14.0:1 |
+| Muted | #9e92ad, 5.5:1 | #bcaebf | 7.1:1 |
+| Panel muted | #aca0ba | #c3b6c6 | — |
+| Title (new) | — | #f2dc9b pale gold | 11.1:1 |
+| Page (`bg`) | #251d30 | #2e2330 | — |
+| Surface | #2b2238 | #352a37 | — |
+| Rule | #392f47 | #45384a | — |
+| Accent soft | #2d223b | #372a39 | — |
+| Scrollbar | #8b7d9e | #9a8ca0 | 4.7:1, rail 4.9:1 |
+| Text hover | #c19df1 | #dcc3e2 soft plum lilac | 9.3:1 |
+
+- **Title:** Material's bright green headings, done in pale gold. Every
+  heading in the content and the current TOC link use it (the `title`
+  key, as Material's green does).
+- **Purple:** softer and more plum. Same darkness, hue 291° at 16%
+  saturation (was LSU purple's 266° at 25%).
+- **Unchanged:** the LSU gold accent (#fdd023, 10.2:1) and the link
+  hover gold.
+- **Not added:** Material's yellow bold and purple italics have no
+  Twilight equivalent, so bold and italic stay the text colour.
+- **Over a background video, worst case (a white frame):**
+  - panel headings 11.4:1, labels 6.3:1, gold headings 9.0:1;
+  - the Visit strip's labels 6.0:1 (4.67:1 before).
+- **High contrast:** the variant is generated from these values as
+  before.
+
+Checked on /v2/special at 1333×767 with the new tokens injected and
+Twilight picked in Settings. With transitions off (the hidden preview
+pane freezes them), every element took the new colours.
+
+Files: `_reading-themes.scss` and `_visit.scss` (comment only).
+
 ### Landing hero: breadcrumb and video button inside the lead; map heading lower, summary smaller (2026-10-18)
 
 - **Top row in the lead panel:** on a Landing hero with its lead panel,
