@@ -604,6 +604,32 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Building map on phones: marks grow with the map; entrance arrow; hint icon (2026-10-18)
+
+- **Grow with the map:** the room numbers, restroom and elevator icons,
+  and FLOOR 2 / ENTRANCE used to stay a fixed size on phones. Now they grow
+  with the drawing from 320 to 575px, part fixed and part in proportion:
+  - numbers 20 → 31px;
+  - restroom tile 18 → 28px;
+  - elevator 15 → 23px;
+  - type 9 → 11.5px.
+
+  Growing in full proportion would have left a jump at 576px, where the
+  desktop sizes take over; this leaves a small step.
+- **Entrance arrow:** ENTRANCE used to be enlarged from the start of the
+  word, which slid the arrow off the doorway and onto the wall lines. It
+  now grows around the arrow's tip, so the arrow stays in the doorway and
+  the word sits clear below the slab.
+- **FLOOR 2:** it now sits under the railing, tracked a little tighter
+  (.16em), so it clears the Floor 2 Gallery's number and the Quiet Study
+  and McIlhenny Room corners.
+- **Hint icon:** Font Awesome Pro's bullseye-pointer (solid) instead of a
+  "1" in a circle, which read as one of the room numbers. It is inlined
+  from the site's `/libraries/fontawesome-pro` copy with `source()`, like
+  the utility menu's icons, so no FA CSS or font loads.
+
+Files: `_building-map.scss` and `paragraph--building-map.html.twig`.
+
 ### "Bento" renamed to "landing" in the theme (2026-10-18)
 
 "Bento" was a prototype name. The landing section's classes, variables,

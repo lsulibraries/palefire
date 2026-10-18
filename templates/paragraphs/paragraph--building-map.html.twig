@@ -97,7 +97,9 @@
        building-map.js numbers the rooms and the list to match. In the
        markup from the start, so nothing moves when the script runs. #}
     <figcaption class="pf-map__hint">
-      <span class="pf-map__hint-dot" aria-hidden="true">1</span>
+      {# Font Awesome Pro bullseye-pointer (solid), inlined from the site's
+         /libraries copy like menu--utility.html.twig, so |raw is safe. #}
+      <span class="pf-map__hint-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/solid/bullseye-pointer.svg', ignore_missing = true)|raw }}</span>
       {{ 'Tap a numbered room, or choose a space from the list.'|t }}
     </figcaption>
   </figure>
