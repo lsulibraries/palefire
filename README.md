@@ -604,6 +604,27 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing TOC hides on desktop only; building map fits phones (2026-10-18)
+
+- **TOC:** the landing-page collapse over the hero and the events carousel
+  now happens only from lg up, where closing the column gives the map the
+  full width. Below lg the TOC is just the floating list button, which
+  covers nothing, so it now shows from the top of the page and the drawer
+  is always one tap away. (`_landing-hero.scss`)
+- **Building map on phones (under 576px):**
+  - The whole drawing fits the width. It used to be 40rem wide and scroll
+    sideways, so a 320px screen showed half of it.
+  - The room names inside the drawing are hidden at this size, because
+    they would be about 4px. The legend lists every space, and the names
+    were already `aria-hidden`.
+  - The legend ("Legend & spaces") starts open on phones, as the main way
+    in.
+  - Tapping a space in the legend scrolls the drawing into view if it is
+    off-screen, so the room lighting up and its tooltip can be seen. This
+    happens in any stacked layout. It is instant with reduced motion, and
+    a keyboard press doesn't scroll, so focus stays on the list.
+  - Files: `_building-map.scss` and `building-map.js`.
+
 ### Landing pages: the TOC collapses instead of fading (2026-10-17)
 
 On landing pages the TOC no longer just turns transparent over the hero

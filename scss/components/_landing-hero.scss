@@ -259,8 +259,9 @@ $pf-hero-media-wash: .8 !default;
 // column closes so the content and backgrounds run edge to edge, and the
 // sidebar slides out whole like Bootstrap's .offcanvas-start (.3s
 // ease-in-out). visibility takes its links out of the tab order once it
-// has gone. Below lg the list button that opens the TOC drawer waits the
-// same way.
+// has gone. Desktop only: below lg the TOC is just the floating list
+// button, which covers nothing, so it shows from the top on phones and
+// tablets.
 @include media-breakpoint-up(lg) {
   html[data-pf-mode="landing"] .pf-modular--has-toc {
     transition:
@@ -295,19 +296,8 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-// (The button keeps Bootstrap's colour fades alongside.)
-html[data-pf-mode="landing"] .pf-modular__toc-toggle {
-  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease, opacity .5s ease, visibility 0s;
-}
-
-html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-modular__toc-toggle {
-  visibility: hidden;
-  opacity: 0;
-  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease, opacity .5s ease, visibility 0s .5s;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  html[data-pf-mode="landing"] :is(.pf-modular--has-toc, .pf-sidebar.pf-modular__sidebar, .pf-modular__toc-toggle) {
+  html[data-pf-mode="landing"] :is(.pf-modular--has-toc, .pf-sidebar.pf-modular__sidebar) {
     transition: none !important;
   }
 }

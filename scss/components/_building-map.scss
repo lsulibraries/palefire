@@ -103,7 +103,14 @@
 .pf-map__stage { margin: 0; min-width: 0; } /* position: sticky or relative, above */
 .pf-map__scroller { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
 .pf-map__svg { display: block; width: 100%; height: auto; overflow: visible; }
-@media (max-width: 575.98px) { .pf-map__svg { min-width: 40rem; } }
+/* Phones: the whole drawing fits the width (it used to be 40rem wide and
+   scroll sideways), and the legend is the way in (building-map.js opens it
+   here and brings the drawing into view when a space is tapped). The names
+   would be ~4px at this size, so they hide; the legend lists them, and the
+   group is aria-hidden already. visibility keeps their boxes, which the
+   tooltip and the "here" arrow are placed from. */
+.pf-map__stage { scroll-margin-top: calc(var(--pf-header-h, 50px) + 1rem); }
+@media (max-width: 575.98px) { .pf-map__labels { visibility: hidden; } }
 
 .pf-map__lines path { fill: none; stroke: var(--pf-map-ink); stroke-width: var(--pf-map-line); stroke-linejoin: round; stroke-linecap: round; }
 .pf-map__lines .pf-map__rail { stroke-width: calc(var(--pf-map-line) * 2); }
@@ -383,6 +390,5 @@
 @media print {
   .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
   .pf-map__scroller { overflow: visible; }
-  .pf-map__svg { min-width: 0; }
   .pf-map__key-toggle, .pf-map__tip { display: none !important; }
 }

@@ -34,6 +34,9 @@
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   // OS setting, or the Settings drawer's "Reduce motion" (html.pf-a11y-motion).
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
+  // Phones: the drawing fits the width and the legend leads
+  // (_building-map.scss, same breakpoint).
+  const phone = window.matchMedia('(max-width: 575.98px)');
 
   // Appointment rooms: the walk-in hatch cut into 20-unit dashes, staggered
   // row to row, so access reads from the texture and not only from a dimmer
@@ -291,9 +294,23 @@
         else window.location.assign(href);
       });
     });
+    // A tapped space whose room is out of sight (the legend under the
+    // drawing: phones, stacked layouts) brings the drawing into view, so
+    // the room lighting up and its tooltip are seen. Pointer only: a
+    // keyboard press keeps focus, and the page, where they are.
+    const revealStage = () => {
+      const box = stage.getBoundingClientRect();
+      const top = parseFloat(getComputedStyle(stage).scrollMarginTop) || 0;
+      if (box.top >= top && box.bottom <= window.innerHeight) return;
+      stage.scrollIntoView({ block: 'start', behavior: reduceMotion() ? 'auto' : 'smooth' });
+    };
     items.forEach((item) => {
-      hoverable(item, item.dataset.mapRegion);
-      pressable(item, item.dataset.mapRegion);
+      const key = item.dataset.mapRegion;
+      hoverable(item, key);
+      pressable(item, key);
+      item.addEventListener('click', (e) => {
+        if (e.detail > 0 && current === key && tip.classList.contains('is-open')) revealStage();
+      });
     });
     document.addEventListener('pointerdown', (e) => {
       if (current && !e.target.closest('.pf-map__region, .pf-map__item, .pf-map__tip, [data-map-label]')) hide(true);
@@ -334,18 +351,20 @@
     }
 
     // Legend: open while it sits beside the map, collapsed when it moves
-    // under it. The layout comes from the stylesheet (--pf-map-layout, set by
-    // a container query in _building-map.scss), so this follows the space the
-    // map really has, TOC sidebar or not. Only acts when the layout flips, so
-    // a reader's own toggle is never overridden. Without JS it is open.
+    // under it, and open again on phones, where the drawing is small and the
+    // legend is the way in. The layout comes from the stylesheet
+    // (--pf-map-layout, set by a container query in _building-map.scss), so
+    // this follows the space the map really has, TOC sidebar or not. Only
+    // acts when that changes, so a reader's own toggle is never overridden.
+    // Without JS it is open.
     const key = root.querySelector('[data-map-key]');
     if (key) {
-      let stacked = null;
+      let open = null;
       const syncKey = () => {
-        const now = getComputedStyle(root).getPropertyValue('--pf-map-layout').trim() === 'stacked';
-        if (now === stacked) return;
-        stacked = now;
-        key.open = !stacked;
+        const now = phone.matches || getComputedStyle(root).getPropertyValue('--pf-map-layout').trim() !== 'stacked';
+        if (now === open) return;
+        open = now;
+        key.open = open;
       };
       if ('ResizeObserver' in window) new ResizeObserver(syncKey).observe(root);
       else window.addEventListener('resize', syncKey, { passive: true });

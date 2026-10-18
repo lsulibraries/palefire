@@ -538,7 +538,8 @@
     // (REVEAL_SLACK of the viewport) collapses it again: opening the column
     // narrows the content, which makes the sections above taller and pushes
     // the section down, so a single line would flip it back and forth. A
-    // landing page with no other section never shows it.
+    // landing page with no other section never shows it. The class is set
+    // at every width, but only the lg-and-up styles read it.
     const landing = ROOT.dataset.pfMode === 'landing';
     const revealAt = landing
       ? Array.from(document.querySelectorAll('.pf-section'))
