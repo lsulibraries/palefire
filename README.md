@@ -605,6 +605,27 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" follows the carousel's calendars and libraries (2026-10-18)
+
+The "Next event" card (`hero-event.js`) read the carousel's feed with no
+query. So it always showed the default calendar for every library, even
+when the page's events carousel was set to, say, Events and Hill Memorial
+Library only. It now sends the same `calendar` and `campus` the carousel
+sends, read from the first carousel's `data-calendar` and `data-campus`.
+The card is therefore always an event the carousel also lists.
+
+- **The pick:** the first timed event that hasn't ended. All-day items are
+  skipped with the carousel's own all-day test (start at or before 0.01h,
+  end at or after 23.9h), so a segment that starts a few seconds after
+  midnight no longer counts as timed.
+- **"Show only event days"** needs nothing extra: the card already skipped
+  all-day items.
+- **Requirements:** the carousel's Calendars and Libraries options
+  (palefire_modular `field_carousel_calendars` and
+  `field_carousel_campuses`, libcal_gantt 2026-10-18).
+
+Files: `js/hero-event.js`.
+
 ### Tile showcase: Tiles as image cards (2026-10-18)
 
 The How-to guides, Collections and Specializations sections from the

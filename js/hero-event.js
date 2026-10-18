@@ -5,9 +5,12 @@
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
- * that have the carousel, and the card shows the same events. It picks the
- * first timed event that hasn't ended; all-day items such as donation bins
- * and displays are skipped. The feed has no description, so the line under
+ * that have the carousel. It asks with the page's first carousel's own
+ * Calendars and Libraries (its data-calendar and data-campus), as
+ * day-carousel.js does, so the card is always one of the events the
+ * carousel lists. It picks the first timed event that hasn't ended;
+ * all-day items such as donation bins and displays are skipped, with the
+ * carousel's own all-day test. The feed has no description, so the line under
  * the title is the first category and the place ("Online" when there is no
  * room).
  *
@@ -21,10 +24,25 @@
   const FALLBACK_ENDPOINT = '/libcal-gantt/carousel-events';
   let feed = null;
 
-  function loadFeed() {
+  // The same query day-carousel.js sends, from the carousel's own data-*
+  // attributes, so both read the same calendars and libraries.
+  function feedUrl(carousel) {
+    const settings = drupalSettings.libcalGanttCarousel || {};
+    const endpoint = settings.endpoint || FALLBACK_ENDPOINT;
+    const params = new URLSearchParams({ offset: '0' });
+    const data = carousel ? carousel.dataset : {};
+    if (data.calendar) {
+      params.set('calendar', data.calendar);
+    }
+    if (data.campus) {
+      params.set('campus', data.campus);
+    }
+    return endpoint + (endpoint.indexOf('?') === -1 ? '?' : '&') + params.toString();
+  }
+
+  function loadFeed(carousel) {
     if (!feed) {
-      const settings = drupalSettings.libcalGanttCarousel || {};
-      feed = fetch(settings.endpoint || FALLBACK_ENDPOINT, { credentials: 'same-origin' })
+      feed = fetch(feedUrl(carousel), { credentials: 'same-origin' })
         .then((response) => (response.ok ? response.json() : null))
         .catch(() => null);
     }
@@ -42,7 +60,8 @@
     const upcoming = [];
     ((data && data.events) || []).forEach((event) => {
       Object.entries(event.segments || {}).forEach(([day, segment]) => {
-        const allDay = segment.startHour <= 0 && segment.endHour >= 23.9;
+        // Same test as day-carousel.js ("All day" on its slides).
+        const allDay = segment.startHour <= 0.01 && segment.endHour >= 23.9;
         const start = at(day, segment.startHour);
         if (!allDay && at(day, segment.endHour).getTime() > now) {
           upcoming.push({ event, start });
@@ -119,10 +138,13 @@
     attach(context) {
       once('pf-hero-event', '[data-pf-hero-event]', context).forEach((box) => {
         // Only alongside the events carousel (CSS holds the space then).
-        if (!document.querySelector('.pf-events-carousel')) {
+        const section = document.querySelector('.pf-events-carousel');
+        if (!section) {
           box.remove();
           return;
         }
+        // The block's container carries the carousel's settings as data-*.
+        const carousel = section.querySelector('.libcal-day-carousel');
         // On its own (no lead panel): under the building map's heading,
         // above the drawing (grid row "event", _landing-hero.scss). Moved
         // before the feed loads, so its space is held there.
@@ -132,7 +154,7 @@
           heading.after(box);
           box.classList.add('is-in-map');
         }
-        loadFeed().then((data) => {
+        loadFeed(carousel).then((data) => {
           const next = nextEvent(data);
           // Links and images only from http(s) addresses.
           if (next && /^https?:\/\//.test(next.event.url || '') && next.event.title) {
