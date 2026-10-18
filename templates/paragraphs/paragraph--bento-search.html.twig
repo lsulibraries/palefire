@@ -50,6 +50,17 @@
 {% set bento_name = bento.identifier|default('search_api_fulltext_bento') %}
 {% set input_id = bento.input_id|default('pf-bento-q') %}
 {% set show_lead = not map_only and (not hero or page_title or bento_intro) %}
+{# Next event (landing hero only), filled in by hero-event.js from the
+   events carousel's feed; removed when the page has no carousel or no
+   event. In the lead panel, or on its own glass when there is none. #}
+{% if hero %}
+  {{ attach_library('palefire/hero-event') }}
+  {% set hero_event %}
+    <div class="pf-hero-event{{ not show_lead ? ' pf-hero-event--solo' }}" data-pf-hero-event>
+      <p class="pf-hero-event__label">{{ 'Next event'|t }}</p>
+    </div>
+  {% endset %}
+{% endif %}
 <div{{ attributes.addClass('pf-bento', hero ? 'pf-bento--hero', bg_videos ? 'has-bg-video', not show_lead and bento_map ? 'pf-bento--map-only') }} data-pf-bento>
 
   {% if bg_videos %}
@@ -81,6 +92,7 @@
     {% if page_title %}
       <h1 class="visually-hidden">{{ page_title }}</h1>
     {% endif %}
+    {{ hero_event }}
   {% else %}
   {# Title, intro and search on one frosted panel (the Visit card's glass),
      so the text reads over the background video. #}
@@ -92,12 +104,7 @@
       <div class="pf-bento__intro">{{ bento_intro }}</div>
     {% endif %}
     {% if hero %}
-      {# Next event, filled in by hero-event.js from the events carousel's
-         feed; removed when the page has no carousel or no event. #}
-      {{ attach_library('palefire/hero-event') }}
-      <div class="pf-hero-event" data-pf-hero-event>
-        <p class="pf-hero-event__label">{{ 'Next event'|t }}</p>
-      </div>
+      {{ hero_event }}
     {% else %}
     <form class="pf-bento__form" role="search" method="get" action="{{ bento_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-bento__heading" id="{{ input_id }}-heading" data-toc>

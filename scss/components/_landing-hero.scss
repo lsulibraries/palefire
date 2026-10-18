@@ -134,8 +134,42 @@ $pf-hero-media-wash: .8 !default;
   color: var(--pf-toc-color);
 }
 
+// No lead panel (no title or intro, or "Hide lead panel"): the card sits
+// on its own glass, the lead panel's, above the map.
+.pf-hero-event--solo {
+  max-width: 40rem;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--pf-bento-line);
+  background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+
+.pf-bento--map-only > .pf-hero-event--solo + .pf-bento__visit {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .pf-hero-event__card {
     animation: pf-accordion-in $pf-menu-fade ease both;
+  }
+}
+
+// The solo card follows the lead panel's other modes (_visit.scss).
+.pf-section--theme-dark .pf-hero-event--solo {
+  --pf-toc-color: var(--pf-section-muted);
+}
+
+@media print {
+  .pf-hero-event--solo {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-hero-event--solo {
+    border-color: CanvasText;
   }
 }

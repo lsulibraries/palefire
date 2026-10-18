@@ -604,6 +604,16 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" card without a lead panel (2026-10-17)
+
+The card was printed only inside the lead panel. A hero with no lead panel
+(no page title or intro, or "Hide lead panel" checked) therefore showed no
+card, and its script never loaded. That was the case on /v2/special. Now
+the card also shows in that case, on its own glass panel above the map
+(`.pf-hero-event--solo`), with print and Windows High Contrast handled
+like the lead panel. The template builds the card once (`hero_event`) and
+prints it in whichever place applies.
+
 ### Landing hero: "Next event" card (2026-10-17)
 
 The landing hero's lead panel now shows the next event under the intro,
