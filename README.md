@@ -605,6 +605,59 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Twilight goes charcoal; header matches the TOC; lead and Visit glass like the Settings drawer (2026-10-18)
+
+**Twilight purples:** the 291° plum read reddish. The page is now
+`#272429`, hue 276° at 6.5% saturation, which reads as charcoal. The
+other purples share that hue at the same low saturation and keep their
+lightness.
+
+| Token | Plum (was) | Now |
+|---|---|---|
+| bg | #2e2330 | #272429 |
+| surface | #352a37 | #2e2b30 |
+| accent-soft | #372a39 | #2f2c31 |
+| rule | #45384a | #3f3a42 |
+| scroll | #9a8ca0 | #97929a |
+| muted | #bcaebf | #b7b3ba |
+| panel-muted | #c3b6c6 | #bfbbc1 |
+| hover | #dcc3e2 | #d4c9dc |
+| fg | #efe9f0 | #edebee |
+| heading | #faf6fa | #f8f7f9 |
+
+- The chrome works out to #242126.
+- Pale gold titles and the LSU gold accent are unchanged.
+- Contrast: text 12.9:1, muted 7.4:1, gold headings 11.3:1, hover
+  9.6:1, scrollbar 5.0:1 (5.2:1 on the rail).
+
+**Header = TOC** (every swatch): the header takes the TOC sidebar's glass
+(`--pf-sidebar-bg`), and so does the strip under a header growing back.
+- That is 90%, or 75% (light) / 80% (dark) over a landing video.
+- It was the header's own 60% (light) / 78% (dark).
+- The blur was already the same. Measured on /v2/special: header and
+  sidebar are both `rgba(36, 33, 38, .8)` in Twilight.
+
+**Lead panel and Visit strip** (every swatch): the Settings drawer's
+glass and blur.
+- **Light swatches:** exactly the drawer's, the page colour at 65%.
+- **Dark swatches:** the drawer's colour (the page darkened 20%), at 55%
+  on the hero and 75% on other landings. The drawer itself is 30%, but
+  it has the dimmed backdrop behind it; these panels only have the
+  video's wash.
+- 55% / 75% is the least that keeps every dark swatch's panel text and
+  labels at 4.5:1 over a white video frame. That was worked out per
+  swatch under the hero's 80% wash and the plain landing's 60%. At the
+  drawer's 30%, Dusk, Solarized, Cocoa, Forest, Midnight and Material
+  labels would fall to 3.5–4.2:1.
+- Light swatches stay 5.2:1 and up at 65%.
+- Reduce transparency and the solid switch make them solid, like the TOC
+  and header. `$pf-reading-lead-glass-dark*` in `_reading-themes.scss`.
+
+Checked on /v2/special at 1333×767 with the new CSS injected, in Twilight
+and in Cream.
+
+File: `_reading-themes.scss`.
+
 ### Twilight: white text, pale gold headings, a softer plum (2026-10-18)
 
 Twilight (the default reading colours) now reads more like Material.

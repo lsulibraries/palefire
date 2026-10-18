@@ -43,8 +43,8 @@
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
-//   twilight text 12.6  muted 7.1  accent 10.2   (default; LSU gold accent,
-//                                                 pale gold headings 11.1)
+//   twilight text 12.9  muted 7.4  accent 10.4   (default; LSU gold accent,
+//                                                 pale gold headings 11.3)
 //   midnight text  5.15 muted 5.0  accent  8.4
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
@@ -75,19 +75,20 @@ $pf-reading-themes: (
   //   lavender at 7:1). Headings white.
   // - Content headings and the current TOC link in a pale gold (title),
   //   where Material has its bright green (11.1:1).
-  // - A softer, plum purple: the same darkness, hue 291deg at 16%
-  //   saturation (was LSU purple's 266deg at 25%), for the page, surfaces,
-  //   rules and hovers.
+  // - A muted, near-neutral purple: page #272429, hue 276deg at 6.5%
+  //   saturation (was LSU purple's 266deg at 25%, then a plum at 291deg,
+  //   which read reddish). Surfaces, rules and greys share the hue at the
+  //   same low saturation.
   'twilight': (
     label: 'Twilight', dark: true,
-    bg: #2e2330, fg: #efe9f0, heading: #faf6fa, muted: #bcaebf, rule: #45384a,
-    surface: #352a37, accent: #fdd023, accent-soft: #372a39,
-    scroll: #9a8ca0, panel-muted: #c3b6c6,
+    bg: #272429, fg: #edebee, heading: #f8f7f9, muted: #b7b3ba, rule: #3f3a42,
+    surface: #2e2b30, accent: #fdd023, accent-soft: #2f2c31,
+    scroll: #97929a, panel-muted: #bfbbc1,
     title: #f2dc9b,
     // Calm hovers, never purple to gold: text goes from near-white to a
-    // soft plum lilac (9.3:1 on the page), and gold links brighten to a
-    // lighter gold.
-    hover: #dcc3e2, link-hover: #ffe27a,
+    // soft lilac (9.6:1 on the page), and gold links brighten to a lighter
+    // gold.
+    hover: #d4c9dc, link-hover: #ffe27a,
   ),
   'cream': (
     label: 'Cream', dark: false,
@@ -192,10 +193,17 @@ $pf-reading-media-wash: .6 !default;
 $pf-reading-media-wash-map: .9 !default;
 $pf-reading-media-glass: .75 !default;
 $pf-reading-media-glass-dark: .8 !default;
-// TOC sidebar glass elsewhere (it can sit over a section photo).
+// TOC sidebar glass elsewhere (it can sit over a section photo). The header
+// uses the same glass.
 $pf-reading-sidebar-glass: .9 !default;
-// Header glass on dark swatches (light ones use $pf-header-bg-alpha).
-$pf-reading-header-glass-dark: .78 !default;
+// The landing lead panel and Visit strip on dark swatches: the Settings
+// drawer's colour (the page darkened 20%) at this much. The drawer itself is
+// 30%, but it has the dimmed backdrop behind it; these sit on the video's
+// wash only. The least that keeps every dark swatch's panel text and labels
+// at 4.5:1 over a white frame: 55% on the hero (80% wash), 75% elsewhere
+// (60% wash). Light swatches use the drawer's own $pf-panel-glass (65%).
+$pf-reading-lead-glass-dark: 75% !default;
+$pf-reading-lead-glass-dark-hero: 55% !default;
 
 @function pf-rgb($c) {
   @return math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb));
@@ -420,8 +428,10 @@ html#{$pf-themed}.pf-reading-dark:has(.pf-landing.has-bg-video) body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass-dark});
 }
 
+// The header is the TOC sidebar's glass (--pf-sidebar-bg, above), on every
+// swatch: the two read as one frame around the page.
 html#{$pf-themed} .pf-header {
-  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha});
+  --pf-header-bg: var(--pf-sidebar-bg);
   --pf-utility-color: var(--pf-g-heading);
 
   .navbar {
@@ -451,17 +461,9 @@ html#{$pf-themed} .pf-header {
   }
 }
 
-html#{$pf-themed}.pf-reading-dark .pf-header {
-  --pf-header-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-header-glass-dark});
-}
-
 // The strip under a header that is growing back (_header.scss) matches it.
 html#{$pf-themed} .pf-page::before {
-  background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-header-bg-alpha});
-}
-
-html#{$pf-themed}.pf-reading-dark .pf-page::before {
-  background-color: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-header-glass-dark});
+  background-color: var(--pf-sidebar-bg);
 }
 
 html#{$pf-themed} .pf-footer {
@@ -500,6 +502,35 @@ html#{$pf-themed}.pf-a11y-solid body {
 }
 
 // --- Landing, map, events --------------------------------------------------
+// The lead panel and the Visit strip: the Settings drawer's glass
+// (_utility-panels.scss), same blur (--pf-glass-filter), so the frosted
+// panels match. Light swatches: the page colour at the drawer's 65%.
+// Dark: the drawer's darkened page colour, thicker than the drawer's 30%
+// (see $pf-reading-lead-glass-dark).
+html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
+  background-color: rgba(var(--pf-g-bg-rgb), #{$pf-panel-glass});
+}
+
+html#{$pf-themed}.pf-reading-dark :is(.pf-landing__lead, .pf-visit) {
+  background-color: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-reading-lead-glass-dark}, transparent);
+}
+
+html#{$pf-themed}.pf-reading-dark .pf-landing--hero :is(.pf-landing__lead, .pf-visit) {
+  background-color: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-reading-lead-glass-dark-hero}, transparent);
+}
+
+// Reduce transparency and the Settings drawer's solid switch: solid page
+// colour, as the TOC and header (high contrast keeps the swatch's glass).
+@media (prefers-reduced-transparency: reduce) {
+  html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
+    background-color: rgb(var(--pf-g-bg-rgb)) !important;
+  }
+}
+
+html#{$pf-themed}.pf-a11y-solid :is(.pf-landing__lead, .pf-visit) {
+  background-color: rgb(var(--pf-g-bg-rgb)) !important;
+}
+
 // The lead panel and the Visit strip are glass, often over a video: text in
 // the heading colour, labels and lines in the panel muted tone.
 html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
