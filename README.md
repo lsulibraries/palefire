@@ -604,6 +604,28 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" card (2026-10-17)
+
+The landing hero's lead panel now shows the next event under the intro,
+across a hairline.
+
+- **The card:** a square thumbnail on the left. Events without an image get
+  a diagonal-hatch placeholder in the map's style. Next to it are the day
+  and time ("Mon, Oct 19 · 11:30 AM–12:30 PM", or "Today" / "Tomorrow"),
+  then the title, then a short line with the category and place, such as
+  "Workshop · Hill Memorial: Lecture Hall" or "Workshop · Online".
+- **Link:** the whole card links to the event on LibCal.
+- **Data:** `js/hero-event.js` (library `palefire/hero-event`, attached
+  only by the landing hero) reads the events carousel's own feed
+  (`drupalSettings.libcalGanttCarousel.endpoint`). It picks the first timed
+  event that hasn't ended and skips all-day items such as donation bins.
+  - The card only appears on pages that also have the events carousel.
+  - Its space is held while the feed loads, so nothing jumps.
+  - With no upcoming event, or if the request fails, the card is removed.
+  - The feed has no event descriptions, so the short line is built from
+    the category and the location.
+- **Styles:** `_landing-hero.scss` (`.pf-hero-event`). No config.
+
 ### Landing hero: an 80% wash of the reading colour (2026-10-17)
 
 The hero's video now gets a wash of 80% of the reading swatch's page

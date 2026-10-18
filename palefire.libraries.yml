@@ -170,6 +170,16 @@ bento-video:
     - core/drupal
     - core/once
 
+# Landing hero: "Next event" card from the events carousel's feed. Attached
+# by paragraph--bento-search.html.twig only for the landing hero.
+hero-event:
+  js:
+    js/hero-event.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
 # Visit card in the bento (Modular page Visit fields): LibCal hours and the
 # click-to-load Google map. Attached by _palefire_bento_visit() in
 # palefire.theme only when the page fills in a Visit field.

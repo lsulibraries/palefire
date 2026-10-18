@@ -34,3 +34,108 @@ $pf-hero-media-wash: .8 !default;
     top: auto;
   }
 }
+
+// Next event (hero-event.js): under the intro, across a hairline like the
+// bento's search. A square thumbnail, or diagonal hatching when the event
+// has no image, then the day and time, the title (the card's one link,
+// stretched over the card) and the category and place.
+// Shown only when the page has the events carousel, which feeds it. Its
+// space is held while the feed loads: the hatched square under the label.
+.pf-hero-event {
+  --pf-hero-thumb: clamp(4.5rem, 3.5rem + 3vw, 6rem);
+  --pf-hero-hatch: repeating-linear-gradient(135deg, var(--pf-bento-line) 0 1px, transparent 1px 7px);
+  display: none;
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  border-top: 1px solid var(--pf-bento-line);
+}
+
+:root:has(.pf-events-carousel) .pf-hero-event {
+  display: block;
+}
+
+.pf-hero-event:not(.is-ready)::after {
+  content: "";
+  display: block;
+  width: var(--pf-hero-thumb);
+  aspect-ratio: 1;
+  border: 1px solid var(--pf-bento-line);
+  background-image: var(--pf-hero-hatch);
+}
+
+.pf-hero-event__label {
+  @extend %pf-bento-label;
+  margin-bottom: .875rem;
+  color: var(--pf-toc-color);
+}
+
+.pf-hero-event__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--pf-hero-thumb) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: center;
+  max-width: 40rem;
+}
+
+.pf-hero-event__thumb {
+  width: var(--pf-hero-thumb);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--pf-bento-line);
+  background-image: var(--pf-hero-hatch);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:has(img) {
+    background-image: none;
+  }
+}
+
+.pf-hero-event__when {
+  @extend %pf-bento-label;
+  margin: 0 0 .375rem;
+  color: var(--pf-toc-color);
+}
+
+.pf-hero-event__title {
+  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--pf-section-fg, inherit);
+  text-decoration: none;
+  text-underline-offset: .2em;
+  transition: color $pf-hover-out ease;
+
+  // The whole card is the link's target area.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-section-fg, inherit));
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-hero-event__meta {
+  margin: .375rem 0 0;
+  font-size: .9375rem;
+  line-height: 1.4;
+  color: var(--pf-toc-color);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-hero-event__card {
+    animation: pf-accordion-in $pf-menu-fade ease both;
+  }
+}
