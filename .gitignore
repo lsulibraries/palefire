@@ -1,3 +1,9 @@
 # npm packages: install with `npm install`. Only build output is committed
 # (css/style.css, js/vendor/, images/bi/).
 node_modules/
+
+# Local working files: never commit
+_reference/
+patches/
+/*.patch
+/palefire_guide_research_help.php
