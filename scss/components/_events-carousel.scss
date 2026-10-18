@@ -294,6 +294,16 @@
   border-radius: 0;
 }
 
+// The image fills the 3:2 frame. At its own height, a photo wider than 3:2
+// left a strip of the frame's grey under it; a taller one was cut at the
+// frame's foot. Cropped from the top, so posters keep their headline.
+.pf-events-carousel .libcal-day__feature img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
 // Events: a ruled list. Time as a small label, then the title.
 .pf-events-carousel .libcal-day__events {
   border-top: 1px solid var(--ldc-border);

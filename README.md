@@ -605,6 +605,18 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Events carousel: images fill their frame (2026-10-18)
+
+The featured image's frame is 3:2, but the image kept its own height. A
+wider photo (the first event, 640×392) left a 34px strip of the frame's
+grey under it. A taller one (the Hill-O-Ween poster) ran past the frame's
+foot and was cut there. Images now fill the frame (`object-fit: cover`),
+cropped from the top so posters keep their headline. Checked on
+/v2/special at 1440px: both images are exactly 420px tall in their 420px
+frames.
+
+File: `_events-carousel.scss`.
+
 ### Landing: lead fills the first screen, the page snaps to the map (2026-10-18)
 
 From md (768px) up, a landing with a lead panel and a building map
