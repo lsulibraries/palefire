@@ -14,8 +14,9 @@
  * arrive while the page is moving, and the trackpad's trailing inertia, are
  * swallowed, so one gesture is one step.
  *
- * Left to the browser: touch, below md, a lead taller than the window (its
- * end would be skipped), and wheel or keys inside anything that scrolls on
+ * Left to the browser: touch, below md, a lead taller than the window, a
+ * step down while the lead's end is still below the fold (it would be
+ * skipped), and wheel or keys inside anything that scrolls on
  * its own (drawers, menus) or in a form field. Instant for
  * prefers-reduced-motion and the Settings drawer's "Reduce motion"
  * (html.pf-a11y-motion). Listeners are set once for the document, since
@@ -61,7 +62,13 @@
     const pad = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight())
       || parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
-    return { map: Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin) };
+    return {
+      map: Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin),
+      // The lead's end is on screen: a step down skips none of it. On a
+      // short window the lead runs past the fold, and the page scrolls
+      // freely until its end comes up.
+      leadSeen: lead.getBoundingClientRect().bottom <= window.innerHeight + 1,
+    };
   }
 
   // Anything between the target and the page that scrolls by itself.
@@ -82,7 +89,7 @@
     }
     const y = window.scrollY;
     let top = null;
-    if (down && y < at.map - 1) {
+    if (down && y < at.map - 1 && at.leadSeen) {
       top = at.map;
     }
     else if (!down && y > 0 && y <= at.map + 1) {

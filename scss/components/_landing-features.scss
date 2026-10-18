@@ -1,0 +1,331 @@
+// =========================================================================
+// Landing hero lead: features (includes/landing.html.twig, hero only).
+// Under the title, three rows:
+// 1. Latest blog post: the Next event card's parts (_landing-hero.scss).
+// 2. Two exhibitions side by side: tiles with the image edge to edge and
+//    the text over it on a dark scrim. Placeholders for now: hatched frames
+//    stand in for images. A tile with several images crossfades through
+//    them (exhibit-rotate.js), with a pause button.
+// 3. Next event (hero-event.js).
+// With the lead filling the first screen (.pf-landing--lead-screen, md and
+// up) the exhibitions row takes the height the other rows leave, so the
+// whole lead still ends at the fold on a 900px-tall window.
+// Imported after _landing-hero.scss, so these rules follow the ones they
+// adjust.
+// =========================================================================
+
+.pf-landing__features {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(11rem, 1fr) auto;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+// The features fill the panel under the title instead of sitting at its
+// foot (the lead-screen rule in _landing-swiss.scss pushes the last block
+// down).
+.pf-landing--lead-screen > .pf-landing__lead > .pf-landing__features:last-child {
+  flex: 1 0 auto;
+  margin-top: 0;
+}
+
+// lg and up: title and intro side by side, the features across both
+// columns under them. Stacked, the intro alone took about 200px, and the
+// lead ran past the fold (821px of a 900px window, measured on
+// /v2/special); side by side it ends at the fold. A slightly tighter
+// panel padding than the plain lead.
+@include media-breakpoint-up(lg) {
+  .pf-landing__lead:has(> .pf-landing__features) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(2rem, 4vw, 4rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+
+    > .pf-landing__title {
+      grid-column: 1;
+      align-self: start;
+    }
+
+    > .pf-landing__intro {
+      grid-column: 2;
+      align-self: start;
+      max-width: none;
+      margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+    }
+
+    > .pf-landing__features {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// --- Rows 1 and 3: blog post and next event --------------------------------
+// One ledger style: a hairline, then the label and the card. From md the
+// label is a column of its own, so each row is only as tall as its card.
+.pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
+  --pf-hero-thumb: 4.5rem;
+  padding-top: clamp(.875rem, 1.5vw, 1.125rem);
+  border-top: 1px solid var(--pf-landing-line);
+}
+
+.pf-landing__features .pf-hero-event__label {
+  margin-bottom: .625rem;
+}
+
+.pf-landing__features .pf-hero-event__card {
+  max-width: 48rem;
+}
+
+@media (min-width: 768px) {
+  .pf-landing__features :is(.pf-hero-post, .pf-hero-event.is-ready) {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  // Loading: the held space sits in the card's column too.
+  .pf-landing__features .pf-hero-event:not(.is-ready) {
+    display: grid;
+    grid-template-columns: 11rem var(--pf-hero-thumb);
+    gap: 1.5rem;
+  }
+
+  .pf-landing__features .pf-hero-event__label {
+    margin: .25rem 0 0;
+  }
+}
+
+// The post's excerpt: two lines at most.
+.pf-hero-post__excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.pf-hero-post .pf-hero-event__when {
+  display: block;
+}
+
+.pf-hero-post .pf-hero-event__meta {
+  display: block;
+}
+
+// Placeholder row (no blog category set yet): not a link, so no hover.
+.pf-hero-event__card.is-placeholder {
+  color: var(--pf-toc-color);
+}
+
+// --- Row 2: exhibitions ----------------------------------------------------
+.pf-exhibits {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(.75rem, 1.5vw, 1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 576px) {
+  .pf-exhibits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pf-exhibit {
+  // The scrim under the text: strongest at the foot, where the text sits,
+  // so white text keeps 4.5:1 even over a white image.
+  --pf-exhibit-scrim: linear-gradient(to top, rgb(0 0 0 / .78) 0%, rgb(0 0 0 / .55) 45%, rgb(0 0 0 / 0) 85%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 11rem;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--pf-landing-line);
+  color: #fff;
+  background-color: #1f1b26;
+}
+
+// Phones: a 4:3 tile each, stacked. No min-height here: with the ratio it
+// made a 320px screen's tile 4px wider than its column.
+@media (max-width: 575.98px) {
+  .pf-exhibit {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.pf-exhibit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--pf-exhibit-scrim);
+  pointer-events: none;
+}
+
+.pf-exhibit__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+// One frame per image, stacked; .is-current is shown. The crossfade is
+// slow and the image eases in a little on hover, like a gallery wall.
+.pf-exhibit__frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease, transform 1.2s cubic-bezier(.2, .7, .2, 1);
+
+  &.is-current {
+    opacity: 1;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.pf-exhibit:hover .pf-exhibit__frame {
+  transform: scale(1.03);
+}
+
+// Placeholder frames (no image yet): three muted tones with the Visit
+// card's hatching, so a crossfade shows even before there are images.
+.pf-exhibit__frame:not(:has(img)) {
+  --pf-exhibit-tone: #3b3346;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / .07) 11px 12px),
+    linear-gradient(160deg, var(--pf-exhibit-tone), #17141c);
+}
+
+.pf-exhibit__frame:nth-child(3n + 2):not(:has(img)) {
+  --pf-exhibit-tone: #2f4049;
+}
+
+.pf-exhibit__frame:nth-child(3n + 3):not(:has(img)) {
+  --pf-exhibit-tone: #4a3a2c;
+}
+
+.pf-exhibit__text {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.pf-exhibit__label,
+.pf-exhibit__when {
+  @extend %pf-landing-label;
+  margin: 0;
+  color: rgb(255 255 255 / .85);
+}
+
+.pf-exhibit__title {
+  margin: .375rem 0 .5rem;
+  font-size: clamp(1.25rem, 1rem + .9vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+  color: #fff;
+}
+
+// The permanent exhibition: a gold rule before its "On view · Permanent",
+// so it reads as always there rather than as an old date.
+.pf-exhibit--permanent .pf-exhibit__when::before {
+  content: "";
+  display: inline-block;
+  width: 1.25rem;
+  height: 1px;
+  margin-inline-end: .5rem;
+  vertical-align: .3em;
+  background-color: #{$pf-gold};
+}
+
+// Pause / play for a crossfading tile (WCAG 2.2.2): a small glass square in
+// the top corner, like the background video's button.
+.pf-exhibit__pause {
+  position: absolute;
+  top: .75rem;
+  inset-inline-end: .75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / .5);
+  border-radius: 0;
+  color: #fff;
+  // Half black: the white icon stays 3.9:1 even over a white image.
+  background-color: rgb(0 0 0 / .5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #fff;
+    background-color: rgb(0 0 0 / .7);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #{$pf-gold};
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: .875rem;
+    height: .875rem;
+    fill: currentColor;
+  }
+}
+
+.pf-exhibit__play-icon,
+.pf-exhibit__pause[data-state="paused"] .pf-exhibit__pause-icon {
+  display: none;
+}
+
+.pf-exhibit__pause[data-state="paused"] .pf-exhibit__play-icon {
+  display: inline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-exhibit__frame {
+    transition: none;
+  }
+
+  .pf-exhibit:hover .pf-exhibit__frame {
+    transform: none;
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-exhibit__frame {
+    transition: none;
+  }
+
+  .pf-exhibit:hover .pf-exhibit__frame {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-exhibit {
+    border-color: CanvasText;
+  }
+
+  .pf-exhibit::after {
+    display: none;
+  }
+}

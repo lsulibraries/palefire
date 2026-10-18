@@ -187,6 +187,16 @@ landing-snap:
   dependencies:
     - core/drupal
 
+# Landing hero: exhibition tiles with several images crossfade, with a
+# pause button. Attached by includes/landing.html.twig only when a tile has
+# more than one image.
+exhibit-rotate:
+  js:
+    js/exhibit-rotate.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Landing hero: "Next event" card from the events carousel's feed. Attached
 # by includes/landing.html.twig only for the landing hero.
 hero-event:

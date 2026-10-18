@@ -260,7 +260,117 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
+    $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
   }
+}
+
+/**
+ * The newest published Article in the hero's blog category, or NULL.
+ *
+ * The category is the Landing hero's optional "Blog category" field
+ * (field_landing_blog_category, a taxonomy reference to Article Category,
+ * added by hand in the UI). Without the field, or with it empty, this is
+ * NULL and the lead shows a placeholder row. Newest by Article Date, then by
+ * creation. The list's cache tag (node_list:article) refreshes the row when
+ * an article is published or changed.
+ *
+ * Returns ['title', 'url', 'date', 'datetime', 'category', 'excerpt',
+ * 'image'], image a render array (decorative, lazy) or NULL.
+ */
+function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): ?array {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $cache->addCacheTags(['node_list:article']);
+  $post = NULL;
+
+  if ($paragraph->hasField('field_landing_blog_category') && !$paragraph->get('field_landing_blog_category')->isEmpty()) {
+    $term = $paragraph->get('field_landing_blog_category')->entity;
+    // Both fields are on Article (Manage fields); without them the query
+    // would fail, so the row just stays a placeholder.
+    $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+    if ($term && isset($storages['field_article_category'], $storages['field_article_date'])) {
+      $cache->addCacheableDependency($term);
+      $ids = \Drupal::entityQuery('node')
+        ->accessCheck(TRUE)
+        ->condition('type', 'article')
+        ->condition('status', 1)
+        ->condition('field_article_category', $term->id())
+        ->sort('field_article_date', 'DESC')
+        ->sort('created', 'DESC')
+        ->range(0, 1)
+        ->execute();
+      $node = $ids ? \Drupal::entityTypeManager()->getStorage('node')->load(reset($ids)) : NULL;
+      if ($node instanceof NodeInterface) {
+        $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+        $cache->addCacheableDependency($node);
+        $url = $node->toUrl()->toString(TRUE);
+        $cache->addCacheableDependency($url);
+
+        // In the site's time zone (the field stores UTC).
+        $timestamp = (int) $node->getCreatedTime();
+        if ($node->hasField('field_article_date') && $node->get('field_article_date')->date) {
+          $timestamp = $node->get('field_article_date')->date->getTimestamp();
+        }
+        $formatter = \Drupal::service('date.formatter');
+
+        // Excerpt: About Text, else the body's summary or text, as plain text.
+        $excerpt = '';
+        foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
+          if ($excerpt === '' && $node->hasField($field) && !$node->get($field)->isEmpty()) {
+            $excerpt = trim(Html::decodeEntities(strip_tags((string) $node->get($field)->first()->{$property})));
+          }
+        }
+        $excerpt = preg_replace('/\s+/u', ' ', $excerpt);
+        if (mb_strlen($excerpt) > 180) {
+          $excerpt = rtrim(mb_substr($excerpt, 0, 180)) . '…';
+        }
+
+        $post = [
+          'title' => $node->label(),
+          'url' => $url->getGeneratedUrl(),
+          'date' => $formatter->format($timestamp, 'custom', 'M j, Y'),
+          'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
+          'category' => \Drupal::service('entity.repository')->getTranslationFromContext($term)->label(),
+          'excerpt' => $excerpt,
+          'image' => _palefire_field_image($node, 'field_image', ['medium', 'thumbnail'], $cache),
+        ];
+      }
+    }
+  }
+  $cache->applyTo($variables);
+  return $post;
+}
+
+/**
+ * An image field's first image as a decorative (alt="") lazy image.
+ *
+ * In the first of $styles that exists, else the original file. Article
+ * images are often 2000-3000px originals, so a small style matters.
+ */
+function _palefire_field_image(NodeInterface $node, string $field, array $styles, CacheableMetadata $cache): ?array {
+  if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
+    return NULL;
+  }
+  $image = $node->get($field)->first();
+  $file = $image->entity;
+  if (!$file) {
+    return NULL;
+  }
+  $cache->addCacheableDependency($file);
+  $build = [
+    '#uri' => $file->getFileUri(),
+    '#width' => $image->width,
+    '#height' => $image->height,
+    '#alt' => '',
+    '#attributes' => ['alt' => '', 'loading' => 'lazy', 'decoding' => 'async'],
+  ];
+  $storage = \Drupal::entityTypeManager()->getStorage('image_style');
+  foreach ($styles as $name) {
+    if ($style = $storage->load($name)) {
+      $cache->addCacheableDependency($style);
+      return $build + ['#theme' => 'image_style', '#style_name' => $name];
+    }
+  }
+  return $build + ['#theme' => 'image'];
 }
 
 /**

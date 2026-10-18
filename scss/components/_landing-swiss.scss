@@ -45,9 +45,10 @@
   border-radius: 0;
 }
 
+// Title: 36px on phones to 64px from about 1440px (was up to 88px).
 .pf-landing .pf-landing__title {
   margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
-  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.5rem);
+  font-size: clamp(2.25rem, 1.25rem + 2.75vw, 4rem);
   font-weight: 500;
   letter-spacing: -.035em;
   line-height: .95;

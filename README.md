@@ -605,6 +605,70 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero lead: blog post, two exhibitions, next event; smaller title (2026-10-18)
+
+The hero's lead panel now holds three rows under the title. Built in
+`landing.html.twig`, styled in `_landing-features.scss` (new).
+
+- **Title:** 36px on phones to 64px from about 1440px (was up to 88px).
+  This applies to every landing's title.
+- **lg and up:** the title and the page intro sit side by side, and the
+  rows run across both columns below them. Stacked, the intro alone took
+  about 200px and pushed the lead to 821px in a 900px window; side by side
+  the lead ends at the fold.
+- **Row 1, latest blog post:** the newest published Article in the
+  paragraph's **Blog category**, newest by Article Date. It shows the
+  image (core `medium` style, decorative), the date and category, the
+  title and two lines of About Text. If there is no About Text, it uses
+  the body's summary or text.
+  - It uses the Next event card's parts, as a ledger row: the label in
+    its own column from md up.
+  - It refreshes when articles change (`node_list:article`).
+  - It is a placeholder row until the field below exists and is filled
+    in. Code: `_palefire_hero_post()` and `_palefire_field_image()` in
+    `palefire.theme`.
+- **Row 2, two exhibitions:** these are **placeholders** for now, as data
+  at the top of the Twig block (label, title, ISO start and end, the
+  shown dates or `permanent`, and image URLs), ready for a real source.
+  - Each tile shows its image edge to edge, with the text on a dark scrim
+    that keeps white text at 4.5:1 even over a white image. Hatched tones
+    stand in for images.
+  - The permanent LSU History tile reads "On view · Permanent" after a
+    gold rule, instead of dates.
+  - A tile with several images crossfades through them, one every 7s
+    (`js/exhibit-rotate.js`, library `palefire/exhibit-rotate`). It has a
+    pause/play button (WCAG 2.2.2) and runs only while on screen and the
+    tab is visible. It holds still on hover or focus, and is off under
+    reduced motion.
+  - Phones: the tiles stack at 4:3.
+- **Row 3:** Next event, as before.
+- **Snap** (`landing-snap.js`): on a window short enough that the lead
+  runs past the fold, the page now scrolls freely until the lead's end is
+  on screen. Before, a step down would have skipped the rest of it.
+
+**To do in the UI (config is by hand):** add the Blog category field.
+1. Structure → Paragraph types → **Landing hero** → Manage fields →
+   Create a new field.
+2. Reference → **Taxonomy term**. Label "Blog category", machine name
+   `landing_blog_category` (Drupal adds `field_`). Allowed number: 1.
+   Reference type: the **Article Category** vocabulary.
+3. Edit the Special Collections page, pick the category in the Landing
+   hero, then save.
+
+Checked on /v2/special with the new CSS and markup injected (the blog row
+is the placeholder, since the field doesn't exist yet):
+- **1440×900:** the lead is 661px and ends at 897px, at the fold.
+- **768×1024:** the lead ends at 978px, and the exhibition tiles stretch
+  to fill.
+- **320px:** everything stacks, and nothing scrolls sideways (a 4px
+  overflow of the 4:3 tiles was fixed).
+- **Crossfade and pause:** checked with a short-interval stand-in for
+  `exhibit-rotate.js`.
+
+Not checked: the real blog query (it needs the field), `exhibit-rotate.js`
+itself, and the PHP lint (no PHP on this machine). Production: `git pull`,
+then `drush cr`.
+
 ### Landing snap: no more stall on the way to the map (2026-10-18)
 
 The glide from the lead to the map stuck for about .2s, about 130px

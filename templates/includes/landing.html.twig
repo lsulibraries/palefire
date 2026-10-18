@@ -116,7 +116,99 @@
       <div class="pf-landing__intro">{{ landing_intro }}</div>
     {% endif %}
     {% if hero %}
-      {{ hero_event }}
+      {# Features, three rows (_landing-features.scss): latest blog post |
+         two exhibitions side by side | next event.
+         - hero_post: palefire_preprocess_paragraph__landing_hero(), the
+           newest Article in the paragraph's "Blog category"; a placeholder
+           row until that field exists and is filled in.
+         - exhibitions: PLACEHOLDERS until there is a source for them. Same
+           shape a real source would give: label, title, start/end (ISO
+           dates) and dates (shown), or permanent; images (urls, empty for
+           now: hatched frames stand in). More than one image crossfades
+           (exhibit-rotate.js), with a pause button. #}
+      {% set exhibitions = [
+        {
+          label: 'Exhibition'|t,
+          title: 'Exhibition title'|t,
+          start: '2026-09-01',
+          end: '2026-12-19',
+          dates: 'Sep 1 – Dec 19, 2026',
+          images: [],
+          frames: 1,
+        },
+        {
+          label: 'Permanent exhibition'|t,
+          title: 'LSU History'|t,
+          permanent: true,
+          images: [],
+          frames: 3,
+        },
+      ] %}
+      <div class="pf-landing__features">
+        <div class="pf-hero-post">
+          <p class="pf-hero-event__label">{{ 'Latest from the blog'|t }}</p>
+          {% if hero_post %}
+            <a class="pf-hero-event__card" href="{{ hero_post.url }}">
+              <span class="pf-hero-event__thumb">{{ hero_post.image }}</span>
+              <span class="pf-hero-event__text">
+                <span class="pf-hero-event__when"><time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time>{% if hero_post.category %} · {{ hero_post.category }}{% endif %}</span>
+                <span class="pf-hero-event__title">{{ hero_post.title }}</span>
+                {% if hero_post.excerpt %}<span class="pf-hero-event__meta pf-hero-post__excerpt">{{ hero_post.excerpt }}</span>{% endif %}
+              </span>
+            </a>
+          {% else %}
+            {# Placeholder until field_landing_blog_category is added and set. #}
+            <div class="pf-hero-event__card is-placeholder">
+              <span class="pf-hero-event__thumb"></span>
+              <span class="pf-hero-event__text">
+                <span class="pf-hero-event__when">{{ 'Date · Category'|t }}</span>
+                <span class="pf-hero-event__title">{{ 'Blog post title'|t }}</span>
+                <span class="pf-hero-event__meta pf-hero-post__excerpt">{{ 'A line or two from the post’s About Text.'|t }}</span>
+              </span>
+            </div>
+          {% endif %}
+        </div>
+
+        <ul class="pf-exhibits" aria-label="{{ 'Exhibitions'|t }}">
+          {% for ex in exhibitions %}
+            {% set count = ex.images ? ex.images|length : ex.frames %}
+            <li class="pf-exhibit{{ ex.permanent ? ' pf-exhibit--permanent' }}"{% if count > 1 %} data-pf-exhibit-rotate{% endif %}>
+              <div class="pf-exhibit__media" aria-hidden="true">
+                {% for i in 1..count %}
+                  <span class="pf-exhibit__frame{{ loop.first ? ' is-current' }}">
+                    {% if ex.images %}
+                      <img src="{{ ex.images[loop.index0] }}" alt="" loading="lazy" decoding="async">
+                    {% endif %}
+                  </span>
+                {% endfor %}
+              </div>
+              <div class="pf-exhibit__text">
+                <p class="pf-exhibit__label">{{ ex.label }}</p>
+                <p class="pf-exhibit__title">{{ ex.title }}</p>
+                <p class="pf-exhibit__when">
+                  {% if ex.permanent %}
+                    {{ 'On view · Permanent'|t }}
+                  {% else %}
+                    <time datetime="{{ ex.start }}/{{ ex.end }}">{{ ex.dates }}</time>
+                  {% endif %}
+                </p>
+              </div>
+              {% if count > 1 %}
+                {# Crossfade pause/play (WCAG 2.2.2), set up by exhibit-rotate.js. #}
+                <button type="button" class="pf-exhibit__pause" data-pf-exhibit-pause hidden>
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g class="pf-exhibit__pause-icon"><rect x="4" y="3" width="2.6" height="10" rx=".8"/><rect x="9.4" y="3" width="2.6" height="10" rx=".8"/></g><path class="pf-exhibit__play-icon" d="M5 3.4v9.2c0 .7.8 1.1 1.4.7l6.7-4.6c.5-.4.5-1.1 0-1.5L6.4 2.7c-.6-.4-1.4 0-1.4.7z"/></svg>
+                  <span class="visually-hidden" data-pf-exhibit-pause-label>{{ 'Pause slideshow'|t }}</span>
+                </button>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+        {% if exhibitions|filter(ex => ex.images|length > 1 or ex.frames > 1) %}
+          {{ attach_library('palefire/exhibit-rotate') }}
+        {% endif %}
+
+        {{ hero_event }}
+      </div>
     {% else %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-landing__heading" id="{{ input_id }}-heading" data-toc>
