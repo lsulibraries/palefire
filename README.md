@@ -604,6 +604,17 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: tighter "Next event" box, softer stripes (2026-10-17)
+
+- When the card stands on its own (no lead panel), the "Next event" label
+  now sits above the box on the page. Only the card itself is on glass,
+  with less padding, so the box holds just the thumbnail and text.
+- The thumbnail placeholder uses the Visit card's "Show map" stripes: thin
+  lines 12px apart at 18% of the line colour. The old lines were 7px apart
+  at full strength. The loading placeholder uses them too.
+
+Files: `_landing-hero.scss`.
+
 ### Landing hero: "Next event" card over the map drawing (2026-10-17)
 
 When the map is Hill Memorial (`field_map_building` = `hill_memorial`,

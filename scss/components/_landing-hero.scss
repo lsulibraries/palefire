@@ -43,7 +43,8 @@ $pf-hero-media-wash: .8 !default;
 // space is held while the feed loads: the hatched square under the label.
 .pf-hero-event {
   --pf-hero-thumb: clamp(4.5rem, 3.5rem + 3vw, 6rem);
-  --pf-hero-hatch: repeating-linear-gradient(135deg, var(--pf-bento-line) 0 1px, transparent 1px 7px);
+  // The Visit card's "Show map" stripes (_visit.scss .pf-visit__map-load).
+  --pf-hero-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-bento-line) 18%, transparent) 11px 12px);
   display: none;
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
   border-top: 1px solid var(--pf-bento-line);
@@ -134,11 +135,17 @@ $pf-hero-media-wash: .8 !default;
   color: var(--pf-toc-color);
 }
 
-// No lead panel (no title or intro, or "Hide lead panel"): the card sits
-// on its own glass, the lead panel's, above the map.
+// No lead panel (no title or intro, or "Hide lead panel"): the label sits
+// above, on the page, and only the card is on glass (the lead panel's),
+// sized to its content.
 .pf-hero-event--solo {
   max-width: 40rem;
-  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pf-hero-event--solo .pf-hero-event__card {
+  padding: clamp(.875rem, 1.5vw, 1.25rem);
   border: 1px solid var(--pf-bento-line);
   background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -195,7 +202,7 @@ $pf-hero-media-wash: .8 !default;
 }
 
 @media print {
-  .pf-hero-event--solo {
+  .pf-hero-event--solo .pf-hero-event__card {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: none;
@@ -203,7 +210,7 @@ $pf-hero-media-wash: .8 !default;
 }
 
 @media (forced-colors: active) {
-  .pf-hero-event--solo {
+  .pf-hero-event--solo .pf-hero-event__card {
     border-color: CanvasText;
   }
 }
