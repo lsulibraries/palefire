@@ -367,7 +367,7 @@
 .pf-bento__visit { position: relative; width: 100%; max-width: 1280px; margin: clamp(2.5rem, 6vw, 4.5rem) auto 0; container-name: pf-map; container-type: inline-size; }
 .pf-bento__bg-video { transition: filter .8s ease, transform .8s ease; }
 .pf-bento__media::after { transition: background-color .8s ease; }
-.pf-bento.is-map-in-view .pf-bento__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
+// .pf-bento.is-map-in-view .pf-bento__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
 .pf-bento.is-map-in-view .pf-bento__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
 @media (prefers-reduced-motion: reduce) {
