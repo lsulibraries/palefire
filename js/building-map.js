@@ -91,6 +91,8 @@
       const scale = m ? Math.hypot(m.a, m.b) : 0;
       if (scale > 0) {
         root.style.setProperty('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
+        // Map units per screen px: keeps the room numbers one size.
+        root.style.setProperty('--pf-map-px', String(1 / scale));
         // Legend swatches draw the map's hatch at the map's current size,
         // snapped to whole device pixels: with a fractional period every line
         // lands on a different sub-pixel offset and is antialiased
@@ -124,6 +126,60 @@
     centreArrows();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(centreArrows);
 
+    // Room numbers (phones only, _building-map.scss): the names are too
+    // small to show there, so each room in the list gets a number, in list
+    // order, and the same number sits on its room in the drawing, centred
+    // on where the name would be. Both are aria-hidden: the entries and
+    // rooms keep their names. The markers are drawn in screen px whatever
+    // the drawing's size (--pf-map-px).
+    const nums = [];
+    const numLayer = document.createElementNS(SVG_NS, 'g');
+    numLayer.setAttribute('class', 'pf-map__nums');
+    numLayer.setAttribute('aria-hidden', 'true');
+    items.filter((item) => live.has(item.dataset.mapRegion)).forEach((item, i) => {
+      const key = item.dataset.mapRegion;
+      const badge = document.createElement('span');
+      badge.className = 'pf-map__item-num';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = String(i + 1);
+      item.prepend(badge);
+      const marker = document.createElementNS(SVG_NS, 'g');
+      marker.setAttribute('class', 'pf-map__num');
+      marker.dataset.mapNum = key;
+      marker.style.setProperty('--n', String(i));
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('r', '11');
+      const text = document.createElementNS(SVG_NS, 'text');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dy', '.35em');
+      text.textContent = String(i + 1);
+      marker.append(dot, text);
+      numLayer.appendChild(marker);
+      nums.push(marker);
+    });
+    if (nums.length) {
+      svg.appendChild(numLayer);
+      root.classList.add('has-nums');
+      const placeNums = () => {
+        const m = svg.getScreenCTM();
+        if (!m) return;
+        const inverse = m.inverse();
+        nums.forEach((marker) => {
+          const key = marker.dataset.mapNum;
+          const anchor = labels.find((l) => l.dataset.mapLabel === key) || regionFor(key);
+          // Not while a name is lifted by hover.
+          if (!anchor || anchor.classList.contains('is-active')) return;
+          const r = anchor.getBoundingClientRect();
+          if (!r.width) return;
+          const pt = new DOMPoint(r.left + r.width / 2, r.top + r.height / 2).matrixTransform(inverse);
+          marker.style.setProperty('--x', pt.x.toFixed(1));
+          marker.style.setProperty('--y', pt.y.toFixed(1));
+        });
+      };
+      placeNums();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeNums);
+    }
+
     // Tooltip ---------------------------------------------------------------
     // Screen readers get the same text through aria-describedby on each
     // region, so the visual tooltip itself is aria-hidden.
@@ -150,6 +206,9 @@
       });
       labels.forEach((el) => {
         if (el.dataset.mapLabel === key) el.classList.toggle('is-active', on);
+      });
+      nums.forEach((el) => {
+        if (el.dataset.mapNum === key) el.classList.toggle('is-active', on);
       });
     }
 

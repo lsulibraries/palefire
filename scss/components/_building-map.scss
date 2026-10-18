@@ -112,6 +112,45 @@
 .pf-map__stage { scroll-margin-top: calc(var(--pf-header-h, 50px) + 1rem); }
 @media (max-width: 575.98px) { .pf-map__labels { visibility: hidden; } }
 
+/* Room numbers + hint (phones only). building-map.js numbers the list in
+   order and puts the same number on each room, centred where its name is,
+   and scales the markers by --pf-map-px so they stay 22px. They come in
+   one after another once the rooms have, with a small pop. The hint under
+   the drawing is in the markup, so it takes its space from the start. */
+.pf-map__nums, .pf-map__item-num, .pf-map__hint { display: none; }
+@media (max-width: 575.98px) {
+  .pf-map__nums { display: inline; }
+  .pf-map__item-num { display: inline-flex; }
+  .pf-map__hint { display: flex; }
+}
+.pf-map__nums { pointer-events: none; }
+.pf-map__num {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--pf-map-px, 1));
+}
+.pf-map__num circle { fill: var(--pf-map-surface); stroke: var(--pf-map-ink); stroke-width: 1px; transition: fill var(--pf-map-out) ease, stroke var(--pf-map-out) ease; }
+.pf-map__num text { fill: var(--pf-map-ink); font-family: inherit; font-size: 11px; font-weight: 700; transition: fill var(--pf-map-out) ease; }
+.pf-map__num.is-active circle { fill: var(--pf-map-hover); stroke: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
+.pf-map__num.is-active text { fill: var(--pf-map-on-hover); transition-duration: var(--pf-map-in); }
+.pf-map.is-tracing .pf-map__num { opacity: 0; transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(calc(var(--pf-map-px, 1) * .4)); }
+.pf-map.is-drawn .pf-map__num { opacity: 1; }
+.pf-map.is-revealing .pf-map__num {
+  --pf-map-num-delay: calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag) + var(--n, 0) * 70ms);
+  transition: opacity .35s ease var(--pf-map-num-delay), transform .5s cubic-bezier(.22, 1, .36, 1) var(--pf-map-num-delay);
+}
+.pf-map__item-num, .pf-map__hint-dot {
+  flex: none; align-items: center; justify-content: center; width: 1.375rem; height: 1.375rem;
+  border: 1px solid var(--pf-map-ink); border-radius: 50%;
+  font-size: .6875rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; color: var(--pf-map-ink);
+  transition: background-color var(--pf-map-out) ease, border-color var(--pf-map-out) ease, color var(--pf-map-out) ease;
+}
+.pf-map__item:is(:hover, :focus-visible, .is-active) .pf-map__item-num {
+  border-color: var(--pf-map-hover); background-color: var(--pf-map-hover); color: var(--pf-map-on-hover); transition-duration: var(--pf-map-in);
+}
+.pf-map__hint { align-items: center; gap: .6rem; margin: .875rem 0 0; font-size: .875rem; line-height: 1.4; color: var(--pf-map-floor-ink); }
+.pf-map__hint-dot { display: inline-flex; }
+
 .pf-map__lines path { fill: none; stroke: var(--pf-map-ink); stroke-width: var(--pf-map-line); stroke-linejoin: round; stroke-linecap: round; }
 .pf-map__lines .pf-map__rail { stroke-width: calc(var(--pf-map-line) * 2); }
 .pf-map__lines--hidden path { stroke: var(--pf-map-hidden-ink); stroke-dasharray: calc(var(--pf-map-line) * 6) calc(var(--pf-map-line) * 5); }
@@ -378,7 +417,7 @@
 .pf-bento.is-map-in-view .pf-bento__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon { transition: none !important; }
+  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num { transition: none !important; }
   .pf-map__label.is-active { --lift: 0px; }
   .pf-bento__bg-video, .pf-bento__media::after { transition: none !important; }
   /* Tooltip: a plain short fade, no movement. */

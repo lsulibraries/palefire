@@ -93,6 +93,13 @@
     <div class="pf-map__scroller">
       {% include map.template with { uid: map.uid, spaces: map.spaces } only %}
     </div>
+    {# Phones only (_building-map.scss): the room names are hidden there and
+       building-map.js numbers the rooms and the list to match. In the
+       markup from the start, so nothing moves when the script runs. #}
+    <figcaption class="pf-map__hint">
+      <span class="pf-map__hint-dot" aria-hidden="true">1</span>
+      {{ 'Tap a numbered room, or choose a space from the list.'|t }}
+    </figcaption>
   </figure>
 
   {# Hidden tooltip sources, one per room (also the regions' aria-describedby).

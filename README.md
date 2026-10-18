@@ -604,6 +604,43 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Building map on phones: numbered rooms and a tap hint (2026-10-18)
+
+On phones (under 576px) the room names are hidden, so the drawing looked
+blank and gave no clue what to tap. Now:
+- **Numbered rooms:** each space in the list gets a number, in list order,
+  and the same number sits on its room in the drawing, centred where the
+  name would be. The markers stay 22px whatever the drawing's size. They
+  pop in one after another once the rooms have drawn. A tapped or hovered
+  space turns its number gold in both places.
+- **Hint** under the drawing: "Tap a numbered room, or choose a space from
+  the list." It is in the markup and takes its space from the start, so
+  nothing moves when the script runs.
+- Numbers are `aria-hidden`. The list entries and rooms keep their names
+  for screen readers.
+- From 576px up, nothing changes.
+- Reduced motion shows the numbers without the pop.
+
+Files: `building-map.js` (numbers), `_building-map.scss` (styles) and
+`paragraph--building-map.html.twig` (hint).
+
+### Hill Memorial map: Galleries and Reading Room are parallelograms (2026-10-18)
+
+The hatched areas of three rooms had bits sticking out of their shapes.
+They now follow the drawing's own corners, and the cut-off bits are plain
+floor, like the Lobby:
+- **Reading Room:** a thin strip ran left along the back wall. It is gone.
+- **Floor 2 Gallery:** the hatch spilled past the left end of the railing
+  into a wedge against Quiet Study, plus a sliver down the slab edge. It
+  now stops square at the railing. Two hatch-mask cuts that only bounded
+  the old wedge are removed.
+- **Floor 1 Gallery:** its front corner ran past the floor's corner into
+  the Lobby as a point. It now ends at that corner and at the back-wall
+  corner.
+
+File: `templates/includes/hill-memorial-map.svg.twig` (each room's hatch
+and hit area). Labels, outlines and other rooms are unchanged.
+
 ### Building map: a tapped legend space stays lit after the scroll (2026-10-18)
 
 A fix to the next entry, found by testing the real files in a browser.
