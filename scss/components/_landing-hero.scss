@@ -44,7 +44,7 @@ $pf-hero-media-wash: .8 !default;
 .pf-hero-event {
   --pf-hero-thumb: clamp(4.5rem, 3.5rem + 3vw, 6rem);
   // The Visit card's "Show map" stripes (_visit.scss .pf-visit__map-load).
-  --pf-hero-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-bento-line) 18%, transparent) 11px 12px);
+  --pf-hero-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
   display: none;
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
   border-top: 1px solid var(--pf-bento-line);
@@ -236,5 +236,52 @@ $pf-hero-media-wash: .8 !default;
 @media (forced-colors: active) {
   .pf-hero-event--solo .pf-hero-event__card {
     border-color: CanvasText;
+  }
+}
+
+// Frames in the hero at 20% of the line colour: the lead panel, the hairline
+// over the next event, the event card and its thumbnail, the Visit strip
+// and its mini map. (The stripes and the map drawing keep their own
+// strength.)
+.pf-bento.pf-bento--hero {
+  --pf-bento-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 20%, transparent);
+}
+
+.pf-bento--hero :is(.pf-visit, .pf-visit__map) {
+  border-color: var(--pf-bento-line);
+}
+
+// Landing pages (field_modular_type "landing", <html data-pf-mode>): the
+// TOC stays out of sight over the landing hero and the events carousel and
+// fades in once the first other section reaches the activation line
+// (html.pf-toc-in, modular-toc.js). lg and up the sidebar's column stays
+// (nothing moves) and the video shows through it; below lg the list button
+// that opens the TOC drawer waits the same way.
+@include media-breakpoint-up(lg) {
+  html[data-pf-mode="landing"] .pf-sidebar.pf-modular__sidebar {
+    transition: background-color .3s ease, opacity .5s ease, visibility 0s;
+  }
+
+  html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-sidebar.pf-modular__sidebar {
+    visibility: hidden;
+    opacity: 0;
+    transition: background-color .3s ease, opacity .5s ease, visibility 0s .5s;
+  }
+}
+
+// (The button keeps Bootstrap's colour fades alongside.)
+html[data-pf-mode="landing"] .pf-modular__toc-toggle {
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease, opacity .5s ease, visibility 0s;
+}
+
+html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-modular__toc-toggle {
+  visibility: hidden;
+  opacity: 0;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease, opacity .5s ease, visibility 0s .5s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-pf-mode="landing"] :is(.pf-sidebar.pf-modular__sidebar, .pf-modular__toc-toggle) {
+    transition: none !important;
   }
 }

@@ -604,6 +604,26 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing pages: TOC waits past the hero; hero borders at 20% (2026-10-17)
+
+- **TOC on landing pages** (`field_modular_type` = `landing`, so
+  `<html data-pf-mode="landing">`): the table of contents stays out of
+  sight over the landing hero and the events carousel. It fades in once
+  the first other section reaches the activation line, and fades out again
+  if you scroll back above it.
+  - `modular-toc.js` sets `html.pf-toc-in`, and the styles are in
+    `_landing-hero.scss`.
+  - From lg up, the sidebar's column stays where it is, so nothing shifts,
+    and the video shows through it.
+  - Below lg, the list button that opens the TOC drawer waits the same way.
+  - With reduced motion it switches without fading.
+  - A landing page with no other section never shows it.
+  - Other page types are unchanged.
+- **Hero borders at 20%** of the line colour: the lead panel, the hairline
+  over the next event, the event card and its thumbnail, the Visit strip
+  and its mini map. The thumbnail stripes and the map drawing keep their
+  own strength.
+
 ### Landing hero: "Next event" card is one link, edge-to-edge thumbnail (2026-10-17)
 
 - **One link:** the whole card is the link to the event, not just the
