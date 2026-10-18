@@ -76,7 +76,7 @@ $pf-tile-break-two: 32rem;
   }
 
   &:focus-visible {
-    outline: 3px solid $pf-gold;
+    outline: 3px solid var(--pf-ui-gold, #{$pf-gold}); // the swatch accent on dark swatches
     outline-offset: -3px;
     box-shadow: inset 0 0 0 6px $pf-black;
   }
@@ -139,7 +139,7 @@ $pf-tile-break-two: 32rem;
 }
 
 .pf-tile:is(:hover, :focus-visible) .pf-tile__label {
-  background: $pf-gold;
+  background: var(--pf-ui-gold, #{$pf-gold});
   color: $pf-black;
 }
 

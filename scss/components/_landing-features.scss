@@ -301,7 +301,7 @@
   height: 1px;
   margin-inline-end: .5rem;
   vertical-align: .3em;
-  background-color: #{$pf-gold};
+  background-color: var(--pf-ui-gold, #{$pf-gold}); // the swatch accent on dark swatches (_reading-themes.scss)
 }
 
 // Pause / play for a crossfading tile (WCAG 2.2.2): a small glass square in
@@ -334,7 +334,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid #{$pf-gold};
+    outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
     outline-offset: 2px;
   }
 

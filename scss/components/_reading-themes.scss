@@ -43,8 +43,8 @@
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
-//   twilight text 12.9  muted 7.4  accent 10.4   (default; LSU gold accent,
-//                                                 pale gold headings 11.3)
+//   twilight text 12.9  muted 7.4  accent 11.3   (default; pale gold accent
+//                                                 and headings)
 //   midnight text  5.15 muted 5.0  accent  8.4
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
@@ -69,7 +69,8 @@
 $pf-reading-themes: (
   // The default (2026-10-17): every page opens in it until a visitor picks
   // another ($pf-reading-default; html.html.twig marks <html> with it).
-  // LSU gold (#fdd023) as the accent.
+  // Accent: the same pale gold as the headings, #f2dc9b (2026-10-18; LSU
+  // gold #fdd023 beside it clashed).
   // 2026-10-18, closer to Material, which reads better:
   // - Near-white text everywhere, as Material has (12.6:1; was a grey
   //   lavender at 7:1). Headings white.
@@ -82,13 +83,13 @@ $pf-reading-themes: (
   'twilight': (
     label: 'Twilight', dark: true,
     bg: #272429, fg: #edebee, heading: #f8f7f9, muted: #b7b3ba, rule: #3f3a42,
-    surface: #2e2b30, accent: #fdd023, accent-soft: #2f2c31,
+    surface: #2e2b30, accent: #f2dc9b, accent-soft: #2f2c31,
     scroll: #97929a, panel-muted: #bfbbc1,
     title: #f2dc9b,
     // Calm hovers, never purple to gold: text goes from near-white to a
-    // soft lilac (9.6:1 on the page), and gold links brighten to a lighter
-    // gold.
-    hover: #d4c9dc, link-hover: #ffe27a,
+    // soft lilac (9.6:1 on the page), and pale gold links lighten to a
+    // cream gold (13.6:1).
+    hover: #d4c9dc, link-hover: #fbf1d6,
   ),
   'cream': (
     label: 'Cream', dark: false,
@@ -398,6 +399,19 @@ html#{$pf-themed} :is(.pf-section--theme-dark, .pf-section.is-map-dark) .pf-guid
 html#{$pf-themed} :is(.pf-section--light, .pf-section--dark, .pf-section--brand) {
   color: var(--pf-g-fg);
   background-color: var(--pf-g-surface);
+}
+
+// Dark swatches: the gold touches (keyboard focus ring, the exhibition and
+// collection tiles' gold rule, hover label and focus) take the swatch's own
+// accent, so they never sit beside a second gold (Twilight's is pale gold;
+// LSU gold #ffd700 beside it clashed). Every dark accent is 6:1 or more on
+// its page, so the focus ring stays well over 3:1. Repeated on dark
+// sections and the dark bar, which set their own focus colour (_base.scss).
+// The Settings drawer's "Focus" switch keeps its heavier gold ring.
+html#{$pf-themed}.pf-reading-dark,
+html#{$pf-themed}.pf-reading-dark [data-bs-theme="dark"] {
+  --pf-focus-color: var(--pf-g-accent);
+  --pf-ui-gold: var(--pf-g-accent);
 }
 
 // --- Chrome: header, dropdowns, TOC sidebar, footer ----------------------

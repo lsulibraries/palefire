@@ -605,6 +605,38 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Twilight: one gold, the pale gold (2026-10-18)
+
+LSU gold (#fdd023) next to the pale gold headings (#f2dc9b) clashed, so
+Twilight now uses the pale gold for everything.
+
+- **Accent:** `#f2dc9b`. That covers links, the TOC bar and Back to top,
+  the search field's focus border, the video button's progress bar, the
+  events carousel, badges and the Settings switch.
+  - Contrast: 11.3:1 on the page, 9.1:1 on the lead glass over a white
+    frame, 15.5:1 for black text on it.
+- **Link hover:** a lighter cream gold, `#fbf1d6` (13.6:1). It was the
+  bright gold `#ffe27a`.
+- **Hard-coded gold that reached Twilight:** on dark swatches these now
+  read the swatch's accent, through `--pf-ui-gold` and
+  `--pf-focus-color`:
+  - the keyboard focus ring, which was `#ffd700` on every dark page,
+    including the dark header and dark sections;
+  - the exhibition tiles' gold rule and pause button focus;
+  - the collection tiles' hover label and focus outline.
+  - Every dark swatch's accent is 6:1 or more on its page, so focus
+    stays well over 3:1. Light swatches keep their colours.
+- **Unchanged:** the Settings drawer's "Focus" switch (a heavier gold
+  ring, on purpose) and the Visit strip's yellow "opening soon" dot (a
+  status colour).
+
+Checked on /v2/special with the change injected: the accent, the TOC
+accent, the landing accent and the focus colour, on the page and inside
+the dark header, are all `#f2dc9b`.
+
+Files: `_reading-themes.scss`, `_landing-features.scss` and
+`_tile-showcase.scss`.
+
 ### Twilight goes charcoal; header matches the TOC; lead and Visit glass like the Settings drawer (2026-10-18)
 
 **Twilight purples:** the 291° plum read reddish. The page is now
