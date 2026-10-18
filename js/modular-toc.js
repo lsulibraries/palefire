@@ -467,7 +467,9 @@
     const wide = window.matchMedia('(min-width: 992px)');
     let nudge = 0;
     const alignTitle = () => {
-      const crumb = document.querySelector('.pf-modular__head .breadcrumb-item')
+      // The head's breadcrumb, or the Landing hero's sub-header bar
+      // (includes/landing.html.twig), which has it instead.
+      const crumb = document.querySelector('.pf-modular__head .breadcrumb-item, .pf-landing__bar .breadcrumb-item')
         || document.querySelector('.pf-modular__head > :first-child');
       if (!sidebar || !title || !crumb || !wide.matches || window.scrollY > 1) {
         return;

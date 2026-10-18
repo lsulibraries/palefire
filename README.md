@@ -605,6 +605,45 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: sub-header bar; the video never moves; map heading by its summary (2026-10-18)
+
+- **Sub-header bar:** the breadcrumb and the video button left the lead
+  panel for a bar of their own, across the whole content column, right
+  under the header.
+  - It uses the header and TOC's glass and blur, with a hairline under it.
+  - Its content lines up with the panel's: breadcrumb text 390px, title
+    391px; the button's right edge is on the panel's padding.
+  - `modular-toc.js` now finds this breadcrumb too, so the TOC title and
+    its hide/show button sit on the bar's line (measured at 1333×767).
+  - Panel spacing: 1rem under the bar, and the exhibition band is
+    `clamp(9rem, 18svh, 12rem)`. At 1333×767 the panel ends at 756 of
+    767px.
+- **Background video fills the screen and never changes:** the fixed
+  video layer is now the whole viewport (`inset: 0`).
+  - It used to reach out from the section's edges by the top and side
+    bleed variables. Those animate with the TOC column and change when the
+    header turns compact on scroll, so the video was resized and
+    re-cropped on every frame: the jagged TOC animation.
+  - The landing's clip now only limits its foot (the section's bottom
+    edge), so the video still ends where the next section starts.
+  - Measured: the layer stays `0, 0, 1325 × 767` through a whole TOC
+    toggle and while scrolling.
+  - The column itself still animates. The page's content reflows as it
+    does, which is far lighter without the video.
+- **Map heading close to its summary:**
+  - Corner layout (Hill, map 64rem wide or more): the heading is drawn
+    lower, by the row-gap plus 3cqi less 1rem, so it sits 1rem above the
+    summary. The summary and the drawing don't move.
+  - Narrower: the summary is pulled up to 1rem under the heading instead
+    of the map's 40px row-gap.
+  - Measured: 16px in both.
+
+Checked on /v2/special at 1333×767 with the new CSS injected and the
+markup moved as the template now renders it, in Twilight.
+
+Files: `landing.html.twig`, `_landing-features.scss`, `_landing.scss`,
+`_landing-hero.scss` and `modular-toc.js`.
+
 ### Landing hero lead: flush under the header, shorter exhibitions, 5×7 thumbnails (2026-10-18)
 
 - **Panel flush under the header:** no gap above the hero's lead panel.

@@ -221,6 +221,12 @@ $pf-hero-media-wash: .8 !default;
   grid-template-areas: "head" "type" "stage" "aside";
 }
 
+// The summary 1rem under the heading, not the map's whole row-gap (the
+// corner layout below sets its own place).
+.pf-landing--hero .pf-map > .pf-map__type {
+  margin-top: calc(1rem - clamp(1.5rem, 3vw, 3rem));
+}
+
 .pf-landing--hero .pf-map:has(> .pf-map__type):has(> .pf-hero-event) {
   grid-template-areas: "head" "type" "event" "stage" "aside";
 }
@@ -247,6 +253,15 @@ $pf-hero-media-wash: .8 !default;
 @container pf-map (min-width: 64rem) {
   .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) {
     grid-template-areas: "head" "stage" "aside";
+  }
+
+  // The heading sits right above the summary (1rem between them), not a
+  // row-gap and 3cqi higher: drawn lower by that much, so the summary and
+  // the drawing stay where they are.
+  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) > .pf-map__heading {
+    position: relative;
+    z-index: 2;
+    top: calc(clamp(1.5rem, 3vw, 3rem) + 3cqi - 1rem); // the hero map's row-gap, plus the summary's 3cqi
   }
 
   .pf-landing--hero .pf-map--hill-memorial:not(:has(> .pf-hero-event)) > .pf-map__type {

@@ -96,7 +96,7 @@
        position: fixed with negative insets, so a button inside it was
        placed against the viewport and pushed off the right edge by the
        section padding (_landing.scss). With the breadcrumb in the lead
-       (lead_breadcrumb) it moves into the lead's top row instead. #}
+       (lead_breadcrumb) it moves into the sub-header bar instead. #}
     {% set video_toggle %}
     <button type="button" class="pf-landing__bg-toggle" data-landing-video-toggle data-state="playing">
       <span class="pf-landing__bg-toggle-progress" aria-hidden="true"></span>
@@ -134,17 +134,21 @@
     {% set search_label = 'Search LSU Libraries'|t %}
     {% set search_placeholder = landing.placeholder|default('Search books, articles, databases, guides and more'|t) %}
   {% endif %}
-  <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
-    {# Top row: the breadcrumb, and the background video button at the far
-       end (PalefireHooks::crumbInLanding(); page.html.twig leaves the
-       head's breadcrumb out). Same markup and classes as the head's, so
-       its type and link styles carry over (_landing-features.scss). #}
-    {% if lead_breadcrumb %}
-      <div class="pf-landing__bar">
+  {# Sub-header bar: the breadcrumb, and the background video button at the
+     far end, on a glass bar across the content column right under the
+     header (PalefireHooks::crumbInLanding(); page.html.twig leaves the
+     head's breadcrumb out). Same markup and classes as the head's
+     breadcrumb, so its type and link styles carry over
+     (_landing-features.scss). #}
+  {% if lead_breadcrumb %}
+    <div class="pf-landing__bar">
+      <div class="pf-landing__bar-inner">
         <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
         {{ video_toggle }}
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
+  <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title">{{ page_title }}</h1>
     {% endif %}

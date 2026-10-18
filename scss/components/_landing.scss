@@ -2,37 +2,23 @@
 // The media layer is position: fixed, so overflow can't clip it: it showed
 // through every transparent section after the landing (Events). clip-path
 // does clip fixed descendants, so the video stays put while the landing
-// scrolls past and is gone once the next section comes up. The clip is the
-// media layer's own reach: the section edges plus the top and side bleed.
+// scrolls past and is gone once the next section comes up. Only the clip's
+// foot matters: the section's bottom edge. Its top and sides reach far
+// past the screen, so the video shows under the header, the TOC and every
+// side, whatever the TOC column or the header is doing.
 .pf-landing.has-bg-video {
-  clip-path: inset(
-    calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
-    calc(-1 * var(--pf-section-pad-inline, 0px))
-    calc(-1 * var(--pf-section-pad-block, 0px))
-    calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
-  );
+  clip-path: inset(-100vh -100vw calc(-1 * var(--pf-section-pad-block, 0px)) -100vw);
 }
-[dir="rtl"] .pf-landing.has-bg-video {
-  clip-path: inset(
-    calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
-    calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
-    calc(-1 * var(--pf-section-pad-block, 0px))
-    calc(-1 * var(--pf-section-pad-inline, 0px))
-  );
-}
-// The media layer bleeds like .pf-section__bg (see "Full-page backgrounds"
-// in _modular.scss): left under the TOC sidebar and, in the first section,
-// up under the top bar. The landing box sits inside .pf-section__inner's
-// padding, so the layer first reaches back out by that padding to the
-// section edge. The video toggle is not in this layer any more (see
-// .pf-landing__bg-toggle below): with position: fixed its right: 1rem was
-// measured from a box that runs past the viewport by the section padding,
-// so the button was drawn off screen.
+// The media layer fills the screen, fixed (2026-10-18). It used to reach
+// from the section's edges with the top and side bleed
+// (--pf-bleed-block-start, --pf-bleed-inline-start), so the video was resized
+// and re-cropped on every frame of the TOC's hide/show (the jagged
+// animation) and whenever the header turned compact on scroll. Now it never
+// moves or resizes. The video toggle is not in this layer (see
+// .pf-landing__bg-toggle below).
 .pf-landing__media {
   position: fixed;
-  inset: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px));
-  inset-block-start: calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)));
-  inset-inline-start: calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)));
+  inset: 0;
   overflow: hidden;
 } // no z-index here
 .pf-landing__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }

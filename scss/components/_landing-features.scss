@@ -16,13 +16,13 @@
 // adjust.
 // =========================================================================
 
-// Exhibitions a short band (9rem to 12rem with the window's height), then
+// Exhibitions a short band (9rem to 12rem, 18% of the window's height), then
 // the event and the post. A tall window's spare height goes between the two
 // rows, so the event and post stay at the panel's foot.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: clamp(9rem, 20svh, 12rem) auto;
+  grid-template-rows: clamp(9rem, 18svh, 12rem) auto;
   align-content: space-between;
   gap: clamp(.875rem, 1.5vw, 1rem);
 }
@@ -49,36 +49,34 @@
   margin-top: 0;
 }
 
-// --- Top row: breadcrumb and video button --------------------------------
-// The breadcrumb (PalefireHooks::crumbInLanding()) on the left, the
-// background video button at the far end, inside the panel instead of over
-// the video above it. The breadcrumb keeps the head's type
-// (.pf-breadcrumb--modular, _layout.scss) without its own glass strip. The
-// button keeps its look but sits in the row, not positioned against the
-// landing (landing-video.js only places it when the head has the
-// breadcrumb).
+// --- Sub-header bar: breadcrumb and video button -------------------------
+// A glass bar right under the header, across the whole content column (the
+// section's side padding is pulled back out), in the header and TOC's glass
+// with a hairline under it. Its content lines up with the lead panel's
+// text: the panel is at most 1280px, centred, with its own padding. The
+// breadcrumb (PalefireHooks::crumbInLanding()) keeps the head's type
+// (.pf-breadcrumb--modular, _layout.scss) without its glass strip; the
+// button keeps its look but sits in the row (landing-video.js only places
+// it when the head has the breadcrumb). The TOC title lines up with the
+// breadcrumb (modular-toc.js measures it, as it did the head's).
 .pf-landing__bar {
+  --pf-bar-pad: clamp(1.25rem, 2.25vw, 2rem); // the lead panel's padding (below)
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  margin-bottom: 1rem;
+  padding-block: .375rem;
+  padding-inline: calc(var(--pf-section-pad-inline, 0px) + max(0px, (100% - 1280px) / 2) + var(--pf-bar-pad));
+  border-bottom: 1px solid var(--pf-toc-rail, #{$pf-hairline});
+  background-color: var(--pf-sidebar-bg);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+
+.pf-landing__bar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 2.25rem; // the button's height, so the row is the same with or without it
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
-}
-
-// lg and up, beside the TOC: the breadcrumb's text on the TOC title's line.
-// The sidebar's title sits 2rem down (its padding); the panel takes the same
-// top padding, and the row (the button's 2.25rem) moves up by half of what
-// it adds to the text's 1.125rem line. Measured on /v2/special: both 120px
-// down at 1333x767.
-@include media-breakpoint-up(lg) {
-  .pf-landing__lead:has(> .pf-landing__features) {
-    padding-top: 2rem;
-
-    > .pf-landing__bar:first-child {
-      margin-top: calc((1.125rem - 2.25rem) / 2);
-    }
-  }
+  min-height: 2.25rem; // the button's height, so the bar is the same with or without it
 }
 
 .pf-landing__bar .pf-breadcrumb--lead {
