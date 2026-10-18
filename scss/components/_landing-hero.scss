@@ -214,6 +214,67 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
+// The map's summary and note (.pf-map__type, _building-map.scss) keep their
+// row under the heading in the hero's stacked map, above the event card when
+// there is one.
+.pf-landing--hero .pf-map:has(> .pf-map__type) {
+  grid-template-areas: "head" "type" "stage" "aside";
+}
+
+.pf-landing--hero .pf-map:has(> .pf-map__type):has(> .pf-hero-event) {
+  grid-template-areas: "head" "type" "event" "stage" "aside";
+}
+
+@container pf-map (min-width: 48rem) {
+  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):has(> .pf-hero-event) {
+    grid-template-areas: "head" "type" "stage" "aside";
+  }
+}
+
+// Typography in the drawing (Hill Memorial, the hero, desktop: the map 64rem
+// wide or more, so the whole drawing shows; and no event card in the
+// corner). Hill's outline never changes, so the text is set into the
+// drawing's empty top-left corner, on a grid measured from the drawing (in
+// cqi, the map's width; the drawing is 75cqi tall):
+//   row 1: the summary, display size, 0 to 50% across, from 3cqi down.
+//          Seminar Space starts at 65% and the upper Gallery's top corner
+//          at 48% across, 19cqi down.
+//   row 2: the note, 0 to 30% across, under the summary; Oral History
+//          starts 31cqi down.
+// Nothing is drawn there, and the text stays above the drawing (z-index), so
+// it can be selected.
+@container pf-map (min-width: 64rem) {
+  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) {
+    grid-template-areas: "head" "stage" "aside";
+  }
+
+  .pf-landing--hero .pf-map--hill-memorial:not(:has(> .pf-hero-event)) > .pf-map__type {
+    position: relative;
+    z-index: 2;
+    grid-area: stage;
+    align-self: start;
+    display: grid;
+    grid-template-columns: 50cqi;
+    row-gap: 2.5cqi;
+    margin: 3cqi 0 0;
+
+    .pf-map__summary {
+      margin: 0;
+      font-size: clamp(1.375rem, .5rem + 1.5cqi, 2rem);
+      font-weight: 400;
+      letter-spacing: -.015em;
+      line-height: 1.25;
+      text-wrap: pretty;
+    }
+
+    .pf-map__note {
+      width: 30cqi;
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .pf-hero-event__card {
     animation: pf-accordion-in $pf-menu-fade ease both;

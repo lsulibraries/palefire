@@ -282,9 +282,31 @@
   transition: opacity .6s ease calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag));
 }
 
-/* Aside: intro, legend, space list ------------------------------------- */
+/* Summary and note (.pf-map__type) under the heading: a row of their own,
+   only when there is text, so no empty gap is left. In the split layout
+   they head the left column, above the legend. ------------------------- */
+.pf-map:has(> .pf-map__type) {
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "head stage" "type stage" "aside stage";
+}
+.pf-map__type { grid-area: type; min-width: 0; margin-bottom: 1.5rem; }
+.pf-map__summary { margin: 0 0 1rem; color: var(--pf-section-fg, inherit); font-size: 1.25rem; line-height: 1.45; }
+.pf-map__summary p:last-child { margin-bottom: 0; }
+@container pf-map (max-width: 57.99rem) {
+  .pf-map:has(> .pf-map__type) { grid-template-rows: none; grid-template-areas: "head" "type" "stage" "aside"; }
+  .pf-map__type { margin-bottom: 0; }
+}
+@supports not (container-type: inline-size) {
+  @media (max-width: 1239.98px) {
+    .pf-map:has(> .pf-map__type) { grid-template-rows: none; grid-template-areas: "head" "type" "stage" "aside"; }
+    .pf-map__type { margin-bottom: 0; }
+  }
+}
+
+/* Aside: legend, space list; the note (.pf-map__intro) ------------------- */
 .pf-map__intro { margin: 0 0 1.5rem; color: var(--pf-map-floor-ink); font-size: 1.0625rem; line-height: 1.55; }
 .pf-map__intro p:last-child { margin-bottom: 0; }
+.pf-map__type > :last-child { margin-bottom: 0; }
 /* Legend + space list sit in a <details> with its toggle always showing.
    building-map.js opens it beside the map and collapses it under the map;
    without JS it is open. The reset drops the starterkit details box (border,

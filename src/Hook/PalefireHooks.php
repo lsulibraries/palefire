@@ -224,6 +224,53 @@ class PalefireHooks {
     $node = $this->currentModularNode();
     $variables['page_title'] = $node ? $node->label() : NULL;
     $variables['#cache']['contexts'][] = 'route';
+
+    // A landing that opens the page has no section title, so palefire_modular
+    // leaves it out of the TOC, and the map heading inside it with it. Add
+    // "Home" (the lead panel) and "Map" (the building map) at the top. The
+    // landing prints the same ids (palefire_preprocess_paragraph__bento_search()).
+    $ids = $node ? self::heroTocIds($node) : [];
+    $extra = [];
+    if (!empty($ids['home'])) {
+      $extra[] = ['id' => $ids['home'], 'label' => $this->t('Home')];
+    }
+    if (!empty($ids['map'])) {
+      $extra[] = ['id' => $ids['map'], 'label' => $this->t('Map')];
+    }
+    if ($extra) {
+      $variables['items'] = array_merge($extra, $variables['items'] ?? []);
+    }
+  }
+
+  /**
+   * TOC targets for the landing that opens a Modular page.
+   *
+   * home: the lead panel's id, when the landing has no section title of its
+   * own (with one, palefire_modular already lists it). map: the building
+   * map's wrapper, when the landing has a map. Fixed ids, so the links read
+   * #home and #map; a section anchored "home" or "map" keeps it, and the
+   * landing then gets none.
+   *
+   * @return array{home?: string, map?: string}
+   */
+  public static function heroTocIds(NodeInterface $node): array {
+    $uuid = self::titleLandingUuid($node);
+    if ($uuid === NULL) {
+      return [];
+    }
+    $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', $uuid);
+    if (!$paragraph instanceof FieldableEntityInterface) {
+      return [];
+    }
+    $taken = array_column(self::sectionData($node), 'anchor');
+    $ids = [];
+    if (self::stringValue($paragraph, 'field_section_title') === '' && !in_array('home', $taken, TRUE)) {
+      $ids['home'] = 'home';
+    }
+    if ($paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty() && !in_array('map', $taken, TRUE)) {
+      $ids['map'] = 'map';
+    }
+    return $ids;
   }
 
   /**

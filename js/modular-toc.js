@@ -191,8 +191,14 @@
       setActiveSub(null);
       queueIndicator();
 
+      // A link can point inside a section (the landing's "Home" and "Map",
+      // PalefireHooks::heroTocIds()): the chrome follows the section that
+      // holds it, and the index is that section's place on the page.
+      const host = entry.section.closest('.pf-section') || entry.section;
+      const sections = Array.from(document.querySelectorAll('.pf-sections > .pf-section'));
+      const index = sections.includes(host) ? sections.indexOf(host) : entries.indexOf(entry);
       document.dispatchEvent(new CustomEvent('palefire:sectionchange', {
-        detail: { id: entry.section.id, index: entries.indexOf(entry), section: entry.section, nav: nav },
+        detail: { id: host.id, index: index, section: host, nav: nav },
       }));
     }
 
@@ -543,10 +549,13 @@
 
   function entryAtLine(entries) {
     const line = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
-    return entries.find((entry) => {
+    // The last match: a target inside another (the landing's "Map" inside
+    // its section) wins over the one around it.
+    const hits = entries.filter((entry) => {
       const rect = entry.section.getBoundingClientRect();
       return rect.top <= line && rect.bottom > line;
     });
+    return hits[hits.length - 1];
   }
 
   /**

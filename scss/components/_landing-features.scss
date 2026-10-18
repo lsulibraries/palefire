@@ -1,16 +1,17 @@
 // =========================================================================
-// Landing hero lead: features (includes/landing.html.twig, hero only).
-// Under the title, three rows:
-// 1. Latest blog post: the Next event card's parts (_landing-hero.scss).
-// 2. Two exhibitions side by side: tiles with the image edge to edge and
+// Landing hero lead (includes/landing.html.twig, hero only), top to bottom:
+// the title; the page intro, full width; a search form (a placeholder for
+// a Special Collections search); then the features:
+// 1. Two exhibitions side by side: tiles with the image edge to edge and
 //    the text over it on a dark scrim. Placeholders for now: hatched frames
 //    stand in for images. A tile with several images crossfades through
 //    them (exhibit-rotate.js), with a pause button.
-// 3. Next event (hero-event.js).
+// 2. Next event (hero-event.js) | Latest blog post: the Next event card's
+//    parts (_landing-hero.scss), each under its label, left-aligned.
 // With the lead filling the first screen (.pf-landing--lead-screen, md and
-// up) the exhibitions row takes the height the other rows leave. Sized so
-// the whole lead ends at the fold on a laptop: 1333x767 (a 1.5x display)
-// and up, measured on /v2/special.
+// up) the exhibitions take the height the other rows leave. Sized so the
+// whole lead ends on screen on a laptop: 1333x767 (a 1.5x display) and up,
+// measured on /v2/special.
 // Imported after _landing-hero.scss, so these rules follow the ones they
 // adjust.
 // =========================================================================
@@ -18,7 +19,7 @@
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(9rem, 1fr) auto;
+  grid-template-rows: minmax(9rem, 1fr) auto;
   gap: clamp(.875rem, 1.5vw, 1rem);
 }
 
@@ -30,7 +31,7 @@
   --pf-section-pad-block: 2rem;
 }
 
-// The features fill the panel under the title instead of sitting at its
+// The features fill the panel under the search instead of sitting at its
 // foot (the lead-screen rule in _landing-swiss.scss pushes the last block
 // down).
 .pf-landing--lead-screen > .pf-landing__lead > .pf-landing__features:last-child {
@@ -38,59 +39,68 @@
   margin-top: 0;
 }
 
-// lg and up: title and intro side by side, the features across both
-// columns under them. Stacked, the intro alone took about 200px, and the
-// lead ran past the fold (821px of a 900px window, measured on
-// /v2/special); side by side it ends at the fold. A slightly tighter
-// panel padding than the plain lead.
-@include media-breakpoint-up(lg) {
-  .pf-landing__lead:has(> .pf-landing__features) {
-    display: grid;
-    // Title 2 : intro 3, so the intro wraps to about four lines.
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    grid-template-rows: auto 1fr;
-    column-gap: clamp(2rem, 4vw, 4rem);
-    padding: clamp(1.25rem, 2.25vw, 2rem);
+// --- Title, intro and search, tighter than the plain landing's -------------
+.pf-landing__lead:has(> .pf-landing__features) {
+  padding: clamp(1.25rem, 2.25vw, 2rem);
 
-    > .pf-landing__title {
-      grid-column: 1;
-      align-self: start;
-      margin-bottom: clamp(1rem, 2vw, 1.5rem);
-    }
+  > .pf-landing__title {
+    margin-bottom: clamp(.75rem, 1.5vw, 1rem);
+  }
 
-    > .pf-landing__intro {
-      grid-column: 2;
-      align-self: start;
-      max-width: none;
-      margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-      font-size: 1rem;
-      line-height: 1.5;
-    }
+  // The intro runs the panel's full width.
+  > .pf-landing__intro {
+    max-width: none;
+    margin-bottom: clamp(1rem, 2vw, 1.25rem);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 
-    > .pf-landing__features {
-      grid-column: 1 / -1;
-    }
+  > .pf-landing__form {
+    --pf-landing-field-h: 3rem;
+    margin-bottom: clamp(.875rem, 1.5vw, 1rem);
+    padding-top: clamp(.75rem, 1.25vw, .875rem);
+  }
+
+  .pf-landing__heading {
+    margin-bottom: .5rem;
+  }
+
+  .pf-landing__field {
+    min-height: var(--pf-landing-field-h);
+  }
+
+  .pf-landing__input {
+    font-size: 1.0625rem;
   }
 }
 
-// --- Rows 1 and 3: blog post and next event --------------------------------
-// One ledger style: a hairline, then the label and the card. From md the
-// label is a column of its own, so each row is only as tall as its card.
+// --- Next event | Latest blog post ----------------------------------------
+// Side by side from md, each a hairline, its label, then its card. With no
+// event (no carousel, or nothing coming up) the post takes the first column.
+.pf-landing__pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(.875rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 768px) {
+  .pf-landing__pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
   --pf-hero-thumb: 3.5rem;
+  min-width: 0;
   padding-top: clamp(.75rem, 1.25vw, .875rem);
   border-top: 1px solid var(--pf-landing-line);
 }
 
 .pf-landing__features .pf-hero-event__label {
-  margin-bottom: .625rem;
+  margin-bottom: .5rem;
 }
 
-.pf-landing__features .pf-hero-event__card {
-  max-width: 48rem;
-}
-
-// Row titles one size down from the solo Next event card.
+// Titles one size down from the solo Next event card.
 .pf-landing__features .pf-hero-event__title {
   font-size: 1.125rem;
 }
@@ -103,33 +113,12 @@
   margin-top: .125rem;
 }
 
-@media (min-width: 768px) {
-  .pf-landing__features :is(.pf-hero-post, .pf-hero-event.is-ready) {
-    display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
-    gap: 1.5rem;
-    align-items: start;
-  }
-
-  // Loading: the held space sits in the card's column too.
-  .pf-landing__features .pf-hero-event:not(.is-ready) {
-    display: grid;
-    grid-template-columns: 11rem var(--pf-hero-thumb);
-    gap: 1.5rem;
-  }
-
-  .pf-landing__features .pf-hero-event__label {
-    margin: .25rem 0 0;
-  }
-}
-
 .pf-hero-post .pf-hero-event__when {
   display: block;
 }
 
-// The post's excerpt: two lines at most, one from lg (beside the label
-// column there is room for a long line). Two classes, so the clamp's
-// display wins.
+// The post's excerpt: one line (two on phones, where the column is
+// narrow). Two classes, so the clamp's display wins.
 .pf-hero-post .pf-hero-post__excerpt {
   display: -webkit-box;
   overflow: hidden;
@@ -138,15 +127,15 @@
   line-clamp: 2;
 }
 
-@include media-breakpoint-up(lg) {
+@media (min-width: 768px) {
   .pf-hero-post .pf-hero-post__excerpt {
     -webkit-line-clamp: 1;
     line-clamp: 1;
   }
 }
 
-// Placeholder row (no blog category set yet): not a link, so no hover
-// and no underline.
+// Placeholder (no blog category set yet): not a link, so no hover and no
+// underline.
 .pf-hero-event__card.is-placeholder {
   color: var(--pf-toc-color);
 

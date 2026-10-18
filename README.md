@@ -605,6 +605,77 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: new lead order, search, map typography, TOC Home and Map (2026-10-18)
+
+**Lead** (`landing.html.twig`, `_landing-features.scss`), top to bottom:
+1. The title.
+2. The intro, full width (no longer beside the title).
+3. A **Search Special Collections** form. It is a placeholder: there is
+   no Special Collections search target yet, so it searches Bento like the
+   old landing form. Change `landing_action` / `landing_name` in the hero
+   block when there is one. On the hero it is not listed in the TOC.
+4. The two exhibition tiles. They take whatever height is left (144px
+   minimum).
+5. **Next event | Latest blog post**, side by side from md, each with its
+   label above it, left-aligned (the label column is gone). With no event,
+   the post takes the first column.
+
+**Fit:** the lead ends at 743px of a 767px window at 1333×767, 740 of 768
+at 1024×768, and 828 of 900 at 1440×900.
+
+**Map summary** (`palefire.theme`, `paragraph--building-map.html.twig`):
+- The building's own description (its Building spaces term) never showed:
+  the paragraph's intro replaced it.
+- Both now show, in a block under the heading (`.pf-map__type`):
+  - **summary:** the building's description;
+  - **note:** the paragraph's intro, the "open to everyone / by
+    appointment" text.
+- With only one of them, that one is the summary.
+- The intro used to sit in the aside above the legend. It doesn't any
+  more.
+- In every layout the block has its own row under the heading, added only
+  when there is text.
+
+**Typography in the drawing** (`_landing-hero.scss`): Hill Memorial, in the
+hero, with the map 64rem wide or more and no event card in the corner.
+- The text is set into the drawing's empty top-left corner, on the grid
+  sketched for it:
+  - **row 1:** the summary at display size, 0–50% across;
+  - **row 2:** the note, 0–30% across.
+- Placed in cqi, measured from the drawing. Seminar Space starts 65%
+  across, and Oral History about 31cqi down.
+- Checked at 1333×767 with a test summary injected: the summary covers
+  4–20% of the drawing's height, the note 23–35%. A hit test over both
+  boxes found no room shapes under the text.
+- Narrower, the block stays under the heading.
+
+**TOC "Home" and "Map"** (`PalefireHooks::heroTocIds()`):
+- The landing that opens the page has no section title, so
+  palefire_modular left it out of the TOC, along with the map inside it.
+- The TOC preprocess now puts two links at the top:
+  - **Home** → `#home`, the lead panel;
+  - **Map** → `#map`, the map's wrapper.
+- The landing prints the same ids. A landing with its own section title
+  gets no Home, and a section already anchored `home` or `map` keeps that
+  anchor.
+- `modular-toc.js`:
+  - When targets are nested, the innermost one under the activation line
+    wins, so Map takes over from the section around it.
+  - The section change reports the `.pf-section` that holds the target,
+    and its real position on the page, so the dark/light chrome still
+    follows the section's theme.
+
+**To do in the UI:** if the Hill Memorial Library term (Taxonomy →
+Building spaces) has no description, add one. That is the summary.
+Without it, the access note becomes the summary.
+
+Not checked:
+- the PHP, which is unlinted (no PHP on this machine);
+- the TOC changes at run time (the live TOC script was already running).
+  The new links were checked in the DOM only.
+
+Production: `git pull`, then `drush cr`.
+
 ### Landing hero lead fits a laptop screen (2026-10-18)
 
 On a 1.5× laptop display (1333×767 CSS px) the new lead was 660px tall

@@ -228,6 +228,8 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['landing'] = ($variables['landing'] ?? []) + ($variables['bento'] ?? []);
   $variables['landing_map'] = NULL;
   $variables['page_title'] = NULL;
+  $variables['toc_home_id'] = NULL;
+  $variables['toc_map_id'] = NULL;
   $variables['map_only'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
@@ -407,6 +409,10 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
   // prints the <h1> itself on every other Modular page.
   if ($host->bundle() === PalefireHooks::MODULAR_BUNDLE && PalefireHooks::titleLandingUuid($host) === $paragraph->uuid()) {
     $variables['page_title'] = $host->label();
+    // The TOC's "Home" and "Map" targets (PalefireHooks::heroTocIds()).
+    $ids = PalefireHooks::heroTocIds($host);
+    $variables['toc_home_id'] = $ids['home'] ?? NULL;
+    $variables['toc_map_id'] = $ids['map'] ?? NULL;
   }
 
   $value = static function (string $name) use ($host): string {
@@ -536,9 +542,17 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
   if ($building_term) {
     $cache->addCacheableDependency($building_term);
   }
+  // Summary: the building's own description (its Building spaces term).
+  // Note: this paragraph's intro (on Hill, who can walk in and what needs
+  // an appointment). Both show when both are filled in; the intro used to
+  // replace the description, so the building's summary never appeared.
+  // With only one of them it is the summary.
+  $description = $building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL;
   $intro = $paragraph->hasField('field_map_intro') && !$paragraph->get('field_map_intro')->isEmpty()
     ? $paragraph->get('field_map_intro')
-    : ($building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL);
+    : NULL;
+  $summary = $description ?: $intro;
+  $note = $description && $intro ? $intro : NULL;
 
   // "You are here": only a drawn (published) room in this building.
   $here = (string) $value('field_map_here');
@@ -554,7 +568,8 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'key' => $key,
     'label' => $building['label'] ?? $key,
     'heading' => $value('field_map_heading') ?: ($building['heading'] ?? t('Visit @building', ['@building' => $building['label'] ?? $key])),
-    'intro' => $text($intro),
+    'summary' => $text($summary),
+    'note' => $text($note),
     'template' => $building['template'],
     'spaces' => $spaces,
     'here' => $here,

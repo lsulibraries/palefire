@@ -1,14 +1,16 @@
 {#
 /**
  * @file
- * Landing hero: the landing section without the search form.
+ * Landing hero: the landing section with features in its lead.
  *
  * Markup in includes/landing.html.twig, with hero set (variables from
  * palefire_preprocess_paragraph__landing_hero()): background video, glass
  * panels, map and Visit card. The differences, all from .pf-landing--hero:
- * - no search form; the lead panel holds the page <h1> (when this is the
- *   first section) and the page intro, and is left out when both are empty
- *   or "Hide lead panel" is checked and there is a map;
+ * - the lead panel holds the page <h1> (when this is the first section), the
+ *   page intro, a placeholder "Search Special Collections" form, two
+ *   exhibition tiles, and Next event beside the latest blog post
+ *   (_landing-features.scss); it is left out when title and intro are
+ *   empty, or "Hide lead panel" is checked and there is a map;
  * - the video has no wash and is not darkened when the map is in view;
  * - the map's legend always sits under the drawing, never beside it
  *   (_landing-hero.scss).
