@@ -604,6 +604,21 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" card is one link, edge-to-edge thumbnail (2026-10-17)
+
+- **One link:** the whole card is the link to the event, not just the
+  title (`hero-event.js` builds it as an `<a>`). Hovering or focusing
+  anywhere on it brightens and underlines the title. On its own (no lead
+  panel), the frame also brightens.
+- **On its own (no lead panel):**
+  - The thumbnail fills the frame's top, left and bottom edges, with a
+    hairline between it and the text. It's square unless the text runs
+    taller, then it grows with the card.
+  - The thumbnail is a little larger here (`5.5rem` to `8rem`).
+  - The card's background is clear, with a 10px blur of what's behind it.
+
+Files: `_landing-hero.scss`.
+
 ### Landing hero: tighter "Next event" box, softer stripes (2026-10-17)
 
 - When the card stands on its own (no lead panel), the "Next event" label

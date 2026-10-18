@@ -76,7 +76,9 @@
   }
 
   function render(box, { event, start }) {
-    const card = el('div', 'pf-hero-event__card');
+    // The whole card is the link.
+    const card = el('a', 'pf-hero-event__card');
+    card.href = event.url;
 
     // Square thumbnail, or the hatched placeholder (CSS) when there is none.
     // Decorative: the title says what the event is.
@@ -99,8 +101,7 @@
     time.textContent = [dayLabel(start), [event.startLabel, event.endLabel].filter(Boolean).join('–')].filter(Boolean).join(' · ');
     when.append(time);
 
-    const title = el('a', 'pf-hero-event__title', event.title);
-    title.href = event.url;
+    const title = el('span', 'pf-hero-event__title', event.title);
 
     const place = event.location || (event.isOnline ? Drupal.t('Online') : '');
     const meta = [(event.categories || [])[0], place].filter(Boolean).join(' · ');

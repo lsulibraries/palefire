@@ -69,13 +69,23 @@ $pf-hero-media-wash: .8 !default;
   color: var(--pf-toc-color);
 }
 
+// The card is the link (hero-event.js): thumbnail and text are all one
+// target. Hover brightens the title and underlines it, and the frame.
 .pf-hero-event__card {
-  position: relative;
   display: grid;
   grid-template-columns: var(--pf-hero-thumb) minmax(0, 1fr);
   gap: clamp(1rem, 2vw, 1.5rem);
   align-items: center;
   max-width: 40rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: inherit;
+    transition-duration: $pf-hover-in;
+  }
 }
 
 .pf-hero-event__thumb {
@@ -104,28 +114,21 @@ $pf-hero-media-wash: .8 !default;
 }
 
 .pf-hero-event__title {
+  display: block;
   font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
   font-weight: 500;
   line-height: 1.25;
   color: var(--pf-section-fg, inherit);
-  text-decoration: none;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
   text-underline-offset: .2em;
-  transition: color $pf-hover-out ease;
+  transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
+}
 
-  // The whole card is the link's target area.
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-g-hover, var(--pf-section-fg, inherit));
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    transition-duration: $pf-hover-in;
-  }
+.pf-hero-event__card:is(:hover, :focus-visible) .pf-hero-event__title {
+  color: var(--pf-g-hover, var(--pf-section-fg, inherit));
+  text-decoration-color: currentColor;
+  transition-duration: $pf-hover-in;
 }
 
 .pf-hero-event__meta {
@@ -136,20 +139,41 @@ $pf-hero-media-wash: .8 !default;
 }
 
 // No lead panel (no title or intro, or "Hide lead panel"): the label sits
-// above, on the page, and only the card is on glass (the lead panel's),
-// sized to its content.
+// above, on the page, and only the card is framed: clear, with a 10px blur
+// of what's behind it. The thumbnail runs to the frame's edges (top, left
+// and bottom), with a hairline between it and the text; it stays square
+// unless the text runs taller, then it grows with the card.
 .pf-hero-event--solo {
+  --pf-hero-thumb: clamp(5.5rem, 4rem + 4vw, 8rem);
   max-width: 40rem;
   padding-top: 0;
   border-top: 0;
 }
 
 .pf-hero-event--solo .pf-hero-event__card {
-  padding: clamp(.875rem, 1.5vw, 1.25rem);
+  align-items: stretch;
+  padding-inline-end: clamp(1rem, 2vw, 1.5rem);
   border: 1px solid var(--pf-bento-line);
-  background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
-  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  background: transparent;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--pf-section-fg, currentColor);
+  }
+
+  .pf-hero-event__thumb {
+    aspect-ratio: auto;
+    min-height: var(--pf-hero-thumb);
+    border: 0;
+    border-inline-end: 1px solid var(--pf-bento-line);
+  }
+
+  .pf-hero-event__text {
+    align-self: center;
+    padding-block: clamp(.75rem, 1.5vw, 1rem);
+  }
 }
 
 .pf-bento--map-only > .pf-hero-event--solo + .pf-bento__visit {
