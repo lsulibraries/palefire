@@ -605,6 +605,46 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero lead fits a laptop screen (2026-10-18)
+
+On a 1.5× laptop display (1333×767 CSS px) the new lead was 660px tall
+and ran 129px past the fold, so the map snap stopped short. It now ends
+at 702px.
+
+- **Title:** 32px to 48px (it was up to 64px). This applies to every
+  landing's title.
+- **Space above the panel:** 2rem under the breadcrumb instead of 5rem,
+  on this hero only. The section's `--pf-section-pad-block` is 2rem, so
+  the space under the Visit strip is 2rem too.
+- **Title and intro:** the columns are 2 : 3, so the intro wraps to four
+  lines. The intro is 16px.
+- **Blog and event rows:** 56px thumbnails, 18px titles, tighter spacing.
+  - The post excerpt is one line from lg, two below.
+  - Its clamp never applied before: a `display: block` rule outranked
+    it. Fixed.
+- **Exhibition tiles:** 144px minimum (was 176), and they still stretch
+  to fill any spare height. The text is a little tighter, and the titles
+  are 20px to 24px.
+- **Panel padding:** tighter on lg and up.
+- **Placeholder blog title:** no longer underlined like a link.
+
+Measured on /v2/special with the new CSS injected:
+
+| Window | Lead ends at | Fold |
+|---|---|---|
+| 1280×720 | 700 | 720 |
+| 1333×767 | 702 | 767 |
+| 1024×768 | 707 | 768 |
+| 1440×900 | 828 | 900 |
+| 1920×960 | 888 | 960 |
+| 768×1024 | 978 | 1024 |
+
+On taller windows, the exhibition tiles take the extra height. On phones
+the lead stacks and scrolls (no snap below md), and nothing scrolls
+sideways at 320px.
+
+Files: `_landing-features.scss` and `_landing-swiss.scss`.
+
 ### Landing hero lead: blog post, two exhibitions, next event; smaller title (2026-10-18)
 
 The hero's lead panel now holds three rows under the title. Built in

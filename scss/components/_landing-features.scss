@@ -8,8 +8,9 @@
 //    them (exhibit-rotate.js), with a pause button.
 // 3. Next event (hero-event.js).
 // With the lead filling the first screen (.pf-landing--lead-screen, md and
-// up) the exhibitions row takes the height the other rows leave, so the
-// whole lead still ends at the fold on a 900px-tall window.
+// up) the exhibitions row takes the height the other rows leave. Sized so
+// the whole lead ends at the fold on a laptop: 1333x767 (a 1.5x display)
+// and up, measured on /v2/special.
 // Imported after _landing-hero.scss, so these rules follow the ones they
 // adjust.
 // =========================================================================
@@ -17,8 +18,16 @@
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(11rem, 1fr) auto;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  grid-template-rows: auto minmax(9rem, 1fr) auto;
+  gap: clamp(.875rem, 1.5vw, 1rem);
+}
+
+// Less room above the panel on this hero: 2rem under the breadcrumb
+// instead of the section's 5rem. The section padding is one variable, so
+// the lead's height (_landing-swiss.scss) and the video's reach
+// (_landing.scss) follow it.
+.pf-sections > .pf-section:first-child:has(.pf-landing--lead-screen .pf-landing__features) {
+  --pf-section-pad-block: 2rem;
 }
 
 // The features fill the panel under the title instead of sitting at its
@@ -37,23 +46,25 @@
 @include media-breakpoint-up(lg) {
   .pf-landing__lead:has(> .pf-landing__features) {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    // Title 2 : intro 3, so the intro wraps to about four lines.
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     grid-template-rows: auto 1fr;
     column-gap: clamp(2rem, 4vw, 4rem);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
+    padding: clamp(1.25rem, 2.25vw, 2rem);
 
     > .pf-landing__title {
       grid-column: 1;
       align-self: start;
+      margin-bottom: clamp(1rem, 2vw, 1.5rem);
     }
 
     > .pf-landing__intro {
       grid-column: 2;
       align-self: start;
       max-width: none;
-      margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
-      font-size: 1.0625rem;
-      line-height: 1.55;
+      margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+      font-size: 1rem;
+      line-height: 1.5;
     }
 
     > .pf-landing__features {
@@ -66,8 +77,8 @@
 // One ledger style: a hairline, then the label and the card. From md the
 // label is a column of its own, so each row is only as tall as its card.
 .pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
-  --pf-hero-thumb: 4.5rem;
-  padding-top: clamp(.875rem, 1.5vw, 1.125rem);
+  --pf-hero-thumb: 3.5rem;
+  padding-top: clamp(.75rem, 1.25vw, .875rem);
   border-top: 1px solid var(--pf-landing-line);
 }
 
@@ -77,6 +88,19 @@
 
 .pf-landing__features .pf-hero-event__card {
   max-width: 48rem;
+}
+
+// Row titles one size down from the solo Next event card.
+.pf-landing__features .pf-hero-event__title {
+  font-size: 1.125rem;
+}
+
+.pf-landing__features .pf-hero-event__when {
+  margin-bottom: .125rem;
+}
+
+.pf-landing__features .pf-hero-event__meta {
+  margin-top: .125rem;
 }
 
 @media (min-width: 768px) {
@@ -99,8 +123,14 @@
   }
 }
 
-// The post's excerpt: two lines at most.
-.pf-hero-post__excerpt {
+.pf-hero-post .pf-hero-event__when {
+  display: block;
+}
+
+// The post's excerpt: two lines at most, one from lg (beside the label
+// column there is room for a long line). Two classes, so the clamp's
+// display wins.
+.pf-hero-post .pf-hero-post__excerpt {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
@@ -108,17 +138,21 @@
   line-clamp: 2;
 }
 
-.pf-hero-post .pf-hero-event__when {
-  display: block;
+@include media-breakpoint-up(lg) {
+  .pf-hero-post .pf-hero-post__excerpt {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
 }
 
-.pf-hero-post .pf-hero-event__meta {
-  display: block;
-}
-
-// Placeholder row (no blog category set yet): not a link, so no hover.
+// Placeholder row (no blog category set yet): not a link, so no hover
+// and no underline.
 .pf-hero-event__card.is-placeholder {
   color: var(--pf-toc-color);
+
+  .pf-hero-event__title {
+    text-decoration: none;
+  }
 }
 
 // --- Row 2: exhibitions ----------------------------------------------------
@@ -145,7 +179,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 11rem;
+  min-height: 9rem;
   overflow: hidden;
   isolation: isolate;
   border: 1px solid var(--pf-landing-line);
@@ -219,7 +253,7 @@
 }
 
 .pf-exhibit__text {
-  padding: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(.875rem, 1.75vw, 1.25rem);
 }
 
 .pf-exhibit__label,
@@ -230,8 +264,8 @@
 }
 
 .pf-exhibit__title {
-  margin: .375rem 0 .5rem;
-  font-size: clamp(1.25rem, 1rem + .9vw, 1.75rem);
+  margin: .25rem 0 .375rem;
+  font-size: clamp(1.25rem, 1rem + .6vw, 1.5rem);
   font-weight: 500;
   letter-spacing: -.02em;
   line-height: 1.15;
