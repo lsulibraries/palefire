@@ -605,6 +605,64 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Visit strip rework; TOC hide/show button is back; landing head lines up (2026-10-18)
+
+**Visit strip** (`landing.html.twig`, `_visit.scss`):
+- **Open in Google Maps** sits under the mini map (`.pf-visit__place`),
+  not in the first column.
+- **Instagram placeholder** fills the first column under the name: an
+  empty frame in the mini map's hatch, with Font Awesome Pro's Instagram
+  icon (inlined from the site's copy, like the map's hint icon) and an
+  INSTAGRAM label. It is `aria-hidden` until a real post embed replaces
+  it. On phones it comes last.
+  - md: name, hours and Instagram | map and link.
+  - 1200px and up: name and Instagram | hours | map and link.
+- **Frosted glass:** in dark contexts (dark sections, the map's dark turn,
+  dark reading colours) the strip's glass is 70% of the sidebar's
+  (Twilight .8 → .56), so the video shows through. Even over a white
+  frame, the muted text stays 4.67:1.
+  - Light glass stays at .75: any less and dark text over the map's dark
+    overlay drops under 4.5:1.
+  - "Reduce transparency" and the Settings drawer's solid switches keep
+    it solid.
+
+**TOC hide/show button** (`page.html.twig`,
+`js/modular-toc-collapse.js`, `_modular.scss`): restored from `5865c10`
+for every Modular page but guides (the TOC is required there, so CSS hides
+the button). It replaces the landing pages' scroll-driven collapse (the
+`pf-toc-in` code is gone from `modular-toc.js` and `_landing-hero.scss`).
+- **Default:** landing pages start hidden, so the hero runs full width.
+  Other pages start shown.
+- **Saved choice:** kept in `localStorage` per page type
+  (`palefire.tocCollapsed.landing` for landing pages,
+  `palefire.tocCollapsed` for the rest).
+- **Load:** the library loads in `<head>`, so the state is set before
+  the first paint: no flash and no layout shift. Swup visits apply the
+  new page's state without the slide.
+- **Look:** open, it is a square chevron at the top right of the sidebar.
+  Closed, it is a glass list button on the breadcrumb's line, 1rem from
+  the page edge.
+- **Accessibility:** the button's name switches between "Hide table of
+  contents" and "Show table of contents", with `aria-expanded` set to
+  match. It has a gold focus ring.
+- **Motion:** with reduced motion it doesn't slide.
+
+**Landing head** (`_landing-swiss.scss`, `landing-video.js`): the
+breadcrumb's glass strip and the video button reached .75rem past the
+content edge. Their outer edges are now on the lead panel's edges, with
+the TOC open or closed.
+
+Checked on /v2/special with the new rules and markup injected:
+- Breadcrumb and video button edges match the panel at 1440 (76 / 1356,
+  and 360 / 1372 with the TOC open), 1024 and 768.
+- The toggle opens, closes and saves its choice.
+- The Visit grid is correct at 1440, 1024, 768 and 320, and nothing
+  scrolls sideways at any width.
+
+Not checked: a non-landing, non-guide page (the default there is shown)
+and a guide (no button). Production: `git pull`, then `drush cr` (new
+library and template changes).
+
 ### Events carousel: images fill their frame (2026-10-18)
 
 The featured image's frame is 3:2, but the image kept its own height. A

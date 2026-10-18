@@ -194,7 +194,8 @@
   gap: .5rem;
 }
 
-.pf-visit__eyebrow {
+.pf-visit__eyebrow,
+.pf-visit__social-label {
   @extend %pf-landing-label;
 }
 
@@ -271,16 +272,16 @@
 }
 
 // Breadcrumb: it sits straight on the video above the lead panel, so on a
-// light hero it gets its own strip of the sidebar's glass. Text keeps its
-// edge (the padding is pulled back out). The strip is the video button's
-// height (2.25rem) and the button mirrors its outer edge, .75rem past the
-// content edge, so the two line up top, bottom and side to side
-// (landing-video.js centres the button on the strip and sets the edge).
+// light hero it gets its own strip of the sidebar's glass. The strip is the
+// video button's height (2.25rem). Its outer edge is on the content edge,
+// the lead panel's edge, and the button's outer edge is on the other side's
+// (landing-video.js centres the button on the strip and sets the edge), so
+// both line up with the panel. (They used to reach .75rem past it, so the
+// breadcrumb's text kept the content edge instead.)
 .pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-landing.has-bg-video) .pf-breadcrumb--modular .breadcrumb {
   width: fit-content;
   min-height: 2.25rem;
   align-items: center;
-  margin-inline-start: -.75rem;
   padding: .375rem .75rem;
   background-color: var(--pf-sidebar-bg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));

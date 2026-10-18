@@ -143,9 +143,10 @@
         // is negative. Measured on the whole list, so on the glass strip it
         // matches the strip's top and bottom (_landing-swiss.scss); not
         // rounded, since the strip can sit on a fractional pixel.
-        // Side to side, the button's outer edge mirrors the strip's: .75rem
-        // past the head's content edge (its padding is the breadcrumb's
-        // gutter, which differs from the section's on wide screens).
+        // Side to side, the button's outer edge is on the head's content
+        // edge, mirroring the strip's, so both line up with the lead panel
+        // (the head's padding is the breadcrumb's gutter, which differs
+        // from the section's on wide screens).
         const align = () => {
           const head = document.querySelector('.pf-modular__head');
           const crumb = head && head.querySelector('.breadcrumb');
@@ -157,11 +158,10 @@
             const h = head.getBoundingClientRect();
             const hb = host.getBoundingClientRect();
             const hs = getComputedStyle(head);
-            const outset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.75;
             top = (c.top + c.height / 2 - hb.top - btn.offsetHeight / 2).toFixed(2);
             end = (hs.direction === 'rtl'
-              ? (h.left + parseFloat(hs.paddingLeft) - outset) - hb.left
-              : hb.right - (h.right - parseFloat(hs.paddingRight) + outset)).toFixed(2);
+              ? (h.left + parseFloat(hs.paddingLeft)) - hb.left
+              : hb.right - (h.right - parseFloat(hs.paddingRight))).toFixed(2);
           }
           if (top !== null) {
             btn.style.setProperty('--pf-landing-toggle-top', `${top}px`);

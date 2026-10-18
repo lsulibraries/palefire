@@ -2,8 +2,9 @@
 // Landing lead panel and Visit strip, one 1280px column:
 // 1. Lead panel: page <h1>, intro and search on frosted glass.
 // 2. The building map (.pf-landing__visit, _building-map.scss).
-// 3. Visit strip: hours, mini map, Google Maps link, as wide as the map's
-//    legend and drawing together; a stacked card below md.
+// 3. Visit strip: name, hours, mini map with the Google Maps link under
+//    it, and an Instagram placeholder, as wide as the map's legend and
+//    drawing together; a stacked card below md.
 // Rendered by templates/includes/landing.html.twig; the
 // intro and Visit fields come from _palefire_landing_visit() in
 // palefire.theme. Hours: js/visit-hours.js. Mini map: js/visit-map.js
@@ -75,35 +76,81 @@
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
-// md and up: a horizontal strip. Name, hours and directions | mini map.
-// 1200px and up (about 780px of column even with the TOC open): name and
-// directions | hours | mini map. Empty areas (no LibCal id, no map) just
-// leave their track empty.
+// Dark glass (dark sections, the map's dark turn, dark reading colours) is
+// lighter here than on the lead panel: 70% of the sidebar's (Twilight:
+// .8 → .56), so the video shows through. Text stays AA: the wash under the
+// strip is 80-90% dark, so even over a white frame the muted text (Twilight
+// #aca0ba) is 4.67:1. Light glass keeps its .75: any less and dark text
+// over the map's dark overlay drops under 4.5:1. "Reduce transparency" and
+// the Settings drawer's solid switches keep it solid (below).
+:root.pf-reading-dark .pf-visit,
+.pf-section--theme-dark .pf-visit,
+.pf-section.is-map-dark .pf-visit {
+  background-color: color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent);
+}
+@include pf-solid-chrome {
+  .pf-visit { background-color: var(--pf-sidebar-bg) !important; }
+}
+
+// Mini map with the Google Maps link under it.
+.pf-visit__place {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+.pf-visit__place > .pf-visit__directions { align-self: flex-start; }
+
+// Instagram placeholder: an empty frame in the mini map's hatch until a
+// post embed replaces it. Below md it comes last.
+.pf-visit__social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 9rem;
+  padding: 1rem;
+  border: 1px solid var(--pf-visit-rule);
+  color: var(--pf-toc-color, inherit);
+  background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-visit-line) 18%, transparent) 11px 12px);
+}
+.pf-visit__social-icon { display: flex; }
+.pf-visit__social-icon svg {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  fill: currentColor;
+}
+
+// md and up: a horizontal strip. Name, hours and Instagram | mini map and
+// directions. 1200px and up (about 780px of column even with the TOC
+// open): name and Instagram | hours | mini map and directions. Instagram
+// fills the height the other columns leave. Empty areas (no LibCal id, no
+// map) just leave their track empty.
 @media (min-width: 768px) {
   .pf-visit {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
     grid-template-rows: auto auto 1fr;
     grid-template-areas:
-      "head map"
-      "hours map"
-      "link map";
+      "head place"
+      "hours place"
+      "social place";
     gap: .875rem clamp(1.5rem, 3vw, 2.5rem);
     align-items: start;
     padding: 1.5rem;
   }
   .pf-visit__heading { grid-area: head; }
   .pf-visit__hours { grid-area: hours; }
-  .pf-visit__map { grid-area: map; }
-  .pf-visit__directions { grid-area: link; align-self: end; }
+  .pf-visit__place { grid-area: place; }
+  .pf-visit__social { grid-area: social; align-self: stretch; }
 }
 @media (min-width: 1200px) {
   .pf-visit {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(14rem, 20rem);
     grid-template-rows: auto 1fr;
     grid-template-areas:
-      "head hours map"
-      "link hours map";
+      "head hours place"
+      "social hours place";
   }
 }
 .pf-visit__heading {
@@ -270,7 +317,8 @@
 
 @media (forced-colors: active) {
   .pf-visit,
-  .pf-visit__map { border-color: CanvasText; }
+  .pf-visit__map,
+  .pf-visit__social { border-color: CanvasText; }
   .pf-visit__dot { forced-color-adjust: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -279,7 +327,8 @@
 }
 @media print {
   .pf-visit__map,
-  .pf-visit__week { display: none; }
+  .pf-visit__week,
+  .pf-visit__social { display: none; }
   .pf-visit,
   .pf-landing__lead { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
 }

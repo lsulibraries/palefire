@@ -46,10 +46,6 @@
   // lower part of the screen, not once it has climbed to the middle. (Was
   // 0.3, then 0.5 with 0.75 on portrait screens only.)
   const ACTIVATION_LINE = 0.75;
-  // Landing pages: how far (a fraction of the viewport) back above the
-  // activation line the first content section must go before the TOC
-  // collapses again (see checkReveal in initToc()).
-  const REVEAL_SLACK = 0.2;
   // Depth 2: every h3, plus anything marked data-toc.
   const SUB_HEADING_SELECTOR = 'h3, [data-toc]';
   // Depth 1: only what asks to be listed (h3[data-toc], or any element with
@@ -531,51 +527,9 @@
       });
     }
 
-    // Landing pages (field_modular_type "landing", <html data-pf-mode>): the
-    // TOC is collapsed over the landing hero and the events carousel, and
-    // opens once the first other section reaches the activation line
-    // (html.pf-toc-in; _landing-hero.scss). Scrolling back well above it
-    // (REVEAL_SLACK of the viewport) collapses it again: opening the column
-    // narrows the content, which makes the sections above taller and pushes
-    // the section down, so a single line would flip it back and forth. A
-    // landing page with no other section never shows it. The class is set
-    // at every width, but only the lg-and-up styles read it.
-    const landing = ROOT.dataset.pfMode === 'landing';
-    const revealAt = landing
-      ? Array.from(document.querySelectorAll('.pf-section'))
-        .find((section) => !section.querySelector('.pf-landing--hero, .pf-events-carousel'))
-      : null;
-    let revealTicking = false;
-    const checkReveal = () => {
-      if (revealTicking) {
-        return;
-      }
-      revealTicking = true;
-      requestAnimationFrame(() => {
-        revealTicking = false;
-        if (destroyed) {
-          return;
-        }
-        const line = headerHeight() + (window.innerHeight - headerHeight()) * ACTIVATION_LINE;
-        const top = revealAt ? revealAt.getBoundingClientRect().top : Infinity;
-        if (top <= line) {
-          ROOT.classList.add('pf-toc-in');
-        }
-        else if (top > line + window.innerHeight * REVEAL_SLACK) {
-          ROOT.classList.remove('pf-toc-in');
-        }
-      });
-    };
-    if (landing) {
-      checkReveal();
-      window.addEventListener('scroll', checkReveal, { passive: true, signal });
-      window.addEventListener('resize', checkReveal, { passive: true, signal });
-    }
-
     // Swup 'unload': stop tracking a page that is being swapped out.
     return function teardown() {
       destroyed = true;
-      ROOT.classList.remove('pf-toc-in');
       listeners.abort();
       clearTimeout(resizeTimer);
       if (observer) {

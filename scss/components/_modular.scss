@@ -424,10 +424,129 @@ html.pf-snap .site-footer {
   // Section backgrounds reach left under the frosted TOC column. Only with
   // the TOC: a plain sidebar has no glass, so its text would sit straight
   // on the photo.
-  // lg and up the TOC column is always there: it is the page's main
-  // navigation, so there is no hide/show button (removed 2026-10-16).
   .pf-modular--has-toc {
     --pf-bleed-inline-start: var(--pf-sidebar-w);
+    // Bootstrap's offcanvas timing, so the column closes in step with the
+    // sidebar sliding out (TOC sidebar toggle, below).
+    transition:
+      grid-template-columns .3s ease-in-out,
+      --pf-bleed-inline-start .3s ease-in-out;
+  }
+
+  // -------------------------------------------------------------------
+  // TOC sidebar toggle (every Modular page but guides, where the TOC is
+  // required). js/modular-toc-collapse.js puts .pf-toc-collapsed on <html>
+  // before the first paint. The column closes and the backgrounds stop
+  // reaching left, so they still run edge to edge. Below lg the offcanvas
+  // is unaffected. Restored 2026-10-18 from 5865c10, which removed it; it
+  // replaces the landing pages' scroll-driven collapse.
+  // -------------------------------------------------------------------
+  html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-modular--has-toc {
+    grid-template-columns: 0px minmax(0, 1fr);
+    --pf-bleed-inline-start: 0px;
+  }
+
+  // The sidebar slides out whole, glass and all, like Bootstrap's
+  // .offcanvas-start, while the column closes behind it. visibility takes
+  // the links out of the tab order once it has gone. overflow: visible lets
+  // the toggle (inside the sidebar) ride along past its edge and stay on
+  // screen.
+  html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-sidebar.pf-modular__sidebar {
+    visibility: hidden;
+    pointer-events: none;
+    overflow: visible;
+    transform: translateX(-100%);
+    transition:
+      background-color .3s ease,
+      transform .3s ease-in-out,
+      visibility 0s linear .3s;
+  }
+
+  html[dir="rtl"].pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-sidebar.pf-modular__sidebar {
+    transform: translateX(100%);
+  }
+
+  // Open: top right of the sidebar, centred on the TOC title's first line
+  // (2rem + half of its 1.125rem line - half of 2.25rem), which is also
+  // the breadcrumb's line.
+  .pf-modular__toc-collapse {
+    position: absolute;
+    top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // nudge: js/modular-toc.js
+    inset-inline-end: .75rem;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 1px solid var(--pf-toc-rail);
+    border-radius: 0;
+    color: var(--pf-toc-color);
+    background-color: transparent;
+    visibility: visible; // stays visible while the sidebar is hidden
+    pointer-events: auto;
+    transition:
+      color $pf-hover-out ease,
+      background-color .3s ease,
+      border-color .3s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      transition:
+        color $pf-hover-in ease,
+        background-color .3s ease,
+        border-color .3s ease;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-toc-accent, #{$pf-gold});
+      outline-offset: 3px;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  // Guides keep the TOC: no button.
+  html[data-pf-mode="guide"] .pf-modular__toc-collapse {
+    display: none !important;
+  }
+
+  // Closed: a small glass button in the content's side padding, 1rem from
+  // the page edge once the sidebar has slid off by its full width.
+  // Closing, it moves out in step with the slide. Opening, it jumps back
+  // inside at once and slides in with the sidebar.
+  html.pf-toc-collapsed .pf-modular__toc-collapse {
+    inset-inline-end: -3.25rem;
+    background-color: var(--pf-sidebar-bg);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+    box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .15);
+    transition:
+      color $pf-hover-out ease,
+      background-color .3s ease,
+      border-color .3s ease,
+      inset-inline-end .3s ease-in-out;
+  }
+
+  // Icon: a chevron while the sidebar is open ("hide"), a list while it is
+  // closed ("show"). Both are in the markup and the <html> class picks one,
+  // so the right icon is there on first paint. Only the chevron mirrors in
+  // RTL.
+  .pf-modular__toc-collapse-icon--show,
+  html.pf-toc-collapsed .pf-modular__toc-collapse-icon--hide {
+    display: none;
+  }
+
+  html.pf-toc-collapsed .pf-modular__toc-collapse-icon--show {
+    display: block;
+  }
+
+  html[dir="rtl"] .pf-modular__toc-collapse-icon--hide {
+    transform: scaleX(-1);
   }
 
   // Two classes so these beat Palefire's own .pf-sidebar rules and
@@ -448,7 +567,10 @@ html.pf-snap .site-footer {
     background-color: var(--pf-sidebar-bg) !important;
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
-    transition: background-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease-in-out,
+      visibility 0s;
     // Above the section backgrounds that bleed in under it (each
     // .pf-section__inner is z-index 1); below the header (1020).
     z-index: 2;
@@ -487,9 +609,21 @@ html.pf-snap .site-footer {
   }
 }
 
+// Reduced motion, and a default applied on a Swup visit
+// (js/modular-toc-collapse.js, html.pf-toc-instant): no slide.
 @media (prefers-reduced-motion: reduce) {
+  .pf-modular--has-toc,
   .pf-sidebar.pf-modular__sidebar,
-  .pf-sidebar.pf-modular__sidebar .offcanvas-body {
+  .pf-sidebar.pf-modular__sidebar .offcanvas-body,
+  .pf-modular__toc-collapse {
+    transition: none !important;
+  }
+}
+
+html:is(.pf-toc-instant, .pf-a11y-motion) {
+  .pf-modular--has-toc,
+  .pf-sidebar.pf-modular__sidebar,
+  .pf-modular__toc-collapse {
     transition: none !important;
   }
 }
