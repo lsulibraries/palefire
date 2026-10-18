@@ -1,0 +1,74 @@
+(function ($, Drupal, once) {
+
+  'use strict';
+
+  Drupal.behaviors.bootstrap_barrio = {
+    attach: function (context, settings) {
+
+      settings.bootstrapBarrio = settings.bootstrapBarrio || {};
+
+      // Track focused element.
+      $(document).on('focusin.bootstrapBarrio', ':input:text', function () {
+        const selector = $(this).attr('data-drupal-selector');
+
+        if (selector) {
+          settings.bootstrapBarrio.focusedSelector = selector;
+        }
+      });
+
+      // Restore focus after AJAX.
+      once('bootstrap-barrio-focus-restore', 'body', context).forEach(function () {
+
+        $(document).ajaxComplete(function () {
+
+          const selector = settings.bootstrapBarrio.focusedSelector;
+
+          if (!selector) {
+            return;
+          }
+
+          const $element = $('[data-drupal-selector="' + selector + '"]');
+
+          if ($element.length) {
+            $element.focus();
+          }
+        });
+
+      });
+
+      function handleScroll() {
+        const selector = settings.bootstrapBarrio.focusedSelector;
+
+        const isFocused =
+          selector &&
+          document.activeElement &&
+          document.activeElement.getAttribute('data-drupal-selector') === selector;
+
+        if (window.scrollY > 50 && !isFocused) {
+          $('body').addClass('scrolled');
+        }
+        else {
+          $('body').removeClass('scrolled');
+        }
+      }
+
+      once('bootstrap-barrio-scroll', 'body', context).forEach(function () {
+        $(window).on('scroll.bootstrapBarrio', handleScroll);
+        $(window).on('touchmove.bootstrapBarrio', handleScroll);
+      });
+
+      once('bootstrap-barrio-dropdown', '.dropdown-item a.dropdown-toggle', context)
+        .forEach(function (element) {
+
+          $(element).on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            $(this).next('ul').toggle();
+          });
+
+        });
+    }
+  };
+
+})(jQuery, Drupal, once);

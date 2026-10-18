@@ -1,0 +1,266 @@
+// Tile showcase: Tile nodes as image cards (paragraph--tile-showcase).
+//
+// Two layouts, both from the Origami concept at /concept/special, which only
+// worked on xxl screens (fixed calc(100dvw - 480px) widths, dvh heights and
+// one hand-tuned offset per card). Here the layouts respond to the width of
+// the section itself (container queries), not the window, so they hold up
+// beside the "On this page" sidebar, at 400% zoom and at any card count.
+//
+// - stagger (How-to guides, Specializations): tall portrait cards.
+//   Narrow: a swipeable row (scroll-snap). The next card peeks in as the cue,
+//   and Tab moves through the cards, scrolling each into view.
+//   Wide (60rem and up): every card in one row, on a repeating
+//   five-step offset, so any number of cards keeps the rhythm.
+// - grid (Collections): landscape cards, edge to edge.
+//   1 column, then 2 from 32rem, then 3 from 60rem.
+//
+// Contrast: the title and label sit on a scrim that reaches 85% black under
+// the text, so white text passes 4.5:1 (WCAG 1.4.3) on any image, even a
+// white one. The label pill is white on black (21:1), gold on black on hover.
+// Focus: a 3px gold ring with a black halo inside it, visible on both light
+// and dark images (WCAG 2.4.7, 1.4.11).
+
+$pf-tile-break-wide: 60rem;
+$pf-tile-break-two: 32rem;
+
+.pf-tiles {
+  container: pf-tiles / inline-size;
+  --pf-tile-gap: 0.625rem;
+  // Custom properties are not evaluated by Sass, so the colours are
+  // interpolated (a bare $pf-black would reach the browser as text).
+  --pf-tile-scrim: linear-gradient(
+    to bottom,
+    #{rgba($pf-black, 0)} 30%,
+    #{rgba($pf-black, 0.6)} 58%,
+    #{rgba($pf-black, 0.85)} 78%,
+    #{rgba($pf-black, 0.92)} 100%
+  );
+}
+
+.pf-tiles__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// The card ---------------------------------------------------------------
+.pf-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  color: $pf-white;
+  text-decoration: none;
+  background: $pf-grey-900;
+  box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, 0.1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--pf-tile-scrim);
+    pointer-events: none;
+  }
+
+  &:hover,
+  &:focus {
+    color: $pf-white;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid $pf-gold;
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 6px $pf-black;
+  }
+}
+
+.pf-tile__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  // picture or img, whichever Responsive Image prints.
+  picture,
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.pf-tile__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+  padding: 0 1.25rem 1.25rem;
+}
+
+// The label reads after the title (link name "Oral History, Dept +
+// Medium") but shows above it.
+.pf-tile__label {
+  order: -1;
+  padding: 0.125rem 0.625rem;
+  border-radius: 1.25rem;
+  background: $pf-black;
+  color: $pf-white;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.075rem;
+  text-transform: uppercase;
+}
+
+.pf-tile__title {
+  margin: 0;
+  color: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere; // long single words at 400% zoom (WCAG 1.4.10)
+  hyphens: auto;
+}
+
+.pf-tile:is(:hover, :focus-visible) .pf-tile__label {
+  background: $pf-gold;
+  color: $pf-black;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-tile__media img {
+    transition: transform 0.6s ease-out;
+  }
+
+  .pf-tile__label {
+    transition: color 0.2s ease-out, background-color 0.2s ease-out;
+  }
+
+  .pf-tile:is(:hover, :focus-visible) .pf-tile__media img {
+    transform: scale(1.04);
+  }
+}
+
+// Stagger ------------------------------------------------------------------
+// Narrow: swipeable row. The row bleeds to the section's edges so cards slide
+// in from the edge; scroll-padding lines the snapped card up with the title.
+.pf-tiles--stagger .pf-tiles__list {
+  display: flex;
+  gap: var(--pf-tile-gap);
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 1rem));
+  padding: 0.25rem var(--pf-section-pad-inline, 1rem) 1.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pf-section-pad-inline, 1rem);
+  @include pf-thin-scrollbar;
+}
+
+.pf-tiles--stagger .pf-tiles__item {
+  flex: 0 0 min(72%, 17rem);
+  aspect-ratio: 3 / 5;
+  scroll-snap-align: start;
+}
+
+@container pf-tiles (min-width: #{$pf-tile-break-wide}) {
+  .pf-tiles--stagger .pf-tiles__list {
+    align-items: flex-start;
+    margin-inline: 0;
+    padding: 0 0 3rem; // room for the lowest offset
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .pf-tiles--stagger .pf-tiles__item {
+    flex: 1 1 0;
+    min-width: 0;
+    aspect-ratio: auto;
+    height: clamp(24rem, 58svh, 42rem);
+  }
+
+  // A repeating five-step offset, close to the concept's hand-placed one.
+  .pf-tiles--stagger .pf-tiles__item:nth-child(5n + 2) { margin-top: 2.5rem; }
+  .pf-tiles--stagger .pf-tiles__item:nth-child(5n + 3) { margin-top: 0.75rem; }
+  .pf-tiles--stagger .pf-tiles__item:nth-child(5n + 4) { margin-top: 3rem; }
+  .pf-tiles--stagger .pf-tiles__item:nth-child(5n + 5) { margin-top: 1.25rem; }
+
+  .pf-tiles--stagger .pf-tile__title {
+    font-size: clamp(1.25rem, 2.1cqi, 1.75rem);
+  }
+}
+
+// Grid ---------------------------------------------------------------------
+.pf-tiles--grid .pf-tiles__list {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.pf-tiles--grid .pf-tiles__item {
+  aspect-ratio: 16 / 10;
+  min-height: 12rem;
+}
+
+.pf-tiles--grid .pf-tile {
+  box-shadow: 1.25rem 1.25rem 4.5rem rgba($pf-black, 0.5);
+}
+
+@container pf-tiles (min-width: #{$pf-tile-break-two}) {
+  .pf-tiles--grid .pf-tiles__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pf-tiles--grid .pf-tiles__item {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@container pf-tiles (min-width: #{$pf-tile-break-wide}) {
+  .pf-tiles--grid .pf-tiles__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pf-tiles--grid .pf-tiles__item {
+    aspect-ratio: auto;
+    height: clamp(14rem, 33svh, 24rem);
+  }
+
+  .pf-tiles--grid .pf-tile__title {
+    font-size: clamp(1.25rem, 1.6cqi, 1.5rem);
+  }
+}
+
+// Windows High Contrast / forced colours: the scrim and image go, the
+// system colours draw the card and its focus ring.
+@media (forced-colors: active) {
+  .pf-tile {
+    border: 1px solid CanvasText;
+
+    &::after {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+
+  .pf-tile__label {
+    border: 1px solid CanvasText;
+  }
+}

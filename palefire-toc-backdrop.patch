@@ -1,0 +1,106 @@
+From b15957e040f92c899b01e0c152cdce5971cbafa0 Mon Sep 17 00:00:00 2001
+From: Kyle Tanglao <ktanglao@lsu.edu>
+Date: Sat, 17 Oct 2026 14:25:53 -0500
+Subject: [PATCH] Mobile TOC drawer: page-colour backdrop so iOS Safari's
+ toolbar isn't black
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01TogAz7bHBkX8WbCN2yHtDY
+---
+ README.md                            | 12 ++++++++++
+ js/modular-toc.js                    | 36 ++++++++++++++++++++++++++++
+ scss/components/_utility-panels.scss |  6 +++--
+ 3 files changed, 52 insertions(+), 2 deletions(-)
+
+diff --git a/README.md b/README.md
+index 5095f0c..28f2ed5 100644
+--- a/README.md
++++ b/README.md
+@@ -604,6 +604,18 @@ production downstream as usual.
+   published revision, plus the latest draft if there is an unpublished one.
+   It changes nothing.
+ 
++### Mobile "On this page" drawer backdrop (2026-10-17)
++
++Below lg the TOC opens as a Bootstrap offcanvas (`#pf-modular-sidebar`).
++It used to keep Bootstrap's black backdrop, and iOS Safari tints its bottom
++toolbar from the fixed layer at the bottom of the screen (ignoring that
++layer's opacity), so the toolbar turned solid black while the TOC was open.
++`modular-toc.js` now sets `<html data-pf-panel="toc">` while the drawer is
++open, so it gets the same page-colour wash as the menu and utility drawers
++(`_utility-panels.scss`) and the toolbar matches the page. The flag is
++cleared on close, and on the next attach if a Swup visit swapped the drawer
++out while it was open. JS only: no CSS rebuild, no config.
++
+ ### Calendar events in "On this page"
+ 
+ `modular-toc.js` lists any element with `data-toc` under its section, even
+diff --git a/js/modular-toc.js b/js/modular-toc.js
+index 27f5f43..3544224 100644
+--- a/js/modular-toc.js
++++ b/js/modular-toc.js
+@@ -59,8 +59,44 @@
+   // nav element -> teardown function (see initToc()).
+   const instances = new WeakMap();
+ 
++  // Below lg the TOC is an offcanvas (#pf-modular-sidebar). While it is
++  // open, <html data-pf-panel="toc"> gives its backdrop the same page-colour
++  // wash as the menu and utility drawers (_utility-panels.scss) instead of
++  // Bootstrap's black. iOS Safari tints its bottom toolbar from the fixed
++  // layer at the bottom of the screen and ignores that layer's opacity, so
++  // the black backdrop painted the toolbar solid black (2026-10-17).
++  // Delegated from the document: the offcanvas sits inside Swup's
++  // container and is replaced on every visit; Bootstrap's events bubble.
++  const TOC_DRAWER = 'pf-modular-sidebar';
++  const ROOT = document.documentElement;
++
++  function isTocDrawer(event) {
++    return event.target instanceof Element && event.target.id === TOC_DRAWER;
++  }
++
++  document.addEventListener('show.bs.offcanvas', (event) => {
++    if (isTocDrawer(event)) {
++      ROOT.dataset.pfPanel = 'toc';
++    }
++  });
++
++  document.addEventListener('hidden.bs.offcanvas', (event) => {
++    if (isTocDrawer(event) && ROOT.dataset.pfPanel === 'toc') {
++      delete ROOT.dataset.pfPanel;
++    }
++  });
++
++  // A Swup visit can swap the drawer out while it is open, so no
++  // hidden.bs.offcanvas fires: drop a flag no open drawer backs up.
++  function clearStaleTocFlag() {
++    if (ROOT.dataset.pfPanel === 'toc' && !document.querySelector('#' + TOC_DRAWER + '.show, #' + TOC_DRAWER + '.showing')) {
++      delete ROOT.dataset.pfPanel;
++    }
++  }
++
+   Drupal.behaviors.palefireModularToc = {
+     attach(context) {
++      clearStaleTocFlag();
+       once('pf-toc', '[data-pf-toc]', context).forEach((nav) => {
+         const teardown = initToc(nav);
+         if (teardown) {
+diff --git a/scss/components/_utility-panels.scss b/scss/components/_utility-panels.scss
+index b90c760..89581f7 100644
+--- a/scss/components/_utility-panels.scss
++++ b/scss/components/_utility-panels.scss
+@@ -375,8 +375,10 @@ html.pf-over-menu .pf-panel.offcanvas {
+ // The page recedes under a wash of the drawer's own page colour (Cream, or
+ // the reading swatch) instead of Bootstrap's black, so the light glass
+ // still reads as glass. The dark swatches keep a dark wash.
+-// js/utility-panels.js sets <html data-pf-panel> while a panel is open, so
+-// the mobile "On this page" offcanvas keeps Bootstrap's default.
++// js/utility-panels.js sets <html data-pf-panel> while a panel is open (and
++// js/palefire.js for the menu, js/modular-toc.js for the mobile "On this
++// page" offcanvas, 2026-10-17: Bootstrap's black wash turned iOS Safari's
++// bottom toolbar solid black).
+ html[data-pf-panel] .offcanvas-backdrop.show {
+   background-color: rgb(var(--pf-g-bg-rgb, 247, 244, 236));
+   opacity: $pf-panel-backdrop-light;
+-- 
+2.43.0
+

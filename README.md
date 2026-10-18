@@ -27,6 +27,7 @@ Production needs only the build output in the repo: `css/style.css`,
 - `scripts/palefire_visit_setup.php` – Visit card fields and the `light-map` section theme (sites with palefire_modular)
 - `scripts/palefire_modular_setup_undo.php` – removes the unused paragraph types/storages a partial `palefire_modular_setup.php` run leaves on a palefire_modular site
 - `scripts/palefire_guide_setup.php` – Guide pages content model: Resource content type, guide paragraph types, guide fields on Modular page (sites with palefire_modular)
+- `scripts/palefire_tile_showcase_setup.php` – Tile showcase paragraph type (How-to guides, Collections, Specializations), its image styles and responsive image styles (sites with palefire_modular)
 - `scripts/palefire_guide_demo.php` – builds the Systematic Reviews LibGuide as an unpublished guide page, as a demo
 
 ## Modular pages
@@ -603,6 +604,97 @@ production downstream as usual.
   `scripts/palefire_visit_setup.php`) and each section's saved theme on the
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
+
+### Tile showcase: Tiles as image cards (2026-10-18)
+
+The How-to guides, Collections and Specializations sections from the
+Origami concept (`/concept/special`) as one paragraph type,
+`tile_showcase`. The concept was hand-coded HTML, with each card's image
+set in CSS per class, and it only worked on xxl screens. Here every card is
+a referenced Tile node, and the layout follows the section's own width.
+
+**Fields** (besides the shared section fields: title, anchor, snap,
+height, theme, hide from TOC, background):
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| `field_tile_layout` | List: `stagger`, `grid` | Staggered row (How-to guides, Specializations) or grid (Collections) |
+| `field_tiles` | Entity reference → Tile nodes, unlimited | The cards, in this order |
+
+**Each card, from the Tile:**
+
+- the title, as an `<h3>` (the section title is the `<h2>`);
+- the Tile Cover (`field_tile_cover`), cropped from the centre through the
+  `tile_showcase_portrait` or `tile_showcase_landscape` responsive image
+  style;
+- the Category terms (`field_category`, up to 3), joined with " + " as the
+  label pill, e.g. "Dept + Medium";
+- a link to the Tile node's own URL.
+
+Tiles the visitor can't see (unpublished, no access) are left out. The
+image's alt is empty because the card's title already names the link.
+
+**Layouts.** Both use container queries on the card list, so they respond
+to the space beside the "On this page" sidebar, not the window:
+
+- **Staggered row:**
+  - Narrower than 60rem: a swipeable row (scroll-snap) that bleeds to the
+    section's edges, with the next card peeking in. Tab moves through the
+    cards and scrolls each one into view.
+  - 60rem and wider: one row on a repeating five-step offset, close to the
+    concept's hand-placed one, so any number of cards keeps the rhythm.
+- **Grid:** 1 column, then 2 from 32rem, then 3 from 60rem, edge to edge as
+  in the concept.
+
+**"On this page":** each card is listed under its section (as in the
+concept). The `<li>` is the TOC target (`data-toc`), not the `<h3>`, so
+modular-toc.js never puts `tabindex` on a heading inside the link.
+
+**Accessibility:**
+
+- A scrim that is at least 85% black under the text keeps white titles
+  above 4.5:1 on any image, even a white one.
+- The label pill is white on black and turns gold on hover and focus.
+- Focus is a 3px gold ring with a black halo inside it, so it shows on
+  light and dark images alike.
+- The title comes first in the source, so the link reads
+  "Oral History, Dept + Medium". CSS shows the label above the title.
+- The list keeps `role="list"` for Safari.
+- Motion (the image zoom on hover) only runs under
+  `prefers-reduced-motion: no-preference`.
+- Forced-colours mode drops the scrim and draws a system border.
+
+**Images and Lighthouse:** each card loads one `srcset` image with a
+`sizes` attribute, lazily and asynchronously. The image styles convert to
+WebP when the server's image toolkit supports it (the script says when it
+doesn't). If Responsive Image or the style is missing, the card falls back
+to `<style>_md`, then to the original file.
+
+#### Turning it on (production)
+
+```sh
+git pull
+drush php:script themes/custom/palefire/scripts/palefire_tile_showcase_setup.php
+drush cr
+```
+
+Then edit the page, add three **Tile showcase** sections, and fill each one:
+
+| Section title | Layout | Tiles |
+| --- | --- | --- |
+| How-to guides | Staggered row | View an item, Browse finding aids, Visitor parking, Donate materials |
+| Collections | Grid | the six collection Tiles |
+| Specializations | Staggered row | University Archives, Oral History, Rare books, State Documents, Digital Services |
+
+For the concept's look, set each section's theme to Dark and add the
+concept's background image. Make sure each Tile has a Tile Cover and its
+Category terms set. Staging gets the config from production downstream as
+usual.
+
+Files: `palefire.theme` (`palefire_preprocess_paragraph__tile_showcase()`,
+`_palefire_tile_cover()`), `templates/paragraphs/paragraph--tile-showcase.html.twig`,
+`scss/components/_tile-showcase.scss`, `scss/style.scss`, `css/style.css`
+and `scripts/palefire_tile_showcase_setup.php`.
 
 ### Soft hairlines (the guides' look) replace the Swiss layer's solid lines (2026-10-18)
 

@@ -551,6 +551,124 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph--tile-showcase.
+ *
+ * Tile showcase (scripts/palefire_tile_showcase_setup.php) lists Tile nodes
+ * as image cards in one of two layouts (field_tile_layout):
+ * - stagger: tall portrait cards in a row with an offset rhythm (the
+ *   concept's How-to guides and Specializations). A swipeable row when the
+ *   section is narrow.
+ * - grid: landscape cards in three columns (the concept's Collections),
+ *   stepping down to two and one.
+ *
+ * layout: 'stagger' or 'grid'.
+ * tiles: one entry per Tile the visitor can see, in field order:
+ * - title: the Tile's title.
+ * - url: the Tile node's own URL.
+ * - label: its Category terms joined with " + " ("Dept + Medium"), or ''.
+ * - image: field_tile_cover in the layout's responsive image style, or NULL.
+ *   Its alt is empty: the card's title already names the link, so the
+ *   image would only repeat it (WCAG 1.1.1 decorative-in-context).
+ */
+function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
+  $variables['layout'] = 'stagger';
+  $variables['tiles'] = [];
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  if ($paragraph->hasField('field_tile_layout') && $paragraph->get('field_tile_layout')->value === 'grid') {
+    $variables['layout'] = 'grid';
+  }
+  if (!$paragraph->hasField('field_tiles')) {
+    return;
+  }
+
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $repository = \Drupal::service('entity.repository');
+  $style = $variables['layout'] === 'grid' ? 'tile_showcase_landscape' : 'tile_showcase_portrait';
+
+  foreach ($paragraph->get('field_tiles') as $item) {
+    $tile = $item->entity;
+    if (!$tile instanceof NodeInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($tile);
+    $access = $tile->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $tile = $repository->getTranslationFromContext($tile);
+
+    $url = $tile->toUrl()->toString(TRUE);
+    $cache->addCacheableDependency($url);
+
+    $labels = [];
+    if ($tile->hasField('field_category')) {
+      foreach ($tile->get('field_category') as $term_item) {
+        $term = $term_item->entity;
+        if (!$term) {
+          continue;
+        }
+        $cache->addCacheableDependency($term);
+        $term_access = $term->access('view', NULL, TRUE);
+        $cache->addCacheableDependency($term_access);
+        if ($term_access->isAllowed()) {
+          $labels[] = $repository->getTranslationFromContext($term)->label();
+        }
+      }
+    }
+
+    $variables['tiles'][] = [
+      'title' => $tile->label(),
+      'url' => $url->getGeneratedUrl(),
+      'label' => implode(' + ', $labels),
+      'image' => _palefire_tile_cover($tile, $style, $cache),
+    ];
+  }
+  $cache->applyTo($variables);
+}
+
+/**
+ * The Tile's cover image as a decorative (alt="") lazy image.
+ *
+ * Uses the responsive image style when it exists, then its middle image
+ * style ("<style>_md") on its own, then the original file, so the card never
+ * breaks if the setup script hasn't run yet or Responsive Image is off.
+ */
+function _palefire_tile_cover(NodeInterface $tile, string $style, CacheableMetadata $cache): ?array {
+  if (!$tile->hasField('field_tile_cover') || $tile->get('field_tile_cover')->isEmpty()) {
+    return NULL;
+  }
+  $image = $tile->get('field_tile_cover')->first();
+  $file = $image->entity;
+  if (!$file) {
+    return NULL;
+  }
+  $cache->addCacheableDependency($file);
+  $attributes = ['alt' => '', 'loading' => 'lazy', 'decoding' => 'async'];
+  $build = [
+    '#uri' => $file->getFileUri(),
+    '#width' => $image->width,
+    '#height' => $image->height,
+    '#attributes' => $attributes,
+  ];
+
+  $types = \Drupal::entityTypeManager();
+  if (\Drupal::moduleHandler()->moduleExists('responsive_image')
+    && ($responsive = $types->getStorage('responsive_image_style')->load($style))) {
+    $cache->addCacheableDependency($responsive);
+    return $build + ['#theme' => 'responsive_image', '#responsive_image_style_id' => $style];
+  }
+  if ($image_style = $types->getStorage('image_style')->load($style . '_md')) {
+    $cache->addCacheableDependency($image_style);
+    return $build + ['#theme' => 'image_style', '#style_name' => $image_style->id(), '#alt' => ''];
+  }
+  return $build + ['#theme' => 'image', '#alt' => ''];
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--guide-video.
  *
  * video: url (the video's page), embed (privacy-enhanced YouTube or Vimeo

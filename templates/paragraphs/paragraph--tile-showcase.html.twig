@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Tile showcase section: Tile nodes as image cards.
+ *
+ * Variables from palefire_preprocess_paragraph__tile_showcase():
+ * - layout: 'stagger' (tall cards, offset rhythm) or 'grid' (3 / 2 / 1 columns).
+ * - tiles: title, url, label (Category terms, "Dept + Medium"), image.
+ *
+ * The section <h2> comes from the scroll-section field template, so each
+ * card is an <h3>. The title comes first in the source so the link's name
+ * starts with it ("Oral History, Dept + Medium"); CSS shows the label above.
+ * role="list" keeps list semantics in Safari, which drops them when
+ * list-style is none.
+ *
+ * "On this page": each card is a sub-link under its section, as in the
+ * concept. The <li> is the target (data-toc), not the <h3>: modular-toc.js
+ * gives its target tabindex="-1", and a focusable heading inside the link
+ * would be nested-interactive. data-toc-skip on the wrapper keeps the h3s
+ * from being listed a second time on modes that list every h3.
+ */
+#}
+{% if tiles %}
+  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip>
+    <ul class="pf-tiles__list" role="list">
+      {% for tile in tiles %}
+        <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+          <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+            {% if tile.image %}
+              <span class="pf-tile__media">{{ tile.image }}</span>
+            {% endif %}
+            <span class="pf-tile__body">
+              <h3 class="pf-tile__title">{{ tile.title }}</h3>
+              {% if tile.label %}
+                <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
+              {% endif %}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

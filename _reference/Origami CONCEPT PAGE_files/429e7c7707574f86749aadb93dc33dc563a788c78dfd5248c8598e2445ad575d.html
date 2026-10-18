@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!-- saved from url=(0102)https://askus.lib.lsu.edu/chat/widget/429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex, nofollow, noarchive">
+        <title>Chat</title>
+
+        <style>
+            /** Custom colors from widget setting, applied in the widget stylesheet */
+            html {
+                --color-background: ;
+                --color-head: ;
+                --color-button: ;
+            }
+        </style>
+
+        <link rel="stylesheet" href="./font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <link rel="stylesheet" media="screen" href="https://askus.lib.lsu.edu/chat/widget/429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d">
+        <link rel="stylesheet" media="screen" href="./libchatwidget.css">
+
+        <script>
+            var springSpace = springSpace || {};
+            springSpace.la = springSpace.la || {};
+        </script>
+    <style>html{
+font-family: Roboto;
+}
+.s-la-widget {
+padding: 0px;
+}
+input, textarea{
+    font-size: 16px !important;
+}
+
+.s-la-widget .form-group {
+    margin-bottom: 20px;
+}
+
+.s-la-widget .input-sm {
+    height: auto;
+    padding: 6px 12px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.s-la-widget select.input-sm {
+    height: auto;
+}
+
+textarea#client_question {
+    min-height: 100px;
+}
+
+#widget_base{
+max-height: 564px;
+}
+
+.s-la-widget-embed{
+border: 0px;
+padding: 0px;
+}
+
+.s-la-searchform-button {
+background-color: #fdd023 !important;
+font-weight: bold !important;
+color: #474747 !important;
+border: 1px solid #ccc !important;
+}
+
+.s-la-widget {
+background-color: transparent;
+}
+
+.s-la-widget label {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: white;    
+}
+
+.s-la-widget .btn-chat {
+    padding: 10px 0px;
+    border: 1px solid rgba(203, 203, 203, 0.25);
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 3px;
+    background: #fdd023;
+    color: black;
+}
+
+.s-la-widget input, .s-la-widget select.form-select, .s-la-widget textarea.form-control {
+    background: transparent;
+    border: 1px solid #434343 !important;
+    color: white;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 2px;
+}
+
+.s-la-widget select.form-select option{
+    background: #232323;
+}
+
+.s-la-widget .btn-chat:hover, .s-la-widget .btn-chat:active{
+    color: white;
+    background-color: transparent;
+    border-color: #fdd023;
+    box-shadow: none;
+}
+
+.chatList li.nav-item button.active {
+    padding: 0px 0px 10px 0px;
+    width: 100%;
+    background: transparent;
+    border: 0px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    font-weight: 100;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.s-la-widget button{
+    border-radius: 2px;
+}
+
+
+
+@media (min-width: 500px) {
+button.btn-chat.btn.btn-xs.btn-fullWidth {
+  font-size: 17.5px;
+  letter-spacing: 2.5px;
+  margin-top: 15px;
+}
+}</style></head>
+
+    <body class="s-la-widget" data-widget-id="29010" style="height: 500px;">
+        <div class="widget_base container">
+            <div id="libauth"></div>
+            <div id="autoload" class="chatpane hidden"></div>
+            <div id="login" class="chatpane hidden"></div>
+            <div id="away" class="chatpane hidden"></div>
+            <div id="chat" class="chatpane hidden"></div>
+            <div id="file" class="chatpane hidden"></div>
+            <div id="qform" class="chatpane hidden"></div>
+            <div id="bform" class="chatpane hidden"></div>
+            <div id="offline" class="chatpane">
+<h2 class="color_head" tabindex="-1">Ask Us</h2>
+
+    
+        <button type="button" class="btn btn-default btn-sm s-lch-btn-close hidden" aria-label="Close Chat"><i class="fa fa-fw fa-close"></i></button>
+    
+
+<div id="s-lch-search-box" class="margin-bottom"></div>
+<div class="s-lch-offline-msg s-lch-offline-msg-1 margin-bottom">Sorry, chat is offline but you can still get help.</div>
+<div class="s-lch-offline-msg s-lch-offline-msg-2 margin-bottom"><a href="https://askus.lib.lsu.edu/" target="_parent">Submit your question to our Virtual Help Desk.</a></div>
+
+</div>
+            <audio id="sound" src="https://d1vbcbna54tygs.cloudfront.net/data/libchat/chat_msg.mp3"></audio>
+        </div>
+
+        <script src="./jquery.min(1).js.download"></script>
+        <script src="./libchatwidget.js.download"></script>
+        <script type="module" src="./libchatwidget.min.js.download"></script>
+
+        <script>
+            var cascadeServer = 'https\u003A\/\/chat\u002Dus.libanswers.com';
+            var altCascadeServer = 'https\u003A\/\/askus.lib.lsu.edu';
+            var socketIoUrl = "https\u003A\/\/chat\u002Dus.libanswers.com\/js2.86.0\/socket.io\/socket.io.min.js";
+            /**
+             * Model for the patron.
+             */
+            var sessionData = {"iid":955,"referer":"","widget":"Modal Chat (dark theme)","consortium":[],"peel":"","peelToken":"","region":"prod_us","fallbacks":[{"u":0,"d":[7071],"c":""},{"u":0,"d":[7372],"c":""}],"name":"","client_contact":""};
+
+            /**
+             * Array of ops involved in the chat.
+             */
+            var operatorsList = [];
+
+            /**
+             *  Model for the widget and its settings.
+             */
+            var settings = {"id":29010,"iid":955,"hash":"429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d","name":"Modal Chat (dark theme)","language":"en_US","key":"57e2cb3e492e68d","queue_id":4799,"chat_title":"","byeMsg":"Thanks for chatting!","dept_label":"Select Department:","name_label":"Name","name_default":"","guest_label":"Guest","contact_label":"Email address","dept_message":"You are now chatting with %deptName% Department.","width":"100%","height":"500","chat_button":"Start Chat","press_enter":"Press ENTER to send","submit_button":"Submit","email_trans":"View\/Email Transcript","offline_text":"Ask Us","offline_url":"","slidebutton_url":"","slidebutton_url_off":"","slidebutton_url_bot":"","slidebutton_text":"Ask Us","slidebutton_text_off":"Offline","slidebutton_text_bot":"","slidebutton_position":"r","slidebutton_bcolor":"#59278F","slidebutton_color":"#FFFFFF","slidebutton_bcolor_off":"#59278F","slidebutton_color_off":"#FFFFFF","slidebutton_bcolor_bot":"#286090","slidebutton_color_bot":"#FFFFFF","slidebutton_width":"","slidebutton_height":"","la_hide":true,"la_hide_msg":"Sorry, chat is offline but you can still get help.","la_hide_msg2":"<a href=\"{{ domain }}\" target=\"_parent\">Submit your question to our Virtual Help Desk.<\/a>","la_search_opt":{"group_id":"","button":"Search","placeholder":"","label":""},"star_text":"How did we do? Let us know what you think about our chat service! ","rate_1":"Bad","rate_2":"So-so","rate_3":"Good","rate_4":"Great","trans":"Enter an email address to send this chat transcript to:","error_sess":"Error starting session.","error_send":"Error sending this message.","initial_question":true,"initial_question_label":"Your Question","comments_label":"Please leave any comments\/suggestions you have in the box below.","comments_button_text":"Submit Feedback","comments_followup":"I would like to be contacted for a follow-up.","comments_email":"Email yourself a transcript of this chat","enable_anon":false,"enable_sound":false,"star_ratings":true,"file_uploads":true,"file_title":"Upload File","file_intro":"Note: Maximum file size is 20MB. File is removed after one month, it is not kept permanently.","file_label":"Attach a file","file_action":"Upload","max_file_size_label":"Maximum File Size","clear_file_btn":"Clear File","restart_chat":"Start New Chat","cancel_button":"Cancel","custom_css":"html{\nfont-family: Roboto;\n}\n.s-la-widget {\npadding: 0px;\n}\ninput, textarea{\n    font-size: 16px !important;\n}\n\n.s-la-widget .form-group {\n    margin-bottom: 20px;\n}\n\n.s-la-widget .input-sm {\n    height: auto;\n    padding: 6px 12px;\n    font-size: 16px;\n    line-height: 1.5;\n    border-radius: 3px;\n}\n\n.s-la-widget select.input-sm {\n    height: auto;\n}\n\ntextarea#client_question {\n    min-height: 100px;\n}\n\n#widget_base{\nmax-height: 564px;\n}\n\n.s-la-widget-embed{\nborder: 0px;\npadding: 0px;\n}\n\n.s-la-searchform-button {\nbackground-color: #fdd023 !important;\nfont-weight: bold !important;\ncolor: #474747 !important;\nborder: 1px solid #ccc !important;\n}\n\n.s-la-widget {\nbackground-color: transparent;\n}\n\n.s-la-widget label {\n    text-transform: uppercase;\n    font-size: 12px;\n    font-weight: 700;\n    letter-spacing: 2px;\n    color: white;    \n}\n\n.s-la-widget .btn-chat {\n    padding: 10px 0px;\n    border: 1px solid rgba(203, 203, 203, 0.25);\n    text-transform: uppercase;\n    font-size: 13px;\n    letter-spacing: 3px;\n    background: #fdd023;\n    color: black;\n}\n\n.s-la-widget input, .s-la-widget select.form-select, .s-la-widget textarea.form-control {\n    background: transparent;\n    border: 1px solid #434343 !important;\n    color: white;\n    background-color: transparent;\n    box-shadow: none;\n    border-radius: 2px;\n}\n\n.s-la-widget select.form-select option{\n    background: #232323;\n}\n\n.s-la-widget .btn-chat:hover, .s-la-widget .btn-chat:active{\n    color: white;\n    background-color: transparent;\n    border-color: #fdd023;\n    box-shadow: none;\n}\n\n.chatList li.nav-item button.active {\n    padding: 0px 0px 10px 0px;\n    width: 100%;\n    background: transparent;\n    border: 0px;\n    color: white;\n    text-transform: uppercase;\n    letter-spacing: 6px;\n    font-weight: 100;\n    font-size: 20px;\n    margin-bottom: 10px;\n}\n\n.s-la-widget button{\n    border-radius: 2px;\n}\n\n\n\n@media (min-width: 500px) {\nbutton.btn-chat.btn.btn-xs.btn-fullWidth {\n  font-size: 17.5px;\n  letter-spacing: 2.5px;\n  margin-top: 15px;\n}\n}","color_backg":"","color_head":"","color_btn":"","color_border":"","error_off":"Sorry it doesn't appear any librarians are online... Please try again later.","wait":"A staff member will connect shortly!  Note: Harassment of chat operators will not be tolerated. The Libraries Virtual Help Desk operates according to a Policy of Mutual Respect. ","widget_type":2,"skip_login":false,"nologin_message":"Type your question in the box below and press Enter to start chatting.","autoload_time":10,"autoload_head":"Need help accessing library materials and services? LSU Libraries is available to chat during main library operating hours.","autoload_text":"Clicking \"No Thanks\" will dismiss the chat widget for this browser session.","autoload_yes":"Chat Now","autoload_no":"No Thanks","autoload_default":true,"autoload_image":"","autoload_name":"","missedchat_time":"30","missedchat_message":"We apologize for the delay. We are currently receiving a high volume of chat messages. Don't want to wait?","missedchat_link":"Submit your question.","error_link":"Submit your question.","away_message":"Chat is online but the operator is temporarily away.","away_link":"Submit your question.","reload_button":"Recheck Status","valid_form_q":"Please enter your question.","valid_form_n":"Please enter your name.","valid_form_c":"Please enter your email address.","fbwidget":false,"autopop":false,"contact_request":true,"contact_required":true,"contact_request_msg":"To help us be able to follow up with you, please enter an email address.","followup_enabled":true,"followup_msg":"If you wish to be followed up with via email, submit a message below to create a new support ticket.","cal_offline":false,"cal_autoload":false,"cal_text":"Schedule a Meeting","cal_url":"","translation":{"ch_comment_success":"Thanks for commenting!","ch_comment_error":"Sorry, it failed to submit","ch_file_error":"Upload failed. Please try again.","ch_connect_lost":"Connection lost: reconnecting...","ch_connect_regained":"Connection re-established.","ch_reconnect_chat":"Reconnected to existing conversation.","ch_message_place":"Type your message here...","ch_float_show":"Open chat","ch_float_hide":"Minimize chat","ch_op_left":" has left the chat","ch_op_typing":" is typing...","ch_op_join":" has joined the chat","ch_op_away":" has temporarily disconnected","ch_op_back":" has reconnected","ch_include_comment":"Please include comment text.","ch_status_connecting":"Connecting...","ch_status_connected":"Connected","ch_status_disconnected":"Disconnected","ch_ticket_created":"Ticket created","ch_ticket_success":"Ticket success","ch_btn_end":"End Chat","ch_btn_popout":"Pop out chat box","ch_contact_info_saved":"Contact information saved.","ch_message_label":"Your message","ch_sound_off":"Sound is Off (click to toggle)","ch_sound_on":"Sound is On (click to toggle)","ch_status_label":"Online status","ch_transcript_form_button":"Email Transcript","ch_transcript_form_email":"Email","ch_transcript_formintro":"To receive this transcript via email, enter your email address below. The field can accept only one email address.","ch_transcript_success":"Success, the transcript has been emailed to %s.","ch_user_pronoun":"You","Ch_ChatIntro":"This is the chat transcript from %1$s (%2$s) on %3$s:","Ch_ChatSub":"Your recent chat transcript","required":"Required","ch_skiplink":"Skip to Chat Message Input","ch_skiplink_back":"Go to chat header actions","ch_message_unsendable":"Sorry, you've been temporarily disconnected. Please wait and try again.","ch_connect_error":"Sorry, it looks like you're having a connection issue.","ch_view_faq":"View full answer","ch_see_more":"See more results","ch_file_list":"Selected Files","ch_validate_email":"Invalid email address. Please provide a valid email address.","ch_botticket_form":"Click here to submit a ticket:","ch_file_toolarge":"Total file size is too large. Trying uploading smaller or fewer files.","ch_file_nofiles":"No files found to upload.","ch_thanks":"Thank you.","ch_contact_info_not_saved":"An error occurred and we were not able to save your contact information.","ch_required_field":"You must choose or enter an answer.","ch_btn_close":"Close Chat","ch_pasted_img_toolarge":"Image size is too large. Try pasting a smaller image.","ch_remove":"Remove","ch_pasted_img_count":"Only one image can be pasted in each message","new_window_link":"Opens in new window","ch_captcha_prompt":"Please confirm you are not a robot to start your chat.","ch_captcha_required":"Please confirm you are not a robot."},"defaultProfile":"https:\/\/d1vbcbna54tygs.cloudfront.net\/data\/libchat\/profile_default.svg","dataNotice":"","greetingLocal":"","greetingCoop":"","timedFallback":0,"authUrl":"","authText":"","authButton":"","isAuthValidated":true,"user1":{"name":"User Status ","id":1,"show":true,"required":false,"type":"l","val":["Undergraduate"," Graduate"," Faculty"," Staff"," Not affiliated with LSU-Baton Rouge"]},"user2":{"name":"","id":2,"show":true,"required":false,"type":"t","val":[]},"user3":{"name":"","id":3,"show":true,"required":false,"type":"t","val":[]},"domain":"https:\/\/askus.lib.lsu.edu","onlineRules":[{"u":0,"d":[7071],"c":""},{"u":0,"d":[7372],"c":""}],"unit_id":0,"auth_id":0,"flow_id":"","survey_uuid":"","referer":"","referer_title":"","question_text":"","use_captcha":false,"la_search_box":""};
+
+            /**
+             * Department info so we can match IDs to department data.
+             */
+            var departments = {"8344":{"id":8344,"name":"Development","image":"https:\/\/d1vbcbna54tygs.cloudfront.net\/data\/libchat\/profile_default.svg","color":""},"7387":{"id":7387,"name":"Interlibrary Loan Services","image":"https:\/\/d1vbcbna54tygs.cloudfront.net\/data\/libchat\/profile_default.svg","color":""},"7372":{"id":7372,"name":"Research Librarians","image":"https:\/\/d1vbcbna54tygs.cloudfront.net\/data\/libchat\/profile_default.svg","color":"#5c0759"},"7071":{"id":7071,"name":"Virtual Help Desk","image":"https:\/\/d1vbcbna54tygs.cloudfront.net\/data\/libchat\/profile_default.svg","color":""}};
+
+            const flowdata = {};
+
+            try {
+                $(() => {
+                window.initWidget({
+                    settings,
+                    sessionData,
+                    cascadeServer,
+                    socketIoUrl,
+                    departments,
+                    flowdata,
+                    altCascadeServer
+                });
+                if (window.self === window.top) {
+                    document.querySelector('.widget_base')?.setAttribute('role', 'main');
+                }
+            });
+            } catch (e) {
+                console.log('Fatal error in init:' + e.message);
+            }
+        </script>
+    
+
+</body></html>
