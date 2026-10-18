@@ -230,6 +230,7 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['page_title'] = NULL;
   $variables['toc_home_id'] = NULL;
   $variables['toc_map_id'] = NULL;
+  $variables['lead_breadcrumb'] = NULL;
   $variables['map_only'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
@@ -413,6 +414,13 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
     $ids = PalefireHooks::heroTocIds($host);
     $variables['toc_home_id'] = $ids['home'] ?? NULL;
     $variables['toc_map_id'] = $ids['map'] ?? NULL;
+    // The breadcrumb at the top of the lead panel (PalefireHooks::
+    // crumbInLanding(); page.html.twig then leaves the head's out). Built by
+    // the same service as the System Breadcrumb block, so the trail and its
+    // template are the same.
+    if (PalefireHooks::crumbInLanding($host)) {
+      $variables['lead_breadcrumb'] = \Drupal::service('breadcrumb')->build(\Drupal::routeMatch())->toRenderable();
+    }
   }
 
   $value = static function (string $name) use ($host): string {

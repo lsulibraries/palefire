@@ -605,6 +605,43 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: breadcrumb and video button inside the lead; map heading lower, summary smaller (2026-10-18)
+
+- **Top row in the lead panel:** on a Landing hero with its lead panel,
+  the breadcrumb and the background video button now share a row at the
+  top of the panel, instead of floating over the video above it.
+  - The breadcrumb is on the left, lined up with the title. The button is
+    at the far end, on the panel's padding.
+  - The breadcrumb is built by the same service as the System Breadcrumb
+    block, so it has the same trail and template.
+  - `PalefireHooks::crumbInLanding()` decides when this applies, and
+    `page.html.twig` then leaves out the head's breadcrumb. The head was
+    otherwise empty (the `<h1>` is in the lead), so it is skipped
+    altogether.
+  - Inside the panel the breadcrumb has no glass strip of its own.
+  - `landing-video.js` only positions the button when the head has a
+    breadcrumb, so here it stays in the row.
+  - The panel starts 68px higher, and still ends on screen at 1333×767
+    (735 of 767).
+- **Map heading lower:** the map now stops 2.5–4.5rem under the header,
+  not 1.5–2.5rem. At 1333 that is about 67px, which was 40.
+- **Map summary smaller:**
+  - in the drawing's corner: 17–22px, line height 1.4 (it was up to 32px);
+  - elsewhere: 18px.
+  - Your Hill history text runs 6 lines at 1333 and ends at 16.4cqi,
+    clear of the upper Gallery at 19cqi. A hit test found no room shapes
+    under it.
+- **Phones (320px):** the breadcrumb wraps beside the button, and nothing
+  scrolls sideways.
+
+Checked on /v2/special with the new CSS and markup injected. The PHP is
+unlinted (no PHP on this machine).
+
+Files: `PalefireHooks.php`, `palefire.theme`, `page.html.twig`,
+`landing.html.twig`, `_landing-features.scss`, `_landing-swiss.scss`,
+`_landing-hero.scss` and `_building-map.scss`. Production: `git pull`,
+then `drush cr`.
+
 ### Building map: Intro is the summary, the building's description sits above the legend (2026-10-18)
 
 The map's two texts now have fixed roles. Before, the building's

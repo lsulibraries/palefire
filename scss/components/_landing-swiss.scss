@@ -142,7 +142,8 @@
     > .pf-landing__visit {
       margin-top: var(--pf-landing-gap);
       scroll-snap-align: start;
-      scroll-margin-top: clamp(1.5rem, 3vw, 2.5rem);
+      // Where the map stops under the header: room above its heading.
+      scroll-margin-top: clamp(2.5rem, 5vw, 4.5rem);
     }
   }
 }
@@ -280,7 +281,9 @@
 // (landing-video.js centres the button on the strip and sets the edge), so
 // both line up with the panel. (They used to reach .75rem past it, so the
 // breadcrumb's text kept the content edge instead.)
-.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-landing.has-bg-video) .pf-breadcrumb--modular .breadcrumb {
+// Not inside the lead panel (.pf-breadcrumb--lead, _landing-features.scss),
+// which is glass already.
+.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-landing.has-bg-video) .pf-breadcrumb--modular:not(.pf-breadcrumb--lead) .breadcrumb {
   width: fit-content;
   min-height: 2.25rem;
   align-items: center;

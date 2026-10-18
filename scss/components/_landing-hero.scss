@@ -240,7 +240,7 @@ $pf-hero-media-wash: .8 !default;
 //   across, from 3cqi down. Seminar Space starts at 65% and the upper
 //   Gallery's top corner at 48% across, 19cqi down; under it the corner
 //   narrows to 30% across until Oral History, 31cqi down. A summary much
-//   past four lines at this size would reach the Gallery: keep it short.
+//   past seven lines at this size would reach the Gallery: keep it short.
 // The note (the building's description) is in the legend, not here.
 // Nothing is drawn there, and the text stays above the drawing (z-index), so
 // it can be selected.
@@ -259,10 +259,10 @@ $pf-hero-media-wash: .8 !default;
 
     .pf-map__summary {
       margin: 0;
-      font-size: clamp(1.375rem, .5rem + 1.5cqi, 2rem);
+      font-size: clamp(1.0625rem, .375rem + 1.1cqi, 1.375rem); // was up to 2rem
       font-weight: 400;
       letter-spacing: -.015em;
-      line-height: 1.25;
+      line-height: 1.4;
       text-wrap: pretty;
     }
   }

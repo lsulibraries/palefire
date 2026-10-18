@@ -95,7 +95,9 @@
        It sits beside .pf-landing__media, not inside it: the media layer is
        position: fixed with negative insets, so a button inside it was
        placed against the viewport and pushed off the right edge by the
-       section padding (_landing.scss). #}
+       section padding (_landing.scss). With the breadcrumb in the lead
+       (lead_breadcrumb) it moves into the lead's top row instead. #}
+    {% set video_toggle %}
     <button type="button" class="pf-landing__bg-toggle" data-landing-video-toggle data-state="playing">
       <span class="pf-landing__bg-toggle-progress" aria-hidden="true"></span>
       <svg class="pf-landing__bg-toggle-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -104,6 +106,10 @@
       </svg>
       <span class="pf-landing__bg-toggle-label" data-landing-video-label>{{ 'Pause background video'|t }}</span>
     </button>
+    {% endset %}
+    {% if not (show_lead and lead_breadcrumb) %}
+      {{ video_toggle }}
+    {% endif %}
   {% endif %}
 
   {% if not show_lead %}
@@ -129,6 +135,16 @@
     {% set search_placeholder = landing.placeholder|default('Search books, articles, databases, guides and more'|t) %}
   {% endif %}
   <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+    {# Top row: the breadcrumb, and the background video button at the far
+       end (PalefireHooks::crumbInLanding(); page.html.twig leaves the
+       head's breadcrumb out). Same markup and classes as the head's, so
+       its type and link styles carry over (_landing-features.scss). #}
+    {% if lead_breadcrumb %}
+      <div class="pf-landing__bar">
+        <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
+        {{ video_toggle }}
+      </div>
+    {% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title">{{ page_title }}</h1>
     {% endif %}

@@ -290,7 +290,7 @@
   grid-template-areas: "head stage" "type stage" "aside stage";
 }
 .pf-map__type { grid-area: type; min-width: 0; margin-bottom: 1.5rem; }
-.pf-map__summary { margin: 0 0 1rem; color: var(--pf-section-fg, inherit); font-size: 1.25rem; line-height: 1.45; }
+.pf-map__summary { margin: 0 0 1rem; color: var(--pf-section-fg, inherit); font-size: 1.125rem; line-height: 1.5; }
 .pf-map__summary p:last-child { margin-bottom: 0; }
 @container pf-map (max-width: 57.99rem) {
   .pf-map:has(> .pf-map__type) { grid-template-rows: none; grid-template-areas: "head" "type" "stage" "aside"; }

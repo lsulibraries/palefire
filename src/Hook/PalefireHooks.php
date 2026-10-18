@@ -116,6 +116,9 @@ class PalefireHooks {
     // first section (includes/landing.html.twig); page.html.twig then
     // leaves its own <h1> out, so there is always exactly one.
     $variables['modular_title_in_landing'] = self::titleLandingUuid($node) !== NULL;
+    // A Landing hero with its lead panel prints the breadcrumb at the top of
+    // the panel instead (crumbInLanding()), so the head leaves it out.
+    $variables['modular_crumb_in_landing'] = self::crumbInLanding($node);
 
     // Guide mode: intro, owner, updated date and subjects under the <h1>.
     if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'guide') {
@@ -240,6 +243,29 @@ class PalefireHooks {
     if ($extra) {
       $variables['items'] = array_merge($extra, $variables['items'] ?? []);
     }
+  }
+
+  /**
+   * Whether the landing that opens the page prints the breadcrumb itself.
+   *
+   * TRUE for a Landing hero (landing_hero) that shows its lead panel: the
+   * breadcrumb and the video button share a row at the top of the panel
+   * (includes/landing.html.twig), and page.html.twig leaves the head's
+   * breadcrumb out. The lead is left out ("Hide lead panel" with a map), so
+   * then the head keeps it.
+   */
+  public static function crumbInLanding(NodeInterface $node): bool {
+    $uuid = self::titleLandingUuid($node);
+    if ($uuid === NULL) {
+      return FALSE;
+    }
+    $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', $uuid);
+    if (!$paragraph instanceof FieldableEntityInterface || $paragraph->bundle() !== 'landing_hero') {
+      return FALSE;
+    }
+    $map_only = self::boolValue($paragraph, 'field_bento_hide_lead')
+      && $paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty();
+    return !$map_only;
   }
 
   /**

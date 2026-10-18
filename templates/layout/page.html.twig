@@ -218,8 +218,14 @@
              and the first section snap as one screen.
              Styles: .pf-modular__head (_layout.scss). #}
           {% if is_modular_page %}
+            {# A Landing hero prints the breadcrumb at the top of its lead
+               panel instead (modular_crumb_in_landing,
+               PalefireHooks::crumbInLanding()); with the <h1> there too, the
+               head would be empty, so it is left out. #}
+            {% set head_crumb = page.breadcrumb and not modular_crumb_in_landing %}
+            {% if head_crumb or (node.label and not modular_title_in_landing) or guide_head %}
             <header class="pf-modular__head">
-              {% if page.breadcrumb %}
+              {% if head_crumb %}
                 <div class="pf-breadcrumb pf-breadcrumb--modular">
                   {{ page.breadcrumb }}
                 </div>
@@ -237,6 +243,7 @@
                 {% include '@palefire/includes/guide-head.html.twig' with { head: guide_head } only %}
               {% endif %}
             </header>
+            {% endif %}
           {% endif %}
           {% if has_toc %}
             {# Below lg: a square list icon that opens the TOC offcanvas (lg
