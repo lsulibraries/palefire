@@ -521,6 +521,84 @@
       display: none;
     }
 
+    // Search pairs with the Menu button: a magnifier drawn in the menu
+    // lines' 2px weight (the icon font's glyph is hidden here), and from
+    // 25rem the word, in the button's type. Narrower, the word stays
+    // visually hidden (it is the link's name).
+    [data-pf-panel-trigger="search"] {
+      gap: .625rem;
+      color: var(--bs-navbar-color);
+      font-size: .75rem;
+      font-weight: $font-weight-bold;
+      letter-spacing: .14em;
+      line-height: 1;
+      text-transform: uppercase;
+
+      &:is(:hover, :focus-visible) {
+        color: var(--bs-navbar-hover-color);
+      }
+
+      .pf-icon {
+        position: relative;
+        flex: none;
+        width: 1.125rem;
+        height: 1.125rem;
+
+        svg {
+          display: none;
+        }
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+        }
+
+        // The lens.
+        &::before {
+          inset: 0 auto auto 0;
+          width: .8125rem;
+          height: .8125rem;
+          border: 2px solid currentColor;
+          border-radius: 50%;
+        }
+
+        // The handle, off the lens at 45 degrees.
+        &::after {
+          right: 0;
+          bottom: 0;
+          width: 2px;
+          height: .5rem;
+          background-color: currentColor;
+          transform: translate(-.15rem, .05rem) rotate(-45deg);
+          transform-origin: 50% 100%;
+        }
+      }
+
+      // As specific as the tooltip's hover rule (and later), so hover and
+      // focus leave the word as it is; outline: the high-contrast setting
+      // frames the tooltip (_a11y-settings.scss).
+      @media (min-width: 25rem) {
+        &.pf-utility-nav__link .pf-utility-nav__label {
+          position: static;
+          width: auto;
+          height: auto;
+          margin: 0;
+          padding: 0;
+          overflow: visible;
+          clip-path: none;
+          color: inherit;
+          font-size: inherit;
+          line-height: inherit;
+          letter-spacing: inherit;
+          background: none;
+          border-radius: 0;
+          outline: 0;
+          transform: none;
+        }
+      }
+    }
+
     // The bar's height doesn't change when it turns compact on scroll here,
     // so the two targets never shrink.
     &--compact {

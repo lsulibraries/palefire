@@ -604,6 +604,24 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Breadcrumb caps centred; Search pairs with Menu on phones (2026-10-18)
+
+- **Breadcrumb:** the caps sat 1px above the centre of the glass strip.
+  The 2px under the "Home" link for its gold underline pushed the line
+  up, and the current page copied it. The link now takes that room back
+  with a negative margin, so the underline hangs into the strip's
+  padding, and the current page's 2px is gone. Measured: the caps' centre
+  is the strip's centre.
+- **Search on phones and tablets (below lg):** the bare, thin magnifier
+  read as unfinished next to the two-line "Menu" button. It is now drawn
+  in the menu lines' 2px weight (CSS, replacing the icon-font glyph), with
+  the menu's spacing and colours. From 25rem (400px) it carries the word
+  SEARCH in the button's type. Narrower, there is no room beside the
+  logo, so the word stays visually hidden; it is the link's name either
+  way. Desktop keeps its icon and tooltip.
+
+Files: `_layout.scss` and `_header.scss`.
+
 ### Building map on phones: marks grow with the map; entrance arrow; hint icon (2026-10-18)
 
 - **Grow with the map:** the room numbers, restroom and elevator icons,

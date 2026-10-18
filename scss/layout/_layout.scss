@@ -109,7 +109,10 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     color: inherit;
     text-decoration: none;
     background: linear-gradient(var(--pf-toc-accent), var(--pf-toc-accent)) no-repeat 0 100% / 0 2px;
+    // Room for the underline that takes no room: the line box stays the
+    // text's own, so the caps centre in the glass strip.
     padding-block-end: 2px;
+    margin-block-end: -2px;
     transition: color $pf-hover-out ease, background-size 0.25s ease;
 
     &:hover,
@@ -133,11 +136,8 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     flex: 0 1 auto;
     color: var(--pf-toc-active);
 
-    // padding: the 2px the links keep for their underline, so both sit
-    // on the same line.
     > span {
       min-width: 0;
-      padding-block-end: 2px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
