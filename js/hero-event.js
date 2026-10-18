@@ -122,6 +122,15 @@
           box.remove();
           return;
         }
+        // On its own (no lead panel): under the building map's heading,
+        // above the drawing (grid row "event", _landing-hero.scss). Moved
+        // before the feed loads, so its space is held there.
+        const heading = box.classList.contains('pf-hero-event--solo')
+          && box.closest('.pf-bento') && box.closest('.pf-bento').querySelector('.pf-map > .pf-map__heading');
+        if (heading) {
+          heading.after(box);
+          box.classList.add('is-in-map');
+        }
         loadFeed().then((data) => {
           const next = nextEvent(data);
           // Links and images only from http(s) addresses.

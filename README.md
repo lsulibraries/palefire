@@ -604,6 +604,16 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: "Next event" card under the map heading (2026-10-17)
+
+When the hero has no lead panel but has a building map, the card now sits
+inside the map: under its heading (for example "Hill Memorial Library")
+and above the drawing. `hero-event.js` moves the card there before the
+feed loads, so its space is held in that spot. The hero's map grid then
+gains an "event" row (`head / event / stage / aside`), only while the card
+is present (`_landing-hero.scss`). A hero without a map still shows the
+card on its own above the Visit strip.
+
 ### Landing hero: "Next event" card without a lead panel (2026-10-17)
 
 The card was printed only inside the lead panel. A hero with no lead panel

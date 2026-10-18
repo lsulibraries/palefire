@@ -149,6 +149,19 @@ $pf-hero-media-wash: .8 !default;
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
+// With a building map, hero-event.js moves it under the map's heading: a
+// row of its own between the heading and the drawing (only while the card
+// is there, so no empty gap is left when it is removed).
+.pf-bento--hero .pf-map:has(> .pf-hero-event) {
+  grid-template-areas: "head" "event" "stage" "aside";
+}
+
+.pf-hero-event.is-in-map {
+  grid-area: event;
+  justify-self: start;
+  width: 100%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .pf-hero-event__card {
     animation: pf-accordion-in $pf-menu-fade ease both;
