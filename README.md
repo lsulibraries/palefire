@@ -605,6 +605,43 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing: lead fills the first screen, the page snaps to the map (2026-10-18)
+
+From md (768px) up, a landing with a lead panel and a building map
+(`.pf-landing--lead-screen`) opens on the lead alone. The map starts
+exactly at the fold, and one scroll step takes the page to it.
+
+- **Lead height:** the screen minus the header, breadcrumb, section
+  padding and the gap to the map (`--pf-landing-gap`, the map's top
+  margin, now set here). It is a `min-height`, so long text still grows
+  the panel. The title stays at the top and the last block (Next event,
+  search) moves to the bottom, like a poster.
+- **Snap:** down from the lead (wheel, PageDown, Space, ArrowDown) glides
+  to the map, which stops 1.5–2.5rem under the header. Up from the map's
+  top glides back to the top of the page. Scrolling inside the map stays
+  free. `js/landing-snap.js` (library `palefire/landing-snap`), attached
+  only by this landing.
+- **Why JS:** CSS snapping alone still traps the page. Tested again in
+  Chromium: with mandatory snapping, every wheel step goes back to the top.
+  With proximity, a step stops 85px down and never reaches the map. The
+  map keeps a CSS snap point, which catches scrollbar drags.
+- The header turns compact on the way down, which moves the snap point by
+  38px, so the script follows the new point instead of stopping short.
+  Wheel events during the glide, including trackpad inertia, are
+  swallowed, so one gesture moves one step.
+- **Left to the browser:** touch, below md, a lead taller than the window,
+  and scrolling inside drawers, menus or form fields. The glide is
+  instant under reduced motion (the OS setting or Settings → Reduce
+  motion).
+
+Tested on /v2/special (the new CSS and JS injected) at 1440×900, 1024×768
+and 768×1024, where the map starts at the fold. 320px is unchanged, and
+nothing scrolls sideways at any width.
+
+Files: `_landing-swiss.scss`, `landing.html.twig`, `js/landing-snap.js`
+and `palefire.libraries.yml`. Production: `git pull`, then `drush cr` (new
+library).
+
 ### Tile showcase: cards animate in on scroll, as on the concept page (2026-10-18)
 
 The Tile showcase cards now animate in the way the Origami concept page's

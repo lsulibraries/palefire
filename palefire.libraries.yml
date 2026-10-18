@@ -179,6 +179,14 @@ tile-reveal:
     - core/drupal
     - core/once
 
+# Landing with a lead panel and a map: the page snaps between the two (md
+# and up). Attached by includes/landing.html.twig.
+landing-snap:
+  js:
+    js/landing-snap.js: {}
+  dependencies:
+    - core/drupal
+
 # Landing hero: "Next event" card from the events carousel's feed. Attached
 # by includes/landing.html.twig only for the landing hero.
 hero-event:

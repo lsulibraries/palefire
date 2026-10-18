@@ -8,12 +8,9 @@
 // underline. One accent: LSU purple on light sections (11:1 on white, also
 // the focus ring there: gold was 1.4:1), the TOC gold on dark ones.
 //
-// Also: on light sections the map is held back until it is in view.
-//
-// No scroll-snap point at the map: tested in Chromium with wheel input, a
-// snap point there (with the section's own snap area removed so it can take
-// effect) trapped the page at the top. Each wheel step snaps back to the
-// nearest point, and the map is about a screen away.
+// Also: on light sections the map is held back until it is in view, and
+// from md up the lead panel fills the first screen and the page snaps
+// between it and the map (see "Lead fills the first screen" below).
 //
 // Imported after _visit.scss, so these rules follow the ones they adjust.
 // =========================================================================
@@ -109,6 +106,43 @@
   font-weight: 500;
   letter-spacing: -.03em;
   line-height: 1;
+}
+
+// Lead fills the first screen (md and up), so the map starts at the fold,
+// and the page snaps between the two: a scroll down from the lead lands on
+// the map, under the header; a scroll up from there lands back on the top.
+// .pf-landing--lead-screen: a lead panel and a map (landing.html.twig).
+// The lead's height is the screen minus what is above it (header,
+// breadcrumb, section padding) and the gap to the map; the gap is the
+// map's own top margin (_building-map.scss), kept in step here. Its
+// content stays at the top, the last block (Next event, search) at the
+// bottom. min-height, so a long intro or text resize still grows it.
+//
+// The snapping is landing-snap.js (wheel and keys). CSS alone traps the
+// page: tested in Chromium with wheel input, each wheel step snaps back to
+// the top, since the map is a screen away. The snap point below only
+// catches a scrollbar drag or a scroll that ends near the map.
+@include media-breakpoint-up($pf-snap-breakpoint) {
+  .pf-landing--lead-screen {
+    --pf-landing-gap: clamp(2.5rem, 6vw, 4.5rem);
+
+    > .pf-landing__lead {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-above-sections, 0px) - var(--pf-section-pad-block, 0px) - var(--pf-landing-gap));
+      min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-above-sections, 0px) - var(--pf-section-pad-block, 0px) - var(--pf-landing-gap));
+
+      > :last-child:not(:first-child) {
+        margin-top: auto;
+      }
+    }
+
+    > .pf-landing__visit {
+      margin-top: var(--pf-landing-gap);
+      scroll-snap-align: start;
+      scroll-margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    }
+  }
 }
 
 // Light sections: the map is drawn for a dark backdrop (white ink), which it

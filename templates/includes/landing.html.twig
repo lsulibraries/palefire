@@ -32,7 +32,9 @@
  * Layout, top to bottom, one 1280px column: the lead panel (title, intro,
  * search) on frosted glass, the building map, then the Visit strip (hours
  * from LibCal via visit-hours.js, mini map that loads on click, Google Maps
- * link), as wide as the map's legend and drawing together.
+ * link), as wide as the map's legend and drawing together. With a lead and
+ * a map, .pf-landing--lead-screen: from md up the lead fills the first
+ * screen and the page snaps between it and the map (landing-snap.js).
  *
  * - map_only: the paragraph's "Hide search panel" box (field_bento_hide_lead)
  *   is checked and there is a map. No lead panel: the map leads the landing.
@@ -56,6 +58,12 @@
 {# Next event (landing hero only), filled in by hero-event.js from the
    events carousel's feed; removed when the page has no carousel or no
    event. In the lead panel, or on its own glass when there is none. #}
+{# Lead panel and map: the lead fills the first screen and the page snaps
+   between the two (md and up, _landing-swiss.scss, landing-snap.js). #}
+{% set lead_screen = show_lead and landing_map %}
+{% if lead_screen %}
+  {{ attach_library('palefire/landing-snap') }}
+{% endif %}
 {% if hero %}
   {{ attach_library('palefire/hero-event') }}
   {% set hero_event %}
@@ -64,7 +72,7 @@
     </div>
   {% endset %}
 {% endif %}
-<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only') }} data-pf-landing>
+<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen') }} data-pf-landing>
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}
