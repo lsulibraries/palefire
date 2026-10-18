@@ -9,6 +9,8 @@
   // passed through as plain CSS, so Sass never treats saturate() as its
   // colour function.
   --pf-glass-filter: blur(#{$pf-glass-blur}) saturate(#{$pf-glass-saturate});
+  // Soft rules ($pf-hairline, _variables.scss): this share of the line colour.
+  --pf-hairline-strength: 20%;
   --pf-focus-color: #{$pf-purple};
 }
 

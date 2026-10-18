@@ -19,7 +19,7 @@
 .pf-landing__lead {
   min-width: 0;
   padding: clamp(1.25rem, 3vw, 2.5rem);
-  border: 1px solid var(--pf-section-border, #6c757d);
+  border: 1px solid #{$pf-hairline};
   border-radius: 6px;
   color: var(--pf-section-fg, inherit);
   background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
@@ -55,6 +55,9 @@
 // --- Visit strip -----------------------------------------------------------
 .pf-visit {
   --pf-visit-line: var(--pf-section-border, #6c757d);
+  // The guides' soft hairline: the strip's frame, the hours rows and the
+  // mini map's edge. (The status dot and the map stripes keep the line.)
+  --pf-visit-rule: #{$pf-hairline};
   --pf-visit-open: #2f9e4f;
   --pf-visit-soon: #fdd023;
   --pf-visit-closed: #c8102e;
@@ -65,7 +68,7 @@
   max-width: 1280px;
   margin: clamp(1.5rem, 3vw, 2rem) auto 0;
   padding: 1.25rem 1.25rem 1.125rem;
-  border: 1px solid var(--pf-visit-line);
+  border: 1px solid var(--pf-visit-rule);
   border-radius: 6px;
   color: var(--pf-section-fg, inherit);
   background-color: var(--pf-sidebar-bg, rgba(255, 255, 255, .72));
@@ -179,7 +182,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: .125rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--pf-visit-line) 35%, transparent);
+  border-bottom: 1px solid var(--pf-visit-rule);
 }
 .pf-visit__day.is-today { font-weight: 600; }
 .pf-visit__day.is-closed .pf-visit__day-hours { color: var(--pf-toc-color, inherit); }
@@ -202,7 +205,7 @@
 .pf-visit__map {
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border: 1px solid var(--pf-visit-line);
+  border: 1px solid var(--pf-visit-rule);
   border-radius: 4px;
 }
 .pf-visit__map-load {

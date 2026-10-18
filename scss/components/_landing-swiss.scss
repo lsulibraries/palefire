@@ -21,7 +21,9 @@
 .pf-landing {
   --pf-landing-accent: #{$pf-purple};
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  --pf-landing-line: var(--pf-section-border, #6c757d);
+  // The guides' soft hairline for the lead panel and its rules. The search
+  // field re-sets the full line colour for its own border (_landing.scss).
+  --pf-landing-line: #{$pf-hairline};
 }
 
 .pf-section--theme-dark .pf-landing,
@@ -179,7 +181,7 @@
 }
 
 .pf-visit__day {
-  border-bottom-color: var(--pf-visit-line);
+  border-bottom-color: var(--pf-visit-rule);
 }
 
 // Links as labels with an accent underline, like the events fact source.

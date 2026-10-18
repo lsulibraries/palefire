@@ -89,6 +89,12 @@ html.pf-a11y-contrast .pf-hours__loc {
   background-image: none !important;
 }
 
+// Every page, swatch or not: the soft rules ($pf-hairline) at the full line
+// colour, the "brighter borders" the switch promises.
+html.pf-a11y-contrast {
+  --pf-hairline-strength: 100%;
+}
+
 html.pf-a11y-contrast:not(#{$pf-themed}) {
   --bs-secondary-color: var(--bs-emphasis-color);
 

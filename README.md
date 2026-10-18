@@ -604,6 +604,33 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Soft hairlines (the guides' look) replace the Swiss layer's solid lines (2026-10-18)
+
+The landing's Swiss layer drew its lines at the full 3:1 line colour, so
+the Visit strip's hours read as solid rules. They now use the soft
+hairline the guides use. One shared token, `$pf-hairline`
+(`_variables.scss`), is 20% of the section's line colour, the strength
+the hero already used, so it follows light and dark sections and every
+reading colour.
+
+- **Now soft:**
+  - the Visit strip's frame, hours rows and mini-map edge (a new
+    `--pf-visit-rule`; the status dot and map stripes keep the line);
+  - the lead panel's border and the rule over the search.
+- **Unchanged:**
+  - the search field keeps its 3:1 border, and so does anything whose
+    border identifies a control (WCAG 1.4.11);
+  - the events carousel already draws its rules in the reading colour's
+    soft rule tone, so it is left as it is.
+- **The hero:** its own 20% override is gone, because the default is now
+  the same.
+- **High contrast:** Settings > High contrast sets
+  `--pf-hairline-strength` to 100% on every page, so these lines go back
+  to full strength.
+
+Files: `_variables.scss`, `_base.scss`, `_a11y-settings.scss`,
+`_visit.scss`, `_landing-swiss.scss` and `_landing-hero.scss`.
+
 ### Breadcrumb caps centred; Search pairs with Menu on phones (2026-10-18)
 
 - **Breadcrumb:** the caps sat 1px above the centre of the glass strip.

@@ -239,18 +239,6 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-// Frames in the hero at 20% of the line colour: the lead panel, the hairline
-// over the next event, the event card and its thumbnail, the Visit strip
-// and its mini map. (The stripes and the map drawing keep their own
-// strength.)
-.pf-landing.pf-landing--hero {
-  --pf-landing-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 20%, transparent);
-}
-
-.pf-landing--hero :is(.pf-visit, .pf-visit__map) {
-  border-color: var(--pf-landing-line);
-}
-
 // Landing pages (field_modular_type "landing", <html data-pf-mode>): the
 // TOC is collapsed over the landing hero and the events carousel and opens
 // once the first other section reaches the activation line (html.pf-toc-in,

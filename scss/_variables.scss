@@ -44,6 +44,14 @@ $enable-smooth-scroll: true;
 // Palefire settings.
 $pf-display-weight:  600;  // Page <h1> and map tooltip titles (800 draws near Black in system-ui).
 $pf-content-max:     1280px; // Landing search form + building map cap; the page head follows it.
+
+// Hairline: the soft rule the guides use, for lines that only separate or
+// frame (rows, rules, panel edges). A share of the section's line colour
+// (--pf-section-border, 3:1), so it follows light and dark sections and
+// every reading colour; --pf-hairline-strength (20%, _base.scss) goes to
+// 100% under Settings > High contrast. Control borders that identify a
+// control keep --pf-section-border (WCAG 1.4.11).
+$pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
 $pf-fade-duration:   .45s; // Page fade-in duration.
 $pf-swup-duration:   .25s; // Swup page-to-page cross-fade (each direction).
