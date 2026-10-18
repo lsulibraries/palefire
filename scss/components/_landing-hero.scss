@@ -2,13 +2,13 @@
 // search form, .pf-bento--hero. Everything else comes from the bento's
 // styles (_bento-search, _building-map, _visit, _bento-swiss).
 
-// The video keeps most of its colour: a light tint of the reading swatch's
-// page colour, and the same tint while the map is in view or leads (no
+// The video sits under a strong wash of the reading swatch's page colour
+// (80%), and the same wash while the map is in view or leads (no
 // darkening). Every bento wash reads these two tokens (_bento-search,
 // _building-map, _visit, _bento-swiss), so setting them here covers all
 // of them. High contrast still puts its heavy wash over it
 // (_a11y-settings.scss). Text sits on the glass panels, not on the video.
-$pf-hero-media-wash: .3 !default;
+$pf-hero-media-wash: .8 !default;
 
 .pf-bento--hero {
   --pf-media-wash: rgba(var(--pf-g-bg-rgb), #{$pf-hero-media-wash});

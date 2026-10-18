@@ -604,12 +604,12 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
-### Landing hero: a light tint of the reading colour (2026-10-17)
+### Landing hero: an 80% wash of the reading colour (2026-10-17)
 
-The hero's video now gets a light wash: 30% of the reading swatch's page
-colour (`$pf-hero-media-wash`), for example a faint purple on Twilight. The
-wash is the same while the map is in view or leading, so the video never
-darkens. Bento search keeps 60%, and 90% at the map. The hero sets the two
+The hero's video now gets a wash of 80% of the reading swatch's page
+colour (`$pf-hero-media-wash`), for example a deep purple on Twilight. The
+wash stays the same while the map is in view or leading (first set at 30%,
+raised to 80% the same day). Bento search keeps 60%, and 90% at the map. The hero sets the two
 wash tokens (`--pf-media-wash`, `--pf-media-wash-map`) that every bento
 wash reads, so High contrast still puts its heavy wash on top
 (`_landing-hero.scss`).
