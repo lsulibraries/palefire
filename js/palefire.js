@@ -125,6 +125,13 @@
     return compactBar.height;
   };
 
+  // For scripts that scroll past the compact point and need to know where
+  // the header will end (landing-snap.js), before it has shrunk.
+  Drupal.palefireCompactHeaderHeight = () => {
+    const header = document.querySelector('.pf-header');
+    return header ? compactBarHeight(header) : 0;
+  };
+
   const updateCompactAfter = () => {
     compactAfterFrame = 0;
     const header = document.querySelector('.pf-header');

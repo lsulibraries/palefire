@@ -25,7 +25,7 @@
   'use strict';
 
   const QUIET = 200; // ms without wheel events that ends a gesture
-  const DONE = 1000; // ms fallback where there is no scrollend event
+  const DONE = 1500; // ms fallback where there is no scrollend event
   const wide = window.matchMedia('(min-width: 768px)'); // $pf-snap-breakpoint
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
@@ -54,7 +54,12 @@
     if (lead.getBoundingClientRect().height > window.innerHeight) {
       return null;
     }
-    const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    // The header is compact at the map, so aim under the compact bar from
+    // the start. Aiming under the current (full) header and following the
+    // header as it shrank restarted the glide on every frame of its
+    // transition, and the page stalled for about .2s on the way down.
+    const pad = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight())
+      || parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
     return { map: Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin) };
   }
@@ -89,32 +94,26 @@
     const behavior = reduceMotion() ? 'instant' : 'smooth';
     moving = true;
     gesture = true;
-    // The header turns compact on the way down, which moves the map's snap
-    // point (scroll-padding-top is the header height): follow it, so the
-    // page doesn't stop short and need a second step.
-    const follow = () => {
-      const now = top && stops();
-      if (now && Math.abs(now.map - top) > 1) {
-        top = now.map;
-        window.scrollTo({ top, behavior });
-      }
-    };
     let finished = false;
-    const finish = () => {
+    // ended: the page really stopped (scrollend), not the fallback timer.
+    const finish = (ended) => {
       if (finished) {
         return;
       }
       finished = true;
-      follow();
-      window.removeEventListener('scroll', follow);
+      // One correction at most, if the page moved under the glide (a late
+      // font or image): never mid-flight, which restarts it from rest.
+      const now = ended && top && stops();
+      if (now && Math.abs(now.map - window.scrollY) > 2) {
+        window.scrollTo({ top: now.map, behavior });
+      }
       moving = false;
       quiet();
     };
-    window.addEventListener('scroll', follow, { passive: true });
     if ('onscrollend' in window) {
-      window.addEventListener('scrollend', finish, { once: true });
+      window.addEventListener('scrollend', () => finish(true), { once: true });
     }
-    setTimeout(finish, DONE);
+    setTimeout(() => finish(false), DONE);
     window.scrollTo({ top, behavior });
     return true;
   }

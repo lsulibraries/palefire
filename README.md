@@ -605,6 +605,35 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing snap: no more stall on the way to the map (2026-10-18)
+
+The glide from the lead to the map stuck for about .2s, about 130px
+down, then set off again.
+
+- **Cause:** the header turns compact at that point and shrinks from 87
+  to 49px over about .2s. That moves the map's stop point.
+  `landing-snap.js` followed the moving point by calling the smooth
+  scroll again on every frame of the header's transition (12 calls,
+  recorded on /v2/special). Each call restarts the glide from rest, so
+  the page stood still until the header settled.
+- **Fix:** the glide now aims under the compact header from the start, so
+  it is one smooth scroll with no retargeting.
+  - `palefire.js` exposes the compact height it already measures on a
+    hidden copy of the header, as `Drupal.palefireCompactHeaderHeight()`.
+  - If the page moved under the glide (a late font or image), there is
+    one correction after it ends, never during it.
+  - The fallback timer for browsers without `scrollend` (now 1.5s) never
+    corrects, so it can't restart a glide that is still running.
+- **Checked** on /v2/special, with the new code injected over the live
+  script, at 1440×900: down is one call to 811 (was 12), with no frame
+  where the page stands still. It ends with the map heading at the same
+  spot, under the compact header. Up is one call to 0.
+- **Not confirmed:** one recording on the way up showed a single 130ms
+  frame gap, which didn't come back in later runs. The browser pane was
+  hidden, which throttles frames, so frame timing there isn't reliable.
+
+Files: `js/landing-snap.js` and `js/palefire.js`.
+
 ### Visit strip rework; TOC hide/show button is back; landing head lines up (2026-10-18)
 
 **Visit strip** (`landing.html.twig`, `_visit.scss`):
