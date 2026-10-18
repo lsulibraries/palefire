@@ -604,6 +604,23 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing pages: the TOC collapses instead of fading (2026-10-17)
+
+On landing pages the TOC no longer just turns transparent over the hero
+and the events carousel. From lg up it collapses the way the old hide/show
+button did (removed in `5865c10`), but driven by scroll instead of a button:
+- the column closes, so the hero and backgrounds run edge to edge;
+- the sidebar slides out to the left (to the right in RTL), over .3s
+  ease-in-out;
+- its links leave the tab order once it has gone.
+
+It opens again at the first other section. Opening narrows the content, so
+the sections above get taller and push that section down. To stop the TOC
+flipping back and forth, it only collapses again once that section is 20%
+of the screen back above the line (`REVEAL_SLACK` in `modular-toc.js`).
+Reduced motion switches it without animating. Files: `_landing-hero.scss`
+and `modular-toc.js`.
+
 ### Landing pages: TOC waits past the hero; hero borders at 20% (2026-10-17)
 
 - **TOC on landing pages** (`field_modular_type` = `landing`, so

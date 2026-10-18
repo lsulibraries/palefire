@@ -252,20 +252,46 @@ $pf-hero-media-wash: .8 !default;
 }
 
 // Landing pages (field_modular_type "landing", <html data-pf-mode>): the
-// TOC stays out of sight over the landing hero and the events carousel and
-// fades in once the first other section reaches the activation line
-// (html.pf-toc-in, modular-toc.js). lg and up the sidebar's column stays
-// (nothing moves) and the video shows through it; below lg the list button
-// that opens the TOC drawer waits the same way.
+// TOC is collapsed over the landing hero and the events carousel and opens
+// once the first other section reaches the activation line (html.pf-toc-in,
+// modular-toc.js). lg and up this is the old hide/show button's collapse
+// (removed 2026-10-16, 5865c10), driven by scroll instead of a button: the
+// column closes so the content and backgrounds run edge to edge, and the
+// sidebar slides out whole like Bootstrap's .offcanvas-start (.3s
+// ease-in-out). visibility takes its links out of the tab order once it
+// has gone. Below lg the list button that opens the TOC drawer waits the
+// same way.
 @include media-breakpoint-up(lg) {
+  html[data-pf-mode="landing"] .pf-modular--has-toc {
+    transition:
+      grid-template-columns .3s ease-in-out,
+      --pf-bleed-inline-start .3s ease-in-out;
+  }
+
+  html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-modular--has-toc {
+    grid-template-columns: 0px minmax(0, 1fr);
+    --pf-bleed-inline-start: 0px;
+  }
+
   html[data-pf-mode="landing"] .pf-sidebar.pf-modular__sidebar {
-    transition: background-color .3s ease, opacity .5s ease, visibility 0s;
+    transition:
+      background-color .3s ease,
+      transform .3s ease-in-out,
+      visibility 0s;
   }
 
   html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-sidebar.pf-modular__sidebar {
     visibility: hidden;
-    opacity: 0;
-    transition: background-color .3s ease, opacity .5s ease, visibility 0s .5s;
+    pointer-events: none;
+    transform: translateX(-100%);
+    transition:
+      background-color .3s ease,
+      transform .3s ease-in-out,
+      visibility 0s linear .3s;
+  }
+
+  html[dir="rtl"][data-pf-mode="landing"]:not(.pf-toc-in) .pf-sidebar.pf-modular__sidebar {
+    transform: translateX(100%);
   }
 }
 
@@ -281,7 +307,7 @@ html[data-pf-mode="landing"]:not(.pf-toc-in) .pf-modular__toc-toggle {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-pf-mode="landing"] :is(.pf-sidebar.pf-modular__sidebar, .pf-modular__toc-toggle) {
+  html[data-pf-mode="landing"] :is(.pf-modular--has-toc, .pf-sidebar.pf-modular__sidebar, .pf-modular__toc-toggle) {
     transition: none !important;
   }
 }
