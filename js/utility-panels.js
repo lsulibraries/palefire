@@ -22,7 +22,7 @@
  * - Settings: saves the visitor's choices (localStorage "pf-a11y") and
  *   applies them to <html> at once. html.html.twig applies the saved
  *   copy before the first paint on every page load. Sends
- *   palefire:a11ychange (bento-video.js pauses on it).
+ *   palefire:a11ychange (landing-video.js pauses on it).
  * - Utility icon tooltips: Escape hides the one showing (WCAG 1.4.13).
  */
 ((Drupal, once) => {

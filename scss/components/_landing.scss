@@ -1,10 +1,10 @@
-.pf-bento.has-bg-video { position: relative; isolation: isolate; }
+.pf-landing.has-bg-video { position: relative; isolation: isolate; }
 // The media layer is position: fixed, so overflow can't clip it: it showed
-// through every transparent section after the bento (Events). clip-path
-// does clip fixed descendants, so the video stays put while the bento
+// through every transparent section after the landing (Events). clip-path
+// does clip fixed descendants, so the video stays put while the landing
 // scrolls past and is gone once the next section comes up. The clip is the
 // media layer's own reach: the section edges plus the top and side bleed.
-.pf-bento.has-bg-video {
+.pf-landing.has-bg-video {
   clip-path: inset(
     calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
     calc(-1 * var(--pf-section-pad-inline, 0px))
@@ -12,7 +12,7 @@
     calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
   );
 }
-[dir="rtl"] .pf-bento.has-bg-video {
+[dir="rtl"] .pf-landing.has-bg-video {
   clip-path: inset(
     calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)))
     calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)))
@@ -22,38 +22,38 @@
 }
 // The media layer bleeds like .pf-section__bg (see "Full-page backgrounds"
 // in _modular.scss): left under the TOC sidebar and, in the first section,
-// up under the top bar. The bento box sits inside .pf-section__inner's
+// up under the top bar. The landing box sits inside .pf-section__inner's
 // padding, so the layer first reaches back out by that padding to the
 // section edge. The video toggle is not in this layer any more (see
-// .pf-bento__bg-toggle below): with position: fixed its right: 1rem was
+// .pf-landing__bg-toggle below): with position: fixed its right: 1rem was
 // measured from a box that runs past the viewport by the section padding,
 // so the button was drawn off screen.
-.pf-bento__media {
+.pf-landing__media {
   position: fixed;
   inset: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px));
   inset-block-start: calc(-1 * (var(--pf-bleed-block-start, 0px) + var(--pf-section-pad-block, 0px)));
   inset-inline-start: calc(-1 * (var(--pf-bleed-inline-start, 0px) + var(--pf-section-pad-inline, 0px)));
   overflow: hidden;
 } // no z-index here
-.pf-bento__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+.pf-landing__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 // A light scrim, so the video keeps its colour; the text sits on the lead
 // panel's glass (_visit.scss), not straight on the video.
-.pf-bento__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--pf-media-wash, rgb(0 0 0 / .3)); }
-// Playlists (two or more clips): bento-video.js adds a second <video> and
+.pf-landing__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--pf-media-wash, rgb(0 0 0 / .3)); }
+// Playlists (two or more clips): landing-video.js adds a second <video> and
 // .is-buffered, and moves .is-current to whichever layer is playing. The
 // incoming clip goes on top and fades in over the outgoing one, which stays
 // fully opaque until the fade is done, so there is no dip to black between
-// clips. Keep --pf-bento-fade in step with FADE_MS in bento-video.js.
-.pf-bento__media { --pf-bento-fade: 1s; }
-.pf-bento__media.is-buffered .pf-bento__bg-video {
+// clips. Keep --pf-landing-fade in step with FADE_MS in landing-video.js.
+.pf-landing__media { --pf-landing-fade: 1s; }
+.pf-landing__media.is-buffered .pf-landing__bg-video {
   z-index: -2; opacity: 0;
-  transition: opacity 0s linear var(--pf-bento-fade), filter .8s ease, transform .8s ease;
+  transition: opacity 0s linear var(--pf-landing-fade), filter .8s ease, transform .8s ease;
 }
-.pf-bento__media.is-buffered .pf-bento__bg-video.is-current {
+.pf-landing__media.is-buffered .pf-landing__bg-video.is-current {
   z-index: -1; opacity: 1;
-  transition: opacity var(--pf-bento-fade) ease, filter .8s ease, transform .8s ease;
+  transition: opacity var(--pf-landing-fade) ease, filter .8s ease, transform .8s ease;
 }
-// Search form (paragraph--bento-search.html.twig): one field that sends
+// Search form (includes/landing.html.twig): one field that sends
 // the search to https://lib.lsu.edu/bento. Drawn like the rest of the
 // modular chrome rather than as a Bootstrap input group: a 4px-cornered
 // box with a 1px border on the sidebar's glass, a thin search glyph, and a
@@ -62,36 +62,36 @@
 // active colour on hover, and the gold accent border while the field has
 // focus. Colours are the --pf-toc-* / --pf-section-* tokens, so it follows
 // light and dark sections.
-.pf-bento__form {
-  --pf-bento-field-h: 3.5rem;
-  --pf-bento-line: var(--pf-section-border, #{$pf-grey-500}); // 3:1 or more on light and dark (WCAG 1.4.11)
+.pf-landing__form {
+  --pf-landing-field-h: 3.5rem;
+  --pf-landing-line: var(--pf-section-border, #{$pf-grey-500}); // 3:1 or more on light and dark (WCAG 1.4.11)
 }
-.pf-bento__heading { margin-bottom: 1rem; }
-.pf-bento__field {
+.pf-landing__heading { margin-bottom: 1rem; }
+.pf-landing__field {
   position: relative;
   display: flex; align-items: stretch;
-  min-height: var(--pf-bento-field-h);
-  border: 1px solid var(--pf-bento-line); border-radius: 4px;
+  min-height: var(--pf-landing-field-h);
+  border: 1px solid var(--pf-landing-line); border-radius: 4px;
   color: var(--pf-toc-color, #{$pf-grey-500});
   background-color: var(--pf-sidebar-bg, #{rgba($pf-black, .5)});
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
   transition: border-color .3s ease, box-shadow .3s ease;
 }
-.pf-bento__field:hover { border-color: var(--pf-toc-color, #{$pf-grey-500}); }
+.pf-landing__field:hover { border-color: var(--pf-toc-color, #{$pf-grey-500}); }
 // Focus shows on the whole box (the input itself draws no outline): gold
 // border plus a 1px gold ring, about 3px of accent in all.
-.pf-bento__field:focus-within {
+.pf-landing__field:focus-within {
   border-color: var(--pf-toc-accent, #{$pf-gold});
   box-shadow: 0 0 0 1px var(--pf-toc-accent, #{$pf-gold});
 }
-.pf-bento__field-icon {
+.pf-landing__field-icon {
   flex: none; align-self: center;
   width: 1.25rem; height: 1.25rem; margin-inline: 1.125rem .75rem;
   transition: color $pf-hover-out ease;
 }
-.pf-bento__field:focus-within .pf-bento__field-icon { color: var(--pf-toc-active, #{$pf-white}); transition-duration: $pf-hover-in; }
-.pf-bento__input {
+.pf-landing__field:focus-within .pf-landing__field-icon { color: var(--pf-toc-active, #{$pf-white}); transition-duration: $pf-hover-in; }
+.pf-landing__input {
   flex: 1 1 auto; min-width: 0;
   padding: .75rem .75rem .75rem 0; margin: 0;
   border: 0; border-radius: 0; outline: 0;
@@ -100,13 +100,13 @@
   background: transparent;
   -webkit-appearance: none; appearance: none;
 }
-.pf-bento__input::placeholder { color: var(--pf-toc-color, #{$pf-grey-500}); opacity: 1; }
-.pf-bento__input::-webkit-search-decoration { -webkit-appearance: none; }
-.pf-bento__input::-webkit-search-cancel-button { cursor: pointer; filter: grayscale(1); opacity: .6; }
-.pf-bento__submit {
+.pf-landing__input::placeholder { color: var(--pf-toc-color, #{$pf-grey-500}); opacity: 1; }
+.pf-landing__input::-webkit-search-decoration { -webkit-appearance: none; }
+.pf-landing__input::-webkit-search-cancel-button { cursor: pointer; filter: grayscale(1); opacity: .6; }
+.pf-landing__submit {
   flex: none; display: inline-flex; align-items: center; gap: .625rem;
   margin: 0; padding: 0 1.25rem 0 1.375rem;
-  border: 0; border-inline-start: 1px solid var(--pf-bento-line); border-radius: 0 3px 3px 0;
+  border: 0; border-inline-start: 1px solid var(--pf-landing-line); border-radius: 0 3px 3px 0;
   color: var(--pf-toc-color, #{$pf-grey-500});
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
@@ -114,22 +114,22 @@
   cursor: pointer;
   transition: color $pf-hover-out ease, background-color .3s ease;
 }
-[dir="rtl"] .pf-bento__submit { border-radius: 3px 0 0 3px; }
-.pf-bento__submit:hover,
-.pf-bento__submit:focus-visible { color: var(--pf-toc-active, #{$pf-white}); background-color: rgb(127 127 127 / .08); transition: color $pf-hover-in ease, background-color .3s ease; }
-.pf-bento__submit:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: -4px; }
-.pf-bento__submit-icon { width: 1rem; height: 1rem; transition: transform .25s ease; }
-[dir="rtl"] .pf-bento__submit-icon { transform: scaleX(-1); }
-.pf-bento__submit:hover .pf-bento__submit-icon,
-.pf-bento__submit:focus-visible .pf-bento__submit-icon { transform: translateX(3px); }
-[dir="rtl"] .pf-bento__submit:hover .pf-bento__submit-icon,
-[dir="rtl"] .pf-bento__submit:focus-visible .pf-bento__submit-icon { transform: scaleX(-1) translateX(3px); }
+[dir="rtl"] .pf-landing__submit { border-radius: 3px 0 0 3px; }
+.pf-landing__submit:hover,
+.pf-landing__submit:focus-visible { color: var(--pf-toc-active, #{$pf-white}); background-color: rgb(127 127 127 / .08); transition: color $pf-hover-in ease, background-color .3s ease; }
+.pf-landing__submit:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: -4px; }
+.pf-landing__submit-icon { width: 1rem; height: 1rem; transition: transform .25s ease; }
+[dir="rtl"] .pf-landing__submit-icon { transform: scaleX(-1); }
+.pf-landing__submit:hover .pf-landing__submit-icon,
+.pf-landing__submit:focus-visible .pf-landing__submit-icon { transform: translateX(3px); }
+[dir="rtl"] .pf-landing__submit:hover .pf-landing__submit-icon,
+[dir="rtl"] .pf-landing__submit:focus-visible .pf-landing__submit-icon { transform: scaleX(-1) translateX(3px); }
 // Phones: the button keeps only its arrow; "Search" stays for screen readers.
 @media (max-width: 479.98px) {
-  .pf-bento__field-icon { margin-inline: .875rem .5rem; }
-  .pf-bento__input { font-size: 1rem; }
-  .pf-bento__submit { padding-inline: 1rem; }
-  .pf-bento__submit-text {
+  .pf-landing__field-icon { margin-inline: .875rem .5rem; }
+  .pf-landing__input { font-size: 1rem; }
+  .pf-landing__submit { padding-inline: 1rem; }
+  .pf-landing__submit-text {
     position: absolute !important; width: 1px !important; height: 1px !important;
     overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important;
   }
@@ -144,19 +144,21 @@
 // slides out on hover or keyboard focus; touch shows just the icon, and
 // screen readers always get the label (never display: none). A thin gold
 // bar along the bottom (the TOC indicator's gold) fills as the clip plays.
-.pf-bento__bg-toggle {
+.pf-landing__bg-toggle {
   --size: 2.25rem; // the TOC toggle's size
-  // Positioned against .pf-bento (the button is the media layer's sibling,
-  // not its child). The bento box sits inside .pf-section__inner's padding,
+  // Positioned against .pf-landing (the button is the media layer's sibling,
+  // not its child). The landing box sits inside .pf-section__inner's padding,
   // so the offsets reach back out by that padding: 1rem in from the
   // section's top right corner, as before the media layer became fixed.
-  // --pf-bento-toggle-top: set by js/bento-video.js to centre the button on
-  // the breadcrumb's line when the bento is the first section (negative:
-  // the breadcrumb is above the bento).
+  // --pf-landing-toggle-top and --pf-landing-toggle-end: set by
+  // js/landing-video.js when the landing is the first section, to centre the
+  // button on the breadcrumb's line (negative: the breadcrumb is above the
+  // landing) and put its outer edge .75rem past the breadcrumb's content
+  // edge, mirroring the breadcrumb's glass strip (_landing-swiss.scss).
   position: absolute;
-  top: var(--pf-bento-toggle-top, calc(1rem - var(--pf-section-pad-block, 0px)));
-  inset-inline-end: calc(1rem - var(--pf-section-pad-inline, 0px));
-  z-index: 4; // above the bento head (positioned, z-index auto)
+  top: var(--pf-landing-toggle-top, calc(1rem - var(--pf-section-pad-block, 0px)));
+  inset-inline-end: var(--pf-landing-toggle-end, calc(1rem - var(--pf-section-pad-inline, 0px)));
+  z-index: 4; // above the landing head (positioned, z-index auto)
   display: inline-flex; align-items: center; flex-direction: row-reverse;
   min-width: var(--size); height: var(--size); padding: 0; margin: 0;
   overflow: hidden; // clips the progress bar to the corners
@@ -171,53 +173,53 @@
   cursor: pointer;
   transition: color $pf-hover-out ease, background-color .3s ease, border-color .3s ease;
 }
-.pf-bento__bg-toggle:hover,
-.pf-bento__bg-toggle:focus-visible { color: var(--pf-toc-active, #{$pf-white}); transition: color $pf-hover-in ease, background-color .3s ease, border-color .3s ease; }
-.pf-bento__bg-toggle:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: 3px; }
+.pf-landing__bg-toggle:hover,
+.pf-landing__bg-toggle:focus-visible { color: var(--pf-toc-active, #{$pf-white}); transition: color $pf-hover-in ease, background-color .3s ease, border-color .3s ease; }
+.pf-landing__bg-toggle:focus-visible { outline: 2px solid var(--pf-toc-accent, #{$pf-gold}); outline-offset: 3px; }
 
-.pf-bento__bg-toggle-progress {
+.pf-landing__bg-toggle-progress {
   position: absolute; inset-inline: 0; bottom: 0; height: 2px;
   background: var(--pf-toc-accent, #{$pf-gold});
-  transform: scaleX(var(--pf-bento-progress, 0)); transform-origin: left center;
+  transform: scaleX(var(--pf-landing-progress, 0)); transform-origin: left center;
   pointer-events: none;
   transition: transform .3s linear, opacity .25s ease;
 }
-[dir="rtl"] .pf-bento__bg-toggle-progress { transform-origin: right center; }
-.pf-bento__bg-toggle.is-rewinding .pf-bento__bg-toggle-progress { transition: none; }
-.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-progress { opacity: .55; }
+[dir="rtl"] .pf-landing__bg-toggle-progress { transform-origin: right center; }
+.pf-landing__bg-toggle.is-rewinding .pf-landing__bg-toggle-progress { transition: none; }
+.pf-landing__bg-toggle[data-state="paused"] .pf-landing__bg-toggle-progress { opacity: .55; }
 
 // The icon fills the button's square end, so the collapsed button is the
 // same square as the TOC toggle.
-.pf-bento__bg-toggle-icon {
+.pf-landing__bg-toggle-icon {
   flex: none; display: grid; width: calc(var(--size) - 2px); height: .875rem; fill: currentColor; overflow: visible;
 }
-.pf-bento__bg-toggle-pause,
-.pf-bento__bg-toggle-play { transform-box: fill-box; transform-origin: center; transition: opacity .2s ease, transform .25s ease; }
-.pf-bento__bg-toggle-play { opacity: 0; transform: scale(.6); }
-.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-pause { opacity: 0; transform: scale(.6); }
-.pf-bento__bg-toggle[data-state="paused"] .pf-bento__bg-toggle-play { opacity: 1; transform: none; }
+.pf-landing__bg-toggle-pause,
+.pf-landing__bg-toggle-play { transform-box: fill-box; transform-origin: center; transition: opacity .2s ease, transform .25s ease; }
+.pf-landing__bg-toggle-play { opacity: 0; transform: scale(.6); }
+.pf-landing__bg-toggle[data-state="paused"] .pf-landing__bg-toggle-pause { opacity: 0; transform: scale(.6); }
+.pf-landing__bg-toggle[data-state="paused"] .pf-landing__bg-toggle-play { opacity: 1; transform: none; }
 
 // Label: .875rem in from the left edge and .25rem clear of the icon's
 // square on the right (about .875rem of space to the glyph), so the text
 // never runs into the icon.
-.pf-bento__bg-toggle-label {
+.pf-landing__bg-toggle-label {
   display: block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
   padding-inline: 0;
   transition: max-width .35s ease, opacity .2s ease, padding .35s ease;
 }
-.pf-bento__bg-toggle:hover .pf-bento__bg-toggle-label,
-.pf-bento__bg-toggle:focus-visible .pf-bento__bg-toggle-label { max-width: 18rem; opacity: 1; padding-inline: .875rem .25rem; }
+.pf-landing__bg-toggle:hover .pf-landing__bg-toggle-label,
+.pf-landing__bg-toggle:focus-visible .pf-landing__bg-toggle-label { max-width: 18rem; opacity: 1; padding-inline: .875rem .25rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-bento__field, .pf-bento__field *,
-  .pf-bento__bg-toggle,
-  .pf-bento__bg-toggle *,
-  .pf-bento__bg-toggle-progress { transition: none !important; }
+  .pf-landing__field, .pf-landing__field *,
+  .pf-landing__bg-toggle,
+  .pf-landing__bg-toggle *,
+  .pf-landing__bg-toggle-progress { transition: none !important; }
 }
 @media (forced-colors: active) {
-  .pf-bento__field { border-color: CanvasText; }
-  .pf-bento__field:focus-within { outline: 2px solid Highlight; outline-offset: 2px; }
-  .pf-bento__submit { border-inline-start-color: CanvasText; color: ButtonText; }
-  .pf-bento__bg-toggle { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
-  .pf-bento__bg-toggle-progress { background: Highlight; }
+  .pf-landing__field { border-color: CanvasText; }
+  .pf-landing__field:focus-within { outline: 2px solid Highlight; outline-offset: 2px; }
+  .pf-landing__submit { border-inline-start-color: CanvasText; color: ButtonText; }
+  .pf-landing__bg-toggle { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+  .pf-landing__bg-toggle-progress { background: Highlight; }
 }

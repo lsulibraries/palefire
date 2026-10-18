@@ -1,10 +1,10 @@
 /**
  * @file
  * Hill Memorial building map: draw-on outline, hover sync, tooltips and the
- * bento background dim.
+ * landing background dim.
  *
  * Markup: paragraph--building-map.html.twig (map, legend, space list,
- * hidden tooltip sources) inside paragraph--bento-search.html.twig.
+ * hidden tooltip sources) inside includes/landing.html.twig.
  * Hovering or focusing a room, its name on the map, or its entry in the list
  * lights the room, turns its name gold and shows a tooltip built from that
  * room's .pf-map__tip-src. Rooms with a link follow it on click; rooms
@@ -459,10 +459,10 @@
       syncStick();
     }
 
-    // Bento: dim + blur the background video while the map is in view.
+    // Landing: dim + blur the background video while the map is in view.
     // Also drives the light-map section theme (see below).
-    const bento = root.closest('.pf-bento');
-    if (bento && 'IntersectionObserver' in window) {
+    const landing = root.closest('.pf-landing');
+    if (landing && 'IntersectionObserver' in window) {
       const steps = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
       // Load flash fix: a page opened at the top always starts light. The
       // observer's first report comes before fonts, the "This week" list
@@ -472,24 +472,24 @@
       // the visitor has scrolled (or the page opened already scrolled: a
       // #anchor or a restored position); then the latest state applies.
       const ARM_AT = 8; // px
-      // A map-only bento (no lead panel) opens on the map, so it is in view
+      // A map-only landing (no lead panel) opens on the map, so it is in view
       // from the start: armed at once, and the CSS already starts it dark
-      // (_bento-swiss.scss), so there is no light frame to flip from.
-      let armed = window.scrollY > ARM_AT || bento.classList.contains('pf-bento--map-only');
+      // (_landing-swiss.scss), so there is no light frame to flip from.
+      let armed = window.scrollY > ARM_AT || landing.classList.contains('pf-landing--map-only');
       let latest = false;
       const apply = (inView) => {
-        if (bento.classList.contains('is-map-in-view') === inView) return;
-        bento.classList.toggle('is-map-in-view', inView);
+        if (landing.classList.contains('is-map-in-view') === inView) return;
+        landing.classList.toggle('is-map-in-view', inView);
         // "Light, dark at the map" sections (field_section_theme = light-map):
         // the same signal turns the section and the page chrome dark, so the
         // overlay and the theme always switch together (modular-toc.js).
-        const section = bento.closest('[data-section-theme="light-map"]');
+        const section = landing.closest('[data-section-theme="light-map"]');
         if (section) {
           section.classList.toggle('is-map-dark', inView);
           if (inView) section.setAttribute('data-bs-theme', 'dark');
           else section.removeAttribute('data-bs-theme');
         }
-        document.dispatchEvent(new CustomEvent('palefire:mapview', { detail: { inView, bento, section } }));
+        document.dispatchEvent(new CustomEvent('palefire:mapview', { detail: { inView, landing, section } }));
       };
       const dim = new IntersectionObserver(([entry]) => {
         const seen = entry.intersectionRect.height;
@@ -499,8 +499,8 @@
       }, { threshold: steps });
       dim.observe(root);
       // Lets CSS hold the map back on light sections until it is in view
-      // (_bento-swiss.scss); without this script the map always shows.
-      bento.classList.add('has-map-view');
+      // (_landing-swiss.scss); without this script the map always shows.
+      landing.classList.add('has-map-view');
       const arm = new AbortController();
       if (!armed) {
         window.addEventListener('scroll', () => {
@@ -631,14 +631,14 @@
       once('pf-building-map', '[data-pf-map]', context).forEach(initMap);
     },
     detach(context, settings, trigger) {
-      // Swup swaps #swup: stop the dim observer and clear the bento state.
+      // Swup swaps #swup: stop the dim observer and clear the landing state.
       if (trigger !== 'unload') return;
       context.querySelectorAll('[data-pf-map]').forEach((root) => {
         if (root.pfMapDim) root.pfMapDim.disconnect();
         if (root.pfMapDraw) root.pfMapDraw.disconnect();
-        const bento = root.closest('.pf-bento');
-        if (bento) bento.classList.remove('is-map-in-view', 'has-map-view');
-        const section = bento ? bento.closest('[data-section-theme="light-map"]') : null;
+        const landing = root.closest('.pf-landing');
+        if (landing) landing.classList.remove('is-map-in-view', 'has-map-view');
+        const section = landing ? landing.closest('[data-section-theme="light-map"]') : null;
         if (section) {
           section.classList.remove('is-map-dark');
           section.removeAttribute('data-bs-theme');

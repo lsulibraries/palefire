@@ -35,11 +35,11 @@ class PalefireHooks {
   public const MODULAR_BUNDLE = 'modular_page';
 
   /**
-   * Paragraph types drawn as a bento: background video, the page <h1> when
+   * Paragraph types drawn as a landing: background video, the page <h1> when
    * first, building map and Visit card. landing_hero is bento_search
    * without the search form (paragraph--landing-hero.html.twig).
    */
-  public const BENTO_BUNDLES = ['bento_search', 'landing_hero'];
+  public const LANDING_BUNDLES = ['bento_search', 'landing_hero'];
 
   /**
    * Paragraph reference field on the modular content type.
@@ -102,7 +102,7 @@ class PalefireHooks {
   #[Hook('preprocess_page')]
   public function preprocessPage(array &$variables): void {
     $variables['is_modular_page'] = FALSE;
-    $variables['modular_title_in_bento'] = FALSE;
+    $variables['modular_title_in_landing'] = FALSE;
     $variables['palefire_toc'] = [];
     $variables['guide_head'] = NULL;
 
@@ -112,13 +112,13 @@ class PalefireHooks {
     }
     $variables['is_modular_page'] = TRUE;
 
-    // The bento search prints the page <h1> above its intro when it is the
-    // first section (paragraph--bento-search.html.twig); page.html.twig then
+    // The landing search prints the page <h1> above its intro when it is the
+    // first section (includes/landing.html.twig); page.html.twig then
     // leaves its own <h1> out, so there is always exactly one.
-    $variables['modular_title_in_bento'] = self::titleBentoUuid($node) !== NULL;
+    $variables['modular_title_in_landing'] = self::titleLandingUuid($node) !== NULL;
 
     // Guide mode: intro, owner, updated date and subjects under the <h1>.
-    if (!$variables['modular_title_in_bento'] && self::stringValue($node, 'field_modular_type') === 'guide') {
+    if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'guide') {
       $variables['guide_head'] = $this->guideHead($node);
     }
 
@@ -153,15 +153,15 @@ class PalefireHooks {
   /**
    * Implements hook_preprocess_paragraph().
    *
-   * Exposes section variables consumed by paragraph.html.twig, plus bento
-   * background video variables for the bento paragraphs (BENTO_BUNDLES).
+   * Exposes section variables consumed by paragraph.html.twig, plus landing
+   * background video variables for the landing paragraphs (LANDING_BUNDLES).
    */
   #[Hook('preprocess_paragraph')]
   public function preprocessParagraph(array &$variables): void {
     $variables['is_section'] = FALSE;
 
-    // Runs before the section early-return so bentos always get it.
-    $this->bentoVideoVariables($variables);
+    // Runs before the section early-return so landings always get it.
+    $this->landingVideoVariables($variables);
 
     /** @var \Drupal\paragraphs\ParagraphInterface|null $paragraph */
     $paragraph = $variables['paragraph'] ?? NULL;
@@ -201,7 +201,7 @@ class PalefireHooks {
       $variables['site_name_plain'] = (string) \Drupal::config('system.site')->get('name');
     }
 
-    // Modular pages print their own <h1> (page.html.twig, or the bento
+    // Modular pages print their own <h1> (page.html.twig, or the landing
     // search when it is the first section), so a placed Page title block
     // would be a second one.
     if (($variables['plugin_id'] ?? '') === 'page_title_block') {
@@ -305,14 +305,14 @@ class PalefireHooks {
   public const SECTION_FIELDS = ['field_scroll_section', self::SECTIONS_FIELD];
 
   /**
-   * UUID of the bento (BENTO_BUNDLES) that prints the page <h1>, or NULL.
+   * UUID of the landing (LANDING_BUNDLES) that prints the page <h1>, or NULL.
    *
    * That is the first section the current user can see, when it is a
-   * bento. Used by preprocessPage() (page.html.twig skips its own
-   * <h1>) and palefire_preprocess_paragraph__bento_search() (the bento
+   * landing. Used by preprocessPage() (page.html.twig skips its own
+   * <h1>) and palefire_preprocess_paragraph__bento_search() (the landing
    * prints it above the intro), so the two always agree.
    */
-  public static function titleBentoUuid(NodeInterface $node): ?string {
+  public static function titleLandingUuid(NodeInterface $node): ?string {
     foreach (self::SECTION_FIELDS as $field) {
       if (!$node->hasField($field)) {
         continue;
@@ -324,22 +324,22 @@ class PalefireHooks {
         if (!$paragraph->access('view')) {
           continue;
         }
-        return in_array($paragraph->bundle(), self::BENTO_BUNDLES, TRUE) ? $paragraph->uuid() : NULL;
+        return in_array($paragraph->bundle(), self::LANDING_BUNDLES, TRUE) ? $paragraph->uuid() : NULL;
       }
     }
     return NULL;
   }
 
   /**
-   * Adds bento background video variables (bg_videos, bg_poster).
+   * Adds landing background video variables (bg_videos, bg_poster).
    *
    * Called from preprocessParagraph(). The bento_search template attaches
-   * palefire/bento-video itself.
+   * palefire/landing-video itself.
    */
-  private function bentoVideoVariables(array &$variables): void {
+  private function landingVideoVariables(array &$variables): void {
     $paragraph = $variables['paragraph'] ?? NULL;
     if (!$paragraph instanceof FieldableEntityInterface
-      || !in_array($paragraph->bundle(), self::BENTO_BUNDLES, TRUE)
+      || !in_array($paragraph->bundle(), self::LANDING_BUNDLES, TRUE)
       || !$paragraph->hasField('field_bg_videos')
       || $paragraph->get('field_bg_videos')->isEmpty()) {
       return;

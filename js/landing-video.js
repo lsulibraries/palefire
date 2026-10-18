@@ -5,19 +5,19 @@
   const html = document.documentElement;
   const reduceMotion = () => reduce.matches || html.classList.contains('pf-a11y-motion');
   const startPaused = () => reduceMotion() || html.classList.contains('pf-a11y-pausevideo');
-  // Crossfade between clips; keep in step with --pf-bento-fade
-  // (_bento-search.scss).
+  // Crossfade between clips; keep in step with --pf-landing-fade
+  // (_landing.scss).
   const FADE_MS = 1000;
-  Drupal.behaviors.palefireBentoVideo = {
+  Drupal.behaviors.palefireLandingVideo = {
     attach(context) {
-      once('bento-video', '[data-bento-video]', context).forEach((wrap) => {
+      once('landing-video', '[data-landing-video]', context).forEach((wrap) => {
         const first = wrap.querySelector('video');
-        // The button is the media layer's sibling (paragraph--bento-search),
-        // so look it up from the bento box.
-        const bento = wrap.closest('[data-pf-bento]') || wrap.parentElement;
-        const btn = bento.querySelector('[data-bento-video-toggle]');
+        // The button is the media layer's sibling (includes/landing.html.twig),
+        // so look it up from the landing box.
+        const landing = wrap.closest('[data-pf-landing]') || wrap.parentElement;
+        const btn = landing.querySelector('[data-landing-video-toggle]');
         if (!first || !btn) return;
-        const label = btn.querySelector('[data-bento-video-label]') || btn;
+        const label = btn.querySelector('[data-landing-video-label]') || btn;
         const sources = JSON.parse(wrap.dataset.sources || '[]');
         if (!sources.length) return;
         let paused = startPaused();
@@ -30,7 +30,7 @@
         // Two <video> layers, so a playlist never cuts to black: while one
         // plays, the other has already loaded the next clip. Just before the
         // current clip ends the next one starts under it and fades in
-        // (opacity, _bento-search.scss), then the old layer loads the clip
+        // (opacity, _landing.scss), then the old layer loads the clip
         // after that. One clip: a single layer with the native loop.
         const videos = [first];
         if (sources.length > 1) {
@@ -69,12 +69,12 @@
           const p = v.duration ? Math.min(1, v.currentTime / v.duration) : 0;
           if (p < shown) {
             btn.classList.add('is-rewinding');
-            btn.style.setProperty('--pf-bento-progress', p.toFixed(4));
+            btn.style.setProperty('--pf-landing-progress', p.toFixed(4));
             // eslint-disable-next-line no-unused-expressions
             btn.offsetWidth;
             btn.classList.remove('is-rewinding');
           } else {
-            btn.style.setProperty('--pf-bento-progress', p.toFixed(4));
+            btn.style.setProperty('--pf-landing-progress', p.toFixed(4));
           }
           shown = p;
         };
@@ -138,22 +138,38 @@
         // In the first section, centre the button on the breadcrumb's line
         // (.pf-modular__head, page.html.twig) instead of 1rem below the
         // section's top. Measured against the button's positioned parent
-        // (.pf-bento), so it holds at any scroll position; re-run when
-        // either resizes. The breadcrumb is above the bento, so the value
-        // is negative.
+        // (.pf-landing), so it holds at any scroll position; re-run when
+        // either resizes. The breadcrumb is above the landing, so the value
+        // is negative. Measured on the whole list, so on the glass strip it
+        // matches the strip's top and bottom (_landing-swiss.scss); not
+        // rounded, since the strip can sit on a fractional pixel.
+        // Side to side, the button's outer edge mirrors the strip's: .75rem
+        // past the head's content edge (its padding is the breadcrumb's
+        // gutter, which differs from the section's on wide screens).
         const align = () => {
-          const crumb = document.querySelector('.pf-modular__head .breadcrumb-item');
+          const head = document.querySelector('.pf-modular__head');
+          const crumb = head && head.querySelector('.breadcrumb');
           const host = btn.offsetParent;
           let top = null;
+          let end = null;
           if (crumb && host && wrap.closest('.pf-sections > .pf-section:first-child')) {
             const c = crumb.getBoundingClientRect();
-            top = Math.round(c.top + c.height / 2 - host.getBoundingClientRect().top - btn.offsetHeight / 2);
+            const h = head.getBoundingClientRect();
+            const hb = host.getBoundingClientRect();
+            const hs = getComputedStyle(head);
+            const outset = parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.75;
+            top = (c.top + c.height / 2 - hb.top - btn.offsetHeight / 2).toFixed(2);
+            end = (hs.direction === 'rtl'
+              ? (h.left + parseFloat(hs.paddingLeft) - outset) - hb.left
+              : hb.right - (h.right - parseFloat(hs.paddingRight) + outset)).toFixed(2);
           }
           if (top !== null) {
-            btn.style.setProperty('--pf-bento-toggle-top', `${top}px`);
+            btn.style.setProperty('--pf-landing-toggle-top', `${top}px`);
+            btn.style.setProperty('--pf-landing-toggle-end', `${end}px`);
           }
           else {
-            btn.style.removeProperty('--pf-bento-toggle-top');
+            btn.style.removeProperty('--pf-landing-toggle-top');
+            btn.style.removeProperty('--pf-landing-toggle-end');
           }
         };
         requestAnimationFrame(align);
@@ -169,14 +185,14 @@
         first.classList.add('is-current');
         first.src = sources[0];
         preload();
-        // Watch the bento box, not the media layer: the layer is
+        // Watch the landing box, not the media layer: the layer is
         // position: fixed and always covers the viewport, so it never
         // reported leaving it and the clip kept playing off screen.
         new IntersectionObserver(([e]) => {
           inView = e.isIntersecting;
           if (inView) play();
           else pauseAll();
-        }, { threshold: 0.25 }).observe(bento);
+        }, { threshold: 0.25 }).observe(landing);
       });
     },
   };

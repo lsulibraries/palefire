@@ -604,6 +604,67 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### "Bento" renamed to "landing" in the theme (2026-10-18)
+
+"Bento" was a prototype name. The landing section's classes, variables,
+files and JS now say "landing". The compiled CSS is the same as before
+apart from the names. Bento search, with the search form, is retired;
+its paragraph type still renders, through the same markup.
+
+**Renamed:**
+- **Classes:** `.pf-bento*` → `.pf-landing*`, `--pf-bento-*` →
+  `--pf-landing-*`, `%pf-bento-label` → `%pf-landing-label`,
+  `data-pf-bento` / `data-bento-video*` → `data-pf-landing` /
+  `data-landing-video*`.
+- **Files:**
+  - `js/bento-video.js` → `js/landing-video.js` (library
+    `palefire/landing-video`, behavior `palefireLandingVideo`);
+  - `_bento-search.scss` → `_landing.scss`;
+  - `_bento-swiss.scss` → `_landing-swiss.scss`.
+- **Markup:** it now lives in `templates/includes/landing.html.twig`.
+  Both `paragraph--landing-hero.html.twig` (with `hero`) and
+  `paragraph--bento-search.html.twig` include it.
+- **Template variables:** `bento_map`, `bento_intro` and
+  `modular_title_in_bento` become `landing_map`, `landing_intro` and
+  `modular_title_in_landing`.
+- **PHP:**
+  - `_palefire_bento_visit()` → `_palefire_landing_visit()`;
+  - `PalefireHooks::BENTO_BUNDLES` → `LANDING_BUNDLES`;
+  - `titleBentoUuid()` → `titleLandingUuid()`.
+
+**Unchanged on purpose:**
+- **Drupal machine names** (config is edited in the UI only):
+  - the `bento_search` paragraph type;
+  - `field_bento_map` and `field_bento_hide_lead`;
+  - the `palefire_preprocess_paragraph__bento_search()` hook and its
+    template filename.
+- **The real search:** `https://lib.lsu.edu/bento` and
+  `search_api_fulltext_bento`.
+- **Elsewhere:** Origami file names in comments, `scripts/`, this
+  changelog, and the uncompiled prototype in `components/_modular.scss`.
+
+The palefire_modular module still passes the search settings as `bento`.
+The bento_search preprocess copies them into `landing`.
+
+### Landing hero: breadcrumb strip and video button line up (2026-10-18)
+
+When the hero has a video, the breadcrumb sits on a glass strip with the
+video's pause button on the same line. They didn't line up:
+- **Height:** the strip was 32px and the button 36px, so neither the
+  tops nor the bottoms matched. The strip is now the button's height
+  (2.25rem), and the button is centred on the whole strip rather than on
+  its first item, without rounding.
+- **Sides:** the strip reaches .75rem past the content edge on the left,
+  and the button now does the same on the right, at every width.
+  `bento-video.js` measures this from the breadcrumb's own gutter, which
+  differs from the section's on wide screens. This also works in RTL.
+- **Text:** "Special Collections" sat 1px below "Home". The link keeps
+  2px under it for the gold underline, and the current page now keeps the
+  same.
+
+Files: `_bento-swiss.scss`, `_bento-search.scss`, `_layout.scss` and
+`bento-video.js`.
+
 ### Building map on phones: icons, FLOOR 2 and ENTRANCE stay readable (2026-10-18)
 
 On phones only the room names hide now, since the numbers stand in for

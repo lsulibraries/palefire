@@ -38,7 +38,7 @@
   --pf-toc-rail: var(--pf-g-rule, #e2ddd1);
   --pf-toc-accent: var(--pf-g-accent, #{$pf-purple});
   --pf-on-accent: var(--pf-g-on-accent, #fff);
-  // Glass for fields inside a drawer (the Search drawer's bento field).
+  // Glass for fields inside a drawer (the Search drawer's landing field).
   --pf-sidebar-bg: #{rgba($pf-white, .55)};
   --bs-offcanvas-width: min(#{$pf-panel-width}, 100vw);
   --bs-offcanvas-padding-x: 2.5rem;
@@ -213,7 +213,7 @@ html.pf-over-menu .pf-panel.offcanvas {
     }
   }
 
-  // Search panel: the bento form, top of the drawer.
+  // Search panel: the landing form, top of the drawer.
   &__search {
     margin-top: 1rem;
   }

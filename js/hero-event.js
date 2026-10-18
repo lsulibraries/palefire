@@ -1,7 +1,7 @@
 /**
  * @file
  * "Next event" card in the landing hero's lead panel
- * (paragraph--bento-search.html.twig with hero, .pf-hero-event).
+ * (includes/landing.html.twig with hero, .pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
@@ -127,7 +127,7 @@
         // above the drawing (grid row "event", _landing-hero.scss). Moved
         // before the feed loads, so its space is held there.
         const heading = box.classList.contains('pf-hero-event--solo')
-          && box.closest('.pf-bento') && box.closest('.pf-bento').querySelector('.pf-map > .pf-map__heading');
+          && box.closest('.pf-landing') && box.closest('.pf-landing').querySelector('.pf-map > .pf-map__heading');
         if (heading) {
           heading.after(box);
           box.classList.add('is-in-map');

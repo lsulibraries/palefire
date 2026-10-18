@@ -35,14 +35,14 @@
   }
 }
 
-// On wide screens the bento (search form + map) is capped at
+// On wide screens the landing (search form + map) is capped at
 // $pf-content-max and centred, so its left edge moves in past
 // --pf-section-pad-inline while the head stayed at the padding: with the
 // TOC collapsed the breadcrumb and <h1> sat left of "Search LSU
-// Libraries". When the first section is a bento, the head uses the same
+// Libraries". When the first section is a landing, the head uses the same
 // edge: the section padding, or half the space left beside the cap,
 // whichever is larger (100% is the main column, as for the sections).
-body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
+body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
   padding-inline: max(var(--pf-section-pad-inline, 1.25rem), calc((100% - #{$pf-content-max}) / 2));
 }
 
@@ -133,8 +133,11 @@ body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
     flex: 0 1 auto;
     color: var(--pf-toc-active);
 
+    // padding: the 2px the links keep for their underline, so both sit
+    // on the same line.
     > span {
       min-width: 0;
+      padding-block-end: 2px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -142,9 +145,9 @@ body:has(.pf-sections > .pf-section:first-child .pf-bento) .pf-modular__head {
   }
 
   // Keep the breadcrumb clear of the background-video button when the
-  // bento (with a video) is the first section: the button sits on this
-  // line at the right (bento-video.js).
-  body:has(.pf-sections > .pf-section:first-child [data-bento-video-toggle]) & .breadcrumb {
+  // landing (with a video) is the first section: the button sits on this
+  // line at the right (landing-video.js).
+  body:has(.pf-sections > .pf-section:first-child [data-landing-video-toggle]) & .breadcrumb {
     padding-inline-end: 3.5rem;
   }
 

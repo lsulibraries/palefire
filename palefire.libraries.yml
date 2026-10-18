@@ -163,15 +163,15 @@ fontawesome:
       /libraries/fontawesome-pro/css/solid.min.css: { minified: true }
       /libraries/fontawesome-pro/css/brands.min.css: { minified: true }
 
-bento-video:
+landing-video:
   js:
-    js/bento-video.js: {}
+    js/landing-video.js: {}
   dependencies:
     - core/drupal
     - core/once
 
 # Landing hero: "Next event" card from the events carousel's feed. Attached
-# by paragraph--bento-search.html.twig only for the landing hero.
+# by includes/landing.html.twig only for the landing hero.
 hero-event:
   js:
     js/hero-event.js: {}
@@ -180,8 +180,8 @@ hero-event:
     - core/drupalSettings
     - core/once
 
-# Visit card in the bento (Modular page Visit fields): LibCal hours and the
-# click-to-load Google map. Attached by _palefire_bento_visit() in
+# Visit card in the landing (Modular page Visit fields): LibCal hours and the
+# click-to-load Google map. Attached by _palefire_landing_visit() in
 # palefire.theme only when the page fills in a Visit field.
 visit:
   version: 1.0.0
@@ -213,7 +213,7 @@ modular-toc:
     - core/drupal
     - core/once
 
-# Hill Memorial building map (bento section). Attached by
+# Hill Memorial building map (landing section). Attached by
 # templates/paragraphs/paragraph--building-map.html.twig.
 building-map:
   version: 1.0.0

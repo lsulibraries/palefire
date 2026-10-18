@@ -15,7 +15,7 @@
  *
  * Extra variables (PalefireHooks::preprocessPage()):
  * - is_modular_page: TRUE on "modular_page" nodes.
- * - modular_title_in_bento: TRUE when the first section is a bento search,
+ * - modular_title_in_landing: TRUE when the first section is a landing search,
  *   which then prints the page <h1> itself.
  *
  * Modular pages: the "On this page" TOC is palefire_modular's block, placed
@@ -31,7 +31,7 @@
  * keep the container-xxl + Bootstrap row layout.
  *
  * Full-page backgrounds: on modular pages, section background images and
- * bento background videos run past their section, left under the frosted
+ * landing background videos run past their section, left under the frosted
  * TOC sidebar (pf-modular--has-toc, lg and up) and, for the first section,
  * up under the frosted top bar. Only the decorative layer grows; the
  * sections and their content keep their place in the main column.
@@ -200,8 +200,8 @@
              - Breadcrumb: the same "breadcrumb" region and System Breadcrumb
                block as other pages, on the line of the TOC's title.
              - <h1>: the node title, printed here so every Modular page has
-               one, unless the first section is a bento search: then the
-               bento prints it right above its intro. The Page title block is suppressed on these pages
+               one, unless the first section is a landing search: then the
+               landing prints it right above its intro. The Page title block is suppressed on these pages
                (PalefireHooks::preprocessBlock()), so placing it can't add a
                second <h1>.
              It has no snap point of its own: the first section's snap point
@@ -215,11 +215,11 @@
                   {{ page.breadcrumb }}
                 </div>
               {% endif %}
-              {# When the first section is a bento search, the bento prints
-                 the <h1> above its intro (paragraph--bento-search.html.twig)
-                 and this one is left out (modular_title_in_bento,
+              {# When the first section is a landing search, the landing prints
+                 the <h1> above its intro (includes/landing.html.twig)
+                 and this one is left out (modular_title_in_landing,
                  PalefireHooks::preprocessPage()). #}
-              {% if node.label and not modular_title_in_bento %}
+              {% if node.label and not modular_title_in_landing %}
                 <h1 class="pf-modular__title">{{ node.label }}</h1>
               {% endif %}
               {# Guide mode: intro, owner, updated date, subjects

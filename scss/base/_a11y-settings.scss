@@ -119,11 +119,11 @@ html.pf-a11y-contrast:not(#{$pf-themed}) {
   }
 
   // Background videos and photos sit further back behind the text.
-  .pf-bento__media::after {
+  .pf-landing__media::after {
     background-color: rgb(0 0 0 / .85);
   }
 
-  .pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__media::after {
+  .pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing:not(.is-map-in-view, .pf-landing--map-only) .pf-landing__media::after {
     background-color: rgb(255 255 255 / .94);
   }
 

@@ -124,16 +124,16 @@
       </button>
     </div>
     <div class="pf-panel__body">
-      {# Same GET form as the bento search (paragraph--bento-search). #}
-      <form class="pf-bento__form pf-panel__search" role="search" method="get" action="https://lib.lsu.edu/bento" aria-labelledby="pf-panel-search-title">
+      {# Same GET form as the landing search (includes/landing.html.twig). #}
+      <form class="pf-landing__form pf-panel__search" role="search" method="get" action="https://lib.lsu.edu/bento" aria-labelledby="pf-panel-search-title">
         <label class="visually-hidden" for="pf-panel-search-q">{{ 'Search LSU Libraries'|t }}</label>
-        <div class="pf-bento__field">
-          <svg class="pf-bento__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-          <input class="pf-bento__input" type="search" id="pf-panel-search-q" name="search_api_fulltext_bento"
+        <div class="pf-landing__field">
+          <svg class="pf-landing__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+          <input class="pf-landing__input" type="search" id="pf-panel-search-q" name="search_api_fulltext_bento"
                  placeholder="{{ 'Books, articles, databases, guides'|t }}" autocomplete="off" enterkeyhint="search" data-pf-panel-autofocus>
-          <button class="pf-bento__submit" type="submit">
-            <span class="pf-bento__submit-text">{{ 'Search'|t }}</span>
-            <svg class="pf-bento__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          <button class="pf-landing__submit" type="submit">
+            <span class="pf-landing__submit-text">{{ 'Search'|t }}</span>
+            <svg class="pf-landing__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
           </button>
         </div>
       </form>

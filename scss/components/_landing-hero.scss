@@ -1,24 +1,24 @@
-// Landing hero (paragraph--landing-hero.html.twig): the bento without its
-// search form, .pf-bento--hero. Everything else comes from the bento's
-// styles (_bento-search, _building-map, _visit, _bento-swiss).
+// Landing hero (paragraph--landing-hero.html.twig): the landing without its
+// search form, .pf-landing--hero. Everything else comes from the landing's
+// styles (_landing, _building-map, _visit, _landing-swiss).
 
 // The video sits under a strong wash of the reading swatch's page colour
 // (80%), and the same wash while the map is in view or leads (no
-// darkening). Every bento wash reads these two tokens (_bento-search,
-// _building-map, _visit, _bento-swiss), so setting them here covers all
+// darkening). Every landing wash reads these two tokens (_landing,
+// _building-map, _visit, _landing-swiss), so setting them here covers all
 // of them. High contrast still puts its heavy wash over it
 // (_a11y-settings.scss). Text sits on the glass panels, not on the video.
 $pf-hero-media-wash: .8 !default;
 
-.pf-bento--hero {
+.pf-landing--hero {
   --pf-media-wash: rgba(var(--pf-g-bg-rgb), #{$pf-hero-media-wash});
   --pf-media-wash-map: var(--pf-media-wash);
 }
 
-// The map's legend always sits under the drawing, as the bento's map does
+// The map's legend always sits under the drawing, as the landing's map does
 // in a narrow column (_building-map.scss, @container pf-map). building-map.js
 // reads --pf-map-layout, so the legend's key starts closed here as well.
-.pf-bento--hero .pf-map {
+.pf-landing--hero .pf-map {
   --pf-map-layout: stacked;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: none;
@@ -36,7 +36,7 @@ $pf-hero-media-wash: .8 !default;
 }
 
 // Next event (hero-event.js): under the intro, across a hairline like the
-// bento's search. A square thumbnail, or diagonal hatching when the event
+// landing's search. A square thumbnail, or diagonal hatching when the event
 // has no image, then the day and time, the title (the card's one link,
 // stretched over the card) and the category and place.
 // Shown only when the page has the events carousel, which feeds it. Its
@@ -47,7 +47,7 @@ $pf-hero-media-wash: .8 !default;
   --pf-hero-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
   display: none;
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
-  border-top: 1px solid var(--pf-bento-line);
+  border-top: 1px solid var(--pf-landing-line);
 }
 
 :root:has(.pf-events-carousel) .pf-hero-event {
@@ -59,12 +59,12 @@ $pf-hero-media-wash: .8 !default;
   display: block;
   width: var(--pf-hero-thumb);
   aspect-ratio: 1;
-  border: 1px solid var(--pf-bento-line);
+  border: 1px solid var(--pf-landing-line);
   background-image: var(--pf-hero-hatch);
 }
 
 .pf-hero-event__label {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
   margin-bottom: .875rem;
   color: var(--pf-toc-color);
 }
@@ -92,7 +92,7 @@ $pf-hero-media-wash: .8 !default;
   width: var(--pf-hero-thumb);
   aspect-ratio: 1;
   overflow: hidden;
-  border: 1px solid var(--pf-bento-line);
+  border: 1px solid var(--pf-landing-line);
   background-image: var(--pf-hero-hatch);
 
   img {
@@ -108,7 +108,7 @@ $pf-hero-media-wash: .8 !default;
 }
 
 .pf-hero-event__when {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
   margin: 0 0 .375rem;
   color: var(--pf-toc-color);
 }
@@ -153,7 +153,7 @@ $pf-hero-media-wash: .8 !default;
 .pf-hero-event--solo .pf-hero-event__card {
   align-items: stretch;
   padding-inline-end: clamp(1rem, 2vw, 1.5rem);
-  border: 1px solid var(--pf-bento-line);
+  border: 1px solid var(--pf-landing-line);
   background: transparent;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -167,7 +167,7 @@ $pf-hero-media-wash: .8 !default;
     aspect-ratio: auto;
     min-height: var(--pf-hero-thumb);
     border: 0;
-    border-inline-end: 1px solid var(--pf-bento-line);
+    border-inline-end: 1px solid var(--pf-landing-line);
   }
 
   .pf-hero-event__text {
@@ -176,14 +176,14 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-.pf-bento--map-only > .pf-hero-event--solo + .pf-bento__visit {
+.pf-landing--map-only > .pf-hero-event--solo + .pf-landing__visit {
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 // With a building map, hero-event.js moves it under the map's heading: a
 // row of its own between the heading and the drawing (only while the card
 // is there, so no empty gap is left when it is removed).
-.pf-bento--hero .pf-map:has(> .pf-hero-event) {
+.pf-landing--hero .pf-map:has(> .pf-hero-event) {
   grid-template-areas: "head" "event" "stage" "aside";
 }
 
@@ -200,7 +200,7 @@ $pf-hero-media-wash: .8 !default;
 // corner, and narrower the drawing scrolls sideways and fills its box, so
 // there the card keeps its own row above it.
 @container pf-map (min-width: 48rem) {
-  .pf-bento--hero .pf-map--hill-memorial:has(> .pf-hero-event) {
+  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-hero-event) {
     grid-template-areas: "head" "stage" "aside";
   }
 
@@ -243,12 +243,12 @@ $pf-hero-media-wash: .8 !default;
 // over the next event, the event card and its thumbnail, the Visit strip
 // and its mini map. (The stripes and the map drawing keep their own
 // strength.)
-.pf-bento.pf-bento--hero {
-  --pf-bento-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 20%, transparent);
+.pf-landing.pf-landing--hero {
+  --pf-landing-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 20%, transparent);
 }
 
-.pf-bento--hero :is(.pf-visit, .pf-visit__map) {
-  border-color: var(--pf-bento-line);
+.pf-landing--hero :is(.pf-visit, .pf-visit__map) {
+  border-color: var(--pf-landing-line);
 }
 
 // Landing pages (field_modular_type "landing", <html data-pf-mode>): the

@@ -43,7 +43,7 @@ $enable-smooth-scroll: true;
 
 // Palefire settings.
 $pf-display-weight:  600;  // Page <h1> and map tooltip titles (800 draws near Black in system-ui).
-$pf-content-max:     1280px; // Bento search form + building map cap; the page head follows it.
+$pf-content-max:     1280px; // Landing search form + building map cap; the page head follows it.
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
 $pf-fade-duration:   .45s; // Page fade-in duration.
 $pf-swup-duration:   .25s; // Swup page-to-page cross-fade (each direction).

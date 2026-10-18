@@ -211,72 +211,76 @@ function palefire_buildings(): array {
 /**
  * Implements hook_preprocess_HOOK() for paragraph--bento-search.
  *
- * Renders the bento's building map (field_bento_map) as bento_map. Built here
- * from the referenced paragraph, so it doesn't depend on the bento's view
- * display listing the field.
+ * Renders the landing's building map (field_bento_map) as landing_map. Built
+ * here from the referenced paragraph, so it doesn't depend on the landing's
+ * view display listing the field.
  *
  * map_only: TRUE when the optional field_bento_hide_lead (Boolean, added in
  * the UI) is checked and there is a map to show. The template then leaves
- * out the lead panel (title, intro, search) and the map leads the bento. A
- * bento without a map ignores it, so it can never render empty.
+ * out the lead panel (title, intro, search) and the map leads the landing. A
+ * landing without a map ignores it, so it can never render empty.
+ *
+ * landing: the search settings (identifier, input_id, placeholder). The
+ * palefire_modular module still hands them over as bento, so they are
+ * copied across; anything already in landing wins.
  */
 function palefire_preprocess_paragraph__bento_search(array &$variables): void {
-  $variables['bento_map'] = NULL;
+  $variables['landing'] = ($variables['landing'] ?? []) + ($variables['bento'] ?? []);
+  $variables['landing_map'] = NULL;
   $variables['page_title'] = NULL;
   $variables['map_only'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
     return;
   }
-  // A bento without the map field still gets its intro, Visit card and
+  // A landing without the map field still gets its intro, Visit card and
   // page title (this used to return early and skip them).
   $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
   if ($map instanceof ParagraphInterface && $map->isPublished()) {
     $map = \Drupal::service('entity.repository')->getTranslationFromContext($map);
-    $variables['bento_map'] = \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($map, 'default');
+    $variables['landing_map'] = \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($map, 'default');
   }
-  $variables['map_only'] = $variables['bento_map'] !== NULL
+  $variables['map_only'] = $variables['landing_map'] !== NULL
     && $paragraph->hasField('field_bento_hide_lead')
     && (bool) $paragraph->get('field_bento_hide_lead')->value;
-  _palefire_bento_visit($variables, $paragraph);
+  _palefire_landing_visit($variables, $paragraph);
 }
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--landing-hero.
  *
- * Landing hero (scripts/palefire_landing_hero_setup.php) is a bento search
- * without the search form, and it shares the bento's fields: the same
- * variables, plus hero, which the bento template reads
- * (paragraph--landing-hero.html.twig includes it). input_id only keeps the
- * Visit card's ids unique on the page.
+ * Landing hero (scripts/palefire_landing_hero_setup.php) is the landing
+ * section without the search form, and it shares the bento_search fields:
+ * the same variables, plus hero, which includes/landing.html.twig reads.
+ * input_id only keeps the Visit card's ids unique on the page.
  */
 function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   palefire_preprocess_paragraph__bento_search($variables);
   $variables['hero'] = TRUE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
-    $variables['bento']['input_id'] = 'pf-hero-' . $paragraph->id();
+    $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
   }
 }
 
 /**
- * Adds the host Modular page's title, intro and Visit card to a bento search.
+ * Adds the host Modular page's title, intro and Visit card to a landing search.
  *
  * Reads the optional node fields added by scripts/palefire_modular_setup.php
  * (field_intro, field_hours_location, field_location_name,
  * field_location_query, field_location_display). Sets:
- * - page_title: the node title when this bento is the first section (it
+ * - page_title: the node title when this landing is the first section (it
  *   then prints the page <h1>), or NULL.
- * - bento_intro: render array of field_intro, or NULL.
+ * - landing_intro: render array of field_intro, or NULL.
  * - visit: NULL, or ['name', 'lid', 'maps_url', 'embed_url', 'query'] for
  *   the Visit card (hours via js/visit-hours.js, the map loads on click).
- * A page with none of these fields filled in keeps today's bento.
+ * A page with none of these fields filled in keeps today's landing.
  */
-function _palefire_bento_visit(array &$variables, ParagraphInterface $paragraph): void {
-  $variables['bento_intro'] = NULL;
+function _palefire_landing_visit(array &$variables, ParagraphInterface $paragraph): void {
+  $variables['landing_intro'] = NULL;
   $variables['visit'] = NULL;
 
-  // The bento may sit inside a section paragraph: walk up to the node.
+  // The landing may sit inside a section paragraph: walk up to the node.
   $host = $paragraph;
   for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
     $host = $host->getParentEntity();
@@ -286,12 +290,12 @@ function _palefire_bento_visit(array &$variables, ParagraphInterface $paragraph)
   }
   $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $host->getCacheTags());
 
-  // The page <h1>: printed by the bento (above the intro) only when it is
+  // The page <h1>: printed by the landing (above the intro) only when it is
   // the Modular page's first section. Paragraph templates don't get a
   // `node` variable, which is why {{ node.label }} printed nothing.
   // PalefireHooks::preprocessPage() uses the same check, so page.html.twig
   // prints the <h1> itself on every other Modular page.
-  if ($host->bundle() === PalefireHooks::MODULAR_BUNDLE && PalefireHooks::titleBentoUuid($host) === $paragraph->uuid()) {
+  if ($host->bundle() === PalefireHooks::MODULAR_BUNDLE && PalefireHooks::titleLandingUuid($host) === $paragraph->uuid()) {
     $variables['page_title'] = $host->label();
   }
 
@@ -302,7 +306,7 @@ function _palefire_bento_visit(array &$variables, ParagraphInterface $paragraph)
   };
 
   if ($host->hasField('field_intro') && !$host->get('field_intro')->isEmpty()) {
-    $variables['bento_intro'] = $host->get('field_intro')->view(['label' => 'hidden']);
+    $variables['landing_intro'] = $host->get('field_intro')->view(['label' => 'hidden']);
   }
 
   $lid = $value('field_hours_location');

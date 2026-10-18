@@ -7,7 +7,7 @@
  *   block), so they exist without JS and the ids are stable. Only the
  *   h3 sub-links are added here: every h3 on modes the block lists under
  *   "Include h3 sub-links on these modes" (depth 2), and on any other mode
- *   just the h3s that opt in with data-toc (the bento search and building
+ *   just the h3s that opt in with data-toc (the landing search and building
  *   map headings), so those show up whatever the page's mode.
  * - The active section is whichever one crosses a fixed "activation line"
  *   (ACTIVATION_LINE of the viewport below the sticky header). Origami
@@ -543,7 +543,7 @@
     const landing = ROOT.dataset.pfMode === 'landing';
     const revealAt = landing
       ? Array.from(document.querySelectorAll('.pf-section'))
-        .find((section) => !section.querySelector('.pf-bento--hero, .pf-events-carousel'))
+        .find((section) => !section.querySelector('.pf-landing--hero, .pf-events-carousel'))
       : null;
     let revealTicking = false;
     const checkReveal = () => {
@@ -598,7 +598,7 @@
   /**
    * One sub-link per matching item in the section (all h3s at depth 2,
    * [data-toc] items at depth 1), ignoring headings in embedded components
-   * (bento tiles, carousel slides, the map legend) marked data-toc-skip.
+   * (landing tiles, carousel slides, the map legend) marked data-toc-skip.
    * An element with data-toc is listed even inside a data-toc-skip area.
    *
    * Optional attributes on a listed element:
@@ -739,7 +739,7 @@
   // "light-map" sections (field_section_theme "Light, dark at the map") are
   // light until their building map is in view, then dark: building-map.js
   // adds .is-map-dark to the section and sends palefire:mapview, the same
-  // signal that dims the bento's background video.
+  // signal that dims the landing's background video.
   function sectionTheme(section) {
     const theme = section.dataset.sectionTheme || 'light';
     if (theme === 'light-map') {

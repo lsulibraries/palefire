@@ -17,7 +17,7 @@
   @include pf-tokens($pf-chrome-light);
   @include pf-tokens($pf-section-light);
 
-  // Section padding (.pf-section__inner). The bento video layer and the
+  // Section padding (.pf-section__inner). The landing video layer and the
   // events carousel read these too, so change them here.
   --pf-section-pad-block: 3rem;
   --pf-section-pad-inline: 1.25rem;
@@ -43,8 +43,8 @@ body[data-section-theme="dark"] {
   @include pf-tokens($pf-chrome-dark);
 }
 
-// Pages with a bento background video, light chrome: the TOC sidebar, the
-// breadcrumb and the bento's lead panel and Visit strip (which share
+// Pages with a landing background video, light chrome: the TOC sidebar, the
+// breadcrumb and the landing's lead panel and Visit strip (which share
 // --pf-sidebar-bg) sit over the video under a light wash (_visit.scss),
 // not on white. Denser glass and a darker grey keep TOC, breadcrumb and
 // field text above 4.5:1 even over a black frame. :where() keeps this at
@@ -54,7 +54,7 @@ body[data-section-theme="dark"] {
 // to make up for it. Worst case, a black frame under the 20% wash
 // (_visit.scss): (0.2 * 255) + 0.62 * (255 - 51) = 177, about 4.8:1 for
 // #404040. Black text is about 9:1 there.
-:root:where(:has(.pf-bento.has-bg-video)) {
+:root:where(:has(.pf-landing.has-bg-video)) {
   --pf-sidebar-bg: #{rgba($pf-white, 0.62)};
   --pf-toc-color: #{$pf-grey-800};
   --pf-toc-sub-color: #{$pf-grey-800};
@@ -137,7 +137,7 @@ html.pf-snap .site-footer {
   --pf-section-pad-inline: 0px;
 }
 
-// Height: auto, sized to its content (bento). No extra rules needed.
+// Height: auto, sized to its content (landing). No extra rules needed.
 
 // Height: screen, fills the viewport under the header (carousel).
 .pf-section--screen {
@@ -156,7 +156,7 @@ html.pf-snap .site-footer {
 }
 
 // Screen and peek: the content fills the section's full height, not just
-// its own height, so a paragraph with its own background (the bento video,
+// its own height, so a paragraph with its own background (the landing video,
 // for example) covers the whole section. Content is centred vertically.
 .pf-section--screen,
 .pf-section--peek {
@@ -192,7 +192,7 @@ html.pf-snap .site-footer {
 }
 
 // field_section_theme "light-map" ("Light, dark at the map"): light until the
-// bento's building map is in view, then every dark-section rule applies.
+// landing's building map is in view, then every dark-section rule applies.
 // building-map.js toggles .is-map-dark (and data-bs-theme) on the section.
 .pf-section--theme-light-map.is-map-dark {
   @extend .pf-section--theme-dark;
@@ -222,8 +222,8 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // Full-page backgrounds (bleed)
 // ---------------------------------------------------------------------
-// Section background images (below), dark theme colours (above) and bento
-// background videos (_bento-search.scss) run past their section so they
+// Section background images (below), dark theme colours (above) and landing
+// background videos (_landing.scss) run past their section so they
 // cover the whole page: left under the frosted TOC sidebar, and, for the
 // first section, up under the frosted top bar. Only the decorative layers
 // grow. The section box and its content stay in the main column, and
@@ -332,18 +332,18 @@ html.pf-snap .site-footer {
 }
 
 // ---------------------------------------------------------------------
-// Bento section (first section, not full height)
+// Landing section (first section, not full height)
 // ---------------------------------------------------------------------
-// The bento box is full width so its background video reaches both edges.
+// The landing box is full width so its background video reaches both edges.
 // The lead panel (title, intro, search) is capped at 1280px and centred
-// (the map, in .pf-bento__visit, and the Visit strip have the same cap).
-// The padding keeps the panel off the screen edge on phones when the bento
+// (the map, in .pf-landing__visit, and the Visit strip have the same cap).
+// The padding keeps the panel off the screen edge on phones when the landing
 // is not in a padded section (see the next rule). Form styles:
-// _bento-search.scss; panel and Visit strip: _visit.scss.
-.pf-bento {
+// _landing.scss; panel and Visit strip: _visit.scss.
+.pf-landing {
   padding: clamp(2rem, 6vh, 4.5rem) clamp(1rem, 4vw, 5rem);
 
-  > .pf-bento__lead {
+  > .pf-landing__lead {
     width: 100%;
     max-width: 1280px;
     margin-inline: auto;
@@ -351,26 +351,26 @@ html.pf-snap .site-footer {
 }
 
 // In a section, .pf-section__inner already pads the content
-// (--pf-section-pad-*), so the bento adds none of its own; the two together
+// (--pf-section-pad-*), so the landing adds none of its own; the two together
 // doubled the space around the search form and map. A flush section has no
-// padding, so the bento keeps its own there.
-.pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek):not(.pf-section--flush) .pf-bento {
+// padding, so the landing keeps its own there.
+.pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek):not(.pf-section--flush) .pf-landing {
   padding: 0;
 }
 
-// In a screen or peek section, the bento box grows to fill the section and
+// In a screen or peek section, the landing box grows to fill the section and
 // centres the search form inside it.
-.pf-section--screen .pf-bento,
-.pf-section--peek .pf-bento {
+.pf-section--screen .pf-landing,
+.pf-section--peek .pf-landing {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-// The search label sits in a plain h3 (paragraph--bento-search.html.twig)
+// The search label sits in a plain h3 (includes/landing.html.twig)
 // and takes the modular page's h3 type; no size or weight of its own.
-.pf-bento__label {
+.pf-landing__label {
   display: block;
 }
 

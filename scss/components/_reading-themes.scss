@@ -16,7 +16,7 @@
 // Where they apply (2026-10-16: site-wide, was guides only):
 // - Every page once a swatch is picked, and guides always (Cream when none
 //   is): $pf-themed. The swatch colours everything: page, header and its
-//   dropdowns, TOC sidebar, drawers, dark sections, the bento lead panel and
+//   dropdowns, TOC sidebar, drawers, dark sections, the landing lead panel and
 //   Visit strip, the building map, the events calendar and the footer.
 //   Background videos and maps stay; their wash and glass take the swatch.
 // - Pages with no swatch (and not a guide) look as they always have.
@@ -24,7 +24,7 @@
 // How: each swatch writes its --pf-g-* tokens on <html> (pf-reading-tokens).
 // Everything else reads those: Bootstrap's --bs-* colours (pf-reading-bs),
 // re-declared on anything that resets them ([data-bs-theme], dark sections,
-// the footer), and the chrome, section, bento, map and calendar tokens
+// the footer), and the chrome, section, landing, map and calendar tokens
 // below. So a swatch, or high contrast, only ever changes --pf-g-*.
 //
 // Chrome glass (header, TOC sidebar, dropdowns, footer): the page colour on
@@ -277,7 +277,7 @@ $pf-reading-header-glass-dark: .78 !default;
   }
   --pf-g-scroll: #{map.get($t, scroll)};
   --pf-g-scroll-hover: #{map.get($t, muted)};
-  // Text on glass (drawers, the bento lead panel, the TOC over a photo):
+  // Text on glass (drawers, the landing lead panel, the TOC over a photo):
   // the heading colour, and labels in a muted tone dark (or light) enough
   // for 4.5:1 with the page showing through.
   --pf-g-panel-text: #{map.get($t, heading)};
@@ -345,7 +345,7 @@ html#{$pf-themed} {
   // Section photos (light sections) and dark ones: a scrim of the page.
   --pf-section-scrim: rgba(var(--pf-g-bg-rgb), .8);
   // Background videos and maps keep playing under a wash of the page
-  // colour (_bento-search.scss, _visit.scss, _building-map.scss).
+  // colour (_landing.scss, _visit.scss, _building-map.scss).
   --pf-media-wash: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash});
   --pf-media-wash-map: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash-map});
   background-color: var(--pf-g-bg);
@@ -405,11 +405,11 @@ html[data-pf-mode="guide"] body {
 }
 
 // Over a background video the sidebar is thinner glass on the video's wash.
-html#{$pf-themed}:has(.pf-bento.has-bg-video) body {
+html#{$pf-themed}:has(.pf-landing.has-bg-video) body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass});
 }
 
-html#{$pf-themed}.pf-reading-dark:has(.pf-bento.has-bg-video) body {
+html#{$pf-themed}.pf-reading-dark:has(.pf-landing.has-bg-video) body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass-dark});
 }
 
@@ -492,11 +492,11 @@ html#{$pf-themed}.pf-a11y-solid body {
   --pf-sidebar-bg: rgb(var(--pf-g-chrome-rgb));
 }
 
-// --- Bento, map, events --------------------------------------------------
+// --- Landing, map, events --------------------------------------------------
 // The lead panel and the Visit strip are glass, often over a video: text in
 // the heading colour, labels and lines in the panel muted tone.
-html#{$pf-themed} :is(.pf-bento, .pf-bento__lead) {
-  --pf-bento-accent: var(--pf-g-accent);
+html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
+  --pf-landing-accent: var(--pf-g-accent);
   --pf-section-fg: var(--pf-g-heading);
   --pf-section-border: var(--pf-g-panel-muted);
   --pf-toc-color: var(--pf-g-panel-muted);
@@ -523,7 +523,7 @@ html#{$pf-themed} :is(.pf-bento, .pf-bento__lead) {
 }
 
 // Multicolour swatches (Material): headings, bold and italics in the main
-// content take their own colours. Italics stay plain on the bento's glass
+// content take their own colours. Italics stay plain on the landing's glass
 // over a video, where purple would fall under 4.5:1.
 @each $name, $t in $pf-reading-themes {
   @if map.has-key($t, title) {
@@ -539,7 +539,7 @@ html#{$pf-themed} :is(.pf-bento, .pf-bento__lead) {
   }
 
   @if map.has-key($t, em) {
-    html[data-pf-theme="#{$name}"] .pf-main :is(em, i):not(.pf-bento *) {
+    html[data-pf-theme="#{$name}"] .pf-main :is(em, i):not(.pf-landing *) {
       color: var(--pf-g-em);
     }
   }

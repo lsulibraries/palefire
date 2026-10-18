@@ -1,7 +1,7 @@
 /**
  * @file
  * Visit card hours: "Open now / Closed now" and today's and this week's
- * hours from LibCal, for [data-pf-hours] elements (paragraph--bento-search
+ * hours from LibCal, for [data-pf-hours] elements (includes/landing.html.twig
  * Visit card, field_hours_location on the Modular page).
  *
  * Ported from Origami's bento.js (LibCal JSON-LD hours widget, same status

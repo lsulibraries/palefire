@@ -1,5 +1,5 @@
 // =========================================================================
-// Bento hero: Swiss / museum layer, to match the events carousel
+// Landing hero: Swiss / museum layer, to match the events carousel
 // (_events-carousel.scss).
 //
 // Square corners, hairlines, a display-size title with tight tracking, the
@@ -18,20 +18,20 @@
 // Imported after _visit.scss, so these rules follow the ones they adjust.
 // =========================================================================
 
-.pf-bento {
-  --pf-bento-accent: #{$pf-purple};
-  --pf-bento-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  --pf-bento-line: var(--pf-section-border, #6c757d);
+.pf-landing {
+  --pf-landing-accent: #{$pf-purple};
+  --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  --pf-landing-line: var(--pf-section-border, #6c757d);
 }
 
-.pf-section--theme-dark .pf-bento,
-.pf-section.is-map-dark .pf-bento {
-  --pf-bento-accent: var(--pf-toc-accent, #{$pf-gold});
+.pf-section--theme-dark .pf-landing,
+.pf-section.is-map-dark .pf-landing {
+  --pf-landing-accent: var(--pf-toc-accent, #{$pf-gold});
 }
 
 // Small tracked monospace label (search heading, Visit labels, links).
-%pf-bento-label {
-  font-family: var(--pf-bento-label);
+%pf-landing-label {
+  font-family: var(--pf-landing-label);
   font-size: .6875rem;
   font-weight: 700;
   letter-spacing: .16em;
@@ -40,13 +40,13 @@
 }
 
 // --- Lead panel -------------------------------------------------------------
-.pf-bento__lead {
+.pf-landing__lead {
   padding: clamp(1.5rem, 4vw, 3.5rem);
-  border-color: var(--pf-bento-line);
+  border-color: var(--pf-landing-line);
   border-radius: 0;
 }
 
-.pf-bento .pf-bento__title {
+.pf-landing .pf-landing__title {
   margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
   font-size: clamp(2.75rem, 1.5rem + 4vw, 5.5rem);
   font-weight: 500;
@@ -54,7 +54,7 @@
   line-height: .95;
 }
 
-.pf-bento__intro {
+.pf-landing__intro {
   max-width: 58ch;
   margin-bottom: clamp(2rem, 4vw, 3rem);
   font-size: clamp(1.0625rem, .95rem + .35vw, 1.25rem);
@@ -62,47 +62,47 @@
 }
 
 // Search: a hairline across the panel, then the label and the field.
-.pf-bento__lead > .pf-bento__form {
+.pf-landing__lead > .pf-landing__form {
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
-  border-top: 1px solid var(--pf-bento-line);
+  border-top: 1px solid var(--pf-landing-line);
 }
 
-.pf-bento__heading {
-  @extend %pf-bento-label;
+.pf-landing__heading {
+  @extend %pf-landing-label;
   margin-bottom: .875rem;
   color: var(--pf-toc-color);
 }
 
-.pf-bento__field {
+.pf-landing__field {
   min-height: 4rem;
   border-radius: 0;
 }
 
-.pf-bento__field:focus-within {
-  border-color: var(--pf-bento-accent);
-  box-shadow: 0 0 0 1px var(--pf-bento-accent);
+.pf-landing__field:focus-within {
+  border-color: var(--pf-landing-accent);
+  box-shadow: 0 0 0 1px var(--pf-landing-accent);
 }
 
-.pf-bento__input {
+.pf-landing__input {
   font-size: 1.25rem;
   font-weight: 300;
 }
 
-.pf-bento__submit,
-[dir="rtl"] .pf-bento__submit {
+.pf-landing__submit,
+[dir="rtl"] .pf-landing__submit {
   border-radius: 0;
 }
 
-.pf-bento__submit:focus-visible {
-  outline-color: var(--pf-bento-accent);
+.pf-landing__submit:focus-visible {
+  outline-color: var(--pf-landing-accent);
 }
 
-.pf-bento__bg-toggle {
+.pf-landing__bg-toggle {
   border-radius: 0;
 }
 
 // --- Map --------------------------------------------------------------------
-.pf-bento__visit .pf-map > .pf-map__heading {
+.pf-landing__visit .pf-map > .pf-map__heading {
   font-size: clamp(2rem, 1.25rem + 2.4vw, 3.25rem);
   font-weight: 500;
   letter-spacing: -.03em;
@@ -116,34 +116,34 @@
 // opens on the lead panel alone. .has-map-view is set by building-map.js:
 // without it the map always shows. Still focusable while held back: focus
 // scrolls it into view, which shows it.
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view .pf-bento__visit {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view .pf-landing__visit {
   transition: opacity .6s ease;
 }
 
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento.has-map-view:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__visit {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.is-map-in-view, .pf-landing--map-only) .pf-landing__visit {
   opacity: 0;
 }
 
 // Map only (the paragraph's "Hide search panel", field_bento_hide_lead): no
-// lead panel, so the map opens the bento. It is never held back, it starts
+// lead panel, so the map opens the landing. It is never held back, it starts
 // on the in-view backdrop (the .is-map-in-view overlay and blur from
 // _building-map.scss; the light wash in _visit.scss leaves it out), and it
 // loses the gap that separated it from the lead.
-.pf-bento--map-only > .pf-bento__visit {
+.pf-landing--map-only > .pf-landing__visit {
   margin-top: 0;
 }
 
-.pf-bento--map-only .pf-bento__media::after {
+.pf-landing--map-only .pf-landing__media::after {
   background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72));
 }
 
-// .pf-bento--map-only .pf-bento__bg-video {
+// .pf-landing--map-only .pf-landing__bg-video {
 //   filter: blur(12px) brightness(.55);
 //   transform: scale(1.06);
 // }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-bento--map-only .pf-bento__bg-video {
+  .pf-landing--map-only .pf-landing__bg-video {
     transform: none;
   }
 }
@@ -159,7 +159,7 @@
 }
 
 .pf-visit__eyebrow {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
 }
 
 .pf-visit__name {
@@ -175,7 +175,7 @@
 
 .pf-visit__week > summary,
 .pf-visit__week[open] > summary {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
 }
 
 .pf-visit__day {
@@ -184,9 +184,9 @@
 
 // Links as labels with an accent underline, like the events fact source.
 .pf-visit__link {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
   color: var(--pf-section-fg, var(--bs-body-color));
-  text-decoration-color: var(--pf-bento-accent);
+  text-decoration-color: var(--pf-landing-accent);
   text-decoration-thickness: 1px;
   text-underline-offset: .45em;
 }
@@ -197,7 +197,7 @@
 
 .pf-visit__link:focus-visible,
 .pf-visit__map-load:focus-visible {
-  outline-color: var(--pf-bento-accent);
+  outline-color: var(--pf-landing-accent);
 }
 
 .pf-visit__map-load {
@@ -205,18 +205,18 @@
 }
 
 .pf-visit__map-load small {
-  @extend %pf-bento-label;
+  @extend %pf-landing-label;
   font-size: .625rem;
 }
 
-// --- Light chrome over a bento video ----------------------------------------
+// --- Light chrome over a landing video ----------------------------------------
 // The video's white wash is only 20% (_visit.scss), so the chrome carries
 // the contrast itself. Worst case is a black frame under the glass.
 // Header: 45% glass (was 60%) with black nav, icons and logo (was #434343):
 // 51 + 0.45 * 204 = 143, about 6.4:1 for black. The "Reduce transparency"
 // and "High contrast" settings still make it solid: they set the
 // background colour directly, not this variable (_header.scss).
-:where(:root:has(.pf-bento.has-bg-video)) .pf-header:not([data-bs-theme="dark"]) {
+:where(:root:has(.pf-landing.has-bg-video)) .pf-header:not([data-bs-theme="dark"]) {
   --pf-header-bg: rgba(var(--bs-body-bg-rgb), .45);
   --pf-utility-color: #{$black};
 
@@ -230,15 +230,20 @@
 }
 
 // The strip under the compact header (_header.scss) matches it.
-:where(:root:has(.pf-bento.has-bg-video)) .pf-page::before {
+:where(:root:has(.pf-landing.has-bg-video)) .pf-page::before {
   background-color: rgba(var(--bs-body-bg-rgb), .45);
 }
 
 // Breadcrumb: it sits straight on the video above the lead panel, so on a
 // light hero it gets its own strip of the sidebar's glass. Text keeps its
-// edge (the padding is pulled back out).
-.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-bento.has-bg-video) .pf-breadcrumb--modular .breadcrumb {
+// edge (the padding is pulled back out). The strip is the video button's
+// height (2.25rem) and the button mirrors its outer edge, .75rem past the
+// content edge, so the two line up top, bottom and side to side
+// (landing-video.js centres the button on the strip and sets the edge).
+.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-landing.has-bg-video) .pf-breadcrumb--modular .breadcrumb {
   width: fit-content;
+  min-height: 2.25rem;
+  align-items: center;
   margin-inline-start: -.75rem;
   padding: .375rem .75rem;
   background-color: var(--pf-sidebar-bg);
@@ -247,13 +252,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-section .pf-bento.has-map-view .pf-bento__visit {
+  .pf-section .pf-landing.has-map-view .pf-landing__visit {
     transition: none !important;
   }
 }
 
 @media (forced-colors: active) {
-  .pf-bento__field:focus-within {
+  .pf-landing__field:focus-within {
     box-shadow: none;
   }
 }

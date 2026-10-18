@@ -1,11 +1,11 @@
 // =========================================================================
-// Bento lead panel and Visit strip, one 1280px column:
+// Landing lead panel and Visit strip, one 1280px column:
 // 1. Lead panel: page <h1>, intro and search on frosted glass.
-// 2. The building map (.pf-bento__visit, _building-map.scss).
+// 2. The building map (.pf-landing__visit, _building-map.scss).
 // 3. Visit strip: hours, mini map, Google Maps link, as wide as the map's
 //    legend and drawing together; a stacked card below md.
-// Rendered by templates/paragraphs/paragraph--bento-search.html.twig; the
-// intro and Visit fields come from _palefire_bento_visit() in
+// Rendered by templates/includes/landing.html.twig; the
+// intro and Visit fields come from _palefire_landing_visit() in
 // palefire.theme. Hours: js/visit-hours.js. Mini map: js/visit-map.js
 // (loads Google Maps only on click).
 //
@@ -16,7 +16,7 @@
 // Same glass as the Visit strip, the TOC sidebar and the top bar
 // (--pf-sidebar-bg + --pf-glass-filter), so the panel follows light and
 // dark sections and the Settings drawer's solid-chrome switch.
-.pf-bento__lead {
+.pf-landing__lead {
   min-width: 0;
   padding: clamp(1.25rem, 3vw, 2.5rem);
   border: 1px solid var(--pf-section-border, #6c757d);
@@ -29,28 +29,28 @@
 // Dark: the search field's muted text (placeholder, "Search", icon) sits on
 // two layers of glass over a bright frame of video; the section's muted grey
 // (#ababab) keeps it above 4.5:1 where the chrome grey (#929292) did not.
-.pf-section--theme-dark .pf-bento__lead { --pf-toc-color: var(--pf-section-muted); }
-.pf-bento__intro {
+.pf-section--theme-dark .pf-landing__lead { --pf-toc-color: var(--pf-section-muted); }
+.pf-landing__intro {
   max-width: 62ch;
   margin-bottom: 1.75rem;
   font-size: 1.125rem;
   line-height: 1.6;
 }
-.pf-bento__intro > :last-child,
-.pf-bento__intro .field > :last-child { margin-bottom: 0; }
+.pf-landing__intro > :last-child,
+.pf-landing__intro .field > :last-child { margin-bottom: 0; }
 
-// .pf-bento__media is position: fixed, so it paints over every bento child
+// .pf-landing__media is position: fixed, so it paints over every landing child
 // that isn't positioned: the intro and the "Search LSU Libraries" heading
 // were drawn under the video and its overlay. Positioning the children puts
 // them back on top, in DOM order (the media comes first).
-// The video toggle is left out: it is position: absolute (_bento-search.scss).
-.pf-bento.has-bg-video > :not(.pf-bento__media, .pf-bento__bg-toggle) { position: relative; }
+// The video toggle is left out: it is position: absolute (_landing.scss).
+.pf-landing.has-bg-video > :not(.pf-landing__media, .pf-landing__bg-toggle) { position: relative; }
 
-// Page <h1> above the intro, when the bento is the first section
-// (page_title, paragraph--bento-search.html.twig). Type: .pf-modular__title
+// Page <h1> above the intro, when the landing is the first section
+// (page_title, includes/landing.html.twig). Type: .pf-modular__title
 // in _layout.scss.
-.pf-bento__title { margin: 0 0 1.25rem; }
-.pf-bento__lead > .pf-bento__title + .pf-bento__intro { margin-top: 0; }
+.pf-landing__title { margin: 0 0 1.25rem; }
+.pf-landing__lead > .pf-landing__title + .pf-landing__intro { margin-top: 0; }
 
 // --- Visit strip -----------------------------------------------------------
 .pf-visit {
@@ -251,17 +251,17 @@
 .pf-section--theme-light-map::before {
   transition: color .45s ease, background-color .45s ease;
 }
-// Light bento sections (Light, or "Light, dark at the map" before the map):
+// Light landing sections (Light, or "Light, dark at the map" before the map):
 // a white wash over the background video instead of the dark one, so the
 // light tokens' dark text reads on it. Only 20% (was 40%, plus an 85% band
 // behind the top bar and breadcrumb, now gone), so the video keeps its
 // colour: every piece of text sits on glass instead (lead panel, sidebar,
-// header, the breadcrumb strip; _modular.scss, _bento-swiss.scss).
+// header, the breadcrumb strip; _modular.scss, _landing-swiss.scss).
 // Map in view: the .is-map-in-view dark overlay (_building-map.scss) takes
 // over.
 // With a reading swatch, every wash is the page colour (--pf-media-wash,
 // _reading-themes.scss).
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-bento:not(.is-map-in-view, .pf-bento--map-only) .pf-bento__media::after {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing:not(.is-map-in-view, .pf-landing--map-only) .pf-landing__media::after {
   background-color: var(--pf-media-wash, rgb(255 255 255 / .2));
 }
 
@@ -278,8 +278,8 @@
   .pf-visit__map,
   .pf-visit__week { display: none; }
   .pf-visit,
-  .pf-bento__lead { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
+  .pf-landing__lead { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
 }
 @media (forced-colors: active) {
-  .pf-bento__lead { border-color: CanvasText; }
+  .pf-landing__lead { border-color: CanvasText; }
 }
