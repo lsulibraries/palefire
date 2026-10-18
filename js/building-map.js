@@ -135,6 +135,8 @@
     let hideTimer = 0;
     let showTimer = 0;
     let hovered = null; // room lit by hover while its tooltip waits
+    let pinned = null;  // space tapped in the list and scrolled to (revealStage, hide)
+    let finishDraw = () => {}; // set by the draw-on trace, below
     // Hover wait before a tooltip shows: --pf-map-tip-delay (s or ms).
     const tipDelay = () => {
       const v = getComputedStyle(root).getPropertyValue('--pf-map-tip-delay').trim();
@@ -193,6 +195,7 @@
     // Pointer hover: wait first, unless a tooltip is already open (moving
     // from room to room then feels instant).
     function showSoon(key) {
+      if (pinned) return;
       clearTimeout(hideTimer);
       if (current && tip.classList.contains('is-open')) { clearTimeout(showTimer); show(key); return; }
       if (!live.has(key)) return;
@@ -206,7 +209,11 @@
       showTimer = setTimeout(() => { showTimer = 0; show(key); }, tipDelay());
     }
 
+    // A pinned space (revealStage) ignores hover in and out, since the
+    // scroll to the drawing slides rooms and list entries under the
+    // pointer; a tap elsewhere, Escape or a second tap closes it.
     function hide(now) {
+      if (pinned && !now) return;
       clearTimeout(hideTimer);
       const done = () => {
         // The tooltip's wait ends here, not on pointerleave, so crossing
@@ -217,6 +224,7 @@
         if (hovered && hovered !== current) setActive(hovered, false);
         current = null;
         hovered = null;
+        pinned = null;
         tip.classList.remove('is-open');
       };
       if (now) done();
@@ -296,12 +304,16 @@
     });
     // A tapped space whose room is out of sight (the legend under the
     // drawing: phones, stacked layouts) brings the drawing into view, so
-    // the room lighting up and its tooltip are seen. Pointer only: a
-    // keyboard press keeps focus, and the page, where they are.
-    const revealStage = () => {
+    // the room lighting up and its tooltip are seen. The drawing arrives
+    // already drawn (no draw-on trace hiding the room), and the space stays
+    // open until a tap elsewhere or Escape. Pointer only: a keyboard press
+    // keeps focus, and the page, where they are.
+    const revealStage = (key) => {
       const box = stage.getBoundingClientRect();
       const top = parseFloat(getComputedStyle(stage).scrollMarginTop) || 0;
       if (box.top >= top && box.bottom <= window.innerHeight) return;
+      pinned = key;
+      finishDraw();
       stage.scrollIntoView({ block: 'start', behavior: reduceMotion() ? 'auto' : 'smooth' });
     };
     items.forEach((item) => {
@@ -309,7 +321,7 @@
       hoverable(item, key);
       pressable(item, key);
       item.addEventListener('click', (e) => {
-        if (e.detail > 0 && current === key && tip.classList.contains('is-open')) revealStage();
+        if (e.detail > 0 && current === key && tip.classList.contains('is-open')) revealStage(key);
       });
     });
     document.addEventListener('pointerdown', (e) => {
@@ -521,6 +533,19 @@
       root.classList.add('is-tracing');
       hideLines();
       state = 'hidden';
+    };
+    // Straight to the end, no trace (revealStage).
+    finishDraw = () => {
+      if (state === 'drawn') return;
+      run++;
+      timers.forEach(clearTimeout);
+      timers = [];
+      animations.forEach((a) => a.cancel());
+      animations = [];
+      records.forEach(({ path }) => { path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; });
+      root.classList.remove('is-tracing', 'is-revealing');
+      root.classList.add('is-drawn');
+      state = 'drawn';
     };
     if (!('IntersectionObserver' in window)) { draw(); return; }
     // Draws each time a quarter of it comes into view; resets only once it

@@ -604,6 +604,21 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Building map: a tapped legend space stays lit after the scroll (2026-10-18)
+
+A fix to the next entry, found by testing the real files in a browser.
+Tapping a space in the legend scrolled the drawing into view, but the room
+and its tooltip were lost:
+- **The draw-on trace replayed.** The map comes back into view and
+  redraws, which hid the rooms for about 1.5s. The drawing now arrives
+  already drawn when the legend scrolls to it.
+- **Hover closed the tooltip.** With a mouse (a narrow desktop window),
+  the scroll slides other rooms and list entries under the pointer, and
+  their hover took over or closed it. The tapped space now ignores hover
+  in and out until a tap elsewhere, Escape, or a second tap.
+
+File: `building-map.js`.
+
 ### Landing TOC hides on desktop only; building map fits phones (2026-10-18)
 
 - **TOC:** the landing-page collapse over the hero and the events carousel
