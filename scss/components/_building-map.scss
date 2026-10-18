@@ -26,7 +26,7 @@
   --pf-map-tip-text: #d6d6d6;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
   --pf-map-hatch-period: 4.7px;        /* the drawing's 20-unit hatch period on screen; building-map.js keeps it in step with the map */
-  --pf-map-tip-delay: 1s;           /* hover wait before a tooltip shows (building-map.js reads this); the room lights at once */
+  --pf-map-tip-delay: 0.5s;           /* hover wait before a tooltip shows (building-map.js reads this); the room lights at once */
   --pf-map-tip-shift: -14px;           /* tooltip slides in from this far left */
   --pf-map-tip-slide: .38s;            /* tooltip slide-in duration */
   --pf-map-tip-slide-ease: cubic-bezier(.22, 1, .36, 1); /* fast start, soft landing, no overshoot */
