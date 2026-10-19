@@ -605,6 +605,36 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Legend lines are hairlines; Visit strip's name across, columns aligned (2026-10-19)
+
+- **Hairlines:** the legend's lines (above and below the toggle, above each
+  group, under each room) used the drawing's dashed-line grey
+  (`--pf-map-hidden-ink`, #5c5c5c, opaque). They now use the site's soft
+  hairline (`$pf-hairline`, the panel's muted tone at 20%) through a new
+  `--pf-map-rule`, the same as the hours rows in the Visit strip. The
+  drawing keeps its grey. Rule from here on: lines and borders are this
+  hairline unless a control needs 3:1.
+- **Visit strip layout:** the name ("Visit / Hill Memorial Library") runs
+  across the top. Under it, the columns start on one line: Instagram |
+  hours | mini map from 1200px, and hours | map with Instagram under the
+  hours from 768px. The map column stretches, with its mini map growing
+  (16:10 at least), so the columns also end on one line. No new rules or
+  borders. Applies to every Visit strip.
+- **The row fade-in:** the previous patch (`c1b257f`) wasn't on the server
+  yet when this was checked. /v2/special had no `.pf-seq` rows and no fade
+  rule, while the patch before it (hatches on the headings) was live. It
+  arrives with `git pull && drush cr`.
+
+Measured on /v2/special with the change injected:
+
+| Window | Name | Column tops | Column bottoms |
+|---|---|---|---|
+| 1333 | full width | 2643 / 2643 / 2643 | 2918 / 2918 / 2918 |
+| 1024 | full width | hours 2466, map 2466 | 2899 (Instagram) / 2899 (map) |
+| 320 | stacked | | no sideways scroll |
+
+Files: `_building-map.scss`, `_visit.scss`.
+
 ### Legend & spaces opens like the guides' accordions (2026-10-19)
 
 Same motion as `.pf-accordion` in the guides (the mobile menu's timing,

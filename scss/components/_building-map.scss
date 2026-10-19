@@ -6,6 +6,7 @@
   --pf-map-ink: #fff;                  /* outline + room names */
   --pf-map-floor-ink: #9a9a9a;         /* floor names (FLOOR 2, ENTRANCE) */
   --pf-map-hidden-ink: #5c5c5c;        /* dashed lines between floors */
+  --pf-map-rule: #{$pf-hairline};      /* the key's lines: the site's soft hairline, as the Visit strip's hours */
   --pf-map-hatch: #fff;
   --pf-map-hatch-walk-in: .3;          /* matches the draft's #4d4d4d hatch on black */
   --pf-map-hatch-appointment: .13;     /* appointment spaces read quieter */
@@ -323,7 +324,7 @@
 .pf-map__key { margin: 0; padding: 0; border: 0; background: none; }
 .pf-map__key-toggle {
   display: flex; align-items: center; gap: .75rem; min-height: 2.75rem; padding: .6rem 0;
-  border-top: 1px solid var(--pf-map-hidden-ink); border-bottom: 1px solid var(--pf-map-hidden-ink);
+  border-top: 1px solid var(--pf-map-rule); border-bottom: 1px solid var(--pf-map-rule);
   font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-ink);
   list-style: none; cursor: pointer;
 }
@@ -391,10 +392,10 @@
 .pf-map__list { display: grid; gap: 1.25rem; }
 /* Each group's heading carries its hatch (once, not on every room). */
 .pf-map__group-title { display: flex; align-items: center; gap: .6rem; margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
-.pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-hidden-ink); }
+.pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-rule); }
 .pf-map__item {
   display: flex; align-items: center; gap: .75rem; width: 100%; min-height: 2.75rem;
-  padding: .55rem .25rem; border: 0; border-bottom: 1px solid var(--pf-map-hidden-ink);
+  padding: .55rem .25rem; border: 0; border-bottom: 1px solid var(--pf-map-rule);
   background: none; color: var(--pf-map-ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer;
 }
 .pf-map__item-name { flex: 1; font-weight: 600; }
