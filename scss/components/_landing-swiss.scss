@@ -151,15 +151,17 @@
 // Light sections: the map is drawn for a dark backdrop (white ink), which it
 // only gets once it is in view (the .is-map-in-view overlay, or "Light, dark
 // at the map" turning the section dark). Until then it peeked out under the
-// lead panel as white on a pale wash. Held back until in view, so the hero
-// opens on the lead panel alone. .has-map-view is set by building-map.js:
-// without it the map always shows. Still focusable while held back: focus
-// scrolls it into view, which shows it.
+// lead panel as white on a pale wash. Held back until it is first in view,
+// so the hero opens on the lead panel alone; after that it stays (.has-map-
+// seen), not fading out and in again each time it leaves the window.
+// .has-map-view and .has-map-seen are set by building-map.js: without them
+// the map always shows. Still focusable while held back: focus scrolls it
+// into view, which shows it.
 .pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view .pf-landing__visit {
   transition: opacity .6s ease;
 }
 
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.is-map-in-view, .pf-landing--map-only) .pf-landing__visit {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.is-map-in-view, .has-map-seen, .pf-landing--map-only) .pf-landing__visit {
   opacity: 0;
 }
 

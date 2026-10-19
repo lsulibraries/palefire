@@ -605,6 +605,32 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Map: drawn once; no fade out and back in (2026-10-19)
+
+- **Drawn once:** the draw-on trace ran every time the map came back into
+  view, because it reset whenever the map left the screen. Now it runs the
+  first time a quarter of the map is in view, then the observer
+  disconnects, and the map stays drawn (rooms and names included) for the
+  rest of the visit. `reset()` is gone.
+- **No fade out/in:** on light sections (/v2/special is "light" under
+  Twilight), the whole map, legend and Visit panel faded to opacity 0
+  whenever the map left the window, and back in when it returned (0.6s
+  each way). That hold-back only exists so white map lines don't peek out
+  under the lead before you get there. `building-map.js` now adds
+  `.has-map-seen` the first time the map is in view, and the hold-back
+  rule skips it, so the map fades in once and then stays.
+- **Unchanged:** the video's darker wash while the map is in view, on
+  sections that have one (it's how the white lines stay readable). On
+  /v2/special under Twilight the wash is the same both ways, so nothing
+  fades there. Also unchanged: the "light, dark at the map" theme switch.
+
+Checked: `node --check js/building-map.js` passes, and the compiled CSS
+has the hold-back rule only with `:not(.has-map-seen)`. Not checked: the
+script itself on a page. The live site still has the old one, and the
+pane freezes the timeline.
+
+Files: `js/building-map.js`, `_landing-swiss.scss`.
+
 ### Legend lines are hairlines; Visit strip's name across, columns aligned (2026-10-19)
 
 - **Hairlines:** the legend's lines (above and below the toggle, above each

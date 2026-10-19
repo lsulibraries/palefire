@@ -478,6 +478,10 @@
       let armed = window.scrollY > ARM_AT || landing.classList.contains('pf-landing--map-only');
       let latest = false;
       const apply = (inView) => {
+        // Seen once, the map stays shown (_landing-swiss.scss holds it back
+        // on light sections only until then), so it doesn't fade out and
+        // back in each time it leaves and re-enters the window.
+        if (inView) landing.classList.add('has-map-seen');
         if (landing.classList.contains('is-map-in-view') === inView) return;
         landing.classList.toggle('is-map-in-view', inView);
         // "Light, dark at the map" sections (field_section_theme = light-map):
@@ -514,8 +518,8 @@
       root.pfMapDim = { disconnect() { dim.disconnect(); arm.abort(); } };
     }
 
-    // Draw-on trace (from the codepen) every time the map scrolls into view:
-    // it resets once fully off screen.
+    // Draw-on trace (from the codepen), once: the first time the map
+    // scrolls into view. After that it stays drawn.
     if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') return;
     root.classList.add('is-tracing');
     // Reveal order: rooms top to bottom (then left to right) through the
@@ -542,7 +546,7 @@
     });
     hideLines();
     // 'hidden' (ready to draw), 'drawing' or 'drawn'. `run` tells a draw
-    // that finished apart from one a reset cancelled.
+    // that finished apart from one finishDraw() cut short.
     let state = 'hidden';
     let run = 0;
     let animations = [];
@@ -580,19 +584,6 @@
         state = 'drawn';
       });
     };
-    // Back to the start, hidden. Only ever runs off screen, so nothing
-    // visibly disappears.
-    const reset = () => {
-      run++;
-      timers.forEach(clearTimeout);
-      timers = [];
-      animations.forEach((a) => a.cancel());
-      animations = [];
-      root.classList.remove('is-revealing', 'is-drawn');
-      root.classList.add('is-tracing');
-      hideLines();
-      state = 'hidden';
-    };
     // Straight to the end, no trace (revealStage).
     finishDraw = () => {
       if (state === 'drawn') return;
@@ -607,16 +598,14 @@
       state = 'drawn';
     };
     if (!('IntersectionObserver' in window)) { draw(); return; }
-    // Draws each time a quarter of it comes into view; resets only once it
-    // is fully off screen, so it never vanishes while partly visible.
+    // Draws when a quarter of it first comes into view, then stops
+    // watching.
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
-        if (state === 'hidden') draw();
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.25 && state === 'hidden') {
+        io.disconnect();
+        draw();
       }
-      else if (!entry.isIntersecting && state !== 'hidden') {
-        reset();
-      }
-    }, { threshold: [0, 0.25] });
+    }, { threshold: [0.25] });
     io.observe(svg);
     root.pfMapDraw = {
       disconnect() {
@@ -637,7 +626,7 @@
         if (root.pfMapDim) root.pfMapDim.disconnect();
         if (root.pfMapDraw) root.pfMapDraw.disconnect();
         const landing = root.closest('.pf-landing');
-        if (landing) landing.classList.remove('is-map-in-view', 'has-map-view');
+        if (landing) landing.classList.remove('is-map-in-view', 'has-map-view', 'has-map-seen');
         const section = landing ? landing.closest('[data-section-theme="light-map"]') : null;
         if (section) {
           section.classList.remove('is-map-dark');
