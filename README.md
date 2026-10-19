@@ -605,6 +605,26 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Map: quieter room hatching on desktop (2026-10-19)
+
+From lg (992px), where the drawing is large and its long hatch lines read
+heavy, every room hatch is about a quarter quieter. The gap between
+resting and selected stays, so the selected room still stands out (its
+name also turns gold).
+
+| Hatch | Resting | Selected (hover, focus, tap) |
+|---|---|---|
+| Walk-in | .3 → **.22** | .5 → **.4** |
+| Appointment (broken hatch, as on Hill) | .42 → **.32** | .7 → **.55** |
+| Appointment (plain hatch) | .13 → .1 | .3 → .24 |
+
+The legend swatches on the "Walk in" / "By appointment" headings use the
+same variables, so they match. Below lg, nothing changes. Checked on
+/v2/special with the change injected: rooms and swatches read
+.22/.4 and .32/.55 at 1333px, and the old values at 800px.
+
+File: `_building-map.scss`.
+
 ### Map: drawn once; no fade out and back in (2026-10-19)
 
 - **Drawn once:** the draw-on trace ran every time the map came back into

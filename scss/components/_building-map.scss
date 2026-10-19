@@ -385,6 +385,24 @@
   --pf-map-hatch-appointment: .42;
   --pf-map-hatch-appointment-hover: .7;
 }
+/* Desktop (lg up): the drawing is large there, so its long hatch lines read
+   heavier than on smaller screens. Every hatch is about a quarter quieter,
+   resting and selected alike, with the step between them kept so the
+   selected room still stands out (its name turns gold too). The legend
+   swatches use the same variables, so they match. Plain hatch appointment
+   rooms (no broken hatch) drop by the same share. */
+@media (min-width: 992px) {
+  .pf-map {
+    --pf-map-hatch-walk-in: .22;
+    --pf-map-hatch-hover: .4;
+    --pf-map-hatch-appointment: .1;
+    --pf-map-hatch-appointment-hover: .24;
+  }
+  .pf-map.has-broken-hatch {
+    --pf-map-hatch-appointment: .32;
+    --pf-map-hatch-appointment-hover: .55;
+  }
+}
 .pf-map.has-broken-hatch .pf-map__swatch--appointment {
   -webkit-mask: conic-gradient(#000 0 25%, transparent 0 50%, #000 0 75%, transparent 0) 0 0 / calc(var(--p) * 2) calc(var(--p) * 2);
   mask: conic-gradient(#000 0 25%, transparent 0 50%, #000 0 75%, transparent 0) 0 0 / calc(var(--p) * 2) calc(var(--p) * 2);
