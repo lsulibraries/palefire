@@ -605,6 +605,20 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing bar: no flickering band under it (2026-10-19)
+
+A dark band, about 20px tall, sometimes showed along the top of the lead
+panel under the breadcrumb bar. It came and went as the cursor moved.
+Both are glass (`backdrop-filter`), and the bar was drawn first. The
+lead's blur therefore had the bar's dark fill behind it, and Chrome let
+that bleed in along the shared edge whenever it repainted. The bar is now
+drawn after the lead (`z-index: 1`), so the bar is never part of the
+lead's backdrop. The TOC (2) and the video button (5) stay above it. The
+TOC's glass was already drawn after the lead, which is why its edge never
+showed the band.
+
+File: `_landing-features.scss`.
+
 ### Hero search hairline, map tooltip on top, header under the admin toolbar (2026-10-19)
 
 - **Search box:** the field's border and the divider before the Search

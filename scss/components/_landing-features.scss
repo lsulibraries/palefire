@@ -79,7 +79,14 @@
 // keeps the head's type (.pf-breadcrumb--modular, _layout.scss) without its
 // glass strip. The TOC title lines up with the breadcrumb (modular-toc.js
 // measures it, as it did the head's).
+// The bar is drawn after the lead panel (z-index 1; the TOC, 2, and the
+// video button, 5, stay above it). The lead's glass blurs whatever is drawn
+// before it, and Chrome let that blur pick up the bar's dark fill: a band
+// about the blur's size along the lead's top edge that came and went as
+// the page repainted (on hover, cursor moves).
 .pf-landing__bar {
+  position: relative;
+  z-index: 1;
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-bottom: var(--pf-landing-bar-gap);
   padding-block: .375rem;
