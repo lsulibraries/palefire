@@ -605,6 +605,34 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: less space above the title; bar items at the screen's edges; no bar border (2026-10-19)
+
+- **Space above the title:** `clamp(1.5rem, 4vw, 3.5rem)`, 53px at
+  1333px. That's about halfway between the panel's own padding (24px)
+  and the side gutter (80px, tried in the last change, too much).
+- **Breadcrumb and video button near the screen's edges:** both sit 1rem
+  from the content column's edges (`--pf-bar-edge`), like the floating TOC
+  button, instead of on the content column, which leaves the space above
+  the title clear.
+  - With the TOC hidden (lg and up), the breadcrumb steps past the TOC's
+    floating button (1rem + 2.25rem + 1rem), in step with the column
+    (.3s, none under reduced motion).
+  - The docked button keeps 1rem from the right edge, sticky as before.
+- **No border under the bar:** it ran into the TOC sidebar's edge. The bar
+  is now 3rem (`--pf-landing-bar-h`), so the docked button's offsets
+  follow.
+
+Measured on /v2/special at 1333×798 with the change injected, in
+Twilight:
+- **TOC open:** breadcrumb 16px from the column's edge, button 16px from
+  the right.
+- **TOC hidden:** breadcrumb at 68px, clear of the TOC button (which ends
+  at 52px).
+- **Both:** the button is inside the bar's row, the space above the title
+  is 53px, and the panel ends at the window's bottom.
+
+File: `_landing-features.scss`.
+
 ### Landing hero: gutter above the title, tiles fill the panel, one-line cards (2026-10-19)
 
 - **Space above the title = the side gutter:** the panel's top padding is

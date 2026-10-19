@@ -53,24 +53,29 @@
 }
 
 // --- Content column -----------------------------------------------------
-// The panel's content, the bar's breadcrumb and the docked video button
-// share one column: at most 1280px, centred, with a gutter of at least
-// 2rem to 6rem (6vw) from the screen's edge, which also keeps the
-// breadcrumb clear of the floating TOC button. Percentages in
-// --pf-hero-inset are of the landing's width (the containing block of the
-// bar, the dock and the panel), so 100% plus the section's two side
-// paddings is the column's full width.
+// The panel's content keeps to one column: at most 1280px, centred, with a
+// gutter of at least 2rem to 6rem (6vw) from the screen's edge.
+// Percentages in --pf-hero-inset are of the landing's width (the containing
+// block of the bar, the dock and the panel), so 100% plus the section's two
+// side paddings is the column's full width.
+// The bar's breadcrumb and the docked video button sit near the screen's
+// edges instead (--pf-bar-edge, 1rem, as the floating TOC button), leaving
+// the column's space above the title clear.
 .pf-landing--hero {
   --pf-hero-gutter: clamp(2rem, 6vw, 6rem);
   --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
-  --pf-landing-bar-h: calc(3rem + 1px); // the bar: 2.25rem row, .375rem padding each side, the hairline
+  --pf-bar-edge: 1rem;
+  --pf-landing-bar-h: 3rem; // the bar: 2.25rem row, .375rem padding each side
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
 }
 
 // --- Sub-header bar: breadcrumb -----------------------------------------
 // A glass bar right under the header, across the whole content column (the
-// section's side padding is pulled back out), in the header and TOC's glass
-// with a hairline under it. The breadcrumb (PalefireHooks::crumbInLanding())
+// section's side padding is pulled back out), in the header and TOC's glass.
+// No hairline under it: it ran into the TOC sidebar's edge. The breadcrumb
+// sits 1rem from the column's edge; with the TOC hidden (lg and up), past
+// the floating TOC button there (1rem in, 2.25rem wide, then 1rem), moving
+// with the column. The breadcrumb (PalefireHooks::crumbInLanding())
 // keeps the head's type (.pf-breadcrumb--modular, _layout.scss) without its
 // glass strip. The TOC title lines up with the breadcrumb (modular-toc.js
 // measures it, as it did the head's).
@@ -78,11 +83,20 @@
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-bottom: var(--pf-landing-bar-gap);
   padding-block: .375rem;
-  padding-inline: var(--pf-hero-inset);
-  border-bottom: 1px solid var(--pf-toc-rail, #{$pf-hairline});
+  padding-inline: var(--pf-bar-edge);
   background-color: var(--pf-sidebar-bg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-landing__bar {
+    transition: padding-inline-start .3s ease-in-out; // the TOC column's timing
+  }
+
+  html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-landing__bar {
+    padding-inline-start: calc(2 * var(--pf-bar-edge) + 2.25rem);
+  }
 }
 
 .pf-landing__bar-inner {
@@ -119,7 +133,7 @@
   height: 0;
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
-  padding-inline: var(--pf-hero-inset);
+  padding-inline: var(--pf-bar-edge);
   pointer-events: none;
 }
 
@@ -149,10 +163,10 @@
     min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
-    // The space above the title is the side gutter (--pf-hero-gutter), so
-    // the content sits in an even margin. On wide windows the sides are
-    // wider still, where the column centres.
-    padding-top: var(--pf-hero-gutter);
+    // Space above the title: about halfway between the panel's own padding
+    // and the side gutter (53px at 1333px; the gutter, tried first, was
+    // 80px, too much).
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
     border-width: 0 0 1px;
   }
 }
@@ -588,7 +602,8 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-exhibit,
   .pf-exhibit__frame,
-  .pf-exhibit__more {
+  .pf-exhibit__more,
+  .pf-landing__bar {
     transition: none !important;
   }
 
@@ -600,7 +615,8 @@
 html.pf-a11y-motion {
   .pf-exhibit,
   .pf-exhibit__frame,
-  .pf-exhibit__more {
+  .pf-exhibit__more,
+  .pf-landing__bar {
     transition: none !important;
   }
 
