@@ -446,8 +446,13 @@ html.pf-snap .site-footer {
     --pf-bleed-inline-start: 0px;
   }
 
-  // The sidebar slides out whole, glass and all, like Bootstrap's
-  // .offcanvas-start, while the column closes behind it. visibility takes
+  // The sidebar slides out whole, glass and all, as the column closes: it
+  // sits at the end of its column (justify-self: end, below), so as the
+  // column narrows its full-width box moves off the page edge. No transform
+  // (2026-10-19): a transform ran on the compositor, smoothly, while the
+  // column's width is page layout; on a heavy page the content's edge lagged
+  // behind the sidebar's and the background video showed through the gap.
+  // Both now move in the same layout, so they can't part. visibility takes
   // the links out of the tab order once it has gone. overflow: visible lets
   // the toggle (inside the sidebar) ride along past its edge and stay on
   // screen.
@@ -455,15 +460,9 @@ html.pf-snap .site-footer {
     visibility: hidden;
     pointer-events: none;
     overflow: visible;
-    transform: translateX(-100%);
     transition:
       background-color .3s ease,
-      transform .3s ease-in-out,
       visibility 0s linear .3s;
-  }
-
-  html[dir="rtl"].pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-sidebar.pf-modular__sidebar {
-    transform: translateX(100%);
   }
 
   // Open: top right of the sidebar, centred on the TOC title's first line
@@ -555,6 +554,7 @@ html.pf-snap .site-footer {
     position: sticky;
     top: var(--pf-header-h);
     width: var(--pf-sidebar-w);
+    justify-self: end; // at the column's end, so it slides out as the column closes (TOC sidebar toggle, above)
     align-self: flex-start; // a stretched column is as tall as the row, so it can't stick
     height: calc(100dvh - var(--pf-header-h));
     overflow-y: auto;
@@ -569,7 +569,6 @@ html.pf-snap .site-footer {
     backdrop-filter: var(--pf-glass-filter, blur(26px));
     transition:
       background-color 0.3s ease,
-      transform 0.3s ease-in-out,
       visibility 0s;
     // Above the section backgrounds that bleed in under it (each
     // .pf-section__inner is z-index 1); below the header (1020).

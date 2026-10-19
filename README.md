@@ -605,6 +605,81 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: three opening tiles, account card, sticky video button, smooth TOC (2026-10-19)
+
+**TOC hide/show without the video showing through** (`_modular.scss`):
+- The sidebar used to slide with a `transform`, which runs on the
+  compositor, smoothly. The column's width is page layout on the main
+  thread. On this heavy page the panel's edge lagged behind the sidebar's,
+  and the bare background video showed in the gap.
+- The sidebar now sits at the end of its column (`justify-self: end`), so
+  as the column narrows it moves off the page edge in the same layout as
+  the content. The two edges can't part, and the RTL transform rule is
+  gone.
+- Checked by stepping the animation on /v2/special: the sidebar's right
+  edge equals the panel's left edge at every step, closing and opening.
+
+**Content column and sub-header bar** (`_landing-features.scss`):
+- **Gutter:** the column keeps at least `clamp(2rem, 6vw, 6rem)` from the
+  screen's edge (80px at 1333px), up to 1280px wide and centred. The bar's
+  breadcrumb and the panel's content share it, which also keeps the
+  breadcrumb clear of the floating TOC button.
+- **Sticky video button:** the button moved into a zero-height sticky
+  `.pf-landing__dock` laid over the bar's row (after the breadcrumb in the
+  source, so after it in the tab order).
+  - It sits on the column's right edge and, once the page scrolls, stays
+    .375rem under the header, compact or not, like the TOC's button.
+  - It leaves when the landing does, so it's there over the map, where the
+    video shows most.
+  - The bar keeps room for it, so a long breadcrumb wraps first (320px).
+
+**Search:**
+- More space around the search: 1rem to 1.5rem above the rule, under it,
+  and under the field.
+- The rule above it is now the same soft hairline as the lines above the
+  bottom row.
+- The field's border is softer, at 70% of the panel's muted tone. It can't
+  match the hairline (20%, about 1.5:1): a text field's boundary needs 3:1
+  (WCAG 1.4.11), and 70% is the least that keeps 3:1 on every reading
+  swatch over a mid-grey or white/black video frame.
+
+**Three tiles, opening on hover** (`landing.html.twig`):
+- The tiles are Exhibition | LSU History | a new guide tile, "How to use
+  Special Collections" (placeholder). They sit flush in one hairline
+  frame, with no borders between.
+- With a pointer, the tile under it, or the one with keyboard focus
+  inside, grows to about 2.4 times the others' width (.6s). More of its
+  picture shows, and its extra line and link prompt fade in.
+  - Measured at 1333px: the open tile is 635px and the others 265px.
+- Each tile has a `more` line, plus `url` and `cta` (empty for now). With
+  a url, the title is the tile's link, stretched over it, so the
+  slideshow's pause button stays its own control.
+- In a closed tile the label and date lines stay on one line (ellipsis)
+  and the title takes two at most, so the text always fits the tile.
+- Below 36rem of panel the tiles stack at 4:3, with everything shown.
+- Reduced motion switches without the animation.
+
+**Bottom row: Next event | Latest blog post | Special Collections account:**
+- The account card is a placeholder ("Sign in to your account",
+  `account_url` empty for now) with Font Awesome Pro's user icon.
+- The row is three across from 60rem of panel, two from 36rem, one below
+  (container queries, so the TOC being open counts too).
+- Thumbnails are 7×5 landscape, `clamp(6.5rem, 9.5cqi, 9rem)` wide (111×79
+  at 1333px, up to 144×103).
+- Titles take two lines and the line under them one, so the three cards
+  stay one even row.
+
+**Fit at 1333×767:** the tiles' band is `clamp(9rem, 19svh, 13rem)` and
+the panel's padding is a little tighter. The content ends at 743px and the
+panel at the window's bottom.
+
+Checked on /v2/special by replacing these components' live rules with the
+new ones and the markup as the template now renders it, at 320, 768 and
+1333px, in Twilight. No sideways scroll anywhere. Not checked: the real
+template (the PHP side is unchanged).
+
+Files: `landing.html.twig`, `_landing-features.scss` and `_modular.scss`.
+
 ### Landing hero lead is full screen (2026-10-19)
 
 From md up the hero's lead panel fills the screen: across the whole

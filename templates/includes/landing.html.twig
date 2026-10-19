@@ -134,19 +134,24 @@
     {% set search_label = 'Search LSU Libraries'|t %}
     {% set search_placeholder = landing.placeholder|default('Search books, articles, databases, guides and more'|t) %}
   {% endif %}
-  {# Sub-header bar: the breadcrumb, and the background video button at the
-     far end, on a glass bar across the content column right under the
-     header (PalefireHooks::crumbInLanding(); page.html.twig leaves the
-     head's breadcrumb out). Same markup and classes as the head's
+  {# Sub-header bar: the breadcrumb on a glass bar across the content column
+     right under the header (PalefireHooks::crumbInLanding(); page.html.twig
+     leaves the head's breadcrumb out). Same markup and classes as the head's
      breadcrumb, so its type and link styles carry over
-     (_landing-features.scss). #}
+     (_landing-features.scss).
+     The background video button follows in a sticky "dock": it starts at the
+     far end of the bar's row and stays under the header while the landing
+     (and its video) is on screen, like the TOC's hide/show button. After the
+     breadcrumb in the source, so it comes after it in the tab order. #}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
         <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
-        {{ video_toggle }}
       </div>
     </div>
+    {% if video_toggle %}
+      <div class="pf-landing__dock">{{ video_toggle }}</div>
+    {% endif %}
   {% endif %}
   <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
     {% if page_title %}
@@ -171,16 +176,22 @@
       </div>
     </form>
     {% if hero %}
-      {# Features (_landing-features.scss): two exhibitions side by side,
-         then Next event | Latest blog post, each with its label above.
+      {# Features (_landing-features.scss): three large tiles that open on
+         hover or focus (an accordion across: the one in use widens, shows
+         more of its picture and a line more about it), then Next event |
+         Latest blog post | Special Collections account.
+         - exhibitions: PLACEHOLDERS until there is a source for them. Same
+           shape a real source would give: label, title, start/end (ISO
+           dates) and dates (shown), or permanent, or meta (a line in place
+           of dates); more (the line shown when the tile opens); url and cta
+           (empty for now, so the tile is not a link); images (urls, empty
+           for now: hatched frames stand in). More than one image
+           crossfades (exhibit-rotate.js), with a pause button.
          - hero_post: palefire_preprocess_paragraph__landing_hero(), the
            newest Article in the paragraph's "Blog category"; a placeholder
            until that field exists and is filled in.
-         - exhibitions: PLACEHOLDERS until there is a source for them. Same
-           shape a real source would give: label, title, start/end (ISO
-           dates) and dates (shown), or permanent; images (urls, empty for
-           now: hatched frames stand in). More than one image crossfades
-           (exhibit-rotate.js), with a pause button. #}
+         - account_url: PLACEHOLDER for the Special Collections account
+           sign-in (empty, so the card is not a link yet). #}
       {% set exhibitions = [
         {
           label: 'Exhibition'|t,
@@ -188,6 +199,9 @@
           start: '2026-09-01',
           end: '2026-12-19',
           dates: 'Sep 1 – Dec 19, 2026',
+          more: 'Placeholder: a line or two about the exhibition.'|t,
+          cta: 'View the exhibition'|t,
+          url: '',
           images: [],
           frames: 1,
         },
@@ -195,12 +209,26 @@
           label: 'Permanent exhibition'|t,
           title: 'LSU History'|t,
           permanent: true,
+          more: 'Placeholder: a line or two about the permanent exhibition.'|t,
+          cta: 'Visit the exhibition'|t,
+          url: '',
           images: [],
           frames: 3,
         },
+        {
+          label: 'Guide'|t,
+          title: 'How to use Special Collections'|t,
+          meta: 'Registering · Requesting · Reading room'|t,
+          more: 'Placeholder: what to bring, how to request materials before a visit, and the reading room rules.'|t,
+          cta: 'Read the guide'|t,
+          url: '',
+          images: [],
+          frames: 1,
+        },
       ] %}
+      {% set account_url = '' %}
       <div class="pf-landing__features">
-        <ul class="pf-exhibits" aria-label="{{ 'Exhibitions'|t }}">
+        <ul class="pf-exhibits" aria-label="{{ 'Exhibitions and guides'|t }}">
           {% for ex in exhibitions %}
             {% set count = ex.images ? ex.images|length : ex.frames %}
             <li class="pf-exhibit{{ ex.permanent ? ' pf-exhibit--permanent' }}"{% if count > 1 %} data-pf-exhibit-rotate{% endif %}>
@@ -215,14 +243,27 @@
               </div>
               <div class="pf-exhibit__text">
                 <p class="pf-exhibit__label">{{ ex.label }}</p>
-                <p class="pf-exhibit__title">{{ ex.title }}</p>
+                {# With a url the title is the link, stretched over the tile
+                   (_landing-features.scss), so the pause button stays its
+                   own control. #}
+                <p class="pf-exhibit__title">
+                  {% if ex.url %}<a class="pf-exhibit__link" href="{{ ex.url }}">{{ ex.title }}</a>{% else %}{{ ex.title }}{% endif %}
+                </p>
                 <p class="pf-exhibit__when">
                   {% if ex.permanent %}
                     {{ 'On view · Permanent'|t }}
+                  {% elseif ex.meta %}
+                    {{ ex.meta }}
                   {% else %}
                     <time datetime="{{ ex.start }}/{{ ex.end }}">{{ ex.dates }}</time>
                   {% endif %}
                 </p>
+                {% if ex.more %}
+                  <div class="pf-exhibit__more">
+                    <p>{{ ex.more }}</p>
+                    {% if ex.url and ex.cta %}<span class="pf-exhibit__cta" aria-hidden="true">{{ ex.cta }}</span>{% endif %}
+                  </div>
+                {% endif %}
               </div>
               {% if count > 1 %}
                 {# Crossfade pause/play (WCAG 2.2.2), set up by exhibit-rotate.js. #}
@@ -262,6 +303,21 @@
                 </span>
               </div>
             {% endif %}
+          </div>
+          {# Special Collections account: sign in to request materials. #}
+          <div class="pf-hero-account">
+            <p class="pf-hero-event__label">{{ 'Your account'|t }}</p>
+            {% set account_tag = account_url ? 'a' : 'div' %}
+            <{{ account_tag }} class="pf-hero-event__card{{ not account_url ? ' is-placeholder' }}"{% if account_url %} href="{{ account_url }}"{% endif %}>
+              {# Font Awesome Pro user (solid), inlined from the site's copy
+                 like the map's hint icon. #}
+              <span class="pf-hero-event__thumb pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/solid/user.svg', ignore_missing = true)|raw }}</span>
+              <span class="pf-hero-event__text">
+                <span class="pf-hero-event__when">{{ 'Special Collections'|t }}</span>
+                <span class="pf-hero-event__title">{{ 'Sign in to your account'|t }}</span>
+                <span class="pf-hero-event__meta">{{ 'Request materials and keep track of your requests.'|t }}</span>
+              </span>
+            </{{ account_tag }}>
           </div>
         </div>
       </div>

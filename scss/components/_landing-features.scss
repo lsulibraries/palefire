@@ -1,38 +1,41 @@
 // =========================================================================
 // Landing hero lead (includes/landing.html.twig, hero only), top to bottom:
-// the title; the page intro, full width; a search form (a placeholder for
-// a Special Collections search); then the features:
-// 1. Two exhibitions side by side: tiles with the image edge to edge and
-//    the text over it on a dark scrim. Placeholders for now: hatched frames
-//    stand in for images. A tile with several images crossfades through
-//    them (exhibit-rotate.js), with a pause button.
-// 2. Next event (hero-event.js) | Latest blog post: the Next event card's
-//    parts (_landing-hero.scss), each under its label, left-aligned.
-// With the lead filling the first screen (.pf-landing--lead-screen, md and
-// up) the exhibitions take the height the other rows leave. Sized so the
-// whole lead ends on screen on a laptop: 1333x767 (a 1.5x display) and up,
+// the sub-header bar (breadcrumb) and the sticky video button; then the
+// lead panel: the title; the page intro, full width; a search form (a
+// placeholder for a Special Collections search); then the features:
+// 1. Three large tiles side by side, flush (no borders between): two
+//    exhibitions and a guide. The tile under the pointer or keyboard focus
+//    widens, shows more of its picture and a line more about it (an
+//    accordion across). Placeholders for now: hatched frames stand in for
+//    images. A tile with several images crossfades through them
+//    (exhibit-rotate.js), with a pause button.
+// 2. Next event (hero-event.js) | Latest blog post | Special Collections
+//    account: the Next event card's parts (_landing-hero.scss), with 7x5
+//    thumbnails.
+// From md (.pf-landing--lead-screen) the panel is full screen: the whole
+// content column, from the bar to the bottom of the window. Sized so its
+// content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
 // measured on /v2/special.
 // Imported after _landing-hero.scss, so these rules follow the ones they
 // adjust.
 // =========================================================================
 
-// Exhibitions a short band (9rem to 12rem, 18% of the window's height), then
-// the event and the post. A tall window's spare height goes between the two
-// rows, so the event and post stay at the panel's foot.
+// The tiles, then the bottom row. A tall window's spare height goes between
+// the two rows, so the bottom row stays at the panel's foot.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: clamp(9rem, 18svh, 12rem) auto;
+  grid-template-rows: auto auto;
   align-content: space-between;
-  gap: clamp(.875rem, 1.5vw, 1rem);
+  gap: clamp(1rem, 2vw, 1.25rem);
+  container: pf-features / inline-size;
 }
 
-// Less room around the panel on this hero: 2rem under it instead of the
-// section's 5rem, and none above, so the panel starts right under the
-// header and its breadcrumb row lines up with the TOC's title beside it
-// (the panel's top padding, below). The section padding is one variable, so
-// the lead's height (_landing-swiss.scss) and the video's reach
-// (_landing.scss) follow it; the top is only the inner box's padding.
+// No room above the panel on this hero (it starts right under the header,
+// below the sub-header bar), 2rem under it instead of the section's 5rem.
+// The section padding is one variable, so the lead's height
+// (_landing-swiss.scss) and the video's reach (_landing.scss) follow it; the
+// top is only the inner box's padding.
 .pf-sections > .pf-section:first-child:has(.pf-landing--lead-screen .pf-landing__features) {
   --pf-section-pad-block: 2rem;
 
@@ -49,47 +52,94 @@
   margin-top: 0;
 }
 
-// --- Sub-header bar: breadcrumb and video button -------------------------
+// --- Content column -----------------------------------------------------
+// The panel's content, the bar's breadcrumb and the docked video button
+// share one column: at most 1280px, centred, with a gutter of at least
+// 2rem to 6rem (6vw) from the screen's edge, which also keeps the
+// breadcrumb clear of the floating TOC button. Percentages in
+// --pf-hero-inset are of the landing's width (the containing block of the
+// bar, the dock and the panel), so 100% plus the section's two side
+// paddings is the column's full width.
+.pf-landing--hero {
+  --pf-hero-gutter: clamp(2rem, 6vw, 6rem);
+  --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
+  --pf-landing-bar-h: calc(3rem + 1px); // the bar: 2.25rem row, .375rem padding each side, the hairline
+  --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
+}
+
+// --- Sub-header bar: breadcrumb -----------------------------------------
 // A glass bar right under the header, across the whole content column (the
 // section's side padding is pulled back out), in the header and TOC's glass
-// with a hairline under it. Its content lines up with the lead panel's
-// outer edges (the breadcrumb on its left edge, the button on its right):
-// the panel is at most 1280px, centred in the section's padding. The
-// breadcrumb (PalefireHooks::crumbInLanding()) keeps the head's type
-// (.pf-breadcrumb--modular, _layout.scss) without its glass strip; the
-// button keeps its look but sits in the row (landing-video.js only places
-// it when the head has the breadcrumb). The TOC title lines up with the
-// breadcrumb (modular-toc.js measures it, as it did the head's).
+// with a hairline under it. The breadcrumb (PalefireHooks::crumbInLanding())
+// keeps the head's type (.pf-breadcrumb--modular, _layout.scss) without its
+// glass strip. The TOC title lines up with the breadcrumb (modular-toc.js
+// measures it, as it did the head's).
 .pf-landing__bar {
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
-  margin-bottom: 1rem;
+  margin-bottom: var(--pf-landing-bar-gap);
   padding-block: .375rem;
-  padding-inline: calc(var(--pf-section-pad-inline, 0px) + max(0px, (100% - 1280px) / 2));
+  padding-inline: var(--pf-hero-inset);
   border-bottom: 1px solid var(--pf-toc-rail, #{$pf-hairline});
   background-color: var(--pf-sidebar-bg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
 
-// md and up (where the lead fills the first screen, .pf-landing--lead-screen):
-// the lead panel is full screen. It runs across the whole content column
-// (no side margins, no 1280px cap), straight under the bar and down to the
-// bottom of the window, so the map starts at the fold. Its content stays in
-// a centred 1280px column (--pf-hero-inset), and the bar's breadcrumb and
-// button line up with that content. Glass with a hairline at its foot; no
-// side or top border, which would sit on the screen's edges.
-// Percentages in --pf-hero-inset are of the landing's width (the containing
-// block of both the bar and the panel), so 100% plus the section's two side
-// paddings is the column's full width.
+.pf-landing__bar-inner {
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem; // the video button's height, so the row is the same with or without it
+}
+
+// Room at the end of the row for the docked video button (2.25rem and a
+// 1rem gap), so a long breadcrumb wraps before it instead of running under.
+.pf-landing__bar:has(+ .pf-landing__dock) .pf-landing__bar-inner {
+  padding-inline-end: 3.25rem;
+}
+
+.pf-landing__bar .pf-breadcrumb--lead {
+  min-width: 0;
+  padding: 0;
+}
+
+// --- Docked video button ---------------------------------------------------
+// A zero-height sticky row laid over the bar (negative margin out, the same
+// back in, so nothing below moves): the button sits at the far end of the
+// bar's row and, once the page scrolls, stays .375rem under the header
+// (compact or not) until the landing, and so the video, has gone, like the
+// TOC's hide/show button. Only the button takes the pointer. The button
+// keeps its look (_landing.scss) but isn't positioned against the landing
+// (landing-video.js only places it when the head has the breadcrumb).
+.pf-landing.has-bg-video > .pf-landing__dock {
+  position: sticky;
+  top: calc(var(--pf-header-h) + .375rem);
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  height: 0;
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
+  padding-inline: var(--pf-hero-inset);
+  pointer-events: none;
+}
+
+.pf-landing__dock .pf-landing__bg-toggle {
+  position: relative;
+  top: auto;
+  inset-inline-end: auto;
+  flex: none;
+  pointer-events: auto;
+}
+
+// --- Full-screen panel (md and up, .pf-landing--lead-screen) --------------
+// The lead panel runs across the whole content column (no side margins, no
+// 1280px cap), straight under the bar and down to the bottom of the window,
+// so the map starts at the fold. Its content keeps to the column above.
+// Glass with a hairline at its foot; no side or top border, which would sit
+// on the screen's edges.
 @include media-breakpoint-up(md) {
   .pf-landing--lead-screen {
-    --pf-hero-inset: max(var(--pf-section-pad-inline, 1.25rem), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
-    --pf-landing-bar-h: calc(3rem + 1px); // the bar: 2.25rem row, .375rem padding each side, the hairline
-  }
-
-  .pf-landing--lead-screen > .pf-landing__bar {
-    margin-bottom: 0;
-    padding-inline: var(--pf-hero-inset);
+    --pf-landing-bar-gap: 0px;
   }
 
   .pf-landing--lead-screen > .pf-landing__lead:has(> .pf-landing__features) {
@@ -103,31 +153,16 @@
   }
 }
 
-.pf-landing__bar-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 2.25rem; // the button's height, so the bar is the same with or without it
-}
-
-.pf-landing__bar .pf-breadcrumb--lead {
-  min-width: 0;
-  padding: 0;
-}
-
-.pf-landing__bar .pf-landing__bg-toggle {
-  position: relative;
-  top: auto;
-  inset-inline-end: auto;
-  flex: none;
-  margin-inline-start: auto;
-  box-shadow: none;
-}
-
-// --- Title, intro and search, tighter than the plain landing's -------------
+// --- Title, intro and search ------------------------------------------------
+// Room around the search: more space between the intro, the rule above the
+// search and the field, and under the field. The rule is the same soft
+// hairline as the lines above the bottom row. The field's own border is
+// softer than before but keeps 3:1 on its glass (WCAG 1.4.11, a control's
+// boundary): 70% of the panel's muted tone is the least that does on every
+// reading swatch, over a mid-grey or white/black video frame; the hairline
+// (20%) is about 1.5:1.
 .pf-landing__lead:has(> .pf-landing__features) {
-  padding: clamp(1.25rem, 2.25vw, 2rem);
+  padding-block: clamp(1rem, 2vw, 1.5rem);
 
   > .pf-landing__title {
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
@@ -136,19 +171,21 @@
   // The intro runs the panel's full width.
   > .pf-landing__intro {
     max-width: none;
-    margin-bottom: clamp(1rem, 2vw, 1.25rem);
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
     font-size: 1rem;
     line-height: 1.5;
   }
 
   > .pf-landing__form {
     --pf-landing-field-h: 3rem;
-    margin-bottom: clamp(.875rem, 1.5vw, 1rem);
-    padding-top: clamp(.75rem, 1.25vw, .875rem);
+    --pf-landing-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 70%, transparent);
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+    border-top-color: #{$pf-hairline};
   }
 
   .pf-landing__heading {
-    margin-bottom: .5rem;
+    margin-bottom: .625rem;
   }
 
   .pf-landing__field {
@@ -160,28 +197,35 @@
   }
 }
 
-// --- Next event | Latest blog post ----------------------------------------
-// Side by side from md, each a hairline, then its card: a 5x7 portrait
-// thumbnail (5rem by 7rem, cropped to fill) beside the text. The labels
-// ("Next event", "Latest from the blog") are for screen readers only. With
-// no event (no carousel, or nothing coming up) the post takes the first
-// column.
+// --- Next event | Latest blog post | Account -------------------------------
+// One column on narrow panels, two from 36rem, three from 60rem (container
+// widths, so the TOC being open or closed decides too). Each card: a
+// hairline, then a 7x5 landscape thumbnail beside the text. The labels
+// ("Next event", "Latest from the blog", "Your account") are for screen
+// readers only. With no event (no carousel, or nothing coming up) the post
+// takes the first column.
 .pf-landing__pair {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(.875rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1rem, 2vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
 }
 
-@media (min-width: 768px) {
+@container pf-features (min-width: 36rem) {
   .pf-landing__pair {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
-  --pf-hero-thumb: 5rem;
+@container pf-features (min-width: 60rem) {
+  .pf-landing__pair {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
+  --pf-hero-thumb: clamp(6.5rem, 9.5cqi, 9rem); // 7x5: 104x74 to 144x103px (111x79 at 1333px)
   min-width: 0;
-  padding-top: clamp(.75rem, 1.25vw, .875rem);
+  padding-top: clamp(.875rem, 1.5vw, 1rem);
   border-top: 1px solid var(--pf-landing-line);
 }
 
@@ -194,16 +238,25 @@
   white-space: nowrap !important;
 }
 
-// 5x7, portrait: the thumbnail and, while the feed loads, the hatched space
+// 7x5, landscape: the thumbnail and, while the feed loads, the hatched space
 // held for it.
 .pf-landing__features .pf-hero-event__thumb,
 .pf-landing__features .pf-hero-event:not(.is-ready)::after {
-  aspect-ratio: 5 / 7;
+  aspect-ratio: 7 / 5;
 }
 
-// Titles one size down from the solo Next event card.
+.pf-landing__features .pf-hero-event__card {
+  max-width: none;
+}
+
+// Titles one size down from the solo Next event card, two lines at most.
 .pf-landing__features .pf-hero-event__title {
-  font-size: 1.125rem;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-size: 1.0625rem;
 }
 
 .pf-landing__features .pf-hero-event__when {
@@ -214,23 +267,36 @@
   margin-top: .125rem;
 }
 
-.pf-hero-post .pf-hero-event__when {
+.pf-landing__features :is(.pf-hero-post, .pf-hero-account) .pf-hero-event__when {
   display: block;
 }
 
-// The post's excerpt: two lines at most, beside the taller thumbnail. Two
-// classes, so the clamp's display wins.
-.pf-hero-post .pf-hero-post__excerpt {
+// The line under each title (event place, post excerpt, account): one line,
+// so the three cards stay one even row. Two classes, so the clamp's display
+// wins.
+.pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) .pf-hero-event__meta {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
+// The account's thumbnail: the user icon on the hatched ground.
+.pf-hero-account__icon {
+  display: grid;
+  place-items: center;
+  color: var(--pf-landing-accent, currentColor);
 
-// Placeholder (no blog category set yet): not a link, so no hover and no
-// underline.
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: currentColor;
+  }
+}
+
+// Placeholder (no blog category, no account link yet): not a link, so no
+// hover and no underline.
 .pf-hero-event__card.is-placeholder {
   color: var(--pf-toc-color);
 
@@ -239,44 +305,69 @@
   }
 }
 
-// --- Row 2: exhibitions ----------------------------------------------------
+// --- Tiles: exhibitions and guide, an accordion across -----------------------
+// Flush tiles in one frame, no borders between. With a pointer, the tile
+// under it (or with keyboard focus inside) grows to about 2.4 times the
+// others' width: more of its picture shows, and its extra line and link
+// prompt fade in. Below 36rem of panel they stack, each 4:3 with everything
+// shown. Reduced motion: no widening animation or fades, the states just
+// switch.
 .pf-exhibits {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(.75rem, 1.5vw, 1rem);
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   list-style: none;
-}
-
-@media (min-width: 576px) {
-  .pf-exhibits {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  border: 1px solid var(--pf-landing-line);
 }
 
 .pf-exhibit {
   // The scrim under the text: strongest at the foot, where the text sits,
   // so white text keeps 4.5:1 even over a white image.
-  --pf-exhibit-scrim: linear-gradient(to top, rgb(0 0 0 / .78) 0%, rgb(0 0 0 / .55) 45%, rgb(0 0 0 / 0) 85%);
+  --pf-exhibit-scrim: linear-gradient(to top, rgb(0 0 0 / .8) 0%, rgb(0 0 0 / .58) 50%, rgb(0 0 0 / 0) 90%);
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 9rem;
+  min-width: 0;
   overflow: hidden;
   isolation: isolate;
-  border: 1px solid var(--pf-landing-line);
   color: #fff;
   background-color: #1f1b26;
+  aspect-ratio: 4 / 3;
 }
 
-// Phones: a 4:3 tile each, stacked. No min-height here: with the ratio it
-// made a 320px screen's tile 4px wider than its column.
-@media (max-width: 575.98px) {
+@container pf-features (min-width: 36rem) {
+  // Side by side: a band 9rem to 13rem tall (19% of the window's height).
+  .pf-exhibits {
+    flex-direction: row;
+    height: clamp(9rem, 19svh, 13rem);
+  }
+
   .pf-exhibit {
-    min-height: 0;
-    aspect-ratio: 4 / 3;
+    flex: 1 1 0;
+    aspect-ratio: auto;
+    transition: flex-grow .6s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .pf-exhibits .pf-exhibit:is(:hover, :focus-within) {
+    flex-grow: 2.4;
+  }
+
+  // The extra line and prompt, closed until the tile opens.
+  .pf-exhibit__more {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(.5rem);
+    transition: max-height .5s cubic-bezier(.2, .7, .2, 1), opacity .3s ease, transform .5s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .pf-exhibit:is(:hover, :focus-within) .pf-exhibit__more {
+    max-height: 6rem;
+    opacity: 1;
+    transform: none;
+    transition-delay: .12s;
   }
 }
 
@@ -319,8 +410,9 @@
   transform: scale(1.03);
 }
 
-// Placeholder frames (no image yet): three muted tones with the Visit
-// card's hatching, so a crossfade shows even before there are images.
+// Placeholder frames (no image yet): muted tones with the Visit card's
+// hatching, so a crossfade shows even before there are images. The guide
+// tile (third) starts on the third tone.
 .pf-exhibit__frame:not(:has(img)) {
   --pf-exhibit-tone: #3b3346;
   background:
@@ -332,7 +424,8 @@
   --pf-exhibit-tone: #2f4049;
 }
 
-.pf-exhibit__frame:nth-child(3n + 3):not(:has(img)) {
+.pf-exhibit__frame:nth-child(3n + 3):not(:has(img)),
+.pf-exhibit:nth-child(3) .pf-exhibit__frame:not(:has(img)) {
   --pf-exhibit-tone: #4a3a2c;
 }
 
@@ -340,20 +433,75 @@
   padding: clamp(.875rem, 1.75vw, 1.25rem);
 }
 
+// One line each, so a narrow (closed) tile's text never outgrows the tile:
+// the label and the dates or line under the title end in an ellipsis, the
+// title takes two lines at most.
 .pf-exhibit__label,
 .pf-exhibit__when {
   @extend %pf-landing-label;
   margin: 0;
+  overflow: hidden;
   color: rgb(255 255 255 / .85);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pf-exhibit__title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   margin: .25rem 0 .375rem;
   font-size: clamp(1.25rem, 1rem + .6vw, 1.5rem);
   font-weight: 500;
   letter-spacing: -.02em;
   line-height: 1.15;
   color: #fff;
+}
+
+// With a url, the title is the tile's link, stretched over it (the pause
+// button sits above, its own control).
+.pf-exhibit__link {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::after {
+      outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
+      outline-offset: -4px;
+    }
+  }
+}
+
+// The line shown when the tile opens, and the link prompt under it.
+.pf-exhibit__more {
+  overflow: hidden;
+
+  p {
+    max-width: 34rem;
+    margin: .5rem 0 0;
+    font-size: .9375rem;
+    line-height: 1.45;
+    color: rgb(255 255 255 / .92);
+  }
+}
+
+.pf-exhibit__cta {
+  @extend %pf-landing-label;
+  display: inline-block;
+  margin-top: .5rem;
+  color: #fff;
+  border-bottom: 1px solid var(--pf-ui-gold, #{$pf-gold});
 }
 
 // The permanent exhibition: a gold rule before its "On view · Permanent",
@@ -369,11 +517,13 @@
 }
 
 // Pause / play for a crossfading tile (WCAG 2.2.2): a small glass square in
-// the top corner, like the background video's button.
+// the top corner, like the background video's button. Above the tile's
+// stretched link.
 .pf-exhibit__pause {
   position: absolute;
   top: .75rem;
   inset-inline-end: .75rem;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -419,8 +569,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-exhibit__frame {
-    transition: none;
+  .pf-exhibit,
+  .pf-exhibit__frame,
+  .pf-exhibit__more {
+    transition: none !important;
   }
 
   .pf-exhibit:hover .pf-exhibit__frame {
@@ -429,8 +581,10 @@
 }
 
 html.pf-a11y-motion {
-  .pf-exhibit__frame {
-    transition: none;
+  .pf-exhibit,
+  .pf-exhibit__frame,
+  .pf-exhibit__more {
+    transition: none !important;
   }
 
   .pf-exhibit:hover .pf-exhibit__frame {
@@ -439,7 +593,7 @@ html.pf-a11y-motion {
 }
 
 @media (forced-colors: active) {
-  .pf-exhibit {
+  .pf-exhibits {
     border-color: CanvasText;
   }
 
