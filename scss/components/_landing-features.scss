@@ -59,12 +59,16 @@
 // block of the bar, the dock and the panel), so 100% plus the section's two
 // side paddings is the column's full width.
 // The bar's breadcrumb and the docked video button sit near the screen's
-// edges instead (--pf-bar-edge, 1rem, as the floating TOC button), leaving
-// the column's space above the title clear.
+// edges instead, leaving the column's space above the title clear: the
+// breadcrumb 1rem in (--pf-bar-edge), the corner buttons (the video
+// button, and the floating TOC button, _modular.scss) as far from the
+// screen's edge as from the header above them (--pf-bar-icon-edge, the
+// bar's own .375rem padding), so each sits square in its corner.
 .pf-landing--hero {
   --pf-hero-gutter: clamp(2rem, 6vw, 6rem);
   --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
   --pf-bar-edge: 1rem;
+  --pf-bar-icon-edge: .375rem;
   --pf-landing-bar-h: 3rem; // the bar: 2.25rem row, .375rem padding each side
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
 }
@@ -100,7 +104,7 @@
   }
 
   html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-landing__bar {
-    padding-inline-start: calc(2 * var(--pf-bar-edge) + 2.25rem);
+    padding-inline-start: calc(var(--pf-bar-icon-edge) + 2.25rem + var(--pf-bar-edge)); // past the TOC button, then 1rem
   }
 }
 
@@ -149,7 +153,7 @@
   height: 0;
   margin-inline: auto calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
-  padding-inline: var(--pf-bar-edge);
+  padding-inline: var(--pf-bar-icon-edge);
   pointer-events: none;
 }
 

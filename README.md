@@ -605,6 +605,28 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: corner buttons as close to the screen's edge as to the header (2026-10-19)
+
+The floating TOC button (left, TOC hidden) and the video pause button
+(right) sat .375rem (6px) under the header but 1rem (16px) from the
+screen's edges. Both now sit .375rem from the edge too, square in their
+corners. A new `--pf-bar-icon-edge` carries the buttons' inset, and the
+breadcrumb keeps `--pf-bar-edge` (1rem):
+
+- With the TOC hidden, the breadcrumb starts 1rem past the TOC button, so
+  it moves 10px left with the button.
+- With the TOC open, the breadcrumb is still 1rem in from the column, as
+  before.
+- The TOC button's new position only applies over the hero's bar
+  (`:has(.pf-landing__bar)`). Other pages keep 1rem.
+
+Measured on /v2/special at 1333 with the change injected: TOC button 6px
+from the header and 6px from the left edge, video button 6px from the
+header and 6px from the right edge. The breadcrumb is 16px past the TOC
+button (TOC hidden), and 16px from the column (TOC open).
+
+Files: `_landing-features.scss`, `_modular.scss`.
+
 ### Landing hero: bottom row lines up with the tiles (2026-10-19)
 
 The three cards under the tiles (Next event | Latest blog post | Your

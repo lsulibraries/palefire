@@ -531,6 +531,14 @@ html.pf-snap .site-footer {
       inset-inline-end .3s ease-in-out;
   }
 
+  // Over the landing hero's sub-header bar it lines up with the bar's row,
+  // .375rem under the header, so it sits .375rem from the screen's edge
+  // too, square in the corner like the video button opposite
+  // (--pf-bar-icon-edge, _landing-features.scss).
+  html.pf-toc-collapsed:not([data-pf-mode="guide"]):has(.pf-landing__bar) .pf-modular__toc-collapse {
+    inset-inline-end: calc(-2.25rem - .375rem);
+  }
+
   // Icon: a chevron while the sidebar is open ("hide"), a list while it is
   // closed ("show"). Both are in the markup and the <html> class picks one,
   // so the right icon is there on first paint. Only the chevron mirrors in
