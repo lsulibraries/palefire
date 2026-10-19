@@ -605,6 +605,65 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: the lead slides off a near-static map (2026-10-19)
+
+Scrolling from the lead to the map, the map now barely moves (15% of the
+scroll) while the lead slides up off it, as if the map had been waiting
+underneath. It's a CSS scroll-driven animation (`view-timeline`), so it runs
+on the compositor with no scroll listeners. It's on from md up where
+`animation-timeline: view()` is supported (Chrome, Edge, Safari 26). In
+Firefox, with reduced motion, or with the Settings drawer's Reduce motion
+switch, the map scrolls as before.
+
+**CSS (`_landing-hero.scss`)**
+- **Timeline:** the map wrapper (`#map`) entering the window, with the top
+  inset by about the compact header plus the lead's top padding. Only
+  `.pf-map` inside the wrapper moves, so the wrapper itself keeps its
+  place, and the TOC, the snap and `#map` links measure it as before.
+- **Waiting under the lead:** before the timeline starts, the map is pulled
+  up by 85% of the distance it's about to travel, so it waits under the
+  lead. Its heading, summary and drawing fade in over the first half
+  (`pf-map-reveal-fade`), still under the lead's glass, so the top of the
+  page shows nothing of it. By the time the lead uncovers them they're
+  fully shown.
+- **Stacking:** the lead (z 1) and the bar over it (z 2) stack above the
+  map so it can pass under them.
+
+**JS: keeping everything on the map's real place**
+- **Draw-on (`building-map.js`):** watches the wrapper and works out the
+  drawing's share from its place in the page (less the reveal's shift),
+  so the line drawing starts when the drawing is really a quarter in view.
+  The dimmed backdrop also watches the wrapper.
+- **Hold-back:** the light-section hold-back (`.has-map-view`) is skipped
+  while the reveal runs, since its own fade does that job.
+- **Keyboard focus:** if focus moves into the map mid-reveal, the page
+  scrolls to the control's real place. Otherwise the browser would aim at
+  where the map is drawn, and the control could end up off screen. A page
+  opened at a #hash inside the map is corrected the same way after load.
+- **TOC (`modular-toc.js`):** a TOC jump to a target inside the map (its
+  heading) aims at its real place, with the same scroll-padding and
+  margin.
+
+Measured on /v2/special at 1333×798 with the CSS injected, Browser pane
+visible:
+
+| Scroll | Map drawn at | Shift | Heading opacity | Lead's bottom |
+|---|---|---|---|---|
+| 0 | 285 | −586 | 0 | 799 |
+| 200 | 194 | −477 | .37 | 599 |
+| 400 | 164 | −307 | .95 | 399 |
+| 600 | 134 | −137 | 1 | 199 |
+| 750 | 111 | −10 | 1 | 49 |
+| 800 | 71 | 0 | 1 | gone |
+
+The map moves 75px over 500px of scroll. The shift reaches 0 at about
+762, just before the snap stops at about 769, so the map is still when it
+arrives. `node --check` passes for both scripts. Not checked: the new JS
+on a page (the live site still has the old scripts), the frame rate (the
+pane can't measure it reliably), and other widths.
+
+Files: `_landing-hero.scss`, `js/building-map.js`, `js/modular-toc.js`.
+
 ### TOC: the first link does what "Back to top" does (2026-10-19)
 
 The TOC's first link (Home on the hero) and "Back to top" now go through

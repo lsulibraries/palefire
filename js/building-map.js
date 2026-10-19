@@ -76,6 +76,13 @@
     if (svg && SETTINGS.appointmentHatch === 'broken') brokenHatch(root, svg);
     if (!svg) return;
     const stage = root.querySelector('.pf-map__stage') || root;
+    // The landing's map wrapper (#map). On the hero the map inside it can
+    // be mid-way through its scroll-driven reveal (_landing-hero.scss): drawn
+    // higher than its place in the page. The wrapper never moves, so
+    // anything that asks "is the map on screen?" watches the wrapper, and
+    // shift() is how far the map is drawn from its place (0 when still).
+    const wrap = root.parentElement && root.parentElement.matches('.pf-landing__visit') ? root.parentElement : null;
+    const shift = () => (wrap ? root.getBoundingClientRect().top - wrap.getBoundingClientRect().top : 0);
     const lines = Array.from(svg.querySelectorAll('.pf-map__lines:not(.pf-map__lines--hidden) path'));
     const regions = Array.from(root.querySelectorAll('.pf-map__region[data-map-region]'));
     const items = Array.from(root.querySelectorAll('.pf-map__item[data-map-region]'));
@@ -459,6 +466,36 @@
       syncStick();
     }
 
+    // Keyboard focus moving into the map mid-reveal: the browser scrolls to
+    // where the map is drawn, not where it will settle, and the control
+    // could end up off screen. Scroll to its place instead (the map is still
+    // by the time the page gets there).
+    if (wrap) {
+      root.addEventListener('focusin', (event) => {
+        const by = shift();
+        if (Math.abs(by) < 1) return;
+        const r = event.target.getBoundingClientRect();
+        const top = r.top - by;
+        const head = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight()) || 0;
+        if (top < head || top + r.height > window.innerHeight) {
+          window.scrollTo({ top: window.scrollY + top - head - 16 });
+        }
+      });
+      // Opened at a #hash inside the map: the browser placed it the same
+      // way, so put it right once the page has loaded.
+      const hashedEl = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const hashed = hashedEl && root.contains(hashedEl) ? hashedEl : null;
+      if (hashed) {
+        window.addEventListener('load', () => requestAnimationFrame(() => {
+          const by = shift();
+          if (Math.abs(by) < 1) return;
+          const margin = parseFloat(getComputedStyle(hashed).scrollMarginTop) || 0;
+          const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+          window.scrollTo({ top: window.scrollY + hashed.getBoundingClientRect().top - by - margin - pad, behavior: 'instant' });
+        }), { once: true });
+      }
+    }
+
     // Landing: dim + blur the background video while the map is in view.
     // Also drives the light-map section theme (see below).
     const landing = root.closest('.pf-landing');
@@ -501,10 +538,14 @@
           && (entry.intersectionRatio >= 0.3 || seen >= window.innerHeight * 0.45);
         if (armed) apply(latest);
       }, { threshold: steps });
-      dim.observe(root);
+      dim.observe(wrap || root);
       // Lets CSS hold the map back on light sections until it is in view
       // (_landing-swiss.scss); without this script the map always shows.
-      landing.classList.add('has-map-view');
+      // Not while the map reveals itself: its own fade does that job, and
+      // holding it back would hide the reveal.
+      if (getComputedStyle(root).animationName !== 'pf-map-reveal') {
+        landing.classList.add('has-map-view');
+      }
       const arm = new AbortController();
       if (!armed) {
         window.addEventListener('scroll', () => {
@@ -599,14 +640,22 @@
     };
     if (!('IntersectionObserver' in window)) { draw(); return; }
     // Draws when a quarter of it first comes into view, then stops
-    // watching.
+    // watching. In a landing it watches the wrapper and works out the
+    // drawing's own share from where it sits in the page (less shift()),
+    // so a map drawn higher during its reveal doesn't count as seen.
+    const svgSeen = () => {
+      const r = svg.getBoundingClientRect();
+      const top = r.top - shift();
+      const seen = Math.min(top + r.height, window.innerHeight) - Math.max(top, 0);
+      return r.height > 0 && seen / r.height >= 0.25;
+    };
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.25 && state === 'hidden') {
+      if (entry.isIntersecting && state === 'hidden' && (wrap ? svgSeen() : entry.intersectionRatio >= 0.25)) {
         io.disconnect();
         draw();
       }
-    }, { threshold: [0.25] });
-    io.observe(svg);
+    }, { threshold: wrap ? Array.from({ length: 51 }, (_, i) => i / 50) : [0.25] });
+    io.observe(wrap || svg);
     root.pfMapDraw = {
       disconnect() {
         io.disconnect();

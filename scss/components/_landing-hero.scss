@@ -60,6 +60,74 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
+// Near-static reveal (md up): scrolling from the lead to the map, the map
+// barely moves (15% of the scroll) and the lead slides up off it, as if
+// the map had been waiting underneath. A scroll-driven animation, so it
+// runs on the compositor with no JS; where it isn't supported, with
+// reduced motion or the Settings drawer's switch, the map scrolls as
+// before.
+// - The timeline is the map wrapper (#map) entering the window, and only
+//   the map inside it moves: the wrapper keeps its place, so the TOC, the
+//   snap and #map links measure it as before. The window's top is inset by
+//   the compact header and the lead's top padding (where the snap stops
+//   the heading; a little extra, so the map is still by then).
+// - Before that the map waits under the lead: pulled up by 85% of the
+//   distance it is about to travel, its heading, summary and drawing
+//   faded out so the lead's glass shows nothing of it at the top of the
+//   page. They fade in over the first half, still under the glass, and
+//   are fully shown by the time the lead uncovers them.
+// - The lead (and the bar over it) stack above the map so it can pass
+//   under them. building-map.js reads the map's place from the wrapper too
+//   (draw-on, the dimmed backdrop, keyboard focus).
+@supports (animation-timeline: view()) {
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) .pf-landing--hero.pf-landing--lead-screen {
+      --pf-map-reveal-inset: calc(3.5rem + clamp(1.5rem, 4vw, 3.5rem));
+
+      > .pf-landing__bar {
+        z-index: 2;
+      }
+
+      > .pf-landing__lead {
+        z-index: 1;
+      }
+
+      > .pf-landing__visit {
+        view-timeline: --pf-map-reveal block;
+        view-timeline-inset: var(--pf-map-reveal-inset) 0px;
+      }
+
+      > .pf-landing__visit > .pf-map {
+        animation: pf-map-reveal linear both;
+        animation-timeline: --pf-map-reveal;
+        animation-range: entry 0% entry 100%;
+      }
+
+      > .pf-landing__visit > .pf-map > :is(.pf-map__heading, .pf-map__type, .pf-map__stage) {
+        animation: pf-map-reveal-fade linear both;
+        animation-timeline: --pf-map-reveal;
+        animation-range: entry 0% entry 50%;
+      }
+    }
+  }
+}
+
+@keyframes pf-map-reveal {
+  from {
+    transform: translateY(calc(-.85 * (100vh - var(--pf-map-reveal-inset))));
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes pf-map-reveal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 // Next event (hero-event.js): under the intro, across a hairline like the
 // landing's search. A square thumbnail, or diagonal hatching when the event
 // has no image, then the day and time, the title (the card's one link,

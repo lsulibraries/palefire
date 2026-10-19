@@ -421,9 +421,21 @@
       });
       closeOffcanvas(nav);
       // After the phone drawer has started closing, as the anchor's own
-      // jump did.
+      // jump did. A target inside the hero's map (its heading) may be drawn
+      // higher than its place while the map reveals itself
+      // (_landing-hero.scss), and scrollIntoView() would aim at that: aim
+      // at its place instead, with the same scroll-padding and margin.
       if (jump) {
-        target.scrollIntoView({ block: 'start' });
+        const map = target.closest('.pf-landing__visit > .pf-map');
+        const by = map ? map.getBoundingClientRect().top - map.parentElement.getBoundingClientRect().top : 0;
+        if (Math.abs(by) >= 1) {
+          const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+          const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+          window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - by - pad - margin });
+        }
+        else {
+          target.scrollIntoView({ block: 'start' });
+        }
       }
     }, { signal });
 
