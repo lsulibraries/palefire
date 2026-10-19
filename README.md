@@ -605,6 +605,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: bottom row lines up with the tiles (2026-10-19)
+
+The three cards under the tiles (Next event | Latest blog post | Your
+account) now start where the tiles above them start. The tiles are equal
+thirds with nothing between them, but the cards' grid had a column gap,
+so the second and third cards started 13–27px to the right of their
+tiles. With three columns (panel 50rem and up), the gap is now 0, and the
+space between cards is padding at the end of the first two, the same
+amount the gap was (`clamp(1.5rem, 3vw, 2.5rem)`).
+
+Measured on /v2/special with the change injected (tile left → card left):
+
+| Window | TOC hidden | TOC open |
+|---|---|---|
+| 1333 | 81/469/857 → 80/468/857 | 381/669/957 → 380/668/957 |
+| 1920 | 317/743/1169 → 316/743/1169 | 467/893/1319 → 466/893/1319 |
+| 1024 | 62/359/657 → 61/359/657 | two columns of cards, unchanged |
+
+The 1px differences are the tile frame. With the panel under 50rem the
+cards drop to two columns, which can't line up with three tiles, so that
+case is unchanged.
+
+File: `_landing-features.scss`.
+
 ### Map screen lines up with the lead: same gutter, same top padding (2026-10-19)
 
 On the landing hero (md and up), the map's heading, summary and Visit

@@ -394,8 +394,16 @@
 // Three across from 50rem: each card is one line per field now, so they
 // hold up narrower (the TOC open at 1333px leaves about 56rem).
 @container pf-features (min-width: 50rem) {
+  // Each card starts where its tile above does (the tiles are equal
+  // thirds with nothing between them): no column gap, the space between
+  // cards is padding at the end of each instead.
   .pf-landing__pair {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 0;
+  }
+
+  .pf-landing__pair > :not(:last-child) {
+    padding-inline-end: clamp(1.5rem, 3vw, 2.5rem);
   }
 }
 
