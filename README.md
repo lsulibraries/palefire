@@ -605,6 +605,37 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero lead is full screen (2026-10-19)
+
+From md up the hero's lead panel fills the screen: across the whole
+content column, straight under the sub-header bar, down to the bottom of
+the window. The map starts at the fold.
+
+- **Width:** no side margins, no 1280px cap. The panel's content stays
+  in a centred 1280px column (`--pf-hero-inset`), with the section's
+  padding as the minimum on narrower screens.
+- **Height:** `100svh` less the header and the bar (`--pf-landing-bar-h`,
+  3rem plus the hairline), replacing the "fit the first screen" height.
+- **Look:** the same glass, with only a hairline at its foot. No side or
+  top border on the screen's edges.
+- **Bar:** no gap under it now. Its breadcrumb and button line up with
+  the panel's content column (they had lined up with the panel's old
+  edges).
+- **Phones (under md):** unchanged.
+
+Measured on /v2/special with the new CSS injected:
+
+| Window | Panel | Bottom | Content |
+|---|---|---|---|
+| 1333×767, TOC hidden | 0–1325 wide | 768 (the window plus the hairline) | breadcrumb on the title's edge, button on the search field's right edge |
+| 1920×1000, TOC hidden | full width | to the bottom | 1280px column |
+| 1920×1000, TOC open | 300–1912 | to the bottom | 1280px column |
+| 768×1024 | full width | to the bottom | 640px column |
+
+Nothing scrolls sideways at any of these sizes.
+
+File: `_landing-features.scss`.
+
 ### Sub-header bar lines up with the lead panel's edges (2026-10-18)
 
 The bar's breadcrumb and video button now line up with the lead panel's

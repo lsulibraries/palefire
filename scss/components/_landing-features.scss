@@ -71,6 +71,38 @@
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
 
+// md and up (where the lead fills the first screen, .pf-landing--lead-screen):
+// the lead panel is full screen. It runs across the whole content column
+// (no side margins, no 1280px cap), straight under the bar and down to the
+// bottom of the window, so the map starts at the fold. Its content stays in
+// a centred 1280px column (--pf-hero-inset), and the bar's breadcrumb and
+// button line up with that content. Glass with a hairline at its foot; no
+// side or top border, which would sit on the screen's edges.
+// Percentages in --pf-hero-inset are of the landing's width (the containing
+// block of both the bar and the panel), so 100% plus the section's two side
+// paddings is the column's full width.
+@include media-breakpoint-up(md) {
+  .pf-landing--lead-screen {
+    --pf-hero-inset: max(var(--pf-section-pad-inline, 1.25rem), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
+    --pf-landing-bar-h: calc(3rem + 1px); // the bar: 2.25rem row, .375rem padding each side, the hairline
+  }
+
+  .pf-landing--lead-screen > .pf-landing__bar {
+    margin-bottom: 0;
+    padding-inline: var(--pf-hero-inset);
+  }
+
+  .pf-landing--lead-screen > .pf-landing__lead:has(> .pf-landing__features) {
+    width: auto;
+    max-width: none;
+    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
+    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
+    margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+    padding-inline: var(--pf-hero-inset);
+    border-width: 0 0 1px;
+  }
+}
+
 .pf-landing__bar-inner {
   display: flex;
   align-items: center;
