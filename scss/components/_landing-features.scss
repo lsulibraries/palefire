@@ -173,10 +173,11 @@
     min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
-    // Space above the title: about halfway between the panel's own padding
-    // and the side gutter (53px at 1333px; the gutter, tried first, was
-    // 80px, too much).
-    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+    // Space above the title, and the same under the bottom row, so the
+    // panel has an even margin top and bottom: about halfway between the
+    // panel's own padding and the side gutter (53px at 1333px; the gutter,
+    // tried first, was 80px, too much).
+    padding-block: clamp(1.5rem, 4vw, 3.5rem);
     border-width: 0 0 1px;
   }
 }
@@ -196,9 +197,15 @@
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
   }
 
-  // The intro runs the panel's full width.
+  // The intro runs the panel's full width on smaller screens; from lg, 80%
+  // of it, so its lines end short of the margin instead of filling it.
   > .pf-landing__intro {
     max-width: none;
+
+    @include media-breakpoint-up(lg) {
+      max-width: 80%;
+    }
+
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
     font-size: 1rem;
     line-height: 1.5;

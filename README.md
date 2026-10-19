@@ -605,6 +605,31 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: intro at 80% on desktop; even top and bottom margin (2026-10-19)
+
+- **Intro:** from lg, the page intro under the title is 80% of the
+  content column's width. Its lines end short of the margin instead of
+  running to it. It's full width on smaller screens.
+- **Bottom padding = top:** both are `clamp(1.5rem, 4vw, 3.5rem)`, 53px
+  at 1333px, so the panel has an even margin around its content. The tile
+  row gives up the height.
+
+Measured on /v2/special with the change injected, in Twilight:
+
+| Window | TOC | Top / bottom | Intro | Tiles | Panel ends |
+|---|---|---|---|---|---|
+| 1333×798 | hidden | 53 / 54 | 932 of 1165px | 162px | 799 |
+| 1333×798 | open | 53 / 54 | 692 of 865px | 154px | 799 |
+| 1333×767 | hidden | 53 / 54 | 932 of 1165px | 131px | 768 |
+| 1333×767 | open | 53 / 54 | 692 of 865px | 140px | 785 |
+
+At 1333×798 the panel ends at the window's bottom in both TOC states. The
+last case runs 18px past the fold: the narrower column wraps the intro
+to four lines, and the tiles are already near the least their text needs.
+The map snap still works there.
+
+File: `_landing-features.scss`.
+
 ### Landing hero: no blinking second bar under the header (2026-10-19)
 
 The header leaves a glass strip behind when it turns compact near the top
