@@ -605,6 +605,27 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: no blinking second bar under the header (2026-10-19)
+
+The header leaves a glass strip behind when it turns compact near the top
+of the page (`.pf-page::before`, `_header.scss`). It covers the gap the
+taller header leaves, so the page doesn't show through.
+
+- **The problem:** on the Landing hero it sat right between the compact
+  header and the sub-header bar, in the same glass. It showed as a second
+  bar that blinked on and off as the header compacted and grew back.
+  Measured with the header compact: strip 50–88px, bar from 88px.
+- **The fix:** the sub-header bar covers that space itself, so the strip
+  is off on pages that have the bar (`.pf-page:has(.pf-landing__bar)`).
+  Other pages keep it.
+
+Checked on /v2/special with the change injected and the header forced
+compact: nothing is drawn between the header and the bar. The real
+compact switch doesn't fire in the hidden preview, so the blink itself
+wasn't watched live.
+
+File: `_landing-features.scss`.
+
 ### Landing hero: less space above the title; bar items at the screen's edges; no bar border (2026-10-19)
 
 - **Space above the title:** `clamp(1.5rem, 4vw, 3.5rem)`, 53px at

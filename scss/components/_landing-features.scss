@@ -116,6 +116,16 @@
   padding: 0;
 }
 
+// The header's growing-back strip (.pf-page::before, _header.scss) covers
+// the gap the full-height header leaves when it turns compact near the top
+// of the page. Here it sat between the compact header and this bar, in the
+// same glass, and showed as a second bar that blinked on and off as the
+// header compacted and grew back. The bar does its job on these pages, so
+// the strip is off.
+.pf-page:has(.pf-landing__bar)::before {
+  display: none;
+}
+
 // --- Docked video button ---------------------------------------------------
 // A zero-height sticky row laid over the bar (negative margin out, the same
 // back in, so nothing below moves): the button sits at the far end of the
