@@ -20,13 +20,13 @@
 // adjust.
 // =========================================================================
 
-// The tiles, then the bottom row. A tall window's spare height goes between
-// the two rows, so the bottom row stays at the panel's foot.
+// The tiles, then the bottom row. The tiles' row takes whatever height the
+// panel has left (see the band below), so the bottom row stays at the
+// panel's foot.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-content: space-between;
+  grid-template-rows: 1fr auto;
   gap: clamp(1rem, 2vw, 1.25rem);
   container: pf-features / inline-size;
 }
@@ -149,6 +149,10 @@
     min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
+    // The space above the title is the side gutter (--pf-hero-gutter), so
+    // the content sits in an even margin. On wide windows the sides are
+    // wider still, where the column centres.
+    padding-top: var(--pf-hero-gutter);
     border-width: 0 0 1px;
   }
 }
@@ -198,7 +202,7 @@
 }
 
 // --- Next event | Latest blog post | Account -------------------------------
-// One column on narrow panels, two from 36rem, three from 60rem (container
+// One column on narrow panels, two from 36rem, three from 50rem (container
 // widths, so the TOC being open or closed decides too). Each card: a
 // hairline, then a 7x5 landscape thumbnail beside the text. The labels
 // ("Next event", "Latest from the blog", "Your account") are for screen
@@ -216,14 +220,16 @@
   }
 }
 
-@container pf-features (min-width: 60rem) {
+// Three across from 50rem: each card is one line per field now, so they
+// hold up narrower (the TOC open at 1333px leaves about 56rem).
+@container pf-features (min-width: 50rem) {
   .pf-landing__pair {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 .pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
-  --pf-hero-thumb: clamp(6.5rem, 9.5cqi, 9rem); // 7x5: 104x74 to 144x103px (111x79 at 1333px)
+  --pf-hero-thumb: clamp(5.5rem, 9.5cqi, 9rem); // 7x5: 88x63 to 144x103px (111x79 at 1333px, TOC hidden)
   min-width: 0;
   padding-top: clamp(.875rem, 1.5vw, 1rem);
   border-top: 1px solid var(--pf-landing-line);
@@ -249,18 +255,24 @@
   max-width: none;
 }
 
-// Titles one size down from the solo Next event card, two lines at most.
+// One line each for the three cards' date (or label), title and line under
+// it, so the row stays even: the date and title end in an ellipsis, the line
+// under is clamped (below). Titles one size down from the solo Next event
+// card.
 .pf-landing__features .pf-hero-event__title {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   font-size: 1.0625rem;
 }
 
 .pf-landing__features .pf-hero-event__when {
+  overflow: hidden;
   margin-bottom: .125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pf-landing__features .pf-hero-event__meta {
@@ -339,10 +351,15 @@
 }
 
 @container pf-features (min-width: 36rem) {
-  // Side by side: a band 9rem to 13rem tall (19% of the window's height).
+  // Side by side: a band that fills the height the panel has left (its
+  // grid row), from 8rem to 13rem (17% of the window's height) at least, so
+  // it holds its shape where the panel isn't full screen, to 32rem at most
+  // on very tall windows.
   .pf-exhibits {
     flex-direction: row;
-    height: clamp(9rem, 19svh, 13rem);
+    height: 100%;
+    min-height: clamp(8rem, 17svh, 13rem);
+    max-height: 32rem;
   }
 
   .pf-exhibit {

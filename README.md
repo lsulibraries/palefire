@@ -605,6 +605,40 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: gutter above the title, tiles fill the panel, one-line cards (2026-10-19)
+
+- **Space above the title = the side gutter:** the panel's top padding is
+  `--pf-hero-gutter`, `clamp(2rem, 6vw, 6rem)`, 80px at 1333px, the same
+  as the sides there. On wide windows the sides grow further as the column
+  centres; the top stays the gutter.
+- **Tiles fill the panel:** the features grid is `1fr auto`. The tiles'
+  row takes whatever height is left, so the bottom row sits at the
+  panel's foot.
+  - The band is at least `clamp(8rem, 17svh, 13rem)` (it holds its shape
+    where the panel isn't full screen) and at most 32rem on very tall
+    windows.
+- **Bottom row, one line per field:** the date or label and the title end
+  in an ellipsis, and the line under is clamped to one, so the three cards
+  stay an even row.
+  - They go three across from 50rem of panel (was 60rem), so the TOC being
+    open at 1333px no longer drops the account card to a second row.
+  - The thumbnail can shrink to 5.5rem in that narrow case (88×63). With
+    the TOC hidden it's 111×79 at 1333px.
+
+Measured on /v2/special with the change injected, in Twilight:
+
+| Window | TOC | Top / side gap | Tile band | Panel ends |
+|---|---|---|---|---|
+| 1333×798 | open | 80 / 80 | 179px | 799 |
+| 1333×798 | hidden | 80 / 80 | 187px | 799 |
+| 1333×767 | open | 80 / 80 | 148px | 768 |
+| 1333×767 | hidden | 80 / 80 | 156px | 768 |
+
+In every case the panel ends at the window's bottom; the cards are 80–96px
+tall.
+
+File: `_landing-features.scss`.
+
 ### Landing hero: three opening tiles, account card, sticky video button, smooth TOC (2026-10-19)
 
 **TOC hide/show without the video showing through** (`_modular.scss`):
