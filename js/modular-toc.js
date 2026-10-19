@@ -378,9 +378,26 @@
     // link active right away and holds tracking until the scroll settles,
     // so the highlight doesn't flicker through every section in between.
     // Modified clicks (new tab, new window) are left to the browser.
+    // The first link (Home on the hero) and "Back to top" do the same
+    // thing: the page's very top, and the address without a #hash.
     nav.addEventListener('click', (event) => {
       const link = event.target.closest('a[href^="#"]');
-      if (!link || link.classList.contains('pf-toc__top')) {
+      if (!link) {
+        return;
+      }
+      const plain = event.button === 0 && !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+      if (link.classList.contains('pf-toc__top') || link === entries[0].link) {
+        if (plain) {
+          event.preventDefault();
+          history.replaceState(history.state, '', location.pathname + location.search);
+        }
+        setActive(entries[0]);
+        setActiveSub(null);
+        lockUntilScrollEnds(() => {});
+        closeOffcanvas(nav);
+        if (plain) {
+          window.scrollTo({ top: 0 });
+        }
         return;
       }
       const entry = entries.find((e) => e.link === link || e.subs.some((s) => s.link === link));
@@ -388,7 +405,7 @@
         return;
       }
       const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
-      const jump = target && event.button === 0 && !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+      const jump = target && plain;
       if (jump) {
         event.preventDefault();
         history.replaceState(history.state, '', link.hash);

@@ -605,6 +605,27 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### TOC: the first link does what "Back to top" does (2026-10-19)
+
+The TOC's first link (Home on the hero) and "Back to top" now go through
+one path in `modular-toc.js`:
+
+- **Destination:** the page's very top (`window.scrollTo({ top: 0 })`,
+  with the CSS smooth scroll, instant with reduced motion). Home used to
+  stop at the lead's `scroll-margin`. Back to top was a native `#top`
+  anchor that added `#top` to the history.
+- **Address:** the address loses its #hash (`replaceState`, so no history
+  entry).
+- **Highlight:** the first TOC entry is marked active right away, the
+  scroll lock holds the highlight still, and the phone drawer closes.
+- **Fallback:** modified clicks and no JS keep the plain anchors.
+
+Checked on /v2/special with the same steps run in the page: from the map
+(y 702), both land at y 0 with no hash and no new history entry.
+`node --check` passes.
+
+File: `js/modular-toc.js`.
+
 ### TOC clicks no longer add browser history entries (2026-10-19)
 
 Each TOC link was a plain anchor, so every click added an entry, and Back
