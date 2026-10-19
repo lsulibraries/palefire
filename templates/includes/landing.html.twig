@@ -154,8 +154,25 @@
     {% endif %}
   {% endif %}
   <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+    {# Hero: open now / closed now with the title, from the same LibCal
+       location as the Visit strip (the page's Hours location field;
+       visit-hours.js fills the status and today's hours, palefire/visit is
+       attached with visit). The two share .pf-landing__head, which sets
+       the line beside the title on wide screens. No live region: the Visit
+       strip already announces changes. #}
+    {% set hero_hours = hero and visit.lid %}
+    {% if hero_hours %}<div class="pf-landing__head">{% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title">{{ page_title }}</h1>
+    {% endif %}
+    {% if hero_hours %}
+        <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
+          <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+          <span class="pf-landing__hours-status" data-pf-hours-status>{{ 'Hours'|t }}</span>
+          <span class="pf-landing__hours-today" data-pf-hours-today></span>
+          {% if visit.name %}<span class="pf-landing__hours-place">{{ visit.name }}</span>{% endif %}
+        </p>
+      </div>
     {% endif %}
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>

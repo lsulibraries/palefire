@@ -605,6 +605,50 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: one glass for bar and panel, one rule under the tiles, open/closed line (2026-10-19)
+
+- **Flickering band, second fix:** drawing the bar after the panel wasn't
+  enough. The bar and the panel each blurred the playing video on their
+  own, and Chrome now and then skips one surface's blur for a frame or a
+  repaint. Where the two met, that showed as a flickering band. From md,
+  the panel now starts under the bar (pulled up by `--pf-landing-bar-h`,
+  with the same amount added to its top padding), so there's one blurred
+  surface. The bar has no glass of its own, just a tint
+  (`color-mix(--pf-sidebar-bg 70%)`) over the panel's top 48px, which comes
+  out close to its old shade. The video button's sticky dock is now only
+  as wide as the button instead of a full-width layer over the bar.
+  Edge case: a breadcrumb long enough to wrap would make the bar taller
+  than the tint.
+- **Rule under the tiles:** with the cards side by side (container 36rem
+  up), one line runs across the whole row instead of three with gaps.
+  When stacked, each card keeps its own line.
+- **Open now / Closed now:** a line with the title, in the breadcrumb's
+  voice: status dot, state, today's hours and the building, using the
+  Visit strip's LibCal location (the page's Hours location field) and
+  `visit-hours.js` (no new JS or requests). From lg it sits beside the
+  title on its baseline, so the panel still fits the first screen. Below
+  lg, and beside a long title, it goes under it. "Hours" shows dimmed
+  while loading, and the line hides if LibCal fails. The dot only repeats
+  the word, so it's `aria-hidden`.
+  **Content note:** /v2/special's Hours location is 241, which LibCal
+  calls "LSU Library" (7AM–12AM today). Hill Memorial Library is **236**
+  (9AM–5PM), the location the concept page uses. Set the field to 236
+  in the production UI to correct both this line and the Visit strip.
+
+Measured on /v2/special with the change injected, panel bottom (window
+height in brackets):
+
+| Window | TOC hidden | TOC open |
+|---|---|---|
+| 1333×798 | 799 (798) | 799 (798) |
+| 1440×900 | 901 (900) | 901 (900) |
+| 1024×768 | 769 (768) | 864 (768): the narrow column wraps the hours and intro |
+
+At 768 and 320 nothing scrolls sideways. At 320 the hours line wraps
+under the title.
+
+Files: `landing.html.twig`, `_landing-features.scss`.
+
 ### Landing bar: no flickering band under it (2026-10-19)
 
 A dark band, about 20px tall, sometimes showed along the top of the lead

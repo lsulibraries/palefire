@@ -79,11 +79,9 @@
 // keeps the head's type (.pf-breadcrumb--modular, _layout.scss) without its
 // glass strip. The TOC title lines up with the breadcrumb (modular-toc.js
 // measures it, as it did the head's).
-// The bar is drawn after the lead panel (z-index 1; the TOC, 2, and the
-// video button, 5, stay above it). The lead's glass blurs whatever is drawn
-// before it, and Chrome let that blur pick up the bar's dark fill: a band
-// about the blur's size along the lead's top edge that came and went as
-// the page repainted (on hover, cursor moves).
+// The bar sits over the lead panel (z-index 1; the TOC, 2, and the video
+// button, 5, stay above it): from md the panel's glass runs up under it
+// (below).
 .pf-landing__bar {
   position: relative;
   z-index: 1;
@@ -147,8 +145,9 @@
   z-index: 5;
   display: flex;
   justify-content: flex-end;
+  width: fit-content;
   height: 0;
-  margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  margin-inline: auto calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
   padding-inline: var(--pf-bar-edge);
   pointer-events: none;
@@ -176,8 +175,8 @@
   .pf-landing--lead-screen > .pf-landing__lead:has(> .pf-landing__features) {
     width: auto;
     max-width: none;
-    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
-    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
+    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)));
+    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
     // Space above the title, and the same under the bottom row, so the
@@ -186,6 +185,29 @@
     // tried first, was 80px, too much).
     padding-block: clamp(1.5rem, 4vw, 3.5rem);
     border-width: 0 0 1px;
+  }
+
+  // One glass surface for the bar and the panel. Each had its own blur, and
+  // over the playing video Chrome now and then skipped one of them for a
+  // frame or a repaint (hover, cursor moves): a band, about the blur's size,
+  // flickered where the two met. The panel now starts under the bar (pulled
+  // up by its height, the same added to its top padding), and the bar keeps
+  // only a tint: the panel's glass plus 70% of the bar's own colour comes
+  // to about the bar's old shade.
+  .pf-landing--lead-screen:has(> .pf-landing__lead > .pf-landing__features) {
+    > .pf-landing__bar {
+      background-color: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    > .pf-landing__lead {
+      margin-top: calc(-1 * var(--pf-landing-bar-h));
+      padding-top: calc(var(--pf-landing-bar-h) + clamp(1.5rem, 4vw, 3.5rem));
+      background-image: linear-gradient(color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent) 0 0);
+      background-repeat: no-repeat;
+      background-size: 100% var(--pf-landing-bar-h);
+    }
   }
 }
 
@@ -202,6 +224,32 @@
 
   > .pf-landing__title {
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
+  }
+
+  // Title and hours: the hours line close under the title, as its
+  // caption; from lg, beside it on the title's baseline (under it again if
+  // a long title leaves no room). The panel has no height to spare for a
+  // line of its own there.
+  > .pf-landing__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem clamp(1rem, 2vw, 1.75rem);
+    margin-bottom: clamp(.75rem, 1.5vw, 1rem);
+
+    @include media-breakpoint-up(lg) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+
+    > .pf-landing__title {
+      margin: 0;
+    }
+  }
+
+  > .pf-landing__head + .pf-landing__intro {
+    margin-top: 0;
   }
 
   // The intro runs the panel's full width on smaller screens; from lg, 80%
@@ -239,6 +287,91 @@
   }
 }
 
+// --- Open now / Closed now -------------------------------------------------
+// One line under the title in the breadcrumb and TOC's voice (monospace,
+// uppercase, tracked): a status dot, the state in the panel's text colour,
+// then today's hours and the building in its muted tone, a middle dot
+// between them. Wraps on narrow screens. The dot only repeats the word, so
+// it is hidden from screen readers; its colours are the Visit strip's.
+// "Hours" shows dimmed while LibCal loads, and the line goes if it fails.
+.pf-landing__hours {
+  --pf-visit-open: #2f9e4f;
+  --pf-visit-soon: #fdd023;
+  --pf-visit-closed: #c8102e;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .25rem .625rem;
+  margin: 0;
+  color: var(--pf-toc-color, inherit);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  transition: opacity .3s ease;
+
+  &.is-loading {
+    opacity: .6;
+  }
+
+  &.is-failed {
+    display: none;
+  }
+}
+
+.pf-landing__hours-dot {
+  flex: none;
+  align-self: center;
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: 50%;
+  background-color: var(--pf-landing-line, currentColor);
+  transition: background-color .3s ease;
+
+  [data-hours-state="open"] > & {
+    background-color: var(--pf-visit-open);
+  }
+
+  [data-hours-state="soon"] > & {
+    background-color: var(--pf-visit-soon);
+  }
+
+  [data-hours-state="closed"] > & {
+    background-color: var(--pf-visit-closed);
+  }
+}
+
+.pf-landing__hours-status {
+  color: var(--pf-section-fg, inherit);
+}
+
+.pf-landing__hours-today:empty {
+  display: none;
+}
+
+// The middle dot is decoration: empty alt text keeps it out of what screen
+// readers say.
+:is(.pf-landing__hours-today, .pf-landing__hours-place)::before {
+  content: "·" / "";
+  margin-inline-end: .625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__hours,
+  .pf-landing__hours-dot {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-landing__hours-dot {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
+  }
+}
+
 // --- Next event | Latest blog post | Account -------------------------------
 // One column on narrow panels, two from 36rem, three from 50rem (container
 // widths, so the TOC being open or closed decides too). Each card: a
@@ -271,6 +404,21 @@
   min-width: 0;
   padding-top: clamp(.875rem, 1.5vw, 1rem);
   border-top: 1px solid var(--pf-landing-line);
+}
+
+// Side by side, one unbroken line over the whole row (under the tiles)
+// instead of one per card with the column gaps between them. Stacked, each
+// card keeps its own, which is what separates them.
+@container pf-features (min-width: 36rem) {
+  .pf-landing__pair {
+    padding-top: clamp(.875rem, 1.5vw, 1rem);
+    border-top: 1px solid var(--pf-landing-line);
+  }
+
+  .pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
+    padding-top: 0;
+    border-top: 0;
+  }
 }
 
 .pf-landing__features .pf-hero-event__label {
