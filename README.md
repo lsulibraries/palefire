@@ -605,6 +605,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### TOC clicks no longer add browser history entries (2026-10-19)
+
+Each TOC link was a plain anchor, so every click added an entry, and Back
+stepped through the jumps (#map, #events, #home…) before leaving the page.
+`modular-toc.js` now handles a plain left click itself:
+
+- **Hash:** the address still gets the section's #hash, for sharing or
+  reloading, but through `history.replaceState()`, so there's no new
+  entry. Back leaves the page.
+- **Scroll:** `scrollIntoView({ block: 'start' })` keeps what the anchor
+  did. It uses the CSS smooth scroll (instant with reduced motion) and each
+  section's `scroll-margin`. It runs after the phone drawer starts
+  closing, as the anchor's jump did.
+- **Unchanged:** the active highlight, the scroll lock and moving focus to
+  the section's heading. Without JS, and for modified clicks (Ctrl/Cmd,
+  Shift, Alt, middle click), the links behave as plain anchors.
+
+Checked on /v2/special with the same steps run in the page, for #home,
+#map, the map's sub-link and #events: each lands at the same scroll
+position as the plain anchor (1, 702, 711, 2389), the address shows the
+hash, and history length doesn't change. `node --check` passes.
+
+File: `js/modular-toc.js`.
+
 ### Landing hero: corner buttons as close to the screen's edge as to the header (2026-10-19)
 
 The floating TOC button (left, TOC hidden) and the video pause button

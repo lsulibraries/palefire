@@ -369,11 +369,15 @@
 
     /* ---------------- Clicks ---------------- */
 
-    // The jump itself is a native anchor (CSS smooth scrolling and
-    // scroll-margin do the work), so it also works without JS and plays
-    // well with scroll-snap. JS marks the link active right away and holds
-    // tracking until the scroll settles, so the highlight doesn't flicker
-    // through every section in between.
+    // The links are plain anchors, so without JS they jump as usual. With
+    // it, a click doesn't add a history entry: the address still gets the
+    // section's #hash (to share or reload), but replaced, so Back leaves the
+    // page instead of stepping back through every jump. scrollIntoView()
+    // keeps what the anchor did: the CSS smooth scroll (instant with
+    // reduced motion) and each section's scroll-margin. JS also marks the
+    // link active right away and holds tracking until the scroll settles,
+    // so the highlight doesn't flicker through every section in between.
+    // Modified clicks (new tab, new window) are left to the browser.
     nav.addEventListener('click', (event) => {
       const link = event.target.closest('a[href^="#"]');
       if (!link || link.classList.contains('pf-toc__top')) {
@@ -382,6 +386,12 @@
       const entry = entries.find((e) => e.link === link || e.subs.some((s) => s.link === link));
       if (!entry) {
         return;
+      }
+      const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+      const jump = target && event.button === 0 && !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+      if (jump) {
+        event.preventDefault();
+        history.replaceState(history.state, '', link.hash);
       }
       setActive(entry);
       setActiveSub(entry.subs.find((s) => s.link === link) || null);
@@ -393,6 +403,11 @@
         }
       });
       closeOffcanvas(nav);
+      // After the phone drawer has started closing, as the anchor's own
+      // jump did.
+      if (jump) {
+        target.scrollIntoView({ block: 'start' });
+      }
     }, { signal });
 
     function lockUntilScrollEnds(done) {
