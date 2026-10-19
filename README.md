@@ -605,6 +605,36 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Map legend in the Visit panel; hatches on the group headings (2026-10-19)
+
+- **One panel:** on the landing hero, the map's legend and space list now
+  sit across the top of the Visit strip, under the drawing, on its glass
+  and inside its frame, instead of straight on the video. A rule separates
+  them from the Visit content. It's one element with one blur, so no seam
+  between two glass panels. How: `palefire_preprocess_paragraph__landing_hero()`
+  hands the Visit data to the map paragraph (`#pf_visit` → `map.visit`,
+  with its own render-cache key and the page's cache tags), the map's
+  aside embeds the strip with the key in it, and `visit_in_map` stops the
+  landing from printing it again. Hero only: on other landings the legend
+  is a narrow column beside the drawing.
+- **Description after the legend:** the building's note now follows
+  "Legend & spaces" everywhere the map appears.
+- **Hatches once per group:** the walk-in and appointment hatches are on
+  the "Walk in" / "By appointment" headings, not on every room. The legend
+  line keeps only the drawing's other marks (Elevator). The item-hover
+  swatch rules went with them.
+- **Templates:** the strip is now `includes/visit-strip.html.twig` (an
+  embeddable key block) and the key is `includes/map-key.html.twig`, used
+  by both landings and the map.
+
+Checked by moving the elements on /v2/special: one panel at 1333, with the
+key across the top at 768 and stacked at 320, and no sideways scroll.
+
+Files: `palefire.theme`, `landing.html.twig`,
+`paragraph--building-map.html.twig`, `includes/visit-strip.html.twig`
+(new), `includes/map-key.html.twig` (new), `_visit.scss`,
+`_building-map.scss`.
+
 ### Landing hero: one glass for bar and panel, one rule under the tiles, open/closed line (2026-10-19)
 
 - **Flickering band, second fix:** drawing the bar after the panel wasn't

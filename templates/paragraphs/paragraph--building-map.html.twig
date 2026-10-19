@@ -44,61 +44,21 @@
       <div class="pf-map__summary">{{ map.summary }}</div>
     </div>
   {% endif %}
+  {# Aside: the legend and space list, then the note (includes/
+     map-key.html.twig). On the landing hero (map.visit), the Visit strip
+     is here too, with the key across its top, so they share one panel. #}
   <div class="pf-map__aside">
-    {# Note (the building term's description): who can walk in and what
-       needs an appointment, right above the legend it explains. Outside the
-       <details>, so it shows while the legend is collapsed. #}
-    {% if map.note %}
-      <div class="pf-map__intro pf-map__note">{{ map.note }}</div>
+    {% if map.visit %}
+      {% embed '@palefire/includes/visit-strip.html.twig' with { visit: map.visit, visit_id: map.visit.id, keyed: true } %}
+        {% block key %}
+          <div class="pf-visit__key">
+            {% include '@palefire/includes/map-key.html.twig' %}
+          </div>
+        {% endblock %}
+      {% endembed %}
+    {% else %}
+      {% include '@palefire/includes/map-key.html.twig' %}
     {% endif %}
-    {# The toggle always shows. Open beside the map, collapsed when it moves
-       under the map (building-map.js); the reader can open or close it either
-       way. data-toc-skip keeps anything in here out of the TOC. #}
-    <details class="pf-map__key" open data-map-key data-toc-skip>
-      <summary class="pf-map__key-toggle">
-        <span>{{ 'Legend & spaces'|t }}</span>
-        <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
-        <span class="pf-map__key-icon" aria-hidden="true"></span>
-      </summary>
-      <div class="pf-map__key-body">
-        <ul class="pf-map__legend">
-          <li><span class="pf-map__swatch" aria-hidden="true"></span>{{ 'Public walk-in'|t }}</li>
-          <li><span class="pf-map__swatch pf-map__swatch--appointment" aria-hidden="true"></span>{{ 'Request an appointment'|t }}</li>
-          {% if 'elevator' in map.legend %}
-            <li><svg class="pf-map__legend-icon" viewBox="-66 -40 132 80" aria-hidden="true" focusable="false">{% include '@palefire/includes/map-icon-elevator.svg.twig' %}</svg>{{ 'Elevator'|t }}</li>
-          {% endif %}
-        </ul>
-
-        {# Same rooms as the drawing's regions: the keyboard / small-screen route in. #}
-        <div class="pf-map__list">
-          {% for group in [
-            { access: 'walk_in', title: 'Walk in'|t },
-            { access: 'appointment', title: 'By appointment'|t },
-          ] %}
-            {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}
-            {% if group_spaces %}
-              <div class="pf-map__group">
-                <h4 class="pf-map__group-title">{{ group.title }}</h4>
-                <ul>
-                  {% for s in group_spaces %}
-                    {# Rooms without a link are buttons: they show the tooltip. #}
-                    {% set tag = s.url ? 'a' : 'button' %}
-                    <li>
-                      <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} type="button"{% endif %}{% if s.key == map.here %} aria-current="location"{% endif %}>
-                        <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
-                        <span class="pf-map__item-name">{{ s.title }}</span>
-                        {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
-                        <span class="pf-map__item-floor">{{ 'Floor @n'|t({'@n': s.floor}) }}</span>
-                      </{{ tag }}>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    </details>
   </div>
 
   <figure class="pf-map__stage">

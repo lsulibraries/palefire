@@ -256,14 +256,30 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * section without the search form, and it shares the bento_search fields:
  * the same variables, plus hero, which includes/landing.html.twig reads.
  * input_id only keeps the Visit card's ids unique on the page.
+ *
+ * With both a map and a Visit card, the map shows the card itself: under
+ * the drawing, with the legend and space list across its top, one panel
+ * (paragraph--building-map.html.twig reads #pf_visit as map.visit), and
+ * visit_in_map tells the landing not to print it again. Hero only: the
+ * stacked hero map gives the aside the map's full width; beside the drawing
+ * (other landings) it is a narrow column.
  */
 function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   palefire_preprocess_paragraph__bento_search($variables);
   $variables['hero'] = TRUE;
+  $variables['visit_in_map'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
+    if (!empty($variables['landing_map']) && !empty($variables['visit'])) {
+      $variables['landing_map']['#pf_visit'] = $variables['visit'] + ['id' => $variables['landing']['input_id'] . '-visit'];
+      // The map's render cache: its own entry with the card, cleared when
+      // the page's location fields change (the host node's tags).
+      $variables['landing_map']['#cache']['keys'][] = 'pf_visit';
+      $variables['landing_map']['#cache']['tags'] = Cache::mergeTags($variables['landing_map']['#cache']['tags'] ?? [], $variables['#cache']['tags'] ?? []);
+      $variables['visit_in_map'] = TRUE;
+    }
   }
 }
 
@@ -580,6 +596,9 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'here' => $here,
     'legend' => array_values((array) ($building['legend'] ?? [])),
     'cache' => $cache_render,
+    // The landing hero's Visit card, shown in the aside with the key
+    // (palefire_preprocess_paragraph__landing_hero()), or NULL.
+    'visit' => $variables['elements']['#pf_visit'] ?? NULL,
   ];
 }
 

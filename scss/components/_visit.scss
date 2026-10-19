@@ -153,6 +153,45 @@
       "social hours place";
   }
 }
+
+// Keyed (the landing hero, paragraph--building-map.html.twig): the map's
+// legend and space list, then its note, across the top of the strip, so
+// they sit on the strip's glass and in its frame instead of straight on
+// the video. A rule under them, then the strip as before. The strip is the
+// map's aside here: no gap above it, the map's full width.
+.pf-map__aside > .pf-visit {
+  max-width: none;
+  margin-top: 0;
+}
+.pf-visit__key {
+  min-width: 0;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--pf-visit-rule);
+}
+// The frame is the line above the toggle; collapsed, the rule under the
+// key is the line below it.
+.pf-visit__key .pf-map__key-toggle { border-top: 0; padding-top: 0; }
+.pf-visit__key .pf-map__key:not([open]) .pf-map__key-toggle { border-bottom: 0; padding-bottom: 0; }
+@media (min-width: 768px) {
+  .pf-visit--keyed {
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "key key"
+      "head place"
+      "hours place"
+      "social place";
+  }
+  .pf-visit__key { grid-area: key; }
+}
+@media (min-width: 1200px) {
+  .pf-visit--keyed {
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "key key key"
+      "head hours place"
+      "social hours place";
+  }
+}
 .pf-visit__heading {
   display: flex;
   flex-direction: column;

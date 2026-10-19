@@ -1,0 +1,67 @@
+{#
+/**
+ * @file
+ * Visit strip: name, hours (js/visit-hours.js), mini map and directions,
+ * Instagram placeholder (_visit.scss).
+ *
+ * Variables:
+ * - visit: ['name', 'lid', 'maps_url', 'embed_url', 'query']
+ *   (_palefire_landing_visit()).
+ * - visit_id: id prefix, unique on the page.
+ * - keyed: TRUE when the key block is filled in. The landing hero's map
+ *   embeds this strip and puts its legend and space list there, across the
+ *   top (paragraph--building-map.html.twig), so the two share one panel.
+ */
+#}
+<aside class="pf-visit{{ keyed ? ' pf-visit--keyed' }}" aria-labelledby="{{ visit_id }}-heading">
+  {% block key %}{% endblock %}
+
+  <h3 class="pf-visit__heading" id="{{ visit_id }}-heading">
+    <span class="pf-visit__eyebrow">{{ 'Visit'|t }}</span>
+    {% if visit.name %}<span class="pf-visit__name">{{ visit.name }}</span>{% endif %}
+  </h3>
+
+  {% if visit.lid %}
+    <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
+      <p class="pf-visit__status" aria-live="polite">
+        <span class="pf-visit__dot" aria-hidden="true"></span>
+        <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
+        <span class="pf-visit__today" data-pf-hours-today></span>
+      </p>
+      <details class="pf-visit__week">
+        <summary>{{ 'This week'|t }}</summary>
+        <ol class="pf-visit__days" data-pf-hours-week></ol>
+      </details>
+      <a class="pf-visit__link pf-visit__all-hours" href="https://lsu.libcal.com/hours">{{ 'All library hours'|t }}</a>
+    </div>
+  {% endif %}
+
+  {# Mini map with the Google Maps link under it, one column. #}
+  {% if visit.embed_url or visit.maps_url %}
+    <div class="pf-visit__place">
+      {% if visit.embed_url %}
+        <div class="pf-visit__map" data-pf-visit-map data-src="{{ visit.embed_url }}" data-title="{{ 'Map: @place'|t({'@place': visit.name ?: visit.query}) }}">
+          <button type="button" class="pf-visit__map-load" data-pf-visit-map-load>
+            <svg class="pf-visit__map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+            <span>{{ 'Show map'|t }}</span>
+            <small>{{ 'Loads Google Maps'|t }}</small>
+          </button>
+        </div>
+      {% endif %}
+      {% if visit.maps_url %}
+        <a class="pf-visit__link pf-visit__directions" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
+          {{ 'Open in Google Maps'|t }}<svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {# Instagram: a placeholder frame under the name until a post embed
+     takes its place. Decorative for now, so screen readers skip it. The
+     icon is Font Awesome Pro's, inlined from the site's copy like the
+     building map's hint icon (no FA CSS or font). #}
+  <div class="pf-visit__social" aria-hidden="true">
+    <span class="pf-visit__social-icon">{{ source('libraries/fontawesome-pro/svgs/brands/instagram.svg', ignore_missing = true)|raw }}</span>
+    <span class="pf-visit__social-label">{{ 'Instagram'|t }}</span>
+  </div>
+</aside>

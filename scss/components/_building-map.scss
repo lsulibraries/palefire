@@ -309,11 +309,11 @@
   }
 }
 
-/* Aside: the note (.pf-map__intro, the building's description: who can
-   walk in, what needs an appointment) right above the legend, then the
-   legend and space list. ------------------------------------------------- */
+/* Aside (includes/map-key.html.twig): the legend and space list, then the
+   note (.pf-map__intro, the building's description: who can walk in, what
+   needs an appointment) under them. ----------------------------------------- */
 .pf-map__intro { margin: 0 0 1.5rem; color: var(--pf-map-floor-ink); font-size: 1.0625rem; line-height: 1.55; }
-.pf-map__aside > .pf-map__note { max-width: 60ch; margin-bottom: 1rem; font-size: .9375rem; line-height: 1.5; }
+.pf-map__key + .pf-map__note { max-width: 60ch; margin: 1rem 0 0; font-size: .9375rem; line-height: 1.5; }
 .pf-map__intro p:last-child { margin-bottom: 0; }
 .pf-map__type > :last-child { margin-bottom: 0; }
 /* Legend + space list sit in a <details> with its toggle always showing.
@@ -370,7 +370,8 @@
   mask: conic-gradient(#000 0 25%, transparent 0 50%, #000 0 75%, transparent 0) 0 0 / calc(var(--p) * 2) calc(var(--p) * 2);
 }
 .pf-map__list { display: grid; gap: 1.25rem; }
-.pf-map__group-title { margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
+/* Each group's heading carries its hatch (once, not on every room). */
+.pf-map__group-title { display: flex; align-items: center; gap: .6rem; margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-hidden-ink); }
 .pf-map__item {
   display: flex; align-items: center; gap: .75rem; width: 100%; min-height: 2.75rem;
@@ -380,12 +381,6 @@
 .pf-map__item-name { flex: 1; font-weight: 600; }
 .pf-map__item-floor { font-size: .8125rem; color: var(--pf-map-floor-ink); }
 .pf-map__item-name { transition: color var(--pf-map-out) ease; }
-.pf-map__item:hover .pf-map__swatch, .pf-map__item:focus-visible .pf-map__swatch, .pf-map__item.is-active .pf-map__swatch {
-  opacity: var(--pf-map-hatch-hover); transition-duration: var(--pf-map-in);
-}
-.pf-map__item:hover .pf-map__swatch--appointment, .pf-map__item:focus-visible .pf-map__swatch--appointment, .pf-map__item.is-active .pf-map__swatch--appointment {
-  opacity: var(--pf-map-hatch-appointment-hover);
-}
 .pf-map__item:hover .pf-map__item-name, .pf-map__item:focus-visible .pf-map__item-name, .pf-map__item.is-active .pf-map__item-name { color: var(--pf-map-hover); transition-duration: var(--pf-map-in); }
 .pf-map__item:focus-visible { outline: 2px solid var(--pf-map-hover); outline-offset: 2px; }
 
@@ -453,7 +448,8 @@
 }
 .pf-map__tip.is-below::after { top: -7px; bottom: auto; transform: rotate(-135deg); }
 .pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .35rem; }
-.pf-map__tip-head .pf-map__swatch { width: 28px; height: calc(var(--p) * 3); }
+.pf-map__tip-head .pf-map__swatch,
+.pf-map__group-title .pf-map__swatch { width: 28px; height: calc(var(--p) * 3); }
 .pf-map__tip-eyebrow { margin: 0; font-size: .6875rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-title { display: block; margin: 0 0 .3rem; font-size: 1rem; font-weight: $pf-display-weight; letter-spacing: .08em; text-transform: uppercase; line-height: 1.2; color: var(--pf-map-hover); }
 .pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
