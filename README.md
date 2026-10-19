@@ -605,6 +605,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Legend & spaces opens like the guides' accordions (2026-10-19)
+
+Same motion as `.pf-accordion` in the guides (the mobile menu's timing,
+`$pf-menu-fade` .35s, `$pf-menu-stagger` .06s):
+
+- **Glide:** in Chrome and Edge the body grows open (`::details-content`
+  with `interpolate-size: allow-keywords`). Other browsers open it at
+  once. Closing is instant. It clips with a 4px clip margin
+  (`overflow: clip`) so the rooms' focus rings aren't cut off.
+- **Sequenced fade:** the rows (legend line, each heading, each room)
+  fade in one after another with a slight drop (`pf-accordion-in`).
+  `includes/map-key.html.twig` numbers them (`.pf-seq`, `--pf-seq`) and
+  caps the number at 5, so the 6th row and the rest come in together. No
+  JS.
+- **Reduced motion:** the OS setting and the Settings drawer's switch turn
+  off the glide and the fade.
+
+Checked on /v2/special with the change injected. Delays are 0, .06 … .3s,
+and the 6th through 11th rows all start at .3s. The glide's target
+resolves to the body's full height. The browser pane froze the clock, so
+I didn't see the motion itself.
+
+Files: `includes/map-key.html.twig`, `_building-map.scss`.
+
 ### Map legend in the Visit panel; hatches on the group headings (2026-10-19)
 
 - **One panel:** on the landing hero, the map's legend and space list now

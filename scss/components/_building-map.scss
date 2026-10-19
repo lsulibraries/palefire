@@ -333,6 +333,25 @@
 .pf-map__key-icon { flex: none; width: .6rem; height: .6rem; margin: 0 .2rem -.1rem 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-25%) rotate(45deg); transition: transform .2s ease; }
 .pf-map__key[open] .pf-map__key-icon { transform: translateY(15%) rotate(-135deg); }
 .pf-map__key[open] .pf-map__key-body { padding-top: 1.25rem; }
+/* Opening, as the guides' accordions (_guide.scss, the mobile menu's
+   timing): Chrome and Edge glide the body open (::details-content with
+   interpolate-size), other browsers open it at once; closing is instant.
+   The rows (.pf-seq, numbered in includes/map-key.html.twig, capped at 5)
+   fade in one after another with a slight drop. Reduced motion: no glide,
+   no fade (below). */
+@supports (interpolate-size: allow-keywords) {
+  .pf-map__key { interpolate-size: allow-keywords; }
+  /* clip, with room for the rooms' focus rings (2px out, 2px wide). */
+  .pf-map__key::details-content { block-size: 0; overflow: clip; overflow-clip-margin: 4px; }
+  .pf-map__key[open]::details-content {
+    block-size: auto;
+    transition: block-size #{$pf-menu-fade} ease, content-visibility #{$pf-menu-fade} allow-discrete;
+  }
+}
+.pf-map__key[open] .pf-seq {
+  animation: pf-accordion-in #{$pf-menu-fade} ease both;
+  animation-delay: calc(var(--pf-seq, 0) * #{$pf-menu-stagger});
+}
 .pf-map__legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin: 0 0 1.5rem; padding: 0; list-style: none; font-size: .875rem; color: var(--pf-map-floor-ink); }
 .pf-map__legend li { display: flex; align-items: center; gap: .6rem; }
 /* Map icons explained in the legend (elevator): the same arrows, upright. */
@@ -482,7 +501,10 @@
   .pf-map__tip.is-open { transition: opacity var(--pf-map-tip-in) linear, visibility 0s; }
   .pf-map__here-arrow { animation: none !important; }
   .pf-landing.is-map-in-view .pf-landing__bg-video { transform: none; }
+  .pf-map__key[open]::details-content { transition: none; }
+  .pf-map__key[open] .pf-seq { animation: none; }
 }
+html.pf-a11y-motion .pf-map__key[open]::details-content { transition: none; }
 @media print {
   .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
   .pf-map__scroller { overflow: visible; }

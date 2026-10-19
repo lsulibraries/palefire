@@ -20,10 +20,19 @@
     <span class="pf-map__key-icon" aria-hidden="true"></span>
   </summary>
   <div class="pf-map__key-body">
+    {# Opening fades the rows in one after another, as the guides'
+       accordions do (_building-map.scss): each row is .pf-seq with its
+       place in --pf-seq, the legend line first, then each heading and its
+       rooms. Capped at 5, so the sixth row and the rest come in together.
+       Twig keeps no count across loops, so the places are worked out:
+       the legend line (0 or 1 rows), then the walk-in group (its heading
+       and rooms), then the appointment group. #}
+    {% set seq_legend = 'elevator' in map.legend ? 1 : 0 %}
+    {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length %}
     {# The walk-in and appointment hatches are on the group headings below,
        so the legend lists only the drawing's other marks. #}
     {% if 'elevator' in map.legend %}
-      <ul class="pf-map__legend">
+      <ul class="pf-map__legend pf-seq" style="--pf-seq: 0">
         <li><svg class="pf-map__legend-icon" viewBox="-66 -40 132 80" aria-hidden="true" focusable="false">{% include '@palefire/includes/map-icon-elevator.svg.twig' %}</svg>{{ 'Elevator'|t }}</li>
       </ul>
     {% endif %}
@@ -37,9 +46,10 @@
         { access: 'appointment', title: 'By appointment'|t },
       ] %}
         {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}
+        {% set seq_start = seq_legend + (group.access == 'appointment' and seq_walk_in ? seq_walk_in + 1 : 0) %}
         {% if group_spaces %}
           <div class="pf-map__group">
-            <h4 class="pf-map__group-title">
+            <h4 class="pf-map__group-title pf-seq" style="--pf-seq: {{ min(seq_start, 5) }}">
               <span class="pf-map__swatch{{ group.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
               {{ group.title }}
             </h4>
@@ -47,7 +57,7 @@
               {% for s in group_spaces %}
                 {# Rooms without a link are buttons: they show the tooltip. #}
                 {% set tag = s.url ? 'a' : 'button' %}
-                <li>
+                <li class="pf-seq" style="--pf-seq: {{ min(seq_start + loop.index, 5) }}">
                   <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} type="button"{% endif %}{% if s.key == map.here %} aria-current="location"{% endif %}>
                     <span class="pf-map__item-name">{{ s.title }}</span>
                     {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
