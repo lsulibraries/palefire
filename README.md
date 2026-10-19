@@ -605,6 +605,25 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Hero search hairline, map tooltip on top, header under the admin toolbar (2026-10-19)
+
+- **Search box:** the field's border and the divider before the Search
+  button use the same 20% hairline as the rule above it and the tiles. The
+  field is still easy to find from its glass fill, icon, placeholder,
+  labelled button and heading. Hover brings its border up to the muted
+  tone, and focus turns it gold.
+- **Map tooltip:** the summary set into the Hill drawing (z-index 2) was
+  drawn over the tooltip. While a tooltip is open, the drawing's stage
+  rises to z-index 3. It drops back only after the tooltip fades out, and
+  the text stays selectable the rest of the time.
+- **Header vs. Gin:** when logged in, Drupal's admin toolbar (core Toolbar
+  or Navigation, styled by Gin) is at z-index 501–503. Bootstrap's
+  `sticky-top` (1020) put the header over its trays. With the toolbar on
+  the page, the header is now at 500 and the glass under it at 499. The
+  open menu drawer still rises to the offcanvas layer.
+
+Files: `_landing-features.scss`, `_building-map.scss`, `_header.scss`.
+
 ### Landing hero: intro at 80% on desktop; even top and bottom margin (2026-10-19)
 
 - **Intro:** from lg, the page intro under the title is 80% of the

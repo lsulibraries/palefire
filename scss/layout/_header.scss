@@ -1019,3 +1019,19 @@
     text-underline-offset: .45em;
   }
 }
+
+// Logged in: Drupal's admin toolbar (core Toolbar or Navigation, styled by
+// Gin) sits at z-index 501-503 and opens its trays and menus over the page.
+// Bootstrap's sticky-top (1020) put the header, and the glass under it, on
+// top of them; they stay just below instead. :where() keeps this at the
+// specificity of .sticky-top, so the open menu drawer (above) still rises to
+// the offcanvas layer.
+:where(body:has(#toolbar-administration, .admin-toolbar)) {
+  .pf-header {
+    z-index: 500;
+  }
+
+  .pf-page::before {
+    z-index: 499;
+  }
+}

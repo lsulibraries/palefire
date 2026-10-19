@@ -70,7 +70,13 @@
   position: sticky;
   top: calc(var(--pf-header-h, 50px) + var(--pf-map-stick-gap));
   z-index: 1;                          /* tooltips over the legend column */
+  /* Back under the text set into the drawing (the hero's summary, z-index 2,
+     _landing-hero.scss) only once the tooltip has faded out. */
+  transition: z-index 0s linear var(--pf-map-tip-out);
 }
+/* While a tooltip is open the drawing rises over that text, so the tooltip
+   is never under it. */
+.pf-map__stage:has(> .pf-map__tip.is-open) { z-index: 3; transition-delay: 0s; }
 .pf-map.is-unstuck .pf-map__stage { position: relative; top: auto; }
 @container pf-map (max-width: 57.99rem) {
   .pf-map {

@@ -184,12 +184,12 @@
 
 // --- Title, intro and search ------------------------------------------------
 // Room around the search: more space between the intro, the rule above the
-// search and the field, and under the field. The rule is the same soft
-// hairline as the lines above the bottom row. The field's own border is
-// softer than before but keeps 3:1 on its glass (WCAG 1.4.11, a control's
-// boundary): 70% of the panel's muted tone is the least that does on every
-// reading swatch, over a mid-grey or white/black video frame; the hairline
-// (20%) is about 1.5:1.
+// search and the field, and under the field. The rule, the field's border
+// and the divider before the Search button are all the same soft hairline
+// as the lines above the bottom row and around the tiles. The field is
+// still plain to see without a strong edge: its glass fill, the search
+// glyph, the placeholder, the labelled Search button and the heading above
+// it; hover brings the border up to the muted tone and focus turns it gold.
 .pf-landing__lead:has(> .pf-landing__features) {
   padding-block: clamp(1rem, 2vw, 1.5rem);
 
@@ -213,7 +213,7 @@
 
   > .pf-landing__form {
     --pf-landing-field-h: 3rem;
-    --pf-landing-line: color-mix(in srgb, var(--pf-section-border, #6c757d) 70%, transparent);
+    --pf-landing-line: #{$pf-hairline};
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
     padding-top: clamp(1rem, 2vw, 1.5rem);
     border-top-color: #{$pf-hairline};
