@@ -35,6 +35,31 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
+// The map screen lines up with the lead (md up, the full-screen lead,
+// _landing-features.scss): the same gutter, so the map's heading, summary
+// and the Visit panel start where the lead's title and text do, and the
+// same top padding, where the snap (landing-snap.js reads scroll-margin-
+// top) stops the heading under the header.
+// The wrapper runs the content column's full width with the lead's inset
+// (--pf-hero-inset: its percentages are of the landing's width here too,
+// so the two always match), and the drawing alone spills back out into the
+// gutters, by as much as the inset took beyond the section's padding but
+// never past the old 1280px cap: the drawing keeps its size, the text
+// stays in the column.
+@include media-breakpoint-up(md) {
+  .pf-landing--hero.pf-landing--lead-screen > .pf-landing__visit {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+    padding-inline: var(--pf-hero-inset);
+    scroll-margin-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .pf-landing--hero.pf-landing--lead-screen .pf-map__stage {
+    margin-inline: calc(-1 * max(0px, min(var(--pf-hero-gutter) - var(--pf-section-pad-inline, 0px), (1280px - 100cqi) / 2)));
+  }
+}
+
 // Next event (hero-event.js): under the intro, across a hairline like the
 // landing's search. A square thumbnail, or diagonal hatching when the event
 // has no image, then the day and time, the title (the card's one link,
@@ -255,13 +280,21 @@ $pf-hero-media-wash: .8 !default;
     grid-template-areas: "head" "stage" "aside";
   }
 
-  // The heading sits right above the summary (1rem between them), not a
-  // row-gap and 3cqi higher: drawn lower by that much, so the summary and
-  // the drawing stay where they are.
-  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) > .pf-map__heading {
-    position: relative;
-    z-index: 2;
-    top: calc(clamp(1.5rem, 3vw, 3rem) + 3cqi - 1rem); // the hero map's row-gap, plus the summary's 3cqi
+  // The heading sits at the top (where the snap stops it, under the
+  // header), the summary 1rem under it, and the drawing moves up with them:
+  // pulled up by the row-gap plus the summary's 3cqi, less that 1rem, so
+  // the text still sits as deep in the drawing's corner as before.
+  .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) {
+    --pf-map-lift: calc(clamp(1.5rem, 3vw, 3rem) + 3cqi - 1rem); // the hero map's row-gap, plus the summary's 3cqi, less 1rem
+
+    > .pf-map__heading {
+      position: relative;
+      z-index: 2;
+    }
+
+    > .pf-map__stage {
+      margin-top: calc(-1 * var(--pf-map-lift));
+    }
   }
 
   .pf-landing--hero .pf-map--hill-memorial:not(:has(> .pf-hero-event)) > .pf-map__type {
@@ -270,7 +303,7 @@ $pf-hero-media-wash: .8 !default;
     grid-area: stage;
     align-self: start;
     width: 50cqi;
-    margin: 3cqi 0 0;
+    margin: calc(1rem - clamp(1.5rem, 3vw, 3rem)) 0 0; // 1rem under the heading
 
     .pf-map__summary {
       margin: 0;

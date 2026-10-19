@@ -605,6 +605,43 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Map screen lines up with the lead: same gutter, same top padding (2026-10-19)
+
+On the landing hero (md and up), the map's heading, summary and Visit
+panel now start where the lead's title and text do, and a snap to the map
+stops its heading the lead's top padding under the header. The text still
+sits deep in the drawing's corner, and the drawing alone may spill into
+the gutters.
+
+- **Gutter:** the map wrapper (`.pf-landing__visit`) now spans the
+  content column with the lead's own `--pf-hero-inset` padding. Its
+  percentages are of the same width as the lead's, so the two always
+  match. The drawing spills back out by
+  `max(0, min(gutter − section padding, (1280px − 100cqi) / 2))`, which
+  keeps it the size it was.
+- **Top:** the snap's `scroll-margin-top` is now the lead's top padding,
+  `clamp(1.5rem, 4vw, 3.5rem)`. The heading moved from its offset down in
+  the drawing to the top. The drawing and the summary move up with it
+  (`--pf-map-lift`: the row gap plus 3cqi, less 1rem), so the summary is
+  still 1rem under the heading and 3cqi into the drawing's corner.
+- **Visit panel:** it's in the wrapper, so it now spans the lead's text
+  column too, the same width as the search and the tiles.
+
+Measured on /v2/special with the change injected:
+
+| Window | TOC | Lead title / map heading, left | Drawing width, before → after |
+|---|---|---|---|
+| 1333 | hidden / open | 80 / 80, 380 / 380 | 1205 → 1205, 905 → 905 |
+| 1440 | hidden / open | 86 / 86, 386 / 386 | 1280 → 1280, 1012 → 1012 |
+| 1920 | hidden / open | 316 / 316, 466 / 466 | 1280 → 1280 |
+| 1024 | hidden / open | 61 / 61, 361 / 361 | 896 → 896, 596 → 596 |
+| 768 | | 46 / 46 | 640 → 668 (the gutter is under the section padding here) |
+
+Snapped at 1333, the heading's top is 53px under the compact header (it
+was 127px). Nothing scrolls sideways at any width.
+
+File: `_landing-hero.scss`.
+
 ### Map: quieter room hatching on desktop (2026-10-19)
 
 From lg (992px), where the drawing is large and its long hatch lines read
