@@ -697,6 +697,27 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: blog post as a caption, Next event as a tile (2026-10-20)
+
+- **Blog post.** No longer a framed strip flush under the tiles: it sits a
+  little below them, unframed, like a gallery label. A small colour picture
+  (16:9, 104–176px wide), then the label (From the blog · date · category)
+  and the title, light, in two lines at most. The excerpt is gone. Hover or
+  focus eases the picture in a little and underlines the title. It no
+  longer follows the first column when tiles open, and the tiles keep
+  their full frame. The tiles get the height it gave up (230px at
+  1440x900, was 202).
+- **Next event in the TOC** is now a small tile like the hero's: the
+  picture fills it (4:3) under a scrim, with the day and time, title and
+  place in white at its foot. Hover or focus dims it under a veil and eases
+  the picture in. It also no longer flashes an empty "Next event" label
+  while the feed loads: its `hidden` rule was less specific than the rule
+  that shows the card on pages with the events carousel.
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`,
+`scss/components/_landing-hero.scss`, `css/style.css`.
+
 ### Hero: one accordion, the blog post under it, Next event in the TOC (2026-10-20)
 
 Back to a single tile accordion. The second accordion is gone:

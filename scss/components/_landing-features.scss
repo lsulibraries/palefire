@@ -9,10 +9,9 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. The latest blog post across the row under them, flush: its picture
-//    under the first tile, the text across the other two. (Next event is
-//    in the TOC sidebar, _landing-hero.scss; the sign-in button in the
-//    title row, above.)
+// 2. The latest blog post under them, unframed, like a caption: a small
+//    picture, its label and title. (Next event is in the TOC sidebar,
+//    _landing-hero.scss; the sign-in button in the title row, above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -22,20 +21,13 @@
 // =========================================================================
 
 // The tiles, then the blog post. From md the tiles take whatever height
-// the panel has left, down to its foot, and the post only what its text
-// needs (a 5:3 split stretched the tiles to match a tall post and pushed
-// the panel past the fold), so the exhibitions lead. They touch with no
-// line between them, one frame around both (the tiles have no bottom
-// border, the post no top).
+// the panel has left, down to its foot, and the post only what it needs,
+// so the exhibitions lead.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
   container: pf-features / inline-size;
-}
-
-.pf-landing__features > .pf-exhibits:has(+ .pf-landing__post) {
-  border-bottom: 0;
 }
 
 @include media-breakpoint-up($pf-snap-breakpoint) {
@@ -46,17 +38,13 @@
 
 // Side by side, the tiles are at least 11rem to 15rem tall (22% of the
 // window's height), so an open tile's extra line fits (on short windows
-// the panel runs past the fold instead), and the post 8rem to 9.5rem (14%).
-// Size containment: what a tile shows when it opens never changes the
-// band's height, so nothing below moves on hover.
+// the panel runs past the fold instead). Size containment: what a tile
+// shows when it opens never changes the band's height, so nothing below
+// moves on hover.
 @container pf-features (min-width: 36rem) {
   .pf-landing__features > .pf-exhibits {
     contain: size;
     min-height: clamp(11rem, 22svh, 15rem);
-  }
-
-  .pf-landing__features > .pf-landing__post {
-    min-height: clamp(8rem, 14svh, 9.5rem);
   }
 }
 
@@ -516,41 +504,36 @@
   }
 }
 
-// --- Latest blog post: the row under the tiles -----------------------------
-// One link across the row, in the tiles' frame: the picture, then the
-// label (From the blog · date · category), the title and a line or two of
-// the post. Narrow panels: the picture (16:9) over the text. From 36rem
-// side by side, the picture as wide as the first tile and the text across
-// the other two; under exactly three tiles it follows them as one opens
-// (the tile's 2.4 shares to the others' 1), so the line between picture
-// and text stays under the first tile's edge. The picture rests in
-// greyscale and comes back to colour on hover or focus, like a gallery
-// label beside the work; hover also tints the row and underlines the
-// title. A placeholder (no blog category yet): hatched, not a link.
+// --- Latest blog post: a caption under the tiles ---------------------------
+// Unframed, a little below the tiles, like a gallery label beside the
+// work: a small picture (16:9), then the label (From the blog · date ·
+// category) and the title, light, in two lines at most. The whole row is
+// the link: hover or focus eases the picture in a little and underlines
+// the title. A placeholder (no blog category yet): hatched, not a link.
 .pf-landing__post {
   display: flex;
-  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: center;
   min-width: 0;
-  border: 1px solid var(--pf-landing-line);
-  border-top: 0;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
   color: inherit;
   text-decoration: none;
-  transition: background-color $pf-hover-out ease;
 
-  &:is(a):is(:hover, :focus-visible) {
-    background-color: color-mix(in srgb, var(--pf-section-fg, currentColor) 5%, transparent);
+  &:hover,
+  &:focus-visible {
     color: inherit;
-    transition-duration: $pf-hover-in;
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
-    outline-offset: -4px;
+    outline-offset: 4px;
   }
 }
 
 .pf-landing__post-media {
   position: relative;
+  flex: none;
+  width: clamp(6.5rem, 17cqi, 11rem);
   overflow: hidden;
   aspect-ratio: 16 / 9;
   background:
@@ -564,31 +547,19 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(1);
-    transition: filter .9s ease, transform 1.2s cubic-bezier(.2, .7, .2, 1);
+    transition: transform 1.2s cubic-bezier(.2, .7, .2, 1);
   }
 
-  .pf-landing__post:is(:hover, :focus-visible) & img {
-    filter: none;
-    transform: scale(1.03);
+  .pf-landing__post:is(a):is(:hover, :focus-visible) & img {
+    transform: scale(1.04);
   }
 }
 
-// The side padding is on the lines, not the box: a flex item's own padding
-// counts against its share, which put the picture's edge 14px short of
-// the first tile's.
 .pf-landing__post-text {
-  --pf-post-pad: clamp(.875rem, 1.75vw, 1.25rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: .375rem;
   min-width: 0;
-  padding-block: var(--pf-post-pad);
-
-  > * {
-    padding-inline: var(--pf-post-pad);
-  }
 }
 
 .pf-landing__post-label {
@@ -605,10 +576,10 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
-  font-weight: 500;
-  letter-spacing: -.01em;
-  line-height: 1.2;
+  max-width: 40rem;
+  font-size: clamp(1.0625rem, .95rem + .45vw, 1.375rem);
+  font-weight: 300;
+  line-height: 1.3;
   color: var(--pf-section-fg, inherit);
   text-decoration: underline transparent;
   text-decoration-thickness: 1px;
@@ -621,74 +592,26 @@
   }
 }
 
-.pf-landing__post-excerpt {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  max-width: 48rem;
-  font-size: .9375rem;
-  line-height: 1.45;
-  color: var(--pf-toc-color);
-}
-
 .pf-landing__post.is-placeholder {
   color: var(--pf-toc-color);
 }
 
-@container pf-features (min-width: 36rem) {
-  .pf-landing__post {
-    flex-direction: row;
-  }
-
-  .pf-landing__post-media {
-    flex: var(--pf-col-1, 1) 1 0;
-    aspect-ratio: auto;
-    transition: flex-grow .9s cubic-bezier(.45, 0, .2, 1);
-  }
-
-  .pf-landing__post-text {
-    flex: calc(var(--pf-col-2, 1) + var(--pf-col-3, 1)) 1 0;
-    transition: flex-grow .9s cubic-bezier(.45, 0, .2, 1);
-  }
-
-  // One line of the post side by side, so the row stays low.
-  .pf-landing__post-excerpt {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-  }
-
-  // Under exactly three tiles: the share of the column each opens.
-  $pf-three-tiles: '.pf-landing__features:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(3):last-child)';
-
-  @for $i from 1 through 3 {
-    #{$pf-three-tiles}:has(> .pf-exhibits > .pf-exhibit:nth-child(#{$i}):is(:hover, :focus-within)) > .pf-landing__post {
-      --pf-col-#{$i}: 2.4;
-    }
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .pf-landing__post-media,
-  .pf-landing__post-media img,
-  .pf-landing__post-text {
-    transition: none !important;
+  .pf-landing__post-media img {
+    transition: none;
   }
 
-  .pf-landing__post:is(:hover, :focus-visible) .pf-landing__post-media img {
+  .pf-landing__post:is(a):is(:hover, :focus-visible) .pf-landing__post-media img {
     transform: none;
   }
 }
 
 html.pf-a11y-motion {
-  .pf-landing__post-media,
-  .pf-landing__post-media img,
-  .pf-landing__post-text {
-    transition: none !important;
+  .pf-landing__post-media img {
+    transition: none;
   }
 
-  .pf-landing__post:is(:hover, :focus-visible) .pf-landing__post-media img {
+  .pf-landing__post:is(a):is(:hover, :focus-visible) .pf-landing__post-media img {
     transform: none;
   }
 }
