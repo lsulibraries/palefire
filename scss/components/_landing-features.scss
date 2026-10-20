@@ -400,9 +400,10 @@
 
   // Next event (hero-event.js): one line close under the intro, its
   // caption. "Next event" in the search heading's gold label, the day and
-  // time in the muted label type, then the title, the link, with an arrow
-  // that nudges on hover. The line's height is held while the feed loads
-  // and its words fade in once filled; it wraps on narrow screens.
+  // time in the muted label type, then the title, the link, in that type at
+  // full strength, with an arrow that nudges on hover. The line's height is
+  // held while the feed loads and its words fade in once filled; it wraps
+  // on narrow screens.
   > .pf-landing__intro:has(+ .pf-landing__next) {
     margin-bottom: .625rem;
   }
@@ -431,7 +432,7 @@
       flex-wrap: nowrap;
       gap: .125rem;
       align-items: stretch;
-      min-height: calc(2 * .6875rem * 1.5 + .9375rem * 1.5 + 2 * .125rem);
+      min-height: calc(3 * .6875rem * 1.5 + 2 * .125rem);
 
       > * {
         overflow: hidden;
@@ -452,7 +453,10 @@
   color: var(--pf-toc-color);
 }
 
+// The title in the same small label type as the day and time, but at full
+// strength, so it still reads as the link.
 .pf-landing__next-link {
+  @extend %pf-landing-label;
   color: var(--pf-section-fg, inherit);
   text-decoration: underline transparent;
   text-decoration-thickness: 1px;

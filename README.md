@@ -697,6 +697,16 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: Next event title in the label type (2026-10-20)
+
+The event title in the Next event line now uses the same small tracked
+caps as the day and time, so the line reads as one caption. It stays in
+the full-strength text colour (the time is muted), so it still reads as
+the link, and keeps its underline and arrow on hover. The phones' held
+height follows (three label lines).
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: Next event as a line under the intro (2026-10-20)
 
 The TOC sidebar's Next event tile is gone. Next event is now one line
