@@ -150,6 +150,14 @@
       }
     }
 
+    // With the sub-header bar (_landing-features.scss) the bar and the gap
+    // under it take the section's top padding's place, so the bar's own
+    // height comes off too. The hero's full-screen panel sets its own.
+    &:has(> .pf-landing__bar) > .pf-landing__lead {
+      min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-above-sections, 0px) - var(--pf-landing-bar-h) - var(--pf-landing-bar-gap) - var(--pf-landing-gap));
+      min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-above-sections, 0px) - var(--pf-landing-bar-h) - var(--pf-landing-bar-gap) - var(--pf-landing-gap));
+    }
+
     > .pf-landing__visit {
       margin-top: var(--pf-landing-gap);
       scroll-snap-align: start;

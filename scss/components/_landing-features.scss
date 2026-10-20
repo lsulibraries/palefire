@@ -69,10 +69,27 @@
 .pf-landing--hero {
   --pf-hero-gutter: clamp(2rem, 6vw, 6rem);
   --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
+}
+
+// The bar's measures, on every landing: the older Bento search landing
+// (Oral History) has the bar too. There the lead stays a card, so the gap
+// under the bar is the section's top padding, which the bar replaces: the
+// card keeps its place on the page.
+.pf-landing {
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
   --pf-landing-bar-h: 3rem; // the bar: 2.25rem row, .375rem padding each side
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
+}
+
+.pf-landing:not(.pf-landing--hero) {
+  --pf-landing-bar-gap: var(--pf-section-pad-block, 1rem);
+}
+
+// The bar starts right under the header, so the first section has no top
+// padding of its own (the hero's features rule below does the same).
+.pf-sections > .pf-section:first-child:has(.pf-landing > .pf-landing__bar) > .pf-section__inner {
+  padding-top: 0;
 }
 
 // --- Sub-header bar: breadcrumb -----------------------------------------
@@ -182,7 +199,7 @@
 // Glass with a hairline at its foot; no side or top border, which would sit
 // on the screen's edges.
 @include media-breakpoint-up(md) {
-  .pf-landing--lead-screen {
+  .pf-landing--hero.pf-landing--lead-screen {
     --pf-landing-bar-gap: 0px;
   }
 

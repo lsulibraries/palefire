@@ -605,6 +605,33 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Section snap works on tall sections; Oral History gets the landing bar (2026-10-20)
+
+- **Snap:** Events, Specializations and Collections on /v2/special had
+  `field_section_snap` on, but the page never pulled to them. Each was
+  taller than the window under the header (1015, 827 and 835px against
+  812px at 1440x900). The browser counts a snap area that tall as lined up
+  anywhere inside it, so it stopped mid-section or at a section's foot.
+  With proximity snapping (`html.pf-snap-proximity`), the snap point is
+  now a 1px `::after` marker at each section's top. Measured on the live
+  page with the new CSS: a scroll that ends near a section's top settles
+  on it, and the middle of a long section stays free. Mandatory pages keep
+  the section itself, so tall content is never skipped. The first
+  section's merged snap margin carries over (`scroll-margin-top: inherit`).
+- Snapping is now md and up only (`$pf-snap-breakpoint`). Phones scroll
+  freely.
+- **Oral History bar:** `PalefireHooks::crumbInLanding()` only accepted
+  the Landing hero, so the older Bento search landing kept the breadcrumb
+  in the page head. It now accepts both. The bar's measures move from
+  `.pf-landing--hero` to `.pf-landing`. On the Bento landing the gap under
+  the bar is the section's top padding, which the bar replaces, and the
+  lead's min-height subtracts the bar. The map starts at exactly the same
+  place as before at 768, 1024 and 1440 (checked with the bar markup
+  simulated on the live page). The map itself is unchanged.
+
+Files: `scss/components/_modular.scss`, `_landing-features.scss`,
+`_landing-swiss.scss`, `src/Hook/PalefireHooks.php`, `css/style.css`.
+
 ### Landing hero: tiles fill tall screens, gold Search, tiles from Modular pages, several blog categories (2026-10-20)
 
 - **Tiles fill the panel:** the tile band had a 32rem cap, so on very

@@ -248,11 +248,11 @@ class PalefireHooks {
   /**
    * Whether the landing that opens the page prints the breadcrumb itself.
    *
-   * TRUE for a Landing hero (landing_hero) that shows its lead panel: the
-   * breadcrumb and the video button share a row at the top of the panel
-   * (includes/landing.html.twig), and page.html.twig leaves the head's
-   * breadcrumb out. The lead is left out ("Hide lead panel" with a map), so
-   * then the head keeps it.
+   * TRUE for a landing (Landing hero or the older Bento search) that shows
+   * its lead panel: the breadcrumb and the video button share the sub-header
+   * bar above the panel (includes/landing.html.twig), and page.html.twig
+   * leaves the head's breadcrumb out. The lead is left out ("Hide lead
+   * panel" with a map), so then the head keeps it.
    */
   public static function crumbInLanding(NodeInterface $node): bool {
     $uuid = self::titleLandingUuid($node);
@@ -260,7 +260,7 @@ class PalefireHooks {
       return FALSE;
     }
     $paragraph = \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', $uuid);
-    if (!$paragraph instanceof FieldableEntityInterface || $paragraph->bundle() !== 'landing_hero') {
+    if (!$paragraph instanceof FieldableEntityInterface) {
       return FALSE;
     }
     $map_only = self::boolValue($paragraph, 'field_bento_hide_lead')

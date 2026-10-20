@@ -87,18 +87,21 @@ html {
 // palefire_modular_preprocess_html(). Unlike Origami, html does not get
 // `height: 100%; overflow-y: auto`, which makes <html> its own scroll box
 // in some browsers and breaks sticky positioning and window scroll events.
-html.pf-snap-mandatory {
-  scroll-snap-type: y mandatory;
-}
+// md and up only: phones scroll freely.
+@include media-breakpoint-up($pf-snap-breakpoint) {
+  html.pf-snap-mandatory {
+    scroll-snap-type: y mandatory;
+  }
 
-// Used when only some sections snap. With mandatory snapping, a section
-// that has no snap point gets skipped.
-html.pf-snap-proximity {
-  scroll-snap-type: y proximity;
-}
+  // Used when only some sections snap. With mandatory snapping, a section
+  // that has no snap point gets skipped.
+  html.pf-snap-proximity {
+    scroll-snap-type: y proximity;
+  }
 
-html.pf-snap .site-footer {
-  scroll-snap-align: end;
+  html.pf-snap .site-footer {
+    scroll-snap-align: end;
+  }
 }
 
 // ---------------------------------------------------------------------
@@ -178,6 +181,34 @@ html.pf-snap .site-footer {
 // A full-screen snapping section is never skipped by a fast flick.
 .pf-section--snap.pf-section--screen {
   scroll-snap-stop: always;
+}
+
+// Proximity: the snap point is a 1px marker at the section's top, not the
+// section. A snap area taller than the window (under the header) counts
+// as lined up anywhere inside it, so the browser never pulled to a tall
+// section's top and stopped at its foot instead. On /v2/special at
+// 1440x900, Events (1015px), Specializations (827) and Collections (835)
+// were all taller than the 812px left under the header. The marker
+// snaps only near the top and leaves the rest of the section free.
+// Mandatory keeps the section itself: with only the marker, the rest of a
+// tall section could never be scrolled to.
+html.pf-snap-proximity .pf-section--snap {
+  scroll-snap-align: none;
+
+  // ::after, as dark sections paint their colour with ::before.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    pointer-events: none;
+    scroll-snap-align: start;
+    scroll-margin-top: inherit; // the first section's merged snap (below)
+  }
+
+  &.pf-section--screen::after {
+    scroll-snap-stop: always;
+  }
 }
 
 .pf-section__title {
