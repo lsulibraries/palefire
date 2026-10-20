@@ -605,6 +605,32 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: a true curtain reveal for the map (2026-10-19)
+
+The map now stays perfectly still, where the snap will stop it, while the
+lead slides up off it. Before, it crept up at 6.5% of the scroll and then
+eased into full speed.
+
+- **Pinned:** through the timeline the map moves up against the scroll
+  one for one (`pf-map-reveal`: pulled up by the whole distance the
+  wrapper travels, `100vh` less the top inset, linear), so on screen it
+  doesn't move. The 82% ease-out segment is gone.
+- **Exact end:** the timeline's top inset is now the compact header
+  (49px, the same at every width from md up) plus the map's 5rem stop, so
+  the timeline ends exactly where the snap stops the map. From there it
+  scrolls with the page again, from the place it was already in.
+- **Unchanged:** the fade-in of the heading, summary and drawing (first
+  half, under the lead's glass), the wrapper staying put for the TOC, the
+  snap and `#map` links, and the JS reading the map's real place.
+
+Measured on /v2/special at 1333×798 (pane visible, CSS injected), scroll
+→ map top on screen: 120 → 129, 300 → 129, 480 → 129, 660 → 129,
+720 → 129 (the lead's edge moving 679 → 79), then 780 → 91 and 840 → 31
+with the page. The snap stops at 742. Below about 120px of scroll the map
+is still faded out, so its first few px of movement don't show.
+
+File: `_landing-hero.scss`.
+
 ### Landing tiles open at a calmer pace (2026-10-19)
 
 The tiles' hover/focus accordion used a quick-start curve

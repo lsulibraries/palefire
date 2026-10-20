@@ -63,29 +63,32 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-// Near-static reveal (md up): scrolling from the lead to the map, the map
-// barely moves (15% of the scroll) and the lead slides up off it, as if
-// the map had been waiting underneath. A scroll-driven animation, so it
-// runs on the compositor with no JS; where it isn't supported, with
-// reduced motion or the Settings drawer's switch, the map scrolls as
-// before.
+// Curtain reveal (md up): scrolling from the lead to the map, the map
+// stays still where it will stop and the lead slides up off it, as if the
+// map had been waiting underneath. A scroll-driven animation, so it runs
+// on the compositor with no JS; where it isn't supported, with reduced
+// motion or the Settings drawer's switch, the map scrolls as before.
 // - The timeline is the map wrapper (#map) entering the window, and only
 //   the map inside it moves: the wrapper keeps its place, so the TOC, the
 //   snap and #map links measure it as before. The window's top is inset by
-//   about the compact header and the map's 5rem stop (where the snap
-//   stops the heading; a little extra, so the map is still by then).
-// - Before that the map waits under the lead: pulled up by 85% of the
-//   distance it is about to travel, its heading, summary and drawing
-//   faded out so the lead's glass shows nothing of it at the top of the
-//   page. They fade in over the first half, still under the glass, and
-//   are fully shown by the time the lead uncovers them.
+//   the compact header (49px from md up) and the map's 5rem stop, so the
+//   timeline ends exactly where the snap stops the map.
+// - Through the timeline the map moves up against the scroll one for one
+//   (pulled up by the whole distance it travels, linear), so on screen it
+//   doesn't move at all; when the timeline ends it scrolls with the page
+//   again, from the place it was already in.
+// - Before that (the first few px from the top, while the map is still
+//   below the window) it waits under the lead; its heading, summary and
+//   drawing are faded out so the lead's glass shows nothing of it at the
+//   top of the page. They fade in over the first half, still under the
+//   glass, and are fully shown by the time the lead uncovers them.
 // - The lead (and the bar over it) stack above the map so it can pass
 //   under them. building-map.js reads the map's place from the wrapper too
 //   (draw-on, the dimmed backdrop, keyboard focus).
 @supports (animation-timeline: view()) {
   @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     html:not(.pf-a11y-motion) .pf-landing--hero.pf-landing--lead-screen {
-      --pf-map-reveal-inset: calc(3.5rem + 5rem);
+      --pf-map-reveal-inset: calc(49px + 5rem);
 
       > .pf-landing__bar {
         z-index: 2;
@@ -115,23 +118,11 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
-// The map's speed against the page: at 85% held back (linear) it moved
-// at 15% of the scroll the whole way, then jumped to full speed the moment
-// the reveal ended, a visible jolt as it settled. Now it is held back a
-// little more (6.5%) through 82% of the reveal, then eases out over the
-// last 18% (a quadratic ease-out, its starting slope matched to the
-// linear part), so its speed rises smoothly to the page's own and nothing
-// changes pace where the reveal ends. The 82% keyframe is the linear part's
-// end: 1 - 1.1 x .82 of the full pull (1.1 per unit of progress, x .85).
+// The whole distance the map travels through the timeline (the window's
+// height less its top inset), undone one for one: the map holds still.
 @keyframes pf-map-reveal {
   from {
-    transform: translateY(calc(-.85 * (100vh - var(--pf-map-reveal-inset))));
-    animation-timing-function: linear;
-  }
-
-  82% {
-    transform: translateY(calc(-.85 * .098 * (100vh - var(--pf-map-reveal-inset))));
-    animation-timing-function: cubic-bezier(.3333, .6667, .6667, 1);
+    transform: translateY(calc(-1 * (100vh - var(--pf-map-reveal-inset))));
   }
 
   to {
