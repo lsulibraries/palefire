@@ -697,6 +697,17 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: events and blog band darker (2026-10-20)
+
+The second band's pictures still read too bright at rest. They now rest
+in greyscale at half brightness (was 80%), and an opened tile comes back
+to colour at 75% brightness under the veil instead of full, so a poster's
+own lettering (Hill-O-Ween's, for one) stays behind the tile's title. The
+band's height is unchanged: its label, title and date already fill most
+of it, with the link prompt taking the rest when a tile opens.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: the events and blog band steps back (2026-10-20)
 
 With two accordions of full-colour tiles at the same height, nothing led:

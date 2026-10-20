@@ -52,10 +52,12 @@
 // band's height, so nothing below moves on hover.
 // The second band's tiles fit its height: a title one size down, on one
 // line, and opening shows only the link prompt (a post's excerpt, an
-// event's category and place stay out). Its pictures rest in greyscale,
-// a little darker, and come back to full colour as a tile opens, so the
-// events' mixed images (posters, photos) read as one set under the
-// exhibitions' chosen ones. Narrow panels (touch, no hover) keep colour.
+// event's category and place stay out). Its pictures rest in greyscale at
+// half brightness, so the events' mixed images (posters, photos) read as
+// one set under the exhibitions' chosen ones, and come back to colour as
+// a tile opens, still a little dim under the opening veil, so a poster's
+// own lettering stays behind the title. Narrow panels (touch, no hover)
+// keep colour.
 @container pf-features (min-width: 36rem) {
   .pf-landing__features > .pf-exhibits {
     contain: size;
@@ -78,12 +80,12 @@
     }
 
     .pf-exhibit__media {
-      filter: grayscale(1) brightness(.8);
+      filter: grayscale(1) brightness(.5);
       transition: filter .9s var(--pf-exhibit-ease, ease);
     }
 
     .pf-exhibit:is(:hover, :focus-within) .pf-exhibit__media {
-      filter: none;
+      filter: brightness(.75);
     }
   }
 }
