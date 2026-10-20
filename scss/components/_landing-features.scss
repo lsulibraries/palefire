@@ -32,12 +32,14 @@
 }
 
 // No room above the panel on this hero (it starts right under the header,
-// below the sub-header bar), 2rem under it instead of the section's 5rem.
+// below the sub-header bar). Under the Visit panel, 3rem on phones up to the
+// sections' 5rem (80px) from about 1333px wide; 2rem looked cramped against
+// the next section.
 // The section padding is one variable, so the lead's height
 // (_landing-swiss.scss) and the video's reach (_landing.scss) follow it; the
 // top is only the inner box's padding.
 .pf-sections > .pf-section:first-child:has(.pf-landing--lead-screen .pf-landing__features) {
-  --pf-section-pad-block: 2rem;
+  --pf-section-pad-block: clamp(3rem, 6vw, 5rem);
 
   > .pf-section__inner {
     padding-top: 0;

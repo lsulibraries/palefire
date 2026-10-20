@@ -605,6 +605,21 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: more room under the Visit panel (2026-10-20)
+
+The hero section's bottom padding under the Visit panel was 2rem (32px)
+and looked cramped against Events. It is now `clamp(3rem, 6vw, 5rem)`:
+48px on phones, about 61px at 1024, and the sections' usual 80px from
+about 1333px wide. It is the section's `--pf-section-pad-block`, so the
+background video's clip (`_landing.scss`) still reaches the section's
+foot. The top stays 0, and the lead's full-screen height doesn't read
+this variable, so nothing above the panel moves.
+
+Checked in headless Edge: the padding (and the video's clip) measure 48 /
+61.44 / 80px at 320 / 1024 / 1440, with no horizontal scroll.
+
+File: `_landing-features.scss`.
+
 ### Landing bar stays through Home and Map; lead and Visit edge to edge on phones (2026-10-20)
 
 The sub-header bar (breadcrumb and video button) used to scroll away with
