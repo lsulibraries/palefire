@@ -31,13 +31,10 @@
   --ldc-brand: var(--pf-ev-accent);
 }
 
-// Section title: the display size, tight tracking.
+// Section title: the section heading size ($pf-h2-size, _modular.scss), as
+// every section and the map heading; only its space below is its own.
 .pf-section:has(.pf-events-carousel) .pf-section__title {
   margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
-  font-weight: 500;
-  letter-spacing: -.025em;
-  line-height: 1;
 }
 
 // --- Toolbar: a calendar strip on one hairline ---------------------------
@@ -226,10 +223,12 @@
   letter-spacing: .16em;
 }
 
+// The day's date (h3): a step under the section's h2 ($pf-h2-size), 20px
+// on phones to 24px (22.7px at 1333px).
 .pf-events-carousel .libcal-day__date,
 .pf-events-carousel .libcal-day-carousel.is-multi .libcal-day__date {
   margin: 0 0 1.75rem;
-  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+  font-size: clamp(1.25rem, 1rem + .5vw, 1.5rem);
   font-weight: 500;
   letter-spacing: -.02em;
   line-height: 1.05;
@@ -360,6 +359,119 @@
   font-size: .875rem;
 }
 
+// --- Image card -----------------------------------------------------------
+// A day with a featured image reads like the landing's tiles
+// (_landing-features.scss, .pf-exhibit): the image is the card, and the
+// day's events sit over its foot on a dark gradient, in white. The image
+// and the list share one grid cell, so the image grows with a long list
+// (it covers, from the top) instead of the list spilling out.
+// - One event: the whole card is its link (the title's ::after stretched
+//   over the card), the focus ring goes round the card, and the image eases
+//   in a little on hover, as a tile's does.
+// - More than one: each row is its own link, stretched over its row; the
+//   image is the backdrop.
+// The gradient sits under the list itself, from clear at its top to 80%
+// black at its foot (58% at the first line of text), so white text keeps
+// 4.5:1 over any image, a white one included. Lines between rows: the
+// site's hairline, in white.
+// A day without an image keeps the ruled list above.
+.pf-events-carousel .libcal-day__main:has(> .libcal-day__feature) {
+  position: relative;
+  display: grid;
+  grid-template-areas: "card";
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+
+  > * {
+    grid-area: card;
+    min-width: 0;
+  }
+
+  > .libcal-day__feature {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  .libcal-day__feature img {
+    transition: transform 1.2s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  > .libcal-day__events {
+    z-index: 1;
+    align-self: end;
+    margin: 0;
+    padding: clamp(3.5rem, 6vw, 5rem) clamp(1rem, 2vw, 1.5rem) .5rem;
+    border-top: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / .8) 0%, rgb(0 0 0 / .62) calc(100% - 3.5rem), rgb(0 0 0 / 0) 100%);
+  }
+
+  .libcal-day__event {
+    position: relative;
+    border-color: rgb(255 255 255 / .2);
+  }
+
+  .libcal-day__event:last-child {
+    border-bottom: 0;
+  }
+
+  .libcal-day__event-time,
+  .libcal-day__event-location {
+    color: rgb(255 255 255 / .85);
+  }
+
+  .libcal-day__event-title {
+    color: #fff;
+    text-decoration-color: rgb(255 255 255 / .35);
+  }
+
+  // Each row is its own link (several events).
+  a.libcal-day__event-title::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  a.libcal-day__event-title:focus-visible {
+    outline-color: #fff;
+  }
+}
+
+// One event: the whole card is the link.
+.pf-events-carousel .libcal-day__main:has(> .libcal-day__feature):has(.libcal-day__event:only-child a.libcal-day__event-title) {
+  .libcal-day__event {
+    position: static;
+  }
+
+  a.libcal-day__event-title::after {
+    z-index: 2;
+  }
+
+  .libcal-day__event-title {
+    text-decoration-line: none;
+  }
+
+  a.libcal-day__event-title:focus-visible {
+    outline: none;
+  }
+
+  &:has(a.libcal-day__event-title:focus-visible) {
+    outline: 2px solid var(--pf-ev-accent);
+    outline-offset: 3px;
+  }
+
+  &:has(a.libcal-day__event-title:is(:hover, :focus-visible)) {
+    .libcal-day__event-title {
+      text-decoration-line: underline;
+      text-decoration-color: #fff;
+    }
+
+    .libcal-day__feature img {
+      transform: scale(1.04);
+    }
+  }
+}
+
 .pf-events-carousel .libcal-day__more a {
   color: inherit;
   text-decoration-color: var(--pf-ev-accent);
@@ -422,9 +534,18 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-events-carousel .libcal-day-carousel__tab,
   .pf-events-carousel .libcal-day-carousel__control,
-  .pf-events-carousel .libcal-day__event-title {
+  .pf-events-carousel .libcal-day__event-title,
+  .pf-events-carousel .libcal-day__feature img {
     transition: none !important;
   }
+
+  .pf-events-carousel .libcal-day__main .libcal-day__feature img {
+    transform: none !important;
+  }
+}
+
+html.pf-a11y-motion .pf-events-carousel .libcal-day__main .libcal-day__feature img {
+  transform: none !important;
 }
 
 @media (forced-colors: active) {

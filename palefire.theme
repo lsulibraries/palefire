@@ -272,6 +272,12 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
+    // On the hero the map is a section of the page: its heading is an h2
+    // (map.heading_tag). Its own render-cache entry.
+    if (!empty($variables['landing_map'])) {
+      $variables['landing_map']['#pf_hero'] = TRUE;
+      $variables['landing_map']['#cache']['keys'][] = 'pf_hero';
+    }
     if (!empty($variables['landing_map']) && !empty($variables['visit'])) {
       $variables['landing_map']['#pf_visit'] = $variables['visit'] + ['id' => $variables['landing']['input_id'] . '-visit'];
       // The map's render cache: its own entry with the card, cleared when
@@ -599,6 +605,8 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     // The landing hero's Visit card, shown in the aside with the key
     // (palefire_preprocess_paragraph__landing_hero()), or NULL.
     'visit' => $variables['elements']['#pf_visit'] ?? NULL,
+    // h2 on the landing hero (a section of the page), h3 elsewhere.
+    'heading_tag' => empty($variables['elements']['#pf_hero']) ? 'h3' : 'h2',
   ];
 }
 

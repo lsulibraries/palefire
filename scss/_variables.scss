@@ -22,6 +22,12 @@ $pf-font-clock: Handjet, "Arial Narrow", sans-serif;
 // Settings drawer > "Easy-to-read font" (base/_a11y-settings.scss).
 $pf-font-readable: "Atkinson Hyperlegible Next", Verdana, Arial, sans-serif;
 
+// Section headings (h2) on Modular pages: the section titles (Events,
+// Collections…) and the landing hero's map heading, one size, a step under
+// the page title (h1, clamp(2rem, 1rem + 2vw, 3rem), _landing-swiss.scss):
+// 24px on phones, 32px at 1333px, 34px at most. Guides keep their own.
+$pf-h2-size: clamp(1.5rem, 1rem + 1.2vw, 2.125rem);
+
 // Links stay underlined (WCAG 1.4.1: not color alone).
 $link-decoration: underline;
 $link-underline-offset: .2em;

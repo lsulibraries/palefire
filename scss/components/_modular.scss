@@ -181,6 +181,11 @@ html.pf-snap .site-footer {
 }
 
 .pf-section__title {
+  font-size: $pf-h2-size;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+
   &:focus {
     outline: none;
   }

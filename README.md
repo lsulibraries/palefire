@@ -605,6 +605,54 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Smoother reveal end; calmer tile text; one H2 size; event image cards (2026-10-19)
+
+- **Reveal end:** the map moved at 15% of the scroll the whole way, then
+  jumped to full speed where the reveal ended, a visible jolt as it
+  settled. Now it's held a little more (6.5%) through 82% of the reveal,
+  then a quadratic ease-out (its starting slope matched) brings its speed
+  smoothly up to the page's own (`@keyframes pf-map-reveal`). Measured in
+  the pane at 1333×798: 0.07 of scroll speed, then 0.17 → 0.32 → 0.47 →
+  0.62 → 0.76 → 0.91 → 1.00 over the last 120px.
+- **Tile description:** when a tile opens, the space opens first (the
+  title and labels rise), then the line fades in where it sits, with no
+  slide. Closing, it fades out quickly before the space closes.
+- **One H2 size (`$pf-h2-size`):** `clamp(1.5rem, 1rem + 1.2vw,
+  2.125rem)`, which is 24px on phones, 32px at 1333px and 34px at most. That
+  sits a step under the page title (42.7px at 1333px). It now applies to:
+  - every section title (`.pf-section__title`: Events, Collections…).
+    Events loses its 60px display size.
+  - the hero's map heading. It was an h3 at 52px, bigger than the h1, and
+    is now an h2 at this size (`map.heading_tag`, from `#pf_hero` set by
+    the hero's preprocess, with its own render-cache key). Elsewhere the
+    map heading stays h3. `data-toc` keeps it in the TOC either way.
+  - Guides keep their own scale.
+- **Event dates:** the day's date (h3, "Wednesday, October 21") goes from
+  32px to `clamp(1.25rem, 1rem + .5vw, 1.5rem)` (22.7px at 1333px), a step
+  under the h2.
+- **Event image cards:** a day with a featured image now reads like the
+  landing's tiles. The image is the card, and the day's events sit over
+  its foot in white, on a gradient under the list (clear at its top, 62%
+  black at the first line, 80% at the foot), so white text keeps 4.5:1 over
+  any image. The image and the list share one grid cell, so a long list
+  grows the image rather than spilling. With one event, the whole card is
+  its link: the focus ring goes round the card, the title underlines and
+  the image eases in a little on hover (none with reduced motion). With
+  several events, each row is its own link. Lines between rows are the
+  hairline in white. Days without an image keep the ruled list.
+  CSS only (`_events-carousel.scss`): the carousel markup is the LibCal
+  module's.
+
+Checked on /v2/special with the CSS injected: map heading 32px, Collections
+32px, Events 32px (with the old 60px rule overridden), dates 22.7px. A
+click anywhere on an event's image hits its link. Not checked: the h2 tag
+(PHP and Twig changes run after deploy), phones, and multi-event days (the
+live days have one event each).
+
+Files: `palefire.theme`, `paragraph--building-map.html.twig`,
+`_variables.scss`, `_modular.scss`, `_landing-swiss.scss`,
+`_landing-hero.scss`, `_landing-features.scss`, `_events-carousel.scss`.
+
 ### Landing hero: the lead slides off a near-static map (2026-10-19)
 
 Scrolling from the lead to the map, the map now barely moves (15% of the

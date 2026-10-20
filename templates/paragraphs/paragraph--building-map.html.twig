@@ -34,7 +34,10 @@
 {{ map.cache }}
 <div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
   {# Inside the grid, so the drawing starts level with the heading. #}
-  <h3 class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</h3>
+  {# h2 on the landing hero, where the map is a section of the page under
+     its h1 (map.heading_tag); h3 elsewhere. data-toc keeps it in the TOC
+     either way. #}
+  <{{ map.heading_tag }} class="pf-map__heading" id="{{ map.uid }}-heading" data-toc>{{ map.heading }}</{{ map.heading_tag }}>
   {# Summary (this paragraph's Intro) under the heading. On the landing
      hero, Hill Memorial only and wide enough, it sits in the drawing's
      empty top-left corner instead (_landing-hero.scss, "Typography in the

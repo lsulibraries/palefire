@@ -112,9 +112,23 @@ $pf-hero-media-wash: .8 !default;
   }
 }
 
+// The map's speed against the page: at 85% held back (linear) it moved
+// at 15% of the scroll the whole way, then jumped to full speed the moment
+// the reveal ended, a visible jolt as it settled. Now it is held back a
+// little more (6.5%) through 82% of the reveal, then eases out over the
+// last 18% (a quadratic ease-out, its starting slope matched to the
+// linear part), so its speed rises smoothly to the page's own and nothing
+// changes pace where the reveal ends. The 82% keyframe is the linear part's
+// end: 1 - 1.1 x .82 of the full pull (1.1 per unit of progress, x .85).
 @keyframes pf-map-reveal {
   from {
     transform: translateY(calc(-.85 * (100vh - var(--pf-map-reveal-inset))));
+    animation-timing-function: linear;
+  }
+
+  82% {
+    transform: translateY(calc(-.85 * .098 * (100vh - var(--pf-map-reveal-inset))));
+    animation-timing-function: cubic-bezier(.3333, .6667, .6667, 1);
   }
 
   to {
