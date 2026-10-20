@@ -605,6 +605,34 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing tiles open at a calmer pace (2026-10-19)
+
+The tiles' hover/focus accordion used a quick-start curve
+(`cubic-bezier(.2, .7, .2, 1)`) over .5–.6s, so most of its movement
+happened in the first 150ms. Now it uses the site's pace:
+
+- **Curve:** a soft ease-in-out, `--pf-exhibit-ease: cubic-bezier(.45, 0,
+  .2, 1)`. The tile widens over .9s, the text space opens over .8s, and
+  the description fades in over .6s once the space has opened. Closing,
+  it fades out (.25s), then the space closes (.7s).
+- **Real height:** where height can animate to `auto` (`interpolate-size`:
+  Chrome, Edge), the space opens to the description's own height, not
+  toward a 6rem `max-height`, which ended the visible motion early. Other
+  browsers keep the `max-height`.
+- **No re-wrap:** the description is laid out at the open tile's width
+  from the start (`100cqi × 2.4 / 4.4` less the padding, with three
+  tiles). Laid out at the narrow width, it re-wrapped as the tile widened,
+  so the space overshot and snapped back (46 → 51 → 30px).
+
+Measured on /v2/special at 1333×798 (focus on a tile, CSS injected): the
+tile widens 396 → 463 → 570 → 613 → 629 → 635px at 0.1/0.25/0.4/0.55/
+0.7/0.85s, and the text space opens 0 → 2 → 15 → 25 → 28 → 30px with no
+overshoot. Opacity .19 at 0.85s, .71 at 1s, 1 by 1.5s. The description's
+width matches the open tile's text width exactly (595px). Reduced motion
+still turns the transitions off.
+
+File: `_landing-features.scss`.
+
 ### Lead → map: one calm glide instead of a flick and a crawl (2026-10-19)
 
 I measured the scroll from the lead to the map frame by frame in the
