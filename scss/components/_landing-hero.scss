@@ -285,6 +285,74 @@ $pf-hero-media-wash: .8 !default;
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
+// With the lead panel: in the TOC sidebar (hero-event.js moves it there,
+// above "Back to top", and shows it once filled in). It takes the
+// sidebar's empty space (margin-top: auto, in place of Back to top's), so
+// the list above doesn't move. In the TOC's own type: the "Next event"
+// label like Back to top, a small square thumbnail beside the day and
+// time, the title (two lines) and its category and place (one line). The
+// sidebar is narrow, so everything wraps or clamps within it.
+.pf-hero-event[hidden] {
+  display: none;
+}
+
+.pf-hero-event--toc {
+  --pf-hero-thumb: 3.5rem;
+  margin-top: auto;
+  padding: 1rem 0;
+  border-top: 1px solid var(--pf-toc-rail);
+
+  + .pf-toc__top {
+    margin-top: 0;
+  }
+
+  .pf-hero-event__label {
+    margin-bottom: .75rem;
+    font-family: var(--pf-toc-font);
+    font-size: .6875rem;
+    letter-spacing: .14em;
+  }
+
+  .pf-hero-event__card {
+    gap: .75rem;
+    align-items: start;
+    max-width: none;
+  }
+
+  .pf-hero-event__thumb {
+    border-color: var(--pf-toc-rail);
+  }
+
+  .pf-hero-event__when {
+    margin-bottom: .25rem;
+    font-family: var(--pf-toc-font);
+    font-size: .625rem;
+    letter-spacing: .1em;
+  }
+
+  .pf-hero-event__title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    font-family: $font-family-sans-serif;
+    font-size: .9375rem;
+    color: var(--pf-toc-active);
+  }
+
+  .pf-hero-event__meta {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    margin-top: .25rem;
+    font-family: $font-family-sans-serif;
+    font-size: .8125rem;
+  }
+}
+
 // With a building map, hero-event.js moves it under the map's heading: a
 // row of its own between the heading and the drawing (only while the card
 // is there, so no empty gap is left when it is removed).

@@ -697,6 +697,37 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: one accordion, the blog post under it, Next event in the TOC (2026-10-20)
+
+Back to a single tile accordion. The second accordion is gone:
+
+- **Blog post row.** The latest post now takes the whole row under the
+  tiles, inside the same frame with no line between them. Its picture sits
+  under the first tile, at the same width, and the label (From the blog ·
+  date · category), title and a line of the post sit across the other two.
+  The whole row is one link. The picture rests in greyscale and comes back
+  to colour on hover or focus. Under exactly three tiles it follows the
+  first column as tiles open, so its edge stays under the first tile's. The
+  tiles take whatever height the panel has left, and the row only what its
+  text needs. Phones stack the picture (16:9) over the text. Placeholder
+  (no blog category yet): hatched, not a link.
+- **Next event in the TOC.** `hero-event.js` now moves the Next event card
+  into the TOC sidebar above "Back to top", where the sidebar had empty
+  space, and shows it once filled in, so nothing moves. It's removed
+  without a TOC, an events carousel or an upcoming event. The second
+  event ("Coming up") is dropped; the Events section further down the
+  page lists them all.
+- **Sign-in** stays in the title row.
+
+Removed: the event tiles and `modifier` option in
+`landing-exhibits.html.twig` (back to its earlier version), the tile
+renderer in `hero-event.js`, and the second band's and column-linking CSS.
+
+Files: `templates/includes/landing.html.twig`,
+`templates/includes/landing-exhibits.html.twig`, `js/hero-event.js`,
+`scss/components/_landing-features.scss`,
+`scss/components/_landing-hero.scss`, `css/style.css`.
+
 ### Hero: no line between the two accordions (2026-10-20)
 
 The two bands now meet with no line between them, one frame around both,

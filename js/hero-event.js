@@ -1,23 +1,23 @@
 /**
  * @file
- * "Next event" in the landing hero: a tile in the lead panel's second
- * accordion (.pf-exhibit--event), or a card on its own when there is no
- * lead panel (includes/landing.html.twig with hero, .pf-hero-event).
+ * "Next event" card for the landing hero (includes/landing.html.twig with
+ * hero, .pf-hero-event): in the TOC sidebar when the hero has its lead
+ * panel (.pf-hero-event--toc), or on its own by the map when it doesn't.
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
  * that have the carousel. It asks with the page's first carousel's own
  * Calendars and Libraries (its data-calendar and data-campus), as
  * day-carousel.js does, so the card is always one of the events the
- * carousel lists. It picks the timed events that haven't ended, soonest
- * first: the first for the card or the first event tile, the second for a
- * second tile (data-pf-hero-event="1"); all-day items such as donation
- * bins and displays are skipped, with the carousel's own all-day test. The feed has no description, so the line under
- * the title is the first category and the place ("Online" when there is no
- * room).
+ * carousel lists. It picks the first timed event that hasn't ended;
+ * all-day items such as donation bins and displays are skipped, with the
+ * carousel's own all-day test. The feed has no description, so the line
+ * under the title is the first category and the place ("Online" when
+ * there is no room).
  *
- * The card's space is held by CSS while the feed loads (no layout shift);
- * with no carousel, no upcoming event or a failed request it is removed.
+ * On its own, the card's space is held by CSS while the feed loads (no
+ * layout shift); in the TOC it stays hidden until filled in. With no
+ * carousel, no upcoming event or a failed request it is removed.
  * Times are the feed's own labels (the library's time zone).
  */
 (function (Drupal, drupalSettings, once) {
@@ -146,38 +146,6 @@
     box.classList.add('is-ready');
   }
 
-  // In the landing hero's second accordion the box is a tile
-  // (includes/landing-exhibits.html.twig, event): the picture fills its
-  // frame, the title is the tile's link, the day and time sit under it, and
-  // the category and place are the line shown when the tile opens.
-  function renderTile(box, { event, start }) {
-    const frame = box.querySelector('.pf-exhibit__frame');
-    if (frame && /^https:\/\//.test(event.image || '')) {
-      const img = document.createElement('img');
-      img.src = event.image;
-      img.alt = '';
-      img.decoding = 'async';
-      frame.append(img);
-    }
-
-    const link = el('a', 'pf-exhibit__link', event.title);
-    link.href = event.url;
-    box.querySelector('.pf-exhibit__title').append(link);
-    box.querySelector('.pf-exhibit__when').append(timeOf(event, start));
-
-    const place = event.location || (event.isOnline ? Drupal.t('Online') : '');
-    const meta = [(event.categories || [])[0], place].filter(Boolean).join(' · ');
-    const more = el('div', 'pf-exhibit__more');
-    if (meta) {
-      more.append(el('p', '', meta));
-    }
-    const cta = el('span', 'pf-exhibit__cta', Drupal.t('Event details'));
-    cta.setAttribute('aria-hidden', 'true');
-    more.append(cta);
-    box.querySelector('.pf-exhibit__text').append(more);
-    box.classList.add('is-ready');
-  }
-
   Drupal.behaviors.palefireHeroEvent = {
     attach(context) {
       once('pf-hero-event', '[data-pf-hero-event]', context).forEach((box) => {
@@ -198,12 +166,22 @@
           heading.after(box);
           box.classList.add('is-in-map');
         }
+        // With the lead panel: in the TOC, above "Back to top", in the
+        // sidebar's empty space, so nothing moves; shown once filled in.
+        if (box.classList.contains('pf-hero-event--toc')) {
+          const top = document.querySelector('.pf-toc .pf-toc__top');
+          if (!top) {
+            box.remove();
+            return;
+          }
+          top.before(box);
+        }
         loadFeed(carousel).then((data) => {
           // Links and images only from http(s) addresses.
-          const events = nextEvents(data).filter(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
-          const next = events[Number(box.dataset.pfHeroEvent) || 0];
+          const next = nextEvents(data).find(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
           if (next) {
-            (box.classList.contains('pf-exhibit') ? renderTile : render)(box, next);
+            render(box, next);
+            box.hidden = false;
           }
           else {
             box.remove();

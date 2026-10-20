@@ -226,9 +226,9 @@
     {% if hero %}
       {# Features (_landing-features.scss): three large tiles that open on
          hover or focus (an accordion across: the one in use widens, shows
-         more of its picture and a line more about it), then a second
-         accordion of the next two events | Latest blog post (the sign-in
-         button is in the head, above).
+         more of its picture and a line more about it), then the latest
+         blog post across the row under them. Next event goes in the TOC
+         sidebar (below), the sign-in button in the head (above).
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page: _palefire_hero_tiles()), when it has any; else
            the PLACEHOLDERS below. Shape: label, title, start/end (ISO
@@ -280,35 +280,25 @@
       <div class="pf-landing__features">
         {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: exhibitions } only %}
 
-        {# The second accordion: the next two events (filled in by
-           hero-event.js; each removed with no carousel or no event for
-           it) and the latest blog post, as tiles like the ones above. #}
-        {% set updates = [
-          { event: 0, label: 'Next event'|t, title: '', meta: '', frames: 1 },
-          { event: 1, label: 'Coming up'|t, title: '', meta: '', frames: 1 },
-        ] %}
-        {% if hero_post %}
-          {% set updates = updates|merge([{
-            label: 'From the blog'|t,
-            title: hero_post.title,
-            meta: hero_post.date ~ (hero_post.category ? ' · ' ~ hero_post.category),
-            more: hero_post.excerpt,
-            cta: 'Read the post'|t,
-            url: hero_post.url,
-            images: hero_post.image ? [hero_post.image] : [],
-            frames: 1,
-          }]) %}
-        {% else %}
-          {# Placeholder until field_landing_blog_category is added and set. #}
-          {% set updates = updates|merge([{
-            label: 'From the blog'|t,
-            title: 'Blog post title'|t,
-            meta: 'Date · Category'|t,
-            more: 'A line or two from the post’s About Text.'|t,
-            frames: 1,
-          }]) %}
-        {% endif %}
-        {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: updates, label: 'Events and news'|t, modifier: 'updates' } only %}
+        {# The latest blog post, the row under the tiles: its picture under
+           the first tile, the text across the other two. The whole row is
+           the link. A placeholder (not a link) until
+           field_landing_blog_category is added and set. #}
+        {% set post_tag = hero_post ? 'a' : 'div' %}
+        <{{ post_tag }} class="pf-landing__post{{ not hero_post ? ' is-placeholder' }}"{% if hero_post %} href="{{ hero_post.url }}"{% endif %}>
+          <span class="pf-landing__post-media" aria-hidden="true">{{ hero_post.image }}</span>
+          <span class="pf-landing__post-text">
+            <span class="pf-landing__post-label">{{ 'From the blog'|t }} · {% if hero_post %}<time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time>{% if hero_post.category %} · {{ hero_post.category }}{% endif %}{% else %}{{ 'Date · Category'|t }}{% endif %}</span>
+            <span class="pf-landing__post-title">{{ hero_post ? hero_post.title : 'Blog post title'|t }}</span>
+            <span class="pf-landing__post-excerpt">{{ hero_post ? hero_post.excerpt : 'A line or two from the post’s About Text.'|t }}</span>
+          </span>
+        </{{ post_tag }}>
+      </div>
+      {# Next event: hero-event.js moves it into the TOC sidebar, above
+         "Back to top", and shows it once filled in; removed without a TOC,
+         an events carousel or an upcoming event. #}
+      <div class="pf-hero-event pf-hero-event--toc" data-pf-hero-event hidden>
+        <p class="pf-hero-event__label">{{ 'Next event'|t }}</p>
       </div>
     {% endif %}
   </div>

@@ -9,10 +9,10 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. A second accordion of the same tiles: Next event (hero-event.js) |
-//    Latest blog post; under three tiles the bands open
-//    a column at a time, both together.
-// 3. (The Special Collections sign-in button is in the title row, above.)
+// 2. The latest blog post across the row under them, flush: its picture
+//    under the first tile, the text across the other two. (Next event is
+//    in the TOC sidebar, _landing-hero.scss; the sign-in button in the
+//    title row, above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -21,12 +21,12 @@
 // adjust.
 // =========================================================================
 
-// The two accordions. From md they share whatever height the panel has
-// left equally (see the band below), down to the panel's foot. Below md
-// each is as tall as its own tiles (stacked, three tiles are taller than
-// two). They touch with no line between them, one frame around both (the
-// first has no bottom border, the second no top), so they read as one
-// grid.
+// The tiles, then the blog post. From md the tiles take whatever height
+// the panel has left, down to its foot, and the post only what its text
+// needs (a 5:3 split stretched the tiles to match a tall post and pushed
+// the panel past the fold), so the exhibitions lead. They touch with no
+// line between them, one frame around both (the tiles have no bottom
+// border, the post no top).
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -34,65 +34,29 @@
   container: pf-features / inline-size;
 }
 
-.pf-landing__features > .pf-exhibits:has(+ .pf-exhibits--updates) {
+.pf-landing__features > .pf-exhibits:has(+ .pf-landing__post) {
   border-bottom: 0;
 }
 
-.pf-landing__features > .pf-exhibits--updates {
-  border-top: 0;
-}
-
-// The second band is the lesser one: 3 shares of the height to the first's
-// 5, so the exhibitions lead and the events and post read as news under
-// them.
 @include media-breakpoint-up($pf-snap-breakpoint) {
   .pf-landing__features {
-    grid-template-rows: minmax(0, 5fr) minmax(0, 3fr);
+    grid-template-rows: minmax(0, 1fr) auto;
   }
 }
 
-// Side by side, the first accordion is at least 11rem to 15rem tall (22% of
-// the window's height), so an open tile's extra line fits (on short windows
-// the panel runs past the fold instead); the second, 8rem to 9.5rem (14%).
+// Side by side, the tiles are at least 11rem to 15rem tall (22% of the
+// window's height), so an open tile's extra line fits (on short windows
+// the panel runs past the fold instead), and the post 8rem to 9.5rem (14%).
 // Size containment: what a tile shows when it opens never changes the
 // band's height, so nothing below moves on hover.
-// The second band's tiles fit its height: a title one size down, on one
-// line, and opening shows only the link prompt (a post's excerpt, an
-// event's category and place stay out). Its pictures rest in greyscale at
-// half brightness, so the events' mixed images (posters, photos) read as
-// one set under the exhibitions' chosen ones, and come back to colour as
-// a tile opens, still a little dim under the opening veil, so a poster's
-// own lettering stays behind the title. Narrow panels (touch, no hover)
-// keep colour.
 @container pf-features (min-width: 36rem) {
   .pf-landing__features > .pf-exhibits {
     contain: size;
     min-height: clamp(11rem, 22svh, 15rem);
   }
 
-  .pf-landing__features > .pf-exhibits--updates {
+  .pf-landing__features > .pf-landing__post {
     min-height: clamp(8rem, 14svh, 9.5rem);
-  }
-
-  .pf-exhibits--updates {
-    .pf-exhibit__title {
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      font-size: clamp(1.125rem, 1rem + .3vw, 1.25rem);
-    }
-
-    .pf-exhibit__more p {
-      display: none;
-    }
-
-    .pf-exhibit__media {
-      filter: grayscale(1) brightness(.5);
-      transition: filter .9s var(--pf-exhibit-ease, ease);
-    }
-
-    .pf-exhibit:is(:hover, :focus-within) .pf-exhibit__media {
-      filter: brightness(.75);
-    }
   }
 }
 
@@ -552,71 +516,180 @@
   }
 }
 
-// --- Second accordion: the next two events | Latest blog post ---------------
-// The same tiles as the first (below), under it. The two event tiles are
-// held while hero-event.js loads the feed (hatched frames and their
-// labels), and hidden at once on pages without the events carousel, where
-// the script removes them, as it does a tile with no event for it; the
-// post then takes the rest of the row.
-:root:not(:has(.pf-events-carousel)) .pf-exhibit--event {
-  display: none;
+// --- Latest blog post: the row under the tiles -----------------------------
+// One link across the row, in the tiles' frame: the picture, then the
+// label (From the blog · date · category), the title and a line or two of
+// the post. Narrow panels: the picture (16:9) over the text. From 36rem
+// side by side, the picture as wide as the first tile and the text across
+// the other two; under exactly three tiles it follows them as one opens
+// (the tile's 2.4 shares to the others' 1), so the line between picture
+// and text stays under the first tile's edge. The picture rests in
+// greyscale and comes back to colour on hover or focus, like a gallery
+// label beside the work; hover also tints the row and underlines the
+// title. A placeholder (no blog category yet): hatched, not a link.
+.pf-landing__post {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--pf-landing-line);
+  border-top: 0;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color $pf-hover-out ease;
+
+  &:is(a):is(:hover, :focus-visible) {
+    background-color: color-mix(in srgb, var(--pf-section-fg, currentColor) 5%, transparent);
+    color: inherit;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
+    outline-offset: -4px;
+  }
 }
 
-// Under exactly three tiles the two bands are one grid of three columns,
-// opened a column at a time: a tile in use, in either band, widens its
-// column in both (to 2.4 shares, the others 1), so the lines between the
-// columns stay in step across the bands. Each column's share is
-// --pf-col-1/2/3, set on both lists. The second band's tiles take their
-// columns' shares: three, one each; two, the first across columns 1 and 2
-// (so the line between them falls where the second and third tiles meet)
-// and the post in column 3; one, the whole row.
-$pf-three-tiles: '.pf-landing__features:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(3):last-child)';
+.pf-landing__post-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / .07) 11px 12px),
+    linear-gradient(160deg, #3b3346, #17141c);
+
+  img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: filter .9s ease, transform 1.2s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .pf-landing__post:is(:hover, :focus-visible) & img {
+    filter: none;
+    transform: scale(1.03);
+  }
+}
+
+// The side padding is on the lines, not the box: a flex item's own padding
+// counts against its share, which put the picture's edge 14px short of
+// the first tile's.
+.pf-landing__post-text {
+  --pf-post-pad: clamp(.875rem, 1.75vw, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .375rem;
+  min-width: 0;
+  padding-block: var(--pf-post-pad);
+
+  > * {
+    padding-inline: var(--pf-post-pad);
+  }
+}
+
+.pf-landing__post-label {
+  @extend %pf-landing-label;
+  overflow: hidden;
+  color: var(--pf-toc-color);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-landing__post-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  color: var(--pf-section-fg, inherit);
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  .pf-landing__post:is(a):is(:hover, :focus-visible) & {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-landing__post-excerpt {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  max-width: 48rem;
+  font-size: .9375rem;
+  line-height: 1.45;
+  color: var(--pf-toc-color);
+}
+
+.pf-landing__post.is-placeholder {
+  color: var(--pf-toc-color);
+}
 
 @container pf-features (min-width: 36rem) {
-  #{$pf-three-tiles} > .pf-exhibits {
-    --pf-col-1: 1;
-    --pf-col-2: 1;
-    --pf-col-3: 1;
+  .pf-landing__post {
+    flex-direction: row;
   }
 
-  #{$pf-three-tiles}:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(1):is(:hover, :focus-within), > .pf-exhibits--updates > .pf-exhibit:nth-child(1):is(:hover, :focus-within)) > .pf-exhibits {
-    --pf-col-1: 2.4;
+  .pf-landing__post-media {
+    flex: var(--pf-col-1, 1) 1 0;
+    aspect-ratio: auto;
+    transition: flex-grow .9s cubic-bezier(.45, 0, .2, 1);
   }
 
-  #{$pf-three-tiles}:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(2):is(:hover, :focus-within), > .pf-exhibits--updates > .pf-exhibit:nth-child(2):not(:last-child):is(:hover, :focus-within)) > .pf-exhibits {
-    --pf-col-2: 2.4;
+  .pf-landing__post-text {
+    flex: calc(var(--pf-col-2, 1) + var(--pf-col-3, 1)) 1 0;
+    transition: flex-grow .9s cubic-bezier(.45, 0, .2, 1);
   }
 
-  #{$pf-three-tiles}:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(3):is(:hover, :focus-within), > .pf-exhibits--updates > .pf-exhibit:nth-child(2):last-child:is(:hover, :focus-within), > .pf-exhibits--updates > .pf-exhibit:nth-child(3):is(:hover, :focus-within)) > .pf-exhibits {
-    --pf-col-3: 2.4;
+  // One line of the post side by side, so the row stays low.
+  .pf-landing__post-excerpt {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
 
-  #{$pf-three-tiles} > .pf-exhibits > .pf-exhibit {
-    &:nth-child(1) {
-      flex-grow: var(--pf-col-1);
-    }
+  // Under exactly three tiles: the share of the column each opens.
+  $pf-three-tiles: '.pf-landing__features:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(3):last-child)';
 
-    &:nth-child(2) {
-      flex-grow: var(--pf-col-2);
-    }
-
-    &:nth-child(3) {
-      flex-grow: var(--pf-col-3);
+  @for $i from 1 through 3 {
+    #{$pf-three-tiles}:has(> .pf-exhibits > .pf-exhibit:nth-child(#{$i}):is(:hover, :focus-within)) > .pf-landing__post {
+      --pf-col-#{$i}: 2.4;
     }
   }
+}
 
-  #{$pf-three-tiles} > .pf-exhibits--updates > .pf-exhibit {
-    &:first-child:nth-last-child(2) {
-      flex-grow: calc(var(--pf-col-1) + var(--pf-col-2));
-    }
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__post-media,
+  .pf-landing__post-media img,
+  .pf-landing__post-text {
+    transition: none !important;
+  }
 
-    &:nth-child(2):last-child {
-      flex-grow: var(--pf-col-3);
-    }
+  .pf-landing__post:is(:hover, :focus-visible) .pf-landing__post-media img {
+    transform: none;
+  }
+}
 
-    &:only-child {
-      flex-grow: 1;
-    }
+html.pf-a11y-motion {
+  .pf-landing__post-media,
+  .pf-landing__post-media img,
+  .pf-landing__post-text {
+    transition: none !important;
+  }
+
+  .pf-landing__post:is(:hover, :focus-visible) .pf-landing__post-media img {
+    transform: none;
   }
 }
 
@@ -740,8 +813,6 @@ $pf-three-tiles: '.pf-landing__features:has(> .pf-exhibits:first-child > .pf-exh
   // The pace: a soft ease-in-out (--pf-exhibit-ease) over about a second,
   // like the site's other motion (the lead/map glide, the reveals). The
   // earlier quick-start curve did most of its moving in the first 150ms.
-  // Under three tiles on the hero, the two bands open by column instead
-  // (above).
   .pf-exhibit {
     --pf-exhibit-ease: cubic-bezier(.45, 0, .2, 1);
     flex: 1 1 0;
