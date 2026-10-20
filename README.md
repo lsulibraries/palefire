@@ -607,6 +607,20 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Hero account card links to Aeon sign-in (2026-10-20)
+
+The landing hero's "Your account" card (`.pf-hero-account`) was a
+placeholder with no link. It now links to the Special Collections sign-in,
+`https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?`, and its icon
+is the Font Awesome Pro duotone sign-in (`fad fa-sign-in`). Like the
+theme's other FA icons, it's inlined from the server's
+`libraries/fontawesome-pro/svgs/duotone/sign-in.svg` rather than an `<i>`
+tag, since no page loads the FA CSS or webfont. The icon stays
+`aria-hidden`; the card's text names the link.
+
+File: `templates/includes/landing.html.twig` (and a comment in
+`scss/components/_landing-features.scss`; no CSS rebuild needed).
+
 ### Guides use the WYSIWYG text format (2026-10-20)
 
 Guide text was saved as Full HTML (`full_html`, else `basic_html`). The

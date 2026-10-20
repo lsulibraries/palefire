@@ -223,8 +223,8 @@
          - hero_post: palefire_preprocess_paragraph__landing_hero(), the
            newest Article in the paragraph's "Blog category"; a placeholder
            until that field exists and is filled in.
-         - account_url: PLACEHOLDER for the Special Collections account
-           sign-in (empty, so the card is not a link yet). #}
+         - account_url: the Special Collections account sign-in (Aeon).
+           Empty makes the card a placeholder, not a link. #}
       {% set exhibitions = [
         {
           label: 'Exhibition'|t,
@@ -262,7 +262,7 @@
       {% if hero_tiles %}
         {% set exhibitions = hero_tiles %}
       {% endif %}
-      {% set account_url = '' %}
+      {% set account_url = 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' %}
       <div class="pf-landing__features">
         {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: exhibitions } only %}
 
@@ -296,9 +296,9 @@
             <p class="pf-hero-event__label">{{ 'Your account'|t }}</p>
             {% set account_tag = account_url ? 'a' : 'div' %}
             <{{ account_tag }} class="pf-hero-event__card{{ not account_url ? ' is-placeholder' }}"{% if account_url %} href="{{ account_url }}"{% endif %}>
-              {# Font Awesome Pro user (solid), inlined from the site's copy
-                 like the map's hint icon. #}
-              <span class="pf-hero-event__thumb pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/solid/user.svg', ignore_missing = true)|raw }}</span>
+              {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+                 inlined from the site's copy like the map's hint icon. #}
+              <span class="pf-hero-event__thumb pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
               <span class="pf-hero-event__text">
                 <span class="pf-hero-event__when">{{ 'Special Collections'|t }}</span>
                 <span class="pf-hero-event__title">{{ 'Sign in to your account'|t }}</span>
