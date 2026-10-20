@@ -211,7 +211,7 @@
       {# Features (_landing-features.scss): three large tiles that open on
          hover or focus (an accordion across: the one in use widens, shows
          more of its picture and a line more about it), then Next event |
-         Latest blog post | Special Collections account.
+         Latest blog post, and a Special Collections sign-in button.
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page: _palefire_hero_tiles()), when it has any; else
            the PLACEHOLDERS below. Shape: label, title, start/end (ISO
@@ -224,7 +224,7 @@
            newest Article in the paragraph's "Blog category"; a placeholder
            until that field exists and is filled in.
          - account_url: the Special Collections account sign-in (Aeon).
-           Empty makes the card a placeholder, not a link. #}
+           Empty leaves the button out. #}
       {% set exhibitions = [
         {
           label: 'Exhibition'|t,
@@ -291,21 +291,18 @@
               </div>
             {% endif %}
           </div>
-          {# Special Collections account: sign in to request materials. #}
-          <div class="pf-hero-account">
-            <p class="pf-hero-event__label">{{ 'Your account'|t }}</p>
-            {% set account_tag = account_url ? 'a' : 'div' %}
-            <{{ account_tag }} class="pf-hero-event__card{{ not account_url ? ' is-placeholder' }}"{% if account_url %} href="{{ account_url }}"{% endif %}>
-              {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                 inlined from the site's copy like the map's hint icon. #}
-              <span class="pf-hero-event__thumb pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-              <span class="pf-hero-event__text">
-                <span class="pf-hero-event__when">{{ 'Special Collections'|t }}</span>
-                <span class="pf-hero-event__title">{{ 'Sign in to your account'|t }}</span>
-                <span class="pf-hero-event__meta">{{ 'Request materials and keep track of your requests.'|t }}</span>
-              </span>
-            </{{ account_tag }}>
-          </div>
+          {# Special Collections account: a small button at the row's end,
+             not a card. Empty account_url hides it. #}
+          {% if account_url %}
+            <div class="pf-hero-account">
+              <a class="pf-hero-account__link" href="{{ account_url }}">
+                {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+                   inlined from the site's copy like the map's hint icon. #}
+                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+                <span>{{ 'Sign in to request materials'|t }}</span>
+              </a>
+            </div>
+          {% endif %}
         </div>
       </div>
     {% endif %}

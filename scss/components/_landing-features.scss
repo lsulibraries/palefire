@@ -9,9 +9,9 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. Next event (hero-event.js) | Latest blog post | Special Collections
-//    account: the Next event card's parts (_landing-hero.scss), with square
-//    thumbnails. Three across, a plinth flush under the tiles.
+// 2. Next event (hero-event.js) | Latest blog post, and a Special Collections
+//    sign-in button: the Next event card's parts (_landing-hero.scss), with
+//    small square thumbnails; under three tiles, in their thirds.
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -24,11 +24,10 @@
 // panel has left (see the band below), so the bottom row stays at the
 // panel's foot.
 .pf-landing__features {
-  --pf-features-gap: clamp(1rem, 2vw, 1.25rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 1fr auto;
-  gap: var(--pf-features-gap);
+  gap: clamp(1rem, 2vw, 1.25rem);
   container: pf-features / inline-size;
 }
 
@@ -468,88 +467,66 @@
   }
 }
 
-// --- Next event | Latest blog post | Account -------------------------------
-// One column on narrow panels, two from 36rem, three from 50rem (container
-// widths, so the TOC being open or closed decides too). Each card: a
-// hairline, then a square thumbnail beside the text. The labels
-// ("Next event", "Latest from the blog", "Your account") are for screen
-// readers only. With no event (no carousel, or nothing coming up) the post
-// takes the first column.
+// --- Next event | Latest blog post, and the sign-in button -----------------
+// A caption under the tiles, not a second band: no frame, small square
+// thumbnails, the text leading. The two cards stack, one row each, a
+// hairline between; the sign-in button stands beside them, as tall as both.
+// Narrow panels: one column, the button full width under the cards. From
+// 36rem (container widths, so the TOC being open or closed decides too):
+// cards | button, in halves, or with exactly three tiles above, two thirds
+// | one third, so the cards end where the second tile does and
+// the button sits under the third. With no event (no carousel, or nothing
+// coming up) the post is the only card. The labels ("Next event", "Latest
+// from the blog") are for screen readers only; each card's date line says
+// what it is.
 .pf-landing__pair {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1rem, 2vw, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(.75rem, 1.5vw, 1rem) 0;
 }
 
+.pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
+  --pf-hero-thumb: clamp(3.5rem, 5cqi, 4rem); // square: 56 to 64px
+  min-width: 0;
+  padding-top: clamp(.75rem, 1.5vw, 1rem);
+  border-top: 1px solid var(--pf-landing-line);
+}
+
+// Beside the button: the gap under the tiles is the divider above the first
+// card, so only the post has a line, and only under a shown event. The
+// cards' space before the button is padding, not a column gap, so the
+// button starts where its tile does.
 @container pf-features (min-width: 36rem) {
   .pf-landing__pair {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-// Three across from 50rem (the TOC open at 1333px leaves about 56rem): a
-// plinth under the tiles. No gap between them, the tiles' bottom edge is
-// the row's top line, and each card is a cell under its tile (the tiles are
-// equal thirds at rest), framed by the same hairline. With no event the
-// post and account take the first two cells and the frame ends after them.
-// Two classes, so this wins over the single line the row has from 36rem
-// (below): the tiles' frame is the top line here.
-@container pf-features (min-width: 50rem) {
-  .pf-landing__features .pf-landing__pair {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0;
-    margin-top: calc(-1 * var(--pf-features-gap));
+  .pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
+    grid-column: 1;
     padding-top: 0;
+    padding-inline-end: clamp(1.25rem, 2.5vw, 2rem);
     border-top: 0;
-    border-inline-start: 1px solid var(--pf-landing-line);
   }
 
-  .pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
-    border-inline-end: 1px solid var(--pf-landing-line);
-    border-bottom: 1px solid var(--pf-landing-line);
-  }
-
-  // The card fills its cell, so the whole cell is the target; hover and
-  // focus tint it faintly.
-  .pf-landing__features .pf-hero-event__card {
-    height: 100%;
-    padding: clamp(.75rem, 1.25vw, 1rem);
-    transition: background-color $pf-hover-out ease;
-
-    &:is(:hover, :focus-visible) {
-      background-color: color-mix(in srgb, var(--pf-section-fg, currentColor) 5%, transparent);
-      transition-duration: $pf-hover-in;
-    }
-  }
-
-  .pf-landing__features .pf-hero-event__card.is-placeholder {
-    background-color: transparent;
-  }
-
-  .pf-landing__features .pf-hero-event:not(.is-ready)::after {
-    margin: clamp(.75rem, 1.25vw, 1rem);
-  }
-}
-
-.pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
-  --pf-hero-thumb: clamp(5.5rem, 9.5cqi, 9rem); // square: 88 to 144px (111px at 1333px, TOC hidden)
-  min-width: 0;
-  padding-top: clamp(.875rem, 1.5vw, 1rem);
-  border-top: 1px solid var(--pf-landing-line);
-}
-
-// Side by side, one unbroken line over the whole row (under the tiles)
-// instead of one per card with the column gaps between them. Stacked, each
-// card keeps its own, which is what separates them.
-@container pf-features (min-width: 36rem) {
-  .pf-landing__pair {
-    padding-top: clamp(.875rem, 1.5vw, 1rem);
+  :root:has(.pf-events-carousel) .pf-landing__features .pf-hero-event + .pf-hero-post {
+    padding-top: clamp(.75rem, 1.5vw, 1rem);
     border-top: 1px solid var(--pf-landing-line);
   }
 
-  .pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) {
-    padding-top: 0;
-    border-top: 0;
+  .pf-hero-account {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
+
+  // One card: one row, so no empty row (and its gap) under it.
+  :root:not(:has(.pf-events-carousel)) .pf-hero-account,
+  .pf-landing__pair:not(:has(> .pf-hero-event)) > .pf-hero-account {
+    grid-row: 1;
+  }
+
+  // Exactly three tiles: two thirds | one third, in step with them.
+  .pf-landing__features:has(> .pf-exhibits > .pf-exhibit:nth-child(3):last-child) .pf-landing__pair {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   }
 }
 
@@ -563,20 +540,21 @@
 }
 
 // Square: the thumbnail and, while the feed loads, the hatched space held
-// for it. As tall as the card's two-line date and title and its line under.
+// for it. Text from the top, beside it.
 .pf-landing__features .pf-hero-event__thumb,
 .pf-landing__features .pf-hero-event:not(.is-ready)::after {
   aspect-ratio: 1;
 }
 
 .pf-landing__features .pf-hero-event__card {
+  align-items: start;
   max-width: none;
 }
 
-// Up to two lines each for the three cards' date (or label) and title, so
-// an event's time and place or a post's title read in full in most cases;
-// longer ones are clamped. The line under is one line (below). Titles one
-// size down from the solo Next event card.
+// Up to two lines each for the cards' date and title, so an event's time
+// or a post's title read in full in most cases; longer ones are clamped.
+// The line under is one line (below). Titles one size down from the solo
+// Next event card.
 .pf-landing__features :is(.pf-hero-event__title, .pf-hero-event__when) {
   display: -webkit-box;
   overflow: hidden;
@@ -597,10 +575,9 @@
   margin-top: .125rem;
 }
 
-// The line under each title (event place, post excerpt, account): one line,
-// so the three cards stay one even row. Two classes, so the clamp's display
-// wins.
-.pf-landing__features :is(.pf-hero-post, .pf-hero-event, .pf-hero-account) .pf-hero-event__meta {
+// The line under each title (event place, post excerpt): one line. Two
+// classes, so the clamp's display wins.
+.pf-landing__features :is(.pf-hero-post, .pf-hero-event) .pf-hero-event__meta {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
@@ -608,21 +585,62 @@
   line-clamp: 1;
 }
 
-// The account's thumbnail: the duotone sign-in icon on the hatched ground.
+// Sign-in: an outlined button in the Search button's type and colour, the
+// duotone sign-in icon before the words. Full width when stacked; beside
+// the cards it fills its cell, the icon over the words.
+.pf-hero-account__link {
+  @extend %pf-landing-label;
+  display: flex;
+  gap: .625rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: .5rem 1rem;
+  border: 1px solid var(--pf-landing-line);
+  color: var(--pf-g-title, var(--pf-toc-active));
+  text-decoration: none;
+  transition: border-color $pf-hover-out ease, background-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: currentColor;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    color: var(--pf-g-title, var(--pf-toc-active));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline-color: var(--pf-landing-accent);
+  }
+}
+
 .pf-hero-account__icon {
-  display: grid;
-  place-items: center;
-  color: var(--pf-landing-accent, currentColor);
+  display: flex;
 
   svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: currentColor;
   }
 }
 
-// Placeholder (no blog category, no account link yet): not a link, so no
-// hover and no underline.
+@container pf-features (min-width: 36rem) {
+  .pf-hero-account__link {
+    flex-direction: column;
+    gap: .75rem;
+    height: 100%;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .pf-hero-account__icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+// Placeholder (no blog category yet): not a link, so no hover and no
+// underline.
 .pf-hero-event__card.is-placeholder {
   color: var(--pf-toc-color);
 

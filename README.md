@@ -697,6 +697,23 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero bottom row: lighter caption, sign-in button (2026-10-20)
+
+The plinth (above) still felt as heavy as the tiles. The row is now a
+light caption under them: no frame, small square thumbnails, the text
+leading. Next event and Latest blog post stack, one row each with a
+hairline between, and the account card is now an outlined "Sign in to
+request materials" button beside them, as tall as both, in the Search
+button's type and colour. With exactly three tiles above (a 36rem panel
+and up), the cards take the first two thirds and end where the second tile
+does, and the button sits under the third; with any other number of tiles
+it's halves. With no event, the post is the only card and the button
+shrinks to its height. On phones everything stacks, the button full width
+at the end. Stacking the cards beside the button adds no extra row for it.
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Guides use the WYSIWYG text format (2026-10-20)
 
 Guide text was saved as Full HTML (`full_html`, else `basic_html`). The
