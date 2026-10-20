@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Landing department (scripts/palefire_landing_department_setup.php): the
+ * Bento search landing (background video, lead panel with the page title,
+ * intro and "Search LSU Libraries", building map, Visit strip, sub-header
+ * bar), plus the Landing hero's tile accordion under the search when Tiles
+ * are filled in.
+ *
+ * Markup in includes/landing.html.twig, with department set (variables from
+ * palefire_preprocess_paragraph__landing_department()). Styles are the
+ * Bento landing's; .pf-landing--department and .pf-landing__tiles
+ * (_landing-features.scss) only add the tiles.
+ */
+#}
+{% include '@palefire/includes/landing.html.twig' with { department: true } %}

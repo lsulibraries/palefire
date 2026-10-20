@@ -292,6 +292,25 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph--landing-department.
+ *
+ * Landing department (scripts/palefire_landing_department_setup.php) is a
+ * copy of bento_search with the same fields, plus the Landing hero's Tiles
+ * (field_hero_tiles): the same variables, plus department and hero_tiles,
+ * which includes/landing.html.twig reads. Its own input_id keeps the
+ * search's and the Visit card's ids unique on the page.
+ */
+function palefire_preprocess_paragraph__landing_department(array &$variables): void {
+  palefire_preprocess_paragraph__bento_search($variables);
+  $variables['department'] = TRUE;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if ($paragraph instanceof ParagraphInterface) {
+    $variables['landing']['input_id'] = 'pf-department-' . $paragraph->id();
+    $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
+  }
+}
+
+/**
  * The newest published Article in any of the hero's blog categories, or NULL.
  *
  * The categories are the Landing hero's optional "Blog categories" field

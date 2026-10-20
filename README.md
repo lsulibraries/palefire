@@ -605,6 +605,42 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### New scroll section: Landing department (2026-10-20)
+
+A copy of the Bento search landing (background video, lead card with the
+page title, intro and "Search LSU Libraries", building map, Visit strip,
+sub-header bar) with the Landing hero's tile accordion under the search.
+
+- **Setup:** `scripts/palefire_landing_department_setup.php` creates the
+  paragraph type `landing_department`. It copies every `bento_search` field
+  with its settings, widget, display and form field groups, adds Tiles
+  (`field_hero_tiles`, up to three Hero tiles, as on the hero), and allows
+  the type wherever Bento search is allowed. Run it after
+  `palefire_landing_hero_tiles_setup.php`, then `drush cr`. Safe to re-run.
+- **Markup:** `paragraph--landing-department.html.twig` includes
+  `includes/landing.html.twig` with `department`. The accordion moved into
+  `includes/landing-exhibits.html.twig`, shared with the hero (its markup is
+  unchanged). With no tiles, nothing shows (no placeholders).
+- **Styles:** shared with the Bento landing. Only `.pf-landing__tiles` is
+  new: the `pf-features` container the accordion's queries read. From md
+  the band fills the card's free height under the search (at least 7rem),
+  so the map still starts at the fold on 1440x900 and 768x1024. On short
+  laptops (1333x767, 1024x768), with Oral History's intro, the card runs
+  past the fold and the lead/map snap waits for its foot.
+- `PalefireHooks::LANDING_BUNDLES` includes the new type, so it gets the
+  background video, the page `<h1>`, the TOC's Home/Map links, the
+  breadcrumb bar, and its poster on other pages' tiles.
+- Checked on the live Oral History page with the bar and tiles simulated
+  and the new CSS: hover opens a tile (635px against 265), no horizontal
+  scroll at 320–1440, tiles stack 4:3 on phones.
+
+Files: `scripts/palefire_landing_department_setup.php`,
+`templates/paragraphs/paragraph--landing-department.html.twig`,
+`templates/includes/landing.html.twig`,
+`templates/includes/landing-exhibits.html.twig`, `palefire.theme`,
+`src/Hook/PalefireHooks.php`, `scss/components/_landing-features.scss`,
+`css/style.css`.
+
 ### Section snap works on tall sections; Oral History gets the landing bar (2026-10-20)
 
 - **Snap:** Events, Specializations and Collections on /v2/special had

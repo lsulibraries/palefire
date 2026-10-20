@@ -37,9 +37,11 @@ class PalefireHooks {
   /**
    * Paragraph types drawn as a landing: background video, the page <h1> when
    * first, building map and Visit card. landing_hero is bento_search
-   * without the search form (paragraph--landing-hero.html.twig).
+   * without the search form (paragraph--landing-hero.html.twig);
+   * landing_department is bento_search plus the hero's tiles
+   * (paragraph--landing-department.html.twig).
    */
-  public const LANDING_BUNDLES = ['bento_search', 'landing_hero'];
+  public const LANDING_BUNDLES = ['bento_search', 'landing_hero', 'landing_department'];
 
   /**
    * Paragraph reference field on the modular content type.

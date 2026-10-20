@@ -1,0 +1,71 @@
+{#
+/**
+ * @file
+ * The landing's tile accordion: up to three tiles side by side that open on
+ * hover or focus (the one in use widens, shows more of its picture and a
+ * line more about it). Styles: _landing-features.scss ("Tiles"); they
+ * need a `pf-features` container around this list.
+ *
+ * Included by includes/landing.html.twig, in the Landing hero's features
+ * and under the Landing department's search.
+ *
+ * Variables:
+ * - exhibitions: the tiles, each: label, title, start/end (ISO dates) and
+ *   dates (shown), or permanent, or meta (a line in place of dates); more
+ *   (the line shown when the tile opens); url and cta (the tile is a link
+ *   only with a url); images (image render arrays; none: hatched frames
+ *   stand in) and frames. More than one image crossfades
+ *   (exhibit-rotate.js), with a pause button.
+ * - label: the list's accessible name (default "Exhibitions and guides").
+ */
+#}
+<ul class="pf-exhibits" aria-label="{{ label|default('Exhibitions and guides'|t) }}">
+  {% for ex in exhibitions %}
+    {% set count = ex.images ? ex.images|length : ex.frames %}
+    <li class="pf-exhibit{{ ex.permanent ? ' pf-exhibit--permanent' }}"{% if count > 1 %} data-pf-exhibit-rotate{% endif %}>
+      <div class="pf-exhibit__media" aria-hidden="true">
+        {% for i in 1..count %}
+          <span class="pf-exhibit__frame{{ loop.first ? ' is-current' }}">
+            {% if ex.images %}
+              {{ ex.images[loop.index0] }}
+            {% endif %}
+          </span>
+        {% endfor %}
+      </div>
+      <div class="pf-exhibit__text">
+        <p class="pf-exhibit__label">{{ ex.label }}</p>
+        {# With a url the title is the link, stretched over the tile
+           (_landing-features.scss), so the pause button stays its
+           own control. #}
+        <p class="pf-exhibit__title">
+          {% if ex.url %}<a class="pf-exhibit__link" href="{{ ex.url }}">{{ ex.title }}</a>{% else %}{{ ex.title }}{% endif %}
+        </p>
+        <p class="pf-exhibit__when">
+          {% if ex.permanent %}
+            {{ 'On view · Permanent'|t }}
+          {% elseif ex.meta %}
+            {{ ex.meta }}
+          {% else %}
+            <time datetime="{{ ex.start }}/{{ ex.end }}">{{ ex.dates }}</time>
+          {% endif %}
+        </p>
+        {% if ex.more %}
+          <div class="pf-exhibit__more">
+            <p>{{ ex.more }}</p>
+            {% if ex.url and ex.cta %}<span class="pf-exhibit__cta" aria-hidden="true">{{ ex.cta }}</span>{% endif %}
+          </div>
+        {% endif %}
+      </div>
+      {% if count > 1 %}
+        {# Crossfade pause/play (WCAG 2.2.2), set up by exhibit-rotate.js. #}
+        <button type="button" class="pf-exhibit__pause" data-pf-exhibit-pause hidden>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><g class="pf-exhibit__pause-icon"><rect x="4" y="3" width="2.6" height="10" rx=".8"/><rect x="9.4" y="3" width="2.6" height="10" rx=".8"/></g><path class="pf-exhibit__play-icon" d="M5 3.4v9.2c0 .7.8 1.1 1.4.7l6.7-4.6c.5-.4.5-1.1 0-1.5L6.4 2.7c-.6-.4-1.4 0-1.4.7z"/></svg>
+          <span class="visually-hidden" data-pf-exhibit-pause-label>{{ 'Pause slideshow'|t }}</span>
+        </button>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% if exhibitions|filter(ex => ex.images|length > 1 or ex.frames > 1) %}
+  {{ attach_library('palefire/exhibit-rotate') }}
+{% endif %}

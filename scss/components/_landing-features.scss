@@ -606,6 +606,37 @@
   }
 }
 
+// --- Landing department: the tiles under the search -------------------------
+// The same accordion (below) in the Bento-style lead card. The wrapper is
+// the `pf-features` container the tiles' queries read, without the hero's
+// .pf-landing__features (which turns the lead into the full-screen panel).
+// From md, as on the hero, the band takes the height the card has left
+// under the search, down to its foot, so the card still ends at the fold
+// and the map starts there. At least 7rem: with a long intro on a short
+// window the card grows instead (measured with Oral History's intro: fits
+// at 1440x900 and 768x1024; at 1333x767 and 1024x768, where the card was
+// already full without tiles, it runs 115 and 60px past the fold, and the
+// lead/map snap waits until its foot is in view, landing-snap.js).
+.pf-landing__tiles {
+  container: pf-features / inline-size;
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+@include media-breakpoint-up($pf-snap-breakpoint) {
+  .pf-landing--lead-screen > .pf-landing__lead > .pf-landing__tiles:last-child {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    margin-top: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .pf-landing--lead-screen .pf-landing__tiles > .pf-exhibits {
+    flex: 1 0 auto;
+    height: auto;
+    min-height: 7rem;
+  }
+}
+
 // --- Tiles: exhibitions and guide, an accordion across -----------------------
 // Flush tiles in one frame, no borders between. With a pointer, the tile
 // under it (or with keyboard focus inside) grows to about 2.4 times the
