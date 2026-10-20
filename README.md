@@ -605,6 +605,72 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Lead → map: one calm glide instead of a flick and a crawl (2026-10-19)
+
+I measured the scroll from the lead to the map frame by frame in the
+Browser pane (1333×798). Frame times were fine: no long tasks, about 10 of
+180 frames over 12ms. The problem was the motion curve. The snap used the
+browser's smooth scroll, which is front-loaded: 620 of the 742px in about
+280ms (up to 86px a frame), then a crawl of over a second for the last
+120px. The lead flew off and the scroll-driven reveal played as a flash
+and then a slow settle, the "two steps".
+
+`landing-snap.js` now runs its own glide: an ease-in-out cubic over about
+a second (600–1100ms by distance; 990ms here). The lead lifts off gently,
+is fastest half-way and settles gently, so the reveal reads as one motion.
+Each frame scrolls instantly (so the CSS smooth scroll doesn't stack on
+top), and CSS scroll snapping is off for the glide. Without that, the
+browser snapped the rest of the way at once after an instant scroll near
+the map's snap point, a jump of about 280px mid-glide. Reduced motion stays
+instant. The glide ends the step itself (`scrollend` would fire after
+each of its frames), and the fallback timer still covers a hidden tab.
+
+Measured with the same glide run in the page: 0 → 742px in about 1s, no
+jumps, at most 37px per frame (86 before), the map's drawn top easing
+from 308 to 129, a steady 60fps or better, and no frame over 25ms.
+
+File: `js/landing-snap.js` (the glide itself moved to `palefire.js`, see
+the next entry).
+
+### TOC jumps use the same eased glide (2026-10-19)
+
+The glide is now one shared helper, `Drupal.palefireGlide(to, done,
+{ interruptible })` in `palefire.js` (the theme's global script). It's
+used by:
+
+- **The landing snap (`landing-snap.js`):** as before, not interruptible,
+  since it swallows a gesture's trailing wheel events on purpose.
+- **Every TOC jump (`modular-toc.js`):** sections, sub-links, the first
+  link (Home) and "Back to top", instead of the browser's front-loaded
+  smooth scroll. These glides are interruptible: a wheel, touch or key
+  press stops them where they are. The TOC's tracking holds until the
+  glide ends, then focus moves to the section's heading. Before, the lock
+  ended on `scrollend`, which would now fire after the glide's first
+  frame.
+
+The helper is instant with reduced motion, turns CSS scroll snapping off
+for the glide and back on after (including when interrupted), and takes
+600–1100ms by distance. `landing-snap` and `modular-toc` now depend on
+`palefire/global`, so it's always there. Without it the TOC falls back to
+the browser's smooth scroll.
+
+Measured in the pane at 1333×798 with the glide run in the page:
+
+| Jump | Time | Largest step | Heading under the header |
+|---|---|---|---|
+| Top → Map | 989ms | 35px | 80px |
+| Top → Events | 1109ms | 63px | 80px |
+| Top → Collections | 1101ms | 75px | 80px |
+| Mid-page → Map | 1108ms | 51px | 80px |
+| Mid-page → top | 1118ms | 67px | y 0 |
+
+No jumps. A wheel event stopped a glide at once, with snapping restored.
+The browser then settled on the map's nearby snap point, as it does
+after any scroll. `node --check` passes for all three scripts.
+
+Files: `js/palefire.js`, `js/landing-snap.js`, `js/modular-toc.js`,
+`palefire.libraries.yml`.
+
 ### TOC jumps land every section the same way (2026-10-19)
 
 On /v2/special the TOC landed each section differently: the map heading

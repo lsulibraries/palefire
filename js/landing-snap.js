@@ -117,11 +117,22 @@
       moving = false;
       quiet();
     };
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', () => finish(true), { once: true });
+    if (behavior === 'instant') {
+      if ('onscrollend' in window) {
+        window.addEventListener('scrollend', () => finish(true), { once: true });
+      }
+      setTimeout(() => finish(false), DONE);
+      window.scrollTo({ top, behavior });
     }
-    setTimeout(() => finish(false), DONE);
-    window.scrollTo({ top, behavior });
+    else {
+      // One calm glide (Drupal.palefireGlide, palefire.js), not the
+      // browser's front-loaded smooth scroll, which made the map's reveal
+      // a flash and then a crawl. It calls finish itself: scrollend would
+      // fire after each of its frames. The fallback timer still covers a
+      // hidden tab, where frames stop.
+      setTimeout(() => finish(false), DONE);
+      Drupal.palefireGlide(top, () => finish(true));
+    }
     return true;
   }
 

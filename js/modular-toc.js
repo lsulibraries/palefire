@@ -393,10 +393,12 @@
         }
         setActive(entries[0]);
         setActiveSub(null);
-        lockUntilScrollEnds(() => {});
         closeOffcanvas(nav);
         if (plain) {
-          window.scrollTo({ top: 0 });
+          glideTo(0, () => {});
+        }
+        else {
+          lockUntilScrollEnds(() => {});
         }
         return;
       }
@@ -412,13 +414,15 @@
       }
       setActive(entry);
       setActiveSub(entry.subs.find((s) => s.link === link) || null);
-      lockUntilScrollEnds(() => {
-        const target = document.getElementById(decodeURIComponent(link.hash.slice(1)));
+      const arrived = () => {
         const heading = target && (target.matches('h2, h3') ? target : target.querySelector('h2'));
         if (heading) {
           heading.focus({ preventScroll: true });
         }
-      });
+      };
+      if (!jump) {
+        lockUntilScrollEnds(arrived);
+      }
       closeOffcanvas(nav);
       // After the phone drawer has started closing, as the anchor's own
       // jump did. Worked out here rather than with scrollIntoView(), so
@@ -433,7 +437,8 @@
       //   drawn higher while the map reveals itself (_landing-hero.scss).
       // - An event (Events carousel) lands on its day: its date, weather
       //   and image card, not its row, which sits at the card's foot.
-      // The CSS smooth scroll and each target's scroll-margin still apply.
+      // Each target's scroll-margin still applies; the scroll itself is the
+      // eased glide (glideTo).
       if (jump) {
         const map = target.closest('.pf-landing__visit > .pf-map');
         const by = map ? map.getBoundingClientRect().top - map.parentElement.getBoundingClientRect().top : 0;
@@ -449,9 +454,30 @@
         if (compact && sentinel && at(compact) > sentinel.offsetHeight) {
           top = at(compact);
         }
-        window.scrollTo({ top: Math.max(0, top) });
+        glideTo(Math.max(0, top), arrived);
       }
     }, { signal });
+
+    // TOC jumps glide like the landing's snap (Drupal.palefireGlide,
+    // palefire.js): one calm ease-in-out instead of the browser's
+    // front-loaded smooth scroll, stopped by a wheel, touch or key press.
+    // Tracking holds until the glide ends (scrollend would fire after each
+    // of its frames), then `done` runs. Without the helper, the browser's
+    // smooth scroll and the usual lock.
+    function glideTo(top, done) {
+      if (!Drupal.palefireGlide) {
+        lockUntilScrollEnds(done);
+        window.scrollTo({ top });
+        return;
+      }
+      locked = true;
+      Drupal.palefireGlide(top, () => {
+        locked = false;
+        if (!destroyed) {
+          done();
+        }
+      }, { interruptible: true });
+    }
 
     function lockUntilScrollEnds(done) {
       locked = true;

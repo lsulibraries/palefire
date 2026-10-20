@@ -196,6 +196,7 @@ landing-snap:
     js/landing-snap.js: {}
   dependencies:
     - core/drupal
+    - palefire/global
 
 # Landing hero: exhibition tiles with several images crossfade, with a
 # pause button. Attached by includes/landing.html.twig only when a tile has
@@ -249,6 +250,7 @@ modular-toc:
   dependencies:
     - core/drupal
     - core/once
+    - palefire/global
 
 # Hide / show the TOC sidebar (lg and up, every Modular page but guides).
 # Attached by page.html.twig on Modular pages with a TOC. Loads in <head> so

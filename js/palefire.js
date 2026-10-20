@@ -132,6 +132,69 @@
     return header ? compactBarHeight(header) : 0;
   };
 
+  /**
+   * Scrolls the page to `to` in one calm glide, then calls `done`. Used by
+   * the landing's lead/map snap (landing-snap.js) and the TOC's jumps
+   * (modular-toc.js).
+   *
+   * The browser's own smooth scroll is front-loaded (measured in Chromium:
+   * 620 of 742px in about 280ms, then a crawl of over a second for the
+   * rest): the landing hero's map reveal (_landing-hero.scss, driven by the
+   * scroll) played as a flash and then a slow settle. This eases in and out
+   * over about a second (an ease-in-out cubic, 600-1100ms by distance).
+   * Each frame scrolls instantly, so the CSS smooth scroll doesn't animate
+   * on top of it, and CSS scroll snapping is off for the glide: after an
+   * instant scroll near a snap point the browser snapped the rest of the
+   * way at once, a jump mid-glide.
+   *
+   * Instant with prefers-reduced-motion and the Settings drawer's "Reduce
+   * motion". With `interruptible`, a wheel, touch or key press stops it
+   * where it is (and still calls `done`), so it never fights the reader;
+   * the landing's snap leaves it off, as it swallows a gesture's trailing
+   * wheel events on purpose.
+   */
+  Drupal.palefireGlide = (to, done = () => {}, { interruptible = false } = {}) => {
+    const root = document.documentElement;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      || root.classList.contains('pf-a11y-motion');
+    if (reduce) {
+      window.scrollTo({ top: to, behavior: 'instant' });
+      done();
+      return;
+    }
+    const from = window.scrollY;
+    const distance = to - from;
+    const duration = Math.min(1100, Math.max(600, 350 + Math.abs(distance) * 0.85));
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const stop = new AbortController();
+    let start = 0;
+    let frameId = 0;
+    const end = () => {
+      stop.abort();
+      window.cancelAnimationFrame(frameId);
+      root.style.scrollSnapType = '';
+      done();
+    };
+    if (interruptible) {
+      ['wheel', 'touchstart', 'keydown'].forEach((type) => {
+        window.addEventListener(type, end, { passive: true, signal: stop.signal });
+      });
+    }
+    root.style.scrollSnapType = 'none';
+    const frame = (now) => {
+      start = start || now;
+      const t = Math.min(1, (now - start) / duration);
+      window.scrollTo({ top: from + distance * ease(t), behavior: 'instant' });
+      if (t < 1) {
+        frameId = window.requestAnimationFrame(frame);
+      }
+      else {
+        end();
+      }
+    };
+    frameId = window.requestAnimationFrame(frame);
+  };
+
   const updateCompactAfter = () => {
     compactAfterFrame = 0;
     const header = document.querySelector('.pf-header');
