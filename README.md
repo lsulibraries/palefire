@@ -30,6 +30,7 @@ Production needs only the build output in the repo: `css/style.css`,
 - `scripts/palefire_tile_showcase_setup.php` – Tile showcase paragraph type (How-to guides, Collections, Specializations), its image styles and responsive image styles (sites with palefire_modular)
 - `scripts/palefire_guide_demo.php` – builds the Systematic Reviews LibGuide as an unpublished guide page, as a demo
 - `scripts/palefire_guide_special_collections.php` – builds the "How to Use Special Collections" guide as an unpublished guide page
+- `scripts/palefire_guide_wysiwyg.php` – moves every guide page's text to the WYSIWYG text format
 
 ## Modular pages
 
@@ -605,6 +606,23 @@ production downstream as usual.
   `scripts/palefire_visit_setup.php`) and each section's saved theme on the
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
+
+### Guides use the WYSIWYG text format (2026-10-20)
+
+Guide text was saved as Full HTML (`full_html`, else `basic_html`). The
+three guide scripts now save it in the WYSIWYG format instead: the format whose machine name is `wysiwyg` or whose label
+is "WYSIWYG". They stop with an error if there isn't one, rather than fall
+back to Full HTML; `-- format=<machine name>` still picks another.
+
+Guide pages built before this keep their old format until you run the new
+`scripts/palefire_guide_wysiwyg.php` (see Guide pages > Move existing
+guides to WYSIWYG). It changes only the format, not the text, and saves
+each guide as a new revision.
+
+Files: `scripts/palefire_guide_demo.php`,
+`scripts/palefire_guide_research_help.php`,
+`scripts/palefire_guide_special_collections.php`,
+`scripts/palefire_guide_wysiwyg.php` (new).
 
 ### "How to Use Special Collections" guide (2026-10-20)
 
@@ -3030,12 +3048,32 @@ After the script:
 * **Permissions.** Give the editor roles that build guides "Resource:
   Create new content" and "Edit any content" (People > Permissions). The
   script doesn't touch roles.
-* **Text format.** Guide text uses tables, lists and Heading 4. Make sure
-  the format editors use allows `<table>`, `<caption>`, `<th scope>`,
-  `<h4>`, `<ol>`, `<ul>` and `<code>` (CKEditor 5: Table, Heading, Code).
+* **Text format.** Guide text uses the WYSIWYG format, not Full HTML.
+  Guide text uses tables, lists and Heading 4, so WYSIWYG must allow
+  `<table>`, `<caption>`, `<th scope>`, `<h4>`, `<ol>`, `<ul>`, `<code>`
+  and `<a href>` (CKEditor 5: Table, Heading, Code, Link). The guide
+  scripts stop if there is no WYSIWYG format.
 * **Guide card.** Check Staff > Manage display > Guide card. The script
   turns on the Staff fields that look like an email, phone, photo, job
   title, pronouns or office; add or remove fields there.
+
+### Move existing guides to WYSIWYG
+
+Guide pages built before 2026-10-20 have Full HTML text. To move all of
+them (intro and every block, accordion items included) to WYSIWYG:
+
+```bash
+drush php:script themes/custom/palefire/scripts/palefire_guide_wysiwyg.php
+drush php:script themes/custom/palefire/scripts/palefire_guide_wysiwyg.php -- apply=1
+drush cr
+```
+
+The first run only lists what would change. With `apply=1` each changed
+guide gets a new revision ("Guide text moved to the wysiwyg text format"),
+so the Revisions tab can undo it. The script stops if WYSIWYG doesn't allow
+the tags guides use (the list above), since the text would lose its tables
+or headings on display; fix the format, or pass `force=1` to convert
+anyway.
 
 ### Content model
 

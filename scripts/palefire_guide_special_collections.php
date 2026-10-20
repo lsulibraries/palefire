@@ -10,7 +10,7 @@
  *
  * Optional arguments after "--":
  *   format=<text format>  Text format for the guide's text (default:
- *                         full_html, else basic_html).
+ *                         the WYSIWYG format).
  *   path=<alias>          URL alias, e.g. path=/v2/guides/special-collections
  *
  * Written for someone who has never used an archive: what Special
@@ -63,8 +63,19 @@ if ($found) {
   throw new \RuntimeException("A page titled '$title' already exists (node " . reset($found) . '). Delete it first to rebuild it.');
 }
 
+// Guide text uses the WYSIWYG format (machine name or label "WYSIWYG"),
+// never full_html.
 $formats = filter_formats();
-$format = $args['format'] ?? (isset($formats['full_html']) ? 'full_html' : (isset($formats['basic_html']) ? 'basic_html' : filter_default_format()));
+$format = $args['format'] ?? NULL;
+foreach ($format === NULL ? $formats : [] as $id => $candidate) {
+  if ($id === 'wysiwyg' || strcasecmp((string) $candidate->label(), 'WYSIWYG') === 0) {
+    $format = $id;
+    break;
+  }
+}
+if ($format === NULL) {
+  throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
+}
 if (!isset($formats[$format])) {
   throw new \RuntimeException("Text format '$format' not found.");
 }
