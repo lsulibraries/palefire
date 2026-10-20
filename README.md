@@ -607,6 +607,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Special Collections guide: decision tree first (2026-10-20)
+
+"Requesting and visiting" is now the first section of the How to Use
+Special Collections guide, and it opens with a decision tree: find the
+item in the catalog and choose "Request Item", then either see it in the
+Reading Room (request, book an appointment, visit) or order a digital copy
+(the Duplication Order Form, an emailed invoice, copies sent to you). Each
+option then has its own numbered steps. The duplication steps come from
+lib.lsu.edu/visitsc. "Start here" became "What Special Collections is",
+after it, and Ask Us now says copies are ordered through "Request Item"
+too.
+
+The tree is a plain nested bulleted list, so editors can change it in
+WYSIWYG: in guide text, any bulleted list with a list inside it is drawn
+as a tree, in a framed box with hairline branches (`_guide.scss`). No
+existing guide has nested lists, so nothing else changes.
+
+The script creates a new page; it doesn't update one. To rebuild the
+unpublished page made earlier, delete it (node/132607), then re-run the
+script.
+
+Files: `scripts/palefire_guide_special_collections.php`,
+`scss/components/_guide.scss`, `css/style.css`.
+
 ### Hero account card links to Aeon sign-in (2026-10-20)
 
 The landing hero's "Your account" card (`.pf-hero-account`) was a
@@ -3183,9 +3207,10 @@ help.
 
 `scripts/palefire_guide_special_collections.php` (2026-10-20) builds a
 beginner's guide to Special Collections, owned by Kyle Tanglao. Sections:
-Start here, How a collection is described, What is a finding aid?, Finding
-your way by collection type (an accordion: Manuscripts, University
-Archives, Oral History), Requesting and visiting, Asking Special
+Requesting and visiting (a decision tree, then Reading Room and digital
+copy steps), What Special Collections is, How a collection is described,
+What is a finding aid?, Finding your way by collection type (an accordion:
+Manuscripts, University Archives, Oral History), Asking Special
 Collections a question (Ask Us form fields, Do, Don't, an example), and
 Get help.
 
@@ -3220,6 +3245,9 @@ Get help.
 * Add Resources first (Content > Add content > Resource), then pick them
   in a Resource list by title. Paste the plain address and tick "Requires
   LSU login" rather than pasting a libezp link.
+* A bulleted list with a list inside it is drawn as a decision tree
+  (indent bullets with Tab in WYSIWYG). Keep plain nested lists out of
+  guides, or they get the tree look too.
 * Leave the TOC to do navigation: no "Next / Previous" or "see the tab
   above" text.
 

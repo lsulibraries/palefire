@@ -14,12 +14,13 @@
  *   path=<alias>          URL alias, e.g. path=/v2/guides/special-collections
  *
  * Written for someone who has never used an archive: what Special
- * Collections is, how a collection is described (catalog record, finding
- * aid, box, folder, item), the path through Manuscripts, University
- * Archives and Oral History, how to request and visit, and the do's and
+ * Collections offers first (see an item in the Reading Room, or order a
+ * digital copy, as a decision tree), then how a collection is described
+ * (catalog record, finding aid, box, folder, item), the path through
+ * Manuscripts, University Archives and Oral History, and the do's and
  * don'ts of asking Special Collections a question through Ask Us. Service
- * details come from lib.lsu.edu/special, /findingaids, /oralhistory and the
- * Special Collections Ask Us form (October 2026).
+ * details come from lib.lsu.edu/special, /findingaids, /oralhistory, /visitsc
+ * (duplication) and the Special Collections Ask Us form (October 2026).
  *
  * Creates:
  * - Resources for the Special Collections tools (found by link first, so
@@ -174,19 +175,84 @@ $section = function (string $heading, array $blocks, string $theme = 'light') us
 
 // Sections. ----------------------------------------------------------------
 
-$section('Start here', [
-  $text('What Special Collections is', <<<'HTML'
-<p>LSU Libraries Special Collections keeps rare books, manuscripts, university records, oral histories and other materials that exist nowhere else. It's in Hill Memorial Library on the LSU Quad (95 Fieldhouse Dr., Baton Rouge), and its Reading Room is open to the LSU community and to researchers from anywhere.</p>
-<p>Using it is different from borrowing a library book. Nothing leaves the building, most of it isn't on a shelf you can browse, and staff bring it to you. This guide walks you through it from the first search to the Reading Room table.</p>
+// The decision tree is a nested bulleted list: _guide.scss draws any list
+// with a list inside it as a tree, so editors can change it in WYSIWYG.
+$section('Requesting and visiting', [
+  $text('Two ways to use an item', <<<'HTML'
+<p>Special Collections materials don't circulate, so there are two ways to use one: see it in the Reading Room, or order a digital copy. Both start the same way, in the library catalog.</p>
+<ul>
+<li><strong>Find the item in the catalog and choose "Request Item"</strong>, then sign in to your Special Collections account.
+<ul>
+<li><strong>Option 1: See it in person</strong>
+<ul>
+<li>Fill in the request form. Add the box or volume number from the finding aid.</li>
+<li>Book a Reading Room appointment in your account (recommended, not required).</li>
+<li>Visit Hill Memorial Library. Staff bring the materials to your table.</li>
+</ul>
+</li>
+<li><strong>Option 2: Get a digital copy</strong>
+<ul>
+<li>Choose "Switch to Duplication Order Form" at the top right of the request form.</li>
+<li>Say exactly what to copy: the box, folder and pages.</li>
+<li>Staff review the order and email you an invoice with payment instructions.</li>
+<li>Pay the invoice, and the copies are sent to you.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 HTML),
-  $text(NULL, '<p><strong>Special Collections materials don\'t circulate.</strong> You read them in the Reading Room at Hill Memorial Library, so plan your research around a visit, or around copies you order.</p>', 'callout'),
-  $text('The short version', <<<'HTML'
+  $text(NULL, '<p><strong>Not sure where to start?</strong> Box and folder numbers come from the collection\'s finding aid, explained further down this guide. If you can\'t tell what to request, ask Special Collections through Ask Us first.</p>', 'callout'),
+  $text('Option 1: See it in the Reading Room', <<<'HTML'
 <ol>
-<li><strong>Find a collection</strong> in the library catalog, or on one of our collection pages.</li>
-<li><strong>Read its finding aid</strong> to see what's in it and which box holds what you need.</li>
-<li><strong>Create a Special Collections account</strong> and request the boxes.</li>
-<li><strong>Visit the Reading Room</strong>, where staff bring the boxes to your table.</li>
+<li><strong>Create a Special Collections account.</strong> Everyone who uses the materials needs one. First-time users are taken to a registration form.</li>
+<li><strong>Search the catalog</strong> with the library set to Special Collections.</li>
+<li><strong>Open the record and choose "Request Item"</strong> at the bottom of the page. It's added to your account.</li>
+<li><strong>Make one request for each box, volume or serial.</strong> Add the box number from the finding aid.</li>
+<li><strong>Request before you arrive.</strong> You can have up to 10 requests open. Mark the rest "Keep for My Review" and submit them once the first ones are filled.</li>
+<li><strong>Book an appointment.</strong> Appointments aren't required, but they're recommended. Book one through your Special Collections account, and check the Reading Room hours before you come.</li>
 </ol>
+HTML),
+  $text('Option 2: Order a digital copy', <<<'HTML'
+<p>Special Collections makes copies for a fee, for personal or research use. Every copy needs a staff member's approval, and staff can refuse or change an order because of an item's format, condition or restrictions.</p>
+<ol>
+<li><strong>Find the catalog record</strong> for each book, manuscript collection or other item you want copied.</li>
+<li><strong>Choose "Request Item"</strong> under the record's Available tab, and sign in to your Special Collections account.</li>
+<li><strong>Choose "Switch to Duplication Order Form"</strong> at the top right of the New Request form.</li>
+<li><strong>Describe exactly what to copy.</strong> For manuscript collections, give the box and folder numbers from the finding aid.</li>
+<li><strong>Wait for the invoice.</strong> Staff review the order and email an invoice with payment instructions, usually within 24 to 48 hours (not counting weekends and holidays).</li>
+</ol>
+<p>Copies are for personal research and scholarly use. Providing a copy doesn't give permission to publish it, and LSU doesn't own the copyright to most of its materials.</p>
+HTML),
+  $text('Timing', <<<'HTML'
+<ul>
+<li>Materials requested during a visit usually reach the Reading Room in 5 to 15 minutes.</li>
+<li>Some collections are stored off campus and take 3 to 7 days to retrieve. Request those well ahead and ask staff for help.</li>
+<li>Duplication orders aren't taken by phone. Place them through your Special Collections account.</li>
+</ul>
+HTML),
+  $accordion('In the Reading Room', [
+    ['What to bring, and what to leave in a locker', '<p>You can bring pencils, paper or notebooks, laptops, tablets, cameras, chargers and phones. Leave food, drinks, pens, bags, cases, coats and umbrellas in a locker.</p>'],
+    ['Handling the materials', <<<'HTML'
+<ul>
+<li>Make sure your hands are clean and dry.</li>
+<li>Use pencil only.</li>
+<li>Keep materials flat on the table, and use the book cradles and weights provided.</li>
+<li>Use one box or volume at a time, and keep folders in the order you found them.</li>
+<li>Don't mark, fold, trace or lean on anything, or write with materials under your paper.</li>
+<li>Return everything to the desk when you're done. Staff check belongings as you leave.</li>
+</ul>
+HTML],
+    ['Taking photographs', '<p>You can photograph archival and manuscript materials, without flash, after you complete a Camera User Policy form. Ask at the desk.</p>'],
+    ['Items on exhibit', '<p>Items on exhibit can\'t be used unless special approval was arranged with staff in advance.</p>'],
+  ]),
+  $list(NULL, ['account', 'catalog']),
+]);
+
+$section('What Special Collections is', [
+  $text(NULL, <<<'HTML'
+<p>LSU Libraries Special Collections keeps rare books, manuscripts, university records, oral histories and other materials that exist nowhere else. It's in Hill Memorial Library on the LSU Quad (95 Fieldhouse Dr., Baton Rouge), and its Reading Room is open to the LSU community and to researchers from anywhere.</p>
+<p>Using it is different from borrowing a library book. Nothing leaves the building, most of it isn't on a shelf you can browse, and staff bring it to you. The rest of this guide explains how collections are described, so you can find exactly what to request.</p>
 HTML),
 ]);
 
@@ -272,46 +338,10 @@ HTML, ['oralhistory', 'ldl']],
   ]),
 ]);
 
-$section('Requesting and visiting', [
-  $text('Request your materials', <<<'HTML'
-<ol>
-<li><strong>Create a Special Collections account.</strong> Everyone who uses the materials needs one. First-time users are taken to a registration form.</li>
-<li><strong>Search the catalog</strong> with the library set to Special Collections.</li>
-<li><strong>Open the record and choose "Request Item"</strong> at the bottom of the page. It's added to your account.</li>
-<li><strong>Make one request for each box, volume or serial.</strong> Add the box number from the finding aid.</li>
-<li><strong>Request before you arrive.</strong> You can have up to 10 requests open. Mark the rest "Keep for My Review" and submit them once the first ones are filled.</li>
-</ol>
-HTML),
-  $text('Timing', <<<'HTML'
-<ul>
-<li>Materials requested during a visit usually reach the Reading Room in 5 to 15 minutes.</li>
-<li>Some collections are stored off campus and take 3 to 7 days to retrieve. Request those well ahead and ask staff for help.</li>
-<li>Appointments aren't required, but they're recommended. Book one through your Special Collections account.</li>
-<li>Check the Reading Room hours before you come.</li>
-</ul>
-HTML),
-  $accordion('In the Reading Room', [
-    ['What to bring, and what to leave in a locker', '<p>You can bring pencils, paper or notebooks, laptops, tablets, cameras, chargers and phones. Leave food, drinks, pens, bags, cases, coats and umbrellas in a locker.</p>'],
-    ['Handling the materials', <<<'HTML'
-<ul>
-<li>Make sure your hands are clean and dry.</li>
-<li>Use pencil only.</li>
-<li>Keep materials flat on the table, and use the book cradles and weights provided.</li>
-<li>Use one box or volume at a time, and keep folders in the order you found them.</li>
-<li>Don't mark, fold, trace or lean on anything, or write with materials under your paper.</li>
-<li>Return everything to the desk when you're done. Staff check belongings as you leave.</li>
-</ul>
-HTML],
-    ['Taking photographs', '<p>You can photograph archival and manuscript materials, without flash, after you complete a Camera User Policy form. Ask at the desk.</p>'],
-    ['Copies and items on exhibit', '<p>To order copies (duplication), use your Special Collections account. Items on exhibit can\'t be used unless special approval was arranged with staff in advance.</p>'],
-  ]),
-  $list(NULL, ['account', 'catalog']),
-]);
-
 $section('Asking Special Collections a question', [
   $text('When to use Ask Us', <<<'HTML'
 <p>Use the Special Collections form on Ask Us when you aren't sure which collection or box you need, can't find a finding aid, have a question about access or copies, or want help planning a visit. Your question goes straight to Special Collections staff.</p>
-<p>Ask Us is for questions, not for retrieving materials. To have a box brought to the Reading Room, request it through your Special Collections account.</p>
+<p>Ask Us is for questions, not for requests. To have a box brought to the Reading Room or to order a copy, use "Request Item" and your Special Collections account.</p>
 HTML),
   $text('Filling in the form', <<<'HTML'
 <h4>Affiliation</h4>
@@ -334,7 +364,7 @@ HTML),
 HTML),
   $text('Don\'t', <<<'HTML'
 <ul>
-<li><strong>Don't use Ask Us to place a retrieval request.</strong> Use "Request Item" in the catalog, through your Special Collections account.</li>
+<li><strong>Don't use Ask Us to place a retrieval request or order copies.</strong> Both go through "Request Item" in the catalog and your Special Collections account.</li>
 <li><strong>Don't send box or folder numbers you haven't checked</strong> in a finding aid, such as numbers from an AI tool or an old footnote.</li>
 <li><strong>Don't ask for "everything about" a broad topic.</strong> Narrow it to a person, place, event or date range.</li>
 <li><strong>Don't assume something is online.</strong> Most materials haven't been digitized; ask whether they have.</li>
@@ -371,7 +401,7 @@ if (isset($node_fields['field_modular_type'])) {
   $values['field_modular_type'] = 'guide';
 }
 if (isset($node_fields['field_intro'])) {
-  $values['field_intro'] = $html('<p>New to archives? Learn how LSU Special Collections is organized, what a finding aid is, how to request materials and visit the Reading Room, and how to ask us a question that gets a fast answer.</p>');
+  $values['field_intro'] = $html('<p>New to archives? Choose how to use an item (see it in the Reading Room, or order a digital copy), then learn what a finding aid is, how collections are organized, and how to ask us a question that gets a fast answer.</p>');
 }
 
 // Owner: Kyle Tanglao's Staff node.

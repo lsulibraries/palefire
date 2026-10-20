@@ -308,6 +308,73 @@ html[data-pf-mode="guide"] .pf-section__title {
     border-inline-start: 0;
   }
 
+  // A bulleted list with a list inside it is a decision tree (the Special
+  // Collections guide's "Two ways to use an item"): the outer item is the
+  // root, and every nested item hangs off a hairline branch, like a file
+  // tree in a README. Editors make one in WYSIWYG by indenting bullets, and
+  // it stays a real nested list, so screen readers announce each level.
+  // Bullets are hidden the Safari-safe way, as for the steps above. Without
+  // :has() it is an ordinary nested list.
+  ul:has(ul):not(li ul) {
+    --pf-tree-indent: 1.5rem;
+    --pf-tree-pad: 0.3rem;
+    // Where a branch meets its item: the middle of the item's first line.
+    --pf-tree-knee: calc(var(--pf-tree-pad) + 0.8em);
+
+    padding: 1rem 1.25rem;
+    background: var(--pf-guide-surface);
+    border: 1px solid var(--pf-guide-rule);
+
+    ul {
+      margin: 0.35rem 0 0;
+      padding: 0;
+    }
+
+    li {
+      margin: 0;
+      list-style-type: "\200B";
+
+      &::marker {
+        content: "";
+      }
+    }
+
+    strong {
+      color: var(--bs-emphasis-color);
+    }
+
+    ul > li {
+      position: relative;
+      padding-block: var(--pf-tree-pad);
+      padding-inline-start: var(--pf-tree-indent);
+
+      // The trunk, down the side of every sibling but the last...
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0.4rem;
+        border-inline-start: 1px solid var(--pf-guide-rule);
+      }
+
+      // ...and the branch across to each item.
+      &::after {
+        content: "";
+        position: absolute;
+        top: var(--pf-tree-knee);
+        inset-inline-start: 0.4rem;
+        width: calc(var(--pf-tree-indent) - 0.65rem);
+        border-top: 1px solid var(--pf-guide-rule);
+      }
+
+      // The last sibling's trunk stops at its branch: └ not ├.
+      &:last-child::before {
+        bottom: auto;
+        height: var(--pf-tree-knee);
+      }
+    }
+  }
+
   li + li {
     margin-top: 0.4rem;
   }
