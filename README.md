@@ -697,6 +697,20 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: the events and blog band steps back (2026-10-20)
+
+With two accordions of full-colour tiles at the same height, nothing led:
+the events and post competed with the exhibitions, and LibCal's mixed
+images (posters, photos) clashed with the chosen exhibition photos. The
+second band is now 3 shares of the height to the first's 5 (at least
+8–9.5rem against 11–15rem), its titles are one size down on one line, and
+opening a tile shows only its link prompt. Its pictures rest in greyscale,
+a little darker, and come back to full colour as a tile opens (switched,
+not faded, with reduced motion). On narrow panels (phones, no hover)
+they stay in colour.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: sign-in button in the title row (2026-10-20)
 
 The "Sign in to request materials" button moved from under the tiles to

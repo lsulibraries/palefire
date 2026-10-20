@@ -36,28 +36,55 @@
   border-top: 0;
 }
 
+// The second band is the lesser one: 3 shares of the height to the first's
+// 5, so the exhibitions lead and the events and post read as news under
+// them.
 @include media-breakpoint-up($pf-snap-breakpoint) {
   .pf-landing__features {
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 5fr) minmax(0, 3fr);
   }
 }
 
-// Side by side, each accordion is at least 11rem to 15rem tall (22% of the
-// window's height), taller than one band needed alone, so an open tile's
-// extra line fits (on short windows the panel runs past the fold instead).
+// Side by side, the first accordion is at least 11rem to 15rem tall (22% of
+// the window's height), so an open tile's extra line fits (on short windows
+// the panel runs past the fold instead); the second, 8rem to 9.5rem (14%).
 // Size containment: what a tile shows when it opens never changes the
-// band's height, so nothing below moves on hover. The second band's line
-// (a post's excerpt, an event's category and place) is one line, so a
-// two-line post title still fits with it at 1440x900.
+// band's height, so nothing below moves on hover.
+// The second band's tiles fit its height: a title one size down, on one
+// line, and opening shows only the link prompt (a post's excerpt, an
+// event's category and place stay out). Its pictures rest in greyscale,
+// a little darker, and come back to full colour as a tile opens, so the
+// events' mixed images (posters, photos) read as one set under the
+// exhibitions' chosen ones. Narrow panels (touch, no hover) keep colour.
 @container pf-features (min-width: 36rem) {
   .pf-landing__features > .pf-exhibits {
     contain: size;
     min-height: clamp(11rem, 22svh, 15rem);
   }
 
-  .pf-exhibits--updates .pf-exhibit__more p {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
+  .pf-landing__features > .pf-exhibits--updates {
+    min-height: clamp(8rem, 14svh, 9.5rem);
+  }
+
+  .pf-exhibits--updates {
+    .pf-exhibit__title {
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      font-size: clamp(1.125rem, 1rem + .3vw, 1.25rem);
+    }
+
+    .pf-exhibit__more p {
+      display: none;
+    }
+
+    .pf-exhibit__media {
+      filter: grayscale(1) brightness(.8);
+      transition: filter .9s var(--pf-exhibit-ease, ease);
+    }
+
+    .pf-exhibit:is(:hover, :focus-within) .pf-exhibit__media {
+      filter: none;
+    }
   }
 }
 
@@ -936,6 +963,7 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-exhibit,
   .pf-exhibit__frame,
+  .pf-exhibit__media,
   .pf-exhibit__media::after,
   .pf-exhibit__more,
   .pf-landing__bar {
@@ -950,6 +978,7 @@
 html.pf-a11y-motion {
   .pf-exhibit,
   .pf-exhibit__frame,
+  .pf-exhibit__media,
   .pf-exhibit__media::after,
   .pf-exhibit__more,
   .pf-landing__bar {
