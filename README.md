@@ -605,6 +605,21 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Section heading motion: not on guides (2026-10-19)
+
+The H2 slide-in (`js/section-reveal.js`) now runs only on the Modular
+content type's other modes. On guides (`<html data-pf-mode="guide">`, set
+server-side), the script leaves headings alone, with no `.pf-reveal` and
+nothing hidden, so they keep their own colour change (`_guide.scss`) and
+nothing else. The guide-specific transition rule added for the slide is
+gone, and the shared `.pf-reveal` transition drops the colour part it
+carried for guides. The Events carousel reveal is unchanged.
+
+`node --check` passes, and the compiled CSS has no guide `.pf-reveal` rule
+left.
+
+Files: `js/section-reveal.js`, `_modular.scss`.
+
 ### Section headings slide in; the Events carousel reveals in sequence (2026-10-19)
 
 A new `js/section-reveal.js` (library `palefire/section-reveal`, attached

@@ -4,7 +4,8 @@
  * again once they have left it, so they replay on the way back (as the
  * Collections tiles do, js/tile-reveal.js).
  * - Section headings (h2: .pf-section__title, and the landing hero's map
- *   heading) slide in from the left as they fade in.
+ *   heading) slide in from the left as they fade in. Not on guides
+ *   (<html data-pf-mode="guide">): their headings stay still.
  * - The Events carousel (libcal_gantt_carousel, inside .pf-events-carousel):
  *   once a fifth of it is in view, its day strip, then each day's label,
  *   date, weather, hours and image card fade in and rise into place one
@@ -34,7 +35,8 @@
         return;
       }
 
-      const headings = once('pf-section-reveal', HEADINGS, context);
+      const guide = document.documentElement.dataset.pfMode === 'guide';
+      const headings = guide ? [] : once('pf-section-reveal', HEADINGS, context);
       if (headings.length) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
