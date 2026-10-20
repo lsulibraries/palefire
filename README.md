@@ -605,6 +605,23 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Collections tiles: no flicker on hover (2026-10-19)
+
+Hovering a tile showcase card zooms its image (`scale(1.04)`) and turns
+its label gold. As the zoom began, Chrome moved the image onto a
+compositing layer of its own, and moved it back once the zoom had ended,
+repainting the label and title over it each time. The text's
+anti-aliasing flipped at both ends of every hover, which read as a
+flicker. The image now keeps its own layer (`will-change: transform`,
+only when motion is allowed), so nothing is repainted mid-hover. The
+label's colour change is unchanged.
+
+Checked on /v2/special: the rule applies to the three tile images (the
+fourth tile has no image). The flicker itself can't be seen in the
+Browser pane, so please confirm on the site.
+
+File: `_tile-showcase.scss`.
+
 ### Section heading motion: not on guides (2026-10-19)
 
 The H2 slide-in (`js/section-reveal.js`) now runs only on the Modular

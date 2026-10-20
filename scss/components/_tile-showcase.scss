@@ -144,8 +144,13 @@ $pf-tile-break-two: 32rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  // The image keeps a layer of its own (will-change). Without it Chrome
+  // moved it onto one as the hover zoom began and off again as it ended,
+  // repainting the label and title over it each time: the text flickered
+  // (its anti-aliasing flipped) at both ends of every hover.
   .pf-tile__media img {
     transition: transform 0.6s ease-out;
+    will-change: transform;
   }
 
   .pf-tile__label {
