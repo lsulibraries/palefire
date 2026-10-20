@@ -175,32 +175,12 @@ $section = function (string $heading, array $blocks, string $theme = 'light') us
 
 // Sections. ----------------------------------------------------------------
 
-// The decision tree is a nested bulleted list: _guide.scss draws any list
-// with a list inside it as a tree, so editors can change it in WYSIWYG.
+// "[request-paths]" on a line of its own draws the two request paths as
+// subway lines (palefire_preprocess_paragraph__guide_text()).
 $section('Requesting and visiting', [
   $text('Two ways to use an item', <<<'HTML'
 <p>Special Collections materials don't circulate, so there are two ways to use one: see it in the Reading Room, or order a digital copy. Both start the same way, in the library catalog.</p>
-<ul>
-<li><strong>Find the item in the catalog and choose "Request Item"</strong>, then sign in to your Special Collections account.
-<ul>
-<li><strong>Option 1: See it in person</strong>
-<ul>
-<li>Fill in the request form. Add the box or volume number from the finding aid.</li>
-<li>Book a Reading Room appointment in your account (recommended, not required).</li>
-<li>Visit Hill Memorial Library. Staff bring the materials to your table.</li>
-</ul>
-</li>
-<li><strong>Option 2: Get a digital copy</strong>
-<ul>
-<li>Choose "Switch to Duplication Order Form" at the top right of the request form.</li>
-<li>Say exactly what to copy: the box, folder and pages.</li>
-<li>Staff review the order and email you an invoice with payment instructions.</li>
-<li>Pay the invoice, and the copies are sent to you.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<p>[request-paths]</p>
 HTML),
   $text(NULL, '<p><strong>Not sure where to start?</strong> Box and folder numbers come from the collection\'s finding aid, explained further down this guide. If you can\'t tell what to request, ask Special Collections through Ask Us first.</p>', 'callout'),
   $text('Option 1: See it in the Reading Room', <<<'HTML'

@@ -438,6 +438,185 @@ html[data-pf-mode="guide"] .pf-section__title {
   border-inline-start: 3px solid var(--pf-guide-accent);
 }
 
+// Request paths (includes/guide-request-paths.html.twig) -------------------
+// Two "subway lines" of stops. Mobile first: each line runs down the left,
+// through the middle of every stop's icon; from 34rem of block width the
+// stops sit in a row and the line runs across. The icon's disc is the page
+// colour, so the line seems to pass behind it.
+.pf-paths {
+  --pf-paths-dot: 2.75rem;
+
+  display: grid;
+  gap: 1.75rem;
+  max-width: var(--pf-guide-prose);
+  padding: 1.25rem;
+  border: 1px solid var(--pf-guide-rule);
+  container: pf-paths / inline-size;
+}
+
+.pf-paths__name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font: 700 0.6875rem var(--pf-guide-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-paths__name-icon svg {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  fill: var(--pf-guide-accent);
+}
+
+// list-style-type "\200B", not none, keeps Safari's list semantics (as for
+// the guide's numbered steps).
+.pf-paths__stops {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.pf-paths__stop {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--pf-paths-dot) minmax(0, 1fr);
+  column-gap: 0.875rem;
+  align-items: center;
+  list-style-type: "\200B";
+
+  &::marker {
+    content: "";
+  }
+
+  // The line, from this stop's icon to the next one's.
+  &:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--pf-paths-dot) / 2);
+    bottom: calc(-1rem - var(--pf-paths-dot) / 2);
+    inset-inline-start: calc(var(--pf-paths-dot) / 2);
+    border-inline-start: 1px solid var(--pf-guide-rule);
+    transform-origin: top;
+  }
+}
+
+.pf-paths__icon {
+  position: relative; // above the line
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: var(--pf-paths-dot);
+  height: var(--pf-paths-dot);
+  color: var(--pf-guide-accent);
+  background: var(--bs-body-bg);
+  border: 1px solid var(--pf-guide-rule);
+  border-radius: 50%;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: currentColor;
+  }
+}
+
+.pf-paths__label {
+  align-self: end;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-paths__note {
+  align-self: start;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--pf-guide-muted);
+}
+
+// Wide enough for four stops in a row: icon on top, words centred under it.
+@container pf-paths (min-width: 34rem) {
+  .pf-paths__stops {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .pf-paths__stop {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start; // a neighbour's two-line label doesn't spread these
+    align-items: start;
+    justify-items: center;
+    row-gap: 0.25rem;
+    text-align: center;
+
+    &:not(:last-child)::before {
+      top: calc(var(--pf-paths-dot) / 2);
+      bottom: auto;
+      inset-inline-start: 50%;
+      width: calc(100% + 0.75rem);
+      border-inline-start: 0;
+      border-top: 1px solid var(--pf-guide-rule);
+      transform-origin: left;
+    }
+
+    [dir="rtl"] &:not(:last-child)::before {
+      transform-origin: right;
+    }
+  }
+
+  .pf-paths__icon {
+    grid-row: auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .pf-paths__label,
+  .pf-paths__note {
+    align-self: auto;
+  }
+}
+
+// As a line scrolls into view, its stops fade up one after another and the
+// line draws between them. Scroll-driven, so no script; browsers without
+// it (and reduced motion) just show the diagram.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pf-paths__stop {
+      animation: pf-paths-stop linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 60%;
+
+      &:not(:last-child)::before {
+        animation: pf-paths-line linear both;
+        animation-timeline: view();
+        animation-range: entry 30% entry 90%;
+      }
+
+      @for $i from 2 through 4 {
+        &:nth-child(#{$i}) {
+          animation-range: entry #{10% + ($i - 1) * 8%} entry #{60% + ($i - 1) * 8%};
+        }
+      }
+    }
+  }
+}
+
+@keyframes pf-paths-stop {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes pf-paths-line {
+  from {
+    transform: scale(0);
+  }
+}
+
 // Resources (node--resource--guide-item.html.twig) -------------------------
 
 .pf-resources {

@@ -607,6 +607,34 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Special Collections guide: request paths as subway lines (2026-10-20)
+
+The tree at the top of the Special Collections guide was hard to scan, so
+it's now a diagram: two "subway lines", See it in person and Get a digital
+copy, each four stops with a Font Awesome Pro duotone icon, a short label
+and a note (Request Item, then box number, book a visit, read it at Hill;
+or duplication form, invoice, copies sent). Four across from 34rem of
+block width, a vertical line below that (phones). As a line scrolls into
+view its stops fade up in turn and the line draws between them
+(scroll-driven CSS, no script; skipped under reduced motion and in
+browsers without `animation-timeline`). Each line is an `<ol>` named by
+its heading; icons are `aria-hidden`.
+
+To place it, a guide text block has a paragraph that is only
+`[request-paths]`. `palefire_preprocess_paragraph__guide_text()` takes the
+marker out and the block renders `includes/guide-request-paths.html.twig`
+after its text. The labels live in that include, not in the editor. The
+nested-list tree style stays for other guides.
+
+The page on production (unpublished) needs the change too: edit the "Two
+ways to use an item" block, replace the bulleted tree with a paragraph
+that says `[request-paths]`, and save. Or delete it and re-run the script.
+
+Files: `palefire.theme`, `templates/paragraphs/paragraph--guide-text.html.twig`,
+`templates/includes/guide-request-paths.html.twig` (new),
+`scss/components/_guide.scss`, `css/style.css`,
+`scripts/palefire_guide_special_collections.php`.
+
 ### Special Collections guide: decision tree first (2026-10-20)
 
 "Requesting and visiting" is now the first section of the How to Use
@@ -3207,8 +3235,8 @@ help.
 
 `scripts/palefire_guide_special_collections.php` (2026-10-20) builds a
 beginner's guide to Special Collections, owned by Kyle Tanglao. Sections:
-Requesting and visiting (a decision tree, then Reading Room and digital
-copy steps), What Special Collections is, How a collection is described,
+Requesting and visiting (the request-paths diagram, then Reading Room and
+digital copy steps), What Special Collections is, How a collection is described,
 What is a finding aid?, Finding your way by collection type (an accordion:
 Manuscripts, University Archives, Oral History), Asking Special
 Collections a question (Ask Us form fields, Do, Don't, an example), and
@@ -3245,6 +3273,9 @@ Get help.
 * Add Resources first (Content > Add content > Resource), then pick them
   in a Resource list by title. Paste the plain address and tick "Requires
   LSU login" rather than pasting a libezp link.
+* A paragraph that is only `[request-paths]` draws the Special Collections
+  request diagram (two subway lines) after the block's text. Its labels
+  are in `templates/includes/guide-request-paths.html.twig`.
 * A bulleted list with a list inside it is drawn as a decision tree
   (indent bullets with Tab in WYSIWYG). Keep plain nested lists out of
   guides, or they get the tree look too.

@@ -11,6 +11,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
@@ -856,6 +857,27 @@ function palefire_preprocess_paragraph__resource_list(array &$variables): void {
  */
 function palefire_preprocess_paragraph__accordion_item(array &$variables): void {
   $variables['resources'] = _palefire_guide_resources($variables['paragraph'], 'field_resources', $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--guide-text.
+ *
+ * request_paths: TRUE when the text has a paragraph that is only
+ * "[request-paths]". The marker is taken out of the text, and the template
+ * draws the Special Collections request diagram (guide-request-paths.html.twig)
+ * after it. A marker anywhere else in a sentence is left as typed.
+ */
+function palefire_preprocess_paragraph__guide_text(array &$variables): void {
+  $variables['request_paths'] = FALSE;
+  $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
+  foreach (Element::children($variables['content']['field_block_body'] ?? []) as $delta) {
+    $item = &$variables['content']['field_block_body'][$delta];
+    if (isset($item['#text']) && preg_match($marker, (string) $item['#text'])) {
+      $item['#text'] = preg_replace($marker, '', (string) $item['#text']);
+      $variables['request_paths'] = TRUE;
+    }
+    unset($item);
+  }
 }
 
 /**

@@ -8,6 +8,10 @@
  *
  * Inside a block that has a heading, use Heading 4 in the editor: every h3
  * in a guide section becomes a TOC sub-link.
+ *
+ * - request_paths: the text had a "[request-paths]" paragraph
+ *   (palefire_preprocess_paragraph__guide_text()); the Special Collections
+ *   request diagram follows the text.
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -27,4 +31,7 @@
   <div class="pf-guide-prose">
     {{ content.field_block_body }}
   </div>
+  {% if request_paths %}
+    {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id() } only %}
+  {% endif %}
 </div>
