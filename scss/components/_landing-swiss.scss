@@ -94,6 +94,15 @@
   border-radius: 0;
 }
 
+// The Search button's text and arrow in the title's colour, the same as
+// the TOC's current item (a reading swatch's title colour where it has one),
+// so the eye finds the action. Hover keeps its tint and the arrow's nudge.
+.pf-landing__submit,
+.pf-landing__submit:hover,
+.pf-landing__submit:focus-visible {
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
 .pf-landing__submit:focus-visible {
   outline-color: var(--pf-landing-accent);
 }

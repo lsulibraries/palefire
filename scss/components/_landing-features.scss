@@ -625,13 +625,13 @@
 @container pf-features (min-width: 36rem) {
   // Side by side: a band that fills the height the panel has left (its
   // grid row), from 8rem to 13rem (17% of the window's height) at least, so
-  // it holds its shape where the panel isn't full screen, to 32rem at most
-  // on very tall windows.
+  // it holds its shape where the panel isn't full screen. No cap: on very
+  // tall windows (a 32rem cap) it stopped short and left a gap above the
+  // bottom row.
   .pf-exhibits {
     flex-direction: row;
     height: 100%;
     min-height: clamp(8rem, 17svh, 13rem);
-    max-height: 32rem;
   }
 
   // The pace: a soft ease-in-out (--pf-exhibit-ease) over about a second,

@@ -605,6 +605,44 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: tiles fill tall screens, gold Search, tiles from Modular pages, several blog categories (2026-10-20)
+
+- **Tiles fill the panel:** the tile band had a 32rem cap, so on very
+  tall windows it stopped short and left a gap over the bottom row (728px
+  at 3000×1875). The cap is gone; the band takes the row's height. Gap
+  now 20px, the same as on laptops (1333×833 and 1024×768 unchanged).
+- **Search button:** its text and arrow are in the title's colour, the
+  same as the TOC's current item (`var(--pf-g-title, var(--pf-toc-active))`,
+  242/220/155 on the hero), so the action stands out.
+- **Tiles from Modular pages:** a new Hero tile paragraph (one per tile:
+  a Modular page, an optional label, an optional dates line) and the
+  Landing hero's Tiles field (up to three). Each tile shows the page's
+  title, its intro as the line that opens, the background poster of the
+  page's first landing as the image (cropped to
+  `tile_showcase_landscape_lg`, lazy, size set), and links to the page
+  ("Explore"). With no tiles the placeholders stay.
+  `_palefire_hero_tiles()`, `_palefire_landing_poster()`.
+- **Several blog categories:** "Latest from the blog" now takes any number
+  of Article Categories (`field_landing_blog_category`, checkboxes) and
+  shows the newest published article in any of them; its category line is
+  the article's first matching category.
+
+Setup (production, once): `drush php:script
+themes/custom/palefire/scripts/palefire_landing_hero_tiles_setup.php`, then
+`drush cr`. It creates the Hero tile type and its fields, adds Tiles and
+Blog categories to the Landing hero (the vocabulary is read from
+Article's own `field_article_category`), and opens an existing
+single-value Blog category field up to any number. Safe to re-run.
+
+Checked on /v2/special in headless Edge with the local CSS: the tile
+heights and button colour above. Not checked: the PHP and Twig (no PHP
+here, and the fields don't exist until the script runs), so look at the
+hero after the script with a tile or two and a category set.
+
+Files: `_landing-features.scss`, `_landing-swiss.scss`, `palefire.theme`,
+`templates/includes/landing.html.twig`,
+`scripts/palefire_landing_hero_tiles_setup.php`.
+
 ### Landing hero: the map holds perfectly still through the reveal (2026-10-20)
 
 The curtain reveal moved the map with a scroll-driven transform, which

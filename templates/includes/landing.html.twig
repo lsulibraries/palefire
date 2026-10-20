@@ -197,12 +197,13 @@
          hover or focus (an accordion across: the one in use widens, shows
          more of its picture and a line more about it), then Next event |
          Latest blog post | Special Collections account.
-         - exhibitions: PLACEHOLDERS until there is a source for them. Same
-           shape a real source would give: label, title, start/end (ISO
+         - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
+           a Modular page: _palefire_hero_tiles()), when it has any; else
+           the PLACEHOLDERS below. Shape: label, title, start/end (ISO
            dates) and dates (shown), or permanent, or meta (a line in place
            of dates); more (the line shown when the tile opens); url and cta
-           (empty for now, so the tile is not a link); images (urls, empty
-           for now: hatched frames stand in). More than one image
+           (the tile is a link only with a url); images (image render
+           arrays; none: hatched frames stand in). More than one image
            crossfades (exhibit-rotate.js), with a pause button.
          - hero_post: palefire_preprocess_paragraph__landing_hero(), the
            newest Article in the paragraph's "Blog category"; a placeholder
@@ -243,6 +244,9 @@
           frames: 1,
         },
       ] %}
+      {% if hero_tiles %}
+        {% set exhibitions = hero_tiles %}
+      {% endif %}
       {% set account_url = '' %}
       <div class="pf-landing__features">
         <ul class="pf-exhibits" aria-label="{{ 'Exhibitions and guides'|t }}">
@@ -253,7 +257,7 @@
                 {% for i in 1..count %}
                   <span class="pf-exhibit__frame{{ loop.first ? ' is-current' }}">
                     {% if ex.images %}
-                      <img src="{{ ex.images[loop.index0] }}" alt="" loading="lazy" decoding="async">
+                      {{ ex.images[loop.index0] }}
                     {% endif %}
                   </span>
                 {% endfor %}

@@ -9,6 +9,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\media\MediaInterface;
@@ -272,6 +273,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
+    $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -290,35 +292,44 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
 }
 
 /**
- * The newest published Article in the hero's blog category, or NULL.
+ * The newest published Article in any of the hero's blog categories, or NULL.
  *
- * The category is the Landing hero's optional "Blog category" field
+ * The categories are the Landing hero's optional "Blog categories" field
  * (field_landing_blog_category, a taxonomy reference to Article Category,
- * added by hand in the UI). Without the field, or with it empty, this is
- * NULL and the lead shows a placeholder row. Newest by Article Date, then by
- * creation. The list's cache tag (node_list:article) refreshes the row when
- * an article is published or changed.
+ * any number of terms; scripts/palefire_landing_hero_tiles_setup.php adds it
+ * or opens up a single-value one). An article matches when its own Article
+ * Category (field_article_category) has any of them. Without the field, or
+ * with it empty, this is NULL and the lead shows a placeholder row. Newest
+ * by Article Date, then by creation. The list's cache tag
+ * (node_list:article) refreshes the row when an article is published or
+ * changed.
  *
  * Returns ['title', 'url', 'date', 'datetime', 'category', 'excerpt',
- * 'image'], image a render array (decorative, lazy) or NULL.
+ * 'image'], image a render array (decorative, lazy) or NULL. category is
+ * the article's first category among the hero's.
  */
 function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): ?array {
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $cache->addCacheTags(['node_list:article']);
   $post = NULL;
 
-  if ($paragraph->hasField('field_landing_blog_category') && !$paragraph->get('field_landing_blog_category')->isEmpty()) {
-    $term = $paragraph->get('field_landing_blog_category')->entity;
+  $terms = [];
+  if ($paragraph->hasField('field_landing_blog_category')) {
+    foreach ($paragraph->get('field_landing_blog_category')->referencedEntities() as $term) {
+      $cache->addCacheableDependency($term);
+      $terms[$term->id()] = $term;
+    }
+  }
+  if ($terms) {
     // Both fields are on Article (Manage fields); without them the query
     // would fail, so the row just stays a placeholder.
     $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
-    if ($term && isset($storages['field_article_category'], $storages['field_article_date'])) {
-      $cache->addCacheableDependency($term);
+    if (isset($storages['field_article_category'], $storages['field_article_date'])) {
       $ids = \Drupal::entityQuery('node')
         ->accessCheck(TRUE)
         ->condition('type', 'article')
         ->condition('status', 1)
-        ->condition('field_article_category', $term->id())
+        ->condition('field_article_category', array_keys($terms), 'IN')
         ->sort('field_article_date', 'DESC')
         ->sort('created', 'DESC')
         ->range(0, 1)
@@ -349,6 +360,15 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
           $excerpt = rtrim(mb_substr($excerpt, 0, 180)) . '…';
         }
 
+        // The article's first category that the hero asks for.
+        $term = reset($terms);
+        foreach ($node->get('field_article_category') as $item) {
+          if (isset($terms[$item->target_id])) {
+            $term = $terms[$item->target_id];
+            break;
+          }
+        }
+
         $post = [
           'title' => $node->label(),
           'url' => $url->getGeneratedUrl(),
@@ -366,6 +386,111 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
 }
 
 /**
+ * The Landing hero's tiles from its Hero tile paragraphs, or [].
+ *
+ * field_hero_tiles (scripts/palefire_landing_hero_tiles_setup.php): up to
+ * three Hero tiles, each a Modular page with an optional label and line.
+ * Empty, or without the field, the template keeps its placeholder tiles.
+ * A tile whose page is missing or that the visitor can't view is left out.
+ *
+ * Each tile has the template's shape: label, title, meta (the line under
+ * the title), more (the page's intro as plain text, shown when the tile
+ * opens), url, cta, images (one render array, or none: hatched frame) and
+ * frames. The image is the background poster of the page's first landing
+ * (Bento search or Landing hero), decorative and lazy.
+ */
+function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables): array {
+  if (!$paragraph->hasField('field_hero_tiles')) {
+    return [];
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $repository = \Drupal::service('entity.repository');
+  $tiles = [];
+  foreach ($paragraph->get('field_hero_tiles')->referencedEntities() as $tile) {
+    if (!$tile instanceof ParagraphInterface || !$tile->hasField('field_hero_tile_page')) {
+      continue;
+    }
+    $cache->addCacheableDependency($tile);
+    $page = $tile->get('field_hero_tile_page')->entity;
+    if (!$page instanceof NodeInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($page);
+    $access = $page->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $page = $repository->getTranslationFromContext($page);
+    $url = $page->toUrl()->toString(TRUE);
+    $cache->addCacheableDependency($url);
+
+    $more = '';
+    if ($page->hasField('field_intro') && !$page->get('field_intro')->isEmpty()) {
+      $more = _palefire_plain_excerpt((string) $page->get('field_intro')->value, 200);
+    }
+    $image = _palefire_landing_poster($page, $cache);
+
+    $tiles[] = [
+      'label' => $tile->hasField('field_hero_tile_label') ? (string) $tile->get('field_hero_tile_label')->value : '',
+      'title' => $page->label(),
+      'meta' => $tile->hasField('field_hero_tile_when') ? (string) $tile->get('field_hero_tile_when')->value : '',
+      'more' => $more,
+      'url' => $url->getGeneratedUrl(),
+      'cta' => t('Explore'),
+      'images' => $image ? [$image] : [],
+      'frames' => 1,
+    ];
+  }
+  $cache->applyTo($variables);
+  return $tiles;
+}
+
+/**
+ * The background poster of a Modular page's first landing, or NULL.
+ *
+ * The first section (in field_scroll_section, then field_sections) that is
+ * a landing (PalefireHooks::LANDING_BUNDLES) with a poster. field_bg_poster
+ * may be a Media (image) reference or a plain image field. Cropped to the
+ * tiles' landscape style when it exists (tile_showcase_landscape_lg, 1280 x
+ * 800, from the Tile showcase setup), else the original file.
+ */
+function _palefire_landing_poster(NodeInterface $page, CacheableMetadata $cache): ?array {
+  foreach (PalefireHooks::SECTION_FIELDS as $field) {
+    if (!$page->hasField($field)) {
+      continue;
+    }
+    foreach ($page->get($field)->referencedEntities() as $section) {
+      if (!in_array($section->bundle(), PalefireHooks::LANDING_BUNDLES, TRUE)
+        || !$section->hasField('field_bg_poster') || $section->get('field_bg_poster')->isEmpty()) {
+        continue;
+      }
+      $cache->addCacheableDependency($section);
+      $image = $section->get('field_bg_poster')->first();
+      $target = $image->entity;
+      if ($target instanceof MediaInterface) {
+        $cache->addCacheableDependency($target);
+        $source = $target->getSource()->getConfiguration()['source_field'] ?? NULL;
+        if (!$source || !$target->hasField($source) || $target->get($source)->isEmpty()) {
+          return NULL;
+        }
+        $image = $target->get($source)->first();
+      }
+      return _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache);
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Plain text from HTML, whitespace collapsed, cut at $max with an ellipsis.
+ */
+function _palefire_plain_excerpt(string $html, int $max = 180): string {
+  $text = preg_replace('/\s+/u', ' ', trim(Html::decodeEntities(strip_tags($html))));
+  return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, $max)) . '…' : $text;
+}
+
+/**
  * An image field's first image as a decorative (alt="") lazy image.
  *
  * In the first of $styles that exists, else the original file. Article
@@ -375,7 +500,15 @@ function _palefire_field_image(NodeInterface $node, string $field, array $styles
   if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
     return NULL;
   }
-  $image = $node->get($field)->first();
+  return _palefire_image_build($node->get($field)->first(), $styles, $cache);
+}
+
+/**
+ * One image item as a decorative (alt="") lazy image with its size set.
+ *
+ * In the first of $styles that exists, else the original file.
+ */
+function _palefire_image_build(FieldItemInterface $image, array $styles, CacheableMetadata $cache): ?array {
   $file = $image->entity;
   if (!$file) {
     return NULL;
