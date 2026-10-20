@@ -8,9 +8,9 @@
  * between Swup visits. The visitor's choice is saved in localStorage per
  * page type ('1' hidden, '0' shown): landing pages keep their own
  * (palefire.tocCollapsed.landing), so showing the TOC on a landing doesn't
- * open it on every page. With no saved choice, landing pages
- * (<html data-pf-mode="landing">) start hidden, so the hero runs full
- * width, and every other page starts shown. It never opens or closes by
+ * open it on every page. With no saved choice, every page starts shown,
+ * landing pages too (they started hidden until 2026-10-20, so the hero ran
+ * full width). It never opens or closes by
  * itself while the visitor scrolls: that would reflow the content column
  * under them (layout shift). This replaces the landing pages' old
  * scroll-driven collapse.
@@ -58,8 +58,7 @@
     if (mode() === 'guide') {
       return false;
     }
-    const saved = stored();
-    return saved !== null ? saved : mode() === 'landing';
+    return stored() === true;
   }
 
   // Full page load: before the first paint.

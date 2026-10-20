@@ -44,6 +44,12 @@
  */
 #}
 {% set modular_toc = is_modular_page ? page.modular_sidebar|render : '' %}
+{# A page whose only section is its landing: palefire_modular's TOC block
+   is empty, so the landing's Home and Map links come from landing_toc
+   (PalefireHooks::preprocessPage()). #}
+{% if landing_toc and modular_toc|striptags|trim is empty %}
+  {% set modular_toc = landing_toc|render %}
+{% endif %}
 {% set has_toc = is_modular_page and modular_toc|striptags|trim is not empty %}
 {% set has_sidebar = page.sidebar or has_toc %}
 {% set toc_first = has_sidebar and is_modular_page %}

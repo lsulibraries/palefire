@@ -106,6 +106,7 @@ class PalefireHooks {
     $variables['is_modular_page'] = FALSE;
     $variables['modular_title_in_landing'] = FALSE;
     $variables['palefire_toc'] = [];
+    $variables['landing_toc'] = NULL;
     $variables['guide_head'] = NULL;
 
     $node = $variables['node'] ?? NULL;
@@ -152,6 +153,24 @@ class PalefireHooks {
         ],
       ];
       $cacheability->applyTo($variables['palefire_toc']);
+    }
+
+    // The TOC for a page whose only section is its landing (Oral History).
+    // palefire_modular's TOC block lists titled sections and renders
+    // nothing without one, so the landing's Home and Map links
+    // (heroTocIds(), added in preprocessPalefireModularToc()) never showed.
+    // The same theme hook as the block; page.html.twig prints it only when
+    // the block is empty. Not on Form pages, where the block hides the TOC.
+    $mode = self::stringValue($node, 'field_modular_type') ?: 'page';
+    if ($mode !== 'form' && self::heroTocIds($node)) {
+      $variables['landing_toc'] = [
+        '#theme' => 'palefire_modular_toc',
+        '#items' => [],
+        '#heading' => (string) $this->t('On this page'),
+        '#depth' => 1,
+        '#mode' => $mode,
+      ];
+      $cacheability->applyTo($variables['landing_toc']);
     }
   }
 

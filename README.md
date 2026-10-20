@@ -605,6 +605,28 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### TOC on landing-only pages; TOC open by default (2026-10-20)
+
+- **Landing-only pages get the TOC:** palefire_modular's TOC block lists
+  titled sections and renders nothing without one. A page whose only
+  section is its landing (Oral History, a Landing department page) had no
+  TOC, so the hero's Home and Map links (`heroTocIds()`) never showed.
+  `PalefireHooks::preprocessPage()` now builds `landing_toc` with the same
+  theme hook (`palefire_modular_toc`), and `page.html.twig` prints it only
+  when the block is empty. `preprocessPalefireModularToc()` adds Home and
+  Map to it as usual. Not on Form pages, where the block hides the TOC.
+- **Open by default (lg and up):** landing pages started with the TOC
+  hidden so the hero ran full width. Every page now starts with it shown.
+  A visitor's own Hide/Show choice is still remembered
+  (`palefire.tocCollapsed.landing` in localStorage).
+- Checked on /v2/special with the TOC open: the hero fits the first screen
+  at 1440x900 and 1280x800. At 1333x767 it runs 17px past the fold, and at
+  1024x768 98px (the Next event | blog | account row wraps to two rows in
+  the narrower column). The lead/map snap then waits for the panel's foot.
+
+Files: `src/Hook/PalefireHooks.php`, `templates/layout/page.html.twig`,
+`js/modular-toc-collapse.js`.
+
 ### New scroll section: Landing department (2026-10-20)
 
 A copy of the Bento search landing (background video, lead card with the
