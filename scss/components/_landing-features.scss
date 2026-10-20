@@ -258,11 +258,6 @@
       > .pf-landing__bar {
         background-color: transparent;
         background-image: linear-gradient(color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent) 0 0);
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-        // forwards, not both: filled backwards, the blur's starting value
-        // was an empty filter (blur(0)), not none, and Chrome drew the
-        // panel's glass under the bar twice.
         animation: pf-landing-bar-glass linear forwards;
         animation-timeline: --pf-lead;
         animation-range: cover calc(100% - 1px) cover 100%;
