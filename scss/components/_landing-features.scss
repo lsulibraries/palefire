@@ -9,8 +9,8 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. Under them, the latest blog post across two thirds (a framed card: a
-//    small picture, its label and title) and the Special Collections
+// 2. Under them, the latest blog post across two thirds (a small picture,
+//    a hairline, its label and title) and the Special Collections
 //    sign-in button in the last third. (Next event is a line under the
 //    intro, above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
@@ -614,36 +614,27 @@ html.pf-a11y-motion {
   }
 }
 
-// The post: a card in the tiles' soft hairline, padded, with a small
-// picture (16:9), then the label (From the blog · date · category) and the
-// title, in two lines at most. The whole card is the link: hover or focus
-// brings the frame up to the muted tone, eases the picture in a little and
-// underlines the title. A placeholder (no blog category yet): hatched, not
-// a link.
+// The post: unframed, like a gallery label. A small picture (16:9) flush
+// with the tiles' left edge, a hairline in the tiles' soft line between it
+// and the text, then the label (From the blog · date · category) and the
+// title, in two lines at most. The whole row is the link: hover or focus
+// eases the picture in a little and underlines the title. A placeholder
+// (no blog category yet): hatched, not a link.
 .pf-landing__post {
   display: flex;
-  gap: clamp(.875rem, 1.75vw, 1.25rem);
-  align-items: center;
+  align-items: stretch;
   min-width: 0;
-  padding: clamp(.625rem, 1.25vw, .875rem);
-  border: 1px solid var(--pf-landing-line);
   color: inherit;
   text-decoration: none;
-  transition: border-color $pf-hover-out ease;
 
   &:hover,
   &:focus-visible {
     color: inherit;
   }
 
-  &:is(a):is(:hover, :focus-visible) {
-    border-color: var(--pf-toc-color);
-    transition-duration: $pf-hover-in;
-  }
-
   &:focus-visible {
     outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
-    outline-offset: 2px;
+    outline-offset: 4px;
   }
 }
 
@@ -672,11 +663,17 @@ html.pf-a11y-motion {
   }
 }
 
+// The divider: the text's start edge, as tall as the picture, with the
+// same space on both sides of it.
 .pf-landing__post-text {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: .375rem;
   min-width: 0;
+  margin-inline-start: clamp(.875rem, 1.75vw, 1.25rem);
+  padding-inline-start: clamp(.875rem, 1.75vw, 1.25rem);
+  border-inline-start: 1px solid var(--pf-landing-line);
 }
 
 .pf-landing__post-label {

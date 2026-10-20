@@ -697,6 +697,19 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: blog post with a divider instead of a frame (2026-10-20)
+
+The blog post under the tiles drops its frame and padding. The picture
+now sits flush with the tiles' left edge, and a single hairline (the
+tiles' soft 20% line, as tall as the picture) separates it from the
+label and title, with equal space on both sides, like a gallery label.
+Hover and focus still ease the picture in and underline the title. The
+same layout applies at every width. It still takes the first two thirds
+of the row, with sign-in in the last third.
+
+Files: `templates/includes/landing.html.twig` (comment only),
+`scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: blog card and sign-in share the row under the tiles (2026-10-20)
 
 - **Blog post** is a card again: the tiles' soft hairline around it, with
