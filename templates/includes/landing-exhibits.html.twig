@@ -16,13 +16,16 @@
  *   only with a url); images (image render arrays; none: hatched frames
  *   stand in) and frames. More than one image crossfades
  *   (exhibit-rotate.js), with a pause button.
+ *   event: the landing hero's Next event tile, an empty frame that
+ *   hero-event.js fills in (or removes).
  * - label: the list's accessible name (default "Exhibitions and guides").
+ * - modifier: adds pf-exhibits--{modifier} to the list.
  */
 #}
-<ul class="pf-exhibits" aria-label="{{ label|default('Exhibitions and guides'|t) }}">
+<ul class="pf-exhibits{{ modifier ? ' pf-exhibits--' ~ modifier }}" aria-label="{{ label|default('Exhibitions and guides'|t) }}">
   {% for ex in exhibitions %}
     {% set count = ex.images ? ex.images|length : ex.frames %}
-    <li class="pf-exhibit{{ ex.permanent ? ' pf-exhibit--permanent' }}"{% if count > 1 %} data-pf-exhibit-rotate{% endif %}>
+    <li class="pf-exhibit{{ ex.permanent ? ' pf-exhibit--permanent' }}{{ ex.event ? ' pf-exhibit--event' }}"{% if count > 1 %} data-pf-exhibit-rotate{% endif %}{% if ex.event %} data-pf-hero-event{% endif %}>
       <div class="pf-exhibit__media" aria-hidden="true">
         {% for i in 1..count %}
           <span class="pf-exhibit__frame{{ loop.first ? ' is-current' }}">
@@ -43,7 +46,7 @@
         <p class="pf-exhibit__when">
           {% if ex.permanent %}
             {{ 'On view · Permanent'|t }}
-          {% elseif ex.meta %}
+          {% elseif ex.meta or ex.event %}
             {{ ex.meta }}
           {% else %}
             <time datetime="{{ ex.start }}/{{ ex.end }}">{{ ex.dates }}</time>

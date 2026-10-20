@@ -697,6 +697,30 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: a second tile accordion for the event and blog post (2026-10-20)
+
+The card row under the hero tiles (above) never sat right, so Next event
+and the latest blog post are now a second accordion of the same tiles,
+stacked under the first. When exactly two of them sit under exactly three
+tiles, the first takes two thirds and its edge lines up with the line
+between the second and third tiles above; otherwise they share the row
+equally, and with no event the post fills it. The event tile is filled in
+by `hero-event.js` (picture, title link, day and time; category and place
+show when it opens). The blog tile uses the hero tiles' image style
+(`tile_showcase_landscape_lg`) instead of the small `medium` one.
+
+In both accordions an opened tile's picture now dims under a black veil, so
+its text reads more easily. From md the two bands split the panel's height
+equally (at least 11–15rem each), and a tile's extra line can no longer
+change a band's height, so nothing moves on hover. On short windows the
+panel runs a little past the fold. The sign-in button now sits under both
+accordions, aligned right (full width on phones).
+
+Files: `templates/includes/landing.html.twig`,
+`templates/includes/landing-exhibits.html.twig`, `js/hero-event.js`,
+`palefire.theme`, `scss/components/_landing-features.scss`,
+`css/style.css`. Run `drush cr` (template and theme function changes).
+
 ### Hero bottom row: lighter caption, sign-in button (2026-10-20)
 
 The plinth (above) still felt as heavy as the tiles. The row is now a

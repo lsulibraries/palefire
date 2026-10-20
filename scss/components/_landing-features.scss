@@ -9,9 +9,9 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. Next event (hero-event.js) | Latest blog post, and a Special Collections
-//    sign-in button: the Next event card's parts (_landing-hero.scss), with
-//    small square thumbnails; under three tiles, in their thirds.
+// 2. A second accordion of the same tiles: Next event (hero-event.js) |
+//    Latest blog post; two under three line up with the thirds above.
+// 3. A small Special Collections sign-in button under them, at the right.
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -20,15 +20,40 @@
 // adjust.
 // =========================================================================
 
-// The tiles, then the bottom row. The tiles' row takes whatever height the
-// panel has left (see the band below), so the bottom row stays at the
-// panel's foot.
+// The two accordions, then the sign-in button. From md the accordions share
+// whatever height the panel has left equally (see the band below), so the
+// button stays at the panel's foot. Below md each is as tall as its own
+// tiles (stacked, three tiles are taller than two).
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 1fr auto;
   gap: clamp(1rem, 2vw, 1.25rem);
   container: pf-features / inline-size;
+}
+
+@include media-breakpoint-up($pf-snap-breakpoint) {
+  .pf-landing__features {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+}
+
+// Side by side, each accordion is at least 11rem to 15rem tall (22% of the
+// window's height), taller than one band needed alone, so an open tile's
+// extra line fits (on short windows the panel runs past the fold instead).
+// Size containment: what a tile shows when it opens never changes the
+// band's height, so nothing below moves on hover. The second band's line
+// (a post's excerpt, an event's category and place) is one line, so a
+// two-line post title still fits with it at 1440x900.
+@container pf-features (min-width: 36rem) {
+  .pf-landing__features > .pf-exhibits {
+    contain: size;
+    min-height: clamp(11rem, 22svh, 15rem);
+  }
+
+  .pf-exhibits--updates .pf-exhibit__more p {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
 }
 
 // No room above the panel on this hero (it starts right under the header,
@@ -467,127 +492,28 @@
   }
 }
 
-// --- Next event | Latest blog post, and the sign-in button -----------------
-// A caption under the tiles, not a second band: no frame, small square
-// thumbnails, the text leading. The two cards stack, one row each, a
-// hairline between; the sign-in button stands beside them, as tall as both.
-// Narrow panels: one column, the button full width under the cards. From
-// 36rem (container widths, so the TOC being open or closed decides too):
-// cards | button, in halves, or with exactly three tiles above, two thirds
-// | one third, so the cards end where the second tile does and
-// the button sits under the third. With no event (no carousel, or nothing
-// coming up) the post is the only card. The labels ("Next event", "Latest
-// from the blog") are for screen readers only; each card's date line says
-// what it is.
-.pf-landing__pair {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(.75rem, 1.5vw, 1rem) 0;
+// --- Second accordion: Next event | Latest blog post ------------------------
+// The same tiles as the first (below), under it. The event tile is held
+// while hero-event.js loads the feed (its hatched frame and "Next event"
+// label), and hidden at once on pages without the events carousel, where
+// the script removes it; the post then takes the whole row. With exactly
+// two tiles under exactly three, the first takes two shares of three, so
+// the line between them falls where the second and third tiles above meet
+// (see the tiles' widths, below).
+:root:not(:has(.pf-events-carousel)) .pf-exhibit--event {
+  display: none;
 }
 
-.pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
-  --pf-hero-thumb: clamp(3.5rem, 5cqi, 4rem); // square: 56 to 64px
-  min-width: 0;
-  padding-top: clamp(.75rem, 1.5vw, 1rem);
-  border-top: 1px solid var(--pf-landing-line);
-}
-
-// Beside the button: the gap under the tiles is the divider above the first
-// card, so only the post has a line, and only under a shown event. The
-// cards' space before the button is padding, not a column gap, so the
-// button starts where its tile does.
 @container pf-features (min-width: 36rem) {
-  .pf-landing__pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .pf-landing__features :is(.pf-hero-post, .pf-hero-event) {
-    grid-column: 1;
-    padding-top: 0;
-    padding-inline-end: clamp(1.25rem, 2.5vw, 2rem);
-    border-top: 0;
-  }
-
-  :root:has(.pf-events-carousel) .pf-landing__features .pf-hero-event + .pf-hero-post {
-    padding-top: clamp(.75rem, 1.5vw, 1rem);
-    border-top: 1px solid var(--pf-landing-line);
-  }
-
-  .pf-hero-account {
-    grid-row: 1 / span 2;
-    grid-column: 2;
-  }
-
-  // One card: one row, so no empty row (and its gap) under it.
-  :root:not(:has(.pf-events-carousel)) .pf-hero-account,
-  .pf-landing__pair:not(:has(> .pf-hero-event)) > .pf-hero-account {
-    grid-row: 1;
-  }
-
-  // Exactly three tiles: two thirds | one third, in step with them.
-  .pf-landing__features:has(> .pf-exhibits > .pf-exhibit:nth-child(3):last-child) .pf-landing__pair {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  .pf-landing__features:has(> .pf-exhibits:first-child > .pf-exhibit:nth-child(3):last-child) > .pf-exhibits--updates > .pf-exhibit:first-child:nth-last-child(2) {
+    --pf-exhibit-grow: 2;
   }
 }
 
-.pf-landing__features .pf-hero-event__label {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-}
-
-// Square: the thumbnail and, while the feed loads, the hatched space held
-// for it. Text from the top, beside it.
-.pf-landing__features .pf-hero-event__thumb,
-.pf-landing__features .pf-hero-event:not(.is-ready)::after {
-  aspect-ratio: 1;
-}
-
-.pf-landing__features .pf-hero-event__card {
-  align-items: start;
-  max-width: none;
-}
-
-// Up to two lines each for the cards' date and title, so an event's time
-// or a post's title read in full in most cases; longer ones are clamped.
-// The line under is one line (below). Titles one size down from the solo
-// Next event card.
-.pf-landing__features :is(.pf-hero-event__title, .pf-hero-event__when) {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-}
-
-.pf-landing__features .pf-hero-event__title {
-  font-size: 1.0625rem;
-}
-
-.pf-landing__features .pf-hero-event__when {
-  margin-bottom: .25rem;
-}
-
-.pf-landing__features .pf-hero-event__meta {
-  margin-top: .125rem;
-}
-
-// The line under each title (event place, post excerpt): one line. Two
-// classes, so the clamp's display wins.
-.pf-landing__features :is(.pf-hero-post, .pf-hero-event) .pf-hero-event__meta {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-}
-
-// Sign-in: an outlined button in the Search button's type and colour, the
-// duotone sign-in icon before the words. Full width when stacked; beside
-// the cards it fills its cell, the icon over the words.
+// --- Sign-in ----------------------------------------------------------------
+// A small outlined button under the tiles, at the right (full width on
+// narrow panels), in the Search button's type and colour, the duotone
+// sign-in icon before the words.
 .pf-hero-account__link {
   @extend %pf-landing-label;
   display: flex;
@@ -614,6 +540,16 @@
   }
 }
 
+@container pf-features (min-width: 36rem) {
+  .pf-hero-account {
+    justify-self: end;
+  }
+
+  .pf-hero-account__link {
+    display: inline-flex;
+  }
+}
+
 .pf-hero-account__icon {
   display: flex;
 
@@ -621,31 +557,6 @@
     width: 1.125rem;
     height: 1.125rem;
     fill: currentColor;
-  }
-}
-
-@container pf-features (min-width: 36rem) {
-  .pf-hero-account__link {
-    flex-direction: column;
-    gap: .75rem;
-    height: 100%;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  .pf-hero-account__icon svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-}
-
-// Placeholder (no blog category yet): not a link, so no hover and no
-// underline.
-.pf-hero-event__card.is-placeholder {
-  color: var(--pf-toc-color);
-
-  .pf-hero-event__title {
-    text-decoration: none;
   }
 }
 
@@ -728,15 +639,17 @@
   // The pace: a soft ease-in-out (--pf-exhibit-ease) over about a second,
   // like the site's other motion (the lead/map glide, the reveals). The
   // earlier quick-start curve did most of its moving in the first 150ms.
+  // Each tile's share at rest is --pf-exhibit-grow (1; 2 for the first of
+  // two under three, above); the one in use gains 1.4 shares.
   .pf-exhibit {
     --pf-exhibit-ease: cubic-bezier(.45, 0, .2, 1);
-    flex: 1 1 0;
+    flex: var(--pf-exhibit-grow, 1) 1 0;
     aspect-ratio: auto;
     transition: flex-grow .9s var(--pf-exhibit-ease);
   }
 
   .pf-exhibits .pf-exhibit:is(:hover, :focus-within) {
-    flex-grow: 2.4;
+    flex-grow: calc(var(--pf-exhibit-grow, 1) + 1.4);
   }
 
   // The extra line and prompt, closed until the tile opens. Opening, the
@@ -797,6 +710,21 @@
   position: absolute;
   inset: 0;
   z-index: -1;
+
+  // Opening, the picture dims (a black veil fades in over it, under the
+  // scrim), so the title and the extra line read more easily over it.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / .45);
+    opacity: 0;
+    transition: opacity .9s var(--pf-exhibit-ease, ease);
+  }
+}
+
+.pf-exhibit:is(:hover, :focus-within) .pf-exhibit__media::after {
+  opacity: 1;
 }
 
 // One frame per image, stacked; .is-current is shown. The crossfade is
@@ -900,7 +828,14 @@
 .pf-exhibit__more {
   overflow: hidden;
 
+  // Two lines at most (a post's excerpt can be longer), so it fits the
+  // band.
   p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     max-width: 34rem;
     margin: .5rem 0 0;
     font-size: .9375rem;
@@ -984,6 +919,7 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-exhibit,
   .pf-exhibit__frame,
+  .pf-exhibit__media::after,
   .pf-exhibit__more,
   .pf-landing__bar {
     transition: none !important;
@@ -997,6 +933,7 @@
 html.pf-a11y-motion {
   .pf-exhibit,
   .pf-exhibit__frame,
+  .pf-exhibit__media::after,
   .pf-exhibit__more,
   .pf-landing__bar {
     transition: none !important;

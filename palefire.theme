@@ -396,7 +396,8 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
           'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
           'category' => \Drupal::service('entity.repository')->getTranslationFromContext($term)->label(),
           'excerpt' => $excerpt,
-          'image' => _palefire_field_image($node, 'field_image', ['medium', 'thumbnail'], $cache),
+          // A tile in the hero's second accordion: the hero tiles' style.
+          'image' => _palefire_field_image($node, 'field_image', ['tile_showcase_landscape_lg', 'large', 'medium'], $cache),
         ];
       }
     }

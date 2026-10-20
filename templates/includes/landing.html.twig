@@ -210,8 +210,9 @@
     {% if hero %}
       {# Features (_landing-features.scss): three large tiles that open on
          hover or focus (an accordion across: the one in use widens, shows
-         more of its picture and a line more about it), then Next event |
-         Latest blog post, and a Special Collections sign-in button.
+         more of its picture and a line more about it), then a second
+         accordion of Next event | Latest blog post, and a Special
+         Collections sign-in button under them.
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page: _palefire_hero_tiles()), when it has any; else
            the PLACEHOLDERS below. Shape: label, title, start/end (ISO
@@ -266,44 +267,45 @@
       <div class="pf-landing__features">
         {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: exhibitions } only %}
 
-        <div class="pf-landing__pair">
-          {{ hero_event }}
-          <div class="pf-hero-post">
-            <p class="pf-hero-event__label">{{ 'Latest from the blog'|t }}</p>
-            {% if hero_post %}
-              <a class="pf-hero-event__card" href="{{ hero_post.url }}">
-                <span class="pf-hero-event__thumb">{{ hero_post.image }}</span>
-                <span class="pf-hero-event__text">
-                  <span class="pf-hero-event__when"><time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time>{% if hero_post.category %} · {{ hero_post.category }}{% endif %}</span>
-                  <span class="pf-hero-event__title">{{ hero_post.title }}</span>
-                  {% if hero_post.excerpt %}<span class="pf-hero-event__meta pf-hero-post__excerpt">{{ hero_post.excerpt }}</span>{% endif %}
-                </span>
-              </a>
-            {% else %}
-              {# Placeholder until field_landing_blog_category is added and set. #}
-              <div class="pf-hero-event__card is-placeholder">
-                <span class="pf-hero-event__thumb"></span>
-                <span class="pf-hero-event__text">
-                  <span class="pf-hero-event__when">{{ 'Date · Category'|t }}</span>
-                  <span class="pf-hero-event__title">{{ 'Blog post title'|t }}</span>
-                  <span class="pf-hero-event__meta pf-hero-post__excerpt">{{ 'A line or two from the post’s About Text.'|t }}</span>
-                </span>
-              </div>
-            {% endif %}
+        {# The second accordion: Next event (filled in by hero-event.js;
+           removed with no carousel or nothing coming up) and the latest
+           blog post, as tiles like the ones above. #}
+        {% set updates = [{ event: true, label: 'Next event'|t, title: '', meta: '', frames: 1 }] %}
+        {% if hero_post %}
+          {% set updates = updates|merge([{
+            label: 'From the blog'|t,
+            title: hero_post.title,
+            meta: hero_post.date ~ (hero_post.category ? ' · ' ~ hero_post.category),
+            more: hero_post.excerpt,
+            cta: 'Read the post'|t,
+            url: hero_post.url,
+            images: hero_post.image ? [hero_post.image] : [],
+            frames: 1,
+          }]) %}
+        {% else %}
+          {# Placeholder until field_landing_blog_category is added and set. #}
+          {% set updates = updates|merge([{
+            label: 'From the blog'|t,
+            title: 'Blog post title'|t,
+            meta: 'Date · Category'|t,
+            more: 'A line or two from the post’s About Text.'|t,
+            frames: 1,
+          }]) %}
+        {% endif %}
+        {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: updates, label: 'Events and news'|t, modifier: 'updates' } only %}
+
+        {# Special Collections account: a small button under the tiles, at
+           the right. Empty account_url leaves it out. #}
+        {% if account_url %}
+          <div class="pf-hero-account">
+            <a class="pf-hero-account__link" href="{{ account_url }}">
+              {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+                 inlined from the site's copy like the map's hint icon. #}
+              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+              <span>{{ 'Sign in to request materials'|t }}</span>
+            </a>
           </div>
-          {# Special Collections account: a small button at the row's end,
-             not a card. Empty account_url hides it. #}
-          {% if account_url %}
-            <div class="pf-hero-account">
-              <a class="pf-hero-account__link" href="{{ account_url }}">
-                {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                   inlined from the site's copy like the map's hint icon. #}
-                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                <span>{{ 'Sign in to request materials'|t }}</span>
-              </a>
-            </div>
-          {% endif %}
-        </div>
+        {% endif %}
       </div>
     {% endif %}
   </div>

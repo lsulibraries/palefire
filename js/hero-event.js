@@ -1,7 +1,8 @@
 /**
  * @file
- * "Next event" card in the landing hero's lead panel
- * (includes/landing.html.twig with hero, .pf-hero-event).
+ * "Next event" in the landing hero: a tile in the lead panel's second
+ * accordion (.pf-exhibit--event), or a card on its own when there is no
+ * lead panel (includes/landing.html.twig with hero, .pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
@@ -94,6 +95,15 @@
     return node;
   }
 
+  // "Tomorrow · 4:00 PM–5:30 PM", as a <time>.
+  function timeOf(event, start) {
+    const time = document.createElement('time');
+    const pad = (n) => String(n).padStart(2, '0');
+    time.dateTime = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}T${pad(start.getHours())}:${pad(start.getMinutes())}`;
+    time.textContent = [dayLabel(start), [event.startLabel, event.endLabel].filter(Boolean).join('–')].filter(Boolean).join(' · ');
+    return time;
+  }
+
   function render(box, { event, start }) {
     // The whole card is the link.
     const card = el('a', 'pf-hero-event__card');
@@ -114,11 +124,7 @@
 
     const text = el('div', 'pf-hero-event__text');
     const when = el('p', 'pf-hero-event__when');
-    const time = document.createElement('time');
-    const pad = (n) => String(n).padStart(2, '0');
-    time.dateTime = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())}T${pad(start.getHours())}:${pad(start.getMinutes())}`;
-    time.textContent = [dayLabel(start), [event.startLabel, event.endLabel].filter(Boolean).join('–')].filter(Boolean).join(' · ');
-    when.append(time);
+    when.append(timeOf(event, start));
 
     const title = el('span', 'pf-hero-event__title', event.title);
 
@@ -131,6 +137,38 @@
     }
     card.append(thumb, text);
     box.append(card);
+    box.classList.add('is-ready');
+  }
+
+  // In the landing hero's second accordion the box is a tile
+  // (includes/landing-exhibits.html.twig, event): the picture fills its
+  // frame, the title is the tile's link, the day and time sit under it, and
+  // the category and place are the line shown when the tile opens.
+  function renderTile(box, { event, start }) {
+    const frame = box.querySelector('.pf-exhibit__frame');
+    if (frame && /^https:\/\//.test(event.image || '')) {
+      const img = document.createElement('img');
+      img.src = event.image;
+      img.alt = '';
+      img.decoding = 'async';
+      frame.append(img);
+    }
+
+    const link = el('a', 'pf-exhibit__link', event.title);
+    link.href = event.url;
+    box.querySelector('.pf-exhibit__title').append(link);
+    box.querySelector('.pf-exhibit__when').append(timeOf(event, start));
+
+    const place = event.location || (event.isOnline ? Drupal.t('Online') : '');
+    const meta = [(event.categories || [])[0], place].filter(Boolean).join(' · ');
+    const more = el('div', 'pf-exhibit__more');
+    if (meta) {
+      more.append(el('p', '', meta));
+    }
+    const cta = el('span', 'pf-exhibit__cta', Drupal.t('Event details'));
+    cta.setAttribute('aria-hidden', 'true');
+    more.append(cta);
+    box.querySelector('.pf-exhibit__text').append(more);
     box.classList.add('is-ready');
   }
 
@@ -158,7 +196,7 @@
           const next = nextEvent(data);
           // Links and images only from http(s) addresses.
           if (next && /^https?:\/\//.test(next.event.url || '') && next.event.title) {
-            render(box, next);
+            (box.classList.contains('pf-exhibit') ? renderTile : render)(box, next);
           }
           else {
             box.remove();
