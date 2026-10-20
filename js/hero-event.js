@@ -9,9 +9,10 @@
  * that have the carousel. It asks with the page's first carousel's own
  * Calendars and Libraries (its data-calendar and data-campus), as
  * day-carousel.js does, so the card is always one of the events the
- * carousel lists. It picks the first timed event that hasn't ended;
- * all-day items such as donation bins and displays are skipped, with the
- * carousel's own all-day test. The feed has no description, so the line under
+ * carousel lists. It picks the timed events that haven't ended, soonest
+ * first: the first for the card or the first event tile, the second for a
+ * second tile (data-pf-hero-event="1"); all-day items such as donation
+ * bins and displays are skipped, with the carousel's own all-day test. The feed has no description, so the line under
  * the title is the first category and the place ("Online" when there is no
  * room).
  *
@@ -56,21 +57,26 @@
     return new Date(y, m - 1, d, 0, Math.round(hour * 60));
   }
 
-  function nextEvent(data) {
+  // The upcoming timed events, soonest first, each once (a multi-day event
+  // at its next day).
+  function nextEvents(data) {
     const now = Date.now();
     const upcoming = [];
     ((data && data.events) || []).forEach((event) => {
+      let next = null;
       Object.entries(event.segments || {}).forEach(([day, segment]) => {
         // Same test as day-carousel.js ("All day" on its slides).
         const allDay = segment.startHour <= 0.01 && segment.endHour >= 23.9;
         const start = at(day, segment.startHour);
-        if (!allDay && at(day, segment.endHour).getTime() > now) {
-          upcoming.push({ event, start });
+        if (!allDay && at(day, segment.endHour).getTime() > now && (!next || start < next.start)) {
+          next = { event, start };
         }
       });
+      if (next) {
+        upcoming.push(next);
+      }
     });
-    upcoming.sort((a, b) => a.start - b.start);
-    return upcoming[0] || null;
+    return upcoming.sort((a, b) => a.start - b.start);
   }
 
   function dayLabel(start) {
@@ -193,9 +199,10 @@
           box.classList.add('is-in-map');
         }
         loadFeed(carousel).then((data) => {
-          const next = nextEvent(data);
           // Links and images only from http(s) addresses.
-          if (next && /^https?:\/\//.test(next.event.url || '') && next.event.title) {
+          const events = nextEvents(data).filter(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
+          const next = events[Number(box.dataset.pfHeroEvent) || 0];
+          if (next) {
             (box.classList.contains('pf-exhibit') ? renderTile : render)(box, next);
           }
           else {

@@ -11,7 +11,7 @@
 //    (exhibit-rotate.js), with a pause button.
 // 2. A second accordion of the same tiles: Next event (hero-event.js) |
 //    Latest blog post; two under three line up with the thirds above.
-// 3. A small Special Collections sign-in button under them, at the right.
+// 3. (The Special Collections sign-in button is in the title row, above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -20,20 +20,25 @@
 // adjust.
 // =========================================================================
 
-// The two accordions, then the sign-in button. From md the accordions share
-// whatever height the panel has left equally (see the band below), so the
-// button stays at the panel's foot. Below md each is as tall as its own
-// tiles (stacked, three tiles are taller than two).
+// The two accordions. From md they share whatever height the panel has
+// left equally (see the band below), down to the panel's foot. Below md
+// each is as tall as its own tiles (stacked, three tiles are taller than
+// two). They touch, one frame line between them (the second has no top
+// border).
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1rem, 2vw, 1.25rem);
+  gap: 0;
   container: pf-features / inline-size;
+}
+
+.pf-exhibits--updates {
+  border-top: 0;
 }
 
 @include media-breakpoint-up($pf-snap-breakpoint) {
   .pf-landing__features {
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
@@ -346,18 +351,34 @@
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
   }
 
-  // Title and hours: the hours line close under the title, as its
-  // caption; from lg, beside it on the title's baseline (under it again if
-  // a long title leaves no room). The panel has no height to spare for a
-  // line of its own there.
+  // Title and hours (.pf-landing__head-text), then the sign-in button. The
+  // hours line sits close under the title, as its caption; from lg, beside
+  // it on the title's baseline (under it again if a long title leaves no
+  // room). The button: under them below lg; from lg at the row's far end,
+  // level with the title, never wrapping to a line of its own (the title
+  // and hours wrap first). The panel has no height to spare for one.
   > .pf-landing__head {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: .5rem clamp(1rem, 2vw, 1.75rem);
+    gap: .75rem clamp(1rem, 2vw, 1.75rem);
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
 
     @include media-breakpoint-up(lg) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .pf-landing__head-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem clamp(1rem, 2vw, 1.75rem);
+    min-width: 0;
+
+    @include media-breakpoint-up(lg) {
+      flex: 1 1 auto;
       flex-direction: row;
       flex-wrap: wrap;
       align-items: baseline;
@@ -366,6 +387,10 @@
     > .pf-landing__title {
       margin: 0;
     }
+  }
+
+  .pf-landing__head > .pf-hero-account {
+    flex: none;
   }
 
   > .pf-landing__head + .pf-landing__intro {
@@ -492,12 +517,13 @@
   }
 }
 
-// --- Second accordion: Next event | Latest blog post ------------------------
-// The same tiles as the first (below), under it. The event tile is held
-// while hero-event.js loads the feed (its hatched frame and "Next event"
-// label), and hidden at once on pages without the events carousel, where
-// the script removes it; the post then takes the whole row. With exactly
-// two tiles under exactly three, the first takes two shares of three, so
+// --- Second accordion: the next two events | Latest blog post ---------------
+// The same tiles as the first (below), under it. The two event tiles are
+// held while hero-event.js loads the feed (hatched frames and their
+// labels), and hidden at once on pages without the events carousel, where
+// the script removes them, as it does a tile with no event for it; the
+// post then takes the rest of the row. With exactly two tiles under
+// exactly three, the first takes two shares of three, so
 // the line between them falls where the second and third tiles above meet
 // (see the tiles' widths, below).
 :root:not(:has(.pf-events-carousel)) .pf-exhibit--event {
@@ -511,12 +537,13 @@
 }
 
 // --- Sign-in ----------------------------------------------------------------
-// A small outlined button under the tiles, at the right (full width on
-// narrow panels), in the Search button's type and colour, the duotone
-// sign-in icon before the words.
+// A small outlined button in the title row (.pf-landing__head, above): from
+// lg at the row's far end, level with the title; below lg under the hours
+// line. In the Search button's type and colour, the duotone sign-in icon
+// before the words.
 .pf-hero-account__link {
   @extend %pf-landing-label;
-  display: flex;
+  display: inline-flex;
   gap: .625rem;
   align-items: center;
   justify-content: center;
@@ -537,16 +564,6 @@
 
   &:focus-visible {
     outline-color: var(--pf-landing-accent);
-  }
-}
-
-@container pf-features (min-width: 36rem) {
-  .pf-hero-account {
-    justify-self: end;
-  }
-
-  .pf-hero-account__link {
-    display: inline-flex;
   }
 }
 

@@ -165,9 +165,14 @@
        visit-hours.js fills the status and today's hours, palefire/visit is
        attached with visit). The two share .pf-landing__head, which sets
        the line beside the title on wide screens. No live region: the Visit
-       strip already announces changes. #}
+       strip already announces changes.
+       Hero: the Special Collections sign-in (account_url, Aeon) is a
+       small button at the head's far end, so it shows on the first screen;
+       empty leaves it out. #}
     {% set hero_hours = hero and visit.lid %}
-    {% if hero_hours %}<div class="pf-landing__head">{% endif %}
+    {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
+    {% set hero_head = hero_hours or account_url %}
+    {% if hero_head %}<div class="pf-landing__head"><div class="pf-landing__head-text">{% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title">{{ page_title }}</h1>
     {% endif %}
@@ -178,8 +183,19 @@
           <span class="pf-landing__hours-today" data-pf-hours-today></span>
           {% if visit.name %}<span class="pf-landing__hours-place">{{ visit.name }}</span>{% endif %}
         </p>
-      </div>
     {% endif %}
+    {% if hero_head %}</div>{% endif %}
+    {% if account_url %}
+        <div class="pf-hero-account">
+          <a class="pf-hero-account__link" href="{{ account_url }}">
+            {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+               inlined from the site's copy like the map's hint icon. #}
+            <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+            <span>{{ 'Sign in to request materials'|t }}</span>
+          </a>
+        </div>
+    {% endif %}
+    {% if hero_head %}</div>{% endif %}
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>
     {% endif %}
@@ -211,8 +227,8 @@
       {# Features (_landing-features.scss): three large tiles that open on
          hover or focus (an accordion across: the one in use widens, shows
          more of its picture and a line more about it), then a second
-         accordion of Next event | Latest blog post, and a Special
-         Collections sign-in button under them.
+         accordion of the next two events | Latest blog post (the sign-in
+         button is in the head, above).
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page: _palefire_hero_tiles()), when it has any; else
            the PLACEHOLDERS below. Shape: label, title, start/end (ISO
@@ -223,9 +239,7 @@
            crossfades (exhibit-rotate.js), with a pause button.
          - hero_post: palefire_preprocess_paragraph__landing_hero(), the
            newest Article in the paragraph's "Blog category"; a placeholder
-           until that field exists and is filled in.
-         - account_url: the Special Collections account sign-in (Aeon).
-           Empty leaves the button out. #}
+           until that field exists and is filled in. #}
       {% set exhibitions = [
         {
           label: 'Exhibition'|t,
@@ -263,14 +277,16 @@
       {% if hero_tiles %}
         {% set exhibitions = hero_tiles %}
       {% endif %}
-      {% set account_url = 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' %}
       <div class="pf-landing__features">
         {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: exhibitions } only %}
 
-        {# The second accordion: Next event (filled in by hero-event.js;
-           removed with no carousel or nothing coming up) and the latest
-           blog post, as tiles like the ones above. #}
-        {% set updates = [{ event: true, label: 'Next event'|t, title: '', meta: '', frames: 1 }] %}
+        {# The second accordion: the next two events (filled in by
+           hero-event.js; each removed with no carousel or no event for
+           it) and the latest blog post, as tiles like the ones above. #}
+        {% set updates = [
+          { event: 0, label: 'Next event'|t, title: '', meta: '', frames: 1 },
+          { event: 1, label: 'Coming up'|t, title: '', meta: '', frames: 1 },
+        ] %}
         {% if hero_post %}
           {% set updates = updates|merge([{
             label: 'From the blog'|t,
@@ -293,19 +309,6 @@
           }]) %}
         {% endif %}
         {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: updates, label: 'Events and news'|t, modifier: 'updates' } only %}
-
-        {# Special Collections account: a small button under the tiles, at
-           the right. Empty account_url leaves it out. #}
-        {% if account_url %}
-          <div class="pf-hero-account">
-            <a class="pf-hero-account__link" href="{{ account_url }}">
-              {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                 inlined from the site's copy like the map's hint icon. #}
-              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-              <span>{{ 'Sign in to request materials'|t }}</span>
-            </a>
-          </div>
-        {% endif %}
       </div>
     {% endif %}
   </div>

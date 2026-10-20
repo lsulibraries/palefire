@@ -697,6 +697,35 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: sign-in button in the title row (2026-10-20)
+
+The "Sign in to request materials" button moved from under the tiles to
+the far end of the title row, so it shows on the first screen and adds no
+height to the panel. The title and hours line are now grouped
+(`.pf-landing__head-text`) and wrap first: when the three don't fit in one
+row (the contents panel open at 1440px), the hours drop under the title
+and the button stays beside them, level with the title. Below lg it sits
+under the hours line. With the button gone from the panel's foot, both
+accordions fit on a 1440x900 first screen.
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `css/style.css`.
+
+### Hero: two events in the second accordion, flush bands (2026-10-20)
+
+The second accordion only ever showed one event, because `hero-event.js`
+picked just the next one. It now fills up to two event tiles ("Next event",
+"Coming up"), each event once and soonest first, so with the blog post
+the row is three tiles in the same thirds as the tiles above. A tile with
+no event for it is removed, and the 2/3 rule below still applies when
+only one event is coming up. The two accordions now touch, sharing one
+frame line, which saves the gap between them; only the sign-in button
+keeps its space above.
+
+Files: `templates/includes/landing.html.twig`,
+`templates/includes/landing-exhibits.html.twig`, `js/hero-event.js`,
+`scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: a second tile accordion for the event and blog post (2026-10-20)
 
 The card row under the hero tiles (above) never sat right, so Next event
