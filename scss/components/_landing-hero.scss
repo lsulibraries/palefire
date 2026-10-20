@@ -37,9 +37,12 @@ $pf-hero-media-wash: .8 !default;
 
 // The map screen lines up with the lead (md up, the full-screen lead,
 // _landing-features.scss): the same gutter, so the map's heading, summary
-// and the Visit panel start where the lead's title and text do, and the
-// same top padding, where the snap (landing-snap.js reads scroll-margin-
-// top) stops the heading under the header.
+// and the Visit panel start where the lead's title and text do. Its
+// heading stops where every section's title does, 5rem under the header
+// (the sections' top padding from md, --pf-section-pad-block in
+// _modular.scss; the hero's own section sets that variable lower, so the
+// value is written out), whether by the snap (landing-snap.js reads
+// scroll-margin-top), a TOC click or a #map link.
 // The wrapper runs the content column's full width with the lead's inset
 // (--pf-hero-inset: its percentages are of the landing's width here too,
 // so the two always match), and the drawing alone spills back out into the
@@ -52,7 +55,7 @@ $pf-hero-media-wash: .8 !default;
     max-width: none;
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
-    scroll-margin-top: clamp(1.5rem, 4vw, 3.5rem);
+    scroll-margin-top: 5rem;
   }
 
   .pf-landing--hero.pf-landing--lead-screen .pf-map__stage {
@@ -69,8 +72,8 @@ $pf-hero-media-wash: .8 !default;
 // - The timeline is the map wrapper (#map) entering the window, and only
 //   the map inside it moves: the wrapper keeps its place, so the TOC, the
 //   snap and #map links measure it as before. The window's top is inset by
-//   the compact header and the lead's top padding (where the snap stops
-//   the heading; a little extra, so the map is still by then).
+//   about the compact header and the map's 5rem stop (where the snap
+//   stops the heading; a little extra, so the map is still by then).
 // - Before that the map waits under the lead: pulled up by 85% of the
 //   distance it is about to travel, its heading, summary and drawing
 //   faded out so the lead's glass shows nothing of it at the top of the
@@ -82,7 +85,7 @@ $pf-hero-media-wash: .8 !default;
 @supports (animation-timeline: view()) {
   @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     html:not(.pf-a11y-motion) .pf-landing--hero.pf-landing--lead-screen {
-      --pf-map-reveal-inset: calc(3.5rem + clamp(1.5rem, 4vw, 3.5rem));
+      --pf-map-reveal-inset: calc(3.5rem + 5rem);
 
       > .pf-landing__bar {
         z-index: 2;

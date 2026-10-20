@@ -421,21 +421,35 @@
       });
       closeOffcanvas(nav);
       // After the phone drawer has started closing, as the anchor's own
-      // jump did. A target inside the hero's map (its heading) may be drawn
-      // higher than its place while the map reveals itself
-      // (_landing-hero.scss), and scrollIntoView() would aim at that: aim
-      // at its place instead, with the same scroll-padding and margin.
+      // jump did. Worked out here rather than with scrollIntoView(), so
+      // every section lands the same way:
+      // - Under the header as it will be on arrival. The scroll-padding
+      //   is the header's height now: from the top of the page that is the
+      //   full header, which then shrinks on the way down, so a section
+      //   that isn't a snap point (nothing re-aligns it) stopped lower by
+      //   the difference. Past the point where the header compacts
+      //   (.pf-header-sentinel, palefire.js) it aims under the compact one.
+      // - At its place: a target inside the hero's map (its heading) may be
+      //   drawn higher while the map reveals itself (_landing-hero.scss).
+      // - An event (Events carousel) lands on its day: its date, weather
+      //   and image card, not its row, which sits at the card's foot.
+      // The CSS smooth scroll and each target's scroll-margin still apply.
       if (jump) {
         const map = target.closest('.pf-landing__visit > .pf-map');
         const by = map ? map.getBoundingClientRect().top - map.parentElement.getBoundingClientRect().top : 0;
-        if (Math.abs(by) >= 1) {
-          const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-          const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-          window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - by - pad - margin });
+        const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        // (A day that isn't the slide on screen has no box: the carousel then.)
+        const day = target.closest('.libcal-day');
+        const place = day ? (day.getClientRects().length ? day : day.closest('.libcal-day-carousel')) : target;
+        const at = (head) => window.scrollY + place.getBoundingClientRect().top - by - head - margin;
+        const now = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+        const compact = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight()) || 0;
+        const sentinel = document.querySelector('.pf-header-sentinel');
+        let top = at(now);
+        if (compact && sentinel && at(compact) > sentinel.offsetHeight) {
+          top = at(compact);
         }
-        else {
-          target.scrollIntoView({ block: 'start' });
-        }
+        window.scrollTo({ top: Math.max(0, top) });
       }
     }, { signal });
 

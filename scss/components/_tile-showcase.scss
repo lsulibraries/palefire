@@ -177,10 +177,14 @@ $pf-tile-break-two: 32rem;
   @include pf-thin-scrollbar;
 }
 
+// Cards snap sideways in their own strip only (block: none, inline:
+// start). A plain `start` made each card a vertical snap point for the
+// page too, so a jump to the section (a TOC click) was snapped on past
+// its title to the first card.
 .pf-tiles--stagger .pf-tiles__item {
   flex: 0 0 min(72%, 17rem);
   aspect-ratio: 3 / 5;
-  scroll-snap-align: start;
+  scroll-snap-align: none start;
 }
 
 @container pf-tiles (min-width: #{$pf-tile-break-wide}) {

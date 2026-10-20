@@ -605,6 +605,49 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### TOC jumps land every section the same way (2026-10-19)
+
+On /v2/special the TOC landed each section differently: the map heading
+53px under the header, "Events" 80px, and "Collections" 24px *under* the
+header, out of sight. Three causes:
+
+- **Collections overshoot:** the Collections tile cards had
+  `scroll-snap-align: start`, there so they snap sideways in their strip,
+  but it applies to both axes. So every card was also a vertical snap point
+  for the page, and a jump to Collections was snapped on past its title to
+  the first card. Now `none start` (sideways only). File:
+  `_tile-showcase.scss`.
+- **The map's stop:** it was `clamp(1.5rem, 4vw, 3.5rem)` under the
+  header. Now 5rem, the same place every section title lands (the
+  sections' top padding from md). The reveal's end moves with it
+  (`--pf-map-reveal-inset`), so the map is still by the time the snap or a
+  jump arrives. File: `_landing-hero.scss`.
+- **The header shrinking on the way:** `scroll-padding-top` is the
+  header's height at the moment of the click. From the top of the page
+  that's the full header, which compacts on the way down, so a section that
+  isn't a snap point (nothing re-aligns it) stopped lower by the
+  difference. `modular-toc.js` now works the target out itself. Past the
+  point where the header compacts (`.pf-header-sentinel`), it aims under
+  the compact header. It still corrects for the map's reveal shift, and the
+  CSS smooth scroll and each target's `scroll-margin` still apply.
+- **Event sub-links:** these now land on their day (date, weather and
+  image card) rather than on the event's row, which sits at the foot of the
+  image card.
+
+Measured on /v2/special at 1333×798 with the changes injected, smooth
+scroll on, from the top and from mid-page:
+
+| Target | From the top | From mid-page |
+|---|---|---|
+| #map, #events, #collections (heading) | 80 / 80 / 80 | 80 / 80 / 80 |
+| A Collections tile (sub-link) | 31 | 31 |
+| An event (its day) | 31 | 31 |
+
+All values are px under the header. Sub-links keep their 2rem margin. Not
+checked: phone widths, and #home (it goes to the top).
+
+Files: `_tile-showcase.scss`, `_landing-hero.scss`, `js/modular-toc.js`.
+
 ### Collections tiles: no flicker on hover (2026-10-19)
 
 Hovering a tile showcase card zooms its image (`scale(1.04)`) and turns
