@@ -378,26 +378,48 @@
   // caption. "Next event" in the search heading's gold label, the day and
   // time in the muted label type, then the title, the link, in that type at
   // full strength, with an arrow that nudges on hover. The line's height is
-  // held while the feed loads and its words fade in once filled; it wraps
-  // on narrow screens.
+  // held while the feed loads and its words fade in once filled; on phones
+  // it stacks in three lines.
   > .pf-landing__intro:has(+ .pf-landing__next) {
     margin-bottom: .625rem;
   }
 
+  // On a dark band as wide as its words (up to the panel's), padded, so it
+  // reads as one caption chip under the intro.
+  // One line from sm: the label and the time keep their width and a long
+  // title ends in an ellipsis, so the height held is the height filled.
   > .pf-landing__next {
+    --pf-next-pad-block: .375rem;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: .125rem .875rem;
     align-items: baseline;
-    min-height: 1.5rem;
+    width: fit-content;
+    max-width: 100%;
+    min-height: calc(1.5rem + 2 * var(--pf-next-pad-block));
     margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    padding: var(--pf-next-pad-block) .875rem;
     font-size: .9375rem;
     line-height: 1.5;
+    background-color: rgb(0 0 0 / .4);
     opacity: 0;
     transition: opacity .6s ease;
 
     &.is-ready {
       opacity: 1;
+    }
+
+    > .pf-landing__next-label,
+    > .pf-landing__next-when {
+      flex: none;
+      white-space: nowrap;
+    }
+
+    > .pf-landing__next-link {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     // Phones: three fixed lines (label, day and time, title), each cut
@@ -408,7 +430,8 @@
       flex-wrap: nowrap;
       gap: .125rem;
       align-items: stretch;
-      min-height: calc(3 * .6875rem * 1.5 + 2 * .125rem);
+      width: auto;
+      min-height: calc(3 * .6875rem * 1.5 + 2 * .125rem + 2 * var(--pf-next-pad-block));
 
       > * {
         overflow: hidden;
@@ -422,6 +445,22 @@
 .pf-landing__next-label {
   @extend %pf-landing-label;
   color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+// The duotone calendar before "Next event": as tall as the label's
+// capitals and in its gold (both tones from currentColor, the second at
+// Font Awesome's 40%).
+.pf-landing__next-icon {
+  display: inline-block;
+  margin-inline-end: .5em;
+  vertical-align: -.1em;
+
+  svg {
+    display: block;
+    width: .875em; // the icon's 448x512 box at 1em tall
+    height: 1em;
+    fill: currentColor;
+  }
 }
 
 .pf-landing__next-when {

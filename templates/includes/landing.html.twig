@@ -189,7 +189,10 @@
        events carousel. #}
     {% if hero %}
       <p class="pf-landing__next" data-pf-hero-event>
-        <span class="pf-landing__next-label">{{ 'Next event'|t }}</span>
+        {# Font Awesome Pro calendar-day (duotone, like
+           `fad fa-calendar-day`), inlined from the site's copy like the
+           sign-in icon; decorative, the label says it. #}
+        <span class="pf-landing__next-label"><span class="pf-landing__next-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/calendar-day.svg', ignore_missing = true)|raw }}</span>{{ 'Next event'|t }}</span>
       </p>
     {% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">

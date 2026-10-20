@@ -697,6 +697,22 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: Next event on a dark band, with a calendar icon (2026-10-20)
+
+The Next event line under the intro now sits on a dark band (40% black)
+as wide as its words, padded, so it reads as one caption chip. "Next
+event" starts with the Font Awesome Pro duotone calendar-day (like
+`fad fa-calendar-day`), inlined from the server's
+`libraries/fontawesome-pro/svgs/duotone/calendar-day.svg` like the sign-in
+icon. It's as tall as the label's 11px type, in its gold, and
+`aria-hidden`. From sm up the line no longer wraps: the label and time
+keep their width and a long title ends in an ellipsis. With the band's
+padding, a wrapped title at 1024px would have grown the line after it
+loaded. Phones keep the three-line stack.
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: blog post with a divider instead of a frame (2026-10-20)
 
 The blog post under the tiles drops its frame and padding. The picture
