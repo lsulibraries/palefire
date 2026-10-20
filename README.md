@@ -605,6 +605,50 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: the map holds perfectly still through the reveal (2026-10-20)
+
+The curtain reveal moved the map with a scroll-driven transform, which
+followed the scroll a frame late whenever the page's layout shifted. The
+header's height hold (`palefire.js`) shifts it on every frame while the
+header turns compact. Per-frame samples on /v2/special (1333×833 at
+1.5×, local CSS/JS): with the browser's smooth scrolling, the map heading
+drifted 124.6–129.6px, up to 4.4px, while the header shrank (scroll
+150–720). In 40px steps, like a scrollbar drag, it wobbled about ±0.6px.
+The landing's own glide stayed within 0.05px.
+
+The map is now held with `position: sticky`, which the browser places in
+step with the scroll on every frame:
+
+- **Hold:** `.pf-map` is pulled up out of its wrapper by
+  `--pf-map-reveal-hold` (200vh, negative margin), and a spacer of the
+  same height follows it (`::after`). The wrapper (`#map`) keeps its size
+  and place, so the TOC, the snap and `#map` links are unchanged
+  (`display: flow-root` keeps the margin from collapsing through it).
+  Sticky at the stop (49px + 5rem), the map waits from the top of the page
+  and is let go exactly when the wrapper reaches the stop, where the snap
+  lands. From there it scrolls with the page.
+- **Fade:** unchanged. The heading, summary and drawing still fade in on
+  the wrapper's view timeline. Opacity can't show a frame's lag.
+- **JS:** `building-map.js` now tells that the reveal is on from
+  `--pf-map-reveal: on`, not the old animation's name (the light-section
+  hold-back stays off during the reveal). Its `shift()`, the focus and
+  #hash fixes and `modular-toc.js` all measure the map against the
+  wrapper, so they work as before.
+- **Unchanged:** the support gate (`animation-timeline: view()`, md up, no
+  reduced motion or Settings switch) and the fallback.
+
+Measured per frame on /v2/special, headless Edge, local CSS/JS (lib.lsu.edu
+requests with the debug header). The map heading stayed at exactly 129px
+from scroll 0 to the stop, in the landing glide (wheel), browser smooth
+scroll and 40px steps, at 1333×833 (1.5×), 1024×768, 1440×900, 768×1024 and
+1920×1080. The stop lands with the wrapper at 129 at every width. The
+wrapper's height, page height and the Events section's place are identical
+to before (1333: 1522 / 4535 / 2508px), and the fade's opacity matches.
+With reduced motion the map is static and scrolls with the page, as
+before.
+
+Files: `_landing-hero.scss`, `js/building-map.js`.
+
 ### Landing hero: more room under the Visit panel (2026-10-20)
 
 The hero section's bottom padding under the Visit panel was 2rem (32px)

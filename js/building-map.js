@@ -77,7 +77,7 @@
     if (!svg) return;
     const stage = root.querySelector('.pf-map__stage') || root;
     // The landing's map wrapper (#map). On the hero the map inside it can
-    // be mid-way through its scroll-driven reveal (_landing-hero.scss): drawn
+    // be mid-way through its reveal, held in place (_landing-hero.scss): drawn
     // higher than its place in the page. The wrapper never moves, so
     // anything that asks "is the map on screen?" watches the wrapper, and
     // shift() is how far the map is drawn from its place (0 when still).
@@ -543,7 +543,7 @@
       // (_landing-swiss.scss); without this script the map always shows.
       // Not while the map reveals itself: its own fade does that job, and
       // holding it back would hide the reveal.
-      if (getComputedStyle(root).animationName !== 'pf-map-reveal') {
+      if (getComputedStyle(root).getPropertyValue('--pf-map-reveal').trim() !== 'on') {
         landing.classList.add('has-map-view');
       }
       const arm = new AbortController();

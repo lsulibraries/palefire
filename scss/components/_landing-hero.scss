@@ -65,44 +65,64 @@ $pf-hero-media-wash: .8 !default;
 
 // Curtain reveal (md up): scrolling from the lead to the map, the map
 // stays still where it will stop and the lead slides up off it, as if the
-// map had been waiting underneath. A scroll-driven animation, so it runs
-// on the compositor with no JS; where it isn't supported, with reduced
-// motion or the Settings drawer's switch, the map scrolls as before.
-// - The timeline is the map wrapper (#map) entering the window, and only
-//   the map inside it moves: the wrapper keeps its place, so the TOC, the
-//   snap and #map links measure it as before. The window's top is inset by
-//   the compact header (49px from md up) and the map's 5rem stop, so the
-//   timeline ends exactly where the snap stops the map.
-// - Through the timeline the map moves up against the scroll one for one
-//   (pulled up by the whole distance it travels, linear), so on screen it
-//   doesn't move at all; when the timeline ends it scrolls with the page
-//   again, from the place it was already in.
-// - Before that (the first few px from the top, while the map is still
-//   below the window) it waits under the lead; its heading, summary and
-//   drawing are faded out so the lead's glass shows nothing of it at the
-//   top of the page. They fade in over the first half, still under the
-//   glass, and are fully shown by the time the lead uncovers them.
+// map had been waiting underneath. Where scroll-driven animations aren't
+// supported (the fade below needs them), with reduced motion or the
+// Settings drawer's switch, the map scrolls as before.
+// - The map is held with position: sticky, not moved by a scroll-driven
+//   transform. The browser places a sticky box in step with the scroll on
+//   every frame, so nothing can move it: not the browser's smooth
+//   scrolling, not the header turning compact. The transform followed the
+//   scroll a frame late whenever the page's layout shifted under it (the
+//   header's height hold, palefire.js), and with smooth scrolling the map
+//   drifted by up to 4px while the header shrank.
+// - How: the map is pulled up out of its wrapper by --pf-map-reveal-hold
+//   (negative margin) and a spacer of the same height follows it, so the
+//   wrapper (#map) keeps its size and place: the TOC, the snap and #map
+//   links measure it as before. Sticky at the stop (the compact header,
+//   49px from md up, plus the map's 5rem), the map waits there from the
+//   top of the page and is let go exactly when its wrapper reaches that
+//   line, where the snap stops it; from there it scrolls with the page.
+//   The hold only has to reach above the stop by the wrapper's distance
+//   from the top of the page: two screens covers a lead up to about two
+//   screens tall.
+// - Its heading, summary and drawing are faded out so the lead's glass
+//   shows nothing of them at the top of the page. They fade in over the
+//   first half of the wrapper's way up (a scroll-driven opacity, which a
+//   frame's lag can't show), still under the glass, and are fully shown by
+//   the time the lead uncovers them.
 // - The lead (and the bar over it) stack above the map so it can pass
 //   under them. building-map.js reads the map's place from the wrapper too
-//   (draw-on, the dimmed backdrop, keyboard focus).
+//   (draw-on, the dimmed backdrop, keyboard focus), and --pf-map-reveal
+//   tells it the reveal is on.
 @supports (animation-timeline: view()) {
   @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     html:not(.pf-a11y-motion) .pf-landing--hero.pf-landing--lead-screen {
       --pf-map-reveal-inset: calc(49px + 5rem);
+      --pf-map-reveal-hold: 200vh;
 
       > .pf-landing__lead {
         z-index: 1;
       }
 
+      // flow-root: the map's negative margin stays inside the wrapper
+      // instead of collapsing through it and moving the wrapper up.
       > .pf-landing__visit {
+        display: flow-root;
         view-timeline: --pf-map-reveal block;
         view-timeline-inset: var(--pf-map-reveal-inset) 0px;
+
+        &::after {
+          content: "";
+          display: block;
+          height: var(--pf-map-reveal-hold);
+        }
       }
 
       > .pf-landing__visit > .pf-map {
-        animation: pf-map-reveal linear both;
-        animation-timeline: --pf-map-reveal;
-        animation-range: entry 0% entry 100%;
+        --pf-map-reveal: on;
+        position: sticky;
+        top: var(--pf-map-reveal-inset);
+        margin-top: calc(-1 * var(--pf-map-reveal-hold));
       }
 
       > .pf-landing__visit > .pf-map > :is(.pf-map__heading, .pf-map__type, .pf-map__stage) {
@@ -111,18 +131,6 @@ $pf-hero-media-wash: .8 !default;
         animation-range: entry 0% entry 50%;
       }
     }
-  }
-}
-
-// The whole distance the map travels through the timeline (the window's
-// height less its top inset), undone one for one: the map holds still.
-@keyframes pf-map-reveal {
-  from {
-    transform: translateY(calc(-1 * (100vh - var(--pf-map-reveal-inset))));
-  }
-
-  to {
-    transform: none;
   }
 }
 
