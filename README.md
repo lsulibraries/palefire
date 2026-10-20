@@ -621,6 +621,20 @@ tag, since no page loads the FA CSS or webfont. The icon stays
 File: `templates/includes/landing.html.twig` (and a comment in
 `scss/components/_landing-features.scss`; no CSS rebuild needed).
 
+### Hero bottom row becomes a plinth under the tiles (2026-10-20)
+
+The row under the hero tiles (Next event | Latest blog post | Your
+account) looked too small next to them, mostly because every field was cut
+to one line. Where the cards sit three across (a 50rem panel and up), the
+row now sits flush under the tiles as one framed strip: no gap, the tiles'
+bottom edge is its top line, and each card is a cell with the same soft
+hairline between, under its tile. The whole cell is the link and tints
+faintly on hover and focus. On every width, dates and titles now wrap to two
+lines before they're clamped, and the thumbnails are square so they fill
+the taller card. The two-across and stacked layouts are otherwise unchanged.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Guides use the WYSIWYG text format (2026-10-20)
 
 Guide text was saved as Full HTML (`full_html`, else `basic_html`). The
