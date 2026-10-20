@@ -697,6 +697,16 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: no line between the two accordions (2026-10-20)
+
+The two bands now meet with no line between them, one frame around both,
+so they read as one grid. The first band drops its bottom border. The
+second band's `border-top: 0` had never applied (the general `.pf-exhibits`
+border rule came later at the same specificity), so there were two
+hairlines there; it's now scoped to `.pf-landing__features`.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: the two accordions open by column (2026-10-20)
 
 Each band used to widen its own tiles, so the lines between the columns

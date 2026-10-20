@@ -24,8 +24,9 @@
 // The two accordions. From md they share whatever height the panel has
 // left equally (see the band below), down to the panel's foot. Below md
 // each is as tall as its own tiles (stacked, three tiles are taller than
-// two). They touch, one frame line between them (the second has no top
-// border).
+// two). They touch with no line between them, one frame around both (the
+// first has no bottom border, the second no top), so they read as one
+// grid.
 .pf-landing__features {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -33,7 +34,11 @@
   container: pf-features / inline-size;
 }
 
-.pf-exhibits--updates {
+.pf-landing__features > .pf-exhibits:has(+ .pf-exhibits--updates) {
+  border-bottom: 0;
+}
+
+.pf-landing__features > .pf-exhibits--updates {
   border-top: 0;
 }
 
