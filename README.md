@@ -29,6 +29,7 @@ Production needs only the build output in the repo: `css/style.css`,
 - `scripts/palefire_guide_setup.php` – Guide pages content model: Resource content type, guide paragraph types, guide fields on Modular page (sites with palefire_modular)
 - `scripts/palefire_tile_showcase_setup.php` – Tile showcase paragraph type (How-to guides, Collections, Specializations), its image styles and responsive image styles (sites with palefire_modular)
 - `scripts/palefire_guide_demo.php` – builds the Systematic Reviews LibGuide as an unpublished guide page, as a demo
+- `scripts/palefire_guide_special_collections.php` – builds the "How to Use Special Collections" guide as an unpublished guide page
 
 ## Modular pages
 
@@ -604,6 +605,22 @@ production downstream as usual.
   `scripts/palefire_visit_setup.php`) and each section's saved theme on the
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
+
+### "How to Use Special Collections" guide (2026-10-20)
+
+A new guide page for people who have never used an archive, built the same
+way as the Systematic Reviews guide: run
+`scripts/palefire_guide_special_collections.php` once and it creates an
+unpublished Modular page in guide mode. It explains what Special
+Collections is, how a collection is described (catalog record, finding
+aid, box, folder, item), what a finding aid is and how to read one, the
+paths through Manuscripts, University Archives and Oral History, how to
+request and visit, and the do's and don'ts of asking Special Collections a
+question through Ask Us. See "How to Use Special Collections" under Guide
+pages.
+
+File: `scripts/palefire_guide_special_collections.php` (new). No theme code
+or config changes.
 
 ### Hero tiles use the page's Image Cover (2026-10-20)
 
@@ -2997,6 +3014,8 @@ drush cr
 drush php:script themes/custom/palefire/scripts/palefire_guide_demo.php -- path=/v2/guides/systematic-reviews
 # Optional "How to Request Research Help" page (unpublished):
 drush php:script themes/custom/palefire/scripts/palefire_guide_research_help.php -- path=/v2/guides/research-help
+# Optional "How to Use Special Collections" page (unpublished):
+drush php:script themes/custom/palefire/scripts/palefire_guide_special_collections.php -- path=/v2/guides/special-collections
 drush cr
 ```
 
@@ -3093,6 +3112,36 @@ help.
   the same title exists.
 * If llms.txt changes, update the page itself; the script is a one-time
   starting point, not a sync.
+
+### How to Use Special Collections
+
+`scripts/palefire_guide_special_collections.php` (2026-10-20) builds a
+beginner's guide to Special Collections, owned by Kyle Tanglao. Sections:
+Start here, How a collection is described, What is a finding aid?, Finding
+your way by collection type (an accordion: Manuscripts, University
+Archives, Oral History), Requesting and visiting, Asking Special
+Collections a question (Ask Us form fields, Do, Don't, an example), and
+Get help.
+
+* Service details (the Special Collections account, "Request Item", 10
+  open requests, 5 to 15 minutes in the Reading Room, 3 to 7 days from
+  remote storage, Reading Room rules, the Ask Us form fields, phone and
+  email) come from lib.lsu.edu/special, /findingaids, /oralhistory and
+  askus.lib.lsu.edu/special as of October 2026. If those change, update
+  the page; the script is a one-time starting point.
+* The structure follows the Special Collections records flow chart
+  (catalog record, finding aid, description and item list, box, folder,
+  item). Its deprecated record types are left out on purpose.
+* The Ask Us example uses an invented collection and numbers, and says so,
+  so the guide never shows box or folder numbers that aren't in a real
+  finding aid.
+* New Resources: Finding Aids, Special Collections account, Manuscript
+  Subject Guides, University Archives, the Oral History center, the
+  Louisiana Digital Library and Ask Us: Special Collections. Existing
+  Resources with the same link are reused (the Library Catalog and Special
+  Collections & Archives from the research-help guide).
+* Like the other guides, it creates the page unpublished and stops if a
+  page with the same title exists.
 
 ### Writing a guide
 
