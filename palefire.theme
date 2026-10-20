@@ -869,8 +869,13 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
+  if (empty($variables['content']['field_block_body'])) {
+    return;
+  }
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
-  foreach (Element::children($variables['content']['field_block_body'] ?? []) as $delta) {
+  // Element::children() takes its argument by reference, so it gets the
+  // variable itself, not an expression.
+  foreach (Element::children($variables['content']['field_block_body']) as $delta) {
     $item = &$variables['content']['field_block_body'][$delta];
     if (isset($item['#text']) && preg_match($marker, (string) $item['#text'])) {
       $item['#text'] = preg_replace($marker, '', (string) $item['#text']);

@@ -607,6 +607,16 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Fix: guide pages crashed after the request-paths change (2026-10-20)
+
+`palefire_preprocess_paragraph__guide_text()` passed an expression
+(`... ?? []`) to `Element::children()`, which takes its argument by
+reference, so every guide page with a text block failed with "could not be
+passed by reference". It now returns early when the block has no body and
+passes the variable itself.
+
+File: `palefire.theme`.
+
 ### Special Collections guide: request paths as subway lines (2026-10-20)
 
 The tree at the top of the Special Collections guide was hard to scan, so
