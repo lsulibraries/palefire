@@ -9,9 +9,10 @@
 //    accordion across). Placeholders for now: hatched frames stand in for
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
-// 2. The latest blog post under them, unframed, like a caption: a small
-//    picture, its label and title. (Next event is a line under the intro
-//    and the sign-in button is in the title row, both above.)
+// 2. Under them, the latest blog post across two thirds (a framed card: a
+//    small picture, its label and title) and the Special Collections
+//    sign-in button in the last third. (Next event is a line under the
+//    intro, above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -333,34 +334,18 @@
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
   }
 
-  // Title and hours (.pf-landing__head-text), then the sign-in button. The
-  // hours line sits close under the title, as its caption; from lg, beside
-  // it on the title's baseline (under it again if a long title leaves no
-  // room). The button: under them below lg; from lg at the row's far end,
-  // level with the title, never wrapping to a line of its own (the title
-  // and hours wrap first). The panel has no height to spare for one.
+  // Title and hours: the hours line close under the title, as its
+  // caption; from lg, beside it on the title's baseline (under it again if
+  // a long title leaves no room). The panel has no height to spare for a
+  // line of its own there.
   > .pf-landing__head {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: .75rem clamp(1rem, 2vw, 1.75rem);
+    gap: .5rem clamp(1rem, 2vw, 1.75rem);
     margin-bottom: clamp(.75rem, 1.5vw, 1rem);
 
     @include media-breakpoint-up(lg) {
-      flex-direction: row;
-      align-items: flex-start;
-    }
-  }
-
-  .pf-landing__head-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: .5rem clamp(1rem, 2vw, 1.75rem);
-    min-width: 0;
-
-    @include media-breakpoint-up(lg) {
-      flex: 1 1 auto;
       flex-direction: row;
       flex-wrap: wrap;
       align-items: baseline;
@@ -369,10 +354,6 @@
     > .pf-landing__title {
       margin: 0;
     }
-  }
-
-  .pf-landing__head > .pf-hero-account {
-    flex: none;
   }
 
   > .pf-landing__head + .pf-landing__intro {
@@ -609,36 +590,67 @@ html.pf-a11y-motion {
   }
 }
 
-// --- Latest blog post: a caption under the tiles ---------------------------
-// Unframed, a little below the tiles, like a gallery label beside the
-// work: a small picture (16:9), then the label (From the blog · date ·
-// category) and the title, light, in two lines at most. The whole row is
-// the link: hover or focus eases the picture in a little and underlines
-// the title. A placeholder (no blog category yet): hatched, not a link.
+// --- Under the tiles: the latest blog post and the sign-in button ----------
+// A row a little below the tiles (.pf-landing__foot). From 36rem of panel
+// the post takes the first two thirds, ending where the second tile does,
+// and the button sits in the last third at its top right, nearest the
+// tiles. Narrower, they stack: the post, then the button full width.
+.pf-landing__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(.75rem, 1.5vw, 1rem);
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
+@container pf-features (min-width: 36rem) {
+  .pf-landing__foot {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: 0;
+  }
+
+  .pf-landing__foot > .pf-hero-account {
+    align-self: start;
+    justify-self: end;
+  }
+}
+
+// The post: a card in the tiles' soft hairline, padded, with a small
+// picture (16:9), then the label (From the blog · date · category) and the
+// title, in two lines at most. The whole card is the link: hover or focus
+// brings the frame up to the muted tone, eases the picture in a little and
+// underlines the title. A placeholder (no blog category yet): hatched, not
+// a link.
 .pf-landing__post {
   display: flex;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  gap: clamp(.875rem, 1.75vw, 1.25rem);
   align-items: center;
   min-width: 0;
-  margin-top: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(.625rem, 1.25vw, .875rem);
+  border: 1px solid var(--pf-landing-line);
   color: inherit;
   text-decoration: none;
+  transition: border-color $pf-hover-out ease;
 
   &:hover,
   &:focus-visible {
     color: inherit;
   }
 
+  &:is(a):is(:hover, :focus-visible) {
+    border-color: var(--pf-toc-color);
+    transition-duration: $pf-hover-in;
+  }
+
   &:focus-visible {
     outline: 2px solid var(--pf-ui-gold, #{$pf-gold});
-    outline-offset: 4px;
+    outline-offset: 2px;
   }
 }
 
 .pf-landing__post-media {
   position: relative;
   flex: none;
-  width: clamp(6.5rem, 17cqi, 11rem);
+  width: clamp(6rem, 14cqi, 9.5rem);
   overflow: hidden;
   aspect-ratio: 16 / 9;
   background:
@@ -682,9 +694,9 @@ html.pf-a11y-motion {
   -webkit-line-clamp: 2;
   line-clamp: 2;
   max-width: 40rem;
-  font-size: clamp(1.0625rem, .95rem + .45vw, 1.375rem);
-  font-weight: 300;
-  line-height: 1.3;
+  font-size: clamp(.9375rem, .9rem + .2vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.35;
   color: var(--pf-section-fg, inherit);
   text-decoration: underline transparent;
   text-decoration-thickness: 1px;
@@ -722,13 +734,12 @@ html.pf-a11y-motion {
 }
 
 // --- Sign-in ----------------------------------------------------------------
-// A small outlined button in the title row (.pf-landing__head, above): from
-// lg at the row's far end, level with the title; below lg under the hours
-// line. In the Search button's type and colour, the duotone sign-in icon
-// before the words.
+// A small outlined button beside the blog post (above), in the Search
+// button's type and colour, the duotone sign-in icon before the words.
+// Full width when stacked.
 .pf-hero-account__link {
   @extend %pf-landing-label;
-  display: inline-flex;
+  display: flex;
   gap: .625rem;
   align-items: center;
   justify-content: center;
@@ -749,6 +760,34 @@ html.pf-a11y-motion {
 
   &:focus-visible {
     outline-color: var(--pf-landing-accent);
+  }
+}
+
+@container pf-features (min-width: 36rem) {
+  .pf-hero-account__link {
+    display: inline-flex;
+  }
+}
+
+// The words: in full when stacked (the button is full width) and from
+// 60rem of panel; between, the last third is too narrow for them on one
+// line, so "Sign in" shows and the full words stay the link's name.
+.pf-hero-account__short {
+  display: none;
+}
+
+@container pf-features (min-width: 36rem) and (max-width: 59.99rem) {
+  .pf-hero-account__long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .pf-hero-account__short {
+    display: inline;
   }
 }
 

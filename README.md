@@ -697,6 +697,25 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: blog card and sign-in share the row under the tiles (2026-10-20)
+
+- **Blog post** is a card again: the tiles' soft hairline around it, with
+  padding, a smaller picture (96–152px) and the title one size down
+  (15–17px, regular weight). From a 36rem panel it takes the first two
+  thirds of the row, ending where the second tile does. Hover brings the
+  frame up to the muted tone.
+- **Sign-in** moved out of the title row into the last third of that
+  row, at its top right (level with the card's top, nearest the tiles).
+  Where that third is narrow (36–60rem of panel, e.g. 1024 and 768px) it
+  reads "Sign in", with the full "Sign in to request materials" kept as
+  the link's name for screen readers. On phones the card and button stack,
+  the button full width.
+- **Title row** is back to the title with the hours beside it (the
+  `.pf-landing__head-text` wrapper is gone).
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: Next event title in the label type (2026-10-20)
 
 The event title in the Next event line now uses the same small tracked
