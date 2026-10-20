@@ -415,8 +415,8 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
  * Each tile has the template's shape: label, title, meta (the line under
  * the title), more (the page's intro as plain text, shown when the tile
  * opens), url, cta, images (one render array, or none: hatched frame) and
- * frames. The image is the background poster of the page's first landing
- * (Bento search or Landing hero), decorative and lazy.
+ * frames. The image is the page's Image Cover (field_image_cover), else the
+ * background poster of its first landing; decorative and lazy.
  */
 function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables): array {
   if (!$paragraph->hasField('field_hero_tiles')) {
@@ -448,7 +448,7 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
     if ($page->hasField('field_intro') && !$page->get('field_intro')->isEmpty()) {
       $more = _palefire_plain_excerpt((string) $page->get('field_intro')->value, 200);
     }
-    $image = _palefire_landing_poster($page, $cache);
+    $image = _palefire_page_cover($page, $cache) ?? _palefire_landing_poster($page, $cache);
 
     $tiles[] = [
       'label' => $tile->hasField('field_hero_tile_label') ? (string) $tile->get('field_hero_tile_label')->value : '',
@@ -485,20 +485,44 @@ function _palefire_landing_poster(NodeInterface $page, CacheableMetadata $cache)
         continue;
       }
       $cache->addCacheableDependency($section);
-      $image = $section->get('field_bg_poster')->first();
-      $target = $image->entity;
-      if ($target instanceof MediaInterface) {
-        $cache->addCacheableDependency($target);
-        $source = $target->getSource()->getConfiguration()['source_field'] ?? NULL;
-        if (!$source || !$target->hasField($source) || $target->get($source)->isEmpty()) {
-          return NULL;
-        }
-        $image = $target->get($source)->first();
-      }
-      return _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache);
+      $image = _palefire_media_image_item($section->get('field_bg_poster')->first(), $cache);
+      return $image ? _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache) : NULL;
     }
   }
   return NULL;
+}
+
+/**
+ * A Modular page's Image Cover (field_image_cover, Media: Image), or NULL.
+ *
+ * In the tiles' landscape style, like the landing poster
+ * (_palefire_landing_poster(), the fallback when there is no cover).
+ */
+function _palefire_page_cover(NodeInterface $page, CacheableMetadata $cache): ?array {
+  if (!$page->hasField('field_image_cover') || $page->get('field_image_cover')->isEmpty()) {
+    return NULL;
+  }
+  $image = _palefire_media_image_item($page->get('field_image_cover')->first(), $cache);
+  return $image ? _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache) : NULL;
+}
+
+/**
+ * The image item behind a Media reference or a plain image field, or NULL.
+ *
+ * A Media item's source field holds the image; a plain image field item is
+ * returned as it is.
+ */
+function _palefire_media_image_item(FieldItemInterface $item, CacheableMetadata $cache): ?FieldItemInterface {
+  $target = $item->entity;
+  if (!$target instanceof MediaInterface) {
+    return $item;
+  }
+  $cache->addCacheableDependency($target);
+  $source = $target->getSource()->getConfiguration()['source_field'] ?? NULL;
+  if (!$source || !$target->hasField($source) || $target->get($source)->isEmpty()) {
+    return NULL;
+  }
+  return $target->get($source)->first();
 }
 
 /**

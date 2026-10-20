@@ -605,6 +605,19 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Hero tiles use the page's Image Cover (2026-10-20)
+
+The landing tiles (Hero tiles on the Landing hero and Landing department)
+took their picture only from the linked page's landing Background poster,
+so a Modular page's **Image Cover** (`field_image_cover`, Media: Image)
+never showed. Tiles now use the Image Cover first, and the poster when a
+page has no cover. Same landscape image style
+(`tile_showcase_landscape_lg`), decorative and lazy. The Media-to-image
+lookup the poster used is now `_palefire_media_image_item()`, shared by
+both.
+
+File: `palefire.theme`.
+
 ### TOC on landing-only pages; TOC open by default (2026-10-20)
 
 - **Landing-only pages get the TOC:** palefire_modular's TOC block lists
