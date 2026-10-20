@@ -605,6 +605,41 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Section headings slide in; the Events carousel reveals in sequence (2026-10-19)
+
+A new `js/section-reveal.js` (library `palefire/section-reveal`, attached
+by the Modular page's sections template) works like the Collections tiles
+(`tile-reveal.js`). Things animate in as they scroll into view and hide
+again, at once, when they've left it, so they replay on the way back.
+
+- **H2s:** every section title and the hero's map heading slide in from
+  the left (1.5rem, `translate`) as they fade in: .6s fade, .7s slide. The
+  map heading already fades with the map's reveal, so it only slides.
+  Guides keep their heading colour change in the same transition. A
+  heading that takes focus (a TOC jump) shows at once.
+- **Events carousel:** once a fifth of it is in view, its parts fade in and
+  rise 1rem into place in sequence. The order is the day strip, then for
+  each day its label, date, weather, hours and image card, 70ms apart, with
+  each day starting 140ms after the one before. It resets when the carousel
+  has left the window. Only the parts move, never the carousel the script
+  watches or the slides Bootstrap moves.
+- **Off for:** reduced motion, the Settings drawer's switch, and no
+  IntersectionObserver. Without JS nothing is hidden (the hidden states
+  need classes only the script adds). Focus inside the carousel shows it
+  at once.
+
+Checked on /v2/special at 1333×798 with the CSS and the script's logic run
+in the page: the headings hidden at the top and revealed in view. The
+carousel at 150ms: day 1's label .15, the rest 0. At 400ms: day 1
+.79/.65/.48/.29/.08, day 2 .48/.29/0/0. All shown by 1.2s.
+
+The map reveal's two-step look (the TOC's sub-list for the map heading
+opening as the reveal ends) is left as it is, as agreed.
+
+Files: `js/section-reveal.js` (new), `palefire.libraries.yml`,
+`field--node--field-scroll-section--modular-page.html.twig`,
+`_modular.scss`, `_events-carousel.scss`.
+
 ### Smoother reveal end; calmer tile text; one H2 size; event image cards (2026-10-19)
 
 - **Reveal end:** the map moved at 15% of the scroll the whole way, then

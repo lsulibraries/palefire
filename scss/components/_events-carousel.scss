@@ -359,6 +359,68 @@
   font-size: .875rem;
 }
 
+// --- Reveal ---------------------------------------------------------------
+// Once a fifth of the carousel is in view (js/section-reveal.js adds
+// .pf-ev-reveal, then .is-revealed), its parts fade in and rise 1rem into
+// place one after another: the day strip, then for each day its label,
+// date, weather, hours and image card or list (70ms apart), each day
+// starting 140ms after the one before. They hide again, at once, when the
+// carousel has left the window, so it replays on the way back. Only the
+// parts move, never the carousel the script watches or the slides
+// Bootstrap moves. Without the script, or with reduced motion, nothing is
+// hidden.
+.pf-events-carousel .libcal-day-carousel.pf-ev-reveal {
+  .libcal-day-carousel__toolbar {
+    --pf-ev-k: 0;
+  }
+
+  .libcal-day__eyebrow {
+    --pf-ev-k: 1;
+  }
+
+  .libcal-day__date {
+    --pf-ev-k: 2;
+  }
+
+  .libcal-day__weather {
+    --pf-ev-k: 3;
+  }
+
+  .libcal-day__hours {
+    --pf-ev-k: 4;
+  }
+
+  .libcal-day__main {
+    --pf-ev-k: 5;
+  }
+
+  .libcal-day__fact {
+    --pf-ev-k: 6;
+  }
+
+  .libcal-day:nth-child(2) {
+    --pf-ev-d: 1;
+  }
+
+  .libcal-day:nth-child(n + 3) {
+    --pf-ev-d: 2;
+  }
+
+  :is(.libcal-day-carousel__toolbar, .libcal-day__eyebrow, .libcal-day__date, .libcal-day__weather, .libcal-day__hours, .libcal-day__main, .libcal-day__fact) {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  &.is-revealed :is(.libcal-day-carousel__toolbar, .libcal-day__eyebrow, .libcal-day__date, .libcal-day__weather, .libcal-day__hours, .libcal-day__main, .libcal-day__fact) {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity .5s ease-out,
+      transform .6s cubic-bezier(.2, .7, .2, 1);
+    transition-delay: calc(var(--pf-ev-k, 0) * 70ms + var(--pf-ev-d, 0) * 140ms);
+  }
+}
+
 // --- Image card -----------------------------------------------------------
 // A day with a featured image reads like the landing's tiles
 // (_landing-features.scss, .pf-exhibit): the image is the card, and the

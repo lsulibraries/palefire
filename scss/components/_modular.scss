@@ -196,6 +196,37 @@ html.pf-snap .site-footer {
   }
 }
 
+// Section headings (h2) slide in from the left as they fade in, each time
+// they scroll into view (js/section-reveal.js adds .pf-reveal, then
+// .is-revealed while in view). Hiding, out of view, is instant; showing
+// takes .6-.7s. The slide is `translate`, so it never fights a heading's
+// own transform; the hero's map heading also fades with the map's reveal
+// (its opacity is that animation's), so it only slides. The guides' colour
+// change (_guide.scss) is kept in the same transition. Without the script,
+// or with reduced motion, there is no .pf-reveal: headings simply show.
+.pf-reveal {
+  opacity: 0;
+  translate: -1.5rem 0;
+
+  &.is-revealed {
+    opacity: 1;
+    translate: none;
+    transition:
+      opacity .6s ease-out,
+      translate .7s cubic-bezier(.2, .7, .2, 1),
+      color .3s ease;
+  }
+}
+
+// Guides set their headings' transition (colour only) more specifically
+// (_guide.scss): the same three here, so they slide in too.
+html[data-pf-mode="guide"] .pf-sections .pf-reveal.is-revealed {
+  transition:
+    opacity .6s ease-out,
+    translate .7s cubic-bezier(.2, .7, .2, 1),
+    color .3s ease;
+}
+
 // field_section_theme "light-map" ("Light, dark at the map"): light until the
 // landing's building map is in view, then every dark-section rule applies.
 // building-map.js toggles .is-map-dark (and data-bs-theme) on the section.

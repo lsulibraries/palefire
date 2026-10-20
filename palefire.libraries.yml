@@ -170,6 +170,16 @@ landing-video:
     - core/drupal
     - core/once
 
+# Modular pages: section headings and the Events carousel animate in on
+# scroll. Attached by
+# templates/field/field--node--field-scroll-section--modular-page.html.twig.
+section-reveal:
+  js:
+    js/section-reveal.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Tile showcase: cards animate in on scroll, as on the Origami concept page.
 # Attached by templates/paragraphs/paragraph--tile-showcase.html.twig.
 tile-reveal:
