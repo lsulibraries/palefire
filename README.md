@@ -697,6 +697,19 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: the two accordions open by column (2026-10-20)
+
+Each band used to widen its own tiles, so the lines between the columns
+broke apart across the two bands on hover. Under exactly three tiles they
+now act as one grid of three columns: a tile in use, in either band,
+widens its whole column in both (2.4 shares to the others' 1), so the
+column lines stay aligned while it opens. With one event, it spans columns 1
+and 2 and grows with whichever of them opens; the post stays in column 3.
+Nothing changes height. Other landings, and heroes with other tile
+counts, keep the single-row accordion.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`.
+
 ### Hero: events and blog band darker (2026-10-20)
 
 The second band's pictures still read too bright at rest. They now rest
