@@ -83,12 +83,20 @@
 // keeps the head's type (.pf-breadcrumb--modular, _layout.scss) without its
 // glass strip. The TOC title lines up with the breadcrumb (modular-toc.js
 // measures it, as it did the head's).
-// The bar sits over the lead panel (z-index 1; the TOC, 2, and the video
-// button, 5, stay above it): from md the panel's glass runs up under it
-// (below).
+// Sticky: the bar stays under the header (compact or not) for as long as
+// the landing, lead and map, is on screen, and scrolls away with it. It
+// sits over the whole landing (z-index 3, above the map's heading and
+// event card at 2; the docked video button, 5, stays above it). Two
+// selectors so it beats the landing's `position: relative` for children
+// over the video (_visit.scss).
+.pf-landing > .pf-landing__bar,
+.pf-landing.has-bg-video > .pf-landing__bar {
+  position: sticky;
+  top: var(--pf-header-h);
+  z-index: 3;
+}
+
 .pf-landing__bar {
-  position: relative;
-  z-index: 1;
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-bottom: var(--pf-landing-bar-gap);
   padding-block: .375rem;
@@ -179,8 +187,9 @@
   .pf-landing--lead-screen > .pf-landing__lead:has(> .pf-landing__features) {
     width: auto;
     max-width: none;
-    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)));
-    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
+    // Under the bar (below where it runs up under it), down to the window's foot.
+    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
+    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
     padding-inline: var(--pf-hero-inset);
     // Space above the title, and the same under the bottom row, so the
@@ -190,28 +199,91 @@
     padding-block: clamp(1.5rem, 4vw, 3.5rem);
     border-width: 0 0 1px;
   }
+}
 
-  // One glass surface for the bar and the panel. Each had its own blur, and
-  // over the playing video Chrome now and then skipped one of them for a
-  // frame or a repaint (hover, cursor moves): a band, about the blur's size,
-  // flickered where the two met. The panel now starts under the bar (pulled
-  // up by its height, the same added to its top padding), and the bar keeps
-  // only a tint: the panel's glass plus 70% of the bar's own colour comes
-  // to about the bar's old shade.
-  .pf-landing--lead-screen:has(> .pf-landing__lead > .pf-landing__features) {
-    > .pf-landing__bar {
-      background-color: transparent;
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
+// One glass surface for the bar and the panel. Each had its own blur, and
+// over the playing video Chrome now and then skipped one of them for a
+// frame or a repaint (hover, cursor moves): a band, about the blur's size,
+// flickered where the two met. The panel starts under the bar (pulled up by
+// its height, the same added to its top padding), and while the panel is
+// under it the bar keeps only a tint: the panel's glass plus 70% of the
+// bar's own colour comes to about the bar's old shade.
+// Once the panel's foot has scrolled up past the bar (over the map), the
+// bar has no glass under it, so it takes its own: the bar's colour and blur
+// under the same tint, the same shade as before. A scroll-driven switch on
+// the panel's view timeline, inset to the bar's bottom edge (no JS). Where
+// that isn't supported the bar keeps its own glass and the panel starts
+// under it, as below md.
+@supports (animation-timeline: view()) and (timeline-scope: none) {
+  @include media-breakpoint-up(md) {
+    .pf-landing--lead-screen:has(> .pf-landing__lead > .pf-landing__features) {
+      timeline-scope: --pf-lead;
 
-    > .pf-landing__lead {
-      margin-top: calc(-1 * var(--pf-landing-bar-h));
-      padding-top: calc(var(--pf-landing-bar-h) + clamp(1.5rem, 4vw, 3.5rem));
-      background-image: linear-gradient(color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent) 0 0);
-      background-repeat: no-repeat;
-      background-size: 100% var(--pf-landing-bar-h);
+      > .pf-landing__bar {
+        background-color: transparent;
+        background-image: linear-gradient(color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent) 0 0);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        // forwards, not both: filled backwards, the blur's starting value
+        // was an empty filter (blur(0)), not none, and Chrome drew the
+        // panel's glass under the bar twice.
+        animation: pf-landing-bar-glass linear forwards;
+        animation-timeline: --pf-lead;
+        animation-range: cover calc(100% - 1px) cover 100%;
+      }
+
+      > .pf-landing__lead {
+        min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)));
+        min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
+        margin-top: calc(-1 * var(--pf-landing-bar-h));
+        padding-top: calc(var(--pf-landing-bar-h) + clamp(1.5rem, 4vw, 3.5rem));
+        view-timeline: --pf-lead block;
+        view-timeline-inset: calc(var(--pf-header-h) + var(--pf-landing-bar-h)) 0px;
+      }
     }
+  }
+}
+
+@keyframes pf-landing-bar-glass {
+  to {
+    background-color: var(--pf-sidebar-bg);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+  }
+}
+
+// Nothing in the landing stops under the stuck bar: keyboard focus and TOC
+// jumps (modular-toc.js reads scroll-margin) land below it (WCAG 2.2
+// SC 2.4.11), as does the drawing when a tapped room brings it into view
+// (building-map.js). The map wrapper keeps its own 5rem stop, which already
+// clears the bar.
+.pf-landing:has(> .pf-landing__bar) {
+  > :is(.pf-landing__lead, .pf-landing__visit) :is(a[href], button, input, select, textarea, summary, [tabindex]) {
+    scroll-margin-top: calc(var(--pf-landing-bar-h) + 1rem);
+  }
+
+  :is(h3, [data-toc])[id] {
+    scroll-margin-top: calc(var(--pf-landing-bar-h) + 2rem);
+  }
+
+  .pf-map__stage {
+    scroll-margin-top: calc(var(--pf-header-h, 50px) + var(--pf-landing-bar-h) + 1rem);
+  }
+}
+
+// --- Edge to edge on phones (below md) --------------------------------------
+// The lead panel and the Visit strip run the full width of the screen like
+// the bar: the section's side padding is pulled back out, no side borders
+// (they'd sit on the screen's edges), and their content keeps to the page's
+// gutter, in line with the map's heading.
+@include media-breakpoint-down(md) {
+  .pf-landing > .pf-landing__lead,
+  .pf-landing .pf-visit {
+    width: auto;
+    max-width: none;
+    margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+    padding-inline: var(--pf-section-pad-inline, 0px);
+    border-inline-width: 0;
   }
 }
 

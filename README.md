@@ -605,6 +605,51 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing bar stays through Home and Map; lead and Visit edge to edge on phones (2026-10-20)
+
+The sub-header bar (breadcrumb and video button) used to scroll away with
+the lead, leaving only the video button. It now stays the same the whole
+time you're on the landing.
+
+- **Sticky:** `.pf-landing__bar` sticks under the header (`top:
+  var(--pf-header-h)`, so it follows the compact header) for the whole
+  landing, lead and map, and leaves with it. It sits at z-index 3, above
+  the map's heading and event card (2). The docked video button (5) stays
+  in its row.
+- **Same glass throughout (md up):** while the lead is under the bar, the
+  bar keeps only the 70% tint (moved from the lead's `background-image`
+  to the bar) over the lead's glass, as before, so the double-blur flicker
+  stays fixed. Once the lead's foot passes the bar's bottom edge, a
+  scroll-driven switch on the lead's view timeline (`--pf-lead`,
+  `timeline-scope` on the landing, no JS) gives the bar its own colour
+  and blur under the same tint. Browsers without `timeline-scope` keep the
+  bar's own glass with the lead starting under it, and the lead is
+  shortened by the bar's height so it still ends at the fold. Filled
+  `forwards`, not `both`: filled backwards, the blur started as
+  `blur(0px)` rather than `none`, and Chrome drew the lead's glass under
+  the bar twice.
+- **Not hidden under the bar (WCAG 2.4.11):** inside the landing,
+  focusable items get `scroll-margin-top` of the bar plus 1rem, TOC
+  targets (h3s) the bar plus 2rem, and the map drawing (a tapped room
+  brings it into view) the header, the bar and 1rem. The map's own 5rem
+  stop already clears the bar.
+- **Edge to edge below md:** the lead panel and the Visit strip pull out
+  by the section padding, drop their side borders and pad their content
+  to the page gutter (1.25rem), in line with the map heading. In a flush
+  section (no padding) nothing changes.
+
+Checked in headless Edge on a local test page with the compiled CSS. The
+bar holds at the header's foot from scroll 0 to the end of the landing at
+320, 768, 1024 and 1440, then scrolls away. It switches to its own glass
+between scroll 764 and 766 at 1440×900, as the lead's foot crosses its
+136/134px edge. At rest the bar's colour matches the committed CSS
+exactly (248, 227, 227 over the test stripes). At 320 the lead and Visit
+strip run 0–305px (the full width less the scrollbar), with no horizontal
+scroll.
+
+Files: `_landing-features.scss`, `_landing-hero.scss` (the reveal's own
+bar z-index is gone).
+
 ### Landing hero: a true curtain reveal for the map (2026-10-19)
 
 The map now stays perfectly still, where the snap will stop it, while the

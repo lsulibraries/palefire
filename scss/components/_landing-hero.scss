@@ -90,10 +90,6 @@ $pf-hero-media-wash: .8 !default;
     html:not(.pf-a11y-motion) .pf-landing--hero.pf-landing--lead-screen {
       --pf-map-reveal-inset: calc(49px + 5rem);
 
-      > .pf-landing__bar {
-        z-index: 2;
-      }
-
       > .pf-landing__lead {
         z-index: 1;
       }
