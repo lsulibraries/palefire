@@ -10,8 +10,8 @@
 //    images. A tile with several images crossfades through them
 //    (exhibit-rotate.js), with a pause button.
 // 2. The latest blog post under them, unframed, like a caption: a small
-//    picture, its label and title. (Next event is in the TOC sidebar,
-//    _landing-hero.scss; the sign-in button in the title row, above.)
+//    picture, its label and title. (Next event is a line under the intro
+//    and the sign-in button is in the title row, both above.)
 // From md (.pf-landing--lead-screen) the panel is full screen: the whole
 // content column, from the bar to the bottom of the window. Sized so its
 // content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
@@ -398,6 +398,112 @@
     line-height: 1.5;
   }
 
+  // Next event (hero-event.js): one line close under the intro, its
+  // caption. "Next event" in the search heading's gold label, the day and
+  // time in the muted label type, then the title, the link, with an arrow
+  // that nudges on hover. The line's height is held while the feed loads
+  // and its words fade in once filled; it wraps on narrow screens.
+  > .pf-landing__intro:has(+ .pf-landing__next) {
+    margin-bottom: .625rem;
+  }
+
+  > .pf-landing__next {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .125rem .875rem;
+    align-items: baseline;
+    min-height: 1.5rem;
+    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+    font-size: .9375rem;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity .6s ease;
+
+    &.is-ready {
+      opacity: 1;
+    }
+
+    // Phones: three fixed lines (label, day and time, title), each cut
+    // with an ellipsis, so the height held is the height filled: wrapping
+    // freely, a long title could add lines once it loads.
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: .125rem;
+      align-items: stretch;
+      min-height: calc(2 * .6875rem * 1.5 + .9375rem * 1.5 + 2 * .125rem);
+
+      > * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.pf-landing__next-label {
+  @extend %pf-landing-label;
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+.pf-landing__next-when {
+  @extend %pf-landing-label;
+  color: var(--pf-toc-color);
+}
+
+.pf-landing__next-link {
+  color: var(--pf-section-fg, inherit);
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &::after {
+    content: "→" / "";
+    display: inline-block;
+    margin-inline-start: .5rem;
+    color: var(--pf-g-title, var(--pf-toc-active));
+    transition: transform .3s ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-section-fg, inherit);
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    &::after {
+      transform: translateX(3px);
+    }
+  }
+}
+
+:root:not(:has(.pf-events-carousel)) .pf-landing__next {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__next-link::after {
+    transition: none;
+  }
+
+  .pf-landing__next-link:is(:hover, :focus-visible)::after {
+    transform: none;
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-landing__next-link::after {
+    transition: none;
+  }
+
+  .pf-landing__next-link:is(:hover, :focus-visible)::after {
+    transform: none;
+  }
+}
+
+.pf-landing__lead:has(> .pf-landing__features) {
   > .pf-landing__form {
     --pf-landing-field-h: 3rem;
     --pf-landing-line: #{$pf-hairline};

@@ -1,8 +1,9 @@
 /**
  * @file
- * "Next event" card for the landing hero (includes/landing.html.twig with
- * hero, .pf-hero-event): in the TOC sidebar when the hero has its lead
- * panel (.pf-hero-event--toc), or on its own by the map when it doesn't.
+ * "Next event" for the landing hero (includes/landing.html.twig with
+ * hero): a line under the intro when the hero has its lead panel
+ * (.pf-landing__next), or a card on its own by the map when it doesn't
+ * (.pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
@@ -15,9 +16,9 @@
  * under the title is the first category and the place ("Online" when
  * there is no room).
  *
- * On its own, the card's space is held by CSS while the feed loads (no
- * layout shift); in the TOC it stays hidden until filled in. With no
- * carousel, no upcoming event or a failed request it is removed.
+ * The card's or line's space is held by CSS while the feed loads (no
+ * layout shift). With no carousel, no upcoming event or a failed request
+ * it is removed.
  * Times are the feed's own labels (the library's time zone).
  */
 (function (Drupal, drupalSettings, once) {
@@ -146,6 +147,17 @@
     box.classList.add('is-ready');
   }
 
+  // With the lead panel: one line under the intro, after its "Next event"
+  // label: the day and time, then the title, the line's link.
+  function renderLine(box, { event, start }) {
+    const when = el('span', 'pf-landing__next-when');
+    when.append(timeOf(event, start));
+    const link = el('a', 'pf-landing__next-link', event.title);
+    link.href = event.url;
+    box.append(when, link);
+    box.classList.add('is-ready');
+  }
+
   Drupal.behaviors.palefireHeroEvent = {
     attach(context) {
       once('pf-hero-event', '[data-pf-hero-event]', context).forEach((box) => {
@@ -166,22 +178,11 @@
           heading.after(box);
           box.classList.add('is-in-map');
         }
-        // With the lead panel: in the TOC, above "Back to top", in the
-        // sidebar's empty space, so nothing moves; shown once filled in.
-        if (box.classList.contains('pf-hero-event--toc')) {
-          const top = document.querySelector('.pf-toc .pf-toc__top');
-          if (!top) {
-            box.remove();
-            return;
-          }
-          top.before(box);
-        }
         loadFeed(carousel).then((data) => {
           // Links and images only from http(s) addresses.
           const next = nextEvents(data).find(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
           if (next) {
-            render(box, next);
-            box.hidden = false;
+            (box.classList.contains('pf-landing__next') ? renderLine : render)(box, next);
           }
           else {
             box.remove();

@@ -697,6 +697,23 @@ the taller card. The two-across and stacked layouts are otherwise unchanged.
 
 Files: `scss/components/_landing-features.scss`, `css/style.css`.
 
+### Hero: Next event as a line under the intro (2026-10-20)
+
+The TOC sidebar's Next event tile is gone. Next event is now one line
+right under the page description: "Next event" in the search heading's
+gold label, the day and time in the muted label type, then the event
+title as the link, with an arrow that nudges on hover. `hero-event.js`
+fills it in (`.pf-landing__next`); its height is held while the feed
+loads and the words fade in, so nothing below moves. On phones it's three
+fixed lines (label, time, title), each cut with an ellipsis, so the held
+height always matches. It's hidden on pages without the events carousel
+and removed when nothing is coming up. The tiles give up the line's 24px
+(198px tall at 1440x900, was 230).
+
+Files: `templates/includes/landing.html.twig`, `js/hero-event.js`,
+`scss/components/_landing-features.scss`,
+`scss/components/_landing-hero.scss`, `css/style.css`.
+
 ### Hero: blog post as a caption, Next event as a tile (2026-10-20)
 
 - **Blog post.** No longer a framed strip flush under the tiles: it sits a

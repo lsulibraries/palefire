@@ -199,6 +199,15 @@
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>
     {% endif %}
+    {# Hero: one line under the intro, "Next event · day · time · title",
+       filled in by hero-event.js (its line held, fading in once filled;
+       removed with no upcoming event). Hidden by CSS on pages without the
+       events carousel. #}
+    {% if hero %}
+      <p class="pf-landing__next" data-pf-hero-event>
+        <span class="pf-landing__next-label">{{ 'Next event'|t }}</span>
+      </p>
+    {% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-landing__heading" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
         <label class="pf-landing__label" for="{{ input_id }}">{{ search_label }}</label>
@@ -227,8 +236,8 @@
       {# Features (_landing-features.scss): three large tiles that open on
          hover or focus (an accordion across: the one in use widens, shows
          more of its picture and a line more about it), then the latest
-         blog post across the row under them. Next event goes in the TOC
-         sidebar (below), the sign-in button in the head (above).
+         blog post under them. Next event is the line under the intro, the
+         sign-in button in the head (both above).
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page: _palefire_hero_tiles()), when it has any; else
            the PLACEHOLDERS below. Shape: label, title, start/end (ISO
@@ -292,12 +301,6 @@
             <span class="pf-landing__post-title">{{ hero_post ? hero_post.title : 'Blog post title'|t }}</span>
           </span>
         </{{ post_tag }}>
-      </div>
-      {# Next event: hero-event.js moves it into the TOC sidebar, above
-         "Back to top", and shows it once filled in; removed without a TOC,
-         an events carousel or an upcoming event. #}
-      <div class="pf-hero-event pf-hero-event--toc" data-pf-hero-event hidden>
-        <p class="pf-hero-event__label">{{ 'Next event'|t }}</p>
       </div>
     {% endif %}
   </div>
