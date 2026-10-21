@@ -892,10 +892,13 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// A size container, so the title can fit itself to the column (below).
 .pf-exhibit-cover__text {
   display: grid;
+  flex: 1 1 auto;
   gap: 1.25rem;
   max-width: 38rem;
+  container-type: inline-size;
   padding-top: clamp(10rem, 40vh, 24rem);
 
   @include media-breakpoint-up(md) {
@@ -922,14 +925,23 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   @extend %pf-exhibit-kicker;
 }
 
+// Sized by its length (--pf-title-chars and --pf-title-word, set in
+// exhibit-cover.html.twig): the smallest of the full display size, about
+// three lines of the column (a letter is about half an em), and the longest
+// word on one line. A short title such as "AVES" keeps the full size.
 .pf-exhibit-head .pf-exhibit-cover__title {
   display: grid;
   gap: 1rem;
   margin: 0;
-  font-size: clamp(3.5rem, 1.5rem + 8vw, 8.5rem);
+  font-size: max(1.75rem, min(
+    clamp(3.5rem, 1.5rem + 8vw, 8.5rem),
+    600cqi / var(--pf-title-chars, 1),
+    100cqi / (var(--pf-title-word, 1) * .62)
+  ));
   font-weight: $pf-display-weight;
   letter-spacing: -0.04em;
   line-height: 0.9;
+  overflow-wrap: break-word;
 }
 
 .pf-exhibit-cover__subtitle {

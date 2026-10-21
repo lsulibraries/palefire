@@ -714,6 +714,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** the title page's `<h1>` sizes itself by its length.
+  `exhibit-cover.html.twig` passes the character count and longest word
+  (`--pf-title-chars`, `--pf-title-word`); the size is the smallest of the
+  usual display size, about three lines of the text column (a container),
+  and the longest word on one line. "AVES" is unchanged; Occult Science
+  sets in three lines (76px wide, 35px at 320px). Why: the 48-character
+  title ran to five lines at 136px and pushed past its column.
 - **Exhibitions:** Occult Science and Philosophy in the Renaissance
   (`palefire_exhibit_occult.php`, `data/occult.json`), built as an
   unpublished exhibition from the 2011 online exhibition's text and the

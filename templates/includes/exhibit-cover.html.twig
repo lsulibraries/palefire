@@ -36,7 +36,12 @@
   {% endif %}
   <div class="pf-exhibit-cover__text">
     <p class="pf-exhibit-cover__kicker pf-exhibit-cover__step" style="--pf-step: 1">{{ 'Exhibition'|t }}</p>
-    <h1 class="pf-modular__title pf-exhibit-cover__title pf-exhibit-cover__step" style="--pf-step: 2">
+    {# The title's length and longest word set its size (_exhibition.scss). #}
+    {% set title_word = 1 %}
+    {% for word in head.title|split(' ') %}
+      {% set title_word = max(title_word, word|length) %}
+    {% endfor %}
+    <h1 class="pf-modular__title pf-exhibit-cover__title pf-exhibit-cover__step" style="--pf-step: 2; --pf-title-chars: {{ max(head.title|length, 1) }}; --pf-title-word: {{ title_word }}">
       {{- head.title -}}
       {% if head.subtitle %}
         <span class="visually-hidden">: </span><span class="pf-exhibit-cover__subtitle">{{ head.subtitle }}</span>
