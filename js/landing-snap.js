@@ -4,19 +4,24 @@
  * includes/landing.html.twig): from md up the lead fills the first screen
  * and the page snaps between the lead and the map.
  *
- * - Down (wheel, PageDown, Space, ArrowDown) from above the map: smooth
- *   scroll to the map, under the header (the map's scroll-margin-top).
- * - Up (wheel, PageUp, Shift+Space, ArrowUp) from the map's top or above:
- *   back to the top of the page.
+ * - Down (wheel, PageDown, Space, ArrowDown) from above the map, once the
+ *   lead's end is on screen: smooth scroll to the map, under the header
+ *   (the map's scroll-margin-top).
+ * - Up (wheel, PageUp, Shift+Space, ArrowUp) from the map's top: back to
+ *   where the lead's end meets the foot of the window (the top of the page
+ *   when the lead fits the window).
+ *
+ * A lead taller than the window (the Quick Guide) scrolls freely until its
+ * end comes up; the snap is only the step between its end and the map.
  *
  * CSS scroll-snap can't do this: with the map a screen away, Chromium snaps
  * each wheel step back to the top (_landing-swiss.scss). Wheel events that
  * arrive while the page is moving, and the trackpad's trailing inertia, are
  * swallowed, so one gesture is one step.
  *
- * Left to the browser: touch, below md, a lead taller than the window, a
- * step down while the lead's end is still below the fold (it would be
- * skipped), and wheel or keys inside anything that scrolls on
+ * Left to the browser: touch, below md, any step inside the lead (down
+ * while its end is still below the fold, up once its end has gone below
+ * it), and wheel or keys inside anything that scrolls on
  * its own (drawers, menus) or in a form field. Instant for
  * prefers-reduced-motion and the Settings drawer's "Reduce motion"
  * (html.pf-a11y-motion). Listeners are set once for the document, since
@@ -51,10 +56,6 @@
     if (!lead || !map || !wide.matches) {
       return null;
     }
-    // A lead taller than the window: its end would be scrolled past.
-    if (lead.getBoundingClientRect().height > window.innerHeight) {
-      return null;
-    }
     // The header is compact at the map, so aim under the compact bar from
     // the start. Aiming under the current (full) header and following the
     // header as it shrank restarted the glide on every frame of its
@@ -62,12 +63,12 @@
     const pad = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight())
       || parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
+    // Where the lead's end meets the foot of the window: 0 when the lead
+    // fits. Above it, the page scrolls freely through the lead.
+    const leadEnd = Math.max(0, Math.round(lead.getBoundingClientRect().bottom + window.scrollY - window.innerHeight));
     return {
       map: Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin),
-      // The lead's end is on screen: a step down skips none of it. On a
-      // short window the lead runs past the fold, and the page scrolls
-      // freely until its end comes up.
-      leadSeen: lead.getBoundingClientRect().bottom <= window.innerHeight + 1,
+      leadEnd,
     };
   }
 
@@ -89,11 +90,12 @@
     }
     const y = window.scrollY;
     let top = null;
-    if (down && y < at.map - 1 && at.leadSeen) {
+    // Between the lead's end and the map: a step skips none of the lead.
+    if (down && y < at.map - 1 && y >= at.leadEnd - 1) {
       top = at.map;
     }
-    else if (!down && y > 0 && y <= at.map + 1) {
-      top = 0;
+    else if (!down && y > at.leadEnd + 1 && y <= at.map + 1) {
+      top = at.leadEnd;
     }
     if (top === null) {
       return false;
@@ -110,9 +112,10 @@
       finished = true;
       // One correction at most, if the page moved under the glide (a late
       // font or image): never mid-flight, which restarts it from rest.
-      const now = ended && top && stops();
-      if (now && Math.abs(now.map - window.scrollY) > 2) {
-        window.scrollTo({ top: now.map, behavior });
+      const now = ended && stops();
+      const want = now && (down ? now.map : now.leadEnd);
+      if (now && Math.abs(want - window.scrollY) > 2) {
+        window.scrollTo({ top: want, behavior });
       }
       moving = false;
       quiet();

@@ -607,6 +607,25 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Fix: lead/map snap with a lead taller than the window (2026-10-20)
+
+Since the Quick Guide, the Special Collections lead runs past the fold,
+and `landing-snap.js` turned itself off for any lead taller than the
+window, so the step to the map stopped working. Now the lead scrolls
+freely, and the snap is the step between its end and the map: a wheel
+or key step down once the lead's end is on screen glides to the map, and
+a step up from the map glides back to where the lead's end meets the foot
+of the window (the top of the page when the lead fits, as before). The
+correction after a glide aims at whichever stop it went to.
+
+Tested on the live page with the local script swapped in, at 1440x900,
+1024x768 and 1440x1600: wheel inside the lead scrolls normally; down from
+the lead's end lands on the map; up from the map lands on the lead's end;
+up from there scrolls normally.
+
+Files: `js/landing-snap.js`, `templates/includes/landing.html.twig`
+(comment). No CSS rebuild or config changes: `git pull` and `drush cr`.
+
 ### Quick Guide: smaller star, hairline lines (2026-10-20)
 
 The Quick Guide's star is now 12px tall (width follows its shape) so it
