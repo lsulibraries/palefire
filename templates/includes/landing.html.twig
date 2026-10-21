@@ -341,7 +341,7 @@
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: base_path ~ directory ~ '/images/guides/special-collections/' } only %}
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
         {% if guide_url %}
           <div class="pf-quick-guide__more">
             <a class="pf-hero-account__link" href="{{ guide_url }}">
