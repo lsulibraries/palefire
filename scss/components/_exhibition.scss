@@ -1140,6 +1140,29 @@ html.pf-exhibit-paged .pf-exhibit-head.is-folded {
   }
 }
 
+// The gallery's title again at the start of the text (full opening with an
+// image: the <h2> has faded with the hero by then). Set like the <h2> at
+// its usual size, with the gallery number above it; aria-hidden.
+.pf-exhibit-body-title {
+  max-width: 24ch;
+  margin: 0;
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--pf-g-title, var(--bs-heading-color));
+
+  &::before {
+    content: counter(pf-gallery, decimal-leading-zero) "\2009/\2009" counter(pf-galleries, decimal-leading-zero) / "";
+    display: block;
+    margin-bottom: 1rem;
+    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    letter-spacing: 0.12em;
+    color: var(--pf-exhibit-muted);
+  }
+}
+
 // Jumps and keyboard focus land below the header and the bar.
 html.pf-exhibit-paged {
   scroll-padding-top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));

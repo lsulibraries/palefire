@@ -102,7 +102,6 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
 | `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
 | `palefire_exhibit_aves_lead_captions.php` | Fills the 9 draft AVES lead captions on the existing page (empty ones only; stops on a published page unless `-- force=1`) |
-| `palefire_exhibit_paths.php` | One URL per exhibition gallery (`<page alias>/<gallery anchor>`, an alias of the page with no language, so the page keeps its own address). Re-run after adding or renaming a gallery's Anchor; `-- prune=1` removes stale ones |
 | `palefire_exhibit_aves_update.php` | Brings the live AVES page up to `data/aves.json`: Capital Case names, "Main Library", the 16 images from `Section 4 (additions)`, catalogue lead captions (`-- images="<AVES exhibition 4K folder>"`). Keeps editors' own changes |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
@@ -501,7 +500,7 @@ from the media item. A figure with no image shows only to editors.
   swap, fade in and glide to the target. Gallery changes push a history
   entry (Back works); jumps inside a gallery replace it. While a gallery is
   open the title page folds to a running head that keeps the `<h1>`.
-- TOC: "Title page" first, entries listed under their gallery whatever the
+- TOC: "Home" (the title page) first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
 - Full-screen opening: from lg the text sits on the image's washed left
@@ -527,13 +526,13 @@ from the media item. A figure with no image shows only to editors.
 - Breadcrumb: the landing's sub-header bar (`.pf-landing__bar`), with the
   TOC's hide/show button. While a gallery is open the title page folds to
   that bar, sticky under the header for the whole gallery; the `<h1>` stays
-  for screen readers. `scroll-padding-top` allows for it.
-- Addresses: with `palefire_exhibit_paths.php` run, a gallery's address is
-  `/v2/exhibitions/aves/featherwork` (entries add `#anchor`); the head says
-  so with `data-pf-exhibit-paths` (`PalefireHooks::exhibitHead()`).
-  Without the aliases, `#anchor` as before. Old `#gallery` links are read
-  and rewritten. On a gallery path the breadcrumb leaves out the link to
-  the page itself (`palefire_preprocess_breadcrumb()`). "Skip to the text"
+  for screen readers. `scroll-padding-top` allows for it. The trail follows
+  the open gallery (Home / AVES / Preface; AVES then links back to the
+  title page), and the page's crumb shows the full title on hover
+  (`js/exhibition.js`, from the `<h1>`).
+- The TOC's first link is "Home" (the title page). Galleries with a
+  full-screen opening and an image repeat their title, with the gallery
+  number, at the start of the text (`.pf-exhibit-body-title`, aria-hidden). "Skip to the text"
   glides past it; the stage allows for the running head
   (`--pf-exhibit-head-h`).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
@@ -671,13 +670,18 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** gallery URLs back to `#anchor` (the per-gallery paths
+  didn't open their gallery; `palefire_exhibit_paths.php` removed). The
+  breadcrumb follows the open gallery and shows the full title on hover;
+  the TOC's "Title page" is now "Home"; the gallery's title opens its text
+  again after the image. Why: the text began as a bare paragraph, and the
+  trail didn't say where you were.
 - **Exhibition galleries:** the first scroll fades the heading, links and
   wash; only then does the image pan. The image runs up under the frosted
   header and a landing-style breadcrumb bar (with the TOC's hide/show
   button, now on exhibitions too), which stays as the running head.
-  Galleries have their own URLs (`/v2/exhibitions/aves/featherwork`) once
-  `palefire_exhibit_paths.php` has run. Why: the cover moved as soon as you
-  scrolled, the header hid the image, and `#` addresses were untidy.
+  Why: the cover moved as soon as you scrolled, and the header hid the
+  image.
 - **Exhibition: the text slides over the image.** After the pan, the
   gallery's image stays where it is and the caption and text move up over
   it on the page colour, so the text moves and the image stays put.

@@ -266,12 +266,13 @@ class PalefireHooks {
     if (!empty($ids['map'])) {
       $extra[] = ['id' => $ids['map'], 'label' => $this->t('Map')];
     }
-    // Exhibitions: "Title page" first (the head, includes/exhibit-cover),
-    // and every gallery lists its entries (h3s) whatever the block's
+    // Exhibitions: "Home" first (the title page: the head,
+    // includes/exhibit-cover), and every gallery lists its entries (h3s)
+    // whatever the block's
     // "Include h3 sub-links" setting says. js/exhibition.js shows one
     // gallery at a time.
     if ($node && self::stringValue($node, 'field_modular_type') === 'exhibition') {
-      $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Title page')];
+      $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Home')];
       $variables['depth'] = 2;
     }
     if ($extra) {
@@ -418,7 +419,7 @@ class PalefireHooks {
   /**
    * Variables for includes/exhibit-cover.html.twig on an exhibition page.
    *
-   * @return array{base: string, paths: bool, title: string, subtitle: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
+   * @return array{title: string, subtitle: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
    */
   private function exhibitHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -434,28 +435,9 @@ class PalefireHooks {
       $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
     }
 
-    // Galleries at their own paths (<page>/<gallery anchor>) once
-    // palefire_exhibit_paths.php has made the aliases: js/exhibition.js then
-    // shows those paths instead of #anchors. Checked on the first gallery
-    // with an anchor; any alias change clears the page (path_alias_list).
-    $paths = FALSE;
-    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $node->id(), $node->language()->getId());
-    if ($node->hasField('field_scroll_section') && !str_starts_with($alias, '/node/')) {
-      foreach ($node->get('field_scroll_section')->referencedEntities() as $gallery) {
-        $anchor = $gallery->bundle() === 'exhibit_page' && $gallery->hasField('field_section_anchor') ? trim((string) $gallery->get('field_section_anchor')->value) : '';
-        if ($anchor !== '') {
-          $paths = (bool) \Drupal::service('path_alias.repository')->lookupByAlias($alias . '/' . $anchor, $node->language()->getId());
-          break;
-        }
-      }
-    }
-    $cache->addCacheTags(['path_alias_list']);
-
     $render = [];
     $cache->applyTo($render);
     return [
-      'base' => $node->toUrl()->toString(),
-      'paths' => $paths,
       'title' => $node->label(),
       'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
       'credit' => $text('field_exhibit_credit'),

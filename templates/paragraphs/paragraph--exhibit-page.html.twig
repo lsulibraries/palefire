@@ -133,6 +133,12 @@
     {% endif %}
   {% endif %}
   <div class="pf-gallery__body pf-guide" id="{{ dom_id }}-text" tabindex="-1">
+    {# The full opening's heading has faded with the image by the time the
+       text arrives: the gallery's title again, to open the text. A visual
+       repeat only; the <h2> above is the heading for screen readers. #}
+    {% if full and lead %}
+      <p class="pf-exhibit-body-title" aria-hidden="true">{{ paragraph.field_section_title.value }}</p>
+    {% endif %}
     {{ content.field_guide_blocks }}
   </div>
 </div>

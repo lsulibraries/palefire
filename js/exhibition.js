@@ -8,9 +8,8 @@
  *   previous / next links added at each gallery's foot, and any #link in
  *   the text (an entry on another gallery, a source) fade the current
  *   gallery out and the target's gallery in, then glide to the target.
- *   Gallery changes add a history entry (the gallery's path, or #gallery:
- *   see Addresses), so Back steps back through them; jumps inside a
- *   gallery replace it.
+ *   Gallery changes add a history entry (#gallery), so Back steps back
+ *   through them; jumps inside a gallery replace it.
  * - Title page: the page head (includes/exhibit-cover.html.twig). While a
  *   gallery is open it folds to a sticky running head (.is-folded, the
  *   breadcrumb bar) that keeps the
@@ -47,7 +46,7 @@
    * Galleries
    * ------------------------------------------------------------------ */
 
-  const state = { head: null, pages: [], current: null, busy: false };
+  const state = { head: null, pages: [], current: null, busy: false, crumb: null };
 
   // The gallery (or the title page, null) that holds an element.
   function galleryOf(el) {
@@ -70,6 +69,65 @@
     state.head.classList.toggle('is-folded', folded);
     state.head.toggleAttribute('data-toc-inactive', folded);
     measureHead();
+  }
+
+  /* ---------------------------------------------------------------------
+   * Breadcrumb: Home / AVES on the title page, Home / AVES / Preface while
+   * a gallery is open, with AVES then a link back to the title page. The
+   * page's crumb shows the full title (title, colon, subtitle) on hover.
+   * ------------------------------------------------------------------ */
+
+  function initCrumb() {
+    const list = state.head.querySelector('.pf-landing__bar .breadcrumb, .pf-breadcrumb .breadcrumb');
+    const page = list ? list.lastElementChild : null;
+    if (!page) {
+      return;
+    }
+    const h1 = state.head.querySelector('h1');
+    const full = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '';
+    const gallery = document.createElement('li');
+    gallery.className = 'breadcrumb-item active';
+    gallery.setAttribute('aria-current', 'page');
+    state.crumb = {
+      list: list,
+      page: page,
+      html: page.innerHTML,
+      label: page.textContent.replace(/\s+/g, ' ').trim(),
+      full: full,
+      gallery: gallery,
+    };
+    if (full) {
+      page.title = full;
+    }
+  }
+
+  function updateCrumb(gallery) {
+    const c = state.crumb;
+    if (!c) {
+      return;
+    }
+    if (!gallery) {
+      // The title page: the page's crumb is the current one again.
+      c.gallery.remove();
+      c.page.innerHTML = c.html;
+      c.page.classList.add('active');
+      c.page.setAttribute('aria-current', 'page');
+      return;
+    }
+    if (!c.page.querySelector('a[data-pf-crumb-home]')) {
+      const link = document.createElement('a');
+      link.href = '#' + state.head.id;
+      link.setAttribute('data-pf-crumb-home', '');
+      link.textContent = c.label;
+      c.page.replaceChildren(link);
+      c.page.classList.remove('active');
+      c.page.removeAttribute('aria-current');
+    }
+    const heading = gallery.querySelector('.pf-section__title');
+    c.gallery.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+    if (!c.gallery.isConnected) {
+      c.list.append(c.gallery);
+    }
   }
 
   // The folded head's height, so a gallery's full-screen opening fills the
@@ -119,6 +177,7 @@
       p.hidden = p !== page;
     });
     setFolded(page !== null);
+    updateCrumb(page);
     state.current = page;
     if (page) {
       prepareGallery(page);
@@ -287,7 +346,7 @@
     };
     nav.append(index > 0
       ? link(state.pages[index - 1], 'prev', Drupal.t('Previous gallery'))
-      : link(state.head, 'prev', Drupal.t('Title page')));
+      : link(state.head, 'prev', Drupal.t('Home')));
     if (index < state.pages.length - 1) {
       nav.append(link(state.pages[index + 1], 'next', Drupal.t('Next gallery')));
     }
@@ -351,50 +410,14 @@
     }
   }
 
-  /* ---------------------------------------------------------------------
-   * Addresses
-   *
-   * With the gallery aliases in place (palefire_exhibit_paths.php; the head
-   * says so with data-pf-exhibit-paths), a gallery's address is the page's
-   * path plus its anchor, /v2/exhibitions/aves/featherwork, and an entry
-   * in it adds #anchor. Otherwise #anchor, as before. Either form is read,
-   * so old #links keep working (and are rewritten to the path form).
-   * ------------------------------------------------------------------ */
-
-  function basePath() {
-    return (state.head.dataset.pfExhibitBase || location.pathname).replace(/\/+$/, '');
-  }
-
-  function usePaths() {
-    return state.head.hasAttribute('data-pf-exhibit-paths');
-  }
-
-  // The address for a target: the title page, a gallery or something in one.
+  // The address for a target: the page, plus #anchor for a gallery or
+  // anything in one.
   function urlFor(target) {
-    const page = galleryOf(target);
-    if (!usePaths()) {
-      return location.pathname + location.search + (target === state.head ? '' : '#' + target.id);
-    }
-    if (!page || target === state.head) {
-      return basePath() + location.search;
-    }
-    return basePath() + '/' + encodeURIComponent(page.id) + location.search + (target === page ? '' : '#' + target.id);
-  }
-
-  // The element the current address points at, or null.
-  function targetFromLocation() {
-    const hashed = targetOf(location.hash);
-    const base = basePath();
-    const rest = location.pathname.startsWith(base + '/') ? location.pathname.slice(base.length + 1).split('/')[0] : '';
-    const page = rest ? targetOf('#' + rest) : null;
-    if (hashed && (!page || page.contains(hashed))) {
-      return hashed;
-    }
-    return page && galleryOf(page) === page ? page : hashed;
+    return location.pathname + location.search + (target === state.head ? '' : '#' + target.id);
   }
 
   function onPopState() {
-    const target = targetFromLocation();
+    const target = targetOf(location.hash);
     go(target && (galleryOf(target) || state.head.contains(target)) ? target : state.head, { history: 'none' });
   }
 
@@ -417,17 +440,10 @@
       page.style.setProperty('--pf-gallery-index', String(i + 1));
       page.style.setProperty('--pf-gallery-total', String(state.pages.length));
     });
-    const target = targetFromLocation();
+    initCrumb();
+    const target = targetOf(location.hash);
     const page = galleryOf(target);
     place(page);
-    // An old #gallery link, or a path address on a page without the
-    // aliases: show the address in this page's form.
-    if (target) {
-      const url = urlFor(target);
-      if (url !== location.pathname + location.search + location.hash) {
-        history.replaceState(history.state, '', url);
-      }
-    }
     if (page && target !== page) {
       // A link to an entry or a source: there once the page has laid out.
       requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
@@ -777,6 +793,7 @@
       state.head = null;
       state.pages = [];
       state.current = null;
+      state.crumb = null;
     },
   };
 })(Drupal, once);
