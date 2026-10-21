@@ -1538,6 +1538,11 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
  * lead is content (alt text, lightbox, caption); without, decorative.
  * Rendered here rather than through Manage display, so galleries made
  * before the field existed show it too.
+ * opener: "full" (default) or "compact".
+ * entries, entries_more: the full opening's links to the gallery's entries,
+ * ['anchor', 'title'] each, the first six and the rest.
+ * dom_id: base for the whole image's and the text's ids (the opening's
+ * "View the image" and "Skip to the text" links).
  */
 function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -1555,11 +1560,45 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
     $variables['lead_caption'] = $paragraph->get('field_exhibit_lead_caption')->view(['label' => 'hidden', 'type' => 'text_default']);
   }
-  if ($variables['lead'] && $variables['lead_whole']) {
+  // Opening: "full" (also when empty, for galleries made before the field)
+  // or "compact" (the band above, as before).
+  $opener = $paragraph->hasField('field_exhibit_opener') ? (string) $paragraph->get('field_exhibit_opener')->value : '';
+  $variables['opener'] = $opener === 'compact' ? 'compact' : 'full';
+  if ($variables['lead'] && $variables['lead_whole'] && $variables['opener'] === 'compact') {
     // Centred at its own width, never wider than the column.
     $variables['lead']['sizes'] = '(min-width: 62rem) 60vw, 100vw';
   }
+
+  // The full opening's "In this gallery" links: the gallery's entries, in
+  // order, with the ids their headings get (paragraph--exhibit-entry). The
+  // first six show; the rest sit behind "+ n more".
+  $variables['entries'] = [];
+  $variables['entries_more'] = [];
+  if ($variables['opener'] === 'full' && $paragraph->hasField('field_guide_blocks')) {
+    foreach ($paragraph->get('field_guide_blocks')->referencedEntities() as $block) {
+      if ($block->bundle() === 'exhibit_entry' && $block->isPublished()) {
+        $variables['entries'][] = [
+          'anchor' => _palefire_exhibit_entry_anchor($block),
+          'title' => trim((string) $block->get('field_block_title')->value),
+        ];
+      }
+    }
+    $variables['entries_more'] = array_slice($variables['entries'], 6);
+    $variables['entries'] = array_slice($variables['entries'], 0, 6);
+  }
+  $variables['dom_id'] = 'gallery-' . $paragraph->id();
   $cache->applyTo($variables);
+}
+
+/**
+ * The id an exhibit_entry's heading gets: its Anchor field, else its
+ * heading, as a class-safe string; entry-<id> when both are empty.
+ */
+function _palefire_exhibit_entry_anchor(ParagraphInterface $entry): string {
+  $title = trim((string) ($entry->get('field_block_title')->value ?? ''));
+  $anchor = $entry->hasField('field_section_anchor') ? trim((string) $entry->get('field_section_anchor')->value) : '';
+  $anchor = Html::getClass($anchor !== '' ? $anchor : $title);
+  return $anchor !== '' ? $anchor : 'entry-' . $entry->id();
 }
 
 /**
@@ -1570,11 +1609,8 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  */
 function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
   $paragraph = $variables['paragraph'];
-  $title = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
-  $anchor = $paragraph->hasField('field_section_anchor') ? trim((string) $paragraph->get('field_section_anchor')->value) : '';
-  $anchor = Html::getClass($anchor !== '' ? $anchor : $title);
-  $variables['title'] = $title;
-  $variables['anchor'] = $anchor !== '' ? $anchor : 'entry-' . $paragraph->id();
+  $variables['title'] = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
+  $variables['anchor'] = _palefire_exhibit_entry_anchor($paragraph);
 }
 
 /**

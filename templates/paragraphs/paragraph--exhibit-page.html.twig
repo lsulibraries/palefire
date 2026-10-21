@@ -5,27 +5,109 @@
  *
  * Like guide_section, palefire_modular already wraps it in the <section>
  * and its <h2> (field--node--field-scroll-section--modular-page.html.twig),
- * so this prints only the lead image and the blocks; it must not extend
- * paragraph.html.twig.
+ * so this prints only what follows the heading; it must not extend
+ * paragraph.html.twig. CSS places these parts around the <h2>
+ * (_exhibition.scss, .pf-gallery is display: contents).
  *
- * - lead: image values (_palefire_exhibit_image()), drawn above the heading
- *   (CSS order), or NULL. A full-width band with a curtain reveal that pans
- *   from the image's top to its bottom as the page scrolls; with lead_whole
- *   ("Show whole image"), uncropped and centred, fading up
- *   (_exhibition.scss).
- * - lead_caption: rendered caption, or NULL. With one, the lead is a
+ * Opening (field_exhibit_opener):
+ * - full (default): the lead fills the first screen under the running head
+ *   (.pf-exhibit-hero, decorative), with the gallery number and <h2> over
+ *   it and "In this gallery" links to its entries; scrolling then shows the
+ *   whole image at full width (.pf-exhibit-full), with its caption, before
+ *   the text. Without a lead: the number, heading and links on the page
+ *   colour.
+ * - compact: the lead as a band above the heading, panning as the page
+ *   scrolls, or with lead_whole uncropped and centred (.pf-exhibit-lead).
+ *
+ * - lead: image values (_palefire_exhibit_image()), or NULL.
+ * - lead_caption: rendered caption, or NULL. With one, the image is a
  *   <figure>: its alt text is announced, it opens in the lightbox like the
  *   other images, and the caption sits under it. Without one it is
  *   decorative (alt="", aria-hidden).
- * - focus: object-position keyword for a cropped lead (where it rests under
- *   reduced motion). lead_x: the pan's horizontal position.
+ * - focus: object-position keyword for a cropped image. lead_x: the
+ *   compact band's pan position.
+ * - entries, entries_more: links for the full opening; dom_id: id base.
  *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
  */
 #}
-<div{{ attributes.addClass('pf-gallery', lead ? 'pf-gallery--has-lead') }} data-pf-exhibit-page>
-  {% if lead %}
+{% set full = opener == 'full' %}
+{%
+  set classes = [
+    'pf-gallery',
+    lead ? 'pf-gallery--has-lead',
+    full ? 'pf-gallery--opener',
+  ]
+%}
+{% set lightbox_svg %}<svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>{% endset %}
+<div{{ attributes.addClass(classes) }} data-pf-exhibit-page>
+  {% if full %}
+    {% if lead %}
+      <div class="pf-exhibit-hero" aria-hidden="true">
+        <div class="pf-exhibit-hero__frame">
+          <img class="pf-exhibit-hero__img" src="{{ lead.src }}"
+               {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
+               {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
+               style="object-position: {{ focus }}" alt="" loading="lazy" decoding="async">
+        </div>
+      </div>
+    {% endif %}
+    <div class="pf-exhibit-opener">
+      {% if entries %}
+        <nav class="pf-exhibit-opener__nav" aria-labelledby="{{ dom_id }}-in">
+          <p class="pf-exhibit-opener__label" id="{{ dom_id }}-in">{{ 'In this gallery'|t }}</p>
+          <ol class="pf-exhibit-opener__links">
+            {% for entry in entries %}
+              <li><a href="#{{ entry.anchor }}">{{ entry.title }}</a></li>
+            {% endfor %}
+          </ol>
+          {% if entries_more %}
+            <details class="pf-exhibit-opener__more">
+              <summary>{{ '+ @count more'|t({'@count': entries_more|length}) }}</summary>
+              <ol class="pf-exhibit-opener__links" start="{{ entries|length + 1 }}">
+                {% for entry in entries_more %}
+                  <li><a href="#{{ entry.anchor }}">{{ entry.title }}</a></li>
+                {% endfor %}
+              </ol>
+            </details>
+          {% endif %}
+        </nav>
+      {% endif %}
+      <p class="pf-exhibit-opener__actions">
+        {% if lead %}
+          <a class="pf-exhibit-opener__cue" href="#{{ dom_id }}-image">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M8 2.5v11M3.5 9 8 13.5 12.5 9"/></svg>
+            {{ 'View the whole image'|t }}
+          </a>
+        {% endif %}
+        <a class="pf-exhibit-opener__skip" href="#{{ dom_id }}-text">{{ 'Skip to the text'|t }}</a>
+      </p>
+    </div>
+    {% if lead %}
+      {% set full_img %}
+        <img class="pf-exhibit-full__img" src="{{ lead.src }}"
+             {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
+             {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
+             alt="{{ lead_caption ? lead.alt }}" loading="lazy" decoding="async">
+      {% endset %}
+      {% if lead_caption %}
+        <figure class="pf-exhibit-full has-caption" id="{{ dom_id }}-image" tabindex="-1">
+          <a class="pf-exhibit-full__link" href="{{ lead.full }}" data-pf-lightbox
+             {% if lead.width %}data-width="{{ lead.width }}" data-height="{{ lead.height }}"{% endif %}>
+            <span class="pf-exhibit-full__frame">{{ full_img }}</span>
+            <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
+            {{ lightbox_svg }}
+          </a>
+          <figcaption class="pf-exhibit-lead__caption pf-guide-prose">{{ lead_caption }}</figcaption>
+        </figure>
+      {% else %}
+        <div class="pf-exhibit-full" id="{{ dom_id }}-image" tabindex="-1">
+          <span class="pf-exhibit-full__frame" aria-hidden="true">{{ full_img }}</span>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% elseif lead %}
     {% set lead_classes = 'pf-exhibit-lead' ~ (lead_whole ? ' pf-exhibit-lead--whole') %}
     {% set lead_img %}
       <img class="pf-exhibit-lead__img" src="{{ lead.src }}"
@@ -39,7 +121,7 @@
            {% if lead.width %}data-width="{{ lead.width }}" data-height="{{ lead.height }}"{% endif %}>
           <span class="pf-exhibit-lead__frame">{{ lead_img }}</span>
           <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
-          <svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>
+          {{ lightbox_svg }}
         </a>
         <figcaption class="pf-exhibit-lead__caption pf-guide-prose">{{ lead_caption }}</figcaption>
       </figure>
@@ -49,7 +131,7 @@
       </div>
     {% endif %}
   {% endif %}
-  <div class="pf-gallery__body pf-guide">
+  <div class="pf-gallery__body pf-guide" id="{{ dom_id }}-text" tabindex="-1">
     {{ content.field_guide_blocks }}
   </div>
 </div>

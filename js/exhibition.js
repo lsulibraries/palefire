@@ -67,6 +67,17 @@
   function setFolded(folded) {
     state.head.classList.toggle('is-folded', folded);
     state.head.toggleAttribute('data-toc-inactive', folded);
+    measureHead();
+  }
+
+  // The folded head's height, so a gallery's full-screen opening fills the
+  // screen under it (--pf-hero-h, _exhibition.scss).
+  function measureHead() {
+    if (!state.head) {
+      return;
+    }
+    const folded = state.head.classList.contains('is-folded');
+    ROOT.style.setProperty('--pf-exhibit-head-h', folded ? Math.round(state.head.getBoundingClientRect().height) + 'px' : '0px');
   }
 
   // Show one gallery (or the title page) at once, without animation.
@@ -122,10 +133,9 @@
     heading.focus({ preventScroll: true });
   }
 
-  // A target inside a gallery other than the gallery's own top (an entry,
-  // a source) flashes once it is reached.
+  // A heading or a source a link went to flashes once it is reached.
   function flash(el) {
-    if (reduceMotion() || el.matches('.pf-section, .pf-exhibit-head')) {
+    if (reduceMotion() || !el.matches('h3, h4, li')) {
       return;
     }
     el.classList.remove('is-target');
@@ -280,9 +290,15 @@
     }
     const page = galleryOf(target);
     const toHead = target === state.head;
-    // Same gallery: the TOC (or the browser) scrolls as on other pages,
-    // except the folded running head, which means "open the title page".
+    // Same gallery: the TOC scrolls as on other pages, except the folded
+    // running head, which means "open the title page". Other links in the
+    // gallery (the opening's entry links, "View the whole image", "Skip to
+    // the text", cross references) glide there too.
     if (page === state.current && !(toHead && state.current)) {
+      if (page && !link.closest('[data-pf-toc]')) {
+        event.preventDefault();
+        go(target, { history: 'replace' });
+      }
       return;
     }
     if (!page && !toHead && !state.head.contains(target)) {
@@ -340,6 +356,7 @@
     // Capture, ahead of the TOC's own click handler.
     document.addEventListener('click', onClick, true);
     window.addEventListener('popstate', onPopState);
+    window.addEventListener('resize', measureHead, { passive: true });
   }
 
   /* ---------------------------------------------------------------------
@@ -664,6 +681,8 @@
       }
       document.removeEventListener('click', onClick, true);
       window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('resize', measureHead);
+      ROOT.style.removeProperty('--pf-exhibit-head-h');
       ROOT.classList.remove('pf-exhibit-paged');
       state.head = null;
       state.pages = [];

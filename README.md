@@ -477,7 +477,7 @@ to begin."), and `field_intro` if filled.
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
-| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_guide_blocks` | A section. The lead is a full-width band (curtain, then a scroll-pan) or, with "Show whole image", the plate uncropped and centred. With a caption it is a figure (alt text, lightbox, caption under it); without, decorative |
+| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_guide_blocks` | A section. Opening **full screen** (default): the lead fills the screen with the number, title and "In this gallery" links, then shows whole at full width before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
 | `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox |
 | `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
@@ -502,6 +502,13 @@ from the media item. A figure with no image shows only to editors.
 - TOC: "Title page" first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
+- Full-screen opening: from lg the text sits on the image's washed left
+  half, as on the title page; below lg the image is on its own at the top,
+  fading into the page, with the text under it. The heading is
+  palefire_modular's, so `.pf-section__inner` is a grid that places the
+  parts around it. "View the whole image" and "Skip to the text" glide
+  inside the gallery; the hero's height allows for the running head
+  (`--pf-exhibit-head-h`, measured by the script).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
   prompt come in one after another; lead bands open with a curtain and
   pan from the image's top to its bottom over the first 70% of a screen of
@@ -637,6 +644,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibition galleries open like the title page:** the lead fills the
+  screen with the gallery number, title and links to its entries; scrolling
+  lifts them away and shows the whole image at full width, with its credit,
+  before the text. Per-gallery Opening (`field_exhibit_opener`, re-run
+  `palefire_exhibit_setup.php`): full screen (default, also for existing
+  galleries) or compact (the band). Links inside a gallery now glide. Why:
+  a showcase entrance to each gallery and a way to see each plate whole.
 - **Exhibition lead captions:** new "Lead image caption" field
   (`field_exhibit_lead_caption`, re-run `palefire_exhibit_setup.php`). With
   one, the lead is announced, opens in the lightbox and is credited under

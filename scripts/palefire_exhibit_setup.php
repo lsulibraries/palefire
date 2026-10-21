@@ -22,8 +22,9 @@
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
- *     (field_exhibit_lead_whole), its caption (field_exhibit_lead_caption;
- *     both added 2026-10-21), and field_guide_blocks.
+ *     (field_exhibit_lead_whole), its caption (field_exhibit_lead_caption),
+ *     the Opening (field_exhibit_opener: full screen or compact; all three
+ *     added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
  *     sub-link), anchor, biography, and its own blocks.
  *   - exhibit_figure: one image with a caption and a layout.
@@ -228,6 +229,10 @@ $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_value
   'right' => 'Right',
 ]]);
 $storage('paragraph', 'field_exhibit_lead_whole', 'boolean');
+$storage('paragraph', 'field_exhibit_opener', 'list_string', ['allowed_values' => [
+  'full' => 'Full screen: the image fills the screen with the title and entries, then shows whole',
+  'compact' => 'Compact: a band above the title',
+]]);
 $storage('paragraph', 'field_exhibit_lead_caption', 'text_long');
 $storage('paragraph', 'field_entry_bio', 'text_long');
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
@@ -358,8 +363,14 @@ foreach ($shared as $name => $values) {
 }
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead', $media_ref('Lead image (optional)', 'Shown full width at the top of the gallery with a curtain reveal, then panned from top to bottom as the page scrolls. Decorative: it is not announced, so use an image whose content the gallery doesn\'t depend on.'));
 // Added 2026-10-21. Re-running the script adds it to an existing site.
+// Added 2026-10-21. Empty (galleries made before it) counts as "full".
+$field('paragraph', 'exhibit_page', 'field_exhibit_opener', [
+  'label' => 'Opening',
+  'description' => 'Full screen: the gallery opens on its lead image with the number, title and links to its entries; scrolling then shows the whole image at full width before the text. Compact: a shorter band above the title, for text-heavy galleries.',
+  'default_value' => [['value' => 'full']],
+]);
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_whole', [
-  'label' => 'Show whole image',
+  'label' => 'Show whole image (compact opening only)',
   'description' => 'Show the lead uncropped, centred on the page, instead of as a full-width band. Good for plates on white paper and tall images.',
   'settings' => ['on_label' => 'Whole image', 'off_label' => 'Full-width band'],
 ]);
@@ -373,6 +384,7 @@ $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
   'description' => 'Entries, images, catalogue records, audio and text, in order.',
   'settings' => $err($page_blocks),
 ]);
+$section_form['field_exhibit_opener'] = ['type' => 'options_buttons', 'weight' => 9];
 $section_form['field_exhibit_lead'] = $media_widget + ['weight' => 10];
 $section_form['field_exhibit_lead_focus'] = $select(11);
 $section_form['field_exhibit_lead_whole'] = ['type' => 'boolean_checkbox', 'weight' => 12, 'settings' => ['display_label' => TRUE]];
