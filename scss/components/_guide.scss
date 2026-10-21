@@ -442,25 +442,29 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // Request paths (includes/guide-request-paths.html.twig) -------------------
-// Two "subway lines" of stops. Mobile first: each line runs down the left,
-// through the middle of every stop's icon; from 34rem of block width the
-// stops sit in a row and the line runs across. The icon's disc is the page
-// colour, so the line seems to pass behind it.
+// Three "subway lines" of stops, options A, B and C, split by an "or" rule.
+// Mobile first: each line runs down the left, through the middle of every
+// stop's icon; from 34rem of block width the stops sit in a row and the line
+// runs across. The icon's disc is the page colour, so the line seems to pass
+// behind it.
 .pf-paths {
   --pf-paths-dot: 2.75rem;
 
   display: grid;
-  gap: 1.75rem;
+  gap: 1.25rem;
   max-width: var(--pf-guide-prose);
   padding: 1.25rem;
   border: 1px solid var(--pf-guide-rule);
   container: pf-paths / inline-size;
 }
 
+// The option's letter in the accent, then its name in the mono caption. The
+// letter's box is the stops' disc width, so on narrow blocks it sits right
+// over the line running down from the first disc.
 .pf-paths__name {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.875rem;
   margin: 0 0 1rem;
   font: 700 0.6875rem var(--pf-guide-mono);
   letter-spacing: 0.14em;
@@ -468,11 +472,41 @@ html[data-pf-mode="guide"] .pf-section__title {
   color: var(--bs-emphasis-color);
 }
 
-.pf-paths__name-icon svg {
-  display: block;
-  width: 1rem;
-  height: 1rem;
-  fill: var(--pf-guide-accent);
+.pf-paths__letter {
+  flex: none;
+  width: var(--pf-paths-dot);
+  font: 700 1.5rem/1 var(--bs-body-font-family);
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--pf-guide-accent);
+}
+
+// "or" between two options: a short mono word, then a hairline to the end.
+.pf-paths__or {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font: 700 0.6875rem/1 var(--pf-guide-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+
+  span {
+    flex: none;
+    width: var(--pf-paths-dot);
+    text-align: center;
+  }
+
+  &::after {
+    content: "";
+    flex: 1 1 auto;
+    border-top: 1px solid var(--pf-guide-rule);
+    transform-origin: left;
+  }
+
+  [dir="rtl"] &::after {
+    transform-origin: right;
+  }
 }
 
 // list-style-type "\200B", not none, keeps Safari's list semantics (as for
@@ -583,10 +617,17 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // As a line scrolls into view, its stops fade up one after another and the
-// line draws between them. Scroll-driven, so no script; browsers without
-// it (and reduced motion) just show the diagram.
+// line draws between them; each "or" rule draws out from its word. Scroll-
+// driven, so no script; browsers without it (and reduced motion) just show
+// the diagram.
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    .pf-paths__or::after {
+      animation: pf-paths-line linear both;
+      animation-timeline: view();
+      animation-range: entry 20% entry 80%;
+    }
+
     .pf-paths__stop {
       animation: pf-paths-stop linear both;
       animation-timeline: view();

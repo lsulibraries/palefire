@@ -314,8 +314,9 @@
 
       {# Quick guide: under the features, still in the lead panel. A gold
          rule with a star between two equal lines (decorative), then the
-         two request paths from the full guide (the same include, so an
-         edit there shows here too) and a link to that guide, in the
+         three request paths, options A, B and C, from the full guide (the
+         same include, so an edit there shows here too) and a link to that
+         guide, in the
          sign-in button's style. On wide screens it starts below the fold,
          so the lead is taller than the window: it scrolls freely, and
          landing-snap.js snaps to the map once the lead's end is in view.
@@ -330,7 +331,7 @@
           <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
         </div>
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ 'Quick guide'|t }}">{{ 'Quick Guide'|t }}</h2>
-        <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate, so there are <strong>two ways</strong> to use one: see it in the Reading Room, or order a digital copy. Both start the same way, in the library catalog.'|t }}</p>
+        <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id } only %}
         {% if guide_url %}
           <div class="pf-quick-guide__more">

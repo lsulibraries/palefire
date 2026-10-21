@@ -1,14 +1,17 @@
 {#
 /**
  * @file
- * Special Collections request paths: two "subway lines", one per way to use
- * an item, each a row of stops (a column on narrow blocks). Placed by a
- * "[request-paths]" paragraph in a guide text block
- * (paragraph--guide-text.html.twig).
+ * Special Collections request paths: three "subway lines", one per way to
+ * start (options A, B and C), each a row of stops (a column on narrow
+ * blocks). Placed by a "[request-paths]" paragraph in a guide text block
+ * (paragraph--guide-text.html.twig) and by the landing hero's Quick Guide.
  *
  * Each line is an ordered list named by its heading, so screen readers hear
- * "See it in person, list, 4 items". Icons are Font Awesome Pro duotone,
- * inlined from the site's copy like the hero account icon, and decorative.
+ * "Option A: See it in person, list, 4 items"; C's last stop points back to
+ * A and B by those letters. An "or" divider between the lines shows they are
+ * alternatives; it repeats the letters, so it is hidden from screen readers.
+ * Icons are Font Awesome Pro duotone, inlined from the site's copy like the
+ * hero account icon, and decorative.
  *
  * Available variables:
  * - uid: makes the heading ids unique on the page.
@@ -17,8 +20,8 @@
 {% set paths = [
   {
     key: 'visit',
+    letter: 'A',
     name: 'See it in person'|t,
-    icon: 'book-reader',
     stops: [
       { icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t },
       { icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t },
@@ -28,8 +31,8 @@
   },
   {
     key: 'copy',
+    letter: 'B',
     name: 'Get a digital copy'|t,
-    icon: 'copy',
     stops: [
       { icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t },
       { icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t },
@@ -37,10 +40,10 @@
       { icon: 'paper-plane', label: 'Pay invoice to receive copies'|t, note: 'usually emailed in 24–48 hours'|t },
     ],
   },
-    {
+  {
     key: 'assist',
+    letter: 'C',
     name: 'Have an expert help'|t,
-    icon: 'hands-helping',
     stops: [
       { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email form'|t },
       { icon: 'lightbulb-on', label: 'Receive guidance'|t, note: 'Get recommendations'|t },
@@ -52,10 +55,13 @@
 <div class="pf-paths">
   {% for path in paths %}
     {% set heading_id = 'pf-paths-' ~ uid ~ '-' ~ path.key %}
+    {% if not loop.first %}
+      <div class="pf-paths__or" aria-hidden="true"><span>{{ 'or'|t }}</span></div>
+    {% endif %}
     <div class="pf-paths__line">
       <p class="pf-paths__name" id="{{ heading_id }}">
-        <span class="pf-paths__name-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ path.icon ~ '.svg', ignore_missing = true)|raw }}</span>
-        {{ path.name }}
+        <span class="pf-paths__letter"><span class="visually-hidden">{{ 'Option'|t }} </span>{{ path.letter }}<span class="visually-hidden">: </span></span>
+        <span class="pf-paths__name-text">{{ path.name }}</span>
       </p>
       <ol class="pf-paths__stops" aria-labelledby="{{ heading_id }}">
         {% for stop in path.stops %}

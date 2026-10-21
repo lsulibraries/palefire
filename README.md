@@ -607,6 +607,29 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: options A, B and C (2026-10-21)
+
+The request paths now read as three ways to start, not a numbered list.
+Each row is labelled with a large accent letter (A, B, C) next to its name,
+and an "or" hairline separates the rows. The labels replace the "01/02/03"
+counter on the landing and the duotone name icons in the full guide. Screen
+readers hear each list as "Option A: See it in person", which matches C's
+last stop, "Start options A or B". The "or" rules are `aria-hidden`
+because they repeat what the letters already say. As they scroll into view
+they draw out from the word. That animation is scroll-driven and is off
+under reduced motion. The landing intro now says "three ways" and maps each
+one to its letter. It used to say "two ways", although the guide already
+showed three paths.
+
+Tested on the live landing and guide pages, with the new CSS and markup
+applied in the browser, at 1440, 1024, 768 and 320px. Neither page scrolls
+sideways because of this change.
+
+Files: `templates/includes/guide-request-paths.html.twig`,
+`templates/includes/landing.html.twig`, `scss/components/_guide.scss`,
+`scss/components/_landing-features.scss`, `css/style.css`. No config
+changes: `git pull` and `drush cr`.
+
 ### TOC: "Landing" and "Quick guide" under Home (2026-10-20)
 
 On hero landings (`/v2/special`) the TOC's Home item now opens two
