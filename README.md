@@ -381,7 +381,8 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
 - Add Resources first, then pick them by title. Paste the plain address and
   tick "Requires LSU login" instead of a libezp link.
 - A paragraph that is only `[request-paths]` draws the Special Collections
-  request diagram after the block's text.
+  request diagram after the block's text. Its stops, "how" text and
+  screenshots live in `templates/includes/guide-request-paths.html.twig`.
 - A bulleted list with a nested list is drawn as a decision tree.
 - Numbered lists become steps; a leading **bold** phrase is the step's title.
 - No "Next / Previous" text: the TOC does navigation.
@@ -407,6 +408,16 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
 - **How to Use Special Collections** (`palefire_guide_special_collections.php`):
   requesting and visiting (request paths), finding aids, collection types and
   Ask Us. The Ask Us example uses an invented collection on purpose.
+  - **Request paths** (`guide-request-paths.html.twig`, also in the landing's
+    Quick Guide): a stop with `detail` has a dotted-underlined label that opens
+    a native popover (no script) with a sentence or two and, with `shots`,
+    screenshots from `images/guides/special-collections/` (WebP, lazy, width
+    and height set, so they load only when opened). Esc, the close button or a
+    click outside closes it; focus returns to the label. Screenshots come from
+    the unpublished "How to Request Materials" and "How to Submit a
+    Duplication Request" LibGuide pages (September 2026), cropped to the part
+    that matters. Replace a file under the same name when the catalog or
+    request system changes.
 - **Louisiana Newspapers** (`palefire_guide_louisiana_newspapers.php`, after
   `palefire_louisiana_newspapers_setup.php`): the LibGuide word for word, with
   a clickable map of the 64 parishes.
@@ -550,6 +561,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Request paths: screenshots on demand.** Steps A1–A3 and B1–B4 open a
+  "how" panel with screenshots of the catalog and request system, and the fees
+  and timing (50 cents a page plus $10 per order; invoice in 24–48 hours;
+  5–7 business days). The guide's script has the same facts in its steps. From
+  the unpublished LibGuide, trimmed: the old Special Collections home page and
+  the staff-only "unlimited requests" banner are left out. Why: show what each
+  screen looks like without turning the guide into a nine-step LibGuide.
 - **Parish map:** descriptions under linked entries muted and smaller, so the
   titles lead; more room above the sticky map (2–5rem by window height, was
   1.5rem), and it shrinks to fit short windows. Why: entries ran together, and

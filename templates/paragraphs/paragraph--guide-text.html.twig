@@ -32,6 +32,6 @@
     {{ content.field_block_body }}
   </div>
   {% if request_paths %}
-    {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id() } only %}
+    {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id(), img_base: base_path ~ directory ~ '/images/guides/special-collections/' } only %}
   {% endif %}
 </div>

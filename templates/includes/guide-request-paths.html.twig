@@ -14,19 +14,49 @@
  * hero account icon, and decorative. The light arrow between an option and
  * its stops shows only on the landing's wide Quick Guide.
  *
+ * A stop with `detail` has a "how" panel: its label is a button that opens a
+ * popover with a sentence or two and, when it has `shots`, screenshots of
+ * the catalog and request system (images/guides/special-collections/). The
+ * popover is native (popover / popovertarget), so it needs no script:
+ * clicking or tapping the label, Enter or Space opens it; Esc, the close
+ * button or a click outside closes it. Screenshots load only when opened.
+ *
  * Available variables:
  * - uid: makes the heading ids unique on the page.
+ * - img_base: URL of images/guides/special-collections/ with a trailing
+ *   slash. Without it the panels show their text only.
  */
 #}
+{% set find = {
+  icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t,
+  detail: 'Search the catalog, then open the item’s record. It lists the contents, the abstract, a link to the finding aid when there is one, and the format. Scroll down to the Holdings and Available tabs.'|t,
+  shots: [
+    { file: 'catalog-record.webp', width: 1250, height: 723, alt: 'A catalog record for the William Y. Dixon papers, with Holdings and Available tabs below it.'|t },
+  ],
+} %}
+{% set request = {
+  icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t,
+  detail: 'On the Available tab, choose Request Item at the end of the row you want. Then sign in: LSU students, faculty and staff use single sign-on, and everyone else signs in or registers as a Guest. You don’t need to be affiliated with LSU.'|t,
+  shots: [
+    { file: 'available-tab.webp', width: 1001, height: 329, alt: 'The Available tab: a table of copies, each with a Request Item link in the last column.'|t },
+    { file: 'sign-in.webp', width: 760, height: 495, alt: 'The Special Collections Request System sign-in page, with Single Sign-On for LSU Students, Faculty, and Staff on the left and Guest on the right.'|t },
+  ],
+} %}
 {% set paths = [
   {
     key: 'visit',
     letter: 'A',
     name: 'See it in person'|t,
     stops: [
-      { icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t },
-      { icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t },
-      { icon: 'calendar-check', label: 'Book a visit'|t, note: 'recommended'|t },
+      find,
+      request,
+      {
+        icon: 'calendar-check', label: 'Book a visit'|t, note: 'recommended'|t,
+        detail: 'The request form fills in the item for you; add the box number from the finding aid. Choose an appointment, or New Appointment, then Submit Request to View In-Person. Appointments aren’t required, but with one your materials are waiting when you arrive.'|t,
+        shots: [
+          { file: 'book-visit.webp', width: 740, height: 350, alt: 'The end of the request form: Reading Room and Appointment menus, a New Appointment button, and Submit Request to View In-Person.'|t },
+        ],
+      },
       { icon: 'book-reader', label: 'Read it at Hill'|t, note: 'staff bring it to you'|t },
     ],
   },
@@ -35,10 +65,20 @@
     letter: 'B',
     name: 'Get a digital copy'|t,
     stops: [
-      { icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t },
-      { icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t },
-      { icon: 'exchange', label: 'Switch to duplication'|t, note: 'top right of the form'|t },
-      { icon: 'paper-plane', label: 'Pay invoice to receive copies'|t, note: 'usually emailed in 24–48 hours'|t },
+      find,
+      request,
+      {
+        icon: 'exchange', label: 'Switch to duplication'|t, note: 'top right of the form'|t,
+        detail: 'Choose Switch to Duplication Order Form at the top right of the request form. Then list what to copy under Selections To Be Reproduced, with box and folder numbers from the finding aid, and pick a format and delivery method.'|t,
+        shots: [
+          { file: 'duplication-switch.webp', width: 1110, height: 231, alt: 'The request form’s Item Information, with the Switch to Duplication Order Form button at the top right.'|t },
+          { file: 'duplication-order.webp', width: 1110, height: 438, alt: 'The duplication form’s Order Information: Selections To Be Reproduced, Duplication Format and Preferred Delivery Method.'|t },
+        ],
+      },
+      {
+        icon: 'paper-plane', label: 'Pay invoice to receive copies'|t, note: 'usually emailed in 24–48 hours'|t,
+        detail: 'Scans cost 50 cents a page, plus a $10 processing fee per order; one fee covers requests you submit together. Staff email an invoice with payment instructions, usually within 24–48 hours (not counting weekends and holidays). Allow 5–7 business days for the order; your scans are emailed in the format you chose.'|t,
+      },
     ],
   },
   {
@@ -69,8 +109,37 @@
         {% for stop in path.stops %}
           <li class="pf-paths__stop">
             <span class="pf-paths__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ stop.icon ~ '.svg', ignore_missing = true)|raw }}</span>
-            <span class="pf-paths__label">{{ stop.label }}</span>
+            {% if stop.detail is defined %}
+              {% set pop_id = heading_id ~ '-' ~ loop.index %}
+              {% set has_shots = stop.shots is defined and img_base|default('') %}
+              {# The label's last word and the icon don't wrap apart. #}
+              {% set words = stop.label|split(' ') %}
+              <button type="button" class="pf-paths__label pf-paths__peek" popovertarget="{{ pop_id }}">
+                {{- words|slice(0, -1)|join(' ') ~ (words|length > 1 ? ' ') -}}
+                <span class="pf-paths__peek-end">{{ words|last }}<span class="visually-hidden">, {{ has_shots ? 'show screenshots'|t : 'show details'|t }}</span><span class="pf-paths__peek-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ (has_shots ? 'image' : 'info-circle') ~ '.svg', ignore_missing = true)|raw }}</span></span>
+              </button>
+            {% else %}
+              <span class="pf-paths__label">{{ stop.label }}</span>
+            {% endif %}
             <span class="pf-paths__note">{{ stop.note }}</span>
+            {% if stop.detail is defined %}
+              <div class="pf-paths__pop" id="{{ pop_id }}" popover role="dialog" aria-labelledby="{{ pop_id }}-title">
+                <div class="pf-paths__pop-head">
+                  <p class="pf-paths__pop-kicker">{{ 'Option @letter, step @step'|t({ '@letter': path.letter, '@step': loop.index }) }}</p>
+                  <p class="pf-paths__pop-title" id="{{ pop_id }}-title">{{ stop.label }}</p>
+                  <button type="button" class="pf-paths__pop-close" popovertarget="{{ pop_id }}" popovertargetaction="hide">
+                    <span class="visually-hidden">{{ 'Close'|t }}</span>
+                    <span aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/times.svg', ignore_missing = true)|raw }}</span>
+                  </button>
+                </div>
+                <p class="pf-paths__pop-text">{{ stop.detail }}</p>
+                {% if has_shots %}
+                  {% for shot in stop.shots %}
+                    <img class="pf-paths__shot" src="{{ img_base ~ shot.file }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt }}" loading="lazy" decoding="async">
+                  {% endfor %}
+                {% endif %}
+              </div>
+            {% endif %}
           </li>
         {% endfor %}
       </ol>

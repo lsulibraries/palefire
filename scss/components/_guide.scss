@@ -581,6 +581,195 @@ html[data-pf-mode="guide"] .pf-section__title {
   color: var(--pf-guide-muted);
 }
 
+// A stop with a "how" panel: its label is the button that opens it, styled
+// as the label with a dotted accent underline and a small image (or info)
+// icon, so it reads as "there's more here" without looking like a CTA.
+.pf-paths__peek {
+  display: inline;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  text-align: inherit;
+  color: var(--bs-emphasis-color);
+  text-decoration: underline dotted var(--pf-guide-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-style: solid;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 3px;
+  }
+}
+
+.pf-paths__peek-end {
+  white-space: nowrap;
+}
+
+.pf-paths__peek-icon svg {
+  display: inline-block;
+  width: 0.875em;
+  height: 0.875em;
+  margin-inline-start: 0.35em;
+  vertical-align: -0.05em;
+  fill: var(--pf-guide-accent);
+}
+
+// The panel: native popover, so it sits in the top layer, centred in the
+// window, above everything (the stops' scroll animation can't trap it).
+// Without popover support the attribute does nothing and the rule below
+// is dropped with it (unknown :popover-open), so the panel just shows
+// under its stop.
+.pf-paths__pop {
+  width: min(46rem, 100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+  text-align: start;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  border: 1px solid var(--pf-guide-rule);
+  box-shadow: 0 1.5rem 4rem rgba($pf-black, 0.25);
+
+  &:not(:popover-open) {
+    display: none;
+  }
+
+  &::backdrop {
+    background: rgba($pf-black, 0.35);
+  }
+}
+
+// Kicker and title on the left, the close button in the top corner.
+.pf-paths__pop-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pf-paths__pop-kicker {
+  margin: 0 0 0.35rem;
+  font: 700 0.6875rem var(--pf-guide-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+}
+
+.pf-paths__pop-title {
+  grid-row: 2;
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-paths__pop-close {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem; // 44px target
+  height: 2.75rem;
+  margin: -0.5rem -0.5rem 0 0;
+  padding: 0;
+  color: var(--bs-emphasis-color);
+  cursor: pointer;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition: border-color 0.2s ease;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: currentColor;
+  }
+
+  &:hover {
+    border-color: var(--pf-guide-rule);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-paths__pop-text {
+  max-width: var(--pf-guide-prose);
+  margin: 0 0 1.25rem;
+  line-height: 1.6;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Screenshots: full panel width, a hairline frame so white pages don't
+// melt into a light panel.
+.pf-paths__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--pf-guide-rule);
+
+  + .pf-paths__shot {
+    margin-top: 1rem;
+  }
+}
+
+// Opening: the panel fades in and rises a little, and the backdrop fades.
+// Closing reverses it (allow-discrete keeps it in the top layer until the
+// fade ends). Reduced motion: it just appears.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-paths__pop {
+    transition:
+      opacity 0.28s ease,
+      transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+      overlay 0.28s allow-discrete,
+      display 0.28s allow-discrete;
+
+    &:not(:popover-open) {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.985);
+    }
+
+    &::backdrop {
+      transition:
+        background-color 0.28s ease,
+        overlay 0.28s allow-discrete,
+        display 0.28s allow-discrete;
+    }
+
+    &:not(:popover-open)::backdrop {
+      background-color: transparent;
+    }
+  }
+
+  @starting-style {
+    .pf-paths__pop:popover-open {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.985);
+    }
+
+    .pf-paths__pop:popover-open::backdrop {
+      background-color: transparent;
+    }
+  }
+}
+
 // Wide enough for four stops in a row: icon on top, words centred under it.
 @container pf-paths (min-width: 34rem) {
   .pf-paths__stops {

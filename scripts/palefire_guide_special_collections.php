@@ -185,22 +185,23 @@ HTML),
   $text(NULL, '<p><strong>Not sure where to start?</strong> Box and folder numbers come from the collection\'s finding aid, explained further down this guide. If you can\'t tell what to request, ask Special Collections through Ask Us first.</p>', 'callout'),
   $text('Option 1: See it in the Reading Room', <<<'HTML'
 <ol>
-<li><strong>Create a Special Collections account.</strong> Everyone who uses the materials needs one. First-time users are taken to a registration form.</li>
+<li><strong>Create a Special Collections account.</strong> Everyone who uses the materials needs one, and you don't need to be affiliated with LSU. LSU students, faculty and staff sign in with single sign-on; everyone else registers as a Guest. First-time users are taken to a registration form.</li>
 <li><strong>Search the catalog</strong> with the library set to Special Collections.</li>
-<li><strong>Open the record and choose "Request Item"</strong> at the bottom of the page. It's added to your account.</li>
+<li><strong>Open the record and choose "Request Item".</strong> Scroll down to the Available tab and choose Request Item at the end of the row you want. The request form fills in the item's details for you.</li>
 <li><strong>Make one request for each box, volume or serial.</strong> Add the box number from the finding aid.</li>
 <li><strong>Request before you arrive.</strong> You can have up to 10 requests open. Mark the rest "Keep for My Review" and submit them once the first ones are filled.</li>
 <li><strong>Book an appointment.</strong> Appointments aren't required, but they're recommended. Book one through your Special Collections account, and check the Reading Room hours before you come.</li>
 </ol>
 HTML),
   $text('Option 2: Order a digital copy', <<<'HTML'
-<p>Special Collections makes copies for a fee, for personal or research use. Every copy needs a staff member's approval, and staff can refuse or change an order because of an item's format, condition or restrictions.</p>
+<p>Special Collections makes copies for a fee, for personal or research use. Scans cost 50 cents a page, plus a $10 processing fee for each order; one fee covers requests you submit together. Every copy needs a staff member's approval, and staff can refuse or change an order because of an item's format, condition or restrictions.</p>
 <ol>
 <li><strong>Find the catalog record</strong> for each book, manuscript collection or other item you want copied.</li>
 <li><strong>Choose "Request Item"</strong> under the record's Available tab, and sign in to your Special Collections account.</li>
 <li><strong>Choose "Switch to Duplication Order Form"</strong> at the top right of the New Request form.</li>
-<li><strong>Describe exactly what to copy.</strong> For manuscript collections, give the box and folder numbers from the finding aid.</li>
-<li><strong>Wait for the invoice.</strong> Staff review the order and email an invoice with payment instructions, usually within 24 to 48 hours (not counting weekends and holidays).</li>
+<li><strong>Describe exactly what to copy.</strong> List it under Selections To Be Reproduced (separate several items with semicolons), with box and folder numbers from the finding aid, then choose a format and a delivery method.</li>
+<li><strong>Pay the invoice.</strong> Staff review the order and email an invoice with payment instructions, usually within 24 to 48 hours (not counting weekends and holidays).</li>
+<li><strong>Get your scans.</strong> Allow 5 to 7 business days. The scans are emailed to you in the format you chose.</li>
 </ol>
 <p>Copies are for personal research and scholarly use. Providing a copy doesn't give permission to publish it, and LSU doesn't own the copyright to most of its materials.</p>
 HTML),
