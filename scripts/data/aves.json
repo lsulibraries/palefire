@@ -35,7 +35,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the species and plate, then delete this line.]</strong></p><p>Scarlet macaw. Edward Lear, <em>Illustrations of the Family of Psittacidae, or Parrots</em> (London, 1832). McIlhenny Collection, LSU.</p>"
+   "lead_caption": "<p>Scarlet macaw from Edward Lear’s <em>Illustrations of the Family of Psittacidae, or Parrots</em>, (London, [1830-] 1832).</p>"
   },
   {
    "title": "Preface",
@@ -60,7 +60,8 @@
      "body": "<p><a href=\"#toro\">Miguel Alvarez del Toro</a><br>\n<a href=\"#azara\">Félix de Azara</a><br>\n<a href=\"#beebe\">William Beebe</a><br>\n<a href=\"#burmeister\">Hermann Burmeister</a><br>\n<a href=\"#carriker\">M. A. Carriker, Jr.</a><br>\n<a href=\"#castelnau\">Francis L. de Laporte, Comte de Castelnau</a><br>\n<a href=\"#chapman\">Frank M. Chapman</a><br>\n<a href=\"#george-k-cherrie-1865-1942\">George K. Cherrie</a><br>\n<a href=\"#cory\">Charles B. Cory</a><br>\n<a href=\"#charles-darwin-1809-1882\">Charles Darwin</a><br>\n<a href=\"#descourtilz\">Jean Théodore Descourtilz</a><br>\n<a href=\"#eisenmann\">Eugene Eisenmann</a><br>\n<a href=\"#claudio-gay-1800-1873\">Claudio Gay</a><br>\n<a href=\"#frederick-ducane-godman-1834-1919-osbert-salvin-1835-1898\">Frederick DuCane Godman</a><br>\n<a href=\"#gosse\">Phillip Henry Gosse</a><br>\n<a href=\"#gould\">John Gould</a><br>\n<a href=\"#francois-haverschmidt-1906-1987\">François Haverschmidt</a><br>\n<a href=\"#hellmayr\">Carl Eduard Hellmayr</a><br>\n<a href=\"#hernandez\">Francisco Hernández</a><br>\n<a href=\"#hudson\">W. H. Hudson</a><br>\n<a href=\"#opening-scientific-exploration\">Alexander von Humboldt</a><br>\n<a href=\"#koepcke\">Maria Koepcke</a><br>\n<a href=\"#markgraf\">Georg Markgraf</a><br>\n<a href=\"#schauensee\">Rodolphe Meyer de Schauensee</a><br>\n<a href=\"#miller\">Leo E. Miller</a><br>\n<a href=\"#molina\">Juan Ignacio Molina</a><br>\n<a href=\"#murphy\">Robert Cushman Murphy</a><br>\n<a href=\"#natterer\">Johann Natterer</a><br>\n<a href=\"#naumburg\">Elsie M.B. Naumburg</a><br>\n<a href=\"#dorbigny\">Alcide d’Orbigny</a><br>\n<a href=\"#parker\">Ted Parker</a><br>\n<a href=\"#phelps\">William Phelps, Jr.</a><br>\n<a href=\"#phelps\">William Phelps, Sr.</a><br>\n<a href=\"#ridgway\">Robert Ridgway</a><br>\n<a href=\"#frederick-ducane-godman-1834-1919-osbert-salvin-1835-1898\">Osbert Salvin</a><br>\n<a href=\"#schomburgk\">Richard Schomburgk</a><br>\n<a href=\"#schomburgk\">Robert Schomburgk</a><br>\n<a href=\"#sclater\">Philip Lutley Sclater</a><br>\n<a href=\"#sick\">Helmut Sick</a><br>\n<a href=\"#skutch\">Alexander Skutch</a><br>\n<a href=\"#snethlage\">Emilie Snethlage</a><br>\n<a href=\"#spix\">Johann Baptist von Spix</a><br>\n<a href=\"#tschudi\">Johann Jacob von Tschudi</a><br>\n<a href=\"#vieillot\">Louis Jean Pierre Vieillot</a><br>\n<a href=\"#wetmore\">Alexander Wetmore</a><br>\n<a href=\"#wied\">Prince Maximilian of Wied-Neuwied</a><br>\n<a href=\"#zimmer\">John T. Zimmer</a></p>"
     }
    ],
-   "focus": "center"
+   "focus": "center",
+   "lead_caption": "<p>This plate from <em>The Birds of Ecuador</em> (Ithaca, 2001), painted by Paul Greenfield, shows the level of detail and attention to subtleties of coloration that characterize modern field guides. These tyrant- flycatchers are so similar to one another that they routinely confuse even the most experienced birder – so text is critical for confirming species identifications by using descriptions of voice, behavior, habitat, and distribution.</p>"
   },
   {
    "title": "Birds in the New World",
@@ -73,7 +74,7 @@
     },
     {
      "type": "entry",
-     "title": "FRANCISCO HERNÁNDEZ (1514-1587)",
+     "title": "Francisco Hernández (1514-1587)",
      "anchor": "hernandez",
      "bio": "<p>Although his focus was on medical botany, Hernández was encyclopedic in his interests, and he did not ignore the wonderful array of exotic birds encountered on five journeys from Mexico City that took himwest and south along the Pacific coast, over to Oaxaca, and northwest as far as Guanajuato. He described 229 species, with names in the native Nahuatl language, some of which, like motmot, survive to this day. Because they are not accompanied by illustrations, most of the bird descriptions are inadequate to identify the species, and the later use of some of Hernández’s Nahuatl names, like hoatzin, for birds that are not found anywhere near Mexico, can cause confusion for a modern reader. Nonetheless, “for more than 200 years Hernandez remained the only authority on Mexican animals, because the Spaniards tried anxiously to prevent more exact reports on the natural resources of their colonies from becoming public knowledge. Therefore, his descriptions were copied again and again in seventeenth-and eighteenth-century ornithological literature . . . The barriers did not fall until Mexico became independent in 1821” (<a href=\"#src-stresemann\">Stresemann 1975, 32</a>).</p>",
      "blocks": [
@@ -96,7 +97,7 @@
     },
     {
      "type": "entry",
-     "title": "GEORG MARKGRAF (1610-1644)",
+     "title": "Georg Markgraf (1610-1644)",
      "anchor": "markgraf",
      "bio": "<p>The Dutch West India Company was chartered in 1621 for the purpose of “colonization and commerce through conquest” (<a href=\"#src-boxer\">Boxer 1973, 7</a>). Its first target was the northeast Atlantic coast of the Portuguese colony of Brazil, an area rich in sugar production. The company wrested control of the area around Recife but was forced to wage a nearly constant campaign against insurgent Portuguese and Indian elements for the twenty-four years (1630-54) that the occupation lasted. Such success as the Dutch enjoyed was largely the result of the leadership of Johan Maurits, the aristocrat engaged as governor-general of the colony.  Maurits, although the product of a strict Calvinist culture, tolerated the religious practices of Jews and Catholics, tried to protect the interests of the local Portuguese planters, and treated most every class of people, slaves included, with an even hand. He “fell in love with Brazil from the moment he stepped ashore” (<a href=\"#src-boxer\">ibid., 70</a>), and, when not concerned with administrative and military duties, he devoted his energies to the natural world, constructing gardens and zoos and bringing to Brazil scientists and artists to explore and describe the new Dutch possession.  One of the scientists he engaged was Georg Markgraf, twenty-eight years old when he arrived in Brazil in 1638. He was a “trained and professional scientist” (<a href=\"#src-whitehead\">Whitehead 1979, 424</a>), among the first to engage with the New World, and though he spent only six years in Brazil, his accomplishments were many.  He devoted two years to astronomy, while also compiling the first detailed meteorological records from South America; as a cartographer, he helped create some of the best early large-scale maps of Brazil, published in 1647.</p>\n<p>But it is as a naturalist that Markgraf is chiefly remembered. He was an advocate for the new empiricism being taught in Europe, and regarding his explorations in and around the Dutch colony, he declared, “I will not write about anything I have not actually seen and observed” (<a href=\"#src-whitehead\">ibid., 154</a>). He collected all kinds of plants, mammals, insects, reptiles, and, of course, birds. Of his work on birds, Elliott Coues remarks, “We have here the first description and primary basis of many species,” after which he lists the many scientific and vernacular names for bird families that are derived from Markgraf (jacana, ani, jacamar, toucan, aracari, etc.) (<a href=\"#src-coues\">Coues 1878-79, 239-40</a>).  The Dutch period in Brazilian history ended with a whimper. Maurits was recalled in 1644; relations with the local population soured; guerilla bands harassed the Dutch in the interior; and the little colony was often near starvation. Maurits’s splendid houses were torn down to build fortifications, but all was for naught, and the Portuguese retook Recife in 1654.  By then Markgraf had been dead for ten years. He had left Brazil in 1644, heading to West Africa, where he died only a few weeks after landing. The cause of his death remains a mystery, as do most of the details of his brief life. Even the spelling of his name is uncertain – it can be found rendered in a half dozen different ways. </p>",
      "blocks": [
@@ -119,7 +120,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the edition and whether the copy is in the McIlhenny Collection (the Sources list the 1568 English translation, <em>The Newfound worlde</em>), then delete this line.]</strong></p><p>Toucan. André Thevet, <em>Les singularitez de la France antarctique</em> (Paris, 1558).</p>"
+   "lead_caption": "<p>From Thevet, <em>Les singularitez de la France Antarctique, autrement nominée Amerique . . .</em>, (Paris, 1557).</p>"
   },
   {
    "title": "Featherwork",
@@ -132,7 +133,7 @@
     },
     {
      "type": "entry",
-     "title": "JUAN IGNACIO MOLINA (1740-1829)",
+     "title": "Juan Ignacio Molina (1740-1829)",
      "anchor": "molina",
      "bio": "<p>“For his time, however, he was an eminent man.”  That was Alexander von Humboldt’s appraisal of Molina as a naturalist (<a href=\"#src-ronan\">Ronan 2002, 194</a>); if it is faint praise, it is probably a useful corrective to the more laudatory assessments that came later.  The usually hard-headed Elliott Coues, for instance, calls Molina’s <em>Saggio sulla storia naturale del Chili</em> a “celebrated work” and Molina a man “famous in the annals of South American Ornithology” (<a href=\"#src-coues\">Coues 1878-79, 244</a>). All that may be true, yet his fame rests on slender evidence: Only thirty-four pages of the book are devoted to birds, and the list of species described by Molina totals only thirty-three. The limitations of his work are best understood by recalling the handicaps under which he worked. Molina was born in central Chile and entered the Jesuit order at the age of fifteen as a novice. By 1763 he was teaching school, as well as studying the botany and zoology of the area where he lived. In 1767 his progress was halted when the Jesuits were expelled from Chile; he was deported to Spain, his notes and papers on natural history confiscated. After a period of unpleasant wandering he finally settled in Bologna, where he spent the rest of his life.</p>",
      "blocks": [
@@ -148,7 +149,7 @@
     },
     {
      "type": "entry",
-     "title": "LOUIS JEAN PIERRE VIEILLOT (1610-1644)",
+     "title": "Louis Jean Pierre Vieillot (1610-1644)",
      "anchor": "vieillot",
      "bio": "<p>Vieillot is hardly a household name, unless one happens to be deeply involved with avian taxonomic issues, in which case the abbreviation “Vieill.” after a bird’s binomial name, denoting Vieillot as the first describer of the species, will be familiar. In the brief time he was active – roughly 1800 to 1825 – he described 387 currently valid species, a number exceeded only by that of Linnaeus (710), who, of course, had the advantage of providing the original binomials for every species known to science in the mid-eighteenth century, in the various editions of his <em>Systema Naturae</em> (<a href=\"#src-peterson\">Peterson 2009</a>). Some of Vieillot’s descriptions were of North American birds. As a young man, he went to the French colony of Saint Domingue (present-day Haiti), where he established a business and developed a passion for natural history (<a href=\"#src-oehser\">Oehser 1948, 571</a>).  He was forced to flee the slave rebellion in the early 1790s and came to the United States, where he focused on ornithology. He wrote the first descriptions of some of our most familiar birds: northern pintail, cinnamon teal, wild turkey, broad-winged hawk, house wren, winter wren, cedar waxwing, northern shrike, boat-tailed grackle, scarlet tanager, and twenty-two other species (<a href=\"#src-oehser\">ibid., 569</a>). He returned to France in 1798, enduring a tragic crossing during which his wife and three daughters died from yellow fever. If, as is sometimes noted, he had a difficult disposition, the loss of his home and the loss of his family might serve as sufficient explanation.</p>\n<p>However, for a man passionate about avian taxonomy, he arrived at the right place at the right time. “Between 1812 and 1820 no one studied more eagerly than Vieillot the exotic birds exhibited in the galleries of the Paris Museum” (<a href=\"#src-stresemann\">Stresemann 1975, 123</a>). Vast collections of specimens (such as those from Azara’s explorations – see next entry) were arriving in the city, and “though the scientific staff thought little of him, the number of bird species he described (especially in the second edition of the <em>Nouveau dictionnaire d’histoire naturelle</em>, 1816-1819) was very considerable” (<a href=\"#src-stresemann\">ibid.</a>).  Most of the birds he described were from the Neotropics.  By all accounts the last years of his life were not happy. Although he continued to do some taxonomic work, he was desperately poor and “lived out his days as an eccentric.  At the end of his life he was in Rouen, where he died, old and blind, at the beginning of 1831” (<a href=\"#src-stresemann\">ibid., 124</a>).</p>",
      "blocks": [
@@ -171,13 +172,13 @@
     },
     {
      "type": "entry",
-     "title": "FÉLIX DE AZARA (1746-1821)",
+     "title": "Félix de Azara (1746-1821)",
      "anchor": "azara",
      "bio": "<p>Félix de Azara had a fairly conventional upbringing, which culminated with his enlistment in the Spanish army at age eighteen. His military career was likewise ordinary, with occasional promotions as he worked on various engineering projects. In 1781, however, his life changed abruptly. The Spanish government ordered him to South America as part of an effort to determine disputed boundaries between Spanish and Portuguese colonies in the Río de la Plata region. Unfortunately, it soon became clear that the Portuguese were not much interested in the project, with the result that Azara ended up with a lot of time on his hands – twenty years, as it turned out – “forgotten by my friends, without books or rational conversation, and traveling continually through immense and terrifying wildernesses and forests, communicating only with the birds and wild beasts” (<a href=\"#src-beddell\">Beddell 1983b, 225</a>).</p>\n<p>“Finding myself in an immense country, which seemed to me unknown . . . ,” he wrote, “I could scarcely occupy myself otherwise than with the objects nature presented to me. I found myself, really, almost forced to observe her, and I saw at each step new beings that caught my attention . . .” (<a href=\"#src-beddell\">Beddell 1975, 18</a>). Although not trained as a naturalist, by 1783 he was studying and collecting birds and mammals.  He made extensive notes on the habits, nesting, and distribution of the birds he encountered, and his achievements were nothing short of remarkable. “Many of [Azara’s claims] were regarded as fables,” said the later explorer Alcide d’Orbigny, and Azara’s contribution to South American ornithology was often overlooked, largely due to the indifference of his contemporaries. But d’Orbigny discovered Azara to be “an observer as accurate as he was conscientious”; Darwin cited Azara repeatedly in <em>Voyage of the Beagle</em>; and a century later, W. H. Hudson, in <em>Birds of La Plata</em>, praised Azara and made frequent use of his observations (<a href=\"#src-beddell\">Beddell 1975; 1983b, 228</a>).</p>",
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Azara surucua.jpg",
        "source": "azarapxxiv_surucuos-on-a-ventre-rouge2",
        "caption": "<p>“Surucua” appearing in Azara’s <em>Voyages dans l’Amérique Méridionale</em>.</p>",
        "layout": "side_start"
@@ -194,7 +195,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the species, then delete this line.]</strong></p><p>Jacamar. Jean Baptiste Audebert, in Louis Jean Pierre Vieillot, <em>Oiseaux dorés ou à reflets métalliques</em> (Paris: Desray, 1800-1802). McIlhenny Collection, LSU.</p>"
+   "lead_caption": "<p>Images by Jean Baptiste Audebert, published in Louis Jean Pierre Vieillot’s <em>Oiseaux dorés ou à reflets métalliques</em> (Paris, 1800-02). French color printing of this period was technically brilliant, but the formal style – resembling that of Napoleonic portraiture – is not well suited to birds. Also, with little knowledge of the habitat or habits of the birds he drew, Audebert could do little more than pose them on sticks.</p>"
   },
   {
    "title": "Opening Scientific Exploration",
@@ -213,7 +214,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Wied Schiffahrt.jpg",
        "source": "wiedp100fold_schiffahut-uber-die-felsen-des-atheos2",
        "caption": "<p>This image, titled “Schiffahrt über die Felsen des Rhéos,” from Wied’s <em>Reise nach Brasilien</em>, illustrates the environment that he encountered in Brazil.</p>",
        "layout": "side_start"
@@ -230,7 +231,7 @@
     },
     {
      "type": "entry",
-     "title": "JOHANN BAPTIST VON SPIX (1781-1826)",
+     "title": "Johann Baptist von Spix (1781-1826)",
      "anchor": "spix",
      "bio": "<p>Johann Baptist von Spix was born to an impoverished doctor in the small Bavarian town of Höchstadt an der Aisch. A precocious student, he studied philosophy, theology, and medicine at the universities of Bamberg and Würzburg and was awarded his PhD at the tender age of nineteen. After making the acquaintance of the young natural philosopher Friedrich Wilhelm Joseph Schelling, however, Spix discovered his true interest in life, the study of the animal kingdom. In 1808, having worked for two years as a medical doctor – a not uncommon way of entering the field of zoology in the early nineteenth century – Spix came to the attention of King Maximilian I of Bavaria, partly through Schelling’s influence.  The king provided Spix with a generous stipend, which enabled him to travel to Paris, where he met and briefly studied with the great French naturalist Georges Cuvier. The knowledge he acquired in Paris, the world capital of the study of zoology, was invaluable, and in 1811 he was appointed curator of a collection of animal specimens now known as the Zoologische Staatssammlung München (Bavarian State Collection of Zoology).</p>\n<p>Between 1811 and 1815, Spix published several groundbreaking studies, including a history of zoological classification, a work on primates, and a comparative anatomy of skulls.  While hard at work in his offices in Munich, he was presented with a once-in-a-lifetime opportunity to expand the collections under his care.  In 1817, the daughter of Emperor Francis I of Austria was betrothed to crown prince Pedro of Portugal, who had been living in exile in Brazil with his father, King João of Portugal, following Napoleon’s invasion of his country ten years earlier.  King Maximilian, an enthusiastic bird collector and patron of the sciences, arranged for Spix and a twenty-two-year-old botanist named Karl Friedrich Philipp Martius to join the royal entourage that was to accompany the archduchess to South America (<a href=\"#src-juniper\">Juniper 2002). </a> Upon their arrival, the scientists were to undertake an in-depth study of Brazil’s natural history, Spix focusing on animal life and fossils, Martius on plants. On July 13, 1817, the ship carrying the future empress of Brazil and the two young Bavarian scientists reached its destination. “A sensation, not to be described, overcame us all at the moment when the anchor struck the ground at another continent,” Spix and Martius later recalled (<a href=\"#src-spix\">Spix and Martius 1824, vol. 1, 124</a>).  Six months spent in the capital city of Rio de Janeiro and in nearby São Paulo gave them time to adjust to the tropical climate and to inspect the natural history section of the fine library King João had brought from Portugal. In early December, the pair finally set out for Brazil’s sparsely settled interior, where many difficulties awaited them. Bad maps and flooded roads slowed their progress, while intolerable heat, venomous snakes, marauding cats, and swarms of insects made camp life stressful. Their guide disappeared one night, taking with him many of their valuables.</p>\n<p>For all the hardships they encountered, however, Spix and Martius admitted at the end of their journey that “this simple mode of life had its peculiar charms” (<a href=\"#src-spix\">ibid., vol. 2, 129</a>). As far as collecting specimens was concerned, they were wildly successful.  Good fortune, they wrote, “attended all our collections of natural history, which, though exposed to innumerable hazards and dangers, have all, without exception, reached their final destination, a success which few travelers can boast” (<a href=\"#src-spix\">ibid., vol. 1, 299</a>). By the time they reached the port of Belém on April 16, 1820, they had traversed the arid northeast corner of Brazil and penetrated deep into the Amazon rainforest, a journey of almost 4,000 miles. All in all, they collected 350 species of birds, 85 species of mammals, 116 species of fish, 2,700 insects, and more than 6,500 botanical specimens. Many of these were previously unknown to science. The collection provided essential material for other scholars, including Louis Agassiz, whose first published work was a study of the fish Spix and Martius had brought back to Europe.</p>\n<p>In recognition of their success, the returning travelers were granted the title Ritter (“Sir”) and permitted to add the word von (“of”) to their last names as a further mark of distinction. Spix immediately set about studying the vertebrates he had collected, especially the birds, which formed the basis of his two-volume Avium species novae, published in 1824 and 1825. He and Martius also issued the first part of a travel account, which was intended to be of interest to general readers as well as scientists. That volume, published in German in 1823 and English in 1824, still makes for entertaining reading. Sadly, Spix’s health never recovered from his grueling journey through the tropics, and he died in 1826, at the age of forty-five. Martius, who completed the final two volumes of the travelogue he had begun with Spix, went on to become a highly esteemed botanist. He died in 1868. (Michael Taylor)</p>",
      "blocks": [
@@ -265,7 +266,7 @@
     },
     {
      "type": "entry",
-     "title": "JOHANN NATTERER (1787-1843)",
+     "title": "Johann Natterer (1787-1843)",
      "anchor": "natterer",
      "bio": "<p>Johann Natterer was almost predestined to become a naturalist. His father, Joseph, worked as a falconer and taxidermist at Laxenburg, one of the country estates of the Austrian emperor Franz I.  There the elder Natterer assembled a large collection of birds,  mammals, and insects, which the emperor later purchased and moved to Vienna, where it was opened to the public as part of the Hof-Naturalienkabinette (Court Natural History Collection).  Joseph Natterer used the museum’s collections to train his sons, Johann and Joseph, Jr., in the art of taxidermy. Presumably, he taught them some basic zoology, as well. In 1806,  Karl von Schreibers, an energetic young zoologist, took over the directorship of the Hof-Naturalienkabinette, and, as part of his effort to make the museum one of the best of its kind, he enlisted the help of Joseph Natterer’s nineteen year-old son, Johann. Traveling at his own expense through Austria, Hungary, the Balkans, and Italy, Johann  Natterer acquired valuable experience and proved his ability at hunting and animal preparation. He later traveled to the Turkish border with the hunter and taxidermist Dominik Sochor, and then to Italy in 1812 and 1814.</p>\n<p>After Napoleon’s final defeat and exile, Natterer contributed to efforts to recover natural history specimens plundered during the French occupation of Austria. He was sidetracked, however, in 1817, when chosen to be part of an Austrian scientific expedition to Brazil.  This once-in-a-lifetime opportunity for Natterer was the brainchild of Prince Klemens Wenzel von Metternich, one of Europe’s most influential statesmen and an enthusiastic student of natural history.  Seeking to expand Austria’s influence over Latin America and open up new economic markets, Metternich arranged a marriage between the Austrian archduchess Maria Leopoldina and Don Pedro, the son of the king of Portugal, who had fled to Brazil after Napoleon’s conquest of the Iberian Peninsula.  A group of fourteen scientists and artists was assembled to accompany the emperor’s daughter to Rio de Janeiro. They were then charged with exploring as much of the country as they could, searching for trade opportunities, as well as plants and animals that could be raised in Europe. Natterer was originally supposed to be the expedition’s leader but was passed over in favor of Johann Christian Mikan, a botanist and professor of natural history at the University of Prague.</p>\n<p>In November 1817, Natterer reached Brazil and met up with other members of the expedition who had arrived a short time earlier. Two Bavarian naturalists, Johann Baptist Spix and Carl Philipp Martius, soon went their own way, as had been arranged beforehand. After just a few months of exploring, most of Natterer’s Austrian colleagues, including Mikan, returned to Europe on account of ill health, homesickness, or their inability to get along with each other. Natterer and a few others stayed behind. In 1821 the Austrian government officially called off the venture because of political unrest in Brazil, but, not to be deterred, Natterer and his old friend Dominik Sochor chose to continue their work independent of support, either moral or financial. Together they explored the provinces of southern Brazil, collecting in addition to animal specimens a large quantity of ethnological material, including tools, weapons, and jewelry produced by Brazil’s indigenous peoples.</p>\n<p>Natterer remained in South America much longer than he had ever intended to – eighteen years.  During  that time he undertook ten trips, traveling through dense forests as far as  the borders with Bolivia and Colombia. He and Sochor were often in poor health.  In 1825, Natterer contracted hepatitis, and in December of the following year Sochor died of fever at São Vicente. Despite his own lingering illness, Natterer pressed on, and, even when the emperor ordered him to return to Vienna, in 1827, he resisted.  For another eight years, he forged ahead with his collecting mission. By the time he finally departed from Brazil, in September 1835, he had collected 12,293 individual birds and a vast array of other specimens, ranging from insects, fish, and amphibians to worms, mollusks, and eggs. Schreibers was initially unable to find a suitable place to store the material that Mikan, Natterer, and other expedition members began sending back to Vienna in 1818, but quarters were eventually found in a building that became known as the Brasilianum. Twelve of its rooms were devoted to natural history and one large room to manmade objects.  All told, the museum contained more than 150,000 items.  It was a popular attraction and remained open until 1836, when its collections were moved into storage. They were partly destroyed by fire during the Revolution of 1848, but most of Natterer’s material survived, including the ethnological objects, which were integrated into Vienna’s Museum für Völkerkunde (Museum of Ethnology) when it opened in 1928. (Michael Taylor)</p>",
      "blocks": [
@@ -281,7 +282,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the species and plate, then delete this line.]</strong></p><p>Johann Jacob von Tschudi, <em>Untersuchungen über die Fauna Peruana</em> (St. Gallen: Scheitlin and Zollikofer, 1844-1846). McIlhenny Collection, LSU.</p>"
+   "lead_caption": "<p>It is fair to say that illustrations in 19th German books devoted to Neotropical birds were not of the highest quality. They have neither the formal brilliance of French bird art, nor the naturalness and subtlety of the best English bird art. The German artists seem content to portray a stuffed object, without attempting to impart the spark of life. This is regrettable, because the work of Germans was crucial to the progress of Neotropical ornithology. The plate is from the first work devoted entirely to the birds of Peru: Tschudi’s <em>Untersuchungen über die Fauna Peruana</em> (St. Gallen, 1844-46).</p>"
   },
   {
    "title": "Traveling Naturalists",
@@ -340,7 +341,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the species and plate, then delete this line.]</strong></p><p>Jean Théodore Descourtilz, <em>Ornithologie bresilienne ou histoire des oiseaux du Brésil, remarquables par leur plumage, leur chant ou leurs habitudes</em> (Rio de Janeiro [actually London]: Thomas Reeves, [1852-1856]). McIlhenny Collection, LSU.</p>"
+   "lead_caption": "<p>Black-capped mockingthrush (<em>Donacobius atricapilla</em>). Descourtilz placed this dramatic bird on a plate with thrushes, because that was where it was thought to belong, based on superficial physical resemblance. In the early 20th century it was moved to the thrashers, then in the 1990s it found a new taxonomic home among the wrens. So, what is this bird? Recent DNA analysis has provided a surprising answer: it is most closely related to Old World warblers and probably found its way to South America across the Siberian land-bridge. It has now been placed in a family all its own. “<em>Donacobius</em> is a truly enigmatic taxon,” wrote Van Remsen, “whose relationships, once elucidated, will be a biogeographical blockbuster” (<a href=\"#src-aleixo\">Aleixo and Pacheco 2007</a>; Remsen and Parker 2004).</p><p>From the last and best-known of Descourtilz’s works, <em>Ornithologie bresilienne ou histoire des oiseaux du Brésil, remarquables par leur plumage, leur chant ou leurs habitudes</em> (London, 1852-56).</p>"
   },
   {
    "title": "The Destruction of the Atlantic Forest",
@@ -353,7 +354,7 @@
     },
     {
      "type": "entry",
-     "title": "CLAUDIO GAY (1800-1873)",
+     "title": "Claudio Gay (1800-1873)",
      "anchor": "claudio-gay-1800-1873",
      "bio": "<p>Born in France, Claudio Gay spent most of his productive life in Chile. He arrived there in 1828 and by 1830 had accepted an invitation to begin a study of the country on behalf of the government. He did research for a decade, then began writing, and produced a thirty-volume set of books (twenty-eight volumes of text, plus two atlas volumes) that constituted the first in-depth study of Chile’s natural and political history. The work was published by the Chilean government between 1844 and 1871 – a rather long gestation period, during which time Gay also founded a botanical garden, to which he brought from France <em>Vitis vinifera</em> vines, some sixty varieties, thus inaugurating the Chilean wine industry.</p>",
      "blocks": [
@@ -451,7 +452,7 @@
     }
    ],
    "focus": "center",
-   "lead_caption": "<p><strong>[Editor: please verify the species and plate, then delete this line.]</strong></p><p>Jean Théodore Descourtilz, <em>Ornithologie bresilienne ou histoire des oiseaux du Brésil, remarquables par leur plumage, leur chant ou leurs habitudes</em> (Rio de Janeiro [actually London]: Thomas Reeves, [1852-1856]). McIlhenny Collection, LSU.</p>"
+   "lead_caption": "<p>White-plumed antbird (<em>Pithys albifrons</em>). This dapper creature is one of 209 species of antbirds, which take their name from the habitual following of army-ant swarms by some members of the family. None eat ants – rather, they concentrate on the insects and spiders fleeing the marauding <em>Eciton</em> species – and only 18 species (including the white-plumed antbird) are “obligate” followers of ant swarms (<a href=\"#src-zimmer-5\">Zimmer and Isler 2003</a>). The rest are opportunistic, sometimes joining flocks following ants (especially when they pass through their territories), but also foraging elsewhere.</p><p>From the last and best-known of Descourtilz’s works, <em>Ornithologie bresilienne ou histoire des oiseaux du Brésil, remarquables par leur plumage, leur chant ou leurs habitudes</em> (London, 1852-56).</p>"
   },
   {
    "title": "Collecting by Individuals",
@@ -480,13 +481,13 @@
     },
     {
      "type": "entry",
-     "title": "PHILIP HENRY GOSSE (1810-1888)",
+     "title": "Philip Henry Gosse (1810-1888)",
      "anchor": "gosse",
      "bio": "<p>Gosse lived a “vehement, eager life,” according to his son, formed by enthusiasms that followed one upon the other. As a young man abroad, he studied insects in Canada and Alabama, birds in Jamaica. Upon returning to England, he turned his attention to the wonders of the seashore – especially anemones.  He developed the first practical marine aquariums and published numerous popular books devoted to all manner of natural wonders that fascinated him.  Darwin and others respected him for the quality of his observations and his rare ability to describe what he saw in writing that was clear and engrossing. In his seventies he became passionate about butterflies, and, ambitious to collect “the Papilionidae of the whole world,” he acquired thousands of specimens from a global network of collectors.  Gosse was also deeply religious, and his reputation has suffered from the publication of two books, one he wrote himself, one written by his literary son, Edmund. His own book was <em>Omphalos: An Attempt to Untie the Geological Knot</em>, published in 1857, two years before <em>The Origin of Species</em>.  In it he tried to reconcile the claims of the Bible with the evidence of geology and the fossil record by asserting that God created the world with a pre-existent history already in place (thus the title <em>Omphalos</em>, meaning “belly button” in Greek and referring to the peculiar question of whether Adam had one). Although the book met with ridicule, it expresses the tensions that defined his own and so many other Victorian lives.  As his recent biographer puts it, “It is the combination of cool, objective scientific observation of the natural world and the complete passionate commitment to the truth of the Bible that puts Philip Henry Gosse at the heart of the Victorian crisis of faith” (<a href=\"#src-thwaite\">Thwaite 2002, 2</a>). After Gosse’s death his son published <em>Father and Son</em>, a minor classic of autobiography that paints Henry as a fanatical and not very lovable father – a reconstruction of Edmund’s childhood that the facts do not entirely corroborate (<a href=\"#src-thwaite\">Thwaite 2002</a>).</p>",
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Gosse p184.jpg",
        "source": "gosse_184",
        "caption": "<p>An image from Gosse’s unillustrated folio volume, <em>Birds of Jamaica</em>.</p>",
        "layout": "side_start"
@@ -626,7 +627,8 @@
      ]
     }
    ],
-   "focus": "center"
+   "focus": "center",
+   "lead_caption": "<p>Photography shows things more or less as they really were. The photograph above, from Leo Miller’s <em>In the Wilds of South America</em>, is of Bonaventura, Colombia, no doubt the port described in this amusing anecdote related by Blair Beebe (<a href=\"#src-beebe-3\">Beebe 1910, 89</a>): “Our very interesting friend Mr. Eugene André of Trinidad told us that on one of his many orchid-hunting expeditions he had chanced to land at a certain God-forsaken little port on the west coast of Colombia. Mr. André had wondered why the fare to this port from Panama should be $30. – while the return passage was $100. The problem was solved after he had seen the port – desolate, barren, inaccessible and fever and insect ridden. One might be induced to pay $30. to get there provided one did not know what manner of place it was. But to get away – one would pay any sum and gladly.”</p>"
   },
   {
    "title": "Museum Men",
@@ -671,7 +673,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Cory Euphonia musica.jpg",
        "source": "coryp62fold_euphoniamusica2",
        "caption": "<p><em>Euphonia musica</em> from <em>The Birds of Haiti and San Domingo.</em></p>",
        "layout": "side_start"
@@ -690,7 +692,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Sclater Chaetocercus burmeisteri.jpg",
        "source": "sclaterp2foldout_chaetocercus-burmeisteri2",
        "caption": "<p><em>Chaetocercus burmeister</em> from <em>Argentine Ornithology</em>.</p>",
        "layout": "side_start"
@@ -737,11 +739,11 @@
      "blocks": [
       {
        "type": "text",
-       "body": "<p><em><strong>The Distribution of Bird-Life in Colombia. A Contribution to a Biological Survey of South America. </strong></em><strong>Bulletin of the American Museum of Natural History, vol. 36. New York: Published by Order of the Trustees, 1917. 8vo. Numerous maps, photographs, and 4 color plates of birds by L. A. Fuertes.</strong> (<a href=\"#src-anker\">Anker 96</a>; <a href=\"#src-mengel\">Mengel 503</a>; <a href=\"#src-wood\">Wood 286</a>; Middleton Library, LSU.)</p>"
+       "body": "<p><em><strong>The Distribution of Bird-Life in Colombia. A Contribution to a Biological Survey of South America. </strong></em><strong>Bulletin of the American Museum of Natural History, vol. 36. New York: Published by Order of the Trustees, 1917. 8vo. Numerous maps, photographs, and 4 color plates of birds by L. A. Fuertes.</strong> (<a href=\"#src-anker\">Anker 96</a>; <a href=\"#src-mengel\">Mengel 503</a>; <a href=\"#src-wood\">Wood 286</a>; Main Library, LSU.)</p>"
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>The Distribution of Bird-Life in Ecuador. A Contribution to a Study of the Origin of Andean Bird-Life.</em> Bulletin of the American Museum of Natural History, vol. 55. New York: Published by Order of the Trustees, 1926. 8vo. Numerous maps, photographs, and 4 color plates of birds by L. A. Fuertes.</strong> (<a href=\"#src-anker\">Anker 97</a>; <a href=\"#src-mengel\">Mengel 507</a>; Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>The Distribution of Bird-Life in Ecuador. A Contribution to a Study of the Origin of Andean Bird-Life.</em> Bulletin of the American Museum of Natural History, vol. 55. New York: Published by Order of the Trustees, 1926. 8vo. Numerous maps, photographs, and 4 color plates of birds by L. A. Fuertes.</strong> (<a href=\"#src-anker\">Anker 97</a>; <a href=\"#src-mengel\">Mengel 507</a>; Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -749,7 +751,7 @@
       },
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Chapman Rosy.jpg",
        "source": "chapmanpplatevi_rosy",
        "caption": "<p>“Rosy” from <em>Life in an Air Castle.</em></p>",
        "layout": "side_start"
@@ -781,7 +783,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>A Contribution to the Ornithology of the Orinoco Region. The Museum of The Brooklyn Institute of Arts and Science, Science Bulletin, vol. 2, no. 6. </em>Brooklyn: Published for the Brooklyn Museum, 1916. 8vo. </strong>(<a href=\"#src-mengel\">Mengel 519</a>; <a href=\"#src-wood\">Wood 288</a>; Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>A Contribution to the Ornithology of the Orinoco Region. The Museum of The Brooklyn Institute of Arts and Science, Science Bulletin, vol. 2, no. 6. </em>Brooklyn: Published for the Brooklyn Museum, 1916. 8vo. </strong>(<a href=\"#src-mengel\">Mengel 519</a>; <a href=\"#src-wood\">Wood 288</a>; Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -797,7 +799,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Miller Cock of the Rock.jpg",
        "source": "millerpinsidecoverart_cockoftherock",
        "caption": "<p>Cock of the Rock from<em> In the Wilds of South America.</em></p>",
        "layout": "side_start"
@@ -820,14 +822,14 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Snethlage p46.jpg",
        "source": "snethlage_pp46",
        "caption": "<p>Plate from <em>Catalogo das Aves Amazonicas.</em></p>",
        "layout": "side_start"
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>Catalogo das Aves Amazonicas, contendo todas as especies descriptas e mencionadas até 1913. Boletim do Museu Goeldi (Museu Paraense) de Historia Natural e Ethnographia, tomo 8, 1911-1912. </em>Pará: Edição do Museu Goeldi, 1914. Large 8vo. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Catalogo das Aves Amazonicas, contendo todas as especies descriptas e mencionadas até 1913. Boletim do Museu Goeldi (Museu Paraense) de Historia Natural e Ethnographia, tomo 8, 1911-1912. </em>Pará: Edição do Museu Goeldi, 1914. Large 8vo. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -843,7 +845,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>Two Bird-Lovers in Mexico. </em>Boston and New York: Houghton, Mifflin Co., 1905. 8vo, pictorial cloth.</strong> (<a href=\"#src-mengel\">Mengel 200</a>; Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Two Bird-Lovers in Mexico. </em>Boston and New York: Houghton, Mifflin Co., 1905. 8vo, pictorial cloth.</strong> (<a href=\"#src-mengel\">Mengel 200</a>; Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -867,7 +869,7 @@
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>Catalogue of Birds of the Americas. </em>Chicago: Field Museum of Natural History, 1918-1949. 11 parts in 15 volumes. 8vo, printed wrappers. </strong>(<a href=\"#src-mengel\">Mengel 571</a>; <a href=\"#src-wood\">Wood 300-01</a>; Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Catalogue of Birds of the Americas. </em>Chicago: Field Museum of Natural History, 1918-1949. 11 parts in 15 volumes. 8vo, printed wrappers. </strong>(<a href=\"#src-mengel\">Mengel 571</a>; <a href=\"#src-wood\">Wood 300-01</a>; Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -883,14 +885,14 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Todd Carriker Pyrrhura viridicata.jpg",
        "source": "toddcarrikerpp",
        "caption": "<p><em>Pyrrhura viridicata</em> from <em>The Birds of the Santa Marta Region of Colombia</em>.</p>",
        "layout": "side_start"
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>The Birds of the Santa Marta Region of Colombia: A Study in Altitudinal Distribution. </em>[Pittsburgh:] Annals of the Carnegie Museum, vol. 14, 1922. 8vo. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>The Birds of the Santa Marta Region of Colombia: A Study in Altitudinal Distribution. </em>[Pittsburgh:] Annals of the Carnegie Museum, vol. 14, 1922. 8vo. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -906,7 +908,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>The Birds of Matto Grosso, Brazil. A Report on the Birds Secured by the Roosevelt-Rondon Expedition. With Field Notes by George K. Cherrie. Bulletin of the American Museum of Natural History, vol. 60. </em>New York: The American Museum of Natural History, 1930. 8vo. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>The Birds of Matto Grosso, Brazil. A Report on the Birds Secured by the Roosevelt-Rondon Expedition. With Field Notes by George K. Cherrie. Bulletin of the American Museum of Natural History, vol. 60. </em>New York: The American Museum of Natural History, 1930. 8vo. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -922,7 +924,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Murphy Chincha Islands.jpg",
        "source": "murphypp35_chincha-islands",
        "caption": "<p>Chincha Islands, from <em>Oceanic Birds of South America.</em></p>",
        "layout": "side_start"
@@ -945,7 +947,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>Studies of Peruvian Birds, Nos. 1-66. American Museum Novitates. </em>New York: American Museum of Natural History, 1931-1955. 66 volumes, together approximately 1,650 pages. 8vo, printed wrappers. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Studies of Peruvian Birds, Nos. 1-66. American Museum Novitates. </em>New York: American Museum of Natural History, 1931-1955. 66 volumes, together approximately 1,650 pages. 8vo, printed wrappers. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -953,7 +955,7 @@
       },
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Zimmer unpublished drawing.jpg",
        "source": "zimmerpp193_unpublished-drawing",
        "caption": "<p>Drawing from<em> Catalogue of the Edward E. Ayer Ornithological Library.</em></p>",
        "layout": "side_start"
@@ -976,7 +978,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>The Birds of the Republic of Panama. Smithsonian Miscellaneous Collections, vol. 150 [parts 1-4]. </em>Washington, D.C.: Smithsonian Institution, 1965-1984. 4 volumes. 8vo. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>The Birds of the Republic of Panama. Smithsonian Miscellaneous Collections, vol. 150 [parts 1-4]. </em>Washington, D.C.: Smithsonian Institution, 1965-1984. 4 volumes. 8vo. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -1005,14 +1007,14 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Haverschmidt plate 19.jpg",
        "source": "haverschmidtpp212_plate-19-2",
        "caption": "<p>Plate 19 from <em>Birds of Surinam.</em></p>",
        "layout": "side_start"
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>Birds of Surinam. Illustrated by Paul Barruel. </em>Edinburgh: Oliver &amp; Boyd, 1968. 4to. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Birds of Surinam. Illustrated by Paul Barruel. </em>Edinburgh: Oliver &amp; Boyd, 1968. 4to. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -1028,7 +1030,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>Lista de las Aves de Venezuela con su Distribucion. </em>Parte 2, Passeriformes. Boletin de la Sociedad Venezolana de Ciencias Naturales, tomo 12, no. 75, enero 1950. [and] Parte 1, No Passeriformes. Boletin de la Sociedad Venezolana de Ciencias Naturales, tomo 19, no. 90, mayo 1958. 2 volumes. 8vo, printed wrappers. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Lista de las Aves de Venezuela con su Distribucion. </em>Parte 2, Passeriformes. Boletin de la Sociedad Venezolana de Ciencias Naturales, tomo 12, no. 75, enero 1950. [and] Parte 1, No Passeriformes. Boletin de la Sociedad Venezolana de Ciencias Naturales, tomo 19, no. 90, mayo 1958. 2 volumes. 8vo, printed wrappers. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -1044,7 +1046,7 @@
      "blocks": [
       {
        "type": "citation",
-       "body": "<p><strong><em>Life Histories of Central American Birds. </em>Illustrated with Drawings by Don R. Eckelberry. Berkeley: Cooper Ornithological Society, 1954, 1960, 1969. 3 volumes. Large 8vo. First editions. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>Life Histories of Central American Birds. </em>Illustrated with Drawings by Don R. Eckelberry. Berkeley: Cooper Ornithological Society, 1954, 1960, 1969. 3 volumes. Large 8vo. First editions. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -1084,14 +1086,14 @@
       },
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Schauensee p63.jpg",
        "source": "schauensee_pp-63",
        "caption": "<p><strong>Ima</strong><strong>ge: </strong>White-headed Marsh Tyrant from <em>A Guide to the Birds of South America</em>.</p>",
        "layout": "side_start"
       },
       {
        "type": "citation",
-       "body": "<p><strong><em>A Guide to the Birds of South America. </em>Wynnewood, Pa.: Livingston Publishing Co., for The Academy of Natural Sciences of Philadelphia, [1970]. 8vo. </strong>(Middleton Library, LSU.)</p>"
+       "body": "<p><strong><em>A Guide to the Birds of South America. </em>Wynnewood, Pa.: Livingston Publishing Co., for The Academy of Natural Sciences of Philadelphia, [1970]. 8vo. </strong>(Main Library, LSU.)</p>"
       },
       {
        "type": "text",
@@ -1126,7 +1128,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Sick Birds in Brazil cover.jpg",
        "source": "sick_cover-page",
        "caption": "<p><strong><em>Birds in Brazil. A Natural History. </em>Translated from the Portuguese by William Belton. Princeton: Princeton University Press, [1993]. 4to. First edition in English. First published in 1984 as <em>Ornitologia Brasileira – Uma Introdução.</em> The English edition, however, contains Sick’s numerous revisions to the text and other revisions introduced by the translator. </strong>(McIlhenny Collection, LSU.)</p>",
        "layout": "side_start"
@@ -1145,7 +1147,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Schulenberg Birds of Peru cover.jpg",
        "source": "schlunberg_cover-page",
        "caption": "<p><strong><em>Birds of Peru. </em>Princeton: Princeton University Press, 2007. 8vo.</strong> (McIlhenny Collection, LSU.)</p>",
        "layout": "side_start"
@@ -1164,7 +1166,7 @@
      "blocks": [
       {
        "type": "figure",
-       "image": null,
+       "image": "Section 4 (additions)/Alvarez del Toro Las Aves de Chiapas cover.jpg",
        "source": "toro_cover-page-2",
        "caption": "<p><strong><em>Las Aves de Chiapas. </em>Tuxtla Gutiérrez: Publicado por el Gobierno del Estado de Chiapas, 1971. 4to. </strong>(McIlhenny Collection, LSU.)</p>",
        "layout": "side_start"
@@ -1254,7 +1256,8 @@
      "layout": "side_start"
     }
    ],
-   "focus": "center"
+   "focus": "center",
+   "lead_caption": "<p>This image, also from Chubb, resembles the lithograph from Wied Neuwied (plate 3), but here the leaders are in pith-helmets, not beaver top-hats, and are helping with the paddling.</p>"
   },
   {
    "title": "Modern Fieldwork",
@@ -1327,7 +1330,8 @@
      "layout": "side_end"
     }
    ],
-   "focus": "center"
+   "focus": "center",
+   "lead_caption": "<p>Unloading gear and food for a three-week expedition into the higher elevations of the Amotape Cordillera in Tumbes, Peru. It took three days and several horse and mule journeys – through recently opened, narrow, and steep trails – to carry all the equipment to the base camp,</p><p>Photograph by César Sánchez.</p>"
   },
   {
    "title": "Conclusion",
@@ -1339,7 +1343,8 @@
      "body": "<p>Looking into a large mirror at the zoo founded by Miguel Álvarez del Toro at Tuxtla Gutiérrez, you will see, along with your own visage, these words: THE MOST DANGEROUS AND DESTRUCTIVE SPECIES IN THE WORLD (<a href=\"#src-navarro\">Navarro and Morales-Pérez 1999, 226</a>). True enough: There is no doubt that <em>Homo sapiens</em> has done a fairly comprehensive job of overexploiting and thereby destroying much of the natural fecundity that flourished in the New World. Habitat destruction is, and will likely remain, the greatest threat to wildlife, and it is hard to see how the interests of birds will compete effectively against the needs of a growing population for food and a place to live. Certainly, the creatures of our continent have not been spared in this same competition, leaving North Americans with little claim to the moral high ground when advocating conservation in Latin America. Perhaps the example of Miguel Álvarez del Toro, and the reserve at El Triunfo, offer a glimmer of hope for the future. A special place, identified and prized by a local scientist, then protected by local initiative. A place that attracts visitors from around the world, thus becoming a source of income for the residents of the community. A place that by virtue of saving a few charismatic species, such as horned guans and resplendent quetzals, also provides a haven for the numberless other species of plants and animals that form the ecological community of a cloud forest. All of this, of course, may just be wishful thinking; perhaps it is inevitable that one day, as Álvarez del Toro feared, the push to develop and exploit a mountain valley will trump all other values. It happens all the time.</p>"
     }
    ],
-   "focus": "center"
+   "focus": "center",
+   "lead_caption": "<p>A species of conservation concern, and considered rare throughout its distribution, the solitary eagle (<em>Harpyhaliaetus solitarius</em>) is one of the least-known raptors in the Neotropics. However, it was encountered regularly during the last LSUMNS expedition to Tumbes, Peru. Here a subadult vocalizes along Quebrada Faical, at the Cerros de Amotape National Park.</p><p>Photograph by César Sánchez.</p>"
   },
   {
    "title": "Sources",
@@ -1424,6 +1429,22 @@
   "Section 2 (x)/Red capped manakin.jpg": "Painting of a red-capped manakin.",
   "Section 1 (x)/CHubb, paddling.jpg": "Photograph of men paddling a canoe on a forest river.",
   "Section 3 (x)/ongoing expedition .jpg": "Photograph of an expedition team unloading gear beside vehicles.",
-  "Section 3 (x)/Solitary Eagle.jpg": "Photograph of a solitary eagle perched in a tree."
+  "Section 3 (x)/Solitary Eagle.jpg": "Photograph of a solitary eagle perched in a tree.",
+  "Section 4 (additions)/Azara surucua.jpg": "Colour plate of a trogon with a red belly and long tail, perched on a branch.",
+  "Section 4 (additions)/Wied Schiffahrt.jpg": "Engraving of a boat being worked over rocks in a river below dense forest.",
+  "Section 4 (additions)/Gosse p184.jpg": "Open book showing two pages of text from Gosse’s The Birds of Jamaica.",
+  "Section 4 (additions)/Cory Euphonia musica.jpg": "Colour plate of two euphonias, small blue-capped and yellow birds, on a branch.",
+  "Section 4 (additions)/Sclater Chaetocercus burmeisteri.jpg": "Colour plate of two small hummingbirds among leaves.",
+  "Section 4 (additions)/Chapman Rosy.jpg": "Photograph of a bird feeding from a hand held out from a tree trunk.",
+  "Section 4 (additions)/Miller Cock of the Rock.jpg": "Colour illustration of an orange cock-of-the-rock beside a waterfall in the forest.",
+  "Section 4 (additions)/Snethlage p46.jpg": "Page of line drawings of bird heads, bills and feet.",
+  "Section 4 (additions)/Todd Carriker Pyrrhura viridicata.jpg": "Colour plate of a green parakeet with a red belly patch, perched.",
+  "Section 4 (additions)/Murphy Chincha Islands.jpg": "Photograph of rocky islands and sea, with a man seated in the foreground.",
+  "Section 4 (additions)/Zimmer unpublished drawing.jpg": "Drawing of a small bird on a branch with an insect above it.",
+  "Section 4 (additions)/Haverschmidt plate 19.jpg": "Colour plate of several kingfishers, jacamars and toucans.",
+  "Section 4 (additions)/Schauensee p63.jpg": "Book page with a drawing of a white-headed marsh tyrant.",
+  "Section 4 (additions)/Schulenberg Birds of Peru cover.jpg": "Cover of the field guide Birds of Peru, with painted birds.",
+  "Section 4 (additions)/Sick Birds in Brazil cover.jpg": "Cover of Birds in Brazil by Helmut Sick, with a yellow parakeet over a map of Brazil.",
+  "Section 4 (additions)/Alvarez del Toro Las Aves de Chiapas cover.jpg": "Cover of Las Aves de Chiapas, with paintings of several birds."
  }
 }

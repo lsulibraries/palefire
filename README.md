@@ -102,6 +102,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
 | `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
 | `palefire_exhibit_aves_lead_captions.php` | Fills the 9 draft AVES lead captions on the existing page (empty ones only; stops on a published page unless `-- force=1`) |
+| `palefire_exhibit_aves_update.php` | Brings the live AVES page up to `data/aves.json`: Capital Case names, "Main Library", the 16 images from `Section 4 (additions)`, catalogue lead captions (`-- images="<AVES exhibition 4K folder>"`). Keeps editors' own changes |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
@@ -513,7 +514,11 @@ from the media item. A figure with no image shows only to editors.
   clears and the image tours the whole of itself (`object-position` 0% 0%
   to 100% 100%, so a tall plate pans down and a wide photo across). Below
   lg, with reduced motion or without scroll-driven animations there is no
-  pin (below lg the image pans as it scrolls off). "Skip to the text"
+  pin (below lg the image pans as it scrolls off). After the pan the image
+  stays put and the caption, the text and the previous / next links slide
+  up over it on the page colour: the hero then spans the whole gallery
+  (its sticky stage holds until the text covers it) and
+  `.pf-section__inner::before` sizes the first rows instead. "Skip to the text"
   glides past it; the stage allows for the running head
   (`--pf-exhibit-head-h`).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
@@ -651,6 +656,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibition: the text slides over the image.** After the pan, the
+  gallery's image stays where it is and the caption and text move up over
+  it on the page colour, so the text moves and the image stays put.
+- **AVES content:** the nine names written in capitals now in Capital
+  Case, and entry headings no longer set in capitals; "Middleton Library"
+  is now "Main Library" (14 records); 16 of the 17 missing images, from the
+  catalogue's TIFFs (converted to JPEG in `Section 4 (additions)`); top
+  image captions for 11 galleries from the print catalogue's illustration
+  lists. `palefire_exhibit_aves_update.php` applies it to the live page.
 - **Exhibition galleries open like the title page:** the lead fills the
   screen with the gallery number, title and links to its entries; scrolling,
   the image stays pinned while they fade, then pans through the whole of

@@ -471,6 +471,64 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   grid-row: 5;
 }
 
+// After the pan the image stays where it is and the caption and the text
+// slide up over it on the page colour (from lg, while the pan is on), so
+// the image moves less and the text does the moving. The hero then reaches
+// the gallery's foot, so its sticky stage holds until the text has covered
+// it, and .pf-section__inner::before keeps rows 1-4 their size (the hero no
+// longer sets them).
+#{$pf-opener}[style*="--pf-pan"] {
+  &::before {
+    content: "";
+    grid-row: 1 / 5;
+    grid-column: 1;
+    height: calc(var(--pf-stage-h) + var(--pf-pan));
+    margin-top: calc(-1 * var(--pf-section-pad-block));
+  }
+
+  > .pf-gallery > .pf-exhibit-hero {
+    grid-row: 1 / -1;
+    height: auto;
+  }
+
+  // The layer that covers the image: full width, on the page colour, with
+  // no gaps (margins become padding) through to the previous / next links.
+  > .pf-gallery > .pf-exhibit-hero__caption,
+  > .pf-gallery > .pf-gallery__body,
+  > .pf-exhibit-pager {
+    position: relative;
+    z-index: 1;
+    margin-inline: calc(-1 * var(--pf-section-pad-inline));
+    padding-inline: var(--pf-section-pad-inline);
+    background: var(--bs-body-bg);
+    // The text keeps its measure (.pf-guide is narrower than the column);
+    // the colour runs on to the right edge. Clipped top and bottom, and
+    // ink overflow, so it never scrolls sideways.
+    box-shadow: 0 0 0 100vmax var(--bs-body-bg);
+    clip-path: inset(0 -100vmax 0 0);
+  }
+
+  > .pf-gallery > .pf-exhibit-hero__caption {
+    max-width: none;
+    margin-top: 0;
+    // Overlap the text below by a pixel: no seam between the two layers.
+    margin-bottom: -1px;
+    padding-top: 1.25rem;
+    // The text keeps its measure; the colour runs to the edge.
+    padding-inline-end: max(var(--pf-section-pad-inline), calc(100% - var(--pf-exhibit-prose) - var(--pf-section-pad-inline)));
+  }
+
+  > .pf-gallery > .pf-gallery__body {
+    margin-top: 0;
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  > .pf-exhibit-pager {
+    margin-top: 0;
+  }
+}
+
 .pf-exhibit-opener__label {
   @extend %pf-exhibit-kicker;
   margin-bottom: 0.5rem;
@@ -1053,9 +1111,8 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   margin: 0;
   font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.01em;
   line-height: 1.25;
-  text-transform: uppercase;
   text-wrap: balance;
   scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
   transition: color .3s ease;
