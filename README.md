@@ -607,6 +607,18 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Parish map: the list and the map light each other (2026-10-21)
+
+Pointing at a parish's name in the list (or tabbing to it) now lights that
+parish on the map with the map's own hover look, and names it in the
+caption under the drawing. It works the other way too: a parish under the
+pointer on the map lights its name in the list. Why: small parishes
+(Assumption, Orleans) are hard to find on the map by name alone. Choosing
+a parish clears the hover; the chosen one keeps the accent. Files:
+`js/parish-map.js` (`light()`, `.is-hover`),
+`scss/components/_parish-map.scss`, `css/style.css`. Then `git pull` and
+`drush cr`.
+
 ### Family tree viewer: shareable links, themed scrollbars (2026-10-21)
 
 * **Links:** an open tree is now in the address as `?tree=<page name>`

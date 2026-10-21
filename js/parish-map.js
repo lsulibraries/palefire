@@ -90,6 +90,8 @@
       }
       const previous = current;
       current = key;
+      // The chosen parish takes over from any hover.
+      light('');
       if (shapes.get(previous)) shapes.get(previous).classList.remove('is-selected');
       const shape = shapes.get(key);
       if (shape) {
@@ -131,13 +133,44 @@
       const shape = event.target.closest('[data-parish]');
       if (shape) show(shape.dataset.parish, { reveal: true });
     });
+    // Hover, in both directions: a parish under the pointer on the map lights
+    // its name in the list, and a name pointed at or focused in the list
+    // lights its parish on the map (.is-hover, the map's own hover look).
+    // The caption names it either way.
+    let lit = '';
+    const light = (key) => {
+      if (key === lit) return;
+      if (lit) {
+        if (shapes.get(lit)) shapes.get(lit).classList.remove('is-hover');
+        const was = index.querySelector('[data-parish="' + lit + '"]');
+        if (was) was.classList.remove('is-hover');
+      }
+      lit = key;
+      if (key) {
+        if (shapes.get(key)) shapes.get(key).classList.add('is-hover');
+        const pick = index.querySelector('[data-parish="' + key + '"]');
+        if (pick) pick.classList.add('is-hover');
+      }
+      caption.textContent = key ? name(key) : (current ? name(current) : resting);
+    };
     svg.addEventListener('pointerover', (event) => {
       const shape = event.target.closest('[data-parish]');
-      if (shape) caption.textContent = name(shape.dataset.parish);
+      if (shape) light(shape.dataset.parish);
     });
-    svg.addEventListener('pointerleave', () => {
-      caption.textContent = current ? name(current) : resting;
-    });
+    svg.addEventListener('pointerleave', () => light(''));
+    const pickOf = (event) => {
+      const pick = event.target.closest && event.target.closest('.pf-parishes__pick');
+      return pick && index.contains(pick) ? pick : null;
+    };
+    ['pointerover', 'focusin'].forEach((type) => view.addEventListener(type, (event) => {
+      const pick = pickOf(event);
+      if (pick) light(pick.dataset.parish);
+    }));
+    ['pointerout', 'focusout'].forEach((type) => view.addEventListener(type, (event) => {
+      const pick = pickOf(event);
+      // Still on the same name (moving between its text and its padding).
+      if (pick && !(event.relatedTarget && pick.contains(event.relatedTarget))) light('');
+    }));
 
     // The list and the "All parishes" button (buttons with data-parish).
     view.addEventListener('click', (event) => {

@@ -79,7 +79,9 @@
   cursor: pointer;
   transition: fill-opacity $pf-hover-out ease, stroke-opacity $pf-hover-out ease;
 
-  &:hover {
+  // .is-hover: its name is pointed at or focused in the list (parish-map.js).
+  &:hover,
+  &.is-hover {
     fill-opacity: var(--pf-parishes-hatch-hover);
     stroke-opacity: 1;
     transition-duration: $pf-hover-in;
@@ -187,8 +189,10 @@
   border: 0;
   transition: color $pf-hover-out ease, transform $pf-hover-out ease;
 
+  // .is-hover: its parish is under the pointer on the map (parish-map.js).
   &:hover,
-  &:focus-visible {
+  &:focus-visible,
+  &.is-hover {
     color: var(--pf-g-hover, var(--pf-guide-accent));
     transform: translateX(0.25rem);
     transition-duration: $pf-hover-in;
