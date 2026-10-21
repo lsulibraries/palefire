@@ -607,6 +607,44 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Family trees open in a full-screen viewer (2026-10-21)
+
+A family tree link (in a parish's panel or in the Family trees list) now
+opens the tree drawn in a full-screen viewer, in the Palefire style,
+instead of leaving the guide for its old-style page. Why: the trees are
+the point of the links, and the old pages draw them black on grey with
+the site's former chrome.
+
+* **Source:** each tree page is a Diagram node whose drawing is JointJS
+  JSON in its `data-diagram` attribute (one, Winnsboro Franklin Sun, is
+  base64). `js/family-tree-viewer.js` fetches the page once (same site,
+  cached), reads that JSON and draws it as SVG itself; JointJS isn't
+  loaded. All 83 trees were checked: boxes (framed, unframed notes,
+  grey-filled), solid, dashed and grey crossed lines, arrowheads, bends,
+  anchored and free line ends. Labels wrap to their box and shrink (13 to
+  10 units) if they'd overflow it.
+* **Layout:** the tree's title block is the heading (its dates under it;
+  titles over 60 characters are set smaller), the Key and notes are a
+  column beside the drawing from 62rem (under it, narrower, with the
+  whole viewer scrolling). "Line" Key entries get a line sample. A tree
+  wider than the window fits it; "Actual size" draws it full size to
+  scroll. "Original page" links to the old page.
+* **Motion:** the viewer rises in, the boxes fade up top to bottom, then
+  the lines. None with reduced motion.
+* **Access:** a native modal `<dialog>`: Escape or × closes it, focus
+  starts on × and goes back to the link; the page behind doesn't scroll.
+  The drawing is `aria-hidden`, with its publications as a hidden list
+  for screen readers.
+* **Fallbacks:** a Ctrl/Cmd/Shift-click, a link to another site, or a page
+  with no diagram goes to the page as before. Links carry `data-no-swup`.
+
+Files: `js/family-tree-viewer.js`, `scss/components/_family-tree-viewer.scss`
+(new); `palefire.libraries.yml` (`palefire/family-tree-viewer`, attached
+by the two templates below), `templates/paragraphs/paragraph--parish-map.html.twig`,
+`templates/paragraphs/paragraph--family-trees.html.twig`,
+`templates/includes/family-tree-row.html.twig`, `scss/style.scss`,
+`css/style.css`. Then `git pull` and `drush cr`.
+
 ### Parish map: fainter hatch at rest (2026-10-21)
 
 The parish map's diagonal hatch, before hover, drops from 30% to 10%

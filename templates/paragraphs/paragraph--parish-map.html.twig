@@ -10,7 +10,8 @@
  * it holds (Digital newspapers, Newspaper websites, Microfilm: WYSIWYG
  * fields) and its family trees, read live from the site's newspaper
  * records. js/parish-map.js does the choosing; the URL keeps the parish
- * (#parish-orleans) without adding history entries.
+ * (#parish-orleans) without adding history entries. A family tree opens in
+ * the full-screen viewer (js/family-tree-viewer.js, data-family-tree).
  *
  * parishes: palefire_preprocess_paragraph__parish_map(). Each parish's
  * panel is a <template>, so the 64 lists (over 1,400 entries) stay out of
@@ -21,6 +22,7 @@
  */
 #}
 {{ attach_library('palefire/parish-map') }}
+{{ attach_library('palefire/family-tree-viewer') }}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set icon = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
 {%
@@ -97,7 +99,7 @@
                     {% if group == 'trees' %}
                       <ul class="pf-parishes__trees">
                         {% for tree in p.trees %}
-                          <li><a href="{{ tree.url }}">{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
+                          <li><a href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
                         {% endfor %}
                       </ul>
                     {% else %}

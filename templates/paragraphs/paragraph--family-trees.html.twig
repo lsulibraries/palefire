@@ -6,7 +6,8 @@
  *
  * Every newspaper family tree on the site, read live from the records
  * behind /louisiananewspapers (palefire_preprocess_paragraph__family_trees()),
- * with a search box and a parish filter (js/family-trees.js).
+ * with a search box and a parish filter (js/family-trees.js). A tree opens
+ * in the full-screen viewer (js/family-tree-viewer.js).
  *
  * The first 40 rows are in the list from the start, so nothing moves when
  * the script runs; every row is also in the <template>, which the script
@@ -15,6 +16,7 @@
  */
 #}
 {{ attach_library('palefire/family-trees') }}
+{{ attach_library('palefire/family-tree-viewer') }}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set step = 40 %}
 <div{{ attributes.addClass('pf-guide-block', 'pf-trees') }} data-family-trees data-trees-step="{{ step }}">

@@ -295,6 +295,17 @@ family-trees:
     - core/drupal
     - core/once
 
+# Louisiana Newspapers guide: a family tree in a full-screen viewer, drawn
+# from its Diagram page. Attached by paragraph--parish-map.html.twig and
+# paragraph--family-trees.html.twig.
+family-tree-viewer:
+  version: 1.0.0
+  js:
+    js/family-tree-viewer.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has
 # content. Needs palefire/visit for Drupal.palefireHours (visit-hours.js).
