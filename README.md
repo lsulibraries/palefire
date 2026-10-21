@@ -476,10 +476,14 @@ On `node.modular_page` (exhibition mode only, printed by
 `field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
 `field_exhibit_prompt` (default "Choose a gallery from the table of contents
 to begin."), and `field_intro` if filled. Optional tiles under the credit:
-`field_exhibit_year` (a number) and `field_exhibit_physical` ("Accompanied a
-physical exhibition", shown as FA Pro's light treasure chest, inlined from
-`/libraries/fontawesome-pro/svgs/light/treasure-chest.svg`; the words "On
-display" where the server has no FA Pro files).
+`field_exhibit_year` (a number) and `field_exhibit_physical_note` (a short
+note on the physical exhibition). The note sits behind a tile with FA Pro's
+light treasure chest, inlined from
+`/libraries/fontawesome-pro/svgs/light/treasure-chest.svg` (the words "On
+display" where the server has no FA Pro files). The tile is a button
+described by the note, which shows as a tooltip on hover, keyboard focus or
+a tap, can itself be hovered, and hides with Esc (WCAG 1.4.13,
+`js/exhibition.js`).
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
@@ -681,6 +685,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** the physical exhibition tile takes a short note instead
+  of a checkbox (`field_exhibit_physical_note`; re-run
+  `palefire_exhibit_setup.php`), shown in a tooltip on hover, focus or tap.
+  The checkbox `field_exhibit_physical` is no longer used: delete it in
+  Manage fields if it was created. Why: the tile can now say when and where
+  the exhibition was.
 - **Exhibitions:** optional year and "accompanied a physical exhibition"
   tiles on the title page, under the credit (re-run
   `palefire_exhibit_setup.php`, then fill them on the page). AVES typos

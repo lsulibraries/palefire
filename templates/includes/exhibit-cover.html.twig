@@ -8,9 +8,11 @@
  * - title, subtitle: the <h1> and the line under it.
  * - credit, intro: render arrays or NULL.
  * - prompt: the line that points at the table of contents.
- * - year, physical: optional tiles under the credit (the exhibition's year;
- *   whether it accompanied a physical exhibition, as FA Pro's light
- *   treasure chest, or a word where the server has no FA Pro files).
+ * - year, physical: optional tiles under the credit: the exhibition's year,
+ *   and a note on the physical exhibition, behind FA Pro's light treasure
+ *   chest (a word where the server has no FA Pro files). The note is a
+ *   tooltip: hover, keyboard focus or a tap shows it, Esc hides it
+ *   (js/exhibition.js), and the button is described by it.
  * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
  *
  * The parts come in one after another on load (_exhibition.scss):
@@ -49,17 +51,20 @@
     {% if head.year or head.physical %}
       <ul class="pf-exhibit-cover__facts pf-exhibit-cover__step" style="--pf-step: 4.5">
         {% if head.year %}
-          <li class="pf-exhibit-cover__fact"><span class="visually-hidden">{{ 'Year:'|t }} </span>{{ head.year }}</li>
+          <li><span class="pf-exhibit-cover__fact"><span class="visually-hidden">{{ 'Year:'|t }} </span>{{ head.year }}</span></li>
         {% endif %}
         {% if head.physical %}
           {% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
-          <li class="pf-exhibit-cover__fact{{ chest ? ' pf-exhibit-cover__fact--icon' }}" title="{{ 'Accompanied a physical exhibition'|t }}">
-            {% if chest %}
-              <span class="pf-exhibit-cover__fact-icon" aria-hidden="true">{{ chest|raw }}</span>
-              <span class="visually-hidden">{{ 'Accompanied a physical exhibition'|t }}</span>
-            {% else %}
-              {{ 'On display'|t }}
-            {% endif %}
+          <li class="pf-exhibit-cover__tip-wrap" data-pf-exhibit-tip>
+            <button type="button" class="pf-exhibit-cover__fact pf-exhibit-cover__fact--tip{{ chest ? ' has-icon' }}" aria-describedby="pf-exhibit-physical-note">
+              {% if chest %}
+                <span class="pf-exhibit-cover__fact-icon" aria-hidden="true">{{ chest|raw }}</span>
+                <span class="visually-hidden">{{ 'Physical exhibition'|t }}</span>
+              {% else %}
+                {{ 'On display'|t }}
+              {% endif %}
+            </button>
+            <span class="pf-exhibit-cover__tip" id="pf-exhibit-physical-note" role="tooltip">{{ head.physical }}</span>
           </li>
         {% endif %}
       </ul>

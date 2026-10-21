@@ -445,7 +445,7 @@ class PalefireHooks {
       'prompt' => self::stringValue($node, 'field_exhibit_prompt') ?: (string) $this->t('Choose a gallery from the table of contents to begin.'),
       // Optional tiles under the credit.
       'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
-      'physical' => $node->hasField('field_exhibit_physical') && (bool) $node->get('field_exhibit_physical')->value,
+      'physical' => self::stringValue($node, 'field_exhibit_physical_note') ?: NULL,
       'cover' => $cover,
       'cache' => $render,
     ];

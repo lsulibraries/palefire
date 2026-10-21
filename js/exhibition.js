@@ -563,6 +563,44 @@
   }
 
   /* ---------------------------------------------------------------------
+   * Title page tooltip (the physical exhibition's note)
+   *
+   * CSS shows it on hover and keyboard focus; a tap or click keeps it open
+   * until the next tap elsewhere, and Esc hides it until the pointer or
+   * focus leaves (WCAG 1.4.13).
+   * ------------------------------------------------------------------ */
+
+  function initTip(wrap) {
+    const close = () => wrap.classList.remove('is-open');
+    wrap.querySelector('button').addEventListener('click', () => {
+      wrap.classList.remove('is-dismissed');
+      wrap.classList.toggle('is-open');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && (wrap.classList.contains('is-open') || wrap.matches(':hover, :focus-within'))) {
+        close();
+        wrap.classList.add('is-dismissed');
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (!wrap.contains(event.target)) {
+        close();
+      }
+    });
+    wrap.addEventListener('mouseleave', () => {
+      if (!wrap.matches(':focus-within')) {
+        wrap.classList.remove('is-dismissed');
+      }
+    });
+    wrap.addEventListener('focusout', (event) => {
+      if (!wrap.contains(event.relatedTarget)) {
+        close();
+        wrap.classList.remove('is-dismissed');
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
    * Biographies
    * ------------------------------------------------------------------ */
 
@@ -882,6 +920,7 @@
         });
       });
       once('pf-audio', '[data-pf-audio]', context).forEach(initAudio);
+      once('pf-exhibit-tip', '[data-pf-exhibit-tip]', context).forEach(initTip);
       // Biographies outside galleries (a page without the head's script).
       if (!state.pages.length) {
         once('pf-exhibit-bio', '[data-pf-exhibit-bio]', context).forEach(initBio);

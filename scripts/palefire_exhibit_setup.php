@@ -19,8 +19,11 @@
  * - On node.modular_page (title page, exhibition mode only):
  *   field_exhibit_subtitle, field_exhibit_cover (Media: Image),
  *   field_exhibit_credit, field_exhibit_prompt, and two optional tiles
- *   under the credit: field_exhibit_year and field_exhibit_physical
- *   (accompanied a physical exhibition; both added 2026-10-21).
+ *   under the credit: field_exhibit_year and field_exhibit_physical_note
+ *   (a short note on the physical exhibition, shown in a tooltip; both
+ *   added 2026-10-21). An earlier version made a checkbox,
+ *   field_exhibit_physical, in its place: it is no longer used, and can be
+ *   deleted in Manage fields.
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
@@ -222,7 +225,7 @@ $storage('node', 'field_exhibit_cover', 'entity_reference', ['target_type' => 'm
 $storage('node', 'field_exhibit_credit', 'text_long');
 $storage('node', 'field_exhibit_prompt', 'string', ['max_length' => 255]);
 $storage('node', 'field_exhibit_year', 'integer');
-$storage('node', 'field_exhibit_physical', 'boolean');
+$storage('node', 'field_exhibit_physical_note', 'string', ['max_length' => 255]);
 
 $storage('paragraph', 'field_exhibit_lead', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_values' => [
@@ -410,16 +413,16 @@ $field('node', $bundle, 'field_exhibit_year', [
   'description' => 'Exhibition pages only: shown as a tile under the credit line on the title page, e.g. the year the exhibition opened.',
   'settings' => ['min' => 1800, 'max' => 2200],
 ]);
-$field('node', $bundle, 'field_exhibit_physical', [
-  'label' => 'Accompanied a physical exhibition',
-  'description' => 'Exhibition pages only: shows a treasure chest tile beside the year on the title page.',
+$field('node', $bundle, 'field_exhibit_physical_note', [
+  'label' => 'Physical exhibition note (optional)',
+  'description' => 'Exhibition pages only: one short sentence, e.g. "Physical exhibition under the same name debuted on May 23, 2011, at Hill Memorial Library." When filled, a treasure chest tile beside the year on the title page shows it on hover, focus or tap.',
 ]);
 $form('node', $bundle, [
   'field_exhibit_subtitle' => $textfield(6),
   'field_exhibit_cover' => $media_widget + ['weight' => 7],
   'field_exhibit_credit' => $wysiwyg(8, 2),
   'field_exhibit_year' => ['type' => 'number', 'weight' => 8],
-  'field_exhibit_physical' => ['type' => 'boolean_checkbox', 'weight' => 8, 'settings' => ['display_label' => TRUE]],
+  'field_exhibit_physical_note' => $textfield(8),
   'field_exhibit_prompt' => $textfield(9),
 ]);
 // The theme prints them in the title page (exhibition mode only).
@@ -428,7 +431,7 @@ foreach (['default', 'full'] as $mode) {
     continue;
   }
   $node_view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical'] as $name) {
+  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical_note'] as $name) {
     $node_view->removeComponent($name);
   }
   $node_view->save();
