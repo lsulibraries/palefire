@@ -847,7 +847,9 @@ html.pf-a11y-motion {
 // The rule is decoration (aria-hidden); the heading names the region.
 .pf-quick-guide {
   --pf-quick-space: clamp(3rem, 6vw, 5rem);
-  --pf-quick-gold: var(--pf-ui-gold, #{$pf-gold});
+  // The swatch's accent (gold on Twilight, a dark accent on the light
+  // swatches, where LSU gold on cream all but vanished); LSU gold unthemed.
+  --pf-quick-gold: var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
 
   container: pf-quick-guide / inline-size;
   // Padding, not margin: the lead-screen rule gives its last block
@@ -912,6 +914,64 @@ html.pf-a11y-motion {
   max-width: none;
   padding: 0;
   border: 0;
+  counter-reset: pf-path;
+}
+
+// Each way in is a numbered row label here ("01 See it in person"), in the
+// panel's text type, not the guide's small mono caption, and the two rows
+// are split by a hairline, so the name reads as the row's and not as a
+// caption on its first stop. From 52rem of block width the label sits
+// beside its stops, level with their discs, like a Swiss table; narrower,
+// above them. The duotone icon gives way to the number. The full guide
+// keeps its captions (_guide.scss).
+.pf-quick-guide .pf-paths__line {
+  counter-increment: pf-path;
+
+  + .pf-paths__line {
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--pf-guide-rule);
+  }
+}
+
+.pf-quick-guide .pf-paths__name {
+  display: grid;
+  justify-items: start;
+  gap: .25rem;
+  margin: 0 0 1.25rem;
+  font-family: inherit;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+
+  // Decorative: the alt text ("") keeps the number out of the name.
+  &::before {
+    content: counter(pf-path, decimal-leading-zero);
+    content: counter(pf-path, decimal-leading-zero) / "";
+    font: 700 .6875rem var(--pf-guide-mono);
+    letter-spacing: .14em;
+    color: var(--pf-guide-accent);
+  }
+}
+
+.pf-quick-guide .pf-paths__name-icon {
+  display: none;
+}
+
+@container pf-paths (min-width: 52rem) {
+  .pf-quick-guide .pf-paths__line {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 2rem;
+    align-items: start;
+  }
+
+  .pf-quick-guide .pf-paths__name {
+    align-content: center;
+    min-height: var(--pf-paths-dot);
+    margin: 0;
+  }
 }
 
 .pf-quick-guide__more {

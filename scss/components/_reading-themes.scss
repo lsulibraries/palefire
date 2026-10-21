@@ -556,6 +556,13 @@ html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
   --pf-toc-active: var(--pf-g-heading);
 }
 
+// The hero's Next event band: its 40% black is for the dark swatches; on
+// the light ones it went murky grey under dark text. A faint tint of the
+// text colour instead, so the chip still reads with its labels at contrast.
+html#{$pf-themed}:not(.pf-reading-dark) .pf-landing__lead > .pf-landing__next {
+  background-color: rgba(var(--pf-g-fg-rgb), .06);
+}
+
 // The building map in the swatch: ink in the heading colour, floor names
 // in the panel muted tone, hover in the accent. (Print keeps its own.)
 @media screen {

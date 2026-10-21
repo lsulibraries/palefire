@@ -607,6 +607,32 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Light swatches on landings; Quick Guide row labels (2026-10-20)
+
+Two things broke on the light reading swatches (Cream, Soft cream,
+Lavender, Sepia, Sage) on `/v2/special`:
+
+- The hero's Next event band kept its 40% black, made for the dark
+  swatches, so it went murky grey under dark text. On light swatches it is
+  now a 6% tint of the swatch's text colour (`_reading-themes.scss`).
+- The Quick Guide's star, path icons and accents stayed LSU gold, which all
+  but vanished on cream. `--pf-quick-gold` now takes the swatch's accent
+  (`--pf-g-accent`); Twilight and the dark swatches look as before.
+
+The Quick Guide's two path names ("See it in person", "Get a digital copy")
+read like a caption on the first stop. On landings only they are now
+numbered row labels ("01", "02" in the accent, the name in the panel's text
+type), split by a hairline; from 52rem of block width the label sits beside
+its stops, level with the discs. The duotone icon gives way to the number.
+The full guide keeps its small mono captions.
+
+Tested on the live page with the local CSS injected, at 1440x900, 768x1024
+and 320px, in Cream, Sepia and Twilight; the guide page is unchanged.
+
+Files: `scss/components/_landing-features.scss`,
+`scss/components/_reading-themes.scss`, `css/style.css` (rebuilt). No
+config changes: `git pull` and `drush cr`.
+
 ### Landing snap: read the lead's end before the step (2026-10-20)
 
 With a lead taller than the window, the step to the map started as soon
