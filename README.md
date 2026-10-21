@@ -607,6 +607,21 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: fewer rules across, labels centred (2026-10-21)
+
+When the stops run across, the "or" divider now drops its hairline and only
+the word stays. Each line of stops already draws a rule, so the extra
+hairlines made the layout look busy. Where the stops run down (narrow blocks
+and phones) the full "or" rule stays. On the landing's wide layout, each
+"A See it in person" label is now centred vertically on its row, discs and
+words together, instead of sitting level with the discs.
+
+Tested on the live landing and guide pages with the new CSS injected, at
+1440, 1024, 768 and 320px.
+
+Files: `scss/components/_guide.scss`, `scss/components/_landing-features.scss`,
+`css/style.css`. No config changes: `git pull` and `drush cr`.
+
 ### Quick Guide: options A, B and C (2026-10-21)
 
 The request paths now read as three ways to start, not a numbered list.

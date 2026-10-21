@@ -921,9 +921,9 @@ html.pf-a11y-motion {
 // accent letter, the name in the panel's text type rather than the guide's
 // small mono caption, and an "or" hairline between the rows, so A, B and C
 // read as three ways to start and not as captions on their first stops.
-// From 52rem of block width the label sits beside its stops, level with
-// their discs, like a Swiss table; narrower, above them. The full guide
-// keeps its captions (_guide.scss).
+// From 52rem of block width the label sits beside its stops, centred on
+// the row (discs and words), like a Swiss table; narrower, above them. The
+// full guide keeps its captions (_guide.scss).
 .pf-quick-guide .pf-paths__name {
   margin: 0 0 1.25rem;
   font-family: inherit;
@@ -943,11 +943,10 @@ html.pf-a11y-motion {
     display: grid;
     grid-template-columns: 13rem minmax(0, 1fr);
     column-gap: 2rem;
-    align-items: start;
+    align-items: center;
   }
 
   .pf-quick-guide .pf-paths__name {
-    min-height: var(--pf-paths-dot);
     margin: 0;
   }
 }

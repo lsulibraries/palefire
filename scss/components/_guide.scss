@@ -610,6 +610,12 @@ html[data-pf-mode="guide"] .pf-section__title {
     margin-bottom: 0.5rem;
   }
 
+  // With the stops in a row, each line already draws a rule; the "or"
+  // hairline under it read as one rule too many, so only the word stays.
+  .pf-paths__or::after {
+    display: none;
+  }
+
   .pf-paths__label,
   .pf-paths__note {
     align-self: auto;
