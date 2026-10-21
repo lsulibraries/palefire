@@ -607,6 +607,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: title, intro and link from the Landing hero (2026-10-21)
+
+The Quick Guide's text was fixed in the template, so changing "Quick
+Guide" meant a code change. The Landing hero now reads three optional
+fields; each one left empty (or not yet added) keeps today's text:
+
+| Field (machine name) | Type | Replaces |
+|---|---|---|
+| `field_quick_guide_title` | Text (plain) | The h2 "Quick Guide" and its TOC label |
+| `field_quick_guide_intro` | Text (formatted, long) | The line under the heading |
+| `field_quick_guide_link` | Link (link text optional) | The "See full guide" URL; its link text, if any, replaces the words |
+
+With its own URL the link drops the hidden ": How to Use Special
+Collections" from its name, since that may no longer be the guide. The
+request paths stay in `includes/guide-request-paths.html.twig`, shared
+with the full guide.
+
+Add the fields by hand on production: Structure > Paragraph types >
+Landing hero > Manage fields, and place them in Manage form display (the
+view display doesn't need them). Files: `palefire.theme`,
+`templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `css/style.css`. Then
+`git pull` and `drush cr`.
+
 ### Quick Guide: light arrow (2026-10-21)
 
 The arrow between each option box and its stops now uses Font Awesome

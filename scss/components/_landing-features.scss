@@ -899,6 +899,15 @@ html.pf-a11y-motion {
   font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
   line-height: 1.55;
   color: var(--pf-section-fg, inherit);
+
+  // From the Intro field: the editor's paragraphs inside the wrapper.
+  > p {
+    margin: 0;
+  }
+
+  > p + p {
+    margin-top: .75em;
+  }
 }
 
 // The paths across the panel's column: no box or prose cap here, the rule

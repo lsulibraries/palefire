@@ -321,8 +321,12 @@
          so the lead is taller than the window: it scrolls freely, and
          landing-snap.js snaps to the map once the lead's end is in view.
          - guide_url: the full "How to Use Special Collections" guide;
-           empty leaves the link out. #}
-      {% set guide_url = '/v2/special/guides/special-collections' %}
+           empty leaves the link out.
+         - quick_guide: title, intro, url and link_text from the paragraph's
+           optional Quick Guide fields (_palefire_quick_guide()); each one
+           left empty keeps the built-in text below. #}
+      {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
+      {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
         <div class="pf-quick-guide__rule" aria-hidden="true">
@@ -330,16 +334,29 @@
              `fad fa-star-christmas`), inlined like the sign-in icon. #}
           <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
         </div>
-        <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ 'Quick guide'|t }}">{{ 'Quick Guide'|t }}</h2>
-        <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
+        {# The TOC label is the heading's own text once the title is set. #}
+        <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
+        {% if quick_guide.intro %}
+          <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
+        {% else %}
+          <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
+        {% endif %}
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id } only %}
         {% if guide_url %}
           <div class="pf-quick-guide__more">
             <a class="pf-hero-account__link" href="{{ guide_url }}">
               <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
               {# The full name keeps the visible words first (WCAG 2.5.3)
-                 and says which guide, so the link stands on its own. #}
-              <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+                 and says which guide, so the link stands on its own. With
+                 its own text or URL (the Link field) the link names
+                 itself: the added guide name may no longer fit. #}
+              {% if quick_guide.link_text %}
+                <span>{{ quick_guide.link_text }}</span>
+              {% elseif quick_guide.url %}
+                <span>{{ 'See full guide'|t }}</span>
+              {% else %}
+                <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+              {% endif %}
             </a>
           </div>
         {% endif %}

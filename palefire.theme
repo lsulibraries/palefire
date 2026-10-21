@@ -275,6 +275,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
+    $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -290,6 +291,44 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $variables['visit_in_map'] = TRUE;
     }
   }
+}
+
+/**
+ * The Landing hero's Quick Guide text, from its optional fields.
+ *
+ * Each field is added in the UI (Landing hero > Manage fields); a missing or
+ * empty one leaves its key out, and includes/landing.html.twig prints the
+ * built-in text instead:
+ * - field_quick_guide_title (Text, plain): the heading and its TOC label.
+ * - field_quick_guide_intro (Text, formatted, long): the line under it.
+ * - field_quick_guide_link (Link): the full guide's URL; its link text, if
+ *   any, replaces "See full guide".
+ *
+ * Returns ['title', 'intro', 'url', 'link_text'], each optional; intro is a
+ * processed_text render array.
+ */
+function _palefire_quick_guide(ParagraphInterface $paragraph, array &$variables): array {
+  $field = static fn (string $name): ?FieldItemListInterface => $paragraph->hasField($name) && !$paragraph->get($name)->isEmpty() ? $paragraph->get($name) : NULL;
+  $quick = [];
+  if ($title = $field('field_quick_guide_title')) {
+    $quick['title'] = trim((string) $title->value);
+  }
+  if ($intro = $field('field_quick_guide_intro')) {
+    $quick['intro'] = [
+      '#type' => 'processed_text',
+      '#text' => $intro->value,
+      '#format' => $intro->format,
+    ];
+  }
+  if ($link = $field('field_quick_guide_link')?->first()) {
+    $url = $link->getUrl()->toString(TRUE);
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheableDependency($url)
+      ->applyTo($variables);
+    $quick['url'] = $url->getGeneratedUrl();
+    $quick['link_text'] = trim((string) $link->title);
+  }
+  return array_filter($quick);
 }
 
 /**
