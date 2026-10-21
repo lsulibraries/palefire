@@ -80,6 +80,37 @@
     ROOT.style.setProperty('--pf-exhibit-head-h', folded ? Math.round(state.head.getBoundingClientRect().height) + 'px' : '0px');
   }
 
+  // The full-screen opening's pan (_exhibition.scss): how far the page
+  // scrolls while the image stays pinned and tours itself. It is how much
+  // the image overflows the screen when it covers it (a tall plate at full
+  // width, a wide photograph at full height), at least a third of a screen
+  // so the heading has room to leave, and at most 1.6 screens. Only from
+  // lg, with motion and scroll-driven animations; otherwise no pin.
+  const wide = window.matchMedia('(min-width: 992px)');
+  const canPan = () => wide.matches && !reduceMotion() && window.CSS && CSS.supports('animation-timeline: scroll()');
+
+  function sizeHero(page) {
+    const hero = page && page.querySelector('[data-pf-hero]');
+    const inner = hero && hero.closest('.pf-section__inner');
+    if (!inner) {
+      return;
+    }
+    const ratio = parseFloat(hero.dataset.ratio) || 0;
+    if (!ratio || !canPan()) {
+      inner.style.removeProperty('--pf-pan');
+      return;
+    }
+    const w = hero.getBoundingClientRect().width;
+    const h = window.innerHeight - (parseFloat(getComputedStyle(ROOT).getPropertyValue('--pf-header-h')) || 0);
+    const overflow = Math.max(w * ratio - h, h / ratio - w);
+    inner.style.setProperty('--pf-pan', Math.round(Math.min(Math.max(overflow, h / 3), h * 1.6)) + 'px');
+  }
+
+  function onResize() {
+    measureHead();
+    sizeHero(state.current);
+  }
+
   // Show one gallery (or the title page) at once, without animation.
   function place(page) {
     state.pages.forEach((p) => {
@@ -89,6 +120,7 @@
     state.current = page;
     if (page) {
       prepareGallery(page);
+      sizeHero(page);
     }
   }
 
@@ -356,7 +388,9 @@
     // Capture, ahead of the TOC's own click handler.
     document.addEventListener('click', onClick, true);
     window.addEventListener('popstate', onPopState);
-    window.addEventListener('resize', measureHead, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    // Settings > Reduce motion turns the pin off and on.
+    document.addEventListener('palefire:a11ychange', onResize);
   }
 
   /* ---------------------------------------------------------------------
@@ -523,8 +557,12 @@
     };
     full.src = link.href;
 
+    // A figure's own caption, or the one a link names (a gallery's hero,
+    // whose caption follows its pan).
     const figure = link.closest('figure');
-    const caption = figure ? figure.querySelector(':scope > figcaption') : null;
+    const caption = link.dataset.pfCaption
+      ? document.getElementById(link.dataset.pfCaption)
+      : (figure ? figure.querySelector(':scope > figcaption') : null);
     b.caption.innerHTML = '';
     if (caption) {
       b.caption.append(...Array.from(caption.cloneNode(true).childNodes));
@@ -681,7 +719,8 @@
       }
       document.removeEventListener('click', onClick, true);
       window.removeEventListener('popstate', onPopState);
-      window.removeEventListener('resize', measureHead);
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('palefire:a11ychange', onResize);
       ROOT.style.removeProperty('--pf-exhibit-head-h');
       ROOT.classList.remove('pf-exhibit-paged');
       state.head = null;
