@@ -607,6 +607,36 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### "Louisiana Newspapers" guide with a parish map (2026-10-21)
+
+The Louisiana Newspapers LibGuide (guides.lib.lsu.edu/c.php?g=440633)
+moves into a Palefire guide, word for word, with a clickable map of the 64
+parishes as its main feature. Choosing a parish (on the map, from the
+Parish menu or from the list) shows its digital newspapers, newspaper
+websites, major titles on microfilm and family trees. The family trees
+are also searchable on their own. Why: the LibGuide spreads one parish
+over two pages of 65 tabs each; the map puts everything about a parish
+in one place. The map is for this guide only, not the building maps.
+Details under Guide pages > Louisiana Newspapers.
+
+New: `scripts/palefire_louisiana_newspapers_setup.php` (paragraph types
+`parish_map`, `parish_entry`, `family_trees`),
+`scripts/palefire_guide_louisiana_newspapers.php` and
+`scripts/data/louisiana-newspapers.json` (the page),
+`templates/paragraphs/paragraph--parish-map.html.twig`,
+`templates/paragraphs/paragraph--family-trees.html.twig`,
+`templates/includes/louisiana-parishes.svg.twig`,
+`templates/includes/family-tree-row.html.twig`, `js/parish-map.js`,
+`js/family-trees.js`, `scss/components/_parish-map.scss`. Changed:
+`palefire.theme`, `palefire.libraries.yml`, `scss/style.scss`,
+`css/style.css`.
+
+```bash
+drush php:script themes/custom/palefire/scripts/palefire_louisiana_newspapers_setup.php
+drush php:script themes/custom/palefire/scripts/palefire_guide_louisiana_newspapers.php -- path=/v2/guides/louisiana-newspapers
+drush cr
+```
+
 ### Quick Guide: title, intro and link from the Landing hero (2026-10-21)
 
 The Quick Guide's text was fixed in the template, so changing "Quick
@@ -3768,6 +3798,64 @@ Get help.
   Collections & Archives from the research-help guide).
 * Like the other guides, it creates the page unpublished and stops if a
   page with the same title exists.
+
+### Louisiana Newspapers
+
+`scripts/palefire_guide_louisiana_newspapers.php` (2026-10-21) builds the
+Louisiana Newspapers LibGuide as a guide page. Run
+`scripts/palefire_louisiana_newspapers_setup.php` first (config only:
+three paragraph types, offered in every guide section's Content).
+
+* **Text:** carried over word for word from the LibGuide's six pages and
+  lib.lsu.edu/louisiananewspapers (the page intro, its three collections
+  and its contact). One approved fix: "1891-1892,1895" gets its missing
+  space (Gretna Courier). Other quirks are kept as they are, e.g. "Issues
+  1843-1844", "225 (Baton Rouge. La.)" and both "Library of Congress'"
+  and "Congress's". Section titles ("Newspapers by Parish", "Collections",
+  "Contact") and the panel's labels are new.
+* **Sections:** Newspapers by Parish (the map), Louisiana Digital
+  Newspapers (Databases, Collections), Louisiana Newspapers on Microfilm
+  (one accordion item per city), Louisiana Newspaper Project Microfilm
+  Indexes, Digitizing Louisiana Newspapers Project, Family Trees for
+  Louisiana Newspapers, Contact. The LibGuide names no owner, so the
+  script leaves Guide owner empty; it sets Subjects to "Special
+  Collections" when that term exists and Original LibGuide to the old URL.
+* **Parish map (`parish_map`):** heading and intro, then one **Parish**
+  item (`parish_entry`) per parish with three WYSIWYG fields: Digital
+  newspapers & magazines, Newspaper & magazine websites, Newspapers on
+  microfilm. An empty field leaves its group out. The seven microfilm
+  cities sit under their parishes (Alexandria: Rapides, Baton Rouge: East
+  Baton Rouge, Lafayette, Lake Charles: Calcasieu, Monroe: Ouachita, New
+  Orleans: Orleans, Shreveport: Caddo). Morehouse and St. Helena have no
+  websites in the LibGuide. Groups of 25 entries or fewer start open.
+* **Family trees:** never typed in. `_palefire_newspaper_trees()` reads
+  the records behind /louisiananewspapers (any published entity whose
+  bundle has `field_louisiana_parish` and `field_record_url`), so a new
+  tree shows on the map and in the **Family trees** block (`family_trees`)
+  at once. The block searches titles, cities and parishes (accents
+  ignored) with a parish filter, 40 rows at a time.
+* **Drawing:** `includes/louisiana-parishes.svg.twig`, from the Census
+  Bureau's 2023 cartographic boundaries (public domain), Albers
+  projection, 28 KB. Hairline outlines over the guide's muted hatch; the
+  chosen parish takes the accent. As the map first scrolls into view the
+  outlines trace from north to south and the hatch fades in (none with
+  reduced motion, or if the map is on screen at load).
+* **Layout:** the block may use 80rem (other guide blocks keep 52rem).
+  From a 50rem block the map and panel sit side by side and the map is
+  sticky; narrower, they stack and the map stops at 40rem. No horizontal
+  scroll at 320, 768, 1024 or 1440px.
+* **Access:** the drawing is `aria-hidden`; the Parish menu and the list
+  of 64 buttons do the same by keyboard and screen reader. A choice from
+  the list moves focus to the parish's name (an h4, not in "On this
+  page"); the menu keeps focus and a status line names the parish. The
+  URL keeps the parish (`#parish-orleans`, replaced, not pushed).
+* **Weight:** each parish's panel is a `<template>`, so its lists (over
+  1,400 entries) aren't in the DOM until it's chosen. The family trees'
+  first 40 rows are in the page, so nothing shifts when the script runs;
+  without JavaScript the filters and "Show more" are hidden.
+* **Libraries:** `palefire/parish-map` and `palefire/family-trees`,
+  attached by their templates only. The styles are in `css/style.css`
+  with the rest of the theme (`_parish-map.scss`, about 6 KB).
 
 ### Writing a guide
 

@@ -1,0 +1,406 @@
+// Louisiana Newspapers guide: the parish map (paragraph--parish-map.html.twig)
+// and the family trees list (paragraph--family-trees.html.twig).
+//
+// Set like a museum's wall map: hairline parish outlines over a light hatch
+// (the Hill map's hatch, here diagonal and in the guide's muted ink), the
+// chosen parish in the accent, and a monospace caption under the drawing.
+// Colours come from the guide tokens (_guide.scss), so every reading swatch
+// and dark sections work.
+
+// The map needs more than the guide's 52rem column: the guide lets it out to
+// 80rem and keeps the other blocks at 52rem.
+.pf-guide:has(> .pf-parishes) {
+  max-width: none;
+
+  > * {
+    max-width: 52rem;
+  }
+
+  > .pf-parishes {
+    max-width: 80rem;
+  }
+}
+
+.pf-parishes {
+  --pf-parishes-hatch-rest: 0.3;
+  --pf-parishes-hatch-hover: 0.75;
+  --pf-parishes-trace: 1.1s;
+  --pf-parishes-trace-step: 14ms;
+  --pf-parishes-ease: cubic-bezier(0.45, 0, 0.2, 1);
+  container: pf-parishes / inline-size;
+}
+
+.pf-parishes__layout {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+// Side by side once there is room for both: the drawing stays in view
+// (sticky) while a long parish list scrolls past.
+@container pf-parishes (min-width: 50rem) {
+  .pf-parishes__layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 1fr);
+  }
+
+  .pf-parishes__stage {
+    max-width: none;
+    position: sticky;
+    top: calc(var(--pf-header-h, 50px) + 1.5rem);
+  }
+}
+
+// Drawing ------------------------------------------------------------------
+
+// Stacked, the drawing stops at 40rem, so the list isn't a long scroll away.
+.pf-parishes__stage {
+  max-width: 40rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.pf-parishes__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  // The hatch pattern's ink (currentColor in the pattern).
+  color: var(--pf-guide-muted);
+}
+
+.pf-parishes__shape {
+  fill-opacity: var(--pf-parishes-hatch-rest);
+  stroke: var(--bs-body-color);
+  stroke-opacity: 0.55;
+  stroke-width: var(--pf-parishes-line, 1.5);
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  cursor: pointer;
+  transition: fill-opacity $pf-hover-out ease, stroke-opacity $pf-hover-out ease;
+
+  &:hover {
+    fill-opacity: var(--pf-parishes-hatch-hover);
+    stroke-opacity: 1;
+    transition-duration: $pf-hover-in;
+  }
+
+  &.is-selected {
+    fill: var(--pf-guide-accent);
+    fill-opacity: 1;
+    stroke: var(--pf-guide-accent);
+    stroke-opacity: 1;
+  }
+}
+
+// Draw-on (parish-map.js): .is-tracing hides the outlines and hatch; taking
+// it off traces each outline (one dash, pathLength 1) from north to south,
+// then fades its hatch in. .is-revealing holds the slow timing until the
+// last parish is done, then hover gets its quick one back.
+.pf-parishes.is-tracing .pf-parishes__shape {
+  fill-opacity: 0;
+  stroke-dashoffset: 1;
+}
+
+.pf-parishes.is-revealing .pf-parishes__shape {
+  transition:
+    stroke-dashoffset var(--pf-parishes-trace) var(--pf-parishes-ease) calc(var(--i) * var(--pf-parishes-trace-step)),
+    fill-opacity 0.6s ease calc(var(--pf-parishes-trace) * 0.7 + var(--i) * var(--pf-parishes-trace-step));
+}
+
+.pf-parishes__caption {
+  min-height: 1.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  font-family: var(--pf-guide-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+// Panel --------------------------------------------------------------------
+
+.pf-parishes__panel {
+  min-width: 0;
+}
+
+.pf-parishes__picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--pf-guide-rule);
+}
+
+.pf-parishes__picker-label,
+.pf-parishes__eyebrow,
+.pf-parishes__n,
+.pf-parishes__city,
+.pf-trees__label,
+.pf-trees__meta,
+.pf-trees__count {
+  font-family: var(--pf-guide-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+}
+
+.pf-parishes__select {
+  flex: 1 1 12rem;
+  max-width: 20rem;
+}
+
+.pf-parishes__prompt {
+  margin: 1.25rem 0 0.5rem;
+  color: var(--pf-guide-muted);
+}
+
+// The list of all 64: an index in columns, a hairline under each name.
+// Targets are 2rem tall (2.5.8 asks for 24px).
+.pf-parishes__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 2 10rem;
+  column-gap: 1.5rem;
+
+  li {
+    break-inside: avoid;
+    border-bottom: 1px solid var(--pf-guide-rule);
+  }
+}
+
+.pf-parishes__pick {
+  display: block;
+  width: 100%;
+  min-height: 2rem;
+  padding: 0.35rem 0;
+  font: inherit;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+  transition: color $pf-hover-out ease, transform $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-guide-accent));
+    transform: translateX(0.25rem);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+// One parish: its name large, "All parishes" across from it, then its
+// lists as the guide's accordion.
+.pf-parishes__entry {
+  animation: pf-parishes-in $pf-menu-fade ease both;
+}
+
+@keyframes pf-parishes-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+.pf-parishes__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.25rem 1rem;
+  padding: 1.5rem 0 1.25rem;
+}
+
+.pf-parishes__eyebrow {
+  margin: 0;
+}
+
+.pf-parishes__name {
+  grid-column: 1;
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  text-wrap: balance;
+
+  // Focused only by script, after a choice; it isn't a control.
+  &:focus {
+    outline: none;
+  }
+}
+
+.pf-parishes__back {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
+  min-height: 2rem;
+  padding: 0.35rem 0;
+  font-family: var(--pf-guide-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pf-guide-accent);
+  background: none;
+  border: 0;
+  transition: color $pf-hover-out ease;
+
+  &::before {
+    content: "\2190\00a0" / "";
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--bs-body-color));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-parishes__n {
+  margin-inline-start: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  vertical-align: 0.1em;
+}
+
+.pf-parishes__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--pf-guide-muted);
+}
+
+// The parish lists (WYSIWYG) and its family trees: one entry per row, on
+// hairlines, the link first and its note under it.
+.pf-parishes__links ul,
+.pf-parishes__trees {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-parishes__links li,
+.pf-parishes__trees li {
+  margin: 0;
+  padding: 0.5rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+
+  + li {
+    border-top: 1px solid var(--pf-guide-rule);
+  }
+}
+
+// The Microfilm field's city names (bold paragraphs, so they aren't
+// headings inside the panel).
+.pf-parishes__links p {
+  margin: 0.75rem 0 0.25rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.pf-parishes__city {
+  display: block;
+  margin-top: 0.15rem;
+}
+
+// Family trees -------------------------------------------------------------
+
+.pf-trees__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+}
+
+.pf-trees__field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.pf-trees__count {
+  margin: 0;
+}
+
+.pf-trees__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+// A row: the title, its city and parish across from it on wide blocks,
+// under it on narrow ones.
+.pf-trees__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1.5rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--pf-guide-rule);
+}
+
+.pf-trees__title {
+  flex: 1 1 18rem;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.pf-trees__meta {
+  flex: 0 1 auto;
+}
+
+.pf-trees__more {
+  justify-self: start;
+}
+
+// Without JavaScript the filters and "Show more" can't work: hide them.
+@media (scripting: none) {
+  .pf-trees__filters,
+  .pf-trees__count,
+  .pf-trees__more {
+    display: none;
+  }
+}
+
+// Reduced motion ------------------------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-parishes__shape,
+  .pf-parishes__pick,
+  .pf-parishes__back {
+    transition: none;
+  }
+
+  .pf-parishes__entry {
+    animation: none;
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-parishes__shape,
+  .pf-parishes__pick,
+  .pf-parishes__back {
+    transition: none;
+  }
+
+  .pf-parishes__entry {
+    animation: none;
+  }
+}

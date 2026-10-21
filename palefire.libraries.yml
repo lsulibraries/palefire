@@ -275,6 +275,26 @@ building-map:
     - core/drupal
     - core/once
 
+# Louisiana Newspapers guide: the parish map (choose a parish, fill the
+# panel, draw-on). Attached by paragraph--parish-map.html.twig.
+parish-map:
+  version: 1.0.0
+  js:
+    js/parish-map.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+# Louisiana Newspapers guide: search and filter the family trees. Attached
+# by paragraph--family-trees.html.twig.
+family-trees:
+  version: 1.0.0
+  js:
+    js/family-trees.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has
 # content. Needs palefire/visit for Drupal.palefireHours (visit-hours.js).

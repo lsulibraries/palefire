@@ -1,0 +1,60 @@
+{#
+/**
+ * @file
+ * Guide: Family trees (paragraph type family_trees), for the Louisiana
+ * Newspapers guide.
+ *
+ * Every newspaper family tree on the site, read live from the records
+ * behind /louisiananewspapers (palefire_preprocess_paragraph__family_trees()),
+ * with a search box and a parish filter (js/family-trees.js).
+ *
+ * The first 40 rows are in the list from the start, so nothing moves when
+ * the script runs; every row is also in the <template>, which the script
+ * filters and shows 40 at a time. Without JavaScript the filters and "Show
+ * more" are hidden (_parish-map.scss) and the first 40 rows show.
+ */
+#}
+{{ attach_library('palefire/family-trees') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set step = 40 %}
+<div{{ attributes.addClass('pf-guide-block', 'pf-trees') }} data-family-trees data-trees-step="{{ step }}">
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+
+  {% if trees %}
+    <div class="pf-trees__filters">
+      <div class="pf-trees__field pf-trees__field--q">
+        <label class="pf-trees__label" for="{{ uid }}-q">{{ 'Search titles and cities'|t }}</label>
+        <input class="form-control" type="search" id="{{ uid }}-q" autocomplete="off" data-trees-q>
+      </div>
+      <div class="pf-trees__field">
+        <label class="pf-trees__label" for="{{ uid }}-parish">{{ 'Parish'|t }}</label>
+        <select class="form-select" id="{{ uid }}-parish" data-trees-parish>
+          <option value="">{{ 'All parishes'|t }}</option>
+          {% for key, name in parishes %}
+            <option value="{{ key }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <p class="pf-trees__count" role="status" data-trees-count>{{ '@count family trees'|t({'@count': trees|length}) }}</p>
+
+    <ul class="pf-trees__list" data-trees-list>
+      {% for tree in trees|slice(0, step) %}
+        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree } only %}
+      {% endfor %}
+    </ul>
+    <button type="button" class="btn btn-outline-secondary pf-trees__more" data-trees-more{{ trees|length <= step ? ' hidden' }}>{{ 'Show more'|t }}</button>
+
+    <template data-trees-rows>
+      {% for tree in trees %}
+        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree } only %}
+      {% endfor %}
+    </template>
+  {% endif %}
+</div>

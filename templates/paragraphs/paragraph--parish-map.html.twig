@@ -1,0 +1,118 @@
+{#
+/**
+ * @file
+ * Guide: Parish map (paragraph type parish_map), for the Louisiana
+ * Newspapers guide only.
+ *
+ * A map of Louisiana's 64 parishes (includes/louisiana-parishes.svg.twig)
+ * beside a panel. Choosing a parish (on the map, from the Parish menu or
+ * from the list) fills the panel with what this paragraph's Parish item for
+ * it holds (Digital newspapers, Newspaper websites, Microfilm: WYSIWYG
+ * fields) and its family trees, read live from the site's newspaper
+ * records. js/parish-map.js does the choosing; the URL keeps the parish
+ * (#parish-orleans) without adding history entries.
+ *
+ * parishes: palefire_preprocess_paragraph__parish_map(). Each parish's
+ * panel is a <template>, so the 64 lists (over 1,400 entries) stay out of
+ * the page until someone asks for one.
+ *
+ * Headings: the block title is the h3 ("On this page" lists it); a parish
+ * name is an h4 and is never listed (the panel is data-toc-skip).
+ */
+#}
+{{ attach_library('palefire/parish-map') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set icon = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
+{%
+  set groups = {
+    digital: 'Digital newspapers & magazines'|t,
+    websites: 'Newspaper & magazine websites'|t,
+    microfilm: 'Newspapers on microfilm'|t,
+    trees: 'Family trees'|t,
+  }
+%}
+<div{{ attributes.addClass('pf-guide-block', 'pf-parishes') }} data-parish-map>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose pf-parishes__intro">{{ content.field_block_intro }}</div>
+  {% endif %}
+
+  <div class="pf-parishes__layout">
+    <figure class="pf-parishes__stage">
+      {% include '@palefire/includes/louisiana-parishes.svg.twig' with { uid: uid } only %}
+      {# The parish under the pointer, or the chosen one. Screen readers get
+         the panel's heading instead. #}
+      <figcaption class="pf-parishes__caption" aria-hidden="true" data-parish-caption>{{ 'Choose a parish'|t }}</figcaption>
+    </figure>
+
+    <div class="pf-parishes__panel" data-toc-skip>
+      <div class="pf-parishes__picker">
+        <label class="pf-parishes__picker-label" for="{{ uid }}-select">{{ 'Parish'|t }}</label>
+        <select class="form-select pf-parishes__select" id="{{ uid }}-select" data-parish-select>
+          <option value="">{{ 'All parishes'|t }}</option>
+          {% for p in parishes %}
+            <option value="{{ p.key }}">{{ p.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="pf-parishes__view" data-parish-view>
+        <div class="pf-parishes__index">
+          <p class="pf-parishes__prompt">{{ 'Choose a parish on the map or from this list.'|t }}</p>
+          <ul class="pf-parishes__list">
+            {% for p in parishes %}
+              <li><button type="button" class="pf-parishes__pick" data-parish="{{ p.key }}">{{ p.name }}</button></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% for p in parishes %}
+    <template data-parish-entry="{{ p.key }}" data-parish-id="{{ p.id }}" data-parish-name="{{ p.name }}">
+      <article class="pf-parishes__entry" aria-labelledby="{{ uid }}-{{ p.id }}">
+        <header class="pf-parishes__head">
+          <p class="pf-parishes__eyebrow">{{ 'Parish'|t }}</p>
+          <h4 class="pf-parishes__name" id="{{ uid }}-{{ p.id }}" tabindex="-1">{{ p.name }}</h4>
+          <button type="button" class="pf-parishes__back" data-parish="">{{ 'All parishes'|t }}</button>
+        </header>
+        {% if p.count|filter(n => n > 0) is empty %}
+          <p class="pf-parishes__empty">{{ 'Nothing is listed for this parish yet.'|t }}</p>
+        {% else %}
+          <div class="pf-accordion">
+            {% for group, label in groups %}
+              {% if p.count[group] %}
+                <details class="pf-accordion__item"{{ group in p.open ? ' open' }}>
+                  <summary class="pf-accordion__summary">
+                    <span class="pf-accordion__row">
+                      <span class="pf-accordion__title">{{ label }} <span class="pf-parishes__n">{{ p.count[group] }}</span></span>
+                      {# Theme SVG file, so |raw is safe here. #}
+                      <span class="pf-accordion__icon" aria-hidden="true">{{ icon|raw }}</span>
+                    </span>
+                  </summary>
+                  <div class="pf-accordion__panel">
+                    {% if group == 'trees' %}
+                      <ul class="pf-parishes__trees">
+                        {% for tree in p.trees %}
+                          <li><a href="{{ tree.url }}">{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
+                        {% endfor %}
+                      </ul>
+                    {% else %}
+                      {% if group == 'websites' and '*' in p.websites['#text'] %}
+                        <p class="pf-parishes__note">{{ '(asterisk denotes official parish journal)'|t }}</p>
+                      {% endif %}
+                      <div class="pf-guide-prose pf-parishes__links">{{ p[group] }}</div>
+                    {% endif %}
+                  </div>
+                </details>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </article>
+    </template>
+  {% endfor %}
+</div>

@@ -1133,6 +1133,239 @@ function palefire_preprocess_paragraph__guide_video(array &$variables): void {
   ];
 }
 
+/* ---------------------------------------------------------------------------
+ * Louisiana Newspapers guide (scripts/palefire_louisiana_newspapers_setup.php)
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Louisiana's 64 parishes: key => name, as the LibGuide spells them.
+ *
+ * The keys are parish_entry's field_parish values and the data-parish keys
+ * of includes/louisiana-parishes.svg.twig.
+ */
+const PALEFIRE_LA_PARISHES = [
+  'acadia' => 'Acadia',
+  'allen' => 'Allen',
+  'ascension' => 'Ascension',
+  'assumption' => 'Assumption',
+  'avoyelles' => 'Avoyelles',
+  'beauregard' => 'Beauregard',
+  'bienville' => 'Bienville',
+  'bossier' => 'Bossier',
+  'caddo' => 'Caddo',
+  'calcasieu' => 'Calcasieu',
+  'caldwell' => 'Caldwell',
+  'cameron' => 'Cameron',
+  'catahoula' => 'Catahoula',
+  'claiborne' => 'Claiborne',
+  'concordia' => 'Concordia',
+  'de_soto' => 'De Soto',
+  'east_baton_rouge' => 'East Baton Rouge',
+  'east_carroll' => 'East Carroll',
+  'east_feliciana' => 'East Feliciana',
+  'evangeline' => 'Evangeline',
+  'franklin' => 'Franklin',
+  'grant' => 'Grant',
+  'iberia' => 'Iberia',
+  'iberville' => 'Iberville',
+  'jackson' => 'Jackson',
+  'jefferson' => 'Jefferson',
+  'jefferson_davis' => 'Jefferson Davis',
+  'lafayette' => 'Lafayette',
+  'lafourche' => 'Lafourche',
+  'la_salle' => 'La Salle',
+  'lincoln' => 'Lincoln',
+  'livingston' => 'Livingston',
+  'madison' => 'Madison',
+  'morehouse' => 'Morehouse',
+  'natchitoches' => 'Natchitoches',
+  'orleans' => 'Orleans',
+  'ouachita' => 'Ouachita',
+  'plaquemines' => 'Plaquemines',
+  'pointe_coupee' => 'Pointe Coupee',
+  'rapides' => 'Rapides',
+  'red_river' => 'Red River',
+  'richland' => 'Richland',
+  'sabine' => 'Sabine',
+  'st_bernard' => 'St. Bernard',
+  'st_charles' => 'St. Charles',
+  'st_helena' => 'St. Helena',
+  'st_james' => 'St. James',
+  'st_john_the_baptist' => 'St. John the Baptist',
+  'st_landry' => 'St. Landry',
+  'st_martin' => 'St. Martin',
+  'st_mary' => 'St. Mary',
+  'st_tammany' => 'St. Tammany',
+  'tangipahoa' => 'Tangipahoa',
+  'tensas' => 'Tensas',
+  'terrebonne' => 'Terrebonne',
+  'union' => 'Union',
+  'vermilion' => 'Vermilion',
+  'vernon' => 'Vernon',
+  'washington' => 'Washington',
+  'webster' => 'Webster',
+  'west_baton_rouge' => 'West Baton Rouge',
+  'west_carroll' => 'West Carroll',
+  'west_feliciana' => 'West Feliciana',
+  'winn' => 'Winn',
+];
+
+/**
+ * The newspaper family trees, read live from the site's own records.
+ *
+ * The records behind lib.lsu.edu/louisiananewspapers: any published entity
+ * whose bundle has field_louisiana_parish and field_record_url (title, tree
+ * link, parish, field_louisiana_city). Found through the field map, so the
+ * theme doesn't need to know the content type's machine name. Their list
+ * cache tags go on $cache, so a new or changed record shows at once.
+ *
+ * Returns rows sorted by title: title, url, parish (a PALEFIRE_LA_PARISHES
+ * key, '' when the record's parish isn't one), city.
+ */
+function _palefire_newspaper_trees(CacheableMetadata $cache): array {
+  $rows = &drupal_static(__FUNCTION__);
+  $tags = &drupal_static(__FUNCTION__ . ':tags', []);
+  if ($rows !== NULL) {
+    $cache->addCacheTags($tags);
+    return $rows;
+  }
+  $rows = [];
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $repository = \Drupal::service('entity.repository');
+  // The records' keys shorten East/West ("e_baton_rouge"); compare them
+  // without separators against the parish keys.
+  $parishes = [];
+  foreach (array_keys(PALEFIRE_LA_PARISHES) as $key) {
+    $parishes[str_replace('_', '', $key)] = $key;
+  }
+  foreach (\Drupal::service('entity_field.manager')->getFieldMap() as $entity_type_id => $fields) {
+    if (!isset($fields['field_louisiana_parish'], $fields['field_record_url'])) {
+      continue;
+    }
+    $bundles = array_intersect($fields['field_louisiana_parish']['bundles'], $fields['field_record_url']['bundles']);
+    $type = $entity_type_manager->getDefinition($entity_type_id);
+    if (!$bundles || !$type->hasKey('label')) {
+      continue;
+    }
+    $tags = array_merge($tags, $type->getListCacheTags());
+    $storage = $entity_type_manager->getStorage($entity_type_id);
+    $query = $storage->getQuery()->accessCheck(TRUE);
+    if ($type->hasKey('bundle')) {
+      $query->condition($type->getKey('bundle'), $bundles, 'IN');
+    }
+    if ($type->hasKey('published')) {
+      $query->condition($type->getKey('published'), 1);
+    }
+    foreach ($storage->loadMultiple($query->execute()) as $record) {
+      $record = $repository->getTranslationFromContext($record);
+      $link = $record->get('field_record_url');
+      if ($link->isEmpty()) {
+        continue;
+      }
+      $first = $link->first();
+      $url = $link->getFieldDefinition()->getType() === 'link' ? $first->getUrl()->toString() : trim((string) $first->value);
+      $parish = (string) $record->get('field_louisiana_parish')->value;
+      $parish = preg_replace(['/^e_/', '/^w_/'], ['east_', 'west_'], $parish);
+      $city = $record->hasField('field_louisiana_city') ? $record->get('field_louisiana_city') : NULL;
+      $city_name = '';
+      if ($city && !$city->isEmpty()) {
+        // A list field stores a key ("baton_rouge"); show its label.
+        $options = $city->getFieldDefinition()->getFieldStorageDefinition()->getSetting('allowed_values') ?: [];
+        $city_name = (string) ($options[$city->value] ?? $city->value);
+      }
+      $rows[] = [
+        'title' => $record->label(),
+        'url' => $url,
+        'parish' => $parishes[str_replace('_', '', $parish)] ?? '',
+        'city' => $city_name,
+      ];
+    }
+  }
+  usort($rows, static fn (array $a, array $b): int => strnatcasecmp($a['title'], $b['title']));
+  $cache->addCacheTags($tags);
+  return $rows;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--parish-map.
+ *
+ * Builds `parishes` for the template: one entry per parish, in
+ * PALEFIRE_LA_PARISHES order, with its name, its Parish item's three texts
+ * (digital, websites, microfilm: processed_text render arrays or NULL), its
+ * family trees (_palefire_newspaper_trees()), a count for each list and
+ * `open`, the groups that start open (25 entries or fewer).
+ */
+function palefire_preprocess_paragraph__parish_map(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $text = static fn (ParagraphInterface $entry, string $field): ?array => $entry->hasField($field) && trim(strip_tags((string) $entry->get($field)->value)) !== '' ? [
+    '#type' => 'processed_text',
+    '#text' => $entry->get($field)->value,
+    '#format' => $entry->get($field)->format,
+  ] : NULL;
+
+  $entries = [];
+  if ($paragraph->hasField('field_parish_entries')) {
+    foreach ($paragraph->get('field_parish_entries') as $item) {
+      $entry = $item->entity;
+      if ($entry instanceof ParagraphInterface && $entry->isPublished()) {
+        $cache->addCacheableDependency($entry);
+        $entries[(string) $entry->get('field_parish')->value] = $entry;
+      }
+    }
+  }
+  $trees = [];
+  foreach (_palefire_newspaper_trees($cache) as $row) {
+    $trees[$row['parish']][] = $row;
+  }
+
+  $parishes = [];
+  foreach (PALEFIRE_LA_PARISHES as $key => $name) {
+    $entry = $entries[$key] ?? NULL;
+    $parish = [
+      'key' => $key,
+      'name' => $name,
+      'id' => 'parish-' . Html::cleanCssIdentifier($key),
+      'trees' => $trees[$key] ?? [],
+    ];
+    foreach (['digital', 'websites', 'microfilm'] as $group) {
+      $parish[$group] = $entry ? $text($entry, 'field_parish_' . $group) : NULL;
+      $parish['count'][$group] = $parish[$group] ? substr_count(strtolower((string) $parish[$group]['#text']), '<li') : 0;
+    }
+    $parish['count']['trees'] = count($parish['trees']);
+    $parish['open'] = array_keys(array_filter($parish['count'], static fn (int $n): bool => $n > 0 && $n <= 25));
+    $parishes[$key] = $parish;
+  }
+
+  $cache->applyTo($variables);
+  $variables['uid'] = 'pf-parishes-' . $paragraph->id();
+  $variables['parishes'] = $parishes;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--family-trees.
+ *
+ * trees: every family tree (_palefire_newspaper_trees()), each with its
+ * parish's name; parishes: key => name of the parishes that have one, for
+ * the filter.
+ */
+function palefire_preprocess_paragraph__family_trees(array &$variables): void {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $trees = [];
+  $parishes = [];
+  foreach (_palefire_newspaper_trees($cache) as $row) {
+    $row['parish_name'] = PALEFIRE_LA_PARISHES[$row['parish']] ?? '';
+    if ($row['parish'] !== '') {
+      $parishes[$row['parish']] = $row['parish_name'];
+    }
+    $trees[] = $row;
+  }
+  $cache->applyTo($variables);
+  $variables['uid'] = 'pf-trees-' . $variables['paragraph']->id();
+  $variables['trees'] = $trees;
+  $variables['parishes'] = array_intersect_key(PALEFIRE_LA_PARISHES, $parishes);
+}
+
 /**
  * Implements hook_preprocess_node().
  *
