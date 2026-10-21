@@ -614,7 +614,14 @@ reads as a small ornament, not an icon. The rule's two lines were 2px gold;
 they are now the shared 1px hairline (`$pf-hairline`), like every other line
 in the theme, and the request paths' connecting line and disc outlines use
 it there too (`--pf-guide-rule` on `.pf-quick-guide .pf-paths`). The star
-keeps the gold. The full guide is unchanged.
+keeps the gold. The full guide is unchanged. The Quick Guide also gets the
+same space below it as above (`--pf-quick-space`, 80px from about 1333px
+wide), so "See full guide" doesn't sit on the panel's edge.
+
+Fix: the paths' icons were meant to take the rule's gold but showed the
+section accent, because `_guide.scss` loads after `_landing-features.scss`
+and resets `--pf-guide-accent` on `.pf-quick-guide`. The gold is now set on
+`.pf-quick-guide .pf-paths`, next to the hairline token, where it wins.
 
 Files: `scss/components/_landing-features.scss`. Rebuild `css/style.css`
 with `npm run build:css` after applying.

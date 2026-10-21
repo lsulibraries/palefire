@@ -848,13 +848,13 @@ html.pf-a11y-motion {
 .pf-quick-guide {
   --pf-quick-space: clamp(3rem, 6vw, 5rem);
   --pf-quick-gold: var(--pf-ui-gold, #{$pf-gold});
-  // The paths' accent follows the rule's gold here.
-  --pf-guide-accent: var(--pf-quick-gold);
 
   container: pf-quick-guide / inline-size;
   // Padding, not margin: the lead-screen rule gives its last block
   // margin-top: auto (_landing-swiss.scss).
   padding-top: var(--pf-quick-space);
+  // The same space again under "See full guide".
+  padding-bottom: var(--pf-quick-space);
 }
 
 .pf-quick-guide__rule {
@@ -903,7 +903,10 @@ html.pf-a11y-motion {
 // above already sets them off. The stops' discs keep the page colour
 // (opaque, so the line still passes behind them).
 .pf-quick-guide .pf-paths {
-  // The stops' line and disc outlines in the shared hairline.
+  // Set here, not on .pf-quick-guide: _guide.scss loads later and resets
+  // the guide tokens there. The accent follows the rule's gold; the stops'
+  // line and disc outlines take the shared hairline.
+  --pf-guide-accent: var(--pf-quick-gold);
   --pf-guide-rule: #{$pf-hairline};
 
   max-width: none;
