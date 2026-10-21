@@ -5,14 +5,15 @@
  * and the page snaps between the lead and the map.
  *
  * - Down (wheel, PageDown, Space, ArrowDown) from above the map, once the
- *   lead's end is on screen: smooth scroll to the map, under the header
- *   (the map's scroll-margin-top).
+ *   lead's end is halfway up the window: smooth scroll to the map, under
+ *   the header (the map's scroll-margin-top).
  * - Up (wheel, PageUp, Shift+Space, ArrowUp) from the map's top: back to
- *   where the lead's end meets the foot of the window (the top of the page
+ *   where the lead's end is halfway up the window (the top of the page
  *   when the lead fits the window).
  *
  * A lead taller than the window (the Quick Guide) scrolls freely until its
- * end comes up; the snap is only the step between its end and the map.
+ * end is halfway up, so its last lines can be read; the snap is only the
+ * step from there to the map.
  *
  * CSS scroll-snap can't do this: with the map a screen away, Chromium snaps
  * each wheel step back to the top (_landing-swiss.scss). Wheel events that
@@ -20,8 +21,8 @@
  * swallowed, so one gesture is one step.
  *
  * Left to the browser: touch, below md, any step inside the lead (down
- * while its end is still below the fold, up once its end has gone below
- * it), and wheel or keys inside anything that scrolls on
+ * while its end is still below the middle of the window, up once it has
+ * gone below it), and wheel or keys inside anything that scrolls on
  * its own (drawers, menus) or in a form field. Instant for
  * prefers-reduced-motion and the Settings drawer's "Reduce motion"
  * (html.pf-a11y-motion). Listeners are set once for the document, since
@@ -63,11 +64,17 @@
     const pad = (Drupal.palefireCompactHeaderHeight && Drupal.palefireCompactHeaderHeight())
       || parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const margin = parseFloat(getComputedStyle(map).scrollMarginTop) || 0;
-    // Where the lead's end meets the foot of the window: 0 when the lead
-    // fits. Above it, the page scrolls freely through the lead.
-    const leadEnd = Math.max(0, Math.round(lead.getBoundingClientRect().bottom + window.scrollY - window.innerHeight));
+    const mapTop = Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin);
+    // Where the lead's end has come halfway up the window, so its last
+    // lines get read before the step: 0 when the lead fits the window (the
+    // snap starts at the top, as before). Above it, the page scrolls freely
+    // through the lead. Never past the map's own stop.
+    const leadBottom = lead.getBoundingClientRect().bottom + window.scrollY;
+    const leadEnd = leadBottom > window.innerHeight + 1
+      ? Math.min(mapTop, Math.round(leadBottom - window.innerHeight / 2))
+      : 0;
     return {
-      map: Math.round(map.getBoundingClientRect().top + window.scrollY - pad - margin),
+      map: mapTop,
       leadEnd,
     };
   }
@@ -90,7 +97,8 @@
     }
     const y = window.scrollY;
     let top = null;
-    // Between the lead's end and the map: a step skips none of the lead.
+    // Between the lead's end (halfway up) and the map: a step skips none
+    // of the lead.
     if (down && y < at.map - 1 && y >= at.leadEnd - 1) {
       top = at.map;
     }

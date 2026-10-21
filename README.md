@@ -607,6 +607,22 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing snap: read the lead's end before the step (2026-10-20)
+
+With a lead taller than the window, the step to the map started as soon
+as the lead's end reached the foot of the window, so its last lines (the
+Quick Guide's "See full guide") could be snapped away before anyone read
+them. Now the page scrolls freely until the lead's end is halfway up the
+window, and the step down starts from there; a step up from the map
+lands back at that point, with the lead's end mid-screen. A lead that
+fits the window still snaps from the top, as before.
+
+Tested on the live page with the local script swapped in, at 1440x900,
+1024x768 and 1440x1600.
+
+Files: `js/landing-snap.js`. No CSS rebuild or config changes: `git pull`
+and `drush cr`.
+
 ### Fix: lead/map snap with a lead taller than the window (2026-10-20)
 
 Since the Quick Guide, the Special Collections lead runs past the fold,
