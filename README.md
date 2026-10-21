@@ -413,7 +413,10 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
   - **Parish map** (`js/parish-map.js`, `_parish-map.scss`): one Parish item per
     parish with three WYSIWYG fields; each panel is a `<template>` until
     chosen. Map, Parish menu and list stay in step; list and map light each
-    other on hover. The URL keeps the parish (`#parish-orleans`).
+    other on hover. The URL keeps the parish (`#parish-orleans`). Side by
+    side, the map sticks `--pf-parishes-stick-gap` (2–5rem, by window height)
+    under the header and shrinks to fit short windows. In the panel, a linked
+    entry's description is muted and a size smaller than its title.
   - **Family trees** are never typed in: `_palefire_newspaper_trees()` reads
     the newspaper records with one database query (any bundle with
     `field_louisiana_parish` and `field_record_url`), and logs and skips on
@@ -547,6 +550,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Parish map:** descriptions under linked entries muted and smaller, so the
+  titles lead; more room above the sticky map (2–5rem by window height, was
+  1.5rem), and it shrinks to fit short windows. Why: entries ran together, and
+  the map sat tight against the header on large screens.
 - **README reorganised.** Rewritten as a reference by topic with a short
   changelog; superseded iterations and test measurements removed. Why: the file
   had grown to about 5,000 lines of mostly outdated entries.
