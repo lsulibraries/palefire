@@ -59,6 +59,17 @@
   }
 }
 
+// Scrollbars: the page's own thin bar (_reading-themes.scss), same thumb,
+// hover and track, instead of the browser's wide grey one.
+.pf-tree-viewer,
+.pf-tree-viewer__stage,
+.pf-tree-viewer__key {
+  @include pf-thin-scrollbar;
+  --pf-scroll-thumb: var(--pf-g-scroll, var(--pf-tree-muted));
+  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover, var(--pf-tree-fg));
+  --pf-scroll-track: var(--pf-tree-rule);
+}
+
 // The page underneath doesn't scroll while the viewer is open.
 html.pf-tree-viewer-open {
   overflow: hidden;
@@ -126,11 +137,14 @@ html.pf-tree-viewer-open {
   color: var(--pf-tree-muted);
 }
 
+// The text actions wrap on the narrowest phones; × stays at the end.
 .pf-tree-viewer__actions {
   display: flex;
-  flex: none;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1.25rem;
+  justify-content: flex-end;
+  gap: 0.25rem 1.25rem;
   margin-inline-start: auto;
 }
 

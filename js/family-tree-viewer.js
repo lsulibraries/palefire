@@ -16,6 +16,13 @@
  * "Fit" scales a wide tree to the window; "Actual size" draws it at the
  * size its editor made it, to scroll. A link opened with a modifier key,
  * one to another site, or a page with no diagram falls back to the page.
+ *
+ * Linkable: an open tree is in the address as ?tree=<its page's name>
+ * (e.g. ?tree=Napoleonville_Assumption_pioneer), beside any #parish-…, so
+ * the address can be shared and opens the guide with that tree up. "Copy
+ * link" copies it. Opening a tree adds one history entry, so the browser's
+ * Back button (or a phone's back gesture) closes the viewer rather than
+ * leaving the guide; closing it any other way takes that entry back off.
  */
 (function (Drupal, once) {
   'use strict';
@@ -29,8 +36,23 @@
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   // OS setting, or the Settings drawer's "Reduce motion" (html.pf-a11y-motion).
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
+  const PARAM = 'tree';
   const cache = new Map();
   let viewer = null;
+
+  // A tree's name in the address: its page's file name without ".html".
+  const nameOf = (href) => decodeURIComponent(new URL(href, location.href).pathname.split('/').pop() || '').replace(/\.html?$/i, '');
+  // This page's address with ?tree= set to name, or taken off (null).
+  function addressWith(name) {
+    const url = new URL(location.href);
+    if (name) {
+      url.searchParams.set(PARAM, name);
+    }
+    else {
+      url.searchParams.delete(PARAM);
+    }
+    return url.pathname + url.search + url.hash;
+  }
 
   const el = (name, attrs = {}, ns = null) => {
     const node = ns ? document.createElementNS(ns, name) : document.createElement(name);
@@ -216,6 +238,7 @@
         </div>
         <div class="pf-tree-viewer__actions">
           <button type="button" class="pf-tree-viewer__action" data-tree-zoom aria-pressed="false" hidden>${Drupal.t('Actual size')}</button>
+          <button type="button" class="pf-tree-viewer__action" data-tree-copy hidden>${Drupal.t('Copy link')}</button>
           <a class="pf-tree-viewer__action" data-tree-page data-no-swup href="#">${Drupal.t('Original page')}</a>
           <button type="button" class="pf-tree-viewer__close" data-tree-close aria-label="${Drupal.t('Close')}" autofocus>
             <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
@@ -233,15 +256,40 @@
       page: dialog.querySelector('[data-tree-page]'),
       stage: dialog.querySelector('.pf-tree-viewer__stage'),
       key: dialog.querySelector('.pf-tree-viewer__key'),
+      copy: dialog.querySelector('[data-tree-copy]'),
       opener: null,
+      href: '',
       tree: null,
       actual: false,
+      // TRUE while the history entry this viewer added is the current one.
+      pushed: false,
     };
     dialog.querySelector('[data-tree-close]').addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => {
       document.documentElement.classList.remove('pf-tree-viewer-open');
+      // Closed by ×, Escape or a link: take ?tree= back off the address.
+      if (parts.pushed) {
+        parts.pushed = false;
+        history.back();
+      }
+      else if (new URLSearchParams(location.search).has(PARAM)) {
+        history.replaceState(history.state, '', addressWith(null));
+      }
       if (parts.opener && parts.opener.isConnected) parts.opener.focus();
     });
+    // Copy link: the address, which has ?tree= while a tree is open.
+    if (navigator.clipboard && window.isSecureContext) {
+      parts.copy.hidden = false;
+      let timer = 0;
+      parts.copy.addEventListener('click', () => {
+        navigator.clipboard.writeText(location.href).then(() => {
+          parts.copy.textContent = Drupal.t('Link copied');
+          Drupal.announce(Drupal.t('Link copied'));
+          clearTimeout(timer);
+          timer = setTimeout(() => { parts.copy.textContent = Drupal.t('Copy link'); }, 2000);
+        });
+      });
+    }
     parts.zoom.addEventListener('click', () => {
       parts.actual = !parts.actual;
       fit(parts);
@@ -276,14 +324,24 @@
     return li;
   }
 
-  async function open(link) {
+  // Opens the tree at href. title: the link's text, until the diagram's own
+  // title has loaded. opener: the link to focus again on close, or null.
+  // push: add a history entry with ?tree= (FALSE when the address already
+  // has it: a shared link, or Forward).
+  async function open(href, title, opener, push) {
     viewer = viewer || build();
     const parts = viewer;
-    parts.opener = link;
+    const link = opener;
+    parts.opener = opener;
+    parts.href = href;
     parts.actual = false;
     parts.tree = null;
-    parts.page.href = link.href;
-    parts.title.textContent = link.textContent.trim();
+    if (push) {
+      history.pushState({ pfTree: nameOf(href) }, '', addressWith(nameOf(href)));
+      parts.pushed = true;
+    }
+    parts.page.href = href;
+    parts.title.textContent = title;
     parts.dates.textContent = '';
     parts.key.replaceChildren();
     parts.zoom.hidden = true;
@@ -291,29 +349,29 @@
     parts.stage.firstChild.textContent = Drupal.t('Loading the family tree…');
     parts.dialog.classList.toggle('is-still', reduceMotion());
     document.documentElement.classList.add('pf-tree-viewer-open');
-    parts.dialog.showModal();
+    if (!parts.dialog.open) parts.dialog.showModal();
 
     let cells;
     try {
-      cells = await load(link.href);
+      cells = await load(href);
     }
     catch (e) {
       cells = null;
     }
-    if (parts.opener !== link || !parts.dialog.open) return;
+    if (parts.href !== href || parts.opener !== link || !parts.dialog.open) return;
     if (!cells || !cells.length) {
       const status = parts.stage.firstChild;
       status.textContent = Drupal.t("This family tree can't be drawn here. ");
-      const more = el('a', { href: link.href, 'data-no-swup': '' });
+      const more = el('a', { href, 'data-no-swup': '' });
       more.textContent = Drupal.t('Open its page');
       status.append(more);
       return;
     }
 
     const tree = draw(cells, getComputedStyle(parts.stage).fontFamily);
-    const title = tree.blocks.filter((b) => b.kind === 'title');
-    if (title.length) {
-      const lines = title.flatMap((b) => b.lines);
+    const heads = tree.blocks.filter((b) => b.kind === 'title');
+    if (heads.length) {
+      const lines = heads.flatMap((b) => b.lines);
       parts.title.textContent = lines.filter((l) => /^h\d$/.test(l.tag)).map((l) => l.text).join(' ') || parts.title.textContent;
       parts.dates.textContent = lines.filter((l) => !/^h\d$/.test(l.tag)).map((l) => l.text).join(' ');
     }
@@ -360,12 +418,54 @@
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (new URL(link.href, location.href).origin !== location.origin || typeof HTMLDialogElement !== 'function') return;
     event.preventDefault();
-    open(link);
+    open(link.href, link.textContent.trim(), link, true);
+  }
+
+  // The tree called name, from the family-tree links on the page, those in
+  // the parish panels' <template>s included. Returns { href, title, link }
+  // (link: one in the page, to focus on close, or null), or null. The links
+  // come live from the newspaper records, so a name none of them has is a
+  // mistyped or removed tree: it's ignored and the guide opens as usual.
+  function findTree(name) {
+    if (!/^[\w.-]+$/.test(name)) return null;
+    const links = Array.from(document.querySelectorAll('a[data-family-tree]'));
+    document.querySelectorAll('template').forEach((tpl) => links.push(...tpl.content.querySelectorAll('a[data-family-tree]')));
+    // Template content resolves no URLs: resolve each href against the page.
+    const href = (a) => new URL(a.getAttribute('href'), location.href).href;
+    const match = links.find((a) => nameOf(href(a)) === name);
+    if (!match) return null;
+    return { href: href(match), title: match.textContent.trim(), link: match.isConnected && !match.closest('template') ? match : null };
+  }
+
+  // The address's ?tree=, opened without adding history (it's already
+  // there). pushed: whether that entry is one this viewer added.
+  function fromAddress(pushed) {
+    const name = new URLSearchParams(location.search).get(PARAM);
+    const tree = name && findTree(name);
+    if (!tree || typeof HTMLDialogElement !== 'function') return;
+    open(tree.href, tree.title, tree.link, false);
+    viewer.pushed = pushed;
+  }
+
+  // Back closes the viewer; Forward opens the tree again.
+  function onPopState(event) {
+    const state = event.state || {};
+    if (viewer && viewer.dialog.open && !state.pfTree) {
+      viewer.pushed = false;
+      viewer.dialog.close();
+    }
+    else if (state.pfTree && !(viewer && viewer.dialog.open)) {
+      fromAddress(true);
+    }
   }
 
   Drupal.behaviors.palefireFamilyTreeViewer = {
     attach() {
-      once('pf-tree-viewer', 'html').forEach(() => document.addEventListener('click', onClick));
+      once('pf-tree-viewer', 'html').forEach(() => {
+        document.addEventListener('click', onClick);
+        window.addEventListener('popstate', onPopState);
+        fromAddress(false);
+      });
     },
   };
 })(Drupal, once);

@@ -304,6 +304,7 @@ family-tree-viewer:
     js/family-tree-viewer.js: {}
   dependencies:
     - core/drupal
+    - core/drupal.announce
     - core/once
 
 # Utility menu panels (offcanvas drawers from the left): live clock and

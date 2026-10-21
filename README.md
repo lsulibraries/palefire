@@ -607,6 +607,30 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Family tree viewer: shareable links, themed scrollbars (2026-10-21)
+
+* **Links:** an open tree is now in the address as `?tree=<page name>`
+  (e.g. `/v2/special/guides/louisiananewspapers?tree=Napoleonville_Assumption_pioneer#parish-assumption`),
+  so it can be sent to someone: the guide loads with that tree open. A
+  "Copy link" button copies the address. Why: the trees are what people
+  ask about, and "open the guide, pick Assumption, click the second link"
+  isn't something to put in an email.
+* **Back button:** opening a tree adds one history entry, so Back (or a
+  phone's back gesture) closes the viewer instead of leaving the guide;
+  Forward opens it again. Closing with ×, Escape or a link takes the entry
+  back off, so history never fills with trees. A shared link opens
+  without adding an entry. An unknown name (mistyped, or a tree since
+  removed) is ignored and the guide opens as usual; only names of the
+  page's own family-tree links are opened.
+* **Scrollbars:** the viewer, its drawing pane and its Key column use the
+  page's own thin scrollbar (`pf-thin-scrollbar`, the `--pf-g-scroll`
+  thumb on a rule-coloured track) instead of the browser's wide grey one.
+* The action links wrap on the narrowest phones instead of overflowing.
+
+Files: `js/family-tree-viewer.js`, `scss/components/_family-tree-viewer.scss`,
+`palefire.libraries.yml` (adds `core/drupal.announce`, for "Link
+copied"), `css/style.css`. Then `git pull` and `drush cr`.
+
 ### Family trees open in a full-screen viewer (2026-10-21)
 
 A family tree link (in a parish's panel or in the Family trees list) now
