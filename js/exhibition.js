@@ -46,7 +46,7 @@
    * Galleries
    * ------------------------------------------------------------------ */
 
-  const state = { head: null, pages: [], current: null, busy: false, crumb: null };
+  const state = { head: null, pages: [], current: null, busy: false, crumb: null, zoom: null };
 
   // The gallery (or the title page, null) that holds an element.
   function galleryOf(el) {
@@ -140,6 +140,105 @@
     ROOT.style.setProperty('--pf-exhibit-head-h', folded ? Math.round(state.head.getBoundingClientRect().height) + 'px' : '0px');
   }
 
+  /* ---------------------------------------------------------------------
+   * Zoom button: at the end of the breadcrumb bar, opens the image that
+   * opens the view (the title page's cover, a gallery's lead) full screen
+   * in the lightbox, with its caption when it has one. It shows while that
+   * image is in sight under the bar and fades once it has scrolled away
+   * or the text has covered it.
+   * ------------------------------------------------------------------ */
+
+  function initZoom() {
+    const row = state.head.querySelector('.pf-landing__bar-inner');
+    if (!row || state.zoom) {
+      return;
+    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-exhibit-zoom';
+    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>'
+      + '<span class="visually-hidden">' + Drupal.t('View the image full screen') + '</span>';
+    button.addEventListener('click', () => {
+      const source = zoomSource();
+      if (source) {
+        openBox(source.link, source.group, button);
+      }
+    });
+    row.append(button);
+    state.zoom = button;
+    window.addEventListener('scroll', queueZoom, { passive: true });
+  }
+
+  // The image the view opens with: [the element to watch, its <img>].
+  function openingImage() {
+    const page = state.current;
+    const frame = page
+      ? page.querySelector('.pf-exhibit-hero__stage, .pf-exhibit-lead__frame')
+      : state.head.querySelector('.pf-exhibit-cover__media');
+    const img = frame ? frame.querySelector('img') : null;
+    return img ? [frame, img] : null;
+  }
+
+  // A lightbox link for the opening image: the image's own link when it has
+  // one (a captioned lead), else one made for the purpose, with the largest
+  // size in its srcset. The group is the gallery's images (none on the title
+  // page).
+  function zoomSource() {
+    const found = openingImage();
+    if (!found) {
+      return null;
+    }
+    const img = found[1];
+    let link = img.closest('a[data-pf-lightbox]');
+    if (!link) {
+      link = document.createElement('a');
+      const sizes = (img.getAttribute('srcset') || '').split(',').map((part) => part.trim().split(/\s+/));
+      const largest = sizes.reduce((best, part) => (parseInt(part[1], 10) || 0) > (parseInt(best[1], 10) || 0) ? part : best, [img.currentSrc || img.src, '0w']);
+      link.href = largest[0];
+      if (img.getAttribute('width')) {
+        link.dataset.width = img.getAttribute('width');
+        link.dataset.height = img.getAttribute('height');
+      }
+      link.append(img.cloneNode(false));
+    }
+    return { link: link, group: state.current ? null : [link] };
+  }
+
+  let zoomQueued = false;
+  function queueZoom() {
+    if (zoomQueued) {
+      return;
+    }
+    zoomQueued = true;
+    requestAnimationFrame(() => {
+      zoomQueued = false;
+      updateZoom();
+    });
+  }
+
+  // In sight: more than about two lines' worth of the image shows between
+  // the bar and whichever comes first, the image's foot or the top of the
+  // caption / text sliding over it.
+  function updateZoom() {
+    const button = state.zoom;
+    if (!button) {
+      return;
+    }
+    const found = openingImage();
+    let shown = false;
+    if (found && found[0].getClientRects().length) {
+      const bar = button.closest('.pf-landing__bar').getBoundingClientRect().bottom;
+      let bottom = Math.min(found[0].getBoundingClientRect().bottom, window.innerHeight);
+      const layer = state.current ? state.current.querySelector('.pf-exhibit-hero__caption, .pf-gallery__body') : null;
+      if (layer && found[0].matches('.pf-exhibit-hero__stage')) {
+        bottom = Math.min(bottom, layer.getBoundingClientRect().top);
+      }
+      shown = bottom - bar > 96;
+    }
+    button.classList.toggle('is-shown', shown);
+    button.tabIndex = shown ? 0 : -1;
+  }
+
   // The full-screen opening's pan (_exhibition.scss): how far the page
   // scrolls while the image stays pinned and tours itself. It is how much
   // the image overflows the screen when it covers it (a tall plate at full
@@ -169,6 +268,7 @@
   function onResize() {
     measureHead();
     sizeHero(state.current);
+    queueZoom();
   }
 
   // Show one gallery (or the title page) at once, without animation.
@@ -183,6 +283,7 @@
       prepareGallery(page);
       sizeHero(page);
     }
+    queueZoom();
   }
 
   function headerOffset() {
@@ -441,6 +542,7 @@
       page.style.setProperty('--pf-gallery-total', String(state.pages.length));
     });
     initCrumb();
+    initZoom();
     const target = targetOf(location.hash);
     const page = galleryOf(target);
     place(page);
@@ -648,11 +750,16 @@
     }
   }
 
-  function openBox(link) {
+  // group: the images to step through (default: the link's gallery's);
+  // opener: where focus returns (default: the link).
+  function openBox(link, group, opener) {
     const b = lightbox();
-    const scope = galleryOf(link) || document;
-    b.links = Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
-    b.opener = link;
+    const scope = galleryOf(link) || (state.current || document);
+    b.links = group || Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
+    if (!b.links.includes(link)) {
+      b.links.unshift(link);
+    }
+    b.opener = opener || link;
     show(Math.max(0, b.links.indexOf(link)));
     ROOT.classList.add('pf-lightbox-open');
     b.dialog.showModal();
@@ -794,6 +901,10 @@
       state.pages = [];
       state.current = null;
       state.crumb = null;
+      if (state.zoom) {
+        window.removeEventListener('scroll', queueZoom);
+        state.zoom = null;
+      }
     },
   };
 })(Drupal, once);

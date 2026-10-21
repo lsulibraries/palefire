@@ -1089,6 +1089,73 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// The bar's zoom button (js/exhibition.js): the opening image full screen,
+// at the end of the row, styled like the landing's video button. It fades
+// in while that image is in sight and out once the text covers it or it
+// scrolls away; hidden, it leaves the tab order and the accessibility tree.
+.pf-exhibit-zoom {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  margin: 0 0 0 auto;
+  border: 1px solid var(--pf-toc-rail, #{$pf-grey-900});
+  border-radius: 4px;
+  color: var(--pf-toc-color, #{$pf-grey-500});
+  background-color: var(--pf-sidebar-bg, #{rgba($pf-black, .5)});
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  cursor: zoom-in;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease, translate .4s ease, visibility 0s linear .4s, color $pf-hover-out ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &.is-shown {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-toc-active, #{$pf-white});
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-toc-accent, #{$pf-gold});
+    outline-offset: 3px;
+  }
+
+  @media (forced-colors: active) {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+  }
+}
+
+[dir="rtl"] .pf-exhibit-zoom {
+  margin: 0 auto 0 0;
+}
+
+// A slight drop as it arrives, with motion on.
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-exhibit-zoom:not(.is-shown) {
+    translate: 0 -.25rem;
+  }
+}
+
+// The bar's button stands in for the full opening's corner mark.
+.pf-exhibit-hero__link .pf-exhibit-figure__zoom {
+  display: none;
+}
+
 // Running head: while a gallery is open the title page folds to just that
 // bar, and the head itself sticks under the header for the whole gallery,
 // so the gallery's image (and later its text) passes under its glass. The

@@ -529,7 +529,10 @@ from the media item. A figure with no image shows only to editors.
   for screen readers. `scroll-padding-top` allows for it. The trail follows
   the open gallery (Home / AVES / Preface; AVES then links back to the
   title page), and the page's crumb shows the full title on hover
-  (`js/exhibition.js`, from the `<h1>`).
+  (`js/exhibition.js`, from the `<h1>`). At the bar's right end a zoom
+  button (`.pf-exhibit-zoom`) opens the view's opening image (the cover, or
+  the gallery's lead) in the lightbox; it fades in while that image is in
+  sight and out once the text covers it or it scrolls away.
 - The TOC's first link is "Home" (the title page). Galleries with a
   full-screen opening and an image repeat their title, with the gallery
   number, at the start of the text (`.pf-exhibit-body-title`, aria-hidden). "Skip to the text"
@@ -670,6 +673,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** a zoom button at the right end of the breadcrumb bar
+  opens the cover or the gallery's lead image full screen, and fades away
+  once the image is out of sight. It replaces the full opening's corner
+  mark, which sat under the header. Why: the cover had no visible way into
+  the lightbox.
 - **Exhibitions:** gallery URLs back to `#anchor` (the per-gallery paths
   didn't open their gallery; `palefire_exhibit_paths.php` removed). The
   breadcrumb follows the open gallery and shows the full title on hover;
