@@ -22,7 +22,7 @@
 }
 
 .pf-parishes {
-  --pf-parishes-hatch-rest: 0.3;
+  --pf-parishes-hatch-rest: 0.1;       // a faint hatch at rest (was .3)
   --pf-parishes-hatch-hover: 0.75;
   --pf-parishes-trace: 1.1s;
   --pf-parishes-trace-step: 14ms;

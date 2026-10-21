@@ -607,6 +607,15 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Parish map: fainter hatch at rest (2026-10-21)
+
+The parish map's diagonal hatch, before hover, drops from 30% to 10%
+(`--pf-parishes-hatch-rest` in `_parish-map.scss`), so the outlines lead
+and the map reads calmer. Hover (75%) and the chosen parish (accent) are
+unchanged, so a hovered parish now stands out more. Files:
+`scss/components/_parish-map.scss`, `css/style.css`. Then `git pull` and
+`drush cr`.
+
 ### Fix: Louisiana Newspapers guide gave a blank 500 (2026-10-21)
 
 The guide page returned an empty 500 (a PHP fatal, not Drupal's error
