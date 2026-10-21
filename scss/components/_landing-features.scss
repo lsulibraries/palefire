@@ -943,26 +943,30 @@ html.pf-a11y-motion {
 }
 
 // Beside its stops, the box runs the row's full height and an accent arrow
-// points from it to the first stop. The arrow is a mask over the accent
-// colour (no icon font or markup); the full guide has no arrow.
+// (Font Awesome Pro solid long-arrow-right, inlined by the template) points
+// from it to the first stop. Narrower, and on the full guide, the arrow is
+// hidden (_guide.scss).
 @container pf-paths (min-width: 52rem) {
   .pf-quick-guide .pf-paths__line {
     display: grid;
-    grid-template-columns: 13rem 3.5rem minmax(0, 1fr);
+    grid-template-columns: 13rem auto minmax(0, 1fr);
     column-gap: 1.5rem;
     align-items: center;
+  }
 
-    &::after {
-      content: "";
-      grid-row: 1;
-      grid-column: 2;
-      height: 1.5rem;
-      background: var(--pf-guide-accent);
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 24'%3E%3Cpath d='M0 10h44V3l12 9-12 9v-7H0z'/%3E%3C/svg%3E") center / contain no-repeat;
-      transform-origin: left;
+  .pf-quick-guide .pf-paths__arrow {
+    display: block;
+    color: var(--pf-guide-accent);
+    transform-origin: left;
+
+    svg {
+      display: block;
+      width: 2.5rem;
+      height: auto;
+      fill: currentColor;
     }
 
-    [dir="rtl"] &::after {
+    [dir="rtl"] & {
       scale: -1 1;
       transform-origin: right;
     }
@@ -974,26 +978,15 @@ html.pf-a11y-motion {
     padding: 1.5rem 1.25rem 1.5rem 0.75rem;
   }
 
-  .pf-quick-guide .pf-paths__stops {
-    grid-column: 3;
-  }
-
   // The arrow draws out as its row scrolls in, like the stops' line.
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .pf-quick-guide .pf-paths__line::after {
+      .pf-quick-guide .pf-paths__arrow {
         animation: pf-paths-line linear both;
         animation-timeline: view();
         animation-range: entry 20% entry 70%;
       }
     }
-  }
-}
-
-@media (forced-colors: active) {
-  .pf-quick-guide .pf-paths__line::after {
-    forced-color-adjust: none;
-    background: CanvasText;
   }
 }
 

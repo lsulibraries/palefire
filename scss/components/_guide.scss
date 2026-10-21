@@ -481,6 +481,12 @@ html[data-pf-mode="guide"] .pf-section__title {
   color: var(--pf-guide-accent);
 }
 
+// The arrow from an option to its stops: only the landing's wide Quick
+// Guide shows it (_landing-features.scss).
+.pf-paths__arrow {
+  display: none;
+}
+
 // "or" between two options: a short mono word, then a hairline to the end.
 .pf-paths__or {
   display: flex;

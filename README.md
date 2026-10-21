@@ -607,6 +607,19 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: Font Awesome arrow (2026-10-21)
+
+The arrow between each option box and its stops is now Font Awesome Pro's
+solid long-arrow-right, inlined from the site's copy like the stops' icons,
+instead of a CSS-drawn mask. The template adds it as a decorative span
+(`aria-hidden`); it shows only on the landing's wide Quick Guide and stays
+hidden on the full guide and on narrow layouts. The scroll-in draw, the
+reduced-motion fallback and the RTL flip are unchanged.
+
+Files: `templates/includes/guide-request-paths.html.twig`,
+`scss/components/_guide.scss`, `scss/components/_landing-features.scss`,
+`css/style.css`. No config changes: `git pull` and `drush cr`.
+
 ### Quick Guide: boxed options and arrows (2026-10-21)
 
 On the landing's Quick Guide each option label ("A See it in person") now
