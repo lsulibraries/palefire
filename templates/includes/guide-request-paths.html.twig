@@ -11,7 +11,7 @@
  * A and B by those letters. An "or" divider between the lines shows they are
  * alternatives; it repeats the letters, so it is hidden from screen readers.
  * Icons are Font Awesome Pro duotone, inlined from the site's copy like the
- * hero account icon, and decorative. The solid arrow between an option and
+ * hero account icon, and decorative. The light arrow between an option and
  * its stops shows only on the landing's wide Quick Guide.
  *
  * Available variables:
@@ -64,7 +64,7 @@
         <span class="pf-paths__letter"><span class="visually-hidden">{{ 'Option'|t }} </span>{{ path.letter }}<span class="visually-hidden">: </span></span>
         <span class="pf-paths__name-text">{{ path.name }}</span>
       </p>
-      <span class="pf-paths__arrow" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/solid/long-arrow-right.svg', ignore_missing = true)|raw }}</span>
+      <span class="pf-paths__arrow" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/long-arrow-right.svg', ignore_missing = true)|raw }}</span>
       <ol class="pf-paths__stops" aria-labelledby="{{ heading_id }}">
         {% for stop in path.stops %}
           <li class="pf-paths__stop">

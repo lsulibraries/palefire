@@ -607,6 +607,17 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: light arrow (2026-10-21)
+
+The arrow between each option box and its stops now uses Font Awesome
+Pro's light long-arrow-right instead of the solid one. The thinner stroke
+matches the hairline boxes and the stops' line. No CSS change: same size,
+colour and scroll-in draw.
+
+Files: `templates/includes/guide-request-paths.html.twig` (and a comment in
+`scss/components/_landing-features.scss`). No config changes: `git pull`
+and `drush cr`.
+
 ### Quick Guide: Font Awesome arrow (2026-10-21)
 
 The arrow between each option box and its stops is now Font Awesome Pro's
