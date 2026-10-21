@@ -8,11 +8,15 @@
  * so this prints only the lead image and the blocks; it must not extend
  * paragraph.html.twig.
  *
- * - lead: decorative image (_palefire_exhibit_image()), drawn above the
- *   heading (CSS order), or NULL. A full-width band with a curtain reveal
- *   that pans from the image's top to its bottom as the page scrolls; with
- *   lead_whole ("Show whole image"), uncropped and centred, fading up
+ * - lead: image values (_palefire_exhibit_image()), drawn above the heading
+ *   (CSS order), or NULL. A full-width band with a curtain reveal that pans
+ *   from the image's top to its bottom as the page scrolls; with lead_whole
+ *   ("Show whole image"), uncropped and centred, fading up
  *   (_exhibition.scss).
+ * - lead_caption: rendered caption, or NULL. With one, the lead is a
+ *   <figure>: its alt text is announced, it opens in the lightbox like the
+ *   other images, and the caption sits under it. Without one it is
+ *   decorative (alt="", aria-hidden).
  * - focus: object-position keyword for a cropped lead (where it rests under
  *   reduced motion). lead_x: the pan's horizontal position.
  *
@@ -22,14 +26,28 @@
 #}
 <div{{ attributes.addClass('pf-gallery', lead ? 'pf-gallery--has-lead') }} data-pf-exhibit-page>
   {% if lead %}
-    <div class="pf-exhibit-lead{{ lead_whole ? ' pf-exhibit-lead--whole' }}" aria-hidden="true">
-      <div class="pf-exhibit-lead__frame">
-        <img class="pf-exhibit-lead__img" src="{{ lead.src }}"
-             {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
-             {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
-             style="object-position: {{ focus }}; --pf-lead-x: {{ lead_x }}" alt="" loading="lazy" decoding="async">
+    {% set lead_classes = 'pf-exhibit-lead' ~ (lead_whole ? ' pf-exhibit-lead--whole') %}
+    {% set lead_img %}
+      <img class="pf-exhibit-lead__img" src="{{ lead.src }}"
+           {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
+           {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
+           style="object-position: {{ focus }}; --pf-lead-x: {{ lead_x }}" alt="{{ lead_caption ? lead.alt }}" loading="lazy" decoding="async">
+    {% endset %}
+    {% if lead_caption %}
+      <figure class="{{ lead_classes }} has-caption">
+        <a class="pf-exhibit-lead__link" href="{{ lead.full }}" data-pf-lightbox
+           {% if lead.width %}data-width="{{ lead.width }}" data-height="{{ lead.height }}"{% endif %}>
+          <span class="pf-exhibit-lead__frame">{{ lead_img }}</span>
+          <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
+          <svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>
+        </a>
+        <figcaption class="pf-exhibit-lead__caption pf-guide-prose">{{ lead_caption }}</figcaption>
+      </figure>
+    {% else %}
+      <div class="{{ lead_classes }}" aria-hidden="true">
+        <div class="pf-exhibit-lead__frame">{{ lead_img }}</div>
       </div>
-    </div>
+    {% endif %}
   {% endif %}
   <div class="pf-gallery__body pf-guide">
     {{ content.field_guide_blocks }}

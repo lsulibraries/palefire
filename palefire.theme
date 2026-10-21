@@ -1534,6 +1534,10 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
  * focus: where a cropped lead stays in view (object-position keyword).
  * lead_x: the pan's horizontal position (Left / Right keep that side).
  * lead_whole: "Show whole image": uncropped and centred, not a band.
+ * lead_caption: field_exhibit_lead_caption rendered, or NULL. With one, the
+ * lead is content (alt text, lightbox, caption); without, decorative.
+ * Rendered here rather than through Manage display, so galleries made
+ * before the field existed show it too.
  */
 function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -1547,6 +1551,10 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
   $variables['lead_x'] = ['left' => '0%', 'right' => '100%'][$variables['focus']] ?? '50%';
   $variables['lead_whole'] = $paragraph->hasField('field_exhibit_lead_whole') && (bool) $paragraph->get('field_exhibit_lead_whole')->value;
+  $variables['lead_caption'] = NULL;
+  if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
+    $variables['lead_caption'] = $paragraph->get('field_exhibit_lead_caption')->view(['label' => 'hidden', 'type' => 'text_default']);
+  }
   if ($variables['lead'] && $variables['lead_whole']) {
     // Centred at its own width, never wider than the column.
     $variables['lead']['sizes'] = '(min-width: 62rem) 60vw, 100vw';

@@ -101,6 +101,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_louisiana_newspapers_setup.php` | `parish_map`, `parish_entry`, `family_trees` paragraph types |
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
 | `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
+| `palefire_exhibit_aves_lead_captions.php` | Fills the 9 draft AVES lead captions on the existing page (empty ones only; stops on a published page unless `-- force=1`) |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
@@ -476,7 +477,7 @@ to begin."), and `field_intro` if filled.
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
-| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_lead` + `_lead_focus` + `_lead_whole`, `field_guide_blocks` | A section. The lead is decorative: a full-width band (curtain, then a scroll-pan) or, with "Show whole image", the plate uncropped and centred |
+| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_guide_blocks` | A section. The lead is a full-width band (curtain, then a scroll-pan) or, with "Show whole image", the plate uncropped and centred. With a caption it is a figure (alt text, lightbox, caption under it); without, decorative |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
 | `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox |
 | `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
@@ -636,6 +637,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibition lead captions:** new "Lead image caption" field
+  (`field_exhibit_lead_caption`, re-run `palefire_exhibit_setup.php`). With
+  one, the lead is announced, opens in the lightbox and is credited under
+  the band; without, it stays decorative. Drafts for the 9 AVES leads that
+  come from books the exhibition describes, each with a "[Editor: please
+  verify …]" line (`palefire_exhibit_aves_lead_captions.php`); the other 7
+  need a source. Why: the leads are collection objects and were uncredited.
 - **Exhibition leads:** the band is taller (70% of the screen) and pans
   from the image's top to its bottom as the page scrolls, instead of a 7%
   drift; new per-gallery "Show whole image" checkbox

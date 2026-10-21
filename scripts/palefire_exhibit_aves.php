@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
@@ -210,6 +211,8 @@ $block = function (array $b) use (&$block, $figure, $keep, $html): ?Paragraph {
   return NULL;
 };
 
+// Lead captions (field added 2026-10-21): drafts for the editors to check.
+$has_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
 $sections = [];
 foreach ($data['pages'] as $page) {
   $sections[] = Paragraph::create($keep([
@@ -218,6 +221,8 @@ foreach ($data['pages'] as $page) {
     'field_section_anchor' => $page['anchor'],
     'field_exhibit_lead' => $ref($media($page['lead'] ?? NULL)),
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
+    // Drafts for the editors to check (palefire_exhibit_aves_lead_captions.php).
+    'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;
