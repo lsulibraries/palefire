@@ -1530,8 +1530,10 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
 /**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-page.
  *
- * lead: the gallery's lead image (decorative, full width), or NULL.
+ * lead: the gallery's lead image (decorative), or NULL.
  * focus: where a cropped lead stays in view (object-position keyword).
+ * lead_x: the pan's horizontal position (Left / Right keep that side).
+ * lead_whole: "Show whole image": uncropped and centred, not a band.
  */
 function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -1543,6 +1545,12 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   }
   $focus = $paragraph->hasField('field_exhibit_lead_focus') ? (string) $paragraph->get('field_exhibit_lead_focus')->value : '';
   $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
+  $variables['lead_x'] = ['left' => '0%', 'right' => '100%'][$variables['focus']] ?? '50%';
+  $variables['lead_whole'] = $paragraph->hasField('field_exhibit_lead_whole') && (bool) $paragraph->get('field_exhibit_lead_whole')->value;
+  if ($variables['lead'] && $variables['lead_whole']) {
+    // Centred at its own width, never wider than the column.
+    $variables['lead']['sizes'] = '(min-width: 62rem) 60vw, 100vw';
+  }
   $cache->applyTo($variables);
 }
 

@@ -21,7 +21,8 @@
  *   field_exhibit_credit, field_exhibit_prompt.
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
- *     section fields, a lead image and its focus, and field_guide_blocks.
+ *     section fields, a lead image, its focus and "Show whole image"
+ *     (field_exhibit_lead_whole, added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
  *     sub-link), anchor, biography, and its own blocks.
  *   - exhibit_figure: one image with a caption and a layout.
@@ -225,6 +226,7 @@ $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_value
   'left' => 'Left',
   'right' => 'Right',
 ]]);
+$storage('paragraph', 'field_exhibit_lead_whole', 'boolean');
 $storage('paragraph', 'field_entry_bio', 'text_long');
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_figure_caption', 'text_long');
@@ -352,7 +354,13 @@ foreach ($shared as $name => $values) {
       : ['type' => 'string_textfield']);
   $section_form[$name] = ['weight' => $weight++] + $component;
 }
-$field('paragraph', 'exhibit_page', 'field_exhibit_lead', $media_ref('Lead image (optional)', 'Shown full width at the top of the gallery with a curtain reveal and a slow parallax. Decorative: it is not announced, so use an image whose content the gallery doesn\'t depend on.'));
+$field('paragraph', 'exhibit_page', 'field_exhibit_lead', $media_ref('Lead image (optional)', 'Shown full width at the top of the gallery with a curtain reveal, then panned from top to bottom as the page scrolls. Decorative: it is not announced, so use an image whose content the gallery doesn\'t depend on.'));
+// Added 2026-10-21. Re-running the script adds it to an existing site.
+$field('paragraph', 'exhibit_page', 'field_exhibit_lead_whole', [
+  'label' => 'Show whole image',
+  'description' => 'Show the lead uncropped, centred on the page, instead of as a full-width band. Good for plates on white paper and tall images.',
+  'settings' => ['on_label' => 'Whole image', 'off_label' => 'Full-width band'],
+]);
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_focus', ['label' => 'Keep in view when cropped', 'default_value' => [['value' => 'center']]]);
 $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
   'label' => 'Content',
@@ -361,6 +369,7 @@ $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
 ]);
 $section_form['field_exhibit_lead'] = $media_widget + ['weight' => 10];
 $section_form['field_exhibit_lead_focus'] = $select(11);
+$section_form['field_exhibit_lead_whole'] = ['type' => 'boolean_checkbox', 'weight' => 12, 'settings' => ['display_label' => TRUE]];
 $section_form['field_guide_blocks'] = $paragraphs_widget(20, 'Block', 'Blocks', 'exhibit_entry');
 $form('paragraph', 'exhibit_page', $section_form);
 $view('paragraph', 'exhibit_page', [

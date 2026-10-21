@@ -3,9 +3,9 @@
 //
 // A gallery at a time (js/exhibition.js): the title page, then one
 // exhibit_page section, each fading in with its lead image drawn by a
-// curtain. Lead and full-width images drift slowly with the scroll
-// (scroll-driven animation, no script); figures beside the text rise in as
-// they enter the view. Everything stays still under reduced motion.
+// curtain. Lead and full-width images pan from their top to their bottom
+// as the page scrolls (scroll-driven animation, no script), or a lead can
+// show whole; figures beside the text rise in as they enter the view. Everything stays still under reduced motion.
 //
 // Colours: the reading swatch (--pf-g-*, _reading-themes.scss) through the
 // guide's tokens (.pf-guide, _guide.scss), so every swatch works and keeps
@@ -125,15 +125,18 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 }
 
 // Lead image: full width, under the running head. Curtain on show (CSS
-// animations restart whenever the gallery goes from hidden to shown), then
-// a slow drift with the scroll.
+// animations restart whenever the gallery goes from hidden to shown), then a
+// scroll-pan: the crop slides from the image's top to its bottom over the
+// first screen of scrolling, so the whole plate passes through the band.
+// "Keep in view when cropped" (object-position) is where it rests under
+// reduced motion; Left / Right also keep the pan to that side (--pf-lead-x).
 .pf-exhibit-lead {
   order: -1;
   margin: calc(-1 * var(--pf-section-pad-block)) calc(-1 * var(--pf-section-pad-inline)) clamp(2rem, 4vw, 3.5rem);
 }
 
 .pf-exhibit-lead__frame {
-  height: clamp(14rem, 52vh, 36rem);
+  height: clamp(16rem, 70vh, 48rem);
   overflow: hidden;
   background: var(--pf-exhibit-surface);
 
@@ -150,6 +153,31 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   object-fit: cover;
 }
 
+// "Show whole image": the plate uncropped, centred on the page colour, as a
+// framed object rather than a banner. It fades up instead of panning.
+.pf-exhibit-lead--whole {
+  margin: 0 0 clamp(2rem, 4vw, 3.5rem);
+
+  .pf-exhibit-lead__frame {
+    display: flex;
+    justify-content: center;
+    height: auto;
+    background: none;
+
+    @include pf-exhibit-motion {
+      animation: pf-exhibit-step 1.4s $pf-exhibit-ease .1s both;
+    }
+  }
+
+  .pf-exhibit-lead__img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: min(68vh, 52rem);
+    object-fit: contain;
+  }
+}
+
 @keyframes pf-exhibit-curtain {
   from {
     clip-path: inset(0 0 100% 0);
@@ -160,19 +188,33 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   }
 }
 
-// Parallax: the image is a little larger than its frame and moves less than
-// the page while the frame crosses the view.
-@supports (animation-timeline: view()) {
-  .pf-exhibit-lead__img,
-  .pf-exhibit-figure--wide .pf-exhibit-figure__img {
-    @include pf-exhibit-motion {
-      scale: 1.16;
-      animation: pf-exhibit-drift linear both;
-      animation-timeline: view();
-      animation-range: cover 0% cover 100%;
+// The pan. Written out rather than with pf-exhibit-motion: the paged class
+// is on <html> too, so it has to be part of the same compound selector.
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    // The lead opens every gallery at the top of the page (js/exhibition.js
+    // scrolls there), so the page's own scroll drives it: the image's top
+    // at the top, its bottom 70% of a screen down.
+    html.pf-exhibit-paged:not(.pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__img {
+      animation: pf-exhibit-pan linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
     }
   }
 
+  @supports (animation-timeline: view()) {
+    // Full-width images (and leads without the script, one gallery after
+    // another): the pan runs while the frame crosses the screen.
+    html:not(.pf-exhibit-paged, .pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__img,
+    html:not(.pf-a11y-motion) .pf-exhibit-figure--wide .pf-exhibit-figure__img {
+      animation: pf-exhibit-pan linear both;
+      animation-timeline: view();
+      animation-range: cover 10% cover 90%;
+    }
+  }
+}
+
+@supports (animation-timeline: view()) {
   // Figures beside the text rise in as they enter.
   .pf-exhibit-figure:is(.pf-exhibit-figure--side-start, .pf-exhibit-figure--side-end, .pf-exhibit-figure--center),
   .pf-exhibit-group__grid > .pf-exhibit-figure {
@@ -184,13 +226,13 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   }
 }
 
-@keyframes pf-exhibit-drift {
+@keyframes pf-exhibit-pan {
   from {
-    translate: 0 -7%;
+    object-position: var(--pf-lead-x, 50%) 0%;
   }
 
   to {
-    translate: 0 7%;
+    object-position: var(--pf-lead-x, 50%) 100%;
   }
 }
 

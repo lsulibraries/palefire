@@ -8,10 +8,13 @@
  * so this prints only the lead image and the blocks; it must not extend
  * paragraph.html.twig.
  *
- * - lead: decorative image (_palefire_exhibit_image()), drawn full width
- *   above the heading (CSS order) with a curtain reveal and a slow
- *   parallax (_exhibition.scss), or NULL.
- * - focus: object-position keyword for a cropped lead.
+ * - lead: decorative image (_palefire_exhibit_image()), drawn above the
+ *   heading (CSS order), or NULL. A full-width band with a curtain reveal
+ *   that pans from the image's top to its bottom as the page scrolls; with
+ *   lead_whole ("Show whole image"), uncropped and centred, fading up
+ *   (_exhibition.scss).
+ * - focus: object-position keyword for a cropped lead (where it rests under
+ *   reduced motion). lead_x: the pan's horizontal position.
  *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
@@ -19,12 +22,12 @@
 #}
 <div{{ attributes.addClass('pf-gallery', lead ? 'pf-gallery--has-lead') }} data-pf-exhibit-page>
   {% if lead %}
-    <div class="pf-exhibit-lead" aria-hidden="true">
+    <div class="pf-exhibit-lead{{ lead_whole ? ' pf-exhibit-lead--whole' }}" aria-hidden="true">
       <div class="pf-exhibit-lead__frame">
         <img class="pf-exhibit-lead__img" src="{{ lead.src }}"
              {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
              {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
-             style="object-position: {{ focus }}" alt="" loading="lazy" decoding="async">
+             style="object-position: {{ focus }}; --pf-lead-x: {{ lead_x }}" alt="" loading="lazy" decoding="async">
       </div>
     </div>
   {% endif %}
