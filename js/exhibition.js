@@ -8,10 +8,12 @@
  *   previous / next links added at each gallery's foot, and any #link in
  *   the text (an entry on another gallery, a source) fade the current
  *   gallery out and the target's gallery in, then glide to the target.
- *   Gallery changes add a history entry (#gallery), so Back steps back
- *   through them; jumps inside a gallery replace it.
+ *   Gallery changes add a history entry (the gallery's path, or #gallery:
+ *   see Addresses), so Back steps back through them; jumps inside a
+ *   gallery replace it.
  * - Title page: the page head (includes/exhibit-cover.html.twig). While a
- *   gallery is open it folds to a running head (.is-folded) that keeps the
+ *   gallery is open it folds to a sticky running head (.is-folded, the
+ *   breadcrumb bar) that keeps the
  *   <h1>, and is marked data-toc-inactive so the TOC doesn't light "Title
  *   page" (js/modular-toc.js).
  * - Lightbox: a figure's image link opens a <dialog> with its largest
@@ -196,8 +198,7 @@
     }
     const page = galleryOf(target);
     const top = target === state.head || target === page;
-    const hash = target === state.head ? '' : '#' + target.id;
-    const url = location.pathname + location.search + hash;
+    const url = urlFor(target);
 
     if (page === state.current) {
       if (mode !== 'none') {
@@ -215,10 +216,10 @@
     }
 
     if (mode === 'push') {
-      history.pushState({ pfExhibit: hash }, '', url);
+      history.pushState({ pfExhibit: url }, '', url);
     }
     else if (mode === 'replace') {
-      history.replaceState({ pfExhibit: hash }, '', url);
+      history.replaceState({ pfExhibit: url }, '', url);
     }
 
     const arrive = () => {
@@ -350,8 +351,50 @@
     }
   }
 
+  /* ---------------------------------------------------------------------
+   * Addresses
+   *
+   * With the gallery aliases in place (palefire_exhibit_paths.php; the head
+   * says so with data-pf-exhibit-paths), a gallery's address is the page's
+   * path plus its anchor, /v2/exhibitions/aves/featherwork, and an entry
+   * in it adds #anchor. Otherwise #anchor, as before. Either form is read,
+   * so old #links keep working (and are rewritten to the path form).
+   * ------------------------------------------------------------------ */
+
+  function basePath() {
+    return (state.head.dataset.pfExhibitBase || location.pathname).replace(/\/+$/, '');
+  }
+
+  function usePaths() {
+    return state.head.hasAttribute('data-pf-exhibit-paths');
+  }
+
+  // The address for a target: the title page, a gallery or something in one.
+  function urlFor(target) {
+    const page = galleryOf(target);
+    if (!usePaths()) {
+      return location.pathname + location.search + (target === state.head ? '' : '#' + target.id);
+    }
+    if (!page || target === state.head) {
+      return basePath() + location.search;
+    }
+    return basePath() + '/' + encodeURIComponent(page.id) + location.search + (target === page ? '' : '#' + target.id);
+  }
+
+  // The element the current address points at, or null.
+  function targetFromLocation() {
+    const hashed = targetOf(location.hash);
+    const base = basePath();
+    const rest = location.pathname.startsWith(base + '/') ? location.pathname.slice(base.length + 1).split('/')[0] : '';
+    const page = rest ? targetOf('#' + rest) : null;
+    if (hashed && (!page || page.contains(hashed))) {
+      return hashed;
+    }
+    return page && galleryOf(page) === page ? page : hashed;
+  }
+
   function onPopState() {
-    const target = targetOf(location.hash);
+    const target = targetFromLocation();
     go(target && (galleryOf(target) || state.head.contains(target)) ? target : state.head, { history: 'none' });
   }
 
@@ -374,9 +417,17 @@
       page.style.setProperty('--pf-gallery-index', String(i + 1));
       page.style.setProperty('--pf-gallery-total', String(state.pages.length));
     });
-    const target = targetOf(location.hash);
+    const target = targetFromLocation();
     const page = galleryOf(target);
     place(page);
+    // An old #gallery link, or a path address on a page without the
+    // aliases: show the address in this page's form.
+    if (target) {
+      const url = urlFor(target);
+      if (url !== location.pathname + location.search + location.hash) {
+        history.replaceState(history.state, '', url);
+      }
+    }
     if (page && target !== page) {
       // A link to an entry or a source: there once the page has laid out.
       requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));

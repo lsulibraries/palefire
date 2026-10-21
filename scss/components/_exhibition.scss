@@ -307,13 +307,16 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 //   row 1  space (grows so rows 1-3 fill the first screen)
 //   row 2  <h2>
 //   row 3  links, the scroll cue, "Skip to the text"
-//   row 4  the pin: the running head's height plus the pan's length
+//   row 4  the pin: the fade's length plus the pan's length
 //   row 5  the caption
 //   row 6  the text
 //   row 7  previous / next
 // The hero spans rows 1-4 and its stage is sticky, so the image stays put
-// for the length of row 4. js/exhibition.js sets --pf-pan from the image's
-// proportions (lg and up, with motion and scroll-driven animation
+// for the length of row 4: first the heading, links and wash fade (the
+// fade, --pf-fade-len), and only then does the image pan (--pf-pan). The
+// image reaches up under the running head's bar and the header, both
+// glass, so it shows through them. js/exhibition.js sets --pf-pan from the
+// image's proportions (lg and up, with motion and scroll-driven animation
 // support); without it there is no pin and nothing moves.
 
 $pf-opener-inner: '.pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery--opener)';
@@ -322,13 +325,16 @@ $pf-opener: 'html[data-pf-mode="exhibition"] #{$pf-opener-inner}';
 $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-opener-inner}';
 
 #{$pf-opener} {
-  // The stage: the screen under the header. The first screen also has the
-  // running head above it (js/exhibition.js measures the head).
-  --pf-stage-h: calc(100svh - var(--pf-header-h));
-  --pf-hero-h: calc(var(--pf-stage-h) - var(--pf-exhibit-head-h, 0px));
+  // The stage: the whole screen, under the header and the running head's
+  // bar (glass), which sit over it. The hero reaches up behind them by the
+  // section's padding, the expanded header and the bar (js/exhibition.js
+  // measures the bar). The fade has a length only while the pan is on.
+  --pf-stage-h: 100svh;
+  --pf-bleed-top: calc(var(--pf-section-pad-block) + var(--pf-header-full, var(--pf-header-h)) + var(--pf-exhibit-head-h, 0px));
+  --pf-fade-len: 0px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto auto calc(var(--pf-exhibit-head-h, 0px) + var(--pf-pan, 0px)) auto auto auto;
+  grid-template-rows: minmax(0, 1fr) auto auto calc(var(--pf-fade-len) + var(--pf-pan, 0px)) auto auto auto;
 
   > .pf-section__title {
     grid-row: 2;
@@ -358,9 +364,9 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   grid-row: 1 / 5;
   grid-column: 1;
   z-index: 0;
-  height: calc(var(--pf-stage-h) + var(--pf-pan, 0px));
+  height: calc(var(--pf-stage-h) + var(--pf-fade-len) + var(--pf-pan, 0px));
   min-height: 26rem;
-  margin: calc(-1 * var(--pf-section-pad-block)) calc(-1 * var(--pf-section-pad-inline)) 0;
+  margin: calc(-1 * var(--pf-bleed-top)) calc(-1 * var(--pf-section-pad-inline)) 0;
   // clip, not hidden: hidden would make the hero the stage's scroller and
   // the stage would never stick.
   overflow: clip;
@@ -368,7 +374,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 .pf-exhibit-hero__stage {
   position: sticky;
-  top: var(--pf-header-h);
+  top: 0;
   height: var(--pf-stage-h);
   min-height: 26rem;
   overflow: clip;
@@ -478,12 +484,16 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 // it, and .pf-section__inner::before keeps rows 1-4 their size (the hero no
 // longer sets them).
 #{$pf-opener}[style*="--pf-pan"] {
+  // The first part of the pin, before the image moves: the heading and
+  // links leave and the wash clears.
+  --pf-fade-len: 40svh;
+
   &::before {
     content: "";
     grid-row: 1 / 5;
     grid-column: 1;
-    height: calc(var(--pf-stage-h) + var(--pf-pan));
-    margin-top: calc(-1 * var(--pf-section-pad-block));
+    height: calc(var(--pf-stage-h) + var(--pf-fade-len) + var(--pf-pan));
+    margin-top: calc(-1 * var(--pf-bleed-top));
   }
 
   > .pf-gallery > .pf-exhibit-hero {
@@ -646,6 +656,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     grid-row: 1;
     height: auto;
     min-height: 0;
+    margin-top: calc(-1 * var(--pf-section-pad-block));
   }
 
   .pf-exhibit-hero__stage {
@@ -659,7 +670,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     }
   }
 
-  #{$pf-opener} > .pf-section__title {
+  #{$pf-opener}:has(> .pf-gallery--has-lead) > .pf-section__title {
     position: relative;
     margin-top: -2.5rem;
   }
@@ -691,7 +702,9 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
         pf-exhibit-step 1s $pf-exhibit-ease .45s both,
         pf-exhibit-away linear both;
       animation-timeline: auto, view();
-      animation-range: normal, exit -20% exit 60%;
+      // Only once they actually start to leave the screen: at rest near
+      // the top (no image above them) they stay at full strength.
+      animation-range: normal, exit 0% exit 100%;
     }
 
     html:not(.pf-a11y-motion) .pf-exhibit-opener {
@@ -709,26 +722,27 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 
   @supports (animation-timeline: scroll()) {
-    // From lg, while pinned: the heading and links leave first (over the
-    // first 30% of a screen), then the wash clears behind them, so text is
-    // never left on the bare image; the image tours the whole of itself
-    // over the full pin.
+    // From lg, while pinned, in order: the heading and links leave (over
+    // the first 30% of a screen), the wash clears behind them (15-40%),
+    // and only then does the image tour the whole of itself (from 40%, the
+    // fade's length, for the pan's length). The running head is a sticky
+    // bar, so the page's scroll counts from 0.
     #{$pf-opener-moving}[style*="--pf-pan"] > .pf-section__title,
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-opener {
       animation-timeline: auto, scroll(root);
-      animation-range: normal, 0px calc(var(--pf-exhibit-head-h, 0px) + 30svh);
+      animation-range: normal, 0px 30svh;
     }
 
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-hero__stage::after {
       animation: pf-exhibit-clear linear both;
       animation-timeline: scroll(root);
-      animation-range: calc(var(--pf-exhibit-head-h, 0px) + 22svh) calc(var(--pf-exhibit-head-h, 0px) + 50svh);
+      animation-range: 15svh 40svh;
     }
 
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-hero .pf-exhibit-hero__img {
       animation: pf-exhibit-tour linear both;
       animation-timeline: scroll(root);
-      animation-range: var(--pf-exhibit-head-h, 0px) calc(var(--pf-exhibit-head-h, 0px) + var(--pf-pan, 0px));
+      animation-range: 40svh calc(40svh + var(--pf-pan, 0px));
     }
   }
 }
@@ -1057,11 +1071,36 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-// Running head: while a gallery is open the title page folds to its
-// breadcrumb and a one-line title, which keeps the page's <h1>.
-.pf-exhibit-head.is-folded {
+// The breadcrumb is the landing's sub-header bar (.pf-landing__bar,
+// _landing-features.scss): glass, right under the header, across the
+// column, lined up with the TOC title and moving aside for the TOC button.
+// On the title page it stays under the header while the cover is on
+// screen.
+.pf-exhibit-head {
+  // The landing's bar spacing (.pf-landing sets these there).
+  --pf-bar-edge: 1rem;
+  --pf-bar-icon-edge: .375rem;
+  padding-top: 0;
+
+  > .pf-landing__bar {
+    position: sticky;
+    top: var(--pf-header-h);
+    z-index: 3;
+  }
+}
+
+// Running head: while a gallery is open the title page folds to just that
+// bar, and the head itself sticks under the header for the whole gallery,
+// so the gallery's image (and later its text) passes under its glass. The
+// <h1> stays, for screen readers only: the bar's breadcrumb and the
+// gallery's own heading say where you are.
+html.pf-exhibit-paged .pf-exhibit-head.is-folded {
+  position: sticky;
+  top: var(--pf-header-h);
+  z-index: 4;
   min-height: 0;
   padding-bottom: 0;
+  background: none;
 
   .pf-exhibit-cover__media,
   .pf-exhibit-cover__kicker,
@@ -1072,7 +1111,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 
   .pf-exhibit-cover__text {
-    padding: 0.75rem 0 1rem;
+    padding: 0;
   }
 
   .pf-exhibit-cover__step {
@@ -1080,21 +1119,30 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 
   .pf-exhibit-cover__title {
-    display: block;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--pf-exhibit-muted);
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
+}
 
-  .pf-exhibit-cover__subtitle {
-    font: inherit;
-    letter-spacing: inherit;
-
-    &::before {
-      content: "\2002\2014\2002" / "";
-    }
+// The TOC's hide/show button lives in the sidebar (z-index 2) and, with the
+// TOC hidden, sits over the start of the bar (z-index 3-4): lift the
+// sidebar above it. The sidebar sits beside the content, never over it.
+@include media-breakpoint-up(lg) {
+  html[data-pf-mode="exhibition"] .pf-modular__sidebar {
+    z-index: 5;
   }
+}
+
+// Jumps and keyboard focus land below the header and the bar.
+html.pf-exhibit-paged {
+  scroll-padding-top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
 }
 
 // Entries --------------------------------------------------------------------
@@ -1114,7 +1162,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   letter-spacing: -0.01em;
   line-height: 1.25;
   text-wrap: balance;
-  scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
+  scroll-margin-top: 1.5rem; // past the header and bar (scroll-padding-top)
   transition: color .3s ease;
 
   &:focus {
@@ -1546,7 +1594,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 // js/exhibition.js glides to #src-… under the header.
 .pf-guide-prose li[id^="src-"] {
-  scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
+  scroll-margin-top: 1.5rem;
 }
 
 // Lightbox ---------------------------------------------------------------------
