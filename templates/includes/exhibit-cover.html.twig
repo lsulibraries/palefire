@@ -8,6 +8,9 @@
  * - title, subtitle: the <h1> and the line under it.
  * - credit, intro: render arrays or NULL.
  * - prompt: the line that points at the table of contents.
+ * - year, physical: optional tiles under the credit (the exhibition's year;
+ *   whether it accompanied a physical exhibition, as FA Pro's light
+ *   treasure chest, or a word where the server has no FA Pro files).
  * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
  *
  * The parts come in one after another on load (_exhibition.scss):
@@ -42,6 +45,24 @@
     {% endif %}
     {% if head.credit %}
       <div class="pf-exhibit-cover__credit pf-exhibit-cover__step" style="--pf-step: 4">{{ head.credit }}</div>
+    {% endif %}
+    {% if head.year or head.physical %}
+      <ul class="pf-exhibit-cover__facts pf-exhibit-cover__step" style="--pf-step: 4.5">
+        {% if head.year %}
+          <li class="pf-exhibit-cover__fact"><span class="visually-hidden">{{ 'Year:'|t }} </span>{{ head.year }}</li>
+        {% endif %}
+        {% if head.physical %}
+          {% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
+          <li class="pf-exhibit-cover__fact{{ chest ? ' pf-exhibit-cover__fact--icon' }}" title="{{ 'Accompanied a physical exhibition'|t }}">
+            {% if chest %}
+              <span class="pf-exhibit-cover__fact-icon" aria-hidden="true">{{ chest|raw }}</span>
+              <span class="visually-hidden">{{ 'Accompanied a physical exhibition'|t }}</span>
+            {% else %}
+              {{ 'On display'|t }}
+            {% endif %}
+          </li>
+        {% endif %}
+      </ul>
     {% endif %}
     <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 5">
       <p class="pf-exhibit-cover__prompt-text">

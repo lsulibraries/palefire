@@ -103,6 +103,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
 | `palefire_exhibit_aves_lead_captions.php` | Fills the 9 draft AVES lead captions on the existing page (empty ones only; stops on a published page unless `-- force=1`) |
 | `palefire_exhibit_aves_update.php` | Brings the live AVES page up to `data/aves.json`: Capital Case names, "Main Library", the 16 images from `Section 4 (additions)`, catalogue lead captions (`-- images="<AVES exhibition 4K folder>"`). Keeps editors' own changes |
+| `palefire_exhibit_aves_typos.php` | Corrects 25 typos in the live AVES page (missing spaces and brackets in names, hyphen and dash spacing, Vieillot's dates, Weimar, Chubb), the same as in `data/aves.json`. Exact replacements only; lists any it can't find |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
@@ -474,7 +475,11 @@ On `node.modular_page` (exhibition mode only, printed by
 `includes/exhibit-cover.html.twig`): `field_exhibit_subtitle`,
 `field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
 `field_exhibit_prompt` (default "Choose a gallery from the table of contents
-to begin."), and `field_intro` if filled.
+to begin."), and `field_intro` if filled. Optional tiles under the credit:
+`field_exhibit_year` (a number) and `field_exhibit_physical` ("Accompanied a
+physical exhibition", shown as FA Pro's light treasure chest, inlined from
+`/libraries/fontawesome-pro/svgs/light/treasure-chest.svg`; the words "On
+display" where the server has no FA Pro files).
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
@@ -676,6 +681,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** optional year and "accompanied a physical exhibition"
+  tiles on the title page, under the credit (re-run
+  `palefire_exhibit_setup.php`, then fill them on the page). AVES typos
+  fixed in `data/aves.json`, with `palefire_exhibit_aves_typos.php` for the
+  live page: names such as "John Gould 1804-1881)", Vieillot's dates
+  (copied from Markgraf), spacing around hyphens and dashes, "from from".
+  Why: the title page didn't say when the exhibition was or that it was on
+  display, and the typos showed in the TOC.
 - **Exhibitions:** a full-screen gallery image now starts right under the
   breadcrumb bar instead of behind it; its caption shows only in the
   lightbox (still read as the figure's caption); the title page's cover

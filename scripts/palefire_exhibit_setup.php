@@ -18,7 +18,9 @@
  * - "exhibition" to field_modular_type, so a page can be set to it.
  * - On node.modular_page (title page, exhibition mode only):
  *   field_exhibit_subtitle, field_exhibit_cover (Media: Image),
- *   field_exhibit_credit, field_exhibit_prompt.
+ *   field_exhibit_credit, field_exhibit_prompt, and two optional tiles
+ *   under the credit: field_exhibit_year and field_exhibit_physical
+ *   (accompanied a physical exhibition; both added 2026-10-21).
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
@@ -219,6 +221,8 @@ $storage('node', 'field_exhibit_subtitle', 'string', ['max_length' => 255]);
 $storage('node', 'field_exhibit_cover', 'entity_reference', ['target_type' => 'media']);
 $storage('node', 'field_exhibit_credit', 'text_long');
 $storage('node', 'field_exhibit_prompt', 'string', ['max_length' => 255]);
+$storage('node', 'field_exhibit_year', 'integer');
+$storage('node', 'field_exhibit_physical', 'boolean');
 
 $storage('paragraph', 'field_exhibit_lead', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_values' => [
@@ -401,10 +405,21 @@ $field('node', $bundle, 'field_exhibit_subtitle', ['label' => 'Exhibition subtit
 $field('node', $bundle, 'field_exhibit_cover', $media_ref('Exhibition title image', 'Exhibition pages only: full-screen image behind the title page. Decorative.'));
 $field('node', $bundle, 'field_exhibit_credit', ['label' => 'Exhibition credit line', 'description' => 'Exhibition pages only: e.g. the collection and the funder.']);
 $field('node', $bundle, 'field_exhibit_prompt', ['label' => 'Exhibition prompt (optional)', 'description' => 'Exhibition pages only. Default: "Choose a gallery from the table of contents to begin."']);
+$field('node', $bundle, 'field_exhibit_year', [
+  'label' => 'Exhibition year (optional)',
+  'description' => 'Exhibition pages only: shown as a tile under the credit line on the title page, e.g. the year the exhibition opened.',
+  'settings' => ['min' => 1800, 'max' => 2200],
+]);
+$field('node', $bundle, 'field_exhibit_physical', [
+  'label' => 'Accompanied a physical exhibition',
+  'description' => 'Exhibition pages only: shows a treasure chest tile beside the year on the title page.',
+]);
 $form('node', $bundle, [
   'field_exhibit_subtitle' => $textfield(6),
   'field_exhibit_cover' => $media_widget + ['weight' => 7],
   'field_exhibit_credit' => $wysiwyg(8, 2),
+  'field_exhibit_year' => ['type' => 'number', 'weight' => 8],
+  'field_exhibit_physical' => ['type' => 'boolean_checkbox', 'weight' => 8, 'settings' => ['display_label' => TRUE]],
   'field_exhibit_prompt' => $textfield(9),
 ]);
 // The theme prints them in the title page (exhibition mode only).
@@ -413,7 +428,7 @@ foreach (['default', 'full'] as $mode) {
     continue;
   }
   $node_view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt'] as $name) {
+  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical'] as $name) {
     $node_view->removeComponent($name);
   }
   $node_view->save();
