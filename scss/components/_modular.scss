@@ -104,6 +104,16 @@ html {
   }
 }
 
+// Content images (e.g. a guide's Image Cover at the 480px "large" style)
+// shrink to their column so a 320px phone doesn't scroll sideways. Their
+// width/height attributes still reserve the box, so nothing shifts on load.
+// :where() keeps this at a bare img's specificity: any class-scoped image
+// rule (section backgrounds, person photos, tiles) still wins.
+:where(.pf-modular__content) img {
+  max-width: 100%;
+  height: auto;
+}
+
 // ---------------------------------------------------------------------
 // Sections
 // ---------------------------------------------------------------------

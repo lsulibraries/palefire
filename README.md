@@ -607,6 +607,22 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Guide images fit the column (2026-10-21)
+
+At 320px the Special Collections guide scrolled sideways: its Image Cover
+(the 480px "large" style) kept its full width and widened the page to 480px.
+Images in modular page content now shrink to their column
+(`max-width: 100%; height: auto`). Their width and height attributes stay,
+so the browser still reserves the right box and nothing shifts. The rule is
+wrapped in `:where()`, so section backgrounds, person photos and tiles keep
+their own sizing.
+
+Tested on the live guide page with the new CSS injected: the page width
+matched the viewport at 320, 768, 1024 and 1440px.
+
+Files: `scss/components/_modular.scss`, `css/style.css`. No config changes:
+`git pull` and `drush cr`.
+
 ### Quick Guide: fewer rules across, labels centred (2026-10-21)
 
 When the stops run across, the "or" divider now drops its hairline and only
