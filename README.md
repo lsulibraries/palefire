@@ -607,6 +607,19 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Fix: Louisiana Newspapers guide gave a blank 500 (2026-10-21)
+
+The guide page returned an empty 500 (a PHP fatal, not Drupal's error
+page) while other pages worked. The family trees were read by loading all
+637 newspaper records as full entities on every uncached render, the
+likely cause (memory). `_palefire_newspaper_trees()` in `palefire.theme`
+now reads title, tree link, parish and city with one database query
+(`_palefire_newspaper_trees_query()`, through the entity's table mapping,
+so the content type's machine name still isn't needed). If that query
+ever fails, the error is logged (channel "palefire") and the page renders
+without family trees instead of breaking. Theme file only: `git pull` and
+`drush cr`.
+
 ### "Louisiana Newspapers" guide with a parish map (2026-10-21)
 
 The Louisiana Newspapers LibGuide (guides.lib.lsu.edu/c.php?g=440633)

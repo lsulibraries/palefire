@@ -9,10 +9,12 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
@@ -1219,6 +1221,11 @@ const PALEFIRE_LA_PARISHES = [
  * theme doesn't need to know the content type's machine name. Their list
  * cache tags go on $cache, so a new or changed record shows at once.
  *
+ * Read with one database query, not by loading the records: loading all
+ * 637 as entities on an uncached render ran the guide out of memory (a
+ * blank 500, 2026-10-21). Anything unexpected (another storage, a renamed
+ * table) is logged and gives no trees rather than a broken page.
+ *
  * Returns rows sorted by title: title, url, parish (a PALEFIRE_LA_PARISHES
  * key, '' when the record's parish isn't one), city.
  */
@@ -1230,59 +1237,104 @@ function _palefire_newspaper_trees(CacheableMetadata $cache): array {
     return $rows;
   }
   $rows = [];
+  try {
+    $rows = _palefire_newspaper_trees_query($tags);
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('palefire')->error('Louisiana Newspapers guide: could not read the family trees: @message', ['@message' => $e->getMessage()]);
+  }
+  usort($rows, static fn (array $a, array $b): int => strnatcasecmp($a['title'], $b['title']));
+  $cache->addCacheTags($tags);
+  return $rows;
+}
+
+/**
+ * The family-tree rows, straight from the records' tables.
+ *
+ * For _palefire_newspaper_trees(). Adds each record type's list cache tags
+ * to $tags.
+ */
+function _palefire_newspaper_trees_query(array &$tags): array {
+  $rows = [];
   $entity_type_manager = \Drupal::entityTypeManager();
-  $repository = \Drupal::service('entity.repository');
+  $field_manager = \Drupal::service('entity_field.manager');
+  $database = \Drupal::database();
   // The records' keys shorten East/West ("e_baton_rouge"); compare them
   // without separators against the parish keys.
   $parishes = [];
   foreach (array_keys(PALEFIRE_LA_PARISHES) as $key) {
     $parishes[str_replace('_', '', $key)] = $key;
   }
-  foreach (\Drupal::service('entity_field.manager')->getFieldMap() as $entity_type_id => $fields) {
+  foreach ($field_manager->getFieldMap() as $entity_type_id => $fields) {
     if (!isset($fields['field_louisiana_parish'], $fields['field_record_url'])) {
       continue;
     }
-    $bundles = array_intersect($fields['field_louisiana_parish']['bundles'], $fields['field_record_url']['bundles']);
+    $bundles = array_values(array_intersect($fields['field_louisiana_parish']['bundles'], $fields['field_record_url']['bundles']));
     $type = $entity_type_manager->getDefinition($entity_type_id);
-    if (!$bundles || !$type->hasKey('label')) {
+    $storage = $entity_type_manager->getStorage($entity_type_id);
+    if (!$bundles || !$type->hasKey('label') || !$storage instanceof SqlEntityStorageInterface) {
       continue;
     }
     $tags = array_merge($tags, $type->getListCacheTags());
-    $storage = $entity_type_manager->getStorage($entity_type_id);
-    $query = $storage->getQuery()->accessCheck(TRUE);
+    $definitions = $field_manager->getFieldStorageDefinitions($entity_type_id);
+    $mapping = $storage->getTableMapping();
+    $table = $type->getDataTable() ?: $type->getBaseTable();
+    $id = $type->getKey('id');
+
+    $query = $database->select($table, 'e');
+    $query->addField('e', $type->getKey('label'), 'title');
     if ($type->hasKey('bundle')) {
-      $query->condition($type->getKey('bundle'), $bundles, 'IN');
+      $query->condition('e.' . $type->getKey('bundle'), $bundles, 'IN');
     }
     if ($type->hasKey('published')) {
-      $query->condition($type->getKey('published'), 1);
+      $query->condition('e.' . $type->getKey('published'), 1);
     }
-    foreach ($storage->loadMultiple($query->execute()) as $record) {
-      $record = $repository->getTranslationFromContext($record);
-      $link = $record->get('field_record_url');
-      if ($link->isEmpty()) {
+    if ($type->getDataTable() && $type->hasKey('default_langcode')) {
+      $query->condition('e.' . $type->getKey('default_langcode'), 1);
+    }
+    // One field value per record: delta 0 of the record's own language.
+    $join = function (string $field, string $property, string $alias, bool $required) use ($query, $mapping, $definitions, $id, $type): ?string {
+      $definition = $definitions[$field] ?? NULL;
+      if (!$definition) {
+        return NULL;
+      }
+      $on = "$alias.entity_id = e.$id AND $alias.deleted = 0 AND $alias.delta = 0";
+      if ($type->hasKey('langcode')) {
+        $on .= " AND $alias.langcode = e." . $type->getKey('langcode');
+      }
+      $required ? $query->join($mapping->getFieldTableName($field), $alias, $on) : $query->leftJoin($mapping->getFieldTableName($field), $alias, $on);
+      return $query->addField($alias, $mapping->getFieldColumnName($definition, $property), $alias);
+    };
+    $link = ($definitions['field_record_url'] ?? NULL)?->getType() === 'link';
+    $join('field_record_url', $link ? 'uri' : 'value', 'url', TRUE);
+    $join('field_louisiana_parish', 'value', 'parish', TRUE);
+    $city_column = $join('field_louisiana_city', 'value', 'city', FALSE);
+    // A list field stores a key ("baton_rouge"); show its label.
+    $cities = $city_column ? ($definitions['field_louisiana_city']->getSetting('allowed_values') ?: []) : [];
+
+    foreach ($query->execute() as $record) {
+      $url = trim((string) $record->url);
+      if ($url === '') {
         continue;
       }
-      $first = $link->first();
-      $url = $link->getFieldDefinition()->getType() === 'link' ? $first->getUrl()->toString() : trim((string) $first->value);
-      $parish = (string) $record->get('field_louisiana_parish')->value;
-      $parish = preg_replace(['/^e_/', '/^w_/'], ['east_', 'west_'], $parish);
-      $city = $record->hasField('field_louisiana_city') ? $record->get('field_louisiana_city') : NULL;
-      $city_name = '';
-      if ($city && !$city->isEmpty()) {
-        // A list field stores a key ("baton_rouge"); show its label.
-        $options = $city->getFieldDefinition()->getFieldStorageDefinition()->getSetting('allowed_values') ?: [];
-        $city_name = (string) ($options[$city->value] ?? $city->value);
+      if ($link) {
+        try {
+          $url = Url::fromUri($url)->toString();
+        }
+        catch (\Throwable $e) {
+          $url = preg_replace('/^internal:/', '', $url);
+        }
       }
+      $parish = preg_replace(['/^e_/', '/^w_/'], ['east_', 'west_'], (string) $record->parish);
+      $city = $city_column ? (string) $record->city : '';
       $rows[] = [
-        'title' => $record->label(),
+        'title' => (string) $record->title,
         'url' => $url,
         'parish' => $parishes[str_replace('_', '', $parish)] ?? '',
-        'city' => $city_name,
+        'city' => is_scalar($cities[$city] ?? NULL) ? (string) $cities[$city] : $city,
       ];
     }
   }
-  usort($rows, static fn (array $a, array $b): int => strnatcasecmp($a['title'], $b['title']));
-  $cache->addCacheTags($tags);
   return $rows;
 }
 
