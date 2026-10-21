@@ -5,6 +5,8 @@
  * guide mode. Built by PalefireHooks::preprocessPage():
  * - head.intro: field_intro (render array) or NULL
  * - head.owner: {name, url} or NULL (field_guide_owner)
+ * - head.editors: list of {name, url} (field_guide_editors), without the
+ *   owner; shown as "Edited by A, B and C"
  * - head.updated: {label, iso} (the node's changed time)
  * - head.published: {label, iso} (created time) or NULL when it is in the
  *   same month as the update
@@ -20,6 +22,14 @@
   <p class="pf-guide-head__meta">
     {% if head.owner %}
       <span>{{ 'Guide by'|t }} <a href="{{ head.owner.url }}">{{ head.owner.name }}</a></span>
+    {% endif %}
+    {% if head.editors %}
+      <span>{{ 'Edited by'|t }}
+        {%- for editor in head.editors %}
+          {{- loop.first ? ' ' : (loop.last ? ' ' ~ 'and'|t ~ ' ' : ', ') -}}
+          <a href="{{ editor.url }}">{{ editor.name }}</a>
+        {%- endfor -%}
+      </span>
     {% endif %}
     <span>{{ 'Updated'|t }} <strong><time datetime="{{ head.updated.iso }}">{{ head.updated.label }}</time></strong></span>
     {% if head.published %}

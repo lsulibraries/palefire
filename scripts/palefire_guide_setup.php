@@ -29,8 +29,8 @@
  *   field_guide_blocks), and the blocks it holds: guide_text,
  *   resource_list, guide_accordion (+ accordion_item), librarian_card,
  *   guide_video.
- * - On node.modular_page: field_guide_owner, field_guide_subjects,
- *   field_guide_source. guide_section is added to field_scroll_section's
+ * - On node.modular_page: field_guide_owner, field_guide_editors,
+ *   field_guide_subjects, field_guide_source. guide_section is added to field_scroll_section's
  *   allowed types.
  *
  * Safe to re-run: existing types, fields and display settings are kept.
@@ -557,6 +557,13 @@ if ($staff) {
     'description' => 'Shown as "Guide by" under the title on Guide pages.',
     'settings' => $node_ref([$staff]),
   ]);
+  // Added 2026-10-21. Re-running the script adds it to an existing site.
+  $storage('node', 'field_guide_editors', 'entity_reference', ['target_type' => 'node'], -1);
+  $field('node', $bundle, 'field_guide_editors', [
+    'label' => 'Guide editors',
+    'description' => 'Optional. Staff who also edit this guide, shown as "Edited by" after "Guide by". Add one or more.',
+    'settings' => $node_ref([$staff]),
+  ]);
 }
 if ($vocab) {
   $storage('node', 'field_guide_subjects', 'entity_reference', ['target_type' => 'taxonomy_term'], -1);
@@ -576,6 +583,7 @@ $field('node', $bundle, 'field_guide_source', [
 ]);
 $form('node', $bundle, array_filter([
   'field_guide_owner' => $staff ? $autocomplete + ['weight' => 3] : NULL,
+  'field_guide_editors' => $staff ? $autocomplete + ['weight' => 3] : NULL,
   'field_guide_subjects' => $vocab ? ['type' => 'entity_reference_autocomplete_tags', 'weight' => 4, 'settings' => ['match_operator' => 'CONTAINS', 'size' => 60, 'placeholder' => '']] : NULL,
   'field_guide_source' => ['type' => 'link_default', 'weight' => 5, 'settings' => ['placeholder_url' => 'https://guides.lib.lsu.edu/']],
 ]));
@@ -585,7 +593,7 @@ foreach (['default', 'full'] as $mode) {
     continue;
   }
   $node_view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (['field_guide_owner', 'field_guide_subjects', 'field_guide_source'] as $name) {
+  foreach (['field_guide_owner', 'field_guide_editors', 'field_guide_subjects', 'field_guide_source'] as $name) {
     $node_view->removeComponent($name);
   }
   $node_view->save();

@@ -323,7 +323,7 @@ class PalefireHooks {
   /**
    * Variables for includes/guide-head.html.twig on a guide-mode page.
    *
-   * @return array{intro: ?array, owner: ?array, updated: array, published: ?array, subjects: array, cache: array}
+   * @return array{intro: ?array, owner: ?array, editors: array, updated: array, published: ?array, subjects: array, cache: array}
    */
   private function guideHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -341,6 +341,25 @@ class PalefireHooks {
       if ($access->isAllowed()) {
         $person = $repository->getTranslationFromContext($person);
         $owner = ['name' => $person->label(), 'url' => $person->toUrl()->toString()];
+      }
+    }
+
+    // Guide editors (optional, any number): those the visitor can see, in
+    // the field's order, leaving out the owner if listed again.
+    $editors = [];
+    if ($node->hasField('field_guide_editors')) {
+      $owner_id = $node->hasField('field_guide_owner') ? (int) $node->get('field_guide_owner')->target_id : 0;
+      foreach ($node->get('field_guide_editors') as $item) {
+        $person = $item->entity;
+        if (!$person instanceof NodeInterface || (int) $person->id() === $owner_id || isset($editors[$person->id()])) {
+          continue;
+        }
+        $access = $person->access('view', NULL, TRUE);
+        $cache->addCacheableDependency($person)->addCacheableDependency($access);
+        if ($access->isAllowed()) {
+          $person = $repository->getTranslationFromContext($person);
+          $editors[$person->id()] = ['name' => $person->label(), 'url' => $person->toUrl()->toString()];
+        }
       }
     }
 
@@ -368,6 +387,7 @@ class PalefireHooks {
     return [
       'intro' => $intro,
       'owner' => $owner,
+      'editors' => array_values($editors),
       'updated' => [
         'label' => $formatter->format($changed, 'custom', 'M j, Y'),
         'iso' => date('c', $changed),

@@ -607,6 +607,31 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Guide editors (2026-10-21)
+
+Guide pages get an optional **Guide editors** field next to Guide owner:
+Staff who also edit the guide, any number. They show in the page head
+after "Guide by", as "Edited by A, B and C", each linking to their Staff
+page, in the field's order. The owner is left out if listed again, and a
+Staff page the visitor can't see is skipped. Why: guides are often kept
+up by more than one person, and only the owner was credited.
+
+Field: `field_guide_editors` on Modular page, an entity reference to the
+Staff type, unlimited, autocomplete widget, hidden from the node's view
+display (the theme prints it). `scripts/palefire_guide_setup.php` now adds
+it; re-running the script is safe and only adds what's missing. Or add it
+by hand in Structure > Content types > Modular page > Manage fields with
+those settings; the theme shows it either way, and nothing shows until it
+exists and is filled in.
+
+Files: `scripts/palefire_guide_setup.php`, `src/Hook/PalefireHooks.php`
+(`guideHead()`), `templates/includes/guide-head.html.twig`.
+
+```bash
+drush php:script themes/custom/palefire/scripts/palefire_guide_setup.php
+drush cr
+```
+
 ### Parish map: the list and the map light each other (2026-10-21)
 
 Pointing at a parish's name in the list (or tabbing to it) now lights that
@@ -3798,6 +3823,7 @@ hidden in the node's display):
 | `field_modular_type` | existing | `guide` turns on guide mode |
 | `field_intro` | existing | The lede under the `<h1>` |
 | `field_guide_owner` | Entity reference → Staff | "Guide by" link |
+| `field_guide_editors` | Entity reference → Staff, any number (optional) | "Edited by" links, after "Guide by" |
 | `field_guide_subjects` | Entity reference → Subjects terms | Subject tags |
 | `field_guide_source` | Link | The LibGuide it replaces (for redirects; not shown) |
 
