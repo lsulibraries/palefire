@@ -415,7 +415,7 @@
       setActive(entry);
       setActiveSub(entry.subs.find((s) => s.link === link) || null);
       const arrived = () => {
-        const heading = target && (target.matches('h2, h3') ? target : target.querySelector('h2'));
+        const heading = target && (target.matches('h1, h2, h3') ? target : target.querySelector('h2'));
         if (heading) {
           heading.focus({ preventScroll: true });
         }

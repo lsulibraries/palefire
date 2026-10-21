@@ -168,8 +168,11 @@
        strip already announces changes. #}
     {% set hero_hours = hero and visit.lid %}
     {% if hero_hours %}<div class="pf-landing__head">{% endif %}
+    {# Hero: the title is the TOC's "Landing" sub-link under Home, with the
+       Quick Guide's heading the second (modular-toc.js). The headings
+       themselves keep their own text and level. #}
     {% if page_title %}
-      <h1 class="pf-modular__title pf-landing__title">{{ page_title }}</h1>
+      <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>
     {% endif %}
     {% if hero_hours %}
         <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
@@ -326,7 +329,7 @@
              `fad fa-star-christmas`), inlined like the sign-in icon. #}
           <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
         </div>
-        <h2 class="pf-quick-guide__title" id="{{ quick_id }}">{{ 'Quick Guide'|t }}</h2>
+        <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ 'Quick guide'|t }}">{{ 'Quick Guide'|t }}</h2>
         <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate, so there are <strong>two ways</strong> to use one: see it in the Reading Room, or order a digital copy. Both start the same way, in the library catalog.'|t }}</p>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id } only %}
         {% if guide_url %}

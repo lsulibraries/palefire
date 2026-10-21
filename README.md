@@ -607,6 +607,23 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### TOC: "Landing" and "Quick guide" under Home (2026-10-20)
+
+On hero landings (`/v2/special`) the TOC's Home item now opens two
+sub-links, like Map and Events: "Landing" (the top of the lead) and "Quick
+guide". No new headings were added. The page's `<h1>` and the Quick
+Guide's `<h2>` opt in with `data-toc` and `data-toc-label`, so the TOC shows
+the short labels while screen readers keep the real headings and their
+order. A TOC jump now also moves focus to an `<h1>` target, as it already
+did for `<h2>` and `<h3>`. The sub-links highlight with scroll and don't
+add history entries, like the others.
+
+Tested on the live page with the attributes added to its HTML in-flight,
+at 1440x900.
+
+Files: `templates/includes/landing.html.twig`, `js/modular-toc.js`. No CSS
+rebuild or config changes: `git pull` and `drush cr`.
+
 ### Light swatches on landings; Quick Guide row labels (2026-10-20)
 
 Two things broke on the light reading swatches (Cream, Soft cream,
