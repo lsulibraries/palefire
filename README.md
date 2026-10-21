@@ -607,6 +607,24 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: boxed options and arrows (2026-10-21)
+
+On the landing's Quick Guide each option label ("A See it in person") now
+sits in a hairline box, so A, B and C read as choices. Where the label sits
+beside its stops (52rem of block width and up), the box runs the full
+height of its row and a gold arrow points from it to the first stop. The
+arrow draws out as the row scrolls in, and it stays still under reduced
+motion. The arrow is a CSS mask, so it needs no markup or icon font; it
+uses CanvasText in forced colours and flips in RTL. On narrow screens the
+box sits above the stops, with the letter still over the line. The full
+guide page is unchanged.
+
+Tested on the live landing with the new CSS injected, at 320, 768, 1024,
+1440 and 1920px: no sideways scroll.
+
+Files: `scss/components/_landing-features.scss`, `css/style.css`. No config
+changes: `git pull` and `drush cr`.
+
 ### Guide images fit the column (2026-10-21)
 
 At 320px the Special Collections guide scrolled sideways: its Image Cover
