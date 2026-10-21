@@ -105,6 +105,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves_update.php` | Brings the live AVES page up to `data/aves.json`: Capital Case names, "Main Library", the 16 images from `Section 4 (additions)`, catalogue lead captions (`-- images="<AVES exhibition 4K folder>"`). Keeps editors' own changes |
 | `palefire_exhibit_aves_typos.php` | Corrects 25 typos in the live AVES page (missing spaces and brackets in names, hyphen and dash spacing, Vieillot's dates, Weimar, Chubb), the same as in `data/aves.json`. Exact replacements only; lists any it can't find |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
+| `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
@@ -572,6 +573,34 @@ the biography, and old page links point at the new anchors. Images are the
 (the script lists them). Unused 4K plates and photographs are the galleries'
 decorative leads; change them in the editor.
 
+### Occult Science and Philosophy in the Renaissance
+
+`scripts/data/occult.json` holds the 2011 online exhibition (shown in Hill
+Memorial Library, January to March 2010) from the Wayback Machine's copy of
+exhibitions.blogs.lib.lsu.edu/?p=1257&all=1: Introduction, eight themed
+galleries with 21 entries (catalogue record, images, text), Index, About. The
+old Gallery page (thumbnails of the same images) is dropped. The students'
+copy at lib.lsu.edu/occult was not used: its text has encoding errors and
+its images are the same 1,000px files.
+
+- **Text** word for word, except: "Amboise" to "Ambroise" Paré, missing
+  spaces and line breaks in records and the Index, Felgenhauer filed under F
+  in the Index, and "Main Library" for Middleton (as on AVES). Index lines
+  link to their entries; Berthelot's drawings, which had no text, are the
+  Ancient Origins lead.
+- **New wording to check:** image captions, gallery lead captions, alt
+  text, the credit line and the physical exhibition note.
+- **To verify:** Defoe's record says Oxford: D. A. Talboys, 1840, but the
+  scan (and its folder, BF 1601 D3 1728) is the London, 1728 title page.
+- **Images** ("Occult Science 4K", 40 JPEGs, long edge at most 3,840px): the
+  2011 files were 1,000px crops. Where the hard drive has a master scan
+  (TIFFs, `old/extra scans`), the same framing was found in it and cut at
+  full resolution (20 images); the rest are the 1,000px files. Additions
+  from the drive: Bacon's portrait, Boyle's title page and five photographs
+  of the installation (About, Science or Sorcery? lead). Each gallery's
+  lead is one of its own images, credited; the cover is Francisci's
+  sunflower plate, as on the 2011 home page.
+
 ## Reading colours and Settings
 
 Settings > **Reading colours** sets page and text colours for the whole site.
@@ -685,6 +714,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** Occult Science and Philosophy in the Renaissance
+  (`palefire_exhibit_occult.php`, `data/occult.json`), built as an
+  unpublished exhibition from the 2011 online exhibition's text and the
+  hard drive's scans, 20 of them recut at full resolution. Why: the second
+  Hill Online Exhibition to move into exhibition mode; the students' copy
+  at /occult has broken text and 1,000px images.
 - **Exhibitions:** the physical exhibition tile takes a short note instead
   of a checkbox (`field_exhibit_physical_note`; re-run
   `palefire_exhibit_setup.php`), shown in a tooltip on hover, focus or tap.

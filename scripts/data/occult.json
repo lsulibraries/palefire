@@ -1,0 +1,755 @@
+{
+ "title": "Occult Science and Philosophy in the Renaissance",
+ "subtitle": "",
+ "credit": "<p>An exhibition drawn primarily from the Rare Book, McIlhenny, and Rhoades Collections of LSU Libraries Special Collections. Curated by Michael Taylor.</p>",
+ "cover": "francisci-sunflower-plate-796.jpg",
+ "year": 2010,
+ "physical_note": "Shown in Hill Memorial Library, January 24 to March 6, 2010, alongside Harry Potter’s World at the Main Library.",
+ "source": "http://exhibitions.blogs.lib.lsu.edu/?p=1257",
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "lead": "hall-grand-rosicrucian-formula.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>“Grand Rosicrucian Alchemical Formula.” Emblem from <em>Museum Hermeticum Reformatum et Amplificatum</em>, 1678. Reproduced in Manly P. Hall. <em>An Encyclopedic Outline of Masonic, Hermetic, Qabbalistic and Rosicrucian Symbolical Philosophy</em>. San Francisco: H. S. Crocker Co., 1928.</strong><br>LLMVC Acadia BF1411 .H3 1928 Oversize</p>",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Since the first book in the series was published in 1997, British author J.K. Rowling’s Harry Potter novels have captivated millions of readers young and old. Though a writer of fiction, Rowling explores many themes—alchemy and astrology, witchcraft and wizardry, magical creatures and the quest for eternal life—that are based on the activities of a colorful body of naturalists, physicians, and philosophers who lived in the fifteenth, sixteenth, and seventeenth centuries.</p>\n<p>The kind of knowledge these individuals pursued is referred to as “the occult,” a term derived from the Latin word <em>occultus</em>, meaning “hidden” or “obscure.” As opposed to modern empirical science, which requires that physical matter and natural phenomena be observed and measured, occult science holds that there is a hidden wisdom in the universe and a deeper, intangible truth that exists beneath the surface of our everyday lives.</p>\n<p>Occult science has received a mixed reception over the years. The secrecy associated with it has frequently resulted in misunderstanding and misinterpretation. Even in its heyday, its followers were often dismissed as quacks and charlatans. Some, labeled witches or heretics, paid for their beliefs with their lives. Yet despite opposition and skepticism, occultist beliefs attracted the attention of scientific giants such as Isaac Newton and Robert Boyle. Their impact on history, literature, popular culture, the arts, and—as the Harry Potter series has shown—our collective imagination has been profound and long-lasting. For that reason, if no other, they are worthy of study.</p>"
+    }
+   ]
+  },
+  {
+   "title": "Ancient Origins",
+   "anchor": "ancient-origins",
+   "lead": "berthelot-alchemical-drawings.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Alchemical drawings. From M. Berthelot, ed. <em>Collection des Anciens Alchimistes Grecs</em>. Paris: Georges Steinheil, 1888.</strong><br>Rare QD25 .B53 vol. 1</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Lactantius, Litera Pythagorae Y",
+     "anchor": "lactantius",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lactantius-litera-pythagorae.jpg",
+       "source": "lactantius-litera-pythagorae",
+       "caption": "<p>The Pythagorean “Y” and the poem on the two paths of life.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Lactantius. <em>Litera Pythagorae Y</em>. Leiden: Sebastian Gryphius, 1536.</strong><br>Rare B243 .L3</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The Greek philosopher Pythagoras (6th century B.C.) and his later disciples taught that human souls are divine entities that have become trapped in a cycle of birth, death, and reincarnation. To escape this cycle and return the spirit to its divine state, they believed, one must lead a pure and contemplative life, developing the mind rather than indulging one’s animal appetites. As a symbol of this path to spiritual perfection, Pythagoreans used the Greek letter “Y” (upsilon). The stem of the letter represents the first portion of life, before we have chosen a path of vice or virtue. At adolescence, a split occurs, as the poem printed on the left-hand side of this book explains. The path to the right, it asserts, is difficult but ultimately leads to spiritual enlightenment and immortal bliss. The path to the left, though easier, ends in ruin and death.</p>\n<p>The author of this pamphlet, the early Christian author Lactantius (ca. 240 – ca. 320), criticizes the Pythagoreans’ symbolic use of the letter “Y” for its implication that man is rewarded or punished for his actions during his life rather than after death, as Christian theology teaches. Nevertheless, in the Middle Ages and Renaissance, alchemists, among others, secretly incorporated the Pythagorean notion of the perfectibility of the soul into their own beliefs. Indeed, scholars have suggested that alchemy’s stated goal—the transmutation of common metals into gold by the discovery of the legendary Philosopher’s Stone—was really an allegory symbolizing alchemy’s real goal, the spiritual transformation of the alchemist himself and his ascension to a higher level of understanding by the discovery of hidden knowledge, either through contemplation (as Pythagoras had taught) or through the study of the natural world and its secrets. Not surprisingly, the letter “Y” is a common symbol in alchemical and other occult literature of the Renaissance.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Iamblichus, De Mysteriis Aegyptiorum",
+     "anchor": "iamblichus",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "iamblichus-de-mysteriis-title-page.jpg",
+       "source": "iamblichus-de-mysteriis-title-page",
+       "caption": "<p>Title page.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Iamblichus. <em>De Mysteriis Aegyptiorum</em>. Rome: Antonio Blado, 1556.</strong><br>Rare PA4220 .A7 D4 1556A</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The ancient Syrian philosopher Iamblichus (ca. 245 – ca. 325) was a follower of Neoplatonism. Like Pythagoreanism, this mystical school of thought held that all human souls were once united with a transcendent being or god known as The One, but have since become separated from it and embodied in physical matter. The goal of Neoplatonism was to figure out how to retrace the soul’s steps back to its divine origins and achieve unity once again.</p>\n<p>The earliest Neoplatonist philosophers believed that this could be accomplished through an act of the mind alone. Iamblichus, however, felt that meditation was effective for only a small minority. Most people, he believed, required something more sensual to help them “see the light” and ascend to a higher spiritual level. To achieve this, he practiced theurgy, or ritual magic, believing it would invoke the actions or presence of a god and unite human spirits with the divine.</p>\n<p>Iamblichus’s teacher, Porphyry, was skeptical of theurgy and criticized many of his student’s ideas. <em>De Mysteriis Aegyptiorum</em> (<em>On the Egyptian Mysteries</em>) is a response to these criticisms. Iamblichus’s beliefs and practices were embraced in the fourth century by the Roman Emperor Julian, who sought unsuccessfully to replace Christianity with a form of Neoplatonic paganism. Christians destroyed many of the philosopher’s works in later generations, but those that survived attracted attention from scholars and occultists in Europe in the fifteenth and sixteenth centuries when interest in Neoplatonist philosophy was revived.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Nature’s Secrets",
+   "anchor": "natures-secrets",
+   "lead": "porta-phytognomonica-p270.jpg",
+   "focus": "center",
+   "lead_caption": "<p>Roots, scorpions and crayfish: a page from Giambattista della Porta’s <em>Phytognomonica</em> (Rotterdam, 1650), p. 270.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Sir Francis Bacon, Sylva Sylvarum",
+     "anchor": "bacon",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "type": "figure",
+         "image": "bacon-sylva-sylvarum-frontispiece.jpg",
+         "source": "bacon-sylva-sylvarum-frontispiece",
+         "caption": "<p>Frontispiece.</p>",
+         "layout": "center"
+        },
+        {
+         "type": "figure",
+         "image": "bacon-sylva-sylvarum-portrait.jpg",
+         "source": "bacon-sylva-sylvarum-portrait",
+         "caption": "<p>Engraved portrait of the author.</p>",
+         "layout": "center"
+        }
+       ]
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Sir Francis Bacon. <em>Sylva Sylvarum: or, A Naturall History</em>. London: William Lee, 1651.</strong><br>Rhoades AES8463</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Bacon’s posthumously published <em>Sylva Sylvarum</em> is a collection of facts and experiments relating to natural history. It takes a different approach than we might expect, for from its beginning, Bacon announces his interest in occult knowledge. The work’s frontispiece, shown here along with an engraving of the author, differs sharply from the frontispiece of one of Bacon’s earlier works, <em>Advancement of Learning</em>. There, a ship was depicted sailing confidently into the ocean of knowledge. The frontispiece to <em>Sylva Sylvarum</em>, by contrast, reveals Bacon’s belief that a true understanding of the world relies not on physical exploration alone, but on “divine revelation” of knowledge.</p>\n<p>Bacon explores this idea in the final chapter of <em>Sylva Sylvarum</em>. There, he grapples with an intellectual heritage cultivated by the ancient Greeks, preserved by medieval writers like St. Thomas Aquinas, and revived by Renaissance humanists fascinated by alchemy and magic. Like Pythagoras, Bacon held that the world and all its contents are united by a shared spirit—the spiritus mundi. The world, in his view, was a single living organism. Changes in one individual part (animate or inanimate) might influence others elsewhere. Following this line of reasoning, by turning lead into gold, alchemists sought to transform a corresponding part of their own soul into something purer. Bacon goes further and considers the idea that the “force of imagination” in one individual could be used to magically influence the actions of others.</p>\n<p>Partly because of ideas such as these, some have theorized that Bacon was a member, and perhaps even the founder, of a secret society of mystics called the Order of the Rose Cross. For more on this organization, see <a href=\"#signs-and-symbols\">Signs and Symbols</a>.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Paul Felgenhauer, Jehi-Or",
+     "anchor": "felgenhauer",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "felgenhauer-jehi-or.jpg",
+       "source": "felgenhauer-jehi-or",
+       "caption": "<p>Opening page of the manuscript.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Paul Felgenhauer. <em>Jehi-Or</em>. English manuscript, 17th century.</strong><br>George De Forest Collection, 31: 26, vol. 46.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Knowledge, according to the manuscript displayed here, is threefold. It is “of the Naturall, in and of all things created; then of the Wisdome of Faith unto Salvation; and next of the mysterious hidden Wisdom, the which for the generall is not known.” “[T]he Word speaketh… out [of], in, and through all things,” the author suggests, “because it is in all things.” Thus, the study of the natural world was essentially the study of God. “[T]he signature of everything by the outward… telles plainly, what inwardly be hidden….” The text draws a parallel between baptism and the alchemist’s quest to transmute “inferior metall into pure gold.” However, it also warns seekers after occult wisdom to be careful, lest they enter into the realm of sorcery and witchcraft.</p>\n<p>The text’s author, Paul Felgenhauer (1593-ca. 1677), was a student of the great German mystic and theologian Jakob Böhme (1575-1624). Felgenhauer was persecuted by both Catholics and Protestants in his native Bohemia on account of his unorthodox religious views, which combined his interests in alchemy and prophecy. After wandering through Germany for many years, he finally sought refuge in Amsterdam and began publishing his works. Felgenhauer’s writings, along with those of Böhme, with whom he was often confused, attracted considerable attention in England, where their followers were known as Behmenists. The poet John Milton was well versed in their ideals. Behmenist philosophy also influenced two groups later associated with America—the Quakers and Shakers.</p>\n<p>The manuscript displayed here is a scribal copy of an English translation of <em>Das Büchlein Jehi Or</em>, printed in Holland in 1640. At least one other manuscript copy of <em>Jehi-Or</em> is known (British Museum, Sloane Ms. 728.), and others probably circulated in the seventeenth century. The text was revised and reprinted in 1673 in William Cooper’s <em>The Philosophical Epitaph of W. C., Esquire</em>, an anthology of metaphysical writings that contains the first bibliography of English-language works on chemistry.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Giambattista della Porta, Phytognomonica",
+     "anchor": "porta",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "porta-phytognomonica-p309.jpg",
+       "source": "porta-phytognomonica-p309",
+       "caption": "<p>Page 309.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Giambattista della Porta. <em>Phytognomonica</em>. Rotterdam: Joannes Berthelin, 1650.</strong><br>Rhoades AES9615</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>In 1560, the Neapolitan scientist and playwright Giambattista della Porta (1535-1615) helped found one of Europe’s earliest scientific societies, the Accademia Secretorum Naturae (Academy of the Mysteries of Nature). Members of the group, who termed themselves <em>otiosi</em> (men of leisure), were admitted after they had presented a new “fact” related to natural science. Most outsiders looked upon the academy with suspicion. The Catholic Inquisition in particular regarded it as an occultist organization and eventually forced it to disband. Between 1592 and 1598, the Church also prohibited the publication of della Porta’s works.</p>\n<p>It is not hard to see why della Porta came to the inquisitors’ attention. One of his most peculiar ideas, which he outlined in the book displayed here, was the Doctrine of Signatures. In an earlier treatise, della Porta had suggested that the bodily form of man contains indications of his character and spiritual qualities. Here, he goes one step further and suggests that the inner qualities and healing powers of plants are also revealed by external signs.</p>\n<p>As Agnes Robertson Arber writes in her book <em>Herbals: Their Origin and Evolution</em>, della Porta “supposed that long-lived plants would lengthen a man’s life, while short-lived plants would abbreviate it. He held that herbs with a yellow sap would cure jaundice. Plants with flowers shaped like butterflies would cure the bites of insects, while those whose roots or fruits had a jointed appearance, and thus remotely suggested a scorpion, must necessarily be sovereign remedies for the sting of that creature.”</p>\n<p>Della Porta, a student of astrology, also suggested that some plants take on the qualities of the astrological sign under which they are harvested. If you want to keep people from arguing with you, for example, he recommends carrying marigolds gathered when the sun was in the sign of Leo.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Johann Zahn, Specula Physico-Mathematico-Historica",
+     "anchor": "zahn",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "zahn-plate-after-236.jpg",
+       "source": "zahn-plate-after-236",
+       "caption": "<p>Plate after page 236.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Johann Zahn. <em>Specula Physico-Mathematico-Historica Notabilium ac Mirabilium Sciendorum</em>. Nuremberg: Johann Christoph Lochner, 1696.</strong><br>McIlhenny Q155 .Z3 Flat</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>If plants’ physical characteristics could reveal their healing powers, some also believed that the Almighty sometimes tries to communicate with mankind via botanical mediums. An example can be found in the engraving seen here, from a work by the German cleric and student of the occult Johann Zahn.</p>\n<p>One of the most interesting plants discovered in the New World in the sixteenth century was the passion flower. Descriptions of it caught the attention of religious thinkers in Europe because of its curiously shaped petals and reproductive organs, which were thought to bear a resemblance to Christ’s wounds and crown of thorns. Surely, church fathers thought, this was a sign from God that the Americas were meant to be conquered for Christ.</p>\n<p>Most of Zahn’s examples would be at home in a modern tabloid. In Spain, for instance, a vision of the crucifixion had supposedly appeared “perfectissime efformatus” (“perfectly depicted”) on a cabbage.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Alchemical Quest",
+   "anchor": "the-alchemical-quest",
+   "lead": "boyle-air-pump.jpg",
+   "focus": "top",
+   "lead_caption": "<p>Boyle’s air-pump and its apparatus. Folding plate from Robert Boyle, <em>New Experiments Physico-Mechanical</em> (Oxford, 1662).</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Geber, La Somme de la Perfection",
+     "anchor": "geber",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "type": "figure",
+         "image": "geber-somme-de-la-perfection.jpg",
+         "source": "geber-somme-de-la-perfection",
+         "caption": "<p>The opening of <em>La Somme de la Perfection</em>.</p>",
+         "layout": "center"
+        },
+        {
+         "type": "figure",
+         "image": "geber-bibliotheque-title-page.jpg",
+         "source": "geber-bibliotheque-title-page",
+         "caption": "<p>Title page of the <em>Bibliothèque des Philosophes</em>, Tome Second.</p>",
+         "layout": "center"
+        }
+       ]
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Geber [Jabir ibn Hayyan]. <em>La Somme de la Perfection, ou L’Abregé du Magistere Parfait,</em> in William Salmon, <em>Bibliothèque des Philosophes (Chymiques), Tome Second</em>. Paris: Charles Angot, 1678.</strong><br>Rare QD25 .A2 B4</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Many consider the Persian scientist and philosopher Geber (ca. 721 – ca. 815) to be the father of modern chemistry. He is credited with the invention of more than twenty types of basic chemical laboratory equipment that are still in use today, as well as with the discovery and description of many now-commonplace chemical substances and processes, including hydrochloric acid and distillation.</p>\n<p>Geber was also one of history’s most famous alchemists, and his works are filled with references to what we would now call magic rather than science. In his <em>The Book of Stones</em>, for example, Geber includes instructions for creating living creatures such as scorpions, snakes, and even humans in a laboratory—creatures which their creator is supposed to be able to control. To Aristotelian physics, which was based on the five classical elements of earth, air, fire, water and ether, Geber added four new properties: hotness, coldness, dryness, and moistness. He then theorized that by rearranging the qualities of one metal, a different metal would result. This theory may have originated the search for a magic elixir—known in Europe as the Philosopher’s Stone—that would make this transformation possible.</p>\n<p>In the Middle Ages, both in Europe and the Near East, alchemy was considered heretical. Religious authorities punished or put to death anyone who openly wrote on the subject. In his writings, therefore, Geber deliberately used mystical jargon that would have been difficult for anyone who had not been initiated into his teachings to understand. The incomprehensibility of his works on alchemy became so well known, in fact, that his name is thought to be the source of the English word “gibberish.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Robert Boyle, New Experiments Physico-Mechanical",
+     "anchor": "boyle",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "boyle-title-page.jpg",
+       "source": "boyle-title-page",
+       "caption": "<p>Title page.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Robert Boyle. <em>New Experiments Physico-Mechanical</em>. Oxford: Thomas Robinson, 1662.</strong><br>Rare QC161 .B79</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The Anglo-Irish scientist and philosopher Robert Boyle (1627-1691) ranks with Isaac Newton and Galileo Galilei as one of the leaders of the Scientific Revolution of the seventeenth century. Many consider him the first modern chemist, and his groundbreaking treatise on the air-pump (displayed here) marked the beginning of a new age in scientific experimentation.</p>\n<p>Few realize, however, that Boyle’s work was deeply rooted in alchemy. His famous dialogue <em>The Sceptical Chymist</em> (1661) has traditionally been viewed as an attack on quack doctors and alchemists. Yet in 2000, historian Lawrence Principe published a new book, <em>The Aspiring Adept: Robert Boyle and His Alchemical Quest</em>, in which he reconsiders Boyle’s views on alchemy.</p>\n<p>Principe reveals that Boyle was instrumental in obtaining the repeal, in 1689, of the statute of King Henry IV against using alchemy to multiply gold and silver. He radically reinterprets <em>The Sceptical Chymist</em> to show that it actually does not criticize alchemists, as has been thought. He then gives evidence of Boyle’s interest in alchemy in his lost “Dialogue on the Transmutation and Melioration of Metals,” and shows how his research was disguised at first by his own codes and secrecy. According to Principe, Boyle believed that the goal of his quest, the Philosopher’s Stone, could not only transmute base metals into gold, but could also attract angels. Alchemy could thus act both as a source of knowledge and as a defense against the growing tide of atheism that tormented Boyle, a devout Christian who, as a director of the East India Company, spent a great deal of money promoting the spread of Christianity in Asia.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Heinrich Khunrath, Amphitheatrum Sapientiae Aeternae",
+     "anchor": "khunrath",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "khunrath-alchemist-laboratory.jpg",
+       "source": "khunrath-alchemist-laboratory",
+       "caption": "<p>An alchemist in his laboratory.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>An alchemist in his laboratory. Engraving from Heinrich Khunrath, <em>Amphitheatrum Sapientiae Aeternae,</em> 1609. Reproduced in Ian Macphail, <em>Alchemy and the Occult</em>. New Haven: Yale University Library, 1968.</strong><br>Rare Z6880 .M3 vol. 1 Oversize</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Arthur Edward Waite, a historian of alchemy, considers this a key image. Though the room is filled with chemical instruments, the alchemist’s back is turned to them while he kneels in devotion. For Waite, this suggests that alchemy’s true goal was not literally to turn base metals into gold, but rather to transform the mind and spirit of the alchemist himself into something purer through religious contemplation and the study of nature. The alchemist engaged in an internal quest for wisdom and truth, in much the same way as the knights of the Arthurian legend had done.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Science or Sorcery?",
+   "anchor": "science-or-sorcery",
+   "lead": "installation-glanvill.jpg",
+   "focus": "center",
+   "lead_caption": "<p>Glanvill’s <em>Sadducismus Triumphatus</em> on display in Hill Memorial Library, 2010.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Daniel Defoe, A System of Magick",
+     "anchor": "defoe",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "defoe-system-of-magick.jpg",
+       "source": "defoe-system-of-magick",
+       "caption": "<p>Title page.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Daniel Defoe. <em>A System of Magick; or, A History of the Black Art</em>. Oxford: D. A. Talboys, 1840.</strong><br>Rare BF1601 .D3 1840</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Originally published in 1728, Defoe’s <em>System of Magick</em> is one of the first books to deal with sorcery and the supernatural in a purely historical context. Defoe, best known today as the author of the classic adventure novel <em>Robinson Crusoe</em>, includes many entertaining anecdotes in this work, but his overall approach to the history of magic is skeptical, reflecting the new scientific thought of his time.</p>\n<p>As one of his biographers has written, Defoe “depicted the prophets of the past as the equivalent of contemporary scientists—Newton, Halley, and Whiston—and suggested that those who possessed some knowledge of science often had to disguise it under a form of magic that would please the ignorant.” Conversely, medieval witches, Defoe suggests, were probably just frauds and swindlers who used a basic knowledge of chemistry to trick people into believing they had supernatural powers.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Joseph Glanvill, Sadducismus Triumphatus",
+     "anchor": "glanvill",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "glanvill-sadducismus-triumphatus.jpg",
+       "source": "glanvill-sadducismus-triumphatus",
+       "caption": "<p>Frontispiece and title page.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Joseph Glanvill. <em>Sadducismus Triumphatus: Or, A Full and Plain Evidence Concerning Witches and Apparitions</em>. London: A. Bettesworth, 1726.</strong><br>Rare BF1581 .A2 G53 1726</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Though a proponent of the new scientific method that was being developed in his lifetime, the English Puritan clergyman Joseph Glanvill (1636-1680) held that full knowledge of the universe cannot be deduced by reason alone. Whereas skeptical scientists largely dismissed the idea of witchcraft and sorcery, Glanvill asserted the reality of a supernatural world filled with evil spirits—a world, he believed, some humans had figured out how to interact with.</p>\n<p>Despite famous cases such as the Salem witch trials of 1692-93, belief in the power of witches was fading in the late seventeenth century. Glanvill, however, thought that the tide of skepticism could be turned back if the existence of spirits could be scientifically proven. This book, a compendium of case histories relating to witchcraft and other supernatural phenomena, is Glanvill’s attempt to provide such proof. First published in 1681, <em>Sadducismus Triumphatus</em> (“The Sadducee Triumphant”) takes its title from the Jewish sect which, around the time of Jesus, was said to have denied the immortality of the soul. This is a reference to the skepticism of modern scientists, philosophers, and other writers such as Daniel Defoe.</p>\n<p>Dismissed by some as folklore rather than science, Glanvill’s work nevertheless strongly influenced the American Puritan minister Cotton Mather, whose <em>Wonders of the Invisible World</em> (1693) was written to justify the Salem witch trials.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Written in the Stars",
+   "anchor": "written-in-the-stars",
+   "lead": "lilly-monarchy-p13.jpg",
+   "focus": "top",
+   "lead_caption": "<p>One of William Lilly’s nineteen “hierogliphicks,” from <em>Monarchy or No Monarchy in England</em> (London, 1651), p. 13.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "William Lilly, Monarchy or No Monarchy in England",
+     "anchor": "lilly",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lilly-monarchy-hieroglyphic.jpg",
+       "source": "lilly-monarchy-hieroglyphic",
+       "caption": "<p>Another of Lilly’s “hierogliphicks.”</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>William Lilly. <em>Monarchy or No Monarchy in England</em>. London: Humfrey Blunden, 1651.</strong><br>Rare BF1812 .E6 L7</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Astrology is the “science” of explaining human personalities and predicting future events based on the positions of celestial bodies. The foremost practitioner of astrology in seventeenth-century England was William Lilly (1602-1681). Known as “the English Merlin” to his friends and “that juggling Wizard and Imposter” to his enemies, Lilly devoted himself fulltime to various occultist activities after inheriting a large sum of money in 1633. By the time of the English Civil War in the 1640s, he was focusing solely on astrology.</p>\n<p>Lilly accurately predicted many of the outcomes of this war. In 1651, he published the book displayed here, <em>Monarchy or No Monarchy in England</em>. In it, he claims to have foretold the execution of King Charles I, which had occurred two years earlier. He also predicted that London would one day be destroyed by fire. When the Great Fire of London actually occurred in 1666—fifteen years after this book was published—some thought Lilly must have set the fire himself. Though a parliamentary committee acquitted him of any wrongdoing, the startling accuracy of Lilly’s predictions added credence in many people’s minds to the practice of astrology.</p>\n<p>The images seen here are among nineteen “hierogliphicks” that Lilly designed to depict his prophecies. The reason for using images rather than text, he explains, is that it would have been too dangerous in the highly charged political environment of mid-seventeenth-century England to publish a more detailed explanation of his predictions. Like alchemists, Lilly seems to have recognized that deliberate ambiguity provided a level of protection from those who might have disapproved of his ideas.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Marcus Manilius, Astronomicon",
+     "anchor": "manilius",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "type": "figure",
+         "image": "manilius-title-page.jpg",
+         "source": "manilius-title-page",
+         "caption": "<p>Title page.</p>",
+         "layout": "center"
+        },
+        {
+         "type": "figure",
+         "image": "manilius-houses.jpg",
+         "source": "manilius-houses",
+         "caption": "<p>Scaliger’s diagram of the astrological houses, p. 273.</p>",
+         "layout": "center"
+        }
+       ]
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Marcus Manilius. <em>Astronomicon</em>. Leiden: Ex Officina Plantiniana, 1600.</strong><br>Rare 878 M314AZS</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The Roman poet Marcus Manilius lived in the first century A.D. His only known work, the <em>Astronomicon</em>, is a long didactic poem on the subject of astrology. In it, he combines Roman Stoic philosophy with reflections on the cosmos, asserting that our lives and fates are totally controlled by the stars. “Set your minds free, mortals, and lighten your cares,” he writes, “empty your life of superfluous complaints. The fates rule the world… Our death is in our birth, our end is in our beginning.”</p>\n<p>The Renaissance humanist Poggio Bracciolini discovered a manuscript of the <em>Astronomicon</em> in 1417. It was edited by the German astronomer Regiomontanus and printed in 1473. In the late sixteenth century, the French Protestant scholar Joseph Justus Scaliger prepared another edition, seen here. Scaliger supplied a lengthy commentary on the poem, as well as diagrams of astrological “houses,” which Manilius explained at length.</p>\n<p>Houses are divisions of the horoscope, a chart of the positions of the celestial bodies at the time of a specific event. Astrologers use them to help record and interpret the positions of the sun, moon, and planets, and thereby make their predictions. William Lilly included several such charts in <em>Monarchy or No Monarchy in England</em>. Their purpose was to show that “the heavens” had preordained events such as the beginning of the English Civil War and the execution of King Charles I.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Sixth Sense",
+   "anchor": "the-sixth-sense",
+   "lead": "vallemont-physique-occulte.jpg",
+   "focus": "center",
+   "lead_caption": "<p>Frontispiece and title page of Pierre Le Lorrain, Abbé de Vallemont, <em>La Physique Occulte, ou Traité de la Baguette Divinatoire</em> (Amsterdam, 1693).</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Abbé de Vallemont, La Physique Occulte",
+     "anchor": "vallemont",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "vallemont-dowser.jpg",
+       "source": "vallemont-dowser",
+       "caption": "<p>A dowser with his rod.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Pierre Le Lorrain, Abbé de Vallemont. <em>La Physique Occulte, ou Traité de la Baguette Divinatoire</em>. Amsterdam: Adrian Braakman, 1693.</strong><br>Rare BF1628 .V2 1693 Mini</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Dowsing, sometimes called divining or water witching, is the art of finding underground water, metals, or gems by the use of a forked twig or metal rod called a divining rod. The forks of the rod are carried in the dowser’s hands. As he or she nears the materials being searched for—so it is claimed—the rod will start to move of its own accord. Explanations of this phenomenon vary. One suggestion is that the rod’s reaction is triggered not by water or metal, but by a “sixth sense” in dowsers themselves, which causes the muscles in their hands to react. The dowsing rod, according to this explanation, is simply a conduit for the dowsers’ subconscious knowledge or perception.</p>\n<p>Though the practice of dowsing dates back to ancient times, modern dowsing techniques were developed in the Renaissance. At that time, many associated dowsing with the occult. Martin Luther even considered it a violation of the first commandment (“I am the Lord your God… You shall have no gods other than me.”) Nevertheless, dowsing flourished in Germany and England in the fifteenth and sixteenth centuries. In France, its heyday came in the seventeenth century. There, the Baron and Baroness de Beausoleil used dowsing to establish a thriving mineral company. Their luck ran out, however, when they were accused of having made a pact with the devil. At Cardinal Richelieu’s orders they were charged with sorcery and imprisoned for the rest of their lives.</p>\n<p>By the time the book displayed here, a treatise on the history and use of the divining rod, was published, witchcraft had come to be regarded more as a quaint relic of the past than as a real threat. The book’s author, the Abbé de Vallemont, was a professor of physics at the University of Paris. After examining dowsing’s usefulness for finding buried mineral resources, Vallemont makes the intriguing claim that divining rods can also be used to locate fugitive criminals. As proof of this, he tells an anecdote about how a dowser helped police in the French city of Lyons find the murderers of a wine merchant and his wife who were axed to death in their cellar.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Juan Eusebio Nieremberg, Curiosa y Oculta Filosofia",
+     "anchor": "nieremberg",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "type": "figure",
+         "image": "nieremberg-curiosa-title-page.jpg",
+         "source": "nieremberg-curiosa-title-page",
+         "caption": "<p>Title page.</p>",
+         "layout": "center"
+        },
+        {
+         "type": "figure",
+         "image": "nieremberg-curiosa-p87.jpg",
+         "source": "nieremberg-curiosa-p87",
+         "caption": "<p>“De la verdad de los monstros fabulosos,” p. 87.</p>",
+         "layout": "center"
+        }
+       ]
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Juan Eusebio Nieremberg. <em>Curiosa y Oculta Filosofia</em>. Alcala: Maria Fernandez, 1649.</strong><br>Rhoades AES9671</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Born in Spain of German parents, the Jesuit writer and natural philosopher Juan Eusebio Nieremberg (1595-1658) was one of the most well known writers on mysticism during the golden age of Spanish literature. In addition to a work on natural history in which he proposed that the abundance of snakes in the Americas was a sign of Satan’s dominance over the New World, he also wrote the book displayed here—<em>Curious and Hidden Philosophy</em>.</p>\n<p>Nieremberg expounds on the mystical significance of various natural phenomena, including stars, comets, and volcanoes. In one of his chapters on monsters, he tells the story of a fabled race of red-eyed people believed to have lived in the mountains of northern Spain. The Zahuris, as these people were called, supposedly had supernatural powers that enabled them, like dowsers, to see streams of water and veins of metal hidden in the earth. They could also detect the whereabouts of buried treasure and the bodies of murdered persons.</p>\n<p>“Explanations were offered on natural lines,” one historian has written. “It was said that these men knew where water was to be found by the vapors arising at such spots, and that they were able to trace mines of gold, silver, and copper by the particular herbs growing in their neighborhood. But to the Spaniards, such explanations were unsatisfactory; they persisted in believing that the Zahuris were gifted with supernatural faculties, that they were in rapport with demons, and that, if they wished, they could, without any physical aid, read thoughts and discover secrets that were as a sealed book to the grosser senses of ordinary mortals.”</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Fabled Creatures",
+   "anchor": "fabled-creatures",
+   "lead": "zahn-plate-after-326.jpg",
+   "focus": "top",
+   "lead_caption": "<p>Beasts of distant lands, among them a unicorn. Plate after p. 326 of Johann Zahn, <em>Specula Physico-Mathematico-Historica</em> (Nuremberg, 1696).</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Johann Zahn, Specula Physico-Mathematico-Historica",
+     "anchor": "zahn-creatures",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "zahn-plate-after-68.jpg",
+       "source": "zahn-plate-after-68",
+       "caption": "<p>Plate after page 68.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Johann Zahn. <em>Specula Physico-Mathematico-Historica Notabilium ac Mirabilium Sciendorum</em>. Nuremberg: Johann Christoph Lochner, 1696.</strong><br>McIlhenny Q155 .Z3 Flat</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Johann Zahn, a seventeenth-century German cleric best known for his experiments with optics, believed that demons were an active force in the world and could inhabit or influence plants and animals. In the mammoth cabinet of historical and scientific curiosities shown here, he cites numerous examples of demonic forces at work in nature, such as the case of Slovenian dormice who, according to Zahn, met with the devil underground and bore his signatures on their ears.</p>\n<p>Zahn also included illustrations of giant snakes, a unicorn, and more than a dozen quasi-human figures with wings, snouts, tails, claws, and double heads. A chronology, beginning in the year 123 and ending in 1692, lists dozens of examples of “monstrous” births. Although clearly cases of severe birth defects, it is easy to imagine how reports of such cases were exaggerated in the retelling.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Konrad Gesner, Historiae Animalium",
+     "anchor": "gesner",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "gesner-unicorn.jpg",
+       "source": "gesner-unicorn",
+       "caption": "<p>The unicorn, p. 781.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Konrad Gesner. <em>Historiae Animalium, Lib. I de Quadrupedibus</em>. Zurich: Christoph Froschauer, 1551.</strong><br>McIlhenny QL41 .G37 vol. 1 Flat</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Konrad Gesner (1516-1565) was a Swiss naturalist and bibliographer. His encyclopedic work <em>Historiae Animalium</em> (<em>Histories of Animals</em>) is considered the first work of modern zoology. Gesner was a forward-looking scientist who based many of his observations on dissections and detailed reports from travelers. On the whole, he made a conscious effort to distinguish fact from fiction.</p>\n<p>That said, <em>Historiae Animalium</em> includes a great deal of folklore, and we find references to mythical creatures throughout the book. In his chapter on reptiles, for example, Gesner wrote about the medicinal value of dragon fat, which was said to be a sure remedy for ulcers. Unicorn horn was believed to be an antidote for poisons, and many apothecaries in Gesner’s day claimed to stock it. Like the influential French surgeon Ambroise Paré, Gesner was skeptical about the unicorn’s existence. “Stories about the medicinal values of a unicorn’s horn,” he wrote, “may have originated from similar Asian beliefs about the rhinoceros horn.” No amount of skepticism, however, could dissuade Gesner from including a woodcut of the fabled animal in his volume on quadrupeds, displayed here.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Ambroise Paré, Des Monstres, Des Prodiges, Des Voyages",
+     "anchor": "pare",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "type": "figure",
+         "image": "pare-monster.jpg",
+         "source": "pare-monster",
+         "caption": "<p>“Figure d’un animal fort monstrueux.”</p>",
+         "layout": "center"
+        },
+        {
+         "type": "figure",
+         "image": "pare-dragons.jpg",
+         "source": "pare-dragons",
+         "caption": "<p>Winged and sea dragons.</p>",
+         "layout": "center"
+        }
+       ]
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Woodcuts from Ambroise Paré. <em>Des Monstres, Des Prodiges, Des Voyages</em>. Paris: Livre Club du Libraire, 1964.</strong><br>Rare Laughlin QM690 .P37 1964</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The French surgeon Ambroise Paré (ca. 1510-1590) is credited with the invention of many modern surgical procedures. Yet despite his forward thinking, Paré, like his Swiss contemporary Konrad Gesner, was not entirely free of the superstitious beliefs of his time. In this work on monsters and “freaks of nature,” for example, he discusses the medicinal values of mythical creatures such as mermaids, unicorns, dragons and various types of sea serpents.</p>\n<p>As funny as Paré’s treatment methods may seem to modern audiences, the “medicine” practiced at this time often cost patients their lives. In 1565, Paré experimented with the curative properties of bezoar stones (a scientific name for hairballs). At the time, bezoar was believed to be an antidote to poison. Paré was unconvinced, but to test the theory, he found a cook who had been sentenced to death for stealing silver cutlery. The thief, realizing he had nothing to lose, agreed to let Paré poison him and then see whether he could be cured using bezoar. If he survived, he would be allowed to go free. The stone, of course, didn’t work, and the cook died.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "John Jonston, Beschrijving van de Natuur der Viervoetige Dieren",
+     "anchor": "jonston",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "jonston-dragons.jpg",
+       "source": "jonston-dragons",
+       "caption": "<p>Dragons, Tab. XII.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>John Jonston. <em>Beschrijving van de Natuur der Viervoetige Dieren</em>. Amsterdam: J. J. Schipper, 1660.</strong><br>Rhoades uncataloged</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>John Jonston (1603-1675) was a Polish scholar born to a family of Scottish origin. He spent most of his life in Poland, working as an academician and private tutor. Though he traveled widely throughout Europe, Jonston repeatedly turned down offers of professorships at major universities. Instead, he chose to live a private life on his country estate in southwest Poland.</p>\n<p>One of Jonston’s works, <em>Historia Naturalis</em> (<em>Natural History</em>), was translated into many languages. The engraving shown here has been reproduced from a Dutch edition. To an even greater extent than Konrad Gesner’s encyclopedia, Jonston’s includes full-page illustrations of mythical animals, including dragons, basilisks, sea serpents, the “many-headed hydra,” and several species of unicorn.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Signs and Symbols",
+   "anchor": "signs-and-symbols",
+   "lead": "broutin-commission.jpg",
+   "focus": "center",
+   "lead_caption": "<p>Narcissus Broutin’s commission as a notary public for New Orleans, signed by Governor William C. C. Claiborne, 1808.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Manly P. Hall, An Encyclopedic Outline",
+     "anchor": "hall",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "hall-pelican.jpg",
+       "source": "hall-pelican",
+       "caption": "<p>The pelican under the rosy cross.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Manly P. Hall. <em>An Encyclopedic Outline of Masonic, Hermetic, Qabbalistic and Rosicrucian Symbolical Philosophy</em>. San Francisco: H. S. Crocker Co., 1928.</strong><br>LLMVC Acadia BF1411 .H3 1928 Oversize</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The Order of the Rose Cross was one of the most famous secret societies of the Renaissance. According to legend, it was founded in the fifteenth century by a German mystic named Christian Rosenkreuz (whose name, in English, means “rose cross”). Rosenkreuz is said to have made a pilgrimage to the Middle East, where he studied mystical philosophy (possibly Sufism or Zoroastrianism). Upon returning to Europe, he founded a secret society to preserve ancient esoteric wisdom for those few who were able to appreciate and understand it.</p>\n<p>Christian Rosenkreuz is now generally regarded to have been an allegorical rather than a real historical figure. Most scholars believe Rosicrucianism dates to the period of the Thirty Years’ War in the early seventeenth century, when many thought the Day of Judgment was near. Some regard the Swiss alchemist Paracelsus as the order’s founder. Others have suggested that the name Rosenkreuz was a pseudonym of Sir Francis Bacon.</p>\n<p>Alchemy was central to Rosicrucian beliefs. One of the most common alchemical symbols was the pelican. As Manly Hall explains, “The pelican feeding its young from a self-inflicted wound in its own breast is accepted as an appropriate symbol of both sacrifice and resurrection. To the Christian mystic, the pelican signifies Christ, who saved humanity (the baby birds) through the sacrifice of His own blood.” To Rosicrucians, the pelican represented “one of the vessels in which the experiments of alchemy are performed and its blood that mysterious tincture [the Philosopher’s Stone] by which the base metals (the seven baby birds) are transmuted into spiritual gold.” The pelican was often shown under a “rosy cross” or “rose croix,” as seen here. Together, the pelican and the rose symbolize human and divine affection. The mother bird represents the love of the Creator, while the rose, a rearrangement of the letters of the Greek word eros (love), represents humans’ love for each other.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Narcissus Broutin Commission, 1808",
+     "anchor": "broutin",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "territory-of-orleans-seal.jpg",
+       "source": "territory-of-orleans-seal",
+       "caption": "<p>The eagle on the seal of the Territory of Orleans, as on the commission.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>Narcissus Broutin Commission, 1808.</strong><br>Misc. B.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The image of the pelican is a familiar one in Louisiana. In addition to decorating the state capitol, pelicans are found on the state flag, on the official state seal, and even on the LSU seal. Few people are aware, however, of the pelican’s symbolic significance and its roots in Renaissance occult philosophy.</p>\n<p>When Louisiana became a U.S. territory in 1803, Governor William C. C. Claiborne chose an eagle for his official seal, seen here on a commission dated 1808. When the territory became a state in 1812, the eagle was dropped in favor of a pelican, “which had the reputation of tearing its breast to feed its young” and thus symbolized the state’s obligation to take care of its citizens.</p>\n<p>The fact that the pelican was a religious symbol that was acceptable to both Catholics and Protestants may have been another reason for choosing it to represent Louisiana, which had one of the largest Catholic populations of any state. Whether early legislators were aware of the pelican’s connections to alchemy is not known, but we do know that Governor Claiborne, among other founders of Louisiana, was a Freemason. This secret society, which dates back to at least the fifteenth century, incorporated many of the tenets of Rosicrucianism. (Note the pair of compasses, a Masonic symbol, in the illustration in Manly Hall’s book.)</p>\n<p>“In Masonic symbolism,” Hall writes, “the blood of the pelican stands for the Secret Work by which man is raised from the slavery of ignorance to the condition of freedom conferred by wisdom.” As an emblem of LSU, therefore, the pelican is also appropriate.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Erasmus Francisci, Lust- und Stats-Garten",
+     "anchor": "francisci",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "francisci-sunflower-plate-796.jpg",
+       "source": "francisci-sunflower-plate-796",
+       "caption": "<p>The sunflower, plate 796.</p>",
+       "layout": "side_start"
+      },
+      {
+       "type": "citation",
+       "body": "<p><strong>The Sunflower. Engraving from Erasmus Francisci, <em>Ost- und West-Indischer wie auch Sinesischer Lust- und Stats-Garten</em>. Nuremberg: J.A. Endters, 1668.</strong><br>Rare G480 .F7 Flat</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Manly Hall writes that the esoteric emblem shown here “represents a curious experiment in plant magnetism. Several plants were sacred to the ancient Egyptians, Greeks, and Hindus because of the peculiar effect which the sun exerted over them. As it is difficult for man to look upon the face of the sun without being blinded by the light, those plants which turned and deliberately faced the solar orb were considered typical of very highly advanced souls. Since the sun was regarded as the personification of the Supreme Deity, those forms of life over which it exercised marked influence were venerated as being sacred to divinity. The sunflower, because of its plainly perceptible affinity for the sun, was given high rank among sacred plants.”</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Index",
+   "anchor": "index",
+   "lead": null,
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Bacon, Francis (1561-1626). <em>Sylva Sylvarum: or, A Naturall History</em>. London: William Lee, 1651. See <a href=\"#bacon\">Nature’s Secrets</a>.</p>\n<p>Berthelot, M., ed. <em>Collection des Anciens Alchimistes Grecs</em>. Paris: Georges Steinheil, 1888. See <a href=\"#ancient-origins\">Ancient Origins</a>.</p>\n<p>Boyle, Robert (1627-1691). <em>New Experiments Physico-Mechanical</em>. Oxford: Thomas Robinson, 1662. See <a href=\"#boyle\">The Alchemical Quest</a>.</p>\n<p>Broutin, Narcissus (d. 1819). Commission, 1808. See <a href=\"#broutin\">Signs and Symbols</a>.</p>\n<p>Defoe, Daniel (ca. 1660-1731). <em>A System of Magick; or, A History of the Black Art</em>. Oxford: D. A. Talboys, 1840. See <a href=\"#defoe\">Science or Sorcery?</a></p>\n<p>della Porta, Giambattista (ca. 1535-1615). <em>Phytognomonica</em>. Rotterdam: Joannes Berthelin, 1650. See <a href=\"#porta\">Nature’s Secrets</a>.</p>\n<p>Felgenhauer, Paul (1593-ca. 1677). <em>Jehi-Or</em>. English manuscript, 17th century. See <a href=\"#felgenhauer\">Nature’s Secrets</a>.</p>\n<p>Francisci, Erasmus (1627-1694). <em>Ost- und West-Indischer wie auch Sinesischer Lust- und Stats-Garten</em>. Nuremberg: J.A. Endters, 1668. See <a href=\"#francisci\">Signs and Symbols</a>.</p>\n<p>Geber [Jabir ibn Hayyan] (ca. 721-ca. 815). <em>La Somme de la Perfection, ou L’Abregé du Magistere Parfait,</em> in William Salmon, <em>Bibliothèque des Philosophes (Chymiques)</em>, Tome Second. Paris: Charles Angot, 1678. See <a href=\"#geber\">The Alchemical Quest</a>.</p>\n<p>Gesner, Konrad (1516-1565). <em>Historiae Animalium, Lib. I de Quadrupedibus</em>. Zurich: Christoph Froschauer, 1551. See <a href=\"#gesner\">Fabled Creatures</a>.</p>\n<p>Glanvill, Joseph (1636-1680). <em>Sadducismus Triumphatus: Or, A Full and Plain Evidence Concerning Witches and Apparitions</em>. London: A. Bettesworth, 1726. See <a href=\"#glanvill\">Science or Sorcery?</a></p>\n<p>Hall, Manly P. (1901-1990). <em>An Encyclopedic Outline of Masonic, Hermetic, Qabbalistic and Rosicrucian Symbolical Philosophy</em>. San Francisco: H. S. Crocker Co., 1928. See <a href=\"#hall\">Signs and Symbols</a>.</p>\n<p>Iamblichus (ca. 250-ca. 325). <em>De Mysteriis Aegyptiorum</em>. Rome: Antonio Blado, 1556. See <a href=\"#iamblichus\">Ancient Origins</a>.</p>\n<p>Jonston, John (1603-1675). <em>Beschrijving van de Natuur der Viervoetige Dieren</em>. Amsterdam: J. J. Schipper, 1660. See <a href=\"#jonston\">Fabled Creatures</a>.</p>\n<p>Khunrath, Heinrich (ca. 1560-1605). <em>Amphitheatrum Sapientiae Aeternae,</em> 1609. Reproduced in Ian Macphail. <em>Alchemy and the Occult</em>. New Haven: Yale University Library, 1968. See <a href=\"#khunrath\">The Alchemical Quest</a>.</p>\n<p>Lactantius (ca. 240 – ca. 320). <em>Litera Pythagorae Y</em>. Leiden: Sebastian Gryphius, 1536. See <a href=\"#lactantius\">Ancient Origins</a>.</p>\n<p>Lilly, William (1602-1681). <em>Monarchy or No Monarchy in England</em>. London: Humfrey Blunden, 1651. See <a href=\"#lilly\">Written in the Stars</a>.</p>\n<p>Manilius, Marcus (1st century A.D.). <em>Astronomicon</em>. Leiden: Ex Officina Plantiniana, 1600. See <a href=\"#manilius\">Written in the Stars</a>.</p>\n<p>Nieremberg, Juan Eusebio (1595-1658). <em>Curiosa y Oculta Filosofia</em>. Alcala: Maria Fernandez, 1649. See <a href=\"#nieremberg\">The Sixth Sense</a>.</p>\n<p>Paré, Ambroise (ca. 1510-1590). <em>Des Monstres, Des Prodiges, Des Voyages</em>. Paris: Livre Club du Libraire, 1964. See <a href=\"#pare\">Fabled Creatures</a>.</p>\n<p>Vallemont, Pierre Le Lorrain, Abbé de (1649-1721). <em>La Physique Occulte, ou Traité de la Baguette Divinatoire</em>. Amsterdam: Adrian Braakman, 1693. See <a href=\"#vallemont\">The Sixth Sense</a>.</p>\n<p>Zahn, Johann (1631-1707). <em>Specula Physico-Mathematico-Historica Notabilium ac Mirabilium Sciendorum</em>. Nuremberg: Johann Christoph Lochner, 1696. See <a href=\"#zahn\">Nature’s Secrets</a> and <a href=\"#zahn-creatures\">Fabled Creatures</a>.</p>"
+    }
+   ]
+  },
+  {
+   "title": "About the Exhibition",
+   "anchor": "about-the-exhibition",
+   "lead": "installation-title-panel.jpg",
+   "focus": "center",
+   "lead_caption": "<p>The exhibition in Hill Memorial Library, 2010.</p>",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>The materials in this online exhibition were displayed in the LSU Libraries’ Division of Special Collections (Hill Memorial Library) from January 24 to March 6, 2010, in conjunction with a traveling exhibition, <em>Harry Potter’s World: Renaissance Science, Magic and Medicine</em>, sponsored by the National Library of Medicine and hosted by LSU’s Main Library. Drawn primarily from the Rare Book, McIlhenny, and Rhoades Collections, the items included here reflect the library’s strong holdings in early-modern science, religion, and philosophy.</p>\n<p>Exhibition curator: Michael Taylor, Assistant Curator of Books<br>Online exhibition designer: Leah Wood Jewett, Exhibitions Coordinator</p>\n<p>Special thanks to the following for their assistance with the online exhibition: Gina Costello, Digital Services Librarian; Raven Duncil, Student Volunteer; William R. “Robbie” Gore, Computer Analyst; Gabe Harrell, Digital Services; Sigrid Kelsey, Electronic Reference Services Librarian; and Vanessa Varin, GA, Digital Services.</p>"
+    },
+    {
+     "type": "gallery",
+     "caption": "<p>The cases in Hill Memorial Library, January to March 2010.</p>",
+     "figures": [
+      {
+       "type": "figure",
+       "image": "installation-gallery.jpg",
+       "source": "installation-gallery",
+       "caption": "",
+       "layout": "center"
+      },
+      {
+       "type": "figure",
+       "image": "installation-hall.jpg",
+       "source": "installation-hall",
+       "caption": "<p>Manly P. Hall’s <em>Encyclopedic Outline</em>, open at the pelican.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "figure",
+       "image": "installation-bacon-manilius.jpg",
+       "source": "installation-bacon-manilius",
+       "caption": "<p>Bacon’s <em>Sylva Sylvarum</em> and the <em>Astronomicon</em> of Manilius.</p>",
+       "layout": "center"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "alt": {
+  "francisci-sunflower-plate-796.jpg": "Engraving of a sunflower in a ringed armillary frame above a fountain basin, flanked by two more sunflowers and banners.",
+  "hall-grand-rosicrucian-formula.jpg": "Coloured emblem: a radiant sun and a ring of planetary symbols above a hillside of allegorical figures, a lion, and a man and woman.",
+  "lactantius-litera-pythagorae.jpg": "Printed page of Latin verse headed Litera Pythagorae Y, with a decorated initial.",
+  "iamblichus-de-mysteriis-title-page.jpg": "Title page of Iamblichus, De Mysteriis Aegyptiorum, with a handwritten inscription and a papal coat of arms.",
+  "berthelot-alchemical-drawings.jpg": "Page of alchemical drawings: a coiled serpent ringed with Greek text, crescents, stars and a still on a stand.",
+  "bacon-sylva-sylvarum-frontispiece.jpg": "Engraved frontispiece: a globe between two columns beneath a radiant name of God, above the title Sylva Sylvarum.",
+  "bacon-sylva-sylvarum-portrait.jpg": "Engraved portrait of Francis Bacon in a tall hat and ruff, in an oval frame.",
+  "felgenhauer-jehi-or.jpg": "Handwritten manuscript page headed Jehi-Or, or Lux be Light, or Aurora Sapientiae.",
+  "porta-phytognomonica-p309.jpg": "Woodcut page of plants and leaves, with a hand, a lizard and an eye drawn below.",
+  "porta-phytognomonica-p270.jpg": "Woodcut of plants with jointed roots beside scorpions and crayfish.",
+  "zahn-plate-after-236.jpg": "Engraved plate of curious plants and roots, among them figures shaped like animals and people.",
+  "geber-bibliotheque-title-page.jpg": "Title page of the Bibliothèque des Philosophes Chymiques, Tome Second, Paris, 1678.",
+  "geber-somme-de-la-perfection.jpg": "Opening page of La Somme de la Perfection de Geber, Philosophe Arabe, with a decorated initial.",
+  "boyle-air-pump.jpg": "Engraved plate of Robert Boyle’s air-pump: a glass globe on a wooden stand surrounded by tubes, valves and tools.",
+  "boyle-title-page.jpg": "Title page of New Experiments Physico-Mechanical, Touching the Spring of the Air, Oxford, 1662.",
+  "khunrath-alchemist-laboratory.jpg": "Circular engraving of a vaulted laboratory: a man kneels in prayer at a tent-like altar while furnaces and instruments fill the room.",
+  "defoe-system-of-magick.jpg": "Title page of A System of Magick; or, A History of the Black Art.",
+  "glanvill-sadducismus-triumphatus.jpg": "Open book: a frontispiece of a kneeling man and a ghostly figure beside a bed, and the title page of Sadducismus Triumphatus printed in red and black.",
+  "lilly-monarchy-hieroglyphic.jpg": "Woodcut of a figure falling headfirst into flames while men stand around a fire.",
+  "lilly-monarchy-p13.jpg": "Woodcut of a city in flames along a river crowded with ships.",
+  "manilius-title-page.jpg": "Title page of M. Manili Astronomicon, edited by Joseph Scaliger, with the Plantin printer’s device.",
+  "manilius-houses.jpg": "Printed square diagram of a horoscope divided into twelve astrological houses.",
+  "vallemont-physique-occulte.jpg": "Engraved frontispiece of allegorical figures beside the title page of La Physique Occulte, printed in red and black.",
+  "vallemont-dowser.jpg": "Engraving of a man in a long coat and hat holding a forked divining rod.",
+  "nieremberg-curiosa-p87.jpg": "Printed page in two columns headed Libro Quarto, De la Verdad de los Monstros Fabulosos.",
+  "nieremberg-curiosa-title-page.jpg": "Title page of Curiosa y Oculta Filosofia by Juan Eusebio Nieremberg, Alcalá, 1649.",
+  "zahn-plate-after-326.jpg": "Engraved plate of three landscapes with animals, including a leopard and a unicorn.",
+  "zahn-plate-after-68.jpg": "Engraved plate of nine numbered figures of people with deformities and hybrid bodies.",
+  "gesner-unicorn.jpg": "Woodcut of a unicorn with a long spiralled horn, cloven hooves and a beard.",
+  "pare-monster.jpg": "Woodcut of a round monster covered in limbs, with a cross on its back and a long tail.",
+  "pare-dragons.jpg": "Woodcuts of a winged dragon with a coiled tail and a finned sea dragon.",
+  "jonston-dragons.jpg": "Engraved plate of four dragons and serpents, some winged, one with a crested head.",
+  "hall-pelican.jpg": "Coloured plate: a pelican feeding its young from its breast, beneath a white cross with a red rose and a pair of compasses, over a banner reading INRI.",
+  "broutin-commission.jpg": "Handwritten and printed commission signed by William C. C. Claiborne, with a paper seal at the lower left.",
+  "territory-of-orleans-seal.jpg": "Drawing of a seal: an eagle with spread wings holding an olive branch, ringed by the words Territory of Orleans and stars.",
+  "installation-gallery.jpg": "Exhibition room with framed reproductions on the wall above three glass display cases.",
+  "installation-title-panel.jpg": "Exhibition wall with a black title panel reading Occult Science and Philosophy in the Renaissance beside framed prints.",
+  "installation-glanvill.jpg": "Display case with open books and printed labels; in front, Sadducismus Triumphatus open at its frontispiece.",
+  "installation-hall.jpg": "Large open book in a display case showing the coloured pelican plate, with a label below.",
+  "installation-bacon-manilius.jpg": "Display case with Sylva Sylvarum open at its frontispiece and the Astronomicon open at its diagram of the houses."
+ }
+}
