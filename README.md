@@ -106,6 +106,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves_typos.php` | Corrects 25 typos in the live AVES page (missing spaces and brackets in names, hyphen and dash spacing, Vieillot's dates, Weimar, Chubb), the same as in `data/aves.json`. Exact replacements only; lists any it can't find |
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
+| `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
@@ -601,6 +602,44 @@ its images are the same 1,000px files.
   lead is one of its own images, credited; the cover is Francisci's
   sunflower plate, as on the 2011 home page.
 
+### John James Audubon in Louisiana
+
+`scripts/data/audubon.json` holds the 2021 digital exhibition (from
+*Audubon at Oakley*, 2008): Audubon in Louisiana, Audubon at Oakley, Elephant
+Folio (22 plates), Octavo Edition (17), Drawings and Proofs (37),
+Manuscripts (3) and Suggested Reading. Each bird page of 2021 is an entry.
+
+- **Text, word for word.** The landing and section pages come from the
+  Wayback Machine (lib.lsu.edu/exhibitions/john-james-audubon). It never
+  captured 78 of the 79 bird and manuscript pages, so those come from the
+  students' copy (/audubon, nodes 437-520), whose text was mis-encoded four
+  times over; the bytes survive as entities, so it decodes exactly (no word
+  differs from the six pages the Wayback Machine has). Headings are the 2021
+  menu names (the students' titles had "Boneparte", "Prarie", "Flamigo").
+- **Corrected:** spacing and punctuation (spaces around "[now", "vol. 1",
+  missing full stops and commas, " : " and " ;" in the readings, straight
+  quotes and spaced hyphens set as curly quotes and dashes, "FIeld",
+  "Sociey"); and, agreed with the editors, six Latin names (Psittacus,
+  Sylvia childrenii, Sylvia roscoe, Haematopus palliatus, Ictinia
+  mississippiensis, Picus querulus), "Susanne Low" and Heitman's pages
+  44-53.
+- **To verify:** three octavo citations give "Philadelphia: J. B.
+  Chevalier, 1856" (Pine Creeping Wood-warbler, Wood Duck, Yellow-throated
+  Vireo); the 1856 edition was not Chevalier's.
+- **New wording to check:** gallery lead captions, alt text, credit line and
+  physical exhibition note.
+- **Images** ("Audubon 4K", 93 JPEGs, long edge at most 3,840px). 2021 showed
+  600 × 400 close-ups; each was found in a full source on the drive (scored,
+  and the low scores checked by eye) and the whole sheet is shown instead:
+  the 39 plates from `Audubon Images for Heitman book/Edited images`, 46
+  drawings and proofs and the Hurricane's first page at 1,000px or more
+  (`source image for cropped ones`, `5188_001.jpg`). Four have no larger
+  source and stay 2021 crops (Black-throated Waxwing drawing, Virginian Rail,
+  Children's Warbler and Bear manuscripts). Leads: the Brown Pelican (folio,
+  not in 2021) and full-resolution cuts of the 2021 close-ups of the Mocking
+  Birds and Great Blue Heron; the cover is the Carolina Parrot. Unused:
+  Alexander Wilson's Mocking Bird and Mississippi Kite plates.
+
 ## Reading colours and Settings
 
 Settings > **Reading colours** sets page and text colours for the whole site.
@@ -714,6 +753,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** John James Audubon in Louisiana
+  (`palefire_exhibit_audubon.php`, `data/audubon.json`): 79 entries in five
+  galleries plus two opening galleries and readings, as an unpublished
+  exhibition, with the whole plate or sheet in place of 2021's close-ups.
+  Why: the third online exhibition to move into exhibition mode; the
+  students' copy at /audubon has garbled text and 600px images.
 - **Exhibitions:** the title page's `<h1>` sizes itself by its length.
   `exhibit-cover.html.twig` passes the character count and longest word
   (`--pf-title-chars`, `--pf-title-word`); the size is the smallest of the
