@@ -66,8 +66,8 @@
 
 // The features fill the panel under the search instead of sitting at its
 // foot (the lead-screen rule in _landing-swiss.scss pushes the last block
-// down).
-.pf-landing--lead-screen > .pf-landing__lead > .pf-landing__features:last-child {
+// down). Not only as the last child: the quick guide follows them.
+.pf-landing--lead-screen > .pf-landing__lead > .pf-landing__features {
   flex: 1 0 auto;
   margin-top: 0;
 }
@@ -835,6 +835,99 @@ html.pf-a11y-motion {
     width: 1.125rem;
     height: 1.125rem;
     fill: currentColor;
+  }
+}
+
+// --- Quick guide: under the features, in the lead panel --------------------
+// A gold rule (two equal lines with a duotone star between them), 80px of
+// space above and below it from about 1333px wide (3rem on phones, like the
+// sections' padding), then the heading, a line of intro, the request paths
+// from the full guide (includes/guide-request-paths.html.twig, styled in
+// _guide.scss) and "See full guide" in the sign-in button's style.
+// The rule is decoration (aria-hidden); the heading names the region.
+.pf-quick-guide {
+  --pf-quick-space: clamp(3rem, 6vw, 5rem);
+  --pf-quick-gold: var(--pf-ui-gold, #{$pf-gold});
+  // The paths' accent follows the rule's gold here.
+  --pf-guide-accent: var(--pf-quick-gold);
+
+  container: pf-quick-guide / inline-size;
+  // Padding, not margin: the lead-screen rule gives its last block
+  // margin-top: auto (_landing-swiss.scss).
+  padding-top: var(--pf-quick-space);
+}
+
+.pf-quick-guide__rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: center;
+  margin-bottom: var(--pf-quick-space);
+  color: var(--pf-quick-gold);
+
+  &::before,
+  &::after {
+    content: "";
+    border-top: 2px solid currentColor;
+  }
+}
+
+.pf-quick-guide__star {
+  display: flex;
+
+  svg {
+    width: clamp(2rem, 4vw, 2.75rem);
+    height: clamp(2rem, 4vw, 2.75rem);
+    fill: currentColor;
+  }
+}
+
+.pf-quick-guide__title {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.375rem, 1.2rem + .7vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+.pf-quick-guide__intro {
+  max-width: 48rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
+  line-height: 1.55;
+  color: var(--pf-section-fg, inherit);
+}
+
+// The paths across the panel's column: no box or prose cap here, the rule
+// above already sets them off. The stops' discs keep the page colour
+// (opaque, so the line still passes behind them).
+.pf-quick-guide .pf-paths {
+  max-width: none;
+  padding: 0;
+  border: 0;
+}
+
+.pf-quick-guide__more {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+
+  // Full width when narrow, like the sign-in button stacked.
+  .pf-hero-account__link {
+    flex: 1 1 auto;
+  }
+}
+
+@container pf-quick-guide (min-width: 36rem) {
+  .pf-quick-guide__more .pf-hero-account__link {
+    flex: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-quick-guide__rule::before,
+  .pf-quick-guide__rule::after {
+    border-top-color: CanvasText;
   }
 }
 

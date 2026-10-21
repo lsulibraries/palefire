@@ -607,6 +607,41 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Landing hero: Quick Guide under the features (2026-10-20)
+
+The hero's lead panel (Special Collections) now goes on past the blog post
+and sign-in row into a Quick Guide:
+
+- A gold rule: two equal lines with a Font Awesome Pro duotone star
+  (`fad fa-star-christmas`) between them, 80px of space above and below
+  from about 1333px wide (`clamp(3rem, 6vw, 5rem)`, as the sections'
+  padding). Decorative (`aria-hidden`); system text colour in forced colors.
+- "Quick Guide" (an h2, naming the region), the intro line from the full
+  guide, then the two request paths from
+  `includes/guide-request-paths.html.twig`, the same include the full guide
+  uses: edit the stops there and both pages change. On the landing the
+  paths run the width of the column with no box around them, the accent in
+  the rule's gold. The guide tokens (`--pf-guide-*`) are now set on
+  `.pf-quick-guide` too, so the lines, discs and muted notes look as they
+  do on the guide.
+- "See full guide", in the sign-in button's style, at the right (full
+  width when narrow). Its accessible name adds ": How to Use Special
+  Collections" after the visible words. The URL is `guide_url` at the top
+  of the block in `landing.html.twig`.
+
+From md the lead is now taller than the window, so the features keep their
+minimum tile height instead of stretching to the fold, and landing-snap.js
+leaves scrolling to the browser (it already skipped leads taller than the
+window). The features' fill rule no longer needs them to be the lead's last
+child.
+
+Files: `templates/includes/landing.html.twig`,
+`scss/components/_landing-features.scss`, `scss/components/_guide.scss`.
+The patch leaves out `css/style.css`: it is one minified line, so any
+other uncommitted style change makes its hunk fail. Run
+`npm run build:css` after applying, and commit the rebuilt CSS with it.
+No config changes: `git pull` and `drush cr` on production.
+
 ### Fix: guide pages crashed after the request-paths change (2026-10-20)
 
 `palefire_preprocess_paragraph__guide_text()` passed an expression

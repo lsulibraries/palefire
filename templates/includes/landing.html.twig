@@ -308,6 +308,38 @@
           {% endif %}
         </div>
       </div>
+
+      {# Quick guide: under the features, still in the lead panel. A gold
+         rule with a star between two equal lines (decorative), then the
+         two request paths from the full guide (the same include, so an
+         edit there shows here too) and a link to that guide, in the
+         sign-in button's style. On wide screens it starts below the fold,
+         so the lead is taller than the window and landing-snap.js leaves
+         the scrolling to the browser.
+         - guide_url: the full "How to Use Special Collections" guide;
+           empty leaves the link out. #}
+      {% set guide_url = '/v2/special/guides/special-collections' %}
+      {% set quick_id = input_id ~ '-quick-guide' %}
+      <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
+        <div class="pf-quick-guide__rule" aria-hidden="true">
+          {# Font Awesome Pro star-christmas (duotone, like
+             `fad fa-star-christmas`), inlined like the sign-in icon. #}
+          <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
+        </div>
+        <h2 class="pf-quick-guide__title" id="{{ quick_id }}">{{ 'Quick Guide'|t }}</h2>
+        <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate, so there are <strong>two ways</strong> to use one: see it in the Reading Room, or order a digital copy. Both start the same way, in the library catalog.'|t }}</p>
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id } only %}
+        {% if guide_url %}
+          <div class="pf-quick-guide__more">
+            <a class="pf-hero-account__link" href="{{ guide_url }}">
+              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+              {# The full name keeps the visible words first (WCAG 2.5.3)
+                 and says which guide, so the link stands on its own. #}
+              <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+            </a>
+          </div>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
   {% endif %}

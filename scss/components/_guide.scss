@@ -14,8 +14,11 @@
 // Dark sections take the swatch too (_reading-themes.scss), so on a guide
 // they look like every other section.
 
+// The landing hero's quick guide (_landing-features.scss) takes them too,
+// for the request paths it shares with the guide.
 .pf-guide,
-.pf-guide-head {
+.pf-guide-head,
+.pf-quick-guide {
   --pf-guide-accent: var(--pf-section-accent, var(--pf-g-accent, var(--bs-primary)));
   --pf-guide-accent-soft: var(--pf-g-accent-soft, var(--bs-tertiary-bg));
   --pf-guide-muted: var(--pf-section-muted, var(--pf-g-muted, var(--bs-secondary-color)));
