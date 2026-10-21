@@ -576,8 +576,8 @@ html.pf-snap-proximity .pf-section--snap {
     }
   }
 
-  // Guides keep the TOC: no button.
-  html[data-pf-mode="guide"] .pf-modular__toc-collapse {
+  // Guides and exhibitions keep the TOC: no button.
+  html:is([data-pf-mode="guide"], [data-pf-mode="exhibition"]) .pf-modular__toc-collapse {
     display: none !important;
   }
 

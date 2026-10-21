@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Exhibition entry (paragraph type exhibit_entry): a person or a book.
+ *
+ * - title: the <h3>, a sub-link under its gallery in the TOC.
+ * - anchor: the <h3>'s id, the target of links from other galleries.
+ * - Biography (field_entry_bio): js/exhibition.js shows the opening lines
+ *   of a long one with a "Read the full biography" button; without the
+ *   script it is shown in full.
+ * - Blocks: images, catalogue records, audio and text (field_guide_blocks).
+ */
+#}
+{%
+  set classes = [
+    'pf-exhibit-entry',
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+  ]
+%}
+<article{{ attributes.addClass(classes).setAttribute('aria-labelledby', anchor) }}>
+  <h3 id="{{ anchor }}" class="pf-exhibit-entry__title">{{ title }}</h3>
+  {% if content.field_entry_bio|render|trim %}
+    <div class="pf-exhibit-bio" data-pf-exhibit-bio>
+      <p class="pf-exhibit-bio__label">{{ 'Biography'|t }}</p>
+      <div class="pf-exhibit-bio__text pf-guide-prose" id="{{ anchor }}-bio">
+        {{ content.field_entry_bio }}
+      </div>
+    </div>
+  {% endif %}
+  {% if content.field_guide_blocks|render|trim %}
+    <div class="pf-exhibit-entry__body">
+      {{ content.field_guide_blocks }}
+    </div>
+  {% endif %}
+</article>

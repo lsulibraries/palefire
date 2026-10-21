@@ -319,3 +319,14 @@ utility-panels:
     - core/once
     - palefire/global
     - palefire/visit
+
+# Exhibition pages: one gallery at a time, title page, lightbox, long
+# biographies, audio. Attached by includes/exhibit-cover.html.twig. Lighter
+# weight so it runs before modular-toc.js, which reads what is shown.
+exhibition:
+  js:
+    js/exhibition.js: { weight: -1 }
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/global

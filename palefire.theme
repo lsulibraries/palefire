@@ -18,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\Hook\PalefireHooks;
 
 /**
@@ -914,6 +915,11 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   if (empty($variables['content']['field_block_body'])) {
     return;
   }
+  // Style "Sources" (exhibitions): each list item gets an id, #src-<surname>,
+  // after the text format has run (it would strip ids typed in the text).
+  if ($variables['paragraph']->get('field_text_style')->value === 'sources') {
+    $variables['content']['field_block_body']['#post_render'][] = [ExhibitSources::class, 'addIds'];
+  }
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
@@ -1460,4 +1466,143 @@ function palefire_preprocess_node(array &$variables): void {
     'citation' => $value('field_resource_citation'),
     'desc' => $value('field_resource_desc'),
   ];
+}
+
+/**
+ * One image as plain values for an exhibition <img> (templates print it).
+ *
+ * The exhibit_640/_1280/_1920/_2560 styles (palefire_exhibit_setup.php) as
+ * a srcset, so a 4K original is never sent: src is the 1280 version, full
+ * (the lightbox) the largest. Styles that are missing are skipped; with
+ * none, the original file. Width and height are always set (no layout
+ * shift); alt comes from the image item.
+ *
+ * @param string $sizes
+ *   The <img sizes> value.
+ * @param bool $eager
+ *   TRUE for the first image on screen (the exhibition's title page).
+ *
+ * @return array{src: string, srcset: string, sizes: string, width: ?int, height: ?int, alt: string, full: string, loading: string}|null
+ */
+function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, CacheableMetadata $cache, bool $eager = FALSE): ?array {
+  $file = $image->entity;
+  if (!$file) {
+    return NULL;
+  }
+  $cache->addCacheableDependency($file);
+  $uri = $file->getFileUri();
+  $width = $image->width ? (int) $image->width : NULL;
+  $height = $image->height ? (int) $image->height : NULL;
+  $original = \Drupal::service('file_url_generator')->generateString($uri);
+
+  $candidates = [];
+  $storage = \Drupal::entityTypeManager()->getStorage('image_style');
+  foreach ([640, 1280, 1920, 2560] as $step) {
+    $style = $storage->load('exhibit_' . $step);
+    if (!$style) {
+      continue;
+    }
+    $cache->addCacheableDependency($style);
+    $dimensions = ['width' => $width, 'height' => $height];
+    $style->transformDimensions($dimensions, $uri);
+    $w = (int) ($dimensions['width'] ?? $step);
+    // An original narrower than the step gives the same image again.
+    if ($candidates && $w <= array_key_last($candidates)) {
+      continue;
+    }
+    $candidates[$w] = \Drupal::service('file_url_generator')->transformRelative($style->buildUrl($uri));
+  }
+
+  $srcset = implode(', ', array_map(fn ($w, $url) => "$url {$w}w", array_keys($candidates), $candidates));
+  $src = $candidates ? ($candidates[array_keys($candidates)[min(1, count($candidates) - 1)]]) : $original;
+  return [
+    'src' => $src,
+    'srcset' => $srcset,
+    'sizes' => $sizes,
+    'width' => $width,
+    'height' => $height,
+    'alt' => (string) ($image->alt ?? ''),
+    'full' => $candidates ? end($candidates) : $original,
+    'loading' => $eager ? 'eager' : 'lazy',
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-page.
+ *
+ * lead: the gallery's lead image (decorative, full width), or NULL.
+ * focus: where a cropped lead stays in view (object-position keyword).
+ */
+function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $variables['lead'] = NULL;
+  if ($paragraph->hasField('field_exhibit_lead') && !$paragraph->get('field_exhibit_lead')->isEmpty()) {
+    $item = _palefire_media_image_item($paragraph->get('field_exhibit_lead')->first(), $cache);
+    $variables['lead'] = $item ? _palefire_exhibit_image($item, '100vw', $cache) : NULL;
+  }
+  $focus = $paragraph->hasField('field_exhibit_lead_focus') ? (string) $paragraph->get('field_exhibit_lead_focus')->value : '';
+  $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-entry.
+ *
+ * anchor: the heading's id, from the Anchor field or the heading, so text
+ * on any gallery can link to #anchor (js/exhibition.js opens its gallery).
+ */
+function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $title = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
+  $anchor = $paragraph->hasField('field_section_anchor') ? trim((string) $paragraph->get('field_section_anchor')->value) : '';
+  $anchor = Html::getClass($anchor !== '' ? $anchor : $title);
+  $variables['title'] = $title;
+  $variables['anchor'] = $anchor !== '' ? $anchor : 'entry-' . $paragraph->id();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-figure.
+ *
+ * image: values for the <img> (_palefire_exhibit_image()), or NULL when the
+ * figure has no image yet (it then shows only to editors, as a reminder).
+ * layout: side_start, side_end, center or wide. Inside an image group the
+ * group lays the figures out and the layout is ignored.
+ */
+function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $layout = (string) ($paragraph->get('field_figure_layout')->value ?? '');
+  $layout = in_array($layout, ['side_start', 'side_end', 'center', 'wide'], TRUE) ? $layout : 'side_start';
+  $in_group = $paragraph->getParentEntity() instanceof ParagraphInterface && $paragraph->getParentEntity()->bundle() === 'exhibit_gallery';
+  $sizes = match (TRUE) {
+    $in_group => '(min-width: 62rem) 30vw, (min-width: 36rem) 45vw, 100vw',
+    $layout === 'wide' => '100vw',
+    $layout === 'center' => '(min-width: 62rem) 48rem, 100vw',
+    default => '(min-width: 48rem) 40vw, 100vw',
+  };
+  $variables['image'] = NULL;
+  if (!$paragraph->get('field_figure_image')->isEmpty()) {
+    $item = _palefire_media_image_item($paragraph->get('field_figure_image')->first(), $cache);
+    $variables['image'] = $item ? _palefire_exhibit_image($item, $sizes, $cache) : NULL;
+  }
+  $variables['layout'] = $in_group ? 'group' : $layout;
+  $access = $paragraph->access('update', NULL, TRUE);
+  $variables['can_edit'] = $access->isAllowed();
+  $cache->addCacheableDependency($access)->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-audio.
+ *
+ * audio: ['url', 'type'] of the file, or NULL.
+ */
+function palefire_preprocess_paragraph__exhibit_audio(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $file = $paragraph->get('field_audio_file')->entity;
+  $variables['audio'] = $file ? [
+    'url' => \Drupal::service('file_url_generator')->generateString($file->getFileUri()),
+    'type' => $file->getMimeType(),
+  ] : NULL;
+  $variables['transcript_id'] = 'pf-audio-transcript-' . $paragraph->id();
 }

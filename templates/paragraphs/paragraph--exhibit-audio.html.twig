@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Exhibition audio (paragraph type exhibit_audio): an oral history clip.
+ *
+ * - field_block_title: the <h3> (a TOC sub-link).
+ * - field_audio_credit: speaker and date, under the title.
+ * - audio: ['url', 'type'] or NULL.
+ * - The transcript (required) is a native <details> under the player.
+ *
+ * The browser's own <audio controls> work without JS; js/exhibition.js
+ * swaps them for a play button, a seek slider and the time, in the
+ * exhibition's style. The audio loads only on Play (preload="none").
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set credit = paragraph.field_audio_credit.value|default('')|trim %}
+{% set heading_id = 'pf-audio-' ~ paragraph.id() %}
+<div{{ attributes.addClass('pf-exhibit-audio', not paragraph.isPublished() ? 'paragraph--unpublished').setAttribute('aria-labelledby', heading_id) }} role="group">
+  <p class="pf-exhibit-label__kicker">{{ 'Listen'|t }}</p>
+  <h3 class="pf-exhibit-audio__title" id="{{ heading_id }}">{{ title }}</h3>
+  {% if credit %}
+    <p class="pf-exhibit-audio__credit">{{ credit }}</p>
+  {% endif %}
+  {% if audio %}
+    <div class="pf-audio" data-pf-audio>
+      <audio class="pf-audio__native" controls preload="none" aria-labelledby="{{ heading_id }}">
+        <source src="{{ audio.url }}" type="{{ audio.type }}">
+        <a href="{{ audio.url }}">{{ 'Download the audio'|t }}</a>
+      </audio>
+    </div>
+  {% endif %}
+  <details class="pf-exhibit-audio__transcript pf-accordion__item">
+    <summary class="pf-exhibit-audio__summary">{{ 'Transcript'|t }}</summary>
+    <div class="pf-exhibit-audio__text pf-guide-prose" id="{{ transcript_id }}">
+      {{ content.field_audio_transcript }}
+    </div>
+  </details>
+</div>

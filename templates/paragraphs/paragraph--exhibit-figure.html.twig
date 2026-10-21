@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Exhibition image (paragraph type exhibit_figure): one image, its caption.
+ *
+ * - image: values for the <img> (_palefire_exhibit_image()), or NULL.
+ * - layout: side_start / side_end (beside the caption), center, wide (full
+ *   width, slow parallax) or group (inside an image group).
+ * - can_edit: a figure without an image shows only to people who can edit
+ *   it, as a dashed reminder to add one; visitors don't see it.
+ *
+ * The image is a link to its largest version, so without JS it opens on
+ * its own; js/exhibition.js opens it in the lightbox instead, with the
+ * gallery's other images.
+ */
+#}
+{% set caption = content.field_figure_caption|render|trim %}
+{% if image or can_edit %}
+  {%
+    set classes = [
+      'pf-exhibit-figure',
+      'pf-exhibit-figure--' ~ layout|clean_class,
+      not image ? 'pf-exhibit-figure--empty',
+      not paragraph.isPublished() ? 'paragraph--unpublished',
+    ]
+  %}
+  <figure{{ attributes.addClass(classes) }}>
+    {% if image %}
+      <a class="pf-exhibit-figure__link" href="{{ image.full }}" data-pf-lightbox
+         {% if image.width %}data-width="{{ image.width }}" data-height="{{ image.height }}"{% endif %}>
+        <span class="pf-exhibit-figure__frame">
+          <img class="pf-exhibit-figure__img" src="{{ image.src }}"
+               {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
+               {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
+               alt="{{ image.alt }}" loading="{{ image.loading }}" decoding="async">
+        </span>
+        <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
+        <svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>
+      </a>
+    {% else %}
+      <span class="pf-exhibit-figure__frame pf-exhibit-figure__placeholder">{{ 'Image to add (editors only)'|t }}</span>
+    {% endif %}
+    {% if caption %}
+      <figcaption class="pf-exhibit-figure__caption pf-guide-prose">{{ content.field_figure_caption }}</figcaption>
+    {% endif %}
+  </figure>
+{% endif %}

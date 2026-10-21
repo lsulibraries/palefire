@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * An image group's figures, with no field wrappers: each figure is a direct
+ * child of .pf-exhibit-group__grid, so the grid lays them out.
+ */
+#}
+{% for item in items %}
+  {{ item.content }}
+{% endfor %}

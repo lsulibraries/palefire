@@ -35,8 +35,10 @@
         return;
       }
 
-      const guide = document.documentElement.dataset.pfMode === 'guide';
-      const headings = guide ? [] : once('pf-section-reveal', HEADINGS, context);
+      // Not on guides, nor on exhibitions, whose galleries bring their
+      // heading in with the gallery (js/exhibition.js, _exhibition.scss).
+      const still = ['guide', 'exhibition'].includes(document.documentElement.dataset.pfMode);
+      const headings = still ? [] : once('pf-section-reveal', HEADINGS, context);
       if (headings.length) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {

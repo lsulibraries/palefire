@@ -108,6 +108,7 @@ class PalefireHooks {
     $variables['palefire_toc'] = [];
     $variables['landing_toc'] = NULL;
     $variables['guide_head'] = NULL;
+    $variables['exhibit_head'] = NULL;
 
     $node = $variables['node'] ?? NULL;
     if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
@@ -126,6 +127,10 @@ class PalefireHooks {
     // Guide mode: intro, owner, updated date and subjects under the <h1>.
     if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'guide') {
       $variables['guide_head'] = $this->guideHead($node);
+    }
+    // Exhibition mode: the title page (includes/exhibit-cover.html.twig).
+    if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'exhibition') {
+      $variables['exhibit_head'] = $this->exhibitHead($node);
     }
 
     // Only build the TOC on routes that display the node itself.
@@ -260,6 +265,14 @@ class PalefireHooks {
     }
     if (!empty($ids['map'])) {
       $extra[] = ['id' => $ids['map'], 'label' => $this->t('Map')];
+    }
+    // Exhibitions: "Title page" first (the head, includes/exhibit-cover),
+    // and every gallery lists its entries (h3s) whatever the block's
+    // "Include h3 sub-links" setting says. js/exhibition.js shows one
+    // gallery at a time.
+    if ($node && self::stringValue($node, 'field_modular_type') === 'exhibition') {
+      $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Title page')];
+      $variables['depth'] = 2;
     }
     if ($extra) {
       $variables['items'] = array_merge($extra, $variables['items'] ?? []);
@@ -398,6 +411,38 @@ class PalefireHooks {
         'iso' => date('c', $created),
       ],
       'subjects' => $subjects,
+      'cache' => $render,
+    ];
+  }
+
+  /**
+   * Variables for includes/exhibit-cover.html.twig on an exhibition page.
+   *
+   * @return array{title: string, subtitle: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
+   */
+  private function exhibitHead(NodeInterface $node): array {
+    $cache = CacheableMetadata::createFromObject($node);
+    $text = fn (string $field): ?array => $node->hasField($field) && !$node->get($field)->isEmpty()
+      ? $node->get($field)->view(['label' => 'hidden', 'type' => 'text_default'])
+      : NULL;
+
+    $cover = NULL;
+    if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()) {
+      $item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache);
+      // The whole screen at any width; it is the page's first image, so it
+      // loads eagerly (_palefire_exhibit_image() sets lazy otherwise).
+      $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
+    }
+
+    $render = [];
+    $cache->applyTo($render);
+    return [
+      'title' => $node->label(),
+      'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
+      'credit' => $text('field_exhibit_credit'),
+      'intro' => $text('field_intro'),
+      'prompt' => self::stringValue($node, 'field_exhibit_prompt') ?: (string) $this->t('Choose a gallery from the table of contents to begin.'),
+      'cover' => $cover,
       'cache' => $render,
     ];
   }

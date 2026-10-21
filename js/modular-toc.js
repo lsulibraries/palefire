@@ -157,6 +157,14 @@
 
     let active = null;
     let activeSub = null;
+
+    // Exhibitions show one gallery at a time (js/exhibition.js): the others
+    // are [hidden], and the title page, folded to a running head while a
+    // gallery is open, is marked data-toc-inactive. The page-edge cases
+    // below pick from what is shown. On every other page all are shown.
+    const isShown = (entry) => !entry.section.closest('[hidden]') && !entry.section.hasAttribute('data-toc-inactive');
+    const firstShown = () => entries.find(isShown) || entries[0];
+    const lastShown = () => [...entries].reverse().find(isShown) || entries[entries.length - 1];
     let locked = false;
     let destroyed = false;
     // Removes every window listener added below in one go on teardown.
@@ -263,10 +271,10 @@
         }
         const doc = document.documentElement;
         if (window.scrollY <= 2) {
-          setActive(entries[0]);
+          setActive(firstShown());
         }
         else if (window.innerHeight + window.scrollY >= doc.scrollHeight - 2) {
-          setActive(entries[entries.length - 1]);
+          setActive(lastShown());
         }
         trackSubHeadings();
       });
@@ -391,7 +399,7 @@
           event.preventDefault();
           history.replaceState(history.state, '', location.pathname + location.search);
         }
-        setActive(entries[0]);
+        setActive(firstShown());
         setActiveSub(null);
         closeOffcanvas(nav);
         if (plain) {
@@ -525,7 +533,7 @@
     // until the first placement, so the page loads with the bar already
     // in place and the active sub-list already open.
     const hashed = location.hash && entries.find((e) => '#' + e.section.id === location.hash);
-    setActive(hashed || entryAtLine(entries) || entries[0]);
+    setActive((hashed && isShown(hashed) ? hashed : null) || entryAtLine(entries) || firstShown());
     trackSubHeadings();
 
     // Sub-links are clamped to two lines. Show the full heading as a

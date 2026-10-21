@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Exhibition catalogue record (paragraph type exhibit_citation): the book's
+ * bibliographic record, set like a museum object label.
+ */
+#}
+<div{{ attributes.addClass('pf-exhibit-label', not paragraph.isPublished() ? 'paragraph--unpublished') }}>
+  <p class="pf-exhibit-label__kicker">{{ 'In the collection'|t }}</p>
+  <div class="pf-exhibit-label__text">
+    {{ content.field_block_body }}
+  </div>
+</div>

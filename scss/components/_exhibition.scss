@@ -1,0 +1,1180 @@
+// Exhibition pages: Modular pages in exhibition mode (field_modular_type =
+// exhibition) and their blocks (scripts/palefire_exhibit_setup.php).
+//
+// A gallery at a time (js/exhibition.js): the title page, then one
+// exhibit_page section, each fading in with its lead image drawn by a
+// curtain. Lead and full-width images drift slowly with the scroll
+// (scroll-driven animation, no script); figures beside the text rise in as
+// they enter the view. Everything stays still under reduced motion.
+//
+// Colours: the reading swatch (--pf-g-*, _reading-themes.scss) through the
+// guide's tokens (.pf-guide, _guide.scss), so every swatch works and keeps
+// its contrast. Lines are the soft hairline. No literal colours except the
+// lightbox, which is always dark.
+
+$pf-exhibit-ease: cubic-bezier(.2, .7, .2, 1);
+$pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
+
+// Motion that is only decoration: off with the OS setting or Settings >
+// Reduce motion.
+@mixin pf-exhibit-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+html[data-pf-mode="exhibition"] {
+  --pf-exhibit-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  --pf-exhibit-accent: var(--pf-g-accent, var(--bs-primary));
+  --pf-exhibit-muted: var(--pf-g-muted, var(--bs-secondary-color));
+  --pf-exhibit-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
+  --pf-exhibit-prose: 42rem;
+}
+
+// Shared small label: mono capitals, as the guide head's meta line.
+%pf-exhibit-kicker {
+  margin: 0;
+  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pf-exhibit-muted);
+}
+
+// Galleries ------------------------------------------------------------------
+
+html[data-pf-mode="exhibition"] .pf-sections > .pf-section {
+  --pf-section-pad-block: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+html[data-pf-mode="exhibition"]:not(.pf-exhibit-paged) .pf-sections > .pf-section + .pf-section {
+  border-top: 1px solid $pf-hairline;
+}
+
+// The lead comes first on screen, above the heading (it is decorative, so
+// the reading order is unchanged).
+html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery) {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-gallery {
+  display: contents;
+}
+
+.pf-gallery__body {
+  display: grid;
+  gap: 2.5rem;
+  min-width: 0;
+}
+
+html[data-pf-mode="exhibition"] .pf-section__title {
+  max-width: 24ch;
+  margin-bottom: 2.5rem;
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-wrap: balance;
+
+  // "06 / 19", set by js/exhibition.js (--pf-gallery-*). The "/ ''" keeps it
+  // out of the heading's name; a browser without that syntax shows none.
+  &::before {
+    content: counter(pf-gallery, decimal-leading-zero) "\2009/\2009" counter(pf-galleries, decimal-leading-zero) / "";
+    display: block;
+    margin-bottom: 1rem;
+    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    letter-spacing: 0.12em;
+    color: var(--pf-exhibit-muted);
+  }
+}
+
+html[data-pf-mode="exhibition"] .pf-section:not([style*="--pf-gallery-index"]) .pf-section__title::before {
+  content: none;
+}
+
+html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
+  counter-reset: pf-gallery var(--pf-gallery-index) pf-galleries var(--pf-gallery-total);
+}
+
+// One gallery at a time: the others are [hidden] (sections set display).
+.pf-exhibit-paged {
+  .pf-sections > .pf-section[hidden],
+  .pf-exhibit-head[hidden] {
+    display: none !important;
+  }
+
+  .pf-sections > .pf-section,
+  .pf-exhibit-head {
+    transition:
+      opacity .7s ease,
+      translate .9s $pf-exhibit-ease;
+  }
+
+  .is-leaving {
+    opacity: 0;
+    transition-duration: .28s, .28s;
+  }
+
+  .is-entering {
+    opacity: 0;
+    translate: 0 1.25rem;
+    transition: none;
+  }
+}
+
+// Lead image: full width, under the running head. Curtain on show (CSS
+// animations restart whenever the gallery goes from hidden to shown), then
+// a slow drift with the scroll.
+.pf-exhibit-lead {
+  order: -1;
+  margin: calc(-1 * var(--pf-section-pad-block)) calc(-1 * var(--pf-section-pad-inline)) clamp(2rem, 4vw, 3.5rem);
+}
+
+.pf-exhibit-lead__frame {
+  height: clamp(14rem, 52vh, 36rem);
+  overflow: hidden;
+  background: var(--pf-exhibit-surface);
+
+  @include pf-exhibit-motion {
+    animation: pf-exhibit-curtain 1.2s $pf-exhibit-curtain .1s both;
+  }
+}
+
+// Two classes: .pf-section img (_sections.scss) sets height: auto.
+.pf-exhibit-lead .pf-exhibit-lead__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes pf-exhibit-curtain {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+// Parallax: the image is a little larger than its frame and moves less than
+// the page while the frame crosses the view.
+@supports (animation-timeline: view()) {
+  .pf-exhibit-lead__img,
+  .pf-exhibit-figure--wide .pf-exhibit-figure__img {
+    @include pf-exhibit-motion {
+      scale: 1.16;
+      animation: pf-exhibit-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+
+  // Figures beside the text rise in as they enter.
+  .pf-exhibit-figure:is(.pf-exhibit-figure--side-start, .pf-exhibit-figure--side-end, .pf-exhibit-figure--center),
+  .pf-exhibit-group__grid > .pf-exhibit-figure {
+    @include pf-exhibit-motion {
+      animation: pf-exhibit-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+
+@keyframes pf-exhibit-drift {
+  from {
+    translate: 0 -7%;
+  }
+
+  to {
+    translate: 0 7%;
+  }
+}
+
+@keyframes pf-exhibit-rise {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+}
+
+// Previous / next at a gallery's foot (js/exhibition.js).
+.pf-exhibit-pager {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: 2rem;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-pager__link {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 0;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition: color $pf-hover-out ease;
+
+  &--next {
+    text-align: end;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+
+    .pf-exhibit-pager__title {
+      text-decoration: underline;
+      text-underline-offset: .2em;
+      text-decoration-thickness: 1px;
+    }
+  }
+}
+
+.pf-exhibit-pager__kicker {
+  @extend %pf-exhibit-kicker;
+}
+
+.pf-exhibit-pager__link--prev .pf-exhibit-pager__kicker::before {
+  content: "\2190\2002" / "";
+}
+
+.pf-exhibit-pager__link--next .pf-exhibit-pager__kicker::after {
+  content: "\2002\2192" / "";
+}
+
+.pf-exhibit-pager__title {
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+// A link's target on another gallery flashes once it is reached.
+.is-target {
+  animation: pf-exhibit-flash 1.8s ease both;
+}
+
+@keyframes pf-exhibit-flash {
+  0%,
+  35% {
+    background-color: var(--pf-g-accent-soft, var(--bs-tertiary-bg));
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+// Title page -----------------------------------------------------------------
+
+.pf-exhibit-head {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - var(--pf-header-h));
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.pf-exhibit-cover {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+}
+
+// The image fills the head, past its padding.
+.pf-exhibit-cover__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  // A wash of the page colour where the text sits, so it keeps the
+  // swatch's contrast on any image: a band behind the breadcrumb, then the
+  // bottom below lg (the text spans the column) or the left from lg (beside
+  // the TOC, the text takes about half the column).
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, var(--bs-body-bg) 4.5rem, transparent 9rem),
+      linear-gradient(to top, var(--bs-body-bg) 45%, color-mix(in srgb, var(--bs-body-bg) 70%, transparent) 65%, transparent 92%);
+
+    @include media-breakpoint-up(lg) {
+      background:
+        linear-gradient(to bottom, var(--bs-body-bg) 4.5rem, transparent 9rem),
+        linear-gradient(to right, var(--bs-body-bg) 34%, color-mix(in srgb, var(--bs-body-bg) 80%, transparent) 56%, transparent 80%);
+    }
+  }
+}
+
+.pf-exhibit-cover__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% center;
+
+  @include pf-exhibit-motion {
+    animation: pf-exhibit-cover-in 2.4s $pf-exhibit-ease both;
+  }
+}
+
+@keyframes pf-exhibit-cover-in {
+  from {
+    opacity: 0;
+    scale: 1.08;
+  }
+}
+
+.pf-exhibit-cover__text {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 38rem;
+  padding-top: clamp(10rem, 40vh, 24rem);
+
+  @include media-breakpoint-up(md) {
+    padding-top: 4rem;
+  }
+}
+
+// In one after another: kicker, title, intro, credit, prompt.
+.pf-exhibit-cover__step {
+  @include pf-exhibit-motion {
+    animation: pf-exhibit-step 1.1s $pf-exhibit-ease both;
+    animation-delay: calc(.5s + var(--pf-step, 0) * .24s);
+  }
+}
+
+@keyframes pf-exhibit-step {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+.pf-exhibit-cover__kicker {
+  @extend %pf-exhibit-kicker;
+}
+
+.pf-exhibit-head .pf-exhibit-cover__title {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  font-size: clamp(3.5rem, 1.5rem + 8vw, 8.5rem);
+  font-weight: $pf-display-weight;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.pf-exhibit-cover__subtitle {
+  font-size: clamp(1.25rem, 1rem + 1.1vw, 2rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.pf-exhibit-cover__intro {
+  font-size: 1.1875rem;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.pf-exhibit-cover__credit {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-exhibit-cover__intro,
+.pf-exhibit-cover__credit {
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-exhibit-cover__prompt {
+  display: grid;
+  gap: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-cover__prompt-text {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+// The arrow points at the TOC beside the content (lg and up); below lg the
+// TOC is a drawer, opened by "Contents".
+.pf-exhibit-cover__arrow {
+  display: none;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--pf-exhibit-accent);
+
+  @include media-breakpoint-up(lg) {
+    display: block;
+
+    @include pf-exhibit-motion {
+      animation: pf-exhibit-nudge 1.4s ease-in-out 2.2s 2;
+    }
+  }
+}
+
+@keyframes pf-exhibit-nudge {
+  50% {
+    translate: -0.5rem 0;
+  }
+}
+
+.pf-exhibit-cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-exhibit-button {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  font: 0.8125rem/1.2 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  background: transparent;
+  // A control's boundary: the text colour (3:1, WCAG 1.4.11), not the hairline.
+  border: 1px solid currentColor;
+  border-radius: 0;
+  transition:
+    color $pf-hover-out ease,
+    background-color $pf-hover-out ease,
+    border-color $pf-hover-out ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    transition: translate $pf-hover-out ease;
+  }
+
+  &--primary {
+    color: var(--bs-body-bg);
+    background: var(--bs-body-color);
+    border-color: var(--bs-body-color);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bs-body-bg);
+    background: var(--pf-g-hover, var(--pf-exhibit-accent));
+    border-color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+
+    svg {
+      translate: 0.25rem 0;
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 3px;
+  }
+}
+
+// Running head: while a gallery is open the title page folds to its
+// breadcrumb and a one-line title, which keeps the page's <h1>.
+.pf-exhibit-head.is-folded {
+  min-height: 0;
+  padding-bottom: 0;
+
+  .pf-exhibit-cover__media,
+  .pf-exhibit-cover__kicker,
+  .pf-exhibit-cover__intro,
+  .pf-exhibit-cover__credit,
+  .pf-exhibit-cover__prompt {
+    display: none;
+  }
+
+  .pf-exhibit-cover__text {
+    padding: 0.75rem 0 1rem;
+  }
+
+  .pf-exhibit-cover__step {
+    animation: none;
+  }
+
+  .pf-exhibit-cover__title {
+    display: block;
+    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pf-exhibit-muted);
+  }
+
+  .pf-exhibit-cover__subtitle {
+    font: inherit;
+    letter-spacing: inherit;
+
+    &::before {
+      content: "\2002\2014\2002" / "";
+    }
+  }
+}
+
+// Entries --------------------------------------------------------------------
+
+.pf-exhibit-entry {
+  display: grid;
+  gap: 2rem;
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-entry__title {
+  max-width: 36ch;
+  margin: 0;
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  text-wrap: balance;
+  scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
+  transition: color .3s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+.pf-main .pf-sections .pf-exhibit-entry__title.is-toc-current {
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+.pf-exhibit-entry__body {
+  display: grid;
+  gap: 2rem;
+  min-width: 0;
+}
+
+// Biography: long ones fold to their opening lines (js/exhibition.js).
+.pf-exhibit-bio {
+  --pf-bio-clip: 13.5rem;
+  display: grid;
+  gap: 0.75rem;
+  max-width: var(--pf-exhibit-prose);
+}
+
+.pf-exhibit-bio__label {
+  @extend %pf-exhibit-kicker;
+}
+
+.pf-exhibit-bio__text {
+  overflow: hidden;
+  transition: max-height .6s $pf-exhibit-ease;
+
+  > :last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-exhibit-bio.is-folded .pf-exhibit-bio__text {
+  max-height: var(--pf-bio-clip);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.pf-exhibit-bio__toggle {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  text-decoration-color: $pf-hairline;
+  text-underline-offset: 0.4em;
+  transition:
+    color $pf-hover-out ease,
+    text-decoration-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+// Figures --------------------------------------------------------------------
+
+.pf-exhibit-figure {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.pf-exhibit-figure__link {
+  position: relative;
+  display: block;
+  color: inherit;
+  cursor: zoom-in;
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 4px;
+  }
+}
+
+.pf-exhibit-figure__frame {
+  display: block;
+  overflow: hidden;
+}
+
+.pf-exhibit-figure__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: scale .9s $pf-exhibit-ease;
+}
+
+.pf-exhibit-figure__link:hover .pf-exhibit-figure__img {
+  scale: 1.03;
+}
+
+// The enlarge mark, in a corner, shown on hover and focus.
+.pf-exhibit-figure__zoom {
+  position: absolute;
+  inset: 0.75rem 0.75rem auto auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.6rem;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 80%, transparent);
+  opacity: 0;
+  transition: opacity $pf-hover-out ease;
+}
+
+.pf-exhibit-figure__link:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
+  opacity: 1;
+  transition-duration: $pf-hover-in;
+}
+
+.pf-exhibit-figure__caption {
+  max-width: var(--pf-exhibit-prose);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--bs-body-color);
+
+  > :last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Beside the text from md: image and caption side by side, alternating.
+@include media-breakpoint-up(md) {
+  .pf-exhibit-figure--side-start,
+  .pf-exhibit-figure--side-end {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: start;
+  }
+
+  .pf-exhibit-figure--side-end {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+
+    .pf-exhibit-figure__link,
+    .pf-exhibit-figure__frame {
+      order: 2;
+    }
+  }
+
+  // A caption much longer than the image sits beside it at the top.
+  .pf-exhibit-figure:is(.pf-exhibit-figure--side-start, .pf-exhibit-figure--side-end) .pf-exhibit-figure__link {
+    position: sticky;
+    top: calc(var(--pf-header-h) + 1.5rem);
+  }
+}
+
+.pf-exhibit-figure--center {
+  justify-items: center;
+  text-align: start;
+
+  .pf-exhibit-figure__link,
+  .pf-exhibit-figure__frame {
+    max-width: 48rem;
+  }
+}
+
+// Full width, past the section's padding; the caption stays in the column.
+.pf-exhibit-figure--wide {
+  .pf-exhibit-figure__link,
+  > .pf-exhibit-figure__frame {
+    margin-inline: calc(-1 * var(--pf-section-pad-inline));
+  }
+
+  .pf-exhibit-figure__frame {
+    height: clamp(16rem, 62vh, 42rem);
+  }
+
+  .pf-exhibit-figure__img {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// No image yet: editors only (the template leaves it out for visitors).
+.pf-exhibit-figure__placeholder {
+  display: grid;
+  place-items: center;
+  min-height: 10rem;
+  padding: 1rem;
+  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pf-exhibit-muted);
+  border: 1px dashed $pf-hairline;
+}
+
+// Image groups ---------------------------------------------------------------
+
+.pf-exhibit-group {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.pf-exhibit-group__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+
+  .pf-exhibit-figure {
+    align-content: start;
+    gap: 0.75rem;
+  }
+
+  .pf-exhibit-figure__frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .pf-exhibit-figure__img {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pf-exhibit-figure__caption {
+    font-size: 0.875rem;
+    color: var(--pf-exhibit-muted);
+  }
+}
+
+.pf-exhibit-group__caption {
+  max-width: var(--pf-exhibit-prose);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+
+  > :last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Catalogue record: a museum label ---------------------------------------
+
+.pf-exhibit-label {
+  display: grid;
+  gap: 0.5rem;
+  max-width: var(--pf-exhibit-prose);
+  padding: 1.25rem 1.5rem;
+  background: var(--pf-exhibit-surface);
+  border: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-label__kicker {
+  @extend %pf-exhibit-kicker;
+}
+
+.pf-exhibit-label__text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+
+  p:last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Audio ----------------------------------------------------------------------
+
+.pf-exhibit-audio {
+  display: grid;
+  gap: 0.75rem;
+  max-width: var(--pf-exhibit-prose);
+  padding: 1.5rem;
+  border: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-audio__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.pf-exhibit-audio__credit {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-audio__native {
+  width: 100%;
+}
+
+// The custom player (js/exhibition.js).
+.pf-audio.is-custom {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+
+  .pf-audio__native {
+    display: none;
+  }
+}
+
+.pf-audio__play {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  color: var(--bs-body-bg);
+  background: var(--bs-body-color);
+  border: 0;
+  border-radius: 50%;
+  transition: background-color $pf-hover-out ease;
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+  }
+
+  .pf-audio__icon-pause {
+    display: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 3px;
+  }
+}
+
+.pf-audio.is-playing {
+  .pf-audio__icon-play {
+    display: none;
+  }
+
+  .pf-audio__icon-pause {
+    display: inline;
+  }
+}
+
+.pf-audio__seek {
+  --pf-audio-progress: 0%;
+  width: 100%;
+  height: 2.75rem; // the target; the track is drawn thinner
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+
+  &::-webkit-slider-runnable-track {
+    height: 3px;
+    background: linear-gradient(to right, var(--bs-body-color) var(--pf-audio-progress), color-mix(in srgb, var(--bs-body-color) 35%, transparent) var(--pf-audio-progress));
+  }
+
+  &::-moz-range-track {
+    height: 3px;
+    background: color-mix(in srgb, var(--bs-body-color) 35%, transparent);
+  }
+
+  &::-moz-range-progress {
+    height: 3px;
+    background: var(--bs-body-color);
+  }
+
+  &::-webkit-slider-thumb {
+    width: 1rem;
+    height: 1rem;
+    margin-top: calc(-0.5rem + 1.5px);
+    background: var(--bs-body-color);
+    border: 0;
+    border-radius: 50%;
+    appearance: none;
+  }
+
+  &::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    background: var(--bs-body-color);
+    border: 0;
+    border-radius: 50%;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+}
+
+.pf-audio__time {
+  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-exhibit-audio__summary {
+  min-height: 2.75rem;
+  padding: 0.65rem 0;
+  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+// Sources ----------------------------------------------------------------------
+
+// js/exhibition.js glides to #src-… under the header.
+.pf-guide-prose li[id^="src-"] {
+  scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
+}
+
+// Lightbox ---------------------------------------------------------------------
+
+html.pf-lightbox-open {
+  overflow: hidden;
+}
+
+// Always dark, whatever the swatch: the image is what matters.
+.pf-lightbox {
+  position: fixed;
+  inset: 0;
+  display: none;
+  grid-template-rows: minmax(0, 1fr) auto;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  color: #f2eff4;
+  background: rgba(14, 12, 16, 0.985);
+  border: 0;
+
+  &[open] {
+    display: grid;
+
+    @include pf-exhibit-motion {
+      animation: pf-lightbox-in .35s ease both;
+
+      .pf-lightbox__img {
+        animation: pf-lightbox-img .6s $pf-exhibit-ease both;
+      }
+    }
+  }
+
+  &.is-closing {
+    opacity: 0;
+    transition: opacity .22s ease;
+  }
+
+  &::backdrop {
+    background: transparent;
+  }
+
+  a {
+    color: #d4c9dc; // lilac: 10:1 on the lightbox
+  }
+}
+
+@keyframes pf-lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-lightbox-img {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
+.pf-lightbox__stage {
+  --pf-lightbox-top: clamp(3.5rem, 6vh, 4.5rem);
+  --pf-lightbox-side: clamp(0.75rem, 5vw, 5.5rem);
+  position: relative;
+  min-height: 0;
+}
+
+// Fills the stage inside its margins and keeps its proportions (the
+// stage's height comes from the grid row, which a max-height: 100% on the
+// image wouldn't see).
+.pf-lightbox__img {
+  position: absolute;
+  top: var(--pf-lightbox-top);
+  left: var(--pf-lightbox-side);
+  width: calc(100% - 2 * var(--pf-lightbox-side));
+  height: calc(100% - var(--pf-lightbox-top) - 1rem);
+  object-fit: contain;
+  transition: filter .4s ease;
+
+  &.is-loading {
+    filter: blur(2px);
+  }
+}
+
+.pf-lightbox__bar {
+  display: grid;
+  gap: 0.5rem;
+  max-height: 30vh;
+  padding: 1rem clamp(1rem, 5vw, 5.5rem) 1.5rem;
+  overflow: auto;
+  border-top: 1px solid rgba(242, 239, 244, 0.2);
+}
+
+.pf-lightbox__count {
+  margin: 0;
+  font: 0.75rem/1.5 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bdb6c2; // 9:1
+
+  &:empty {
+    display: none;
+  }
+}
+
+.pf-lightbox__caption {
+  max-width: 48rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-lightbox__btn {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.7rem;
+  color: #f2eff4;
+  background: rgba(242, 239, 244, 0.08);
+  border: 1px solid rgba(242, 239, 244, 0.45); // 3:1 on the lightbox
+  border-radius: 50%;
+  transition: background-color $pf-hover-out ease;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(242, 239, 244, 0.22);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #f2eff4;
+    outline-offset: 2px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-lightbox__close {
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.pf-lightbox__prev,
+.pf-lightbox__next {
+  top: 40%;
+}
+
+.pf-lightbox__prev {
+  left: 0.75rem;
+}
+
+.pf-lightbox__next {
+  right: 0.75rem;
+}
+
+// Phones: the arrows sit under the image, not over it.
+@include media-breakpoint-down(md) {
+  .pf-lightbox__prev,
+  .pf-lightbox__next {
+    top: auto;
+    bottom: calc(100% - 3.5rem);
+  }
+
+  .pf-lightbox__prev {
+    left: auto;
+    right: 7.25rem;
+  }
+
+  .pf-lightbox__next {
+    right: 4rem;
+  }
+}

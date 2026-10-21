@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Exhibition gallery (paragraph type exhibit_page) on a Modular page.
+ *
+ * Like guide_section, palefire_modular already wraps it in the <section>
+ * and its <h2> (field--node--field-scroll-section--modular-page.html.twig),
+ * so this prints only the lead image and the blocks; it must not extend
+ * paragraph.html.twig.
+ *
+ * - lead: decorative image (_palefire_exhibit_image()), drawn full width
+ *   above the heading (CSS order) with a curtain reveal and a slow
+ *   parallax (_exhibition.scss), or NULL.
+ * - focus: object-position keyword for a cropped lead.
+ *
+ * js/exhibition.js shows one gallery at a time and adds the previous /
+ * next links at the foot.
+ */
+#}
+<div{{ attributes.addClass('pf-gallery', lead ? 'pf-gallery--has-lead') }} data-pf-exhibit-page>
+  {% if lead %}
+    <div class="pf-exhibit-lead" aria-hidden="true">
+      <div class="pf-exhibit-lead__frame">
+        <img class="pf-exhibit-lead__img" src="{{ lead.src }}"
+             {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
+             {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
+             style="object-position: {{ focus }}" alt="" loading="lazy" decoding="async">
+      </div>
+    </div>
+  {% endif %}
+  <div class="pf-gallery__body pf-guide">
+    {{ content.field_guide_blocks }}
+  </div>
+</div>

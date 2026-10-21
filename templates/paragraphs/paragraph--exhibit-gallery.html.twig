@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Exhibition image group (paragraph type exhibit_gallery).
+ *
+ * - field_block_title: optional <h3> (a TOC sub-link).
+ * - field_gallery_items: exhibit_figure paragraphs, laid out as a grid
+ *   (each keeps its own caption).
+ * - field_figure_caption: optional caption for the whole group.
+ *
+ * A <figure> of figures, so the group caption describes them all.
+ */
+#}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set caption = content.field_figure_caption|render|trim %}
+<figure{{ attributes.addClass('pf-exhibit-group', not paragraph.isPublished() ? 'paragraph--unpublished') }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  <div class="pf-exhibit-group__grid">
+    {{ content.field_gallery_items }}
+  </div>
+  {% if caption %}
+    <figcaption class="pf-exhibit-group__caption pf-guide-prose">{{ content.field_figure_caption }}</figcaption>
+  {% endif %}
+</figure>

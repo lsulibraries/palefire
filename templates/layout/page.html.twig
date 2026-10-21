@@ -230,7 +230,9 @@
                head would be empty, so it is left out. #}
             {% set head_crumb = page.breadcrumb and not modular_crumb_in_landing %}
             {% if head_crumb or (node.label and not modular_title_in_landing) or guide_head %}
-            <header class="pf-modular__head">
+            {# Exhibition mode: the head is the title page, with its own id
+               for the TOC's "Title page" link (includes/exhibit-cover). #}
+            <header class="pf-modular__head{{ exhibit_head ? ' pf-exhibit-head' }}"{% if exhibit_head %} id="exhibit-title"{% endif %}>
               {% if head_crumb %}
                 <div class="pf-breadcrumb pf-breadcrumb--modular">
                   {{ page.breadcrumb }}
@@ -240,7 +242,9 @@
                  the <h1> above its intro (includes/landing.html.twig)
                  and this one is left out (modular_title_in_landing,
                  PalefireHooks::preprocessPage()). #}
-              {% if node.label and not modular_title_in_landing %}
+              {% if exhibit_head %}
+                {% include '@palefire/includes/exhibit-cover.html.twig' with { head: exhibit_head } only %}
+              {% elseif node.label and not modular_title_in_landing %}
                 <h1 class="pf-modular__title">{{ node.label }}</h1>
               {% endif %}
               {# Guide mode: intro, owner, updated date, subjects

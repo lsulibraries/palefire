@@ -1,8 +1,8 @@
 /**
  * @file
  * Hide / show the TOC sidebar on Modular pages (lg and up), on every page
- * type but guides, where the TOC is required (the button is hidden there
- * and the sidebar never collapses).
+ * type but guides and exhibitions, where the TOC is required (the button is
+ * hidden there and the sidebar never collapses).
  *
  * The state is a class on <html> (pf-toc-collapsed), so it carries over
  * between Swup visits. The visitor's choice is saved in localStorage per
@@ -55,7 +55,8 @@
   }
 
   function wanted() {
-    if (mode() === 'guide') {
+    // Exhibitions navigate by the TOC (js/exhibition.js), so it stays too.
+    if (mode() === 'guide' || mode() === 'exhibition') {
       return false;
     }
     return stored() === true;

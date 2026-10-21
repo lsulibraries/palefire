@@ -14,6 +14,7 @@ at https://lib.lsu.edu/v2/special.
 - [Tile showcase](#tile-showcase)
 - [Events carousel](#events-carousel)
 - [Guide pages](#guide-pages)
+- [Exhibition pages](#exhibition-pages)
 - [Reading colours and Settings](#reading-colours-and-settings)
 - [Header, menu and drawers](#header-menu-and-drawers)
 - [Page transitions (Swup 4)](#page-transitions-swup-4)
@@ -99,6 +100,8 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_guide_setup.php` | Guide content model: Resource type, guide paragraph types, guide fields (incl. Guide editors) |
 | `palefire_louisiana_newspapers_setup.php` | `parish_map`, `parish_entry`, `family_trees` paragraph types |
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
+| `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
+| `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
@@ -448,6 +451,75 @@ drush php:script themes/custom/palefire/scripts/palefire_guide_wysiwyg.php -- ap
 The first run lists what would change; `apply=1` saves each guide as a new
 revision. It stops if WYSIWYG lacks the tags above (`force=1` overrides).
 
+## Exhibition pages
+
+A Modular page with **Type = exhibition** holds an online exhibition: a
+title page, then one gallery (section) at a time, chosen from the TOC.
+
+### Set up (production, once)
+
+```bash
+drush php:script themes/custom/palefire/scripts/palefire_exhibit_setup.php
+drush cr
+```
+
+Run `palefire_guide_setup.php` first (exhibitions reuse its blocks and
+`field_guide_blocks`). Give editors "Create new media" for images.
+
+### Content model
+
+On `node.modular_page` (exhibition mode only, printed by
+`includes/exhibit-cover.html.twig`): `field_exhibit_subtitle`,
+`field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
+`field_exhibit_prompt` (default "Choose a gallery from the table of contents
+to begin."), and `field_intro` if filled.
+
+| Paragraph type | Fields | Notes |
+| --- | --- | --- |
+| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_lead` + `_lead_focus`, `field_guide_blocks` | A section. The lead is decorative, full width, curtain + parallax |
+| `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
+| `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox |
+| `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
+| `exhibit_citation` (Catalogue record) | `field_block_body` | Set like a museum label |
+| `exhibit_audio` (Audio) | Title, `field_audio_file`, speaker/date, `field_audio_transcript` (required) | Oral history; custom player, transcript in a `<details>` |
+
+Galleries also take `guide_text`, `guide_accordion` and `guide_video`.
+`guide_text` with Style **Sources** gives each list item an id,
+`#src-<surname>` (`src/ExhibitSources.php`), so citations can link to it.
+Images use the `exhibit_640/1280/1920/2560` WebP styles as a srcset
+(`_palefire_exhibit_image()`); the original is never sent. Alt text comes
+from the media item. A figure with no image shows only to editors.
+
+### Behaviour
+
+- `js/exhibition.js`: one gallery shown, the rest `[hidden]`. TOC links,
+  "Begin", the previous / next links it adds at each gallery's foot, and any
+  `#link` in the text (an entry or source on another gallery) fade out,
+  swap, fade in and glide to the target. Gallery changes push a history
+  entry (Back works); jumps inside a gallery replace it. While a gallery is
+  open the title page folds to a running head that keeps the `<h1>`.
+- TOC: "Title page" first, entries listed under their gallery whatever the
+  block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
+  button. `modular-toc.js` picks its edge cases from the shown gallery.
+- Motion (`_exhibition.scss`): title page image, kicker, title, credit and
+  prompt come in one after another; lead images open with a curtain;
+  lead and full-width images drift with the scroll (`animation-timeline:
+  view()`); side figures rise in. All off under reduced motion.
+- Long biographies fold to their opening lines with "Read the full
+  biography". Lightbox: `<dialog>`, arrows, swipe, Esc, focus returns.
+- Without JS every gallery shows in order and images open on their own.
+
+### AVES
+
+`scripts/data/aves.json` (made from the Wayback Machine's copy of
+exhibitions.blogs.lib.lsu.edu/?p=5206 and its 53 "Read more" pop-ups) holds
+the 19 galleries word for word: each pop-up's full text replaces its
+shortened lead, the "Image:" and "Biography:" labels become the figure and
+the biography, and old page links point at the new anchors. Images are the
+4K originals; 17 exhibition images have no 4K file and are left for editors
+(the script lists them). Unused 4K plates and photographs are the galleries'
+decorative leads; change them in the editor.
+
 ## Reading colours and Settings
 
 Settings > **Reading colours** sets page and text colours for the whole site.
@@ -561,6 +633,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibition pages** (new Type, `exhibition`): a title page whose image,
+  title and prompt come in in sequence, then one gallery at a time with
+  cross-fades driven by the TOC; galleries hold entries (a second nesting
+  level), images with captions and a lightbox, image groups, catalogue
+  records and oral history audio with transcripts, all as WYSIWYG, media and
+  list fields. Leads open with a curtain and drift with the scroll. AVES
+  (2012) rebuilt from the Wayback Machine with its 4K images
+  (`palefire_exhibit_aves.php`). Why: a showcase format for online
+  exhibitions, replacing the old WordPress page-by-page site.
 - **Request paths: screenshots on demand.** Steps A1–A3 and B1–B4 open a
   "how" panel with screenshots of the catalog and request system, and the fees
   and timing (50 cents a page plus $10 per order; invoice in 24–48 hours;

@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Exhibition title page: the page's <h1> over a full-screen image.
+ *
+ * Printed inside .pf-modular__head (page.html.twig) on Modular pages in
+ * exhibition mode. Variables: head (PalefireHooks::exhibitHead()):
+ * - title, subtitle: the <h1> and the line under it.
+ * - credit, intro: render arrays or NULL.
+ * - prompt: the line that points at the table of contents.
+ * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
+ *
+ * The parts come in one after another on load (_exhibition.scss):
+ * image, title, subtitle, credit, then the prompt. js/exhibition.js
+ * shows this page for "Title page" in the TOC and hides it while a
+ * gallery is open; without the script, everything is one long page.
+ *
+ * "Begin" opens the first gallery; below lg, "Contents" opens the TOC
+ * drawer, which is where the prompt points there.
+ */
+#}
+{{ attach_library('palefire/exhibition') }}
+<div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}">
+  {% if head.cover %}
+    <div class="pf-exhibit-cover__media" aria-hidden="true">
+      <img class="pf-exhibit-cover__img" src="{{ head.cover.src }}"
+           {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="{{ head.cover.sizes }}"{% endif %}
+           {% if head.cover.width %}width="{{ head.cover.width }}" height="{{ head.cover.height }}"{% endif %}
+           alt="" loading="eager" fetchpriority="high" decoding="async">
+    </div>
+  {% endif %}
+  <div class="pf-exhibit-cover__text">
+    <p class="pf-exhibit-cover__kicker pf-exhibit-cover__step" style="--pf-step: 1">{{ 'Exhibition'|t }}</p>
+    <h1 class="pf-modular__title pf-exhibit-cover__title pf-exhibit-cover__step" style="--pf-step: 2">
+      {{- head.title -}}
+      {% if head.subtitle %}
+        <span class="visually-hidden">: </span><span class="pf-exhibit-cover__subtitle">{{ head.subtitle }}</span>
+      {% endif %}
+    </h1>
+    {% if head.intro %}
+      <div class="pf-exhibit-cover__intro pf-exhibit-cover__step" style="--pf-step: 3">{{ head.intro }}</div>
+    {% endif %}
+    {% if head.credit %}
+      <div class="pf-exhibit-cover__credit pf-exhibit-cover__step" style="--pf-step: 4">{{ head.credit }}</div>
+    {% endif %}
+    <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 5">
+      <p class="pf-exhibit-cover__prompt-text">
+        <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
+        {{ head.prompt }}
+      </p>
+      <div class="pf-exhibit-cover__actions" data-pf-exhibit-actions hidden>
+        <a class="pf-exhibit-button pf-exhibit-button--primary" href="#" data-pf-exhibit-begin>
+          {{ 'Begin'|t }}
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        </a>
+        <button type="button" class="pf-exhibit-button d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
+          {{ 'Contents'|t }}
+        </button>
+      </div>
+    </div>
+  </div>
+  {{ head.cache }}
+</div>
