@@ -325,12 +325,13 @@ $pf-opener: 'html[data-pf-mode="exhibition"] #{$pf-opener-inner}';
 $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-opener-inner}';
 
 #{$pf-opener} {
-  // The stage: the whole screen, under the header and the running head's
-  // bar (glass), which sit over it. The hero reaches up behind them by the
-  // section's padding, the expanded header and the bar (js/exhibition.js
-  // measures the bar). The fade has a length only while the pan is on.
-  --pf-stage-h: 100svh;
-  --pf-bleed-top: calc(var(--pf-section-pad-block) + var(--pf-header-full, var(--pf-header-h)) + var(--pf-exhibit-head-h, 0px));
+  // The stage: the rest of the screen under the expanded header and the
+  // running head's bar (js/exhibition.js measures the bar), so the whole
+  // image shows from its top edge. The hero reaches up through the
+  // section's padding to the bar. The fade has a length only while the pan
+  // is on.
+  --pf-stage-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-exhibit-head-h, 0px));
+  --pf-bleed-top: var(--pf-section-pad-block);
   --pf-fade-len: 0px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -373,9 +374,11 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 }
 
 .pf-exhibit-hero__stage {
+  // Pinned right under the bar. The header compacts as the page scrolls,
+  // and the stage grows with it to keep reaching the screen's foot.
   position: sticky;
-  top: 0;
-  height: var(--pf-stage-h);
+  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
+  height: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
   min-height: 26rem;
   overflow: clip;
 
@@ -431,10 +434,10 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   object-fit: cover;
 }
 
+// The lead's caption shows in the lightbox (the bar's zoom button); here it
+// stays for screen readers, as the figure's label.
 .pf-exhibit-hero__caption {
-  grid-row: 5;
-  grid-column: 1;
-  margin-inline: calc(-1 * var(--pf-section-pad-inline));
+  @include visually-hidden;
 }
 
 .pf-exhibit-opener {
@@ -503,7 +506,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
   // The layer that covers the image: full width, on the page colour, with
   // no gaps (margins become padding) through to the previous / next links.
-  > .pf-gallery > .pf-exhibit-hero__caption,
   > .pf-gallery > .pf-gallery__body,
   > .pf-exhibit-pager {
     position: relative;
@@ -516,16 +518,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     // ink overflow, so it never scrolls sideways.
     box-shadow: 0 0 0 100vmax var(--bs-body-bg);
     clip-path: inset(0 -100vmax 0 0);
-  }
-
-  > .pf-gallery > .pf-exhibit-hero__caption {
-    max-width: none;
-    margin-top: 0;
-    // Overlap the text below by a pixel: no seam between the two layers.
-    margin-bottom: -1px;
-    padding-top: 1.25rem;
-    // The text keeps its measure; the colour runs to the edge.
-    padding-inline-end: max(var(--pf-section-pad-inline), calc(100% - var(--pf-exhibit-prose) - var(--pf-section-pad-inline)));
   }
 
   > .pf-gallery > .pf-gallery__body {
@@ -867,21 +859,17 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   overflow: hidden;
 
   // A wash of the page colour where the text sits, so it keeps the
-  // swatch's contrast on any image: a band behind the breadcrumb, then the
-  // bottom below lg (the text spans the column) or the left from lg (beside
-  // the TOC, the text takes about half the column).
+  // swatch's contrast on any image: the bottom below lg (the text spans the
+  // column) or the left from lg (beside the TOC, the text takes about half
+  // the column). The breadcrumb's bar has its own glass.
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(to bottom, var(--bs-body-bg) 4.5rem, transparent 9rem),
-      linear-gradient(to top, var(--bs-body-bg) 45%, color-mix(in srgb, var(--bs-body-bg) 70%, transparent) 65%, transparent 92%);
+    background: linear-gradient(to top, var(--bs-body-bg) 45%, color-mix(in srgb, var(--bs-body-bg) 70%, transparent) 65%, transparent 92%);
 
     @include media-breakpoint-up(lg) {
-      background:
-        linear-gradient(to bottom, var(--bs-body-bg) 4.5rem, transparent 9rem),
-        linear-gradient(to right, var(--bs-body-bg) 34%, color-mix(in srgb, var(--bs-body-bg) 80%, transparent) 56%, transparent 80%);
+      background: linear-gradient(to right, var(--bs-body-bg) 34%, color-mix(in srgb, var(--bs-body-bg) 80%, transparent) 56%, transparent 80%);
     }
   }
 }
@@ -1209,8 +1197,14 @@ html.pf-exhibit-paged .pf-exhibit-head.is-folded {
 
 // The gallery's title again at the start of the text (full opening with an
 // image: the <h2> has faded with the hero by then). Set like the <h2> at
-// its usual size, with the gallery number above it; aria-hidden.
+// its usual size, with the gallery number above it; aria-hidden. Only
+// while the image is pinned and pans: otherwise the <h2> is just above.
 .pf-exhibit-body-title {
+  display: none;
+}
+
+#{$pf-opener}[style*="--pf-pan"] .pf-exhibit-body-title {
+  display: block;
   max-width: 24ch;
   margin: 0;
   font-size: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);

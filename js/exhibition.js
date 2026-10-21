@@ -218,7 +218,7 @@
 
   // In sight: more than about two lines' worth of the image shows between
   // the bar and whichever comes first, the image's foot or the top of the
-  // caption / text sliding over it.
+  // text sliding over it.
   function updateZoom() {
     const button = state.zoom;
     if (!button) {
@@ -229,7 +229,7 @@
     if (found && found[0].getClientRects().length) {
       const bar = button.closest('.pf-landing__bar').getBoundingClientRect().bottom;
       let bottom = Math.min(found[0].getBoundingClientRect().bottom, window.innerHeight);
-      const layer = state.current ? state.current.querySelector('.pf-exhibit-hero__caption, .pf-gallery__body') : null;
+      const layer = state.current ? state.current.querySelector('.pf-gallery__body') : null;
       if (layer && found[0].matches('.pf-exhibit-hero__stage')) {
         bottom = Math.min(bottom, layer.getBoundingClientRect().top);
       }
@@ -260,7 +260,7 @@
       return;
     }
     const w = hero.getBoundingClientRect().width;
-    const h = window.innerHeight - (parseFloat(getComputedStyle(ROOT).getPropertyValue('--pf-header-h')) || 0);
+    const h = hero.querySelector('.pf-exhibit-hero__stage').getBoundingClientRect().height;
     const overflow = Math.max(w * ratio - h, h / ratio - w);
     inner.style.setProperty('--pf-pan', Math.round(Math.min(Math.max(overflow, h / 3), h * 1.6)) + 'px');
   }

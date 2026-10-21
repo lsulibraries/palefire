@@ -22,8 +22,9 @@
  * - lead: image values (_palefire_exhibit_image()), or NULL.
  * - lead_caption: rendered caption, or NULL. With one, the image is a
  *   figure: its alt text is announced, it opens in the lightbox like the
- *   other images, and the caption sits under it. Without one it is
- *   decorative (alt="", aria-hidden).
+ *   other images, and the caption sits under it (in the full opening it
+ *   shows only in the lightbox, and labels the figure for screen readers).
+ *   Without one it is decorative (alt="", aria-hidden).
  * - focus: object-position keyword for a cropped image. lead_x: the
  *   compact band's pan position.
  * - entries, entries_more: links for the full opening; dom_id: id base.
@@ -47,7 +48,7 @@
       {# The image stays pinned while the heading and links fade, then pans
          through the whole image (js/exhibition.js sizes the pan from
          data-ratio). With a caption it is announced as a figure and opens
-         in the lightbox; the caption follows the pan (row 5). #}
+         in the lightbox, which shows the caption (visually hidden here). #}
       <div class="pf-exhibit-hero{{ lead_caption ? ' has-caption' }}" data-pf-hero
            {% if lead.width %}data-ratio="{{ (lead.height / lead.width)|round(4) }}"{% endif %}
            {% if lead_caption %}role="figure" aria-labelledby="{{ dom_id }}-caption"{% else %}aria-hidden="true"{% endif %}>

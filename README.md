@@ -515,14 +515,16 @@ from the media item. A figure with no image shows only to editors.
   to 100% 100%, so a tall plate pans down and a wide photo across). Below
   lg, with reduced motion or without scroll-driven animations there is no
   pin (below lg the image pans as it scrolls off). After the pan the image
-  stays put and the caption, the text and the previous / next links slide
+  stays put and the text and the previous / next links slide
   up over it on the page colour: the hero then spans the whole gallery
   (its sticky stage holds until the text covers it) and
   `.pf-section__inner::before` sizes the first rows instead.
 - The pin runs in order: the heading and links fade (first 30% of a
   screen), the wash clears (15-40%), and only then does the image pan
-  (from 40%, `--pf-fade-len`). The image reaches up under the header and
-  the breadcrumb bar (both glass), so it shows through them.
+  (from 40%, `--pf-fade-len`). The image starts right under the
+  breadcrumb bar and pins there, so its top edge is never hidden. A
+  full-screen lead's caption shows only in the lightbox (visually hidden
+  under the image, where it labels the figure for screen readers).
 - Breadcrumb: the landing's sub-header bar (`.pf-landing__bar`), with the
   TOC's hide/show button. While a gallery is open the title page folds to
   that bar, sticky under the header for the whole gallery; the `<h1>` stays
@@ -533,9 +535,10 @@ from the media item. A figure with no image shows only to editors.
   button (`.pf-exhibit-zoom`) opens the view's opening image (the cover, or
   the gallery's lead) in the lightbox; it fades in while that image is in
   sight and out once the text covers it or it scrolls away.
-- The TOC's first link is "Home" (the title page). Galleries with a
-  full-screen opening and an image repeat their title, with the gallery
-  number, at the start of the text (`.pf-exhibit-body-title`, aria-hidden). "Skip to the text"
+- The TOC's first link is "Home" (the title page). Galleries whose image
+  pins and pans repeat their title, with the gallery number, at the start
+  of the text (`.pf-exhibit-body-title`, aria-hidden; not below lg, where
+  the heading is just above). "Skip to the text"
   glides past it; the stage allows for the running head
   (`--pf-exhibit-head-h`).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
@@ -673,6 +676,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions:** a full-screen gallery image now starts right under the
+  breadcrumb bar instead of behind it; its caption shows only in the
+  lightbox (still read as the figure's caption); the title page's cover
+  drops the dark band at its top; below lg the text no longer repeats the
+  gallery title. Why: the image's top was always hidden, and the caption
+  and title read as repeats.
 - **Exhibitions:** a zoom button at the right end of the breadcrumb bar
   opens the cover or the gallery's lead image full screen, and fades away
   once the image is out of sight. It replaces the full opening's corner
