@@ -607,6 +607,18 @@ production downstream as usual.
   published revision, plus the latest draft if there is an unpublished one.
   It changes nothing.
 
+### Quick Guide: smaller star, hairline lines (2026-10-20)
+
+The Quick Guide's star is now 12px tall (width follows its shape) so it
+reads as a small ornament, not an icon. The rule's two lines were 2px gold;
+they are now the shared 1px hairline (`$pf-hairline`), like every other line
+in the theme, and the request paths' connecting line and disc outlines use
+it there too (`--pf-guide-rule` on `.pf-quick-guide .pf-paths`). The star
+keeps the gold. The full guide is unchanged.
+
+Files: `scss/components/_landing-features.scss`. Rebuild `css/style.css`
+with `npm run build:css` after applying.
+
 ### Landing hero: Quick Guide under the features (2026-10-20)
 
 The hero's lead panel (Special Collections) now goes on past the blog post

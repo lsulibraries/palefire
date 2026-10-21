@@ -839,7 +839,7 @@ html.pf-a11y-motion {
 }
 
 // --- Quick guide: under the features, in the lead panel --------------------
-// A gold rule (two equal lines with a duotone star between them), 80px of
+// A rule (two equal hairlines with a small gold duotone star between), 80px of
 // space above and below it from about 1333px wide (3rem on phones, like the
 // sections' padding), then the heading, a line of intro, the request paths
 // from the full guide (includes/guide-request-paths.html.twig, styled in
@@ -865,10 +865,11 @@ html.pf-a11y-motion {
   margin-bottom: var(--pf-quick-space);
   color: var(--pf-quick-gold);
 
+  // The lines are the shared hairline; only the star keeps the gold.
   &::before,
   &::after {
     content: "";
-    border-top: 2px solid currentColor;
+    border-top: 1px solid #{$pf-hairline};
   }
 }
 
@@ -876,8 +877,8 @@ html.pf-a11y-motion {
   display: flex;
 
   svg {
-    width: clamp(2rem, 4vw, 2.75rem);
-    height: clamp(2rem, 4vw, 2.75rem);
+    width: auto;
+    height: 12px;
     fill: currentColor;
   }
 }
@@ -902,6 +903,9 @@ html.pf-a11y-motion {
 // above already sets them off. The stops' discs keep the page colour
 // (opaque, so the line still passes behind them).
 .pf-quick-guide .pf-paths {
+  // The stops' line and disc outlines in the shared hairline.
+  --pf-guide-rule: #{$pf-hairline};
+
   max-width: none;
   padding: 0;
   border: 0;
