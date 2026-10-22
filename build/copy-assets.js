@@ -28,6 +28,9 @@ const icons = [
   'file-earmark-text', 'database', 'tools', 'card-checklist', 'easel',
   'play-fill', 'file-earmark-pdf', 'file-earmark-word', 'download', 'person',
   'globe2', 'plus-lg',
+  // Footer social links, when the FA Pro brand icons are missing
+  // (includes/footer.html.twig).
+  'instagram', 'facebook',
 ];
 
 function copy(from, to) {

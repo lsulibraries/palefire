@@ -1,0 +1,171 @@
+{#
+/**
+ * @file
+ * Site footer (page.html.twig), in two versions that lead with their own
+ * building and name the other in one line: Special Collections (Hill
+ * Memorial Library) on /special and the pages under it, the Main Library
+ * everywhere else. PalefireHooks::preprocessPage() sets footer_special.
+ *
+ * The footer is a Swup container (js/palefire-swup.js), so it changes along
+ * with the page.
+ *
+ * Hours: js/footer.js gives each [data-pf-footer-lid] its data-pf-hours
+ * attributes when the footer comes near the viewport, and visit-hours.js
+ * fills them (one LibCal request per location, shared with the Hours
+ * drawer). Until then, or if LibCal doesn't answer, they read "Hours".
+ *
+ * Content: edit the `footers` map below. `lid` is a LibCal location (the
+ * same IDs as hours_locations in utility-panels.html.twig). Social icons
+ * are FA Pro brand SVGs from the server, or the Bootstrap Icons copies in
+ * images/bi when those are missing.
+ *
+ * Available variables:
+ * - special: TRUE for the Special Collections version.
+ * - branding: the footer region (the site branding block), printed in the
+ *   bottom bar.
+ * - cache: an empty render array carrying the url.path cache context.
+ */
+#}
+{{ cache }}
+{% set sc = base_path ~ 'special' %}
+{%
+  set footers = {
+    special: {
+      kicker: 'Special Collections'|t,
+      heading: 'Rare books, manuscripts and University Archives at Hill Memorial Library.'|t,
+      intro: 'Hill Memorial Library is open to everyone. Create a Special Collections account and request items ahead of your visit.'|t,
+      cta: { label: 'Plan a research visit'|t, url: sc ~ '/guides/special-collections' },
+      lid: '236',
+      phone: '225-578-6544',
+      ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special' },
+      other: { name: 'Main Library'|t, lid: '241', label: 'Main Library home'|t, url: base_path },
+      links: [
+        { title: 'Visit'|t, items: [
+          { label: 'How to use Special Collections'|t, url: sc ~ '/guides/special-collections' },
+          { label: 'Special Collections account'|t, url: 'https://specialcollections.lib.lsu.edu/logon' },
+          { label: 'Reading room policies'|t, url: 'https://lib.lsu.edu/visitsc#scpolicies' },
+          { label: 'All library hours'|t, url: 'https://lsu.libcal.com/hours' },
+        ] },
+        { title: 'Explore'|t, items: [
+          { label: 'Special Collections home'|t, url: sc },
+          { label: 'LSU History exhibition'|t, url: sc ~ '/universityarchives/lsuexhibition' },
+          { label: 'Staff favorites exhibition'|t, url: sc ~ '/favorites/part1' },
+          { label: 'Louisiana Digital Library'|t, url: 'https://louisianadigitallibrary.org/' },
+        ] },
+      ],
+      social: [
+        { label: 'Special Collections on Instagram'|t, fa: 'instagram', bi: 'instagram', url: 'https://www.instagram.com/lsuspecialcollections' },
+        { label: 'Special Collections on Facebook'|t, fa: 'facebook-f', bi: 'facebook', url: 'https://www.facebook.com/LSUspecialcollections' },
+      ],
+    },
+    main: {
+      kicker: 'LSU Libraries'|t,
+      heading: 'Research help, study space and collections at the Main Library.'|t,
+      intro: 'Librarians answer questions by chat, email and phone. Ask about a source, a citation or where to start.'|t,
+      cta: { label: 'Ask a librarian'|t, url: 'https://askus.lib.lsu.edu/' },
+      lid: '241',
+      phone: '225-578-5652',
+      ask: { label: 'Email the Main Library'|t, url: '/askus/widgets/19448' },
+      other: { name: 'Hill Memorial Library, Special Collections'|t, lid: '236', label: 'Special Collections home'|t, url: sc },
+      links: [
+        { title: 'Visit'|t, items: [
+          { label: 'All library hours'|t, url: 'https://lsu.libcal.com/hours' },
+          { label: 'Staff directory'|t, url: 'https://lib.lsu.edu/staff' },
+          { label: 'Library policies'|t, url: 'https://lib.lsu.edu/policies' },
+          { label: 'Jobs'|t, url: 'https://lib.lsu.edu/about/jobs' },
+        ] },
+        { title: 'Explore'|t, items: [
+          { label: 'Special Collections'|t, url: sc },
+          { label: 'LSU Scholarly Repository'|t, url: 'https://repository.lsu.edu/' },
+          { label: 'Louisiana Digital Library'|t, url: 'https://louisianadigitallibrary.org/' },
+          { label: 'Give to LSU Libraries'|t, url: 'https://bbis32491p.sky.blackbaud.com/give-now' },
+        ] },
+      ],
+      social: [
+        { label: 'LSU Libraries on Instagram'|t, fa: 'instagram', bi: 'instagram', url: 'https://www.instagram.com/lsulibraries' },
+        { label: 'LSU Libraries on Facebook'|t, fa: 'facebook-f', bi: 'facebook', url: 'https://www.facebook.com/LSUMainLibrary' },
+      ],
+    },
+  }
+%}
+{% set f = special ? footers.special : footers.main %}
+<footer id="pf-footer" class="pf-footer mt-auto{{ special ? ' pf-footer--special' }}" data-bs-theme="dark">
+  <div class="pf-footer__inner">
+    <div class="pf-footer__lead">
+      <div class="pf-footer__intro">
+        <p class="pf-footer__kicker">{{ f.kicker }}</p>
+        <h2 class="pf-footer__title" id="pf-footer-title">{{ f.heading }}</h2>
+        <p class="pf-footer__text">{{ f.intro }}</p>
+        <a class="pf-footer__cta" href="{{ f.cta.url }}">{{ f.cta.label }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a>
+      </div>
+      <dl class="pf-footer__facts">
+        <div class="pf-footer__fact">
+          <dt>{{ 'Today'|t }}</dt>
+          <dd class="pf-footer__hours" data-pf-footer-lid="{{ f.lid }}">
+            <span class="pf-footer__dot" aria-hidden="true"></span>
+            <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+            <span class="pf-footer__today" data-pf-hours-today></span>
+          </dd>
+        </div>
+        <div class="pf-footer__fact">
+          <dt>{{ 'Call'|t }}</dt>
+          <dd><a href="tel:+1{{ f.phone|replace({'-': ''}) }}">{{ f.phone }}</a></dd>
+        </div>
+        <div class="pf-footer__fact">
+          <dt>{{ 'Ask'|t }}</dt>
+          <dd><a href="{{ f.ask.url }}">{{ f.ask.label }}</a></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="pf-footer__more">
+      <div class="pf-footer__other">
+        <h2 class="pf-footer__label">{{ 'Also at LSU Libraries'|t }}</h2>
+        <p class="pf-footer__other-name">{{ f.other.name }}</p>
+        <p class="pf-footer__hours pf-footer__hours--other" data-pf-footer-lid="{{ f.other.lid }}">
+          <span class="pf-footer__dot" aria-hidden="true"></span>
+          <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+          <span class="pf-footer__today" data-pf-hours-today></span>
+        </p>
+        <a href="{{ f.other.url }}">{{ f.other.label }}</a>
+      </div>
+      {% for group in f.links %}
+        <nav class="pf-footer__nav" aria-labelledby="pf-footer-nav-{{ loop.index }}">
+          <h2 class="pf-footer__label" id="pf-footer-nav-{{ loop.index }}">{{ group.title }}</h2>
+          <ul class="pf-footer__links">
+            {% for link in group.items %}
+              <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endfor %}
+    </div>
+
+    <div class="pf-footer__bar">
+      {% if branding %}
+        <div class="pf-footer__brand">{{ branding }}</div>
+      {% endif %}
+      <p class="pf-footer__copy">© {{ 'now'|date('Y') }} {{ 'Louisiana State University'|t }}</p>
+      <ul class="pf-footer__legal">
+        <li><a href="https://lib.lsu.edu/accessibilitysupport">{{ 'Accessibility support'|t }}</a></li>
+        <li><a href="https://www.lsu.edu/ocr-tix/accessibility/">{{ 'LSU accessibility'|t }}</a></li>
+        <li><a href="https://www.lsu.edu/privacy/">{{ 'Privacy'|t }}</a></li>
+      </ul>
+      <ul class="pf-footer__social">
+        {% for item in f.social %}
+          {# Theme and site-library SVG files, so |raw is safe here. #}
+          {% set svg = source('libraries/fontawesome-pro/svgs/brands/' ~ item.fa ~ '.svg', ignore_missing = true) %}
+          {% if svg is empty %}
+            {% set svg = source(directory ~ '/images/bi/' ~ item.bi ~ '.svg', ignore_missing = true) %}
+          {% endif %}
+          <li>
+            <a href="{{ item.url }}" class="pf-footer__social-link">
+              <span class="pf-icon" aria-hidden="true">{{ svg|raw }}</span>
+              <span class="visually-hidden">{{ item.label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</footer>

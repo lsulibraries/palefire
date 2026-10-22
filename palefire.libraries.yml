@@ -330,3 +330,14 @@ exhibition:
     - core/drupal
     - core/once
     - palefire/global
+
+# Site footer (includes/footer.html.twig): starts the footer's LibCal hours
+# once it nears the viewport. Attached by page.html.twig on every page.
+footer:
+  version: 1.0.0
+  js:
+    js/footer.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/visit

@@ -37,8 +37,9 @@
  * sections and their content keep their place in the main column.
  *
  * Swup page transitions (js/palefire-swup.js, anonymous visitors only) swap
- * #swup (breadcrumb + body) and #pf-primary-menu (active trail) on each
- * visit. The header shell and footer persist between pages.
+ * #swup (breadcrumb + body), #pf-primary-menu (active trail) and #pf-footer
+ * (Main Library or Special Collections) on each visit. The header shell
+ * persists between pages.
  *
  * @see html.html.twig
  */
@@ -290,11 +291,15 @@
     </div>
   </div>{# /#swup #}
 
-  {% if page.footer %}
-    <footer class="pf-footer mt-auto" data-bs-theme="dark">
-      <div class="container-xxl py-5">
-        {{ page.footer }}
-      </div>
-    </footer>
-  {% endif %}
+  {# Footer: Special Collections or Main Library (footer_special,
+     PalefireHooks::preprocessPage()). The footer region's blocks (the site
+     branding) go in its bottom bar. #}
+  {{ attach_library('palefire/footer') }}
+  {% include '@palefire/includes/footer.html.twig' with {
+    special: footer_special,
+    cache: footer_cache,
+    branding: page.footer,
+    base_path: base_path,
+    directory: directory,
+  } only %}
 </div>

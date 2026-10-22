@@ -1,22 +1,387 @@
-// Footer uses Bootstrap's dark color mode (data-bs-theme="dark").
+// Site footer (includes/footer.html.twig): a lead with the section's own
+// building (heading, call to action, today's hours, phone, Ask Us), then a
+// row with the other building and two link lists, then the bottom bar.
+//
+// Colours come from Bootstrap's dark mode (data-bs-theme="dark") or, under
+// a reading colour, from the swatch (_reading-themes.scss maps both onto
+// the --bs-* properties used here). The accent is gold on the dark footer
+// and the swatch's accent under a reading colour.
+
+$pf-footer-max: 1320px; // Bootstrap's container-xxl.
 
 .pf-footer {
+  --pf-footer-accent: #{$pf-gold};
+  --pf-footer-on-accent: #1a1025; // ≈13:1 on gold.
+  --pf-section-border: var(--bs-secondary-color);
   background-color: $gray-900;
   color: var(--bs-body-color);
 
-  .block + .block {
-    margin-top: $spacer * 1.5;
+  // The last snap point on scroll-snap landing pages (_modular.scss), so the
+  // footer is never left half in view.
+  html.pf-snap & {
+    @include media-breakpoint-up($pf-snap-breakpoint) {
+      scroll-snap-align: end;
+    }
+  }
+
+  a {
+    color: var(--bs-link-color);
+  }
+
+  a:is(:hover, :focus-visible) {
+    color: var(--bs-link-hover-color);
+  }
+}
+
+html#{$pf-themed} .pf-footer {
+  --pf-footer-accent: var(--pf-g-accent);
+  --pf-footer-on-accent: var(--pf-g-on-accent);
+}
+
+.pf-footer__inner {
+  max-width: $pf-footer-max;
+  margin-inline: auto;
+  padding-block: 3rem 1.5rem;
+
+  @each $bp, $gutter in $pf-header-gutters {
+    @include media-breakpoint-up($bp) {
+      padding-inline: $gutter;
+    }
   }
 
   @include media-breakpoint-up(md) {
-    .region-footer {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-      gap: $spacer * 2;
+    padding-block: 4rem 1.75rem;
+  }
 
-      .block + .block {
-        margin-top: 0;
-      }
+  @include media-breakpoint-up(xl) {
+    padding-block: 5rem 2rem;
+  }
+}
+
+// Small uppercase labels: the kicker, the facts and the column titles.
+%pf-footer-label {
+  margin: 0 0 .875rem;
+  font-size: $pf-nav-font-size;
+  font-weight: $font-weight-bold;
+  line-height: 1.4;
+  letter-spacing: $pf-nav-tracking;
+  text-transform: uppercase;
+}
+
+// --- Lead ---------------------------------------------------------------
+
+.pf-footer__lead {
+  display: grid;
+  gap: 2rem;
+  padding-bottom: 2.5rem;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
+.pf-footer__kicker {
+  @extend %pf-footer-label;
+  color: var(--pf-footer-accent);
+}
+
+.pf-footer__title {
+  margin: 0 0 .75rem;
+  max-width: 22ch;
+  color: var(--bs-emphasis-color);
+  font-size: $pf-h2-size;
+  font-weight: $pf-display-weight;
+  line-height: 1.12;
+  letter-spacing: -.015em;
+  text-wrap: balance;
+}
+
+.pf-footer__text {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--bs-secondary-color);
+}
+
+.pf-footer .pf-footer__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  min-height: $pf-header-target;
+  margin-top: 1.5rem;
+  padding: .625rem 1.25rem;
+  border-radius: 50rem;
+  background-color: var(--pf-footer-accent);
+  color: var(--pf-footer-on-accent);
+  font-weight: $font-weight-bold;
+  text-decoration: none;
+  transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  &:is(:hover, :focus-visible) {
+    background-color: var(--bs-emphasis-color);
+    color: var(--bs-body-bg);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-footer__arrow {
+  transition: transform $pf-hover-out ease;
+
+  .pf-footer__cta:is(:hover, :focus-visible) & {
+    transform: translateX(.25rem);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-footer__facts {
+  margin: 0;
+}
+
+.pf-footer__fact {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: .75rem;
+  border-top: 1px solid $pf-hairline;
+
+  &:last-child {
+    border-bottom: 1px solid $pf-hairline;
+  }
+
+  dt {
+    @extend %pf-footer-label;
+    margin: 0;
+    padding-top: .125rem;
+    color: var(--bs-secondary-color);
+  }
+
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+// --- Hours (filled by visit-hours.js) -----------------------------------
+
+.pf-footer__hours {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: .5rem;
+  margin: 0;
+}
+
+// Same colours as the Visit strip's dot (_visit.scss). The text says open
+// or closed; the dot only repeats it.
+.pf-footer__dot {
+  flex: none;
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: 50%;
+  background-color: var(--bs-secondary-color);
+  transition: background-color .3s ease;
+
+  [data-hours-state="open"] > & {
+    background-color: #2f9e4f;
+  }
+
+  [data-hours-state="soon"] > & {
+    background-color: $pf-gold;
+  }
+
+  [data-hours-state="closed"] > & {
+    background-color: #c8102e;
+  }
+
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
+  }
+}
+
+.pf-footer__today {
+  color: var(--bs-secondary-color);
+
+  &:empty {
+    display: none;
+  }
+
+  // Decorative middle dot: empty alt text keeps it out of screen readers.
+  &::before {
+    content: "·" / "";
+    margin-inline-end: .5rem;
+  }
+
+  // The Today row is narrow: today's hours go on their own line, under the
+  // status, so a wrap never starts a line with the dot.
+  .pf-footer__fact & {
+    flex-basis: 100%;
+    padding-inline-start: 1rem;
+
+    &::before {
+      content: none;
     }
+  }
+}
+
+// --- The other building and the link lists ---------------------------
+
+.pf-footer__more {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+  padding-block: 2rem;
+  border-top: 1px solid $pf-hairline;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+}
+
+.pf-footer__other {
+  grid-column: 1 / -1;
+
+  @include media-breakpoint-up(md) {
+    grid-column: auto;
+  }
+
+  p {
+    margin: 0 0 .25rem;
+  }
+}
+
+.pf-footer__label {
+  @extend %pf-footer-label;
+  color: var(--bs-secondary-color);
+}
+
+.pf-footer__other-name {
+  color: var(--bs-emphasis-color);
+  font-weight: $font-weight-medium;
+}
+
+.pf-footer__hours--other {
+  margin-bottom: .5rem;
+  color: var(--bs-secondary-color);
+}
+
+.pf-footer__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    margin-top: .375rem;
+  }
+
+  // Plain text at rest, the accent on hover: the column reads as an index.
+  .pf-footer & a {
+    display: inline-block;
+    padding-block: .125rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+
+    &:is(:hover, :focus-visible) {
+      color: var(--pf-footer-accent);
+      text-decoration: underline;
+    }
+  }
+}
+
+// --- Bottom bar ---------------------------------------------------------
+
+.pf-footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $pf-hairline;
+  color: var(--bs-secondary-color);
+  font-size: $font-size-sm;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.pf-footer__brand {
+  flex-basis: 100%;
+
+  @include media-breakpoint-up(md) {
+    flex-basis: auto;
+  }
+
+  // The branding block's logo: a little smaller than the header's.
+  svg,
+  img {
+    width: $pf-logo-width-sm;
+    height: auto;
+  }
+
+  a {
+    color: var(--bs-emphasis-color);
+  }
+
+  a:is(:hover, :focus-visible) {
+    color: var(--pf-footer-accent);
+  }
+}
+
+.pf-footer__copy {
+  margin: 0;
+}
+
+.pf-footer__bar .pf-footer__social {
+  margin-inline-start: auto;
+
+  // Phones: a row of its own, the first icon lined up with the text.
+  @include media-breakpoint-down(md) {
+    flex-basis: 100%;
+    margin-inline-start: -.625rem;
+  }
+}
+
+.pf-footer .pf-footer__social-link {
+  display: grid;
+  place-items: center;
+  inline-size: $pf-header-target;
+  block-size: $pf-header-target;
+  border-radius: 50%;
+  color: var(--bs-body-color);
+  transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  .pf-icon svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  &:is(:hover, :focus-visible) {
+    background-color: var(--pf-footer-accent);
+    color: var(--pf-footer-on-accent);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-footer :is(.pf-footer__cta, .pf-footer__arrow, .pf-footer__dot, .pf-footer__social-link) {
+    transition: none;
+  }
+
+  .pf-footer__cta:is(:hover, :focus-visible) .pf-footer__arrow {
+    transform: none;
+  }
+}
+
+@media print {
+  .pf-footer :is(.pf-footer__cta, .pf-footer__more, .pf-footer__social) {
+    display: none;
   }
 }

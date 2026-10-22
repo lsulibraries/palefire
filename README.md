@@ -821,6 +821,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Footer: Special Collections or Main Library.** The footer held only the
+  logo. It now leads with the section's own building: on `/special` and the
+  pages under it, Hill Memorial Library (Special Collections) with "Plan a
+  research visit"; everywhere else, the Main Library with "Ask a
+  librarian". Each shows today's hours, phone and Ask Us, names the other
+  building in one line with its hours, and has two link lists, LSU legal
+  links and that section's Instagram and Facebook. Content lives in
+  `includes/footer.html.twig`; `footer_special` comes from
+  `PalefireHooks::preprocessPage()`. The footer is now a Swup container
+  (`#pf-footer`), so it changes with the section, and `js/footer.js` asks
+  LibCal for its hours only when it nears the viewport. It is the last
+  snap point on scroll-snap pages. Twitter links were dropped (FA 5 has no
+  X icon).
 - **Drawing/proof comparison shows on iOS Safari.** The frame was sized by
   `aspect-ratio` alone, and iOS Safari gives such a box (all of its children
   absolutely placed) no width, so nothing showed. It now sits in a

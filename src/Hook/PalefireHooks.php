@@ -111,6 +111,13 @@ class PalefireHooks {
     $variables['guide_head'] = NULL;
     $variables['exhibit_head'] = NULL;
 
+    // Footer: Special Collections on /special and the pages under it, the
+    // Main Library everywhere else (includes/footer.html.twig).
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
+    $variables['footer_special'] = $alias === '/special' || str_starts_with($alias, '/special/');
+    // Printed by the footer, so the cache varies by path.
+    $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
+
     $node = $variables['node'] ?? NULL;
     if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
       return;

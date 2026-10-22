@@ -25,8 +25,9 @@
  */
 ((Drupal, drupalSettings, once) => {
   const CONTAINER = '#swup';
-  // Also swapped when present, so menu active-trail classes stay correct.
-  const OPTIONAL_CONTAINERS = ['#pf-primary-menu'];
+  // Also swapped when present, so menu active-trail classes stay correct
+  // and the footer follows the section (includes/footer.html.twig).
+  const OPTIONAL_CONTAINERS = ['#pf-primary-menu', '#pf-footer'];
 
   // Paths that must always get a full page load.
   const IGNORE_PATHS = [
