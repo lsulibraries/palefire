@@ -857,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: one 16-column grid for 01 to 04.** The landing's content column
+  is a 16-column grid with one gutter (--pf-grid-gutter, up to 2rem), the
+  main blocks spanning 4, so its four columns are equal and every fourth
+  line is theirs. Every layout switch now reads the landing's own width
+  (pf-cover: 2 columns from 30rem, 4 from 64rem) instead of the lead's
+  or the window's. On it: the intro and the map's text span 8 (half); the
+  Visit panel puts Instagram, hours and the mini map in columns 1, 2-3
+  and 4 (two even columns from 48rem); On view's heading takes column 1
+  and its tiles columns 2-4 with the gutter between, like the Quick
+  Start. Why: those blocks had their own widths (46ch, 62ch, 1fr/1.25fr,
+  thirds) and none lined up with the columns.
 - **Hero: columns start on one edge; bar buttons without borders.** The
   Quick Start's letters and diamonds now start on the column edges (no
   longer hanging in the gutter), so every column's first ink meets At a

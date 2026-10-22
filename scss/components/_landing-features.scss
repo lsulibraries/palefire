@@ -378,7 +378,7 @@
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
   > .pf-landing__top {
     display: block;
-    max-width: 44rem;
+    max-width: none;
 
     > .pf-landing__title {
       margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
@@ -609,14 +609,23 @@
 // The row follows the lead panel's own width (beside the TOC it is much
 // narrower than the window): two by two from 30rem, all in one row from
 // 75rem, where each cell has room for its words (at 64rem the titles cut off).
-// Its four columns are the hero's grid: the search and the Quick Guide's
-// rule line up with them, sharing the gutter (--pf-grid-gutter).
-.pf-landing__lead--hero {
-  --pf-grid-gutter: clamp(1.5rem, 3vw, 2.5rem);
-  container: pf-lead / inline-size;
+// Its four columns are the hero's grid (.pf-landing--cover, below).
+
+// --- The hero's grid ----------------------------------------------------------
+// One grid for the whole landing, 01 to 04: the content column (the
+// landing's width) in 16 columns with one gutter (--pf-grid-gutter), the
+// main blocks each spanning 4. With a single gutter the 4-column lines are
+// every fourth line of the 16, so 4 equal columns = 25% each of the column
+// less the gutters, and a half (the intro, the map's text) spans 8. Every
+// layout switch reads the landing's own width (pf-cover), not the window
+// or a child's, so all of them change together: 2 columns from 30rem, 4
+// from 64rem.
+.pf-landing--cover {
+  --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
+  container: pf-cover / inline-size;
 }
 
-@container pf-lead (min-width: 30rem) {
+@container pf-cover (min-width: 30rem) {
   .pf-today__item:nth-child(2) {
     border-top: 0;
   }
@@ -627,7 +636,7 @@
   }
 }
 
-@container pf-lead (min-width: 75rem) {
+@container pf-cover (min-width: 64rem) {
   .pf-today__item {
     border-top: 0;
   }
@@ -1018,13 +1027,13 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   }
 }
 
-// Timetable, on the hero's four columns (the lead from 75rem, where At a
-// glance is one row): the heading and intro in the first column, options
+// Timetable, on the hero's four columns (the landing from 64rem, where At
+// a glance is one row): the heading and intro in the first column, options
 // A, B and C one to a column in the other three, each a list of stops
 // running down. Each option is its own pf-paths container here, so the
 // shared styles (_guide.scss) set its stops as the narrow column they are:
 // the mark on the left, the line down through them, the letter over it.
-@container pf-lead (min-width: 75rem) {
+@container pf-cover (min-width: 64rem) {
   .pf-quick-guide {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1084,6 +1093,69 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   .pf-quick-guide .pf-paths__icon svg {
     width: .875rem;
     height: .875rem;
+  }
+}
+
+// On the grid: the intro and the map's text span 8 of 16 (half the
+// column); the Visit panel's Instagram, hours and mini map take columns
+// 1, 2-3 and 4; On view's heading takes column 1 and its tiles 2-4 with
+// the gutter between them, as the Quick Start does.
+@container pf-cover (min-width: 48rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro {
+    max-width: calc((100% - var(--pf-grid-gutter)) / 2);
+  }
+
+  .pf-landing--cover .pf-map .pf-map__type {
+    max-width: calc((100% - var(--pf-grid-gutter)) / 2);
+  }
+
+  // Two columns, as At a glance is above it: hours (and Instagram under
+  // them) in the first, the mini map in the second.
+  .pf-landing--cover .pf-map .pf-visit {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--pf-grid-gutter);
+  }
+}
+
+@container pf-cover (min-width: 64rem) {
+  .pf-landing--cover .pf-map .pf-visit {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "head head head head"
+      "social hours hours place";
+    column-gap: var(--pf-grid-gutter);
+  }
+
+  .pf-landing--cover .pf-map .pf-visit--keyed {
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "key key key key"
+      "head head head head"
+      "social hours hours place";
+  }
+
+  .pf-landing--cover > .pf-landing__onview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--pf-grid-gutter);
+    align-items: start;
+
+    > .pf-index-rule {
+      grid-column: 1 / -1;
+    }
+
+    > .pf-landing__onview-title {
+      grid-column: 1;
+      margin: 0;
+    }
+
+    > .pf-exhibits {
+      grid-column: 2 / -1;
+      gap: var(--pf-grid-gutter);
+      overflow: visible;
+      border: 0;
+    }
   }
 }
 
@@ -1605,13 +1677,13 @@ html[data-pf-hero] {
   padding-top: 0;
 }
 
-@container pf-lead (min-width: 30rem) {
+@container pf-cover (min-width: 30rem) {
   .pf-landing--cover .pf-today__item:nth-child(2) {
     padding-top: 0;
   }
 }
 
-@container pf-lead (min-width: 75rem) {
+@container pf-cover (min-width: 64rem) {
   .pf-landing--cover .pf-today__item {
     padding-top: 0;
   }
