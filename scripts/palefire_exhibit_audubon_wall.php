@@ -16,9 +16,11 @@
  * - Display "wall" on those three galleries, and the editions' sheet sizes
  *   (40 × 27 in, 11 × 7 in) for the object view's "Actual size".
  * - "Drawing" and "Proof" captions on the 11 drawing-and-proof pairs, which
- *   name the tile and the comparison slider. Only empty captions are
- *   filled, and a gallery's Display or sheet size is set only where it is
- *   still empty or "story", so an editor's own choices are kept.
+ *   name the tile and the comparison slider, and (added 2026-10-21) each
+ *   drawing's alignment over its proof (field_figure_align). Only empty
+ *   captions and alignments are filled, and a gallery's Display or sheet
+ *   size is set only where it is still empty or "story", so an editor's
+ *   own choices are kept.
  *
  * Saves the page as a new revision. Safe to re-run.
  */
@@ -44,6 +46,9 @@ foreach (['field_exhibit_display', 'field_exhibit_sheet'] as $name) {
   if (!FieldConfig::loadByName('paragraph', 'exhibit_page', $name)) {
     throw new \RuntimeException("$name is not on Gallery: run palefire_exhibit_setup.php first.");
   }
+}
+if (!FieldConfig::loadByName('paragraph', 'exhibit_figure', 'field_figure_align')) {
+  throw new \RuntimeException('field_figure_align is not on Image: run palefire_exhibit_setup.php first.');
 }
 
 $data = json_decode((string) file_get_contents(__DIR__ . '/data/audubon.json'), TRUE);
@@ -73,7 +78,7 @@ if (count($ids) !== 1) {
 $node = Node::load(reset($ids));
 
 // The data file, indexed: each gallery's display and sheet, and each
-// entry's image-group figure captions.
+// entry's image-group figures (captions, a drawing's alignment).
 $galleries = [];
 $pairs = [];
 foreach ($data['pages'] as $page) {
@@ -84,7 +89,7 @@ foreach ($data['pages'] as $page) {
     }
     foreach ($block['blocks'] as $child) {
       if ($child['type'] === 'gallery') {
-        $pairs[$block['anchor']] = array_map(fn ($figure) => $figure['caption'], $child['figures']);
+        $pairs[$block['anchor']] = $child['figures'];
       }
     }
   }
@@ -124,14 +129,24 @@ foreach ($node->get('field_scroll_section')->referencedEntities() as $gallery) {
         continue;
       }
       foreach ($block->get('field_gallery_items')->referencedEntities() as $i => $figure) {
-        $caption = $pairs[$anchor][$i] ?? '';
+        $caption = $pairs[$anchor][$i]['caption'] ?? '';
+        $align = $pairs[$anchor][$i]['align'] ?? '';
+        $changed = FALSE;
         if ($caption !== '' && trim(strip_tags((string) $figure->get('field_figure_caption')->value)) === '') {
           $figure->set('field_figure_caption', ['value' => $caption, 'format' => $format]);
+          $changed = TRUE;
+          $log[] = "Caption: $anchor " . ($i + 1) . ' ' . strip_tags($caption);
+        }
+        if ($align !== '' && $figure->get('field_figure_align')->isEmpty()) {
+          $figure->set('field_figure_align', $align);
+          $changed = TRUE;
+          $log[] = "Alignment: $anchor ($align)";
+        }
+        if ($changed) {
           $figure->setNeedsSave(TRUE);
           $block->setNeedsSave(TRUE);
           $entry->setNeedsSave(TRUE);
           $gallery->setNeedsSave(TRUE);
-          $log[] = "Caption: $anchor " . ($i + 1) . ' ' . strip_tags($caption);
         }
       }
       break;
@@ -141,7 +156,7 @@ foreach ($node->get('field_scroll_section')->referencedEntities() as $gallery) {
 
 if ($log) {
   $node->setNewRevision(TRUE);
-  $node->setRevisionLogMessage('Audubon: Elephant Folio, Octavo Edition and Drawings and Proofs as walls (palefire_exhibit_audubon_wall.php).');
+  $node->setRevisionLogMessage('Audubon: Elephant Folio, Octavo Edition and Drawings and Proofs as walls, drawings lined up with their proofs (palefire_exhibit_audubon_wall.php).');
   $node->save();
 }
 foreach ($log as $line) {

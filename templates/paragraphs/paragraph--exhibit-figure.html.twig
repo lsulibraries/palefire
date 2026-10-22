@@ -6,6 +6,8 @@
  * - image: values for the <img> (_palefire_exhibit_image()), or NULL.
  * - layout: side_start / side_end (beside the caption), center, wide (full
  *   width, slow parallax) or group (inside an image group).
+ * - align: "k rot tx ty" laying this drawing over the proof after it in a
+ *   wall's compare view, or ''.
  * - can_edit: a figure without an image shows only to people who can edit
  *   it, as a dashed reminder to add one; visitors don't see it.
  *
@@ -27,7 +29,8 @@
   <figure{{ attributes.addClass(classes) }}>
     {% if image %}
       <a class="pf-exhibit-figure__link" href="{{ image.full }}" data-pf-lightbox
-         {% if image.width %}data-width="{{ image.width }}" data-height="{{ image.height }}"{% endif %}>
+         {% if image.width %}data-width="{{ image.width }}" data-height="{{ image.height }}"{% endif %}
+         {% if align %}data-pf-align="{{ align }}"{% endif %}>
         <span class="pf-exhibit-figure__frame">
           <img class="pf-exhibit-figure__img" src="{{ image.src }}"
                {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}

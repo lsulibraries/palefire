@@ -622,7 +622,7 @@
 
   // quiet: closing for another route (Back, a TOC jump), which sets the
   // address itself.
-  const wallState = { view: null, tiles: [], index: 0, tile: null, quiet: false };
+  const wallState = { view: null, tiles: [], index: 0, tile: null, quiet: false, compare: 'wipe' };
 
   function canMorph() {
     return !reduceMotion() && typeof document.startViewTransition === 'function';
@@ -963,10 +963,29 @@
         return caption ? caption.textContent.trim() : '';
       });
       frame.classList.add('pf-exhibit-compare');
-      if (a.dataset.width) {
-        frame.style.setProperty('--pf-r', a.dataset.width / a.dataset.height);
+      // "k rot tx ty" on the drawing lays it over the proof: the frame takes
+      // the proof's shape and the drawing is scaled, turned and moved onto
+      // it (k and the offsets in proof widths), in a layer the slider wipes
+      // or fades.
+      const align = (a.dataset.pfAlign || '').split(' ').map(Number);
+      const aligned = align.length === 4 && align.every(Number.isFinite) && b.dataset.width;
+      const sized = aligned ? b : a;
+      if (sized.dataset.width) {
+        frame.style.setProperty('--pf-r', sized.dataset.width / sized.dataset.height);
       }
-      frame.append(mediaImg(a, 'pf-exhibit-compare__img', shown[0]), mediaImg(b, 'pf-exhibit-compare__img pf-exhibit-compare__after', shown[1]));
+      if (aligned) {
+        const [k, rot, tx, ty] = align;
+        const layer = document.createElement('div');
+        layer.className = 'pf-exhibit-compare__layer';
+        const drawing = mediaImg(a, 'pf-exhibit-compare__drawing', shown[0]);
+        drawing.style.cssText = 'left:' + (tx * 100) + '%;top:' + (ty * b.dataset.width / b.dataset.height * 100) + '%;width:' + (k * 100) + '%;rotate:' + rot + 'deg';
+        layer.append(drawing);
+        frame.classList.add('pf-exhibit-compare--aligned');
+        frame.append(mediaImg(b, 'pf-exhibit-compare__img', shown[1]), layer);
+      }
+      else {
+        frame.append(mediaImg(a, 'pf-exhibit-compare__img', shown[0]), mediaImg(b, 'pf-exhibit-compare__img pf-exhibit-compare__after', shown[1]));
+      }
       const line = document.createElement('span');
       line.className = 'pf-exhibit-compare__line';
       line.setAttribute('aria-hidden', 'true');
@@ -981,7 +1000,10 @@
       range.setAttribute('aria-label', names[0] && names[1]
         ? Drupal.t('Compare the @a and the @b', { '@a': names[0].toLowerCase(), '@b': names[1].toLowerCase() })
         : Drupal.t('Compare the two images'));
-      range.addEventListener('input', () => frame.style.setProperty('--pf-cut', range.value + '%'));
+      range.addEventListener('input', () => {
+        frame.style.setProperty('--pf-cut', range.value + '%');
+        frame.style.setProperty('--pf-mix', range.value / 100);
+      });
       const end = (text) => {
         const span = document.createElement('span');
         span.setAttribute('aria-hidden', 'true');
@@ -989,6 +1011,29 @@
         return span;
       };
       control.append(end(names[0]), range, end(names[1]));
+      // Lined up, the two can also be faded one into the other.
+      if (aligned) {
+        const modes = document.createElement('div');
+        modes.className = 'pf-exhibit-compare__modes';
+        modes.setAttribute('role', 'group');
+        modes.setAttribute('aria-label', Drupal.t('Comparison'));
+        [['wipe', Drupal.t('Wipe')], ['fade', Drupal.t('Fade')]].forEach(([mode, label]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = label;
+          button.setAttribute('aria-pressed', String(mode === wallState.compare));
+          button.addEventListener('click', () => {
+            wallState.compare = mode;
+            frame.classList.add('is-easing');
+            frame.classList.toggle('is-fading', mode === 'fade');
+            modes.querySelectorAll('button').forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+            window.setTimeout(() => frame.classList.remove('is-easing'), 600);
+          });
+          modes.append(button);
+        });
+        frame.classList.toggle('is-fading', wallState.compare === 'fade');
+        control.append(modes);
+      }
       view.media.replaceChildren(frame, control);
     }
     else if (media.links.length) {

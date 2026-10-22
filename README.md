@@ -108,7 +108,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
 | `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
-| `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, and the pairs' "Drawing" / "Proof" captions (empty ones only). Run `palefire_exhibit_setup.php` first |
+| `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, the pairs' "Drawing" / "Proof" captions and the drawings' alignments (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
@@ -493,7 +493,7 @@ a tap, can itself be hovered, and hides with Esc (WCAG 1.4.13,
 | --- | --- | --- |
 | `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_exhibit_display`, `field_exhibit_sheet`, `field_guide_blocks` | A section. Opening **full screen** (default): the lead fills the screen with the number, title and "In this gallery" links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative. Display **Story** (default) or **Wall** (below); Sheet size ("40 × 27", inches) for a wall's "Actual size" |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
-| `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox |
+| `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout`, `field_figure_align` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox. Alignment ("k rot tx ty": scale, degrees, left and top in proof widths) lays a drawing over the proof after it in a wall's comparison |
 | `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
 | `exhibit_citation` (Catalogue record) | `field_block_body` | Set like a museum label |
 | `exhibit_audio` (Audio) | Title, `field_audio_file`, speaker/date, `field_audio_transcript` (required) | Oral history; custom player, transcript in a `<details>` |
@@ -598,7 +598,10 @@ from the media item. A figure with no image shows only to editors.
   It shows the tile's loaded image at once, then the size the stage needs;
   click to zoom where you click (largest size), move to look around. A pair
   is a comparison: the second image wiped over the first with a labelled
-  slider. Beside it (below on phones): count, heading, the caption, the
+  slider. When the first has an alignment the frame takes the second's
+  shape, the first is scaled, turned and moved onto it (the files are not
+  changed), and Wipe / Fade switches the slider between a wipe and a
+  cross-fade (eased; remembered while the page is open). Beside it (below on phones): count, heading, the caption, the
   entry's own text (ids stripped; its other images open in the lightbox),
   and "Actual size" when the gallery has a sheet size: every wall gallery's
   sheet drawn to scale, the current one outlined with the plate in it.
@@ -682,7 +685,11 @@ Manuscripts (3) and Suggested Reading. Each bird page of 2021 is an entry.
   Waxwing drawing is the full sheet from the Louisiana Digital Library
   (lsu-sc-jjadp:13, a JPEG 2000 at 4,585 × 7,079, checked by eye against
   the 2021 crop; `palefire_exhibit_replace_image.php` for the built page).
-  Three have no larger source and stay 2021 crops (Virginian Rail,
+  Each of the 11 drawings is aligned with its proof (`align` in the data):
+  two to five matching points read off both (beak tips, wing tips, feet,
+  title text), fitted, refined against the proof's lines and checked by
+  eye; Western Shore Lark and Ivory Gull were redrawn for the plate, so
+  theirs is the nearest fit. Three have no larger source and stay 2021 crops (Virginian Rail,
   Children's Warbler and Bear manuscripts). Leads: the Brown Pelican (folio,
   not in 2021) and full-resolution cuts of the 2021 close-ups of the Mocking
   Birds and Great Blue Heron; the cover is the Carolina Parrot. Unused:
@@ -801,6 +808,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: drawings lined up with their proofs.** New Image field
+  `field_figure_align` (setup script) places a drawing over its proof in a
+  wall's comparison: scaled, turned and moved, the files untouched. The
+  comparison then takes the proof's shape and gets Wipe / Fade. Audubon's 11
+  pairs are aligned (`audubon.json`, import and wall scripts). Why: the
+  drawings sat at other scales and angles, so the slider compared sheets,
+  not birds.
 - **Audubon: the whole Waxwing drawing.** The Black-throated Waxwing
   drawing was the 2021 site's 600 × 400 close-up (the drive has no full
   scan); it is now the full sheet from the Louisiana Digital Library, at

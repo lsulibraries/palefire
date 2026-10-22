@@ -847,6 +847,7 @@
          "image": "drawing-black-bellied-plover-1.jpg",
          "source": "drawing-black-bellied-plover-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9172 -0.37 0.0214 0.0138",
          "layout": "center"
         },
         {
@@ -898,6 +899,7 @@
          "image": "drawing-black-throated-waxwing-or-bohemian-chatterer-1.jpg",
          "source": "drawing-black-throated-waxwing-or-bohemian-chatterer-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9565 -0.27 0.0225 0.0068",
          "layout": "center"
         },
         {
@@ -1025,6 +1027,7 @@
          "image": "drawing-common-tern-1.jpg",
          "source": "drawing-common-tern-1",
          "caption": "<p>Drawing</p>",
+         "align": "1.0082 1.11 0.0240 -0.0310",
          "layout": "center"
         },
         {
@@ -1057,6 +1060,7 @@
          "image": "drawing-curled-crested-phaleris-1.jpg",
          "source": "drawing-curled-crested-phaleris-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9252 3.45 -0.0161 -0.0084",
          "layout": "center"
         },
         {
@@ -1089,6 +1093,7 @@
          "image": "drawing-downy-woodpecker-1.jpg",
          "source": "drawing-downy-woodpecker-1",
          "caption": "<p>Drawing</p>",
+         "align": "1.0698 -3.46 -0.0267 -0.0780",
          "layout": "center"
         },
         {
@@ -1121,6 +1126,7 @@
          "image": "drawing-harriss-finch-1.jpg",
          "source": "drawing-harriss-finch-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9620 -2.14 0.0064 0.0221",
          "layout": "center"
         },
         {
@@ -1172,6 +1178,7 @@
          "image": "drawing-ivory-gull-1.jpg",
          "source": "drawing-ivory-gull-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9008 -0.42 0.1445 0.0378",
          "layout": "center"
         },
         {
@@ -1242,6 +1249,7 @@
          "image": "drawing-missouri-meadowlark-1.jpg",
          "source": "drawing-missouri-meadowlark-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9667 -3.37 -0.0527 0.0011",
          "layout": "center"
         },
         {
@@ -1521,6 +1529,7 @@
          "image": "drawing-western-shore-lark-1.jpg",
          "source": "drawing-western-shore-lark-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.6319 -4.50 0.1286 0.0482",
          "layout": "center"
         },
         {
@@ -1572,6 +1581,7 @@
          "image": "drawing-willow-ptarmigan-1.jpg",
          "source": "drawing-willow-ptarmigan-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.8972 -0.13 0.0215 0.0229",
          "layout": "center"
         },
         {
@@ -1623,6 +1633,7 @@
          "image": "drawing-yellow-bellied-flycatcher-1.jpg",
          "source": "drawing-yellow-bellied-flycatcher-1",
          "caption": "<p>Drawing</p>",
+         "align": "0.9882 0.71 0.0341 0.0608",
          "layout": "center"
         },
         {

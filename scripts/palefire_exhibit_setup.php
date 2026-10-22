@@ -34,7 +34,9 @@
  *     both added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
  *     sub-link), anchor, biography, and its own blocks.
- *   - exhibit_figure: one image with a caption and a layout.
+ *   - exhibit_figure: one image with a caption and a layout, and (added
+ *     2026-10-21) an alignment that lays a drawing over its proof in a
+ *     wall's compare view (field_figure_align).
  *   - exhibit_gallery: several figures in a grid, with a shared caption.
  *   - exhibit_citation: a catalogue record, set like a museum label.
  *   - exhibit_audio: an oral history clip with a required transcript.
@@ -251,6 +253,7 @@ $storage('paragraph', 'field_exhibit_sheet', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_entry_bio', 'text_long');
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_figure_caption', 'text_long');
+$storage('paragraph', 'field_figure_align', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_figure_layout', 'list_string', ['allowed_values' => [
   'side_start' => 'Beside the text, image first',
   'side_end' => 'Beside the text, image second',
@@ -281,10 +284,16 @@ $paragraph_type('exhibit_page', 'Exhibition: Gallery', 'One page of an exhibitio
 $field('paragraph', 'exhibit_figure', 'field_figure_image', $media_ref('Image', 'Alt text comes from the media item: describe what the image shows. The caption below is shown with it.'));
 $field('paragraph', 'exhibit_figure', 'field_figure_caption', ['label' => 'Caption (optional)']);
 $field('paragraph', 'exhibit_figure', 'field_figure_layout', ['label' => 'Layout', 'required' => TRUE, 'default_value' => [['value' => 'side_start']]]);
+// Added 2026-10-21.
+$field('paragraph', 'exhibit_figure', 'field_figure_align', [
+  'label' => 'Line up with the next image (optional)',
+  'description' => 'For a drawing followed by its proof in a wall gallery: four numbers that lay the drawing over the proof in the compare view (the files are not changed). Scale, rotation in degrees, then left and top offsets as fractions of the proof\'s width, e.g. "0.962 -2.14 0.0064 0.0221".',
+]);
 $form('paragraph', 'exhibit_figure', [
   'field_figure_image' => $media_widget + ['weight' => 0],
   'field_figure_caption' => $wysiwyg(1, 4),
   'field_figure_layout' => ['type' => 'options_buttons', 'weight' => 2],
+  'field_figure_align' => ['type' => 'string_textfield', 'weight' => 3],
 ]);
 $view('paragraph', 'exhibit_figure', ['field_figure_caption' => ['type' => 'text_default', 'label' => 'hidden', 'weight' => 0]]);
 

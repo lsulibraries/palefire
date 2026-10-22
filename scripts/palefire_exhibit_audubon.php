@@ -165,7 +165,10 @@ $media = function (?string $relative) use (&$media_ids, $images_dir, $fs, $desti
 $ref = fn (?int $id) => $id ? ['target_id' => $id] : NULL;
 $keep = fn (array $values) => array_filter($values, fn ($v) => $v !== NULL && $v !== '');
 
-$figure = function (array $b, string $layout) use ($media, $ref, $keep, $html, &$skipped): Paragraph {
+// A drawing's alignment over its proof (palefire_exhibit_setup.php adds the
+// field; without it the pairs are compared unaligned).
+$has_align = (bool) FieldConfig::loadByName('paragraph', 'exhibit_figure', 'field_figure_align');
+$figure = function (array $b, string $layout) use ($media, $ref, $keep, $html, $has_align, &$skipped): Paragraph {
   $id = $media($b['image'] ?? NULL);
   if (!$id) {
     $skipped[] = 'No image for "' . $b['source'] . '": the figure keeps its caption; add the image in the editor.';
@@ -175,6 +178,7 @@ $figure = function (array $b, string $layout) use ($media, $ref, $keep, $html, &
     'field_figure_image' => $ref($id),
     'field_figure_caption' => ($b['caption'] ?? '') !== '' ? $html($b['caption']) : NULL,
     'field_figure_layout' => $layout,
+    'field_figure_align' => $has_align ? ($b['align'] ?? NULL) : NULL,
   ]));
 };
 

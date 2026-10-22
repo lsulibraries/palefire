@@ -2129,7 +2129,8 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
   @extend %pf-exhibit-kicker;
 }
 
-.pf-exhibit-wall__sort {
+.pf-exhibit-wall__sort,
+.pf-exhibit-compare__modes {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -2412,6 +2413,41 @@ html.pf-object-open {
   pointer-events: none;
 }
 
+// Lined up (data-pf-align): the proof fills the frame and the drawing,
+// scaled, turned and moved onto it, sits in a layer above that the slider
+// wipes away to the right, or fades out.
+.pf-exhibit-compare__layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0 calc(100% - var(--pf-cut, 50%)) 0 0);
+
+  .is-fading > & {
+    clip-path: inset(0);
+    opacity: calc(1 - var(--pf-mix, 0.5));
+  }
+}
+
+.pf-exhibit-compare__drawing {
+  position: absolute;
+  max-width: none;
+  height: auto;
+  transform-origin: 0 0;
+}
+
+.pf-exhibit-compare--aligned.is-fading .pf-exhibit-compare__line {
+  opacity: 0;
+}
+
+// Eased only while switching between wipe and fade, so the slider stays
+// direct.
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .is-easing > .pf-exhibit-compare__layer,
+  html:not(.pf-a11y-motion) .is-easing > .pf-exhibit-compare__line {
+    transition: clip-path .5s $pf-exhibit-ease, opacity .5s $pf-exhibit-ease;
+  }
+}
+
 .pf-exhibit-compare__control {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -2426,6 +2462,11 @@ html.pf-object-open {
   input {
     width: 100%;
     accent-color: var(--pf-exhibit-accent);
+  }
+
+  .pf-exhibit-compare__modes {
+    grid-column: 1 / -1;
+    justify-self: center;
   }
 }
 

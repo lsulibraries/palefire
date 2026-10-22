@@ -1756,6 +1756,8 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
  * figure has no image yet (it then shows only to editors, as a reminder).
  * layout: side_start, side_end, center or wide. Inside an image group the
  * group lays the figures out and the layout is ignored.
+ * align: "k rot tx ty" from field_figure_align (a drawing laid over the
+ * proof after it in a wall's compare view), or ''.
  */
 function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -1775,6 +1777,9 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
     $variables['image'] = $item ? _palefire_exhibit_image($item, $sizes, $cache) : NULL;
   }
   $variables['layout'] = $in_group ? 'group' : $layout;
+  // "k rot tx ty": four numbers, else nothing.
+  $align = $paragraph->hasField('field_figure_align') ? trim((string) $paragraph->get('field_figure_align')->value) : '';
+  $variables['align'] = preg_match('/^-?[\d.]+(\s+-?[\d.]+){3}$/', $align) ? preg_replace('/\s+/', ' ', $align) : '';
   $access = $paragraph->access('update', NULL, TRUE);
   $variables['can_edit'] = $access->isAllowed();
   $cache->addCacheableDependency($access)->applyTo($variables);
