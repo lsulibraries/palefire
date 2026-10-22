@@ -625,9 +625,21 @@ html.pf-snap-proximity .pf-section--snap {
   // the bar's top, so .375rem is set outright rather than through the
   // title nudge, which modular-toc.js measures only when the page loads
   // at the top (reloaded part-way down, the button sat a row low).
+  // No outline or glass of its own there, like the bar's other buttons
+  // (_landing-features.scss): the bar is its ground.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]):has(.pf-landing__bar) .pf-modular__toc-collapse {
     top: .375rem;
     inset-inline-end: calc(-2.25rem - .375rem);
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+
+    &:hover,
+    &:focus-visible {
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+    }
   }
 
   // Icon: a chevron while the sidebar is open ("hide"), a list while it is

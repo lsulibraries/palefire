@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: columns start on one edge; bar buttons without borders.** The
+  Quick Start's letters and diamonds now start on the column edges (no
+  longer hanging in the gutter), so every column's first ink meets At a
+  glance's above, and the intro keeps the full gutter before column A
+  (--pf-grid-gutter back to at most 2.5rem). Sign in, the video button and
+  the floating TOC button over the bar lose their outline, fill and
+  shadow, with a faint fill on hover and focus. Why: the hanging marks
+  read as columns off the grid and crowded the intro; the outlines were
+  noise on the bar's glass.
 - **Hero: one rhythm, a shorter type scale, text on the columns, no
   suggestions.** The search suggestions are gone (template, the
   `_palefire_search_suggestions()` helper and their styles), and the

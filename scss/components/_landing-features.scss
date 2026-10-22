@@ -132,6 +132,24 @@
   padding-inline-end: calc(2.25rem + 2 * var(--pf-bar-icon-edge) - var(--pf-bar-edge));
 }
 
+// The bar's buttons (Sign in here, the video button docked over the bar,
+// and the floating TOC button, _modular.scss) have no outline of their
+// own: the bar's glass is their ground. Hover and focus fill them faintly.
+.pf-landing__bar .pf-landing__signin,
+.pf-landing__dock .pf-landing__bg-toggle {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  &:hover,
+  &:focus-visible {
+    border-color: transparent;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+}
+
 .pf-landing__bar .pf-breadcrumb--lead {
   min-width: 0;
   padding: 0;
@@ -592,10 +610,9 @@
 // narrower than the window): two by two from 30rem, all in one row from
 // 75rem, where each cell has room for its words (at 64rem the titles cut off).
 // Its four columns are the hero's grid: the search and the Quick Guide's
-// rule line up with them, sharing the gutter (--pf-grid-gutter), which is
-// wide enough at four columns for the Quick Start's marks to hang in.
+// rule line up with them, sharing the gutter (--pf-grid-gutter).
 .pf-landing__lead--hero {
-  --pf-grid-gutter: clamp(1.5rem, 3.5vw, 3rem);
+  --pf-grid-gutter: clamp(1.5rem, 3vw, 2.5rem);
   container: pf-lead / inline-size;
 }
 
@@ -1047,16 +1064,16 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
     border: 0;
   }
 
-  // The words start on the column's edge, as At a glance's do above;
-  // the letter and the marks hang into the gutter before it (a 2rem mark
-  // and .625rem, under the gutter's 42px or more at this width).
+  // Each column starts on its edge, as At a glance's cells do above: the
+  // letter and the marks are the first ink, flush left (a 2rem mark, its
+  // left point on the edge), the words after them. Nothing hangs into the
+  // gutter, so the intro keeps the full gutter's space before column A.
   .pf-quick-guide .pf-paths {
     --pf-paths-dot: 2rem;
-    --pf-paths-hang: calc(var(--pf-paths-dot) + .625rem);
   }
 
-  .pf-quick-guide .pf-paths__line {
-    margin-inline-start: calc(-1 * var(--pf-paths-hang));
+  .pf-quick-guide .pf-paths__letter {
+    text-align: start;
   }
 
   .pf-quick-guide .pf-paths__name,
