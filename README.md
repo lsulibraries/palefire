@@ -137,9 +137,10 @@ and its own breadcrumb bar instead (`PalefireHooks::titleLandingUuid()`,
 - Its visible title is "Table of contents", a plain label that names the
   `<nav>`.
 - **Hide/show** (lg and up, not on guides): `js/modular-toc-collapse.js`, loaded
-  in `<head>` so there is no flash. Every page starts shown; a visitor's choice
-  is saved per page type (`palefire.tocCollapsed.landing` /
-  `palefire.tocCollapsed`).
+  in `<head>` so there is no flash. Pages that open with a Landing hero
+  (`<html data-pf-hero>`) start hidden, every other page shown; a visitor's
+  choice is saved per page type (`palefire.tocCollapsed.hero` /
+  `palefire.tocCollapsed.landing` / `palefire.tocCollapsed`).
 - **Listing:** sections, plus h3s on modes in the block's "Include h3
   sub-links" setting (`deep_modes`, default `guide`); elsewhere only
   `[data-toc]`. Attributes: `data-toc`, `data-toc-label` (short link text),
@@ -227,8 +228,11 @@ On the paragraphs:
 - **Bar:** breadcrumb and the background-video button, sticky under the header
   for the whole landing.
 - **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title and
-  intro (side by side from xl), search with an accent-filled Search button,
-  then At a glance (`.pf-today`): today's hours (`js/visit-hours.js`), Next
+  intro (side by side from xl; keep the intro to a sentence or two), a 4rem
+  search field with an accent-filled Search button and suggested searches
+  under it (the optional Landing hero field `field_search_suggestions`, Text
+  (plain), any number of values; without it, built-in ones), then At a
+  glance (`.pf-today`): today's hours (`js/visit-hours.js`), Next
   event (`js/hero-event.js`, from the events carousel's or From the stacks'
   calendar; "No upcoming events" when there are none), the exhibitions on
   view, and the latest blog post. Every cell is a label, one value line and
@@ -846,6 +850,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Special Collections hero, third pass; TOC hidden on hero pages.** The
+  search field is taller (4rem) with suggested searches under it, as in the
+  mockup (Landing hero > Search suggestions, an optional field added by
+  hand; built-in ones without it; one swipeable row on phones). The intro
+  sits beside the title from xl, written for a one- or two-sentence intro.
+  Pages that open with a Landing hero get `<html data-pf-hero>`
+  (PalefireHooks::preprocessHtml(), copied on Swup visits), and the TOC
+  starts hidden there, with its own saved choice
+  (`palefire.tocCollapsed.hero`). The phone TOC button takes the TOC's
+  glass and colours, so it follows the reading colours. Why: review on
+  production.
 - **Special Collections hero, second pass.** The full Quick Guide is back
   (lines of stops; the compact cards are gone), with the sign-in beside "See
   full guide". At a glance gains today's hours as its first cell (moved from

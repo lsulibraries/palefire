@@ -95,8 +95,10 @@ class PalefireHooks {
    *
    * Puts the page mode (field_modular_type: page, guide, form) on <html> as
    * data-pf-mode, for CSS and for scripts that run before <body> exists
-   * (Settings > Dark guides, html.html.twig). The page cache entry already
-   * carries the node's cache tags, so editing the node updates it.
+   * (Settings > Dark guides, html.html.twig), and data-pf-hero when the page
+   * opens with a Landing hero (the TOC starts hidden there,
+   * modular-toc-collapse.js). The page cache entry already carries the
+   * node's cache tags, so editing the node updates it.
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
@@ -109,6 +111,11 @@ class PalefireHooks {
       return;
     }
     $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
+    // Opens with a Landing hero (the Special Collections homepage):
+    // modular-toc-collapse.js starts the TOC hidden there, before paint.
+    if (self::titleLanding($node)?->bundle() === 'landing_hero') {
+      $variables['html_attributes']->setAttribute('data-pf-hero', '');
+    }
   }
 
   /**
@@ -531,6 +538,17 @@ class PalefireHooks {
    * prints it above the intro), so the two always agree.
    */
   public static function titleLandingUuid(NodeInterface $node): ?string {
+    return self::titleLanding($node)?->uuid();
+  }
+
+  /**
+   * The landing (LANDING_BUNDLES) that opens the page, or NULL.
+   *
+   * The first section the current user can see, when it is a landing: the
+   * one titleLandingUuid() names. preprocessHtml() reads its bundle to mark
+   * Landing hero pages.
+   */
+  public static function titleLanding(NodeInterface $node): ?FieldableEntityInterface {
     foreach (self::SECTION_FIELDS as $field) {
       if (!$node->hasField($field)) {
         continue;
@@ -542,7 +560,7 @@ class PalefireHooks {
         if (!$paragraph->access('view')) {
           continue;
         }
-        return in_array($paragraph->bundle(), self::LANDING_BUNDLES, TRUE) ? $paragraph->uuid() : NULL;
+        return in_array($paragraph->bundle(), self::LANDING_BUNDLES, TRUE) ? $paragraph : NULL;
       }
     }
     return NULL;

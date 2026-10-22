@@ -292,10 +292,12 @@
 .pf-landing__lead.pf-landing__lead--hero {
   padding-block: clamp(1rem, 2vw, 1.5rem);
 
-  // Title and intro (.pf-landing__top): stacked, the intro up to 62
-  // characters wide; from xl side by side as in the mockup, the title
-  // large on the left (over two lines) and the intro beside its foot.
-  // Today's hours are At a glance's first cell (below).
+  // Title and intro (.pf-landing__top): the intro under the title, up to
+  // 62 characters wide; from xl side by side as in the mockup, the intro at
+  // the right, its last line on the title's baseline. Written for a short
+  // intro (a sentence or two): a long one stands taller than the title and
+  // reads as a block beside it. Today's hours are At a glance's first cell
+  // (below).
   > .pf-landing__top {
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
 
@@ -306,25 +308,23 @@
     > .pf-landing__intro {
       max-width: 62ch;
       margin: 0;
-      font-size: 1rem;
-      line-height: 1.5;
+      font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
+      line-height: 1.55;
     }
 
     @include media-breakpoint-up(xl) {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 2rem clamp(2rem, 4vw, 4rem);
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 2rem clamp(2rem, 5vw, 5rem);
       align-items: end;
 
       > .pf-landing__title {
         margin: 0;
-        font-size: clamp(3rem, 1rem + 2.75vw, 4.5rem);
-        line-height: .95;
       }
 
       > .pf-landing__intro {
-        font-size: clamp(1rem, .9rem + .2vw, 1.125rem);
-        line-height: 1.55;
+        max-width: 44ch;
+        justify-self: end;
       }
     }
   }
@@ -336,7 +336,7 @@
 
 .pf-landing__lead.pf-landing__lead--hero {
   > .pf-landing__form {
-    --pf-landing-field-h: 3rem;
+    --pf-landing-field-h: 4rem; // the mockup's taller field
     --pf-landing-line: #{$pf-hairline};
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
     padding-top: clamp(1rem, 2vw, 1.5rem);
@@ -352,7 +352,72 @@
   }
 
   .pf-landing__input {
-    font-size: 1.0625rem;
+    font-size: clamp(1.0625rem, 1rem + .25vw, 1.25rem);
+  }
+
+  // Suggested searches under the field: "Try" in the label voice, then
+  // each one a hairline chip; hover or focus brings the chip's line and
+  // words up to the text colour. They wrap on narrow screens; every chip is
+  // at least 2.75rem tall (a 44px target).
+  .pf-landing__try {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .75rem;
+    align-items: center;
+    margin-top: .875rem;
+  }
+
+  .pf-landing__try-label {
+    @extend %pf-landing-label;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-landing__suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Phones: one row that swipes (it wrapped to three), the label above.
+    @include media-breakpoint-down(sm) {
+      flex: 1 1 100%;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding-bottom: .375rem;
+      @include pf-thin-scrollbar;
+
+      > li {
+        flex: none;
+      }
+    }
+  }
+
+  .pf-landing__suggestion {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: .5rem .875rem;
+    border: 1px solid #{$pf-hairline};
+    color: var(--pf-toc-color);
+    font-size: .875rem;
+    line-height: 1.3;
+    text-decoration: none;
+    transition: color $pf-hover-out ease, border-color $pf-hover-out ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: currentColor;
+      color: var(--pf-section-fg, var(--bs-body-color));
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-landing-accent, #{$pf-gold});
+      outline-offset: 2px;
+    }
   }
 
   // The Search button filled with the swatch's accent, its words in the

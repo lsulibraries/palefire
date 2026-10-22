@@ -162,9 +162,9 @@
     {% endif %}
   {% endif %}
   <div class="pf-landing__lead{{ hero ? ' pf-landing__lead--hero' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
-    {# Hero: the title and the intro share .pf-landing__top: from xl, side
-       by side, the intro beside the title's foot (_landing-features.scss).
-       Today's hours are At a glance's first cell (below).
+    {# Hero: the title and the intro share .pf-landing__top: the intro
+       under the title, beside it from xl (_landing-features.scss). Today's
+       hours are At a glance's first cell (below).
        The title is the TOC's "Landing" sub-link under Home, with the
        Quick Guide's heading the second (modular-toc.js). The headings
        themselves keep their own text and level. #}
@@ -190,6 +190,27 @@
           <svg class="pf-landing__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
         </button>
       </div>
+      {# Hero: suggested searches under the field, as in the mockup, each a
+         link that runs that search. search_suggestions: the paragraph's
+         optional Search suggestions field (_palefire_search_suggestions());
+         without it, the built-in ones below. #}
+      {% if hero %}
+        {% set suggestions = search_suggestions|default([
+          'Civil War letters'|t,
+          'Audubon'|t,
+          'Gumbo yearbooks'|t,
+          'Oral histories'|t,
+          'Louisiana maps'|t,
+        ]) %}
+        <div class="pf-landing__try">
+          <span class="pf-landing__try-label" id="{{ input_id }}-try">{{ 'Try'|t }}</span>
+          <ul class="pf-landing__suggestions" role="list" aria-labelledby="{{ input_id }}-try">
+            {% for term in suggestions %}
+              <li><a class="pf-landing__suggestion" href="{{ landing_action }}?{{ { (landing_name): term }|url_encode }}">{{ term }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
     </form>
     {# Landing department: the hero's tile accordion under the search, only
        when the paragraph has tiles (no placeholders). Its own wrapper, not

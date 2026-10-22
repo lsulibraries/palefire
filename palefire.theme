@@ -281,6 +281,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
+    $variables['search_suggestions'] = _palefire_search_suggestions($paragraph);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -334,6 +335,29 @@ function _palefire_quick_guide(ParagraphInterface $paragraph, array &$variables)
     $quick['link_text'] = trim((string) $link->title);
   }
   return array_filter($quick);
+}
+
+/**
+ * The Landing hero's suggested searches, from its optional field, or NULL.
+ *
+ * field_search_suggestions (Text, plain, any number of values) is added in
+ * the UI (Landing hero > Manage fields), like the Quick Guide fields; each
+ * value is one suggestion, shown in order under the search field. Missing
+ * or empty, this is NULL and includes/landing.html.twig shows its built-in
+ * ones.
+ */
+function _palefire_search_suggestions(ParagraphInterface $paragraph): ?array {
+  if (!$paragraph->hasField('field_search_suggestions')) {
+    return NULL;
+  }
+  $terms = [];
+  foreach ($paragraph->get('field_search_suggestions') as $item) {
+    $term = trim((string) $item->value);
+    if ($term !== '') {
+      $terms[] = $term;
+    }
+  }
+  return $terms ?: NULL;
 }
 
 /**

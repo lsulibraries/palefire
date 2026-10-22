@@ -7,10 +7,11 @@
  * The state is a class on <html> (pf-toc-collapsed), so it carries over
  * between Swup visits. The visitor's choice is saved in localStorage per
  * page type ('1' hidden, '0' shown): landing pages keep their own
- * (palefire.tocCollapsed.landing), so showing the TOC on a landing doesn't
- * open it on every page. With no saved choice, every page starts shown,
- * landing pages too (they started hidden until 2026-10-20, so the hero ran
- * full width). It never opens or closes by
+ * (palefire.tocCollapsed.landing), and Landing hero pages theirs
+ * (palefire.tocCollapsed.hero), so showing the TOC on one doesn't open it
+ * on every page. With no saved choice, a page that opens with a
+ * Landing hero (<html data-pf-hero>) starts hidden, so the hero runs full
+ * width; every other page starts shown. It never opens or closes by
  * itself while the visitor scrolls: that would reflow the content column
  * under them (layout shift). This replaces the landing pages' old
  * scroll-driven collapse.
@@ -32,7 +33,14 @@
   // Read each time: a Swup visit can move between page types
   // (palefire-swup.js syncs data-pf-mode before behaviors attach).
   const mode = () => root.getAttribute('data-pf-mode') || 'page';
-  const key = () => (mode() === 'landing' ? 'palefire.tocCollapsed.landing' : 'palefire.tocCollapsed');
+  // Hero pages keep a choice of their own, so one made on another landing
+  // (or saved before they started hidden) doesn't carry over.
+  const key = () => {
+    if (root.hasAttribute('data-pf-hero')) {
+      return 'palefire.tocCollapsed.hero';
+    }
+    return mode() === 'landing' ? 'palefire.tocCollapsed.landing' : 'palefire.tocCollapsed';
+  };
 
   // TRUE (hidden), FALSE (shown) or NULL (no choice saved).
   function stored() {
@@ -54,11 +62,15 @@
     }
   }
 
+  // With no saved choice: hidden on a page that opens with a Landing hero
+  // (<html data-pf-hero>, PalefireHooks::preprocessHtml()), so the hero
+  // gets the full width; shown everywhere else.
   function wanted() {
     if (mode() === 'guide') {
       return false;
     }
-    return stored() === true;
+    const choice = stored();
+    return choice === null ? root.hasAttribute('data-pf-hero') : choice;
   }
 
   // Full page load: before the first paint.
