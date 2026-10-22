@@ -821,6 +821,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a cover's image never moves, and "Show more".** The
+  cover's frame is pinned under the bar from the first scroll and follows
+  it as the header shrinks, while the image and washes inside are set back
+  by the shrink so far (`--pf-cover-shift`): on screen they stay put and
+  the shrink only uncovers the top strip. "In this gallery" prints every
+  entry; past the sixth they fold behind a "Show @count more" / "Show
+  less" button set like "Read more" (`initEntryLinks()`), in place of the
+  boxed "+ n more" summary. Why: the image still rose with the first
+  scroll, and the summary looked out of place.
 - **Exhibitions: a cover holds still while the header shrinks.** A wall's
   or story's cover image is now sized and pinned from the compact header's
   height (`$pf-header-bar-compact-h`) instead of the live `--pf-header-h`,

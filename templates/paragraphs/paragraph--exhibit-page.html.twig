@@ -56,21 +56,13 @@
   {% if entries %}
     <nav class="pf-exhibit-opener__nav{{ opener == 'cover' ? ' pf-exhibit-cover__nav' }}" aria-labelledby="{{ dom_id }}-in">
       <p class="pf-exhibit-opener__label" id="{{ dom_id }}-in">{{ 'In this gallery'|t }}</p>
-      <ol class="pf-exhibit-opener__links">
-        {% for entry in entries %}
-          <li><a href="#{{ entry.anchor }}">{{ entry.title }}</a></li>
+      {# All the entries; js/exhibition.js folds those after the sixth
+         behind "Show more" (without it they all show). #}
+      <ol class="pf-exhibit-opener__links" id="{{ dom_id }}-entries">
+        {% for entry in entries|merge(entries_more) %}
+          <li{{ loop.index > entries|length ? ' data-pf-more' }}><a href="#{{ entry.anchor }}">{{ entry.title }}</a></li>
         {% endfor %}
       </ol>
-      {% if entries_more %}
-        <details class="pf-exhibit-opener__more">
-          <summary>{{ '+ @count more'|t({'@count': entries_more|length}) }}</summary>
-          <ol class="pf-exhibit-opener__links" start="{{ entries|length + 1 }}">
-            {% for entry in entries_more %}
-              <li><a href="#{{ entry.anchor }}">{{ entry.title }}</a></li>
-            {% endfor %}
-          </ol>
-        </details>
-      {% endif %}
     </nav>
   {% endif %}
 {% endset %}

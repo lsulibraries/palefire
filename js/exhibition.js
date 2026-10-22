@@ -582,6 +582,7 @@
     initZoom();
     initWalls();
     initCovers();
+    initEntryLinks();
     const target = targetOf(location.hash);
     const page = galleryOf(target);
     place(page);
@@ -668,6 +669,38 @@
         text.append(intro);
         body.before(text);
       }
+    });
+  }
+
+  // "In this gallery": the entries after the sixth fold behind "Show more"
+  // (the template prints them all, for a page without the script).
+  function initEntryLinks() {
+    document.querySelectorAll('.pf-exhibit-opener__links').forEach((list) => {
+      const more = list.querySelectorAll('[data-pf-more]');
+      if (!more.length) {
+        return;
+      }
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-exhibit-bio__toggle pf-exhibit-opener__toggle';
+      button.setAttribute('aria-controls', list.id);
+      const sync = (open) => {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.textContent = open ? Drupal.t('Show less') : Drupal.t('Show @count more', { '@count': more.length });
+        more.forEach((item) => {
+          item.hidden = !open;
+        });
+      };
+      sync(false);
+      button.addEventListener('click', () => {
+        sync(button.getAttribute('aria-expanded') !== 'true');
+        // A cover's text moved down or up: its fade's place follows.
+        const page = list.closest('.pf-section');
+        if (page) {
+          foldIntro(page);
+        }
+      });
+      list.after(button);
     });
   }
 

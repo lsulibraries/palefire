@@ -1605,7 +1605,7 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   // The full and cover openings' "In this gallery" links: the gallery's
   // entries, in order, with the ids their headings get
   // (paragraph--exhibit-entry). The first six show; the rest sit behind
-  // "+ n more". A wall is its own index.
+  // "Show more". A wall is its own index.
   $variables['entries'] = [];
   $variables['entries_more'] = [];
   if (in_array($variables['opener'], ['full', 'cover'], TRUE) && !$variables['wall'] && $paragraph->hasField('field_guide_blocks')) {

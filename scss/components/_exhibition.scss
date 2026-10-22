@@ -586,20 +586,21 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-.pf-exhibit-opener__more {
-  > summary {
-    min-height: 2.75rem;
-    padding: 0.65rem 0;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--pf-exhibit-muted);
-    cursor: pointer;
-    border-top: 1px solid $pf-hairline;
-  }
+// "Show more" (js/exhibition.js), set like "Read more"; the entries it
+// shows fade in.
+.pf-exhibit-opener__toggle {
+  margin-top: 0.25rem;
+}
 
-  &[open] > summary {
-    color: var(--bs-body-color);
+.pf-exhibit-opener__links [data-pf-more] {
+  @include pf-exhibit-motion {
+    animation: pf-exhibit-fade-in .45s $pf-exhibit-ease both;
+  }
+}
+
+@keyframes pf-exhibit-fade-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -2050,11 +2051,9 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // above the title in the plain column the page has without the script).
 // The area grows with the text over it; the frame (image and wash) stays
 // on screen while that text scrolls, then leaves with the area's foot.
-// Sized and pinned from the compact header's height, not the live
-// --pf-header-h: the header shrinks once the page scrolls, and following it
-// would move and re-crop the image (and the text over it) under the
-// reader. At rest the full header covers the frame's top strip (38px from
-// lg); the shrink uncovers it, the image itself still.
+// Sized from the compact header's height, not the live --pf-header-h: the
+// header shrinks once the page scrolls, and following it would re-crop the
+// image and move the text over it under the reader.
 .pf-exhibit-wall-hero {
   --pf-wall-hero-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-exhibit-head-h, 0px));
   position: relative;
@@ -2073,11 +2072,17 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   cursor: zoom-in;
 }
 
+// The frame is pinned under the bar from the first scroll and its top edge
+// follows the bar as the header shrinks, while the image and its washes
+// inside are set back by the header's shrink so far (--pf-cover-shift, 0
+// to -38px from lg), so on screen they never move: the shrink only
+// uncovers the image's top strip.
 .pf-exhibit-wall-hero__frame {
+  --pf-cover-shift: calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
   position: sticky;
-  top: calc(#{$pf-header-bar-compact-h} + var(--pf-exhibit-head-h, 0px));
+  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
   display: block;
-  height: max(22rem, var(--pf-wall-hero-h));
+  height: max(22rem + var(--pf-cover-shift), var(--pf-wall-hero-h) + var(--pf-cover-shift));
   overflow: clip;
 
   // The page colour where the text sits: from the foot below lg (the text
@@ -2086,7 +2091,10 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   &::after {
     content: "";
     position: absolute;
-    inset: 0;
+    top: var(--pf-cover-shift);
+    left: 0;
+    width: 100%;
+    height: max(22rem, var(--pf-wall-hero-h));
     z-index: 1;
     pointer-events: none;
   }
@@ -2126,10 +2134,11 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // a wide image short of the frame's foot.
 .pf-exhibit-wall-hero .pf-exhibit-wall-hero__img {
   position: absolute;
-  inset: 0;
+  top: var(--pf-cover-shift);
+  left: 0;
   display: block;
   width: 100%;
-  height: 100%;
+  height: max(22rem, var(--pf-wall-hero-h));
   object-fit: cover;
 
   @include pf-exhibit-motion {
