@@ -225,8 +225,9 @@ On the paragraphs:
 
 ### What the hero shows
 
-- **Bar:** breadcrumb and the background-video button, sticky under the header
-  for the whole landing.
+- **Bar:** breadcrumb, "Sign in" (Aeon, new tab; the icon alone on phones)
+  and the background-video button, sticky under the header for the whole
+  landing.
 - **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title and
   intro (side by side from xl; keep the intro to a sentence or two), a 4rem
   search field with an accent-filled Search button and suggested searches
@@ -241,8 +242,8 @@ On the paragraphs:
 - **Quick Guide:** the request paths from
   `includes/guide-request-paths.html.twig`, shared with the full guide: three
   options A, B, C, each a line of stops. Edit the stops there and both pages
-  change. "Sign in to request materials" (Aeon) and "See full guide" under
-  them.
+  change. "See full guide" under them. The space around its star rule is
+  tighter in the hero, so the guide follows At a glance closely.
 - **Map and Visit strip:** the building map with its key and the Visit strip
   (`includes/visit-strip.html.twig`) in one glass panel.
 - **On view** (`.pf-landing__onview`): under the map, so the galleries come
@@ -850,6 +851,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: Sign in moves to the bar; the Quick Guide moves up.** "Sign in"
+  (icon after the word, opens Aeon in a new tab) sits at the end of the
+  sticky breadcrumb bar, the icon alone on phones; it leaves the Quick
+  Guide, which keeps "See full guide". The Quick Guide follows At a glance
+  closely (a third of the old space around its star rule, and no longer
+  pushed to the panel's foot), so its heading shows in a laptop's first
+  screen. Why: few visitors know how Special Collections works, so the
+  guide is the next step after search.
 - **Special Collections hero, third pass; TOC hidden on hero pages.** The
   search field is taller (4rem) with suggested searches under it, as in the
   mockup (Landing hero > Search suggestions, an optional field added by

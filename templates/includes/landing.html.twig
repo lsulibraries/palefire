@@ -151,10 +151,24 @@
      far end of the bar's row and stays under the header while the landing
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
+  {# Hero: "Sign in" (the Special Collections request system, Aeon) at the
+     end of the bar, so it stays at hand under the header for as long as
+     the landing is on screen. It opens in a new tab, which its name says
+     for screen readers; the duotone sign-in icon follows the word.
+     account_url: empty leaves it out. #}
+  {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
         <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
+        {% if account_url %}
+          <a class="pf-hero-account__link pf-landing__signin" href="{{ account_url }}" target="_blank" rel="noopener" title="{{ 'Sign in (opens in a new tab)'|t }}">
+            <span>{{ 'Sign in'|t }}<span class="visually-hidden">{{ ' to request Special Collections materials (opens in a new tab)'|t }}</span></span>
+            {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+               inlined from the site's copy like the map's hint icon. #}
+            <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+          </a>
+        {% endif %}
       </div>
     </div>
     {% if video_toggle %}
@@ -319,19 +333,17 @@
       {# Quick guide: under At a glance, still in the lead panel. A gold
          rule with a star between two equal lines (decorative), then the
          three request paths, options A, B and C, from the full guide (the
-         same include, so an edit there shows here too), then the Special
-         Collections sign-in and a link to that guide, in the sign-in
-         button's style. On wide screens it starts below the fold, so the
-         lead is taller than the window: it scrolls freely, and
-         landing-snap.js snaps to the map once the lead's end is in view.
+         same include, so an edit there shows here too) and a link to that
+         guide, in the sign-in button's style (the sign-in itself is at the
+         end of the bar, above). Close under At a glance, so its heading
+         shows in a laptop's first screen; the lead runs taller than the
+         window, scrolls freely, and landing-snap.js snaps to the map once
+         the lead's end is in view.
          - guide_url: the full "How to Use Special Collections" guide;
            empty leaves the link out.
-         - account_url: the Special Collections sign-in (Aeon); empty
-           leaves the button out.
          - quick_guide: title, intro, url and link_text from the paragraph's
            optional Quick Guide fields (_palefire_quick_guide()); each one
            left empty keeps the built-in text below. #}
-      {% set account_url = 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' %}
       {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
@@ -349,32 +361,22 @@
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
-        {% if guide_url or account_url %}
+        {% if guide_url %}
           <div class="pf-quick-guide__more">
-            {% if account_url %}
-              <a class="pf-hero-account__link" href="{{ account_url }}">
-                {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                   inlined from the site's copy like the map's hint icon. #}
-                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                <span>{{ 'Sign in to request materials'|t }}</span>
-              </a>
-            {% endif %}
-            {% if guide_url %}
-              <a class="pf-hero-account__link" href="{{ guide_url }}">
-                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                {# The full name keeps the visible words first (WCAG 2.5.3)
-                   and says which guide, so the link stands on its own. With
-                   its own text or URL (the Link field) the link names
-                   itself: the added guide name may no longer fit. #}
-                {% if quick_guide.link_text %}
-                  <span>{{ quick_guide.link_text }}</span>
-                {% elseif quick_guide.url %}
-                  <span>{{ 'See full guide'|t }}</span>
-                {% else %}
-                  <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
-                {% endif %}
-              </a>
-            {% endif %}
+            <a class="pf-hero-account__link" href="{{ guide_url }}">
+              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+              {# The full name keeps the visible words first (WCAG 2.5.3)
+                 and says which guide, so the link stands on its own. With
+                 its own text or URL (the Link field) the link names
+                 itself: the added guide name may no longer fit. #}
+              {% if quick_guide.link_text %}
+                <span>{{ quick_guide.link_text }}</span>
+              {% elseif quick_guide.url %}
+                <span>{{ 'See full guide'|t }}</span>
+              {% else %}
+                <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+              {% endif %}
+            </a>
           </div>
         {% endif %}
       </div>

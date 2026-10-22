@@ -132,6 +132,46 @@
   padding: 0;
 }
 
+// Hero: "Sign in" at the bar's end (before the docked video button's
+// room), the sign-in button's style made to fit the bar's row: as tall as
+// the video button, the icon after the word. The breadcrumb gives way
+// (ellipsis) on narrow screens; the button keeps its size.
+.pf-landing__bar .pf-landing__signin {
+  flex: none;
+  min-height: 2.25rem;
+  margin-inline-start: auto;
+  padding: .25rem .75rem;
+  gap: .5rem;
+
+  .pf-hero-account__icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.pf-landing__bar .pf-breadcrumb--lead:has(+ .pf-landing__signin) {
+  margin-inline-end: 1rem;
+}
+
+// Phones: the icon alone (a 36px square, its name still "Sign in…" for
+// screen readers, and its title as a tooltip), so the breadcrumb keeps
+// its room.
+@include media-breakpoint-down(sm) {
+  .pf-landing__bar .pf-landing__signin {
+    width: 2.25rem;
+    padding: 0;
+
+    > span:not(.pf-hero-account__icon) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+  }
+}
+
 // The header's growing-back strip (.pf-page::before, _header.scss) covers
 // the gap the full-height header leaves when it turns compact near the top
 // of the page. Here it sat between the compact header and this bar, in the
@@ -708,6 +748,20 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   padding-bottom: var(--pf-quick-space);
 }
 
+// In the hero the guide follows At a glance closely (its hairline already
+// sets the two apart), so its heading reaches a laptop's first screen: the
+// space around the star rule is about a third of the default.
+.pf-landing__lead--hero > .pf-quick-guide {
+  --pf-quick-space: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+// Not pushed to the full-screen panel's foot (the lead-screen rule's
+// margin-top: auto, _landing-swiss.scss): on a tall screen the spare
+// height goes under the guide, not between it and At a glance.
+.pf-landing--lead-screen > .pf-landing__lead.pf-landing__lead--hero > .pf-quick-guide {
+  margin-top: 0;
+}
+
 .pf-quick-guide__rule {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -848,8 +902,8 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   }
 }
 
-// The sign-in and "See full guide", side by side at the end of the row
-// from 36rem; full width and stacked when narrow.
+// "See full guide": at the end of the row from 36rem; full width when
+// narrow.
 .pf-quick-guide__more {
   display: flex;
   flex-wrap: wrap;
