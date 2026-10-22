@@ -491,7 +491,7 @@ a tap, can itself be hovered, and hides with Esc (WCAG 1.4.13,
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
-| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_exhibit_display`, `field_exhibit_sheet`, `field_guide_blocks` | A section. Opening **full screen** (default): the lead fills the screen with the number, title and "In this gallery" links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative. Display **Story** (default) or **Wall** (below); Sheet size ("40 × 27", inches) for a wall's "Actual size" |
+| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_exhibit_display`, `field_exhibit_sheet`, `field_guide_blocks` | A section. Opening **Cover** (default): the lead fills the screen and stays put, with the number, title, "In this gallery" links and opening text on it. **Full screen, then pan**: the lead fills the screen with the number, title and links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative. Display **Story** (default) or **Wall** (below); Sheet size ("40 × 27", inches) for a wall's "Actual size" |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
 | `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout`, `field_figure_align` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox. Alignment ("k rot tx ty": scale, degrees, left and top in proof widths) lays a drawing over the proof after it in a wall's comparison |
 | `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
@@ -516,7 +516,15 @@ from the media item. A figure with no image shows only to editors.
 - TOC: "Home" (the title page) first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
-- Full-screen opening: from lg the text sits on the image's washed left
+- Cover opening (Opening "Cover", stored as `full`, the default with a
+  lead): the lead full screen and fixed, as on a wall, with the number,
+  heading, "In this gallery" links and the gallery's opening text (its
+  untitled text blocks before anything else, moved there by
+  `initCovers()`) over its lower left on the wash; longer text folds with
+  "Read more" and scrolls over the image when opened. The rest of the
+  gallery follows below. Without the script the text stays in the body.
+- Full screen, then pan (Opening "Full screen, then pan", stored as `pan`;
+  also every gallery without a lead): from lg the text sits on the image's washed left
   half, as on the title page; below lg the image is on its own at the top,
   fading into the page, with the text under it. The heading is
   palefire_modular's, so `.pf-section__inner` is a grid that places the
@@ -598,7 +606,8 @@ from the media item. A figure with no image shows only to editors.
   It shows the tile's loaded image at once, then the size the stage needs;
   click to zoom where you click (largest size), move to look around. A pair
   is a comparison: the second image wiped over the first with a labelled
-  slider. When the first has an alignment the frame takes the second's
+  slider; click it to zoom both together, like a single image. When the
+  first has an alignment the frame takes the second's
   shape, the first is scaled, turned and moved onto it (the files are not
   changed), and Wipe / Fade switches the slider between a wipe and a
   cross-fade (eased; remembered while the page is open). Beside it (below on phones): count, heading, the caption, the
@@ -808,6 +817,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: story galleries open on a fixed cover.** A story gallery
+  with a lead now opens like a wall: the image full screen and fixed, with
+  the title, the "In this gallery" links and the opening text on its wash
+  ("Read more" for longer text), the entries below. The Opening field's
+  "Full screen" is now "Cover" (same stored value, so every such gallery
+  switches); the new "Full screen, then pan" keeps the earlier opening,
+  and "Compact" stays (re-run `palefire_exhibit_setup.php` for the new
+  option and labels). Why: the cover reads better than the pan, which hid
+  the text behind a long scroll.
+- **Exhibitions: zoom on a drawing and its proof.** Clicking a comparison
+  zooms both images and the cut together where clicked, at their largest
+  size, as a single image does. Why: the pairs are the ones most worth
+  looking at closely.
 - **Exhibitions: drawings lined up with their proofs.** New Image field
   `field_figure_align` (setup script) places a drawing over its proof in a
   wall's comparison: scaled, turned and moved, the files untouched. The

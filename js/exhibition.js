@@ -581,6 +581,7 @@
     initCrumb();
     initZoom();
     initWalls();
+    initCovers();
     const target = targetOf(location.hash);
     const page = galleryOf(target);
     place(page);
@@ -640,6 +641,35 @@
     return heading && page ? page.querySelector('[data-pf-tile="' + CSS.escape(heading.id) + '"]') : null;
   }
 
+  // A cover opening: the gallery's opening text (its untitled text blocks
+  // before anything else) moves onto the image under the entry links,
+  // folded like a wall's intro.
+  function initCovers() {
+    state.pages.forEach((page) => {
+      const body = page.querySelector('.pf-gallery--cover > .pf-gallery__body');
+      if (!body) {
+        return;
+      }
+      const blocks = [];
+      for (const el of body.children) {
+        if (!el.matches('.pf-guide-block--text') || el.querySelector(':scope > .pf-guide-block__title')) {
+          break;
+        }
+        blocks.push(el);
+      }
+      if (blocks.length) {
+        const text = document.createElement('div');
+        text.className = 'pf-exhibit-wall__text';
+        const intro = document.createElement('div');
+        intro.className = 'pf-exhibit-wall__intro pf-guide';
+        intro.id = page.id + '-intro';
+        intro.append(...blocks);
+        text.append(intro);
+        body.before(text);
+      }
+    });
+  }
+
   function initWalls() {
     state.pages.forEach((page) => {
       const wall = page.querySelector('[data-pf-wall]');
@@ -675,9 +705,9 @@
     });
   }
 
-  // How much of a wall's intro shows folded: about four lines, or from lg
-  // over a lead, as many whole lines as fill the image's screen (about 78%
-  // of it, under the title, facts and button).
+  // How much of a wall's or cover's intro shows folded: about four lines,
+  // or from lg over a lead, as many whole lines as fill the image's screen
+  // (about 78% of it, under the title, facts or links, and button).
   function introLimit(page, intro) {
     const text = intro.querySelector('.pf-guide-prose') || intro;
     const line = parseFloat(getComputedStyle(text).lineHeight) || 26;
@@ -695,7 +725,7 @@
     const wrap = intro.parentElement;
     const room = frame.getBoundingClientRect().height * 0.78
       - outer(page.querySelector('.pf-section__title'))
-      - outer(page.querySelector('.pf-exhibit-wall__stats'))
+      - outer(page.querySelector('.pf-exhibit-wall__stats, .pf-exhibit-cover__nav'))
       - (parseFloat(getComputedStyle(wrap).paddingBottom) || 0)
       - line * 2.25;
     return Math.max(4, Math.floor(room / line)) * line;
@@ -833,26 +863,34 @@
       }
     });
     // Click the image to look closer where you clicked; move to look around.
+    // A comparison zooms both images together (its stage).
     view.media.addEventListener('click', (event) => {
-      const img = event.target.closest('.pf-exhibit-object__img');
+      const img = event.target.closest('.pf-exhibit-object__img, .pf-exhibit-compare__stage');
       if (!img) {
         return;
       }
-      if (!img.dataset.full) {
-        aim(img, event);
-        img.closest('.pf-exhibit-object__frame').classList.toggle('is-zoomed');
-        return;
-      }
       // First zoom: the largest size, then zoom.
-      const full = img.dataset.full;
-      delete img.dataset.full;
-      img.srcset = '';
-      img.src = full;
+      const frame = img.closest('.pf-exhibit-object__frame');
+      const swap = (el) => {
+        el.srcset = '';
+        el.src = el.dataset.full;
+        delete el.dataset.full;
+      };
+      if (img.dataset.full) {
+        swap(img);
+        frame.classList.add('is-zoomed');
+      }
+      else if (img.querySelector('img[data-full]')) {
+        img.querySelectorAll('img[data-full]').forEach(swap);
+        frame.classList.add('is-zoomed');
+      }
+      else {
+        frame.classList.toggle('is-zoomed');
+      }
       aim(img, event);
-      img.closest('.pf-exhibit-object__frame').classList.add('is-zoomed');
     });
     view.media.addEventListener('pointermove', (event) => {
-      const img = event.target.closest('.is-zoomed .pf-exhibit-object__img');
+      const img = event.target.closest('.is-zoomed .pf-exhibit-object__img, .is-zoomed .pf-exhibit-compare__stage');
       if (img && event.pointerType === 'mouse') {
         aim(img, event);
       }
@@ -990,6 +1028,15 @@
       line.className = 'pf-exhibit-compare__line';
       line.setAttribute('aria-hidden', 'true');
       frame.append(line);
+      // Zoomed as one, like a single image: both images (and the cut) in a
+      // stage, each swapping to its largest size on the first zoom.
+      const stage = document.createElement('div');
+      stage.className = 'pf-exhibit-compare__stage';
+      stage.append(...frame.childNodes);
+      frame.append(stage);
+      stage.querySelectorAll('img').forEach((img) => {
+        img.dataset.full = (img.classList.contains('pf-exhibit-compare__after') || (aligned && !img.closest('.pf-exhibit-compare__layer')) ? b : a).href;
+      });
       const control = document.createElement('div');
       control.className = 'pf-exhibit-compare__control';
       const range = document.createElement('input');

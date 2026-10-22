@@ -28,8 +28,8 @@
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
  *     (field_exhibit_lead_whole), its caption (field_exhibit_lead_caption),
- *     the Opening (field_exhibit_opener: full screen or compact; all three
- *     added 2026-10-21), the Display (field_exhibit_display: story or wall)
+ *     the Opening (field_exhibit_opener: cover, full screen then pan, or
+ *     compact; all three added 2026-10-21), the Display (field_exhibit_display: story or wall)
  *     and a sheet size for the wall's "Actual size" (field_exhibit_sheet;
  *     both added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
@@ -240,10 +240,20 @@ $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_value
   'right' => 'Right',
 ]]);
 $storage('paragraph', 'field_exhibit_lead_whole', 'boolean');
-$storage('paragraph', 'field_exhibit_opener', 'list_string', ['allowed_values' => [
-  'full' => 'Full screen: the image fills the screen with the title and entries, then shows whole',
+// Changed 2026-10-21: "full" is now the cover (the image stays put with
+// the text on it, as on a wall); "pan" keeps the earlier full-screen
+// opening. Existing sites get the new labels and option.
+$opener_values = [
+  'full' => 'Cover: the image fills the screen and stays put, with the title, entries and opening text on it',
+  'pan' => 'Full screen, then pan: the image fills the screen with the title and entries, then shows whole',
   'compact' => 'Compact: a band above the title',
-]]);
+];
+$storage('paragraph', 'field_exhibit_opener', 'list_string', ['allowed_values' => $opener_values]);
+$opener_storage = FieldStorageConfig::loadByName('paragraph', 'field_exhibit_opener');
+if ($opener_storage->getSetting('allowed_values') !== $opener_values) {
+  $opener_storage->setSetting('allowed_values', $opener_values)->save();
+  echo 'Updated the Opening options (Cover, Full screen then pan, Compact)' . PHP_EOL;
+}
 $storage('paragraph', 'field_exhibit_lead_caption', 'text_long');
 $storage('paragraph', 'field_exhibit_display', 'list_string', ['allowed_values' => [
   'story' => 'Story: entries one after another, images beside their text',
@@ -387,11 +397,16 @@ foreach ($shared as $name => $values) {
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead', $media_ref('Lead image (optional)', 'Shown full width at the top of the gallery with a curtain reveal, then panned from top to bottom as the page scrolls. Decorative: it is not announced, so use an image whose content the gallery doesn\'t depend on.'));
 // Added 2026-10-21. Re-running the script adds it to an existing site.
 // Added 2026-10-21. Empty (galleries made before it) counts as "full".
+$opener_description = 'Cover: the gallery opens on its lead image, which stays put while the number, title, links to its entries and its opening text sit on it (longer text folds with "Read more"); the rest of the gallery follows. Full screen, then pan: the same opening without the text, then the whole image at full width before the text. Compact: a shorter band above the title, for text-heavy galleries. Without a lead image, Cover and Full screen look the same.';
 $field('paragraph', 'exhibit_page', 'field_exhibit_opener', [
   'label' => 'Opening',
-  'description' => 'Full screen: the gallery opens on its lead image with the number, title and links to its entries; scrolling then shows the whole image at full width before the text. Compact: a shorter band above the title, for text-heavy galleries.',
+  'description' => $opener_description,
   'default_value' => [['value' => 'full']],
 ]);
+$opener_field = FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_opener');
+if ($opener_field->getDescription() !== $opener_description) {
+  $opener_field->setDescription($opener_description)->save();
+}
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_whole', [
   'label' => 'Show whole image (compact opening only)',
   'description' => 'Show the lead uncropped, centred on the page, instead of as a full-width band. Good for plates on white paper and tall images.',

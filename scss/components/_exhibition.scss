@@ -1942,17 +1942,32 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
   }
 }
 
-// With a lead. Row 1 takes what the image's full-screen height leaves
-// over the text in rows 2-4; the image spans rows 1-4.
-#{$pf-walled}:has(.pf-exhibit-wall-hero) {
+// With a lead, and a story's cover opening (.pf-gallery--cover, the same
+// parts: its entry links in place of the facts, the gallery's text in row
+// 5). Row 1 takes what the image's full-screen height leaves over the text
+// in rows 2-4; the image spans rows 1-4.
+$pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery--cover)';
+
+#{$pf-walled}:has(.pf-exhibit-wall-hero) > .pf-gallery > .pf-gallery__body {
+  display: contents;
+}
+
+#{$pf-covered} > .pf-gallery > .pf-gallery__body {
+  grid-column: 1;
+  grid-row: 5;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+#{$pf-walled}:has(.pf-exhibit-wall-hero),
+#{$pf-covered} {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 1fr auto auto auto auto auto;
   align-items: end;
-
-  > .pf-gallery > .pf-gallery__body {
-    display: contents;
-  }
 
   .pf-exhibit-wall-hero {
     grid-column: 1;
@@ -1964,6 +1979,7 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
 
   > .pf-section__title,
   .pf-exhibit-wall__stats,
+  .pf-exhibit-cover__nav,
   .pf-exhibit-wall__text {
     grid-column: 1;
     position: relative;
@@ -1983,6 +1999,16 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
   .pf-exhibit-wall__stats {
     grid-row: 3;
     margin: 0 0 1.5rem calc(-1 * var(--pf-stats-gap));
+  }
+
+  .pf-exhibit-cover__nav {
+    grid-row: 3;
+    margin-bottom: 1.5rem;
+
+    // Last on the image when the gallery opens on an entry, not text.
+    &:not(:has(~ .pf-exhibit-wall__text)) {
+      margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    }
   }
 
   .pf-exhibit-wall__text {
@@ -2411,6 +2437,28 @@ html.pf-object-open {
   width: 1px;
   background: var(--pf-exhibit-accent);
   pointer-events: none;
+
+  // Still a hairline at the stage's 2.5×.
+  .is-zoomed & {
+    width: 0.4px;
+  }
+}
+
+// Both images and the cut, zoomed together where clicked like a single
+// image (.pf-exhibit-object__img).
+.pf-exhibit-compare__stage {
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+
+  @include pf-exhibit-motion {
+    transition: transform .5s $pf-exhibit-ease;
+  }
+
+  .is-zoomed > & {
+    transform: scale(2.5);
+    cursor: zoom-out;
+  }
 }
 
 // Lined up (data-pf-align): the proof fills the frame and the drawing,
@@ -2422,7 +2470,7 @@ html.pf-object-open {
   overflow: hidden;
   clip-path: inset(0 calc(100% - var(--pf-cut, 50%)) 0 0);
 
-  .is-fading > & {
+  .is-fading & {
     clip-path: inset(0);
     opacity: calc(1 - var(--pf-mix, 0.5));
   }
@@ -2442,8 +2490,8 @@ html.pf-object-open {
 // Eased only while switching between wipe and fade, so the slider stays
 // direct.
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion) .is-easing > .pf-exhibit-compare__layer,
-  html:not(.pf-a11y-motion) .is-easing > .pf-exhibit-compare__line {
+  html:not(.pf-a11y-motion) .is-easing .pf-exhibit-compare__layer,
+  html:not(.pf-a11y-motion) .is-easing .pf-exhibit-compare__line {
     transition: clip-path .5s $pf-exhibit-ease, opacity .5s $pf-exhibit-ease;
   }
 }
