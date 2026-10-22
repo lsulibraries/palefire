@@ -5,10 +5,13 @@
  * (paragraph--family-trees.html.twig). data-search is what the search box
  * matches: title, city and parish, lowercased. data-family-tree opens the
  * tree in the viewer (js/family-tree-viewer.js); data-no-swup keeps Swup off
- * the link.
+ * the link. icon: the id of the family-tree icon's <symbol>, or nothing.
  */
 #}
 <li class="pf-trees__row" data-parish="{{ tree.parish }}" data-search="{{ [tree.title, tree.city, tree.parish_name]|join(' ')|lower }}">
-  <a class="pf-trees__title" href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>
+  <span class="pf-trees__name">
+    {%- if icon %}<svg class="pf-tree-icon" aria-hidden="true" focusable="false"><use href="#{{ icon }}"/></svg>{% endif -%}
+    <a class="pf-trees__title" href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>
+  </span>
   <span class="pf-trees__meta">{{ [tree.city, tree.parish_name]|filter(v => v)|join(' · ') }}</span>
 </li>

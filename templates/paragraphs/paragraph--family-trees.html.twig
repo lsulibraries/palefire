@@ -20,6 +20,8 @@
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set step = 40 %}
 <div{{ attributes.addClass('pf-guide-block', 'pf-trees') }} data-family-trees data-trees-step="{{ step }}">
+  {# The family trees' icon (_palefire_fa_symbol()), used by each row. #}
+  {{ tree_icon }}
   {% if title %}
     <h3 class="pf-guide-block__title">{{ title }}</h3>
   {% endif %}
@@ -48,14 +50,14 @@
 
     <ul class="pf-trees__list" data-trees-list>
       {% for tree in trees|slice(0, step) %}
-        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree } only %}
+        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree, icon: tree_icon ? 'pf-icon-tree-list' } only %}
       {% endfor %}
     </ul>
     <button type="button" class="btn btn-outline-secondary pf-trees__more" data-trees-more{{ trees|length <= step ? ' hidden' }}>{{ 'Show more'|t }}</button>
 
     <template data-trees-rows>
       {% for tree in trees %}
-        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree } only %}
+        {% include '@palefire/includes/family-tree-row.html.twig' with { tree: tree, icon: tree_icon ? 'pf-icon-tree-list' } only %}
       {% endfor %}
     </template>
   {% endif %}

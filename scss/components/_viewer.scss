@@ -184,10 +184,12 @@ html.pf-viewer-open {
 }
 
 .pf-viewer__panel {
-  // Its padding, which the pinned top row (below) reaches across.
+  // Its padding, which the pinned top row (below) reaches across. The top
+  // is the row's own: the row starts at the panel's top edge, its Close
+  // level with the stage's toolbar.
   --pf-pad-start: max(1rem, env(safe-area-inset-left, 0px));
   --pf-pad-end: max(1rem, env(safe-area-inset-right, 0px));
-  --pf-pad-top: 1.25rem;
+  --pf-pad-top: .75rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -199,9 +201,8 @@ html.pf-viewer-open {
   @include media-breakpoint-up(lg) {
     --pf-pad-start: 2.25rem;
     --pf-pad-end: 2.25rem;
-    --pf-pad-top: 3rem;
     width: var(--pf-panel-w);
-    padding: var(--pf-pad-top) 2.25rem;
+    padding: var(--pf-pad-top) 2.25rem 3rem;
     border-top: 0;
     border-left: 1px solid $pf-hairline;
   }

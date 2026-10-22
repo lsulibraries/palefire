@@ -821,6 +821,25 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Viewer: the panel's bar at the top.** The pinned row (count or
+  "Family tree", and Close) started 3rem down and only reached the top
+  on scroll. It now starts at the panel's top edge, with Close level with
+  the stage's toolbar, so the controls read as one bar.
+- **Family trees zoom like images.** The whole tree is fitted to the
+  stage. A click or Zoom goes 2.5× there; the mouse looks around and a
+  finger drags (the viewer's own zoom, the SVG as `.pf-viewer__zoomable`).
+  This replaces the Fit / Actual size switch and its scrolling pane.
+- **Family trees: the duotone project-diagram icon.** It appears before
+  each tree link (Family trees list and parish panels) and before "Family
+  tree" in the viewer. `_palefire_fa_symbol()` reads it from the server's
+  Font Awesome Pro files (never in this repo) and prints it once per block
+  as an SVG `<symbol>`; the links `<use>` it, so the hundreds of rows add
+  little to the page. It takes the accent colour, and its light layer
+  stays at 40%. If the file is missing, no icon shows.
+- **Family trees: Copy link and Original page as buttons.** Before they
+  were bare text with no alignment. They're now a pair of hairline-framed
+  buttons like the viewer's Close: an icon and a mono label each, 44px
+  tall.
 - **One full-screen viewer for exhibitions and the newspaper family
   trees.** The exhibitions' object view is now its own library,
   `palefire/viewer` (js/viewer.js, scss/components/_viewer.scss, classes

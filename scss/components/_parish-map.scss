@@ -382,8 +382,14 @@
   border-bottom: 1px solid var(--pf-guide-rule);
 }
 
-.pf-trees__title {
+// The title with the family trees' icon before it (.pf-tree-icon,
+// _family-tree-viewer.scss), one item in the row.
+.pf-trees__name {
   flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.pf-trees__title {
   font-weight: 500;
   overflow-wrap: anywhere;
 }

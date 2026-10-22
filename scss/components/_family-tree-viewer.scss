@@ -33,7 +33,6 @@
 }
 
 .pf-tree-viewer__dates,
-.pf-tree-viewer__action,
 .pf-tree-viewer__key-title,
 .pf-tree-viewer__key-list {
   font-family: var(--pf-viewer-mono);
@@ -48,26 +47,46 @@
 }
 
 // Copy link and Original page: quiet text links in the guide's caption type.
+// Copy link and Original page: a pair of buttons set like the viewer's
+// Close (.pf-viewer__close), hairline-framed, an icon and a mono label
+// each, the same height whether <button> or <a>.
 .pf-tree-viewer__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
+  gap: 0.5rem;
   margin: 0;
 }
 
 .pf-tree-viewer__action {
-  min-height: 2rem;
-  padding: 0.35rem 0;
-  color: var(--pf-tree-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem; // 44px target
+  padding: 0.55rem 0.8rem;
+  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
   background: none;
-  border: 0;
+  border: 1px solid $pf-hairline;
   text-decoration: none;
-  transition: color $pf-hover-out ease;
+  transition: color $pf-hover-out ease, border-color $pf-hover-out ease;
 
   &:hover,
   &:focus-visible {
-    color: var(--pf-g-hover, var(--pf-tree-fg));
+    color: var(--pf-tree-accent);
+    border-color: currentColor;
     transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-tree-accent);
+    outline-offset: 2px;
+  }
+
+  svg {
+    flex: none;
+    width: 0.9rem;
   }
 
   &[hidden] {
@@ -75,43 +94,25 @@
   }
 }
 
-.pf-tree-viewer__action,
-.pf-tree-viewer__canvas {
-  &:focus-visible {
-    outline: 2px solid var(--pf-tree-accent);
-    outline-offset: 2px;
-  }
+// The family trees' icon (the duotone project-diagram, a <use> of the
+// page's _palefire_fa_symbol()): before each tree link, and before "Family
+// tree" in the viewer. In the accent; its lighter layer at 40%.
+.pf-tree-icon {
+  flex: none;
+  width: 1.25em;
+  height: 1em;
+  margin-inline-end: 0.5em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  color: var(--pf-g-accent, var(--bs-primary));
 }
 
 // Drawing ------------------------------------------------------------------
 
-// The stage's pane: the tree centred in it, scaled to fit; at its actual
-// size it scrolls (and a mouse drags it: js/family-tree-viewer.js). "safe"
-// centring starts a drawing wider or taller than the pane at its edge, so
-// all of it can be scrolled to.
-.pf-tree-viewer__canvas {
-  @include pf-thin-scrollbar;
-  --pf-scroll-thumb: var(--pf-g-scroll, var(--pf-tree-muted));
-  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover, var(--pf-tree-fg));
-  --pf-scroll-track: var(--pf-tree-rule);
-  display: flex;
-  align-items: safe center;
-  justify-content: safe center;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-
-  &.is-actual {
-    cursor: grab;
-  }
-
-  &.is-dragging {
-    cursor: grabbing;
-    user-select: none;
-  }
-}
+// The stage's pane is the viewer's frame (.pf-viewer__frame, so
+// .pf-tree-viewer__canvas has no rules of its own): the tree centred in
+// it, fitted whole, and zoomed like an image (the drawing is
+// .pf-viewer__zoomable).
 
 .pf-tree-viewer__status {
   margin: 2rem 0;

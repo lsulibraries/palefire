@@ -15,9 +15,9 @@
  * the Key and any notes go under them, with line samples beside "Solid
  * line" and "Dashed line", after "Copy link" and "Original page".
  *
- * A tree wider than the stage is scaled down to fit; the viewer's Zoom
- * draws it at the size its editor made it, to scroll or drag around. A
- * link opened with a modifier key, one to another site, or a page with no
+ * The whole tree is fitted to the stage, and zooms like an exhibition's
+ * images: a click (or the viewer's Zoom) goes 2.5× there, the mouse looks
+ * around, a finger drags. A link opened with a modifier key, one to another site, or a page with no
  * diagram falls back to the page.
  *
  * Linkable: an open tree is in the address as ?tree=<its page's name>
@@ -37,12 +37,17 @@
   const LINE_HEIGHT = 1.25;
   const MARKER = [9, 4];    // arrowhead length and half-width, map units
   const PARAM = 'tree';
+  // Copy link's chain and Original page's arrow, drawn like the viewer's
+  // icons (js/viewer.js).
+  const LINK = '<path d="M6.5 9.5 9.5 6.5M7 4.5l1.25-1.25a2.5 2.5 0 0 1 3.5 3.5L10.5 8M9 11.5l-1.25 1.25a2.5 2.5 0 0 1-3.5-3.5L5.5 8"/>';
+  const PAGE = '<path d="M5 11 11 5M6 5h5v5"/>';
+  const icon = (paths) => '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false">' + paths + '</svg>';
   const cache = new Map();
   // The full-screen viewer (js/viewer.js) the tree is shown in, and the
-  // open tree: its link and page, its drawing, Actual size on or off, and
+  // open tree: its link and page, its drawing, and
   // whether the history entry this viewer added is the current one.
   const viewer = Drupal.palefireViewer;
-  const state = { canvas: null, opener: null, href: '', tree: null, actual: false, pushed: false };
+  const state = { canvas: null, opener: null, href: '', tree: null, pushed: false };
 
   // A tree's name in the address: its page's file name without ".html".
   const nameOf = (href) => decodeURIComponent(new URL(href, location.href).pathname.split('/').pop() || '').replace(/\.html?$/i, '');
@@ -232,17 +237,22 @@
   }
 
   // The tree's parts in the viewer (js/viewer.js): the drawing on the
-  // stage, in a pane that scrolls when it is drawn at its actual size; the
-  // title, years, links, Key and notes in the panel.
+  // stage, fitted whole and zoomed like an exhibition's image (a click,
+  // or Zoom, goes 2.5× there; the mouse looks around, a finger drags);
+  // the title, years, links, Key and notes in the panel.
   function parts() {
     const view = viewer.get();
     if (!state.canvas) {
-      state.canvas = el('div', { class: 'pf-tree-viewer__canvas', tabindex: '0', role: 'region', 'aria-label': Drupal.t('Diagram'), 'data-pf-viewer-scroll': '' });
+      state.canvas = el('div', { class: 'pf-viewer__frame pf-tree-viewer__canvas', role: 'region', 'aria-label': Drupal.t('Diagram') });
       state.links = el('p', { class: 'pf-tree-viewer__actions' });
+      // Buttons like the viewer's Close: an icon and a label each.
       state.copy = el('button', { type: 'button', class: 'pf-tree-viewer__action', hidden: '' });
-      state.copy.textContent = Drupal.t('Copy link');
+      state.copy.innerHTML = icon(LINK) + '<span></span>';
+      state.copyLabel = state.copy.lastChild;
+      state.copyLabel.textContent = Drupal.t('Copy link');
       state.page = el('a', { class: 'pf-tree-viewer__action', 'data-no-swup': '', href: '#' });
-      state.page.textContent = Drupal.t('Original page');
+      state.page.innerHTML = icon(PAGE) + '<span></span>';
+      state.page.lastChild.textContent = Drupal.t('Original page');
       state.links.append(state.copy, state.page);
       state.key = el('div', { class: 'pf-tree-viewer__key' });
       // Copy link: the address, which has ?tree= while a tree is open.
@@ -251,43 +261,20 @@
         let timer = 0;
         state.copy.addEventListener('click', () => {
           navigator.clipboard.writeText(location.href).then(() => {
-            state.copy.textContent = Drupal.t('Link copied');
+            state.copyLabel.textContent = Drupal.t('Link copied');
             Drupal.announce(Drupal.t('Link copied'));
             clearTimeout(timer);
-            timer = setTimeout(() => { state.copy.textContent = Drupal.t('Copy link'); }, 2000);
+            timer = setTimeout(() => { state.copyLabel.textContent = Drupal.t('Copy link'); }, 2000);
           });
         });
       }
-      // At its actual size, a mouse drags the drawing around (touch
-      // scrolls it as it is).
-      let drag = null;
-      state.canvas.addEventListener('pointerdown', (event) => {
-        drag = state.actual && event.pointerType === 'mouse' && event.button === 0
-          ? { x: event.clientX, y: event.clientY, left: state.canvas.scrollLeft, top: state.canvas.scrollTop }
-          : null;
-        state.canvas.classList.toggle('is-dragging', !!drag);
-      });
-      state.canvas.addEventListener('pointermove', (event) => {
-        if (drag) {
-          state.canvas.scrollLeft = drag.left - (event.clientX - drag.x);
-          state.canvas.scrollTop = drag.top - (event.clientY - drag.y);
-        }
-      });
-      ['pointerup', 'pointercancel', 'pointerleave'].forEach((type) => state.canvas.addEventListener(type, () => {
-        drag = null;
-        state.canvas.classList.remove('is-dragging');
-      }));
       new ResizeObserver(() => fit()).observe(state.canvas);
     }
     return view;
   }
 
-  // What the viewer's Zoom, Close and Esc do here.
+  // What the viewer's Close and Esc do here.
   const handler = {
-    zoom: () => {
-      state.actual = !state.actual;
-      fit();
-    },
     close: () => viewer.close(null),
     closed: () => {
       // Closed by ×, Esc or a link: take ?tree= back off the address.
@@ -304,22 +291,16 @@
     },
   };
 
-  // Fit: a wide tree scaled down to the pane, never above its actual size.
-  // Zoom shows only for a tree wider than the pane: on, its actual size.
+  // Fit: the whole tree in the stage, never above the size its editor
+  // drew it.
   function fit() {
     const tree = state.tree;
     if (!tree || !viewer.isOpen()) {
       return;
     }
-    const view = viewer.get();
-    const room = state.canvas.clientWidth - 2 * PAD;
-    const wide = tree.width > room;
-    view.zoom.hidden = !wide;
-    view.zoom.setAttribute('aria-pressed', String(state.actual && wide));
-    const scale = state.actual || !wide ? 1 : room / tree.width;
+    const scale = Math.min(1, state.canvas.clientWidth / tree.width, state.canvas.clientHeight / tree.height);
     tree.svg.setAttribute('width', (tree.width * scale).toFixed(1));
     tree.svg.setAttribute('height', (tree.height * scale).toFixed(1));
-    state.canvas.classList.toggle('is-actual', state.actual && wide);
   }
 
   function keyLine(text) {
@@ -340,7 +321,6 @@
     const view = parts();
     state.opener = opener;
     state.href = href;
-    state.actual = false;
     state.tree = null;
     if (push) {
       history.pushState({ pfTree: nameOf(href) }, '', addressWith(nameOf(href)));
@@ -352,6 +332,12 @@
       view.dialog.removeAttribute('aria-label');
       view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
       view.count.textContent = Drupal.t('Family tree');
+      // The family trees' icon, from the page's <symbol>
+      // (_palefire_fa_symbol()), when it has one.
+      const symbol = document.querySelector('symbol[id^="pf-icon-tree-"]');
+      if (symbol) {
+        view.count.insertAdjacentHTML('afterbegin', '<svg class="pf-tree-icon" aria-hidden="true" focusable="false"><use href="#' + symbol.id + '"/></svg>');
+      }
       view.title.hidden = false;
       view.title.textContent = title;
       view.title.classList.remove('is-long');
@@ -385,6 +371,7 @@
     }
 
     const tree = draw(cells, getComputedStyle(state.canvas).fontFamily);
+    tree.svg.classList.add('pf-viewer__zoomable');
     const heads = tree.blocks.filter((b) => b.kind === 'title');
     if (heads.length) {
       const lines = heads.flatMap((b) => b.lines);
@@ -428,7 +415,7 @@
     state.canvas.replaceChildren(tree.svg, alt);
     state.canvas.setAttribute('aria-label', Drupal.t('Diagram: @title', { '@title': view.title.textContent }));
     fit();
-    state.canvas.scrollTo(0, 0);
+    viewer.sync();
   }
 
   // One listener for every family-tree link on the page, now and after a

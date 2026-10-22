@@ -34,6 +34,8 @@
   }
 %}
 <div{{ attributes.addClass('pf-guide-block', 'pf-parishes') }} data-parish-map>
+  {# The family trees' icon (_palefire_fa_symbol()), used by each tree link. #}
+  {{ tree_icon }}
   {% if title %}
     <h3 class="pf-guide-block__title">{{ title }}</h3>
   {% endif %}
@@ -99,7 +101,7 @@
                     {% if group == 'trees' %}
                       <ul class="pf-parishes__trees">
                         {% for tree in p.trees %}
-                          <li><a href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
+                          <li>{% if tree_icon %}<svg class="pf-tree-icon" aria-hidden="true" focusable="false"><use href="#pf-icon-tree-map"/></svg>{% endif %}<a href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
                         {% endfor %}
                       </ul>
                     {% else %}

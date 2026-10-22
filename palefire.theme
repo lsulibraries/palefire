@@ -1371,6 +1371,8 @@ function _palefire_newspaper_trees_query(array &$tags): array {
 function palefire_preprocess_paragraph__parish_map(array &$variables): void {
   $paragraph = $variables['paragraph'];
   $cache = CacheableMetadata::createFromRenderArray($variables);
+  // The family trees' icon, once, for each tree link to <use>.
+  $variables['tree_icon'] = _palefire_fa_symbol('duotone', 'project-diagram', 'pf-icon-tree-map');
   $text = static fn (ParagraphInterface $entry, string $field): ?array => $entry->hasField($field) && trim(strip_tags((string) $entry->get($field)->value)) !== '' ? [
     '#type' => 'processed_text',
     '#text' => $entry->get($field)->value,
@@ -1424,6 +1426,8 @@ function palefire_preprocess_paragraph__parish_map(array &$variables): void {
  */
 function palefire_preprocess_paragraph__family_trees(array &$variables): void {
   $cache = CacheableMetadata::createFromRenderArray($variables);
+  // The family trees' icon, once, for each row to <use>.
+  $variables['tree_icon'] = _palefire_fa_symbol('duotone', 'project-diagram', 'pf-icon-tree-list');
   $trees = [];
   $parishes = [];
   foreach (_palefire_newspaper_trees($cache) as $row) {
@@ -1541,6 +1545,25 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
     'loading' => $eager ? 'eager' : 'lazy',
     'focus' => _palefire_focal_point($file, $width, $height, $cache),
   ];
+}
+
+/**
+ * A Font Awesome Pro icon as an inline <symbol>, for <use href="#$id">.
+ *
+ * Read from the server's /libraries/fontawesome-pro (licensed, so never in
+ * this repository). One copy per template, however many links use it,
+ * instead of the whole SVG in each. The paths take the text colour (the
+ * <use> sets fill: currentColor); a duotone icon's lighter layer keeps its
+ * 40%. NULL when the file isn't there: the templates then print no icon.
+ */
+function _palefire_fa_symbol(string $style, string $name, string $id): ?Markup {
+  $file = DRUPAL_ROOT . '/libraries/fontawesome-pro/svgs/' . $style . '/' . $name . '.svg';
+  $svg = is_readable($file) ? (string) file_get_contents($file) : '';
+  if (!preg_match('#viewBox="([\d. ]+)"#', $svg, $box) || !preg_match_all('#<path [^>]*/>#', $svg, $paths)) {
+    return NULL;
+  }
+  $paths = str_replace(['class="fa-secondary"', ' class="fa-primary"'], ['opacity=".4"', ''], implode('', $paths[0]));
+  return Markup::create('<svg class="visually-hidden" aria-hidden="true" focusable="false"><symbol id="' . $id . '" viewBox="' . $box[1] . '">' . $paths . '</symbol></svg>');
 }
 
 /**
