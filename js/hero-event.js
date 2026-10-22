@@ -2,7 +2,7 @@
  * @file
  * "Next event" for the landing hero (includes/landing.html.twig with
  * hero): a cell in the lead panel's At a glance row when the hero has its
- * lead panel (.pf-landing__next), or a card on its own by the map when it
+ * lead panel (.pf-today__item), or a card on its own by the map when it
  * doesn't (.pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
@@ -147,14 +147,26 @@
     box.classList.add('is-ready');
   }
 
-  // With the lead panel: in the At a glance cell, after its "Next event"
-  // label: the day and time, then the title, the cell's link.
-  function renderLine(box, { event, start }) {
-    const when = el('span', 'pf-landing__next-when');
-    when.append(timeOf(event, start));
-    const link = el('a', 'pf-landing__next-link', event.title);
+  // The At a glance cell: the day after its label ("Next event · Tomorrow"),
+  // the title (the cell's link), then the time and place, each on one line
+  // like the other cells.
+  function renderCell(box, { event, start }) {
+    const label = box.querySelector('.pf-today__label');
+    if (label) {
+      label.append(' · ', dayLabel(start));
+    }
+    const link = el('a', 'pf-today__value pf-today__link', event.title);
     link.href = event.url;
-    box.append(when, link);
+    // A room number alone ("109") says little: the building instead.
+    const place = event.location && !/^\d+$/.test(event.location) ? event.location : (event.row || (event.isOnline ? Drupal.t('Online') : ''));
+    const meta = el('span', 'pf-today__meta');
+    const time = timeOf(event, start);
+    time.textContent = [event.startLabel, event.endLabel].filter(Boolean).join('–');
+    meta.append(time);
+    if (place) {
+      meta.append(' · ' + place);
+    }
+    box.append(link, meta);
     box.classList.add('is-ready');
   }
 
@@ -166,7 +178,7 @@
       box.remove();
       return;
     }
-    box.append(el('span', 'pf-landing__next-when', box.dataset.pfHeroEventEmpty));
+    box.append(el('span', 'pf-today__value pf-today__value--empty', box.dataset.pfHeroEventEmpty));
     box.classList.add('is-ready');
   }
 
@@ -194,7 +206,7 @@
           // Links and images only from http(s) addresses.
           const next = nextEvents(data).find(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
           if (next) {
-            (box.classList.contains('pf-landing__next') ? renderLine : render)(box, next);
+            (box.classList.contains('pf-today__item') ? renderCell : render)(box, next);
           }
           else {
             renderEmpty(box);

@@ -162,32 +162,20 @@
     {% endif %}
   {% endif %}
   <div class="pf-landing__lead{{ hero ? ' pf-landing__lead--hero' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
-    {# Hero: open now / closed now with the title, from the same LibCal
-       location as the Visit strip (the page's Hours location field;
-       visit-hours.js fills the status and today's hours, palefire/visit is
-       attached with visit). The two share .pf-landing__head, which sets
-       the line beside the title on wide screens. No live region: the Visit
-       strip already announces changes. #}
-    {% set hero_hours = hero and visit.lid %}
-    {% if hero_hours %}<div class="pf-landing__head">{% endif %}
-    {# Hero: the title is the TOC's "Landing" sub-link under Home, with the
+    {# Hero: the title and the intro share .pf-landing__top: from xl, side
+       by side, the intro beside the title's foot (_landing-features.scss).
+       Today's hours are At a glance's first cell (below).
+       The title is the TOC's "Landing" sub-link under Home, with the
        Quick Guide's heading the second (modular-toc.js). The headings
        themselves keep their own text and level. #}
+    {% if hero %}<div class="pf-landing__top">{% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>
-    {% endif %}
-    {% if hero_hours %}
-        <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
-          <span class="pf-landing__hours-dot" aria-hidden="true"></span>
-          <span class="pf-landing__hours-status" data-pf-hours-status>{{ 'Hours'|t }}</span>
-          <span class="pf-landing__hours-today" data-pf-hours-today></span>
-          {% if visit.name %}<span class="pf-landing__hours-place">{{ visit.name }}</span>{% endif %}
-        </p>
-      </div>
     {% endif %}
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>
     {% endif %}
+    {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-landing__heading" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
         <label class="pf-landing__label" for="{{ input_id }}">{{ search_label }}</label>
@@ -261,48 +249,62 @@
       {% endif %}
 
       {# At a glance (.pf-today, _landing-features.scss): one ruled row under
-         the search, three cells, each a small label over a line or two.
-         - Next event: filled in by hero-event.js from the events carousel's
-           feed (its label stays, the cell's height is held); "No upcoming
-           events" when there are none. Hidden by CSS on pages without the
-           carousel.
-         - On view: the exhibitions' titles, each its link (hero_tiles only,
-           not the placeholders).
+         the search, as in the mockup. Every cell has the same three lines,
+         each one line high (cut with an ellipsis): a small label, the value
+         (the link) and a muted line under it.
+         - Today: the hours from the page's Hours location (visit-hours.js
+           fills the status and today's hours, palefire/visit is attached
+           with visit), the building under them. No live region: the Visit
+           panel already announces changes.
+         - Next event: filled in by hero-event.js from the events feed (the
+           carousel's, or From the stacks'): the day in the label, the
+           title, the time and place; "No upcoming events" when there are
+           none. Its height is held while it loads. Hidden by CSS on pages
+           with neither.
+         - On view: how many exhibitions, a link to On view under the map,
+           with their titles under it (hero_tiles only, not the
+           placeholders).
          - From the blog: hero_post, the newest Article in the paragraph's
-           "Blog category" (palefire_preprocess_paragraph__landing_hero());
-           left out until that is set. #}
+           "Blog category" (palefire_preprocess_paragraph__landing_hero()),
+           its category under it; left out until that is set. #}
       <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
+        {% if visit.lid %}
+          <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
+            <span class="pf-today__label"><span class="pf-today__dot" aria-hidden="true"></span><span data-pf-hours-status>{{ 'Hours'|t }}</span></span>
+            <span class="pf-today__value" data-pf-hours-today></span>
+            <span class="pf-today__meta">{{ visit.name }}</span>
+          </li>
+        {% endif %}
         <li class="pf-today__item pf-landing__next" data-pf-hero-event data-pf-hero-event-empty="{{ 'No upcoming events'|t }}">
           <span class="pf-today__label">{{ 'Next event'|t }}</span>
         </li>
         {% if hero_tiles %}
+          {% set count = hero_tiles|length %}
           <li class="pf-today__item">
             <span class="pf-today__label">{{ 'On view'|t }}</span>
-            <span class="pf-today__links">
-              {% for ex in hero_tiles %}
-                {% if ex.url %}<a class="pf-today__link" href="{{ ex.url }}">{{ ex.title }}</a>{% else %}<span>{{ ex.title }}</span>{% endif %}
-              {% endfor %}
-            </span>
+            <a class="pf-today__value pf-today__link" href="#{{ input_id }}-on-view">{% trans %}{{ count }} exhibition{% plural count %}{{ count }} exhibitions{% endtrans %}</a>
+            <span class="pf-today__meta">{{ hero_tiles|map(ex => ex.title)|join(' · ') }}</span>
           </li>
         {% endif %}
         {% if hero_post %}
           <li class="pf-today__item">
             <span class="pf-today__label">{{ 'From the blog'|t }} · <time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time></span>
-            <a class="pf-today__link pf-today__link--clamp" href="{{ hero_post.url }}">{{ hero_post.title }}</a>
+            <a class="pf-today__value pf-today__link" href="{{ hero_post.url }}">{{ hero_post.title }}</a>
+            <span class="pf-today__meta">{{ hero_post.category }}</span>
           </li>
         {% endif %}
       </ul>
 
-      {# Quick guide: the panel's last block, pushed to its foot on wide
-         screens (_landing-swiss.scss). A gold rule with a star between two
-         equal lines (decorative), the heading with the Special Collections
-         sign-in and "See full guide" at the end of its row, a line of
-         intro, then the three ways to start, options A, B and C, as one
-         compact row of cards from the full guide's own list (the same
-         include, so an edit there shows here too); each card opens the
-         full guide.
+      {# Quick guide: under At a glance, still in the lead panel. A gold
+         rule with a star between two equal lines (decorative), then the
+         three request paths, options A, B and C, from the full guide (the
+         same include, so an edit there shows here too), then the Special
+         Collections sign-in and a link to that guide, in the sign-in
+         button's style. On wide screens it starts below the fold, so the
+         lead is taller than the window: it scrolls freely, and
+         landing-snap.js snaps to the map once the lead's end is in view.
          - guide_url: the full "How to Use Special Collections" guide;
-           empty leaves its link out (the cards then aren't links).
+           empty leaves the link out.
          - account_url: the Special Collections sign-in (Aeon); empty
            leaves the button out.
          - quick_guide: title, intro, url and link_text from the paragraph's
@@ -318,46 +320,42 @@
              `fad fa-star-christmas`), inlined like the sign-in icon. #}
           <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
         </div>
-        {# The heading, with the sign-in and full guide links at the end of
-           its row (under it when narrow). The TOC label is the heading's
-           own text once the title is set. #}
-        <div class="pf-quick-guide__head">
-          <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
-          {% if guide_url or account_url %}
-            <div class="pf-quick-guide__more">
-              {% if account_url %}
-                <a class="pf-hero-account__link" href="{{ account_url }}">
-                  {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                     inlined from the site's copy like the map's hint icon. #}
-                  <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                  <span>{{ 'Sign in to request materials'|t }}</span>
-                </a>
-              {% endif %}
-              {% if guide_url %}
-                <a class="pf-hero-account__link" href="{{ guide_url }}">
-                  <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                  {# The full name keeps the visible words first (WCAG 2.5.3)
-                     and says which guide, so the link stands on its own. With
-                     its own text or URL (the Link field) the link names
-                     itself: the added guide name may no longer fit. #}
-                  {% if quick_guide.link_text %}
-                    <span>{{ quick_guide.link_text }}</span>
-                  {% elseif quick_guide.url %}
-                    <span>{{ 'See full guide'|t }}</span>
-                  {% else %}
-                    <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
-                  {% endif %}
-                </a>
-              {% endif %}
-            </div>
-          {% endif %}
-        </div>
+        {# The TOC label is the heading's own text once the title is set. #}
+        <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
         {% if quick_guide.intro %}
           <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, compact: true, url: guide_url } only %}
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
+        {% if guide_url or account_url %}
+          <div class="pf-quick-guide__more">
+            {% if account_url %}
+              <a class="pf-hero-account__link" href="{{ account_url }}">
+                {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+                   inlined from the site's copy like the map's hint icon. #}
+                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+                <span>{{ 'Sign in to request materials'|t }}</span>
+              </a>
+            {% endif %}
+            {% if guide_url %}
+              <a class="pf-hero-account__link" href="{{ guide_url }}">
+                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+                {# The full name keeps the visible words first (WCAG 2.5.3)
+                   and says which guide, so the link stands on its own. With
+                   its own text or URL (the Link field) the link names
+                   itself: the added guide name may no longer fit. #}
+                {% if quick_guide.link_text %}
+                  <span>{{ quick_guide.link_text }}</span>
+                {% elseif quick_guide.url %}
+                  <span>{{ 'See full guide'|t }}</span>
+                {% else %}
+                  <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+                {% endif %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
       </div>
     {% endif %}
   </div>

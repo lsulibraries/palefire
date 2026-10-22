@@ -226,16 +226,19 @@ On the paragraphs:
 
 - **Bar:** breadcrumb and the background-video button, sticky under the header
   for the whole landing.
-- **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title,
-  "Open now" hours line, intro, search, then At a glance (`.pf-today`): Next
-  event (`js/hero-event.js`, reads the events carousel's calendars and
-  campuses; "No upcoming events" when there are none), the exhibitions on
-  view, and the latest blog post. The Quick Guide sits at its foot.
-- **Quick Guide:** "Sign in to request materials" (Aeon) and "See full
-  guide" beside the heading, then options A, B and C as compact cards from
-  `includes/guide-request-paths.html.twig` (`compact: true`), the same list
-  the full guide draws as lines of stops. Edit the stops there and both pages
-  change.
+- **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title and
+  intro (side by side from xl), search with an accent-filled Search button,
+  then At a glance (`.pf-today`): today's hours (`js/visit-hours.js`), Next
+  event (`js/hero-event.js`, from the events carousel's or From the stacks'
+  calendar; "No upcoming events" when there are none), the exhibitions on
+  view, and the latest blog post. Every cell is a label, one value line and
+  one muted line; four across when the panel is 64rem wide, two by two from
+  30rem, stacked below. The Quick Guide sits at its foot.
+- **Quick Guide:** the request paths from
+  `includes/guide-request-paths.html.twig`, shared with the full guide: three
+  options A, B, C, each a line of stops. Edit the stops there and both pages
+  change. "Sign in to request materials" (Aeon) and "See full guide" under
+  them.
 - **Map and Visit strip:** the building map with its key and the Visit strip
   (`includes/visit-strip.html.twig`) in one glass panel.
 - **On view** (`.pf-landing__onview`): under the map, so the galleries come
@@ -843,6 +846,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Special Collections hero, second pass.** The full Quick Guide is back
+  (lines of stops; the compact cards are gone), with the sign-in beside "See
+  full guide". At a glance gains today's hours as its first cell (moved from
+  beside the title), and every cell is now a label, one value line and one
+  muted line, so the row reads as one even band; four across on wide
+  panels, two by two beside the TOC. The Search button is filled with the
+  swatch's accent, and from xl the title and intro sit side by side, as in
+  the mockup. On view uses the Visit panel's column, padding and corners.
+  Why: review on production; the cards, the uneven cells and On view's own
+  width looked off.
 - **From the stacks: a featured item, the next events and the newest blog
   posts.** A new section paragraph (`landing_stacks`, created by
   `scripts/palefire_landing_stacks_setup.php`) with `js/upcoming.js` for the
