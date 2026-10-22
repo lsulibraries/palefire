@@ -819,6 +819,19 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+### 2026-10-22
+
+- **Drawing/proof comparison shows on iOS Safari.** The frame was sized by
+  `aspect-ratio` alone, and iOS Safari gives such a box (all of its children
+  absolutely placed) no width, so nothing showed. It now sits in a
+  `.pf-exhibit-compare__fit` size container and takes the largest size that
+  fits at the images' proportions, with width and height both set.
+- **Actual size: each label under its sheet.** The sheets and their labels
+  were two separate rows that didn't line up. Each sheet is now a list item
+  with its name and size under it, and all the sheets stand on one baseline.
+  Sizes come from `--pf-w`/`--pf-h` against `--pf-sheet-max`, not
+  `aspect-ratio`.
+
 ### 2026-10-21
 
 - **Faster Largest Contentful Paint (LCP).** Chrome never counts content first painted at opacity 0,

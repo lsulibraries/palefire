@@ -1169,7 +1169,13 @@
         frame.classList.toggle('is-fading', wallState.compare === 'fade');
         control.append(modes);
       }
-      view.media.replaceChildren(frame, control);
+      // The frame is sized to fit inside this box (container units), not by
+      // aspect-ratio alone: iOS Safari gives an aspect-ratio box whose
+      // children are all absolutely placed no width in the grid.
+      const fit = document.createElement('div');
+      fit.className = 'pf-exhibit-compare__fit';
+      fit.append(frame);
+      view.media.replaceChildren(fit, control);
     }
     else if (media.links.length) {
       const img = mediaImg(media.links[0], 'pf-exhibit-object__img', shown[0]);
@@ -1225,28 +1231,31 @@
     const tallest = Math.max(...sheets.map((s) => s.h));
     const thumb = tile.querySelector('img');
     view.scale.innerHTML = '<p class="pf-exhibit-object__scale-title">' + Drupal.t('Actual size') + '</p>'
-      + '<div class="pf-exhibit-object__sheets" aria-hidden="true"></div>'
-      + '<ul class="pf-exhibit-object__sheet-key"></ul>';
+      + '<ul class="pf-exhibit-object__sheets"></ul>';
     const row = view.scale.querySelector('.pf-exhibit-object__sheets');
-    const key = view.scale.querySelector('.pf-exhibit-object__sheet-key');
+    // Each sheet over its own label, at its size against the tallest.
     sheets.forEach((s) => {
+      const li = document.createElement('li');
+      li.className = s.current ? 'is-current' : '';
       const sheet = document.createElement('span');
-      sheet.className = 'pf-exhibit-object__sheet' + (s.current ? ' is-current' : '');
-      sheet.style.height = (s.h / tallest * 100) + '%';
-      sheet.style.aspectRatio = s.w + ' / ' + s.h;
+      sheet.className = 'pf-exhibit-object__sheet';
+      sheet.setAttribute('aria-hidden', 'true');
+      sheet.style.setProperty('--pf-w', s.w / tallest);
+      sheet.style.setProperty('--pf-h', s.h / tallest);
       if (s.current && thumb) {
         const img = document.createElement('img');
         img.src = thumb.currentSrc || thumb.src;
         img.alt = '';
         sheet.append(img);
       }
-      row.append(sheet);
-      const li = document.createElement('li');
-      li.textContent = s.label + ' · ' + s.size;
-      if (s.current) {
-        li.className = 'is-current';
-      }
-      key.append(li);
+      const label = document.createElement('span');
+      label.className = 'pf-exhibit-object__sheet-label';
+      label.textContent = s.label;
+      const size = document.createElement('span');
+      size.className = 'pf-exhibit-object__sheet-label';
+      size.textContent = s.size;
+      li.append(sheet, label, size);
+      row.append(li);
     });
   }
 

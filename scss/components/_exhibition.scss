@@ -2490,13 +2490,23 @@ html.pf-object-open {
   }
 }
 
-// A drawing and its proof: the proof is wiped over the drawing.
+// A drawing and its proof: the proof is wiped over the drawing. The frame
+// is as large as fits in its box at the images' proportions (--pf-r), with
+// both sides set outright: iOS Safari gives an aspect-ratio box with only
+// absolutely placed children no width.
+.pf-exhibit-compare__fit {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  container-type: size;
+}
+
 .pf-exhibit-compare {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: 100%;
-  aspect-ratio: var(--pf-r, 1.4);
+  --pf-fit-w: min(100cqw, 100cqh * var(--pf-r, 1.4));
+  width: var(--pf-fit-w);
+  height: calc(var(--pf-fit-w) / var(--pf-r, 1.4));
 }
 
 .pf-exhibit-compare__img {
@@ -2746,41 +2756,49 @@ html.pf-object-open {
   @extend %pf-exhibit-kicker;
 }
 
+// Each sheet stands on a shared baseline with its label under it, so the
+// labels line up with each other and with their sheets. The tallest sheet
+// is --pf-sheet-max tall; the rest are --pf-w and --pf-h of it.
 .pf-exhibit-object__sheets {
-  display: flex;
-  align-items: flex-end;
-  gap: 1.25rem;
-  height: 9rem;
-}
-
-.pf-exhibit-object__sheet {
-  display: grid;
-  place-items: center;
-  background: var(--pf-exhibit-surface);
-  border: 1px solid $pf-hairline;
-
-  &.is-current {
-    border-color: var(--pf-exhibit-accent);
-  }
-
-  img {
-    max-width: 82%;
-    max-height: 82%;
-  }
-}
-
-.pf-exhibit-object__sheet-key {
+  --pf-sheet-max: 9rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
+  align-items: flex-start;
+  gap: 1.25rem 1.75rem;
   margin: 0;
   padding: 0;
   list-style: none;
   font: 0.6875rem/1.4 var(--pf-exhibit-mono);
   color: var(--pf-exhibit-muted);
 
+  li {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   .is-current {
     color: var(--bs-body-color);
+  }
+}
+
+.pf-exhibit-object__sheet {
+  display: grid;
+  place-items: center;
+  width: calc(var(--pf-sheet-max) * var(--pf-w, 1));
+  height: calc(var(--pf-sheet-max) * var(--pf-h, 1));
+  margin-top: calc(var(--pf-sheet-max) * (1 - var(--pf-h, 1)));
+  margin-bottom: 0.6rem;
+  background: var(--pf-exhibit-surface);
+  border: 1px solid $pf-hairline;
+
+  .is-current > & {
+    border-color: var(--pf-exhibit-accent);
+  }
+
+  img {
+    max-width: 82%;
+    max-height: 82%;
   }
 }
 
