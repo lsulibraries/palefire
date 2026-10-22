@@ -579,8 +579,13 @@ from the media item. A figure with no image shows only to editors.
   full screen (`.pf-exhibit-wall-hero`; with a caption it opens in the
   lightbox), with the number, title, facts and folded intro over its lower
   left on the page-colour wash (from the foot below lg, from the left from
-  lg, the text kept in its dense part); "Read more" grows the image down,
-  never the column wider. No pan or band, whatever the Opening says.
+  lg, the text kept in its dense part); "Read more" grows the area down,
+  never the column wider, and the image and its wash stay on screen
+  (`.pf-exhibit-wall-hero__frame`, sticky) while the opened text scrolls
+  over them; below lg a veil of the page colour comes over the image while
+  the intro is open. Folded, the intro shows four lines, or from lg over a
+  lead as many lines as fill about 78% of the image's screen (measured,
+  again on resize). No pan or band, whatever the Opening says.
   Without a lead, from lg the title and facts and the gallery's own text sit side by side as
   wall text, the wall full width below; text longer than four lines folds
   with "Read more" / "Show less" (`.pf-exhibit-wall__text`), so the first
@@ -792,6 +797,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a wall's image stays put under its text.** The lead (and
+  its wash) is pinned while the opened intro scrolls over it, with a veil
+  of the page colour below lg; from lg the folded intro shows as many lines
+  as fill the image (14 at 1440 × 900, 7 at 1024 × 768) instead of four.
+  Why: the opened text scrolled the image away, and the folded one left the
+  screen half empty on desktop.
 - **Exhibitions: a wall's text on its image, and its facts.** A wall
   gallery's number, title, facts and intro now sit over its full-screen
   lead's lower left, on the left-to-right wash (from the foot on phones);

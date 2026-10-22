@@ -2004,22 +2004,45 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
 
 // A wall's lead: full screen under the breadcrumb bar, edge to edge (and
 // above the title in the plain column the page has without the script).
+// The area grows with the text over it; the frame (image and wash) stays
+// on screen while that text scrolls, then leaves with the area's foot.
 .pf-exhibit-wall-hero {
+  --pf-wall-hero-h: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
   position: relative;
   z-index: 0;
   order: -1;
-  height: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
-  min-height: max(22rem, calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px)));
+  height: var(--pf-wall-hero-h);
+  min-height: max(22rem, var(--pf-wall-hero-h));
   margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) clamp(2rem, 5vw, 3.5rem);
+  overflow: clip;
+}
+
+.pf-exhibit-wall-hero__link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  cursor: zoom-in;
+}
+
+.pf-exhibit-wall-hero__frame {
+  position: sticky;
+  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
+  display: block;
+  height: max(22rem, var(--pf-wall-hero-h));
   overflow: clip;
 
   // The page colour where the text sits: from the foot below lg (the text
   // spans the column), from the left from lg, as on the title page.
+  &::before,
   &::after {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
     pointer-events: none;
+  }
+
+  &::after {
     background: pf-eased-wash(to top, 46%, 98%);
 
     @include media-breakpoint-up(lg) {
@@ -2028,12 +2051,20 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
         pf-eased-wash(to right, 38%, 94%);
     }
   }
-}
 
-.pf-exhibit-wall-hero__link {
-  display: block;
-  height: 100%;
-  cursor: zoom-in;
+  // Below lg, an opened intro scrolls over the whole image: a veil of the
+  // page colour keeps it readable there (from lg the side wash does).
+  &::before {
+    background: var(--bs-body-bg);
+    opacity: 0;
+    transition: opacity .5s ease;
+
+    @include media-breakpoint-down(lg) {
+      .pf-section__inner:has(.pf-exhibit-wall__more[aria-expanded="true"]) & {
+        opacity: 0.82;
+      }
+    }
+  }
 }
 
 .pf-exhibit-wall-hero__img {

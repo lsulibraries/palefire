@@ -274,6 +274,9 @@
   function onResize() {
     measureHead();
     sizeHero(state.current);
+    if (state.current) {
+      foldIntro(state.current);
+    }
     queueZoom();
   }
 
@@ -672,17 +675,49 @@
     });
   }
 
-  // A wall's intro longer than about four lines folds to them, with "Read
-  // more", so the wall starts on the first screen. Measured once shown.
+  // How much of a wall's intro shows folded: about four lines, or from lg
+  // over a lead, as many whole lines as fill the image's screen (about 78%
+  // of it, under the title, facts and button).
+  function introLimit(page, intro) {
+    const text = intro.querySelector('.pf-guide-prose') || intro;
+    const line = parseFloat(getComputedStyle(text).lineHeight) || 26;
+    const frame = page.querySelector('.pf-exhibit-wall-hero__frame');
+    if (!frame || !wide.matches) {
+      return line * 4;
+    }
+    const outer = (el) => {
+      if (!el) {
+        return 0;
+      }
+      const cs = getComputedStyle(el);
+      return el.getBoundingClientRect().height + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+    };
+    const wrap = intro.parentElement;
+    const room = frame.getBoundingClientRect().height * 0.78
+      - outer(page.querySelector('.pf-section__title'))
+      - outer(page.querySelector('.pf-exhibit-wall__stats'))
+      - (parseFloat(getComputedStyle(wrap).paddingBottom) || 0)
+      - line * 2.25;
+    return Math.max(4, Math.floor(room / line)) * line;
+  }
+
+  // A wall's intro longer than its fold shows that much, with "Read more",
+  // so the wall starts soon after. Measured once shown, again on resize.
   function foldIntro(page) {
     const intro = page.querySelector('.pf-exhibit-wall__intro');
-    if (!intro || intro.dataset.pfFoldReady) {
+    if (!intro) {
+      return;
+    }
+    if (intro.dataset.pfFoldReady) {
+      // A resize: a new fold for a folded intro.
+      if (intro.classList.contains('is-folded')) {
+        intro.style.setProperty('--pf-intro-clip', Math.round(introLimit(page, intro)) + 'px');
+      }
       return;
     }
     intro.dataset.pfFoldReady = '1';
-    const text = intro.querySelector('.pf-guide-prose') || intro;
-    const limit = (parseFloat(getComputedStyle(text).lineHeight) || 26) * 4;
-    if (intro.scrollHeight < limit * 1.6) {
+    const limit = introLimit(page, intro);
+    if (intro.scrollHeight < limit * 1.3) {
       return;
     }
     intro.style.setProperty('--pf-intro-clip', Math.round(limit) + 'px');
@@ -705,7 +740,7 @@
         return;
       }
       requestAnimationFrame(() => {
-        intro.style.maxHeight = (open ? intro.scrollHeight : limit) + 'px';
+        intro.style.maxHeight = (open ? intro.scrollHeight : introLimit(page, intro)) + 'px';
         const end = () => {
           intro.style.maxHeight = '';
           intro.removeEventListener('transitionend', end);

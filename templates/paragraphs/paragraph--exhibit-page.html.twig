@@ -142,11 +142,15 @@
     {# A wall's lead: full screen, with the title, the facts and the intro
        over its lower left on a wash (_exhibition.scss). With a caption it
        is a figure that opens in the lightbox. #}
+    {# The frame stays on screen (with its wash) while the text over it
+       scrolls, however long the intro once opened. #}
     {% set wall_img %}
-      <img class="pf-exhibit-wall-hero__img" src="{{ wall_lead.src }}"
-           {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
-           {% if wall_lead.width %}width="{{ wall_lead.width }}" height="{{ wall_lead.height }}"{% endif %}
-           style="object-position: {{ focus }}" alt="{{ wall_lead_caption ? wall_lead.alt }}" decoding="async">
+      <span class="pf-exhibit-wall-hero__frame">
+        <img class="pf-exhibit-wall-hero__img" src="{{ wall_lead.src }}"
+             {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
+             {% if wall_lead.width %}width="{{ wall_lead.width }}" height="{{ wall_lead.height }}"{% endif %}
+             style="object-position: {{ focus }}" alt="{{ wall_lead_caption ? wall_lead.alt }}" decoding="async">
+      </span>
     {% endset %}
     <div class="pf-exhibit-wall-hero" data-pf-wall-hero
          {% if wall_lead_caption %}role="figure" aria-labelledby="{{ dom_id }}-caption"{% else %}aria-hidden="true"{% endif %}>
