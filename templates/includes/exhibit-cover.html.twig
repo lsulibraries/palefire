@@ -14,6 +14,7 @@
  *   tooltip: hover, keyboard focus or a tap shows it, Esc hides it
  *   (js/exhibition.js), and the button is described by it.
  * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
+ *   Its focal point, when set, is where it stays in view when cropped.
  *
  * The parts come in one after another on load (_exhibition.scss):
  * image, title, subtitle, credit, then the prompt. js/exhibition.js
@@ -34,6 +35,7 @@
       <img class="pf-exhibit-cover__img" src="{{ head.cover.src }}"
            {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="{{ head.cover.sizes }}"{% endif %}
            {% if head.cover.width %}width="{{ head.cover.width }}" height="{{ head.cover.height }}"{% endif %}
+           {% if head.cover.focus %}style="object-position: {{ head.cover.focus }}"{% endif %}
            alt="" loading="lazy" fetchpriority="high" decoding="async">
     </div>
   {% endif %}

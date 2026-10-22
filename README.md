@@ -821,6 +821,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Exhibition covers follow the image's focal point.** Editors set the
+  point on the Media image (Focal Point module, Image (Focal Point)
+  widget). `_palefire_focal_point()` turns it into an `object-position`
+  ("62.5% 30%"), so that spot stays in view at every screen shape,
+  without Focal Point's fixed-crop image styles. It's used by the title
+  page cover (in place of the CSS 70% center), and by gallery and wall
+  leads (in place of "Keep in view when cropped", which still applies
+  when an image has no point). The compact band's pan starts at the
+  point's horizontal position. With the module off or no point set,
+  nothing changes.
 - **Wall galleries: a shorter intro before Read more.** The fold showed
   text up to 78% of the lead's height (about ten lines at 1440 × 900).
   The stats, text and Read more now take the lower third (`introLimit`,

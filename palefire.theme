@@ -15,6 +15,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
@@ -1538,7 +1539,35 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
     'alt' => (string) ($image->alt ?? ''),
     'full' => $candidates ? end($candidates) : $original,
     'loading' => $eager ? 'eager' : 'lazy',
+    'focus' => _palefire_focal_point($file, $width, $height, $cache),
   ];
+}
+
+/**
+ * The image's focal point as an object-position ("62.5% 30%"), or ''.
+ *
+ * Set by editors on the Media image's edit form (Focal Point module), it
+ * keeps that spot in view wherever a cropped cover shows the image, at any
+ * screen shape: the templates set it as the <img>'s object-position rather
+ * than using Focal Point's fixed-crop image styles. '' when the module is
+ * off, the image has no point yet, or its size is unknown.
+ */
+function _palefire_focal_point(FileInterface $file, ?int $width, ?int $height, CacheableMetadata $cache): string {
+  if (!$width || !$height || !\Drupal::moduleHandler()->moduleExists('focal_point')) {
+    return '';
+  }
+  $type = \Drupal::config('focal_point.settings')->get('crop_type') ?: 'focal_point';
+  $cache->addCacheTags(['config:focal_point.settings']);
+  // getCropEntity() makes an unsaved crop when there is none: no point yet.
+  $crop = \Drupal::service('focal_point.manager')->getCropEntity($file, $type);
+  if (!$crop || $crop->isNew()) {
+    return '';
+  }
+  $cache->addCacheableDependency($crop);
+  $position = $crop->position();
+  $x = max(0, min(100, round($position['x'] / $width * 100, 1)));
+  $y = max(0, min(100, round($position['y'] / $height * 100, 1)));
+  return $x . '% ' . $y . '%';
 }
 
 /**
@@ -1577,6 +1606,12 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   $focus = $paragraph->hasField('field_exhibit_lead_focus') ? (string) $paragraph->get('field_exhibit_lead_focus')->value : '';
   $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
   $variables['lead_x'] = ['left' => '0%', 'right' => '100%'][$variables['focus']] ?? '50%';
+  // The image's focal point, when an editor has set one, is more precise
+  // than "Keep in view when cropped" and takes its place.
+  if (!empty($variables['lead']['focus'])) {
+    $variables['focus'] = $variables['lead']['focus'];
+    $variables['lead_x'] = explode(' ', $variables['focus'])[0];
+  }
   $variables['lead_whole'] = $paragraph->hasField('field_exhibit_lead_whole') && (bool) $paragraph->get('field_exhibit_lead_whole')->value;
   $variables['lead_caption'] = NULL;
   if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
