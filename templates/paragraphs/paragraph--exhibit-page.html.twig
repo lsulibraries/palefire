@@ -28,6 +28,10 @@
  * - focus: object-position keyword for a cropped image. lead_x: the
  *   compact band's pan position.
  * - entries, entries_more: links for the full opening; dom_id: id base.
+ * - wall: Display "wall" (_palefire_exhibit_wall()), or NULL. The wall is
+ *   printed [hidden] after the blocks: js/exhibition.js shows it and folds
+ *   the entries away, and each tile opens its entry in the object view.
+ *   Without the script the gallery reads as a story.
  *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
@@ -39,6 +43,7 @@
     'pf-gallery',
     lead ? 'pf-gallery--has-lead',
     full ? 'pf-gallery--opener',
+    wall ? 'pf-gallery--wall',
   ]
 %}
 {% set lightbox_svg %}<svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>{% endset %}
@@ -141,5 +146,51 @@
       <p class="pf-exhibit-body-title" aria-hidden="true">{{ paragraph.field_section_title.value }}</p>
     {% endif %}
     {{ content.field_guide_blocks }}
+    {% if wall %}
+      <div class="pf-exhibit-wall" data-pf-wall hidden
+           {% if wall.sheets %}data-pf-sheets="{{ wall.sheets|json_encode }}"{% endif %}>
+        {% if wall.sortable %}
+          <div class="pf-exhibit-wall__tools">
+            <p class="pf-exhibit-wall__hint">{{ 'Select an entry to view it full screen'|t }}</p>
+            <div class="pf-exhibit-wall__sort" role="group" aria-label="{{ 'Order'|t }}">
+              <span class="pf-exhibit-wall__sort-label" aria-hidden="true">{{ 'Order'|t }}</span>
+              <button type="button" data-pf-sort="plate" aria-pressed="true">{{ 'Plate'|t }}</button>
+              <button type="button" data-pf-sort="title" aria-pressed="false">{{ 'A–Z'|t }}</button>
+            </div>
+          </div>
+        {% endif %}
+        <ul class="pf-exhibit-wall__list">
+          {% for tile in wall.tiles %}
+            {% set image = tile.images|first %}
+            <li class="pf-exhibit-wall__tile" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+                {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
+              <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
+                <span class="pf-exhibit-wall__frame">
+                  <img class="pf-exhibit-wall__img" src="{{ image.src }}"
+                       {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
+                       {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
+                       alt="{{ image.alt }}" loading="lazy" decoding="async">
+                  {% if tile.images|length > 1 %}
+                    {% set second = tile.images|last %}
+                    {# The proof crossfades in on hover; the entry is described by the first. #}
+                    <img class="pf-exhibit-wall__img pf-exhibit-wall__img--second" src="{{ second.src }}"
+                         {% if second.srcset %}srcset="{{ second.srcset }}" sizes="{{ second.sizes }}"{% endif %}
+                         alt="" loading="lazy" decoding="async" aria-hidden="true">
+                  {% endif %}
+                </span>
+                <span class="pf-exhibit-wall__label">
+                  <span class="pf-exhibit-wall__name">{{ tile.title }}</span>
+                  {% if tile.tag %}
+                    <span class="pf-exhibit-wall__tag">{{ tile.tag }}</span>
+                  {% elseif tile.plate %}
+                    <span class="pf-exhibit-wall__tag"><abbr title="{{ 'Plate'|t }}">{{ 'Pl.'|t }}</abbr> {{ tile.plate }}</span>
+                  {% endif %}
+                </span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
   </div>
 </div>

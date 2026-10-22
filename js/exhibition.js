@@ -18,6 +18,8 @@
  * - Lightbox: a figure's image link opens a <dialog> with its largest
  *   version and caption; arrows, swipe and the buttons step through the
  *   gallery's images. Esc or a click outside closes it; focus goes back.
+ * - Wall: a gallery set to Display "wall" shows its entries as a wall of
+ *   images; each opens full screen in the object view (see below).
  * - Biographies longer than about ten lines show their opening lines and
  *   a "Read the full biography" button.
  * - Audio: the browser's controls are swapped for a play button, a seek
@@ -351,11 +353,25 @@
    *   The element to show (a gallery, an entry heading, the head...).
    * @param {Object} options
    *   - history: 'push', 'replace' or 'none'.
+   *   - then: runs on arrival instead of the glide (opening a wall's entry).
    */
-  function go(target, { history: mode = 'push' } = {}) {
+  function go(target, { history: mode = 'push', then = null } = {}) {
     if (state.busy) {
       return;
     }
+    // An entry on a wall opens in the object view, in its gallery.
+    const entry = then ? null : wallEntry(target);
+    if (entry) {
+      const gallery = galleryOf(entry);
+      if (gallery === state.current) {
+        openObject(entry, true);
+        return;
+      }
+      closeObject(false, true);
+      go(gallery, { history: mode, then: () => openObject(entry, false) });
+      return;
+    }
+    closeObject(false, true);
     const page = galleryOf(target);
     const top = target === state.head || target === page;
     const url = urlFor(target);
@@ -383,6 +399,11 @@
     }
 
     const arrive = () => {
+      if (then) {
+        then();
+        tellToc();
+        return;
+      }
       if (top) {
         focusOn(target);
         tellToc();
@@ -481,6 +502,14 @@
     if (!target) {
       return;
     }
+    // Tiles, TOC sub-links and cross references to a wall's entries.
+    if (wallEntry(target)) {
+      event.preventDefault();
+      event.stopPropagation();
+      closeToc();
+      go(target, { history: galleryOf(target) === state.current ? 'replace' : 'push' });
+      return;
+    }
     const page = galleryOf(target);
     const toHead = target === state.head;
     // Same gallery: the TOC scrolls as on other pages, except the folded
@@ -543,10 +572,16 @@
     });
     initCrumb();
     initZoom();
+    initWalls();
     const target = targetOf(location.hash);
     const page = galleryOf(target);
     place(page);
-    if (page && target !== page) {
+    const entry = wallEntry(target);
+    if (entry) {
+      // An address for a wall's entry: its gallery, with the entry open.
+      requestAnimationFrame(() => openObject(entry, false));
+    }
+    else if (page && target !== page) {
       // A link to an entry or a source: there once the page has laid out.
       requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
     }
@@ -560,6 +595,442 @@
     window.addEventListener('resize', onResize, { passive: true });
     // Settings > Reduce motion turns the pin off and on.
     document.addEventListener('palefire:a11ychange', onResize);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Wall and object view
+   *
+   * A gallery set to Display "wall" (paragraph--exhibit-page.html.twig)
+   * prints its entries as usual and a [hidden] wall of tiles after them.
+   * Here the wall shows and the entries fold away (.is-walled): they stay
+   * in the page as the object view's text. A tile, a link to an entry (TOC,
+   * cross reference, Back) or the address opens the entry in the object
+   * view: a full-screen <dialog> with the image (or a drawing and its proof
+   * on a slider) beside the entry's caption and text. Arrows, swipe and
+   * the buttons step through the wall in its current order; Esc or Close
+   * returns to the tile. Where the browser has view transitions, the image
+   * grows out of its tile and back, and re-sorting slides the tiles.
+   * ------------------------------------------------------------------ */
+
+  // quiet: closing for another route (Back, a TOC jump), which sets the
+  // address itself.
+  const wallState = { view: null, tiles: [], index: 0, tile: null, quiet: false };
+
+  function canMorph() {
+    return !reduceMotion() && typeof document.startViewTransition === 'function';
+  }
+
+  // The entry an element belongs to, when that entry is on a wall.
+  function wallEntry(el) {
+    const entry = el && el.closest ? el.closest('.pf-exhibit-entry') : null;
+    return entry && entry.closest('.pf-gallery.is-walled') ? entry : null;
+  }
+
+  function tileFor(entry) {
+    const heading = entry.querySelector('.pf-exhibit-entry__title');
+    const page = galleryOf(entry);
+    return heading && page ? page.querySelector('[data-pf-tile="' + CSS.escape(heading.id) + '"]') : null;
+  }
+
+  function initWalls() {
+    state.pages.forEach((page) => {
+      const wall = page.querySelector('[data-pf-wall]');
+      if (!wall) {
+        return;
+      }
+      page.querySelector('.pf-gallery').classList.add('is-walled');
+      wall.hidden = false;
+      // Still listed in the TOC, but never "current" by scroll position:
+      // the headings are folded away (js/modular-toc.js).
+      page.querySelectorAll('.pf-exhibit-entry__title').forEach((h) => h.setAttribute('data-toc-passive', ''));
+      const buttons = wall.querySelectorAll('[data-pf-sort]');
+      if (buttons.length) {
+        sortWall(wall, 'plate', false);
+        buttons.forEach((button) => button.addEventListener('click', () => sortWall(wall, button.dataset.pfSort, true)));
+      }
+    });
+  }
+
+  function sortWall(wall, key, animate) {
+    const list = wall.querySelector('.pf-exhibit-wall__list');
+    const tiles = Array.from(list.children);
+    const title = (tile) => tile.querySelector('.pf-exhibit-wall__name').textContent.trim();
+    const plate = (tile) => parseInt(tile.dataset.plate, 10) || Infinity;
+    const sorted = tiles.slice().sort(key === 'plate'
+      ? (a, b) => plate(a) - plate(b) || tiles.indexOf(a) - tiles.indexOf(b)
+      : (a, b) => title(a).localeCompare(title(b)));
+    wall.querySelectorAll('[data-pf-sort]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.pfSort === key ? 'true' : 'false'));
+    const apply = () => list.append(...sorted);
+    if (!animate || !canMorph()) {
+      apply();
+      return;
+    }
+    // Tiles on screen slide to their new places; the rest just move.
+    const shown = sorted.filter((tile) => {
+      const r = tile.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    });
+    shown.forEach((tile, i) => {
+      tile.style.viewTransitionName = 'pf-tile-' + i;
+    });
+    document.startViewTransition(apply).finished.finally(() => {
+      shown.forEach((tile) => {
+        tile.style.viewTransitionName = '';
+      });
+    });
+  }
+
+  function objectView() {
+    if (wallState.view) {
+      return wallState.view;
+    }
+    const dialog = document.createElement('dialog');
+    dialog.className = 'pf-exhibit-object';
+    dialog.setAttribute('aria-labelledby', 'pf-exhibit-object-title');
+    dialog.innerHTML =
+      '<div class="pf-exhibit-object__stage">'
+      + '<div class="pf-exhibit-object__media"></div>'
+      + '<button type="button" class="pf-exhibit-object__step pf-exhibit-object__prev">' + svg('prev') + '<span class="visually-hidden">' + Drupal.t('Previous') + '</span></button>'
+      + '<button type="button" class="pf-exhibit-object__step pf-exhibit-object__next">' + svg('next') + '<span class="visually-hidden">' + Drupal.t('Next') + '</span></button>'
+      + '</div>'
+      + '<div class="pf-exhibit-object__panel">'
+      + '<div class="pf-exhibit-object__top">'
+      + '<p class="pf-exhibit-object__count" aria-live="polite"></p>'
+      + '<button type="button" class="pf-exhibit-object__close" autofocus>' + svg('close') + '<span>' + Drupal.t('Close') + '</span></button>'
+      + '</div>'
+      + '<h2 class="pf-exhibit-object__title" id="pf-exhibit-object-title"></h2>'
+      + '<div class="pf-exhibit-object__label pf-guide-prose"></div>'
+      + '<div class="pf-exhibit-object__body"></div>'
+      + '<div class="pf-exhibit-object__scale" hidden></div>'
+      + '</div>';
+    document.body.append(dialog);
+    const view = {
+      dialog: dialog,
+      media: dialog.querySelector('.pf-exhibit-object__media'),
+      count: dialog.querySelector('.pf-exhibit-object__count'),
+      title: dialog.querySelector('.pf-exhibit-object__title'),
+      label: dialog.querySelector('.pf-exhibit-object__label'),
+      body: dialog.querySelector('.pf-exhibit-object__body'),
+      scale: dialog.querySelector('.pf-exhibit-object__scale'),
+      panel: dialog.querySelector('.pf-exhibit-object__panel'),
+    };
+    dialog.querySelector('.pf-exhibit-object__prev').addEventListener('click', () => stepObject(-1));
+    dialog.querySelector('.pf-exhibit-object__next').addEventListener('click', () => stepObject(1));
+    dialog.querySelector('.pf-exhibit-object__close').addEventListener('click', () => closeObject(true));
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeObject(true);
+    });
+    dialog.addEventListener('keydown', (event) => {
+      if (event.target.matches('input')) {
+        return;
+      }
+      if (event.key === 'ArrowLeft') {
+        stepObject(-1);
+      }
+      else if (event.key === 'ArrowRight') {
+        stepObject(1);
+      }
+    });
+    // Click the image to look closer where you clicked; move to look around.
+    view.media.addEventListener('click', (event) => {
+      const img = event.target.closest('.pf-exhibit-object__img');
+      if (!img) {
+        return;
+      }
+      if (!img.dataset.full) {
+        aim(img, event);
+        img.closest('.pf-exhibit-object__frame').classList.toggle('is-zoomed');
+        return;
+      }
+      // First zoom: the largest size, then zoom.
+      const full = img.dataset.full;
+      delete img.dataset.full;
+      img.srcset = '';
+      img.src = full;
+      aim(img, event);
+      img.closest('.pf-exhibit-object__frame').classList.add('is-zoomed');
+    });
+    view.media.addEventListener('pointermove', (event) => {
+      const img = event.target.closest('.is-zoomed .pf-exhibit-object__img');
+      if (img && event.pointerType === 'mouse') {
+        aim(img, event);
+      }
+    });
+    // Swipe on touch screens (not while zoomed or on the slider).
+    let startX = null;
+    view.media.addEventListener('pointerdown', (event) => {
+      startX = event.pointerType === 'touch' && !event.target.closest('.is-zoomed, input') ? event.clientX : null;
+    });
+    view.media.addEventListener('pointerup', (event) => {
+      if (startX !== null && Math.abs(event.clientX - startX) > 50) {
+        stepObject(event.clientX < startX ? 1 : -1);
+      }
+      startX = null;
+    });
+    // Images in the text open in the lightbox, over the object view.
+    view.body.addEventListener('click', (event) => {
+      const link = event.target.closest('a[data-pf-lightbox]');
+      if (link && window.HTMLDialogElement && event.button === 0) {
+        event.preventDefault();
+        openBox(link, Array.from(view.body.querySelectorAll('a[data-pf-lightbox]')));
+      }
+    });
+    dialog.addEventListener('close', () => {
+      ROOT.classList.remove('pf-object-open');
+      if (wallState.quiet) {
+        wallState.quiet = false;
+        return;
+      }
+      const page = galleryOf(wallState.tile);
+      if (page) {
+        history.replaceState(history.state, '', urlFor(page));
+      }
+      const link = wallState.tile && wallState.tile.querySelector('a');
+      if (link && link.isConnected) {
+        link.focus({ preventScroll: true });
+      }
+    });
+    wallState.view = view;
+    return view;
+  }
+
+  function aim(img, event) {
+    const r = img.getBoundingClientRect();
+    img.style.transformOrigin = ((event.clientX - r.left) / r.width * 100) + '% ' + ((event.clientY - r.top) / r.height * 100) + '%';
+  }
+
+  // The entry's first figure (or image group): its images and its caption.
+  function entryMedia(entry) {
+    const block = entry.querySelector('.pf-exhibit-group, .pf-exhibit-figure');
+    if (!block) {
+      return { block: null, links: [], caption: null };
+    }
+    const links = Array.from(block.querySelectorAll('a.pf-exhibit-figure__link')).slice(0, 2);
+    const caption = block.querySelector(':scope > figcaption')
+      || (links.length === 1 ? links[0].closest('figure').querySelector(':scope > figcaption') : null);
+    return { block: block, links: links, caption: caption };
+  }
+
+  // The stage's image: at once the tile's own (already loaded), then the
+  // size the stage needs from the figure's srcset once it has loaded.
+  function mediaImg(link, cls, shown) {
+    const thumb = link.querySelector('img');
+    const img = document.createElement('img');
+    img.className = cls;
+    img.alt = thumb ? thumb.alt : '';
+    if (link.dataset.width) {
+      img.width = parseInt(link.dataset.width, 10);
+      img.height = parseInt(link.dataset.height, 10);
+    }
+    img.src = shown && shown.currentSrc ? shown.currentSrc : (thumb ? thumb.getAttribute('src') : link.href);
+    img.decoding = 'async';
+    if (thumb && thumb.getAttribute('srcset')) {
+      const large = new Image();
+      large.decoding = 'async';
+      large.sizes = '(min-width: 62rem) 62vw, 100vw';
+      large.onload = () => {
+        if (img.isConnected && !img.closest('.is-zoomed')) {
+          img.src = large.currentSrc;
+        }
+      };
+      large.srcset = thumb.getAttribute('srcset');
+    }
+    return img;
+  }
+
+  function fillObject(index) {
+    const view = objectView();
+    const n = wallState.tiles.length;
+    wallState.index = (index + n) % n;
+    const tile = wallState.tiles[wallState.index];
+    wallState.tile = tile;
+    const heading = document.getElementById(tile.dataset.pfTile);
+    const entry = heading ? heading.closest('.pf-exhibit-entry') : null;
+    if (!entry) {
+      return;
+    }
+    const media = entryMedia(entry);
+    const shown = tile.querySelectorAll('.pf-exhibit-wall__img');
+
+    // The image, or the first two as a comparison.
+    const frame = document.createElement('div');
+    frame.className = 'pf-exhibit-object__frame';
+    if (media.links.length === 2) {
+      const [a, b] = media.links;
+      const names = media.links.map((link) => {
+        const caption = link.closest('figure').querySelector('figcaption');
+        return caption ? caption.textContent.trim() : '';
+      });
+      frame.classList.add('pf-exhibit-compare');
+      if (a.dataset.width) {
+        frame.style.setProperty('--pf-r', a.dataset.width / a.dataset.height);
+      }
+      frame.append(mediaImg(a, 'pf-exhibit-compare__img', shown[0]), mediaImg(b, 'pf-exhibit-compare__img pf-exhibit-compare__after', shown[1]));
+      const line = document.createElement('span');
+      line.className = 'pf-exhibit-compare__line';
+      line.setAttribute('aria-hidden', 'true');
+      frame.append(line);
+      const control = document.createElement('div');
+      control.className = 'pf-exhibit-compare__control';
+      const range = document.createElement('input');
+      range.type = 'range';
+      range.min = '0';
+      range.max = '100';
+      range.value = '50';
+      range.setAttribute('aria-label', names[0] && names[1]
+        ? Drupal.t('Compare the @a and the @b', { '@a': names[0].toLowerCase(), '@b': names[1].toLowerCase() })
+        : Drupal.t('Compare the two images'));
+      range.addEventListener('input', () => frame.style.setProperty('--pf-cut', range.value + '%'));
+      const end = (text) => {
+        const span = document.createElement('span');
+        span.setAttribute('aria-hidden', 'true');
+        span.textContent = text;
+        return span;
+      };
+      control.append(end(names[0]), range, end(names[1]));
+      view.media.replaceChildren(frame, control);
+    }
+    else if (media.links.length) {
+      const img = mediaImg(media.links[0], 'pf-exhibit-object__img', shown[0]);
+      img.dataset.full = media.links[0].href;
+      frame.append(img);
+      view.media.replaceChildren(frame);
+    }
+    else {
+      view.media.replaceChildren();
+    }
+
+    // The entry's heading, caption and the rest of its content.
+    view.title.textContent = heading.textContent.trim();
+    view.label.replaceChildren(...(media.caption ? Array.from(media.caption.cloneNode(true).childNodes) : []));
+    view.label.hidden = !media.caption;
+    const copy = entry.cloneNode(true);
+    copy.querySelector('.pf-exhibit-entry__title').remove();
+    if (media.block) {
+      // The image is on the stage: drop its figure (and its field wrapper).
+      const twin = copy.querySelector('.pf-exhibit-group, .pf-exhibit-figure');
+      const wrap = twin.parentElement;
+      (wrap && wrap !== copy && wrap.classList.contains('field__item') && wrap.children.length === 1 ? wrap : twin).remove();
+    }
+    copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+    copy.querySelectorAll('.pf-exhibit-bio__toggle').forEach((el) => el.remove());
+    copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
+    view.body.replaceChildren(...Array.from(copy.childNodes));
+    view.panel.scrollTop = 0;
+
+    view.count.textContent = Drupal.t('@n of @total', { '@n': wallState.index + 1, '@total': n });
+    view.dialog.querySelectorAll('.pf-exhibit-object__step').forEach((button) => {
+      button.hidden = n < 2;
+    });
+    fillScale(tile);
+  }
+
+  // "Actual size": this gallery's sheet beside the page's other sheets.
+  function fillScale(tile) {
+    const view = wallState.view;
+    const wall = tile.closest('[data-pf-wall]');
+    let sheets = [];
+    try {
+      sheets = JSON.parse(wall.dataset.pfSheets || '[]');
+    }
+    catch (e) {
+      sheets = [];
+    }
+    view.scale.hidden = sheets.length < 2;
+    if (view.scale.hidden) {
+      view.scale.replaceChildren();
+      return;
+    }
+    const tallest = Math.max(...sheets.map((s) => s.h));
+    const thumb = tile.querySelector('img');
+    view.scale.innerHTML = '<p class="pf-exhibit-object__scale-title">' + Drupal.t('Actual size') + '</p>'
+      + '<div class="pf-exhibit-object__sheets" aria-hidden="true"></div>'
+      + '<ul class="pf-exhibit-object__sheet-key"></ul>';
+    const row = view.scale.querySelector('.pf-exhibit-object__sheets');
+    const key = view.scale.querySelector('.pf-exhibit-object__sheet-key');
+    sheets.forEach((s) => {
+      const sheet = document.createElement('span');
+      sheet.className = 'pf-exhibit-object__sheet' + (s.current ? ' is-current' : '');
+      sheet.style.height = (s.h / tallest * 100) + '%';
+      sheet.style.aspectRatio = s.w + ' / ' + s.h;
+      if (s.current && thumb) {
+        const img = document.createElement('img');
+        img.src = thumb.currentSrc || thumb.src;
+        img.alt = '';
+        sheet.append(img);
+      }
+      row.append(sheet);
+      const li = document.createElement('li');
+      li.textContent = s.label + ' · ' + s.size;
+      if (s.current) {
+        li.className = 'is-current';
+      }
+      key.append(li);
+    });
+  }
+
+  function stepObject(delta) {
+    if (wallState.tiles.length > 1) {
+      fillObject(wallState.index + delta);
+      history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
+    }
+  }
+
+  // Opens an entry on a wall. animate: grow out of its tile.
+  function openObject(entry, animate) {
+    const tile = tileFor(entry);
+    if (!tile) {
+      return;
+    }
+    const view = objectView();
+    wallState.tiles = Array.from(tile.parentElement.children);
+    const index = wallState.tiles.indexOf(tile);
+    const show = () => {
+      fillObject(index);
+      if (!view.dialog.open) {
+        ROOT.classList.add('pf-object-open');
+        view.dialog.showModal();
+      }
+    };
+    history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
+    const thumb = tile.querySelector('.pf-exhibit-wall__img');
+    const r = thumb.getBoundingClientRect();
+    if (!animate || !canMorph() || view.dialog.open || r.bottom < 0 || r.top > window.innerHeight) {
+      show();
+      return;
+    }
+    thumb.style.viewTransitionName = 'pf-object';
+    document.startViewTransition(() => {
+      thumb.style.viewTransitionName = '';
+      show();
+    });
+  }
+
+  // animate: shrink back into the tile (scrolled into view first). quiet:
+  // leave the address and focus to the caller.
+  function closeObject(animate, quiet) {
+    const view = wallState.view;
+    if (!view || !view.dialog.open) {
+      return;
+    }
+    wallState.quiet = !!quiet;
+    const tile = wallState.tile;
+    const thumb = tile && tile.querySelector('.pf-exhibit-wall__img');
+    if (!animate || !canMorph() || !thumb) {
+      view.dialog.close();
+      return;
+    }
+    const r = thumb.getBoundingClientRect();
+    if (r.top < headerOffset() || r.bottom > window.innerHeight) {
+      window.scrollTo({ top: window.scrollY + r.top - window.innerHeight / 3, behavior: 'instant' });
+    }
+    document.startViewTransition(() => {
+      view.dialog.close();
+      thumb.style.viewTransitionName = 'pf-object';
+    }).finished.finally(() => {
+      thumb.style.viewTransitionName = '';
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -935,7 +1406,12 @@
       window.removeEventListener('resize', onResize);
       document.removeEventListener('palefire:a11ychange', onResize);
       ROOT.style.removeProperty('--pf-exhibit-head-h');
-      ROOT.classList.remove('pf-exhibit-paged');
+      ROOT.classList.remove('pf-exhibit-paged', 'pf-object-open');
+      if (wallState.view) {
+        wallState.view.dialog.remove();
+        wallState.view = null;
+        wallState.tile = null;
+      }
       state.head = null;
       state.pages = [];
       state.current = null;

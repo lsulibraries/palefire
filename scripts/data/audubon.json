@@ -37,6 +37,8 @@
    "lead": "detail-mocking-birds.jpg",
    "focus": "center",
    "lead_caption": "<p>Detail of the Mocking Birds and rattlesnake, folio edition, plate 21.</p>",
+   "display": "wall",
+   "sheet": "40 × 27 in",
    "blocks": [
     {
      "type": "text",
@@ -468,6 +470,8 @@
    "lead": "detail-great-blue-heron.jpg",
    "focus": "center",
    "lead_caption": "<p>Detail of the Great Blue Heron, octavo edition, plate 369.</p>",
+   "display": "wall",
+   "sheet": "11 × 7 in",
    "blocks": [
     {
      "type": "text",
@@ -803,6 +807,7 @@
    "anchor": "drawings-and-proofs",
    "lead": null,
    "focus": "center",
+   "display": "wall",
    "blocks": [
     {
      "type": "text",
@@ -841,14 +846,14 @@
          "type": "figure",
          "image": "drawing-black-bellied-plover-1.jpg",
          "source": "drawing-black-bellied-plover-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-black-bellied-plover-2.jpg",
          "source": "drawing-black-bellied-plover-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -892,14 +897,14 @@
          "type": "figure",
          "image": "drawing-black-throated-waxwing-or-bohemian-chatterer-1.jpg",
          "source": "drawing-black-throated-waxwing-or-bohemian-chatterer-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-black-throated-waxwing-or-bohemian-chatterer-2.jpg",
          "source": "drawing-black-throated-waxwing-or-bohemian-chatterer-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1019,14 +1024,14 @@
          "type": "figure",
          "image": "drawing-common-tern-1.jpg",
          "source": "drawing-common-tern-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-common-tern-2.jpg",
          "source": "drawing-common-tern-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1051,14 +1056,14 @@
          "type": "figure",
          "image": "drawing-curled-crested-phaleris-1.jpg",
          "source": "drawing-curled-crested-phaleris-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-curled-crested-phaleris-2.jpg",
          "source": "drawing-curled-crested-phaleris-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1083,14 +1088,14 @@
          "type": "figure",
          "image": "drawing-downy-woodpecker-1.jpg",
          "source": "drawing-downy-woodpecker-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-downy-woodpecker-2.jpg",
          "source": "drawing-downy-woodpecker-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1115,14 +1120,14 @@
          "type": "figure",
          "image": "drawing-harriss-finch-1.jpg",
          "source": "drawing-harriss-finch-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-harriss-finch-2.jpg",
          "source": "drawing-harriss-finch-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1166,14 +1171,14 @@
          "type": "figure",
          "image": "drawing-ivory-gull-1.jpg",
          "source": "drawing-ivory-gull-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-ivory-gull-2.jpg",
          "source": "drawing-ivory-gull-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1236,14 +1241,14 @@
          "type": "figure",
          "image": "drawing-missouri-meadowlark-1.jpg",
          "source": "drawing-missouri-meadowlark-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-missouri-meadowlark-2.jpg",
          "source": "drawing-missouri-meadowlark-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1515,14 +1520,14 @@
          "type": "figure",
          "image": "drawing-western-shore-lark-1.jpg",
          "source": "drawing-western-shore-lark-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-western-shore-lark-2.jpg",
          "source": "drawing-western-shore-lark-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1566,14 +1571,14 @@
          "type": "figure",
          "image": "drawing-willow-ptarmigan-1.jpg",
          "source": "drawing-willow-ptarmigan-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-willow-ptarmigan-2.jpg",
          "source": "drawing-willow-ptarmigan-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]
@@ -1617,14 +1622,14 @@
          "type": "figure",
          "image": "drawing-yellow-bellied-flycatcher-1.jpg",
          "source": "drawing-yellow-bellied-flycatcher-1",
-         "caption": "",
+         "caption": "<p>Drawing</p>",
          "layout": "center"
         },
         {
          "type": "figure",
          "image": "drawing-yellow-bellied-flycatcher-2.jpg",
          "source": "drawing-yellow-bellied-flycatcher-2",
-         "caption": "",
+         "caption": "<p>Proof</p>",
          "layout": "center"
         }
        ]

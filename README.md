@@ -107,6 +107,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
+| `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, and the pairs' "Drawing" / "Proof" captions (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
@@ -489,7 +490,7 @@ a tap, can itself be hovered, and hides with Esc (WCAG 1.4.13,
 
 | Paragraph type | Fields | Notes |
 | --- | --- | --- |
-| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_guide_blocks` | A section. Opening **full screen** (default): the lead fills the screen with the number, title and "In this gallery" links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative |
+| `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_exhibit_display`, `field_exhibit_sheet`, `field_guide_blocks` | A section. Opening **full screen** (default): the lead fills the screen with the number, title and "In this gallery" links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative. Display **Story** (default) or **Wall** (below); Sheet size ("40 × 27", inches) for a wall's "Actual size" |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
 | `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox |
 | `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
@@ -559,6 +560,33 @@ from the media item. A figure with no image shows only to editors.
   while they cross the screen (`view()`); "Show whole image" leads fade up
   uncropped; side figures rise in. All off under reduced motion, where a
   band rests on "Keep in view when cropped".
+- **Wall** (Display "wall"; `_palefire_exhibit_wall()`, the gallery
+  template, `js/exhibition.js`, `_exhibition.scss`): each entry's first
+  image (or the first two of an image group) on a wall of justified rows,
+  sized from the images' own proportions (`--pf-r`), so nothing shifts as
+  they load; the wall takes the gallery's full width, its text keeps the
+  measure. Labels: the entry's heading and "Pl. 40" (from "plate 40" in the
+  caption) or the pair's captions ("Drawing · Proof"); a pair's second image
+  crossfades in on hover. "Plate / A–Z" sorts when two or more captions give
+  a plate (the tiles slide where the browser has view transitions). Hover
+  lifts a tile and dims the rest; tiles rise in as they scroll into view
+  (scroll-driven animations). The entries stay in the page, folded away, and
+  are the object view's text; their headings stay in the TOC
+  (`data-toc-passive`). Without JS the wall stays `[hidden]` and the gallery
+  reads as a story.
+- **Object view** (a wall's tile, a link to its entry from the TOC or the
+  text, the address `#anchor`, Back): a full-screen `<dialog>` in the page's
+  reading colours. The image grows out of its tile (`view-transition-name:
+  pf-object`) and shrinks back on Esc / Close, focus returning to the tile.
+  It shows the tile's loaded image at once, then the size the stage needs;
+  click to zoom where you click (largest size), move to look around. A pair
+  is a comparison: the second image wiped over the first with a labelled
+  slider. Beside it (below on phones): count, heading, the caption, the
+  entry's own text (ids stripped; its other images open in the lightbox),
+  and "Actual size" when the gallery has a sheet size: every wall gallery's
+  sheet drawn to scale, the current one outlined with the plate in it.
+  Arrows, swipe and the buttons step through the wall in its current order,
+  updating the address. Reduced motion: no grow, slide or rise.
 - Long biographies fold to their opening lines with "Read the full
   biography". Lightbox: `<dialog>`, arrows, swipe, Esc, focus returns.
 - Without JS every gallery shows in order and images open on their own.
@@ -753,6 +781,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: wall galleries.** A gallery's new Display option (re-run
+  `palefire_exhibit_setup.php`) shows its entries as a wall of whole images
+  that open full screen in an object view, with sorting, a drawing-to-proof
+  slider and "Actual size" (Sheet size). Audubon's Elephant Folio, Octavo
+  Edition and Drawings and Proofs use it (`data/audubon.json`;
+  `palefire_exhibit_audubon_wall.php` for the page already built). Why:
+  galleries of 17 to 37 plates read better side by side than one by one.
 - **Exhibitions:** John James Audubon in Louisiana
   (`palefire_exhibit_audubon.php`, `data/audubon.json`): 79 entries in five
   galleries plus two opening galleries and readings, as an unpublished

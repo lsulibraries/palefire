@@ -1539,8 +1539,10 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
  * Rendered here rather than through Manage display, so galleries made
  * before the field existed show it too.
  * opener: "full" (default) or "compact".
+ * wall: the wall's tiles (_palefire_exhibit_wall()) when Display is "wall",
+ * else NULL.
  * entries, entries_more: the full opening's links to the gallery's entries,
- * ['anchor', 'title'] each, the first six and the rest.
+ * ['anchor', 'title'] each, the first six and the rest (none on a wall).
  * dom_id: base for the caption's and the text's ids (the hero's
  * aria-labelledby and the opening's "Skip to the text" link).
  */
@@ -1569,12 +1571,16 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $variables['lead']['sizes'] = '(min-width: 62rem) 60vw, 100vw';
   }
 
+  // Display: "story" (default, also when empty) or "wall".
+  $display = $paragraph->hasField('field_exhibit_display') ? (string) $paragraph->get('field_exhibit_display')->value : '';
+  $variables['wall'] = $display === 'wall' ? _palefire_exhibit_wall($paragraph, $cache) : NULL;
+
   // The full opening's "In this gallery" links: the gallery's entries, in
   // order, with the ids their headings get (paragraph--exhibit-entry). The
-  // first six show; the rest sit behind "+ n more".
+  // first six show; the rest sit behind "+ n more". A wall is its own index.
   $variables['entries'] = [];
   $variables['entries_more'] = [];
-  if ($variables['opener'] === 'full' && $paragraph->hasField('field_guide_blocks')) {
+  if ($variables['opener'] === 'full' && !$variables['wall'] && $paragraph->hasField('field_guide_blocks')) {
     foreach ($paragraph->get('field_guide_blocks')->referencedEntities() as $block) {
       if ($block->bundle() === 'exhibit_entry' && $block->isPublished()) {
         $variables['entries'][] = [
@@ -1588,6 +1594,100 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   }
   $variables['dom_id'] = 'gallery-' . $paragraph->id();
   $cache->applyTo($variables);
+}
+
+/**
+ * A wall gallery's tiles: one per published entry with an image.
+ *
+ * Each tile is the entry's first image, or its first two when they share an
+ * image group (a drawing and its proof, compared in the object view).
+ *
+ * @return array{tiles: array, sortable: bool, sheets: array}|null
+ *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
+ *   NULL), 'tag' (the two figures' captions, "Drawing · Proof"), 'ratio',
+ *   'images' (_palefire_exhibit_image() values)]. sortable: two or more
+ *   tiles have a plate number. sheets: this page's sheet sizes, ['label',
+ *   'h', 'w', 'current'] each, when this gallery has one.
+ */
+function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cache): ?array {
+  if (!$page->hasField('field_guide_blocks')) {
+    return NULL;
+  }
+  $sizes = '(min-width: 62rem) 24vw, (min-width: 36rem) 45vw, 90vw';
+  $text = fn ($field) => trim(preg_replace('/\s+/', ' ', strip_tags((string) $field->value)));
+  $tiles = [];
+  foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
+    if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
+      continue;
+    }
+    // The entry's first image block: a figure, or an image group's figures.
+    $figures = [];
+    $caption = '';
+    foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+      if ($block->bundle() === 'exhibit_figure' && !$block->get('field_figure_image')->isEmpty()) {
+        $figures = [$block];
+        $caption = $text($block->get('field_figure_caption'));
+        break;
+      }
+      if ($block->bundle() === 'exhibit_gallery') {
+        $figures = array_slice(array_values(array_filter($block->get('field_gallery_items')->referencedEntities(), fn ($f) => !$f->get('field_figure_image')->isEmpty())), 0, 2);
+        $caption = $text($block->get('field_figure_caption')) ?: ($figures ? $text($figures[0]->get('field_figure_caption')) : '');
+        if ($figures) {
+          break;
+        }
+      }
+    }
+    $images = [];
+    foreach ($figures as $figure) {
+      $item = _palefire_media_image_item($figure->get('field_figure_image')->first(), $cache);
+      $image = $item ? _palefire_exhibit_image($item, $sizes, $cache) : NULL;
+      if ($image) {
+        $images[] = $image;
+      }
+    }
+    if (!$images) {
+      continue;
+    }
+    $tags = count($figures) === 2 ? array_filter(array_map(fn ($f) => $text($f->get('field_figure_caption')), $figures)) : [];
+    $first = $images[0];
+    $tiles[] = [
+      'anchor' => _palefire_exhibit_entry_anchor($entry),
+      'title' => trim((string) $entry->get('field_block_title')->value),
+      'plate' => preg_match('/\bplate\s+(\d+)/i', $caption, $m) ? (int) $m[1] : NULL,
+      'tag' => count($tags) === 2 ? implode(' · ', $tags) : '',
+      'ratio' => $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
+      'images' => $images,
+    ];
+  }
+  if (!$tiles) {
+    return NULL;
+  }
+
+  // "Actual size": every wall gallery's sheet on this page, to scale.
+  $sheets = [];
+  $own = $page->hasField('field_exhibit_sheet') ? (string) $page->get('field_exhibit_sheet')->value : '';
+  $node = $page->getParentEntity();
+  if (preg_match('/^\s*([\d.]+)\s*[×x]\s*([\d.]+)/u', $own) && $node && $node->hasField('field_scroll_section')) {
+    $cache->addCacheableDependency($node);
+    foreach ($node->get('field_scroll_section')->referencedEntities() as $sibling) {
+      $size = $sibling->hasField('field_exhibit_sheet') ? (string) $sibling->get('field_exhibit_sheet')->value : '';
+      if (preg_match('/^\s*([\d.]+)\s*[×x]\s*([\d.]+)/u', $size, $m)) {
+        $sheets[] = [
+          'label' => $sibling->hasField('field_section_title') ? trim((string) $sibling->get('field_section_title')->value) : '',
+          'size' => trim($size),
+          'h' => (float) $m[1],
+          'w' => (float) $m[2],
+          'current' => $sibling->id() === $page->id(),
+        ];
+      }
+    }
+  }
+
+  return [
+    'tiles' => $tiles,
+    'sortable' => count(array_filter(array_column($tiles, 'plate'))) >= 2,
+    'sheets' => $sheets,
+  ];
 }
 
 /**

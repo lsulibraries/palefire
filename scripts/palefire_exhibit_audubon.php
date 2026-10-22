@@ -214,6 +214,13 @@ $block = function (array $b) use (&$block, $figure, $keep, $html): ?Paragraph {
 
 // Each lead is one of the gallery's own images, credited in its caption.
 $has_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
+// Display and sheet size (added 2026-10-21): left out where the site's
+// setup predates them (the galleries then read as stories; set them later).
+$has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
+$has_sheet = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_sheet');
+if (!$has_display) {
+  $skipped[] = 'field_exhibit_display is not on Gallery: re-run palefire_exhibit_setup.php, then set Display to "Wall" on Elephant Folio, Octavo Edition and Drawings and Proofs.';
+}
 $sections = [];
 foreach ($data['pages'] as $page) {
   $sections[] = Paragraph::create($keep([
@@ -223,6 +230,8 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead' => $ref($media($page['lead'] ?? NULL)),
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
     'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
+    'field_exhibit_display' => $has_display ? ($page['display'] ?? 'story') : NULL,
+    'field_exhibit_sheet' => $has_sheet ? ($page['sheet'] ?? NULL) : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;

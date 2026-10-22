@@ -29,7 +29,9 @@
  *     section fields, a lead image, its focus and "Show whole image"
  *     (field_exhibit_lead_whole), its caption (field_exhibit_lead_caption),
  *     the Opening (field_exhibit_opener: full screen or compact; all three
- *     added 2026-10-21), and field_guide_blocks.
+ *     added 2026-10-21), the Display (field_exhibit_display: story or wall)
+ *     and a sheet size for the wall's "Actual size" (field_exhibit_sheet;
+ *     both added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
  *     sub-link), anchor, biography, and its own blocks.
  *   - exhibit_figure: one image with a caption and a layout.
@@ -241,6 +243,11 @@ $storage('paragraph', 'field_exhibit_opener', 'list_string', ['allowed_values' =
   'compact' => 'Compact: a band above the title',
 ]]);
 $storage('paragraph', 'field_exhibit_lead_caption', 'text_long');
+$storage('paragraph', 'field_exhibit_display', 'list_string', ['allowed_values' => [
+  'story' => 'Story: entries one after another, images beside their text',
+  'wall' => 'Wall: every entry\'s image on one wall; each opens full screen with its text',
+]]);
+$storage('paragraph', 'field_exhibit_sheet', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_entry_bio', 'text_long');
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_figure_caption', 'text_long');
@@ -386,6 +393,16 @@ $field('paragraph', 'exhibit_page', 'field_exhibit_lead_caption', [
   'description' => 'What the image shows and where it comes from: artist, book, place, date, collection. With a caption the image is announced (its media alt text) and opens full screen; without one it is decorative.',
 ]);
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_focus', ['label' => 'Keep in view when cropped', 'default_value' => [['value' => 'center']]]);
+// Added 2026-10-21. Empty (galleries made before it) counts as "story".
+$field('paragraph', 'exhibit_page', 'field_exhibit_display', [
+  'label' => 'Display',
+  'description' => 'Story: the entries one after another. Wall: the entries\' first images side by side at their own proportions, sortable by plate or name when captions give a plate number ("plate 40"); each opens full screen with its caption and text. Two images in an entry (a drawing and its proof) are compared with a slider.',
+  'default_value' => [['value' => 'story']],
+]);
+$field('paragraph', 'exhibit_page', 'field_exhibit_sheet', [
+  'label' => 'Sheet size (wall only, optional)',
+  'description' => 'Height × width in inches, e.g. "40 × 27". Galleries with one show "Actual size": this gallery\'s sheet drawn to scale beside the other galleries\' sheets.',
+]);
 $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
   'label' => 'Content',
   'description' => 'Entries, images, catalogue records, audio and text, in order.',
@@ -396,6 +413,8 @@ $section_form['field_exhibit_lead'] = $media_widget + ['weight' => 10];
 $section_form['field_exhibit_lead_focus'] = $select(11);
 $section_form['field_exhibit_lead_whole'] = ['type' => 'boolean_checkbox', 'weight' => 12, 'settings' => ['display_label' => TRUE]];
 $section_form['field_exhibit_lead_caption'] = $wysiwyg(13, 3);
+$section_form['field_exhibit_display'] = ['type' => 'options_buttons', 'weight' => 14];
+$section_form['field_exhibit_sheet'] = ['type' => 'string_textfield', 'weight' => 15];
 $section_form['field_guide_blocks'] = $paragraphs_widget(20, 'Block', 'Blocks', 'exhibit_entry');
 $form('paragraph', 'exhibit_page', $section_form);
 $view('paragraph', 'exhibit_page', [
