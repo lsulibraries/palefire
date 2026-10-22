@@ -1435,6 +1435,12 @@ html[data-pf-mode="exhibition"] :is(.pf-guide-block--text > .pf-guide-prose, .pf
   }
 }
 
+// A long URL (the sources' web addresses) breaks rather than widening a
+// phone's page.
+html[data-pf-mode="exhibition"] .pf-guide-prose a {
+  overflow-wrap: anywhere;
+}
+
 // Biography: long ones fold to their opening lines (js/exhibition.js).
 .pf-exhibit-bio {
   --pf-bio-clip: 13.5rem;
@@ -2031,6 +2037,12 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     margin: 0 0 1.5rem calc(-1 * var(--pf-stats-gap));
   }
 
+  // A cover with neither links nor opening text (a gallery that opens on
+  // an image or a video): the title keeps the text's foot margin.
+  &:not(:has(.pf-exhibit-cover__nav, .pf-exhibit-wall__stats, .pf-exhibit-wall__text)) > .pf-section__title {
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
   .pf-exhibit-cover__nav {
     grid-row: 3;
     margin-bottom: 1.5rem;
@@ -2062,11 +2074,15 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // above the title in the plain column the page has without the script).
 // The area grows with the text over it; the frame (image and wash) stays
 // on screen while that text scrolls, then leaves with the area's foot.
-// Sized from the compact header's height, not the live --pf-header-h: the
-// header shrinks once the page scrolls, and following it would re-crop the
-// image and move the text over it under the reader.
+// Neither size follows the live --pf-header-h, which changes as the header
+// shrinks and would move the text or re-crop the image under the reader:
+// the area is the first screen under the full header (--pf-header-full is
+// held while the header is compact), so the text over it ends on that
+// screen; the image is the screen under the compact header, so it still
+// fills the screen once the header has shrunk.
 .pf-exhibit-wall-hero {
-  --pf-wall-hero-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-exhibit-head-h, 0px));
+  --pf-wall-hero-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-exhibit-head-h, 0px));
+  --pf-cover-img-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-exhibit-head-h, 0px));
   position: relative;
   z-index: 0;
   order: -1;
@@ -2093,7 +2109,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   position: sticky;
   top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
   display: block;
-  height: max(22rem + var(--pf-cover-shift), var(--pf-wall-hero-h) + var(--pf-cover-shift));
+  height: max(22rem + var(--pf-cover-shift), var(--pf-cover-img-h) + var(--pf-cover-shift));
   overflow: clip;
 
   // The page colour where the text sits: from the foot below lg (the text
@@ -2105,7 +2121,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     top: var(--pf-cover-shift);
     left: 0;
     width: 100%;
-    height: max(22rem, var(--pf-wall-hero-h));
+    height: max(22rem, var(--pf-cover-img-h));
     z-index: 1;
     pointer-events: none;
   }
@@ -2149,7 +2165,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   left: 0;
   display: block;
   width: 100%;
-  height: max(22rem, var(--pf-wall-hero-h));
+  height: max(22rem, var(--pf-cover-img-h));
   object-fit: cover;
 
   @include pf-exhibit-motion {

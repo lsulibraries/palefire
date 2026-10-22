@@ -821,6 +821,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a cover's text on its first screen; no "Skip" without a
+  lead.** A cover's area is the first screen under the full header again
+  (`--pf-header-full`, held while compact); only its image keeps the
+  compact-header size (`--pf-cover-img-h`) so it stays still. A cover with
+  no links or opening text keeps a margin under its title. Galleries
+  without a lead lose "Skip to the text", and long links in exhibition text
+  break instead of widening a phone's page. Why: Modern Fieldwork's title
+  sat under the screen's foot, the prompt had nothing to skip, and Sources
+  scrolled sideways at 320px.
 - **Exhibitions: looser reading text.** Text blocks, biographies and
   transcripts (also in the object view) get line height 1.7 (was 1.5) and
   1.5em between paragraphs (was 1em); captions, labels and records keep

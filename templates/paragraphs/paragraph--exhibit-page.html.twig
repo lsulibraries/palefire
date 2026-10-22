@@ -101,16 +101,17 @@
     {% endif %}
     <div class="pf-exhibit-opener">
       {{ entry_nav }}
-      <p class="pf-exhibit-opener__actions">
-        {% if lead %}
+      {# Only over a lead: without one the text is already in view. #}
+      {% if lead %}
+        <p class="pf-exhibit-opener__actions">
           {# Shown only while the pan is on (_exhibition.scss). #}
           <span class="pf-exhibit-opener__cue" aria-hidden="true">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" focusable="false"><path d="M8 2.5v11M3.5 9 8 13.5 12.5 9"/></svg>
             {{ 'Scroll to explore the image'|t }}
           </span>
-        {% endif %}
-        <a class="pf-exhibit-opener__skip" href="#{{ dom_id }}-text">{{ 'Skip to the text'|t }}</a>
-      </p>
+          <a class="pf-exhibit-opener__skip" href="#{{ dom_id }}-text">{{ 'Skip to the text'|t }}</a>
+        </p>
+      {% endif %}
     </div>
     {% if lead and lead_caption %}
       <div class="pf-exhibit-hero__caption pf-exhibit-lead__caption pf-guide-prose" id="{{ dom_id }}-caption">{{ lead_caption }}</div>
