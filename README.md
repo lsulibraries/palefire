@@ -821,6 +821,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Footer: Special Collections version on /v2/exhibitions too.** The
+  exhibitions page and the pages under it are Special Collections content,
+  so they get its footer. More paths go in
+  `PalefireHooks::SPECIAL_EXTRA`.
 - **Footer: Special Collections version shows on /v2/special.** The check
   looked for `/special`, but on lib.lsu.edu "v2" is part of the alias (the
   base path is `/`), so every page got the Main Library footer and the

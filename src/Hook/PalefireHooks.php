@@ -64,6 +64,11 @@ class PalefireHooks {
   public const SPECIAL_ROOT = '/v2/special';
 
   /**
+   * Other aliases that get the Special Collections footer, with their pages.
+   */
+  public const SPECIAL_EXTRA = ['/v2/exhibitions'];
+
+  /**
    * Per-request cache of computed section data, keyed by host entity.
    *
    * @var array<string, array<string, array{anchor: string, label: string, toc: bool}>>
@@ -120,10 +125,17 @@ class PalefireHooks {
     $variables['guide_head'] = NULL;
     $variables['exhibit_head'] = NULL;
 
-    // Footer: Special Collections on SPECIAL_ROOT and the pages under it,
-    // the Main Library everywhere else (includes/footer.html.twig).
+    // Footer: Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the
+    // pages under them, the Main Library everywhere else
+    // (includes/footer.html.twig).
     $alias = \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
-    $variables['footer_special'] = $alias === self::SPECIAL_ROOT || str_starts_with($alias, self::SPECIAL_ROOT . '/');
+    $variables['footer_special'] = FALSE;
+    foreach ([self::SPECIAL_ROOT, ...self::SPECIAL_EXTRA] as $root) {
+      if ($alias === $root || str_starts_with($alias, $root . '/')) {
+        $variables['footer_special'] = TRUE;
+        break;
+      }
+    }
     $variables['footer_special_root'] = self::SPECIAL_ROOT;
     // Printed by the footer, so the cache varies by path.
     $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
