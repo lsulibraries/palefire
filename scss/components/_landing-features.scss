@@ -853,10 +853,64 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // Decorative (aria-hidden): the list or heading after each one names it.
 .pf-index-rule {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0 1rem;
   align-items: baseline;
   padding-bottom: .625rem;
   border-bottom: 1px solid #{$pf-hairline};
+}
+
+// The rule's link, at its right end, so each section has a mark on the
+// right margin to answer the number on the left: the same small capitals,
+// in the text's full colour, an arrow after them that steps right on hover,
+// underlined on hover and focus. A taller box than its line (24px, WCAG
+// 2.5.8) without moving the line.
+.pf-index-rule__link {
+  @extend %pf-landing-label;
+  margin-inline-start: auto;
+  padding-block: .25rem;
+  margin-block: -.25rem;
+  color: var(--pf-section-fg, var(--bs-body-color));
+  white-space: nowrap;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-inline-start: .5em;
+    letter-spacing: 0;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    &::after {
+      transform: translateX(.2em);
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+
+  [dir="rtl"] &::after {
+    content: "\2190" / "";
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-index-rule__link::after {
+    transition: none;
+    transform: none !important;
+  }
 }
 
 .pf-index-rule__num,
@@ -1022,58 +1076,6 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
       inset-inline-start: calc(var(--pf-paths-dot) / 2);
       width: calc(100% + var(--pf-grid-gutter, .75rem));
     }
-  }
-}
-
-// "See the full guide": the intro's last words, a link in the text's full
-// colour (the intro is at 80%), underlined, with an arrow after it. The
-// editor's last paragraph runs inline so the link follows its words.
-.pf-quick-guide__intro > p:last-of-type {
-  display: inline;
-}
-
-.pf-quick-guide__link {
-  color: var(--pf-section-fg, var(--bs-body-color));
-  font-weight: 500;
-  white-space: nowrap;
-  text-decoration: underline;
-  text-decoration-color: #{$pf-hairline};
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  transition: text-decoration-color $pf-hover-out ease;
-
-  &::after {
-    content: "\2192" / "";
-    display: inline-block;
-    margin-inline-start: .35em;
-    transition: transform $pf-hover-out ease;
-  }
-
-  &:hover,
-  &:focus-visible {
-    text-decoration-color: currentColor;
-    transition-duration: $pf-hover-in;
-
-    &::after {
-      transform: translateX(.2em);
-      transition-duration: $pf-hover-in;
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-quick-gold);
-    outline-offset: 2px;
-  }
-
-  [dir="rtl"] &::after {
-    content: "\2190" / "";
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pf-quick-guide__link::after {
-    transition: none;
-    transform: none !important;
   }
 }
 

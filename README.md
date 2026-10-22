@@ -857,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Index rules with right-hand links.** Each index rule now ends in a
+  link on the column's right edge, in the rule's small capitals with an
+  arrow: 01 "All hours" (LibCal, as the Visit panel's), 02 "Full guide"
+  (moved from the end of the Quick Guide intro; the Link field's text and
+  URL still apply), 03 "Directions" (Google Maps, new tab) and 04 "All
+  exhibitions" (/exhibitions, the main menu's page). The rules are built
+  by an `index_rule` macro in includes/landing.html.twig; only their number
+  and name are hidden from screen readers now, so the links are reachable,
+  each with a full name ("Directions to Hill Memorial Library (opens in a
+  new tab)"). Why: left-aligned text left the right margin ragged; a mark
+  at each rule's right end balances the number at its left.
 - **Reveal animations off; Quick Start marks on their own 16th.** The
   section-reveal (headings, Events carousel) and tile-reveal (Collections
   cards) libraries are no longer attached (the templates note how to put

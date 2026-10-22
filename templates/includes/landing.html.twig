@@ -66,6 +66,28 @@
  * dim and blur the background video.
  */
 #}
+{#
+  Index rule (.pf-index-rule, _landing-features.scss): a hairline with the
+  section's number and name in the mono label voice, and at its right end
+  an optional link (a running head, as in a catalogue). The number and name
+  are decoration (the heading or list after each rule names the section),
+  so only they are hidden from screen readers; the link is not.
+  - link: { url, text, hidden (more of its name, read but not shown),
+    external (opens in a new tab) }, or empty.
+#}
+{% macro index_rule(num, label, link) %}
+  <div class="pf-index-rule">
+    <span class="pf-index-rule__num" aria-hidden="true">{{ num }}</span>
+    <span class="pf-index-rule__label" aria-hidden="true">{{ label }}</span>
+    {%- if link.url %}
+      <a class="pf-index-rule__link" href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>
+        {{- link.text -}}
+        {%- if link.hidden %}<span class="visually-hidden">{{ link.hidden }}</span>{% endif -%}
+      </a>
+    {%- endif %}
+  </div>
+{% endmacro %}
+{% import _self as pf %}
 {% set landing_action = 'https://lib.lsu.edu/bento' %}
 {% set landing_name = landing.identifier|default('search_api_fulltext_bento') %}
 {% set input_id = landing.input_id|default('pf-landing-q') %}
@@ -294,13 +316,9 @@
          - From the blog: hero_post, the newest Article in the paragraph's
            "Blog category" (palefire_preprocess_paragraph__landing_hero()),
            its category under it; left out until that is set. #}
-      {# Index rule (.pf-index-rule): a hairline with the section's number
-         and name in the mono label voice, on the hero's four columns. The
-         list keeps its own name, so the rule is decoration. #}
-      <div class="pf-index-rule" aria-hidden="true">
-        <span class="pf-index-rule__num">01</span>
-        <span class="pf-index-rule__label">{{ 'At a glance'|t }}</span>
-      </div>
+      {# Index rule 01 (the index_rule macro, top): its link goes to every
+         library's hours (LibCal), as the Visit panel's does. #}
+      {{ pf.index_rule('01', 'At a glance'|t, { url: 'https://lsu.libcal.com/hours', text: 'All hours'|t, hidden: ' ' ~ 'for all LSU Libraries'|t }) }}
       <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
         {% if visit.lid %}
           <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
@@ -332,8 +350,8 @@
       </ul>
 
       {# Quick guide: under At a glance, still in the lead panel. Index rule
-         02 (decorative), the heading and intro ending in a link to the
-         full guide, then the three request paths, options A, B and C, from
+         02 with the link to the full guide at its end, the heading and
+         intro, then the three request paths, options A, B and C, from
          the full guide (the same include, so an edit there shows here too);
          on the hero's four columns, a timetable: heading and intro in the
          first, one option in each of the others. Close under At a glance, so its heading
@@ -349,34 +367,20 @@
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
-        {# The second index rule; the heading below names the region. #}
-        <div class="pf-index-rule" aria-hidden="true">
-          <span class="pf-index-rule__num">02</span>
-          <span class="pf-index-rule__label">{{ 'Start your research'|t }}</span>
-        </div>
+        {# Index rule 02, "Full guide" at its end. The full name keeps the
+           visible words first (WCAG 2.5.3) and says which guide; with its
+           own text or URL (the Link field) the link names itself. #}
+        {{ pf.index_rule('02', 'Start your research'|t, guide_url ? {
+          url: guide_url,
+          text: quick_guide.link_text ?: 'Full guide'|t,
+          hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
+        } : {}) }}
         {# The TOC label is the heading's own text once the title is set. #}
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
-        {# "See the full guide" ends the intro, inline in its last paragraph
-           (_landing-features.scss), not a button of its own. The full name
-           keeps the visible words first (WCAG 2.5.3) and says which guide;
-           with its own text or URL (the Link field) the link names itself. #}
-        {% set guide_link %}
-          {%- if guide_url -%}
-            <a class="pf-quick-guide__link" href="{{ guide_url }}">
-              {%- if quick_guide.link_text -%}
-                {{ quick_guide.link_text }}
-              {%- elseif quick_guide.url -%}
-                {{ 'See the full guide'|t }}
-              {%- else -%}
-                {{ 'See the full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>
-              {%- endif -%}
-            </a>
-          {%- endif -%}
-        {% endset %}
         {% if quick_guide.intro %}
-          <div class="pf-quick-guide__intro">{{ quick_guide.intro }} {{ guide_link }}</div>
+          <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
         {% else %}
-          <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }} {{ guide_link }}</p>
+          <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
       </div>
@@ -387,11 +391,14 @@
   {% if landing_map %}
     <div class="pf-landing__visit"{% if toc_map_id %} id="{{ toc_map_id }}" tabindex="-1"{% endif %}>
       {%- if hero -%}
-        {# Index rule 03 (.pf-index-rule): the map's heading names it. #}
-        <div class="pf-index-rule" aria-hidden="true">
-          <span class="pf-index-rule__num">03</span>
-          <span class="pf-index-rule__label">{{ 'Visit Hill'|t }}</span>
-        </div>
+        {# Index rule 03: directions in Google Maps, as the Visit panel's
+           link, in a new tab. #}
+        {{ pf.index_rule('03', 'Visit Hill'|t, visit.maps_url ? {
+          url: visit.maps_url,
+          text: 'Directions'|t,
+          hidden: ' ' ~ 'to @place (opens in a new tab)'|t({ '@place': visit.name }),
+          external: true,
+        } : {}) }}
       {%- endif -%}
       {{ landing_map }}
     </div>
@@ -412,10 +419,8 @@
   {% if hero and on_view %}
     {% set on_view_id = input_id ~ '-on-view' %}
     <section class="pf-landing__onview" aria-labelledby="{{ on_view_id }}">
-      <div class="pf-index-rule" aria-hidden="true">
-        <span class="pf-index-rule__num">04</span>
-        <span class="pf-index-rule__label">{{ 'On view'|t }}</span>
-      </div>
+      {# Index rule 04: the site's Exhibitions page (the main menu's). #}
+      {{ pf.index_rule('04', 'On view'|t, { url: '/exhibitions', text: 'All exhibitions'|t }) }}
       <h2 class="pf-section__title pf-landing__onview-title" id="{{ on_view_id }}" data-toc data-toc-label="{{ 'On view'|t }}">{{ 'On view'|t }}</h2>
       {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: on_view, label: 'On view'|t } only %}
     </section>
