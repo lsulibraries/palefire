@@ -2050,8 +2050,13 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // above the title in the plain column the page has without the script).
 // The area grows with the text over it; the frame (image and wash) stays
 // on screen while that text scrolls, then leaves with the area's foot.
+// Sized and pinned from the compact header's height, not the live
+// --pf-header-h: the header shrinks once the page scrolls, and following it
+// would move and re-crop the image (and the text over it) under the
+// reader. At rest the full header covers the frame's top strip (38px from
+// lg); the shrink uncovers it, the image itself still.
 .pf-exhibit-wall-hero {
-  --pf-wall-hero-h: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
+  --pf-wall-hero-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-exhibit-head-h, 0px));
   position: relative;
   z-index: 0;
   order: -1;
@@ -2070,7 +2075,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 
 .pf-exhibit-wall-hero__frame {
   position: sticky;
-  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
+  top: calc(#{$pf-header-bar-compact-h} + var(--pf-exhibit-head-h, 0px));
   display: block;
   height: max(22rem, var(--pf-wall-hero-h));
   overflow: clip;
@@ -2117,7 +2122,9 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
-.pf-exhibit-wall-hero__img {
+// Two classes: .pf-section img (_sections.scss) sets height: auto, which left
+// a wide image short of the frame's foot.
+.pf-exhibit-wall-hero .pf-exhibit-wall-hero__img {
   position: absolute;
   inset: 0;
   display: block;

@@ -821,6 +821,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a cover holds still while the header shrinks.** A wall's
+  or story's cover image is now sized and pinned from the compact header's
+  height (`$pf-header-bar-compact-h`) instead of the live `--pf-header-h`,
+  so the shrink no longer moves or re-crops it, or moves the text over it;
+  at rest the full header covers its top strip. Its image also fills the
+  frame again (`.pf-section img` had set `height: auto`, leaving wide images
+  short of the foot). Why: the shift on scroll was disorienting.
 - **Exhibitions: a cover's text without "Read more".** A story cover now
   shows all its opening text; the title starts low on the first screen,
   the lines at its foot are faded, and the fade lifts as you scroll (with
