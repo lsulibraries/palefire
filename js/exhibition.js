@@ -664,9 +664,9 @@
         intro.append(...blocks);
         text.append(intro);
       }
-      // Still listed in the TOC, but never "current" by scroll position:
-      // the headings are folded away (js/modular-toc.js).
-      page.querySelectorAll('.pf-exhibit-entry__title').forEach((h) => h.setAttribute('data-toc-passive', ''));
+      // Not in the TOC: the wall is the gallery's index, and dozens of
+      // entries made the TOC a long scroll (js/modular-toc.js skips them).
+      page.querySelectorAll('.pf-exhibit-entry').forEach((entry) => entry.setAttribute('data-toc-skip', ''));
       const buttons = wall.querySelectorAll('[data-pf-sort]');
       if (buttons.length) {
         sortWall(wall, 'plate', false);

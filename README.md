@@ -107,6 +107,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
+| `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
 | `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, and the pairs' "Drawing" / "Proof" captions (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
 | `palefire_guide_demo.php`, `_research_help.php`, `_special_collections.php`, `_louisiana_newspapers.php` | Each builds one guide as an unpublished page (`-- path=/v2/guides/…`). One-time starting points: they stop if a page with the same title exists and never update one |
@@ -571,8 +572,8 @@ from the media item. A figure with no image shows only to editors.
   a plate (the tiles slide where the browser has view transitions). Hover
   lifts a tile and dims the rest; tiles rise in as they scroll into view
   (scroll-driven animations). The entries stay in the page, folded away, and
-  are the object view's text; their headings stay in the TOC
-  (`data-toc-passive`). Without JS the wall stays `[hidden]` and the gallery
+  are the object view's text; they are left out of the TOC
+  (`data-toc-skip`: the wall is the gallery's index). Without JS the wall stays `[hidden]` and the gallery
   reads as a story. In place of a story's entry links, a line of facts from
   the wall (`.pf-exhibit-wall__stats`: "22 entries · Plates 2–154 · Sheet
   40 × 27 in", or "11 drawing–proof pairs"). A wall with a lead opens on it
@@ -677,8 +678,11 @@ Manuscripts (3) and Suggested Reading. Each bird page of 2021 is an entry.
   and the low scores checked by eye) and the whole sheet is shown instead:
   the 39 plates from `Audubon Images for Heitman book/Edited images`, 46
   drawings and proofs and the Hurricane's first page at 1,000px or more
-  (`source image for cropped ones`, `5188_001.jpg`). Four have no larger
-  source and stay 2021 crops (Black-throated Waxwing drawing, Virginian Rail,
+  (`source image for cropped ones`, `5188_001.jpg`). The Black-throated
+  Waxwing drawing is the full sheet from the Louisiana Digital Library
+  (lsu-sc-jjadp:13, a JPEG 2000 at 4,585 × 7,079, checked by eye against
+  the 2021 crop; `palefire_exhibit_replace_image.php` for the built page).
+  Three have no larger source and stay 2021 crops (Virginian Rail,
   Children's Warbler and Bear manuscripts). Leads: the Brown Pelican (folio,
   not in 2021) and full-resolution cuts of the 2021 close-ups of the Mocking
   Birds and Great Blue Heron; the cover is the Carolina Parrot. Unused:
@@ -797,6 +801,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Audubon: the whole Waxwing drawing.** The Black-throated Waxwing
+  drawing was the 2021 site's 600 × 400 close-up (the drive has no full
+  scan); it is now the full sheet from the Louisiana Digital Library, at
+  2,487 × 3,840. New `palefire_exhibit_replace_image.php` swaps it in on the
+  built page. Why: next to its full proof the drawing looked cut off.
+- **Exhibitions: wall entries out of the TOC.** A wall gallery's entries
+  are no longer TOC sub-links (`data-toc-skip`); the wall is the gallery's
+  index, and links to its entries still open the object view. Audubon's TOC
+  goes from 79 sub-links to the 3 manuscripts. Why: with three walls of 17
+  to 37 entries the TOC had become a long scroll.
 - **Exhibitions: a wall's image stays put under its text.** The lead (and
   its wash) is pinned while the opened intro scrolls over it, with a veil
   of the page colour below lg; from lg the folded intro shows as many lines
