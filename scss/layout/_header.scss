@@ -264,6 +264,31 @@
   }
 }
 
+// The bar's side padding and the utility icons' cell, published for what
+// lines up with the logo and the icons from outside the header (the
+// landing's sub-header bar, _landing-features.scss and _modular.scss).
+// The same breakpoints as the rules that set them; the cell shrinks with
+// the compact bar below the wide breakpoint, as the icons' cells do.
+:root {
+  @each $bp, $gutter in $pf-header-gutters {
+    @include media-breakpoint-up($bp) {
+      --pf-header-gutter: #{$gutter};
+    }
+  }
+
+  --pf-utility-cell: #{$pf-header-target};
+
+  @media (min-width: $pf-utility-wide-bp) {
+    --pf-utility-cell: #{$pf-utility-cell-wide};
+  }
+}
+
+@media (max-width: $pf-utility-wide-bp - .02px) {
+  :root:has(.pf-header--compact) {
+    --pf-utility-cell: #{$pf-header-compact-target};
+  }
+}
+
 // Utility (icon) menu ----------------------------------------------------------
 
 .pf-utility-nav {

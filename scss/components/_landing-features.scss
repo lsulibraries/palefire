@@ -57,6 +57,15 @@
 .pf-landing {
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
+  // The video button's distance from the screen's right edge. From lg its
+  // centre is the header's last icon's (the settings gear): the header's
+  // side padding and half an icon cell in (_header.scss), less half the
+  // 2.25rem button.
+  --pf-bar-icon-end: var(--pf-bar-icon-edge);
+
+  @include media-breakpoint-up(lg) {
+    --pf-bar-icon-end: calc(var(--pf-header-gutter, 3rem) + var(--pf-utility-cell, 2.75rem) / 2 - 1.125rem);
+  }
   --pf-landing-bar-h: 3rem; // the bar: 2.25rem row, .375rem padding each side
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
 }
@@ -109,8 +118,10 @@
     transition: padding-inline-start .3s ease-in-out; // the TOC column's timing
   }
 
+  // The TOC button's 1rem icon starts on the logo's edge (the header's
+  // side padding, _modular.scss); the breadcrumb 1rem after the icon.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-landing__bar {
-    padding-inline-start: calc(var(--pf-bar-icon-edge) + 2.25rem + var(--pf-bar-edge)); // past the TOC button, then 1rem
+    padding-inline-start: calc(var(--pf-header-gutter, 3rem) + 1rem + var(--pf-bar-edge));
   }
 }
 
@@ -123,13 +134,14 @@
 // Room at the end of the row for the docked video button (2.25rem and a
 // 1rem gap), so a long breadcrumb wraps before it instead of running under.
 .pf-landing__bar:has(+ .pf-landing__dock) .pf-landing__bar-inner {
-  padding-inline-end: 3.25rem;
+  padding-inline-end: calc(var(--pf-bar-icon-end) + 3.25rem - var(--pf-bar-edge));
+  transition: padding-inline-end $pf-header-transition; // with the header compacting
 }
 
 // With "Sign in" last in the row, the two buttons pair up: the same
 // .375rem between them as between the video button and the screen's edge.
 .pf-landing__bar:has(+ .pf-landing__dock) .pf-landing__bar-inner:has(> .pf-landing__signin) {
-  padding-inline-end: calc(2.25rem + 2 * var(--pf-bar-icon-edge) - var(--pf-bar-edge));
+  padding-inline-end: calc(var(--pf-bar-icon-end) + 2.25rem + var(--pf-bar-icon-edge) - var(--pf-bar-edge));
 }
 
 // The bar's buttons (Sign in here, the video button docked over the bar,
@@ -223,8 +235,9 @@
   height: 0;
   margin-inline: auto calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
-  padding-inline: var(--pf-bar-icon-edge);
+  padding-inline: var(--pf-bar-icon-edge) var(--pf-bar-icon-end);
   pointer-events: none;
+  transition: padding-inline-end $pf-header-transition; // with the header compacting
 }
 
 .pf-landing__dock .pf-landing__bg-toggle {
@@ -236,19 +249,25 @@
 }
 
 // --- Cover: the video as a washed band (hero, .pf-landing--cover) ---------
-// As on an exhibition's title page: the video fills a band at the top of
-// the lead, behind the title, intro and search, and a wash of the page
-// colour does the work the glass panel did. Solid at the band's foot, so
-// At a glance and the Quick Guide start on the plain page with no edge;
-// from the left, under the text, so it keeps the swatch's contrast on any
-// frame; and a light one under the bar. The page then scrolls on through
-// the map and On view in one flow: no full-screen panel, no snap. The lead
-// runs the content column's full width (the hero's inset) and starts under
-// the bar, so the video reaches up behind it.
+// As on an exhibition's title page: the video fills the first screen,
+// behind the title, intro, search and At a glance, which sit at its foot,
+// and a wash of the page colour does the work the glass panel did. Solid
+// at the band's foot, under At a glance, so the Quick Guide starts on the
+// plain page with no edge; from the left, under the text, so it keeps the
+// swatch's contrast on any frame; and a light one under the bar. The page
+// then scrolls on through the map and On view in one flow: no snap. The
+// lead runs the content column's full width (the hero's inset) and starts
+// under the bar, so the video reaches up behind it.
 // The lead is a one-column grid: the media layer (its first child,
-// includes/landing.html.twig) lies across its first two rows, the title
-// and intro and the search, and reaches out to the column's edges, up
+// includes/landing.html.twig) lies across its first two rows (the title
+// and intro, and the search) and reaches out to the column's edges, up
 // under the bar and down past the search (--pf-cover-top, --pf-cover-foot).
+// Where At a glance is one row (the 4-column grid, below) it spans index
+// rule 01 and At a glance too and is at least the window's height under
+// the header; the first row is the flexible one, so the room it adds opens
+// above the title, and the title, search and At a glance settle at the
+// screen's foot whatever its height. Narrower, the stacked cells would
+// cover the band on thinly washed video, so it ends under the search.
 // The lead has no side padding, so the layer spans the content column
 // edge to edge; the other rows keep to the column with side margins
 // (--pf-cover-gutter: the hero's inset, its percentage of the lead's
@@ -279,6 +298,7 @@
   --pf-media-wash-map: transparent;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 1fr;
   width: auto;
   max-width: none;
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
@@ -305,11 +325,20 @@
 
   > .pf-landing__top {
     grid-row: 1;
+    align-self: end;
   }
 
   > .pf-landing__form {
     grid-row: 2;
     margin-bottom: var(--pf-cover-foot);
+  }
+
+  > .pf-index-rule {
+    grid-row: 3;
+  }
+
+  > .pf-today {
+    grid-row: 4;
   }
 
   > .pf-landing__media {
@@ -330,6 +359,27 @@
   }
 }
 
+// The full-screen cover, on the 4-column grid (see above). The band's
+// solid foot under At a glance as under the search, so its last line never
+// sits on the screen's edge; the Quick Guide's gap less that foot, so 02
+// keeps the rhythm.
+@container pf-cover (min-width: 64rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+    > .pf-landing__media {
+      grid-row: 1 / 5;
+      min-height: calc(100svh - var(--pf-header-h, 0px));
+    }
+
+    > .pf-today {
+      margin-bottom: var(--pf-cover-foot);
+    }
+
+    > .pf-quick-guide {
+      padding-top: calc(var(--pf-hero-gap) - var(--pf-cover-foot));
+    }
+  }
+}
+
 .pf-landing--cover .pf-landing__lead > .pf-landing__media {
   .pf-landing__bg-video {
     object-position: 62% 40%; // the building stays in frame on wide screens
@@ -339,12 +389,12 @@
     background-image:
       linear-gradient(to top,
         var(--pf-cover-bg) 0%,
-        var(--pf-cover-bg) 6%,
-        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 18%,
-        color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 34%,
-        color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 52%,
+        var(--pf-cover-bg) 10%,
+        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 22%,
+        color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 38%,
+        color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 54%,
         color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 68%,
-        transparent 82%),
+        transparent 80%),
       linear-gradient(to bottom,
         color-mix(in srgb, var(--pf-cover-bg) 65%, transparent) 0%,
         transparent 18%),
@@ -1593,7 +1643,9 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   .pf-exhibit__media,
   .pf-exhibit__media::after,
   .pf-exhibit__more,
-  .pf-landing__bar {
+  .pf-landing__bar,
+  .pf-landing__bar-inner,
+  .pf-landing__dock {
     transition: none !important;
   }
 
@@ -1608,7 +1660,9 @@ html.pf-a11y-motion {
   .pf-exhibit__media,
   .pf-exhibit__media::after,
   .pf-exhibit__more,
-  .pf-landing__bar {
+  .pf-landing__bar,
+  .pf-landing__bar-inner,
+  .pf-landing__dock {
     transition: none !important;
   }
 

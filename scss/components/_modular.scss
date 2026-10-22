@@ -619,9 +619,10 @@ html.pf-snap-proximity .pf-section--snap {
   }
 
   // Over the landing hero's sub-header bar it lines up with the bar's row,
-  // .375rem under the header, so it sits .375rem from the screen's edge
-  // too, square in the corner like the video button opposite
-  // (--pf-bar-icon-edge, _landing-features.scss). The sidebar sticks at
+  // .375rem under the header, and its 1rem icon starts on the logo's left
+  // edge (the header's side padding, --pf-header-gutter, _header.scss), as
+  // the video button opposite centres under the last header icon
+  // (_landing-features.scss). The sidebar sticks at
   // the bar's top, so .375rem is set outright rather than through the
   // title nudge, which modular-toc.js measures only when the page loads
   // at the top (reloaded part-way down, the button sat a row low).
@@ -629,7 +630,7 @@ html.pf-snap-proximity .pf-section--snap {
   // (_landing-features.scss): the bar is its ground.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]):has(.pf-landing__bar) .pf-modular__toc-collapse {
     top: .375rem;
-    inset-inline-end: calc(-2.25rem - .375rem);
+    inset-inline-end: calc(-2.25rem - (var(--pf-header-gutter, 3rem) - .625rem));
     border-color: transparent;
     background-color: transparent;
     box-shadow: none;

@@ -857,6 +857,24 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: the video cover fills the first screen on desktop.** On the
+  4-column grid the cover's video spans the title, search, index rule 01
+  and At a glance and is at least the window's height under the header;
+  its first row is the flexible one, so the room opens above the title
+  and title, search and At a glance sit at the screen's foot, with the
+  band's solid foot under them (02 keeps its gap). The wash's solid foot
+  runs a little higher to sit under At a glance. Narrower layouts keep the
+  band ending under the search: stacked, At a glance would cover the band
+  on thinly washed video. Why: the first screen read as bare below a
+  short band.
+- **Landing bar icons on the header's edges.** The header now publishes
+  its side padding and utility-icon cell (--pf-header-gutter,
+  --pf-utility-cell, _header.scss, the same breakpoints and compact size
+  as the header). From lg, the floating TOC button's icon starts on the
+  logo's left edge, and the video button centres under the last header
+  icon (the settings gear), with Sign in paired before it; both follow the
+  header as it compacts. Why: the bar's corner buttons sat 6px from the
+  screen's edges, off the header's lines.
 - **Hero: one 16-column grid for 01 to 04.** The landing's content column
   is a 16-column grid with one gutter (--pf-grid-gutter, up to 2rem), the
   main blocks spanning 4, so its four columns are equal and every fourth
