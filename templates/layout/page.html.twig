@@ -70,11 +70,16 @@
 {% endif %}
 
 <div class="pf-page position-relative d-flex flex-column min-vh-100">
-  {# Scroll marker: when it leaves the viewport, the header turns compact
-     (js/palefire.js, palefireHeaderCompact). #}
+  {# The page's top (js/palefire.js measures offsets from it). With a
+     header that grows and shrinks, the header turns compact once this
+     leaves the viewport (palefireHeaderCompact). #}
   <div class="pf-header-sentinel" aria-hidden="true"></div>
 
-  <header class="pf-header sticky-top">
+  {# Always compact (2026-10-22): the slim bar from the first paint, no
+     growing or shrinking, more of the first screen for the page. The
+     script leaves a data-pf-compact="always" header alone; remove the
+     attribute and the class to bring the growing header back. #}
+  <header class="pf-header pf-header--compact sticky-top" data-pf-compact="always">
     <div class="navbar navbar-expand-lg">
       {# Full-width top bar: container-fluid instead of container-xxl.
          Side padding grows with the viewport ($pf-header-gutters). #}

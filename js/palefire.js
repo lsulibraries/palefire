@@ -12,6 +12,9 @@
   // Compact bar height for a given header width (see compactBarHeight).
   let compactBar = { width: -1, height: 0 };
   let compactAfterFrame = 0;
+  // A header rendered compact for good (page.html.twig) never grows or
+  // shrinks, so the scroll point that would switch it isn't needed.
+  const alwaysCompact = (header) => !!header && header.dataset.pfCompact === 'always';
 
   /**
    * Publishes the sticky header's height as --pf-header-h. Used for
@@ -59,7 +62,7 @@
     attach(context) {
       once('pf-header-compact', '.pf-header', context).forEach((header) => {
         const sentinel = document.querySelector('.pf-header-sentinel');
-        if (!sentinel || !('IntersectionObserver' in window)) {
+        if (alwaysCompact(header) || !sentinel || !('IntersectionObserver' in window)) {
           return;
         }
         let timer;
@@ -199,7 +202,7 @@
     compactAfterFrame = 0;
     const header = document.querySelector('.pf-header');
     const sentinel = document.querySelector('.pf-header-sentinel');
-    if (!header || !sentinel) {
+    if (!header || !sentinel || alwaysCompact(header)) {
       return;
     }
     const sidebar = document.querySelector('.pf-modular__sidebar');

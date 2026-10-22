@@ -359,29 +359,38 @@
   }
 }
 
-// The full-screen cover, on the 4-column grid (see above). The band's
-// solid foot under At a glance as under the search, so its last line never
-// sits on the screen's edge; the Quick Guide's gap less that foot, so 02
-// keeps the rhythm.
+// The full-screen cover, on the 4-column grid (see above), composed in
+// thirds as an exhibition's cover is: the video fills the first screen
+// less a strip at its foot (--pf-cover-peek), where index rule 01 and the
+// top of At a glance's plates show on the plain page, inviting the scroll.
+// The search sits on the screen's lower third line: the room under it is
+// a third of the screen less that strip (at least the band's usual foot),
+// and the title and intro rise from it, the flexible first row taking the
+// rest. On a short screen the space above the title gives way first.
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
-    // Less room above the title, so the row of plates and their cells
-    // fit a laptop's first screen (1440x900); the flexible first row
-    // still adds space above the title wherever there is more.
-    --pf-cover-space: clamp(2.5rem, 4vw, 3.5rem);
+    --pf-cover-peek: 10rem;
 
     > .pf-landing__media {
-      grid-row: 1 / 5;
-      min-height: calc(100svh - var(--pf-header-h, 0px));
+      grid-row: 1 / 3;
+      min-height: calc(100svh - var(--pf-header-h, 0px) - var(--pf-cover-peek));
     }
 
-    > .pf-today {
-      margin-bottom: var(--pf-cover-foot);
+    > .pf-landing__form {
+      margin-bottom: max(var(--pf-cover-foot), calc(100svh / 3 - var(--pf-cover-peek)));
     }
 
-    > .pf-quick-guide {
-      padding-top: calc(var(--pf-hero-gap) - var(--pf-cover-foot));
+    // Under the band, on the plain page: a short step to rule 01.
+    > .pf-index-rule {
+      margin-top: clamp(1.5rem, 3vw, 2.5rem);
     }
+  }
+
+  // The title a step larger here, with the room the band gives it: about
+  // 87px at 1440, 96px from about 1650. (html[data-pf-hero]: over the
+  // cover title rule further down.)
+  html[data-pf-hero] .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title {
+    font-size: clamp(2.75rem, 1.5rem + 4.4vw, 6rem);
   }
 }
 
@@ -394,12 +403,12 @@
     background-image:
       linear-gradient(to top,
         var(--pf-cover-bg) 0%,
-        var(--pf-cover-bg) 10%,
-        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 22%,
-        color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 38%,
-        color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 54%,
-        color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 68%,
-        transparent 80%),
+        var(--pf-cover-bg) 6%,
+        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 14%,
+        color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 26%,
+        color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 42%,
+        color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 58%,
+        transparent 72%),
       linear-gradient(to bottom,
         color-mix(in srgb, var(--pf-cover-bg) 65%, transparent) 0%,
         transparent 18%),

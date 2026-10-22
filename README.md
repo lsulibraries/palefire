@@ -857,6 +857,22 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero cover in thirds.** On the 4-column grid the video fills the
+  first screen less a 10rem strip (--pf-cover-peek) and covers only the
+  title, intro and search; the search sits on the screen's lower third
+  line, the title and intro rising from it, and index rule 01 and the top
+  of At a glance's plates show in the strip on the plain page. The title
+  is larger there (up to 6rem), and the band's bottom fade is gentler so
+  the video shows under the search. Narrower layouts are unchanged. Why:
+  the plates on the moving video read as busy; this gives the first
+  screen one calm picture, composed like an exhibition cover.
+- **Header always compact.** Every Palefire page renders the header
+  compact (`pf-header--compact`, `data-pf-compact="always"` in
+  page.html.twig), and js/palefire.js leaves such a header alone: no
+  growing or shrinking on scroll. Rules that size to the full header
+  (--pf-header-full) fall back to the compact height. Remove the attribute
+  and class to bring the growing header back. Why: about 38px more of the
+  first screen on every page, and no jump on the first scroll.
 - **Sign in plate picture.** At a glance's Sign in plate can show a
   picture: the Landing hero's optional `field_account_image` (Media: Image
   or a plain Image, one value; added in the UI like the Quick Guide
