@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: indexed label rules, Quick Start stops on the four columns.** A
+  hairline with a mono number and name ("01 At a glance", "02 Start your
+  research") now heads At a glance and the Quick Guide, the number in
+  gold (one of the small gold marks) and the name at the second column's
+  edge; the star rule is gone, and At a glance's first row drops its own
+  rule under 01. From 52rem each Quick Start option's name sits above its
+  stops, and the four stops sit in At a glance's four columns with the
+  same gutter. Why: the separators said "new section" three different
+  ways, and the tracks were the last block off the grid.
 - **Hero: search and Quick Guide rule on the four-column grid.** At a
   glance's gutter is now the hero's (--pf-grid-gutter). Where the row is
   four across, the search spans three columns, ending on On view's right

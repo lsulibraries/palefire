@@ -317,6 +317,13 @@
          - From the blog: hero_post, the newest Article in the paragraph's
            "Blog category" (palefire_preprocess_paragraph__landing_hero()),
            its category under it; left out until that is set. #}
+      {# Index rule (.pf-index-rule): a hairline with the section's number
+         and name in the mono label voice, on the hero's four columns. The
+         list keeps its own name, so the rule is decoration. #}
+      <div class="pf-index-rule" aria-hidden="true">
+        <span class="pf-index-rule__num">01</span>
+        <span class="pf-index-rule__label">{{ 'At a glance'|t }}</span>
+      </div>
       <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
         {% if visit.lid %}
           <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
@@ -347,8 +354,8 @@
         {% endif %}
       </ul>
 
-      {# Quick guide: under At a glance, still in the lead panel. A gold
-         rule with a star between two equal lines (decorative), then the
+      {# Quick guide: under At a glance, still in the lead panel. Index rule
+         02 (decorative), the heading and intro, then the
          three request paths, options A, B and C, from the full guide (the
          same include, so an edit there shows here too) and a link to that
          guide, in the sign-in button's style (the sign-in itself is at the
@@ -365,10 +372,10 @@
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
-        <div class="pf-quick-guide__rule" aria-hidden="true">
-          {# Font Awesome Pro star-christmas (duotone, like
-             `fad fa-star-christmas`), inlined like the sign-in icon. #}
-          <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
+        {# The second index rule; the heading below names the region. #}
+        <div class="pf-index-rule" aria-hidden="true">
+          <span class="pf-index-rule__num">02</span>
+          <span class="pf-index-rule__label">{{ 'Start your research'|t }}</span>
         </div>
         {# The TOC label is the heading's own text once the title is set. #}
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>

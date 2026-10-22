@@ -617,7 +617,12 @@
   // The three lines, held before they fill.
   min-height: calc(1rem + .375rem + .6875rem * 1.5 + 2 * .375rem + 1rem * 1.35 + .875rem * 1.4);
   padding: 1rem 0 .375rem;
+  // A hairline between rows; the first row sits under index rule 01.
   border-top: 1px solid #{$pf-hairline};
+
+  &:first-child {
+    border-top: 0;
+  }
 
   > * {
     overflow: hidden;
@@ -646,6 +651,10 @@
 }
 
 @container pf-lead (min-width: 30rem) {
+  .pf-today__item:nth-child(2) {
+    border-top: 0;
+  }
+
   .pf-today {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 1rem;
@@ -653,6 +662,10 @@
 }
 
 @container pf-lead (min-width: 75rem) {
+  .pf-today__item {
+    border-top: 0;
+  }
+
   .pf-today {
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
@@ -806,13 +819,56 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   }
 }
 
+// --- Index rules -------------------------------------------------------------
+// A section marker in the manner of a catalogue: the section's number and
+// name in the mono label voice, sitting on a hairline ("01  At a glance",
+// "02  Start your research"). From 30rem of lead the two sit on the hero's
+// grid (the At a glance columns, --pf-grid-gutter): the number in the first
+// column, the name at the second's edge. The number is one of the gold
+// marks; the name takes the labels' muted tone. Decorative (aria-hidden):
+// the list or heading after each one names it.
+.pf-index-rule {
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding-bottom: .625rem;
+  border-bottom: 1px solid #{$pf-hairline};
+}
+
+.pf-index-rule__num,
+.pf-index-rule__label {
+  @extend %pf-landing-label;
+}
+
+.pf-index-rule__num {
+  color: var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-index-rule__label {
+  color: var(--pf-toc-color);
+}
+
+@container pf-lead (min-width: 30rem) {
+  .pf-index-rule {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--pf-grid-gutter);
+  }
+}
+
+@container pf-lead (min-width: 75rem) {
+  .pf-index-rule {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 // --- Quick guide: under At a glance, in the lead panel ---------------------
-// A rule (two equal hairlines with a small gold duotone star between), 80px of
-// space above and below it from about 1333px wide (3rem on phones, like the
-// sections' padding), then the heading, a line of intro, the request paths
-// from the full guide (includes/guide-request-paths.html.twig, styled in
-// _guide.scss) and "See full guide" in the sign-in button's style.
-// The rule is decoration (aria-hidden); the heading names the region.
+// Index rule 02, then the heading, a line of intro, the request paths from
+// the full guide (includes/guide-request-paths.html.twig, styled in
+// _guide.scss) and "See full guide" in the sign-in button's style. More
+// space above the rule than under it, so it reads as the start of the next
+// part rather than a line between two.
 .pf-quick-guide {
   --pf-quick-space: clamp(3rem, 6vw, 5rem);
   // The swatch's accent (gold on Twilight, a dark accent on the light
@@ -827,41 +883,14 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   padding-bottom: var(--pf-quick-space);
 }
 
-// In the hero the guide follows At a glance closely (its hairline already
-// sets the two apart), so its heading reaches a laptop's first screen: the
-// space around the star rule is about a third of the default.
+// In the hero the guide follows At a glance closely, so its heading
+// reaches a laptop's first screen.
 .pf-landing__lead--hero > .pf-quick-guide {
-  --pf-quick-space: clamp(1.25rem, 2.5vw, 2rem);
+  --pf-quick-space: clamp(2rem, 4vw, 3.5rem);
 }
 
-// The star sits in the grid's middle gutter: the lines stop on the column
-// edges either side (the gutter is the hero's, --pf-grid-gutter, so they
-// meet At a glance's columns above).
-.pf-quick-guide__rule {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--pf-grid-gutter, 2rem) minmax(0, 1fr);
-  justify-items: center;
-  align-items: center;
-  margin-bottom: var(--pf-quick-space);
-  color: var(--pf-quick-gold);
-
-  // The lines are the shared hairline; only the star keeps the gold.
-  &::before,
-  &::after {
-    content: "";
-    justify-self: stretch;
-    border-top: 1px solid #{$pf-hairline};
-  }
-}
-
-.pf-quick-guide__star {
-  display: flex;
-
-  svg {
-    width: auto;
-    height: 12px;
-    fill: currentColor;
-  }
+.pf-quick-guide > .pf-index-rule {
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
 }
 
 .pf-quick-guide__title {
@@ -905,10 +934,10 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   gap: 0;
 }
 
-// Narrow, where each option's name sits above its stops, a hairline over
-// each option and one closing the last keeps A, B and C in rows (they
-// replace the hairlines between options). From 52rem the rows lose their
-// rules: the option's own line carries it (below).
+// Narrow, where the stops run down the page, a hairline over each option
+// and one closing the last keeps A, B and C in rows (they replace the
+// hairlines between options). From 52rem the stops sit on the hero's
+// columns and the rows need no rules (below).
 .pf-quick-guide .pf-paths__or {
   display: none;
 }
@@ -925,9 +954,8 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // Each option is a lettered row label here ("A  See it in person"): a large
 // accent letter and the name in the panel's text type rather than the
 // guide's small mono caption, so A, B and C read as three ways to start and
-// not as captions on their first stops. From 52rem of block width the label
-// sits beside its stops, on the line of discs; narrower, above them. The
-// full guide keeps its captions (_guide.scss).
+// not as captions on their first stops. It sits above its stops at every
+// width. The full guide keeps its captions (_guide.scss).
 .pf-quick-guide .pf-paths__name {
   margin: 0 0 1rem;
   font-family: inherit;
@@ -945,17 +973,13 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 }
 
 @container pf-paths (min-width: 52rem) {
-  // Each option is one track: "A  See it in person ——(1)——(2)——(3)——(4)".
-  // The line leaves the name and runs into the first disc, so the name
-  // starts the route instead of floating beside it, and no rules are
-  // needed between the rows: the space between them is enough. The names
-  // share one column, room for the longest on one line plus a run of line;
-  // the stops sit at the start of their quarters, words flush left under
-  // the disc.
+  // On the hero's grid: each option's name over its stops, and the four
+  // stops in the four columns of At a glance above (the same gutter,
+  // --pf-grid-gutter), each disc and its words at its column's edge. The
+  // letter is a disc wide, so it stands over the first disc. The line
+  // runs disc to disc across the gutters. No rules between the options:
+  // the space between them is enough.
   .pf-quick-guide .pf-paths__line {
-    display: grid;
-    grid-template-columns: 17.5rem minmax(0, 1fr);
-    align-items: start;
     margin-top: clamp(2rem, 4vw, 3rem);
     padding-block: 0;
     border: 0;
@@ -970,21 +994,11 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   }
 
   .pf-quick-guide .pf-paths__name {
-    min-height: var(--pf-paths-dot);
-    margin: 0;
-    white-space: nowrap;
+    margin: 0 0 1rem;
+  }
 
-    &::after {
-      content: "";
-      flex: 1 1 auto;
-      min-width: 1.5rem;
-      border-top: 1px solid var(--pf-guide-rule);
-      transform-origin: left;
-    }
-
-    [dir="rtl"] &::after {
-      transform-origin: right;
-    }
+  .pf-quick-guide .pf-paths__stops {
+    gap: 0 var(--pf-grid-gutter, .75rem);
   }
 
   .pf-quick-guide .pf-paths__stop {
@@ -993,18 +1007,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 
     &:not(:last-child)::before {
       inset-inline-start: calc(var(--pf-paths-dot) / 2);
-    }
-  }
-}
-
-// The name's run of line draws out as the row scrolls in, ahead of the
-// stops' lines (_guide.scss).
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .pf-quick-guide .pf-paths__name::after {
-      animation: pf-paths-line linear both;
-      animation-timeline: view();
-      animation-range: entry 10% entry 50%;
+      width: calc(100% + var(--pf-grid-gutter, .75rem));
     }
   }
 }
@@ -1031,9 +1034,8 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 }
 
 @media (forced-colors: active) {
-  .pf-quick-guide__rule::before,
-  .pf-quick-guide__rule::after {
-    border-top-color: CanvasText;
+  .pf-index-rule {
+    border-bottom-color: CanvasText;
   }
 }
 
@@ -1505,7 +1507,7 @@ html.pf-a11y-motion {
 //   Quick Guide, On view and the sections after the landing) the same size,
 //   weight and tracking, in the text colour. The swatch's heading gold
 //   (html[data-pf-theme] .pf-main h1-h6, _reading-themes.scss) is kept for
-//   the page title, the Search button and small marks (the star, active
+//   the page title, the Search button and small marks (the index numbers, active
 //   states), so it still means something. Each selector outranks that rule.
 // - One left edge: On view and the map's Visit panel lose their boxes
 //   (the video no longer runs behind them, so they need no glass), and
