@@ -228,8 +228,13 @@ On the paragraphs:
 - **Bar:** breadcrumb, "Sign in" (Aeon, new tab; the icon alone on phones)
   and the background-video button, sticky under the header for the whole
   landing.
-- **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title and
-  intro (side by side from xl; keep the intro to a sentence or two), a 4rem
+- **Cover** (`.pf-landing--cover`, `.pf-landing__lead--hero`): the video is
+  a band behind the title, intro and search, washed into the page colour
+  like an exhibition cover (solid at its foot, from the left under the
+  text), fading into the wash as it scrolls up (scroll-driven; off with
+  reduced motion). No glass panel and no snap: the page scrolls on through
+  the map in one flow. Title with the intro under it (keep the intro to a
+  sentence or two), a 4rem
   search field with an accent-filled Search button and suggested searches
   under it (the optional Landing hero field `field_search_suggestions`, Text
   (plain), any number of values; without it, built-in ones), then At a
@@ -238,7 +243,7 @@ On the paragraphs:
   calendar; "No upcoming events" when there are none), the exhibitions on
   view, and the latest blog post. Every cell is a label, one value line and
   one muted line; four across when the panel is 64rem wide, two by two from
-  30rem, stacked below. The Quick Guide sits at its foot.
+  30rem, stacked below. The Quick Guide follows.
 - **Quick Guide:** the request paths from
   `includes/guide-request-paths.html.twig`, shared with the full guide: three
   options A, B, C, each a line of stops. Edit the stops there and both pages
@@ -249,7 +254,7 @@ On the paragraphs:
 - **On view** (`.pf-landing__onview`): under the map, so the galleries come
   before what's in them. The tile accordion (`includes/landing-exhibits.html.twig`;
   `js/exhibit-rotate.js` crossfades multi-image tiles with a pause button) on
-  the lead's glass.
+  the Visit panel's glass.
 
 ### Background video
 
@@ -257,18 +262,19 @@ On the paragraphs:
 crossfade so there is never black between clips (`--pf-landing-fade` and
 `FADE_MS`, keep equal). The button pauses/plays both, shows a progress line and
 pauses the clip off screen. The video layer is fixed to the viewport and
-clipped at the section's foot. Reduced motion and Settings > Pause background
+clipped at the section's foot; on the hero it is the cover band instead
+(absolute, watched itself for off screen). Reduced motion and Settings > Pause background
 videos start it paused.
 
 ### Lead → map
+
+Not on the hero (its cover scrolls on in one flow). Other landings with a
+lead and a map:
 
 - `js/landing-snap.js`: from md, a wheel/key step down from the lead's end
   glides to the map and back up. A lead taller than the window scrolls freely
   until its end is halfway up the window. Touch and phones are left to the
   browser.
-- The map holds still while the lead slides off it (`position: sticky` with
-  `--pf-map-reveal-hold`, `_landing-hero.scss`), where
-  `animation-timeline: view()` is supported, from md, without reduced motion.
 
 ### "Light, dark at the map"
 
@@ -851,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: the video becomes a washed cover; no curtain, no snap.** The
+  background video moves from behind the whole landing into a band behind
+  the title, intro and search, washed into the page colour as on exhibition
+  title pages, and fades into the wash as it scrolls up (scroll-driven,
+  off with reduced motion). The glass panel, the full-screen lead, the snap
+  to the map (`landing-snap.js` isn't attached on the hero) and the
+  curtain reveal are gone from the hero, so the page scrolls on through
+  the map in one flow; the curtain's and full-screen panel's CSS is
+  removed. The clip plays only while the band is on screen. Other landings
+  keep their lead, video and snap. Why: the curtain split the homepage
+  into two pages.
 - **Hero: Sign in moves to the bar; the Quick Guide moves up.** "Sign in"
   (icon after the word, opens Aeon in a new tab) sits at the end of the
   sticky breadcrumb bar, the icon alone on phones; it leaves the Quick

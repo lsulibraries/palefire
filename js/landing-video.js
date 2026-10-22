@@ -185,14 +185,18 @@
         first.classList.add('is-current');
         first.src = sources[0];
         preload();
-        // Watch the landing box, not the media layer: the layer is
-        // position: fixed and always covers the viewport, so it never
-        // reported leaving it and the clip kept playing off screen.
+        // Watch the landing box, not the media layer, where the layer is
+        // position: fixed: it always covers the viewport, so it never
+        // reported leaving it and the clip kept playing off screen. In the
+        // hero's cover band (.pf-landing--cover) the layer scrolls with the
+        // page, so it is watched itself: the clip stops once the band has
+        // gone, not when the whole landing has.
+        const cover = wrap.closest('.pf-landing--cover');
         new IntersectionObserver(([e]) => {
           inView = e.isIntersecting;
           if (inView) play();
           else pauseAll();
-        }, { threshold: 0.25 }).observe(landing);
+        }, { threshold: cover ? 0 : 0.25 }).observe(cover ? wrap : landing);
       });
     },
   };

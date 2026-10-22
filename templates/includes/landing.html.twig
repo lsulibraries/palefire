@@ -73,9 +73,14 @@
 {# Next event (landing hero only), filled in by hero-event.js from the
    events carousel's feed; removed when the page has no carousel or no
    event. In the lead panel, or on its own glass when there is none. #}
-{# Lead panel and map: the lead fills the first screen and the page snaps
-   between the two (md and up, _landing-swiss.scss, landing-snap.js). #}
-{% set lead_screen = show_lead and landing_map %}
+{# Hero with its lead (cover): the video is a band at the top of the lead,
+   behind the title, intro and search, washed into the page colour like an exhibition
+   cover, and the page scrolls on through the map in one flow (no glass
+   panel, no snap). Other landings with a lead and a map: the lead fills
+   the first screen and the page snaps between the two (md and up,
+   _landing-swiss.scss, landing-snap.js). #}
+{% set cover = hero and show_lead %}
+{% set lead_screen = show_lead and landing_map and not cover %}
 {% if lead_screen %}
   {{ attach_library('palefire/landing-snap') }}
 {% endif %}
@@ -87,15 +92,20 @@
     </div>
   {% endset %}
 {% endif %}
-<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen') }} data-pf-landing>
+<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', cover ? 'pf-landing--cover', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen') }} data-pf-landing>
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}
+    {# The media layer: fixed behind the whole landing, or (cover) inside
+       the lead's cover band, printed there below. #}
+    {% set media %}
     <div class="pf-landing__media" data-landing-video data-sources="{{ bg_videos|json_encode }}">
       <video class="pf-landing__bg-video" muted playsinline preload="metadata"
              aria-hidden="true" tabindex="-1"
              {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
     </div>
+    {% endset %}
+    {% if not cover %}{{ media }}{% endif %}
     {# Same look as the TOC hide/show button: icon square + a gold bar that
        fills as the current clip plays; the label slides out on
        hover/focus and is always read by screen readers. landing-video.js
@@ -182,6 +192,9 @@
        The title is the TOC's "Landing" sub-link under Home, with the
        Quick Guide's heading the second (modular-toc.js). The headings
        themselves keep their own text and level. #}
+    {# Cover: the video's layer, laid across the title, intro and search
+       (_landing-features.scss, "Cover"). #}
+    {% if cover %}{{ media }}{% endif %}
     {% if hero %}<div class="pf-landing__top">{% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>

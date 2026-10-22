@@ -6,15 +6,14 @@
 // Special Collections search) with a filled Search button; At a glance
 // (.pf-today: today's hours, the next event, what's on view, the latest
 // blog post); and the Quick guide, options A, B and C as lines of stops,
-// with the sign-in and full guide links.
+// with the full guide link ("Sign in" is at the end of the bar).
 // Under the map, On view: the exhibitions as a tile accordion. The tile
 // under the pointer or keyboard focus widens, shows more of its picture
 // and a line more about it. A tile with several images crossfades through
 // them (exhibit-rotate.js), with a pause button.
-// From md (.pf-landing--lead-screen) the panel is full screen: the whole
-// content column, from the bar to the bottom of the window. Sized so its
-// content fits a laptop's first screen: 1333x767 (a 1.5x display) and up,
-// measured on /v2/special.
+// The video is a band at the top of the lead, washed into the page colour
+// like an exhibition cover (.pf-landing--cover, "Cover" below); the page
+// scrolls on through the map in one flow.
 // Imported after _landing-hero.scss, so these rules follow the ones they
 // adjust.
 // =========================================================================
@@ -26,7 +25,7 @@
 // The section padding is one variable, so the lead's height
 // (_landing-swiss.scss) and the video's reach (_landing.scss) follow it; the
 // top is only the inner box's padding.
-.pf-sections > .pf-section:first-child:has(.pf-landing--lead-screen .pf-landing__lead--hero) {
+.pf-sections > .pf-section:first-child:has(.pf-landing--cover) {
   --pf-section-pad-block: clamp(3rem, 6vw, 5rem);
 
   > .pf-section__inner {
@@ -212,77 +211,188 @@
   pointer-events: auto;
 }
 
-// --- Full-screen panel (md and up, .pf-landing--lead-screen) --------------
-// The lead panel runs across the whole content column (no side margins, no
-// 1280px cap), straight under the bar and down to the bottom of the window,
-// so the map starts at the fold. Its content keeps to the column above.
-// Glass with a hairline at its foot; no side or top border, which would sit
-// on the screen's edges.
-@include media-breakpoint-up(md) {
-  .pf-landing--hero.pf-landing--lead-screen {
-    --pf-landing-bar-gap: 0px;
+// --- Cover: the video as a washed band (hero, .pf-landing--cover) ---------
+// As on an exhibition's title page: the video fills a band at the top of
+// the lead, behind the title, intro and search, and a wash of the page
+// colour does the work the glass panel did. Solid at the band's foot, so
+// At a glance and the Quick Guide start on the plain page with no edge;
+// from the left, under the text, so it keeps the swatch's contrast on any
+// frame; and a light one under the bar. The page then scrolls on through
+// the map and On view in one flow: no full-screen panel, no snap. The lead
+// runs the content column's full width (the hero's inset) and starts under
+// the bar, so the video reaches up behind it.
+// The lead is a one-column grid: the media layer (its first child,
+// includes/landing.html.twig) lies across its first two rows, the title
+// and intro and the search, and reaches out to the column's edges, up
+// under the bar and down past the search (--pf-cover-top, --pf-cover-foot).
+// The lead has no side padding, so the layer spans the content column
+// edge to edge; the other rows keep to the column with side margins
+// (--pf-cover-gutter: the hero's inset, its percentage of the lead's
+// full width, so they line up with the map below). The landing's own
+// layer is fixed behind everything; this one scrolls with the page, and
+// landing-video.js watches it, so the clip only plays while it is on
+// screen.
+.pf-landing--cover {
+  --pf-landing-bar-gap: 0px;
+}
+
+.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+  --pf-cover-space: clamp(3rem, 9vw, 7.5rem); // above the title
+  --pf-cover-top: calc(var(--pf-landing-bar-h) + var(--pf-cover-space));
+  --pf-cover-foot: clamp(2.5rem, 5vw, 4rem); // under the search, the wash's solid foot
+  --pf-cover-gutter: max(var(--pf-hero-gutter), (100% - 1280px) / 2);
+  --pf-cover-bg: var(--pf-g-bg, var(--bs-body-bg));
+  // The landing's washes (_landing, _visit, _building-map) are off here:
+  // the band has its own.
+  --pf-media-wash: transparent;
+  --pf-media-wash-map: transparent;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: auto;
+  max-width: none;
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  margin-top: calc(-1 * var(--pf-landing-bar-h));
+  padding: var(--pf-cover-top) 0 clamp(1rem, 2vw, 1.5rem);
+  border: 0;
+  border-radius: 0;
+  // No glass: !important over the reading colours' lead tint
+  // (html[data-pf-theme] .pf-landing--hero .pf-landing__lead,
+  // _reading-themes.scss), which would darken the page under the band and
+  // show a seam at the wash's foot. Reduce transparency keeps its solid
+  // panel (its own !important rule there is more specific).
+  background: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  @include media-breakpoint-down(md) {
+    --pf-cover-gutter: var(--pf-section-pad-inline, 1rem);
   }
 
-  .pf-landing--lead-screen > .pf-landing__lead.pf-landing__lead--hero {
-    width: auto;
-    max-width: none;
-    // Under the bar (below where it runs up under it), down to the window's foot.
-    min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
-    min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-landing-bar-h));
-    margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
-    padding-inline: var(--pf-hero-inset);
-    // Space above the title, and the same under the bottom row, so the
-    // panel has an even margin top and bottom: about halfway between the
-    // panel's own padding and the side gutter (53px at 1333px; the gutter,
-    // tried first, was 80px, too much).
-    padding-block: clamp(1.5rem, 4vw, 3.5rem);
-    border-width: 0 0 1px;
+  > * {
+    grid-column: 1;
+  }
+
+  > .pf-landing__top {
+    grid-row: 1;
+  }
+
+  > .pf-landing__form {
+    grid-row: 2;
+    margin-bottom: var(--pf-cover-foot);
+  }
+
+  > .pf-landing__media {
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    grid-row: 1 / 3;
+    margin: calc(-1 * var(--pf-cover-top)) 0 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  // Over the media layer, within the content column.
+  > :not(.pf-landing__media) {
+    position: relative;
+    z-index: 1;
+    margin-inline: var(--pf-cover-gutter);
   }
 }
 
-// One glass surface for the bar and the panel. Each had its own blur, and
-// over the playing video Chrome now and then skipped one of them for a
-// frame or a repaint (hover, cursor moves): a band, about the blur's size,
-// flickered where the two met. The panel starts under the bar (pulled up by
-// its height, the same added to its top padding), and while the panel is
-// under it the bar keeps only a tint: the panel's glass plus 70% of the
-// bar's own colour comes to about the bar's old shade.
-// Once the panel's foot has scrolled up past the bar (over the map), the
-// bar has no glass under it, so it takes its own: the bar's colour and blur
-// under the same tint, the same shade as before. A scroll-driven switch on
-// the panel's view timeline, inset to the bar's bottom edge (no JS). Where
-// that isn't supported the bar keeps its own glass and the panel starts
-// under it, as below md.
-@supports (animation-timeline: view()) and (timeline-scope: none) {
-  @include media-breakpoint-up(md) {
-    .pf-landing--lead-screen:has(> .pf-landing__lead.pf-landing__lead--hero) {
-      timeline-scope: --pf-lead;
+.pf-landing--cover .pf-landing__lead > .pf-landing__media {
+  .pf-landing__bg-video {
+    object-position: 62% 40%; // the building stays in frame on wide screens
+  }
 
-      > .pf-landing__bar {
-        background-color: transparent;
-        background-image: linear-gradient(color-mix(in srgb, var(--pf-sidebar-bg) 70%, transparent) 0 0);
-        animation: pf-landing-bar-glass linear forwards;
-        animation-timeline: --pf-lead;
-        animation-range: cover calc(100% - 1px) cover 100%;
-      }
+  &::after {
+    background-image:
+      linear-gradient(to top,
+        var(--pf-cover-bg) 0%,
+        var(--pf-cover-bg) 6%,
+        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 18%,
+        color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 34%,
+        color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 52%,
+        color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 68%,
+        transparent 82%),
+      linear-gradient(to bottom,
+        color-mix(in srgb, var(--pf-cover-bg) 65%, transparent) 0%,
+        transparent 18%),
+      linear-gradient(to right,
+        color-mix(in srgb, var(--pf-cover-bg) 94%, transparent) 0%,
+        color-mix(in srgb, var(--pf-cover-bg) 84%, transparent) 26%,
+        color-mix(in srgb, var(--pf-cover-bg) 58%, transparent) 46%,
+        color-mix(in srgb, var(--pf-cover-bg) 22%, transparent) 66%,
+        transparent 82%);
+  }
+}
 
-      > .pf-landing__lead {
-        min-height: calc(100vh - var(--pf-header-full, var(--pf-header-h)));
-        min-height: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
-        margin-top: calc(-1 * var(--pf-landing-bar-h));
-        padding-top: calc(var(--pf-landing-bar-h) + clamp(1.5rem, 4vw, 3.5rem));
-        view-timeline: --pf-lead block;
-        view-timeline-inset: calc(var(--pf-header-h) + var(--pf-landing-bar-h)) 0px;
-      }
+// Phones and tablets: the text runs the band's full width, so an even
+// wash stands in for the one from the left.
+@include media-breakpoint-down(lg) {
+  .pf-landing--cover .pf-landing__lead > .pf-landing__media::after {
+    background-image:
+      linear-gradient(to top,
+        var(--pf-cover-bg) 0%,
+        var(--pf-cover-bg) 6%,
+        color-mix(in srgb, var(--pf-cover-bg) 80%, transparent) 30%,
+        color-mix(in srgb, var(--pf-cover-bg) 66%, transparent) 60%,
+        color-mix(in srgb, var(--pf-cover-bg) 72%, transparent) 100%);
+  }
+}
+
+// On the video, the title larger and the intro under it (side by side put
+// the intro on the unwashed side); the search on a firmer fill, with no
+// rule above it, up to 58rem wide.
+.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+  > .pf-landing__top {
+    display: block;
+    max-width: 44rem;
+
+    > .pf-landing__title {
+      margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
+      font-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem);
+      line-height: .98;
+    }
+
+    > .pf-landing__intro {
+      max-width: 46ch;
+      justify-self: start;
+      font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+    }
+  }
+
+  > .pf-landing__form {
+    max-width: 58rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .pf-landing__field {
+    background-color: color-mix(in srgb, var(--pf-cover-bg) 80%, transparent);
+  }
+
+  .pf-landing__suggestion {
+    background-color: color-mix(in srgb, var(--pf-cover-bg) 45%, transparent);
+  }
+}
+
+// Fade on scroll: the video gives way to the wash as the band scrolls up
+// under the header (scroll-driven, no script), as an exhibition cover
+// lifts away. Off with reduced motion and the Settings drawer's switch,
+// where the clip starts paused (landing-video.js) and simply scrolls.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) .pf-landing--cover .pf-landing__lead > .pf-landing__media {
+      animation: pf-cover-fade linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
     }
   }
 }
 
-@keyframes pf-landing-bar-glass {
+@keyframes pf-cover-fade {
   to {
-    background-color: var(--pf-sidebar-bg);
-    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-    backdrop-filter: var(--pf-glass-filter, blur(26px));
+    opacity: 0;
   }
 }
 
@@ -753,13 +863,6 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // space around the star rule is about a third of the default.
 .pf-landing__lead--hero > .pf-quick-guide {
   --pf-quick-space: clamp(1.25rem, 2.5vw, 2rem);
-}
-
-// Not pushed to the full-screen panel's foot (the lead-screen rule's
-// margin-top: auto, _landing-swiss.scss): on a tall screen the spare
-// height goes under the guide, not between it and At a glance.
-.pf-landing--lead-screen > .pf-landing__lead.pf-landing__lead--hero > .pf-quick-guide {
-  margin-top: 0;
 }
 
 .pf-quick-guide__rule {
