@@ -1540,7 +1540,8 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
  * before the field existed show it too.
  * opener: "full" (default) or "compact".
  * wall: the wall's tiles (_palefire_exhibit_wall()) when Display is "wall",
- * else NULL.
+ * else NULL. A wall gallery has no lead and a compact opening: the wall
+ * opens it, under a header of title and intro (_exhibition.scss).
  * entries, entries_more: the full opening's links to the gallery's entries,
  * ['anchor', 'title'] each, the first six and the rest (none on a wall).
  * dom_id: base for the caption's and the text's ids (the hero's
@@ -1574,6 +1575,13 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   // Display: "story" (default, also when empty) or "wall".
   $display = $paragraph->hasField('field_exhibit_display') ? (string) $paragraph->get('field_exhibit_display')->value : '';
   $variables['wall'] = $display === 'wall' ? _palefire_exhibit_wall($paragraph, $cache) : NULL;
+  if ($variables['wall']) {
+    // The wall is the gallery's opening: no lead, pan or band, whatever the
+    // Opening says (kept in the field, for a return to "story").
+    $variables['lead'] = NULL;
+    $variables['lead_caption'] = NULL;
+    $variables['opener'] = 'compact';
+  }
 
   // The full opening's "In this gallery" links: the gallery's entries, in
   // order, with the ids their headings get (paragraph--exhibit-entry). The

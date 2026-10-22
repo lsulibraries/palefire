@@ -483,6 +483,7 @@
     addPager(page);
     // Measured now that the gallery is shown (hidden ones have no size).
     page.querySelectorAll('[data-pf-exhibit-bio]').forEach(initBio);
+    foldIntro(page);
   }
 
   function onClick(event) {
@@ -640,6 +641,22 @@
       }
       page.querySelector('.pf-gallery').classList.add('is-walled');
       wall.hidden = false;
+      // The gallery's own text (not its entries) as one block: the wall
+      // text beside the title (_exhibition.scss), folded once shown.
+      const body = wall.parentElement;
+      const blocks = Array.from(body.children).filter((el) => el !== wall && !el.matches('.pf-exhibit-entry, .pf-exhibit-body-title'));
+      if (blocks.length) {
+        // .pf-exhibit-wall__text holds the intro and, once folded, its
+        // "Read more" button.
+        const text = document.createElement('div');
+        text.className = 'pf-exhibit-wall__text';
+        const intro = document.createElement('div');
+        intro.className = 'pf-exhibit-wall__intro';
+        intro.id = page.id + '-intro';
+        blocks[0].before(text);
+        intro.append(...blocks);
+        text.append(intro);
+      }
       // Still listed in the TOC, but never "current" by scroll position:
       // the headings are folded away (js/modular-toc.js).
       page.querySelectorAll('.pf-exhibit-entry__title').forEach((h) => h.setAttribute('data-toc-passive', ''));
@@ -649,6 +666,50 @@
         buttons.forEach((button) => button.addEventListener('click', () => sortWall(wall, button.dataset.pfSort, true)));
       }
     });
+  }
+
+  // A wall's intro longer than about four lines folds to them, with "Read
+  // more", so the wall starts on the first screen. Measured once shown.
+  function foldIntro(page) {
+    const intro = page.querySelector('.pf-exhibit-wall__intro');
+    if (!intro || intro.dataset.pfFoldReady) {
+      return;
+    }
+    intro.dataset.pfFoldReady = '1';
+    const text = intro.querySelector('.pf-guide-prose') || intro;
+    const limit = (parseFloat(getComputedStyle(text).lineHeight) || 26) * 4;
+    if (intro.scrollHeight < limit * 1.6) {
+      return;
+    }
+    intro.style.setProperty('--pf-intro-clip', Math.round(limit) + 'px');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-exhibit-bio__toggle pf-exhibit-wall__more';
+    button.setAttribute('aria-controls', intro.id);
+    const sync = (open) => {
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      button.textContent = open ? Drupal.t('Show less') : Drupal.t('Read more');
+      intro.classList.toggle('is-folded', !open);
+    };
+    sync(false);
+    button.addEventListener('click', () => {
+      const open = intro.classList.contains('is-folded');
+      intro.style.maxHeight = intro.getBoundingClientRect().height + 'px';
+      sync(open);
+      if (reduceMotion()) {
+        intro.style.maxHeight = '';
+        return;
+      }
+      requestAnimationFrame(() => {
+        intro.style.maxHeight = (open ? intro.scrollHeight : limit) + 'px';
+        const end = () => {
+          intro.style.maxHeight = '';
+          intro.removeEventListener('transitionend', end);
+        };
+        intro.addEventListener('transitionend', end);
+      });
+    });
+    intro.after(button);
   }
 
   function sortWall(wall, key, animate) {

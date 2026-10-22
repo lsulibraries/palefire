@@ -573,7 +573,12 @@ from the media item. A figure with no image shows only to editors.
   (scroll-driven animations). The entries stay in the page, folded away, and
   are the object view's text; their headings stay in the TOC
   (`data-toc-passive`). Without JS the wall stays `[hidden]` and the gallery
-  reads as a story.
+  reads as a story. A wall has no opening: its lead, pan and band are left
+  out whatever the Opening says (the fields are kept, for a return to
+  Story). From lg the title and the gallery's own text sit side by side as
+  wall text, the wall full width below; text longer than four lines folds
+  with "Read more" / "Show less" (`.pf-exhibit-wall__text`), so the first
+  row of plates is on the first screen.
 - **Object view** (a wall's tile, a link to its entry from the TOC or the
   text, the address `#anchor`, Back): a full-screen `<dialog>` in the page's
   reading colours. The image grows out of its tile (`view-transition-name:
@@ -781,6 +786,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: wall galleries open on the wall.** No full-screen opening
+  or pan on a wall gallery; from lg the title and the intro sit side by side,
+  the intro folded to four lines with "Read more". Why: scrolling past a
+  pinned image and several paragraphs before the plates was the wrong way
+  round for a gallery view; the first row of plates now shows on the first
+  screen at 1440 × 900 and 1024 × 768.
+- **Exhibitions: object view fits tall images.** The image is centred in
+  its frame by absolute placement, so its max height follows the frame and
+  a portrait plate shows whole instead of filling the width and being
+  cropped. The side panel narrows to 20rem (at most 30rem or 32vw) and the
+  stage's padding drops a little, so at 1024px the image has 568px instead
+  of 384px. Why: the Prothonotary Warbler and other upright plates showed
+  only their top half.
 - **Exhibitions: wall galleries.** A gallery's new Display option (re-run
   `palefire_exhibit_setup.php`) shows its entries as a wall of whole images
   that open full screen in an object view, with sorting, a drawing-to-proof

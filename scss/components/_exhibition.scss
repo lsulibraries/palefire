@@ -1837,6 +1837,70 @@ html.pf-exhibit-paged {
   }
 }
 
+// Wall text: from lg the title and the intro side by side, as a label on a
+// gallery wall, with the wall and the pager full width below, so the first
+// row of plates is on the first screen. The intro folds to about four lines
+// (js/exhibition.js) with "Read more".
+@include media-breakpoint-up(lg) {
+  // As specific as the flex column above (galleries' default), to replace it.
+  html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled) {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+
+    > .pf-section__title {
+      grid-column: 1;
+      margin-bottom: 0;
+    }
+
+    > .pf-exhibit-pager {
+      grid-column: 1 / -1;
+    }
+
+    > .pf-gallery > .pf-gallery__body {
+      display: contents;
+    }
+
+    .pf-exhibit-wall__text {
+      grid-column: 2;
+      grid-row: 1;
+      padding-top: 1.85rem;
+    }
+
+    .pf-exhibit-wall {
+      grid-column: 1 / -1;
+      margin-top: clamp(2rem, 3vw, 3rem);
+    }
+  }
+}
+
+.pf-exhibit-wall__text {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.pf-exhibit-wall__intro {
+  overflow: hidden;
+
+  @include pf-exhibit-motion {
+    transition: max-height .5s $pf-exhibit-ease;
+  }
+
+  &.is-folded {
+    max-height: var(--pf-intro-clip, 7rem);
+    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
+    mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  }
+
+  > :last-child,
+  .pf-guide-prose > :last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
 .pf-exhibit-wall {
   --pf-wall-row: 8.5rem;
   display: grid;
@@ -2052,7 +2116,7 @@ html.pf-object-open {
 
     @include media-breakpoint-up(lg) {
       grid-template-rows: none;
-      grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem);
+      grid-template-columns: minmax(0, 1fr) minmax(20rem, min(30rem, 32vw));
     }
   }
 
@@ -2069,7 +2133,7 @@ html.pf-object-open {
   padding: max(3.25rem, env(safe-area-inset-top, 0px)) 3.25rem 1.25rem;
 
   @include media-breakpoint-up(lg) {
-    padding: 4rem 5rem;
+    padding: 3.5rem 4rem;
   }
 }
 
@@ -2092,11 +2156,17 @@ html.pf-object-open {
   view-transition-name: pf-object;
 }
 
+// Centred in the frame at its own proportions: absolutely placed, so its
+// max sizes resolve against the frame's real size (a percentage height in
+// the frame's grid row would not, and a tall plate would overflow).
 .pf-exhibit-object__img {
+  position: absolute;
+  inset: 0;
   max-width: 100%;
   max-height: 100%;
   width: auto;
   height: auto;
+  margin: auto;
   object-fit: contain;
   cursor: zoom-in;
   box-shadow: 0 2rem 4rem -2rem rgba(0, 0, 0, 0.5);
