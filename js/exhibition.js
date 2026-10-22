@@ -602,6 +602,7 @@
     document.addEventListener('click', onClick, true);
     window.addEventListener('popstate', onPopState);
     window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('scroll', queueCover, { passive: true });
     // Settings > Reduce motion turns the pin off and on.
     document.addEventListener('palefire:a11ychange', onResize);
   }
@@ -738,6 +739,10 @@
     if (!intro) {
       return;
     }
+    if (page.querySelector('.pf-gallery--cover')) {
+      measureCover(page, intro);
+      return;
+    }
     if (intro.dataset.pfFoldReady) {
       // A resize: a new fold for a folded intro.
       if (intro.classList.contains('is-folded')) {
@@ -779,6 +784,44 @@
       });
     });
     intro.after(button);
+  }
+
+  // A cover's text is never folded: all of it is there, the lines at the
+  // first screen's foot faded (--pf-fold, in the intro's own coordinates)
+  // until scrolling brings them up to read (--pf-read, 0 to 1 over 40% of a
+  // screen; below lg it also veils the image under the text).
+  function measureCover(page, intro) {
+    const hero = page.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
+    const frame = hero && hero.querySelector('.pf-exhibit-wall-hero__frame');
+    if (!frame) {
+      return;
+    }
+    const fold = frame.getBoundingClientRect().height - (intro.getBoundingClientRect().top - hero.getBoundingClientRect().top);
+    intro.style.setProperty('--pf-fold', Math.round(fold) + 'px');
+    intro.classList.toggle('is-long', intro.scrollHeight > fold);
+    readCover();
+  }
+
+  function readCover() {
+    const hero = state.current && state.current.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
+    if (!hero) {
+      return;
+    }
+    const moved = hero.querySelector('.pf-exhibit-wall-hero__frame').getBoundingClientRect().top - hero.getBoundingClientRect().top;
+    const read = Math.min(Math.max(moved / (window.innerHeight * 0.4), 0), 1);
+    hero.closest('.pf-section__inner').style.setProperty('--pf-read', read.toFixed(3));
+  }
+
+  let coverQueued = false;
+  function queueCover() {
+    if (coverQueued) {
+      return;
+    }
+    coverQueued = true;
+    requestAnimationFrame(() => {
+      coverQueued = false;
+      readCover();
+    });
   }
 
   function sortWall(wall, key, animate) {

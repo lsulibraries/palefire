@@ -397,7 +397,7 @@ foreach ($shared as $name => $values) {
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead', $media_ref('Lead image (optional)', 'Shown full width at the top of the gallery with a curtain reveal, then panned from top to bottom as the page scrolls. Decorative: it is not announced, so use an image whose content the gallery doesn\'t depend on.'));
 // Added 2026-10-21. Re-running the script adds it to an existing site.
 // Added 2026-10-21. Empty (galleries made before it) counts as "full".
-$opener_description = 'Cover: the gallery opens on its lead image, which stays put while the number, title, links to its entries and its opening text sit on it (longer text folds with "Read more"); the rest of the gallery follows. Full screen, then pan: the same opening without the text, then the whole image at full width before the text. Compact: a shorter band above the title, for text-heavy galleries. Without a lead image, Cover and Full screen look the same.';
+$opener_description = 'Cover: the gallery opens on its lead image, which stays put while the number, title, links to its entries and its opening text sit on it (all of it: the lines at the foot of the screen fade in as visitors scroll); the rest of the gallery follows. Full screen, then pan: the same opening without the text, then the whole image at full width before the text. Compact: a shorter band above the title, for text-heavy galleries. Without a lead image, Cover and Full screen look the same.';
 $field('paragraph', 'exhibit_page', 'field_exhibit_opener', [
   'label' => 'Opening',
   'description' => $opener_description,

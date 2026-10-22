@@ -520,9 +520,13 @@ from the media item. A figure with no image shows only to editors.
   lead): the lead full screen and fixed, as on a wall, with the number,
   heading, "In this gallery" links and the gallery's opening text (its
   untitled text blocks before anything else, moved there by
-  `initCovers()`) over its lower left on the wash; longer text folds with
-  "Read more" and scrolls over the image when opened. The rest of the
-  gallery follows below. Without the script the text stays in the body.
+  `initCovers()`) over its lower left on the wash. The text is never
+  folded: the title starts low on the first screen (`--pf-cover-top`), the
+  lines at that screen's foot are faded, and the fade lifts over the first
+  40% of a screen of scrolling (`measureCover()`, `--pf-fold`,
+  `--pf-read`); below lg a veil comes in under the text as it does. The
+  rest of the gallery follows below. Without the script the text stays in
+  the body.
 - Full screen, then pan (Opening "Full screen, then pan", stored as `pan`;
   also every gallery without a lead): from lg the text sits on the image's washed left
   half, as on the title page; below lg the image is on its own at the top,
@@ -817,6 +821,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a cover's text without "Read more".** A story cover now
+  shows all its opening text; the title starts low on the first screen,
+  the lines at its foot are faded, and the fade lifts as you scroll (with
+  a veil under the text on phones). Walls keep "Read more". Why: opening
+  the folded text made it jump up the screen.
 - **Exhibitions: story galleries open on a fixed cover.** A story gallery
   with a lead now opens like a wall: the image full screen and fixed, with
   the title, the "In this gallery" links and the opening text on its wash

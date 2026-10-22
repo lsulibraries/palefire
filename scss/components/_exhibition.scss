@@ -1952,6 +1952,24 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   display: contents;
 }
 
+// A cover's text is never folded (js/exhibition.js measureCover()): row 1
+// keeps the title low on the first screen however long the text, so the
+// image shows above it; the lines at the screen's foot are faded until
+// scrolling brings them up (--pf-read).
+#{$pf-covered} {
+  --pf-cover-top: 30svh;
+
+  @include media-breakpoint-up(lg) {
+    --pf-cover-top: 22svh;
+  }
+}
+
+.pf-gallery--cover .pf-exhibit-wall__intro.is-long {
+  --pf-read-a: calc(0.06 + 0.94 * var(--pf-read, 0));
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--pf-fold, 100%) - 9rem), rgb(0 0 0 / var(--pf-read-a)) var(--pf-fold, 100%));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--pf-fold, 100%) - 9rem), rgb(0 0 0 / var(--pf-read-a)) var(--pf-fold, 100%));
+}
+
 #{$pf-covered} > .pf-gallery > .pf-gallery__body {
   grid-column: 1;
   grid-row: 5;
@@ -1966,7 +1984,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 #{$pf-covered} {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 1fr auto auto auto auto auto;
+  grid-template-rows: minmax(var(--pf-cover-top, 0px), 1fr) auto auto auto auto auto;
   align-items: end;
 
   .pf-exhibit-wall-hero {
@@ -2088,6 +2106,12 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     @include media-breakpoint-down(lg) {
       .pf-section__inner:has(.pf-exhibit-wall__more[aria-expanded="true"]) & {
         opacity: 0.82;
+      }
+
+      // A cover's long text: the veil comes in as the text is scrolled up.
+      .pf-gallery--cover:has(.is-long) & {
+        opacity: calc(0.82 * var(--pf-read, 0));
+        transition: none;
       }
     }
   }
