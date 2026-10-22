@@ -1109,6 +1109,13 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
     margin-bottom: 0;
   }
 
+  // The intro spans 3 of the column's 4 sixteenths, leaving one empty and
+  // a gutter before column A, so it doesn't crowd A's marks. Written for a
+  // short intro (a sentence or two).
+  .pf-landing--cover .pf-quick-guide .pf-quick-guide__intro {
+    max-width: calc((100% - 3 * var(--pf-grid-gutter)) * .75 + 2 * var(--pf-grid-gutter));
+  }
+
   .pf-quick-guide > .pf-paths {
     display: grid;
     grid-column: 2 / -1;

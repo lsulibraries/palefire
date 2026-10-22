@@ -857,6 +857,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start intro three sixteenths wide.** In the timetable the
+  Quick Guide intro spans 3 of its column's 4 sixteenths, leaving one
+  empty and a gutter before column A. Written for the shortened intro (a
+  sentence or two; about four lines). Why: at the full column it crowded
+  A's letter and diamonds.
 - **Index rules with right-hand links.** Each index rule now ends in a
   link on the column's right edge, in the rule's small capitals with an
   arrow: 01 "All hours" (LibCal, as the Visit panel's), 02 "Full guide"
