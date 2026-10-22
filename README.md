@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Outside links: the arrow after the link's real last word.** It went
+  after the last text directly inside the link, so in "octavo editions
+  of *Birds of America*" it landed after "of". A title typed with a
+  trailing space also left an underlined gap before it. The last word is
+  now found inside any `<em>` or `<strong>`, and spaces after it are
+  dropped.
 - **Actual size: the person for scale is removed again.** It looked out
   of place beside the sheets. The diagram is back to 9rem, as before it.
 - **Field guide rows: names from image groups too.** A drawing and its

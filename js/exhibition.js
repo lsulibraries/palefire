@@ -1699,8 +1699,19 @@
       return;
     }
     const arrow = '<svg class="pf-exhibit-out" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 11 11 5M6 5h5v5"/></svg>';
-    // The last word and the arrow in one unbreakable span.
-    const text = Array.from(link.childNodes).reverse().find((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    // The last word and the arrow in one unbreakable span. The last word
+    // may be inside an <em> (a book's title), and spaces after it (a title
+    // typed with one) would be an underlined gap before the arrow.
+    const texts = [];
+    const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      texts.push(walker.currentNode);
+    }
+    const last = texts.findLastIndex((node) => node.textContent.trim());
+    texts.slice(last + 1).forEach((node) => {
+      node.textContent = '';
+    });
+    const text = texts[last];
     const tail = document.createElement('span');
     tail.className = 'pf-exhibit-out-tail';
     if (text) {
