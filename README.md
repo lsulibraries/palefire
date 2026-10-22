@@ -97,6 +97,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_landing_hero_tiles_setup.php` | Hero tile type, Tiles and Blog categories on Landing hero |
 | `palefire_landing_department_setup.php` | `landing_department` type (run after the hero tiles script) |
 | `palefire_tile_showcase_setup.php` | `tile_showcase` type, its image styles and responsive image styles |
+| `palefire_landing_stacks_setup.php` | `landing_stacks` type (From the stacks): Featured item, Blog categories, LibCal calendar and campus (run after the tile showcase and hero tiles scripts) |
 | `palefire_guide_setup.php` | Guide content model: Resource type, guide paragraph types, guide fields (incl. Guide editors) |
 | `palefire_louisiana_newspapers_setup.php` | `parish_map`, `parish_entry`, `family_trees` paragraph types |
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
@@ -310,6 +311,20 @@ the label, and its link. Layouts use container queries; the staggered row is a
 swipeable strip under 60rem. `js/tile-reveal.js` animates cards in on scroll
 (nothing hidden without JS or with reduced motion). A scrim keeps white titles
 at 4.5:1 on any image.
+
+## From the stacks
+
+`landing_stacks` (`paragraph--landing-stacks.html.twig`, `_stacks.scss`): the
+section fields plus the Featured item (`field_tiles`; the first Tile or
+Modular page shows, with its cover, title, Category terms and intro), Blog
+categories (`field_landing_blog_category`; the newest three articles) and
+the events list's LibCal calendar and campus (`field_stacks_calendar`,
+`field_stacks_campus`). `js/upcoming.js` lists the next three timed events at
+that campus from the events carousel's feed, reading up to three two-week
+windows (the feed drops its campus filter after the first, so events are
+matched by `campusId`), and only once the list is near the window. With no
+events it says so. Its calendar also feeds the hero's Next event cell, so the
+events carousel can come off the page.
 
 ## Events carousel
 
@@ -828,6 +843,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **From the stacks: a featured item, the next events and the newest blog
+  posts.** A new section paragraph (`landing_stacks`, created by
+  `scripts/palefire_landing_stacks_setup.php`) with `js/upcoming.js` for the
+  events. The hero's Next event reads its calendar too, and the blog lookup
+  is now one helper (`_palefire_blog_posts()`) for both. Why: Special
+  Collections has a handful of events a month, so a day-by-day carousel was
+  mostly empty; three upcoming events and three posts beside one featured
+  object keep the homepage current without the clutter.
 - **Family tree links: one row each, icon in a box.** Both lists (Family
   trees and the parish panels) now share one link
   (includes/family-tree-link.html.twig). The whole row is the link: the

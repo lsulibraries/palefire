@@ -371,7 +371,7 @@
   }
 }
 
-:root:not(:has(.pf-events-carousel)) .pf-landing__next {
+:root:not(:has(.pf-events-carousel, [data-pf-upcoming])) .pf-landing__next {
   display: none;
 }
 
@@ -469,9 +469,9 @@ html.pf-a11y-motion {
   }
 }
 
-// Without the events carousel the event cell is hidden (below), so the
-// next cell starts the row.
-:root:not(:has(.pf-events-carousel)) .pf-today__item.pf-landing__next + .pf-today__item {
+// Without an events source (the carousel, or From the stacks' list) the
+// event cell is hidden (below), so the next cell starts the row.
+:root:not(:has(.pf-events-carousel, [data-pf-upcoming])) .pf-today__item.pf-landing__next + .pf-today__item {
   padding-inline-start: 0;
   border-top: 0;
   border-inline-start: 0;

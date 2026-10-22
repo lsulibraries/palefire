@@ -155,7 +155,7 @@ $pf-hero-media-wash: .8 !default;
   border-top: 1px solid var(--pf-landing-line);
 }
 
-:root:has(.pf-events-carousel) .pf-hero-event {
+:root:has(.pf-events-carousel, [data-pf-upcoming]) .pf-hero-event {
   display: block;
 }
 

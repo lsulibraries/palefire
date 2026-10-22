@@ -1,0 +1,360 @@
+// From the stacks (paragraph--landing-stacks): a featured item beside the
+// next events (js/upcoming.js) and the newest blog posts.
+//
+// Two columns that wrap on their own (flex basis, no breakpoints): the
+// feature about two fifths of the section, the lists the rest; stacked
+// when the section is narrow, beside the TOC sidebar or on phones. Every
+// line is the soft hairline; labels are the breadcrumb's mono voice; the
+// accent is the swatch's (gold on Twilight, a dark accent on the light
+// swatches), so it reads on light and dark sections alike.
+// Motion: the feature's picture eases in a little on hover, the arrows
+// slide, and loaded events fade in; none of it with reduced motion.
+
+.pf-stacks {
+  --pf-stacks-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-stacks-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-stacks-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-stacks-muted)));
+  --pf-stacks-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  container: pf-stacks / inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(2rem, 5vw, 4rem);
+  color: var(--pf-stacks-fg);
+}
+
+%pf-stacks-label {
+  font-family: var(--pf-stacks-mono);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+// --- Featured item ----------------------------------------------------------
+.pf-stacks__feature {
+  flex: 2 1 18rem;
+  min-width: 0;
+}
+
+.pf-stacks__feature-link {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: inherit;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-stacks-accent);
+    outline-offset: 4px;
+  }
+}
+
+// 4:5, cropped from the cover's portrait style; hatched without one.
+.pf-stacks__media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  max-height: 36rem;
+  background: $pf-grey-900;
+
+  &.is-empty {
+    background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
+    border: 1px solid #{$pf-hairline};
+  }
+
+  picture,
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.pf-stacks__text {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+// Stacked but wide (beside the TOC, tablets): a full-width portrait ran a
+// screen tall, so the picture takes two fifths and the words sit beside it,
+// at its foot.
+@container pf-stacks (min-width: 30rem) and (max-width: 46rem) {
+  .pf-stacks__feature-link {
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+
+  .pf-stacks__media {
+    flex: 0 0 40%;
+  }
+}
+
+// Shown above the title, read after it.
+.pf-stacks__eyebrow {
+  @extend %pf-stacks-label;
+  order: -1;
+  color: var(--pf-stacks-muted);
+}
+
+// The text colour, not the swatch's heading gold (html[data-pf-theme]
+// .pf-main h3, _reading-themes.scss, whose :is() counts as a class): the
+// accent is kept for labels and arrows. Four classes to outrank it.
+.pf-stacks .pf-stacks__feature-link .pf-stacks__text .pf-stacks__title {
+  margin: 0;
+  color: var(--pf-stacks-fg);
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.15;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  overflow-wrap: anywhere;
+  transition: text-decoration-color $pf-hover-out ease;
+}
+
+.pf-stacks .pf-stacks__feature-link:is(:hover, :focus-visible) .pf-stacks__text .pf-stacks__title {
+  text-decoration-color: currentColor;
+  transition-duration: $pf-hover-in;
+}
+
+.pf-stacks__note {
+  max-width: 44ch;
+  margin: .75rem 0 0;
+  color: var(--pf-stacks-muted);
+  font-size: .9375rem;
+  line-height: 1.55;
+}
+
+// --- The lists --------------------------------------------------------------
+.pf-stacks__lists {
+  display: flex;
+  flex: 3 1 22rem;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+  min-width: 0;
+}
+
+.pf-stacks--no-feature .pf-stacks__lists {
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  > .pf-stacks__block {
+    flex: 1 1 20rem;
+  }
+}
+
+.pf-stacks .pf-stacks__lists .pf-stacks__block .pf-stacks__heading {
+  @extend %pf-stacks-label;
+  margin: 0;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid #{$pf-hairline};
+  color: var(--pf-stacks-accent);
+}
+
+.pf-stacks__more {
+  @extend %pf-stacks-label;
+  display: inline-flex;
+  gap: .5rem;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: .5rem;
+  color: var(--pf-stacks-fg);
+  text-decoration: none;
+
+  &::after {
+    content: "→" / "";
+    color: var(--pf-stacks-accent);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-stacks-fg);
+  }
+}
+
+// Events: a date block (month over day), the title and its line, an arrow.
+// While the feed loads (aria-busy) the list holds three rows' height.
+.pf-upcoming,
+.pf-stacks__posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-upcoming[aria-busy="true"] {
+  min-height: calc(3 * 4.75rem);
+}
+
+.pf-upcoming__link,
+.pf-stacks__post {
+  color: var(--pf-stacks-fg);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-stacks-fg);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-stacks-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-upcoming__link {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: .875rem 0;
+  border-bottom: 1px solid #{$pf-hairline};
+}
+
+.pf-upcoming__date {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.pf-upcoming__month {
+  @extend %pf-stacks-label;
+  color: var(--pf-stacks-muted);
+}
+
+.pf-upcoming__day {
+  margin-top: .25rem;
+  font-size: 1.625rem;
+  font-weight: 600;
+}
+
+.pf-upcoming__text {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.pf-upcoming__title,
+.pf-stacks__post-title {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  transition: text-decoration-color $pf-hover-out ease;
+}
+
+:is(.pf-upcoming__link, .pf-stacks__post):is(:hover, :focus-visible) :is(.pf-upcoming__title, .pf-stacks__post-title) {
+  text-decoration-color: currentColor;
+  transition-duration: $pf-hover-in;
+}
+
+.pf-upcoming__meta {
+  color: var(--pf-stacks-muted);
+  font-size: .875rem;
+  line-height: 1.4;
+}
+
+.pf-upcoming__arrow {
+  color: var(--pf-stacks-accent);
+}
+
+.pf-upcoming__empty {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #{$pf-hairline};
+  color: var(--pf-stacks-muted);
+  font-size: .9375rem;
+}
+
+// Posts: the date and category over the title, in two lines at most.
+.pf-stacks__post {
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
+  padding: .875rem 0;
+  border-bottom: 1px solid #{$pf-hairline};
+}
+
+.pf-stacks__post-date {
+  @extend %pf-stacks-label;
+  color: var(--pf-stacks-muted);
+}
+
+.pf-stacks__post-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-stacks__media img {
+    transition: transform 1.2s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .pf-stacks__feature-link:is(:hover, :focus-visible) .pf-stacks__media img {
+    transform: scale(1.03);
+  }
+
+  .pf-upcoming__arrow,
+  .pf-stacks__more::after {
+    transition: transform .3s ease-out;
+  }
+
+  .pf-upcoming__link:is(:hover, :focus-visible) .pf-upcoming__arrow,
+  .pf-stacks__more:is(:hover, :focus-visible)::after {
+    transform: translateX(.25rem);
+  }
+
+  .pf-upcoming.is-ready > * {
+    animation: pf-upcoming-in .6s ease both;
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-stacks__media img,
+  .pf-upcoming__arrow,
+  .pf-stacks__more::after {
+    transition: none;
+    transform: none;
+  }
+
+  .pf-upcoming.is-ready > * {
+    animation: none;
+  }
+}
+
+@keyframes pf-upcoming-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-stacks__media.is-empty {
+    border-color: CanvasText;
+  }
+}

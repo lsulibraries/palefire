@@ -363,19 +363,32 @@ function palefire_preprocess_paragraph__landing_department(array &$variables): v
  * any number of terms; scripts/palefire_landing_hero_tiles_setup.php adds it
  * or opens up a single-value one). An article matches when its own Article
  * Category (field_article_category) has any of them. Without the field, or
- * with it empty, this is NULL and the lead shows a placeholder row. Newest
- * by Article Date, then by creation. The list's cache tag
- * (node_list:article) refreshes the row when an article is published or
- * changed.
- *
- * Returns ['title', 'url', 'date', 'datetime', 'category', 'excerpt',
- * 'image'], image a render array (decorative, lazy) or NULL. category is
- * the article's first category among the hero's.
+ * with it empty, this is NULL and At a glance leaves its blog cell out.
+ * The post's shape: _palefire_blog_posts().
  */
 function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): ?array {
   $cache = CacheableMetadata::createFromRenderArray($variables);
+  $posts = _palefire_blog_posts($paragraph, 1, $cache);
+  $cache->applyTo($variables);
+  return $posts[0] ?? NULL;
+}
+
+/**
+ * The newest published Articles in a paragraph's blog categories.
+ *
+ * The categories are its "Blog categories" field
+ * (field_landing_blog_category, Article Category terms): the Landing hero's
+ * and From the stacks'. An article matches when its own Article Category
+ * (field_article_category) has any of them. Newest by Article Date, then by
+ * creation. Without the field, with it empty, or without those Article
+ * fields, this is []. The list's cache tag (node_list:article) refreshes
+ * the posts when an article is published or changed.
+ *
+ * Each post: ['title', 'url', 'date', 'datetime', 'category', 'excerpt'].
+ * category is the article's first category among the paragraph's.
+ */
+function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, CacheableMetadata $cache): array {
   $cache->addCacheTags(['node_list:article']);
-  $post = NULL;
 
   $terms = [];
   if ($paragraph->hasField('field_landing_blog_category')) {
@@ -384,70 +397,67 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
       $terms[$term->id()] = $term;
     }
   }
-  if ($terms) {
-    // Both fields are on Article (Manage fields); without them the query
-    // would fail, so the row just stays a placeholder.
-    $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
-    if (isset($storages['field_article_category'], $storages['field_article_date'])) {
-      $ids = \Drupal::entityQuery('node')
-        ->accessCheck(TRUE)
-        ->condition('type', 'article')
-        ->condition('status', 1)
-        ->condition('field_article_category', array_keys($terms), 'IN')
-        ->sort('field_article_date', 'DESC')
-        ->sort('created', 'DESC')
-        ->range(0, 1)
-        ->execute();
-      $node = $ids ? \Drupal::entityTypeManager()->getStorage('node')->load(reset($ids)) : NULL;
-      if ($node instanceof NodeInterface) {
-        $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
-        $cache->addCacheableDependency($node);
-        $url = $node->toUrl()->toString(TRUE);
-        $cache->addCacheableDependency($url);
+  // Both fields are on Article (Manage fields); without them the query
+  // would fail, so the posts just stay out.
+  $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+  if (!$terms || !isset($storages['field_article_category'], $storages['field_article_date'])) {
+    return [];
+  }
 
-        // In the site's time zone (the field stores UTC).
-        $timestamp = (int) $node->getCreatedTime();
-        if ($node->hasField('field_article_date') && $node->get('field_article_date')->date) {
-          $timestamp = $node->get('field_article_date')->date->getTimestamp();
-        }
-        $formatter = \Drupal::service('date.formatter');
+  $ids = \Drupal::entityQuery('node')
+    ->accessCheck(TRUE)
+    ->condition('type', 'article')
+    ->condition('status', 1)
+    ->condition('field_article_category', array_keys($terms), 'IN')
+    ->sort('field_article_date', 'DESC')
+    ->sort('created', 'DESC')
+    ->range(0, $limit)
+    ->execute();
+  $repository = \Drupal::service('entity.repository');
+  $formatter = \Drupal::service('date.formatter');
+  $posts = [];
+  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($ids) as $node) {
+    if (!$node instanceof NodeInterface) {
+      continue;
+    }
+    $node = $repository->getTranslationFromContext($node);
+    $cache->addCacheableDependency($node);
+    $url = $node->toUrl()->toString(TRUE);
+    $cache->addCacheableDependency($url);
 
-        // Excerpt: About Text, else the body's summary or text, as plain text.
-        $excerpt = '';
-        foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
-          if ($excerpt === '' && $node->hasField($field) && !$node->get($field)->isEmpty()) {
-            $excerpt = trim(Html::decodeEntities(strip_tags((string) $node->get($field)->first()->{$property})));
-          }
-        }
-        $excerpt = preg_replace('/\s+/u', ' ', $excerpt);
-        if (mb_strlen($excerpt) > 180) {
-          $excerpt = rtrim(mb_substr($excerpt, 0, 180)) . '…';
-        }
+    // In the site's time zone (the field stores UTC).
+    $timestamp = (int) $node->getCreatedTime();
+    if ($node->hasField('field_article_date') && $node->get('field_article_date')->date) {
+      $timestamp = $node->get('field_article_date')->date->getTimestamp();
+    }
 
-        // The article's first category that the hero asks for.
-        $term = reset($terms);
-        foreach ($node->get('field_article_category') as $item) {
-          if (isset($terms[$item->target_id])) {
-            $term = $terms[$item->target_id];
-            break;
-          }
-        }
-
-        $post = [
-          'title' => $node->label(),
-          'url' => $url->getGeneratedUrl(),
-          'date' => $formatter->format($timestamp, 'custom', 'M j, Y'),
-          'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
-          'category' => \Drupal::service('entity.repository')->getTranslationFromContext($term)->label(),
-          'excerpt' => $excerpt,
-          // A tile in the hero's second accordion: the hero tiles' style.
-          'image' => _palefire_field_image($node, 'field_image', ['tile_showcase_landscape_lg', 'large', 'medium'], $cache),
-        ];
+    // Excerpt: About Text, else the body's summary or text, as plain text.
+    $excerpt = '';
+    foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
+      if ($excerpt === '' && $node->hasField($field) && !$node->get($field)->isEmpty()) {
+        $excerpt = _palefire_plain_excerpt((string) $node->get($field)->first()->{$property}, 180);
       }
     }
+
+    // The article's first category that the paragraph asks for.
+    $term = reset($terms);
+    foreach ($node->get('field_article_category') as $item) {
+      if (isset($terms[$item->target_id])) {
+        $term = $terms[$item->target_id];
+        break;
+      }
+    }
+
+    $posts[] = [
+      'title' => $node->label(),
+      'url' => $url->getGeneratedUrl(),
+      'date' => $formatter->format($timestamp, 'custom', 'M j, Y'),
+      'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
+      'category' => $repository->getTranslationFromContext($term)->label(),
+      'excerpt' => $excerpt,
+    ];
   }
-  $cache->applyTo($variables);
-  return $post;
+  return $posts;
 }
 
 /**
@@ -625,19 +635,6 @@ function _palefire_media_image_item(FieldItemInterface $item, CacheableMetadata 
 function _palefire_plain_excerpt(string $html, int $max = 180): string {
   $text = preg_replace('/\s+/u', ' ', trim(Html::decodeEntities(strip_tags($html))));
   return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, $max)) . '…' : $text;
-}
-
-/**
- * An image field's first image as a decorative (alt="") lazy image.
- *
- * In the first of $styles that exists, else the original file. Article
- * images are often 2000-3000px originals, so a small style matters.
- */
-function _palefire_field_image(NodeInterface $node, string $field, array $styles, CacheableMetadata $cache): ?array {
-  if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
-    return NULL;
-  }
-  return _palefire_image_build($node->get($field)->first(), $styles, $cache);
 }
 
 /**
@@ -1081,6 +1078,66 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'image' => $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL,
     ];
   }
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--landing-stacks.
+ *
+ * From the stacks (scripts/palefire_landing_stacks_setup.php): one featured
+ * item beside the next events and the newest blog posts.
+ * - feature: the first Featured item (field_tiles, a Tile or a Modular
+ *   page, read by _palefire_node_card()) the visitor can see, or NULL:
+ *   title, url, label, note, and image (its cover in the portrait
+ *   responsive style, decorative and lazy) or NULL.
+ * - events: for js/upcoming.js, or NULL without a calendar: calendar and
+ *   campus (field_stacks_calendar, field_stacks_campus; digits only),
+ *   endpoint (the events carousel's feed) and calendar_url (LibCal's
+ *   calendar for that campus, the carousel's own "full calendar" link).
+ * - posts: the newest three articles in its Blog categories
+ *   (_palefire_blog_posts()).
+ */
+function palefire_preprocess_paragraph__landing_stacks(array &$variables): void {
+  $variables['feature'] = NULL;
+  $variables['events'] = NULL;
+  $variables['posts'] = [];
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+
+  if ($paragraph->hasField('field_tiles')) {
+    foreach ($paragraph->get('field_tiles') as $item) {
+      $node = $item->entity;
+      $card = $node instanceof NodeInterface ? _palefire_node_card($node, $cache, 220) : NULL;
+      if (!$card) {
+        continue;
+      }
+      $card['image'] = $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache) : NULL;
+      unset($card['image_item']);
+      $variables['feature'] = $card;
+      break;
+    }
+  }
+
+  $value = static fn (string $field): string => ($paragraph->hasField($field) && !$paragraph->get($field)->isEmpty())
+    ? trim((string) $paragraph->get($field)->value)
+    : '';
+  $calendar = $value('field_stacks_calendar');
+  $campus = $value('field_stacks_campus');
+  if (preg_match('/^\d+$/', $calendar)) {
+    $campus = preg_match('/^\d+$/', $campus) ? $campus : '';
+    $variables['events'] = [
+      'calendar' => $calendar,
+      'campus' => $campus,
+      'endpoint' => '/libcal-gantt/carousel-events',
+      'calendar_url' => 'https://lsu.libcal.com/calendar/eventsandprogramming?cid=-1&t=m&d=0000-00-00&cal=-1&inc=0' . ($campus !== '' ? '&cm=' . $campus : ''),
+    ];
+    $variables['#attached']['library'][] = 'palefire/upcoming';
+  }
+
+  $variables['posts'] = _palefire_blog_posts($paragraph, 3, $cache);
   $cache->applyTo($variables);
 }
 

@@ -1,0 +1,73 @@
+{#
+/**
+ * @file
+ * From the stacks: a featured item beside the next events and the newest
+ * blog posts (the Special Collections homepage's last section).
+ *
+ * Variables from palefire_preprocess_paragraph__landing_stacks():
+ * - feature: title, url, label (Category terms), note (intro as plain
+ *   text), image (portrait cover, or NULL: a hatched frame), or NULL.
+ * - events: calendar, campus, endpoint, calendar_url, or NULL. The list is
+ *   filled by js/upcoming.js from the events carousel's feed: the next
+ *   three events at that campus, or "No upcoming events". Its height is
+ *   held while it loads.
+ * - posts: title, url, date, datetime, category.
+ *
+ * The section <h2> comes from the scroll-section field template, so the
+ * featured item and the two lists' headings are <h3>s. data-toc-skip keeps
+ * them out of the TOC, which lists the section itself.
+ */
+#}
+{% if feature or events or posts %}
+  {% set uid = 'pf-stacks-' ~ paragraph.id() %}
+  <div{{ attributes.addClass('pf-stacks', not feature ? 'pf-stacks--no-feature') }} data-toc-skip>
+    {% if feature %}
+      <article class="pf-stacks__feature">
+        <a class="pf-stacks__feature-link" href="{{ feature.url }}">
+          <span class="pf-stacks__media{{ not feature.image ? ' is-empty' }}" aria-hidden="true">{{ feature.image }}</span>
+          {# The title first, so the link's name starts with it; CSS shows
+             the eyebrow above it, as on the tile cards. #}
+          <span class="pf-stacks__text">
+            <h3 class="pf-stacks__title">{{ feature.title }}</h3>
+            <span class="pf-stacks__eyebrow"><span class="visually-hidden">, </span>{{ 'Featured'|t }}{% if feature.label %}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span>{{ feature.label }}{% endif %}</span>
+          </span>
+        </a>
+        {% if feature.note %}
+          <p class="pf-stacks__note">{{ feature.note }}</p>
+        {% endif %}
+      </article>
+    {% endif %}
+
+    <div class="pf-stacks__lists">
+      {% if events %}
+        <section class="pf-stacks__block" aria-labelledby="{{ uid }}-events">
+          <h3 class="pf-stacks__heading" id="{{ uid }}-events">{{ 'Upcoming'|t }}</h3>
+          <ol class="pf-upcoming" role="list" aria-busy="true"
+              data-pf-upcoming
+              data-calendar="{{ events.calendar }}"
+              {% if events.campus %}data-campus="{{ events.campus }}"{% endif %}
+              data-endpoint="{{ events.endpoint }}"
+              data-count="3"
+              data-empty="{{ 'No upcoming events at Hill right now.'|t }}"></ol>
+          <a class="pf-stacks__more" href="{{ events.calendar_url }}">{{ 'All events'|t }}<span class="visually-hidden"> {{ '(LibCal calendar)'|t }}</span></a>
+        </section>
+      {% endif %}
+
+      {% if posts %}
+        <section class="pf-stacks__block" aria-labelledby="{{ uid }}-posts">
+          <h3 class="pf-stacks__heading" id="{{ uid }}-posts">{{ 'From the blog'|t }}</h3>
+          <ul class="pf-stacks__posts" role="list">
+            {% for post in posts %}
+              <li>
+                <a class="pf-stacks__post" href="{{ post.url }}">
+                  <span class="pf-stacks__post-date"><time datetime="{{ post.datetime }}">{{ post.date }}</time>{% if post.category %} · {{ post.category }}{% endif %}</span>
+                  <span class="pf-stacks__post-title">{{ post.title }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

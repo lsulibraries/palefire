@@ -173,14 +173,14 @@
   Drupal.behaviors.palefireHeroEvent = {
     attach(context) {
       once('pf-hero-event', '[data-pf-hero-event]', context).forEach((box) => {
-        // Only alongside the events carousel (CSS holds the space then).
-        const section = document.querySelector('.pf-events-carousel');
-        if (!section) {
+        // Only alongside the events carousel or From the stacks' events
+        // list (CSS holds the space then). Either carries the calendar and
+        // campus as data-*: the carousel block's container, or the list.
+        const carousel = document.querySelector('.pf-events-carousel .libcal-day-carousel, [data-pf-upcoming][data-calendar]');
+        if (!carousel && !document.querySelector('.pf-events-carousel')) {
           box.remove();
           return;
         }
-        // The block's container carries the carousel's settings as data-*.
-        const carousel = section.querySelector('.libcal-day-carousel');
         // On its own (no lead panel): under the building map's heading,
         // above the drawing (grid row "event", _landing-hero.scss). Moved
         // before the feed loads, so its space is held there.
