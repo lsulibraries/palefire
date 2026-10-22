@@ -1,154 +1,60 @@
-// Louisiana Newspapers guide: a newspaper family tree in a full-screen
-// viewer (js/family-tree-viewer.js builds the <dialog>).
+// Louisiana Newspapers guide: a newspaper family tree in the full-screen
+// viewer (.pf-viewer--tree; the viewer itself is _viewer.scss, filled by
+// js/family-tree-viewer.js).
 //
-// Set like a museum's wall chart: the title in the guide's heading type
-// over a hairline, the tree drawn in hairlines on the page colour, and the
-// Key in the small tracked monospace beside it (under it on narrow
-// screens). The dialog sits under <body>, outside .pf-guide, so it reads
-// the reading swatch (--pf-g-*) straight from <html>.
+// Set like a museum's wall chart: the tree drawn in hairlines on the page
+// colour on the stage; the title, years, Key and notes in the viewer's
+// panel, the Key in the small tracked monospace. The viewer sits under
+// <body>, outside .pf-guide, so it reads the reading swatch (--pf-g-*)
+// straight from <html>.
 
-.pf-tree-viewer {
+.pf-viewer--tree {
   --pf-tree-fg: var(--pf-g-fg, var(--bs-body-color));
   --pf-tree-bg: var(--pf-g-bg, var(--bs-body-bg));
   --pf-tree-muted: var(--pf-g-muted, var(--bs-secondary-color));
   --pf-tree-rule: var(--pf-g-rule, var(--bs-border-color));
   --pf-tree-accent: var(--pf-g-accent, var(--bs-primary));
   --pf-tree-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
-  --pf-tree-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
-  --pf-tree-gutter: clamp(1rem, 4vw, 2.5rem);
-  display: none;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  color: var(--pf-tree-fg);
-  background: var(--pf-tree-bg);
-  border: 0;
 
-  // Narrow: one column that scrolls as a whole (title, drawing, Key), so
-  // the Key never takes the drawing's room.
-  // (Block flow, not a grid: in a fixed-height grid the scrolling stage
-  // would shrink and clip the drawing.)
-  &[open] {
-    display: block;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    animation: pf-tree-in $pf-menu-fade ease both;
+  // No arrows to make room for: on phones the drawing takes the stage's
+  // width, under the toolbar.
+  @include media-breakpoint-down(lg) {
+    .pf-viewer__stage {
+      padding-inline: max(.5rem, env(safe-area-inset-left, 0px)) max(.5rem, env(safe-area-inset-right, 0px));
+    }
   }
 
-  &::backdrop {
-    background: var(--pf-tree-bg);
+  // A title of a whole family of papers (over 60 characters,
+  // family-tree-viewer.js): smaller, so the Key keeps its room.
+  .pf-viewer__title.is-long {
+    font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+    line-height: 1.3;
   }
 }
 
-// Wide: the Key is a column beside the drawing, and the drawing scrolls in
-// its own pane under a fixed title.
-@media (min-width: 62rem) {
-  .pf-tree-viewer[open] {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 18rem;
-    grid-template-rows: auto minmax(0, 1fr);
-    grid-template-areas: "bar bar" "stage key";
-    overflow: hidden;
-  }
-
-  .pf-tree-viewer__stage {
-    overflow: auto;
-  }
-}
-
-// Scrollbars: the page's own thin bar (_reading-themes.scss), same thumb,
-// hover and track, instead of the browser's wide grey one.
-.pf-tree-viewer,
-.pf-tree-viewer__stage,
-.pf-tree-viewer__key {
-  @include pf-thin-scrollbar;
-  --pf-scroll-thumb: var(--pf-g-scroll, var(--pf-tree-muted));
-  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover, var(--pf-tree-fg));
-  --pf-scroll-track: var(--pf-tree-rule);
-}
-
-// The page underneath doesn't scroll while the viewer is open.
-html.pf-tree-viewer-open {
-  overflow: hidden;
-}
-
-@keyframes pf-tree-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.75rem);
-  }
-}
-
-.pf-tree-viewer__bar {
-  grid-area: bar;
-  display: flex;
-  flex-wrap: wrap-reverse;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  padding: var(--pf-tree-gutter) var(--pf-tree-gutter) 1.25rem;
-  border-bottom: 1px solid var(--pf-tree-rule);
-}
-
-// On a phone the actions wrap above the title (wrap-reverse), at the right.
-.pf-tree-viewer__heading {
-  flex: 1 1 20rem;
-  min-width: 0;
-}
-
-.pf-tree-viewer__eyebrow,
 .pf-tree-viewer__dates,
 .pf-tree-viewer__action,
 .pf-tree-viewer__key-title,
 .pf-tree-viewer__key-list {
-  font-family: var(--pf-tree-mono);
+  font-family: var(--pf-viewer-mono);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.pf-tree-viewer__eyebrow {
-  margin: 0 0 0.35rem;
-  color: var(--pf-tree-muted);
-}
-
-.pf-tree-viewer__title {
-  margin: 0;
-  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.375rem);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1.15;
-  color: var(--pf-g-title, var(--pf-tree-fg));
-  text-wrap: balance;
-
-  // Over 60 characters (family-tree-viewer.js).
-  &.is-long {
-    max-width: 60rem;
-    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
-    line-height: 1.3;
-  }
-}
-
 .pf-tree-viewer__dates {
-  margin: 0.5rem 0 0;
+  margin: 0;
   color: var(--pf-tree-muted);
 }
 
-// The text actions wrap on the narrowest phones; × stays at the end.
+// Copy link and Original page: quiet text links in the guide's caption type.
 .pf-tree-viewer__actions {
   display: flex;
-  flex: 0 1 auto;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
   gap: 0.25rem 1.25rem;
-  margin-inline-start: auto;
+  margin: 0;
 }
 
-// Text controls in the guide's monospace caption, like "All parishes".
 .pf-tree-viewer__action {
   min-height: 2rem;
   padding: 0.35rem 0;
@@ -163,38 +69,14 @@ html.pf-tree-viewer-open {
     color: var(--pf-g-hover, var(--pf-tree-fg));
     transition-duration: $pf-hover-in;
   }
-}
 
-.pf-tree-viewer__close {
-  display: grid;
-  place-items: center;
-  width: 2.75rem; // 44px target
-  height: 2.75rem;
-  padding: 0;
-  color: var(--pf-tree-fg);
-  background: none;
-  border: 1px solid var(--pf-tree-rule);
-  border-radius: 50%;
-  transition: color $pf-hover-out ease, border-color $pf-hover-out ease, transform $pf-hover-out ease;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    fill: currentColor;
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-tree-accent);
-    border-color: currentColor;
-    transform: rotate(90deg);
-    transition-duration: $pf-hover-in;
+  &[hidden] {
+    display: none;
   }
 }
 
 .pf-tree-viewer__action,
-.pf-tree-viewer__close,
-.pf-tree-viewer__stage {
+.pf-tree-viewer__canvas {
   &:focus-visible {
     outline: 2px solid var(--pf-tree-accent);
     outline-offset: 2px;
@@ -203,20 +85,31 @@ html.pf-tree-viewer-open {
 
 // Drawing ------------------------------------------------------------------
 
-.pf-tree-viewer__stage {
-  grid-area: stage;
+// The stage's pane: the tree centred in it, scaled to fit; at its actual
+// size it scrolls (and a mouse drags it: js/family-tree-viewer.js). "safe"
+// centring starts a drawing wider or taller than the pane at its edge, so
+// all of it can be scrolled to.
+.pf-tree-viewer__canvas {
+  @include pf-thin-scrollbar;
+  --pf-scroll-thumb: var(--pf-g-scroll, var(--pf-tree-muted));
+  --pf-scroll-thumb-hover: var(--pf-g-scroll-hover, var(--pf-tree-fg));
+  --pf-scroll-track: var(--pf-tree-rule);
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  align-items: safe center;
+  justify-content: safe center;
+  width: 100%;
+  height: 100%;
   min-height: 0;
-  padding: var(--pf-tree-gutter);
-  overflow-x: auto;
+  overflow: auto;
   overscroll-behavior: contain;
 
-  // Actual size, wider than the window: start at the left edge so all of
-  // it can be scrolled to.
   &.is-actual {
-    justify-content: flex-start;
+    cursor: grab;
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+    user-select: none;
   }
 }
 
@@ -285,15 +178,17 @@ html.pf-tree-viewer-open {
 }
 
 // Boxes fade up one after another, top of the tree first; the lines fade
-// in once they have landed. None with reduced motion (.is-still).
-.pf-tree-viewer[open]:not(.is-still) {
-  .pf-tree-viewer__box {
-    animation: pf-tree-box 0.45s ease both;
-    animation-delay: calc(0.12s + var(--i, 0) * 0.035s);
-  }
+// in once they have landed. Still with reduced motion.
+.pf-viewer--tree[open] {
+  @include pf-viewer-motion {
+    .pf-tree-viewer__box {
+      animation: pf-tree-box 0.45s ease both;
+      animation-delay: calc(0.12s + var(--i, 0) * 0.035s);
+    }
 
-  .pf-tree-viewer__links {
-    animation: pf-tree-links 0.6s ease 0.35s both;
+    .pf-tree-viewer__links {
+      animation: pf-tree-links 0.6s ease 0.35s both;
+    }
   }
 }
 
@@ -313,21 +208,8 @@ html.pf-tree-viewer-open {
 // Key and notes ------------------------------------------------------------
 
 .pf-tree-viewer__key {
-  grid-area: key;
-  padding: 1.25rem var(--pf-tree-gutter) var(--pf-tree-gutter);
-  border-top: 1px solid var(--pf-tree-rule);
-
   &:empty {
     display: none;
-  }
-}
-
-@media (min-width: 62rem) {
-  .pf-tree-viewer__key {
-    padding-top: var(--pf-tree-gutter);
-    border-top: 0;
-    border-inline-start: 1px solid var(--pf-tree-rule);
-    overflow-y: auto;
   }
 }
 
@@ -371,26 +253,13 @@ html.pf-tree-viewer-open {
   color: var(--pf-tree-muted);
 }
 
-// Reduced motion: the boxes and lines are still (.is-still, set by the
-// script from the same two settings); the viewer just appears.
+// Reduced motion: the links' colour changes at once.
 @media (prefers-reduced-motion: reduce) {
-  .pf-tree-viewer[open] {
-    animation: none;
-  }
-
-  .pf-tree-viewer__action,
-  .pf-tree-viewer__close {
+  .pf-tree-viewer__action {
     transition: none;
   }
 }
 
-html.pf-a11y-motion {
-  .pf-tree-viewer[open] {
-    animation: none;
-  }
-
-  .pf-tree-viewer__action,
-  .pf-tree-viewer__close {
-    transition: none;
-  }
+html.pf-a11y-motion .pf-tree-viewer__action {
+  transition: none;
 }

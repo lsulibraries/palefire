@@ -306,6 +306,17 @@ family-tree-viewer:
     - core/drupal
     - core/drupal.announce
     - core/once
+    - palefire/viewer
+
+# The full-screen viewer (stage, toolbar, text panel) that exhibitions and
+# the newspaper family trees show things in. A dependency of those two
+# libraries only, so other pages never load it. Styles: _viewer.scss.
+viewer:
+  version: 1.0.0
+  js:
+    js/viewer.js: { weight: -2 }
+  dependencies:
+    - core/drupal
 
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has
@@ -330,6 +341,7 @@ exhibition:
     - core/drupal
     - core/once
     - palefire/global
+    - palefire/viewer
 
 # Site footer (includes/footer.html.twig): starts the footer's LibCal hours
 # once it nears the viewport. Attached by page.html.twig on every page.

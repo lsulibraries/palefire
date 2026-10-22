@@ -821,6 +821,27 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **One full-screen viewer for exhibitions and the newspaper family
+  trees.** The exhibitions' object view is now its own library,
+  `palefire/viewer` (js/viewer.js, scss/components/_viewer.scss, classes
+  `pf-viewer__*`). It covers the stage with Zoom, the text fold (I) and
+  Close; the arrows, keys and swipe; the pinned glass row and the panel;
+  click and drag zoom; focus; and the view-transition morph. Pages drive
+  it with a handler (`step`, `close`, `closed`, optional `zoom`) and fill
+  its parts. Only the libraries that need it depend on it.
+  - **Exhibitions** keep their own parts (comparison, Actual size,
+    pictures, address) and look and behave as before.
+  - **The family tree** (js/family-tree-viewer.js) now opens in it. The
+    drawing is on the stage; the title, years, Copy link, Original page,
+    Key and notes are in the panel. Zoom is "Actual size" for a tree
+    wider than the stage, which a mouse can drag around. `?tree=`, Back
+    and the fallback to the page are unchanged. On phones the drawing
+    takes the stage's full width (no arrows to leave room for).
+  - **Fix:** a viewer closed inside a skipped view transition didn't
+    always fire "close" in Chrome, which left the page locked and focus
+    lost. The viewer now finishes closing itself.
+  - Opened by a different kind of page (Swup keeps it between pages),
+    it starts fresh, without the last page's parts.
 - **Focal Point preview shows the cover's wash.**
   images/focal-preview/wash-desktop.png (1600 × 1000) and wash-phone.png
   (900 × 1600) are the title page's wash, drawn by

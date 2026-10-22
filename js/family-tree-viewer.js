@@ -4,18 +4,21 @@
  * viewer, drawn in the Palefire style.
  *
  * Family-tree links (a[data-family-tree], in the parish panel and the
- * Family trees list) open a <dialog> instead of the tree's page. The tree
- * pages are Diagram nodes (jointjs_field): the drawing is JointJS JSON in
- * their [data-diagram] attribute (one tree stores it base64-encoded). This
- * fetches the page once, reads that JSON and draws it as SVG here, without
- * JointJS: boxes (bordered, borderless notes, grey-filled), solid, dashed
- * and grey lines, arrowheads, bends, anchored and free line ends. The
- * title block becomes the viewer's heading; the Key and any notes go under
- * the drawing, with line samples beside "Solid line" and "Dashed line".
+ * Family trees list) open the tree in the full-screen viewer (js/viewer.js,
+ * the one exhibitions use) instead of its page. The tree pages are Diagram
+ * nodes (jointjs_field): the drawing is JointJS JSON in their
+ * [data-diagram] attribute (one tree stores it base64-encoded). This
+ * fetches the page once, reads that JSON and draws it as SVG on the
+ * viewer's stage, without JointJS: boxes (bordered, borderless notes,
+ * grey-filled), solid, dashed and grey lines, arrowheads, bends, anchored
+ * and free line ends. The title block becomes the panel's title and years;
+ * the Key and any notes go under them, with line samples beside "Solid
+ * line" and "Dashed line", after "Copy link" and "Original page".
  *
- * "Fit" scales a wide tree to the window; "Actual size" draws it at the
- * size its editor made it, to scroll. A link opened with a modifier key,
- * one to another site, or a page with no diagram falls back to the page.
+ * A tree wider than the stage is scaled down to fit; the viewer's Zoom
+ * draws it at the size its editor made it, to scroll or drag around. A
+ * link opened with a modifier key, one to another site, or a page with no
+ * diagram falls back to the page.
  *
  * Linkable: an open tree is in the address as ?tree=<its page's name>
  * (e.g. ?tree=Napoleonville_Assumption_pioneer), beside any #parish-…, so
@@ -33,12 +36,13 @@
   const FONT_MIN = 10;
   const LINE_HEIGHT = 1.25;
   const MARKER = [9, 4];    // arrowhead length and half-width, map units
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  // OS setting, or the Settings drawer's "Reduce motion" (html.pf-a11y-motion).
-  const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
   const PARAM = 'tree';
   const cache = new Map();
-  let viewer = null;
+  // The full-screen viewer (js/viewer.js) the tree is shown in, and the
+  // open tree: its link and page, its drawing, Actual size on or off, and
+  // whether the history entry this viewer added is the current one.
+  const viewer = Drupal.palefireViewer;
+  const state = { canvas: null, opener: null, href: '', tree: null, actual: false, pushed: false };
 
   // A tree's name in the address: its page's file name without ".html".
   const nameOf = (href) => decodeURIComponent(new URL(href, location.href).pathname.split('/').pop() || '').replace(/\.html?$/i, '');
@@ -227,91 +231,95 @@
     return { svg, width, height, blocks, boxes: ordered };
   }
 
-  function build() {
-    const dialog = el('dialog', { class: 'pf-tree-viewer', 'aria-labelledby': 'pf-tree-viewer-title' });
-    dialog.innerHTML = `
-      <div class="pf-tree-viewer__bar">
-        <div class="pf-tree-viewer__heading">
-          <p class="pf-tree-viewer__eyebrow">${Drupal.t('Family tree')}</p>
-          <h2 class="pf-tree-viewer__title" id="pf-tree-viewer-title"></h2>
-          <p class="pf-tree-viewer__dates"></p>
-        </div>
-        <div class="pf-tree-viewer__actions">
-          <button type="button" class="pf-tree-viewer__action" data-tree-zoom aria-pressed="false" hidden>${Drupal.t('Actual size')}</button>
-          <button type="button" class="pf-tree-viewer__action" data-tree-copy hidden>${Drupal.t('Copy link')}</button>
-          <a class="pf-tree-viewer__action" data-tree-page data-no-swup href="#">${Drupal.t('Original page')}</a>
-          <button type="button" class="pf-tree-viewer__close" data-tree-close aria-label="${Drupal.t('Close')}" autofocus>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
-          </button>
-        </div>
-      </div>
-      <div class="pf-tree-viewer__stage" tabindex="0" role="region" aria-label="${Drupal.t('Diagram')}"></div>
-      <aside class="pf-tree-viewer__key" aria-label="${Drupal.t('Key and notes')}"></aside>`;
-    document.body.append(dialog);
-    const parts = {
-      dialog,
-      title: dialog.querySelector('.pf-tree-viewer__title'),
-      dates: dialog.querySelector('.pf-tree-viewer__dates'),
-      zoom: dialog.querySelector('[data-tree-zoom]'),
-      page: dialog.querySelector('[data-tree-page]'),
-      stage: dialog.querySelector('.pf-tree-viewer__stage'),
-      key: dialog.querySelector('.pf-tree-viewer__key'),
-      copy: dialog.querySelector('[data-tree-copy]'),
-      opener: null,
-      href: '',
-      tree: null,
-      actual: false,
-      // TRUE while the history entry this viewer added is the current one.
-      pushed: false,
-    };
-    dialog.querySelector('[data-tree-close]').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => {
-      document.documentElement.classList.remove('pf-tree-viewer-open');
-      // Closed by ×, Escape or a link: take ?tree= back off the address.
-      if (parts.pushed) {
-        parts.pushed = false;
+  // The tree's parts in the viewer (js/viewer.js): the drawing on the
+  // stage, in a pane that scrolls when it is drawn at its actual size; the
+  // title, years, links, Key and notes in the panel.
+  function parts() {
+    const view = viewer.get();
+    if (!state.canvas) {
+      state.canvas = el('div', { class: 'pf-tree-viewer__canvas', tabindex: '0', role: 'region', 'aria-label': Drupal.t('Diagram'), 'data-pf-viewer-scroll': '' });
+      state.links = el('p', { class: 'pf-tree-viewer__actions' });
+      state.copy = el('button', { type: 'button', class: 'pf-tree-viewer__action', hidden: '' });
+      state.copy.textContent = Drupal.t('Copy link');
+      state.page = el('a', { class: 'pf-tree-viewer__action', 'data-no-swup': '', href: '#' });
+      state.page.textContent = Drupal.t('Original page');
+      state.links.append(state.copy, state.page);
+      state.key = el('div', { class: 'pf-tree-viewer__key' });
+      // Copy link: the address, which has ?tree= while a tree is open.
+      if (navigator.clipboard && window.isSecureContext) {
+        state.copy.hidden = false;
+        let timer = 0;
+        state.copy.addEventListener('click', () => {
+          navigator.clipboard.writeText(location.href).then(() => {
+            state.copy.textContent = Drupal.t('Link copied');
+            Drupal.announce(Drupal.t('Link copied'));
+            clearTimeout(timer);
+            timer = setTimeout(() => { state.copy.textContent = Drupal.t('Copy link'); }, 2000);
+          });
+        });
+      }
+      // At its actual size, a mouse drags the drawing around (touch
+      // scrolls it as it is).
+      let drag = null;
+      state.canvas.addEventListener('pointerdown', (event) => {
+        drag = state.actual && event.pointerType === 'mouse' && event.button === 0
+          ? { x: event.clientX, y: event.clientY, left: state.canvas.scrollLeft, top: state.canvas.scrollTop }
+          : null;
+        state.canvas.classList.toggle('is-dragging', !!drag);
+      });
+      state.canvas.addEventListener('pointermove', (event) => {
+        if (drag) {
+          state.canvas.scrollLeft = drag.left - (event.clientX - drag.x);
+          state.canvas.scrollTop = drag.top - (event.clientY - drag.y);
+        }
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach((type) => state.canvas.addEventListener(type, () => {
+        drag = null;
+        state.canvas.classList.remove('is-dragging');
+      }));
+      new ResizeObserver(() => fit()).observe(state.canvas);
+    }
+    return view;
+  }
+
+  // What the viewer's Zoom, Close and Esc do here.
+  const handler = {
+    zoom: () => {
+      state.actual = !state.actual;
+      fit();
+    },
+    close: () => viewer.close(null),
+    closed: () => {
+      // Closed by ×, Esc or a link: take ?tree= back off the address.
+      if (state.pushed) {
+        state.pushed = false;
         history.back();
       }
       else if (new URLSearchParams(location.search).has(PARAM)) {
         history.replaceState(history.state, '', addressWith(null));
       }
-      if (parts.opener && parts.opener.isConnected) parts.opener.focus();
-    });
-    // Copy link: the address, which has ?tree= while a tree is open.
-    if (navigator.clipboard && window.isSecureContext) {
-      parts.copy.hidden = false;
-      let timer = 0;
-      parts.copy.addEventListener('click', () => {
-        navigator.clipboard.writeText(location.href).then(() => {
-          parts.copy.textContent = Drupal.t('Link copied');
-          Drupal.announce(Drupal.t('Link copied'));
-          clearTimeout(timer);
-          timer = setTimeout(() => { parts.copy.textContent = Drupal.t('Copy link'); }, 2000);
-        });
-      });
-    }
-    parts.zoom.addEventListener('click', () => {
-      parts.actual = !parts.actual;
-      fit(parts);
-    });
-    new ResizeObserver(() => fit(parts)).observe(parts.stage);
-    return parts;
-  }
+      if (state.opener && state.opener.isConnected) {
+        state.opener.focus();
+      }
+    },
+  };
 
-  // Fit: scale a wide tree down to the stage; never above its actual size.
-  function fit(parts) {
-    const tree = parts.tree;
-    if (!tree) return;
-    const style = getComputedStyle(parts.stage);
-    const room = parts.stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+  // Fit: a wide tree scaled down to the pane, never above its actual size.
+  // Zoom shows only for a tree wider than the pane: on, its actual size.
+  function fit() {
+    const tree = state.tree;
+    if (!tree || !viewer.isOpen()) {
+      return;
+    }
+    const view = viewer.get();
+    const room = state.canvas.clientWidth - 2 * PAD;
     const wide = tree.width > room;
-    parts.zoom.hidden = !wide;
-    parts.zoom.setAttribute('aria-pressed', String(parts.actual));
-    parts.zoom.textContent = parts.actual ? Drupal.t('Fit') : Drupal.t('Actual size');
-    const scale = parts.actual || !wide ? 1 : room / tree.width;
+    view.zoom.hidden = !wide;
+    view.zoom.setAttribute('aria-pressed', String(state.actual && wide));
+    const scale = state.actual || !wide ? 1 : room / tree.width;
     tree.svg.setAttribute('width', (tree.width * scale).toFixed(1));
     tree.svg.setAttribute('height', (tree.height * scale).toFixed(1));
-    parts.stage.classList.toggle('is-actual', parts.actual && wide);
+    state.canvas.classList.toggle('is-actual', state.actual && wide);
   }
 
   function keyLine(text) {
@@ -329,27 +337,34 @@
   // push: add a history entry with ?tree= (FALSE when the address already
   // has it: a shared link, or Forward).
   async function open(href, title, opener, push) {
-    viewer = viewer || build();
-    const parts = viewer;
-    const link = opener;
-    parts.opener = opener;
-    parts.href = href;
-    parts.actual = false;
-    parts.tree = null;
+    const view = parts();
+    state.opener = opener;
+    state.href = href;
+    state.actual = false;
+    state.tree = null;
     if (push) {
       history.pushState({ pfTree: nameOf(href) }, '', addressWith(nameOf(href)));
-      parts.pushed = true;
+      state.pushed = true;
     }
-    parts.page.href = href;
-    parts.title.textContent = title;
-    parts.dates.textContent = '';
-    parts.key.replaceChildren();
-    parts.zoom.hidden = true;
-    parts.stage.replaceChildren(el('p', { class: 'pf-tree-viewer__status', role: 'status' }));
-    parts.stage.firstChild.textContent = Drupal.t('Loading the family tree…');
-    parts.dialog.classList.toggle('is-still', reduceMotion());
-    document.documentElement.classList.add('pf-tree-viewer-open');
-    if (!parts.dialog.open) parts.dialog.showModal();
+    const status = el('p', { class: 'pf-tree-viewer__status', role: 'status' });
+    status.textContent = Drupal.t('Loading the family tree…');
+    viewer.show(handler, () => {
+      view.dialog.removeAttribute('aria-label');
+      view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
+      view.count.textContent = Drupal.t('Family tree');
+      view.title.hidden = false;
+      view.title.textContent = title;
+      view.title.classList.remove('is-long');
+      view.label.replaceChildren();
+      view.label.hidden = true;
+      state.page.href = href;
+      state.key.replaceChildren();
+      view.body.replaceChildren(state.links, state.key);
+      state.canvas.replaceChildren(status);
+      state.canvas.setAttribute('aria-label', Drupal.t('Diagram'));
+      view.media.replaceChildren(state.canvas);
+      viewer.sync({ zoom: false });
+    }, { kind: 'tree' });
 
     let cells;
     try {
@@ -358,9 +373,10 @@
     catch (e) {
       cells = null;
     }
-    if (parts.href !== href || parts.opener !== link || !parts.dialog.open) return;
+    if (state.href !== href || state.opener !== opener || !viewer.isOpen()) {
+      return;
+    }
     if (!cells || !cells.length) {
-      const status = parts.stage.firstChild;
       status.textContent = Drupal.t("This family tree can't be drawn here. ");
       const more = el('a', { href, 'data-no-swup': '' });
       more.textContent = Drupal.t('Open its page');
@@ -368,12 +384,18 @@
       return;
     }
 
-    const tree = draw(cells, getComputedStyle(parts.stage).fontFamily);
+    const tree = draw(cells, getComputedStyle(state.canvas).fontFamily);
     const heads = tree.blocks.filter((b) => b.kind === 'title');
     if (heads.length) {
       const lines = heads.flatMap((b) => b.lines);
-      parts.title.textContent = lines.filter((l) => /^h\d$/.test(l.tag)).map((l) => l.text).join(' ') || parts.title.textContent;
-      parts.dates.textContent = lines.filter((l) => !/^h\d$/.test(l.tag)).map((l) => l.text).join(' ');
+      view.title.textContent = lines.filter((l) => /^h\d$/.test(l.tag)).map((l) => l.text).join(' ') || view.title.textContent;
+      const dates = lines.filter((l) => !/^h\d$/.test(l.tag)).map((l) => l.text).join(' ');
+      if (dates) {
+        const p = el('p', { class: 'pf-tree-viewer__dates' });
+        p.textContent = dates;
+        view.label.replaceChildren(p);
+        view.label.hidden = false;
+      }
     }
     tree.blocks.filter((b) => b.kind !== 'title').forEach((block) => {
       if (block.kind === 'key') {
@@ -382,13 +404,13 @@
         h.textContent = head.text;
         const list = el('ul', { class: 'pf-tree-viewer__key-list' });
         rest.forEach((line) => list.append(keyLine(line.text)));
-        parts.key.prepend(h, list);
+        state.key.prepend(h, list);
       }
       else {
         block.lines.forEach((line) => {
           const p = el('p', { class: 'pf-tree-viewer__note' });
           p.textContent = line.text;
-          parts.key.append(p);
+          state.key.append(p);
         });
       }
     });
@@ -400,15 +422,13 @@
       alt.append(li);
     });
     // A title of a whole family of papers can run to five lines: set it
-    // smaller, so the drawing keeps the screen.
-    parts.title.classList.toggle('is-long', parts.title.textContent.length > 60);
-    parts.tree = tree;
-    parts.stage.replaceChildren(tree.svg, alt);
-    parts.stage.setAttribute('aria-label', Drupal.t('Diagram: @title', { '@title': parts.title.textContent }));
-    fit(parts);
-    // Narrow screens scroll the whole viewer; wide ones the drawing's pane.
-    parts.dialog.scrollTo(0, 0);
-    parts.stage.scrollTo(0, 0);
+    // smaller, so the panel keeps room for the Key.
+    view.title.classList.toggle('is-long', view.title.textContent.length > 60);
+    state.tree = tree;
+    state.canvas.replaceChildren(tree.svg, alt);
+    state.canvas.setAttribute('aria-label', Drupal.t('Diagram: @title', { '@title': view.title.textContent }));
+    fit();
+    state.canvas.scrollTo(0, 0);
   }
 
   // One listener for every family-tree link on the page, now and after a
@@ -444,17 +464,17 @@
     const tree = name && findTree(name);
     if (!tree || typeof HTMLDialogElement !== 'function') return;
     open(tree.href, tree.title, tree.link, false);
-    viewer.pushed = pushed;
+    state.pushed = pushed;
   }
 
   // Back closes the viewer; Forward opens the tree again.
   function onPopState(event) {
-    const state = event.state || {};
-    if (viewer && viewer.dialog.open && !state.pfTree) {
-      viewer.pushed = false;
-      viewer.dialog.close();
+    const entry = event.state || {};
+    if (viewer.isOpen() && !entry.pfTree) {
+      state.pushed = false;
+      viewer.close(null);
     }
-    else if (state.pfTree && !(viewer && viewer.dialog.open)) {
+    else if (entry.pfTree && !viewer.isOpen()) {
       fromAddress(true);
     }
   }

@@ -1,0 +1,426 @@
+// The full-screen viewer (js/viewer.js): the thing itself on the stage, with
+// Zoom, the text's fold and Close at its top corner and the arrows at its
+// sides; the title, label and text in the panel beside it (below it on
+// phones), in the page's reading colours. Exhibitions (.pf-viewer--exhibit,
+// _exhibition.scss) and the newspaper family trees (.pf-viewer--tree,
+// _family-tree-viewer.scss) fill it. The stage's frame grows out of the
+// page where the browser has view transitions (view-transition-name:
+// pf-object).
+
+$pf-viewer-ease: cubic-bezier(.2, .7, .2, 1);
+
+// Motion that is only decoration: off with the OS setting or Settings >
+// Reduce motion.
+@mixin pf-viewer-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+// Small label: mono capitals, as an exhibition's kicker.
+%pf-viewer-kicker {
+  margin: 0;
+  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pf-viewer-muted);
+}
+
+html.pf-viewer-open {
+  overflow: hidden;
+}
+
+.pf-viewer {
+  --pf-viewer-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  --pf-viewer-accent: var(--pf-g-accent, var(--bs-primary));
+  --pf-viewer-muted: var(--pf-g-muted, var(--bs-secondary-color));
+  --pf-viewer-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
+  --pf-panel-w: max(20rem, min(30rem, 32vw));
+  position: fixed;
+  inset: 0;
+  display: none;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  border: 0;
+
+  &[open] {
+    display: grid;
+    grid-template-rows: minmax(0, 56%) minmax(0, 1fr);
+
+    @include media-breakpoint-up(lg) {
+      grid-template-rows: none;
+      grid-template-columns: minmax(0, 1fr) var(--pf-panel-w);
+    }
+  }
+
+  // The text folded away (the stage's info button): the stage takes the
+  // whole screen and the panel slides off its edge whole, without
+  // reflowing, as its track closes.
+  &.is-full[open] {
+    grid-template-rows: minmax(0, 100%) minmax(0, 1fr);
+
+    @include media-breakpoint-up(lg) {
+      grid-template-rows: none;
+      grid-template-columns: minmax(0, 1fr) 0px;
+    }
+  }
+
+  @include pf-viewer-motion {
+    transition: grid-template-columns .45s $pf-viewer-ease, grid-template-rows .45s $pf-viewer-ease;
+  }
+
+  &::backdrop {
+    background: var(--bs-body-bg);
+  }
+}
+
+.pf-viewer__stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+  padding: max(3.25rem, env(safe-area-inset-top, 0px)) 3.25rem 1.25rem;
+
+  @include media-breakpoint-up(lg) {
+    padding: 3.5rem 4rem;
+  }
+}
+
+.pf-viewer__media {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 1rem;
+  justify-items: center;
+  min-height: 0;
+}
+
+.pf-viewer__frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  view-transition-name: pf-object;
+}
+
+// Centred in the frame at its own proportions: absolutely placed, so its
+// max sizes resolve against the frame's real size (a percentage height in
+// the frame's grid row would not, and a tall plate would overflow).
+.pf-viewer__img {
+  position: absolute;
+  inset: 0;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  margin: auto;
+  object-fit: contain;
+  box-shadow: 0 2rem 4rem -2rem rgba(0, 0, 0, 0.5);
+
+  .is-zoomed & {
+    box-shadow: none;
+  }
+}
+
+// What a click zooms 2.5× where it lands (js/viewer.js). touch-action: a
+// finger drags it around instead of scrolling or swiping.
+.pf-viewer__zoomable {
+  cursor: zoom-in;
+
+  @include pf-viewer-motion {
+    transition: transform .5s $pf-viewer-ease;
+  }
+
+  .is-zoomed & {
+    transform: scale(2.5);
+    cursor: zoom-out;
+    touch-action: none;
+  }
+}
+
+.pf-viewer__step {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 75%, transparent);
+  border: 1px solid $pf-hairline;
+  translate: 0 -50%;
+  transition: color .3s ease, border-color .3s ease;
+
+  &:hover {
+    color: var(--pf-viewer-accent);
+  }
+
+  svg {
+    width: 1.1rem;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-viewer__prev {
+  left: max(0.5rem, env(safe-area-inset-left, 0px));
+}
+
+.pf-viewer__next {
+  right: 0.5rem;
+}
+
+.pf-viewer__panel {
+  // Its padding, which the pinned top row (below) reaches across.
+  --pf-pad-start: max(1rem, env(safe-area-inset-left, 0px));
+  --pf-pad-end: max(1rem, env(safe-area-inset-right, 0px));
+  --pf-pad-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--pf-pad-top) var(--pf-pad-end) 2.5rem var(--pf-pad-start);
+  border-top: 1px solid $pf-hairline;
+
+  @include media-breakpoint-up(lg) {
+    --pf-pad-start: 2.25rem;
+    --pf-pad-end: 2.25rem;
+    --pf-pad-top: 3rem;
+    width: var(--pf-panel-w);
+    padding: var(--pf-pad-top) 2.25rem;
+    border-top: 0;
+    border-left: 1px solid $pf-hairline;
+  }
+
+  @include pf-viewer-motion {
+    > * {
+      animation: pf-viewer-panel .6s $pf-viewer-ease both;
+    }
+  }
+
+  // Out of reach (and the tab order) once it has slid away.
+  .is-full & {
+    visibility: hidden;
+    transition: visibility 0s linear .45s;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+@keyframes pf-viewer-panel {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+// Zoom, the text's fold and (the text folded, or on phones) Close, at the
+// stage's top corner, as squares like the arrows.
+.pf-viewer__tools {
+  position: absolute;
+  top: max(.5rem, env(safe-area-inset-top, 0px));
+  right: max(.5rem, env(safe-area-inset-right, 0px));
+  z-index: 1;
+  display: flex;
+  gap: .5rem;
+
+  @include media-breakpoint-up(lg) {
+    top: .75rem;
+    right: .75rem;
+  }
+}
+
+.pf-viewer__tool {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 75%, transparent);
+  border: 1px solid $pf-hairline;
+  transition: color .3s ease;
+
+  &:hover,
+  &[aria-pressed="true"],
+  &[aria-expanded="false"] {
+    color: var(--pf-viewer-accent);
+  }
+
+  svg {
+    width: 1.1rem;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-viewer__tool,
+.pf-viewer__step,
+.pf-viewer__close {
+  &:focus-visible {
+    outline: 2px solid var(--pf-viewer-accent);
+    outline-offset: 2px;
+  }
+}
+
+// Zoomed: the button's plus becomes a minus.
+.pf-viewer__zoom[aria-pressed="true"] .pf-viewer__plus {
+  display: none;
+}
+
+// The fold's icon draws the panel where it is: below the stage on phones,
+// beside it from lg.
+.pf-viewer__side {
+  display: none;
+
+  @include media-breakpoint-up(lg) {
+    display: inline;
+  }
+}
+
+.pf-viewer__foot {
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+}
+
+// On phones Close is always on the stage, by the other controls. From lg
+// it is in the panel, until the panel is folded away.
+@include media-breakpoint-down(lg) {
+  .pf-viewer .pf-viewer__close {
+    display: none;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-viewer:not(.is-full) .pf-viewer__shut {
+    display: none;
+  }
+}
+
+// The count and Close stay at the panel's top while its text scrolls, so
+// the way back is always in sight. Edge to edge in the breadcrumb bar's
+// glass (.pf-landing__bar), so the text blurs away under it rather than
+// being cut off; solid where transparency is reduced (the same tokens). A
+// hairline comes in under it once the text has begun to pass beneath (a
+// scroll-driven animation; without one, no line).
+.pf-viewer__top {
+  position: sticky;
+  top: calc(-1 * var(--pf-pad-top));
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: -.75rem calc(-1 * var(--pf-pad-end)) 0 calc(-1 * var(--pf-pad-start));
+  padding: .75rem var(--pf-pad-end) .75rem var(--pf-pad-start);
+  background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  border-bottom: 1px solid transparent;
+
+  // Above the panel's rise-in (.pf-viewer__panel > *), which this row does
+  // without: it is the way out, there from the start.
+  @supports (animation-timeline: scroll()) {
+    .pf-viewer .pf-viewer__panel > & {
+      animation: pf-viewer-top-rule linear both;
+      animation-timeline: scroll();
+      animation-range: 0 3rem;
+    }
+  }
+}
+
+@keyframes pf-viewer-top-rule {
+  to {
+    border-bottom-color: $pf-hairline;
+  }
+}
+
+.pf-viewer__count {
+  @extend %pf-viewer-kicker;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-viewer__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.8rem;
+  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  background: none;
+  border: 1px solid $pf-hairline;
+
+  &:hover {
+    color: var(--pf-viewer-accent);
+  }
+
+  svg {
+    width: 0.9rem;
+  }
+}
+
+.pf-viewer__title {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.pf-viewer__label {
+  padding-block: 0.9rem;
+  font-size: 0.875rem;
+  border-block: 1px solid $pf-hairline;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-viewer__body {
+  display: grid;
+  gap: 1.25rem;
+  font-size: 0.9375rem;
+
+  &:empty {
+    display: none;
+  }
+}
+
+// The frame's grow and shrink (and an exhibition wall's re-sort).
+::view-transition-group(*) {
+  animation-duration: .65s;
+  animation-timing-function: $pf-viewer-ease;
+}
+
+html.pf-a11y-motion::view-transition-group(*),
+html.pf-a11y-motion::view-transition-old(*),
+html.pf-a11y-motion::view-transition-new(*) {
+  animation: none;
+}
