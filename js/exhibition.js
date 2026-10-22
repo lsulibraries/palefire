@@ -1439,9 +1439,7 @@
       view.scale.replaceChildren();
       return;
     }
-    // A standing person for scale, 5 ft 6 in (sizes in inches only).
-    const person = sheets.every((s) => / in$/.test(s.size)) ? { w: 18, h: 66 } : null;
-    const tallest = Math.max(...sheets.map((s) => s.h), person ? person.h : 0);
+    const tallest = Math.max(...sheets.map((s) => s.h));
     const thumb = tile.querySelector('img');
     view.scale.innerHTML = '<p class="pf-exhibit-object__scale-title">' + Drupal.t('Actual size') + '</p>'
       + '<ul class="pf-exhibit-object__sheets"></ul>';
@@ -1478,24 +1476,6 @@
       }
       row.append(li);
     });
-    if (person) {
-      const li = document.createElement('li');
-      li.className = 'pf-exhibit-object__person';
-      li.innerHTML = '<svg class="pf-exhibit-object__sheet" viewBox="0 0 18 66" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false">'
-        + '<circle cx="9" cy="5.2" r="4.2" vector-effect="non-scaling-stroke"/>'
-        + '<path vector-effect="non-scaling-stroke" d="M6.6 10.3h4.8l4 1.6c.9.4 1.4 1.2 1.4 2.2V31c0 .8-.6 1.4-1.3 1.4s-1.3-.6-1.3-1.4V17.4h-.6V64c0 .8-.6 1.5-1.5 1.5s-1.5-.7-1.5-1.5V38.6H7.6V64c0 .8-.6 1.5-1.5 1.5s-1.5-.7-1.5-1.5V17.4h-.6V31c0 .8-.6 1.4-1.3 1.4S1.4 31.8 1.4 31V14.1c0-1 .5-1.8 1.4-2.2z"/></svg>';
-      const svgEl = li.firstChild;
-      svgEl.style.setProperty('--pf-w', person.w / tallest);
-      svgEl.style.setProperty('--pf-h', person.h / tallest);
-      const label = document.createElement('span');
-      label.className = 'pf-exhibit-object__sheet-label';
-      label.textContent = Drupal.t('A person');
-      const size = document.createElement('span');
-      size.className = 'pf-exhibit-object__sheet-label';
-      size.textContent = Drupal.t('5 ft 6 in');
-      li.append(label, size);
-      row.append(li);
-    }
   }
 
   function stepObject(delta) {
