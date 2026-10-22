@@ -857,6 +857,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **At a glance plates.** On the 4-column grid each At a glance cell now
+  starts with a 16:9 plate on its column: a Sign in card (the request
+  system, as the bar's link), the next event's LibCal picture (cropped
+  from the top, as they are often flyers) or its date set large
+  (js/hero-event.js), the first exhibition's picture, and the blog post's
+  Image (field_image, when the article has one) or its date. The cards are
+  opaque so the video doesn't show through their words; picture plates
+  repeat their cell's link and are out of the tab order. Blog posts gain
+  `day`, `month` and `image` (_palefire_blog_posts()). Narrower layouts
+  show no plates (their images never load). The cover's space above the
+  title is 3.5rem on this grid so the row fits a 1440x900 first screen.
+  Why: the area under the search read as empty; the video already shows
+  Hill, so the first plate is the account instead.
 - **Quick Start intro three sixteenths wide.** In the timetable the
   Quick Guide intro spans 3 of its column's 4 sixteenths, leaving one
   empty and a gutter before column A. Written for the shortened intro (a

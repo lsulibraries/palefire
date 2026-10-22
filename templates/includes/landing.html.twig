@@ -319,20 +319,41 @@
       {# Index rule 01 (the index_rule macro, top): its link goes to every
          library's hours (LibCal), as the Visit panel's does. #}
       {{ pf.index_rule('01', 'At a glance'|t, { url: 'https://lsu.libcal.com/hours', text: 'All hours'|t, hidden: ' ' ~ 'for all LSU Libraries'|t }) }}
+      {# Plates (.pf-today__plate): a 16:9 picture or card at the top of each
+         cell, on the 4-column grid only (CSS). The first is the account
+         card (Sign in, the request system, as the bar's); the others show
+         their item's picture, else its date set large (the event's from
+         js/hero-event.js). A picture plate repeats its cell's link, so it
+         is out of the tab order and hidden from screen readers. #}
       <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
         {% if visit.lid %}
           <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
+            {% if account_url %}
+              <a class="pf-today__plate pf-today__plate--account" href="{{ account_url }}" target="_blank" rel="noopener">
+                <span class="pf-today__plate-title">{{ 'Sign in'|t }}</span>
+                <span class="pf-today__plate-note">{{ 'Request materials, book a visit, order copies'|t }}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span></span>
+              </a>
+            {% else %}
+              <span class="pf-today__plate pf-today__plate--empty" aria-hidden="true"></span>
+            {% endif %}
             <span class="pf-today__label"><span class="pf-today__dot" aria-hidden="true"></span><span data-pf-hours-status>{{ 'Hours'|t }}</span></span>
             <span class="pf-today__value" data-pf-hours-today></span>
             <span class="pf-today__meta">{{ visit.name }}</span>
           </li>
         {% endif %}
         <li class="pf-today__item pf-landing__next" data-pf-hero-event data-pf-hero-event-empty="{{ 'No upcoming events'|t }}">
+          <span class="pf-today__plate pf-today__plate--pending" aria-hidden="true"></span>
           <span class="pf-today__label">{{ 'Next event'|t }}</span>
         </li>
         {% if hero_tiles %}
           {% set count = hero_tiles|length %}
+          {% set view_image = (hero_tiles|first).images|first %}
           <li class="pf-today__item">
+            {% if view_image %}
+              <a class="pf-today__plate" href="#{{ input_id }}-on-view" tabindex="-1" aria-hidden="true">{{ view_image }}</a>
+            {% else %}
+              <span class="pf-today__plate pf-today__plate--empty" aria-hidden="true"></span>
+            {% endif %}
             <span class="pf-today__label">{{ 'On view'|t }}</span>
             <a class="pf-today__value pf-today__link" href="#{{ input_id }}-on-view">{% trans %}{{ count }} exhibition{% plural count %}{{ count }} exhibitions{% endtrans %}</a>
             {# The first exhibition by name, the others counted, so the line
@@ -342,6 +363,13 @@
         {% endif %}
         {% if hero_post %}
           <li class="pf-today__item">
+            <a class="pf-today__plate{{ hero_post.image ? '' : ' pf-today__plate--date' }}" href="{{ hero_post.url }}" tabindex="-1" aria-hidden="true">
+              {%- if hero_post.image -%}
+                {{ hero_post.image }}
+              {%- else -%}
+                <span class="pf-today__plate-day">{{ hero_post.day }}</span><span class="pf-today__plate-month">{{ hero_post.month }}</span>
+              {%- endif -%}
+            </a>
             <span class="pf-today__label">{{ 'From the blog'|t }} · <time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time></span>
             <a class="pf-today__value pf-today__link" href="{{ hero_post.url }}">{{ hero_post.title }}</a>
             <span class="pf-today__meta">{{ hero_post.category }}</span>

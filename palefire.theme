@@ -384,8 +384,11 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
  * fields, this is []. The list's cache tag (node_list:article) refreshes
  * the posts when an article is published or changed.
  *
- * Each post: ['title', 'url', 'date', 'datetime', 'category', 'excerpt'].
- * category is the article's first category among the paragraph's.
+ * Each post: ['title', 'url', 'date', 'datetime', 'day', 'month',
+ * 'category', 'excerpt', 'image']. category is the article's first category
+ * among the paragraph's. day and month ("28", "Sep 2026") set the date
+ * large where there is no picture; image is the article's Image
+ * (field_image) as a lazy render array, or NULL when it has none.
  */
 function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, CacheableMetadata $cache): array {
   $cache->addCacheTags(['node_list:article']);
@@ -448,13 +451,21 @@ function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, Cacheab
       }
     }
 
+    $image = NULL;
+    if ($node->hasField('field_image') && !$node->get('field_image')->isEmpty()) {
+      $image = _palefire_image_build($node->get('field_image')->first(), ['tile_showcase_landscape_lg'], $cache);
+    }
+
     $posts[] = [
       'title' => $node->label(),
       'url' => $url->getGeneratedUrl(),
       'date' => $formatter->format($timestamp, 'custom', 'M j, Y'),
       'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
+      'day' => $formatter->format($timestamp, 'custom', 'j'),
+      'month' => $formatter->format($timestamp, 'custom', 'M Y'),
       'category' => $repository->getTranslationFromContext($term)->label(),
       'excerpt' => $excerpt,
+      'image' => $image,
     ];
   }
   return $posts;

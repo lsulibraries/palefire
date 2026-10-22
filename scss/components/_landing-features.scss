@@ -365,6 +365,11 @@
 // keeps the rhythm.
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+    // Less room above the title, so the row of plates and their cells
+    // fit a laptop's first screen (1440x900); the flexible first row
+    // still adds space above the title wherever there is more.
+    --pf-cover-space: clamp(2.5rem, 4vw, 3.5rem);
+
     > .pf-landing__media {
       grid-row: 1 / 5;
       min-height: calc(100svh - var(--pf-header-h, 0px));
@@ -653,6 +658,127 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+// Plates: a 16:9 picture or card at the top of each cell (includes/
+// landing.html.twig, js/hero-event.js), on the 4-column grid only, where
+// the four sit in a row on the columns; stacked, they would push the page
+// down for little. The picture fills the plate. Without one, a card in the
+// hairline frame on a faint tint: the account card (Sign in, its note and
+// an arrow), a date set large (the day over its month), or empty. The
+// pictures are lazy and, hidden below the grid, never load.
+.pf-today__plate {
+  display: none;
+}
+
+@container pf-cover (min-width: 64rem) {
+  .pf-today .pf-today__item > .pf-today__plate {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: .375rem;
+    aspect-ratio: 16 / 9;
+    margin-bottom: .625rem;
+    padding: 1rem;
+    overflow: hidden;
+    white-space: normal;
+    color: var(--pf-section-fg, var(--bs-body-color));
+    text-decoration: none;
+    // Opaque: the page colour with a 5% tint, so the video doesn't show
+    // through behind a card's words.
+    background-color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 5%, var(--pf-cover-bg, var(--bs-body-bg)));
+    border: 1px solid #{$pf-hairline};
+
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .pf-today .pf-today__item > .pf-today__plate:has(> img) {
+    padding: 0;
+    border: 0;
+  }
+
+  // Event pictures are often flyers, their headline at the top: cropped
+  // from the top rather than the middle.
+  .pf-today .pf-today__plate--event img {
+    object-position: 50% 0;
+  }
+}
+
+.pf-today__plate-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.1;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-inline-start: .35em;
+    font-size: .75em;
+    transition: transform $pf-hover-out ease;
+  }
+
+  [dir="rtl"] &::after {
+    content: "\2190" / "";
+  }
+}
+
+.pf-today__plate-note {
+  font-size: .875rem;
+  line-height: 1.4;
+  color: var(--pf-toc-color);
+}
+
+.pf-today__plate--account {
+  transition: background-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 10%, var(--pf-cover-bg, var(--bs-body-bg)));
+    transition-duration: $pf-hover-in;
+
+    .pf-today__plate-title::after {
+      transform: translateX(.2em);
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+}
+
+.pf-today__plate-day {
+  font-size: clamp(2.5rem, 1.5rem + 2vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-today__plate-month {
+  @extend %pf-landing-label;
+  color: var(--pf-toc-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-today__plate-title::after {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-today__plate {
+    border-color: CanvasText;
   }
 }
 
