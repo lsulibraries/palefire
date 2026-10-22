@@ -821,6 +821,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: looser reading text.** Text blocks, biographies and
+  transcripts (also in the object view) get line height 1.7 (was 1.5) and
+  1.5em between paragraphs (was 1em); captions, labels and records keep
+  theirs, and guides and other pages are unchanged. Why: exhibitions are
+  read at length.
+- **TOC: two-line items read as one.** Section links set their lines at
+  1.3 with 0.4rem above and below (still at least 44px), sub-links at 1.35
+  with a little more padding, so the gap between items is clearly larger
+  than the gap between an item's lines, on every page with the TOC. Why:
+  two-line items ran into their neighbours.
 - **Exhibitions: a cover's image never moves, and "Show more".** The
   cover's frame is pinned under the bar from the first scroll and follows
   it as the header shrinks, while the image and washes inside are set back

@@ -1424,6 +1424,17 @@ html.pf-exhibit-paged {
   min-width: 0;
 }
 
+// Reading text (text blocks, biographies, transcripts; also in the object
+// view): looser than guides and landing pages, for long reading. Captions,
+// labels and records keep their own.
+html[data-pf-mode="exhibition"] :is(.pf-guide-block--text > .pf-guide-prose, .pf-exhibit-bio__text, .pf-exhibit-audio__text) {
+  line-height: 1.7;
+
+  :is(p, ul, ol, blockquote):not(:last-child) {
+    margin-bottom: 1.5em;
+  }
+}
+
 // Biography: long ones fold to their opening lines (js/exhibition.js).
 .pf-exhibit-bio {
   --pf-bio-clip: 13.5rem;
