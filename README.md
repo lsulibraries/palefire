@@ -857,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Homepage: At a glance as ruled cells, suggestions as plain links, Quick
+  Start as a ruled table.** The Today strip drops its vertical rules for a
+  hairline over each cell with gutters between, two by two until the lead is
+  75rem wide (four across at 64rem cut the titles off). The floating "Try"
+  label is gone (screen readers still hear "Suggested searches"); the
+  suggestions are text links on the field's left edge that underline on
+  hover. The Quick Start options sit between hairlines, A to C, and the stop
+  labels lose their dotted underline (the "how" panels still open on click
+  and underline on hover; their line height now matches the plain labels).
+  Why: the strip's 1-2-1 rules, the label and the dots broke the grid, and
+  the options looked like they floated.
 - **Homepage: paragraphs a step softer than their headings.** The map's
   description and the Quick Guide intro are set at 80% of the text colour
   (bold words at full strength), so each heading leads by tone as well as

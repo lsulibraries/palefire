@@ -230,7 +230,9 @@
           'Louisiana maps'|t,
         ]) %}
         <div class="pf-landing__try">
-          <span class="pf-landing__try-label" id="{{ input_id }}-try">{{ 'Try'|t }}</span>
+          {# The list's name for screen readers; on screen the links start on
+             the field's left edge, with no label beside them. #}
+          <span class="visually-hidden" id="{{ input_id }}-try">{{ 'Suggested searches'|t }}</span>
           <ul class="pf-landing__suggestions" role="list" aria-labelledby="{{ input_id }}-try">
             {% for term in suggestions %}
               <li><a class="pf-landing__suggestion" href="{{ landing_action }}?{{ { (landing_name): term }|url_encode }}">{{ term }}</a></li>

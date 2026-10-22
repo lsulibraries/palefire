@@ -562,17 +562,18 @@ html[data-pf-mode="guide"] .pf-section__title {
   color: var(--pf-guide-muted);
 }
 
-// A stop with a "how" panel: its label is the button that opens it, styled
-// as the label with a dotted accent underline, so it reads as "there's more
-// here" without looking like a CTA.
+// A stop with a "how" panel: its label is the button that opens it, set as
+// the label (no dotted underline, which read as noise beside the line of
+// discs); hover and focus underline it, and the pointer shows it opens.
 .pf-paths__peek {
   display: inline;
   padding: 0;
   font: inherit;
   font-weight: 700;
+  line-height: 1.3; // font: inherit resets it; match the plain labels
   text-align: inherit;
   color: var(--bs-emphasis-color);
-  text-decoration: underline dotted var(--pf-guide-accent);
+  text-decoration: underline transparent;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25em;
   cursor: pointer;
@@ -582,7 +583,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 
   &:hover,
   &:focus-visible {
-    text-decoration-style: solid;
+    text-decoration-color: currentColor;
   }
 
   &:focus-visible {
