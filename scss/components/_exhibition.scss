@@ -12,8 +12,7 @@
 //
 // Colours: the reading swatch (--pf-g-*, _reading-themes.scss) through the
 // guide's tokens (.pf-guide, _guide.scss), so every swatch works and keeps
-// its contrast. Lines are the soft hairline. No literal colours except the
-// lightbox, which is always dark.
+// its contrast. Lines are the soft hairline. No literal colours.
 
 $pf-exhibit-ease: cubic-bezier(.2, .7, .2, 1);
 $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
@@ -178,7 +177,7 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 }
 
 // With a caption (field_exhibit_lead_caption) the lead is a figure: the
-// image is a link to the lightbox and the caption lines up with the text
+// image opens in the object view and the caption lines up with the text
 // column under the band.
 .pf-exhibit-lead.has-caption .pf-exhibit-lead__frame {
   display: block;
@@ -458,7 +457,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   object-fit: cover;
 }
 
-// The lead's caption shows in the lightbox (the bar's zoom button); here it
+// The lead's caption shows in the object view (the bar's zoom button); here it
 // stays for screen readers, as the figure's label.
 .pf-exhibit-hero__caption {
   @include visually-hidden;
@@ -2451,8 +2450,10 @@ html.pf-object-open {
   max-width: none;
   height: 100%;
   max-height: none;
+  --pf-panel-w: max(20rem, min(30rem, 32vw));
   margin: 0;
   padding: 0;
+  overflow: hidden;
   color: var(--bs-body-color);
   background: var(--bs-body-bg);
   border: 0;
@@ -2463,8 +2464,24 @@ html.pf-object-open {
 
     @include media-breakpoint-up(lg) {
       grid-template-rows: none;
-      grid-template-columns: minmax(0, 1fr) minmax(20rem, min(30rem, 32vw));
+      grid-template-columns: minmax(0, 1fr) var(--pf-panel-w);
     }
+  }
+
+  // The text folded away (the stage's info button, js/exhibition.js): the
+  // stage takes the whole screen and the panel slides off its edge whole,
+  // without reflowing, as its track closes.
+  &.is-full[open] {
+    grid-template-rows: minmax(0, 100%) minmax(0, 1fr);
+
+    @include media-breakpoint-up(lg) {
+      grid-template-rows: none;
+      grid-template-columns: minmax(0, 1fr) 0px;
+    }
+  }
+
+  @include pf-exhibit-motion {
+    transition: grid-template-columns .45s $pf-exhibit-ease, grid-template-rows .45s $pf-exhibit-ease;
   }
 
   &::backdrop {
@@ -2522,10 +2539,13 @@ html.pf-object-open {
     transition: transform .5s $pf-exhibit-ease;
   }
 
+  // touch-action: a finger drags the zoomed image around (js/exhibition.js)
+  // instead of scrolling or swiping.
   .is-zoomed & {
     transform: scale(2.5);
     cursor: zoom-out;
     box-shadow: none;
+    touch-action: none;
   }
 }
 
@@ -2589,6 +2609,7 @@ html.pf-object-open {
   .is-zoomed > & {
     transform: scale(2.5);
     cursor: zoom-out;
+    touch-action: none;
   }
 }
 
@@ -2693,6 +2714,7 @@ html.pf-object-open {
   border-top: 1px solid $pf-hairline;
 
   @include media-breakpoint-up(lg) {
+    width: var(--pf-panel-w);
     padding: 3rem 2.25rem;
     border-top: 0;
     border-left: 1px solid $pf-hairline;
@@ -2703,6 +2725,89 @@ html.pf-object-open {
       animation: pf-object-panel .6s $pf-exhibit-ease both;
     }
   }
+
+  // Out of reach (and the tab order) once it has slid away.
+  .is-full & {
+    visibility: hidden;
+    transition: visibility 0s linear .45s;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Zoom, the text's fold and (the text folded) Close, at the stage's top
+// corner, as squares like the arrows.
+.pf-exhibit-object__tools {
+  position: absolute;
+  top: max(.5rem, env(safe-area-inset-top, 0px));
+  right: max(.5rem, env(safe-area-inset-right, 0px));
+  z-index: 1;
+  display: flex;
+  gap: .5rem;
+
+  @include media-breakpoint-up(lg) {
+    top: .75rem;
+    right: .75rem;
+  }
+}
+
+.pf-exhibit-object__tool {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 75%, transparent);
+  border: 1px solid $pf-hairline;
+  transition: color .3s ease;
+
+  &:hover,
+  &[aria-pressed="true"],
+  &[aria-expanded="false"] {
+    color: var(--pf-exhibit-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-exhibit-accent);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 1.1rem;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Zoomed: the button's plus becomes a minus.
+.pf-exhibit-object__zoom[aria-pressed="true"] .pf-exhibit-object__plus {
+  display: none;
+}
+
+// The fold's icon draws the panel where it is: below the image on phones,
+// beside it from lg.
+.pf-exhibit-object__side {
+  display: none;
+
+  @include media-breakpoint-up(lg) {
+    display: inline;
+  }
+}
+
+.pf-exhibit-object__foot {
+  @include media-breakpoint-up(lg) {
+    display: none;
+  }
+}
+
+// Close is in the panel, until the panel is folded away.
+.pf-exhibit-object:not(.is-full) .pf-exhibit-object__shut {
+  display: none;
 }
 
 @keyframes pf-object-panel {
@@ -2851,190 +2956,4 @@ html.pf-a11y-motion::view-transition-group(*),
 html.pf-a11y-motion::view-transition-old(*),
 html.pf-a11y-motion::view-transition-new(*) {
   animation: none;
-}
-
-// Lightbox ---------------------------------------------------------------------
-
-html.pf-lightbox-open {
-  overflow: hidden;
-}
-
-// Always dark, whatever the swatch: the image is what matters.
-.pf-lightbox {
-  position: fixed;
-  inset: 0;
-  display: none;
-  grid-template-rows: minmax(0, 1fr) auto;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  color: #f2eff4;
-  background: rgba(14, 12, 16, 0.985);
-  border: 0;
-
-  &[open] {
-    display: grid;
-
-    @include pf-exhibit-motion {
-      animation: pf-lightbox-in .35s ease both;
-
-      .pf-lightbox__img {
-        animation: pf-lightbox-img .6s $pf-exhibit-ease both;
-      }
-    }
-  }
-
-  &.is-closing {
-    opacity: 0;
-    transition: opacity .22s ease;
-  }
-
-  &::backdrop {
-    background: transparent;
-  }
-
-  a {
-    color: #d4c9dc; // lilac: 10:1 on the lightbox
-  }
-}
-
-@keyframes pf-lightbox-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes pf-lightbox-img {
-  from {
-    opacity: 0;
-    scale: 0.97;
-  }
-}
-
-.pf-lightbox__stage {
-  --pf-lightbox-top: clamp(3.5rem, 6vh, 4.5rem);
-  --pf-lightbox-side: clamp(0.75rem, 5vw, 5.5rem);
-  position: relative;
-  min-height: 0;
-}
-
-// Fills the stage inside its margins and keeps its proportions (the
-// stage's height comes from the grid row, which a max-height: 100% on the
-// image wouldn't see).
-.pf-lightbox__img {
-  position: absolute;
-  top: var(--pf-lightbox-top);
-  left: var(--pf-lightbox-side);
-  width: calc(100% - 2 * var(--pf-lightbox-side));
-  height: calc(100% - var(--pf-lightbox-top) - 1rem);
-  object-fit: contain;
-  transition: filter .4s ease;
-
-  &.is-loading {
-    filter: blur(2px);
-  }
-}
-
-.pf-lightbox__bar {
-  display: grid;
-  gap: 0.5rem;
-  max-height: 30vh;
-  padding: 1rem clamp(1rem, 5vw, 5.5rem) 1.5rem;
-  overflow: auto;
-  border-top: 1px solid rgba(242, 239, 244, 0.2);
-}
-
-.pf-lightbox__count {
-  margin: 0;
-  font: 0.75rem/1.5 'Consolas', 'Monaco', 'Liberation Mono', monospace;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #bdb6c2; // 9:1
-
-  &:empty {
-    display: none;
-  }
-}
-
-.pf-lightbox__caption {
-  max-width: 48rem;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-
-  > :last-child {
-    margin-bottom: 0;
-  }
-}
-
-.pf-lightbox__btn {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0.7rem;
-  color: #f2eff4;
-  background: rgba(242, 239, 244, 0.08);
-  border: 1px solid rgba(242, 239, 244, 0.45); // 3:1 on the lightbox
-  border-radius: 50%;
-  transition: background-color $pf-hover-out ease;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  &:hover,
-  &:focus-visible {
-    background: rgba(242, 239, 244, 0.22);
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #f2eff4;
-    outline-offset: 2px;
-  }
-
-  &[hidden] {
-    display: none;
-  }
-}
-
-.pf-lightbox__close {
-  top: 0.75rem;
-  right: 0.75rem;
-}
-
-.pf-lightbox__prev,
-.pf-lightbox__next {
-  top: 40%;
-}
-
-.pf-lightbox__prev {
-  left: 0.75rem;
-}
-
-.pf-lightbox__next {
-  right: 0.75rem;
-}
-
-// Phones: the arrows sit under the image, not over it.
-@include media-breakpoint-down(md) {
-  .pf-lightbox__prev,
-  .pf-lightbox__next {
-    top: auto;
-    bottom: calc(100% - 3.5rem);
-  }
-
-  .pf-lightbox__prev {
-    left: auto;
-    right: 7.25rem;
-  }
-
-  .pf-lightbox__next {
-    right: 4rem;
-  }
 }

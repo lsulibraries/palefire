@@ -821,6 +821,21 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **One image viewer for exhibitions: the object view.** The lightbox is
+  gone (its JS and CSS). Images in the text, a gallery's lead and the
+  bar's zoom button now open in the wall's object view: the image on the
+  stage, its caption and "Image 2 of 4" in the panel, stepping through
+  the gallery's images. Opened from an entry's text, Close goes back to
+  the entry, and an image with no caption has no panel. The image grows
+  out of its place on the page where the browser has view transitions.
+  The stage has a toolbar:
+  - **Zoom**, the same zoom as a click, and reachable by keyboard.
+  - **Fold the text away** (or press I). The panel slides off and the
+    image takes the screen. The choice is kept per browser
+    (localStorage), and Close moves onto the stage while the panel is
+    folded.
+  - **Drag to pan on touch.** Zoomed images could only be panned with a
+    mouse before.
 - **Title page: no line of image at the cover's foot, at any zoom.** The
   1px fix below didn't hold at 125%. The clip cut the image and its wash
   at one edge, and the anti-aliased rows of the two layers let a broken

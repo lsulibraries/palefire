@@ -1,7 +1,7 @@
 /**
  * @file
  * Exhibition pages (<html data-pf-mode="exhibition">): one gallery at a
- * time, the title page, the lightbox, long biographies and audio.
+ * time, the title page, the object view, long biographies and audio.
  *
  * - Galleries: each exhibit_page section is a "gallery". Only the current
  *   one is shown; the rest are [hidden]. The TOC links, "Begin", the
@@ -15,11 +15,11 @@
  *   breadcrumb bar) that keeps the
  *   <h1>, and is marked data-toc-inactive so the TOC doesn't light "Title
  *   page" (js/modular-toc.js).
- * - Lightbox: a figure's image link opens a <dialog> with its largest
- *   version and caption; arrows, swipe and the buttons step through the
- *   gallery's images. Esc or a click outside closes it; focus goes back.
- * - Wall: a gallery set to Display "wall" shows its entries as a wall of
- *   images; each opens full screen in the object view (see below).
+ * - Object view: one full-screen <dialog> for every image. A wall's entry
+ *   (a gallery set to Display "wall") shows its image beside its text; an
+ *   image in the text shows beside its caption, stepping through the
+ *   gallery's images. Zoom and a button (or I) that folds the text away
+ *   are on the stage; Esc or Close closes it and focus goes back.
  * - Biographies longer than about ten lines show their opening lines and
  *   a "Read the full biography" button.
  * - Audio: the browser's controls are swapped for a play button, a seek
@@ -167,7 +167,7 @@
     button.addEventListener('click', () => {
       const source = zoomSource();
       if (source) {
-        openBox(source.link, source.group, button);
+        openPictures(source.link, source.group, button);
       }
     });
     row.append(button);
@@ -640,8 +640,20 @@
    * ------------------------------------------------------------------ */
 
   // quiet: closing for another route (Back, a TOC jump), which sets the
-  // address itself.
-  const wallState = { view: null, tiles: [], index: 0, tile: null, quiet: false, compare: 'wipe' };
+  // address itself. loose: the view is showing images from the text
+  // (openPictures) rather than a wall's entry.
+  const wallState = { view: null, tiles: [], index: 0, tile: null, quiet: false, compare: 'wipe', loose: null };
+
+  // The text panel folded away (the image full width), kept across visits.
+  const FULL_KEY = 'pf-object-full';
+  function savedFull() {
+    try {
+      return window.localStorage.getItem(FULL_KEY) === '1';
+    }
+    catch (e) {
+      return false;
+    }
+  }
 
   function canMorph() {
     return !reduceMotion() && typeof document.startViewTransition === 'function';
@@ -912,10 +924,15 @@
     dialog.innerHTML =
       '<div class="pf-exhibit-object__stage">'
       + '<div class="pf-exhibit-object__media"></div>'
+      + '<div class="pf-exhibit-object__tools">'
+      + '<button type="button" class="pf-exhibit-object__tool pf-exhibit-object__zoom" aria-pressed="false">' + svg('zoom') + '<span class="visually-hidden">' + Drupal.t('Zoom') + '</span></button>'
+      + '<button type="button" class="pf-exhibit-object__tool pf-exhibit-object__info" aria-controls="pf-exhibit-object-panel">' + svg('panel') + '<span class="visually-hidden">' + Drupal.t('Text beside the image') + '</span></button>'
+      + '<button type="button" class="pf-exhibit-object__tool pf-exhibit-object__shut">' + svg('close') + '<span class="visually-hidden">' + Drupal.t('Close') + '</span></button>'
+      + '</div>'
       + '<button type="button" class="pf-exhibit-object__step pf-exhibit-object__prev">' + svg('prev') + '<span class="visually-hidden">' + Drupal.t('Previous') + '</span></button>'
       + '<button type="button" class="pf-exhibit-object__step pf-exhibit-object__next">' + svg('next') + '<span class="visually-hidden">' + Drupal.t('Next') + '</span></button>'
       + '</div>'
-      + '<div class="pf-exhibit-object__panel">'
+      + '<div class="pf-exhibit-object__panel" id="pf-exhibit-object-panel">'
       + '<div class="pf-exhibit-object__top">'
       + '<p class="pf-exhibit-object__count" aria-live="polite"></p>'
       + '<button type="button" class="pf-exhibit-object__close" autofocus>' + svg('close') + '<span>' + Drupal.t('Close') + '</span></button>'
@@ -935,10 +952,20 @@
       body: dialog.querySelector('.pf-exhibit-object__body'),
       scale: dialog.querySelector('.pf-exhibit-object__scale'),
       panel: dialog.querySelector('.pf-exhibit-object__panel'),
+      zoom: dialog.querySelector('.pf-exhibit-object__zoom'),
+      info: dialog.querySelector('.pf-exhibit-object__info'),
     };
     dialog.querySelector('.pf-exhibit-object__prev').addEventListener('click', () => stepObject(-1));
     dialog.querySelector('.pf-exhibit-object__next').addEventListener('click', () => stepObject(1));
     dialog.querySelector('.pf-exhibit-object__close').addEventListener('click', () => closeObject(true));
+    dialog.querySelector('.pf-exhibit-object__shut').addEventListener('click', () => closeObject(true));
+    view.info.addEventListener('click', () => setFull(!dialog.classList.contains('is-full'), true));
+    view.zoom.addEventListener('click', () => {
+      const target = view.media.querySelector('.pf-exhibit-object__img, .pf-exhibit-compare__stage');
+      if (target) {
+        zoom(target, null);
+      }
+    });
     dialog.addEventListener('cancel', (event) => {
       event.preventDefault();
       closeObject(true);
@@ -953,61 +980,87 @@
       else if (event.key === 'ArrowRight') {
         stepObject(1);
       }
+      else if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey && !event.altKey && !view.info.hidden) {
+        setFull(!dialog.classList.contains('is-full'), true);
+      }
     });
-    // Click the image to look closer where you clicked; move to look around.
-    // A comparison zooms both images together (its stage).
+    // Click the image to look closer where you clicked; move to look around
+    // (a mouse) or drag (touch). A comparison zooms both images together
+    // (its stage).
+    let drag = null;
+    let dragged = false;
     view.media.addEventListener('click', (event) => {
       const img = event.target.closest('.pf-exhibit-object__img, .pf-exhibit-compare__stage');
-      if (!img) {
+      if (!img || dragged) {
+        dragged = false;
         return;
       }
-      // First zoom: the largest size, then zoom.
-      const frame = img.closest('.pf-exhibit-object__frame');
-      const swap = (el) => {
-        el.srcset = '';
-        el.src = el.dataset.full;
-        delete el.dataset.full;
-      };
-      if (img.dataset.full) {
-        swap(img);
-        frame.classList.add('is-zoomed');
-      }
-      else if (img.querySelector('img[data-full]')) {
-        img.querySelectorAll('img[data-full]').forEach(swap);
-        frame.classList.add('is-zoomed');
-      }
-      else {
-        frame.classList.toggle('is-zoomed');
-      }
-      aim(img, event);
+      zoom(img, event);
     });
     view.media.addEventListener('pointermove', (event) => {
       const img = event.target.closest('.is-zoomed .pf-exhibit-object__img, .is-zoomed .pf-exhibit-compare__stage');
       if (img && event.pointerType === 'mouse') {
         aim(img, event);
       }
+      // Dragging moves the zoom's origin the opposite way, as far as the
+      // image moves under the finger: at 2.5× that is 1 / 1.5 of the drag.
+      if (drag && drag.img === img) {
+        const r = img.getBoundingClientRect();
+        const dx = event.clientX - drag.x;
+        const dy = event.clientY - drag.y;
+        if (Math.abs(dx) + Math.abs(dy) > 6) {
+          dragged = true;
+        }
+        const x = Math.min(100, Math.max(0, drag.ox - dx / (r.width / 2.5 * 1.5) * 100));
+        const y = Math.min(100, Math.max(0, drag.oy - dy / (r.height / 2.5 * 1.5) * 100));
+        img.style.transformOrigin = x + '% ' + y + '%';
+      }
     });
     // Swipe on touch screens (not while zoomed or on the slider).
     let startX = null;
     view.media.addEventListener('pointerdown', (event) => {
       startX = event.pointerType === 'touch' && !event.target.closest('.is-zoomed, input') ? event.clientX : null;
+      const img = event.pointerType !== 'mouse' && event.target.closest('.is-zoomed .pf-exhibit-object__img, .is-zoomed .pf-exhibit-compare__stage');
+      dragged = false;
+      drag = null;
+      if (img) {
+        const origin = getComputedStyle(img).transformOrigin.split(' ').map(parseFloat);
+        const r = img.getBoundingClientRect();
+        drag = { img: img, x: event.clientX, y: event.clientY, ox: origin[0] / (r.width / 2.5) * 100, oy: origin[1] / (r.height / 2.5) * 100 };
+      }
     });
     view.media.addEventListener('pointerup', (event) => {
       if (startX !== null && Math.abs(event.clientX - startX) > 50) {
         stepObject(event.clientX < startX ? 1 : -1);
       }
       startX = null;
+      drag = null;
     });
-    // Images in the text open in the lightbox, over the object view.
+    view.media.addEventListener('pointercancel', () => {
+      startX = null;
+      drag = null;
+    });
+    // Images in the text open on the stage, with their captions; Close
+    // returns to the entry.
     view.body.addEventListener('click', (event) => {
       const link = event.target.closest('a[data-pf-lightbox]');
-      if (link && window.HTMLDialogElement && event.button === 0) {
+      if (link && event.button === 0) {
         event.preventDefault();
-        openBox(link, Array.from(view.body.querySelectorAll('a[data-pf-lightbox]')));
+        openPictures(link, Array.from(view.body.querySelectorAll('a[data-pf-lightbox]')), null);
       }
     });
     dialog.addEventListener('close', () => {
       ROOT.classList.remove('pf-object-open');
+      const loose = wallState.loose;
+      wallState.loose = null;
+      if (loose) {
+        const quiet = wallState.quiet;
+        wallState.quiet = false;
+        if (!quiet && loose.opener && loose.opener.isConnected) {
+          loose.opener.focus({ preventScroll: true });
+        }
+        return;
+      }
       if (wallState.quiet) {
         wallState.quiet = false;
         return;
@@ -1028,6 +1081,66 @@
   function aim(img, event) {
     const r = img.getBoundingClientRect();
     img.style.transformOrigin = ((event.clientX - r.left) / r.width * 100) + '% ' + ((event.clientY - r.top) / r.height * 100) + '%';
+  }
+
+  // Zooms in on the image (or comparison stage) where it was clicked, or
+  // its centre from the Zoom button; again zooms out. The first zoom swaps
+  // in the largest size.
+  function zoom(img, event) {
+    const frame = img.closest('.pf-exhibit-object__frame');
+    const swap = (el) => {
+      el.srcset = '';
+      el.src = el.dataset.full;
+      delete el.dataset.full;
+    };
+    if (img.dataset.full) {
+      swap(img);
+      frame.classList.add('is-zoomed');
+    }
+    else if (img.querySelector('img[data-full]')) {
+      img.querySelectorAll('img[data-full]').forEach(swap);
+      frame.classList.add('is-zoomed');
+    }
+    else {
+      frame.classList.toggle('is-zoomed');
+    }
+    if (event) {
+      aim(img, event);
+    }
+    else {
+      img.style.transformOrigin = '';
+    }
+    wallState.view.zoom.setAttribute('aria-pressed', String(frame.classList.contains('is-zoomed')));
+  }
+
+  // The text panel folded away or back. save: the reader's own choice,
+  // kept for next time. A view with nothing to read is always full.
+  function setFull(full, save) {
+    const view = wallState.view;
+    // Focus in the panel (I pressed there) moves to the button first.
+    if (full && view.panel.contains(document.activeElement)) {
+      (view.info.hidden ? view.dialog.querySelector('.pf-exhibit-object__shut') : view.info).focus();
+    }
+    view.dialog.classList.toggle('is-full', full);
+    view.info.setAttribute('aria-expanded', String(!full));
+    if (save) {
+      try {
+        window.localStorage.setItem(FULL_KEY, full ? '1' : '0');
+      }
+      catch (e) {
+        // Private browsing: the choice lasts until the page closes.
+      }
+    }
+  }
+
+  // After the stage is filled: the Zoom button follows the new image, and
+  // the panel shows unless the reader folded it away or it has nothing in it.
+  function syncTools(bare) {
+    const view = wallState.view;
+    view.zoom.hidden = !view.media.querySelector('img');
+    view.zoom.setAttribute('aria-pressed', 'false');
+    view.info.hidden = bare;
+    setFull(bare || savedFull(), false);
   }
 
   // The entry's first figure (or image group): its images and its caption.
@@ -1080,6 +1193,10 @@
     if (!entry) {
       return;
     }
+    wallState.loose = null;
+    view.dialog.removeAttribute('aria-label');
+    view.dialog.setAttribute('aria-labelledby', 'pf-exhibit-object-title');
+    view.title.hidden = false;
     const media = entryMedia(entry);
     const shown = tile.querySelectorAll('.pf-exhibit-wall__img');
 
@@ -1214,6 +1331,92 @@
       button.hidden = n < 2;
     });
     fillScale(tile);
+    syncTools(false);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Pictures: images in the text (a figure, a group, a gallery's lead, the
+   * bar's zoom button) open in the same view, each with its caption in the
+   * panel, and step through the gallery's images. Opened from an entry in
+   * the view, Close goes back to that entry.
+   * ------------------------------------------------------------------ */
+
+  // group: the images to step through (default: the link's gallery's);
+  // opener: where focus returns (default: the link).
+  function openPictures(link, group, opener) {
+    const view = objectView();
+    const scope = galleryOf(link) || (state.current || document);
+    const links = group || Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
+    if (!links.includes(link)) {
+      links.unshift(link);
+    }
+    const open = view.dialog.open;
+    wallState.loose = {
+      links: links,
+      index: 0,
+      opener: opener || link,
+      entry: open && !wallState.loose ? wallState.index : null,
+    };
+    const thumb = link.querySelector('img');
+    const show = () => {
+      fillLoose(links.indexOf(link));
+      if (!view.dialog.open) {
+        ROOT.classList.add('pf-object-open');
+        view.dialog.showModal();
+        focusClose();
+      }
+    };
+    const r = thumb && thumb.isConnected ? thumb.getBoundingClientRect() : null;
+    if (open || !canMorph() || !r || r.bottom < 0 || r.top > window.innerHeight) {
+      show();
+      return;
+    }
+    thumb.style.viewTransitionName = 'pf-object';
+    document.startViewTransition(() => {
+      thumb.style.viewTransitionName = '';
+      show();
+    });
+  }
+
+  function fillLoose(index) {
+    const view = wallState.view;
+    const loose = wallState.loose;
+    const n = loose.links.length;
+    loose.index = (index + n) % n;
+    const link = loose.links[loose.index];
+    const frame = document.createElement('div');
+    frame.className = 'pf-exhibit-object__frame';
+    const img = mediaImg(link, 'pf-exhibit-object__img', link.querySelector('img'));
+    img.dataset.full = link.href;
+    frame.append(img);
+    view.media.replaceChildren(frame);
+
+    // A figure's own caption, or the one a link names (a gallery's hero,
+    // whose caption follows its pan).
+    const figure = link.closest('figure');
+    const caption = link.dataset.pfCaption
+      ? document.getElementById(link.dataset.pfCaption)
+      : (figure ? figure.querySelector(':scope > figcaption') : null);
+    view.dialog.removeAttribute('aria-labelledby');
+    view.dialog.setAttribute('aria-label', Drupal.t('Image viewer'));
+    view.title.hidden = true;
+    view.label.replaceChildren(...(caption ? Array.from(caption.cloneNode(true).childNodes) : []));
+    view.label.hidden = !caption;
+    view.body.replaceChildren();
+    view.scale.hidden = true;
+    view.scale.replaceChildren();
+    view.panel.scrollTop = 0;
+    view.count.textContent = n > 1 ? Drupal.t('Image @n of @total', { '@n': loose.index + 1, '@total': n }) : '';
+    view.dialog.querySelectorAll('.pf-exhibit-object__step').forEach((button) => {
+      button.hidden = n < 2;
+    });
+    syncTools(!caption && n < 2);
+  }
+
+  // Focus on opening: Close, in the panel or (the panel folded) on the stage.
+  function focusClose() {
+    const view = wallState.view;
+    view.dialog.querySelector(view.dialog.classList.contains('is-full') ? '.pf-exhibit-object__shut' : '.pf-exhibit-object__close').focus();
   }
 
   // "Actual size": this gallery's sheet beside the page's other sheets.
@@ -1264,7 +1467,12 @@
   }
 
   function stepObject(delta) {
-    if (wallState.tiles.length > 1) {
+    if (wallState.loose) {
+      if (wallState.loose.links.length > 1) {
+        fillLoose(wallState.loose.index + delta);
+      }
+    }
+    else if (wallState.tiles.length > 1) {
       fillObject(wallState.index + delta);
       history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
     }
@@ -1284,6 +1492,7 @@
       if (!view.dialog.open) {
         ROOT.classList.add('pf-object-open');
         view.dialog.showModal();
+        focusClose();
       }
     };
     history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
@@ -1300,22 +1509,36 @@
     });
   }
 
-  // animate: shrink back into the tile (scrolled into view first). quiet:
-  // leave the address and focus to the caller.
+  // animate: shrink back into the tile (scrolled into view first), or the
+  // picture into its image when that is on screen. quiet: leave the address
+  // and focus to the caller. Pictures opened from an entry go back to it.
   function closeObject(animate, quiet) {
     const view = wallState.view;
     if (!view || !view.dialog.open) {
       return;
     }
+    const loose = wallState.loose;
+    if (loose && loose.entry !== null && !quiet) {
+      fillObject(loose.entry);
+      focusClose();
+      return;
+    }
     wallState.quiet = !!quiet;
     const tile = wallState.tile;
-    const thumb = tile && tile.querySelector('.pf-exhibit-wall__img');
+    let thumb = tile && tile.querySelector('.pf-exhibit-wall__img');
+    if (loose) {
+      thumb = loose.links[loose.index].querySelector('img');
+      const box = thumb && thumb.isConnected ? thumb.getBoundingClientRect() : null;
+      if (!box || box.bottom < headerOffset() || box.top > window.innerHeight) {
+        thumb = null;
+      }
+    }
     if (!animate || !canMorph() || !thumb) {
       view.dialog.close();
       return;
     }
     const r = thumb.getBoundingClientRect();
-    if (r.top < headerOffset() || r.bottom > window.innerHeight) {
+    if (!loose && (r.top < headerOffset() || r.bottom > window.innerHeight)) {
       window.scrollTo({ top: window.scrollY + r.top - window.innerHeight / 3, behavior: 'instant' });
     }
     document.startViewTransition(() => {
@@ -1420,166 +1643,19 @@
   }
 
   /* ---------------------------------------------------------------------
-   * Lightbox
+   * Icons
    * ------------------------------------------------------------------ */
 
   const ICON = {
     close: '<path d="M3.5 3.5l9 9m0-9-9 9"/>',
     prev: '<path d="M10 3.5 5.5 8l4.5 4.5"/>',
     next: '<path d="M6 3.5 10.5 8 6 12.5"/>',
+    zoom: '<circle cx="7" cy="7" r="4.25"/><path d="M10.2 10.2 13.5 13.5M5 7h4"/><path class="pf-exhibit-object__plus" d="M7 5v4"/>',
+    panel: '<path d="M2.5 3.5h11v9h-11z"/><path class="pf-exhibit-object__side" d="M9.5 3.5v9"/><path class="pf-exhibit-object__foot" d="M2.5 9.5h11"/>',
   };
 
   function svg(name) {
     return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false">' + ICON[name] + '</svg>';
-  }
-
-  let box = null;
-
-  function lightbox() {
-    if (box) {
-      return box;
-    }
-    const dialog = document.createElement('dialog');
-    dialog.className = 'pf-lightbox';
-    dialog.setAttribute('aria-label', Drupal.t('Image viewer'));
-    dialog.innerHTML =
-      '<div class="pf-lightbox__stage"><img class="pf-lightbox__img" alt=""></div>'
-      + '<div class="pf-lightbox__bar">'
-      + '<p class="pf-lightbox__count" aria-live="polite"></p>'
-      + '<div class="pf-lightbox__caption pf-guide-prose"></div>'
-      + '</div>'
-      + '<button type="button" class="pf-lightbox__btn pf-lightbox__prev">' + svg('prev') + '<span class="visually-hidden">' + Drupal.t('Previous image') + '</span></button>'
-      + '<button type="button" class="pf-lightbox__btn pf-lightbox__next">' + svg('next') + '<span class="visually-hidden">' + Drupal.t('Next image') + '</span></button>'
-      + '<button type="button" class="pf-lightbox__btn pf-lightbox__close">' + svg('close') + '<span class="visually-hidden">' + Drupal.t('Close') + '</span></button>';
-    document.body.append(dialog);
-
-    box = {
-      dialog: dialog,
-      img: dialog.querySelector('.pf-lightbox__img'),
-      count: dialog.querySelector('.pf-lightbox__count'),
-      caption: dialog.querySelector('.pf-lightbox__caption'),
-      prev: dialog.querySelector('.pf-lightbox__prev'),
-      next: dialog.querySelector('.pf-lightbox__next'),
-      links: [],
-      index: 0,
-      opener: null,
-    };
-
-    box.prev.addEventListener('click', () => step(-1));
-    box.next.addEventListener('click', () => step(1));
-    dialog.querySelector('.pf-lightbox__close').addEventListener('click', closeBox);
-    // A click on the dark area around the image closes it.
-    dialog.addEventListener('click', (event) => {
-      if (event.target === dialog || event.target.classList.contains('pf-lightbox__stage')) {
-        closeBox();
-      }
-    });
-    dialog.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft') {
-        step(-1);
-      }
-      else if (event.key === 'ArrowRight') {
-        step(1);
-      }
-    });
-    dialog.addEventListener('close', () => {
-      ROOT.classList.remove('pf-lightbox-open');
-      if (box.opener && box.opener.isConnected) {
-        box.opener.focus({ preventScroll: true });
-      }
-    });
-    // Swipe left / right on touch screens.
-    let startX = null;
-    dialog.addEventListener('pointerdown', (event) => {
-      startX = event.pointerType === 'touch' ? event.clientX : null;
-    });
-    dialog.addEventListener('pointerup', (event) => {
-      if (startX !== null && Math.abs(event.clientX - startX) > 50) {
-        step(event.clientX < startX ? 1 : -1);
-      }
-      startX = null;
-    });
-    return box;
-  }
-
-  function show(index) {
-    const b = box;
-    const link = b.links[index];
-    if (!link) {
-      return;
-    }
-    b.index = index;
-    const thumb = link.querySelector('img');
-    // The size already loaded on the page first, then the largest.
-    b.img.classList.add('is-loading');
-    b.img.src = thumb ? thumb.currentSrc || thumb.src : link.href;
-    b.img.alt = thumb ? thumb.alt : '';
-    if (link.dataset.width) {
-      b.img.width = parseInt(link.dataset.width, 10);
-      b.img.height = parseInt(link.dataset.height, 10);
-    }
-    const full = new Image();
-    full.decoding = 'async';
-    full.onload = () => {
-      if (b.index === index) {
-        b.img.src = full.src;
-        b.img.classList.remove('is-loading');
-      }
-    };
-    full.src = link.href;
-
-    // A figure's own caption, or the one a link names (a gallery's hero,
-    // whose caption follows its pan).
-    const figure = link.closest('figure');
-    const caption = link.dataset.pfCaption
-      ? document.getElementById(link.dataset.pfCaption)
-      : (figure ? figure.querySelector(':scope > figcaption') : null);
-    b.caption.innerHTML = '';
-    if (caption) {
-      b.caption.append(...Array.from(caption.cloneNode(true).childNodes));
-    }
-    b.caption.hidden = !caption;
-    const many = b.links.length > 1;
-    b.count.textContent = many ? Drupal.t('Image @n of @total', { '@n': index + 1, '@total': b.links.length }) : '';
-    b.prev.hidden = !many;
-    b.next.hidden = !many;
-  }
-
-  function step(delta) {
-    const n = box.links.length;
-    if (n > 1) {
-      show((box.index + delta + n) % n);
-    }
-  }
-
-  // group: the images to step through (default: the link's gallery's);
-  // opener: where focus returns (default: the link).
-  function openBox(link, group, opener) {
-    const b = lightbox();
-    const scope = galleryOf(link) || (state.current || document);
-    b.links = group || Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
-    if (!b.links.includes(link)) {
-      b.links.unshift(link);
-    }
-    b.opener = opener || link;
-    show(Math.max(0, b.links.indexOf(link)));
-    ROOT.classList.add('pf-lightbox-open');
-    b.dialog.showModal();
-  }
-
-  function closeBox() {
-    if (!box || !box.dialog.open) {
-      return;
-    }
-    if (reduceMotion()) {
-      box.dialog.close();
-      return;
-    }
-    box.dialog.classList.add('is-closing');
-    window.setTimeout(() => {
-      box.dialog.classList.remove('is-closing');
-      box.dialog.close();
-    }, 220);
   }
 
   /* ---------------------------------------------------------------------
@@ -1676,11 +1752,11 @@
       start();
       once('pf-lightbox', 'a[data-pf-lightbox]', context).forEach((link) => {
         link.addEventListener('click', (event) => {
-          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !window.HTMLDialogElement) {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !window.HTMLDialogElement || link.closest('.pf-exhibit-object')) {
             return;
           }
           event.preventDefault();
-          openBox(link);
+          openPictures(link, null, null);
         });
       });
       once('pf-audio', '[data-pf-audio]', context).forEach(initAudio);
