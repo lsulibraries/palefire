@@ -821,6 +821,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Focal Point preview shows the cover's wash.**
+  images/focal-preview/wash-desktop.png (1600 × 1000) and wash-phone.png
+  (900 × 1600) are the title page's wash, drawn by
+  build/focal-preview-washes.js from the same eased gradient as
+  `pf-eased-wash()` in the default swatch's page colour. In the "Cover
+  preview" image styles, an Image Effects Watermark lays them over the
+  focal point crop, so editors see where the title and text will cover
+  the image. Rerun the script if the wash changes.
 - **Exhibition covers follow the image's focal point.** Editors set the
   point on the Media image (Focal Point module, Image (Focal Point)
   widget). `_palefire_focal_point()` turns it into an `object-position`
