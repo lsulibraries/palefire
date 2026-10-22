@@ -821,6 +821,18 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Faster Largest Contentful Paint (LCP).** Chrome never counts content first painted at opacity 0,
+  and the page fade-in (`.pf-fade body`) and the exhibition's load fades
+  (`$pf-exhibit-fade-from`) all started there, so the cover and title went
+  unmeasured and LCP fell on a TOC link repainted after the reveal. They
+  now start at 0.01, which looks the same. On an address for a gallery
+  (`#…`) its opening image is made eager and high priority as soon as
+  `exhibition.js` starts, and the title page's cover, now lazy in the
+  markup, isn't fetched at all until the title page is opened; without a
+  `#`, a script in `<head>` (`PalefireHooks::exhibitHead()`) preloads it
+  as early as before. Measured on AVES: the title page's LCP is now its
+  cover at about 0.95s (was a TOC link); a gallery link no longer
+  downloads the 270KB title cover. Why: Lighthouse's 2.1s LCP.
 - **Exhibitions: 17px reading text.** Text blocks, biographies and
   transcripts go from 16px to 17px (1.0625rem, so Settings > Text size
   still scales it), with the 1.7 line height and 1.5em paragraph spacing

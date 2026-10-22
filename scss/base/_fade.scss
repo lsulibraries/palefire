@@ -5,8 +5,11 @@
   to { opacity: 1; }
 }
 
+// Just above 0, which looks the same: Chrome never counts content first
+// painted at opacity 0 as the Largest Contentful Paint, so a body at 0
+// left LCP to whatever repainted after the reveal (a TOC link).
 .pf-fade body {
-  opacity: 0;
+  opacity: 0.01;
 }
 
 // Failsafe: reveal after 3s even if DOMContentLoaded never fires.

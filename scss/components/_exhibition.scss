@@ -33,6 +33,12 @@ $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
   @return linear-gradient($direction, $stops);
 }
 
+// Where load-time fades start: just above 0, which looks the same, because
+// Chrome never counts an element first painted at opacity 0 as the
+// Largest Contentful Paint, so the cover and title went unmeasured and LCP
+// fell on whatever small text painted last.
+$pf-exhibit-fade-from: 0.01;
+
 // Motion that is only decoration: off with the OS setting or Settings >
 // Reduce motion.
 @mixin pf-exhibit-motion {
@@ -306,7 +312,7 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 
 @keyframes pf-exhibit-rise {
   from {
-    opacity: 0;
+    opacity: $pf-exhibit-fade-from;
     translate: 0 2rem;
   }
 }
@@ -600,7 +606,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 @keyframes pf-exhibit-fade-in {
   from {
-    opacity: 0;
+    opacity: $pf-exhibit-fade-from;
   }
 }
 
@@ -904,9 +910,16 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// An address for a gallery: the title page's cover stays unrendered, so its
+// lazy image isn't fetched, until the title page is folded away
+// (exhibit-cover.html.twig, js/exhibition.js).
+.pf-exhibit-deep .pf-exhibit-cover__img {
+  display: none;
+}
+
 @keyframes pf-exhibit-cover-in {
   from {
-    opacity: 0;
+    opacity: $pf-exhibit-fade-from;
     scale: 1.08;
   }
 }
@@ -935,7 +948,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 @keyframes pf-exhibit-step {
   from {
-    opacity: 0;
+    opacity: $pf-exhibit-fade-from;
     translate: 0 1.5rem;
   }
 }

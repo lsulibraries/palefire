@@ -28,10 +28,13 @@
 <div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}">
   {% if head.cover %}
     <div class="pf-exhibit-cover__media" aria-hidden="true">
+      {# Lazy in the markup so an address for a gallery (#…) doesn't fetch
+         it; otherwise a script in <head> preloads it as early as an eager
+         image (PalefireHooks::exhibitHead()). #}
       <img class="pf-exhibit-cover__img" src="{{ head.cover.src }}"
            {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="{{ head.cover.sizes }}"{% endif %}
            {% if head.cover.width %}width="{{ head.cover.width }}" height="{{ head.cover.height }}"{% endif %}
-           alt="" loading="eager" fetchpriority="high" decoding="async">
+           alt="" loading="lazy" fetchpriority="high" decoding="async">
     </div>
   {% endif %}
   <div class="pf-exhibit-cover__text">

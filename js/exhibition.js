@@ -573,6 +573,17 @@
       return;
     }
     ROOT.classList.add('pf-exhibit-paged');
+    // An address for a gallery: its opening image first and at once (it is
+    // lazy in a hidden gallery, so it would wait until shown), ahead of the
+    // set-up below.
+    const target = targetOf(location.hash);
+    const page = galleryOf(target);
+    const lead = page && page.querySelector('.pf-exhibit-wall-hero__img, .pf-exhibit-hero__img, .pf-exhibit-lead__img');
+    if (lead) {
+      // Priority first: the request starts as soon as it is eager.
+      lead.fetchPriority = 'high';
+      lead.loading = 'eager';
+    }
     // "06 / 19" above each gallery's heading (_exhibition.scss).
     state.pages.forEach((page, i) => {
       page.style.setProperty('--pf-gallery-index', String(i + 1));
@@ -583,9 +594,10 @@
     initWalls();
     initCovers();
     initEntryLinks();
-    const target = targetOf(location.hash);
-    const page = galleryOf(target);
     place(page);
+    // The title page's cover waited for this (exhibit-cover.html.twig):
+    // folded away for a gallery, it loads lazily if the title page opens.
+    ROOT.classList.remove('pf-exhibit-deep');
     const entry = wallEntry(target);
     if (entry) {
       // An address for a wall's entry: its gallery, with the entry open.

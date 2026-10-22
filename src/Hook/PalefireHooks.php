@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
@@ -430,13 +431,38 @@ class PalefireHooks {
     $cover = NULL;
     if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()) {
       $item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache);
-      // The whole screen at any width; it is the page's first image, so it
-      // loads eagerly (_palefire_exhibit_image() sets lazy otherwise).
+      // The whole screen at any width. The page's first image: preloaded
+      // from <head> unless the address opens a gallery (below).
       $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
     }
 
     $render = [];
     $cache->applyTo($render);
+    if ($cover) {
+      // The cover is lazy in the markup, so an address for a gallery (#…)
+      // never fetches it. This runs in <head>, before the stylesheets: with
+      // no #, it preloads the cover as early as an eager image would be
+      // found; with one, .pf-exhibit-deep keeps the cover unrendered (so
+      // unfetched) until js/exhibition.js has folded the title page away, or
+      // 4s pass (exhibit-cover.html.twig).
+      $json = fn ($value) => json_encode($value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES);
+      $render['#attached']['html_head'][] = [[
+        '#type' => 'html_tag',
+        '#tag' => 'script',
+        '#value' => Markup::create('(function (root, src, srcset, sizes) {'
+          . 'if (location.hash.length > 1) {'
+          . 'root.classList.add("pf-exhibit-deep");'
+          . 'setTimeout(function () { root.classList.remove("pf-exhibit-deep"); }, 4000);'
+          . 'return;'
+          . '}'
+          . 'var link = document.createElement("link");'
+          . 'link.rel = "preload"; link.as = "image"; link.href = src;'
+          . 'if (srcset) { link.setAttribute("imagesrcset", srcset); link.setAttribute("imagesizes", sizes); }'
+          . 'link.setAttribute("fetchpriority", "high");'
+          . 'document.head.appendChild(link);'
+          . '})(document.documentElement, ' . $json($cover['src']) . ', ' . $json($cover['srcset'] ?? '') . ', ' . $json($cover['sizes'] ?? '100vw') . ');'),
+      ], 'palefire_exhibit_cover'];
+    }
     return [
       'title' => $node->label(),
       'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
