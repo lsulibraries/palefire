@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: 17px reading text.** Text blocks, biographies and
+  transcripts go from 16px to 17px (1.0625rem, so Settings > Text size
+  still scales it), with the 1.7 line height and 1.5em paragraph spacing
+  following; captions, labels and records stay as they were. Why: about
+  75 characters a line at the full measure instead of about 85, easier for
+  long reading.
 - **Exhibitions: a cover's text on its first screen; no "Skip" without a
   lead.** A cover's area is the first screen under the full header again
   (`--pf-header-full`, held while compact); only its image keeps the

@@ -1425,9 +1425,11 @@ html.pf-exhibit-paged {
 }
 
 // Reading text (text blocks, biographies, transcripts; also in the object
-// view): looser than guides and landing pages, for long reading. Captions,
-// labels and records keep their own.
+// view): larger and looser than guides and landing pages, for long
+// reading (17px at 100%, about 75 characters a line at the full measure).
+// Captions, labels and records keep their own.
 html[data-pf-mode="exhibition"] :is(.pf-guide-block--text > .pf-guide-prose, .pf-exhibit-bio__text, .pf-exhibit-audio__text) {
+  font-size: 1.0625rem;
   line-height: 1.7;
 
   :is(p, ul, ol, blockquote):not(:last-child) {
