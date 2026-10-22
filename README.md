@@ -857,6 +857,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: search and Quick Guide rule on the four-column grid.** At a
+  glance's gutter is now the hero's (--pf-grid-gutter). Where the row is
+  four across, the search spans three columns, ending on On view's right
+  edge instead of a fixed 58rem, and the star rule's lines stop on the
+  middle gutter's edges with the star centred in it. Why: both sat off
+  the page grid.
 - **Quick Start as tracks, icons back; suggestions as labels; calmer map
   tooltip.** The stops' discs show their duotone icons again. From 52rem
   each option is one track: the line leaves the option's name and runs

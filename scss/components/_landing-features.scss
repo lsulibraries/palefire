@@ -598,10 +598,9 @@
 // face, and a muted line under it. The cells' height is held while the
 // hours and the event load, and the event's words fade in.
 .pf-today {
-  --pf-today-gutter: clamp(1.25rem, 2.5vw, 2rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: .5rem var(--pf-today-gutter);
+  gap: .5rem var(--pf-grid-gutter);
   margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
   padding: 0;
   list-style: none;
@@ -630,8 +629,20 @@
 // The row follows the lead panel's own width (beside the TOC it is much
 // narrower than the window): two by two from 30rem, all in one row from
 // 75rem, where each cell has room for its words (at 64rem the titles cut off).
+// Its four columns are the hero's grid: the search and the Quick Guide's
+// rule line up with them, sharing the gutter (--pf-grid-gutter).
 .pf-landing__lead--hero {
+  --pf-grid-gutter: clamp(1.25rem, 2.5vw, 2rem);
   container: pf-lead / inline-size;
+}
+
+// On the four-column grid the search spans three columns, ending on the
+// third one's edge (the On view cell's right edge), not at a fixed 58rem.
+// The column is the lead less the cover's side margins.
+@container pf-lead (min-width: 75rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__form {
+    max-width: calc((100cqi - 2 * var(--pf-cover-gutter, 0px) - 3 * var(--pf-grid-gutter)) * .75 + 2 * var(--pf-grid-gutter));
+  }
 }
 
 @container pf-lead (min-width: 30rem) {
@@ -823,10 +834,13 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   --pf-quick-space: clamp(1.25rem, 2.5vw, 2rem);
 }
 
+// The star sits in the grid's middle gutter: the lines stop on the column
+// edges either side (the gutter is the hero's, --pf-grid-gutter, so they
+// meet At a glance's columns above).
 .pf-quick-guide__rule {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  gap: clamp(1rem, 2.5vw, 2rem);
+  grid-template-columns: minmax(0, 1fr) var(--pf-grid-gutter, 2rem) minmax(0, 1fr);
+  justify-items: center;
   align-items: center;
   margin-bottom: var(--pf-quick-space);
   color: var(--pf-quick-gold);
@@ -835,6 +849,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   &::before,
   &::after {
     content: "";
+    justify-self: stretch;
     border-top: 1px solid #{$pf-hairline};
   }
 }
