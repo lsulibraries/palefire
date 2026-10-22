@@ -884,33 +884,36 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 // while the page scrolls, into the footer too: the head's foot rises over
 // it, so the footer seems to slide over the image. The media runs a screen
 // past the head's foot so the sticky image has room to stay pinned, and
-// clip-path shows it only within the head.
+// clip-path shows it only within the head, stopping .25rem short of the
+// foot, under the wash's solid foot (the head's ::after, below).
 .pf-exhibit-cover__media {
   position: absolute;
   inset: 0 0 -100lvh;
   z-index: -1;
   overflow: clip;
-  clip-path: inset(0 0 100lvh);
+  clip-path: inset(0 0 calc(100lvh + .25rem));
+}
 
-  // A wash of the page colour where the text sits, so it keeps the
-  // swatch's contrast on any image: the bottom below lg (the text spans the
-  // column) or the left from lg (beside the TOC, the text takes about half
-  // the column). It moves with the text. The breadcrumb's bar has its own
-  // glass. From lg the image also fades out over the head's foot, so the
-  // footer meets the page colour, not the image's edge. The wash runs a
-  // pixel past the clip, so rounding never leaves a row of bare image at
-  // the foot.
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0 0 calc(100lvh - 1px);
-    background: pf-eased-wash(to top, 46%, 98%);
+// A wash of the page colour where the text sits, so it keeps the swatch's
+// contrast on any image: the bottom below lg (the text spans the column) or
+// the left from lg (beside the TOC, the text takes about half the column).
+// It moves with the text. The breadcrumb's bar has its own glass. From lg
+// the image also fades out over the head's foot, so the footer meets the
+// page colour, not the image's edge. On the head, not in the media: there
+// the clip cut both at one edge, and at fractional zoom (125% and the like)
+// their anti-aliased rows let a broken line of image through.
+.pf-exhibit-head:has(.pf-exhibit-cover__media)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: pf-eased-wash(to top, 46%, 98%);
 
-    @include media-breakpoint-up(lg) {
-      background:
-        pf-eased-wash(to top, 0%, 100%) left bottom / 100% clamp(4rem, 14vh, 8rem) no-repeat,
-        pf-eased-wash(to right, 38%, 94%);
-    }
+  @include media-breakpoint-up(lg) {
+    background:
+      pf-eased-wash(to top, 0%, 100%) left bottom / 100% clamp(4rem, 14vh, 8rem) no-repeat,
+      pf-eased-wash(to right, 38%, 94%);
   }
 }
 
@@ -1348,6 +1351,10 @@ html.pf-exhibit-paged .pf-exhibit-head.is-folded {
   min-height: 0;
   padding-bottom: 0;
   background: none;
+
+  &::after {
+    content: none;
+  }
 
   .pf-exhibit-cover__media,
   .pf-exhibit-cover__kicker,

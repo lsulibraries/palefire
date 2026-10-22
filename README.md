@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Title page: no line of image at the cover's foot, at any zoom.** The
+  1px fix below didn't hold at 125%. The clip cut the image and its wash
+  at one edge, and the anti-aliased rows of the two layers let a broken
+  bright line through. The wash is now the head's own `::after`, which
+  the clip doesn't cut. The image stops .25rem above the foot, under the
+  wash's solid edge.
 - **Title page: the cover fades out at the head's foot.** Under the Begin
   button the image stopped at a hard edge against the footer. A row of
   bare image also showed through under the wash there: the wash and the
