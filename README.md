@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Footer: Special Collections version shows on /v2/special.** The check
+  looked for `/special`, but on lib.lsu.edu "v2" is part of the alias (the
+  base path is `/`), so every page got the Main Library footer and the
+  footer's Special Collections links missed "v2". Both now use
+  `PalefireHooks::SPECIAL_ROOT` (`/v2/special`); change it there when the
+  pages move.
 - **Footer: Special Collections or Main Library.** The footer held only the
   logo. It now leads with the section's own building: on `/special` and the
   pages under it, Hill Memorial Library (Special Collections) with "Plan a

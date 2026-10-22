@@ -3,7 +3,7 @@
  * @file
  * Site footer (page.html.twig), in two versions that lead with their own
  * building and name the other in one line: Special Collections (Hill
- * Memorial Library) on /special and the pages under it, the Main Library
+ * Memorial Library) on special_root and the pages under it, the Main Library
  * everywhere else. PalefireHooks::preprocessPage() sets footer_special.
  *
  * The footer is a Swup container (js/palefire-swup.js), so it changes along
@@ -21,13 +21,15 @@
  *
  * Available variables:
  * - special: TRUE for the Special Collections version.
+ * - special_root: the Special Collections home page's path
+ *   (PalefireHooks::SPECIAL_ROOT); its links start there.
  * - branding: the footer region (the site branding block), printed in the
  *   bottom bar.
  * - cache: an empty render array carrying the url.path cache context.
  */
 #}
 {{ cache }}
-{% set sc = base_path ~ 'special' %}
+{% set sc = special_root %}
 {%
   set footers = {
     special: {
