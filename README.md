@@ -857,6 +857,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Sign in plate picture.** At a glance's Sign in plate can show a
+  picture: the Landing hero's optional `field_account_image` (Media: Image
+  or a plain Image, one value; added in the UI like the Quick Guide
+  fields), read by `_palefire_account_image()`. The picture fills the
+  plate under a scrim (as on the exhibition tiles) with the words in
+  white; without it the plate stays a card. Why: a photo of the request
+  system reads better beside the other pictures than a bare card.
 - **At a glance plates.** On the 4-column grid each At a glance cell now
   starts with a 16:9 plate on its column: a Sign in card (the request
   system, as the bar's link), the next event's LibCal picture (cropped

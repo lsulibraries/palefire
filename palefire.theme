@@ -281,6 +281,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
+    $variables['account_image'] = _palefire_account_image($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -296,6 +297,26 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $variables['visit_in_map'] = TRUE;
     }
   }
+}
+
+/**
+ * The Landing hero's Sign in picture, from its optional field, or NULL.
+ *
+ * field_account_image is added in the UI (Landing hero > Manage fields),
+ * like the Quick Guide fields: a Media reference (Image) or a plain Image
+ * field, one value. Its picture fills At a glance's Sign in plate
+ * (includes/landing.html.twig); missing or empty, the plate is a card.
+ * Decorative (alt=""): the plate's words name the link.
+ */
+function _palefire_account_image(ParagraphInterface $paragraph, array &$variables): ?array {
+  if (!$paragraph->hasField('field_account_image') || $paragraph->get('field_account_image')->isEmpty()) {
+    return NULL;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $item = _palefire_media_image_item($paragraph->get('field_account_image')->first(), $cache);
+  $image = $item ? _palefire_image_build($item, ['tile_showcase_landscape_lg'], $cache) : NULL;
+  $cache->applyTo($variables);
+  return $image;
 }
 
 /**

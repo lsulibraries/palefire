@@ -329,7 +329,10 @@
         {% if visit.lid %}
           <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
             {% if account_url %}
-              <a class="pf-today__plate pf-today__plate--account" href="{{ account_url }}" target="_blank" rel="noopener">
+              {# account_image: the paragraph's optional Sign in picture
+                 (_palefire_account_image()); without it, a card. #}
+              <a class="pf-today__plate pf-today__plate--account{{ account_image ? ' pf-today__plate--photo' }}" href="{{ account_url }}" target="_blank" rel="noopener">
+                {{- account_image -}}
                 <span class="pf-today__plate-title">{{ 'Sign in'|t }}</span>
                 <span class="pf-today__plate-note">{{ 'Request materials, book a visit, order copies'|t }}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span></span>
               </a>

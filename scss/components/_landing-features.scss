@@ -705,6 +705,44 @@
     border: 0;
   }
 
+  // The Sign in card with a picture (the Landing hero's optional field):
+  // the picture fills the plate, a scrim at its foot (as on the exhibition
+  // tiles) keeps the white words at 4.5:1 or more over any picture. Hover
+  // and focus deepen the scrim instead of tinting the card.
+  .pf-today .pf-today__item > .pf-today__plate--account.pf-today__plate--photo {
+    --pf-plate-scrim: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .72) 30%, rgb(0 0 0 / .5) 55%, rgb(0 0 0 / 0) 90%);
+    padding: 1rem;
+    color: #fff;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-image: var(--pf-plate-scrim);
+      transition: opacity $pf-hover-out ease;
+    }
+
+    > :not(img) {
+      position: relative;
+      z-index: 2;
+    }
+
+    .pf-today__plate-note {
+      color: rgb(255 255 255 / .88);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: transparent;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+      background-image: var(--pf-plate-scrim), linear-gradient(rgb(0 0 0 / .15), rgb(0 0 0 / .15));
+    }
+  }
+
   // Event pictures are often flyers, their headline at the top: cropped
   // from the top rather than the middle.
   .pf-today .pf-today__plate--event img {
