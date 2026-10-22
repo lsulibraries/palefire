@@ -296,8 +296,11 @@ plain floor.
 ## Tile showcase
 
 `tile_showcase` (How-to guides, Collections, Specializations): the section
-fields plus `field_tile_layout` (`stagger` / `grid`) and `field_tiles` (Tile
-nodes). Each card: the Tile's title (h3), its Tile Cover through the
+fields plus `field_tile_layout` (`stagger` / `grid` / `index`) and
+`field_tiles` (Tile nodes or Modular pages, read by `_palefire_node_card()`).
+`index` is a numbered list with no pictures. Each card: the title (h3), the
+cover (a Tile's Tile Cover; a Modular page's Image cover or landing poster)
+through the
 `tile_showcase_portrait`/`_landscape` responsive styles, its Category terms as
 the label, and its link. Layouts use container queries; the staggered row is a
 swipeable strip under 60rem. `js/tile-reveal.js` animates cards in on scroll
@@ -821,6 +824,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Tile showcase and hero tiles take Tiles or Modular pages.** One
+  helper, `_palefire_node_card()`, reads either into the same card
+  (title, link, Category label, intro note, cover). A Tile's cover is its
+  Tile cover; a Modular page's is its Image cover, else its landing's
+  poster. Allow the other type in each field's Reference type (Manage
+  fields) to use it. Why: the homepage's sections mix both kinds of
+  content.
+- **Tile showcase: the `index` layout.** A numbered list with no pictures:
+  number, title and note, label, and an arrow that slides on hover, between
+  soft hairlines; the label drops under the note on narrow screens. For
+  Collections & services on the Special Collections homepage, replacing
+  two image-tile sections. Add `index` to the Layout field's allowed
+  values (Manage fields) to use it.
 - **Viewer: the panel's bar at the top.** The pinned row (count or
   "Family tree", and Close) started 3rem down and only reached the top
   on scroll. It now starts at the panel's top edge, with Close level with

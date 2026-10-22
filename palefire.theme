@@ -454,22 +454,23 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
  * The Landing hero's tiles from its Hero tile paragraphs, or [].
  *
  * field_hero_tiles (scripts/palefire_landing_hero_tiles_setup.php): up to
- * three Hero tiles, each a Modular page with an optional label and line.
+ * three Hero tiles, each a Modular page or a Tile (field_hero_tile_page,
+ * read by _palefire_node_card()) with an optional label and line.
  * Empty, or without the field, the template keeps its placeholder tiles.
  * A tile whose page is missing or that the visitor can't view is left out.
  *
  * Each tile has the template's shape: label, title, meta (the line under
  * the title), more (the page's intro as plain text, shown when the tile
  * opens), url, cta, images (one render array, or none: hatched frame) and
- * frames. The image is the page's Image Cover (field_image_cover), else the
- * background poster of its first landing; decorative and lazy.
+ * frames. The image is the card's cover in the tiles' landscape style
+ * (tile_showcase_landscape_lg, 1280 x 800), else the original file;
+ * decorative and lazy.
  */
 function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables): array {
   if (!$paragraph->hasField('field_hero_tiles')) {
     return [];
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
-  $repository = \Drupal::service('entity.repository');
   $tiles = [];
   foreach ($paragraph->get('field_hero_tiles')->referencedEntities() as $tile) {
     if (!$tile instanceof ParagraphInterface || !$tile->hasField('field_hero_tile_page')) {
@@ -477,31 +478,18 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
     }
     $cache->addCacheableDependency($tile);
     $page = $tile->get('field_hero_tile_page')->entity;
-    if (!$page instanceof NodeInterface) {
+    $card = $page instanceof NodeInterface ? _palefire_node_card($page, $cache) : NULL;
+    if (!$card) {
       continue;
     }
-    $cache->addCacheableDependency($page);
-    $access = $page->access('view', NULL, TRUE);
-    $cache->addCacheableDependency($access);
-    if (!$access->isAllowed()) {
-      continue;
-    }
-    $page = $repository->getTranslationFromContext($page);
-    $url = $page->toUrl()->toString(TRUE);
-    $cache->addCacheableDependency($url);
-
-    $more = '';
-    if ($page->hasField('field_intro') && !$page->get('field_intro')->isEmpty()) {
-      $more = _palefire_plain_excerpt((string) $page->get('field_intro')->value, 200);
-    }
-    $image = _palefire_page_cover($page, $cache) ?? _palefire_landing_poster($page, $cache);
+    $image = $card['image_item'] ? _palefire_image_build($card['image_item'], ['tile_showcase_landscape_lg'], $cache) : NULL;
 
     $tiles[] = [
       'label' => $tile->hasField('field_hero_tile_label') ? (string) $tile->get('field_hero_tile_label')->value : '',
-      'title' => $page->label(),
+      'title' => $card['title'],
       'meta' => $tile->hasField('field_hero_tile_when') ? (string) $tile->get('field_hero_tile_when')->value : '',
-      'more' => $more,
-      'url' => $url->getGeneratedUrl(),
+      'more' => $card['note'],
+      'url' => $card['url'],
       'cta' => t('Explore'),
       'images' => $image ? [$image] : [],
       'frames' => 1,
@@ -512,15 +500,90 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
 }
 
 /**
- * The background poster of a Modular page's first landing, or NULL.
+ * One Tile or Modular page as a card, or NULL when the visitor can't view it.
+ *
+ * Tile showcase (field_tiles) and the Landing hero's tiles
+ * (field_hero_tile_page) may reference either type (each field's Reference
+ * type, Manage fields), so both read their nodes through here and get the
+ * same shape:
+ * - title, url: the node's own, in the page's language.
+ * - label: its Category terms (field_category) joined with " + "
+ *   ("Dept + Medium"), or ''.
+ * - note: plain text from its intro (field_intro), else the body's summary,
+ *   else the body, cut at $max; '' when it has none.
+ * - image_item: the cover's image item (_palefire_card_image_item()), or
+ *   NULL. Each caller builds it in its own image style.
+ */
+function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int $max = 200): ?array {
+  $cache->addCacheableDependency($node);
+  $access = $node->access('view', NULL, TRUE);
+  $cache->addCacheableDependency($access);
+  if (!$access->isAllowed()) {
+    return NULL;
+  }
+  $repository = \Drupal::service('entity.repository');
+  $node = $repository->getTranslationFromContext($node);
+  $url = $node->toUrl()->toString(TRUE);
+  $cache->addCacheableDependency($url);
+
+  $labels = [];
+  if ($node->hasField('field_category')) {
+    foreach ($node->get('field_category') as $term_item) {
+      $term = $term_item->entity;
+      if (!$term) {
+        continue;
+      }
+      $cache->addCacheableDependency($term);
+      $term_access = $term->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($term_access);
+      if ($term_access->isAllowed()) {
+        $labels[] = $repository->getTranslationFromContext($term)->label();
+      }
+    }
+  }
+
+  $note = '';
+  foreach ([['field_intro', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
+    if ($note === '' && $node->hasField($field) && !$node->get($field)->isEmpty()) {
+      $note = _palefire_plain_excerpt((string) $node->get($field)->first()->{$property}, $max);
+    }
+  }
+
+  return [
+    'title' => $node->label(),
+    'url' => $url->getGeneratedUrl(),
+    'label' => implode(' + ', $labels),
+    'note' => $note,
+    'image_item' => _palefire_card_image_item($node, $cache),
+  ];
+}
+
+/**
+ * A card's cover image item, or NULL.
+ *
+ * A Tile's Tile cover (field_tile_cover). Any other node (a Modular page):
+ * its Image cover (field_image_cover, Media: Image), else the background
+ * poster of its first landing (_palefire_landing_poster_item()).
+ */
+function _palefire_card_image_item(NodeInterface $node, CacheableMetadata $cache): ?FieldItemInterface {
+  if ($node->hasField('field_tile_cover')) {
+    return $node->get('field_tile_cover')->isEmpty() ? NULL : $node->get('field_tile_cover')->first();
+  }
+  if ($node->hasField('field_image_cover') && !$node->get('field_image_cover')->isEmpty()
+    && ($image = _palefire_media_image_item($node->get('field_image_cover')->first(), $cache))) {
+    return $image;
+  }
+  return _palefire_landing_poster_item($node, $cache);
+}
+
+/**
+ * The background poster's image item of a page's first landing, or NULL.
  *
  * The first section (in field_scroll_section, then field_sections) that is
  * a landing (PalefireHooks::LANDING_BUNDLES) with a poster. field_bg_poster
- * may be a Media (image) reference or a plain image field. Cropped to the
- * tiles' landscape style when it exists (tile_showcase_landscape_lg, 1280 x
- * 800, from the Tile showcase setup), else the original file.
+ * may be a Media (image) reference or a plain image field.
  */
-function _palefire_landing_poster(NodeInterface $page, CacheableMetadata $cache): ?array {
+function _palefire_landing_poster_item(NodeInterface $page, CacheableMetadata $cache): ?FieldItemInterface {
   foreach (PalefireHooks::SECTION_FIELDS as $field) {
     if (!$page->hasField($field)) {
       continue;
@@ -531,25 +594,10 @@ function _palefire_landing_poster(NodeInterface $page, CacheableMetadata $cache)
         continue;
       }
       $cache->addCacheableDependency($section);
-      $image = _palefire_media_image_item($section->get('field_bg_poster')->first(), $cache);
-      return $image ? _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache) : NULL;
+      return _palefire_media_image_item($section->get('field_bg_poster')->first(), $cache);
     }
   }
   return NULL;
-}
-
-/**
- * A Modular page's Image Cover (field_image_cover, Media: Image), or NULL.
- *
- * In the tiles' landscape style, like the landing poster
- * (_palefire_landing_poster(), the fallback when there is no cover).
- */
-function _palefire_page_cover(NodeInterface $page, CacheableMetadata $cache): ?array {
-  if (!$page->hasField('field_image_cover') || $page->get('field_image_cover')->isEmpty()) {
-    return NULL;
-  }
-  $image = _palefire_media_image_item($page->get('field_image_cover')->first(), $cache);
-  return $image ? _palefire_image_build($image, ['tile_showcase_landscape_lg'], $cache) : NULL;
 }
 
 /**
@@ -977,21 +1025,28 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * Implements hook_preprocess_HOOK() for paragraph--tile-showcase.
  *
  * Tile showcase (scripts/palefire_tile_showcase_setup.php) lists Tile nodes
- * as image cards in one of two layouts (field_tile_layout):
+ * and Modular pages (field_tiles, read by _palefire_node_card()) in one of
+ * three layouts (field_tile_layout):
  * - stagger: tall portrait cards in a row with an offset rhythm (the
  *   concept's How-to guides and Specializations). A swipeable row when the
  *   section is narrow.
  * - grid: landscape cards in three columns (the concept's Collections),
  *   stepping down to two and one.
+ * - index: a numbered list with no pictures, one ruled row per item: its
+ *   number, title, note and label (Collections & services on the Special
+ *   Collections homepage). The "index" value is added to the Layout field's
+ *   allowed values by hand (Manage fields); any other value is a stagger.
  *
- * layout: 'stagger' or 'grid'.
- * tiles: one entry per Tile the visitor can see, in field order:
- * - title: the Tile's title.
- * - url: the Tile node's own URL.
+ * layout: 'stagger', 'grid' or 'index'.
+ * tiles: one entry per item the visitor can see, in field order:
+ * - title: the node's title.
+ * - url: the node's own URL.
  * - label: its Category terms joined with " + " ("Dept + Medium"), or ''.
- * - image: field_tile_cover in the layout's responsive image style, or NULL.
- *   Its alt is empty: the card's title already names the link, so the
- *   image would only repeat it (WCAG 1.1.1 decorative-in-context).
+ * - note: its intro as plain text, or '' (shown by the index only).
+ * - image: the card's cover in the layout's responsive image style, or
+ *   NULL (always NULL on the index, which shows none). Its alt is empty:
+ *   the card's title already names the link, so the image would only
+ *   repeat it (WCAG 1.1.1 decorative-in-context).
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
@@ -1000,71 +1055,43 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   if (!$paragraph instanceof ParagraphInterface) {
     return;
   }
-  if ($paragraph->hasField('field_tile_layout') && $paragraph->get('field_tile_layout')->value === 'grid') {
-    $variables['layout'] = 'grid';
+  $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
+  if (in_array($layout, ['grid', 'index'], TRUE)) {
+    $variables['layout'] = $layout;
   }
   if (!$paragraph->hasField('field_tiles')) {
     return;
   }
 
   $cache = CacheableMetadata::createFromRenderArray($variables);
-  $repository = \Drupal::service('entity.repository');
   $style = $variables['layout'] === 'grid' ? 'tile_showcase_landscape' : 'tile_showcase_portrait';
 
   foreach ($paragraph->get('field_tiles') as $item) {
-    $tile = $item->entity;
-    if (!$tile instanceof NodeInterface) {
+    $node = $item->entity;
+    $card = $node instanceof NodeInterface ? _palefire_node_card($node, $cache, 140) : NULL;
+    if (!$card) {
       continue;
     }
-    $cache->addCacheableDependency($tile);
-    $access = $tile->access('view', NULL, TRUE);
-    $cache->addCacheableDependency($access);
-    if (!$access->isAllowed()) {
-      continue;
-    }
-    $tile = $repository->getTranslationFromContext($tile);
-
-    $url = $tile->toUrl()->toString(TRUE);
-    $cache->addCacheableDependency($url);
-
-    $labels = [];
-    if ($tile->hasField('field_category')) {
-      foreach ($tile->get('field_category') as $term_item) {
-        $term = $term_item->entity;
-        if (!$term) {
-          continue;
-        }
-        $cache->addCacheableDependency($term);
-        $term_access = $term->access('view', NULL, TRUE);
-        $cache->addCacheableDependency($term_access);
-        if ($term_access->isAllowed()) {
-          $labels[] = $repository->getTranslationFromContext($term)->label();
-        }
-      }
-    }
-
+    $show_image = $variables['layout'] !== 'index' && $card['image_item'];
     $variables['tiles'][] = [
-      'title' => $tile->label(),
-      'url' => $url->getGeneratedUrl(),
-      'label' => implode(' + ', $labels),
-      'image' => _palefire_tile_cover($tile, $style, $cache),
+      'title' => $card['title'],
+      'url' => $card['url'],
+      'label' => $card['label'],
+      'note' => $card['note'],
+      'image' => $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL,
     ];
   }
   $cache->applyTo($variables);
 }
 
 /**
- * The Tile's cover image as a decorative (alt="") lazy image.
+ * A card's cover image as a decorative (alt="") lazy image.
  *
  * Uses the responsive image style when it exists, then its middle image
  * style ("<style>_md") on its own, then the original file, so the card never
  * breaks if the setup script hasn't run yet or Responsive Image is off.
  */
-function _palefire_tile_cover(NodeInterface $tile, string $style, CacheableMetadata $cache): ?array {
-  if (!$tile->hasField('field_tile_cover') || $tile->get('field_tile_cover')->isEmpty()) {
-    return NULL;
-  }
-  $image = $tile->get('field_tile_cover')->first();
+function _palefire_responsive_cover(FieldItemInterface $image, string $style, CacheableMetadata $cache): ?array {
   $file = $image->entity;
   if (!$file) {
     return NULL;

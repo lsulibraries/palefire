@@ -1,17 +1,24 @@
 {#
 /**
  * @file
- * Tile showcase section: Tile nodes as image cards.
+ * Tile showcase section: Tile nodes and Modular pages as image cards, or as
+ * a numbered list.
  *
  * Variables from palefire_preprocess_paragraph__tile_showcase():
- * - layout: 'stagger' (tall cards, offset rhythm) or 'grid' (3 / 2 / 1 columns).
- * - tiles: title, url, label (Category terms, "Dept + Medium"), image.
+ * - layout: 'stagger' (tall cards, offset rhythm), 'grid' (3 / 2 / 1
+ *   columns) or 'index' (numbered rows, no pictures).
+ * - tiles: title, url, label (Category terms, "Dept + Medium"), note (the
+ *   intro as plain text; index only), image.
  *
  * The section <h2> comes from the scroll-section field template, so each
  * card is an <h3>. The title comes first in the source so the link's name
  * starts with it ("Oral History, Dept + Medium"); CSS shows the label above.
  * role="list" keeps list semantics in Safari, which drops them when
  * list-style is none.
+ *
+ * Index: the same list, each row a link with its number (decorative: the
+ * list is ordered, which screen readers already announce), title, note and
+ * label, and an arrow that slides on hover. An <ol>, as the numbers say.
  *
  * "On this page": each card is a sub-link under its section, as in the
  * concept. The <li> is the target (data-toc), not the <h3>: modular-toc.js
@@ -24,22 +31,44 @@
   {# Scroll-in animation, as on the concept page (skipped for reduced motion). #}
   {{ attach_library('palefire/tile-reveal') }}
   <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip>
-    <ul class="pf-tiles__list" role="list">
-      {% for tile in tiles %}
-        <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
-          <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
-            {% if tile.image %}
-              <span class="pf-tile__media">{{ tile.image }}</span>
-            {% endif %}
-            <span class="pf-tile__body">
-              <h3 class="pf-tile__title">{{ tile.title }}</h3>
+    {% if layout == 'index' %}
+      <ol class="pf-tiles__list" role="list">
+        {% for tile in tiles %}
+          <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+            <a class="pf-tile-row" href="{{ tile.url }}">
+              <span class="pf-tile-row__number" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+              <span class="pf-tile-row__text">
+                <h3 class="pf-tile-row__title">{{ tile.title }}</h3>
+                {% if tile.note %}
+                  <span class="pf-tile-row__note"><span class="visually-hidden">, </span>{{ tile.note }}</span>
+                {% endif %}
+              </span>
               {% if tile.label %}
-                <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
+                <span class="pf-tile-row__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
               {% endif %}
-            </span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+              <svg class="pf-tile-row__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <ul class="pf-tiles__list" role="list">
+        {% for tile in tiles %}
+          <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+            <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+              {% if tile.image %}
+                <span class="pf-tile__media">{{ tile.image }}</span>
+              {% endif %}
+              <span class="pf-tile__body">
+                <h3 class="pf-tile__title">{{ tile.title }}</h3>
+                {% if tile.label %}
+                  <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
+                {% endif %}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </div>
 {% endif %}
