@@ -442,7 +442,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // Request paths (includes/guide-request-paths.html.twig) -------------------
-// Three "subway lines" of stops, options A, B and C, split by an "or" rule.
+// Three "subway lines" of stops, options A, B and C, split by hairlines.
 // Mobile first: each line runs down the left, through the middle of every
 // stop's icon; from 34rem of block width the stops sit in a row and the line
 // runs across. The icon's disc is the page colour, so the line seems to pass
@@ -481,27 +481,11 @@ html[data-pf-mode="guide"] .pf-section__title {
   color: var(--pf-guide-accent);
 }
 
-// The arrow from an option to its stops: only the landing's wide Quick
-// Guide shows it (_landing-features.scss).
-.pf-paths__arrow {
-  display: none;
-}
-
-// "or" between two options: a short mono word, then a hairline to the end.
+// Between two options: a hairline (decorative). In a row of stops (below)
+// the spacing alone sets the options apart.
 .pf-paths__or {
   display: flex;
   align-items: center;
-  gap: 0.875rem;
-  font: 700 0.6875rem/1 var(--pf-guide-mono);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--pf-guide-muted);
-
-  span {
-    flex: none;
-    width: var(--pf-paths-dot);
-    text-align: center;
-  }
 
   &::after {
     content: "";
@@ -559,12 +543,9 @@ html[data-pf-mode="guide"] .pf-section__title {
   background: var(--bs-body-bg);
   border: 1px solid var(--pf-guide-rule);
   border-radius: 50%;
-
-  svg {
-    width: 1.125rem;
-    height: 1.125rem;
-    fill: currentColor;
-  }
+  // The step's number (the list's own, shown), small in the mono face.
+  font: 600 0.8125rem/1 var(--pf-guide-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .pf-paths__label {
@@ -582,8 +563,8 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // A stop with a "how" panel: its label is the button that opens it, styled
-// as the label with a dotted accent underline and a small image (or info)
-// icon, so it reads as "there's more here" without looking like a CTA.
+// as the label with a dotted accent underline, so it reads as "there's more
+// here" without looking like a CTA.
 .pf-paths__peek {
   display: inline;
   padding: 0;
@@ -608,19 +589,6 @@ html[data-pf-mode="guide"] .pf-section__title {
     outline: 2px solid var(--pf-guide-accent);
     outline-offset: 3px;
   }
-}
-
-.pf-paths__peek-end {
-  white-space: nowrap;
-}
-
-.pf-paths__peek-icon svg {
-  display: inline-block;
-  width: 0.875em;
-  height: 0.875em;
-  margin-inline-start: 0.35em;
-  vertical-align: -0.05em;
-  fill: var(--pf-guide-accent);
 }
 
 // The panel: native popover, so it sits in the top layer, centred in the
@@ -805,8 +773,9 @@ html[data-pf-mode="guide"] .pf-section__title {
     margin-bottom: 0.5rem;
   }
 
-  // With the stops in a row, each line already draws a rule; the "or"
-  // hairline under it read as one rule too many, so only the word stays.
+  // With the stops in a row, each line already draws a rule; the hairline
+  // between options read as one rule too many, so the spacing alone
+  // separates them.
   .pf-paths__or::after {
     display: none;
   }
@@ -818,7 +787,7 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // As a line scrolls into view, its stops fade up one after another and the
-// line draws between them; each "or" rule draws out from its word. Scroll-
+// line draws between them; each hairline between options draws out. Scroll-
 // driven, so no script; browsers without it (and reduced motion) just show
 // the diagram.
 @supports (animation-timeline: view()) {

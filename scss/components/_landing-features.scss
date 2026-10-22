@@ -929,24 +929,21 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   max-width: none;
   padding: 0;
   border: 0;
-  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem); // the rows' spacing separates the options
 }
 
 // Each option is a lettered row label here ("A  See it in person"): a large
-// accent letter, the name in the panel's text type rather than the guide's
-// small mono caption, and an "or" hairline between the rows, so A, B and C
-// read as three ways to start and not as captions on their first stops.
-// From 52rem of block width the label sits beside its stops, centred on
-// the row (discs and words), like a Swiss table; narrower, above them. The
-// full guide keeps its captions (_guide.scss).
+// accent letter and the name in the panel's text type rather than the
+// guide's small mono caption, so A, B and C read as three ways to start and
+// not as captions on their first stops. No box, no arrow: the letter and
+// the spacing between the rows carry it, like a table. From 52rem of block
+// width the label sits beside its stops, on the line of discs; narrower,
+// above them. The full guide keeps its captions (_guide.scss).
 .pf-quick-guide .pf-paths__name {
-  margin: 0 0 1.25rem;
-  // A hairline box, so each option reads as a choice to make. No start
-  // padding: the letter's box stays over the line down from the discs.
-  padding: 1rem 1.25rem 1rem 0;
-  border: 1px solid var(--pf-guide-rule);
+  margin: 0 0 1rem;
   font-family: inherit;
   font-size: 1.0625rem;
+  font-weight: 500;
   line-height: 1.3;
   letter-spacing: normal;
   text-transform: none;
@@ -955,53 +952,22 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 
 .pf-quick-guide .pf-paths__letter {
   font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  font-weight: 500;
 }
 
-// Beside its stops, the box runs the row's full height and an accent arrow
-// (Font Awesome Pro light long-arrow-right, inlined by the template) points
-// from it to the first stop. Narrower, and on the full guide, the arrow is
-// hidden (_guide.scss).
 @container pf-paths (min-width: 52rem) {
+  // The label on the line of discs: as tall as a disc, its words centred
+  // in it, at the row's top.
   .pf-quick-guide .pf-paths__line {
     display: grid;
-    grid-template-columns: 13rem auto minmax(0, 1fr);
-    column-gap: 1.5rem;
-    align-items: center;
-  }
-
-  .pf-quick-guide .pf-paths__arrow {
-    display: block;
-    color: var(--pf-guide-accent);
-    transform-origin: left;
-
-    svg {
-      display: block;
-      width: 2.5rem;
-      height: auto;
-      fill: currentColor;
-    }
-
-    [dir="rtl"] & {
-      scale: -1 1;
-      transform-origin: right;
-    }
+    grid-template-columns: 13rem minmax(0, 1fr);
+    column-gap: 2rem;
+    align-items: start;
   }
 
   .pf-quick-guide .pf-paths__name {
-    align-self: stretch;
+    min-height: var(--pf-paths-dot);
     margin: 0;
-    padding: 1.5rem 1.25rem 1.5rem 0.75rem;
-  }
-
-  // The arrow draws out as its row scrolls in, like the stops' line.
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .pf-quick-guide .pf-paths__arrow {
-        animation: pf-paths-line linear both;
-        animation-timeline: view();
-        animation-range: entry 20% entry 70%;
-      }
-    }
   }
 }
 

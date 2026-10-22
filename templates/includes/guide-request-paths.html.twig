@@ -8,11 +8,9 @@
  *
  * Each line is an ordered list named by its heading, so screen readers hear
  * "Option A: See it in person, list, 4 items"; C's last stop points back to
- * A and B by those letters. An "or" divider between the lines shows they are
- * alternatives; it repeats the letters, so it is hidden from screen readers.
- * Icons are Font Awesome Pro duotone, inlined from the site's copy like the
- * hero account icon, and decorative. The light arrow between an option and
- * its stops shows only on the landing's wide Quick Guide.
+ * A and B by those letters. A hairline between the lines sets the options
+ * apart (decorative). Each stop's disc holds its step number, the list's
+ * own numbering made visible, so it is hidden from screen readers.
  *
  * A stop with `detail` has a "how" panel: its label is a button that opens a
  * popover with a sentence or two and, when it has `shots`, screenshots of
@@ -28,14 +26,14 @@
  */
 #}
 {% set find = {
-  icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t,
+  label: 'Find Item'|t, note: 'in the catalog'|t,
   detail: 'Search the catalog, then open the item’s record. It lists the contents, the abstract, a link to the finding aid when there is one, and the format. Scroll down to the Holdings and Available tabs.'|t,
   shots: [
     { file: 'catalog-record.webp', width: 1250, height: 723, alt: 'A catalog record for the William Y. Dixon papers, with Holdings and Available tabs below it.'|t },
   ],
 } %}
 {% set request = {
-  icon: 'file-signature', label: 'Click Request Item'|t, note: 'bottom right area'|t,
+  label: 'Click Request Item'|t, note: 'bottom right area'|t,
   detail: 'On the Available tab, choose Request Item at the end of the row you want. Then sign in: LSU students, faculty and staff use single sign-on, and everyone else signs in or registers as a Guest. You don’t need to be affiliated with LSU.'|t,
   shots: [
     { file: 'available-tab.webp', width: 1001, height: 329, alt: 'The Available tab: a table of copies, each with a Request Item link in the last column.'|t },
@@ -51,13 +49,13 @@
       find,
       request,
       {
-        icon: 'calendar-check', label: 'Book a visit'|t, note: 'recommended'|t,
+        label: 'Book a visit'|t, note: 'recommended'|t,
         detail: 'The request form fills in the item for you; add the box number from the finding aid. Choose an appointment, or New Appointment, then Submit Request to View In-Person. Appointments aren’t required, but with one your materials are waiting when you arrive.'|t,
         shots: [
           { file: 'book-visit.webp', width: 740, height: 350, alt: 'The end of the request form: Reading Room and Appointment menus, a New Appointment button, and Submit Request to View In-Person.'|t },
         ],
       },
-      { icon: 'book-reader', label: 'Read it at Hill'|t, note: 'staff bring it to you'|t },
+      { label: 'Read it at Hill'|t, note: 'staff bring it to you'|t },
     ],
   },
   {
@@ -68,7 +66,7 @@
       find,
       request,
       {
-        icon: 'exchange', label: 'Switch to duplication'|t, note: 'top right of the form'|t,
+        label: 'Switch to duplication'|t, note: 'top right of the form'|t,
         detail: 'Choose Switch to Duplication Order Form at the top right of the request form. Then list what to copy under Selections To Be Reproduced, with box and folder numbers from the finding aid, and pick a format and delivery method.'|t,
         shots: [
           { file: 'duplication-switch.webp', width: 1110, height: 231, alt: 'The request form’s Item Information, with the Switch to Duplication Order Form button at the top right.'|t },
@@ -76,7 +74,7 @@
         ],
       },
       {
-        icon: 'paper-plane', label: 'Pay invoice to receive copies'|t, note: 'ETA 24–48 hours'|t,
+        label: 'Pay invoice to receive copies'|t, note: 'ETA 24–48 hours'|t,
         detail: 'Scans cost 50 cents a page, plus a $10 processing fee per order; one fee covers requests you submit together. Staff email an invoice with payment instructions, usually within 24–48 hours (not counting weekends and holidays). Allow 5–7 business days for the order; your scans are emailed in the format you chose.'|t,
       },
     ],
@@ -86,10 +84,10 @@
     letter: 'C',
     name: 'Have an expert help'|t,
     stops: [
-      { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email form'|t },
-      { icon: 'lightbulb-on', label: 'Receive guidance'|t, note: 'chef’s choice'|t },
-      { icon: 'search', label: 'Find Item'|t, note: 'in the catalog'|t },
-      { icon: 'repeat', label: 'Start options A or B'|t, note: 'thank your librarian'|t },
+      { label: 'Reach out'|t, note: 'AskUs or email form'|t },
+      { label: 'Receive guidance'|t, note: 'chef’s choice'|t },
+      { label: 'Find Item'|t, note: 'in the catalog'|t },
+      { label: 'Start options A or B'|t, note: 'thank your librarian'|t },
     ],
   },
 ] %}
@@ -97,26 +95,23 @@
   {% for path in paths %}
     {% set heading_id = 'pf-paths-' ~ uid ~ '-' ~ path.key %}
     {% if not loop.first %}
-      <div class="pf-paths__or" aria-hidden="true"><span>{{ 'or'|t }}</span></div>
+      <div class="pf-paths__or" aria-hidden="true"></div>
     {% endif %}
     <div class="pf-paths__line">
       <p class="pf-paths__name" id="{{ heading_id }}">
         <span class="pf-paths__letter"><span class="visually-hidden">{{ 'Option'|t }} </span>{{ path.letter }}<span class="visually-hidden">: </span></span>
         <span class="pf-paths__name-text">{{ path.name }}</span>
       </p>
-      <span class="pf-paths__arrow" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/long-arrow-right.svg', ignore_missing = true)|raw }}</span>
       <ol class="pf-paths__stops" aria-labelledby="{{ heading_id }}">
         {% for stop in path.stops %}
           <li class="pf-paths__stop">
-            <span class="pf-paths__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ stop.icon ~ '.svg', ignore_missing = true)|raw }}</span>
+            <span class="pf-paths__icon" aria-hidden="true">{{ loop.index }}</span>
             {% if stop.detail is defined %}
               {% set pop_id = heading_id ~ '-' ~ loop.index %}
               {% set has_shots = stop.shots is defined and img_base|default('') %}
-              {# The label's last word and the icon don't wrap apart. #}
-              {% set words = stop.label|split(' ') %}
               <button type="button" class="pf-paths__label pf-paths__peek" popovertarget="{{ pop_id }}">
-                {{- words|slice(0, -1)|join(' ') ~ (words|length > 1 ? ' ') -}}
-                <span class="pf-paths__peek-end">{{ words|last }}<span class="visually-hidden">, {{ has_shots ? 'show screenshots'|t : 'show details'|t }}</span><span class="pf-paths__peek-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ (has_shots ? 'image' : 'info-circle') ~ '.svg', ignore_missing = true)|raw }}</span></span>
+                {{- stop.label -}}
+                <span class="visually-hidden">, {{ has_shots ? 'show screenshots'|t : 'show details'|t }}</span>
               </button>
             {% else %}
               <span class="pf-paths__label">{{ stop.label }}</span>

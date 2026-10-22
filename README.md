@@ -857,6 +857,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Request paths, calmer** (the homepage's Quick Guide and the full guide,
+  `includes/guide-request-paths.html.twig`). Each stop's disc holds its
+  step number (1–4) instead of an icon; the image and info badges after
+  the labels are gone (the dotted underline still marks a label that opens
+  a panel); the options are set apart by a hairline (stacked) or the
+  spacing (in a row) instead of "or". On the homepage the A/B/C labels lose
+  their boxes and arrows and sit on the line of discs. Why: the guide was
+  the busiest typography on the page.
 - **Homepage type pass.** One section heading for the page (the map, the
   Quick Guide, On view and the sections after the landing: one size,
   weight and tracking, in the text colour); gold kept for the page title,
