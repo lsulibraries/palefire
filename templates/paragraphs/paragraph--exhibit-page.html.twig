@@ -138,6 +138,30 @@
       </div>
     {% endif %}
   {% endif %}
+  {% if wall_lead %}
+    {# A wall's lead: full screen above the title, which falls from it into
+       place as the page scrolls (_exhibition.scss, js/exhibition.js). With
+       a caption it is a figure that opens in the lightbox. #}
+    {% set wall_img %}
+      <img class="pf-exhibit-wall-hero__img" src="{{ wall_lead.src }}"
+           {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
+           {% if wall_lead.width %}width="{{ wall_lead.width }}" height="{{ wall_lead.height }}"{% endif %}
+           style="object-position: {{ focus }}" alt="{{ wall_lead_caption ? wall_lead.alt }}" decoding="async">
+    {% endset %}
+    <div class="pf-exhibit-wall-hero" data-pf-wall-hero
+         {% if wall_lead_caption %}role="figure" aria-labelledby="{{ dom_id }}-caption"{% else %}aria-hidden="true"{% endif %}>
+      {% if wall_lead_caption %}
+        <a class="pf-exhibit-wall-hero__link" href="{{ wall_lead.full }}" data-pf-lightbox data-pf-caption="{{ dom_id }}-caption"
+           {% if wall_lead.width %}data-width="{{ wall_lead.width }}" data-height="{{ wall_lead.height }}"{% endif %}>
+          {{ wall_img }}
+          <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
+        </a>
+        <div class="visually-hidden" id="{{ dom_id }}-caption">{{ wall_lead_caption }}</div>
+      {% else %}
+        {{ wall_img }}
+      {% endif %}
+    </div>
+  {% endif %}
   <div class="pf-gallery__body pf-guide" id="{{ dom_id }}-text" tabindex="-1">
     {# The full opening's heading has faded with the image by the time the
        text arrives: the gallery's title again, to open the text. A visual

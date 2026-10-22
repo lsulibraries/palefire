@@ -126,7 +126,11 @@
       c.page.removeAttribute('aria-current');
     }
     const heading = gallery.querySelector('.pf-section__title');
-    c.gallery.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+    // In a <span>, like the page's own crumb, so a long title can end in an
+    // ellipsis on one line (_layout.scss).
+    const name = document.createElement('span');
+    name.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+    c.gallery.replaceChildren(name);
     if (!c.gallery.isConnected) {
       c.list.append(c.gallery);
     }
@@ -175,7 +179,7 @@
   function openingImage() {
     const page = state.current;
     const frame = page
-      ? page.querySelector('.pf-exhibit-hero__stage, .pf-exhibit-lead__frame')
+      ? page.querySelector('.pf-exhibit-hero__stage, .pf-exhibit-lead__frame, .pf-exhibit-wall-hero')
       : state.head.querySelector('.pf-exhibit-cover__media');
     const img = frame ? frame.querySelector('img') : null;
     return img ? [frame, img] : null;
@@ -267,9 +271,29 @@
     inner.style.setProperty('--pf-pan', Math.round(Math.min(Math.max(overflow, h / 3), h * 1.6)) + 'px');
   }
 
+  // A wall's opening (_exhibition.scss): how far the title falls, from the
+  // foot of the full-screen image to its place beside the intro. Measured
+  // without its animation; the page scrolls that far while it falls.
+  function sizeWallHero(page) {
+    const hero = page && page.querySelector('[data-pf-wall-hero]');
+    const inner = hero && hero.closest('.pf-section__inner');
+    const title = inner && inner.querySelector(':scope > .pf-section__title');
+    if (!title) {
+      return;
+    }
+    title.style.animation = 'none';
+    const h = hero.getBoundingClientRect();
+    const t = title.getBoundingClientRect();
+    title.style.animation = '';
+    const scale = parseFloat(getComputedStyle(inner).getPropertyValue('--pf-fall-scale')) || 1;
+    const gap = parseFloat(getComputedStyle(ROOT).fontSize) * 2.5;
+    inner.style.setProperty('--pf-fall', Math.max(0, Math.round(t.top - h.bottom + t.height * scale + gap)) + 'px');
+  }
+
   function onResize() {
     measureHead();
     sizeHero(state.current);
+    sizeWallHero(state.current);
     queueZoom();
   }
 
@@ -284,6 +308,7 @@
     if (page) {
       prepareGallery(page);
       sizeHero(page);
+      sizeWallHero(page);
     }
     queueZoom();
   }

@@ -573,9 +573,14 @@ from the media item. A figure with no image shows only to editors.
   (scroll-driven animations). The entries stay in the page, folded away, and
   are the object view's text; their headings stay in the TOC
   (`data-toc-passive`). Without JS the wall stays `[hidden]` and the gallery
-  reads as a story. A wall has no opening: its lead, pan and band are left
-  out whatever the Opening says (the fields are kept, for a return to
-  Story). From lg the title and the gallery's own text sit side by side as
+  reads as a story. A wall's opening is its lead full screen
+  (`.pf-exhibit-wall-hero`; with a caption it opens in the lightbox), with
+  the title and its number over the image's foot, larger; as the page
+  scrolls the title holds still while the image slides away and recedes,
+  and it settles in place beside the intro after `--pf-fall` of scrolling
+  (measured in `js/exhibition.js`; scroll-driven animations; under reduced
+  motion it just sits below the image). No pan or band, whatever the
+  Opening says. From lg the title and the gallery's own text sit side by side as
   wall text, the wall full width below; text longer than four lines folds
   with "Read more" / "Show less" (`.pf-exhibit-wall__text`), so the first
   row of plates is on the first screen.
@@ -786,6 +791,22 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a wall's title falls into place.** A wall gallery with a
+  lead opens on it full screen again, the title over its foot; scrolling,
+  the title holds while the image slides away, and settles beside the
+  intro. Without a lead the wall text opens the gallery as before. Why: a
+  showcase entrance without the long pan before the plates.
+- **Exhibitions: eased washes.** The title page's and the galleries'
+  page-colour washes over their images fade along an ease-in-out curve in
+  12 stops (`pf-eased-wash()`), instead of two straight segments whose
+  bends showed as steps. Text keeps its contrast (the wash is as dense as
+  before where the text sits).
+- **Breadcrumb on one line.** The modular breadcrumb (and the landing bar's)
+  never wraps: items that don't fit end in an ellipsis, the middle ones
+  first, then the current page; Home stays whole. Below md it is 11px with
+  tighter tracking and separators. The exhibition's gallery crumb is in a
+  `<span>` like the others, so it can be cut too. Why: on phones the
+  breadcrumb ran to three lines.
 - **Exhibitions: wall galleries open on the wall.** No full-screen opening
   or pan on a wall gallery; from lg the title and the intro sit side by side,
   the intro folded to four lines with "Read more". Why: scrolling past a

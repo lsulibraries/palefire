@@ -70,11 +70,15 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
 .pf-breadcrumb--modular {
   padding: 0;
 
+  // One line at every width: items that don't fit are cut with an ellipsis,
+  // the middle ones first, then the current page; Home stays whole. Phones
+  // get a smaller size and tighter tracking and separators.
   .breadcrumb {
     --bs-breadcrumb-divider: '';
     --bs-breadcrumb-item-padding-x: 0;
-    flex-wrap: wrap;
-    gap: 0.25rem 0;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow: hidden;
     margin: 0;
     padding: 0;
     font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
@@ -84,12 +88,30 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     line-height: 1.5;
     text-transform: uppercase;
     color: var(--pf-toc-color);
+
+    @include media-breakpoint-down(md) {
+      font-size: 0.6875rem;
+      letter-spacing: 0.1em;
+    }
   }
 
   .breadcrumb-item {
     display: inline-flex;
+    flex: 0 3 auto;
     align-items: center;
     min-width: 0;
+    white-space: nowrap;
+
+    &:first-child {
+      flex-shrink: 0;
+    }
+
+    > a,
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   // Separator: a short slanted rule, the map's and TOC's thin-line look.
@@ -98,8 +120,13 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     float: none;
     width: 1px;
     height: 0.9em;
+    flex: none;
     margin-inline: 0.85rem;
     padding: 0;
+
+    @include media-breakpoint-down(md) {
+      margin-inline: 0.55rem;
+    }
     background: currentColor;
     opacity: 0.45;
     transform: skewX(-20deg);

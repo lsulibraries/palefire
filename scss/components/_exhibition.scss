@@ -1,3 +1,6 @@
+@use "sass:list";
+@use "sass:math";
+
 // Exhibition pages: Modular pages in exhibition mode (field_modular_type =
 // exhibition) and their blocks (scripts/palefire_exhibit_setup.php).
 //
@@ -14,6 +17,21 @@
 
 $pf-exhibit-ease: cubic-bezier(.2, .7, .2, 1);
 $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
+
+// A wash of the page colour that is solid up to $from and fades out by $to
+// along an ease-in-out curve, in many stops: no visible bends where a few
+// straight segments meet, as a photographer's graduated filter.
+@function pf-eased-wash($direction, $from, $to, $steps: 12) {
+  $stops: ();
+  @for $i from 0 through $steps {
+    $t: math.div($i, $steps);
+    $alpha: math.div(1 + math.cos(math.$pi * $t), 2);
+    $mix: math.div(math.round($alpha * 1000), 10) * 1%;
+    $at: math.div(math.round(($from + ($to - $from) * $t) * 10), 10);
+    $stops: list.append($stops, color-mix(in srgb, var(--bs-body-bg) $mix, transparent) $at, comma);
+  }
+  @return linear-gradient($direction, $stops);
+}
 
 // Motion that is only decoration: off with the OS setting or Settings >
 // Reduce motion.
@@ -389,12 +407,12 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(to top, var(--bs-body-bg) 52%, color-mix(in srgb, var(--bs-body-bg) 72%, transparent) 70%, transparent 95%);
+    background: pf-eased-wash(to top, 54%, 100%);
 
     @include media-breakpoint-up(lg) {
       background:
-        linear-gradient(to top, var(--bs-body-bg) 0, transparent 18%),
-        linear-gradient(to right, var(--bs-body-bg) 38%, color-mix(in srgb, var(--bs-body-bg) 82%, transparent) 60%, transparent 86%);
+        pf-eased-wash(to top, 0%, 22%),
+        pf-eased-wash(to right, 40%, 94%);
     }
   }
 }
@@ -866,10 +884,10 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, var(--bs-body-bg) 45%, color-mix(in srgb, var(--bs-body-bg) 70%, transparent) 65%, transparent 92%);
+    background: pf-eased-wash(to top, 46%, 98%);
 
     @include media-breakpoint-up(lg) {
-      background: linear-gradient(to right, var(--bs-body-bg) 34%, color-mix(in srgb, var(--bs-body-bg) 80%, transparent) 56%, transparent 80%);
+      background: pf-eased-wash(to right, 38%, 94%);
     }
   }
 }
@@ -1851,11 +1869,20 @@ html.pf-exhibit-paged {
 
     > .pf-section__title {
       grid-column: 1;
+      grid-row: 2;
       margin-bottom: 0;
     }
 
+    // Every row explicit: without a lead, row 1 stays empty rather than
+    // taking the wall by auto-placement.
     > .pf-exhibit-pager {
       grid-column: 1 / -1;
+      grid-row: 4;
+    }
+
+    .pf-exhibit-wall-hero {
+      grid-column: 1 / -1;
+      grid-row: 1;
     }
 
     > .pf-gallery > .pf-gallery__body {
@@ -1864,12 +1891,13 @@ html.pf-exhibit-paged {
 
     .pf-exhibit-wall__text {
       grid-column: 2;
-      grid-row: 1;
+      grid-row: 2;
       padding-top: 1.85rem;
     }
 
     .pf-exhibit-wall {
       grid-column: 1 / -1;
+      grid-row: 3;
       margin-top: clamp(2rem, 3vw, 3rem);
     }
   }
@@ -1879,6 +1907,99 @@ html.pf-exhibit-paged {
   display: grid;
   gap: 0.5rem;
   min-width: 0;
+}
+
+// A wall's opening: its lead full screen under the breadcrumb bar, edge to
+// edge. The title (and its number) start at the image's foot, larger, and
+// as the page scrolls they hold still on screen while the image slides
+// away and recedes, settling at their size beside the intro after
+// --pf-fall of scrolling (measured by js/exhibition.js). Without
+// scroll-driven animations, or with reduced motion, the title just sits
+// below the image.
+.pf-exhibit-wall-hero {
+  position: relative;
+  z-index: 0;
+  order: -1; // the flex column below lg: above the title
+  height: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
+  min-height: 22rem;
+  margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) clamp(2rem, 5vw, 3.5rem);
+  overflow: clip;
+
+  // Page colour from the foot, dense where the title starts: 3:1 or more
+  // for its large type on a light plate.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: pf-eased-wash(to top, 12%, 72%);
+  }
+}
+
+.pf-exhibit-wall-hero__link {
+  display: block;
+  height: 100%;
+  cursor: zoom-in;
+}
+
+.pf-exhibit-wall-hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery > .pf-exhibit-wall-hero) {
+  --pf-fall-scale: 1.12;
+  overflow-x: clip; // the larger title, at its start, never widens the page
+
+  @include media-breakpoint-up(lg) {
+    --pf-fall-scale: 1.3;
+  }
+
+  > .pf-section__title {
+    position: relative;
+    z-index: 2;
+    transform-origin: 0 100%;
+  }
+}
+
+// The fall (pf-exhibit-motion's conditions, written out: the selector
+// already starts at <html>).
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery > .pf-exhibit-wall-hero) {
+      > .pf-section__title,
+      .pf-exhibit-wall-hero__img {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 var(--pf-fall, 0px);
+      }
+
+      > .pf-section__title {
+        animation-name: pf-wall-fall;
+      }
+
+      .pf-exhibit-wall-hero__img {
+        animation-name: pf-wall-recede;
+      }
+    }
+  }
+}
+
+@keyframes pf-wall-fall {
+  from {
+    translate: 0 calc(-1 * var(--pf-fall, 0px));
+    scale: var(--pf-fall-scale, 1);
+  }
+}
+
+@keyframes pf-wall-recede {
+  to {
+    opacity: 0.35;
+    scale: 1.06;
+  }
 }
 
 .pf-exhibit-wall__intro {
