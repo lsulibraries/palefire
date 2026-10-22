@@ -857,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start as a timetable; diamond stops; 03 and 04 rules.** On the
+  hero's four columns the Quick Guide's heading and intro take the first
+  and options A, B and C one column each, their stops running down
+  (narrower layouts keep the rows). "See the full guide" is now an inline
+  link ending the intro, not a button. The index rules set the name right
+  after its number at every width, and "03 Visit Hill" and "04 On view"
+  head the map and On view (On view's own hairline is gone). The request
+  paths' stops, here and in the full guide, are diamonds instead of
+  circles, icons upright. Why: the three full rows were tall and
+  repetitive, the labels sat far from their numbers, and circles were the
+  one soft shape in a hard-edged theme.
 - **Hero: indexed label rules, Quick Start stops on the four columns.** A
   hairline with a mono number and name ("01 At a glance", "02 Start your
   research") now heads At a glance and the Quick Guide, the number in

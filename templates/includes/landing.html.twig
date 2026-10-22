@@ -355,11 +355,11 @@
       </ul>
 
       {# Quick guide: under At a glance, still in the lead panel. Index rule
-         02 (decorative), the heading and intro, then the
-         three request paths, options A, B and C, from the full guide (the
-         same include, so an edit there shows here too) and a link to that
-         guide, in the sign-in button's style (the sign-in itself is at the
-         end of the bar, above). Close under At a glance, so its heading
+         02 (decorative), the heading and intro ending in a link to the
+         full guide, then the three request paths, options A, B and C, from
+         the full guide (the same include, so an edit there shows here too);
+         on the hero's four columns, a timetable: heading and intro in the
+         first, one option in each of the others. Close under At a glance, so its heading
          shows in a laptop's first screen; the lead runs taller than the
          window, scrolls freely, and landing-snap.js snaps to the map once
          the lead's end is in view.
@@ -379,37 +379,45 @@
         </div>
         {# The TOC label is the heading's own text once the title is set. #}
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
+        {# "See the full guide" ends the intro, inline in its last paragraph
+           (_landing-features.scss), not a button of its own. The full name
+           keeps the visible words first (WCAG 2.5.3) and says which guide;
+           with its own text or URL (the Link field) the link names itself. #}
+        {% set guide_link %}
+          {%- if guide_url -%}
+            <a class="pf-quick-guide__link" href="{{ guide_url }}">
+              {%- if quick_guide.link_text -%}
+                {{ quick_guide.link_text }}
+              {%- elseif quick_guide.url -%}
+                {{ 'See the full guide'|t }}
+              {%- else -%}
+                {{ 'See the full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        {% endset %}
         {% if quick_guide.intro %}
-          <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
+          <div class="pf-quick-guide__intro">{{ quick_guide.intro }} {{ guide_link }}</div>
         {% else %}
-          <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
+          <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }} {{ guide_link }}</p>
         {% endif %}
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
-        {% if guide_url %}
-          <div class="pf-quick-guide__more">
-            <a class="pf-hero-account__link" href="{{ guide_url }}">
-              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-              {# The full name keeps the visible words first (WCAG 2.5.3)
-                 and says which guide, so the link stands on its own. With
-                 its own text or URL (the Link field) the link names
-                 itself: the added guide name may no longer fit. #}
-              {% if quick_guide.link_text %}
-                <span>{{ quick_guide.link_text }}</span>
-              {% elseif quick_guide.url %}
-                <span>{{ 'See full guide'|t }}</span>
-              {% else %}
-                <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
-              {% endif %}
-            </a>
-          </div>
-        {% endif %}
       </div>
     {% endif %}
   </div>
   {% endif %}
 
   {% if landing_map %}
-    <div class="pf-landing__visit"{% if toc_map_id %} id="{{ toc_map_id }}" tabindex="-1"{% endif %}>{{ landing_map }}</div>
+    <div class="pf-landing__visit"{% if toc_map_id %} id="{{ toc_map_id }}" tabindex="-1"{% endif %}>
+      {%- if hero -%}
+        {# Index rule 03 (.pf-index-rule): the map's heading names it. #}
+        <div class="pf-index-rule" aria-hidden="true">
+          <span class="pf-index-rule__num">03</span>
+          <span class="pf-index-rule__label">{{ 'Visit Hill'|t }}</span>
+        </div>
+      {%- endif -%}
+      {{ landing_map }}
+    </div>
   {% endif %}
 
   {# Visit strip: under the map, as wide as legend + map. On the hero the
@@ -427,6 +435,10 @@
   {% if hero and on_view %}
     {% set on_view_id = input_id ~ '-on-view' %}
     <section class="pf-landing__onview" aria-labelledby="{{ on_view_id }}">
+      <div class="pf-index-rule" aria-hidden="true">
+        <span class="pf-index-rule__num">04</span>
+        <span class="pf-index-rule__label">{{ 'On view'|t }}</span>
+      </div>
       <h2 class="pf-section__title pf-landing__onview-title" id="{{ on_view_id }}" data-toc data-toc-label="{{ 'On view'|t }}">{{ 'On view'|t }}</h2>
       {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: on_view, label: 'On view'|t } only %}
     </section>

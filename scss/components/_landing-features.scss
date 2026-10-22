@@ -822,14 +822,13 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // --- Index rules -------------------------------------------------------------
 // A section marker in the manner of a catalogue: the section's number and
 // name in the mono label voice, sitting on a hairline ("01  At a glance",
-// "02  Start your research"). From 30rem of lead the two sit on the hero's
-// grid (the At a glance columns, --pf-grid-gutter): the number in the first
-// column, the name at the second's edge. The number is one of the gold
-// marks; the name takes the labels' muted tone. Decorative (aria-hidden):
-// the list or heading after each one names it.
+// "02  Start your research", "03  Visit Hill", "04  On view"), the name
+// right after the number at every width, so the two read as one label. The
+// number is one of the gold marks; the name takes the labels' muted tone.
+// Decorative (aria-hidden): the list or heading after each one names it.
 .pf-index-rule {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: baseline;
   padding-bottom: .625rem;
   border-bottom: 1px solid #{$pf-hairline};
@@ -849,18 +848,11 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   color: var(--pf-toc-color);
 }
 
-@container pf-lead (min-width: 30rem) {
-  .pf-index-rule {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 var(--pf-grid-gutter);
-  }
-}
-
-@container pf-lead (min-width: 75rem) {
-  .pf-index-rule {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+// The space under a rule before its heading, the same for 02, 03 and 04.
+.pf-quick-guide > .pf-index-rule,
+.pf-landing__visit > .pf-index-rule,
+.pf-landing__onview > .pf-index-rule {
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
 }
 
 // --- Quick guide: under At a glance, in the lead panel ---------------------
@@ -887,10 +879,6 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // reaches a laptop's first screen.
 .pf-landing__lead--hero > .pf-quick-guide {
   --pf-quick-space: clamp(2rem, 4vw, 3.5rem);
-}
-
-.pf-quick-guide > .pf-index-rule {
-  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
 }
 
 .pf-quick-guide__title {
@@ -1012,24 +1000,102 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   }
 }
 
-// "See full guide": at the end of the row from 36rem; full width when
-// narrow.
-.pf-quick-guide__more {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .75rem;
-  justify-content: flex-end;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+// "See the full guide": the intro's last words, a link in the text's full
+// colour (the intro is at 80%), underlined, with an arrow after it. The
+// editor's last paragraph runs inline so the link follows its words.
+.pf-quick-guide__intro > p:last-of-type {
+  display: inline;
+}
 
-  // Full width when narrow, like the sign-in button stacked.
-  .pf-hero-account__link {
-    flex: 1 1 auto;
+.pf-quick-guide__link {
+  color: var(--pf-section-fg, var(--bs-body-color));
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: #{$pf-hairline};
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-inline-start: .35em;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    &::after {
+      transform: translateX(.2em);
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-quick-gold);
+    outline-offset: 2px;
+  }
+
+  [dir="rtl"] &::after {
+    content: "\2190" / "";
   }
 }
 
-@container pf-quick-guide (min-width: 36rem) {
-  .pf-quick-guide__more .pf-hero-account__link {
-    flex: none;
+@media (prefers-reduced-motion: reduce) {
+  .pf-quick-guide__link::after {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+// Timetable, on the hero's four columns (the lead from 75rem, where At a
+// glance is one row): the heading and intro in the first column, options
+// A, B and C one to a column in the other three, each a list of stops
+// running down. Each option is its own pf-paths container here, so the
+// shared styles (_guide.scss) set its stops as the narrow column they are:
+// the mark on the left, the line down through them, the letter over it.
+@container pf-lead (min-width: 75rem) {
+  .pf-quick-guide {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: var(--pf-grid-gutter);
+    align-items: start;
+  }
+
+  .pf-quick-guide > .pf-index-rule {
+    grid-column: 1 / -1;
+  }
+
+  .pf-quick-guide__title {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .pf-quick-guide__intro {
+    grid-column: 1;
+    grid-row: 3;
+    margin-bottom: 0;
+  }
+
+  .pf-quick-guide > .pf-paths {
+    display: grid;
+    grid-column: 2 / -1;
+    grid-row: 2 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--pf-grid-gutter);
+    container-type: normal;
+  }
+
+  .pf-quick-guide .pf-paths__line,
+  .pf-quick-guide .pf-paths__line:last-child {
+    container: pf-paths / inline-size;
+    padding-block: 0;
+    border: 0;
   }
 }
 
@@ -1606,9 +1672,8 @@ html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-q
 // heading's).
 .pf-landing--cover > .pf-landing__onview {
   margin-top: var(--pf-hero-gap);
-  padding: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 0;
   border: 0;
-  border-top: 1px solid #{$pf-hairline};
   border-radius: 0;
   background: none;
   -webkit-backdrop-filter: none;
