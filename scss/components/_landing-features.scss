@@ -1123,26 +1123,39 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
     border: 0;
   }
 
-  // Each column starts on its edge, as At a glance's cells do above: the
-  // letter and the marks are the first ink, flush left (a 2rem mark, its
-  // left point on the edge), the words after them. Nothing hangs into the
-  // gutter, so the intro keeps the full gutter's space before column A.
-  .pf-quick-guide .pf-paths {
-    --pf-paths-dot: 2rem;
-  }
-
-  .pf-quick-guide .pf-paths__letter {
-    text-align: start;
+  // Each option column on the 16-column grid: its first track (one 16th,
+  // --pf-paths-mark) holds the letter and the marks, centred in it, and
+  // the words start a gutter later, on the second track. The column is
+  // the option's own container (above), so a 16th is a quarter of it less
+  // three gutters. The mark is 2.75rem across (its diamond about 1.9rem a
+  // side, room round the 1rem icon), or the track's width if that is less.
+  .pf-quick-guide .pf-paths__line {
+    --pf-paths-mark: calc((100cqi - 3 * var(--pf-grid-gutter)) / 4);
+    --pf-paths-dot: min(2.75rem, var(--pf-paths-mark));
   }
 
   .pf-quick-guide .pf-paths__name,
   .pf-quick-guide .pf-paths__stop {
-    column-gap: .625rem;
+    display: grid;
+    grid-template-columns: var(--pf-paths-mark) minmax(0, 1fr);
+    column-gap: var(--pf-grid-gutter);
   }
 
-  .pf-quick-guide .pf-paths__icon svg {
-    width: .875rem;
-    height: .875rem;
+  .pf-quick-guide .pf-paths__name {
+    align-items: center;
+  }
+
+  .pf-quick-guide .pf-paths__letter {
+    width: auto;
+    text-align: center;
+  }
+
+  .pf-quick-guide .pf-paths__icon {
+    justify-self: center;
+  }
+
+  .pf-quick-guide .pf-paths__stop:not(:last-child)::before {
+    inset-inline-start: calc(var(--pf-paths-mark) / 2);
   }
 }
 

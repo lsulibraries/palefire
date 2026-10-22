@@ -857,6 +857,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Reveal animations off; Quick Start marks on their own 16th.** The
+  section-reveal (headings, Events carousel) and tile-reveal (Collections
+  cards) libraries are no longer attached (the templates note how to put
+  them back), and the request paths' scroll-in is behind a new
+  `$pf-paths-reveal: false` (_variables.scss). In the Quick Start
+  timetable each option column now puts its letter and diamonds centred
+  in its first 16-column track and starts the words on the second, a
+  gutter later; the diamonds are 2.75rem across (or the track's width),
+  their icons back to 1rem. Why: the layout is being settled without
+  motion in the way, and the marks crowded the words and their icons.
 - **Hero: the video cover fills the first screen on desktop.** On the
   4-column grid the cover's video spans the title, search, index rule 01
   and At a glance and is at least the window's height under the header;
