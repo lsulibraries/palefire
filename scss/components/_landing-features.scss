@@ -265,7 +265,7 @@
   max-width: none;
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-top: calc(-1 * var(--pf-landing-bar-h));
-  padding: var(--pf-cover-top) 0 clamp(1rem, 2vw, 1.5rem);
+  padding: var(--pf-cover-top) 0 0;
   border: 0;
   border-radius: 0;
   // No glass: !important over the reading colours' lead tint
@@ -355,7 +355,8 @@
 
 // On the video, the title larger and the intro under it (side by side put
 // the intro on the unwashed side); the search on a firmer fill, with no
-// rule above it, up to 58rem wide.
+// rule above it, across the column (both edges on the grid's, like the
+// index rules under it).
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
   > .pf-landing__top {
     display: block;
@@ -364,18 +365,23 @@
     > .pf-landing__title {
       margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
       font-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem);
+      // Display tracking: -.02em like the h2s (-.035em pinched Roboto 500
+      // at this size), and the first letter's side bearing pulled back so
+      // the title's edge meets the intro's and the search's.
+      margin-inline-start: -.03em;
+      letter-spacing: -.02em;
       line-height: .98;
     }
 
     > .pf-landing__intro {
       max-width: 46ch;
       justify-self: start;
-      font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+      font-size: var(--pf-hero-text);
     }
   }
 
   > .pf-landing__form {
-    max-width: 58rem;
+    max-width: none;
     padding-top: 0;
     border-top: 0;
   }
@@ -514,55 +520,6 @@
     font-size: clamp(1.0625rem, 1rem + .25vw, 1.25rem);
   }
 
-  // Suggested searches under the field, set like the field's label above it
-  // (the same small spaced capitals), so the label, the field and the
-  // suggestions read as one block, framed top and bottom, instead of a
-  // second line of body text floating under it. From the field's left edge
-  // (the list is named for screen readers only), in the muted tone,
-  // underlined on hover or focus. They wrap; each link is a 2rem-tall
-  // target (over WCAG 2.5.8's 24px).
-  .pf-landing__try {
-    margin-top: .5rem;
-  }
-
-  .pf-landing__suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 1.75rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .pf-landing__suggestion {
-    display: inline-flex;
-    align-items: center;
-    min-height: 2rem;
-    color: var(--pf-toc-color);
-    font-family: var(--pf-landing-label);
-    font-size: .6875rem;
-    font-weight: 700;
-    letter-spacing: .16em;
-    line-height: 1.5;
-    text-transform: uppercase;
-    text-decoration: underline transparent;
-    text-decoration-thickness: 1px;
-    text-underline-offset: .25em;
-    transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--pf-section-fg, var(--bs-body-color));
-      text-decoration-color: currentColor;
-      transition-duration: $pf-hover-in;
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--pf-landing-accent, #{$pf-gold});
-      outline-offset: 2px;
-    }
-  }
-
   // The Search button filled with the swatch's accent, its words in the
   // text colour for that fill, as in the mockup, so the action stands out
   // (black on Twilight's gold, white on the light swatches' dark accents;
@@ -635,19 +592,11 @@
 // narrower than the window): two by two from 30rem, all in one row from
 // 75rem, where each cell has room for its words (at 64rem the titles cut off).
 // Its four columns are the hero's grid: the search and the Quick Guide's
-// rule line up with them, sharing the gutter (--pf-grid-gutter).
+// rule line up with them, sharing the gutter (--pf-grid-gutter), which is
+// wide enough at four columns for the Quick Start's marks to hang in.
 .pf-landing__lead--hero {
-  --pf-grid-gutter: clamp(1.25rem, 2.5vw, 2rem);
+  --pf-grid-gutter: clamp(1.5rem, 3.5vw, 3rem);
   container: pf-lead / inline-size;
-}
-
-// On the four-column grid the search spans three columns, ending on the
-// third one's edge (the On view cell's right edge), not at a fixed 58rem.
-// The column is the lead less the cover's side margins.
-@container pf-lead (min-width: 75rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__form {
-    max-width: calc((100cqi - 2 * var(--pf-cover-gutter, 0px) - 3 * var(--pf-grid-gutter)) * .75 + 2 * var(--pf-grid-gutter));
-  }
 }
 
 @container pf-lead (min-width: 30rem) {
@@ -1096,6 +1045,28 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
     container: pf-paths / inline-size;
     padding-block: 0;
     border: 0;
+  }
+
+  // The words start on the column's edge, as At a glance's do above;
+  // the letter and the marks hang into the gutter before it (a 2rem mark
+  // and .625rem, under the gutter's 42px or more at this width).
+  .pf-quick-guide .pf-paths {
+    --pf-paths-dot: 2rem;
+    --pf-paths-hang: calc(var(--pf-paths-dot) + .625rem);
+  }
+
+  .pf-quick-guide .pf-paths__line {
+    margin-inline-start: calc(-1 * var(--pf-paths-hang));
+  }
+
+  .pf-quick-guide .pf-paths__name,
+  .pf-quick-guide .pf-paths__stop {
+    column-gap: .625rem;
+  }
+
+  .pf-quick-guide .pf-paths__icon svg {
+    width: .875rem;
+    height: .875rem;
   }
 }
 
@@ -1586,7 +1557,70 @@ html.pf-a11y-motion {
 // - Figures: hours in tabular figures, so the week's times line up.
 html[data-pf-hero] {
   --pf-hero-h2-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.5rem);
-  --pf-hero-gap: clamp(4rem, 7vw, 6rem); // above each landing section
+  --pf-hero-text: clamp(1rem, .95rem + .2vw, 1.125rem); // every paragraph
+  --pf-hero-gap: clamp(4rem, 7vw, 6rem); // above each index rule
+  --pf-hero-rule-gap: clamp(1.25rem, 2.5vw, 2rem); // under each index rule
+}
+
+// One rhythm: --pf-hero-gap above each index rule (01 to 04) and
+// --pf-hero-rule-gap under it, and nothing else adding to either. Above
+// 01 the gap counts from the search; the band's solid foot is part of it.
+.pf-landing--cover {
+  .pf-landing__lead--hero > .pf-index-rule {
+    margin-top: calc(var(--pf-hero-gap) - var(--pf-cover-foot));
+  }
+
+  .pf-index-rule {
+    margin-bottom: var(--pf-hero-rule-gap);
+  }
+
+  .pf-today {
+    margin-bottom: 0;
+  }
+
+  .pf-landing__lead--hero > .pf-quick-guide {
+    padding: var(--pf-hero-gap) 0 0;
+  }
+}
+
+// The first row of At a glance starts at the rule gap, like a heading.
+.pf-landing--cover .pf-today__item:first-child {
+  padding-top: 0;
+}
+
+@container pf-lead (min-width: 30rem) {
+  .pf-landing--cover .pf-today__item:nth-child(2) {
+    padding-top: 0;
+  }
+}
+
+@container pf-lead (min-width: 75rem) {
+  .pf-landing--cover .pf-today__item {
+    padding-top: 0;
+  }
+}
+
+// The scale on these pages: 11px labels, 14px notes, 16px values and
+// names, one paragraph size (--pf-hero-text), the h2, the title. The
+// Quick Start's letters take the h2 size; its stop labels and option
+// names the values' 16px at 500, like At a glance.
+html[data-pf-hero] .pf-landing--cover {
+  :is(.pf-quick-guide__intro, .pf-map__summary) {
+    font-size: var(--pf-hero-text);
+  }
+
+  .pf-quick-guide .pf-paths__name {
+    font-size: 1rem;
+  }
+
+  .pf-quick-guide .pf-paths__letter {
+    font-size: var(--pf-hero-h2-size);
+  }
+
+  .pf-quick-guide :is(.pf-paths__label, .pf-paths__peek) {
+    font-size: 1rem;
+    font-weight: 500;
+  }
 }
 
 html[data-pf-hero] .pf-main .pf-sections .pf-section__title,

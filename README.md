@@ -857,6 +857,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: one rhythm, a shorter type scale, text on the columns, no
+  suggestions.** The search suggestions are gone (template, the
+  `_palefire_search_suggestions()` helper and their styles), and the
+  search runs the column's full width, its edges on the rules'. Every
+  index rule has the same space above it (--pf-hero-gap, counted from the
+  search for 01) and under it (--pf-hero-rule-gap). Paragraphs share one
+  size (--pf-hero-text); the Quick Start's names and stop labels take At
+  a glance's 16px at 500, and its letters the h2 size. In the timetable
+  the words start on the column edges, with the letters and diamonds
+  hanging in a wider gutter (--pf-grid-gutter up to 3rem). The title is
+  tracked at -.02em (was -.035em) with its first letter's side bearing
+  pulled back. Why: uneven gaps, too many sizes, text off the columns,
+  and a pinched title.
 - **Quick Start as a timetable; diamond stops; 03 and 04 rules.** On the
   hero's four columns the Quick Guide's heading and intro take the first
   and options A, B and C one column each, their stops running down
