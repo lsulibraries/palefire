@@ -21,10 +21,18 @@
  * clicking or tapping the label, Enter or Space opens it; Esc, the close
  * button or a click outside closes it. Screenshots load only when opened.
  *
+ * Compact (the landing hero's Quick Guide): one card per option instead,
+ * in a row (stacked when narrow): the letter, the name, and its stops'
+ * labels on one line ("Find Item · Click Request Item · …"), from the same
+ * list below so the two never disagree. Each card links to the full guide
+ * (url); without a url they are plain text. No popovers or icons.
+ *
  * Available variables:
  * - uid: makes the heading ids unique on the page.
  * - img_base: URL of images/guides/special-collections/ with a trailing
  *   slash. Without it the panels show their text only.
+ * - compact: TRUE for the cards.
+ * - url: the full guide, for the compact cards.
  */
 #}
 {% set find = {
@@ -93,6 +101,25 @@
     ],
   },
 ] %}
+{% if compact|default(false) %}
+  <ul class="pf-paths-compact" role="list">
+    {% for path in paths %}
+      {% set card_tag = url|default('') ? 'a' : 'div' %}
+      <li class="pf-paths-compact__item">
+        <{{ card_tag }} class="pf-paths-compact__card"{% if url|default('') %} href="{{ url }}"{% endif %}>
+          <span class="pf-paths-compact__letter"><span class="visually-hidden">{{ 'Option'|t }} </span>{{ path.letter }}<span class="visually-hidden">: </span></span>
+          <span class="pf-paths-compact__text">
+            <span class="pf-paths-compact__name">{{ path.name }}</span>
+            <span class="pf-paths-compact__steps"><span class="visually-hidden">, </span>{{ path.stops|map(stop => stop.label)|join(' · ') }}</span>
+          </span>
+          {% if url|default('') %}
+            <svg class="pf-paths-compact__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          {% endif %}
+        </{{ card_tag }}>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
 <div class="pf-paths">
   {% for path in paths %}
     {% set heading_id = 'pf-paths-' ~ uid ~ '-' ~ path.key %}
@@ -146,3 +173,4 @@
     </div>
   {% endfor %}
 </div>
+{% endif %}

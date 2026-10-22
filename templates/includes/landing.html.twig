@@ -43,12 +43,14 @@
  *   The page <h1> stays, visually hidden, so the page keeps its heading.
  *
  * - hero: set for the Landing hero paragraph (paragraph--landing-hero),
- *   .pf-landing--hero. The lead holds the title, the intro, a "Search
- *   Special Collections" form (a placeholder: it searches Bento for now),
- *   two exhibition tiles, then Next event (hero-event.js, from the events
- *   carousel's feed) beside the latest blog post. No lead panel when it
- *   would be empty (no page title, no intro): the Next event card then
- *   stands alone.
+ *   .pf-landing--hero. The lead (.pf-landing__lead--hero) holds the title
+ *   and today's hours, the intro, a "Search Special Collections" form (a
+ *   placeholder: it searches Bento for now), At a glance (Next event from
+ *   the events carousel's feed via hero-event.js, the exhibitions on view,
+ *   the latest blog post), then the Quick guide's A, B and C cards with
+ *   the sign-in. Under the map, On view: the exhibition tiles. No lead
+ *   panel when it would be empty (no page title, no intro): the Next event
+ *   card then stands alone.
  * - department: set for the Landing department paragraph
  *   (paragraph--landing-department), .pf-landing--department. The Bento
  *   search landing (search form, map, Visit strip), plus the hero's tile
@@ -159,7 +161,7 @@
       <div class="pf-landing__dock">{{ video_toggle }}</div>
     {% endif %}
   {% endif %}
-  <div class="pf-landing__lead"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+  <div class="pf-landing__lead{{ hero ? ' pf-landing__lead--hero' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
     {# Hero: open now / closed now with the title, from the same LibCal
        location as the Visit strip (the page's Hours location field;
        visit-hours.js fills the status and today's hours, palefire/visit is
@@ -186,18 +188,6 @@
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>
     {% endif %}
-    {# Hero: one line under the intro, "Next event · day · time · title",
-       filled in by hero-event.js (its line held, fading in once filled;
-       removed with no upcoming event). Hidden by CSS on pages without the
-       events carousel. #}
-    {% if hero %}
-      <p class="pf-landing__next" data-pf-hero-event>
-        {# Font Awesome Pro calendar-day (duotone, like
-           `fad fa-calendar-day`), inlined from the site's copy like the
-           sign-in icon; decorative, the label says it. #}
-        <span class="pf-landing__next-label"><span class="pf-landing__next-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/calendar-day.svg', ignore_missing = true)|raw }}</span>{{ 'Next event'|t }}</span>
-      </p>
-    {% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-landing__heading" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
         <label class="pf-landing__label" for="{{ input_id }}">{{ search_label }}</label>
@@ -223,22 +213,15 @@
       </div>
     {% endif %}
     {% if hero %}
-      {# Features (_landing-features.scss): three large tiles that open on
-         hover or focus (an accordion across: the one in use widens, shows
-         more of its picture and a line more about it), then a row of the
-         latest blog post and the sign-in button. Next event is the line
-         under the intro (above).
+      {# The exhibitions, shown under the map as On view (below).
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
-           a Modular page: _palefire_hero_tiles()), when it has any; else
-           the PLACEHOLDERS below. Shape: label, title, start/end (ISO
-           dates) and dates (shown), or permanent, or meta (a line in place
-           of dates); more (the line shown when the tile opens); url and cta
-           (the tile is a link only with a url); images (image render
-           arrays; none: hatched frames stand in). More than one image
-           crossfades (exhibit-rotate.js), with a pause button.
-         - hero_post: palefire_preprocess_paragraph__landing_hero(), the
-           newest Article in the paragraph's "Blog category"; a placeholder
-           until that field exists and is filled in. #}
+           a Modular page or a Tile: _palefire_hero_tiles()), when it has
+           any; else the PLACEHOLDERS below. Shape: label, title,
+           start/end (ISO dates) and dates (shown), or permanent, or meta
+           (a line in place of dates); more (the line shown when the tile
+           opens); url and cta (the tile is a link only with a url); images
+           (image render arrays; none: hatched frames stand in). More than
+           one image crossfades (exhibit-rotate.js), with a pause button. #}
       {% set exhibitions = [
         {
           label: 'Exhibition'|t,
@@ -276,55 +259,56 @@
       {% if hero_tiles %}
         {% set exhibitions = hero_tiles %}
       {% endif %}
-      <div class="pf-landing__features">
-        {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: exhibitions } only %}
 
-        {# The row under the tiles: the latest blog post across the first
-           two thirds, the sign-in button in the last.
-           - The post: a small picture, a hairline, then the label and
-             title; the whole row is the link. A placeholder (not a link)
-             until field_landing_blog_category is added and set.
-           - account_url: the Special Collections sign-in (Aeon); empty
-             leaves the button out. #}
-        {% set account_url = 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' %}
-        <div class="pf-landing__foot">
-          {% set post_tag = hero_post ? 'a' : 'div' %}
-          <{{ post_tag }} class="pf-landing__post{{ not hero_post ? ' is-placeholder' }}"{% if hero_post %} href="{{ hero_post.url }}"{% endif %}>
-            <span class="pf-landing__post-media" aria-hidden="true">{{ hero_post.image }}</span>
-            <span class="pf-landing__post-text">
-              <span class="pf-landing__post-label">{{ 'From the blog'|t }} · {% if hero_post %}<time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time>{% if hero_post.category %} · {{ hero_post.category }}{% endif %}{% else %}{{ 'Date · Category'|t }}{% endif %}</span>
-              <span class="pf-landing__post-title">{{ hero_post ? hero_post.title : 'Blog post title'|t }}</span>
+      {# At a glance (.pf-today, _landing-features.scss): one ruled row under
+         the search, three cells, each a small label over a line or two.
+         - Next event: filled in by hero-event.js from the events carousel's
+           feed (its label stays, the cell's height is held); "No upcoming
+           events" when there are none. Hidden by CSS on pages without the
+           carousel.
+         - On view: the exhibitions' titles, each its link (hero_tiles only,
+           not the placeholders).
+         - From the blog: hero_post, the newest Article in the paragraph's
+           "Blog category" (palefire_preprocess_paragraph__landing_hero());
+           left out until that is set. #}
+      <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
+        <li class="pf-today__item pf-landing__next" data-pf-hero-event data-pf-hero-event-empty="{{ 'No upcoming events'|t }}">
+          <span class="pf-today__label">{{ 'Next event'|t }}</span>
+        </li>
+        {% if hero_tiles %}
+          <li class="pf-today__item">
+            <span class="pf-today__label">{{ 'On view'|t }}</span>
+            <span class="pf-today__links">
+              {% for ex in hero_tiles %}
+                {% if ex.url %}<a class="pf-today__link" href="{{ ex.url }}">{{ ex.title }}</a>{% else %}<span>{{ ex.title }}</span>{% endif %}
+              {% endfor %}
             </span>
-          </{{ post_tag }}>
-          {% if account_url %}
-            <div class="pf-hero-account">
-              <a class="pf-hero-account__link" href="{{ account_url }}">
-                {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-                   inlined from the site's copy like the map's hint icon. #}
-                <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-                {# Where the last third is narrow the short words show; the
-                   full ones stay the link's name (visually hidden there). #}
-                <span class="pf-hero-account__long">{{ 'Sign in to request materials'|t }}</span>
-                <span class="pf-hero-account__short" aria-hidden="true">{{ 'Sign in'|t }}</span>
-              </a>
-            </div>
-          {% endif %}
-        </div>
-      </div>
+          </li>
+        {% endif %}
+        {% if hero_post %}
+          <li class="pf-today__item">
+            <span class="pf-today__label">{{ 'From the blog'|t }} · <time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time></span>
+            <a class="pf-today__link pf-today__link--clamp" href="{{ hero_post.url }}">{{ hero_post.title }}</a>
+          </li>
+        {% endif %}
+      </ul>
 
-      {# Quick guide: under the features, still in the lead panel. A gold
-         rule with a star between two equal lines (decorative), then the
-         three request paths, options A, B and C, from the full guide (the
-         same include, so an edit there shows here too) and a link to that
-         guide, in the
-         sign-in button's style. On wide screens it starts below the fold,
-         so the lead is taller than the window: it scrolls freely, and
-         landing-snap.js snaps to the map once the lead's end is in view.
+      {# Quick guide: the panel's last block, pushed to its foot on wide
+         screens (_landing-swiss.scss). A gold rule with a star between two
+         equal lines (decorative), the heading with the Special Collections
+         sign-in and "See full guide" at the end of its row, a line of
+         intro, then the three ways to start, options A, B and C, as one
+         compact row of cards from the full guide's own list (the same
+         include, so an edit there shows here too); each card opens the
+         full guide.
          - guide_url: the full "How to Use Special Collections" guide;
-           empty leaves the link out.
+           empty leaves its link out (the cards then aren't links).
+         - account_url: the Special Collections sign-in (Aeon); empty
+           leaves the button out.
          - quick_guide: title, intro, url and link_text from the paragraph's
            optional Quick Guide fields (_palefire_quick_guide()); each one
            left empty keeps the built-in text below. #}
+      {% set account_url = 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' %}
       {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
@@ -334,32 +318,46 @@
              `fad fa-star-christmas`), inlined like the sign-in icon. #}
           <span class="pf-quick-guide__star">{{ source('libraries/fontawesome-pro/svgs/duotone/star-christmas.svg', ignore_missing = true)|raw }}</span>
         </div>
-        {# The TOC label is the heading's own text once the title is set. #}
-        <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
+        {# The heading, with the sign-in and full guide links at the end of
+           its row (under it when narrow). The TOC label is the heading's
+           own text once the title is set. #}
+        <div class="pf-quick-guide__head">
+          <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
+          {% if guide_url or account_url %}
+            <div class="pf-quick-guide__more">
+              {% if account_url %}
+                <a class="pf-hero-account__link" href="{{ account_url }}">
+                  {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
+                     inlined from the site's copy like the map's hint icon. #}
+                  <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+                  <span>{{ 'Sign in to request materials'|t }}</span>
+                </a>
+              {% endif %}
+              {% if guide_url %}
+                <a class="pf-hero-account__link" href="{{ guide_url }}">
+                  <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
+                  {# The full name keeps the visible words first (WCAG 2.5.3)
+                     and says which guide, so the link stands on its own. With
+                     its own text or URL (the Link field) the link names
+                     itself: the added guide name may no longer fit. #}
+                  {% if quick_guide.link_text %}
+                    <span>{{ quick_guide.link_text }}</span>
+                  {% elseif quick_guide.url %}
+                    <span>{{ 'See full guide'|t }}</span>
+                  {% else %}
+                    <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
         {% if quick_guide.intro %}
           <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
-        {% if guide_url %}
-          <div class="pf-quick-guide__more">
-            <a class="pf-hero-account__link" href="{{ guide_url }}">
-              <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-              {# The full name keeps the visible words first (WCAG 2.5.3)
-                 and says which guide, so the link stands on its own. With
-                 its own text or URL (the Link field) the link names
-                 itself: the added guide name may no longer fit. #}
-              {% if quick_guide.link_text %}
-                <span>{{ quick_guide.link_text }}</span>
-              {% elseif quick_guide.url %}
-                <span>{{ 'See full guide'|t }}</span>
-              {% else %}
-                <span>{{ 'See full guide'|t }}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span></span>
-              {% endif %}
-            </a>
-          </div>
-        {% endif %}
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, compact: true, url: guide_url } only %}
       </div>
     {% endif %}
   </div>
@@ -374,5 +372,18 @@
      (visit_in_map, palefire_preprocess_paragraph__landing_hero()). #}
   {% if visit and not visit_in_map %}
     {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', keyed: false } only %}
+  {% endif %}
+
+  {# Hero: On view, under the map, so visitors see where the galleries are
+     before what's in them. The tile accordion (includes/landing-exhibits),
+     the paragraph's Tiles or the placeholders above; its heading is a
+     sub-link in the TOC. Styles: _landing-features.scss ("On view"). #}
+  {% set on_view = hero_tiles ?: exhibitions|default([]) %}
+  {% if hero and on_view %}
+    {% set on_view_id = input_id ~ '-on-view' %}
+    <section class="pf-landing__onview" aria-labelledby="{{ on_view_id }}">
+      <h2 class="pf-section__title pf-landing__onview-title" id="{{ on_view_id }}" data-toc data-toc-label="{{ 'On view'|t }}">{{ 'On view'|t }}</h2>
+      {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: on_view, label: 'On view'|t } only %}
+    </section>
   {% endif %}
 </div>

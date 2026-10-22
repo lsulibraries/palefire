@@ -225,18 +225,22 @@ On the paragraphs:
 
 - **Bar:** breadcrumb and the background-video button, sticky under the header
   for the whole landing.
-- **Lead panel** (full screen from md): title, "Open now" hours line, intro,
-  Next event line (`js/hero-event.js`, reads the events carousel's calendars
-  and campuses), the tile accordion (`includes/landing-exhibits.html.twig`;
-  `js/exhibit-rotate.js` crossfades multi-image tiles with a pause button),
-  the blog post and "Sign in to request materials" (Aeon), then the Quick
-  Guide.
-- **Quick Guide:** the request paths from
-  `includes/guide-request-paths.html.twig`, shared with the full guide: three
-  options A, B, C, each a line of stops. Edit the stops there and both pages
+- **Lead panel** (full screen from md, `.pf-landing__lead--hero`): title,
+  "Open now" hours line, intro, search, then At a glance (`.pf-today`): Next
+  event (`js/hero-event.js`, reads the events carousel's calendars and
+  campuses; "No upcoming events" when there are none), the exhibitions on
+  view, and the latest blog post. The Quick Guide sits at its foot.
+- **Quick Guide:** "Sign in to request materials" (Aeon) and "See full
+  guide" beside the heading, then options A, B and C as compact cards from
+  `includes/guide-request-paths.html.twig` (`compact: true`), the same list
+  the full guide draws as lines of stops. Edit the stops there and both pages
   change.
 - **Map and Visit strip:** the building map with its key and the Visit strip
   (`includes/visit-strip.html.twig`) in one glass panel.
+- **On view** (`.pf-landing__onview`): under the map, so the galleries come
+  before what's in them. The tile accordion (`includes/landing-exhibits.html.twig`;
+  `js/exhibit-rotate.js` crossfades multi-image tiles with a pause button) on
+  the lead's glass.
 
 ### Background video
 
@@ -824,6 +828,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Special Collections hero: calmer first screen, exhibitions after the
+  map.** The lead panel is now title, hours, intro, search, an At a glance
+  row (next event, on view, latest blog post) and the Quick Guide as three
+  compact A/B/C cards, with the sign-in and full guide links beside its
+  heading. The exhibition tiles moved under the map as On view, on the same
+  glass. The Next event chip, the blog row and the tiles in the lead are
+  gone, along with their CSS. Why: the first screen had six competing
+  parts; research access now leads, and visitors see where the galleries
+  are before what's in them. The full guide page keeps its lines of stops.
 - **Tile showcase and hero tiles take Tiles or Modular pages.** One
   helper, `_palefire_node_card()`, reads either into the same card
   (title, link, Category label, intro note, cover). A Tile's cover is its

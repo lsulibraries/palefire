@@ -1,9 +1,9 @@
 /**
  * @file
  * "Next event" for the landing hero (includes/landing.html.twig with
- * hero): a line under the intro when the hero has its lead panel
- * (.pf-landing__next), or a card on its own by the map when it doesn't
- * (.pf-hero-event).
+ * hero): a cell in the lead panel's At a glance row when the hero has its
+ * lead panel (.pf-landing__next), or a card on its own by the map when it
+ * doesn't (.pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
@@ -147,14 +147,26 @@
     box.classList.add('is-ready');
   }
 
-  // With the lead panel: one line under the intro, after its "Next event"
-  // label: the day and time, then the title, the line's link.
+  // With the lead panel: in the At a glance cell, after its "Next event"
+  // label: the day and time, then the title, the cell's link.
   function renderLine(box, { event, start }) {
     const when = el('span', 'pf-landing__next-when');
     when.append(timeOf(event, start));
     const link = el('a', 'pf-landing__next-link', event.title);
     link.href = event.url;
     box.append(when, link);
+    box.classList.add('is-ready');
+  }
+
+  // No upcoming event (or the feed failed): the box's own words
+  // (data-pf-hero-event-empty, the hero's At a glance cell) in place of the
+  // event, so the cell keeps its place; boxes without them are removed.
+  function renderEmpty(box) {
+    if (!box.dataset.pfHeroEventEmpty) {
+      box.remove();
+      return;
+    }
+    box.append(el('span', 'pf-landing__next-when', box.dataset.pfHeroEventEmpty));
     box.classList.add('is-ready');
   }
 
@@ -185,7 +197,7 @@
             (box.classList.contains('pf-landing__next') ? renderLine : render)(box, next);
           }
           else {
-            box.remove();
+            renderEmpty(box);
           }
         });
       });
