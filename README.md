@@ -821,6 +821,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Object view: Close stays in sight.** The panel's top row (the count
+  and Close) is sticky. It stays at the panel's top while the text
+  scrolls, edge to edge on the page colour, and from lg it lines up with
+  the stage's Zoom and fold buttons. A hairline fades in under it once
+  the text starts passing beneath (scroll-driven; with no support, no
+  line). The panel's padding is in custom properties so the row can
+  reach across it.
 - **Outside links: the arrow after the link's real last word.** It went
   after the last text directly inside the link, so in "octavo editions
   of *Birds of America*" it landed after "of". A title typed with a

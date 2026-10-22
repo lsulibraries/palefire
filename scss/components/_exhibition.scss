@@ -2791,17 +2791,24 @@ html.pf-object-open {
 }
 
 .pf-exhibit-object__panel {
+  // Its padding, which the pinned top row (below) reaches across.
+  --pf-pad-start: max(1rem, env(safe-area-inset-left, 0px));
+  --pf-pad-end: max(1rem, env(safe-area-inset-right, 0px));
+  --pf-pad-top: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   min-width: 0;
   overflow-y: auto;
-  padding: 1.25rem max(1rem, env(safe-area-inset-right, 0px)) 2.5rem max(1rem, env(safe-area-inset-left, 0px));
+  padding: var(--pf-pad-top) var(--pf-pad-end) 2.5rem var(--pf-pad-start);
   border-top: 1px solid $pf-hairline;
 
   @include media-breakpoint-up(lg) {
+    --pf-pad-start: 2.25rem;
+    --pf-pad-end: 2.25rem;
+    --pf-pad-top: 3rem;
     width: var(--pf-panel-w);
-    padding: 3rem 2.25rem;
+    padding: var(--pf-pad-top) 2.25rem;
     border-top: 0;
     border-left: 1px solid $pf-hairline;
   }
@@ -2903,11 +2910,38 @@ html.pf-object-open {
   }
 }
 
+// The count and Close stay at the panel's top while its text scrolls, so
+// the way back to the gallery is always in sight. Edge to edge on the page
+// colour; a hairline comes in under it once the text has begun to pass
+// beneath (a scroll-driven animation; without one, no line).
 .pf-exhibit-object__top {
+  position: sticky;
+  top: calc(-1 * var(--pf-pad-top));
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  margin: -.75rem calc(-1 * var(--pf-pad-end)) 0 calc(-1 * var(--pf-pad-start));
+  padding: .75rem var(--pf-pad-end) .75rem var(--pf-pad-start);
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid transparent;
+
+  // Above the panel's rise-in (.pf-exhibit-object__panel > *), which this
+  // row does without: it is the way out, there from the start.
+  @supports (animation-timeline: scroll()) {
+    .pf-exhibit-object .pf-exhibit-object__panel > & {
+      animation: pf-object-top-rule linear both;
+      animation-timeline: scroll();
+      animation-range: 0 3rem;
+    }
+  }
+}
+
+@keyframes pf-object-top-rule {
+  to {
+    border-bottom-color: $pf-hairline;
+  }
 }
 
 .pf-exhibit-object__count {
