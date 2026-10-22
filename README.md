@@ -573,14 +573,15 @@ from the media item. A figure with no image shows only to editors.
   (scroll-driven animations). The entries stay in the page, folded away, and
   are the object view's text; their headings stay in the TOC
   (`data-toc-passive`). Without JS the wall stays `[hidden]` and the gallery
-  reads as a story. A wall's opening is its lead full screen
-  (`.pf-exhibit-wall-hero`; with a caption it opens in the lightbox), with
-  the title and its number over the image's foot, larger; as the page
-  scrolls the title holds still while the image slides away and recedes,
-  and it settles in place beside the intro after `--pf-fall` of scrolling
-  (measured in `js/exhibition.js`; scroll-driven animations; under reduced
-  motion it just sits below the image). No pan or band, whatever the
-  Opening says. From lg the title and the gallery's own text sit side by side as
+  reads as a story. In place of a story's entry links, a line of facts from
+  the wall (`.pf-exhibit-wall__stats`: "22 entries · Plates 2–154 · Sheet
+  40 × 27 in", or "11 drawing–proof pairs"). A wall with a lead opens on it
+  full screen (`.pf-exhibit-wall-hero`; with a caption it opens in the
+  lightbox), with the number, title, facts and folded intro over its lower
+  left on the page-colour wash (from the foot below lg, from the left from
+  lg, the text kept in its dense part); "Read more" grows the image down,
+  never the column wider. No pan or band, whatever the Opening says.
+  Without a lead, from lg the title and facts and the gallery's own text sit side by side as
   wall text, the wall full width below; text longer than four lines folds
   with "Read more" / "Show less" (`.pf-exhibit-wall__text`), so the first
   row of plates is on the first screen.
@@ -791,6 +792,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-21
 
+- **Exhibitions: a wall's text on its image, and its facts.** A wall
+  gallery's number, title, facts and intro now sit over its full-screen
+  lead's lower left, on the left-to-right wash (from the foot on phones);
+  "Read more" opens the intro downwards within the wash, the image growing
+  with it. The falling title is gone. A new line of facts replaces a
+  story's entry links: entries, plate range, compared pairs, sheet size
+  (`_palefire_exhibit_wall()` `stats`). Why: the text belongs on the
+  showcase image, and a wall's index is the wall itself.
 - **Exhibitions: a wall's title falls into place.** A wall gallery with a
   lead opens on it full screen again, the title over its foot; scrolling,
   the title holds while the image slides away, and settles beside the

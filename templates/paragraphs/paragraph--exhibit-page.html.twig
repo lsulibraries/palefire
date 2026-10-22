@@ -139,9 +139,9 @@
     {% endif %}
   {% endif %}
   {% if wall_lead %}
-    {# A wall's lead: full screen above the title, which falls from it into
-       place as the page scrolls (_exhibition.scss, js/exhibition.js). With
-       a caption it is a figure that opens in the lightbox. #}
+    {# A wall's lead: full screen, with the title, the facts and the intro
+       over its lower left on a wash (_exhibition.scss). With a caption it
+       is a figure that opens in the lightbox. #}
     {% set wall_img %}
       <img class="pf-exhibit-wall-hero__img" src="{{ wall_lead.src }}"
            {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
@@ -161,6 +161,14 @@
         {{ wall_img }}
       {% endif %}
     </div>
+  {% endif %}
+  {% if wall and wall.stats %}
+    {# A wall's facts under its title, in place of a story's entry links. #}
+    <ul class="pf-exhibit-wall__stats">
+      {% for stat in wall.stats %}
+        <li>{{ stat }}</li>
+      {% endfor %}
+    </ul>
   {% endif %}
   <div class="pf-gallery__body pf-guide" id="{{ dom_id }}-text" tabindex="-1">
     {# The full opening's heading has faded with the image by the time the

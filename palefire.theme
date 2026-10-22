@@ -1625,7 +1625,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof"), 'ratio',
  *   'images' (_palefire_exhibit_image() values)]. sortable: two or more
  *   tiles have a plate number. sheets: this page's sheet sizes, ['label',
- *   'h', 'w', 'current'] each, when this gallery has one.
+ *   'h', 'w', 'current'] each, when this gallery has one. stats: the
+ *   opening's facts ("22 entries", "Plates 2–154", "11 drawing–proof
+ *   pairs", "Sheet 40 × 27 in").
  */
 function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cache): ?array {
   if (!$page->hasField('field_guide_blocks')) {
@@ -1701,10 +1703,26 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     }
   }
 
+  // The opening's line of facts, in place of a story's entry links: how
+  // many entries, the plate range, compared pairs, the sheet size.
+  $plates = array_filter(array_column($tiles, 'plate'));
+  $tags = array_filter(array_column($tiles, 'tag'));
+  $stats = [(string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries')];
+  if (count($plates) >= 2) {
+    $stats[] = (string) t('Plates @first–@last', ['@first' => min($plates), '@last' => max($plates)]);
+  }
+  if ($tags && count(array_unique($tags)) === 1) {
+    $stats[] = (string) t('@count @kind pairs', ['@count' => count($tags), '@kind' => mb_strtolower(str_replace(' · ', '–', reset($tags)))]);
+  }
+  if (preg_match('/^\s*[\d.]+\s*[×x]\s*[\d.]+/u', $own)) {
+    $stats[] = (string) t('Sheet @size', ['@size' => trim($own)]);
+  }
+
   return [
     'tiles' => $tiles,
-    'sortable' => count(array_filter(array_column($tiles, 'plate'))) >= 2,
+    'sortable' => count($plates) >= 2,
     'sheets' => $sheets,
+    'stats' => $stats,
   ];
 }
 

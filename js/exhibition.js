@@ -271,29 +271,9 @@
     inner.style.setProperty('--pf-pan', Math.round(Math.min(Math.max(overflow, h / 3), h * 1.6)) + 'px');
   }
 
-  // A wall's opening (_exhibition.scss): how far the title falls, from the
-  // foot of the full-screen image to its place beside the intro. Measured
-  // without its animation; the page scrolls that far while it falls.
-  function sizeWallHero(page) {
-    const hero = page && page.querySelector('[data-pf-wall-hero]');
-    const inner = hero && hero.closest('.pf-section__inner');
-    const title = inner && inner.querySelector(':scope > .pf-section__title');
-    if (!title) {
-      return;
-    }
-    title.style.animation = 'none';
-    const h = hero.getBoundingClientRect();
-    const t = title.getBoundingClientRect();
-    title.style.animation = '';
-    const scale = parseFloat(getComputedStyle(inner).getPropertyValue('--pf-fall-scale')) || 1;
-    const gap = parseFloat(getComputedStyle(ROOT).fontSize) * 2.5;
-    inner.style.setProperty('--pf-fall', Math.max(0, Math.round(t.top - h.bottom + t.height * scale + gap)) + 'px');
-  }
-
   function onResize() {
     measureHead();
     sizeHero(state.current);
-    sizeWallHero(state.current);
     queueZoom();
   }
 
@@ -308,7 +288,6 @@
     if (page) {
       prepareGallery(page);
       sizeHero(page);
-      sizeWallHero(page);
     }
     queueZoom();
   }
