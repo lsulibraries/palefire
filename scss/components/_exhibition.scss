@@ -2898,9 +2898,18 @@ html.pf-object-open {
   }
 }
 
-// Close is in the panel, until the panel is folded away.
-.pf-exhibit-object:not(.is-full) .pf-exhibit-object__shut {
-  display: none;
+// On phones Close is always on the stage, by the other controls. From lg
+// it is in the panel, until the panel is folded away.
+@include media-breakpoint-down(lg) {
+  .pf-exhibit-object .pf-exhibit-object__close {
+    display: none;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-exhibit-object:not(.is-full) .pf-exhibit-object__shut {
+    display: none;
+  }
 }
 
 @keyframes pf-object-panel {
@@ -2911,9 +2920,11 @@ html.pf-object-open {
 }
 
 // The count and Close stay at the panel's top while its text scrolls, so
-// the way back to the gallery is always in sight. Edge to edge on the page
-// colour; a hairline comes in under it once the text has begun to pass
-// beneath (a scroll-driven animation; without one, no line).
+// the way back to the gallery is always in sight. Edge to edge in the
+// breadcrumb bar's glass (.pf-landing__bar), so the text blurs away under
+// it rather than being cut off; solid where transparency is reduced (the
+// same tokens). A hairline comes in under it once the text has begun to
+// pass beneath (a scroll-driven animation; without one, no line).
 .pf-exhibit-object__top {
   position: sticky;
   top: calc(-1 * var(--pf-pad-top));
@@ -2924,7 +2935,9 @@ html.pf-object-open {
   gap: 1rem;
   margin: -.75rem calc(-1 * var(--pf-pad-end)) 0 calc(-1 * var(--pf-pad-start));
   padding: .75rem var(--pf-pad-end) .75rem var(--pf-pad-start);
-  background: var(--bs-body-bg);
+  background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
   border-bottom: 1px solid transparent;
 
   // Above the panel's rise-in (.pf-exhibit-object__panel > *), which this

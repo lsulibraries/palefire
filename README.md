@@ -821,6 +821,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Wall galleries: a shorter intro before Read more.** The fold showed
+  text up to 78% of the lead's height (about ten lines at 1440 × 900).
+  The stats, text and Read more now take the lower third (`introLimit`,
+  js/exhibition.js), at least four lines, so the heading sits lower and
+  more of the image shows.
+- **Object view on phones: Close by the other controls.** Below lg,
+  Close is in the stage's top-right toolbar, beside Zoom and the fold,
+  instead of in the panel. Focus on opening goes to whichever Close
+  shows.
+- **Object view: the pinned row is glass.** The count and Close row uses
+  the breadcrumb bar's glass (`--pf-sidebar-bg`, `--pf-glass-filter`), so
+  scrolling text blurs away under it instead of being cut off. It's solid
+  where transparency is reduced.
 - **Object view: Close stays in sight.** The panel's top row (the count
   and Close) is sticky. It stays at the panel's top while the text
   scrolls, edge to edge on the page colour, and from lg it lines up with

@@ -785,8 +785,9 @@
       return el.getBoundingClientRect().height + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
     };
     const wrap = intro.parentElement;
-    const room = frame.getBoundingClientRect().height * 0.78
-      - outer(page.querySelector('.pf-section__title'))
+    // The rule of thirds: the heading sits on the lower third line and the
+    // stats, the text and "Read more" fill the third below it.
+    const room = frame.getBoundingClientRect().height / 3
       - outer(page.querySelector('.pf-exhibit-wall__stats, .pf-exhibit-cover__nav'))
       - (parseFloat(getComputedStyle(wrap).paddingBottom) || 0)
       - line * 2.25;
@@ -1417,10 +1418,14 @@
     syncTools(!caption && n < 2);
   }
 
-  // Focus on opening: Close, in the panel or (the panel folded) on the stage.
+  // Focus on opening: whichever Close shows, in the panel or on the stage
+  // (phones, or the panel folded).
   function focusClose() {
     const view = wallState.view;
-    view.dialog.querySelector(view.dialog.classList.contains('is-full') ? '.pf-exhibit-object__shut' : '.pf-exhibit-object__close').focus();
+    const shown = Array.from(view.dialog.querySelectorAll('.pf-exhibit-object__close, .pf-exhibit-object__shut')).find((button) => button.getClientRects().length);
+    if (shown) {
+      shown.focus();
+    }
   }
 
   // "Actual size": this gallery's sheet beside the page's other sheets.
