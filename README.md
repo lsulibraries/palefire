@@ -857,6 +857,18 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start as tracks, icons back; suggestions as labels; calmer map
+  tooltip.** The stops' discs show their duotone icons again. From 52rem
+  each option is one track: the line leaves the option's name and runs
+  through its stops, which sit flush left, so the rows need no rules
+  between them (narrow layouts keep them). The suggested searches are set
+  in the search label's small spaced capitals, so label, field and
+  suggestions read as one block. The map's summary now takes the 80%
+  paragraph tone (it set its own colour). The map tooltip is square with a
+  hairline edge and a softer shadow, with a mono floor line, the room in
+  the text face (not gold capitals) and a plain-words link. Why: the
+  table had too many lines, the suggestions looked out of place, and the
+  tooltip didn't match the page.
 - **Hero bar: glass blurs again, TOC button in line, Sign in paired with
   pause.** The cover landing drops the clip-path the old fixed video
   needed; it made the landing a backdrop root, so the sticky bar stopped

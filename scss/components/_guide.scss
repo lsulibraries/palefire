@@ -543,9 +543,12 @@ html[data-pf-mode="guide"] .pf-section__title {
   background: var(--bs-body-bg);
   border: 1px solid var(--pf-guide-rule);
   border-radius: 50%;
-  // The step's number (the list's own, shown), small in the mono face.
-  font: 600 0.8125rem/1 var(--pf-guide-mono);
-  font-variant-numeric: tabular-nums;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: currentColor;
+  }
 }
 
 .pf-paths__label {

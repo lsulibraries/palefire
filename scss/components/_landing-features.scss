@@ -514,19 +514,21 @@
     font-size: clamp(1.0625rem, 1rem + .25vw, 1.25rem);
   }
 
-  // Suggested searches under the field: a quiet line of text links that
-  // starts on the field's left edge (the list is named for screen readers
-  // only, so nothing sits beside it), in the muted tone, underlined on
-  // hover or focus. They wrap; each link is a 2rem-tall target (over WCAG
-  // 2.5.8's 24px).
+  // Suggested searches under the field, set like the field's label above it
+  // (the same small spaced capitals), so the label, the field and the
+  // suggestions read as one block, framed top and bottom, instead of a
+  // second line of body text floating under it. From the field's left edge
+  // (the list is named for screen readers only), in the muted tone,
+  // underlined on hover or focus. They wrap; each link is a 2rem-tall
+  // target (over WCAG 2.5.8's 24px).
   .pf-landing__try {
-    margin-top: .75rem;
+    margin-top: .5rem;
   }
 
   .pf-landing__suggestions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 1.5rem;
+    gap: 0 1.75rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -537,8 +539,12 @@
     align-items: center;
     min-height: 2rem;
     color: var(--pf-toc-color);
-    font-size: .9375rem;
-    line-height: 1.3;
+    font-family: var(--pf-landing-label);
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    line-height: 1.5;
+    text-transform: uppercase;
     text-decoration: underline transparent;
     text-decoration-thickness: 1px;
     text-underline-offset: .25em;
@@ -884,9 +890,10 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   gap: 0;
 }
 
-// Set as a ruled table: a hairline across the top of each option and one
-// closing the last, so A, B and C sit in rows instead of floating. The
-// rules replace the hairlines between the options.
+// Narrow, where each option's name sits above its stops, a hairline over
+// each option and one closing the last keeps A, B and C in rows (they
+// replace the hairlines between options). From 52rem the rows lose their
+// rules: the option's own line carries it (below).
 .pf-quick-guide .pf-paths__or {
   display: none;
 }
@@ -903,10 +910,9 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 // Each option is a lettered row label here ("A  See it in person"): a large
 // accent letter and the name in the panel's text type rather than the
 // guide's small mono caption, so A, B and C read as three ways to start and
-// not as captions on their first stops. No box, no arrow: the letter and
-// the table's rules carry it. From 52rem of block
-// width the label sits beside its stops, on the line of discs; narrower,
-// above them. The full guide keeps its captions (_guide.scss).
+// not as captions on their first stops. From 52rem of block width the label
+// sits beside its stops, on the line of discs; narrower, above them. The
+// full guide keeps its captions (_guide.scss).
 .pf-quick-guide .pf-paths__name {
   margin: 0 0 1rem;
   font-family: inherit;
@@ -924,18 +930,67 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 }
 
 @container pf-paths (min-width: 52rem) {
-  // The label on the line of discs: as tall as a disc, its words centred
-  // in it, at the row's top.
+  // Each option is one track: "A  See it in person ——(1)——(2)——(3)——(4)".
+  // The line leaves the name and runs into the first disc, so the name
+  // starts the route instead of floating beside it, and no rules are
+  // needed between the rows: the space between them is enough. The names
+  // share one column, room for the longest on one line plus a run of line;
+  // the stops sit at the start of their quarters, words flush left under
+  // the disc.
   .pf-quick-guide .pf-paths__line {
     display: grid;
-    grid-template-columns: 13rem minmax(0, 1fr);
-    column-gap: 2rem;
+    grid-template-columns: 17.5rem minmax(0, 1fr);
     align-items: start;
+    margin-top: clamp(2rem, 4vw, 3rem);
+    padding-block: 0;
+    border: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 
   .pf-quick-guide .pf-paths__name {
     min-height: var(--pf-paths-dot);
     margin: 0;
+    white-space: nowrap;
+
+    &::after {
+      content: "";
+      flex: 1 1 auto;
+      min-width: 1.5rem;
+      border-top: 1px solid var(--pf-guide-rule);
+      transform-origin: left;
+    }
+
+    [dir="rtl"] &::after {
+      transform-origin: right;
+    }
+  }
+
+  .pf-quick-guide .pf-paths__stop {
+    justify-items: start;
+    text-align: start;
+
+    &:not(:last-child)::before {
+      inset-inline-start: calc(var(--pf-paths-dot) / 2);
+    }
+  }
+}
+
+// The name's run of line draws out as the row scrolls in, ahead of the
+// stops' lines (_guide.scss).
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pf-quick-guide .pf-paths__name::after {
+      animation: pf-paths-line linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 50%;
+    }
   }
 }
 
@@ -1507,8 +1562,9 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
 // Paragraphs a step softer than the headings over them (80% of the text
 // colour), so the heading leads by tone as well as size; bold words keep
 // full strength. About 10:1 on Twilight, over 7:1 on the light swatches.
-// Not the intro on the video, which needs all its contrast there.
-html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-quick-guide__intro) {
+// Not the intro on the video, which needs all its contrast there. The
+// map's summary is named too: it sets its own colour (_building-map.scss).
+html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-quick-guide__intro) {
   color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
 
   :is(strong, b) {
