@@ -418,6 +418,10 @@
     viewer.sync();
   }
 
+  // A tree link's title: its title line (family-tree-link.html.twig), not
+  // the place under it.
+  const titleOf = (link) => (link.querySelector('.pf-tree-link__title') || link).textContent.trim();
+
   // One listener for every family-tree link on the page, now and after a
   // parish panel is filled in.
   function onClick(event) {
@@ -425,7 +429,7 @@
     if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     if (new URL(link.href, location.href).origin !== location.origin || typeof HTMLDialogElement !== 'function') return;
     event.preventDefault();
-    open(link.href, link.textContent.trim(), link, true);
+    open(link.href, titleOf(link), link, true);
   }
 
   // The tree called name, from the family-tree links on the page, those in
@@ -441,7 +445,7 @@
     const href = (a) => new URL(a.getAttribute('href'), location.href).href;
     const match = links.find((a) => nameOf(href(a)) === name);
     if (!match) return null;
-    return { href: href(match), title: match.textContent.trim(), link: match.isConnected && !match.closest('template') ? match : null };
+    return { href: href(match), title: titleOf(match), link: match.isConnected && !match.closest('template') ? match : null };
   }
 
   // The address's ?tree=, opened without adding history (it's already

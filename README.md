@@ -828,6 +828,21 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Family tree links: one row each, icon in a box.** Both lists (Family
+  trees and the parish panels) now share one link
+  (includes/family-tree-link.html.twig). The whole row is the link: the
+  icon in a 32px hairline box, then the title in the text colour with the
+  place under it. Hover and focus turn the title and the box gold, with
+  no underline, since the row opens the viewer, not a page.
+  - **Alignment:** the box's top sits on the top of the title's capitals.
+    CSS `text-box` trims the title to its capitals and the place to its
+    baseline; older browsers get a margin fallback.
+  - **Spacing:** the space beside the box equals the space above and
+    below it (16px, `--pf-tree-pad`).
+  - **Line spacing:** titles are at 1.25 with the place 5px under, so a
+    wrapped title no longer reads as two items.
+  - **Viewer title:** the viewer takes the tree's title from the title
+    line, not the whole row.
 - **Special Collections hero: calmer first screen, exhibitions after the
   map.** The lead panel is now title, hours, intro, search, an At a glance
   row (next event, on view, latest blog post) and the Quick Guide as three

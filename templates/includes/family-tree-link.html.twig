@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * A link to a newspaper family tree, the whole row: the family trees' icon
+ * in a hairline box, then the title and, under it, where the paper was
+ * published. Used by the Family trees list (family-tree-row.html.twig) and
+ * the parish panels (paragraph--parish-map.html.twig).
+ *
+ * - tree: url and title.
+ * - icon: the id of the icon's <symbol> (_palefire_fa_symbol()), or nothing.
+ * - meta: the place, or nothing.
+ *
+ * data-family-tree opens the tree in the viewer (js/family-tree-viewer.js,
+ * which takes its title from .pf-tree-link__title); data-no-swup keeps Swup
+ * off the link.
+ */
+#}
+<a class="pf-tree-link" href="{{ tree.url }}" data-family-tree data-no-swup>
+  {%- if icon %}<span class="pf-tree-link__box" aria-hidden="true"><svg class="pf-tree-icon" focusable="false"><use href="#{{ icon }}"/></svg></span>{% endif -%}
+  <span class="pf-tree-link__text">
+    <span class="pf-tree-link__title">{{ tree.title }}</span>
+    {%- if meta %}<span class="visually-hidden">, </span><span class="pf-tree-link__meta">{{ meta }}</span>{% endif -%}
+  </span>
+</a>

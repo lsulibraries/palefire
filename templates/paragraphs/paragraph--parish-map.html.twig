@@ -101,7 +101,7 @@
                     {% if group == 'trees' %}
                       <ul class="pf-parishes__trees">
                         {% for tree in p.trees %}
-                          <li>{% if tree_icon %}<svg class="pf-tree-icon" aria-hidden="true" focusable="false"><use href="#pf-icon-tree-map"/></svg>{% endif %}<a href="{{ tree.url }}" data-family-tree data-no-swup>{{ tree.title }}</a>{% if tree.city %} <span class="pf-parishes__city">{{ tree.city }}</span>{% endif %}</li>
+                          <li>{% include '@palefire/includes/family-tree-link.html.twig' with { tree: tree, icon: tree_icon ? 'pf-icon-tree-map', meta: tree.city } only %}</li>
                         {% endfor %}
                       </ul>
                     {% else %}

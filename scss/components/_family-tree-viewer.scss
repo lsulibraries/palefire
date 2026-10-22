@@ -95,8 +95,9 @@
 }
 
 // The family trees' icon (the duotone project-diagram, a <use> of the
-// page's _palefire_fa_symbol()): before each tree link, and before "Family
-// tree" in the viewer. In the accent; its lighter layer at 40%.
+// page's _palefire_fa_symbol()): in each tree link's box (.pf-tree-link,
+// _parish-map.scss), and before "Family tree" in the viewer. In the accent;
+// its lighter layer at 40%.
 .pf-tree-icon {
   flex: none;
   width: 1.25em;

@@ -150,10 +150,9 @@
 .pf-parishes__picker-label,
 .pf-parishes__eyebrow,
 .pf-parishes__n,
-.pf-parishes__city,
 .pf-trees__label,
-.pf-trees__meta,
-.pf-trees__count {
+.pf-trees__count,
+.pf-tree-link__meta {
   font-family: var(--pf-guide-mono);
   font-size: 0.75rem;
   letter-spacing: 0.1em;
@@ -322,6 +321,12 @@
 // 1942-1945 are available…") steps back in the muted colour and a size
 // smaller, so the titles lead and each entry reads as title, then note.
 // Entries without a link (the microfilm titles) keep the body colour.
+// A parish's family trees: the link is the whole row (.pf-tree-link) and
+// sets its own spacing.
+.pf-parishes__trees li {
+  padding: 0;
+}
+
 .pf-parishes__links li:has(> a) {
   font-size: 0.875rem;
   color: var(--pf-guide-muted);
@@ -339,11 +344,6 @@
   &:first-child {
     margin-top: 0;
   }
-}
-
-.pf-parishes__city {
-  display: block;
-  margin-top: 0.15rem;
 }
 
 // Family trees -------------------------------------------------------------
@@ -370,32 +370,87 @@
   border-top: 1px solid var(--pf-guide-rule);
 }
 
-// A row: the title, its city and parish across from it on wide blocks,
-// under it on narrow ones.
+// A row: the tree's link (.pf-tree-link, below) on a hairline.
 .pf-trees__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.15rem 1.5rem;
-  padding: 0.65rem 0;
   border-bottom: 1px solid var(--pf-guide-rule);
 }
 
-// The title with the family trees' icon before it (.pf-tree-icon,
-// _family-tree-viewer.scss), one item in the row.
-.pf-trees__name {
-  flex: 1 1 18rem;
+// A link to a family tree, in both lists (family-tree-link.html.twig): the
+// whole row, the family trees' icon in a hairline box, then the title in
+// the text colour and the place under it. The box's top is on the top of
+// the title's capitals, and the space beside the box is the space above
+// it (--pf-tree-pad), so it sits in an even margin. Hover and focus light
+// the title and the box in the accent. Not underlined: every row is a
+// link, and it opens the viewer, not another page.
+.pf-tree-link {
+  --pf-tree-pad: 1rem;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--pf-tree-pad);
+  align-items: start;
+  padding-block: var(--pf-tree-pad);
+  color: var(--bs-body-color);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    .pf-tree-link__title {
+      color: var(--pf-guide-accent);
+    }
+
+    .pf-tree-link__box {
+      border-color: var(--pf-guide-accent);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-tree-link__box {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--pf-guide-rule);
+  transition: border-color $pf-hover-out ease;
+
+  .pf-tree-icon {
+    width: 0.95rem;
+    height: 0.75rem;
+    margin: 0;
+  }
+}
+
+.pf-tree-link__text {
   min-width: 0;
 }
 
-.pf-trees__title {
+// Its first line starts at the top of the capitals (text-box), the box's
+// top; without text-box support, the same by a margin (Roboto's capitals
+// sit about a quarter of an em into a 1.25 line).
+.pf-tree-link__title {
+  display: block;
   font-weight: 500;
+  line-height: 1.25;
   overflow-wrap: anywhere;
+  transition: color $pf-hover-out ease;
+  text-box: trim-start cap alphabetic;
+
+  @supports not (text-box: trim-start cap alphabetic) {
+    margin-top: -0.25em;
+  }
 }
 
-.pf-trees__meta {
-  flex: 0 1 auto;
+// It ends at its baseline (text-box), so a one-line title and its place
+// are as tall as the box, and the row's space is the same all round it.
+.pf-tree-link__meta {
+  display: block;
+  margin-top: 0.3rem;
+  line-height: 1.2;
+  text-box: trim-end cap alphabetic;
 }
 
 .pf-trees__more {
@@ -416,7 +471,9 @@
 @media (prefers-reduced-motion: reduce) {
   .pf-parishes__shape,
   .pf-parishes__pick,
-  .pf-parishes__back {
+  .pf-parishes__back,
+  .pf-tree-link__box,
+  .pf-tree-link__title {
     transition: none;
   }
 
@@ -428,7 +485,9 @@
 html.pf-a11y-motion {
   .pf-parishes__shape,
   .pf-parishes__pick,
-  .pf-parishes__back {
+  .pf-parishes__back,
+  .pf-tree-link__box,
+  .pf-tree-link__title {
     transition: none;
   }
 
