@@ -857,6 +857,20 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Homepage type pass.** One section heading for the page (the map, the
+  Quick Guide, On view and the sections after the landing: one size,
+  weight and tracking, in the text colour); gold kept for the page title,
+  the Search button and small marks. One left edge: every section on the
+  page keeps to the landing's centred 1280px column (a registered length
+  per section, `--pf-hero-col-pad`), and On view and the map's Visit panel
+  lose their boxes for a hairline. Buttons and links (Search, Sign in, See
+  full guide, the Visit links) in the text face; mono stays for labels.
+  The Visit panel in the map is "Plan your visit" (the map already names
+  the building). Hours read "9 AM–5 PM" everywhere (a no-break space before
+  AM/PM, a closed-up en dash; `visit-hours.js`) in tabular figures. At a
+  glance's On view line names the first exhibition and counts the rest.
+  Balanced headings, no lone last words, paragraphs about 62 characters.
+  Why: a print-style review of the page.
 - **Hero: the video becomes a washed cover; no curtain, no snap.** The
   background video moves from behind the whole landing into a band behind
   the title, intro and search, washed into the page colour as on exhibition

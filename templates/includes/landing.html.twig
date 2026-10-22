@@ -331,7 +331,9 @@
           <li class="pf-today__item">
             <span class="pf-today__label">{{ 'On view'|t }}</span>
             <a class="pf-today__value pf-today__link" href="#{{ input_id }}-on-view">{% trans %}{{ count }} exhibition{% plural count %}{{ count }} exhibitions{% endtrans %}</a>
-            <span class="pf-today__meta">{{ hero_tiles|map(ex => ex.title)|join(' · ') }}</span>
+            {# The first exhibition by name, the others counted, so the line
+               isn't cut mid-word. #}
+            <span class="pf-today__meta">{{ hero_tiles|first.title }}{% if count > 1 %} {{ '+ @n more'|t({ '@n': count - 1 }) }}{% endif %}</span>
           </li>
         {% endif %}
         {% if hero_post %}

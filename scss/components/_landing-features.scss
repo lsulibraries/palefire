@@ -1494,3 +1494,164 @@ html.pf-a11y-motion {
     display: none;
   }
 }
+
+// --- Type pass: the Special Collections homepage (hero) --------------------
+// One system for the page, as in print:
+// - One section heading: every section's h2 on the page (the map, the
+//   Quick Guide, On view and the sections after the landing) the same size,
+//   weight and tracking, in the text colour. The swatch's heading gold
+//   (html[data-pf-theme] .pf-main h1-h6, _reading-themes.scss) is kept for
+//   the page title, the Search button and small marks (the star, active
+//   states), so it still means something. Each selector outranks that rule.
+// - One left edge: On view and the map's Visit panel lose their boxes
+//   (the video no longer runs behind them, so they need no glass), and
+//   their headings hang on the column's edge with everything else; a
+//   hairline sets each off instead.
+// - Mono for labels only: buttons and links (Search, Sign in, See full
+//   guide, the Visit panel's links) in the text face.
+// - One rhythm: the same space above each landing section, paragraphs
+//   kept to about 62 characters, balanced headings and no lone last words.
+// - Figures: hours in tabular figures, so the week's times line up.
+html[data-pf-hero] {
+  --pf-hero-h2-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.5rem);
+  --pf-hero-gap: clamp(4rem, 7vw, 6rem); // above each landing section
+}
+
+html[data-pf-hero] .pf-main .pf-sections .pf-section__title,
+html[data-pf-hero] .pf-landing--cover .pf-landing__visit .pf-map > .pf-map__heading,
+html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
+  font-size: var(--pf-hero-h2-size);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-wrap: balance;
+}
+
+html[data-pf-hero] .pf-landing--cover .pf-landing__title {
+  text-wrap: balance;
+}
+
+// The Visit panel's own heading ("Plan your visit") a step down, an h3.
+html[data-pf-hero] .pf-landing--cover .pf-visit .pf-visit__name {
+  font-size: clamp(1.25rem, 1.1rem + .5vw, 1.5rem);
+  color: var(--pf-section-fg, var(--bs-body-color));
+}
+
+// The search's label in the muted label tone, not gold.
+html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
+  color: var(--pf-toc-color);
+}
+
+// Buttons and links in the text face.
+.pf-landing--cover {
+  .pf-hero-account__link,
+  .pf-landing__lead--hero .pf-landing__submit,
+  .pf-visit__link {
+    font-family: inherit;
+    font-size: .9375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.3;
+    text-transform: none;
+  }
+
+  .pf-hero-account__link {
+    color: var(--pf-section-fg, var(--bs-body-color));
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-section-fg, var(--bs-body-color));
+    }
+  }
+
+  .pf-landing__lead--hero .pf-landing__submit {
+    font-size: 1rem;
+  }
+}
+
+// Paragraphs: about 62 characters, no lone last word.
+.pf-landing--cover {
+  .pf-quick-guide__intro,
+  .pf-map__type {
+    max-width: 62ch;
+  }
+
+  :is(.pf-landing__intro, .pf-quick-guide__intro, .pf-map__type, .pf-map__type p) {
+    text-wrap: pretty;
+  }
+}
+
+// On view: no box, its heading on the column's edge, a hairline above
+// (the space above the hairline is the sections' gap; under it, a
+// heading's).
+.pf-landing--cover > .pf-landing__onview {
+  margin-top: var(--pf-hero-gap);
+  padding: clamp(2rem, 4vw, 3rem) 0 0;
+  border: 0;
+  border-top: 1px solid #{$pf-hairline};
+  border-radius: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  @include media-breakpoint-down(md) {
+    padding-inline: var(--pf-section-pad-inline, 1rem);
+  }
+}
+
+// The map: the same space above it as On view.
+.pf-landing--cover > .pf-landing__visit {
+  margin-top: var(--pf-hero-gap);
+}
+
+// The map's Visit panel: no box, a hairline above, its content on the
+// column's edge (its legend, hours and mini map keep their grid).
+.pf-landing--cover .pf-map .pf-visit {
+  border-width: 1px 0 0;
+  border-radius: 0;
+  // !important over the reading colours' panel glass (_reading-themes.scss).
+  background: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  // From md on the column's edge; phones keep the panel's edge-to-edge
+  // padding (the page's gutter).
+  @include media-breakpoint-up(md) {
+    padding-inline: 0;
+  }
+}
+
+// Hours in tabular figures (every page): the week's times line up.
+:is(.pf-visit__week, .pf-visit__today, .pf-today__value, .pf-hours-table) {
+  font-variant-numeric: tabular-nums;
+}
+
+// One column for the whole page: the sections after the landing (Events,
+// Collections, From the stacks) keep to the same centred 1280px column as
+// the landing, with the same gutter at its narrowest (the sections' own
+// padding, which the hero's gutter takes too), so every heading and text
+// block on the page starts on one left edge. Their side padding is worked
+// out once per section, in px (a registered length, against the sections'
+// width, 100cqi), so what reads --pf-section-pad-inline further in (the
+// staggered tile row's bleed to the screen's edges) gets the same value.
+// Flush sections (edge-to-edge carousels) keep none.
+@property --pf-hero-col-pad {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+html[data-pf-hero] .pf-sections {
+  --pf-hero-pad-base: var(--pf-section-pad-inline);
+  container: pf-sections / inline-size;
+}
+
+html[data-pf-hero] .pf-sections > .pf-section:not(.pf-section--flush) {
+  --pf-hero-col-pad: max(var(--pf-hero-pad-base), (100cqi - 1280px) / 2);
+  --pf-section-pad-inline: var(--pf-hero-col-pad);
+}
+
+html[data-pf-hero] .pf-landing--hero {
+  --pf-hero-gutter: var(--pf-hero-pad-base);
+}

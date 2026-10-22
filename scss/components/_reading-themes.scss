@@ -521,27 +521,27 @@ html#{$pf-themed}.pf-a11y-solid body {
 // panels match. Light swatches: the page colour at the drawer's 65%.
 // Dark: the drawer's darkened page colour, thicker than the drawer's 30%
 // (see $pf-reading-lead-glass-dark).
-html#{$pf-themed} :is(.pf-landing__lead, .pf-visit, .pf-landing__onview) {
+html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
   background-color: rgba(var(--pf-g-bg-rgb), #{$pf-panel-glass});
 }
 
-html#{$pf-themed}.pf-reading-dark :is(.pf-landing__lead, .pf-visit, .pf-landing__onview) {
+html#{$pf-themed}.pf-reading-dark :is(.pf-landing__lead, .pf-visit) {
   background-color: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-reading-lead-glass-dark}, transparent);
 }
 
-html#{$pf-themed}.pf-reading-dark .pf-landing--hero :is(.pf-landing__lead, .pf-visit, .pf-landing__onview) {
+html#{$pf-themed}.pf-reading-dark .pf-landing--hero :is(.pf-landing__lead, .pf-visit) {
   background-color: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-reading-lead-glass-dark-hero}, transparent);
 }
 
 // Reduce transparency and the Settings drawer's solid switch: solid page
 // colour, as the TOC and header (high contrast keeps the swatch's glass).
 @media (prefers-reduced-transparency: reduce) {
-  html#{$pf-themed} :is(.pf-landing__lead, .pf-visit, .pf-landing__onview) {
+  html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
     background-color: rgb(var(--pf-g-bg-rgb)) !important;
   }
 }
 
-html#{$pf-themed}.pf-a11y-solid :is(.pf-landing__lead, .pf-visit, .pf-landing__onview) {
+html#{$pf-themed}.pf-a11y-solid :is(.pf-landing__lead, .pf-visit) {
   background-color: rgb(var(--pf-g-bg-rgb)) !important;
 }
 

@@ -18,7 +18,13 @@
 
   <h3 class="pf-visit__heading" id="{{ visit_id }}-heading">
     <span class="pf-visit__eyebrow">{{ 'Visit'|t }}</span>
-    {% if visit.name %}<span class="pf-visit__name">{{ visit.name }}</span>{% endif %}
+    {# In the map's panel (keyed, the landing hero) the map's own heading
+       already names the building, so this one says what the panel is for. #}
+    {% if keyed %}
+      <span class="pf-visit__name">{{ 'Plan your visit'|t }}</span>
+    {% elseif visit.name %}
+      <span class="pf-visit__name">{{ visit.name }}</span>
+    {% endif %}
   </h3>
 
   {% if visit.lid %}

@@ -16,7 +16,7 @@
  * Markup (all parts optional except the root):
  *   <div data-pf-hours data-lid="241">
  *     <span data-pf-hours-status></span>   Open now | Closes soon | ...
- *     <span data-pf-hours-today></span>    9AM – 5PM today | Opens tomorrow 9AM
+ *     <span data-pf-hours-today></span>    9 AM–5 PM today | Opens tomorrow 9 AM
  *     <ol data-pf-hours-week></ol>         seven rows, today first
  *   </div>
  */
@@ -52,12 +52,15 @@
 
   /* ---------------- Dates and times (same rules as bento.js) ---------------- */
 
+  // "9 AM", "6:30 PM": a no-break space before AM/PM every time (it was
+  // "9AM" on the hour), so the two never part at a line end.
   function formatTime(date) {
     let h = date.getHours();
     const m = date.getMinutes();
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
-    return m === 0 ? `${h}${ampm}` : `${h}:${String(m).padStart(2, '0')} ${ampm}`;
+    const nbsp = '\u00a0';
+    return m === 0 ? `${h}${nbsp}${ampm}` : `${h}:${String(m).padStart(2, '0')}${nbsp}${ampm}`;
   }
 
   function ymd(d) {
@@ -100,8 +103,9 @@
     return { open, close };
   }
 
+  // "9 AM–5 PM": a closed-up en dash for a range, as the events show times.
   function range(w) {
-    return `${formatTime(w.open)} – ${formatTime(w.close)}`;
+    return `${formatTime(w.open)}\u2013${formatTime(w.close)}`;
   }
 
   function nextOpen(specs, now) {
