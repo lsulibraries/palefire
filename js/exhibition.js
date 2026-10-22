@@ -1324,6 +1324,9 @@
     copy.querySelectorAll('.pf-exhibit-bio__toggle').forEach((el) => el.remove());
     copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
     view.body.replaceChildren(...Array.from(copy.childNodes));
+    // Copied before the page's links were marked (an entry opened from the
+    // address at load): mark them here.
+    view.dialog.querySelectorAll('.pf-exhibit-object__panel a[href]:not([target])').forEach(markOutside);
     view.panel.scrollTop = 0;
 
     view.count.textContent = Drupal.t('@n of @total', { '@n': wallState.index + 1, '@total': n });
@@ -1401,6 +1404,7 @@
     view.dialog.setAttribute('aria-label', Drupal.t('Image viewer'));
     view.title.hidden = true;
     view.label.replaceChildren(...(caption ? Array.from(caption.cloneNode(true).childNodes) : []));
+    view.label.querySelectorAll('a[href]:not([target])').forEach(markOutside);
     view.label.hidden = !caption;
     view.body.replaceChildren();
     view.scale.hidden = true;
@@ -1462,6 +1466,14 @@
       size.className = 'pf-exhibit-object__sheet-label';
       size.textContent = s.size;
       li.append(sheet, label, size);
+      // Which sheet this plate is on, in words: an outline round the sheet
+      // read as part of its size.
+      if (s.current) {
+        const mark = document.createElement('span');
+        mark.className = 'pf-exhibit-object__sheet-mark';
+        mark.textContent = Drupal.t('This plate');
+        li.append(mark);
+      }
       row.append(li);
     });
   }
@@ -1659,6 +1671,53 @@
   }
 
   /* ---------------------------------------------------------------------
+   * Outside links: in an exhibition's text and captions, a link to another
+   * site opens in a new tab, so the exhibition (its gallery, an open image)
+   * stays where it was. Each says so: an arrow after its last word, kept on
+   * that word's line, and "opens in a new tab" for screen readers. A field
+   * guide row (ExhibitFieldGuide) has its own arrow.
+   * ------------------------------------------------------------------ */
+
+  function markOutside(link) {
+    let url;
+    try {
+      url = new URL(link.href, location.href);
+    }
+    catch (e) {
+      return;
+    }
+    if (!/^https?:$/.test(url.protocol) || url.host === location.host) {
+      return;
+    }
+    link.target = '_blank';
+    link.relList.add('noopener');
+    const note = document.createElement('span');
+    note.className = 'visually-hidden';
+    note.textContent = ' ' + Drupal.t('(opens in a new tab)');
+    if (link.classList.contains('pf-exhibit-fieldguide__link')) {
+      link.append(note);
+      return;
+    }
+    const arrow = '<svg class="pf-exhibit-out" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 11 11 5M6 5h5v5"/></svg>';
+    // The last word and the arrow in one unbreakable span.
+    const text = Array.from(link.childNodes).reverse().find((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    const tail = document.createElement('span');
+    tail.className = 'pf-exhibit-out-tail';
+    if (text) {
+      const words = text.textContent.replace(/\s+$/, '');
+      const cut = words.search(/\S+$/);
+      text.textContent = words.slice(0, cut);
+      tail.textContent = words.slice(cut);
+      text.after(tail);
+    }
+    else {
+      link.append(tail);
+    }
+    tail.insertAdjacentHTML('beforeend', arrow);
+    link.append(note);
+  }
+
+  /* ---------------------------------------------------------------------
    * Audio
    * ------------------------------------------------------------------ */
 
@@ -1759,6 +1818,7 @@
           openPictures(link, null, null);
         });
       });
+      once('pf-exhibit-out', '.pf-main a[href]', context).forEach(markOutside);
       once('pf-audio', '[data-pf-audio]', context).forEach(initAudio);
       once('pf-exhibit-tip', '[data-pf-exhibit-tip]', context).forEach(initTip);
       // Biographies outside galleries (a page without the head's script).

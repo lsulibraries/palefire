@@ -18,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\Hook\PalefireHooks;
 
@@ -919,6 +920,19 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   // after the text format has run (it would strip ids typed in the text).
   if ($variables['paragraph']->get('field_text_style')->value === 'sources') {
     $variables['content']['field_block_body']['#post_render'][] = [ExhibitSources::class, 'addIds'];
+  }
+  // A link to a bird in Audubon's field guide becomes a ruled row with the
+  // bird's names (ExhibitFieldGuide).
+  $guide = FALSE;
+  foreach (Element::children($variables['content']['field_block_body']) as $delta) {
+    $guide = $guide || ExhibitFieldGuide::applies((string) ($variables['content']['field_block_body'][$delta]['#text'] ?? ''));
+  }
+  if ($guide) {
+    $names = ExhibitFieldGuide::names($variables['paragraph']);
+    $variables['content']['field_block_body']['#pf_fieldguide'] = $names;
+    // The names come from the entry's caption: a new caption redraws the row.
+    $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $names[2]);
+    $variables['content']['field_block_body']['#post_render'][] = [ExhibitFieldGuide::class, 'rows'];
   }
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
   // Element::children() takes its argument by reference, so it gets the

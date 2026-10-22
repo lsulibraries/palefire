@@ -821,6 +821,24 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Exhibitions: outside links open in a new tab.** Every link to
+  another site in an exhibition's text and captions opens a new tab, so
+  the exhibition (the gallery, an open image) stays put. Each says so: an
+  arrow kept on its last word's line, and "(opens in a new tab)" for
+  screen readers (`markOutside`, js/exhibition.js).
+- **Exhibitions: Audubon field guide links as ruled rows.** "View bird in
+  National Audubon Society Guide…" becomes a row with a kicker, the
+  bird's modern common name, its scientific name and an arrow
+  (src/ExhibitFieldGuide.php, a #post_render on guide_text). The common
+  name comes from the entry title or a caption phrase that matches the
+  link's address, else from the address with its hyphens and possessives
+  restored. All 72 Audubon links were checked. The scientific name is the
+  caption's "[now …]" name. The row is ruled above only, so it never
+  doubles the rule over Actual size.
+- **Actual size: the sheet's outline is the paper's edge.** The current
+  sheet's gold border read as part of its size. Every sheet now has the
+  same hairline, the plate fills its own sheet edge to edge, and "This
+  plate" under its label says which one it is.
 - **One image viewer for exhibitions: the object view.** The lightbox is
   gone (its JS and CSS). Images in the text, a gallery's lead and the
   bar's zoom button now open in the wall's object view: the image on the
