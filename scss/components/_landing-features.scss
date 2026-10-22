@@ -1536,6 +1536,18 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
   }
 }
 
+// Paragraphs a step softer than the headings over them (80% of the text
+// colour), so the heading leads by tone as well as size; bold words keep
+// full strength. About 10:1 on Twilight, over 7:1 on the light swatches.
+// Not the intro on the video, which needs all its contrast there.
+html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-quick-guide__intro) {
+  color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
+
+  :is(strong, b) {
+    color: var(--pf-section-fg, var(--bs-body-color));
+  }
+}
+
 // Paragraphs: about 62 characters, no lone last word.
 .pf-landing--cover {
   .pf-quick-guide__intro,

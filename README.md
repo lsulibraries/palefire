@@ -857,6 +857,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Homepage: paragraphs a step softer than their headings.** The map's
+  description and the Quick Guide intro are set at 80% of the text colour
+  (bold words at full strength), so each heading leads by tone as well as
+  size: about 9.9:1 on Twilight, 8.2:1 on Cream. The intro on the video
+  keeps full strength. Why: heading and paragraph read as one block.
 - **Request paths, calmer** (the homepage's Quick Guide and the full guide,
   `includes/guide-request-paths.html.twig`). Each stop's disc holds its
   step number (1–4) instead of an icon; the image and info badges after
