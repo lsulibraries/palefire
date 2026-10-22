@@ -821,6 +821,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Title page: the cover image holds still while the page scrolls.**
+  It scrolled away with the head, footer and all. It is now sticky under
+  the bar inside a media box that runs a screen past the head. clip-path
+  shows it only within the head, so the head's foot (and then the footer)
+  slides over a still image. It's set back by the header's shrink, as on a
+  wall's lead, so it doesn't move or re-crop as the header compacts. The
+  head is `overflow: clip`, so the page is no longer than before. The
+  zoom button stops counting the image once the head's foot passes it.
 - **Wall: no flicker when moving between plates.** The other plates dim
   only while a plate is under the pointer, so crossing the gap between two
   plates undimmed the whole wall for a moment. Dimming and highlighting are

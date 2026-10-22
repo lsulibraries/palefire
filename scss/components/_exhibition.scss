@@ -861,11 +861,15 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 // Title page -----------------------------------------------------------------
 
+// overflow: clip keeps the cover's media, which runs a screen past the
+// foot (below), from lengthening the page; unlike hidden it leaves the
+// sticky bar and image working.
 .pf-exhibit-head {
   display: flex;
   flex-direction: column;
   min-height: calc(100svh - var(--pf-header-h));
   padding-bottom: clamp(2rem, 6vh, 4rem);
+  overflow: clip;
   pointer-events: auto;
   isolation: isolate;
 }
@@ -876,21 +880,27 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   align-items: flex-end;
 }
 
-// The image fills the head, past its padding.
+// The image fills the head, past its padding, and holds still on screen
+// while the page scrolls, into the footer too: the head's foot rises over
+// it, so the footer seems to slide over the image. The media runs a screen
+// past the head's foot so the sticky image has room to stay pinned, and
+// clip-path shows it only within the head.
 .pf-exhibit-cover__media {
   position: absolute;
-  inset: 0;
+  inset: 0 0 -100lvh;
   z-index: -1;
-  overflow: hidden;
+  overflow: clip;
+  clip-path: inset(0 0 100lvh);
 
   // A wash of the page colour where the text sits, so it keeps the
   // swatch's contrast on any image: the bottom below lg (the text spans the
   // column) or the left from lg (beside the TOC, the text takes about half
-  // the column). The breadcrumb's bar has its own glass.
+  // the column). It moves with the text. The breadcrumb's bar has its own
+  // glass.
   &::after {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: 0 0 100lvh;
     background: pf-eased-wash(to top, 46%, 98%);
 
     @include media-breakpoint-up(lg) {
@@ -899,11 +909,21 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// The screen under the compact header, pinned under the bar. As on a
+// wall's lead (.pf-exhibit-wall-hero__frame), it is set back by the
+// header's shrink so far (--pf-cover-shift), so the shrink only uncovers
+// its top strip and never moves or re-crops it. lvh: the same size whether
+// or not a phone's toolbar shows.
 .pf-exhibit-cover__img {
+  --pf-cover-shift: calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
+  position: sticky;
+  top: var(--pf-header-h);
+  display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100lvh - #{$pf-header-bar-compact-h});
   object-fit: cover;
   object-position: 70% center;
+  translate: 0 var(--pf-cover-shift);
 
   @include pf-exhibit-motion {
     animation: pf-exhibit-cover-in 2.4s $pf-exhibit-ease both;

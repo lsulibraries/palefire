@@ -239,6 +239,10 @@
       if (layer && found[0].matches('.pf-exhibit-hero__stage')) {
         bottom = Math.min(bottom, layer.getBoundingClientRect().top);
       }
+      // The title page's cover runs past the head, which clips it.
+      if (!state.current) {
+        bottom = Math.min(bottom, state.head.getBoundingClientRect().bottom);
+      }
       shown = bottom - bar > 96;
     }
     button.classList.toggle('is-shown', shown);
