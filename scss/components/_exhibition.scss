@@ -896,15 +896,20 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   // swatch's contrast on any image: the bottom below lg (the text spans the
   // column) or the left from lg (beside the TOC, the text takes about half
   // the column). It moves with the text. The breadcrumb's bar has its own
-  // glass.
+  // glass. From lg the image also fades out over the head's foot, so the
+  // footer meets the page colour, not the image's edge. The wash runs a
+  // pixel past the clip, so rounding never leaves a row of bare image at
+  // the foot.
   &::after {
     content: "";
     position: absolute;
-    inset: 0 0 100lvh;
+    inset: 0 0 calc(100lvh - 1px);
     background: pf-eased-wash(to top, 46%, 98%);
 
     @include media-breakpoint-up(lg) {
-      background: pf-eased-wash(to right, 38%, 94%);
+      background:
+        pf-eased-wash(to top, 0%, 100%) left bottom / 100% clamp(4rem, 14vh, 8rem) no-repeat,
+        pf-eased-wash(to right, 38%, 94%);
     }
   }
 }

@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Title page: the cover fades out at the head's foot.** Under the Begin
+  button the image stopped at a hard edge against the footer. A row of
+  bare image also showed through under the wash there: the wash and the
+  clip ended on the same edge, and rounding opened a 1px gap. From lg the
+  image now fades into the page colour over the foot (4–8rem), and the
+  wash runs 1px past the clip.
 - **Title page: the cover image holds still while the page scrolls.**
   It scrolled away with the head, footer and all. It is now sticky under
   the bar inside a media box that runs a screen past the head. clip-path
