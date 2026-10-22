@@ -2321,9 +2321,13 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   aspect-ratio: var(--pf-r);
   overflow: hidden;
   background: var(--pf-exhibit-surface);
+  // Back to full only after a pause, so moving across the gap between two
+  // plates doesn't undim the wall for a moment (a flicker). With reduced
+  // motion it's the pause alone.
+  transition: opacity 0s linear .2s;
 
   @include pf-exhibit-motion {
-    transition: translate .6s $pf-exhibit-ease, box-shadow .6s $pf-exhibit-ease, opacity .5s $pf-exhibit-ease;
+    transition: translate .6s $pf-exhibit-ease, box-shadow .6s $pf-exhibit-ease, opacity .5s $pf-exhibit-ease .2s;
   }
 }
 
@@ -2349,15 +2353,18 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
-// The plate under the pointer lifts; the others dim a little.
+// The plate under the pointer lifts; the others dim a little. Both at
+// once: only the return to full waits (.pf-exhibit-wall__frame).
 @media (hover: hover) {
   .pf-exhibit-wall__link:hover .pf-exhibit-wall__frame {
     translate: 0 -6px;
     box-shadow: 0 1.25rem 2.5rem -1.25rem rgba(0, 0, 0, 0.45);
+    transition-delay: 0s;
   }
 
   .pf-exhibit-wall__list:has(.pf-exhibit-wall__link:hover) .pf-exhibit-wall__tile:not(:has(.pf-exhibit-wall__link:hover)) .pf-exhibit-wall__frame {
     opacity: 0.55;
+    transition-delay: 0s;
   }
 }
 

@@ -821,6 +821,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Wall: no flicker when moving between plates.** The other plates dim
+  only while a plate is under the pointer, so crossing the gap between two
+  plates undimmed the whole wall for a moment. Dimming and highlighting are
+  still immediate, but going back to full opacity now waits 0.2s, which is
+  longer than a quick move across a gap. With reduced motion there is no
+  fade, just the pause.
 - **Footer: Special Collections version on /v2/exhibitions too.** The
   exhibitions page and the pages under it are Special Collections content,
   so they get its footer. More paths go in
