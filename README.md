@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero bar: glass blurs again, TOC button in line, Sign in paired with
+  pause.** The cover landing drops the clip-path the old fixed video
+  needed; it made the landing a backdrop root, so the sticky bar stopped
+  blurring the text scrolling under it. The floating TOC button takes the
+  bar's .375rem top in CSS instead of the title nudge, which is measured
+  only when the page loads at the top (reloaded part-way down, it sat a
+  row low). Sign in now sits .375rem from the pause button, the same as
+  pause from the screen edge, instead of an odd 26px. Why: the text behind
+  the bar was confusing, and the corner buttons didn't line up.
 - **Homepage: At a glance as ruled cells, suggestions as plain links, Quick
   Start as a ruled table.** The Today strip drops its vertical rules for a
   hairline over each cell with gutters between, two by two until the lead is

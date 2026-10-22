@@ -126,6 +126,12 @@
   padding-inline-end: 3.25rem;
 }
 
+// With "Sign in" last in the row, the two buttons pair up: the same
+// .375rem between them as between the video button and the screen's edge.
+.pf-landing__bar:has(+ .pf-landing__dock) .pf-landing__bar-inner:has(> .pf-landing__signin) {
+  padding-inline-end: calc(2.25rem + 2 * var(--pf-bar-icon-edge) - var(--pf-bar-edge));
+}
+
 .pf-landing__bar .pf-breadcrumb--lead {
   min-width: 0;
   padding: 0;
@@ -234,6 +240,13 @@
 // screen.
 .pf-landing--cover {
   --pf-landing-bar-gap: 0px;
+}
+
+// No clip here (_landing.scss clips the landing for its fixed video layer,
+// which the cover doesn't use): a clip-path makes the landing a backdrop
+// root, and the sticky bar's glass then stopped blurring the page behind it.
+.pf-landing.pf-landing--cover.has-bg-video {
+  clip-path: none;
 }
 
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
