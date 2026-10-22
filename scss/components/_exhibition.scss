@@ -2988,9 +2988,11 @@ html.pf-object-open {
 
 // Each sheet stands on a shared baseline with its label under it, so the
 // labels line up with each other and with their sheets. The tallest sheet
-// is --pf-sheet-max tall; the rest are --pf-w and --pf-h of it.
+// (or the person, 5 ft 6 in, at the end for scale) is --pf-sheet-max tall;
+// the rest are --pf-w and --pf-h of it. Taller than the sheets alone
+// needed, so the octavo stays more than a speck beside the person.
 .pf-exhibit-object__sheets {
-  --pf-sheet-max: 9rem;
+  --pf-sheet-max: 12.5rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -3029,6 +3031,17 @@ html.pf-object-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+}
+
+// The person: a hairline outline, not a sheet (no paper, no edge).
+.pf-exhibit-object__person {
+  color: var(--pf-exhibit-muted);
+
+  .pf-exhibit-object__sheet {
+    overflow: visible;
+    background: none;
+    border: 0;
   }
 }
 

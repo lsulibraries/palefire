@@ -821,6 +821,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Actual size: a standing person for scale.** A hairline figure, 5 ft
+  6 in, stands at the end of the row on the same baseline. It's drawn
+  only when every size is in inches. The diagram is taller (12.5rem) so
+  the octavo stays readable beside it.
+- **Field guide rows: names from image groups too.** A drawing and its
+  proof are an image group with one caption, which the rows didn't read,
+  so the plover's row had no scientific name. The caption's spelling now
+  comes before the entry title (Black-bellied Plover, Yellow-billed
+  Cuckoo).
 - **Exhibitions: outside links open in a new tab.** Every link to
   another site in an exhibition's text and captions opens a new tab, so
   the exhibition (the gallery, an open image) stays put. Each says so: an

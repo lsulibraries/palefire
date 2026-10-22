@@ -15,13 +15,14 @@ use Drupal\paragraphs\ParagraphInterface;
  * Society's field guide ("View bird in <a>National Audubon Society Guide
  * …</a>.") becomes a ruled row: a kicker, the bird's common name and its
  * scientific name, and an arrow (_exhibition.scss, .pf-exhibit-fieldguide).
- * The common name is the one the link's address spells: the entry's title
- * or a phrase in its caption when one matches it ("Black-bellied Plover"),
+ * The common name is the one the link's address spells: a phrase in the
+ * entry's caption ("Black-bellied Plover") or its title when one matches,
  * else the address's words, hyphens and possessives put back (Audubon's
  * titles are often the old names: "Indigo Bird" is the Indigo Bunting).
- * The scientific name is the current one in the entry's figure caption
- * ("[now Setophaga magnolia]"), else its first italic two-word name. js/exhibition.js opens it in a new tab, as every
- * outside link in an exhibition.
+ * The scientific name is the current one in the entry's caption, a
+ * figure's or an image group's ("[now Setophaga magnolia]"), else its
+ * first italic two-word name. js/exhibition.js opens it in a new tab, as
+ * every outside link in an exhibition.
  */
 final class ExhibitFieldGuide implements TrustedCallbackInterface {
 
@@ -56,15 +57,16 @@ final class ExhibitFieldGuide implements TrustedCallbackInterface {
       return [[], '', []];
     }
     $tags = $entry->getCacheTags();
-    $phrases = [trim((string) ($entry->get('field_block_title')->value ?? ''))];
+    $phrases = [];
     $latin = '';
     foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+      // An image group (a drawing and its proof) has its own caption too.
       $figures = $block->bundle() === 'exhibit_gallery' && $block->hasField('field_guide_blocks')
-        ? $block->get('field_guide_blocks')->referencedEntities()
+        ? [$block, ...$block->get('field_guide_blocks')->referencedEntities()]
         : [$block];
       foreach ($figures as $figure) {
         $tags = array_merge($tags, $figure->getCacheTags());
-        if ($figure->bundle() === 'exhibit_figure' && !$figure->get('field_figure_caption')->isEmpty()) {
+        if ($figure->hasField('field_figure_caption') && !$figure->get('field_figure_caption')->isEmpty()) {
           $caption = (string) $figure->get('field_figure_caption')->value;
           $plain = strip_tags((string) preg_replace('#<br\s*/?>#i', "\n", $caption));
           $phrases = array_merge($phrases, preg_split('/[\n\[\]“”"]+/u', Html::decodeEntities($plain)) ?: []);
@@ -72,6 +74,8 @@ final class ExhibitFieldGuide implements TrustedCallbackInterface {
         }
       }
     }
+    // The caption's spelling first ("Black-bellied Plover"), then the title.
+    $phrases[] = (string) ($entry->get('field_block_title')->value ?? '');
     return [array_values(array_filter(array_map('trim', $phrases))), $latin, $tags];
   }
 
