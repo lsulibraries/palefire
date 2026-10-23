@@ -164,6 +164,96 @@ $pf-tile-break-two: 32rem;
   }
 }
 
+// Outline ------------------------------------------------------------------
+// A card with no cover (most guides) draws its page instead: the title,
+// intro and first sections set small and blurred, like a page seen through
+// glass, in the reading swatch's colours (the default section's on pages
+// without one). Sized to the card (cqi), so the List's thumbnail is the
+// same page in miniature. The sheet's colour sits on the media, not the
+// blurred layer, so the blur leaves no soft edge. Decorative (aria-hidden):
+// no contrast minimum, and the scrim keeps the real title at 4.5:1. Four
+// classes to outrank the List's thumbnail grey.
+.pf-tiles .pf-tile.pf-tile--no-image .pf-tile__media {
+  container: pf-outline / inline-size;
+  overflow: hidden;
+  background: var(--pf-g-surface, var(--bs-tertiary-bg, #{$pf-grey-900}));
+}
+
+.pf-tile__outline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .45em;
+  padding: 1.75em 1.5em;
+  color: var(--pf-g-muted, var(--bs-secondary-color));
+  font-size: clamp(5px, 4.4cqi, 11px);
+  line-height: 1.5;
+  opacity: .75;
+  filter: blur(max(.6px, .18em));
+  user-select: none;
+  pointer-events: none;
+
+  // Whole lines only: the sheet clips the page, not the flex column.
+  > * {
+    flex: none;
+  }
+}
+
+.pf-tile__outline-title {
+  margin-bottom: .15em;
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  font-size: 2.3em;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+}
+
+.pf-tile__outline-intro {
+  color: var(--pf-g-fg, var(--bs-body-color));
+  font-size: 1.15em;
+}
+
+.pf-tile__outline-heading {
+  margin-top: .9em;
+  padding-top: .8em;
+  border-top: 1px solid var(--pf-g-rule, #{$pf-hairline});
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  font-size: 1.4em;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.pf-tile__outline-subhead {
+  color: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
+  font-weight: 700;
+}
+
+.pf-tile__outline-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+// Hover: the page scrolls a little under the glass, with the pictures'
+// zoom.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-tile__outline {
+    transition: transform 0.6s ease-out;
+  }
+
+  .pf-tile:is(:hover, :focus-visible) .pf-tile__outline {
+    transform: translateY(-1.5em);
+  }
+}
+
+html.pf-a11y-motion .pf-tile .pf-tile__outline {
+  transition: none;
+  transform: none;
+}
+
 // Stagger ------------------------------------------------------------------
 // Narrow: swipeable row. The row bleeds to the section's edges so cards slide
 // in from the edge; scroll-padding lines the snapped card up with the title.
@@ -774,5 +864,9 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
 
   .pf-tile__label {
     border: 1px solid CanvasText;
+  }
+
+  .pf-tile__outline {
+    display: none;
   }
 }

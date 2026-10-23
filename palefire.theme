@@ -628,6 +628,64 @@ function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int 
 }
 
 /**
+ * A page's outline for a card with no cover: the page drawn small, blurred.
+ *
+ * Up to four sections (field_scroll_section, then field_sections) that have
+ * a title, each with up to three lines: its blocks' titles and the start of
+ * their text (a guide section's field_guide_blocks), else the start of its
+ * own body. Landings and untitled sections are skipped. Plain text only; the
+ * card prints it aria-hidden, as a picture of the page.
+ *
+ * @return array
+ *   A list of sections: heading (string) and lines (a list of
+ *   ['text' => string, 'kind' => 'subhead'|'text']).
+ */
+function _palefire_page_outline(NodeInterface $node, CacheableMetadata $cache): array {
+  $outline = [];
+  foreach (PalefireHooks::SECTION_FIELDS as $field) {
+    if (!$node->hasField($field)) {
+      continue;
+    }
+    foreach ($node->get($field)->referencedEntities() as $section) {
+      if (count($outline) === 4) {
+        return $outline;
+      }
+      if (!$section instanceof ParagraphInterface || !$section->isPublished()
+        || in_array($section->bundle(), PalefireHooks::LANDING_BUNDLES, TRUE)
+        || !$section->hasField('field_section_title') || $section->get('field_section_title')->isEmpty()) {
+        continue;
+      }
+      $cache->addCacheableDependency($section);
+      $blocks = $section->hasField('field_guide_blocks') ? $section->get('field_guide_blocks')->referencedEntities() : [$section];
+      $lines = [];
+      foreach ($blocks as $block) {
+        if (!$block instanceof ParagraphInterface || !$block->isPublished()) {
+          continue;
+        }
+        $cache->addCacheableDependency($block);
+        if ($block->hasField('field_block_title') && !$block->get('field_block_title')->isEmpty()) {
+          $lines[] = ['text' => _palefire_plain_excerpt((string) $block->get('field_block_title')->value, 60), 'kind' => 'subhead'];
+        }
+        foreach (['field_block_intro', 'field_block_body', 'field_section_body'] as $text_field) {
+          if ($block->hasField($text_field) && !$block->get($text_field)->isEmpty()) {
+            $lines[] = ['text' => _palefire_plain_excerpt((string) $block->get($text_field)->value, 110), 'kind' => 'text'];
+            break;
+          }
+        }
+        if (count($lines) >= 3) {
+          break;
+        }
+      }
+      $outline[] = [
+        'heading' => _palefire_plain_excerpt((string) $section->get('field_section_title')->value, 60),
+        'lines' => array_slice(array_filter($lines, fn ($line) => $line['text'] !== ''), 0, 3),
+      ];
+    }
+  }
+  return $outline;
+}
+
+/**
  * A card's cover image item, or NULL.
  *
  * A Tile's Tile cover (field_tile_cover). Any other node (a Modular page):
@@ -1110,6 +1168,9 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   NULL (always NULL on the index, which shows none). Its alt is empty:
  *   the card's title already names the link, so the image would only
  *   repeat it (WCAG 1.1.1 decorative-in-context).
+ * - outline: a card with no image (not on the index): the page's sections
+ *   (_palefire_page_outline()), which the card draws as a blurred picture
+ *   of the page in the reading swatch's colours. Guides rarely have covers.
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
@@ -1136,12 +1197,14 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       continue;
     }
     $show_image = $variables['layout'] !== 'index' && $card['image_item'];
+    $image = $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL;
     $variables['tiles'][] = [
       'title' => $card['title'],
       'url' => $card['url'],
       'label' => $card['label'],
       'note' => $card['note'],
-      'image' => $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL,
+      'image' => $image,
+      'outline' => $variables['layout'] !== 'index' && !$image ? _palefire_page_outline($node, $cache) : [],
     ];
   }
   $cache->applyTo($variables);

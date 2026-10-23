@@ -324,7 +324,9 @@ through the
 the label, and its link. Layouts use container queries; the staggered row is a
 swipeable strip under 60rem. `js/tile-reveal.js` animates cards in on scroll
 (nothing hidden without JS or with reduced motion). A scrim keeps white titles
-at 4.5:1 on any image.
+at 4.5:1 on any image. A card with no cover draws its page instead (title,
+intro, first sections; `_palefire_page_outline()`), blurred, in the reading
+swatch's colours.
 
 ## From the stacks
 
@@ -856,6 +858,9 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
+
+- **Tile showcase: a card with no cover shows its page, blurred.** Instead of a blank dark card, a tile with no image (most guides) draws the page it links to: its title, intro and first four titled sections with their block titles and opening lines (`_palefire_page_outline()`), set small, blurred and aria-hidden, in the reading swatch's colours (`--pf-g-*`; the section's Bootstrap colours on pages without one). It scales with the card, so the masonry's List thumbnail is the same page in miniature, and drifts up slightly on hover (not with reduced motion). Hidden in forced colours. Every layout but the index, which has no pictures.
+  - Why: guides almost never have cover images, and an empty card says nothing about what's inside.
 
 - **Exhibition covers: the long fade is back, with the image still moved right.** From lg the cover image starts at 28% of the head (`$pf-exhibit-cover-media`), and the side wash is solid to 38% and fades out by 92%. The entry below had the image at 44% under a 46% to 84% fade: the subject showed, but nothing of the image was left behind the title, so the head looked cut in two with a flat block of colour beside the picture. Now the image shows faintly behind the title as before (the text gets about the same wash), and a portrait image's centre sits about 14% further right than it did originally.
   - Focal Point preview: `wash-desktop.png` is now 1160 × 1200, the image's frame on a 1440 × 900 screen. Set the "Cover preview: desktop" style's Focal Point Scale and Crop to 1160 × 1200.

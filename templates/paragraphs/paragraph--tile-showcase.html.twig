@@ -29,6 +29,11 @@
  * list is ordered, which screen readers already announce), title, note and
  * label, and an arrow that slides on hover. An <ol>, as the numbers say.
  *
+ * Outline: a card with no image draws the page it links to instead, small
+ * and blurred (its title, intro and first sections, tile.outline), in the
+ * reading swatch's colours: most guides have no cover. Decorative, so
+ * aria-hidden like the pictures; the link is still named by its <h3>.
+ *
  * "On this page": each card is a sub-link under its section, as in the
  * concept. The <li> is the target (data-toc), not the <h3>: modular-toc.js
  * gives its target tabindex="-1", and a focusable heading inside the link
@@ -36,6 +41,20 @@
  * from being listed a second time on modes that list every h3.
  */
 #}
+{% macro outline(tile) %}
+  <span class="pf-tile__outline" aria-hidden="true">
+    <span class="pf-tile__outline-title">{{ tile.title }}</span>
+    {% if tile.note %}
+      <span class="pf-tile__outline-intro">{{ tile.note }}</span>
+    {% endif %}
+    {% for section in tile.outline %}
+      <span class="pf-tile__outline-heading">{{ section.heading }}</span>
+      {% for line in section.lines %}
+        <span class="pf-tile__outline-{{ line.kind }}">{{ line.text }}</span>
+      {% endfor %}
+    {% endfor %}
+  </span>
+{% endmacro %}
 {% if tiles %}
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
@@ -80,7 +99,7 @@
         {% for tile in tiles %}
           <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
             <a class="pf-tile pf-tile--banner{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
-              <span class="pf-tile__media">{{ tile.image }}</span>
+              <span class="pf-tile__media">{{ tile.image ?: _self.outline(tile) }}</span>
               <span class="pf-tile__body">
                 <h3 class="pf-tile__title">{{ tile.title }}</h3>
                 {% if tile.note %}
@@ -100,9 +119,7 @@
         {% for tile in tiles %}
           <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
             <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
-              {% if tile.image %}
-                <span class="pf-tile__media">{{ tile.image }}</span>
-              {% endif %}
+              <span class="pf-tile__media">{{ tile.image ?: _self.outline(tile) }}</span>
               <span class="pf-tile__body">
                 <h3 class="pf-tile__title">{{ tile.title }}</h3>
                 {% if tile.label %}
