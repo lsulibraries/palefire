@@ -857,6 +857,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Exhibition covers: the long fade is back, with the image still moved right.** From lg the cover image starts at 28% of the head (`$pf-exhibit-cover-media`), and the side wash is solid to 38% and fades out by 92%. The entry below had the image at 44% under a 46% to 84% fade: the subject showed, but nothing of the image was left behind the title, so the head looked cut in two with a flat block of colour beside the picture. Now the image shows faintly behind the title as before (the text gets about the same wash), and a portrait image's centre sits about 14% further right than it did originally.
+  - Focal Point preview: `wash-desktop.png` is now 1160 × 1200, the image's frame on a 1440 × 900 screen. Set the "Cover preview: desktop" style's Focal Point Scale and Crop to 1160 × 1200.
+  - Why: the shorter fade read as a split, not a fade.
+
 - **Exhibition covers: the image sits right of the text from lg, under a shorter fade.** `.pf-exhibit-cover__media` now starts at 44% of the head's width instead of its left edge (that part was always under the solid wash). The side wash is solid to 46% and fades out by 84% (it was 38% to 94%). Phones are unchanged.
   - A portrait image is shown across its whole width at this size, so its centre used to land in the fade, wherever the focal point was (only the point's height mattered). In the narrower frame, a subject in the middle of the image, such as AVES's cotinga, sits in the clear right side. Checked on Occult, Audubon and the cotinga at 1024 and 1440: the text's right end gets at least as much wash at 1440 as before, and at 1024 the same.
   - Focal Point preview: `images/focal-preview/wash-desktop.png` is now 900 × 1200, only the image's part of the head on a 1440 × 900 screen (`build/focal-preview-washes.js`). Set the "Cover preview: desktop" style's Focal Point Scale and Crop to 900 × 1200 so it lines up.

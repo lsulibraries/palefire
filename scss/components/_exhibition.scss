@@ -879,12 +879,15 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   align-items: flex-end;
 }
 
-// From lg, where the side wash turns from solid page colour to its fade,
-// and where that fade ends (percent of the head's width). At 1440 the
-// text's right end still gets as much wash as it did with the old, longer
-// fade (38% to 94%), and the image's centre is nearly clear of it.
-$pf-exhibit-cover-solid: 46;
-$pf-exhibit-cover-clear: 84;
+// From lg, percent of the head's width: where the image starts, where the
+// side wash turns from solid page colour to its fade, and where that fade
+// ends. The fade is long, so the image shows faintly behind the title and
+// it reads as one picture fading in, not a split; the image starts under
+// the solid part, so its edge never shows. A fade from 46% to 84% over an
+// image from 44% showed the subject better but cut the head in two.
+$pf-exhibit-cover-media: 28;
+$pf-exhibit-cover-solid: 38;
+$pf-exhibit-cover-clear: 92;
 
 // The image fills the head, past its padding, and holds still on screen
 // while the page scrolls, into the footer too: the head's foot rises over
@@ -892,9 +895,9 @@ $pf-exhibit-cover-clear: 84;
 // past the head's foot so the sticky image has room to stay pinned, and
 // clip-path shows it only within the head, stopping .25rem short of the
 // foot, under the wash's solid foot (the head's ::after, below). From lg it
-// starts just inside the solid wash, not at the head's left edge: that part
-// was never seen, and a portrait image, shown across its whole width, now
-// centres in the clear right side instead of under the fade.
+// starts under the solid wash, not at the head's left edge, so a portrait
+// image, shown across its whole width, centres further right, where the
+// fade has mostly cleared.
 .pf-exhibit-cover__media {
   position: absolute;
   inset: 0 0 -100lvh;
@@ -903,7 +906,7 @@ $pf-exhibit-cover-clear: 84;
   clip-path: inset(0 0 calc(100lvh + .25rem));
 
   @include media-breakpoint-up(lg) {
-    left: ($pf-exhibit-cover-solid - 2) * 1%;
+    left: $pf-exhibit-cover-media * 1%;
   }
 }
 
