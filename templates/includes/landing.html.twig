@@ -338,18 +338,14 @@
                   </span>
                 {% endif %}
                 <span class="pf-hero-banner__text">
-                  {# The date in the label beside a picture; set large instead, it is
-                     read here (the large date is hidden from screen readers). #}
+                  {# The label as the tiles' pill, no date on it; the date is
+                     read here (any date set large is hidden from screen
+                     readers). #}
                   <span class="pf-hero-banner__label">
                     {{- 'From the blog'|t -}}
-                    {%- if hero_blog.image %} · <time datetime="{{ hero_blog.datetime }}">{{ hero_blog.date }}</time>
-                    {%- else %}<span class="visually-hidden"> · <time datetime="{{ hero_blog.datetime }}">{{ hero_blog.date }}</time></span>
-                    {%- endif -%}
+                    <span class="visually-hidden"> · <time datetime="{{ hero_blog.datetime }}">{{ hero_blog.date }}</time></span>
                   </span>
                   <span class="pf-hero-banner__title">{{ hero_blog.title }}</span>
-                  {% if hero_blog.category %}
-                    <span class="pf-hero-banner__meta">{{ hero_blog.category }}</span>
-                  {% endif %}
                 </span>
               </a>
             </li>
@@ -406,6 +402,22 @@
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
+        {# Before you visit: a few things first-time visitors ask, under the
+           intro. The paragraph's optional field (quick_guide.visit) replaces
+           the built-in list, each line of which the full guide states. #}
+        <div class="pf-quick-guide__visit">
+          <h3 class="pf-quick-guide__visit-title">{{ 'Before you visit'|t }}</h3>
+          {% if quick_guide.visit %}
+            {{ quick_guide.visit }}
+          {% else %}
+            <ul role="list">
+              <li>{{ 'You don’t need to be affiliated with LSU: sign in or register as a Guest.'|t }}</li>
+              <li>{{ 'Appointments aren’t required, but with one your materials are waiting when you arrive.'|t }}</li>
+              <li>{{ 'Staff bring the materials to you in the Reading Room at Hill.'|t }}</li>
+              <li>{{ 'Scans are 50 cents a page, plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>
+            </ul>
+          {% endif %}
+        </div>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
       </div>
     {% endif %}

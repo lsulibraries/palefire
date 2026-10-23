@@ -857,6 +857,27 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start a step larger; Before you visit; taller banners.** The
+  Quick Start's stop names take the paragraph size (18px wide) at 500,
+  their notes 16px, the option names 20px (letters on their first line,
+  names and stops wrapping evenly; on five columns each name keeps two
+  lines' room so the stops start level). Under its intro, "Before you
+  visit": a short list in hairline rows, built in from what the full guide
+  states (Guest sign-in, appointments, staff bring materials, scan costs),
+  or the Landing hero's optional `field_quick_guide_visit` (Text,
+  formatted, long) instead. The banners are taller on the grids (3:5 on
+  four columns, 1:2 on five), and on five the three high ones now align.
+  Why: the steps read small beside the page's display type, the heading
+  column had room for useful notes, and the banners' words needed more of
+  the scrim.
+- **Banner labels as pills; titles clamped.** The banners' labels are now
+  the Collections tiles' black pill (white small capitals, gold on hover),
+  and the blog and event labels drop their dates ("From the blog", "Next
+  event"; the date, and the event's time, are read to screen readers).
+  The blog post's category and the event's time and place lines are gone.
+  Titles stop at three lines, so they always sit inside the scrim. Why:
+  long titles ran out of the gradient, and the extra lines crowded the
+  first two banners.
 - **Five columns from 80rem; the latest blog post as the first banner.**
   From 80rem of landing (about 1440px) the hero's grid has five columns,
   four below: five banners mirror around the centre column (centre

@@ -368,10 +368,13 @@ function _palefire_hero_blog_banner(ParagraphInterface $paragraph, array &$varia
  * - field_quick_guide_title (Text, plain): the heading and its TOC label.
  * - field_quick_guide_intro (Text, formatted, long): the line under it.
  * - field_quick_guide_link (Link): the full guide's URL; its link text, if
- *   any, replaces "See full guide".
+ *   any, replaces "Full guide".
+ * - field_quick_guide_visit (Text, formatted, long): the "Before you
+ *   visit" notes under the intro, as a list (an editor's bulleted list),
+ *   replacing the built-in ones.
  *
- * Returns ['title', 'intro', 'url', 'link_text'], each optional; intro is a
- * processed_text render array.
+ * Returns ['title', 'intro', 'visit', 'url', 'link_text'], each optional;
+ * intro and visit are processed_text render arrays.
  */
 function _palefire_quick_guide(ParagraphInterface $paragraph, array &$variables): array {
   $field = static fn (string $name): ?FieldItemListInterface => $paragraph->hasField($name) && !$paragraph->get($name)->isEmpty() ? $paragraph->get($name) : NULL;
@@ -384,6 +387,13 @@ function _palefire_quick_guide(ParagraphInterface $paragraph, array &$variables)
       '#type' => 'processed_text',
       '#text' => $intro->value,
       '#format' => $intro->format,
+    ];
+  }
+  if ($visit = $field('field_quick_guide_visit')) {
+    $quick['visit'] = [
+      '#type' => 'processed_text',
+      '#text' => $visit->value,
+      '#format' => $visit->format,
     ];
   }
   if ($link = $field('field_quick_guide_link')?->first()) {

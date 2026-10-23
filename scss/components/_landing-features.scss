@@ -817,17 +817,41 @@
   padding: 1.25rem;
 }
 
+// The label is the Collections tiles' pill (.pf-tile__label,
+// _tile-showcase.scss): white small capitals on black, gold on hover.
 .pf-hero-banner__label {
-  @extend %pf-landing-label;
-  color: rgb(255 255 255 / .88);
+  align-self: flex-start;
+  padding: .125rem .625rem;
+  border-radius: 1.25rem;
+  font-size: .6875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: .075rem;
+  text-transform: uppercase;
+  color: $pf-white;
+  background: $pf-black;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
 }
 
+.pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__label {
+  color: $pf-black;
+  background: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  transition-duration: $pf-hover-in;
+}
+
+// Three lines at most, so the title stays inside the scrim at the
+// banner's foot; the link's name is the whole title all the same.
 .pf-hero-banner__title {
+  display: -webkit-box;
+  overflow: hidden;
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -.01em;
   line-height: 1.15;
   text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
 
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
@@ -870,6 +894,11 @@
     overflow: visible;
   }
 
+  // Taller than on phones (2:3), for the words and more of the picture.
+  .pf-hero-banner__link {
+    aspect-ratio: 3 / 5;
+  }
+
   // Uneven, not a staircase: high, low, nearly high, lowest, as the
   // Collections tiles' stagger was, scaled to these banners.
   .pf-hero-banner:nth-child(2) {
@@ -887,8 +916,7 @@
 
 // The first banner as the next event (js/hero-event.js): its picture cropped
 // from the top (event pictures are often flyers, their headline there), or
-// its date set large at the top of the banner's dark ground; the time and
-// place under the title.
+// its date set large at the top of the banner's dark ground.
 .pf-hero-banner__media--event img {
   object-position: 50% 0;
 }
@@ -918,13 +946,6 @@
 .pf-hero-banner__month {
   @extend %pf-landing-label;
   color: rgb(255 255 255 / .88);
-}
-
-.pf-hero-banner__meta {
-  font-size: .875rem;
-  line-height: 1.4;
-  color: rgb(255 255 255 / .88);
-  font-variant-numeric: tabular-nums;
 }
 
 @media (forced-colors: active) {
@@ -1256,6 +1277,12 @@
     margin-bottom: 0;
   }
 
+  .pf-quick-guide__visit {
+    grid-column: 1;
+    grid-row: 4;
+    margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  }
+
   // The intro spans 3 of the column's 4 sixteenths, leaving one empty and
   // a gutter before column A, so it doesn't crowd A's marks. Written for a
   // short intro (a sentence or two).
@@ -1297,8 +1324,10 @@
     column-gap: var(--pf-grid-gutter);
   }
 
+  // The letter on the first line of its option's name (baselines), so a
+  // name that wraps hangs under it rather than pulling it to its middle.
   .pf-quick-guide .pf-paths__name {
-    align-items: center;
+    align-items: baseline;
   }
 
   .pf-quick-guide .pf-paths__letter {
@@ -1887,17 +1916,18 @@ html[data-pf-hero] {
   }
 }
 
-// The scale on these pages: 11px labels, 14px notes, 16px values and
-// names, one paragraph size (--pf-hero-text), the h2, the title. The
-// Quick Start's letters take the h2 size; its stop labels and option
-// names the values' 16px at 500.
+// The scale on these pages: 11px labels, 14px notes, 16px values, one
+// paragraph size (--pf-hero-text, 18px wide), 20px option names, the h2,
+// the title. The Quick Start is read, not glanced at, so a step up from
+// the rest: its option names 20px, its stop names the paragraph size at
+// 500, their notes 16px; its letters take the h2 size.
 html[data-pf-hero] .pf-landing--cover {
   :is(.pf-quick-guide__intro, .pf-map__summary) {
     font-size: var(--pf-hero-text);
   }
 
   .pf-quick-guide .pf-paths__name {
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 
   .pf-quick-guide .pf-paths__letter {
@@ -1905,9 +1935,51 @@ html[data-pf-hero] .pf-landing--cover {
   }
 
   .pf-quick-guide :is(.pf-paths__label, .pf-paths__peek) {
-    font-size: 1rem;
+    font-size: var(--pf-hero-text);
     font-weight: 500;
   }
+
+  // Wrapped names and stops break evenly, never leaving a word alone.
+  .pf-quick-guide :is(.pf-paths__name-text, .pf-paths__label, .pf-paths__peek) {
+    text-wrap: balance;
+  }
+
+  .pf-quick-guide .pf-paths__note {
+    font-size: 1rem;
+  }
+}
+
+// Before you visit (includes/landing.html.twig): under the intro, a small
+// heading in the labels' voice, then the notes as rows between hairlines,
+// in the paragraphs' tone, at 16px. An editor's list (the optional field)
+// takes the same look.
+.pf-quick-guide__visit {
+  margin-bottom: clamp(1.5rem, 3vw, 2rem); // the timetable sets its own top (above)
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: .625rem 0;
+    border-top: 1px solid #{$pf-hairline};
+    font-size: 1rem;
+    line-height: 1.45;
+    color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
+    text-wrap: pretty;
+
+    &:last-child {
+      border-bottom: 1px solid #{$pf-hairline};
+    }
+  }
+}
+
+html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-title {
+  @extend %pf-landing-label;
+  margin: 0 0 .625rem;
+  color: var(--pf-toc-color);
 }
 
 html[data-pf-hero] .pf-main .pf-sections .pf-section__title,
@@ -2064,9 +2136,9 @@ html[data-pf-hero] .pf-landing--hero {
 // --- Five columns, from 80rem -------------------------------------------------
 // From 80rem of landing (about 1440px of window) the hero's grid has five
 // equal columns (the same gutter), four below. On five:
-// - the banners, five of them, mirror around the centre column: the centre
-//   highest, the outer pair a step down, the second and fourth lowest (the
-//   high ones still come down into place, the low ones up);
+// - the banners, five of them, mirror around the centre column: the first,
+//   third and fifth high, the second and fourth lower, and taller (1:2;
+//   the high ones still come down into place, the low ones up);
 // - the Quick Start and On view headings span two columns, their content
 //   the other three (40/60, near thirds); the intro and the map's text two;
 // - the Visit panel: Instagram, then hours over two, then the mini map
@@ -2084,18 +2156,18 @@ html[data-pf-hero] .pf-landing--hero {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .pf-hero-banner:nth-child(1),
-  .pf-hero-banner:nth-child(5) {
-    margin-top: 1.25rem;
-  }
-
-  .pf-hero-banner:nth-child(2),
-  .pf-hero-banner:nth-child(4) {
-    margin-top: 3.5rem;
-  }
-
-  .pf-hero-banner:nth-child(3) {
+  .pf-hero-banner:nth-child(odd) {
     margin-top: 0;
+  }
+
+  .pf-hero-banner:nth-child(even) {
+    margin-top: 2.25rem;
+  }
+
+  // Taller on five columns, so the words have room in the scrim and more
+  // of each picture shows.
+  .pf-hero-banner__link {
+    aspect-ratio: 1 / 2;
   }
 
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro,
@@ -2108,7 +2180,8 @@ html[data-pf-hero] .pf-landing--hero {
   }
 
   .pf-quick-guide__title,
-  .pf-quick-guide__intro {
+  .pf-quick-guide__intro,
+  .pf-quick-guide__visit {
     grid-column: 1 / span 2;
   }
 
@@ -2122,6 +2195,12 @@ html[data-pf-hero] .pf-landing--hero {
 
   .pf-quick-guide .pf-paths__line {
     --pf-paths-mark: 2.75rem;
+  }
+
+  // Option names may wrap in these narrower columns: each keeps two lines'
+  // room, so the three lists of stops start level.
+  .pf-landing--cover .pf-quick-guide .pf-paths__name-text {
+    min-height: calc(2 * 1.3em);
   }
 
   .pf-landing--cover > .pf-landing__onview {

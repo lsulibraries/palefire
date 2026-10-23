@@ -151,8 +151,9 @@
 
   // The first banner as the next event: the event's picture (cropped from
   // the top: they are often flyers), else its date set large on the
-  // banner's dark ground; "Next event · Tue, Oct 27" over the title, the
-  // time and place under it. The whole banner is the event's link.
+  // banner's dark ground; the "Next event" pill over the title (its day
+  // and time read to screen readers only). The whole banner is the
+  // event's link.
   function renderBanner(box, { event, start }) {
     const link = box.querySelector('.pf-hero-banner__link');
     if (!link) {
@@ -180,17 +181,11 @@
       );
     }
     const text = el('span', 'pf-hero-banner__text');
-    text.append(el('span', 'pf-hero-banner__label', Drupal.t('Next event') + ' · ' + dayLabel(start)));
-    text.append(el('span', 'pf-hero-banner__title', event.title));
-    const place = event.location && !/^\d+$/.test(event.location) ? event.location : (event.row || (event.isOnline ? Drupal.t('Online') : ''));
-    const time = timeOf(event, start);
-    time.textContent = [event.startLabel, event.endLabel].filter(Boolean).join('–');
-    const meta = el('span', 'pf-hero-banner__meta');
-    meta.append(time);
-    if (place) {
-      meta.append(' · ' + place);
-    }
-    text.append(meta);
+    const label = el('span', 'pf-hero-banner__label', Drupal.t('Next event'));
+    const when = el('span', 'visually-hidden', ', ');
+    when.append(timeOf(event, start));
+    label.append(when);
+    text.append(label, el('span', 'pf-hero-banner__title', event.title));
     link.replaceChildren(media, text);
     box.classList.add('is-event');
   }
