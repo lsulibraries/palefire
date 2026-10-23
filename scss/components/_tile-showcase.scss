@@ -167,11 +167,11 @@ $pf-tile-break-two: 32rem;
 // Outline ------------------------------------------------------------------
 // A card with no cover (most guides) draws its page instead, as a desktop
 // shows it, as if photographed lying on a desk: tipped away (rotateX),
-// turned a little (rotateZ), zoomed out and blurred. The "On this page"
-// rail on the left (mono links, the gold bar on the first), then the
-// title, intro and first sections in a wide column that the card's right
-// edge still cuts off. The tilt keeps the blurred title from reading as a
-// copy of the card's own. In the reading swatch's colours (the default
+// turned a little (rotateZ), at 85% and blurred, panned right so the "On
+// this page" rail (mono links, the gold bar on the first) runs half off
+// the left edge and the card's right edge cuts off the title, intro and
+// first sections. The tilt and the crop keep the blurred title from
+// reading as a copy of the card's own. In the reading swatch's colours (the default
 // section's on pages without one); the sheet is the page's colour, so the
 // page's turned edges don't show.
 // Sized to the card (cqi), so the List's thumbnail is the same page in
@@ -198,7 +198,7 @@ $pf-tile-break-two: 32rem;
   opacity: .8;
   filter: blur(max(.6px, .3em));
   transform-origin: 0 0;
-  transform: perspective(90em) translate(1.5em, 6.5em) rotateX(38deg) rotateZ(-14deg) scale(.7);
+  transform: perspective(90em) translate(-6em, 5em) rotateX(38deg) rotateZ(-14deg) scale(.85);
   user-select: none;
   pointer-events: none;
 }

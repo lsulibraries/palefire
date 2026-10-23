@@ -860,6 +860,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Tile showcase: the no-cover outline is closer and panned right.** The angled page is at 85% (was 70%) and shifted so the "On this page" rail runs half off the card's left edge, and the title and column are cut off at the right.
+  - Why: at 70% the page filled only the top of the card, and the full title still read as a repeat; closer in, the crop keeps a hint of the rail and only part of the title.
+
 - **Tile showcase: the no-cover outline is photographed on a desk, title back.** The blurred desktop page now sits tipped away and turned 14° (`rotateX` / `rotateZ` in perspective), zoomed out to 70% so the whole rail and column show with words still cut off at the right edge, under one flat blur. The page's title is back at the top of its column.
   - Why: at an angle the blurred title reads as part of a photographed page rather than a copy of the card's title, and the angle gives the cards depth. One flat blur instead of a depth-of-field stack keeps it to a single filter per card.
 
