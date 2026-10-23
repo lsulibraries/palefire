@@ -889,6 +889,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero links a gutter over the search; TOC toggle unframed; TOC icon squared.**
+  - Hero: "Search Special Collections" is for screen readers only (`visually-hidden` on the hero's label heading; it still names the search form), and the title block's bottom margin is the grid gutter, so the three links sit one gutter over the field, as the links and banners are spaced (32px at 1600, was about 51px).
+  - TOC hide button (`_modular.scss`): no frame while the TOC is open (a box there read as misplaced beside the title and the bar), a faint fill on hover. The closed glass button on other pages keeps its frame.
+  - TOC icon (`page.html.twig`): the rail is now the lines' 1.2 thick and runs exactly from the top line's top to the bottom line's foot, the mark an open 11.2 square centred in the 16 box.
+  - Verified in Edge with local CSS and the markup injected: the gap at 1600 with the TOC open; the icon at 4x.
+
 - **Hero: three links in place of the week's hours, Search a banner wide; footer: directions; a simpler TOC icon.**
   - Hero (`includes/landing.html.twig`, `_landing-features.scss`): University Archives (`/v2/special/archives`), Oral History (`/v2/special/oralhistory`) and Log in (Aeon, new tab, outlined in the highlight and filled with it on hover) replace the week's timetable. In the Quick Start buttons' voice (hairline frame, mono label, arrow at the end) on the search field's glass. From 80rem each is exactly a hero banner wide, in columns 3-5 under banners 3-5, their foot on the intro's; narrower, a row of three under the intro; one to a line on phones. "Sign in to request materials" is gone from the intro (Log in replaces it), with its styles.
   - Search button: one banner wide wherever the banners are five to a row (44rem and up), both edges on banner 5's; the word at its start, the arrow at its end.

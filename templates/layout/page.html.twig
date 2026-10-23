@@ -199,9 +199,10 @@
                       aria-label="{{ 'Hide table of contents'|t }}">
                 {# Open: chevron (hide). Closed: list (show). CSS picks one. The list
                    icon, here and on the phone button: the TOC's rail as a faint bar
-                   (Font Awesome duotone's 40% second tone), its entries as lines. #}
+                   (Font Awesome duotone's 40% second tone) from the top line's top to the
+                   bottom line's foot, its entries as lines: one 11.2 square, centred. #}
                 <svg class="pf-modular__toc-collapse-icon pf-modular__toc-collapse-icon--hide" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg>
-                <svg class="pf-modular__toc-collapse-icon pf-modular__toc-collapse-icon--show" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path opacity=".4" d="M1.5 1.5h1.5v13H1.5z"/><path d="M6 2.4h9v1.2H6zM9 7.4h6v1.2H9zM9 12.4h6v1.2H9z"/></svg>
+                <svg class="pf-modular__toc-collapse-icon pf-modular__toc-collapse-icon--show" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path opacity=".4" d="M2.4 2.4h1.2v11.2H2.4z"/><path d="M4.6 2.4h9v1.2h-9zM7.6 7.4h6v1.2h-6zM7.6 12.4h6v1.2h-6z"/></svg>
               </button>
               <div class="offcanvas-header">
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#pf-modular-sidebar"
@@ -281,7 +282,7 @@
             <button class="pf-modular__toc-toggle btn btn-outline-secondary d-lg-none" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar"
                     title="{{ 'Table of contents'|t }}">
-              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path opacity=".4" d="M1.5 1.5h1.5v13H1.5z"/><path d="M6 2.4h9v1.2H6zM9 7.4h6v1.2H9zM9 12.4h6v1.2H9z"/></svg>
+              <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><path opacity=".4" d="M2.4 2.4h1.2v11.2H2.4z"/><path d="M4.6 2.4h9v1.2h-9zM7.6 7.4h6v1.2h-6zM7.6 12.4h6v1.2h-6z"/></svg>
               <span class="visually-hidden">{{ 'Table of contents'|t }}</span>
             </button>
           {% endif %}

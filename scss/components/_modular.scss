@@ -554,7 +554,8 @@ html.pf-snap-proximity .pf-section--snap {
 
   // Open: top right of the sidebar, centred on the TOC title's first line
   // (2rem + half of its 1.125rem line - half of 2.25rem), which is also
-  // the breadcrumb's line.
+  // the breadcrumb's line. No frame (a box there read as misplaced against
+  // the title and the bar): the chevron alone, a faint fill on hover.
   .pf-modular__toc-collapse {
     position: absolute;
     top: calc(1.4375rem + var(--pf-toc-title-nudge, 0px)); // nudge: js/modular-toc.js
@@ -565,7 +566,7 @@ html.pf-snap-proximity .pf-section--snap {
     width: 2.25rem;
     height: 2.25rem;
     padding: 0;
-    border: 1px solid var(--pf-toc-rail);
+    border: 1px solid transparent;
     border-radius: 0;
     color: var(--pf-toc-color);
     background-color: transparent;
@@ -579,6 +580,7 @@ html.pf-snap-proximity .pf-section--snap {
     &:hover,
     &:focus-visible {
       color: var(--pf-toc-active);
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
       transition:
         color $pf-hover-in ease,
         background-color .3s ease,
@@ -607,6 +609,7 @@ html.pf-snap-proximity .pf-section--snap {
   // inside at once and slides in with the sidebar.
   html.pf-toc-collapsed .pf-modular__toc-collapse {
     inset-inline-end: -3.25rem;
+    border-color: var(--pf-toc-rail);
     background-color: var(--pf-sidebar-bg);
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));

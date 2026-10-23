@@ -265,7 +265,9 @@
     {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
-      <h3 class="pf-landing__heading" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
+      {# Hero: the label for screen readers only (the field and its placeholder
+         say it on screen), so the links above sit close over the field. #}
+      <h3 class="pf-landing__heading{{ hero ? ' visually-hidden' }}" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
         <label class="pf-landing__label" for="{{ input_id }}">{{ search_label }}</label>
       </h3>
       <div class="pf-landing__field">

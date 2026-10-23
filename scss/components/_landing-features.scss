@@ -469,9 +469,12 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // rule above it, across the column (both edges on the grid's, like the
 // index rules under it).
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+  // The search's label is for screen readers only here, so the hero's
+  // links sit a gutter over the field, as the links and banners are spaced.
   > .pf-landing__top {
     display: block;
     max-width: none;
+    margin-bottom: var(--pf-grid-gutter);
 
     > .pf-landing__title {
       margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
