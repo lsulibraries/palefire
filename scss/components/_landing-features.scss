@@ -861,9 +861,14 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // a relative shift, not a margin, so a dropped banner never makes its row
 // taller and every gap between rows is the gutter, as between columns.
 // The grid keeps the drop (--pf-banner-drop) as room under its last row.
+// The drop and the parallax's drift (--pf-banner-travel) are set on the
+// lead, so the Quick Start under the row can allow for them too.
+.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+  --pf-banner-drop: 2.5rem;
+}
+
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
   --pf-banner-rise: 0px; // the row's lift over the cover's foot
-  --pf-banner-drop: 2.5rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
@@ -1078,10 +1083,15 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// No rise here (only on the full-screen cover, from 64rem): the row keeps
+// the search's own margin under it (3.2rem), more than a banner's drop,
+// so the parallax's cross never carries a banner up to the search.
 @container pf-cover (min-width: 44rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
-    --pf-banner-rise: 3rem;
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
     --pf-banner-drop: 2.25rem;
+  }
+
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
@@ -1117,7 +1127,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 
 // The drift only where the gap under the search has room for it.
 @container pf-cover (min-width: 80rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
     --pf-banner-travel: 4.5rem;
   }
 }
@@ -1153,6 +1163,14 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
       animation: pf-banner-drift linear both, pf-banner-cross linear both;
       animation-timeline: scroll(root), --pf-banner-row;
       animation-range: 0 70vh, contain 0% contain 100%;
+    }
+
+    // By the time the row is level it has risen by its drift and its drop
+    // above where it was laid out: the Quick Start takes those back from
+    // its gap, so the gap seen under the level row is the page's rhythm
+    // (--pf-hero-gap, as above each index rule), not that plus the lift.
+    html:not(.pf-a11y-motion) .pf-landing--cover > .pf-landing__lead--hero > .pf-quick-guide {
+      padding-top: max(0px, var(--pf-hero-gap) - var(--pf-banner-drop) - var(--pf-banner-travel, 0px));
     }
   }
 }
