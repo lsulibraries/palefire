@@ -143,6 +143,36 @@
   padding-inline-end: calc(var(--pf-bar-icon-end) + 2.25rem + var(--pf-bar-icon-edge) - var(--pf-bar-edge));
 }
 
+// On the hero's cover the bar is a caption strip at the top of the page:
+// no glass, its breadcrumb and buttons straight on the video (whose top
+// wash darkens under them), each word with a halo of the page colour, so
+// the header is the page's one bar. Once the page scrolls and the bar sticks
+// under the header (js/palefire.js marks <html> .pf-bar-stuck), it turns to
+// glass, as before, to stay readable over whatever passes under it. Reduce
+// transparency (and its kin) keeps the glass throughout.
+.pf-landing--cover > .pf-landing__bar {
+  transition: background-color .3s ease, -webkit-backdrop-filter .3s ease, backdrop-filter .3s ease;
+}
+
+html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
+  background-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  text-shadow: 0 0 .5rem var(--pf-g-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-g-bg, var(--bs-body-bg));
+}
+
+@include pf-solid-chrome {
+  .pf-landing--cover > .pf-landing__bar {
+    background-color: var(--pf-sidebar-bg) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing--cover > .pf-landing__bar {
+    transition: none;
+  }
+}
+
 // The bar's buttons (Sign in here, the video button docked over the bar,
 // and the floating TOC button, _modular.scss) have no outline of their
 // own: the bar's glass is their ground. Hover and focus fill them faintly.
@@ -395,9 +425,12 @@
         color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 42%,
         color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 58%,
         transparent 72%),
+      // Under the bar's caption strip (clear at the top of the page): firm
+      // for its first 7%, so its words keep 4.5:1 on any frame and swatch.
       linear-gradient(to bottom,
-        color-mix(in srgb, var(--pf-cover-bg) 65%, transparent) 0%,
-        transparent 18%),
+        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 0%,
+        color-mix(in srgb, var(--pf-cover-bg) 80%, transparent) 7%,
+        transparent 22%),
       linear-gradient(to right,
         color-mix(in srgb, var(--pf-cover-bg) 94%, transparent) 0%,
         color-mix(in srgb, var(--pf-cover-bg) 84%, transparent) 26%,
@@ -650,6 +683,20 @@
   &.is-failed > .pf-landing__hours-place::before {
     content: none;
   }
+}
+
+// Over the cover's video the muted tone fell to 3.3:1 where the line runs
+// onto the brighter frame (Twilight, measured against the pixels behind
+// it): there the whole line takes the text's full colour, with a soft halo
+// of the page colour, so every word keeps 4.5:1 or more on any frame. The
+// status still leads by weight (bold), the rest by order.
+.pf-landing--cover .pf-landing__hours {
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
+}
+
+.pf-landing--cover :is(.pf-landing__hours-today, .pf-landing__hours-place) {
+  font-weight: 500;
 }
 
 .pf-landing__hours-dot {

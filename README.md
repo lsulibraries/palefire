@@ -857,6 +857,22 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **The hero's bar as a clear caption strip.** On the hero cover the
+  sub-header bar has no glass at the top of the page: the breadcrumb,
+  Sign in and pause sit straight on the video (a firmer top wash under
+  them, a halo of the page colour round each word), so the header is the
+  page's one bar. Once the page scrolls and the bar sticks, it turns to
+  glass (js/palefire.js marks `<html>` `.pf-bar-stuck`; a .3s fade).
+  Reduce transparency keeps the glass. Measured against the pixels behind
+  each word: 7:1 or more on Twilight, Cream, Sepia and Sage (Sign in was
+  3.0:1 on Sepia before the firmer wash). Why: two near-equal glass bars
+  read as two headers.
+- **Hours line at AA over the video.** On the cover the hours line takes
+  the text's full colour (today's hours and the building at 500) with a
+  soft halo of the page colour. Measured against the pixels behind each
+  word, the muted "Hill Memorial Library" fell to 3.3:1 on Twilight; now
+  every word is 4.66:1 or more on Twilight, Cream and Sepia. Why: WCAG 2.2
+  AA, 4.5:1 for small text.
 - **Quick Start in even rows; Before you visit indented.** In the
   timetable every stop is at least two lines of name and a note tall, its
   diamond and words centred in it, with 1.5rem between, so the stops of A,

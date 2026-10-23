@@ -54,6 +54,30 @@
   };
 
   /**
+   * The hero cover's sub-header bar is a clear caption strip at the top of
+   * the page and turns to glass once the page scrolls and it sticks under
+   * the header (_landing-features.scss): <html> gets .pf-bar-stuck while the
+   * page is scrolled. One passive listener, read once a frame.
+   */
+  Drupal.behaviors.palefireBarStuck = {
+    attach() {
+      once('pf-bar-stuck', 'html').forEach(() => {
+        let frame = 0;
+        const update = () => {
+          frame = 0;
+          root.classList.toggle('pf-bar-stuck', window.scrollY > 1);
+        };
+        window.addEventListener('scroll', () => {
+          if (!frame) {
+            frame = window.requestAnimationFrame(update);
+          }
+        }, { passive: true });
+        update();
+      });
+    },
+  };
+
+  /**
    * Shrinks the header once the page is scrolled past .pf-header-sentinel
    * (an IntersectionObserver, so there is no scroll listener). On pages with
    * the sticky TOC sidebar, palefireCompactAfter makes the sentinel longer.
