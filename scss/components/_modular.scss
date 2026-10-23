@@ -458,6 +458,12 @@ html.pf-snap-proximity .pf-section--snap {
 
 // "On this page" button (below lg only). Fixed, so it floats over the
 // sections instead of taking up a band of space above the first one.
+// The list icon's marker (page.html.twig): the bright text colour, as the
+// TOC's own active link, while the bars take the button's colour.
+.pf-toc-icon__mark {
+  fill: var(--pf-toc-active, currentColor);
+}
+
 // z-index sits above the content and below the offcanvas (1045).
 .pf-modular__toc-toggle {
   position: fixed;

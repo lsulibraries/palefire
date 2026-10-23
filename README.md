@@ -889,6 +889,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **TOC icon: the rail and its marker.**
+  - `page.html.twig`, `_modular.scss`: the list icon (TOC toggle and phone button) redrawn as the sidebar looks: the rail's top third in the bright text colour (`--pf-toc-active`, as the TOC's active link; `.pf-toc-icon__mark`), the rest at 35%, then three entries left-aligned with ragged ends, all at one 1.5px weight. Why: the previous five-part 1px drawing looked thin and busy at 16px. On hover the bars brighten to match the marker.
+
 - **Hero spacing restored; search shadow; TOC icon redrawn.**
   - `_landing-features.scss`: the hero's top block (a grid from 40rem since the links moved beside the intro) took the older `xl` rule's 2rem row gap, which stacked 32px more under the title and under the hours. The row gap is now 0, so their own margins space them as before. The hero's search (field and button) has the banners' soft shadow; focus keeps its gold ring over it.
   - `page.html.twig`: the list icon (TOC toggle and phone button) on whole pixels: a faint rail, a heading line, then three entries indented and left-aligned with ragged ends, four rows 2px apart, 1px lines as the header's icons, the drawing centred in its box. Why: the old icon's 1.2-unit bars blurred at 16px, its rows were uneven and its short bars were right-aligned, unlike a TOC.
