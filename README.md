@@ -857,6 +857,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start option names on two lines alike.** Each option's name is
+  now two parts in includes/guide-request-paths.html.twig ("See it" / "in
+  person", "Get a" / "digital copy", "Have an" / "expert help"); the
+  hero's timetable breaks between them, so A, B and C all read as two
+  lines on one baseline, where A alone sat on one. Elsewhere (phones, the
+  full guide) the name stays one line.
 - **Sign in as the intro's last sentence; TOC icon long-short-short.**
   The intro arrives in its field's wrapper (a clearfix div), which kept
   "Sign in to request materials" on a line of its own; the wrapper, its

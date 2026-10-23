@@ -1552,6 +1552,13 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     text-align: center;
   }
 
+  // Each option's name on two lines, broken between its two parts
+  // (includes/guide-request-paths.html.twig), so A, B and C read alike
+  // whichever would wrap on its own.
+  .pf-quick-guide .pf-paths__name-rest {
+    display: block;
+  }
+
   .pf-quick-guide .pf-paths__icon {
     justify-self: center;
   }
