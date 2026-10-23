@@ -1324,10 +1324,11 @@
     column-gap: var(--pf-grid-gutter);
   }
 
-  // The letter on the first line of its option's name (baselines), so a
-  // name that wraps hangs under it rather than pulling it to its middle.
+  // Names sit on a shared bottom line: each letter on its name's last line
+  // (last baselines), a one-line name at the foot of the room a wrapped one
+  // takes (on five columns, below), so A, B and C read as one row.
   .pf-quick-guide .pf-paths__name {
-    align-items: baseline;
+    align-items: last baseline;
   }
 
   .pf-quick-guide .pf-paths__letter {
@@ -1341,6 +1342,29 @@
 
   .pf-quick-guide .pf-paths__stop:not(:last-child)::before {
     inset-inline-start: calc(var(--pf-paths-mark) / 2);
+  }
+
+  // Even rows: every stop is at least two lines of name and one of note
+  // tall, its mark and words centred in it, with more room between the
+  // marks, so the stops of A, B and C line up across the columns even when
+  // a name wraps. The line runs from one mark's centre to the next.
+  .pf-quick-guide .pf-paths {
+    --pf-paths-gap: 1.5rem;
+  }
+
+  .pf-quick-guide .pf-paths__stops {
+    gap: var(--pf-paths-gap);
+  }
+
+  .pf-quick-guide .pf-paths__stop {
+    align-content: center;
+    min-height: calc(2.6 * var(--pf-hero-text, 1rem) + 1.4rem + .25rem);
+
+    &:not(:last-child)::before {
+      top: 50%;
+      bottom: auto;
+      height: calc(100% + var(--pf-paths-gap));
+    }
   }
 }
 
@@ -1950,9 +1974,11 @@ html[data-pf-hero] .pf-landing--cover {
 }
 
 // Before you visit (includes/landing.html.twig): under the intro, a small
-// heading in the labels' voice, then the notes as rows between hairlines,
-// in the paragraphs' tone, at 16px. An editor's list (the optional field)
-// takes the same look.
+// heading in the labels' voice on a hairline, then the notes indented by
+// 1.25rem on both sides (so the block stays even), no rules between them,
+// each after a small diamond in the highlight (the Quick Start's marks in
+// miniature), in the paragraphs' tone, at 16px. An editor's list (the
+// optional field) takes the same look.
 .pf-quick-guide__visit {
   margin-bottom: clamp(1.5rem, 3vw, 2rem); // the timetable sets its own top (above)
 
@@ -1963,15 +1989,22 @@ html[data-pf-hero] .pf-landing--cover {
   }
 
   li {
-    padding: .625rem 0;
-    border-top: 1px solid #{$pf-hairline};
+    position: relative;
+    padding: .375rem 1.25rem;
     font-size: 1rem;
     line-height: 1.45;
     color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
     text-wrap: pretty;
 
-    &:last-child {
-      border-bottom: 1px solid #{$pf-hairline};
+    &::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: .125rem;
+      top: calc(.375rem + .725em - .1875rem);
+      width: .375rem;
+      height: .375rem;
+      background: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+      transform: rotate(45deg);
     }
   }
 }
@@ -1979,6 +2012,8 @@ html[data-pf-hero] .pf-landing--cover {
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-title {
   @extend %pf-landing-label;
   margin: 0 0 .625rem;
+  padding-bottom: .625rem;
+  border-bottom: 1px solid #{$pf-hairline};
   color: var(--pf-toc-color);
 }
 
@@ -2198,8 +2233,12 @@ html[data-pf-hero] .pf-landing--hero {
   }
 
   // Option names may wrap in these narrower columns: each keeps two lines'
-  // room, so the three lists of stops start level.
+  // room, its words at the foot, so the three names share a bottom line
+  // and the lists of stops start level.
   .pf-landing--cover .pf-quick-guide .pf-paths__name-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     min-height: calc(2 * 1.3em);
   }
 

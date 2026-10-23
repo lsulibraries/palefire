@@ -857,6 +857,16 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Quick Start in even rows; Before you visit indented.** In the
+  timetable every stop is at least two lines of name and a note tall, its
+  diamond and words centred in it, with 1.5rem between, so the stops of A,
+  B and C line up across the columns even where a name wraps; the line
+  runs mark to mark. The option names share a bottom line, each letter on
+  its name's last line. Before you visit keeps one hairline, under its
+  heading, and indents its items 1.25rem on both sides with no rules
+  between them, each after a small diamond in the highlight colour. Why:
+  wrapped names pushed the stops out of line and the A/B/C headers read
+  broken; the ruled list was busier than it needed to be.
 - **Quick Start a step larger; Before you visit; taller banners.** The
   Quick Start's stop names take the paragraph size (18px wide) at 500,
   their notes 16px, the option names 20px (letters on their first line,
