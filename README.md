@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero title and intro as a spread.** On five columns the title and
+  hours keep to columns 1-2 and the intro (with Sign in) moves to columns
+  4-5, its foot on the title's, so the type balances across the video
+  above the search. A deeper patch of the page colour lies under the intro
+  (firm under its words, fading over 4.5-6rem past them) with the hours
+  line's halo, so it keeps 8.4:1 or more over the bright side of the frame
+  on Twilight, Cream, Sepia and Sage (1.5-2.5:1 without it). Narrower
+  layouts stack as before. Why: columns 3-5 above the search were empty
+  video, and the page leaned left.
 - **Hero: a smaller two-line title, banners closer to the search.** On
   the full-screen cover the title, now on two lines, steps down to about
   72px at 1440 (76px at most; it was up to 96px). The room under the
