@@ -284,6 +284,32 @@ $pf-tile-break-two: 32rem;
   line-clamp: 3;
 }
 
+// The scrim over the outline: lighter than over a picture, since the
+// sheet's colours are known. 55% black under the title keeps white text
+// at 4.5:1 on the lightest of them (52% needed on a plain light page,
+// #f8f9fa, with the blurred text counted at full strength), then eases
+// out by 7.5rem above that. The floor is as tall as the title can be: a
+// banner's three clamped lines and padding (6.5rem); the stagger and grid
+// titles aren't clamped, so 9rem there.
+.pf-tile--no-image {
+  --pf-scrim-floor: 9rem;
+  --pf-tile-scrim: linear-gradient(
+    to top,
+    rgb(0 0 0 / .55) 0,
+    rgb(0 0 0 / .55) var(--pf-scrim-floor),
+    rgb(0 0 0 / .5) calc(var(--pf-scrim-floor) + 1.5rem),
+    rgb(0 0 0 / .38) calc(var(--pf-scrim-floor) + 3rem),
+    rgb(0 0 0 / .24) calc(var(--pf-scrim-floor) + 4.5rem),
+    rgb(0 0 0 / .12) calc(var(--pf-scrim-floor) + 6rem),
+    rgb(0 0 0 / .04) calc(var(--pf-scrim-floor) + 7.5rem),
+    rgb(0 0 0 / 0) calc(var(--pf-scrim-floor) + 9.5rem)
+  );
+}
+
+.pf-tile--banner.pf-tile--no-image {
+  --pf-scrim-floor: 6.5rem;
+}
+
 // Hover: the page scrolls a little under the glass, with the pictures'
 // zoom. The rail stays put, as the real one is sticky.
 @media (prefers-reduced-motion: no-preference) {

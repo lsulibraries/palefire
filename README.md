@@ -860,6 +860,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Tile showcase: a lighter scrim over no-cover tiles.** Cards that draw their page (`.pf-tile--no-image`) get their own `--pf-tile-scrim`: 55% black up to the title's full height (`--pf-scrim-floor`: 6.5rem on masonry banners, whose titles clamp at three lines; 9rem on stagger and grid, whose titles don't), then easing out over the next 9.5rem. Photo tiles keep the old scrim.
+  - Why: the outline's colours are known, so it needs less than a photo. White on the lightest of them (#f8f9fa, the plain light page, with the blurred text counted at full strength) needs 52% black for 4.5:1; light swatches need 47–50%, dark ones 35–44%. 55% leaves a margin.
+
 - **Tile showcase: the no-cover outline is closer and panned right.** The angled page is at 85% (was 70%) and shifted so the "On this page" rail runs half off the card's left edge, and the title and column are cut off at the right.
   - Why: at 70% the page filled only the top of the card, and the full title still read as a repeat; closer in, the crop keeps a hint of the rail and only part of the title.
 
