@@ -1,6 +1,6 @@
 /**
  * Draws the exhibition cover's wash as PNGs for the Focal Point preview:
- * images/focal-preview/wash-desktop.png (1600 x 1000) and wash-phone.png
+ * images/focal-preview/wash-desktop.png (900 x 1200) and wash-phone.png
  * (900 x 1600). In the "Cover preview: desktop" and "Cover preview: phone"
  * image styles, an Image Effects "Watermark" lays them over the focal point
  * crop, so editors see where the title and text will cover the image.
@@ -9,8 +9,10 @@
  * _exhibition.scss): pf-eased-wash(), the default reading swatch's page
  * colour (#272429), solid up to $from and gone by $to along a cosine curve
  * in 12 straight steps.
- * - Desktop (lg): to the right, 38% to 94%; and the foot's fade, to the
- *   top over 8rem (128px; clamp(4rem, 14vh, 8rem) on a screen this tall).
+ * - Desktop (lg): only the image's part of the head, which starts at 44%
+ *   of its width, in its shape on a 1440 x 900 screen (638 x 851, here
+ *   scaled to 900 x 1200). To the right, 46% to 84% of the head; and the
+ *   foot's fade, to the top over clamp(4rem, 14vh, 8rem) (126px of 851).
  * - Phone: to the top, 46% to 98%.
  *
  * Run after changing the wash: node build/focal-preview-washes.js
@@ -86,11 +88,13 @@ function png(width, height, alphaAt) {
 
 fs.mkdirSync(out, { recursive: true });
 
-const side = stops(38, 94);
+// Where the image starts in the head (.pf-exhibit-cover__media's left).
+const mediaLeft = 0.44;
+const side = stops(46, 84);
 const foot = stops(0, 100);
-fs.writeFileSync(path.join(out, 'wash-desktop.png'), png(1600, 1000, (x, y) => {
-  const fromFoot = (1000 - 1 - y) / 128;
-  return over(fromFoot <= 1 ? wash(foot, fromFoot) : 0, wash(side, x / 1599));
+fs.writeFileSync(path.join(out, 'wash-desktop.png'), png(900, 1200, (x, y) => {
+  const fromFoot = (1200 - 1 - y) / (1200 * 126 / 851);
+  return over(fromFoot <= 1 ? wash(foot, fromFoot) : 0, wash(side, mediaLeft + (1 - mediaLeft) * x / 899));
 }));
 
 const up = stops(46, 98);

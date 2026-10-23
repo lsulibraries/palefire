@@ -857,6 +857,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Exhibition covers: the image sits right of the text from lg, under a shorter fade.** `.pf-exhibit-cover__media` now starts at 44% of the head's width instead of its left edge (that part was always under the solid wash). The side wash is solid to 46% and fades out by 84% (it was 38% to 94%). Phones are unchanged.
+  - A portrait image is shown across its whole width at this size, so its centre used to land in the fade, wherever the focal point was (only the point's height mattered). In the narrower frame, a subject in the middle of the image, such as AVES's cotinga, sits in the clear right side. Checked on Occult, Audubon and the cotinga at 1024 and 1440: the text's right end gets at least as much wash at 1440 as before, and at 1024 the same.
+  - Focal Point preview: `images/focal-preview/wash-desktop.png` is now 900 × 1200, only the image's part of the head on a 1440 × 900 screen (`build/focal-preview-washes.js`). Set the "Cover preview: desktop" style's Focal Point Scale and Crop to 900 × 1200 so it lines up.
+  - Why: subjects were hidden under the title's wash, and the focal point couldn't move them sideways.
+
 - **Tile showcase: a Masonry layout with a Default / Grid / List switch, and numbered section headers.** For "03 From the Galleries / Off the Walls, Online" on the Special Collections homepage.
   - Masonry cards are in the hero banners' voice: their scrim, a mixed-case title and the pill above. They sit in columns that follow the section's width: 2, 3 from 36rem, 4 from 56rem, 5 from 72rem (230×461 at 1440, a banner's size).
   - Card heights cycle around a banner's 1:2. `js/tile-views.js` packs each card into the shortest column in list order. It also shows the switch (`aria-pressed` buttons) and remembers the visitor's pick in localStorage. The change morphs with View Transitions, except with reduced motion.

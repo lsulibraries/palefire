@@ -879,18 +879,32 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   align-items: flex-end;
 }
 
+// From lg, where the side wash turns from solid page colour to its fade,
+// and where that fade ends (percent of the head's width). At 1440 the
+// text's right end still gets as much wash as it did with the old, longer
+// fade (38% to 94%), and the image's centre is nearly clear of it.
+$pf-exhibit-cover-solid: 46;
+$pf-exhibit-cover-clear: 84;
+
 // The image fills the head, past its padding, and holds still on screen
 // while the page scrolls, into the footer too: the head's foot rises over
 // it, so the footer seems to slide over the image. The media runs a screen
 // past the head's foot so the sticky image has room to stay pinned, and
 // clip-path shows it only within the head, stopping .25rem short of the
-// foot, under the wash's solid foot (the head's ::after, below).
+// foot, under the wash's solid foot (the head's ::after, below). From lg it
+// starts just inside the solid wash, not at the head's left edge: that part
+// was never seen, and a portrait image, shown across its whole width, now
+// centres in the clear right side instead of under the fade.
 .pf-exhibit-cover__media {
   position: absolute;
   inset: 0 0 -100lvh;
   z-index: -1;
   overflow: clip;
   clip-path: inset(0 0 calc(100lvh + .25rem));
+
+  @include media-breakpoint-up(lg) {
+    left: ($pf-exhibit-cover-solid - 2) * 1%;
+  }
 }
 
 // A wash of the page colour where the text sits, so it keeps the swatch's
@@ -912,7 +926,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   @include media-breakpoint-up(lg) {
     background:
       pf-eased-wash(to top, 0%, 100%) left bottom / 100% clamp(4rem, 14vh, 8rem) no-repeat,
-      pf-eased-wash(to right, 38%, 94%);
+      pf-eased-wash(to right, $pf-exhibit-cover-solid * 1%, $pf-exhibit-cover-clear * 1%);
   }
 }
 
