@@ -166,11 +166,14 @@ $pf-tile-break-two: 32rem;
 
 // Outline ------------------------------------------------------------------
 // A card with no cover (most guides) draws its page instead, as a desktop
-// shows it, small and blurred like a page seen through glass: the "On this
-// page" rail on the left (mono links, the gold bar on the first), then the
-// intro and first sections in a wide column that the card's right edge
-// cuts off. No title: the card's own title is already there. In the
-// reading swatch's colours (the default section's on pages without one).
+// shows it, as if photographed lying on a desk: tipped away (rotateX),
+// turned a little (rotateZ), zoomed out and blurred. The "On this page"
+// rail on the left (mono links, the gold bar on the first), then the
+// title, intro and first sections in a wide column that the card's right
+// edge still cuts off. The tilt keeps the blurred title from reading as a
+// copy of the card's own. In the reading swatch's colours (the default
+// section's on pages without one); the sheet is the page's colour, so the
+// page's turned edges don't show.
 // Sized to the card (cqi), so the List's thumbnail is the same page in
 // miniature. The sheet's colour sits on the media, not the blurred layer,
 // so the blur leaves no soft edge. Decorative (aria-hidden): no contrast
@@ -192,10 +195,21 @@ $pf-tile-break-two: 32rem;
   color: var(--pf-g-muted, var(--bs-secondary-color));
   font-size: clamp(4px, 3.4cqi, 9px);
   line-height: 1.5;
-  opacity: .75;
-  filter: blur(max(.6px, .2em));
+  opacity: .8;
+  filter: blur(max(.6px, .3em));
+  transform-origin: 0 0;
+  transform: perspective(90em) translate(1.5em, 6.5em) rotateX(38deg) rotateZ(-14deg) scale(.7);
   user-select: none;
   pointer-events: none;
+}
+
+.pf-tile__outline-title {
+  margin-bottom: .1em;
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  font-size: 3.4em;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -.02em;
 }
 
 .pf-tile__outline-toc,

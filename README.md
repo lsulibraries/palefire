@@ -325,8 +325,9 @@ the label, and its link. Layouts use container queries; the staggered row is a
 swipeable strip under 60rem. `js/tile-reveal.js` animates cards in on scroll
 (nothing hidden without JS or with reduced motion). A scrim keeps white titles
 at 4.5:1 on any image. A card with no cover draws its page instead, as a
-desktop shows it (the "On this page" rail, then the intro and first sections;
-`_palefire_page_outline()`), blurred, in the reading swatch's colours.
+desktop shows it (the "On this page" rail, then the title, intro and first
+sections; `_palefire_page_outline()`), lying at an angle and blurred, in the
+reading swatch's colours.
 
 ## From the stacks
 
@@ -858,6 +859,9 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
+
+- **Tile showcase: the no-cover outline is photographed on a desk, title back.** The blurred desktop page now sits tipped away and turned 14° (`rotateX` / `rotateZ` in perspective), zoomed out to 70% so the whole rail and column show with words still cut off at the right edge, under one flat blur. The page's title is back at the top of its column.
+  - Why: at an angle the blurred title reads as part of a photographed page rather than a copy of the card's title, and the angle gives the cards depth. One flat blur instead of a depth-of-field stack keeps it to a single filter per card.
 
 - **Tile showcase: the no-cover outline is the desktop page, without the title.** The blurred page now shows the guide as a desktop does, anchored left: the "On this page" rail (its sections, the gold bar on the first), then the intro and sections in a wide column that the card's edge cuts off. The outline's own title is gone. On hover only the content column scrolls; the rail stays, as the real one is sticky.
   - Why: the blurred title repeated the card's title right below it, and the narrow single column read as a phone page.

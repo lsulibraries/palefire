@@ -29,11 +29,11 @@
  * list is ordered, which screen readers already announce), title, note and
  * label, and an arrow that slides on hover. An <ol>, as the numbers say.
  *
- * Outline: a card with no image draws the page it links to instead, as it
- * looks on a desktop, small and blurred: the "On this page" rail on the
- * left, then the intro and first sections (tile.outline), cut off by the
- * card's right edge, in the reading swatch's colours. No title: the card
- * already shows it. Most guides have no cover. Decorative, so
+ * Outline: a card with no image draws the page it links to instead, as a
+ * desktop shows it, photographed on a desk at an angle and blurred: the
+ * "On this page" rail on the left, then the title, intro and first
+ * sections (tile.outline), cut off by the card's right edge, in the
+ * reading swatch's colours. Most guides have no cover. Decorative, so
  * aria-hidden like the pictures; the link is still named by its <h3>.
  *
  * "On this page": each card is a sub-link under its section, as in the
@@ -54,6 +54,7 @@
       </span>
     {% endif %}
     <span class="pf-tile__outline-page">
+      <span class="pf-tile__outline-title">{{ tile.title }}</span>
       {% if tile.note %}
         <span class="pf-tile__outline-intro">{{ tile.note }}</span>
       {% endif %}
