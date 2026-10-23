@@ -857,6 +857,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: a smaller two-line title, banners closer to the search.** On
+  the full-screen cover the title, now on two lines, steps down to about
+  72px at 1440 (76px at most; it was up to 96px). The room under the
+  search is a quarter of the screen, kept between 13rem and 16rem, so the
+  banners follow it 64-112px lower (about 230px before on a tall screen);
+  the search now sits a little above the lower third, and on tall screens
+  the extra room goes to the sky above the title. Why: the stacked title
+  read top-heavy, with an empty band of video under the search.
 - **Hero title on the intro's columns.** From 48rem of landing the title
   keeps to the intro's width (half the column; two of five from 80rem),
   its lines balanced, so "Special Collections" stands as "Special /

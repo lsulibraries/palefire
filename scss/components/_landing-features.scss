@@ -385,10 +385,12 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // thirds as an exhibition's cover is: the video fills the first screen
 // less a strip at its foot (--pf-cover-peek), where the tops of the
 // banners show, rising out of it, inviting the scroll.
-// The search sits on the screen's lower third line: the room under it is
-// a third of the screen less that strip (at least the band's usual foot),
-// and the title and intro rise from it, the flexible first row taking the
-// rest. On a short screen the space above the title gives way first.
+// The search sits a little above the screen's lower third: the room under
+// it is a quarter of the screen, kept between 13rem and 16rem, so the
+// banners (rising 9rem into the band) follow it 4-7rem lower, one step on,
+// with no empty band between them on a tall screen. The title and intro
+// rise from the search, the flexible first row taking the rest; on a short
+// screen the space above the title gives way first.
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
     // Negative: the band runs on 1rem past the screen's foot, under the
@@ -404,16 +406,17 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     }
 
     > .pf-landing__form {
-      margin-bottom: max(var(--pf-cover-foot), calc(100svh / 3 - var(--pf-cover-peek)));
+      margin-bottom: clamp(13rem, calc(100svh / 4 - var(--pf-cover-peek)), 16rem);
     }
 
   }
 
-  // The title a step larger here, with the room the band gives it: about
-  // 87px at 1440, 96px from about 1650. (html[data-pf-hero]: over the
-  // cover title rule further down.)
+  // The title on two lines here (it keeps to the intro's columns), so a
+  // step down from the one-line size: about 72px at 1440, 76px at most,
+  // in proportion with the intro and the search under it.
+  // (html[data-pf-hero]: over the cover title rule further down.)
   html[data-pf-hero] .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title {
-    font-size: clamp(2.75rem, 1.5rem + 4.4vw, 6rem);
+    font-size: clamp(2.75rem, 1.25rem + 3.6vw, 4.75rem);
   }
 }
 
