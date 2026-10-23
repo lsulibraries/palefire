@@ -864,6 +864,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hill Memorial map: the summary runs further into the drawing's empty corner.** On the hero's desktop map (64rem and up, no event card) the summary is now 47% of the map's width (was 38% from 1440px windows up, capped by the hero's two-column and 62ch limits, which no longer apply here) and set at 1.57cqi (20px on the widest map, 16px on the narrowest), so it scales with the drawing and breaks into the same seven lines at every size.
+  - Measured on the live page in Edge, with the drawing's own shapes (`isPointInFill` / `isPointInStroke`) against each line of text, at 1180 to 2560px: 36–44px clear of every shape, no horizontal scroll. 50% and up brings the seventh line within 24px of the upper Gallery; under 46% the text takes eight or nine lines and reaches it from above. Phones, tablets and 1024px still set the summary above the drawing.
+  - Why: the text stopped well short of the empty space beside it, and ran nine lines deep toward the Gallery.
+
 - **Hero banners and gallery cards: no hairline of picture at the foot.**
   - Each picture now stops 2px above its card's foot, on a clip of its own (`.pf-hero-banner__media`, `.pf-tile--banner .pf-tile__media`), so the last rows are the card's dark ground under the scrim's darkest stop. On the banners the pan moves to the `img` inside that clip, which holds still.
   - Shipped in `33a2b02` (which reused the masonry commit's message); this entry and the guide sources below follow it.

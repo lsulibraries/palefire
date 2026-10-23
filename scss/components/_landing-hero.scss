@@ -269,11 +269,16 @@ $pf-hero-media-wash: .8 !default;
 // corner). Hill's outline never changes, so the text is set into the
 // drawing's empty top-left corner, on a grid measured from the drawing (in
 // cqi, the map's width; the drawing is 75cqi tall):
-//   the summary (the map paragraph's Intro), display size, 0 to 50%
+//   the summary (the map paragraph's Intro), display size, 0 to 47%
 //   across, from 3cqi down. Seminar Space starts at 65% and the upper
 //   Gallery's top corner at 48% across, 19cqi down; under it the corner
-//   narrows to 30% across until Oral History, 31cqi down. A summary much
-//   past seven lines at this size would reach the Gallery: keep it short.
+//   narrows to 30% across until Oral History, 31cqi down. 47% sets the
+//   current summary in seven lines, 24px clear of every line drawn
+//   (measured at 1280 to 2560 wide, the map at most 1280); wider, the
+//   seventh line nears the Gallery's corner, and narrower it takes eight
+//   or nine lines, which reach it from above. The width outranks the
+//   hero's column and 62ch caps here. A longer summary needs measuring
+//   again: keep it short.
 // The note (the building's description) is in the legend, not here.
 // Nothing is drawn there, and the text stays above the drawing (z-index), so
 // it can be selected.
@@ -304,12 +309,16 @@ $pf-hero-media-wash: .8 !default;
     z-index: 2;
     grid-area: stage;
     align-self: start;
-    width: 50cqi;
+    width: 47cqi;
+    max-width: none;
     margin: calc(1rem - clamp(1.5rem, 3vw, 3rem)) 0 0; // 1rem under the heading
 
     .pf-map__summary {
       margin: 0;
-      font-size: clamp(1.0625rem, .375rem + 1.1cqi, 1.375rem); // was up to 2rem
+      // In step with the drawing (20px on the widest map, 1280px; 16px at
+      // its narrowest here, 64rem), so it breaks into the same lines at
+      // every size and keeps the same room round the drawing.
+      font-size: 1.57cqi;
       font-weight: 400;
       letter-spacing: -.015em;
       line-height: 1.4;
