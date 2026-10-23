@@ -578,6 +578,7 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
  * - title, url: the node's own, in the page's language.
  * - label: its Category terms (field_category) joined with " + "
  *   ("Dept + Medium"), or ''.
+ * - labels: the same terms, one string each ([] when none).
  * - note: plain text from its intro (field_intro), else the body's summary,
  *   else the body, cut at $max; '' when it has none.
  * - image_item: the cover's image item (_palefire_card_image_item()), or
@@ -622,6 +623,7 @@ function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int 
     'title' => $node->label(),
     'url' => $url->getGeneratedUrl(),
     'label' => implode(' + ', $labels),
+    'labels' => $labels,
     'note' => $note,
     'image_item' => _palefire_card_image_item($node, $cache),
   ];
@@ -1161,7 +1163,9 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * tiles: one entry per item the visitor can see, in field order:
  * - title: the node's title.
  * - url: the node's own URL.
- * - label: its Category terms joined with " + " ("Dept + Medium"), or ''.
+ * - label: its Category terms joined with " + " ("Dept + Medium"), or ''
+ *   (the index's rows).
+ * - labels: the same terms, one string each (the cards, a label apiece).
  * - note: its intro as plain text, or '' (shown by the index, and by the
  *   masonry's List view).
  * - image: the card's cover in the layout's responsive image style, or
@@ -1202,6 +1206,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'title' => $card['title'],
       'url' => $card['url'],
       'label' => $card['label'],
+      'labels' => $card['labels'],
       'note' => $card['note'],
       'image' => $image,
       'outline' => $variables['layout'] !== 'index' && !$image ? _palefire_page_outline($node, $cache) : [],

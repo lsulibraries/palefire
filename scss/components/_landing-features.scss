@@ -652,6 +652,19 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// Where the banners are five to a row, the Search button is one banner
+// wide (the field spans the row, so its left edge falls on banner 5's), the
+// word at its start and the arrow at its end, as the hero's links.
+@container pf-cover (min-width: 44rem) {
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__submit {
+    flex: 0 0 calc((100% - 4 * var(--pf-grid-gutter)) / 5);
+    justify-content: space-between;
+    // Over the field's 1px frame at the end, so both edges meet banner 5's.
+    margin-inline-end: -1px;
+    padding-inline: 1.25rem;
+  }
+}
+
 // --- Hours, under the title ---------------------------------------------------
 // Today's hours as a caption under the hero's title: the status as a label
 // (a dot in the Visit strip's colours, hidden from screen readers since it
@@ -733,58 +746,6 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   transition: background-color .3s ease;
 }
 
-// "Sign in to request materials": the intro's last sentence, in the
-// text's full colour, underlined, with an arrow up and out after it: it
-// opens the request system in a new tab. The intro arrives in its field's
-// wrapper (a clearfix div), so the wrapper and its last paragraph run
-// inline, without the clearfix's break, and the link follows the last
-// sentence on its line.
-.pf-landing__intro:has(> .pf-landing__signin-link) {
-  > div,
-  > div > p:last-child,
-  > p:last-of-type {
-    display: inline;
-  }
-
-  > div::after {
-    content: none;
-  }
-}
-
-.pf-landing__signin-link {
-  color: var(--pf-section-fg, var(--bs-body-color));
-  font-weight: 500;
-  white-space: nowrap;
-  text-decoration: underline;
-  text-decoration-color: #{$pf-hairline};
-  text-decoration-thickness: 1px;
-  text-underline-offset: .25em;
-  transition: text-decoration-color $pf-hover-out ease;
-
-  &::after {
-    content: "\2197\FE0E" / ""; // text, not the emoji arrow
-    display: inline-block;
-    margin-inline-start: .3em;
-    transition: transform $pf-hover-out ease;
-  }
-
-  &:hover,
-  &:focus-visible {
-    text-decoration-color: currentColor;
-    transition-duration: $pf-hover-in;
-
-    &::after {
-      transform: translate(.15em, -.15em);
-      transition-duration: $pf-hover-in;
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-g-highlight, #{$pf-gold});
-    outline-offset: 2px;
-  }
-}
-
 // Phones: the Quick Start folded (js/palefire.js): its paths stop at about
 // one option under a fade, and "Show all steps" follows. The button only
 // shows while folded.
@@ -831,13 +792,8 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 @media (prefers-reduced-motion: reduce) {
   .pf-landing__hours,
   .pf-landing__hours-label,
-  .pf-landing__hours-dot,
-  .pf-landing__signin-link::after {
+  .pf-landing__hours-dot {
     transition: none;
-  }
-
-  .pf-landing__signin-link::after {
-    transform: none !important;
   }
 }
 
@@ -1036,17 +992,14 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   padding: 1.25rem;
 }
 
-// The label is the Collections tiles' pill (.pf-tile__label,
-// _tile-showcase.scss): white small capitals on black, gold on hover.
+// The label is the Collections tiles' (.pf-tile__label, _tile-showcase.scss):
+// square, mono small capitals, white on black, gold on hover.
 .pf-hero-banner__label {
+  @extend %pf-landing-label;
   align-self: flex-start;
-  padding: .125rem .625rem;
-  border-radius: 1.25rem;
-  font-size: .6875rem;
-  font-weight: 700;
+  padding: .1875rem .5rem;
+  border-radius: 0;
   line-height: 1.4;
-  letter-spacing: .075rem;
-  text-transform: uppercase;
   color: $pf-white;
   background: $pf-black;
   transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
@@ -1645,6 +1598,16 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--pf-grid-gutter);
     container-type: normal;
+  }
+
+  // On screens tall enough to show A, B and C whole under the header and
+  // the bar, they ride along under the bar while the longer first column
+  // (heading, intro, Before you visit) scrolls past, until the guide ends.
+  @media (min-height: 46rem) {
+    .pf-quick-guide > .pf-paths {
+      position: sticky;
+      top: calc(var(--pf-header-h) + var(--pf-landing-bar-h, 0px) + 1.5rem);
+    }
   }
 
   .pf-quick-guide .pf-paths__line,
@@ -2675,131 +2638,118 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
-// --- This week's hours (the hero's right side) -------------------------------
-// A timetable for the week on the five-column cover: the title, hours line
-// and intro keep columns 1-2, and the week takes columns 3-5, its foot on
-// the intro's, its right edge the search's. Its column rules run the full
-// height of the frame, and today's rule lies on its top edge. Its caption is for screen
-// readers; the day names and today's rule say what it is. It is a plate of
-// the search field's own material (the page colour at 80% with the glass
-// blur, a hairline frame, square corners), so it reads at AA over any
-// frame of the video, whichever clip is playing. Seven equal columns,
-// today first: the day in the labels' small capitals over its hours in the
-// text face (tabular figures), hairlines between the days; today marked by
-// a rule of the highlight across its top and its day in the highlight;
-// closed days in the muted tone. It fades in once LibCal has answered and
-// is left out if it doesn't; narrower than five columns it isn't shown
-// (the hours line under the title says enough).
-.pf-landing__week {
-  display: none;
+// --- The hero's links (University Archives, Oral History, Log in) -----------
+// Each a hero banner wide, in the Quick Start buttons' voice (a hairline
+// frame, square, the label in the mono small capitals, an arrow at the
+// end). On the five-column cover they take columns 3-5, under banners 3-5,
+// their foot on the intro's (the last in the flow), as the week's hours
+// did; narrower, a row under the intro (one to a line on phones). A plate
+// of the search field's material (the page colour at 80%, the glass blur),
+// so they read at AA over any frame of the video. Log in, which leaves for
+// the request system, is outlined in the highlight, and filled with it on
+// hover.
+.pf-landing__links {
+  grid-column: 1 / -1;
 }
 
-@container pf-cover (min-width: 80rem) {
-  // Out of the flow (the title, hours line and intro keep their own
-  // spacing, their margins collapsing as before), from column 3 to the
-  // right edge, its foot on the intro's (the last in the flow).
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
-    position: relative;
-
-    > .pf-landing__week {
-      position: absolute;
-      inset-block-end: 0;
-      inset-inline: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + 2 * var(--pf-grid-gutter)) 0;
-      display: block;
-    }
-  }
-}
-
-.pf-landing__week {
-  padding: 0 1.25rem;
-  border: 1px solid var(--pf-landing-line, #{$pf-hairline});
-  color: var(--pf-section-fg, var(--bs-body-color));
-  background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 80%, transparent);
-  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-  backdrop-filter: var(--pf-glass-filter, blur(26px));
-  opacity: 0;
-  transition: opacity .6s ease;
-
-  &.is-ready {
-    opacity: 1;
-  }
-
-  &.is-failed {
-    visibility: hidden;
-  }
-}
-
-.pf-landing__week-days {
+.pf-landing__links-list {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  margin: 0;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .625rem var(--pf-grid-gutter);
+  margin: clamp(1.25rem, 2.5vw, 1.75rem) 0 0;
   padding: 0;
   list-style: none;
 }
 
-.pf-landing__week .pf-visit__day {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: .375rem;
-  min-width: 0;
-  padding: .875rem .75rem;
-  border: 0;
-  border-inline-start: 1px solid #{$pf-hairline};
-  font-weight: inherit;
-
-  &:first-child {
-    padding-inline-start: 0;
-    border-inline-start: 0;
-  }
-
-  // Today: a rule of the highlight across the top of its column.
-  &.is-today::before {
-    content: "";
-    position: absolute;
-    inset: 0 .75rem auto 0;
-    border-top: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-  }
-
-  &.is-today:not(:first-child)::before {
-    inset-inline-start: .75rem;
+@container pf-cover (min-width: 36rem) {
+  .pf-landing__links-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.pf-landing__week .pf-visit__day-name {
+@container pf-cover (min-width: 80rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
+    position: relative;
+
+    > .pf-landing__links {
+      position: absolute;
+      inset-block-end: 0;
+      inset-inline: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + 2 * var(--pf-grid-gutter)) 0;
+    }
+  }
+
+  .pf-landing__links-list {
+    margin: 0;
+  }
+}
+
+.pf-landing__link {
   @extend %pf-landing-label;
-  color: var(--pf-toc-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  min-height: 3rem;
+  padding: .5rem 1rem;
+  border: 1px solid #{$pf-hairline};
+  border-radius: 0;
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  text-decoration: none;
+  background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 80%, transparent);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  transition: border-color $pf-hover-out ease, color $pf-hover-out ease, background-color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: .875rem;
+    height: .875rem;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    color: var(--pf-section-fg, var(--bs-emphasis-color));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
 }
 
-.pf-landing__week .pf-visit__day.is-today .pf-visit__day-name {
-  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+.pf-landing__link--account {
+  border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-on-accent, #{$pf-black});
+    background-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
 }
 
-.pf-landing__week .pf-visit__day-hours {
-  font-size: .9375rem;
-  font-weight: 500;
-  line-height: 1.3;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-landing__link:is(:hover, :focus-visible) svg {
+    transform: translateX(.1875rem);
+  }
 
-.pf-landing__week .pf-visit__day.is-closed .pf-visit__day-hours {
-  font-weight: 400;
-  color: var(--pf-toc-color);
+  html:not(.pf-a11y-motion) .pf-landing__link--account:is(:hover, :focus-visible) svg {
+    transform: translate(.125rem, -.125rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-landing__week {
+  .pf-landing__link,
+  .pf-landing__link svg {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
-  .pf-landing__week {
-    border-color: CanvasText;
-  }
-
-  .pf-landing__week .pf-visit__day.is-today::before {
-    border-top-color: Highlight;
+  .pf-landing__link--account {
+    border-color: Highlight;
   }
 }
+

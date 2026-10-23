@@ -160,6 +160,16 @@ html#{$pf-themed} .pf-footer {
     transform: translateX(.25rem);
     transition-duration: $pf-hover-in;
   }
+
+  // Out of the site (Where: Google Maps): the same arrow turned up-right
+  // (the ↗ glyph sets much smaller), nudged the way it points.
+  &--out {
+    rotate: -45deg;
+  }
+
+  :is(.pf-footer__fact--link):is(:hover, :focus-within) &--out {
+    transform: translate(.1875rem, -.1875rem);
+  }
 }
 
 .pf-footer__facts {

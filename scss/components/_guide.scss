@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Guide pages: Modular pages in guide mode (field_modular_type = guide) and
 // the guide_section blocks (scripts/palefire_guide_setup.php).
 //
@@ -887,6 +889,10 @@ html[data-pf-mode="guide"] .pf-section__title {
 // marks the list .pf-paths--reveal, then each option .is-revealed. Without
 // the script, or with reduced motion (it adds nothing then), the diagram
 // simply shows.
+// When the four diamonds go out together (ms): the last lit at 1970, held 1s,
+// a 450ms fade.
+$pf-paths-ping-end: 1970 + 1000 + 450;
+
 .pf-paths--reveal {
   .pf-paths__stop {
     opacity: 0;
@@ -911,17 +917,11 @@ html[data-pf-mode="guide"] .pf-section__title {
       transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
-    // Each diamond lights up briefly as the line reaches it (its hover
-    // look: the outline in the accent, the icon's second tone up), the
-    // first as the line leaves it: 0.6s, then each leg's end.
-    .pf-paths__icon::before {
-      animation: pf-paths-ping-mark 0.9s ease-out;
-    }
-
-    .pf-paths__icon .fa-secondary {
-      animation: pf-paths-ping-icon 0.9s ease-out;
-    }
-
+    // Each diamond lights up as the line reaches it (its hover look: the
+    // outline in the accent, the icon's second tone up), the first as the
+    // line leaves it: 0.6s, then each leg's end. Each stays lit until the
+    // last is, all four hold a second, then go out together. One set of
+    // keyframes per stop (below), with no fill, so hover works after.
     @for $i from 1 through 4 {
       $ping: 600;
 
@@ -936,26 +936,37 @@ html[data-pf-mode="guide"] .pf-section__title {
           transition-delay: #{600 + ($i - 1) * 250}ms;
         }
 
-        .pf-paths__icon::before,
+        .pf-paths__icon::before {
+          animation: pf-paths-hold-mark-#{$i} #{$pf-paths-ping-end - $ping}ms ease-out #{$ping}ms;
+        }
+
         .pf-paths__icon .fa-secondary {
-          animation-delay: #{$ping}ms;
+          animation: pf-paths-hold-icon-#{$i} #{$pf-paths-ping-end - $ping}ms ease-out #{$ping}ms;
         }
       }
     }
   }
 }
 
-@keyframes pf-paths-ping-mark {
-  30%,
-  50% {
-    border-color: var(--pf-guide-accent);
-  }
-}
+// Stop i lights at its ping (600, 1200, 1450, 1700ms), lit 270ms later;
+// the last is lit at 1970ms, all hold 1s, then fade over 450ms together.
+@each $i, $ping in (1: 600, 2: 1200, 3: 1450, 4: 1700) {
+  $span: $pf-paths-ping-end - $ping;
+  $lit: math.percentage(math.div(270, $span));
+  $hold: math.percentage(math.div($pf-paths-ping-end - 450 - $ping, $span));
 
-@keyframes pf-paths-ping-icon {
-  30%,
-  50% {
-    opacity: 0.75;
+  @keyframes pf-paths-hold-mark-#{$i} {
+    #{$lit},
+    #{$hold} {
+      border-color: var(--pf-guide-accent);
+    }
+  }
+
+  @keyframes pf-paths-hold-icon-#{$i} {
+    #{$lit},
+    #{$hold} {
+      opacity: 0.75;
+    }
   }
 }
 

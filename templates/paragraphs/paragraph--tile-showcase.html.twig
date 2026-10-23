@@ -8,7 +8,8 @@
  * - layout: 'stagger' (tall cards, offset rhythm), 'grid' (3 / 2 / 1
  *   columns), 'index' (numbered rows, no pictures) or 'masonry' (tall
  *   cards on mixed heights, with a Default / Grid / List switch).
- * - tiles: title, url, label (Category terms, "Dept + Medium"), note (the
+ * - tiles: title, url, label (Category terms, "Dept + Medium"; the index's
+ *   rows), labels (the same terms, a label apiece on the cards), note (the
  *   intro as plain text; index only), image.
  *
  * The section <h2> comes from the scroll-section field template, so each
@@ -43,6 +44,17 @@
  * from being listed a second time on modes that list every h3.
  */
 #}
+{# The card's Category terms, a square label apiece, read as ", Exhibition,
+   Digital" after the title. #}
+{% macro labels(tile) %}
+  {% if tile.labels %}
+    <span class="pf-tile__labels">
+      {% for label in tile.labels %}
+        <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ label }}</span>
+      {% endfor %}
+    </span>
+  {% endif %}
+{% endmacro %}
 {% macro outline(tile) %}
   <span class="pf-tile__outline" aria-hidden="true">
     {% if tile.outline %}
@@ -117,9 +129,7 @@
                 {% if tile.note %}
                   <span class="pf-tile__note"><span class="visually-hidden">, </span>{{ tile.note }}</span>
                 {% endif %}
-                {% if tile.label %}
-                  <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
-                {% endif %}
+                {{ _self.labels(tile) }}
               </span>
               <svg class="pf-tile__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
             </a>
@@ -134,9 +144,7 @@
               <span class="pf-tile__media">{{ tile.image ?: _self.outline(tile) }}</span>
               <span class="pf-tile__body">
                 <h3 class="pf-tile__title">{{ tile.title }}</h3>
-                {% if tile.label %}
-                  <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
-                {% endif %}
+                {{ _self.labels(tile) }}
               </span>
             </a>
           </li>

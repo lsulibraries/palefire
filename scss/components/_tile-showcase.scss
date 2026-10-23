@@ -113,19 +113,27 @@ $pf-tile-break-two: 32rem;
   padding: 0 1.25rem 1.25rem;
 }
 
-// The label reads after the title (link name "Oral History, Dept +
-// Medium") but shows above it.
-.pf-tile__label {
+// The labels read after the title (link name "Audubon, Exhibition,
+// Digital") but show above it: a square label per Category term, in the
+// page's label voice (mono small capitals, as the section eyebrows and the
+// Quick Start's buttons), white on black over any picture.
+.pf-tile__labels {
+  // Set here too: stagger and grid sections sit outside the landing.
+  --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+
   order: -1;
-  padding: 0.125rem 0.625rem;
-  border-radius: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.pf-tile__label {
+  @extend %pf-landing-label;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0;
   background: $pf-black;
   color: $pf-white;
-  font-size: 0.6875rem;
-  font-weight: 700;
   line-height: 1.4;
-  letter-spacing: 0.075rem;
-  text-transform: uppercase;
 }
 
 .pf-tile__title {
@@ -746,10 +754,12 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
     padding: 0;
   }
 
+  .pf-tile__labels {
+    gap: 0 .75rem;
+  }
+
   .pf-tile__label {
-    @extend %pf-landing-label;
     padding: 0;
-    border-radius: 0;
     background: none;
     color: var(--pf-toc-color);
   }

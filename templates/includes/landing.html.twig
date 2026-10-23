@@ -183,10 +183,9 @@
      far end of the bar's row and stays under the header while the landing
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
-  {# Hero: "Sign in to request materials" (the Special Collections request
-     system, Aeon), a link at the end of the intro under the title: signing
-     in is what a request needs, and in the bar it read as signing in to the
-     whole site. It opens in a new tab (an arrow after it; its name says so
+  {# Hero: "Log in" (the Special Collections request system, Aeon), the
+     last of the hero's links (.pf-landing__links, below), outlined in the
+     highlight. It opens in a new tab (an up-right arrow; its name says so
      for screen readers). account_url: empty leaves it out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
   {% if lead_breadcrumb %}
@@ -231,19 +230,38 @@
     {% if landing_intro %}
       <div class="pf-landing__intro">
         {{- landing_intro -}}
-        {%- if hero and account_url %} <a class="pf-landing__signin-link" href="{{ account_url }}" target="_blank" rel="noopener">{{ 'Sign in to request materials'|t }}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span></a>{% endif -%}
       </div>
     {% endif %}
-    {# Hero: this week's hours as a timetable (.pf-landing__week), seven
-       columns, today first, on the five-column grid only (columns 3-5, its
-       foot on the intro's). visit-hours.js fills the days from the same LibCal
-       request as the hours line above. A list of days for screen readers,
-       named by its caption (hidden: the day names say what it is). #}
-    {% if hero and visit.lid %}
-      <div class="pf-landing__week" data-pf-hours data-lid="{{ visit.lid }}">
-        <p class="visually-hidden" id="{{ input_id }}-week">{{ 'This week, @place'|t({ '@place': visit.name }) }}</p>
-        <ol class="pf-landing__week-days" role="list" aria-labelledby="{{ input_id }}-week" data-pf-hours-week></ol>
-      </div>
+    {# Hero: three links, each a hero banner wide, in the Quick Start
+       buttons' voice: on the five-column grid in columns 3-5 (under banners
+       3-5), their foot on the intro's; narrower, a row under the intro.
+       Special Collections' own (the hero is its landing, as account_url). #}
+    {% if hero %}
+      {% set hero_links = [
+        { text: 'University Archives'|t, url: '/v2/special/archives' },
+        { text: 'Oral History'|t, url: '/v2/special/oralhistory' },
+      ] %}
+      <nav class="pf-landing__links" aria-label="{{ 'Special Collections'|t }}">
+        <ul class="pf-landing__links-list" role="list">
+          {% for link in hero_links %}
+            <li>
+              <a class="pf-landing__link" href="{{ link.url }}">
+                {{- link.text -}}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+              </a>
+            </li>
+          {% endfor %}
+          {% if account_url %}
+            <li>
+              <a class="pf-landing__link pf-landing__link--account" href="{{ account_url }}" target="_blank" rel="noopener">
+                {{- 'Log in'|t -}}
+                <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
     {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">

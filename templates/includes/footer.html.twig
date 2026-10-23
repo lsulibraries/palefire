@@ -14,6 +14,10 @@
  * fills them (one LibCal request per location, shared with the Hours
  * drawer). Until then, or if LibCal doesn't answer, they read "Hours".
  *
+ * Where: the building's name, linking to Google Maps directions to it
+ * (place.query, the name Google knows it by). Its own row, not the Today
+ * row: a link's text should say where it goes, and Today's is the hours.
+ *
  * Content: edit the `footers` map below. `lid` is a LibCal location (the
  * same IDs as hours_locations in utility-panels.html.twig). Social icons
  * are FA Pro brand SVGs from the server, or the Bootstrap Icons copies in
@@ -38,6 +42,7 @@
       intro: 'Hill Memorial Library is open to everyone. Create a Special Collections account and request items ahead of your visit.'|t,
       cta: { label: 'Plan a research visit'|t, url: sc ~ '/guides/special-collections' },
       lid: '236',
+      place: { name: 'Hill Memorial Library'|t, query: 'Hill Memorial Library, Baton Rouge, LA' },
       phone: '225-578-6544',
       ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special' },
       other: { name: 'Main Library'|t, lid: '241', label: 'Main Library home'|t, url: base_path },
@@ -65,6 +70,7 @@
       intro: 'Librarians answer questions by chat, email and phone. Ask about a source, a citation or where to start.'|t,
       cta: { label: 'Ask a librarian'|t, url: 'https://askus.lib.lsu.edu/' },
       lid: '241',
+      place: { name: 'Main Library'|t, query: 'Middleton Library, Baton Rouge, LA' },
       phone: '225-578-5652',
       ask: { label: 'Email the Main Library'|t, url: '/askus/widgets/19448' },
       other: { name: 'Hill Memorial Library, Special Collections'|t, lid: '236', label: 'Special Collections home'|t, url: sc },
@@ -108,7 +114,13 @@
             <span class="pf-footer__today" data-pf-hours-today></span>
           </dd>
         </div>
-        {# Each link covers its whole row (::after), so the row is the target. #}
+        {# Each link covers its whole row (::after), so the row is the target.
+           Where leaves the site (Google Maps): the arrow turned up-right, as the
+           Quick Start's Full guide button. #}
+        <div class="pf-footer__fact pf-footer__fact--link">
+          <dt>{{ 'Where'|t }}</dt>
+          <dd><a href="https://www.google.com/maps/dir/?api=1&amp;destination={{ f.place.query|url_encode }}">{{ f.place.name }}<span class="visually-hidden">, {{ 'directions in Google Maps'|t }}</span><span class="pf-footer__arrow pf-footer__arrow--out" aria-hidden="true">→</span></a></dd>
+        </div>
         <div class="pf-footer__fact pf-footer__fact--link">
           <dt>{{ 'Call'|t }}</dt>
           <dd><a href="tel:+1{{ f.phone|replace({'-': ''}) }}">{{ f.phone }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a></dd>

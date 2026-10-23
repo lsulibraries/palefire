@@ -889,6 +889,14 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero: three links in place of the week's hours, Search a banner wide; footer: directions; a simpler TOC icon.**
+  - Hero (`includes/landing.html.twig`, `_landing-features.scss`): University Archives (`/v2/special/archives`), Oral History (`/v2/special/oralhistory`) and Log in (Aeon, new tab, outlined in the highlight and filled with it on hover) replace the week's timetable. In the Quick Start buttons' voice (hairline frame, mono label, arrow at the end) on the search field's glass. From 80rem each is exactly a hero banner wide, in columns 3-5 under banners 3-5, their foot on the intro's; narrower, a row of three under the intro; one to a line on phones. "Sign in to request materials" is gone from the intro (Log in replaces it), with its styles.
+  - Search button: one banner wide wherever the banners are five to a row (44rem and up), both edges on banner 5's; the word at its start, the arrow at its end.
+  - Footer: a Where row under Today, the building's name linking to Google Maps directions (place.query in the footers map), the arrow turned up-right as it leaves the site; its name adds ", directions in Google Maps". Its own row rather than Today's: that link's text would have been the hours, not where it goes (WCAG 2.4.4).
+  - TOC icon (both buttons, `page.html.twig`): the three diamonds become a faint full-height bar (40%, Font Awesome duotone's second tone), the TOC's rail, beside the same three lines.
+  - Also ships the Quick Start/tile-label sources (`palefire.theme`, `paragraph--tile-showcase.html.twig`, `_guide.scss`, `_landing-features.scss`, `_tile-showcase.scss`) whose CSS and README entry went out in `53b28bd`/`f821104` without them: until these land, live cards print a bare `.pf-tile__label` and the label falls under the title.
+  - Verified in Edge with local CSS and the new markup injected: links at x 681/943/1206, 230px each at 1600 (banners 3-5 exactly); Search 230px on banner 5; 1440, 1024 and 375 laid out without horizontal scroll; the TOC icon at 4x.
+
 - **Redesign exhibition: AVES added, 2026 "before" pages.** The Exhibitions wall gains AVES (desktop and phone pairs). The old Audubon and Occult Science pages are now the version from just before the redesign (/audubon/introduction live, /occult/introduction from the Wayback Machine, 13 March 2026), not the 2021 page and the 2011 blog. The new files have new names (`exhibit-*-before-2026-*`), so a rebuild imports them instead of reusing the older media items.
   - Why: the redesign replaced the 2025–2026 pages, so those are the honest "before".
 - **Footer: the page's Swiss voice, and a curtain reveal.**
