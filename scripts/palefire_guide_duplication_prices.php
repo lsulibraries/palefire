@@ -86,6 +86,15 @@ if ($markup === FALSE || trim($markup) === '') {
   throw new \RuntimeException('palefire_guide_duplication_prices.html is missing or empty.');
 }
 
+// The price list's notes (<em>) and fee row (<tfoot>) need the format to
+// keep those tags; say so if it strips them.
+$filtered = (string) check_markup(trim($markup), $format);
+foreach (['<tfoot', '<em'] as $tag) {
+  if (!str_contains($filtered, $tag)) {
+    echo "Warning: text format $format strips $tag>; the price list won't look as designed." . PHP_EOL;
+  }
+}
+
 $section->set('field_guide_blocks', [
   Paragraph::create([
     'type' => 'guide_text',

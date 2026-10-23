@@ -16,6 +16,10 @@
 // Dark sections take the swatch too (_reading-themes.scss), so on a guide
 // they look like every other section.
 
+// The measure of the guide's prose: the intro, the text blocks and the page
+// title share it, so the <h1> no longer runs past the guide.
+$pf-guide-prose: 42rem;
+
 // The landing hero's quick guide (_landing-features.scss) takes them too,
 // for the request paths it shares with the guide.
 .pf-guide,
@@ -27,7 +31,7 @@
   --pf-guide-rule: var(--pf-section-border, var(--pf-g-rule, var(--bs-border-color)));
   --pf-guide-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
   --pf-guide-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
-  --pf-guide-prose: 42rem;
+  --pf-guide-prose: #{$pf-guide-prose};
 }
 
 // A dark section without a reading swatch keeps its own surfaces (guides
@@ -131,6 +135,12 @@ html[data-pf-mode="guide"] .pf-section__title {
 }
 
 // Page head (includes/guide-head.html.twig) --------------------------------
+
+// The title stops at the prose's right edge (it is balanced, so it breaks
+// into even lines rather than one long line and a stub).
+html[data-pf-mode="guide"] .pf-modular__title {
+  max-width: min(100%, #{$pf-guide-prose});
+}
 
 .pf-guide-head {
   display: grid;
@@ -428,9 +438,13 @@ html[data-pf-mode="guide"] .pf-section__title {
   // A price list: a table of two columns and no header row (thing | price,
   // e.g. palefire_guide_duplication_prices.html). Text formats drop
   // classes, so its shape marks it. No box or minimum width, rules between
-  // rows; the thing in body weight with an optional <small> detail under
-  // it, the price bold, on one line and right-aligned with even figures.
+  // rows; the thing in body weight with an optional note under it, the
+  // price bold, on one line and right-aligned with even figures. A <tfoot>
+  // row is a charge added to every order.
+  // It never needs to scroll, so it keeps the prose measure, as does the
+  // text after it.
   &:has(table:not(:has(thead)):not(:has(tr > :nth-child(3)))) {
+    max-width: var(--pf-guide-prose);
     overflow-x: visible;
   }
 
@@ -449,10 +463,13 @@ html[data-pf-mode="guide"] .pf-section__title {
       font-weight: 400;
     }
 
-    small {
+    // An item's note. The guide's text format strips <small>, so the price
+    // list marks notes with <em> (set upright); <small> still works.
+    :is(small, em) {
       display: block;
       margin-top: 0.15rem;
       font-size: 0.875rem;
+      font-style: normal;
       color: var(--pf-guide-muted);
     }
 
@@ -463,6 +480,35 @@ html[data-pf-mode="guide"] .pf-section__title {
       text-align: end;
       white-space: nowrap;
       color: var(--bs-emphasis-color);
+    }
+
+    // The fee every order adds: under a full-strength accent rule (the one
+    // line that isn't a hairline, as a receipt's total), a mono label, and
+    // the amount in the title's highlight.
+    tfoot {
+      border-top: 2px solid var(--pf-guide-accent);
+
+      :is(th, td) {
+        padding-top: 1.25rem;
+        border-bottom: 0;
+        vertical-align: top;
+      }
+
+      strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        font: 700 0.6875rem/1.5 var(--pf-guide-mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--pf-guide-muted);
+      }
+
+      td {
+        font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--pf-g-highlight, var(--pf-guide-accent));
+      }
     }
   }
 

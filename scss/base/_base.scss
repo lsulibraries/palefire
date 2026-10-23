@@ -24,6 +24,18 @@ html {
   --pf-focus-color: #{$pf-gold};
 }
 
+// Typesetting: headings break into even lines, and running text avoids a
+// lone word on its last line (text-wrap: pretty). Zero
+// specificity, so components that set their own keep it; browsers without
+// support wrap as before.
+:where(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+}
+
+:where(p, li, dd, dt, blockquote, figcaption, caption, td, th) {
+  text-wrap: pretty;
+}
+
 // Links fade their hover colour (in $pf-hover-in, out $pf-hover-out).
 // Zero specificity: components that set their own transition keep it.
 :where(a) {
