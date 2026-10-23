@@ -1163,11 +1163,13 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
-// Two to a row (under 44rem) the banners hold still and only their
-// pictures move: each picture is --pf-banner-pan taller than its frame at
-// top and foot, and slides down through it as the banner crosses the
-// screen (on the banner's own view timeline: the link clips, so it can't
-// hold one), slower than the page, like a window onto a deeper picture.
+// The pan, at every width: each picture is --pf-banner-pan taller than its
+// frame at top and foot, and slides down through it as the banner crosses
+// the screen (on the banner's own view timeline: the link clips, so it
+// can't hold one), slower than the page, like a window onto a deeper
+// picture. Two to a row (under 44rem) it is the only motion, the banners
+// hold still; in the row of five it runs deeper (3rem) under the drift and
+// the cross, which move the banners themselves.
 @keyframes pf-banner-pan {
   from {
     translate: 0 calc(-1 * var(--pf-banner-pan));
@@ -1200,19 +1202,24 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
       }
     }
 
-    @container pf-cover (max-width: 43.98rem) {
-      html:not(.pf-a11y-motion) .pf-hero-banner {
-        --pf-banner-pan: 1.5rem;
-        view-timeline: --pf-banner-own block;
-      }
+    html:not(.pf-a11y-motion) .pf-hero-banner {
+      --pf-banner-pan: 1.5rem;
+      view-timeline: --pf-banner-own block;
+    }
 
-      // Not the event's date (its words would move with it).
-      html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
-        inset: calc(-1 * var(--pf-banner-pan)) 0;
-        animation: pf-banner-pan linear both;
-        animation-timeline: --pf-banner-own;
-        animation-range: cover 0% cover 100%;
+    // Not the event's flyer: a deeper pan crops its headline.
+    @container pf-cover (min-width: 44rem) {
+      html:not(.pf-a11y-motion) .pf-hero-banner:not(.is-event) {
+        --pf-banner-pan: 3rem;
       }
+    }
+
+    // Not the event's date (its words would move with it).
+    html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+      inset: calc(-1 * var(--pf-banner-pan)) 0;
+      animation: pf-banner-pan linear both;
+      animation-timeline: --pf-banner-own;
+      animation-range: cover 0% cover 100%;
     }
   }
 }

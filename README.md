@@ -857,6 +857,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero banners: the picture pan on desktop too, deeper.** The phones' pan (`pf-banner-pan`) now runs at every width, under the row of five's drift and cross: each picture is 3rem taller than its frame at top and foot from 44rem (1.5rem narrower), so it slides 96px through its banner as the banner crosses the screen. The event banner keeps 1.5rem, since a deeper pan crops its flyer's headline. Reduced motion and the Settings drawer's switch still stop it. Why: the pan gave the phone banners depth, and the desktop row wanted the same.
+
 - **Hero banners on phones: a tighter grid, and the pictures move instead of the banners.** Under 44rem of landing (two to a row, phones and portrait tablets) the gutter is `clamp(.625rem, 2.5cqi, 1rem)` (10px at 375, 16px at 768, was 20px), the right column's drop is 1.5rem (was 2.5rem), and the blog line gets .375rem extra under it. The side margins still line up with the title and search. With motion on, the banners stay put as the page scrolls; each picture is 1.5rem taller than its frame at top and foot and pans down through it on the banner's own view timeline (`pf-banner-pan`), not on the event's date panel. The drift, the cross and the Quick Start's lift allowance now apply only from 44rem, where the row of five is unchanged. Why: on phones the cross carried whole banners past each other, so the right column rode above the left mid-scroll, and the wide gutters made the two columns read as loose pieces.
 
 ### 2026-10-22
