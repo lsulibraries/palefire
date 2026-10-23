@@ -839,21 +839,26 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // a third of their height deep, floating over the building with a soft
 // shadow. Narrower, the blog post is a line of text across the top and the
 // rest go two by two, the right column set lower: the same rhythm, small.
-// --pf-banner-offset sets each banner's drop (the parallax below reads it).
+// --pf-banner-offset sets each banner's drop (the parallax below reads it):
+// a relative shift, not a margin, so a dropped banner never makes its row
+// taller and every gap between rows is the gutter, as between columns.
+// The grid keeps the drop (--pf-banner-drop) as room under its last row.
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
   --pf-banner-rise: 0px; // the row's lift over the cover's foot
+  --pf-banner-drop: 2.5rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   gap: var(--pf-grid-gutter);
   margin: calc(-1 * var(--pf-banner-rise)) var(--pf-cover-gutter) 0;
-  padding: 0;
+  padding: 0 0 var(--pf-banner-drop);
   list-style: none;
 }
 
 .pf-hero-banner {
+  position: relative;
+  top: var(--pf-banner-offset, 0px);
   min-width: 0;
-  margin-top: var(--pf-banner-offset, 0px);
 }
 
 @container pf-cover (max-width: 43.98rem) {
@@ -869,7 +874,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   // The right column: with the blog line first, the odd ones after it.
   .pf-hero-banners:not(:has(> .pf-hero-banner--blog)) > .pf-hero-banner:nth-child(even),
   .pf-hero-banners:has(> .pf-hero-banner--blog) > .pf-hero-banner:nth-child(odd):not(:first-child) {
-    --pf-banner-offset: 2.5rem;
+    --pf-banner-offset: var(--pf-banner-drop);
   }
 
   // Tablets: two to a row are wide, so a little shorter (4:5).
@@ -1058,11 +1063,12 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 @container pf-cover (min-width: 44rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     --pf-banner-rise: 3rem;
+    --pf-banner-drop: 2.25rem;
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .pf-hero-banner:nth-child(even) {
-    --pf-banner-offset: 2.25rem;
+    --pf-banner-offset: var(--pf-banner-drop);
   }
 
   // Tall (1:2), for the words and more of the picture, with a soft

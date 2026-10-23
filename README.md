@@ -857,6 +857,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero banners: even gaps two by two.** A banner's drop is now a
+  relative shift (`top`), not a margin, so the right column's lower
+  banners no longer make each row taller; every gap between rows is the
+  gutter, as between the columns. The grid keeps the drop as room under
+  its last row (--pf-banner-drop). Why: on smaller screens the left
+  column's gap was the gutter plus the drop.
 - **Hero banners: no row of bare picture under the scrim.** The banners'
   heights are fractional (460.78px at 1440), and rounding sometimes left
   a 1px row of picture below the scrim. The scrim now runs past every
