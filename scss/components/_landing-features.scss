@@ -776,10 +776,24 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // The building after today's hours, after a middle dot (from md: on a
 // phone the line wraps there, and a dot would start the second line).
+// Another dot between the building and "This week's hours". Phones: the
+// building on a line of its own, so the line doesn't grow when LibCal
+// answers and the status and today's hours share the first.
 @include media-breakpoint-up(md) {
   .pf-landing__hours-today:not(:empty) + .pf-landing__hours-place::before {
     content: "\00b7" / "";
     margin-inline-end: .75rem;
+  }
+
+  .pf-landing__hours-place:has(+ .pf-landing__hours-week)::after {
+    content: "\00b7" / "";
+    margin-inline-start: .75rem;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .pf-landing__hours-place {
+    flex-basis: 100%;
   }
 }
 
@@ -812,6 +826,46 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   border-radius: 50%;
   background-color: var(--pf-hours-state, currentColor);
   transition: background-color .3s ease;
+}
+
+// "This week's hours": down to the week in the Visit panel (visit-hours.js
+// glides there). A hairline underline that turns gold on hover, the arrow
+// dipping with it. 24px tall at least (WCAG 2.2 SC 2.5.8). Gone with the
+// status if LibCal fails, since the week is too.
+.pf-landing__hours-week {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-block-size: 1.5rem;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: #{$pf-hairline};
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: text-decoration-color .3s ease;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: var(--pf-g-highlight, #{$pf-gold});
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-focus-color);
+    outline-offset: 2px;
+  }
+
+  .is-failed > & {
+    display: none;
+  }
+}
+
+.pf-landing__hours-arrow {
+  display: inline-block;
+  transition: transform .3s ease;
+
+  .pf-landing__hours-week:is(:hover, :focus-visible) > & {
+    transform: translateY(.125rem);
+  }
 }
 
 // Phones: the Quick Start folded (js/palefire.js): its paths stop at about
@@ -860,8 +914,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 @media (prefers-reduced-motion: reduce) {
   .pf-landing__hours,
   .pf-landing__hours-label,
-  .pf-landing__hours-dot {
+  .pf-landing__hours-dot,
+  .pf-landing__hours-week,
+  .pf-landing__hours-arrow {
     transition: none;
+  }
+
+  .pf-landing__hours-week:is(:hover, :focus-visible) > .pf-landing__hours-arrow {
+    transform: none;
   }
 }
 

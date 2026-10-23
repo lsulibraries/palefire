@@ -889,6 +889,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Weekly hours: a link from the hero, and the week always open.**
+  - Why: the week sat in a collapsed "This week" in the Visit Hill panel (shut on phones), several screens down, with nothing at the top pointing to it; the footer, further still, keeps today's hours only.
+  - `landing.html.twig`, `_landing-features.scss`: the hero's hours line ends with "This week's hours ↓" (a dot before it from md; on phones the building takes its own line, so the line no longer grows when LibCal answers: CLS at 320 went from 0.07 to 0). Hairline underline, gold on hover, the arrow dips; hidden if LibCal fails.
+  - `visit-strip.html.twig`, `_visit.scss`, `_landing-swiss.scss`: the `<details>` is now a heading and a ruled Monday-to-Sunday timetable (day, date, hours): today weighted with a gold underline and `aria-current="date"`, past days muted. Seven blank rows hold its height until LibCal answers, then it fades in. The status line is the link's target (`{visit_id}-hours`, `tabindex="-1"`, clear of the landing bar).
+  - `visit-hours.js`: the week runs Monday to Sunday, and on Sundays shows next week ("Next week"), since LibCal's data starts on the Sunday. A day LibCal doesn't list reads "Not posted", not "Closed". The link glides to the panel (instant with reduced motion), focuses the status line and sets the hash. The lg-only open/close toggle is gone.
+  - Checked on the live page with this markup, CSS and JS swapped in at 320, 768, 1024 and 1440: no horizontal scroll, the jump lands 16px under the bar with focus there, Sunday rolls over, reduced motion jumps at once.
+
 - **Hero links: no blur under the stuck bar (flicker fix).**
   - `_landing-features.scss`: the links' plate flickered as it scrolled under the sticky bar and header, a Chromium glitch with one backdrop-filter passing under another (confirmed in DevTools: turning off the plate's blur stopped it). A scroll-driven animation (a view timeline inset by the header and bar) now drops the plate's blur as its top reaches the bar's foot, half a rem early, and scrolling back restores it. The 65% fill keeps the words at AA either way. Browsers without scroll timelines keep the blur. Checked at 1440 with this CSS injected: blurred at the top and 40px below the bar, unblurred under it.
 

@@ -216,7 +216,9 @@
        its colour and the status in small capitals), then today's hours and
        the building as a line of text (visit-hours.js fills the status and
        the hours from LibCal; palefire/visit is attached with visit). No
-       live region: the Visit panel already announces changes. #}
+       live region: the Visit panel already announces changes. Then a link
+       to the week in the Visit panel (visit-strip.html.twig, the same
+       {{ input_id }}-visit id in the map or under it). #}
     {% if hero and visit.lid %}
       <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
         <span class="pf-landing__hours-label">
@@ -225,6 +227,7 @@
         </span>
         <span class="pf-landing__hours-today" data-pf-hours-today></span>
         <span class="pf-landing__hours-place">{{ visit.name }}</span>
+        <a class="pf-landing__hours-week" href="#{{ input_id }}-visit-hours" data-pf-hours-jump>{{ 'This week’s hours'|t }}<span class="pf-landing__hours-arrow" aria-hidden="true">↓</span></a>
       </p>
     {% endif %}
     {% if landing_intro %}

@@ -28,16 +28,23 @@
   </h3>
 
   {% if visit.lid %}
+    {# The status line is the hero's "This week's hours" link target
+       ({{ visit_id }}-hours, includes/landing.html.twig). #}
     <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
-      <p class="pf-visit__status" aria-live="polite">
+      <p class="pf-visit__status" id="{{ visit_id }}-hours" tabindex="-1" aria-live="polite">
         <span class="pf-visit__dot" aria-hidden="true"></span>
         <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
         <span class="pf-visit__today" data-pf-hours-today></span>
       </p>
-      <details class="pf-visit__week">
-        <summary>{{ 'This week'|t }}</summary>
-        <ol class="pf-visit__days" data-pf-hours-week></ol>
-      </details>
+      {# This week, always open: Monday to Sunday with dates (visit-hours.js
+         fills it; "Next week" on Sundays). Seven blank rows hold its height
+         until LibCal answers, so nothing below moves. #}
+      <div class="pf-visit__week">
+        <h4 class="pf-visit__week-title" data-pf-hours-week-label>{{ 'This week'|t }}</h4>
+        <ol class="pf-visit__days" data-pf-hours-week>
+          {% for i in 1..7 %}<li class="pf-visit__day" aria-hidden="true">&nbsp;</li>{% endfor %}
+        </ol>
+      </div>
       <a class="pf-visit__link pf-visit__all-hours" href="https://lsu.libcal.com/hours">{{ 'All library hours'|t }}</a>
     </div>
   {% endif %}

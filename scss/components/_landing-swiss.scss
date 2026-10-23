@@ -236,8 +236,7 @@
   font-weight: 500;
 }
 
-.pf-visit__week > summary,
-.pf-visit__week[open] > summary {
+.pf-visit__week-title {
   @extend %pf-landing-label;
 }
 

@@ -17,8 +17,11 @@
  *   <div data-pf-hours data-lid="241">
  *     <span data-pf-hours-status></span>   Open now | Closes soon | ...
  *     <span data-pf-hours-today></span>    9 AM–5 PM today | Opens tomorrow 9 AM
- *     <ol data-pf-hours-week></ol>         seven rows, today first
+ *     <h4 data-pf-hours-week-label></h4>   This week | Next week
+ *     <ol data-pf-hours-week></ol>         seven rows, Monday to Sunday
  *   </div>
+ *   <a data-pf-hours-jump href="#id">      smooth jump to a Visit panel's
+ *                                          hours, then focus there
  */
 ((Drupal, once) => {
   const ENDPOINT = 'https://lsu.libcal.com/widget/hours/grid';
@@ -154,23 +157,47 @@
 
   /* ---------------- Rendering ---------------- */
 
-  function renderWeek(list, specs, now) {
+  // Monday to Sunday, a timetable: this week, or the next on a Sunday
+  // (LibCal's weeks start on Sunday, so by then it no longer sends the
+  // Monday to Saturday before; the status line has Sunday). Each row: the
+  // day, its date ("Today" for today), its hours. Days already gone are
+  // muted; a day LibCal doesn't list says so instead of "Closed".
+  function renderWeek(list, label, specs, now) {
+    const sunday = now.getDay() === 0;
+    const monday = addDays(now, sunday ? 1 : 1 - now.getDay());
+    const today = ymd(now);
     const rows = [];
     for (let i = 0; i < 7; i++) {
-      const day = addDays(now, i);
-      const w = window_(specFor(specs, day), day);
+      const day = addDays(monday, i);
+      const key = ymd(day);
+      const spec = specFor(specs, day);
+      const w = window_(spec, day);
       const li = document.createElement('li');
-      li.className = 'pf-visit__day' + (i === 0 ? ' is-today' : '') + (w ? '' : ' is-closed');
+      li.className = 'pf-visit__day'
+        + (key === today ? ' is-today' : '')
+        + (key < today ? ' is-past' : '')
+        + (w ? '' : ' is-closed');
+      if (key === today) {
+        li.setAttribute('aria-current', 'date');
+      }
       const name = document.createElement('span');
       name.className = 'pf-visit__day-name';
       name.textContent = day.toLocaleDateString('en-US', { weekday: 'short' });
+      const date = document.createElement('span');
+      date.className = 'pf-visit__day-date';
+      date.textContent = key === today
+        ? Drupal.t('Today')
+        : day.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       const time = document.createElement('span');
       time.className = 'pf-visit__day-hours';
-      time.textContent = w ? range(w) : Drupal.t('Closed');
-      li.append(name, time);
+      time.textContent = w ? range(w) : (spec ? Drupal.t('Closed') : Drupal.t('Not posted'));
+      li.append(name, date, time);
       rows.push(li);
     }
     list.replaceChildren(...rows);
+    if (label) {
+      label.textContent = sunday ? Drupal.t('Next week') : Drupal.t('This week');
+    }
   }
 
   function render(el, data) {
@@ -188,7 +215,7 @@
       todayEl.textContent = s.detail;
     }
     if (weekEl) {
-      renderWeek(weekEl, specs, now);
+      renderWeek(weekEl, el.querySelector('[data-pf-hours-week-label]'), specs, now);
     }
     el.classList.add('is-ready');
     el.classList.remove('is-loading', 'is-failed');
@@ -204,22 +231,28 @@
     formatTime,
   };
 
-  // Bootstrap lg: the Visit strip (_visit.scss) has room for the open list.
-  const LG = window.matchMedia('(min-width: 992px)');
+  const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || document.documentElement.classList.contains('pf-a11y-motion');
 
   Drupal.behaviors.palefireVisitHours = {
     attach(context) {
+      // The hero's "This week's hours": a glide down to the Visit panel's
+      // status line (at once with reduced motion), focus moved there for
+      // keyboard and screen reader users, and the hash kept for sharing.
+      // Without this script the link is a plain jump.
+      once('pf-hours-jump', '[data-pf-hours-jump]', context).forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const target = document.getElementById(link.hash.slice(1));
+          if (!target) {
+            return;
+          }
+          event.preventDefault();
+          target.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+          target.focus({ preventScroll: true });
+          window.history.pushState(null, '', link.hash);
+        });
+      });
       once('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {
-        // "This week" starts open on lg screens (992px up, the Visit strip's
-        // hours column) and closed below. Crossing the breakpoint resets it;
-        // otherwise visitors can open and close it as they like.
-        const week = el.querySelector('.pf-visit__week');
-        if (week) {
-          const sync = () => { week.open = LG.matches; };
-          sync();
-          LG.addEventListener('change', sync);
-          el.pfHoursSync = sync;
-        }
         el.classList.add('is-loading');
         load(el.dataset.lid).then((data) => {
           render(el, data);
@@ -247,9 +280,6 @@
       }
       once.remove('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {
         window.clearInterval(el.pfHoursTimer);
-        if (el.pfHoursSync) {
-          LG.removeEventListener('change', el.pfHoursSync);
-        }
       });
     },
   };

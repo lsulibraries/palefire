@@ -280,28 +280,27 @@
 .pf-visit__hours[data-hours-state="closed"] .pf-visit__dot { background-color: var(--pf-visit-closed); }
 .pf-visit__hours.is-loading .pf-visit__status { opacity: .6; }
 .pf-visit__hours.is-failed .pf-visit__status,
-.pf-visit__hours.is-failed .pf-visit__week,
-.pf-visit__hours:not(.is-ready) .pf-visit__week { display: none; }
+.pf-visit__hours.is-failed .pf-visit__week { display: none; }
+// Held (blank rows) until LibCal answers, then faded in, so nothing moves.
+.pf-visit__hours:not(.is-ready) .pf-visit__week { visibility: hidden; opacity: 0; }
+.pf-visit__week { transition: opacity .4s ease; }
 
-// This week (seven rows, today first). The resets drop the starterkit
-// details box (border, padding, margin), as .pf-map__key does.
-.pf-visit__week,
-.pf-visit__week[open] {
-  margin: .625rem 0 0;
-  padding: 0;
-  border: 0;
-  background: none;
+// The hero's "This week's hours" lands here: under the stuck header and the
+// landing bar (WCAG 2.2 SC 2.4.11). Focused by script, so no ring.
+.pf-visit__status {
+  scroll-margin-top: calc(var(--pf-landing-bar-h, 2rem) + 1.5rem);
+  outline: 0;
 }
-.pf-visit__week > summary,
-.pf-visit__week[open] > summary {
+
+// This week: always open, Monday to Sunday, a ruled timetable (day, date,
+// hours). Today is weighted and underlined in the highlight; days already
+// gone are muted.
+.pf-visit__week { margin: .625rem 0 0; }
+.pf-visit__week-title {
   margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  inline-size: fit-content;
   font-size: .875rem;
   font-weight: 600;
+  line-height: 1.5;
 }
 .pf-visit__days {
   display: grid;
@@ -313,14 +312,28 @@
   font-variant-numeric: tabular-nums;
 }
 .pf-visit__day {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
   gap: 1rem;
-  padding: .125rem 0;
+  padding: .25rem 0;
   border-bottom: 1px solid var(--pf-visit-rule);
 }
-.pf-visit__day.is-today { font-weight: 600; }
+.pf-visit__day-date,
+.pf-visit__day.is-past,
 .pf-visit__day.is-closed .pf-visit__day-hours { color: var(--pf-toc-color, inherit); }
+.pf-visit__day-hours { text-align: end; }
+.pf-visit__day.is-today {
+  font-weight: 600;
+  border-bottom-color: transparent;
+  box-shadow: inset 0 -2px 0 var(--pf-g-highlight, #{$pf-gold});
+}
+.pf-visit__day.is-today .pf-visit__day-date { color: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .pf-visit__week { transition: none; }
+}
+@media (forced-colors: active) {
+  .pf-visit__day.is-today { border-bottom: 2px solid CanvasText; }
+}
 
 .pf-visit__link {
   display: inline-block;
