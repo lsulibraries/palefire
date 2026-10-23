@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Tile showcase: a Masonry layout with a Default / Grid / List switch, and numbered section headers.** For "03 From the Galleries / Off the Walls, Online" on the Special Collections homepage.
+  - Masonry cards are in the hero banners' voice: their scrim, a mixed-case title and the pill above. They sit in columns that follow the section's width: 2, 3 from 36rem, 4 from 56rem, 5 from 72rem (230×461 at 1440, a banner's size).
+  - Card heights cycle around a banner's 1:2. `js/tile-views.js` packs each card into the shortest column in list order. It also shows the switch (`aria-pressed` buttons) and remembers the visitor's pick in localStorage. The change morphs with View Transitions, except with reduced motion.
+  - Grid is even 3:4 cards. List is hairline rows: a thumbnail, the label in mono, the title, the note and an arrow.
+  - The new optional fields Eyebrow, Lede and Link add the hero's index rule above the section's heading, with the lede under it. The rule is numbered by position (the hero's 01 and 02 count first) in `palefire_preprocess_field()` and printed by the scroll-section field template.
+  - Card images now fall back to an exhibition's cover (`field_exhibit_cover`).
+  - Setup: `scripts/palefire_tile_showcase_gallery_setup.php`.
+  - Why: a section of exhibitions that reads like the banners, with a choice of view for people who'd rather scan a list.
+
 - **Fix: hero banners' scrim leaving a hairline of bare picture at the edges.** The scrim (`.pf-hero-banner__link::after`) gets `will-change: transform`, so it is composited like the panning picture and the link's clip snaps the same for both. Why: at fractional display scales (125%) the picture's layer was clipped a device pixel wider than the painted scrim, so a light row showed under some banners' feet and a light column at their sides.
 
 - **Hero banners: the picture pan on desktop too, deeper.** The phones' pan (`pf-banner-pan`) now runs at every width, under the row of five's drift and cross: each picture is 3rem taller than its frame at top and foot from 44rem (1.5rem narrower), so it slides 96px through its banner as the banner crosses the screen. The event banner keeps 1.5rem, since a deeper pan crops its flyer's headline. Reduced motion and the Settings drawer's switch still stop it. Why: the pan gave the phone banners depth, and the desktop row wanted the same.

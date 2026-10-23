@@ -13,23 +13,39 @@
  * anything inside that reads --bs-* variables (tiles, form controls, the
  * events carousel) switches with the section, as _sections.scss does for
  * the older field_sections.
+ *
+ * item.section.index (palefire_preprocess_field(), a section with an
+ * Eyebrow): the hero's index rule (includes/landing.html.twig) above the
+ * heading, numbered by position, with its link at the rule's right end,
+ * and the Lede under the heading.
  */
 #}
+{% import '@palefire/includes/landing.html.twig' as pf %}
 <div{{ attributes.addClass('pf-sections') }}>
   {% for item in items %}
     {% if item.section %}
       {% if item.attributes.hasClass('pf-section--theme-dark') %}
         {% set item_attributes = item.attributes.setAttribute('data-bs-theme', 'dark') %}
       {% endif %}
+      {% set index = item.section.index %}
+      {% if index %}
+        {% set item_attributes = item.attributes.addClass('pf-section--indexed') %}
+      {% endif %}
       <section{{ item.attributes }}>
         {% if item.section.bg %}
           <div class="pf-section__bg" aria-hidden="true" inert>{{ item.section.bg }}</div>
         {% endif %}
         <div class="pf-section__inner">
+          {% if index %}
+            {{ pf.index_rule(index.num, index.label, index.link ?: {}) }}
+          {% endif %}
           {% if item.section.label %}
             <h2 id="{{ item.section.title_id }}"
                 class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}"
                 tabindex="-1">{{ item.section.label }}</h2>
+          {% endif %}
+          {% if index.lede %}
+            <p class="pf-section__lede">{{ index.lede }}</p>
           {% endif %}
           {{ item.content }}
         </div>

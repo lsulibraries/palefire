@@ -6,7 +6,8 @@
  *
  * Variables from palefire_preprocess_paragraph__tile_showcase():
  * - layout: 'stagger' (tall cards, offset rhythm), 'grid' (3 / 2 / 1
- *   columns) or 'index' (numbered rows, no pictures).
+ *   columns), 'index' (numbered rows, no pictures) or 'masonry' (tall
+ *   cards on mixed heights, with a Default / Grid / List switch).
  * - tiles: title, url, label (Category terms, "Dept + Medium"), note (the
  *   intro as plain text; index only), image.
  *
@@ -15,6 +16,14 @@
  * starts with it ("Oral History, Dept + Medium"); CSS shows the label above.
  * role="list" keeps list semantics in Safari, which drops them when
  * list-style is none.
+ *
+ * Masonry: the cards in the hero banners' voice (mixed case, the pill
+ * above), on columns of mixed heights, with a switch for the visitor:
+ * Default (masonry), Grid (even cards) or List (a thumbnail, title, note
+ * and label per row). One list for all three; js/tile-views.js sets
+ * data-pf-view on the wrapper and shows the switch, which stays hidden
+ * without it (the masonry is the page as written). aria-pressed buttons
+ * in a labelled group, as the exhibition's view controls.
  *
  * Index: the same list, each row a link with its number (decorative: the
  * list is ordered, which screen readers already announce), title, note and
@@ -31,7 +40,7 @@
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
   {{ attach_library('palefire/tile-reveal') }}
-  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip>
+  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip{% if layout == 'masonry' %} data-pf-view="default"{% endif %}>
     {% if layout == 'index' %}
       <ol class="pf-tiles__list" role="list">
         {% for tile in tiles %}
@@ -52,6 +61,40 @@
           </li>
         {% endfor %}
       </ol>
+    {% elseif layout == 'masonry' %}
+      {{ attach_library('palefire/tile-views') }}
+      {% set views = {
+        default: { label: 'Default'|t, icon: '<rect x="3" y="3" width="5" height="11"/><rect x="3" y="17" width="5" height="4"/><rect x="10" y="3" width="5" height="6"/><rect x="10" y="12" width="5" height="9"/><rect x="17" y="3" width="4" height="13"/>' },
+        grid: { label: 'Grid'|t, icon: '<rect x="3" y="3" width="7.5" height="7.5"/><rect x="13.5" y="3" width="7.5" height="7.5"/><rect x="3" y="13.5" width="7.5" height="7.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5"/>' },
+        list: { label: 'List'|t, icon: '<path d="M3 5h18M3 12h18M3 19h18"/>' },
+      } %}
+      <div class="pf-tiles__views" role="group" aria-label="{{ 'Show as'|t }}" hidden>
+        {% for key, view in views %}
+          <button type="button" class="pf-tiles__view" data-pf-view="{{ key }}" aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ view.icon|raw }}</svg>
+            <span>{{ view.label }}</span>
+          </button>
+        {% endfor %}
+      </div>
+      <ul class="pf-tiles__list" role="list">
+        {% for tile in tiles %}
+          <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+            <a class="pf-tile pf-tile--banner{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+              <span class="pf-tile__media">{{ tile.image }}</span>
+              <span class="pf-tile__body">
+                <h3 class="pf-tile__title">{{ tile.title }}</h3>
+                {% if tile.note %}
+                  <span class="pf-tile__note"><span class="visually-hidden">, </span>{{ tile.note }}</span>
+                {% endif %}
+                {% if tile.label %}
+                  <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
+                {% endif %}
+              </span>
+              <svg class="pf-tile__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
       <ul class="pf-tiles__list" role="list">
         {% for tile in tiles %}

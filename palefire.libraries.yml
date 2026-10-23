@@ -189,6 +189,15 @@ tile-reveal:
     - core/drupal
     - core/once
 
+# The masonry Tile showcase's Default / Grid / List switch. Attached by
+# templates/paragraphs/paragraph--tile-showcase.html.twig (masonry only).
+tile-views:
+  js:
+    js/tile-views.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Landing with a lead panel and a map: the page snaps between the two (md
 # and up). Attached by includes/landing.html.twig.
 landing-snap:

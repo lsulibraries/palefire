@@ -398,6 +398,314 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   transform: none;
 }
 
+// Masonry ------------------------------------------------------------------
+// Tall cards in the hero banners' voice (the same scrim, mixed-case title,
+// pill above), with a Default / Grid / List switch (js/tile-views.js sets
+// data-pf-view on the wrapper). Columns follow the section's own width:
+// 2, then 3 from 36rem, 4 from 56rem, 5 from 72rem (the banners' five
+// across), with the banners' gutters (10px on a phone up to 16px, then the
+// hero's grid gutter from 44rem).
+//
+// Default: each card a run of rows a column wide (--pf-unit, an eighth of
+// a column), 12 to 16 rows by its place in a five-card cycle, so heights
+// stay near a banner's 1:2 and vary. The script drops each card into the
+// shortest column (--pf-col, --pf-row), so the list reads in its own
+// order and the columns pack; without it the grid places them as it can.
+// Grid: even 3:4 cards. List: one ruled row each, a thumbnail, the title
+// and note, the label in the mono voice, and an arrow.
+.pf-tiles--masonry {
+  --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  --pf-tile-scrim: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .6) 30%, rgb(0 0 0 / 0) 65%);
+}
+
+.pf-tiles--masonry .pf-tiles__list {
+  --pf-cols: 2;
+  --pf-gap: clamp(.625rem, 2.5cqi, 1rem);
+  --pf-unit: calc((100cqi - (var(--pf-cols) - 1) * var(--pf-gap)) / var(--pf-cols) / 8);
+  display: grid;
+  grid-template-columns: repeat(var(--pf-cols), minmax(0, 1fr));
+  gap: var(--pf-gap);
+}
+
+@container pf-tiles (min-width: 36rem) {
+  .pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 3;
+  }
+}
+
+@container pf-tiles (min-width: 44rem) {
+  .pf-tiles--masonry .pf-tiles__list {
+    --pf-gap: clamp(1.25rem, 2.25vw, 2rem);
+  }
+}
+
+@container pf-tiles (min-width: 56rem) {
+  .pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 4;
+  }
+}
+
+@container pf-tiles (min-width: 72rem) {
+  .pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 5;
+  }
+}
+
+// Default: rows of --pf-unit, no row gap (each card keeps the gutter under
+// itself, inside its run of rows).
+.pf-tiles--masonry[data-pf-view="default"] {
+  .pf-tiles__list {
+    grid-auto-rows: var(--pf-unit);
+    row-gap: 0;
+  }
+
+  .pf-tiles__item {
+    --pf-span: 16;
+    grid-column: var(--pf-col, auto);
+    grid-row: var(--pf-row, auto) / span var(--pf-span);
+    padding-bottom: var(--pf-gap);
+
+    &:nth-child(5n + 2) {
+      --pf-span: 13;
+    }
+
+    &:nth-child(5n + 3) {
+      --pf-span: 15;
+    }
+
+    &:nth-child(5n + 4) {
+      --pf-span: 12;
+    }
+
+    &:nth-child(5n) {
+      --pf-span: 14;
+    }
+  }
+}
+
+.pf-tiles--masonry[data-pf-view="grid"] .pf-tile {
+  aspect-ratio: 3 / 4;
+}
+
+// The card in the banners' voice (Default and Grid). The scrim runs a
+// pixel past each edge on a layer of its own, as on the banners, so no
+// hairline of bare picture shows at fractional scales.
+.pf-tile--banner {
+  &::after {
+    inset: -1px -1px -2px;
+    will-change: transform;
+  }
+
+  .pf-tile__body {
+    gap: .5rem;
+    padding: clamp(.875rem, 1.6cqi, 1.25rem);
+  }
+
+  .pf-tile__title {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(1rem, .8rem + .9cqi, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -.01em;
+    line-height: 1.15;
+    text-transform: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  :is(.pf-tile__note, .pf-tile__arrow) {
+    display: none;
+  }
+}
+
+// The card's colour (white here, the text colour in the List), not the
+// swatch's heading gold (html[data-pf-theme] .pf-main h3,
+// _reading-themes.scss): four classes to outrank it, as on the index.
+.pf-tiles.pf-tiles--masonry .pf-tile .pf-tile__title {
+  color: inherit;
+}
+
+// List: the card as a row, in the section's colours.
+.pf-tiles--masonry[data-pf-view="list"] {
+  .pf-tiles__list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid #{$pf-hairline};
+  }
+
+  .pf-tiles__item {
+    border-bottom: 1px solid #{$pf-hairline};
+  }
+
+  .pf-tile {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(1rem, 2.5cqi, 1.75rem);
+    height: auto;
+    padding: .875rem 0;
+    overflow: visible;
+    color: var(--pf-section-fg, var(--bs-body-color));
+    background: none;
+    box-shadow: none;
+
+    &::after {
+      content: none;
+    }
+
+    &:focus-visible {
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  .pf-tile__media {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    flex: none;
+    width: clamp(3.5rem, 9cqi, 5.5rem);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: $pf-grey-900;
+  }
+
+  .pf-tile__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: .25rem;
+    padding: 0;
+  }
+
+  .pf-tile__label {
+    @extend %pf-landing-label;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-tile__title {
+    font-size: clamp(1.0625rem, 1rem + .4cqi, 1.375rem);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    text-decoration: underline transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+
+  .pf-tile__note {
+    display: -webkit-box;
+    overflow: hidden;
+    max-width: 40rem;
+    font-size: .9375rem;
+    line-height: 1.45;
+    color: var(--pf-toc-color);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .pf-tile__arrow {
+    display: block;
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .pf-tile:is(:hover, :focus-visible) {
+    color: var(--pf-section-fg, var(--bs-body-color));
+
+    .pf-tile__label {
+      background: none;
+      color: var(--pf-toc-color);
+    }
+
+    .pf-tile__title {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-tiles--masonry[data-pf-view="list"] {
+    .pf-tile__title {
+      transition: text-decoration-color $pf-hover-out ease;
+    }
+
+    .pf-tile__arrow {
+      transition: transform $pf-hover-out ease;
+    }
+
+    .pf-tile:is(:hover, :focus-visible) .pf-tile__arrow {
+      transform: translateX(.25rem);
+    }
+  }
+
+  // The switch's morph (View Transitions), the cards only: a little
+  // slower than the browser's default, on the banners' ease.
+  ::view-transition-group(*.pf-tile) {
+    animation-duration: .5s;
+    animation-timing-function: cubic-bezier(.2, .7, .2, 1);
+  }
+}
+
+// The switch: three small-capital buttons on one hairline, the pressed one
+// in the text colour with a gold mark under it (the page's active state).
+// 44px tall (WCAG 2.5.8). Hidden until the script shows it.
+.pf-tiles__views {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-tiles__view {
+  @extend %pf-landing-label;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  padding: 0 .875rem;
+  border: 0;
+  border-bottom: 1px solid #{$pf-hairline};
+  background: none;
+  color: var(--pf-toc-color);
+  cursor: pointer;
+  transition: color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    color: var(--pf-section-fg, var(--bs-body-color));
+    transition-duration: $pf-hover-in;
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--pf-section-fg, var(--bs-body-color));
+    box-shadow: inset 0 -2px 0 var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-tiles__view[aria-pressed="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
 // Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
 // The hidden state only exists under .pf-tiles--reveal, which the script
 // adds when motion is allowed, so without JS (or with reduced motion) the

@@ -631,16 +631,19 @@ function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int 
  * A card's cover image item, or NULL.
  *
  * A Tile's Tile cover (field_tile_cover). Any other node (a Modular page):
- * its Image cover (field_image_cover, Media: Image), else the background
- * poster of its first landing (_palefire_landing_poster_item()).
+ * its Image cover (field_image_cover, Media: Image), else an exhibition's
+ * cover (field_exhibit_cover, Media: Image), else the background poster of
+ * its first landing (_palefire_landing_poster_item()).
  */
 function _palefire_card_image_item(NodeInterface $node, CacheableMetadata $cache): ?FieldItemInterface {
   if ($node->hasField('field_tile_cover')) {
     return $node->get('field_tile_cover')->isEmpty() ? NULL : $node->get('field_tile_cover')->first();
   }
-  if ($node->hasField('field_image_cover') && !$node->get('field_image_cover')->isEmpty()
-    && ($image = _palefire_media_image_item($node->get('field_image_cover')->first(), $cache))) {
-    return $image;
+  foreach (['field_image_cover', 'field_exhibit_cover'] as $field) {
+    if ($node->hasField($field) && !$node->get($field)->isEmpty()
+      && ($image = _palefire_media_image_item($node->get($field)->first(), $cache))) {
+      return $image;
+    }
   }
   return _palefire_landing_poster_item($node, $cache);
 }
@@ -1092,13 +1095,17 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   number, title, note and label (Collections & services on the Special
  *   Collections homepage). The "index" value is added to the Layout field's
  *   allowed values by hand (Manage fields); any other value is a stagger.
+ * - masonry: tall cards in the hero banners' voice, on columns of mixed
+ *   heights, with a Default / Grid / List switch for the visitor
+ *   (js/tile-views.js). Added by palefire_tile_showcase_gallery_setup.php.
  *
- * layout: 'stagger', 'grid' or 'index'.
+ * layout: 'stagger', 'grid', 'index' or 'masonry'.
  * tiles: one entry per item the visitor can see, in field order:
  * - title: the node's title.
  * - url: the node's own URL.
  * - label: its Category terms joined with " + " ("Dept + Medium"), or ''.
- * - note: its intro as plain text, or '' (shown by the index only).
+ * - note: its intro as plain text, or '' (shown by the index, and by the
+ *   masonry's List view).
  * - image: the card's cover in the layout's responsive image style, or
  *   NULL (always NULL on the index, which shows none). Its alt is empty:
  *   the card's title already names the link, so the image would only
@@ -1112,7 +1119,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     return;
   }
   $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
-  if (in_array($layout, ['grid', 'index'], TRUE)) {
+  if (in_array($layout, ['grid', 'index', 'masonry'], TRUE)) {
     $variables['layout'] = $layout;
   }
   if (!$paragraph->hasField('field_tiles')) {
@@ -1137,6 +1144,66 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'image' => $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL,
     ];
   }
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field templates.
+ *
+ * Scroll sections (field_scroll_section): a section whose paragraph has an
+ * Eyebrow (field_tile_eyebrow, on the Tile showcase) opens with an index
+ * rule, as the hero's 01 and 02 do, and its Lede under the heading
+ * (field--node--field-scroll-section--modular-page.html.twig). Adds
+ * item.section.index: num ('03'), label (the eyebrow), lede (plain text,
+ * or ''), and link (url, text, external, from field_tile_link) or NULL.
+ *
+ * Numbered by position, so a section moved in the editor renumbers itself:
+ * the landing hero's two rules (01 Start your research, 02 Visit Hill)
+ * count first, then each section with an eyebrow, in order. The link's
+ * text drops a trailing arrow typed by hand: the rule draws its own.
+ */
+function palefire_preprocess_field(array &$variables): void {
+  if (($variables['field_name'] ?? '') !== 'field_scroll_section' || empty($variables['items'])) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $count = 0;
+  foreach ($variables['items'] as &$item) {
+    $paragraph = $item['content']['#paragraph'] ?? NULL;
+    if (!$paragraph instanceof ParagraphInterface) {
+      continue;
+    }
+    if ($paragraph->bundle() === 'landing_hero') {
+      $count += 2;
+      continue;
+    }
+    if (!is_array($item['section'] ?? NULL)
+      || !$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
+      continue;
+    }
+    $cache->addCacheableDependency($paragraph);
+    $link = NULL;
+    if ($paragraph->hasField('field_tile_link') && !$paragraph->get('field_tile_link')->isEmpty()) {
+      $link_item = $paragraph->get('field_tile_link')->first();
+      $url = $link_item->getUrl();
+      $generated = $url->toString(TRUE);
+      $cache->addCacheableDependency($generated);
+      $text = trim(preg_replace('/[\s\x{2192}]+$/u', '', (string) $link_item->title));
+      $link = [
+        'url' => $generated->getGeneratedUrl(),
+        'text' => $text !== '' ? $text : t('See all'),
+        'external' => $url->isExternal(),
+      ];
+    }
+    $lede = $paragraph->hasField('field_tile_lede') ? trim((string) $paragraph->get('field_tile_lede')->value) : '';
+    $item['section']['index'] = [
+      'num' => sprintf('%02d', ++$count),
+      'label' => $paragraph->get('field_tile_eyebrow')->value,
+      'lede' => $lede,
+      'link' => $link,
+    ];
+  }
+  unset($item);
   $cache->applyTo($variables);
 }
 
