@@ -864,6 +864,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero banners and gallery cards: no hairline of picture at the foot.**
+  - Each picture now stops 2px above its card's foot, on a clip of its own (`.pf-hero-banner__media`, `.pf-tile--banner .pf-tile__media`), so the last rows are the card's dark ground under the scrim's darkest stop. On the banners the pan moves to the `img` inside that clip, which holds still.
+  - Shipped in `33a2b02` (which reused the masonry commit's message); this entry and the guide sources below follow it.
+  - Why: at fractional scales (125%) the composited picture and the scrim rounded to different device rows, leaving a light line at the foot at some scroll positions. Measured clean in Edge at 100%, 125% and 150%.
+
 - **Duplication guide: prices as a price list; request paths: diamonds light up as the line reaches them.**
   - Guide text: a table with two columns and no header row is now set as a price list (`_guide.scss`): no box or minimum width, rules between rows, the item in body weight with an optional `<small>` detail under it, the price bold, right-aligned and on one line with even figures. Tables with a header row (Systematic Reviews) are unchanged. Text formats drop classes, so the table's shape is the marker.
   - The duplication guide's Prices section is that table plus one note (`scripts/palefire_guide_duplication_prices.html`), shared by `palefire_guide_duplication.php` (new builds) and the new `palefire_guide_duplication_prices.php`, which replaces the Prices section's blocks on the live page as a new revision (the old one stays under Revisions).

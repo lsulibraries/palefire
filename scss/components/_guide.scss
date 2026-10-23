@@ -423,6 +423,47 @@ html[data-pf-mode="guide"] .pf-section__title {
     background: var(--pf-guide-surface);
   }
 
+  // A price list: a table of two columns and no header row (thing | price,
+  // e.g. palefire_guide_duplication_prices.html). Text formats drop
+  // classes, so its shape marks it. No box or minimum width, rules between
+  // rows; the thing in body weight with an optional <small> detail under
+  // it, the price bold, on one line and right-aligned with even figures.
+  &:has(table:not(:has(thead)):not(:has(tr > :nth-child(3)))) {
+    overflow-x: visible;
+  }
+
+  table:not(:has(thead)):not(:has(tr > :nth-child(3))) {
+    min-width: 0;
+    font-size: 1rem;
+    border: 0;
+    border-top: 1px solid var(--pf-guide-rule);
+
+    caption {
+      padding-inline: 0;
+    }
+
+    th {
+      padding-inline: 0 1.5rem;
+      font-weight: 400;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 0.875rem;
+      color: var(--pf-guide-muted);
+    }
+
+    td {
+      padding-inline: 0;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-align: end;
+      white-space: nowrap;
+      color: var(--bs-emphasis-color);
+    }
+  }
+
   code {
     padding: 0.1em 0.35em;
     font-size: 0.875em;
@@ -870,15 +911,51 @@ html[data-pf-mode="guide"] .pf-section__title {
       transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
+    // Each diamond lights up briefly as the line reaches it (its hover
+    // look: the outline in the accent, the icon's second tone up), the
+    // first as the line leaves it: 0.6s, then each leg's end.
+    .pf-paths__icon::before {
+      animation: pf-paths-ping-mark 0.9s ease-out;
+    }
+
+    .pf-paths__icon .fa-secondary {
+      animation: pf-paths-ping-icon 0.9s ease-out;
+    }
+
     @for $i from 1 through 4 {
+      $ping: 600;
+
+      @if $i > 1 {
+        $ping: 1200 + ($i - 2) * 250;
+      }
+
       &:nth-child(#{$i}) {
         transition-delay: #{($i - 1) * 120}ms;
 
         &::before {
           transition-delay: #{600 + ($i - 1) * 250}ms;
         }
+
+        .pf-paths__icon::before,
+        .pf-paths__icon .fa-secondary {
+          animation-delay: #{$ping}ms;
+        }
       }
     }
+  }
+}
+
+@keyframes pf-paths-ping-mark {
+  30%,
+  50% {
+    border-color: var(--pf-guide-accent);
+  }
+}
+
+@keyframes pf-paths-ping-icon {
+  30%,
+  50% {
+    opacity: 0.75;
   }
 }
 

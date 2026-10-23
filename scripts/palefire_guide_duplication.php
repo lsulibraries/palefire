@@ -18,8 +18,9 @@
  * Prices first (the $10 order fee, then each kind of copy), then how to
  * order, copyright and permissions, and how to cite. Service details come
  * from the Special Collections Duplication tile on lib.lsu.edu/special
- * (October 2026). No tables: the prices are short lists, so the WYSIWYG
- * format needs nothing extra.
+ * (October 2026). The prices are one table, palefire_guide_duplication_prices.html
+ * (the WYSIWYG format keeps tables; if it drops <small>, the <br> before
+ * each detail still puts it on its own line).
  *
  * Creates:
  * - Resources for the tools it links (found by link first, so existing
@@ -152,28 +153,11 @@ $section = function (string $heading, array $blocks, string $theme = 'light') us
 
 // Sections. ----------------------------------------------------------------
 
+// The prices as one price list (a two-column table with no header row,
+// which _guide.scss sets as one), shared with
+// palefire_guide_duplication_prices.php, which updates a page already built.
 $section('Prices', [
-  $text(NULL, '<p><strong>Every order has a $10 processing fee</strong> on top of the prices below. One fee covers several requests submitted at the same time.</p>', 'callout'),
-  $text('Photocopies and reference scans', <<<'HTML'
-<ul>
-<li><strong>$0.50 a page</strong> for low-resolution PDF scans (by email) or photocopies (in print).</li>
-</ul>
-<p>Images from Special Collections' digital collections are free to download, at low resolution, from the <a href="http://louisianadigitallibrary.org/lsu-sc">Louisiana Digital Library</a>.</p>
-HTML),
-  $text('High-resolution scans for publication', <<<'HTML'
-<ul>
-<li><strong>$1 a scan</strong>, as JPEG or TIFF files.</li>
-<li><strong>$5 a disc</strong> if you'd like the files on CD or DVD.</li>
-</ul>
-<p>Photographs can be ordered as staff-made scans or photographic prints. Photographs can't be photocopied, or scanned with your own scanner.</p>
-HTML),
-  $text('Other copies', <<<'HTML'
-<ul>
-<li><strong>$25</strong> for a PDF of an LSU dissertation or thesis, when it isn't already available online.</li>
-<li><strong>$10 a disc</strong> for a copy of a CD or DVD from the collections.</li>
-<li><strong>Microfilm copies are currently unavailable.</strong> When they are offered: $60 for a reel-to-reel copy (only when LSU holds the negative), or $45 for a PDF of a reel.</li>
-</ul>
-HTML),
+  $text(NULL, (string) file_get_contents(__DIR__ . '/palefire_guide_duplication_prices.html')),
 ]);
 
 $section('How to order', [
