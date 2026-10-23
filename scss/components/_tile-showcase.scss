@@ -113,10 +113,11 @@ $pf-tile-break-two: 32rem;
   padding: 0 1.25rem 1.25rem;
 }
 
-// The labels read after the title (link name "Audubon, Exhibition,
-// Digital") but show above it: a square label per Category term, in the
-// page's label voice (mono small capitals, as the section eyebrows and the
-// Quick Start's buttons), white on black over any picture.
+// The label reads after the title (link name "Audubon, Digital
+// Exhibition") but shows above it: one square label for the Category terms
+// together (as the hero banners' .pf-hero-banner__label), in the page's
+// label voice (mono small capitals, as the section eyebrows and the Quick
+// Start's buttons), white on black over any picture.
 .pf-tile__labels {
   // Set here too: stagger and grid sections sit outside the landing.
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
@@ -148,8 +149,9 @@ $pf-tile-break-two: 32rem;
   hyphens: auto;
 }
 
+// Hover and focus: the banners' highlight (the swatch's), black words.
 .pf-tile:is(:hover, :focus-visible) .pf-tile__label {
-  background: var(--pf-ui-gold, #{$pf-gold});
+  background: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
   color: $pf-black;
 }
 
@@ -659,9 +661,11 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 }
 
 // The card in the banners' voice (Default and Grid). The scrim runs a
-// pixel past each edge on a layer of its own, and the picture stops 2px
-// above the foot on a clip of its own, as on the banners, so no hairline
-// of bare picture shows at fractional scales. (List sets inset: auto.)
+// pixel past each edge on a layer of its own, and the picture fills the
+// card to its foot on a clip of its own, as on the banners. (It stopped
+// 2px short, but that strip of the card's grey ground read as a border;
+// the scrim past the foot and the card's clip keep bare picture from
+// showing.) (List sets inset: auto.)
 .pf-tile--banner {
   &::after {
     inset: -1px -1px -2px;
@@ -669,7 +673,6 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 
   .pf-tile__media {
-    bottom: 2px;
     overflow: hidden;
   }
 

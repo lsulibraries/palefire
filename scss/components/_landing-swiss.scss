@@ -302,8 +302,10 @@
     line-height: 1.55;
   }
 
-  .pf-map__note + .pf-map__legend {
-    margin: 1.25rem 0 0;
+  // No closing line under each column's last room: the key's own rule
+  // under the columns (.pf-visit__key) closes the section once.
+  .pf-map__group li:last-child .pf-map__item {
+    border-bottom: 0;
   }
 
   .pf-map__group-title {
@@ -337,6 +339,13 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 // rooms now, so the wrapper keeps only its rule underneath.
 .pf-visit__key .pf-map__key--indexed > .pf-map__key-toggle {
   padding-top: 0;
+}
+
+// More air round that rule, so 03's rooms and the Visit section after it
+// read as two sections (it was 20px above the rule and 14px below).
+.pf-visit__key:has(> .pf-map__key--indexed) {
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
 }
 
 // Links as labels with an accent underline, like the events fact source.

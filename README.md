@@ -889,6 +889,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Rooms and access tidied; See hours button; tiles fill to the foot; one label per card.**
+  - Rooms and access (`map-key.html.twig`, `_landing-swiss.scss`, `_landing-features.scss`): no hairline under the drawing (03's rule opens the section), no elevator mark in its first column for now (the drawing keeps it), no closing line under each column's last room, and more room round the rule before Visit (2–3rem above, 1–1.5rem below; it was 20px and 14px).
+  - Quick Start: the hours button reads "● See hours ↓" (status words for screen readers only, so the dot's colour never carries it alone). When the three buttons don't fit one line (about 474px), a container query lays them out as two columns the width of Full guide and Order prices with See hours across both, its edges on theirs; under about 318px, one column at one width. Breakpoints are in rem from the measured labels; a much longer translation would need them moved.
+  - Tiles (`_tile-showcase.scss`): the banner-voice cards' picture stopped 2px above the foot, the same strip of grey ground that read as a border on the hero banners; it now fills to the foot.
+  - Labels (`palefire.theme`, `paragraph--tile-showcase.html.twig`): tiles show one label for their Category terms, as the hero banners do, gold on hover in the banners' highlight. `_palefire_card_label()` joins the terms with " + ", or a space when one is Exhibition ("Digital Exhibition", "Physical Exhibition"), for the banners, tiles and From the stacks alike.
+  - Checked at 320, 400 and 1440 on the live page with this markup and CSS swapped in: no horizontal scroll; See hours spans exactly the pair above at 400 (20–338px) and all three are one width at 320. The PHP wasn't run locally.
+
 - **03 Rooms and access: the map's legend as an indexed section; index numbers no longer typed by hand.**
   - Why: in the hero's Visit panel the legend's toggle ("Legend & spaces", bold sans capitals, a heavy chevron) was the one row on the page outside the mono label voice, it started collapsed across the full width, and its note floated alone between two rules.
   - `map-key.html.twig`, `_landing-swiss.scss`, `building-map.js`: in the hero (`map.visit`) the toggle is an index rule, "03 Rooms and access", with the count and +/− at its right end in the rule link's voice; it stays open, and the body is an index in three columns from 768px (the note and legend, then Walk in and By appointment, group headings as grey mono labels, rooms in white), stacked below. Maps elsewhere keep their own key.

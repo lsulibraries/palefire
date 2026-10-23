@@ -44,14 +44,13 @@
  * from being listed a second time on modes that list every h3.
  */
 #}
-{# The card's Category terms, a square label apiece, read as ", Exhibition,
-   Digital" after the title. #}
+{# The card's Category terms as one square label, as the hero banners
+   show them ("Digital Exhibition", "Dept + Medium": _palefire_card_label()),
+   read as ", Digital Exhibition" after the title. #}
 {% macro labels(tile) %}
-  {% if tile.labels %}
+  {% if tile.label %}
     <span class="pf-tile__labels">
-      {% for label in tile.labels %}
-        <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ label }}</span>
-      {% endfor %}
+      <span class="pf-tile__label"><span class="visually-hidden">, </span>{{ tile.label }}</span>
     </span>
   {% endif %}
 {% endmacro %}

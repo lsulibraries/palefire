@@ -40,7 +40,7 @@
        Twig keeps no count across loops, so the places are worked out:
        the legend line (0 or 1 rows), then the walk-in group (its heading
        and rooms), then the appointment group. #}
-    {% set seq_legend = 'elevator' in map.legend ? 1 : 0 %}
+    {% set seq_legend = not keyed and 'elevator' in map.legend ? 1 : 0 %}
     {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length %}
     {# The walk-in and appointment hatches are on the group headings below,
        so the legend lists only the drawing's other marks. #}
@@ -51,13 +51,13 @@
         </ul>
       {% endif %}
     {% endset %}
-    {# Indexed: the note, then the legend, as the first column. #}
+    {# Indexed: the note as the first column. The legend (the elevator
+       mark) is left out here for now; the drawing keeps the mark. #}
     {% if keyed %}
       <div class="pf-map__key-about">
         {% if map.note %}
           <div class="pf-map__intro pf-map__note">{{ map.note }}</div>
         {% endif %}
-        {{ legend }}
       </div>
     {% else %}
       {{ legend }}

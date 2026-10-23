@@ -624,6 +624,21 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
 }
 
 /**
+ * A card's Category terms as one label (the hero banners, the tiles).
+ *
+ * Joined with " + " ("Dept + Medium"), except when one of them is
+ * Exhibition: then a space, so it reads as a kind of exhibition ("Digital
+ * Exhibition", "Physical Exhibition") rather than two things.
+ *
+ * @param string[] $labels
+ *   The terms' labels, in field order.
+ */
+function _palefire_card_label(array $labels): string {
+  $exhibition = (bool) array_filter($labels, static fn (string $label): bool => mb_strtolower(trim($label)) === 'exhibition');
+  return implode($exhibition ? ' ' : ' + ', $labels);
+}
+
+/**
  * One Tile or Modular page as a card, or NULL when the visitor can't view it.
  *
  * Tile showcase (field_tiles) and the Landing hero's tiles
@@ -631,8 +646,8 @@ function _palefire_hero_tiles(ParagraphInterface $paragraph, array &$variables):
  * type, Manage fields), so both read their nodes through here and get the
  * same shape:
  * - title, url: the node's own, in the page's language.
- * - label: its Category terms (field_category) joined with " + "
- *   ("Dept + Medium"), or ''.
+ * - label: its Category terms (field_category) as one label
+ *   (_palefire_card_label(): "Dept + Medium", "Digital Exhibition"), or ''.
  * - labels: the same terms, one string each ([] when none).
  * - note: plain text from its intro (field_intro), else the body's summary,
  *   else the body, cut at $max; '' when it has none.
@@ -677,7 +692,7 @@ function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int 
   return [
     'title' => $node->label(),
     'url' => $url->getGeneratedUrl(),
-    'label' => implode(' + ', $labels),
+    'label' => _palefire_card_label($labels),
     'labels' => $labels,
     'note' => $note,
     'image_item' => _palefire_card_image_item($node, $cache),
@@ -1218,9 +1233,10 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * tiles: one entry per item the visitor can see, in field order:
  * - title: the node's title.
  * - url: the node's own URL.
- * - label: its Category terms joined with " + " ("Dept + Medium"), or ''
- *   (the index's rows).
- * - labels: the same terms, one string each (the cards, a label apiece).
+ * - label: its Category terms as one label (_palefire_card_label():
+ *   "Dept + Medium", "Digital Exhibition"), or '' (the cards and the
+ *   index's rows).
+ * - labels: the same terms, one string each.
  * - note: its intro as plain text, or '' (shown by the index, and by the
  *   masonry's List view).
  * - image: the card's cover in the layout's responsive image style, or

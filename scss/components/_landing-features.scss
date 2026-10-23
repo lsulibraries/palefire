@@ -2493,6 +2493,43 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
+// When the three don't fit on one line (about 474px with these labels),
+// two columns as wide as Full guide and Order prices, and See hours across
+// both, so its edges line up with the pair above; under about 318px, one
+// column, every button as wide as the widest. Stretched buttons keep their
+// words at the start and the arrow at the end. A container query on the
+// notes' own width (the Quick Start's column, TOC open or not); a flex
+// wrap can't size a wrapped button to the line above it.
+.pf-quick-guide__visit {
+  container: pf-quick-visit / inline-size;
+}
+
+@container pf-quick-visit (max-width: 30rem) {
+  .pf-quick-guide__visit .pf-quick-guide__links {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+
+    > .pf-quick-guide__hours {
+      grid-column: 1 / -1;
+    }
+
+    .pf-quick-guide__link {
+      width: 100%;
+
+      svg {
+        margin-inline-start: auto;
+      }
+    }
+  }
+}
+
+@container pf-quick-visit (max-width: 20rem) {
+  .pf-quick-guide__visit .pf-quick-guide__links {
+    grid-template-columns: auto;
+  }
+}
+
 .pf-quick-guide__link {
   @extend %pf-landing-label;
   display: inline-flex;
@@ -2714,10 +2751,11 @@ html[data-pf-theme="twilight"] .pf-quick-guide {
   margin-top: var(--pf-hero-gap);
 }
 
-// The map's Visit panel: no box, a hairline above, its content on the
-// column's edge (its legend, hours and mini map keep their grid).
+// The map's Visit panel: no box and no hairline above (03 Rooms and
+// access opens it with its own rule), its content on the column's edge
+// (its legend, hours and mini map keep their grid).
 .pf-landing--cover .pf-map .pf-visit {
-  border-width: 1px 0 0;
+  border-width: 0;
   border-radius: 0;
   // !important over the reading colours' panel glass (_reading-themes.scss).
   background: none !important;
