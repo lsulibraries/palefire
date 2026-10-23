@@ -1,8 +1,15 @@
 {#
 /**
  * @file
- * From the stacks: a featured item beside the next events and the newest
- * blog posts (the Special Collections homepage's last section).
+ * From the stacks: a large picture beside three lists, the next events, a
+ * featured item and the newest blog posts (the Special Collections
+ * homepage's last section).
+ *
+ * The picture is a stage (js/stacks-stage.js): it shows the featured
+ * item's cover, and whichever item the pointer is over, or that has
+ * keyboard focus, in any list takes its place (an event's LibCal picture,
+ * a post's Image, the feature's cover); an item without a picture leaves
+ * the feature's. Decorative: each list item names itself.
  *
  * Variables from palefire_preprocess_paragraph__landing_stacks():
  * - feature: title, url, label (Category terms), note (intro as plain
@@ -11,32 +18,27 @@
  *   filled by js/upcoming.js from the events carousel's feed: the next
  *   three events at that campus, or "No upcoming events". Its height is
  *   held while it loads.
- * - posts: title, url, date, datetime, category.
+ * - posts: title, url, date, datetime, category, image (or NULL).
  *
  * The section <h2> comes from the scroll-section field template, so the
- * featured item and the two lists' headings are <h3>s. data-toc-skip keeps
- * them out of the TOC, which lists the section itself.
+ * lists' headings are <h3>s. data-toc-skip keeps them out of the TOC,
+ * which lists the section itself.
  */
 #}
 {% if feature or events or posts %}
   {% set uid = 'pf-stacks-' ~ paragraph.id() %}
-  <div{{ attributes.addClass('pf-stacks', not feature ? 'pf-stacks--no-feature') }} data-toc-skip>
-    {% if feature %}
-      <article class="pf-stacks__feature">
-        <a class="pf-stacks__feature-link" href="{{ feature.url }}">
-          <span class="pf-stacks__media{{ not feature.image ? ' is-empty' }}" aria-hidden="true">{{ feature.image }}</span>
-          {# The title first, so the link's name starts with it; CSS shows
-             the eyebrow above it, as on the tile cards. #}
-          <span class="pf-stacks__text">
-            <h3 class="pf-stacks__title">{{ feature.title }}</h3>
-            <span class="pf-stacks__eyebrow"><span class="visually-hidden">, </span>{{ 'Featured'|t }}{% if feature.label %}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span>{{ feature.label }}{% endif %}</span>
-          </span>
-        </a>
-        {% if feature.note %}
-          <p class="pf-stacks__note">{{ feature.note }}</p>
+  {{ attach_library('palefire/stacks-stage') }}
+  <div{{ attributes.addClass('pf-stacks') }} data-toc-skip>
+    <div class="pf-stacks__stage{{ not (feature.image ?? false) ? ' is-empty' }}" aria-hidden="true">
+      {% if feature.image ?? false %}
+        <span class="pf-stacks__frame is-shown is-home" data-pf-frame="feature">{{ feature.image }}</span>
+      {% endif %}
+      {% for post in posts %}
+        {% if post.image %}
+          <span class="pf-stacks__frame" data-pf-frame="post-{{ loop.index }}">{{ post.image }}</span>
         {% endif %}
-      </article>
-    {% endif %}
+      {% endfor %}
+    </div>
 
     <div class="pf-stacks__lists">
       {% if events %}
@@ -53,13 +55,32 @@
         </section>
       {% endif %}
 
+      {% if feature %}
+        <section class="pf-stacks__block" aria-labelledby="{{ uid }}-feature">
+          <h3 class="pf-stacks__heading" id="{{ uid }}-feature">{{ 'Featured'|t }}</h3>
+          <ul class="pf-stacks__posts" role="list">
+            <li>
+              <a class="pf-stacks__post" href="{{ feature.url }}" data-pf-stage="feature">
+                {% if feature.label %}
+                  <span class="pf-stacks__post-date">{{ feature.label }}</span>
+                {% endif %}
+                <span class="pf-stacks__post-title">{{ feature.title }}</span>
+                {% if feature.note %}
+                  <span class="pf-stacks__post-note">{{ feature.note }}</span>
+                {% endif %}
+              </a>
+            </li>
+          </ul>
+        </section>
+      {% endif %}
+
       {% if posts %}
         <section class="pf-stacks__block" aria-labelledby="{{ uid }}-posts">
           <h3 class="pf-stacks__heading" id="{{ uid }}-posts">{{ 'From the blog'|t }}</h3>
           <ul class="pf-stacks__posts" role="list">
             {% for post in posts %}
               <li>
-                <a class="pf-stacks__post" href="{{ post.url }}">
+                <a class="pf-stacks__post" href="{{ post.url }}"{% if post.image %} data-pf-stage="post-{{ loop.index }}"{% endif %}>
                   <span class="pf-stacks__post-date"><time datetime="{{ post.datetime }}">{{ post.date }}</time>{% if post.category %} · {{ post.category }}{% endif %}</span>
                   <span class="pf-stacks__post-title">{{ post.title }}</span>
                 </a>

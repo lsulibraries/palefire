@@ -48,7 +48,7 @@
  *   placeholder: it searches Bento for now), the banners (the first the
  *   next event, from the events carousel's feed via hero-event.js, when
  *   there is one), then the Quick guide's A, B and C cards with
- *   the sign-in. Under the map, On view: the exhibition tiles. No lead
+ *   the sign-in, then the map. No lead
  *   panel when it would be empty (no page title, no intro): the Next event
  *   card then stands alone.
  * - department: set for the Landing department paragraph
@@ -260,7 +260,8 @@
       </div>
     {% endif %}
     {% if hero %}
-      {# The exhibitions, shown under the map as On view (below).
+      {# The exhibitions (once shown under the map as On view; kept for the
+         landing department's tiles).
          - exhibitions: hero_tiles, the paragraph's Tiles (Hero tiles, each
            a Modular page or a Tile: _palefire_hero_tiles()), when it has
            any; else the PLACEHOLDERS below. Shape: label, title,
@@ -446,18 +447,6 @@
     {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', keyed: false } only %}
   {% endif %}
 
-  {# Hero: On view, under the map, so visitors see where the galleries are
-     before what's in them. The tile accordion (includes/landing-exhibits),
-     the paragraph's Tiles or the placeholders above; its heading is a
-     sub-link in the TOC. Styles: _landing-features.scss ("On view"). #}
-  {% set on_view = hero_tiles ?: exhibitions|default([]) %}
-  {% if hero and on_view %}
-    {% set on_view_id = input_id ~ '-on-view' %}
-    <section class="pf-landing__onview" aria-labelledby="{{ on_view_id }}">
-      {# Index rule 03: the site's Exhibitions page (the main menu's). #}
-      {{ pf.index_rule('03', 'On view'|t, { url: '/exhibitions', text: 'All exhibitions'|t }) }}
-      <h2 class="pf-section__title pf-landing__onview-title" id="{{ on_view_id }}" data-toc data-toc-label="{{ 'On view'|t }}">{{ 'On view'|t }}</h2>
-      {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: on_view, label: 'On view'|t } only %}
-    </section>
-  {% endif %}
+  {# The hero's On view (exhibition tiles under the map) was removed
+     (2026-10-22): the banners and From the stacks show the exhibitions. #}
 </div>

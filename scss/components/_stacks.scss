@@ -1,14 +1,15 @@
-// From the stacks (paragraph--landing-stacks): a featured item beside the
-// next events (js/upcoming.js) and the newest blog posts.
+// From the stacks (paragraph--landing-stacks): a large picture (the stage)
+// beside three lists, the next events (js/upcoming.js), a featured item
+// and the newest blog posts.
 //
 // Two columns that wrap on their own (flex basis, no breakpoints): the
-// feature about two fifths of the section, the lists the rest; stacked
+// stage about two fifths of the section, the lists the rest; stacked
 // when the section is narrow, beside the TOC sidebar or on phones. Every
 // line is the soft hairline; labels are the breadcrumb's mono voice; the
 // accent is the swatch's (gold on Twilight, a dark accent on the light
 // swatches), so it reads on light and dark sections alike.
-// Motion: the feature's picture eases in a little on hover, the arrows
-// slide, and loaded events fade in; none of it with reduced motion.
+// Motion: the stage's pictures crossfade and settle, the arrows slide,
+// and loaded events fade in; none of it with reduced motion.
 
 .pf-stacks {
   --pf-stacks-fg: var(--pf-section-fg, var(--bs-body-color));
@@ -31,38 +32,16 @@
   text-transform: uppercase;
 }
 
-// --- Featured item ----------------------------------------------------------
-.pf-stacks__feature {
-  flex: 2 1 18rem;
-  min-width: 0;
-}
-
-.pf-stacks__feature-link {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: inherit;
-  text-decoration: none;
-
-  &:hover,
-  &:focus-visible {
-    color: inherit;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-stacks-accent);
-    outline-offset: 4px;
-  }
-}
-
-// 4:5, cropped from the cover's portrait style; hatched without one.
-.pf-stacks__media {
+// --- The stage --------------------------------------------------------------
+// The section's large picture (js/stacks-stage.js): the featured item's
+// cover, crossfading to whichever item the pointer is over in the lists.
+// 4:5, cropped from the covers' portrait style; hatched with no picture.
+// Stacked (narrow), a shorter 3:2 band above the lists.
+.pf-stacks__stage {
   position: relative;
-  display: block;
+  flex: 2 1 18rem;
+  align-self: flex-start;
+  min-width: 0;
   overflow: hidden;
   aspect-ratio: 4 / 5;
   max-height: 36rem;
@@ -71,6 +50,24 @@
   &.is-empty {
     background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
     border: 1px solid #{$pf-hairline};
+  }
+}
+
+@container pf-stacks (max-width: 46rem) {
+  .pf-stacks__stage {
+    flex-basis: 100%;
+    aspect-ratio: 3 / 2;
+  }
+}
+
+.pf-stacks__frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .6s ease;
+
+  &.is-shown {
+    opacity: 1;
   }
 
   picture,
@@ -82,64 +79,25 @@
 
   img {
     object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 1.2s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  &.is-shown img {
+    transform: none;
   }
 }
 
-.pf-stacks__text {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-}
-
-// Stacked but wide (beside the TOC, tablets): a full-width portrait ran a
-// screen tall, so the picture takes two fifths and the words sit beside it,
-// at its foot.
-@container pf-stacks (min-width: 30rem) and (max-width: 46rem) {
-  .pf-stacks__feature-link {
-    flex-direction: row;
-    gap: 1.5rem;
-    align-items: flex-end;
-  }
-
-  .pf-stacks__media {
-    flex: 0 0 40%;
-  }
-}
-
-// Shown above the title, read after it.
-.pf-stacks__eyebrow {
-  @extend %pf-stacks-label;
-  order: -1;
-  color: var(--pf-stacks-muted);
-}
-
-// The text colour, not the swatch's heading gold (html[data-pf-theme]
-// .pf-main h3, _reading-themes.scss, whose :is() counts as a class): the
-// accent is kept for labels and arrows. Four classes to outrank it.
-.pf-stacks .pf-stacks__feature-link .pf-stacks__text .pf-stacks__title {
-  margin: 0;
-  color: var(--pf-stacks-fg);
-  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
-  font-weight: 600;
-  line-height: 1.15;
-  text-decoration: underline transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .2em;
-  overflow-wrap: anywhere;
-  transition: text-decoration-color $pf-hover-out ease;
-}
-
-.pf-stacks .pf-stacks__feature-link:is(:hover, :focus-visible) .pf-stacks__text .pf-stacks__title {
-  text-decoration-color: currentColor;
-  transition-duration: $pf-hover-in;
-}
-
-.pf-stacks__note {
-  max-width: 44ch;
-  margin: .75rem 0 0;
+// A featured item's intro under its title, two lines at most.
+.pf-stacks__post-note {
+  display: -webkit-box;
+  overflow: hidden;
   color: var(--pf-stacks-muted);
   font-size: .9375rem;
-  line-height: 1.55;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 // --- The lists --------------------------------------------------------------
@@ -149,15 +107,6 @@
   flex-direction: column;
   gap: clamp(2rem, 4vw, 3rem);
   min-width: 0;
-}
-
-.pf-stacks--no-feature .pf-stacks__lists {
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  > .pf-stacks__block {
-    flex: 1 1 20rem;
-  }
 }
 
 .pf-stacks .pf-stacks__lists .pf-stacks__block .pf-stacks__heading {
@@ -311,14 +260,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .pf-stacks__media img {
-    transition: transform 1.2s cubic-bezier(.2, .7, .2, 1);
-  }
-
-  .pf-stacks__feature-link:is(:hover, :focus-visible) .pf-stacks__media img {
-    transform: scale(1.03);
-  }
-
   .pf-upcoming__arrow,
   .pf-stacks__more::after {
     transition: transform .3s ease-out;
@@ -334,8 +275,16 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .pf-stacks__frame,
+  .pf-stacks__frame img {
+    transition: none;
+  }
+}
+
 html.pf-a11y-motion {
-  .pf-stacks__media img,
+  .pf-stacks__frame,
+  .pf-stacks__frame img,
   .pf-upcoming__arrow,
   .pf-stacks__more::after {
     transition: none;
@@ -354,7 +303,7 @@ html.pf-a11y-motion {
 }
 
 @media (forced-colors: active) {
-  .pf-stacks__media.is-empty {
+  .pf-stacks__stage.is-empty {
     border-color: CanvasText;
   }
 }

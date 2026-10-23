@@ -1196,7 +1196,13 @@ function palefire_preprocess_paragraph__landing_stacks(array &$variables): void 
     $variables['#attached']['library'][] = 'palefire/upcoming';
   }
 
-  $variables['posts'] = _palefire_blog_posts($paragraph, 3, $cache);
+  // Each post's picture for the stage (the section's large picture, which
+  // shows the item under the pointer), in the feature's portrait style.
+  foreach (_palefire_blog_posts($paragraph, 3, $cache) as $post) {
+    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache) : NULL;
+    unset($post['image_item']);
+    $variables['posts'][] = $post;
+  }
   $cache->applyTo($variables);
 }
 

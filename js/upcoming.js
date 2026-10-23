@@ -99,6 +99,11 @@
     const when = [start.toLocaleDateString(undefined, { weekday: 'short' }), [event.startLabel, event.endLabel].filter(Boolean).join('–'), place].filter(Boolean).join(' · ');
     text.append(el('span', 'pf-upcoming__title', event.title), el('span', 'pf-upcoming__meta', when));
 
+    // Its picture, if any, for the section's stage (js/stacks-stage.js).
+    if (/^https:\/\//.test(event.image || '')) {
+      link.dataset.pfStageSrc = event.image;
+    }
+
     const arrow = el('span', 'pf-upcoming__arrow', '→');
     arrow.setAttribute('aria-hidden', 'true');
     link.append(date, text, arrow);

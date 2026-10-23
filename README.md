@@ -857,6 +857,19 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **From the stacks: a stage that follows the lists; On view out of the
+  hero.** The hero's On view (exhibition tiles under the map, index rule
+  03) is gone. In From the stacks the large picture is now a stage
+  (js/stacks-stage.js, new library `palefire/stacks-stage`): it shows the
+  featured item's cover and crossfades to whichever item the pointer is
+  over, or has keyboard focus, in its lists (an event's LibCal picture,
+  passed by js/upcoming.js; a blog post's Image; the feature's cover); an
+  item without a picture, or leaving the lists, brings the feature back.
+  The featured item is now a list of its own, "Featured", between
+  Upcoming and From the blog, styled like the posts (label, title, its
+  intro in two lines). Blog posts there carry their Image. Why: the On
+  view tiles repeated the banners, and one picture that answers the
+  pointer reads as more alive than a fixed one.
 - **Sign in in the intro; hours as label and sentence; banners deeper,
   with parallax, five columns to 44rem; dark header on light swatches;
   phone Quick Start folds.** Sign in leaves the bar for a link ending the
