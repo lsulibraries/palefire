@@ -857,6 +857,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Sign in as the intro's last sentence; TOC icon long-short-short.**
+  The intro arrives in its field's wrapper (a clearfix div), which kept
+  "Sign in to request materials" on a line of its own; the wrapper, its
+  last paragraph and its clearfix now run inline, so the link follows the
+  last sentence (wrapping whole to the next line when that one is full).
+  The TOC icon's outline is now one item over two indented sub-items.
 - **A 32px landing bar; an outline TOC icon; the map reveals only its
   drawing.** The landing's sub-header bar is 32px (no padding; the
   breadcrumb unchanged), its video and TOC buttons 32px squares at its

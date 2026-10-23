@@ -727,12 +727,22 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   transition: background-color .3s ease;
 }
 
-// "Sign in to request materials": the intro's last words (its last
-// paragraph runs inline so the link follows it), in the text's full
-// colour, underlined, with an arrow up and out after it: it opens the
-// request system in a new tab.
-.pf-landing__intro > p:last-of-type {
-  display: inline;
+// "Sign in to request materials": the intro's last sentence, in the
+// text's full colour, underlined, with an arrow up and out after it: it
+// opens the request system in a new tab. The intro arrives in its field's
+// wrapper (a clearfix div), so the wrapper and its last paragraph run
+// inline, without the clearfix's break, and the link follows the last
+// sentence on its line.
+.pf-landing__intro:has(> .pf-landing__signin-link) {
+  > div,
+  > div > p:last-child,
+  > p:last-of-type {
+    display: inline;
+  }
+
+  > div::after {
+    content: none;
+  }
 }
 
 .pf-landing__signin-link {
