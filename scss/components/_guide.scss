@@ -600,9 +600,49 @@ html[data-pf-mode="guide"] .pf-section__title {
     text-decoration-color: currentColor;
   }
 
+  // The whole stop opens it: the button's box stretched over the stop
+  // (the <li>, position: relative), its icon, label and note, half a rem
+  // past each edge for a roomier target. Above the icon (z-index), whose
+  // diamond would otherwise take the click. Only the label is the
+  // button's name, so screen readers hear the same thing as before.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem;
+    z-index: 1;
+  }
+
+  // The focus ring goes round the whole target, not just the label.
   &:focus-visible {
+    outline: 0;
+  }
+
+  &:focus-visible::after {
     outline: 2px solid var(--pf-guide-accent);
-    outline-offset: 3px;
+  }
+}
+
+// Hover or focus anywhere on a stop that opens a panel: the diamond's
+// outline takes the accent and the icon's second tone (Font Awesome's
+// duotone .fa-secondary, 40% by default) comes up, so the mark brightens
+// with the underlined label.
+.pf-paths__icon {
+  &::before {
+    transition: border-color 0.2s ease;
+  }
+
+  .fa-secondary {
+    transition: opacity 0.2s ease;
+  }
+}
+
+.pf-paths__stop:has(> .pf-paths__peek:is(:hover, :focus-visible)) .pf-paths__icon {
+  &::before {
+    border-color: var(--pf-guide-accent);
+  }
+
+  .fa-secondary {
+    opacity: 0.75;
   }
 }
 
