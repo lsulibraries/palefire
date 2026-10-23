@@ -857,6 +857,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero: this week's hours, and deeper banner parallax.** On the five-column cover (80rem and up) a seven-day timetable (today first, today marked by a highlight rule) takes columns 3–5 at the intro's exact height, in the search field's material, so the right side has a wide counterweight that reads at AA over any video frame (worst 5.89:1 across swatches). Filled by visit-hours.js from the same LibCal request; hidden narrower, or if LibCal fails. The banners' scroll travel is now a token, `--pf-banner-travel` (2.5rem, 4.5rem from 64rem, was 1.5rem), held under the gap below the search. Why: balance the composition without tying it to the changing videos, and give the parallax more depth.
 - **Revert: hero title and intro as a spread.** Back to one flush-left
   column (title, hours, intro, search label and field on one axis). The
   intro in columns 4-5 sat on the photograph's subject, needed a visible

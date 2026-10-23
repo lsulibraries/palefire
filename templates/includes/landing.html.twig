@@ -234,6 +234,17 @@
         {%- if hero and account_url %} <a class="pf-landing__signin-link" href="{{ account_url }}" target="_blank" rel="noopener">{{ 'Sign in to request materials'|t }}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span></a>{% endif -%}
       </div>
     {% endif %}
+    {# Hero: this week's hours as a timetable (.pf-landing__week), seven
+       columns, today first, on the five-column grid only (columns 3-5, the
+       intro's height). visit-hours.js fills the days from the same LibCal
+       request as the hours line above. A list of days for screen readers,
+       named by its caption (hidden: the day names say what it is). #}
+    {% if hero and visit.lid %}
+      <div class="pf-landing__week" data-pf-hours data-lid="{{ visit.lid }}">
+        <p class="visually-hidden" id="{{ input_id }}-week">{{ 'This week, @place'|t({ '@place': visit.name }) }}</p>
+        <ol class="pf-landing__week-days" role="list" aria-labelledby="{{ input_id }}-week" data-pf-hours-week></ol>
+      </div>
+    {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       <h3 class="pf-landing__heading" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>

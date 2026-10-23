@@ -1112,17 +1112,19 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     --pf-banner-rise: 9rem;
+    --pf-banner-travel: 4.5rem;
   }
 }
 
 // Scroll parallax: as the page scrolls its first 70% of a screen, each
-// banner rises at its own pace (by 1.5rem plus its own drop), so the
-// offsets close and the row settles level. Scroll-driven (no script), on
+// banner rises at its own pace (by --pf-banner-travel plus its own drop),
+// so the offsets close and the row settles level. The travel is held under
+// the gap below the search, so no banner reaches it. Scroll-driven (no script), on
 // the link (`translate`), so it never fights the rise-in on the item.
 // None with reduced motion or the Settings drawer's switch.
 @keyframes pf-banner-level {
   to {
-    translate: 0 calc(-1.5rem - var(--pf-banner-offset, 0px));
+    translate: 0 calc(-1 * var(--pf-banner-travel, 2.5rem) - var(--pf-banner-offset, 0px));
   }
 }
 
@@ -2473,5 +2475,146 @@ html[data-pf-hero] .pf-landing--hero {
       "key key key key key"
       "head head head head head"
       "social hours hours place place";
+  }
+}
+
+// --- This week's hours (the hero's right side) -------------------------------
+// A timetable for the week on the five-column cover: the title, hours line
+// and intro keep columns 1-2, and the week takes columns 3-5, the intro's
+// height (its top and foot on the intro's), its right edge the search's:
+// two blocks of one height across the grid. Its caption is for screen
+// readers; the day names and today's rule say what it is. It is a plate of
+// the search field's own material (the page colour at 80% with the glass
+// blur, a hairline frame, square corners), so it reads at AA over any
+// frame of the video, whichever clip is playing. Seven equal columns,
+// today first: the day in the labels' small capitals over its hours in the
+// text face (tabular figures), hairlines between the days; today marked by
+// a rule of the highlight across its top and its day in the highlight;
+// closed days in the muted tone. It fades in once LibCal has answered and
+// is left out if it doesn't; narrower than five columns it isn't shown
+// (the hours line under the title says enough).
+.pf-landing__week {
+  display: none;
+}
+
+@container pf-cover (min-width: 80rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: var(--pf-grid-gutter);
+
+    > :not(.pf-landing__week) {
+      grid-column: 1 / span 2;
+    }
+
+    // The column now sets their measure (two of five).
+    > .pf-landing__title,
+    > .pf-landing__intro {
+      max-width: none;
+    }
+
+    > .pf-landing__week {
+      display: block;
+      grid-column: 3 / -1;
+      grid-row: 3;
+      align-self: stretch;
+      display: flex;
+    }
+  }
+}
+
+.pf-landing__week {
+  flex-direction: column;
+  justify-content: center;
+  padding: .875rem 1.25rem;
+  border: 1px solid var(--pf-landing-line, #{$pf-hairline});
+  color: var(--pf-section-fg, var(--bs-body-color));
+  background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 80%, transparent);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  opacity: 0;
+  transition: opacity .6s ease;
+
+  &.is-ready {
+    opacity: 1;
+  }
+
+  &.is-failed {
+    visibility: hidden;
+  }
+}
+
+.pf-landing__week-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-landing__week .pf-visit__day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
+  min-width: 0;
+  padding: .625rem .75rem 0;
+  border: 0;
+  border-inline-start: 1px solid #{$pf-hairline};
+  font-weight: inherit;
+
+  &:first-child {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  // Today: a rule of the highlight across the top of its column.
+  &.is-today::before {
+    content: "";
+    position: absolute;
+    inset: 0 .75rem auto 0;
+    border-top: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
+
+  &.is-today:not(:first-child)::before {
+    inset-inline-start: .75rem;
+  }
+}
+
+.pf-landing__week .pf-visit__day-name {
+  @extend %pf-landing-label;
+  color: var(--pf-toc-color);
+}
+
+.pf-landing__week .pf-visit__day.is-today .pf-visit__day-name {
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+}
+
+.pf-landing__week .pf-visit__day-hours {
+  font-size: .9375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-landing__week .pf-visit__day.is-closed .pf-visit__day-hours {
+  font-weight: 400;
+  color: var(--pf-toc-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__week {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-landing__week {
+    border-color: CanvasText;
+  }
+
+  .pf-landing__week .pf-visit__day.is-today::before {
+    border-top-color: Highlight;
   }
 }
