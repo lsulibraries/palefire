@@ -656,6 +656,32 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     padding-inline-start: 1.25rem;
     font-size: var(--pf-hero-text, 1.125rem);
     font-weight: 400;
+    // Hover (and focus): a 2px line in the button's gold draws in along
+    // the field's foot from the start, ending at the Search button (it is
+    // the input's own background, so it stops where the input does), and
+    // the placeholder brightens toward the text colour.
+    background-image: linear-gradient(var(--pf-g-accent, #{$pf-gold}), var(--pf-g-accent, #{$pf-gold}));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: 0 2px;
+    transition: background-size .45s cubic-bezier(.2, .7, .2, 1);
+
+    &::placeholder {
+      transition: color $pf-hover-out ease;
+    }
+  }
+
+  [dir="rtl"] & .pf-landing__input {
+    background-position: right bottom;
+  }
+
+  .pf-landing__field:is(:hover, :focus-within) .pf-landing__input {
+    background-size: 100% 2px;
+
+    &::placeholder {
+      color: color-mix(in srgb, var(--pf-toc-color, #{$pf-grey-500}) 40%, var(--pf-toc-active, #{$pf-white}));
+      transition-duration: $pf-hover-in;
+    }
   }
 
   // The Search button filled with the swatch's accent, its words in the
@@ -681,6 +707,17 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
       outline-offset: -5px;
     }
   }
+}
+
+// Reduced motion: the gold line is there at once on hover, not drawn in.
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__input {
+    transition: none;
+  }
+}
+
+html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input {
+  transition: none;
 }
 
 // Where the banners are five to a row, the Search button is one banner

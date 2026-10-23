@@ -889,6 +889,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero search: a gold line draws in on hover.**
+  - `_landing-features.scss`: hovering or focusing the hero's search draws a 2px line in the Search button's gold along the field's foot, from the start to the button (the input's own background, so it ends at the button at every width; mirrored in RTL), and the placeholder brightens toward the text colour. With reduced motion (or the Settings switch) the line appears at once. Why: the search needed a cue on hover; the line ties the field to its gold button without moving anything. Checked at 1440 on the live page with this CSS injected.
+
 - **Hero search: placeholder in the intro's type.**
   - `_landing-features.scss`: the hero's search field (placeholder and typed words) takes the intro's size (`--pf-hero-text`) and regular weight instead of the larger 300 the other landings' fields use. Why: the light weight was the one 300 on the hero and read out of step with the intro beside it.
 
