@@ -54,6 +54,37 @@
   };
 
   /**
+   * Phones: the hero's Quick Start folds to its first option under a fade
+   * (.is-folded, _landing-features.scss), and "Show all steps" unfolds it,
+   * as an exhibition's long text does. Focus moving into the folded part
+   * (a keyboard user tabbing on) unfolds it too. Without this, all show.
+   */
+  Drupal.behaviors.palefireQuickGuideFold = {
+    attach(context) {
+      const phone = window.matchMedia('(max-width: 767.98px)');
+      once('pf-quick-fold', '.pf-quick-guide', context).forEach((guide) => {
+        const button = guide.querySelector('.pf-quick-guide__expand');
+        const paths = guide.querySelector('.pf-paths');
+        if (!button || !paths || !phone.matches) {
+          return;
+        }
+        const unfold = (moveFocus) => {
+          guide.classList.remove('is-folded');
+          button.setAttribute('aria-expanded', 'true');
+          if (moveFocus) {
+            paths.setAttribute('tabindex', '-1');
+            paths.focus({ preventScroll: true });
+          }
+        };
+        guide.classList.add('is-folded');
+        button.setAttribute('aria-expanded', 'false');
+        button.addEventListener('click', () => unfold(true));
+        paths.addEventListener('focusin', () => unfold(false));
+      });
+    },
+  };
+
+  /**
    * The hero cover's sub-header bar is a clear caption strip at the top of
    * the page and turns to glass once the page scrolls and it sticks under
    * the header (_landing-features.scss): <html> gets .pf-bar-stuck while the

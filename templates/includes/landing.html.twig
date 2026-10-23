@@ -183,24 +183,16 @@
      far end of the bar's row and stays under the header while the landing
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
-  {# Hero: "Sign in" (the Special Collections request system, Aeon) at the
-     end of the bar, so it stays at hand under the header for as long as
-     the landing is on screen. It opens in a new tab, which its name says
-     for screen readers; the duotone sign-in icon follows the word.
-     account_url: empty leaves it out. #}
+  {# Hero: "Sign in to request materials" (the Special Collections request
+     system, Aeon), a link at the end of the intro under the title: signing
+     in is what a request needs, and in the bar it read as signing in to the
+     whole site. It opens in a new tab (an arrow after it; its name says so
+     for screen readers). account_url: empty leaves it out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
         <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
-        {% if account_url %}
-          <a class="pf-hero-account__link pf-landing__signin" href="{{ account_url }}" target="_blank" rel="noopener" title="{{ 'Sign in (opens in a new tab)'|t }}">
-            <span>{{ 'Sign in'|t }}<span class="visually-hidden">{{ ' to request Special Collections materials (opens in a new tab)'|t }}</span></span>
-            {# Font Awesome Pro sign-in (duotone, like `fad fa-sign-in`),
-               inlined from the site's copy like the map's hint icon. #}
-            <span class="pf-hero-account__icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/sign-in.svg', ignore_missing = true)|raw }}</span>
-          </a>
-        {% endif %}
       </div>
     </div>
     {% if video_toggle %}
@@ -221,22 +213,26 @@
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>
     {% endif %}
-    {# Hero: today's hours under the title, in the labels' voice: a status
-       dot, the status and today's hours (visit-hours.js fills both from
-       LibCal; palefire/visit is attached with visit), the building, and a
-       link to every library's hours. No live region: the Visit panel
-       already announces changes. #}
+    {# Hero: today's hours under the title: the status as a label (a dot in
+       its colour and the status in small capitals), then today's hours and
+       the building as a line of text (visit-hours.js fills the status and
+       the hours from LibCal; palefire/visit is attached with visit). No
+       live region: the Visit panel already announces changes. #}
     {% if hero and visit.lid %}
       <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
-        <span class="pf-landing__hours-dot" aria-hidden="true"></span>
-        <span class="pf-landing__hours-status" data-pf-hours-status>{{ 'Hours'|t }}</span>
+        <span class="pf-landing__hours-label">
+          <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+          <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+        </span>
         <span class="pf-landing__hours-today" data-pf-hours-today></span>
         <span class="pf-landing__hours-place">{{ visit.name }}</span>
-        <a class="pf-landing__hours-link" href="https://lsu.libcal.com/hours">{{ 'All hours'|t }}<span class="visually-hidden">{{ ' for all LSU Libraries'|t }}</span></a>
       </p>
     {% endif %}
     {% if landing_intro %}
-      <div class="pf-landing__intro">{{ landing_intro }}</div>
+      <div class="pf-landing__intro">
+        {{- landing_intro -}}
+        {%- if hero and account_url %} <a class="pf-landing__signin-link" href="{{ account_url }}" target="_blank" rel="noopener">{{ 'Sign in to request materials'|t }}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span></a>{% endif -%}
+      </div>
     {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
@@ -419,6 +415,9 @@
           {% endif %}
         </div>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
+        {# Phones: the paths fold to their first option under a fade, and
+           this shows the rest (js/palefire.js; without it, all show). #}
+        <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
       </div>
     {% endif %}
   </div>

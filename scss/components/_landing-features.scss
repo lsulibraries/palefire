@@ -389,7 +389,9 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // rest. On a short screen the space above the title gives way first.
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
-    --pf-cover-peek: 10rem;
+    // Negative: the band runs on 1rem past the screen's foot, under the
+    // banners rising 9rem into it, whose tops show 8rem above the fold.
+    --pf-cover-peek: -1rem;
 
     > .pf-landing__media {
       grid-row: 1 / 3;
@@ -643,25 +645,29 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 }
 
 // --- Hours, under the title ---------------------------------------------------
-// Today's hours as a caption under the hero's title, in the labels' small
-// spaced capitals: a status dot (the Visit strip's colours, hidden from
-// screen readers: it repeats the word), the status in the text's full
-// colour, today's hours and the building in the muted tone, then "All
-// hours" with an arrow. visit-hours.js fills the status and the hours and
+// Today's hours as a caption under the hero's title: the status as a label
+// (a dot in the Visit strip's colours, hidden from screen readers since it
+// repeats the word, and the status in the labels' small capitals, in a
+// hairline frame in the same colour), then today's hours and the building
+// as a line of text. visit-hours.js fills the status and the hours and
 // marks the line (data-hours-state, is-ready). Until then "Hours" shows
-// dimmed; if LibCal fails, only the building and the link stay.
+// dimmed; if LibCal fails, only the building stays. Over the cover's video
+// every word takes the text's full colour with a halo of the page colour,
+// so each keeps 4.5:1 on any frame (the muted tone fell to 3.3:1).
 .pf-landing__hours {
   --pf-visit-open: #2f9e4f;
   --pf-visit-soon: #fdd023;
   --pf-visit-closed: #c8102e;
-  @extend %pf-landing-label;
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: .25rem .75rem;
-  min-height: 1.5em; // one line, held while LibCal loads
+  align-items: center;
+  gap: .375rem .75rem;
+  min-height: 1.75rem; // one line, held while LibCal loads
   margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-  color: var(--pf-toc-color);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--pf-section-fg, var(--bs-body-color));
   font-variant-numeric: tabular-nums;
   transition: opacity .3s ease;
 
@@ -669,75 +675,78 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     opacity: .6;
   }
 
-  // The words after the status, each after a middle dot.
-  > :is(.pf-landing__hours-today, .pf-landing__hours-place)::before {
-    content: "\00b7" / "";
-    margin-inline-end: .75rem;
-  }
-
   > .pf-landing__hours-today:empty,
-  &.is-failed > :is(.pf-landing__hours-dot, .pf-landing__hours-status, .pf-landing__hours-today) {
+  &.is-failed > :is(.pf-landing__hours-label, .pf-landing__hours-today) {
     display: none;
-  }
-
-  &.is-failed > .pf-landing__hours-place::before {
-    content: none;
   }
 }
 
-// Over the cover's video the muted tone fell to 3.3:1 where the line runs
-// onto the brighter frame (Twilight, measured against the pixels behind
-// it): there the whole line takes the text's full colour, with a soft halo
-// of the page colour, so every word keeps 4.5:1 or more on any frame. The
-// status still leads by weight (bold), the rest by order.
 .pf-landing--cover .pf-landing__hours {
-  color: var(--pf-section-fg, var(--bs-body-color));
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
 }
 
-.pf-landing--cover :is(.pf-landing__hours-today, .pf-landing__hours-place) {
-  font-weight: 500;
+// The building after today's hours, after a middle dot (from md: on a
+// phone the line wraps there, and a dot would start the second line).
+@include media-breakpoint-up(md) {
+  .pf-landing__hours-today:not(:empty) + .pf-landing__hours-place::before {
+    content: "\00b7" / "";
+    margin-inline-end: .75rem;
+  }
 }
 
-.pf-landing__hours-dot {
-  align-self: center;
-  inline-size: .5rem;
-  block-size: .5rem;
-  margin-inline-end: -.25rem;
-  border-radius: 50%;
-  background-color: currentColor;
-  transition: background-color .3s ease;
+.pf-landing__hours-label {
+  @extend %pf-landing-label;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .125rem .5rem;
+  border: 1px solid var(--pf-hours-state, currentColor);
+  text-shadow: none;
+  transition: border-color .3s ease;
 
   [data-hours-state="open"] > & {
-    background-color: var(--pf-visit-open);
+    --pf-hours-state: var(--pf-visit-open);
   }
 
   [data-hours-state="soon"] > & {
-    background-color: var(--pf-visit-soon);
+    --pf-hours-state: var(--pf-visit-soon);
   }
 
   [data-hours-state="closed"] > & {
-    background-color: var(--pf-visit-closed);
+    --pf-hours-state: var(--pf-visit-closed);
   }
 }
 
-.pf-landing__hours-status {
-  color: var(--pf-section-fg, var(--bs-body-color));
+.pf-landing__hours-dot {
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: 50%;
+  background-color: var(--pf-hours-state, currentColor);
+  transition: background-color .3s ease;
 }
 
-.pf-landing__hours-link {
+// "Sign in to request materials": the intro's last words (its last
+// paragraph runs inline so the link follows it), in the text's full
+// colour, underlined, with an arrow up and out after it: it opens the
+// request system in a new tab.
+.pf-landing__intro > p:last-of-type {
+  display: inline;
+}
+
+.pf-landing__signin-link {
   color: var(--pf-section-fg, var(--bs-body-color));
+  font-weight: 500;
   white-space: nowrap;
-  text-decoration: underline transparent;
+  text-decoration: underline;
+  text-decoration-color: #{$pf-hairline};
   text-decoration-thickness: 1px;
-  text-underline-offset: .3em;
+  text-underline-offset: .25em;
   transition: text-decoration-color $pf-hover-out ease;
 
   &::after {
-    content: "\2192" / "";
+    content: "\2197\FE0E" / ""; // text, not the emoji arrow
     display: inline-block;
-    margin-inline-start: .5em;
-    letter-spacing: 0;
+    margin-inline-start: .3em;
     transition: transform $pf-hover-out ease;
   }
 
@@ -747,7 +756,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     transition-duration: $pf-hover-in;
 
     &::after {
-      transform: translateX(.2em);
+      transform: translate(.15em, -.15em);
       transition-duration: $pf-hover-in;
     }
   }
@@ -758,14 +767,58 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// Phones: the Quick Start folded (js/palefire.js): its paths stop at about
+// one option under a fade, and "Show all steps" follows. The button only
+// shows while folded.
+.pf-quick-guide__expand {
+  display: none;
+}
+
+@include media-breakpoint-down(md) {
+  .pf-quick-guide.is-folded > .pf-paths {
+    max-height: 26rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  .pf-quick-guide.is-folded > .pf-quick-guide__expand {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 2.75rem;
+    margin-top: .25rem;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-weight: 500;
+    color: var(--pf-section-fg, var(--bs-body-color));
+    text-decoration: underline;
+    text-decoration-color: #{$pf-hairline};
+    text-underline-offset: .25em;
+    background: none;
+    cursor: pointer;
+
+    &::after {
+      content: "\2193" / "";
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-g-highlight, #{$pf-gold});
+      outline-offset: 2px;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pf-landing__hours,
+  .pf-landing__hours-label,
   .pf-landing__hours-dot,
-  .pf-landing__hours-link::after {
+  .pf-landing__signin-link::after {
     transition: none;
   }
 
-  .pf-landing__hours-link::after {
+  .pf-landing__signin-link::after {
     transform: none !important;
   }
 }
@@ -777,38 +830,107 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
-// Banners: up to four tall banners under the search (includes/
-// landing.html.twig), each a Tile or Modular page's portrait cover with
-// its Category and title in white over a scrim, never the gold (the gold,
-// the swatch's highlight, marks the page's own voice). Mobile first, a row
-// to swipe: each banner most of the screen's width, snapping, the row
-// running to the screen's edges. On the 4-column grid (below) one banner
-// per column, offset unevenly (as the Collections tiles were), the row
-// pulled up over the cover's
-// foot so the banners rise out of the video into the page.
+// Banners: up to five tall banners under the search (includes/
+// landing.html.twig), each a portrait picture with its label (the tiles'
+// pill) and title in white over a scrim, never the gold (the gold, the
+// swatch's highlight, marks the page's own voice). From 44rem of landing,
+// one row of five, mirrored round the centre (the second and fourth set
+// lower), rising out of the cover's video; on the full-screen cover (64rem)
+// a third of their height deep, floating over the building with a soft
+// shadow. Narrower, the blog post is a line of text across the top and the
+// rest go two by two, the right column set lower: the same rhythm, small.
+// --pf-banner-offset sets each banner's drop (the parallax below reads it).
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+  --pf-banner-rise: 0px; // the row's lift over the cover's foot
   display: grid;
-  grid-auto-columns: min(72%, 18rem);
-  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: var(--pf-grid-gutter);
-  margin: 0;
-  margin-inline: 0;
-  padding: 0 var(--pf-cover-gutter) .25rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-padding-inline: var(--pf-cover-gutter);
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  margin: calc(-1 * var(--pf-banner-rise)) var(--pf-cover-gutter) 0;
+  padding: 0;
   list-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 .pf-hero-banner {
   min-width: 0;
-  scroll-snap-align: start;
+  margin-top: var(--pf-banner-offset, 0px);
+}
+
+@container pf-cover (max-width: 43.98rem) {
+  // Two to a row: the words a step smaller, scaling with the landing.
+  .pf-hero-banners .pf-hero-banner__text {
+    padding: .875rem;
+  }
+
+  .pf-hero-banners .pf-hero-banner__title {
+    font-size: clamp(1rem, .85rem + 1.2cqi, 1.25rem);
+  }
+
+  // The right column: with the blog line first, the odd ones after it.
+  .pf-hero-banners:not(:has(> .pf-hero-banner--blog)) > .pf-hero-banner:nth-child(even),
+  .pf-hero-banners:has(> .pf-hero-banner--blog) > .pf-hero-banner:nth-child(odd):not(:first-child) {
+    --pf-banner-offset: 2.5rem;
+  }
+
+  // Tablets: two to a row are wide, so a little shorter (4:5).
+  @container pf-cover (min-width: 30rem) {
+    .pf-hero-banners .pf-hero-banner__link {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  // Four two by two: without a blog line, the fifth waits for the row.
+  .pf-hero-banners:not(:has(> .pf-hero-banner--blog)) > .pf-hero-banner:nth-child(5) {
+    display: none;
+  }
+
+  // The blog post as a line of text: its pill, then its title as a link
+  // in the text's colour, two lines at most, with an arrow.
+  .pf-hero-banner--blog {
+    grid-column: 1 / -1;
+
+    .pf-hero-banner__link {
+      aspect-ratio: auto;
+      overflow: visible;
+      color: var(--pf-section-fg, var(--bs-body-color));
+      background: none;
+
+      &::after {
+        content: none;
+      }
+    }
+
+    .pf-hero-banner__media {
+      display: none;
+    }
+
+    .pf-hero-banner__text {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .375rem .75rem;
+      padding: 0;
+    }
+
+    .pf-hero-banner__title {
+      flex: 1 1 12rem;
+      font-size: 1rem;
+      line-height: 1.35;
+      text-decoration: underline;
+      text-decoration-color: #{$pf-hairline};
+      text-underline-offset: .25em;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+
+      &::after {
+        content: " \2192" / "";
+      }
+    }
+
+    .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title {
+      text-decoration-color: currentColor;
+    }
+  }
 }
 
 .pf-hero-banner__link {
@@ -922,7 +1044,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   html:not(.pf-a11y-motion) .pf-hero-banner {
     animation: pf-banner-rise .9s cubic-bezier(.2, .7, .2, 1) both;
 
-    @for $i from 1 through 4 {
+    @for $i from 1 through 5 {
       &:nth-child(#{$i}) {
         animation-delay: #{150 + ($i - 1) * 120}ms;
       }
@@ -930,34 +1052,60 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+@container pf-cover (min-width: 44rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+    --pf-banner-rise: 3rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .pf-hero-banner:nth-child(even) {
+    --pf-banner-offset: 2.25rem;
+  }
+
+  // Tall (1:2), for the words and more of the picture, with a soft
+  // shadow under each; the title and its padding scale with the landing's
+  // width, so five fit down to 44rem.
+  .pf-hero-banner__link {
+    aspect-ratio: 1 / 2;
+    box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / .5);
+  }
+
+  .pf-hero-banners .pf-hero-banner__text {
+    padding: clamp(.875rem, 1.6cqi, 1.25rem);
+  }
+
+  .pf-hero-banners .pf-hero-banner__title {
+    font-size: clamp(1rem, 1.9cqi, 1.5rem);
+  }
+}
+
+// On the full-screen cover the row rises a third of the banners' height
+// (9rem) into the video, floating over the building (the cover block
+// above lets the band run on under it).
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
-    --pf-banner-rise: 3rem; // the row's lift over the cover's foot
-    grid-auto-flow: row;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: start;
-    margin: calc(-1 * var(--pf-banner-rise)) var(--pf-cover-gutter) 0;
-    padding: 0;
-    overflow: visible;
+    --pf-banner-rise: 9rem;
   }
+}
 
-  // Taller than on phones (2:3), for the words and more of the picture.
-  .pf-hero-banner__link {
-    aspect-ratio: 3 / 5;
+// Scroll parallax: as the page scrolls its first 70% of a screen, each
+// banner rises at its own pace (by 1.5rem plus its own drop), so the
+// offsets close and the row settles level. Scroll-driven (no script), on
+// the link (`translate`), so it never fights the rise-in on the item.
+// None with reduced motion or the Settings drawer's switch.
+@keyframes pf-banner-level {
+  to {
+    translate: 0 calc(-1.5rem - var(--pf-banner-offset, 0px));
   }
+}
 
-  // Uneven, not a staircase: high, low, nearly high, lowest, as the
-  // Collections tiles' stagger was, scaled to these banners.
-  .pf-hero-banner:nth-child(2) {
-    margin-top: 3rem;
-  }
-
-  .pf-hero-banner:nth-child(3) {
-    margin-top: 1rem;
-  }
-
-  .pf-hero-banner:nth-child(4) {
-    margin-top: 3.75rem;
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) .pf-hero-banner__link {
+      animation: pf-banner-level linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 70vh;
+    }
   }
 }
 
@@ -2218,40 +2366,13 @@ html[data-pf-hero] .pf-landing--hero {
 // --- Five columns, from 80rem -------------------------------------------------
 // From 80rem of landing (about 1440px of window) the hero's grid has five
 // equal columns (the same gutter), four below. On five:
-// - the banners, five of them, mirror around the centre column: the first,
-//   third and fifth high, the second and fourth lower, and taller (1:2;
-//   the high ones still come down into place, the low ones up);
 // - the Quick Start and On view headings span two columns, their content
 //   the other three (40/60, near thirds); the intro and the map's text two;
 // - the Visit panel: Instagram, then hours over two, then the mini map
 //   over two.
 // The Quick Start's mark track is the diamond's own 2.75rem here: a
 // quarter of a column (34px at 1440) would shrink the diamonds.
-@container pf-cover (min-width: 64rem) and (max-width: 79.98rem) {
-  .pf-hero-banner:nth-child(5) {
-    display: none;
-  }
-}
-
 @container pf-cover (min-width: 80rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  .pf-hero-banner:nth-child(odd) {
-    margin-top: 0;
-  }
-
-  .pf-hero-banner:nth-child(even) {
-    margin-top: 2.25rem;
-  }
-
-  // Taller on five columns, so the words have room in the scrim and more
-  // of each picture shows.
-  .pf-hero-banner__link {
-    aspect-ratio: 1 / 2;
-  }
-
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro,
   .pf-landing--cover .pf-map .pf-map__type {
     max-width: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + var(--pf-grid-gutter));

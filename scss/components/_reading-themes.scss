@@ -488,6 +488,41 @@ html#{$pf-themed} .pf-header {
   }
 }
 
+// Light swatches: the header inverted, in the swatch's heading colour as
+// its glass with the page colour for its text and icons, so the frame
+// reads as a dark band over a light page (all light was a glare) and the
+// page's own type leads. Hovers in the soft accent. The dropdown sheets
+// follow. (Dark swatches keep their glass, above.)
+html#{$pf-themed}:not(.pf-reading-dark) .pf-header {
+  --pf-header-bg: rgba(var(--pf-g-heading-rgb), .94);
+  --pf-utility-color: var(--pf-g-bg);
+
+  .navbar {
+    --bs-navbar-color: var(--pf-g-bg);
+    --bs-navbar-hover-color: var(--pf-g-accent-soft);
+    --bs-navbar-active-color: var(--pf-g-accent-soft);
+  }
+
+  .pf-brand {
+    --pf-brand-color: var(--pf-g-bg);
+    --pf-brand-hover-color: var(--pf-g-accent-soft);
+  }
+
+  .pf-utility-nav__link:is(:hover, :focus-visible, [aria-expanded="true"]) {
+    color: var(--pf-g-accent-soft);
+  }
+
+  .pf-primary-nav__submenu.dropdown-menu {
+    --bs-dropdown-bg: rgba(var(--pf-g-heading-rgb), .97);
+    --bs-dropdown-color: rgba(var(--pf-g-bg-rgb), .85);
+    --bs-dropdown-link-color: var(--pf-g-bg);
+    --bs-dropdown-link-hover-color: var(--pf-g-accent-soft);
+    --bs-dropdown-link-active-color: var(--pf-g-accent-soft);
+    --bs-dropdown-border-color: rgba(var(--pf-g-bg-rgb), .12);
+    --bs-dropdown-divider-bg: rgba(var(--pf-g-bg-rgb), .12);
+  }
+}
+
 // The strip under a header that is growing back (_header.scss) matches it.
 html#{$pf-themed} .pf-page::before {
   background-color: var(--pf-sidebar-bg);

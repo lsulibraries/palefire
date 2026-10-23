@@ -857,6 +857,26 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Sign in in the intro; hours as label and sentence; banners deeper,
+  with parallax, five columns to 44rem; dark header on light swatches;
+  phone Quick Start folds.** Sign in leaves the bar for a link ending the
+  hero intro ("Sign in to request materials" with an up-right arrow; it
+  opens the request system in a new tab). The hours are the status as a
+  label (dot and small capitals in a frame in the state's colour), then
+  today's hours and the building in the text face; no "All hours" link.
+  The banners are one row of five from 44rem of landing (titles and
+  padding scale with it); narrower, the blog post is a line of text and
+  the rest go two by two with the right column lower (4:5 on tablets). On
+  the full-screen cover they rise 9rem into the video with a soft shadow
+  (the band runs 1rem past the fold, their tops 8rem above it), and a
+  scroll-driven parallax closes their offsets as the page scrolls (off
+  with reduced motion). Light swatches get the header inverted: the
+  swatch's heading colour as its glass, the page colour for its text and
+  icons, the dropdowns to match. On phones the Quick Start folds to its
+  first option under a fade, with "Show all steps" (js/palefire.js;
+  focus inside unfolds it too). Why: sign-in belongs to requests, not the
+  site; mono is for labels; the banners needed depth; the all-light frame
+  glared.
 - **The hero's bar as a clear caption strip.** On the hero cover the
   sub-header bar has no glass at the top of the page: the breadcrumb,
   Sign in and pause sit straight on the video (a firmer top wash under
