@@ -864,6 +864,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Duplication guide: prices as a price list; request paths: diamonds light up as the line reaches them.**
+  - Guide text: a table with two columns and no header row is now set as a price list (`_guide.scss`): no box or minimum width, rules between rows, the item in body weight with an optional `<small>` detail under it, the price bold, right-aligned and on one line with even figures. Tables with a header row (Systematic Reviews) are unchanged. Text formats drop classes, so the table's shape is the marker.
+  - The duplication guide's Prices section is that table plus one note (`scripts/palefire_guide_duplication_prices.html`), shared by `palefire_guide_duplication.php` (new builds) and the new `palefire_guide_duplication_prices.php`, which replaces the Prices section's blocks on the live page as a new revision (the old one stays under Revisions).
+  - Request paths reveal: each diamond briefly takes its hover look (accent outline, brighter icon) as the line reaches it, the first as the line leaves it (0.6s, then 1.2s, 1.45s, 1.7s; 0.9s each). Measured in Edge over the DevTools protocol. Not with reduced motion.
+  - Why: the prices read as prose rather than a price list; the pulse marks each step as the line connects it.
+
 - **Quick Start Guide: "Full guide" and "Order prices" buttons, a new duplication guide, and a slower line reveal.**
   - Under Before you visit, two square buttons on a hairline in the labels' voice (`.pf-quick-guide__link`), each opening in a new tab with an up-right arrow after it (the name says so for screen readers). Hover takes the highlight and nudges the arrow. "Full guide" uses the Quick Guide's guide URL; "Order prices" goes to `/v2/special/guides/duplication`.
   - New `scripts/palefire_guide_duplication.php` builds that page, unpublished: "Ordering Copies from Special Collections", from the Duplication tile on lib.lsu.edu/special (prices, how to order, copyright, citation). Run it, review, then publish, or the button leads to a page visitors can't see.

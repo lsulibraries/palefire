@@ -1005,9 +1005,15 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// The picture stops 2px (rounded up from the 1 device pixel a fractional
+// scale can round either way) above the banner's foot, on a clip of its
+// own: the last rows are the banner's dark ground under the scrim's
+// darkest stop, so no hairline of bare picture shows there at any scale
+// or point of the drift, the cross or the pan.
 .pf-hero-banner__media {
   position: absolute;
-  inset: 0;
+  inset: 0 0 2px;
+  overflow: hidden;
 
   img {
     width: 100%;
@@ -1167,7 +1173,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 }
 
 // The pan, at every width: each picture is --pf-banner-pan taller than its
-// frame at top and foot, and slides down through it as the banner crosses
+// clip at top and foot, and slides down through it as the banner crosses
 // the screen (on the banner's own view timeline: the link clips, so it
 // can't hold one), slower than the page, like a window onto a deeper
 // picture. Two to a row (under 44rem) it is the only motion, the banners
@@ -1217,9 +1223,13 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
       }
     }
 
-    // Not the event's date (its words would move with it).
-    html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
-      inset: calc(-1 * var(--pf-banner-pan)) 0;
+    // Not the event's date (its words would move with it). The picture
+    // pans inside the clip, which holds still.
+    html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) img {
+      position: absolute;
+      top: calc(-1 * var(--pf-banner-pan));
+      left: 0;
+      height: calc(100% + 2 * var(--pf-banner-pan));
       animation: pf-banner-pan linear both;
       animation-timeline: --pf-banner-own;
       animation-range: cover 0% cover 100%;

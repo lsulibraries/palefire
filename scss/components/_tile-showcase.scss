@@ -651,12 +651,18 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 }
 
 // The card in the banners' voice (Default and Grid). The scrim runs a
-// pixel past each edge on a layer of its own, as on the banners, so no
-// hairline of bare picture shows at fractional scales.
+// pixel past each edge on a layer of its own, and the picture stops 2px
+// above the foot on a clip of its own, as on the banners, so no hairline
+// of bare picture shows at fractional scales. (List sets inset: auto.)
 .pf-tile--banner {
   &::after {
     inset: -1px -1px -2px;
     will-change: transform;
+  }
+
+  .pf-tile__media {
+    bottom: 2px;
+    overflow: hidden;
   }
 
   .pf-tile__body {
