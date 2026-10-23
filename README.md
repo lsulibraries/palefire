@@ -889,6 +889,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero spacing restored; search shadow; TOC icon redrawn.**
+  - `_landing-features.scss`: the hero's top block (a grid from 40rem since the links moved beside the intro) took the older `xl` rule's 2rem row gap, which stacked 32px more under the title and under the hours. The row gap is now 0, so their own margins space them as before. The hero's search (field and button) has the banners' soft shadow; focus keeps its gold ring over it.
+  - `page.html.twig`: the list icon (TOC toggle and phone button) on whole pixels: a faint rail, a heading line, then three entries indented and left-aligned with ragged ends, four rows 2px apart, 1px lines as the header's icons, the drawing centred in its box. Why: the old icon's 1.2-unit bars blurred at 16px, its rows were uneven and its short bars were right-aligned, unlike a TOC.
+
 - **Hero links: glass plate, flush cells, gold hover; Log in over the Search button.**
   - `_landing-features.scss`: the links' plate takes the glass blur again (still 65%, lighter than the search's 80%), so the words read over busy frames. From 80rem the three cells are flush (no gutters): the last is one banner wide, the others a banner and a gutter, so a hover fills a link's whole cell, the hairlines sit on the cells' edges, and Log in's cell and words start where the Search button's do (1130px and 1150px at 1440, both). Hover turns the words gold over the deeper cell (about 82% in all: 5.9:1 for gold over a white frame).
   - Why: hovers filled only part of a column (the gutter stayed light), Log in sat a gutter left of the Search button, and the plate alone was hard to read over bright frames. Checked at 1440 on the live page with this CSS injected.

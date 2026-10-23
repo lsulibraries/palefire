@@ -506,12 +506,17 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   // No frame: the firmer fill and the Search button mark the field, so the
   // links' hairlines over it have no rule to meet. The frame stays in the
   // layout, clear, and turns gold on focus as elsewhere.
+  // The hero banners' soft shadow under it (field and button), so the
+  // search stands forward of the video like them.
   .pf-landing__field {
     border-color: transparent;
     background-color: color-mix(in srgb, var(--pf-cover-bg) 80%, transparent);
+    box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / .5);
 
     &:focus-within {
       border-color: var(--pf-landing-accent, var(--pf-toc-accent, #{$pf-gold}));
+      // The focus ring (_landing-swiss.scss) with the shadow kept under it.
+      box-shadow: 0 0 0 1px var(--pf-landing-accent, var(--pf-toc-accent, #{$pf-gold})), 0 1.5rem 3rem -1rem rgb(0 0 0 / .5);
     }
   }
 }
@@ -2725,7 +2730,7 @@ html[data-pf-hero] .pf-landing--hero {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--pf-grid-gutter);
+    gap: 0 var(--pf-grid-gutter); // no row gap: the title's and hours' own margins space the rows
     align-items: end;
 
     > * {
