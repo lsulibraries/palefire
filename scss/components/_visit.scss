@@ -196,6 +196,51 @@
       "social hours place";
   }
 }
+
+// 1200px and up: Instagram | hours | mini map as three frames of one
+// height, their tops on the status line and their feet on the week's last
+// rule, with the two links (All library hours, Open in Google Maps) on one
+// line under them. The hours and the map's column give their parts to the
+// strip's grid (display: contents; their state classes still reach the
+// parts). The frames keep a floor for when the week is shut or not loaded.
+// On the landing cover the strip is on the hero's grid instead, by the
+// cover's width (_landing-features.scss), with the same parts.
+@mixin pf-visit-frames {
+  .pf-visit__hours,
+  .pf-visit__place { display: contents; }
+  .pf-visit__status { grid-area: status; }
+  .pf-visit__week { grid-area: week; }
+  .pf-visit__all-hours { grid-area: all; justify-self: start; margin-top: 0; }
+  .pf-visit__map {
+    grid-area: map;
+    align-self: stretch;
+    aspect-ratio: auto;
+    min-height: 14rem;
+  }
+  .pf-visit__directions { grid-area: directions; justify-self: start; }
+  .pf-visit__social { min-height: 14rem; }
+}
+
+@media (min-width: 1200px) {
+  .pf-visit:not(.pf-landing--cover .pf-visit) {
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "head head head"
+      "social status map"
+      "social week map"
+      ". all directions";
+    @include pf-visit-frames;
+  }
+  .pf-visit--keyed:not(.pf-landing--cover .pf-visit) {
+    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-areas:
+      "key key key"
+      "head head head"
+      "social status map"
+      "social week map"
+      ". all directions";
+  }
+}
 .pf-visit__heading {
   display: flex;
   flex-direction: column;

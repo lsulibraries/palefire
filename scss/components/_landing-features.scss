@@ -1661,22 +1661,29 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// Instagram | hours | mini map as three frames of one height, the two
+// links on one line under them (the parts as _visit.scss lays them out).
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover .pf-map .pf-visit {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
       "head head head head"
-      "social hours hours place";
+      "social status status map"
+      "social week week map"
+      ". all all directions";
     column-gap: var(--pf-grid-gutter);
+    @include pf-visit-frames;
   }
 
   .pf-landing--cover .pf-map .pf-visit--keyed {
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto 1fr auto;
     grid-template-areas:
       "key key key key"
       "head head head head"
-      "social hours hours place";
+      "social status status map"
+      "social week week map"
+      ". all all directions";
   }
 
   .pf-landing--cover > .pf-landing__onview {
@@ -2504,14 +2511,18 @@ html[data-pf-hero] .pf-landing--hero {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     grid-template-areas:
       "head head head head head"
-      "social hours hours place place";
+      "social status status map map"
+      "social week week map map"
+      ". all all directions directions";
   }
 
   .pf-landing--cover .pf-map .pf-visit--keyed {
     grid-template-areas:
       "key key key key key"
       "head head head head head"
-      "social hours hours place place";
+      "social status status map map"
+      "social week week map map"
+      ". all all directions directions";
   }
 }
 
