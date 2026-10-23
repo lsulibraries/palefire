@@ -889,6 +889,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero search: placeholder in the intro's type.**
+  - `_landing-features.scss`: the hero's search field (placeholder and typed words) takes the intro's size (`--pf-hero-text`) and regular weight instead of the larger 300 the other landings' fields use. Why: the light weight was the one 300 on the hero and read out of step with the intro beside it.
+
 - **TOC icon: the rail and its marker.**
   - `page.html.twig`, `_modular.scss`: the list icon (TOC toggle and phone button) redrawn as the sidebar looks: the rail's top third in the bright text colour (`--pf-toc-active`, as the TOC's active link; `.pf-toc-icon__mark`), the rest at 35%, then three entries left-aligned with ragged ends, all at one 1.5px weight. Why: the previous five-part 1px drawing looked thin and busy at 16px. On hover the bars brighten to match the marker.
 

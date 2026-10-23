@@ -649,10 +649,13 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 
   // No magnifier leads the field here (it is the button's icon), so the
-  // placeholder starts at the field's own inset.
+  // placeholder starts at the field's own inset, its words in the intro's
+  // face, weight and size (--pf-hero-text) rather than the light 300 the
+  // other landings' larger fields take, the one light weight on the hero.
   .pf-landing__input {
     padding-inline-start: 1.25rem;
-    font-size: clamp(1.0625rem, 1rem + .25vw, 1.25rem);
+    font-size: var(--pf-hero-text, 1.125rem);
+    font-weight: 400;
   }
 
   // The Search button filled with the swatch's accent, its words in the
