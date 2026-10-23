@@ -2480,9 +2480,9 @@ html[data-pf-hero] .pf-landing--hero {
 
 // --- This week's hours (the hero's right side) -------------------------------
 // A timetable for the week on the five-column cover: the title, hours line
-// and intro keep columns 1-2, and the week takes columns 3-5, the intro's
-// height (its top and foot on the intro's), its right edge the search's:
-// two blocks of one height across the grid. Its caption is for screen
+// and intro keep columns 1-2, and the week takes columns 3-5, its foot on
+// the intro's, its right edge the search's. Its column rules run the full
+// height of the frame, and today's rule lies on its top edge. Its caption is for screen
 // readers; the day names and today's rule say what it is. It is a plate of
 // the search field's own material (the page colour at 80% with the glass
 // blur, a hairline frame, square corners), so it reads at AA over any
@@ -2517,16 +2517,13 @@ html[data-pf-hero] .pf-landing--hero {
       display: block;
       grid-column: 3 / -1;
       grid-row: 3;
-      align-self: stretch;
-      display: flex;
+      align-self: end;
     }
   }
 }
 
 .pf-landing__week {
-  flex-direction: column;
-  justify-content: center;
-  padding: .875rem 1.25rem;
+  padding: 0 1.25rem;
   border: 1px solid var(--pf-landing-line, #{$pf-hairline});
   color: var(--pf-section-fg, var(--bs-body-color));
   background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 80%, transparent);
@@ -2558,7 +2555,7 @@ html[data-pf-hero] .pf-landing--hero {
   flex-direction: column;
   gap: .375rem;
   min-width: 0;
-  padding: .625rem .75rem 0;
+  padding: .875rem .75rem;
   border: 0;
   border-inline-start: 1px solid #{$pf-hairline};
   font-weight: inherit;
