@@ -108,7 +108,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
-| `palefire_exhibit_redesign.php` | Builds "A New Look for LSU Libraries", the site redesign before and after, as an unpublished exhibition (`-- images=<Redesign screenshots folder> path=/v2/exhibitions/redesign`); `edition=staff` builds the staff page, which adds four staff-only galleries under its own title (`path=/v2/exhibitions/redesign-staff`, access restricted in the UI). Both share the 16 screenshots' media items |
+| `palefire_exhibit_redesign.php` | Builds "A New Look for LSU Libraries", the site redesign before and after, as an unpublished exhibition (`-- images=<Redesign screenshots folder> path=/v2/exhibitions/redesign`); `edition=staff` builds the staff page, which adds four staff-only galleries under its own title (`path=/v2/exhibitions/redesign-staff`, access restricted in the UI). Both share the 20 screenshots' media items |
 | `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
 | `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, the pairs' "Drawing" / "Proof" captions and the drawings' alignments (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
@@ -765,12 +765,13 @@ title, subtitle and intro. Restrict the staff page's access in the Drupal UI.
   entry is an image group of two figures captioned "Before" and "After", so
   its tile reads "Before · After" and opens the Wipe / Fade comparison. The
   group caption gives both addresses and dates.
-- **Screenshots** ("Redesign screenshots", 16 PNGs): the first screen of
+- **Screenshots** ("Redesign screenshots", 20 PNGs): the first screen of
   each page at 1440 × 900 and at 375 × 812 (2×), captured 23 October 2026
   in headless Edge over CDP. The old pages are lib.lsu.edu/special, the
-  Systematic Reviews LibGuide, and the Wayback Machine's copies of the 2021
-  Audubon exhibition (December 2023) and the 2011 Occult Science blog
-  (March 2016; the 2024 copy has lost its images). The old site's cookie
+  Systematic Reviews LibGuide, /audubon/introduction (live: the Wayback
+  Machine has no 2025–2026 copy, so its mis-encoded text shows as it
+  does now), and the Wayback Machine's 13 March 2026 copies of
+  /aves/introduction and /occult/introduction. The old site's cookie
   banner and chat pop-up were hidden, not accepted. Alt text is in the data.
 - **To fill:** the `[Editor: …]` notes (credit, feedback link, contacts,
   redirect plan) and screenshots for Made for Every Reader.
@@ -888,6 +889,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Redesign exhibition: AVES added, 2026 "before" pages.** The Exhibitions wall gains AVES (desktop and phone pairs). The old Audubon and Occult Science pages are now the version from just before the redesign (/audubon/introduction live, /occult/introduction from the Wayback Machine, 13 March 2026), not the 2021 page and the 2011 blog. The new files have new names (`exhibit-*-before-2026-*`), so a rebuild imports them instead of reusing the older media items.
+  - Why: the redesign replaced the 2025–2026 pages, so those are the honest "before".
 - **Footer: the page's Swiss voice, and a curtain reveal.**
   - Restyled (`_footer.scss`, `includes/footer.html.twig`), as mockup A on the footer canvas: labels (kicker, facts, column titles, copyright, legal links) in the mono UI voice (`--pf-toc-font`, so the readable font when chosen); the kicker as an index rule across the lead; links plain at rest, the accent and a hairline underline on hover; hours marks as small diamonds, as the request paths'; Instagram and Facebook in square hairline cells.
   - Call and Ask as ruled rows (mockup B): each link covers its whole row, with an arrow at the end; on hover the accent, a gold rule under the row and the arrow nudged on; the row takes the focus ring. "Plan a research visit" is a square gold block (B) in the mono voice; "Main Library home" gains an arrow.

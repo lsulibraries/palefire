@@ -53,8 +53,16 @@
        "type": "gallery",
        "caption": "<p>Before: lib.lsu.edu/special. After: lib.lsu.edu/v2/special. Both captured 23 October 2026 at 1440 × 900.</p>",
        "figures": [
-        { "image": "special-before-desktop.png", "caption": "Before", "source": "Special Collections, desktop, before" },
-        { "image": "special-after-desktop.png", "caption": "After", "source": "Special Collections, desktop, after" }
+        {
+         "image": "special-before-desktop.png",
+         "caption": "Before",
+         "source": "Special Collections, desktop, before"
+        },
+        {
+         "image": "special-after-desktop.png",
+         "caption": "After",
+         "source": "Special Collections, desktop, after"
+        }
        ]
       }
      ]
@@ -69,8 +77,16 @@
        "type": "gallery",
        "caption": "<p>Before: lib.lsu.edu/special. After: lib.lsu.edu/v2/special. Both captured 23 October 2026 at 375 × 812.</p>",
        "figures": [
-        { "image": "special-before-phone.png", "caption": "Before", "source": "Special Collections, phone, before" },
-        { "image": "special-after-phone.png", "caption": "After", "source": "Special Collections, phone, after" }
+        {
+         "image": "special-before-phone.png",
+         "caption": "Before",
+         "source": "Special Collections, phone, before"
+        },
+        {
+         "image": "special-after-phone.png",
+         "caption": "After",
+         "source": "Special Collections, phone, after"
+        }
        ]
       }
      ]
@@ -96,8 +112,16 @@
        "type": "gallery",
        "caption": "<p>Before: guides.lib.lsu.edu/Systematic_Reviews (LibGuides). After: lib.lsu.edu/v2/guides/systematic-reviews. Both captured 23 October 2026 at 1440 × 900.</p>",
        "figures": [
-        { "image": "guide-sr-before-desktop.png", "caption": "Before", "source": "Systematic Reviews, desktop, before" },
-        { "image": "guide-sr-after-desktop.png", "caption": "After", "source": "Systematic Reviews, desktop, after" }
+        {
+         "image": "guide-sr-before-desktop.png",
+         "caption": "Before",
+         "source": "Systematic Reviews, desktop, before"
+        },
+        {
+         "image": "guide-sr-after-desktop.png",
+         "caption": "After",
+         "source": "Systematic Reviews, desktop, after"
+        }
        ]
       }
      ]
@@ -112,8 +136,16 @@
        "type": "gallery",
        "caption": "<p>Before: guides.lib.lsu.edu/Systematic_Reviews (LibGuides). After: lib.lsu.edu/v2/guides/systematic-reviews. Both captured 23 October 2026 at 375 × 812.</p>",
        "figures": [
-        { "image": "guide-sr-before-phone.png", "caption": "Before", "source": "Systematic Reviews, phone, before" },
-        { "image": "guide-sr-after-phone.png", "caption": "After", "source": "Systematic Reviews, phone, after" }
+        {
+         "image": "guide-sr-before-phone.png",
+         "caption": "Before",
+         "source": "Systematic Reviews, phone, before"
+        },
+        {
+         "image": "guide-sr-after-phone.png",
+         "caption": "After",
+         "source": "Systematic Reviews, phone, after"
+        }
        ]
       }
      ]
@@ -127,7 +159,55 @@
    "blocks": [
     {
      "type": "text",
-     "body": "<p>Online exhibitions used to be blog posts or pages of small pictures. The Audubon exhibition showed 600-pixel close-ups, and Occult Science used 1,000-pixel scans. Each new exhibition opens like a gallery entrance: a title page, then one room at a time. Plates are shown whole, from scans of up to 4K, and open full screen with zoom. Where Audubon's drawing and the printed plate survive, you can lay one over the other and wipe between them, the same way this exhibition compares its screenshots.</p>"
+     "body": "<p>Online exhibitions used to be separate sites, each with its own header and its own way of moving between pages. Audubon showed 600-pixel close-ups and Occult Science 1,000-pixel scans, and the Audubon text, mis-encoded over years of copying, had turned to strings of stray characters. Each new exhibition opens like a gallery entrance: a title page, then one room at a time. Plates are shown whole, from scans of up to 4K, and open full screen with zoom. Where Audubon's drawing and the printed plate survive, you can lay one over the other and wipe between them, the same way this exhibition compares its screenshots.</p>"
+    },
+    {
+     "type": "entry",
+     "title": "AVES: A Survey of the Literature of Neotropical Ornithology",
+     "anchor": "exhibitions-aves",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/aves/introduction, from the Wayback Machine's copy of 13 March 2026. After: lib.lsu.edu/v2/special/exhibitions/aves, 23 October 2026. Both at 1440 × 900.</p>",
+       "figures": [
+        {
+         "image": "exhibit-aves-before-desktop.png",
+         "caption": "Before",
+         "source": "AVES: A Survey of the Literature of Neotropical Ornithology, before"
+        },
+        {
+         "image": "exhibit-aves-after-desktop.png",
+         "caption": "After",
+         "source": "AVES: A Survey of the Literature of Neotropical Ornithology, after"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "AVES, on a phone",
+     "anchor": "exhibitions-aves-phone",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/aves/introduction, from the Wayback Machine's copy of 13 March 2026. After: lib.lsu.edu/v2/special/exhibitions/aves, 23 October 2026. Both at 375 × 812.</p>",
+       "figures": [
+        {
+         "image": "exhibit-aves-before-phone.png",
+         "caption": "Before",
+         "source": "AVES, on a phone, before"
+        },
+        {
+         "image": "exhibit-aves-after-phone.png",
+         "caption": "After",
+         "source": "AVES, on a phone, after"
+        }
+       ]
+      }
+     ]
     },
     {
      "type": "entry",
@@ -137,10 +217,18 @@
      "blocks": [
       {
        "type": "gallery",
-       "caption": "<p>Before: lib.lsu.edu/exhibitions/john-james-audubon (2021), from the Wayback Machine's copy of December 2023. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 1440 × 900.</p>",
+       "caption": "<p>Before: lib.lsu.edu/audubon/introduction, 23 October 2026. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 1440 × 900.</p>",
        "figures": [
-        { "image": "exhibit-audubon-before-desktop.png", "caption": "Before", "source": "Audubon, desktop, before" },
-        { "image": "exhibit-audubon-after-desktop.png", "caption": "After", "source": "Audubon, desktop, after" }
+        {
+         "image": "exhibit-audubon-before-2026-desktop.png",
+         "caption": "Before",
+         "source": "John James Audubon in Louisiana, before"
+        },
+        {
+         "image": "exhibit-audubon-after-desktop.png",
+         "caption": "After",
+         "source": "John James Audubon in Louisiana, after"
+        }
        ]
       }
      ]
@@ -153,10 +241,18 @@
      "blocks": [
       {
        "type": "gallery",
-       "caption": "<p>Before: lib.lsu.edu/exhibitions/john-james-audubon (2021), from the Wayback Machine's copy of December 2023. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 375 × 812.</p>",
+       "caption": "<p>Before: lib.lsu.edu/audubon/introduction, 23 October 2026. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 375 × 812.</p>",
        "figures": [
-        { "image": "exhibit-audubon-before-phone.png", "caption": "Before", "source": "Audubon, phone, before" },
-        { "image": "exhibit-audubon-after-phone.png", "caption": "After", "source": "Audubon, phone, after" }
+        {
+         "image": "exhibit-audubon-before-2026-phone.png",
+         "caption": "Before",
+         "source": "Audubon, on a phone, before"
+        },
+        {
+         "image": "exhibit-audubon-after-phone.png",
+         "caption": "After",
+         "source": "Audubon, on a phone, after"
+        }
        ]
       }
      ]
@@ -169,10 +265,18 @@
      "blocks": [
       {
        "type": "gallery",
-       "caption": "<p>Before: exhibitions.blogs.lib.lsu.edu (2011), from the Wayback Machine's copy of March 2016. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 1440 × 900.</p>",
+       "caption": "<p>Before: lib.lsu.edu/occult/introduction, from the Wayback Machine's copy of 13 March 2026. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 1440 × 900.</p>",
        "figures": [
-        { "image": "exhibit-occult-before-desktop.png", "caption": "Before", "source": "Occult Science, desktop, before" },
-        { "image": "exhibit-occult-after-desktop.png", "caption": "After", "source": "Occult Science, desktop, after" }
+        {
+         "image": "exhibit-occult-before-2026-desktop.png",
+         "caption": "Before",
+         "source": "Occult Science and Philosophy in the Renaissance, before"
+        },
+        {
+         "image": "exhibit-occult-after-desktop.png",
+         "caption": "After",
+         "source": "Occult Science and Philosophy in the Renaissance, after"
+        }
        ]
       }
      ]
@@ -185,10 +289,18 @@
      "blocks": [
       {
        "type": "gallery",
-       "caption": "<p>Before: exhibitions.blogs.lib.lsu.edu (2011), from the Wayback Machine's copy of March 2016. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 375 × 812.</p>",
+       "caption": "<p>Before: lib.lsu.edu/occult/introduction, from the Wayback Machine's copy of 13 March 2026. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 375 × 812.</p>",
        "figures": [
-        { "image": "exhibit-occult-before-phone.png", "caption": "Before", "source": "Occult Science, phone, before" },
-        { "image": "exhibit-occult-after-phone.png", "caption": "After", "source": "Occult Science, phone, after" }
+        {
+         "image": "exhibit-occult-before-2026-phone.png",
+         "caption": "Before",
+         "source": "Occult Science, on a phone, before"
+        },
+        {
+         "image": "exhibit-occult-after-phone.png",
+         "caption": "After",
+         "source": "Occult Science, on a phone, after"
+        }
        ]
       }
      ]
@@ -270,13 +382,17 @@
   "guide-sr-after-desktop.png": "The Systematic Reviews guide on the new site. A table of contents runs down the left. The title, a one-sentence summary, the author, the date and subject tags are followed by the first section, with a narrative-review definition set off by a gold rule.",
   "guide-sr-before-phone.png": "The LibGuides version on a phone. Below the purple banner and a guide search box, the tab buttons stack into a column of grey bars that fills the whole screen before any text.",
   "guide-sr-after-phone.png": "The new guide on a phone. The title, a summary, the author, the date and subject tags, then the first section's heading and text, with a table-of-contents button in the corner.",
-  "exhibit-audubon-before-desktop.png": "The 2021 Audubon exhibition. A purple LSU Libraries header, a banner of a warbler on a map of Louisiana, a list of six sections on the left and a column of text.",
   "exhibit-audubon-after-desktop.png": "The new Audubon title page. A table of contents of seven galleries on the left, the title in large pale-gold type, and Audubon's Carolina Parrot plate filling the right half of the screen.",
-  "exhibit-audubon-before-phone.png": "The 2021 Audubon exhibition on a phone. Site links, a search box and the LSU Libraries logo come first, then a small banner, the list of sections and the opening text in grey.",
   "exhibit-audubon-after-phone.png": "The new Audubon title page on a phone. The Carolina Parrot plate fills the top of the screen and fades into the title, credit line and year below it.",
-  "exhibit-occult-before-desktop.png": "The 2011 exhibition. A grey and purple Hill Memorial Library header, a red title banner, a grey list of sixteen links, and the sunflower engraving in a narrow frame.",
   "exhibit-occult-after-desktop.png": "The new Occult Science title page. The same sunflower engraving fills the right of the screen behind the title, with the galleries listed in the table of contents.",
-  "exhibit-occult-before-phone.png": "The 2011 exhibition on a phone. The desktop layout is shrunk and cut off at the right edge, so the menu and title banner run off the screen, and the engraving sits in a small grey box.",
-  "exhibit-occult-after-phone.png": "The new Occult Science title page on a phone. A close view of the sunflower engraving fills the top of the screen and fades into the title, credit line and year."
+  "exhibit-occult-after-phone.png": "The new Occult Science title page on a phone. A close view of the sunflower engraving fills the top of the screen and fades into the title, credit line and year.",
+  "exhibit-aves-before-desktop.png": "The previous AVES page. A toucan plate fills the screen behind a translucent white title panel and a yellow \"Introduction\" bar with map, image and tool icons; a page-title pill overlaps the site menu.",
+  "exhibit-aves-after-desktop.png": "The new AVES title page. The galleries are listed in a table of contents on the left, the title is set in large pale-gold type, and the toucan plate fills the right of the screen.",
+  "exhibit-aves-before-phone.png": "The previous AVES page on a phone. The title breaks one or two words to a line and runs far below the toucan image, and the icons in the yellow bar overlap the word \"Introduction\".",
+  "exhibit-aves-after-phone.png": "The new AVES title page on a phone. The toucan plate fills the top of the screen and fades into the title, subtitle, credit line and year.",
+  "exhibit-audubon-before-2026-desktop.png": "The previous Audubon in Louisiana page. A white header, the title above a yellow \"Introduction\" bar with map, image and tool icons, and a wide column of widely spaced text broken by strings of garbled characters where apostrophes and spaces should be.",
+  "exhibit-audubon-before-2026-phone.png": "The previous Audubon page on a phone. The title breaks across three lines, the icons in the yellow bar overlap the word \"Introduction\", and a line of garbled characters runs off the right edge.",
+  "exhibit-occult-before-2026-desktop.png": "The previous Occult Science page. The sunflower engraving fills the screen behind a translucent white title panel and a yellow \"Introduction\" bar with map, image and tool icons.",
+  "exhibit-occult-before-2026-phone.png": "The previous Occult Science page on a phone. The title breaks one word to a line and runs past its panel and the image, and the icons in the yellow bar overlap the word \"Introduction\"."
  }
 }

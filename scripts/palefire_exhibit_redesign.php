@@ -14,7 +14,7 @@
  * Both editions share the screenshots' media items, so build both from the
  * same folder.
  *
- * Copy the "Redesign screenshots" folder (16 PNGs) to the server first, then:
+ * Copy the "Redesign screenshots" folder (20 PNGs) to the server first, then:
  *
  *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_redesign.php -- images=/tmp/redesign-shots path=/v2/exhibitions/redesign
  *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_redesign.php -- images=/tmp/redesign-shots edition=staff path=/v2/exhibitions/redesign-staff
@@ -29,8 +29,8 @@
  * Galleries 2-4 are walls: each entry is an image group of two figures
  * captioned "Before" and "After", so its tile opens the Wipe / Fade
  * comparison. Screenshots are first screens at 1440 x 900 and 375 x 812 (at
- * 2x), captured 23 October 2026; the old exhibitions are the Wayback
- * Machine's copies. Alt text is in the data.
+ * 2x), captured 23 October 2026; the old AVES and Occult Science pages are
+ * the Wayback Machine's copies of 13 March 2026. Alt text is in the data.
  *
  * Images: each PNG is imported once as an Image media item (named
  * "Redesign: <file name>", reused on a re-run and by the other edition)
