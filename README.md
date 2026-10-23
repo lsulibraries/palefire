@@ -857,6 +857,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero banners: no row of bare picture under the scrim.** The banners'
+  heights are fractional (460.78px at 1440), and rounding sometimes left
+  a 1px row of picture below the scrim. The scrim now runs past every
+  edge (2px at the foot), clipped by the banner, as the exhibition
+  cover's wash does.
 - **From the stacks: a stage that follows the lists; On view out of the
   hero.** The hero's On view (exhibition tiles under the map, index rule
   03) is gone. In From the stacks the large picture is now a stage

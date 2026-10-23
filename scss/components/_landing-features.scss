@@ -946,11 +946,14 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   background-color: #1f1b26;
 
   // The scrim under the words: strongest at the foot, so white keeps 4.5:1
-  // over any picture (as on the exhibition tiles).
+  // over any picture (as on the exhibition tiles). It runs a pixel past
+  // the banner's foot (the link clips it), so rounding at a fractional
+  // height never leaves a row of bare picture under it (as on the
+  // exhibition cover).
   &::after {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -1px -1px -2px;
     z-index: 1;
     background-image: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .6) 30%, rgb(0 0 0 / 0) 65%);
   }
