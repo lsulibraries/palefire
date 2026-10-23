@@ -143,10 +143,19 @@ html#{$pf-themed} .pf-footer {
   grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 1rem;
   padding-block: .75rem;
-  border-top: 1px solid $pf-hairline;
+
+  // Rules between the facts only, no frame: the first sits on the
+  // kicker's line, the last ends with its words.
+  & + & {
+    border-top: 1px solid $pf-hairline;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
 
   &:last-child {
-    border-bottom: 1px solid $pf-hairline;
+    padding-bottom: 0;
   }
 
   dt {
