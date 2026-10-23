@@ -889,6 +889,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero links: glass plate, flush cells, gold hover; Log in over the Search button.**
+  - `_landing-features.scss`: the links' plate takes the glass blur again (still 65%, lighter than the search's 80%), so the words read over busy frames. From 80rem the three cells are flush (no gutters): the last is one banner wide, the others a banner and a gutter, so a hover fills a link's whole cell, the hairlines sit on the cells' edges, and Log in's cell and words start where the Search button's do (1130px and 1150px at 1440, both). Hover turns the words gold over the deeper cell (about 82% in all: 5.9:1 for gold over a white frame).
+  - Why: hovers filled only part of a column (the gutter stayed light), Log in sat a gutter left of the Search button, and the plate alone was hard to read over bright frames. Checked at 1440 on the live page with this CSS injected.
+
 - **Hero links on one lighter plate; landing bar lines up with the header; map entrance as an opening.**
   - `_landing-features.scss`: University Archives, Oral History and Log in share one plate split by hairlines, beside the intro and as tall as it (a grid row from 40rem: rows in the right half; from 80rem three columns over banners 3-5), words and arrows centred. Phones: rows under the intro. The plate is the page colour at 65%, no glass: lighter than the search's 80% so the two read apart, and the least that keeps white words at 4.5:1 over a white frame (4.7:1). Log in's words go white (gold would need 75%); its arrow keeps the gold. Hover deepens a link's share of the plate. Why: the plateless index was hard to read over bright frames.
   - `_header.scss`, `_modular.scss`, `_landing-features.scss` (lg and up, where the menu shows): the landing bar's TOC button is as wide as the logo (`--pf-logo-w`, which follows the compact header), its icon on the logo's edge, with a clear 1rem strip under it that also takes clicks; the breadcrumb starts where "Help with" does (gutter + logo + `$pf-brand-gap`). Hover brightens the icon instead of filling the wider box.

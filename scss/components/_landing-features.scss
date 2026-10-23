@@ -2682,12 +2682,13 @@ html[data-pf-hero] .pf-landing--hero {
 //   beside it (a grid, so neither can run into the hours over them);
 // - from 80rem (five-column cover): three columns over banners 3-5, so Log
 //   in stands over the Search button, the plate again the intro's height.
-// The plate is the page colour at 65%, lighter than the search field's 80%
-// and with no glass, so the two read apart: the least that keeps white
+// The plate is the page colour at 65% on the glass blur, lighter than the
+// search field's 80% so the two read apart: the least that keeps white
 // words at 4.5:1 over a white frame of the video (4.7:1 there), the halo
-// on top. Gold words would need 75%, so Log in, which leaves for the
-// request system, keeps the highlight on its arrow only. Hover deepens a
-// link's share of the plate, which only adds contrast.
+// on top. Gold words at rest would need 75%, so Log in, which leaves for
+// the request system, keeps the highlight on its arrow. Hover deepens a
+// link's whole cell (about 82% in all) and turns its words gold, which
+// keeps 5.9:1 there.
 .pf-landing__links {
   --pf-links-plate: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 65%, transparent);
   grid-column: 1 / -1;
@@ -2695,6 +2696,8 @@ html[data-pf-hero] .pf-landing--hero {
   flex-direction: column;
   margin-top: clamp(1rem, 2vw, 1.5rem);
   background-color: var(--pf-links-plate);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
 
 .pf-landing__links-list {
@@ -2763,27 +2766,18 @@ html[data-pf-hero] .pf-landing--hero {
     }
   }
 
-  // The grid's gutter between the columns, so each sits over its banner
-  // (Log in over the Search button); the hairline down the gutter's middle.
+  // Flush cells, so a hover fills its whole share of the plate: the last
+  // is one banner wide (banner 5's, the Search button's), the other two
+  // share the rest, each a banner and a gutter. Log in's cell and words
+  // then start where the Search button's do; the hairlines fall on the
+  // cells' edges.
   .pf-landing__links-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) calc((100% - 2 * var(--pf-grid-gutter)) / 3);
     grid-auto-rows: auto;
-    column-gap: var(--pf-grid-gutter);
-
-    > li {
-      position: relative;
-    }
 
     > li + li {
       border-top: 0;
-
-      &::before {
-        content: "";
-        position: absolute;
-        inset-block: 0;
-        inset-inline-start: calc(var(--pf-grid-gutter) / -2);
-        border-inline-start: 1px solid #{$pf-hairline};
-      }
+      border-inline-start: 1px solid #{$pf-hairline};
     }
 
     // The words start where the Search button's do.
@@ -2806,7 +2800,7 @@ html[data-pf-hero] .pf-landing--hero {
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   text-decoration: none;
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
-  transition: background-color $pf-hover-out ease;
+  transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
 
   svg {
     flex: none;
@@ -2817,7 +2811,7 @@ html[data-pf-hero] .pf-landing--hero {
 
   &:hover,
   &:focus-visible {
-    color: var(--pf-section-fg, var(--bs-emphasis-color));
+    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
     background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 50%, transparent);
     transition-duration: $pf-hover-in;
   }
