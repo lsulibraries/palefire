@@ -142,6 +142,13 @@ html[data-pf-mode="guide"] .pf-modular__title {
   max-width: min(100%, #{$pf-guide-prose});
 }
 
+// The breadcrumb is a running head, not part of the title: more space over
+// the title than under it (the head's 1rem), so the title and intro read as
+// one unit. No breadcrumb: the title takes the first line, as elsewhere.
+html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
+  margin-top: clamp(2rem, 1rem + 3vw, 3.5rem);
+}
+
 .pf-guide-head {
   display: grid;
   gap: 1rem;

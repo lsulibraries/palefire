@@ -889,6 +889,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Guides: room between the breadcrumb and the title.**
+  - `_guide.scss`: on guides the `<h1>` sits `clamp(2rem, 1rem + 3vw, 3.5rem)` under the breadcrumb (was 0.85rem), more than the 1rem between the title and the intro. A guide with no breadcrumb keeps its title on the first line.
+  - Why: the breadcrumb is a running head; set tight over the title it read as part of it. The sticky landing bar was considered and left to landings: a reading page needs no chrome pinned over it.
+
 - **Hero links: a ruled index beside the intro; the search loses its frame.**
   - `_landing-features.scss`: University Archives, Oral History and Log in drop their framed glass plates and become a hairline index (mono label, arrow, rule gold on hover and focus). Phones: rows under the intro, a rule only between them. From 40rem: the same rows in the intro's right half (a two-column grid, both feet level, so they can't run into the hours). From 80rem: three columns over banners 3-5, a rule on top of each, Log in over the Search button. The words carry the hours line's halo for 4.5:1 on any video frame.
   - The hero's search field has no frame (clear; gold on focus, CanvasText in forced colours): its fill and the Search button mark it, and no rule sits under the links to meet it.
