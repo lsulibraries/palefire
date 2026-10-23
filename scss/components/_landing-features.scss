@@ -987,12 +987,15 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   // over any picture (as on the exhibition tiles). It runs a pixel past
   // the banner's foot (the link clips it), so rounding at a fractional
   // height never leaves a row of bare picture under it (as on the
-  // exhibition cover).
+  // exhibition cover). Its own compositor layer, as the picture is (it
+  // pans): the link's clip then snaps the same for both, so at fractional
+  // scales (125%) no row or column of bare picture shows at the edges.
   &::after {
     content: "";
     position: absolute;
     inset: -1px -1px -2px;
     z-index: 1;
+    will-change: transform;
     background-image: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .6) 30%, rgb(0 0 0 / 0) 65%);
   }
 
