@@ -863,9 +863,11 @@ html[data-pf-mode="guide"] .pf-section__title {
       opacity 0.5s ease-out,
       transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 
+    // The line waits for the stops, then draws one leg at a time, so it
+    // reads as its own movement: from 0.6s, a leg every 0.25s.
     &:not(:last-child)::before {
       transform: none;
-      transition: transform 0.5s ease-out;
+      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     @for $i from 1 through 4 {
@@ -873,7 +875,7 @@ html[data-pf-mode="guide"] .pf-section__title {
         transition-delay: #{($i - 1) * 120}ms;
 
         &::before {
-          transition-delay: #{($i - 1) * 120 + 200}ms;
+          transition-delay: #{600 + ($i - 1) * 250}ms;
         }
       }
     }

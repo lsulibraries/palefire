@@ -467,6 +467,10 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
     Duplication Request" LibGuide pages (September 2026), cropped to the part
     that matters. Replace a file under the same name when the catalog or
     request system changes.
+- **Ordering Copies from Special Collections** (`palefire_guide_duplication.php`):
+  the Duplication tile on lib.lsu.edu/special as a guide: prices, how to order,
+  copyright and citation. Its alias defaults to `/v2/special/guides/duplication`,
+  where the landing's "Order prices" button points; publish it after review.
 - **Louisiana Newspapers** (`palefire_guide_louisiana_newspapers.php`, after
   `palefire_louisiana_newspapers_setup.php`): the LibGuide word for word, with
   a clickable map of the 64 parishes.
@@ -859,6 +863,12 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
+
+- **Quick Start Guide: "Full guide" and "Order prices" buttons, a new duplication guide, and a slower line reveal.**
+  - Under Before you visit, two square buttons on a hairline in the labels' voice (`.pf-quick-guide__link`), each opening in a new tab with an up-right arrow after it (the name says so for screen readers). Hover takes the highlight and nudges the arrow. "Full guide" uses the Quick Guide's guide URL; "Order prices" goes to `/v2/special/guides/duplication`.
+  - New `scripts/palefire_guide_duplication.php` builds that page, unpublished: "Ordering Copies from Special Collections", from the Duplication tile on lib.lsu.edu/special (prices, how to order, copyright, citation). Run it, review, then publish, or the button leads to a page visitors can't see.
+  - Request paths: the line between the diamonds now waits for the stops (0.6s), then draws one leg every 0.25s over 0.6s, eased in and out. It used to start 0.2s after each stop and finish with it.
+  - Why: the line's drawing was the best part of the reveal and was lost under the stops' fade; the duplication tile's prices had no page of their own in v2.
 
 - **Request paths (Quick Start Guide): the whole step opens its panel.** On a stop with a "how" panel, the label's button now stretches over the whole stop (icon, label and note) plus half a rem on every side (`.pf-paths__peek::after`), and its focus ring goes round that area. Hovering or focusing it turns the diamond's outline the accent colour and brings the icon's second duotone layer up from 40% to 75%. The button's accessible name is unchanged, and stops without a panel are unchanged.
   - Why: only the label text was clickable, a small target next to an icon that looked clickable.

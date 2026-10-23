@@ -2365,6 +2365,68 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
+// Under the notes: the full guide and the copy prices as square buttons on
+// a hairline, in the labels' voice, an up-right arrow after each (new tab).
+// Hover: the hairline takes the highlight and the arrow nudges out. 44px
+// tall (WCAG 2.5.8). Two classes to outrank the list items above.
+.pf-quick-guide__visit .pf-quick-guide__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .625rem;
+  margin-top: 1.25rem;
+
+  li {
+    padding: 0;
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+.pf-quick-guide__link {
+  @extend %pf-landing-label;
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid #{$pf-hairline};
+  border-radius: 0;
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  text-decoration: none;
+  transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: .875rem;
+    height: .875rem;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    color: var(--pf-section-fg, var(--bs-emphasis-color));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-quick-guide__link:is(:hover, :focus-visible) svg {
+    transform: translate(.125rem, -.125rem);
+  }
+}
+
+html.pf-a11y-motion .pf-quick-guide__link svg {
+  transform: none;
+}
+
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-title {
   @extend %pf-landing-label;
   margin: 0 0 .625rem;

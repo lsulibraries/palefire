@@ -425,6 +425,24 @@
               <li>{{ 'Scans are 50 cents a page, plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>
             </ul>
           {% endif %}
+          {# The full guide and the copy prices (palefire_guide_duplication.php),
+             as square buttons, each in a new tab: an up-right arrow after it,
+             and its name says so for screen readers. #}
+          {% set visit_links = [
+            guide_url ? { url: guide_url, text: 'Full guide'|t },
+            { url: '/v2/special/guides/duplication', text: 'Order prices'|t },
+          ]|filter(link => link) %}
+          <ul class="pf-quick-guide__links" role="list">
+            {% for link in visit_links %}
+              <li>
+                <a class="pf-quick-guide__link" href="{{ link.url }}" target="_blank" rel="noopener">
+                  {{- link.text -}}
+                  <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
         {# Phones: the paths fold to their first option under a fade, and
