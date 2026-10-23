@@ -2498,26 +2498,17 @@ html[data-pf-hero] .pf-landing--hero {
 }
 
 @container pf-cover (min-width: 80rem) {
+  // Out of the flow (the title, hours line and intro keep their own
+  // spacing, their margins collapsing as before), from column 3 to the
+  // right edge, its foot on the intro's (the last in the flow).
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    column-gap: var(--pf-grid-gutter);
-
-    > :not(.pf-landing__week) {
-      grid-column: 1 / span 2;
-    }
-
-    // The column now sets their measure (two of five).
-    > .pf-landing__title,
-    > .pf-landing__intro {
-      max-width: none;
-    }
+    position: relative;
 
     > .pf-landing__week {
+      position: absolute;
+      inset-block-end: 0;
+      inset-inline: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + 2 * var(--pf-grid-gutter)) 0;
       display: block;
-      grid-column: 3 / -1;
-      grid-row: 3;
-      align-self: end;
     }
   }
 }
