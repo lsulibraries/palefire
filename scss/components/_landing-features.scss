@@ -680,7 +680,8 @@
 // the swatch's highlight, marks the page's own voice). Mobile first, a row
 // to swipe: each banner most of the screen's width, snapping, the row
 // running to the screen's edges. On the 4-column grid (below) one banner
-// per column in a descending stagger, the row pulled up over the cover's
+// per column, offset unevenly (as the Collections tiles were), the row
+// pulled up over the cover's
 // foot so the banners rise out of the video into the page.
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
   display: grid;
@@ -798,7 +799,6 @@
 
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
-    --pf-banner-step: 3rem; // each banner this much lower than the last
     --pf-banner-rise: 3rem; // the row's lift over the cover's foot
     grid-auto-flow: row;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -808,10 +808,18 @@
     overflow: visible;
   }
 
-  @for $i from 2 through 4 {
-    .pf-hero-banner:nth-child(#{$i}) {
-      margin-top: calc(#{$i - 1} * var(--pf-banner-step));
-    }
+  // Uneven, not a staircase: high, low, nearly high, lowest, as the
+  // Collections tiles' stagger was, scaled to these banners.
+  .pf-hero-banner:nth-child(2) {
+    margin-top: 3rem;
+  }
+
+  .pf-hero-banner:nth-child(3) {
+    margin-top: 1rem;
+  }
+
+  .pf-hero-banner:nth-child(4) {
+    margin-top: 3.75rem;
   }
 }
 

@@ -857,6 +857,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero banners offset unevenly.** The banners' offsets are now 0, 3rem,
+  1rem and 3.75rem (high, low, nearly high, lowest), as the Collections
+  tiles' stagger was, in place of the even 3rem staircase. Why: the
+  staircase read as mechanical; the uneven offsets look more alive.
 - **Hero banners; plates out; a highlight for every swatch.** Up to four
   tall banners now sit under the search: the Landing hero's optional
   `field_hero_banners` (Content: Tile and Modular page; added in the UI),
