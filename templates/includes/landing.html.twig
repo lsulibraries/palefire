@@ -184,7 +184,7 @@
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
   {# Hero: "Log in" (the Special Collections request system, Aeon), the
-     last of the hero's links (.pf-landing__links, below), outlined in the
+     last of the hero's links (.pf-landing__links, below), its words in the
      highlight. It opens in a new tab (an up-right arrow; its name says so
      for screen readers). account_url: empty leaves it out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
@@ -271,13 +271,21 @@
         <label class="pf-landing__label" for="{{ input_id }}">{{ search_label }}</label>
       </h3>
       <div class="pf-landing__field">
-        <svg class="pf-landing__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        {# Hero: the magnifier is the button's icon instead, so none leads the
+           field. Other landings keep it here and an arrow on the button. #}
+        {% if not hero %}
+          <svg class="pf-landing__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+        {% endif %}
         <input class="pf-landing__input" type="search" id="{{ input_id }}" name="{{ landing_name }}"
                placeholder="{{ search_placeholder }}"
                autocomplete="off" enterkeyhint="search">
         <button class="pf-landing__submit" type="submit">
           <span class="pf-landing__submit-text">{{ 'Search'|t }}</span>
-          <svg class="pf-landing__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          {% if hero %}
+            <svg class="pf-landing__submit-icon pf-landing__submit-icon--search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+          {% else %}
+            <svg class="pf-landing__submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          {% endif %}
         </button>
       </div>
     </form>

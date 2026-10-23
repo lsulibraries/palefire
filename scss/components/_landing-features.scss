@@ -626,7 +626,10 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     min-height: var(--pf-landing-field-h);
   }
 
+  // No magnifier leads the field here (it is the button's icon), so the
+  // placeholder starts at the field's own inset.
   .pf-landing__input {
+    padding-inline-start: 1.25rem;
     font-size: clamp(1.0625rem, 1rem + .25vw, 1.25rem);
   }
 
@@ -2440,7 +2443,6 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
 // Buttons and links in the text face.
 .pf-landing--cover {
   .pf-hero-account__link,
-  .pf-landing__lead--hero .pf-landing__submit,
   .pf-visit__link {
     font-family: inherit;
     font-size: .9375rem;
@@ -2459,8 +2461,21 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
     }
   }
 
+  // Search in the mono label voice of the links over it, the magnifier
+  // after the word (held still on hover: the arrow's nudge was a "go on").
   .pf-landing__lead--hero .pf-landing__submit {
-    font-size: 1rem;
+    font-family: var(--pf-landing-label);
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    line-height: 1.5;
+    text-transform: uppercase;
+
+    .pf-landing__submit-icon--search {
+      width: 1.125rem;
+      height: 1.125rem;
+      transform: none;
+    }
   }
 }
 
@@ -2649,8 +2664,8 @@ html[data-pf-hero] .pf-landing--hero {
 // did; narrower, a row under the intro (one to a line on phones). A plate
 // of the search field's material (the page colour at 80%, the glass blur),
 // so they read at AA over any frame of the video. Log in, which leaves for
-// the request system, is outlined in the highlight, and filled with it on
-// hover.
+// the request system, has its words and arrow in the highlight; its frame
+// is the others' hairline.
 .pf-landing__links {
   grid-column: 1 / -1;
 }
@@ -2724,12 +2739,10 @@ html[data-pf-hero] .pf-landing--hero {
 }
 
 .pf-landing__link--account {
-  border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-
+  &,
   &:hover,
   &:focus-visible {
-    color: var(--pf-g-on-accent, #{$pf-black});
-    background-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
   }
 }
 
@@ -2752,7 +2765,7 @@ html[data-pf-hero] .pf-landing--hero {
 
 @media (forced-colors: active) {
   .pf-landing__link--account {
-    border-color: Highlight;
+    color: LinkText;
   }
 }
 

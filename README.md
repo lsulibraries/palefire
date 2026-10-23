@@ -889,6 +889,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero search: the magnifier on the button, Search in the mono voice; Log in in gold.**
+  - Hero only (`includes/landing.html.twig`, `_landing-features.scss`): the Search button's arrow becomes the magnifier, and the magnifier that led the field is gone (the placeholder starts at the field's 1.25rem inset). "Search" is set in the mono label voice of the links over it; the icon holds still on hover (the arrow's nudge read as "go on"). Phones keep the icon alone, as before. Other landings keep the leading magnifier and the arrow.
+  - Log in: the gold outline and fill are gone; its words and arrow are in the highlight, its frame the others' hairline (hover brings the frame up to the highlight, as theirs).
+  - Verified in Edge with local CSS and the markup injected at 1600 and 375: Search and Log in both on banner 5's edges (x 1206, 230px).
+
 - **Hero links a gutter over the search; TOC toggle unframed; TOC icon squared.**
   - Hero: "Search Special Collections" is for screen readers only (`visually-hidden` on the hero's label heading; it still names the search form), and the title block's bottom margin is the grid gutter, so the three links sit one gutter over the field, as the links and banners are spaced (32px at 1600, was about 51px).
   - TOC hide button (`_modular.scss`): no frame while the TOC is open (a box there read as misplaced beside the title and the bar), a faint fill on hover. The closed glass button on other pages keeps its frame.
