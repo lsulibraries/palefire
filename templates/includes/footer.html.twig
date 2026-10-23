@@ -93,8 +93,8 @@
 <footer id="pf-footer" class="pf-footer mt-auto{{ special ? ' pf-footer--special' }}" data-bs-theme="dark">
   <div class="pf-footer__inner">
     <div class="pf-footer__lead">
+      <p class="pf-footer__kicker">{{ f.kicker }}</p>
       <div class="pf-footer__intro">
-        <p class="pf-footer__kicker">{{ f.kicker }}</p>
         <h2 class="pf-footer__title" id="pf-footer-title">{{ f.heading }}</h2>
         <p class="pf-footer__text">{{ f.intro }}</p>
         <a class="pf-footer__cta" href="{{ f.cta.url }}">{{ f.cta.label }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a>
@@ -108,13 +108,14 @@
             <span class="pf-footer__today" data-pf-hours-today></span>
           </dd>
         </div>
-        <div class="pf-footer__fact">
+        {# Each link covers its whole row (::after), so the row is the target. #}
+        <div class="pf-footer__fact pf-footer__fact--link">
           <dt>{{ 'Call'|t }}</dt>
-          <dd><a href="tel:+1{{ f.phone|replace({'-': ''}) }}">{{ f.phone }}</a></dd>
+          <dd><a href="tel:+1{{ f.phone|replace({'-': ''}) }}">{{ f.phone }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a></dd>
         </div>
-        <div class="pf-footer__fact">
+        <div class="pf-footer__fact pf-footer__fact--link">
           <dt>{{ 'Ask'|t }}</dt>
-          <dd><a href="{{ f.ask.url }}">{{ f.ask.label }}</a></dd>
+          <dd><a href="{{ f.ask.url }}">{{ f.ask.label }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a></dd>
         </div>
       </dl>
     </div>
@@ -128,7 +129,7 @@
           <span data-pf-hours-status>{{ 'Hours'|t }}</span>
           <span class="pf-footer__today" data-pf-hours-today></span>
         </p>
-        <a href="{{ f.other.url }}">{{ f.other.label }}</a>
+        <a class="pf-footer__other-link" href="{{ f.other.url }}">{{ f.other.label }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a>
       </div>
       {% for group in f.links %}
         <nav class="pf-footer__nav" aria-labelledby="pf-footer-nav-{{ loop.index }}">

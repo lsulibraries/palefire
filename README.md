@@ -888,6 +888,13 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Footer: the page's Swiss voice, and a curtain reveal.**
+  - Restyled (`_footer.scss`, `includes/footer.html.twig`), as mockup A on the footer canvas: labels (kicker, facts, column titles, copyright, legal links) in the mono UI voice (`--pf-toc-font`, so the readable font when chosen); the kicker as an index rule across the lead; links plain at rest, the accent and a hairline underline on hover; hours marks as small diamonds, as the request paths'; Instagram and Facebook in square hairline cells.
+  - Call and Ask as ruled rows (mockup B): each link covers its whole row, with an arrow at the end; on hover the accent, a gold rule under the row and the arrow nudged on; the row takes the focus ring. "Plan a research visit" is a square gold block (B) in the mono voice; "Main Library home" gains an arrow.
+  - Curtain: from 62rem wide and 50rem tall, where the whole footer (about 45rem) fits the window, the footer holds still at the window's foot while the page (`#swup`, opaque, one layer up, a soft shade along its edge) slides up off it. While focus is inside the footer it rejoins the flow, so a link tabbed to under the page is scrolled into view. Not with reduced motion (OS or the site setting); narrower or shorter windows scroll it in as before.
+  - Why: the round pill, gold underlined links and sans labels didn't match the rest of the theme; the curtain marks the footer as the end of the page.
+  - Verified in Edge with local CSS and the new markup injected: 320, 768, 1024 and 1440 with no horizontal scroll; every footer link type hit-tests as clickable once revealed; focusing the covered button scrolls it fully into view.
+
 - **Redesign exhibition, public and staff editions.** `palefire_exhibit_redesign.php` and `data/redesign.json` build "A New Look for LSU Libraries": the old and new Special Collections, guide and exhibition pages as Before / After pairs on wall galleries, at desktop and phone sizes. `edition=staff` builds a second page, the same galleries plus four for editors.
   - Why: to show readers and staff what changed, with the exhibition's own comparison viewer, and to keep the two editions in step from one data file.
 - **Quick Start: paths ride along on tall screens, diamonds hold lit; tiles: a square label per Category term.**

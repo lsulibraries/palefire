@@ -1,6 +1,8 @@
 // Site footer (includes/footer.html.twig): a lead with the section's own
 // building (heading, call to action, today's hours, phone, Ask Us), then a
 // row with the other building and two link lists, then the bottom bar.
+// In the page's Swiss voice (2026-10-23): square corners, hairlines, labels
+// in the mono UI voice, links plain at rest with the accent on hover.
 //
 // Colours come from Bootstrap's dark mode (data-bs-theme="dark") or, under
 // a reading colour, from the swatch (_reading-themes.scss maps both onto
@@ -58,14 +60,33 @@ html#{$pf-themed} .pf-footer {
   }
 }
 
-// Small uppercase labels: the kicker, the facts and the column titles.
+// Small uppercase labels: the kicker, the facts and the column titles, in
+// the mono voice of the landing's eyebrows (the readable font when the
+// visitor picks it: --pf-toc-font, _a11y-settings.scss).
 %pf-footer-label {
   margin: 0 0 .875rem;
-  font-size: $pf-nav-font-size;
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: .6875rem;
   font-weight: $font-weight-bold;
-  line-height: 1.4;
-  letter-spacing: $pf-nav-tracking;
+  line-height: 1.5;
+  letter-spacing: .16em;
   text-transform: uppercase;
+}
+
+// Plain at rest; on hover the accent and a hairline under the words.
+%pf-footer-link {
+  color: var(--bs-body-color);
+  text-decoration: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: color $pf-hover-out ease;
+
+  &:is(:hover, :focus-visible) {
+    color: var(--pf-footer-accent);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+    transition-duration: $pf-hover-in;
+  }
 }
 
 // --- Lead ---------------------------------------------------------------
@@ -77,13 +98,19 @@ html#{$pf-themed} .pf-footer {
 
   @include media-breakpoint-up(md) {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: 3rem;
+    gap: 2.5rem 3rem;
     align-items: start;
   }
 }
 
+// The kicker as the sections' index rule: across the lead, a hairline
+// under it.
 .pf-footer__kicker {
   @extend %pf-footer-label;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-bottom: .875rem;
+  border-bottom: 1px solid $pf-hairline;
   color: var(--pf-footer-accent);
 }
 
@@ -104,17 +131,18 @@ html#{$pf-themed} .pf-footer {
   color: var(--bs-secondary-color);
 }
 
+// A square block of the accent, its label in the mono voice.
 .pf-footer .pf-footer__cta {
+  @extend %pf-footer-label;
   display: inline-flex;
   align-items: center;
-  gap: .625rem;
-  min-height: $pf-header-target;
-  margin-top: 1.5rem;
-  padding: .625rem 1.25rem;
-  border-radius: 50rem;
+  gap: 1rem;
+  min-height: 3rem;
+  margin: 1.75rem 0 0;
+  padding: .625rem 1.375rem;
+  border-radius: 0;
   background-color: var(--pf-footer-accent);
   color: var(--pf-footer-on-accent);
-  font-weight: $font-weight-bold;
   text-decoration: none;
   transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
 
@@ -128,7 +156,7 @@ html#{$pf-themed} .pf-footer {
 .pf-footer__arrow {
   transition: transform $pf-hover-out ease;
 
-  .pf-footer__cta:is(:hover, :focus-visible) & {
+  :is(.pf-footer__cta, .pf-footer__fact--link, .pf-footer__other-link):is(:hover, :focus-within) & {
     transform: translateX(.25rem);
     transition-duration: $pf-hover-in;
   }
@@ -138,24 +166,20 @@ html#{$pf-themed} .pf-footer {
   margin: 0;
 }
 
+// Ruled rows. Call and Ask are links the size of their row (the link's
+// ::after covers it): an arrow at the end, and on hover the accent and its
+// rule under the row, the arrow nudged on.
 .pf-footer__fact {
+  position: relative;
   display: grid;
   grid-template-columns: 5.5rem minmax(0, 1fr);
   gap: 1rem;
-  padding-block: .75rem;
-
-  // Rules between the facts only, no frame: the first sits on the
-  // kicker's line, the last ends with its words.
-  & + & {
-    border-top: 1px solid $pf-hairline;
-  }
+  padding-block: 1rem;
+  border-bottom: 1px solid $pf-hairline;
+  transition: border-color $pf-hover-out ease;
 
   &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
+    padding-top: .25rem;
   }
 
   dt {
@@ -171,6 +195,48 @@ html#{$pf-themed} .pf-footer {
   }
 }
 
+.pf-footer__fact--link {
+  dd a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--bs-emphasis-color);
+    text-decoration: none;
+    transition: color $pf-hover-out ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .pf-footer__arrow {
+    color: var(--bs-secondary-color);
+  }
+
+  // The row takes the focus ring, as it is the target.
+  &:has(a:focus-visible) {
+    outline: 2px solid var(--pf-footer-accent);
+    outline-offset: 2px;
+  }
+
+  &:is(:hover, :focus-within) {
+    border-bottom-color: var(--pf-footer-accent);
+    transition-duration: $pf-hover-in;
+
+    a,
+    .pf-footer__arrow {
+      color: var(--pf-footer-accent);
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
 // --- Hours (filled by visit-hours.js) -----------------------------------
 
 .pf-footer__hours {
@@ -182,12 +248,14 @@ html#{$pf-themed} .pf-footer {
 }
 
 // Same colours as the Visit strip's dot (_visit.scss). The text says open
-// or closed; the dot only repeats it.
+// or closed; the mark only repeats it. A small diamond, as the request
+// paths' marks.
 .pf-footer__dot {
   flex: none;
-  inline-size: .5rem;
-  block-size: .5rem;
-  border-radius: 50%;
+  inline-size: .4375rem;
+  block-size: .4375rem;
+  margin-inline: .0625rem .1875rem;
+  rotate: 45deg;
   background-color: var(--bs-secondary-color);
   transition: background-color .3s ease;
 
@@ -276,6 +344,13 @@ html#{$pf-themed} .pf-footer {
   color: var(--bs-secondary-color);
 }
 
+.pf-footer .pf-footer__other-link {
+  @extend %pf-footer-link;
+  display: inline-flex;
+  gap: .5rem;
+  padding-block: .25rem;
+}
+
 .pf-footer__links {
   margin: 0;
   padding: 0;
@@ -287,15 +362,9 @@ html#{$pf-themed} .pf-footer {
 
   // Plain text at rest, the accent on hover: the column reads as an index.
   .pf-footer & a {
+    @extend %pf-footer-link;
     display: inline-block;
     padding-block: .125rem;
-    color: var(--bs-body-color);
-    text-decoration: none;
-
-    &:is(:hover, :focus-visible) {
-      color: var(--pf-footer-accent);
-      text-decoration: underline;
-    }
   }
 }
 
@@ -310,6 +379,21 @@ html#{$pf-themed} .pf-footer {
   border-top: 1px solid $pf-hairline;
   color: var(--bs-secondary-color);
   font-size: $font-size-sm;
+
+  // The copyright and the legal links in the mono voice, small.
+  .pf-footer__copy,
+  .pf-footer__legal a {
+    @extend %pf-footer-label;
+    margin: 0;
+    font-size: .625rem;
+  }
+
+  .pf-footer__legal a {
+    @extend %pf-footer-link;
+    display: inline-block;
+    padding-block: .5rem;
+    color: var(--bs-secondary-color);
+  }
 
   ul {
     display: flex;
@@ -348,13 +432,18 @@ html#{$pf-themed} .pf-footer {
   margin: 0;
 }
 
+// The icons in square hairline cells, side by side, sharing their rule.
 .pf-footer__bar .pf-footer__social {
   margin-inline-start: auto;
+  gap: 0;
 
-  // Phones: a row of its own, the first icon lined up with the text.
+  li + li {
+    margin-inline-start: -1px;
+  }
+
+  // Phones: a row of its own.
   @include media-breakpoint-down(md) {
     flex-basis: 100%;
-    margin-inline-start: -.625rem;
   }
 }
 
@@ -363,7 +452,8 @@ html#{$pf-themed} .pf-footer {
   place-items: center;
   inline-size: $pf-header-target;
   block-size: $pf-header-target;
-  border-radius: 50%;
+  border: 1px solid $pf-hairline;
+  border-radius: 0;
   color: var(--bs-body-color);
   transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
 
@@ -373,19 +463,53 @@ html#{$pf-themed} .pf-footer {
   }
 
   &:is(:hover, :focus-visible) {
+    position: relative;
+    border-color: var(--pf-footer-accent);
     background-color: var(--pf-footer-accent);
     color: var(--pf-footer-on-accent);
     transition-duration: $pf-hover-in;
   }
 }
 
+// Curtain: the footer holds still at the foot of the window while the page
+// (#swup, opaque, a layer above) slides up off it, so the footer reads as
+// the end of the page. Only where the whole footer fits the window (about
+// 45rem tall from lg), and not with reduced motion; elsewhere it scrolls in
+// as before. #swup's layer holds its own overlays (the viewer is a modal
+// <dialog>, in the top layer), so none moves under the header.
+@media (prefers-reduced-motion: no-preference) and (min-width: 62rem) and (min-height: 50rem) {
+  html:not(.pf-a11y-motion) {
+    .pf-swup {
+      position: relative;
+      z-index: 1;
+      background-color: var(--bs-body-bg);
+      // A soft shade along the page's edge, over the footer as it shows.
+      box-shadow: 0 1.5rem 3rem rgb(0 0 0 / .35);
+    }
+
+    .pf-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 0;
+    }
+
+    // Keyboard: a link tabbed to under the page would count as in view
+    // (the footer is held in the window), so the browser wouldn't scroll to
+    // it. Held in place only while focus is outside it: back in the flow,
+    // the focused link is scrolled into view.
+    .pf-footer:focus-within {
+      position: relative;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pf-footer :is(.pf-footer__cta, .pf-footer__arrow, .pf-footer__dot, .pf-footer__social-link) {
+  .pf-footer :is(.pf-footer__cta, .pf-footer__arrow, .pf-footer__dot, .pf-footer__social-link, .pf-footer__fact, .pf-footer__fact a, .pf-footer__links a, .pf-footer__other-link, .pf-footer__legal a) {
     transition: none;
   }
 
-  .pf-footer__cta:is(:hover, :focus-visible) .pf-footer__arrow {
-    transform: none;
+  .pf-footer .pf-footer__arrow {
+    transform: none !important;
   }
 }
 
