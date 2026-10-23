@@ -3,8 +3,8 @@
  * Modular pages: things that animate in as they scroll into view, once per
  * page load: revealed, they stay (as the Collections tiles do,
  * js/tile-reveal.js).
- * - Section headings (h2: .pf-section__title, and the landing hero's map
- *   heading) slide in from the left as they fade in. Not on guides
+ * - Section headings (h2: .pf-section__title) slide in from the left as
+ *   they fade in. Not on guides
  *   (<html data-pf-mode="guide">): their headings stay still.
  * - The Events carousel (libcal_gantt_carousel, inside .pf-events-carousel):
  *   once a fifth of it is in view, its day strip, then each day's label,
@@ -30,7 +30,8 @@
 
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
-  const HEADINGS = '.pf-section__title:not(.visually-hidden), .pf-landing--hero .pf-map__heading';
+  // Not the hero's map heading: there only the map's drawing reveals itself.
+  const HEADINGS = '.pf-section__title:not(.visually-hidden)';
 
   Drupal.behaviors.palefireSectionReveal = {
     attach(context) {

@@ -241,8 +241,8 @@ html.pf-snap-proximity .pf-section--snap {
 // they scroll into view (js/section-reveal.js adds .pf-reveal, then
 // .is-revealed while in view). Hiding, out of view, is instant; showing
 // takes .6-.7s. The slide is `translate`, so it never fights a heading's
-// own transform; the hero's map heading also fades with the map's reveal
-// (its opacity is that animation's), so it only slides. Not on guides (the
+// own transform. (The hero's map heading stays still: there only the map's
+// drawing reveals itself.) Not on guides (the
 // script leaves their headings alone). Without the script, or with reduced
 // motion, there is no .pf-reveal: headings simply show.
 .pf-reveal {
@@ -628,9 +628,13 @@ html.pf-snap-proximity .pf-section--snap {
   // at the top (reloaded part-way down, the button sat a row low).
   // No outline or glass of its own there, like the bar's other buttons
   // (_landing-features.scss): the bar is its ground.
+  // As tall as the bar's row (2rem), at its top; its 1rem icon still on
+  // the logo's edge.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]):has(.pf-landing__bar) .pf-modular__toc-collapse {
-    top: .375rem;
-    inset-inline-end: calc(-2.25rem - (var(--pf-header-gutter, 3rem) - .625rem));
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    inset-inline-end: calc(-2rem - (var(--pf-header-gutter, 3rem) - .5rem));
     border-color: transparent;
     background-color: transparent;
     box-shadow: none;

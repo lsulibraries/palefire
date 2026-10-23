@@ -56,16 +56,17 @@
 .pf-landing {
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
+  --pf-bar-button: 2rem; // the bar's buttons (video, TOC), as tall as its row
   // The video button's distance from the screen's right edge. From lg its
   // centre is the header's last icon's (the settings gear): the header's
   // side padding and half an icon cell in (_header.scss), less half the
-  // 2.25rem button.
+  // button (--pf-bar-button).
   --pf-bar-icon-end: var(--pf-bar-icon-edge);
 
   @include media-breakpoint-up(lg) {
-    --pf-bar-icon-end: calc(var(--pf-header-gutter, 3rem) + var(--pf-utility-cell, 2.75rem) / 2 - 1.125rem);
+    --pf-bar-icon-end: calc(var(--pf-header-gutter, 3rem) + var(--pf-utility-cell, 2.75rem) / 2 - var(--pf-bar-button) / 2);
   }
-  --pf-landing-bar-h: 3rem; // the bar: 2.25rem row, .375rem padding each side
+  --pf-landing-bar-h: 2rem; // the bar: its 2rem row, no padding (a slim strip under the header)
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
 }
 
@@ -105,7 +106,7 @@
 .pf-landing__bar {
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   margin-bottom: var(--pf-landing-bar-gap);
-  padding-block: .375rem;
+  padding-block: 0;
   padding-inline: var(--pf-bar-edge);
   background-color: var(--pf-sidebar-bg);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -127,13 +128,13 @@
 .pf-landing__bar-inner {
   display: flex;
   align-items: center;
-  min-height: 2.25rem; // the video button's height, so the row is the same with or without it
+  min-height: var(--pf-bar-button); // the buttons' height, so the row is the same with or without them
 }
 
-// Room at the end of the row for the docked video button (2.25rem and a
-// 1rem gap), so a long breadcrumb wraps before it instead of running under.
+// Room at the end of the row for the docked video button (and a 1rem gap),
+// so a long breadcrumb wraps before it instead of running under.
 .pf-landing__bar:has(+ .pf-landing__dock) .pf-landing__bar-inner {
-  padding-inline-end: calc(var(--pf-bar-icon-end) + 3.25rem - var(--pf-bar-edge));
+  padding-inline-end: calc(var(--pf-bar-icon-end) + var(--pf-bar-button) + 1rem - var(--pf-bar-edge));
   transition: padding-inline-end $pf-header-transition; // with the header compacting
 }
 
@@ -178,6 +179,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // own: the bar's glass is their ground. Hover and focus fill them faintly.
 .pf-landing__bar .pf-landing__signin,
 .pf-landing__dock .pf-landing__bg-toggle {
+  --size: var(--pf-bar-button);
   border-color: transparent;
   background-color: transparent;
   box-shadow: none;
@@ -249,21 +251,21 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // --- Docked video button ---------------------------------------------------
 // A zero-height sticky row laid over the bar (negative margin out, the same
 // back in, so nothing below moves): the button sits at the far end of the
-// bar's row and, once the page scrolls, stays .375rem under the header
+// bar's row and, once the page scrolls, stays right under the header
 // (compact or not) until the landing, and so the video, has gone, like the
 // TOC's hide/show button. Only the button takes the pointer. The button
 // keeps its look (_landing.scss) but isn't positioned against the landing
 // (landing-video.js only places it when the head has the breadcrumb).
 .pf-landing.has-bg-video > .pf-landing__dock {
   position: sticky;
-  top: calc(var(--pf-header-h) + .375rem);
+  top: var(--pf-header-h);
   z-index: 5;
   display: flex;
   justify-content: flex-end;
   width: fit-content;
   height: 0;
   margin-inline: auto calc(-1 * var(--pf-section-pad-inline, 0px));
-  margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap)) + .375rem) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap) - .375rem);
+  margin-block: calc(-1 * (var(--pf-landing-bar-h) + var(--pf-landing-bar-gap))) calc(var(--pf-landing-bar-h) + var(--pf-landing-bar-gap));
   padding-inline: var(--pf-bar-icon-edge) var(--pf-bar-icon-end);
   pointer-events: none;
   transition: padding-inline-end $pf-header-transition; // with the header compacting

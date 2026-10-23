@@ -175,12 +175,14 @@
 // seen), not fading out and in again each time it leaves the window.
 // .has-map-view and .has-map-seen are set by building-map.js: without them
 // the map always shows. Still focusable while held back: focus scrolls it
-// into view, which shows it.
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view .pf-landing__visit {
+// into view, which shows it. Not on the hero's cover: there only the
+// drawing and its labels appear, as the map draws itself (.is-tracing,
+// _building-map.scss); its heading, text and Visit panel simply show.
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.pf-landing--cover) .pf-landing__visit {
   transition: opacity .6s ease;
 }
 
-.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.is-map-in-view, .has-map-seen, .pf-landing--map-only) .pf-landing__visit {
+.pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing.has-map-view:not(.is-map-in-view, .has-map-seen, .pf-landing--map-only, .pf-landing--cover) .pf-landing__visit {
   opacity: 0;
 }
 

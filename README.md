@@ -857,6 +857,17 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **A 32px landing bar; an outline TOC icon; the map reveals only its
+  drawing.** The landing's sub-header bar is 32px (no padding; the
+  breadcrumb unchanged), its video and TOC buttons 32px squares at its
+  top, still lined up with the logo and the header's last icon
+  (--pf-bar-button). The TOC buttons (the floating one and the phone's)
+  show an outline, two items and an indented sub-item with diamond
+  bullets, instead of a bulleted list that read like the menu. On the
+  hero cover the map block no longer fades in as a whole and its heading
+  no longer slides in: only the map's drawing and labels appear as they
+  draw (.is-tracing). Why: a slimmer bar under the header, an icon that
+  says "contents", and a calmer map section.
 - **Hero banners: even gaps two by two.** A banner's drop is now a
   relative shift (`top`), not a margin, so the right column's lower
   banners no longer make each row taller; every gap between rows is the
