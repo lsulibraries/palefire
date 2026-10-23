@@ -889,6 +889,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero links: a ruled index beside the intro; the search loses its frame.**
+  - `_landing-features.scss`: University Archives, Oral History and Log in drop their framed glass plates and become a hairline index (mono label, arrow, rule gold on hover and focus). Phones: rows under the intro, a rule only between them. From 40rem: the same rows in the intro's right half (a two-column grid, both feet level, so they can't run into the hours). From 80rem: three columns over banners 3-5, a rule on top of each, Log in over the Search button. The words carry the hours line's halo for 4.5:1 on any video frame.
+  - The hero's search field has no frame (clear; gold on focus, CanvasText in forced colours): its fill and the Search button mark it, and no rule sits under the links to meet it.
+  - Why: the plates matched the search field's look, so the links read as more fields of one form, and the row under the intro left empty space. Checked in headless Edge against the live page with local CSS at 320, 768, 1024 and 1440; no horizontal scroll.
+
 - **Price list fixes: the prose width actually applies; no empty line in the fee.**
   - `_guide.scss`: the price list's block test was `:has(table:not(:has(…)))`, and `:has()` can't nest, so browsers dropped the rule and the list (and the text after it) ran to the guide's 52rem. Now `:has(table):not(:has(thead, tr > :nth-child(3)))`: 672px, the intro's width.
   - The fee's label is a block, so the `<br>` after it left an empty line over "Processing fee"; that `<br>` is hidden.

@@ -232,10 +232,11 @@
         {{- landing_intro -}}
       </div>
     {% endif %}
-    {# Hero: three links, each a hero banner wide, in the Quick Start
-       buttons' voice: on the five-column grid in columns 3-5 (under banners
-       3-5), their foot on the intro's; narrower, a row under the intro.
-       Special Collections' own (the hero is its landing, as account_url). #}
+    {# Hero: three links as a ruled index beside the intro, their foot on
+       its: on the five-column grid in columns 3-5 (Log in over the Search
+       button); narrower, rows in the intro's other half; on phones, rows
+       under it (_landing-features.scss). Special Collections' own (the hero
+       is its landing, as account_url). #}
     {% if hero %}
       {% set hero_links = [
         { text: 'University Archives'|t, url: '/v2/special/archives' },
