@@ -855,6 +855,10 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+### 2026-10-23
+
+- **Hero banners on phones: a tighter grid, and the pictures move instead of the banners.** Under 44rem of landing (two to a row, phones and portrait tablets) the gutter is `clamp(.625rem, 2.5cqi, 1rem)` (10px at 375, 16px at 768, was 20px), the right column's drop is 1.5rem (was 2.5rem), and the blog line gets .375rem extra under it. The side margins still line up with the title and search. With motion on, the banners stay put as the page scrolls; each picture is 1.5rem taller than its frame at top and foot and pans down through it on the banner's own view timeline (`pf-banner-pan`), not on the event's date panel. The drift, the cross and the Quick Start's lift allowance now apply only from 44rem, where the row of five is unchanged. Why: on phones the cross carried whole banners past each other, so the right column rode above the left mid-scroll, and the wide gutters made the two columns read as loose pieces.
+
 ### 2026-10-22
 
 - **Footer: no frame around Today / Call / Ask.** The rules above the first fact and below the last are gone, so only the rules between them remain, and the first fact starts on the kicker's line. Why: the frame boxed the facts in against the open intro beside them.

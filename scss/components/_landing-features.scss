@@ -864,7 +864,7 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // The drop and the parallax's drift (--pf-banner-travel) are set on the
 // lead, so the Quick Start under the row can allow for them too.
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
-  --pf-banner-drop: 2.5rem;
+  --pf-banner-drop: 1.5rem;
 }
 
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
@@ -885,7 +885,14 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 }
 
 @container pf-cover (max-width: 43.98rem) {
-  // Two to a row: the words a step smaller, scaling with the landing.
+  // Two to a row, close set: a narrow gutter (10px on a phone, 16px by
+  // 44rem) and a short drop, so the pictures read as one block, still
+  // aligned with the title and search at the sides.
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+    gap: clamp(.625rem, 2.5cqi, 1rem);
+  }
+
+  // The words a step smaller, scaling with the landing.
   .pf-hero-banners .pf-hero-banner__text {
     padding: .875rem;
   }
@@ -914,8 +921,11 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 
   // The blog post as a line of text: its pill, then its title as a link
   // in the text's colour, two lines at most, with an arrow.
+  // A little more room under it than the gutter, so its words never sit
+  // tight on the pictures.
   .pf-hero-banner--blog {
     grid-column: 1 / -1;
+    margin-bottom: .375rem;
 
     .pf-hero-banner__link {
       aspect-ratio: auto;
@@ -1153,24 +1163,56 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
+// Two to a row (under 44rem) the banners hold still and only their
+// pictures move: each picture is --pf-banner-pan taller than its frame at
+// top and foot, and slides down through it as the banner crosses the
+// screen (on the banner's own view timeline: the link clips, so it can't
+// hold one), slower than the page, like a window onto a deeper picture.
+@keyframes pf-banner-pan {
+  from {
+    translate: 0 calc(-1 * var(--pf-banner-pan));
+  }
+
+  to {
+    translate: 0 var(--pf-banner-pan);
+  }
+}
+
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    html:not(.pf-a11y-motion) .pf-hero-banners {
-      view-timeline: --pf-banner-row block;
+    @container pf-cover (min-width: 44rem) {
+      html:not(.pf-a11y-motion) .pf-hero-banners {
+        view-timeline: --pf-banner-row block;
+      }
+
+      html:not(.pf-a11y-motion) .pf-hero-banner__link {
+        animation: pf-banner-drift linear both, pf-banner-cross linear both;
+        animation-timeline: scroll(root), --pf-banner-row;
+        animation-range: 0 70vh, contain 0% contain 100%;
+      }
+
+      // By the time the row is level it has risen by its drift and its drop
+      // above where it was laid out: the Quick Start takes those back from
+      // its gap, so the gap seen under the level row is the page's rhythm
+      // (--pf-hero-gap, as above each index rule), not that plus the lift.
+      html:not(.pf-a11y-motion) .pf-landing--cover > .pf-landing__lead--hero > .pf-quick-guide {
+        padding-top: max(0px, var(--pf-hero-gap) - var(--pf-banner-drop) - var(--pf-banner-travel, 0px));
+      }
     }
 
-    html:not(.pf-a11y-motion) .pf-hero-banner__link {
-      animation: pf-banner-drift linear both, pf-banner-cross linear both;
-      animation-timeline: scroll(root), --pf-banner-row;
-      animation-range: 0 70vh, contain 0% contain 100%;
-    }
+    @container pf-cover (max-width: 43.98rem) {
+      html:not(.pf-a11y-motion) .pf-hero-banner {
+        --pf-banner-pan: 1.5rem;
+        view-timeline: --pf-banner-own block;
+      }
 
-    // By the time the row is level it has risen by its drift and its drop
-    // above where it was laid out: the Quick Start takes those back from
-    // its gap, so the gap seen under the level row is the page's rhythm
-    // (--pf-hero-gap, as above each index rule), not that plus the lift.
-    html:not(.pf-a11y-motion) .pf-landing--cover > .pf-landing__lead--hero > .pf-quick-guide {
-      padding-top: max(0px, var(--pf-hero-gap) - var(--pf-banner-drop) - var(--pf-banner-travel, 0px));
+      // Not the event's date (its words would move with it).
+      html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+        inset: calc(-1 * var(--pf-banner-pan)) 0;
+        animation: pf-banner-pan linear both;
+        animation-timeline: --pf-banner-own;
+        animation-range: cover 0% cover 100%;
+      }
     }
   }
 }
