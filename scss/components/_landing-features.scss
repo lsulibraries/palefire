@@ -677,6 +677,15 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 
   .pf-landing__field:is(:hover, :focus-within) .pf-landing__input {
     background-size: 100% 2px;
+  }
+
+  // Focused, the gold frame (border and ring, 2px all round) takes over:
+  // the line folds into the foot, or the foot would read 4px to the top's 2.
+  .pf-landing__field:focus-within .pf-landing__input {
+    background-size: 100% 0;
+  }
+
+  .pf-landing__field:is(:hover, :focus-within) .pf-landing__input {
 
     &::placeholder {
       color: color-mix(in srgb, var(--pf-toc-color, #{$pf-grey-500}) 40%, var(--pf-toc-active, #{$pf-white}));
@@ -1443,7 +1452,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   margin-inline-start: auto;
   padding-block: .25rem;
   margin-block: -.25rem;
-  color: var(--pf-section-fg, var(--bs-body-color));
+  color: var(--bs-emphasis-color, var(--pf-section-fg));
   white-space: nowrap;
   text-decoration: underline transparent;
   text-decoration-thickness: 1px;
@@ -1831,25 +1840,25 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     max-width: calc((100% - var(--pf-grid-gutter)) / 2);
   }
 
-  // Two columns, on the hero's grid: hours (and Instagram under
-  // them) in the first, the mini map in the second.
+  // Two columns, on the hero's grid: hours in the first, the mini map in
+  // the second.
   .pf-landing--cover .pf-map .pf-visit {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--pf-grid-gutter);
   }
 }
 
-// Instagram | hours | mini map as three frames of one height, the two
-// links on one line under them (the parts as _visit.scss lays them out).
+// Hours | mini map, the map a frame as tall as the hours, the two links on
+// one line under them (the parts as _visit.scss lays them out).
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover .pf-map .pf-visit {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
       "head head head head"
-      "social status status map"
-      "social week week map"
-      ". all all directions";
+      "status status map map"
+      "week week map map"
+      "all all directions directions";
     column-gap: var(--pf-grid-gutter);
     @include pf-visit-frames;
   }
@@ -1859,9 +1868,9 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     grid-template-areas:
       "key key key key"
       "head head head head"
-      "social status status map"
-      "social week week map"
-      ". all all directions";
+      "status status map map"
+      "week week map map"
+      "all all directions directions";
   }
 
   .pf-landing--cover > .pf-landing__onview {
@@ -2450,7 +2459,7 @@ html[data-pf-hero] .pf-landing--cover {
     padding: .375rem 1.25rem;
     font-size: 1rem;
     line-height: 1.45;
-    color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
+    color: var(--pf-quick-text, color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent));
     text-wrap: pretty;
 
     &::before {
@@ -2518,14 +2527,61 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
+// Hours: the status dot in its colour (open, soon, closed), then "See
+// hours" with a down arrow. The status is held (hidden, its space kept)
+// until LibCal answers, and the button goes if it fails.
+.pf-quick-guide__link--hours {
+  --pf-visit-open: #2f9e4f;
+  --pf-visit-soon: #fdd023;
+  --pf-visit-closed: #c8102e;
+
+  &[data-hours-state="open"] { --pf-hours-state: var(--pf-visit-open); }
+  &[data-hours-state="soon"] { --pf-hours-state: var(--pf-visit-soon); }
+  &[data-hours-state="closed"] { --pf-hours-state: var(--pf-visit-closed); }
+}
+
+.pf-quick-guide__hours-status {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  transition: opacity .3s ease;
+
+  .pf-quick-guide__link--hours:not(.is-ready) > & {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.pf-quick-guide__hours-dot {
+  inline-size: .5rem;
+  block-size: .5rem;
+  border-radius: 50%;
+  background-color: var(--pf-hours-state, currentColor);
+}
+
+.pf-quick-guide__visit .pf-quick-guide__links li:has(> .pf-quick-guide__link--hours.is-failed) {
+  display: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .pf-quick-guide__link:is(:hover, :focus-visible) svg {
     transform: translate(.125rem, -.125rem);
+  }
+
+  .pf-quick-guide__link--hours:is(:hover, :focus-visible) svg {
+    transform: translateY(.125rem);
   }
 }
 
 html.pf-a11y-motion .pf-quick-guide__link svg {
   transform: none;
+}
+
+@media (forced-colors: active) {
+  .pf-quick-guide__hours-dot {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
+  }
 }
 
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-title {
@@ -2543,7 +2599,9 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
   font-weight: 500;
   letter-spacing: -.02em;
   line-height: 1.1;
-  color: var(--pf-section-fg, var(--bs-body-color));
+  // The heading colour, not the text's: on Twilight the text is the soft
+  // grey and headings stay near-white (_reading-themes.scss).
+  color: var(--bs-heading-color, var(--pf-section-fg, var(--bs-body-color)));
   text-wrap: balance;
 }
 
@@ -2607,11 +2665,20 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
 // Not the intro on the video, which needs all its contrast there. The
 // map's summary is named too: it sets its own colour (_building-map.scss).
 html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-quick-guide__intro) {
-  color: color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent);
+  color: var(--pf-quick-text, color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent));
 
   :is(strong, b) {
     color: var(--pf-section-fg, var(--bs-body-color));
   }
+}
+
+// Twilight: the Quick Start's paragraphs (intro, Before you visit) in the
+// swatch's soft text grey like the rest of its running text; titles and
+// bold stay near-white. The video is fully washed out behind the Quick
+// Start (measured 7.4:1, the page colour's own, at 320 to 1440), unlike
+// the hero's top, whose words keep the heading colour over the video.
+html[data-pf-theme="twilight"] .pf-quick-guide {
+  --pf-quick-text: var(--pf-g-fg);
 }
 
 // Paragraphs: about 62 characters, no lone last word.
@@ -2763,18 +2830,18 @@ html[data-pf-hero] .pf-landing--hero {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     grid-template-areas:
       "head head head head head"
-      "social status status map map"
-      "social week week map map"
-      ". all all directions directions";
+      "status status map map map"
+      "week week map map map"
+      "all all directions directions directions";
   }
 
   .pf-landing--cover .pf-map .pf-visit--keyed {
     grid-template-areas:
       "key key key key key"
       "head head head head head"
-      "social status status map map"
-      "social week week map map"
-      ". all all directions directions";
+      "status status map map map"
+      "week week map map map"
+      "all all directions directions directions";
   }
 }
 

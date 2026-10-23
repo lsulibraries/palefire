@@ -6,7 +6,7 @@
  * (a frame the template rendered: the feature, a post) or data-pf-stage-src
  * (an https picture, an event's from js/upcoming.js, loaded on first use).
  * An item without one, and leaving the lists, bring back the home frame
- * (the feature's), after a moment so moving between items doesn't flash
+ * (Instagram's), after a moment so moving between items doesn't flash
  * it. The frames crossfade (CSS, _stacks.scss; a cut with reduced motion).
  * The stage is decorative (aria-hidden): the lists carry the words.
  */

@@ -43,8 +43,10 @@
 //   solarized text 4.75 muted 5.5  accent  6.0   (Solarized dark)
 //   cocoa    text  5.0  muted 4.9  accent  7.3
 //   forest   text  5.3  muted 5.1  accent  8.8
-//   twilight text 12.9  muted 7.4  accent 11.3   (default; pale gold accent
-//                                                 and headings)
+//   twilight text  7.4  muted 7.4  accent 11.3   (default; pale gold accent
+//                                                 and headings; text the soft
+//                                                 grey, headings, links and
+//                                                 bold near-white 14.3)
 //   midnight text  5.15 muted 5.0  accent  8.4
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
@@ -82,10 +84,15 @@ $pf-reading-themes: (
   //   same low saturation.
   'twilight': (
     label: 'Twilight', dark: true,
-    bg: #272429, fg: #edebee, heading: #f8f7f9, muted: #b7b3ba, rule: #3f3a42,
+    // Two tones: running text in the soft grey the labels use (7.4:1 on
+    // the page, 6.7:1 on the surfaces; was near-white #edebee), and
+    // near-white kept for headings, links and bold (strong). The grey
+    // can't go dimmer for labels: over a white video frame it is already
+    // near 4.5:1, so text over the hero's video keeps the heading colour.
+    bg: #272429, fg: #b7b3ba, heading: #f8f7f9, muted: #b7b3ba, rule: #3f3a42,
     surface: #2e2b30, accent: #f2dc9b, accent-soft: #2f2c31,
     scroll: #97929a, panel-muted: #bfbbc1,
-    title: #f2dc9b,
+    title: #f2dc9b, strong: #f8f7f9,
     // Calm hovers, never purple to gold: text goes from near-white to a
     // soft lilac (9.6:1 on the page), and pale gold links lighten to a
     // cream gold (13.6:1).
@@ -329,6 +336,9 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --bs-body-color-rgb: var(--pf-g-fg-rgb);
   --bs-emphasis-color: var(--pf-g-heading);
   --bs-emphasis-color-rgb: var(--pf-g-heading-rgb);
+  // Headings (h1-h6, Bootstrap's reboot) in the heading colour rather than
+  // inheriting the text's, so they stay bright where text is the soft grey.
+  --bs-heading-color: var(--pf-g-heading);
   --bs-secondary-color: var(--pf-g-muted);
   --bs-secondary-bg: var(--pf-g-surface);
   --bs-tertiary-bg: var(--pf-g-surface);

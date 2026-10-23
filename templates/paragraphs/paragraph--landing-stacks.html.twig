@@ -5,11 +5,16 @@
  * featured item and the newest blog posts (the Special Collections
  * homepage's last section).
  *
- * The picture is a stage (js/stacks-stage.js): it shows the featured
- * item's cover, and whichever item the pointer is over, or that has
+ * The picture is a stage (js/stacks-stage.js): at rest it shows the
+ * Instagram frame, and whichever item the pointer is over, or that has
  * keyboard focus, in any list takes its place (an event's LibCal picture,
- * a post's Image, the feature's cover); an item without a picture leaves
- * the feature's. Decorative: each list item names itself.
+ * a post's Image, the feature's cover); an item without a picture brings
+ * back Instagram. Decorative: each list item names itself.
+ *
+ * Instagram: a placeholder in the hatch (the picture, then bars for the
+ * title, description and link) until a post embed replaces it. That embed
+ * will need to sit outside the stage's aria-hidden, or carry its link in
+ * the lists, so screen readers reach it.
  *
  * Variables from palefire_preprocess_paragraph__landing_stacks():
  * - feature: title, url, label (Category terms), note (intro as plain
@@ -29,9 +34,23 @@
   {% set uid = 'pf-stacks-' ~ paragraph.id() %}
   {{ attach_library('palefire/stacks-stage') }}
   <div{{ attributes.addClass('pf-stacks') }} data-toc-skip>
-    <div class="pf-stacks__stage{{ not (feature.image ?? false) ? ' is-empty' }}" aria-hidden="true">
+    <div class="pf-stacks__stage" aria-hidden="true">
+      {# The icon is Font Awesome Pro's, inlined from the site's copy as the
+         Visit strip's was (no FA CSS or font). #}
+      <span class="pf-stacks__frame pf-stacks__frame--instagram is-shown is-home" data-pf-frame="instagram">
+        <span class="pf-stacks__ig-media">
+          <span class="pf-stacks__ig-icon">{{ source('libraries/fontawesome-pro/svgs/brands/instagram.svg', ignore_missing = true)|raw }}</span>
+          <span class="pf-stacks__ig-label">{{ 'Instagram'|t }}</span>
+        </span>
+        <span class="pf-stacks__ig-caption">
+          <span class="pf-stacks__ig-bar pf-stacks__ig-bar--title"></span>
+          <span class="pf-stacks__ig-bar"></span>
+          <span class="pf-stacks__ig-bar pf-stacks__ig-bar--short"></span>
+          <span class="pf-stacks__ig-bar pf-stacks__ig-bar--link"></span>
+        </span>
+      </span>
       {% if feature.image ?? false %}
-        <span class="pf-stacks__frame is-shown is-home" data-pf-frame="feature">{{ feature.image }}</span>
+        <span class="pf-stacks__frame" data-pf-frame="feature">{{ feature.image }}</span>
       {% endif %}
       {% for post in posts %}
         {% if post.image %}

@@ -889,6 +889,12 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Instagram moves to From the stacks; the stage runs the lists' height.**
+  - Why: Instagram didn't belong in Hours and directions, and the stage stopped short of the lists beside it (4:5, capped at 36rem).
+  - `paragraph--landing-stacks.html.twig`, `stacks-stage.js`, `_stacks.scss`: the stage now rests on an Instagram placeholder in the old hatch (the mark and label, then hatched bars for the post's title, two lines of description and the link) instead of the featured cover. Hovering or focusing an item still shows its picture (the feature's cover included), and leaving the lists brings Instagram back. Beside the lists the stage stretches to their height (24rem floor), top on the first heading, foot on the last rule; stacked, it stays a 3:2 band. Still `aria-hidden`: the real embed will need its link outside the stage.
+  - `visit-strip.html.twig`, `_visit.scss`, `_landing-features.scss`, `_landing-swiss.scss`: the Instagram cell is gone. The strip is hours | mini map (equal halves from 1200px; on the hero cover two columns of four, two of five).
+  - Checked on the live page with this markup and CSS swapped in at 320, 768, 1024 and 1440: no horizontal scroll; stage and lists the same height (633/633 at 1024, 626/626 at 1440); hover shows the feature, leaving returns to Instagram.
+
 - **Weekly hours: a link from the hero, and the week always open.**
   - Why: the week sat in a collapsed "This week" in the Visit Hill panel (shut on phones), several screens down, with nothing at the top pointing to it; the footer, further still, keeps today's hours only.
   - `landing.html.twig`, `_landing-features.scss`: the hero's hours line ends with "This week's hours ↓" (a dot before it from md; on phones the building takes its own line, so the line no longer grows when LibCal answers: CLS at 320 went from 0.07 to 0). Hairline underline, gold on hover, the arrow dips; hidden if LibCal fails.

@@ -11,8 +11,11 @@
 // Motion: the stage's pictures crossfade and settle, the arrows slide,
 // and loaded events fade in; none of it with reduced motion.
 
+// Titles (and the event's day) in the heading colour, the lines under them
+// in the text's, so the lists read as titles first.
 .pf-stacks {
   --pf-stacks-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-stacks-title: var(--bs-emphasis-color, var(--pf-stacks-fg));
   --pf-stacks-muted: var(--pf-section-muted, var(--bs-secondary-color));
   --pf-stacks-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-stacks-muted)));
   --pf-stacks-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
@@ -33,22 +36,27 @@
 }
 
 // --- The stage --------------------------------------------------------------
-// The section's large picture (js/stacks-stage.js): the featured item's
-// cover, crossfading to whichever item the pointer is over in the lists.
-// 4:5, cropped from the covers' portrait style; hatched with no picture.
-// Stacked (narrow), a shorter 3:2 band above the lists.
+// The section's large picture (js/stacks-stage.js): Instagram at rest,
+// crossfading to whichever item the pointer is over in the lists. Beside
+// the lists it runs their full height, its top on the first heading and
+// its foot on the last rule (the pictures crop to fit); a floor keeps it a
+// picture when the lists are short. Stacked (narrow), a 3:2 band above
+// the lists.
+.pf-stacks {
+  --pf-stacks-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
+}
+
 .pf-stacks__stage {
   position: relative;
   flex: 2 1 18rem;
-  align-self: flex-start;
+  align-self: stretch;
   min-width: 0;
+  min-height: 24rem;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
-  max-height: 36rem;
   background: $pf-grey-900;
 
   &.is-empty {
-    background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
+    background: var(--pf-stacks-hatch);
     border: 1px solid #{$pf-hairline};
   }
 }
@@ -56,7 +64,85 @@
 @container pf-stacks (max-width: 46rem) {
   .pf-stacks__stage {
     flex-basis: 100%;
+    min-height: 0;
     aspect-ratio: 3 / 2;
+  }
+}
+
+// Instagram: a placeholder in the Visit strip's old hatch until a post
+// embed replaces it. The picture (the mark and its label), then bars for
+// the post's title, two lines of description and the link. On the
+// section's own colour, so the dark stage behind the photos doesn't show.
+.pf-stacks__frame--instagram {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: var(--pf-section-bg, var(--bs-body-bg));
+}
+
+.pf-stacks__ig-media {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 0;
+  border: 1px solid #{$pf-hairline};
+  color: var(--pf-stacks-muted);
+  background: var(--pf-stacks-hatch);
+}
+
+.pf-stacks__ig-icon {
+  display: flex;
+
+  svg {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    fill: currentColor;
+  }
+}
+
+.pf-stacks__ig-label {
+  @extend %pf-stacks-label;
+}
+
+.pf-stacks__ig-caption {
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+}
+
+.pf-stacks__ig-bar {
+  display: block;
+  inline-size: 100%;
+  block-size: .75rem;
+  border: 1px solid #{$pf-hairline};
+  background: var(--pf-stacks-hatch);
+
+  &--title {
+    inline-size: 70%;
+    block-size: 1.125rem;
+    margin-bottom: .25rem;
+  }
+
+  &--short {
+    inline-size: 85%;
+  }
+
+  &--link {
+    inline-size: 30%;
+    margin-top: .375rem;
+  }
+}
+
+@container pf-stacks (max-width: 46rem) {
+  .pf-stacks__frame--instagram {
+    gap: .75rem;
+  }
+
+  .pf-stacks__ig-caption {
+    gap: .5rem;
   }
 }
 
@@ -195,6 +281,7 @@
   margin-top: .25rem;
   font-size: 1.625rem;
   font-weight: 600;
+  color: var(--pf-stacks-title);
 }
 
 .pf-upcoming__text {
@@ -206,6 +293,7 @@
 
 .pf-upcoming__title,
 .pf-stacks__post-title {
+  color: var(--pf-stacks-title);
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.35;
@@ -303,7 +391,9 @@ html.pf-a11y-motion {
 }
 
 @media (forced-colors: active) {
-  .pf-stacks__stage.is-empty {
+  .pf-stacks__stage.is-empty,
+  .pf-stacks__ig-media,
+  .pf-stacks__ig-bar {
     border-color: CanvasText;
   }
 }

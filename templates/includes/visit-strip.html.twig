@@ -1,8 +1,9 @@
 {#
 /**
  * @file
- * Visit strip: name, hours (js/visit-hours.js), mini map and directions,
- * Instagram placeholder (_visit.scss).
+ * Visit strip: name, hours (js/visit-hours.js), mini map and directions
+ * (_visit.scss). Instagram moved to From the stacks' stage
+ * (paragraph--landing-stacks.html.twig).
  *
  * Variables:
  * - visit: ['name', 'lid', 'maps_url', 'embed_url', 'query']
@@ -68,13 +69,4 @@
       {% endif %}
     </div>
   {% endif %}
-
-  {# Instagram: a placeholder frame under the name until a post embed
-     takes its place. Decorative for now, so screen readers skip it. The
-     icon is Font Awesome Pro's, inlined from the site's copy like the
-     building map's hint icon (no FA CSS or font). #}
-  <div class="pf-visit__social" aria-hidden="true">
-    <span class="pf-visit__social-icon">{{ source('libraries/fontawesome-pro/svgs/brands/instagram.svg', ignore_missing = true)|raw }}</span>
-    <span class="pf-visit__social-label">{{ 'Instagram'|t }}</span>
-  </div>
 </aside>

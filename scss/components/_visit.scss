@@ -3,8 +3,8 @@
 // 1. Lead panel: page <h1>, intro and search on frosted glass.
 // 2. The building map (.pf-landing__visit, _building-map.scss).
 // 3. Visit strip: name, hours, mini map with the Google Maps link under
-//    it, and an Instagram placeholder, as wide as the map's legend and
-//    drawing together; a stacked card below md.
+//    it, as wide as the map's legend and drawing together; a stacked card
+//    below md. (Instagram moved to From the stacks' stage, _stacks.scss.)
 // Rendered by templates/includes/landing.html.twig; the
 // intro and Visit fields come from _palefire_landing_visit() in
 // palefire.theme. Hours: js/visit-hours.js. Mini map: js/visit-map.js
@@ -100,42 +100,18 @@
 }
 .pf-visit__place > .pf-visit__directions { align-self: flex-start; }
 
-// Instagram placeholder: an empty frame in the mini map's hatch until a
-// post embed replaces it. Below md it comes last.
-.pf-visit__social {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  min-height: 9rem;
-  padding: 1rem;
-  border: 1px solid var(--pf-visit-rule);
-  color: var(--pf-toc-color, inherit);
-  background: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-visit-line) 18%, transparent) 11px 12px);
-}
-.pf-visit__social-icon { display: flex; }
-.pf-visit__social-icon svg {
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  fill: currentColor;
-}
-
-// md and up: a horizontal strip. The name across the top, then hours and
-// Instagram | mini map and directions. 1200px and up (about 780px of
-// column even with the TOC open): the name across the top, then Instagram |
-// hours | mini map and directions, their tops on one line. Instagram fills
-// the height the other columns leave. Empty areas (no LibCal id, no map)
-// just leave their track empty.
+// md and up: a horizontal strip. The name across the top, then hours |
+// mini map and directions, their tops on one line; 1200px and up (about
+// 780px of column even with the TOC open) the two halves share the width.
+// Empty areas (no LibCal id, no map) just leave their track empty.
 @media (min-width: 768px) {
   .pf-visit {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
       "head head"
-      "hours place"
-      "social place";
+      "hours place";
     gap: .875rem clamp(1.5rem, 3vw, 2.5rem);
     align-items: start;
     padding: 1.5rem;
@@ -146,16 +122,9 @@
   // it (16:10 at least), so all three columns end on one line too.
   .pf-visit__place { grid-area: place; align-self: stretch; }
   .pf-visit__map { flex: 1 0 auto; }
-  .pf-visit__social { grid-area: social; align-self: stretch; }
 }
 @media (min-width: 1200px) {
-  .pf-visit {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(14rem, 20rem);
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "head head head"
-      "social hours place";
-  }
+  .pf-visit { grid-template-columns: minmax(0, 1fr) minmax(14rem, 1fr); }
 }
 
 // Keyed (the landing hero, paragraph--building-map.html.twig): the map's
@@ -178,31 +147,20 @@
 .pf-visit__key .pf-map__key:not([open]) .pf-map__key-toggle { border-bottom: 0; padding-bottom: 0; }
 @media (min-width: 768px) {
   .pf-visit--keyed {
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-areas:
       "key key"
       "head head"
-      "hours place"
-      "social place";
+      "hours place";
   }
   .pf-visit__key { grid-area: key; }
 }
-@media (min-width: 1200px) {
-  .pf-visit--keyed {
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas:
-      "key key key"
-      "head head head"
-      "social hours place";
-  }
-}
 
-// 1200px and up: Instagram | hours | mini map as three frames of one
-// height, their tops on the status line and their feet on the week's last
-// rule, with the two links (All library hours, Open in Google Maps) on one
+// 1200px and up: hours | mini map, the map a frame as tall as the hours,
+// its top on the status line and its foot on the week's last rule, with the two links (All library hours, Open in Google Maps) on one
 // line under them. The hours and the map's column give their parts to the
 // strip's grid (display: contents; their state classes still reach the
-// parts). The frames keep a floor for when the week is shut or not loaded.
+// parts). The map keeps a floor for when the week is not loaded.
 // On the landing cover the strip is on the hero's grid instead, by the
 // cover's width (_landing-features.scss), with the same parts.
 @mixin pf-visit-frames {
@@ -218,27 +176,26 @@
     min-height: 14rem;
   }
   .pf-visit__directions { grid-area: directions; justify-self: start; }
-  .pf-visit__social { min-height: 14rem; }
 }
 
 @media (min-width: 1200px) {
   .pf-visit:not(.pf-landing--cover .pf-visit) {
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
-      "head head head"
-      "social status map"
-      "social week map"
-      ". all directions";
+      "head head"
+      "status map"
+      "week map"
+      "all directions";
     @include pf-visit-frames;
   }
   .pf-visit--keyed:not(.pf-landing--cover .pf-visit) {
     grid-template-rows: auto auto auto 1fr auto;
     grid-template-areas:
-      "key key key"
-      "head head head"
-      "social status map"
-      "social week map"
-      ". all directions";
+      "key key"
+      "head head"
+      "status map"
+      "week map"
+      "all directions";
   }
 }
 .pf-visit__heading {
@@ -418,8 +375,7 @@
 
 @media (forced-colors: active) {
   .pf-visit,
-  .pf-visit__map,
-  .pf-visit__social { border-color: CanvasText; }
+  .pf-visit__map { border-color: CanvasText; }
   .pf-visit__dot { forced-color-adjust: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -428,8 +384,7 @@
 }
 @media print {
   .pf-visit__map,
-  .pf-visit__week,
-  .pf-visit__social { display: none; }
+  .pf-visit__week { display: none; }
   .pf-visit,
   .pf-landing__lead { -webkit-backdrop-filter: none; backdrop-filter: none; background: none; }
 }
