@@ -324,9 +324,9 @@ through the
 the label, and its link. Layouts use container queries; the staggered row is a
 swipeable strip under 60rem. `js/tile-reveal.js` animates cards in on scroll
 (nothing hidden without JS or with reduced motion). A scrim keeps white titles
-at 4.5:1 on any image. A card with no cover draws its page instead (title,
-intro, first sections; `_palefire_page_outline()`), blurred, in the reading
-swatch's colours.
+at 4.5:1 on any image. A card with no cover draws its page instead, as a
+desktop shows it (the "On this page" rail, then the intro and first sections;
+`_palefire_page_outline()`), blurred, in the reading swatch's colours.
 
 ## From the stacks
 
@@ -858,6 +858,9 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
+
+- **Tile showcase: the no-cover outline is the desktop page, without the title.** The blurred page now shows the guide as a desktop does, anchored left: the "On this page" rail (its sections, the gold bar on the first), then the intro and sections in a wide column that the card's edge cuts off. The outline's own title is gone. On hover only the content column scrolls; the rail stays, as the real one is sticky.
+  - Why: the blurred title repeated the card's title right below it, and the narrow single column read as a phone page.
 
 - **Tile showcase: a card with no cover shows its page, blurred.** Instead of a blank dark card, a tile with no image (most guides) draws the page it links to: its title, intro and first four titled sections with their block titles and opening lines (`_palefire_page_outline()`), set small, blurred and aria-hidden, in the reading swatch's colours (`--pf-g-*`; the section's Bootstrap colours on pages without one). It scales with the card, so the masonry's List thumbnail is the same page in miniature, and drifts up slightly on hover (not with reduced motion). Hidden in forced colours. Every layout but the index, which has no pictures.
   - Why: guides almost never have cover images, and an empty card says nothing about what's inside.

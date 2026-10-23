@@ -165,14 +165,17 @@ $pf-tile-break-two: 32rem;
 }
 
 // Outline ------------------------------------------------------------------
-// A card with no cover (most guides) draws its page instead: the title,
-// intro and first sections set small and blurred, like a page seen through
-// glass, in the reading swatch's colours (the default section's on pages
-// without one). Sized to the card (cqi), so the List's thumbnail is the
-// same page in miniature. The sheet's colour sits on the media, not the
-// blurred layer, so the blur leaves no soft edge. Decorative (aria-hidden):
-// no contrast minimum, and the scrim keeps the real title at 4.5:1. Four
-// classes to outrank the List's thumbnail grey.
+// A card with no cover (most guides) draws its page instead, as a desktop
+// shows it, small and blurred like a page seen through glass: the "On this
+// page" rail on the left (mono links, the gold bar on the first), then the
+// intro and first sections in a wide column that the card's right edge
+// cuts off. No title: the card's own title is already there. In the
+// reading swatch's colours (the default section's on pages without one).
+// Sized to the card (cqi), so the List's thumbnail is the same page in
+// miniature. The sheet's colour sits on the media, not the blurred layer,
+// so the blur leaves no soft edge. Decorative (aria-hidden): no contrast
+// minimum, and the scrim keeps the real title at 4.5:1. Four classes to
+// outrank the List's thumbnail grey.
 .pf-tiles .pf-tile.pf-tile--no-image .pf-tile__media {
   container: pf-outline / inline-size;
   overflow: hidden;
@@ -181,18 +184,24 @@ $pf-tile-break-two: 32rem;
 
 .pf-tile__outline {
   position: absolute;
-  inset: 0;
+  inset: 0 auto auto 0;
   display: flex;
-  flex-direction: column;
-  gap: .45em;
-  padding: 1.75em 1.5em;
+  align-items: flex-start;
+  gap: 2.5em;
+  padding: 2.5em 0 0 2em;
   color: var(--pf-g-muted, var(--bs-secondary-color));
-  font-size: clamp(5px, 4.4cqi, 11px);
+  font-size: clamp(4px, 3.4cqi, 9px);
   line-height: 1.5;
   opacity: .75;
-  filter: blur(max(.6px, .18em));
+  filter: blur(max(.6px, .2em));
   user-select: none;
   pointer-events: none;
+}
+
+.pf-tile__outline-toc,
+.pf-tile__outline-page {
+  display: flex;
+  flex-direction: column;
 
   // Whole lines only: the sheet clips the page, not the flex column.
   > * {
@@ -200,32 +209,56 @@ $pf-tile-break-two: 32rem;
   }
 }
 
-.pf-tile__outline-title {
-  margin-bottom: .15em;
+.pf-tile__outline-toc {
+  flex: 0 0 11em;
+  gap: .9em;
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: .95em;
+  line-height: 1.35;
+}
+
+.pf-tile__outline-toc-label {
+  margin-bottom: .6em;
   color: var(--pf-g-heading, var(--bs-emphasis-color));
-  font-size: 2.3em;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -.01em;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.pf-tile__outline-toc-item {
+  padding-inline-start: 1.4em;
+  border-inline-start: .35em solid var(--pf-g-rule, #{$pf-hairline});
+
+  &:nth-child(2) {
+    border-inline-start-color: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
+    color: var(--pf-g-heading, var(--bs-emphasis-color));
+  }
+}
+
+.pf-tile__outline-page {
+  flex: 0 0 34em;
+  gap: .55em;
 }
 
 .pf-tile__outline-intro {
+  margin-bottom: .4em;
   color: var(--pf-g-fg, var(--bs-body-color));
-  font-size: 1.15em;
+  font-size: 1.5em;
+  line-height: 1.35;
 }
 
 .pf-tile__outline-heading {
-  margin-top: .9em;
+  margin-top: 1em;
   padding-top: .8em;
   border-top: 1px solid var(--pf-g-rule, #{$pf-hairline});
   color: var(--pf-g-heading, var(--bs-emphasis-color));
-  font-size: 1.4em;
+  font-size: 1.8em;
   font-weight: 700;
   line-height: 1.15;
 }
 
 .pf-tile__outline-subhead {
   color: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
+  font-size: 1.15em;
   font-weight: 700;
 }
 
@@ -238,18 +271,18 @@ $pf-tile-break-two: 32rem;
 }
 
 // Hover: the page scrolls a little under the glass, with the pictures'
-// zoom.
+// zoom. The rail stays put, as the real one is sticky.
 @media (prefers-reduced-motion: no-preference) {
-  .pf-tile__outline {
+  .pf-tile__outline-page {
     transition: transform 0.6s ease-out;
   }
 
-  .pf-tile:is(:hover, :focus-visible) .pf-tile__outline {
-    transform: translateY(-1.5em);
+  .pf-tile:is(:hover, :focus-visible) .pf-tile__outline-page {
+    transform: translateY(-3em);
   }
 }
 
-html.pf-a11y-motion .pf-tile .pf-tile__outline {
+html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
   transition: none;
   transform: none;
 }
