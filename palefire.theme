@@ -281,7 +281,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
-    $variables['account_image'] = _palefire_account_image($paragraph, $variables);
+    $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -300,23 +300,40 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
 }
 
 /**
- * The Landing hero's Sign in picture, from its optional field, or NULL.
+ * The Landing hero's banners, from its optional field, or [].
  *
- * field_account_image is added in the UI (Landing hero > Manage fields),
- * like the Quick Guide fields: a Media reference (Image) or a plain Image
- * field, one value. Its picture fills At a glance's Sign in plate
- * (includes/landing.html.twig); missing or empty, the plate is a card.
- * Decorative (alt=""): the plate's words name the link.
+ * field_hero_banners is added in the UI (Landing hero > Manage fields), like
+ * the Quick Guide fields: an entity reference to Content (Tile and Modular
+ * page), up to four values. Each becomes a tall banner under the search
+ * (includes/landing.html.twig), read through _palefire_node_card() as the
+ * Tile showcase reads its tiles, so a banner looks and links as that tile
+ * does there: title, url, label (its Category) and the portrait cover. A
+ * node the visitor can't view is left out.
  */
-function _palefire_account_image(ParagraphInterface $paragraph, array &$variables): ?array {
-  if (!$paragraph->hasField('field_account_image') || $paragraph->get('field_account_image')->isEmpty()) {
-    return NULL;
+function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables): array {
+  if (!$paragraph->hasField('field_hero_banners')) {
+    return [];
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
-  $item = _palefire_media_image_item($paragraph->get('field_account_image')->first(), $cache);
-  $image = $item ? _palefire_image_build($item, ['tile_showcase_landscape_lg'], $cache) : NULL;
+  $banners = [];
+  foreach ($paragraph->get('field_hero_banners') as $item) {
+    $node = $item->entity;
+    $card = $node instanceof NodeInterface ? _palefire_node_card($node, $cache, 140) : NULL;
+    if (!$card) {
+      continue;
+    }
+    $banners[] = [
+      'title' => $card['title'],
+      'url' => $card['url'],
+      'label' => $card['label'],
+      'image' => $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache) : NULL,
+    ];
+    if (count($banners) === 4) {
+      break;
+    }
+  }
   $cache->applyTo($variables);
-  return $image;
+  return $banners;
 }
 
 /**
@@ -405,11 +422,8 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
  * fields, this is []. The list's cache tag (node_list:article) refreshes
  * the posts when an article is published or changed.
  *
- * Each post: ['title', 'url', 'date', 'datetime', 'day', 'month',
- * 'category', 'excerpt', 'image']. category is the article's first category
- * among the paragraph's. day and month ("28", "Sep 2026") set the date
- * large where there is no picture; image is the article's Image
- * (field_image) as a lazy render array, or NULL when it has none.
+ * Each post: ['title', 'url', 'date', 'datetime', 'category', 'excerpt'].
+ * category is the article's first category among the paragraph's.
  */
 function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, CacheableMetadata $cache): array {
   $cache->addCacheTags(['node_list:article']);
@@ -472,21 +486,13 @@ function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, Cacheab
       }
     }
 
-    $image = NULL;
-    if ($node->hasField('field_image') && !$node->get('field_image')->isEmpty()) {
-      $image = _palefire_image_build($node->get('field_image')->first(), ['tile_showcase_landscape_lg'], $cache);
-    }
-
     $posts[] = [
       'title' => $node->label(),
       'url' => $url->getGeneratedUrl(),
       'date' => $formatter->format($timestamp, 'custom', 'M j, Y'),
       'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
-      'day' => $formatter->format($timestamp, 'custom', 'j'),
-      'month' => $formatter->format($timestamp, 'custom', 'M Y'),
       'category' => $repository->getTranslationFromContext($term)->label(),
       'excerpt' => $excerpt,
-      'image' => $image,
     ];
   }
   return $posts;

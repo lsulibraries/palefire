@@ -269,6 +269,19 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --pf-g-accent: #{map.get($t, accent)};
   --pf-g-accent-rgb: #{pf-rgb(map.get($t, accent))};
   --pf-g-accent-soft: #{map.get($t, accent-soft)};
+  // Highlight: the one colour that marks the page's own voice, the hero
+  // title, the index rules' numbers and the Quick Start's letters
+  // (_landing-features.scss). A swatch's highlight key, else its title
+  // colour (Twilight's pale gold, Material's green), else its accent, so
+  // every swatch has one (Cream: LSU purple).
+  $highlight: map.get($t, accent);
+  @if map.has-key($t, highlight) {
+    $highlight: map.get($t, highlight);
+  }
+  @else if map.has-key($t, title) {
+    $highlight: map.get($t, title);
+  }
+  --pf-g-highlight: #{$highlight};
   // Hover colours. A swatch can set its own (Twilight: brighter text, not
   // gold); otherwise text hovers to the accent and links to the heading
   // colour, as before.
@@ -572,6 +585,13 @@ html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
     --pf-map-tip-line: var(--pf-g-rule);
     --pf-map-tip-text: var(--pf-g-fg);
   }
+}
+
+// The page title in the swatch's highlight (--pf-g-highlight), as
+// Twilight's has always been pale gold: every swatch now marks it. Not on
+// exhibitions, whose cover titles sit on the cover image in their own colour.
+html#{$pf-themed}:not([data-pf-mode="exhibition"]) .pf-modular__title {
+  color: var(--pf-g-highlight);
 }
 
 // Multicolour swatches (Material): headings, bold and italics in the main

@@ -147,46 +147,10 @@
     box.classList.add('is-ready');
   }
 
-  // The At a glance cell's plate (.pf-today__plate, shown on the 4-column
-  // grid only): the event's picture, else its date set large ("27" over
-  // "Oct 2026"). It repeats the cell's link, so it is out of the tab order
-  // and hidden from screen readers, as the template's other plates are.
-  function renderPlate(box, event, start) {
-    const holder = box.querySelector('.pf-today__plate--pending');
-    if (!holder) {
-      return;
-    }
-    const plate = el('a', 'pf-today__plate');
-    plate.href = event.url;
-    plate.tabIndex = -1;
-    plate.setAttribute('aria-hidden', 'true');
-    if (/^https:\/\//.test(event.image || '')) {
-      const img = document.createElement('img');
-      img.src = event.image;
-      img.alt = '';
-      img.width = 640;
-      img.height = 360;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      plate.classList.add('pf-today__plate--event');
-      plate.append(img);
-    }
-    else {
-      const lang = document.documentElement.lang || undefined;
-      plate.classList.add('pf-today__plate--date');
-      plate.append(
-        el('span', 'pf-today__plate-day', String(start.getDate())),
-        el('span', 'pf-today__plate-month', start.toLocaleDateString(lang, { month: 'short', year: 'numeric' })),
-      );
-    }
-    holder.replaceWith(plate);
-  }
-
   // The At a glance cell: the day after its label ("Next event · Tomorrow"),
   // the title (the cell's link), then the time and place, each on one line
   // like the other cells.
   function renderCell(box, { event, start }) {
-    renderPlate(box, event, start);
     const label = box.querySelector('.pf-today__label');
     if (label) {
       label.append(' · ', dayLabel(start));
@@ -213,10 +177,6 @@
     if (!box.dataset.pfHeroEventEmpty) {
       box.remove();
       return;
-    }
-    const plate = box.querySelector('.pf-today__plate--pending');
-    if (plate) {
-      plate.classList.replace('pf-today__plate--pending', 'pf-today__plate--empty');
     }
     box.append(el('span', 'pf-today__value pf-today__value--empty', box.dataset.pfHeroEventEmpty));
     box.classList.add('is-ready');

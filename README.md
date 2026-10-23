@@ -857,6 +857,21 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero banners; plates out; a highlight for every swatch.** Up to four
+  tall banners now sit under the search: the Landing hero's optional
+  `field_hero_banners` (Content: Tile and Modular page; added in the UI),
+  read by `_palefire_hero_banners()` through the same card builder and
+  portrait covers as the Tile showcase. On the 4-column grid they straddle
+  the cover's foot in a descending stagger (3rem steps) and rise in on
+  load, left to right (CSS only; off with reduced motion); narrower, a row
+  to swipe. Their words are white over a scrim, not gold. At a glance's
+  plates are gone (template, hero-event.js, styles), and with them the
+  Sign in picture field's code and the blog posts' plate keys. New
+  `--pf-g-highlight` per swatch (its `highlight` key, else `title`, else
+  `accent`) colours the page title, the index numbers and the Quick Start
+  letters, so every swatch marks them as Twilight does (Cream: LSU
+  purple). Why: the banners lead from the cover into the page with real
+  collection imagery, and only Twilight and Material had a title colour.
 - **Hero cover in thirds.** On the 4-column grid the video fills the
   first screen less a 10rem strip (--pf-cover-peek) and covers only the
   title, intro and search; the search sits on the screen's lower third
