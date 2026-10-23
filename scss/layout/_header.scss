@@ -281,6 +281,19 @@
   @media (min-width: $pf-utility-wide-bp) {
     --pf-utility-cell: #{$pf-utility-cell-wide};
   }
+
+  // The logo's width as drawn (.pf-brand__logo, below), for the landing
+  // bar's TOC button and breadcrumb, which line up with the logo and the
+  // menu's first item.
+  --pf-logo-w: #{$pf-logo-width-sm};
+
+  @include media-breakpoint-up(lg) {
+    --pf-logo-w: #{$pf-logo-width};
+  }
+}
+
+:root:has(.pf-header--compact) {
+  --pf-logo-w: #{$pf-logo-compact-width};
 }
 
 @media (max-width: $pf-utility-wide-bp - .02px) {

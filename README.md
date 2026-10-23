@@ -889,6 +889,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero links on one lighter plate; landing bar lines up with the header; map entrance as an opening.**
+  - `_landing-features.scss`: University Archives, Oral History and Log in share one plate split by hairlines, beside the intro and as tall as it (a grid row from 40rem: rows in the right half; from 80rem three columns over banners 3-5), words and arrows centred. Phones: rows under the intro. The plate is the page colour at 65%, no glass: lighter than the search's 80% so the two read apart, and the least that keeps white words at 4.5:1 over a white frame (4.7:1). Log in's words go white (gold would need 75%); its arrow keeps the gold. Hover deepens a link's share of the plate. Why: the plateless index was hard to read over bright frames.
+  - `_header.scss`, `_modular.scss`, `_landing-features.scss` (lg and up, where the menu shows): the landing bar's TOC button is as wide as the logo (`--pf-logo-w`, which follows the compact header), its icon on the logo's edge, with a clear 1rem strip under it that also takes clicks; the breadcrumb starts where "Help with" does (gutter + logo + `$pf-brand-gap`). Hover brightens the icon instead of filling the wider box.
+  - `hill-memorial-map.svg.twig`, `building-map.js`, `_building-map.scss`: the front wall stops either side of the doorway, each end closed by a short edge, instead of the porch jutting out; the entrance arrow and its centring script are gone.
+
 - **Guides: room between the breadcrumb and the title.**
   - `_guide.scss`: on guides the `<h1>` sits `clamp(2rem, 1rem + 3vw, 3.5rem)` under the breadcrumb (was 0.85rem), more than the 1rem between the title and the intro. A guide with no breadcrumb keeps its title on the first line.
   - Why: the breadcrumb is a running head; set tight over the title it read as part of it. The sticky landing bar was considered and left to landings: a reading page needs no chrome pinned over it.

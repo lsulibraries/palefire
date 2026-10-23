@@ -118,21 +118,6 @@
     else window.addEventListener('resize', fitStroke, { passive: true });
     fitStroke();
 
-    // Entrance arrow: centre it over its word once the web font has loaded
-    // (the markup carries a close estimate for no-JS). Measured in the
-    // label's own (pre-skew) units; half the trailing letter-spacing is
-    // dropped so it centres on the visible letters.
-    const centreArrows = () => svg.querySelectorAll('[data-map-center-over]').forEach((arrow) => {
-      const text = arrow.parentNode.querySelector('text');
-      if (!text || typeof text.getBBox !== 'function') return;
-      const box = text.getBBox();
-      if (!box.width) return;
-      const tracking = parseFloat(getComputedStyle(text).letterSpacing) || 0;
-      arrow.setAttribute('transform', `translate(${(box.x + (box.width - tracking) / 2).toFixed(1)} 0)`);
-    });
-    centreArrows();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(centreArrows);
-
     // Room numbers (phones only, _building-map.scss): the names are too
     // small to show there, so each room in the list gets a number, in list
     // order, and the same number sits on its room in the drawing, centred

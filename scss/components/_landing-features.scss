@@ -118,10 +118,13 @@
     transition: padding-inline-start .3s ease-in-out; // the TOC column's timing
   }
 
-  // The TOC button's 1rem icon starts on the logo's edge (the header's
-  // side padding, _modular.scss); the breadcrumb 1rem after the icon.
+  // The TOC button spans the logo (_modular.scss); the breadcrumb starts
+  // where the menu's first item's words do: the logo's end plus the gap to
+  // the menu ($pf-brand-gap, _header.scss: the brand's margin and the
+  // link's own padding). Both follow the logo as the header compacts.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-landing__bar {
-    padding-inline-start: calc(var(--pf-header-gutter, 3rem) + 1rem + var(--pf-bar-edge));
+    padding-inline-start: calc(var(--pf-header-gutter, 3rem) + var(--pf-logo-w, #{$pf-logo-width}) + #{$pf-brand-gap});
+    transition: padding-inline-start $pf-header-transition;
   }
 }
 
@@ -2671,42 +2674,51 @@ html[data-pf-hero] .pf-landing--hero {
 }
 
 // --- The hero's links (University Archives, Oral History, Log in) -----------
-// An index, not buttons: no plate or frame, so nothing reads as a second
-// search field. The label in the mono small capitals, an arrow at the end,
-// a hairline over each (gold on hover and focus). Always beside the intro
-// where there's room, never a row under it:
-// - phones: rows under the intro, a hairline only between them;
-// - from 40rem: the same rows in the right half, the intro in the left;
+// One shared plate beside the intro, split by hairlines: a toolbar, not
+// three more fields. The label in the mono small capitals, an arrow at
+// the end, each centred in its share of the plate.
+// - phones: rows under the intro;
+// - from 40rem: rows in the right half, the plate as tall as the intro
+//   beside it (a grid, so neither can run into the hours over them);
 // - from 80rem (five-column cover): three columns over banners 3-5, so Log
-//   in stands over the Search button, each with its rule on top.
-// Their foot sits on the intro's, a gutter over the search (no rule under
-// them to meet the field). With no plate, the words take the hours line's
-// halo of the page colour, so they keep 4.5:1 on any frame of the video.
-// Log in, which leaves for the request system, has its words and arrow in
-// the highlight.
+//   in stands over the Search button, the plate again the intro's height.
+// The plate is the page colour at 65%, lighter than the search field's 80%
+// and with no glass, so the two read apart: the least that keeps white
+// words at 4.5:1 over a white frame of the video (4.7:1 there), the halo
+// on top. Gold words would need 75%, so Log in, which leaves for the
+// request system, keeps the highlight on its arrow only. Hover deepens a
+// link's share of the plate, which only adds contrast.
 .pf-landing__links {
+  --pf-links-plate: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 65%, transparent);
   grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  background-color: var(--pf-links-plate);
 }
 
 .pf-landing__links-list {
   display: grid;
+  flex: 1 1 auto;
   grid-template-columns: minmax(0, 1fr);
-  gap: 0 var(--pf-grid-gutter);
-  margin: clamp(1rem, 2vw, 1.5rem) 0 0;
+  grid-auto-rows: 1fr;
+  margin: 0;
   padding: 0;
   list-style: none;
-}
 
-@container pf-cover (min-width: 40rem) {
-  .pf-landing__links-list {
-    margin: 0;
+  > li {
+    display: flex;
+  }
+
+  > li + li {
+    border-top: 1px solid #{$pf-hairline};
   }
 }
 
-// Rows beside the intro: two halves, the intro and the links in one row
-// under the title and hours, both feet level. A grid, not laid over, so a
-// long intro or a short one never runs the rows into the hours.
-@container pf-cover (min-width: 40rem) and (max-width: 79.99rem) {
+// Beside the intro: the intro and the plate share a row under the title
+// and hours, the plate stretched to the intro's height (or the intro's
+// row grows to the plate's, never overlapping).
+@container pf-cover (min-width: 40rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2724,40 +2736,77 @@ html[data-pf-hero] .pf-landing--hero {
 
     > .pf-landing__links {
       grid-column: 2;
+      align-self: stretch;
+      margin-top: 0;
     }
+  }
+
+  // Rows 2rem at least (over 2.2's 24px targets), so three fit the
+  // height of a three- or four-line intro; the rows share what's left.
+  // (Two classes: the base rule for the links comes later.)
+  .pf-landing__links-list .pf-landing__link {
+    min-height: 2rem;
+    padding-block: .375rem;
   }
 }
 
 @container pf-cover (min-width: 80rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
-    position: relative;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    > .pf-landing__intro {
+      grid-column: 1 / span 2;
+    }
 
     > .pf-landing__links {
-      position: absolute;
-      inset-block-end: 0;
-      inset-inline: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + 2 * var(--pf-grid-gutter)) 0;
+      grid-column: 3 / -1;
     }
   }
 
+  // The grid's gutter between the columns, so each sits over its banner
+  // (Log in over the Search button); the hairline down the gutter's middle.
   .pf-landing__links-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    column-gap: var(--pf-grid-gutter);
+
+    > li {
+      position: relative;
+    }
+
+    > li + li {
+      border-top: 0;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: calc(var(--pf-grid-gutter) / -2);
+        border-inline-start: 1px solid #{$pf-hairline};
+      }
+    }
+
+    // The words start where the Search button's do.
+    .pf-landing__link {
+      padding-inline: 1.25rem;
+    }
   }
 }
 
 .pf-landing__link {
   @extend %pf-landing-label;
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
   justify-content: space-between;
   gap: .75rem;
   min-height: 2.75rem;
-  padding: .625rem 0;
-  border-top: 1px solid #{$pf-hairline};
+  padding: .625rem 1rem;
   border-radius: 0;
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   text-decoration: none;
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
-  transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+  transition: background-color $pf-hover-out ease;
 
   svg {
     flex: none;
@@ -2768,41 +2817,19 @@ html[data-pf-hero] .pf-landing--hero {
 
   &:hover,
   &:focus-visible {
-    border-top-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
     color: var(--pf-section-fg, var(--bs-emphasis-color));
+    background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 50%, transparent);
     transition-duration: $pf-hover-in;
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: 2px;
+    outline-offset: -2px;
   }
 }
 
-.pf-landing__link--account {
-  &,
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-  }
-}
-
-// Rows: a rule only between them (the first has none over it until hover).
-.pf-landing__links-list > li:first-child > .pf-landing__link:not(:hover, :focus-visible) {
-  border-top-color: transparent;
-}
-
-// Columns: every link has its rule on top, the words at the foot, level
-// with the intro's last line.
-@container pf-cover (min-width: 80rem) {
-  .pf-landing__link {
-    align-items: flex-end;
-    padding-block-end: 0;
-  }
-
-  .pf-landing__links-list > li:first-child > .pf-landing__link:not(:hover, :focus-visible) {
-    border-top-color: #{$pf-hairline};
-  }
+.pf-landing__link--account svg {
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 }
 
 @media (prefers-reduced-motion: no-preference) {

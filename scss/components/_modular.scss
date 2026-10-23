@@ -631,22 +631,37 @@ html.pf-snap-proximity .pf-section--snap {
   // at the top (reloaded part-way down, the button sat a row low).
   // No outline or glass of its own there, like the bar's other buttons
   // (_landing-features.scss): the bar is its ground.
-  // As tall as the bar's row (2rem), at its top; its 1rem icon still on
-  // the logo's edge.
+  // As tall as the bar's row (2rem), at its top, and as wide as the logo
+  // over it (--pf-logo-w, _header.scss), its 1rem icon on the logo's edge;
+  // the breadcrumb starts under the menu's first item. Hover brightens the
+  // icon (a fill would sit lopsided round an icon at the box's edge).
+  // A clear strip under it (::after) takes clicks a row's height lower,
+  // so the small icon is an easier target; nothing else is in that strip.
   html.pf-toc-collapsed:not([data-pf-mode="guide"]):has(.pf-landing__bar) .pf-modular__toc-collapse {
     top: 0;
-    width: 2rem;
+    justify-content: flex-start;
+    width: var(--pf-logo-w, #{$pf-logo-width});
     height: 2rem;
-    inset-inline-end: calc(-2rem - (var(--pf-header-gutter, 3rem) - .5rem));
-    border-color: transparent;
+    inset-inline-end: calc(-1 * (var(--pf-header-gutter, 3rem) + var(--pf-logo-w, #{$pf-logo-width})));
+    border: 0; // the icon exactly on the logo's edge
     background-color: transparent;
     box-shadow: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+    transition:
+      color $pf-hover-out ease,
+      width $pf-header-transition,
+      inset-inline-end .3s ease-in-out;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 -1rem;
+    }
 
     &:hover,
     &:focus-visible {
-      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      background-color: transparent;
     }
   }
 

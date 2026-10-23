@@ -135,12 +135,12 @@
   /* FLOOR 2, bigger, would run into the Floor 2 Gallery's number, over the
      railing and into McIlhenny Room: down under the railing (map units),
      tracked tighter to fit between Quiet Study's and McIlhenny's corners.
-     (ENTRANCE keeps its tracking: its arrow is centred on the word.) */
+     (ENTRANCE keeps its tracking, centred under the doorway.) */
   .pf-map__labels > .pf-map__label--floor:not(.pf-map__entrance) { translate: 90px 235px; letter-spacing: .16em; }
-  /* ENTRANCE grows around its arrow's tip, not the word's start, so the
-     arrow stays on the doorway: the tip is at (234, -136.5) in the label's
-     units, (67.7, -182.2) in the map's once rotated and skewed, and
-     translate takes back what scaling moved it. */
+  /* ENTRANCE grows around the doorway's point, not the word's start, so it
+     stays under the opening: (234, -136.5) in the label's units, (67.7,
+     -182.2) in the map's once rotated and skewed, and translate takes back
+     what scaling moved it. */
   .pf-map__labels > .pf-map__entrance { translate: calc((1 - var(--scale)) * 67.7px) calc((1 - var(--scale)) * -182.2px); }
   .pf-map__icons > .pf-map__icon { --scale: calc(var(--pf-map-grow) * .125); }
   .pf-map__icons > .pf-map__icon--elevator { --scale: calc(var(--pf-map-grow) * .114); }
@@ -205,11 +205,8 @@
 /* Elevator arrows sit a little inside the shaft rather than filling it.
    Map only: the legend draws the same fragment in its own <svg>. */
 .pf-map__icon--elevator { --scale: .68; }
-/* Entrance: Font Awesome's arrow-alt-up (solid, as path data, so it needs no
-   icon font inside the SVG), centred over the word and sharing its rotate +
-   skew because it is inside the same label group. building-map.js measures
-   the word and re-centres the arrow once fonts load. */
-.pf-map__entrance-arrow { fill: currentColor; }
+/* Entrance: the word alone under the front wall's opening (the walls stop
+   either side of the doorway, hill-memorial-map.svg.twig). */
 .pf-map__entrance { color: var(--pf-map-ink); }
 .pf-map__label {
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 700; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
