@@ -857,6 +857,15 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Hero title on the intro's columns.** From 48rem of landing the title
+  keeps to the intro's width (half the column; two of five from 80rem),
+  its lines balanced, so "Special Collections" stands as "Special /
+  Collections" over the hours, intro and search label: one column of
+  type. A short title stays on one line. On the full-screen cover the
+  fixed space above the title is now only a floor (3.5rem at most; it was
+  up to 7.5rem), so the taller title still leaves the search on the lower
+  third line (601px at 1440x900, 1280 and 1920). Why: the one-line title
+  overhung the intro by about 200px.
 - **Quick Start option names on two lines alike.** Each option's name is
   now two parts in includes/guide-request-paths.html.twig ("See it" / "in
   person", "Get a" / "digital copy", "Have an" / "expert help"); the

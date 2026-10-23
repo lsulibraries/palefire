@@ -394,6 +394,9 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
     // Negative: the band runs on 1rem past the screen's foot, under the
     // banners rising 9rem into it, whose tops show 8rem above the fold.
     --pf-cover-peek: -1rem;
+    // Only a floor above the title here: the flexible first row gives the
+    // rest, so a two-line title still leaves the search on the third line.
+    --pf-cover-space: clamp(2.5rem, 4vw, 3.5rem);
 
     > .pf-landing__media {
       grid-row: 1 / 3;
@@ -1596,7 +1599,11 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // 1, 2-3 and 4; On view's heading takes column 1 and its tiles 2-4 with
 // the gutter between them, as the Quick Start does.
 @container pf-cover (min-width: 48rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro {
+  // The title keeps to the intro's columns too, its lines balanced, so the
+  // title, hours, intro and search label stand as one column of type over
+  // the video ("Special / Collections"); a short title stays on one line.
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro,
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title {
     max-width: calc((100% - var(--pf-grid-gutter)) / 2);
   }
 
@@ -2402,6 +2409,7 @@ html[data-pf-hero] .pf-landing--hero {
 // quarter of a column (34px at 1440) would shrink the diamonds.
 @container pf-cover (min-width: 80rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro,
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title,
   .pf-landing--cover .pf-map .pf-map__type {
     max-width: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + var(--pf-grid-gutter));
   }
