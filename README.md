@@ -889,6 +889,11 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Price list fixes: the prose width actually applies; no empty line in the fee.**
+  - `_guide.scss`: the price list's block test was `:has(table:not(:has(…)))`, and `:has()` can't nest, so browsers dropped the rule and the list (and the text after it) ran to the guide's 52rem. Now `:has(table):not(:has(thead, tr > :nth-child(3)))`: 672px, the intro's width.
+  - The fee's label is a block, so the `<br>` after it left an empty line over "Processing fee"; that `<br>` is hidden.
+  - Checked on the live page with this CSS injected in Edge at 1568 wide. No content change: no need to rerun the prices script.
+
 - **Price list: the processing fee as the list's foot; notes muted; prose width.**
   - `palefire_guide_duplication_prices.html`: the fee leaves the rows for a `<tfoot>` ("Added to every order", Processing fee, + $10), and the caption becomes "Prices per item". Notes under an item are `<em>`, since the guide's text format strips `<small>` (live, the notes showed at full size and colour). The script now warns if the format strips `<tfoot>` or `<em>`.
   - `_guide.scss`: the foot sits under a 2px accent rule (the list's one line that isn't a hairline, as a receipt's total), with a mono label and the amount larger, in the title's highlight. Notes (`small` or `em`) are upright and muted. A price list keeps the 42rem prose width, as does the text after it (any block with a table had dropped it, for wide tables' scrolling).

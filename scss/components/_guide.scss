@@ -442,8 +442,9 @@ html[data-pf-mode="guide"] .pf-modular__title {
   // price bold, on one line and right-aligned with even figures. A <tfoot>
   // row is a charge added to every order.
   // It never needs to scroll, so it keeps the prose measure, as does the
-  // text after it.
-  &:has(table:not(:has(thead)):not(:has(tr > :nth-child(3)))) {
+  // text after it. (:has() can't nest, so the block's test is its own
+  // :not(:has()), not the table selector below inside one :has().)
+  &:has(table):not(:has(thead, tr > :nth-child(3))) {
     max-width: var(--pf-guide-prose);
     overflow-x: visible;
   }
@@ -501,6 +502,11 @@ html[data-pf-mode="guide"] .pf-modular__title {
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--pf-guide-muted);
+      }
+
+      // The label is a block, so its <br> would leave an empty line.
+      strong + br {
+        display: none;
       }
 
       td {
