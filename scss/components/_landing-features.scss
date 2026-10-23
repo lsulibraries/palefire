@@ -2745,6 +2745,28 @@ html[data-pf-hero] .pf-landing--hero {
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
 
+// Under the stuck bar the plate drops its blur: Chromium flickers one
+// backdrop-filter passing under another (the bar's glass, the header's).
+// A view timeline inset by the header and bar ends the blur as the
+// plate's top reaches the bar's foot (half a rem early), and scrolling
+// back up restores it. Not motion: the plate's 65% keeps its words at AA
+// either way, and the bar covers what changes. Without scroll timelines
+// the blur stays (Firefox and Safari don't show the flicker).
+@supports (animation-timeline: view()) {
+  .pf-landing--cover .pf-landing__links {
+    animation: pf-links-unblur linear both;
+    animation-timeline: view(block calc(var(--pf-header-h, 3.5rem) + var(--pf-landing-bar-h, 2rem) + .5rem) 0px);
+    animation-range: exit-crossing 0% exit-crossing 1%;
+  }
+}
+
+@keyframes pf-links-unblur {
+  to {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 .pf-landing__links-list {
   display: grid;
   flex: 1 1 auto;

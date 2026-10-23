@@ -889,6 +889,9 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Hero links: no blur under the stuck bar (flicker fix).**
+  - `_landing-features.scss`: the links' plate flickered as it scrolled under the sticky bar and header, a Chromium glitch with one backdrop-filter passing under another (confirmed in DevTools: turning off the plate's blur stopped it). A scroll-driven animation (a view timeline inset by the header and bar) now drops the plate's blur as its top reaches the bar's foot, half a rem early, and scrolling back restores it. The 65% fill keeps the words at AA either way. Browsers without scroll timelines keep the blur. Checked at 1440 with this CSS injected: blurred at the top and 40px below the bar, unblurred under it.
+
 - **Hero search: a gold line draws in on hover.**
   - `_landing-features.scss`: hovering or focusing the hero's search draws a 2px line in the Search button's gold along the field's foot, from the start to the button (the input's own background, so it ends at the button at every width; mirrored in RTL), and the placeholder brightens toward the text colour. With reduced motion (or the Settings switch) the line appears at once. Why: the search needed a cue on hover; the line ties the field to its gold button without moving anything. Checked at 1440 on the live page with this CSS injected.
 
