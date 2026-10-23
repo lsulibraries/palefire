@@ -1112,28 +1112,47 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 @container pf-cover (min-width: 64rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     --pf-banner-rise: 9rem;
+  }
+}
+
+// The drift only where the gap under the search has room for it.
+@container pf-cover (min-width: 80rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     --pf-banner-travel: 4.5rem;
   }
 }
 
-// Scroll parallax: as the page scrolls its first 70% of a screen, each
-// banner rises at its own pace (by --pf-banner-travel plus its own drop),
-// so the offsets close and the row settles level. The travel is held under
-// the gap below the search, so no banner reaches it. Scroll-driven (no script), on
-// the link (`translate`), so it never fights the rise-in on the item.
-// None with reduced motion or the Settings drawer's switch.
-@keyframes pf-banner-level {
+// Scroll parallax, in two parts, scroll-driven (no script) on the link, so
+// it never fights the rise-in on the item. The drift: as the page scrolls
+// its first 70% of a screen, the row rises by --pf-banner-travel (from
+// 80rem, held under the gap below the search, so no banner reaches it). The cross, on
+// the row's own view timeline: while the whole row is in view, each banner
+// moves by twice its drop, so the offsets close to level just as the row's
+// middle meets the screen's and carry on past it, the stagger mirrored by
+// the time the row starts to leave. Before that the row holds its offsets
+// (the first screen as composed). None with reduced motion or the Settings drawer's switch.
+@keyframes pf-banner-drift {
   to {
-    translate: 0 calc(-1 * var(--pf-banner-travel, 2.5rem) - var(--pf-banner-offset, 0px));
+    translate: 0 calc(-1 * var(--pf-banner-travel, 0px));
+  }
+}
+
+@keyframes pf-banner-cross {
+  to {
+    transform: translateY(calc(-2 * var(--pf-banner-offset, 0px)));
   }
 }
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) .pf-hero-banners {
+      view-timeline: --pf-banner-row block;
+    }
+
     html:not(.pf-a11y-motion) .pf-hero-banner__link {
-      animation: pf-banner-level linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 70vh;
+      animation: pf-banner-drift linear both, pf-banner-cross linear both;
+      animation-timeline: scroll(root), --pf-banner-row;
+      animation-range: 0 70vh, contain 0% contain 100%;
     }
   }
 }
