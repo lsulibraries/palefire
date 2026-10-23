@@ -75,7 +75,7 @@ html#{$pf-themed} .pf-footer {
 
 // Plain at rest; on hover the accent and a hairline under the words.
 %pf-footer-link {
-  color: var(--bs-body-color);
+  color: var(--bs-emphasis-color);
   text-decoration: none;
   text-decoration-thickness: 1px;
   text-underline-offset: .3em;
@@ -156,7 +156,7 @@ html#{$pf-themed} .pf-footer {
 .pf-footer__arrow {
   transition: transform $pf-hover-out ease;
 
-  :is(.pf-footer__cta, .pf-footer__fact--link, .pf-footer__other-link):is(:hover, :focus-within) & {
+  :is(.pf-footer__cta, .pf-footer__fact--link):is(:hover, :focus-within) & {
     transform: translateX(.25rem);
     transition-duration: $pf-hover-in;
   }
@@ -354,11 +354,8 @@ html#{$pf-themed} .pf-footer {
   color: var(--bs-secondary-color);
 }
 
-.pf-footer .pf-footer__other-link {
+.pf-footer .pf-footer__other-name a {
   @extend %pf-footer-link;
-  display: inline-flex;
-  gap: .5rem;
-  padding-block: .25rem;
 }
 
 .pf-footer__links {
@@ -514,7 +511,7 @@ html#{$pf-themed} .pf-footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-footer :is(.pf-footer__cta, .pf-footer__arrow, .pf-footer__dot, .pf-footer__social-link, .pf-footer__fact, .pf-footer__fact a, .pf-footer__links a, .pf-footer__other-link, .pf-footer__legal a) {
+  .pf-footer :is(.pf-footer__cta, .pf-footer__arrow, .pf-footer__dot, .pf-footer__social-link, .pf-footer__fact, .pf-footer__fact a, .pf-footer__links a, .pf-footer__other-name a, .pf-footer__legal a) {
     transition: none;
   }
 

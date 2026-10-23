@@ -889,6 +889,18 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
 
+- **Twilight text in two tones; hours links, badge and banners tidied.**
+  - Note: the SCSS for the Twilight colours, the search focus fix and the white Stacks titles went out early inside 1b28303 (its `git add scss/components` picked them up mid-edit). This entry covers them and finishes the rest: the footer links, section titles and templates.
+  - Twilight (`_reading-themes.scss`): running text is now the soft grey the labels use (`#b7b3ba`, 7.4:1 on the page, 6.7:1 on surfaces; was near-white `#edebee`); headings (`--bs-heading-color`), links and bold (a `strong` key) keep near-white. The grey can't go dimmer for a third tier: over a white video frame it is already near 4.5:1. Checked by rendering the page with text hidden and measuring the brightest pixel under every grey text box at 320 and 1440 against the current colours: no new failures (lowest 5.1:1, median 7.5:1). Footer links, landing section titles, the index-rule links and the Stacks titles take the heading colour; the Quick Start's intro and notes take the grey (the video is fully washed out behind it).
+  - Hero hours (`landing.html.twig`, `_landing-features.scss`): today's hours are the link to the week (the separate "This week's hours" is gone; its name finishes "this week's hours" for screen readers). The status badge loses its frame for a solid ground: the swatch's accent while open or closing soon (black on pale gold), the hero links' plate while closed or loading; a frame only in forced colours.
+  - Quick Start: a third button, "● Open now · See hours ↓", jumps to the week too; the status shows once LibCal answers and the button goes if it fails.
+  - `visit-hours.js`: the jump now focuses the status line after the glide ends (one short correction if the map settled under it). Focusing at the start set off the building map's own focus scroll mid-entrance, which stopped the glide at 768 to 1199px.
+  - Hero search: focused, the gold hover line folds away, so the foot matches the top (2px frame all round, not 4px at the foot).
+  - Banners: the picture runs to the foot (the 2px strip of dark ground above it read as a bottom border), and the next event's scrim eases off sooner, so its foot is no longer a flat black.
+  - Footer: the other building's name is its link (no arrow); the "… home →" line under its hours is gone.
+  - Map: the "Tap a numbered room" hint icon is the duotone bullseye-pointer.
+  - Checked at 320, 768, 1024 and 1440 on the live page with this markup, CSS and JS swapped in: no horizontal scroll; the jump lands 97px down (clear of the bar) with focus there at every width.
+
 - **Instagram moves to From the stacks; the stage runs the lists' height.**
   - Why: Instagram didn't belong in Hours and directions, and the stage stopped short of the lists beside it (4:5, capped at 36rem).
   - `paragraph--landing-stacks.html.twig`, `stacks-stage.js`, `_stacks.scss`: the stage now rests on an Instagram placeholder in the old hatch (the mark and label, then hatched bars for the post's title, two lines of description and the link) instead of the featured cover. Hovering or focusing an item still shows its picture (the feature's cover included), and leaving the lists brings Instagram back. Beside the lists the stage stretches to their height (24rem floor), top on the first heading, foot on the last rule; stacked, it stays a 3:2 band. Still `aria-hidden`: the real embed will need its link outside the stage.

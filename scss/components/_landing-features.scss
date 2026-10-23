@@ -743,15 +743,17 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // --- Hours, under the title ---------------------------------------------------
-// Today's hours as a caption under the hero's title: the status as a label
+// Today's hours as a caption under the hero's title: the status as a badge
 // (a dot in the Visit strip's colours, hidden from screen readers since it
-// repeats the word, and the status in the labels' small capitals, in a
-// hairline frame in the same colour), then today's hours and the building
-// as a line of text. visit-hours.js fills the status and the hours and
-// marks the line (data-hours-state, is-ready). Until then "Hours" shows
-// dimmed; if LibCal fails, only the building stays. Over the cover's video
-// every word takes the text's full colour with a halo of the page colour,
-// so each keeps 4.5:1 on any frame (the muted tone fell to 3.3:1).
+// repeats the word, and the status in the labels' small capitals, on a
+// solid ground: the swatch's accent while open, the hero links' plate
+// while closed), then today's hours, which link to the week in the Visit
+// panel, and the building. visit-hours.js fills the status and the hours
+// and marks the line (data-hours-state, is-ready). Until then "Hours"
+// shows dimmed on the plate; if LibCal fails, only the building stays.
+// Over the cover's video every word takes the text's full colour with a
+// halo of the page colour, so each keeps 4.5:1 on any frame (the muted
+// tone fell to 3.3:1).
 .pf-landing__hours {
   --pf-visit-open: #2f9e4f;
   --pf-visit-soon: #fdd023;
@@ -773,8 +775,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     opacity: .6;
   }
 
-  > .pf-landing__hours-today:empty,
-  &.is-failed > :is(.pf-landing__hours-label, .pf-landing__hours-today) {
+  > .pf-landing__hours-link:has(> .pf-landing__hours-today:empty),
+  &.is-failed > :is(.pf-landing__hours-label, .pf-landing__hours-link) {
     display: none;
   }
 }
@@ -785,18 +787,12 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // The building after today's hours, after a middle dot (from md: on a
 // phone the line wraps there, and a dot would start the second line).
-// Another dot between the building and "This week's hours". Phones: the
-// building on a line of its own, so the line doesn't grow when LibCal
-// answers and the status and today's hours share the first.
+// Phones: the building on a line of its own, so the line doesn't grow
+// when LibCal answers and the status and today's hours share the first.
 @include media-breakpoint-up(md) {
-  .pf-landing__hours-today:not(:empty) + .pf-landing__hours-place::before {
+  .pf-landing__hours-link:not(:has(> .pf-landing__hours-today:empty)) + .pf-landing__hours-place::before {
     content: "\00b7" / "";
     margin-inline-end: .75rem;
-  }
-
-  .pf-landing__hours-place:has(+ .pf-landing__hours-week)::after {
-    content: "\00b7" / "";
-    margin-inline-start: .75rem;
   }
 }
 
@@ -806,15 +802,30 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 }
 
+// The badge: no frame, a solid ground. Open (and closing soon): the
+// swatch's accent with its text colour (black on Twilight's pale gold,
+// 13:1; white on the light swatches' dark accents). Closed, and while
+// loading: the hero links' plate (.pf-landing__links), its words in the
+// text colour as on the plate. The ground eases between the two.
 .pf-landing__hours-label {
   @extend %pf-landing-label;
+  --pf-hours-badge-bg: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 65%, transparent);
+  --pf-hours-badge-fg: var(--pf-section-fg, var(--bs-body-color));
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  padding: .125rem .5rem;
-  border: 1px solid var(--pf-hours-state, currentColor);
+  padding: .1875rem .5625rem;
+  color: var(--pf-hours-badge-fg);
+  background-color: var(--pf-hours-badge-bg);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
   text-shadow: none;
-  transition: border-color .3s ease;
+  transition: background-color .3s ease, color .3s ease;
+
+  :is([data-hours-state="open"], [data-hours-state="soon"]) > & {
+    --pf-hours-badge-bg: var(--pf-g-accent, #{$pf-gold});
+    --pf-hours-badge-fg: var(--pf-g-on-accent, #{$pf-black});
+  }
 
   [data-hours-state="open"] > & {
     --pf-hours-state: var(--pf-visit-open);
@@ -837,14 +848,12 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transition: background-color .3s ease;
 }
 
-// "This week's hours": down to the week in the Visit panel (visit-hours.js
-// glides there). A hairline underline that turns gold on hover, the arrow
-// dipping with it. 24px tall at least (WCAG 2.2 SC 2.5.8). Gone with the
-// status if LibCal fails, since the week is too.
-.pf-landing__hours-week {
+// Today's hours as the link down to the week (visit-hours.js glides
+// there): a hairline underline that turns gold on hover. 24px tall at
+// least (WCAG 2.2 SC 2.5.8).
+.pf-landing__hours-link {
   display: inline-flex;
   align-items: center;
-  gap: .375rem;
   min-block-size: 1.5rem;
   color: inherit;
   text-decoration: underline;
@@ -855,25 +864,13 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
   &:hover,
   &:focus-visible {
+    color: inherit;
     text-decoration-color: var(--pf-g-highlight, #{$pf-gold});
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-focus-color);
     outline-offset: 2px;
-  }
-
-  .is-failed > & {
-    display: none;
-  }
-}
-
-.pf-landing__hours-arrow {
-  display: inline-block;
-  transition: transform .3s ease;
-
-  .pf-landing__hours-week:is(:hover, :focus-visible) > & {
-    transform: translateY(.125rem);
   }
 }
 
@@ -924,13 +921,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   .pf-landing__hours,
   .pf-landing__hours-label,
   .pf-landing__hours-dot,
-  .pf-landing__hours-week,
-  .pf-landing__hours-arrow {
+  .pf-landing__hours-link {
     transition: none;
-  }
-
-  .pf-landing__hours-week:is(:hover, :focus-visible) > .pf-landing__hours-arrow {
-    transform: none;
   }
 }
 
@@ -938,6 +930,11 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   .pf-landing__hours-dot {
     forced-color-adjust: none;
     outline: 1px solid CanvasText;
+  }
+
+  // Forced colours drop the badge's ground: a frame marks it instead.
+  .pf-landing__hours-label {
+    border: 1px solid CanvasText;
   }
 }
 
@@ -1098,14 +1095,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 }
 
-// The picture stops 2px (rounded up from the 1 device pixel a fractional
-// scale can round either way) above the banner's foot, on a clip of its
-// own: the last rows are the banner's dark ground under the scrim's
-// darkest stop, so no hairline of bare picture shows there at any scale
-// or point of the drift, the cross or the pan.
+// The picture fills the banner to its foot, on a clip of its own. (It
+// stopped 2px short so no bare picture could show at a fractional scale,
+// but that strip of dark ground read as a border.) The scrim runs past
+// the foot and the link clips both, so the last rows are always the
+// picture under the scrim's darkest stop.
 .pf-hero-banner__media {
   position: absolute;
-  inset: 0 0 2px;
+  inset: 0;
   overflow: hidden;
 
   img {
@@ -1334,10 +1331,12 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   object-position: 50% 0;
 }
 
-// Flyers carry their own words: a deeper scrim under the event's, so the
-// banner's words never sit on the flyer's small print.
+// Flyers carry their own words: a scrim a little deeper than the others'
+// under the event's words, so they never sit on the flyer's small print,
+// but easing off sooner than it did (82% to a third of the way up), which
+// left the banner's foot a flat black that read as empty space.
 .pf-hero-banner.is-event .pf-hero-banner__link::after {
-  background-image: linear-gradient(to top, rgb(0 0 0 / .92) 0%, rgb(0 0 0 / .82) 35%, rgb(0 0 0 / .35) 60%, rgb(0 0 0 / 0) 80%);
+  background-image: linear-gradient(to top, rgb(0 0 0 / .9) 0%, rgb(0 0 0 / .65) 30%, rgb(0 0 0 / .15) 55%, rgb(0 0 0 / 0) 70%);
 }
 
 .pf-hero-banner__media--date {

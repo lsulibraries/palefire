@@ -45,7 +45,7 @@
       place: { name: 'Hill Memorial Library'|t, query: 'Hill Memorial Library, Baton Rouge, LA' },
       phone: '225-578-6544',
       ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special' },
-      other: { name: 'Main Library'|t, lid: '241', label: 'Main Library home'|t, url: base_path },
+      other: { name: 'Main Library'|t, lid: '241', url: base_path },
       links: [
         { title: 'Visit'|t, items: [
           { label: 'How to use Special Collections'|t, url: sc ~ '/guides/special-collections' },
@@ -73,7 +73,7 @@
       place: { name: 'Main Library'|t, query: 'Middleton Library, Baton Rouge, LA' },
       phone: '225-578-5652',
       ask: { label: 'Email the Main Library'|t, url: '/askus/widgets/19448' },
-      other: { name: 'Hill Memorial Library, Special Collections'|t, lid: '236', label: 'Special Collections home'|t, url: sc },
+      other: { name: 'Hill Memorial Library, Special Collections'|t, lid: '236', url: sc },
       links: [
         { title: 'Visit'|t, items: [
           { label: 'All library hours'|t, url: 'https://lsu.libcal.com/hours' },
@@ -135,13 +135,14 @@
     <div class="pf-footer__more">
       <div class="pf-footer__other">
         <h2 class="pf-footer__label">{{ 'Also at LSU Libraries'|t }}</h2>
-        <p class="pf-footer__other-name">{{ f.other.name }}</p>
+        {# The building's name is its home page's link (no arrow): the name
+           says where it goes, so no second "home" link under the hours. #}
+        <p class="pf-footer__other-name"><a href="{{ f.other.url }}">{{ f.other.name }}</a></p>
         <p class="pf-footer__hours pf-footer__hours--other" data-pf-footer-lid="{{ f.other.lid }}">
           <span class="pf-footer__dot" aria-hidden="true"></span>
           <span data-pf-hours-status>{{ 'Hours'|t }}</span>
           <span class="pf-footer__today" data-pf-hours-today></span>
         </p>
-        <a class="pf-footer__other-link" href="{{ f.other.url }}">{{ f.other.label }}<span class="pf-footer__arrow" aria-hidden="true">→</span></a>
       </div>
       {% for group in f.links %}
         <nav class="pf-footer__nav" aria-labelledby="pf-footer-nav-{{ loop.index }}">

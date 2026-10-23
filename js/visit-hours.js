@@ -236,10 +236,15 @@
 
   Drupal.behaviors.palefireVisitHours = {
     attach(context) {
-      // The hero's "This week's hours": a glide down to the Visit panel's
-      // status line (at once with reduced motion), focus moved there for
-      // keyboard and screen reader users, and the hash kept for sharing.
-      // Without this script the link is a plain jump.
+      // The links to the week (the hero's hours, the Quick Start's "See
+      // hours"): a glide down to the Visit panel's status line (at once with
+      // reduced motion), then focus there for keyboard and screen reader
+      // users, and the hash kept for sharing. Focus waits for the glide to
+      // end: the building map moves the page itself when focus lands in it
+      // mid-entrance (building-map.js), which cut the glide short at 768 to
+      // 1199px. The map settling as the page arrives can leave the line a
+      // little off, so one short correction first. Without this script the
+      // link is a plain jump.
       once('pf-hours-jump', '[data-pf-hours-jump]', context).forEach((link) => {
         link.addEventListener('click', (event) => {
           const target = document.getElementById(link.hash.slice(1));
@@ -247,9 +252,29 @@
             return;
           }
           event.preventDefault();
-          target.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
-          target.focus({ preventScroll: true });
+          const behavior = reduceMotion() ? 'auto' : 'smooth';
+          target.scrollIntoView({ behavior, block: 'start' });
           window.history.pushState(null, '', link.hash);
+          let done = false;
+          let timer = 0;
+          const arrive = () => {
+            if (done) {
+              return;
+            }
+            done = true;
+            window.clearTimeout(timer);
+            const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+            const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+            if (Math.abs(target.getBoundingClientRect().top - margin - pad) > 8) {
+              target.scrollIntoView({ behavior, block: 'start' });
+            }
+            target.focus({ preventScroll: true });
+          };
+          if ('onscrollend' in window) {
+            window.addEventListener('scrollend', arrive, { once: true });
+          }
+          // No scrollend (already there, or an older browser): focus anyway.
+          timer = window.setTimeout(arrive, 1600);
         });
       });
       once('pf-visit-hours', '[data-pf-hours][data-lid]', context).forEach((el) => {

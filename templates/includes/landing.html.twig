@@ -216,18 +216,18 @@
        its colour and the status in small capitals), then today's hours and
        the building as a line of text (visit-hours.js fills the status and
        the hours from LibCal; palefire/visit is attached with visit). No
-       live region: the Visit panel already announces changes. Then a link
-       to the week in the Visit panel (visit-strip.html.twig, the same
-       {{ input_id }}-visit id in the map or under it). #}
+       live region: the Visit panel already announces changes. Today's
+       hours are the link to the week in the Visit panel (visit-strip.html.twig,
+       the same {{ input_id }}-visit id in the map or under it); the hidden
+       words finish its name, since the script fills only the hours. #}
     {% if hero and visit.lid %}
       <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
         <span class="pf-landing__hours-label">
           <span class="pf-landing__hours-dot" aria-hidden="true"></span>
           <span data-pf-hours-status>{{ 'Hours'|t }}</span>
         </span>
-        <span class="pf-landing__hours-today" data-pf-hours-today></span>
+        <a class="pf-landing__hours-link" href="#{{ input_id }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
         <span class="pf-landing__hours-place">{{ visit.name }}</span>
-        <a class="pf-landing__hours-week" href="#{{ input_id }}-visit-hours" data-pf-hours-jump>{{ 'This week’s hours'|t }}<span class="pf-landing__hours-arrow" aria-hidden="true">↓</span></a>
       </p>
     {% endif %}
     {% if landing_intro %}
@@ -474,6 +474,24 @@
                 </a>
               </li>
             {% endfor %}
+            {# Hours: today's status (visit-hours.js, a dot in its colour) and
+               "See hours", down to the week in the Visit panel, as the
+               hero's hours line does (same page, so no new tab and the
+               arrow points down). The status shows once LibCal answers;
+               the button goes if LibCal fails, since the week does too. #}
+            {% if hero and visit.lid %}
+              <li>
+                <a class="pf-quick-guide__link pf-quick-guide__link--hours" href="#{{ input_id }}-visit-hours" data-pf-hours-jump data-pf-hours data-lid="{{ visit.lid }}">
+                  <span class="pf-quick-guide__hours-status">
+                    <span class="pf-quick-guide__hours-dot" aria-hidden="true"></span>
+                    <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+                    <span aria-hidden="true">·</span>
+                  </span>
+                  {{- 'See hours'|t -}}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+                </a>
+              </li>
+            {% endif %}
           </ul>
         </div>
         {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
