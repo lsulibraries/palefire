@@ -57,10 +57,6 @@ $pf-content-max:     1280px; // Landing search form + building map cap; the page
 // every reading colour; --pf-hairline-strength (20%, _base.scss) goes to
 // 100% under Settings > High contrast. Control borders that identify a
 // control keep --pf-section-border (WCAG 1.4.11).
-// The request paths' scroll-in (stops fading up, lines drawing,
-// _guide.scss). Off while the layout settles (2026-10-22); true restores it.
-$pf-paths-reveal: false;
-
 $pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
 $pf-fade-duration:   .45s; // Page fade-in duration.

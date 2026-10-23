@@ -1,9 +1,10 @@
 /**
  * @file
  * "Next event" for the landing hero (includes/landing.html.twig with
- * hero): a cell in the lead panel's At a glance row when the hero has its
- * lead panel (.pf-today__item), or a card on its own by the map when it
- * doesn't (.pf-hero-event).
+ * hero): the first of the hero's banners (.pf-hero-banner), which it turns
+ * into the next event, keeping the banner it was as the backup when there
+ * is none; or a card on its own by the map when the hero has no lead
+ * panel (.pf-hero-event).
  *
  * Reads the events carousel's own feed (drupalSettings.libcalGanttCarousel
  * .endpoint, the libcal_gantt_carousel block), so it only runs on pages
@@ -16,9 +17,10 @@
  * under the title is the first category and the place ("Online" when
  * there is no room).
  *
- * The card's or line's space is held by CSS while the feed loads (no
- * layout shift). With no carousel, no upcoming event or a failed request
- * it is removed.
+ * The banner keeps its size, so swapping it shifts nothing; the card's
+ * space is held by CSS while the feed loads (no layout shift). With no
+ * carousel, no upcoming event or a failed request the banner stays the
+ * backup and the card is removed.
  * Times are the feed's own labels (the library's time zone).
  */
 (function (Drupal, drupalSettings, once) {
@@ -147,39 +149,58 @@
     box.classList.add('is-ready');
   }
 
-  // The At a glance cell: the day after its label ("Next event · Tomorrow"),
-  // the title (the cell's link), then the time and place, each on one line
-  // like the other cells.
-  function renderCell(box, { event, start }) {
-    const label = box.querySelector('.pf-today__label');
-    if (label) {
-      label.append(' · ', dayLabel(start));
+  // The first banner as the next event: the event's picture (cropped from
+  // the top: they are often flyers), else its date set large on the
+  // banner's dark ground; "Next event · Tue, Oct 27" over the title, the
+  // time and place under it. The whole banner is the event's link.
+  function renderBanner(box, { event, start }) {
+    const link = box.querySelector('.pf-hero-banner__link');
+    if (!link) {
+      return;
     }
-    const link = el('a', 'pf-today__value pf-today__link', event.title);
     link.href = event.url;
-    // A room number alone ("109") says little: the building instead.
+    const media = el('span', 'pf-hero-banner__media');
+    media.setAttribute('aria-hidden', 'true');
+    if (/^https:\/\//.test(event.image || '')) {
+      const img = document.createElement('img');
+      img.src = event.image;
+      img.alt = '';
+      img.width = 600;
+      img.height = 900;
+      img.decoding = 'async';
+      media.classList.add('pf-hero-banner__media--event');
+      media.append(img);
+    }
+    else {
+      const lang = document.documentElement.lang || undefined;
+      media.classList.add('pf-hero-banner__media--date');
+      media.append(
+        el('span', 'pf-hero-banner__day', String(start.getDate())),
+        el('span', 'pf-hero-banner__month', start.toLocaleDateString(lang, { month: 'short', year: 'numeric' })),
+      );
+    }
+    const text = el('span', 'pf-hero-banner__text');
+    text.append(el('span', 'pf-hero-banner__label', Drupal.t('Next event') + ' · ' + dayLabel(start)));
+    text.append(el('span', 'pf-hero-banner__title', event.title));
     const place = event.location && !/^\d+$/.test(event.location) ? event.location : (event.row || (event.isOnline ? Drupal.t('Online') : ''));
-    const meta = el('span', 'pf-today__meta');
     const time = timeOf(event, start);
     time.textContent = [event.startLabel, event.endLabel].filter(Boolean).join('–');
+    const meta = el('span', 'pf-hero-banner__meta');
     meta.append(time);
     if (place) {
       meta.append(' · ' + place);
     }
-    box.append(link, meta);
-    box.classList.add('is-ready');
+    text.append(meta);
+    link.replaceChildren(media, text);
+    box.classList.add('is-event');
   }
 
-  // No upcoming event (or the feed failed): the box's own words
-  // (data-pf-hero-event-empty, the hero's At a glance cell) in place of the
-  // event, so the cell keeps its place; boxes without them are removed.
+  // No upcoming event (or the feed failed): a banner keeps the banner it
+  // was (the backup); the card on its own is removed.
   function renderEmpty(box) {
-    if (!box.dataset.pfHeroEventEmpty) {
+    if (!box.classList.contains('pf-hero-banner')) {
       box.remove();
-      return;
     }
-    box.append(el('span', 'pf-today__value pf-today__value--empty', box.dataset.pfHeroEventEmpty));
-    box.classList.add('is-ready');
   }
 
   Drupal.behaviors.palefireHeroEvent = {
@@ -190,7 +211,7 @@
         // campus as data-*: the carousel block's container, or the list.
         const carousel = document.querySelector('.pf-events-carousel .libcal-day-carousel, [data-pf-upcoming][data-calendar]');
         if (!carousel && !document.querySelector('.pf-events-carousel')) {
-          box.remove();
+          renderEmpty(box);
           return;
         }
         // On its own (no lead panel): under the building map's heading,
@@ -206,7 +227,12 @@
           // Links and images only from http(s) addresses.
           const next = nextEvents(data).find(({ event }) => /^https?:\/\//.test(event.url || '') && event.title);
           if (next) {
-            (box.classList.contains('pf-today__item') ? renderCell : render)(box, next);
+            if (box.classList.contains('pf-hero-banner')) {
+              renderBanner(box, next);
+            }
+            else {
+              render(box, next);
+            }
           }
           else {
             renderEmpty(box);

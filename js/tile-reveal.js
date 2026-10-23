@@ -6,8 +6,8 @@
  * - stagger: odd cards rise from 50px below, even cards drop from 50px
  *   above, 100ms after entering, 50ms apart;
  * - grid: cards rise from 30px below, 50ms apart.
- * 500ms, ease-out, from opacity 0. Like the concept (reset: true), a card
- * that leaves the viewport hides again and replays when it comes back.
+ * 500ms, ease-out, from opacity 0. Once per page load: a card that has
+ * come in stays (the concept replayed it each time it came back).
  *
  * No ScrollReveal: one IntersectionObserver per card list. Cards that enter
  * together are staggered in source order. The observer watches the <li>,
@@ -48,9 +48,7 @@
               if (entry.isIntersecting) {
                 item.style.setProperty('--pf-reveal-delay', (base + INTERVAL * n++) + 'ms');
                 item.classList.add('is-revealed');
-              }
-              else {
-                item.classList.remove('is-revealed');
+                observer.unobserve(item);
               }
             });
         }, { threshold: 0 });

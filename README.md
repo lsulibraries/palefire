@@ -857,6 +857,37 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-22
 
+- **Five columns from 80rem; the latest blog post as the first banner.**
+  From 80rem of landing (about 1440px) the hero's grid has five columns,
+  four below: five banners mirror around the centre column (centre
+  highest, outer pair a step down, second and fourth lowest); the Quick
+  Start and On view headings span two columns and their content three;
+  the hero intro and the map's text span two; the Visit panel is
+  Instagram, hours over two, mini map over two. The Quick Start's mark
+  track there is the diamond's own 2.75rem. The banners now start with
+  the newest blog post (`_palefire_hero_blog_banner()`, from the hero's
+  Blog categories: its Image, else its date set large), then the
+  configured banners (up to five in all; the first configured one still
+  turns into the next event). Four show on the 4-column grid; all swipe
+  on phones. Blog posts gain `day`, `month` and `image_item`. Why: two-
+  and three-column spans bring the headings close to thirds, the centre
+  column balances the banners, and the blog post gets a picture-led place.
+- **Hours under the title; At a glance out; next event in the first
+  banner; reveals back, once.** Today's hours are now a caption under the
+  hero's title (status dot, status, today's hours, the building, "All
+  hours"; visit-hours.js fills it). At a glance is gone (template, styles,
+  the hero's blog post lookup), and the index rules renumber 01-03. The
+  first banner becomes the next event when the events feed has one
+  (hero-event.js: its picture, cropped from the top under a deeper scrim,
+  or its date set large; time and place under the title), and stays the
+  first configured banner otherwise. The reveal animations are back
+  (section-reveal and tile-reveal attached again), each playing once per
+  page load; the request paths' reveal moves from scroll-driven CSS into
+  section-reveal.js so it can be once too, and `$pf-paths-reveal` is gone.
+  The banners' rise-in now brings the high ones down from above and the
+  low ones up from below. Why: the hours belong with the title, the row of
+  cells had become redundant, and replaying reveals on every scroll back
+  was distracting.
 - **Hero banners offset unevenly.** The banners' offsets are now 0, 3rem,
   1rem and 3.75rem (high, low, nearly high, lowest), as the Collections
   tiles' stagger was, in place of the even 3rem staircase. Why: the

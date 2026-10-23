@@ -278,10 +278,10 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
-    $variables['hero_post'] = _palefire_hero_post($paragraph, $variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
+    $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -304,7 +304,8 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
  *
  * field_hero_banners is added in the UI (Landing hero > Manage fields), like
  * the Quick Guide fields: an entity reference to Content (Tile and Modular
- * page), up to four values. Each becomes a tall banner under the search
+ * page), up to five values (five show on the 5-column grid, four on the
+ * 4-column one). Each becomes a tall banner under the search
  * (includes/landing.html.twig), read through _palefire_node_card() as the
  * Tile showcase reads its tiles, so a banner looks and links as that tile
  * does there: title, url, label (its Category) and the portrait cover. A
@@ -328,12 +329,34 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
       'label' => $card['label'],
       'image' => $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache) : NULL,
     ];
-    if (count($banners) === 4) {
+    if (count($banners) === 5) {
       break;
     }
   }
   $cache->applyTo($variables);
   return $banners;
+}
+
+/**
+ * The Landing hero's first banner: its newest blog post, or NULL.
+ *
+ * The newest Article in the paragraph's "Blog categories"
+ * (field_landing_blog_category, _palefire_blog_posts()), as a banner before
+ * the configured ones: title, url, date (and datetime), category, and its
+ * Image (field_image) in the banners' portrait style, or NULL, when the
+ * banner sets the date large instead (day, "Sep 2026"). Without the field,
+ * or with no post, NULL.
+ */
+function _palefire_hero_blog_banner(ParagraphInterface $paragraph, array &$variables): ?array {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $posts = _palefire_blog_posts($paragraph, 1, $cache);
+  $post = $posts[0] ?? NULL;
+  if ($post) {
+    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache) : NULL;
+    unset($post['image_item']);
+  }
+  $cache->applyTo($variables);
+  return $post;
 }
 
 /**
@@ -394,24 +417,6 @@ function palefire_preprocess_paragraph__landing_department(array &$variables): v
 }
 
 /**
- * The newest published Article in any of the hero's blog categories, or NULL.
- *
- * The categories are the Landing hero's optional "Blog categories" field
- * (field_landing_blog_category, a taxonomy reference to Article Category,
- * any number of terms; scripts/palefire_landing_hero_tiles_setup.php adds it
- * or opens up a single-value one). An article matches when its own Article
- * Category (field_article_category) has any of them. Without the field, or
- * with it empty, this is NULL and At a glance leaves its blog cell out.
- * The post's shape: _palefire_blog_posts().
- */
-function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): ?array {
-  $cache = CacheableMetadata::createFromRenderArray($variables);
-  $posts = _palefire_blog_posts($paragraph, 1, $cache);
-  $cache->applyTo($variables);
-  return $posts[0] ?? NULL;
-}
-
-/**
  * The newest published Articles in a paragraph's blog categories.
  *
  * The categories are its "Blog categories" field
@@ -422,8 +427,11 @@ function _palefire_hero_post(ParagraphInterface $paragraph, array &$variables): 
  * fields, this is []. The list's cache tag (node_list:article) refreshes
  * the posts when an article is published or changed.
  *
- * Each post: ['title', 'url', 'date', 'datetime', 'category', 'excerpt'].
- * category is the article's first category among the paragraph's.
+ * Each post: ['title', 'url', 'date', 'datetime', 'day', 'month',
+ * 'category', 'excerpt', 'image_item']. category is the article's first
+ * category among the paragraph's; day and month ("28", "Sep 2026") set the
+ * date large; image_item is its Image (field_image) item, or NULL, for the
+ * caller to build in its own style.
  */
 function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, CacheableMetadata $cache): array {
   $cache->addCacheTags(['node_list:article']);
@@ -493,6 +501,9 @@ function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, Cacheab
       'datetime' => $formatter->format($timestamp, 'custom', 'Y-m-d'),
       'category' => $repository->getTranslationFromContext($term)->label(),
       'excerpt' => $excerpt,
+      'day' => $formatter->format($timestamp, 'custom', 'j'),
+      'month' => $formatter->format($timestamp, 'custom', 'M Y'),
+      'image_item' => $node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL,
     ];
   }
   return $posts;

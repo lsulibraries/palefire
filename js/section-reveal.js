@@ -1,15 +1,18 @@
 /**
  * @file
- * Modular pages: things that animate in as they scroll into view, and hide
- * again once they have left it, so they replay on the way back (as the
- * Collections tiles do, js/tile-reveal.js).
+ * Modular pages: things that animate in as they scroll into view, once per
+ * page load: revealed, they stay (as the Collections tiles do,
+ * js/tile-reveal.js).
  * - Section headings (h2: .pf-section__title, and the landing hero's map
  *   heading) slide in from the left as they fade in. Not on guides
  *   (<html data-pf-mode="guide">): their headings stay still.
  * - The Events carousel (libcal_gantt_carousel, inside .pf-events-carousel):
  *   once a fifth of it is in view, its day strip, then each day's label,
  *   date, weather, hours and image card fade in and rise into place one
- *   after another; it resets once it has left the window entirely.
+ *   after another.
+ * - Request paths (includes/guide-request-paths.html.twig): as each option
+ *   comes into view, its stops fade up one after another and the line
+ *   draws between them (.pf-paths--reveal, _guide.scss).
  *
  * One IntersectionObserver for each kind. The observed element never moves
  * itself: headings slide sideways only (their vertical place, which is all
@@ -42,7 +45,10 @@
       if (headings.length) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
-            entry.target.classList.toggle('is-revealed', entry.isIntersecting);
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              observer.unobserve(entry.target);
+            }
           });
         }, { threshold: 0 });
         headings.forEach((heading) => {
@@ -56,14 +62,29 @@
         const observer = new IntersectionObserver(([entry]) => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
             carousel.classList.add('is-revealed');
-          }
-          else if (!entry.isIntersecting) {
-            carousel.classList.remove('is-revealed');
+            observer.disconnect();
           }
         }, { threshold: [0, 0.2] });
         observer.observe(carousel);
         carousel.addEventListener('focusin', () => carousel.classList.add('is-revealed'));
         carousel.classList.add('pf-ev-reveal');
+      });
+
+      once('pf-paths-reveal', '.pf-paths', context).forEach((paths) => {
+        const lines = Array.from(paths.querySelectorAll('.pf-paths__line'));
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+        lines.forEach((line) => {
+          observer.observe(line);
+          line.addEventListener('focusin', () => line.classList.add('is-revealed'));
+        });
+        paths.classList.add('pf-paths--reveal');
       });
     },
   };

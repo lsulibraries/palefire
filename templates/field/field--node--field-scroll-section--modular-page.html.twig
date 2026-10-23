@@ -38,8 +38,7 @@
       {{ item.content }}
     {% endif %}
   {% endfor %}
-  {# Section headings and the Events carousel animate in on scroll
-     (js/section-reveal.js). Off while the layout settles (2026-10-22):
-     without the script nothing is hidden. To turn it back on, restore:
-     attach_library('palefire/section-reveal') #}
+  {# Section headings, the Events carousel and the request paths animate
+     in on scroll, once per page load (js/section-reveal.js). #}
+  {{ attach_library('palefire/section-reveal') }}
 </div>

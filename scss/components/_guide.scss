@@ -801,50 +801,42 @@ html[data-pf-mode="guide"] .pf-section__title {
   }
 }
 
-// As a line scrolls into view, its stops fade up one after another and the
-// line draws between them; each hairline between options draws out. Scroll-
-// driven, so no script; browsers without it (and reduced motion) just show
-// the diagram. Switched by $pf-paths-reveal (_variables.scss).
-@if $pf-paths-reveal {
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .pf-paths__or::after {
-        animation: pf-paths-line linear both;
-        animation-timeline: view();
-        animation-range: entry 20% entry 80%;
-      }
+// As each option comes into view, its stops fade up one after another and
+// the line draws between them, once per page load: js/section-reveal.js
+// marks the list .pf-paths--reveal, then each option .is-revealed. Without
+// the script, or with reduced motion (it adds nothing then), the diagram
+// simply shows.
+.pf-paths--reveal {
+  .pf-paths__stop {
+    opacity: 0;
+    transform: translateY(0.5rem);
 
-      .pf-paths__stop {
-        animation: pf-paths-stop linear both;
-        animation-timeline: view();
-        animation-range: entry 10% entry 60%;
+    &:not(:last-child)::before {
+      transform: scale(0);
+    }
+  }
 
-        &:not(:last-child)::before {
-          animation: pf-paths-line linear both;
-          animation-timeline: view();
-          animation-range: entry 30% entry 90%;
-        }
+  .pf-paths__line.is-revealed .pf-paths__stop {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 
-        @for $i from 2 through 4 {
-          &:nth-child(#{$i}) {
-            animation-range: entry #{10% + ($i - 1) * 8%} entry #{60% + ($i - 1) * 8%};
-          }
+    &:not(:last-child)::before {
+      transform: none;
+      transition: transform 0.5s ease-out;
+    }
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        transition-delay: #{($i - 1) * 120}ms;
+
+        &::before {
+          transition-delay: #{($i - 1) * 120 + 200}ms;
         }
       }
     }
-  }
-}
-
-@keyframes pf-paths-stop {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-}
-
-@keyframes pf-paths-line {
-  from {
-    transform: scale(0);
   }
 }
 

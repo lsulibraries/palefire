@@ -3,9 +3,8 @@
 // .pf-landing__lead--hero), top to bottom: the sub-header bar (breadcrumb)
 // and the sticky video button; then the lead panel: the title and the
 // page intro (side by side from xl); a search form (a placeholder for a
-// Special Collections search) with a filled Search button; At a glance
-// (.pf-today: today's hours, the next event, what's on view, the latest
-// blog post); and the Quick guide, options A, B and C as lines of stops,
+// Special Collections search) with a filled Search button; the banners
+// (the first the next event when there is one); and the Quick guide, options A, B and C as lines of stops,
 // with the full guide link ("Sign in" is at the end of the bar).
 // Under the map, On view: the exhibitions as a tile accordion. The tile
 // under the pointer or keyboard focus widens, shows more of its picture
@@ -250,10 +249,9 @@
 
 // --- Cover: the video as a washed band (hero, .pf-landing--cover) ---------
 // As on an exhibition's title page: the video fills the first screen,
-// behind the title, intro, search and At a glance, which sit at its foot,
-// and a wash of the page colour does the work the glass panel did. Solid
-// at the band's foot, under At a glance, so the Quick Guide starts on the
-// plain page with no edge; from the left, under the text, so it keeps the
+// behind the title, the hours, the intro and the search, and a wash of the
+// page colour does the work the glass panel did. Solid at the band's foot,
+// where the banners rise out of it onto the plain page with no edge; from the left, under the text, so it keeps the
 // swatch's contrast on any frame; and a light one under the bar. The page
 // then scrolls on through the map and On view in one flow: no snap. The
 // lead runs the content column's full width (the hero's inset) and starts
@@ -262,12 +260,8 @@
 // includes/landing.html.twig) lies across its first two rows (the title
 // and intro, and the search) and reaches out to the column's edges, up
 // under the bar and down past the search (--pf-cover-top, --pf-cover-foot).
-// Where At a glance is one row (the 4-column grid, below) it spans index
-// rule 01 and At a glance too and is at least the window's height under
-// the header; the first row is the flexible one, so the room it adds opens
-// above the title, and the title, search and At a glance settle at the
-// screen's foot whatever its height. Narrower, the stacked cells would
-// cover the band on thinly washed video, so it ends under the search.
+// On the 4-column grid it fills the first screen, composed in thirds
+// (below).
 // The lead has no side padding, so the layer spans the content column
 // edge to edge; the other rows keep to the column with side margins
 // (--pf-cover-gutter: the hero's inset, its percentage of the lead's
@@ -337,14 +331,6 @@
     grid-row: 3;
   }
 
-  > .pf-index-rule {
-    grid-row: 4;
-  }
-
-  > .pf-today {
-    grid-row: 5;
-  }
-
   > .pf-landing__media {
     position: relative;
     inset: auto;
@@ -365,8 +351,8 @@
 
 // The full-screen cover, on the 4-column grid (see above), composed in
 // thirds as an exhibition's cover is: the video fills the first screen
-// less a strip at its foot (--pf-cover-peek), where index rule 01 and the
-// top of At a glance's plates show on the plain page, inviting the scroll.
+// less a strip at its foot (--pf-cover-peek), where the tops of the
+// banners show, rising out of it, inviting the scroll.
 // The search sits on the screen's lower third line: the room under it is
 // a third of the screen less that strip (at least the band's usual foot),
 // and the title and intro rise from it, the flexible first row taking the
@@ -384,10 +370,6 @@
       margin-bottom: max(var(--pf-cover-foot), calc(100svh / 3 - var(--pf-cover-peek)));
     }
 
-    // Under the band, on the plain page: a short step to rule 01.
-    > .pf-index-rule {
-      margin-top: clamp(1.5rem, 3vw, 2.5rem);
-    }
   }
 
   // The title a step larger here, with the room the band gives it: about
@@ -547,8 +529,8 @@
   // 62 characters wide; from xl side by side as in the mockup, the intro at
   // the right, its last line on the title's baseline. Written for a short
   // intro (a sentence or two): a long one stands taller than the title and
-  // reads as a block beside it. Today's hours are At a glance's first cell
-  // (below).
+  // reads as a block beside it. Today's hours are a line under the title
+  // (.pf-landing__hours).
   > .pf-landing__top {
     margin-bottom: clamp(1rem, 2vw, 1.5rem);
 
@@ -579,10 +561,6 @@
       }
     }
   }
-}
-
-:root:not(:has(.pf-events-carousel, [data-pf-upcoming])) .pf-landing__next {
-  display: none;
 }
 
 .pf-landing__lead.pf-landing__lead--hero {
@@ -631,46 +609,124 @@
   }
 }
 
-// --- At a glance --------------------------------------------------------------
-// One row under the search (.pf-today), set on the grid like index cards:
-// each cell carries its own hairline across its top, with gutters between
-// the cells and no rules between or under them, so the row reads as
-// columns of the page's grid rather than a boxed band. Every cell is the
-// same three lines, each one line high and cut with an ellipsis: a small
-// label in the breadcrumb's mono voice, the value (the link) in the text
-// face, and a muted line under it. The cells' height is held while the
-// hours and the event load, and the event's words fade in.
-.pf-today {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: .5rem var(--pf-grid-gutter);
-  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
-  padding: 0;
-  list-style: none;
-}
-
-.pf-today__item {
+// --- Hours, under the title ---------------------------------------------------
+// Today's hours as a caption under the hero's title, in the labels' small
+// spaced capitals: a status dot (the Visit strip's colours, hidden from
+// screen readers: it repeats the word), the status in the text's full
+// colour, today's hours and the building in the muted tone, then "All
+// hours" with an arrow. visit-hours.js fills the status and the hours and
+// marks the line (data-hours-state, is-ready). Until then "Hours" shows
+// dimmed; if LibCal fails, only the building and the link stay.
+.pf-landing__hours {
   --pf-visit-open: #2f9e4f;
   --pf-visit-soon: #fdd023;
   --pf-visit-closed: #c8102e;
+  @extend %pf-landing-label;
   display: flex;
-  flex-direction: column;
-  gap: .375rem;
-  min-width: 0;
-  // The three lines, held before they fill.
-  min-height: calc(1rem + .375rem + .6875rem * 1.5 + 2 * .375rem + 1rem * 1.35 + .875rem * 1.4);
-  padding: 1rem 0 .375rem;
-  // A hairline between rows; the first row sits under index rule 01.
-  border-top: 1px solid #{$pf-hairline};
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .25rem .75rem;
+  min-height: 1.5em; // one line, held while LibCal loads
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  color: var(--pf-toc-color);
+  font-variant-numeric: tabular-nums;
+  transition: opacity .3s ease;
 
-  &:first-child {
-    border-top: 0;
+  &.is-loading {
+    opacity: .6;
   }
 
-  > * {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  // The words after the status, each after a middle dot.
+  > :is(.pf-landing__hours-today, .pf-landing__hours-place)::before {
+    content: "\00b7" / "";
+    margin-inline-end: .75rem;
+  }
+
+  > .pf-landing__hours-today:empty,
+  &.is-failed > :is(.pf-landing__hours-dot, .pf-landing__hours-status, .pf-landing__hours-today) {
+    display: none;
+  }
+
+  &.is-failed > .pf-landing__hours-place::before {
+    content: none;
+  }
+}
+
+.pf-landing__hours-dot {
+  align-self: center;
+  inline-size: .5rem;
+  block-size: .5rem;
+  margin-inline-end: -.25rem;
+  border-radius: 50%;
+  background-color: currentColor;
+  transition: background-color .3s ease;
+
+  [data-hours-state="open"] > & {
+    background-color: var(--pf-visit-open);
+  }
+
+  [data-hours-state="soon"] > & {
+    background-color: var(--pf-visit-soon);
+  }
+
+  [data-hours-state="closed"] > & {
+    background-color: var(--pf-visit-closed);
+  }
+}
+
+.pf-landing__hours-status {
+  color: var(--pf-section-fg, var(--bs-body-color));
+}
+
+.pf-landing__hours-link {
+  color: var(--pf-section-fg, var(--bs-body-color));
+  white-space: nowrap;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-inline-start: .5em;
+    letter-spacing: 0;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    &::after {
+      transform: translateX(.2em);
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, #{$pf-gold});
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__hours,
+  .pf-landing__hours-dot,
+  .pf-landing__hours-link::after {
+    transition: none;
+  }
+
+  .pf-landing__hours-link::after {
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-landing__hours-dot {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
   }
 }
 
@@ -774,15 +830,21 @@
   text-wrap: balance;
 }
 
-// The rise-in, as the Collections tiles had (js/tile-reveal.js): each
-// banner fades up into place on load, left to right, 120ms apart. CSS only,
-// so it runs with the page (Swup's too). None with reduced motion or the
-// Settings drawer's switch.
+// The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
+// once, each banner fades into place, left to right, 120ms apart; the high
+// ones (first and third) come down from above, the low ones rise from
+// below, so the offsets open out as they settle. CSS only, so it runs with
+// the page (Swup's too). None with reduced motion or the Settings
+// drawer's switch.
 @keyframes pf-banner-rise {
   from {
     opacity: 0;
-    transform: translateY(2.5rem);
+    transform: translateY(var(--pf-banner-from, 2.5rem));
   }
+}
+
+.pf-hero-banner:nth-child(odd) {
+  --pf-banner-from: -2.5rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -823,9 +885,46 @@
   }
 }
 
-// After the banners, rule 01 takes the section gap from their foot.
-.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners + .pf-index-rule {
-  margin-top: var(--pf-hero-gap);
+// The first banner as the next event (js/hero-event.js): its picture cropped
+// from the top (event pictures are often flyers, their headline there), or
+// its date set large at the top of the banner's dark ground; the time and
+// place under the title.
+.pf-hero-banner__media--event img {
+  object-position: 50% 0;
+}
+
+// Flyers carry their own words: a deeper scrim under the event's, so the
+// banner's words never sit on the flyer's small print.
+.pf-hero-banner.is-event .pf-hero-banner__link::after {
+  background-image: linear-gradient(to top, rgb(0 0 0 / .92) 0%, rgb(0 0 0 / .82) 35%, rgb(0 0 0 / .35) 60%, rgb(0 0 0 / 0) 80%);
+}
+
+.pf-hero-banner__media--date {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1.25rem;
+  color: #fff;
+}
+
+.pf-hero-banner__day {
+  font-size: clamp(3.5rem, 2rem + 3vw, 5rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-hero-banner__month {
+  @extend %pf-landing-label;
+  color: rgb(255 255 255 / .88);
+}
+
+.pf-hero-banner__meta {
+  font-size: .875rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / .88);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (forced-colors: active) {
@@ -851,135 +950,6 @@
 .pf-landing--cover {
   --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
   container: pf-cover / inline-size;
-}
-
-@container pf-cover (min-width: 30rem) {
-  .pf-today__item:nth-child(2) {
-    border-top: 0;
-  }
-
-  .pf-today {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 1rem;
-  }
-}
-
-@container pf-cover (min-width: 64rem) {
-  .pf-today__item {
-    border-top: 0;
-  }
-
-  .pf-today {
-    grid-auto-columns: minmax(0, 1fr);
-    grid-auto-flow: column;
-    grid-template-columns: none;
-  }
-}
-
-.pf-today__label {
-  @extend %pf-landing-label;
-  color: var(--pf-toc-color);
-}
-
-.pf-today__value {
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1.35;
-  color: var(--pf-section-fg, var(--bs-body-color));
-}
-
-.pf-today__value--empty {
-  font-weight: 400;
-  color: var(--pf-toc-color);
-}
-
-.pf-today__meta {
-  font-size: .875rem;
-  line-height: 1.4;
-  color: var(--pf-toc-color);
-}
-
-.pf-today__link {
-  text-decoration: underline transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .2em;
-  transition: text-decoration-color $pf-hover-out ease;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-section-fg, var(--bs-body-color));
-    text-decoration-color: currentColor;
-    transition-duration: $pf-hover-in;
-  }
-}
-
-// Today's hours (visit-hours.js sets data-hours-state on the cell): the
-// status dot in the Visit strip's colours, before "Open now". It only
-// repeats the word, so it is hidden from screen readers. "Hours" shows
-// dimmed while LibCal loads; the cell goes if it fails.
-.pf-today__dot {
-  display: inline-block;
-  inline-size: .5rem;
-  block-size: .5rem;
-  margin-inline-end: .5rem;
-  border-radius: 50%;
-  vertical-align: .05em;
-  background-color: currentColor;
-  transition: background-color .3s ease;
-
-  [data-hours-state="open"] & {
-    background-color: var(--pf-visit-open);
-  }
-
-  [data-hours-state="soon"] & {
-    background-color: var(--pf-visit-soon);
-  }
-
-  [data-hours-state="closed"] & {
-    background-color: var(--pf-visit-closed);
-  }
-}
-
-.pf-today__hours {
-  transition: opacity .3s ease;
-
-  &.is-loading {
-    opacity: .6;
-  }
-
-  &.is-failed {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .pf-today .pf-landing__next.is-ready > :not(.pf-today__label) {
-    animation: pf-today-in .6s ease both;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pf-today__hours,
-  .pf-today__dot {
-    transition: none;
-  }
-}
-
-html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
-  animation: none;
-}
-
-@keyframes pf-today-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@media (forced-colors: active) {
-  .pf-today__dot {
-    forced-color-adjust: none;
-    outline: 1px solid CanvasText;
-  }
 }
 
 // --- Sign-in ----------------------------------------------------------------
@@ -1024,8 +994,8 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 
 // --- Index rules -------------------------------------------------------------
 // A section marker in the manner of a catalogue: the section's number and
-// name in the mono label voice, sitting on a hairline ("01  At a glance",
-// "02  Start your research", "03  Visit Hill", "04  On view"), the name
+// name in the mono label voice, sitting on a hairline ("01  Start your
+// research", "02  Visit Hill", "03  On view"), the name
 // right after the number at every width, so the two read as one label. The
 // number is one of the gold marks; the name takes the labels' muted tone.
 // Decorative (aria-hidden): the list or heading after each one names it.
@@ -1112,7 +1082,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
 }
 
-// --- Quick guide: under At a glance, in the lead panel ---------------------
+// --- Quick guide: under the banners, in the lead panel ---------------------
 // Index rule 02, then the heading, a line of intro, the request paths from
 // the full guide (includes/guide-request-paths.html.twig, styled in
 // _guide.scss) and "See full guide" in the sign-in button's style. More
@@ -1132,8 +1102,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
   padding-bottom: var(--pf-quick-space);
 }
 
-// In the hero the guide follows At a glance closely, so its heading
-// reaches a laptop's first screen.
+// In the hero the guide follows the banners.
 .pf-landing__lead--hero > .pf-quick-guide {
   --pf-quick-space: clamp(2rem, 4vw, 3.5rem);
 }
@@ -1219,7 +1188,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
 
 @container pf-paths (min-width: 52rem) {
   // On the hero's grid: each option's name over its stops, and the four
-  // stops in the four columns of At a glance above (the same gutter,
+  // stops in the hero's four columns, as the banners above (the same gutter,
   // --pf-grid-gutter), each disc and its words at its column's edge. The
   // letter is a disc wide, so it stands over the first disc. The line
   // runs disc to disc across the gutters. No rules between the options:
@@ -1359,7 +1328,7 @@ html.pf-a11y-motion .pf-today .pf-landing__next.is-ready > * {
     max-width: calc((100% - var(--pf-grid-gutter)) / 2);
   }
 
-  // Two columns, as At a glance is above it: hours (and Instagram under
+  // Two columns, on the hero's grid: hours (and Instagram under
   // them) in the first, the mini map in the second.
   .pf-landing--cover .pf-map .pf-visit {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1909,16 +1878,8 @@ html[data-pf-hero] {
 // --pf-hero-rule-gap under it, and nothing else adding to either. Above
 // 01 the gap counts from the search; the band's solid foot is part of it.
 .pf-landing--cover {
-  .pf-landing__lead--hero > .pf-index-rule {
-    margin-top: calc(var(--pf-hero-gap) - var(--pf-cover-foot));
-  }
-
   .pf-index-rule {
     margin-bottom: var(--pf-hero-rule-gap);
-  }
-
-  .pf-today {
-    margin-bottom: 0;
   }
 
   .pf-landing__lead--hero > .pf-quick-guide {
@@ -1926,27 +1887,10 @@ html[data-pf-hero] {
   }
 }
 
-// The first row of At a glance starts at the rule gap, like a heading.
-.pf-landing--cover .pf-today__item:first-child {
-  padding-top: 0;
-}
-
-@container pf-cover (min-width: 30rem) {
-  .pf-landing--cover .pf-today__item:nth-child(2) {
-    padding-top: 0;
-  }
-}
-
-@container pf-cover (min-width: 64rem) {
-  .pf-landing--cover .pf-today__item {
-    padding-top: 0;
-  }
-}
-
 // The scale on these pages: 11px labels, 14px notes, 16px values and
 // names, one paragraph size (--pf-hero-text), the h2, the title. The
 // Quick Start's letters take the h2 size; its stop labels and option
-// names the values' 16px at 500, like At a glance.
+// names the values' 16px at 500.
 html[data-pf-hero] .pf-landing--cover {
   :is(.pf-quick-guide__intro, .pf-map__summary) {
     font-size: var(--pf-hero-text);
@@ -2084,7 +2028,7 @@ html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-q
 }
 
 // Hours in tabular figures (every page): the week's times line up.
-:is(.pf-visit__week, .pf-visit__today, .pf-today__value, .pf-hours-table) {
+:is(.pf-visit__week, .pf-visit__today, .pf-hours-table) {
   font-variant-numeric: tabular-nums;
 }
 
@@ -2115,4 +2059,94 @@ html[data-pf-hero] .pf-sections > .pf-section:not(.pf-section--flush) {
 
 html[data-pf-hero] .pf-landing--hero {
   --pf-hero-gutter: var(--pf-hero-pad-base);
+}
+
+// --- Five columns, from 80rem -------------------------------------------------
+// From 80rem of landing (about 1440px of window) the hero's grid has five
+// equal columns (the same gutter), four below. On five:
+// - the banners, five of them, mirror around the centre column: the centre
+//   highest, the outer pair a step down, the second and fourth lowest (the
+//   high ones still come down into place, the low ones up);
+// - the Quick Start and On view headings span two columns, their content
+//   the other three (40/60, near thirds); the intro and the map's text two;
+// - the Visit panel: Instagram, then hours over two, then the mini map
+//   over two.
+// The Quick Start's mark track is the diamond's own 2.75rem here: a
+// quarter of a column (34px at 1440) would shrink the diamonds.
+@container pf-cover (min-width: 64rem) and (max-width: 79.98rem) {
+  .pf-hero-banner:nth-child(5) {
+    display: none;
+  }
+}
+
+@container pf-cover (min-width: 80rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .pf-hero-banner:nth-child(1),
+  .pf-hero-banner:nth-child(5) {
+    margin-top: 1.25rem;
+  }
+
+  .pf-hero-banner:nth-child(2),
+  .pf-hero-banner:nth-child(4) {
+    margin-top: 3.5rem;
+  }
+
+  .pf-hero-banner:nth-child(3) {
+    margin-top: 0;
+  }
+
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__intro,
+  .pf-landing--cover .pf-map .pf-map__type {
+    max-width: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + var(--pf-grid-gutter));
+  }
+
+  .pf-quick-guide {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .pf-quick-guide__title,
+  .pf-quick-guide__intro {
+    grid-column: 1 / span 2;
+  }
+
+  .pf-landing--cover .pf-quick-guide .pf-quick-guide__intro {
+    max-width: none;
+  }
+
+  .pf-quick-guide > .pf-paths {
+    grid-column: 3 / -1;
+  }
+
+  .pf-quick-guide .pf-paths__line {
+    --pf-paths-mark: 2.75rem;
+  }
+
+  .pf-landing--cover > .pf-landing__onview {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    > .pf-landing__onview-title {
+      grid-column: 1 / span 2;
+    }
+
+    > .pf-exhibits {
+      grid-column: 3 / -1;
+    }
+  }
+
+  .pf-landing--cover .pf-map .pf-visit {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-areas:
+      "head head head head head"
+      "social hours hours place place";
+  }
+
+  .pf-landing--cover .pf-map .pf-visit--keyed {
+    grid-template-areas:
+      "key key key key key"
+      "head head head head head"
+      "social hours hours place place";
+  }
 }

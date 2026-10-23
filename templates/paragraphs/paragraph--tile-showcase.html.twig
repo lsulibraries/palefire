@@ -28,10 +28,9 @@
  */
 #}
 {% if tiles %}
-  {# Scroll-in animation, as on the concept page (skipped for reduced
-     motion; js/tile-reveal.js). Off while the layout settles (2026-10-22):
-     without the script the cards simply show. To turn it back on, restore:
-     attach_library('palefire/tile-reveal') #}
+  {# Scroll-in animation, as on the concept page, once per page load
+     (skipped for reduced motion). #}
+  {{ attach_library('palefire/tile-reveal') }}
   <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip>
     {% if layout == 'index' %}
       <ol class="pf-tiles__list" role="list">

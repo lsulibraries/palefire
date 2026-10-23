@@ -45,9 +45,9 @@
  * - hero: set for the Landing hero paragraph (paragraph--landing-hero),
  *   .pf-landing--hero. The lead (.pf-landing__lead--hero) holds the title
  *   and today's hours, the intro, a "Search Special Collections" form (a
- *   placeholder: it searches Bento for now), At a glance (Next event from
- *   the events carousel's feed via hero-event.js, the exhibitions on view,
- *   the latest blog post), then the Quick guide's A, B and C cards with
+ *   placeholder: it searches Bento for now), the banners (the first the
+ *   next event, from the events carousel's feed via hero-event.js, when
+ *   there is one), then the Quick guide's A, B and C cards with
  *   the sign-in. Under the map, On view: the exhibition tiles. No lead
  *   panel when it would be empty (no page title, no intro): the Next event
  *   card then stands alone.
@@ -210,7 +210,7 @@
   <div class="pf-landing__lead{{ hero ? ' pf-landing__lead--hero' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
     {# Hero: the title and the intro share .pf-landing__top: the intro
        under the title, beside it from xl (_landing-features.scss). Today's
-       hours are At a glance's first cell (below).
+       hours are a line under the title (below).
        The title is the TOC's "Landing" sub-link under Home, with the
        Quick Guide's heading the second (modular-toc.js). The headings
        themselves keep their own text and level. #}
@@ -220,6 +220,20 @@
     {% if hero %}<div class="pf-landing__top">{% endif %}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>
+    {% endif %}
+    {# Hero: today's hours under the title, in the labels' voice: a status
+       dot, the status and today's hours (visit-hours.js fills both from
+       LibCal; palefire/visit is attached with visit), the building, and a
+       link to every library's hours. No live region: the Visit panel
+       already announces changes. #}
+    {% if hero and visit.lid %}
+      <p class="pf-landing__hours" data-pf-hours data-lid="{{ visit.lid }}">
+        <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+        <span class="pf-landing__hours-status" data-pf-hours-status>{{ 'Hours'|t }}</span>
+        <span class="pf-landing__hours-today" data-pf-hours-today></span>
+        <span class="pf-landing__hours-place">{{ visit.name }}</span>
+        <a class="pf-landing__hours-link" href="https://lsu.libcal.com/hours">{{ 'All hours'|t }}<span class="visually-hidden">{{ ' for all LSU Libraries'|t }}</span></a>
+      </p>
     {% endif %}
     {% if landing_intro %}
       <div class="pf-landing__intro">{{ landing_intro }}</div>
@@ -297,36 +311,51 @@
         {% set exhibitions = hero_tiles %}
       {% endif %}
 
-      {# At a glance (.pf-today, _landing-features.scss): one ruled row under
-         the search, as in the mockup. Every cell has the same three lines,
-         each one line high (cut with an ellipsis): a small label, the value
-         (the link) and a muted line under it.
-         - Today: the hours from the page's Hours location (visit-hours.js
-           fills the status and today's hours, palefire/visit is attached
-           with visit), the building under them. No live region: the Visit
-           panel already announces changes.
-         - Next event: filled in by hero-event.js from the events feed (the
-           carousel's, or From the stacks'): the day in the label, the
-           title, the time and place; "No upcoming events" when there are
-           none. Its height is held while it loads. Hidden by CSS on pages
-           with neither.
-         - On view: how many exhibitions, a link to On view under the map,
-           with their titles under it (hero_tiles only, not the
-           placeholders).
-         - From the blog: hero_post, the newest Article in the paragraph's
-           "Blog category" (palefire_preprocess_paragraph__landing_hero()),
-           its category under it; left out until that is set. #}
-      {# Banners (.pf-hero-banners, _landing-features.scss): up to four tall
-         banners under the search, each a Tile or Modular page from the
-         paragraph's optional Banners field (_palefire_hero_banners()), with
-         its portrait cover, Category and title, linking as that tile does
-         in a Tile showcase. On the 4-column grid they straddle the cover's
-         foot, offset unevenly, and rise in on load; narrower, a row
-         to swipe. The picture is decoration: the words name the link. #}
-      {% if hero_banners %}
-        <ul class="pf-hero-banners" role="list" aria-label="{{ 'Collections'|t }}">
-          {% for banner in hero_banners %}
-            <li class="pf-hero-banner">
+      {# Banners (.pf-hero-banners, _landing-features.scss): up to five tall
+         banners under the search (four show on the 4-column grid, five on
+         the 5-column one), straddling the cover's foot, offset unevenly,
+         and rising in on load; narrower, a row to swipe. The picture is
+         decoration: the words name the link.
+         - First, the newest blog post (hero_blog,
+           _palefire_hero_blog_banner()): its Image, else its date large.
+         - Then the paragraph's optional Banners (hero_banners,
+           _palefire_hero_banners()): Tile or Modular pages with their
+           portrait cover, Category and title, linking as in a Tile
+           showcase. The first of these holds the next event instead when
+           there is one (js/hero-event.js, from the events feed); it is the
+           backup. #}
+      {% if hero_blog or hero_banners %}
+        <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
+          {% if hero_blog %}
+            <li class="pf-hero-banner pf-hero-banner--blog">
+              <a class="pf-hero-banner__link" href="{{ hero_blog.url }}">
+                {% if hero_blog.image %}
+                  <span class="pf-hero-banner__media" aria-hidden="true">{{ hero_blog.image }}</span>
+                {% else %}
+                  <span class="pf-hero-banner__media pf-hero-banner__media--date" aria-hidden="true">
+                    <span class="pf-hero-banner__day">{{ hero_blog.day }}</span>
+                    <span class="pf-hero-banner__month">{{ hero_blog.month }}</span>
+                  </span>
+                {% endif %}
+                <span class="pf-hero-banner__text">
+                  {# The date in the label beside a picture; set large instead, it is
+                     read here (the large date is hidden from screen readers). #}
+                  <span class="pf-hero-banner__label">
+                    {{- 'From the blog'|t -}}
+                    {%- if hero_blog.image %} · <time datetime="{{ hero_blog.datetime }}">{{ hero_blog.date }}</time>
+                    {%- else %}<span class="visually-hidden"> · <time datetime="{{ hero_blog.datetime }}">{{ hero_blog.date }}</time></span>
+                    {%- endif -%}
+                  </span>
+                  <span class="pf-hero-banner__title">{{ hero_blog.title }}</span>
+                  {% if hero_blog.category %}
+                    <span class="pf-hero-banner__meta">{{ hero_blog.category }}</span>
+                  {% endif %}
+                </span>
+              </a>
+            </li>
+          {% endif %}
+          {% for banner in hero_banners|slice(0, hero_blog ? 4 : 5) %}
+            <li class="pf-hero-banner"{% if loop.first %} data-pf-hero-event{% endif %}>
               <a class="pf-hero-banner__link" href="{{ banner.url }}">
                 {% if banner.image %}
                   <span class="pf-hero-banner__media" aria-hidden="true">{{ banner.image }}</span>
@@ -342,45 +371,14 @@
           {% endfor %}
         </ul>
       {% endif %}
-      {# Index rule 01 (the index_rule macro, top): its link goes to every
-         library's hours (LibCal), as the Visit panel's does. #}
-      {{ pf.index_rule('01', 'At a glance'|t, { url: 'https://lsu.libcal.com/hours', text: 'All hours'|t, hidden: ' ' ~ 'for all LSU Libraries'|t }) }}
-      <ul class="pf-today" role="list" aria-label="{{ 'At a glance'|t }}">
-        {% if visit.lid %}
-          <li class="pf-today__item pf-today__hours" data-pf-hours data-lid="{{ visit.lid }}">
-            <span class="pf-today__label"><span class="pf-today__dot" aria-hidden="true"></span><span data-pf-hours-status>{{ 'Hours'|t }}</span></span>
-            <span class="pf-today__value" data-pf-hours-today></span>
-            <span class="pf-today__meta">{{ visit.name }}</span>
-          </li>
-        {% endif %}
-        <li class="pf-today__item pf-landing__next" data-pf-hero-event data-pf-hero-event-empty="{{ 'No upcoming events'|t }}">
-          <span class="pf-today__label">{{ 'Next event'|t }}</span>
-        </li>
-        {% if hero_tiles %}
-          {% set count = hero_tiles|length %}
-          <li class="pf-today__item">
-            <span class="pf-today__label">{{ 'On view'|t }}</span>
-            <a class="pf-today__value pf-today__link" href="#{{ input_id }}-on-view">{% trans %}{{ count }} exhibition{% plural count %}{{ count }} exhibitions{% endtrans %}</a>
-            {# The first exhibition by name, the others counted, so the line
-               isn't cut mid-word. #}
-            <span class="pf-today__meta">{{ hero_tiles|first.title }}{% if count > 1 %} {{ '+ @n more'|t({ '@n': count - 1 }) }}{% endif %}</span>
-          </li>
-        {% endif %}
-        {% if hero_post %}
-          <li class="pf-today__item">
-            <span class="pf-today__label">{{ 'From the blog'|t }} · <time datetime="{{ hero_post.datetime }}">{{ hero_post.date }}</time></span>
-            <a class="pf-today__value pf-today__link" href="{{ hero_post.url }}">{{ hero_post.title }}</a>
-            <span class="pf-today__meta">{{ hero_post.category }}</span>
-          </li>
-        {% endif %}
-      </ul>
 
-      {# Quick guide: under At a glance, still in the lead panel. Index rule
-         02 with the link to the full guide at its end, the heading and
+
+      {# Quick guide: under the banners, still in the lead panel. Index rule
+         01 with the link to the full guide at its end, the heading and
          intro, then the three request paths, options A, B and C, from
          the full guide (the same include, so an edit there shows here too);
          on the hero's four columns, a timetable: heading and intro in the
-         first, one option in each of the others. Close under At a glance, so its heading
+         first, one option in each of the others. Close under the banners, so its heading
          shows in a laptop's first screen; the lead runs taller than the
          window, scrolls freely, and landing-snap.js snaps to the map once
          the lead's end is in view.
@@ -393,10 +391,10 @@
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
-        {# Index rule 02, "Full guide" at its end. The full name keeps the
+        {# Index rule 01, "Full guide" at its end. The full name keeps the
            visible words first (WCAG 2.5.3) and says which guide; with its
            own text or URL (the Link field) the link names itself. #}
-        {{ pf.index_rule('02', 'Start your research'|t, guide_url ? {
+        {{ pf.index_rule('01', 'Start your research'|t, guide_url ? {
           url: guide_url,
           text: quick_guide.link_text ?: 'Full guide'|t,
           hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
@@ -417,9 +415,9 @@
   {% if landing_map %}
     <div class="pf-landing__visit"{% if toc_map_id %} id="{{ toc_map_id }}" tabindex="-1"{% endif %}>
       {%- if hero -%}
-        {# Index rule 03: directions in Google Maps, as the Visit panel's
+        {# Index rule 02: directions in Google Maps, as the Visit panel's
            link, in a new tab. #}
-        {{ pf.index_rule('03', 'Visit Hill'|t, visit.maps_url ? {
+        {{ pf.index_rule('02', 'Visit Hill'|t, visit.maps_url ? {
           url: visit.maps_url,
           text: 'Directions'|t,
           hidden: ' ' ~ 'to @place (opens in a new tab)'|t({ '@place': visit.name }),
@@ -445,8 +443,8 @@
   {% if hero and on_view %}
     {% set on_view_id = input_id ~ '-on-view' %}
     <section class="pf-landing__onview" aria-labelledby="{{ on_view_id }}">
-      {# Index rule 04: the site's Exhibitions page (the main menu's). #}
-      {{ pf.index_rule('04', 'On view'|t, { url: '/exhibitions', text: 'All exhibitions'|t }) }}
+      {# Index rule 03: the site's Exhibitions page (the main menu's). #}
+      {{ pf.index_rule('03', 'On view'|t, { url: '/exhibitions', text: 'All exhibitions'|t }) }}
       <h2 class="pf-section__title pf-landing__onview-title" id="{{ on_view_id }}" data-toc data-toc-label="{{ 'On view'|t }}">{{ 'On view'|t }}</h2>
       {% include '@palefire/includes/landing-exhibits.html.twig' with { exhibitions: on_view, label: 'On view'|t } only %}
     </section>
