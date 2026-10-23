@@ -69,9 +69,14 @@
 {#
   Index rule (.pf-index-rule, _landing-features.scss): a hairline with the
   section's number and name in the mono label voice, and at its right end
-  an optional link (a running head, as in a catalogue). The number and name
-  are decoration (the heading or list after each rule names the section),
-  so only they are hidden from screen readers; the link is not.
+  an optional link (a running head, as in a catalogue). The numbers come
+  from _palefire_hero_rules() in palefire.theme (hero_index here; the map's
+  Rooms and access gets its own as map.visit.index), and the sections after
+  the hero count on from them, so none is typed by hand. (Not a CSS
+  counter: the map and the cover are size containers, which scope
+  counters.) The number and name are decoration (the heading or list after
+  each rule names the section), so only they are hidden from screen
+  readers; the link is not.
   - link: { url, text, hidden (more of its name, read but not shown),
     external (opens in a new tab) }, or empty.
 #}
@@ -430,7 +435,7 @@
         {# Index rule 01, "Full guide" at its end. The full name keeps the
            visible words first (WCAG 2.5.3) and says which guide; with its
            own text or URL (the Link field) the link names itself. #}
-        {{ pf.index_rule('01', 'Start your research'|t, guide_url ? {
+        {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_url ? {
           url: guide_url,
           text: quick_guide.link_text ?: 'Full guide'|t,
           hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
@@ -508,7 +513,7 @@
       {%- if hero -%}
         {# Index rule 02: directions in Google Maps, as the Visit panel's
            link, in a new tab. #}
-        {{ pf.index_rule('02', 'Visit Hill'|t, visit.maps_url ? {
+        {{ pf.index_rule(hero_index.visit, 'Visit Hill'|t, visit.maps_url ? {
           url: visit.maps_url,
           text: 'Directions'|t,
           hidden: ' ' ~ 'to @place (opens in a new tab)'|t({ '@place': visit.name }),

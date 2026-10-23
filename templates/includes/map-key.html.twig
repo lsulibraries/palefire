@@ -12,13 +12,26 @@
 #}
 {# The toggle always shows. Open beside the map, collapsed when it moves
    under the map (building-map.js); the reader can open or close it either
-   way. data-toc-skip keeps anything in here out of the TOC. #}
-<details class="pf-map__key" open data-map-key data-toc-skip>
-  <summary class="pf-map__key-toggle">
-    <span>{{ 'Legend & spaces'|t }}</span>
-    <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
-    <span class="pf-map__key-icon" aria-hidden="true"></span>
-  </summary>
+   way. data-toc-skip keeps anything in here out of the TOC.
+   In the landing hero's Visit panel (map.visit) it is a section of the
+   page: the toggle is an index rule (its number map.visit.index, from
+   _palefire_hero_rules(): after Visit Hill), it stays open, and the body is an index in three columns,
+   the note and legend first, then each group of rooms (_landing-swiss.scss). #}
+{% set keyed = map.visit is defined and map.visit %}
+<details class="pf-map__key{{ keyed ? ' pf-map__key--indexed' }}" open data-map-key data-toc-skip>
+  {% if keyed %}
+    <summary class="pf-map__key-toggle pf-index-rule">
+      <span class="pf-index-rule__num" aria-hidden="true">{{ map.visit.index }}</span>
+      <span class="pf-index-rule__label">{{ 'Rooms and access'|t }}</span>
+      <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
+    </summary>
+  {% else %}
+    <summary class="pf-map__key-toggle">
+      <span>{{ 'Legend & spaces'|t }}</span>
+      <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
+      <span class="pf-map__key-icon" aria-hidden="true"></span>
+    </summary>
+  {% endif %}
   <div class="pf-map__key-body">
     {# Opening fades the rows in one after another, as the guides'
        accordions do (_building-map.scss): each row is .pf-seq with its
@@ -31,10 +44,23 @@
     {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length %}
     {# The walk-in and appointment hatches are on the group headings below,
        so the legend lists only the drawing's other marks. #}
-    {% if 'elevator' in map.legend %}
-      <ul class="pf-map__legend pf-seq" style="--pf-seq: 0">
-        <li><svg class="pf-map__legend-icon" viewBox="-66 -40 132 80" aria-hidden="true" focusable="false">{% include '@palefire/includes/map-icon-elevator.svg.twig' %}</svg>{{ 'Elevator'|t }}</li>
-      </ul>
+    {% set legend %}
+      {% if 'elevator' in map.legend %}
+        <ul class="pf-map__legend pf-seq" style="--pf-seq: 0">
+          <li><svg class="pf-map__legend-icon" viewBox="-66 -40 132 80" aria-hidden="true" focusable="false">{% include '@palefire/includes/map-icon-elevator.svg.twig' %}</svg>{{ 'Elevator'|t }}</li>
+        </ul>
+      {% endif %}
+    {% endset %}
+    {# Indexed: the note, then the legend, as the first column. #}
+    {% if keyed %}
+      <div class="pf-map__key-about">
+        {% if map.note %}
+          <div class="pf-map__intro pf-map__note">{{ map.note }}</div>
+        {% endif %}
+        {{ legend }}
+      </div>
+    {% else %}
+      {{ legend }}
     {% endif %}
 
     {# Same rooms as the drawing's regions: the keyboard / small-screen route
@@ -72,7 +98,8 @@
     </div>
   </div>
 </details>
-{# Outside the <details>, so it shows while the legend is collapsed. #}
-{% if map.note %}
+{# Outside the <details>, so it shows while the legend is collapsed (in
+   the indexed key it is the first column instead). #}
+{% if map.note and not keyed %}
   <div class="pf-map__intro pf-map__note">{{ map.note }}</div>
 {% endif %}

@@ -243,6 +243,102 @@
   border-bottom-color: var(--pf-visit-rule);
 }
 
+// Rooms and access (map-key.html.twig, the landing hero's Visit panel): the
+// key as a section of the page. Its toggle is an index rule (number, name,
+// and at the right end the count with + or −, in the rule link's voice);
+// its body an index: the note and legend, then each group of rooms, in
+// three columns from md, stacked below. Group headings in the labels'
+// voice over the rooms' hairlines. The building map's own type (bold sans
+// capitals, the heavy chevron) stays on maps elsewhere.
+.pf-map__key--indexed {
+  > .pf-map__key-toggle.pf-index-rule {
+    gap: 0 1rem;
+    align-items: baseline;
+    min-height: 0;
+    padding: .5rem 0 .625rem;
+    border-top: 0;
+    border-bottom: 1px solid #{$pf-hairline};
+    font: inherit;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .pf-map__key-count {
+    @extend %pf-landing-label;
+    margin-inline-start: auto;
+    color: var(--bs-emphasis-color, var(--pf-section-fg));
+    white-space: nowrap;
+
+    &::after {
+      content: "+" / "";
+      display: inline-block;
+      inline-size: 1ch;
+      margin-inline-start: .75em;
+      letter-spacing: 0;
+      text-align: center;
+    }
+  }
+
+  &[open] .pf-map__key-count::after {
+    content: "\2212" / "";
+  }
+
+  > .pf-map__key-toggle:is(:hover, :focus-visible) .pf-map__key-count {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .3em;
+  }
+
+  &[open] .pf-map__key-body {
+    display: grid;
+    gap: 1.5rem;
+    padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .pf-map__note {
+    max-width: 46ch;
+    margin: 0;
+    font-size: .9375rem;
+    line-height: 1.55;
+  }
+
+  .pf-map__note + .pf-map__legend {
+    margin: 1.25rem 0 0;
+  }
+
+  .pf-map__group-title {
+    @extend %pf-landing-label;
+    margin-bottom: .625rem;
+  }
+}
+
+// The group headings are h4s, so a swatch's heading colour (Twilight's
+// pale gold for content headings, _reading-themes.scss) would reach them:
+// labels here, in the labels' grey.
+html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
+  color: var(--pf-section-muted, var(--bs-secondary-color));
+}
+
+@media (min-width: 768px) {
+  .pf-map__key--indexed {
+    &[open] .pf-map__key-body {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0 var(--pf-grid-gutter, 2rem);
+      align-items: start;
+    }
+
+    .pf-map__list {
+      display: contents;
+    }
+  }
+}
+
+// The Visit strip's key wrapper: the index rule is the line above the
+// rooms now, so the wrapper keeps only its rule underneath.
+.pf-visit__key .pf-map__key--indexed > .pf-map__key-toggle {
+  padding-top: 0;
+}
+
 // Links as labels with an accent underline, like the events fact source.
 .pf-visit__link {
   @extend %pf-landing-label;

@@ -257,6 +257,51 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
 }
 
 /**
+ * The landing hero's index rules, in the order it shows them: guide (Start
+ * your research, the Quick Start in the lead panel), visit (Visit Hill, over
+ * the map) and rooms (Rooms and access: the map's key, when the map carries
+ * the Visit card, map-key.html.twig). Read from the same facts the
+ * templates use: the lead shows unless the map leads alone, and only with
+ * the page title or an intro (show_lead, includes/landing.html.twig); the
+ * map when it is published; the Visit card when the host page has a
+ * location (_palefire_landing_visit()). The hero numbers its rules from
+ * this, and palefire_preprocess_field() counts on from its length, so no
+ * number is typed by hand and they always agree.
+ *
+ * @return string[]
+ *   Rule keys: 'guide', 'visit', 'rooms', those the hero shows.
+ */
+function _palefire_hero_rules(ParagraphInterface $paragraph): array {
+  $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
+  $has_map = $map instanceof ParagraphInterface && $map->isPublished();
+  $map_only = $has_map && $paragraph->hasField('field_bento_hide_lead') && (bool) $paragraph->get('field_bento_hide_lead')->value;
+
+  $host = $paragraph;
+  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+    $host = $host->getParentEntity();
+  }
+  $filled = static fn (string $name): bool => $host instanceof NodeInterface
+    && $host->hasField($name) && trim((string) ($host->get($name)->value ?? '')) !== '';
+  $title = $host instanceof NodeInterface
+    && $host->bundle() === PalefireHooks::MODULAR_BUNDLE
+    && PalefireHooks::titleLandingUuid($host) === $paragraph->uuid();
+  $intro = $host instanceof NodeInterface && $host->hasField('field_intro') && !$host->get('field_intro')->isEmpty();
+  $visit = $filled('field_hours_location') || $filled('field_location_name') || $filled('field_location_query');
+
+  $rules = [];
+  if (!$map_only && ($title || $intro)) {
+    $rules[] = 'guide';
+  }
+  if ($has_map) {
+    $rules[] = 'visit';
+    if ($visit) {
+      $rules[] = 'rooms';
+    }
+  }
+  return $rules;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--landing-hero.
  *
  * Landing hero (scripts/palefire_landing_hero_setup.php) is the landing
@@ -278,6 +323,12 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
+    // The index rules' numbers (_palefire_hero_rules()): 01, 02, … in the
+    // order the hero shows them.
+    $variables['hero_index'] = [];
+    foreach (_palefire_hero_rules($paragraph) as $i => $rule) {
+      $variables['hero_index'][$rule] = sprintf('%02d', $i + 1);
+    }
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
@@ -289,7 +340,11 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $variables['landing_map']['#cache']['keys'][] = 'pf_hero';
     }
     if (!empty($variables['landing_map']) && !empty($variables['visit'])) {
-      $variables['landing_map']['#pf_visit'] = $variables['visit'] + ['id' => $variables['landing']['input_id'] . '-visit'];
+      $variables['landing_map']['#pf_visit'] = $variables['visit'] + [
+        'id' => $variables['landing']['input_id'] . '-visit',
+        // Rooms and access, the key's index rule (map-key.html.twig).
+        'index' => $variables['hero_index']['rooms'] ?? '',
+      ];
       // The map's render cache: its own entry with the card, cleared when
       // the page's location fields change (the host node's tags).
       $variables['landing_map']['#cache']['keys'][] = 'pf_visit';
@@ -1220,15 +1275,16 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
  *
  * Scroll sections (field_scroll_section): a section whose paragraph has an
  * Eyebrow (field_tile_eyebrow, on the Tile showcase) opens with an index
- * rule, as the hero's 01 and 02 do, and its Lede under the heading
+ * rule, as the hero's do, and its Lede under the heading
  * (field--node--field-scroll-section--modular-page.html.twig). Adds
- * item.section.index: num ('03'), label (the eyebrow), lede (plain text,
+ * item.section.index: num ('04'), label (the eyebrow), lede (plain text,
  * or ''), and link (url, text, external, from field_tile_link) or NULL.
  *
  * Numbered by position, so a section moved in the editor renumbers itself:
- * the landing hero's two rules (01 Start your research, 02 Visit Hill)
- * count first, then each section with an eyebrow, in order. The link's
- * text drops a trailing arrow typed by hand: the rule draws its own.
+ * the landing hero's rules count first (as many as it shows,
+ * _palefire_hero_rules()), then each section with an Eyebrow, in order.
+ * The link's text drops a trailing arrow typed by hand: the rule draws
+ * its own.
  */
 function palefire_preprocess_field(array &$variables): void {
   if (($variables['field_name'] ?? '') !== 'field_scroll_section' || empty($variables['items'])) {
@@ -1242,7 +1298,7 @@ function palefire_preprocess_field(array &$variables): void {
       continue;
     }
     if ($paragraph->bundle() === 'landing_hero') {
-      $count += 2;
+      $count += count(_palefire_hero_rules($paragraph));
       continue;
     }
     if (!is_array($item['section'] ?? NULL)
