@@ -108,6 +108,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_aves.php` | Builds AVES as an unpublished exhibition (`-- images="<AVES exhibition 4K folder>" path=/v2/exhibitions/aves`), importing the 4K images into Media |
 | `palefire_exhibit_occult.php` | Builds Occult Science and Philosophy in the Renaissance as an unpublished exhibition (`-- images="<Occult Science 4K folder>" path=/v2/exhibitions/occult`), importing its 40 images into Media |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
+| `palefire_exhibit_redesign.php` | Builds "A New Look for LSU Libraries", the site redesign before and after, as an unpublished exhibition (`-- images=<Redesign screenshots folder> path=/v2/exhibitions/redesign`); `edition=staff` builds the staff page, which adds four staff-only galleries under its own title (`path=/v2/exhibitions/redesign-staff`, access restricted in the UI). Both share the 16 screenshots' media items |
 | `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
 | `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, the pairs' "Drawing" / "Proof" captions and the drawings' alignments (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_section_theme_check.php` | Read-only: lists theme options and each section's saved theme, e.g. `… /special` |
@@ -751,6 +752,29 @@ Manuscripts (3) and Suggested Reading. Each bird page of 2021 is an entry.
   Birds and Great Blue Heron; the cover is the Carolina Parrot. Unused:
   Alexander Wilson's Mocking Bird and Mississippi Kite plates.
 
+### A New Look for LSU Libraries
+
+`scripts/data/redesign.json` holds the redesign exhibition in two editions.
+The **public** edition has Introduction, Special Collections, Guides,
+Exhibitions and Made for Every Reader. The **staff** edition adds the
+galleries marked `"staff": true` (Building a Guide, Building an Exhibition,
+Standards Behind the Design, How Changes Reach the Site) and uses `staff`'s
+title, subtitle and intro. Restrict the staff page's access in the Drupal UI.
+
+- **Pairs:** Special Collections, Guides and Exhibitions are walls. Each
+  entry is an image group of two figures captioned "Before" and "After", so
+  its tile reads "Before · After" and opens the Wipe / Fade comparison. The
+  group caption gives both addresses and dates.
+- **Screenshots** ("Redesign screenshots", 16 PNGs): the first screen of
+  each page at 1440 × 900 and at 375 × 812 (2×), captured 23 October 2026
+  in headless Edge over CDP. The old pages are lib.lsu.edu/special, the
+  Systematic Reviews LibGuide, and the Wayback Machine's copies of the 2021
+  Audubon exhibition (December 2023) and the 2011 Occult Science blog
+  (March 2016; the 2024 copy has lost its images). The old site's cookie
+  banner and chat pop-up were hidden, not accepted. Alt text is in the data.
+- **To fill:** the `[Editor: …]` notes (credit, feedback link, contacts,
+  redirect plan) and screenshots for Made for Every Reader.
+
 ## Reading colours and Settings
 
 Settings > **Reading colours** sets page and text colours for the whole site.
@@ -863,6 +887,15 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-23
+
+- **Redesign exhibition, public and staff editions.** `palefire_exhibit_redesign.php` and `data/redesign.json` build "A New Look for LSU Libraries": the old and new Special Collections, guide and exhibition pages as Before / After pairs on wall galleries, at desktop and phone sizes. `edition=staff` builds a second page, the same galleries plus four for editors.
+  - Why: to show readers and staff what changed, with the exhibition's own comparison viewer, and to keep the two editions in step from one data file.
+- **Quick Start: paths ride along on tall screens, diamonds hold lit; tiles: a square label per Category term.**
+  - Quick Start (64rem and up, screens 46rem tall and up): A, B and C stick under the header and the bar while the longer first column (heading, intro, Before you visit) scrolls past, until the guide ends. Where the paths are the taller column (wide windows), nothing changes.
+  - Request paths reveal (`_guide.scss`): each diamond now stays lit once the line reaches it (0.6s, 1.2s, 1.45s, 1.7s); with all four lit (1.97s) they hold 1s, then go out together over 0.45s. One set of keyframes per stop and no fill, so hover works after. Not with reduced motion.
+  - Tile showcase cards: every Category term (field_category) gets its own label (`labels` in `palefire_preprocess_paragraph__tile_showcase()`, joined only on the index's rows), read as ", Exhibition, Digital" after the title. Labels on the cards and the hero banners are now square, in the page's mono label voice (as the section eyebrows and the Quick Start buttons), white on black, gold on hover.
+  - Why: the paths left a long gap beside the first column on narrower desktops; the brief pings read as flicker rather than a path being built; the rounded pills didn't match the theme's square, Swiss look, and a second term had nowhere to go.
+  - Verified in Edge with local CSS: sticky top 105px at 1280×1000; outline colours sampled every 150ms; two labels on AVES at 1440. A second term only shows once it's on the node's published revision and the term is published: live AVES currently lists only "Exhibition".
 
 - **Hill Memorial map: the summary runs further into the drawing's empty corner.** On the hero's desktop map (64rem and up, no event card) the summary is now 47% of the map's width (was 38% from 1440px windows up, capped by the hero's two-column and 62ch limits, which no longer apply here) and set at 1.57cqi (20px on the widest map, 16px on the narrowest), so it scales with the drawing and breaks into the same seven lines at every size.
   - Measured on the live page in Edge, with the drawing's own shapes (`isPointInFill` / `isPointInStroke`) against each line of text, at 1180 to 2560px: 36–44px clear of every shape, no horizontal scroll. 50% and up brings the seventh line within 24px of the upper Gallery; under 46% the text takes eight or nine lines and reaches it from above. Phones, tablets and 1024px still set the summary above the drawing.

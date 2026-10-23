@@ -1,0 +1,282 @@
+{
+ "title": "A New Look for LSU Libraries",
+ "subtitle": "The redesign of lib.lsu.edu, before and after",
+ "credit": "<p>Designed and built by LSU Libraries, 2026. [Editor: names and departments]</p>",
+ "intro": "<p>A library website is a reading room you can enter from anywhere. Over 2026 we rebuilt ours around three ideas: say less and show more, put the next step within reach, and let every reader set the page to suit them. Choose a gallery to see the pages side by side.</p>",
+ "cover": "special-after-desktop.png",
+ "year": 2026,
+ "staff": {
+  "title": "A New Look for LSU Libraries: Staff Edition",
+  "subtitle": "The redesign of lib.lsu.edu, before and after, with notes for editors",
+  "intro": "<p>A library website is a reading room you can enter from anywhere. Over 2026 we rebuilt ours around three ideas: say less and show more, put the next step within reach, and let every reader set the page to suit them. This edition adds four galleries for staff: how to build a guide and an exhibition, the standards behind the design, and how changes reach the site.</p>"
+ },
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "display": "story",
+   "blocks": [
+    {
+     "type": "text",
+     "title": "Why we changed it",
+     "body": "<p>The old site grew over fifteen years across several systems. Research guides lived in LibGuides, exhibitions on a separate blog, and each had its own menus, colours and type. Readers had to learn three websites to use one library.</p>"
+    },
+    {
+     "type": "text",
+     "title": "What's different",
+     "body": "<ul><li><strong>One design.</strong> Guides, exhibitions and Special Collections now share one typeface, one grid and one set of controls.</li><li><strong>The next step first.</strong> Today's hours, the search box and the way to request material come before the history and the policies.</li><li><strong>Readable everywhere.</strong> Every page is built for the phone first and checked against WCAG 2.2 AA, the international accessibility standard.</li><li><strong>Quieter motion.</strong> Movement is slow and purposeful, and it stops completely when you ask your device or the site to reduce motion.</li></ul>"
+    },
+    {
+     "type": "text",
+     "title": "How to read this exhibition",
+     "style": "callout",
+     "body": "<p>Each gallery shows a page before and after. Open a pair and drag the line to wipe between them, or choose Fade.</p>"
+    }
+   ]
+  },
+  {
+   "title": "Special Collections",
+   "anchor": "special-collections",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>The Special Collections home page used to open with the library-wide search panel, a carousel and a purple wash over Hill Memorial Library. Hours appeared in the header, but the way in was a list of links. The new page opens on Hill itself. It says whether the building is open right now, shows the week's hours, and puts a search of the collections, along with the request sign-in, on the first screen. Below it, a Quick Start Guide walks through requesting material step by step.</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Home page, desktop",
+     "anchor": "special-collections-desktop",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/special. After: lib.lsu.edu/v2/special. Both captured 23 October 2026 at 1440 × 900.</p>",
+       "figures": [
+        { "image": "special-before-desktop.png", "caption": "Before", "source": "Special Collections, desktop, before" },
+        { "image": "special-after-desktop.png", "caption": "After", "source": "Special Collections, desktop, after" }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Home page, phone",
+     "anchor": "special-collections-phone",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/special. After: lib.lsu.edu/v2/special. Both captured 23 October 2026 at 375 × 812.</p>",
+       "figures": [
+        { "image": "special-before-phone.png", "caption": "Before", "source": "Special Collections, phone, before" },
+        { "image": "special-after-phone.png", "caption": "After", "source": "Special Collections, phone, after" }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Guides",
+   "anchor": "guides",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Research guides used to live in LibGuides. Each tab was its own page, and the tab bar could run to three rows. Now a guide is a single page. Every former tab is a section, and the table of contents at the side follows you as you read, so the whole guide is one scroll and one search away. Numbered steps, decision trees and side notes are set as type, not as boxes. Links to databases say when they need an LSU login.</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Systematic Reviews, desktop",
+     "anchor": "guides-desktop",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: guides.lib.lsu.edu/Systematic_Reviews (LibGuides). After: lib.lsu.edu/v2/guides/systematic-reviews. Both captured 23 October 2026 at 1440 × 900.</p>",
+       "figures": [
+        { "image": "guide-sr-before-desktop.png", "caption": "Before", "source": "Systematic Reviews, desktop, before" },
+        { "image": "guide-sr-after-desktop.png", "caption": "After", "source": "Systematic Reviews, desktop, after" }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Systematic Reviews, phone",
+     "anchor": "guides-phone",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: guides.lib.lsu.edu/Systematic_Reviews (LibGuides). After: lib.lsu.edu/v2/guides/systematic-reviews. Both captured 23 October 2026 at 375 × 812.</p>",
+       "figures": [
+        { "image": "guide-sr-before-phone.png", "caption": "Before", "source": "Systematic Reviews, phone, before" },
+        { "image": "guide-sr-after-phone.png", "caption": "After", "source": "Systematic Reviews, phone, after" }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Exhibitions",
+   "anchor": "exhibitions",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Online exhibitions used to be blog posts or pages of small pictures. The Audubon exhibition showed 600-pixel close-ups, and Occult Science used 1,000-pixel scans. Each new exhibition opens like a gallery entrance: a title page, then one room at a time. Plates are shown whole, from scans of up to 4K, and open full screen with zoom. Where Audubon's drawing and the printed plate survive, you can lay one over the other and wipe between them, the same way this exhibition compares its screenshots.</p>"
+    },
+    {
+     "type": "entry",
+     "title": "John James Audubon in Louisiana",
+     "anchor": "exhibitions-audubon",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/exhibitions/john-james-audubon (2021), from the Wayback Machine's copy of December 2023. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 1440 × 900.</p>",
+       "figures": [
+        { "image": "exhibit-audubon-before-desktop.png", "caption": "Before", "source": "Audubon, desktop, before" },
+        { "image": "exhibit-audubon-after-desktop.png", "caption": "After", "source": "Audubon, desktop, after" }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Audubon, on a phone",
+     "anchor": "exhibitions-audubon-phone",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: lib.lsu.edu/exhibitions/john-james-audubon (2021), from the Wayback Machine's copy of December 2023. After: lib.lsu.edu/v2/exhibitions/audubon, 23 October 2026. Both at 375 × 812.</p>",
+       "figures": [
+        { "image": "exhibit-audubon-before-phone.png", "caption": "Before", "source": "Audubon, phone, before" },
+        { "image": "exhibit-audubon-after-phone.png", "caption": "After", "source": "Audubon, phone, after" }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Occult Science and Philosophy in the Renaissance",
+     "anchor": "exhibitions-occult",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: exhibitions.blogs.lib.lsu.edu (2011), from the Wayback Machine's copy of March 2016. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 1440 × 900.</p>",
+       "figures": [
+        { "image": "exhibit-occult-before-desktop.png", "caption": "Before", "source": "Occult Science, desktop, before" },
+        { "image": "exhibit-occult-after-desktop.png", "caption": "After", "source": "Occult Science, desktop, after" }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Occult Science, on a phone",
+     "anchor": "exhibitions-occult-phone",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p>Before: exhibitions.blogs.lib.lsu.edu (2011), from the Wayback Machine's copy of March 2016. After: lib.lsu.edu/v2/exhibitions/occult, 23 October 2026. Both at 375 × 812.</p>",
+       "figures": [
+        { "image": "exhibit-occult-before-phone.png", "caption": "Before", "source": "Occult Science, phone, before" },
+        { "image": "exhibit-occult-after-phone.png", "caption": "After", "source": "Occult Science, phone, after" }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Made for Every Reader",
+   "anchor": "every-reader",
+   "display": "story",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>The gear icon at the top of every page opens <strong>Settings</strong>:</p><ul><li><strong>Reading colours:</strong> thirteen page and text colour schemes, light and dark, each keeping text at 4.5:1 contrast or better.</li><li><strong>Text size:</strong> up to 150%.</li><li><strong>Easy-to-read font:</strong> Atkinson Hyperlegible.</li><li><strong>Text spacing:</strong> more space between lines, words and letters.</li><li><strong>Underline all links.</strong></li><li><strong>High contrast.</strong></li><li><strong>Reduce motion,</strong> and <strong>pause background videos.</strong></li></ul><p>Your choices are saved on your device and apply across the site. The clock, chat and person icons beside the gear open today's hours, Ask Us and your library accounts without leaving the page.</p>"
+    },
+    {
+     "type": "text",
+     "title": "Tell us what you think",
+     "style": "callout",
+     "body": "<p>[Editor: feedback form or email]</p>"
+    }
+   ]
+  },
+  {
+   "title": "Building a Guide",
+   "anchor": "building-a-guide",
+   "display": "story",
+   "staff": true,
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<ul><li>A guide is a Modular page with Type = guide. Each former LibGuide tab becomes a <strong>section</strong>, and each box becomes a <strong>block</strong>.</li><li>Block headings are Heading 3 and appear in the table of contents. Inside a block, use <strong>Heading 4</strong>.</li><li>A numbered list becomes steps; start an item with <strong>bold</strong> text to give the step a title. A bulleted list with a nested list becomes a decision tree.</li><li>Add Resources first, then pick them by title. Paste the plain address and tick \"Requires LSU login\"; don't paste libezp links.</li><li>Don't add \"Next / Previous\" text; the table of contents handles navigation.</li><li>A paragraph containing only <code>[request-paths]</code> draws the Special Collections request diagram.</li></ul>"
+    }
+   ]
+  },
+  {
+   "title": "Building an Exhibition",
+   "anchor": "building-an-exhibition",
+   "display": "story",
+   "staff": true,
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<ul><li>One <strong>gallery</strong> per room. Its <strong>opening</strong> can be Cover (the lead image full screen), Full screen then pan, or Compact.</li><li><strong>Story</strong> or <strong>Wall</strong> display. On a wall, each entry's first image is a tile. An entry whose image group holds exactly two images becomes a comparison: caption them \"Before\" and \"After\" (or \"Drawing\" and \"Proof\"), as in this exhibition.</li><li><strong>Images:</strong> upload the largest file you have. The site makes 640–2560px WebP copies and never sends the original. Set a focal point for cropped leads.</li><li><strong>Alt text</strong> lives on the media item. Describe what the image shows and why it matters, not \"image of\".</li><li>An Image block with no image shows only to editors, as a reminder.</li><li>Captions that say \"plate 40\" give the wall its plate numbers and A–Z / Plate sorting.</li></ul>"
+    }
+   ]
+  },
+  {
+   "title": "Standards Behind the Design",
+   "anchor": "standards",
+   "display": "story",
+   "staff": true,
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<ul><li>WCAG 2.2 AA throughout: 4.5:1 text contrast, visible focus, labelled controls, reduced motion respected in every script.</li><li>Built for phones first and checked at 320, 768, 1024 and 1440px.</li><li>Speed: images lazy-load at fixed sizes (no layout shift), and scripts load only on the pages that use them.</li><li>Visual rules: Swiss-style grid, one hairline weight for every rule, hover colour in 0.2s and out 0.5s, Font Awesome 5 icons only.</li></ul>"
+    }
+   ]
+  },
+  {
+   "title": "How Changes Reach the Site",
+   "anchor": "how-changes-reach-the-site",
+   "display": "story",
+   "staff": true,
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<ul><li>Content: edit in Drupal; it's live when published.</li><li>Design: changes are reviewed, then deployed to lib.lsu.edu and passed on to the staging site. [Editor: who to contact, and how to report a problem]</li><li>Where the old pages went: LibGuides [Editor: redirect plan], exhibitions blog [Editor].</li></ul>"
+    }
+   ]
+  }
+ ],
+ "alt": {
+  "special-before-desktop.png": "The previous Special Collections home page. A white search panel with six tabs covers the top of a purple-tinted photograph of Hill Memorial Library. \"Special Collections\" is set in white and gold capitals beside an exhibition banner and contact links.",
+  "special-after-desktop.png": "The new Special Collections home page. A photograph of Hill Memorial Library under a dark wash, with \"Special Collections\" in pale gold, an \"Open now\" badge with today's hours, the week's hours in a row, and a full-width search of the collections.",
+  "special-before-phone.png": "The previous page on a phone. The library-wide search panel and two rows of hours come first; \"Special Collections\" appears halfway down the screen, and the introduction and contact links are pushed below it.",
+  "special-after-phone.png": "The new page on a phone. The title, today's hours, a one-sentence description, the request link and the search box all fit on the first screen, with event and exhibition cards starting below.",
+  "guide-sr-before-desktop.png": "The Systematic Reviews guide in LibGuides. A purple banner, then eleven grey tab buttons in three rows, a librarian profile box and the opening text in a white box.",
+  "guide-sr-after-desktop.png": "The Systematic Reviews guide on the new site. A table of contents runs down the left. The title, a one-sentence summary, the author, the date and subject tags are followed by the first section, with a narrative-review definition set off by a gold rule.",
+  "guide-sr-before-phone.png": "The LibGuides version on a phone. Below the purple banner and a guide search box, the tab buttons stack into a column of grey bars that fills the whole screen before any text.",
+  "guide-sr-after-phone.png": "The new guide on a phone. The title, a summary, the author, the date and subject tags, then the first section's heading and text, with a table-of-contents button in the corner.",
+  "exhibit-audubon-before-desktop.png": "The 2021 Audubon exhibition. A purple LSU Libraries header, a banner of a warbler on a map of Louisiana, a list of six sections on the left and a column of text.",
+  "exhibit-audubon-after-desktop.png": "The new Audubon title page. A table of contents of seven galleries on the left, the title in large pale-gold type, and Audubon's Carolina Parrot plate filling the right half of the screen.",
+  "exhibit-audubon-before-phone.png": "The 2021 Audubon exhibition on a phone. Site links, a search box and the LSU Libraries logo come first, then a small banner, the list of sections and the opening text in grey.",
+  "exhibit-audubon-after-phone.png": "The new Audubon title page on a phone. The Carolina Parrot plate fills the top of the screen and fades into the title, credit line and year below it.",
+  "exhibit-occult-before-desktop.png": "The 2011 exhibition. A grey and purple Hill Memorial Library header, a red title banner, a grey list of sixteen links, and the sunflower engraving in a narrow frame.",
+  "exhibit-occult-after-desktop.png": "The new Occult Science title page. The same sunflower engraving fills the right of the screen behind the title, with the galleries listed in the table of contents.",
+  "exhibit-occult-before-phone.png": "The 2011 exhibition on a phone. The desktop layout is shrunk and cut off at the right edge, so the menu and title banner run off the screen, and the engraving sits in a small grey box.",
+  "exhibit-occult-after-phone.png": "The new Occult Science title page on a phone. A close view of the sunflower engraving fills the top of the screen and fades into the title, credit line and year."
+ }
+}
