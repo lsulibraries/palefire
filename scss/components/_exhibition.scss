@@ -237,16 +237,14 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 
 // Handoff between galleries (2026-10-26). In one scrolled document a
 // gallery's pinned image used to scroll away half on screen while the next
-// one's came up under it, two images and a gap at once. Now, on the
-// page's scroll rather than on load: each gallery's opening image (the
-// pinned stage, a cover's frame, a lead band) unrolls downward like a
-// curtain as it comes in, from when its top is a fifth of the way up the
-// screen until it is all in view (a plain clip would match its natural
-// entry and not show); a pinned one fades out as it scrolls away, gone by
-// 70% of its exit, so the next opens on its own. Not scroll snap: on long
-// texts a snap pulls the reader past the last lines to the next gallery,
-// and it fights the pinned openings' pan. The title page's cover keeps its
-// curtain on load. Off with reduced motion and the Settings drawer's switch.
+// one's came up under it, two images and a gap at once. Now a pinned image
+// (the stage, a cover's frame) fades out as it scrolls away, on the page's
+// scroll, gone by 70% of its exit, so the next gallery's image comes up on
+// its own. The next one simply scrolls in (a scroll-linked curtain on it
+// was tried and taken out the same day). Not scroll snap: on long texts a
+// snap pulls the reader past the last lines to the next gallery, and it
+// fights the pinned openings' pan. Off with reduced motion and the
+// Settings drawer's switch.
 @keyframes pf-exhibit-leave {
   to {
     opacity: 0;
@@ -255,18 +253,10 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    html:not(.pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__frame {
-      animation: pf-exhibit-curtain $pf-exhibit-curtain both;
-      animation-timeline: view();
-      animation-range: entry 20% entry 100%;
-    }
-
     html:not(.pf-a11y-motion) :is(.pf-exhibit-hero__stage, .pf-exhibit-wall-hero__frame) {
-      animation:
-        pf-exhibit-curtain $pf-exhibit-curtain both,
-        pf-exhibit-leave linear both;
-      animation-timeline: view(), view();
-      animation-range: entry 20% entry 100%, exit 0% exit 70%;
+      animation: pf-exhibit-leave linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 70%;
     }
   }
 }
@@ -670,9 +660,9 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-// Motion. Coming in: the hero's curtain (on the scroll where the browser
-// can, the handoff above; on load otherwise), then the heading and the
-// links. Scrolling on: the heading and links lift away (their own view
+// Motion. Coming in: the hero's curtain on load, only where the browser
+// has no scroll-driven animation (elsewhere the stage's one animation is
+// the handoff's fade-out, above), then the heading and the links. Scrolling on: the heading and links lift away (their own view
 // timelines); the wash clears and the image pans (the gallery's own
 // timeline, from where the stage pins). The two kinds use different
 // properties (opacity / translate vs transform / filter), so they never
