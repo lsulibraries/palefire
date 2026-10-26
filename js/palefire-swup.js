@@ -530,6 +530,16 @@
     });
     prefetchOn(swup);
 
+    // The new page opens at its top (or #anchor) in one jump, while its
+    // content is still faded out. Swup scrolls with behavior 'auto', which
+    // follows the CSS scroll-behavior: smooth (_modular.scss), so a visit
+    // from far down the page showed the new one gliding up as it faded in.
+    ['scroll:top', 'scroll:anchor'].forEach((hook) => {
+      swup.hooks.before(hook, (visit, args) => {
+        args.options.behavior = 'instant';
+      });
+    });
+
     swup.hooks.on('visit:start', (visit) => {
       hardNavigation = false;
       incoming = null;
