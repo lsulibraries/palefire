@@ -711,6 +711,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 .pf-tiles--masonry[data-pf-view="grid"] {
   .pf-tile {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto;
     height: auto;
     overflow: visible;
@@ -772,6 +773,49 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   .pf-tile:is(:hover, :focus-visible) .pf-tile__label {
     background: none;
     color: var(--pf-section-fg, var(--bs-body-color));
+  }
+}
+
+// Grid, five across, one to four cards (data-pf-count): the first card
+// leads, wide enough to fill the row (4: two columns, 3: three, 2: three
+// with the other two, 1: the whole row), so no column stands empty. Its
+// picture keeps the row's height, a 3:4 column's (--pf-unit is an eighth
+// of a column), so the captions stay on one line; the title grows with it.
+// Five or more keep the even grid, so a card added later never reshapes
+// the row. The lead's cover is the landscape crop (palefire.theme).
+@container pf-tiles (min-width: 72rem) {
+  .pf-tiles--masonry[data-pf-view="grid"] {
+    &[data-pf-count="1"] .pf-tiles__item:first-child {
+      grid-column: 1 / -1;
+    }
+
+    &:is([data-pf-count="2"], [data-pf-count="3"]) .pf-tiles__item:first-child {
+      grid-column: span 3;
+    }
+
+    &[data-pf-count="2"] .pf-tiles__item:last-child,
+    &[data-pf-count="4"] .pf-tiles__item:first-child {
+      grid-column: span 2;
+    }
+
+    &:is([data-pf-count="1"], [data-pf-count="2"], [data-pf-count="3"], [data-pf-count="4"]) .pf-tiles__item:first-child,
+    &[data-pf-count="2"] .pf-tiles__item {
+      .pf-tile__media {
+        aspect-ratio: auto;
+        height: calc(var(--pf-unit) * 32 / 3);
+      }
+
+      // The page drawing grows with the card, so it still fills it.
+      .pf-tile__outline {
+        font-size: clamp(4px, 2.2cqi, 20px);
+      }
+
+      .pf-tile__title {
+        font-size: clamp(1.5rem, 1rem + 1.4cqi, 2.5rem);
+        letter-spacing: -.02em;
+        line-height: 1.08;
+      }
+    }
   }
 }
 

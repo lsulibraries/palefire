@@ -83,7 +83,7 @@
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
   {{ attach_library('palefire/tile-reveal') }}
-  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip{% if layout == 'masonry' %} data-pf-view="grid"{% endif %}>
+  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip{% if layout == 'masonry' %} data-pf-view="grid" data-pf-count="{{ tiles|length }}"{% endif %}>
     {% if layout == 'index' %}
       <ol class="pf-tiles__list" role="list">
         {% for tile in tiles %}

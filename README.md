@@ -321,7 +321,9 @@ fields plus `field_tile_layout` (`stagger` / `grid` / `index`) and
 `field_tiles` (Tile nodes or Modular pages, read by `_palefire_node_card()`).
 `index` is a numbered list with no pictures. `masonry` has a Grid / Masonry /
 List switch (`js/tile-views.js`, remembered per browser); Grid is the
-default and shows the label under the picture. Each card: the title (h3), the
+default and shows the label under the picture. With one to four cards, five
+across, Grid's first card leads, wide enough to fill the row (so put the
+guide to start with first); five or more stay even. Each card: the title (h3), the
 cover (a Tile's Tile Cover; a Modular page's Image cover or landing poster)
 through the
 `tile_showcase_portrait`/`_landscape` responsive styles, its Category terms as
@@ -892,6 +894,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-26
+
+- **Tile showcase Grid: the first card leads when there are fewer than five.** Five across (a 72rem section), a masonry showcase with one to four cards left columns empty. Now the first card widens to fill the row: 4 cards, two columns; 3, three; 2, three and two; 1, the whole row (`_tile-showcase.scss`, keyed on `data-pf-count` from `paragraph--tile-showcase.html.twig`). Its picture keeps the row's 3:4 column height, so the captions stay level; its title is larger and its page drawing scales up to fill it. Five or more cards keep the even grid, so adding one never reshapes the row; narrower sections, Masonry and List are unchanged. A lead card with a cover gets the landscape crops (`_palefire_lead_cover()`, `tile_showcase_landscape_sm/_md/_lg`) sized for its width, not the portrait crop stretched. The Grid card's single column is now explicit (`minmax(0, 1fr)`): the card's inherited `justify-content: flex-end` had only been hidden by the 3:4 ratio. Editors pick the lead by ordering the Tiles field. Checked on /v2/special at 320, 768, 1024, 1440 and 1600 with 1–4 cards: no horizontal scroll. Why: a gap at the end of the row read as a missing card; one larger card gives the section a clear way in.
 
 - **Page transitions: the new page opens at its top in one jump.** Swup scrolled to the top (or #anchor) with behavior `auto`, which follows the modular pages' `scroll-behavior: smooth`, so a link clicked far down the page showed the new page gliding up as it faded in. The scroll is now instant (`scroll:top`/`scroll:anchor` hooks, `palefire-swup.js`) and happens while the new content is still faded out. Back/forward is unchanged. Why: the long glide read as scrolling the old page, not opening a new one.
 

@@ -1264,6 +1264,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
 
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $style = $variables['layout'] === 'grid' ? 'tile_showcase_landscape' : 'tile_showcase_portrait';
+  $covers = [];
 
   foreach ($paragraph->get('field_tiles') as $item) {
     $node = $item->entity;
@@ -1282,8 +1283,54 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'image' => $image,
       'outline' => $variables['layout'] !== 'index' && !$image ? _palefire_page_outline($node, $cache) : [],
     ];
+    $covers[] = $show_image ? $card['image_item'] : NULL;
+  }
+
+  // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)
+  // spans two to five columns: its cover is the landscape crop, sized for
+  // that width (beside the sidebar from 1480px; a column below).
+  $count = count($variables['tiles']);
+  if ($variables['layout'] === 'masonry' && $count <= 4 && !empty($covers[0])) {
+    $lead = [1 => 85, 2 => 50, 3 => 50, 4 => 34][$count];
+    $variables['tiles'][0]['image'] = _palefire_lead_cover($covers[0], "(min-width: 1480px) {$lead}vw, (min-width: 768px) 34vw, 50vw", $cache) ?? $variables['tiles'][0]['image'];
   }
   $cache->applyTo($variables);
+}
+
+/**
+ * Builds a tile's cover in the landscape crops for a lead card.
+ *
+ * One srcset of tile_showcase_landscape_sm/_md/_lg (640, 960 and 1280 wide,
+ * 16:10) with the given sizes, decorative and lazy as the other covers.
+ * NULL when none of the styles exist (the caller keeps its own cover).
+ */
+function _palefire_lead_cover(FieldItemInterface $image, string $sizes, CacheableMetadata $cache): ?array {
+  $file = $image->entity;
+  if (!$file) {
+    return NULL;
+  }
+  $storage = \Drupal::entityTypeManager()->getStorage('image_style');
+  $srcset = [];
+  foreach (['sm' => 640, 'md' => 960, 'lg' => 1280] as $size => $width) {
+    if ($style = $storage->load('tile_showcase_landscape_' . $size)) {
+      $cache->addCacheableDependency($style);
+      $srcset[] = ['uri' => $style->buildUrl($file->getFileUri()), 'width' => $width . 'w'];
+    }
+  }
+  if (!$srcset) {
+    return NULL;
+  }
+  $cache->addCacheableDependency($file);
+  return [
+    '#theme' => 'image',
+    '#uri' => end($srcset)['uri'],
+    '#srcset' => $srcset,
+    '#sizes' => $sizes,
+    '#width' => 1280,
+    '#height' => 800,
+    '#alt' => '',
+    '#attributes' => ['alt' => '', 'loading' => 'lazy', 'decoding' => 'async'],
+  ];
 }
 
 /**
