@@ -8,15 +8,26 @@
  *
  * - Behaviors: detached from the outgoing containers ('unload') and attached
  *   to the incoming ones, with drupalSettings replaced by the new page's.
- * - Assets: if the next page needs any script or stylesheet URL that is not
- *   already on this page (different libraries, or an aggregate that differs),
- *   or its content contains executable <script> tags (LibCal/other embeds),
- *   the visit falls back to a normal full page load.
+ * - Assets: libraries the next page needs that this one hasn't loaded are
+ *   added before the swap, as an aggregate of just those (see "Missing
+ *   assets"; 2026-10-26, was a full page load). The visit falls back to a
+ *   normal full page load if that fails, or if the next page's content
+ *   contains executable <script> tags (LibCal/other embeds).
  * - Head/body: <title> (Swup), meta tags, canonical/shortlink, JSON-LD,
  *   <html lang/dir>, and Drupal's path-* body classes are synced.
  * - Accessibility: focus moves to the new page's <h1> (or the #anchor
  *   target, or <main>), and the page title is announced via Drupal.announce.
  *   Transitions are skipped when the user prefers reduced motion.
+ * - Exhibitions (/…/exhibitions/<name>) always load normally: they need
+ *   their own scripts, so a visit there faded the page out, fetched it, found
+ *   it incompatible and loaded it a second time (2026-10-26). Any other page
+ *   that falls back is remembered for the session and loaded normally from
+ *   the start next time.
+ * - Loading line: a thin line under the header (.pf-loading, _header.scss)
+ *   while the next page loads, a Swup visit or a normal one (a link Swup
+ *   skips). It shows only after 300ms, so a quick visit never flashes it;
+ *   after a second screen readers hear "Loading…". Cleared when a page is
+ *   shown again from the back/forward cache.
  *
  * Swup is only enabled for anonymous visitors (page.html.twig attaches this
  * library when not logged in); editors get normal page loads so the toolbar,
@@ -36,7 +47,66 @@
     /^\/node\/\d+\/(edit|delete|revisions|layout)(\/|$)/,
     /^\/(media|taxonomy\/term)\/\d+\/(edit|delete)(\/|$)/,
     /\.(?!html?$)[a-z0-9]{2,5}$/i, // file downloads (pdf, docx, jpg, ...)
+    /\/exhibitions\/[^/]+/, // an exhibition (not the list): scripts of its own
   ];
+
+  // Pages that fell back to a full load this session (page:load, below).
+  const HARD_KEY = 'palefire.swupHard';
+  const hardPaths = () => {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(HARD_KEY)) || [];
+    }
+    catch (e) {
+      return [];
+    }
+  };
+  const rememberHard = (path) => {
+    try {
+      const paths = hardPaths();
+      if (!paths.includes(path)) {
+        window.sessionStorage.setItem(HARD_KEY, JSON.stringify(paths.concat(path).slice(-50)));
+      }
+    }
+    catch (e) {
+      // Storage blocked: the fallback still works, just later.
+    }
+  };
+
+  /* ---------------------------------------------------------------------
+   * Loading line
+   * ------------------------------------------------------------------ */
+
+  const LOADING = 'pf-is-loading';
+  let announceTimer = 0;
+
+  const startLoading = () => {
+    const root = document.documentElement;
+    if (root.classList.contains(LOADING)) {
+      return;
+    }
+    root.classList.add(LOADING);
+    window.clearTimeout(announceTimer);
+    announceTimer = window.setTimeout(() => Drupal.announce(Drupal.t('Loading…')), 1000);
+  };
+
+  const stopLoading = () => {
+    document.documentElement.classList.remove(LOADING);
+    window.clearTimeout(announceTimer);
+  };
+
+  // The line itself, once, at the foot of the header (outside #swup, so it
+  // survives every visit).
+  const addLine = () => {
+    const header = document.querySelector('.pf-header');
+    if (!header || header.querySelector('.pf-loading')) {
+      return;
+    }
+    const line = document.createElement('div');
+    line.className = 'pf-loading';
+    line.setAttribute('aria-hidden', 'true');
+    line.append(document.createElement('span'));
+    header.append(line);
+  };
 
   // Head elements replaced on every visit (the title is handled by Swup).
   const HEAD_SELECTOR = [
@@ -63,6 +133,158 @@
     return urls;
   };
 
+  /* ---------------------------------------------------------------------
+   * Missing assets
+   *
+   * A page that needs libraries this one hasn't loaded used to fall back to
+   * a full load, after Swup had already faded the page out and fetched it
+   * (so it was fetched twice). Its own aggregates can't simply be added:
+   * each one bundles its whole group, Drupal core included, and running
+   * drupal.js again would wipe every behavior. So this asks Drupal's asset
+   * route (/sites/…/files/js/js_*.js) for an aggregate of only the missing
+   * libraries, the way Drupal's own AJAX adds assets: include = the next
+   * page's libraries less this one's, exclude = this one's (dependencies
+   * resolved by Drupal, so core and anything loaded stays out). Drupal builds
+   * any include/exclude set on request; with a name that isn't its own hash
+   * it serves the file without saving it. CSS first, then header and footer
+   * scripts, each group (delta) in order until one past the last answers
+   * 400. Files the next page links outside aggregates are added as they
+   * are. Then ajaxPageState.libraries becomes the union, so Drupal AJAX and
+   * the next visit know what is loaded.
+   * ------------------------------------------------------------------ */
+
+  // ajaxPageState.libraries once more libraries have been added; null while
+  // the page has what it loaded with.
+  let pageLibraries = null;
+
+  // Drupal's UrlHelper::compressQueryParameter(): gzcompress (zlib, which
+  // is the streams' "deflate"), base64 with - and _, no padding.
+  const toBase64 = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const fromBase64 = (text) => {
+    let s = text.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) {
+      s += '=';
+    }
+    return Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  };
+  const pipe = (bytes, stream) => new Response(new Blob([bytes]).stream().pipeThrough(stream));
+  const compress = async (text) => toBase64(new Uint8Array(await pipe(new TextEncoder().encode(text), new CompressionStream('deflate')).arrayBuffer()));
+  const uncompress = async (text) => (await pipe(fromBase64(text), new DecompressionStream('deflate')).text()).split(',').filter(Boolean);
+
+  // A short stable name for an aggregate, so the browser can cache it.
+  const nameFor = (text) => {
+    let h = 0;
+    for (let i = 0; i < text.length; i++) {
+      h = (h * 31 + text.charCodeAt(i)) | 0;
+    }
+    return (h >>> 0).toString(36);
+  };
+
+  const AGGREGATE = /\/(css|js)\/(css|js)_[^/]+\.(css|js)$/;
+
+  // One group of the missing libraries' aggregate: fetched first, since a
+  // group past the last answers 400 "Invalid filename." and a <script src>
+  // ran that text as a script; then its code goes in as a <style> or an
+  // inline <script> (which runs as it is added, so groups keep their order).
+  // Drupal rewrites url()s in aggregated CSS to root-relative ones, so they
+  // hold in a <style>.
+  const addGroup = async (url, type) => {
+    const response = await fetch(url, { credentials: 'same-origin' });
+    if (!response.ok) {
+      throw new Error(url);
+    }
+    const code = await response.text();
+    // An empty group (the theme's CSS is one global file): nothing to add.
+    if (!code.trim()) {
+      return;
+    }
+    const el = document.createElement(type === 'css' ? 'style' : 'script');
+    el.dataset.pfAsset = url;
+    el.textContent = code;
+    document.head.append(el);
+  };
+
+  // Adds a stylesheet or script the next page links outside aggregates, and
+  // waits for it; rejects (and removes it) on an error.
+  const addAsset = (url) => new Promise((resolve, reject) => {
+    const css = /\.css$/.test(new URL(url, window.location.href).pathname);
+    const el = document.createElement(css ? 'link' : 'script');
+    if (css) {
+      el.rel = 'stylesheet';
+      el.href = url;
+    }
+    else {
+      el.src = url;
+      el.async = false;
+    }
+    el.addEventListener('load', () => resolve(el), { once: true });
+    el.addEventListener('error', () => {
+      el.remove();
+      reject(new Error(url));
+    }, { once: true });
+    document.head.append(el);
+  });
+
+  /**
+   * Loads what the next page needs that this one hasn't.
+   *
+   * @return {Promise<boolean>}
+   *   FALSE when it can't be done here (no compression streams, no library
+   *   lists, or Drupal sent nothing for libraries that are missing): the
+   *   visit then falls back to a full load.
+   */
+  const loadMissing = async (doc, next, loadedAssets) => {
+    const now = drupalSettings.ajaxPageState;
+    const then = next.ajaxPageState;
+    if (!('CompressionStream' in window) || !now || !then || !now.libraries || !then.libraries) {
+      return false;
+    }
+    const have = await uncompress(pageLibraries || now.libraries);
+    const missing = (await uncompress(then.libraries)).filter((library) => !have.includes(library));
+    const sample = document.querySelector('script[src*="/js/js_"]');
+    if (missing.length && sample) {
+      const src = new URL(sample.src);
+      const jsDir = src.pathname.replace(/[^/]+$/, '');
+      const include = await compress(missing.join(','));
+      const exclude = pageLibraries || now.libraries;
+      const name = nameFor(include + exclude);
+      const base = { language: src.searchParams.get('language') || document.documentElement.lang || 'en', theme: now.theme || src.searchParams.get('theme') || '', include, exclude };
+      let loaded = 0;
+      for (const [type, scope] of [['css', null], ['js', 'header'], ['js', 'footer']]) {
+        const dir = type === 'css' ? jsDir.replace(/\/js\/$/, '/css/') : jsDir;
+        for (let delta = 0; delta < 8; delta++) {
+          const params = new URLSearchParams(Object.assign(scope ? { scope } : {}, { delta: String(delta) }, base));
+          try {
+            await addGroup(`${dir}${type}_pf${name}${delta}.${type}?${params}`, type);
+            loaded++;
+          }
+          catch (e) {
+            break;
+          }
+        }
+      }
+      if (!loaded) {
+        return false;
+      }
+    }
+    // Files the next page links outside aggregates (or every file, where
+    // aggregation is off).
+    const loose = assetUrls(doc).filter((url) => !loadedAssets.has(url) && (!sample || !AGGREGATE.test(new URL(url).pathname)));
+    for (const url of loose) {
+      try {
+        await addAsset(url);
+      }
+      catch (e) {
+        return false;
+      }
+    }
+    assetUrls(doc).forEach((url) => loadedAssets.add(url));
+    if (missing.length) {
+      pageLibraries = await compress(have.concat(missing).join(','));
+    }
+    return true;
+  };
+
   const isExecutable = (script) => {
     const type = (script.getAttribute('type') || '').trim().toLowerCase();
     return !type || type === 'module' || /(java|ecma)script/.test(type);
@@ -82,7 +304,7 @@
    * reference to the same object.
    */
   const replaceSettings = (next) => {
-    const libraries = drupalSettings.ajaxPageState && drupalSettings.ajaxPageState.libraries;
+    const libraries = pageLibraries || (drupalSettings.ajaxPageState && drupalSettings.ajaxPageState.libraries);
     Object.keys(drupalSettings).forEach((key) => delete drupalSettings[key]);
     Object.assign(drupalSettings, next);
     // Keep the list of libraries actually loaded in this document, so Drupal
@@ -186,7 +408,32 @@
     if (prefix && path.startsWith(prefix)) {
       path = path.slice(prefix.length);
     }
-    return IGNORE_PATHS.some((pattern) => pattern.test(`/${path}`));
+    return IGNORE_PATHS.some((pattern) => pattern.test(`/${path}`)) || hardPaths().includes(next.pathname);
+  };
+
+  // A click that leaves the page without Swup (an ignored link): the line
+  // until the next page replaces this one. Bubble phase, after Swup and
+  // every other handler, so a link they took over is left alone.
+  const onLeave = (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    const el = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!el || el.hasAttribute('download') || (el.target && el.target !== '_self')) {
+      return;
+    }
+    const next = new URL(el.href, window.location.href);
+    if (next.origin !== window.location.origin || !/^https?:$/.test(next.protocol)) {
+      return;
+    }
+    if (next.pathname === window.location.pathname && next.search === window.location.search) {
+      return;
+    }
+    // A file download leaves the page in place: no line.
+    if (/\.(?!html?$)[a-z0-9]{2,5}$/i.test(next.pathname)) {
+      return;
+    }
+    startLoading();
   };
 
   const init = () => {
@@ -204,27 +451,38 @@
     swup.hooks.on('visit:start', (visit) => {
       hardNavigation = false;
       incoming = null;
+      startLoading();
       if (reducedMotion.matches || document.documentElement.classList.contains('pf-a11y-motion')) {
         visit.animation.animate = false;
       }
       closeMenu();
     });
 
-    // Decide whether the fetched page can be swapped in safely.
-    swup.hooks.on('page:load', (visit, args) => {
+    // Decide whether the fetched page can be swapped in safely, loading the
+    // libraries it needs that this page hasn't (loadMissing, above). Swup
+    // waits for the promise before it swaps.
+    swup.hooks.on('page:load', async (visit, args) => {
       const html = args && args.page && args.page.html;
       const doc = html ? new DOMParser().parseFromString(html, 'text/html') : null;
       const settings = doc && readSettings(doc);
-      const compatible = doc
+      let compatible = doc
         && settings
         && containers.every((sel) => doc.querySelector(sel))
         && OPTIONAL_CONTAINERS.every((sel) => containers.includes(sel) || !doc.querySelector(sel))
-        && assetUrls(doc).every((url) => loadedAssets.has(url))
         && !containers.some((sel) => Array.from(doc.querySelector(sel).querySelectorAll('script')).some(isExecutable))
         && !doc.querySelector('[data-big-pipe-placeholder-id]');
+      if (compatible && !assetUrls(doc).every((url) => loadedAssets.has(url))) {
+        try {
+          compatible = await loadMissing(doc, settings, loadedAssets);
+        }
+        catch (e) {
+          compatible = false;
+        }
+      }
 
       if (!compatible) {
         hardNavigation = true;
+        rememberHard(new URL(visit.to.url, window.location.href).pathname);
         if (typeof visit.abort === 'function') {
           visit.abort();
         }
@@ -266,6 +524,7 @@
       if (hardNavigation) {
         return;
       }
+      stopLoading();
       focusTarget(visit.to.hash || window.location.hash);
       Drupal.announce(Drupal.t('Page loaded: @title', { '@title': document.title }));
     });
@@ -275,6 +534,16 @@
 
   Drupal.behaviors.palefireSwup = {
     attach() {
+      once('pf-loading', 'html').forEach(() => {
+        addLine();
+        document.addEventListener('click', onLeave);
+        // Back/forward cache: the page comes back as it was left, line on.
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) {
+            stopLoading();
+          }
+        });
+      });
       once('pf-swup', 'html').forEach(() => {
         if (
           typeof window.Swup !== 'function'

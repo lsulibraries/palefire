@@ -1,0 +1,19 @@
+# Line endings: LF in the repository and in every checkout, whatever
+# core.autocrlf says (Git for Windows sets it to true system-wide, which
+# left some working copies in CRLF and made untouched lines show as changed).
+* text=auto eol=lf
+
+# Binary files: never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.mp4 binary
+*.pdf binary
+*.zip binary
