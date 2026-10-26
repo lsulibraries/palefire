@@ -866,8 +866,9 @@ function _palefire_image_build(FieldItemInterface $image, array $styles, Cacheab
  * - page_title: the node title when this landing is the first section (it
  *   then prints the page <h1>), or NULL.
  * - landing_intro: render array of field_intro, or NULL.
- * - visit: NULL, or ['name', 'lid', 'maps_url', 'embed_url', 'query'] for
- *   the Visit card (hours via js/visit-hours.js, the map loads on click).
+ * - visit: NULL, or ['name', 'lid', 'maps_url', 'embed_url', 'query',
+ *   'parking_url'] for the Visit card (hours via js/visit-hours.js, the map
+ *   loads on click).
  * A page with none of these fields filled in keeps today's landing.
  */
 function _palefire_landing_visit(array &$variables, ParagraphInterface $paragraph): void {
@@ -921,12 +922,18 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
     return;
   }
   $embed = $value('field_location_display') === 'embed';
+  // Visitor parking guides (scripts/palefire_guide_parking.php) by LibCal
+  // location: the Visit card's Parking link and the Quick Guide's button.
+  $parking = [
+    '236' => '/v2/special/guides/parking-hill-memorial-library',
+  ];
   $variables['visit'] = [
     'name' => $name,
     'lid' => preg_match('/^\d+$/', $lid) ? $lid : '',
     'query' => $query,
     'maps_url' => $query !== '' ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query) : '',
     'embed_url' => ($embed && $query !== '') ? 'https://www.google.com/maps?q=' . rawurlencode($query) . '&output=embed' : '',
+    'parking_url' => $parking[$lid] ?? '',
   ];
   $variables['#attached']['library'][] = 'palefire/visit';
 }

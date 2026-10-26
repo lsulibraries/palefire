@@ -2677,10 +2677,11 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
-// When the three don't fit on one line (415px with these labels at 13px,
-// measured 2026-10-26: Full guide 155, Prices 120, Hours 120, two 10px
-// gaps), two columns as wide as Full guide and Prices, and Hours across
-// both, so its edges line up with the pair above; under 320px, one column, every button
+// When the four don't fit on one line (555px with these labels at 13px,
+// measured 2026-10-26: Full guide 155, Prices 120, Parking 130, Hours 120,
+// three 10px gaps), two columns as wide as Full guide and Prices, and an
+// odd last button across both, so its edges line up with the pair above;
+// under 320px, one column, every button
 // as wide as the widest. A longer translation would need these moved. Stretched buttons keep their
 // words at the start and the arrow at the end. A container query on the
 // notes' own width (the Quick Start's column, TOC open or not); a flex
@@ -2689,13 +2690,13 @@ html[data-pf-hero] .pf-landing--cover {
   container: pf-quick-visit / inline-size;
 }
 
-@container pf-quick-visit (max-width: 25.9375rem) {
+@container pf-quick-visit (max-width: 34.6875rem) {
   .pf-quick-guide__visit .pf-quick-guide__links {
     display: grid;
     grid-template-columns: repeat(2, auto);
     justify-content: start;
 
-    > .pf-quick-guide__hours {
+    > li:last-child:nth-child(odd) {
       grid-column: 1 / -1;
     }
 

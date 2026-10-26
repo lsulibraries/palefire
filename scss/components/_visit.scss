@@ -98,7 +98,14 @@
   flex-direction: column;
   gap: .75rem;
 }
-.pf-visit__place > .pf-visit__directions { align-self: flex-start; }
+// Google Maps and Parking on one line, wrapping when they don't fit.
+.pf-visit__go {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  margin: 0;
+}
+.pf-visit__go > .pf-visit__link { margin-top: 0; }
 
 // md and up: a horizontal strip. The name across the top, then hours |
 // mini map and directions, their tops on one line; 1200px and up (about
@@ -157,7 +164,7 @@
 }
 
 // 1200px and up: hours | mini map, the map a frame as tall as the hours,
-// its top on the status line and its foot on the week's last rule, with the two links (All library hours, Open in Google Maps) on one
+// its top on the status line and its foot on the week's last rule, with the links (All library hours; Open in Google Maps, Parking) on one
 // line under them. The hours and the map's column give their parts to the
 // strip's grid (display: contents; their state classes still reach the
 // parts). The map keeps a floor for when the week is not loaded.
@@ -175,7 +182,7 @@
     aspect-ratio: auto;
     min-height: 14rem;
   }
-  .pf-visit__directions { grid-area: directions; justify-self: start; }
+  .pf-visit__go { grid-area: directions; justify-self: start; }
 }
 
 @media (min-width: 1200px) {
@@ -298,7 +305,6 @@
   font-size: .875rem;
   font-weight: 600;
 }
-.pf-visit__directions { margin-top: 0; }
 .pf-visit__ext {
   inline-size: .75em;
   block-size: .75em;

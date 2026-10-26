@@ -462,12 +462,14 @@
               <li>{{ 'Scans are 50 cents a page, plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>
             </ul>
           {% endif %}
-          {# The full guide and the copy prices (palefire_guide_duplication.php),
-             as square buttons, each in a new tab: an up-right arrow after it,
-             and its name says so for screen readers. #}
+          {# The full guide, the copy prices (palefire_guide_duplication.php)
+             and the building's parking guide (visit.parking_url), as square
+             buttons, each in a new tab: an up-right arrow after it, and its
+             name says so for screen readers. #}
           {% set visit_links = [
             guide_url ? { url: guide_url, text: 'Full guide'|t },
             { url: '/v2/special/guides/duplication', text: 'Prices'|t },
+            visit.parking_url ? { url: visit.parking_url, text: 'Parking'|t },
           ]|filter(link => link) %}
           <ul class="pf-quick-guide__links" role="list">
             {% for link in visit_links %}

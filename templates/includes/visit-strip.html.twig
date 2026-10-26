@@ -50,8 +50,10 @@
     </div>
   {% endif %}
 
-  {# Mini map with the Google Maps link under it, one column. #}
-  {% if visit.embed_url or visit.maps_url %}
+  {# Mini map with the Google Maps and Parking links under it, one column.
+     Parking stays on the site: same tab, a right arrow, not the up-right
+     one, as the footer's links do. #}
+  {% if visit.embed_url or visit.maps_url or visit.parking_url %}
     <div class="pf-visit__place">
       {% if visit.embed_url %}
         <div class="pf-visit__map" data-pf-visit-map data-src="{{ visit.embed_url }}" data-title="{{ 'Map: @place'|t({'@place': visit.name ?: visit.query}) }}">
@@ -62,10 +64,21 @@
           </button>
         </div>
       {% endif %}
-      {% if visit.maps_url %}
-        <a class="pf-visit__link pf-visit__directions" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
-          {{ 'Open in Google Maps'|t }}<svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
-        </a>
+      {% if visit.maps_url or visit.parking_url %}
+        <p class="pf-visit__go">
+          {% if visit.maps_url %}
+            <a class="pf-visit__link pf-visit__directions" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
+              {{ 'Open in Google Maps'|t }}<svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+            </a>
+          {% endif %}
+          {% if visit.parking_url %}
+            <a class="pf-visit__link pf-visit__parking" href="{{ visit.parking_url }}">
+              {{- 'Parking'|t -}}
+              {%- if visit.name %}<span class="visually-hidden"> {{ 'at @place'|t({'@place': visit.name}) }}</span>{% endif -%}
+              <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          {% endif %}
+        </p>
       {% endif %}
     </div>
   {% endif %}
