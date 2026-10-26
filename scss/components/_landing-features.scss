@@ -2668,24 +2668,34 @@ html[data-pf-hero] .pf-landing--cover {
   gap: .625rem;
   margin-top: 1.25rem;
 
+  // The buttons fill the notes' width, so their right edge meets the
+  // hairline's: on one line each grows by an equal share.
   li {
+    flex: 1 1 auto;
     padding: 0;
 
     &::before {
       content: none;
     }
   }
+
+  // Stretched buttons keep their words at the start and the arrow at the end.
+  .pf-quick-guide__link {
+    width: 100%;
+
+    svg {
+      margin-inline-start: auto;
+    }
+  }
 }
 
 // When the four don't fit on one line (555px with these labels at 13px,
 // measured 2026-10-26: Full guide 155, Prices 120, Parking 130, Hours 120,
-// three 10px gaps), two columns as wide as Full guide and Prices, and an
-// odd last button across both, so its edges line up with the pair above;
-// under 320px, one column, every button
-// as wide as the widest. A longer translation would need these moved. Stretched buttons keep their
-// words at the start and the arrow at the end. A container query on the
-// notes' own width (the Quick Start's column, TOC open or not); a flex
-// wrap can't size a wrapped button to the line above it.
+// three 10px gaps), two equal columns across the notes' width, and an odd
+// last button across both; under 320px, one column. A longer translation
+// would need these moved. A container query on the notes' own width (the
+// Quick Start's column, TOC open or not); a flex wrap can't size a wrapped
+// button to the line above it.
 .pf-quick-guide__visit {
   container: pf-quick-visit / inline-size;
 }
@@ -2693,26 +2703,17 @@ html[data-pf-hero] .pf-landing--cover {
 @container pf-quick-visit (max-width: 34.6875rem) {
   .pf-quick-guide__visit .pf-quick-guide__links {
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    justify-content: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
     > li:last-child:nth-child(odd) {
       grid-column: 1 / -1;
-    }
-
-    .pf-quick-guide__link {
-      width: 100%;
-
-      svg {
-        margin-inline-start: auto;
-      }
     }
   }
 }
 
 @container pf-quick-visit (max-width: 20rem) {
   .pf-quick-guide__visit .pf-quick-guide__links {
-    grid-template-columns: auto;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
