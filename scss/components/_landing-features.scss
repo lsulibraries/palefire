@@ -940,11 +940,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // The badge: no frame, a solid ground. Open (and closing soon): the
 // swatch's accent with its text colour (black on Twilight's pale gold,
 // 13:1; white on the light swatches' dark accents). Closed, and while
-// loading: the hero links' plate (.pf-landing__links), its words in the
-// text colour as on the plate. The ground eases between the two.
+// loading: a plate of the page colour, its words in the text colour. The
+// ground eases between the two.
+// No glass (2026-10-26): its blur, wider than the 24px badge, flickered
+// under the header's glass as the badge scrolled beneath it. The plate is
+// 90% (the links' is 65%) to make up for the blur over the video.
 .pf-landing__hours-label {
   @extend %pf-landing-label;
-  --pf-hours-badge-bg: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 65%, transparent);
+  --pf-hours-badge-bg: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 90%, transparent);
   --pf-hours-badge-fg: var(--pf-section-fg, var(--bs-body-color));
   display: inline-flex;
   align-items: center;
@@ -952,8 +955,6 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   padding: .1875rem .5625rem;
   color: var(--pf-hours-badge-fg);
   background-color: var(--pf-hours-badge-bg);
-  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-  backdrop-filter: var(--pf-glass-filter, blur(26px));
   text-shadow: none;
   transition: background-color .3s ease, color .3s ease;
 

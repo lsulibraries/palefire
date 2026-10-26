@@ -83,3 +83,34 @@
     scroll-snap-type: none;
   }
 }
+
+// Alternating tones on a landing page ------------------------------------------
+// Every other band takes the swatch's surface colour, one quiet step off the
+// page (1.04–1.14:1), so the parts read apart without patterns: the quick
+// guide, then the even sections after the landing (Special Collections: Go
+// deeper, and the events and blog). The Visit strip stays the page colour,
+// which its map is drawn on. Text, muted and accent keep 4.5:1 on the surface
+// on every swatch, high contrast included (2026-10-26). Anything inside a band
+// that used the surface colour takes the page colour, so it still stands off;
+// --pf-band holds the surface from above that swap.
+html#{$pf-themed} .pf-sections:has(> .pf-section--landing-hero) {
+  --pf-band: var(--pf-g-surface);
+
+  > .pf-section--auto:nth-child(even of .pf-section--auto),
+  .pf-quick-guide {
+    --pf-section-bg: var(--pf-band);
+    --pf-g-surface: var(--pf-g-bg);
+    --pf-guide-surface: var(--pf-g-bg);
+    --bs-secondary-bg: var(--pf-g-bg);
+    --bs-tertiary-bg: var(--pf-g-bg);
+    background-color: var(--pf-band);
+  }
+
+  // The guide sits in the landing's 1280px column: its band runs edge to
+  // edge on a shadow, clipped to its own height, so nothing moves. It starts
+  // halfway down the guide's top space, clear of the hero cards' labels.
+  .pf-quick-guide {
+    box-shadow: 0 0 0 100vmax var(--pf-band);
+    clip-path: inset(calc(var(--pf-quick-space) / 2) -100vmax 0);
+  }
+}
