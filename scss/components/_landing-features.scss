@@ -1119,23 +1119,24 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transform: scale(1.04);
 }
 
-// The pictures in the swatch's colours until hovered: each one grey, then
-// tinted with the swatch's accent (Cream's LSU purple, Twilight's gold).
-// The colour blend keeps the picture's own light and dark, so the scrim
-// and the white words over it keep their contrast. Hover or focus brings
-// the picture's colours back as it zooms. Not the event's date (no
-// picture).
+// The pictures in the swatch's colours until hovered: each one grey and a
+// little dimmed, then the swatch's accent multiplied over it (Cream's LSU
+// purple, Twilight's gold), so it sits deep and low-key on the page.
+// Multiply only darkens, so the white words over the scrim gain contrast.
+// Hover or focus brings the picture's colours back as it zooms. Not the
+// event's date (no picture).
 .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
   img {
-    filter: grayscale(1);
+    filter: grayscale(1) brightness(.8) contrast(1.1);
   }
 
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--pf-g-accent, #{$pf-purple});
-    mix-blend-mode: color;
+    // A third white, so a dark accent (purple) tints rather than blacks out.
+    background: color-mix(in srgb, var(--pf-g-accent, #{$pf-purple}) 65%, #fff);
+    mix-blend-mode: multiply;
     pointer-events: none;
     transition: opacity $pf-hover-out ease;
   }
