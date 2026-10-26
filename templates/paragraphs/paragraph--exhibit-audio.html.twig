@@ -3,7 +3,9 @@
  * @file
  * Exhibition audio (paragraph type exhibit_audio): an oral history clip.
  *
- * - field_block_title: the <h3> (a TOC sub-link).
+ * - field_block_title: the <h3> (a TOC sub-link). Inside an entry the
+ *   clip is labelled by the entry's heading (entry_heading_id) and prints
+ *   no heading of its own, so the clip's title isn't said twice.
  * - field_audio_credit: speaker and date, under the title.
  * - audio: ['url', 'type'] or NULL.
  * - The transcript (required) is a native <details> under the player.
@@ -15,10 +17,12 @@
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set credit = paragraph.field_audio_credit.value|default('')|trim %}
-{% set heading_id = 'pf-audio-' ~ paragraph.id() %}
+{% set heading_id = entry_heading_id ?: 'pf-audio-' ~ paragraph.id() %}
 <div{{ attributes.addClass('pf-exhibit-audio', not paragraph.isPublished() ? 'paragraph--unpublished').setAttribute('aria-labelledby', heading_id) }} role="group">
   <p class="pf-exhibit-label__kicker">{{ 'Listen'|t }}</p>
-  <h3 class="pf-exhibit-audio__title" id="{{ heading_id }}">{{ title }}</h3>
+  {% if not entry_heading_id %}
+    <h3 class="pf-exhibit-audio__title" id="{{ heading_id }}">{{ title }}</h3>
+  {% endif %}
   {% if credit %}
     <p class="pf-exhibit-audio__credit">{{ credit }}</p>
   {% endif %}

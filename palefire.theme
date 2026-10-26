@@ -2281,9 +2281,15 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-audio.
  *
  * audio: ['url', 'type'] of the file, or NULL.
+ * entry_heading_id: inside an entry, the entry heading's id. The clip is
+ * labelled by that heading instead of repeating its title as another <h3>.
  */
 function palefire_preprocess_paragraph__exhibit_audio(array &$variables): void {
   $paragraph = $variables['paragraph'];
+  $parent = $paragraph->getParentEntity();
+  $variables['entry_heading_id'] = $parent instanceof ParagraphInterface && $parent->bundle() === 'exhibit_entry'
+    ? _palefire_exhibit_entry_anchor($parent)
+    : NULL;
   $file = $paragraph->get('field_audio_file')->entity;
   $variables['audio'] = $file ? [
     'url' => \Drupal::service('file_url_generator')->generateString($file->getFileUri()),
