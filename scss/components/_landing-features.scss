@@ -1,3 +1,6 @@
+@use "sass:list";
+@use "sass:math";
+
 // =========================================================================
 // Landing hero lead (includes/landing.html.twig, hero only,
 // .pf-landing__lead--hero), top to bottom: the sub-header bar (breadcrumb)
@@ -345,6 +348,23 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
 // layer is fixed behind everything; this one scrolls with the page, and
 // landing-video.js watches it, so the clip only plays while it is on
 // screen.
+// The cover's wash under the header and the bar, clear over the video at
+// the top of the page: 70% as deep as the two (the layer starts at the
+// page's top), the least that keeps their white words at 4.5:1 over a
+// white frame (5.6:1 on Twilight), then easing out (a cosine, so no edge
+// shows) over the next 12rem, so it reads as the video darkening towards
+// the top rather than as a band.
+@function pf-cover-top-wash($fade: 12, $steps: 10) {
+  $edge: 'var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem)';
+  $stops: (color-mix(in srgb, var(--pf-cover-bg) 72%, transparent) 0,);
+  @for $i from 0 through $steps {
+    $t: math.div($i, $steps);
+    $mix: math.div(math.round(70 * math.div(1 + math.cos(math.$pi * $t), 2) * 10), 10) * 1%;
+    $stops: list.append($stops, color-mix(in srgb, var(--pf-cover-bg) $mix, transparent) calc(#{$edge} + #{$t * $fade}rem), comma);
+  }
+  @return linear-gradient(to bottom, $stops);
+}
+
 .pf-landing--cover {
   --pf-landing-bar-gap: 0px;
 }
@@ -481,15 +501,9 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
         color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 42%,
         color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 58%,
         transparent 72%),
-      // Under the header and the bar (both clear at the top of the page),
-      // and no further: 70% as deep as the two (the layer starts at the
-      // page's top), the least that keeps white words at 4.5:1 over a
-      // white frame (5.6:1 on Twilight), then gone within 1.5rem, so the
-      // video shows through instead of reading as a fill.
-      linear-gradient(to bottom,
-        color-mix(in srgb, var(--pf-cover-bg) 72%, transparent) 0,
-        color-mix(in srgb, var(--pf-cover-bg) 70%, transparent) calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem)),
-        transparent calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 1.5rem)),
+      // Under the header and the bar (both clear at the top of the page):
+      // pf-cover-top-wash(), above.
+      pf-cover-top-wash(),
       linear-gradient(to right,
         color-mix(in srgb, var(--pf-cover-bg) 94%, transparent) 0%,
         color-mix(in srgb, var(--pf-cover-bg) 84%, transparent) 26%,
@@ -590,6 +604,81 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
 @keyframes pf-cover-fade {
   to {
     opacity: 0;
+  }
+}
+
+// Pinned video: the video holds still while the title, the search and the
+// banners scroll up over it, and leaves with the banners as the Quick
+// Start ("01") arrives. The media layer spans the banners' row too, and
+// only the <video>s in it stick (top: 0, a screen tall; position: sticky
+// inside overflow: clip, which, unlike hidden, doesn't stop them sticking;
+// both playlist layers share the one cell). The washes stay on the layer,
+// so they scroll with the words they serve: the bottom fade now sits under
+// the banners, at fixed depths (the layer is far taller than a screen,
+// where percentages would wash most of the video). The first screen's
+// height, which the layer used to set (min-height), is kept by a spacer
+// (the lead's ::before) over the title and search rows, so nothing there
+// moves. The scroll fade above runs as the layer leaves. Reduced motion
+// and the Settings drawer's switch keep the band that simply scrolls.
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+    &::before {
+      content: "";
+      grid-row: 1 / 3;
+      grid-column: 1;
+      margin-top: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px)));
+      pointer-events: none;
+    }
+
+    > .pf-landing__media {
+      display: grid;
+      grid-row: 1 / 4;
+      min-height: 0;
+      overflow: clip;
+    }
+
+    > .pf-landing__media .pf-landing__bg-video {
+      position: sticky;
+      inset: auto;
+      top: 0;
+      grid-area: 1 / 1;
+      align-self: start;
+      height: 100lvh; // past a phone's toolbar, so none of the page shows under it
+    }
+  }
+
+  @container pf-cover (min-width: 64rem) {
+    html:not(.pf-a11y-motion) .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+      &::before {
+        min-height: calc(100svh - var(--pf-cover-peek));
+      }
+
+      > .pf-landing__media {
+        grid-row: 1 / 4;
+        min-height: 0;
+      }
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    html:not(.pf-a11y-motion) .pf-landing--cover .pf-landing__lead > .pf-landing__media::after {
+      background-image:
+        linear-gradient(to top,
+          var(--pf-cover-bg) 0,
+          var(--pf-cover-bg) 2rem,
+          color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 5rem,
+          color-mix(in srgb, var(--pf-cover-bg) 60%, transparent) 10rem,
+          color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 16rem,
+          color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 22rem,
+          transparent 28rem),
+        pf-cover-top-wash(),
+        linear-gradient(to right,
+          color-mix(in srgb, var(--pf-cover-bg) 94%, transparent) 0%,
+          color-mix(in srgb, var(--pf-cover-bg) 84%, transparent) 26%,
+          color-mix(in srgb, var(--pf-cover-bg) 58%, transparent) 46%,
+          color-mix(in srgb, var(--pf-cover-bg) 22%, transparent) 66%,
+          transparent 82%);
+    }
   }
 }
 
