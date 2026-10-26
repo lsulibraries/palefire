@@ -13,6 +13,7 @@
       "anchor": "heritage",
       "category": "History",
       "lead": "bradley_helen_2.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Helen Bradley, 2016. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -143,6 +144,7 @@
       "anchor": "places",
       "category": "History",
       "lead": "06_john_bernard.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>John Bernard, 2015. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -321,6 +323,7 @@
       "anchor": "politics-integration",
       "category": "History",
       "lead": "04_delma_and_christine_bennett.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Delma and Christine Bennett, 2016. Photo. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -547,6 +550,7 @@
       "anchor": "the-old-ways",
       "category": "Culture",
       "lead": "46_lillian_washington.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Lillian Washington. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -749,6 +753,7 @@
       "anchor": "education",
       "category": "Culture",
       "lead": "42_evelyn_gasaway_shelton.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Evelyn Gasaway Shelton, 2015. Photo. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -975,6 +980,7 @@
       "anchor": "church",
       "category": "Culture",
       "lead": "ljl_1655.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Mt. Zion Baptist Church, 2015. Photo by Lane Lefort.</p>",
       "blocks": [
@@ -1129,6 +1135,7 @@
       "anchor": "family-community",
       "category": "Culture",
       "lead": "35_vera_payne.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015. Photo. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -1283,6 +1290,7 @@
       "anchor": "work",
       "category": "Economy",
       "lead": "sims_1_rebecca_cooper_conducting_an_interview_with_ms_audrey_sims_for_the_mossville_history_project.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Audrey Sims Guillory being interviewed by Rebecca Cooper, 2015. Photo. Photo by Stephanie Dragoon.</p>",
       "blocks": [
@@ -1437,6 +1445,7 @@
       "anchor": "health-environment",
       "category": "Economy",
       "lead": "mossville_satellite.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Satellite view of Mossville and the plants beside it, 2017. Imagery © Google.</p>",
       "blocks": [
@@ -1615,6 +1624,7 @@
       "anchor": "mossville-moving",
       "category": "Economy",
       "lead": "43_huber_smith.jpg",
+      "display": "wall",
       "focus": "center",
       "lead_caption": "<p>Huber “Mickey” Smith Sr., 2015. Photo by Kyle Tanglao.</p>",
       "blocks": [
@@ -1793,6 +1803,7 @@
       "anchor": "about",
       "category": "",
       "lead": null,
+      "display": "story",
       "focus": "center",
       "lead_caption": "",
       "blocks": [

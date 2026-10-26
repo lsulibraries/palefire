@@ -2114,12 +2114,13 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  *
  * @return array{tiles: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
- *   NULL), 'tag' (the two figures' captions, "Drawing · Proof"), 'ratio',
+ *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
+ *   audio clip's speaker), 'audio' (the entry has a clip), 'ratio',
  *   'images' (_palefire_exhibit_image() values)]. sortable: two or more
  *   tiles have a plate number. sheets: this page's sheet sizes, ['label',
  *   'h', 'w', 'current'] each, when this gallery has one. stats: the
- *   opening's facts ("22 entries", "Plates 2–154", "11 drawing–proof
- *   pairs", "Sheet 40 × 27 in").
+ *   opening's facts ("22 entries" or "7 clips", "Plates 2–154", "11
+ *   drawing–proof pairs", "Sheet 40 × 27 in").
  */
 function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cache): ?array {
   if (!$page->hasField('field_guide_blocks')) {
@@ -2133,8 +2134,16 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       continue;
     }
     // The entry's first image block: a figure, or an image group's figures.
+    // Its first audio clip's speaker (the credit before ", interviewed")
+    // labels an oral history tile.
     $figures = [];
     $caption = '';
+    $speaker = NULL;
+    foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+      if ($speaker === NULL && $block->bundle() === 'exhibit_audio' && $block->isPublished()) {
+        $speaker = trim((string) preg_replace('/,?\s*interviewed\b.*$/i', '', (string) $block->get('field_audio_credit')->value));
+      }
+    }
     foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
       if ($block->bundle() === 'exhibit_figure' && !$block->get('field_figure_image')->isEmpty()) {
         $figures = [$block];
@@ -2166,7 +2175,8 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'anchor' => _palefire_exhibit_entry_anchor($entry),
       'title' => trim((string) $entry->get('field_block_title')->value),
       'plate' => preg_match('/\bplate\s+(\d+)/i', $caption, $m) ? (int) $m[1] : NULL,
-      'tag' => count($tags) === 2 ? implode(' · ', $tags) : '',
+      'tag' => count($tags) === 2 ? implode(' · ', $tags) : (string) $speaker,
+      'audio' => $speaker !== NULL,
       'ratio' => $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
       'images' => $images,
     ];
@@ -2198,8 +2208,11 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   // The opening's line of facts, in place of a story's entry links: how
   // many entries, the plate range, compared pairs, the sheet size.
   $plates = array_filter(array_column($tiles, 'plate'));
-  $tags = array_filter(array_column($tiles, 'tag'));
-  $stats = [(string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries')];
+  $tags = array_filter(array_column(array_filter($tiles, fn ($tile) => !$tile['audio']), 'tag'));
+  // A wall of oral history clips counts clips.
+  $stats = [count(array_filter(array_column($tiles, 'audio'))) === count($tiles)
+    ? (string) \Drupal::translation()->formatPlural(count($tiles), '1 clip', '@count clips')
+    : (string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries')];
   if (count($plates) >= 2) {
     $stats[] = (string) t('Plates @first–@last', ['@first' => min($plates), '@last' => max($plates)]);
   }

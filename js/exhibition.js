@@ -733,6 +733,57 @@
     return view;
   }
 
+  // An oral history clip's stage: its photo blurred into a wash behind it
+  // (_exhibition.scss), fading in after the image and crossfading as the
+  // view steps. src: the tile's loaded image, or null for none (objects).
+  function setWash(view, src) {
+    view.stage.querySelectorAll('.pf-exhibit-wash:not(.is-leaving)').forEach((layer) => {
+      layer.classList.add('is-leaving');
+      layer.classList.remove('is-shown');
+      window.setTimeout(() => layer.remove(), 800);
+    });
+    if (!src) {
+      return;
+    }
+    const layer = document.createElement('div');
+    layer.className = 'pf-exhibit-wash';
+    layer.setAttribute('aria-hidden', 'true');
+    layer.style.backgroundImage = 'url("' + src.replace(/"/g, '%22') + '")';
+    view.stage.prepend(layer);
+    // Its hidden style read first, so the opacity transitions rather than
+    // starts shown (animation frames may not run in a background tab).
+    window.getComputedStyle(layer).opacity;
+    layer.classList.add('is-shown');
+  }
+
+  // A clip in the panel's copy of its entry: the copied player has no
+  // listeners, so it is set up again, labelled by the view's title, with
+  // the transcript open (it is the panel's text).
+  function panelAudio(view) {
+    view.body.querySelectorAll('[data-pf-audio]').forEach((wrap) => {
+      wrap.querySelectorAll('.pf-audio__play, .pf-audio__seek, .pf-audio__time').forEach((el) => el.remove());
+      wrap.classList.remove('is-custom', 'is-playing');
+      const audio = wrap.querySelector('audio');
+      if (audio) {
+        audio.setAttribute('aria-labelledby', 'pf-viewer-title');
+        initAudio(wrap);
+      }
+    });
+    view.body.querySelectorAll('.pf-exhibit-audio').forEach((clip) => {
+      clip.setAttribute('aria-labelledby', 'pf-viewer-title');
+      const transcript = clip.querySelector('.pf-exhibit-audio__transcript');
+      if (transcript) {
+        transcript.open = true;
+      }
+    });
+  }
+
+  // A clip stops when the view steps on or closes (a detached <audio>
+  // would play on).
+  function stopAudio(view) {
+    view.body.querySelectorAll('audio').forEach((audio) => audio.pause());
+  }
+
   // What the viewer's arrows, Close and Esc do here.
   const objectHandler = {
     step: (delta) => stepObject(delta),
@@ -743,6 +794,10 @@
   // Closed: focus back where the view was opened from, and (an entry) the
   // address back to its gallery. quiet: the caller does both.
   function objectClosed() {
+    if (wallState.view) {
+      stopAudio(wallState.view);
+      setWash(wallState.view, null);
+    }
     const loose = wallState.loose;
     const quiet = wallState.quiet;
     wallState.loose = null;
@@ -946,7 +1001,10 @@
     copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
     copy.querySelectorAll('.pf-exhibit-bio__toggle').forEach((el) => el.remove());
     copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
+    stopAudio(view);
     view.body.replaceChildren(...Array.from(copy.childNodes));
+    panelAudio(view);
+    setWash(view, entry.querySelector('.pf-exhibit-audio') && shown[0] ? (shown[0].currentSrc || shown[0].getAttribute('src')) : null);
     // Copied before the page's links were marked (an entry opened from the
     // address at load): mark them here.
     view.dialog.querySelectorAll('.pf-viewer__panel a[href]:not([target])').forEach(markOutside);
@@ -1006,6 +1064,8 @@
     view.label.replaceChildren(...(caption ? Array.from(caption.cloneNode(true).childNodes) : []));
     view.label.querySelectorAll('a[href]:not([target])').forEach(markOutside);
     view.label.hidden = !caption;
+    stopAudio(view);
+    setWash(view, null);
     view.body.replaceChildren();
     view.scale.hidden = true;
     view.scale.replaceChildren();

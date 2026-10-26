@@ -631,8 +631,9 @@ from the media item. A figure with no image shows only to editors.
   sized from the images' own proportions (`--pf-r`), so nothing shifts as
   they load; the wall takes the gallery's full width, its text keeps the
   measure. Labels: the entry's heading and "Pl. 40" (from "plate 40" in the
-  caption) or the pair's captions ("Drawing · Proof"); a pair's second image
-  crossfades in on hover. "Plate / A–Z" sorts when two or more captions give
+  caption), the pair's captions ("Drawing · Proof") or an audio clip's
+  speaker (its credit before ", interviewed"); a pair's second image
+  crossfades in on hover. A wall of clips counts "7 clips" in its facts. "Plate / A–Z" sorts when two or more captions give
   a plate (the tiles slide where the browser has view transitions). Hover
   lifts a tile and dims the rest; tiles rise in as they scroll into view
   (scroll-driven animations). The entries stay in the page, folded away, and
@@ -672,6 +673,13 @@ from the media item. A figure with no image shows only to editors.
   sheet drawn to scale, the current one outlined with the plate in it.
   Arrows, swipe and the buttons step through the wall in its current order,
   updating the address. Reduced motion: no grow, slide or rise.
+  An entry with an audio clip: the panel's copy of the player is set up
+  again (labelled by the view's title) with its transcript open, and the
+  clip stops when the view steps on or closes. Behind its image, the tile's
+  photo blurred (48px, 70% saturation) at 35% over the reading colour
+  (`.pf-exhibit-wash`, `setWash()`), fading in after the image and
+  crossfading as the view steps, hidden while zoomed; never behind objects,
+  whose colours a tinted ground would change.
 - Long biographies fold to their opening lines with "Read the full
   biography". Lightbox: `<dialog>`, arrows, swipe, Esc, focus returns.
 - Without JS every gallery shows in order and images open on their own.
@@ -897,6 +905,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-26
 
+- **Mossville galleries as walls; clips in the object view.** The builder sets the ten clip galleries to Display "wall" (About the Project stays a story), so each gallery opens as a wall of portraits and a clip opens in the object view: photo on the stage; heading, caption, player and transcript (open) in the panel. `js/exhibition.js` sets up the panel's copy of the player again (the copy has no listeners), labels it by the view's title, and stops it when the view steps on or closes. Behind an audio entry's photo, a wash of the same photo (blurred, desaturated, 35% over the reading colour, `_exhibition.scss`); never behind objects. Wall tiles of clips show the speaker under the title and the facts say "7 clips" (`_palefire_exhibit_wall()`). Checked on the live Audubon wall with local JS and CSS and a Mossville clip injected, at 1440 and 375, Twilight and Cream: one working player, transcript open, the page's copy paused, the clip stops on step and on close, focus back on the tile, stage buttons keep their 75% backing over the wash. Why: 70 clips scrolled as stories was a long read; a wall is the gallery's index, as at a listening station, and the wash fills the bands beside portrait photos without cropping them.
 - **Mossville History Project exhibition.** New `scripts/palefire_exhibit_mossville.php` and `data/mossville.json` build the 2017 oral history listening station as an unpublished exhibition: 11 galleries (the old History, Culture and Economy menus' ten sub-groups, then About the Project), 70 entries of photo, player and transcript, each gallery opening on its first clip's photo. Media is prepared off-site: audio as AAC 64 kbps mono at -18 LUFS (-2.5 dBTP), photos as 2560 px JPEG masters with metadata stripped (391 MB of audio and 169 MB of photos before). Fixes carried over from the old pages: three clips played the wrong file (c34, c48) or none (c52, now unpublished until it has a transcript), interviewers' misspelt names, empty or wrong captions, and alt text that only repeated the caption. `exhibit_audio` inside an entry no longer repeats the entry's title as a second `<h3>`; the entry heading labels it (`paragraph--exhibit-audio.html.twig`, `palefire_preprocess_paragraph__exhibit_audio()`). Why: the old site preloaded 5-17 MB per page, mixed channel levels and loudness, and is a standalone app outside the theme.
 - **Special Collections Glossary guide.** New `scripts/palefire_guide_special_collections_glossary.php` builds an unpublished guide page of 37 terms patrons meet when using Special Collections, one guide accordion per stage of a visit: Finding materials (finding aid, Mss. number, record group, container list, provenance…), Requesting (account, Request Item, off-site storage, processed and unprocessed, restricted, embargo), In the Reading Room (non-circulating, lockers, pencil only, book cradle, Camera User Policy) and Copies, rights and citing (duplication order, copyright, public domain, rights statement, permission to publish, preferred citation). Definitions are one or two sentences, with LSU details taken from How to Use Special Collections, which a callout links to (found by title, else its suggested alias). It reuses that guide's Resources. Two LSU-specific points are left as "[Editor: …]" (embargo; credit line or permission form). Why: patrons stumble on archive vocabulary more than on the steps, and a reference page answers a term without retelling the whole how-to.
 - **Quick Guide buttons fill the notes' width.** Under Before you visit (`_landing-features.scss`), Full guide, Prices, Parking and Hours sat at their own widths, leaving a gap before the hairline's end. Now they stretch to it: on one line each grows by an equal share; below 555px two equal columns (`minmax(0, 1fr)`, was `auto` from the start), an odd last button across both; under 320px one full-width column. Words stay at the start, the arrow at the end. If Hours fails (LibCal down) the other three share the line. Checked on /v2/special at 320, 768, 1024 and 1440 with local CSS: buttons end on the hairline's edge, no horizontal scroll. Why: the ragged right edge left empty space that read as unfinished next to the ruled notes above.

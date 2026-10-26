@@ -2602,6 +2602,45 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
+// An oral history clip's stage (js/exhibition.js setWash()): its photo
+// blurred into a wash of colour and light over the reading colour, so a
+// portrait doesn't stand in empty bands. Never behind objects, whose
+// colours a tinted ground would change; the text panel stays solid. The
+// stage's buttons keep their own 75% page-colour backing.
+.pf-viewer__stage:has(> .pf-exhibit-wash) {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pf-exhibit-wash {
+  position: absolute;
+  // Past the stage's edges, so the blur's soft rim is clipped away.
+  inset: -4rem;
+  z-index: -1;
+  background: center / cover no-repeat;
+  filter: blur(48px) saturate(.7);
+  opacity: 0;
+  pointer-events: none;
+
+  &.is-shown {
+    opacity: .35;
+  }
+
+  // Zoomed in, the image is all there is to look at.
+  .pf-viewer__stage:has(.is-zoomed) > & {
+    opacity: 0;
+  }
+
+  // In after the image has grown out of its tile; out at once.
+  @include pf-viewer-motion {
+    transition: opacity .6s ease .25s;
+
+    &.is-leaving {
+      transition-delay: 0s;
+    }
+  }
+}
+
 .pf-exhibit-object__scale {
   display: grid;
   gap: 0.6rem;

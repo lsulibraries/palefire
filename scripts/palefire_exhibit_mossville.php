@@ -21,8 +21,9 @@
  *   path=<alias>          URL alias, e.g. path=/v2/exhibitions/mossville
  *
  * The text is carried over from the old site's pages, in data/mossville.json:
- * one gallery per sub-group of its History, Culture and Economy menus, one
- * entry per clip (photo, player and transcript), then About the Project from
+ * one gallery per sub-group of its History, Culture and Economy menus, each
+ * a wall (Display "wall") of one entry per clip (photo, player and
+ * transcript, which open in the object view), then About the Project from
  * its About page. Changes: typos in titles and interviewers' names, speaker
  * labels in bold on their own paragraphs, new alt text and named captions,
  * and the right audio for three clips the old pages linked wrongly (c34,
@@ -257,8 +258,13 @@ $block = function (array $b) use (&$block, $media, $audio_file, $ref, $keep, $ht
   return NULL;
 };
 
-// Each lead is its gallery's first clip photo, credited in its caption.
+// Each lead is its gallery's first clip photo, credited in its caption. The
+// clip galleries are walls: each clip opens in the object view.
 $has_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
+$has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
+if (!$has_display) {
+  $skipped[] = 'field_exhibit_display is not on Gallery; run palefire_exhibit_setup.php. The galleries read as stories.';
+}
 $sections = [];
 foreach ($data['pages'] as $page) {
   $sections[] = Paragraph::create($keep([
@@ -268,6 +274,7 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead' => $ref($media($page['lead'] ?? NULL)),
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
     'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
+    'field_exhibit_display' => $has_display ? ($page['display'] ?? 'story') : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;
