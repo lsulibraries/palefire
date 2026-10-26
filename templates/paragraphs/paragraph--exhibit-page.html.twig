@@ -223,7 +223,8 @@
                 <span class="pf-exhibit-wall__label">
                   <span class="pf-exhibit-wall__name">{{ tile.title }}</span>
                   {% if tile.tag %}
-                    <span class="pf-exhibit-wall__tag">{{ tile.tag }}</span>
+                    {# A clip's speaker can be long: it wraps on its own line. #}
+                    <span class="pf-exhibit-wall__tag{{ tile.audio ? ' pf-exhibit-wall__tag--speaker' }}">{{ tile.tag }}</span>
                   {% elseif tile.plate %}
                     <span class="pf-exhibit-wall__tag"><abbr title="{{ 'Plate'|t }}">{{ 'Pl.'|t }}</abbr> {{ tile.plate }}</span>
                   {% endif %}

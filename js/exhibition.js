@@ -721,6 +721,11 @@
       view.scale.className = 'pf-exhibit-object__scale';
       view.scale.hidden = true;
       view.panel.append(view.scale);
+      // The pinned top row's height, under which a clip's player pins:
+      // measured when a clip is shown (panelAudio()) and as it resizes.
+      if (window.ResizeObserver) {
+        new ResizeObserver(() => topHeight(view)).observe(view.panel.querySelector('.pf-viewer__top'));
+      }
       view.body.addEventListener('click', (event) => {
         const link = event.target.closest('a[data-pf-lightbox]');
         if (link && event.button === 0) {
@@ -757,9 +762,16 @@
   }
 
   // A clip in the panel's copy of its entry: the copied player has no
-  // listeners, so it is set up again, labelled by the view's title, with
-  // the transcript open (it is the panel's text).
+  // listeners, so it is set up again, labelled by the view's title. The
+  // transcript is the panel's text: shown under a label, not folded in a
+  // <details>, while the player stays pinned (_exhibition.scss).
   function panelAudio(view) {
+    if (view.body.querySelector('[data-pf-audio]')) {
+      // Again once the dialog is open: on the first opening it is filled
+      // before it shows.
+      topHeight(view);
+      window.setTimeout(() => topHeight(view), 50);
+    }
     view.body.querySelectorAll('[data-pf-audio]').forEach((wrap) => {
       wrap.querySelectorAll('.pf-audio__play, .pf-audio__seek, .pf-audio__time').forEach((el) => el.remove());
       wrap.classList.remove('is-custom', 'is-playing');
@@ -771,11 +783,27 @@
     });
     view.body.querySelectorAll('.pf-exhibit-audio').forEach((clip) => {
       clip.setAttribute('aria-labelledby', 'pf-viewer-title');
-      const transcript = clip.querySelector('.pf-exhibit-audio__transcript');
-      if (transcript) {
-        transcript.open = true;
+      const folded = clip.querySelector('.pf-exhibit-audio__transcript');
+      const text = folded && folded.querySelector('.pf-exhibit-audio__text');
+      if (text) {
+        const transcript = document.createElement('div');
+        transcript.className = 'pf-exhibit-audio__read';
+        const label = document.createElement('p');
+        label.className = 'pf-exhibit-label__kicker';
+        label.textContent = Drupal.t('Transcript');
+        transcript.append(label, text);
+        folded.replaceWith(transcript);
       }
     });
+  }
+
+  // --pf-viewer-top-h for the pinned player (_exhibition.scss); kept
+  // while the dialog is closed (no height then).
+  function topHeight(view) {
+    const height = view.panel.querySelector('.pf-viewer__top').offsetHeight;
+    if (height) {
+      view.panel.style.setProperty('--pf-viewer-top-h', height + 'px');
+    }
   }
 
   // A clip stops when the view steps on or closes (a detached <audio>

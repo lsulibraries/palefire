@@ -2479,6 +2479,15 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
+// A clip's speaker: its own line under the title, wrapping, so a long name
+// ("Judy Montgomery-Gauthia and Elaine Robinson") never widens the tile.
+.pf-exhibit-wall__tag--speaker {
+  flex: 1 1 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 // Object view ------------------------------------------------------------------
 // A wall's entry and the images in the text, in the full-screen viewer
 // (.pf-viewer--exhibit; the viewer itself is _viewer.scss): what is the
@@ -2600,6 +2609,32 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   .pf-exhibit-figure--side-end {
     display: block;
   }
+
+  // A clip: the transcript is the panel's text, so no frame around it.
+  .pf-exhibit-audio {
+    max-width: none;
+    padding: 0;
+    border: 0;
+  }
+
+  // The player pins under the panel's top row (its height measured by
+  // js/exhibition.js) while the transcript scrolls by, across the panel on
+  // the page colour, solid so no line shows through behind the controls.
+  .pf-audio {
+    position: sticky;
+    top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
+    z-index: 1;
+    margin-inline: calc(-1 * var(--pf-pad-start)) calc(-1 * var(--pf-pad-end));
+    padding: .75rem var(--pf-pad-end) .75rem var(--pf-pad-start);
+    background-color: var(--bs-body-bg);
+    border-bottom: 1px solid $pf-hairline;
+  }
+}
+
+.pf-exhibit-audio__read {
+  display: grid;
+  gap: .5rem;
+  margin-top: .5rem;
 }
 
 // An oral history clip's stage (js/exhibition.js setWash()): its photo
