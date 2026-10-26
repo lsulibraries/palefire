@@ -251,6 +251,156 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   display: none;
 }
 
+// --- The logo across the bar; the bar's controls on the right -------------
+// From lg, on a page with the bar, while the page is at its top (no
+// .pf-bar-stuck, js/palefire.js): the logo spans the header and the bar,
+// a third larger and centred on the two rows together (down half the
+// bar's 2rem row), its column the bar's left end. A transform, so nothing
+// moves under it. Once the page scrolls it eases back into the header's
+// row, and the sticky header and bar are their slim selves. The breadcrumb
+// and the TOC's "show" button (a copy of the sidebar's, js/modular-toc-
+// collapse.js) sit at the bar's right end, before the video button. Below
+// lg the header and bar are unchanged.
+@include media-breakpoint-up(lg) {
+  :root:has(.pf-landing__bar) .pf-header .pf-brand {
+    transform-origin: 0 50%;
+  }
+
+  [dir="rtl"]:has(.pf-landing__bar) .pf-header .pf-brand {
+    transform-origin: 100% 50%;
+  }
+
+  // Not while the page loads: reloaded part-way down, the logo would
+  // shrink in view.
+  :root.pf-ready:has(.pf-landing__bar) .pf-header .pf-brand {
+    transition: color $pf-hover-out ease, transform .5s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  :root:not(.pf-bar-stuck):has(.pf-landing__bar) .pf-header .pf-brand {
+    transform: translateY(1rem) scale(1.35);
+  }
+
+  // No rule under the header through the logo: header and bar read as one.
+  :root:not(.pf-bar-stuck):has(.pf-landing__bar) .pf-header {
+    border-bottom-color: transparent;
+  }
+
+  // An exhibition's zoom button (js/exhibition.js) follows the breadcrumb
+  // at the end of the row, rather than pushing it to the start.
+  .pf-landing__bar .pf-exhibit-zoom {
+    margin-inline-start: .5rem;
+  }
+
+  .pf-landing__bar-inner {
+    justify-content: flex-end;
+  }
+
+  // The trail ends against the TOC button (its list is a wrapping flex
+  // row). The bar's row already keeps the video button's room, so not the
+  // list's own (_layout.scss), which left a gap before the button.
+  .pf-landing__bar .pf-breadcrumb--lead .breadcrumb {
+    justify-content: flex-end;
+  }
+
+  body:has(.pf-sections > .pf-section:first-child [data-landing-video-toggle]) .pf-landing__bar .pf-breadcrumb--modular .breadcrumb {
+    padding-inline-end: 0;
+  }
+
+  // The bar's TOC button: as the video button beside it, square, no frame,
+  // a faint fill on hover. Only while the TOC is hidden; open, the
+  // sidebar's own chevron hides it again (and the floating copy over the
+  // logo's column is gone).
+  .pf-landing__toc {
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--pf-bar-button, 2rem);
+    height: var(--pf-bar-button, 2rem);
+    margin-inline-start: .5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: var(--pf-toc-color);
+    background-color: transparent;
+    transition: color $pf-hover-out ease, background-color .3s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-toc-active);
+      background-color: color-mix(in srgb, currentColor 8%, transparent);
+      transition-duration: $pf-hover-in, .3s;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-toc-accent, #{$pf-gold});
+      outline-offset: 2px;
+    }
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  html:not(.pf-toc-collapsed) .pf-landing__toc,
+  html.pf-toc-collapsed:has(.pf-landing__bar) .pf-modular__toc-collapse {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:has(.pf-landing__bar) .pf-header .pf-brand {
+    transition: color $pf-hover-out ease !important;
+  }
+}
+
+html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
+  transition: color $pf-hover-out ease !important;
+}
+
+// --- A clear header at the top of a cover --------------------------------
+// On the hero's cover, before the page scrolls, the header has no glass,
+// fill or rule, like the bar under it: the video runs up behind both. Its
+// words and icons keep a halo of the page colour (as the bar's do), so
+// they read over any frame. Scrolled, it is glass again. Reduce
+// transparency (and its kin) keeps the glass throughout.
+:root:has(.pf-landing--cover) .pf-header {
+  transition: background-color .3s ease, border-color .3s ease, box-shadow $pf-header-transition;
+
+  &::before {
+    transition: -webkit-backdrop-filter .3s ease, backdrop-filter .3s ease;
+  }
+}
+
+:root:not(.pf-bar-stuck):has(.pf-landing--cover) .pf-header {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  text-shadow: 0 0 .5rem var(--pf-g-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-g-bg, var(--bs-body-bg));
+
+  &::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  // The logo and icons are drawings: the same halo as a shadow.
+  .pf-brand__logo,
+  .pf-header__utility svg {
+    filter: drop-shadow(0 0 .375rem var(--pf-g-bg, var(--bs-body-bg)));
+  }
+}
+
+@include pf-solid-chrome {
+  :root:has(.pf-landing--cover) .pf-header {
+    background-color: var(--pf-header-bg) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:has(.pf-landing--cover) .pf-header {
+    transition: none;
+  }
+}
+
 // --- Docked video button ---------------------------------------------------
 // A zero-height sticky row laid over the bar (negative margin out, the same
 // back in, so nothing below moves): the button sits at the far end of the
@@ -942,21 +1092,13 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // landing.html.twig), each a portrait picture with its label (the tiles'
 // pill) and title in white over a scrim, never the gold (the gold, the
 // swatch's highlight, marks the page's own voice). From 44rem of landing,
-// one row of five, mirrored round the centre (the second and fourth set
-// lower), rising out of the cover's video; on the full-screen cover (64rem)
-// a third of their height deep, floating over the building with a soft
-// shadow. Narrower, the blog post is a line of text across the top and the
-// rest go two by two, the right column set lower: the same rhythm, small.
-// --pf-banner-offset sets each banner's drop: a relative shift, not a
-// margin, so a dropped banner never makes its row taller and every gap
-// between rows is the gutter, as between columns. The grid keeps the drop
-// (--pf-banner-drop) as room under its last row. The banners hold still
-// as the page scrolls (2026-10-26: the row's drift and cross are gone);
-// only their pictures pan.
-.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
-  --pf-banner-drop: 1.5rem;
-}
-
+// one level row of five, rising out of the cover's video; on the
+// full-screen cover (64rem) a third of their height deep, floating over the
+// building with a soft shadow. Narrower, the blog post is a line of text
+// across the top and the rest go two by two. The banners hold still as the
+// page scrolls and stand level (2026-10-26: the row's drift and cross, and
+// the stagger that set every other banner lower, are gone); only their
+// pictures pan.
 .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
   --pf-banner-rise: 0px; // the row's lift over the cover's foot
   display: grid;
@@ -964,19 +1106,18 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   align-items: start;
   gap: var(--pf-grid-gutter);
   margin: calc(-1 * var(--pf-banner-rise)) var(--pf-cover-gutter) 0;
-  padding: 0 0 var(--pf-banner-drop);
+  padding: 0;
   list-style: none;
 }
 
 .pf-hero-banner {
   position: relative;
-  top: var(--pf-banner-offset, 0px);
   min-width: 0;
 }
 
 @container pf-cover (max-width: 43.98rem) {
   // Two to a row, close set: a narrow gutter (10px on a phone, 16px by
-  // 44rem) and a short drop, so the pictures read as one block, still
+  // 44rem), so the pictures read as one block, still
   // aligned with the title and search at the sides.
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     gap: clamp(.625rem, 2.5cqi, 1rem);
@@ -989,12 +1130,6 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
   .pf-hero-banners .pf-hero-banner__title {
     font-size: clamp(1rem, .85rem + 1.2cqi, 1.25rem);
-  }
-
-  // The right column: with the blog line first, the odd ones after it.
-  .pf-hero-banners:not(:has(> .pf-hero-banner--blog)) > .pf-hero-banner:nth-child(even),
-  .pf-hero-banners:has(> .pf-hero-banner--blog) > .pf-hero-banner:nth-child(odd):not(:first-child) {
-    --pf-banner-offset: var(--pf-banner-drop);
   }
 
   // Tablets: two to a row are wide, so a little shorter (4:5).
@@ -1119,24 +1254,22 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transform: scale(1.04);
 }
 
-// The pictures in the swatch's colours until hovered: each one grey and a
-// little dimmed, then the swatch's accent multiplied over it (Cream's LSU
-// purple, Twilight's gold), so it sits deep and low-key on the page.
-// Multiply only darkens, so the white words over the scrim gain contrast.
-// Hover or focus brings the picture's colours back as it zooms. Not the
-// event's date (no picture).
+// The pictures in the page's own colour until hovered: each one grey, then
+// half washed with the page colour (the cover's, so the swatch's), so it
+// sinks into the ground around it (Twilight's dark violet grey, Cream's
+// cream). The scrim over it keeps the white words at 4.5:1. Hover or focus
+// brings the picture's colours back as it zooms. Not the event's date (no
+// picture).
 .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
   img {
-    filter: grayscale(1) brightness(.8) contrast(1.1);
+    filter: grayscale(1) contrast(1.1);
   }
 
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    // A third white, so a dark accent (purple) tints rather than blacks out.
-    background: color-mix(in srgb, var(--pf-g-accent, #{$pf-purple}) 65%, #fff);
-    mix-blend-mode: multiply;
+    background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 50%, transparent);
     pointer-events: none;
     transition: opacity $pf-hover-out ease;
   }
@@ -1197,20 +1330,15 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
-// once, each banner fades into place, left to right, 120ms apart; the high
-// ones (first and third) come down from above, the low ones rise from
-// below, so the offsets open out as they settle. CSS only, so it runs with
+// once, each banner fades up into place, left to right, 120ms apart. CSS
+// only, so it runs with
 // the page (Swup's too). None with reduced motion or the Settings
 // drawer's switch.
 @keyframes pf-banner-rise {
   from {
     opacity: 0;
-    transform: translateY(var(--pf-banner-from, 2.5rem));
+    transform: translateY(2.5rem);
   }
-}
-
-.pf-hero-banner:nth-child(odd) {
-  --pf-banner-from: -2.5rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1226,18 +1354,10 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // No rise here (only on the full-screen cover, from 64rem): the row keeps
-// the search's own margin under it (3.2rem), more than a banner's drop.
+// the search's own margin under it (3.2rem).
 @container pf-cover (min-width: 44rem) {
-  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
-    --pf-banner-drop: 2.25rem;
-  }
-
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  .pf-hero-banner:nth-child(even) {
-    --pf-banner-offset: var(--pf-banner-drop);
   }
 
   // Tall (1:2), for the words and more of the picture, with a soft

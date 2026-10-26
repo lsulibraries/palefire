@@ -21,7 +21,11 @@
  * open and the column doesn't animate on load.
  *
  * Styles: "TOC sidebar toggle" in scss/components/_modular.scss.
- * Markup: the [data-pf-toc-collapse] button in page.html.twig.
+ * Markup: the [data-pf-toc-collapse] button in page.html.twig. On a page
+ * with the landing's sub-header bar this adds a copy at the bar's end
+ * (.pf-landing__toc, beside the video button), which shows the TOC while
+ * it is hidden (_landing-features.scss); both work the same and keep the
+ * same name.
  * Restored 2026-10-18 from the version removed in 5865c10.
  */
 (function (Drupal, once) {
@@ -96,8 +100,22 @@
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('pf-toc-instant')));
   }
 
+  // The sidebar's button, copied to the end of the landing bar's row.
+  function addBarCopy(context) {
+    const button = document.querySelector('.pf-modular__toc-collapse[data-pf-toc-collapse]');
+    once('pf-toc-bar', '.pf-landing__bar-inner', context).forEach((row) => {
+      if (!button) {
+        return;
+      }
+      const copy = button.cloneNode(true);
+      copy.className = 'pf-landing__toc d-none d-lg-inline-flex';
+      row.append(copy);
+    });
+  }
+
   Drupal.behaviors.palefireTocCollapse = {
     attach(context) {
+      addBarCopy(context);
       once('pf-toc-collapse', '[data-pf-toc-collapse]', context).forEach((button) => {
         applyDefault();
         sync(button);
@@ -105,7 +123,16 @@
           const collapsed = !root.classList.contains(CLASS);
           root.classList.toggle(CLASS, collapsed);
           store(collapsed);
-          sync(button);
+          const buttons = document.querySelectorAll('[data-pf-toc-collapse]');
+          buttons.forEach(sync);
+          // On the landing bar one button shows at a time: when the one
+          // pressed has gone, focus moves to the one that took its place.
+          if (!button.getClientRects().length) {
+            const other = Array.from(buttons).find((b) => b.getClientRects().length);
+            if (other) {
+              other.focus({ preventScroll: true });
+            }
+          }
           // Shown again: let the TOC re-measure its indicator in the
           // opened column.
           window.dispatchEvent(new Event('resize'));
