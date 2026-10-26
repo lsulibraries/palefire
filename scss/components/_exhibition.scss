@@ -765,6 +765,94 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// Next-gallery placard (js/exhibition.js addNext()): at the foot of each
+// gallery but the last, after its content box, on the page colour. A
+// hairline over the mono "Next" and the number in the highlight, the next
+// gallery's title, and an arrow pointing down: scrolling on is the way
+// there, so it reads as a signpost, not a button (the link glides there
+// too). Lined up with the text column; every gallery ends the same way, so
+// the seam no longer depends on how much room its last text leaves.
+.pf-exhibit-next {
+  padding: 0 var(--pf-section-pad-inline) clamp(2.5rem, 5vw, 4rem);
+}
+
+.pf-exhibit-next__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "kicker arrow"
+    "title  arrow";
+  align-items: end;
+  gap: .75rem 1.5rem;
+  max-width: var(--pf-exhibit-prose);
+  padding-top: 1.25rem;
+  border-top: 1px solid $pf-hairline;
+  color: var(--bs-emphasis-color);
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    outline-offset: .5rem;
+  }
+}
+
+.pf-exhibit-next__kicker {
+  @extend %pf-exhibit-kicker;
+  grid-area: kicker;
+}
+
+.pf-exhibit-next__number {
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  font-variant-numeric: tabular-nums;
+
+  // "Next · 03 / 07": the dot is decoration.
+  &::before {
+    content: "\00b7\2002" / "";
+  }
+}
+
+.pf-exhibit-next__title {
+  grid-area: title;
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -.015em;
+  line-height: 1.2;
+  text-wrap: balance;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  transition: text-decoration-color $pf-hover-out ease;
+}
+
+.pf-exhibit-next__arrow {
+  grid-area: arrow;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-bottom: .3rem;
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+}
+
+.pf-exhibit-next__link:is(:hover, :focus-visible) .pf-exhibit-next__title {
+  text-decoration-color: currentColor;
+  transition-duration: $pf-hover-in;
+}
+
+@include pf-exhibit-motion {
+  .pf-exhibit-next__arrow {
+    transition: translate $pf-hover-out ease;
+  }
+
+  .pf-exhibit-next__link:is(:hover, :focus-visible) .pf-exhibit-next__arrow {
+    translate: 0 .25rem;
+    transition-duration: $pf-hover-in;
+  }
+}
+
 // A link's target flashes once it is reached.
 .is-target {
   animation: pf-exhibit-flash 1.8s ease both;

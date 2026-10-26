@@ -7,7 +7,9 @@
  *   one after another under the title page (2026-10-26: was one gallery
  *   at a time). "Begin" and any #link in the text (an entry, a source)
  *   glide to the target and focus it; the address follows without a
- *   history entry. The TOC scrolls as on other pages.
+ *   history entry. The TOC scrolls as on other pages. Each gallery but the
+ *   last ends with a placard for the next one ("Next · 03 / 07", its title,
+ *   an arrow pointing down: scrolling on is the way there).
  * - Title page: the page head (includes/exhibit-cover.html.twig), with a
  *   button in its breadcrumb bar that opens the cover full screen.
  * - Object view: every image in the full-screen viewer (js/viewer.js). A
@@ -264,6 +266,45 @@
     });
   }
 
+  // The placard at a gallery's foot (.pf-exhibit-next, _exhibition.scss):
+  // "Next · 03 / 07", the next gallery's title and an arrow pointing down,
+  // since scrolling on is the way there; the link glides there too (onClick).
+  // After the section's content box, so it sits on the page colour past any
+  // pinned image. None after the last gallery.
+  function addNext(page) {
+    const index = state.pages.indexOf(page);
+    const to = state.pages[index + 1];
+    if (!to || !to.id) {
+      return;
+    }
+    const heading = to.querySelector('.pf-section__title');
+    const nav = document.createElement('nav');
+    nav.className = 'pf-exhibit-next';
+    nav.setAttribute('aria-label', Drupal.t('Next gallery'));
+    const link = document.createElement('a');
+    link.className = 'pf-exhibit-next__link';
+    link.href = '#' + to.id;
+    const kicker = document.createElement('span');
+    kicker.className = 'pf-exhibit-next__kicker';
+    kicker.append(Drupal.t('Next'));
+    const number = document.createElement('span');
+    number.className = 'pf-exhibit-next__number';
+    number.textContent = String(index + 2).padStart(2, '0') + ' / ' + String(state.pages.length).padStart(2, '0');
+    kicker.append(' ', number);
+    const title = document.createElement('span');
+    title.className = 'pf-exhibit-next__title';
+    title.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
+    // A pause between the number and the title for screen readers
+    // ("Next 02 / 07: Audubon at Oakley").
+    const pause = document.createElement('span');
+    pause.className = 'visually-hidden';
+    pause.textContent = ': ';
+    link.append(kicker, pause, title);
+    link.insertAdjacentHTML('beforeend', '<svg class="pf-exhibit-next__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M8 2.5v11M3.5 9 8 13.5 12.5 9"/></svg>');
+    nav.append(link);
+    page.append(nav);
+  }
+
   function prepareGallery(page) {
     if (page.dataset.pfExhibitReady) {
       return;
@@ -272,6 +313,7 @@
     page.querySelectorAll('[data-pf-exhibit-bio]').forEach(initBio);
     foldIntro(page);
     sizeHero(page);
+    addNext(page);
   }
 
   // "Begin", and #links in the exhibition outside the TOC (the opening's
