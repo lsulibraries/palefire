@@ -60,7 +60,9 @@ $pf-content-max:     1280px; // Landing search form + building map cap; the page
 $pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
 $pf-fade-duration:   .45s; // Page fade-in duration.
-$pf-swup-duration:   .25s; // Swup page-to-page cross-fade (each direction).
+$pf-swup-out:        .2s;  // Swup visit: the page's content fades out.
+$pf-swup-in:         .35s; // Swup visit: the next page's content fades and rises in.
+$pf-swup-ease-in:    cubic-bezier(.22, 1, .36, 1); // Fast start, soft landing.
 
 // Top bar spans the full page width; these are its left/right padding per
 // Bootstrap breakpoint (mobile first). Keep xs >= 1rem so nothing touches

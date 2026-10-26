@@ -23,6 +23,8 @@
  *   it incompatible and loaded it a second time (2026-10-26). Any other page
  *   that falls back is remembered for the session and loaded normally from
  *   the start next time.
+ * - Prefetch: a link's page is fetched into the cache on hover, focus or
+ *   touch, so most visits swap without waiting (see "Prefetch").
  * - Loading line: a thin line under the header (.pf-loading, _header.scss)
  *   while the next page loads, a Swup visit or a normal one (a link Swup
  *   skips). It shows only after 300ms, so a quick visit never flashes it;
@@ -436,6 +438,72 @@
     startLoading();
   };
 
+  /* ---------------------------------------------------------------------
+   * Prefetch
+   *
+   * A link's page is fetched into Swup's cache when the pointer rests on it
+   * (80ms, so sweeping across a menu fetches nothing), when it gets focus,
+   * or when a finger touches it, so the visit usually swaps with no wait.
+   * Only links Swup would follow, each page once, two at a time, and never
+   * with Data Saver or on a 2G connection.
+   * ------------------------------------------------------------------ */
+
+  const PREFETCH_DELAY = 80;
+  const PREFETCH_MAX = 2;
+  // Swup URL (path + query) => the request in flight.
+  const prefetching = new Map();
+
+  const prefetchOn = (swup) => {
+    const connection = navigator.connection;
+    if (connection && (connection.saveData || /2g/.test(connection.effectiveType || ''))) {
+      return;
+    }
+    let hoverTimer = 0;
+    let hoverLink = null;
+
+    const prefetch = (el) => {
+      if (swup.shouldIgnoreVisit(el.href, { el })) {
+        return;
+      }
+      const next = new URL(el.href, window.location.href);
+      const url = next.pathname + next.search;
+      if (url === window.location.pathname + window.location.search || prefetching.has(url) || prefetching.size >= PREFETCH_MAX || swup.cache.has(url)) {
+        return;
+      }
+      const request = swup.fetchPage(url)
+        .catch(() => null)
+        .finally(() => prefetching.delete(url));
+      prefetching.set(url, request);
+    };
+
+    const linkFor = (event) => (event.target instanceof Element ? event.target.closest('a[href]') : null);
+
+    document.addEventListener('mouseover', (event) => {
+      const el = linkFor(event);
+      // Moving between a link's own children: the timer keeps running.
+      if (el === hoverLink) {
+        return;
+      }
+      hoverLink = el;
+      window.clearTimeout(hoverTimer);
+      if (el) {
+        hoverTimer = window.setTimeout(() => prefetch(el), PREFETCH_DELAY);
+      }
+    });
+    document.addEventListener('focusin', (event) => {
+      const el = linkFor(event);
+      if (el) {
+        prefetch(el);
+      }
+    });
+    document.addEventListener('touchstart', (event) => {
+      const el = linkFor(event);
+      if (el) {
+        prefetch(el);
+      }
+    }, { passive: true });
+  };
+
   const init = () => {
     const containers = [CONTAINER].concat(OPTIONAL_CONTAINERS.filter((sel) => document.querySelector(sel)));
     const loadedAssets = new Set(assetUrls(document));
@@ -446,7 +514,21 @@
       containers,
       cache: true,
       ignoreVisit: shouldIgnore,
+      // The content fades, not #swup: it's the curtain over the footer
+      // (base/_swup.scss).
+      animationSelector: `${CONTAINER} > *`,
     });
+
+    // A visit to a page still being prefetched waits for that request
+    // instead of sending a second one; the page is then in the cache.
+    swup.hooks.replace('page:load', async (visit, args, defaultHandler) => {
+      const pending = prefetching.get(visit.to.url);
+      if (pending) {
+        await pending;
+      }
+      return defaultHandler(visit, args);
+    });
+    prefetchOn(swup);
 
     swup.hooks.on('visit:start', (visit) => {
       hardNavigation = false;

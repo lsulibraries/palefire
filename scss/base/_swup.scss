@@ -1,22 +1,46 @@
 // Swup page transitions (js/palefire-swup.js).
-// Swup adds .is-changing / .is-animating to <html> during a visit and waits
-// for this transition on #swup.transition-fade. The first page load still
-// uses the body fade-in (base/_fade.scss).
+// Swup adds .is-changing / .is-animating to <html> during a visit, with
+// .is-leaving on the way out and .is-rendering on the way in, and waits for
+// the opacity transition on #swup's children (animationSelector). The first
+// page load still uses the body fade-in (base/_fade.scss).
+//
+// Only the content inside #swup fades, never #swup itself: on large screens
+// #swup is the opaque curtain over the sticky footer (_footer.scss), so
+// fading it showed the footer until the next page arrived (2026-10-26).
 
-html.is-changing .transition-fade {
-  transition: opacity $pf-swup-duration ease-out;
-  opacity: 1;
+html.is-changing .pf-swup > * {
+  transition: opacity $pf-swup-out ease-in;
 }
 
-html.is-animating .transition-fade {
+html.is-rendering .pf-swup > * {
+  transition: opacity $pf-swup-in $pf-swup-ease-in;
+}
+
+html.is-animating .pf-swup > * {
   opacity: 0;
+}
+
+// The rise: the next page's content settles up into place. Not on anything
+// holding a position: fixed layer (the landing video, the TOC button; the
+// TOC drawer is outside <main>): a transform would pin it to the moving box
+// for the length of the rise, then let it jump back to the window.
+@media (prefers-reduced-motion: no-preference) {
+  html.is-rendering .pf-swup > .pf-breadcrumb,
+  html.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
+    // Opacity too: this outranks the fade above on the breadcrumb.
+    transition: opacity $pf-swup-in $pf-swup-ease-in, transform $pf-swup-in $pf-swup-ease-in;
+  }
+
+  html.is-animating.is-rendering .pf-swup > .pf-breadcrumb,
+  html.is-animating.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
+    transform: translateY(.5rem);
+  }
 }
 
 // Reduced motion: the JS skips the animation; this is a belt-and-braces
 // fallback so nothing is ever left faded out.
 @media (prefers-reduced-motion: reduce) {
-  html.is-changing .transition-fade,
-  html.is-animating .transition-fade {
+  html:is(.is-changing, .is-animating) .pf-swup > * {
     transition: none;
     opacity: 1;
   }
