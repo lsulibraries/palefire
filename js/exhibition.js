@@ -773,8 +773,8 @@
       window.setTimeout(() => topHeight(view), 50);
     }
     view.body.querySelectorAll('[data-pf-audio]').forEach((wrap) => {
-      wrap.querySelectorAll('.pf-audio__play, .pf-audio__seek, .pf-audio__time').forEach((el) => el.remove());
-      wrap.classList.remove('is-custom', 'is-playing');
+      wrap.querySelectorAll('.pf-audio__play, .pf-audio__seek, .pf-audio__time, .pf-audio__mute').forEach((el) => el.remove());
+      wrap.classList.remove('is-custom', 'is-playing', 'is-muted');
       const audio = wrap.querySelector('audio');
       if (audio) {
         audio.setAttribute('aria-labelledby', 'pf-viewer-title');
@@ -1374,6 +1374,28 @@
     return Math.floor(seconds / 60) + ':' + (s < 10 ? '0' : '') + s;
   }
 
+  // The listener's level, shared by every player on the page, so the next
+  // clip (a new player in the object view) keeps it. iOS ignores a page's
+  // volume (it reads back as 1): there only Mute shows and the device's
+  // buttons set the level.
+  const level = { volume: 1, muted: false };
+  const canSetVolume = (() => {
+    const probe = document.createElement('audio');
+    probe.volume = 0.5;
+    return probe.volume === 0.5;
+  })();
+
+  function setLevel(volume, muted) {
+    level.volume = volume;
+    level.muted = muted;
+    document.querySelectorAll('[data-pf-audio] audio').forEach((audio) => {
+      audio.muted = muted;
+      if (canSetVolume) {
+        audio.volume = volume;
+      }
+    });
+  }
+
   function initAudio(wrap) {
     const audio = wrap.querySelector('audio');
     if (!audio) {
@@ -1440,8 +1462,49 @@
       sync();
     });
     ['play', 'pause', 'timeupdate', 'loadedmetadata', 'ended'].forEach((type) => audio.addEventListener(type, sync));
-    wrap.append(play, seek, time);
+
+    // Mute (a toggle: aria-pressed), and the volume where it can be set.
+    const mute = document.createElement('button');
+    mute.type = 'button';
+    mute.className = 'pf-audio__mute';
+    mute.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 6h2.5L8.5 3v10L5 10H2.5z"/><path class="pf-audio__waves" d="M10.5 5.75a3 3 0 0 1 0 4.5M12.25 4a5.5 5.5 0 0 1 0 8"/><path class="pf-audio__cross" d="M10.5 6l4 4m0-4-4 4"/></svg><span class="visually-hidden">' + Drupal.t('Mute') + '</span>';
+    let volume = null;
+    if (canSetVolume) {
+      volume = document.createElement('input');
+      volume.type = 'range';
+      volume.className = 'pf-audio__seek pf-audio__volume';
+      volume.min = '0';
+      volume.max = '100';
+      volume.step = '5';
+      volume.setAttribute('aria-label', Drupal.t('Volume'));
+      volume.addEventListener('input', () => setLevel(Number(volume.value) / 100, false));
+    }
+    mute.addEventListener('click', () => {
+      // Unmuting at no volume would stay silent: back to half.
+      setLevel(level.volume || 0.5, !audio.muted);
+    });
+    const syncLevel = () => {
+      wrap.classList.toggle('is-muted', audio.muted || (canSetVolume && audio.volume === 0));
+      mute.setAttribute('aria-pressed', String(audio.muted));
+      if (volume) {
+        const percent = audio.muted ? 0 : Math.round(audio.volume * 100);
+        volume.value = String(percent);
+        volume.style.setProperty('--pf-audio-progress', percent + '%');
+        volume.setAttribute('aria-valuetext', audio.muted ? Drupal.t('Muted') : percent + '%');
+      }
+    };
+    audio.addEventListener('volumechange', syncLevel);
+    audio.muted = level.muted;
+    if (canSetVolume) {
+      audio.volume = level.volume;
+    }
+
+    wrap.append(play, seek, time, mute);
+    if (volume) {
+      wrap.append(volume);
+    }
     sync();
+    syncLevel();
   }
 
   /* ---------------------------------------------------------------------

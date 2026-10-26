@@ -1744,12 +1744,16 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   width: 100%;
 }
 
-// The custom player (js/exhibition.js).
+// The custom player (js/exhibition.js): play, seek, time, then Mute and
+// (where the device lets a page set it) the volume.
 .pf-audio.is-custom {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-auto-columns: auto;
+  grid-auto-flow: column;
   gap: 1rem;
   align-items: center;
+  container-type: inline-size;
 
   .pf-audio__native {
     display: none;
@@ -1852,6 +1856,61 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
   font-variant-numeric: tabular-nums;
   color: var(--pf-exhibit-muted);
+}
+
+.pf-audio__mute {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-inline: -0.5rem -0.5rem;
+  padding: 0;
+  color: var(--bs-body-color);
+  background: transparent;
+  border: 0;
+  transition: color $pf-hover-out ease;
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .pf-audio__cross {
+    display: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+}
+
+.pf-audio.is-muted {
+  .pf-audio__waves {
+    display: none;
+  }
+
+  .pf-audio__cross {
+    display: inline;
+  }
+}
+
+.pf-audio__volume {
+  width: 4.5rem;
+}
+
+// A narrow player keeps the seek bar long: the volume slider goes (Mute
+// stays; phones have their own volume buttons).
+@container (max-width: 22rem) {
+  .pf-audio__volume {
+    display: none;
+  }
 }
 
 .pf-exhibit-audio__summary {
@@ -2635,6 +2694,17 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   display: grid;
   gap: .5rem;
   margin-top: .5rem;
+}
+
+// Room after the transcript, so its last lines can be scrolled up to eye
+// level (about the panel's middle) instead of read at the foot of the
+// screen. Below lg the panel is the screen's lower part (_viewer.scss).
+.pf-exhibit-object__body .pf-exhibit-audio__read {
+  padding-bottom: 20svh;
+
+  @include media-breakpoint-up(lg) {
+    padding-bottom: 40svh;
+  }
 }
 
 // An oral history clip's stage (js/exhibition.js setWash()): its photo
