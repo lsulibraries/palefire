@@ -251,40 +251,12 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   display: none;
 }
 
-// --- The logo across the bar; the bar's controls on the right -------------
-// From lg, on a page with the bar, while the page is at its top (no
-// .pf-bar-stuck, js/palefire.js): the logo spans the header and the bar,
-// a third larger and centred on the two rows together (down half the
-// bar's 2rem row), its column the bar's left end. A transform, so nothing
-// moves under it. Once the page scrolls it eases back into the header's
-// row, and the sticky header and bar are their slim selves. The breadcrumb
-// and the TOC's "show" button (a copy of the sidebar's, js/modular-toc-
-// collapse.js) sit at the bar's right end, before the video button. Below
-// lg the header and bar are unchanged.
+// --- The bar's controls on the right ---------------------------------------
+// From lg the breadcrumb and the TOC's "show" button (a copy of the
+// sidebar's, js/modular-toc-collapse.js) sit at the bar's right end,
+// before the video or zoom button. Below lg the bar is unchanged.
+// (2026-10-26: the logo no longer grows across the bar.)
 @include media-breakpoint-up(lg) {
-  :root:has(.pf-landing__bar) .pf-header .pf-brand {
-    transform-origin: 0 50%;
-  }
-
-  [dir="rtl"]:has(.pf-landing__bar) .pf-header .pf-brand {
-    transform-origin: 100% 50%;
-  }
-
-  // Not while the page loads: reloaded part-way down, the logo would
-  // shrink in view.
-  :root.pf-ready:has(.pf-landing__bar) .pf-header .pf-brand {
-    transition: color $pf-hover-out ease, transform .5s cubic-bezier(.2, .7, .2, 1);
-  }
-
-  :root:not(.pf-bar-stuck):has(.pf-landing__bar) .pf-header .pf-brand {
-    transform: translateY(1rem) scale(1.35);
-  }
-
-  // No rule under the header through the logo: header and bar read as one.
-  :root:not(.pf-bar-stuck):has(.pf-landing__bar) .pf-header {
-    border-bottom-color: transparent;
-  }
-
   // An exhibition's zoom button (js/exhibition.js) follows the breadcrumb
   // at the end of the row, rather than pushing it to the start.
   .pf-landing__bar .pf-exhibit-zoom {
@@ -348,23 +320,17 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root:has(.pf-landing__bar) .pf-header .pf-brand {
-    transition: color $pf-hover-out ease !important;
-  }
-}
-
-html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
-  transition: color $pf-hover-out ease !important;
-}
-
-// --- A clear header at the top of a cover --------------------------------
-// On the hero's cover, before the page scrolls, the header has no glass,
-// fill or rule, like the bar under it: the video runs up behind both. Its
-// words and icons keep a halo of the page colour (as the bar's do), so
+// --- A clear header over a background video or image --------------------
+// When the page opens on a background video (a landing's, the hero's cover
+// among them) or a section's background image, the header has no glass,
+// fill or rule until the page scrolls: the picture runs up behind it (the
+// cover's video reaches up under it, below; the others already bleed up).
+// Its words and icons keep a halo of the page colour (as the bar's do), so
 // they read over any frame. Scrolled, it is glass again. Reduce
 // transparency (and its kin) keeps the glass throughout.
-:root:has(.pf-landing--cover) .pf-header {
+$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg))';
+
+:root#{$pf-bg-first} .pf-header {
   transition: background-color .3s ease, border-color .3s ease, box-shadow $pf-header-transition;
 
   &::before {
@@ -372,7 +338,7 @@ html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
   }
 }
 
-:root:not(.pf-bar-stuck):has(.pf-landing--cover) .pf-header {
+:root:not(.pf-bar-stuck)#{$pf-bg-first} .pf-header {
   background-color: transparent;
   border-bottom-color: transparent;
   text-shadow: 0 0 .5rem var(--pf-g-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-g-bg, var(--bs-body-bg));
@@ -390,13 +356,13 @@ html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
 }
 
 @include pf-solid-chrome {
-  :root:has(.pf-landing--cover) .pf-header {
+  :root#{$pf-bg-first} .pf-header {
     background-color: var(--pf-header-bg) !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root:has(.pf-landing--cover) .pf-header {
+  :root#{$pf-bg-first} .pf-header {
     transition: none;
   }
 }
@@ -516,12 +482,14 @@ html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
     grid-row: 3;
   }
 
+  // Up under the header too (--pf-header-h), which is clear over it at
+  // the top of the page (below).
   > .pf-landing__media {
     position: relative;
     inset: auto;
     z-index: 0;
     grid-row: 1 / 3;
-    margin: calc(-1 * var(--pf-cover-top)) 0 0;
+    margin: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0;
     overflow: hidden;
     pointer-events: none;
   }
@@ -555,7 +523,7 @@ html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
 
     > .pf-landing__media {
       grid-row: 1 / 3;
-      min-height: calc(100svh - var(--pf-header-h, 0px) - var(--pf-cover-peek));
+      min-height: calc(100svh - var(--pf-cover-peek)); // from the page's top, under the header
     }
 
     > .pf-landing__form {
@@ -588,12 +556,14 @@ html.pf-a11y-motion:has(.pf-landing__bar) .pf-header .pf-brand {
         color-mix(in srgb, var(--pf-cover-bg) 28%, transparent) 42%,
         color-mix(in srgb, var(--pf-cover-bg) 8%, transparent) 58%,
         transparent 72%),
-      // Under the bar's caption strip (clear at the top of the page): firm
-      // for its first 7%, so its words keep 4.5:1 on any frame and swatch.
+      // Under the header and the bar (both clear at the top of the page):
+      // 70% and up for their first 10%, the least that keeps white words at
+      // 4.5:1 over a white frame (5.6:1 on Twilight), so the video still
+      // shows through instead of reading as a fill.
       linear-gradient(to bottom,
-        color-mix(in srgb, var(--pf-cover-bg) 88%, transparent) 0%,
-        color-mix(in srgb, var(--pf-cover-bg) 80%, transparent) 7%,
-        transparent 22%),
+        color-mix(in srgb, var(--pf-cover-bg) 72%, transparent) 0%,
+        color-mix(in srgb, var(--pf-cover-bg) 70%, transparent) 10%,
+        transparent 26%),
       linear-gradient(to right,
         color-mix(in srgb, var(--pf-cover-bg) 94%, transparent) 0%,
         color-mix(in srgb, var(--pf-cover-bg) 84%, transparent) 26%,
