@@ -32,6 +32,20 @@ $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
   @return linear-gradient($direction, $stops);
 }
 
+// The same eased fall-off from a corner: the page colour solid out to
+// $solid of an ellipse $size around $at, gone at its edge.
+@function pf-eased-corner($size, $at, $solid, $steps: 12) {
+  $stops: ();
+  @for $i from 0 through $steps {
+    $t: math.div($i, $steps);
+    $alpha: math.div(1 + math.cos(math.$pi * $t), 2);
+    $mix: math.div(math.round($alpha * 1000), 10) * 1%;
+    $pos: math.div(math.round(($solid + (100% - $solid) * $t) * 10), 10);
+    $stops: list.append($stops, color-mix(in srgb, var(--bs-body-bg) $mix, transparent) $pos, comma);
+  }
+  @return radial-gradient(ellipse $size at $at, $stops);
+}
+
 // Where load-time fades start: just above 0, which looks the same, because
 // Chrome never counts an element first painted at opacity 0 as the
 // Largest Contentful Paint, so the cover and title went unmeasured and LCP
@@ -2285,6 +2299,14 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
       background:
         pf-eased-wash(to top, 0%, 22%),
         pf-eased-wash(to right, 38%, 94%);
+
+      // A wall that opens on its title and facts alone (no intro over the
+      // image, as Mossville's galleries): nothing to read across the left,
+      // so the wash keeps to the corner they sit in, solid under them and
+      // easing out, and the photograph shows across the rest.
+      .pf-section__inner:not(:has(.pf-exhibit-wall__text)) & {
+        background: pf-eased-corner(80% 85%, 0% 100%, 50%);
+      }
     }
   }
 
