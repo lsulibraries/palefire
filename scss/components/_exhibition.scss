@@ -71,7 +71,8 @@ html[data-pf-mode="exhibition"] .pf-sections > .pf-section {
   --pf-section-pad-block: clamp(2.5rem, 5vw, 4.5rem);
 }
 
-html[data-pf-mode="exhibition"]:not(.pf-exhibit-paged) .pf-sections > .pf-section + .pf-section {
+// One scrolled document: a hairline between galleries.
+html[data-pf-mode="exhibition"] .pf-sections > .pf-section + .pf-section {
   border-top: 1px solid $pf-hairline;
 }
 
@@ -121,36 +122,9 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   counter-reset: pf-gallery var(--pf-gallery-index) pf-galleries var(--pf-gallery-total);
 }
 
-// One gallery at a time: the others are [hidden] (sections set display).
-.pf-exhibit-paged {
-  .pf-sections > .pf-section[hidden],
-  .pf-exhibit-head[hidden] {
-    display: none !important;
-  }
-
-  .pf-sections > .pf-section,
-  .pf-exhibit-head {
-    transition:
-      opacity .7s ease,
-      translate .9s $pf-exhibit-ease;
-  }
-
-  .is-leaving {
-    opacity: 0;
-    transition-duration: .28s, .28s;
-  }
-
-  .is-entering {
-    opacity: 0;
-    translate: 0 1.25rem;
-    transition: none;
-  }
-}
-
-// Lead image: full width, under the running head. Curtain on show (CSS
-// animations restart whenever the gallery goes from hidden to shown), then a
-// scroll-pan: the crop slides from the image's top to its bottom over the
-// first screen of scrolling, so the whole plate passes through the band.
+// Lead image: full width at the gallery's head. Curtain on load, then a
+// scroll-pan: the crop slides from the image's top to its bottom while the
+// band crosses the screen, so the whole plate passes through it.
 // "Keep in view when cropped" (object-position) is where it rests under
 // reduced motion; Left / Right also keep the pan to that side (--pf-lead-x).
 .pf-exhibit-lead {
@@ -261,24 +235,12 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   }
 }
 
-// The pan. Written out rather than with pf-exhibit-motion: the paged class
-// is on <html> too, so it has to be part of the same compound selector.
+// The pan.
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: scroll()) {
-    // The lead opens every gallery at the top of the page (js/exhibition.js
-    // scrolls there), so the page's own scroll drives it: the image's top
-    // at the top, its bottom 70% of a screen down.
-    html.pf-exhibit-paged:not(.pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__img {
-      animation: pf-exhibit-pan linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 70vh;
-    }
-  }
-
   @supports (animation-timeline: view()) {
-    // Full-width images (and leads without the script, one gallery after
-    // another): the pan runs while the frame crosses the screen.
-    html:not(.pf-exhibit-paged, .pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__img,
+    // Leads and full-width images: the pan runs while the frame crosses
+    // the screen.
+    html:not(.pf-a11y-motion) .pf-exhibit-lead:not(.pf-exhibit-lead--whole) .pf-exhibit-lead__img,
     html:not(.pf-a11y-motion) .pf-exhibit-figure--wide .pf-exhibit-figure__img {
       animation: pf-exhibit-pan linear both;
       animation-timeline: view();
@@ -318,8 +280,7 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 
 // Full-screen opening (Opening: full, the default) -------------------------
 //
-// Like the title page: the lead fills the first screen under the running
-// head, washed with the page colour where the gallery number, the <h2> and
+// Like the title page: the lead fills a screen under the header, washed with the page colour where the gallery number, the <h2> and
 // the "In this gallery" links sit. Scrolling on, the image stays pinned
 // under the header while the heading and links lift away and the wash
 // clears, then it pans through the whole image: top to bottom for a tall
@@ -333,12 +294,10 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 //   row 4  the pin: the fade's length plus the pan's length
 //   row 5  the caption
 //   row 6  the text
-//   row 7  previous / next
 // The hero spans rows 1-4 and its stage is sticky, so the image stays put
 // for the length of row 4: first the heading, links and wash fade (the
 // fade, --pf-fade-len), and only then does the image pan (--pf-pan). The
-// image reaches up under the running head's bar and the header, both
-// glass, so it shows through them. js/exhibition.js sets --pf-pan from the
+// image reaches up under the header, glass, so it shows through it. js/exhibition.js sets --pf-pan from the
 // image's proportions (lg and up, with motion and scroll-driven animation
 // support); without it there is no pin and nothing moves.
 
@@ -348,17 +307,16 @@ $pf-opener: 'html[data-pf-mode="exhibition"] #{$pf-opener-inner}';
 $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-opener-inner}';
 
 #{$pf-opener} {
-  // The stage: the rest of the screen under the expanded header and the
-  // running head's bar (js/exhibition.js measures the bar), so the whole
-  // image shows from its top edge. The hero reaches up through the
-  // section's padding to the bar. The fade has a length only while the pan
+  // The stage: the rest of the screen under the expanded header, so the
+  // whole image shows from its top edge. The hero reaches up through the
+  // section's padding. The fade has a length only while the pan
   // is on.
-  --pf-stage-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-exhibit-head-h, 0px));
+  --pf-stage-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
   --pf-bleed-top: var(--pf-section-pad-block);
   --pf-fade-len: 0px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto auto calc(var(--pf-fade-len) + var(--pf-pan, 0px)) auto auto auto;
+  grid-template-rows: minmax(0, 1fr) auto auto calc(var(--pf-fade-len) + var(--pf-pan, 0px)) auto auto;
 
   > .pf-section__title {
     grid-row: 2;
@@ -379,7 +337,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 // Without a lead: about half a screen of number, heading and links.
 #{$pf-opener}:not(:has(> .pf-gallery--has-lead)) {
-  grid-template-rows: minmax(0, 1fr) auto auto auto auto;
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
   min-height: min(32rem, 55svh);
 }
 
@@ -400,8 +358,8 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   // Pinned right under the bar. The header compacts as the page scrolls,
   // and the stage grows with it to keep reaching the screen's foot.
   position: sticky;
-  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
-  height: calc(100svh - var(--pf-header-h) - var(--pf-exhibit-head-h, 0px));
+  top: var(--pf-header-h);
+  height: calc(100svh - var(--pf-header-h));
   min-height: 26rem;
   overflow: clip;
 
@@ -457,7 +415,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   object-fit: cover;
 }
 
-// The lead's caption shows in the object view (the bar's zoom button); here it
+// The lead's caption shows in the object view (the image's own link); here it
 // stays for screen readers, as the figure's label.
 .pf-exhibit-hero__caption {
   @include visually-hidden;
@@ -492,17 +450,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 
-// The previous / next links (js/exhibition.js) after everything else; the
-// grid would put them in the first free cell.
-#{$pf-opener} > .pf-exhibit-pager {
-  grid-row: 7;
-  grid-column: 1;
-}
-
-#{$pf-opener}:not(:has(> .pf-gallery--has-lead)) > .pf-exhibit-pager {
-  grid-row: 5;
-}
-
 // After the pan the image stays where it is and the caption and the text
 // slide up over it on the page colour (from lg, while the pan is on), so
 // the image moves less and the text does the moving. The hero then reaches
@@ -528,9 +475,8 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 
   // The layer that covers the image: full width, on the page colour, with
-  // no gaps (margins become padding) through to the previous / next links.
-  > .pf-gallery > .pf-gallery__body,
-  > .pf-exhibit-pager {
+  // no gaps (margins become padding) through to the gallery's foot.
+  > .pf-gallery > .pf-gallery__body {
     position: relative;
     z-index: 1;
     margin-inline: calc(-1 * var(--pf-section-pad-inline));
@@ -547,10 +493,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     margin-top: 0;
     padding-top: clamp(2.5rem, 5vw, 4rem);
     padding-bottom: clamp(3rem, 6vw, 5rem);
-  }
-
-  > .pf-exhibit-pager {
-    margin-top: 0;
   }
 }
 
@@ -665,7 +607,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 // image pans while it scrolls off.
 @include media-breakpoint-down(lg) {
   #{$pf-opener} {
-    grid-template-rows: auto auto auto 0 auto auto auto;
+    grid-template-rows: auto auto auto 0 auto auto;
   }
 
   .pf-exhibit-hero {
@@ -737,28 +679,34 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     }
   }
 
-  @supports (animation-timeline: scroll()) {
+  @supports (animation-timeline: view()) {
     // From lg, while pinned, in order: the heading and links leave (over
     // the first 30% of a screen), the wash clears behind them (15-40%),
     // and only then does the image tour the whole of itself (from 40%, the
-    // fade's length, for the pan's length). The running head is a sticky
-    // bar, so the page's scroll counts from 0.
+    // fade's length, for the pan's length). Measured on the gallery's own
+    // timeline (--pf-opener), inset by the header, so 0 is where the stage
+    // pins under it, wherever the gallery sits in the page.
+    #{$pf-opener-moving}[style*="--pf-pan"] {
+      view-timeline: --pf-opener block;
+      view-timeline-inset: var(--pf-header-h) 0px;
+    }
+
     #{$pf-opener-moving}[style*="--pf-pan"] > .pf-section__title,
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-opener {
-      animation-timeline: auto, scroll(root);
-      animation-range: normal, 0px 30svh;
+      animation-timeline: auto, --pf-opener;
+      animation-range: normal, contain 0px contain 30svh;
     }
 
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-hero__stage::after {
       animation: pf-exhibit-clear linear both;
-      animation-timeline: scroll(root);
-      animation-range: 15svh 40svh;
+      animation-timeline: --pf-opener;
+      animation-range: contain 15svh contain 40svh;
     }
 
     #{$pf-opener-moving}[style*="--pf-pan"] .pf-exhibit-hero .pf-exhibit-hero__img {
       animation: pf-exhibit-tour linear both;
-      animation-timeline: scroll(root);
-      animation-range: 40svh calc(40svh + var(--pf-pan, 0px));
+      animation-timeline: --pf-opener;
+      animation-range: contain 40svh contain calc(40svh + var(--pf-pan, 0px));
     }
   }
 }
@@ -788,61 +736,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-// Previous / next at a gallery's foot (js/exhibition.js).
-.pf-exhibit-pager {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  gap: 1rem;
-  margin-top: clamp(3rem, 6vw, 5rem);
-  padding-top: 2rem;
-  border-top: 1px solid $pf-hairline;
-}
-
-.pf-exhibit-pager__link {
-  display: grid;
-  gap: 0.35rem;
-  padding: 1rem 0;
-  color: var(--bs-body-color);
-  text-decoration: none;
-  transition: color $pf-hover-out ease;
-
-  &--next {
-    text-align: end;
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-g-hover, var(--pf-exhibit-accent));
-    transition-duration: $pf-hover-in;
-
-    .pf-exhibit-pager__title {
-      text-decoration: underline;
-      text-underline-offset: .2em;
-      text-decoration-thickness: 1px;
-    }
-  }
-}
-
-.pf-exhibit-pager__kicker {
-  @extend %pf-exhibit-kicker;
-}
-
-.pf-exhibit-pager__link--prev .pf-exhibit-pager__kicker::before {
-  content: "\2190\2002" / "";
-}
-
-.pf-exhibit-pager__link--next .pf-exhibit-pager__kicker::after {
-  content: "\2002\2192" / "";
-}
-
-.pf-exhibit-pager__title {
-  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-}
-
-// A link's target on another gallery flashes once it is reached.
+// A link's target flashes once it is reached.
 .is-target {
   animation: pf-exhibit-flash 1.8s ease both;
 }
@@ -1288,10 +1182,10 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
-// The bar's zoom button (js/exhibition.js): the opening image full screen,
+// The bar's zoom button (js/exhibition.js): the title page's cover full screen,
 // at the end of the row, styled like the landing's video button. It fades
-// in while that image is in sight and out once the text covers it or it
-// scrolls away; hidden, it leaves the tab order and the accessibility tree.
+// in while the cover is in sight and out once it scrolls away; hidden, it
+// leaves the tab order and the accessibility tree.
 .pf-exhibit-zoom {
   flex: none;
   display: inline-grid;
@@ -1350,58 +1244,6 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
-// The bar's button stands in for the full opening's corner mark.
-.pf-exhibit-hero__link .pf-exhibit-figure__zoom {
-  display: none;
-}
-
-// Running head: while a gallery is open the title page folds to just that
-// bar, and the head itself sticks under the header for the whole gallery,
-// so the gallery's image (and later its text) passes under its glass. The
-// <h1> stays, for screen readers only: the bar's breadcrumb and the
-// gallery's own heading say where you are.
-html.pf-exhibit-paged .pf-exhibit-head.is-folded {
-  position: sticky;
-  top: var(--pf-header-h);
-  z-index: 4;
-  min-height: 0;
-  padding-bottom: 0;
-  background: none;
-
-  &::after {
-    content: none;
-  }
-
-  .pf-exhibit-cover__media,
-  .pf-exhibit-cover__kicker,
-  .pf-exhibit-cover__intro,
-  .pf-exhibit-cover__credit,
-  .pf-exhibit-cover__facts,
-  .pf-exhibit-cover__prompt {
-    display: none;
-  }
-
-  .pf-exhibit-cover__text {
-    padding: 0;
-  }
-
-  .pf-exhibit-cover__step {
-    animation: none;
-  }
-
-  .pf-exhibit-cover__title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-}
-
 // The TOC's hide/show button lives in the sidebar (z-index 2) and, with the
 // TOC hidden, sits over the start of the bar (z-index 3-4): lift the
 // sidebar above it. The sidebar sits beside the content, never over it.
@@ -1438,11 +1280,6 @@ html.pf-exhibit-paged .pf-exhibit-head.is-folded {
     letter-spacing: 0.12em;
     color: var(--pf-exhibit-muted);
   }
-}
-
-// Jumps and keyboard focus land below the header and the bar.
-html.pf-exhibit-paged {
-  scroll-padding-top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
 }
 
 // Entries --------------------------------------------------------------------
@@ -2026,7 +1863,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 // gallery's own text (.pf-exhibit-wall__text; folded to about four lines
 // with "Read more" by js/exhibition.js), so the wall starts soon after.
 // Without a lead, from lg: title and facts on the left, the text on the
-// right, wall and pager full width below. With a lead, at every width: the
+// right, the wall full width below. With a lead, at every width: the
 // image full screen, the title, facts and text over its lower left on a
 // wash of the page colour, kept in the wash's dense part; "Read more" grows
 // the image down, never the column wider.
@@ -2100,11 +1937,6 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
       grid-column: 1 / -1;
       grid-row: 3;
       margin-top: clamp(2rem, 3vw, 3rem);
-    }
-
-    > .pf-exhibit-pager {
-      grid-column: 1 / -1;
-      grid-row: 4;
     }
   }
 }
@@ -2212,11 +2044,6 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     grid-row: 5;
     margin-top: clamp(2rem, 4vw, 3rem);
   }
-
-  > .pf-exhibit-pager {
-    grid-column: 1;
-    grid-row: 6;
-  }
 }
 
 // A wall's lead: full screen under the breadcrumb bar, edge to edge (and
@@ -2230,8 +2057,8 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // screen; the image is the screen under the compact header, so it still
 // fills the screen once the header has shrunk.
 .pf-exhibit-wall-hero {
-  --pf-wall-hero-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-exhibit-head-h, 0px));
-  --pf-cover-img-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-exhibit-head-h, 0px));
+  --pf-wall-hero-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)));
+  --pf-cover-img-h: calc(100svh - #{$pf-header-bar-compact-h});
   position: relative;
   z-index: 0;
   order: -1;
@@ -2256,7 +2083,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 .pf-exhibit-wall-hero__frame {
   --pf-cover-shift: calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
   position: sticky;
-  top: calc(var(--pf-header-h) + var(--pf-exhibit-head-h, 0px));
+  top: var(--pf-header-h);
   display: block;
   height: max(22rem + var(--pf-cover-shift), var(--pf-cover-img-h) + var(--pf-cover-shift));
   overflow: clip;

@@ -318,7 +318,9 @@ plain floor.
 `tile_showcase` (How-to guides, Collections, Specializations): the section
 fields plus `field_tile_layout` (`stagger` / `grid` / `index`) and
 `field_tiles` (Tile nodes or Modular pages, read by `_palefire_node_card()`).
-`index` is a numbered list with no pictures. Each card: the title (h3), the
+`index` is a numbered list with no pictures. `masonry` has a Grid / Masonry /
+List switch (`js/tile-views.js`, remembered per browser); Grid is the
+default and shows the label under the picture. Each card: the title (h3), the
 cover (a Tile's Tile Cover; a Modular page's Image cover or landing poster)
 through the
 `tile_showcase_portrait`/`_landscape` responsive styles, its Category terms as
@@ -505,7 +507,7 @@ revision. It stops if WYSIWYG lacks the tags above (`force=1` overrides).
 ## Exhibition pages
 
 A Modular page with **Type = exhibition** holds an online exhibition: a
-title page, then one gallery (section) at a time, chosen from the TOC.
+title page, then every gallery (section) in turn, as one scrolled document.
 
 ### Set up (production, once)
 
@@ -551,12 +553,13 @@ from the media item. A figure with no image shows only to editors.
 
 ### Behaviour
 
-- `js/exhibition.js`: one gallery shown, the rest `[hidden]`. TOC links,
-  "Begin", the previous / next links it adds at each gallery's foot, and any
-  `#link` in the text (an entry or source on another gallery) fade out,
-  swap, fade in and glide to the target. Gallery changes push a history
-  entry (Back works); jumps inside a gallery replace it. While a gallery is
-  open the title page folds to a running head that keeps the `<h1>`.
+- `js/exhibition.js`: every gallery shown, one after another. "Begin" and
+  any `#link` in the text (an entry, a source) glide to the target and focus
+  it; the address follows without a history entry. The TOC scrolls as on
+  other pages; a link to a wall's entry opens it in the object view, its
+  tile scrolled into sight first. The pinned opening ("Full screen, then
+  pan") runs on its gallery's own view timeline (`--pf-opener`, inset by
+  the header), so it plays wherever the gallery sits in the page.
 - TOC: "Home" (the title page) first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
@@ -886,6 +889,13 @@ a full load. Skipped: links with `data-no-swup`, `data-bs-toggle` or
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
+
+### 2026-10-26
+
+- **Exhibitions as one scrolled document; still hero banners, toned until hover; tiles open on Grid with the label under the picture.**
+  - Exhibitions (`js/exhibition.js`, `_exhibition.scss`, `exhibit-cover.html.twig`): every gallery shows, one after another under the title page, with a hairline between them. Gone: hiding all but one gallery, the fade between galleries, the previous / next links, the folded running head and its breadcrumb crumb, and the history entries per gallery. "Begin" and in-text `#links` glide and focus; TOC links to a wall's entries still open the object view. The pinned opening's fade and pan moved from the page's scroll (which assumed the gallery opened at the top) to the gallery's own view timeline, inset by the header; measured on Occult, the stage pins at 0 and the pan ends exactly at 40svh plus `--pf-pan`, as before. The bar's zoom button now opens only the title page's cover, so a gallery's opening shows its own enlarge mark again. Why: the exhibition reads as one document by default.
+  - Hero banners (`_landing-features.scss`): no more scroll drift or cross (the row and its stagger hold still); the pictures still pan in their frames. Each picture is grey and tinted with the swatch's accent (`mix-blend-mode: color`, so light and dark, and the scrim's contrast, are unchanged); hover or focus fades its own colours back in as it zooms. Why: the row reads as one set in the page's colours, and the colour reveal rewards hover.
+  - Tile showcase, masonry (`paragraph--tile-showcase.html.twig`, `js/tile-views.js`, `_tile-showcase.scss`): Grid is the first and default view; the old "Default" is now "Masonry". A pick saved as "default" is no longer a view, so those visitors start on Grid too. In Grid the Category label sits under the picture as a mono caption in the section's colours (the title stays on the picture); the scrim and shadow are on the picture. Masonry and List are unchanged.
 
 ### 2026-10-23
 

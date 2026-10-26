@@ -306,8 +306,8 @@ class PalefireHooks {
     // Exhibitions: "Home" first (the title page: the head,
     // includes/exhibit-cover), and every gallery lists its entries (h3s)
     // whatever the block's
-    // "Include h3 sub-links" setting says. js/exhibition.js shows one
-    // gallery at a time.
+    // "Include h3 sub-links" setting says. The galleries are one scrolled
+    // document (js/exhibition.js).
     if ($node && self::stringValue($node, 'field_modular_type') === 'exhibition') {
       $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Home')];
       $variables['depth'] = 2;
@@ -479,8 +479,8 @@ class PalefireHooks {
       // never fetches it. This runs in <head>, before the stylesheets: with
       // no #, it preloads the cover as early as an eager image would be
       // found; with one, .pf-exhibit-deep keeps the cover unrendered (so
-      // unfetched) until js/exhibition.js has folded the title page away, or
-      // 4s pass (exhibit-cover.html.twig).
+      // unfetched) until js/exhibition.js has set the page up, or 4s pass
+      // (exhibit-cover.html.twig); it is above the address, so stays lazy.
       $json = fn ($value) => json_encode($value, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES);
       $render['#attached']['html_head'][] = [[
         '#type' => 'html_tag',

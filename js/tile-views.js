@@ -1,14 +1,16 @@
 /**
  * @file
- * The masonry Tile showcase's view switch: Default (masonry), Grid or List
+ * The masonry Tile showcase's view switch: Grid (the default), Masonry or List
  * (paragraph--tile-showcase.html.twig, styled in _tile-showcase.scss).
  *
  * Sets data-pf-view on the wrapper and aria-pressed on the buttons, and
  * remembers the visitor's pick in this browser (localStorage, shared by
  * every such section), so the next page opens the same way. The switch is
- * hidden until this runs: without it the masonry is simply there.
+ * hidden until this runs: without it the grid is simply there. A pick
+ * saved as "default" (the masonry's old name, when it was the default) is
+ * no longer a view, so those visitors start on Grid too.
  *
- * Default packs the cards: each takes the shortest column (--pf-col,
+ * Masonry packs the cards: each takes the shortest column (--pf-col,
  * --pf-row), in list order, its height a run of rows (--pf-span, set in
  * CSS). Packed again only when the column count changes (ResizeObserver).
  *
@@ -21,7 +23,7 @@
   'use strict';
 
   const KEY = 'pf-tile-view';
-  const VIEWS = ['default', 'grid', 'list'];
+  const VIEWS = ['grid', 'masonry', 'list'];
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
 
@@ -61,7 +63,7 @@
 
         const pack = () => {
           const cols = parseInt(getComputedStyle(list).getPropertyValue('--pf-cols'), 10) || 1;
-          if (wrapper.dataset.pfView !== 'default' || cols === packed) {
+          if (wrapper.dataset.pfView !== 'masonry' || cols === packed) {
             return;
           }
           packed = cols;
@@ -105,7 +107,7 @@
           });
         };
 
-        set(stored() || 'default');
+        set(stored() || 'grid');
         group.hidden = false;
         if ('ResizeObserver' in window) {
           new ResizeObserver(pack).observe(list);

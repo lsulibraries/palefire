@@ -1,20 +1,15 @@
 /**
  * @file
- * Exhibition pages (<html data-pf-mode="exhibition">): one gallery at a
- * time, the title page, the object view, long biographies and audio.
+ * Exhibition pages (<html data-pf-mode="exhibition">): one scrolled
+ * document, the title page, the object view, long biographies and audio.
  *
- * - Galleries: each exhibit_page section is a "gallery". Only the current
- *   one is shown; the rest are [hidden]. The TOC links, "Begin", the
- *   previous / next links added at each gallery's foot, and any #link in
- *   the text (an entry on another gallery, a source) fade the current
- *   gallery out and the target's gallery in, then glide to the target.
- *   Gallery changes add a history entry (#gallery), so Back steps back
- *   through them; jumps inside a gallery replace it.
- * - Title page: the page head (includes/exhibit-cover.html.twig). While a
- *   gallery is open it folds to a sticky running head (.is-folded, the
- *   breadcrumb bar) that keeps the
- *   <h1>, and is marked data-toc-inactive so the TOC doesn't light "Title
- *   page" (js/modular-toc.js).
+ * - Galleries: each exhibit_page section is a "gallery", all of them shown
+ *   one after another under the title page (2026-10-26: was one gallery
+ *   at a time). "Begin" and any #link in the text (an entry, a source)
+ *   glide to the target and focus it; the address follows without a
+ *   history entry. The TOC scrolls as on other pages.
+ * - Title page: the page head (includes/exhibit-cover.html.twig), with a
+ *   button in its breadcrumb bar that opens the cover full screen.
  * - Object view: every image in the full-screen viewer (js/viewer.js). A
  *   wall's entry
  *   (a gallery set to Display "wall") shows its image beside its text; an
@@ -34,8 +29,6 @@
   'use strict';
 
   const ROOT = document.documentElement;
-  const FADE_OUT = 280;
-  const FADE_IN = 700;
 
   function reduceMotion() {
     return ROOT.classList.contains('pf-a11y-motion') || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -49,9 +42,9 @@
    * Galleries
    * ------------------------------------------------------------------ */
 
-  const state = { head: null, pages: [], current: null, busy: false, crumb: null, zoom: null };
+  const state = { head: null, pages: [], zoom: null };
 
-  // The gallery (or the title page, null) that holds an element.
+  // The gallery that holds an element (null: the title page, or neither).
   function galleryOf(el) {
     return el ? state.pages.find((page) => page.contains(el)) || null : null;
   }
@@ -68,91 +61,10 @@
     }
   }
 
-  function setFolded(folded) {
-    state.head.classList.toggle('is-folded', folded);
-    state.head.toggleAttribute('data-toc-inactive', folded);
-    measureHead();
-  }
-
   /* ---------------------------------------------------------------------
-   * Breadcrumb: Home / AVES on the title page, Home / AVES / Preface while
-   * a gallery is open, with AVES then a link back to the title page. The
-   * page's crumb shows the full title (title, colon, subtitle) on hover.
-   * ------------------------------------------------------------------ */
-
-  function initCrumb() {
-    const list = state.head.querySelector('.pf-landing__bar .breadcrumb, .pf-breadcrumb .breadcrumb');
-    const page = list ? list.lastElementChild : null;
-    if (!page) {
-      return;
-    }
-    const h1 = state.head.querySelector('h1');
-    const full = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '';
-    const gallery = document.createElement('li');
-    gallery.className = 'breadcrumb-item active';
-    gallery.setAttribute('aria-current', 'page');
-    state.crumb = {
-      list: list,
-      page: page,
-      html: page.innerHTML,
-      label: page.textContent.replace(/\s+/g, ' ').trim(),
-      full: full,
-      gallery: gallery,
-    };
-    if (full) {
-      page.title = full;
-    }
-  }
-
-  function updateCrumb(gallery) {
-    const c = state.crumb;
-    if (!c) {
-      return;
-    }
-    if (!gallery) {
-      // The title page: the page's crumb is the current one again.
-      c.gallery.remove();
-      c.page.innerHTML = c.html;
-      c.page.classList.add('active');
-      c.page.setAttribute('aria-current', 'page');
-      return;
-    }
-    if (!c.page.querySelector('a[data-pf-crumb-home]')) {
-      const link = document.createElement('a');
-      link.href = '#' + state.head.id;
-      link.setAttribute('data-pf-crumb-home', '');
-      link.textContent = c.label;
-      c.page.replaceChildren(link);
-      c.page.classList.remove('active');
-      c.page.removeAttribute('aria-current');
-    }
-    const heading = gallery.querySelector('.pf-section__title');
-    // In a <span>, like the page's own crumb, so a long title can end in an
-    // ellipsis on one line (_layout.scss).
-    const name = document.createElement('span');
-    name.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
-    c.gallery.replaceChildren(name);
-    if (!c.gallery.isConnected) {
-      c.list.append(c.gallery);
-    }
-  }
-
-  // The folded head's height, so a gallery's full-screen opening fills the
-  // screen under it (--pf-hero-h, _exhibition.scss).
-  function measureHead() {
-    if (!state.head) {
-      return;
-    }
-    const folded = state.head.classList.contains('is-folded');
-    ROOT.style.setProperty('--pf-exhibit-head-h', folded ? Math.round(state.head.getBoundingClientRect().height) + 'px' : '0px');
-  }
-
-  /* ---------------------------------------------------------------------
-   * Zoom button: at the end of the breadcrumb bar, opens the image that
-   * opens the view (the title page's cover, a gallery's lead) full screen
-   * in the lightbox, with its caption when it has one. It shows while that
-   * image is in sight under the bar and fades once it has scrolled away
-   * or the text has covered it.
+   * Zoom button: at the end of the breadcrumb bar, opens the title page's
+   * cover full screen in the lightbox. It shows while the cover is in sight
+   * under the bar and fades once it has scrolled away.
    * ------------------------------------------------------------------ */
 
   function initZoom() {
@@ -176,39 +88,31 @@
     window.addEventListener('scroll', queueZoom, { passive: true });
   }
 
-  // The image the view opens with: [the element to watch, its <img>].
+  // The cover: [the element to watch, its <img>].
   function openingImage() {
-    const page = state.current;
-    const frame = page
-      ? page.querySelector('.pf-exhibit-hero__stage, .pf-exhibit-lead__frame, .pf-exhibit-wall-hero')
-      : state.head.querySelector('.pf-exhibit-cover__media');
+    const frame = state.head.querySelector('.pf-exhibit-cover__media');
     const img = frame ? frame.querySelector('img') : null;
     return img ? [frame, img] : null;
   }
 
-  // A lightbox link for the opening image: the image's own link when it has
-  // one (a captioned lead), else one made for the purpose, with the largest
-  // size in its srcset. The group is the gallery's images (none on the title
-  // page).
+  // A lightbox link for the cover, made for the purpose, with the largest
+  // size in its srcset, on its own (no images to step through).
   function zoomSource() {
     const found = openingImage();
     if (!found) {
       return null;
     }
     const img = found[1];
-    let link = img.closest('a[data-pf-lightbox]');
-    if (!link) {
-      link = document.createElement('a');
-      const sizes = (img.getAttribute('srcset') || '').split(',').map((part) => part.trim().split(/\s+/));
-      const largest = sizes.reduce((best, part) => (parseInt(part[1], 10) || 0) > (parseInt(best[1], 10) || 0) ? part : best, [img.currentSrc || img.src, '0w']);
-      link.href = largest[0];
-      if (img.getAttribute('width')) {
-        link.dataset.width = img.getAttribute('width');
-        link.dataset.height = img.getAttribute('height');
-      }
-      link.append(img.cloneNode(false));
+    const link = document.createElement('a');
+    const sizes = (img.getAttribute('srcset') || '').split(',').map((part) => part.trim().split(/\s+/));
+    const largest = sizes.reduce((best, part) => (parseInt(part[1], 10) || 0) > (parseInt(best[1], 10) || 0) ? part : best, [img.currentSrc || img.src, '0w']);
+    link.href = largest[0];
+    if (img.getAttribute('width')) {
+      link.dataset.width = img.getAttribute('width');
+      link.dataset.height = img.getAttribute('height');
     }
-    return { link: link, group: state.current ? null : [link] };
+    link.append(img.cloneNode(false));
+    return { link: link, group: [link] };
   }
 
   let zoomQueued = false;
@@ -223,9 +127,8 @@
     });
   }
 
-  // In sight: more than about two lines' worth of the image shows between
-  // the bar and whichever comes first, the image's foot or the top of the
-  // text sliding over it.
+  // In sight: more than about two lines' worth of the cover shows between
+  // the bar and the head's foot (the cover runs past it, the head clips it).
   function updateZoom() {
     const button = state.zoom;
     if (!button) {
@@ -235,15 +138,7 @@
     let shown = false;
     if (found && found[0].getClientRects().length) {
       const bar = button.closest('.pf-landing__bar').getBoundingClientRect().bottom;
-      let bottom = Math.min(found[0].getBoundingClientRect().bottom, window.innerHeight);
-      const layer = state.current ? state.current.querySelector('.pf-gallery__body') : null;
-      if (layer && found[0].matches('.pf-exhibit-hero__stage')) {
-        bottom = Math.min(bottom, layer.getBoundingClientRect().top);
-      }
-      // The title page's cover runs past the head, which clips it.
-      if (!state.current) {
-        bottom = Math.min(bottom, state.head.getBoundingClientRect().bottom);
-      }
+      const bottom = Math.min(found[0].getBoundingClientRect().bottom, window.innerHeight, state.head.getBoundingClientRect().bottom);
       shown = bottom - bar > 96;
     }
     button.classList.toggle('is-shown', shown);
@@ -257,7 +152,7 @@
   // so the heading has room to leave, and at most 1.6 screens. Only from
   // lg, with motion and scroll-driven animations; otherwise no pin.
   const wide = window.matchMedia('(min-width: 992px)');
-  const canPan = () => wide.matches && !reduceMotion() && window.CSS && CSS.supports('animation-timeline: scroll()');
+  const canPan = () => wide.matches && !reduceMotion() && window.CSS && CSS.supports('animation-timeline: view()');
 
   function sizeHero(page) {
     const hero = page && page.querySelector('[data-pf-hero]');
@@ -277,26 +172,10 @@
   }
 
   function onResize() {
-    measureHead();
-    sizeHero(state.current);
-    if (state.current) {
-      foldIntro(state.current);
-    }
-    queueZoom();
-  }
-
-  // Show one gallery (or the title page) at once, without animation.
-  function place(page) {
-    state.pages.forEach((p) => {
-      p.hidden = p !== page;
-    });
-    setFolded(page !== null);
-    updateCrumb(page);
-    state.current = page;
-    if (page) {
-      prepareGallery(page);
+    state.pages.forEach((page) => {
       sizeHero(page);
-    }
+      foldIntro(page);
+    });
     queueZoom();
   }
 
@@ -353,138 +232,36 @@
     el.addEventListener('animationend', () => el.classList.remove('is-target'), { once: true });
   }
 
-  function tellToc() {
-    // modular-toc.js re-reads the page edges on scroll.
-    window.dispatchEvent(new Event('scroll'));
-  }
-
   /**
-   * Goes to an element: switches gallery if needed, then glides to it.
+   * Goes to an element on the page.
+   *
+   * An entry on a wall opens in the object view, its tile brought into
+   * sight first, so the image grows out of it and focus has somewhere to
+   * return. Anything else glides into place and takes focus. The address
+   * follows, without a history entry.
    *
    * @param {Element} target
    *   The element to show (a gallery, an entry heading, the head...).
-   * @param {Object} options
-   *   - history: 'push', 'replace' or 'none'.
-   *   - then: runs on arrival instead of the glide (opening a wall's entry).
    */
-  function go(target, { history: mode = 'push', then = null } = {}) {
-    if (state.busy) {
-      return;
-    }
-    // An entry on a wall opens in the object view, in its gallery.
-    const entry = then ? null : wallEntry(target);
+  function go(target) {
+    const entry = wallEntry(target);
     if (entry) {
-      const gallery = galleryOf(entry);
-      if (gallery === state.current) {
-        openObject(entry, true);
-        return;
+      const tile = tileFor(entry);
+      if (tile && !viewer.inSight(tile, headerOffset())) {
+        tile.scrollIntoView({ block: 'center', behavior: 'instant' });
       }
-      closeObject(false, true);
-      go(gallery, { history: mode, then: () => openObject(entry, false) });
+      openObject(entry, true);
       return;
     }
     closeObject(false, true);
-    const page = galleryOf(target);
-    const top = target === state.head || target === page;
-    const url = urlFor(target);
-
-    if (page === state.current) {
-      if (mode !== 'none') {
-        history.replaceState(history.state, '', url);
-      }
-      if (top) {
-        glideTo(page || state.head, () => focusOn(target));
-        return;
-      }
-      glideTo(target, () => {
-        focusOn(target);
+    history.replaceState(history.state, '', urlFor(target));
+    const top = target === state.head || state.pages.includes(target);
+    glideTo(target, () => {
+      focusOn(target);
+      if (!top) {
         flash(target);
-      });
-      return;
-    }
-
-    if (mode === 'push') {
-      history.pushState({ pfExhibit: url }, '', url);
-    }
-    else if (mode === 'replace') {
-      history.replaceState({ pfExhibit: url }, '', url);
-    }
-
-    const arrive = () => {
-      if (then) {
-        then();
-        tellToc();
-        return;
       }
-      if (top) {
-        focusOn(target);
-        tellToc();
-        return;
-      }
-      glideTo(target, () => {
-        focusOn(target);
-        flash(target);
-        tellToc();
-      });
-    };
-
-    if (reduceMotion()) {
-      place(page);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      arrive();
-      return;
-    }
-
-    // Fade the current view out, swap while nothing shows, fade in.
-    state.busy = true;
-    const leaving = state.current || state.head;
-    leaving.classList.add('is-leaving');
-    window.setTimeout(() => {
-      leaving.classList.remove('is-leaving');
-      const entering = page || state.head;
-      entering.classList.add('is-entering');
-      place(page);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      // Two frames: the hidden → shown change paints first, so the
-      // transition (and the lead's curtain) run from their start.
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        entering.classList.remove('is-entering');
-        entering.classList.add('is-revealing');
-        window.setTimeout(() => entering.classList.remove('is-revealing'), FADE_IN + 900);
-        state.busy = false;
-        arrive();
-      }));
-    }, FADE_OUT);
-  }
-
-  // The previous / next links at a gallery's foot, built once.
-  function addPager(page) {
-    const index = state.pages.indexOf(page);
-    const nav = document.createElement('nav');
-    nav.className = 'pf-exhibit-pager';
-    nav.setAttribute('aria-label', Drupal.t('Galleries'));
-    const link = (to, rel, label) => {
-      const a = document.createElement('a');
-      a.className = 'pf-exhibit-pager__link pf-exhibit-pager__link--' + rel;
-      a.href = '#' + to.id;
-      a.rel = rel;
-      const kicker = document.createElement('span');
-      kicker.className = 'pf-exhibit-pager__kicker';
-      kicker.textContent = label;
-      const title = document.createElement('span');
-      title.className = 'pf-exhibit-pager__title';
-      const heading = to.querySelector('.pf-section__title, h1');
-      title.textContent = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : '';
-      a.append(kicker, title);
-      return a;
-    };
-    nav.append(index > 0
-      ? link(state.pages[index - 1], 'prev', Drupal.t('Previous gallery'))
-      : link(state.head, 'prev', Drupal.t('Home')));
-    if (index < state.pages.length - 1) {
-      nav.append(link(state.pages[index + 1], 'next', Drupal.t('Next gallery')));
-    }
-    page.querySelector('.pf-section__inner').append(nav);
+    });
   }
 
   function prepareGallery(page) {
@@ -492,12 +269,15 @@
       return;
     }
     page.dataset.pfExhibitReady = '1';
-    addPager(page);
-    // Measured now that the gallery is shown (hidden ones have no size).
     page.querySelectorAll('[data-pf-exhibit-bio]').forEach(initBio);
     foldIntro(page);
+    sizeHero(page);
   }
 
+  // "Begin", and #links in the exhibition outside the TOC (the opening's
+  // entry links, "View the whole image", "Skip to the text", cross
+  // references): a glide. The TOC scrolls to its own targets as on other
+  // pages (js/modular-toc.js), except a wall's entries, which open.
   function onClick(event) {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
       return;
@@ -506,43 +286,17 @@
     if (!link) {
       return;
     }
-    if (link.hasAttribute('data-pf-exhibit-begin')) {
-      event.preventDefault();
-      go(state.pages[0]);
+    const target = link.hasAttribute('data-pf-exhibit-begin') ? state.pages[0] : targetOf(link.hash);
+    if (!target || !(galleryOf(target) || state.head.contains(target))) {
       return;
     }
-    const target = targetOf(link.hash);
-    if (!target) {
-      return;
-    }
-    // Tiles, TOC sub-links and cross references to a wall's entries.
-    if (wallEntry(target)) {
-      event.preventDefault();
-      event.stopPropagation();
-      closeToc();
-      go(target, { history: galleryOf(target) === state.current ? 'replace' : 'push' });
-      return;
-    }
-    const page = galleryOf(target);
-    const toHead = target === state.head;
-    // Same gallery: the TOC scrolls as on other pages, except the folded
-    // running head, which means "open the title page". Other links in the
-    // gallery (the opening's entry links, "View the whole image", "Skip to
-    // the text", cross references) glide there too.
-    if (page === state.current && !(toHead && state.current)) {
-      if (page && !link.closest('[data-pf-toc]')) {
-        event.preventDefault();
-        go(target, { history: 'replace' });
-      }
-      return;
-    }
-    if (!page && !toHead && !state.head.contains(target)) {
+    if (link.closest('[data-pf-toc]') && !wallEntry(target)) {
       return;
     }
     event.preventDefault();
     event.stopPropagation();
     closeToc();
-    go(toHead || !page ? state.head : target);
+    go(target);
   }
 
   function closeToc() {
@@ -559,13 +313,20 @@
     return location.pathname + location.search + (target === state.head ? '' : '#' + target.id);
   }
 
+  // Back and Forward: an address for a wall's entry opens it; any other
+  // closes the object view (the browser scrolls to the anchor itself).
   function onPopState() {
-    const target = targetOf(location.hash);
-    go(target && (galleryOf(target) || state.head.contains(target)) ? target : state.head, { history: 'none' });
+    const entry = wallEntry(targetOf(location.hash));
+    if (entry) {
+      openObject(entry, false);
+    }
+    else {
+      closeObject(false, true);
+    }
   }
 
   // Before the first paint where possible: this runs as the script loads,
-  // ahead of every behavior (the TOC reads what is shown when it starts).
+  // ahead of every behavior.
   function start() {
     const head = document.querySelector('.pf-exhibit-head');
     if (!isExhibition() || !head || state.head === head) {
@@ -577,39 +338,35 @@
     if (!state.pages.length) {
       return;
     }
-    ROOT.classList.add('pf-exhibit-paged');
-    // An address for a gallery: its opening image first and at once (it is
-    // lazy in a hidden gallery, so it would wait until shown), ahead of the
-    // set-up below.
-    const target = targetOf(location.hash);
-    const page = galleryOf(target);
-    const lead = page && page.querySelector('.pf-exhibit-wall-hero__img, .pf-exhibit-hero__img, .pf-exhibit-lead__img');
-    if (lead) {
-      // Priority first: the request starts as soon as it is eager.
-      lead.fetchPriority = 'high';
-      lead.loading = 'eager';
-    }
     // "06 / 19" above each gallery's heading (_exhibition.scss).
     state.pages.forEach((page, i) => {
       page.style.setProperty('--pf-gallery-index', String(i + 1));
       page.style.setProperty('--pf-gallery-total', String(state.pages.length));
     });
-    initCrumb();
     initZoom();
     initWalls();
     initCovers();
     initEntryLinks();
-    place(page);
+    state.pages.forEach(prepareGallery);
+    queueZoom();
     // The title page's cover waited for this (exhibit-cover.html.twig):
-    // folded away for a gallery, it loads lazily if the title page opens.
+    // with an address for a gallery it is above, and loads lazily.
     ROOT.classList.remove('pf-exhibit-deep');
+    const target = targetOf(location.hash);
     const entry = wallEntry(target);
     if (entry) {
-      // An address for a wall's entry: its gallery, with the entry open.
-      requestAnimationFrame(() => openObject(entry, false));
+      // An address for a wall's entry: the entry open, over its wall.
+      requestAnimationFrame(() => {
+        const tile = tileFor(entry);
+        if (tile) {
+          tile.scrollIntoView({ block: 'center', behavior: 'instant' });
+        }
+        openObject(entry, false);
+      });
     }
-    else if (page && target !== page) {
-      // A link to an entry or a source: there once the page has laid out.
+    else if (target && galleryOf(target)) {
+      // An address for a gallery or anything in one: there again once the
+      // walls and folds above have changed the page's length.
       requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
     }
     const actions = head.querySelector('[data-pf-exhibit-actions]');
@@ -856,14 +613,18 @@
     readCover();
   }
 
+  // Every cover on the page (the frame sticks, so how far it has held is
+  // how far the text has come up over it).
   function readCover() {
-    const hero = state.current && state.current.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
-    if (!hero) {
-      return;
-    }
-    const moved = hero.querySelector('.pf-exhibit-wall-hero__frame').getBoundingClientRect().top - hero.getBoundingClientRect().top;
-    const read = Math.min(Math.max(moved / (window.innerHeight * 0.4), 0), 1);
-    hero.closest('.pf-section__inner').style.setProperty('--pf-read', read.toFixed(3));
+    state.pages.forEach((page) => {
+      const hero = page.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
+      if (!hero) {
+        return;
+      }
+      const moved = hero.querySelector('.pf-exhibit-wall-hero__frame').getBoundingClientRect().top - hero.getBoundingClientRect().top;
+      const read = Math.min(Math.max(moved / (window.innerHeight * 0.4), 0), 1);
+      hero.closest('.pf-section__inner').style.setProperty('--pf-read', read.toFixed(3));
+    });
   }
 
   let coverQueued = false;
@@ -1164,7 +925,7 @@
   // opener: where focus returns (default: the link).
   function openPictures(link, group, opener) {
     objectView();
-    const scope = galleryOf(link) || (state.current || document);
+    const scope = galleryOf(link) || document;
     const links = group || Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
     if (!links.includes(link)) {
       links.unshift(link);
@@ -1587,9 +1348,8 @@
       document.removeEventListener('click', onClick, true);
       window.removeEventListener('popstate', onPopState);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('scroll', queueCover);
       document.removeEventListener('palefire:a11ychange', onResize);
-      ROOT.style.removeProperty('--pf-exhibit-head-h');
-      ROOT.classList.remove('pf-exhibit-paged');
       if (wallState.view) {
         viewer.destroy();
         wallState.view = null;
@@ -1597,8 +1357,6 @@
       }
       state.head = null;
       state.pages = [];
-      state.current = null;
-      state.crumb = null;
       if (state.zoom) {
         window.removeEventListener('scroll', queueZoom);
         state.zoom = null;

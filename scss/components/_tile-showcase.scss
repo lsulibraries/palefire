@@ -573,19 +573,20 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 
 // Masonry ------------------------------------------------------------------
 // Tall cards in the hero banners' voice (the same scrim, mixed-case title,
-// pill above), with a Default / Grid / List switch (js/tile-views.js sets
+// pill above), with a Grid / Masonry / List switch (js/tile-views.js sets
 // data-pf-view on the wrapper). Columns follow the section's own width:
 // 2, then 3 from 36rem, 4 from 56rem, 5 from 72rem (the banners' five
 // across), with the banners' gutters (10px on a phone up to 16px, then the
 // hero's grid gutter from 44rem).
 //
-// Default: each card a run of rows a column wide (--pf-unit, an eighth of
+// Masonry: each card a run of rows a column wide (--pf-unit, an eighth of
 // a column), 12 to 16 rows by its place in a five-card cycle, so heights
 // stay near a banner's 1:2 and vary. The script drops each card into the
 // shortest column (--pf-col, --pf-row), so the list reads in its own
 // order and the columns pack; without it the grid places them as it can.
-// Grid: even 3:4 cards. List: one ruled row each, a thumbnail, the title
-// and note, the label in the mono voice, and an arrow.
+// Grid (the default, 2026-10-26: was Masonry): even 3:4 cards, the label
+// under the picture. List: one ruled row each, a thumbnail, the title and
+// note, the label in the mono voice, and an arrow.
 .pf-tiles--masonry {
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   --pf-tile-scrim: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .6) 30%, rgb(0 0 0 / 0) 65%);
@@ -624,9 +625,9 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 }
 
-// Default: rows of --pf-unit, no row gap (each card keeps the gutter under
+// Masonry: rows of --pf-unit, no row gap (each card keeps the gutter under
 // itself, inside its run of rows).
-.pf-tiles--masonry[data-pf-view="default"] {
+.pf-tiles--masonry[data-pf-view="masonry"] {
   .pf-tiles__list {
     grid-auto-rows: var(--pf-unit);
     row-gap: 0;
@@ -656,11 +657,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 }
 
-.pf-tiles--masonry[data-pf-view="grid"] .pf-tile {
-  aspect-ratio: 3 / 4;
-}
-
-// The card in the banners' voice (Default and Grid). The scrim runs a
+// The card in the banners' voice (Masonry and Grid). The scrim runs a
 // pixel past each edge on a layer of its own, and the picture fills the
 // card to its foot on a clip of its own, as on the banners. (It stopped
 // 2px short, but that strip of the card's grey ground read as a border;
@@ -704,6 +701,78 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 // _reading-themes.scss): four classes to outrank it, as on the index.
 .pf-tiles.pf-tiles--masonry .pf-tile .pf-tile__title {
   color: inherit;
+}
+
+// Grid (the default): even 3:4 pictures, the title on the picture, and
+// the Category terms under it as a caption, in the section's colours and
+// the page's mono label voice, as in the List. The body opens up
+// (display: contents) so the title and the caption take a row each of the
+// card's grid; the scrim and the shadow move onto the picture.
+.pf-tiles--masonry[data-pf-view="grid"] {
+  .pf-tile {
+    display: grid;
+    grid-template-rows: auto auto;
+    height: auto;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+
+    &::after {
+      content: none;
+    }
+
+    &:focus-visible {
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+
+  .pf-tile__media {
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    grid-area: 1 / 1;
+    aspect-ratio: 3 / 4;
+    background: $pf-grey-900;
+    box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, 0.1);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -1px -1px -2px;
+      background: var(--pf-tile-scrim);
+      pointer-events: none;
+    }
+  }
+
+  .pf-tile__body {
+    display: contents;
+  }
+
+  .pf-tile__title {
+    position: relative;
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: end;
+    margin: clamp(.875rem, 1.6cqi, 1.25rem);
+  }
+
+  .pf-tile__labels {
+    grid-area: 2 / 1;
+    gap: 0 .75rem;
+    padding-top: .75rem;
+  }
+
+  .pf-tile__label {
+    padding: 0;
+    background: none;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-tile:is(:hover, :focus-visible) .pf-tile__label {
+    background: none;
+    color: var(--pf-section-fg, var(--bs-body-color));
+  }
 }
 
 // List: the card as a row, in the section's colours.
