@@ -892,6 +892,10 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-26
 
+- **Clear header: no shadows, and the cover's top wash only as deep as the header and bar.** While the header is clear it has no drop shadow, and neither it nor the bar has the page-colour halo round its words, logo and icons (they read as smudges over the video); the glass and shadow come back once the page scrolls. The cover's top wash, which faded out over about a quarter of the screen (about 260px at 1440), now covers the header and the bar (70%, which keeps their white words at 4.5:1 over a white frame) and is gone 1.5rem below them (105px at 1440).
+
+- **Landing bar: the breadcrumb and TOC button back on the left.** The bar is as it was before today: the TOC button over the logo's column, the breadcrumb starting under the menu's first item, the video (or zoom) button at the far end. `js/modular-toc-collapse.js` no longer adds a copy of the button to the bar. The clear header over background videos and images stays.
+
 - **Header: the logo back to its size; clear over any background video or image.**
   - The logo no longer grows across the bar (it read badly); the header is as before, with the bar's breadcrumb and TOC button still on the right.
   - Clear header (`_landing-features.scss`): no glass, fill or rule at the top of the page whenever the first section has a landing background video (the hero's cover among them) or a background image, not only on the cover; glass again once scrolled. The cover's video layer now reaches up under the header (it stopped at the bar, so the clear header showed the plain page colour), and its top wash is lighter (72% to 70% over the first 10%, was 88% to 80%), the least that keeps the header's and bar's white words at 4.5:1 over a white frame, so the video shows through. Why: the header still read as a filled bar over the video.
