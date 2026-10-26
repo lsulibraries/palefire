@@ -171,18 +171,30 @@ $section = function (string $heading, array $blocks, string $theme = 'light'): P
 
 $pay_callout = fn () => $text(NULL, '<p><strong>On weekdays from 7 a.m. to 8 p.m., visitors pay to park.</strong> Pay-to-park spaces are $3.00 an hour, by debit or credit card only. Note your space number and license plate before you pay.</p>', 'callout');
 
-$lots_table = fn (string $walk) => $text('Pay-to-park lots nearby', <<<HTML
+// A lot's name, optionally linked to its Google Maps place. Each search was
+// checked to open on the one lot (2026-10-26).
+$lot = fn (string $name, string $query, bool $maps) => $maps
+  ? '<a href="https://www.google.com/maps/search/?api=1&amp;query=' . rawurlencode($query) . '">' . $name . '</a>'
+  : $name;
+
+$lots_table = function (string $walk, bool $maps = FALSE) use ($text, $lot): Paragraph {
+  $garage = $lot('Union Square Parking Garage', 'Union Square Parking Garage LSU Baton Rouge', $maps);
+  $welcome = $lot('Welcome Center Lot', 'LSU Welcome Center Lot Baton Rouge', $maps);
+  $boyd = $lot('Thomas Boyd Visitor Lot', 'Thomas Boyd Lot 119 Dalrymple Dr Baton Rouge', $maps);
+  $note = $maps ? ' Each lot\'s name opens it in Google Maps.' : '';
+  return $text('Pay-to-park lots nearby', <<<HTML
 <table>
 <caption>Visitor parking closest to the library</caption>
 <thead><tr><th scope="col">Where</th><th scope="col">How to find it</th><th scope="col">Walk</th></tr></thead>
 <tbody>
-<tr><th scope="row">Union Square Parking Garage</th><td>Enter from East Campus Drive. Visitor spaces are on the 2nd floor only.</td><td>$walk</td></tr>
-<tr><th scope="row">Welcome Center Lot</th><td>Corner of Highland Road and Dalrymple Drive</td><td>$walk</td></tr>
-<tr><th scope="row">Thomas Boyd Visitor Lot</th><td>Near Memorial Tower</td><td>$walk</td></tr>
+<tr><th scope="row">$garage</th><td>Enter from East Campus Drive. Visitor spaces are on the 2nd floor only.</td><td>$walk</td></tr>
+<tr><th scope="row">$welcome</th><td>Corner of Highland Road and Dalrymple Drive</td><td>$walk</td></tr>
+<tr><th scope="row">$boyd</th><td>Near Memorial Tower</td><td>$walk</td></tr>
 </tbody>
 </table>
-<p>All three are $3.00 an hour on weekdays, 7 a.m. to 8 p.m. The pay-to-park map shows each visitor area.</p>
+<p>All three are $3.00 an hour on weekdays, 7 a.m. to 8 p.m. The pay-to-park map shows each visitor area.$note</p>
 HTML);
+};
 
 $day_permit = fn (string $who) => $text('A day permit', <<<HTML
 <p>$who a visitor day permit is often simpler than paying by the hour.</p>
@@ -267,7 +279,7 @@ HTML),
       $list(NULL, ['special']),
     ]),
     $section('Where to park', [
-      $lots_table('5–10 min'),
+      $lots_table('5–10 min', TRUE),
       $list(NULL, ['map', 'garage', 'visitor']),
     ]),
     $section('Researching for several days', [
