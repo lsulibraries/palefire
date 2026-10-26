@@ -1,5 +1,19 @@
 // Palefire mixins.
 
+// Hatching: a 1px diagonal line every 12px (the Visit card's "Show map",
+// the hero event's waiting square, From the stacks, placeholder frames).
+// Browsers don't anti-alias a gradient's hard stops, so a 1px line at 45
+// degrees came out stair-stepped (worst at 125% and 150% zoom, and in
+// Firefox and Safari). Each line here has half-pixel soft edges instead:
+// it ramps up over .5px, holds .5px, and ramps down over .5px, the same
+// 1px of colour in all, drawn smooth at any scale.
+@function pf-hatch($color, $angle: 135deg) {
+  @return repeating-linear-gradient($angle,
+    transparent 0 10.25px,
+    $color 10.75px 11.25px,
+    transparent 11.75px 12px);
+}
+
 // Solid chrome: what the header, sidebar and drawers do when the visitor
 // asks for less transparency or more contrast. Applies for the OS setting
 // (prefers-reduced-transparency / prefers-contrast) and for the Settings

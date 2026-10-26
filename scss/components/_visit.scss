@@ -327,7 +327,7 @@
   font: inherit;
   font-weight: 600;
   background:
-    repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-visit-line) 18%, transparent) 11px 12px),
+    pf-hatch(color-mix(in srgb, var(--pf-visit-line) 18%, transparent)),
     transparent;
   cursor: pointer;
 }

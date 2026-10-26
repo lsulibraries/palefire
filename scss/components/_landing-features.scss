@@ -1110,7 +1110,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
   // The words a step smaller, scaling with the landing.
   .pf-hero-banners .pf-hero-banner__text {
-    padding: .875rem;
+    --pf-banner-pad: .875rem;
+    padding: var(--pf-banner-pad);
   }
 
   .pf-hero-banners .pf-hero-banner__title {
@@ -1120,7 +1121,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   // Tablets: two to a row are wide, so a little shorter (4:5).
   @container pf-cover (min-width: 30rem) {
     .pf-hero-banners .pf-hero-banner__link {
-      aspect-ratio: 4 / 5;
+      --pf-banner-ratio: 4 / 5;
+      aspect-ratio: var(--pf-banner-ratio);
     }
   }
 
@@ -1186,7 +1188,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  aspect-ratio: 2 / 3;
+  --pf-banner-ratio: 2 / 3;
+  aspect-ratio: var(--pf-banner-ratio);
   overflow: hidden;
   isolation: isolate;
   color: #fff;
@@ -1314,6 +1317,86 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   line-clamp: 3;
 }
 
+// The category under the picture (2026-10-26, as the tile showcase's Grid
+// view): the picture is a box of its own (the banner's proportions,
+// --pf-banner-ratio, and its shadow) with the title on it over a scrim of
+// its own (the title's box, reaching 4.5rem above its words: 85% black at
+// the foot, so white keeps 4.5:1 on any picture, the top line about 60%);
+// under it, the label as a caption in the section's colours and the mono
+// label voice, its text colour on hover. The text block opens up
+// (display: contents) so title and label take a row each of the link's
+// grid. Not the blog post set as a line of text (under 44rem).
+@mixin pf-banner-caption {
+  .pf-hero-banner__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr); // not the flex column's flex-end
+    grid-template-rows: auto auto;
+    align-content: start;
+    justify-content: stretch;
+    aspect-ratio: auto;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  .pf-hero-banner__media {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    // The column's width: a grid item with a ratio doesn't stretch by
+    // itself, and took its picture's width instead.
+    width: 100%;
+    aspect-ratio: var(--pf-banner-ratio, 2 / 3);
+    background-color: #1f1b26;
+    box-shadow: var(--pf-banner-shadow, none);
+  }
+
+  .pf-hero-banner__text {
+    display: contents;
+  }
+
+  .pf-hero-banner__title {
+    position: relative;
+    z-index: 2;
+    grid-area: 1 / 1;
+    align-self: end;
+    padding: 4.5rem var(--pf-banner-pad, 1.25rem) var(--pf-banner-pad, 1.25rem);
+    background-image: linear-gradient(to top, rgb(0 0 0 / .85) 0%, rgb(0 0 0 / .65) 50%, rgb(0 0 0 / 0) 100%);
+  }
+
+  &.is-event .pf-hero-banner__title {
+    background-image: linear-gradient(to top, rgb(0 0 0 / .9) 0%, rgb(0 0 0 / .7) 50%, rgb(0 0 0 / 0) 100%);
+  }
+
+  .pf-hero-banner__label {
+    grid-area: 2 / 1;
+    justify-self: start;
+    margin-top: .75rem;
+    padding: 0;
+    color: var(--pf-toc-color);
+    background: none;
+  }
+
+  .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__label {
+    color: var(--pf-section-fg, var(--bs-body-color));
+    background: none;
+  }
+}
+
+.pf-hero-banners > .pf-hero-banner:not(.pf-hero-banner--blog) {
+  @include pf-banner-caption;
+}
+
+@container pf-cover (min-width: 44rem) {
+  .pf-hero-banners > .pf-hero-banner--blog {
+    @include pf-banner-caption;
+  }
+}
+
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
 // once, each banner fades up into place, left to right, 120ms apart. CSS
 // only, so it runs with
@@ -1349,12 +1432,15 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   // shadow under each; the title and its padding scale with the landing's
   // width, so five fit down to 44rem.
   .pf-hero-banner__link {
-    aspect-ratio: 1 / 2;
-    box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / .5);
+    --pf-banner-ratio: 1 / 2;
+    --pf-banner-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / .5);
+    aspect-ratio: var(--pf-banner-ratio);
+    box-shadow: var(--pf-banner-shadow);
   }
 
   .pf-hero-banners .pf-hero-banner__text {
-    padding: clamp(.875rem, 1.6cqi, 1.25rem);
+    --pf-banner-pad: clamp(.875rem, 1.6cqi, 1.25rem);
+    padding: var(--pf-banner-pad);
   }
 
   .pf-hero-banners .pf-hero-banner__title {
@@ -2257,7 +2343,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 .pf-exhibit__frame:not(:has(img)) {
   --pf-exhibit-tone: #3b3346;
   background:
-    repeating-linear-gradient(135deg, transparent 0 11px, rgb(255 255 255 / .07) 11px 12px),
+    pf-hatch(rgb(255 255 255 / .07)),
     linear-gradient(160deg, var(--pf-exhibit-tone), #17141c);
 }
 
@@ -2585,10 +2671,11 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
-// When the three don't fit on one line (about 474px with these labels),
-// two columns as wide as Full guide and Order prices, and See hours across
-// both, so its edges line up with the pair above; under about 318px, one
-// column, every button as wide as the widest. Stretched buttons keep their
+// When the three don't fit on one line (396px with these labels, measured
+// 2026-10-26: Full guide 146, Prices 115, Hours 115, two 10px gaps), two
+// columns as wide as Full guide and Prices, and Hours across both, so its
+// edges line up with the pair above; under 302px, one column, every button
+// as wide as the widest. A longer translation would need these moved. Stretched buttons keep their
 // words at the start and the arrow at the end. A container query on the
 // notes' own width (the Quick Start's column, TOC open or not); a flex
 // wrap can't size a wrapped button to the line above it.
@@ -2596,7 +2683,7 @@ html[data-pf-hero] .pf-landing--cover {
   container: pf-quick-visit / inline-size;
 }
 
-@container pf-quick-visit (max-width: 30rem) {
+@container pf-quick-visit (max-width: 24.75rem) {
   .pf-quick-guide__visit .pf-quick-guide__links {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -2616,7 +2703,7 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
-@container pf-quick-visit (max-width: 20rem) {
+@container pf-quick-visit (max-width: 18.875rem) {
   .pf-quick-guide__visit .pf-quick-guide__links {
     grid-template-columns: auto;
   }

@@ -467,7 +467,7 @@
              and its name says so for screen readers. #}
           {% set visit_links = [
             guide_url ? { url: guide_url, text: 'Full guide'|t },
-            { url: '/v2/special/guides/duplication', text: 'Order prices'|t },
+            { url: '/v2/special/guides/duplication', text: 'Prices'|t },
           ]|filter(link => link) %}
           <ul class="pf-quick-guide__links" role="list">
             {% for link in visit_links %}
@@ -479,11 +479,11 @@
                 </a>
               </li>
             {% endfor %}
-            {# Hours: "See hours" after a dot in today's status colour
+            {# Hours: "Hours" after a dot in today's status colour
                (visit-hours.js), down to the week in the Visit panel, as the
                hero's hours line does (same page, so no new tab and the
                arrow points down). The status words are for screen readers
-               only ("Open now, See hours"), so the dot's colour never
+               only ("Open now, Hours"), so the dot's colour never
                carries it alone (WCAG 1.4.1); the hero's badge shows them.
                The dot shows once LibCal answers; the button goes if LibCal
                fails, since the week does too. #}
@@ -494,7 +494,7 @@
                     <span class="pf-quick-guide__hours-dot" aria-hidden="true"></span>
                     <span class="visually-hidden"><span data-pf-hours-status></span>, </span>
                   </span>
-                  {{- 'See hours'|t -}}
+                  {{- 'Hours'|t -}}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
                 </a>
               </li>

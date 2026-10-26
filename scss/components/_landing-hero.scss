@@ -71,7 +71,7 @@ $pf-hero-media-wash: .8 !default;
 .pf-hero-event {
   --pf-hero-thumb: clamp(4.5rem, 3.5rem + 3vw, 6rem);
   // The Visit card's "Show map" stripes (_visit.scss .pf-visit__map-load).
-  --pf-hero-hatch: repeating-linear-gradient(135deg, transparent 0 11px, color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent) 11px 12px);
+  --pf-hero-hatch: #{pf-hatch(color-mix(in srgb, var(--pf-section-border, #6c757d) 18%, transparent))};
   display: none;
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
   border-top: 1px solid var(--pf-landing-line);

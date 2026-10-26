@@ -357,10 +357,12 @@ html.pf-over-menu .pf-panel.offcanvas {
   // Closed: Origami's diagonal stripes.
   &__loc[data-hours-state="closed"],
   &__loc[data-hours-state="opening"] {
+    // Soft half-pixel edges, as pf-hatch(): hard stops alias at 45deg.
     background-image: repeating-linear-gradient(
       -45deg,
-      color-mix(in srgb, var(--pf-section-fg) 6%, transparent) 0 .375rem,
-      transparent .375rem .875rem
+      color-mix(in srgb, var(--pf-section-fg) 6%, transparent) 0 calc(.375rem - .5px),
+      transparent calc(.375rem + .5px) calc(.875rem - 1px),
+      color-mix(in srgb, var(--pf-section-fg) 6%, transparent) .875rem
     );
   }
 
