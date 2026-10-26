@@ -53,7 +53,7 @@ html[data-pf-mode="guide"] {
   }
 
   .pf-toc__sublink {
-    font-size: 0.6875rem;
+    font-size: var(--pf-mono-label);
     letter-spacing: 0.08em;
   }
 }
@@ -173,7 +173,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   flex-wrap: wrap;
   gap: 0.25rem 1.5rem;
   margin: 0;
-  font: 0.75rem/1.5 var(--pf-guide-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-guide-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--pf-guide-muted);
@@ -420,7 +420,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   caption {
     caption-side: top;
     padding: 0.75rem 1rem;
-    font: 700 0.6875rem var(--pf-guide-mono);
+    font: 700 var(--pf-mono-label) var(--pf-guide-mono);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--pf-guide-muted);
@@ -435,7 +435,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   }
 
   thead th {
-    font: 700 0.6875rem var(--pf-guide-mono);
+    font: 700 var(--pf-mono-label) var(--pf-guide-mono);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--pf-guide-muted);
@@ -505,7 +505,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
       strong {
         display: block;
         margin-bottom: 0.35rem;
-        font: 700 0.6875rem/1.5 var(--pf-guide-mono);
+        font: 700 var(--pf-mono-label)/1.5 var(--pf-guide-mono);
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--pf-guide-muted);
@@ -568,7 +568,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   align-items: center;
   gap: 0.875rem;
   margin: 0 0 1rem;
-  font: 700 0.6875rem var(--pf-guide-mono);
+  font: 700 var(--pf-mono-label) var(--pf-guide-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--bs-emphasis-color);
@@ -785,7 +785,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
 
 .pf-paths__pop-kicker {
   margin: 0 0 0.35rem;
-  font: 700 0.6875rem var(--pf-guide-mono);
+  font: 700 var(--pf-mono-label) var(--pf-guide-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--pf-guide-muted);
@@ -1084,7 +1084,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
 }
 
 .pf-resource__meta {
-  font-size: 0.6875rem;
+  font-size: var(--pf-mono-label);
   line-height: 1.5;
 }
 
@@ -1097,7 +1097,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
   display: inline-block;
   margin-inline-start: 0.4rem;
   padding: 0.3rem 0.45rem;
-  font-size: 0.625rem;
+  font-size: var(--pf-mono-label);
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
@@ -1296,7 +1296,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
   }
 
   .field__label {
-    font: 700 0.6875rem/1.5 var(--pf-guide-mono);
+    font: 700 var(--pf-mono-label)/1.5 var(--pf-guide-mono);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pf-guide-muted);
@@ -1441,7 +1441,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
   inset-inline-start: 0;
   inset-block-end: 0;
   padding: 0.45rem 0.75rem;
-  font: 700 0.6875rem var(--pf-guide-mono);
+  font: 700 var(--pf-mono-label) var(--pf-guide-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-white);

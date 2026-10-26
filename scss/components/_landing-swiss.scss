@@ -31,7 +31,7 @@
 // Small tracked monospace label (search heading, Visit labels, links).
 %pf-landing-label {
   font-family: var(--pf-landing-label);
-  font-size: .6875rem;
+  font-size: var(--pf-mono-label);
   font-weight: 700;
   letter-spacing: .16em;
   line-height: 1.5;
@@ -372,7 +372,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 
 .pf-visit__map-load small {
   @extend %pf-landing-label;
-  font-size: .625rem;
+  font-size: var(--pf-mono-label);
 }
 
 // --- Light chrome over a landing video ----------------------------------------

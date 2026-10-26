@@ -12,6 +12,10 @@
   // Soft rules ($pf-hairline, _variables.scss): this share of the line colour.
   --pf-hairline-strength: 20%;
   --pf-focus-color: #{$pf-purple};
+  // Monospace sizes: labels (eyebrows, captions, meta) and the controls in
+  // the same voice (buttons, toggles, search), a step larger to read and hit.
+  --pf-mono-label: .75rem; // 12px
+  --pf-mono-ui: .8125rem; // 13px
 }
 
 // Anchor jumps, TOC links, and scroll-snap stop below the sticky header, and

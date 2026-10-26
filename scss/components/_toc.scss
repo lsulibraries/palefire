@@ -52,7 +52,7 @@
   padding: 0;
   margin-inline-end: 1.25rem;
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  font-size: 0.75rem;
+  font-size: var(--pf-mono-label);
   font-weight: 700;
   letter-spacing: 0.1667em; // 2px at 12px; em so it grows with Text size
   line-height: 1.5;
@@ -241,7 +241,7 @@
   padding: 1rem 0 0;
   border-top: 1px solid var(--pf-toc-rail);
   font-family: var(--pf-toc-font);
-  font-size: 0.6875rem;
+  font-size: var(--pf-mono-ui);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;

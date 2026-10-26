@@ -36,7 +36,7 @@
 .pf-tree-viewer__key-title,
 .pf-tree-viewer__key-list {
   font-family: var(--pf-viewer-mono);
-  font-size: 0.75rem;
+  font-size: var(--pf-mono-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -63,7 +63,7 @@
   gap: 0.5rem;
   min-height: 2.75rem; // 44px target
   padding: 0.55rem 0.8rem;
-  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  font: var(--pf-mono-ui)/1.5 var(--pf-viewer-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-body-color);

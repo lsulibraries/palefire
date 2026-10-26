@@ -95,7 +95,7 @@
   border: 0; border-inline-start: 1px solid var(--pf-landing-line); border-radius: 0 3px 3px 0;
   color: var(--pf-toc-color, #{$pf-grey-500});
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+  font-size: var(--pf-mono-ui); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
   background: transparent;
   cursor: pointer;
   transition: color $pf-hover-out ease, background-color .3s ease;
@@ -151,7 +151,7 @@
   border: 1px solid var(--pf-toc-rail, #{$pf-grey-900}); border-radius: 4px;
   color: var(--pf-toc-color, #{$pf-grey-500});
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
+  font-size: var(--pf-mono-ui); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; line-height: 1;
   background-color: var(--pf-sidebar-bg, #{rgba($pf-black, .5)});
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));

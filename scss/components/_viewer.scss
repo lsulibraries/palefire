@@ -22,7 +22,7 @@ $pf-viewer-ease: cubic-bezier(.2, .7, .2, 1);
 // Small label: mono capitals, as an exhibition's kicker.
 %pf-viewer-kicker {
   margin: 0;
-  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-viewer-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--pf-viewer-muted);
@@ -365,7 +365,7 @@ html.pf-viewer-open {
   align-items: center;
   gap: 0.5rem;
   padding: 0.55rem 0.8rem;
-  font: 0.75rem/1.5 var(--pf-viewer-mono);
+  font: var(--pf-mono-ui)/1.5 var(--pf-viewer-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-body-color);

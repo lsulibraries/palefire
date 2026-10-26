@@ -66,7 +66,7 @@ html#{$pf-themed} .pf-footer {
 %pf-footer-label {
   margin: 0 0 .875rem;
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  font-size: .6875rem;
+  font-size: var(--pf-mono-label);
   font-weight: $font-weight-bold;
   line-height: 1.5;
   letter-spacing: .16em;
@@ -392,7 +392,7 @@ html#{$pf-themed} .pf-footer {
   .pf-footer__legal a {
     @extend %pf-footer-label;
     margin: 0;
-    font-size: .625rem;
+    font-size: var(--pf-mono-label);
   }
 
   .pf-footer__legal a {

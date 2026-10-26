@@ -82,16 +82,17 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     margin: 0;
     padding: 0;
     font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-    font-size: 0.75rem;
+    font-size: var(--pf-mono-label);
     font-weight: 700;
     letter-spacing: 0.1667em; // 2px at 12px; em so Text size enlarges it too
     line-height: 1.5;
     text-transform: uppercase;
     color: var(--pf-toc-color);
 
+    // Phones: tighter tracking keeps a title like "Special Collections"
+    // whole at 320px now the label is 12px (was 11px at 0.1em).
     @include media-breakpoint-down(md) {
-      font-size: 0.6875rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.06em;
     }
   }
 

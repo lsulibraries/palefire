@@ -691,7 +691,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     align-items: stretch;
     gap: .5rem;
     padding: .25rem;
-    font-size: .625rem;
+    font-size: var(--pf-mono-label);
     letter-spacing: .08em;
     text-align: center;
     text-transform: uppercase;

@@ -59,7 +59,7 @@ html[data-pf-mode="exhibition"] {
 // Shared small label: mono capitals, as the guide head's meta line.
 %pf-exhibit-kicker {
   margin: 0;
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--pf-exhibit-muted);
@@ -108,7 +108,7 @@ html[data-pf-mode="exhibition"] .pf-section__title {
     content: counter(pf-gallery, decimal-leading-zero) "\2009/\2009" counter(pf-galleries, decimal-leading-zero) / "";
     display: block;
     margin-bottom: 1rem;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
     letter-spacing: 0.12em;
     color: var(--pf-exhibit-muted);
   }
@@ -589,7 +589,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     gap: 0.5rem;
     align-items: center;
     min-height: 2.75rem;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--bs-body-color);
@@ -1082,7 +1082,7 @@ $pf-exhibit-cover-clear: 92;
   padding-inline: 0.875rem;
   border: 1px solid $pf-hairline;
   border-radius: 4px;
-  font: 0.75rem/1 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   color: var(--pf-exhibit-muted);
   background: color-mix(in srgb, var(--bs-body-bg) 55%, transparent);
@@ -1236,7 +1236,7 @@ $pf-exhibit-cover-clear: 92;
   align-items: center;
   min-height: 2.75rem;
   padding: 0.5rem 1.25rem;
-  font: 0.8125rem/1.2 var(--pf-exhibit-mono);
+  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-body-color);
@@ -1393,7 +1393,7 @@ $pf-exhibit-cover-clear: 92;
     content: counter(pf-gallery, decimal-leading-zero) "\2009/\2009" counter(pf-galleries, decimal-leading-zero) / "";
     display: block;
     margin-bottom: 1rem;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
     letter-spacing: 0.12em;
     color: var(--pf-exhibit-muted);
   }
@@ -1490,7 +1490,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   justify-self: start;
   min-height: 2.75rem;
   padding: 0.5rem 0;
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-ui)/1.5 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-body-color);
@@ -1641,7 +1641,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   place-items: center;
   min-height: 10rem;
   padding: 1rem;
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--pf-exhibit-muted);
@@ -1849,7 +1849,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 .pf-audio__time {
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
   font-variant-numeric: tabular-nums;
   color: var(--pf-exhibit-muted);
 }
@@ -1857,7 +1857,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 .pf-exhibit-audio__summary {
   min-height: 2.75rem;
   padding: 0.65rem 0;
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-ui)/1.5 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   cursor: pointer;
@@ -1996,7 +1996,7 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
   margin: -1.5rem 0 2rem calc(-1 * var(--pf-stats-gap)); // under the title's own margin
   padding: 0;
   list-style: none;
-  font: 0.75rem/1.5 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--pf-exhibit-muted);
@@ -2323,7 +2323,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 
   button {
     padding: 0.5rem 0.75rem;
-    font: 0.75rem/1.5 var(--pf-exhibit-mono);
+    font: var(--pf-mono-ui)/1.5 var(--pf-exhibit-mono);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--pf-exhibit-muted);
@@ -2471,7 +2471,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 .pf-exhibit-wall__tag {
   @extend %pf-exhibit-kicker;
   flex: none;
-  font-size: 0.6875rem;
+  font-size: var(--pf-mono-label);
   white-space: nowrap;
 
   abbr {
@@ -2629,7 +2629,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 0.6875rem/1.4 var(--pf-exhibit-mono);
+  font: var(--pf-mono-label)/1.4 var(--pf-exhibit-mono);
   color: var(--pf-exhibit-muted);
 
   li {

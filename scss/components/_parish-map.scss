@@ -124,7 +124,7 @@
   margin-top: 0.75rem;
   padding-top: 0.6rem;
   font-family: var(--pf-guide-mono);
-  font-size: 0.75rem;
+  font-size: var(--pf-mono-label);
   letter-spacing: 0.1em;
   line-height: 1.5;
   text-transform: uppercase;
@@ -154,7 +154,7 @@
 .pf-trees__count,
 .pf-tree-link__meta {
   font-family: var(--pf-guide-mono);
-  font-size: 0.75rem;
+  font-size: var(--pf-mono-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--pf-guide-muted);
@@ -259,7 +259,7 @@
   min-height: 2rem;
   padding: 0.35rem 0;
   font-family: var(--pf-guide-mono);
-  font-size: 0.75rem;
+  font-size: var(--pf-mono-ui);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--pf-guide-accent);
