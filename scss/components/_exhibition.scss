@@ -2291,7 +2291,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
       // so only a soft rise from the foot, where they sit, and the
       // photograph shows across the rest.
       .pf-section__inner:not(:has(.pf-exhibit-wall__text)) & {
-        background: pf-eased-wash(to top, 6%, 42%);
+        background: pf-eased-wash(to top, 10%, 46%);
       }
     }
   }
@@ -2314,6 +2314,71 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
         transition: none;
       }
     }
+  }
+}
+
+// A wall that opens on its title and facts alone (no intro to hold the
+// image up). Its small labels, the number and the facts, take the text's
+// full colour: over the foot's light wash the muted tone fell to 2.1:1 on a
+// bright photograph; full colour keeps 4.5:1.
+$pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled):has(.pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
+
+#{$pf-wall-bare} {
+  > .pf-section__title::before,
+  .pf-exhibit-wall__stats {
+    color: var(--bs-body-color);
+  }
+}
+
+// Its area spans the whole gallery, so the photograph stays pinned under
+// the header while the wall rises over it, and fades to the page colour
+// (the gallery's own timeline, inset by the header, as the pinned
+// openings'): most of the way in the first 8% of a screen, while the title
+// is still on the foot's wash, then out by 32%. Hidden at the end, so its
+// zoom link can't be hit through the wall. Without scroll timelines or with
+// reduced motion it scrolls away as before.
+$pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled):has(.pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    #{$pf-wall-photo} {
+      view-timeline: --pf-wall-open block;
+      view-timeline-inset: var(--pf-header-h) 0px;
+
+      // The hero no longer sets rows 1-4 (it reaches the gallery's foot):
+      // this keeps them its first screen, so the title still sits at the
+      // photograph's foot (as the pinned openings' ::before).
+      &::before {
+        content: "";
+        grid-row: 1 / 5;
+        grid-column: 1;
+        min-height: max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
+        margin-top: calc(-1 * var(--pf-section-pad-block, 0px));
+      }
+
+      .pf-exhibit-wall-hero {
+        grid-row: 1 / 6;
+        animation: pf-exhibit-photo-out linear both;
+        animation-timeline: --pf-wall-open;
+        animation-range: contain 0px contain 32svh;
+      }
+
+      .pf-exhibit-wall {
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+@keyframes pf-exhibit-photo-out {
+  25% {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
 }
 
