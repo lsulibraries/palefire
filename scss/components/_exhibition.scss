@@ -19,12 +19,13 @@ $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
 
 // A wash of the page colour that is solid up to $from and fades out by $to
 // along an ease-in-out curve, in many stops: no visible bends where a few
-// straight segments meet, as a photographer's graduated filter.
-@function pf-eased-wash($direction, $from, $to, $steps: 12) {
+// straight segments meet, as a photographer's graduated filter. $strength
+// (0 to 1): how much page colour at its solid end, for a lighter wash.
+@function pf-eased-wash($direction, $from, $to, $steps: 12, $strength: 1) {
   $stops: ();
   @for $i from 0 through $steps {
     $t: math.div($i, $steps);
-    $alpha: math.div(1 + math.cos(math.$pi * $t), 2);
+    $alpha: math.div(1 + math.cos(math.$pi * $t), 2) * $strength;
     $mix: math.div(math.round($alpha * 1000), 10) * 1%;
     $at: math.div(math.round(($from + ($to - $from) * $t) * 10), 10);
     $stops: list.append($stops, color-mix(in srgb, var(--bs-body-bg) $mix, transparent) $at, comma);
@@ -925,10 +926,12 @@ $pf-exhibit-cover-clear: 92;
 // contrast on any image: the bottom below lg (the text spans the column) or
 // the left from lg (beside the TOC, the text takes about half the column).
 // It moves with the text. The breadcrumb's bar has its own glass. From lg
-// the image also fades out over the head's foot, so the footer meets the
-// page colour, not the image's edge. On the head, not in the media: there
-// the clip cut both at one edge, and at fractional zoom (125% and the like)
-// their anti-aliased rows let a broken line of image through.
+// the image settles into the head's foot under a light fade (40% of the
+// page colour at most): a solid one read as a dark band where the first
+// gallery's photograph comes up below.
+// On the head, not in the media: there the clip cut both at one edge, and
+// at fractional zoom (125% and the like) their anti-aliased rows let a
+// broken line of image through.
 .pf-exhibit-head:has(.pf-exhibit-cover__media)::after {
   content: "";
   position: absolute;
@@ -939,7 +942,7 @@ $pf-exhibit-cover-clear: 92;
 
   @include media-breakpoint-up(lg) {
     background:
-      pf-eased-wash(to top, 0%, 100%) left bottom / 100% clamp(4rem, 14vh, 8rem) no-repeat,
+      pf-eased-wash(to top, 0%, 100%, 12, .4) left bottom / 100% clamp(3rem, 10vh, 6rem) no-repeat,
       pf-eased-wash(to right, $pf-exhibit-cover-solid * 1%, $pf-exhibit-cover-clear * 1%);
   }
 }
