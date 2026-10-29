@@ -10,8 +10,10 @@
 //   switches to even ticks (.pf-toc--ticks) when the segments can't all be
 //   24px tall (2.5.8). Without JS the segments are even and unfilled.
 // - The names sit beside the segments over the content, on the sidebar's
-//   glass, so nothing reflows (no layout shift). Hover, focus and a first
-//   tap (.is-open) show them all; Esc hides them (.is-dismissed, 1.4.13).
+//   glass, so nothing reflows (no layout shift). Hover (.is-hover, held
+//   for a moment after the pointer leaves), focus and a first tap
+//   (.is-open) show them all, over a frosted left side of the page; Esc
+//   hides them (.is-dismissed, 1.4.13).
 //   The current one shows by itself only while its section's heading rises
 //   from the activation line (--pf-rail-peek, fading as it goes), so it
 //   never sits over the text being read.
@@ -34,6 +36,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     --pf-rail-col: 2.75rem;  // the hit area's width
     --pf-rail-line: 1.25rem; // the line's distance from the page edge
     --pf-rail-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --pf-rail-open-w: min(26rem, 65vw); // each row's width while the names are open
 
     grid-template-columns: 0px minmax(0, 1fr);
     --pf-bleed-inline-start: 0px;
@@ -50,6 +53,35 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     z-index: 4; // over the landing bar (3), under the docked video button (5)
+
+    // While the names are open, the left of the page is frosted with the
+    // sidebar's glass, fading out to the right, so the names don't sit on
+    // the text. It follows them in and out (the same hold on closing).
+    &::before {
+      content: "";
+      position: fixed;
+      top: var(--pf-header-h);
+      bottom: 0;
+      inset-inline-start: 0;
+      width: min(34rem, 75vw);
+      background-color: var(--pf-sidebar-bg);
+      -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+      backdrop-filter: var(--pf-glass-filter, blur(26px));
+      -webkit-mask-image: linear-gradient(to right, #000 55%, transparent);
+      mask-image: linear-gradient(to right, #000 55%, transparent);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 0.3s ease,
+        visibility 0s linear 0.3s;
+    }
+
+    &:has(.pf-toc:is(:hover, .is-hover, :focus-within, .is-open):not(.is-dismissed))::before {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.25s ease;
+    }
   }
 
   #{$pf-rail} .pf-toc {
@@ -88,16 +120,20 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       }
     }
 
-    // The link is the segment's whole box; its name sits beside it.
+    // The link is the segment's whole box, and the 4px gap under it, so
+    // the rows touch and the pointer never falls between two names. Its
+    // name sits beside it.
     .pf-toc__link {
       position: absolute;
-      inset-block: 0;
+      inset-block: 0 -4px;
       inset-inline-start: 0;
       display: block;
       width: var(--pf-rail-col);
       min-height: 0;
       padding: 0;
       color: var(--pf-toc-color);
+      // Narrows once the names have faded out.
+      transition: width 0s linear 0.2s;
 
       // Track, then the read part over it.
       &::before,
@@ -120,6 +156,16 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
         height: calc(var(--pf-rail-p, 0) * 100%);
         background-color: var(--pf-toc-active);
       }
+    }
+
+    // Sections already read step back: their fill in the TOC text colour,
+    // softened toward the track, so only the current one is bright. 70%
+    // keeps it above 3:1 on both chromes (about 3.3:1 light, 3.9:1 dark).
+    .pf-toc__item.is-read > .pf-toc__link:not([aria-current])::after {
+      background-color: color-mix(in srgb, var(--pf-toc-color) 70%, var(--pf-toc-rail));
+    }
+
+    .pf-toc__link {
 
       &:hover::before,
       &:hover::after,
@@ -159,6 +205,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       transition:
         opacity 0.2s ease,
         transform 0.3s var(--pf-rail-ease),
+        background-color 0s linear 0.2s,
         color $pf-hover-out ease;
     }
 
@@ -176,7 +223,6 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       color: var(--pf-toc-active);
       text-decoration: underline;
       text-underline-offset: 0.2em;
-      transition-duration: 0.2s, 0.3s, $pf-hover-in;
     }
 
     // The current name, by itself, while its heading rises (JS).
@@ -186,8 +232,10 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       transition: color $pf-hover-out ease;
     }
 
-    // "Back to top": the arrow alone, under the line.
+    // "Back to top": the arrow alone, under the line. Positioned, so it
+    // paints over the open frost (the sidebar's ::before).
     .pf-toc__top {
+      position: relative;
       justify-content: flex-start;
       width: var(--pf-rail-col);
       min-height: 2.75rem;
@@ -206,15 +254,28 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
   }
 
   // Every name: hover, focus, or a first tap. Each one follows the one
-  // above it by 25ms.
-  #{$pf-rail} .pf-toc:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-toc__label {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
-    transition:
-      opacity 0.2s ease calc(var(--pf-rail-i, 0) * 25ms),
-      transform 0.3s var(--pf-rail-ease) calc(var(--pf-rail-i, 0) * 25ms),
-      color $pf-hover-out ease;
+  // above it by 25ms. On the frost they need no glass of their own.
+  // Each row is then a wide band (the link, as tall as its segment), so
+  // moving from one name to the next stays on the rail. .is-hover
+  // (modular-toc.js) outlasts :hover by RAIL_HOLD, so slipping off a row
+  // doesn't close them; it is a timer, so Reduce motion (which zeroes
+  // transition delays) keeps it.
+  #{$pf-rail} .pf-toc:is(:hover, .is-hover, :focus-within, .is-open):not(.is-dismissed) {
+    .pf-toc__link {
+      width: var(--pf-rail-open-w);
+      transition: width 0s;
+    }
+
+    .pf-toc__label {
+      opacity: 1;
+      transform: none;
+      background-color: transparent;
+      transition:
+        opacity 0.2s ease calc(var(--pf-rail-i, 0) * 25ms),
+        transform 0.3s var(--pf-rail-ease) calc(var(--pf-rail-i, 0) * 25ms),
+        background-color 0s,
+        color $pf-hover-out ease;
+    }
   }
 
   // The read part grows only once the rail is sized (modular-toc.js), so
@@ -273,25 +334,37 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * 0.5rem));
   }
 
-  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-toc__label {
+  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc:is(:hover, .is-hover, :focus-within, .is-open):not(.is-dismissed) .pf-toc__label {
     transform: none;
+  }
+
+  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} > .pf-sidebar.pf-modular__sidebar::before {
+    -webkit-mask-image: linear-gradient(to left, #000 55%, transparent);
+    mask-image: linear-gradient(to left, #000 55%, transparent);
   }
 }
 
+// Reduced motion: no fades or slides. The hold after the pointer leaves is
+// a timer in modular-toc.js, so it stays.
 @media (prefers-reduced-motion: reduce) {
   #{$pf-rail} .pf-toc {
     .pf-toc__link::before,
     .pf-toc__link::after,
     .pf-toc__label {
-      transition: none !important;
+      transition-duration: 0s !important;
     }
+  }
+
+  #{$pf-rail} > .pf-sidebar.pf-modular__sidebar::before {
+    transition-duration: 0s !important;
   }
 }
 
-#{$pf-rail-html}.pf-a11y-motion #{$pf-rail-row} .pf-toc {
-  .pf-toc__link::before,
-  .pf-toc__link::after,
-  .pf-toc__label {
-    transition: none !important;
+#{$pf-rail-html}.pf-a11y-motion #{$pf-rail-row} {
+  .pf-toc .pf-toc__link::before,
+  .pf-toc .pf-toc__link::after,
+  .pf-toc .pf-toc__label,
+  > .pf-sidebar.pf-modular__sidebar::before {
+    transition-duration: 0s !important;
   }
 }

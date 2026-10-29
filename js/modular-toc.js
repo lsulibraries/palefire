@@ -527,12 +527,17 @@
     // the second), so it never sits over the text being read. Hover and focus show every name (CSS).
     const PEEK_END = 0.45;
     const RAIL_MIN = 28; // a 24px target plus the 4px gap
+    // How long the names stay after the pointer leaves the rail (ms), so
+    // slipping off a row doesn't close them. A timer, not a CSS delay:
+    // Reduce motion zeroes transition delays (_a11y-settings.scss).
+    const RAIL_HOLD = 400;
     const railRow = nav.closest('.pf-modular--toc-rail');
     const railMedia = window.matchMedia('(min-width: 992px)');
     const railOn = () => !!railRow && railMedia.matches && ROOT.dataset.pfMode !== 'guide';
     let railTicking = false;
     let railFrame = 0;
     let lastPointer = 'mouse';
+    let holdTimer = 0;
 
     // Weights from the sections' heights, on load and when they resize,
     // never on scroll.
@@ -649,7 +654,8 @@
       document.addEventListener('keydown', (event) => {
         const shown = nav.matches(':hover') || nav.contains(document.activeElement) || nav.classList.contains('is-open');
         if (event.key === 'Escape' && shown && railOn()) {
-          nav.classList.remove('is-open');
+          clearTimeout(holdTimer);
+          nav.classList.remove('is-open', 'is-hover');
           nav.classList.add('is-dismissed');
         }
       }, { signal });
@@ -658,7 +664,23 @@
           nav.classList.remove('is-dismissed');
         }
       };
-      nav.addEventListener('pointerleave', undismiss, { signal });
+
+      // Hover, held: .is-hover goes on as the pointer enters and comes off
+      // RAIL_HOLD after it leaves, unless it comes back first (_toc-rail.scss
+      // shows the names for it as for :hover).
+      nav.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'touch') {
+          clearTimeout(holdTimer);
+          nav.classList.add('is-hover');
+        }
+      }, { signal });
+      nav.addEventListener('pointerleave', (event) => {
+        undismiss();
+        if (event.pointerType !== 'touch') {
+          clearTimeout(holdTimer);
+          holdTimer = setTimeout(() => nav.classList.remove('is-hover'), RAIL_HOLD);
+        }
+      }, { signal });
       nav.addEventListener('focusout', () => requestAnimationFrame(undismiss), { signal });
     }
 
@@ -802,6 +824,7 @@
         railObserver.disconnect();
       }
       cancelAnimationFrame(railFrame);
+      clearTimeout(holdTimer);
     };
   }
 
