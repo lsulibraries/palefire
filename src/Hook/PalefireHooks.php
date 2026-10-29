@@ -456,7 +456,7 @@ class PalefireHooks {
   /**
    * Variables for includes/exhibit-cover.html.twig on an exhibition page.
    *
-   * @return array{title: string, subtitle: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
+   * @return array{title: string, subtitle: string, title_style: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
    */
   private function exhibitHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -472,18 +472,25 @@ class PalefireHooks {
       $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
     }
 
+    // Title style: "serif" (the default, also when the field is empty or
+    // not yet added) or "sans".
+    $title_style = self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif';
+
     $render = [];
     $cache->applyTo($render);
     // The cover title's serif (base/_fonts.scss): preloaded so the <h1>
     // draws in it with the first paint rather than swapping in after the
-    // stylesheet asks for it. Only exhibitions use the font.
-    $render['#attached']['html_head_link'][] = [[
-      'rel' => 'preload',
-      'as' => 'font',
-      'type' => 'font/woff2',
-      'href' => base_path() . \Drupal::service('extension.list.theme')->getPath('palefire') . '/fonts/playfair-display/playfair-display-latin-500-normal.woff2',
-      'crossorigin' => 'anonymous',
-    ], FALSE];
+    // stylesheet asks for it. Only serif titles use the font, so a sans
+    // title never downloads it.
+    if ($title_style === 'serif') {
+      $render['#attached']['html_head_link'][] = [[
+        'rel' => 'preload',
+        'as' => 'font',
+        'type' => 'font/woff2',
+        'href' => base_path() . \Drupal::service('extension.list.theme')->getPath('palefire') . '/fonts/playfair-display/playfair-display-latin-500-normal.woff2',
+        'crossorigin' => 'anonymous',
+      ], FALSE];
+    }
     if ($cover) {
       // The cover is lazy in the markup, so an address for a gallery (#…)
       // never fetches it. This runs in <head>, before the stylesheets: with
@@ -512,6 +519,7 @@ class PalefireHooks {
     return [
       'title' => $node->label(),
       'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
+      'title_style' => $title_style,
       'credit' => $text('field_exhibit_credit'),
       'intro' => $text('field_intro'),
       'prompt' => self::stringValue($node, 'field_exhibit_prompt') ?: (string) $this->t('Choose a gallery from the table of contents to begin.'),

@@ -1016,22 +1016,21 @@ $pf-exhibit-cover-clear: 92;
 // exhibit-cover.html.twig): the smallest of the full display size, about
 // three lines of the column (a letter is about half an em), and the longest
 // word on one line. A short title such as "AVES" keeps the full size.
-// Set in Playfair Display, an art-magazine serif (mockup A on the hero
-// canvas); Settings > Easy-to-read font puts it back in that font, at the
-// sans display weight and tracking.
+// The Exhibition title style field (PalefireHooks::exhibitHead()) picks the
+// face: --serif (the default) or --sans. Settings > Easy-to-read font puts
+// either in that font, at the sans display weight and tracking.
 .pf-exhibit-head .pf-exhibit-cover__title {
   display: grid;
   gap: 1rem;
   margin: 0;
-  font-family: $pf-font-display-serif;
   font-size: max(1.75rem, min(
     clamp(3.5rem, 1.5rem + 8vw, 8.5rem),
     600cqi / var(--pf-title-chars, 1),
     100cqi / (var(--pf-title-word, 1) * .62)
   ));
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
+  font-weight: $pf-display-weight;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
   overflow-wrap: break-word;
   text-wrap: balance;
 
@@ -1040,6 +1039,23 @@ $pf-exhibit-cover-clear: 92;
     font-weight: $pf-display-weight;
     letter-spacing: -0.04em;
     line-height: 0.9;
+  }
+}
+
+// Serif: Playfair Display, an art-magazine serif (mockup A on the hero
+// canvas). Leading from the font's own extremes: a J's tail falls 0.19em
+// below the baseline and a b's stem rises 0.79em above it, so lines closer
+// than 0.98em collide (0.92 put "John James" into "Audubon"); 1.04 leaves
+// a 0.06em channel of light between them. Tracking a touch under neutral,
+// as display sizes want, with the font's own kerning and ligatures.
+.pf-exhibit-head .pf-exhibit-cover__title--serif {
+  html:not(.pf-a11y-font) & {
+    font-family: $pf-font-display-serif;
+    font-weight: 500;
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures;
+    letter-spacing: -0.015em;
+    line-height: 1.04;
   }
 }
 

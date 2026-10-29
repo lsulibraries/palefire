@@ -527,7 +527,8 @@ Run `palefire_guide_setup.php` first (exhibitions reuse its blocks and
 ### Content model
 
 On `node.modular_page` (exhibition mode only, printed by
-`includes/exhibit-cover.html.twig`): `field_exhibit_subtitle`,
+`includes/exhibit-cover.html.twig`): `field_exhibit_title_style` (Serif,
+Playfair Display, the default; or Sans), `field_exhibit_subtitle`,
 `field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
 `field_exhibit_prompt` (default "Choose a gallery from the table of contents
 to begin."), and `field_intro` if filled. Optional tiles under the credit:
@@ -925,6 +926,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Exhibition title style: Serif or Sans, and the serif's lines no longer collide.** New field `field_exhibit_title_style` on the title page (re-run `palefire_exhibit_setup.php`): Serif, Playfair Display, the default and also what an empty field means; or Sans, the site's display sans as before Playfair. The `<h1>` gets `pf-exhibit-cover__title--serif` or `--sans`, and only a serif title preloads the font, so a sans exhibition never downloads it. "Easy-to-read font" still sets either in Atkinson. The serif's leading now comes from the font: Playfair's J falls 0.19em below the baseline and its b rises 0.79em, so lines closer than 0.98em touch. At 0.92 the J of "James" ran into the b of "Audubon"; at 1.04 there is a 0.06em gap (measured: 6–7px at 1440, 1024 and 768, 2px at 320). Tracking is eased to −0.015em, with the font's kerning and common ligatures. Sans keeps 0.9 and −0.04em. Checked on the live Audubon page with local CSS, both styles at 320, 768, 1024 and 1440: no horizontal scroll, and Playfair is never fetched for sans. Why: curators get a choice of tone from tested presets, and "John James" was touching "Audubon".
 
 - **Exhibition titles in a serif.** The cover `<h1>` (`.pf-exhibit-cover__title`) is now set in Playfair Display 500, an art-magazine serif (mockup A on the hero canvas), at -0.02em tracking and 0.92 line height, balanced across lines; the size rule by title length is unchanged. The font is self-hosted (`fonts/playfair-display/`, from `@fontsource/playfair-display` 5.3.0, Latin subset, 23 KB, licence in `OFL.txt`), declared in `base/_fonts.scss` with `font-display: swap`, and preloaded from `PalefireHooks::exhibitHead()`, so other pages never download it and no Google request is added. The subtitle stays in the body sans; Settings > Easy-to-read font puts the title back in Atkinson at the sans weight. New `$pf-font-display-serif` in `_variables.scss`. No config: `git pull` and `drush cr`. Why: the sans title didn't suit 19th-century natural-history plates.
 

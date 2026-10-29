@@ -23,7 +23,9 @@
  *   (a short note on the physical exhibition, shown in a tooltip; both
  *   added 2026-10-21). An earlier version made a checkbox,
  *   field_exhibit_physical, in its place: it is no longer used, and can be
- *   deleted in Manage fields.
+ *   deleted in Manage fields. field_exhibit_title_style (added
+ *   2026-10-29): the title in Serif (Playfair Display, the default when
+ *   empty) or Sans (the site's display sans).
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
@@ -230,6 +232,10 @@ $storage('node', 'field_exhibit_credit', 'text_long');
 $storage('node', 'field_exhibit_prompt', 'string', ['max_length' => 255]);
 $storage('node', 'field_exhibit_year', 'integer');
 $storage('node', 'field_exhibit_physical_note', 'string', ['max_length' => 255]);
+$storage('node', 'field_exhibit_title_style', 'list_string', ['allowed_values' => [
+  'serif' => 'Serif: Playfair Display, an art-book display face',
+  'sans' => 'Sans: the site\'s own display type, plain and documentary',
+]]);
 
 $storage('paragraph', 'field_exhibit_lead', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_values' => [
@@ -460,7 +466,12 @@ $field('node', $bundle, 'field_exhibit_physical_note', [
   'label' => 'Physical exhibition note (optional)',
   'description' => 'Exhibition pages only: one short sentence, e.g. "Physical exhibition under the same name debuted on May 23, 2011, at Hill Memorial Library." When filled, a treasure chest tile beside the year on the title page shows it on hover, focus or tap.',
 ]);
+$field('node', $bundle, 'field_exhibit_title_style', [
+  'label' => 'Exhibition title style',
+  'description' => 'Exhibition pages only: the typeface of the title on the title page. Empty means Serif.',
+]);
 $form('node', $bundle, [
+  'field_exhibit_title_style' => ['type' => 'options_buttons', 'weight' => 5],
   'field_exhibit_subtitle' => $textfield(6),
   'field_exhibit_cover' => $media_widget + ['weight' => 7],
   'field_exhibit_credit' => $wysiwyg(8, 2),
@@ -474,7 +485,7 @@ foreach (['default', 'full'] as $mode) {
     continue;
   }
   $node_view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical_note'] as $name) {
+  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical_note', 'field_exhibit_title_style'] as $name) {
     $node_view->removeComponent($name);
   }
   $node_view->save();

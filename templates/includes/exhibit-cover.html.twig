@@ -6,6 +6,8 @@
  * Printed inside .pf-modular__head (page.html.twig) on Modular pages in
  * exhibition mode. Variables: head (PalefireHooks::exhibitHead()):
  * - title, subtitle: the <h1> and the line under it.
+ * - title_style: "serif" (Playfair Display) or "sans" (the site's display
+ *   sans), from the Exhibition title style field.
  * - credit, intro: render arrays or NULL.
  * - prompt: the line that points at the table of contents.
  * - year, physical: optional tiles under the credit: the exhibition's year,
@@ -45,7 +47,7 @@
     {% for word in head.title|split(' ') %}
       {% set title_word = max(title_word, word|length) %}
     {% endfor %}
-    <h1 class="pf-modular__title pf-exhibit-cover__title pf-exhibit-cover__step" style="--pf-step: 2; --pf-title-chars: {{ max(head.title|length, 1) }}; --pf-title-word: {{ title_word }}">
+    <h1 class="pf-modular__title pf-exhibit-cover__title pf-exhibit-cover__title--{{ head.title_style }} pf-exhibit-cover__step" style="--pf-step: 2; --pf-title-chars: {{ max(head.title|length, 1) }}; --pf-title-word: {{ title_word }}">
       {{- head.title -}}
       {% if head.subtitle %}
         <span class="visually-hidden">: </span><span class="pf-exhibit-cover__subtitle">{{ head.subtitle }}</span>
