@@ -927,6 +927,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
 
+- **Title page: no gap under the photograph.** The cover image stopped .25rem short of the head's foot (`.pf-exhibit-cover__media` clip-path), hidden under the solid foot fade. With today's lighter fade the strip showed as a 4px line of page colour between the title page and the first gallery (Mossville, Audubon). From lg the image now runs to the foot. Below lg, where the foot is still solid, the .25rem stays (it keeps a broken line of image from showing at 125% zoom). Checked on the live Mossville page with local CSS at 1440, at 100% and 125%: no row of page colour at the join. Why: the gap came from the lighter fade.
+
 - **Title page: a much lighter fade at the photograph's foot.** From lg the cover image used to fade to solid page colour over its last 4–8rem, which read as a dark band right above the first gallery's photograph. It now fades to at most 40% page colour over 3–6rem (`clamp(3rem, 10vh, 6rem)`), so the edge still settles into the page without the band. `pf-eased-wash()` gains an optional `$strength` (0 to 1, default 1, so every other wash is unchanged). The left wash behind the title is unchanged. Why: the band looked heavy where the title page meets the first gallery.
 
 - **Reverted: gallery cover openings with the photograph beside the text.** Back to the photograph full width under the text with its left wash, as before 6373781 (`css/style.css` and `_exhibition.scss` match 0edfa7f again). The new title page prompt from that commit stays. Why: the split layout looked much worse on the live page.

@@ -905,8 +905,10 @@ $pf-exhibit-cover-clear: 92;
 // while the page scrolls, into the footer too: the head's foot rises over
 // it, so the footer seems to slide over the image. The media runs a screen
 // past the head's foot so the sticky image has room to stay pinned, and
-// clip-path shows it only within the head, stopping .25rem short of the
-// foot, under the wash's solid foot (the head's ::after, below). From lg it
+// clip-path shows it only within the head. Below lg it stops .25rem short
+// of the foot, under the wash's solid foot (the head's ::after, below). From
+// lg it runs to the foot: the foot's fade is light there, so the .25rem
+// showed as a strip of page colour over the first gallery. From lg it also
 // starts under the solid wash, not at the head's left edge, so a portrait
 // image, shown across its whole width, centres further right, where the
 // fade has mostly cleared.
@@ -919,6 +921,7 @@ $pf-exhibit-cover-clear: 92;
 
   @include media-breakpoint-up(lg) {
     left: $pf-exhibit-cover-media * 1%;
+    clip-path: inset(0 0 100lvh);
   }
 }
 
