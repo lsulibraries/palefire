@@ -6,6 +6,19 @@
 // Roboto's metrics (the values Next.js and Fontaine use), so the swap keeps
 // line breaks and heights and costs no layout shift (Lighthouse CLS).
 
+// Playfair Display 500 (SIL OFL, fonts/playfair-display/OFL.txt), from
+// @fontsource/playfair-display 5.3.0. Only the exhibition cover title uses
+// it, so other pages never download it; exhibitions preload it
+// (PalefireHooks::exhibitHead()). Latin subset, 23 KB.
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/playfair-display/playfair-display-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @font-face {
   font-family: "Roboto Fallback";
   src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");

@@ -860,7 +860,9 @@ its key in `SWITCHES` (`utility-panels.js`) and the inline script's list
   inline SVG in `currentColor`, printed by `page.html.twig` when the Header
   region is empty.
 - **Fonts:** Roboto (with a metric-matched local fallback, no CLS) and Handjet
-  for the Hours clock, from Google Fonts, non-blocking.
+  for the Hours clock, from Google Fonts, non-blocking. Exhibition cover titles
+  use Playfair Display 500, self-hosted in `fonts/playfair-display/` (Latin,
+  23 KB, SIL OFL), preloaded only on exhibition pages.
 - **Desktop dropdowns:** links fade in in sequence and their underline draws in
   and out (`$pf-dropdown-stagger`, `$pf-dropdown-fade`).
 - **Below lg:** logo | Search | Menu. The menu is a full-screen offcanvas
@@ -923,6 +925,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Exhibition titles in a serif.** The cover `<h1>` (`.pf-exhibit-cover__title`) is now set in Playfair Display 500, an art-magazine serif (mockup A on the hero canvas), at -0.02em tracking and 0.92 line height, balanced across lines; the size rule by title length is unchanged. The font is self-hosted (`fonts/playfair-display/`, from `@fontsource/playfair-display` 5.3.0, Latin subset, 23 KB, licence in `OFL.txt`), declared in `base/_fonts.scss` with `font-display: swap`, and preloaded from `PalefireHooks::exhibitHead()`, so other pages never download it and no Google request is added. The subtitle stays in the body sans; Settings > Easy-to-read font puts the title back in Atkinson at the sans weight. New `$pf-font-display-serif` in `_variables.scss`. No config: `git pull` and `drush cr`. Why: the sans title didn't suit 19th-century natural-history plates.
 
 - **Transcriptions: horizontal rules only.** The side hairline is gone: it started just below the hairline above the transcription, so the two read as a corner that missed, and the page rules started at the text, short of it. Now everything is flush left: one full-width hairline above "Transcription" and one above each page, with the monospace labels on them. Checked on the live page with local CSS at 1440 and 320 (the aggregate's old side rule cancelled in the harness, as the deploy removes it). Why: it looked broken.
 

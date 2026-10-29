@@ -474,6 +474,16 @@ class PalefireHooks {
 
     $render = [];
     $cache->applyTo($render);
+    // The cover title's serif (base/_fonts.scss): preloaded so the <h1>
+    // draws in it with the first paint rather than swapping in after the
+    // stylesheet asks for it. Only exhibitions use the font.
+    $render['#attached']['html_head_link'][] = [[
+      'rel' => 'preload',
+      'as' => 'font',
+      'type' => 'font/woff2',
+      'href' => base_path() . \Drupal::service('extension.list.theme')->getPath('palefire') . '/fonts/playfair-display/playfair-display-latin-500-normal.woff2',
+      'crossorigin' => 'anonymous',
+    ], FALSE];
     if ($cover) {
       // The cover is lazy in the markup, so an address for a gallery (#…)
       // never fetches it. This runs in <head>, before the stylesheets: with

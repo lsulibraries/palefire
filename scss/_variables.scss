@@ -21,6 +21,11 @@ $font-family-sans-serif: Roboto, "Roboto Fallback", system-ui, -apple-system, "S
 $pf-font-clock: Handjet, "Arial Narrow", sans-serif;
 // Settings drawer > "Easy-to-read font" (base/_a11y-settings.scss).
 $pf-font-readable: "Atkinson Hyperlegible Next", Verdana, Arial, sans-serif;
+// Exhibition cover titles: Playfair Display 500, self-hosted, Latin only
+// (fonts/playfair-display, base/_fonts.scss; preloaded on exhibitions by
+// PalefireHooks::exhibitHead()). Display sizes only: its hairlines are too
+// thin for body text.
+$pf-font-display-serif: "Playfair Display", Georgia, "Times New Roman", serif;
 
 // Section headings (h2) on Modular pages: the section titles (Events,
 // Collections…) and the landing hero's map heading, one size, a step under
