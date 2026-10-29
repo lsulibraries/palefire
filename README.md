@@ -649,10 +649,11 @@ from the media item. A figure with no image shows only to editors.
   lg, the text kept in its dense part; a wall with no intro, only the title
   and facts, gets from lg only a soft rise from the foot, solid to 10% of
   the image's height and gone by 46%, so the photograph shows across the
-  rest; its number and facts take the text's full colour; with scroll
-  timelines the photograph then stays pinned under the header and fades
-  out, most of the way by 8% of a screen and gone by 32%, while the wall
-  rises over it); "Read more" grows the area down,
+  rest; its number and facts take the heading colour; with scroll
+  timelines the photograph stays pinned under the header while the page
+  slides up over it, the wash carried up with the title (on the content,
+  not the frame) and the wall on the page colour, held at full strength
+  for a quarter of a screen and gone by 70%); "Read more" grows the area down,
   never the column wider, and the image and its wash stay on screen
   (`.pf-exhibit-wall-hero__frame`, sticky) while the opened text scrolls
   over them; below lg a veil of the page colour comes over the image while
@@ -913,9 +914,13 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+### 2026-10-29
+
+- **Wall openings: the photograph stays longer; the page slides up over it.** The opening photograph (Mossville's ten galleries) now holds at full strength for the first quarter of a screen of scrolling and is gone by 70% (was: 20% within 8%, gone by 32%). To keep the title readable while it rises over a full-strength photograph, the foot's wash moves from the pinned frame onto the content: the `::before` spacer carries it up with the title, edge to edge, and the wall below sits on the page colour (padding in place of its top margin), so the page reads as sliding up over the pinned photo. The gallery number and "N clips" now take the heading colour (`--pf-g-heading`, Twilight #f8f7f9), as text over a hero's video does: `--bs-body-color` on these pages is the grey #b7b3ba, so yesterday's switch to it changed nothing and the number stayed at 3.1:1 at rest. Measured on the live page with local CSS from full-screen shots (text hidden, crops of the real pixels, label colours read from the page), all ten galleries at 1440 from 0 to 60% of a screen in Twilight and 0 to 40% in Cream, and three at 375: worst number 5.7:1, title 5.9:1, clips 14.2:1; page width 375 at 375. Why: the portrait was gone almost as soon as the reader started to scroll.
+
 ### 2026-10-28
 
-- **Wall openings without an intro: the photograph pins and fades.** From the first scroll the opening photograph (Mossville's ten galleries) stays pinned under the header and fades to the page colour while the wall of clips rises over it: most of the way within 8% of a screen (while the title is still on the foot's wash), gone by 32%, then hidden so it can't be clicked through the wall (`$pf-wall-photo` in `_exhibition.scss`: the hero spans the gallery's rows 1-5 on its own view timeline, inset by the header, as the pinned story openings; a `::before` keeps rows 1-4 one screen tall so the title still sits at the photo's foot). Reduced motion or no scroll timelines: it scrolls away as before. Also fixes failing contrast found while checking: the gallery number ("07 / 11", muted tone) fell to 2.1:1 over bright photos (Family & Community, Health & Environment) under the soft foot wash. The number and "N clips" now take the text's full colour, and the wash is a little deeper (solid to 10%, gone by 46%, was 6% / 42%). Measured on the live page with local CSS from full-screen shots, all ten galleries at 1440, at rest and through the fade: worst number 5.4:1, title 5.6:1, clips 11.8:1 (Twilight); 5.7:1, 8.3:1, 12.6:1 (Cream). Earlier entries' 11.3:1 figures were wrong (clipped shots without the photo) and are corrected below. Why: the portrait hands over to the clips instead of scrolling off as a block, and small labels must hold 4.5:1 over any photo.
+- **Wall openings without an intro: the photograph pins and fades.** From the first scroll the opening photograph (Mossville's ten galleries) stays pinned under the header and fades to the page colour while the wall of clips rises over it: most of the way within 8% of a screen (while the title is still on the foot's wash), gone by 32%, then hidden so it can't be clicked through the wall (`$pf-wall-photo` in `_exhibition.scss`: the hero spans the gallery's rows 1-5 on its own view timeline, inset by the header, as the pinned story openings; a `::before` keeps rows 1-4 one screen tall so the title still sits at the photo's foot). Reduced motion or no scroll timelines: it scrolls away as before. Also fixes failing contrast found while checking: the gallery number ("07 / 11", muted tone) fell to 2.1:1 over bright photos (Family & Community, Health & Environment) under the soft foot wash. The number and "N clips" now take the text's full colour (in error: see 2026-10-29), and the wash is a little deeper (solid to 10%, gone by 46%, was 6% / 42%). (Contrast figures first given here, 5.4:1 and up, were computed with the near-white text colour; on these pages `--bs-body-color` is Twilight's grey #b7b3ba, so the change to it did nothing and the number was still 3.1:1 at rest. Corrected 2026-10-29, above.) Earlier entries' 11.3:1 figures were wrong (clipped shots without the photo) and are corrected below. Why: the portrait hands over to the clips instead of scrolling off as a block, and small labels must hold 4.5:1 over any photo.
 
 ### 2026-10-26
 

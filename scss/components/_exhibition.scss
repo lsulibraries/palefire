@@ -2318,25 +2318,29 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 }
 
 // A wall that opens on its title and facts alone (no intro to hold the
-// image up). Its small labels, the number and the facts, take the text's
-// full colour: over the foot's light wash the muted tone fell to 2.1:1 on a
-// bright photograph; full colour keeps 4.5:1.
+// image up). Its small labels, the number and the facts, take the heading
+// colour, as text over a hero's video does (_reading-themes.scss): the
+// grey running text (Twilight's #b7b3ba, also its muted tone) fell to
+// 3.1:1 over a bright photograph on the foot's light wash.
 $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled):has(.pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
 
 #{$pf-wall-bare} {
   > .pf-section__title::before,
   .pf-exhibit-wall__stats {
-    color: var(--bs-body-color);
+    color: var(--pf-g-heading, var(--bs-emphasis-color));
   }
 }
 
 // Its area spans the whole gallery, so the photograph stays pinned under
-// the header while the wall rises over it, and fades to the page colour
-// (the gallery's own timeline, inset by the header, as the pinned
-// openings'): most of the way in the first 8% of a screen, while the title
-// is still on the foot's wash, then out by 32%. Hidden at the end, so its
-// zoom link can't be hit through the wall. Without scroll timelines or with
-// reduced motion it scrolls away as before.
+// the header while the page slides up over it: the foot's wash moves from
+// the pinned frame to the content (the ::before spacer, then the wall on
+// the page colour), so the title always sits on the same wash however far
+// it has scrolled, and the photograph can stay at full strength for the
+// first quarter of a screen before it fades (the gallery's own timeline,
+// inset by the header, as the pinned openings'), gone by 70%. Hidden at
+// the end, so its zoom link can't be hit through the wall. Without scroll
+// timelines or with reduced motion it scrolls away as before, its wash on
+// the frame.
 $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled):has(.pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
 
 @supports (animation-timeline: view()) {
@@ -2347,33 +2351,51 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
 
       // The hero no longer sets rows 1-4 (it reaches the gallery's foot):
       // this keeps them its first screen, so the title still sits at the
-      // photograph's foot (as the pinned openings' ::before).
+      // photograph's foot (as the pinned openings' ::before). Edge to edge
+      // over the photograph, it carries the foot's wash up with the title.
       &::before {
         content: "";
+        position: relative;
+        z-index: 1;
         grid-row: 1 / 5;
         grid-column: 1;
         min-height: max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
-        margin-top: calc(-1 * var(--pf-section-pad-block, 0px));
+        margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+        background: pf-eased-wash(to top, 46%, 98%);
+        pointer-events: none;
+
+        @include media-breakpoint-up(lg) {
+          background: pf-eased-wash(to top, 10%, 46%);
+        }
+      }
+
+      .pf-exhibit-wall-hero__frame::after {
+        background: none;
       }
 
       .pf-exhibit-wall-hero {
         grid-row: 1 / 6;
         animation: pf-exhibit-photo-out linear both;
         animation-timeline: --pf-wall-open;
-        animation-range: contain 0px contain 32svh;
+        animation-range: contain 0px contain 70svh;
       }
 
+      // The page colour from the wash's foot down, edge to edge: no photo
+      // between the tiles or above the first row.
       .pf-exhibit-wall {
         position: relative;
         z-index: 1;
+        margin: 0 calc(-1 * var(--pf-section-pad-inline, 0px));
+        padding: clamp(2rem, 4vw, 3rem) var(--pf-section-pad-inline, 0px) 0;
+        background: var(--bs-body-bg);
       }
     }
   }
 }
 
 @keyframes pf-exhibit-photo-out {
-  25% {
-    opacity: 0.2;
+  36% {
+    opacity: 1;
   }
 
   to {
