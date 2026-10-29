@@ -545,7 +545,7 @@ a tap, can itself be hovered, and hides with Esc (WCAG 1.4.13,
 | `exhibit_page` (Gallery) | Title, anchor, TOC hide, `field_exhibit_opener`, `field_exhibit_lead` + `_lead_focus` + `_lead_whole` + `_lead_caption`, `field_exhibit_display`, `field_exhibit_sheet`, `field_guide_blocks` | A section. Opening **Cover** (default): the lead fills the screen and stays put, with the number, title, "In this gallery" links and opening text on it. **Full screen, then pan**: the lead fills the screen with the number, title and links; scrolling, it stays pinned while they fade, then pans through the whole image before the text. **Compact**: a band above the title (scroll-pan, or "Show whole image"). With a caption the lead is a figure (alt text, lightbox, caption); without, decorative. Display **Story** (default) or **Wall** (below); Sheet size ("40 × 27", inches) for a wall's "Actual size" |
 | `exhibit_entry` (Entry) | `field_block_title` (h3, TOC sub-link), `field_section_anchor`, `field_entry_bio`, `field_guide_blocks` | A person or book; the second level of nesting under the TOC |
 | `exhibit_figure` (Image) | `field_figure_image`, `field_figure_caption`, `field_figure_layout`, `field_figure_align` | Layouts: beside the text (image first / second), centred, full width (parallax). Opens the lightbox. Alignment ("k rot tx ty": scale, degrees, left and top in proof widths) lays a drawing over the proof after it in a wall's comparison |
-| `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption |
+| `exhibit_gallery` (Image group) | Optional heading, `field_gallery_items` (figures), group caption | Grid; each figure keeps its caption. On a wall, a group of two is compared (slider); of three or more, a manuscript's pages, turned one at a time (tile tagged "4 pages") |
 | `exhibit_citation` (Catalogue record) | `field_block_body` | Set like a museum label |
 | `exhibit_audio` (Audio) | Title, `field_audio_file`, speaker/date, `field_audio_transcript` (required) | Oral history; custom player, transcript in a `<details>`. Inside an entry it prints no heading: the entry's `<h3>` labels it |
 
@@ -773,8 +773,16 @@ Manuscripts (3) and Suggested Reading. Each bird page of 2021 is an entry.
   two to five matching points read off both (beak tips, wing tips, feet,
   title text), fitted, refined against the proof's lines and checked by
   eye; Western Shore Lark and Ivory Gull were redrawn for the plate, so
-  theirs is the nearest fit. Three have no larger source and stay 2021 crops (Virginian Rail,
-  Children's Warbler and Bear manuscripts). Leads: the Brown Pelican (folio,
+  theirs is the nearest fit. The Virginian Rail has no larger source and stays a 2021 crop.
+- **Manuscripts** (`Audubon 4K/manuscripts`, 9 JPEGs from the Special
+  Collections TIFFs in `_reference/manuscripts`: 5188 Hurricane, 5189 Bear,
+  5190 Children's Warbler; long edge 3,840px, quality 88, metadata
+  stripped). Every page is shown whole: the Hurricane's two-page spread is
+  cut at the fold (x = 6,240 of 12,577), and its fourth page is the blank
+  back of the leaf. Each entry ends with a transcription made from the scans
+  (struck words in `<s>`, interlinear additions in ⟨ ⟩, [?] for uncertain
+  readings, a heading per page); it is a draft for a curator to proofread.
+  `palefire_exhibit_audubon_manuscripts.php` applies them to the built page. Leads: the Brown Pelican (folio,
   not in 2021) and full-resolution cuts of the 2021 close-ups of the Mocking
   Birds and Great Blue Heron; the cover is the Carolina Parrot. Unused:
   Alexander Wilson's Mocking Bird and Mississippi Kite plates.
@@ -915,6 +923,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Audubon manuscripts: whole pages and transcriptions.** The Manuscripts gallery showed 600 × 400 close-ups of the Children's Warbler and the Bear and the Hurricane's first page. Each now shows every page, made from the Special Collections TIFFs (`Audubon 4K/manuscripts`; the Hurricane's spread cut at the fold), with a transcription after its text. On the wall an image group of three or more figures is a manuscript: its tile is tagged "4 pages" and shows page 2 on hover. The object view turns its pages with Previous page / Next page under the image ("Page 2 of 4", announced; the crossfade is off with reduced motion, and a turn leaves any zoom), and the transcription follows: the shown page's heading is marked and brought under the panel's top row (a glide within a screen, a jump further). New `palefire_exhibit_audubon_manuscripts.php` updates the built page; it stops if the WYSIWYG format strips `<s>`. Checked on the live page with local CSS and JS at 1440, 1024, 768 and 320: pages and headings in step, no horizontal scroll, no script errors. Why: the close-ups showed a few lines of each manuscript, and visitors could not read Audubon's hand.
 
 - **Wall openings: the photograph stays longer; the page slides up over it.** The opening photograph (Mossville's ten galleries) now holds at full strength for the first quarter of a screen of scrolling and is gone by 70% (was: 20% within 8%, gone by 32%). To keep the title readable while it rises over a full-strength photograph, the foot's wash moves from the pinned frame onto the content: the `::before` spacer carries it up with the title, edge to edge, and the wall below sits on the page colour (padding in place of its top margin), so the page reads as sliding up over the pinned photo. The gallery number and "N clips" now take the heading colour (`--pf-g-heading`, Twilight #f8f7f9), as text over a hero's video does: `--bs-body-color` on these pages is the grey #b7b3ba, so yesterday's switch to it changed nothing and the number stayed at 3.1:1 at rest. Measured on the live page with local CSS from full-screen shots (text hidden, crops of the real pixels, label colours read from the page), all ten galleries at 1440 from 0 to 60% of a screen in Twilight and 0 to 40% in Cream, and three at 375: worst number 5.7:1, title 5.9:1, clips 14.2:1; page width 375 at 375. Why: the portrait was gone almost as soon as the reader started to scroll.
 

@@ -850,12 +850,13 @@
   }
 
   // The entry's first figure (or image group): its images and its caption.
+  // A group of two is compared; of three or more, its pages are turned.
   function entryMedia(entry) {
     const block = entry.querySelector('.pf-exhibit-group, .pf-exhibit-figure');
     if (!block) {
       return { block: null, links: [], caption: null };
     }
-    const links = Array.from(block.querySelectorAll('a.pf-exhibit-figure__link')).slice(0, 2);
+    const links = Array.from(block.querySelectorAll('a.pf-exhibit-figure__link'));
     const caption = block.querySelector(':scope > figcaption')
       || (links.length === 1 ? links[0].closest('figure').querySelector(':scope > figcaption') : null);
     return { block: block, links: links, caption: caption };
@@ -886,6 +887,96 @@
       large.srcset = thumb.getAttribute('srcset');
     }
     return img;
+  }
+
+  // A manuscript's pages, one at a time in the frame, with Previous page /
+  // Next page under them (the viewer's own arrows and keys still step
+  // through the wall). Each turn crossfades and leaves any zoom; shown: the
+  // tile's loaded image, for the first page.
+  function pageControls(view, frame, links, shown) {
+    const n = links.length;
+    const control = document.createElement('div');
+    control.className = 'pf-exhibit-pages';
+    control.setAttribute('role', 'group');
+    control.setAttribute('aria-label', Drupal.t('Pages'));
+    const button = (label, path) => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'pf-exhibit-pages__step';
+      el.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="' + path + '"/></svg>';
+      const text = document.createElement('span');
+      text.className = 'visually-hidden';
+      text.textContent = label;
+      el.append(text);
+      return el;
+    };
+    const prev = button(Drupal.t('Previous page'), 'M10 3.5 5.5 8l4.5 4.5');
+    const next = button(Drupal.t('Next page'), 'M6 3.5 10.5 8 6 12.5');
+    const status = document.createElement('p');
+    status.className = 'pf-exhibit-pages__status';
+    status.setAttribute('aria-live', 'polite');
+    control.append(prev, status, next);
+
+    let index = -1;
+    const turn = (to) => {
+      if (to < 0 || to >= n || to === index) {
+        return;
+      }
+      const first = index < 0;
+      index = to;
+      const img = mediaImg(links[to], 'pf-viewer__img pf-viewer__zoomable', to === 0 ? shown : null);
+      img.dataset.full = links[to].href;
+      frame.classList.remove('is-zoomed');
+      view.zoom.setAttribute('aria-pressed', 'false');
+      if (first) {
+        frame.append(img);
+      }
+      else {
+        frame.querySelectorAll('.pf-viewer__img:not(.is-leaving)').forEach((old) => {
+          old.classList.add('is-leaving');
+          window.setTimeout(() => old.remove(), 600);
+        });
+        img.classList.add('is-entering');
+        frame.append(img);
+        // Its hidden style read first, so the opacity transitions.
+        window.getComputedStyle(img).opacity;
+        img.classList.remove('is-entering');
+        markPage(view, to, n, true);
+      }
+      status.textContent = Drupal.t('Page @n of @total', { '@n': to + 1, '@total': n });
+      prev.disabled = to === 0;
+      next.disabled = to === n - 1;
+      // The next page's stage size, ready for the next turn.
+      const after = links[to + 1] && links[to + 1].querySelector('img');
+      if (after && after.getAttribute('srcset')) {
+        const ahead = new Image();
+        ahead.sizes = '(min-width: 62rem) 62vw, 100vw';
+        ahead.srcset = after.getAttribute('srcset');
+      }
+    };
+    prev.addEventListener('click', () => turn(index - 1));
+    next.addEventListener('click', () => turn(index + 1));
+    turn(0);
+    return [frame, control];
+  }
+
+  // The transcription follows the page: its last headings, one per page,
+  // the shown page's marked and, on a turn (scroll), brought to the top of
+  // the panel under its pinned row. It glides only within a screen: a page
+  // of text further on is jumped to (a long smooth scroll blurs past it).
+  function markPage(view, index, n, scroll) {
+    const heads = Array.from(view.body.querySelectorAll('.pf-guide-prose h4')).slice(-n);
+    if (heads.length !== n) {
+      return;
+    }
+    heads.forEach((head, i) => head.classList.toggle('is-current', i === index));
+    if (scroll) {
+      const panel = view.panel;
+      const top = panel.querySelector('.pf-viewer__top');
+      const y = Math.max(0, panel.scrollTop + heads[index].getBoundingClientRect().top - panel.getBoundingClientRect().top - (top ? top.offsetHeight : 0) - 16);
+      const near = Math.abs(y - panel.scrollTop) <= panel.clientHeight;
+      panel.scrollTo({ top: y, behavior: near && !reduceMotion() ? 'smooth' : 'auto' });
+    }
   }
 
   function fillObject(index) {
@@ -1004,6 +1095,9 @@
       fit.append(frame);
       view.media.replaceChildren(fit, control);
     }
+    else if (media.links.length > 2) {
+      view.media.replaceChildren(...pageControls(view, frame, media.links, shown[0]));
+    }
     else if (media.links.length) {
       const img = mediaImg(media.links[0], 'pf-viewer__img pf-viewer__zoomable', shown[0]);
       img.dataset.full = media.links[0].href;
@@ -1031,6 +1125,9 @@
     copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
     stopAudio(view);
     view.body.replaceChildren(...Array.from(copy.childNodes));
+    if (media.links.length > 2) {
+      markPage(view, 0, media.links.length, false);
+    }
     panelAudio(view);
     setWash(view, entry.querySelector('.pf-exhibit-audio') && shown[0] ? (shown[0].currentSrc || shown[0].getAttribute('src')) : null);
     // Copied before the page's links were marked (an entry opened from the
