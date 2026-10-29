@@ -2819,9 +2819,10 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
 
 // A transcription (paragraph--guide-text.html.twig: a text that opens with
 // a Heading 4 "Transcription", as Audubon's manuscripts do): the writer's
-// own words, set apart from the curators' text. A hairline above and one
-// down its side, as a quotation; "Transcription" and "Page 1" as monospace
-// labels (not the guides' term-and-definition rule); the manuscript's text
+// own words, set apart from the curators' text. Horizontal rules only, all
+// flush left: a hairline above it and above each page, "Transcription" and
+// "Page 1" as monospace labels on them (not the guides' term-and-definition
+// rule, and no side rule: it met the top one short of a corner); the text
 // in the reader serif (system fonts; "Easy-to-read font" wins), the note on
 // conventions under the label in the curators' sans. Words struck through
 // as in the hand; the page on the stage marked as it turns.
@@ -2829,11 +2830,6 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
   margin-top: 2.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid $pf-hairline;
-
-  .pf-guide-prose {
-    padding-inline-start: 1.25rem;
-    border-inline-start: 1px solid $pf-hairline;
-  }
 
   .pf-guide-prose h4 {
     @extend %pf-exhibit-kicker;
