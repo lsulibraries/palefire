@@ -597,9 +597,10 @@
       return;
     }
     if (intro.dataset.pfFoldReady) {
-      // A resize: a new fold for a folded intro.
-      if (intro.classList.contains('is-folded')) {
-        intro.style.setProperty('--pf-intro-clip', Math.round(introLimit(page, intro)) + 'px');
+      // A resize: a new fold, and an open intro's title row held at it.
+      intro.style.setProperty('--pf-intro-clip', Math.round(introLimit(page, intro)) + 'px');
+      if (!intro.classList.contains('is-folded')) {
+        holdWallTop(page, intro, true);
       }
       return;
     }
@@ -621,22 +622,78 @@
     sync(false);
     button.addEventListener('click', () => {
       const open = intro.classList.contains('is-folded');
-      intro.style.maxHeight = intro.getBoundingClientRect().height + 'px';
+      const from = intro.getBoundingClientRect().height;
+      const to = open ? intro.scrollHeight : introLimit(page, intro);
+      if (open) {
+        holdWallTop(page, intro, true);
+      }
+      // The browser's own scroll anchoring would move the page as well.
+      ROOT.style.overflowAnchor = 'none';
+      intro.style.maxHeight = from + 'px';
       sync(open);
-      if (reduceMotion()) {
+      // Closing, the button keeps its place on screen (the page scrolls up
+      // as the text above it folds), never taken up past the header.
+      let last = from;
+      const follow = () => {
+        const now = intro.getBoundingClientRect().height;
+        if (!open) {
+          window.scrollBy({ top: now - last, behavior: 'instant' });
+        }
+        last = now;
+      };
+      const done = () => {
+        follow();
+        ROOT.style.overflowAnchor = '';
+        if (!open) {
+          holdWallTop(page, intro, false);
+        }
+      };
+      if (reduceMotion() || Math.abs(from - to) < 1) {
         intro.style.maxHeight = '';
+        done();
         return;
       }
+      let frame = 0;
+      const step = () => {
+        follow();
+        frame = requestAnimationFrame(step);
+      };
       requestAnimationFrame(() => {
-        intro.style.maxHeight = (open ? intro.scrollHeight : introLimit(page, intro)) + 'px';
-        const end = () => {
+        intro.style.maxHeight = to + 'px';
+        frame = requestAnimationFrame(step);
+        const end = (event) => {
+          if (event.target !== intro) {
+            return;
+          }
+          cancelAnimationFrame(frame);
           intro.style.maxHeight = '';
           intro.removeEventListener('transitionend', end);
+          done();
         };
         intro.addEventListener('transitionend', end);
       });
     });
     intro.after(button);
+  }
+
+  // With a lead, the title's row takes what the text leaves of the first
+  // screen (_exhibition.scss), so opened lines pushed the title and the text
+  // above them up the screen. While open, the row keeps its height with the
+  // intro folded (measured folded, again on resize): the text opens
+  // downward and the image grows with it.
+  function holdWallTop(page, intro, on) {
+    const inner = page.querySelector('.pf-exhibit-wall-hero') && intro.closest('.pf-section__inner');
+    if (!inner) {
+      return;
+    }
+    inner.style.removeProperty('--pf-wall-top');
+    if (!on) {
+      return;
+    }
+    const folded = intro.classList.contains('is-folded');
+    intro.classList.add('is-folded');
+    inner.style.setProperty('--pf-wall-top', parseFloat(getComputedStyle(inner).gridTemplateRows) + 'px');
+    intro.classList.toggle('is-folded', folded);
   }
 
   // A cover's text is never folded: all of it is there, the lines at the

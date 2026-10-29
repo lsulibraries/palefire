@@ -2077,7 +2077,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 // right, the wall full width below. With a lead, at every width: the
 // image full screen, the title, facts and text over its lower left on a
 // wash of the page colour, kept in the wash's dense part; "Read more" grows
-// the image down, never the column wider.
+// the image down (the title held in place), never the column wider.
 $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled)';
 
 // Each fact's dot sits in the gap before it; the list starts one gap to the
@@ -2194,7 +2194,9 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 #{$pf-covered} {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(var(--pf-cover-top, 0px), 1fr) auto auto auto auto auto;
+  // --pf-wall-top: row 1 held while a wall's intro is open (js/exhibition.js
+  // holdWallTop()), so its text opens downward, not the title up.
+  grid-template-rows: var(--pf-wall-top, minmax(var(--pf-cover-top, 0px), 1fr)) auto auto auto auto auto;
   align-items: end;
 
   .pf-exhibit-wall-hero {
