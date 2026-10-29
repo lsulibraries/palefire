@@ -530,8 +530,8 @@ On `node.modular_page` (exhibition mode only, printed by
 `includes/exhibit-cover.html.twig`): `field_exhibit_title_style` (Serif,
 Playfair Display, the default; or Sans), `field_exhibit_subtitle`,
 `field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
-`field_exhibit_prompt` (default "Choose a gallery from the table of contents
-to begin."), and `field_intro` if filled. Optional tiles under the credit:
+`field_exhibit_prompt` (default "Scroll through every gallery in order, or
+choose one from the table of contents."), and `field_intro` if filled. Optional tiles under the credit:
 `field_exhibit_year` (a number) and `field_exhibit_physical_note` (a short
 note on the physical exhibition). The note sits behind a tile with FA Pro's
 light treasure chest, inlined from
@@ -926,6 +926,9 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Gallery cover openings: the photograph beside the text, from lg.** A gallery's cover opening (Audubon in Louisiana) no longer washes its photograph out from the left behind the text: the text keeps its column on the page colour, and the photograph starts a gutter after it (`left` on `.pf-exhibit-wall-hero__link`) and runs to the screen's edge, cut square, with no wash. Below lg, where the text spans the column, nothing changes. Title pages and wall openings keep their own treatment. Measured on the live Audubon page with local CSS: the text ends at 826 and the photograph starts at 883 at 1440 (634 and 675 at 1024); no horizontal scroll at 768, 1024 or 1440. Why: the left wash read as a gradient box, and where the photograph rose under the title page its top met the page as a hard line over that gradient. (A scroll-driven wash over the photograph's top was tried first and dropped: fading it reopened the line part-way.)
+- **Title page prompt: "Scroll through every gallery in order, or choose one from the table of contents."** The default under the credit (`PalefireHooks::exhibitHead()`) used to send readers only to the table of contents; exhibitions now read straight through by scrolling. An exhibition whose Exhibition prompt field is filled keeps its own text, and the field's help text on existing sites keeps the old default until edited in Manage fields (the setup script only creates fields). Why: the old line implied the galleries could only be opened from the table of contents.
 
 - **Exhibition title style: Serif or Sans, and the serif's lines no longer collide.** New field `field_exhibit_title_style` on the title page (re-run `palefire_exhibit_setup.php`): Serif, Playfair Display, the default and also what an empty field means; or Sans, the site's display sans as before Playfair. The `<h1>` gets `pf-exhibit-cover__title--serif` or `--sans`, and only a serif title preloads the font, so a sans exhibition never downloads it. "Easy-to-read font" still sets either in Atkinson. The serif's leading now comes from the font: Playfair's J falls 0.19em below the baseline and its b rises 0.79em, so lines closer than 0.98em touch. At 0.92 the J of "James" ran into the b of "Audubon"; at 1.04 there is a 0.06em gap (measured: 6–7px at 1440, 1024 and 768, 2px at 320). Tracking is eased to −0.015em, with the font's kerning and common ligatures. Sans keeps 0.9 and −0.04em. Checked on the live Audubon page with local CSS, both styles at 320, 768, 1024 and 1440: no horizontal scroll, and Playfair is never fetched for sans. Why: curators get a choice of tone from tested presets, and "John James" was touching "Audubon".
 

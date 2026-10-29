@@ -456,7 +456,7 @@ $view('paragraph', 'exhibit_page', [
 $field('node', $bundle, 'field_exhibit_subtitle', ['label' => 'Exhibition subtitle', 'description' => 'Exhibition pages only: the line under the title on the title page.']);
 $field('node', $bundle, 'field_exhibit_cover', $media_ref('Exhibition title image', 'Exhibition pages only: full-screen image behind the title page. Decorative.'));
 $field('node', $bundle, 'field_exhibit_credit', ['label' => 'Exhibition credit line', 'description' => 'Exhibition pages only: e.g. the collection and the funder.']);
-$field('node', $bundle, 'field_exhibit_prompt', ['label' => 'Exhibition prompt (optional)', 'description' => 'Exhibition pages only. Default: "Choose a gallery from the table of contents to begin."']);
+$field('node', $bundle, 'field_exhibit_prompt', ['label' => 'Exhibition prompt (optional)', 'description' => 'Exhibition pages only. Default: "Scroll through every gallery in order, or choose one from the table of contents."']);
 $field('node', $bundle, 'field_exhibit_year', [
   'label' => 'Exhibition year (optional)',
   'description' => 'Exhibition pages only: shown as a tile under the credit line on the title page, e.g. the year the exhibition opened.',

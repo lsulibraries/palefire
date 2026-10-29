@@ -2346,6 +2346,27 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
+// A gallery's cover opening from lg: the photograph beside the text, not
+// under it. The text keeps its column on the page colour (36rem, at most
+// 46% of the content, as above); the photograph starts a gutter after it
+// and runs to the screen's edge, cut square, with no wash: nothing needs
+// one when no text crosses it. It was washed out from the left behind the
+// text, which read as a gradient box and, where its top rose under the
+// title page, as a hard line over that gradient. Below lg the text spans
+// the column, so the image stays under it with the foot wash and veil.
+// The title page keeps its own fade.
+@include media-breakpoint-up(lg) {
+  .pf-section__inner > .pf-gallery--cover {
+    .pf-exhibit-wall-hero__link {
+      left: calc(var(--pf-section-pad-inline, 0px) + min(36rem, (100% - 2 * var(--pf-section-pad-inline, 0px)) * .46) + clamp(2rem, 4vw, 4rem));
+    }
+
+    .pf-exhibit-wall-hero__frame::after {
+      background: none;
+    }
+  }
+}
+
 // A wall that opens on its title and facts alone (no intro to hold the
 // image up). Its small labels, the number and the facts, take the heading
 // colour, as text over a hero's video does (_reading-themes.scss): the
