@@ -2817,23 +2817,100 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
   }
 }
 
-// A transcription (Audubon's manuscripts): words struck through as in the
-// hand, and the heading of the page on the stage marked as it turns.
-.pf-exhibit-entry,
-.pf-exhibit-object__body {
-  .pf-guide-prose s {
-    text-decoration-thickness: 1px;
-    color: var(--pf-exhibit-muted);
-  }
+// A transcription (paragraph--guide-text.html.twig: a text that opens with
+// a Heading 4 "Transcription", as Audubon's manuscripts do): the writer's
+// own words, set apart from the curators' text. A hairline above and one
+// down its side, as a quotation; "Transcription" and "Page 1" as monospace
+// labels (not the guides' term-and-definition rule); the manuscript's text
+// in the reader serif (system fonts; "Easy-to-read font" wins), the note on
+// conventions under the label in the curators' sans. Words struck through
+// as in the hand; the page on the stage marked as it turns.
+.pf-transcription {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $pf-hairline;
 
-  .pf-guide-prose h4.is-current {
-    color: var(--pf-viewer-accent, var(--pf-exhibit-accent));
+  .pf-guide-prose {
+    padding-inline-start: 1.25rem;
+    border-inline-start: 1px solid $pf-hairline;
   }
 
   .pf-guide-prose h4 {
+    @extend %pf-exhibit-kicker;
+    margin: 2.25rem 0 0.75rem;
+    padding: 0.75rem 0 0;
+    border-inline-start: 0;
+    border-top: 1px solid $pf-hairline;
+
     @include pf-viewer-motion {
       transition: color .4s ease;
     }
+
+    &:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    &.is-current {
+      color: var(--pf-viewer-accent, var(--pf-exhibit-accent));
+    }
+
+    + :is(p, ul, ol) {
+      padding-inline-start: 0;
+      padding-bottom: 0;
+      border-inline-start: 0;
+    }
+  }
+
+  html:not(.pf-a11y-font) & .pf-guide-prose p:not(h4:first-child + p) {
+    font-family: $pf-font-reader;
+    font-kerning: normal;
+  }
+
+  .pf-guide-prose h4:first-child + p {
+    font-size: 0.875rem;
+    color: var(--pf-exhibit-muted);
+
+    em {
+      font-style: normal;
+    }
+  }
+
+  // Screen readers don't announce a strike: "crossed out" is said around
+  // the words, out of sight.
+  s {
+    text-decoration-thickness: 1px;
+    color: var(--pf-exhibit-muted);
+
+    &::before,
+    &::after {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    &::before {
+      content: " [crossed out: ";
+    }
+
+    &::after {
+      content: "] ";
+    }
+  }
+}
+
+// Room after it in the object view, so a short last page's heading (the
+// Hurricane's blank page 4) can still come to the top of the panel: the
+// panel is the screen's lower part below lg, its full height from lg.
+.pf-exhibit-object__body .pf-transcription {
+  padding-bottom: 30svh;
+
+  @include media-breakpoint-up(lg) {
+    padding-bottom: 75svh;
   }
 }
 

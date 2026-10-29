@@ -1155,9 +1155,14 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  * "[request-paths]". The marker is taken out of the text, and the template
  * draws the Special Collections request diagram (guide-request-paths.html.twig)
  * after it. A marker anywhere else in a sentence is left as typed.
+ *
+ * transcription: TRUE when the text opens with a Heading 4 "Transcription"
+ * (Audubon's manuscripts): a primary source, set apart from the curators'
+ * text (_exhibition.scss .pf-transcription).
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
+  $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
   }

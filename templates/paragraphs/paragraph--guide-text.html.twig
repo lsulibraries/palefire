@@ -5,6 +5,8 @@
  *
  * - field_block_title: optional <h3> (a sub-link in "On this page").
  * - field_text_style: "callout" puts the block in a highlighted box.
+ * - transcription: the text opens with a Heading 4 "Transcription"
+ *   (palefire_preprocess_paragraph__guide_text()): set as a primary source.
  *
  * Inside a block that has a heading, use Heading 4 in the editor: every h3
  * in a guide section becomes a TOC sub-link.
@@ -21,6 +23,7 @@
     'pf-guide-block',
     'pf-guide-block--text',
     callout ? 'pf-guide-callout',
+    transcription ? 'pf-transcription',
     not paragraph.isPublished() ? 'paragraph--unpublished',
   ]
 %}
