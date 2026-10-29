@@ -281,19 +281,6 @@ modular-toc:
     - core/once
     - palefire/global
 
-# Hide / show the TOC sidebar (lg and up, every Modular page but guides).
-# Attached by page.html.twig on Modular pages with a TOC. Loads in <head> so
-# the state is on <html> before the page paints (no flash, no animation on
-# load); that also moves core/drupal and core/once to <head> on those pages.
-modular-toc-collapse:
-  version: 1.0.0
-  header: true
-  js:
-    js/modular-toc-collapse.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
 # Hill Memorial building map (landing section). Attached by
 # templates/paragraphs/paragraph--building-map.html.twig.
 building-map:

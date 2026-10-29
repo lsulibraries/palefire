@@ -11,6 +11,9 @@
  * not a heading, because the sidebar comes before the <h1> in the page;
  * it names the nav (aria-labelledby), so screen readers hear "Table of
  * contents, navigation". The mobile button says the same.
+ *
+ * The labels are spans of their own so the reading rail (lg and up,
+ * _toc-rail.scss) can make the link the segment and set the name beside it.
  */
 #}
 {{ attach_library('palefire/modular-toc') }}
@@ -21,13 +24,13 @@
     <ol class="pf-toc__list">
       {% for item in items %}
         <li class="pf-toc__item">
-          <a class="pf-toc__link" href="#{{ item.id }}">{{ item.label }}</a>
+          <a class="pf-toc__link" href="#{{ item.id }}"><span class="pf-toc__label">{{ item.label }}</span></a>
         </li>
       {% endfor %}
     </ol>
   </div>
   <a class="pf-toc__top" href="#top">
     <svg class="pf-toc__top-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M8 14V2.5M3.5 7 8 2.5 12.5 7"/></svg>
-    {{ 'Back to top'|t }}
+    <span class="pf-toc__top-label">{{ 'Back to top'|t }}</span>
   </a>
 </nav>

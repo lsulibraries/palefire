@@ -121,11 +121,12 @@
     transition: padding-inline-start .3s ease-in-out; // the TOC column's timing
   }
 
-  // The TOC button spans the logo (_modular.scss); the breadcrumb starts
-  // where the menu's first item's words do: the logo's end plus the gap to
-  // the menu ($pf-brand-gap, _header.scss: the brand's margin and the
-  // link's own padding). Both follow the logo as the header compacts.
-  html.pf-toc-collapsed:not([data-pf-mode="guide"]) .pf-landing__bar {
+  // With the reading rail (_toc-rail.scss) the bar runs to the page edge;
+  // the breadcrumb starts where the menu's first item's words do: the
+  // logo's end plus the gap to the menu ($pf-brand-gap, _header.scss: the
+  // brand's margin and the link's own padding), clear of the rail. It
+  // follows the logo as the header compacts.
+  html:not([data-pf-mode="guide"]) .pf-modular--toc-rail .pf-landing__bar {
     padding-inline-start: calc(var(--pf-header-gutter, 3rem) + var(--pf-logo-w, #{$pf-logo-width}) + #{$pf-brand-gap});
     transition: padding-inline-start $pf-header-transition;
   }

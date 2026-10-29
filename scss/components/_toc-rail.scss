@@ -1,0 +1,297 @@
+// Reading rail: the TOC at the page edge, lg and up, on every Modular
+// mode but guides (which keep the sidebar), in place of the old hide/show
+// button (2026-10-29). Below lg nothing changes: the list-icon button opens
+// the offcanvas.
+//
+// The same <nav> as the sidebar (palefire-modular-toc.html.twig), restyled:
+// - Each link is a segment of a 3px line, as long as its section is
+//   (--pf-rail-w, flex-grow), filled as far as the activation line has
+//   read into it (--pf-rail-p). Both are set by js/modular-toc.js, which
+//   switches to even ticks (.pf-toc--ticks) when the segments can't all be
+//   24px tall (2.5.8). Without JS the segments are even and unfilled.
+// - The names sit beside the segments over the content, on the sidebar's
+//   glass, so nothing reflows (no layout shift). Hover, focus and a first
+//   tap (.is-open) show them all; Esc hides them (.is-dismissed, 1.4.13).
+//   The current one shows by itself only while its section's heading rises
+//   from the activation line (--pf-rail-peek, fading as it goes), so it
+//   never sits over the text being read.
+// - The column closes (0px) and section backgrounds run to the page edge.
+//   The rail overlays the sections' side padding (3.75rem from md).
+// - Colours are the TOC tokens, so the rail follows dark sections and
+//   reading swatches like the sidebar did: the read part in --pf-toc-active,
+//   the rest in --pf-toc-rail. A 1px halo in the glass colour keeps the line
+//   visible where the section under it has the other theme's background.
+//
+// page.html.twig adds .pf-modular--toc-rail when the sidebar holds only the
+// TOC: with other blocks it stays a column, so they keep their place.
+
+$pf-rail-html: 'html:not([data-pf-mode="guide"])';
+$pf-rail-row: '.pf-modular--toc-rail';
+$pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
+
+@include media-breakpoint-up(lg) {
+  #{$pf-rail} {
+    --pf-rail-col: 2.75rem;  // the hit area's width
+    --pf-rail-line: 1.25rem; // the line's distance from the page edge
+    --pf-rail-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    grid-template-columns: 0px minmax(0, 1fr);
+    --pf-bleed-inline-start: 0px;
+  }
+
+  // Two classes plus the row, to beat .pf-sidebar.pf-modular__sidebar
+  // (_modular.scss); !important only where that rule has it.
+  #{$pf-rail} > .pf-sidebar.pf-modular__sidebar {
+    justify-self: start;
+    width: var(--pf-rail-col);
+    overflow: visible; // the names reach out over the content
+    padding: 3rem 0 1.25rem; // clears the landing's sub-header bar (2rem)
+    background-color: transparent !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    z-index: 4; // over the landing bar (3), under the docked video button (5)
+  }
+
+  #{$pf-rail} .pf-toc {
+    // Still names the nav for screen readers.
+    .pf-toc__heading {
+      @include visually-hidden();
+    }
+
+    .pf-toc__rail {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 0;
+      border: 0;
+    }
+
+    .pf-toc__indicator,
+    .pf-toc__subwrap {
+      display: none;
+    }
+
+    .pf-toc__list {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pf-toc__item {
+      position: relative;
+      flex: var(--pf-rail-w, 1) 1 0;
+      min-height: 1.5rem; // 2.5.8
+      padding: 0;
+
+      &:last-child {
+        padding: 0;
+      }
+    }
+
+    // The link is the segment's whole box; its name sits beside it.
+    .pf-toc__link {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      display: block;
+      width: var(--pf-rail-col);
+      min-height: 0;
+      padding: 0;
+      color: var(--pf-toc-color);
+
+      // Track, then the read part over it.
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        inset-inline-start: var(--pf-rail-line);
+        width: 3px;
+        transition: width 0.25s var(--pf-rail-ease), background-color 0.3s ease;
+      }
+
+      &::before {
+        bottom: 0;
+        background-color: var(--pf-toc-rail);
+        box-shadow: 0 0 0 1px var(--pf-sidebar-bg);
+      }
+
+      &::after {
+        height: calc(var(--pf-rail-p, 0) * 100%);
+        background-color: var(--pf-toc-active);
+      }
+
+      &:hover::before,
+      &:hover::after,
+      &[aria-current]::before,
+      &[aria-current]::after {
+        width: 5px;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--pf-toc-accent);
+        outline-offset: -2px;
+      }
+    }
+
+    .pf-toc__label {
+      position: absolute;
+      top: 0;
+      inset-inline-start: calc(var(--pf-rail-line) + 1rem);
+      display: block;
+      max-width: 22rem;
+      padding: 0.375rem 0.75rem 0.375rem 0.625rem;
+      overflow: hidden;
+      font-size: var(--pf-mono-label);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--pf-toc-color);
+      background-color: var(--pf-sidebar-bg);
+      -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+      backdrop-filter: var(--pf-glass-filter, blur(26px));
+      opacity: 0;
+      transform: translateX(-0.5rem);
+      pointer-events: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.3s var(--pf-rail-ease),
+        color $pf-hover-out ease;
+    }
+
+    // No numbers: sections already carry their own (landing kickers), which
+    // count differently from the TOC's links.
+
+    [aria-current] > .pf-toc__label {
+      font-weight: 700;
+      color: var(--pf-g-title, var(--pf-toc-active));
+    }
+
+    // Focus also underlines the name: the gold outline alone is under 3:1
+    // on the light chrome.
+    .pf-toc__link:is(:hover, :focus-visible) > .pf-toc__label {
+      color: var(--pf-toc-active);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      transition-duration: 0.2s, 0.3s, $pf-hover-in;
+    }
+
+    // The current name, by itself, while its heading rises (JS).
+    [aria-current] > .pf-toc__label {
+      opacity: var(--pf-rail-peek, 0);
+      transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * -0.5rem));
+      transition: color $pf-hover-out ease;
+    }
+
+    // "Back to top": the arrow alone, under the line.
+    .pf-toc__top {
+      justify-content: flex-start;
+      width: var(--pf-rail-col);
+      min-height: 2.75rem;
+      margin-top: 0.5rem;
+      padding: 0 0 0 calc(var(--pf-rail-line) - 0.375rem);
+      border: 0;
+
+      &:focus-visible {
+        outline-offset: -2px;
+      }
+    }
+
+    .pf-toc__top-label {
+      @include visually-hidden();
+    }
+  }
+
+  // Every name: hover, focus, or a first tap. Each one follows the one
+  // above it by 25ms.
+  #{$pf-rail} .pf-toc:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-toc__label {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition:
+      opacity 0.2s ease calc(var(--pf-rail-i, 0) * 25ms),
+      transform 0.3s var(--pf-rail-ease) calc(var(--pf-rail-i, 0) * 25ms),
+      color $pf-hover-out ease;
+  }
+
+  // The read part grows only once the rail is sized (modular-toc.js), so
+  // it doesn't sweep in on load.
+  #{$pf-rail} .pf-toc.is-rail-ready .pf-toc__link::after {
+    transition:
+      width 0.25s var(--pf-rail-ease),
+      height 0.15s linear,
+      background-color 0.3s ease;
+  }
+
+  // Too many sections for 24px segments: even ticks, centred. Read ones in
+  // the TOC text colour, the current one longer and in the active colour.
+  #{$pf-rail} .pf-toc.pf-toc--ticks {
+    .pf-toc__list {
+      justify-content: center;
+      gap: 0;
+    }
+
+    .pf-toc__item {
+      flex: 0 0 1.75rem;
+    }
+
+    .pf-toc__link::before {
+      top: 50%;
+      bottom: auto;
+      width: 0.75rem;
+      height: 2px;
+    }
+
+    .pf-toc__link::after {
+      display: none;
+    }
+
+    .pf-toc__item.is-read .pf-toc__link::before {
+      background-color: var(--pf-toc-color);
+    }
+
+    .pf-toc__link:hover::before,
+    .pf-toc__link[aria-current]::before {
+      width: 1.25rem;
+      background-color: var(--pf-toc-active);
+    }
+
+    .pf-toc__label {
+      top: 50%;
+      translate: 0 -50%;
+    }
+  }
+
+  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc .pf-toc__label {
+    transform: translateX(0.5rem);
+  }
+
+  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc [aria-current] > .pf-toc__label {
+    transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * 0.5rem));
+  }
+
+  #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-toc__label {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #{$pf-rail} .pf-toc {
+    .pf-toc__link::before,
+    .pf-toc__link::after,
+    .pf-toc__label {
+      transition: none !important;
+    }
+  }
+}
+
+#{$pf-rail-html}.pf-a11y-motion #{$pf-rail-row} .pf-toc {
+  .pf-toc__link::before,
+  .pf-toc__link::after,
+  .pf-toc__label {
+    transition: none !important;
+  }
+}

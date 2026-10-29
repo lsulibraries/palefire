@@ -136,15 +136,21 @@ and its own breadcrumb bar instead (`PalefireHooks::titleLandingUuid()`,
 
 ### Table of contents
 
-- From lg the TOC is a sticky sidebar; below lg a list-icon button opens it as
-  an offcanvas (`<html data-pf-panel="toc">` gives it the drawers' backdrop).
+- From lg, guides keep the TOC as a sticky sidebar; every other mode shows it as
+  the **reading rail** (below). Below lg a list-icon button opens it as an
+  offcanvas (`<html data-pf-panel="toc">` gives it the drawers' backdrop).
 - Its visible title is "Table of contents", a plain label that names the
   `<nav>`.
-- **Hide/show** (lg and up, not on guides): `js/modular-toc-collapse.js`, loaded
-  in `<head>` so there is no flash. Pages that open with a Landing hero
-  (`<html data-pf-hero>`) start hidden, every other page shown; a visitor's
-  choice is saved per page type (`palefire.tocCollapsed.hero` /
-  `palefire.tocCollapsed.landing` / `palefire.tocCollapsed`).
+- **Reading rail** (lg and up, not on guides, `_toc-rail.scss`): the same
+  `<nav>` as a 3px line at the page edge, one segment per section, as long as
+  the section, filled as far as the activation line has read into it. The
+  column closes and backgrounds run to the edge. Hover, focus or a first tap
+  shows every name over the content; Esc hides them. The current name shows
+  by itself only while its heading rises from the activation line to 45% of
+  the screen (`PEEK_END`), fading as it goes. When the segments can't
+  all be 24px tall, it switches to even ticks (`.pf-toc--ticks`). It is set by
+  `.pf-modular--toc-rail` (`page.html.twig`), which is left off when the
+  sidebar region holds other blocks: the sidebar stays then.
 - **Listing:** sections, plus h3s on modes in the block's "Include h3
   sub-links" setting (`deep_modes`, default `guide`); elsewhere only
   `[data-toc]`. Attributes: `data-toc`, `data-toc-label` (short link text),
@@ -926,6 +932,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **TOC: a reading rail replaces the hide/show button (lg and up, not on guides).** The TOC is now a 3px line at the page edge, one segment per section, each as long as its section. The current segment fills as the activation line reads into it (`_toc-rail.scss`, rail code in `js/modular-toc.js`). Hover, focus or a first tap (iPad landscape, touch laptops) shows every name on the sidebar's glass over the content, with no reflow; Esc hides them (1.4.13). The current name shows by itself only while its heading rises from the activation line to 45% of the screen, fading as it goes, so it doesn't sit over what is being read. Segments that can't be 24px tall become even ticks. Guides keep the sidebar, and so does any page whose sidebar region holds other blocks. Below lg nothing changes. Removed: `js/modular-toc-collapse.js` and its library, its three localStorage keys, `html.pf-toc-collapsed` / `pf-toc-instant`, the button's Twig and styles, and the column's slide. TOC labels are now spans (`.pf-toc__label`, `.pf-toc__top-label`). Checked on the live Special Collections home, Oral History, Mossville and the Special Collections guide with local CSS, JS and Twig at 320, 768, 1024 and 1440: no horizontal scroll, the offcanvas button below lg, the guide's sidebar unchanged, and hover, Tab, Esc and tap working. The 1px hero shift at load is in the live page too (it scores higher now because the hero is full width). Why: the toggle cost the content 300px or hid the TOC, and the rail keeps it on screen without either. 693c172 already shipped this change's CSS (its compile picked up the SCSS in progress), so production has had no toggle styles since then; this patch brings the Twig and JS in line.
 
 - **Wall galleries: Read more opens downward.** On a wall with a lead image (Audubon's Octavo Edition), the grid's first row took whatever the image's screen left over the text, so an opened intro shrank it: the title and the paragraph being read slid up to 400px (or the browser's scroll anchoring scrolled the page instead), and at 1024 Show less left the button off screen. While open, that row now keeps its folded height (`--pf-wall-top`, set by `holdWallTop()` in `js/exhibition.js`, measured again on resize), so the text opens down over the image and the image grows with it. Show less keeps the button where it is on screen (the page scrolls up as the text folds), and the browser's scroll anchoring is off during the change. Reduced motion: the same, instantly. Checked on the live Audubon page with local CSS and JS at 320, 375, 768, 1024 and 1440: the title doesn't move on Read more, the button stays within 4px on Show less, no horizontal scroll. Why: the upward jump looked like the page scrolling by itself.
 

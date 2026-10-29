@@ -513,6 +513,155 @@
       timer = setTimeout(finish, 1200);
     }
 
+    /* ---------------- Reading rail ---------------- */
+
+    // lg and up, on every mode but guides, the TOC is a rail at the page
+    // edge instead of a sidebar (_toc-rail.scss; page.html.twig puts
+    // .pf-modular--toc-rail on the row). One segment per section, as long
+    // as the section is, filled as far as the activation line has read
+    // into it (--pf-rail-p). When the segments can't all be 24px tall
+    // (2.5.8), they become even ticks (.pf-toc--ticks).
+    // The current section's name shows beside its segment only while its
+    // heading rises from the activation line to PEEK_END of the screen
+    // (--pf-rail-peek: full for the first half of the way, fading to 0 over
+    // the second), so it never sits over the text being read. Hover and focus show every name (CSS).
+    const PEEK_END = 0.45;
+    const RAIL_MIN = 28; // a 24px target plus the 4px gap
+    const railRow = nav.closest('.pf-modular--toc-rail');
+    const railMedia = window.matchMedia('(min-width: 992px)');
+    const railOn = () => !!railRow && railMedia.matches && ROOT.dataset.pfMode !== 'guide';
+    let railTicking = false;
+    let railFrame = 0;
+    let lastPointer = 'mouse';
+
+    // Weights from the sections' heights, on load and when they resize,
+    // never on scroll.
+    function measureRail() {
+      railFrame = 0;
+      if (destroyed || !railOn()) {
+        return;
+      }
+      const shown = entries.filter((entry) => !entry.li.hidden);
+      shown.forEach((entry, i) => {
+        // A gallery that isn't open (exhibitions) has no height: give it a
+        // screen's worth, so it still has a segment to aim at.
+        const height = isShown(entry) ? entry.section.getBoundingClientRect().height : window.innerHeight;
+        entry.li.style.setProperty('--pf-rail-w', Math.max(1, Math.round(height)));
+        entry.li.style.setProperty('--pf-rail-i', i);
+      });
+      nav.classList.toggle('pf-toc--ticks', shown.length * RAIL_MIN > list.clientHeight);
+      updateRail();
+    }
+
+    function queueRail() {
+      if (!railFrame && !destroyed) {
+        railFrame = requestAnimationFrame(measureRail);
+      }
+    }
+
+    function updateRail() {
+      railTicking = false;
+      if (destroyed || !railOn()) {
+        return;
+      }
+      const head = headerHeight();
+      const span = window.innerHeight - head;
+      const line = head + span * ACTIVATION_LINE;
+      entries.forEach((entry) => {
+        const rect = entry.section.getBoundingClientRect();
+        const p = isShown(entry) && rect.height ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
+        entry.li.style.setProperty('--pf-rail-p', p.toFixed(3));
+        entry.li.classList.toggle('is-read', p >= 1);
+      });
+      let peek = 0;
+      if (active && isShown(active)) {
+        const top = (active.title || active.section).getBoundingClientRect().top;
+        const end = head + span * PEEK_END;
+        peek = Math.min(1, Math.max(0, (top - end) / ((line - end) / 2)));
+        // Not yet at the line (the first section on load, a section made
+        // current at the page's foot): nothing to announce.
+        if (top > line) {
+          peek = 0;
+        }
+      }
+      nav.style.setProperty('--pf-rail-peek', peek.toFixed(3));
+    }
+
+    function onRailScroll() {
+      if (!railTicking) {
+        railTicking = true;
+        requestAnimationFrame(updateRail);
+      }
+    }
+
+    if (railRow) {
+      // The label is its own element, so the link can be the segment's
+      // whole height and the name can sit beside it.
+      entries.forEach((entry) => {
+        if (!entry.link.querySelector('.pf-toc__label')) {
+          const label = document.createElement('span');
+          label.className = 'pf-toc__label';
+          label.append(...entry.link.childNodes);
+          entry.link.append(label);
+        }
+      });
+      window.addEventListener('scroll', onRailScroll, { passive: true, signal });
+      window.addEventListener('resize', queueRail, { passive: true, signal });
+      railMedia.addEventListener('change', queueRail, { signal });
+      document.addEventListener('palefire:tocrefresh', queueRail, { signal });
+      // The observer can change the section after the last scroll frame.
+      document.addEventListener('palefire:sectionchange', (event) => {
+        if (event.detail.nav === nav) {
+          onRailScroll();
+        }
+      }, { signal });
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(queueRail);
+      }
+
+      // Touch (iPad landscape, touch laptops) has no hover: the first tap
+      // shows the names, the next follows a link. A tap elsewhere, Esc or
+      // following a link hides them.
+      nav.addEventListener('pointerdown', (event) => {
+        lastPointer = event.pointerType;
+      }, { signal });
+      nav.addEventListener('click', (event) => {
+        if (!railOn() || !event.target.closest('.pf-toc__link')) {
+          return;
+        }
+        if (lastPointer === 'touch' && !nav.classList.contains('is-open')) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          nav.classList.add('is-open');
+          return;
+        }
+        nav.classList.remove('is-open');
+      }, { capture: true, signal });
+      document.addEventListener('pointerdown', (event) => {
+        if (!nav.contains(event.target)) {
+          nav.classList.remove('is-open');
+        }
+      }, { signal });
+
+      // 1.4.13: Esc hides names shown by hover, focus or a tap, until the
+      // pointer leaves the rail and focus moves out of it. On the document:
+      // a hover reveal has no focus inside the rail.
+      document.addEventListener('keydown', (event) => {
+        const shown = nav.matches(':hover') || nav.contains(document.activeElement) || nav.classList.contains('is-open');
+        if (event.key === 'Escape' && shown && railOn()) {
+          nav.classList.remove('is-open');
+          nav.classList.add('is-dismissed');
+        }
+      }, { signal });
+      const undismiss = () => {
+        if (!nav.matches(':hover') && !nav.contains(document.activeElement)) {
+          nav.classList.remove('is-dismissed');
+        }
+      };
+      nav.addEventListener('pointerleave', undismiss, { signal });
+      nav.addEventListener('focusout', () => requestAnimationFrame(undismiss), { signal });
+    }
+
     /* ---------------- Wire up ---------------- */
 
     observe();
@@ -527,6 +676,12 @@
       resizeObserver = new ResizeObserver(queueIndicator);
       resizeObserver.observe(list);
     }
+    let railObserver = null;
+    if (railRow && 'ResizeObserver' in window) {
+      railObserver = new ResizeObserver(queueRail);
+      railObserver.observe(list);
+      entries.forEach((entry) => railObserver.observe(entry.section));
+    }
 
     // Initial state: the URL hash if there is one, otherwise whatever is
     // under the line now. Transitions stay off (no .is-ready on the nav)
@@ -535,6 +690,12 @@
     const hashed = location.hash && entries.find((e) => '#' + e.section.id === location.hash);
     setActive((hashed && isShown(hashed) ? hashed : null) || entryAtLine(entries) || firstShown());
     trackSubHeadings();
+    // Sized before the first page fade ends; transitions start after
+    // (.is-rail-ready), so the segments don't animate in on load.
+    if (railRow) {
+      measureRail();
+      requestAnimationFrame(() => nav.classList.add('is-rail-ready'));
+    }
 
     // Sub-links are clamped to two lines. Show the full heading as a
     // tooltip only where the text is actually cut off.
@@ -550,8 +711,7 @@
     // sidebar sits beside the content). Both start 2rem down in CSS, but
     // the sidebar and <main> don't start at exactly the same height (header
     // spacer, region wrappers), so measure once at the top of the page and
-    // nudge the title (and the hide/show button, which reads the same
-    // property) by the difference. Re-measured on resize and font load,
+    // nudge the title by the difference. Re-measured on resize and font load,
     // only while the page is at the top, where the sticky sidebar is in
     // its own place.
     const sidebar = nav.closest('.pf-sidebar');
@@ -638,6 +798,10 @@
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
+      if (railObserver) {
+        railObserver.disconnect();
+      }
+      cancelAnimationFrame(railFrame);
     };
   }
 
