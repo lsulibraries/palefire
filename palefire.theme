@@ -1345,9 +1345,10 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
  * The FAQs for an Ask Special Collections section (Tile showcase, "ask").
  *
  * The Tiles picked in the section's Tiles field, in that order; with none
- * picked, the published Tiles in the FAQ category whose Subcategory is
+ * picked, the published Tiles in the FAQ category whose Subcategory says
  * "Special Collections" (the old site's FAQ tiles), by search weight then
- * title, at most eight. The section's link (the index rule's) points at
+ * title, at most eight. "Says", not "is": some imported Subcategories
+ * carry stray spaces, and an exact match (LIKE) misses them all. The section's link (the index rule's) points at
  * the rest on AskUs.
  *
  * Each FAQ:
@@ -1377,7 +1378,7 @@ function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): a
         ->condition('type', 'tile')
         ->condition('status', NodeInterface::PUBLISHED)
         ->condition('field_category', array_keys($terms), 'IN')
-        ->condition('field_subcategory', 'Special Collections')
+        ->condition('field_subcategory', 'Special Collections', 'CONTAINS')
         ->sort('field_tile_search_weight', 'DESC')
         ->sort('title')
         ->range(0, 8)

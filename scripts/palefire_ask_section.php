@@ -83,11 +83,27 @@ if ($terms) {
     ->condition('type', 'tile')
     ->condition('status', 1)
     ->condition('field_category', array_keys($terms), 'IN')
-    ->condition('field_subcategory', 'Special Collections')
+    ->condition('field_subcategory', 'Special Collections', 'CONTAINS')
     ->sort('field_tile_search_weight', 'DESC')
     ->sort('title')
     ->range(0, 8)
     ->execute();
+  if (!$faqs) {
+    // Show the Subcategories the FAQ tiles do have, exactly as stored.
+    $all = \Drupal::entityQuery('node')->accessCheck(FALSE)
+      ->condition('type', 'tile')
+      ->condition('field_category', array_keys($terms), 'IN')
+      ->execute();
+    $seen = [];
+    foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($all) as $tile) {
+      $key = json_encode((string) $tile->get('field_subcategory')->value) . ($tile->isPublished() ? '' : ' (unpublished)');
+      $seen[$key] = ($seen[$key] ?? 0) + 1;
+    }
+    arsort($seen);
+    foreach ($seen as $value => $count) {
+      $log[] = "FAQ tiles with Subcategory $value: $count.";
+    }
+  }
 }
 if (!$faqs) {
   $log[] = 'No published Tile has Category "FAQ" and Subcategory "Special Collections": the section would show the form and the AskUs link only.';

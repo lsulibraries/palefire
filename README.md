@@ -959,6 +959,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-30
 
+- **Ask Special Collections: FAQs found by a looser Subcategory match.** The section and `palefire_ask_section.php` found no FAQ tiles on production, though 17 have the Subcategory "Special Collections". Drupal matches a text field's `=` with `LIKE`, so a stored value with stray spaces (as some imported Subcategories have) never matched. Both now match Subcategories containing "Special Collections". When the dry run still finds none, it lists the FAQ tiles' Subcategories exactly as stored (quoted, unpublished counted apart), so the right value is easy to see. Why: the section showed only the form.
 - **Special Collections: Teaching with Special Collections joins the program pages.** `scripts/palefire_special_programs.php` now also builds "Teaching with Special Collections" as an unpublished exhibition (`…/teaching`), reworded from the research guide of that name (guides.lib.lsu.edu/c.php?g=1544354).
   - **Title page:** the label "Class visits", the key facts "100+ classes a year", "2,500+ students a year" and "Instructors in any field", and a "Request a class" button to the LibWizard class request form.
   - **Galleries:** what a visit offers, the two sample activities (Object Identification, Reading Maps) as entries, 16 past classes with the materials pulled for them in an accordion, and how to request a class. The request gallery names John Miles and links to the Faculty Fellowship as the next step.
