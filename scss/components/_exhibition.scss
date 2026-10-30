@@ -2774,8 +2774,10 @@ $pf-brief-clear: 86%;
     // left; it turns back as the text opens.
     @include media-breakpoint-up(lg) {
       background: pf-turned-wash(90deg, 38%, 94%, $pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
+      // Slow and eased at both ends, so it settles in after the text has
+      // opened (0.5s) rather than snapping round with it.
       @media (prefers-reduced-motion: no-preference) {
-        transition: --pf-wash-turn 0.9s $pf-exhibit-ease;
+        transition: --pf-wash-turn 1.8s cubic-bezier(.45, 0, .25, 1);
       }
 
       .pf-section__inner.is-brief & {
