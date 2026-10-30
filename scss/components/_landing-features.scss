@@ -1234,9 +1234,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition:
-      transform .9s cubic-bezier(.2, .7, .2, 1),
-      filter .9s ease;
+    transition: transform .9s cubic-bezier(.2, .7, .2, 1);
   }
 }
 
@@ -1244,15 +1242,44 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transform: scale(1.04);
 }
 
-// The pictures in the page's own colour until hovered: each one grey, then
+// The pictures in the page's own colour at first: each one grey, then
 // half washed with the page colour (the cover's, so the swatch's), so it
 // sinks into the ground around it (Twilight's dark violet grey, Cream's
 // cream). The scrim over it keeps the white words at 4.5:1. Hover or focus
-// brings the picture's colours back as it zooms. Not the event's date (no
-// picture).
+// brings the picture's colours back as it zooms, and so does scrolling
+// (below). Values from 1 (grey and washed) to 0 (the picture's own
+// colours): --pf-banner-grey for the banner's place on screen,
+// --pf-banner-wait for the page's scroll, --pf-banner-dim for hover. Either
+// scroll value keeps the picture grey; hover clears both. Hover's has to
+// be its own: a property under an animation
+// won't transition, so hover would snap. Only hover's value eases, not
+// the filter and wash they set: a transition on those restarted every
+// frame of the scroll and left the picture trailing it. Not the event's
+// date (no picture).
+@property --pf-banner-grey {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@property --pf-banner-wait {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@property --pf-banner-dim {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
 .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+  --pf-banner-mute: calc((1 - (1 - var(--pf-banner-grey, 1)) * (1 - var(--pf-banner-wait, 1))) * var(--pf-banner-dim, 1));
+  transition: --pf-banner-dim $pf-hover-out ease;
+
   img {
-    filter: grayscale(1) contrast(1.1);
+    filter: grayscale(var(--pf-banner-mute)) contrast(calc(1 + .1 * var(--pf-banner-mute)));
   }
 
   &::after {
@@ -1260,20 +1287,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     position: absolute;
     inset: 0;
     background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 50%, transparent);
+    opacity: var(--pf-banner-mute);
     pointer-events: none;
-    transition: opacity $pf-hover-out ease;
   }
 }
 
 .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
-  img {
-    filter: none;
-  }
-
-  &::after {
-    opacity: 0;
-    transition-duration: .9s;
-  }
+  --pf-banner-dim: 0;
+  transition-duration: .9s;
 }
 
 .pf-hero-banner__text {
@@ -1506,6 +1527,39 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
       animation-timeline: --pf-banner-own;
       animation-range: cover 0% cover 100%;
     }
+
+    // The colour comes in on scroll, on the same timeline: grey until half
+    // the banner is on screen, in full colour by the time it reaches the
+    // middle of the screen, and grey again on the way back up. And none
+    // before the page has scrolled 15rem, so the row is quiet on load
+    // where it already shows (half of it from 44rem to 64rem).
+    html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+      animation:
+        pf-banner-colour linear both,
+        pf-banner-unwait linear both;
+      animation-timeline: --pf-banner-own, scroll(root);
+      animation-range: entry 50% cover 50%, 0 15rem;
+    }
+  }
+}
+
+@keyframes pf-banner-colour {
+  from {
+    --pf-banner-grey: 1;
+  }
+
+  to {
+    --pf-banner-grey: 0;
+  }
+}
+
+@keyframes pf-banner-unwait {
+  from {
+    --pf-banner-wait: 1;
+  }
+
+  to {
+    --pf-banner-wait: 0;
   }
 }
 
