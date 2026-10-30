@@ -214,19 +214,28 @@
        (_landing-features.scss, "Cover"). #}
     {% if cover %}{{ media }}{% endif %}
     {% if hero %}<div class="pf-landing__top">{% endif %}
-    {# Hero: "LSU Libraries" over the title as a small label, inside the
-       <h1> so the heading reads "LSU Libraries: Special Collections"
-       (_landing-swiss.scss, "Unit name"). Theme colours only: no LSU
-       purple or gold, which clash with the reading colours. #}
+    {# Hero: "LSU Libraries", a hairline, then the building (the Visit
+       card's name) over the title as a small label, inside the <h1> so the
+       heading reads "LSU Libraries, Hill Memorial Library: Special
+       Collections" (_landing-swiss.scss, "Unit name"). The building is
+       named here only, not again in the hours line. Theme colours only: no
+       LSU purple or gold, which clash with the reading colours. #}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
-        {%- if hero %}<span class="pf-landing__kicker">{{ 'LSU Libraries'|t }}<span class="visually-hidden">: </span></span>{% endif -%}
+        {%- if hero -%}
+          <span class="pf-landing__kicker">
+            {{- 'LSU Libraries'|t -}}
+            {%- if visit.name %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ visit.name }}</span>{% endif -%}
+            <span class="visually-hidden">: </span>
+          </span>
+        {%- endif -%}
         {{- page_title -}}
       </h1>
     {% endif %}
     {# Hero: today's hours under the title: the status as a label (a dot in
-       its colour and the status in small capitals), then today's hours and
-       the building as a line of text (visit-hours.js fills the status and
+       its colour and the status in small capitals), then today's hours as a
+       line of text (the building is in the label over the title; the
+       script fills the status and
        the hours from LibCal; palefire/visit is attached with visit). No
        live region: the Visit panel already announces changes. Today's
        hours are the link to the week in the Visit panel (visit-strip.html.twig,
@@ -239,7 +248,6 @@
           <span data-pf-hours-status>{{ 'Hours'|t }}</span>
         </span>
         <a class="pf-landing__hours-link" href="#{{ input_id }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
-        <span class="pf-landing__hours-place">{{ visit.name }}</span>
       </p>
     {% endif %}
     {% if landing_intro %}
