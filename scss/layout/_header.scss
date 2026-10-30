@@ -294,6 +294,10 @@
 
 :root:has(.pf-header--compact) {
   --pf-logo-w: #{$pf-logo-compact-width};
+
+  @include media-breakpoint-up(xl) {
+    --pf-logo-w: #{$pf-logo-compact-width-xl};
+  }
 }
 
 @media (max-width: $pf-utility-wide-bp - .02px) {
@@ -445,8 +449,13 @@
       min-height: $pf-header-bar-compact-h;
     }
 
+    // Larger from xl, so "LSU Libraries" reads first on wide screens.
     .pf-brand__logo {
       width: $pf-logo-compact-width;
+
+      @include media-breakpoint-up(xl) {
+        width: $pf-logo-compact-width-xl;
+      }
     }
 
     .pf-primary-nav .nav-link {

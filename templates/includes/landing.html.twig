@@ -214,8 +214,15 @@
        (_landing-features.scss, "Cover"). #}
     {% if cover %}{{ media }}{% endif %}
     {% if hero %}<div class="pf-landing__top">{% endif %}
+    {# Hero: "LSU Libraries" over the title as a small label, inside the
+       <h1> so the heading reads "LSU Libraries: Special Collections"
+       (_landing-swiss.scss, "Unit name"). Theme colours only: no LSU
+       purple or gold, which clash with the reading colours. #}
     {% if page_title %}
-      <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>{{ page_title }}</h1>
+      <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
+        {%- if hero %}<span class="pf-landing__kicker">{{ 'LSU Libraries'|t }}<span class="visually-hidden">: </span></span>{% endif -%}
+        {{- page_title -}}
+      </h1>
     {% endif %}
     {# Hero: today's hours under the title: the status as a label (a dot in
        its colour and the status in small capitals), then today's hours and
@@ -297,6 +304,10 @@
           {% endif %}
         </button>
       </div>
+      {# Hero: whose collections these are, a quiet line under the field. #}
+      {% if hero %}
+        <p class="pf-landing__unit">{{ 'A unit of LSU Libraries, Louisiana State University'|t }}</p>
+      {% endif %}
     </form>
     {# Landing department: the hero's tile accordion under the search, only
        when the paragraph has tiles (no placeholders). Its own wrapper, not
