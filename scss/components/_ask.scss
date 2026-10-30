@@ -189,6 +189,19 @@
     border-bottom-color: var(--pf-inquiry-error);
     box-shadow: 0 1px 0 var(--pf-inquiry-error);
   }
+
+  // Autofill: the browser's own pale box (which ignores background-color)
+  // painted over by an inset shadow in the section's colour, the text in
+  // the section's text colour; the focus rule still shows under it.
+  &:autofill {
+    -webkit-text-fill-color: var(--pf-inquiry-fg);
+    caret-color: var(--pf-inquiry-fg);
+    box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+
+    &:focus {
+      box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))), 0 2px 0 var(--pf-inquiry-accent);
+    }
+  }
 }
 
 select.pf-inquiry__control {
@@ -213,6 +226,133 @@ select.pf-inquiry__control {
   option {
     color: var(--pf-inquiry-fg);
     background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+  }
+
+  // "Select one" reads as a prompt, in the labels' muted colour, until a
+  // choice is made.
+  &:has(option[value=""]:checked) {
+    color: var(--pf-inquiry-muted);
+  }
+}
+
+// The open list, styled where the browser allows it (Chrome and Edge 135+:
+// a customizable select). Still the native <select>: the same keyboard,
+// screen reader and phone behaviour, only drawn by the page. Elsewhere the
+// browser's own list, in the section's colours above.
+// - The list: a panel in the section's colour just under the field, as
+//   wide as it, with a hairline frame and a soft shadow; it fades and
+//   drops in (none with reduced motion).
+// - Options: 44px rows (WCAG 2.5.8) with the fields' padding; hover and
+//   keyboard focus share one wash of the text colour, focus adding the
+//   accent rule at the start; the chosen one is marked by a check in the
+//   accent and medium weight, never by colour alone.
+// - The chevron turns over while the list is open.
+@supports (appearance: base-select) {
+  select.pf-inquiry__control,
+  select.pf-inquiry__control::picker(select) {
+    appearance: base-select;
+  }
+
+  select.pf-inquiry__control {
+    display: flex;
+    align-items: center;
+    padding-right: .125rem;
+    background-image: none;
+
+    &::picker-icon {
+      content: '';
+      width: .4375rem;
+      height: .4375rem;
+      margin-inline: auto .5rem;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: translateY(-25%) rotate(45deg);
+      transition: transform .25s ease;
+    }
+
+    &:open::picker-icon {
+      transform: translateY(25%) rotate(225deg);
+    }
+
+    &::picker(select) {
+      min-inline-size: anchor-size(self-inline);
+      margin-block: .25rem;
+      padding: .375rem 0;
+      border: 1px solid #{$pf-hairline};
+      border-radius: 0;
+      color: var(--pf-inquiry-fg);
+      background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+      box-shadow: 0 .75rem 2rem rgb(0 0 0 / .25);
+      opacity: 1;
+      transform: none;
+      transition: opacity .2s ease, transform .2s ease, overlay .2s allow-discrete, display .2s allow-discrete;
+    }
+
+    &:not(:open)::picker(select) {
+      opacity: 0;
+      transform: translateY(-.25rem);
+    }
+
+    option {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      min-height: 2.75rem;
+      padding: .5rem 1rem;
+      border-inline-start: 2px solid transparent;
+      color: var(--pf-inquiry-fg);
+      background-color: transparent;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background-color $pf-hover-out ease;
+
+      &::checkmark {
+        order: 1;
+        margin-inline-start: auto;
+        color: var(--pf-inquiry-accent);
+      }
+
+      &:hover,
+      &:focus-visible {
+        background-color: color-mix(in srgb, var(--pf-inquiry-fg) 8%, transparent);
+        transition-duration: $pf-hover-in;
+      }
+
+      &:focus-visible {
+        outline: none;
+        border-inline-start-color: var(--pf-inquiry-accent);
+      }
+
+      &:checked {
+        font-weight: 500;
+      }
+
+      // The prompt isn't a choice: muted in the list, no check.
+      &[value=""] {
+        color: var(--pf-inquiry-muted);
+      }
+    }
+  }
+
+  @starting-style {
+    select.pf-inquiry__control:open::picker(select) {
+      opacity: 0;
+      transform: translateY(-.25rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    select.pf-inquiry__control::picker-icon,
+    select.pf-inquiry__control::picker(select) {
+      transition: none;
+    }
+  }
+
+  html.pf-a11y-motion select.pf-inquiry__control {
+    &::picker-icon,
+    &::picker(select) {
+      transition: none;
+    }
   }
 }
 
