@@ -7,13 +7,14 @@
  *
  * - kind: 'book' (a coloured cover) or 'article' (a journal offprint).
  * - byline, title, subtitle, source, details: the citation (preprocess).
- * - size: '', 'long' or 'longer', a smaller title on the cover.
+ * - size: '' or 'longer', a smaller title on the cover.
  * - link: ['url', 'external'], or NULL.
  * - tone: 1–8, a book cover's colour.
  *
  * The cover and the line under it are one citation, with nothing twice:
  * the cover has the author and title (and an article's journal), the
- * caption a book's subtitle and the imprint, or an article's issue. The
+ * caption a book's subtitle and the imprint, or an article's issue, as
+ * one quiet line (so the subtitle doesn't read as a second title). The
  * cover is real text, in reading order (an article's masthead is moved to
  * the top in CSS); hidden full stops make it read as a citation. With a
  * link, the whole figure is the link, named by the cover and caption, and
@@ -72,12 +73,8 @@
   {% endif %}
   {% if subtitle or imprint %}
     <figcaption class="pf-exhibit-figure__caption pf-exhibit-reading__caption" id="{{ id }}-caption">
-      {% if subtitle %}
-        <span class="pf-exhibit-reading__subtitle">{{ subtitle }}.</span>
-      {% endif %}
-      {% if imprint %}
-        <span class="pf-exhibit-reading__imprint">{{ imprint }}.</span>
-      {% endif %}
+      {% if subtitle %}<em>{{ subtitle }}</em>.{% endif %}
+      {{ imprint ? imprint ~ '.' }}
     </figcaption>
   {% endif %}
 </figure>

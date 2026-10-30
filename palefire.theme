@@ -2321,8 +2321,9 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
  * the quotes or full stop an editor may have typed (the template adds
  * them). A book's subtitle (after the first colon) goes under the cover
  * instead, as a real cover sets it smaller: title is then the part before
- * it and subtitle the rest, else ''. size: '', 'long' or 'longer', a
- * smaller step for the title on the cover so the whole title fits. source,
+ * it and subtitle the rest, else ''. size: '' or 'longer' (over 90
+ * characters), a smaller title on the cover so it still fits; every other
+ * title is the same size, so the covers match. source,
  * details: publisher or journal, and year or volume. link: ['url',
  * 'external'], or NULL. tone: 1–8 from the title, a book cover's colour
  * (_exhibition.scss), the same wherever the book shows.
@@ -2342,7 +2343,7 @@ function palefire_preprocess_paragraph__exhibit_reading(array &$variables): void
   $variables['byline'] = $author;
   $variables['title'] = $title;
   $variables['subtitle'] = $subtitle;
-  $variables['size'] = $length > 90 ? 'longer' : ($length > 45 ? 'long' : '');
+  $variables['size'] = $length > 90 ? 'longer' : '';
   // The template ends the imprint with a full stop.
   $variables['source'] = rtrim($value('field_reading_source'), '. ');
   $variables['details'] = rtrim($value('field_reading_details'), '. ');

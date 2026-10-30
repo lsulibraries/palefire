@@ -1790,22 +1790,18 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     transition: translate $pf-hover-out $pf-exhibit-ease;
   }
 
-  &:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
+  // The arrow shows at rest, so a linked figure (a reading with a link)
+  // is told from one without at a glance; hover nudges it.
+  .pf-exhibit-figure__zoom {
     opacity: 1;
-    transition-duration: $pf-hover-in;
+  }
 
+  &:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
     path {
       @include pf-exhibit-motion {
         translate: 1.5px -1.5px;
         transition-duration: $pf-hover-in;
       }
-    }
-  }
-
-  // No hover on touch screens: the arrow always shows.
-  @media (hover: none) {
-    .pf-exhibit-figure__zoom {
-      opacity: 1;
     }
   }
 }
@@ -1868,6 +1864,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 .pf-exhibit-reading__cover {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1890,6 +1887,17 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   text-transform: uppercase;
 }
 
+// A linked reading's arrow sits in the top corner: the line at the head
+// (a book's byline, an article's masthead) stops short of it, and a long
+// name breaks rather than running under it.
+.pf-exhibit-figure--out {
+  &.pf-exhibit-reading--book .pf-exhibit-reading__byline,
+  &.pf-exhibit-reading--article .pf-exhibit-reading__masthead {
+    margin-right: max(0px, calc(3.5rem - 10cqi));
+    overflow-wrap: anywhere;
+  }
+}
+
 // The whole title always shows (it isn't repeated under the cover): long
 // ones step down a size or two.
 .pf-exhibit-reading__name {
@@ -1898,17 +1906,19 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   overflow-wrap: break-word;
 }
 
-.pf-exhibit-reading__name--long {
-  font-size: 9cqi;
-}
-
 .pf-exhibit-reading__name--longer {
   font-size: 7.5cqi;
   line-height: 1.22;
 }
 
-// Book: the byline at the head, the title at the foot under a short rule.
+// Book: the byline at the head, the title under a short rule. The rule is
+// at the same height on every cover (52%), so titles line up across a row
+// whatever their length: four lines still clear the foot.
 .pf-exhibit-reading--book .pf-exhibit-reading__name {
+  position: absolute;
+  top: 52%;
+  left: 10cqi;
+  max-width: 80cqi;
   padding-top: 5cqi;
   border-top: 1px solid color-mix(in srgb, currentColor 35%, transparent);
   width: fit-content;
@@ -1936,10 +1946,6 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     font-style: italic;
   }
 
-  .pf-exhibit-reading__name--long {
-    font-size: 7.5cqi;
-  }
-
   .pf-exhibit-reading__name--longer {
     font-size: 6.5cqi;
   }
@@ -1950,31 +1956,26 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
-// Under the cover, the rest of the citation: a book's subtitle (italic, in
-// the heading colour) and the imprint, or an article's issue. Its first
-// line underlines on hover, the link's sign now the title is on the cover.
+// Under the cover, the rest of the citation as one quiet line in the
+// caption colour: a book's subtitle (italic) and the imprint, or an
+// article's issue. Not the heading colour, so it never reads as a second
+// title. A linked reading's line underlines on hover.
 .pf-exhibit-reading__caption {
-  display: grid;
-  gap: .15rem;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .2em;
+  transition: text-decoration-color $pf-hover-out ease;
 
-  > :first-child {
-    .pf-exhibit-figure--out & {
-      text-decoration: underline;
-      text-decoration-color: $pf-hairline;
-      text-underline-offset: .2em;
-      transition: text-decoration-color $pf-hover-out ease;
-    }
-
-    .pf-exhibit-figure--out:has(.pf-exhibit-figure__out:is(:hover, :focus-visible)) & {
-      text-decoration-color: currentColor;
-      transition-duration: $pf-hover-in;
-    }
+  .pf-exhibit-figure--out:has(.pf-exhibit-figure__out:is(:hover, :focus-visible)) & {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
   }
-}
 
-.pf-exhibit-reading__subtitle {
-  font-style: italic;
-  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  // Over a linked image caption's title colour.
+  .pf-exhibit-reading & em {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 // Catalogue record: a museum label ---------------------------------------
