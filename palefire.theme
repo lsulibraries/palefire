@@ -2333,13 +2333,14 @@ function palefire_preprocess_paragraph__exhibit_gallery(array &$variables): void
 /**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-reading.
  *
- * kind: 'book' or 'article'. byline: the author as typed. title: without
+ * kind: 'book' or 'article'. byline: the author as typed, for the cover;
+ * author: the same ending in a full stop, for the citation. title: without
  * the quotes or full stop an editor may have typed (the template adds
- * them). A book's subtitle (after the first colon) goes under the cover
- * instead, as a real cover sets it smaller: title is then the part before
- * it and subtitle the rest, else ''. size: '' or 'longer' (over 90
- * characters), a smaller title on the cover so it still fits; every other
- * title is the same size, so the covers match. source,
+ * them). A book's subtitle (after the first colon) is set smaller on the
+ * cover, as a real cover sets it: title is then the part before it and
+ * subtitle the rest, else ''. size: '' or 'longer' (over 90 characters), a
+ * smaller title on the cover so it still fits; every other title is the
+ * same size, so the covers match. source,
  * details: publisher or journal, and year or volume. link: ['url',
  * 'external'], or NULL. tone: 1–8 from the title, a book cover's colour
  * (_exhibition.scss), the same wherever the book shows.
@@ -2357,6 +2358,7 @@ function palefire_preprocess_paragraph__exhibit_reading(array &$variables): void
   $length = mb_strlen($title);
   $variables['kind'] = $kind;
   $variables['byline'] = $author;
+  $variables['author'] = $author === '' || preg_match('/[.?!]$/u', $author) ? $author : $author . '.';
   $variables['title'] = $title;
   $variables['subtitle'] = $subtitle;
   $variables['size'] = $length > 90 ? 'longer' : '';
