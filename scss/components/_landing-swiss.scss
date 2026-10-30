@@ -433,8 +433,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 
 // --- Unit name (hero) -------------------------------------------------------
 // "LSU Libraries — Hill Memorial Library" over the Special Collections
-// title, and "A unit of LSU Libraries, Louisiana State University" under
-// the search (landing.html.twig), so the page reads as the Libraries' own.
+// title (landing.html.twig), so the page reads as the Libraries' own.
 // Swatch colours only (accent and the muted label tone), never LSU purple
 // or gold: those clash with the reading colours.
 .pf-landing__kicker {
@@ -463,14 +462,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
   }
 }
 
-.pf-landing__unit {
-  margin: .75rem 0 0;
-  font-size: .875rem;
-  line-height: 1.5;
-  color: var(--pf-toc-color);
-}
-
-.pf-landing--cover :is(.pf-landing__kicker, .pf-landing__unit) {
+.pf-landing--cover .pf-landing__kicker {
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
 }
 

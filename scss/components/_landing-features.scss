@@ -116,19 +116,25 @@
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
 
+// Hero: the breadcrumb starts where the LSU Libraries logo does at every
+// width (the header's side padding; 1rem on phones, as the bar's edge).
+.pf-landing--hero > .pf-landing__bar {
+  padding-inline-start: var(--pf-header-gutter, var(--pf-bar-edge));
+}
+
 @include media-breakpoint-up(lg) {
   .pf-landing__bar {
     transition: padding-inline-start .3s ease-in-out; // the TOC column's timing
   }
 
   // With the reading rail (_toc-rail.scss) the bar runs to the page edge;
-  // the breadcrumb starts where the menu's first item's words do: the
-  // logo's end plus the gap to the menu ($pf-brand-gap, _header.scss: the
-  // brand's margin and the link's own padding), clear of the rail. It
-  // follows the logo as the header compacts.
+  // the breadcrumb starts where the LSU Libraries logo does (the header's
+  // side padding, _header.scss), so the two read as one column (2026-10-30;
+  // was under the menu's first item).
+  // No transition of its own here: it would replace the cover's glass fade
+  // (below), and the inset no longer moves with the logo's width.
   html:not([data-pf-mode="guide"]) .pf-modular--toc-rail .pf-landing__bar {
-    padding-inline-start: calc(var(--pf-header-gutter, 3rem) + var(--pf-logo-w, #{$pf-logo-width}) + #{$pf-brand-gap});
-    transition: padding-inline-start $pf-header-transition;
+    padding-inline-start: var(--pf-header-gutter, 3rem);
   }
 }
 
@@ -158,14 +164,35 @@
 // under the header (js/palefire.js marks <html> .pf-bar-stuck), it turns to
 // glass, as before, to stay readable over whatever passes under it. Reduce
 // transparency (and its kin) keeps the glass throughout.
+// The glass comes and goes with the header's (same .3s), one step behind
+// it ($pf-chrome-stagger): scrolling down the header turns to glass, then
+// the bar; back at the top the bar clears first, then the header (below).
+$pf-chrome-stagger: .12s;
+
 .pf-landing--cover > .pf-landing__bar {
-  transition: background-color .3s ease, -webkit-backdrop-filter .3s ease, backdrop-filter .3s ease;
+  transition:
+    background-color .3s ease $pf-chrome-stagger,
+    -webkit-backdrop-filter .3s ease $pf-chrome-stagger,
+    backdrop-filter .3s ease $pf-chrome-stagger;
 }
 
 html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
   background-color: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  transition-delay: 0s;
+}
+
+// Back at the top, the header waits for the bar to start clearing. Uses
+// the header's own selector ($pf-bg-first, below), whose transition
+// shorthand would otherwise reset the delay.
+$pf-cover-bar: ':has(.pf-landing--cover > .pf-landing__bar)';
+
+:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg)) .pf-header {
+  &,
+  &::before {
+    transition-delay: $pf-chrome-stagger;
+  }
 }
 
 @include pf-solid-chrome {
