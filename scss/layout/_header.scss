@@ -98,6 +98,10 @@
     width: $pf-logo-width-sm;
     height: auto;
     aspect-ratio: 433.91 / 106;
+    // The drawing starts 24 units in (the "L" at x=24): pull it back so the
+    // letter, not the empty edge, sits on the gutter the breadcrumb uses.
+    // A percentage of its own width, so it follows the compact bar's resize.
+    translate: calc(-24 / 433.91 * 100%) 0;
     @include media-breakpoint-up(lg) {
       width: $pf-logo-width;
     }
