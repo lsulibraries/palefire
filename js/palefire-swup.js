@@ -578,7 +578,10 @@
         if (typeof visit.abort === 'function') {
           visit.abort();
         }
-        window.location.assign(`${visit.to.url}${visit.to.hash || ''}`);
+        // Replace, not assign: Swup has already pushed a history entry for
+        // this URL (on this document), so assign() left two, and Back from
+        // the loaded page landed on the first and reloaded it.
+        window.location.replace(`${visit.to.url}${visit.to.hash || ''}`);
         return;
       }
       incoming = { doc, settings };
