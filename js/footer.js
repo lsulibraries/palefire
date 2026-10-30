@@ -8,8 +8,10 @@
  * attributes, and that behavior fills it in (one request per location,
  * shared with the Hours drawer and the Visit card).
  *
- * Ask (Special Collections) goes to the question form (#ask-question). On
- * the page that has it, a click glides there (Drupal.palefireGlide, as the
+ * Ask (Special Collections) goes to the question form (#ask-question), as
+ * does the Quick Start Guide's "Reach out" on the Special Collections home
+ * page (includes/landing.html.twig). On the page that has the form, a click
+ * on any link to it glides there (Drupal.palefireGlide, as the
  * "On this page" links do): the browser's own jump to a #hash already in
  * the address sat for seconds after a wheel scroll, or never moved. It
  * replaces the address, and on arrival focuses the panel for keyboard and
@@ -36,7 +38,7 @@
 
   Drupal.behaviors.palefireFooterAsk = {
     attach(context) {
-      once('pf-footer-ask', '.pf-footer a[href$="#ask-question"]', context).forEach((link) => {
+      once('pf-footer-ask', 'a[href$="#ask-question"]', context).forEach((link) => {
         link.addEventListener('click', (event) => {
           const panel = document.getElementById(link.hash.slice(1));
           if (

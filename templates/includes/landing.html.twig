@@ -522,9 +522,11 @@
             {% endif %}
           </ul>
         </div>
-        {# "Reach out" jumps to the Ask Special Collections section further
-           down (palefire_ask_section.php; its id comes from its title). #}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: '#ask-special-collections' } only %}
+        {# "Reach out" glides to the question form in the Ask Special
+           Collections section further down (includes/ask-special.html.twig),
+           which frames itself in gold, as the footer's Ask link does
+           (js/footer.js). #}
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: '#ask-question' } only %}
         {# Phones: the paths fold to their first option under a fade, and
            this shows the rest (js/palefire.js; without it, all show). #}
         <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
