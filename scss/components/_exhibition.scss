@@ -1014,6 +1014,133 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
+// Scrolling into the title page (lg, with motion and scroll-driven
+// animations, a cover image): the first screen is the photograph alone,
+// with a "Scroll" cue at the text's foot. The head runs a reveal's length
+// longer, and over that scroll the photograph and the text hold still (the
+// text sticky at the screen's foot, where the head's padding leaves it)
+// while the wash comes in, then the kicker, title, intro, credit, facts and
+// prompt, one after another, scrubbed by the scroll. The wash is full
+// before any text shows. Past the reveal the text and wash scroll away over
+// the still photograph, as before. Measured on the head's own timeline
+// (--pf-cover), inset by the header, so 0 is the top of the page. Text too
+// tall to pin on the screen (.is-tall, js/exhibition.js) comes in on load
+// as below lg; focus in the text (keyboard, "Home") shows it all at once.
+$pf-exhibit-cover-reveal: 90svh;
+$pf-exhibit-head-foot: clamp(2rem, 6vh, 4rem);
+$pf-cover-reveal: ".pf-exhibit-head:has(.pf-exhibit-cover.has-image):not(.is-tall)";
+
+.pf-exhibit-cover__cue {
+  display: none;
+}
+
+@supports (animation-timeline: view()) {
+  @include media-breakpoint-up(lg) {
+    #{$pf-cover-reveal} {
+      @include pf-exhibit-motion {
+        min-height: calc(100svh - var(--pf-header-h) + #{$pf-exhibit-cover-reveal});
+        view-timeline: --pf-cover block;
+        view-timeline-inset: var(--pf-header-h) 0px;
+
+        // Before the wash, the photograph's left edge (it starts at
+        // $pf-exhibit-cover-media) fades into the page instead of a hard
+        // line; the fade ends under the wash's solid part.
+        .pf-exhibit-cover__media {
+          -webkit-mask-image: linear-gradient(to right, transparent, #000 12%);
+          mask-image: linear-gradient(to right, transparent, #000 12%);
+        }
+
+        &::after {
+          animation: pf-exhibit-reveal-wash linear both;
+          animation-timeline: --pf-cover;
+          animation-range: contain 2svh contain 16svh;
+        }
+
+        .pf-exhibit-cover__text {
+          position: sticky;
+          bottom: $pf-exhibit-head-foot;
+        }
+
+        .pf-exhibit-cover__step {
+          animation: pf-exhibit-reveal $pf-exhibit-ease both;
+          animation-delay: 0s;
+          animation-timeline: --pf-cover;
+          animation-range:
+            contain calc(16svh + (var(--pf-step, 1) - 1) * 10svh)
+            contain calc(38svh + (var(--pf-step, 1) - 1) * 10svh);
+        }
+
+        .pf-exhibit-cover__cue {
+          display: flex;
+          animation: pf-exhibit-cue-out linear both;
+          animation-timeline: --pf-cover;
+          animation-range: contain 0svh contain 8svh;
+        }
+
+        .pf-exhibit-cover__cue svg {
+          animation: pf-exhibit-cue-bob 2.4s ease-in-out infinite;
+        }
+
+        &:focus-within::after,
+        .pf-exhibit-cover__text:focus-within .pf-exhibit-cover__step {
+          animation: none;
+        }
+
+        .pf-exhibit-cover__text:focus-within .pf-exhibit-cover__cue {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// On the page colour, so it reads on any photograph before the wash.
+.pf-exhibit-cover__cue {
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  gap: .6rem;
+  align-items: center;
+  padding: .5rem .75rem;
+  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  pointer-events: none;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@keyframes pf-exhibit-reveal {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+}
+
+@keyframes pf-exhibit-reveal-wash {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-exhibit-cue-out {
+  to {
+    opacity: 0;
+    translate: 0 .75rem;
+  }
+}
+
+@keyframes pf-exhibit-cue-bob {
+  50% {
+    translate: 0 .2rem;
+  }
+}
+
 .pf-exhibit-cover__kicker {
   @extend %pf-exhibit-kicker;
 }

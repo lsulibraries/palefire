@@ -628,7 +628,9 @@ from the media item. A figure with no image shows only to editors.
   glides past it; the stage allows for the running head
   (`--pf-exhibit-head-h`).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
-  prompt come in one after another; lead bands open with a curtain and
+  prompt come in one after another (from lg, with a cover image and scroll
+  timelines, the image comes alone and scrolling brings the rest in over
+  it, held still for 90svh); lead bands open with a curtain and
   pan from the image's top to its bottom over the first 70% of a screen of
   scrolling (`animation-timeline: scroll(root)`), full-width figures pan
   while they cross the screen (`view()`); "Show whole image" leads fade up
@@ -934,6 +936,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Title page: scroll into the photograph, then the text.** From lg, with motion and scroll-driven animations, the title page opens on the cover photograph alone, its left edge softened into the page, with a small "Scroll" cue. The head runs 90svh longer: over that scroll the photograph and the text hold still while the wash comes in (2–16% of a screen), then the kicker, title, intro, credit, facts and prompt rise in one after another (from 16%, 10% apart), scrubbed by the scroll on the head's own timeline (`--pf-cover`). Past it, as before, the text and wash scroll away over the still photograph. Text too tall to pin on the screen (`.is-tall`, `sizeReveal()` in `js/exhibition.js`), below lg and with reduced motion: unchanged, the text comes in on load. Focus in the text shows it all at once, and "Home" glides to the reveal's end. Checked on the live Audubon page (1440 × 900) and Occult (1024 × 768) with local CSS: the text holds to the pixel through the reveal, the photograph never moves, no horizontal scroll. Why: the title page should open on the picture and let the visitor bring the title in.
 
 - **TOC rail: an index panel replaces the frost and wide rows.** Hovering, focusing or tapping the rail now opens a compact glass panel beside it (`.pf-toc__panel`, built by `buildPanel()` in `js/modular-toc.js`). It lists every section on an even 36px row; the row under the pointer fills and gets a marker, and the current section is in the heading colour. A segment and its row light together (`.is-hot`), whichever the pointer is on, and a long panel scrolls to keep that row in view. The panel is a visual copy: `aria-hidden`, with rows out of the tab order, so the rail's links stay the nav for screen readers and the keyboard, and focusing a rail link lights its row. A plain click on a row clicks its rail link, so the glide is the same; a modified click opens the row's own link. Following a link or pressing Esc closes the panel until the pointer leaves or moves to another section. The page-wide frost and the invisible 26rem rows are gone, and the rail's own names now only show as the scroll-linked current name. Checked on the live Special Collections home and Aves with local CSS and JS at 320, 1024 and 1440: the panel opens from a segment with the matching row lit, a sweep down all rows never closed it, a row click glides to its section, and Tab, Esc and touch taps work. Below lg nothing changes. Why: the hover gave no sign of what was clickable, and names spaced by section length were hard to scan.
 

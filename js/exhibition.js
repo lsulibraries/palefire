@@ -178,7 +178,29 @@
       sizeHero(page);
       foldIntro(page);
     });
+    sizeReveal();
     queueZoom();
+  }
+
+  // The title page's reveal (_exhibition.scss) pins its text at the
+  // screen's foot: text too tall for the room under the bar can't pin,
+  // and comes in on load instead (.is-tall).
+  function sizeReveal() {
+    const text = state.head.querySelector('.pf-exhibit-cover__text');
+    const bar = state.head.querySelector('.pf-landing__bar');
+    if (!text) {
+      return;
+    }
+    const css = getComputedStyle(text);
+    const height = text.offsetHeight - parseFloat(css.paddingTop);
+    const room = window.innerHeight - headerOffset() - (bar ? bar.offsetHeight : 0) - parseFloat(getComputedStyle(state.head).paddingBottom);
+    state.head.classList.toggle('is-tall', height > room);
+  }
+
+  // Pinned while the reveal runs: the text is sticky only then.
+  function revealing() {
+    const text = state.head.querySelector('.pf-exhibit-cover__text');
+    return !!text && getComputedStyle(text).position === 'sticky';
   }
 
   function headerOffset() {
@@ -187,7 +209,12 @@
   }
 
   function glideTo(el, done) {
-    const at = () => Math.max(0, window.scrollY + el.getBoundingClientRect().top - headerOffset());
+    // The title page with its reveal: to the reveal's end, where all of
+    // the text is in (the head's foot at the screen's).
+    const reveal = el === state.head && revealing();
+    const at = () => Math.max(0, reveal
+      ? window.scrollY + el.getBoundingClientRect().bottom - window.innerHeight
+      : window.scrollY + el.getBoundingClientRect().top - headerOffset());
     if (reduceMotion() || !Drupal.palefireGlide) {
       window.scrollTo({ top: at(), behavior: 'instant' });
       done();
@@ -390,6 +417,10 @@
     initCovers();
     initEntryLinks();
     state.pages.forEach(prepareGallery);
+    sizeReveal();
+    if (document.fonts) {
+      document.fonts.ready.then(sizeReveal);
+    }
     queueZoom();
     // The title page's cover waited for this (exhibit-cover.html.twig):
     // with an address for a gallery it is above, and loads lazily.
