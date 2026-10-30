@@ -2319,8 +2319,14 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
  *
  * readings: TRUE when the group holds readings (exhibit_reading): it then
  * runs the gallery's full width and gets a Grid / List switch.
+ * in_guide: TRUE when the group is a guide section's block, outside any
+ * exhibition: it then brings its own lightbox (js/guide-gallery.js) and
+ * the exhibition's colours, which exhibition.js and html[data-pf-mode]
+ * give it on an exhibition.
  */
 function palefire_preprocess_paragraph__exhibit_gallery(array &$variables): void {
+  $parent = $variables['paragraph']->getParentEntity();
+  $variables['in_guide'] = $parent instanceof ParagraphInterface && $parent->bundle() === 'guide_section';
   $variables['readings'] = FALSE;
   foreach ($variables['paragraph']->get('field_gallery_items')->referencedEntities() as $item) {
     if ($item->bundle() === 'exhibit_reading') {

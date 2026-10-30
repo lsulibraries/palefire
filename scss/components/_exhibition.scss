@@ -1707,6 +1707,15 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   margin: 0;
 }
 
+// In a guide (example items): the exhibition's tokens, which only
+// html[data-pf-mode="exhibition"] sets.
+.pf-exhibit-group--guide {
+  --pf-exhibit-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  --pf-exhibit-muted: var(--pf-g-muted, var(--bs-secondary-color));
+  --pf-exhibit-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
+  --pf-exhibit-prose: 42rem;
+}
+
 .pf-exhibit-group__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));

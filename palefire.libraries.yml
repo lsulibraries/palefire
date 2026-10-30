@@ -325,15 +325,29 @@ family-tree-viewer:
     - core/once
     - palefire/viewer
 
-# The full-screen viewer (stage, toolbar, text panel) that exhibitions and
-# the newspaper family trees show things in. A dependency of those two
-# libraries only, so other pages never load it. Styles: _viewer.scss.
+# The full-screen viewer (stage, toolbar, text panel) that exhibitions, the
+# newspaper family trees and image groups in guides show things in. A
+# dependency of those libraries only, so other pages never load it.
+# Styles: _viewer.scss.
 viewer:
   version: 1.0.0
   js:
     js/viewer.js: { weight: -2 }
   dependencies:
     - core/drupal
+
+# An image group in a guide (e.g. a donation guide's example items): its
+# pictures in the full-screen viewer, stepping through the group. Attached
+# by paragraph--exhibit-gallery.html.twig only when the group is in a
+# guide section; exhibitions use exhibition.js.
+guide-gallery:
+  version: 1.0.0
+  js:
+    js/guide-gallery.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/viewer
 
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has

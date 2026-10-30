@@ -12,13 +12,19 @@
  *   (js/tile-views.js: data-pf-view on the group, the visitor's pick kept
  *   in this browser and shared by every reading list). The switch stays
  *   hidden without the script: the grid is the page as written.
+ * - in_guide: TRUE in a guide section (e.g. a guide's example items).
+ *   js/guide-gallery.js opens its pictures in the full-screen viewer;
+ *   without it, each still opens its largest version.
  *
  * A <figure> of figures, so the group caption describes them all.
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set caption = content.field_figure_caption|render|trim %}
-<figure{{ attributes.addClass('pf-exhibit-group', readings ? 'pf-exhibit-group--readings', not paragraph.isPublished() ? 'paragraph--unpublished') }}{% if readings %} data-pf-views="pf-reading-view" data-pf-view="grid"{% endif %}>
+<figure{{ attributes.addClass('pf-exhibit-group', readings ? 'pf-exhibit-group--readings', in_guide ? 'pf-exhibit-group--guide', not paragraph.isPublished() ? 'paragraph--unpublished') }}{% if readings %} data-pf-views="pf-reading-view" data-pf-view="grid"{% endif %}>
+  {% if in_guide %}
+    {{ attach_library('palefire/guide-gallery') }}
+  {% endif %}
   {% if title %}
     <h3 class="pf-guide-block__title">{{ title }}</h3>
   {% endif %}
