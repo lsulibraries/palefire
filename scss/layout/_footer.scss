@@ -303,12 +303,32 @@ html#{$pf-themed} .pf-footer {
   // The Today row is narrow: today's hours go on their own line, under the
   // status, so a wrap never starts a line with the dot.
   .pf-footer__fact & {
-    flex-basis: 100%;
-    padding-inline-start: 1rem;
+    grid-column: 2;
+    margin-top: .125rem;
+    font-size: $font-size-sm;
 
     &::before {
       content: none;
     }
+  }
+}
+
+// Today: the diamond in its own column, so the status and today's hours
+// under it start on one line. The status is the row's value, in the same
+// color as Where, Call and Ask; the hours a quieter second line. The
+// diamond hangs in the gap before the column (its .6875rem box and the
+// .5rem gap), so the words start on the same line as the other rows'.
+.pf-footer__fact .pf-footer__hours {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: .5rem;
+  margin-inline-start: -1.1875rem;
+  align-items: baseline;
+  color: var(--bs-emphasis-color);
+
+  .pf-footer__dot {
+    align-self: center;
+    grid-row: 1;
   }
 }
 
