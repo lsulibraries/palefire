@@ -66,7 +66,12 @@
   }
 }
 
+// An open answer: a little air under its question, and twice the
+// question's own padding before the next rule, so the next question reads
+// as a new start, not the answer's last line.
 .pf-inquiry__accordion .pf-accordion__panel {
+  gap: 1.25rem;
+  padding: .25rem .25rem clamp(2rem, 1.5rem + 1.5vw, 2.75rem);
   color: var(--pf-inquiry-fg);
 }
 
@@ -87,9 +92,20 @@
   }
 }
 
-// "Answered by": the headings' quiet mono voice, under the answer.
+// Under the answer: "Answered by" at the start, "Full answer on AskUs" (a
+// .pf-inquiry__button, as below) at the end; stacked when they don't fit.
+.pf-inquiry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+  max-width: 38rem;
+}
+
+// "Answered by": the headings' quiet mono voice.
 .pf-inquiry__byline {
-  margin: -.25rem 0 0;
+  margin: 0;
   color: var(--pf-inquiry-muted);
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   font-size: var(--pf-mono-label);
@@ -97,8 +113,8 @@
   text-transform: uppercase;
 }
 
-// "Full answer on AskUs": a small link with the ledger's arrow, which
-// slides on hover.
+// "Ask Special Collections on AskUs" (the panel without the libanswers
+// module): a small link with the ledger's arrow, which slides on hover.
 .pf-inquiry__link {
   display: inline-flex;
   align-items: center;
@@ -171,9 +187,10 @@
 
 // Arrival from the footer's Ask link (#ask-question): a gold hairline and
 // a faint gold wash around the panel, outside its box (outline and
-// box-shadow), so nothing moves. :target on a load or an in-page jump;
-// :focus after a Swup visit, which focuses the #anchor without updating
-// :target (palefire-swup.js). It fades in and out once; kept while the
+// box-shadow), so nothing moves. :target on a load; :focus after a Swup
+// visit, which focuses the #anchor without updating :target
+// (palefire-swup.js), and after the link on this page (js/footer.js, which
+// also replays it on each click). It fades in and out once; kept while the
 // panel has keyboard focus, and held without the fade on reduced motion.
 .pf-inquiry__panel:is(:target, :focus) {
   --pf-inquiry-wash: color-mix(in srgb, var(--pf-inquiry-accent) 6%, transparent);
@@ -192,12 +209,21 @@
   }
 }
 
+// Reduced motion (the OS's, or Settings', which cuts the animation short).
+@mixin pf-inquiry-arrived {
+  outline-color: var(--pf-inquiry-accent);
+  background-color: var(--pf-inquiry-wash);
+  box-shadow: 0 0 0 var(--pf-inquiry-frame) var(--pf-inquiry-wash);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pf-inquiry__panel:is(:target, :focus) {
-    outline-color: var(--pf-inquiry-accent);
-    background-color: var(--pf-inquiry-wash);
-    box-shadow: 0 0 0 var(--pf-inquiry-frame) var(--pf-inquiry-wash);
+    @include pf-inquiry-arrived;
   }
+}
+
+html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
+  @include pf-inquiry-arrived;
 }
 
 @keyframes pf-inquiry-arrive {
@@ -591,5 +617,34 @@ html.pf-a11y-motion {
   .pf-inquiry__status[data-kind] {
     transition: none;
     animation: none;
+  }
+}
+
+// Reveal on scroll (js/ask-reveal.js), as the Collections rows rise
+// (_tile-showcase.scss). The hidden state needs .pf-inquiry--reveal, which
+// the script adds only when motion is allowed, so without it every part is
+// simply there. `translate`, so no part's own transform is touched.
+.pf-inquiry--reveal .pf-inquiry__part {
+  opacity: 0;
+  translate: 0 1rem;
+  transition: opacity .6s ease-out, translate .7s cubic-bezier(.2, .7, .2, 1);
+
+  &.is-revealed {
+    opacity: 1;
+    translate: none;
+    transition-delay: var(--pf-reveal-delay, 0ms);
+  }
+}
+
+// Reduce motion turned on mid-visit (Settings, or the OS): all shown.
+html.pf-a11y-motion .pf-inquiry--reveal .pf-inquiry__part {
+  opacity: 1;
+  translate: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-inquiry--reveal .pf-inquiry__part {
+    opacity: 1;
+    translate: none;
   }
 }
