@@ -1240,8 +1240,12 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * - masonry: tall cards in the hero banners' voice, with a Grid / List
  *   switch for the visitor (js/tile-views.js); named for its old Masonry
  *   view. Added by palefire_tile_showcase_gallery_setup.php.
+ * - ledger: the index's rows unnumbered, grouped under their Category
+ *   labels, beside the section's heading when wide (Partnerships on the
+ *   Special Collections homepage). Added to the allowed values by hand, as
+ *   index is.
  *
- * layout: 'stagger', 'grid', 'index' or 'masonry'.
+ * layout: 'stagger', 'grid', 'index', 'ledger' or 'masonry'.
  * tiles: one entry per item the visitor can see, in field order:
  * - title: the node's title.
  * - url: the node's own URL.
@@ -1258,18 +1262,23 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * - outline: a card with no image (not on the index): the page's sections
  *   (_palefire_page_outline()), which the card draws as a blurred picture
  *   of the page in the reading swatch's colours. Guides rarely have covers.
+ * groups (ledger only): the tiles by label, in the order each label first
+ *   appears: label, tiles. Tiles with no label come last, under "More", or
+ *   as one group with no label when none has one.
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
   $variables['tiles'] = [];
+  $variables['groups'] = [];
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
     return;
   }
   $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
-  if (in_array($layout, ['grid', 'index', 'masonry'], TRUE)) {
+  if (in_array($layout, ['grid', 'index', 'ledger', 'masonry'], TRUE)) {
     $variables['layout'] = $layout;
   }
+  $rows = in_array($variables['layout'], ['index', 'ledger'], TRUE);
   if (!$paragraph->hasField('field_tiles')) {
     return;
   }
@@ -1284,7 +1293,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     if (!$card) {
       continue;
     }
-    $show_image = $variables['layout'] !== 'index' && $card['image_item'];
+    $show_image = !$rows && $card['image_item'];
     $image = $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL;
     $variables['tiles'][] = [
       'title' => $card['title'],
@@ -1293,9 +1302,25 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'labels' => $card['labels'],
       'note' => $card['note'],
       'image' => $image,
-      'outline' => $variables['layout'] !== 'index' && !$image ? _palefire_page_outline($node, $cache) : [],
+      'outline' => !$rows && !$image ? _palefire_page_outline($node, $cache) : [],
     ];
     $covers[] = $show_image ? $card['image_item'] : NULL;
+  }
+
+  if ($variables['layout'] === 'ledger') {
+    $groups = [];
+    foreach ($variables['tiles'] as $tile) {
+      $groups[$tile['label']][] = $tile;
+    }
+    $loose = $groups[''] ?? [];
+    unset($groups['']);
+    if ($loose) {
+      $more = $groups ? (string) t('More') : '';
+      $groups[$more] = array_merge($groups[$more] ?? [], $loose);
+    }
+    foreach ($groups as $label => $tiles) {
+      $variables['groups'][] = ['label' => (string) $label, 'tiles' => $tiles];
+    }
   }
 
   // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)

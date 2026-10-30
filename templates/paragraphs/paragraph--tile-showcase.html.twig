@@ -6,12 +6,14 @@
  *
  * Variables from palefire_preprocess_paragraph__tile_showcase():
  * - layout: 'stagger' (tall cards, offset rhythm), 'grid' (3 / 2 / 1
- *   columns), 'index' (numbered rows, no pictures) or 'masonry' (tall
+ *   columns), 'index' (numbered rows, no pictures), 'ledger' (grouped
+ *   rows, no pictures) or 'masonry' (tall
  *   cards, with a Grid / List switch; the name is kept from its old
  *   Masonry view, removed 2026-10-30).
  * - tiles: title, url, label (Category terms, "Dept + Medium"; the index's
  *   rows), labels (the same terms, a label apiece on the cards), note (the
- *   intro as plain text; index only), image.
+ *   intro as plain text; index and ledger only), image.
+ * - groups: the ledger's tiles by Category: label, tiles.
  *
  * The section <h2> comes from the scroll-section field template, so each
  * card is an <h3>. The title comes first in the source so the link's name
@@ -30,6 +32,11 @@
  * Index: the same list, each row a link with its number (decorative: the
  * list is ordered, which screen readers already announce), title, note and
  * label, and an arrow that slides on hover. An <ol>, as the numbers say.
+ *
+ * Ledger: the index's rows without numbers, under their Category labels
+ * (groups), each row the title, note and an arrow. Wide, the section's
+ * heading and lede sit in a column to its left (_tile-showcase.scss).
+ * Partnerships on the Special Collections homepage.
  *
  * Outline: a card with no image draws the page it links to instead, as a
  * desktop shows it, photographed on a desk at an angle and blurred: the
@@ -104,6 +111,32 @@
           </li>
         {% endfor %}
       </ol>
+    {% elseif layout == 'ledger' %}
+      {# A group with a label is an <h3>, so its rows step down to <h4>;
+         a ledger with no Categories is one group with none. #}
+      {% set row_heading = groups|first.label ? 'h4' : 'h3' %}
+      <div class="pf-tiles__groups">
+        {% for group in groups %}
+          <div class="pf-tiles__group">
+            {% if group.label %}
+              <h3 class="pf-tiles__group-label">{{ group.label }}</h3>
+            {% endif %}
+            <ul class="pf-tiles__list" role="list">
+              {% for tile in group.tiles %}
+                <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+                  <a class="pf-tile-line" href="{{ tile.url }}">
+                    <{{ row_heading }} class="pf-tile-line__title">{{ tile.title }}</{{ row_heading }}>
+                    {% if tile.note %}
+                      <span class="pf-tile-line__note"><span class="visually-hidden">, </span>{{ tile.note }}</span>
+                    {% endif %}
+                    <svg class="pf-tile-line__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
     {% elseif layout == 'masonry' %}
       {{ attach_library('palefire/tile-views') }}
       {% set views = {

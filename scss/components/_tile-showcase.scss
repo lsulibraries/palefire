@@ -15,6 +15,7 @@
 // - grid (Collections): landscape cards, edge to edge.
 //   1 column, then 2 from 32rem, then 3 from 60rem.
 // - index (Collections & services): numbered rows, no pictures (below).
+// - ledger (Partnerships): grouped rows, no pictures, beside the heading.
 //
 // Contrast: the title and label sit on a scrim that reaches 85% black under
 // the text, so white text passes 4.5:1 (WCAG 1.4.3) on any image, even a
@@ -571,6 +572,175 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   transform: none;
 }
 
+// Ledger -------------------------------------------------------------------
+// The index's rows without numbers, grouped under their Category labels
+// (Partnerships). Each row: the title, its note, an arrow, between soft
+// hairlines; from 40rem the note moves beside the title on a shared
+// baseline. The index's colours, so it reads on light and dark sections.
+//
+// From lg the section becomes two columns: the index rule across the top,
+// the heading and lede on the left (5 parts), the ledger on the right (7).
+// The ledger spans every row on its side, so a long lede never pushes it
+// down and a long ledger never stretches the heading's rows.
+$pf-ledger-break: 40rem;
+
+.pf-tiles--ledger {
+  --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
+  --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
+}
+
+.pf-tiles__groups {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+// The section eyebrows' voice: mono small capitals in the index's accent,
+// as the rule's number above (the swatch's gold on dark swatches, muted on
+// light). Four classes to outrank the swatch's heading colour.
+.pf-tiles.pf-tiles--ledger .pf-tiles__group .pf-tiles__group-label {
+  margin: 0 0 .5rem;
+  color: var(--pf-index-accent);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  font-weight: 400;
+  letter-spacing: .14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-tiles--ledger .pf-tiles__list {
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-tiles--ledger .pf-tiles__item {
+  border-bottom: 1px solid $pf-hairline;
+}
+
+.pf-tile-line {
+  display: grid;
+  grid-template-areas:
+    "title arrow"
+    "note  arrow";
+  grid-template-columns: minmax(0, 1fr) 1.25rem;
+  gap: .375rem 1rem;
+  align-items: center;
+  padding: 1.125rem 0;
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: var(--pf-section-fg, var(--bs-body-color));
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-index-accent);
+    outline-offset: 2px;
+  }
+}
+
+// The heading colour, as the section's h2 (near-white on Twilight, where
+// the notes are the soft grey), not the swatch's heading gold; four classes
+// to outrank it, as the index's titles (h3 or h4 here).
+.pf-tiles.pf-tiles--ledger .pf-tile-line .pf-tile-line__title {
+  grid-area: title;
+  margin: 0;
+  color: var(--bs-heading-color, var(--pf-section-fg, var(--bs-body-color)));
+  font-size: clamp(1.25rem, 1.05rem + .75vw, 1.625rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.pf-tile-line__note {
+  grid-area: note;
+  max-width: 34rem;
+  color: var(--pf-index-muted);
+  font-size: .9375rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.pf-tile-line__arrow {
+  grid-area: arrow;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--pf-index-muted);
+}
+
+.pf-tiles.pf-tiles--ledger .pf-tile-line:is(:hover, :focus-visible) :is(.pf-tile-line__arrow, .pf-tile-line__title) {
+  color: var(--pf-index-accent);
+}
+
+@container pf-tiles (min-width: #{$pf-ledger-break}) {
+  .pf-tile-line {
+    grid-template-areas: "title note arrow";
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 1.25rem;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1.375rem 0;
+  }
+
+  .pf-tile-line__arrow {
+    align-self: center;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-section__inner:has(> .pf-tiles--ledger) {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: repeat(3, auto) 1fr;
+    column-gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: start;
+
+    > .pf-index-rule {
+      grid-column: 1 / -1;
+    }
+
+    > :is(.pf-section__title, .pf-section__lede) {
+      grid-column: 1;
+    }
+
+    > .pf-tiles--ledger {
+      grid-column: 2;
+      grid-row: 1 / -1;
+    }
+  }
+
+  .pf-section__inner:has(> .pf-index-rule):has(> .pf-tiles--ledger) > .pf-tiles--ledger {
+    grid-row: 2 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  // Once tile-reveal.js has run, as the index (see there).
+  .pf-tiles--reveal .pf-tile-line__arrow {
+    transition: transform .3s ease-out, color .3s ease-out;
+  }
+
+  .pf-tiles--reveal.pf-tiles--ledger .pf-tile-line .pf-tile-line__title {
+    transition: color .3s ease-out;
+  }
+
+  .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arrow {
+    transform: translateX(.25rem);
+  }
+}
+
+html.pf-a11y-motion .pf-tile-line .pf-tile-line__arrow,
+html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arrow {
+  transition: none;
+  transform: none;
+}
+
 // Masonry layout --------------------------------------------------------------
 // Tall cards in the hero banners' voice (the same scrim, mixed-case title,
 // pill above), with a Grid / List switch (js/tile-views.js sets
@@ -976,13 +1146,13 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 .pf-tiles--reveal .pf-tiles__item {
   --pf-reveal-from: 30px; // grid: rise from below
 
-  > :is(.pf-tile, .pf-tile-row) {
+  > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
     opacity: 0;
     transform: translateY(var(--pf-reveal-from));
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
 
-  &.is-revealed > :is(.pf-tile, .pf-tile-row) {
+  &.is-revealed > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
     opacity: 1;
     transform: none;
     transition-delay: var(--pf-reveal-delay, 0ms);
@@ -998,20 +1168,20 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 }
 
-// Index: rows rise a little, 12px.
-.pf-tiles--reveal.pf-tiles--index .pf-tiles__item {
+// Index and ledger: rows rise a little, 12px.
+.pf-tiles--reveal:is(.pf-tiles--index, .pf-tiles--ledger) .pf-tiles__item {
   --pf-reveal-from: 12px;
 }
 
 // Turned on mid-visit (Settings > Reduce motion), or the OS setting: show
 // everything at once, whatever the script already hid.
-html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row) {
+html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row) {
+  .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
     opacity: 1;
     transform: none;
   }
