@@ -20,6 +20,9 @@
  * clicking or tapping the label, Enter or Space opens it; Esc, the close
  * button or a click outside closes it. Screenshots load only when opened.
  *
+ * A panel with `cta` ("Find Item") ends its text with a full-width link
+ * there (the catalog), in a new tab so the guide stays open behind it.
+ *
  * A stop with `href` (C's "Reach out") is a link instead, styled as the
  * panel buttons are.
  *
@@ -38,6 +41,7 @@
   shots: [
     { file: 'catalog-record.webp', width: 1250, height: 723, alt: 'A catalog record for the William Y. Dixon papers, with Holdings and Available tabs below it.'|t },
   ],
+  cta: { href: 'https://catalog.lib.lsu.edu', label: 'Search the library catalog'|t },
 } %}
 {% set request = {
   icon: 'file-signature', label: 'Click Request Item'|t, note: 'Bottom right area'|t,
@@ -93,7 +97,7 @@
     stops: [
       { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email form'|t, href: ask_href|default('https://askus.lib.lsu.edu/special') },
       { icon: 'lightbulb-on', label: 'Receive guidance'|t, note: 'Chef’s choice'|t },
-      { icon: 'search', label: 'Find Item'|t, note: 'In the catalog'|t },
+      find,
       { icon: 'repeat', label: 'Start options A or B'|t, note: 'Thank your librarian'|t },
     ],
   },
@@ -141,6 +145,13 @@
                   </button>
                 </div>
                 <p class="pf-paths__pop-text">{{ stop.detail }}</p>
+                {% if stop.cta is defined %}
+                  <a class="pf-paths__cta" href="{{ stop.cta.href }}" target="_blank" rel="noopener">
+                    {{- stop.cta.label -}}
+                    <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                  </a>
+                {% endif %}
                 {% if has_shots %}
                   {% for shot in stop.shots %}
                     <img class="pf-paths__shot" src="{{ img_base ~ shot.file }}" width="{{ shot.width }}" height="{{ shot.height }}" alt="{{ shot.alt }}" loading="lazy" decoding="async">

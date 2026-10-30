@@ -842,6 +842,60 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   }
 }
 
+// The panel's call to action (Find Item: the catalog): the Quick Start
+// Guide's buttons (.pf-quick-guide__link) across the panel's width, mono
+// capitals in a hairline frame, the arrow at the end nudging up-right and
+// the frame turning gold on hover.
+.pf-paths__cta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 3rem;
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1.25rem; // the label wraps on a phone
+  font: 700 var(--pf-mono-ui) / 1.5 var(--pf-guide-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-emphasis-color);
+  text-decoration: none;
+  border: 1px solid #{$pf-hairline};
+  transition: border-color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-inline-start: auto;
+    transition: transform $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bs-emphasis-color);
+    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    transition-duration: $pf-hover-in;
+
+    svg {
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-paths__cta:is(:hover, :focus-visible) svg {
+    transform: translate(2px, -2px);
+  }
+}
+
 // Screenshots: full panel width, a hairline frame so white pages don't
 // melt into a light panel.
 .pf-paths__shot {
