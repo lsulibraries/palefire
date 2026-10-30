@@ -10,9 +10,11 @@
  *   drush cr
  *
  * Without apply=1 it lists what it would change and every section field's
- * current label and help text, and saves nothing. With apply=1:
- * - Every Paragraphs field (Sections, Tiles, ...) on every content type and
- *   paragraph type opens collapsed: one summary row per item, with Edit,
+ * current label and help text, and saves nothing. Only the Modular page
+ * and the paragraph types it can hold (at any depth) are touched; the old
+ * theme's content types are left as they are. With apply=1:
+ * - Every Paragraphs field (Sections, Tiles, ...) opens collapsed: one
+ *   summary row per item, with Edit,
  *   Duplicate and "Add above", and dragging rows reorders them. Opening one
  *   item closes the others; "Edit all" / "Collapse all" sit above the list.
  * - Field groups shown as details (field_group) start closed.
@@ -23,9 +25,10 @@
  * - Layout (field_tile_layout): "masonry" reads "Default (Grid / List
  *   switch)" and comes first; the other options get plain labels, and the
  *   help text describes only the options the field has.
- * - Clearer labels and help text for the section fields this repo knows
- *   ($fields below). Fields from palefire_modular this repo doesn't know
- *   are left alone and listed.
+ * - Clearer labels and help text for the Modular page and its landing
+ *   sections ($fields below). Guide and exhibition fields already have
+ *   their own wording and are left alone, as are fields not in $fields
+ *   (listed by the dry run).
  *
  * Idempotent: a second run changes nothing. Undo: edit the fields and Manage
  * form display by hand (no other config is touched).
@@ -57,8 +60,23 @@ $note = function (string $line) use (&$changes, $apply): void {
 /** @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface $repo */
 $repo = \Drupal::service('entity_display.repository');
 
-// Labels and help text, by field name. Applied on paragraph types (and the
-// Modular page) that have the field; NULL keeps what is there.
+// The bundles whose labels are rewritten: the Modular page and its landing
+// sections. Guide and exhibition paragraphs keep their own wording.
+$label_bundles = [
+  'node.modular_page',
+  'paragraph.bento_search',
+  'paragraph.events_carousel',
+  'paragraph.hero_tile',
+  'paragraph.landing_department',
+  'paragraph.landing_hero',
+  'paragraph.landing_stacks',
+  'paragraph.map',
+  'paragraph.tile_showcase',
+];
+
+// Labels and help text, by field name, on the bundles above that have the
+// field; NULL keeps what is there. A third value limits a field to those
+// bundles (field_tiles is "Featured item" on From the stacks).
 $fields = [
   'field_section_title' => [
     'Heading',
@@ -72,9 +90,47 @@ $fields = [
     'Leave out of "On this page"',
     'Tick to keep this section out of the page\'s list of sections.',
   ],
+  'field_section_height' => [
+    'Height',
+    'How much of the screen the section fills.',
+  ],
+  'field_section_snap' => [
+    'Snap into place when scrolling',
+    'The page settles on this section as visitors scroll to it. Best on sections that fill the screen.',
+  ],
+  'field_section_bg' => [
+    'Background image (optional)',
+    NULL,
+  ],
+  'field_bg_videos' => [
+    'Background video',
+    'Plays silently behind the section.',
+  ],
+  'field_bg_poster' => [
+    'Background still image',
+    'Shown while the video loads, and in its place when it can\'t play.',
+  ],
+  'field_bento_hide_lead' => [
+    'Hide lead panel',
+    'Leave out the title and intro panel so the building map opens the section. Only used when a building map is added; the page title stays for screen readers.',
+  ],
+  'field_quick_guide_title' => ['Quick guide heading', NULL],
+  'field_quick_guide_intro' => ['Quick guide text', NULL],
+  'field_quick_guide_link' => ['Quick guide link', NULL],
+  'field_hero_banners' => ['Banners', NULL],
   'field_tiles' => [
     'Cards',
     'Tiles or Modular pages, in the order shown; drag to reorder. Each card uses the item\'s title, cover image and Category terms, and links to it. Unpublished items are left out.',
+    ['paragraph.tile_showcase'],
+  ],
+  'field_scroll_section' => [
+    'Sections',
+    'The page\'s sections, top to bottom. Drag a row to move it; Edit opens it. Add new ones with the button under the list.',
+  ],
+  'field_image_cover' => ['Cover image', NULL],
+  'field_authorized_editors' => [
+    'Authorized editors',
+    'Staff who can edit this page.',
   ],
   'field_tile_eyebrow' => [
     'Kicker',
@@ -144,12 +200,31 @@ $is_theme_field = function (string $entity_type, string $name): bool {
 };
 
 // 1. Form displays. ------------------------------------------------------------
-$targets = [];
-foreach (array_keys(NodeType::loadMultiple()) as $bundle) {
-  $targets[] = ['node', $bundle];
+// The Modular page, then every paragraph type it can hold, at any depth.
+if (!NodeType::load('modular_page')) {
+  echo 'Content type modular_page not found: nothing to do.' . PHP_EOL;
+  return;
 }
-foreach (array_keys(ParagraphsType::loadMultiple()) as $bundle) {
-  $targets[] = ['paragraph', $bundle];
+$field_manager = \Drupal::service('entity_field.manager');
+$all_paragraphs = array_keys(ParagraphsType::loadMultiple());
+$targets = [['node', 'modular_page']];
+for ($i = 0; $i < count($targets); $i++) {
+  [$entity_type, $bundle] = $targets[$i];
+  foreach ($field_manager->getFieldDefinitions($entity_type, $bundle) as $definition) {
+    if ($definition->getType() !== 'entity_reference_revisions' || $definition->getSetting('target_type') !== 'paragraph') {
+      continue;
+    }
+    $handler = $definition->getSetting('handler_settings') ?: [];
+    $listed = array_keys(array_filter($handler['target_bundles'] ?? []));
+    // No list allows every type; "negate" allows every type but the list.
+    $allowed_types = !$listed ? $all_paragraphs
+      : (!empty($handler['negate']) ? array_diff($all_paragraphs, $listed) : $listed);
+    foreach ($allowed_types as $type) {
+      if (!in_array(['paragraph', $type], $targets, TRUE)) {
+        $targets[] = ['paragraph', $type];
+      }
+    }
+  }
 }
 
 $hidden_theme = [];
@@ -247,19 +322,22 @@ else {
 }
 
 // 3. Labels and help text. -----------------------------------------------------
-$bundles = array_map(fn ($b) => ['paragraph', $b], array_keys(ParagraphsType::loadMultiple()));
-if (NodeType::load('modular_page')) {
-  $bundles[] = ['node', 'modular_page'];
-}
+$bundles = array_map(fn ($id) => explode('.', $id, 2), $label_bundles);
 foreach ($bundles as [$entity_type, $bundle]) {
-  foreach ($fields as $name => [$label, $description]) {
+  foreach ($fields as $name => $info) {
+    [$label, $description] = $info;
+    if (isset($info[2]) && !in_array("$entity_type.$bundle", $info[2], TRUE)) {
+      continue;
+    }
     if (!$field = FieldConfig::loadByName($entity_type, $bundle, $name)) {
       continue;
     }
     $new_label = $label ?? $field->getLabel();
     $new_description = $description ?? $field->getDescription();
     if ($field->getLabel() !== $new_label || $field->getDescription() !== $new_description) {
-      $note("$entity_type.$bundle.$name: \"{$field->getLabel()}\" -> \"$new_label\"");
+      $note("$entity_type.$bundle.$name: " . ($field->getLabel() === $new_label
+        ? "\"$new_label\" help text"
+        : "\"{$field->getLabel()}\" -> \"$new_label\""));
       if ($apply) {
         $field->setLabel($new_label)->setDescription($new_description)->save();
       }
