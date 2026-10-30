@@ -163,24 +163,26 @@
   border-bottom: 1px solid var(--pf-inquiry-muted);
   border-radius: 0;
   color: var(--pf-inquiry-fg);
-  background: transparent;
+  background-color: transparent;
   font: inherit;
   font-size: 1rem; // 16px: no zoom on focus in iOS Safari
   line-height: 1.5;
-  transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+  transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease, background-color $pf-hover-out ease;
 
   &:hover {
     border-bottom-color: var(--pf-inquiry-fg);
     transition-duration: $pf-hover-in;
   }
 
-  // The rule thickens in the accent, and the outline keeps it visible
-  // where the accent is close to the background.
+  // Focus: no box. The rule turns the accent and thickens to 3px, and the
+  // field takes a faint wash of the text colour. The accent keeps 3:1 on
+  // every swatch.
   &:focus {
-    outline: 2px solid var(--pf-inquiry-accent);
-    outline-offset: 2px;
-    border-bottom-color: var(--pf-inquiry-fg);
-    box-shadow: 0 1px 0 var(--pf-inquiry-fg);
+    outline: none;
+    border-bottom-color: var(--pf-inquiry-accent);
+    background-color: color-mix(in srgb, var(--pf-inquiry-fg) 5%, transparent);
+    box-shadow: 0 2px 0 var(--pf-inquiry-accent);
+    transition-duration: $pf-hover-in;
   }
 
   &[aria-invalid="true"] {
@@ -190,23 +192,27 @@
 }
 
 select.pf-inquiry__control {
-  padding-right: 1.75rem;
-  // A thin chevron in the text colour (currentColor isn't read inside a
-  // data URI, so it's drawn by two gradients instead).
+  padding-right: 2rem;
+  // A thin chevron in the text colour: two 1.5px strokes ("\" and "/"),
+  // each a gradient on its own square (currentColor isn't read inside a
+  // data URI).
   background-image:
-    linear-gradient(45deg, transparent 50%, currentColor 50%),
-    linear-gradient(135deg, currentColor 50%, transparent 50%);
+    linear-gradient(45deg, transparent calc(50% - .75px), currentColor calc(50% - .75px), currentColor calc(50% + .75px), transparent calc(50% + .75px)),
+    linear-gradient(-45deg, transparent calc(50% - .75px), currentColor calc(50% - .75px), currentColor calc(50% + .75px), transparent calc(50% + .75px));
   background-position:
-    calc(100% - .75rem) 55%,
-    calc(100% - .4375rem) 55%;
-  background-size: .3125rem .3125rem;
+    calc(100% - .875rem) 50%,
+    calc(100% - .5rem) 50%;
+  background-size: .375rem .375rem;
   background-repeat: no-repeat;
   appearance: none;
   cursor: pointer;
 
+  // The open list is drawn by the browser on the select's background,
+  // which is transparent here: give it the section's own solid colours,
+  // or a dark section's light text lands on a white list.
   option {
-    color: initial;
-    background: initial;
+    color: var(--pf-inquiry-fg);
+    background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
   }
 }
 
