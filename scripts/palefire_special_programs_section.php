@@ -27,8 +27,8 @@
  *   keeping every value already there, if it is missing.
  * - Adds one tile_showcase section after "Off the Walls, Online": Eyebrow
  *   "Teaching & Research" (the index rule; its number follows the page),
- *   Title "Time in the Archive", a Lede, Link "Ask about a program" (Ask
- *   Special Collections), Layout Ledger, and the four program pages in
+ *   Title "Time in the Archive", a Lede, Link "Ask about a program" (the
+ *   page's question form, #ask-question), Layout Ledger, and the four program pages in
  *   order: Teaching, Faculty Fellowship, Research Grants, Summer Project.
  *   A page that isn't found is left out and reported. Snap, height, theme
  *   and hide from TOC are copied from the section it follows, so the two
@@ -165,7 +165,7 @@ $values = [
   'field_section_title' => $title,
   'field_tile_eyebrow' => 'Teaching & Research',
   'field_tile_lede' => 'Class visits, fellowships and grants for instructors, scholars and students whose work starts in Hill’s collections.',
-  'field_tile_link' => ['uri' => 'https://askus.lib.lsu.edu#special', 'title' => 'Ask about a program'],
+  'field_tile_link' => ['uri' => 'internal:/v2/special#ask-question', 'title' => 'Ask about a program'],
   'field_tile_layout' => 'ledger',
   'field_tiles' => $tiles,
 ];
