@@ -6,9 +6,9 @@
  * (palefire_preprocess_paragraph__guide_text()).
  *
  * Variables:
- * - faqs: question, answer (render array or plain text), byline, url (the
- *   answer on AskUs), from _palefire_ask_faqs(): most asked first, as on the
- *   Special Collections homepage.
+ * - faqs: question, answer (render array or plain text), byline, from
+ *   _palefire_ask_faqs(): most asked first, as on the Special Collections
+ *   homepage.
  *
  * Questions are summaries, not headings, so they stay out of "On this
  * page"; the panels are data-toc-skip, as in paragraph--accordion-item.
@@ -32,9 +32,6 @@
           {% endif %}
           {% if faq.byline %}
             <p>{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
-          {% endif %}
-          {% if faq.url %}
-            <p><a href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}</a></p>
           {% endif %}
         </div>
       </div>

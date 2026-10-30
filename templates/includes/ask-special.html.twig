@@ -6,8 +6,7 @@
  *
  * Included by paragraph--tile-showcase.html.twig. Variables:
  * - faqs: question, answer (render array or plain text), byline (who
- *   answered, or ''), url (the answer on AskUs), from _palefire_ask_faqs()
- *   in palefire.theme.
+ *   answered, or ''), from _palefire_ask_faqs() in palefire.theme.
  * - ask_form: the libanswers module's question form, or NULL without the
  *   module (then the panel points to AskUs).
  *
@@ -44,15 +43,8 @@
               {% if faq.answer %}
                 <div class="pf-guide-prose pf-inquiry__answer">{{ faq.answer }}</div>
               {% endif %}
-              {% if faq.byline or faq.url %}
-                <div class="pf-inquiry__meta">
-                  {% if faq.byline %}
-                    <p class="pf-inquiry__byline">{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
-                  {% endif %}
-                  {% if faq.url %}
-                    <a class="pf-inquiry__button" href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}{{ arrow }}</a>
-                  {% endif %}
-                </div>
+              {% if faq.byline %}
+                <p class="pf-inquiry__byline">{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
               {% endif %}
             </div>
           </details>

@@ -92,18 +92,7 @@
   }
 }
 
-// Under the answer: "Answered by" at the start, "Full answer on AskUs" (a
-// .pf-inquiry__button, as below) at the end; stacked when they don't fit.
-.pf-inquiry__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: .75rem 1.5rem;
-  max-width: 38rem;
-}
-
-// "Answered by": the headings' quiet mono voice.
+// "Answered by": the headings' quiet mono voice, the answer's last line.
 .pf-inquiry__byline {
   margin: 0;
   color: var(--pf-inquiry-muted);

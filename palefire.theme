@@ -1389,7 +1389,9 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
  * - question: the tile's title.
  * - answer: its Formatted text or Linked text (filtered, as a render
  *   array), else its Long summary as plain text, else ''.
- * - url: its Link (the answer on AskUs), or ''.
+ * - byline: who answered ("Answered by" off the end of the text), or ''.
+ * The tile's Link (the same answer on AskUs) isn't offered: it only sent
+ * readers away to read the same words again.
  */
 function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?int $limit = 8): array {
   $cache = CacheableMetadata::createFromRenderArray($variables);
@@ -1448,12 +1450,10 @@ function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?
     if (!$answer && $node->hasField('field_tile_long_summary')) {
       $answer = trim((string) $node->get('field_tile_long_summary')->value);
     }
-    $link = $node->hasField('field_tile_link') ? $node->get('field_tile_link')->first() : NULL;
     $faqs[] = [
       'question' => $node->label(),
       'answer' => $answer,
       'byline' => $byline,
-      'url' => $link && !$link->isEmpty() ? $link->getUrl()->toString() : '',
     ];
   }
   $cache->applyTo($variables);
