@@ -69,6 +69,15 @@ class PalefireHooks {
   public const SPECIAL_EXTRA = ['/v2/exhibitions'];
 
   /**
+   * Routes that show a node as its page.
+   *
+   * The node's own page, its latest revision, and the edit form's Preview
+   * (/node/preview/{uuid}/{view_mode}), whose node is the "node_preview"
+   * parameter, not "node".
+   */
+  public const NODE_PAGE_ROUTES = ['entity.node.canonical', 'entity.node.latest_version', 'entity.node.preview'];
+
+  /**
    * Per-request cache of computed section data, keyed by host entity.
    *
    * @var array<string, array<string, array{anchor: string, label: string, toc: bool}>>
@@ -101,12 +110,8 @@ class PalefireHooks {
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
-    $route_match = \Drupal::routeMatch();
-    if (!in_array($route_match->getRouteName(), ['entity.node.canonical', 'entity.node.latest_version'], TRUE)) {
-      return;
-    }
-    $node = $route_match->getParameter('node');
-    if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
+    $node = self::pageNode();
+    if (!$node || $node->bundle() !== self::MODULAR_BUNDLE) {
       return;
     }
     $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
@@ -133,7 +138,7 @@ class PalefireHooks {
     // Footer: Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the
     // pages under them, the Main Library everywhere else
     // (includes/footer.html.twig).
-    $alias = \Drupal::service('path_alias.manager')->getAliasByPath(\Drupal::service('path.current')->getPath());
+    $alias = self::pageAlias();
     $variables['footer_special'] = FALSE;
     foreach ([self::SPECIAL_ROOT, ...self::SPECIAL_EXTRA] as $root) {
       if ($alias === $root || str_starts_with($alias, $root . '/')) {
@@ -145,10 +150,13 @@ class PalefireHooks {
     // Printed by the footer, so the cache varies by path.
     $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
 
-    $node = $variables['node'] ?? NULL;
+    // Core sets "node" from the route's "node" parameter only, so a Preview
+    // has none: take it from pageNode(), for page.html.twig too.
+    $node = $variables['node'] ?? self::pageNode();
     if (!$node instanceof NodeInterface || $node->bundle() !== self::MODULAR_BUNDLE) {
       return;
     }
+    $variables['node'] = $node;
     $variables['is_modular_page'] = TRUE;
 
     // The landing search prints the page <h1> above its intro when it is the
@@ -169,8 +177,7 @@ class PalefireHooks {
     }
 
     // Only build the TOC on routes that display the node itself.
-    $route = \Drupal::routeMatch()->getRouteName();
-    if (!in_array($route, ['entity.node.canonical', 'entity.node.latest_version'], TRUE)) {
+    if (!self::pageNode()) {
       return;
     }
 
@@ -563,8 +570,51 @@ class PalefireHooks {
    * The Modular page node shown on the current route, if any.
    */
   private function currentModularNode(): ?NodeInterface {
-    $node = \Drupal::routeMatch()->getParameter('node');
+    $node = \Drupal::routeMatch()->getParameter('node') ?? self::pageNode();
     return $node instanceof NodeInterface && $node->bundle() === self::MODULAR_BUNDLE ? $node : NULL;
+  }
+
+  /**
+   * The node the current route shows as its page (NODE_PAGE_ROUTES), or NULL.
+   *
+   * A Preview counts only in the Full view mode: in another (Teaser) the
+   * node is drawn as a teaser on an ordinary page.
+   */
+  public static function pageNode(): ?NodeInterface {
+    $route_match = \Drupal::routeMatch();
+    $route = $route_match->getRouteName();
+    if (!in_array($route, self::NODE_PAGE_ROUTES, TRUE)) {
+      return NULL;
+    }
+    if ($route === 'entity.node.preview') {
+      $node = $route_match->getRawParameter('view_mode_id') === 'full' ? $route_match->getParameter('node_preview') : NULL;
+    }
+    else {
+      $node = $route_match->getParameter('node');
+    }
+    return $node instanceof NodeInterface ? $node : NULL;
+  }
+
+  /**
+   * The current page's path alias.
+   *
+   * On a Preview, the alias in the edit form (else the node's saved one), so
+   * the page gets the same footer as when published. A new node with no
+   * alias yet (Pathauto makes it on save) gets its /node/preview path.
+   */
+  public static function pageAlias(): string {
+    $aliases = \Drupal::service('path_alias.manager');
+    $node = \Drupal::routeMatch()->getRouteName() === 'entity.node.preview' ? self::pageNode() : NULL;
+    if ($node) {
+      $alias = $node->hasField('path') ? (string) $node->get('path')->alias : '';
+      if ($alias === '' && !$node->isNew()) {
+        $alias = $aliases->getAliasByPath('/node/' . $node->id());
+      }
+      if ($alias !== '') {
+        return $alias;
+      }
+    }
+    return $aliases->getAliasByPath(\Drupal::service('path.current')->getPath());
   }
 
   /**
