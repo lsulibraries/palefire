@@ -70,8 +70,8 @@
   color: var(--pf-inquiry-fg);
 }
 
-// "Full answer on AskUs", "All Special Collections FAQs": small links with
-// the ledger's arrow, which slides on hover.
+// "Full answer on AskUs": a small link with the ledger's arrow, which
+// slides on hover.
 .pf-inquiry__link {
   display: inline-flex;
   align-items: center;
@@ -98,8 +98,27 @@
   }
 }
 
-.pf-inquiry__all {
-  margin-top: 1.25rem;
+// The guide and all the FAQs: two buttons (.pf-inquiry__button, as Send
+// question below) side by side, each at least as wide as Send question;
+// stacked when the column can't hold both.
+.pf-inquiry__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .625rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    flex: 1 1 17.5rem;
+    max-width: 22rem;
+  }
+
+  // Room above and below for a label that wraps on a phone.
+  .pf-inquiry__button {
+    width: 100%;
+    padding-block: .5rem;
+  }
 }
 
 .pf-inquiry__arrow {
@@ -395,7 +414,8 @@ textarea.pf-inquiry__control {
 // _landing-features.scss): mono capitals in a hairline frame, the words at
 // the start and the arrow at the end, the frame turning gold on hover. As
 // wide as one of those (half the notes' column), the whole form's on a
-// phone.
+// phone. The FAQs' links (.pf-inquiry__button) share the look.
+.pf-inquiry__button,
 .pf-inquiry__submit {
   @extend %pf-landing-label;
   display: inline-flex;
@@ -411,6 +431,7 @@ textarea.pf-inquiry__control {
   font-size: var(--pf-mono-ui);
   letter-spacing: .12em;
   text-align: start;
+  text-decoration: none;
   cursor: pointer;
   transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
 
@@ -471,7 +492,7 @@ textarea.pf-inquiry__control {
     transition: transform .3s ease-out;
   }
 
-  :is(.pf-inquiry__link, .pf-inquiry__submit):is(:hover, :focus-visible) .pf-inquiry__arrow {
+  :is(.pf-inquiry__link, .pf-inquiry__button, .pf-inquiry__submit):is(:hover, :focus-visible) .pf-inquiry__arrow {
     transform: translateX(.25rem);
   }
 

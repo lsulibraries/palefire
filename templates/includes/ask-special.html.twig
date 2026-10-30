@@ -49,7 +49,12 @@
         {% endfor %}
       </div>
     {% endif %}
-    <a class="pf-inquiry__link pf-inquiry__all" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=4711">{{ 'All Special Collections FAQs'|t }}{{ arrow }}</a>
+    {# Further reading: the full guide (the Quick Guide's "Full guide"
+       link), then every FAQ on AskUs, as buttons like Send question. #}
+    <ul class="pf-inquiry__links" role="list">
+      <li><a class="pf-inquiry__button" href="/v2/special/guides/special-collections">{{ 'How to use Special Collections'|t }}{{ arrow }}</a></li>
+      <li><a class="pf-inquiry__button" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=4711">{{ 'All Special Collections FAQs'|t }}{{ arrow }}</a></li>
+    </ul>
   </div>
 
   <div class="pf-inquiry__panel">
