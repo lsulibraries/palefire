@@ -536,7 +536,7 @@
         const page = list.closest('.pf-section');
         if (page) {
           foldIntro(page);
-          briefWash(page);
+          briefWash(page, true);
         }
       });
       list.after(button);
@@ -651,7 +651,7 @@
       ROOT.style.overflowAnchor = 'none';
       intro.style.maxHeight = from + 'px';
       sync(open);
-      briefWash(page);
+      briefWash(page, true);
       // Closing, the button keeps its place on screen (the page scrolls up
       // as the text above it folds), never taken up past the header.
       let last = from;
@@ -698,11 +698,15 @@
   }
 
   // From lg, a lead whose text is short (title to foot within BRIEF of the
-  // image's screen) has a lighter, turned wash (.is-brief, _exhibition.scss),
-  // turning back as the text opens. An intro with "Read more" is short
-  // while folded (its fold keeps it to the lower third) and long open.
+  // image's screen) has a lighter wash, lifted above the text (.is-brief,
+  // _exhibition.scss), settling back as the text opens. An intro with
+  // "Read more" is short while folded (its fold keeps it to the lower
+  // third) and long open.
+  // The wash moves (.is-wash-live) only for `byReader` ("Read more", "Show
+  // more"): set on load, an opening off screen was restyled only as it
+  // came near, so it turned in view from the long wash.
   const BRIEF = 0.42;
-  function briefWash(page) {
+  function briefWash(page, byReader) {
     const hero = page.querySelector('.pf-exhibit-wall-hero');
     const title = page.querySelector('.pf-section__title');
     const intro = page.querySelector('.pf-exhibit-wall__intro');
@@ -715,7 +719,9 @@
       const stack = layoutTop(hero) + hero.offsetHeight - layoutTop(title);
       brief = toggle ? intro.classList.contains('is-folded') : stack <= hero.querySelector('.pf-exhibit-wall-hero__frame').offsetHeight * BRIEF;
     }
-    title.closest('.pf-section__inner').classList.toggle('is-brief', brief);
+    const inner = title.closest('.pf-section__inner');
+    inner.classList.toggle('is-wash-live', !!byReader);
+    inner.classList.toggle('is-brief', brief);
   }
 
   // With a lead, the title's row takes what the text leaves of the first
