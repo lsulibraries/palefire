@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
@@ -1267,7 +1268,9 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   as one group with no label when none has one.
  *
  * Layout "ask" (Ask Special Collections, scripts/palefire_ask_section.php)
- * is no card list: faqs (_palefire_ask_faqs()) and the question form.
+ * is no card list: faqs (_palefire_ask_faqs()) and ask_form, the libanswers
+ * module's question form (palefire_form_libanswers_ask_form_alter()), or
+ * NULL without the module.
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
@@ -1283,6 +1286,12 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   }
   if ($variables['layout'] === 'ask') {
     $variables['faqs'] = _palefire_ask_faqs($paragraph, $variables);
+    // The question form (the libanswers module: a Special Collections
+    // ticket through the LibAnswers API, Honeypot against spam). Without
+    // the module the section offers AskUs instead.
+    $variables['ask_form'] = \Drupal::moduleHandler()->moduleExists('libanswers')
+      ? \Drupal::formBuilder()->getForm('Drupal\libanswers\Form\AskForm', 2616, 'ask-special-collections')
+      : NULL;
     return;
   }
   $rows = in_array($variables['layout'], ['index', 'ledger'], TRUE);
@@ -1418,6 +1427,36 @@ function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): a
   }
   $cache->applyTo($variables);
   return $faqs;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for libanswers_ask_form.
+ *
+ * The libanswers module's question form in the Ask section's markup
+ * (templates/form/libanswers-ask-form.html.twig writes the labels and error
+ * lines, so the controls lose their form-element wrappers). Each control
+ * takes the section's class, text fields a blank placeholder (filled ones
+ * show by :placeholder-shown, _ask.scss), and the button is a <button>
+ * with the arrow (input--submit--libanswers.html.twig).
+ */
+function palefire_form_libanswers_ask_form_alter(array &$form, FormStateInterface $form_state): void {
+  $form['#attributes']['class'][] = 'pf-inquiry__form';
+  // Named as the panel's heading above it.
+  $form['#attributes']['aria-label'] = t('Send us a question');
+  foreach (['val1', 'val2', 'pname', 'pemail', 'pquestion', 'pdetails'] as $name) {
+    if (!isset($form[$name])) {
+      continue;
+    }
+    $form[$name]['#theme_wrappers'] = [];
+    $form[$name]['#attributes']['class'][] = 'pf-inquiry__control';
+    if ($form[$name]['#type'] !== 'select') {
+      $form[$name]['#attributes']['placeholder'] = ' ';
+    }
+  }
+  if (isset($form['actions']['submit'])) {
+    $form['actions']['submit']['#theme'] = 'input__submit__libanswers';
+    $form['actions']['submit']['#attributes']['class'][] = 'pf-inquiry__submit';
+  }
 }
 
 /**

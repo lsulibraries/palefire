@@ -7,59 +7,22 @@
  * Included by paragraph--tile-showcase.html.twig. Variables:
  * - faqs: question, answer (render array or plain text), url (the answer
  *   on AskUs), from _palefire_ask_faqs() in palefire.theme.
- * - paragraph: the section, for ids unique on the page.
+ * - ask_form: the libanswers module's question form, or NULL without the
+ *   module (then the panel points to AskUs).
  *
- * The form is the Special Collections LibAnswers widget's (19447): the
- * same field names, options and hidden values, so a question reaches the
- * same queue (2616) as one sent from AskUs. js/ask-form.js checks it and
- * posts it to LibAnswers in the background; without JavaScript it posts
- * there directly. contact_me_by_fax_only is LibAnswers' honeypot: hidden
- * from everyone, filled only by bots.
+ * The form is a Drupal form (templates/form/libanswers-ask-form.html.twig):
+ * the module sends each question to the Special Collections queue (2616)
+ * as a ticket through the LibAnswers API, so staff answer it in LibAnswers
+ * as before, and Honeypot keeps bots out. js/ask-form.js checks the fields
+ * and posts it in the background; without JavaScript it posts as usual.
  *
  * FAQs are native <details> in the guides' accordion (_guide.scss); the
  * questions are summaries, not headings, so they stay out of "On this
  * page" (data-toc-skip on the wrapper keeps the h3s out too).
  */
 #}
-{{ attach_library('palefire/ask-form') }}
-{% set id = 'pf-inquiry-' ~ paragraph.id() %}
 {% set plus = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
 {% set arrow %}<svg class="pf-inquiry__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>{% endset %}
-{% set selects = {
-  val1: {
-    label: 'Affiliation'|t,
-    options: {
-      1: 'LSU Undergrad'|t,
-      2: 'LSU Grad Student'|t,
-      3: 'LSU Faculty/Staff'|t,
-      4: 'LSU Alumni'|t,
-      5: 'Other College/University'|t,
-      6: 'General Public'|t,
-      7: 'Independent Researcher'|t,
-    },
-  },
-  val2: {
-    label: 'Purpose of research'|t,
-    options: {
-      1: 'Class Assignment'|t,
-      2: 'Publication/Broadcast'|t,
-      3: 'Work/Business'|t,
-      4: 'Genealogy'|t,
-      5: 'Scholarly Research'|t,
-      6: 'Thesis / Dissertation'|t,
-      7: 'Personal'|t,
-      8: 'Other'|t,
-    },
-  },
-} %}
-{% set inputs = {
-  pname: { label: 'Name'|t, type: 'text', autocomplete: 'name', maxlength: 100 },
-  pemail: { label: 'Email'|t, type: 'email', autocomplete: 'email', maxlength: 100 },
-  pquestion: { label: 'Question'|t, type: 'text', autocomplete: 'off', maxlength: 250 },
-} %}
-{% macro label(id, name, text) %}
-  <label class="pf-inquiry__label" for="{{ id }}-{{ name }}">{{ text }}<span class="pf-inquiry__req" aria-hidden="true"> *</span></label>
-{% endmacro %}
 <div class="pf-inquiry" data-toc-skip>
   <div class="pf-inquiry__faqs">
     <h3 class="pf-inquiry__heading">{{ 'Common questions'|t }}</h3>
@@ -90,51 +53,14 @@
   </div>
 
   <div class="pf-inquiry__panel">
-    <h3 class="pf-inquiry__heading" id="{{ id }}-title">{{ 'Send us a question'|t }}</h3>
-    <p class="pf-inquiry__intro">{{ 'Special Collections staff reply by email.'|t }}</p>
-    <form class="pf-inquiry__form" action="https://askus.lib.lsu.edu/1.0/form/submit" method="post" enctype="multipart/form-data" aria-labelledby="{{ id }}-title" novalidate>
-      <input type="hidden" name="instid" value="955">
-      <input type="hidden" name="quid" value="2616">
-      <input type="hidden" name="qlog" value="0">
-      <input type="hidden" name="source" value="4">
-      <input type="hidden" name="alt_auth_id" value="0">
-
-      {% for name, select in selects %}
-        <div class="pf-inquiry__field">
-          {{ _self.label(id, name, select.label) }}
-          <select class="pf-inquiry__control" id="{{ id }}-{{ name }}" name="{{ name }}" required>
-            <option value="">{{ 'Select one'|t }}</option>
-            {% for value, option in select.options %}
-              <option value="{{ value }}">{{ option }}</option>
-            {% endfor %}
-          </select>
-          <span class="pf-inquiry__error" id="{{ id }}-{{ name }}-error" hidden></span>
-        </div>
-      {% endfor %}
-
-      {% for name, input in inputs %}
-        <div class="pf-inquiry__field{{ name == 'pquestion' ? ' pf-inquiry__field--wide' }}">
-          {{ _self.label(id, name, input.label) }}
-          <input class="pf-inquiry__control" type="{{ input.type }}" id="{{ id }}-{{ name }}" name="{{ name }}" autocomplete="{{ input.autocomplete }}" maxlength="{{ input.maxlength }}" placeholder=" " required>
-          <span class="pf-inquiry__error" id="{{ id }}-{{ name }}-error" hidden></span>
-        </div>
-      {% endfor %}
-
-      <div class="pf-inquiry__field pf-inquiry__field--wide">
-        <label class="pf-inquiry__label" for="{{ id }}-pdetails">{{ 'More detail'|t }}</label>
-        <textarea class="pf-inquiry__control" id="{{ id }}-pdetails" name="pdetails" rows="5" placeholder=" "></textarea>
-      </div>
-
-      <div class="pf-inquiry__trap" aria-hidden="true">
-        <label for="{{ id }}-fax">{{ 'Leave this field blank'|t }}</label>
-        <input id="{{ id }}-fax" type="text" name="contact_me_by_fax_only" value="" tabindex="-1" autocomplete="off">
-      </div>
-
-      <p class="pf-inquiry__required"><span aria-hidden="true">* </span>{{ 'Required'|t }}</p>
-      <div class="pf-inquiry__actions">
-        <button type="submit" class="pf-inquiry__submit">{{ 'Send question'|t }}{{ arrow }}</button>
-      </div>
-      <div class="pf-inquiry__status" role="status" tabindex="-1"></div>
-    </form>
+    <h3 class="pf-inquiry__heading">{{ 'Send us a question'|t }}</h3>
+    {% if ask_form %}
+      {{ attach_library('palefire/ask-form') }}
+      <p class="pf-inquiry__intro">{{ 'Special Collections staff reply by email.'|t }}</p>
+      {{ ask_form }}
+    {% else %}
+      <p class="pf-inquiry__intro">{{ 'Special Collections staff answer questions on AskUs, by email or chat.'|t }}</p>
+      <a class="pf-inquiry__link" href="https://askus.lib.lsu.edu/special">{{ 'Ask Special Collections on AskUs'|t }}{{ arrow }}</a>
+    {% endif %}
   </div>
 </div>

@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * The libanswers module's question form in the Ask section's markup
+ * (included by includes/ask-special.html.twig; styled in _ask.scss, checked
+ * and sent by js/ask-form.js).
+ *
+ * palefire_form_libanswers_ask_form_alter() strips each control's
+ * form-element wrapper, so this writes its label, the required mark and
+ * its error line (id "<control id>-error", the script's and the server's).
+ * After a post without JavaScript, Form API's errors (#errors) show there.
+ * Everything else (form_build_id, form_id, Honeypot's hidden field) comes
+ * last, untouched.
+ *
+ * Available variables:
+ * - form: the form render array.
+ */
+#}
+{% macro field(control, wide) %}
+  {% set id = control['#id'] %}
+  <div class="pf-inquiry__field{{ wide ? ' pf-inquiry__field--wide' }}">
+    <label class="pf-inquiry__label" for="{{ id }}">
+      {{- control['#title'] -}}
+      {%- if control['#required'] %}<span class="pf-inquiry__req" aria-hidden="true"> *</span>{% endif -%}
+    </label>
+    {{ control }}
+    {% if control['#required'] %}
+      <span class="pf-inquiry__error" id="{{ id }}-error"{{ control['#errors'] ? '' : ' hidden' }}>{{ control['#errors'] }}</span>
+    {% endif %}
+  </div>
+{% endmacro %}
+{% for name in ['val1', 'val2', 'pname', 'pemail'] %}
+  {% if form[name] %}
+    {{ _self.field(form[name], false) }}
+  {% endif %}
+{% endfor %}
+{{ _self.field(form.pquestion, true) }}
+{{ _self.field(form.pdetails, true) }}
+<p class="pf-inquiry__required"><span aria-hidden="true">* </span>{{ 'Required'|t }}</p>
+<div class="pf-inquiry__actions">{{ form.actions }}</div>
+<div class="pf-inquiry__status" role="status" tabindex="-1"></div>
+{{ form|without('val1', 'val2', 'pname', 'pemail', 'pquestion', 'pdetails', 'actions') }}

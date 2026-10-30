@@ -158,10 +158,14 @@
   color: var(--pf-inquiry-fg);
 }
 
+// Drupal's own classes on the controls (form-select, form-text) are also
+// Bootstrap's; these rules come later and set everything those do, the
+// margin included.
 .pf-inquiry__control {
   display: block;
   width: 100%;
   min-height: 2.75rem;
+  margin: 0;
   padding: .5rem .125rem;
   border: 0;
   border-bottom: 1px solid var(--pf-inquiry-muted);
@@ -379,16 +383,6 @@ textarea.pf-inquiry__control {
   color: var(--pf-inquiry-error);
   font-size: .875rem;
   line-height: 1.4;
-}
-
-// The honeypot: off-screen and out of the tab order (not display: none,
-// which some bots skip).
-.pf-inquiry__trap {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
 }
 
 .pf-inquiry__required {

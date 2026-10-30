@@ -1,21 +1,20 @@
 /**
  * @file
  * Ask Special Collections: the question form
- * (templates/includes/ask-special.html.twig, styled in _ask.scss).
+ * (templates/form/libanswers-ask-form.html.twig, styled in _ask.scss).
  *
- * Checks the required fields and the email, then posts the form to
- * LibAnswers (its action, the Special Collections widget's endpoint) in
- * the background, so the question lands in the same queue as one sent
- * from AskUs and the visitor stays on the page. LibAnswers allows the
- * cross-origin post and answers JSON: { message } when the question is
- * in, { error } (and a 4xx) when not; 449 means it wants a CAPTCHA, which
- * the widget it copies has off. Any failure points to AskUs instead.
+ * Checks the required fields and the email, then posts the form to Drupal
+ * in the background, so the visitor stays on the page. The libanswers
+ * module sends it on to LibAnswers as a ticket in the Special Collections
+ * queue (through the API; Honeypot keeps bots out) and, for this header
+ * (X-LibAnswers-Fetch), answers JSON: 200 { ok } once the ticket exists,
+ * 422 { errors: { field: message } } for fields to fix, 502 when
+ * LibAnswers refuses it. A failure points to AskUs instead. Without this
+ * script the form posts as usual and the page returns with a message.
  *
  * Errors: each invalid field gets aria-invalid and its message under it
  * (aria-describedby), and focus moves to the first. The outcome is said in
  * the status line (role="status"), which takes focus so it is read.
- * A filled honeypot (contact_me_by_fax_only) is a bot: it is thanked and
- * nothing is sent.
  */
 (function (Drupal, once) {
   'use strict';
@@ -62,6 +61,11 @@
     }
   };
 
+  const showErrors = (form, invalid) => {
+    say(form, Drupal.formatPlural(invalid.length, 'Check 1 field above.', 'Check @count fields above.'), 'error');
+    invalid[0].focus();
+  };
+
   const validate = (form) => {
     const invalid = [];
     form.querySelectorAll('[required]').forEach((field) => {
@@ -74,21 +78,51 @@
     return invalid;
   };
 
-  const send = async (form) => {
-    const button = form.querySelector('.pf-inquiry__submit');
-    if (form.elements.contact_me_by_fax_only.value) {
-      form.reset();
-      say(form, Drupal.t('Thank you. Your question has been sent.'), 'done');
-      return;
+  // The form's fields with the button that sent it (Form API reads which).
+  const fieldsOf = (form, submitter) => {
+    try {
+      return new FormData(form, submitter);
     }
+    catch (e) {
+      const data = new FormData(form);
+      if (submitter && submitter.name) {
+        data.append(submitter.name, submitter.value);
+      }
+      return data;
+    }
+  };
+
+  const send = async (form, submitter) => {
+    const button = form.querySelector('.pf-inquiry__submit');
     button.disabled = true;
     form.setAttribute('aria-busy', 'true');
     say(form, Drupal.t('Sending…'), 'busy');
     try {
-      const response = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: fieldsOf(form, submitter),
+        headers: { 'X-LibAnswers-Fetch': '1' },
+        credentials: 'same-origin',
+      });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || data.error) {
-        throw new Error(response.status === 449 ? 'captcha' : 'error');
+      if (response.status === 422 && data.errors) {
+        // The server's word on a field, under that field; anything else
+        // (Honeypot) as a failure.
+        const invalid = Object.entries(data.errors).map(([name, text]) => {
+          const field = form.elements[name];
+          if (field && field.id && document.getElementById(`${field.id}-error`)) {
+            setError(field, text);
+            return field;
+          }
+          return null;
+        }).filter(Boolean);
+        if (invalid.length) {
+          showErrors(form, invalid);
+          return;
+        }
+      }
+      if (!response.ok || !data.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
       const email = form.elements.pemail.value;
       form.reset();
@@ -113,11 +147,10 @@
           }
           const invalid = validate(form);
           if (invalid.length) {
-            say(form, Drupal.formatPlural(invalid.length, 'Check 1 field above.', 'Check @count fields above.'), 'error');
-            invalid[0].focus();
+            showErrors(form, invalid);
             return;
           }
-          send(form);
+          send(form, event.submitter);
         });
         // Clear a field's error once it is fixed, not on every key.
         form.addEventListener('change', (event) => {
