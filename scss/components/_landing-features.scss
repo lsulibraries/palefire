@@ -2666,12 +2666,14 @@ html[data-pf-hero] {
     margin-bottom: var(--pf-hero-rule-gap);
   }
 
-  // The guide's band (_sections.scss) starts halfway down its top space;
-  // the same space again under the last line, so the band doesn't end
-  // flush on the buttons or the paths. The next index rule's gap counts
-  // from the band's foot.
+  // The guide's band (_sections.scss) in three equal spaces: banners'
+  // labels to the band, the band's top to rule 01, and the last line to
+  // the band's foot (--pf-quick-band-top, 68px at 1440), so the band sits
+  // clear of the banners as of what follows. The next index rule's gap
+  // counts from the band's foot.
   .pf-landing__lead--hero > .pf-quick-guide {
-    padding: var(--pf-hero-gap) 0 calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
+    --pf-quick-band-top: calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
+    padding: calc(2 * var(--pf-quick-band-top)) 0 var(--pf-quick-band-top);
   }
 }
 

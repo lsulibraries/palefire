@@ -108,9 +108,10 @@ html#{$pf-themed} .pf-sections:has(> .pf-section--landing-hero) {
 
   // The guide sits in the landing's 1280px column: its band runs edge to
   // edge on a shadow, clipped to its own height, so nothing moves. It starts
-  // halfway down the guide's top space, clear of the hero cards' labels.
+  // halfway down the guide's top space, clear of the hero cards' labels
+  // (on the landing cover, at --pf-quick-band-top: _landing-features.scss).
   .pf-quick-guide {
     box-shadow: 0 0 0 100vmax var(--pf-band);
-    clip-path: inset(calc(var(--pf-quick-space) / 2) -100vmax 0);
+    clip-path: inset(var(--pf-quick-band-top, calc(var(--pf-quick-space) / 2)) -100vmax 0);
   }
 }
