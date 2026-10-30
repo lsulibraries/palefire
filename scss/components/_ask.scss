@@ -4,14 +4,14 @@
 //
 // One column on phones: the FAQs, then the form. From lg, two: the FAQs
 // on the left (7 parts), the form on the right (5), tops aligned. The FAQs are the guides' accordion (_guide.scss) in the
-// section's colours; the form is Swiss and quiet: ruled fields with no
+// section's colors; the form is Swiss and quiet: ruled fields with no
 // boxes, labels in the eyebrows' mono capitals, a solid button. Field
-// rules are the muted text colour at full strength, not the 20% hairline:
+// rules are the muted text color at full strength, not the 20% hairline:
 // a control's edge needs 3:1 (WCAG 1.4.11).
 
 .pf-inquiry {
   --pf-inquiry-fg: var(--pf-section-fg, var(--bs-body-color));
-  // The headings' colour (the FAQ questions'): what the visitor typed and a
+  // The headings' color (the FAQ questions'): what the visitor typed and a
   // filled field's rule. Brighter than the text on reading swatches, whose
   // body text and muted text are often one grey (Twilight: both #b7b3ba).
   --pf-inquiry-strong: var(--bs-heading-color, var(--bs-emphasis-color, var(--pf-inquiry-fg)));
@@ -293,7 +293,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
     transition-duration: $pf-hover-in;
   }
 
-  // Filled: the rule steps up from muted to the headings' colour, so what's
+  // Filled: the rule steps up from muted to the headings' color, so what's
   // done shows at a glance. Not the accent, which stays focus's alone (a filled
   // field must never look focused, or valid). Text fields know they're
   // empty by their blank placeholder (placeholder=" ", which reads as
@@ -304,7 +304,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   }
 
   // Focus: no box. The rule turns the accent and thickens to 3px, and the
-  // field takes a faint wash of the text colour. The accent keeps 3:1 on
+  // field takes a faint wash of the text color. The accent keeps 3:1 on
   // every swatch.
   &:focus {
     outline: none;
@@ -320,8 +320,8 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   }
 
   // Autofill: the browser's own pale box (which ignores background-color)
-  // painted over by an inset shadow in the section's colour, the text in
-  // the headings' colour as typed text is; the focus rule still shows.
+  // painted over by an inset shadow in the section's color, the text in
+  // the headings' color as typed text is; the focus rule still shows.
   &:autofill {
     -webkit-text-fill-color: var(--pf-inquiry-strong);
     caret-color: var(--pf-inquiry-strong);
@@ -335,7 +335,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
 
 select.pf-inquiry__control {
   padding-right: 2rem;
-  // A thin chevron in the text colour: two 1.5px strokes ("\" and "/"),
+  // A thin chevron in the text color: two 1.5px strokes ("\" and "/"),
   // each a gradient on its own square (currentColor isn't read inside a
   // data URI).
   background-image:
@@ -350,14 +350,14 @@ select.pf-inquiry__control {
   cursor: pointer;
 
   // The open list is drawn by the browser on the select's background,
-  // which is transparent here: give it the section's own solid colours,
+  // which is transparent here: give it the section's own solid colors,
   // or a dark section's light text lands on a white list.
   option {
     color: var(--pf-inquiry-fg);
     background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
   }
 
-  // "Select one" reads as a prompt, in the labels' muted colour, until a
+  // "Select one" reads as a prompt, in the labels' muted color, until a
   // choice is made.
   &:has(option[value=""]:checked) {
     color: var(--pf-inquiry-muted);
@@ -367,14 +367,14 @@ select.pf-inquiry__control {
 // The open list, styled where the browser allows it (Chrome and Edge 135+:
 // a customizable select). Still the native <select>: the same keyboard,
 // screen reader and phone behaviour, only drawn by the page. Elsewhere the
-// browser's own list, in the section's colours above.
-// - The list: a panel in the section's colour just under the field, as
+// browser's own list, in the section's colors above.
+// - The list: a panel in the section's color just under the field, as
 //   wide as it, with a hairline frame and a soft shadow; it fades and
 //   drops in (none with reduced motion).
 // - Options: 44px rows (WCAG 2.5.8) with the fields' padding; hover and
-//   keyboard focus share one wash of the text colour, focus adding the
+//   keyboard focus share one wash of the text color, focus adding the
 //   accent rule at the start; the chosen one is marked by a check in the
-//   accent and medium weight, never by colour alone.
+//   accent and medium weight, never by color alone.
 // - The chevron turns over while the list is open.
 @supports (appearance: base-select) {
   select.pf-inquiry__control,

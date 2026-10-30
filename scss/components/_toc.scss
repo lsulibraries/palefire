@@ -10,7 +10,7 @@
 // is what keeps the bar landing on a sub-link as its list opens (see
 // placeIndicator() in js/modular-toc.js). Change them together.
 //
-// Colours are the --pf-toc-* custom properties from _modular-tokens.scss
+// Colors are the --pf-toc-* custom properties from _modular-tokens.scss
 // (light on :root, dark under body[data-section-theme="dark"]). Change
 // them there, not here.
 
@@ -114,8 +114,8 @@
     transition-duration: $pf-hover-in;
   }
 
-  // The current section in the content's heading colour, so the TOC and
-  // the headings match: a multicolour swatch's own (Material's green,
+  // The current section in the content's heading color, so the TOC and
+  // the headings match: a multicolor swatch's own (Material's green,
   // --pf-g-title, _reading-themes.scss), otherwise the usual active text.
   &[aria-current] {
     color: var(--pf-g-title, var(--pf-toc-active));
@@ -226,8 +226,8 @@
 }
 
 // "Back to top" at the bottom of the sidebar, in the guides' label style
-// (2026-10-16): a hairline in the rail colour, then a thin arrow and the
-// label in one row, tracked monospace caps in the TOC's muted colour, so it
+// (2026-10-16): a hairline in the rail color, then a thin arrow and the
+// label in one row, tracked monospace caps in the TOC's muted color, so it
 // follows the reading swatch, or the chrome without one (it was
 // #ccc with a 20%-opacity arrow, about 1.6:1 on the light sidebar). Hover
 // and focus: full-strength text, the arrow in the accent, lifted 2px.

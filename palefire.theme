@@ -1278,7 +1278,7 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   repeat it (WCAG 1.1.1 decorative-in-context).
  * - outline: a card with no image (not on the index): the page's sections
  *   (_palefire_page_outline()), which the card draws as a blurred picture
- *   of the page in the reading swatch's colours. Guides rarely have covers.
+ *   of the page in the reading swatch's colors. Guides rarely have covers.
  * groups (ledger only): the tiles by label, in the order each label first
  *   appears: label, tiles. Tiles with no label come last, under "More", or
  *   as one group with no label when none has one. Titles lose a leading
@@ -2201,7 +2201,7 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
  *
  * Read from the server's /libraries/fontawesome-pro (licensed, so never in
  * this repository). One copy per template, however many links use it,
- * instead of the whole SVG in each. The paths take the text colour (the
+ * instead of the whole SVG in each. The paths take the text color (the
  * <use> sets fill: currentColor); a duotone icon's lighter layer keeps its
  * 40%. NULL when the file isn't there: the templates then print no icon.
  */
@@ -2558,7 +2558,7 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
  * runs the gallery's full width and gets a Grid / List switch.
  * in_guide: TRUE when the group is a guide section's block, outside any
  * exhibition: it then brings its own lightbox (js/guide-gallery.js) and
- * the exhibition's colours, which exhibition.js and html[data-pf-mode]
+ * the exhibition's colors, which exhibition.js and html[data-pf-mode]
  * give it on an exhibition.
  */
 function palefire_preprocess_paragraph__exhibit_gallery(array &$variables): void {
@@ -2585,7 +2585,7 @@ function palefire_preprocess_paragraph__exhibit_gallery(array &$variables): void
  * smaller title on the cover so it still fits; every other title is the
  * same size, so the covers match. source,
  * details: publisher or journal, and year or volume. link: ['url',
- * 'external'], or NULL. tone: 1–8 from the title, a book cover's colour
+ * 'external'], or NULL. tone: 1–8 from the title, a book cover's color
  * (_exhibition.scss), the same wherever the book shows.
  */
 function palefire_preprocess_paragraph__exhibit_reading(array &$variables): void {

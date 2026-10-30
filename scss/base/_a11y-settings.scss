@@ -14,7 +14,7 @@
 //   .pf-a11y-focus                      Strong focus outline
 //   .pf-a11y-motion                     Reduce motion
 //   .pf-a11y-pausevideo                 Pause background videos (JS only)
-//   [data-pf-theme="sepia"]             Reading colours, every page (no
+//   [data-pf-theme="sepia"]             Reading colors, every page (no
 //                                       attribute: Cream on guides, the
 //                                       usual look elsewhere); dark swatches
 //                                       add .pf-reading-dark + data-bs-theme="dark"
@@ -80,7 +80,7 @@ html.pf-a11y-underline {
 }
 
 // High contrast -----------------------------------------------------------------
-// Pages with a reading swatch ($pf-themed): the swatch's own colours pushed
+// Pages with a reading swatch ($pf-themed): the swatch's own colors pushed
 // apart (_reading-themes.scss); the glass, borders and washes stay as they
 // are. Only the stripes go (below).
 // Pages without one: solid backgrounds (pf-solid-chrome), full-strength
@@ -90,7 +90,7 @@ html.pf-a11y-contrast .pf-hours__loc {
 }
 
 // Every page, swatch or not: the soft rules ($pf-hairline) at the full line
-// colour, the "brighter borders" the switch promises.
+// color, the "brighter borders" the switch promises.
 html.pf-a11y-contrast {
   --pf-hairline-strength: 100%;
 }

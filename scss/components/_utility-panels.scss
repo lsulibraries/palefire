@@ -3,26 +3,26 @@
 // js/utility-panels.js).
 //
 // In the guides' art direction (2026-10-16): frosted glass in the guide's
-// page colour, its dark grey text, muted grey labels, hairline rules, an
+// page color, its dark grey text, muted grey labels, hairline rules, an
 // accent for links, hover and focus, monospace tracked labels, square
 // corners. With a reading swatch the drawers take it (Settings >
-// Reading colours: the --pf-g-* tokens, _reading-themes.scss): light glass
+// Reading colors: the --pf-g-* tokens, _reading-themes.scss): light glass
 // on light swatches, a shade darker than the page on the dark swatches.
 // Without one --pf-g-* isn't set, so the fallbacks give the Cream look.
 // The Hours drawer keeps Origami's Handjet clock; its OPEN badges take the
 // swatch's accent.
 // Bootstrap 5.3 does the slide, focus trap and backdrop.
 //
-// Contrast: the glass is 65% of the page colour over a 45% wash of the same
-// colour (backdrop, below), so about 19% of the page shows through (it was
+// Contrast: the glass is 65% of the page color over a 45% wash of the same
+// color (backdrop, below), so about 19% of the page shows through (it was
 // 84%, about 9%). The worst case, a black pixel under the drawer, leaves it
-// at 0.81 of the page colour. Drawer text is each swatch's heading colour
+// at 0.81 of the page color. Drawer text is each swatch's heading color
 // and labels a muted tone darkened just enough for 4.5:1 there
 // (--pf-g-panel-text / --pf-g-panel-muted, _reading-themes.scss); the
 // reading swatches' own softest greys (Soft cream, Lavender) are for long
 // text on the page, not for small labels on glass. Control borders use the
 // same muted tone (the scrollbar grey fell under 3:1 on the thinner glass);
-// hairlines between items use the rule colour (dividers only).
+// hairlines between items use the rule color (dividers only).
 
 @import 'modular-tokens';
 
@@ -72,7 +72,7 @@ html.pf-over-menu .pf-panel.offcanvas {
 
 
 // The mobile menu drawer (#pf-primary-menu, _header.scss) wears the same
-// glass and colours as these drawers. Below lg only: from lg up the same
+// glass and colors as these drawers. Below lg only: from lg up the same
 // element is the bar's menu. Its text is the drawers' too (not the
 // header's), so it reads on the glass whatever the bar is doing.
 @include media-breakpoint-down(lg) {
@@ -278,7 +278,7 @@ html.pf-over-menu .pf-panel.offcanvas {
     display: grid;
     grid-template-columns: 2.75rem minmax(0, 1fr);
     min-height: 5.5rem;
-    // A faint tint of the text colour, so it works on any swatch, and a
+    // A faint tint of the text color, so it works on any swatch, and a
     // hairline (a card, not a control).
     background-color: color-mix(in srgb, var(--pf-section-fg) 4%, transparent);
     border: 1px solid var(--pf-toc-rail);
@@ -374,7 +374,7 @@ html.pf-over-menu .pf-panel.offcanvas {
 }
 
 // Backdrop ------------------------------------------------------------------
-// The page recedes under a wash of the drawer's own page colour (Cream, or
+// The page recedes under a wash of the drawer's own page color (Cream, or
 // the reading swatch) instead of Bootstrap's black, so the light glass
 // still reads as glass. The dark swatches keep a dark wash.
 // js/utility-panels.js sets <html data-pf-panel> while a panel is open (and
@@ -392,7 +392,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 }
 
 // Without blur, or when asked for less transparency / more contrast, the
-// drawer is solid: its page colour (a shade darker on the dark swatches).
+// drawer is solid: its page color (a shade darker on the dark swatches).
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .pf-panel.offcanvas,
   .pf-menu-drawer {
@@ -411,7 +411,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
 // The same for the dark swatches, written out: pf-solid-chrome can't take
 // html-first selectors, and the dark glass rule above outranks it. (High
-// contrast keeps a swatch's glass: it pushes its colours apart instead.)
+// contrast keeps a swatch's glass: it pushes its colors apart instead.)
 @media (prefers-reduced-transparency: reduce) {
   html.pf-reading-dark :is(.pf-panel.offcanvas, .pf-menu-drawer) {
     --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
@@ -506,7 +506,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     }
 
     // Selected: an accent bar at the start and full-strength text, not
-    // colour alone.
+    // color alone.
     &.active {
       padding-inline-start: 1.25rem;
       color: var(--pf-toc-active);
@@ -665,7 +665,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   &__size[data-size="130"] &__size-a { font-size: 1.3rem; }
   &__size[data-size="150"] &__size-a { font-size: 1.5rem; }
 
-  // Selected: the accent bar and full-strength text, not colour alone.
+  // Selected: the accent bar and full-strength text, not color alone.
   &__size-input:checked + &__size {
     color: var(--pf-toc-active);
     box-shadow: inset 0 -2px 0 var(--pf-toc-accent);
@@ -676,8 +676,8 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     outline-offset: 2px;
   }
 
-  // Reading colours: "Aa" in the swatch's own text on its own page colour
-  // (colours: _reading-themes.scss), the name under it, no box. The chosen
+  // Reading colors: "Aa" in the swatch's own text on its own page color
+  // (colors: _reading-themes.scss), the name under it, no box. The chosen
   // one gets an accent ring around its chip and full-strength name.
   &__themes {
     display: grid;
@@ -715,7 +715,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     letter-spacing: 0;
     text-transform: none;
     // Its hairline separates a chip from a drawer of nearly the same
-    // colour, and is also the hover and selected mark: brighter on hover,
+    // color, and is also the hover and selected mark: brighter on hover,
     // a 2px accent line when chosen.
     box-shadow: inset 0 0 0 1px var(--pf-toc-rail);
     transition: box-shadow $pf-hover-out ease;
@@ -734,7 +734,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     box-shadow: inset 0 0 0 2px var(--pf-toc-accent);
   }
 
-  // "More colours" (initThemesMore, utility-panels.js): only the first
+  // "More colors" (initThemesMore, utility-panels.js): only the first
   // three, and the chosen one wherever it is, until the list is opened.
   &__themes.is-collapsed &__theme-input.is-more:not(:checked),
   &__themes.is-collapsed &__theme-input.is-more:not(:checked) + &__theme {
@@ -755,7 +755,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     }
   }
 
-  // The "More colours" tile: the swatch tile (.pf-settings__theme) with a
+  // The "More colors" tile: the swatch tile (.pf-settings__theme) with a
   // "+" in its chip, turning to "−" while the list is open.
   &__more {
     font-family: inherit;

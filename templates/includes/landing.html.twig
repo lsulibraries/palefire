@@ -101,7 +101,7 @@
    events carousel's feed; removed when the page has no carousel or no
    event. In the lead panel, or on its own glass when there is none. #}
 {# Hero with its lead (cover): the video is a band at the top of the lead,
-   behind the title, intro and search, washed into the page colour like an exhibition
+   behind the title, intro and search, washed into the page color like an exhibition
    cover, and the page scrolls on through the map in one flow (no glass
    panel, no snap). Other landings with a lead and a map: the lead fills
    the first screen and the page snaps between the two (md and up,
@@ -222,8 +222,8 @@
        card's name) over the title as a small label, inside the <h1> so the
        heading reads "LSU Libraries, Hill Memorial Library: Special
        Collections" (_landing-swiss.scss, "Unit name"). The building is
-       named here only, not again in the hours line. Theme colours only: no
-       LSU purple or gold, which clash with the reading colours. #}
+       named here only, not again in the hours line. Theme colors only: no
+       LSU purple or gold, which clash with the reading colors. #}
     {% if page_title %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {%- if hero -%}
@@ -237,7 +237,7 @@
       </h1>
     {% endif %}
     {# Hero: today's hours under the title: the status as a label (a dot in
-       its colour and the status in small capitals), then today's hours as a
+       its color and the status in small capitals), then today's hours as a
        line of text (the building is in the label over the title; the
        script fills the status and
        the hours from LibCal; palefire/visit is attached with visit). No
@@ -500,11 +500,11 @@
                 </a>
               </li>
             {% endfor %}
-            {# Hours: "Hours" after a dot in today's status colour
+            {# Hours: "Hours" after a dot in today's status color
                (visit-hours.js), down to the week in the Visit panel, as the
                hero's hours line does (same page, so no new tab and the
                arrow points down). The status words are for screen readers
-               only ("Open now, Hours"), so the dot's colour never
+               only ("Open now, Hours"), so the dot's color never
                carries it alone (WCAG 1.4.1); the hero's badge shows them.
                The dot shows once LibCal answers; the button goes if LibCal
                fails, since the week does too. #}

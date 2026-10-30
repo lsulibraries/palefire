@@ -287,7 +287,7 @@
   // The placard at a gallery's foot (.pf-exhibit-next, _exhibition.scss):
   // "Next · 03 / 07", the next gallery's title and an arrow pointing down,
   // since scrolling on is the way there; the link glides there too (onClick).
-  // After the section's content box, so it sits on the page colour past any
+  // After the section's content box, so it sits on the page color past any
   // pinned image. None after the last gallery.
   function addNext(page) {
     const index = state.pages.indexOf(page);

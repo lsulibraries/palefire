@@ -12,7 +12,7 @@
 // Modular pages: printed at the top of <main>, above the first section,
 // in the TOC's voice: monospace, uppercase and tracked like "On this page"
 // and its sub-links, muted links that brighten with a gold underline,
-// the current page in the active colour. Colours are the --pf-toc-*
+// the current page in the active color. Colors are the --pf-toc-*
 // chrome tokens, so it follows the light/dark section theme with the
 // sidebar. The first section's background bleeds up behind it
 // (palefireBleedOffset), so it stays above that layer.
@@ -157,7 +157,7 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
     }
   }
 
-  // The current page: the last item, in the active colour, cut to one
+  // The current page: the last item, in the active color, cut to one
   // line with an ellipsis if it runs out of room (the <h1> right below has
   // the full title).
   .breadcrumb-item.active {

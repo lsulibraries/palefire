@@ -11,8 +11,8 @@
 //
 // data-bs-theme="dark" gives the header Bootstrap 5.3's dark palette, so
 // menu text, the border, dropdown menus and the navbar toggler icon switch
-// with no colours written here. This file only adds the glass tint, the gold
-// accent (Origami's hover colour) and the fade between the two.
+// with no colors written here. This file only adds the glass tint, the gold
+// accent (Origami's hover color) and the fade between the two.
 //
 // Import right after layout/header in style.scss:
 //   @import "layout/header";
@@ -128,8 +128,8 @@ html.pf-reading-dark .pf-page::before {
 // The same for the dark reading swatches (html.pf-reading-dark), written out by hand:
 // pf-solid-chrome nests its class version under :root, so a selector that
 // starts with html (html.pf-reading-dark) can't go inside it; it would never
-// match. The swatch's own colours for these: _reading-themes.scss. High
-// contrast leaves a swatch's glass alone (it pushes its colours apart).
+// match. The swatch's own colors for these: _reading-themes.scss. High
+// contrast leaves a swatch's glass alone (it pushes its colors apart).
 @media (prefers-reduced-transparency: reduce) {
   html.pf-reading-dark .pf-header {
     --pf-header-filter: none;

@@ -1,6 +1,6 @@
 // Palefire modular_page layout: scroll sections, snap, sidebar column.
 // Assumes Bootstrap 5.3 SCSS (media-breakpoint-up) is already imported.
-// Colours come from _modular-tokens.scss; don't hard-code them here.
+// Colors come from _modular-tokens.scss; don't hard-code them here.
 
 @import 'modular-tokens';
 
@@ -139,7 +139,7 @@ html {
 }
 
 // Inner padding. Only the content moves in: the section box, its theme
-// colour and every background layer still start at the section edge.
+// color and every background layer still start at the section edge.
 .pf-sections > .pf-section:is(.pf-section--auto, .pf-section--screen, .pf-section--peek) > .pf-section__inner {
   padding: var(--pf-section-pad-block) var(--pf-section-pad-inline);
 }
@@ -205,7 +205,7 @@ html {
 html.pf-snap-proximity .pf-section--snap {
   scroll-snap-align: none;
 
-  // ::after, as dark sections paint their colour with ::before.
+  // ::after, as dark sections paint their color with ::before.
   &::after {
     content: "";
     position: absolute;
@@ -271,7 +271,7 @@ html.pf-snap-proximity .pf-section--snap {
   color: var(--pf-section-fg);
   isolation: isolate;
 
-  // The colour is a layer, not the section's own background, so it bleeds
+  // The color is a layer, not the section's own background, so it bleeds
   // under the sidebar and the top bar like images and videos (see below).
   // It paints under .pf-section__bg, which comes later in the markup.
   &::before {
@@ -289,7 +289,7 @@ html.pf-snap-proximity .pf-section--snap {
 // ---------------------------------------------------------------------
 // Full-page backgrounds (bleed)
 // ---------------------------------------------------------------------
-// Section background images (below), dark theme colours (above) and landing
+// Section background images (below), dark theme colors (above) and landing
 // background videos (_landing.scss) run past their section so they
 // cover the whole page: left under the frosted TOC sidebar, and, for the
 // first section, up under the frosted top bar. Only the decorative layers
@@ -353,7 +353,7 @@ html.pf-snap-proximity .pf-section--snap {
 // ---------------------------------------------------------------------
 // The image is a real responsive <img> from the "section_background"
 // responsive image style, laid behind the content with object-fit.
-// isolation keeps z-index: -1 above the section's own background colour.
+// isolation keeps z-index: -1 above the section's own background color.
 .pf-section--has-bg {
   isolation: isolate;
 }
@@ -458,8 +458,8 @@ html.pf-snap-proximity .pf-section--snap {
 
 // "On this page" button (below lg only). Fixed, so it floats over the
 // sections instead of taking up a band of space above the first one.
-// The list icon's marker (page.html.twig): the bright text colour, as the
-// TOC's own active link, while the bars take the button's colour.
+// The list icon's marker (page.html.twig): the bright text color, as the
+// TOC's own active link, while the bars take the button's color.
 .pf-toc-icon__mark {
   fill: var(--pf-toc-active, currentColor);
 }
@@ -480,8 +480,8 @@ html.pf-snap-proximity .pf-section--snap {
   height: 3rem;
   padding: 0;
   border-radius: 0;
-  // The TOC's own colours on its glass, so it follows the
-  // reading colours and dark sections (the tokens are set on body,
+  // The TOC's own colors on its glass, so it follows the
+  // reading colors and dark sections (the tokens are set on body,
   // _reading-themes.scss) instead of Bootstrap's grey outline button.
   --bs-btn-color: var(--pf-toc-color, var(--bs-secondary-color));
   --bs-btn-bg: var(--pf-sidebar-bg, var(--bs-body-bg));
@@ -636,8 +636,8 @@ html.pf-a11y-motion .pf-sidebar.pf-modular__sidebar {
 // Dark sections. The block's defaults read Bootstrap's --bs-body-color,
 // --bs-secondary-color and --bs-border-color, which keep their light
 // values unless data-bs-theme="dark" is set, so the text came out near
-// black on black. Map every colour to the section tokens instead, so this
-// works with or without the Bootstrap colour mode.
+// black on black. Map every color to the section tokens instead, so this
+// works with or without the Bootstrap color mode.
 .pf-section--theme-dark .libcal-day-carousel {
   --ldc-fg: var(--pf-section-fg);
   --ldc-muted: var(--pf-section-muted);

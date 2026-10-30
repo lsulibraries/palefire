@@ -7,7 +7,7 @@
  *
  * The same wash as the title page (.pf-exhibit-head::after,
  * _exhibition.scss): pf-eased-wash(), the default reading swatch's page
- * colour (#272429), solid up to $from and gone by $to along a cosine curve
+ * color (#272429), solid up to $from and gone by $to along a cosine curve
  * in 12 straight steps.
  * - Desktop (lg): only the image's part of the head, which starts at 28%
  *   of its width, in its shape on a 1440 x 900 screen (821 x 851, here

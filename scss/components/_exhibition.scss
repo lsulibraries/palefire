@@ -10,17 +10,17 @@
 // as the page scrolls (scroll-driven animation, no script), or a lead can
 // show whole; figures beside the text rise in as they enter the view. Everything stays still under reduced motion.
 //
-// Colours: the reading swatch (--pf-g-*, _reading-themes.scss) through the
+// Colors: the reading swatch (--pf-g-*, _reading-themes.scss) through the
 // guide's tokens (.pf-guide, _guide.scss), so every swatch works and keeps
-// its contrast. Lines are the soft hairline. No literal colours.
+// its contrast. Lines are the soft hairline. No literal colors.
 
 $pf-exhibit-ease: cubic-bezier(.2, .7, .2, 1);
 $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
 
-// A wash of the page colour that is solid up to $from and fades out by $to
+// A wash of the page color that is solid up to $from and fades out by $to
 // along an ease-in-out curve, in many stops: no visible bends where a few
 // straight segments meet, as a photographer's graduated filter. $strength
-// (0 to 1): how much page colour at its solid end, for a lighter wash.
+// (0 to 1): how much page color at its solid end, for a lighter wash.
 @function pf-eased-wash($direction, $from, $to, $steps: 12, $strength: 1) {
   $stops: ();
   @for $i from 0 through $steps {
@@ -206,7 +206,7 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   }
 }
 
-// "Show whole image": the plate uncropped, centred on the page colour, as a
+// "Show whole image": the plate uncropped, centred on the page color, as a
 // framed object rather than a banner. It fades up instead of panning.
 .pf-exhibit-lead--whole {
   margin: 0 0 clamp(2rem, 4vw, 3.5rem);
@@ -324,7 +324,7 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 
 // Full-screen opening (Opening: full, the default) -------------------------
 //
-// Like the title page: the lead fills a screen under the header, washed with the page colour where the gallery number, the <h2> and
+// Like the title page: the lead fills a screen under the header, washed with the page color where the gallery number, the <h2> and
 // the "In this gallery" links sit. Scrolling on, the image stays pinned
 // under the header while the heading and links lift away and the wash
 // clears, then it pans through the whole image: top to bottom for a tall
@@ -504,7 +504,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 }
 
 // After the pan the image stays where it is and the caption and the text
-// slide up over it on the page colour (from lg, while the pan is on), so
+// slide up over it on the page color (from lg, while the pan is on), so
 // the image moves less and the text does the moving. The hero then reaches
 // the gallery's foot, so its sticky stage holds until the text has covered
 // it, and .pf-section__inner::before keeps rows 1-4 their size (the hero no
@@ -527,7 +527,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     height: auto;
   }
 
-  // The layer that covers the image: full width, on the page colour, with
+  // The layer that covers the image: full width, on the page color, with
   // no gaps (margins become padding) through to the gallery's foot.
   > .pf-gallery > .pf-gallery__body {
     position: relative;
@@ -536,7 +536,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     padding-inline: var(--pf-section-pad-inline);
     background: var(--bs-body-bg);
     // The text keeps its measure (.pf-guide is narrower than the column);
-    // the colour runs on to the right edge. Clipped top and bottom, and
+    // the color runs on to the right edge. Clipped top and bottom, and
     // ink overflow, so it never scrolls sideways.
     box-shadow: 0 0 0 100vmax var(--bs-body-bg);
     clip-path: inset(0 -100vmax 0 0);
@@ -656,7 +656,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 // Below lg the TOC is a drawer and the column is narrow: the image on its
 // own at the top, fading into the page, and the number, heading and links
-// under it on the page colour (always their full contrast). No pin; the
+// under it on the page color (always their full contrast). No pin; the
 // image pans while it scrolls off.
 @include media-breakpoint-down(lg) {
   #{$pf-opener} {
@@ -793,7 +793,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 }
 
 // Next-gallery placard (js/exhibition.js addNext()): at the foot of each
-// gallery but the last, after its content box, on the page colour. A
+// gallery but the last, after its content box, on the page color. A
 // hairline over the mono "Next" and the number in the highlight, the next
 // gallery's title, and an arrow pointing down: scrolling on is the way
 // there, so it reads as a signpost, not a button (the link glides there
@@ -918,7 +918,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 }
 
 // From lg, percent of the head's width: where the image starts, where the
-// side wash turns from solid page colour to its fade, and where that fade
+// side wash turns from solid page color to its fade, and where that fade
 // ends. The fade is long, so the image shows faintly behind the title and
 // it reads as one picture fading in, not a split; the image starts under
 // the solid part, so its edge never shows. A fade from 46% to 84% over an
@@ -934,7 +934,7 @@ $pf-exhibit-cover-clear: 92;
 // clip-path shows it only within the head. Below lg it stops .25rem short
 // of the foot, under the wash's solid foot (the head's ::after, below). From
 // lg it runs to the foot: the foot's fade is light there, so the .25rem
-// showed as a strip of page colour over the first gallery. From lg it also
+// showed as a strip of page color over the first gallery. From lg it also
 // starts under the solid wash, not at the head's left edge, so a portrait
 // image, shown across its whole width, centres further right, where the
 // fade has mostly cleared.
@@ -951,12 +951,12 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
-// A wash of the page colour where the text sits, so it keeps the swatch's
+// A wash of the page color where the text sits, so it keeps the swatch's
 // contrast on any image: the bottom below lg (the text spans the column) or
 // the left from lg (beside the TOC, the text takes about half the column).
 // It moves with the text. The breadcrumb's bar has its own glass. From lg
 // the image settles into the head's foot under a light fade (40% of the
-// page colour at most): a solid one read as a dark band where the first
+// page color at most): a solid one read as a dark band where the first
 // gallery's photograph comes up below.
 // On the head, not in the media: there the clip cut both at one edge, and
 // at fractional zoom (125% and the like) their anti-aliased rows let a
@@ -1345,7 +1345,7 @@ $pf-exhibit-cover-clear: 92;
   color: var(--bs-body-color);
   text-decoration: none;
   background: transparent;
-  // A control's boundary: the text colour (3:1, WCAG 1.4.11), not the hairline.
+  // A control's boundary: the text color (3:1, WCAG 1.4.11), not the hairline.
   border: 1px solid currentColor;
   border-radius: 0;
   transition:
@@ -1819,7 +1819,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     z-index: 1;
   }
 
-  // The title in a citation, in the heading colour, underlined on hover.
+  // The title in a citation, in the heading color, underlined on hover.
   .pf-exhibit-figure__caption em {
     color: var(--pf-g-heading, var(--bs-emphasis-color));
     text-decoration: underline;
@@ -1885,7 +1885,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 // A group of covers (and readings, below): smaller, so more to a row (two at 320px), each 2:3 on
-// the panel colour, never cropped, framed by the hairline so a white
+// the panel color, never cropped, framed by the hairline so a white
 // jacket keeps its edge on a light page.
 .pf-exhibit-group__grid:has(> :is(.pf-exhibit-figure--out, .pf-exhibit-reading)) {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
@@ -1929,7 +1929,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 // The heading and the Grid / List switch (the tile showcase's,
 // _tile-showcase.scss) share a row; the covers run under both. The switch
-// takes the exhibition's mono voice and colours.
+// takes the exhibition's mono voice and colors.
 .pf-exhibit-group--readings {
   --pf-landing-label: var(--pf-exhibit-mono);
   --pf-toc-color: var(--pf-exhibit-muted);
@@ -1953,7 +1953,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 // List: one ruled row per reading, as a library index. The caption (the
 // full citation) is the row's text: author over a larger title, then the
-// imprint. The cover shrinks to a 4px spine in its colour down the row's
+// imprint. The cover shrinks to a 4px spine in its color down the row's
 // left edge, and the arrow sits at the row's right. The same markup as the
 // grid, so the switch can morph between them.
 .pf-exhibit-group--readings[data-pf-view="list"] {
@@ -2011,9 +2011,9 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 // Readings (paragraph--exhibit-reading.html.twig): a book or article set as
 // a cover, from its citation, with no image. Books get one of eight cloth
-// colours (tone, from the title); articles are a journal offprint on paper.
-// Every pair is at least 5.2:1. The cover is a fixed object, so its colours
-// are the same in light and dark reading colours; the hairline frame keeps
+// colors (tone, from the title); articles are a journal offprint on paper.
+// Every pair is at least 5.2:1. The cover is a fixed object, so its colors
+// are the same in light and dark reading colors; the hairline frame keeps
 // the pale offprint's edge on a light page. Type scales with the cover's
 // width (cqi), so it looks the same at every column width. The cover is
 // decoration (aria-hidden): the caption under it is the full citation.
@@ -2155,7 +2155,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 // Under the cover, the full citation, a line each: the author (mono), the
-// title in the heading colour (a book's in italics with its subtitle, an
+// title in the heading color (a book's in italics with its subtitle, an
 // article's in quotes), then the imprint (an article's journal in
 // italics). A linked reading's title underlines on hover.
 .pf-exhibit-reading__caption {
@@ -2539,7 +2539,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 // Without a lead, from lg: title and facts on the left, the text on the
 // right, the wall full width below. With a lead, at every width: the
 // image full screen, the title, facts and text over its lower left on a
-// wash of the page colour, kept in the wash's dense part; "Read more" grows
+// wash of the page color, kept in the wash's dense part; "Read more" grows
 // the image down (the title held in place), never the column wider.
 $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled)';
 
@@ -2814,7 +2814,7 @@ $pf-brief-clear: 90%;
   height: max(22rem + var(--pf-cover-shift), var(--pf-cover-img-h) + var(--pf-cover-shift));
   overflow: clip;
 
-  // The page colour where the text sits: from the foot below lg (the text
+  // The page color where the text sits: from the foot below lg (the text
   // spans the column), from the left from lg, as on the title page.
   &::before,
   &::after {
@@ -2865,7 +2865,7 @@ $pf-brief-clear: 90%;
   }
 
   // Below lg, an opened intro scrolls over the whole image: a veil of the
-  // page colour keeps it readable there (from lg the side wash does).
+  // page color keeps it readable there (from lg the side wash does).
   &::before {
     background: var(--bs-body-bg);
     opacity: 0;
@@ -2884,7 +2884,7 @@ $pf-brief-clear: 90%;
     }
 
     // From lg, with text on the side wash: the title page's light foot (40%
-    // of the page colour at most), on its own layer so the side wash can
+    // of the page color at most), on its own layer so the side wash can
     // slide in over it. Solid to 22% it read as a dark band.
     @include media-breakpoint-up(lg) {
       .pf-section__inner:has(.pf-exhibit-wall__text) & {
@@ -2897,7 +2897,7 @@ $pf-brief-clear: 90%;
 
 // A wall that opens on its title and facts alone (no intro to hold the
 // image up). Its small labels, the number and the facts, take the heading
-// colour, as text over a hero's video does (_reading-themes.scss): the
+// color, as text over a hero's video does (_reading-themes.scss): the
 // grey running text (Twilight's #b7b3ba, also its muted tone) fell to
 // 3.1:1 over a bright photograph on the foot's light wash.
 $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery.is-walled):has(.pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
@@ -2912,7 +2912,7 @@ $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf
 // Its area spans the whole gallery, so the photograph stays pinned under
 // the header while the page slides up over it: the foot's wash moves from
 // the pinned frame to the content (the ::before spacer, then the wall on
-// the page colour), so the title always sits on the same wash however far
+// the page color), so the title always sits on the same wash however far
 // it has scrolled, and the photograph can stay at full strength for the
 // first quarter of a screen before it fades (the gallery's own timeline,
 // inset by the header, as the pinned openings'), gone by 70%. Hidden at
@@ -2958,7 +2958,7 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         animation-range: contain 0px contain 70svh;
       }
 
-      // The page colour from the wash's foot down, edge to edge: no photo
+      // The page color from the wash's foot down, edge to edge: no photo
       // between the tiles or above the first row.
       .pf-exhibit-wall {
         position: relative;
@@ -3800,7 +3800,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 
   // The player pins under the panel's top row (its height measured by
   // js/exhibition.js) while the transcript scrolls by, across the panel on
-  // the page colour, solid so no line shows through behind the controls.
+  // the page color, solid so no line shows through behind the controls.
   .pf-audio {
     position: sticky;
     top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
@@ -3830,10 +3830,10 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 }
 
 // An oral history clip's stage (js/exhibition.js setWash()): its photo
-// blurred into a wash of colour and light over the reading colour, so a
+// blurred into a wash of color and light over the reading color, so a
 // portrait doesn't stand in empty bands. Never behind objects, whose
-// colours a tinted ground would change; the text panel stays solid. The
-// stage's buttons keep their own 75% page-colour backing.
+// colors a tinted ground would change; the text panel stays solid. The
+// stage's buttons keep their own 75% page-color backing.
 .pf-viewer__stage:has(> .pf-exhibit-wash) {
   overflow: hidden;
   isolation: isolate;

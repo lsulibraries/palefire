@@ -108,7 +108,7 @@ $field('field_reading_kind', [
   'label' => 'Kind',
   'required' => TRUE,
   'default_value' => [['value' => 'book']],
-  'description' => 'Books are set as a coloured cover; articles as a journal offprint.',
+  'description' => 'Books are set as a colored cover; articles as a journal offprint.',
 ]);
 $field('field_reading_author', [
   'label' => 'Author (optional)',

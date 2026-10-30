@@ -22,7 +22,7 @@
   overflow: hidden;
 } // no z-index here
 .pf-landing__bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
-// A light scrim, so the video keeps its colour; the text sits on the lead
+// A light scrim, so the video keeps its color; the text sits on the lead
 // panel's glass (_visit.scss), not straight on the video.
 .pf-landing__media::after { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--pf-media-wash, rgb(0 0 0 / .3)); }
 // Playlists (two or more clips): landing-video.js adds a second <video> and
@@ -45,8 +45,8 @@
 // box with a 1px border on the sidebar's glass, a thin search glyph, and a
 // "Search" button in the breadcrumb/TOC voice (monospace, uppercase,
 // tracked) behind a hairline divider. Muted (--pf-toc-color) at rest, the
-// active colour on hover, and the gold accent border while the field has
-// focus. Colours are the --pf-toc-* / --pf-section-* tokens, so it follows
+// active color on hover, and the gold accent border while the field has
+// focus. Colors are the --pf-toc-* / --pf-section-* tokens, so it follows
 // light and dark sections.
 .pf-landing__form {
   --pf-landing-field-h: 3.5rem;

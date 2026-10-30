@@ -76,7 +76,7 @@
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
 }
-// Dark glass (dark sections, the map's dark turn, dark reading colours) is
+// Dark glass (dark sections, the map's dark turn, dark reading colors) is
 // lighter here than on the lead panel: 70% of the sidebar's (Twilight:
 // .8 → .56), so the video shows through. Text stays AA: the wash under the
 // strip is 80-90% dark, so even over a white frame the muted text (Twilight
@@ -360,7 +360,7 @@
 // --- "Light, dark at the map" sections -----------------------------------
 // building-map.js adds .is-map-dark while the map is in view; the section
 // then uses the dark section tokens (the @extend in _modular.scss) and the
-// colour change eases in.
+// color change eases in.
 .pf-section--theme-light-map,
 .pf-section--theme-light-map::before {
   transition: color .45s ease, background-color .45s ease;
@@ -369,11 +369,11 @@
 // a white wash over the background video instead of the dark one, so the
 // light tokens' dark text reads on it. Only 20% (was 40%, plus an 85% band
 // behind the top bar and breadcrumb, now gone), so the video keeps its
-// colour: every piece of text sits on glass instead (lead panel, sidebar,
+// color: every piece of text sits on glass instead (lead panel, sidebar,
 // header, the breadcrumb strip; _modular.scss, _landing-swiss.scss).
 // Map in view: the .is-map-in-view dark overlay (_building-map.scss) takes
 // over.
-// With a reading swatch, every wash is the page colour (--pf-media-wash,
+// With a reading swatch, every wash is the page color (--pf-media-wash,
 // _reading-themes.scss).
 .pf-section:not(.pf-section--theme-dark, .is-map-dark) .pf-landing:not(.is-map-in-view, .pf-landing--map-only) .pf-landing__media::after {
   background-color: var(--pf-media-wash, rgb(255 255 255 / .2));

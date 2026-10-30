@@ -7,9 +7,9 @@
   }
   // Frosted glass (top bar, modular sidebar). Custom property values are
   // passed through as plain CSS, so Sass never treats saturate() as its
-  // colour function.
+  // color function.
   --pf-glass-filter: blur(#{$pf-glass-blur}) saturate(#{$pf-glass-saturate});
-  // Soft rules ($pf-hairline, _variables.scss): this share of the line colour.
+  // Soft rules ($pf-hairline, _variables.scss): this share of the line color.
   --pf-hairline-strength: 20%;
   --pf-focus-color: #{$pf-purple};
   // Monospace sizes: labels (eyebrows, captions, meta) and the controls in
@@ -40,7 +40,7 @@ html {
   text-wrap: pretty;
 }
 
-// Links fade their hover colour (in $pf-hover-in, out $pf-hover-out).
+// Links fade their hover color (in $pf-hover-in, out $pf-hover-out).
 // Zero specificity: components that set their own transition keep it.
 :where(a) {
   transition: color $pf-hover-out ease;

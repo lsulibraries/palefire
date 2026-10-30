@@ -85,13 +85,13 @@
 }
 
 // Alternating tones on a landing page ------------------------------------------
-// Every other band takes the swatch's surface colour, one quiet step off the
+// Every other band takes the swatch's surface color, one quiet step off the
 // page (1.04–1.14:1), so the parts read apart without patterns: the quick
 // guide, then the even sections after the landing (Special Collections: Go
-// deeper, and the events and blog). The Visit strip stays the page colour,
+// deeper, and the events and blog). The Visit strip stays the page color,
 // which its map is drawn on. Text, muted and accent keep 4.5:1 on the surface
 // on every swatch, high contrast included (2026-10-26). Anything inside a band
-// that used the surface colour takes the page colour, so it still stands off;
+// that used the surface color takes the page color, so it still stands off;
 // --pf-band holds the surface from above that swap.
 html#{$pf-themed} .pf-sections:has(> .pf-section--landing-hero) {
   --pf-band: var(--pf-g-surface);

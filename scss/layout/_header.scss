@@ -69,8 +69,8 @@
 
 .pf-brand {
   // The inline SVG logo (logo-lsu-libraries.svg.twig) is filled with
-  // currentColor: the bar's text colour at rest (the menu's own colour, so
-  // the two read as one; with a reading swatch, its heading colour,
+  // currentColor: the bar's text color at rest (the menu's own color, so
+  // the two read as one; with a reading swatch, its heading color,
   // _reading-themes.scss), LSU purple on hover. The dark bar switches these to light
   // grey and gold (_chrome-dark.scss).
   --pf-brand-color: var(--bs-navbar-color, #{$pf-nav-color});
@@ -86,7 +86,7 @@
     transition-duration: $pf-hover-in;
   }
 
-  // Keep the site name (if shown) in the body colour; only the mark changes.
+  // Keep the site name (if shown) in the body color; only the mark changes.
   .pf-brand__name {
     color: var(--bs-body-color);
   }
@@ -219,7 +219,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       text-decoration: none;
-      // The accent colour comes in quickly (.2s, the hover state's
+      // The accent color comes in quickly (.2s, the hover state's
       // transition) and fades out slowly (.5s, this one).
       transition: color $pf-hover-out ease;
 
@@ -228,11 +228,11 @@
       }
     }
 
-    // Hover/focus: colour plus an underline, so it isn't colour alone. The
+    // Hover/focus: color plus an underline, so it isn't color alone. The
     // underline draws in from the left under the words, and on leaving
     // carries on out to the right (it shrinks toward the right edge),
     // rather than snapping back. The current page keeps a full, still one.
-    // Always in the hover colour, so it doesn't change colour on its way
+    // Always in the hover color, so it doesn't change color on its way
     // out while the text fades back.
     .pf-primary-nav__text {
       padding-bottom: .45em;
@@ -322,7 +322,7 @@
     color: var(--pf-utility-color, #{$pf-nav-color});
     border-radius: 4px;
 
-    // Origami: solid icons, a colour change on hover (no filled circle).
+    // Origami: solid icons, a color change on hover (no filled circle).
     &:hover,
     &:focus-visible,
     &[aria-expanded="true"] {
@@ -418,7 +418,7 @@
   .pf-brand__logo,
   .nav-link,
   .pf-utility-nav__link {
-    // Colour: the site's hover timing; the rest follows the compact bar.
+    // Color: the site's hover timing; the rest follows the compact bar.
     transition:
       color $pf-hover-out ease,
       background-color .15s ease-in-out,
@@ -712,7 +712,7 @@
 
   // The drawer: full screen on phones and tablets, the base layer that
   // the utility drawers open over (openOverMenu, js/palefire.js). Their
-  // header and close button, glass and colours (_utility-panels.scss).
+  // header and close button, glass and colors (_utility-panels.scss).
   // The full screen height is set explicitly, so it doesn't depend on what
   // the header contains.
   .pf-menu-drawer {
@@ -735,7 +735,7 @@
     overscroll-behavior: contain;
   }
 
-  // Quick links: four tiles a row, set like the reading colour swatches
+  // Quick links: four tiles a row, set like the reading color swatches
   // below (_utility-panels.scss): the icon in a hairline chip where a
   // swatch shows "Aa", the name under it in small tracked caps.
   .pf-menu-actions__list {
@@ -969,7 +969,7 @@
         text-underline-offset: .25em;
       }
 
-      // The current page: underlined, not colour alone.
+      // The current page: underlined, not color alone.
       &.is-active {
         text-decoration: underline;
         text-decoration-thickness: 2px;
@@ -979,7 +979,7 @@
   }
 }
 
-// Text size and reading colours under the menu (below lg): the Settings
+// Text size and reading colors under the menu (below lg): the Settings
 // drawer's tiles (_utility-panels.scss), copied in by initMenuSetting
 // (js/utility-panels.js). The tiles read the drawer tokens, set here.
 @include media-breakpoint-down(lg) {
@@ -1010,7 +1010,7 @@
 }
 
 // Desktop: the drawer is the bar's menu (.navbar-expand-lg); its quick
-// links and reading colours step aside.
+// links and reading colors step aside.
 @include media-breakpoint-up(lg) {
   .pf-menu-actions,
   .pf-menu-themes {

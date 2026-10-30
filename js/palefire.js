@@ -362,7 +362,7 @@
    * lg). Bootstrap handles Escape, the focus trap and returning focus to
    * the Menu button. This adds:
    * - <html data-pf-panel="menu"> while it is open, so the backdrop is the
-   *   same wash of the page colour as the utility drawers'
+   *   same wash of the page color as the utility drawers'
    *   (_utility-panels.scss).
    * - The sections as an accordion: each section's heading button
    *   (.pf-primary-nav__heading, menu--main.html.twig) shows or hides its

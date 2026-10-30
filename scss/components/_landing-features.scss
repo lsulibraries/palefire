@@ -13,7 +13,7 @@
 // under the pointer or keyboard focus widens, shows more of its picture
 // and a line more about it. A tile with several images crossfades through
 // them (exhibit-rotate.js), with a pause button.
-// The video is a band at the top of the lead, washed into the page colour
+// The video is a band at the top of the lead, washed into the page color
 // like an exhibition cover (.pf-landing--cover, "Cover" below); the page
 // scrolls on through the map in one flow.
 // Imported after _landing-hero.scss, so these rules follow the ones they
@@ -159,7 +159,7 @@
 
 // On the hero's cover the bar is a caption strip at the top of the page:
 // no glass, its breadcrumb and buttons straight on the video (whose top
-// wash darkens under them), each word with a halo of the page colour, so
+// wash darkens under them), each word with a halo of the page color, so
 // the header is the page's one bar. Once the page scrolls and the bar sticks
 // under the header (js/palefire.js marks <html> .pf-bar-stuck), it turns to
 // glass, as before, to stay readable over whatever passes under it. Reduce
@@ -357,7 +357,7 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
 // --- Cover: the video as a washed band (hero, .pf-landing--cover) ---------
 // As on an exhibition's title page: the video fills the first screen,
 // behind the title, the hours, the intro and the search, and a wash of the
-// page colour does the work the glass panel did. Solid at the band's foot,
+// page color does the work the glass panel did. Solid at the band's foot,
 // where the banners rise out of it onto the plain page with no edge; from the left, under the text, so it keeps the
 // swatch's contrast on any frame; and a light one under the bar. The page
 // then scrolls on through the map and On view in one flow: no snap. The
@@ -424,7 +424,7 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
   padding: var(--pf-cover-top) 0 0;
   border: 0;
   border-radius: 0;
-  // No glass: !important over the reading colours' lead tint
+  // No glass: !important over the reading colors' lead tint
   // (html[data-pf-theme] .pf-landing--hero .pf-landing__lead,
   // _reading-themes.scss), which would darken the page under the band and
   // show a seam at the wash's foot. Reduce transparency keeps its solid
@@ -822,7 +822,7 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
     // Hover (and focus): a 2px line in the button's gold draws in along
     // the field's foot from the start, ending at the Search button (it is
     // the input's own background, so it stops where the input does), and
-    // the placeholder brightens toward the text colour.
+    // the placeholder brightens toward the text color.
     background-image: linear-gradient(var(--pf-g-accent, #{$pf-gold}), var(--pf-g-accent, #{$pf-gold}));
     background-position: left bottom;
     background-repeat: no-repeat;
@@ -857,10 +857,10 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
   }
 
   // The Search button filled with the swatch's accent, its words in the
-  // text colour for that fill, as in the mockup, so the action stands out
+  // text color for that fill, as in the mockup, so the action stands out
   // (black on Twilight's gold, white on the light swatches' dark accents;
   // LSU gold and black unthemed). Hover moves the fill a little toward the
-  // page's text colour, which also keeps the words at contrast.
+  // page's text color, which also keeps the words at contrast.
   .pf-landing__submit {
     border-inline-start: 0;
     color: var(--pf-g-on-accent, #{$pf-black});
@@ -907,15 +907,15 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // --- Hours, under the title ---------------------------------------------------
 // Today's hours as a caption under the hero's title: the status as a badge
-// (a dot in the Visit strip's colours, hidden from screen readers since it
+// (a dot in the Visit strip's colors, hidden from screen readers since it
 // repeats the word, and the status in the labels' small capitals, on a
 // solid ground: the swatch's accent while open, the hero links' plate
 // while closed), then today's hours, which link to the week in the Visit
 // panel, and the building. visit-hours.js fills the status and the hours
 // and marks the line (data-hours-state, is-ready). Until then "Hours"
 // shows dimmed on the plate; if LibCal fails, only the building stays.
-// Over the cover's video every word takes the text's full colour with a
-// halo of the page colour, so each keeps 4.5:1 on any frame (the muted
+// Over the cover's video every word takes the text's full color with a
+// halo of the page color, so each keeps 4.5:1 on any frame (the muted
 // tone fell to 3.3:1).
 .pf-landing__hours {
   --pf-visit-open: #2f9e4f;
@@ -966,9 +966,9 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // The badge: no frame, a solid ground. Open (and closing soon): the
-// swatch's accent with its text colour (black on Twilight's pale gold,
+// swatch's accent with its text color (black on Twilight's pale gold,
 // 13:1; white on the light swatches' dark accents). Closed, and while
-// loading: a plate of the page colour, its words in the text colour. The
+// loading: a plate of the page color, its words in the text color. The
 // ground eases between the two.
 // No glass (2026-10-26): its blur, wider than the 24px badge, flickered
 // under the header's glass as the badge scrolled beneath it. The plate is
@@ -1096,7 +1096,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     outline: 1px solid CanvasText;
   }
 
-  // Forced colours drop the badge's ground: a frame marks it instead.
+  // Forced colors drop the badge's ground: a frame marks it instead.
   .pf-landing__hours-label {
     border: 1px solid CanvasText;
   }
@@ -1161,7 +1161,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 
   // The blog post as a line of text: its pill, then its title as a link
-  // in the text's colour, two lines at most, with an arrow.
+  // in the text's color, two lines at most, with an arrow.
   // A little more room under it than the gutter, so its words never sit
   // tight on the pictures.
   .pf-hero-banner--blog {
@@ -1269,13 +1269,13 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transform: scale(1.04);
 }
 
-// The pictures in the page's own colour at first: each one grey, then
-// half washed with the page colour (the cover's, so the swatch's), so it
+// The pictures in the page's own color at first: each one grey, then
+// half washed with the page color (the cover's, so the swatch's), so it
 // sinks into the ground around it (Twilight's dark violet grey, Cream's
 // cream). The scrim over it keeps the white words at 4.5:1. Hover or focus
-// brings the picture's colours back as it zooms, and so does scrolling
+// brings the picture's colors back as it zooms, and so does scrolling
 // (below). Values from 1 (grey and washed) to 0 (the picture's own
-// colours): --pf-banner-grey for the banner's place on screen,
+// colors): --pf-banner-grey for the banner's place on screen,
 // --pf-banner-wait for the page's scroll, --pf-banner-dim for hover. Either
 // scroll value keeps the picture grey; hover clears both. Hover's has to
 // be its own: a property under an animation
@@ -1372,8 +1372,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // --pf-banner-ratio, and its shadow) with the title on it over a scrim of
 // its own (the title's box, reaching 4.5rem above its words: 85% black at
 // the foot, so white keeps 4.5:1 on any picture, the top line about 60%);
-// under it, the label as a caption in the section's colours and the mono
-// label voice, its text colour on hover. The text block opens up
+// under it, the label as a caption in the section's colors and the mono
+// label voice, its text color on hover. The text block opens up
 // (display: contents) so title and label take a row each of the link's
 // grid. Not the blog post set as a line of text (under 44rem).
 @mixin pf-banner-caption {
@@ -1555,14 +1555,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
       animation-range: cover 0% cover 100%;
     }
 
-    // The colour comes in on scroll, on the same timeline: grey until half
-    // the banner is on screen, in full colour by the time it reaches the
+    // The color comes in on scroll, on the same timeline: grey until half
+    // the banner is on screen, in full color by the time it reaches the
     // middle of the screen, and grey again on the way back up. And none
     // before the page has scrolled 15rem, so the row is quiet on load
     // where it already shows (half of it from 44rem to 64rem).
     html:not(.pf-a11y-motion) .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
       animation:
-        pf-banner-colour linear both,
+        pf-banner-color linear both,
         pf-banner-unwait linear both;
       animation-timeline: --pf-banner-own, scroll(root);
       animation-range: entry 50% cover 50%, 0 15rem;
@@ -1570,7 +1570,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 }
 
-@keyframes pf-banner-colour {
+@keyframes pf-banner-color {
   from {
     --pf-banner-grey: 1;
   }
@@ -1653,7 +1653,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // --- Sign-in ----------------------------------------------------------------
 // A small outlined button beside the blog post (above), in the Search
-// button's type and colour, the duotone sign-in icon before the words.
+// button's type and color, the duotone sign-in icon before the words.
 // Full width when stacked.
 .pf-hero-account__link {
   @extend %pf-landing-label;
@@ -1709,7 +1709,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // The rule's link, at its right end, so each section has a mark on the
 // right margin to answer the number on the left: the same small capitals,
-// in the text's full colour, an arrow after them that steps right on hover,
+// in the text's full color, an arrow after them that steps right on hover,
 // underlined on hover and focus. A taller box than its line (24px, WCAG
 // 2.5.8) without moving the line.
 .pf-index-rule__link {
@@ -1857,7 +1857,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // The paths across the panel's column: no box or prose cap here, the rule
-// above already sets them off. The stops' discs keep the page colour
+// above already sets them off. The stops' discs keep the page color
 // (opaque, so the line still passes behind them).
 .pf-quick-guide .pf-paths {
   // Set here, not on .pf-quick-guide: _guide.scss loads later and resets
@@ -2638,7 +2638,7 @@ html.pf-a11y-motion {
 // One system for the page, as in print:
 // - One section heading: every section's h2 on the page (the map, the
 //   Quick Guide, On view and the sections after the landing) the same size,
-//   weight and tracking, in the text colour. The swatch's heading gold
+//   weight and tracking, in the text color. The swatch's heading gold
 //   (html[data-pf-theme] .pf-main h1-h6, _reading-themes.scss) is kept for
 //   the page title, the Search button and small marks (the index numbers, active
 //   states), so it still means something. Each selector outranks that rule.
@@ -2863,7 +2863,7 @@ html[data-pf-hero] .pf-landing--cover {
   justify-self: stretch;
 }
 
-// Hours: the status dot in its colour (open, soon, closed), then "See
+// Hours: the status dot in its color (open, soon, closed), then "See
 // hours" with a down arrow. The status is held (hidden, its space kept)
 // until LibCal answers, and the button goes if it fails.
 .pf-quick-guide__link--hours {
@@ -2940,7 +2940,7 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
   font-weight: 500;
   letter-spacing: -.02em;
   line-height: 1.1;
-  // The heading colour, not the text's: on Twilight the text is the soft
+  // The heading color, not the text's: on Twilight the text is the soft
   // grey and headings stay near-white (_reading-themes.scss).
   color: var(--bs-heading-color, var(--pf-section-fg, var(--bs-body-color)));
   text-wrap: balance;
@@ -3000,10 +3000,10 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
 }
 
 // Paragraphs a step softer than the headings over them (80% of the text
-// colour), so the heading leads by tone as well as size; bold words keep
+// color), so the heading leads by tone as well as size; bold words keep
 // full strength. About 10:1 on Twilight, over 7:1 on the light swatches.
 // Not the intro on the video, which needs all its contrast there. The
-// map's summary is named too: it sets its own colour (_building-map.scss).
+// map's summary is named too: it sets its own color (_building-map.scss).
 html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-quick-guide__intro) {
   color: var(--pf-quick-text, color-mix(in srgb, var(--pf-section-fg, var(--bs-body-color)) 80%, transparent));
 
@@ -3015,8 +3015,8 @@ html[data-pf-hero] .pf-landing--cover :is(.pf-map__type, .pf-map__summary, .pf-q
 // Twilight: the Quick Start's paragraphs (intro, Before you visit) in the
 // swatch's soft text grey like the rest of its running text; titles and
 // bold stay near-white. The video is fully washed out behind the Quick
-// Start (measured 7.4:1, the page colour's own, at 320 to 1440), unlike
-// the hero's top, whose words keep the heading colour over the video.
+// Start (measured 7.4:1, the page color's own, at 320 to 1440), unlike
+// the hero's top, whose words keep the heading color over the video.
 html[data-pf-theme="twilight"] .pf-quick-guide {
   --pf-quick-text: var(--pf-g-fg);
 }
@@ -3061,7 +3061,7 @@ html[data-pf-theme="twilight"] .pf-quick-guide {
 .pf-landing--cover .pf-map .pf-visit {
   border-width: 0;
   border-radius: 0;
-  // !important over the reading colours' panel glass (_reading-themes.scss).
+  // !important over the reading colors' panel glass (_reading-themes.scss).
   background: none !important;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -3195,7 +3195,7 @@ html[data-pf-hero] .pf-landing--hero {
 //   beside it (a grid, so neither can run into the hours over them);
 // - from 80rem (five-column cover): three columns over banners 3-5, so Log
 //   in stands over the Search button, the plate again the intro's height.
-// The plate is the page colour at 65% on the glass blur, lighter than the
+// The plate is the page color at 65% on the glass blur, lighter than the
 // search field's 80% so the two read apart: the least that keeps white
 // words at 4.5:1 over a white frame of the video (4.7:1 there), the halo
 // on top. Gold words at rest would need 75%, so Log in, which leaves for

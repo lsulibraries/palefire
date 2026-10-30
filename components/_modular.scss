@@ -99,7 +99,7 @@ html.pf-snap .site-footer {
 // ---------------------------------------------------------------------
 // The image is a real responsive <img> from the "section_background"
 // responsive image style, laid behind the content with object-fit.
-// isolation keeps z-index: -1 above the section's own background colour.
+// isolation keeps z-index: -1 above the section's own background color.
 .pf-section--has-bg {
   isolation: isolate;
 }

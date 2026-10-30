@@ -6,7 +6,7 @@
 // degrees came out stair-stepped (worst at 125% and 150% zoom, and in
 // Firefox and Safari). Each line here has half-pixel soft edges instead:
 // it ramps up over .5px, holds .5px, and ramps down over .5px, the same
-// 1px of colour in all, drawn smooth at any scale.
+// 1px of color in all, drawn smooth at any scale.
 @function pf-hatch($color, $angle: 135deg) {
   @return repeating-linear-gradient($angle,
     transparent 0 10.25px,
@@ -20,7 +20,7 @@
 // drawer's "Reduce transparency" and "High contrast" switches
 // (html.pf-a11y-solid / html.pf-a11y-contrast, utility-panels.js).
 // On pages with a reading swatch ($pf-themed) high contrast leaves the glass
-// alone: it pushes the swatch's own colours apart instead
+// alone: it pushes the swatch's own colors apart instead
 // (_reading-themes.scss). Reduce transparency still applies there.
 //
 // Write the content as top-level rules (`.pf-header { ... }`): the class
@@ -55,7 +55,7 @@
 // scrollbar-width/-color are set, so those go back to auto there.
 //
 // --pf-scroll-track: no track by default. Guides give it the TOC rail's
-// colour, so the bar reads like the rail (_guide.scss). Set on the element
+// color, so the bar reads like the rail (_guide.scss). Set on the element
 // itself, like the thumb, so a value on <html> never reaches the drawers.
 @mixin pf-thin-scrollbar {
   --pf-scroll-thumb: var(--pf-toc-color);

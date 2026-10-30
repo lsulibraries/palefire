@@ -19,7 +19,7 @@
     {
      "type": "text",
      "title": "Why we changed it",
-     "body": "<p>The old site grew over fifteen years across several systems. Research guides lived in LibGuides, exhibitions on a separate blog, and each had its own menus, colours and type. Readers had to learn three websites to use one library.</p>"
+     "body": "<p>The old site grew over fifteen years across several systems. Research guides lived in LibGuides, exhibitions on a separate blog, and each had its own menus, colors and type. Readers had to learn three websites to use one library.</p>"
     },
     {
      "type": "text",
@@ -314,7 +314,7 @@
    "blocks": [
     {
      "type": "text",
-     "body": "<p>The gear icon at the top of every page opens <strong>Settings</strong>:</p><ul><li><strong>Reading colours:</strong> thirteen page and text colour schemes, light and dark, each keeping text at 4.5:1 contrast or better.</li><li><strong>Text size:</strong> up to 150%.</li><li><strong>Easy-to-read font:</strong> Atkinson Hyperlegible.</li><li><strong>Text spacing:</strong> more space between lines, words and letters.</li><li><strong>Underline all links.</strong></li><li><strong>High contrast.</strong></li><li><strong>Reduce motion,</strong> and <strong>pause background videos.</strong></li></ul><p>Your choices are saved on your device and apply across the site. The clock, chat and person icons beside the gear open today's hours, Ask Us and your library accounts without leaving the page.</p>"
+     "body": "<p>The gear icon at the top of every page opens <strong>Settings</strong>:</p><ul><li><strong>Reading colors:</strong> thirteen page and text color schemes, light and dark, each keeping text at 4.5:1 contrast or better.</li><li><strong>Text size:</strong> up to 150%.</li><li><strong>Easy-to-read font:</strong> Atkinson Hyperlegible.</li><li><strong>Text spacing:</strong> more space between lines, words and letters.</li><li><strong>Underline all links.</strong></li><li><strong>High contrast.</strong></li><li><strong>Reduce motion,</strong> and <strong>pause background videos.</strong></li></ul><p>Your choices are saved on your device and apply across the site. The clock, chat and person icons beside the gear open today's hours, Ask Us and your library accounts without leaving the page.</p>"
     },
     {
      "type": "text",
@@ -356,7 +356,7 @@
    "blocks": [
     {
      "type": "text",
-     "body": "<ul><li>WCAG 2.2 AA throughout: 4.5:1 text contrast, visible focus, labelled controls, reduced motion respected in every script.</li><li>Built for phones first and checked at 320, 768, 1024 and 1440px.</li><li>Speed: images lazy-load at fixed sizes (no layout shift), and scripts load only on the pages that use them.</li><li>Visual rules: Swiss-style grid, one hairline weight for every rule, hover colour in 0.2s and out 0.5s, Font Awesome 5 icons only.</li></ul>"
+     "body": "<ul><li>WCAG 2.2 AA throughout: 4.5:1 text contrast, visible focus, labelled controls, reduced motion respected in every script.</li><li>Built for phones first and checked at 320, 768, 1024 and 1440px.</li><li>Speed: images lazy-load at fixed sizes (no layout shift), and scripts load only on the pages that use them.</li><li>Visual rules: Swiss-style grid, one hairline weight for every rule, hover color in 0.2s and out 0.5s, Font Awesome 5 icons only.</li></ul>"
     }
    ]
   },

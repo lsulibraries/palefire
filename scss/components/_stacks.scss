@@ -11,7 +11,7 @@
 // Motion: the stage's pictures crossfade and settle, the arrows slide,
 // and loaded events fade in; none of it with reduced motion.
 
-// Titles (and the event's day) in the heading colour, the lines under them
+// Titles (and the event's day) in the heading color, the lines under them
 // in the text's, so the lists read as titles first.
 .pf-stacks {
   --pf-stacks-fg: var(--pf-section-fg, var(--bs-body-color));
@@ -72,7 +72,7 @@
 // Instagram: a placeholder in the Visit strip's old hatch until a post
 // embed replaces it. The picture (the mark and its label), then bars for
 // the post's title, two lines of description and the link. On the
-// section's own colour, so the dark stage behind the photos doesn't show.
+// section's own color, so the dark stage behind the photos doesn't show.
 .pf-stacks__frame--instagram {
   display: flex;
   flex-direction: column;

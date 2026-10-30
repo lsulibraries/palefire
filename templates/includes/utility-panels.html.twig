@@ -58,13 +58,13 @@
     { label: 'TigerCASH Account'|t, icon: 'credit-card', url: 'https://tcard.lsu.edu/' },
   ]
 %}
-{# Reading colours (Settings): page and text colour pairs. Keys must match
+{# Reading colors (Settings): page and text color pairs. Keys must match
    $pf-reading-themes (_reading-themes.scss), the THEMES list in
    utility-panels.js and the pattern in html.html.twig. The first is the
    default every page opens in (Twilight, set on <html> by
    html.html.twig); its radio is checked when nothing is saved. Order:
    favourite darks, the other darks, then the lights. Only the first
-   three show, then a "More colours" tile (utility-panels.js moves the
+   three show, then a "More colors" tile (utility-panels.js moves the
    button into the grid); the chosen one always stays in view. #}
 {%
   set reading_themes = [
@@ -264,7 +264,7 @@
       </fieldset>
 
       <fieldset class="pf-settings__group">
-        <legend class="pf-settings__legend">{{ 'Reading colours'|t }}</legend>
+        <legend class="pf-settings__legend">{{ 'Reading colors'|t }}</legend>
         <div class="pf-settings__themes" id="pf-set-themes" data-pf-themes>
           {% for theme in reading_themes %}
             <input class="pf-settings__theme-input visually-hidden{{ loop.index > 3 ? ' is-more' }}" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-describedby="pf-set-theme-help">
@@ -275,9 +275,9 @@
            to the end of the grid and shown by utility-panels.js. #}
         <button type="button" class="pf-settings__theme pf-settings__more" aria-controls="pf-set-themes" aria-expanded="false" data-pf-themes-more hidden>
           <span class="pf-settings__theme-chip" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8h10"/><path class="pf-settings__more-v" d="M8 3v10"/></svg></span>
-          <span data-pf-themes-more-label>{{ 'More colours'|t }}</span>
+          <span data-pf-themes-more-label>{{ 'More colors'|t }}</span>
         </button>
-        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colours for the whole site, including the header, menus and these drawers.'|t }}</p>
+        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colors for the whole site, including the header, menus and these drawers.'|t }}</p>
       </fieldset>
 
       {% for group in settings_groups %}

@@ -3,7 +3,7 @@
 // js/family-tree-viewer.js).
 //
 // Set like a museum's wall chart: the tree drawn in hairlines on the page
-// colour on the stage; the title, years, Key and notes in the viewer's
+// color on the stage; the title, years, Key and notes in the viewer's
 // panel, the Key in the small tracked monospace. The viewer sits under
 // <body>, outside .pf-guide, so it reads the reading swatch (--pf-g-*)
 // straight from <html>.
@@ -255,7 +255,7 @@
   color: var(--pf-tree-muted);
 }
 
-// Reduced motion: the links' colour changes at once.
+// Reduced motion: the links' color changes at once.
 @media (prefers-reduced-motion: reduce) {
   .pf-tree-viewer__action {
     transition: none;

@@ -4,7 +4,7 @@
 @use "sass:string";
 
 // =========================================================================
-// Reading colours (Settings > Reading colours): page and text colour pairs
+// Reading colors (Settings > Reading colors): page and text color pairs
 // popular in reading modes. They replace "Dark guides".
 //
 // <html data-pf-theme="sepia"> (no attribute: Cream, the default), set by
@@ -15,19 +15,19 @@
 //
 // Where they apply (2026-10-16: site-wide, was guides only):
 // - Every page once a swatch is picked, and guides always (Cream when none
-//   is): $pf-themed. The swatch colours everything: page, header and its
+//   is): $pf-themed. The swatch colors everything: page, header and its
 //   dropdowns, TOC sidebar, drawers, dark sections, the landing lead panel and
 //   Visit strip, the building map, the events calendar and the footer.
 //   Background videos and maps stay; their wash and glass take the swatch.
 // - Pages with no swatch (and not a guide) look as they always have.
 //
 // How: each swatch writes its --pf-g-* tokens on <html> (pf-reading-tokens).
-// Everything else reads those: Bootstrap's --bs-* colours (pf-reading-bs),
+// Everything else reads those: Bootstrap's --bs-* colors (pf-reading-bs),
 // re-declared on anything that resets them ([data-bs-theme], dark sections,
 // the footer), and the chrome, section, landing, map and calendar tokens
 // below. So a swatch, or high contrast, only ever changes --pf-g-*.
 //
-// Chrome glass (header, TOC sidebar, dropdowns, footer): the page colour on
+// Chrome glass (header, TOC sidebar, dropdowns, footer): the page color on
 // light swatches; on dark ones with a little black ($pf-reading-chrome-*),
 // so it reads as a quiet layer just under the page.
 //
@@ -51,18 +51,18 @@
 //   material text 12.8  muted 6.3  accent  8.7   (headings 9.6, bold 8.8,
 //                                                 italics 5.5)
 // On the chrome glass: text 4.9:1 and up, muted 4.6:1 and up. Muted text on
-// the surface colour is 4.5:1 and up. The four later dark swatches keep
+// the surface color is 4.5:1 and up. The four later dark swatches keep
 // their surface and callout tints (surface, accent-soft) just above their
-// page colour so text, muted and accent stay 4.5:1 on them too. Scrollbar
+// page color so text, muted and accent stay 4.5:1 on them too. Scrollbar
 // thumbs are 3:1 and up on both the page and the rail (1.4.11).
 //
 // Over a background video (worst case, a black frame under a light swatch
 // or a white one under a dark swatch) text sits on two layers: a 60% wash of
-// the page colour, then 75% glass (80% on dark swatches). Panel text there
-// is the heading colour (6.3:1 and up) and labels the panel muted tone
+// the page color, then 75% glass (80% on dark swatches). Panel text there
+// is the heading color (6.3:1 and up) and labels the panel muted tone
 // (4.5:1 and up). The map's in-view wash is 90%.
 //
-// High contrast (the Settings switch or the OS): the swatch's own colours
+// High contrast (the Settings switch or the OS): the swatch's own colors
 // pushed apart, so it keeps its hue and stays glass. Light swatches: page
 // lighter, text darker. Dark swatches: page darker, text lighter. Rules,
 // borders and scrollbar thumbs stay as they are (pf-reading-hc).
@@ -88,7 +88,7 @@ $pf-reading-themes: (
     // the page, 6.7:1 on the surfaces; was near-white #edebee), and
     // near-white kept for headings, links and bold (strong). The grey
     // can't go dimmer for labels: over a white video frame it is already
-    // near 4.5:1, so text over the hero's video keeps the heading colour.
+    // near 4.5:1, so text over the hero's video keeps the heading color.
     bg: #272429, fg: #b7b3ba, heading: #f8f7f9, muted: #b7b3ba, rule: #3f3a42,
     surface: #2e2b30, accent: #f2dc9b, accent-soft: #2f2c31,
     scroll: #97929a, panel-muted: #bfbbc1,
@@ -167,8 +167,8 @@ $pf-reading-themes: (
     surface: #222938, accent: #a9bdf2, accent-soft: #22293b,
     scroll: #7d889e, panel-muted: #97a1b5,
   ),
-  // Material (2026-10-16, replaces Mist): the Atom Material Theme's colours,
-  // sampled from the editor. Multicolour: headings green, bold yellow,
+  // Material (2026-10-16, replaces Mist): the Atom Material Theme's colors,
+  // sampled from the editor. Multicolor: headings green, bold yellow,
   // italics purple, links cyan (the optional title / strong / em keys).
   // Its header and TOC are the theme's own darker sidebar (chrome: #232e33),
   // not a mix. The scrollbar thumb is a touch lighter than the editor's dim
@@ -186,7 +186,7 @@ $pf-reading-themes: (
 // DEFAULT_THEME in utility-panels.js.
 $pf-reading-default: 'twilight' !default;
 
-// Chrome glass: the page colour with this much black (none on light
+// Chrome glass: the page color with this much black (none on light
 // swatches; 7.5% on dark, half the 15% first tried).
 $pf-reading-chrome-light: 0% !default;
 $pf-reading-chrome-dark: 7.5% !default;
@@ -205,7 +205,7 @@ $pf-reading-media-glass-dark: .8 !default;
 // uses the same glass.
 $pf-reading-sidebar-glass: .9 !default;
 // The landing lead panel and Visit strip on dark swatches: the Settings
-// drawer's colour (the page darkened 20%) at this much. The drawer itself is
+// drawer's color (the page darkened 20%) at this much. The drawer itself is
 // 30%, but it has the dimmed backdrop behind it; these sit on the video's
 // wash only. The least that keeps every dark swatch's panel text and labels
 // at 4.5:1 over a white frame: 55% on the hero (80% wash), 75% elsewhere
@@ -217,13 +217,13 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   @return math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb));
 }
 
-// A mixed colour rounded to whole channels, so it prints as hex.
+// A mixed color rounded to whole channels, so it prints as hex.
 @function pf-mix($a, $b, $weight) {
   $c: color.mix($a, $b, $weight);
   @return rgb(math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb)));
 }
 
-// High contrast version of a swatch: page colours pushed toward white (light
+// High contrast version of a swatch: page colors pushed toward white (light
 // swatches) or black (dark), text toward the other end. Rules and scrollbar
 // thumbs are left alone, so borders don't get louder.
 @function pf-reading-hc($t) {
@@ -253,12 +253,12 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   @if $dark {
     $chrome: pf-mix(#000, map.get($t, bg), $pf-reading-chrome-dark);
   }
-  // A swatch can name its own chrome colour (Material).
+  // A swatch can name its own chrome color (Material).
   @if map.has-key($t, chrome) {
     $chrome: map.get($t, chrome);
   }
-  // Multicolour swatches: content headings, bold and italics in their own
-  // colours (Material).
+  // Multicolor swatches: content headings, bold and italics in their own
+  // colors (Material).
   @each $key in (title, strong, em) {
     @if map.has-key($t, $key) {
       --pf-g-#{$key}: #{map.get($t, $key)};
@@ -276,10 +276,10 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --pf-g-accent: #{map.get($t, accent)};
   --pf-g-accent-rgb: #{pf-rgb(map.get($t, accent))};
   --pf-g-accent-soft: #{map.get($t, accent-soft)};
-  // Highlight: the one colour that marks the page's own voice, the hero
+  // Highlight: the one color that marks the page's own voice, the hero
   // title, the index rules' numbers and the Quick Start's letters
   // (_landing-features.scss). A swatch's highlight key, else its title
-  // colour (Twilight's pale gold, Material's green), else its accent, so
+  // color (Twilight's pale gold, Material's green), else its accent, so
   // every swatch has one (Cream: LSU purple).
   $highlight: map.get($t, accent);
   @if map.has-key($t, highlight) {
@@ -289,9 +289,9 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
     $highlight: map.get($t, title);
   }
   --pf-g-highlight: #{$highlight};
-  // Hover colours. A swatch can set its own (Twilight: brighter text, not
+  // Hover colors. A swatch can set its own (Twilight: brighter text, not
   // gold); otherwise text hovers to the accent and links to the heading
-  // colour, as before.
+  // color, as before.
   $hover: map.get($t, accent);
   @if map.has-key($t, hover) {
     $hover: map.get($t, hover);
@@ -314,7 +314,7 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --pf-g-scroll: #{map.get($t, scroll)};
   --pf-g-scroll-hover: #{map.get($t, muted)};
   // Text on glass (drawers, the landing lead panel, the TOC over a photo):
-  // the heading colour, and labels in a muted tone dark (or light) enough
+  // the heading color, and labels in a muted tone dark (or light) enough
   // for 4.5:1 with the page showing through.
   --pf-g-panel-text: #{map.get($t, heading)};
   --pf-g-panel-muted: #{map.get($t, panel-muted)};
@@ -327,7 +327,7 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   }
 }
 
-// Bootstrap's colours, from the tokens: on <html>, and again on anything
+// Bootstrap's colors, from the tokens: on <html>, and again on anything
 // that resets them (data-bs-theme, dark sections, the footer).
 @mixin pf-reading-bs {
   --bs-body-bg: var(--pf-g-bg);
@@ -336,7 +336,7 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --bs-body-color-rgb: var(--pf-g-fg-rgb);
   --bs-emphasis-color: var(--pf-g-heading);
   --bs-emphasis-color-rgb: var(--pf-g-heading-rgb);
-  // Headings (h1-h6, Bootstrap's reboot) in the heading colour rather than
+  // Headings (h1-h6, Bootstrap's reboot) in the heading color rather than
   // inheriting the text's, so they stay bright where text is the soft grey.
   --bs-heading-color: var(--pf-g-heading);
   --bs-secondary-color: var(--pf-g-muted);
@@ -384,7 +384,7 @@ html#{$pf-themed} {
   // Section photos (light sections) and dark ones: a scrim of the page.
   --pf-section-scrim: rgba(var(--pf-g-bg-rgb), .8);
   // Background videos and maps keep playing under a wash of the page
-  // colour (_landing.scss, _visit.scss, _building-map.scss).
+  // color (_landing.scss, _visit.scss, _building-map.scss).
   --pf-media-wash: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash});
   --pf-media-wash-map: rgba(var(--pf-g-bg-rgb), #{$pf-reading-media-wash-map});
   background-color: var(--pf-g-bg);
@@ -395,7 +395,7 @@ html#{$pf-themed} {
   --pf-scroll-track: var(--pf-g-rule);
 }
 
-// Anything that brings its own colours (Bootstrap's dark mode on dark
+// Anything that brings its own colors (Bootstrap's dark mode on dark
 // sections, the footer, the dark header and mobile TOC; the older section
 // styles) takes the swatch's instead.
 html#{$pf-themed} :is([data-bs-theme], .pf-section--theme-dark, .pf-section.is-map-dark, .pf-section--light, .pf-section--dark, .pf-section--brand, .pf-footer) {
@@ -403,7 +403,7 @@ html#{$pf-themed} :is([data-bs-theme], .pf-section--theme-dark, .pf-section.is-m
   color-scheme: inherit;
 }
 
-// Dark sections are the page colour too.
+// Dark sections are the page color too.
 html#{$pf-themed} :is(.pf-section--theme-dark, .pf-section.is-map-dark) {
   --pf-section-fg: var(--pf-g-fg);
   --pf-section-bg: var(--pf-g-bg);
@@ -429,7 +429,7 @@ html#{$pf-themed} :is(.pf-section--light, .pf-section--dark, .pf-section--brand)
 // accent, so they never sit beside a second gold (Twilight's is pale gold;
 // LSU gold #ffd700 beside it clashed). Every dark accent is 6:1 or more on
 // its page, so the focus ring stays well over 3:1. Repeated on dark
-// sections and the dark bar, which set their own focus colour (_base.scss).
+// sections and the dark bar, which set their own focus color (_base.scss).
 // The Settings drawer's "Focus" switch keeps its heavier gold ring.
 html#{$pf-themed}.pf-reading-dark,
 html#{$pf-themed}.pf-reading-dark [data-bs-theme="dark"] {
@@ -438,7 +438,7 @@ html#{$pf-themed}.pf-reading-dark [data-bs-theme="dark"] {
 }
 
 // --- Chrome: header, dropdowns, TOC sidebar, footer ----------------------
-// Glass a little darker than the page; text in the heading colour, hover
+// Glass a little darker than the page; text in the heading color, hover
 // and the TOC bar in the accent.
 html#{$pf-themed} body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-sidebar-glass});
@@ -499,8 +499,8 @@ html#{$pf-themed} .pf-header {
 }
 
 // Light swatches: the page's own glass, as reader apps do (2026-10-26; was
-// inverted to a dark band in the heading colour, which matched neither the
-// page nor its title). Text and icons in the heading colour, hovers in the
+// inverted to a dark band in the heading color, which matched neither the
+// page nor its title). Text and icons in the heading color, hovers in the
 // accent (above). The soft hairline ($pf-hairline's mix, in the panel muted
 // tone) keeps the bar apart from the page; high contrast takes it to full
 // strength.
@@ -551,8 +551,8 @@ html#{$pf-themed}.pf-a11y-solid body {
 // --- Landing, map, events --------------------------------------------------
 // The lead panel and the Visit strip: the Settings drawer's glass
 // (_utility-panels.scss), same blur (--pf-glass-filter), so the frosted
-// panels match. Light swatches: the page colour at the drawer's 65%.
-// Dark: the drawer's darkened page colour, thicker than the drawer's 30%
+// panels match. Light swatches: the page color at the drawer's 65%.
+// Dark: the drawer's darkened page color, thicker than the drawer's 30%
 // (see $pf-reading-lead-glass-dark).
 html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
   background-color: rgba(var(--pf-g-bg-rgb), #{$pf-panel-glass});
@@ -567,7 +567,7 @@ html#{$pf-themed}.pf-reading-dark .pf-landing--hero :is(.pf-landing__lead, .pf-v
 }
 
 // Reduce transparency and the Settings drawer's solid switch: solid page
-// colour, as the TOC and header (high contrast keeps the swatch's glass).
+// color, as the TOC and header (high contrast keeps the swatch's glass).
 @media (prefers-reduced-transparency: reduce) {
   html#{$pf-themed} :is(.pf-landing__lead, .pf-visit) {
     background-color: rgb(var(--pf-g-bg-rgb)) !important;
@@ -579,7 +579,7 @@ html#{$pf-themed}.pf-a11y-solid :is(.pf-landing__lead, .pf-visit) {
 }
 
 // The lead panel and the Visit strip are glass, often over a video: text in
-// the heading colour, labels and lines in the panel muted tone.
+// the heading color, labels and lines in the panel muted tone.
 html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
   --pf-landing-accent: var(--pf-g-accent);
   --pf-section-fg: var(--pf-g-heading);
@@ -589,7 +589,7 @@ html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
   --pf-toc-active: var(--pf-g-heading);
 }
 
-// The building map in the swatch: ink in the heading colour, floor names
+// The building map in the swatch: ink in the heading color, floor names
 // in the panel muted tone, hover in the accent. (Print keeps its own.)
 @media screen {
   html#{$pf-themed} .pf-map {
@@ -609,13 +609,13 @@ html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
 
 // The page title in the swatch's highlight (--pf-g-highlight), as
 // Twilight's has always been pale gold: every swatch now marks it. Not on
-// exhibitions, whose cover titles sit on the cover image in their own colour.
+// exhibitions, whose cover titles sit on the cover image in their own color.
 html#{$pf-themed}:not([data-pf-mode="exhibition"]) .pf-modular__title {
   color: var(--pf-g-highlight);
 }
 
-// Multicolour swatches (Material): headings, bold and italics in the main
-// content take their own colours. Italics stay plain on the landing's glass
+// Multicolor swatches (Material): headings, bold and italics in the main
+// content take their own colors. Italics stay plain on the landing's glass
 // over a video, where purple would fall under 4.5:1.
 @each $name, $t in $pf-reading-themes {
   @if map.has-key($t, title) {
@@ -643,7 +643,7 @@ html#{$pf-themed} .pf-events-carousel .libcal-day-carousel {
 }
 
 // --- Settings drawer swatches --------------------------------------------
-// Each tile shows "Aa" in the swatch's own text on its own page colour.
+// Each tile shows "Aa" in the swatch's own text on its own page color.
 @each $name, $t in $pf-reading-themes {
   .pf-settings__theme[data-theme="#{$name}"] .pf-settings__theme-chip {
     color: map.get($t, fg);

@@ -5,10 +5,10 @@
 //
 // Guide theme (2026-10-16): guide pages carry the look of the guide preview
 // artifact, scoped to <html data-pf-mode="guide"> so no other page changes:
-// a page-coloured sidebar, an accent TOC bar, hairlines between sections,
+// a page-colored sidebar, an accent TOC bar, hairlines between sections,
 // and the preview's type sizes.
 //
-// Colours: the reading swatch (Settings > Reading colours), as --pf-g-* and
+// Colors: the reading swatch (Settings > Reading colors), as --pf-g-* and
 // Bootstrap's --bs-body-* tokens on <html>: _reading-themes.scss. Cream is
 // the default on guides. Rules (--pf-g-rule) are dividers only, not the
 // boundary of a control, so 1.4.11's 3:1 doesn't apply to them.
@@ -41,7 +41,7 @@ $pf-guide-prose: 42rem;
   --pf-guide-accent-soft: #{rgba($pf-lavender, 0.12)};
 }
 
-// Chrome (header, sidebar, TOC colours, the page scrollbar) and dark
+// Chrome (header, sidebar, TOC colors, the page scrollbar) and dark
 // sections follow the swatch on every page now: _reading-themes.scss.
 
 // Preview type: smaller monospace links, so long guides fit the rail.
@@ -104,8 +104,8 @@ html[data-pf-mode="guide"] .pf-sections > .pf-section + .pf-section {
 }
 
 // Wayfinding: the heading of the section (and sub-section) the TOC marks
-// as current takes the active TOC link's colour, so the two light up
-// together (js/modular-toc.js adds .is-toc-current). A colour change only,
+// as current takes the active TOC link's color, so the two light up
+// together (js/modular-toc.js adds .is-toc-current). A color change only,
 // eased like the TOC; none with reduced motion.
 html[data-pf-mode="guide"] .pf-sections :is(.pf-section__title, h3) {
   transition: color 0.3s ease;
@@ -314,7 +314,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
 
       // Bold stays inline, so the sentence (and its punctuation) runs on
       // after it, and every bold phrase in a step looks the same: the
-      // heading colour. A leading <strong> used to be display: block,
+      // heading color. A leading <strong> used to be display: block,
       // which put whatever followed the </strong>, even a lone full stop,
       // on a line of its own (and :first-child ignores text, so it also
       // fired when text came before the bold).
@@ -547,7 +547,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
 // Three "subway lines" of stops, options A, B and C, split by hairlines.
 // Mobile first: each line runs down the left, through the middle of every
 // stop's icon; from 34rem of block width the stops sit in a row and the line
-// runs across. The icon's disc is the page colour, so the line seems to pass
+// runs across. The icon's disc is the page color, so the line seems to pass
 // behind it.
 .pf-paths {
   --pf-paths-dot: 2.75rem;
@@ -1360,7 +1360,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
     }
   }
 
-  // Email, phone and other links: body colour with an accent underline.
+  // Email, phone and other links: body color with an accent underline.
   .field__item a {
     color: var(--bs-body-color);
     text-decoration-thickness: 1px;

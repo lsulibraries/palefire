@@ -1,6 +1,6 @@
-// Palefire modular_page colour tokens.
+// Palefire modular_page color tokens.
 //
-// One place for every colour the modular page, its sidebar and its TOC
+// One place for every color the modular page, its sidebar and its TOC
 // use. This file only defines Sass variables, maps and a mixin; it outputs
 // no CSS, so it is safe to @import from more than one partial.
 //
@@ -14,7 +14,7 @@
 //    which Sass alone can't do.
 
 // ---------------------------------------------------------------------
-// Palette: raw colours, named for what they are
+// Palette: raw colors, named for what they are
 // ---------------------------------------------------------------------
 $pf-white:     #fff !default;
 $pf-black:     #000 !default;
@@ -57,7 +57,7 @@ $pf-chrome-dark: (
 
 // ---------------------------------------------------------------------
 // Sections. Set per section (.pf-section--theme-dark), not from <body>,
-// so a light section that is still partly in view keeps light colours.
+// so a light section that is still partly in view keeps light colors.
 // ---------------------------------------------------------------------
 $pf-section-light: (
   'section-scrim': rgba($pf-white, 0.6),

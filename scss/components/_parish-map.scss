@@ -4,7 +4,7 @@
 // Set like a museum's wall map: hairline parish outlines over a light hatch
 // (the Hill map's hatch, here diagonal and in the guide's muted ink), the
 // chosen parish in the accent, and a monospace caption under the drawing.
-// Colours come from the guide tokens (_guide.scss), so every reading swatch
+// Colors come from the guide tokens (_guide.scss), so every reading swatch
 // and dark sections work.
 
 // The map needs more than the guide's 52rem column: the guide lets it out to
@@ -318,9 +318,9 @@
 }
 
 // A linked entry's description (the text after its link: "Issues for
-// 1942-1945 are available…") steps back in the muted colour and a size
+// 1942-1945 are available…") steps back in the muted color and a size
 // smaller, so the titles lead and each entry reads as title, then note.
-// Entries without a link (the microfilm titles) keep the body colour.
+// Entries without a link (the microfilm titles) keep the body color.
 // A parish's family trees: the link is the whole row (.pf-tree-link) and
 // sets its own spacing.
 .pf-parishes__trees li {
@@ -377,7 +377,7 @@
 
 // A link to a family tree, in both lists (family-tree-link.html.twig): the
 // whole row, the family trees' icon in a hairline box, then the title in
-// the text colour and the place under it. The box's top is on the top of
+// the text color and the place under it. The box's top is on the top of
 // the title's capitals, and the space beside the box is the space above
 // it (--pf-tree-pad), so it sits in an even margin. Hover and focus light
 // the title and the box in the accent. Not underlined: every row is a

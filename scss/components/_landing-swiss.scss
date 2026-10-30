@@ -19,7 +19,7 @@
   --pf-landing-accent: #{$pf-purple};
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   // The guides' soft hairline for the lead panel and its rules. The search
-  // field re-sets the full line colour for its own border (_landing.scss).
+  // field re-sets the full line color for its own border (_landing.scss).
   --pf-landing-line: #{$pf-hairline};
 }
 
@@ -94,8 +94,8 @@
   border-radius: 0;
 }
 
-// The Search button's text and arrow in the title's colour, the same as
-// the TOC's current item (a reading swatch's title colour where it has one),
+// The Search button's text and arrow in the title's color, the same as
+// the TOC's current item (a reading swatch's title color where it has one),
 // so the eye finds the action. Hover keeps its tint and the arrow's nudge.
 .pf-landing__submit,
 .pf-landing__submit:hover,
@@ -314,7 +314,7 @@
   }
 }
 
-// The group headings are h4s, so a swatch's heading colour (Twilight's
+// The group headings are h4s, so a swatch's heading color (Twilight's
 // pale gold for content headings, _reading-themes.scss) would reach them:
 // labels here, in the labels' grey.
 html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
@@ -381,7 +381,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 // Header: 45% glass (was 60%) with black nav, icons and logo (was #434343):
 // 51 + 0.45 * 204 = 143, about 6.4:1 for black. The "Reduce transparency"
 // and "High contrast" settings still make it solid: they set the
-// background colour directly, not this variable (_header.scss).
+// background color directly, not this variable (_header.scss).
 :where(:root:has(.pf-landing.has-bg-video)) .pf-header:not([data-bs-theme="dark"]) {
   --pf-header-bg: rgba(var(--bs-body-bg-rgb), .45);
   --pf-utility-color: #{$black};
@@ -434,8 +434,8 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 // --- Unit name (hero) -------------------------------------------------------
 // "LSU Libraries — Hill Memorial Library" over the Special Collections
 // title (landing.html.twig), so the page reads as the Libraries' own.
-// Swatch colours only (accent and the muted label tone), never LSU purple
-// or gold: those clash with the reading colours.
+// Swatch colors only (accent and the muted label tone), never LSU purple
+// or gold: those clash with the reading colors.
 .pf-landing__kicker {
   @extend %pf-landing-label;
   display: flex;

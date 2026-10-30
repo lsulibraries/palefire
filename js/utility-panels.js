@@ -168,7 +168,7 @@
   const STORE = 'pf-a11y';
   const SIZES = ['100', '115', '130', '150'];
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
-  // Reading colours (_reading-themes.scss), in the drawer's order. See
+  // Reading colors (_reading-themes.scss), in the drawer's order. See
   // DEFAULT_THEME and DARK_THEMES.
   const THEMES = ['twilight', 'material', 'cocoa', 'forest', 'dusk', 'night', 'midnight', 'solarized', 'cream', 'soft', 'lavender', 'sepia', 'sage'];
   const DARK_THEMES = ['twilight', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
@@ -186,7 +186,7 @@
     catch (e) {
       return {};
     }
-    // "Dark guides" (the old switch) becomes the Night reading colours.
+    // "Dark guides" (the old switch) becomes the Night reading colors.
     if (settings.dark) {
       if (!settings.theme) {
         settings.theme = 'night';
@@ -215,7 +215,7 @@
     }
   }
 
-  // Reading colours: <html data-pf-theme> on every page, which the whole
+  // Reading colors: <html data-pf-theme> on every page, which the whole
   // page follows (_reading-themes.scss); the default when none is saved. A
   // dark swatch also adds pf-reading-dark and Bootstrap's
   // data-bs-theme="dark". The same job as the inline script in
@@ -258,7 +258,7 @@
     document.dispatchEvent(new CustomEvent('palefire:a11ychange', { detail: { settings } }));
   }
 
-  // "More colours": the swatches after the first four (.is-more) stay
+  // "More colors": the swatches after the first four (.is-more) stay
   // hidden until the button opens them. A hidden swatch that is chosen
   // still shows (CSS: .is-more:checked), so the choice is never out of
   // sight. Without JS the button stays hidden and every swatch shows.
@@ -278,7 +278,7 @@
       }
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (label) {
-        label.textContent = open ? Drupal.t('Fewer colours') : Drupal.t('More colours');
+        label.textContent = open ? Drupal.t('Fewer colors') : Drupal.t('More colors');
       }
     };
     button.addEventListener('click', () => {
@@ -380,10 +380,10 @@
     });
   }
 
-  /* ---------------- Text size and reading colours in the mobile menu ---------------- */
+  /* ---------------- Text size and reading colors in the mobile menu ---------------- */
 
   // The menu drawer (page.html.twig, below lg) offers the Settings drawer's
-  // text sizes and reading colours too, so they can be changed from the
+  // text sizes and reading colors too, so they can be changed from the
   // menu on a phone. data-pf-menu-setting names the Settings radio group
   // ("size" or "theme"). The tiles are copies of the Settings ones (same
   // tiles, own ids and radio group). Picking one ticks the matching

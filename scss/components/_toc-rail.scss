@@ -20,9 +20,9 @@
 //   being read.
 // - The column closes (0px) and section backgrounds run to the page edge.
 //   The rail overlays the sections' side padding (3.75rem from md).
-// - Colours are the TOC tokens, so the rail follows dark sections and
+// - Colors are the TOC tokens, so the rail follows dark sections and
 //   reading swatches like the sidebar did: the read part in --pf-toc-active,
-//   the rest in --pf-toc-rail. A 1px halo in the glass colour keeps the line
+//   the rest in --pf-toc-rail. A 1px halo in the glass color keeps the line
 //   visible where the section under it has the other theme's background.
 //
 // page.html.twig adds .pf-modular--toc-rail when the sidebar holds only the
@@ -135,7 +135,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       }
     }
 
-    // Sections already read step back: their fill in the TOC text colour,
+    // Sections already read step back: their fill in the TOC text color,
     // softened toward the track, so only the current one is bright. 70%
     // keeps it above 3:1 on both chromes (about 3.3:1 light, 3.9:1 dark).
     .pf-toc__item.is-read > .pf-toc__link:not([aria-current])::after {
@@ -282,7 +282,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
   }
 
   // Rows: 36px, a fill and a marker under the pointer (or on the row of the
-  // focused rail link), the current one in the heading colour.
+  // focused rail link), the current one in the heading color.
   #{$pf-rail} .pf-toc__row {
     position: relative;
     display: flex;
@@ -354,7 +354,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
   }
 
   // Too many sections for 24px segments: even ticks, centred. Read ones in
-  // the TOC text colour, the current one longer and in the active colour.
+  // the TOC text color, the current one longer and in the active color.
   #{$pf-rail} .pf-toc.pf-toc--ticks {
     .pf-toc__list {
       justify-content: center;

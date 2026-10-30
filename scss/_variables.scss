@@ -57,9 +57,9 @@ $pf-display-weight:  600;  // Page <h1> and map tooltip titles (800 draws near B
 $pf-content-max:     1280px; // Landing search form + building map cap; the page head follows it.
 
 // Hairline: the soft rule the guides use, for lines that only separate or
-// frame (rows, rules, panel edges). A share of the section's line colour
+// frame (rows, rules, panel edges). A share of the section's line color
 // (--pf-section-border, 3:1), so it follows light and dark sections and
-// every reading colour; --pf-hairline-strength (20%, _base.scss) goes to
+// every reading color; --pf-hairline-strength (20%, _base.scss) goes to
 // 100% under Settings > High contrast. Control borders that identify a
 // control keep --pf-section-border (WCAG 1.4.11).
 $pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
@@ -127,8 +127,8 @@ $pf-logo-color-dark:     #fff;     // On the dark bar (Origami: white, gold on h
 // The page behind an open drawer dims more on light pages, where a .5 black
 // wash (Bootstrap's default) left the content competing with the drawer.
 $pf-panel-width:             24rem;
-// Drawer glass: how much of the drawer's own colour covers the blurred page
-// (light swatches and Cream), and of the darkened page colour on dark
+// Drawer glass: how much of the drawer's own color covers the blurred page
+// (light swatches and Cream), and of the darkened page color on dark
 // swatches. The mobile menu drawer uses the same (_utility-panels.scss).
 $pf-panel-glass:             .65;
 $pf-panel-glass-dark:        30%;
@@ -139,22 +139,22 @@ $pf-menu-stagger:            .06s;
 $pf-menu-fade:               .35s;
 $pf-dropdown-stagger:        .04s;
 $pf-dropdown-fade:           .25s;
-// Text colour on hover and focus, everywhere: comes in quickly, fades out
+// Text color on hover and focus, everywhere: comes in quickly, fades out
 // slowly. Each element's resting style carries color $pf-hover-out and its
 // own :hover / :focus-visible style color $pf-hover-in (CSS uses the new
 // state's transition), so moving from one link to the next fades the old
 // one out slowly.
 $pf-hover-in:                .2s;
 $pf-hover-out:               .5s;
-// Bootstrap's buttons, nav links and pager links use the same colour
+// Bootstrap's buttons, nav links and pager links use the same color
 // timing (their hover side: _base.scss).
 $btn-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 $nav-link-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out;
 $pagination-transition: color $pf-hover-out ease, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-$pf-panel-backdrop-light:    .45; // a wash of the page colour (Cream or the guide swatch), not black
+$pf-panel-backdrop-light:    .45; // a wash of the page color (Cream or the guide swatch), not black
 $pf-panel-backdrop-dark:     .55;
 
-// Reading colours (components/_reading-themes.scss) ---------------------------
+// Reading colors (components/_reading-themes.scss) ---------------------------
 // Pages that wear a reading swatch: every page once a visitor picks one
 // (<html data-pf-theme>), and guides always (Cream when none is picked).
 // Use after html: html#{$pf-themed}.

@@ -29,7 +29,7 @@ $pf-tile-break-two: 32rem;
 .pf-tiles {
   container: pf-tiles / inline-size;
   --pf-tile-gap: 0.625rem;
-  // Custom properties are not evaluated by Sass, so the colours are
+  // Custom properties are not evaluated by Sass, so the colors are
   // interpolated (a bare $pf-black would reach the browser as text).
   --pf-tile-scrim: linear-gradient(
     to bottom,
@@ -182,11 +182,11 @@ $pf-tile-break-two: 32rem;
 // this page" rail (mono links, the gold bar on the first) runs half off
 // the left edge and the card's right edge cuts off the title, intro and
 // first sections. The tilt and the crop keep the blurred title from
-// reading as a copy of the card's own. In the reading swatch's colours (the default
-// section's on pages without one); the sheet is the page's colour, so the
+// reading as a copy of the card's own. In the reading swatch's colors (the default
+// section's on pages without one); the sheet is the page's color, so the
 // page's turned edges don't show.
 // Sized to the card (cqi), so the List's thumbnail is the same page in
-// miniature. The sheet's colour sits on the media, not the blurred layer,
+// miniature. The sheet's color sits on the media, not the blurred layer,
 // so the blur leaves no soft edge. Decorative (aria-hidden): no contrast
 // minimum, and the scrim keeps the real title at 4.5:1. Four classes to
 // outrank the List's thumbnail grey.
@@ -296,7 +296,7 @@ $pf-tile-break-two: 32rem;
 }
 
 // The scrim over the outline: lighter than over a picture, since the
-// sheet's colours are known. 55% black under the title keeps white text
+// sheet's colors are known. 55% black under the title keeps white text
 // at 4.5:1 on the lightest of them (52% needed on a plain light page,
 // #f8f9fa, with the blurred text counted at full strength), then eases
 // out by 7.5rem above that. The floor is as tall as the title can be: a
@@ -434,7 +434,7 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
 // A numbered list with no pictures (Collections & services): one row per
 // item between soft hairlines, number | title and note | label | arrow.
 // Narrow: the label drops under the note. The number is decorative (the
-// <ol> already numbers the rows for screen readers). Colours come from the
+// <ol> already numbers the rows for screen readers). Colors come from the
 // section's swatch, so it reads on light and dark sections alike.
 .pf-tiles--index {
   --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
@@ -492,7 +492,7 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
   min-width: 0;
 }
 
-// The text colour, not the swatch's heading gold (html[data-pf-theme]
+// The text color, not the swatch's heading gold (html[data-pf-theme]
 // .pf-main h3, _reading-themes.scss): the numbers carry the accent, so the
 // list stays quiet. Four classes to outrank that rule (its :is() counts
 // as a class, from .h1).
@@ -576,7 +576,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 // The index's rows without numbers, grouped under their Category labels
 // (Partnerships). Each row: the title, its note, an arrow, between soft
 // hairlines; from 40rem the note moves beside the title on a shared
-// baseline. The index's colours, so it reads on light and dark sections.
+// baseline. The index's colors, so it reads on light and dark sections.
 //
 // From lg the section becomes two columns: the index rule across the top,
 // the heading and lede on the left (5 parts), the ledger on the right (7).
@@ -597,7 +597,7 @@ $pf-ledger-break: 40rem;
 
 // The section eyebrows' voice: mono small capitals in the index's accent,
 // as the rule's number above (the swatch's gold on dark swatches, muted on
-// light). Four classes to outrank the swatch's heading colour.
+// light). Four classes to outrank the swatch's heading color.
 .pf-tiles.pf-tiles--ledger .pf-tiles__group .pf-tiles__group-label {
   margin: 0 0 .5rem;
   color: var(--pf-index-accent);
@@ -644,7 +644,7 @@ $pf-ledger-break: 40rem;
   }
 }
 
-// The heading colour, as the section's h2 (near-white on Twilight, where
+// The heading color, as the section's h2 (near-white on Twilight, where
 // the notes are the soft grey), not the swatch's heading gold; four classes
 // to outrank it, as the index's titles (h3 or h4 here).
 .pf-tiles.pf-tiles--ledger .pf-tile-line .pf-tile-line__title {
@@ -831,7 +831,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
-// The card's colour (white here, the text colour in the List), not the
+// The card's color (white here, the text color in the List), not the
 // swatch's heading gold (html[data-pf-theme] .pf-main h3,
 // _reading-themes.scss): four classes to outrank it, as on the index.
 .pf-tiles.pf-tiles--masonry .pf-tile .pf-tile__title {
@@ -839,7 +839,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 // Grid (the default): even 3:4 pictures, the title on the picture, and
-// the Category terms under it as a caption, in the section's colours and
+// the Category terms under it as a caption, in the section's colors and
 // the page's mono label voice, as in the List. The body opens up
 // (display: contents) so the title and the caption take a row each of the
 // card's grid; the scrim and the shadow move onto the picture.
@@ -954,7 +954,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
-// List: the card as a row, in the section's colours.
+// List: the card as a row, in the section's colors.
 .pf-tiles--masonry[data-pf-view="list"] {
   .pf-tiles__list {
     grid-template-columns: minmax(0, 1fr);
@@ -1081,7 +1081,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 // The switch: small-capital buttons on one hairline, the pressed one
-// in the text colour with a gold mark under it (the page's active state).
+// in the text color with a gold mark under it (the page's active state).
 // 44px tall (WCAG 2.5.8). Hidden until the script shows it.
 .pf-tiles__views {
   display: flex;
@@ -1187,8 +1187,8 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
   }
 }
 
-// Windows High Contrast / forced colours: the scrim and image go, the
-// system colours draw the card and its focus ring.
+// Windows High Contrast / forced colors: the scrim and image go, the
+// system colors draw the card and its focus ring.
 @media (forced-colors: active) {
   .pf-tile {
     border: 1px solid CanvasText;

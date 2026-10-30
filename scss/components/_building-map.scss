@@ -1,6 +1,6 @@
 // Building map (paragraph--building-map), shown inside the landing under search.
 // Plain CSS syntax so it can be copied into the prototype unchanged.
-/* Building map (paragraph--building-map). Colours are custom properties so a
+/* Building map (paragraph--building-map). Colors are custom properties so a
    section theme, a print sheet or a light variant can swap them in one place. */
 .pf-map {
   --pf-map-ink: #fff;                  /* outline + room names */
@@ -13,7 +13,7 @@
   --pf-map-hatch-hover: .5;            /* hover / focus: a slightly brighter grey */
   --pf-map-hatch-appointment-hover: .3;
   --pf-map-hover: #fdd023;             /* LSU gold: room name on hover, focus ring */
-  --pf-map-on-hover: #000;             /* text on a hover-colour fill ("You are here") */
+  --pf-map-on-hover: #000;             /* text on a hover-color fill ("You are here") */
   --pf-map-rotate: -25deg;             /* label + floor-tile angle */
   --pf-map-skew-room: -25deg;          /* room names stand up */
   --pf-map-skew-floor: 35deg;          /* floor names + restroom tiles lie flat */
@@ -31,7 +31,7 @@
   --pf-map-tip-shift: -14px;           /* tooltip slides in from this far left */
   --pf-map-tip-slide: .38s;            /* tooltip slide-in duration */
   --pf-map-tip-slide-ease: cubic-bezier(.22, 1, .36, 1); /* fast start, soft landing, no overshoot */
-  --pf-map-label-halo: var(--pf-map-surface); /* room-name shadow colour: keeps a lifted name readable over the lines */
+  --pf-map-label-halo: var(--pf-map-surface); /* room-name shadow color: keeps a lifted name readable over the lines */
   --pf-map-label-halo-blur: 12px;      /* map units; three soft layers at 1x, 2.5x and 5x this (about 3, 7 and 15px at 1000px wide) */
   --pf-map-label-halo-in: .06s;        /* shadow on: almost at once, before the name moves */
   --pf-map-label-halo-out: .2s;        /* shadow off: after the name has settled (waits --pf-map-out) */
@@ -212,9 +212,9 @@
   fill: var(--pf-map-ink); font-family: inherit; font-size: 62px; font-weight: 700; font-style: normal; letter-spacing: .3em; text-transform: uppercase;
   /* Real, selectable text: the transforms only fake the 3D perspective. */
   pointer-events: auto; user-select: text; -webkit-user-select: text; cursor: default;
-  /* Shadow: a soft glow in the map's surface colour behind the letters,
+  /* Shadow: a soft glow in the map's surface color behind the letters,
      three stacked text-shadows with no hard edge, clear until hover. Only
-     the colour (--pf-map-label-glow) changes on hover, so the glow fades. */
+     the color (--pf-map-label-glow) changes on hover, so the glow fades. */
   --pf-map-label-glow: transparent;
   text-shadow: 0 0 var(--pf-map-label-halo-blur) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 2.5) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 5) var(--pf-map-label-glow);
   transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease, text-shadow var(--pf-map-label-halo-out) ease var(--pf-map-out);
@@ -233,7 +233,7 @@
 .pf-map__icon-tile { fill: none; stroke: var(--pf-map-hidden-ink); stroke-width: var(--pf-map-line); }
 .pf-map__icon-glyph { fill: var(--pf-map-floor-ink); }
 
-/* Clickable regions: the hatch is a mask, so one fill colour drives every line. */
+/* Clickable regions: the hatch is a mask, so one fill color drives every line. */
 .pf-map__region { cursor: pointer; outline: none; }
 .pf-map__hatch {
   fill: var(--pf-map-hatch);
@@ -358,7 +358,7 @@
    every 20 units (7.5-12.5 in each period, see the <pattern> in the drawing),
    filled white at the region's fill-opacity. building-map.js sets
    --pf-map-hatch-period to 20 units in screen px, so the swatch lines have the
-   same period, weight, colour and opacity as the rooms at the map's current
+   same period, weight, color and opacity as the rooms at the map's current
    size. Four periods tall, so it always shows four whole lines. */
 .pf-map__swatch {
   --p: var(--pf-map-hatch-period);

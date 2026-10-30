@@ -4,10 +4,10 @@
 // In the page's Swiss voice (2026-10-23): square corners, hairlines, labels
 // in the mono UI voice, links plain at rest with the accent on hover.
 //
-// Colours come from Bootstrap's dark mode (data-bs-theme="dark") or, under
-// a reading colour, from the swatch (_reading-themes.scss maps both onto
+// Colors come from Bootstrap's dark mode (data-bs-theme="dark") or, under
+// a reading color, from the swatch (_reading-themes.scss maps both onto
 // the --bs-* properties used here). The accent is gold on the dark footer
-// and the swatch's accent under a reading colour.
+// and the swatch's accent under a reading color.
 
 $pf-footer-max: 1320px; // Bootstrap's container-xxl.
 
@@ -257,7 +257,7 @@ html#{$pf-themed} .pf-footer {
   margin: 0;
 }
 
-// Same colours as the Visit strip's dot (_visit.scss). The text says open
+// Same colors as the Visit strip's dot (_visit.scss). The text says open
 // or closed; the mark only repeats it. A small diamond, as the request
 // paths' marks.
 .pf-footer__dot {

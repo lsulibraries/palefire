@@ -9,7 +9,7 @@
 // monospace labels in the TOC/breadcrumb voice) and one accent: LSU purple
 // on light sections, the TOC gold on dark ones.
 //
-// Theme CSS only: colours go through the block's --ldc-* custom properties
+// Theme CSS only: colors go through the block's --ldc-* custom properties
 // (dark section mapping: "Events carousel section" in _modular.scss), and
 // selectors start with .pf-events-carousel so they out-rank the block's
 // own day-carousel.css without !important.
@@ -74,7 +74,7 @@
 }
 
 // Day tabs: no pill. Small label over a large light numeral, muted until
-// in view; the days in view get full colour and a 3px accent bar that sits
+// in view; the days in view get full color and a 3px accent bar that sits
 // on the strip's hairline. 44px+ tall targets.
 .pf-events-carousel .libcal-day-carousel .carousel-indicators [data-bs-target].libcal-day-carousel__tab {
   align-items: flex-start;
@@ -121,7 +121,7 @@
   outline-offset: -2px;
 }
 
-// Previous / next: square, hairline, a thin drawn arrow in the text colour.
+// Previous / next: square, hairline, a thin drawn arrow in the text color.
 // The arrow is a mask, not Bootstrap's white chevron image: Bootstrap's
 // [data-bs-theme=dark] filter inverted that to black on the dark section,
 // so the buttons looked empty.
@@ -185,7 +185,7 @@
 
 // libcal_gantt 53a2d6a and later draw the chevron as an inline SVG in
 // currentColor (.libcal-day-carousel__chevron) instead of the -icon span:
-// the same thin line here. It follows the hover colour flip above.
+// the same thin line here. It follows the hover color flip above.
 .pf-events-carousel .libcal-day-carousel__chevron {
   width: 1.125rem;
   height: 1.125rem;
@@ -328,7 +328,7 @@
 }
 
 // Titles stay underlined so links read as links (WCAG 1.4.1), but on a
-// hairline in the border colour; the accent takes over on hover/focus.
+// hairline in the border color; the accent takes over on hover/focus.
 .pf-events-carousel .libcal-day__event-title {
   font-size: 1.125rem;
   font-weight: 500;

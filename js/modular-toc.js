@@ -53,14 +53,14 @@
   const OPT_IN_SELECTOR = '[data-toc]';
   const SKIP_SELECTOR = '[data-toc-skip]';
   // On the heading of the current section and sub-section, so the page can
-  // mirror the TOC (guides colour it like the active link, _guide.scss).
+  // mirror the TOC (guides color it like the active link, _guide.scss).
   const CURRENT_HEADING = 'is-toc-current';
 
   // nav element -> teardown function (see initToc()).
   const instances = new WeakMap();
 
   // Below lg the TOC is an offcanvas (#pf-modular-sidebar). While it is
-  // open, <html data-pf-panel="toc"> gives its backdrop the same page-colour
+  // open, <html data-pf-panel="toc"> gives its backdrop the same page-color
   // wash as the menu and utility drawers (_utility-panels.scss) instead of
   // Bootstrap's black. iOS Safari tints its bottom toolbar from the fixed
   // layer at the bottom of the screen and ignores that layer's opacity, so
@@ -1094,7 +1094,7 @@
    * and #header plus .modularSidebar restyled themselves from that class.
    * Palefire splits the same job in two:
    *
-   *   body[data-section-theme="dark"]   TOC + sidebar colours, through the
+   *   body[data-section-theme="dark"]   TOC + sidebar colors, through the
    *                                     --pf-toc-* / --pf-sidebar-bg tokens
    *                                     (_modular-tokens.scss).
    *   .pf-header[data-bs-theme="dark"]  Top bar. Bootstrap 5.3's own dark
@@ -1102,14 +1102,14 @@
    *                                     the navbar toggler icon and the
    *                                     mobile offcanvas (and its close
    *                                     button) all switch with no
-   *                                     hand-written colours. Glass alpha
-   *                                     and hover colour: _chrome-dark.scss.
+   *                                     hand-written colors. Glass alpha
+   *                                     and hover color: _chrome-dark.scss.
    *
    * Pass null to reset everything to the light default.
    * ---------------------------------------------------------------- */
   function applyChromeTheme(theme, nav) {
     // With a reading swatch (<html data-pf-theme>, and every guide) each
-    // section is the swatch's colour, so the chrome follows the swatch
+    // section is the swatch's color, so the chrome follows the swatch
     // (dark ones: html.pf-reading-dark) instead of the section.
     const root = document.documentElement;
     const themed = root.hasAttribute('data-pf-theme') || root.getAttribute('data-pf-mode') === 'guide';
@@ -1173,7 +1173,7 @@
     }
   });
 
-  // Reading colours changed in Settings (dark on or off): re-apply to the active
+  // Reading colors changed in Settings (dark on or off): re-apply to the active
   // section.
   document.addEventListener('palefire:a11ychange', () => {
     const id = document.body.dataset.activeSection;
