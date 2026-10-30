@@ -20,6 +20,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\Hook\PalefireHooks;
@@ -1439,6 +1440,7 @@ function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?
           '#type' => 'processed_text',
           '#text' => $text,
           '#format' => $node->get($name)->format,
+          '#post_render' => [[AskAnswer::class, 'links']],
         ];
         break;
       }
@@ -1468,9 +1470,9 @@ function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?
  * - a block (between blank lines) whose words repeat an earlier one's goes;
  * - text with no block markup of its own is split into paragraphs where a
  *   sentence ends before two or more spaces;
- * - a link repeated straight after itself in brackets is dropped, and a
- *   link whose text is its URL shows the URL without "https://".
- * Answers written with their own paragraphs keep them.
+ * Answers written with their own paragraphs keep them. The links are
+ * tidied after the text format's filters (AskAnswer::links()), since most
+ * are bare URLs until the URL filter links them.
  *
  * @return array
  *   The answer's HTML, then the byline's name ('' without one).
@@ -1505,16 +1507,6 @@ function _palefire_ask_answer_tidy(string $html): array {
     }
     $html = implode("\n", $paragraphs);
   }
-
-  // A link followed by the same link in brackets: once is enough.
-  $html = preg_replace('~(<a\b[^>]*\bhref="([^"]+)"[^>]*>.*?</a>)\s*\(<a\b[^>]*\bhref="\2"[^>]*>.*?</a>\)~isu', '$1', $html);
-  // A bare URL as a link's text: drop the scheme, "www." and a final slash.
-  $html = preg_replace_callback('~(<a\b[^>]*\bhref="([^"]+)"[^>]*>)\s*(https?://[^<\s]+)\s*</a>~i', function (array $m): string {
-    if (rtrim(Html::decodeEntities($m[3]), '/') !== rtrim(Html::decodeEntities($m[2]), '/')) {
-      return $m[0];
-    }
-    return $m[1] . preg_replace(['~^https?://(?:www\.)?~i', '~/$~'], '', $m[3]) . '</a>';
-  }, $html);
 
   return [$html, $byline];
 }

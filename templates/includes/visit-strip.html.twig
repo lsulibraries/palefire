@@ -46,7 +46,11 @@
           {% for i in 1..7 %}<li class="pf-visit__day" aria-hidden="true">&nbsp;</li>{% endfor %}
         </ol>
       </div>
-      <a class="pf-visit__link pf-visit__all-hours" href="https://lsu.libcal.com/hours">{{ 'All library hours'|t }}</a>
+      {# Off the site (LibCal): the up-right arrow, as Google Maps. #}
+      <a class="pf-visit__link pf-visit__all-hours" href="https://lsu.libcal.com/hours">
+        {{- 'All library hours'|t -}}
+        <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg>
+      </a>
     </div>
   {% endif %}
 

@@ -22,6 +22,8 @@
  * page" (data-toc-skip on the wrapper keeps the h3s out too).
  */
 #}
+{# Each column's parts rise in one after another on scroll (js/ask-reveal.js). #}
+{{ attach_library('palefire/ask-reveal') }}
 {% set plus = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
 {% set arrow %}<svg class="pf-inquiry__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>{% endset %}
 <div class="pf-inquiry" data-toc-skip>
@@ -42,11 +44,15 @@
               {% if faq.answer %}
                 <div class="pf-guide-prose pf-inquiry__answer">{{ faq.answer }}</div>
               {% endif %}
-              {% if faq.byline %}
-                <p class="pf-inquiry__byline">{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
-              {% endif %}
-              {% if faq.url %}
-                <a class="pf-inquiry__link" href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}{{ arrow }}</a>
+              {% if faq.byline or faq.url %}
+                <div class="pf-inquiry__meta">
+                  {% if faq.byline %}
+                    <p class="pf-inquiry__byline">{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
+                  {% endif %}
+                  {% if faq.url %}
+                    <a class="pf-inquiry__button" href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}{{ arrow }}</a>
+                  {% endif %}
+                </div>
               {% endif %}
             </div>
           </details>
