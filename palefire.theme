@@ -1265,6 +1265,9 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * groups (ledger only): the tiles by label, in the order each label first
  *   appears: label, tiles. Tiles with no label come last, under "More", or
  *   as one group with no label when none has one.
+ *
+ * Layout "ask" (Ask Special Collections, scripts/palefire_ask_section.php)
+ * is no card list: faqs (_palefire_ask_faqs()) and the question form.
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
@@ -1275,8 +1278,12 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     return;
   }
   $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
-  if (in_array($layout, ['grid', 'index', 'ledger', 'masonry'], TRUE)) {
+  if (in_array($layout, ['grid', 'index', 'ledger', 'masonry', 'ask'], TRUE)) {
     $variables['layout'] = $layout;
+  }
+  if ($variables['layout'] === 'ask') {
+    $variables['faqs'] = _palefire_ask_faqs($paragraph, $variables);
+    return;
   }
   $rows = in_array($variables['layout'], ['index', 'ledger'], TRUE);
   if (!$paragraph->hasField('field_tiles')) {
@@ -1332,6 +1339,84 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     $variables['tiles'][0]['image'] = _palefire_lead_cover($covers[0], "(min-width: 1480px) {$lead}vw, (min-width: 768px) 34vw, 50vw", $cache) ?? $variables['tiles'][0]['image'];
   }
   $cache->applyTo($variables);
+}
+
+/**
+ * The FAQs for an Ask Special Collections section (Tile showcase, "ask").
+ *
+ * The Tiles picked in the section's Tiles field, in that order; with none
+ * picked, the published Tiles in the FAQ category whose Subcategory is
+ * "Special Collections" (the old site's FAQ tiles), by search weight then
+ * title, at most eight. The section's link (the index rule's) points at
+ * the rest on AskUs.
+ *
+ * Each FAQ:
+ * - question: the tile's title.
+ * - answer: its Formatted text or Linked text (filtered, as a render
+ *   array), else its Long summary as plain text, else ''.
+ * - url: its Link (the answer on AskUs), or ''.
+ */
+function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): array {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $nodes = [];
+  if ($paragraph->hasField('field_tiles')) {
+    foreach ($paragraph->get('field_tiles') as $item) {
+      if ($item->entity instanceof NodeInterface) {
+        $nodes[] = $item->entity;
+      }
+    }
+  }
+  if (!$nodes) {
+    // A new or edited Tile can change the list.
+    $cache->addCacheTags(['node_list:tile']);
+    $types = \Drupal::entityTypeManager();
+    $terms = $types->getStorage('taxonomy_term')->loadByProperties(['name' => 'FAQ']);
+    if ($terms) {
+      $ids = \Drupal::entityQuery('node')
+        ->accessCheck(TRUE)
+        ->condition('type', 'tile')
+        ->condition('status', NodeInterface::PUBLISHED)
+        ->condition('field_category', array_keys($terms), 'IN')
+        ->condition('field_subcategory', 'Special Collections')
+        ->sort('field_tile_search_weight', 'DESC')
+        ->sort('title')
+        ->range(0, 8)
+        ->execute();
+      $nodes = $types->getStorage('node')->loadMultiple($ids);
+    }
+  }
+
+  $faqs = [];
+  foreach ($nodes as $node) {
+    $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+    $access = $node->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($node)->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $answer = '';
+    foreach (['field_formatted_text', 'field_tile_linked_text'] as $name) {
+      if ($node->hasField($name) && trim(strip_tags((string) $node->get($name)->value)) !== '') {
+        $answer = [
+          '#type' => 'processed_text',
+          '#text' => $node->get($name)->value,
+          '#format' => $node->get($name)->format,
+        ];
+        break;
+      }
+    }
+    if (!$answer && $node->hasField('field_tile_long_summary')) {
+      $answer = trim((string) $node->get('field_tile_long_summary')->value);
+    }
+    $link = $node->hasField('field_tile_link') ? $node->get('field_tile_link')->first() : NULL;
+    $faqs[] = [
+      'question' => $node->label(),
+      'answer' => $answer,
+      'url' => $link && !$link->isEmpty() ? $link->getUrl()->toString() : '',
+    ];
+  }
+  $cache->applyTo($variables);
+  return $faqs;
 }
 
 /**

@@ -189,6 +189,16 @@ tile-reveal:
     - core/drupal
     - core/once
 
+# Ask Special Collections: checks the question form and sends it to
+# LibAnswers in the background. Attached by
+# templates/includes/ask-special.html.twig.
+ask-form:
+  js:
+    js/ask-form.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # The Grid / List switch: the masonry-layout Tile showcase
 # (paragraph--tile-showcase.html.twig) and exhibition reading lists
 # (paragraph--exhibit-gallery.html.twig).

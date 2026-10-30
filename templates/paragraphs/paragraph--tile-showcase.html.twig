@@ -14,6 +14,7 @@
  *   rows), labels (the same terms, a label apiece on the cards), note (the
  *   intro as plain text; index and ledger only), image.
  * - groups: the ledger's tiles by Category: label, tiles.
+ * - faqs: layout 'ask' only (includes/ask-special.html.twig).
  *
  * The section <h2> comes from the scroll-section field template, so each
  * card is an <h3>. The title comes first in the source so the link's name
@@ -86,7 +87,10 @@
     </span>
   </span>
 {% endmacro %}
-{% if tiles %}
+{% if layout == 'ask' %}
+  {# Ask Special Collections: FAQs and the question form, not cards. #}
+  {% include '@palefire/includes/ask-special.html.twig' %}
+{% elseif tiles %}
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
   {{ attach_library('palefire/tile-reveal') }}

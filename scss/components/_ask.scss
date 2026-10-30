@@ -1,0 +1,329 @@
+// Ask Special Collections ----------------------------------------------------
+// FAQs beside a question form (templates/includes/ask-special.html.twig, a
+// Tile showcase in the "ask" layout; js/ask-form.js sends the form).
+//
+// One column on phones: the FAQs, then the form. From lg, two: the FAQs
+// on the left (7 parts), the form on the right (5), tops aligned. The FAQs are the guides' accordion (_guide.scss) in the
+// section's colours; the form is Swiss and quiet: ruled fields with no
+// boxes, labels in the eyebrows' mono capitals, a solid button. Field
+// rules are the muted text colour at full strength, not the 20% hairline:
+// a control's edge needs 3:1 (WCAG 1.4.11).
+
+.pf-inquiry {
+  --pf-inquiry-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-inquiry-bg: var(--pf-section-bg, var(--bs-body-bg));
+  --pf-inquiry-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-inquiry-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-inquiry-muted)));
+  --pf-inquiry-error: var(--bs-form-invalid-color);
+  // The accordion's own tokens, which guides set on their wrapper.
+  --pf-guide-rule: #{$pf-hairline};
+  --pf-guide-accent: var(--pf-inquiry-accent);
+  display: grid;
+  gap: clamp(3rem, 6vw, 4.5rem);
+  color: var(--pf-inquiry-fg);
+}
+
+// Two columns from lg (the wrapper can't query its own width).
+@include media-breakpoint-up(lg) {
+  .pf-inquiry {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+}
+
+// Each column's heading: the eyebrows' voice (mono small capitals), so the
+// section's h2 above stays the only big heading.
+.pf-inquiry .pf-inquiry__heading {
+  margin: 0 0 1.25rem;
+  color: var(--pf-inquiry-muted);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  font-weight: 400;
+  letter-spacing: .14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+// FAQs ---------------------------------------------------------------------
+
+.pf-inquiry__accordion .pf-accordion__summary {
+  color: var(--bs-heading-color, var(--pf-inquiry-fg));
+  font-size: clamp(1.0625rem, 1rem + .35vw, 1.25rem);
+  text-wrap: pretty;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-inquiry-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-inquiry__accordion .pf-accordion__panel {
+  color: var(--pf-inquiry-fg);
+}
+
+// "Full answer on AskUs", "All Special Collections FAQs": small links with
+// the ledger's arrow, which slides on hover.
+.pf-inquiry__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  justify-self: start;
+  min-height: 2.75rem; // 44px target
+  color: var(--pf-inquiry-fg);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  transition: color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-inquiry-fg);
+    text-decoration-color: var(--pf-inquiry-accent);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-inquiry-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-inquiry__all {
+  margin-top: 1.25rem;
+}
+
+.pf-inquiry__arrow {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+// Form ---------------------------------------------------------------------
+
+.pf-inquiry__intro {
+  margin: -.5rem 0 1.75rem;
+  color: var(--pf-inquiry-muted);
+}
+
+// The panel is the container: the form can't query its own width.
+.pf-inquiry__panel {
+  container: pf-inquiry-form / inline-size;
+}
+
+.pf-inquiry__form {
+  display: grid;
+  gap: 1.5rem 1.25rem;
+}
+
+// Wide enough: the two menus side by side, then name and email.
+@container pf-inquiry-form (min-width: 30rem) {
+  .pf-inquiry__form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pf-inquiry__field--wide,
+  .pf-inquiry__required,
+  .pf-inquiry__actions,
+  .pf-inquiry__status {
+    grid-column: 1 / -1;
+  }
+}
+
+.pf-inquiry__field {
+  display: grid;
+  gap: .375rem;
+  align-content: start;
+}
+
+.pf-inquiry__label {
+  color: var(--pf-inquiry-muted);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  letter-spacing: .12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-inquiry__req {
+  color: var(--pf-inquiry-fg);
+}
+
+.pf-inquiry__control {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: .5rem .125rem;
+  border: 0;
+  border-bottom: 1px solid var(--pf-inquiry-muted);
+  border-radius: 0;
+  color: var(--pf-inquiry-fg);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem; // 16px: no zoom on focus in iOS Safari
+  line-height: 1.5;
+  transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+
+  &:hover {
+    border-bottom-color: var(--pf-inquiry-fg);
+    transition-duration: $pf-hover-in;
+  }
+
+  // The rule thickens in the accent, and the outline keeps it visible
+  // where the accent is close to the background.
+  &:focus {
+    outline: 2px solid var(--pf-inquiry-accent);
+    outline-offset: 2px;
+    border-bottom-color: var(--pf-inquiry-fg);
+    box-shadow: 0 1px 0 var(--pf-inquiry-fg);
+  }
+
+  &[aria-invalid="true"] {
+    border-bottom-color: var(--pf-inquiry-error);
+    box-shadow: 0 1px 0 var(--pf-inquiry-error);
+  }
+}
+
+select.pf-inquiry__control {
+  padding-right: 1.75rem;
+  // A thin chevron in the text colour (currentColor isn't read inside a
+  // data URI, so it's drawn by two gradients instead).
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - .75rem) 55%,
+    calc(100% - .4375rem) 55%;
+  background-size: .3125rem .3125rem;
+  background-repeat: no-repeat;
+  appearance: none;
+  cursor: pointer;
+
+  option {
+    color: initial;
+    background: initial;
+  }
+}
+
+textarea.pf-inquiry__control {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.pf-inquiry__error {
+  color: var(--pf-inquiry-error);
+  font-size: .875rem;
+  line-height: 1.4;
+}
+
+// The honeypot: off-screen and out of the tab order (not display: none,
+// which some bots skip).
+.pf-inquiry__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.pf-inquiry__required {
+  margin: 0;
+  color: var(--pf-inquiry-muted);
+  font-size: .875rem;
+}
+
+.pf-inquiry__submit {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: 3rem;
+  padding: .75rem 1.5rem;
+  border: 1px solid var(--pf-inquiry-fg);
+  border-radius: 0;
+  color: var(--pf-inquiry-bg);
+  background: var(--pf-inquiry-fg);
+  font-weight: 500;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-inquiry-fg);
+    background: transparent;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-inquiry-accent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: progress;
+    opacity: .6;
+  }
+}
+
+.pf-inquiry__status {
+  min-height: 1.5rem; // Holds its line, so a message never shifts the page.
+  color: var(--pf-inquiry-fg);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-inquiry-accent);
+    outline-offset: 2px;
+  }
+
+  &[data-kind="done"],
+  &[data-kind="error"] {
+    padding-left: 1rem;
+    border-left: 3px solid var(--pf-inquiry-accent);
+  }
+
+  &[data-kind="error"] {
+    border-left-color: var(--pf-inquiry-error);
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-inquiry__arrow {
+    transition: transform .3s ease-out;
+  }
+
+  :is(.pf-inquiry__link, .pf-inquiry__submit):is(:hover, :focus-visible) .pf-inquiry__arrow {
+    transform: translateX(.25rem);
+  }
+
+  // A message settles in.
+  .pf-inquiry__status[data-kind] {
+    animation: pf-inquiry-status $pf-menu-fade ease both;
+  }
+}
+
+@keyframes pf-inquiry-status {
+  from {
+    opacity: 0;
+    transform: translateY(.25rem);
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-inquiry__arrow,
+  .pf-inquiry__status[data-kind] {
+    transition: none;
+    animation: none;
+  }
+}
