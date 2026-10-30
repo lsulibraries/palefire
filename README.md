@@ -577,6 +577,15 @@ from the media item. A figure with no image shows only to editors.
 - TOC: "Home" (the title page) first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
+- Openings on a full-screen photograph (Cover, and a wall's lead), from lg
+  with motion and scroll timelines: the photograph never moves on screen.
+  It fades in where it rests while its gallery comes up, holds under the
+  header, and fades out in place at the area's foot. Once it fills the
+  screen the text holds at its foot for 76svh (`--pf-reveal`) while the
+  wash comes in, then the title, the facts or links, and the opening text
+  rise in one after another, scrubbed by the scroll; then the text scrolls
+  on over the still photograph. Links to a gallery land at the reveal's end.
+  Not for "Full screen, then pan", which has its own pinned sequence.
 - Cover opening (Opening "Cover", stored as `full`, the default with a
   lead): the lead full screen and fixed, as on a wall, with the number,
   heading, "In this gallery" links and the gallery's opening text (its
@@ -628,9 +637,7 @@ from the media item. A figure with no image shows only to editors.
   glides past it; the stage allows for the running head
   (`--pf-exhibit-head-h`).
 - Motion (`_exhibition.scss`): title page image, kicker, title, credit and
-  prompt come in one after another (from lg, with a cover image and scroll
-  timelines, the image comes alone and scrolling brings the rest in over
-  it, held still for 90svh); lead bands open with a curtain and
+  prompt come in one after another; lead bands open with a curtain and
   pan from the image's top to its bottom over the first 70% of a screen of
   scrolling (`animation-timeline: scroll(root)`), full-width figures pan
   while they cross the screen (`view()`); "Show whole image" leads fade up
@@ -936,6 +943,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Gallery openings: the photograph fades in and out in place, and the text comes in while it holds.** Moves the reveal from the title page (24ba376, undone: the title page is as it was before it) to every gallery that opens on a full-screen photograph, a story's Cover or a wall's lead, from lg with motion and scroll timelines. The photograph no longer scrolls: while its gallery comes up the frame is held where it will rest and fades in as the gallery's edge wipes up over the previous one; at the gallery's foot it is held again and fades out (`pf-exhibit-frame-in`/`-out` on the area's timeline, `--pf-hero`). Once it fills the screen, the text holds for 76svh of scrolling (`--pf-reveal`, a registered length) while the wash comes in (2–16% of a screen), then the title, the facts or links and the opening text rise in, 12% apart. The area and its first row run 76svh longer and the text is set back by what is left of the reveal (`pf-exhibit-pin`), so it holds to the pixel; then it scrolls on over the still photograph. Walls without an intro (Mossville): the spacer carrying the wash is held the same way and the photograph's fade starts after the reveal. Anchors and TOC links land at the reveal's end (the section's negative scroll-margin), as do "Begin" and "Next" (`glideTo()`); a Cover's long-text fade allows for the hold (`measureCover()`, `readCover()`). Focus in the text shows it at once. Unchanged: "Full screen, then pan" openings (Occult), below lg, reduced motion, browsers without scroll timelines. Checked on the live Audubon (Cover and wall) and Mossville galleries at 1440 × 900 and Audubon at 1024 × 768 with local CSS: the photograph's top stays at the header's foot through entry, hold and exit, the title holds to the pixel, no horizontal scroll. The script's part was not run live. Why: each gallery should open on its picture, and the picture should never slide.
 
 - **Title page: scroll into the photograph, then the text.** From lg, with motion and scroll-driven animations, the title page opens on the cover photograph alone, its left edge softened into the page, with a small "Scroll" cue. The head runs 90svh longer: over that scroll the photograph and the text hold still while the wash comes in (2–16% of a screen), then the kicker, title, intro, credit, facts and prompt rise in one after another (from 16%, 10% apart), scrubbed by the scroll on the head's own timeline (`--pf-cover`). Past it, as before, the text and wash scroll away over the still photograph. Text too tall to pin on the screen (`.is-tall`, `sizeReveal()` in `js/exhibition.js`), below lg and with reduced motion: unchanged, the text comes in on load. Focus in the text shows it all at once, and "Home" glides to the reveal's end. Checked on the live Audubon page (1440 × 900) and Occult (1024 × 768) with local CSS: the text holds to the pixel through the reveal, the photograph never moves, no horizontal scroll. Why: the title page should open on the picture and let the visitor bring the title in.
 

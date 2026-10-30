@@ -19,9 +19,7 @@
  *   Its focal point, when set, is where it stays in view when cropped.
  *
  * The parts come in one after another on load (_exhibition.scss):
- * image, title, subtitle, credit, then the prompt. From lg, with motion,
- * the image comes first on its own and scrolling brings the rest in over
- * it, the image held still. The galleries follow
+ * image, title, subtitle, credit, then the prompt. The galleries follow
  * it as one long page ("Home" in the TOC is this page).
  *
  * "Begin" glides to the first gallery; below lg, "Contents" opens the TOC
@@ -97,13 +95,6 @@
         </button>
       </div>
     </div>
-    {% if head.cover %}
-      {# Shown only while the photograph is on its own (lg, scrolling in). #}
-      <span class="pf-exhibit-cover__cue" aria-hidden="true">
-        {{ 'Scroll'|t }}
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" focusable="false"><path d="M8 2.5v11M3.5 9 8 13.5 12.5 9"/></svg>
-      </span>
-    {% endif %}
   </div>
   {{ head.cache }}
 </div>

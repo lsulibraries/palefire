@@ -1014,133 +1014,6 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
-// Scrolling into the title page (lg, with motion and scroll-driven
-// animations, a cover image): the first screen is the photograph alone,
-// with a "Scroll" cue at the text's foot. The head runs a reveal's length
-// longer, and over that scroll the photograph and the text hold still (the
-// text sticky at the screen's foot, where the head's padding leaves it)
-// while the wash comes in, then the kicker, title, intro, credit, facts and
-// prompt, one after another, scrubbed by the scroll. The wash is full
-// before any text shows. Past the reveal the text and wash scroll away over
-// the still photograph, as before. Measured on the head's own timeline
-// (--pf-cover), inset by the header, so 0 is the top of the page. Text too
-// tall to pin on the screen (.is-tall, js/exhibition.js) comes in on load
-// as below lg; focus in the text (keyboard, "Home") shows it all at once.
-$pf-exhibit-cover-reveal: 90svh;
-$pf-exhibit-head-foot: clamp(2rem, 6vh, 4rem);
-$pf-cover-reveal: ".pf-exhibit-head:has(.pf-exhibit-cover.has-image):not(.is-tall)";
-
-.pf-exhibit-cover__cue {
-  display: none;
-}
-
-@supports (animation-timeline: view()) {
-  @include media-breakpoint-up(lg) {
-    #{$pf-cover-reveal} {
-      @include pf-exhibit-motion {
-        min-height: calc(100svh - var(--pf-header-h) + #{$pf-exhibit-cover-reveal});
-        view-timeline: --pf-cover block;
-        view-timeline-inset: var(--pf-header-h) 0px;
-
-        // Before the wash, the photograph's left edge (it starts at
-        // $pf-exhibit-cover-media) fades into the page instead of a hard
-        // line; the fade ends under the wash's solid part.
-        .pf-exhibit-cover__media {
-          -webkit-mask-image: linear-gradient(to right, transparent, #000 12%);
-          mask-image: linear-gradient(to right, transparent, #000 12%);
-        }
-
-        &::after {
-          animation: pf-exhibit-reveal-wash linear both;
-          animation-timeline: --pf-cover;
-          animation-range: contain 2svh contain 16svh;
-        }
-
-        .pf-exhibit-cover__text {
-          position: sticky;
-          bottom: $pf-exhibit-head-foot;
-        }
-
-        .pf-exhibit-cover__step {
-          animation: pf-exhibit-reveal $pf-exhibit-ease both;
-          animation-delay: 0s;
-          animation-timeline: --pf-cover;
-          animation-range:
-            contain calc(16svh + (var(--pf-step, 1) - 1) * 10svh)
-            contain calc(38svh + (var(--pf-step, 1) - 1) * 10svh);
-        }
-
-        .pf-exhibit-cover__cue {
-          display: flex;
-          animation: pf-exhibit-cue-out linear both;
-          animation-timeline: --pf-cover;
-          animation-range: contain 0svh contain 8svh;
-        }
-
-        .pf-exhibit-cover__cue svg {
-          animation: pf-exhibit-cue-bob 2.4s ease-in-out infinite;
-        }
-
-        &:focus-within::after,
-        .pf-exhibit-cover__text:focus-within .pf-exhibit-cover__step {
-          animation: none;
-        }
-
-        .pf-exhibit-cover__text:focus-within .pf-exhibit-cover__cue {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-// On the page colour, so it reads on any photograph before the wash.
-.pf-exhibit-cover__cue {
-  position: absolute;
-  inset-inline-start: 0;
-  bottom: 0;
-  gap: .6rem;
-  align-items: center;
-  padding: .5rem .75rem;
-  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--bs-body-color);
-  background: var(--bs-body-bg);
-  pointer-events: none;
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-  }
-}
-
-@keyframes pf-exhibit-reveal {
-  from {
-    opacity: 0;
-    translate: 0 2rem;
-  }
-}
-
-@keyframes pf-exhibit-reveal-wash {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes pf-exhibit-cue-out {
-  to {
-    opacity: 0;
-    translate: 0 .75rem;
-  }
-}
-
-@keyframes pf-exhibit-cue-bob {
-  50% {
-    translate: 0 .2rem;
-  }
-}
-
 .pf-exhibit-cover__kicker {
   @extend %pf-exhibit-kicker;
 }
@@ -2565,6 +2438,170 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+// Gallery openings on a full-screen photograph (a story's cover, a wall's
+// lead), from lg with motion and scroll timelines:
+// - The photograph never moves on screen. While its gallery comes up, the
+//   frame is held where it will rest (set back by what is left of the
+//   area's entry) and fades in as the area wipes up over the previous
+//   gallery; it holds under the header; at the area's foot it is held
+//   again and fades out in place (pf-exhibit-frame-in/-out, on the area's
+//   own timeline, --pf-hero).
+// - Once it fills the screen, the text holds at its foot for --pf-reveal
+//   of scrolling while the wash comes in, then the title, the facts or
+//   links, and the opening text rise in one after another, scrubbed by
+//   the scroll. Then the text scrolls on over the still photograph, as
+//   before. The area and its first row run --pf-reveal longer and the text
+//   is set back by what is left of the reveal (pf-exhibit-pin), so it
+//   holds to the pixel. On the gallery's timeline (--pf-open), inset by
+//   the header, so 0 is where the photograph fills the screen.
+// - Links to a gallery land at the reveal's end: the section's negative
+//   scroll-margin (anchors, the TOC) and js/exhibition.js glideTo().
+//   Focus in the text shows it at once.
+// Registered, so the script reads it in px (0 where there is no reveal).
+@property --pf-reveal {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+$pf-reveal-len: 76svh;
+$pf-reveal-section: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery:is(.pf-gallery--cover, .is-walled) .pf-exhibit-wall-hero)';
+$pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @include media-breakpoint-up(lg) {
+      #{$pf-reveal-section} {
+        --pf-reveal: #{$pf-reveal-len};
+        scroll-margin-top: calc(-1 * var(--pf-reveal));
+
+        > .pf-section__inner {
+          grid-template-rows: var(--pf-wall-top, minmax(calc(var(--pf-cover-top, 0px) + var(--pf-reveal)), 1fr)) auto auto auto auto auto;
+          view-timeline: --pf-open block, --pf-wall-open block;
+          view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
+        }
+
+        .pf-exhibit-wall-hero {
+          min-height: calc(max(22rem, var(--pf-wall-hero-h)) + var(--pf-reveal));
+          view-timeline: --pf-hero block;
+          view-timeline-inset: var(--pf-header-h) 0px;
+        }
+
+        .pf-exhibit-wall-hero__frame {
+          animation: pf-exhibit-frame-in linear both, pf-exhibit-frame-out linear both;
+          animation-timeline: --pf-hero, --pf-hero;
+          animation-range: entry 0% entry 100%, exit 0% exit 100%;
+        }
+
+        .pf-exhibit-wall-hero__frame::after {
+          animation: pf-exhibit-reveal-wash linear both;
+          animation-timeline: --pf-open;
+          animation-range: contain 2svh contain 16svh;
+        }
+
+        #{$pf-reveal-text} {
+          animation: pf-exhibit-pin linear both, pf-exhibit-reveal $pf-exhibit-ease both;
+          animation-timeline: --pf-open, --pf-open;
+          animation-range:
+            contain 0px contain var(--pf-reveal),
+            contain calc(16svh + var(--pf-reveal-step, 0) * 12svh) contain calc(40svh + var(--pf-reveal-step, 0) * 12svh);
+        }
+
+        :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav) {
+          --pf-reveal-step: 1;
+        }
+
+        .pf-exhibit-wall__text {
+          --pf-reveal-step: 2;
+        }
+
+        > .pf-section__inner > .pf-section__title:focus-within,
+        :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text):focus-within {
+          animation-name: pf-exhibit-pin, none;
+        }
+
+        .pf-section__inner:has(:focus-within) .pf-exhibit-wall-hero__frame::after {
+          animation: none;
+        }
+      }
+
+      // A wall with no intro: its wash rides on the spacer (above), which
+      // is held and comes in like the frame's, and the photograph's
+      // fade starts after the reveal.
+      #{$pf-wall-photo} {
+        view-timeline: --pf-open block, --pf-wall-open block;
+        view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
+
+        &::before {
+          min-height: calc(max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)))) + var(--pf-reveal));
+          background-position: bottom;
+          background-size: 100% max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
+          background-repeat: no-repeat;
+          animation: pf-exhibit-pin linear both, pf-exhibit-reveal-wash linear both;
+          animation-timeline: --pf-open, --pf-open;
+          animation-range: contain 0px contain var(--pf-reveal), contain 2svh contain 16svh;
+        }
+
+        &:has(:focus-within)::before {
+          animation-name: pf-exhibit-pin, none;
+        }
+
+        .pf-exhibit-wall-hero {
+          animation-range: contain var(--pf-reveal) contain calc(var(--pf-reveal) + 70svh);
+        }
+      }
+    }
+  }
+}
+
+// The frame held at the screen's top while the area comes up (the entry
+// is a screen under the header long), then fading out in place as the
+// area's foot goes by.
+@keyframes pf-exhibit-frame-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--pf-header-h) - 100vh);
+  }
+
+  30% {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-exhibit-frame-out {
+  60% {
+    filter: opacity(0);
+  }
+
+  to {
+    filter: opacity(0);
+    transform: translateY(calc(100vh - var(--pf-header-h)));
+  }
+}
+
+@keyframes pf-exhibit-pin {
+  from {
+    transform: translateY(calc(-1 * var(--pf-reveal)));
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes pf-exhibit-reveal {
+  from {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+}
+
+@keyframes pf-exhibit-reveal-wash {
+  from {
+    opacity: 0;
   }
 }
 

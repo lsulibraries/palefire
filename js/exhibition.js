@@ -178,29 +178,7 @@
       sizeHero(page);
       foldIntro(page);
     });
-    sizeReveal();
     queueZoom();
-  }
-
-  // The title page's reveal (_exhibition.scss) pins its text at the
-  // screen's foot: text too tall for the room under the bar can't pin,
-  // and comes in on load instead (.is-tall).
-  function sizeReveal() {
-    const text = state.head.querySelector('.pf-exhibit-cover__text');
-    const bar = state.head.querySelector('.pf-landing__bar');
-    if (!text) {
-      return;
-    }
-    const css = getComputedStyle(text);
-    const height = text.offsetHeight - parseFloat(css.paddingTop);
-    const room = window.innerHeight - headerOffset() - (bar ? bar.offsetHeight : 0) - parseFloat(getComputedStyle(state.head).paddingBottom);
-    state.head.classList.toggle('is-tall', height > room);
-  }
-
-  // Pinned while the reveal runs: the text is sticky only then.
-  function revealing() {
-    const text = state.head.querySelector('.pf-exhibit-cover__text');
-    return !!text && getComputedStyle(text).position === 'sticky';
   }
 
   function headerOffset() {
@@ -208,13 +186,25 @@
     return (parseFloat(css.scrollPaddingTop) || parseFloat(css.getPropertyValue('--pf-header-h')) || 0) + 16;
   }
 
+  // How long a gallery's opening holds its photograph while its text comes
+  // in (_exhibition.scss --pf-reveal, in px; 0 without the reveal).
+  function revealOf(el) {
+    return parseFloat(getComputedStyle(el).getPropertyValue('--pf-reveal')) || 0;
+  }
+
+  // Top in the document, transforms aside (the reveal sets the text back).
+  function layoutTop(el) {
+    let top = 0;
+    for (let node = el; node; node = node.offsetParent) {
+      top += node.offsetTop;
+    }
+    return top;
+  }
+
   function glideTo(el, done) {
-    // The title page with its reveal: to the reveal's end, where all of
-    // the text is in (the head's foot at the screen's).
-    const reveal = el === state.head && revealing();
-    const at = () => Math.max(0, reveal
-      ? window.scrollY + el.getBoundingClientRect().bottom - window.innerHeight
-      : window.scrollY + el.getBoundingClientRect().top - headerOffset());
+    // A gallery: to its reveal's end, where its text is in.
+    const reveal = state.pages.includes(el) ? revealOf(el) : 0;
+    const at = () => Math.max(0, window.scrollY + el.getBoundingClientRect().top - headerOffset() + reveal);
     if (reduceMotion() || !Drupal.palefireGlide) {
       window.scrollTo({ top: at(), behavior: 'instant' });
       done();
@@ -417,10 +407,6 @@
     initCovers();
     initEntryLinks();
     state.pages.forEach(prepareGallery);
-    sizeReveal();
-    if (document.fonts) {
-      document.fonts.ready.then(sizeReveal);
-    }
     queueZoom();
     // The title page's cover waited for this (exhibit-cover.html.twig):
     // with an address for a gallery it is above, and loads lazily.
@@ -737,7 +723,9 @@
     if (!frame) {
       return;
     }
-    const fold = frame.getBoundingClientRect().height - (intro.getBoundingClientRect().top - hero.getBoundingClientRect().top);
+    // Where the text rests while the photograph holds: the reveal's length
+    // above its place in the layout.
+    const fold = frame.getBoundingClientRect().height - (layoutTop(intro) - layoutTop(hero) - revealOf(page));
     intro.style.setProperty('--pf-fold', Math.round(fold) + 'px');
     intro.classList.toggle('is-long', intro.scrollHeight > fold);
     readCover();
@@ -751,7 +739,8 @@
       if (!hero) {
         return;
       }
-      const moved = hero.querySelector('.pf-exhibit-wall-hero__frame').getBoundingClientRect().top - hero.getBoundingClientRect().top;
+      // Less the reveal, while the text holds still.
+      const moved = hero.querySelector('.pf-exhibit-wall-hero__frame').getBoundingClientRect().top - hero.getBoundingClientRect().top - revealOf(page);
       const read = Math.min(Math.max(moved / (window.innerHeight * 0.4), 0), 1);
       hero.closest('.pf-section__inner').style.setProperty('--pf-read', read.toFixed(3));
     });
