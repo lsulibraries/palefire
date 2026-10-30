@@ -145,8 +145,10 @@ and its own breadcrumb bar instead (`PalefireHooks::titleLandingUuid()`,
   `<nav>` as a 3px line at the page edge, one segment per section, as long as
   the section, filled as far as the activation line has read into it. The
   column closes and backgrounds run to the edge. Hover, focus or a first tap
-  shows every name over the content; Esc hides them. The current name shows
-  by itself only while its heading rises from the activation line to 45% of
+  opens the **index panel** beside it: every section on an even row, a visual
+  copy of the links (`aria-hidden`; the rail's links stay the nav), where a
+  segment and its row light together. Esc or following a link closes it. With
+  the panel closed, the current name shows by itself only while its heading rises from the activation line to 45% of
   the screen (`PEEK_END`), fading as it goes. When the segments can't
   all be 24px tall, it switches to even ticks (`.pf-toc--ticks`). It is set by
   `.pf-modular--toc-rail` (`page.html.twig`), which is left off when the
@@ -932,6 +934,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **TOC rail: an index panel replaces the frost and wide rows.** Hovering, focusing or tapping the rail now opens a compact glass panel beside it (`.pf-toc__panel`, built by `buildPanel()` in `js/modular-toc.js`). It lists every section on an even 36px row; the row under the pointer fills and gets a marker, and the current section is in the heading colour. A segment and its row light together (`.is-hot`), whichever the pointer is on, and a long panel scrolls to keep that row in view. The panel is a visual copy: `aria-hidden`, with rows out of the tab order, so the rail's links stay the nav for screen readers and the keyboard, and focusing a rail link lights its row. A plain click on a row clicks its rail link, so the glide is the same; a modified click opens the row's own link. Following a link or pressing Esc closes the panel until the pointer leaves or moves to another section. The page-wide frost and the invisible 26rem rows are gone, and the rail's own names now only show as the scroll-linked current name. Checked on the live Special Collections home and Aves with local CSS and JS at 320, 1024 and 1440: the panel opens from a segment with the matching row lit, a sweep down all rows never closed it, a row click glides to its section, and Tab, Esc and touch taps work. Below lg nothing changes. Why: the hover gave no sign of what was clickable, and names spaced by section length were hard to scan.
 
 - **TOC rail: easier to use on hover; read sections step back.** While the names are open, the left of the page is frosted with the sidebar's glass, fading out to the right, and the names drop their own boxes, so they no longer sit on the text. Each row is now as tall as its segment and covers the 4px gap below it, about 26rem wide, so moving from one name to the next never falls between them. The names stay 0.4s after the pointer leaves (`.is-hover`, `RAIL_HOLD` in `js/modular-toc.js`), so slipping off a row doesn't close them. It's a timer, because Reduce motion zeroes CSS transition delays. Esc still closes at once. Segments already read fill in the TOC text colour softened toward the track (about 3.3:1 light, 3.9:1 dark), so only the current one is bright. The names keep their colour for contrast. Checked on the live Aves exhibition and Special Collections home at 1024 and 1440: a pointer sweep down all the names never closed them, with Reduce motion on and off. Tab, Esc and touch taps unchanged. Why: on the Aves page the names were hard to read over the text and closed while moving between them.
 

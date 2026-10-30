@@ -524,7 +524,8 @@
     // The current section's name shows beside its segment only while its
     // heading rises from the activation line to PEEK_END of the screen
     // (--pf-rail-peek: full for the first half of the way, fading to 0 over
-    // the second), so it never sits over the text being read. Hover and focus show every name (CSS).
+    // the second), so it never sits over the text being read. Hover, focus
+    // and a first tap open the index panel (buildPanel()).
     const PEEK_END = 0.45;
     const RAIL_MIN = 28; // a 24px target plus the 4px gap
     // How long the names stay after the pointer leaves the rail (ms), so
@@ -538,6 +539,8 @@
     let railFrame = 0;
     let lastPointer = 'mouse';
     let holdTimer = 0;
+    let panelList = null; // the index panel's list (buildPanel())
+    let dismissedOn = null; // the entry the pointer was on when the panel closed
 
     // Weights from the sections' heights, on load and when they resize,
     // never on scroll.
@@ -577,6 +580,10 @@
         const p = isShown(entry) && rect.height ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
         entry.li.style.setProperty('--pf-rail-p', p.toFixed(3));
         entry.li.classList.toggle('is-read', p >= 1);
+        if (entry.row) {
+          entry.row.classList.toggle('is-read', p >= 1);
+          entry.row.classList.toggle('is-current', entry === active);
+        }
       });
       let peek = 0;
       if (active && isShown(active)) {
@@ -610,6 +617,7 @@
           entry.link.append(label);
         }
       });
+      buildPanel();
       window.addEventListener('scroll', onRailScroll, { passive: true, signal });
       window.addEventListener('resize', queueRail, { passive: true, signal });
       railMedia.addEventListener('change', queueRail, { signal });
@@ -625,8 +633,8 @@
       }
 
       // Touch (iPad landscape, touch laptops) has no hover: the first tap
-      // shows the names, the next follows a link. A tap elsewhere, Esc or
-      // following a link hides them.
+      // opens the panel, the next follows a link. A tap elsewhere, Esc or
+      // following a link closes it.
       nav.addEventListener('pointerdown', (event) => {
         lastPointer = event.pointerType;
       }, { signal });
@@ -638,9 +646,12 @@
           event.preventDefault();
           event.stopImmediatePropagation();
           nav.classList.add('is-open');
+          revealRow(entries.find((entry) => entry.link === event.target.closest('.pf-toc__link')));
           return;
         }
-        nav.classList.remove('is-open');
+        // Followed: close the panel until the pointer leaves the rail or
+        // moves to another section.
+        dismiss(entries.find((entry) => entry.link === event.target.closest('.pf-toc__link')));
       }, { capture: true, signal });
       document.addEventListener('pointerdown', (event) => {
         if (!nav.contains(event.target)) {
@@ -654,9 +665,7 @@
       document.addEventListener('keydown', (event) => {
         const shown = nav.matches(':hover') || nav.contains(document.activeElement) || nav.classList.contains('is-open');
         if (event.key === 'Escape' && shown && railOn()) {
-          clearTimeout(holdTimer);
-          nav.classList.remove('is-open', 'is-hover');
-          nav.classList.add('is-dismissed');
+          dismiss(entries.find((entry) => entry.li.classList.contains('is-hot')));
         }
       }, { signal });
       const undismiss = () => {
@@ -671,17 +680,125 @@
       nav.addEventListener('pointerenter', (event) => {
         if (event.pointerType !== 'touch') {
           clearTimeout(holdTimer);
-          nav.classList.add('is-hover');
+          if (!nav.classList.contains('is-hover')) {
+            nav.classList.add('is-hover');
+            revealRow(active);
+          }
         }
       }, { signal });
       nav.addEventListener('pointerleave', (event) => {
         undismiss();
         if (event.pointerType !== 'touch') {
           clearTimeout(holdTimer);
-          holdTimer = setTimeout(() => nav.classList.remove('is-hover'), RAIL_HOLD);
+          holdTimer = setTimeout(() => {
+            nav.classList.remove('is-hover');
+            setHot(null);
+          }, RAIL_HOLD);
         }
       }, { signal });
-      nav.addEventListener('focusout', () => requestAnimationFrame(undismiss), { signal });
+      nav.addEventListener('focusout', () => requestAnimationFrame(() => {
+        undismiss();
+        if (!nav.contains(document.activeElement)) {
+          setHot(null);
+        }
+      }), { signal });
+    }
+
+    // The index panel: a visual copy of the links, one even row per
+    // section, beside the rail (_toc-rail.scss). aria-hidden and out of the
+    // tab order, so screen readers and the keyboard use the rail's own
+    // links; focusing one lights its row. A plain click on a row clicks its
+    // rail link, so the jump (glide, history, focus) is the same; a
+    // modified click opens the row's own href. A row and its segment light
+    // together (.is-hot), whichever the pointer is on.
+    function buildPanel() {
+      const panel = document.createElement('div');
+      panel.className = 'pf-toc__panel';
+      panel.setAttribute('aria-hidden', 'true');
+      const head = document.createElement('p');
+      head.className = 'pf-toc__panel-head';
+      head.textContent = (nav.querySelector('.pf-toc__heading') || {}).textContent || '';
+      panelList = document.createElement('ol');
+      panelList.className = 'pf-toc__panel-list';
+      entries.forEach((entry) => {
+        const li = document.createElement('li');
+        li.hidden = entry.li.hidden;
+        const row = document.createElement('a');
+        row.className = 'pf-toc__row';
+        row.href = entry.link.getAttribute('href');
+        row.tabIndex = -1;
+        row.textContent = entry.link.textContent.replace(/\s+/g, ' ').trim();
+        li.append(row);
+        panelList.append(li);
+        entry.row = row;
+        row.addEventListener('pointerenter', () => {
+          reopen(entry);
+          setHot(entry);
+        }, { signal });
+        row.addEventListener('click', (event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return;
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          entry.link.click();
+        }, { signal });
+        entry.link.addEventListener('pointerenter', () => {
+          reopen(entry);
+          setHot(entry);
+          revealRow(entry);
+        }, { signal });
+        entry.link.addEventListener('focus', () => {
+          setHot(entry);
+          revealRow(entry);
+        }, { signal });
+      });
+      panel.append(head, panelList);
+      nav.append(panel);
+    }
+
+    function setHot(target) {
+      entries.forEach((entry) => {
+        entry.li.classList.toggle('is-hot', entry === target);
+        if (entry.row) {
+          entry.row.classList.toggle('is-hot', entry === target);
+        }
+      });
+    }
+
+    // Scroll a long panel so the row is in view (opening on the current
+    // section, or following the pointer down the rail).
+    function revealRow(entry) {
+      if (!panelList || !entry || !entry.row) {
+        return;
+      }
+      const top = entry.row.offsetTop - panelList.offsetTop;
+      const bottom = top + entry.row.offsetHeight;
+      if (top < panelList.scrollTop || bottom > panelList.scrollTop + panelList.clientHeight) {
+        panelList.scrollTop = top - (panelList.clientHeight - entry.row.offsetHeight) / 2;
+      }
+    }
+
+    function closeRail() {
+      clearTimeout(holdTimer);
+      nav.classList.remove('is-open', 'is-hover');
+      setHot(null);
+    }
+
+    // Closed by a click or Esc: it stays closed while the pointer is on the
+    // same section (1.4.13), and opens again on another one.
+    function dismiss(entry) {
+      closeRail();
+      dismissedOn = entry || null;
+      nav.classList.add('is-dismissed');
+    }
+
+    function reopen(entry) {
+      if (nav.classList.contains('is-dismissed') && entry !== dismissedOn) {
+        nav.classList.remove('is-dismissed');
+        nav.classList.add('is-hover');
+        dismissedOn = null;
+      }
     }
 
     /* ---------------- Wire up ---------------- */
