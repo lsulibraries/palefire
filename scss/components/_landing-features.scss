@@ -2666,8 +2666,12 @@ html[data-pf-hero] {
     margin-bottom: var(--pf-hero-rule-gap);
   }
 
+  // The guide's band (_sections.scss) starts halfway down its top space;
+  // the same space again under the last line, so the band doesn't end
+  // flush on the buttons or the paths. The next index rule's gap counts
+  // from the band's foot.
   .pf-landing__lead--hero > .pf-quick-guide {
-    padding: var(--pf-hero-gap) 0 0;
+    padding: var(--pf-hero-gap) 0 calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
   }
 }
 
@@ -2799,7 +2803,10 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
-.pf-quick-guide__link {
+// The Visit panel's links on the hero (All library hours, Open in Google
+// Maps, Parking) are these buttons too.
+.pf-quick-guide__link,
+.pf-landing--cover .pf-visit__link {
   @extend %pf-landing-label;
   display: inline-flex;
   align-items: center;
@@ -2832,6 +2839,26 @@ html[data-pf-hero] .pf-landing--cover {
     outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
     outline-offset: 2px;
   }
+}
+
+// The Visit buttons as wide as the Quick Guide's (and Send question), the
+// words at the start and the arrow at the end; Google Maps and Parking
+// side by side, wrapping when the map's column can't hold both.
+.pf-landing--cover .pf-visit__link {
+  width: min(100%, 17.5rem);
+  margin-top: 0;
+
+  .pf-visit__ext {
+    margin-inline-start: auto;
+    vertical-align: baseline;
+  }
+}
+
+// Across the map's column (not shrunk to fit, which stacks the two), over
+// pf-visit-frames' justify-self: start on the hero's grid.
+.pf-landing--cover .pf-map .pf-visit .pf-visit__go {
+  gap: .625rem;
+  justify-self: stretch;
 }
 
 // Hours: the status dot in its colour (open, soon, closed), then "See
@@ -2871,16 +2898,21 @@ html[data-pf-hero] .pf-landing--cover {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .pf-quick-guide__link:is(:hover, :focus-visible) svg {
+  :is(.pf-quick-guide__link, .pf-landing--cover .pf-visit__link):is(:hover, :focus-visible) svg {
     transform: translate(.125rem, -.125rem);
   }
 
   .pf-quick-guide__link--hours:is(:hover, :focus-visible) svg {
     transform: translateY(.125rem);
   }
+
+  // Parking stays on the site: its right arrow moves right.
+  .pf-landing--cover .pf-visit__parking:is(:hover, :focus-visible) svg {
+    transform: translateX(.125rem);
+  }
 }
 
-html.pf-a11y-motion .pf-quick-guide__link svg {
+html.pf-a11y-motion :is(.pf-quick-guide__link, .pf-landing--cover .pf-visit__link) svg {
   transform: none;
 }
 
@@ -2929,8 +2961,7 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
 
 // Buttons and links in the text face.
 .pf-landing--cover {
-  .pf-hero-account__link,
-  .pf-visit__link {
+  .pf-hero-account__link {
     font-family: inherit;
     font-size: .9375rem;
     font-weight: 500;
