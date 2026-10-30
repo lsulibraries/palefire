@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Every Special Collections FAQ, in a guide: the guides' accordion, placed
+ * by a "[special-collections-faqs]" paragraph in a guide text block
+ * (palefire_preprocess_paragraph__guide_text()).
+ *
+ * Variables:
+ * - faqs: question, answer (render array or plain text), byline, url (the
+ *   answer on AskUs), from _palefire_ask_faqs(): most asked first, as on the
+ *   Special Collections homepage.
+ *
+ * Questions are summaries, not headings, so they stay out of "On this
+ * page"; the panels are data-toc-skip, as in paragraph--accordion-item.
+ */
+#}
+{% set plus = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
+<div class="pf-accordion">
+  {% for faq in faqs %}
+    <details class="pf-accordion__item">
+      <summary class="pf-accordion__summary">
+        <span class="pf-accordion__row">
+          <span class="pf-accordion__title">{{ faq.question }}</span>
+          {# Theme SVG file, so |raw is safe here. #}
+          <span class="pf-accordion__icon" aria-hidden="true">{{ plus|raw }}</span>
+        </span>
+      </summary>
+      <div class="pf-accordion__panel" data-toc-skip>
+        <div class="pf-guide-prose">
+          {% if faq.answer %}
+            {{ faq.answer }}
+          {% endif %}
+          {% if faq.byline %}
+            <p>{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
+          {% endif %}
+          {% if faq.url %}
+            <p><a href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}</a></p>
+          {% endif %}
+        </div>
+      </div>
+    </details>
+  {% endfor %}
+</div>

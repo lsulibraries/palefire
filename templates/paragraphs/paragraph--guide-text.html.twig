@@ -14,6 +14,8 @@
  * - request_paths: the text had a "[request-paths]" paragraph
  *   (palefire_preprocess_paragraph__guide_text()); the Special Collections
  *   request diagram follows the text.
+ * - faqs: the text had a "[special-collections-faqs]" paragraph; every
+ *   Special Collections FAQ follows it, most asked first.
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -36,5 +38,8 @@
   </div>
   {% if request_paths %}
     {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id(), img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
+  {% endif %}
+  {% if faqs %}
+    {% include '@palefire/includes/guide-faqs.html.twig' with { faqs: faqs, directory: directory } only %}
   {% endif %}
 </div>
