@@ -33,6 +33,22 @@ $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
   @return linear-gradient($direction, $stops);
 }
 
+// pf-eased-wash() that turns from one angle and span to another as
+// --pf-wash-turn goes from 0 to 1 (registered, so it transitions: the wash
+// sweeps round instead of two washes crossfading).
+@function pf-turned-wash($angle1, $from1, $to1, $angle2, $from2, $to2, $steps: 12) {
+  $stops: ();
+  @for $i from 0 through $steps {
+    $t: math.div($i, $steps);
+    $alpha: math.div(1 + math.cos(math.$pi * $t), 2);
+    $mix: math.div(math.round($alpha * 1000), 10) * 1%;
+    $a: math.div(math.round(($from1 + ($to1 - $from1) * $t) * 10), 10);
+    $b: math.div(math.round(($from2 + ($to2 - $from2) * $t) * 10), 10);
+    $stops: list.append($stops, color-mix(in srgb, var(--bs-body-bg) $mix, transparent) calc(#{$a} + #{$b - $a} * var(--pf-wash-turn, 0)), comma);
+  }
+  @return linear-gradient(calc(#{$angle1} + #{$angle2 - $angle1} * var(--pf-wash-turn, 0)), $stops);
+}
+
 // Where load-time fades start: just above 0, which looks the same, because
 // Chrome never counts an element first painted at opacity 0 as the
 // Largest Contentful Paint, so the cover and title went unmeasured and LCP
@@ -2710,6 +2726,17 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   cursor: zoom-in;
 }
 
+@property --pf-wash-turn {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+// The brief wash (below): its angle, and where it is solid to and clear by.
+$pf-brief-angle: 30deg;
+$pf-brief-solid: 32%;
+$pf-brief-clear: 86%;
+
 // The frame is pinned under the bar from the first scroll and its top edge
 // follows the bar as the header shrinks, while the image and its washes
 // inside are set back by the header's shrink so far (--pf-cover-shift, 0
@@ -2741,9 +2768,19 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     background: pf-eased-wash(to top, 46%, 98%);
 
     // From lg the text is on the side wash, and the foot only settles the
-    // image into the page (::before, below).
+    // image into the page (::before, below). A short text (.is-brief,
+    // js/exhibition.js briefWash()) sits low, so the wash turns to 210°
+    // (written from its solid end, 30deg) and lifts off the image's upper
+    // left; it turns back as the text opens.
     @include media-breakpoint-up(lg) {
-      background: pf-eased-wash(to right, 38%, 94%);
+      background: pf-turned-wash(90deg, 38%, 94%, $pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
+      @media (prefers-reduced-motion: no-preference) {
+        transition: --pf-wash-turn 0.9s $pf-exhibit-ease;
+      }
+
+      .pf-section__inner.is-brief & {
+        --pf-wash-turn: 1;
+      }
 
       // A wall that opens on its title and facts alone (no intro over the
       // image, as Mossville's galleries): nothing to read across the left,

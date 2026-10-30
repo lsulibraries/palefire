@@ -403,6 +403,7 @@
         setActiveSub(null);
         closeOffcanvas(nav);
         if (plain) {
+          hushPeek();
           glideTo(0, () => {});
         }
         else {
@@ -419,6 +420,7 @@
       if (jump) {
         event.preventDefault();
         history.replaceState(history.state, '', link.hash);
+        hushPeek();
       }
       setActive(entry);
       setActiveSub(entry.subs.find((s) => s.link === link) || null);
@@ -524,9 +526,15 @@
     // The current section's name shows beside its segment only while its
     // heading rises from the activation line to PEEK_END of the screen
     // (--pf-rail-peek: full for the first half of the way, fading to 0 over
-    // the second), so it never sits over the text being read. Hover, focus
-    // and a first tap open the index panel (buildPanel()).
+    // the second), so it never sits over the text being read. It stays
+    // hidden where it would cover text (a section too short for its heading
+    // to rise, at the page's foot), and after a jump (a TOC link, an
+    // address with a #hash) until the reader scrolls PEEK_SLACK px: they
+    // just chose that section. Hover, focus and a first tap open the index
+    // panel (buildPanel()).
     const PEEK_END = 0.45;
+    const PEEK_SLACK = 48;
+    const PEEK_OVER = 'p, li, dt, dd, h1, h2, h3, h4, h5, h6, blockquote, figcaption, td, th';
     const RAIL_MIN = 28; // a 24px target plus the 4px gap
     // How long the names stay after the pointer leaves the rail (ms), so
     // slipping off a row doesn't close them. A timer, not a CSS delay:
@@ -541,6 +549,8 @@
     let holdTimer = 0;
     let panelList = null; // the index panel's list (buildPanel())
     let dismissedOn = null; // the entry the pointer was on when the panel closed
+    let hushed = false;
+    let hushedAt = null; // where the jump landed (null while it glides)
 
     // Weights from the sections' heights, on load and when they resize,
     // never on scroll.
@@ -596,7 +606,42 @@
           peek = 0;
         }
       }
+      if (hushed) {
+        if (locked) {
+          hushedAt = null;
+        }
+        else if (hushedAt === null) {
+          hushedAt = window.scrollY;
+        }
+        else if (Math.abs(window.scrollY - hushedAt) > PEEK_SLACK) {
+          hushed = false;
+        }
+      }
+      if (hushed || (peek > 0 && peekCovers(active))) {
+        peek = 0;
+      }
       nav.style.setProperty('--pf-rail-peek', peek.toFixed(3));
+    }
+
+    function hushPeek() {
+      hushed = true;
+      hushedAt = null;
+    }
+
+    // Whether the current name, beside its segment, would sit over text:
+    // sampled along its middle (the label lets the pointer through, so the
+    // hit is what lies under it).
+    function peekCovers(entry) {
+      const label = entry.link.querySelector('.pf-toc__label');
+      if (!label) {
+        return false;
+      }
+      const box = label.getBoundingClientRect();
+      const y = box.top + box.height / 2;
+      return [0.35, 0.65, 0.95].some((at) => {
+        const hit = document.elementFromPoint(box.left + box.width * at, y);
+        return !!hit && !nav.contains(hit) && !!hit.closest(PEEK_OVER);
+      });
     }
 
     function onRailScroll() {
@@ -828,6 +873,9 @@
     // in place and the active sub-list already open.
     const hashed = location.hash && entries.find((e) => '#' + e.section.id === location.hash);
     setActive((hashed && isShown(hashed) ? hashed : null) || entryAtLine(entries) || firstShown());
+    if (hashed) {
+      hushPeek();
+    }
     trackSubHeadings();
     // Sized before the first page fade ends; transitions start after
     // (.is-rail-ready), so the segments don't animate in on load.

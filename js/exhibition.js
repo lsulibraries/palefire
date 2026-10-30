@@ -177,6 +177,7 @@
     state.pages.forEach((page) => {
       sizeHero(page);
       foldIntro(page);
+      briefWash(page);
     });
     queueZoom();
   }
@@ -329,6 +330,7 @@
     page.dataset.pfExhibitReady = '1';
     page.querySelectorAll('[data-pf-exhibit-bio]').forEach(initBio);
     foldIntro(page);
+    briefWash(page);
     sizeHero(page);
     addNext(page);
   }
@@ -534,6 +536,7 @@
         const page = list.closest('.pf-section');
         if (page) {
           foldIntro(page);
+          briefWash(page);
         }
       });
       list.after(button);
@@ -648,6 +651,7 @@
       ROOT.style.overflowAnchor = 'none';
       intro.style.maxHeight = from + 'px';
       sync(open);
+      briefWash(page);
       // Closing, the button keeps its place on screen (the page scrolls up
       // as the text above it folds), never taken up past the header.
       let last = from;
@@ -691,6 +695,27 @@
       });
     });
     intro.after(button);
+  }
+
+  // From lg, a lead whose text is short (title to foot within BRIEF of the
+  // image's screen) has a lighter, turned wash (.is-brief, _exhibition.scss),
+  // turning back as the text opens. An intro with "Read more" is short
+  // while folded (its fold keeps it to the lower third) and long open.
+  const BRIEF = 0.42;
+  function briefWash(page) {
+    const hero = page.querySelector('.pf-exhibit-wall-hero');
+    const title = page.querySelector('.pf-section__title');
+    const intro = page.querySelector('.pf-exhibit-wall__intro');
+    if (!hero || !title) {
+      return;
+    }
+    let brief = false;
+    if (intro && wide.matches) {
+      const toggle = intro.parentElement.querySelector('.pf-exhibit-wall__more');
+      const stack = layoutTop(hero) + hero.offsetHeight - layoutTop(title);
+      brief = toggle ? intro.classList.contains('is-folded') : stack <= hero.querySelector('.pf-exhibit-wall-hero__frame').offsetHeight * BRIEF;
+    }
+    title.closest('.pf-section__inner').classList.toggle('is-brief', brief);
   }
 
   // With a lead, the title's row takes what the text leaves of the first

@@ -189,13 +189,18 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
         color $pf-hover-out ease;
     }
 
-    // The current name, by itself, while its heading rises (JS).
+    // The current name, by itself, while its heading rises (JS). Eased, so
+    // it fades rather than blinks where JS hides it (over text, after a
+    // jump).
     [aria-current] > .pf-toc__label {
       font-weight: 700;
       color: var(--pf-g-title, var(--pf-toc-active));
       opacity: var(--pf-rail-peek, 0);
       transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * -0.5rem));
-      transition: color $pf-hover-out ease;
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s var(--pf-rail-ease),
+        color $pf-hover-out ease;
     }
 
     // "Back to top": the arrow alone, under the line.
