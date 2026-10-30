@@ -459,6 +459,15 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   object-fit: cover;
 }
 
+// "Mirror lead image" (field_exhibit_lead_mirror): the lead flipped left to
+// right, so a subject facing off the page faces into it. On the image, not
+// its frame, whose washes stay put; transform, as the cover's rise animates
+// scale. Focal points and pans follow the flip. The lightbox builds its own
+// image, so shows the original.
+.pf-exhibit-mirror {
+  transform: scaleX(-1);
+}
+
 // The lead's caption shows in the object view (the image's own link); here it
 // stays for screen readers, as the figure's label.
 .pf-exhibit-hero__caption {

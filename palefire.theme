@@ -1157,12 +1157,18 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  * draws the Special Collections request diagram (guide-request-paths.html.twig)
  * after it. A marker anywhere else in a sentence is left as typed.
  *
+ * faqs: likewise for a paragraph that is only "[special-collections-faqs]":
+ * every Special Collections FAQ, most asked first, in the order the
+ * homepage's Ask Special Collections section uses (_palefire_ask_faqs()),
+ * drawn after the text as the guides' accordion (guide-faqs.html.twig).
+ *
  * transcription: TRUE when the text opens with a Heading 4 "Transcription"
  * (Audubon's manuscripts): a primary source, set apart from the curators'
  * text (_exhibition.scss .pf-transcription).
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
+  $variables['faqs'] = [];
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -1186,6 +1192,8 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     $variables['content']['field_block_body']['#post_render'][] = [ExhibitFieldGuide::class, 'rows'];
   }
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
+  $faqs_marker = '#<p>\s*\[special-collections-faqs\]\s*</p>#i';
+  $faqs = FALSE;
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
   foreach (Element::children($variables['content']['field_block_body']) as $delta) {
@@ -1194,7 +1202,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       $item['#text'] = preg_replace($marker, '', (string) $item['#text']);
       $variables['request_paths'] = TRUE;
     }
+    if (isset($item['#text']) && preg_match($faqs_marker, (string) $item['#text'])) {
+      $item['#text'] = preg_replace($faqs_marker, '', (string) $item['#text']);
+      $faqs = TRUE;
+    }
     unset($item);
+  }
+  if ($faqs) {
+    $variables['faqs'] = _palefire_ask_faqs(NULL, $variables, NULL);
   }
 }
 
@@ -1365,16 +1380,20 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
  * carry stray spaces, and an exact match (LIKE) misses them all. The section's link (the index rule's) points at
  * the rest on AskUs.
  *
+ * With no paragraph and no limit (a guide's "[special-collections-faqs]"
+ * marker, palefire_preprocess_paragraph__guide_text()): every one of those
+ * FAQs, in the same order.
+ *
  * Each FAQ:
  * - question: the tile's title.
  * - answer: its Formatted text or Linked text (filtered, as a render
  *   array), else its Long summary as plain text, else ''.
  * - url: its Link (the answer on AskUs), or ''.
  */
-function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): array {
+function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?int $limit = 8): array {
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $nodes = [];
-  if ($paragraph->hasField('field_tiles')) {
+  if ($paragraph && $paragraph->hasField('field_tiles')) {
     foreach ($paragraph->get('field_tiles') as $item) {
       if ($item->entity instanceof NodeInterface) {
         $nodes[] = $item->entity;
@@ -1387,16 +1406,18 @@ function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): a
     $types = \Drupal::entityTypeManager();
     $terms = $types->getStorage('taxonomy_term')->loadByProperties(['name' => 'FAQ']);
     if ($terms) {
-      $ids = \Drupal::entityQuery('node')
+      $query = \Drupal::entityQuery('node')
         ->accessCheck(TRUE)
         ->condition('type', 'tile')
         ->condition('status', NodeInterface::PUBLISHED)
         ->condition('field_category', array_keys($terms), 'IN')
         ->condition('field_subcategory', 'Special Collections', 'CONTAINS')
         ->sort('field_tile_search_weight', 'DESC')
-        ->sort('title')
-        ->range(0, 8)
-        ->execute();
+        ->sort('title');
+      if ($limit) {
+        $query->range(0, $limit);
+      }
+      $ids = $query->execute();
       $nodes = $types->getStorage('node')->loadMultiple($ids);
     }
   }
@@ -1410,11 +1431,13 @@ function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): a
       continue;
     }
     $answer = '';
+    $byline = '';
     foreach (['field_formatted_text', 'field_tile_linked_text'] as $name) {
       if ($node->hasField($name) && trim(strip_tags((string) $node->get($name)->value)) !== '') {
+        [$text, $byline] = _palefire_ask_answer_tidy((string) $node->get($name)->value);
         $answer = [
           '#type' => 'processed_text',
-          '#text' => $node->get($name)->value,
+          '#text' => $text,
           '#format' => $node->get($name)->format,
         ];
         break;
@@ -1427,11 +1450,73 @@ function _palefire_ask_faqs(ParagraphInterface $paragraph, array &$variables): a
     $faqs[] = [
       'question' => $node->label(),
       'answer' => $answer,
+      'byline' => $byline,
       'url' => $link && !$link->isEmpty() ? $link->getUrl()->toString() : '',
     ];
   }
   $cache->applyTo($variables);
   return $faqs;
+}
+
+/**
+ * Tidies an FAQ answer imported from AskUs for reading.
+ *
+ * The import flattened AskUs's paragraphs into one line (two spaces where
+ * a paragraph ended), sometimes pasted the answer in twice, wrote links
+ * with their URL as their text and ended with "Answered by: Name". So:
+ * - the trailing "Answered by" comes off and is returned as the byline;
+ * - a block (between blank lines) whose words repeat an earlier one's goes;
+ * - text with no block markup of its own is split into paragraphs where a
+ *   sentence ends before two or more spaces;
+ * - a link repeated straight after itself in brackets is dropped, and a
+ *   link whose text is its URL shows the URL without "https://".
+ * Answers written with their own paragraphs keep them.
+ *
+ * @return array
+ *   The answer's HTML, then the byline's name ('' without one).
+ */
+function _palefire_ask_answer_tidy(string $html): array {
+  $byline = '';
+  if (preg_match('~\s*(?:<p>)?\s*Answered by:\s*([^<\n]+?)\s*(?:</p>)?\s*$~iu', $html, $match)) {
+    $byline = trim(Html::decodeEntities($match[1]));
+    $html = substr($html, 0, -strlen($match[0]));
+  }
+
+  $seen = [];
+  $blocks = [];
+  foreach (preg_split('~\R\s*\R~u', trim($html)) as $block) {
+    $words = mb_strtolower(preg_replace('~\s+~u', ' ', trim(strip_tags($block))));
+    if ($words === '' || isset($seen[$words])) {
+      continue;
+    }
+    $seen[$words] = TRUE;
+    $blocks[] = trim($block);
+  }
+  $html = implode("\n\n", $blocks);
+
+  if (!preg_match('~<(?:p|br|ul|ol|h[1-6]|table|div|blockquote)\b~i', $html)) {
+    $paragraphs = [];
+    foreach ($blocks as $block) {
+      foreach (preg_split('~(?<=[.!?:)])\s{2,}(?=\S)~u', $block) as $paragraph) {
+        // One space between words, and none before a full stop after a link.
+        $paragraph = preg_replace(['~\s+~u', '~\)\s+([.,;])~u'], [' ', ')$1'], trim($paragraph));
+        $paragraphs[] = '<p>' . $paragraph . '</p>';
+      }
+    }
+    $html = implode("\n", $paragraphs);
+  }
+
+  // A link followed by the same link in brackets: once is enough.
+  $html = preg_replace('~(<a\b[^>]*\bhref="([^"]+)"[^>]*>.*?</a>)\s*\(<a\b[^>]*\bhref="\2"[^>]*>.*?</a>\)~isu', '$1', $html);
+  // A bare URL as a link's text: drop the scheme, "www." and a final slash.
+  $html = preg_replace_callback('~(<a\b[^>]*\bhref="([^"]+)"[^>]*>)\s*(https?://[^<\s]+)\s*</a>~i', function (array $m): string {
+    if (rtrim(Html::decodeEntities($m[3]), '/') !== rtrim(Html::decodeEntities($m[2]), '/')) {
+      return $m[0];
+    }
+    return $m[1] . preg_replace(['~^https?://(?:www\.)?~i', '~/$~'], '', $m[3]) . '</a>';
+  }, $html);
+
+  return [$html, $byline];
 }
 
 /**
@@ -2172,6 +2257,8 @@ function _palefire_focal_point(FileInterface $file, ?int $width, ?int $height, C
  * focus: where a cropped lead stays in view (object-position keyword).
  * lead_x: the pan's horizontal position (Left / Right keep that side).
  * lead_whole: "Show whole image": uncropped and centred, not a band.
+ * lead_mirror: "Mirror lead image": flipped left to right on the page
+ * (.pf-exhibit-mirror), never in the lightbox.
  * lead_caption: field_exhibit_lead_caption rendered, or NULL. With one, the
  * lead is content (alt text, lightbox, caption); without, decorative.
  * Rendered here rather than through Manage display, so galleries made
@@ -2208,6 +2295,7 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $variables['lead_x'] = explode(' ', $variables['focus'])[0];
   }
   $variables['lead_whole'] = $paragraph->hasField('field_exhibit_lead_whole') && (bool) $paragraph->get('field_exhibit_lead_whole')->value;
+  $variables['lead_mirror'] = $paragraph->hasField('field_exhibit_lead_mirror') && (bool) $paragraph->get('field_exhibit_lead_mirror')->value;
   $variables['lead_caption'] = NULL;
   if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
     $variables['lead_caption'] = $paragraph->get('field_exhibit_lead_caption')->view(['label' => 'hidden', 'type' => 'text_default']);

@@ -33,7 +33,9 @@
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
- *     (field_exhibit_lead_whole), its caption (field_exhibit_lead_caption),
+ *     (field_exhibit_lead_whole), "Mirror lead image"
+ *     (field_exhibit_lead_mirror; added 2026-10-30), its caption
+ *     (field_exhibit_lead_caption),
  *     the Opening (field_exhibit_opener: cover, full screen then pan, or
  *     compact; all three added 2026-10-21), the Display (field_exhibit_display: story or wall)
  *     and a sheet size for the wall's "Actual size" (field_exhibit_sheet;
@@ -253,6 +255,7 @@ $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_value
   'right' => 'Right',
 ]]);
 $storage('paragraph', 'field_exhibit_lead_whole', 'boolean');
+$storage('paragraph', 'field_exhibit_lead_mirror', 'boolean');
 // Changed 2026-10-21: "full" is now the cover (the image stays put with
 // the text on it, as on a wall); "pan" keeps the earlier full-screen
 // opening. Existing sites get the new labels and option.
@@ -425,6 +428,11 @@ $field('paragraph', 'exhibit_page', 'field_exhibit_lead_whole', [
   'description' => 'Show the lead uncropped, centred on the page, instead of as a full-width band. Good for plates on white paper and tall images.',
   'settings' => ['on_label' => 'Whole image', 'off_label' => 'Full-width band'],
 ]);
+$field('paragraph', 'exhibit_page', 'field_exhibit_lead_mirror', [
+  'label' => 'Mirror lead image',
+  'description' => 'Flip the lead left to right on the page, e.g. so a bird faces into the text. Opened full screen it shows the right way round.',
+  'settings' => ['on_label' => 'Mirrored', 'off_label' => 'As is'],
+]);
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_caption', [
   'label' => 'Lead image caption (optional)',
   'description' => 'What the image shows and where it comes from: artist, book, place, date, collection. With a caption the image is announced (its media alt text) and opens full screen; without one it is decorative.',
@@ -449,6 +457,7 @@ $section_form['field_exhibit_opener'] = ['type' => 'options_buttons', 'weight' =
 $section_form['field_exhibit_lead'] = $media_widget + ['weight' => 10];
 $section_form['field_exhibit_lead_focus'] = $select(11);
 $section_form['field_exhibit_lead_whole'] = ['type' => 'boolean_checkbox', 'weight' => 12, 'settings' => ['display_label' => TRUE]];
+$section_form['field_exhibit_lead_mirror'] = ['type' => 'boolean_checkbox', 'weight' => 12, 'settings' => ['display_label' => TRUE]];
 $section_form['field_exhibit_lead_caption'] = $wysiwyg(13, 3);
 $section_form['field_exhibit_display'] = ['type' => 'options_buttons', 'weight' => 14];
 $section_form['field_exhibit_sheet'] = ['type' => 'string_textfield', 'weight' => 15];
