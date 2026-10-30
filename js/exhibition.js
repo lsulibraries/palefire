@@ -731,12 +731,22 @@
     readCover();
   }
 
+  // Scroll timelines do it in CSS below lg (the veil) and from lg with
+  // motion (the reveal, no fold fade): writing --pf-read on the gallery
+  // every frame made the wash flicker on phones (_exhibition.scss).
+  const readInCss = () => !!(window.CSS && CSS.supports('animation-timeline: view()')) && (!wide.matches || !reduceMotion());
+
   // Every cover on the page (the frame sticks, so how far it has held is
   // how far the text has come up over it).
   function readCover() {
+    const css = readInCss();
     state.pages.forEach((page) => {
       const hero = page.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
       if (!hero) {
+        return;
+      }
+      if (css) {
+        hero.closest('.pf-section__inner').style.removeProperty('--pf-read');
         return;
       }
       // Less the reveal, while the text holds still.

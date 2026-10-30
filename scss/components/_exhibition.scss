@@ -2180,6 +2180,42 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   mask-image: linear-gradient(to bottom, #000 calc(var(--pf-fold, 100%) - 9rem), rgb(0 0 0 / var(--pf-read-a)) var(--pf-fold, 100%));
 }
 
+// Below lg with scroll timelines, the veil (the frame's ::before, below)
+// follows the scroll on the area's own timeline instead of --pf-read, and
+// the text has no fold fade: the script setting --pf-read on the gallery
+// every frame restyled it and repainted the mask over the whole text, and
+// on phones the wash flickered while it caught up with the scroll.
+// js/exhibition.js readCover() leaves it unset there.
+@supports (animation-timeline: view()) {
+  @include media-breakpoint-down(lg) {
+    .pf-gallery--cover:has(.is-long) > .pf-exhibit-wall-hero {
+      view-timeline: --pf-cover-read block;
+      view-timeline-inset: var(--pf-header-h) 0px;
+    }
+
+    .pf-gallery--cover:has(.is-long) > .pf-exhibit-wall-hero .pf-exhibit-wall-hero__frame::before {
+      animation: pf-exhibit-veil linear both;
+      animation-timeline: --pf-cover-read;
+      animation-range: contain 0svh contain 40svh;
+    }
+
+    .pf-gallery--cover .pf-exhibit-wall__intro.is-long {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+}
+
+@keyframes pf-exhibit-veil {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: .82;
+  }
+}
+
 #{$pf-covered} > .pf-gallery > .pf-gallery__body {
   grid-column: 1;
   grid-row: 5;
