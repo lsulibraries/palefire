@@ -1454,7 +1454,9 @@ function palefire_form_libanswers_ask_form_alter(array &$form, FormStateInterfac
     }
   }
   if (isset($form['actions']['submit'])) {
-    $form['actions']['submit']['#theme'] = 'input__submit__libanswers';
+    // A submit button is drawn by its wrapper (input__submit), not #theme:
+    // replace the wrapper, or the <input> is drawn around the <button>.
+    $form['actions']['submit']['#theme_wrappers'] = ['input__submit__libanswers'];
     $form['actions']['submit']['#attributes']['class'][] = 'pf-inquiry__submit';
   }
 }
