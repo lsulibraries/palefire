@@ -1,0 +1,83 @@
+{#
+/**
+ * @file
+ * Exhibition reading (paragraph type exhibit_reading): a book or article in
+ * a reading list, typeset as a cover. Added to an Image group, it sits in
+ * the group's grid like a linked image (paragraph--exhibit-figure.html.twig).
+ *
+ * - kind: 'book' (a coloured cover) or 'article' (a journal offprint).
+ * - byline, title, subtitle, source, details: the citation (preprocess).
+ * - size: '', 'long' or 'longer', a smaller title on the cover.
+ * - link: ['url', 'external'], or NULL.
+ * - tone: 1–8, a book cover's colour.
+ *
+ * The cover and the line under it are one citation, with nothing twice:
+ * the cover has the author and title (and an article's journal), the
+ * caption a book's subtitle and the imprint, or an article's issue. The
+ * cover is real text, in reading order (an article's masthead is moved to
+ * the top in CSS); hidden full stops make it read as a citation. With a
+ * link, the whole figure is the link, named by the cover and caption, and
+ * an arrow shows in the corner; another site opens in a new tab, like the
+ * exhibition's other outside links.
+ */
+#}
+{%
+  set classes = [
+    'pf-exhibit-figure',
+    'pf-exhibit-reading',
+    'pf-exhibit-reading--' ~ kind,
+    link ? 'pf-exhibit-figure--out',
+    not paragraph.isPublished() ? 'paragraph--unpublished',
+  ]
+%}
+{% set id = 'pf-reading-' ~ paragraph.id() %}
+{% set stop %}<span class="visually-hidden">.</span>{% endset %}
+{% set colon %}<span class="visually-hidden">:</span>{% endset %}
+{% set cover %}
+  <span class="pf-exhibit-figure__frame">
+    <span class="pf-exhibit-reading__cover" id="{{ id }}-cover"{% if kind == 'book' %} style="--pf-reading-tone: var(--pf-reading-tone-{{ tone }}); --pf-reading-ink: var(--pf-reading-ink-{{ tone }})"{% endif %}>
+      {% if kind == 'article' %}
+        {% if byline %}
+          <span class="pf-exhibit-reading__byline">{{ byline }}{{ byline matches '/[.?!]$/' ? '' : stop }}</span>
+        {% endif %}
+        <span class="pf-exhibit-reading__name{{ size ? ' pf-exhibit-reading__name--' ~ size }}">“{{ title }}”{{ stop }}</span>
+        {% if source %}
+          <span class="pf-exhibit-reading__masthead">{{ source }}{{ stop }}</span>
+        {% endif %}
+      {% else %}
+        {% if byline %}
+          <span class="pf-exhibit-reading__byline">{{ byline }}{{ byline matches '/[.?!]$/' ? '' : stop }}</span>
+        {% endif %}
+        <span class="pf-exhibit-reading__name{{ size ? ' pf-exhibit-reading__name--' ~ size }}">{{ title }}{{ subtitle ? colon : stop }}</span>
+      {% endif %}
+    </span>
+    {% if link %}
+      <svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 11 11 5M6 5h5v5"/></svg>
+    {% endif %}
+  </span>
+{% endset %}
+{% set imprint = kind == 'article' ? details : [source, details]|filter(v => v)|join(', ') %}
+<figure{{ attributes.addClass(classes) }}>
+  {% if link %}
+    <a class="pf-exhibit-figure__out" href="{{ link.url }}"
+       {% if link.external %}target="_blank" rel="noopener"{% endif %}
+       aria-labelledby="{{ id }}-cover{{ subtitle or imprint ? ' ' ~ id ~ '-caption' }}{{ link.external ? ' ' ~ id ~ '-note' }}">
+      {{ cover }}
+      {% if link.external %}
+        <span class="visually-hidden" id="{{ id }}-note">{{ '(opens in a new tab)'|t }}</span>
+      {% endif %}
+    </a>
+  {% else %}
+    {{ cover }}
+  {% endif %}
+  {% if subtitle or imprint %}
+    <figcaption class="pf-exhibit-figure__caption pf-exhibit-reading__caption" id="{{ id }}-caption">
+      {% if subtitle %}
+        <span class="pf-exhibit-reading__subtitle">{{ subtitle }}.</span>
+      {% endif %}
+      {% if imprint %}
+        <span class="pf-exhibit-reading__imprint">{{ imprint }}.</span>
+      {% endif %}
+    </figcaption>
+  {% endif %}
+</figure>

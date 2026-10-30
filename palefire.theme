@@ -2315,6 +2315,49 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-reading.
+ *
+ * kind: 'book' or 'article'. byline: the author as typed. title: without
+ * the quotes or full stop an editor may have typed (the template adds
+ * them). A book's subtitle (after the first colon) goes under the cover
+ * instead, as a real cover sets it smaller: title is then the part before
+ * it and subtitle the rest, else ''. size: '', 'long' or 'longer', a
+ * smaller step for the title on the cover so the whole title fits. source,
+ * details: publisher or journal, and year or volume. link: ['url',
+ * 'external'], or NULL. tone: 1–8 from the title, a book cover's colour
+ * (_exhibition.scss), the same wherever the book shows.
+ */
+function palefire_preprocess_paragraph__exhibit_reading(array &$variables): void {
+  $paragraph = $variables['paragraph'];
+  $value = fn (string $name): string => $paragraph->hasField($name) ? trim((string) ($paragraph->get($name)->value ?? '')) : '';
+  $author = $value('field_reading_author');
+  $title = preg_replace('/^[\s“"‘]+|[\s”"’.]+$/u', '', $value('field_reading_title'));
+  $kind = $value('field_reading_kind') === 'article' ? 'article' : 'book';
+  $subtitle = '';
+  if ($kind === 'book' && preg_match('/^(.+?):\s+(.+)$/u', $title, $parts)) {
+    [, $title, $subtitle] = $parts;
+  }
+  $length = mb_strlen($title);
+  $variables['kind'] = $kind;
+  $variables['byline'] = $author;
+  $variables['title'] = $title;
+  $variables['subtitle'] = $subtitle;
+  $variables['size'] = $length > 90 ? 'longer' : ($length > 45 ? 'long' : '');
+  // The template ends the imprint with a full stop.
+  $variables['source'] = rtrim($value('field_reading_source'), '. ');
+  $variables['details'] = rtrim($value('field_reading_details'), '. ');
+  $variables['tone'] = crc32(mb_strtolower($title)) % 8 + 1;
+  $variables['link'] = NULL;
+  if ($paragraph->hasField('field_figure_link') && !$paragraph->get('field_figure_link')->isEmpty()) {
+    $url = $paragraph->get('field_figure_link')->first()->getUrl();
+    $variables['link'] = [
+      'url' => trim($url->toString()),
+      'external' => $url->isExternal(),
+    ];
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-audio.
  *
  * audio: ['url', 'type'] of the file, or NULL.

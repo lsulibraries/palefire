@@ -1760,6 +1760,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 .pf-exhibit-figure__out {
   display: block;
   color: inherit;
+  // Underlines carry into a reading's typeset cover and can't be undone there.
+  text-decoration: none;
 
   &::after {
     content: "";
@@ -1772,13 +1774,13 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     outline-offset: 4px;
   }
 
-  .pf-exhibit-figure__img {
+  :is(.pf-exhibit-figure__img, .pf-exhibit-reading__cover) {
     @include pf-exhibit-motion {
       transition: scale .9s $pf-exhibit-ease;
     }
   }
 
-  &:hover .pf-exhibit-figure__img {
+  &:hover :is(.pf-exhibit-figure__img, .pf-exhibit-reading__cover) {
     @include pf-exhibit-motion {
       scale: 1.03;
     }
@@ -1808,10 +1810,10 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
-// A group of covers: smaller, so more to a row (two at 320px), each 2:3 on
+// A group of covers (and readings, below): smaller, so more to a row (two at 320px), each 2:3 on
 // the panel colour, never cropped, framed by the hairline so a white
 // jacket keeps its edge on a light page.
-.pf-exhibit-group__grid:has(> .pf-exhibit-figure--out) {
+.pf-exhibit-group__grid:has(> :is(.pf-exhibit-figure--out, .pf-exhibit-reading)) {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
   row-gap: clamp(1.5rem, 3vw, 2.25rem);
 
@@ -1820,8 +1822,9 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
-.pf-exhibit-group__grid > .pf-exhibit-figure--out {
+.pf-exhibit-group__grid > :is(.pf-exhibit-figure--out, .pf-exhibit-reading) {
   .pf-exhibit-figure__frame {
+    position: relative;
     aspect-ratio: 2 / 3;
     background: var(--pf-exhibit-surface);
 
@@ -1837,6 +1840,141 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   .pf-exhibit-figure__img {
     object-fit: contain;
   }
+}
+
+// Readings (paragraph--exhibit-reading.html.twig): a book or article set as
+// a cover, from its citation, with no image. Books get one of eight cloth
+// colours (tone, from the title); articles are a journal offprint on paper.
+// Every pair is at least 5.2:1. The cover is a fixed object, so its colours
+// are the same in light and dark reading colours; the hairline frame keeps
+// the pale offprint's edge on a light page. Type scales with the cover's
+// width (cqi), so it looks the same at every column width. The cover is
+// real text: the author and title are only here.
+.pf-exhibit-reading {
+  --pf-reading-tone-1: #2f4a3a; --pf-reading-ink-1: #efe6cf; // Forest
+  --pf-reading-tone-2: #c9b48a; --pf-reading-ink-2: #2b2418; // Straw
+  --pf-reading-tone-3: #1f2a36; --pf-reading-ink-3: #e7dcc4; // Ink blue
+  --pf-reading-tone-4: #6b2e2a; --pf-reading-ink-4: #f3e8dc; // Oxblood
+  --pf-reading-tone-5: #8aa39b; --pf-reading-ink-5: #14201c; // Sage
+  --pf-reading-tone-6: #3a3530; --pf-reading-ink-6: #e9dfcf; // Umber
+  --pf-reading-tone-7: #4a3f5c; --pf-reading-ink-7: #efe7f6; // Plum
+  --pf-reading-tone-8: #a8432a; --pf-reading-ink-8: #fbeee3; // Vermilion
+  --pf-reading-paper: #efe9dc;
+  --pf-reading-paper-ink: #2b2620;
+
+  .pf-exhibit-figure__frame {
+    container-type: inline-size;
+  }
+}
+
+.pf-exhibit-reading__cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6cqi;
+  width: 100%;
+  height: 100%;
+  padding: 12cqi 10cqi;
+  overflow: hidden;
+  color: var(--pf-reading-ink);
+  // The spine: a soft shadow down the left edge.
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / .18), rgb(0 0 0 / 0) 7%),
+    var(--pf-reading-tone);
+}
+
+.pf-exhibit-reading__byline,
+.pf-exhibit-reading__masthead {
+  font: 500 max(.5625rem, 5.5cqi)/1.35 var(--pf-exhibit-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+// The whole title always shows (it isn't repeated under the cover): long
+// ones step down a size or two.
+.pf-exhibit-reading__name {
+  font: 500 10.5cqi/1.18 $pf-font-display-serif;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+.pf-exhibit-reading__name--long {
+  font-size: 9cqi;
+}
+
+.pf-exhibit-reading__name--longer {
+  font-size: 7.5cqi;
+  line-height: 1.22;
+}
+
+// Book: the byline at the head, the title at the foot under a short rule.
+.pf-exhibit-reading--book .pf-exhibit-reading__name {
+  padding-top: 5cqi;
+  border-top: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  width: fit-content;
+  max-width: 100%;
+}
+
+// Article: an offprint. The journal as a masthead over a full rule (moved
+// to the top: it follows the title in the markup, for reading order), the
+// title smaller and italic, the author at the foot.
+.pf-exhibit-reading--article {
+  .pf-exhibit-reading__cover {
+    --pf-reading-ink: var(--pf-reading-paper-ink);
+    justify-content: flex-start;
+    background: var(--pf-reading-paper);
+  }
+
+  .pf-exhibit-reading__masthead {
+    order: -1;
+    padding-bottom: 4cqi;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  .pf-exhibit-reading__name {
+    font-size: 8.5cqi;
+    font-style: italic;
+  }
+
+  .pf-exhibit-reading__name--long {
+    font-size: 7.5cqi;
+  }
+
+  .pf-exhibit-reading__name--longer {
+    font-size: 6.5cqi;
+  }
+
+  .pf-exhibit-reading__byline {
+    order: 1;
+    margin-top: auto;
+  }
+}
+
+// Under the cover, the rest of the citation: a book's subtitle (italic, in
+// the heading colour) and the imprint, or an article's issue. Its first
+// line underlines on hover, the link's sign now the title is on the cover.
+.pf-exhibit-reading__caption {
+  display: grid;
+  gap: .15rem;
+
+  > :first-child {
+    .pf-exhibit-figure--out & {
+      text-decoration: underline;
+      text-decoration-color: $pf-hairline;
+      text-underline-offset: .2em;
+      transition: text-decoration-color $pf-hover-out ease;
+    }
+
+    .pf-exhibit-figure--out:has(.pf-exhibit-figure__out:is(:hover, :focus-visible)) & {
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
+.pf-exhibit-reading__subtitle {
+  font-style: italic;
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
 }
 
 // Catalogue record: a museum label ---------------------------------------
