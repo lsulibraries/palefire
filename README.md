@@ -577,8 +577,11 @@ from the media item. A figure with no image shows only to editors.
 - TOC: "Home" (the title page) first, entries listed under their gallery whatever the
   block's sub-link setting (`preprocessPalefireModularToc()`); no hide/show
   button. `modular-toc.js` picks its edge cases from the shown gallery.
-- Openings on a full-screen photograph (Cover, and a wall's lead), from lg
-  with motion and scroll timelines: the photograph never moves on screen.
+- Openings on a full-screen photograph (Cover, and a wall's lead), with
+  motion and scroll timelines, at every width: the photograph never moves
+  on screen. Below lg nothing is held: the wash rises from the foot and
+  fades in while the gallery comes up, and each part of the text fades in
+  as it scrolls up past the screen's foot (its own `view()`). From lg:
   It fades in where it rests while its gallery comes up, holds under the
   header, and fades out in place at the area's foot. Once it fills the
   screen the text holds at its foot for 90svh (`--pf-reveal`) while the
@@ -948,6 +951,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Phones and tablets: gallery openings fade their photograph in and out in place, and the text fades in as it scrolls.** Below lg, Covers and walls with a lead now get the desktop's held photograph: it fades in where it rests while its gallery comes up and fades out in place at the gallery's foot, never sliding. The text is not held there (a phone's toolbar changes the screen as it scrolls, and a held page feels stuck). The wash rises from the foot (30% of its height, eased) and fades in over 20–75% of the gallery's entry. Each text part (title, facts or links, opening text) fades and rises in on its own timeline between 8% and 40% of a screen after it comes up past the foot, so they follow one another wherever the layout puts them, behind the wash. Mossville's walls with no intro: the spacer's wash fades in the same way. To hold exactly on phones, the photograph's entry is now measured in `dvh` (the screen as it is) and its exit hold starts where the frame (sized in `svh`, so a toolbar never re-crops it) unsticks: `exit calc(100dvh - 100svh)`. On desktop both are 0, so nothing changes there. The photograph rules moved out of the lg block, and the area also declares the long-text veil's timeline (`--pf-cover-read`). Checked on the live Audubon Cover and Elephant Folio wall at 390 × 844 and 768 × 1024, and Mossville at 390 (mobile emulation, local CSS): the photograph's top stays at 49px through entry and exit, the wash is 79% or more in when each title starts, no horizontal scroll. The desktop wall was re-run at 1440: unchanged. Emulation has no moving toolbar, so the `dvh`/`svh` hold is not checked on a real phone. Why: phones should get the same calm opening, without a hold.
 
 - **Phones and tablets: no more flickering wash on long-text Covers.** Below lg, a Cover whose text runs past the screen (`.is-long`) had its veil and its text's fold fade driven by `--pf-read`, which `readCover()` wrote on the whole gallery every scroll frame. Each write restyled the gallery and repainted a gradient mask over all of its text, and on phones the wash flickered while it caught up with the scroll. With scroll timelines the veil is now a CSS animation on the area's own timeline (`--pf-cover-read`, inset by the header, 0 to 82% over 40% of a screen, the same curve as before), the text has no fold fade there, and `readCover()` stops writing `--pf-read` wherever CSS covers it (below lg, and from lg with motion, where the reveal already dropped the fold fade). Without scroll timelines, and from lg with reduced motion, it works as before. Checked on the live Audubon in Louisiana Cover at 390 × 844 and 768 × 1024 (mobile emulation) with local CSS: the veil runs on the timeline (0.16, 0.59, 0.82 at steps of a fifth of a screen), no mask. The flicker itself only shows on a real phone; not checked on one. Why: the page should scroll as smoothly as the text it shows.
 

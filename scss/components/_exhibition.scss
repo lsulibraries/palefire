@@ -2488,14 +2488,21 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
 }
 
 // Gallery openings on a full-screen photograph (a story's cover, a wall's
-// lead), from lg with motion and scroll timelines:
-// - The photograph never moves on screen. While its gallery comes up, the
+// lead), with motion and scroll timelines:
+// - At every width the photograph never moves on screen. While its gallery comes up, the
 //   frame is held where it will rest (set back by what is left of the
 //   area's entry) and fades in as the area wipes up over the previous
 //   gallery; it holds under the header; at the area's foot it is held
 //   again and fades out in place (pf-exhibit-frame-in/-out, on the area's
-//   own timeline, --pf-hero).
-// - Once it fills the screen, the text holds at its foot for --pf-reveal
+//   own timeline, --pf-hero). The entry is the scrollport's height (100dvh
+//   under the header); the frame, sized in svh so a phone's toolbar never
+//   re-crops it, unsticks once the area's foot reaches it, 100dvh - 100svh
+//   into the exit, so the hold at the foot starts there.
+// - Below lg nothing is held (a phone's toolbar changes the screen as it
+//   scrolls, and a held page feels stuck): the wash rises from the foot
+//   and fades in while the area comes up, and the text fades in as it
+//   scrolls up over the photograph, one part after another.
+// - From lg, once it fills the screen, the text holds at its foot for --pf-reveal
 //   of scrolling while the wash comes in, then the title, the facts or
 //   links, and the opening text rise in one after another, scrubbed by
 //   the scroll. Then the text scrolls on over the still photograph, as
@@ -2524,6 +2531,79 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    #{$pf-reveal-section} {
+      // With the long-text veil's timeline (below lg), on the same area.
+      .pf-exhibit-wall-hero {
+        view-timeline: --pf-hero block, --pf-cover-read block;
+        view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
+      }
+
+      .pf-exhibit-wall-hero__frame {
+        animation: pf-exhibit-frame-in linear both, pf-exhibit-frame-out linear both;
+        animation-timeline: --pf-hero, --pf-hero;
+        animation-range: entry 0% entry 100%, exit calc(100dvh - 100svh) exit 100%;
+      }
+
+      :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav) {
+        --pf-reveal-step: 1;
+      }
+
+      .pf-exhibit-wall__text {
+        --pf-reveal-step: 2;
+      }
+    }
+
+    @include media-breakpoint-down(lg) {
+      #{$pf-reveal-section} {
+        > .pf-section__inner {
+          view-timeline: --pf-open block, --pf-wall-open block;
+          view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
+        }
+
+        // Late enough that the photograph shows as the area comes up (the
+        // wash covers the part that shows first), still ahead of the text:
+        // in by 75% of the entry, risen by 95%.
+        .pf-exhibit-wall-hero__frame::after {
+          animation: pf-exhibit-reveal-wash ease-in-out both, pf-exhibit-reveal-rise $pf-reveal-slide-ease both;
+          animation-timeline: --pf-hero, --pf-hero;
+          animation-range: entry 20% entry 75%, entry 15% entry 95%;
+        }
+
+        // Each part on its own timeline: it fades in between 8% and 40% of
+        // a screen after it comes up past the foot, wherever the layout
+        // puts it, so they follow one another as they scroll in; eased at
+        // both ends, so the wash under it stays ahead.
+        #{$pf-reveal-text} {
+          animation: pf-exhibit-reveal $pf-reveal-slide-ease both;
+          animation-timeline: view();
+          animation-range: cover 8svh cover 40svh;
+        }
+
+        > .pf-section__inner > .pf-section__title:focus-within,
+        :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text):focus-within,
+        .pf-section__inner:has(:focus-within) .pf-exhibit-wall-hero__frame::after {
+          animation: none;
+        }
+      }
+
+      // A wall with no intro: the wash is on the spacer, which scrolls
+      // with the title, so it only fades in.
+      #{$pf-wall-photo} {
+        view-timeline: --pf-open block, --pf-wall-open block;
+        view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
+
+        &::before {
+          animation: pf-exhibit-reveal-wash ease-in-out both;
+          animation-timeline: --pf-open;
+          animation-range: entry 20% entry 75%;
+        }
+
+        &:has(:focus-within)::before {
+          animation: none;
+        }
+      }
+    }
+
     @include media-breakpoint-up(lg) {
       #{$pf-reveal-section} {
         --pf-reveal: #{$pf-reveal-len};
@@ -2537,14 +2617,6 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 
         .pf-exhibit-wall-hero {
           min-height: calc(max(22rem, var(--pf-wall-hero-h)) + var(--pf-reveal));
-          view-timeline: --pf-hero block;
-          view-timeline-inset: var(--pf-header-h) 0px;
-        }
-
-        .pf-exhibit-wall-hero__frame {
-          animation: pf-exhibit-frame-in linear both, pf-exhibit-frame-out linear both;
-          animation-timeline: --pf-hero, --pf-hero;
-          animation-range: entry 0% entry 100%, exit 0% exit 100%;
         }
 
         // The side wash fades in slowly (ease-in-out over 36% of a screen)
@@ -2569,14 +2641,6 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
           animation-range:
             contain 0px contain var(--pf-reveal),
             contain calc(36svh + var(--pf-reveal-step, 0) * 12svh) contain calc(60svh + var(--pf-reveal-step, 0) * 12svh);
-        }
-
-        :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav) {
-          --pf-reveal-step: 1;
-        }
-
-        .pf-exhibit-wall__text {
-          --pf-reveal-step: 2;
         }
 
         > .pf-section__inner > .pf-section__title:focus-within,
@@ -2655,12 +2719,13 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 }
 
 // The frame held at the screen's top while the area comes up (the entry
-// is a screen under the header long), then fading out in place as the
-// area's foot goes by.
+// is the scrollport under the header), then fading out in place as the
+// area's foot goes by (from where the frame unsticks to the exit's end:
+// the frame's own height).
 @keyframes pf-exhibit-frame-in {
   from {
     opacity: 0;
-    translate: 0 calc(var(--pf-header-h) - 100vh);
+    translate: 0 calc(var(--pf-header-h) - 100dvh);
   }
 
   30% {
@@ -2675,7 +2740,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 
   to {
     filter: opacity(0);
-    transform: translateY(calc(100vh - var(--pf-header-h)));
+    transform: translateY(calc(100svh - var(--pf-header-h)));
   }
 }
 
@@ -2699,6 +2764,14 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 @keyframes pf-exhibit-reveal-wash {
   from {
     opacity: 0;
+  }
+}
+
+// Below lg the wash rises from the foot: its upper part is clear, so it
+// leaves no edge either.
+@keyframes pf-exhibit-reveal-rise {
+  from {
+    translate: 0 30%;
   }
 }
 
