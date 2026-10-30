@@ -1265,7 +1265,8 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   of the page in the reading swatch's colours. Guides rarely have covers.
  * groups (ledger only): the tiles by label, in the order each label first
  *   appears: label, tiles. Tiles with no label come last, under "More", or
- *   as one group with no label when none has one.
+ *   as one group with no label when none has one. Titles lose a leading
+ *   "Special Collections".
  *
  * Layout "ask" (Ask Special Collections, scripts/palefire_ask_section.php)
  * is no card list: faqs (_palefire_ask_faqs()) and ask_form, the libanswers
@@ -1324,8 +1325,12 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   }
 
   if ($variables['layout'] === 'ledger') {
+    // Rows drop a leading "Special Collections" ("Research Grants"): the
+    // section already sits on its homepage. The node titles keep it, for
+    // their own pages and for search.
     $groups = [];
     foreach ($variables['tiles'] as $tile) {
+      $tile['title'] = preg_replace('/^Special Collections\s+(?=\S)/iu', '', $tile['title']);
       $groups[$tile['label']][] = $tile;
     }
     $loose = $groups[''] ?? [];
