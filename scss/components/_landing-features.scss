@@ -1455,8 +1455,9 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
 // once, each banner fades up into place, left to right, 120ms apart. CSS
 // only, so it runs with
-// the page (Swup's too). None with reduced motion or the Settings
-// drawer's switch.
+// the page (Swup's too), from when the page fade starts (as the cover's
+// entrance, _entrance.scss, which retimes it there). None with reduced
+// motion or the Settings drawer's switch.
 @keyframes pf-banner-rise {
   from {
     opacity: 0;
@@ -1465,7 +1466,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion) .pf-hero-banner {
+  html:not(.pf-a11y-motion):is(.pf-ready, :not(.pf-fade)) .pf-hero-banner {
     animation: pf-banner-rise .9s cubic-bezier(.2, .7, .2, 1) both;
 
     @for $i from 1 through 5 {

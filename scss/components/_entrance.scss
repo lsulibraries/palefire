@@ -1,0 +1,179 @@
+// First-load entrance: the header and the hero cover come in as one
+// sequence, as an exhibition cover is hung: the header's marks from the
+// left, the breadcrumb bar, the title (the unit name's hairline drawing
+// out after it), today's hours, the intro, the links plate and its
+// cells, the search, then the banners (their rise, _landing-features.scss,
+// retimed here to follow the search). The cover video settles from a
+// slight push-in under all of it.
+//
+// CSS only. It starts with the page fade (base/_fade.scss): until
+// html.pf-ready the body is all but clear, so nothing would be seen. If
+// the fade never readies (its 3s failsafe), no rule here applies and all
+// is in place, as without JS or with reduced motion (the script then sets
+// no .pf-fade). The header sits outside #swup, so it comes in once per full
+// load; the hero's parts run again when Swup brings the page in.
+//
+// Opacity and the individual translate/scale properties only, filled
+// backwards: nothing is held after the end, so hover transforms and the
+// scroll-driven animations keep working. Not on the glass layers' own
+// boxes where a fade would break their blur (the sticky bar: its inner
+// row moves instead). None with reduced motion or the Settings drawer's
+// switch.
+
+$pf-enter-ease: $pf-swup-ease-in;
+$pf-enter-on: 'html.pf-ready:not(.pf-a11y-motion)';
+$pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
+
+@keyframes pf-enter {
+  from {
+    opacity: 0;
+    translate: var(--pf-enter-x, 0) var(--pf-enter-y, 1rem);
+  }
+}
+
+// The title: from just above 0, not 0, so Chrome still counts it as the
+// Largest Contentful Paint (see base/_fade.scss).
+@keyframes pf-enter-title {
+  from {
+    opacity: .01;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes pf-enter-rule {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes pf-enter-settle {
+  from {
+    scale: 1.06;
+  }
+}
+
+@mixin pf-enter($delay, $duration: .9s, $name: pf-enter) {
+  animation: $name $duration $pf-enter-ease $delay backwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  // --- Header ----------------------------------------------------------------
+  // Down a little into the bar: the logo, the menu's sections one after
+  // another (the Menu button below lg), then the utility icons.
+  #{$pf-enter-on} .pf-header {
+    --pf-enter-y: -.5rem;
+
+    .pf-header__brand,
+    .pf-menu-toggle {
+      @include pf-enter(0ms, .7s);
+    }
+
+    .pf-utility-nav > li {
+      @include pf-enter(240ms, .7s);
+
+      @for $i from 2 through 6 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{240 + ($i - 1) * 50}ms;
+        }
+      }
+    }
+  }
+
+  // From lg only: below it the sections are in the menu drawer.
+  @include media-breakpoint-up(lg) {
+    #{$pf-enter-on} .pf-header .pf-primary-nav > li {
+      @include pf-enter(80ms, .7s);
+
+      @for $i from 2 through 6 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{80 + ($i - 1) * 60}ms;
+        }
+      }
+    }
+  }
+
+  // --- Hero cover --------------------------------------------------------------
+  // The breadcrumb's row and the video button, in from the left.
+  #{$pf-enter-on} .pf-landing--cover > .pf-landing__bar .pf-landing__bar-inner,
+  #{$pf-enter-on} .pf-landing--cover > .pf-landing__dock .pf-landing__bg-toggle {
+    --pf-enter-x: -.75rem;
+    --pf-enter-y: 0;
+    @include pf-enter(220ms, .8s);
+  }
+
+  #{$pf-enter-on} #{$pf-enter-cover} {
+    > .pf-landing__media .pf-landing__bg-video {
+      @include pf-enter(0ms, 2.4s, pf-enter-settle);
+    }
+
+    > .pf-landing__top {
+      // The unit name rides in with the title (it is in the <h1>); its
+      // hairline then draws out from the left and the building follows.
+      > .pf-landing__title {
+        @include pf-enter(340ms, 1.1s, pf-enter-title);
+      }
+
+      .pf-landing__kicker-place {
+        --pf-enter-x: -.5rem;
+        --pf-enter-y: 0;
+        @include pf-enter(720ms, .8s);
+      }
+
+      .pf-landing__kicker-place::before {
+        transform-origin: 0 50%;
+        @include pf-enter(600ms, .7s, pf-enter-rule);
+      }
+
+      > .pf-landing__hours {
+        @include pf-enter(560ms);
+      }
+
+      > .pf-landing__intro {
+        @include pf-enter(660ms);
+      }
+
+      // The plate, then its cells one by one.
+      .pf-landing__links-list > li {
+        --pf-enter-y: .5rem;
+        @include pf-enter(880ms, .7s);
+
+        @for $i from 2 through 3 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{880 + ($i - 1) * 90}ms;
+          }
+        }
+      }
+    }
+
+    > .pf-landing__form .pf-landing__field {
+      @include pf-enter(1000ms);
+    }
+
+    // The banners after the search (their own rise and stagger).
+    > .pf-hero-banners > .pf-hero-banner {
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{1140 + ($i - 1) * 110}ms;
+        }
+      }
+    }
+  }
+
+  // The plate holds the links' unblur on scroll (_landing-features.scss),
+  // so its fade joins that animation's list rather than replacing it.
+  #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__links {
+    @include pf-enter(780ms);
+  }
+
+  @supports (animation-timeline: view()) {
+    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__links {
+      animation:
+        pf-links-unblur linear both,
+        pf-enter .9s $pf-enter-ease 780ms backwards;
+      animation-timeline:
+        view(block calc(var(--pf-header-h, 3.5rem) + var(--pf-landing-bar-h, 2rem) + .5rem) 0px),
+        auto;
+      animation-range: exit-crossing 0% exit-crossing 1%, normal;
+    }
+  }
+}
