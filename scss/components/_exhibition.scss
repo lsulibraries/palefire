@@ -1780,7 +1780,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     }
   }
 
-  &:hover :is(.pf-exhibit-figure__img, .pf-exhibit-reading__cover) {
+  // Not in a reading list's List view, where the cover is a row.
+  &:hover :is(.pf-exhibit-figure__img, .pf-exhibit-reading__cover):not([data-pf-view="list"] *) {
     @include pf-exhibit-motion {
       scale: 1.03;
     }
@@ -1835,6 +1836,115 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
   .pf-exhibit-figure__img {
     object-fit: contain;
+  }
+}
+
+// Reading lists (an Image group of readings) ---------------------------------
+// The full width of the gallery, not the guide's 52rem: a gallery body that
+// holds one opens up, and its other blocks keep the guide's measure.
+.pf-gallery__body:has(> .pf-exhibit-group--readings) {
+  max-width: none;
+
+  > :not(.pf-exhibit-group--readings) {
+    max-width: 52rem;
+  }
+}
+
+// The heading and the Grid / List switch (the tile showcase's,
+// _tile-showcase.scss) share a row; the covers run under both. The switch
+// takes the exhibition's mono voice and colours.
+.pf-exhibit-group--readings {
+  --pf-landing-label: var(--pf-exhibit-mono);
+  --pf-toc-color: var(--pf-exhibit-muted);
+  --pf-section-fg: var(--pf-g-heading, var(--bs-emphasis-color));
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+
+  > :not(.pf-guide-block__title, .pf-tiles__views) {
+    grid-column: 1 / -1;
+  }
+
+  > .pf-tiles__views {
+    grid-column: 2;
+    margin: 0;
+  }
+
+  > .pf-guide-block__title {
+    margin: 0;
+  }
+}
+
+// List: one ruled row per reading, as a library index. The cover becomes
+// the row's text (byline over title, the cover's colour kept as a spine
+// down the left edge), the caption follows under the title, and the arrow
+// sits at the row's right. The same markup as the grid, so the switch can
+// morph between them.
+.pf-exhibit-group--readings[data-pf-view="list"] {
+  .pf-exhibit-group__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid $pf-hairline;
+  }
+
+  .pf-exhibit-reading {
+    gap: .25rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid $pf-hairline;
+  }
+
+  .pf-exhibit-figure__frame {
+    container-type: normal;
+    aspect-ratio: auto;
+    overflow: visible;
+    background: none;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .pf-exhibit-reading__cover {
+    gap: .25rem;
+    height: auto;
+    padding: 0 3.5rem 0 1rem;
+    color: var(--pf-g-heading, var(--bs-emphasis-color));
+    background: linear-gradient(90deg, var(--pf-reading-tone, var(--pf-reading-paper)) 4px, transparent 4px);
+    scale: none;
+  }
+
+  .pf-exhibit-reading__byline,
+  .pf-exhibit-reading__masthead {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: .6875rem;
+    color: var(--pf-exhibit-muted);
+  }
+
+  .pf-exhibit-reading--article .pf-exhibit-reading__byline {
+    order: -2;
+    margin-top: 0;
+  }
+
+  .pf-exhibit-reading__name,
+  .pf-exhibit-reading--article .pf-exhibit-reading__name {
+    position: static;
+    max-width: 46rem;
+    padding: 0;
+    border: 0;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .pf-exhibit-reading__caption {
+    max-width: 46rem;
+    padding-left: 1rem;
+  }
+
+  .pf-exhibit-figure__zoom {
+    inset: 50% 0 auto auto;
+    translate: 0 -50%;
+    background: none;
   }
 }
 
@@ -1918,11 +2028,10 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   position: absolute;
   top: 52%;
   left: 10cqi;
+  width: fit-content;
   max-width: 80cqi;
   padding-top: 5cqi;
   border-top: 1px solid color-mix(in srgb, currentColor 35%, transparent);
-  width: fit-content;
-  max-width: 100%;
 }
 
 // Article: an offprint. The journal as a masthead over a full rule (moved

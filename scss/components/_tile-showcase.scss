@@ -571,20 +571,16 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   transform: none;
 }
 
-// Masonry ------------------------------------------------------------------
+// Masonry layout --------------------------------------------------------------
 // Tall cards in the hero banners' voice (the same scrim, mixed-case title,
-// pill above), with a Grid / Masonry / List switch (js/tile-views.js sets
-// data-pf-view on the wrapper). Columns follow the section's own width:
+// pill above), with a Grid / List switch (js/tile-views.js sets
+// data-pf-view on the wrapper). Named for its Masonry view, removed
+// 2026-10-30. Columns follow the section's own width:
 // 2, then 3 from 36rem, 4 from 56rem, 5 from 72rem (the banners' five
 // across), with the banners' gutters (10px on a phone up to 16px, then the
 // hero's grid gutter from 44rem).
 //
-// Masonry: each card a run of rows a column wide (--pf-unit, an eighth of
-// a column), 12 to 16 rows by its place in a five-card cycle, so heights
-// stay near a banner's 1:2 and vary. The script drops each card into the
-// shortest column (--pf-col, --pf-row), so the list reads in its own
-// order and the columns pack; without it the grid places them as it can.
-// Grid (the default, 2026-10-26: was Masonry): even 3:4 cards, the label
+// Grid (the default): even 3:4 cards, the label
 // under the picture. List: one ruled row each, a thumbnail, the title and
 // note, the label in the mono voice, and an arrow.
 .pf-tiles--masonry {
@@ -595,6 +591,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
 .pf-tiles--masonry .pf-tiles__list {
   --pf-cols: 2;
   --pf-gap: clamp(.625rem, 2.5cqi, 1rem);
+  // An eighth of a column: Grid's lead card sizes its picture from it.
   --pf-unit: calc((100cqi - (var(--pf-cols) - 1) * var(--pf-gap)) / var(--pf-cols) / 8);
   display: grid;
   grid-template-columns: repeat(var(--pf-cols), minmax(0, 1fr));
@@ -625,39 +622,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 }
 
-// Masonry: rows of --pf-unit, no row gap (each card keeps the gutter under
-// itself, inside its run of rows).
-.pf-tiles--masonry[data-pf-view="masonry"] {
-  .pf-tiles__list {
-    grid-auto-rows: var(--pf-unit);
-    row-gap: 0;
-  }
-
-  .pf-tiles__item {
-    --pf-span: 16;
-    grid-column: var(--pf-col, auto);
-    grid-row: var(--pf-row, auto) / span var(--pf-span);
-    padding-bottom: var(--pf-gap);
-
-    &:nth-child(5n + 2) {
-      --pf-span: 13;
-    }
-
-    &:nth-child(5n + 3) {
-      --pf-span: 15;
-    }
-
-    &:nth-child(5n + 4) {
-      --pf-span: 12;
-    }
-
-    &:nth-child(5n) {
-      --pf-span: 14;
-    }
-  }
-}
-
-// The card in the banners' voice (Masonry and Grid). The scrim runs a
+// The card in the banners' voice (Grid). The scrim runs a
 // pixel past each edge on a layer of its own, and the picture fills the
 // card to its foot on a clip of its own, as on the banners. (It stopped
 // 2px short, but that strip of the card's grey ground read as a border;
@@ -945,7 +910,7 @@ html.pf-a11y-motion .pf-tile-row:is(:hover, :focus-visible) .pf-tile-row__arrow 
   }
 }
 
-// The switch: three small-capital buttons on one hairline, the pressed one
+// The switch: small-capital buttons on one hairline, the pressed one
 // in the text colour with a gold mark under it (the page's active state).
 // 44px tall (WCAG 2.5.8). Hidden until the script shows it.
 .pf-tiles__views {

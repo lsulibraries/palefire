@@ -189,8 +189,9 @@ tile-reveal:
     - core/drupal
     - core/once
 
-# The masonry Tile showcase's Default / Grid / List switch. Attached by
-# templates/paragraphs/paragraph--tile-showcase.html.twig (masonry only).
+# The Grid / List switch: the masonry-layout Tile showcase
+# (paragraph--tile-showcase.html.twig) and exhibition reading lists
+# (paragraph--exhibit-gallery.html.twig).
 tile-views:
   js:
     js/tile-views.js: {}

@@ -1237,9 +1237,9 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   number, title, note and label (Collections & services on the Special
  *   Collections homepage). The "index" value is added to the Layout field's
  *   allowed values by hand (Manage fields); any other value is a stagger.
- * - masonry: tall cards in the hero banners' voice, on columns of mixed
- *   heights, with a Default / Grid / List switch for the visitor
- *   (js/tile-views.js). Added by palefire_tile_showcase_gallery_setup.php.
+ * - masonry: tall cards in the hero banners' voice, with a Grid / List
+ *   switch for the visitor (js/tile-views.js); named for its old Masonry
+ *   view. Added by palefire_tile_showcase_gallery_setup.php.
  *
  * layout: 'stagger', 'grid', 'index' or 'masonry'.
  * tiles: one entry per item the visitor can see, in field order:
@@ -2312,6 +2312,22 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
   $access = $paragraph->access('update', NULL, TRUE);
   $variables['can_edit'] = $access->isAllowed();
   $cache->addCacheableDependency($access)->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--exhibit-gallery.
+ *
+ * readings: TRUE when the group holds readings (exhibit_reading): it then
+ * runs the gallery's full width and gets a Grid / List switch.
+ */
+function palefire_preprocess_paragraph__exhibit_gallery(array &$variables): void {
+  $variables['readings'] = FALSE;
+  foreach ($variables['paragraph']->get('field_gallery_items')->referencedEntities() as $item) {
+    if ($item->bundle() === 'exhibit_reading') {
+      $variables['readings'] = TRUE;
+      break;
+    }
+  }
 }
 
 /**

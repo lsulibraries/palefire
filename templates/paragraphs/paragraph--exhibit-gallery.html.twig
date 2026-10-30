@@ -5,17 +5,37 @@
  *
  * - field_block_title: optional <h3> (a TOC sub-link).
  * - field_gallery_items: exhibit_figure paragraphs, laid out as a grid
- *   (each keeps its own caption).
+ *   (each keeps its own caption), or exhibit_reading paragraphs (covers).
  * - field_figure_caption: optional caption for the whole group.
+ * - readings: TRUE when the group holds readings. It then runs the
+ *   gallery's full width and gets the tile showcase's Grid / List switch
+ *   (js/tile-views.js: data-pf-view on the group, the visitor's pick kept
+ *   in this browser and shared by every reading list). The switch stays
+ *   hidden without the script: the grid is the page as written.
  *
  * A <figure> of figures, so the group caption describes them all.
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
 {% set caption = content.field_figure_caption|render|trim %}
-<figure{{ attributes.addClass('pf-exhibit-group', not paragraph.isPublished() ? 'paragraph--unpublished') }}>
+<figure{{ attributes.addClass('pf-exhibit-group', readings ? 'pf-exhibit-group--readings', not paragraph.isPublished() ? 'paragraph--unpublished') }}{% if readings %} data-pf-views="pf-reading-view" data-pf-view="grid"{% endif %}>
   {% if title %}
     <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if readings %}
+    {{ attach_library('palefire/tile-views') }}
+    {% set views = {
+      grid: { label: 'Grid'|t, icon: '<rect x="3" y="3" width="7.5" height="7.5"/><rect x="13.5" y="3" width="7.5" height="7.5"/><rect x="3" y="13.5" width="7.5" height="7.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5"/>' },
+      list: { label: 'List'|t, icon: '<path d="M3 5h18M3 12h18M3 19h18"/>' },
+    } %}
+    <div class="pf-tiles__views" role="group" aria-label="{{ title ? 'Show @title as'|t({'@title': title}) : 'Show as'|t }}" hidden>
+      {% for key, view in views %}
+        <button type="button" class="pf-tiles__view" data-pf-view="{{ key }}" aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ view.icon|raw }}</svg>
+          <span>{{ view.label }}</span>
+        </button>
+      {% endfor %}
+    </div>
   {% endif %}
   <div class="pf-exhibit-group__grid">
     {{ content.field_gallery_items }}

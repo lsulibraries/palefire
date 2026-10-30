@@ -63,7 +63,7 @@ if (!$layout) {
 }
 $allowed = $layout->getSetting('allowed_values');
 if (!isset($allowed['masonry'])) {
-  $allowed['masonry'] = 'Masonry (tall cards, with a Default / Grid / List switch)';
+  $allowed['masonry'] = 'Cards (tall cards, with a Grid / List switch)';
   $layout->setSetting('allowed_values', $allowed)->save();
   echo "Added masonry to field_tile_layout\n";
 }
