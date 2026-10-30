@@ -454,7 +454,7 @@ class PalefireHooks {
   /**
    * Variables for includes/exhibit-cover.html.twig on an exhibition page.
    *
-   * @return array{title: string, subtitle: string, title_style: string, credit: ?array, intro: ?array, prompt: string, cover: ?array, cache: array}
+   * @return array{title: string, subtitle: string, title_style: string, credit: ?array, intro: ?array, prompt: string, year: ?int, physical: ?string, kicker: string, keyfacts: array, action: ?array, cover: ?array, cache: array}
    */
   private function exhibitHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -473,6 +473,33 @@ class PalefireHooks {
     // Title style: "serif" (the default, also when the field is empty or
     // not yet added) or "sans".
     $title_style = self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif';
+
+    // Program pages: "Label: value" lines, split at a colon and a space
+    // within the first 40 characters, so "Hours: 9:00" and a URL in a value
+    // stay whole; any other line is a value with no label. Then the main
+    // button.
+    $keyfacts = [];
+    if ($node->hasField('field_exhibit_keyfacts')) {
+      foreach ($node->get('field_exhibit_keyfacts') as $item) {
+        $line = trim((string) $item->value);
+        if ($line === '') {
+          continue;
+        }
+        $keyfacts[] = preg_match('/^([^:]{1,40}):\s+(.+)$/u', $line, $parts)
+          ? ['label' => trim($parts[1]), 'value' => trim($parts[2])]
+          : ['label' => '', 'value' => rtrim($line, ': ')];
+      }
+    }
+    $action = NULL;
+    if ($node->hasField('field_exhibit_action') && !$node->get('field_exhibit_action')->isEmpty()) {
+      $link = $node->get('field_exhibit_action')->first();
+      $url = $link->getUrl()->toString(TRUE);
+      $cache->addCacheableDependency($url);
+      $action = [
+        'url' => $url->getGeneratedUrl(),
+        'text' => trim((string) $link->title) ?: (string) $this->t('Apply'),
+      ];
+    }
 
     $render = [];
     $cache->applyTo($render);
@@ -524,6 +551,9 @@ class PalefireHooks {
       // Optional tiles under the credit.
       'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
       'physical' => self::stringValue($node, 'field_exhibit_physical_note') ?: NULL,
+      'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) $this->t('Exhibition'),
+      'keyfacts' => $keyfacts,
+      'action' => $action,
       'cover' => $cover,
       'cache' => $render,
     ];

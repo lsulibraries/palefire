@@ -25,7 +25,11 @@
  *   field_exhibit_physical, in its place: it is no longer used, and can be
  *   deleted in Manage fields. field_exhibit_title_style (added
  *   2026-10-29): the title in Serif (Playfair Display, the default when
- *   empty) or Sans (the site's display sans).
+ *   empty) or Sans (the site's display sans). For program pages (added
+ *   2026-10-30): field_exhibit_kicker (the word over the title, in place
+ *   of "Exhibition"), field_exhibit_keyfacts (any number of "Label: value"
+ *   lines, e.g. "Deadline: June 1") and field_exhibit_action (a link shown
+ *   as the title page's main button, e.g. "Apply").
  * - Paragraph types:
  *   - exhibit_page: one gallery of the exhibition (a section). Shared
  *     section fields, a lead image, its focus and "Show whole image"
@@ -74,7 +78,7 @@ foreach (['guide_text', 'guide_section'] as $id) {
     throw new \RuntimeException("'$id' not found. Run palefire_guide_setup.php first.");
   }
 }
-foreach (['media', 'image', 'file', 'options', 'text'] as $module) {
+foreach (['media', 'image', 'file', 'options', 'text', 'link'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     \Drupal::service('module_installer')->install([$module]);
     echo "Enabled $module" . PHP_EOL;
@@ -236,6 +240,9 @@ $storage('node', 'field_exhibit_title_style', 'list_string', ['allowed_values' =
   'serif' => 'Serif: Playfair Display, an art-book display face',
   'sans' => 'Sans: the site\'s own display type, plain and documentary',
 ]]);
+$storage('node', 'field_exhibit_kicker', 'string', ['max_length' => 60]);
+$storage('node', 'field_exhibit_keyfacts', 'string', ['max_length' => 120], FieldStorageConfig::CARDINALITY_UNLIMITED);
+$storage('node', 'field_exhibit_action', 'link');
 
 $storage('paragraph', 'field_exhibit_lead', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_values' => [
@@ -470,7 +477,23 @@ $field('node', $bundle, 'field_exhibit_title_style', [
   'label' => 'Exhibition title style',
   'description' => 'Exhibition pages only: the typeface of the title on the title page. Empty means Serif.',
 ]);
+$field('node', $bundle, 'field_exhibit_kicker', [
+  'label' => 'Title page label (optional)',
+  'description' => 'Exhibition pages only: the small word over the title. Default: "Exhibition". For a program page, e.g. "Fellowship" or "Research grant".',
+]);
+$field('node', $bundle, 'field_exhibit_keyfacts', [
+  'label' => 'Key facts (optional)',
+  'description' => 'Exhibition pages only: one fact per line as "Label: value", e.g. "Deadline: June 1" or "Award: $2,000 stipend". Shown in a row on the title page. Three or four read best.',
+]);
+$field('node', $bundle, 'field_exhibit_action', [
+  'label' => 'Main button (optional)',
+  'description' => 'Exhibition pages only: a link shown as the title page\'s main button, e.g. "Apply" to an application form. Empty link text reads "Apply".',
+  'settings' => ['link_type' => 17, 'title' => 1],
+]);
 $form('node', $bundle, [
+  'field_exhibit_kicker' => $textfield(5),
+  'field_exhibit_keyfacts' => $textfield(9),
+  'field_exhibit_action' => ['type' => 'link_default', 'weight' => 9],
   'field_exhibit_title_style' => ['type' => 'options_buttons', 'weight' => 5],
   'field_exhibit_subtitle' => $textfield(6),
   'field_exhibit_cover' => $media_widget + ['weight' => 7],
@@ -485,7 +508,7 @@ foreach (['default', 'full'] as $mode) {
     continue;
   }
   $node_view = $displays->getViewDisplay('node', $bundle, $mode);
-  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical_note', 'field_exhibit_title_style'] as $name) {
+  foreach (['field_exhibit_subtitle', 'field_exhibit_cover', 'field_exhibit_credit', 'field_exhibit_prompt', 'field_exhibit_year', 'field_exhibit_physical_note', 'field_exhibit_title_style', 'field_exhibit_kicker', 'field_exhibit_keyfacts', 'field_exhibit_action'] as $name) {
     $node_view->removeComponent($name);
   }
   $node_view->save();

@@ -15,6 +15,12 @@
  *   chest (a word where the server has no FA Pro files). The note is a
  *   tooltip: hover, keyboard focus or a tap shows it, Esc hides it
  *   (js/exhibition.js), and the button is described by it.
+ * - kicker: the word over the title ("Exhibition", or e.g. "Fellowship").
+ * - keyfacts: program pages' facts (label, value; label may be ''), a <dl>
+ *   in a row over the prompt: Award, Deadline, Who.
+ * - action: the main button (url, text) or NULL. With one, it leads the
+ *   buttons and is always shown (no script needed); "Begin" steps down to
+ *   the outlined style beside it.
  * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
  *   Its focal point, when set, is where it stays in view when cropped.
  *
@@ -41,7 +47,7 @@
     </div>
   {% endif %}
   <div class="pf-exhibit-cover__text">
-    <p class="pf-exhibit-cover__kicker pf-exhibit-cover__step" style="--pf-step: 1">{{ 'Exhibition'|t }}</p>
+    <p class="pf-exhibit-cover__kicker pf-exhibit-cover__step" style="--pf-step: 1">{{ head.kicker }}</p>
     {# The title's length and longest word set its size (_exhibition.scss). #}
     {% set title_word = 1 %}
     {% for word in head.title|split(' ') %}
@@ -80,13 +86,32 @@
         {% endif %}
       </ul>
     {% endif %}
+    {% if head.keyfacts %}
+      <dl class="pf-exhibit-cover__keyfacts pf-exhibit-cover__step" style="--pf-step: 4.75">
+        {% for fact in head.keyfacts %}
+          <div class="pf-exhibit-cover__keyfact">
+            {% if fact.label %}
+              <dt>{{ fact.label }}</dt>
+            {% endif %}
+            <dd>{{ fact.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    {% endif %}
     <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 5">
       <p class="pf-exhibit-cover__prompt-text">
         <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
         {{ head.prompt }}
       </p>
+      {% if head.action %}
+        <div class="pf-exhibit-cover__buttons">
+          <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ head.action.url }}">
+            {{- head.action.text -}}
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+          </a>
+      {% endif %}
       <div class="pf-exhibit-cover__actions" data-pf-exhibit-actions hidden>
-        <a class="pf-exhibit-button pf-exhibit-button--primary" href="#" data-pf-exhibit-begin>
+        <a class="pf-exhibit-button{{ head.action ? '' : ' pf-exhibit-button--primary' }}" href="#" data-pf-exhibit-begin>
           {{ 'Begin'|t }}
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
         </a>
@@ -94,6 +119,9 @@
           {{ 'Contents'|t }}
         </button>
       </div>
+      {% if head.action %}
+        </div>
+      {% endif %}
     </div>
   </div>
   {{ head.cache }}

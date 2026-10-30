@@ -1233,6 +1233,48 @@ $pf-exhibit-cover-clear: 92;
   }
 }
 
+// Program pages' key facts (Award, Deadline, Who): a row of label over
+// value, each after a hairline, wrapping to fewer columns on a phone. The
+// labels in the kicker's voice, the values at the intro's size.
+.pf-exhibit-cover__keyfacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 0;
+}
+
+.pf-exhibit-cover__keyfact {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  padding-inline-start: 0.875rem;
+  border-inline-start: 1px solid $pf-hairline;
+
+  dt {
+    @extend %pf-exhibit-kicker;
+    font-weight: 400;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+}
+
+// With a main button: it leads, and Begin and Contents join its row once
+// the script shows them.
+.pf-exhibit-cover__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  > .pf-exhibit-cover__actions:not([hidden]) {
+    display: contents;
+  }
+}
+
 .pf-exhibit-cover__prompt {
   display: grid;
   gap: 1.25rem;
