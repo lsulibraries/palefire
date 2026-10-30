@@ -243,30 +243,44 @@ textarea.pf-inquiry__control {
   font-size: .875rem;
 }
 
+// The Quick Start Guide's buttons (.pf-quick-guide__link,
+// _landing-features.scss): mono capitals in a hairline frame, the words at
+// the start and the arrow at the end, the frame turning gold on hover. As
+// wide as one of those (half the notes' column), the whole form's on a
+// phone.
 .pf-inquiry__submit {
+  @extend %pf-landing-label;
   display: inline-flex;
   align-items: center;
-  gap: .75rem;
-  min-height: 3rem;
-  padding: .75rem 1.5rem;
-  border: 1px solid var(--pf-inquiry-fg);
+  gap: .625rem;
+  width: min(100%, 17.5rem);
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid #{$pf-hairline};
   border-radius: 0;
-  color: var(--pf-inquiry-bg);
-  background: var(--pf-inquiry-fg);
-  font-weight: 500;
-  letter-spacing: .02em;
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  background: transparent;
+  font-size: var(--pf-mono-ui);
+  letter-spacing: .12em;
+  text-align: start;
   cursor: pointer;
-  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
+  transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  .pf-inquiry__arrow {
+    width: .875rem;
+    height: .875rem;
+    margin-inline-start: auto;
+  }
 
   &:hover,
   &:focus-visible {
-    color: var(--pf-inquiry-fg);
-    background: transparent;
+    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    color: var(--pf-section-fg, var(--bs-emphasis-color));
     transition-duration: $pf-hover-in;
   }
 
   &:focus-visible {
-    outline: 3px solid var(--pf-inquiry-accent);
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
     outline-offset: 2px;
   }
 
