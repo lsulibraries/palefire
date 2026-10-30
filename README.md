@@ -582,9 +582,13 @@ from the media item. A figure with no image shows only to editors.
   It fades in where it rests while its gallery comes up, holds under the
   header, and fades out in place at the area's foot. Once it fills the
   screen the text holds at its foot for 76svh (`--pf-reveal`) while the
-  wash comes in, then the title, the facts or links, and the opening text
-  rise in one after another, scrubbed by the scroll; then the text scrolls
-  on over the still photograph. Links to a gallery land at the reveal's end.
+  side wash fades in slowly and draws in from the left, then the title, the
+  facts or links, and the opening text rise in one after another, scrubbed
+  by the scroll; then the text scrolls on over the still photograph. A
+  Cover whose text runs past the screen (`.is-long`) isn't held: it starts
+  lower (46svh) and fades in as it scrolls up. From lg the foot has only
+  the title page's light fade, except on openings with no text. Links to a
+  gallery land at the reveal's end.
   Not for "Full screen, then pan", which has its own pinned sequence.
 - Cover opening (Opening "Cover", stored as `full`, the default with a
   lead): the lead full screen and fixed, as on a wall, with the number,
@@ -943,6 +947,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Gallery openings: a gentler side wash, a light foot, and long text that scrolls while it fades in.** The side wash now fades in ease-in-out over a third of a screen (was linear over 14% of one) while it draws in from the left (a sixth of its width, eased over 40%). The title waits until it is about three-quarters in (from 20%, was 16%). From lg the foot of a gallery opening with text had kept the old solid fade to 22% of the screen, a dark band over the photograph's lower edge; it now has the title page's light one (at most 40% of the page colour over 3–6rem), on the frame's `::before` so the sliding wash leaves no bare corner. Openings with no text keep their stronger foot. A Cover whose text runs past the screen (`.is-long`, no "Read more") held all that text still for 76svh while it faded in, so the scroll felt unresponsive. It is no longer held: it starts 46svh lower and rises with the scroll from the first move, fading in on the way (title from 10%, then 6% apart), with the wash ahead of it (in by 22%) and no fold fade at the screen's foot. Checked on the live Audubon Cover (long text) and Elephant Folio wall at 1440 × 900 with local CSS: the long text moves with every step of the scroll, the wash is 98% in when the title is 89%, the wall still holds to the pixel. Why: the wash arrived abruptly, the foot read as a dark band, and held long text felt like a stuck page.
 
 - **Gallery openings: the photograph fades in and out in place, and the text comes in while it holds.** Moves the reveal from the title page (24ba376, undone: the title page is as it was before it) to every gallery that opens on a full-screen photograph, a story's Cover or a wall's lead, from lg with motion and scroll timelines. The photograph no longer scrolls: while its gallery comes up the frame is held where it will rest and fades in as the gallery's edge wipes up over the previous one; at the gallery's foot it is held again and fades out (`pf-exhibit-frame-in`/`-out` on the area's timeline, `--pf-hero`). Once it fills the screen, the text holds for 76svh of scrolling (`--pf-reveal`, a registered length) while the wash comes in (2–16% of a screen), then the title, the facts or links and the opening text rise in, 12% apart. The area and its first row run 76svh longer and the text is set back by what is left of the reveal (`pf-exhibit-pin`), so it holds to the pixel; then it scrolls on over the still photograph. Walls without an intro (Mossville): the spacer carrying the wash is held the same way and the photograph's fade starts after the reveal. Anchors and TOC links land at the reveal's end (the section's negative scroll-margin), as do "Begin" and "Next" (`glideTo()`); a Cover's long-text fade allows for the hold (`measureCover()`, `readCover()`). Focus in the text shows it at once. Unchanged: "Full screen, then pan" openings (Occult), below lg, reduced motion, browsers without scroll timelines. Checked on the live Audubon (Cover and wall) and Mossville galleries at 1440 × 900 and Audubon at 1024 × 768 with local CSS: the photograph's top stays at the header's foot through entry, hold and exit, the title holds to the pixel, no horizontal scroll. The script's part was not run live. Why: each gallery should open on its picture, and the picture should never slide.
 
