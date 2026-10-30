@@ -20,8 +20,14 @@
  * clicking or tapping the label, Enter or Space opens it; Esc, the close
  * button or a click outside closes it. Screenshots load only when opened.
  *
+ * A stop with `href` (C's "Reach out") is a link instead, styled as the
+ * panel buttons are.
+ *
  * Available variables:
  * - uid: makes the heading ids unique on the page.
+ * - ask_href: where "Reach out" goes. The Special Collections landing
+ *   passes its Ask Special Collections section (#ask-special-collections);
+ *   guides, which have none, go to AskUs: Special Collections.
  * - img_base: URL of images/guides/special-collections/ with a trailing
  *   slash. Without it the panels show their text only.
  */
@@ -85,7 +91,7 @@
     letter: 'C',
     name: ['Ask an'|t, 'expert help'|t],
     stops: [
-      { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email form'|t },
+      { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email form'|t, href: ask_href|default('https://askus.lib.lsu.edu/special') },
       { icon: 'lightbulb-on', label: 'Receive guidance'|t, note: 'Chef’s choice'|t },
       { icon: 'search', label: 'Find Item'|t, note: 'In the catalog'|t },
       { icon: 'repeat', label: 'Start options A or B'|t, note: 'Thank your librarian'|t },
@@ -116,6 +122,10 @@
                 {{- stop.label -}}
                 <span class="visually-hidden">, {{ has_shots ? 'show screenshots'|t : 'show details'|t }}</span>
               </button>
+            {% elseif stop.href is defined %}
+              {# A stop with somewhere to go: a link, in the panel buttons'
+                 look (the whole stop is the target, underlined on hover). #}
+              <a class="pf-paths__label pf-paths__peek" href="{{ stop.href }}">{{ stop.label }}</a>
             {% else %}
               <span class="pf-paths__label">{{ stop.label }}</span>
             {% endif %}
