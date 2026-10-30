@@ -102,6 +102,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_louisiana_newspapers_setup.php` | `parish_map`, `parish_entry`, `family_trees` paragraph types |
 | `palefire_guide_wysiwyg.php` | Moves existing guides' text to the WYSIWYG format (dry run unless `-- apply=1`) |
 | `palefire_exhibit_setup.php` | Exhibition content model: `exhibition` mode, title page fields, `exhibit_*` paragraph types, `exhibit_*` image styles, the Sources text style (after the guide setup) |
+| `palefire_exhibit_reading_setup.php` | Adds Exhibition: Reading (`exhibit_reading`), a book or article typeset as a cover: Kind, author, title, publisher or journal, details and `field_figure_link`, and allows it in the Image group. Run after `palefire_exhibit_setup.php` and after `field_figure_link` is on Exhibition: Image |
 | `palefire_exhibit_aves_lead_captions.php` | Fills the 9 draft AVES lead captions on the existing page (empty ones only; stops on a published page unless `-- force=1`) |
 | `palefire_exhibit_aves_update.php` | Brings the live AVES page up to `data/aves.json`: Capital Case names, "Main Library", the 16 images from `Section 4 (additions)`, catalogue lead captions (`-- images="<AVES exhibition 4K folder>"`). Keeps editors' own changes |
 | `palefire_exhibit_aves_typos.php` | Corrects 25 typos in the live AVES page (missing spaces and brackets in names, hyphen and dash spacing, Vieillot's dates, Weimar, Chubb), the same as in `data/aves.json`. Exact replacements only; lists any it can't find |
@@ -949,6 +950,10 @@ a full load. Skipped: links with `data-no-swup`, `data-bs-toggle` or
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
+
+### 2026-10-30
+
+- **Exhibitions: setup script for readings.** `scripts/palefire_exhibit_reading_setup.php` adds the paragraph type Exhibition: Reading (`exhibit_reading`) for reading lists: Kind (Book or Article), author, title, publisher or journal, details, and the existing `field_figure_link`. It allows the type in the Image group and renames the group's add button from "Add Image" to "Add Item" if it hasn't been renamed. It is config only and safe to re-run. The fields' help text tells editors to leave out quotes and italics. Not run yet. The cover template and styles follow in their own patch; until then readings render nothing. Why: Suggested Reading should show every book and article as a typeset cover, with no images to find or upload.
 
 ### 2026-10-29
 
