@@ -5,8 +5,9 @@
  * layout "ask"), so visitors ask from the page instead of on AskUs.
  *
  * Included by paragraph--tile-showcase.html.twig. Variables:
- * - faqs: question, answer (render array or plain text), url (the answer
- *   on AskUs), from _palefire_ask_faqs() in palefire.theme.
+ * - faqs: question, answer (render array or plain text), byline (who
+ *   answered, or ''), url (the answer on AskUs), from _palefire_ask_faqs()
+ *   in palefire.theme.
  * - ask_form: the libanswers module's question form, or NULL without the
  *   module (then the panel points to AskUs).
  *
@@ -39,7 +40,10 @@
             </summary>
             <div class="pf-accordion__panel">
               {% if faq.answer %}
-                <div class="pf-guide-prose">{{ faq.answer }}</div>
+                <div class="pf-guide-prose pf-inquiry__answer">{{ faq.answer }}</div>
+              {% endif %}
+              {% if faq.byline %}
+                <p class="pf-inquiry__byline">{{ 'Answered by @name'|t({'@name': faq.byline}) }}</p>
               {% endif %}
               {% if faq.url %}
                 <a class="pf-inquiry__link" href="{{ faq.url }}">{{ 'Full answer on AskUs'|t }}{{ arrow }}</a>
@@ -57,7 +61,8 @@
     </ul>
   </div>
 
-  <div class="pf-inquiry__panel">
+  {# The footer's Ask link (includes/footer.html.twig) lands here. #}
+  <div class="pf-inquiry__panel" id="ask-question">
     <h3 class="pf-inquiry__heading">{{ 'Send us a question'|t }}</h3>
     {% if ask_form %}
       {{ attach_library('palefire/ask-form') }}

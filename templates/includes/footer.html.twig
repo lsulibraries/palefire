@@ -18,6 +18,10 @@
  * (place.query, the name Google knows it by). Its own row, not the Today
  * row: a link's text should say where it goes, and Today's is the hours.
  *
+ * Ask (Special Collections): the question form on the Special Collections
+ * home page (#ask-question, includes/ask-special.html.twig), which frames
+ * itself in gold on arrival (_ask.scss), instead of AskUs.
+ *
  * Content: edit the `footers` map below. `lid` is a LibCal location (the
  * same IDs as hours_locations in utility-panels.html.twig). Social icons
  * are FA Pro brand SVGs from the server, or the Bootstrap Icons copies in
@@ -44,7 +48,7 @@
       lid: '236',
       place: { name: 'Hill Memorial Library'|t, query: 'Hill Memorial Library, Baton Rouge, LA' },
       phone: '225-578-6544',
-      ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special' },
+      ask: { label: 'Ask Special Collections'|t, url: sc ~ '#ask-question' },
       other: { name: 'Main Library'|t, lid: '241', url: base_path },
       links: [
         { title: 'Visit'|t, items: [

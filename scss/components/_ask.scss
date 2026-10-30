@@ -70,6 +70,33 @@
   color: var(--pf-inquiry-fg);
 }
 
+// The answer (paragraphed by _palefire_ask_answer_tidy()): a shorter
+// measure and open leading, so a long answer reads as an article, not a
+// wall; long URLs wrap on phones.
+.pf-inquiry__answer {
+  max-width: 38rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0 0 1em;
+  }
+
+  a {
+    text-underline-offset: .2em;
+  }
+}
+
+// "Answered by": the headings' quiet mono voice, under the answer.
+.pf-inquiry__byline {
+  margin: -.25rem 0 0;
+  color: var(--pf-inquiry-muted);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
 // "Full answer on AskUs": a small link with the ledger's arrow, which
 // slides on hover.
 .pf-inquiry__link {
@@ -136,7 +163,57 @@
 
 // The panel is the container: the form can't query its own width.
 .pf-inquiry__panel {
+  --pf-inquiry-frame: clamp(.5rem, 2vw, 1.5rem);
   container: pf-inquiry-form / inline-size;
+  // Room for the frame below under the sticky header.
+  scroll-margin-top: calc(var(--pf-inquiry-frame) + .5rem);
+}
+
+// Arrival from the footer's Ask link (#ask-question): a gold hairline and
+// a faint gold wash around the panel, outside its box (outline and
+// box-shadow), so nothing moves. :target on a load or an in-page jump;
+// :focus after a Swup visit, which focuses the #anchor without updating
+// :target (palefire-swup.js). It fades in and out once; kept while the
+// panel has keyboard focus, and held without the fade on reduced motion.
+.pf-inquiry__panel:is(:target, :focus) {
+  --pf-inquiry-wash: color-mix(in srgb, var(--pf-inquiry-accent) 6%, transparent);
+  outline: 1px solid transparent;
+  outline-offset: var(--pf-inquiry-frame);
+}
+
+.pf-inquiry__panel:focus-visible {
+  outline-color: var(--pf-inquiry-accent);
+}
+
+// Backwards, not both: once it ends, the keyboard ring above shows again.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-inquiry__panel:is(:target, :focus) {
+    animation: pf-inquiry-arrive 3.2s cubic-bezier(.4, 0, .2, 1) .3s backwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-inquiry__panel:is(:target, :focus) {
+    outline-color: var(--pf-inquiry-accent);
+    background-color: var(--pf-inquiry-wash);
+    box-shadow: 0 0 0 var(--pf-inquiry-frame) var(--pf-inquiry-wash);
+  }
+}
+
+@keyframes pf-inquiry-arrive {
+  0%,
+  100% {
+    outline-color: transparent;
+    background-color: transparent;
+    box-shadow: 0 0 0 var(--pf-inquiry-frame) transparent;
+  }
+
+  15%,
+  70% {
+    outline-color: var(--pf-inquiry-accent);
+    background-color: var(--pf-inquiry-wash);
+    box-shadow: 0 0 0 var(--pf-inquiry-frame) var(--pf-inquiry-wash);
+  }
 }
 
 .pf-inquiry__form {
