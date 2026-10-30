@@ -959,6 +959,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-30
 
+- **Ask Special Collections: filled fields show they're done.** A filled field's rule steps up from the muted grey to the text colour, so visitors can see at a glance what they've filled in. Focus keeps the only accent rule (3px, gold on most swatches), so a filled field never looks focused or "accepted", and errors stay red. Text fields know they're empty by a blank placeholder (`placeholder=" "`, read as nothing), and the menus by their "Select one" prompt. The rule is in `:where()`, so focus and errors always win. Checked in a local render on a dark section: filled white, empty grey, focus gold on a filled menu, a filled but invalid email red. Why: a long form is easier to finish when its progress shows.
 - **Ask Special Collections: styled menus and autofill.** The question form's menus are customizable selects (`appearance: base-select`) where the browser supports them (Chrome and Edge 135+). They stay native `<select>`s, so keyboard, screen reader and phone behaviour don't change.
   - **The list:** a panel in the section's colour under the field, as wide as it, with a hairline frame and a soft shadow. It fades and drops in, with no motion under reduced motion.
   - **Options:** 44px rows (WCAG 2.5.8) with the fields' padding and a pointer cursor. Hover and keyboard focus share a wash of the text colour, and focus adds an accent bar at the start. The chosen option has a check in the accent and medium weight, so selection is never shown by colour alone.

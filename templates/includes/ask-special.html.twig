@@ -115,14 +115,14 @@
       {% for name, input in inputs %}
         <div class="pf-inquiry__field{{ name == 'pquestion' ? ' pf-inquiry__field--wide' }}">
           {{ _self.label(id, name, input.label) }}
-          <input class="pf-inquiry__control" type="{{ input.type }}" id="{{ id }}-{{ name }}" name="{{ name }}" autocomplete="{{ input.autocomplete }}" maxlength="{{ input.maxlength }}" required>
+          <input class="pf-inquiry__control" type="{{ input.type }}" id="{{ id }}-{{ name }}" name="{{ name }}" autocomplete="{{ input.autocomplete }}" maxlength="{{ input.maxlength }}" placeholder=" " required>
           <span class="pf-inquiry__error" id="{{ id }}-{{ name }}-error" hidden></span>
         </div>
       {% endfor %}
 
       <div class="pf-inquiry__field pf-inquiry__field--wide">
         <label class="pf-inquiry__label" for="{{ id }}-pdetails">{{ 'More detail'|t }}</label>
-        <textarea class="pf-inquiry__control" id="{{ id }}-pdetails" name="pdetails" rows="5"></textarea>
+        <textarea class="pf-inquiry__control" id="{{ id }}-pdetails" name="pdetails" rows="5" placeholder=" "></textarea>
       </div>
 
       <div class="pf-inquiry__trap" aria-hidden="true">

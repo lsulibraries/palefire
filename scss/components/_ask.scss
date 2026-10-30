@@ -174,6 +174,16 @@
     transition-duration: $pf-hover-in;
   }
 
+  // Filled: the rule steps up from muted to the text colour, so what's done
+  // shows at a glance. Not the accent, which stays focus's alone (a filled
+  // field must never look focused, or valid). Text fields know they're
+  // empty by their blank placeholder (placeholder=" ", which reads as
+  // nothing); a menu, by its "Select one" prompt. In :where(), so focus
+  // and errors below always win.
+  &:where(:not(:placeholder-shown, select), select:not(:has(option[value=""]:checked))) {
+    border-bottom-color: var(--pf-inquiry-fg);
+  }
+
   // Focus: no box. The rule turns the accent and thickens to 3px, and the
   // field takes a faint wash of the text colour. The accent keeps 3:1 on
   // every swatch.
