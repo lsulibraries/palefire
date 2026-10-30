@@ -32,6 +32,13 @@ $pf-rail-html: 'html:not([data-pf-mode="guide"])';
 $pf-rail-row: '.pf-modular--toc-rail';
 $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
 
+// modular-toc.js builds the index panel wherever the rail layout is, but
+// it is only the rail's: on guides and below lg (the TOC drawer) it would
+// show as a second, unstyled list after Back to top.
+.pf-toc__panel {
+  display: none;
+}
+
 @include media-breakpoint-up(lg) {
   #{$pf-rail} {
     --pf-rail-col: 2.75rem;  // the hit area's width
