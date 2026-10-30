@@ -171,13 +171,17 @@
      PalefireHooks::heroTocIds()). #}
   {% if hero %}
     {# PLACEHOLDER: there is no Special Collections search target yet, so
-       this sends the words to the libraries' Bento search like the old
-       landing form. Change landing_action / landing_name here when there is. #}
+       the field and button are disabled (search_off) and the placeholder
+       says so. When there is one, set landing_action / landing_name here,
+       drop search_off and restore the placeholder ("Search manuscripts,
+       rare books, photographs and more"). #}
     {% set search_label = 'Search Special Collections'|t %}
-    {% set search_placeholder = 'Search manuscripts, rare books, photographs and more'|t %}
+    {% set search_placeholder = 'Search coming soon'|t %}
+    {% set search_off = true %}
   {% else %}
     {% set search_label = 'Search LSU Libraries'|t %}
     {% set search_placeholder = landing.placeholder|default('Search books, articles, databases, guides and more'|t) %}
+    {% set search_off = false %}
   {% endif %}
   {# Sub-header bar: the breadcrumb on a glass bar across the content column
      right under the header (PalefireHooks::crumbInLanding(); page.html.twig
@@ -302,8 +306,8 @@
         {% endif %}
         <input class="pf-landing__input" type="search" id="{{ input_id }}" name="{{ landing_name }}"
                placeholder="{{ search_placeholder }}"
-               autocomplete="off" enterkeyhint="search">
-        <button class="pf-landing__submit" type="submit">
+               autocomplete="off" enterkeyhint="search"{{ search_off ? ' disabled' }}>
+        <button class="pf-landing__submit" type="submit"{{ search_off ? ' disabled' }}>
           <span class="pf-landing__submit-text">{{ 'Search'|t }}</span>
           {% if hero %}
             <svg class="pf-landing__submit-icon pf-landing__submit-icon--search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
