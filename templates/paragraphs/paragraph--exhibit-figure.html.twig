@@ -11,9 +11,14 @@
  * - can_edit: a figure without an image shows only to people who can edit
  *   it, as a dashed reminder to add one; visitors don't see it.
  *
+ * - link: ['url', 'external'] (a book cover's catalog record), or NULL.
+ *
  * The image is a link to its largest version, so without JS it opens on
  * its own; js/exhibition.js opens it in the lightbox instead, with the
- * gallery's other images.
+ * gallery's other images. With a link, the image links there instead: the
+ * whole figure is the link (its caption names it) and an arrow shows in
+ * the corner. Another site opens in a new tab, like the exhibition's other
+ * outside links.
  */
 #}
 {% set caption = content.field_figure_caption|render|trim %}
@@ -23,11 +28,29 @@
       'pf-exhibit-figure',
       'pf-exhibit-figure--' ~ layout|clean_class,
       not image ? 'pf-exhibit-figure--empty',
+      image and link ? 'pf-exhibit-figure--out',
       not paragraph.isPublished() ? 'paragraph--unpublished',
     ]
   %}
+  {% set caption_id = 'pf-figure-' ~ paragraph.id() ~ '-caption' %}
   <figure{{ attributes.addClass(classes) }}>
-    {% if image %}
+    {% if image and link %}
+      {% set note_id = 'pf-figure-' ~ paragraph.id() ~ '-note' %}
+      <a class="pf-exhibit-figure__out" href="{{ link.url }}"
+         {% if link.external %}target="_blank" rel="noopener"{% endif %}
+         {% if caption %}aria-labelledby="{{ caption_id }}{{ link.external ? ' ' ~ note_id }}"{% endif %}>
+        <span class="pf-exhibit-figure__frame">
+          <img class="pf-exhibit-figure__img" src="{{ image.src }}"
+               {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
+               {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
+               alt="{{ image.alt }}" loading="{{ image.loading }}" decoding="async">
+          <svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M5 11 11 5M6 5h5v5"/></svg>
+        </span>
+        {% if link.external %}
+          <span class="visually-hidden" id="{{ note_id }}">{{ '(opens in a new tab)'|t }}</span>
+        {% endif %}
+      </a>
+    {% elseif image %}
       <a class="pf-exhibit-figure__link" href="{{ image.full }}" data-pf-lightbox
          {% if image.width %}data-width="{{ image.width }}" data-height="{{ image.height }}"{% endif %}
          {% if align %}data-pf-align="{{ align }}"{% endif %}>
@@ -44,7 +67,7 @@
       <span class="pf-exhibit-figure__frame pf-exhibit-figure__placeholder">{{ 'Image to add (editors only)'|t }}</span>
     {% endif %}
     {% if caption %}
-      <figcaption class="pf-exhibit-figure__caption pf-guide-prose">{{ content.field_figure_caption }}</figcaption>
+      <figcaption class="pf-exhibit-figure__caption pf-guide-prose"{% if image and link %} id="{{ caption_id }}"{% endif %}>{{ content.field_figure_caption }}</figcaption>
     {% endif %}
   </figure>
 {% endif %}

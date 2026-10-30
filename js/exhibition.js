@@ -1504,7 +1504,9 @@
     catch (e) {
       return;
     }
-    if (!/^https?:$/.test(url.protocol) || url.host === location.host) {
+    // A figure's link to another site (a book cover) is marked in its
+    // template, with the arrow in the image's corner.
+    if (!/^https?:$/.test(url.protocol) || url.host === location.host || link.classList.contains('pf-exhibit-figure__out')) {
       return;
     }
     link.target = '_blank';

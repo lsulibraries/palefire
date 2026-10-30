@@ -2275,6 +2275,9 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
  * group lays the figures out and the layout is ignored.
  * align: "k rot tx ty" from field_figure_align (a drawing laid over the
  * proof after it in a wall's compare view), or ''.
+ * link: ['url', 'external'] from field_figure_link (a book cover's catalog
+ * record), or NULL. The image then links there instead of the lightbox;
+ * inside an image group it is shown as a cover (2:3).
  */
 function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -2282,7 +2285,16 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
   $layout = (string) ($paragraph->get('field_figure_layout')->value ?? '');
   $layout = in_array($layout, ['side_start', 'side_end', 'center', 'wide'], TRUE) ? $layout : 'side_start';
   $in_group = $paragraph->getParentEntity() instanceof ParagraphInterface && $paragraph->getParentEntity()->bundle() === 'exhibit_gallery';
+  $variables['link'] = NULL;
+  if ($paragraph->hasField('field_figure_link') && !$paragraph->get('field_figure_link')->isEmpty()) {
+    $url = $paragraph->get('field_figure_link')->first()->getUrl();
+    $variables['link'] = [
+      'url' => trim($url->toString()),
+      'external' => $url->isExternal(),
+    ];
+  }
   $sizes = match (TRUE) {
+    $in_group && $variables['link'] => '(min-width: 48rem) 12rem, 45vw',
     $in_group => '(min-width: 62rem) 30vw, (min-width: 36rem) 45vw, 100vw',
     $layout === 'wide' => '100vw',
     $layout === 'center' => '(min-width: 62rem) 48rem, 100vw',

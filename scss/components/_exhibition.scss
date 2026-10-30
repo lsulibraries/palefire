@@ -1727,6 +1727,118 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// Linked figures (book covers): the image links to another page, with an
+// arrow in the enlarge mark's place. The link's ::after covers the whole
+// figure, so the caption is clickable too.
+.pf-exhibit-figure--out {
+  position: relative;
+
+  .pf-exhibit-figure__frame {
+    position: relative;
+  }
+
+  .pf-exhibit-figure__caption a {
+    position: relative;
+    z-index: 1;
+  }
+
+  // The title in a citation, in the heading colour, underlined on hover.
+  .pf-exhibit-figure__caption em {
+    color: var(--pf-g-heading, var(--bs-emphasis-color));
+    text-decoration: underline;
+    text-decoration-color: $pf-hairline;
+    text-underline-offset: .2em;
+    transition: text-decoration-color $pf-hover-out ease;
+  }
+
+  &:has(.pf-exhibit-figure__out:is(:hover, :focus-visible)) .pf-exhibit-figure__caption em {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-exhibit-figure__out {
+  display: block;
+  color: inherit;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 4px;
+  }
+
+  .pf-exhibit-figure__img {
+    @include pf-exhibit-motion {
+      transition: scale .9s $pf-exhibit-ease;
+    }
+  }
+
+  &:hover .pf-exhibit-figure__img {
+    @include pf-exhibit-motion {
+      scale: 1.03;
+    }
+  }
+
+  .pf-exhibit-figure__zoom path {
+    transition: translate $pf-hover-out $pf-exhibit-ease;
+  }
+
+  &:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
+    opacity: 1;
+    transition-duration: $pf-hover-in;
+
+    path {
+      @include pf-exhibit-motion {
+        translate: 1.5px -1.5px;
+        transition-duration: $pf-hover-in;
+      }
+    }
+  }
+
+  // No hover on touch screens: the arrow always shows.
+  @media (hover: none) {
+    .pf-exhibit-figure__zoom {
+      opacity: 1;
+    }
+  }
+}
+
+// A group of covers: smaller, so more to a row (two at 320px), each 2:3 on
+// the panel colour, never cropped, framed by the hairline so a white
+// jacket keeps its edge on a light page.
+.pf-exhibit-group__grid:has(> .pf-exhibit-figure--out) {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
+  row-gap: clamp(1.5rem, 3vw, 2.25rem);
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  }
+}
+
+.pf-exhibit-group__grid > .pf-exhibit-figure--out {
+  .pf-exhibit-figure__frame {
+    aspect-ratio: 2 / 3;
+    background: var(--pf-exhibit-surface);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px solid $pf-hairline;
+      pointer-events: none;
+    }
+  }
+
+  .pf-exhibit-figure__img {
+    object-fit: contain;
+  }
+}
+
 // Catalogue record: a museum label ---------------------------------------
 
 .pf-exhibit-label {
