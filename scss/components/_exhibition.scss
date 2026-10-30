@@ -2477,8 +2477,12 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
   initial-value: 0px;
 }
 
-$pf-reveal-len: 76svh;
-$pf-reveal-long: 46svh;
+$pf-reveal-len: 90svh;
+$pf-reveal-long: 56svh;
+// The side wash slides in from the left: how far, and its easing (gentle
+// at both ends, so the whole travel reads).
+$pf-reveal-slide: -50%;
+$pf-reveal-slide-ease: cubic-bezier(.4, 0, .2, 1);
 $pf-reveal-section: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery:is(.pf-gallery--cover, .is-walled) .pf-exhibit-wall-hero)';
 $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
 
@@ -2507,10 +2511,10 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
           animation-range: entry 0% entry 100%, exit 0% exit 100%;
         }
 
-        // The side wash fades in slowly (ease-in-out over a third of a
-        // screen, about three-quarters in when the title starts) while it
-        // draws in from the left; a foot-only wash (no opening text) just
-        // fades.
+        // The side wash fades in slowly (ease-in-out over 36% of a screen)
+        // while it slides in from half its width to the left (over 64%);
+        // the title waits until it is mostly in place (36%). A foot-only
+        // wash (no opening text) just fades.
         .pf-exhibit-wall-hero__frame::after {
           animation: pf-exhibit-reveal-wash linear both;
           animation-timeline: --pf-open;
@@ -2518,9 +2522,9 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
         }
 
         > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__frame::after {
-          animation: pf-exhibit-reveal-wash ease-in-out both, pf-exhibit-reveal-side $pf-exhibit-ease both;
+          animation: pf-exhibit-reveal-wash ease-in-out both, pf-exhibit-reveal-side $pf-reveal-slide-ease both;
           animation-timeline: --pf-open, --pf-open;
-          animation-range: contain 0svh contain 32svh, contain 0svh contain 40svh;
+          animation-range: contain 0svh contain 36svh, contain 0svh contain 64svh;
         }
 
         #{$pf-reveal-text} {
@@ -2528,7 +2532,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
           animation-timeline: --pf-open, --pf-open;
           animation-range:
             contain 0px contain var(--pf-reveal),
-            contain calc(20svh + var(--pf-reveal-step, 0) * 12svh) contain calc(44svh + var(--pf-reveal-step, 0) * 12svh);
+            contain calc(36svh + var(--pf-reveal-step, 0) * 12svh) contain calc(60svh + var(--pf-reveal-step, 0) * 12svh);
         }
 
         :is(.pf-exhibit-wall__stats, .pf-exhibit-cover__nav) {
@@ -2561,7 +2565,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
             animation-name: none, pf-exhibit-reveal;
             animation-range:
               normal,
-              contain calc(10svh + var(--pf-reveal-step, 0) * 6svh) contain calc(34svh + var(--pf-reveal-step, 0) * 6svh);
+              contain calc(18svh + var(--pf-reveal-step, 0) * 6svh) contain calc(42svh + var(--pf-reveal-step, 0) * 6svh);
           }
 
           > .pf-section__inner > .pf-section__title:focus-within,
@@ -2574,9 +2578,9 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
             mask-image: none;
           }
 
-          // The wash a little sooner, ahead of the moving text.
+          // The wash sooner, ahead of the moving text.
           > .pf-section__inner .pf-exhibit-wall-hero__frame::after {
-            animation-range: contain 0svh contain 22svh, contain 0svh contain 30svh;
+            animation-range: contain 0svh contain 24svh, contain 0svh contain 44svh;
           }
 
           > .pf-section__inner:has(:focus-within) .pf-exhibit-wall-hero__frame::after {
@@ -2662,10 +2666,11 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   }
 }
 
-// A sixth of the width: the wash's clear right part leaves no edge.
+// The wash's right part is clear, so however far it travels it leaves no
+// edge.
 @keyframes pf-exhibit-reveal-side {
   from {
-    translate: -16% 0;
+    translate: $pf-reveal-slide 0;
   }
 }
 

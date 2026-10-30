@@ -581,12 +581,13 @@ from the media item. A figure with no image shows only to editors.
   with motion and scroll timelines: the photograph never moves on screen.
   It fades in where it rests while its gallery comes up, holds under the
   header, and fades out in place at the area's foot. Once it fills the
-  screen the text holds at its foot for 76svh (`--pf-reveal`) while the
-  side wash fades in slowly and draws in from the left, then the title, the
+  screen the text holds at its foot for 90svh (`--pf-reveal`) while the
+  side wash fades in slowly and slides in from half its width to the left
+  (over 64% of a screen), then the title, the
   facts or links, and the opening text rise in one after another, scrubbed
   by the scroll; then the text scrolls on over the still photograph. A
   Cover whose text runs past the screen (`.is-long`) isn't held: it starts
-  lower (46svh) and fades in as it scrolls up. From lg the foot has only
+  lower (56svh) and fades in as it scrolls up. From lg the foot has only
   the title page's light fade, except on openings with no text. Links to a
   gallery land at the reveal's end.
   Not for "Full screen, then pan", which has its own pinned sequence.
@@ -947,6 +948,8 @@ Newest first. One line per change; the commit has the details. Entries before
 history (`git show fa05a94:README.md`).
 
 ### 2026-10-29
+
+- **Gallery openings: the side wash slides in from much further, over longer.** It now starts half its width to the left (was a sixth) and slides in over 64% of a screen of scrolling (was 40%), eased gently at both ends (`$pf-reveal-slide`, `$pf-reveal-slide-ease`) so the whole travel reads; the fade takes 36% (was 32%). The wash's right part is clear, so no edge shows however far it travels. To give it room, the hold is 90svh (was 76svh) and the title starts at 36% (was 20%), when the wash is about 95% in place; then the facts or links and the text 12% apart, all in by 84%. Long-text Covers: the wash slides over 44%, fades over 24%, and the text starts 56svh lower (was 46svh), fading in from 18%. Checked on the live Elephant Folio wall and Audubon in Louisiana Cover at 1440 × 900 with local CSS: the wash goes -50%, -30%, -13%, -5%, 0 at 10% steps of a screen, no edge mid-slide, the wall's title holds to the pixel, the long text moves with every step. Why: the slide was too short and quick to read as a move.
 
 - **Gallery openings: a gentler side wash, a light foot, and long text that scrolls while it fades in.** The side wash now fades in ease-in-out over a third of a screen (was linear over 14% of one) while it draws in from the left (a sixth of its width, eased over 40%). The title waits until it is about three-quarters in (from 20%, was 16%). From lg the foot of a gallery opening with text had kept the old solid fade to 22% of the screen, a dark band over the photograph's lower edge; it now has the title page's light one (at most 40% of the page colour over 3–6rem), on the frame's `::before` so the sliding wash leaves no bare corner. Openings with no text keep their stronger foot. A Cover whose text runs past the screen (`.is-long`, no "Read more") held all that text still for 76svh while it faded in, so the scroll felt unresponsive. It is no longer held: it starts 46svh lower and rises with the scroll from the first move, fading in on the way (title from 10%, then 6% apart), with the wash ahead of it (in by 22%) and no fold fade at the screen's foot. Checked on the live Audubon Cover (long text) and Elephant Folio wall at 1440 × 900 with local CSS: the long text moves with every step of the scroll, the wash is 98% in when the title is 89%, the wall still holds to the pixel. Why: the wash arrived abruptly, the foot read as a dark band, and held long text felt like a stuck page.
 
