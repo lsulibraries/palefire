@@ -77,8 +77,8 @@
           {% endif %}
           {% if visit.parking_url %}
             <a class="pf-visit__link pf-visit__parking" href="{{ visit.parking_url }}">
-              {{- 'Parking'|t -}}
-              {%- if visit.name %}<span class="visually-hidden"> {{ 'at @place'|t({'@place': visit.name}) }}</span>{% endif -%}
+              {{- 'Parking & travel'|t -}}
+              {%- if visit.name %}<span class="visually-hidden"> {{ 'to @place'|t({'@place': visit.name}) }}</span>{% endif -%}
               <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
             </a>
           {% endif %}

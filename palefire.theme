@@ -933,17 +933,25 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
   }
   $embed = $value('field_location_display') === 'embed';
   // Visitor parking guides (scripts/palefire_guide_parking.php) by LibCal
-  // location: the Visit card's Parking link and the Quick Guide's button.
+  // location: the Visit card's link and the Quick Guide's button. Each by
+  // its first alias, which a rename keeps (palefire_guide_hill_rename.php):
+  // the link goes out as the guide's current alias.
   $parking = [
     '236' => '/v2/special/guides/parking-hill-memorial-library',
   ];
+  $parking_url = '';
+  if (isset($parking[$lid])) {
+    $url = Url::fromUserInput($parking[$lid])->toString(TRUE);
+    CacheableMetadata::createFromObject($url)->merge(CacheableMetadata::createFromRenderArray($variables))->applyTo($variables);
+    $parking_url = $url->getGeneratedUrl();
+  }
   $variables['visit'] = [
     'name' => $name,
     'lid' => preg_match('/^\d+$/', $lid) ? $lid : '',
     'query' => $query,
     'maps_url' => $query !== '' ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query) : '',
     'embed_url' => ($embed && $query !== '') ? 'https://www.google.com/maps?q=' . rawurlencode($query) . '&output=embed' : '',
-    'parking_url' => $parking[$lid] ?? '',
+    'parking_url' => $parking_url,
   ];
   $variables['#attached']['library'][] = 'palefire/visit';
 }
@@ -1181,9 +1189,66 @@ function _palefire_guide_resources(ParagraphInterface $paragraph, string $field,
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--resource-list.
+ *
+ * guides: when every Resource the visitor can see links to a Modular page
+ * on this site (Related guides, palefire_guide_related.php), those pages as
+ * cards, the Special Collections homepage's (tile-showcase): title, url,
+ * label, image or outline. Else [], and the list shows as usual.
  */
 function palefire_preprocess_paragraph__resource_list(array &$variables): void {
   $variables['resources'] = _palefire_guide_resources($variables['paragraph'], 'field_resources', $variables);
+  $variables['guides'] = $variables['resources'] ? _palefire_guide_cards($variables['paragraph'], $variables) : [];
+}
+
+/**
+ * The Modular pages a Resource list links to, as cards, or [].
+ *
+ * [] as soon as one visible Resource links anywhere else, so a list is
+ * either all cards or all rows. A Resource or page the visitor can't see is
+ * left out, as in _palefire_guide_resources().
+ */
+function _palefire_guide_cards(ParagraphInterface $paragraph, array &$variables): array {
+  if (!$paragraph->hasField('field_resources')) {
+    return [];
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $cards = [];
+  foreach ($paragraph->get('field_resources') as $item) {
+    $resource = $item->entity;
+    if (!$resource instanceof NodeInterface) {
+      continue;
+    }
+    $access = $resource->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $url = $resource->hasField('field_resource_link') && !$resource->get('field_resource_link')->isEmpty()
+      ? $resource->get('field_resource_link')->first()->getUrl() : NULL;
+    // entity:node/N, or an internal path or alias (the path validator
+    // resolves it to the node's route).
+    $nid = $url && $url->isRouted() && $url->getRouteName() === 'entity.node.canonical'
+      ? ($url->getRouteParameters()['node'] ?? NULL) : NULL;
+    $node = $nid ? \Drupal::entityTypeManager()->getStorage('node')->load($nid) : NULL;
+    if (!$node instanceof NodeInterface || $node->bundle() !== PalefireHooks::MODULAR_BUNDLE) {
+      return [];
+    }
+    $card = _palefire_node_card($node, $cache, 140);
+    if (!$card) {
+      continue;
+    }
+    $image = $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache) : NULL;
+    $cards[] = [
+      'title' => $card['title'],
+      'url' => $card['url'],
+      'label' => $card['label'],
+      'note' => $card['note'],
+      'image' => $image,
+      'outline' => $image ? [] : _palefire_page_outline($node, $cache),
+    ];
+  }
+  $cache->applyTo($variables);
+  return $cards;
 }
 
 /**

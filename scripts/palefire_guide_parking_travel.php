@@ -16,7 +16,7 @@
  * Optional arguments after "--":
  *   apply=1          Save.
  *   page=<alias>     The guide (default
- *                    /v2/special/guides/parking-hill-memorial-library).
+ *                    /v2/special/guides/parking-and-travel-hill-memorial-library).
  *   before=<title>   The section to go before (default "Get help"). Not
  *                    found, the new one goes last.
  *
@@ -48,7 +48,7 @@ foreach ((isset($extra) && is_array($extra)) ? $extra : [] as $arg) {
   }
 }
 $apply = ($args['apply'] ?? '') === '1';
-$alias = '/' . trim($args['page'] ?? '/v2/special/guides/parking-hill-memorial-library', '/');
+$alias = '/' . trim($args['page'] ?? '/v2/special/guides/parking-and-travel-hill-memorial-library', '/');
 $before = $args['before'] ?? 'Get help';
 
 $title = 'Coming from out of town';

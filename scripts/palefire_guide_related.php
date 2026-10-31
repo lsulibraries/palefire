@@ -55,7 +55,7 @@ $before = ['Get help', 'Contact a curator'];
 // Each guide's one-line description, as its Resource shows it.
 $desc = [
   'How to Use Special Collections' => 'Requesting materials, visiting the Reading Room, reading a finding aid and asking for help.',
-  'Visitor Parking at Hill Memorial Library' => 'Where to park without an LSU permit, accessible parking, and getting to Baton Rouge.',
+  'Parking and Travel to Hill Memorial Library' => 'Where to park without an LSU permit, accessible parking, and getting to Baton Rouge.',
   'Ordering Copies from Special Collections' => 'Prices, how to order scans, copyright and how to cite what you use.',
   'Special Collections Glossary' => 'The archive terms you meet when finding, requesting and using materials, in plain words.',
   'Donating Materials to Special Collections' => 'What Special Collections collects and accepts, and how a gift is made.',
@@ -64,12 +64,12 @@ $desc = [
 // Guide => related guides, in the order shown.
 $related = [
   'How to Use Special Collections' => [
-    'Visitor Parking at Hill Memorial Library',
+    'Parking and Travel to Hill Memorial Library',
     'Ordering Copies from Special Collections',
     'Special Collections Glossary',
     'Donating Materials to Special Collections',
   ],
-  'Visitor Parking at Hill Memorial Library' => [
+  'Parking and Travel to Hill Memorial Library' => [
     'How to Use Special Collections',
     'Special Collections Glossary',
   ],

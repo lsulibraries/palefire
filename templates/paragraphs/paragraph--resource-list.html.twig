@@ -6,17 +6,44 @@
  * resources: the referenced Resource nodes the visitor can see, rendered in
  * the guide_item view mode (node--resource--guide-item.html.twig prints each
  * <li>). Built by palefire_preprocess_paragraph__resource_list().
+ *
+ * guides: when every one links to a guide on this site (Related guides),
+ * those guides as the Special Collections homepage draws them, with the
+ * tile showcase's own macros: the page in miniature (or its cover), the
+ * title on it and the "Guide" label under it. .pf-tiles--related keeps
+ * them small and still (_tile-showcase.scss). data-toc-skip: the cards'
+ * h3s aren't listed under "On this page".
  */
 #}
+{% import '@palefire/paragraphs/paragraph--tile-showcase.html.twig' as showcase %}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
-<div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--resources') }}>
+{# Under the block's own h3, the cards are h4s. #}
+{% set card_tag = title ? 'h4' : 'h3' %}
+<div{{ attributes.addClass('pf-guide-block', 'pf-guide-block--resources', guides ? 'pf-guide-block--guides') }}>
   {% if title %}
     <h3 class="pf-guide-block__title">{{ title }}</h3>
   {% endif %}
   {% if content.field_block_intro|render|trim %}
     <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
   {% endif %}
-  {% if resources %}
+  {% if guides %}
+    {{ attach_library('palefire/tile-reveal') }}
+    <div class="pf-tiles pf-tiles--masonry pf-tiles--related" data-toc-skip data-pf-view="grid">
+      <ul class="pf-tiles__list" role="list">
+        {% for tile in guides %}
+          <li class="pf-tiles__item">
+            <a class="pf-tile pf-tile--banner{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+              <span class="pf-tile__media">{{ tile.image ?: showcase.outline(tile) }}</span>
+              <span class="pf-tile__body">
+                <{{ card_tag }} class="pf-tile__title">{{ tile.title }}</{{ card_tag }}>
+                {{ showcase.labels(tile) }}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% elseif resources %}
     <ul class="pf-resources">
       {% for resource in resources %}
         {{ resource }}

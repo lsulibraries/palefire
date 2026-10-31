@@ -348,7 +348,8 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
 // card is mid-screen. Not the List's thumbnails, too small to pan. In a
 // sideways scroller (the narrow stagger) the timeline is inactive and
 // the picture just sits centered. None with reduced motion or the
-// Settings drawer's switch.
+// Settings drawer's switch, nor on a guide's Related guides, where the
+// cards close the page and stay still.
 @keyframes pf-tile-page-scroll {
   from {
     translate: 0 0;
@@ -361,18 +362,18 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tiles__item {
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"], .pf-tiles--related) .pf-tiles__item {
       --pf-banner-pan: 1.5rem;
       view-timeline: --pf-tile-own block;
     }
 
     @container pf-tiles (min-width: 44rem) {
-      html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tiles__item {
+      html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"], .pf-tiles--related) .pf-tiles__item {
         --pf-banner-pan: 3rem;
       }
     }
 
-    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tile:not(.pf-tile--no-image) .pf-tile__media img {
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"], .pf-tiles--related) .pf-tile:not(.pf-tile--no-image) .pf-tile__media img {
       position: absolute;
       top: calc(-1 * var(--pf-banner-pan));
       left: 0;
@@ -382,7 +383,7 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
       animation-range: cover 0% cover 100%;
     }
 
-    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tile--no-image .pf-tile__outline-page {
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"], .pf-tiles--related) .pf-tile--no-image .pf-tile__outline-page {
       animation: pf-tile-page-scroll linear both;
       animation-timeline: --pf-tile-own;
       animation-range: cover 0% cover 100%;
@@ -1061,6 +1062,37 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
         height: calc(var(--pf-unit) * 32 / 3);
       }
     }
+  }
+}
+
+// Related guides at the end of a guide (paragraph--resource-list): the
+// Grid's cards, smaller. Two columns on a phone, as the homepage; four
+// from 36rem (each about a phone card's width), so four never leave one
+// over, and one or two sit at a card's size instead of filling the column. No pan on scroll (above); the hover is the homepage's.
+.pf-tiles--related {
+  margin-top: 0.5rem;
+
+  // A guide's title is its whole name: four lines before it's cut, not
+  // the banners' three.
+  .pf-tile--banner .pf-tile__title {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  .pf-tile--banner.pf-tile--no-image {
+    --pf-scrim-floor: 7.75rem;
+  }
+}
+
+@container pf-tiles (min-width: 36rem) {
+  .pf-tiles--related .pf-tiles__list {
+    --pf-cols: 4;
+  }
+}
+
+@container pf-tiles (min-width: 44rem) {
+  .pf-tiles--related .pf-tiles__list {
+    --pf-gap: 1.25rem;
   }
 }
 
