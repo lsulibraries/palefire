@@ -466,6 +466,19 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
 }
 
+// One line once the cover has room (about 380px of label): the kicker
+// takes its own width, not the title's, which is held narrow so "Special
+// Collections" breaks in two and would otherwise drop the building under
+// the name. Phones keep the wrap.
+@container pf-cover (min-width: 30rem) {
+  .pf-landing--cover .pf-landing__kicker {
+    flex-wrap: nowrap;
+    width: max-content;
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+
 @media (forced-colors: active) {
   .pf-landing__kicker-place::before {
     background-color: CanvasText;

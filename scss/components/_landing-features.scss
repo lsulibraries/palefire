@@ -3231,9 +3231,12 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
-// Beside the intro: the intro and the card share a row under the title
-// and hours, their feet level (a grid, so neither can run into the hours
-// over them).
+// Beside the intro: the title, hours and intro on the left, the card on
+// the right spanning their rows, its foot on the intro's. Spanning, the
+// card's height never opens space between the hours and the intro, as
+// sharing the intro's row did. The title keeps the whole row (from 48rem
+// its own max-width holds it to the left, and its kicker on one line),
+// pinned to the first row so the card can share it.
 @container pf-cover (min-width: 40rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     display: grid;
@@ -3245,13 +3248,21 @@ html[data-pf-hero] .pf-landing--hero {
       grid-column: 1 / -1;
     }
 
-    > .pf-landing__intro {
+    > .pf-landing__title {
+      grid-row: 1;
+    }
+
+    > :is(.pf-landing__hours, .pf-landing__intro) {
       grid-column: 1;
+    }
+
+    > .pf-landing__intro {
       max-width: none;
     }
 
     > .pf-landing__links {
       grid-column: 2;
+      grid-row: 2 / span 2;
       justify-self: end;
       width: min(100%, 24rem);
       margin-top: 0;
@@ -3259,10 +3270,23 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
+// Under 48rem the title runs across the row on one line, so the card
+// starts under it; from 48rem the title keeps to the first half, and the
+// card can rise beside it.
+@container pf-cover (min-width: 48rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__links {
+    grid-row: 1 / span 3;
+  }
+}
+
 // Two banners wide, its end on the Search button's.
 @container pf-cover (min-width: 80rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    > .pf-landing__hours {
+      grid-column: 1 / span 3;
+    }
 
     > .pf-landing__intro {
       grid-column: 1 / span 2;
@@ -3356,18 +3380,20 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
-// Log in filled like the Search button, its hover the same step toward
-// the text color.
+// Log in: unfilled, so the Search button stays the hero's one gold
+// button. It leads Register with a full-strength edge (the control line,
+// 3:1) and its arrow in the accent; hover turns it gold like Register.
 .pf-landing__account-button--primary {
-  border-color: transparent;
-  color: var(--pf-g-on-accent, #{$pf-black});
-  background-color: var(--pf-g-accent, #{$pf-gold});
+  border-color: var(--pf-section-border, currentColor);
+  background-color: transparent;
 
   &:hover,
   &:focus-visible {
-    border-color: transparent;
-    color: var(--pf-g-on-accent, #{$pf-black});
-    background-color: color-mix(in srgb, var(--pf-g-accent, #{$pf-gold}) 85%, var(--pf-g-fg, #{$pf-white}));
+    background-color: transparent;
+  }
+
+  svg {
+    color: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
   }
 }
 
