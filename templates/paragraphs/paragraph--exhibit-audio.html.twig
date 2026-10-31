@@ -7,7 +7,8 @@
  *   clip is labelled by the entry's heading (entry_heading_id) and prints
  *   no heading of its own, so the clip's title isn't said twice.
  * - field_audio_credit: speaker and date, under the title.
- * - audio: ['url', 'type'] or NULL.
+ * - audio: ['url', 'type', 'timings'] or NULL. timings: a WebVTT file of
+ *   the clip's phrases; js/exhibition.js then lights each one as it's heard.
  * - The transcript (required) is a native <details> under the player.
  *
  * The browser's own <audio controls> work without JS; js/exhibition.js
@@ -27,7 +28,7 @@
     <p class="pf-exhibit-audio__credit">{{ credit }}</p>
   {% endif %}
   {% if audio %}
-    <div class="pf-audio" data-pf-audio>
+    <div class="pf-audio" data-pf-audio{% if audio.timings %} data-pf-timings="{{ audio.timings }}"{% endif %}>
       <audio class="pf-audio__native" controls preload="none" aria-labelledby="{{ heading_id }}">
         <source src="{{ audio.url }}" type="{{ audio.type }}">
         <a href="{{ audio.url }}">{{ 'Download the audio'|t }}</a>

@@ -21,7 +21,8 @@
  * - Biographies longer than about ten lines show their opening lines and
  *   a "Read the full biography" button.
  * - Audio: the browser's controls are swapped for a play button, a seek
- *   slider and the time.
+ *   slider and the time. A clip with a WebVTT file lights its transcript
+ *   phrase by phrase as it plays.
  *
  * Without this script every gallery shows, one after another, and image
  * links open the image itself. Reduced motion (the OS setting or Settings
@@ -1722,6 +1723,224 @@
     }
     sync();
     syncLevel();
+    initTimings(wrap, audio);
+  }
+
+  // Timed transcripts: a clip whose player names a WebVTT file
+  // (data-pf-timings, palefire.theme) lights the phrase being heard. Each
+  // cue's text is the transcript's own wording
+  // (scripts/palefire_oral_history_vtt.py), found in the page and wrapped
+  // in a span. Once the clip has played, the rest of the text settles to
+  // the muted color (_exhibition.scss); a click on a phrase plays from it,
+  // and the text follows the voice while the reader is following it.
+  const timings = new Map();
+
+  function vttSeconds(stamp) {
+    return stamp.split(':').reduce((sum, part) => sum * 60 + Number(part), 0);
+  }
+
+  function loadTimings(url) {
+    if (!timings.has(url)) {
+      const entities = { amp: '&', lt: '<', gt: '>', nbsp: ' ' };
+      timings.set(url, fetch(url)
+        .then((response) => (response.ok ? response.text() : ''))
+        .then((text) => text.replace(/\r\n?/g, '\n').split(/\n{2,}/).map((block) => {
+          const lines = block.split('\n');
+          const at = lines.findIndex((line) => line.includes('-->'));
+          if (at < 0) {
+            return null;
+          }
+          const [start, end] = lines[at].split('-->').map((part) => vttSeconds(part.trim().split(/\s/)[0]));
+          const words = lines.slice(at + 1).join(' ')
+            .replace(/<[^>]*>/g, '')
+            .replace(/&(amp|lt|gt|nbsp);/g, (match, name) => entities[name])
+            .trim();
+          return words ? { start, end, words } : null;
+        }).filter(Boolean))
+        .catch(() => []));
+    }
+    return timings.get(url);
+  }
+
+  // Wraps each cue's words in the transcript, in order: [{start, els}]. A
+  // cue whose words aren't found (the text edited since) is left out. The
+  // object view's copy of an entry arrives already wrapped.
+  function phrasesOf(text, cues) {
+    const phrases = cues.map((cue) => ({ start: cue.start, els: [] }));
+    if (!text.querySelector('.pf-phrase')) {
+      const nodes = [];
+      let full = '';
+      const walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        nodes.push({ node: walker.currentNode, at: full.length });
+        full += walker.currentNode.data;
+      }
+      const ranges = [];
+      let from = 0;
+      cues.forEach((cue, index) => {
+        const pattern = new RegExp(cue.words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+'), 'g');
+        pattern.lastIndex = from;
+        const match = pattern.exec(full);
+        if (match) {
+          ranges.push({ index, start: match.index, end: match.index + match[0].length });
+          from = pattern.lastIndex;
+        }
+      });
+      // Last first, so splitting a text node keeps the earlier offsets.
+      ranges.reverse().forEach((range) => {
+        nodes.filter((n) => n.at < range.end && n.at + n.node.data.length > range.start).reverse().forEach((n) => {
+          let piece = n.node;
+          const end = Math.min(range.end - n.at, piece.data.length);
+          const start = Math.max(range.start - n.at, 0);
+          if (end < piece.data.length) {
+            piece.splitText(end);
+          }
+          if (start > 0) {
+            piece = piece.splitText(start);
+          }
+          if (!piece.data.trim()) {
+            return;
+          }
+          const span = document.createElement('span');
+          span.className = 'pf-phrase';
+          span.dataset.pfCue = String(range.index);
+          piece.replaceWith(span);
+          span.append(piece);
+        });
+      });
+    }
+    text.querySelectorAll('.pf-phrase').forEach((span) => {
+      span.classList.remove('is-current');
+      const phrase = phrases[Number(span.dataset.pfCue)];
+      if (phrase) {
+        phrase.els.push(span);
+      }
+    });
+    text.classList.remove('is-following');
+    return phrases;
+  }
+
+  // The nearest box that scrolls the transcript (the object view's panel),
+  // or null: the page.
+  function scrollerOf(el) {
+    for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+      if (/(auto|scroll)/.test(getComputedStyle(parent).overflowY) && parent.scrollHeight > parent.clientHeight) {
+        return parent;
+      }
+    }
+    return null;
+  }
+
+  // reading: wholly within the frame's upper four fifths (eye level, not
+  // the foot of the screen); otherwise any part showing. Below the
+  // object view's pinned player (cover), not behind it.
+  function inView(el, scroller, cover, reading) {
+    const box = el.getBoundingClientRect();
+    if (!box.height) {
+      return false;
+    }
+    const frame = scroller ? scroller.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+    const top = cover && getComputedStyle(cover).position === 'sticky' ? Math.max(frame.top, cover.getBoundingClientRect().bottom) : frame.top;
+    return reading
+      ? box.top >= top && box.bottom <= top + (frame.bottom - top) * 0.8
+      : box.bottom > top && box.top < frame.bottom;
+  }
+
+  function initTimings(wrap, audio) {
+    const url = wrap.dataset.pfTimings;
+    const clip = wrap.closest('.pf-exhibit-audio');
+    const text = clip && clip.querySelector('.pf-exhibit-audio__text');
+    if (!url || !text || !window.IntersectionObserver) {
+      return;
+    }
+    let phrases = null;
+    let current = -1;
+    let following = false;
+    let frame = 0;
+    let ready = null;
+    const load = () => {
+      ready = ready || loadTimings(url).then((cues) => {
+        phrases = cues.length ? phrasesOf(text, cues) : null;
+      });
+      return ready;
+    };
+
+    const light = () => {
+      if (!phrases || !following) {
+        return;
+      }
+      const now = audio.currentTime;
+      let index = -1;
+      phrases.forEach((phrase, i) => {
+        if (phrase.start <= now && phrase.els.length) {
+          index = i;
+        }
+      });
+      if (index === current) {
+        return;
+      }
+      const was = current >= 0 ? phrases[current].els : [];
+      was.forEach((el) => el.classList.remove('is-current'));
+      current = index;
+      if (index < 0) {
+        return;
+      }
+      const els = phrases[index].els;
+      els.forEach((el) => el.classList.add('is-current'));
+      // Follow on only from a phrase the reader could see, so text they
+      // scrolled away to read stays put.
+      const scroller = scrollerOf(text);
+      if (was.length && inView(was[was.length - 1], scroller, wrap, false) && !inView(els[0], scroller, wrap, true)) {
+        els[0].scrollIntoView({ block: 'center', behavior: reduceMotion() ? 'auto' : 'smooth' });
+      }
+    };
+
+    // Per frame while playing: timeupdate comes only about four times a
+    // second, late for a phrase's first word. It still counts where frames
+    // stop (a tab in the background).
+    const tick = () => {
+      light();
+      frame = audio.paused ? 0 : window.requestAnimationFrame(tick);
+    };
+    audio.addEventListener('play', () => {
+      load().then(() => {
+        following = Boolean(phrases);
+        text.classList.toggle('is-following', following);
+        if (!frame) {
+          tick();
+        }
+      });
+    });
+    audio.addEventListener('timeupdate', light);
+    audio.addEventListener('seeked', light);
+    audio.addEventListener('ended', () => {
+      following = false;
+      current = -1;
+      text.classList.remove('is-following');
+      text.querySelectorAll('.is-current').forEach((el) => el.classList.remove('is-current'));
+    });
+
+    // A phrase plays from its start. Mouse only and only once the clip has
+    // played: the seek slider is the keyboard's way, and a click while
+    // selecting text, or on a link, does what it always does.
+    text.addEventListener('click', (event) => {
+      const phrase = event.target.closest('.pf-phrase');
+      if (!following || !phrase || event.target.closest('a') || !window.getSelection().isCollapsed) {
+        return;
+      }
+      audio.currentTime = phrases[Number(phrase.dataset.pfCue)].start;
+      light();
+    });
+
+    // The cues load once the transcript shows (an open <details>, the
+    // object view), not for every clip on the page.
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        load();
+      }
+    }, { rootMargin: '200px' });
+    observer.observe(text);
   }
 
   /* ---------------------------------------------------------------------

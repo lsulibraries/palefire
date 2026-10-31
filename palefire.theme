@@ -1523,6 +1523,10 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
  * - image: its Cover (Media: Image) in publication_cover (480 wide, no
  *   crop), decorative and lazy (_palefire_image_build()), or NULL: the
  *   card then sets a jacket in type.
+ * - depth: its thickness as a share of the cover's width, for the page
+ *   edges (--pf-book-depth): from its Pages (field_pub_pages), about
+ *   0.06mm a page plus 3mm of boards on a 6in (152mm) wide book,
+ *   between 0.06 and 0.3; 300 pages when it has no count.
  */
 function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
   $books = [];
@@ -1557,6 +1561,10 @@ function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata
       $image = _palefire_image_build($item, ['publication_cover'], $cache);
     }
 
+    $pages = ($book->hasField('field_pub_pages') && !$book->get('field_pub_pages')->isEmpty())
+      ? (int) $book->get('field_pub_pages')->value
+      : 300;
+
     $books[] = [
       'title' => $title,
       'subtitle' => $subtitle,
@@ -1564,6 +1572,7 @@ function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata
       'imprint' => $text($book, 'field_pub_imprint'),
       'url' => $url,
       'image' => $image,
+      'depth' => round(min(0.3, max(0.06, ($pages * 0.06 + 3) / 152)), 3),
     ];
   }
   return $books;
@@ -2820,7 +2829,8 @@ function palefire_preprocess_paragraph__exhibit_reading(array &$variables): void
 /**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-audio.
  *
- * audio: ['url', 'type'] of the file, or NULL.
+ * audio: ['url', 'type', 'timings'] of the file, or NULL. timings: the URL
+ * of a WebVTT file of the same name beside it, or NULL.
  * entry_heading_id: inside an entry, the entry heading's id. The clip is
  * labelled by that heading instead of repeating its title as another <h3>.
  */
@@ -2831,9 +2841,14 @@ function palefire_preprocess_paragraph__exhibit_audio(array &$variables): void {
     ? _palefire_exhibit_entry_anchor($parent)
     : NULL;
   $file = $paragraph->get('field_audio_file')->entity;
+  // A WebVTT file beside the clip under the same name (01-helen-bradley.vtt)
+  // times its transcript phrase by phrase (js/exhibition.js lights the
+  // phrase being heard). Uploaded by hand, so a drush cr shows a new one.
+  $timings = $file ? preg_replace('/\.[^.\/]+$/', '.vtt', $file->getFileUri()) : NULL;
   $variables['audio'] = $file ? [
     'url' => \Drupal::service('file_url_generator')->generateString($file->getFileUri()),
     'type' => $file->getMimeType(),
+    'timings' => $timings && file_exists($timings) ? \Drupal::service('file_url_generator')->generateString($timings) : NULL,
   ] : NULL;
   $variables['transcript_id'] = 'pf-audio-transcript-' . $paragraph->id();
 }
