@@ -970,6 +970,48 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
+// Grid on a phone (two columns, under 36rem): the pictures as one mosaic
+// on 2px seams, crisp on a 3x screen and still a seam between two light
+// pictures. The Category caption is for screen readers only (the link
+// still reads "Audubon, Digital Exhibition"; the List shows it). With no
+// gutter to fall in, the shadow goes, and the focus ring moves inside
+// the picture, the gold over a black halo as on the other cards
+// (WCAG 2.4.7, 1.4.11), so it never covers the next card. With an odd
+// count the first card leads, across both columns at a single card's
+// height (--pf-unit), so no cell stands empty.
+@container pf-tiles (width < 36rem) {
+  .pf-tiles--masonry[data-pf-view="grid"] {
+    .pf-tiles__list {
+      --pf-gap: 2px;
+    }
+
+    .pf-tile__media {
+      box-shadow: none;
+    }
+
+    .pf-tile__labels {
+      @include visually-hidden;
+    }
+
+    .pf-tile:focus-visible {
+      outline-offset: -3px;
+
+      .pf-tile__media::after {
+        box-shadow: inset 0 0 0 6px $pf-black;
+      }
+    }
+
+    .pf-tiles__item:first-child:nth-last-child(odd) {
+      grid-column: 1 / -1;
+
+      .pf-tile__media {
+        aspect-ratio: auto;
+        height: calc(var(--pf-unit) * 32 / 3);
+      }
+    }
+  }
+}
+
 // List: the card as a row, in the section's colors.
 .pf-tiles--masonry[data-pf-view="list"] {
   .pf-tiles__list {

@@ -964,6 +964,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Tile showcase Grid on phones: one picture mosaic.** Under 36rem (two columns) the cards sit on 2px seams instead of 10px gutters, and the Category caption under each picture is for screen readers only (the link still reads "Audubon, Digital Exhibition"; the List view still shows it), so the page leads with the pictures. With an odd count the first card spans both columns at one card's height, so no cell stands empty. The drop shadow goes (it would fall on the next card) and the focus ring moves inside the picture, gold over a black halo, so it never covers a neighbour. Wider sections are unchanged. Checked at 320, 375 and 768 on the live Special Collections page: 2px seams, lead card full width, no horizontal scroll.
+
 - **Written at Hill: the shelf no longer scrolls up and down.** Books still waiting to rise in sat 30px low (tile-reveal's grid offset), 10px past the shelf's bottom padding, so the shelf grew a vertical scrollbar and the books could be dragged up and down. Covers now rise 12px, like the index and ledger rows, and the shelf is `overflow-y: hidden`, so it only scrolls sideways. Measured at 1440 and 320: with vertical overflow allowed, nothing overflows at rest or with every book lifted as on hover; the shelf can't be scrolled vertically; it still scrolls sideways, and the page has no horizontal scroll.
 
 - **Written at Hill: the other covers dim further on hover.** From 60% to 35% opacity, so the book in hand clearly stands out. Only the covers dim (decorative); titles, authors and imprints keep their contrast.
