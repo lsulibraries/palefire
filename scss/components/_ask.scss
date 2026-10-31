@@ -5,10 +5,9 @@
 // One column on phones: the FAQs, then the form. From lg, two: the FAQs
 // on the left (7 parts), the form on the right (5), tops aligned. The FAQs are the guides' accordion (_guide.scss) in the
 // section's colors; the form is Swiss and quiet: ruled fields with no
-// boxes, labels in the eyebrows' mono capitals, a solid button. An empty
-// field's rule is the 20% hairline, like every other line on the page, so
-// a filled field's full-strength rule stands out. The label above each
-// field marks it out, and hover, focus and filled rules all reach 3:1.
+// boxes, labels in the eyebrows' mono capitals, a solid button. Field
+// rules are the muted text color at full strength, not the 20% hairline:
+// a control's edge needs 3:1 (WCAG 1.4.11).
 
 .pf-inquiry {
   --pf-inquiry-fg: var(--pf-section-fg, var(--bs-body-color));
@@ -280,7 +279,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   margin: 0;
   padding: .5rem .125rem;
   border: 0;
-  border-bottom: 1px solid $pf-hairline;
+  border-bottom: 1px solid var(--pf-inquiry-muted);
   border-radius: 0;
   color: var(--pf-inquiry-strong);
   background-color: transparent;
@@ -294,14 +293,16 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
     transition-duration: $pf-hover-in;
   }
 
-  // Filled: the rule steps up from the hairline to the headings' color, so what's
-  // done shows at a glance. Not the accent, which stays focus's alone (a filled
-  // field must never look focused, or valid). Text fields know they're
-  // empty by their blank placeholder (placeholder=" ", which reads as
-  // nothing); a menu, by its "Select one" prompt. In :where(), so focus
-  // and errors below always win.
+  // Filled: the rule steps up from muted to the headings' color and
+  // doubles to 2px, so what's done shows at a glance by weight as well as
+  // color (on Twilight, muted and the headings' grey are close). Not the
+  // accent, which stays focus's alone (a filled field must never look
+  // focused, or valid). Text fields know they're empty by their blank
+  // placeholder (placeholder=" ", which reads as nothing); a menu, by its
+  // "Select one" prompt. In :where(), so focus and errors below always win.
   &:where(:not(:placeholder-shown, select), select:not(:has(option[value=""]:checked))) {
     border-bottom-color: var(--pf-inquiry-strong);
+    box-shadow: 0 1px 0 var(--pf-inquiry-strong);
   }
 
   // Focus: no box. The rule turns the accent and thickens to 3px, and the
@@ -326,7 +327,8 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   &:autofill {
     -webkit-text-fill-color: var(--pf-inquiry-strong);
     caret-color: var(--pf-inquiry-strong);
-    box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+    // Autofilled is filled: the 2px rule rides along.
+    box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))), 0 1px 0 var(--pf-inquiry-strong);
 
     &:focus {
       box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))), 0 2px 0 var(--pf-inquiry-accent);
