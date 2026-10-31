@@ -2556,19 +2556,21 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
 }
 
 /**
- * A wall gallery's tiles: one per published entry with an image.
+ * A wall gallery's tiles: one per published entry with an image or a clip.
  *
  * Each tile is the entry's first image, or its first two when they share an
  * image group (a drawing and its proof, compared in the object view). A
  * group of three or more is a manuscript's pages, turned in the object
- * view: its first two show (the second on hover), tagged "4 pages".
+ * view: its first two show (the second on hover), tagged "4 pages". A clip
+ * with no image is drawn as a reel in its box (exhibit-reel.html.twig).
  *
  * @return array{tiles: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
  *   audio clip's speaker, or "4 pages"), 'audio' (the entry has a clip),
+ *   'year' (the clip's year, from the end of its credit, or NULL),
  *   'pages' (a manuscript's page count, or 0), 'ratio',
- *   'images' (_palefire_exhibit_image() values)]. sortable: two or more
+ *   'images' (_palefire_exhibit_image() values; none for a reel)]. sortable: two or more
  *   tiles have a plate number. sheets: this page's sheet sizes, ['label',
  *   'h', 'w', 'current'] each, when this gallery has one. stats: the
  *   opening's facts ("22 entries" or "7 clips", "Plates 2–154", "11
@@ -2591,10 +2593,14 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     $figures = [];
     $caption = '';
     $speaker = NULL;
+    $year = NULL;
     $pages = 0;
     foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
       if ($speaker === NULL && $block->bundle() === 'exhibit_audio' && $block->isPublished()) {
-        $speaker = trim((string) preg_replace('/,?\s*interviewed\b.*$/i', '', (string) $block->get('field_audio_credit')->value));
+        $credit = trim((string) $block->get('field_audio_credit')->value);
+        $speaker = trim((string) preg_replace('/,?\s*interviewed\b.*$/i', '', $credit));
+        // "…, interviewed by Doug Mungin, 2015": the year that ends it.
+        $year = preg_match('/\b(1[89]\d\d|20\d\d)\W*$/', $credit, $m) ? $m[1] : NULL;
       }
     }
     foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
@@ -2621,19 +2627,21 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
         $images[] = $image;
       }
     }
-    if (!$images) {
+    // No image and no clip: nothing to hang.
+    if (!$images && $speaker === NULL) {
       continue;
     }
     $tags = count($figures) === 2 ? array_filter(array_map(fn ($f) => $text($f->get('field_figure_caption')), $figures)) : [];
-    $first = $images[0];
+    $first = $images[0] ?? NULL;
     $tiles[] = [
       'anchor' => _palefire_exhibit_entry_anchor($entry),
       'title' => trim((string) $entry->get('field_block_title')->value),
       'plate' => preg_match('/\bplate\s+(\d+)/i', $caption, $m) ? (int) $m[1] : NULL,
       'tag' => $pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) $speaker),
       'audio' => $speaker !== NULL,
+      'year' => $year,
       'pages' => $pages,
-      'ratio' => $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
+      'ratio' => $first && $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
       'images' => $images,
     ];
   }

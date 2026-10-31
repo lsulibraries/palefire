@@ -2794,18 +2794,19 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     }
   }
 
-  // The title at the hero size, wider than the text's column where it
-  // needs to be (still within the wash's dense half from lg).
+  // The title at the hero size, held to the text's column (above), so it
+  // squares with the facts and the intro under it. From lg that column is
+  // at most 36rem, so the size is held by the screen's width too (6.5vw,
+  // 104px at most): the longest single word ("Integration") still fits.
   > .pf-section__title {
     grid-row: 2;
-    max-width: min(18ch, 100%);
     margin-bottom: 0.85rem;
     font-size: $pf-hero-title-size;
     letter-spacing: -0.035em;
     line-height: 0.95;
 
     @include media-breakpoint-up(lg) {
-      max-width: min(18ch, 58%);
+      font-size: clamp(2.5rem, min(1rem + 9vmin, 6.5vw), 6.5rem);
     }
   }
 
@@ -2922,9 +2923,12 @@ $pf-brief-clear: 90%;
     // clear; it settles back down as the text opens. Slow and eased at both
     // ends, so it follows the text (0.5s) rather than arriving with it. Only
     // when the reader opens or closes the text (.is-wash-live), so a short
-    // opening arrives already lifted.
+    // opening arrives already lifted. Solid behind the text column (its
+    // words end at about 40% of the image on wide screens, 47% at lg) and
+    // gone by 74%: it ran to 94%, which muddied a pale image (Audubon's
+    // drawings on parchment) nearly to its right edge.
     @include media-breakpoint-up(lg) {
-      background: pf-eased-wash(to right, 38%, 94%);
+      background: pf-eased-wash(to right, 42%, 74%);
       -webkit-mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
       mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
 
@@ -3598,6 +3602,140 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   min-width: 0;
   white-space: normal;
   overflow-wrap: anywhere;
+}
+
+// A clip with no picture (exhibit-reel.html.twig): a reel in its box, drawn
+// in 1px lines of the swatch's text color at one opacity per part (the
+// box's edge 60%, the reel 100%, its tape 35% and 20%). The box is 82% the
+// swatch's color, so the reel shows faintly through it. The pair stands in
+// the tile's square frame, 1.5 boxes wide; on hover or focus the box steps
+// left and the reel rolls out to the right, turning. On the object view's
+// stage it is out, and turns while the clip plays. Reduced motion: it
+// steps out without sliding and never turns.
+.pf-exhibit-wall__tile--reel .pf-exhibit-wall__link .pf-exhibit-wall__frame {
+  background: none;
+  box-shadow: none;
+}
+
+.pf-exhibit-reel {
+  --pf-reel-out: 0;
+  position: absolute;
+  inset: 0;
+  color: var(--pf-g-fg, var(--bs-body-color));
+
+  .pf-exhibit-wall__link:is(:hover, :focus-visible) &,
+  .pf-viewer & {
+    --pf-reel-out: 1;
+  }
+}
+
+.pf-exhibit-reel__reel,
+.pf-exhibit-reel__box {
+  position: absolute;
+  bottom: 0;
+  left: calc(100% / 6);
+  width: calc(100% / 1.5);
+  aspect-ratio: 1;
+
+  @include pf-exhibit-motion {
+    transition: translate .8s $pf-exhibit-ease;
+  }
+}
+
+.pf-exhibit-reel__reel {
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  translate: calc(var(--pf-reel-out) * 26%) 0;
+
+  circle {
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @include pf-exhibit-motion {
+    animation: pf-reel-turn 6s linear infinite paused;
+  }
+
+  // Only turns where the motion rule above gives it an animation.
+  .pf-exhibit-wall__link:is(:hover, :focus-visible) &,
+  .pf-viewer:has(.pf-audio.is-playing) & {
+    animation-play-state: running;
+  }
+}
+
+.pf-exhibit-reel__pack {
+  stroke-opacity: 0.35;
+}
+
+.pf-exhibit-reel__pack--inner {
+  stroke-opacity: 0.2;
+}
+
+@keyframes pf-reel-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.pf-exhibit-reel__box {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // Square however long the title: its overflow clips (min-height 0).
+  overflow: hidden;
+  padding: 6%;
+  background: color-mix(in srgb, var(--pf-g-bg, var(--bs-body-bg)) 82%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 60%, transparent);
+  translate: calc(var(--pf-reel-out) * -22%) 0;
+}
+
+// "AUDIO ONLY" and the year, on a hairline: one line even in a phone's
+// 6rem box.
+.pf-exhibit-reel__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding-bottom: 5cqi;
+  font: clamp(0.5rem, 6cqi, 0.75rem)/1.4 var(--pf-exhibit-mono);
+  letter-spacing: clamp(0.04em, 1cqi, 0.12em);
+  white-space: nowrap;
+
+  @container (max-width: 6rem) {
+    letter-spacing: 0.02em;
+  }
+  text-transform: uppercase;
+  color: var(--pf-exhibit-muted);
+  border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+
+.pf-exhibit-reel__title {
+  display: -webkit-box;
+  overflow: hidden;
+  font: 500 clamp(0.8125rem, 10.5cqi, 1.5rem)/1.15 $pf-font-display-serif;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+
+  @container (min-width: 9rem) {
+    -webkit-line-clamp: 4;
+  }
+}
+
+// On the stage: the pair alone (1.5 boxes wide, a box high), as large as
+// fits, centred.
+.pf-viewer__frame--reel {
+  container-type: size;
+
+  .pf-exhibit-reel {
+    position: relative;
+    inset: auto;
+    width: min(100cqw, 150cqh, 36rem);
+    aspect-ratio: 1.5;
+  }
 }
 
 // Object view ------------------------------------------------------------------

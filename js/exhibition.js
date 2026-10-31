@@ -1248,6 +1248,13 @@
       frame.append(img);
       view.media.replaceChildren(frame);
     }
+    else if (tile.querySelector('.pf-exhibit-reel')) {
+      // A clip with no picture: its tile's reel, out of its box, turning
+      // while the clip plays (_exhibition.scss).
+      frame.classList.add('pf-viewer__frame--reel');
+      frame.append(tile.querySelector('.pf-exhibit-reel').cloneNode(true));
+      view.media.replaceChildren(frame);
+    }
     else {
       view.media.replaceChildren();
     }

@@ -206,20 +206,25 @@
         <ul class="pf-exhibit-wall__list">
           {% for tile in wall.tiles %}
             {% set image = tile.images|first %}
-            <li class="pf-exhibit-wall__tile" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+            <li class="pf-exhibit-wall__tile{{ not image ? ' pf-exhibit-wall__tile--reel' }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
               <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
                 <span class="pf-exhibit-wall__frame">
-                  <img class="pf-exhibit-wall__img" src="{{ image.src }}"
-                       {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
-                       {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
-                       alt="{{ image.alt }}" loading="lazy" decoding="async">
-                  {% if tile.images|length > 1 %}
-                    {% set second = tile.images|last %}
-                    {# The proof crossfades in on hover; the entry is described by the first. #}
-                    <img class="pf-exhibit-wall__img pf-exhibit-wall__img--second" src="{{ second.src }}"
-                         {% if second.srcset %}srcset="{{ second.srcset }}" sizes="{{ second.sizes }}"{% endif %}
-                         alt="" loading="lazy" decoding="async" aria-hidden="true">
+                  {% if not image %}
+                    {# A clip with no picture. #}
+                    {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year } only %}
+                  {% else %}
+                    <img class="pf-exhibit-wall__img" src="{{ image.src }}"
+                         {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
+                         {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
+                         alt="{{ image.alt }}" loading="lazy" decoding="async">
+                    {% if tile.images|length > 1 %}
+                      {% set second = tile.images|last %}
+                      {# The proof crossfades in on hover; the entry is described by the first. #}
+                      <img class="pf-exhibit-wall__img pf-exhibit-wall__img--second" src="{{ second.src }}"
+                           {% if second.srcset %}srcset="{{ second.srcset }}" sizes="{{ second.sizes }}"{% endif %}
+                           alt="" loading="lazy" decoding="async" aria-hidden="true">
+                    {% endif %}
                   {% endif %}
                 </span>
                 <span class="pf-exhibit-wall__label">
