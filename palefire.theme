@@ -1032,6 +1032,8 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
       'cta' => $link ? ($link->title ?: ($access === 'appointment' ? t('Request an appointment') : t('Plan your visit'))) : '',
       'tip' => $uid . '-' . Html::cleanCssIdentifier($space_key) . '-tip',
       'body' => $text($pick('field_space_body', $term, $override, 'description')),
+      // Optional words after the access line, e.g. "Now showing".
+      'note' => $term->hasField('field_space_note') ? trim((string) $term->get('field_space_note')->value) : '',
     ];
   }
   // Floor 1 before Floor 2; within a floor, the buildings.yml order.

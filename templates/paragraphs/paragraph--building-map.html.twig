@@ -94,7 +94,7 @@
       <div class="pf-map__tip-body">
         <div class="pf-map__tip-head">
           <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
-          <p class="pf-map__tip-eyebrow">{{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}</p>
+          <p class="pf-map__tip-eyebrow">{{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}{% if s.note %} &middot; {{ s.note }}{% endif %}</p>
           {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
         </div>
         <strong class="pf-map__tip-title">{{ s.title }}</strong>

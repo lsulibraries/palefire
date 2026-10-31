@@ -16,6 +16,10 @@
  *     description         tooltip text
  *     field_space_access  walk_in | appointment
  *     field_space_link    optional: the room links here
+ *     field_space_note    optional: a short note after the access line in
+ *                         the tooltip, e.g. "Now showing"
+ *     field_space_image   optional: a photo of the room (image style
+ *                         pf_map_room, 960x640 WebP)
  *     Published           unpublish to draw the room as plain floor
  *   Terms are created from buildings.yml; existing terms are never overwritten.
  *
@@ -42,6 +46,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\paragraphs\Entity\ParagraphsType;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\Entity\Vocabulary;
@@ -52,7 +57,7 @@ if (PHP_SAPI !== 'cli') {
 $cleanup = in_array('cleanup', $extra ?? [], TRUE);
 
 $installer = \Drupal::service('module_installer');
-foreach (['taxonomy', 'paragraphs', 'entity_reference_revisions', 'options', 'text', 'link'] as $module) {
+foreach (['taxonomy', 'paragraphs', 'entity_reference_revisions', 'options', 'text', 'link', 'image'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     $installer->install([$module]);
     echo "Enabled $module\n";
@@ -189,6 +194,41 @@ $field('taxonomy_term', 'building_space', 'field_space_link', 'Link', [
   'description' => 'Rooms only, optional. Clicking the room or its list entry goes here (e.g. the appointment request form). The link text becomes the hint at the bottom of the tooltip; leave it empty for "Request an appointment" / "Plan your visit".',
 ]);
 
+$storage('taxonomy_term', 'field_space_note', 'string', ['max_length' => 40]);
+$storage('taxonomy_term', 'field_space_image', 'image', ['uri_scheme' => 'public', 'target_type' => 'file']);
+$field('taxonomy_term', 'building_space', 'field_space_note', 'Tooltip note', [
+  'description' => 'Rooms only, optional. A few words after the access line at the top of the tooltip, e.g. "Now showing" for a gallery with an exhibition up. Clear it when it no longer applies.',
+]);
+$field('taxonomy_term', 'building_space', 'field_space_image', 'Photo', [
+  'settings' => [
+    'file_directory' => 'building-spaces',
+    'file_extensions' => 'png jpg jpeg webp',
+    'max_filesize' => '10 MB',
+    'min_resolution' => '960x640',
+    'alt_field' => TRUE,
+    'alt_field_required' => FALSE,
+    'title_field' => FALSE,
+  ],
+  'description' => 'Rooms only, optional. A wide (3:2), evenly lit photo of the room without people, at least 960 x 640 pixels; it is cropped to 3:2. Shown in black and white at the top of the tooltip. Alt text can stay empty: the tooltip already names and describes the room.',
+]);
+
+// The tooltip's photo: 3:2 at twice the tooltip's 480px, as WebP.
+if (!ImageStyle::load('pf_map_room')) {
+  $style = ImageStyle::create(['name' => 'pf_map_room', 'label' => 'Building map room (960x640)']);
+  $style->addImageEffect([
+    'id' => 'image_scale_and_crop',
+    'weight' => 0,
+    'data' => ['width' => 960, 'height' => 640, 'anchor' => 'center-center'],
+  ]);
+  $style->addImageEffect([
+    'id' => 'image_convert',
+    'weight' => 1,
+    'data' => ['extension' => 'webp'],
+  ]);
+  $style->save();
+  echo "Created image style pf_map_room\n";
+}
+
 // Relabel the term description for this vocabulary.
 $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('taxonomy_term', 'building_space');
 $desc_label = 'Tooltip text / intro';
@@ -204,8 +244,16 @@ $repo->getFormDisplay('taxonomy_term', 'building_space', 'default')
   ->setComponent('description', ['type' => 'text_textarea', 'weight' => 1, 'settings' => ['rows' => 3]])
   ->setComponent('field_space_access', ['type' => 'options_buttons', 'weight' => 2])
   ->setComponent('field_space_link', ['type' => 'link_default', 'weight' => 3])
+  ->setComponent('field_space_note', ['type' => 'string_textfield', 'weight' => 4, 'settings' => ['size' => 40, 'placeholder' => 'Now showing']])
+  ->setComponent('field_space_image', ['type' => 'image_image', 'weight' => 5, 'settings' => ['preview_image_style' => 'thumbnail', 'progress_indicator' => 'throbber']])
   ->removeComponent('field_map_key')
   ->save();
+// The theme prints the note and photo from the preprocess, not the display.
+$term_view = $repo->getViewDisplay('taxonomy_term', 'building_space', 'default');
+foreach (['field_space_note', 'field_space_image'] as $name) {
+  $term_view->removeComponent($name);
+}
+$term_view->save();
 
 // Sync terms from buildings.yml (create missing; never overwrite).
 $find = function (string $map_key): ?Term {
