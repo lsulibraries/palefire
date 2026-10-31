@@ -5,9 +5,10 @@
 // One column on phones: the FAQs, then the form. From lg, two: the FAQs
 // on the left (7 parts), the form on the right (5), tops aligned. The FAQs are the guides' accordion (_guide.scss) in the
 // section's colors; the form is Swiss and quiet: ruled fields with no
-// boxes, labels in the eyebrows' mono capitals, a solid button. Field
-// rules are the muted text color at full strength, not the 20% hairline:
-// a control's edge needs 3:1 (WCAG 1.4.11).
+// boxes, labels in the eyebrows' mono capitals, a solid button. An empty
+// field's rule is the 20% hairline, like every other line on the page, so
+// a filled field's full-strength rule stands out. The label above each
+// field marks it out, and hover, focus and filled rules all reach 3:1.
 
 .pf-inquiry {
   --pf-inquiry-fg: var(--pf-section-fg, var(--bs-body-color));
@@ -279,7 +280,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   margin: 0;
   padding: .5rem .125rem;
   border: 0;
-  border-bottom: 1px solid var(--pf-inquiry-muted);
+  border-bottom: 1px solid $pf-hairline;
   border-radius: 0;
   color: var(--pf-inquiry-strong);
   background-color: transparent;
@@ -293,7 +294,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
     transition-duration: $pf-hover-in;
   }
 
-  // Filled: the rule steps up from muted to the headings' color, so what's
+  // Filled: the rule steps up from the hairline to the headings' color, so what's
   // done shows at a glance. Not the accent, which stays focus's alone (a filled
   // field must never look focused, or valid). Text fields know they're
   // empty by their blank placeholder (placeholder=" ", which reads as
