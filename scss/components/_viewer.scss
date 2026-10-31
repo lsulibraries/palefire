@@ -338,6 +338,12 @@ html.pf-viewer-open {
   backdrop-filter: var(--pf-glass-filter, blur(26px));
   border-bottom: 1px solid transparent;
 
+  // From lg, Close sits in the panel's corner, as far in from its right
+  // edge as the stage's tools are from theirs (.pf-viewer__tools).
+  @include media-breakpoint-up(lg) {
+    padding-right: .75rem;
+  }
+
   // Above the panel's rise-in (.pf-viewer__panel > *), which this row does
   // without: it is the way out, there from the start.
   @supports (animation-timeline: scroll()) {

@@ -966,6 +966,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Object view: Close in the panel's corner.** From lg, the panel's Close button now sits .75rem in from the panel's right edge (was 2.25rem, the text's margin), matching the stage's zoom and sidebar buttons, which sit .75rem in from the stage's edge. The count stays on the text's left margin. Phones are unchanged (Close is on the stage there).
+
 - **Oral history view: the pinned title adds the credit and runs as a marquee.** The small mono title over the pinned player now reads "Title · Credit" (e.g. "Lillian Washington, interviewed by Chelsea Arseneault"), taken from the clip's `.pf-exhibit-audio__credit`, so you know who is speaking once the credit has scrolled away. Like an old music player's display, it scrolls left in a seamless loop (two copies on one track, a quarter second per character, fading out across the side gutters), only while the clip plays, so Pause stops it (WCAG 2.2.2). With reduced motion or the Settings drawer's switch it stays still, cut with an ellipsis. Still decorative (`aria-hidden`).
 
 - **Building map: room names rise a few px on hover, not a jump.** `_landing-hero.scss` reused `--pf-map-lift` for the hero drawing's upward offset (about 3rem + 3cqi), so on the Special Collections landing a hovered name rose about 20px and could run off the drawing's top edge. The hero offset is now its own `--pf-map-stage-pull`, and the name's rise drops from 28 to 12 map units (`--pf-map-lift`, about 3px). Measured on the live page at 1440px: Seminar Space's name now rises 3.6px (was 19.9px), with the stage offset unchanged at −65.6px.
