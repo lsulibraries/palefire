@@ -37,6 +37,99 @@ html.is-animating .pf-swup > * {
   }
 }
 
+// Loading mark (js/palefire-swup.js): while a visit's content is faded out
+// and the next page is still on its way, the LSU mark is drawn in the middle
+// of the window, under the header's loading line. Hidden until .4s in, so a
+// prefetched visit never shows it. Each loop: the letters trace in a soft
+// line in the text color, warm into gold, then the mark fades away and
+// draws again. Leaves with a quick fade as the new page fades in. Never
+// with reduced motion: the content doesn't fade then, and the line breathes.
+.pf-loading-mark {
+  position: fixed;
+  inset: var(--pf-header-h) 0 0;
+  z-index: 2; // over #swup's curtain (_footer.scss), under the header
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+
+  > svg {
+    width: clamp(6.5rem, 22vw, 9.5rem);
+    height: auto;
+    overflow: visible;
+  }
+
+  :is(path, polygon) {
+    fill: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    fill-opacity: 0;
+    stroke: currentColor;
+    stroke-opacity: .55;
+    stroke-width: 1px;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.is-changing.pf-is-loading:not(.pf-a11y-motion) .pf-loading-mark {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .4s ease .4s, visibility 0s linear .4s;
+
+    > svg {
+      animation: pf-mark-cycle 3.2s linear .4s infinite;
+    }
+
+    :is(path, polygon) {
+      animation: pf-mark-trace 3.2s linear .4s infinite;
+    }
+  }
+}
+
+@keyframes pf-mark-cycle {
+  0%,
+  84% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-mark-trace {
+  0% {
+    stroke-dashoffset: 1;
+    animation-timing-function: cubic-bezier(.45, 0, .2, 1);
+  }
+
+  56% {
+    stroke: currentColor;
+    stroke-opacity: .55;
+    stroke-dashoffset: 0;
+    fill-opacity: 0;
+    animation-timing-function: ease-in-out;
+  }
+
+  76%,
+  100% {
+    stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    stroke-opacity: 1;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-loading-mark :is(path, polygon) {
+    fill: CanvasText;
+    stroke: CanvasText;
+  }
+}
+
 // Reduced motion: the JS skips the animation; this is a belt-and-braces
 // fallback so nothing is ever left faded out.
 @media (prefers-reduced-motion: reduce) {

@@ -28,7 +28,9 @@
  * - Loading line: a thin line under the header (.pf-loading, _header.scss)
  *   while the next page loads, a Swup visit or a normal one (a link Swup
  *   skips). It shows only after 300ms, so a quick visit never flashes it;
- *   after a second screen readers hear "Loading…". Cleared when a page is
+ *   after a second screen readers hear "Loading…". During a Swup visit the
+ *   LSU mark is also traced in the middle of the faded-out page
+ *   (.pf-loading-mark, _swup.scss). Cleared when a page is
  *   shown again from the back/forward cache.
  *
  * Swup is only enabled for anonymous visitors (page.html.twig attaches this
@@ -108,6 +110,27 @@
     line.setAttribute('aria-hidden', 'true');
     line.append(document.createElement('span'));
     header.append(line);
+  };
+
+  // The LSU mark, traced in the middle of the window while a Swup visit's
+  // content is faded out (base/_swup.scss). Once, outside #swup. Decorative:
+  // the line above and the "Loading…" announcement carry the meaning.
+  // pathLength="1" lets the CSS draw each letter without measuring it.
+  const MARK_SHAPES = [
+    '<polygon points="56,129.8 146.2,129.8 146.2,162.7 0,162.7 0,0 56,0"/>',
+    '<path d="M208.3,0h125.9v33.2h-99.3c-10.4,0-18.9,6.3-18.9,14v17.5h118.2v61.8c0,19.9-21.9,36.2-48.9,36.2H159.6v-33.2h99.1c10.6,0,19.1-6.3,19.1-14V97.8H159.6V36.2C159.6,16.3,181.5,0,208.3,0"/>',
+    '<path d="M466.9,0h56.2v126.5c0,19.9-21.9,36.2-48.7,36.2H349V0.4h55.8v129.4h43c10.6,0,19.1-6.3,19.1-14.2V0z"/>',
+  ];
+
+  const addMark = () => {
+    if (document.querySelector('.pf-loading-mark')) {
+      return;
+    }
+    const mark = document.createElement('div');
+    mark.className = 'pf-loading-mark';
+    mark.setAttribute('aria-hidden', 'true');
+    mark.innerHTML = `<svg viewBox="-1 -1 526 165" width="524" height="163" focusable="false">${MARK_SHAPES.map((shape) => shape.replace('/>', ' pathLength="1"/>')).join('')}</svg>`;
+    document.body.append(mark);
   };
 
   // Head elements replaced on every visit (the title is handled by Swup).
@@ -631,6 +654,7 @@
     attach() {
       once('pf-loading', 'html').forEach(() => {
         addLine();
+        addMark();
         document.addEventListener('click', onLeave);
         // Back/forward cache: the page comes back as it was left, line on.
         window.addEventListener('pageshow', (event) => {
