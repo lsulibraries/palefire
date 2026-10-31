@@ -18,8 +18,10 @@
  *     field_space_link    optional: the room links here
  *     field_space_note    optional: a short note after the access line in
  *                         the tooltip, e.g. "Now showing"
- *     field_space_image   optional: a photo of the room (image style
- *                         pf_map_room, 960x640 WebP)
+ *     field_space_media   optional: a photo of the room, an Image media
+ *                         item (shown in image style pf_map_room, 960x640
+ *                         WebP). Replaces the first version's plain image
+ *                         field_space_image, deleted once no room uses it.
  *     Published           unpublish to draw the room as plain floor
  *   Terms are created from buildings.yml; existing terms are never overwritten.
  *
@@ -57,7 +59,7 @@ if (PHP_SAPI !== 'cli') {
 $cleanup = in_array('cleanup', $extra ?? [], TRUE);
 
 $installer = \Drupal::service('module_installer');
-foreach (['taxonomy', 'paragraphs', 'entity_reference_revisions', 'options', 'text', 'link', 'image'] as $module) {
+foreach (['taxonomy', 'paragraphs', 'entity_reference_revisions', 'options', 'text', 'link', 'image', 'media'] as $module) {
   if (!\Drupal::moduleHandler()->moduleExists($module)) {
     $installer->install([$module]);
     echo "Enabled $module\n";
@@ -195,22 +197,53 @@ $field('taxonomy_term', 'building_space', 'field_space_link', 'Link', [
 ]);
 
 $storage('taxonomy_term', 'field_space_note', 'string', ['max_length' => 40]);
-$storage('taxonomy_term', 'field_space_image', 'image', ['uri_scheme' => 'public', 'target_type' => 'file']);
 $field('taxonomy_term', 'building_space', 'field_space_note', 'Tooltip note', [
   'description' => 'Rooms only, optional. A few words after the access line at the top of the tooltip, e.g. "Now showing" for a gallery with an exhibition up. Clear it when it no longer applies.',
 ]);
-$field('taxonomy_term', 'building_space', 'field_space_image', 'Photo', [
-  'settings' => [
-    'file_directory' => 'building-spaces',
-    'file_extensions' => 'png jpg jpeg webp',
-    'max_filesize' => '10 MB',
-    'min_resolution' => '960x640',
-    'alt_field' => TRUE,
-    'alt_field_required' => FALSE,
-    'title_field' => FALSE,
-  ],
-  'description' => 'Rooms only, optional. A wide (3:2), evenly lit photo of the room without people, at least 960 x 640 pixels; it is cropped to 3:2. Shown in black and white at the top of the tooltip. Alt text can stay empty: the tooltip already names and describes the room.',
-]);
+
+// The room's photo: an Image media item from the library, as the rest of
+// Modular (palefire_exhibit_setup.php), so a photo is uploaded once, with
+// its alt text and credit, and can be reused.
+$image_types = [];
+foreach (\Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple() as $media_type) {
+  if ($media_type->getSource()->getPluginId() === 'image') {
+    $image_types[$media_type->id()] = $media_type->id();
+  }
+}
+// Prefer the core "image" type when there are several.
+if (isset($image_types['image'])) {
+  $image_types = ['image' => 'image'];
+}
+$media_widget = \Drupal::moduleHandler()->moduleExists('media_library')
+  ? ['type' => 'media_library_widget', 'weight' => 5, 'settings' => ['media_types' => array_values($image_types)]]
+  : ['type' => 'entity_reference_autocomplete', 'weight' => 5, 'settings' => ['match_operator' => 'CONTAINS', 'size' => 60, 'placeholder' => '']];
+if ($image_types) {
+  $storage('taxonomy_term', 'field_space_media', 'entity_reference', ['target_type' => 'media']);
+  $field('taxonomy_term', 'building_space', 'field_space_media', 'Photo', [
+    'settings' => ['handler' => 'default:media', 'handler_settings' => ['target_bundles' => $image_types, 'auto_create' => FALSE]],
+    'description' => 'Rooms only, optional. A wide, evenly lit photo of the room without people, at least 960 x 640 pixels. The tooltip shows a 2:1 strip from its middle, in black and white at first.',
+  ]);
+}
+else {
+  echo "No Image media type found (Structure > Media types, source \"Image\"): room photos skipped. Add one and re-run.\n";
+}
+
+// The first version's plain image field: removed while no room uses it.
+if ($old_photo = FieldConfig::loadByName('taxonomy_term', 'building_space', 'field_space_image')) {
+  $used = \Drupal::entityQuery('taxonomy_term')
+    ->accessCheck(FALSE)
+    ->condition('vid', 'building_space')
+    ->exists('field_space_image')
+    ->execute();
+  if (!$used) {
+    $old_photo->delete();
+    echo "Deleted the unused image field field_space_image (now field_space_media)\n";
+  }
+  else {
+    $names = array_map(fn (Term $term) => '"' . $term->label() . '"', Term::loadMultiple($used));
+    echo 'field_space_image still holds photos for ' . implode(', ', $names) . ": add them to the Media library, pick them in Photo, then re-run to delete the old field.\n";
+  }
+}
 
 // The tooltip's photo: 3:2 at twice the tooltip's 480px, as WebP.
 if (!ImageStyle::load('pf_map_room')) {
@@ -239,18 +272,20 @@ if ($override->getLabel() !== $desc_label || $override->getDescription() !== $de
   echo "Relabelled term description\n";
 }
 
-$repo->getFormDisplay('taxonomy_term', 'building_space', 'default')
+$term_form = $repo->getFormDisplay('taxonomy_term', 'building_space', 'default')
   ->setComponent('name', ['type' => 'string_textfield', 'weight' => 0])
   ->setComponent('description', ['type' => 'text_textarea', 'weight' => 1, 'settings' => ['rows' => 3]])
   ->setComponent('field_space_access', ['type' => 'options_buttons', 'weight' => 2])
   ->setComponent('field_space_link', ['type' => 'link_default', 'weight' => 3])
   ->setComponent('field_space_note', ['type' => 'string_textfield', 'weight' => 4, 'settings' => ['size' => 40, 'placeholder' => 'Now showing']])
-  ->setComponent('field_space_image', ['type' => 'image_image', 'weight' => 5, 'settings' => ['preview_image_style' => 'thumbnail', 'progress_indicator' => 'throbber']])
-  ->removeComponent('field_map_key')
-  ->save();
+  ->removeComponent('field_map_key');
+if ($image_types) {
+  $term_form->setComponent('field_space_media', $media_widget);
+}
+$term_form->save();
 // The theme prints the note and photo from the preprocess, not the display.
 $term_view = $repo->getViewDisplay('taxonomy_term', 'building_space', 'default');
-foreach (['field_space_note', 'field_space_image'] as $name) {
+foreach (['field_space_note', 'field_space_media'] as $name) {
   $term_view->removeComponent($name);
 }
 $term_view->save();

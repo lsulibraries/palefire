@@ -1019,7 +1019,9 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     $cache->addCacheableDependency($photo_style);
   }
   $photo = static function ($term) use ($photo_style, $cache): ?array {
-    $item = $photo_style && $term->hasField('field_space_image') ? $term->get('field_space_image')->first() : NULL;
+    // An Image media item from the library, as the rest of Modular.
+    $ref = $photo_style && $term->hasField('field_space_media') ? $term->get('field_space_media')->first() : NULL;
+    $item = $ref ? _palefire_media_image_item($ref, $cache) : NULL;
     $file = $item?->entity;
     if (!$file instanceof FileInterface) {
       return NULL;
