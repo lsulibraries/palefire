@@ -1452,6 +1452,43 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 }
 
+// Two by two (under 44rem), as the tile showcase's Grid on a phone
+// (_tile-showcase.scss): the pictures as one mosaic on 2px seams, the
+// category for screen readers only (the link still starts with it). The
+// blog line keeps its room above them. With no gutter to fall in, the
+// focus ring moves inside the picture, gold over a black halo, on a
+// layer over the title (the link's ::after, free in the caption layout),
+// so it never covers the next banner (WCAG 2.4.7, 1.4.11).
+@container pf-cover (max-width: 43.98rem) {
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-hero-banners {
+    gap: 2px;
+  }
+
+  .pf-hero-banner--blog {
+    margin-bottom: .875rem;
+  }
+
+  .pf-hero-banners > .pf-hero-banner:not(.pf-hero-banner--blog) {
+    .pf-hero-banner__label {
+      @include visually-hidden;
+    }
+
+    .pf-hero-banner__link:focus-visible {
+      outline: none;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        box-shadow: inset 0 0 0 2px var(--pf-g-highlight, #{$pf-gold}), inset 0 0 0 4px $pf-black;
+        background: none;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
 // once, each banner fades up into place, left to right, 120ms apart. CSS
 // only, so it runs with

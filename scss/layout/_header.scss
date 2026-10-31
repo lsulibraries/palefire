@@ -628,10 +628,13 @@
 
       // As specific as the tooltip's hover rule (and later), so hover and
       // focus leave the word as it is; outline: the high-contrast setting
-      // frames the tooltip (_a11y-settings.scss).
+      // frames the tooltip (_a11y-settings.scss). z-index: auto, as the
+      // word is a flex item: the tooltip's z-index still applies to a
+      // static flex item, and lifted the word over the open drawer.
       @media (min-width: 25rem) {
         &.pf-utility-nav__link .pf-utility-nav__label {
           position: static;
+          z-index: auto;
           width: auto;
           height: auto;
           margin: 0;
