@@ -1098,6 +1098,12 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     'spaces' => $spaces,
     'here' => $here,
     'legend' => array_values((array) ($building['legend'] ?? [])),
+    // Not rooms (the Lobby): numbered with them on phones, nothing more.
+    'landmarks' => array_map(static fn (string $lkey, array $l): array => [
+      'key' => $lkey,
+      'title' => $l['label'] ?? $lkey,
+      'floor' => (int) ($l['floor'] ?? 1),
+    ], array_keys((array) ($building['landmarks'] ?? [])), array_values((array) ($building['landmarks'] ?? []))),
     'cache' => $cache_render,
     // The landing hero's Visit card, shown in the aside with the key
     // (palefire_preprocess_paragraph__landing_hero()), or NULL.

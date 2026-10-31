@@ -153,11 +153,12 @@
    and the markers grow with the drawing (--pf-map-grow, above). They come in
    one after another once the rooms have, with a small pop. The hint under
    the drawing is in the markup, so it takes its space from the start. */
-.pf-map__nums, .pf-map__item-num, .pf-map__hint { display: none; }
+.pf-map__nums, .pf-map__item-num, .pf-map__hint, .pf-map__landmark-row { display: none; }
 @media (max-width: 575.98px) {
   .pf-map__nums { display: inline; }
   .pf-map__item-num { display: inline-flex; }
   .pf-map__hint { display: flex; }
+  .pf-map__landmark-row { display: list-item; }
 }
 .pf-map__nums { pointer-events: none; }
 .pf-map__num {
@@ -410,11 +411,13 @@
 /* Each group's heading carries its hatch (once, not on every room). */
 .pf-map__group-title { display: flex; align-items: center; gap: .6rem; margin: 0 0 .35rem; font-size: .75rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__group ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--pf-map-rule); }
-.pf-map__item {
+.pf-map__item, .pf-map__landmark {
   display: flex; align-items: center; gap: .75rem; width: 100%; min-height: 2.75rem;
   padding: .55rem .25rem; border: 0; border-bottom: 1px solid var(--pf-map-rule);
   background: none; color: var(--pf-map-ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer;
 }
+/* A landmark row (the Lobby) is a place to find, not a control. */
+.pf-map__landmark { cursor: default; }
 .pf-map__item-name { flex: 1; font-weight: 600; }
 .pf-map__item-floor { font-size: .8125rem; color: var(--pf-map-floor-ink); }
 .pf-map__item-name { transition: color var(--pf-map-out) ease; }

@@ -41,7 +41,8 @@
        the legend line (0 or 1 rows), then the walk-in group (its heading
        and rooms), then the appointment group. #}
     {% set seq_legend = not keyed and 'elevator' in map.legend ? 1 : 0 %}
-    {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length %}
+    {% set landmarks = map.landmarks|default([]) %}
+    {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length + landmarks|length %}
     {# The walk-in and appointment hatches are on the group headings below,
        so the legend lists only the drawing's other marks. #}
     {% set legend %}
@@ -73,17 +74,30 @@
       ] %}
         {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}
         {% set seq_start = seq_legend + (group.access == 'appointment' and seq_walk_in ? seq_walk_in + 1 : 0) %}
-        {% if group_spaces %}
+        {% set group_landmarks = group.access == 'walk_in' ? landmarks : [] %}
+        {% if group_spaces or group_landmarks %}
           <div class="pf-map__group">
             <h4 class="pf-map__group-title pf-seq" style="--pf-seq: {{ min(seq_start, 5) }}">
               <span class="pf-map__swatch{{ group.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
               {{ group.title }}
             </h4>
             <ul>
+              {# Landmarks (the Lobby) first: not rooms, so plain text with
+                 no tooltip, shown on phones only, where building-map.js
+                 numbers them with the rooms (the drawing's names are hidden
+                 there). #}
+              {% for l in group_landmarks %}
+                <li class="pf-map__landmark-row pf-seq" style="--pf-seq: {{ min(seq_start + loop.index, 5) }}">
+                  <span class="pf-map__landmark" data-map-landmark="{{ l.key }}">
+                    <span class="pf-map__item-name">{{ l.title }}</span>
+                    <span class="pf-map__item-floor">{{ 'Floor @n'|t({'@n': l.floor}) }}</span>
+                  </span>
+                </li>
+              {% endfor %}
               {% for s in group_spaces %}
                 {# Rooms without a link are buttons: they show the tooltip. #}
                 {% set tag = s.url ? 'a' : 'button' %}
-                <li class="pf-seq" style="--pf-seq: {{ min(seq_start + loop.index, 5) }}">
+                <li class="pf-seq" style="--pf-seq: {{ min(seq_start + group_landmarks|length + loop.index, 5) }}">
                   <{{ tag }} class="pf-map__item" data-map-region="{{ s.key }}" aria-describedby="{{ s.tip }}"{% if s.url %} href="{{ s.url }}"{% else %} type="button"{% endif %}{% if s.key == map.here %} aria-current="location"{% endif %}>
                     <span class="pf-map__item-name">{{ s.title }}</span>
                     {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}

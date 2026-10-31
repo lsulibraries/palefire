@@ -128,8 +128,10 @@
     const numLayer = document.createElementNS(SVG_NS, 'g');
     numLayer.setAttribute('class', 'pf-map__nums');
     numLayer.setAttribute('aria-hidden', 'true');
-    items.filter((item) => live.has(item.dataset.mapRegion)).forEach((item, i) => {
-      const key = item.dataset.mapRegion;
+    // Landmarks (the Lobby: no room, no tooltip) are numbered with the
+    // rooms, in list order, so phones can find them too.
+    Array.from(root.querySelectorAll('.pf-map__item[data-map-region], .pf-map__landmark[data-map-landmark]')).filter((item) => item.dataset.mapLandmark || live.has(item.dataset.mapRegion)).forEach((item, i) => {
+      const key = item.dataset.mapRegion || item.dataset.mapLandmark;
       const badge = document.createElement('span');
       badge.className = 'pf-map__item-num';
       badge.setAttribute('aria-hidden', 'true');
@@ -420,7 +422,7 @@
       });
     });
     document.addEventListener('pointerdown', (e) => {
-      if (current && !e.target.closest('.pf-map__region, .pf-map__item, .pf-map__tip, [data-map-label]')) hide(true);
+      if (current && !e.target.closest('.pf-map__region, .pf-map__item, .pf-map__tip, [data-map-label].is-live')) hide(true);
     });
 
     // "Here" marker -----------------------------------------------------------

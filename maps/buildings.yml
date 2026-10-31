@@ -20,6 +20,14 @@ hill_memorial:
   template: '@palefire/includes/hill-memorial-map.svg.twig'
   # Icons the drawing shows that the legend should explain. Supported: elevator.
   legend: [elevator]
+  # Places that aren't rooms (no tooltip, no hover) but that phones number
+  # with the rooms, since the drawing's names are hidden there: listed first
+  # under Walk in. The key matches the drawing's data-map-label. Theme-only:
+  # no need to re-run the setup script.
+  landmarks:
+    lobby:
+      label: Lobby
+      floor: 1
   intro: Exhibitions, the reading room and quiet study are open to everyone. Seminar, lecture, McIlhenny Room and oral history spaces are available by request.
   spaces:
     reading_room:
