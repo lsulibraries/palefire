@@ -288,8 +288,13 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   line-height: 1.5;
   transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease, background-color $pf-hover-out ease;
 
+  // Hover: the rule brightens and the field takes focus's faint wash, so
+  // the box it fills shows before the click. Same wash as focus, so
+  // hovering a focused field changes nothing; the accent rule alone marks
+  // focus.
   &:hover {
     border-bottom-color: var(--pf-inquiry-strong);
+    background-color: color-mix(in srgb, var(--pf-inquiry-fg) 5%, transparent);
     transition-duration: $pf-hover-in;
   }
 
