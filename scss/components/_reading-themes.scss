@@ -223,6 +223,54 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   @return rgb(math.round(color.channel($c, "red", $space: rgb)), math.round(color.channel($c, "green", $space: rgb)), math.round(color.channel($c, "blue", $space: rgb)));
 }
 
+// WCAG relative luminance and contrast ratio.
+@function pf-luminance($c) {
+  $l: 0;
+  @each $channel, $weight in ("red": .2126, "green": .7152, "blue": .0722) {
+    $v: math.div(color.channel($c, $channel, $space: rgb), 255);
+    @if $v <= .04045 {
+      $v: math.div($v, 12.92);
+    }
+    @else {
+      $v: math.pow(math.div($v + .055, 1.055), 2.4);
+    }
+    $l: $l + $v * $weight;
+  }
+  @return $l;
+}
+
+@function pf-contrast($a, $b) {
+  $la: pf-luminance($a);
+  $lb: pf-luminance($b);
+  @return math.div(math.max($la, $lb) + .05, math.min($la, $lb) + .05);
+}
+
+// The least page color a wash over a photograph needs (--pf-g-wash) for
+// every text color of the swatch to keep 4.5:1 on any pixel under it, black
+// or white: the browser blends the wash over the image channel by channel,
+// as pf-mix(). Twilight 85%: an exhibition's side wash (pf-eased-wash()
+// with $floor) lets the photograph show through behind the text instead of
+// solid page color.
+@function pf-wash-floor($t) {
+  $bg: map.get($t, bg);
+  @for $i from 0 through 100 {
+    $ok: true;
+    @each $key in (fg, heading, muted, accent, title, highlight, strong, em) {
+      @if map.has-key($t, $key) {
+        @each $pixel in (#000, #fff) {
+          @if pf-contrast(map.get($t, $key), pf-mix($bg, $pixel, $i * 1%)) < 4.5 {
+            $ok: false;
+          }
+        }
+      }
+    }
+    @if $ok {
+      @return $i * 1%;
+    }
+  }
+  @return 100%;
+}
+
 // High contrast version of a swatch: page colors pushed toward white (light
 // swatches) or black (dark), text toward the other end. Rules and scrollbar
 // thumbs are left alone, so borders don't get louder.
@@ -276,6 +324,7 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --pf-g-accent: #{map.get($t, accent)};
   --pf-g-accent-rgb: #{pf-rgb(map.get($t, accent))};
   --pf-g-accent-soft: #{map.get($t, accent-soft)};
+  --pf-g-wash: #{pf-wash-floor($t)};
   // Highlight: the one color that marks the page's own voice, the hero
   // title, the index rules' numbers and the Quick Start's letters
   // (_landing-features.scss). A swatch's highlight key, else its title

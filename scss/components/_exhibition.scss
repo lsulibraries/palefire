@@ -1,5 +1,6 @@
 @use "sass:list";
 @use "sass:math";
+@use "sass:meta";
 
 // Exhibition pages: Modular pages in exhibition mode (field_modular_type =
 // exhibition) and their blocks (scripts/palefire_exhibit_setup.php).
@@ -21,13 +22,28 @@ $pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
 // along an ease-in-out curve, in many stops: no visible bends where a few
 // straight segments meet, as a photographer's graduated filter. $strength
 // (0 to 1): how much page color at its solid end, for a lighter wash.
-@function pf-eased-wash($direction, $from, $to, $steps: 12, $strength: 1) {
+// $floor: the dense end is the swatch's floor instead (--pf-g-wash,
+// _reading-themes.scss), the least that keeps its text at 4.5:1 on any
+// image, so the photograph shows through behind the text: for a side wash,
+// whose far edges are the screen's or masked. A foot wash stays solid,
+// where it meets the page color below (a wall's tiles, the next gallery).
+// $from and $to are percents, or calc() lengths to follow a text column.
+@function pf-eased-wash($direction, $from, $to, $steps: 12, $strength: 1, $floor: false) {
   $stops: ();
   @for $i from 0 through $steps {
     $t: math.div($i, $steps);
     $alpha: math.div(1 + math.cos(math.$pi * $t), 2) * $strength;
     $mix: math.div(math.round($alpha * 1000), 10) * 1%;
-    $at: math.div(math.round(($from + ($to - $from) * $t) * 10), 10);
+    @if $floor {
+      $mix: calc(var(--pf-g-wash, 100%) * #{math.div(math.round($alpha * 1000), 1000)});
+    }
+    $at: null;
+    @if meta.type-of($from) == number and meta.type-of($to) == number {
+      $at: math.div(math.round(($from + ($to - $from) * $t) * 10), 10);
+    }
+    @else {
+      $at: calc(#{$from} + (#{$to} - #{$from}) * #{math.div(math.round($t * 1000), 1000)});
+    }
     $stops: list.append($stops, color-mix(in srgb, var(--bs-body-bg) $mix, transparent) $at, comma);
   }
   @return linear-gradient($direction, $stops);
@@ -937,15 +953,19 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   align-items: flex-end;
 }
 
-// From lg, percent of the head's width: where the image starts, where the
-// side wash turns from solid page color to its fade, and where that fade
-// ends. The fade is long, so the image shows faintly behind the title and
-// it reads as one picture fading in, not a split; the image starts under
-// the solid part, so its edge never shows. A fade from 46% to 84% over an
-// image from 44% showed the subject better but cut the head in two.
+// From lg, percent of the head's width where the image starts, under the
+// text, so it shows faintly behind the title through the wash and reads as
+// one picture, not a split. An image from 44% showed the subject better but
+// cut the head in two.
 $pf-exhibit-cover-media: 28;
-$pf-exhibit-cover-solid: 38;
-$pf-exhibit-cover-clear: 92;
+// The cover's text column (.pf-exhibit-cover__text).
+$pf-exhibit-cover-text: 38rem;
+
+// From lg, how far past the text's edge a side wash takes to clear. The
+// wash follows the text in rem, not a share of the screen: in percents it
+// stayed dense to 38% and cleared at 92%, which muddied two thirds of a
+// wide image, and at 1024px the text ran on to 65%, out over the fade.
+$pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 
 // The image fills the head, past its padding, and holds still on screen
 // while the page scrolls, into the footer too: the head's foot rises over
@@ -968,6 +988,10 @@ $pf-exhibit-cover-clear: 92;
   @include media-breakpoint-up(lg) {
     left: $pf-exhibit-cover-media * 1%;
     clip-path: inset(0 0 100lvh);
+    // The side wash over it lets the image through, so its left edge fades
+    // in.
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8rem);
+    mask-image: linear-gradient(to right, transparent, #000 8rem);
   }
 }
 
@@ -990,9 +1014,10 @@ $pf-exhibit-cover-clear: 92;
   background: pf-eased-wash(to top, 46%, 98%);
 
   @include media-breakpoint-up(lg) {
+    $edge: calc(var(--pf-section-pad-inline, 1.25rem) + #{$pf-exhibit-cover-text});
     background:
       pf-eased-wash(to top, 0%, 100%, 12, .4) left bottom / 100% clamp(3rem, 10vh, 6rem) no-repeat,
-      pf-eased-wash(to right, $pf-exhibit-cover-solid * 1%, $pf-exhibit-cover-clear * 1%);
+      pf-eased-wash(to right, $edge, calc(#{$edge} + #{$pf-exhibit-wash-fade}), $floor: true);
   }
 }
 
@@ -1036,7 +1061,7 @@ $pf-exhibit-cover-clear: 92;
   display: grid;
   flex: 1 1 auto;
   gap: 1.25rem;
-  max-width: 38rem;
+  max-width: $pf-exhibit-cover-text;
   container-type: inline-size;
   padding-top: clamp(10rem, 40vh, 24rem);
 
@@ -2923,12 +2948,15 @@ $pf-brief-clear: 90%;
     // clear; it settles back down as the text opens. Slow and eased at both
     // ends, so it follows the text (0.5s) rather than arriving with it. Only
     // when the reader opens or closes the text (.is-wash-live), so a short
-    // opening arrives already lifted. Solid behind the text column (its
-    // words end at about 40% of the image on wide screens, 47% at lg) and
-    // gone by 74%: it ran to 94%, which muddied a pale image (Audubon's
-    // drawings on parchment) nearly to its right edge.
+    // opening arrives already lifted. Dense to the text column's edge (its
+    // min(36rem, 46%) past the padding, below) and gone
+    // $pf-exhibit-wash-fade later: in percents (42% to 74%) the words ran
+    // out over the fade at lg (47%), and it ran to 94% before that, which
+    // muddied a pale image (Audubon's drawings on parchment).
     @include media-breakpoint-up(lg) {
-      background: pf-eased-wash(to right, 42%, 74%);
+      $pad: var(--pf-section-pad-inline, 1.25rem);
+      $edge: calc(#{$pad} + min(36rem, (100% - 2 * #{$pad}) * .46));
+      background: pf-eased-wash(to right, $edge, calc(#{$edge} + #{$pf-exhibit-wash-fade}), $floor: true);
       -webkit-mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
       mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
 
