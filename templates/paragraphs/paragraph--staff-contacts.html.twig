@@ -10,20 +10,31 @@
  * The section <h2>, Eyebrow, Lede and Link ("All Special Collections
  * staff", to /v2/staff?department=special-collections) come from the
  * scroll-section field template. A description list: each topic is a <dt>,
- * its person a <dd>. No pictures, so nothing shifts as it loads.
+ * its person and email <dd>s.
+ *
+ * Each row reads as the ledger's rows (Tile showcase): the email link
+ * covers the whole row (its ::after), with a drawn envelope where the
+ * ledger has its arrow. The name is its own link to the profile, lifted
+ * above it. Without an email the row is plain, and only the name links.
  */
 #}
 {% if contacts %}
   <dl{{ attributes.addClass('pf-contacts') }}>
     {% for contact in contacts %}
-      <div class="pf-contacts__row">
+      <div class="pf-contacts__row{{ contact.email ? ' has-mail' }}">
         <dt class="pf-contacts__topic">{{ contact.topic }}</dt>
         <dd class="pf-contacts__who">
           <a class="pf-contacts__name" href="{{ contact.url }}">{{ contact.name }}</a>
           {%- if contact.title %}<span class="pf-contacts__job">{{ contact.title }}</span>{% endif %}
         </dd>
         {% if contact.email %}
-          <dd class="pf-contacts__mail"><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></dd>
+          <dd class="pf-contacts__mail">
+            <a class="pf-contacts__mail-link" href="mailto:{{ contact.email }}">
+              <span class="visually-hidden">{{ 'Email @name about @topic:'|t({'@name': contact.name, '@topic': contact.topic}) }} </span>
+              <span class="pf-contacts__address">{{ contact.email }}</span>
+              <svg class="pf-contacts__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h18v12H3z"/><path d="M3.5 6.5 12 13l8.5-6.5"/></svg>
+            </a>
+          </dd>
         {% endif %}
       </div>
     {% endfor %}
