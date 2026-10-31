@@ -359,6 +359,12 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
 // image's proportions (lg and up, with motion and scroll-driven animation
 // support); without it there is no pin and nothing moves.
 
+// A gallery's title over a full-screen image (this opener, a wall's or a
+// cover's lead): scaled with the screen's shorter side, as the image is,
+// so it holds its own against the photograph. About 45px on a phone,
+// 85px at 1024x768, 97px at 1440x900, 144px (the cap) on a 1440p screen.
+$pf-hero-title-size: clamp(2.5rem, 1rem + 9vmin, 9rem);
+
 $pf-opener-inner: '.pf-sections > .pf-section > .pf-section__inner:has(> .pf-gallery--opener)';
 $pf-opener: 'html[data-pf-mode="exhibition"] #{$pf-opener-inner}';
 // For the motion rules, which add their own conditions on <html>.
@@ -382,7 +388,7 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
     z-index: 2;
     max-width: 18ch;
     margin-bottom: 1.75rem;
-    font-size: clamp(2.5rem, 1.25rem + 3.6vw, 4.75rem);
+    font-size: $pf-hero-title-size;
     letter-spacing: -0.035em;
     line-height: 0.95;
 
@@ -2788,9 +2794,19 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
     }
   }
 
+  // The title at the hero size, wider than the text's column where it
+  // needs to be (still within the wash's dense half from lg).
   > .pf-section__title {
     grid-row: 2;
+    max-width: min(18ch, 100%);
     margin-bottom: 0.85rem;
+    font-size: $pf-hero-title-size;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+
+    @include media-breakpoint-up(lg) {
+      max-width: min(18ch, 58%);
+    }
   }
 
   .pf-exhibit-wall__stats {

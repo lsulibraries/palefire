@@ -1682,6 +1682,44 @@ html.pf-a11y-motion {
   }
 }
 
+// The picture cards (stagger, grid, masonry's Grid) as the shelf: the card
+// in hand stands out, the others' pictures dim to 35% and their titles to
+// 70% (white at 70% over the scrim on a dimmed picture stays above 7:1).
+// Labels keep their color: the pill is white on black, the Grid's caption
+// is muted already. Same timing as the books (above): dims at once,
+// brightens after 300ms, the card landed on at once. Not the List view.
+.pf-tiles:not([data-pf-view="list"]) {
+  :is(.pf-tile__media, .pf-tile__title) {
+    transition: opacity 0.4s ease-out 0.3s;
+  }
+
+  .pf-tiles__list:has(.pf-tile:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(.pf-tile:is(:hover, :focus-visible))) {
+    .pf-tile__media {
+      opacity: 0.35;
+      transition-delay: 0s;
+    }
+
+    .pf-tile__title {
+      opacity: 0.7;
+      transition-delay: 0s;
+    }
+  }
+
+  .pf-tiles__item:has(.pf-tile:is(:hover, :focus-visible)) :is(.pf-tile__media, .pf-tile__title) {
+    transition-delay: 0s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-tiles:not([data-pf-view="list"]) :is(.pf-tile__media, .pf-tile__title) {
+    transition-duration: 0s;
+  }
+}
+
+html.pf-a11y-motion .pf-tiles:not([data-pf-view="list"]) :is(.pf-tile__media, .pf-tile__title) {
+  transition-duration: 0s;
+}
+
 // Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
 // The hidden state only exists under .pf-tiles--reveal, which the script
 // adds when motion is allowed, so without JS (or with reduced motion) the

@@ -1409,6 +1409,55 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transition-duration: .9s;
 }
 
+// The banner in hand stands out, as on Written at Hill's shelf and the
+// tile showcases (_tile-showcase.scss): the others' pictures dim to 35%
+// and their titles to 70% (still above 7:1 over the scrim); an event's
+// date, words rather than a picture, as its title. Not the blog line (text
+// in the section's colors). Dims at once, brightens after 300ms, the
+// banner landed on at once; instant with reduced motion. The picture's
+// transition list carries its color's ease (above) too.
+.pf-hero-banners {
+  .pf-hero-banner__media {
+    transition: opacity .4s ease-out .3s;
+
+    &:not(.pf-hero-banner__media--date) {
+      transition: --pf-banner-dim $pf-hover-out ease, opacity .4s ease-out .3s;
+    }
+  }
+
+  .pf-hero-banner__title {
+    transition: opacity .4s ease-out .3s;
+  }
+
+  &:has(.pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:not(.pf-hero-banner--blog):not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) {
+    .pf-hero-banner__media {
+      opacity: .35;
+      transition-delay: 0s;
+    }
+
+    .pf-hero-banner__media--date,
+    .pf-hero-banner__title {
+      opacity: .7;
+      transition-delay: 0s;
+    }
+  }
+
+  .pf-hero-banner__link:is(:hover, :focus-visible) :is(.pf-hero-banner__media, .pf-hero-banner__title) {
+    transition-delay: 0s;
+  }
+}
+
+// Specific enough to outrank the hover's .9s (above).
+@media (prefers-reduced-motion: reduce) {
+  .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__media:not(.pf-hero-banner__media--date), .pf-hero-banner__media, .pf-hero-banner__title) {
+    transition-duration: 0s;
+  }
+}
+
+html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__media:not(.pf-hero-banner__media--date), .pf-hero-banner__media, .pf-hero-banner__title) {
+  transition-duration: 0s;
+}
+
 .pf-hero-banner__text {
   position: relative;
   z-index: 2;
