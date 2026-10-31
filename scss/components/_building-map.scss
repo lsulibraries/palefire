@@ -75,8 +75,11 @@
   transition: z-index 0s linear var(--pf-map-tip-out);
 }
 /* While a tooltip is open the drawing rises over that text, so the tooltip
-   is never under it. */
-.pf-map__stage:has(> .pf-map__tip.is-open) { z-index: 3; transition-delay: 0s; }
+   is never under it: 2 is enough, since the summary, heading and event card
+   come before it. Not 3, the landing's sticky breadcrumb bar
+   (_landing-features.scss), which comes before it too and would then fall
+   under the drawing. */
+.pf-map__stage:has(> .pf-map__tip.is-open) { z-index: 2; transition-delay: 0s; }
 .pf-map.is-unstuck .pf-map__stage { position: relative; top: auto; }
 @container pf-map (max-width: 57.99rem) {
   .pf-map {
