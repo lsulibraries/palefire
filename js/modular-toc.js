@@ -568,6 +568,13 @@
         entry.li.style.setProperty('--pf-rail-i', i);
       });
       nav.classList.toggle('pf-toc--ticks', shown.length * RAIL_MIN > list.clientHeight);
+      // The current name runs down beside the rail from its segment's top:
+      // it may take what's left of the rail (--pf-rail-room), no more.
+      const bottom = list.getBoundingClientRect().bottom;
+      shown.forEach((entry) => {
+        const room = Math.max(0, Math.floor(bottom - entry.li.getBoundingClientRect().top));
+        entry.li.style.setProperty('--pf-rail-room', `${room}px`);
+      });
       updateRail();
     }
 
@@ -629,17 +636,17 @@
     }
 
     // Whether the current name, beside its segment, would sit over text:
-    // sampled along its middle (the label lets the pointer through, so the
-    // hit is what lies under it).
+    // sampled down its middle, as it runs vertically (the label lets the
+    // pointer through, so the hit is what lies under it).
     function peekCovers(entry) {
       const label = entry.link.querySelector('.pf-toc__label');
       if (!label) {
         return false;
       }
       const box = label.getBoundingClientRect();
-      const y = box.top + box.height / 2;
-      return [0.35, 0.65, 0.95].some((at) => {
-        const hit = document.elementFromPoint(box.left + box.width * at, y);
+      const x = box.left + box.width / 2;
+      return [0.05, 0.35, 0.65, 0.95].some((at) => {
+        const hit = document.elementFromPoint(x, box.top + box.height * at);
         return !!hit && !nav.contains(hit) && !!hit.closest(PEEK_OVER);
       });
     }
