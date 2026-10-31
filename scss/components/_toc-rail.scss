@@ -17,7 +17,8 @@
 // - While the panel is closed, the current section's name shows beside its
 //   segment only while its heading rises from the activation line
 //   (--pf-rail-peek, fading as it goes), so it never sits over the text
-//   being read. It runs vertically down the rail, so it fits every gutter.
+//   being read. It runs vertically beside the rail, reading up, so it
+//   fits every gutter.
 // - The column closes (0px) and section backgrounds run to the page edge.
 //   The rail overlays the sections' side padding (3.75rem from md).
 // - Colors are the TOC tokens, so the rail follows dark sections and
@@ -173,9 +174,10 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       // Physical: in its own vertical writing mode, inset-inline-start
       // would be the top.
       left: calc(var(--pf-rail-line) + 0.75rem);
-      // Set vertically, reading down like a spine, so it's 20px wide and
-      // clears the narrowest gutter (3.75rem) by 8px. As long as the rail
-      // left below its segment (modular-toc.js), 20rem at most.
+      // Set vertically, reading up with its letters facing the page (turned
+      // 180deg), so it's 20px wide and clears the narrowest gutter (3.75rem)
+      // by 8px. As long as the rail left below its segment (modular-toc.js),
+      // 20rem at most.
       display: block;
       max-height: min(20rem, var(--pf-rail-room, 20rem));
       padding: 0.625rem 0.125rem;
@@ -193,7 +195,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
       backdrop-filter: var(--pf-glass-filter, blur(26px));
       opacity: 0;
-      transform: translateX(-0.5rem);
+      transform: translateX(-0.5rem) rotate(180deg);
       pointer-events: none;
       transition:
         opacity 0.2s ease,
@@ -209,7 +211,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       font-weight: 700;
       color: var(--pf-g-title, var(--pf-toc-active));
       opacity: var(--pf-rail-peek, 0);
-      transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * -0.5rem));
+      transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * -0.5rem)) rotate(180deg);
       transition:
         opacity 0.25s ease,
         transform 0.25s var(--pf-rail-ease),
@@ -393,7 +395,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       background-color: var(--pf-toc-active);
     }
 
-    // The name's first letter level with its tick.
+    // The name's top level with its tick.
     .pf-toc__label {
       top: calc(50% - 0.625rem);
     }
@@ -402,11 +404,11 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
   #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc .pf-toc__label {
     right: calc(var(--pf-rail-line) + 0.75rem);
     left: auto;
-    transform: translateX(0.5rem);
+    transform: translateX(0.5rem) rotate(180deg);
   }
 
   #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc [aria-current] > .pf-toc__label {
-    transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * 0.5rem));
+    transform: translateX(calc((1 - var(--pf-rail-peek, 0)) * 0.5rem)) rotate(180deg);
   }
 
   #{$pf-rail-html}[dir="rtl"] #{$pf-rail-row} .pf-toc__panel {
