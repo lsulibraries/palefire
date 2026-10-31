@@ -899,6 +899,13 @@
         audio.setAttribute('aria-labelledby', 'pf-viewer-title');
         initAudio(wrap);
       }
+      // The title, small, over the pinned player once the view's own has
+      // scrolled away (_exhibition.scss). Decorative: the <h2> names it.
+      const now = document.createElement('p');
+      now.className = 'pf-audio__now';
+      now.setAttribute('aria-hidden', 'true');
+      now.textContent = view.title.textContent;
+      wrap.prepend(now);
     });
     view.body.querySelectorAll('.pf-exhibit-audio').forEach((clip) => {
       clip.setAttribute('aria-labelledby', 'pf-viewer-title');

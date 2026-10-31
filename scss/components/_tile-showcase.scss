@@ -338,6 +338,58 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
   transform: none;
 }
 
+// The pan on scroll, as the hero banners' (_landing-features.scss, its
+// keyframes too): each picture is --pf-banner-pan taller than its card at
+// top and foot and slides down through it as the card crosses the
+// screen, on the item's own view timeline (the card clips, and
+// tile-reveal moves it). 1.5rem, 3rem from 44rem as the row of five. A
+// guide's drawn page scrolls up under the glass instead, the hover's
+// move (which still adds to it): 6em over the crossing, so 3em when the
+// card is mid-screen. Not the List's thumbnails, too small to pan. In a
+// sideways scroller (the narrow stagger) the timeline is inactive and
+// the picture just sits centered. None with reduced motion or the
+// Settings drawer's switch.
+@keyframes pf-tile-page-scroll {
+  from {
+    translate: 0 0;
+  }
+
+  to {
+    translate: 0 -6em;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tiles__item {
+      --pf-banner-pan: 1.5rem;
+      view-timeline: --pf-tile-own block;
+    }
+
+    @container pf-tiles (min-width: 44rem) {
+      html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tiles__item {
+        --pf-banner-pan: 3rem;
+      }
+    }
+
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tile:not(.pf-tile--no-image) .pf-tile__media img {
+      position: absolute;
+      top: calc(-1 * var(--pf-banner-pan));
+      left: 0;
+      height: calc(100% + 2 * var(--pf-banner-pan));
+      animation: pf-banner-pan linear both;
+      animation-timeline: --pf-tile-own;
+      animation-range: cover 0% cover 100%;
+    }
+
+    html:not(.pf-a11y-motion) .pf-tiles:not([data-pf-view="list"]) .pf-tile--no-image .pf-tile__outline-page {
+      animation: pf-tile-page-scroll linear both;
+      animation-timeline: --pf-tile-own;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
 // Stagger ------------------------------------------------------------------
 // Narrow: swipeable row. The row bleeds to the section's edges so cards slide
 // in from the edge; scroll-padding lines the snapped card up with the title.

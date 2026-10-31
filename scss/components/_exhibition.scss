@@ -3840,6 +3840,79 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
     background-color: var(--bs-body-bg);
     border-bottom: 1px solid $pf-hairline;
   }
+
+  // The title over the pinned player, in the panel's kicker voice: the
+  // player pins --pf-audio-now lower, and the title fills that slot on
+  // the page color, fading in. On the exit of what sits just above the
+  // player (its credit, else its "Listen" kicker) under the slot's foot,
+  // so the title comes in over it as it goes and is whole as the player
+  // pins. The transcript never reflows: the slot is the sticky offset,
+  // not layout. Without scroll-driven animations the player pins as
+  // before, with no title.
+  .pf-audio__now {
+    display: none;
+  }
+
+  @supports (animation-timeline: view()) {
+    timeline-scope: --pf-audio-above;
+
+    :has(+ .pf-audio) {
+      view-timeline: --pf-audio-above block;
+      view-timeline-inset: calc(var(--pf-viewer-top-h, 3.85rem) + var(--pf-audio-now, 2rem)) auto;
+    }
+
+    .pf-audio {
+      --pf-audio-now: 2rem;
+      animation: pf-audio-now-slot linear both;
+      animation-timeline: --pf-audio-above;
+      animation-range: exit 0% exit 100%;
+    }
+
+    .pf-audio__now {
+      position: absolute;
+      inset: auto 0 100%;
+      display: block;
+      height: var(--pf-audio-now);
+      margin: 0;
+      padding: .5rem var(--pf-pad-end) 0 var(--pf-pad-start);
+      overflow: hidden;
+      font: var(--pf-mono-label)/1.5 var(--pf-viewer-mono);
+      letter-spacing: .12em;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--pf-viewer-muted);
+      background-color: var(--bs-body-bg);
+      pointer-events: none;
+      animation: pf-audio-now-title linear both;
+      animation-timeline: --pf-audio-above;
+      animation-range: exit 0% exit 100%;
+    }
+  }
+}
+
+@keyframes pf-audio-now-slot {
+  to {
+    top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top) + var(--pf-audio-now));
+  }
+}
+
+@keyframes pf-audio-now-title {
+  from {
+    opacity: 0;
+  }
+}
+
+// Reduced motion: the slot and the title come in at once, at the
+// heading's exit (a step, not a fade).
+@media (prefers-reduced-motion: reduce) {
+  .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
+    animation-timing-function: steps(1, jump-start);
+  }
+}
+
+html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
+  animation-timing-function: steps(1, jump-start);
 }
 
 .pf-exhibit-audio__read {
