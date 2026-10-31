@@ -966,6 +966,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Tile showcases: on dark reading colors the others darken on hover, not fade.** Hovering a picture card dimmed the others' pictures to 35% opacity. On dark reading colors they now stay solid and darken to 40% (`filter: brightness(.4)` on `.pf-tile__media`, same timing); on light ones they still fade to 35%, toward the light ground. Titles still dim to 70%. Checked on live /v2/special's Off the Walls showcase at 1440 with the local CSS: Twilight reads opacity 1 / `brightness(0.4)`, Cream 0.35.
+
 - **Hero banners: the blog post dims with the others.** Hovering another banner left the blog post's picture in color, as it was excluded from the dim for its narrow layout (a line of text in the section's colors, under 44rem). From 44rem, where it is a banner, it now goes grey and dark with its title at 70%, like the rest (`pf-banner-hushed` mixin, shared). The event banner was already included. Checked on live /v2/special at 1440: with Audubon hovered, all four others read `grayscale(1) brightness(.55)`.
 
 - **Hero banners: the others go grey and dark on hover, not see-through.** Dimming the other banners' pictures to 35% opacity let the backdrop (the Hill Memorial photo) show through them. They now stay opaque and return to grey with the page-color wash, darkened to 55% (`--pf-banner-hush`, eased like the old dim: at once, back after 300ms), whether or not scrolling had brought their color in. Titles still dim to 70%, which reads higher over the darker picture. Checked on live /v2/special at 1440 with the local CSS: the hovered banner in full color, the others `grayscale(1) brightness(.55)` at opacity 1.

@@ -1683,13 +1683,19 @@ html.pf-a11y-motion {
 }
 
 // The picture cards (stagger, grid, masonry's Grid) as the shelf: the card
-// in hand stands out, the others' pictures dim to 35% and their titles to
+// in hand stands out, the others' pictures dim and their titles drop to
 // 70% (white at 70% over the scrim on a dimmed picture stays above 7:1).
+// On dark reading colors the pictures darken to 40% (a filter, so they
+// stay solid); on light ones they fade to 35%, toward the light ground.
 // Labels keep their color: the pill is white on black, the Grid's caption
 // is muted already. Same timing as the books (above): dims at once,
 // brightens after 300ms, the card landed on at once. Not the List view.
 .pf-tiles:not([data-pf-view="list"]) {
-  :is(.pf-tile__media, .pf-tile__title) {
+  .pf-tile__media {
+    transition: opacity 0.4s ease-out 0.3s, filter 0.4s ease-out 0.3s;
+  }
+
+  .pf-tile__title {
     transition: opacity 0.4s ease-out 0.3s;
   }
 
@@ -1697,6 +1703,11 @@ html.pf-a11y-motion {
     .pf-tile__media {
       opacity: 0.35;
       transition-delay: 0s;
+
+      html.pf-reading-dark & {
+        opacity: 1;
+        filter: brightness(0.4);
+      }
     }
 
     .pf-tile__title {
