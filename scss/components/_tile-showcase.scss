@@ -1068,9 +1068,18 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 // Related guides at the end of a guide (paragraph--resource-list): the
 // Grid's cards, smaller. Two columns on a phone, as the homepage; four
 // from 36rem (each about a phone card's width), so four never leave one
-// over, and one or two sit at a card's size instead of filling the column. No pan on scroll (above); the hover is the homepage's.
+// over, and one or two sit at a card's size instead of filling the column.
+// Calmer than the homepage, as the page's close: no pan on scroll and no
+// dimming of the other cards (both above); no shadow, which read as a
+// halo on dark colors; they fade in without rising; and on hover the
+// drawn page drifts up half as far, twice as slowly.
 .pf-tiles--related {
   margin-top: 0.5rem;
+
+  // As specific as the Grid's shadow rule, so it wins by coming later.
+  &.pf-tiles--masonry .pf-tile__media {
+    box-shadow: none;
+  }
 
   // A guide's title is its whole name: four lines before it's cut, not
   // the banners' three.
@@ -1081,6 +1090,24 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
   .pf-tile--banner.pf-tile--no-image {
     --pf-scrim-floor: 7.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-tiles--related .pf-tile__outline-page {
+    transition: transform 1.2s cubic-bezier(0.25, 0.6, 0.3, 1);
+  }
+
+  html:not(.pf-a11y-motion) .pf-tiles--related .pf-tile:is(:hover, :focus-visible) .pf-tile__outline-page {
+    transform: translateY(-1.5em);
+  }
+
+  .pf-tiles--reveal.pf-tiles--related .pf-tiles__item {
+    --pf-reveal-from: 0;
+
+    > .pf-tile {
+      transition-duration: 0.9s;
+    }
   }
 }
 
@@ -1722,7 +1749,7 @@ html.pf-a11y-motion {
 // Labels keep their color: the pill is white on black, the Grid's caption
 // is muted already. Same timing as the books (above): dims at once,
 // brightens after 300ms, the card landed on at once. Not the List view.
-.pf-tiles:not([data-pf-view="list"]) {
+.pf-tiles:not([data-pf-view="list"], .pf-tiles--related) {
   .pf-tile__media {
     transition: opacity 0.4s ease-out 0.3s, filter 0.4s ease-out 0.3s;
   }
