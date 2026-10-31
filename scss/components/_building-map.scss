@@ -501,6 +501,11 @@
   filter: grayscale(1);
 }
 .pf-map__tip.is-open .pf-map__tip-photo { animation: pf-map-photo 1.6s ease .4s both; }
+/* Where the label can't fit beside its room in what the window shows,
+   building-map.js drops the photo (.is-tight) and, failing that, slides the
+   label into view without its pointer (.is-adrift). */
+.pf-map__tip.is-tight .pf-map__tip-photo,
+.pf-map__tip.is-adrift::after { display: none; }
 @keyframes pf-map-photo { from { filter: grayscale(1); } to { filter: grayscale(0); } }
 .pf-map__tip-floor {
   display: flex; flex-direction: column; align-items: center; gap: .25rem;

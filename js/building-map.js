@@ -223,18 +223,40 @@
       const box = stage.getBoundingClientRect();
       const a = anchorEl.getBoundingClientRect();
       const w = tip.offsetWidth;
-      const h = tip.offsetHeight;
       const cx = a.left + a.width / 2 - box.left;
       let x = Math.round(cx - w / 2);
       x = Math.max(8, Math.min(x, box.width - w - 8));
+      // The space the label can use, in the stage's coordinates: what the
+      // window shows of the stage, below the header and the landing's
+      // sticky breadcrumb bar (the sticky drawing slides under both), and
+      // no lower than just past the stage.
+      const cover = Math.max(0, ...['.pf-header', '.pf-landing__bar'].map((s) => {
+        const el = document.querySelector(s);
+        return el ? el.getBoundingClientRect().bottom : 0;
+      }));
+      const top = Math.max(0, cover - box.top) + 8;
+      const bottom = Math.min(box.height + 40, window.innerHeight - box.top) - 8;
       // The name lifts on hover; aim above where it will be.
-      let y = Math.round(a.top - box.top - h - SETTINGS.tipGap - 6);
-      // Below when it doesn't fit above but does below; when it fits
-      // neither (a tall label with a photo), on the side with more room.
-      const roomBelow = box.height + 40 - (a.bottom - box.top + SETTINGS.tipGap);
-      const below = y < 0 && (h <= roomBelow || roomBelow > a.top - box.top);
-      if (below) y = Math.round(a.bottom - box.top + SETTINGS.tipGap);
+      const aboveEnd = a.top - box.top - SETTINGS.tipGap - 6;
+      const belowY = Math.round(a.bottom - box.top + SETTINGS.tipGap);
+      const fits = (h) => ({ above: aboveEnd - h >= top, below: belowY + h <= bottom });
+      // Above, else below, at full size. Failing both, the photo goes first
+      // (the name and text matter more), then the side with more room.
+      tip.classList.remove('is-tight');
+      let h = tip.offsetHeight;
+      let fit = fits(h);
+      if (!fit.above && !fit.below && tip.querySelector('.pf-map__tip-photo')) {
+        tip.classList.add('is-tight');
+        h = tip.offsetHeight;
+        fit = fits(h);
+      }
+      const below = !fit.above && (fit.below || bottom - belowY > aboveEnd - top);
+      const aim = below ? belowY : Math.round(aboveEnd - h);
+      // A window too short for either side: slide it into view, its pointer
+      // hidden since it no longer meets the room.
+      const y = Math.max(top, Math.min(aim, bottom - h));
       tip.classList.toggle('is-below', below);
+      tip.classList.toggle('is-adrift', y !== aim);
       tip.style.setProperty('--tip-x', x + 'px');
       tip.style.setProperty('--tip-y', y + 'px');
       tip.style.setProperty('--tip-arrow', Math.max(18, Math.min(w - 18, cx - x)) + 'px');
@@ -301,6 +323,13 @@
     tip.addEventListener('pointerleave', () => hide());
     root.addEventListener('keydown', (e) => { if (e.key === 'Escape' && current) hide(true); });
     window.addEventListener('resize', () => { if (current) place(current); }, { passive: true });
+    // The page scrolling changes how much of the stage the header and bar
+    // cover: place again, once a frame.
+    let placeFrame = 0;
+    window.addEventListener('scroll', () => {
+      if (!current || placeFrame) return;
+      placeFrame = requestAnimationFrame(() => { placeFrame = 0; if (current) place(current); });
+    }, { passive: true });
     const scroller = root.querySelector('.pf-map__scroller');
     if (scroller) scroller.addEventListener('scroll', () => { if (current) place(current); }, { passive: true });
 
