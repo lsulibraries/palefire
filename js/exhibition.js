@@ -1616,7 +1616,10 @@
 
   function initAudio(wrap) {
     const audio = wrap.querySelector('audio');
-    if (!audio) {
+    // Once only: an address for a wall's entry opens the object view
+    // before the behaviors attach, and their once() would set up the
+    // view's player (already set up by panelAudio()) a second time.
+    if (!audio || wrap.classList.contains('is-custom')) {
       return;
     }
     const label = audio.getAttribute('aria-labelledby');
