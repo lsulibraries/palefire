@@ -1479,10 +1479,6 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
     transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  .pf-book__cover {
-    transition: opacity 0.5s ease-out;
-  }
-
   .pf-tiles--reveal.pf-tiles--covers .pf-book .pf-book__title {
     transition: color 0.3s ease-out;
   }
@@ -1493,14 +1489,36 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 // The book in hand stands out: the other covers dim (their text doesn't).
+// Dimming is at once; brightening again waits 300ms, so crossing the gap
+// between two books (nothing hovered for a moment) doesn't flash the whole
+// shelf. The book the pointer lands on brightens at once. With reduced
+// motion the changes are instant, the wait kept.
+.pf-book__cover {
+  transition: opacity 0.4s ease-out 0.3s;
+}
+
 .pf-tiles--covers .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) .pf-book__cover {
   opacity: 0.6;
+  transition-delay: 0s;
+}
+
+.pf-tiles--covers .pf-tiles__item:has(a.pf-book:is(:hover, :focus-visible)) .pf-book__cover {
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-book__cover {
+    transition-duration: 0s;
+  }
 }
 
 html.pf-a11y-motion {
-  .pf-book__object,
-  .pf-book__cover {
+  .pf-book__object {
     transition: none;
+  }
+
+  .pf-book__cover {
+    transition-duration: 0s;
   }
 
   a.pf-book:is(:hover, :focus-visible) .pf-book__object {
