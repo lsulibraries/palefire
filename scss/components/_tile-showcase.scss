@@ -1470,6 +1470,37 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   text-transform: uppercase;
 }
 
+// "Find in catalog →", in the "All publications →" label voice: where the
+// link goes. Its line is always there, so nothing moves when it appears.
+// Hover or focus: it fades in in the accent, the arrow slides 0.25rem, as
+// the ledger's. Where nothing can hover (touch) it's always shown, in the
+// muted color, so 33 of them don't read as a row of gold. Decorative: the
+// link says it once for screen readers.
+.pf-book__cta {
+  @extend %pf-landing-label;
+  margin-top: 0.25rem;
+  color: var(--pf-index-accent);
+  opacity: 0;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-inline-start: 0.5em;
+    letter-spacing: 0;
+  }
+}
+
+.pf-tiles.pf-tiles--covers a.pf-book:is(:hover, :focus-visible) .pf-book__cta {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .pf-tiles.pf-tiles--covers .pf-book .pf-book__cta {
+    color: var(--pf-index-muted);
+    opacity: 1;
+  }
+}
+
 .pf-tiles.pf-tiles--covers a.pf-book:is(:hover, :focus-visible) .pf-book__title {
   color: var(--pf-index-accent);
 }
@@ -1485,6 +1516,18 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
   a.pf-book:is(:hover, :focus-visible) .pf-book__object {
     transform: translate3d(0, -0.375rem, 1.5rem) rotateY(-4deg);
+  }
+
+  .pf-book__cta {
+    transition: opacity 0.3s ease-out;
+
+    &::after {
+      transition: transform 0.3s ease-out;
+    }
+  }
+
+  a.pf-book:is(:hover, :focus-visible) .pf-book__cta::after {
+    transform: translateX(0.25rem);
   }
 }
 
@@ -1513,8 +1556,13 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 html.pf-a11y-motion {
-  .pf-book__object {
+  .pf-book__object,
+  .pf-book__cta::after {
     transition: none;
+  }
+
+  a.pf-book:is(:hover, :focus-visible) .pf-book__cta::after {
+    transform: none;
   }
 
   .pf-book__cover {

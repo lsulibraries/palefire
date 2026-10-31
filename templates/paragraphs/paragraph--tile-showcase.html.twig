@@ -144,6 +144,12 @@
                 {% if book.imprint %}
                   <span class="pf-book__imprint"><span class="visually-hidden">, </span>{{ book.imprint }}</span>
                 {% endif %}
+                {# Where the link goes: shown on hover and focus (always, on
+                   touch), and said once for screen readers. #}
+                {% if book.url %}
+                  <span class="pf-book__cta" aria-hidden="true">{{ 'Find in catalog'|t }}</span>
+                  <span class="visually-hidden">, {{ 'in the LSU Libraries catalog'|t }}</span>
+                {% endif %}
               </span>
             </{{ tag }}>
           </li>
