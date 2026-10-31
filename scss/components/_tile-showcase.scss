@@ -617,6 +617,22 @@ $pf-ledger-break: 40rem;
   border-bottom: 1px solid $pf-hairline;
 }
 
+// From lg a ledger with no Categories sits close under the section's
+// rule and over the next section's, so its own rules at the top and bottom
+// only doubled them: the hairlines go between rows only. Grouped ledgers
+// keep theirs, which set each label off from its rows.
+@include media-breakpoint-up(lg) {
+  .pf-tiles--ledger .pf-tiles__group:not(:has(> .pf-tiles__group-label)) {
+    .pf-tiles__list {
+      border-top: 0;
+    }
+
+    .pf-tiles__item:last-child {
+      border-bottom: 0;
+    }
+  }
+}
+
 .pf-tile-line {
   display: grid;
   grid-template-areas:
@@ -1136,6 +1152,216 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
+// Covers -------------------------------------------------------------------
+// Books from the collections' readers (Published from the Collections).
+// Each cover stands in a 2:3 frame on a hairline shelf, shown whole
+// (contain, from the bottom), so books of different shapes stand at
+// different heights, as on a shelf. Under it the title (its subtitle
+// quieter), author and imprint, in the index's colors.
+// Narrow: a swipeable row, as the stagger's, the next book peeking in.
+// From 32rem a grid of 3, from 48rem 4: eight books are two even rows.
+// A book with no cover gets a jacket set in type (Roboto 700 capitals,
+// the author in mono), on one of four swatches in turn, each at least
+// 7:1 though it is decorative. Hover: the cover rises 6px, the title
+// takes the accent.
+$pf-covers-break-four: 48rem;
+
+.pf-tiles--covers {
+  --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
+  --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-index-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  --pf-cover-gap: clamp(1.25rem, 3cqi, 2.5rem);
+}
+
+.pf-tiles--covers .pf-tiles__list {
+  display: flex;
+  gap: var(--pf-cover-gap);
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 1rem));
+  padding: 0.5rem var(--pf-section-pad-inline, 1rem) 1rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pf-section-pad-inline, 1rem);
+  @include pf-thin-scrollbar;
+}
+
+.pf-tiles--covers .pf-tiles__item {
+  flex: 0 0 min(42%, 11rem);
+  scroll-snap-align: none start;
+}
+
+@container pf-tiles (min-width: #{$pf-tile-break-two}) {
+  .pf-tiles--covers .pf-tiles__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: clamp(2.5rem, 5cqi, 3.5rem);
+    margin-inline: 0;
+    padding: 0.5rem 0 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+}
+
+@container pf-tiles (min-width: #{$pf-covers-break-four}) {
+  .pf-tiles--covers .pf-tiles__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.pf-book {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-decoration: none;
+
+  &:is(a):hover,
+  &:is(a):focus {
+    color: var(--pf-section-fg, var(--bs-body-color));
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-index-accent);
+    outline-offset: 4px;
+  }
+}
+
+.pf-book__cover {
+  container-type: inline-size;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  aspect-ratio: 2 / 3;
+  border-bottom: 1px solid $pf-hairline;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    // Follows the cover's own edges, not the frame's.
+    filter: drop-shadow(0.375rem 0.75rem 0.75rem rgba($pf-black, 0.18));
+  }
+}
+
+.pf-book__jacket {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  padding: 9cqi 8cqi;
+  overflow: hidden;
+  background: $pf-purple;
+  color: $pf-white;
+  box-shadow: 0.375rem 0.75rem 1.5rem rgba($pf-black, 0.18);
+}
+
+// Four swatches in turn: purple, ink, gold, paper.
+.pf-tiles__item:nth-child(4n + 2) .pf-book__jacket {
+  background: #1b1b1b;
+  color: $pf-gold;
+}
+
+.pf-tiles__item:nth-child(4n + 3) .pf-book__jacket {
+  background: $pf-gold;
+  color: $pf-black;
+}
+
+.pf-tiles__item:nth-child(4n + 4) .pf-book__jacket {
+  background: #ece7dc;
+  color: $pf-black;
+}
+
+.pf-book__jacket-title {
+  font-size: 11cqi;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.pf-book__jacket-author {
+  padding-top: 4cqi;
+  border-top: 1px solid currentColor;
+  font-family: var(--pf-index-mono);
+  font-size: 6.5cqi;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pf-book__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+// The heading color, not the swatch's heading gold; four classes to
+// outrank it, as the ledger's titles.
+.pf-tiles.pf-tiles--covers .pf-book .pf-book__title {
+  margin: 0;
+  color: var(--bs-heading-color, var(--pf-section-fg, var(--bs-body-color)));
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.3;
+  overflow-wrap: anywhere; // long single words at 400% zoom (WCAG 1.4.10)
+  text-wrap: pretty;
+}
+
+.pf-book__subtitle {
+  color: var(--pf-index-muted);
+  font-weight: 400;
+}
+
+.pf-book__author {
+  color: var(--pf-index-muted);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.pf-book__imprint {
+  color: var(--pf-index-muted);
+  font-family: var(--pf-index-mono);
+  font-size: var(--pf-mono-label);
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-tiles.pf-tiles--covers a.pf-book:is(:hover, :focus-visible) .pf-book__title {
+  color: var(--pf-index-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-book__cover > * {
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .pf-tiles--reveal.pf-tiles--covers .pf-book .pf-book__title {
+    transition: color 0.3s ease-out;
+  }
+
+  a.pf-book:is(:hover, :focus-visible) .pf-book__cover > * {
+    transform: translateY(-0.375rem);
+  }
+}
+
+html.pf-a11y-motion a.pf-book .pf-book__cover > * {
+  transition: none;
+  transform: none;
+}
+
 // Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
 // The hidden state only exists under .pf-tiles--reveal, which the script
 // adds when motion is allowed, so without JS (or with reduced motion) the
@@ -1146,13 +1372,13 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 .pf-tiles--reveal .pf-tiles__item {
   --pf-reveal-from: 30px; // grid: rise from below
 
-  > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
+  > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
     opacity: 0;
     transform: translateY(var(--pf-reveal-from));
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
 
-  &.is-revealed > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
+  &.is-revealed > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
     opacity: 1;
     transform: none;
     transition-delay: var(--pf-reveal-delay, 0ms);
@@ -1175,13 +1401,13 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
 // Turned on mid-visit (Settings > Reduce motion), or the OS setting: show
 // everything at once, whatever the script already hid.
-html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
+html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
   opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line) {
+  .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
     opacity: 1;
     transform: none;
   }
@@ -1208,5 +1434,13 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
 
   .pf-tile__outline {
     display: none;
+  }
+
+  .pf-book__jacket {
+    border: 1px solid CanvasText;
+  }
+
+  .pf-book:focus-visible {
+    outline-color: Highlight;
   }
 }

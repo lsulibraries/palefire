@@ -23,7 +23,9 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
+use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Implements hook_preprocess_breadcrumb().
@@ -43,6 +45,12 @@ function palefire_preprocess_breadcrumb(array &$variables) {
       $variables['#cache']['tags'] ?? [],
       $node->getCacheTags()
     );
+  }
+  // Staff profiles (a View page): the person's name, not the View's title.
+  elseif (StaffDirectory::isRoute('profile')) {
+    $cache = CacheableMetadata::createFromRenderArray($variables);
+    $title = StaffDirectory::current($cache)?->label();
+    $cache->applyTo($variables);
   }
   // Other pages (Views, taxonomy terms, etc.): use the route's title.
   elseif ($route = $route_match->getRouteObject()) {
@@ -1275,6 +1283,91 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for views-view.
+ *
+ * The staff View (StaffDirectory::VIEW, scripts/palefire_staff_setup.php)
+ * only provides the routes; its templates print what this reads from the
+ * Staff nodes.
+ * - directory (/v2/staff): people (StaffDirectory::row(), by family name),
+ *   departments (label, slug, count, by label) and total.
+ * - profile (/v2/staff/<slug>): person (StaffDirectory::profile()). A slug
+ *   that names no published Staff node is a 404.
+ */
+function palefire_preprocess_views_view(array &$variables): void {
+  $view = $variables['view'];
+  if ($view->id() !== StaffDirectory::VIEW) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables)->addCacheTags(['node_list:' . StaffDirectory::BUNDLE]);
+
+  if ($view->current_display === 'profile') {
+    $person = StaffDirectory::fromSlug((string) ($view->args[0] ?? ''), $cache);
+    if (!$person) {
+      throw new NotFoundHttpException();
+    }
+    $variables['person'] = StaffDirectory::profile($person, $cache);
+    $cache->applyTo($variables);
+    return;
+  }
+
+  $nids = \Drupal::entityQuery('node')->accessCheck(TRUE)
+    ->condition('type', StaffDirectory::BUNDLE)
+    ->condition('status', 1)
+    ->execute();
+  $people = [];
+  $departments = [];
+  $repository = \Drupal::service('entity.repository');
+  foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($nids) as $node) {
+    $row = StaffDirectory::row($repository->getTranslationFromContext($node), $cache);
+    $people[StaffDirectory::sortKey($row['name']) . ' ' . $node->id()] = $row;
+    foreach ($row['departments'] as $department) {
+      $departments[$department['slug']] ??= ['label' => $department['label'], 'slug' => $department['slug'], 'count' => 0];
+      $departments[$department['slug']]['count']++;
+    }
+  }
+  ksort($people, SORT_NATURAL);
+  uasort($departments, static fn (array $a, array $b): int => strnatcasecmp($a['label'], $b['label']));
+  $variables['people'] = array_values($people);
+  $variables['departments'] = array_values($departments);
+  $variables['total'] = count($people);
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--staff-contacts.
+ *
+ * Who to ask (scripts/palefire_staff_setup.php): contacts, one per Contact
+ * row (field_staff_contacts) whose person the visitor can see: topic, name,
+ * url (their /v2/staff profile), title and email. The section's heading,
+ * eyebrow, lede and link come from the scroll-section field template.
+ */
+function palefire_preprocess_paragraph__staff_contacts(array &$variables): void {
+  $variables['contacts'] = [];
+  $paragraph = $variables['paragraph'];
+  if (!$paragraph->hasField('field_staff_contacts')) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  foreach ($paragraph->get('field_staff_contacts')->referencedEntities() as $contact) {
+    $cache->addCacheableDependency($contact);
+    $person = $contact->hasField('field_librarian') ? $contact->get('field_librarian')->entity : NULL;
+    $topic = $contact->hasField('field_contact_topic') ? trim((string) $contact->get('field_contact_topic')->value) : '';
+    if (!$contact->isPublished() || $topic === '' || !$person instanceof NodeInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($person);
+    $access = $person->access('view', NULL, TRUE);
+    $cache->addCacheableDependency($access);
+    if (!$access->isAllowed()) {
+      continue;
+    }
+    $row = StaffDirectory::row(\Drupal::service('entity.repository')->getTranslationFromContext($person), $cache);
+    $variables['contacts'][] = ['topic' => $topic] + array_intersect_key($row, array_flip(['name', 'url', 'title', 'email']));
+  }
+  $cache->applyTo($variables);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--tile-showcase.
  *
  * Tile showcase (scripts/palefire_tile_showcase_setup.php) lists Tile nodes
@@ -1297,7 +1390,7 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  *   Special Collections homepage). Added to the allowed values by hand, as
  *   index is.
  *
- * layout: 'stagger', 'grid', 'index', 'ledger' or 'masonry'.
+ * layout: 'stagger', 'grid', 'index', 'ledger', 'masonry', 'ask' or 'covers'.
  * tiles: one entry per item the visitor can see, in field order:
  * - title: the node's title.
  * - url: the node's own URL.
@@ -1323,17 +1416,22 @@ function palefire_preprocess_paragraph__librarian_card(array &$variables): void 
  * is no card list: faqs (_palefire_ask_faqs()) and ask_form, the libanswers
  * module's question form (palefire_form_libanswers_ask_form_alter()), or
  * NULL without the module.
+ *
+ * Layout "covers" (Published from the Collections,
+ * scripts/palefire_publications_setup.php) lists books, not nodes: books
+ * (_palefire_publications()) from the section's Publications paragraphs.
  */
 function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $variables['layout'] = 'stagger';
   $variables['tiles'] = [];
   $variables['groups'] = [];
+  $variables['books'] = [];
   $paragraph = $variables['paragraph'] ?? NULL;
   if (!$paragraph instanceof ParagraphInterface) {
     return;
   }
   $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
-  if (in_array($layout, ['grid', 'index', 'ledger', 'masonry', 'ask'], TRUE)) {
+  if (in_array($layout, ['grid', 'index', 'ledger', 'masonry', 'ask', 'covers'], TRUE)) {
     $variables['layout'] = $layout;
   }
   if ($variables['layout'] === 'ask') {
@@ -1344,6 +1442,12 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     $variables['ask_form'] = \Drupal::moduleHandler()->moduleExists('libanswers')
       ? \Drupal::formBuilder()->getForm('Drupal\libanswers\Form\AskForm', 2616, 'ask-special-collections')
       : NULL;
+    return;
+  }
+  if ($variables['layout'] === 'covers') {
+    $cache = CacheableMetadata::createFromRenderArray($variables);
+    $variables['books'] = _palefire_publications($paragraph, $cache);
+    $cache->applyTo($variables);
     return;
   }
   $rows = in_array($variables['layout'], ['index', 'ledger'], TRUE);
@@ -1404,6 +1508,65 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     $variables['tiles'][0]['image'] = _palefire_lead_cover($covers[0], "(min-width: 1480px) {$lead}vw, (min-width: 768px) 34vw, 50vw", $cache) ?? $variables['tiles'][0]['image'];
   }
   $cache->applyTo($variables);
+}
+
+/**
+ * The books for a Tile showcase in the Covers layout, in field order.
+ *
+ * From its Publications (field_tile_publications, Publication paragraphs:
+ * scripts/palefire_publications_setup.php). Unpublished ones and ones with
+ * no title are skipped. Each book:
+ * - title: the title before its first colon ("Kingfish U"), as the cover
+ *   and the card's heading show it; subtitle: the rest, or ''.
+ * - author, imprint ("LSU Press, 2023"): plain text, or ''.
+ * - url: its Link (the catalog record), or ''.
+ * - image: its Cover (Media: Image) in publication_cover (480 wide, no
+ *   crop), decorative and lazy (_palefire_image_build()), or NULL: the
+ *   card then sets a jacket in type.
+ */
+function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
+  $books = [];
+  if (!$paragraph->hasField('field_tile_publications')) {
+    return $books;
+  }
+  $text = static fn (ParagraphInterface $book, string $field): string => ($book->hasField($field) && !$book->get($field)->isEmpty())
+    ? trim((string) $book->get($field)->value)
+    : '';
+  foreach ($paragraph->get('field_tile_publications')->referencedEntities() as $book) {
+    if (!$book instanceof ParagraphInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($book);
+    $full = $text($book, 'field_pub_title');
+    if (!$book->isPublished() || $full === '') {
+      continue;
+    }
+    [$title, $subtitle] = array_pad(preg_split('/\s*:\s+/u', $full, 2), 2, '');
+
+    $url = '';
+    if ($book->hasField('field_pub_link') && !$book->get('field_pub_link')->isEmpty()) {
+      $link = $book->get('field_pub_link')->first()->getUrl();
+      $generated = $link->toString(TRUE);
+      $cache->addCacheableDependency($generated);
+      $url = $generated->getGeneratedUrl();
+    }
+
+    $image = NULL;
+    if ($book->hasField('field_pub_cover') && !$book->get('field_pub_cover')->isEmpty()
+      && ($item = _palefire_media_image_item($book->get('field_pub_cover')->first(), $cache))) {
+      $image = _palefire_image_build($item, ['publication_cover'], $cache);
+    }
+
+    $books[] = [
+      'title' => $title,
+      'subtitle' => $subtitle,
+      'author' => $text($book, 'field_pub_author'),
+      'imprint' => $text($book, 'field_pub_imprint'),
+      'url' => $url,
+      'image' => $image,
+    ];
+  }
+  return $books;
 }
 
 /**

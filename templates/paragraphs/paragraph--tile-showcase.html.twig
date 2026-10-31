@@ -13,6 +13,8 @@
  * - tiles: title, url, label (Category terms, "Dept + Medium"; the index's
  *   rows), labels (the same terms, a label apiece on the cards), note (the
  *   intro as plain text; index and ledger only), image.
+ * - books: layout 'covers' only (_palefire_publications()): title,
+ *   subtitle, author, imprint, url, image.
  * - groups: the ledger's tiles by Category: label, tiles.
  * - faqs: layout 'ask' only (includes/ask-special.html.twig).
  *
@@ -90,6 +92,45 @@
 {% if layout == 'ask' %}
   {# Ask Special Collections: FAQs and the question form, not cards. #}
   {% include '@palefire/includes/ask-special.html.twig' %}
+{% elseif layout == 'covers' and books %}
+  {# Covers: books from the collections' readers, each its cover (or a
+     jacket set in type when it has none) standing on the section's
+     hairline, then the title, author and imprint. The cover is decorative
+     (aria-hidden, alt=""): the <h3> names the link. Not in "On this page"
+     (no data-toc): eight books would crowd the section's own entry. #}
+  {{ attach_library('palefire/tile-reveal') }}
+  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--covers') }} data-toc-skip>
+    <ul class="pf-tiles__list" role="list">
+      {% for book in books %}
+        {% set tag = book.url ? 'a' : 'div' %}
+        <li class="pf-tiles__item">
+          <{{ tag }} class="pf-book"{% if book.url %} href="{{ book.url }}"{% endif %}>
+            <span class="pf-book__cover{{ book.image ? '' : ' pf-book__cover--set' }}" aria-hidden="true">
+              {% if book.image %}
+                {{ book.image }}
+              {% else %}
+                <span class="pf-book__jacket">
+                  <span class="pf-book__jacket-title">{{ book.title }}</span>
+                  {% if book.author %}
+                    <span class="pf-book__jacket-author">{{ book.author }}</span>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </span>
+            <span class="pf-book__text">
+              <h3 class="pf-book__title">{{ book.title }}{% if book.subtitle %}<span class="pf-book__subtitle">: {{ book.subtitle }}</span>{% endif %}</h3>
+              {% if book.author %}
+                <span class="pf-book__author"><span class="visually-hidden">, </span>{{ book.author }}</span>
+              {% endif %}
+              {% if book.imprint %}
+                <span class="pf-book__imprint"><span class="visually-hidden">, </span>{{ book.imprint }}</span>
+              {% endif %}
+            </span>
+          </{{ tag }}>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% elseif tiles %}
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
