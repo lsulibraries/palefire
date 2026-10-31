@@ -180,13 +180,17 @@
     tip.setAttribute('aria-hidden', 'true');
     stage.appendChild(tip);
     // Tooltip titles are set in the exhibition serif, which other pages
-    // never download: fetch it when the pointer or focus first reaches the
-    // map, so it is in before the hover wait ends.
-    const loadSerif = () => {
+    // never download, and rooms may have photos, which the hidden sources
+    // load lazily (so never): fetch both when the pointer or focus first
+    // reaches the map, so they are in before the hover wait ends.
+    const warm = () => {
       if (document.fonts && document.fonts.load) document.fonts.load('500 1em "Playfair Display"').catch(() => {});
+      root.querySelectorAll('.pf-map__tip-src img').forEach((img) => {
+        new Image().src = img.getAttribute('src');
+      });
     };
-    root.addEventListener('pointerenter', loadSerif, { once: true });
-    root.addEventListener('focusin', loadSerif, { once: true });
+    root.addEventListener('pointerenter', warm, { once: true });
+    root.addEventListener('focusin', warm, { once: true });
     let current = null;
     let hideTimer = 0;
     let showTimer = 0;
@@ -225,7 +229,10 @@
       x = Math.max(8, Math.min(x, box.width - w - 8));
       // The name lifts on hover; aim above where it will be.
       let y = Math.round(a.top - box.top - h - SETTINGS.tipGap - 6);
-      const below = y < 0 && (a.bottom - box.top + SETTINGS.tipGap + h) <= box.height + 40;
+      // Below when it doesn't fit above but does below; when it fits
+      // neither (a tall label with a photo), on the side with more room.
+      const roomBelow = box.height + 40 - (a.bottom - box.top + SETTINGS.tipGap);
+      const below = y < 0 && (h <= roomBelow || roomBelow > a.top - box.top);
       if (below) y = Math.round(a.bottom - box.top + SETTINGS.tipGap);
       tip.classList.toggle('is-below', below);
       tip.style.setProperty('--tip-x', x + 'px');

@@ -490,6 +490,18 @@
    serif, the text at the page's body size; the link in plain words.
    building-map.js loads the serif when the pointer first reaches the map, so
    the first tooltip doesn't swap fonts. */
+/* A room's photo runs across the top, under the gold rule. Stored 3:2, shown
+   2:1 (the crop is centered), so a tall label still fits above or below its
+   room. Black and white like the drawing; color rises in slowly once the
+   label has opened. An animation, not a transition, so moving to another
+   room while open plays it again for the new photo. */
+.pf-map__tip-photo {
+  grid-column: 1 / -1; display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover;
+  border-bottom: 1px solid #{$pf-hairline};
+  filter: grayscale(1);
+}
+.pf-map__tip.is-open .pf-map__tip-photo { animation: pf-map-photo 1.6s ease .4s both; }
+@keyframes pf-map-photo { from { filter: grayscale(1); } to { filter: grayscale(0); } }
 .pf-map__tip-floor {
   display: flex; flex-direction: column; align-items: center; gap: .25rem;
   margin: 0; padding: 2.125rem 0; border-right: 1px solid #{$pf-hairline};
@@ -517,6 +529,8 @@
   .pf-map__tip-floor-num { font: 700 var(--pf-mono-label)/1.5 var(--pf-landing-label, var(--bs-font-monospace)); letter-spacing: .16em; color: var(--pf-map-floor-ink); }
   .pf-map__tip-body { padding: .625rem 1.375rem 1.625rem; }
   .pf-map__tip-title { font-size: 1.375rem; }
+  /* The label already covers most of a phone's drawing: no photo. */
+  .pf-map__tip-photo { display: none; }
 }
 
 /* Landing integration ------------------------------------------------------
@@ -540,12 +554,15 @@
   /* Tooltip: a plain short fade, no movement. */
   .pf-map__tip, .pf-map__tip.is-below { transform: none; }
   .pf-map__tip.is-open { transition: opacity var(--pf-map-tip-in) linear, visibility 0s; }
+  /* The photo stays in black and white. */
+  .pf-map__tip.is-open .pf-map__tip-photo { animation: none; }
   .pf-map__here-arrow { animation: none !important; }
   .pf-landing.is-map-in-view .pf-landing__bg-video { transform: none; }
   .pf-map__key[open]::details-content { transition: none; }
   .pf-map__key[open] .pf-seq { animation: none; }
 }
 html.pf-a11y-motion .pf-map__key[open]::details-content { transition: none; }
+html.pf-a11y-motion .pf-map__tip.is-open .pf-map__tip-photo { animation: none; }
 @media print {
   .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
   .pf-map__scroller { overflow: visible; }

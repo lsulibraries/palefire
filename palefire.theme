@@ -1011,6 +1011,30 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     '#format' => $items->format,
   ] : NULL;
 
+  // The room's photo for the top of its tooltip: pf_map_room (960x640 WebP,
+  // twice the tooltip's width). Rooms without one, or before the setup
+  // script has made the style, get none.
+  $photo_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_map_room');
+  if ($photo_style) {
+    $cache->addCacheableDependency($photo_style);
+  }
+  $photo = static function ($term) use ($photo_style, $cache): ?array {
+    $item = $photo_style && $term->hasField('field_space_image') ? $term->get('field_space_image')->first() : NULL;
+    $file = $item?->entity;
+    if (!$file instanceof FileInterface) {
+      return NULL;
+    }
+    $cache->addCacheableDependency($file);
+    $uri = $file->getFileUri();
+    $dimensions = ['width' => (int) $item->width ?: NULL, 'height' => (int) $item->height ?: NULL];
+    $photo_style->transformDimensions($dimensions, $uri);
+    return [
+      'src' => \Drupal::service('file_url_generator')->transformRelative($photo_style->buildUrl($uri)),
+      'width' => (int) ($dimensions['width'] ?? 960),
+      'height' => (int) ($dimensions['height'] ?? 640),
+    ];
+  };
+
   $uid = 'pf-map-' . $paragraph->id();
   $spaces = [];
   foreach ($building['spaces'] ?? [] as $space_key => $def) {
@@ -1034,6 +1058,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
       'body' => $text($pick('field_space_body', $term, $override, 'description')),
       // Optional words after the access line, e.g. "Now showing".
       'note' => $term->hasField('field_space_note') ? trim((string) $term->get('field_space_note')->value) : '',
+      'photo' => $photo($term),
     ];
   }
   // Floor 1 before Floor 2; within a floor, the buildings.yml order.
