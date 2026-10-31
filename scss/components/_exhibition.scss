@@ -74,6 +74,20 @@ html[data-pf-mode="exhibition"] {
   --pf-exhibit-prose: 42rem;
 }
 
+// Transcripts (an oral history's, a manuscript's transcription): long
+// reading in the page's Roboto, a step heavier (430, its variable axis,
+// already loaded) and larger, the swatch's text color a third of the way
+// to its heading color (Twilight 9:1; always more contrast than the text,
+// as the heading has more), so thin strokes hold on dark swatches.
+// "Easy-to-read font" keeps its own face.
+@mixin pf-transcript-type {
+  font-size: 1.125rem;
+  font-weight: 430;
+  line-height: 1.6;
+  letter-spacing: .005em;
+  color: color-mix(in srgb, var(--pf-g-heading, var(--bs-emphasis-color)) 30%, var(--bs-body-color));
+}
+
 // Shared small label: mono capitals, as the guide head's meta line.
 %pf-exhibit-kicker {
   margin: 0;
@@ -1555,6 +1569,23 @@ html[data-pf-mode="exhibition"] :is(.pf-guide-block--text > .pf-guide-prose, .pf
   }
 }
 
+// An oral history's transcript in the transcript type, each speaker's
+// name (js/exhibition.js markSpeakers()) a mono label on its own line
+// over what they said, in the kicker voice, rather than bold capitals
+// run into the text.
+.pf-exhibit-audio__text {
+  :is(p, li) {
+    @include pf-transcript-type;
+  }
+
+  .pf-speaker {
+    @extend %pf-exhibit-kicker;
+    display: block;
+    margin-bottom: .25rem;
+    font-weight: 400;
+  }
+}
+
 // A long URL (the sources' web addresses) breaks rather than widening a
 // phone's page.
 html[data-pf-mode="exhibition"] .pf-guide-prose a {
@@ -2421,11 +2452,11 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 // A timed transcript (js/exhibition.js), once its clip has played: like a
-// lyrics view, the text fills with the accent (Twilight's pale gold) as
-// it's heard. The phrase being heard and everything before it are in the
-// accent, what's still to come in the muted color (both 4.5:1 and up in
-// every reading theme), so the reader sees where the voice is and how far
-// it has come. Each phrase takes the color in a slow crossfade. Hovering
+// lyrics view, the phrase being heard is in the accent (Twilight's pale
+// gold), what's been heard in the transcript's color and what's still to
+// come in the muted color (all 4.5:1 and up in every reading theme), so
+// the reader sees where the voice is and how far it has come. Each
+// phrase takes its color in a slow crossfade. Hovering
 // one still to come brings it up in the heading color: a click plays from
 // there.
 .pf-exhibit-audio__text.is-following {
@@ -2445,7 +2476,14 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     }
   }
 
-  .pf-phrase:is(.is-past, .is-current) {
+  // Heard: back to the transcript's color. Only the phrase being spoken
+  // is in the accent, so the gold follows the voice instead of filling
+  // the panel; what's still to come stays muted.
+  .pf-phrase.is-past {
+    color: inherit;
+  }
+
+  .pf-phrase.is-current {
     color: var(--pf-exhibit-accent);
   }
 }
@@ -3727,8 +3765,9 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 // flush left: a hairline above it and above each page, "Transcription" and
 // "Page 1" as monospace labels on them (not the guides' term-and-definition
 // rule, and no side rule: it met the top one short of a corner); the text
-// in the reader serif (system fonts; "Easy-to-read font" wins), the note on
-// conventions under the label in the curators' sans. Words struck through
+// in the transcript type (pf-transcript-type, as the oral histories'; was
+// the reader serif until 2026-10-31), the note on conventions under the
+// label in the curators' smaller muted text. Words struck through
 // as in the hand; the page on the stage marked as it turns.
 .pf-transcription {
   margin-top: 2.5rem;
@@ -3763,9 +3802,8 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
     }
   }
 
-  html:not(.pf-a11y-font) & .pf-guide-prose p:not(h4:first-child + p) {
-    font-family: $pf-font-reader;
-    font-kerning: normal;
+  .pf-guide-prose :is(p, li):not(h4:first-child + p) {
+    @include pf-transcript-type;
   }
 
   .pf-guide-prose h4:first-child + p {

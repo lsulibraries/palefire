@@ -907,6 +907,9 @@
       now.textContent = view.title.textContent;
       wrap.prepend(now);
     });
+    // Marked already when copied from the page, unless an address opened
+    // the view before the behaviors attached.
+    view.body.querySelectorAll('.pf-exhibit-audio__text').forEach(markSpeakers);
     view.body.querySelectorAll('.pf-exhibit-audio').forEach((clip) => {
       clip.setAttribute('aria-labelledby', 'pf-viewer-title');
       const folded = clip.querySelector('.pf-exhibit-audio__transcript');
@@ -1621,6 +1624,26 @@
     });
   }
 
+  // A transcript's speaker, "<p><strong>PAYNE:</strong> …", as a label
+  // over what they said (.pf-speaker, _exhibition.scss): a <strong> that
+  // opens its paragraph and ends in a colon. The colon stays for screen
+  // readers (the pause before the words), out of sight.
+  function markSpeakers(text) {
+    text.querySelectorAll('p > strong:first-child').forEach((name) => {
+      const before = name.previousSibling;
+      const label = name.textContent.trim();
+      if ((before && before.textContent.trim()) || !label.endsWith(':') || name.classList.contains('pf-speaker')) {
+        return;
+      }
+      const colon = document.createElement('span');
+      colon.className = 'visually-hidden';
+      colon.textContent = ':';
+      name.textContent = label.slice(0, -1).trim();
+      name.append(colon);
+      name.classList.add('pf-speaker');
+    });
+  }
+
   function initAudio(wrap) {
     const audio = wrap.querySelector('audio');
     // Once only: an address for a wall's entry opens the object view
@@ -1977,6 +2000,7 @@
         });
       });
       once('pf-exhibit-out', '.pf-main a[href]', context).forEach(markOutside);
+      once('pf-speakers', '.pf-exhibit-audio__text', context).forEach(markSpeakers);
       once('pf-audio', '[data-pf-audio]', context).forEach(initAudio);
       once('pf-exhibit-tip', '[data-pf-exhibit-tip]', context).forEach(initTip);
       // Biographies outside galleries (a page without the head's script).
