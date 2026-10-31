@@ -3926,7 +3926,63 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
       animation-timeline: --pf-audio-above;
       animation-range: exit 0% exit 100%;
     }
+
+    // Title and credit as a marquee, like an old music player's display:
+    // two copies, each trailed by its gap, slide left by one copy's width
+    // and loop. An even pace (a quarter second a character) whatever the
+    // length, and only while the clip plays, so Pause stops it (WCAG
+    // 2.2.2). The text fades out across the side gutters rather than
+    // cutting a letter at the panel's edge.
+    .pf-audio__now-track {
+      display: inline-flex;
+      animation: pf-audio-now-marquee calc(var(--pf-now-length, 40) * .25s) linear infinite paused;
+
+      > span {
+        flex: none;
+        padding-right: 3em;
+      }
+    }
+
+    .is-playing .pf-audio__now-track {
+      animation-play-state: running;
+    }
+
+    .pf-audio__now {
+      mask-image: linear-gradient(to right, transparent, #000 var(--pf-pad-start), #000 calc(100% - var(--pf-pad-end)), transparent);
+    }
   }
+}
+
+@keyframes pf-audio-now-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+// Reduced motion: no marquee; the one copy, cut with an ellipsis.
+@mixin pf-audio-now-still {
+  .pf-audio__now {
+    mask-image: none;
+  }
+
+  .pf-audio__now-track {
+    display: inline;
+    animation: none;
+
+    > span + span {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-exhibit-object__body {
+    @include pf-audio-now-still;
+  }
+}
+
+html.pf-a11y-motion .pf-exhibit-object__body {
+  @include pf-audio-now-still;
 }
 
 @keyframes pf-audio-now-slot {

@@ -899,12 +899,27 @@
         audio.setAttribute('aria-labelledby', 'pf-viewer-title');
         initAudio(wrap);
       }
-      // The title, small, over the pinned player once the view's own has
-      // scrolled away (_exhibition.scss). Decorative: the <h2> names it.
+      // The title and its credit, small, over the pinned player once the
+      // view's own has scrolled away, running by as a marquee while the
+      // clip plays (_exhibition.scss): two copies, so the loop is
+      // seamless. Decorative: the <h2> and the credit name it.
+      const credit = wrap.parentElement.querySelector('.pf-exhibit-audio__credit');
+      const label = [view.title.textContent, credit && credit.textContent]
+        .map((part) => (part || '').trim())
+        .filter(Boolean)
+        .join(' · ');
       const now = document.createElement('p');
       now.className = 'pf-audio__now';
       now.setAttribute('aria-hidden', 'true');
-      now.textContent = view.title.textContent;
+      const track = document.createElement('span');
+      track.className = 'pf-audio__now-track';
+      track.style.setProperty('--pf-now-length', label.length);
+      for (let i = 0; i < 2; i++) {
+        const copy = document.createElement('span');
+        copy.textContent = label;
+        track.append(copy);
+      }
+      now.append(track);
       wrap.prepend(now);
     });
     // Marked already when copied from the page, unless an address opened
