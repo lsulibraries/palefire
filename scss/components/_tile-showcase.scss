@@ -1555,10 +1555,6 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
     transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  .pf-tiles--reveal.pf-tiles--covers .pf-book .pf-book__title {
-    transition: color 0.3s ease-out;
-  }
-
   a.pf-book:is(:hover, :focus-visible) .pf-book__object {
     transform: translate3d(0, -0.375rem, 1.5rem) rotateY(-4deg);
   }
@@ -1576,7 +1572,9 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
-// The book in hand stands out: the other covers dim (their text doesn't).
+// The book in hand stands out: the other covers dim to 35%, and their
+// titles step down to the muted color (7.4:1 on Twilight; opacity would
+// take white text under 4.5:1). Authors and imprints are muted already.
 // Dimming is at once; brightening again waits 300ms, so crossing the gap
 // between two books (nothing hovered for a moment) doesn't flash the whole
 // shelf. The book the pointer lands on brightens at once. With reduced
@@ -1585,17 +1583,29 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   transition: opacity 0.4s ease-out 0.3s;
 }
 
-.pf-tiles--covers .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) .pf-book__cover {
-  opacity: 0.35;
-  transition-delay: 0s;
+.pf-tiles.pf-tiles--covers .pf-book .pf-book__title {
+  transition: color 0.3s ease-out 0.3s;
 }
 
-.pf-tiles--covers .pf-tiles__item:has(a.pf-book:is(:hover, :focus-visible)) .pf-book__cover {
+.pf-tiles--covers .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) {
+  .pf-book__cover {
+    opacity: 0.35;
+    transition-delay: 0s;
+  }
+
+  .pf-book__title {
+    color: var(--pf-index-muted);
+    transition-delay: 0s;
+  }
+}
+
+.pf-tiles--covers .pf-tiles__item:has(a.pf-book:is(:hover, :focus-visible)) :is(.pf-book__cover, .pf-book__title) {
   transition-delay: 0s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-book__cover {
+  .pf-book__cover,
+  .pf-tiles.pf-tiles--covers .pf-book .pf-book__title {
     transition-duration: 0s;
   }
 }
@@ -1610,7 +1620,8 @@ html.pf-a11y-motion {
     transform: none;
   }
 
-  .pf-book__cover {
+  .pf-book__cover,
+  .pf-tiles.pf-tiles--covers .pf-book .pf-book__title {
     transition-duration: 0s;
   }
 
