@@ -22,9 +22,14 @@
  *
  * Sources: the research guide's own covers where they are full size (Amazon's
  * originals, 1707 x 2560), else the largest found: LSU Press and Bookshop.org
- * (Ingram), at least 660 wide. Each file becomes an Image media item named
+ * (Ingram), at least 660 wide; for the rest of the guide's list (added
+ * 2026-10-31), the largest of the publisher, Bookshop.org and Amazon. Four
+ * older books have nothing over 323-432 wide (Reconstruction in the Cane
+ * Fields, The Louisiana Field Guide, Louisiana Women, Coolies and Cane),
+ * still sharp at the shelf's 176px. Old South Baton Rouge has none and
+ * keeps its typeset jacket. Each file becomes an Image media item named
  * "Cover: <title>" (alt "Cover of <title>"), in public://publications, and
- * is reused on a re-run. The card shows covers at most about 230px wide, so
+ * is reused on a re-run. The card shows covers at most about 176px wide, so
  * publication_cover (480 wide) is what visitors download.
  *
  * It stops, saving nothing, when "Written at Hill" isn't on the page, or the
@@ -65,6 +70,31 @@ $covers = [
   'The 272' => ['the-272.jpg', 'https://images-us.bookshop.org/ingram/9780399590887.jpg?height=2000&v=v2'],
   'Kingfish U' => ['kingfish-u.jpg', 'https://m.media-amazon.com/images/I/81xjSdETuQL.jpg'],
   'Lost Causes' => ['lost-causes.jpg', 'https://lsu-press-us.imgix.net/covers/9780807177167.jpg'],
+  // The rest of the guide's list (palefire_special_publications_shelf.php).
+  'The New Era in American Mathematics' => ['the-new-era-in-american-mathematics.jpg', 'https://pup-assets.imgix.net/onix/images/9780691197555.jpg'],
+  'Escape to the City' => ['escape-to-the-city.jpg', 'https://images-us.bookshop.org/ingram/9781469671079.jpg?height=2000&v=v2'],
+  'Rough Tactics' => ['rough-tactics.jpg', 'https://m.media-amazon.com/images/I/71ZVk9i3ZyS.jpg'],
+  'The Ledger and the Chain' => ['the-ledger-and-the-chain.jpg', 'https://images-us.bookshop.org/ingram/9781541616592.jpg?height=2000&v=v2'],
+  'Carville’s Cure' => ['carvilles-cure.jpg', 'https://images-us.bookshop.org/ingram/9781631495045.jpg?height=2000&v=v2'],
+  'Louisiana State University and Agricultural and Mechanical College' => ['lsu-1860-1919.jpg', 'https://lsu-press-us.imgix.net/covers/9780807170717.jpg'],
+  'A Kingdom of Water' => ['a-kingdom-of-water.jpg', 'https://unebraskapress-us.imgix.net/covers/9781496218797.jpg'],
+  'The Frescoes of Conrad Albrizio' => ['the-frescoes-of-conrad-albrizio.jpg', 'https://lsu-press-us.imgix.net/covers/9780807171028.jpg'],
+  'Maryland, My Maryland' => ['maryland-my-maryland.jpg', 'https://m.media-amazon.com/images/I/81fDMGE7lGL.jpg'],
+  'Accounting for Slavery' => ['accounting-for-slavery.jpg', 'https://images-us.bookshop.org/ingram/9780674241657.jpg?height=2000&v=v2'],
+  'Native Flora of Louisiana' => ['native-flora-of-louisiana.jpg', 'https://lsu-press-us.imgix.net/covers/9780807170236.jpg'],
+  'Pistols and Politics' => ['pistols-and-politics.jpg', 'https://lsu-press-us.imgix.net/covers/9780807169278.jpg'],
+  'Beyond Racism and Poverty' => ['beyond-racism-and-poverty.jpg', 'https://images-us.bookshop.org/ingram/9789004447172.jpg?height=2000&v=v2'],
+  'The Vietnam War' => ['the-vietnam-war.jpg', 'https://images-us.bookshop.org/ingram/9780307700254.jpg?height=2000&v=v2'],
+  'Spiritualism in Nineteenth-Century New Orleans' => ['spiritualism-in-nineteenth-century-new-orleans.jpg', 'https://images-us.bookshop.org/ingram/9781496810090.jpg?height=2000&v=v2'],
+  'Win the Race or Die Trying' => ['win-the-race-or-die-trying.jpg', 'https://images-us.bookshop.org/ingram/9781496807649.jpg?height=2000&v=v2'],
+  'The Louisiana Field Guide' => ['the-louisiana-field-guide.jpg', 'https://m.media-amazon.com/images/I/517rHtsMKoL.jpg'],
+  'Imagining the Creole City' => ['imagining-the-creole-city.jpg', 'https://lsu-press-us.imgix.net/covers/9780807158234.jpg'],
+  'The Architecture of LSU' => ['the-architecture-of-lsu.jpg', 'https://lsu-press-us.imgix.net/covers/9780807149768.jpg'],
+  'Louisiana Women' => ['louisiana-women.jpg', 'https://m.media-amazon.com/images/I/41C7znatzAL.jpg'],
+  'Coolies and Cane' => ['coolies-and-cane.jpg', 'https://m.media-amazon.com/images/I/41fe2QFsG3L.jpg'],
+  'Kingfish: The Reign' => ['kingfish-the-reign-of-huey-p-long.jpg', 'https://m.media-amazon.com/images/I/6198hWY38YL.jpg'],
+  'The Sugar Masters' => ['the-sugar-masters.jpg', 'https://lsu-press-us.imgix.net/covers/9780807132470.jpg'],
+  'Reconstruction in the Cane Fields' => ['reconstruction-in-the-cane-fields.jpg', 'https://lsu-press-us.imgix.net/covers/9780807127285.jpg'],
 ];
 
 // The Image media type, as palefire_publications_setup.php picks it. ---------

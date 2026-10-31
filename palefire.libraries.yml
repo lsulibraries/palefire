@@ -189,6 +189,15 @@ tile-reveal:
     - core/drupal
     - core/once
 
+# The Covers shelf's Previous / Next buttons. Attached by
+# paragraph--tile-showcase.html.twig, Covers layout only.
+book-shelf:
+  js:
+    js/book-shelf.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Ask Special Collections: each column's parts rise in on scroll, one after
 # another. Attached by templates/includes/ask-special.html.twig.
 ask-reveal:

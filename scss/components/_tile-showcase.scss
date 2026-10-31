@@ -1154,29 +1154,35 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
 // Covers -------------------------------------------------------------------
 // Books from the collections' readers (Published from the Collections).
-// Each cover stands in a 2:3 frame on a hairline shelf, shown whole
-// (contain, from the bottom), so books of different shapes stand at
-// different heights, as on a shelf. Under it the short title, author and
+// One shelf of books, the guide's whole list, newest first: a row that
+// scrolls sideways at every width (swipe, trackpad, Tab, or the Previous /
+// Next buttons js/book-shelf.js shows when it overflows), running to the
+// section's edges. Each book stands in a 2:3 frame on a hairline, at its
+// own shape, so books of different shapes stand at different heights.
+// It is drawn turned a little to the left, so its page edges show, as
+// deep as its page count (--pf-book-depth, a share of the cover's width:
+// _palefire_publications()). Under it the short title, author and
 // imprint, in the index's colors; the subtitle is for screen readers only.
-// A supporting section, so one row of small books: a swipeable row until
-// the section is 60rem wide, then a row of five at most 11rem each, left
-// aligned (more than five wrap: the field asks for five).
 // A book with no cover gets a jacket set in type (Roboto 700 capitals,
 // the author in mono), on one of four swatches in turn, each at least
-// 7:1 though it is decorative. Hover: the cover rises 6px, the title
-// takes the accent.
+// 7:1 though it is decorative.
+// Hover or focus: the book turns toward the reader and lifts, the title
+// takes the accent, and the other covers go soft (blur and fade, a depth
+// of field). Their text stays sharp. With reduced motion the books stay
+// still and nothing blurs.
 .pf-tiles--covers {
   --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
   --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
   --pf-index-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  --pf-cover-gap: clamp(1.25rem, 2.5cqi, 2rem);
+  --pf-cover-gap: clamp(1.5rem, 3cqi, 2.5rem);
+  --pf-book-turn: -18deg;
 }
 
 .pf-tiles--covers .pf-tiles__list {
   display: flex;
   gap: var(--pf-cover-gap);
   margin-inline: calc(-1 * var(--pf-section-pad-inline, 1rem));
-  padding: 0.5rem var(--pf-section-pad-inline, 1rem) 1rem;
+  padding: 1rem var(--pf-section-pad-inline, 1rem) 1.25rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -1184,20 +1190,64 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   @include pf-thin-scrollbar;
 }
 
+// Positioned, so the visually hidden subtitles (absolute) are clipped by
+// the shelf instead of widening the page.
 .pf-tiles--covers .pf-tiles__item {
+  position: relative;
   flex: 0 0 min(40%, 10rem);
-  scroll-snap-align: none start;
+  scroll-snap-align: start;
 }
 
 @container pf-tiles (min-width: #{$pf-tile-break-wide}) {
-  .pf-tiles--covers .pf-tiles__list {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 11rem));
-    row-gap: 2.5rem;
-    margin-inline: 0;
-    padding: 0.5rem 0 0;
-    overflow: visible;
-    scroll-snap-type: none;
+  .pf-tiles--covers .pf-tiles__item {
+    flex-basis: 11rem;
+  }
+}
+
+// Previous / Next: square buttons under the shelf, on the right.
+.pf-tiles__shelf-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-tiles__shelf-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid $pf-hairline;
+  background: none;
+  color: var(--pf-index-muted);
+  cursor: pointer;
+  transition: color $pf-hover-out ease, border-color $pf-hover-out ease;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: currentColor;
+    color: var(--pf-index-accent);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-index-accent);
+    outline-offset: 2px;
+  }
+
+  // At the shelf's end: still there, so the pair doesn't jump.
+  &:disabled {
+    cursor: default;
+    opacity: 0.35;
   }
 }
 
@@ -1231,16 +1281,46 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   justify-content: center;
   aspect-ratio: 2 / 3;
   border-bottom: 1px solid $pf-hairline;
+  perspective: 60rem;
+}
+
+// The book: the cover at its own shape (at most the frame's width or
+// height), turned, with its page edges behind its right edge. The filter
+// is on the img, not here, which would flatten the 3D.
+.pf-book__object {
+  position: relative;
+  display: block;
+  transform: translate3d(0, 0, 0) rotateY(var(--pf-book-turn));
+  transform-style: preserve-3d;
 
   img {
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center bottom;
-    // Follows the cover's own edges, not the frame's.
+    width: auto;
+    max-width: 100cqi;
+    height: auto;
+    max-height: 150cqi;
     filter: drop-shadow(0.375rem 0.75rem 0.75rem rgba($pf-black, 0.18));
   }
+
+  // The page edges: a paper block folded back from the cover's right
+  // edge, one fine line per few leaves, shaded toward the back.
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block: 1.5%;
+    right: 0;
+    width: calc(var(--pf-book-depth, 0.14) * 100%);
+    background:
+      linear-gradient(90deg, rgba($pf-black, 0.22), rgba($pf-black, 0) 70%),
+      repeating-linear-gradient(90deg, #f4f0e6 0 1px, #ddd6c6 1px 2px);
+    transform: rotateY(-90deg);
+    transform-origin: right center;
+  }
+}
+
+.pf-book__cover--set .pf-book__object {
+  width: 100%;
+  height: 100%;
 }
 
 .pf-book__jacket {
@@ -1332,22 +1412,43 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .pf-book__cover > * {
-    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  .pf-book__object {
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .pf-book__cover {
+    transition: filter 0.5s ease-out, opacity 0.5s ease-out;
   }
 
   .pf-tiles--reveal.pf-tiles--covers .pf-book .pf-book__title {
     transition: color 0.3s ease-out;
   }
 
-  a.pf-book:is(:hover, :focus-visible) .pf-book__cover > * {
-    transform: translateY(-0.375rem);
+  a.pf-book:is(:hover, :focus-visible) .pf-book__object {
+    transform: translate3d(0, -0.375rem, 1.5rem) rotateY(-4deg);
+  }
+
+  // Depth of field: the book in hand is sharp, the rest of the shelf soft.
+  .pf-tiles--covers .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) .pf-book__cover {
+    filter: blur(2px);
+    opacity: 0.6;
   }
 }
 
-html.pf-a11y-motion a.pf-book .pf-book__cover > * {
-  transition: none;
-  transform: none;
+html.pf-a11y-motion {
+  .pf-book__object,
+  .pf-book__cover {
+    transition: none;
+  }
+
+  a.pf-book:is(:hover, :focus-visible) .pf-book__object {
+    transform: translate3d(0, 0, 0) rotateY(var(--pf-book-turn));
+  }
+
+  .pf-tiles--covers .pf-tiles__item .pf-book__cover {
+    filter: none;
+    opacity: 1;
+  }
 }
 
 // Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
