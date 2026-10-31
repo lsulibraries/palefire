@@ -1156,21 +1156,20 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 // Books from the collections' readers (Published from the Collections).
 // Each cover stands in a 2:3 frame on a hairline shelf, shown whole
 // (contain, from the bottom), so books of different shapes stand at
-// different heights, as on a shelf. Under it the title (its subtitle
-// quieter), author and imprint, in the index's colors.
-// Narrow: a swipeable row, as the stagger's, the next book peeking in.
-// From 32rem a grid of 3, from 48rem 4: eight books are two even rows.
+// different heights, as on a shelf. Under it the short title, author and
+// imprint, in the index's colors; the subtitle is for screen readers only.
+// A supporting section, so one row of small books: a swipeable row until
+// the section is 60rem wide, then a row of five at most 11rem each, left
+// aligned (more than five wrap: the field asks for five).
 // A book with no cover gets a jacket set in type (Roboto 700 capitals,
 // the author in mono), on one of four swatches in turn, each at least
 // 7:1 though it is decorative. Hover: the cover rises 6px, the title
 // takes the accent.
-$pf-covers-break-four: 48rem;
-
 .pf-tiles--covers {
   --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
   --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
   --pf-index-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  --pf-cover-gap: clamp(1.25rem, 3cqi, 2.5rem);
+  --pf-cover-gap: clamp(1.25rem, 2.5cqi, 2rem);
 }
 
 .pf-tiles--covers .pf-tiles__list {
@@ -1186,25 +1185,19 @@ $pf-covers-break-four: 48rem;
 }
 
 .pf-tiles--covers .pf-tiles__item {
-  flex: 0 0 min(42%, 11rem);
+  flex: 0 0 min(40%, 10rem);
   scroll-snap-align: none start;
 }
 
-@container pf-tiles (min-width: #{$pf-tile-break-two}) {
+@container pf-tiles (min-width: #{$pf-tile-break-wide}) {
   .pf-tiles--covers .pf-tiles__list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    row-gap: clamp(2.5rem, 5cqi, 3.5rem);
+    grid-template-columns: repeat(5, minmax(0, 11rem));
+    row-gap: 2.5rem;
     margin-inline: 0;
     padding: 0.5rem 0 0;
     overflow: visible;
     scroll-snap-type: none;
-  }
-}
-
-@container pf-tiles (min-width: #{$pf-covers-break-four}) {
-  .pf-tiles--covers .pf-tiles__list {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -1317,11 +1310,6 @@ $pf-covers-break-four: 48rem;
   line-height: 1.3;
   overflow-wrap: anywhere; // long single words at 400% zoom (WCAG 1.4.10)
   text-wrap: pretty;
-}
-
-.pf-book__subtitle {
-  color: var(--pf-index-muted);
-  font-weight: 400;
 }
 
 .pf-book__author {
