@@ -1730,8 +1730,8 @@
   // (data-pf-timings, palefire.theme) lights the phrase being heard. Each
   // cue's text is the transcript's own wording
   // (scripts/palefire_oral_history_vtt.py), found in the page and wrapped
-  // in a span. Once the clip has played, the rest of the text settles to
-  // the muted color (_exhibition.scss); a click on a phrase plays from it,
+  // in a span. Once the clip has played, the phrases heard so far are lit
+  // and the rest muted (_exhibition.scss); a click on a phrase plays from it,
   // and the text follows the voice while the reader is following it.
   const timings = new Map();
 
@@ -1810,7 +1810,7 @@
       });
     }
     text.querySelectorAll('.pf-phrase').forEach((span) => {
-      span.classList.remove('is-current');
+      span.classList.remove('is-current', 'is-past');
       const phrase = phrases[Number(span.dataset.pfCue)];
       if (phrase) {
         phrase.els.push(span);
@@ -1880,13 +1880,17 @@
         return;
       }
       const was = current >= 0 ? phrases[current].els : [];
-      was.forEach((el) => el.classList.remove('is-current'));
       current = index;
+      // What has been heard stays lit, as in a lyrics view; a seek back
+      // unlights what comes after.
+      phrases.forEach((phrase, i) => phrase.els.forEach((el) => {
+        el.classList.toggle('is-past', i < index);
+        el.classList.toggle('is-current', i === index);
+      }));
       if (index < 0) {
         return;
       }
       const els = phrases[index].els;
-      els.forEach((el) => el.classList.add('is-current'));
       // Follow on only from a phrase the reader could see, so text they
       // scrolled away to read stays put.
       const scroller = scrollerOf(text);
@@ -1917,7 +1921,7 @@
       following = false;
       current = -1;
       text.classList.remove('is-following');
-      text.querySelectorAll('.is-current').forEach((el) => el.classList.remove('is-current'));
+      text.querySelectorAll('.pf-phrase').forEach((el) => el.classList.remove('is-current', 'is-past'));
     });
 
     // A phrase plays from its start. Mouse only and only once the clip has
