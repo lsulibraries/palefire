@@ -457,8 +457,8 @@
 .pf-map__tip-src { display: none; }
 .pf-map__tip {
   position: absolute; z-index: 5; left: var(--tip-x, 0px); top: var(--tip-y, 0px);
-  display: grid; grid-template-columns: 4rem minmax(0, 1fr);
-  width: max-content; max-width: min(25rem, calc(100% - 1rem));
+  display: grid; grid-template-columns: 4.75rem minmax(0, 1fr);
+  width: max-content; max-width: min(27rem, calc(100% - 1rem));
   border: 1px solid #{$pf-hairline}; border-top: 2px solid var(--pf-map-hover); border-radius: 0;
   background: var(--pf-map-tip-solid); color: var(--pf-map-ink);
   font-size: 1rem; line-height: 1.6; text-align: left;
@@ -492,30 +492,30 @@
    the first tooltip doesn't swap fonts. */
 .pf-map__tip-floor {
   display: flex; flex-direction: column; align-items: center; gap: .25rem;
-  margin: 0; padding: 1.125rem 0; border-right: 1px solid #{$pf-hairline};
+  margin: 0; padding: 1.625rem 0; border-right: 1px solid #{$pf-hairline};
 }
 .pf-map__tip-floor-label { font-family: var(--pf-landing-label, var(--bs-font-monospace)); font-size: .6875rem; font-weight: 700; letter-spacing: .16em; line-height: 1.4; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-floor-num { font: 500 2.125rem/1 $pf-font-display-serif; font-variant-numeric: lining-nums; color: var(--pf-map-ink); }
-.pf-map__tip-body { padding: 1.125rem 1.375rem 1.25rem; }
-.pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .625rem; }
+.pf-map__tip-body { padding: 1.5rem 1.75rem 1.75rem; }
+.pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .875rem; }
 .pf-map__tip-head .pf-map__swatch,
 .pf-map__group-title .pf-map__swatch { width: 28px; height: calc(var(--p) * 3); }
 .pf-map__tip-eyebrow { margin: 0; font-family: var(--pf-landing-label, var(--bs-font-monospace)); font-size: var(--pf-mono-label); font-weight: 700; letter-spacing: .16em; line-height: 1.5; text-transform: uppercase; color: var(--pf-map-floor-ink); }
-.pf-map__tip-title { display: block; margin: 0 0 .625rem; font: 500 1.625rem/1.15 $pf-font-display-serif; font-variant-numeric: lining-nums; letter-spacing: normal; text-transform: none; color: var(--pf-map-ink); }
+.pf-map__tip-title { display: block; margin: 0 0 .75rem; font: 500 1.625rem/1.15 $pf-font-display-serif; font-variant-numeric: lining-nums; letter-spacing: normal; text-transform: none; color: var(--pf-map-ink); }
 .pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-text { color: var(--pf-map-tip-text); }
 .pf-map__tip-text p { margin: 0 0 .5rem; }
 .pf-map__tip-text > :last-child { margin-bottom: 0; }
-.pf-map__tip-cta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 1rem 0 0; padding-top: .75rem; border-top: 1px solid #{$pf-hairline}; font-size: .9375rem; font-weight: 500; color: var(--pf-map-ink); }
+.pf-map__tip-cta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 1.25rem 0 0; padding-top: 1rem; border-top: 1px solid #{$pf-hairline}; font-size: .9375rem; font-weight: 500; color: var(--pf-map-ink); }
 .pf-map__tip-cta::after { content: "\2192"; color: var(--pf-map-hover); }
 /* A narrow map (phones) has no room for the floor column: the floor sits
    in small capitals over the access line, and the type steps down. */
 @container pf-map (max-width: 30rem) {
   .pf-map__tip { grid-template-columns: minmax(0, 1fr); font-size: .9375rem; }
-  .pf-map__tip-floor { flex-direction: row; align-items: baseline; gap: .4rem; padding: .875rem 1.125rem 0; border-right: 0; }
+  .pf-map__tip-floor { flex-direction: row; align-items: baseline; gap: .4rem; padding: 1.25rem 1.375rem 0; border-right: 0; }
   .pf-map__tip-floor-label { font-size: var(--pf-mono-label); line-height: 1.5; }
   .pf-map__tip-floor-num { font: 700 var(--pf-mono-label)/1.5 var(--pf-landing-label, var(--bs-font-monospace)); letter-spacing: .16em; color: var(--pf-map-floor-ink); }
-  .pf-map__tip-body { padding: .5rem 1.125rem 1.125rem; }
+  .pf-map__tip-body { padding: .625rem 1.375rem 1.375rem; }
   .pf-map__tip-title { font-size: 1.375rem; }
 }
 
