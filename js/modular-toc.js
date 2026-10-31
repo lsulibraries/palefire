@@ -858,18 +858,20 @@
     /* ---------------- Landing bar: pinned, with the section ---------------- */
 
     // On a page whose landing has the breadcrumb bar (includes/
-    // landing.html.twig; not an exhibition's head), the bar stays under the
+    // landing.html.twig) or an exhibition, whose title page has the same
+    // bar (page.html.twig, .pf-exhibit-head), the bar stays under the
     // header for the whole page, and its last crumb names the current
     // section, in place of the rail's vertical name. Not the first entry
     // (Home): it would repeat the page's title. The crumb is a button that
     // opens the contents: the rail's index panel from lg (focus moves to
     // the section's rail link; Esc brings it back), the TOC drawer below.
-    // The bar is sticky inside the landing (_landing-features.scss), so it
-    // can't outlast it: once the landing would push it up, it turns fixed
-    // in the same place (.is-pinned), and a spacer of its size holds its
-    // place in the landing, so nothing moves. <html>.pf-bar-pinned lifts the
-    // first section over the ones after it, as the bar is inside it.
-    const bar = document.querySelector('.pf-landing > .pf-landing__bar');
+    // The bar is sticky inside the landing or the title page
+    // (_landing-features.scss, _exhibition.scss), so it can't outlast it:
+    // once that would push it up, it turns fixed in the same place
+    // (.is-pinned), and a spacer of its size holds its place, so nothing
+    // moves. <html>.pf-bar-pinned lifts a landing's first section over the
+    // ones after it, as the bar is inside it.
+    const bar = document.querySelector('.pf-landing > .pf-landing__bar, .pf-exhibit-head > .pf-landing__bar');
     const crumbList = bar ? bar.querySelector('.breadcrumb') : null;
     let crumb = null;
     let crumbLabel = null;
