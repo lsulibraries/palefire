@@ -962,6 +962,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Building map: tooltip hover delay shortened from 0.5s to 0.2s.** Once a tooltip is open, moving room to room skips the wait, so only the first hover waited and the long first wait made the rest feel broken. At 0.2s the first and later hovers feel alike, and a sweep across the map still doesn't flash tooltips. `--pf-map-tip-delay` in `_building-map.scss`.
 - **Building map: Floor 1 Gallery label centered on its room.** The label sat low and right on the Gallery's hatched area (80 map units right of and 22 below its center), while Floor 2's sits on its center. `hill-memorial-map.svg.twig` moves its anchor from 1993, 2376 to 1913, 2354, so the word's center falls on the region's center (2091, 2247). Measured on the live page with the new coordinates applied; it clears the elevator icon.
 
 ### 2026-10-30
