@@ -198,6 +198,7 @@
     let showTimer = 0;
     let hovered = null; // room lit by hover while its tooltip waits
     let pinned = null;  // space tapped in the list and scrolled to (revealStage, hide)
+    let byHover = false; // the open tooltip came from hover (not focus or a tap)
     let finishDraw = () => {}; // set by the draw-on trace, below
     // Hover wait before a tooltip shows: --pf-map-tip-delay (s or ms).
     const tipDelay = () => {
@@ -260,6 +261,7 @@
     function show(key) {
       clearTimeout(hideTimer);
       clearTimeout(showTimer);
+      byHover = false; // showSoon sets it back after
       if (!live.has(key)) return;
       if (hovered && hovered !== key) setActive(hovered, false);
       hovered = null;
@@ -280,7 +282,7 @@
     function showSoon(key) {
       if (pinned) return;
       clearTimeout(hideTimer);
-      if (current && tip.classList.contains('is-open')) { clearTimeout(showTimer); show(key); return; }
+      if (current && tip.classList.contains('is-open')) { clearTimeout(showTimer); show(key); byHover = true; return; }
       if (!live.has(key)) return;
       // The room, its name and its list entry light at once; only the
       // tooltip waits. Moving between a room and its name keeps the wait.
@@ -289,7 +291,7 @@
       if (hovered && hovered !== key) setActive(hovered, false);
       hovered = key;
       setActive(key, true);
-      showTimer = setTimeout(() => { showTimer = 0; show(key); }, tipDelay());
+      showTimer = setTimeout(() => { showTimer = 0; show(key); byHover = true; }, tipDelay());
     }
 
     // A pinned space (revealStage) ignores hover in and out, since the
@@ -318,12 +320,31 @@
     tip.addEventListener('pointerleave', () => hide());
     root.addEventListener('keydown', (e) => { if (e.key === 'Escape' && current) hide(true); });
     window.addEventListener('resize', () => { if (current) place(current); }, { passive: true });
-    // The page scrolling changes how much of the stage the header and bar
-    // cover: place again, once a frame.
+    // Scrolling moves the page under a still pointer, and browsers don't
+    // reliably fire pointerleave until the pointer itself moves, so a hover
+    // tooltip could stay open over the next section. On scroll, check what
+    // is now under the pointer's last position; if it's no longer a room,
+    // its name, a list entry or the tooltip, close (or stop waiting). Focus
+    // and tap tooltips stay. The page scrolling also changes how much of
+    // the stage the header and bar cover: place again. Once a frame.
+    let pointer = null;
+    const track = (e) => {
+      pointer = e.pointerType === 'touch' ? null : { x: e.clientX, y: e.clientY };
+    };
+    document.addEventListener('pointermove', track, { passive: true });
+    document.addEventListener('pointerover', track, { passive: true });
+    const stillHovered = () => {
+      const el = pointer && document.elementFromPoint(pointer.x, pointer.y);
+      return !!(el && el.closest('.pf-map__region, .pf-map__item, .pf-map__tip, [data-map-label].is-live'));
+    };
     let placeFrame = 0;
     window.addEventListener('scroll', () => {
-      if (!current || placeFrame) return;
-      placeFrame = requestAnimationFrame(() => { placeFrame = 0; if (current) place(current); });
+      if (!(current || hovered) || placeFrame) return;
+      placeFrame = requestAnimationFrame(() => {
+        placeFrame = 0;
+        if (!pinned && (hovered || (current && byHover)) && !stillHovered()) { hide(true); return; }
+        if (current) place(current);
+      });
     }, { passive: true });
     const scroller = root.querySelector('.pf-map__scroller');
     if (scroller) scroller.addEventListener('scroll', () => { if (current) place(current); }, { passive: true });
