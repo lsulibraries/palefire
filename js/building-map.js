@@ -217,6 +217,8 @@
       nums.forEach((el) => {
         if (el.dataset.mapNum === key) el.classList.toggle('is-active', on);
       });
+      // While a room is lit the rest of the drawing dims (_building-map.scss).
+      root.classList.toggle('is-focusing', regions.some((r) => r.classList.contains('is-active')));
     }
 
     function place(key) {

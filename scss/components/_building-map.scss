@@ -22,6 +22,8 @@
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
   --pf-map-tip-solid: rgb(10 10 10);   /* tooltip panel and its pointer */
+  --pf-map-dim: .35;                   /* the other rooms, names and icons while one is lit */
+  --pf-map-dim-lines: .55;             /* the outline while one is lit: it draws the lit room too */
   --pf-map-tip-line: #3a3a3a;
   --pf-map-tip-text: #d6d6d6;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
@@ -220,14 +222,14 @@
      the color (--pf-map-label-glow) changes on hover, so the glow fades. */
   --pf-map-label-glow: transparent;
   text-shadow: 0 0 var(--pf-map-label-halo-blur) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 2.5) var(--pf-map-label-glow), 0 0 calc(var(--pf-map-label-halo-blur) * 5) var(--pf-map-label-glow);
-  transition: fill var(--pf-map-out) ease, transform var(--pf-map-out) ease, text-shadow var(--pf-map-label-halo-out) ease var(--pf-map-out);
+  transition: fill var(--pf-map-out) ease, fill-opacity var(--pf-map-out) ease, transform var(--pf-map-out) ease, text-shadow var(--pf-map-label-halo-out) ease var(--pf-map-out);
 }
 /* A live room's name works like the room (hover, click): pointer cursor. */
 .pf-map__label.is-live { cursor: pointer; }
 .pf-map__label--floor { fill: var(--pf-map-floor-ink); font-size: 54px; font-weight: 600; font-style: normal; letter-spacing: .28em; }
 .pf-map__label.is-active {
   --lift: var(--pf-map-lift); --pf-map-label-glow: var(--pf-map-label-halo); fill: var(--pf-map-hover);
-  transition: fill var(--pf-map-in) ease, transform var(--pf-map-in) ease, text-shadow var(--pf-map-label-halo-in) linear;
+  transition: fill var(--pf-map-in) ease, fill-opacity var(--pf-map-in) ease, transform var(--pf-map-in) ease, text-shadow var(--pf-map-label-halo-in) linear;
 }
 .pf-map__icons { pointer-events: none; }
 .pf-map__label::selection, .pf-map__label tspan::selection { fill: var(--pf-map-on-hover); background: var(--pf-map-hover); }
@@ -284,6 +286,18 @@
   transition: opacity var(--pf-map-reveal-fade) ease calc(var(--pf-map-seq, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag)),
     fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
 }
+/* Focus: while a room is lit (hover, focus, a tap or its list entry),
+   building-map.js sets .is-focusing and the rest of the drawing steps back:
+   the other rooms, their names, the icons and the numbers to --pf-map-dim,
+   the outline (one layer, the lit room's walls included) to
+   --pf-map-dim-lines. Opacity on the rooms, icons, lines and numbers;
+   fill-opacity on the names, whose opacity the draw-on uses. Not during the
+   draw-on, so its own fades are untouched. */
+.pf-map.is-drawn:not(.is-revealing) :is(.pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__num) { transition: opacity var(--pf-map-out) ease; }
+.pf-map.is-drawn.is-focusing :is(.pf-map__region, .pf-map__num):not(.is-active),
+.pf-map.is-drawn.is-focusing :is(.pf-map__icons, .pf-map__lines--hidden) { opacity: var(--pf-map-dim); transition-duration: var(--pf-map-in); }
+.pf-map.is-drawn.is-focusing .pf-map__lines:not(.pf-map__lines--hidden) { opacity: var(--pf-map-dim-lines); transition-duration: var(--pf-map-in); }
+.pf-map.is-drawn.is-focusing .pf-map__label:not(.is-active) { fill-opacity: var(--pf-map-dim); }
 .pf-map.is-revealing .pf-map__icons,
 .pf-map.is-revealing .pf-map__lines--hidden {
   transition: opacity .6s ease calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag));
@@ -559,7 +573,7 @@
 .pf-landing.is-map-in-view .pf-landing__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num { transition: none !important; }
+  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num { transition: none !important; }
   .pf-map__label.is-active { --lift: 0px; }
   .pf-landing__bg-video, .pf-landing__media::after { transition: none !important; }
   /* Tooltip: a plain short fade, no movement. */
