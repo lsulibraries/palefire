@@ -3638,7 +3638,8 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 // swatch's color, so the reel shows faintly through it. The pair stands in
 // the tile's square frame, 1.5 boxes wide; on hover or focus the box steps
 // left and the reel rolls out to the right, turning. On the object view's
-// stage it is out, and turns while the clip plays. Reduced motion: it
+// stage, where the tape deck (.pf-deck, below) cannot be had, it is out,
+// and turns while the clip plays. Reduced motion: it
 // steps out without sliding and never turns.
 .pf-exhibit-wall__tile--reel .pf-exhibit-wall__link .pf-exhibit-wall__frame {
   background: none;
@@ -3763,6 +3764,163 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
     inset: auto;
     width: min(100cqw, 150cqh, 36rem);
     aspect-ratio: 1.5;
+  }
+}
+
+// The tape deck the stage plays it on instead (images/exhibit-deck.svg,
+// drawn after a Tascam Model 32 and put in by js/exhibition.js): 1px lines
+// of the text color, each part filled with the text color at its tone
+// (.tN, N%) over the page, so it reads the same in light and dark. As
+// large as fits; in a small stage, the top plate alone (the reels to the
+// transport keys), its foot clipped. While the clip plays the reels turn
+// (the 5" supply faster than the 7" take-up), PLAY lights and the pinch
+// roller presses the tape to the capstan; reduced motion keeps the reels
+// still and the needles at rest.
+$pf-deck-tones: 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 28, 30, 34, 60;
+
+.pf-deck {
+  --pf-deck-bg: var(--bs-body-bg);
+  --pf-deck-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  --pf-deck-lit: color-mix(in srgb, var(--pf-deck-gold) 45%, var(--pf-deck-bg));
+  // Width over height: the whole deck, or its top plate.
+  --pf-deck-r: 0.8177;
+  width: min(100cqw, 100cqh * var(--pf-deck-r), 44rem);
+  aspect-ratio: var(--pf-deck-r);
+  overflow: hidden;
+  color: var(--pf-g-fg, var(--bs-body-color));
+
+  @container (max-width: 34rem) or (max-height: 26rem) {
+    --pf-deck-r: 1.1281;
+  }
+
+  @include pf-exhibit-motion {
+    animation: pf-deck-in 0.6s $pf-exhibit-ease both;
+  }
+}
+
+@keyframes pf-deck-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.pf-deck__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--pf-exhibit-mono);
+  letter-spacing: 0.8px;
+
+  * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  text {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  @each $tone in $pf-deck-tones {
+    .t#{$tone} {
+      fill: color-mix(in srgb, currentColor #{$tone * 1%}, var(--pf-deck-bg));
+    }
+  }
+
+  .bg {
+    fill: var(--pf-deck-bg);
+  }
+
+  .key-play {
+    fill: color-mix(in srgb, currentColor 13%, var(--pf-deck-bg));
+  }
+
+  .key-pause {
+    fill: color-mix(in srgb, currentColor 8%, var(--pf-deck-bg));
+  }
+
+  // Slots, sockets and the counter's window: below the plate, so darker
+  // than the page in either theme.
+  .hole {
+    fill: color-mix(in srgb, currentColor 14%, var(--pf-deck-bg));
+    fill: oklch(from var(--pf-deck-bg) calc(l * (0.55 + 0.35 * l)) c h);
+  }
+
+  .tape {
+    fill: #4e3f32;
+  }
+
+  .gold {
+    stroke: var(--pf-deck-gold);
+  }
+
+  .tan {
+    fill: color-mix(in srgb, var(--pf-deck-gold) 22%, color-mix(in srgb, currentColor 28%, var(--pf-deck-bg)));
+  }
+
+  .led-dim {
+    fill: #4a3a2e;
+  }
+
+  .led-red {
+    fill: #702e2a;
+  }
+
+  .led-amb {
+    fill: #846236;
+  }
+
+  .led-grn {
+    fill: #387a4e;
+  }
+
+  .needle {
+    stroke-width: 1.25px;
+    rotate: -38deg;
+  }
+
+  .spin--1 {
+    --pf-deck-turn: 7s;
+  }
+
+  @include pf-exhibit-motion {
+    .key-play,
+    .key-pause {
+      transition: fill 0.3s ease;
+    }
+
+    .pinch {
+      transition: translate 0.45s $pf-exhibit-ease;
+    }
+
+    .spin {
+      animation: pf-deck-turn var(--pf-deck-turn, 5s) linear infinite paused;
+    }
+  }
+
+  .pf-viewer:has(.pf-audio.is-playing) & {
+    .key-play {
+      fill: var(--pf-deck-lit);
+    }
+
+    .pinch {
+      translate: -5.22px -6.33px;
+    }
+
+    .spin {
+      animation-play-state: running;
+    }
+  }
+
+  .pf-deck.is-paused & .key-pause {
+    fill: var(--pf-deck-lit);
+  }
+}
+
+// Counterclockwise: the tape runs off the supply's foot to the right.
+@keyframes pf-deck-turn {
+  to {
+    rotate: -360deg;
   }
 }
 

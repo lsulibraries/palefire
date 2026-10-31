@@ -12,9 +12,11 @@
  * Variables:
  * - title: the entry's title, set on the box.
  * - year: the clip's year, or NULL (the slot stays empty).
+ * - deck: URL of images/exhibit-deck.svg, the tape deck the object view's
+ *   stage plays the clip on instead (js/exhibition.js), or NULL.
  */
 #}
-<span class="pf-exhibit-reel" aria-hidden="true">
+<span class="pf-exhibit-reel" aria-hidden="true"{% if deck %} data-pf-deck="{{ deck }}"{% endif %}>
   <svg class="pf-exhibit-reel__reel" viewBox="0 0 100 100" focusable="false">
     <circle cx="50" cy="50" r="49"/>
     <circle class="pf-exhibit-reel__pack" cx="50" cy="50" r="30"/>

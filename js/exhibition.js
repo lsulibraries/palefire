@@ -1249,10 +1249,17 @@
       view.media.replaceChildren(frame);
     }
     else if (tile.querySelector('.pf-exhibit-reel')) {
-      // A clip with no picture: its tile's reel, out of its box, turning
-      // while the clip plays (_exhibition.scss).
+      // A clip with no picture: a tape deck (stageDeck()), or, where it
+      // cannot be had, its tile's reel, out of its box, turning while the
+      // clip plays (_exhibition.scss).
+      const reel = tile.querySelector('.pf-exhibit-reel');
       frame.classList.add('pf-viewer__frame--reel');
-      frame.append(tile.querySelector('.pf-exhibit-reel').cloneNode(true));
+      if (reel.dataset.pfDeck && window.fetch && window.DOMParser) {
+        stageDeck(view, frame, reel);
+      }
+      else {
+        frame.append(reel.cloneNode(true));
+      }
       view.media.replaceChildren(frame);
     }
     else {
@@ -1622,6 +1629,166 @@
     }
     const s = Math.floor(seconds % 60);
     return Math.floor(seconds / 60) + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  // A clip with no picture plays on a tape deck on the object view's stage
+  // (images/exhibit-deck.svg, fetched the first time one is shown, inline
+  // so the theme colors it). Its reels, PLAY key and pinch roller follow
+  // the player (_exhibition.scss); here its badge takes the tile's year,
+  // its counter the clip's time, PAUSE lights while the clip waits
+  // part-way, and its needles follow the sound. Where the deck cannot be
+  // had, the tile's reel stands in.
+  let deckMarkup = null;
+
+  function stageDeck(view, frame, reel) {
+    deckMarkup = deckMarkup || fetch(reel.dataset.pfDeck).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.text();
+    });
+    deckMarkup.then((markup) => {
+      const svg = new DOMParser().parseFromString(markup, 'image/svg+xml').documentElement;
+      if (svg.localName !== 'svg') {
+        throw new Error('exhibit-deck.svg');
+      }
+      // Stepped on to another entry meanwhile.
+      if (!frame.isConnected) {
+        return;
+      }
+      const deck = document.createElement('div');
+      deck.className = 'pf-deck';
+      deck.append(document.importNode(svg, true));
+      frame.replaceChildren(deck);
+      const head = reel.querySelectorAll('.pf-exhibit-reel__head > span');
+      const kind = deck.querySelector('.kind');
+      kind.textContent = head[0].textContent.trim().toLocaleUpperCase();
+      deck.querySelector('.year').textContent = head[1].textContent.trim();
+      // A longer word for "Audio only" is pressed to its box.
+      if (kind.getComputedTextLength() > 88) {
+        kind.setAttribute('textLength', '88');
+        kind.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+      }
+      deckAudio(view, deck);
+    }).catch(() => {
+      deckMarkup = null;
+      if (frame.isConnected && !frame.firstChild) {
+        frame.append(reel.cloneNode(true));
+      }
+    });
+  }
+
+  function deckAudio(view, deck) {
+    const audio = view.body.querySelector('[data-pf-audio] audio');
+    if (!audio) {
+      return;
+    }
+    const count = deck.querySelector('.count');
+    const sync = () => {
+      const time = clock(audio.currentTime);
+      count.textContent = time.length < 5 ? '0' + time : time;
+      deck.classList.toggle('is-paused', audio.paused && audio.currentTime > 0 && !audio.ended);
+    };
+    ['play', 'pause', 'timeupdate', 'seeked', 'loadedmetadata', 'ended'].forEach((type) => audio.addEventListener(type, sync));
+    sync();
+    audio.addEventListener('play', () => deckMeter(audio, deck));
+    if (!audio.paused) {
+      deckMeter(audio, deck);
+    }
+  }
+
+  // The needles, on a desktop with motion: the clip is led through Web
+  // Audio and each channel's loudness read every frame, with a VU meter's
+  // 300ms swing (0 VU at -18 dBFS). Clips from this site only: another
+  // host's would go silent through it. Once led through, a clip stays
+  // so (one source per <audio>), so it waits for the context to run.
+  let deckContext = null;
+  const deckMeters = new WeakMap();
+  // dB on the meter's scale, and the needle's turn there.
+  const VU_SCALE = [[-26, -38], [-20, -36], [-10, -25], [-7, -17], [-5, -10], [-3, -3], [0, 16], [3, 34]];
+
+  function deckMeter(audio, deck) {
+    if (reduceMotion() || !window.AudioContext || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      return;
+    }
+    let source;
+    try {
+      source = new URL(audio.currentSrc || audio.src, window.location.href);
+    }
+    catch (e) {
+      return;
+    }
+    if (source.origin !== window.location.origin) {
+      return;
+    }
+    deckContext = deckContext || new AudioContext();
+    deckContext.resume().then(() => {
+      if (deckContext.state !== 'running' || !deck.isConnected) {
+        return;
+      }
+      let meter = deckMeters.get(audio);
+      if (!meter) {
+        const input = deckContext.createMediaElementSource(audio);
+        const split = deckContext.createChannelSplitter(2);
+        input.connect(deckContext.destination);
+        input.connect(split);
+        const sides = [0, 1].map((channel) => {
+          const analyser = deckContext.createAnalyser();
+          analyser.fftSize = 1024;
+          split.connect(analyser, channel);
+          return analyser;
+        });
+        meter = { sides, data: new Float32Array(1024), level: [-30, -30], running: false };
+        deckMeters.set(audio, meter);
+      }
+      const needles = deck.querySelectorAll('.needle');
+      if (meter.running) {
+        return;
+      }
+      meter.running = true;
+      let last = performance.now();
+      const step = (now) => {
+        const dt = Math.min(0.1, (now - last) / 1000);
+        last = now;
+        const db = meter.sides.map((analyser) => {
+          analyser.getFloatTimeDomainData(meter.data);
+          let sum = 0;
+          for (let i = 0; i < meter.data.length; i++) {
+            sum += meter.data[i] * meter.data[i];
+          }
+          return audio.paused ? -30 : Math.max(-30, 20 * Math.log10(Math.sqrt(sum / meter.data.length) || 1e-6) + 18);
+        });
+        // A mono clip feeds its one channel to both.
+        if (db[1] <= -30 && db[0] > -30) {
+          db[1] = db[0];
+        }
+        meter.level = meter.level.map((level, i) => level + (db[i] - level) * (1 - Math.exp(-dt / 0.3)));
+        needles.forEach((needle, i) => {
+          needle.style.rotate = deckTurn(meter.level[i]) + 'deg';
+        });
+        if (deck.isConnected && (!audio.paused || meter.level.some((level) => level > -29.5))) {
+          window.requestAnimationFrame(step);
+        }
+        else {
+          meter.running = false;
+        }
+      };
+      window.requestAnimationFrame(step);
+    }).catch(() => {});
+  }
+
+  function deckTurn(db) {
+    if (db <= VU_SCALE[0][0]) {
+      return -38;
+    }
+    for (let i = 1; i < VU_SCALE.length; i++) {
+      const [d1, a1] = VU_SCALE[i];
+      if (db <= d1) {
+        const [d0, a0] = VU_SCALE[i - 1];
+        return a0 + (a1 - a0) * (db - d0) / (d1 - d0);
+      }
+    }
+    return 38;
   }
 
   // The listener's level, shared by every player on the page, so the next

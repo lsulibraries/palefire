@@ -212,7 +212,7 @@
                 <span class="pf-exhibit-wall__frame">
                   {% if not image %}
                     {# A clip with no picture. #}
-                    {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year } only %}
+                    {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year, deck: file_url(directory) ~ '/images/exhibit-deck.svg' } only %}
                   {% else %}
                     <img class="pf-exhibit-wall__img" src="{{ image.src }}"
                          {% if image.srcset %}srcset="{{ image.srcset }}" sizes="{{ image.sizes }}"{% endif %}
