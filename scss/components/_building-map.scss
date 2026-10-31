@@ -493,22 +493,20 @@
    serif, the text at the page's body size; the link in plain words.
    building-map.js loads the serif when the pointer first reaches the map, so
    the first tooltip doesn't swap fonts. */
-/* A room's photo runs across the top, under the gold rule. Stored 3:2, shown
-   2:1 (the crop is centered), so a tall label still fits above or below its
-   room. Black and white like the drawing; color rises in slowly once the
-   label has opened. An animation, not a transition, so moving to another
-   room while open plays it again for the new photo. */
+/* A room's photo runs across the top, under the gold rule: always a 4:1
+   band (pf_map_room crops the middle of the photo to 960x240), so every
+   label with a photo is the same shape and fits beside its room. Black and
+   white like the drawing; color rises in slowly once the label has opened.
+   An animation, not a transition, so moving to another room while open
+   plays it again for the new photo. */
 .pf-map__tip-photo {
-  grid-column: 1 / -1; display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover;
+  grid-column: 1 / -1; display: block; width: 100%; height: auto; aspect-ratio: 4 / 1; object-fit: cover;
   border-bottom: 1px solid #{$pf-hairline};
   filter: grayscale(1);
 }
 .pf-map__tip.is-open .pf-map__tip-photo { animation: pf-map-photo 1.6s ease .4s both; }
 /* Where the label can't fit beside its room in what the window shows,
-   building-map.js shortens the photo to fit (.is-tight, --tip-photo-h: a
-   tighter centered crop, same layout) and, failing that, slides the label
-   into view without its pointer (.is-adrift). */
-.pf-map__tip.is-tight .pf-map__tip-photo { aspect-ratio: auto; height: var(--tip-photo-h); }
+   building-map.js slides it into view without its pointer (.is-adrift). */
 .pf-map__tip.is-adrift::after { display: none; }
 @keyframes pf-map-photo { from { filter: grayscale(1); } to { filter: grayscale(0); } }
 .pf-map__tip-floor {

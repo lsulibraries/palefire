@@ -1011,7 +1011,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     '#format' => $items->format,
   ] : NULL;
 
-  // The room's photo for the top of its tooltip: pf_map_room (960x640 WebP,
+  // The room's photo for the top of its tooltip: pf_map_room (960x240 WebP,
   // twice the tooltip's width). Rooms without one, or before the setup
   // script has made the style, get none.
   $photo_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_map_room');
@@ -1033,7 +1033,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     return [
       'src' => \Drupal::service('file_url_generator')->transformRelative($photo_style->buildUrl($uri)),
       'width' => (int) ($dimensions['width'] ?? 960),
-      'height' => (int) ($dimensions['height'] ?? 640),
+      'height' => (int) ($dimensions['height'] ?? 240),
     ];
   };
 

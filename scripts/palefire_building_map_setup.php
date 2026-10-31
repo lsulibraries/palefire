@@ -19,7 +19,7 @@
  *     field_space_note    optional: a short note after the access line in
  *                         the tooltip, e.g. "Now showing"
  *     field_space_media   optional: a photo of the room, an Image media
- *                         item (shown in image style pf_map_room, 960x640
+ *                         item (shown in image style pf_map_room, 960x240
  *                         WebP). Replaces the first version's plain image
  *                         field_space_image, deleted once no room uses it.
  *     Published           unpublish to draw the room as plain floor
@@ -221,7 +221,7 @@ if ($image_types) {
   $storage('taxonomy_term', 'field_space_media', 'entity_reference', ['target_type' => 'media']);
   $field('taxonomy_term', 'building_space', 'field_space_media', 'Photo', [
     'settings' => ['handler' => 'default:media', 'handler_settings' => ['target_bundles' => $image_types, 'auto_create' => FALSE]],
-    'description' => 'Rooms only, optional. A wide, evenly lit photo of the room without people, at least 960 x 640 pixels. The tooltip shows a 2:1 strip from its middle, in black and white at first.',
+    'description' => 'Rooms only, optional. A wide, evenly lit photo of the room without people, at least 960 pixels wide. The tooltip shows a 4:1 band from its middle, in black and white at first, so keep what matters in the middle.',
   ]);
 }
 else {
@@ -245,21 +245,31 @@ if ($old_photo = FieldConfig::loadByName('taxonomy_term', 'building_space', 'fie
   }
 }
 
-// The tooltip's photo: 3:2 at twice the tooltip's 480px, as WebP.
-if (!ImageStyle::load('pf_map_room')) {
-  $style = ImageStyle::create(['name' => 'pf_map_room', 'label' => 'Building map room (960x640)']);
-  $style->addImageEffect([
-    'id' => 'image_scale_and_crop',
-    'weight' => 0,
-    'data' => ['width' => 960, 'height' => 640, 'anchor' => 'center-center'],
-  ]);
-  $style->addImageEffect([
-    'id' => 'image_convert',
-    'weight' => 1,
-    'data' => ['extension' => 'webp'],
-  ]);
+// The tooltip's photo: a 4:1 band from the middle, at twice the tooltip's
+// 480px, as WebP. The first version cropped 3:2 (960x640): its effects are
+// replaced, which also flushes the old derivatives.
+$photo_crop = ['width' => 960, 'height' => 240, 'anchor' => 'center-center'];
+$style = ImageStyle::load('pf_map_room');
+$current = NULL;
+foreach ($style ? $style->getEffects() : [] as $effect) {
+  if ($effect->getPluginId() === 'image_scale_and_crop') {
+    $current = $effect->getConfiguration()['data'] ?? NULL;
+  }
+}
+if (!$style || $current != $photo_crop) {
+  if ($style) {
+    foreach ($style->getEffects() as $effect) {
+      $style->deleteImageEffect($effect);
+    }
+  }
+  else {
+    $style = ImageStyle::create(['name' => 'pf_map_room']);
+  }
+  $style->set('label', 'Building map room (960x240)');
+  $style->addImageEffect(['id' => 'image_scale_and_crop', 'weight' => 0, 'data' => $photo_crop]);
+  $style->addImageEffect(['id' => 'image_convert', 'weight' => 1, 'data' => ['extension' => 'webp']]);
   $style->save();
-  echo "Created image style pf_map_room\n";
+  echo $current === NULL ? "Created image style pf_map_room\n" : "Updated image style pf_map_room to 960x240\n";
 }
 
 // Relabel the term description for this vocabulary.

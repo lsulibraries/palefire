@@ -26,7 +26,6 @@
     easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
     hideDelay: 140,      // ms; lets the pointer cross onto the tooltip (WCAG 1.4.13)
     tipGap: 14,          // px between the room name and the tooltip
-    tipPhotoMin: 96,     // px (a 4.5:1 band); a tooltip photo shortened to fit stops here, then the label slides
     hatchPeriod: 20,     // map units: the hatch <pattern> height in the drawing
     appointmentHatch: 'broken', // 'broken' (staggered dashes) or 'lines' (the drawing's own hatch)
     hereGap: 36,         // map units between the "here" arrow and the room name
@@ -243,29 +242,16 @@
       const aboveEnd = a.top - box.top - SETTINGS.tipGap - 6;
       const belowY = Math.round(a.bottom - box.top + SETTINGS.tipGap);
       const fits = (h) => ({ above: aboveEnd - h >= top, below: belowY + h <= bottom });
-      // Above, else below, at full size. Failing both, the photo gets
-      // shorter (a tighter crop, same layout) to fit the side with more
-      // room, down to SETTINGS.tipPhotoMin; then the side with more room.
-      tip.classList.remove('is-tight');
-      let h = tip.offsetHeight;
-      let fit = fits(h);
-      const photo = tip.querySelector('.pf-map__tip-photo');
-      const photoH = photo ? photo.offsetHeight : 0;
-      if (!fit.above && !fit.below && photoH) {
-        const room = Math.max(aboveEnd - top, bottom - belowY);
-        const fitted = Math.floor(Math.max(SETTINGS.tipPhotoMin, Math.min(photoH, room - (h - photoH))));
-        tip.style.setProperty('--tip-photo-h', fitted + 'px');
-        tip.classList.add('is-tight');
-        h = tip.offsetHeight;
-        fit = fits(h);
-      }
+      // Above, else below; failing both, the side with more room.
+      const h = tip.offsetHeight;
+      const fit = fits(h);
       const below = !fit.above && (fit.below || bottom - belowY > aboveEnd - top);
       const aim = below ? belowY : Math.round(aboveEnd - h);
-      // A window too short for either side: slide it into view, its pointer
-      // hidden since it no longer meets the room.
+      // A window too short for either side: slide it into view. Past a few
+      // px its pointer would no longer meet the room, so it's hidden.
       const y = Math.max(top, Math.min(aim, bottom - h));
       tip.classList.toggle('is-below', below);
-      tip.classList.toggle('is-adrift', y !== aim);
+      tip.classList.toggle('is-adrift', Math.abs(y - aim) > SETTINGS.tipGap - 4);
       tip.style.setProperty('--tip-x', x + 'px');
       tip.style.setProperty('--tip-y', y + 'px');
       tip.style.setProperty('--tip-arrow', Math.max(18, Math.min(w - 18, cx - x)) + 'px');
