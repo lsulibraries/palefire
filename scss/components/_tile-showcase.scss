@@ -1195,6 +1195,9 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   gap: var(--pf-cover-gap);
   padding: 1rem 0.5rem 1.25rem;
   overflow-x: auto;
+  // Sideways only: a book still waiting to rise in (below) or lifted on
+  // hover must not make the shelf scroll up and down. The padding holds both.
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   // Snapped or focused, a book stops clear of the glass.
@@ -1606,8 +1609,9 @@ html.pf-a11y-motion {
   }
 }
 
-// Index and ledger: rows rise a little, 12px.
-.pf-tiles--reveal:is(.pf-tiles--index, .pf-tiles--ledger) .pf-tiles__item {
+// Index and ledger: rows rise a little, 12px. Covers too, within the
+// shelf's 1.25rem bottom padding.
+.pf-tiles--reveal:is(.pf-tiles--index, .pf-tiles--ledger, .pf-tiles--covers) .pf-tiles__item {
   --pf-reveal-from: 12px;
 }
 

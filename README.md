@@ -964,6 +964,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Written at Hill: the shelf no longer scrolls up and down.** Books still waiting to rise in sat 30px low (tile-reveal's grid offset), 10px past the shelf's bottom padding, so the shelf grew a vertical scrollbar and the books could be dragged up and down. Covers now rise 12px, like the index and ledger rows, and the shelf is `overflow-y: hidden`, so it only scrolls sideways. Measured at 1440 and 320: with vertical overflow allowed, nothing overflows at rest or with every book lifted as on hover; the shelf can't be scrolled vertically; it still scrolls sideways, and the page has no horizontal scroll.
+
 - **Written at Hill: the other covers dim further on hover.** From 60% to 35% opacity, so the book in hand clearly stands out. Only the covers dim (decorative); titles, authors and imprints keep their contrast.
 
 - **Written at Hill: "Find in catalog →" on each book.** Nothing on a card said it was a link, or where to. Under the imprint, in the "All publications →" label voice: hover or keyboard focus fades it in in the accent, its arrow sliding 0.25rem like the ledger's. Its line is always there, so nothing shifts. Where nothing can hover (touch), it's always shown, in the muted color, so the shelf isn't a row of gold. "Find", not "View": four books link to a catalog search, not a record. The label is `aria-hidden`; screen readers hear ", in the LSU Libraries catalog" once, at the end of the link. Checked at 1440 (hover: one line, gold on the dark swatch 11.3:1) and at 320 with touch emulation (shown, muted 7.4:1, on two lines in the 122px cards).
