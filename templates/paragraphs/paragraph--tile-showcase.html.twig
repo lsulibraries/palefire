@@ -98,45 +98,16 @@
      page edges as thick as its page count (book.depth), then the short
      title (the subtitle for screen readers only, to keep the row compact),
      author and imprint. The cover is decorative (aria-hidden, alt=""): the
-     <h3> names the link. The shelf scrolls sideways; js/book-shelf.js shows
-     the Previous / Next buttons when it overflows. Not in "On this page"
+     <h3> names the link. The shelf scrolls sideways inside the section's
+     gutters, under frosted glass at the side with more books (data-pf-at:
+     start, middle, end or none, kept by js/book-shelf.js, which also shows
+     the Previous / Next buttons when it overflows). The buttons come first:
+     wide, they sit beside the lede, above the shelf. Not in "On this page"
      (no data-toc): thirty books would crowd the section's own entry. #}
   {{ attach_library('palefire/tile-reveal') }}
   {{ attach_library('palefire/book-shelf') }}
   {% set shelf_id = 'pf-shelf-' ~ (paragraph.id() ?: random()) %}
   <div{{ attributes.addClass('pf-tiles', 'pf-tiles--covers') }} data-toc-skip>
-    <ul class="pf-tiles__list" id="{{ shelf_id }}" role="list">
-      {% for book in books %}
-        {% set tag = book.url ? 'a' : 'div' %}
-        <li class="pf-tiles__item" style="--pf-book-depth: {{ book.depth }}">
-          <{{ tag }} class="pf-book"{% if book.url %} href="{{ book.url }}"{% endif %}>
-            <span class="pf-book__cover{{ book.image ? '' : ' pf-book__cover--set' }}" aria-hidden="true">
-              <span class="pf-book__object">
-                {% if book.image %}
-                  {{ book.image }}
-                {% else %}
-                  <span class="pf-book__jacket">
-                    <span class="pf-book__jacket-title">{{ book.title }}</span>
-                    {% if book.author %}
-                      <span class="pf-book__jacket-author">{{ book.author }}</span>
-                    {% endif %}
-                  </span>
-                {% endif %}
-              </span>
-            </span>
-            <span class="pf-book__text">
-              <h3 class="pf-book__title">{{ book.title }}{% if book.subtitle %}<span class="visually-hidden">: {{ book.subtitle }}</span>{% endif %}</h3>
-              {% if book.author %}
-                <span class="pf-book__author"><span class="visually-hidden">, </span>{{ book.author }}</span>
-              {% endif %}
-              {% if book.imprint %}
-                <span class="pf-book__imprint"><span class="visually-hidden">, </span>{{ book.imprint }}</span>
-              {% endif %}
-            </span>
-          </{{ tag }}>
-        </li>
-      {% endfor %}
-    </ul>
     <div class="pf-tiles__shelf-nav" role="group" aria-label="{{ 'Scroll the books'|t }}" hidden>
       {% for dir, label in { prev: 'Previous books'|t, next: 'Next books'|t } %}
         <button type="button" class="pf-tiles__shelf-button" data-pf-shelf="{{ dir }}" aria-controls="{{ shelf_id }}">
@@ -144,6 +115,40 @@
           <span class="visually-hidden">{{ label }}</span>
         </button>
       {% endfor %}
+    </div>
+    <div class="pf-tiles__shelf" data-pf-at="start">
+      <ul class="pf-tiles__list" id="{{ shelf_id }}" role="list">
+        {% for book in books %}
+          {% set tag = book.url ? 'a' : 'div' %}
+          <li class="pf-tiles__item" style="--pf-book-depth: {{ book.depth }}">
+            <{{ tag }} class="pf-book"{% if book.url %} href="{{ book.url }}"{% endif %}>
+              <span class="pf-book__cover{{ book.image ? '' : ' pf-book__cover--set' }}" aria-hidden="true">
+                <span class="pf-book__object">
+                  {% if book.image %}
+                    {{ book.image }}
+                  {% else %}
+                    <span class="pf-book__jacket">
+                      <span class="pf-book__jacket-title">{{ book.title }}</span>
+                      {% if book.author %}
+                        <span class="pf-book__jacket-author">{{ book.author }}</span>
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </span>
+              </span>
+              <span class="pf-book__text">
+                <h3 class="pf-book__title">{{ book.title }}{% if book.subtitle %}<span class="visually-hidden">: {{ book.subtitle }}</span>{% endif %}</h3>
+                {% if book.author %}
+                  <span class="pf-book__author"><span class="visually-hidden">, </span>{{ book.author }}</span>
+                {% endif %}
+                {% if book.imprint %}
+                  <span class="pf-book__imprint"><span class="visually-hidden">, </span>{{ book.imprint }}</span>
+                {% endif %}
+              </span>
+            </{{ tag }}>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 {% elseif tiles %}

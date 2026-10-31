@@ -4,7 +4,9 @@
  *
  * The shelf scrolls by itself (swipe, trackpad, Tab); the buttons are for a
  * mouse. Shown only while the shelf overflows, each moves it most of its
- * width, and is disabled at its end. Smooth unless motion is reduced (OS
+ * width, and is disabled at its end. Keeps data-pf-at on .pf-tiles__shelf
+ * (start, middle, end or none), which shows the frosted glass at the side
+ * with more books. Smooth unless motion is reduced (OS
  * setting or the Settings drawer's html.pf-a11y-motion). Without JS the
  * buttons stay hidden. Styles: _tile-showcase.scss.
  */
@@ -22,14 +24,20 @@
         if (!list || !nav) {
           return;
         }
+        const shelfEl = list.closest('.pf-tiles__shelf');
         const prev = nav.querySelector('[data-pf-shelf="prev"]');
         const next = nav.querySelector('[data-pf-shelf="next"]');
 
         const update = () => {
           const max = list.scrollWidth - list.clientWidth;
+          const atStart = list.scrollLeft <= 1;
+          const atEnd = list.scrollLeft >= max - 1;
           nav.hidden = max <= 1;
-          prev.disabled = list.scrollLeft <= 1;
-          next.disabled = list.scrollLeft >= max - 1;
+          prev.disabled = atStart;
+          next.disabled = atEnd;
+          if (shelfEl) {
+            shelfEl.dataset.pfAt = max <= 1 ? 'none' : atStart ? 'start' : atEnd ? 'end' : 'middle';
+          }
         };
 
         const move = (dir) => {

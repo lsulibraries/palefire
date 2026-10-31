@@ -1156,9 +1156,11 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 // Books from the collections' readers (Published from the Collections).
 // One shelf of books, the guide's whole list, newest first: a row that
 // scrolls sideways at every width (swipe, trackpad, Tab, or the Previous /
-// Next buttons js/book-shelf.js shows when it overflows), running to the
-// section's edges. Each book stands in a 2:3 frame on a hairline, at its
-// own shape, so books of different shapes stand at different heights.
+// Next buttons js/book-shelf.js shows when it overflows), inside the
+// section's gutters like the rest of the page. Books slide under a pane of
+// frosted glass at the side that has more of them. Each book stands in a
+// 2:3 frame on a hairline, at its own shape, so books of different shapes
+// stand at different heights.
 // It is drawn turned a little to the left, so its page edges show, as
 // deep as its page count (--pf-book-depth, a share of the cover's width:
 // _palefire_publications()). Under it the short title, author and
@@ -1176,25 +1178,75 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   --pf-index-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
   --pf-cover-gap: clamp(1.5rem, 3cqi, 2.5rem);
   --pf-book-turn: -18deg;
+  --pf-shelf-glass: clamp(2rem, 6cqi, 4.5rem);
+  --pf-shelf-glass-bg: var(--pf-section-bg, var(--bs-body-bg));
+  position: relative;
+}
+
+// The shelf keeps to the gutters. It reaches 0.5rem past them, its
+// padding, so a book's turned near edge and a focus ring at either end
+// aren't cut off; the first book still lines up with the heading.
+.pf-tiles__shelf {
+  position: relative;
+  margin-inline: -0.5rem;
 }
 
 .pf-tiles--covers .pf-tiles__list {
   display: flex;
   gap: var(--pf-cover-gap);
-  margin-inline: calc(-1 * var(--pf-section-pad-inline, 1rem));
-  padding: 1rem var(--pf-section-pad-inline, 1rem) 1.25rem;
+  padding: 1rem 0.5rem 1.25rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--pf-section-pad-inline, 1rem);
+  // Snapped or focused, a book stops clear of the glass.
+  scroll-padding-inline: var(--pf-shelf-glass);
   @include pf-thin-scrollbar;
+}
+
+// The glass: a pane at each end, over the books (not the scrollbar), that
+// blurs and darkens what passes under it toward the section's color, its
+// inner edge fading out. Shown at the side with more books
+// (data-pf-at, js/book-shelf.js); without JS, at the end only.
+.pf-tiles__shelf::before,
+.pf-tiles__shelf::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 1.25rem;
+  width: var(--pf-shelf-glass);
+  // Solid at the outer edge, where the blur would show its own seam.
+  background: linear-gradient(var(--pf-shelf-glass-dir), var(--pf-shelf-glass-bg) 12%, color-mix(in srgb, var(--pf-shelf-glass-bg) 70%, transparent) 45%, transparent);
+  -webkit-backdrop-filter: blur(6px) saturate(0.8);
+  backdrop-filter: blur(6px) saturate(0.8);
+  -webkit-mask-image: linear-gradient(var(--pf-shelf-glass-dir), #000 50%, transparent);
+  mask-image: linear-gradient(var(--pf-shelf-glass-dir), #000 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease-out;
+}
+
+.pf-tiles__shelf::before {
+  --pf-shelf-glass-dir: to right;
+  left: 0;
+}
+
+.pf-tiles__shelf::after {
+  --pf-shelf-glass-dir: to left;
+  right: 0;
+}
+
+.pf-tiles__shelf:is([data-pf-at="middle"], [data-pf-at="end"])::before,
+.pf-tiles__shelf:is([data-pf-at="start"], [data-pf-at="middle"])::after {
+  opacity: 1;
 }
 
 // Positioned, so the visually hidden subtitles (absolute) are clipped by
 // the shelf instead of widening the page.
+// On phones, 45% of the shelf: "Reconstruction" fits on one line at 320.
 .pf-tiles--covers .pf-tiles__item {
   position: relative;
-  flex: 0 0 min(40%, 10rem);
+  flex: 0 0 min(45%, 10rem);
   scroll-snap-align: start;
 }
 
@@ -1204,15 +1256,26 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
-// Previous / Next: square buttons under the shelf, on the right.
+// Previous / Next: square buttons on the right, above the shelf. Wide, the
+// lede (at most 40rem) leaves room beside it, so they rise into its row,
+// level with its last line: the lede's bottom margin above the shelf.
 .pf-tiles__shelf-nav {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
 
   &[hidden] {
     display: none;
+  }
+}
+
+@container pf-tiles (min-width: #{$pf-tile-break-wide}) {
+  .pf-tiles__shelf-nav {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + clamp(1.5rem, 3vw, 2.5rem));
+    margin: 0;
   }
 }
 
@@ -1389,6 +1452,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   font-weight: 500;
   line-height: 1.3;
   overflow-wrap: anywhere; // long single words at 400% zoom (WCAG 1.4.10)
+  hyphens: auto;
   text-wrap: pretty;
 }
 
