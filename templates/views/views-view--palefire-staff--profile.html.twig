@@ -1,0 +1,83 @@
+{#
+/**
+ * @file
+ * Staff profile (/v2/staff/<slug>): one person, in place of the old
+ * directory's modal.
+ *
+ * Variables from palefire_preprocess_views_view(): person, as
+ * StaffDirectory::profile(): name, title, departments (label, url),
+ * subjects, email, phone, phone_href, portrait (pf_staff_portrait, loaded
+ * at once, alt="": the name is the page's heading) or NULL, initials, note,
+ * links (url, text, external) and sections (id, label, body).
+ *
+ * The CV sections are <details>, the first one open, each with an <h2> in
+ * its summary so they are listed by heading. A subject links to the
+ * directory searched for it. The page's <h1> is printed here (the Page
+ * title block is emptied on this route).
+ */
+#}
+<article{{ attributes.addClass('pf-staff-profile') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <header class="pf-staff-profile__head">
+    {% if person.departments %}
+      <p class="pf-staff__eyebrow">
+        {% for department in person.departments %}
+          <a href="{{ department.url }}">{{ department.label }}</a>{{ not loop.last ? ', ' }}
+        {% endfor %}
+      </p>
+    {% endif %}
+    <h1 class="pf-staff__title">{{ person.name }}</h1>
+    {% if person.title %}
+      <p class="pf-staff__lede">{{ person.title }}</p>
+    {% endif %}
+  </header>
+
+  <div class="pf-staff-profile__body">
+    <aside class="pf-staff-profile__aside" aria-label="{{ 'Contact'|t }}">
+      <div class="pf-staff-profile__portrait" aria-hidden="true">
+        {% if person.portrait %}{{ person.portrait }}{% else %}<span class="pf-staff__initials">{{ person.initials }}</span>{% endif %}
+      </div>
+      <dl class="pf-staff-profile__facts">
+        {% if person.email %}
+          <div><dt>{{ 'Email'|t }}</dt><dd><a href="mailto:{{ person.email }}">{{ person.email }}</a></dd></div>
+        {% endif %}
+        {% if person.phone %}
+          <div><dt>{{ 'Phone'|t }}</dt><dd><a href="{{ person.phone_href }}">{{ person.phone }}</a></dd></div>
+        {% endif %}
+        {% if person.note %}
+          <div><dt>{{ 'Contact'|t }}</dt><dd>{{ person.note }}</dd></div>
+        {% endif %}
+        {% for link in person.links %}
+          <div><dt>{{ 'Online'|t }}</dt><dd><a href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>{{ link.text }}{% if link.external %}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>{% endif %}</a></dd></div>
+        {% endfor %}
+      </dl>
+    </aside>
+
+    <div class="pf-staff-profile__main">
+      {% if person.subjects %}
+        <div class="pf-staff-profile__subjects">
+          <p class="pf-staff__label" id="pf-staff-subjects">{{ 'Subjects'|t }}</p>
+          <ul class="pf-staff-profile__tags" role="list" aria-labelledby="pf-staff-subjects">
+            {% for subject in person.subjects %}
+              <li><a href="{{ path('view.palefire_staff.directory', {}, {query: {q: subject}}) }}">{{ subject }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if person.sections %}
+        <div class="pf-staff-profile__sections">
+          {% for section in person.sections %}
+            <details class="pf-staff-profile__section" id="{{ section.id }}"{{ loop.first ? ' open' }}>
+              <summary><h2 class="pf-staff-profile__section-title">{{ section.label }}</h2></summary>
+              <div class="pf-staff-profile__section-body">{{ section.body }}</div>
+            </details>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <p><a class="pf-staff__back" href="{{ path('view.palefire_staff.directory') }}">{{ 'All staff'|t }}</a></p>
+    </div>
+  </div>
+</article>

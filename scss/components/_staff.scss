@@ -1,0 +1,527 @@
+// Staff -----------------------------------------------------------------------
+// The staff directory (/v2/staff), staff profiles (/v2/staff/<slug>) and
+// Who to ask (a section of the Special Collections homepage). Templates:
+// views-view--palefire-staff--directory/profile.html.twig,
+// paragraph--staff-contacts.html.twig; js/staff-directory.js.
+//
+// Swiss and quiet, as the hero and the tile index: ruled rows on the soft
+// hairline, the page title at the landing's size and tracking, labels in
+// the TOC's mono capitals. Photos sit grey and take their color on hover,
+// as the hero banners do. Controls keep the full line color for their edge
+// (3:1, WCAG 1.4.11).
+
+%pf-staff-label {
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-staff,
+.pf-staff-profile {
+  --pf-staff-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-staff-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-staff-line: #{$pf-hairline};
+  --pf-staff-control: var(--pf-section-border, #6c757d);
+  --pf-staff-ease: #{$pf-swup-ease-in};
+  max-width: $pf-content-max;
+  margin-inline: auto;
+  padding-block: clamp(1.5rem, 4vw, 3.5rem) clamp(3rem, 8vw, 6rem);
+  color: var(--pf-staff-fg);
+}
+
+// Head: eyebrow, the <h1>, a lede. -------------------------------------------
+
+.pf-staff__head,
+.pf-staff-profile__head {
+  display: grid;
+  gap: .75rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.pf-staff__eyebrow,
+.pf-staff__label {
+  @extend %pf-staff-label;
+  margin: 0;
+  color: var(--pf-staff-muted);
+}
+
+.pf-staff__eyebrow a {
+  color: inherit;
+}
+
+.pf-staff .pf-staff__title,
+.pf-staff-profile .pf-staff__title {
+  margin: 0;
+  font-size: clamp(2rem, 1rem + 2vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.pf-staff__lede {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--pf-staff-muted);
+  font-size: clamp(1rem, .95rem + .2vw, 1.125rem);
+  text-wrap: pretty;
+}
+
+// Directory: search and Department, then the count. -------------------------
+
+.pf-staff__controls {
+  display: grid;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: end;
+  }
+}
+
+.pf-staff__field {
+  display: grid;
+  gap: .375rem;
+  min-width: 0;
+}
+
+.pf-staff__input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: .625rem .875rem;
+  border: 1px solid var(--pf-staff-control);
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--pf-staff-fg);
+  font-size: 1rem;
+  transition: border-color .2s ease;
+
+  &:hover {
+    border-color: var(--pf-staff-fg);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--bs-link-color);
+    outline-offset: 2px;
+  }
+}
+
+.pf-staff__select {
+  appearance: none;
+  padding-right: 2.5rem;
+  // The arrow in the text's color (currentColor can't reach a data URI).
+  background-image: linear-gradient(45deg, transparent 50%, var(--pf-staff-fg) 50%), linear-gradient(135deg, var(--pf-staff-fg) 50%, transparent 50%);
+  background-position: calc(100% - 1.25rem) 50%, calc(100% - .9rem) 50%;
+  background-size: .35rem .35rem;
+  background-repeat: no-repeat;
+}
+
+.pf-staff__count {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--pf-staff-muted);
+  font-size: .9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+// Directory: one ruled row per person. --------------------------------------
+// Phones: photo, then name, job, department and contact stacked beside it.
+// From lg: name and job, department, contact in columns.
+
+.pf-staff__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--pf-staff-control);
+}
+
+.pf-staff__row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: .25rem 1rem;
+  align-items: start;
+  padding-block: .875rem;
+  border-bottom: 1px solid var(--pf-staff-line);
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: 3rem minmax(0, 5fr) minmax(0, 3fr) minmax(0, 3fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+}
+
+.pf-staff__photo {
+  grid-row: span 3;
+  display: block;
+  width: 3rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--pf-staff-muted) 16%, transparent);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: filter .45s ease;
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-row: auto;
+  }
+}
+
+.pf-staff__row:hover .pf-staff__photo img,
+.pf-staff__row:focus-within .pf-staff__photo img {
+  filter: none;
+}
+
+.pf-staff__initials {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--pf-staff-muted);
+  font-size: .9375rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.pf-staff__who {
+  display: grid;
+  gap: .125rem;
+  min-width: 0;
+}
+
+// The name is the row's one link, standing alone in the strongest text
+// color (Twilight's body and muted text are one grey) and set apart by its
+// weight and place, not inside running text, so not a WCAG 1.4.1 case: its
+// line shows on hover and focus.
+.pf-staff__name {
+  color: var(--bs-emphasis-color, var(--pf-staff-fg));
+  font-size: 1.0625rem;
+  font-weight: 500;
+  text-decoration-color: transparent;
+  transition: text-decoration-color .3s ease;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+  }
+}
+
+.pf-staff__job,
+.pf-staff__dept {
+  color: var(--pf-staff-muted);
+  font-size: .9375rem;
+  line-height: 1.4;
+}
+
+.pf-staff__dept:empty {
+  display: none;
+}
+
+.pf-staff__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  font-size: .9375rem;
+  overflow-wrap: anywhere;
+
+  @include media-breakpoint-up(lg) {
+    display: grid;
+    justify-items: end;
+    text-align: right;
+  }
+}
+
+.pf-staff__empty {
+  padding-block: 2rem;
+  color: var(--pf-staff-muted);
+}
+
+// Profile ---------------------------------------------------------------------
+
+.pf-staff-profile__body {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: 18rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.pf-staff-profile__aside {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.pf-staff-profile__portrait {
+  width: 100%;
+  max-width: 16rem;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--pf-staff-muted) 16%, transparent);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pf-staff__initials {
+    font-size: 2.5rem;
+    letter-spacing: -.02em;
+  }
+}
+
+.pf-staff-profile__facts {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--pf-staff-line);
+
+  > div {
+    display: grid;
+    gap: .125rem;
+    padding-block: .625rem;
+    border-bottom: 1px solid var(--pf-staff-line);
+  }
+
+  dt {
+    @extend %pf-staff-label;
+    color: var(--pf-staff-muted);
+    font-size: .6875rem;
+  }
+
+  dd {
+    margin: 0;
+    font-size: .9375rem;
+    overflow-wrap: anywhere;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.pf-staff-profile__main {
+  display: grid;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.pf-staff-profile__subjects {
+  display: grid;
+  gap: .625rem;
+}
+
+.pf-staff-profile__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: .25rem .75rem;
+    border: 1px solid var(--pf-staff-control);
+    color: var(--pf-staff-fg);
+    font-size: .875rem;
+    text-decoration: none;
+    transition: background-color .2s ease, color .2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--pf-staff-fg);
+      color: var(--bs-body-bg);
+    }
+  }
+}
+
+// CV sections: ruled <details>, each title an <h2> at the reading size, a
+// plus that turns to a cross when open. The panel eases open where the
+// browser can size to "auto" (interpolate-size), else it just opens.
+.pf-staff-profile__sections {
+  border-top: 1px solid var(--pf-staff-line);
+}
+
+// Core's details box (a grey border, 1em margins, padded summary) is reset.
+.pf-staff-profile__section {
+  interpolate-size: allow-keywords;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--pf-staff-line);
+
+  &::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size .45s var(--pf-staff-ease), content-visibility .45s allow-discrete;
+  }
+
+  &[open]::details-content {
+    block-size: auto;
+  }
+
+  > summary {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 1rem 0;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: "+";
+      flex: none;
+      color: var(--pf-staff-muted);
+      font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: transform .35s var(--pf-staff-ease);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--bs-link-color);
+      outline-offset: 2px;
+    }
+  }
+
+  &[open] > summary::after {
+    transform: rotate(45deg);
+  }
+}
+
+.pf-staff-profile .pf-staff-profile__section-title {
+  margin: 0;
+  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+}
+
+.pf-staff-profile__section-body {
+  max-width: 65ch;
+  padding-bottom: 1.25rem;
+  line-height: 1.6;
+
+  ul {
+    padding-left: 1.125rem;
+  }
+
+  li + li {
+    margin-top: .375rem;
+  }
+
+  > :last-child > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-staff__back {
+  @extend %pf-staff-label;
+  color: var(--pf-staff-fg);
+
+  &::before {
+    content: "\2190\00a0";
+    display: inline-block;
+    transition: translate .3s var(--pf-staff-ease);
+  }
+
+  &:hover::before {
+    translate: -4px 0;
+  }
+}
+
+// Who to ask (a section): topic, person, email in ruled rows. ---------------
+
+.pf-contacts {
+  margin: 0;
+  border-top: 1px solid #{$pf-hairline};
+}
+
+.pf-contacts__row {
+  display: grid;
+  gap: .25rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid #{$pf-hairline};
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr);
+    gap: 2rem;
+    align-items: baseline;
+  }
+}
+
+.pf-contacts__topic {
+  font-size: clamp(1.0625rem, 1rem + .35vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+
+.pf-contacts__who,
+.pf-contacts__mail {
+  margin: 0;
+  min-width: 0;
+}
+
+.pf-contacts__name {
+  font-weight: 500;
+}
+
+.pf-contacts__job {
+  display: block;
+  color: var(--pf-section-muted, var(--bs-secondary-color));
+  font-size: .9375rem;
+  line-height: 1.4;
+}
+
+.pf-contacts__mail {
+  font-size: .9375rem;
+  overflow-wrap: anywhere;
+
+  @include media-breakpoint-up(md) {
+    justify-self: end;
+  }
+}
+
+// Reduced motion (the system's or the Settings drawer's): no easing.
+// ::details-content gets its own rule: a browser that doesn't know it
+// would drop the whole list.
+@mixin pf-staff-still {
+  .pf-staff,
+  .pf-staff-profile {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+    }
+  }
+
+  .pf-staff-profile__section::details-content {
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @include pf-staff-still;
+}
+
+.pf-a11y-motion {
+  @include pf-staff-still;
+}

@@ -218,6 +218,15 @@ tile-views:
     - core/drupal
     - core/once
 
+# Staff directory (/v2/staff): search and the Department filter. Attached by
+# views-view--palefire-staff--directory.html.twig.
+staff-directory:
+  js:
+    js/staff-directory.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Landing with a lead panel and a map: the page snaps between the two (md
 # and up). Attached by includes/landing.html.twig.
 landing-snap:

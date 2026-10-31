@@ -1,0 +1,76 @@
+{#
+/**
+ * @file
+ * Staff directory (/v2/staff): every published Staff node in one list.
+ *
+ * Variables from palefire_preprocess_views_view():
+ * - people: name, url, slug, title, initials, departments (label, slug,
+ *   url), subjects, email, phone, phone_href, photo (pf_staff_thumb, lazy,
+ *   alt="": the name is beside it) or NULL, search.
+ * - departments: label, slug, count, for the Department filter.
+ * - total: how many people.
+ *
+ * The View's own rows are not printed. Without JS the whole list shows and
+ * the search and filter stay hidden; js/staff-directory.js shows them,
+ * filters the rows in place (data-pf-staff-text, data-pf-staff-dept) and
+ * keeps ?department= and ?q= in the address, so a link such as
+ * /v2/staff?department=special-collections opens filtered. It also sends
+ * an old-style /v2/staff#<slug> link on to that person's profile.
+ *
+ * The page's <h1> is printed here: the Page title block is emptied on this
+ * route (PalefireHooks::preprocessBlock()). role="list" keeps the list's
+ * semantics in Safari, which drops them when list-style is none.
+ */
+#}
+{{ attach_library('palefire/staff-directory') }}
+<div{{ attributes.addClass('pf-staff') }} data-pf-staff>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  <header class="pf-staff__head">
+    <p class="pf-staff__eyebrow">{{ 'LSU Libraries'|t }}</p>
+    <h1 class="pf-staff__title">{{ 'Staff directory'|t }}</h1>
+    <p class="pf-staff__lede">{% trans %}{{ total }} people across the Libraries. Search by name, job or subject, or choose a department.{% endtrans %}</p>
+  </header>
+
+  <form class="pf-staff__controls" role="search" aria-label="{{ 'Staff directory'|t }}" data-pf-staff-controls hidden>
+    <div class="pf-staff__field pf-staff__field--search">
+      <label class="pf-staff__label" for="pf-staff-q">{{ 'Search'|t }}</label>
+      <input class="pf-staff__input" type="search" id="pf-staff-q" name="q" autocomplete="off" spellcheck="false"
+             placeholder="{{ 'Name, job or subject'|t }}">
+    </div>
+    <div class="pf-staff__field">
+      <label class="pf-staff__label" for="pf-staff-department">{{ 'Department'|t }}</label>
+      <select class="pf-staff__input pf-staff__select" id="pf-staff-department" name="department">
+        <option value="">{{ 'All departments'|t }}</option>
+        {% for department in departments %}
+          <option value="{{ department.slug }}">{{ department.label }} ({{ department.count }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <p class="pf-staff__count" aria-live="polite" data-pf-staff-count></p>
+  </form>
+
+  <ul class="pf-staff__list" role="list" data-pf-staff-list>
+    {% for person in people %}
+      <li class="pf-staff__row" data-pf-staff-slug="{{ person.slug }}"
+          data-pf-staff-text="{{ person.search }}"
+          data-pf-staff-dept="{{ person.departments|column('slug')|join(' ') }}">
+        <span class="pf-staff__photo" aria-hidden="true">
+          {% if person.photo %}{{ person.photo }}{% else %}<span class="pf-staff__initials">{{ person.initials }}</span>{% endif %}
+        </span>
+        <span class="pf-staff__who">
+          <a class="pf-staff__name" href="{{ person.url }}">{{ person.name }}</a>
+          {% if person.title %}<span class="pf-staff__job">{{ person.title }}</span>{% endif %}
+        </span>
+        <span class="pf-staff__dept">
+          {{ person.departments|column('label')|join(', ') }}
+        </span>
+        <span class="pf-staff__contact">
+          {% if person.email %}<a href="mailto:{{ person.email }}">{{ person.email }}</a>{% endif %}
+          {% if person.phone %}<a href="{{ person.phone_href }}">{{ person.phone }}</a>{% endif %}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+  <p class="pf-staff__empty" data-pf-staff-empty hidden>{{ 'No one matches. Try a job title such as “archivist”, or choose All departments.'|t }}</p>
+</div>

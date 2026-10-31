@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Who to ask: topics, each with the person to write to (Special Collections
+ * homepage).
+ *
+ * Variables from palefire_preprocess_paragraph__staff_contacts():
+ * - contacts: topic, name, url (their /v2/staff profile), title, email.
+ *
+ * The section <h2>, Eyebrow, Lede and Link ("All Special Collections
+ * staff", to /v2/staff?department=special-collections) come from the
+ * scroll-section field template. A description list: each topic is a <dt>,
+ * its person a <dd>. No pictures, so nothing shifts as it loads.
+ */
+#}
+{% if contacts %}
+  <dl{{ attributes.addClass('pf-contacts') }}>
+    {% for contact in contacts %}
+      <div class="pf-contacts__row">
+        <dt class="pf-contacts__topic">{{ contact.topic }}</dt>
+        <dd class="pf-contacts__who">
+          <a class="pf-contacts__name" href="{{ contact.url }}">{{ contact.name }}</a>
+          {%- if contact.title %}<span class="pf-contacts__job">{{ contact.title }}</span>{% endif %}
+        </dd>
+        {% if contact.email %}
+          <dd class="pf-contacts__mail"><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></dd>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </dl>
+{% endif %}

@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
+use Drupal\palefire\StaffDirectory;
 
 /**
  * Hook implementations for the Palefire theme.
@@ -110,6 +111,16 @@ class PalefireHooks {
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
+    // A staff profile's <title> is the person's name: the View's own title
+    // can only repeat the slug.
+    if (StaffDirectory::isRoute('profile')) {
+      $cache = CacheableMetadata::createFromRenderArray($variables);
+      if ($person = StaffDirectory::current($cache)) {
+        $variables['head_title']['title'] = $person->label();
+      }
+      $cache->applyTo($variables);
+      return;
+    }
     $node = self::pageNode();
     if (!$node || $node->bundle() !== self::MODULAR_BUNDLE) {
       return;
@@ -275,9 +286,10 @@ class PalefireHooks {
     // Modular pages print their own <h1> (page.html.twig, or the landing
     // search when it is the first section), so a placed Page title block
     // would be a second one.
+    // So do the staff directory and profiles (views-view--palefire-staff--*).
     if (($variables['plugin_id'] ?? '') === 'page_title_block') {
       $variables['#cache']['contexts'][] = 'route';
-      if ($this->currentModularNode()) {
+      if ($this->currentModularNode() || StaffDirectory::isRoute()) {
         $variables['content'] = [];
         $variables['attributes']['hidden'] = 'hidden';
       }

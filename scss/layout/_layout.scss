@@ -193,6 +193,15 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
   padding-block: $spacer * 2;
 }
 
+// Pages other than Modular (page.html.twig: container-xxl > row g-4 g-lg-5):
+// from lg the row's 3rem gutter pulls 24px past the container's 12px
+// padding, a sideways scroll. Match the padding to the gutter.
+.pf-body.container-xxl {
+  @include media-breakpoint-up(lg) {
+    --bs-gutter-x: 3rem;
+  }
+}
+
 .pf-main {
   min-width: 0; // Let wide content (tables, code) shrink inside the grid.
 
