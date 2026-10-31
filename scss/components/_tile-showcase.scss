@@ -1541,7 +1541,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 }
 
 .pf-tiles--covers .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) .pf-book__cover {
-  opacity: 0.6;
+  opacity: 0.35;
   transition-delay: 0s;
 }
 

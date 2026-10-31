@@ -964,6 +964,8 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Written at Hill: the other covers dim further on hover.** From 60% to 35% opacity, so the book in hand clearly stands out. Only the covers dim (decorative); titles, authors and imprints keep their contrast.
+
 - **Written at Hill: "Find in catalog →" on each book.** Nothing on a card said it was a link, or where to. Under the imprint, in the "All publications →" label voice: hover or keyboard focus fades it in in the accent, its arrow sliding 0.25rem like the ledger's. Its line is always there, so nothing shifts. Where nothing can hover (touch), it's always shown, in the muted color, so the shelf isn't a row of gold. "Find", not "View": four books link to a catalog search, not a record. The label is `aria-hidden`; screen readers hear ", in the LSU Libraries catalog" once, at the end of the link. Checked at 1440 (hover: one line, gold on the dark swatch 11.3:1) and at 320 with touch emulation (shown, muted 7.4:1, on two lines in the 122px cards).
 
 - **Written at Hill: no flicker moving between books.** Crossing the gap between two books left nothing hovered for a moment, so the whole shelf flashed bright and dimmed again. Covers now dim at once but wait 300ms before brightening again, and the book the pointer lands on brightens at once. With reduced motion the changes are instant, keeping the wait. Measured each frame in headless Edge at 1440, book 3 to book 4: with 50ms or 250ms in the gap the other covers stay at 60% throughout; only after a 600ms pause in the gap does the shelf start to brighten.
