@@ -81,23 +81,30 @@
   </figure>
 
   {# Hidden tooltip sources, one per room (also the regions' aria-describedby).
-     building-map.js copies the active one into the visible tooltip. #}
+     building-map.js copies the active one into the visible tooltip. Set as a
+     museum wall label: the floor in its own column, then the access, the
+     room and its text. The floor column reads "Floor 1" to screen readers,
+     so the access line doesn't repeat it. #}
   {% for s in map.spaces %}
     <div class="pf-map__tip-src" id="{{ s.tip }}" data-map-tip="{{ s.key }}" hidden>
-      <div class="pf-map__tip-head">
-        <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
-        <p class="pf-map__tip-eyebrow">
-          {{ 'Floor @n'|t({'@n': s.floor}) }} &middot; {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}
-        </p>
+      <p class="pf-map__tip-floor">
+        <span class="pf-map__tip-floor-label">{{ 'Floor'|t }}</span>
+        <span class="pf-map__tip-floor-num">{{ s.floor }}</span>
+      </p>
+      <div class="pf-map__tip-body">
+        <div class="pf-map__tip-head">
+          <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
+          <p class="pf-map__tip-eyebrow">{{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}</p>
+          {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
+        </div>
+        <strong class="pf-map__tip-title">{{ s.title }}</strong>
+        {% if s.body %}
+          <div class="pf-map__tip-text">{{ s.body }}</div>
+        {% endif %}
+        {% if s.cta %}
+          <p class="pf-map__tip-cta">{{ s.cta }}</p>
+        {% endif %}
       </div>
-      <strong class="pf-map__tip-title">{{ s.title }}</strong>
-      {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
-      {% if s.body %}
-        <div class="pf-map__tip-text">{{ s.body }}</div>
-      {% endif %}
-      {% if s.cta %}
-        <p class="pf-map__tip-cta">{{ s.cta }}</p>
-      {% endif %}
     </div>
   {% endfor %}
 </div>

@@ -179,6 +179,14 @@
     tip.className = 'pf-map__tip';
     tip.setAttribute('aria-hidden', 'true');
     stage.appendChild(tip);
+    // Tooltip titles are set in the exhibition serif, which other pages
+    // never download: fetch it when the pointer or focus first reaches the
+    // map, so it is in before the hover wait ends.
+    const loadSerif = () => {
+      if (document.fonts && document.fonts.load) document.fonts.load('500 1em "Playfair Display"').catch(() => {});
+    };
+    root.addEventListener('pointerenter', loadSerif, { once: true });
+    root.addEventListener('focusin', loadSerif, { once: true });
     let current = null;
     let hideTimer = 0;
     let showTimer = 0;

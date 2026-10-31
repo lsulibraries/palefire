@@ -21,8 +21,7 @@
   --pf-map-in: .2s;                    /* hover in */
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
-  --pf-map-tip-bg: rgb(10 10 10 / .92); /* tooltip glass, its pointer, lines, body text */
-  --pf-map-tip-solid: rgb(10 10 10);
+  --pf-map-tip-solid: rgb(10 10 10);   /* tooltip panel and its pointer */
   --pf-map-tip-line: #3a3a3a;
   --pf-map-tip-text: #d6d6d6;
   --pf-map-line: 2.8;                  /* outline weight in SVG user units (~0.5pt at 1000px wide); building-map.js keeps it at 0.5pt */
@@ -449,18 +448,17 @@
    map doesn't flash tooltips; focus and taps show it straight away. It then
    fades in and rises a few px with a slight overshoot (the bump), growing
    from its pointer. Position is left/top so the bump's transform never moves
-   it across the map. */
+   it across the map.
+   Set as a museum wall label, flat like the page around it: a solid panel,
+   a hairline edge under a gold rule, the floor numeral in its own column. */
 .pf-map__tip-src { display: none; }
 .pf-map__tip {
   position: absolute; z-index: 5; left: var(--tip-x, 0px); top: var(--tip-y, 0px);
-  width: max-content; max-width: min(19rem, calc(100% - 1rem));
-  /* Set like the page around it: square, a hairline edge, a soft shadow. */
-  padding: 1rem 1.125rem 1.125rem;
-  border: 1px solid #{$pf-hairline}; border-radius: 0;
-  background: var(--pf-map-tip-bg); color: var(--pf-map-ink);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  box-shadow: 0 .75rem 2rem rgb(0 0 0 / .22);
-  font-size: .875rem; line-height: 1.5; text-align: left;
+  display: grid; grid-template-columns: 4rem minmax(0, 1fr);
+  width: max-content; max-width: min(25rem, calc(100% - 1rem));
+  border: 1px solid #{$pf-hairline}; border-top: 2px solid var(--pf-map-hover); border-radius: 0;
+  background: var(--pf-map-tip-solid); color: var(--pf-map-ink);
+  font-size: 1rem; line-height: 1.6; text-align: left;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; /* true weight on macOS, as the page <h1> */
   opacity: 0; visibility: hidden; pointer-events: none;
   transform-origin: var(--tip-arrow, 50%) 100%;
@@ -482,21 +480,41 @@
   border: solid #{$pf-hairline}; border-width: 0 1px 1px 0; background: var(--pf-map-tip-solid);
   transform: rotate(45deg);
 }
-.pf-map__tip.is-below::after { top: -7px; bottom: auto; transform: rotate(-135deg); }
+/* Below the room the pointer sits on the gold rule, so it takes the rule. */
+.pf-map__tip.is-below::after { top: -8px; bottom: auto; border-color: var(--pf-map-hover); border-width: 0 2px 2px 0; transform: rotate(-135deg); }
 /* The type follows the landing: the floor and access in the small spaced
-   capitals of its labels (At a glance), the room in the text face at the
-   option names' weight, not gold capitals; the link in plain words. */
-.pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+   capitals of its labels (At a glance), the room in the exhibition cover's
+   serif, the text at the page's body size; the link in plain words.
+   building-map.js loads the serif when the pointer first reaches the map, so
+   the first tooltip doesn't swap fonts. */
+.pf-map__tip-floor {
+  display: flex; flex-direction: column; align-items: center; gap: .25rem;
+  margin: 0; padding: 1.125rem 0; border-right: 1px solid #{$pf-hairline};
+}
+.pf-map__tip-floor-label { font-family: var(--pf-landing-label, var(--bs-font-monospace)); font-size: .6875rem; font-weight: 700; letter-spacing: .16em; line-height: 1.4; text-transform: uppercase; color: var(--pf-map-floor-ink); }
+.pf-map__tip-floor-num { font: 500 2.125rem/1 $pf-font-display-serif; font-variant-numeric: lining-nums; color: var(--pf-map-ink); }
+.pf-map__tip-body { padding: 1.125rem 1.375rem 1.25rem; }
+.pf-map__tip-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .625rem; }
 .pf-map__tip-head .pf-map__swatch,
 .pf-map__group-title .pf-map__swatch { width: 28px; height: calc(var(--p) * 3); }
 .pf-map__tip-eyebrow { margin: 0; font-family: var(--pf-landing-label, var(--bs-font-monospace)); font-size: var(--pf-mono-label); font-weight: 700; letter-spacing: .16em; line-height: 1.5; text-transform: uppercase; color: var(--pf-map-floor-ink); }
-.pf-map__tip-title { display: block; margin: 0 0 .375rem; font-size: 1.0625rem; font-weight: 500; letter-spacing: normal; text-transform: none; line-height: 1.3; color: var(--pf-map-ink); }
+.pf-map__tip-title { display: block; margin: 0 0 .625rem; font: 500 1.625rem/1.15 $pf-font-display-serif; font-variant-numeric: lining-nums; letter-spacing: normal; text-transform: none; color: var(--pf-map-ink); }
 .pf-map__tip-kicker { margin: 0 0 .15rem; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pf-map-floor-ink); }
 .pf-map__tip-text { color: var(--pf-map-tip-text); }
-.pf-map__tip-text p { margin: 0 0 .4rem; }
+.pf-map__tip-text p { margin: 0 0 .5rem; }
 .pf-map__tip-text > :last-child { margin-bottom: 0; }
-.pf-map__tip-cta { display: flex; align-items: center; gap: .4rem; margin: .75rem 0 0; padding-top: .625rem; border-top: 1px solid #{$pf-hairline}; font-size: .875rem; font-weight: 500; color: var(--pf-map-ink); }
+.pf-map__tip-cta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 1rem 0 0; padding-top: .75rem; border-top: 1px solid #{$pf-hairline}; font-size: .9375rem; font-weight: 500; color: var(--pf-map-ink); }
 .pf-map__tip-cta::after { content: "\2192"; color: var(--pf-map-hover); }
+/* A narrow map (phones) has no room for the floor column: the floor sits
+   in small capitals over the access line, and the type steps down. */
+@container pf-map (max-width: 30rem) {
+  .pf-map__tip { grid-template-columns: minmax(0, 1fr); font-size: .9375rem; }
+  .pf-map__tip-floor { flex-direction: row; align-items: baseline; gap: .4rem; padding: .875rem 1.125rem 0; border-right: 0; }
+  .pf-map__tip-floor-label { font-size: var(--pf-mono-label); line-height: 1.5; }
+  .pf-map__tip-floor-num { font: 700 var(--pf-mono-label)/1.5 var(--pf-landing-label, var(--bs-font-monospace)); letter-spacing: .16em; color: var(--pf-map-floor-ink); }
+  .pf-map__tip-body { padding: .5rem 1.125rem 1.125rem; }
+  .pf-map__tip-title { font-size: 1.375rem; }
+}
 
 /* Landing integration ------------------------------------------------------
    The map sits in the landing under the search form. While it is in view,
