@@ -292,7 +292,7 @@ $pf-hero-media-wash: .8 !default;
   // pulled up by the row-gap plus the summary's 3cqi, less that 1rem, so
   // the text still sits as deep in the drawing's corner as before.
   .pf-landing--hero .pf-map--hill-memorial:has(> .pf-map__type):not(:has(> .pf-hero-event)) {
-    --pf-map-lift: calc(clamp(1.5rem, 3vw, 3rem) + 3cqi - 1rem); // the hero map's row-gap, plus the summary's 3cqi, less 1rem
+    --pf-map-stage-pull: calc(clamp(1.5rem, 3vw, 3rem) + 3cqi - 1rem); // the hero map's row-gap, plus the summary's 3cqi, less 1rem
 
     > .pf-map__heading {
       position: relative;
@@ -300,7 +300,7 @@ $pf-hero-media-wash: .8 !default;
     }
 
     > .pf-map__stage {
-      margin-top: calc(-1 * var(--pf-map-lift));
+      margin-top: calc(-1 * var(--pf-map-stage-pull));
     }
   }
 

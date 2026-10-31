@@ -17,7 +17,7 @@
   --pf-map-rotate: -25deg;             /* label + floor-tile angle */
   --pf-map-skew-room: -25deg;          /* room names stand up */
   --pf-map-skew-floor: 35deg;          /* floor names + restroom tiles lie flat */
-  --pf-map-lift: 28px;                 /* room-name bump on hover, in map units (about 6px at 1000px wide) */
+  --pf-map-lift: 12px;                 /* room-name rise on hover, in map units (about 3px at 1000px wide): a nudge, not a jump */
   --pf-map-in: .2s;                    /* hover in */
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
