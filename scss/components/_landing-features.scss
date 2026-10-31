@@ -1423,10 +1423,24 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // grey and the page-color wash, darkened to 55% (--pf-banner-hush; not
 // opacity, which let the backdrop show through), and their titles to 70%
 // (still above 7:1 over the scrim); an event's
-// date, words rather than a picture, as its title. Not the blog line (text
-// in the section's colors). Dims at once, brightens after 300ms, the
+// date, words rather than a picture, as its title. The blog post too where
+// it is a banner (from 44rem), not where it is a line of text in the
+// section's colors. Dims at once, brightens after 300ms, the
 // banner landed on at once; instant with reduced motion. The picture's
 // transition list carries its color's ease (above) too.
+@mixin pf-banner-hushed {
+  .pf-hero-banner__media {
+    --pf-banner-hush: 1;
+    transition-delay: 0s;
+  }
+
+  .pf-hero-banner__media--date,
+  .pf-hero-banner__title {
+    opacity: .7;
+    transition-delay: 0s;
+  }
+}
+
 .pf-hero-banners {
   .pf-hero-banner__media {
     transition: opacity .4s ease-out .3s;
@@ -1441,20 +1455,17 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   }
 
   &:has(.pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:not(.pf-hero-banner--blog):not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) {
-    .pf-hero-banner__media {
-      --pf-banner-hush: 1;
-      transition-delay: 0s;
-    }
-
-    .pf-hero-banner__media--date,
-    .pf-hero-banner__title {
-      opacity: .7;
-      transition-delay: 0s;
-    }
+    @include pf-banner-hushed;
   }
 
   .pf-hero-banner__link:is(:hover, :focus-visible) :is(.pf-hero-banner__media, .pf-hero-banner__title) {
     transition-delay: 0s;
+  }
+}
+
+@container pf-cover (min-width: 44rem) {
+  .pf-hero-banners:has(.pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner--blog:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) {
+    @include pf-banner-hushed;
   }
 }
 
