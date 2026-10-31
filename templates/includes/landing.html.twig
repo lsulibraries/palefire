@@ -192,11 +192,14 @@
      far end of the bar's row and stays under the header while the landing
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
-  {# Hero: "Log in" (the Special Collections request system, Aeon), the
-     last of the hero's links (.pf-landing__links, below), its words in the
-     highlight. It opens in a new tab (an up-right arrow; its name says so
-     for screen readers). account_url: empty leaves it out. #}
+  {# Hero: the researcher card's "Log in" and "Register" (the Special
+     Collections request system, Aeon; .pf-landing__account, below). Both
+     open in a new tab (an up-right arrow; their names say so for screen
+     readers). Aeon makes the account on a first log in, so Register goes
+     to the same place until it has a page of its own (register_url).
+     account_url: empty leaves the card out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
+  {% set register_url = account_url %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
@@ -259,37 +262,38 @@
         {{- landing_intro -}}
       </div>
     {% endif %}
-    {# Hero: three links as a ruled index beside the intro, their foot on
-       its: on the five-column grid in columns 3-5 (Log in over the Search
-       button); narrower, rows in the intro's other half; on phones, rows
-       under it (_landing-features.scss). Special Collections' own (the hero
-       is its landing, as account_url). #}
-    {% if hero %}
-      {% set hero_links = [
-        { text: 'University Archives'|t, url: '/v2/special/archives' },
-        { text: 'Oral History'|t, url: '/v2/special/oralhistory' },
-      ] %}
-      <nav class="pf-landing__links" aria-label="{{ 'Special Collections'|t }}">
-        <ul class="pf-landing__links-list" role="list">
-          {% for link in hero_links %}
-            <li>
-              <a class="pf-landing__link" href="{{ link.url }}">
-                {{- link.text -}}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-              </a>
-            </li>
-          {% endfor %}
-          {% if account_url %}
-            <li>
-              <a class="pf-landing__link pf-landing__link--account" href="{{ account_url }}" target="_blank" rel="noopener">
-                {{- 'Log in'|t -}}
-                <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
-              </a>
-            </li>
-          {% endif %}
+    {# Hero: the researcher card beside the intro, its foot on the intro's:
+       a label, "Request items" (in the Reading Room or as digital copies),
+       Log in in the accent and Register outlined, then a line to the
+       guide for first-timers. On the five-column grid in columns 4-5
+       (its end over the Search button's); narrower, the intro's other
+       half; on phones, under it (_landing-features.scss). #}
+    {% if account_url %}
+      {% set account_id = input_id ~ '-account' %}
+      {% set account_arrow %}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>{% endset %}
+      <section class="pf-landing__links pf-landing__account" aria-labelledby="{{ account_id }}">
+        <p class="pf-landing__account-label">{{ 'Researcher account'|t }}</p>
+        <h2 class="pf-landing__account-title" id="{{ account_id }}">{{ 'Request items'|t }}</h2>
+        <ul class="pf-landing__account-actions" role="list">
+          <li>
+            <a class="pf-landing__account-button pf-landing__account-button--primary" href="{{ account_url }}" target="_blank" rel="noopener">
+              {{- 'Log in'|t -}}
+              <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+              {{- account_arrow -}}
+            </a>
+          </li>
+          <li>
+            <a class="pf-landing__account-button" href="{{ register_url }}" target="_blank" rel="noopener">
+              {{- 'Register'|t -}}
+              <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+              {{- account_arrow -}}
+            </a>
+          </li>
         </ul>
-      </nav>
+        <p class="pf-landing__account-note">
+          {{- 'First time?'|t }} <a href="{{ quick_guide.url|default('/v2/special/guides/special-collections') }}">{{ 'Read the guide'|t }}{% if not quick_guide.url %}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>{% endif %}</a>
+        </p>
+      </section>
     {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">

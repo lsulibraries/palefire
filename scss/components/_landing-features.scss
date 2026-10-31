@@ -3187,27 +3187,22 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
-// --- The hero's links (University Archives, Oral History, Log in) -----------
-// One shared plate beside the intro, split by hairlines: a toolbar, not
-// three more fields. The label in the mono small capitals, an arrow at
-// the end, each centred in its share of the plate.
-// - phones: rows under the intro;
-// - from 40rem: rows in the right half, the plate as tall as the intro
-//   beside it (a grid, so neither can run into the hours over them);
-// - from 80rem (five-column cover): three columns over banners 3-5, so Log
-//   in stands over the Search button, the plate again the intro's height.
-// The plate is the page color at 65% on the glass blur, lighter than the
-// search field's 80% so the two read apart: the least that keeps white
-// words at 4.5:1 over a white frame of the video (4.7:1 there), the halo
-// on top. Gold words at rest would need 75%, so Log in, which leaves for
-// the request system, keeps the highlight on its arrow. Hover deepens a
-// link's whole cell (about 82% in all) and turns its words gold, which
-// keeps 5.9:1 there.
+// --- The hero's researcher card (Log in, Register) ---------------------------
+// One quiet plaque beside the intro, like a museum's membership panel: the
+// label in the mono small capitals and the accent, "Request items" in the
+// text face, Log in filled with the accent (the Search button's fill) and
+// Register outlined in the hairline, then a line to the guide.
+// - phones: under the intro;
+// - from 40rem: the intro's other half, its foot on the intro's;
+// - from 80rem (five-column cover): columns 4-5, its end over the Search
+//   button's.
+// The plate is the page color at 80% (the search field's) on the glass
+// blur, framed by the hairline: the least that keeps the gold label at
+// 4.5:1 over a white frame of the video (it needs 75%), white words well
+// over it, the halo on top.
 .pf-landing__links {
-  --pf-links-plate: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 65%, transparent);
+  --pf-links-plate: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 80%, transparent);
   grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
   margin-top: clamp(1rem, 2vw, 1.5rem);
   background-color: var(--pf-links-plate);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -3218,7 +3213,7 @@ html[data-pf-hero] .pf-landing--hero {
 // backdrop-filter passing under another (the bar's glass, the header's).
 // A view timeline inset by the header and bar ends the blur as the
 // plate's top reaches the bar's foot (half a rem early), and scrolling
-// back up restores it. Not motion: the plate's 65% keeps its words at AA
+// back up restores it. Not motion: the plate's 80% keeps its words at AA
 // either way, and the bar covers what changes. Without scroll timelines
 // the blur stays (Firefox and Safari don't show the flicker).
 @supports (animation-timeline: view()) {
@@ -3236,27 +3231,9 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
-.pf-landing__links-list {
-  display: grid;
-  flex: 1 1 auto;
-  grid-template-columns: minmax(0, 1fr);
-  grid-auto-rows: 1fr;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  > li {
-    display: flex;
-  }
-
-  > li + li {
-    border-top: 1px solid #{$pf-hairline};
-  }
-}
-
-// Beside the intro: the intro and the plate share a row under the title
-// and hours, the plate stretched to the intro's height (or the intro's
-// row grows to the plate's, never overlapping).
+// Beside the intro: the intro and the card share a row under the title
+// and hours, their feet level (a grid, so neither can run into the hours
+// over them).
 @container pf-cover (min-width: 40rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     display: grid;
@@ -3275,20 +3252,14 @@ html[data-pf-hero] .pf-landing--hero {
 
     > .pf-landing__links {
       grid-column: 2;
-      align-self: stretch;
+      justify-self: end;
+      width: min(100%, 24rem);
       margin-top: 0;
     }
   }
-
-  // Rows 2rem at least (over 2.2's 24px targets), so three fit the
-  // height of a three- or four-line intro; the rows share what's left.
-  // (Two classes: the base rule for the links comes later.)
-  .pf-landing__links-list .pf-landing__link {
-    min-height: 2rem;
-    padding-block: .375rem;
-  }
 }
 
+// Two banners wide, its end on the Search button's.
 @container pf-cover (min-width: 80rem) {
   .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top {
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -3298,47 +3269,72 @@ html[data-pf-hero] .pf-landing--hero {
     }
 
     > .pf-landing__links {
-      grid-column: 3 / -1;
-    }
-  }
-
-  // Flush cells, so a hover fills its whole share of the plate: the last
-  // is one banner wide (banner 5's, the Search button's), the other two
-  // share the rest, each a banner and a gutter. Log in's cell and words
-  // then start where the Search button's do; the hairlines fall on the
-  // cells' edges.
-  .pf-landing__links-list {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) calc((100% - 2 * var(--pf-grid-gutter)) / 3);
-    grid-auto-rows: auto;
-
-    > li + li {
-      border-top: 0;
-      border-inline-start: 1px solid #{$pf-hairline};
-    }
-
-    // The words start where the Search button's do.
-    .pf-landing__link {
-      padding-inline: 1.25rem;
+      grid-column: 4 / -1;
+      width: auto;
+      justify-self: stretch;
     }
   }
 }
 
-.pf-landing__link {
+.pf-landing__account {
+  padding: 1.25rem;
+  border: 1px solid #{$pf-hairline};
+  color: var(--pf-section-fg, var(--bs-body-color));
+  text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
+}
+
+.pf-landing__account-label {
+  @extend %pf-landing-label;
+  margin: 0;
+  color: var(--pf-g-accent, var(--pf-landing-accent));
+}
+
+.pf-landing__account-title {
+  margin: .375rem 0 1rem;
+  font-family: inherit;
+  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: inherit;
+}
+
+.pf-landing__account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  // The buttons share the card's width, so a wrapped pair (phones) stacks
+  // as two full-width buttons rather than two ragged ones.
+  > li {
+    display: flex;
+    flex: 1 1 auto;
+  }
+}
+
+// Each button at least 2.75rem tall (over 2.2's 24px targets), its words
+// in the mono label voice of the Search button, an up-right arrow after
+// them (both leave for the request system).
+.pf-landing__account-button {
   @extend %pf-landing-label;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
   justify-content: space-between;
-  gap: .75rem;
+  gap: .625rem;
   min-height: 2.75rem;
-  padding: .625rem 1rem;
+  padding: .5rem 1rem;
   font-size: var(--pf-mono-ui);
   letter-spacing: .12em;
+  border: 1px solid #{$pf-hairline};
   border-radius: 0;
-  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  color: var(--pf-section-fg, var(--bs-body-color));
   text-decoration: none;
-  text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
-  transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
+  text-shadow: none;
+  transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease, color $pf-hover-out ease;
 
   svg {
     flex: none;
@@ -3350,39 +3346,65 @@ html[data-pf-hero] .pf-landing--hero {
   &:hover,
   &:focus-visible {
     color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    background-color: color-mix(in srgb, var(--pf-cover-bg, var(--bs-body-bg)) 50%, transparent);
+    border-color: currentColor;
     transition-duration: $pf-hover-in;
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: -2px;
+    outline-offset: 2px;
   }
 }
 
-.pf-landing__link--account svg {
-  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+// Log in filled like the Search button, its hover the same step toward
+// the text color.
+.pf-landing__account-button--primary {
+  border-color: transparent;
+  color: var(--pf-g-on-accent, #{$pf-black});
+  background-color: var(--pf-g-accent, #{$pf-gold});
+
+  &:hover,
+  &:focus-visible {
+    border-color: transparent;
+    color: var(--pf-g-on-accent, #{$pf-black});
+    background-color: color-mix(in srgb, var(--pf-g-accent, #{$pf-gold}) 85%, var(--pf-g-fg, #{$pf-white}));
+  }
+}
+
+.pf-landing__account-note {
+  margin: 1rem 0 0;
+  font-size: .875rem;
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--pf-g-accent, var(--pf-landing-accent));
+    text-underline-offset: .2em;
+    transition: color $pf-hover-out ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+      transition-duration: $pf-hover-in;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion) .pf-landing__link:is(:hover, :focus-visible) svg {
-    transform: translateX(.1875rem);
-  }
-
-  html:not(.pf-a11y-motion) .pf-landing__link--account:is(:hover, :focus-visible) svg {
+  html:not(.pf-a11y-motion) .pf-landing__account-button:is(:hover, :focus-visible) svg {
     transform: translate(.125rem, -.125rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-landing__link,
-  .pf-landing__link svg {
+  .pf-landing__account-button,
+  .pf-landing__account-button svg {
     transition: none;
   }
 }
 
 @media (forced-colors: active) {
-  .pf-landing__link--account {
+  .pf-landing__account-button {
+    border-color: LinkText;
     color: LinkText;
   }
 }

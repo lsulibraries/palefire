@@ -132,12 +132,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
         @include pf-enter(660ms);
       }
 
-      // The plate, then its cells one by one.
-      .pf-landing__links-list > li {
+      // The card, then its rows one by one.
+      .pf-landing__account > * {
         --pf-enter-y: .5rem;
         @include pf-enter(880ms, .7s);
 
-        @for $i from 2 through 3 {
+        @for $i from 2 through 4 {
           &:nth-child(#{$i}) {
             animation-delay: #{880 + ($i - 1) * 90}ms;
           }
