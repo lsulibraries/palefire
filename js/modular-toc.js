@@ -198,6 +198,7 @@
       }
       setActiveSub(null);
       queueIndicator();
+      updateCrumb();
 
       // A link can point inside a section (the landing's "Home" and "Map",
       // PalefireHooks::heroTocIds()): the chrome follows the section that
@@ -624,7 +625,8 @@
           hushed = false;
         }
       }
-      if (hushed || (peek > 0 && peekCovers(active))) {
+      // The landing bar names the section instead (crumb, below).
+      if (crumb || hushed || (peek > 0 && peekCovers(active))) {
         peek = 0;
       }
       nav.style.setProperty('--pf-rail-peek', peek.toFixed(3));
@@ -853,6 +855,153 @@
       }
     }
 
+    /* ---------------- Landing bar: pinned, with the section ---------------- */
+
+    // On a page whose landing has the breadcrumb bar (includes/
+    // landing.html.twig; not an exhibition's head), the bar stays under the
+    // header for the whole page, and its last crumb names the current
+    // section, in place of the rail's vertical name. Not the first entry
+    // (Home): it would repeat the page's title. The crumb is a button that
+    // opens the contents: the rail's index panel from lg (focus moves to
+    // the section's rail link; Esc brings it back), the TOC drawer below.
+    // The bar is sticky inside the landing (_landing-features.scss), so it
+    // can't outlast it: once the landing would push it up, it turns fixed
+    // in the same place (.is-pinned), and a spacer of its size holds its
+    // place in the landing, so nothing moves. <html>.pf-bar-pinned lifts the
+    // first section over the ones after it, as the bar is inside it.
+    const bar = document.querySelector('.pf-landing > .pf-landing__bar');
+    const crumbList = bar ? bar.querySelector('.breadcrumb') : null;
+    let crumb = null;
+    let crumbLabel = null;
+    let crumbShown = null;
+    let crumbOpened = false;
+    let spacer = null;
+    let pinned = false;
+    let pinFrame = 0;
+
+    function updateCrumb() {
+      if (!crumb) {
+        return;
+      }
+      const show = !!active && active !== entries[0];
+      const text = show ? active.link.textContent.replace(/\s+/g, ' ').trim() : '';
+      crumb.hidden = !show;
+      if (!show || text === crumbLabel.textContent) {
+        crumbShown = show ? crumbShown : null;
+        return;
+      }
+      crumbLabel.textContent = text;
+      // Rises in, as the page's other changes of place do. Not on load.
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches || ROOT.classList.contains('pf-a11y-motion');
+      if (crumbShown !== null && !still && crumbLabel.animate) {
+        crumbLabel.animate([
+          { opacity: 0, transform: 'translateY(0.4em)' },
+          { opacity: 1, transform: 'none' },
+        ], { duration: 350, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+      }
+      crumbShown = text;
+    }
+
+    function openContents() {
+      if (railOn()) {
+        nav.classList.remove('is-dismissed');
+        nav.classList.add('is-open');
+        dismissedOn = null;
+        crumbOpened = true;
+        revealRow(active);
+        if (active) {
+          active.link.focus({ preventScroll: true });
+        }
+        return;
+      }
+      const drawer = document.getElementById(TOC_DRAWER);
+      const Offcanvas = window.bootstrap && window.bootstrap.Offcanvas;
+      if (drawer && Offcanvas) {
+        Offcanvas.getOrCreateInstance(drawer).show();
+      }
+    }
+
+    function updatePin() {
+      pinFrame = 0;
+      if (destroyed || !bar) {
+        return;
+      }
+      const landing = bar.parentElement;
+      const head = headerHeight();
+      const height = (pinned ? spacer : bar).getBoundingClientRect().height;
+      const gap = parseFloat(getComputedStyle(pinned ? spacer : bar).marginBottom) || 0;
+      // Where the sticky bar would start to be pushed up: the landing's
+      // content box ends a bar (and its margin) under the header.
+      const end = landing.getBoundingClientRect().bottom - (parseFloat(getComputedStyle(landing).paddingBottom) || 0);
+      const pin = end - height - gap <= head;
+      if (pin !== pinned) {
+        if (pin) {
+          spacer.style.height = height + 'px';
+        }
+        spacer.hidden = !pin;
+        bar.classList.toggle('is-pinned', pin);
+        ROOT.classList.toggle('pf-bar-pinned', pin);
+        pinned = pin;
+      }
+      if (pinned) {
+        const box = spacer.getBoundingClientRect();
+        bar.style.setProperty('--pf-bar-left', box.left + 'px');
+        bar.style.setProperty('--pf-bar-width', box.width + 'px');
+      }
+    }
+
+    function queuePin() {
+      if (!pinFrame && !destroyed) {
+        pinFrame = requestAnimationFrame(updatePin);
+      }
+    }
+
+    if (crumbList) {
+      crumb = document.createElement('li');
+      crumb.className = 'breadcrumb-item pf-breadcrumb__section';
+      crumb.hidden = true;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-breadcrumb__toc';
+      button.setAttribute('aria-controls', TOC_DRAWER);
+      crumbLabel = document.createElement('span');
+      crumbLabel.className = 'pf-breadcrumb__section-label';
+      const name = document.createElement('span');
+      name.className = 'visually-hidden';
+      name.textContent = ', ' + Drupal.t('table of contents');
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('viewBox', '0 0 16 16');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.setAttribute('focusable', 'false');
+      icon.innerHTML = '<path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      button.append(crumbLabel, name, icon);
+      crumb.append(button);
+      crumbList.append(crumb);
+      button.addEventListener('click', openContents, { signal });
+      // Esc in the panel it opened: back to the crumb. (The rail's own Esc
+      // handler, above, closes the panel.)
+      nav.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && crumbOpened) {
+          crumbOpened = false;
+          button.focus();
+        }
+      }, { signal });
+      nav.addEventListener('focusout', () => requestAnimationFrame(() => {
+        if (!nav.contains(document.activeElement)) {
+          crumbOpened = false;
+        }
+      }), { signal });
+
+      spacer = document.createElement('div');
+      spacer.className = 'pf-landing__bar-spacer';
+      spacer.hidden = true;
+      spacer.setAttribute('aria-hidden', 'true');
+      bar.before(spacer);
+      window.addEventListener('scroll', queuePin, { passive: true, signal });
+      window.addEventListener('resize', queuePin, { passive: true, signal });
+      updatePin();
+    }
+
     /* ---------------- Wire up ---------------- */
 
     observe();
@@ -997,6 +1146,8 @@
       }
       cancelAnimationFrame(railFrame);
       clearTimeout(holdTimer);
+      cancelAnimationFrame(pinFrame);
+      ROOT.classList.remove('pf-bar-pinned');
     };
   }
 

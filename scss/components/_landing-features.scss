@@ -231,6 +231,91 @@ $pf-cover-bar: ':has(.pf-landing--cover > .pf-landing__bar)';
   padding: 0;
 }
 
+// Pinned for the whole page (js/modular-toc.js): past the landing the bar
+// turns fixed where it stuck, as wide as the spacer that keeps its place
+// (and its margin) in the landing. The bar sits inside the first section,
+// so that section is lifted over the ones after it meanwhile; it is above
+// the screen by then.
+.pf-landing > .pf-landing__bar.is-pinned {
+  position: fixed;
+  top: var(--pf-header-h);
+  left: var(--pf-bar-left, 0);
+  width: var(--pf-bar-width, 100%);
+  margin: 0;
+}
+
+.pf-landing__bar-spacer {
+  margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  margin-bottom: var(--pf-landing-bar-gap);
+}
+
+html.pf-bar-pinned .pf-sections > .pf-section:first-child > .pf-section__inner {
+  z-index: 2;
+}
+
+// The current section, after the page: a button in the crumbs' type that
+// opens the contents, with a small chevron. Muted as the links, the active
+// color and the accent underline on hover and focus. It gives way first
+// (ellipsis) when the row runs out of room.
+.pf-breadcrumb--modular .pf-breadcrumb__section {
+  flex: 0 4 auto;
+  min-width: 3.5em;
+}
+
+.pf-breadcrumb__toc {
+  display: inline-flex;
+  align-items: center;
+  gap: .4em;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 1.5rem; // a 24px target (WCAG 2.5.8)
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 1em;
+    height: 1em;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-toc-active);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-toc-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+.pf-breadcrumb__section-label {
+  display: inline-block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  // Room for the underline, as on the crumbs' links (_layout.scss).
+  padding-block-end: 2px;
+  margin-block-end: -2px;
+  background: linear-gradient(var(--pf-toc-accent), var(--pf-toc-accent)) no-repeat 0 100% / 0 2px;
+  transition: background-size .25s ease;
+
+  .pf-breadcrumb__toc:is(:hover, :focus-visible) & {
+    background-size: 100% 2px;
+  }
+}
+
 // Hero: "Sign in" at the bar's end (before the docked video button's
 // room), the sign-in button's style made to fit the bar's row: as tall as
 // the video button, the icon after the word. The breadcrumb gives way
