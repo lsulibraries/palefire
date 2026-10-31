@@ -1363,7 +1363,8 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 // brings the picture's colors back as it zooms, and so does scrolling
 // (below). Values from 1 (grey and washed) to 0 (the picture's own
 // colors): --pf-banner-grey for the banner's place on screen,
-// --pf-banner-wait for the page's scroll, --pf-banner-dim for hover. Either
+// --pf-banner-wait for the page's scroll, --pf-banner-dim for hover,
+// --pf-banner-hush (0 to 1) for another banner's hover (below). Either
 // scroll value keeps the picture grey; hover clears both. Hover's has to
 // be its own: a property under an animation
 // won't transition, so hover would snap. Only hover's value eases, not
@@ -1388,12 +1389,18 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   initial-value: 1;
 }
 
+@property --pf-banner-hush {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
-  --pf-banner-mute: calc((1 - (1 - var(--pf-banner-grey, 1)) * (1 - var(--pf-banner-wait, 1))) * var(--pf-banner-dim, 1));
+  --pf-banner-mute: calc(1 - (1 - (1 - (1 - var(--pf-banner-grey, 1)) * (1 - var(--pf-banner-wait, 1))) * var(--pf-banner-dim, 1)) * (1 - var(--pf-banner-hush, 0)));
   transition: --pf-banner-dim $pf-hover-out ease;
 
   img {
-    filter: grayscale(var(--pf-banner-mute)) contrast(calc(1 + .1 * var(--pf-banner-mute)));
+    filter: grayscale(var(--pf-banner-mute)) contrast(calc(1 + .1 * var(--pf-banner-mute))) brightness(calc(1 - .45 * var(--pf-banner-hush, 0)));
   }
 
   &::after {
@@ -1412,8 +1419,10 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 // The banner in hand stands out, as on Written at Hill's shelf and the
-// tile showcases (_tile-showcase.scss): the others' pictures dim to 35%
-// and their titles to 70% (still above 7:1 over the scrim); an event's
+// tile showcases (_tile-showcase.scss): the others' pictures go back to
+// grey and the page-color wash, darkened to 55% (--pf-banner-hush; not
+// opacity, which let the backdrop show through), and their titles to 70%
+// (still above 7:1 over the scrim); an event's
 // date, words rather than a picture, as its title. Not the blog line (text
 // in the section's colors). Dims at once, brightens after 300ms, the
 // banner landed on at once; instant with reduced motion. The picture's
@@ -1423,7 +1432,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
     transition: opacity .4s ease-out .3s;
 
     &:not(.pf-hero-banner__media--date) {
-      transition: --pf-banner-dim $pf-hover-out ease, opacity .4s ease-out .3s;
+      transition: --pf-banner-dim $pf-hover-out ease, --pf-banner-hush .4s ease-out .3s;
     }
   }
 
@@ -1433,7 +1442,7 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
   &:has(.pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:not(.pf-hero-banner--blog):not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) {
     .pf-hero-banner__media {
-      opacity: .35;
+      --pf-banner-hush: 1;
       transition-delay: 0s;
     }
 
