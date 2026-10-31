@@ -479,12 +479,16 @@
 }
 .pf-map__tip.is-below { transform-origin: var(--tip-arrow, 50%) 0; }
 .pf-map__tip.is-below.is-open { transform: none; }
-/* Pointer: a small rotated square on the edge facing the room. */
+/* Pointer: a small rotated square on the edge facing the room, clipped to
+   its outer half (plus a sliver that covers the edge's own line), so the
+   inner half never paints over the label: below a room that half sat on
+   the photo. */
 .pf-map__tip::after {
   content: ""; position: absolute; left: var(--tip-arrow, 50%); bottom: -7px;
   width: 12px; height: 12px; margin-left: -6px;
   border: solid #{$pf-hairline}; border-width: 0 1px 1px 0; background: var(--pf-map-tip-solid);
   transform: rotate(45deg);
+  clip-path: polygon(calc(100% - 4px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 4px));
 }
 /* Below the room the pointer sits on the gold rule, so it takes the rule. */
 .pf-map__tip.is-below::after { top: -8px; bottom: auto; border-color: var(--pf-map-hover); border-width: 0 2px 2px 0; transform: rotate(-135deg); }
