@@ -1,6 +1,6 @@
 // Exhibitions showcase (includes/exhibit-showcase.html.twig): a Modular
-// page in "showcase" mode. A depth carousel, then an index of every
-// exhibition with a turning plate. Script: js/exhibit-showcase.js.
+// page in "showcase" mode. A depth carousel, then a table of every
+// exhibition. Script: js/exhibit-showcase.js.
 //
 // The carousel: the covers stand in one row going back into the page, to
 // the right. --pf-d is a cover's place in the row (0 = the front, the one
@@ -10,16 +10,24 @@
 // and at 400% zoom. Only transform and opacity move, inside a box of fixed
 // height: no layout shift.
 //
-// Colors follow the page (and a dark section or reading swatch around it):
-// text on the surface, never on a cover. "Featured" is black on gold
-// (14:1). Focus: a 2px ring in the text color.
+// Type and controls are the exhibitions' own: mono labels, the
+// exhibition button (.pf-exhibit-button, _exhibition.scss) for "Enter",
+// and the events carousel's square Previous / Next with a drawn arrow
+// (_events-carousel.scss). Colors follow the page, its dark sections and
+// the reading swatches (--pf-g-*): text sits on the surface, never on a
+// cover. Control boundaries are the text color (3:1, WCAG 1.4.11), lines
+// the hairline.
 
 $pf-showcase-ease: cubic-bezier(.22, 1, .36, 1);
 $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 
 .pf-showcase {
+  // .pf-exhibit-button reads these (set on exhibition pages only).
+  --pf-exhibit-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+  --pf-exhibit-accent: var(--pf-g-accent, var(--bs-primary));
   --pf-showcase-fg: var(--pf-section-fg, var(--bs-body-color));
-  --pf-showcase-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-showcase-bg: var(--pf-section-bg, var(--bs-body-bg));
+  --pf-showcase-muted: var(--pf-g-muted, var(--pf-section-muted, var(--bs-secondary-color)));
   --pf-showcase-line: #{$pf-hairline};
   --pf-showcase-blank: #{$pf-grey-800};
   display: grid;
@@ -33,18 +41,32 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
+// Mono labels, as on the exhibitions' title pages.
+.pf-showcase__kicker,
+.pf-showcase__count,
+.pf-showcase__upnext-label,
+.pf-showcase-list thead th,
+.pf-showcase-list__year,
+.pf-showcase-list__kind {
+  margin: 0;
+  color: var(--pf-showcase-muted);
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
 // A cover with no image yet: the landing tiles' hatching.
-.pf-showcase__card.is-blank,
-.pf-showcase-index__thumb.is-blank,
-.pf-showcase-index__leaf.is-blank {
+.pf-showcase__card.is-blank {
   background:
     pf-hatch(rgb(255 255 255 / .07)),
     linear-gradient(160deg, #3b3346, #17141c);
 }
 
-// "Featured": the label, and the reason beside it.
+// "Featured": the label (text and surface swapped, like the tile labels),
+// and the reason beside it.
 .pf-showcase__feature,
-.pf-showcase-index__feature {
+.pf-showcase-list__feature {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -52,21 +74,17 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   margin: 0;
 }
 
-.pf-showcase__badge,
-.pf-showcase__ribbon {
+.pf-showcase__badge {
   display: inline-block;
-  padding: .3125rem .5rem;
-  color: $pf-black;
-  background: $pf-gold;
-  font-size: .6875rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .12em;
+  padding: .3125rem .5rem .25rem;
+  color: var(--pf-showcase-bg);
+  background: var(--pf-showcase-fg);
+  font: 700 .6875rem/1 var(--pf-exhibit-mono);
+  letter-spacing: .14em;
   text-transform: uppercase;
 }
 
 .pf-showcase__note {
-  color: var(--pf-showcase-fg);
   font-size: .9375rem;
   font-weight: 500;
 }
@@ -78,7 +96,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   gap: 1.5rem;
 
   @include media-breakpoint-up(lg) {
-    grid-template-columns: minmax(17rem, 4fr) minmax(0, 8fr);
+    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
     grid-template-areas: "panel stage";
     gap: clamp(2rem, 4vw, 4rem);
     align-items: center;
@@ -115,7 +133,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 
 @container pf-showcase (min-width: 36rem) {
   .pf-showcase__scene {
-    --pf-showcase-w: min(40cqi, 24rem);
+    --pf-showcase-w: min(44cqi, 24rem);
     --pf-showcase-depth: 11rem;
   }
 }
@@ -134,6 +152,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   overflow: hidden;
   background: var(--pf-showcase-blank);
   box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, .1);
+  cursor: pointer;
   transform: translate3d(var(--pf-x), -50%, var(--pf-z)) rotateY(var(--pf-turn));
   transform-origin: 0 50%;
   // From the fourth cover back they fade, gone by the sixth.
@@ -152,12 +171,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 
   &.is-active {
     --pf-turn: -4deg;
-    cursor: pointer;
     box-shadow: 1.5rem 2.75rem 2.5rem rgba($pf-black, .18);
-
-    &:hover {
-      --pf-z: 1.5rem;
-    }
   }
 
   // Next: the front cover steps off toward you and to the left, then
@@ -179,39 +193,28 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
+// A cover behind comes a little forward under the pointer: it can be
+// clicked to bring it to the front.
+@media (hover: hover) {
+  .pf-showcase__card:hover {
+    --pf-z: calc(var(--pf-d) * -1 * var(--pf-showcase-depth) + 2rem);
+  }
+}
+
+// On a cover the label is black on white (21:1) whatever the page.
 .pf-showcase__ribbon {
   position: absolute;
   top: .75rem;
   left: .75rem;
+  color: $pf-black;
+  background: $pf-white;
 }
 
 // The summary beside it.
 .pf-showcase__panel {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
   min-width: 0;
-}
-
-.pf-showcase__count {
-  display: flex;
-  align-items: flex-start;
-  gap: .5rem;
-  margin: 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.pf-showcase__n {
-  font-size: clamp(3rem, 2.25rem + 2.5vw, 4.5rem);
-  font-weight: 300;
-  line-height: .9;
-  letter-spacing: -.03em;
-}
-
-.pf-showcase__of {
-  padding-top: .25rem;
-  color: var(--pf-showcase-muted);
-  font-size: .8125rem;
-  letter-spacing: .08em;
 }
 
 // Every summary in one cell, so the panel is as tall as the longest and
@@ -226,7 +229,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: .75rem;
+  gap: .875rem;
   min-width: 0;
   visibility: hidden;
   opacity: 0;
@@ -251,76 +254,52 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
-.pf-showcase__kicker {
-  color: var(--pf-showcase-muted);
-  font-size: .75rem;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
 .pf-showcase__draft {
   color: var(--pf-showcase-fg);
 }
 
+// The title in its exhibition's face (the title page's: serif by default).
 .pf-showcase__title {
-  font-family: $pf-font-display-serif;
-  font-size: clamp(1.875rem, 1.25rem + 1.75vw, 2.875rem);
-  font-weight: 500;
+  font-size: clamp(2rem, 1.4rem + 1.8vw, 3rem);
   line-height: 1.05;
-  letter-spacing: -.02em;
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
 
+.pf-showcase__title--serif {
+  font-family: $pf-font-display-serif;
+  font-weight: 500;
+  letter-spacing: -.015em;
+}
+
+.pf-showcase__title--sans {
+  font-weight: $pf-display-weight;
+  letter-spacing: -.02em;
+}
+
 .pf-showcase__subtitle {
   font-size: 1.0625rem;
+  font-weight: 500;
   line-height: 1.4;
 }
 
 .pf-showcase__blurb {
-  max-width: 42ch;
+  max-width: 44ch;
   color: var(--pf-showcase-muted);
-  font-size: .9375rem;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .pf-showcase__enter {
-  display: inline-flex;
-  align-items: center;
-  gap: .625rem;
-  margin-top: .25rem;
-  padding: .25rem 0;
-  color: var(--pf-showcase-fg);
-  font-weight: 500;
-  text-decoration: underline;
-  text-decoration-color: var(--pf-showcase-line);
-  text-decoration-thickness: 1px;
-  text-underline-offset: .375em;
-  transition: text-decoration-color .3s ease;
-
-  .fas {
-    font-size: .8125em;
-    transition: transform .45s $pf-showcase-ease;
-  }
-
-  &:hover,
-  &:focus {
-    color: var(--pf-showcase-fg);
-    text-decoration-color: currentColor;
-  }
-
-  &:hover .fas {
-    transform: translateX(.25rem);
-  }
+  margin-top: .5rem;
 }
 
-// Dots (one per exhibition, the shown one long) and the arrows. Hidden
-// until the script is ready (.is-ready), but holding their place.
+// Browsing. Hidden (visibility) until the script is ready (.is-ready),
+// but holding its place.
 .pf-showcase__controls {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
+  display: grid;
+  gap: 1.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--pf-showcase-line);
   visibility: hidden;
 
   .pf-showcase.is-ready & {
@@ -328,11 +307,96 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
+.pf-showcase__browse {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+// Square, joined, a thin drawn arrow: the events carousel's buttons, a
+// size up. Text and fill swap places on hover.
+.pf-showcase__arrow {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  color: var(--pf-showcase-fg);
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    color $pf-hover-out ease,
+    background-color $pf-hover-out ease;
+
+  + .pf-showcase__arrow {
+    margin-inline-start: -1px; // one shared line between the two
+  }
+
+  svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    transition: translate $pf-hover-out ease;
+  }
+
+  &:hover {
+    position: relative;
+    color: var(--pf-showcase-bg);
+    background: var(--pf-showcase-fg);
+    transition-duration: $pf-hover-in;
+  }
+
+  &[data-pf-showcase-prev]:hover svg {
+    translate: -.1875rem 0;
+    transition-duration: $pf-hover-in;
+  }
+
+  &[data-pf-showcase-next]:hover svg {
+    translate: .1875rem 0;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    position: relative;
+  }
+}
+
+// What Next brings.
+.pf-showcase__upnext {
+  display: grid;
+  min-width: 0;
+  margin: 0 0 0 1.25rem;
+  line-height: 1.3;
+}
+
+.pf-showcase__upnext-title {
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[dir="rtl"] .pf-showcase__arrow svg {
+  transform: scaleX(-1);
+}
+
+.pf-showcase__progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem 1rem;
+}
+
+.pf-showcase__count span {
+  color: var(--pf-showcase-fg);
+}
+
 .pf-showcase__dots {
   display: flex;
-  flex: 1 1 auto;
   flex-wrap: wrap;
-  margin: 0 .5rem 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -363,7 +427,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 
   &[aria-current="true"] {
-    width: 4rem;
+    width: 3.5rem;
 
     &::before {
       background: var(--pf-showcase-fg);
@@ -371,247 +435,147 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
-.pf-showcase__arrow {
-  display: inline-grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  color: var(--pf-showcase-fg);
-  background: transparent;
-  border: 1px solid var(--pf-showcase-line);
-  border-radius: 50%;
-  font-size: .875rem;
-  cursor: pointer;
-  transition: border-color .3s ease, background-color .3s ease;
-
-  &:hover {
-    border-color: currentColor;
-  }
-}
-
-// The index ----------------------------------------------------------------
-.pf-showcase-index {
+// The table of all of them -----------------------------------------------
+.pf-showcase-list {
   display: grid;
   gap: 1.25rem;
 }
 
-.pf-showcase-index__heading {
+.pf-showcase-list__heading {
   margin: 0;
   font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
   font-weight: $pf-display-weight;
   letter-spacing: -.02em;
 }
 
-.pf-showcase-index__body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 3rem;
-  align-items: start;
+.pf-showcase-list__table {
+  width: 100%;
+  border-collapse: collapse;
 
-  @include media-breakpoint-up(lg) {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: clamp(2.5rem, 5vw, 5rem);
+  th,
+  td {
+    padding: 1.25rem 1.5rem 1.25rem 0;
+    text-align: start;
+    vertical-align: top;
+    border-bottom: 1px solid var(--pf-showcase-line);
+  }
+
+  :is(th, td):last-child {
+    padding-inline-end: 0;
+  }
+
+  thead th {
+    padding-block: 0 .75rem;
+    font-weight: 400;
+  }
+
+  p {
+    margin: 0;
   }
 }
 
-.pf-showcase-index__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--pf-showcase-line);
+.pf-showcase-list__year {
+  width: 5rem;
 }
 
-.pf-showcase-index__row {
-  border-bottom: 1px solid var(--pf-showcase-line);
-}
-
-.pf-showcase-index__link {
-  display: grid;
-  grid-template-areas:
-    "thumb title"
-    "thumb meta";
-  grid-template-columns: 3.5rem minmax(0, 1fr);
-  gap: .25rem 1rem;
-  align-items: center;
-  padding: 1rem 0;
+td.pf-showcase-list__year {
   color: var(--pf-showcase-fg);
-  text-decoration: none;
+}
+
+.pf-showcase-list__name {
+  width: 32%;
+  font-weight: 400;
+}
+
+.pf-showcase-list__link {
+  color: var(--pf-showcase-fg);
+  font-size: clamp(1.125rem, 1rem + .5vw, 1.375rem);
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+  overflow-wrap: anywhere;
+  transition: text-decoration-color $pf-hover-out ease;
 
   &:hover,
   &:focus {
     color: var(--pf-showcase-fg);
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
   }
 }
 
-.pf-showcase-index__thumb {
-  grid-area: thumb;
-  align-self: start;
-  width: 3.5rem;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: var(--pf-showcase-blank);
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.pf-showcase-list__feature {
+  margin-top: .625rem;
 }
 
-.pf-showcase-index__title {
-  grid-area: title;
-  font-size: clamp(1.125rem, 1rem + .6vw, 1.5rem);
+.pf-showcase-list__summary {
+  max-width: 38rem;
+}
+
+.pf-showcase-list__subtitle {
   font-weight: 500;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-  transition: color .3s ease, transform .6s $pf-showcase-ease;
 }
 
-.pf-showcase-index__year,
-.pf-showcase-index__kicker {
+.pf-showcase-list__blurb {
+  margin-top: .25rem !important;
   color: var(--pf-showcase-muted);
-  font-size: .75rem;
-  font-weight: 500;
-  letter-spacing: .12em;
-  font-variant-numeric: tabular-nums;
+  font-size: .9375rem;
+  line-height: 1.55;
 }
 
-.pf-showcase-index__year {
-  grid-area: meta;
+.pf-showcase-list__kind {
+  white-space: nowrap;
 }
 
-.pf-showcase-index__kicker {
-  display: none;
-  text-transform: uppercase;
-}
+// Below md: each exhibition a block, year and kind on one line over the
+// title, the summary under it; the header row is left for screen readers.
+@include media-breakpoint-down(md) {
+  .pf-showcase-list__table {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
 
-.pf-showcase-index__feature {
-  padding: 0 0 1rem 4.5rem;
-}
+    tbody tr {
+      display: grid;
+      grid-template-areas:
+        "year kind"
+        "name name"
+        "summary summary";
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .375rem 1rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--pf-showcase-line);
+    }
 
-.pf-showcase-index__plate {
-  display: none;
-}
-
-// Wide: year | title | label, and the plate beside the list.
-@include media-breakpoint-up(lg) {
-  .pf-showcase-index__link {
-    grid-template-areas: "year title kicker";
-    grid-template-columns: 4rem minmax(0, 1fr) auto;
-    gap: 1.5rem;
-    align-items: baseline;
-    padding: 1.375rem 0;
+    tbody :is(th, td) {
+      width: auto;
+      padding: 0;
+      border: 0;
+    }
   }
 
-  .pf-showcase-index__thumb {
-    display: none;
-  }
-
-  .pf-showcase-index__year {
+  .pf-showcase-list__year {
     grid-area: year;
   }
 
-  .pf-showcase-index__kicker {
-    display: block;
+  .pf-showcase-list__kind {
+    grid-area: kind;
   }
 
-  .pf-showcase-index__feature {
-    padding-left: 5.5rem;
+  .pf-showcase-list__name {
+    grid-area: name;
   }
 
-  // While the pointer or focus is in the list, the other titles step back
-  // (still 4.5:1) and the current one moves in a little.
-  .pf-showcase-index__list:is(:hover, :focus-within) .pf-showcase-index__row:not(.is-current) .pf-showcase-index__title {
-    color: var(--pf-showcase-muted);
-  }
-
-  .pf-showcase-index__list:is(:hover, :focus-within) .is-current .pf-showcase-index__title {
-    transform: translateX(.5rem);
-  }
-
-  .pf-showcase-index__plate {
-    position: sticky;
-    top: 6rem;
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  .pf-showcase-index__leaves {
-    position: relative;
-    aspect-ratio: 4 / 5;
-    perspective: 1600px;
-  }
-
-  // A leaf turns in from its left edge like a page in a portfolio; the
-  // one it covers sinks back and fades.
-  .pf-showcase-index__leaf {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    background: var(--pf-showcase-blank);
-    box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, .1);
-    transform: rotateY(-70deg) translateZ(2.5rem);
-    transform-origin: 0 50%;
-    opacity: 0;
-    transition: transform .9s $pf-showcase-ease, opacity .6s ease;
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    &.is-current {
-      z-index: 1;
-      transform: none;
-      opacity: 1;
-    }
-
-    &.is-leaving {
-      transform: rotateY(10deg) translateZ(-7.5rem);
-      opacity: 0;
-    }
-  }
-
-  // Descriptions: one cell, like the summaries.
-  .pf-showcase-index__plate {
-    grid-template-areas: "leaves" "about";
-  }
-
-  .pf-showcase-index__leaves {
-    grid-area: leaves;
-  }
-
-  .pf-showcase-index__about {
-    grid-area: about;
-    display: grid;
-    gap: .375rem;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .3s ease, visibility 0s .3s;
-
-    p {
-      margin: 0;
-    }
-
-    &.is-current {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity .5s ease .1s;
-    }
-  }
-
-  .pf-showcase-index__subtitle {
-    font-weight: 500;
-  }
-
-  .pf-showcase-index__blurb {
-    color: var(--pf-showcase-muted);
-    font-size: .9375rem;
+  .pf-showcase-list__summary {
+    grid-area: summary;
   }
 }
 
@@ -620,9 +584,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 // their places and the shown one changes with a short fade.
 @media (prefers-reduced-motion: reduce) {
   .pf-showcase__card,
-  .pf-showcase__card.is-leaving,
-  .pf-showcase-index__leaf,
-  .pf-showcase-index__title {
+  .pf-showcase__card.is-leaving {
     transition: opacity .2s linear;
   }
 

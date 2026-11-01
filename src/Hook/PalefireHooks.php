@@ -650,6 +650,8 @@ class PalefireHooks {
         'featured' => $choice === 'featured',
         'note' => $choice === 'featured' ? self::stringValue($node, 'field_exhibit_feature_note') : '',
         'unpublished' => !$node->isPublished(),
+        // Its title page's face, as in exhibitHead().
+        'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif',
         'cover' => $cover,
         'changed' => (int) $node->getChangedTime(),
       ];

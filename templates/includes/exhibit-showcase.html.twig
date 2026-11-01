@@ -10,18 +10,24 @@
  *   it. Next sends the front cover off and up to the back of the row, so
  *   the row only ever moves one way (js/exhibit-showcase.js). Without
  *   script it is a still: the first exhibition, its summary and link.
- * - An index of all of them: year, title, label. On wide screens a plate
- *   beside it turns to the cover of the row under the pointer or focus.
+ *   Browsing: the square Previous / Next buttons (the events carousel's),
+ *   with the next title beside them, the dots, a click on a cover behind.
+ * - A table of all of them: year, exhibition, summary, kind.
+ *
+ * In Palefire's exhibition type: mono labels, the exhibition buttons
+ * (.pf-exhibit-button, _exhibition.scss), and each title in its own face
+ * (the Exhibition title style field: serif or sans).
  *
  * Featured exhibitions (field_exhibit_showcase) come first, so the
  * carousel opens on one, with a "Featured" label and the reason
- * (field_exhibit_feature_note) in its summary and its index row.
+ * (field_exhibit_feature_note) in its summary and its table row.
  *
- * Covers are decorative (the titles are in the text). The carousel's
- * controls are buttons; ← → move it while focus is inside. No autoplay.
+ * Covers are decorative (the titles are in the text). Arrows are drawn
+ * inline: Font Awesome's font isn't loaded on these pages. No autoplay.
  *
  * Variables: showcase: items (title, url, subtitle, kicker, year, blurb,
- * physical, featured, note, unpublished, cover), featured (count), cache.
+ * physical, featured, note, unpublished, title_style, cover), featured
+ * (count), cache.
  */
 #}
 {% macro cover(image, sizes, eager) %}
@@ -31,6 +37,21 @@
          {% if image.width %}width="{{ image.width }}" height="{{ image.height }}"{% endif %}
          {% if image.focus %}style="object-position: {{ image.focus }}"{% endif %}
          alt="" loading="{{ eager ? 'eager' : 'lazy' }}"{% if eager %} fetchpriority="high"{% endif %} decoding="async">
+  {% endif %}
+{% endmacro %}
+{% macro arrow(direction) %}
+  {% if direction == 'left' %}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M21 12H3.5M10 5.5 3.5 12l6.5 6.5"/></svg>
+  {% else %}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5"/></svg>
+  {% endif %}
+{% endmacro %}
+{% macro feature(ex, class) %}
+  {% if ex.featured %}
+    <p class="{{ class }}">
+      <span class="pf-showcase__badge">{{ 'Featured'|t }}</span>
+      {% if ex.note %}<span class="pf-showcase__note">{{ ex.note }}</span>{% endif %}
+    </p>
   {% endif %}
 {% endmacro %}
 {% import _self as pf %}
@@ -44,110 +65,96 @@
         <div class="pf-showcase__scene" aria-hidden="true" data-pf-showcase-scene>
           {% for ex in items %}
             <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" style="--pf-d: {{ loop.index0 }}" data-pf-showcase-card data-url="{{ ex.url }}">
-              {{ pf.cover(ex.cover, '(min-width: 62rem) 22rem, 62vw', loop.first) }}
-              {% if ex.featured %}<span class="pf-showcase__ribbon">{{ 'Featured'|t }}</span>{% endif %}
+              {{ pf.cover(ex.cover, '(min-width: 62rem) 24rem, 62vw', loop.first) }}
+              {% if ex.featured %}<span class="pf-showcase__badge pf-showcase__ribbon">{{ 'Featured'|t }}</span>{% endif %}
             </div>
           {% endfor %}
         </div>
       </div>
 
       <div class="pf-showcase__panel">
-        <p class="pf-showcase__count" aria-hidden="true">
-          <span class="pf-showcase__n" data-pf-showcase-n>01</span>
-          <span class="pf-showcase__of">/ {{ '%02d'|format(count) }}</span>
-        </p>
         {# All in one grid cell, as tall as the longest; only the shown one
            is visible (and read). #}
         <div class="pf-showcase__summaries">
-        {% for ex in items %}
-          <div class="pf-showcase__summary{{ loop.first ? ' is-active' }}" data-pf-showcase-summary>
-            {% if ex.featured %}
-              <p class="pf-showcase__feature">
-                <span class="pf-showcase__badge">{{ 'Featured'|t }}</span>
-                {% if ex.note %}<span class="pf-showcase__note">{{ ex.note }}</span>{% endif %}
+          {% for ex in items %}
+            <div class="pf-showcase__summary{{ loop.first ? ' is-active' }}" data-pf-showcase-summary data-title="{{ ex.title }}">
+              {{ pf.feature(ex, 'pf-showcase__feature') }}
+              <p class="pf-showcase__kicker">
+                {{ ex.kicker }}{% if ex.year %} · {{ ex.year }}{% endif %}{% if ex.unpublished %} · <span class="pf-showcase__draft">{{ 'Unpublished'|t }}</span>{% endif %}
               </p>
-            {% endif %}
-            <p class="pf-showcase__kicker">
-              {{ ex.kicker }}{% if ex.year %} · {{ ex.year }}{% endif %}{% if ex.unpublished %} · <span class="pf-showcase__draft">{{ 'Unpublished'|t }}</span>{% endif %}
-            </p>
-            <h2 class="pf-showcase__title">{{ ex.title }}</h2>
-            {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
-            {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
-            <a class="pf-showcase__enter" href="{{ ex.url }}">
-              {{ 'Enter the exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span>
-              <i class="fas fa-arrow-right" aria-hidden="true"></i>
-            </a>
-          </div>
-        {% endfor %}
+              <h2 class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}">{{ ex.title }}</h2>
+              {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
+              {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
+              <a class="pf-exhibit-button pf-exhibit-button--primary pf-showcase__enter" href="{{ ex.url }}">
+                {{ 'Enter the exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+              </a>
+            </div>
+          {% endfor %}
         </div>
 
         {% if count > 1 %}
           {# Hidden (visibility) until the script is ready, so it holds its
              place and nothing moves when it appears. #}
           <div class="pf-showcase__controls" data-pf-showcase-controls>
-            <ol class="pf-showcase__dots">
-              {% for ex in items %}
-                <li><button type="button" class="pf-showcase__dot" data-pf-showcase-go="{{ loop.index0 }}"{% if loop.first %} aria-current="true"{% endif %}>
-                  <span class="visually-hidden">{{ 'Show @title'|t({'@title': ex.title}) }}</span>
-                </button></li>
-              {% endfor %}
-            </ol>
-            <button type="button" class="pf-showcase__arrow" data-pf-showcase-prev>
-              <i class="fas fa-arrow-left" aria-hidden="true"></i>
-              <span class="visually-hidden">{{ 'Previous exhibition'|t }}</span>
-            </button>
-            <button type="button" class="pf-showcase__arrow" data-pf-showcase-next>
-              <i class="fas fa-arrow-right" aria-hidden="true"></i>
-              <span class="visually-hidden">{{ 'Next exhibition'|t }}</span>
-            </button>
+            <div class="pf-showcase__browse">
+              <button type="button" class="pf-showcase__arrow" data-pf-showcase-prev>
+                {{ pf.arrow('left') }}
+                <span class="visually-hidden">{{ 'Previous exhibition'|t }}</span>
+              </button>
+              <button type="button" class="pf-showcase__arrow" data-pf-showcase-next>
+                {{ pf.arrow('right') }}
+                <span class="visually-hidden">{{ 'Next exhibition'|t }}</span>
+              </button>
+              <p class="pf-showcase__upnext" aria-hidden="true">
+                <span class="pf-showcase__upnext-label">{{ 'Next'|t }}</span>
+                <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ items[1].title }}</span>
+              </p>
+            </div>
+            <div class="pf-showcase__progress">
+              <p class="pf-showcase__count" aria-hidden="true"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(count) }}</p>
+              <ol class="pf-showcase__dots">
+                {% for ex in items %}
+                  <li><button type="button" class="pf-showcase__dot" data-pf-showcase-go="{{ loop.index0 }}"{% if loop.first %} aria-current="true"{% endif %}>
+                    <span class="visually-hidden">{{ 'Show @title'|t({'@title': ex.title}) }}</span>
+                  </button></li>
+                {% endfor %}
+              </ol>
+            </div>
           </div>
           <p class="visually-hidden" aria-live="polite" data-pf-showcase-live></p>
         {% endif %}
       </div>
     </section>
 
-    <section class="pf-showcase-index" aria-labelledby="pf-showcase-all" data-pf-showcase-index>
-      <h2 class="pf-showcase-index__heading" id="pf-showcase-all">{{ 'All exhibitions'|t }}</h2>
-      <div class="pf-showcase-index__body">
-        <ol class="pf-showcase-index__list">
+    <section class="pf-showcase-list" aria-labelledby="pf-showcase-all">
+      <h2 class="pf-showcase-list__heading" id="pf-showcase-all">{{ 'All exhibitions'|t }}</h2>
+      <table class="pf-showcase-list__table" aria-labelledby="pf-showcase-all">
+        <thead>
+          <tr>
+            <th scope="col" class="pf-showcase-list__year">{{ 'Year'|t }}</th>
+            <th scope="col">{{ 'Exhibition'|t }}</th>
+            <th scope="col">{{ 'Summary'|t }}</th>
+            <th scope="col" class="pf-showcase-list__kind">{{ 'Kind'|t }}</th>
+          </tr>
+        </thead>
+        <tbody>
           {% for ex in items %}
-            <li class="pf-showcase-index__row{{ ex.featured ? ' is-featured' }}{{ loop.first ? ' is-current' }}" data-pf-showcase-row>
-              <a class="pf-showcase-index__link" href="{{ ex.url }}"{% if ex.subtitle or ex.blurb %} aria-describedby="pf-showcase-about-{{ loop.index }}"{% endif %}>
-                <span class="pf-showcase-index__thumb{{ ex.cover ? '' : ' is-blank' }}" aria-hidden="true">{{ pf.cover(ex.cover, '3.5rem', false) }}</span>
-                <span class="pf-showcase-index__year">{{ ex.year }}</span>
-                <span class="pf-showcase-index__title">{{ ex.title }}</span>
-                <span class="pf-showcase-index__kicker">{{ ex.kicker }}{% if ex.unpublished %} · {{ 'Unpublished'|t }}{% endif %}</span>
-              </a>
-              {% if ex.featured %}
-                <p class="pf-showcase-index__feature">
-                  <span class="pf-showcase__badge">{{ 'Featured'|t }}</span>
-                  {% if ex.note %}<span class="pf-showcase__note">{{ ex.note }}</span>{% endif %}
-                </p>
-              {% endif %}
-            </li>
+            <tr class="pf-showcase-list__row{{ ex.featured ? ' is-featured' }}">
+              <td class="pf-showcase-list__year">{{ ex.year }}</td>
+              <th scope="row" class="pf-showcase-list__name">
+                <a class="pf-showcase-list__link" href="{{ ex.url }}">{{ ex.title }}</a>
+                {{ pf.feature(ex, 'pf-showcase-list__feature') }}
+              </th>
+              <td class="pf-showcase-list__summary">
+                {% if ex.subtitle %}<p class="pf-showcase-list__subtitle">{{ ex.subtitle }}</p>{% endif %}
+                {% if ex.blurb %}<p class="pf-showcase-list__blurb">{{ ex.blurb }}</p>{% endif %}
+              </td>
+              <td class="pf-showcase-list__kind">{{ ex.kicker }}{% if ex.unpublished %}<br>{{ 'Unpublished'|t }}{% endif %}</td>
+            </tr>
           {% endfor %}
-        </ol>
-
-        {# Wide screens: the plate. Only decoration and the descriptions
-           the links point to (aria-describedby reads hidden text too). #}
-        <div class="pf-showcase-index__plate" aria-hidden="true">
-          <div class="pf-showcase-index__leaves">
-            {% for ex in items %}
-              <div class="pf-showcase-index__leaf{{ loop.first ? ' is-current' }}{{ ex.cover ? '' : ' is-blank' }}" data-pf-showcase-leaf>
-                {{ pf.cover(ex.cover, '(min-width: 62rem) 28vw, 1px', false) }}
-              </div>
-            {% endfor %}
-          </div>
-          {% for ex in items %}
-            {% if ex.subtitle or ex.blurb %}
-              <div class="pf-showcase-index__about{{ loop.first ? ' is-current' }}" id="pf-showcase-about-{{ loop.index }}" data-pf-showcase-about="{{ loop.index0 }}">
-                {% if ex.subtitle %}<p class="pf-showcase-index__subtitle">{{ ex.subtitle }}</p>{% endif %}
-                {% if ex.blurb %}<p class="pf-showcase-index__blurb">{{ ex.blurb }}</p>{% endif %}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </section>
   </div>
 {% endif %}

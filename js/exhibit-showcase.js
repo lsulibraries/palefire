@@ -10,11 +10,9 @@
  *   and steps in.
  * A dot jumps several places, the same way. The arrows, dots, ← → (while
  * focus is in the carousel) and a swipe move it; a click on the front
- * cover opens its exhibition. Each change is announced politely. Nothing
- * moves by itself.
- *
- * The index: the row under the pointer or focus turns its cover in on the
- * plate (wide screens) and shows its description.
+ * cover opens its exhibition, one behind comes forward. Beside the
+ * arrows, the title that Next brings (decorative; the change itself is
+ * announced politely). Nothing moves by itself.
  *
  * Reduced motion (the OS setting or the Settings drawer's
  * html.pf-a11y-motion): covers take their places at once and fade.
@@ -23,7 +21,6 @@
   'use strict';
 
   const LEAVE = 500; // .is-leaving's transition, a little less
-  const TURN = 900; // a plate leaf's turn
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
   const pad = (n) => String(n).padStart(2, '0');
@@ -36,6 +33,7 @@
     const dots = Array.from(root.querySelectorAll('[data-pf-showcase-go]'));
     const number = root.querySelector('[data-pf-showcase-n]');
     const live = root.querySelector('[data-pf-showcase-live]');
+    const upnext = root.querySelector('[data-pf-showcase-upnext]');
     const total = cards.length;
     if (total < 2 || !region || !scene) {
       return;
@@ -106,12 +104,14 @@
       if (number) {
         number.textContent = pad(current + 1);
       }
+      if (upnext) {
+        upnext.textContent = summaries[(current + 1) % total].dataset.title;
+      }
       if (live) {
-        const title = summaries[current].querySelector('.pf-showcase__title');
         live.textContent = Drupal.t('Exhibition @n of @total: @title', {
           '@n': current + 1,
           '@total': total,
-          '@title': title ? title.textContent.trim() : '',
+          '@title': summaries[current].dataset.title,
         });
       }
     };
@@ -179,38 +179,10 @@
     });
   }
 
-  function plate(root) {
-    const rows = Array.from(root.querySelectorAll('[data-pf-showcase-row]'));
-    const leaves = Array.from(root.querySelectorAll('[data-pf-showcase-leaf]'));
-    const about = Array.from(root.querySelectorAll('[data-pf-showcase-about]'));
-    let current = 0;
-
-    const show = (k) => {
-      if (k === current) {
-        return;
-      }
-      const old = leaves[current];
-      current = k;
-      rows.forEach((row, n) => row.classList.toggle('is-current', n === k));
-      about.forEach((item) => item.classList.toggle('is-current', Number(item.dataset.pfShowcaseAbout) === k));
-      if (old && !reduceMotion()) {
-        old.classList.add('is-leaving');
-        setTimeout(() => old.classList.remove('is-leaving'), TURN);
-      }
-      leaves.forEach((leaf, n) => leaf.classList.toggle('is-current', n === k));
-    };
-
-    rows.forEach((row, k) => {
-      row.addEventListener('pointerenter', () => show(k));
-      row.addEventListener('focusin', () => show(k));
-    });
-  }
-
   Drupal.behaviors.palefireExhibitShowcase = {
     attach(context) {
       once('pf-showcase', '[data-pf-showcase]', context).forEach((root) => {
         carousel(root);
-        plate(root);
         root.classList.add('is-ready');
       });
     },
