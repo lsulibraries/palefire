@@ -126,6 +126,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-01:** `.pf-dock-tint`, a 12px solid strip at the bottom edge in the dock's color (iOS WebKit only), so Safari 26 paints the band behind its toolbar to match the dock.
 - **2026-11-01:** The dock's glass bleeds 160px below its edge (`--pf-dock-bleed`), so it runs under Safari 26's floating toolbar, where `bottom: 0` is the toolbar's top.
 - **2026-11-01:** Location pages are one section per part, as /v2/special: Location (the top only), `location_photos` (`.pf-location__photos`), `location_visit` (`.pf-location__visit`), `location_rules`, `location_booking`, numbered by `_palefire_location_index()`. The floors' frost fades in with the map's draw (`.pf-map.is-playing`). The ledger has no rules; over the photo it is frosted like the floors. On portrait screens and iOS the backdrop fills one screen from the top and fades out (`pf-location-backdrop-whole`).
 - **2026-11-01:** The dock is set in Roboto (mono only for uppercase labels and section numbers) on the landing bar's chrome frost at 92%, so muted text holds 4.5:1 over anything. The closed dot uses `--pf-g-scroll`. The dot steps in to the second line's 16px indent. The Contents ring shows "5", not "05".

@@ -97,6 +97,12 @@
   </template>
 </aside>
 
+{# Safari 26 on iPhone paints the band behind its floating toolbar in the
+   color of a fixed element at the screen's bottom edge, and leaves it
+   see-through when that element is translucent, as the dock's glass is.
+   This strip gives it the dock's color, solid (_dock.scss). #}
+<div class="pf-dock-tint" aria-hidden="true"></div>
+
 {# Hidden dock: a phone with its dock, Font Awesome duotone style (the
    screen at 40%). Not an arrow: in this corner that reads as "back to
    top". #}
