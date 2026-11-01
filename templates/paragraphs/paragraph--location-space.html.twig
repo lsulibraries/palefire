@@ -1,43 +1,73 @@
 {#
 /**
  * @file
- * Location (paragraph type location_space): the top of a location page,
- * under the page <h1> (the room's name, from the page title).
+ * Location (paragraph type location_space): the top of a location page.
  *
  * Variables from palefire_preprocess_paragraph__location_space():
- * - location: the room (_palefire_location_data()): building, floor,
+ * - location: the room (_palefire_location_data()): title, building, floor,
  *   access, sound, sound_level, capacity, body, link, policies, and map
  *   (the building map with the room marked "here", or NULL when the
  *   building has no drawing yet).
  * - visit: the page's hours and directions (field_hours_location and the
  *   rest), as the landing's Visit card, or NULL.
+ * From _palefire_landing_visit(), when this section opens the page
+ * (PalefireHooks::TITLE_BUNDLES):
+ * - page_title: the page <h1>; page.html.twig then leaves its own out.
+ * - lead_breadcrumb: the breadcrumb, printed here instead of in the head.
+ * - toc_home_id: the TOC's "Home" target.
  *
  * Everything about the room is edited on its Building spaces term, and its
  * policies in Space policies, so the map's tooltip and this page agree.
  *
- * Layout (_location.scss): the room's line and facts beside the Visit
- * strip, the policies at a glance under them, then the map. The glance
- * comes before the Visit strip in the source, so its <h2> leads the
- * strip's <h3>. Without a map the facts carry the page; the map can be
- * added later with no change here.
+ * Layout (_location.scss), after the map-led mockup: the room's details in
+ * a narrow column at the left (breadcrumb, eyebrow, title, line, today's
+ * hours, button), the building map large at the right; under them the
+ * facts, the policies at a glance and the Visit strip. The details come
+ * first in the source, so on phones the title leads and the map follows.
  */
 #}
 {% if location %}
   {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
   {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
-  <div{{ attributes.addClass('pf-location', visit ? 'pf-location--visit') }}>
-    <div class="pf-location__head">
+  <div{{ attributes.addClass('pf-location', location.map ? 'pf-location--map', visit ? 'pf-location--visit') }}>
+    <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+      {% if lead_breadcrumb %}
+        <div class="pf-breadcrumb pf-breadcrumb--modular pf-location__crumb">{{ lead_breadcrumb }}</div>
+      {% endif %}
       <p class="pf-location__eyebrow">
         {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
       </p>
+      {% if page_title %}
+        <h1 class="pf-location__title">{{ page_title }}</h1>
+      {% endif %}
       {% if location.body %}
         <div class="pf-location__lede">{{ location.body }}</div>
+      {% endif %}
+      {# Today's hours, as under the landing hero's title (visit-hours.js
+         fills it); the link goes down to the week in the Visit strip. #}
+      {% if visit.lid %}
+        <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
+          <span class="pf-landing__hours-label">
+            <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+            <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+          </span>
+          <a class="pf-landing__hours-link" href="#{{ location.uid }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+        </p>
       {% endif %}
       {% if location.link %}
         <p class="pf-location__actions">
           <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
         </p>
       {% endif %}
+    </div>
+
+    {% if location.map %}
+      <div class="pf-location__map">
+        {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
+      </div>
+    {% endif %}
+
+    <div class="pf-location__details">
       <dl class="pf-location__facts">
         {% if location.building %}
           <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
@@ -56,31 +86,25 @@
           <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
         {% endif %}
       </dl>
-    </div>
 
-    {% if location.policies %}
-      <div class="pf-location__glance" role="group" aria-labelledby="{{ location.uid }}-glance">
-        <h2 class="pf-location__glance-title" id="{{ location.uid }}-glance">{{ 'At a glance'|t }}</h2>
-        <ul class="pf-space-chips">
-          {% for policy in location.policies %}
-            <li class="pf-space-chip pf-space-chip--{{ policy.state|clean_class }}">
-              {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
-              <span>{{ policy.label }}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
+      {% if location.policies %}
+        <div class="pf-location__glance" role="group" aria-labelledby="{{ location.uid }}-glance">
+          <h2 class="pf-location__glance-title" id="{{ location.uid }}-glance">{{ 'At a glance'|t }}</h2>
+          <ul class="pf-space-chips">
+            {% for policy in location.policies %}
+              <li class="pf-space-chip pf-space-chip--{{ policy.state|clean_class }}">
+                {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+                <span>{{ policy.label }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
 
     {% if visit %}
       <div class="pf-location__visit">
         {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: location.uid ~ '-visit' } only %}
-      </div>
-    {% endif %}
-
-    {% if location.map %}
-      <div class="pf-location__map">
-        {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
       </div>
     {% endif %}
   </div>

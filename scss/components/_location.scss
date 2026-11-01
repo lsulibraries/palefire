@@ -52,42 +52,77 @@
 .pf-space-icon__bar { stroke-width: 1.25; }
 .pf-space-icon__fill { fill: currentColor; }
 
-// --- Location: head, facts, glance, Visit strip, map -------------------------
+// --- Location: details beside the map, then facts, glance, Visit strip ------
+// After the map-led mockup. Phones: the details, the map, the facts and
+// chips, the Visit strip, one under the other. lg and up with a map: the
+// details in a narrow column at the left, centred on the map, which runs
+// large at the right; the facts and chips under the details' column, the
+// Visit strip beside them.
 .pf-location {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
     "head"
-    "glance"
-    "visit"
-    "map";
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+    "map"
+    "details"
+    "visit";
+  gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 4rem);
   max-width: $pf-content-max;
   margin-inline: auto;
 }
 .pf-location__head { grid-area: head; min-width: 0; }
-.pf-location__glance { grid-area: glance; min-width: 0; }
-.pf-location__visit { grid-area: visit; min-width: 0; }
 .pf-location__map { grid-area: map; min-width: 0; }
+.pf-location__details { grid-area: details; min-width: 0; }
+.pf-location__visit { grid-area: visit; min-width: 0; }
 
 // The strip keeps its own frame and glass; here it starts on the grid line.
 .pf-location .pf-visit { margin-top: 0; }
 
+.pf-location__crumb { margin-bottom: clamp(1.25rem, 3vw, 2rem); }
+
 .pf-location__eyebrow {
   @extend %pf-location-label;
   margin: 0 0 .75rem;
-  color: var(--pf-location-muted);
+  color: var(--pf-g-accent, var(--pf-location-muted));
+}
+
+// The room's name at the mockup's size: large and tight, the page's title
+// color. Long names wrap; overflow-wrap keeps a long word inside 320px.
+.pf-location .pf-location__title {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.75rem);
+  font-weight: $pf-display-weight;
+  line-height: .95;
+  letter-spacing: -.035em;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .pf-location__lede {
-  max-width: 62ch;
+  max-width: 34rem;
   font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
   line-height: 1.55;
 
   > :last-child { margin-bottom: 0; }
 }
 
+.pf-location .pf-location__hours { margin: 1.5rem 0 0; }
+
 .pf-location__actions { margin: 1.5rem 0 0; }
+
+// The map: its own queries switch on its column, not the window, so in
+// the narrow hero column it stacks (drawing, then the key, collapsed).
+// Its heading is a quiet label over the drawing.
+.pf-location__map {
+  container-name: pf-map;
+  container-type: inline-size;
+
+  .pf-map__heading {
+    @extend %pf-location-label;
+    margin: 0 0 1rem;
+    color: var(--pf-location-muted);
+  }
+}
 
 // Facts: term over value between two rules (row rules would stop short
 // under a part-filled last row); two across on phones, a row from md.
@@ -95,7 +130,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem 0;
-  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  margin: 0;
   padding-block: 1rem;
   border-block: 1px solid var(--pf-location-line);
 }
@@ -119,11 +154,12 @@
 
 @include media-breakpoint-up(md) {
   .pf-location__facts {
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
   }
 }
 
 // At a glance: the room's policies as chips.
+.pf-location__glance { margin-top: clamp(1.5rem, 3vw, 2rem); }
 .pf-location__glance-title {
   @extend %pf-location-label;
   margin: 0 0 .75rem;
@@ -149,22 +185,35 @@
   border: 1px solid var(--pf-location-line);
 }
 
-// lg and up: the room's line, facts and glance at the left, the Visit strip
-// beside them, the map across the foot.
 @include media-breakpoint-up(lg) {
-  .pf-location--visit {
+  .pf-location--map {
+    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
+    grid-template-areas:
+      "head map"
+      "details visit";
+    align-items: start;
+  }
+  .pf-location--map:not(.pf-location--visit) {
+    grid-template-areas:
+      "head map"
+      "details details";
+  }
+  // The details centred on the map, as in the mockup.
+  .pf-location--map .pf-location__head { align-self: center; }
+
+  // No map: the details and the Visit strip side by side, the facts under.
+  .pf-location--visit:not(.pf-location--map) {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     grid-template-areas:
       "head visit"
-      "glance visit"
-      "map map";
+      "details visit";
     align-items: start;
   }
+}
 
-  // The strip is narrow here: hours over the mini map, not beside it.
-  .pf-location__visit .pf-visit {
-    display: flex;
-  }
+// The strip is in a column here: hours over the mini map, not beside it.
+@include media-breakpoint-up(lg) {
+  .pf-location__visit .pf-visit { display: flex; }
 }
 
 // --- CTA ------------------------------------------------------------------------

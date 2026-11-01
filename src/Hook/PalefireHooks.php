@@ -47,6 +47,13 @@ class PalefireHooks {
   public const LANDING_BUNDLES = ['bento_search', 'landing_hero', 'landing_department'];
 
   /**
+   * Paragraph types that print the page <h1> (and the breadcrumb) when they
+   * open a Modular page: the landings, and a room's Location section
+   * (paragraph--location-space.html.twig), whose title sits beside its map.
+   */
+  public const TITLE_BUNDLES = [...self::LANDING_BUNDLES, 'location_space'];
+
+  /**
    * Paragraph reference field on the modular content type.
    */
   public const SECTIONS_FIELD = 'field_sections';
@@ -730,7 +737,7 @@ class PalefireHooks {
   public const SECTION_FIELDS = ['field_scroll_section', self::SECTIONS_FIELD];
 
   /**
-   * UUID of the landing (LANDING_BUNDLES) that prints the page <h1>, or NULL.
+   * UUID of the landing (TITLE_BUNDLES) that prints the page <h1>, or NULL.
    *
    * That is the first section the current user can see, when it is a
    * landing. Used by preprocessPage() (page.html.twig skips its own
@@ -742,7 +749,7 @@ class PalefireHooks {
   }
 
   /**
-   * The landing (LANDING_BUNDLES) that opens the page, or NULL.
+   * The landing (TITLE_BUNDLES) that opens the page, or NULL.
    *
    * The first section the current user can see, when it is a landing: the
    * one titleLandingUuid() names. preprocessHtml() reads its bundle to mark
@@ -760,7 +767,7 @@ class PalefireHooks {
         if (!$paragraph->access('view')) {
           continue;
         }
-        return in_array($paragraph->bundle(), self::LANDING_BUNDLES, TRUE) ? $paragraph : NULL;
+        return in_array($paragraph->bundle(), self::TITLE_BUNDLES, TRUE) ? $paragraph : NULL;
       }
     }
     return NULL;
