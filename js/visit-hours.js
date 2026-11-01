@@ -227,6 +227,10 @@
     load,
     status,
     today: (specs, now) => window_(specFor(specs, now), now),
+    // The day's LibCal entry (null when it isn't posted) and its window
+    // (null when closed all day): the mobile dock's week (dock.js).
+    specFor,
+    window: window_,
     range,
     formatTime,
   };

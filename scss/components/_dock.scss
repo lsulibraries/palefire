@@ -1,0 +1,612 @@
+// Mobile dock (templates/includes/dock.html.twig, js/dock.js): below md on
+// Special Collections pages, a frosted sheet fixed to the bottom of the
+// screen. The drawers' glass and colors (.pf-panel.offcanvas,
+// _utility-panels.scss), whose fallbacks turn it solid in the same cases.
+// Shown only once js/dock.js has read the page's settings (html.pf-dock-on).
+//
+// Height and motion: the page reserves the closed dock's height once, on
+// the footer (no layout shift); hiding, showing and the panels move with
+// transform and height only.
+
+$pf-dock-glass: .9;
+
+// Dock pages run under the notch (viewport-fit=cover, palefire.theme), so
+// in landscape the page and the drawers step in from it. Zero in portrait.
+html[data-pf-dock] body {
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+}
+
+html[data-pf-dock] .offcanvas {
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+}
+
+.pf-dock,
+.pf-dock-tab {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --pf-dock-row: 60px;
+    --pf-dock-h: 96px;
+    --pf-toolbar: 12px;
+    --pf-dock-ease: cubic-bezier(.2, .8, .2, 1);
+    --pf-dock-dur: .35s;
+  }
+
+  // Safari 26+ on iPhone floats its toolbar over the page (the head script
+  // in html.html.twig).
+  html[data-pf-float-toolbar] {
+    --pf-toolbar: 76px;
+  }
+
+  // Focus and anchor jumps stay clear of the dock (WCAG 2.4.11); the
+  // footer that ends every dock page makes room for it.
+  html.pf-dock-on {
+    scroll-padding-bottom: calc(var(--pf-dock-h) + 16px);
+  }
+
+  html.pf-dock-on .pf-footer__inner {
+    padding-block-end: calc(1.5rem + var(--pf-dock-row) + var(--pf-toolbar) + env(safe-area-inset-bottom) + 24px);
+  }
+
+  // The old "On this page" square: the dock's Contents replaces it.
+  html.pf-dock-on .pf-modular__toc-toggle {
+    display: none !important;
+  }
+
+  html.pf-dock-on .pf-dock,
+  html.pf-dock-on .pf-dock-tab:not([hidden]) {
+    display: block;
+  }
+
+  .pf-dock,
+  .pf-dock-tab {
+    --pf-panel-bg-rgb: var(--pf-g-bg-rgb, 247, 244, 236);
+    --pf-section-fg: var(--pf-g-panel-text, #1f1e1c);
+    --pf-section-muted: var(--pf-g-panel-muted, #505050);
+    --pf-section-border: var(--pf-g-panel-muted, #505050);
+    --pf-dock-accent: var(--pf-g-accent, #{$pf-purple});
+    --pf-dock-on-accent: var(--pf-g-on-accent, #fff);
+    --pf-dock-rule: var(--pf-g-rule, #e2ddd1);
+    // The ring's and the bar's track: the rule tone is too faint on the
+    // dark swatches' glass.
+    --pf-dock-track: color-mix(in srgb, var(--pf-section-muted) 35%, transparent);
+    // Thicker than the drawers' glass: no wash sits under the dock, so
+    // anything can scroll beneath it. 90% keeps muted text 4.5:1 and up on
+    // every swatch over solid white or black (_reading-themes.scss).
+    --pf-dock-bg: rgba(var(--pf-panel-bg-rgb), #{$pf-dock-glass});
+    color: var(--pf-section-fg);
+    background: var(--pf-dock-bg);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+  }
+
+  html.pf-reading-dark :is(.pf-dock, .pf-dock-tab) {
+    --pf-dock-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-dock-glass * 100%}, transparent);
+  }
+
+  // Above the page and its fixed bars, under the drawers and their wash.
+  .pf-dock {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 1035;
+    padding: 0 max(12px, env(safe-area-inset-right)) calc(var(--pf-toolbar) + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    border-top: 1px solid $pf-hairline;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -8px 24px rgba($pf-black, .08);
+    font-family: var(--bs-font-monospace);
+    transition: transform var(--pf-dock-dur) var(--pf-dock-ease), visibility 0s;
+
+    &.is-hidden,
+    &.is-aside {
+      visibility: hidden;
+      transform: translateY(calc(100% + 1px));
+      transition: transform var(--pf-dock-dur) var(--pf-dock-ease), visibility 0s var(--pf-dock-dur);
+    }
+  }
+
+  // The grabber: a 36x5 handle in a full-width 24px strip, a 44px target
+  // with the row's top padding.
+  .pf-dock__grab {
+    display: block;
+    width: 100%;
+    height: 24px;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    touch-action: none;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 5px;
+      margin: 9px auto 0;
+      background: currentColor;
+      border-radius: 3px;
+      opacity: .35;
+    }
+  }
+
+  .pf-dock__row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-block-end: 4px;
+    touch-action: none;
+  }
+
+  /* ---------------- Status ---------------- */
+
+  .pf-dock__status {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 44px;
+    padding: 2px 8px 6px 4px;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    background: none;
+    border: 0;
+    border-radius: 12px;
+  }
+
+  .pf-dock__state {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: .9375rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .pf-dock__next {
+    display: block;
+    margin-block-start: 1px;
+    padding-inline-start: 16px;
+    color: var(--pf-section-muted);
+    font-size: .75rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+
+    &.is-measuring {
+      white-space: nowrap;
+      overflow-wrap: normal;
+    }
+  }
+
+  // The dot repeats the words in shape as well as color: filled open, a
+  // ring closing or opening soon, a muted ring closed.
+  .pf-dock__dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--pf-section-muted);
+    border-radius: 50%;
+  }
+
+  .pf-dock[data-hours-state="open"] .pf-dock__dot {
+    background: var(--pf-dock-accent);
+    border-color: var(--pf-dock-accent);
+  }
+
+  .pf-dock[data-hours-state="soon"] .pf-dock__dot {
+    border-color: var(--pf-dock-accent);
+  }
+
+  // Today's open hours gone by.
+  .pf-dock__bar {
+    display: block;
+    height: 2px;
+    margin: 5px 0 0 16px;
+    overflow: hidden;
+    background: var(--pf-dock-track);
+    border-radius: 1px;
+
+    i {
+      display: block;
+      height: 100%;
+      background: var(--pf-dock-accent);
+      transform: scaleX(var(--pf-dock-bar, 0));
+      transform-origin: left;
+      transition: transform .6s var(--pf-dock-ease);
+    }
+  }
+
+  .pf-dock[data-hours-state="loading"] .pf-dock__bar,
+  .pf-dock[data-hours-state="unknown"] .pf-dock__bar {
+    visibility: hidden;
+  }
+
+  /* ---------------- Action ---------------- */
+
+  // Unfolds when the section has an action, folds away (and turns inert,
+  // js/dock.js) when it has none or the page shows the same link.
+  .pf-dock__action {
+    display: inline-flex;
+    flex: none;
+    gap: 6px;
+    align-items: center;
+    max-width: 0;
+    min-height: 44px;
+    padding-inline: 0;
+    overflow: hidden;
+    color: var(--pf-dock-on-accent);
+    font-size: .8125rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    background: var(--pf-dock-accent);
+    border-radius: 22px;
+    opacity: 0;
+    transition: max-width .25s var(--pf-dock-ease), padding .25s var(--pf-dock-ease), opacity .25s ease, background-color .15s ease;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-dock-on-accent);
+      text-decoration: underline;
+    }
+
+    svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  }
+
+  .pf-dock.has-action:not([data-pf-dock-dup]) .pf-dock__action {
+    max-width: 60vw;
+    min-width: 118px;
+    padding-inline: 14px 16px;
+    justify-content: center;
+    opacity: 1;
+  }
+
+  .pf-dock__action-label {
+    transition: opacity .15s ease;
+  }
+
+  .pf-dock__action.is-swapping .pf-dock__action-label {
+    opacity: 0;
+  }
+
+  // The desk's phone: the button tone, not the accent.
+  .pf-dock__action--secondary {
+    color: var(--pf-section-fg);
+    background: var(--pf-dock-rule);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-section-fg);
+    }
+  }
+
+  /* ---------------- Contents ---------------- */
+
+  .pf-dock__toc-button {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--pf-section-fg);
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    transition: background-color .2s ease, color .2s ease;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &[aria-expanded="true"] {
+      color: rgb(var(--pf-panel-bg-rgb));
+      background: var(--pf-section-fg);
+    }
+  }
+
+  .pf-dock__ring {
+    width: 34px;
+    height: 34px;
+    overflow: visible;
+  }
+
+  .pf-dock__ring-track,
+  .pf-dock__ring-fill {
+    fill: none;
+    stroke-width: 2.5;
+  }
+
+  .pf-dock__ring-track {
+    stroke: var(--pf-dock-track);
+  }
+
+  [aria-expanded="true"] > .pf-dock__ring .pf-dock__ring-track {
+    stroke: color-mix(in srgb, rgb(var(--pf-panel-bg-rgb)) 35%, transparent);
+  }
+
+  .pf-dock__ring-fill {
+    stroke: var(--pf-dock-accent);
+    stroke-dasharray: 0 100;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 18px 18px;
+    transition: stroke-dasharray .2s linear;
+  }
+
+  [aria-expanded="true"] > .pf-dock__ring .pf-dock__ring-fill {
+    stroke: currentColor;
+  }
+
+  .pf-dock__ring-num {
+    fill: currentColor;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  /* ---------------- Panels ---------------- */
+
+  .pf-dock__panel {
+    overflow: hidden;
+
+    &.is-moving {
+      transition: height var(--pf-dock-dur) var(--pf-dock-ease);
+    }
+  }
+
+  .pf-dock__head {
+    display: grid;
+    grid-template-columns: 1fr 44px;
+    align-items: center;
+    padding: 4px 0 8px 4px;
+  }
+
+  .pf-dock__eyebrow {
+    grid-column: 1;
+    margin: 0;
+    color: var(--pf-section-muted);
+    font-size: var(--pf-mono-label, .75rem);
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .pf-dock__title {
+    grid-column: 1;
+    margin: 2px 0 0;
+    color: var(--pf-section-fg);
+    font-size: 1.125rem;
+    line-height: 1.25;
+  }
+
+  .pf-dock__close {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 50%;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .pf-dock__now {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 4px 0 0 4px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .pf-dock__now-detail {
+    margin: 2px 0 0 22px;
+    color: var(--pf-section-muted);
+    font-size: .8125rem;
+  }
+
+  .pf-dock__bar--large {
+    margin: 10px 4px 12px;
+  }
+
+  .pf-dock__week {
+    margin: 0;
+    padding: 0 4px;
+    list-style: none;
+    font-size: .8125rem;
+  }
+
+  .pf-dock__day {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-block: 6px;
+    border-top: 1px solid $pf-hairline;
+
+    &.is-past {
+      color: var(--pf-section-muted);
+    }
+
+    &.is-today {
+      font-weight: 700;
+    }
+  }
+
+  .pf-dock__closure {
+    margin: 8px 4px 0;
+    color: var(--pf-section-muted);
+    font-size: .75rem;
+  }
+
+  .pf-dock__links {
+    display: flex;
+    padding: 6px 0 4px;
+  }
+
+  .pf-dock__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 4px;
+    color: inherit;
+    font-size: .8125rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: .2em;
+  }
+
+  // The TOC: mono numbers, the current item on the accent rail, as in the
+  // sidebar. Scrolls inside the panel so it fits a phone in landscape.
+  .pf-dock__toc {
+    max-height: min(60svh, calc(100svh - 72px - var(--pf-dock-h) - 48px));
+    margin-inline: -4px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+  }
+
+  .pf-dock__toc-link {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px 8px 6px 12px;
+    color: var(--pf-section-muted);
+    font-size: .875rem;
+    line-height: 1.3;
+    text-decoration: none;
+    border-top: 1px solid $pf-hairline;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-section-fg);
+    }
+
+    &[aria-current] {
+      color: var(--pf-section-fg);
+      font-weight: 700;
+      box-shadow: inset 3px 0 0 var(--pf-dock-accent);
+    }
+  }
+
+  .pf-dock__toc-link--sub {
+    padding-inline-start: 40px;
+    font-size: .8125rem;
+    border-top: 0;
+  }
+
+  .pf-dock__toc-num {
+    flex: none;
+    min-width: 2ch;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  /* ---------------- Hidden: the tab ---------------- */
+
+  .pf-dock-tab {
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(var(--pf-toolbar) + env(safe-area-inset-bottom));
+    z-index: 1035;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--pf-section-fg);
+    border: 1px solid $pf-hairline;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba($pf-black, .12);
+    touch-action: none;
+    animation: pf-dock-tab-in var(--pf-dock-dur) var(--pf-dock-ease);
+
+    svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      margin: auto;
+      fill: currentColor;
+    }
+
+    .fa-secondary {
+      opacity: .4;
+    }
+  }
+
+  @keyframes pf-dock-tab-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  // Under 360px the action keeps its label and drops its icon.
+  @media (max-width: 359.98px) {
+    .pf-dock__action-icon {
+      display: none;
+    }
+
+    .pf-dock.has-action:not([data-pf-dock-dup]) .pf-dock__action {
+      min-width: 0;
+      padding-inline: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pf-dock,
+    .pf-dock *,
+    .pf-dock-tab {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
+  html.pf-a11y-motion :is(.pf-dock, .pf-dock *, .pf-dock-tab) {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  // Windows High Contrast: a plain edge, system colors.
+  @media (forced-colors: active) {
+    .pf-dock,
+    .pf-dock-tab {
+      border: 1px solid CanvasText;
+    }
+
+    .pf-dock[data-hours-state="open"] .pf-dock__dot,
+    .pf-dock__bar i {
+      forced-color-adjust: none;
+      background: CanvasText;
+      border-color: CanvasText;
+    }
+
+    .pf-dock__action {
+      border: 1px solid ButtonText;
+    }
+  }
+}

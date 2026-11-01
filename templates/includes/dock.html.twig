@@ -1,0 +1,103 @@
+{#
+/**
+ * @file
+ * The mobile dock ("Hill Dock"): below md (768px), a frosted sheet fixed to
+ * the bottom of the screen on Special Collections pages. One row: the
+ * library's hours (a button that grows the dock into the week), an
+ * optional action, and Contents (a progress ring with the section number,
+ * which grows the dock into the page's TOC). The grabber hides it; the tab
+ * brings it back.
+ *
+ * Printed by page.html.twig outside #swup, so it survives Swup visits. What
+ * changes from page to page (the location, the actions) comes from the
+ * page's own <script data-pf-dock-page> inside #swup, read by js/dock.js on
+ * each visit. Hidden from md up, and until the script runs.
+ *
+ * Variables:
+ * - dock: PalefireHooks::dock(): lid, icons.
+ */
+#}
+{{ attach_library('palefire/dock') }}
+{% set close_icon %}
+  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+{% endset %}
+<aside id="pf-dock" class="pf-dock" aria-label="{{ 'Page tools'|t }}" data-pf-dock data-lid="{{ dock.lid }}">
+  <button class="pf-dock__grab" type="button" data-pf-dock-hide>
+    <span class="visually-hidden">{{ 'Hide page tools'|t }}</span>
+  </button>
+  <div class="pf-dock__body">
+    {# The week: grows the dock from the status button. A disclosure, not a
+       dialog. #}
+    <div class="pf-dock__panel" id="pf-dock-hours" role="region" aria-labelledby="pf-dock-hours-title" data-pf-dock-panel="hours" hidden>
+      <div class="pf-dock__head">
+        <p class="pf-dock__eyebrow">{{ 'Hours'|t }}</p>
+        <h2 class="pf-dock__title" id="pf-dock-hours-title" data-pf-dock-fullname>{{ 'Hill Memorial Library'|t }}</h2>
+        <button class="pf-dock__close" type="button" data-pf-dock-close>
+          {{ close_icon }}<span class="visually-hidden">{{ 'Close hours'|t }}</span>
+        </button>
+      </div>
+      <p class="pf-dock__now"><span class="pf-dock__dot" aria-hidden="true"></span><span data-pf-dock-now>{{ 'Hours'|t }}</span></p>
+      <p class="pf-dock__now-detail" data-pf-dock-now-detail></p>
+      <span class="pf-dock__bar pf-dock__bar--large" aria-hidden="true"><i></i></span>
+      <ol class="pf-dock__week" data-pf-dock-week></ol>
+      <p class="pf-dock__closure" data-pf-dock-closure hidden></p>
+      <div class="pf-dock__links" data-pf-dock-links>
+        <a class="pf-dock__link" href="https://lsu.libcal.com/hours" target="_blank" rel="noopener" data-pf-dock-full>
+          {{- 'See full hours'|t -}}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+        </a>
+      </div>
+    </div>
+
+    {# The page's TOC, rebuilt from #pf-modular-sidebar when it opens. #}
+    <div class="pf-dock__panel" id="pf-dock-contents" role="region" aria-labelledby="pf-dock-contents-title" data-pf-dock-panel="contents" hidden>
+      <div class="pf-dock__head">
+        <p class="pf-dock__eyebrow">{{ 'Contents'|t }}</p>
+        <h2 class="pf-dock__title" id="pf-dock-contents-title" data-pf-dock-page-title></h2>
+        <button class="pf-dock__close" type="button" data-pf-dock-close>
+          {{ close_icon }}<span class="visually-hidden">{{ 'Close contents'|t }}</span>
+        </button>
+      </div>
+      <nav class="pf-dock__toc" aria-label="{{ 'On this page'|t }}">
+        <ol data-pf-dock-toc></ol>
+      </nav>
+    </div>
+
+    <div class="pf-dock__row">
+      <button class="pf-dock__status" type="button" aria-expanded="false" aria-controls="pf-dock-hours" data-pf-dock-status>
+        <span class="pf-dock__state"><span class="pf-dock__dot" aria-hidden="true"></span><span data-pf-dock-state>{{ 'Hours'|t }}</span></span>
+        <span class="pf-dock__next" data-pf-dock-next>{{ 'Hill Memorial Library'|t }}</span>
+        <span class="pf-dock__bar" aria-hidden="true"><i></i></span>
+      </button>
+      <a class="pf-dock__action" href="#" data-pf-dock-action hidden inert>
+        <span class="pf-dock__action-icon" aria-hidden="true" data-pf-dock-action-icon></span>
+        <span class="pf-dock__action-label" data-pf-dock-action-label></span>
+      </a>
+      <button class="pf-dock__toc-button" type="button" aria-expanded="false" aria-controls="pf-dock-contents" data-pf-dock-toc-button hidden>
+        <svg class="pf-dock__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+          <circle class="pf-dock__ring-track" cx="18" cy="18" r="14"/>
+          <circle class="pf-dock__ring-fill" cx="18" cy="18" r="14" pathLength="100"/>
+          <text class="pf-dock__ring-num" x="18" y="18" text-anchor="middle" dominant-baseline="central" data-pf-dock-ring-num></text>
+        </svg>
+        <span class="visually-hidden" data-pf-dock-toc-name>{{ 'Contents'|t }}</span>
+      </button>
+    </div>
+  </div>
+
+  {# Every icon an action can use, cloned by js/dock.js. #}
+  <template data-pf-dock-icons>
+    {% for icon in dock.icons %}
+      <span data-icon="{{ icon }}">{{ source('libraries/fontawesome-pro/svgs/light/' ~ icon ~ '.svg', ignore_missing = true)|raw }}</span>
+    {% endfor %}
+  </template>
+</aside>
+
+{# Hidden dock: a phone with its dock, Font Awesome duotone style (the
+   screen at 40%). Not an arrow: in this corner that reads as "back to
+   top". #}
+<button class="pf-dock-tab" type="button" data-pf-dock-show hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <rect class="fa-secondary" x="5" y="2" width="14" height="20" rx="3"/>
+    <path class="fa-primary" d="M5 16.6a2.6 2.6 0 0 1 2.6-2.6h8.8a2.6 2.6 0 0 1 2.6 2.6V19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/>
+  </svg>
+  <span class="visually-hidden">{{ 'Show page tools'|t }}</span>
+</button>

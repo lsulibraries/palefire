@@ -82,6 +82,18 @@ function palefire_preprocess_breadcrumb(array &$variables) {
  */
 function palefire_page_attachments_alter(array &$attachments) {
   $path = \Drupal::request()->getPathInfo();
+
+  // On pages with the mobile dock (Special Collections), let the page run
+  // under the iPhone's home indicator and notch, so the dock can pad itself
+  // with env(safe-area-inset-*) (_dock.scss).
+  if (PalefireHooks::isSpecialPage(PalefireHooks::pageAlias()) && !empty($attachments['#attached']['html_head'])) {
+    foreach ($attachments['#attached']['html_head'] as &$item) {
+      if (($item[1] ?? '') === 'viewport') {
+        $item[0]['#attributes']['content'] = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+      }
+    }
+    unset($item);
+  }
   $node = \Drupal::routeMatch()->getParameter('node');
   $is_resource = $node instanceof NodeInterface && $node->bundle() === 'resource';
 

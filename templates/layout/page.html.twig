@@ -174,7 +174,16 @@
     {% include '@palefire/includes/utility-panels.html.twig' %}
   {% endif %}
 
+  {# The mobile dock (Special Collections pages, below md). Outside #swup
+     like the panels; the page's own settings ride inside #swup below. #}
+  {% if dock %}
+    {% include '@palefire/includes/dock.html.twig' %}
+  {% endif %}
+
   <div id="swup" class="pf-swup d-flex flex-column flex-grow-1">
+    {% if dock %}
+      <script type="application/json" data-pf-dock-page>{{ dock.json|raw }}</script>
+    {% endif %}
     {# The breadcrumb in the sub-header bar (sticky glass under the header,
        as on the Special Collections landing), on every page but guides,
        which keep it in their head. Modular pages print it inside <main>,

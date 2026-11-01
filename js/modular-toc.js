@@ -905,7 +905,12 @@
       crumbShown = text;
     }
 
-    function openContents() {
+    function openContents(event) {
+      // Below md on Special Collections pages, the mobile dock's Contents
+      // (dock.js) instead of the drawer.
+      if (Drupal.palefireDock && Drupal.palefireDock.openContents(event && event.currentTarget)) {
+        return;
+      }
       if (railOn()) {
         nav.classList.remove('is-dismissed');
         nav.classList.add('is-open');

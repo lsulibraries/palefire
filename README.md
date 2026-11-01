@@ -986,6 +986,35 @@ panel: markup in `utility-panels.html.twig`, key in `panels`.
 
 When logged in, the header sits under Drupal's admin toolbar (z-index 500).
 
+## Mobile dock
+
+Below md (768px), on Special Collections pages (`PalefireHooks::isSpecialPage()`,
+not the 404 page), a frosted sheet at the bottom of the screen
+(`includes/dock.html.twig`, `_dock.scss`, `js/dock.js`, library
+`palefire/dock`). One row:
+
+- **Hours:** the library's state over its name and the next change ("Closed" /
+  "Hill Memorial Library · opens tomorrow 9 AM"; "Hill" when the full name
+  doesn't fit on one line), from `Drupal.palefireHours`. The location is the
+  page's `field_hours_location`, else Hill (236). Tapping grows the dock into
+  the week, a closure line and "See full hours".
+- **Action** (most pages have none): the section's, else the page's, from
+  `PalefireHooks::dockActions()` (labels, icons and links in one place).
+  Section actions are keyed by the TOC anchor and travel in the page's JSON,
+  not as attributes on sections. The action folds away while the page shows
+  a link to the same place.
+- **Contents:** a ring that fills through `<main>`, with the section's printed
+  number ("03"); tapping grows the dock into the page's TOC. The breadcrumb's
+  section button opens it too. Hidden when the TOC has fewer than two entries.
+
+The grabber (or a swipe down) hides the dock for the visit; the tab in the
+corner brings it back. The dock lives outside `#swup`; each page brings its
+settings in `<script data-pf-dock-page>`. Its glass is 90% (thicker than the
+drawers', measured in `_reading-themes.scss`). Dock pages use
+`viewport-fit=cover` (`palefire_page_attachments_alter()`), with the page and
+drawers padded clear of the notch in landscape. To add an action, add it to
+`dockActions()` and its icon to `DOCK_ICONS` (an FA Pro light SVG name).
+
 ## Page transitions (Swup 4)
 
 `js/palefire-swup.js` swaps `#swup` (breadcrumb + body) and `#pf-primary-menu`
@@ -1021,6 +1050,10 @@ a full load. Skipped: links with `data-no-swup`, `data-bs-toggle` or
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
+
+### 2026-11-01
+
+- **Mobile dock on Special Collections pages (phase 1).** Below 768px, a frosted dock at the bottom of the screen: Hill's hours (state, library name, next change, today's bar; tap for the week), the section's or page's action (Find a room, All publications, Call desk on /v2/special; Order copies, Directions, Request the Lecture Hall on their pages), and Contents (a progress ring with the printed section number; tap for the TOC). Grabber or swipe to hide, a corner tab to show; Escape, close and a tap outside collapse a panel; focus stays clear of the dock (`scroll-padding-bottom`, a `focusin` check); the dock steps aside for the on-screen keyboard and goes inert under the menu and drawers. Replaces the old "On this page" square below md. New: `includes/dock.html.twig`, `js/dock.js`, `_dock.scss`, library `palefire/dock`, `PalefireHooks::dock()`/`dockActions()`/`isSpecialPage()`, `data-pf-dock` on `<html>` (synced by Swup; entering a dock page from one without it is a full load), `data-pf-float-toolbar` (head script: Safari 26+ on iPhone, whose toolbar floats over the page), `viewport-fit=cover` on dock pages, `id="rooms-and-access"` on the keyed map key, `Drupal.palefireHours.specFor`/`window`, and the breadcrumb's section button handing off to the dock. Section actions travel in the page's JSON keyed by TOC anchor rather than as `data-pf-dock-action` on sections, so section templates stay untouched. The glass is 90%, not the drawers' 65% / 30%: with no wash under it, the drawers' tint drops muted text to 1.0:1 over white on the dark swatches; 90% keeps it 4.56:1 and up on every swatch. Checked on copies of the live /v2/special and duplication guide with the local CSS and JS (Twilight and Cream) at 320, 390, 667 landscape, 768 and 1024: no horizontal scroll, panels, Escape, focus return, hide and show, actions per section, ring numbers matching the printed ones. Not checked: a real iPhone (toolbar spacing, notch padding, swipe), Drupal rendering, PHP lint, FA Pro icons (served only on the server). Why: on phones the hours, the next step and the page's contents should be one thumb away.
 
 ### 2026-10-31
 

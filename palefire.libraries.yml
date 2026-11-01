@@ -431,6 +431,18 @@ utility-panels:
     - palefire/global
     - palefire/visit
 
+# The mobile dock on Special Collections pages: hours, the page's action,
+# Contents. Attached by templates/includes/dock.html.twig.
+dock:
+  version: 1.0.0
+  js:
+    js/dock.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/global
+    - palefire/visit
+
 # Exhibition pages: one gallery at a time, title page, lightbox, long
 # biographies, audio. Attached by includes/exhibit-cover.html.twig. Lighter
 # weight so it runs before modular-toc.js, which reads what is shown.

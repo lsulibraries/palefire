@@ -351,10 +351,11 @@
         document.documentElement.setAttribute(name, value);
       }
     });
-    // Page mode, kind and the Landing hero flag (PalefireHooks::preprocessHtml()):
-    // present on some pages only, so copy or remove them. data-pf-hero has
-    // no value, so it is copied when present at all.
-    ['data-pf-mode', 'data-pf-page', 'data-pf-hero'].forEach((name) => {
+    // Page mode, kind, the Landing hero flag and the mobile dock flag
+    // (PalefireHooks::preprocessHtml()): present on some pages only, so copy
+    // or remove them. data-pf-hero and data-pf-dock have no value, so they
+    // are copied when present at all.
+    ['data-pf-mode', 'data-pf-page', 'data-pf-hero', 'data-pf-dock'].forEach((name) => {
       if (doc.documentElement.hasAttribute(name)) {
         document.documentElement.setAttribute(name, doc.documentElement.getAttribute(name));
       }
@@ -585,7 +586,10 @@
         && containers.every((sel) => doc.querySelector(sel))
         && OPTIONAL_CONTAINERS.every((sel) => containers.includes(sel) || !doc.querySelector(sel))
         && !containers.some((sel) => Array.from(doc.querySelector(sel).querySelectorAll('script')).some(isExecutable))
-        && !doc.querySelector('[data-big-pipe-placeholder-id]');
+        && !doc.querySelector('[data-big-pipe-placeholder-id]')
+        // The mobile dock (dock.html.twig) is printed outside #swup, so a
+        // page without it can't swap one in: load the dock page in full.
+        && (!doc.getElementById('pf-dock') || document.getElementById('pf-dock'));
       if (compatible && !assetUrls(doc).every((url) => loadedAssets.has(url))) {
         try {
           compatible = await loadMissing(doc, settings, loadedAssets);

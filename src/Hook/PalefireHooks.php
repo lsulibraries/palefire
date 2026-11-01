@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\palefire\Hook;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
@@ -98,6 +99,24 @@ class PalefireHooks {
   public const NOT_FOUND_PREVIEW = '/v2/404';
 
   /**
+   * LibCal location the mobile dock shows when a page has no
+   * field_hours_location: Hill Memorial Library.
+   */
+  public const DOCK_LID = '236';
+
+  /**
+   * Hill Memorial's address, for the dock's Directions when a page has no
+   * field_location_query.
+   */
+  private const DOCK_ADDRESS = 'Hill Memorial Library, Baton Rouge, LA 70803';
+
+  /**
+   * Every icon a dock action can use (dockActions()), printed once in the
+   * dock for js/dock.js: FA 5 light SVGs.
+   */
+  public const DOCK_ICONS = ['copy', 'map-marker-alt', 'calendar-alt', 'door-open', 'external-link-alt', 'phone'];
+
+  /**
    * The missing address the preview pretends to have been asked for.
    */
   private const NOT_FOUND_SAMPLE = '/v2/special/exhibitons';
@@ -162,6 +181,11 @@ class PalefireHooks {
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
+    // The mobile dock (includes/dock.html.twig): its reserved space and
+    // scroll padding are in the first paint, so nothing shifts.
+    if (self::isSpecialPage(self::pageAlias()) && !self::isNotFound()) {
+      $variables['html_attributes']->setAttribute('data-pf-dock', '');
+    }
     // A staff profile's <title> is the person's name: the View's own title
     // can only repeat the slug.
     if (StaffDirectory::isRoute('profile')) {
@@ -224,19 +248,16 @@ class PalefireHooks {
     // pages under them, the Main Library everywhere else
     // (includes/footer.html.twig).
     $alias = self::pageAlias();
-    $variables['footer_special'] = FALSE;
-    foreach ([self::SPECIAL_ROOT, ...self::SPECIAL_EXTRA] as $root) {
-      if ($alias === $root || str_starts_with($alias, $root . '/')) {
-        $variables['footer_special'] = TRUE;
-        break;
-      }
-    }
+    $variables['footer_special'] = self::isSpecialPage($alias);
     $variables['footer_special_root'] = self::SPECIAL_ROOT;
     // Printed by the footer, so the cache varies by path.
     $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
 
     // The 404 page (page--404.html.twig): a real 404, or the preview page.
     $variables['not_found'] = self::isNotFound() ? $this->notFound($alias) : NULL;
+
+    // The mobile dock, on the same pages as the Special Collections footer.
+    $variables['dock'] = $variables['footer_special'] && !$variables['not_found'] ? $this->dock($alias) : NULL;
 
     // Core sets "node" from the route's "node" parameter only, so a Preview
     // has none: take it from pageNode(), for page.html.twig too.
@@ -1020,6 +1041,108 @@ class PalefireHooks {
       $node = $route_match->getParameter('node');
     }
     return $node instanceof NodeInterface ? $node : NULL;
+  }
+
+  /**
+   * Whether an alias is in the Special Collections section: SPECIAL_ROOT,
+   * SPECIAL_EXTRA and the pages under them. They get the Special
+   * Collections footer and the mobile dock.
+   */
+  public static function isSpecialPage(string $alias): bool {
+    foreach ([self::SPECIAL_ROOT, ...self::SPECIAL_EXTRA] as $root) {
+      if ($alias === $root || str_starts_with($alias, $root . '/')) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * The mobile dock's settings for this page (includes/dock.html.twig).
+   *
+   * - lid: the LibCal location (field_hours_location, else DOCK_LID).
+   * - icons: DOCK_ICONS, for the template.
+   * - json: what js/dock.js reads from inside #swup on each visit (the dock
+   *   itself sits outside it): the location, the page's action, and the
+   *   sections' actions by TOC anchor.
+   */
+  private function dock(string $alias): array {
+    $node = self::pageNode();
+    $lid = ($node ? self::stringValue($node, 'field_hours_location') : '') ?: self::DOCK_LID;
+    $query = ($node ? self::stringValue($node, 'field_location_query') : '') ?: self::DOCK_ADDRESS;
+    $actions = $this->dockActions($query);
+    return [
+      'lid' => $lid,
+      'icons' => self::DOCK_ICONS,
+      'json' => Json::encode([
+        'lid' => $lid,
+        'action' => $actions['pages'][$alias] ?? NULL,
+        'sections' => (object) ($actions['sections'][$alias] ?? []),
+      ]),
+    ];
+  }
+
+  /**
+   * The dock's actions: by page alias, and by alias then TOC anchor.
+   *
+   * Most pages have none: the dock shows hours and Contents only. A
+   * section's action wins over the page's while it is current. Keys: label,
+   * icon (DOCK_ICONS), href, external (opens a new tab), style (filled, or
+   * secondary). One label per destination: never reuse a label for another
+   * URL (Siteimprove, WCAG 3.2.4).
+   *
+   * @param string $query
+   *   The address for Directions (field_location_query).
+   */
+  private function dockActions(string $query): array {
+    $directions = [
+      'label' => (string) $this->t('Directions'),
+      'icon' => 'map-marker-alt',
+      'href' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query),
+      'external' => TRUE,
+    ];
+    return [
+      'pages' => [
+        '/v2/special/guides/duplication' => [
+          'label' => (string) $this->t('Order copies'),
+          'icon' => 'copy',
+          'href' => 'https://specialcollections.lib.lsu.edu/logon',
+        ],
+        '/v2/special/guides/parking-and-travel-hill-memorial-library' => $directions,
+        // The guide's old alias, kept by palefire_guide_hill_rename.php.
+        '/v2/special/guides/parking-hill-memorial-library' => $directions,
+        // The page's own booking button goes to the same form.
+        '/v2/special/lecturehall' => [
+          'label' => (string) $this->t('Request the Lecture Hall'),
+          'icon' => 'calendar-alt',
+          'href' => 'https://lsu.formstack.com/forms/lecture_hall_reservations',
+        ],
+      ],
+      'sections' => [
+        self::SPECIAL_ROOT => [
+          // The map's room list (includes/map-key.html.twig).
+          'map' => [
+            'label' => (string) $this->t('Find a room'),
+            'icon' => 'door-open',
+            'href' => '#rooms-and-access',
+          ],
+          'written-at-hill' => [
+            'label' => (string) $this->t('All publications'),
+            'icon' => 'external-link-alt',
+            'href' => 'https://guides.lib.lsu.edu/c.php?g=1091798&p=9443015',
+            'external' => TRUE,
+          ],
+          // Secondary, so it doesn't compete with the question form's
+          // own button. Hill Memorial's number, as in the footer.
+          'ask-special-collections' => [
+            'label' => (string) $this->t('Call desk'),
+            'icon' => 'phone',
+            'href' => 'tel:+12255786544',
+            'style' => 'secondary',
+          ],
+        ],
+      ],
+    ];
   }
 
   /**

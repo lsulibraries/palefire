@@ -393,10 +393,16 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
 // Without blur, or when asked for less transparency / more contrast, the
 // drawer is solid: its page color (a shade darker on the dark swatches).
+// The mobile dock (_dock.scss) follows the drawers.
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .pf-panel.offcanvas,
   .pf-menu-drawer {
     --bs-offcanvas-bg: rgba(var(--pf-panel-bg-rgb), .96);
+  }
+
+  .pf-dock,
+  .pf-dock-tab {
+    --pf-dock-bg: rgba(var(--pf-panel-bg-rgb), .96);
   }
 }
 
@@ -404,6 +410,13 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-panel.offcanvas,
   .pf-menu-drawer {
     --bs-offcanvas-bg: rgb(var(--pf-panel-bg-rgb));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .pf-dock,
+  .pf-dock-tab {
+    --pf-dock-bg: rgb(var(--pf-panel-bg-rgb));
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -418,10 +431,22 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
+
+  html.pf-reading-dark :is(.pf-dock, .pf-dock-tab) {
+    --pf-dock-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 :root.pf-reading-dark.pf-a11y-solid :is(.pf-panel.offcanvas, .pf-menu-drawer) {
   --bs-offcanvas-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+:root.pf-reading-dark.pf-a11y-solid :is(.pf-dock, .pf-dock-tab) {
+  --pf-dock-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
