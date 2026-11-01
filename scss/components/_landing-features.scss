@@ -233,6 +233,25 @@ $pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head, .pf-location-pag
   padding: 0;
 }
 
+// --- The page bar --------------------------------------------------------
+// The same bar on every other page but guides (page.html.twig), so the
+// breadcrumb stays under the header as the main menu does: sticky for the
+// whole page, no script, as it is the first child of a box that runs the
+// page's length (#swup on plain pages and the 404 page, <main> on Modular
+// ones): across the window on plain pages, the content column on Modular
+// ones. The breadcrumb starts where the logo does, as on the Special
+// Collections hero.
+.pf-page-bar {
+  --pf-bar-edge: 1rem;
+  --pf-bar-button: 2rem;
+  position: sticky;
+  top: var(--pf-header-h);
+  z-index: 3;
+  margin-inline: 0;
+  margin-bottom: 0;
+  padding-inline-start: var(--pf-header-gutter, var(--pf-bar-edge));
+}
+
 // Pinned for the whole page (js/modular-toc.js): past the landing the bar
 // turns fixed where it stuck, as wide as the spacer that keeps its place
 // (and its margin) in the landing. The bar sits inside the first section,

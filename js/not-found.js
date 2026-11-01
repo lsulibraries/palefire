@@ -72,6 +72,26 @@
     });
   }
 
+  /**
+   * Shows one of the editors' quips at random over the <h1>.
+   *
+   * The page is cached, so the server prints the first and the pool
+   * (PalefireHooks::notFoundQuips()); each visit draws its own here.
+   */
+  function pickQuip(el) {
+    const eyebrow = el.querySelector('[data-pf-404-quips]');
+    let pool = [];
+    try {
+      pool = JSON.parse(eyebrow ? eyebrow.getAttribute('data-pf-404-quips') : '[]');
+    }
+    catch (e) {
+      return;
+    }
+    if (Array.isArray(pool) && pool.length > 1) {
+      eyebrow.textContent = String(pool[Math.floor(Math.random() * pool.length)]);
+    }
+  }
+
   function setup(el) {
     const stage = el.querySelector('[data-pf-404-stage]');
     const box = el.querySelector('[data-pf-404-case]');
@@ -333,6 +353,7 @@
   Drupal.behaviors.palefireNotFound = {
     attach(context) {
       once('pf-404', '[data-pf-404]', context).forEach((el) => {
+        pickQuip(el);
         teardown.set(el, setup(el));
       });
     },

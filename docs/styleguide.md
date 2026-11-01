@@ -120,6 +120,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Ask Special Collections | `includes/ask-special` | – |
 | Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
+| Breadcrumb bar (glass sub-header, sticky under the header) | `layout/page.html.twig`, `.pf-landing__bar` / `.pf-page-bar` in `_landing-features.scss` | ✔ the exhibition's own; every page but guides |
+| 404 page: display case, wall text, quips | `includes/not-found`, `_not-found.scss`, `js/not-found.js` | – its own page (`/v2/404`); editors keep the quips in that page's Intro, one a line |
 
 ## Changelog
 
@@ -127,6 +129,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
   - Seven plates: overview, colour, type, grid, spacing, lines, motion.
   - "Exhibition blocks" gallery with editor notes.
   - `$pf-exhibit-ease` and `$pf-exhibit-curtain` moved to `_variables.scss`.
+- **2026-10-31:** The breadcrumb bar is on every page but guides. Plain pages and the 404 page print it at the top of `#swup`, Modular pages at the top of `<main>` (`.pf-page-bar`), sticky under the header for the whole page, its crumbs starting where the logo does. Landings, exhibitions, the showcase and location pages keep theirs. The 404 page's mono label is now one of the editors' quips at random.
 - **2026-10-31:** Exhibitions showcase follows the landing's page furniture. The breadcrumb sits in the glass sub-header bar (`.pf-showcase-head`, pinned like an exhibition's), the rail TOC lists Browse and All exhibitions, each band opens with an index rule, and the second band and every other section after it take the swatch surface, as on the Special Collections landing. Everything starts on the section padding line, and the covers line up with the summary's top.
 - **2026-10-31:** Exhibitions showcase shares the landing's styles: `data-pf-hero` (1280px column, type tokens, section headings), the clear-then-glass header and bar, the 4/5-column grid with `--pf-grid-gutter`, the index-rule rhythm, and a new shared token, `--pf-hero-title-size`.
 - **2026-10-31:** The Grid / List switch (`.pf-tiles__view`) is now also a filter: the Exhibitions showcase's All / Digital / Physical buttons reuse it, with a count after each label.
@@ -140,3 +143,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Location backdrop: the photo is fixed to the window; the oval is replaced by `.pf-location__frost`, a backdrop blur masked to the map's floors (`pf-map__floors` + room hit areas, built by `js/location-plate.js`).
 - **2026-10-31:** Location backdrop: no edge fades; one even 75% black wash, the least that keeps the top's text at AA over the photo's whitest pixel. It runs on to the first band.
 - **2026-10-31:** Location parts follow /v2/special's section pattern: index rule (with its link), `.pf-location__part-title`, `.pf-section__lede`, then the body at the full width; `.pf-location__part-grid` removed. Backdrop: the room term's photo in `pf_location_backdrop`; the frost blurs only.
+- **2026-10-31:** Location backdrop: monochrome and low in contrast instead of the black wash: a grey `color`-blend layer plus a 35-grey veil at 87% (tones 30-64 of 255, the same AA ceiling as 75% black).

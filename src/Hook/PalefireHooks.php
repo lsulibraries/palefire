@@ -380,18 +380,17 @@ class PalefireHooks {
   private static function notFoundQuips(): array {
     $quips = [];
     $cache = new CacheableMetadata();
-    $path = Drupal::service('path_alias.manager')->getPathByAlias(self::NOT_FOUND_PREVIEW);
-    if (preg_match('#^/node/(d+)$#', $path, $m)) {
-      $node = Drupal::entityTypeManager()->getStorage('node')->load($m[1]);
+    $path = \Drupal::service('path_alias.manager')->getPathByAlias(self::NOT_FOUND_PREVIEW);
+    if (preg_match('#^/node/(\d+)$#', $path, $m)) {
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($m[1]);
       if ($node instanceof NodeInterface) {
         $cache->addCacheableDependency($node);
         if ($node->hasField('field_intro')) {
           $text = (string) $node->get('field_intro')->value;
-          $text = (string) preg_replace('#<(br|/p|/li|/hd|/div)[^>]*>#i', "
-", $text);
+          $text = (string) preg_replace('#<(br|/p|/li|/h\d|/div)\b[^>]*>#i', "\n", $text);
           $text = Html::decodeEntities(strip_tags($text));
-          foreach (preg_split('/R/u', $text) as $line) {
-            $line = trim((string) preg_replace('/s+/u', ' ', $line));
+          foreach (preg_split('/\R/u', $text) as $line) {
+            $line = trim((string) preg_replace('/\s+/u', ' ', $line));
             if ($line !== '') {
               $quips[] = Unicode::truncate($line, 80, TRUE, TRUE);
             }

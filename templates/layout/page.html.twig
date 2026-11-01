@@ -175,12 +175,19 @@
   {% endif %}
 
   <div id="swup" class="pf-swup d-flex flex-column flex-grow-1">
-    {# Modular pages print the breadcrumb inside <main>, above the first
-       section (see below), so it lines up with the content column, not
-       across the TOC sidebar. #}
+    {# The breadcrumb in the sub-header bar (sticky glass under the header,
+       as on the Special Collections landing), on every page but guides,
+       which keep it in their head. Modular pages print it inside <main>,
+       above the first section (see below), so it runs across the content
+       column, not the TOC sidebar. Styles: .pf-page-bar
+       (_landing-features.scss). #}
     {% if page.breadcrumb and not is_modular_page %}
-      <div class="pf-breadcrumb container-xxl">
-        {{ page.breadcrumb }}
+      <div class="pf-landing__bar pf-page-bar">
+        <div class="pf-landing__bar-inner">
+          <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">
+            {{ page.breadcrumb }}
+          </div>
+        </div>
       </div>
     {% endif %}
 
@@ -227,6 +234,20 @@
                PalefireHooks::crumbInLanding()); with the <h1> there too, the
                head would be empty, so it is left out. #}
             {% set head_crumb = page.breadcrumb and not modular_crumb_in_landing %}
+            {# Every other page but a guide: the bar at the top of <main>,
+               sticky for the whole page (.pf-page-bar), and the head starts
+               with the <h1>. Exhibitions and the showcase keep theirs in
+               the head (below). #}
+            {% if head_crumb and not (exhibit_head or showcase or modular_guide) %}
+              <div class="pf-landing__bar pf-page-bar">
+                <div class="pf-landing__bar-inner">
+                  <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">
+                    {{ page.breadcrumb }}
+                  </div>
+                </div>
+              </div>
+              {% set head_crumb = false %}
+            {% endif %}
             {% if head_crumb or (node.label and not modular_title_in_landing) or guide_head %}
             {# Exhibition mode: the head is the title page, with its own id
                for the TOC's "Home" link (includes/exhibit-cover). #}

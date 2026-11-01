@@ -48,7 +48,10 @@
 
   <div class="pf-404__body">
     <div class="pf-404__lead">
-      <p class="pf-404__eyebrow">{{ 'Please do not touch the glass'|t }}</p>
+      {# One of the editors' quips at random (js/not-found.js; the pool is
+         the Intro of the /v2/404 page, PalefireHooks::notFoundQuips()). #}
+      <p class="pf-404__eyebrow" data-pf-404-quips="{{ quips|json_encode }}">{{ quips|first }}</p>
+      {{ quips_cache }}
       <h1 class="pf-404__title" data-pf-404-title>{{ '404: Page not found'|t }}</h1>
       {# iPhone only: motion needs a tap to allow (js/not-found.js). #}
       <button type="button" class="pf-404__tilt" data-pf-404-tilt hidden>{{ 'Tilt to glitch'|t }}</button>

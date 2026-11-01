@@ -25,13 +25,13 @@ html.is-animating .pf-swup > * {
 // TOC drawer is outside <main>): a transform would pin it to the moving box
 // for the length of the rise, then let it jump back to the window.
 @media (prefers-reduced-motion: no-preference) {
-  html.is-rendering .pf-swup > .pf-breadcrumb,
+  html.is-rendering .pf-swup > .pf-page-bar,
   html.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
     // Opacity too: this outranks the fade above on the breadcrumb.
     transition: opacity $pf-swup-in $pf-swup-ease-in, transform $pf-swup-in $pf-swup-ease-in;
   }
 
-  html.is-animating.is-rendering .pf-swup > .pf-breadcrumb,
+  html.is-animating.is-rendering .pf-swup > .pf-page-bar,
   html.is-animating.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
     transform: translateY(.5rem);
   }

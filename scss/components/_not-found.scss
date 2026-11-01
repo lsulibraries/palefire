@@ -38,10 +38,10 @@
   --pf-404-s: 180px;
   --pf-404-h: 216px;
   --pf-404-p: 100px;
-  --pf-404-drop: 3rem;
+  --pf-404-drop: 1.5rem;
   max-width: $pf-content-max;
   margin-inline: auto;
-  padding-block: 1rem 4rem;
+  padding-block: 0 4rem; // the stage starts under the bar: its spotlight is the top space
 
   @include media-breakpoint-up(md) {
     --pf-404-s: 220px;
@@ -67,7 +67,7 @@
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(26rem, 48vw, 36rem);
+  height: clamp(22rem, 14rem + 15vw, 29rem);
   overflow: hidden;
   perspective: 1100px;
   perspective-origin: 50% 15%;
