@@ -399,8 +399,10 @@
       else {
         const link = activeLink();
         const i = entries.findIndex((e) => e.link === link);
-        n = pad((i < 0 ? 0 : i) + 1);
+        n = String((i < 0 ? 0 : i) + 1);
       }
+      // The ring drops the leading zero the page's numbers and the list keep.
+      n = n.replace(/^0+(?=\d)/, '');
       if (ringNum.textContent !== n) {
         ringNum.textContent = n;
         tocName.textContent = Drupal.t('Contents, section @n of @total', { '@n': parseInt(n, 10) || 1, '@total': total });

@@ -62,10 +62,11 @@
 // is the heading color (6.3:1 and up) and labels the panel muted tone
 // (4.5:1 and up). The map's in-view wash is 90%.
 //
-// The mobile dock (_dock.scss) has no wash under it, so its glass is 90%
-// of the page color (the dark swatches' darkened one). Worst case, solid
-// white under a dark swatch or black under a light one: heading text
-// 6.6:1 and up, muted 4.56:1 and up (Solarized 4.6, Dusk 4.7 the lowest).
+// The mobile dock (_dock.scss) wears the landing bar's frost, the chrome
+// color, at 92% (the bar's 90% leaves Dusk and Solarized muted text at
+// 4.3:1, and no wash sits under the dock). Worst case, solid white under a
+// dark swatch or black under a light one: heading text 7:1 and up, muted
+// 4.55:1 and up; the closed dot (the scrollbar tone) 3.06:1 and up.
 //
 // High contrast (the Settings switch or the OS): the swatch's own colors
 // pushed apart, so it keeps its hue and stays glass. Light swatches: page

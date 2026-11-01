@@ -126,6 +126,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-01:** The dock is set in Roboto (mono only for uppercase labels and section numbers) on the landing bar's chrome frost at 92%, so muted text holds 4.5:1 over anything. The closed dot uses `--pf-g-scroll`. The dot, second line and bar share one left edge. The Contents ring shows "5", not "05".
 - **2026-11-01:** The dock's week gains Ask Us, an accent pill like the row's action (icon dropped below 360px), beside "See full hours". The utility menu stays in the header on every page; its Hours tile opens the dock's week on dock pages.
 - **2026-11-01:** Mobile dock on Special Collections pages, below 768px: the drawers' colors in a thicker glass (90%, `$pf-dock-glass`, so muted text holds 4.5:1 over anything), 28px top corners, a hairline top edge. Status dots differ by shape as well as color (filled open, accent ring soon, muted ring closed). The Contents ring uses the TOC's accent and mono numbers; the current TOC row takes the accent rail. Actions are accent pills (Call desk the quieter rule tone), at least 118px wide, dropping their icon below 360px. Motion: `--pf-dock-ease` (`cubic-bezier(.2, .8, .2, 1)`) over `--pf-dock-dur` (.35s); none with reduced motion.
 - **2026-10-31:** No shadow between the header and the breadcrumb bar (the compact header's fell across it). The 404 page's spotlight and dust reach up behind the header and bar, which are thinner glass there until the page scrolls.

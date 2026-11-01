@@ -1,14 +1,19 @@
 // Mobile dock (templates/includes/dock.html.twig, js/dock.js): below md on
 // Special Collections pages, a frosted sheet fixed to the bottom of the
-// screen. The drawers' glass and colors (.pf-panel.offcanvas,
-// _utility-panels.scss), whose fallbacks turn it solid in the same cases.
+// screen. The landing bar's and main menu's light frost (the swatch's
+// chrome color, --pf-g-chrome-rgb) with the drawers' text colors; solid in
+// the same cases as the drawers (_utility-panels.scss). Roboto, like the
+// page; mono only for the uppercase labels and the section numbers.
 // Shown only once js/dock.js has read the page's settings (html.pf-dock-on).
 //
 // Height and motion: the page reserves the closed dock's height once, on
 // the footer (no layout shift); hiding, showing and the panels move with
 // transform and height only.
 
-$pf-dock-glass: .9;
+// The bar's glass ($pf-reading-sidebar-glass, .9) a touch thicker: no wash
+// sits under the dock, and at .92 muted text stays 4.5:1 on every swatch
+// even over solid white or black (_reading-themes.scss).
+$pf-dock-glass: .92;
 
 // Dock pages run under the notch (viewport-fit=cover, palefire.theme), so
 // in landscape the page and the drawers step in from it. Zero in portrait.
@@ -72,18 +77,12 @@ html[data-pf-dock] .offcanvas {
     // The ring's and the bar's track: the rule tone is too faint on the
     // dark swatches' glass.
     --pf-dock-track: color-mix(in srgb, var(--pf-section-muted) 35%, transparent);
-    // Thicker than the drawers' glass: no wash sits under the dock, so
-    // anything can scroll beneath it. 90% keeps muted text 4.5:1 and up on
-    // every swatch over solid white or black (_reading-themes.scss).
-    --pf-dock-bg: rgba(var(--pf-panel-bg-rgb), #{$pf-dock-glass});
+    --pf-dock-chrome-rgb: var(--pf-g-chrome-rgb, 247, 244, 236);
+    --pf-dock-bg: rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass});
     color: var(--pf-section-fg);
     background: var(--pf-dock-bg);
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
-  }
-
-  html.pf-reading-dark :is(.pf-dock, .pf-dock-tab) {
-    --pf-dock-bg: color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-dock-glass * 100%}, transparent);
   }
 
   // Above the page and its fixed bars, under the drawers and their wash.
@@ -96,7 +95,7 @@ html[data-pf-dock] .offcanvas {
     border-top: 1px solid $pf-hairline;
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -8px 24px rgba($pf-black, .08);
-    font-family: var(--bs-font-monospace);
+    font-family: var(--bs-body-font-family);
     transition: transform var(--pf-dock-dur) var(--pf-dock-ease), visibility 0s;
 
     &.is-hidden,
@@ -166,7 +165,6 @@ html[data-pf-dock] .offcanvas {
   .pf-dock__next {
     display: block;
     margin-block-start: 1px;
-    padding-inline-start: 16px;
     color: var(--pf-section-muted);
     font-size: .75rem;
     line-height: 1.35;
@@ -179,12 +177,14 @@ html[data-pf-dock] .offcanvas {
   }
 
   // The dot repeats the words in shape as well as color: filled open, a
-  // ring closing or opening soon, a muted ring closed.
+  // ring closing or opening soon, a dim ring closed (the swatch's
+  // scrollbar tone, 3:1 and up on the chrome, so it steps back from the
+  // words without vanishing).
   .pf-dock__dot {
     flex: none;
     width: 8px;
     height: 8px;
-    border: 2px solid var(--pf-section-muted);
+    border: 2px solid var(--pf-g-scroll, #7a7772);
     border-radius: 50%;
   }
 
@@ -201,7 +201,7 @@ html[data-pf-dock] .offcanvas {
   .pf-dock__bar {
     display: block;
     height: 2px;
-    margin: 5px 0 0 16px;
+    margin: 5px 0 0;
     overflow: hidden;
     background: var(--pf-dock-track);
     border-radius: 1px;
@@ -350,6 +350,7 @@ html[data-pf-dock] .offcanvas {
 
   .pf-dock__ring-num {
     fill: currentColor;
+    font-family: var(--bs-font-monospace);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: .02em;
@@ -376,6 +377,7 @@ html[data-pf-dock] .offcanvas {
     grid-column: 1;
     margin: 0;
     color: var(--pf-section-muted);
+    font-family: var(--bs-font-monospace);
     font-size: var(--pf-mono-label, .75rem);
     font-weight: 700;
     letter-spacing: .16em;
@@ -420,7 +422,7 @@ html[data-pf-dock] .offcanvas {
   }
 
   .pf-dock__now-detail {
-    margin: 2px 0 0 22px;
+    margin: 2px 0 0 4px;
     color: var(--pf-section-muted);
     font-size: .8125rem;
   }
@@ -559,6 +561,7 @@ html[data-pf-dock] .offcanvas {
   .pf-dock__toc-num {
     flex: none;
     min-width: 2ch;
+    font-family: var(--bs-font-monospace);
     font-size: .75rem;
     font-weight: 700;
     letter-spacing: .04em;
