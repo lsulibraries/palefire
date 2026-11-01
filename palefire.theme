@@ -1263,11 +1263,52 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
 }
 
 /**
+ * A room's house rules: groups (allowed, required, not_allowed => policies;
+ * empty ones left out), sound and sound_level.
+ */
+function _palefire_location_rules(array $location, string $uid): array {
+  $groups = ['allowed' => [], 'required' => [], 'not_allowed' => []];
+  foreach ($location['policies'] as $policy) {
+    $groups[$policy['state']][] = $policy;
+  }
+  return [
+    'uid' => $uid,
+    'groups' => array_filter($groups),
+    'sound' => $location['sound'],
+    'sound_level' => $location['sound_level'],
+  ];
+}
+
+/**
+ * Booking from a section's Text and Booking link (field_booking_*): body
+ * (rendered or NULL), link (url, title or NULL), capacity, and needs (the
+ * room's Required policies).
+ */
+function _palefire_location_booking(ParagraphInterface $paragraph, ?array $location, string $uid): array {
+  $body = $paragraph->hasField('field_booking_body') ? $paragraph->get('field_booking_body') : NULL;
+  $link = $paragraph->hasField('field_booking_link') ? $paragraph->get('field_booking_link')->first() : NULL;
+  return [
+    'uid' => $uid,
+    'body' => $body && !$body->isEmpty() ? [
+      '#type' => 'processed_text',
+      '#text' => $body->value,
+      '#format' => $body->format,
+    ] : NULL,
+    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
+    'capacity' => $location['capacity'] ?? '',
+    'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
+  ];
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--location-space.
  *
  * `location` (_palefire_location_data(), plus `map`: the building map with
- * the room marked, or NULL for a building without a drawing) and `visit`
- * (the page's hours and directions, as the landing's Visit card).
+ * the room marked, or NULL for a building without a drawing; `rules`, the
+ * room's house rules; `booking`, from this section's own booking fields, or
+ * NULL when they are empty) and `visit` (the page's hours and directions,
+ * as the landing's Visit card). With no Room link of its own, the button at
+ * the top is the booking link.
  */
 function palefire_preprocess_paragraph__location_space(array &$variables): void {
   $variables['location'] = NULL;
@@ -1286,8 +1327,13 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
       $map['heading_tag'] = 'h2';
       $map['visit'] = NULL;
     }
+    $uid = 'pf-location-' . $paragraph->id();
     $location['map'] = $map;
-    $location['uid'] = 'pf-location-' . $paragraph->id();
+    $location['uid'] = $uid;
+    $location['rules'] = _palefire_location_rules($location, $uid . '-rules');
+    $booking = _palefire_location_booking($paragraph, $location, $uid . '-book');
+    $location['booking'] = ($booking['body'] || $booking['link']) ? $booking : NULL;
+    $location['link'] = $location['link'] ?? $booking['link'];
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);
@@ -1296,8 +1342,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--location-rules.
  *
- * `rules`: groups (allowed, required, not_allowed => policies; empty ones
- * left out), sound and sound_level. NULL without a room.
+ * `rules` (_palefire_location_rules()), or NULL without a room.
  */
 function palefire_preprocess_paragraph__location_rules(array &$variables): void {
   $variables['rules'] = NULL;
@@ -1307,25 +1352,14 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
     return;
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
-  $location = _palefire_location_data($room, $cache);
-  $groups = ['allowed' => [], 'required' => [], 'not_allowed' => []];
-  foreach ($location['policies'] as $policy) {
-    $groups[$policy['state']][] = $policy;
-  }
-  $variables['rules'] = [
-    'uid' => 'pf-rules-' . $paragraph->id(),
-    'groups' => array_filter($groups),
-    'sound' => $location['sound'],
-    'sound_level' => $location['sound_level'],
-  ];
+  $variables['rules'] = _palefire_location_rules(_palefire_location_data($room, $cache), 'pf-rules-' . $paragraph->id());
   $cache->applyTo($variables);
 }
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--location-booking.
  *
- * `booking`: body (rendered), link (url, title or NULL), capacity, and
- * needs (the room's Required policies).
+ * `booking` (_palefire_location_booking()).
  */
 function palefire_preprocess_paragraph__location_booking(array &$variables): void {
   $variables['booking'] = NULL;
@@ -1336,19 +1370,7 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $room = _palefire_location_room($paragraph);
   $location = $room ? _palefire_location_data($room, $cache) : NULL;
-  $body = $paragraph->hasField('field_booking_body') ? $paragraph->get('field_booking_body') : NULL;
-  $link = $paragraph->hasField('field_booking_link') ? $paragraph->get('field_booking_link')->first() : NULL;
-  $variables['booking'] = [
-    'uid' => 'pf-booking-' . $paragraph->id(),
-    'body' => $body && !$body->isEmpty() ? [
-      '#type' => 'processed_text',
-      '#text' => $body->value,
-      '#format' => $body->format,
-    ] : NULL,
-    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
-    'capacity' => $location['capacity'] ?? '',
-    'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
-  ];
+  $variables['booking'] = _palefire_location_booking($paragraph, $location, 'pf-booking-' . $paragraph->id());
   $cache->applyTo($variables);
 }
 

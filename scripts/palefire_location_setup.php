@@ -31,10 +31,12 @@
  *   field_space_capacity  short text, e.g. "Fewer than 100 people"
  *
  * Paragraph types (allowed wherever bento_search is):
- *   location_space    "Location": the room's floor, access, sound and
- *                     capacity, its policies at a glance, hours (the page's
- *                     LibCal location) and the building map with the room
- *                     marked. field_location_space picks the room.
+ *   location_space    "Location": a room's page in one section. The room's
+ *                     floor, access, sound and capacity, its policies as
+ *                     marks with tooltips, hours (the page's LibCal
+ *                     location), the building map with the room marked,
+ *                     its House rules, and Booking from its own Booking
+ *                     text and link. field_location_space picks the room.
  *   location_rules    "Location: house rules": the room's policies in three
  *                     columns (Allowed, Required, Not allowed) and its sound
  *                     level. Room optional: empty, the page's Location
@@ -49,9 +51,11 @@
  * - The Lecture Hall room term (hill_memorial.lecture_hall): its policies,
  *   sound and capacity, filled in only where empty.
  * - An unpublished Modular page "Lecture Hall" at /v2/special/lecturehall:
- *   Location, House rules and Booking sections, Hill Memorial's LibCal
- *   hours (236). Skipped if a page at that alias, or at its first one
- *   (/v2/special/spaces/lecture-hall), exists.
+ *   one Location section with its booking text and link, Hill Memorial's
+ *   LibCal hours (236). If a page at that alias, or at its first one
+ *   (/v2/special/spaces/lecture-hall), exists, its House rules and Booking
+ *   sections are merged into its Location section instead (a new
+ *   revision; nothing to do the second time).
  *
  * Lecture Hall facts: LSU Libraries' meeting space policy (fewer than 100
  * people; university-affiliated groups, others only when the Libraries
@@ -286,10 +290,14 @@ foreach ($types as $type => [$label, $description]) {
     'settings' => ['match_operator' => 'CONTAINS', 'match_limit' => 10, 'size' => 60, 'placeholder' => 'Start typing a room'],
   ]);
 }
-$field('paragraph', 'location_booking', 'field_booking_body', 'Text', 'How booking works: notice, who decides, costs.');
-$field('paragraph', 'location_booking', 'field_booking_link', 'Booking link', 'Where to request the room. The link text is the button\'s label.', FALSE, ['title' => 2, 'link_type' => 17]);
-$widget('paragraph', 'location_booking', 'field_booking_body', ['type' => 'text_textarea', 'settings' => ['rows' => 5]]);
-$widget('paragraph', 'location_booking', 'field_booking_link', ['type' => 'link_default']);
+// Booking fields on Booking, and on Location, which shows its own House
+// rules and Booking under the map (one section per room page).
+foreach (['location_booking', 'location_space'] as $type) {
+  $field('paragraph', $type, 'field_booking_body', 'Booking text', 'How booking works: notice, who decides, costs. Empty: no Booking part.');
+  $field('paragraph', $type, 'field_booking_link', 'Booking link', 'Where to request the room. The link text is the button\'s label.', FALSE, ['title' => 2, 'link_type' => 17]);
+  $widget('paragraph', $type, 'field_booking_body', ['type' => 'text_textarea', 'settings' => ['rows' => 5]]);
+  $widget('paragraph', $type, 'field_booking_link', ['type' => 'link_default']);
+}
 
 // Allow the three wherever bento_search is allowed.
 foreach (FieldConfig::loadMultiple() as $config) {
@@ -401,19 +409,70 @@ if ($room_changed) {
 }
 
 // 6. The Lecture Hall page. --------------------------------------------------
-$alias = '/v2/special/lecturehall';
-foreach ([$alias, '/v2/special/spaces/lecture-hall'] as $taken) {
-  $path = \Drupal::service('path_alias.manager')->getPathByAlias($taken);
-  if ($path !== $taken) {
-    echo "Skipped the page: $taken already exists ($path).\n";
-    echo "Done. Run: drush cr\n";
-    return;
-  }
-}
 $node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
 $sections_field = isset($node_fields['field_scroll_section']) ? 'field_scroll_section' : 'field_sections';
 if (!isset($node_fields[$sections_field])) {
   throw new \RuntimeException('Modular page has no sections field.');
+}
+$alias = '/v2/special/lecturehall';
+$page_found = FALSE;
+foreach ([$alias, '/v2/special/spaces/lecture-hall'] as $taken) {
+  $path = \Drupal::service('path_alias.manager')->getPathByAlias($taken);
+  if ($path === $taken) {
+    continue;
+  }
+  $page_found = TRUE;
+  // The page exists. Merge its sections into one: the Location section
+  // takes the Booking section's text and link (where its own are empty),
+  // and the House rules and Booking sections are removed (Location shows
+  // both). A new revision, so the old layout can be restored.
+  $existing = preg_match('#^/node/(\d+)$#', $path, $m) ? Node::load((int) $m[1]) : NULL;
+  if (!$existing || !$existing->hasField($sections_field)) {
+    echo "Skipped the page: $taken is $path, not a Modular page.\n";
+    break;
+  }
+  $location = NULL;
+  $booking = NULL;
+  $keep = [];
+  foreach ($existing->get($sections_field) as $item) {
+    $section = $item->entity;
+    if (!$section) {
+      continue;
+    }
+    $bundle = $section->bundle();
+    if ($bundle === 'location_space' && !$location) {
+      $location = $section;
+    }
+    if ($bundle === 'location_booking' && !$booking) {
+      $booking = $section;
+    }
+    if (!in_array($bundle, ['location_rules', 'location_booking'], TRUE)) {
+      // The loaded paragraph, so Location keeps the booking copied into it.
+      $keep[] = $section;
+    }
+  }
+  if (!$location || count($keep) === $existing->get($sections_field)->count()) {
+    echo "Page $taken: nothing to merge.\n";
+    break;
+  }
+  if ($booking) {
+    foreach (['field_booking_body', 'field_booking_link'] as $name) {
+      if ($location->hasField($name) && $location->get($name)->isEmpty() && $booking->hasField($name) && !$booking->get($name)->isEmpty()) {
+        $location->set($name, $booking->get($name)->getValue());
+      }
+    }
+    $location->setNeedsSave(TRUE);
+  }
+  $existing->set($sections_field, $keep);
+  $existing->setNewRevision(TRUE);
+  $existing->setRevisionLogMessage('Location page: House rules and Booking merged into the Location section (palefire_location_setup.php).');
+  $existing->save();
+  echo "Merged page $taken (node/" . $existing->id() . "): one Location section with House rules and Booking.\n";
+  break;
+}
+if ($page_found) {
+  echo "Done. Run: drush cr\n";
+  return;
 }
 $format = NULL;
 foreach (filter_formats() as $id => $candidate) {
@@ -428,16 +487,6 @@ $sections = [
   Paragraph::create([
     'type' => 'location_space',
     'field_location_space' => ['target_id' => $room->id()],
-  ]),
-  Paragraph::create([
-    'type' => 'location_rules',
-    'field_section_title' => 'House rules',
-    'field_section_anchor' => 'rules',
-  ]),
-  Paragraph::create([
-    'type' => 'location_booking',
-    'field_section_title' => 'Book the Lecture Hall',
-    'field_section_anchor' => 'book',
     'field_booking_body' => [
       'value' => '<p>Request your date early, at least two weeks ahead. There may be a service charge, and events outside library hours need permission and may have an extra fee.</p><p>The hall is for university-affiliated groups. Other groups can use it when LSU Libraries co-sponsor the event.</p>',
       'format' => $format,

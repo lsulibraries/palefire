@@ -1,15 +1,17 @@
 // Location pages ---------------------------------------------------------------
-// A room's own page (modular_page, e.g. /v2/special/lecturehall):
-// Location, House rules and Booking sections. Templates:
+// A room's own page (modular_page, e.g. /v2/special/lecturehall): one
+// Location section that carries House rules and Booking too (they are also
+// sections of their own). Templates:
 // paragraph--location-space/rules/booking.html.twig and
-// includes/space-icon.html.twig; preprocess in palefire.theme ("Location
+// includes/space-icon.html.twig, js/location-pins.js; preprocess in palefire.theme ("Location
 // pages"). Everything is read from the room's Building spaces term and its
 // Space policies, so the wording lives in one place.
 //
 // Swiss and quiet as the staff directory: facts as a ruled ledger on the
 // soft hairline, labels in the TOC's mono capitals, colors from the swatch
 // (--pf-section-* / --pf-g-*). Policy marks tell their state by shape
-// (plain, framed, struck), never by color alone; their words sit beside.
+// (plain, framed, struck), never by color alone; their words sit beside
+// them, or in the mark's tooltip.
 
 %pf-location-label {
   font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
@@ -52,31 +54,47 @@
 .pf-space-icon__bar { stroke-width: 1.25; }
 .pf-space-icon__fill { fill: currentColor; }
 
-// --- Location: details beside the map, then facts, glance, Visit strip ------
-// After the map-led mockup. Phones: the details, the map, the facts and
-// chips, the Visit strip, one under the other. lg and up with a map: the
-// details in a narrow column at the left, near the top, the map large at
-// the right; the facts and chips under the details' column, the
-// Visit strip beside them.
+// --- Location: the room's details, then everything else -----------------
+// Phones: the details (title to facts), then the map, the Visit strip,
+// House rules and Booking, one under the other. lg and up: the details in
+// a narrow column at the left that stays in view under the header and the
+// breadcrumb bar while the right column scrolls past it. Only where the
+// window is tall enough for the whole column; shorter, it scrolls too.
 .pf-location {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    "head"
-    "map"
-    "details"
-    "visit";
-  gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 4rem);
+  gap: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 4vw, 4rem);
   max-width: $pf-content-max;
   margin-inline: auto;
 }
-.pf-location__head { grid-area: head; min-width: 0; }
-.pf-location__map { grid-area: map; min-width: 0; }
-.pf-location__details { grid-area: details; min-width: 0; }
-.pf-location__visit { grid-area: visit; min-width: 0; }
+.pf-location__head,
+.pf-location__body { min-width: 0; }
 
-// The strip keeps its own frame and glass; here it starts on the grid line.
+.pf-location__body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 6vw, 4.5rem);
+}
+
+// The strip keeps its own frame and glass; here it starts on its line.
 .pf-location .pf-visit { margin-top: 0; }
+
+@include media-breakpoint-up(lg) {
+  .pf-location {
+    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+
+  // The strip is in a column here: hours over the mini map, not beside it.
+  .pf-location__visit .pf-visit { display: flex; }
+}
+
+@media (min-width: 992px) and (min-height: 46rem) {
+  .pf-location__head {
+    position: sticky;
+    top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + clamp(1.5rem, 3vw, 2.5rem));
+  }
+}
 
 .pf-location__eyebrow {
   @extend %pf-location-label;
@@ -88,7 +106,7 @@
 // color. Long names wrap; overflow-wrap keeps a long word inside 320px.
 .pf-location .pf-location__title {
   margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.75rem);
+  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.25rem);
   font-weight: $pf-display-weight;
   line-height: .95;
   letter-spacing: -.035em;
@@ -104,14 +122,14 @@
   > :last-child { margin-bottom: 0; }
 }
 
-.pf-location .pf-location__hours { margin: 1.5rem 0 0; }
+.pf-location .pf-location__hours { margin: 1.25rem 0 0; }
 
 .pf-location__actions { margin: 1.5rem 0 0; }
 
 // The map: its own queries switch on its column, not the window, so in
-// the narrow hero column it stacks (drawing, then the key, collapsed).
-// Its heading ("Find the …") is left to screen readers and the TOC: the
-// title beside it already says where this is.
+// the narrow column it stacks (drawing, then the key, collapsed). Its
+// heading ("Find the …") is left to screen readers and the TOC: the title
+// beside it already says where this is.
 .pf-location__map {
   container-name: pf-map;
   container-type: inline-size;
@@ -121,13 +139,113 @@
   }
 }
 
+// --- At a glance: the policy marks and their tooltips -----------------------
+// A row of square marks (44px targets). The tooltip hangs under the row,
+// from its left edge, so it never runs off a phone's screen; it is part
+// of the mark (no gap to cross), so the pointer can move onto it.
+.pf-space-pins {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-space-pin__button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--pf-location-fg);
+  background: transparent;
+  border: 1px solid var(--pf-location-line);
+  border-radius: 0;
+  cursor: help;
+  transition:
+    background-color $pf-hover-out ease,
+    border-color $pf-hover-out ease;
+
+  .pf-space-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    border-color: var(--pf-section-border, currentColor);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-location-fg);
+    outline-offset: 2px;
+  }
+}
+
+// The tooltip on the surface, in a hairline frame, with the label, the
+// state in the mono capitals and the detail.
+.pf-space-pin__tip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 4;
+  display: grid;
+  gap: .25rem;
+  width: max-content;
+  max-width: min(20rem, 100%);
+  margin-top: .5rem;
+  padding: .75rem .875rem;
+  font-size: .9375rem;
+  line-height: 1.45;
+  color: var(--pf-location-fg);
+  background: var(--pf-g-surface, var(--bs-body-bg));
+  border: 1px solid var(--pf-location-line);
+  box-shadow: 0 .75rem 2rem rgb(0 0 0 / .18);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -.25rem;
+  pointer-events: none;
+  transition:
+    opacity .2s ease,
+    translate .2s $pf-swup-ease-in,
+    visibility 0s linear .2s;
+
+  // Covers the gap to the row, so the pointer can cross onto the tooltip.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -.5rem 0 100%;
+  }
+}
+
+.pf-space-pin:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-space-pin__tip {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+.pf-space-pin__label { font-weight: 600; }
+
+.pf-space-pin__state {
+  @extend %pf-location-label;
+  color: var(--pf-location-muted);
+}
+
+.pf-space-pin__detail { color: var(--pf-location-muted); }
+
 // Facts: term over value between two rules (row rules would stop short
-// under a part-filled last row); two across on phones, a row from md.
+// under a part-filled last row); two across, three from md.
 .pf-location__facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem 0;
-  margin: 0;
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
   padding-block: 1rem;
   border-block: 1px solid var(--pf-location-line);
 }
@@ -149,68 +267,21 @@
   }
 }
 
-@include media-breakpoint-up(md) {
-  .pf-location__facts {
-    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-  }
+@include media-breakpoint-only(md) {
+  .pf-location__facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-// At a glance: the room's policies as chips.
-.pf-location__glance { margin-top: clamp(1.5rem, 3vw, 2rem); }
-.pf-location__glance-title {
-  @extend %pf-location-label;
-  margin: 0 0 .75rem;
-  color: var(--pf-location-muted);
+// --- House rules and Booking in the right column -----------------------------
+.pf-location__part-title {
+  margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
+  scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
 }
 
-.pf-space-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.pf-space-chip {
-  display: inline-flex;
-  gap: .5rem;
-  align-items: center;
-  min-height: 2.25rem;
-  padding: .375rem .75rem .375rem .625rem;
-  font-size: .9375rem;
-  line-height: 1.3;
-  border: 1px solid var(--pf-location-line);
-}
-
-@include media-breakpoint-up(lg) {
-  .pf-location--map {
-    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
-    grid-template-areas:
-      "head map"
-      "details visit";
-    align-items: start;
-  }
-  .pf-location--map:not(.pf-location--visit) {
-    grid-template-areas:
-      "head map"
-      "details details";
-  }
-  // The details near the top, level with the drawing's upper floor.
-  .pf-location--map .pf-location__head { padding-top: clamp(1rem, 4vw, 4rem); }
-
-  // No map: the details and the Visit strip side by side, the facts under.
-  .pf-location--visit:not(.pf-location--map) {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    grid-template-areas:
-      "head visit"
-      "details visit";
-    align-items: start;
-  }
-}
-
-// The strip is in a column here: hours over the mini map, not beside it.
-@include media-breakpoint-up(lg) {
-  .pf-location__visit .pf-visit { display: flex; }
+// The column is narrower than a section: the rule groups as many across as
+// fit, and Booking's ledger under its text.
+.pf-location__body {
+  .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  .pf-booking { grid-template-columns: minmax(0, 1fr); }
 }
 
 // --- CTA ------------------------------------------------------------------------
@@ -388,6 +459,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pf-space-pin__button,
+  .pf-space-pin__tip,
   .pf-location__cta,
   .pf-sound__bar {
     transition: none;

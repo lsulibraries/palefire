@@ -1,13 +1,15 @@
 {#
 /**
  * @file
- * Location (paragraph type location_space): the top of a location page.
+ * Location (paragraph type location_space): a room's page in one section.
  *
  * Variables from palefire_preprocess_paragraph__location_space():
  * - location: the room (_palefire_location_data()): title, building, floor,
- *   access, sound, sound_level, capacity, body, link, policies, and map
- *   (the building map with the room marked "here", or NULL when the
- *   building has no drawing yet).
+ *   access, sound, sound_level, capacity, body, link, policies; map (the
+ *   building map with the room marked "here", or NULL when the building has
+ *   no drawing yet); rules (_palefire_location_rules()); booking
+ *   (_palefire_location_booking(), from this section's Text and Booking
+ *   link, or NULL when both are empty).
  * - visit: the page's hours and directions (field_hours_location and the
  *   rest), as the landing's Visit card, or NULL.
  * From _palefire_landing_visit(), when this section opens the page
@@ -24,16 +26,19 @@
  * under the header, then stays pinned with the current section's name
  * (modular-toc.js), and the TOC title lines up with it.
  *
- * Layout (_location.scss), after the map-led mockup: the room's details in
- * a narrow column at the left (eyebrow, title, line, today's hours,
- * button), the building map large at the right; under them the
- * facts, the policies at a glance and the Visit strip. The details come
- * first in the source, so on phones the title leads and the map follows.
+ * Layout (_location.scss): at the left the room's details (eyebrow, title,
+ * line, today's hours, the button), its policies as a row of marks with
+ * tooltips (js/location-pins.js) and its facts; from lg this column stays
+ * in view while the right one scrolls: the building map, the Visit strip,
+ * House rules and Booking (their own section templates, so they read the
+ * same as the standalone sections). The two headings are listed in the TOC
+ * (data-toc). On phones the details come first, then the rest.
  */
 #}
 {% if location %}
   {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
   {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
+  {% set states = { allowed: 'Allowed'|t, required: 'Required'|t, not_allowed: 'Not allowed'|t } %}
   <div{{ attributes.addClass('pf-landing', 'pf-location-page') }}>
     {% if lead_breadcrumb %}
       <div class="pf-landing__bar">
@@ -42,7 +47,7 @@
         </div>
       </div>
     {% endif %}
-    <div class="pf-location{{ location.map ? ' pf-location--map' }}{{ visit ? ' pf-location--visit' }}">
+    <div class="pf-location">
       <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
         <p class="pf-location__eyebrow">
           {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
@@ -69,15 +74,30 @@
             <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
           </p>
         {% endif %}
-      </div>
 
-      {% if location.map %}
-        <div class="pf-location__map">
-          {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
-        </div>
-      {% endif %}
+        {# The policies at a glance: one mark each, its name and detail in a
+           tooltip on hover, focus or tap (Esc closes it). The button's name
+           is the policy; the tooltip adds the state and the detail. #}
+        {% if location.policies %}
+          {{ attach_library('palefire/location-pins') }}
+          <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
+            {% for policy in location.policies %}
+              {% set tip = location.uid ~ '-tip-' ~ loop.index %}
+              <li class="pf-space-pin pf-space-pin--{{ policy.state|clean_class }}">
+                <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
+                  {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+                  <span class="visually-hidden">{{ policy.label }}</span>
+                </button>
+                <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
+                  <strong class="pf-space-pin__label" aria-hidden="true">{{ policy.label }}</strong>
+                  <span class="pf-space-pin__state">{{ states[policy.state] }}</span>
+                  {% if policy.detail %}<span class="pf-space-pin__detail">{{ policy.detail }}</span>{% endif %}
+                </span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
 
-      <div class="pf-location__details">
         <dl class="pf-location__facts">
           {% if location.building %}
             <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
@@ -96,27 +116,40 @@
             <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
           {% endif %}
         </dl>
-
-        {% if location.policies %}
-          <div class="pf-location__glance" role="group" aria-labelledby="{{ location.uid }}-glance">
-            <h2 class="pf-location__glance-title" id="{{ location.uid }}-glance">{{ 'At a glance'|t }}</h2>
-            <ul class="pf-space-chips">
-              {% for policy in location.policies %}
-                <li class="pf-space-chip pf-space-chip--{{ policy.state|clean_class }}">
-                  {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
-                  <span>{{ policy.label }}</span>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
       </div>
 
-      {% if visit %}
-        <div class="pf-location__visit">
-          {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: location.uid ~ '-visit' } only %}
-        </div>
-      {% endif %}
+      <div class="pf-location__body">
+        {% if location.map %}
+          <div class="pf-location__map">
+            {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
+          </div>
+        {% endif %}
+
+        {% if visit %}
+          <div class="pf-location__visit">
+            {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: location.uid ~ '-visit' } only %}
+          </div>
+        {% endif %}
+
+        {% if location.rules.groups or location.rules.sound_level %}
+          <section class="pf-location__part" aria-labelledby="{{ location.uid }}-rules-title">
+            <h2 class="pf-location__part-title" id="{{ location.uid }}-rules-title" data-toc>{{ 'House rules'|t }}</h2>
+            {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: location.rules, attributes: create_attribute() } only %}
+          </section>
+        {% endif %}
+
+        {% if location.booking %}
+          {# The top button is already this link: no second one here. #}
+          {% set booking = location.booking %}
+          {% if location.link and booking.link and location.link.url == booking.link.url %}
+            {% set booking = booking|merge({ link: null }) %}
+          {% endif %}
+          <section class="pf-location__part" aria-labelledby="{{ location.uid }}-book-title">
+            <h2 class="pf-location__part-title" id="{{ location.uid }}-book-title" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
+            {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
+          </section>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endif %}
