@@ -117,19 +117,29 @@
     canvas.setAttribute('aria-hidden', 'true');
     stage.appendChild(canvas);
     const ctx = canvas.getContext('2d');
-    const motes = Array.from({ length: MOTES }, () => ({
+    // Half again as many, for the reach above the stage (below).
+    const motes = Array.from({ length: Math.round(MOTES * 1.5) }, () => ({
       x: Math.random(),
-      y: Math.random(),
+      y: Math.random() * 1.5 - 0.5,
       r: Math.random() * 1.4 + 0.4,
       v: Math.random() * 0.00025 + 0.00008,
       ph: Math.random() * 6.28,
     }));
+    // The canvas reaches up past the stage, behind the bar and the header
+    // (_not-found.scss, --pf-404-reach). The motes keep the stage's frame
+    // (0 to 1 down the stage); above it they rise on to the canvas's top,
+    // their cone mirrored, so the light's upper half has dust too.
     let dpr = 1;
+    let reach = 0;
+    let stageH = 1;
     const size = () => {
       const r = stage.getBoundingClientRect();
+      const c = canvas.getBoundingClientRect();
       dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.round(r.width * dpr);
-      canvas.height = Math.round(r.height * dpr);
+      reach = Math.max(0, r.top - c.top);
+      stageH = r.height || 1;
+      canvas.width = Math.round(c.width * dpr);
+      canvas.height = Math.round(c.height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     size();
@@ -188,25 +198,27 @@
     }
 
     function dust(t) {
-      const W = canvas.width / dpr; const H = canvas.height / dpr;
-      ctx.clearRect(0, 0, W, H);
+      const W = canvas.width / dpr; const H = stageH;
+      const top = -reach / H;
+      ctx.clearRect(0, 0, W, canvas.height / dpr);
       const rgb = getComputedStyle(el).getPropertyValue('--pf-404-mote').trim() || '70, 60, 40';
       motes.forEach((o) => {
         o.y -= o.v;
         o.x += Math.sin(t / 2000 + o.ph) * 0.00012 + s.vx * 0.02;
-        if (o.y < 0) {
+        if (o.y < top) {
           o.y = 1;
           o.x = Math.random();
         }
-        const spread = 0.1 + o.y * 0.32;
+        const y = Math.abs(o.y);
+        const spread = 0.1 + y * 0.32;
         const dx = Math.abs(o.x - 0.5) / spread;
         if (dx > 1) {
           return;
         }
-        const a = (1 - dx) * (1 - o.y * 0.6) * (0.35 + 0.25 * Math.sin(t / 900 + o.ph));
+        const a = (1 - dx) * (1 - y * 0.6) * (0.35 + 0.25 * Math.sin(t / 900 + o.ph));
         ctx.fillStyle = `rgba(${rgb}, ${a.toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(o.x * W, o.y * H, o.r, 0, 6.29);
+        ctx.arc(o.x * W, reach + o.y * H, o.r, 0, 6.29);
         ctx.fill();
       });
     }

@@ -39,6 +39,11 @@
   --pf-404-h: 216px;
   --pf-404-p: 100px;
   --pf-404-drop: 1.5rem;
+  // The stage, and how far its light and dust reach up past it: under the
+  // bar and the header to the top of the page (more than they are tall;
+  // what is above the page is never seen).
+  --pf-404-stage-h: clamp(22rem, 14rem + 15vw, 29rem);
+  --pf-404-reach: 14rem;
   max-width: $pf-content-max;
   margin-inline: auto;
   padding-block: 0 4rem; // the stage starts under the bar: its spotlight is the top space
@@ -63,16 +68,32 @@
 }
 
 // Stage: spotlight from above, the wall text, the case, the dust.
+// The light and the dust reach up behind the bar and the header
+// (--pf-404-reach), so they glow through the glass; everything else stays
+// in the stage's box. Clipped to that box and the reach above it (was
+// overflow: hidden): the wall text's sides and the plinth's foot are cut
+// as before.
 .pf-404__stage {
   position: relative;
   display: grid;
   place-items: center;
-  height: clamp(22rem, 14rem + 15vw, 29rem);
-  overflow: hidden;
+  height: var(--pf-404-stage-h);
+  overflow: visible;
+  clip-path: inset(calc(-1 * var(--pf-404-reach)) 0 0);
   perspective: 1100px;
   perspective-origin: 50% 15%;
-  background: radial-gradient(ellipse 30% 80% at 50% 0%, var(--pf-404-spot), transparent 72%);
   touch-action: pan-y;
+
+  // The spotlight: the same ellipse as before, centred on the stage's top,
+  // now drawn whole, its upper half behind the bar and the header.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--pf-404-reach)) 0 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 30% calc(var(--pf-404-stage-h) * .8) at 50% var(--pf-404-reach), var(--pf-404-spot), transparent 72%);
+    pointer-events: none;
+  }
 }
 
 // Centered on the glass: the case's middle sits half the drop below the
@@ -121,12 +142,13 @@
   will-change: transform;
 }
 
+// Up into the reach too (js/not-found.js draws in the stage's frame).
 .pf-404__dust {
   position: absolute;
-  inset: 0;
+  inset: calc(-1 * var(--pf-404-reach)) 0 0;
   z-index: 2;
   width: 100%;
-  height: 100%;
+  height: calc(100% + var(--pf-404-reach));
   pointer-events: none;
 }
 
@@ -481,4 +503,46 @@
   .pf-404__arrow {
     transition: none;
   }
+}
+
+// The header and the bar: thinner glass while the page is at the top, so
+// the spotlight glows up through both; once it scrolls (<html>
+// .pf-bar-stuck, js/palefire.js) they turn to the usual frost, as over
+// the Special Collections cover. The bar is 90% on reading colors, so it
+// takes the header's weight here too. Reduce transparency and more
+// contrast keep both solid.
+:root:has(.pf-404) .pf-header {
+  transition: background-color .3s ease, box-shadow $pf-header-transition;
+}
+
+:root:not(.pf-bar-stuck):has(.pf-404) .pf-header {
+  --pf-header-bg: rgba(var(--bs-body-bg-rgb), .3);
+}
+
+.pf-swup:has(.pf-404) > .pf-page-bar {
+  background-color: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha});
+  transition: background-color .3s ease;
+}
+
+:root:not(.pf-bar-stuck) .pf-swup:has(.pf-404) > .pf-page-bar {
+  background-color: rgba(var(--bs-body-bg-rgb), .3);
+}
+
+@include pf-solid-chrome {
+  :root .pf-swup:has(.pf-404) > .pf-page-bar {
+    background-color: var(--bs-body-bg) !important; // over the not-scrolled rule above
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:has(.pf-404) .pf-header,
+  .pf-swup:has(.pf-404) > .pf-page-bar {
+    transition: none;
+  }
+}
+
+// No band of page between the bar and the stage: its light starts at the
+// bar (the page's top padding read as a gap, and as a shadow under it).
+.pf-body:has(.pf-404) {
+  padding-top: 0;
 }

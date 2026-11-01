@@ -390,6 +390,12 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
   display: none;
 }
 
+// The bar continues the header, so no shadow between them: the compact
+// header's fell across the bar's top (2026-10-31).
+.pf-page:has(.pf-landing__bar) .pf-header--compact {
+  box-shadow: none;
+}
+
 // --- A clear header over a background video or image --------------------
 // When the page opens on a background video (a landing's, the hero's cover
 // among them) or a section's background image, the header has no glass,

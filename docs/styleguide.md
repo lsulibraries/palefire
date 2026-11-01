@@ -125,6 +125,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-10-31:** No shadow between the header and the breadcrumb bar (the compact header's fell across it). The 404 page's spotlight and dust reach up behind the header and bar, which are thinner glass there until the page scrolls.
 - **2026-10-31:** First version.
   - Seven plates: overview, colour, type, grid, spacing, lines, motion.
   - "Exhibition blocks" gallery with editor notes.
@@ -144,3 +145,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Location backdrop: no edge fades; one even 75% black wash, the least that keeps the top's text at AA over the photo's whitest pixel. It runs on to the first band.
 - **2026-10-31:** Location parts follow /v2/special's section pattern: index rule (with its link), `.pf-location__part-title`, `.pf-section__lede`, then the body at the full width; `.pf-location__part-grid` removed. Backdrop: the room term's photo in `pf_location_backdrop`; the frost blurs only.
 - **2026-10-31:** Location backdrop: monochrome and low in contrast instead of the black wash: a grey `color`-blend layer plus a 35-grey veil at 87% (tones 30-64 of 255, the same AA ceiling as 75% black).
+- **2026-10-31:** Building map: `--pf-map-dim-text` (.6) for the other names and numbers while one room is lit, `--pf-map-dim` (.35) for hatching and dashed lines only; floor names and icons never dim. A page's own room rests lit after the draw-on (`data-map-here`), its name in the ink (`.pf-map__label.is-here`). Location backdrop: a top fall to 22rem; policy marks (`.pf-space-pin__button`) frosted; floor ink #b0b0b0 over it.
