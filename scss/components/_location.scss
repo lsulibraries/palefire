@@ -454,6 +454,39 @@ html#{$pf-themed} .pf-location__part--band {
   .pf-booking { grid-template-columns: minmax(0, 1fr); }
 }
 
+// The room: its photos three across at every width (4:5, as the image
+// style crops them), each captioned in the label voice under a hairline.
+// The surface shows while a photo loads; width and height keep its place.
+.pf-location__photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem clamp(.5rem, 1.5vw, var(--pf-grid-gutter));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-location__photo {
+  margin: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background-color: var(--pf-g-surface, var(--bs-secondary-bg));
+  }
+
+  figcaption {
+    @extend %pf-location-label;
+    margin-top: .625rem;
+    padding-top: .625rem;
+    color: var(--pf-location-fg);
+    border-top: 1px solid var(--pf-location-line);
+  }
+}
+
 // Visit: the strip's hours without its frame or its Google map (the
 // building map above shows the way in, Open in Google Maps the way there):
 // today's status, the week, then the links on one line.

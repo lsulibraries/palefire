@@ -1301,6 +1301,47 @@ function _palefire_location_booking(ParagraphInterface $paragraph, ?array $locat
 }
 
 /**
+ * The room's photos (field_location_photos, palefire_location_photos.php).
+ *
+ * Each Image media item in pf_location_photo (4:5 WebP), or the original
+ * before the script has made the style: src, width, height, its alt text,
+ * and its media name as the caption. Media items without a file are left
+ * out.
+ */
+function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
+  if (!$paragraph->hasField('field_location_photos')) {
+    return [];
+  }
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_photo');
+  if ($style) {
+    $cache->addCacheableDependency($style);
+  }
+  $urls = \Drupal::service('file_url_generator');
+  $photos = [];
+  foreach ($paragraph->get('field_location_photos') as $ref) {
+    $item = _palefire_media_image_item($ref, $cache);
+    $file = $item?->entity;
+    if (!$file instanceof FileInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($file);
+    $uri = $file->getFileUri();
+    $dimensions = ['width' => (int) $item->width ?: NULL, 'height' => (int) $item->height ?: NULL];
+    if ($style) {
+      $style->transformDimensions($dimensions, $uri);
+    }
+    $photos[] = [
+      'src' => $urls->transformRelative($style ? $style->buildUrl($uri) : $urls->generateString($uri)),
+      'width' => (int) ($dimensions['width'] ?? 800),
+      'height' => (int) ($dimensions['height'] ?? 1000),
+      'alt' => (string) $item->alt,
+      'caption' => $ref->entity ? $ref->entity->label() : '',
+    ];
+  }
+  return $photos;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--location-space.
  *
  * `location` (_palefire_location_data(), plus `map`: the building map with
@@ -1336,6 +1377,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $booking = _palefire_location_booking($paragraph, $location, $uid . '-book');
     $location['booking'] = ($booking['body'] || $booking['link']) ? $booking : NULL;
     $location['link'] = $location['link'] ?? $booking['link'];
+    $location['photos'] = _palefire_location_photos($paragraph, $cache);
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);

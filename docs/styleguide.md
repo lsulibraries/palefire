@@ -116,7 +116,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Landing hero, stacks, department | `paragraph--landing-*` | – landing only |
 | Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
 | Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
-| Location page: plate (title + map), ledger, numbered parts, policy marks, map chip | `paragraph--location-space`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
+| Location page: plate (title + map), ledger, numbered parts, room photos, policy marks, map chip | `paragraph--location-space`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
 | Ask Special Collections | `includes/ask-special` | – |
 | Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
@@ -134,3 +134,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Location pages: the map plate (the building drawing, small, at the foot of the details column once the map has scrolled away; a chip at the bottom of the screen on phones or wherever the column would cut it off). Policy marks lose their built-in square: a required mark shows a corner flag on its frame instead, and the Required group's mark is an asterisk.
 - **2026-10-31:** Location pages, layout 01: the title beside the map (2/5 and 3/5, key folded), a full-width ledger of facts with the policy marks, then numbered parts (`.pf-location__part`, heading over two columns, content over three; `--band` on odd parts). The map chip is always the bottom-left chip. New placeholder `%pf-visit-tokens` for the Visit colors; Booking text styles its h3, lists and numbered steps.
 - **2026-10-31:** Location pages: the policy marks sit under the title's line; the head is centred on the drawing; the building map shows without its legend (`map.no_key`), the room lit and marked.
+- **2026-10-31:** Location pages: "The room" part (`.pf-location__photos`, `.pf-location__photo`): the room's photos three across at 4:5, captioned in the label voice under a hairline. Image style `pf_location_photo`.

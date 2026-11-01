@@ -59,7 +59,7 @@
     {% set booking = booking|merge({ link: null }) %}
   {% endif %}
   {% set has_visit = visit and (visit.lid or visit.maps_url or visit.parking_url) %}
-  {% set parts = [] %}
+  {% set parts = location.photos ? ['room'] : [] %}
   {% if has_visit %}{% set parts = parts|merge(['visit']) %}{% endif %}
   {% if rules.groups %}{% set parts = parts|merge(['rules']) %}{% endif %}
   {% if booking.body or booking.link %}{% set parts = parts|merge(['booking']) %}{% endif %}
@@ -156,7 +156,26 @@
         {% set num = '%02d'|format(loop.index) %}
         {% set title_id = location.uid ~ '-' ~ part ~ '-title' %}
         <section class="pf-location__part{{ loop.index is odd ? ' pf-location__part--band' }}" aria-labelledby="{{ title_id }}">
-          {% if part == 'visit' %}
+          {% if part == 'room' %}
+            {# The room's photos (field_location_photos), each captioned with
+               its media name ("Lecture"); the alt text says what it shows. #}
+            {{ pf.index_rule(num, 'The space'|t, {}) }}
+            <div class="pf-location__part-grid">
+              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'The room'|t }}</h2>
+              <div class="pf-location__part-body">
+                <ul class="pf-location__photos">
+                  {% for photo in location.photos %}
+                    <li>
+                      <figure class="pf-location__photo">
+                        <img src="{{ photo.src }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
+                        {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+                      </figure>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% elseif part == 'visit' %}
             {{ pf.index_rule(num, 'Getting here'|t, {}) }}
             <div class="pf-location__part-grid">
               <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Hours and directions'|t }}</h2>
