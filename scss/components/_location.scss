@@ -142,6 +142,54 @@
   }
 }
 
+// --- The backdrop: the room's first photo behind the top --------------------
+// On dark swatches only (html.pf-reading-dark), with photos: the photo,
+// blurred to a texture, in grey at 30%, under the title, map and ledger,
+// up under the clear header and bar, and edge to edge. It is a border
+// image outset to the screen's sides, as the bands' shadow: painted, not
+// laid out, so it adds no horizontal scroll. Over it, the page color
+// fades in at the top and back in by the ledger, so the parts start on
+// the plain page. Light swatches, more contrast and forced colors keep
+// the plain page. The URL is --pf-location-backdrop on the element
+// (paragraph--location-space.html.twig), so only dark swatches fetch it
+// here; it is the same file The room shows.
+.pf-location__intro {
+  position: relative;
+  isolation: isolate;
+}
+
+html.pf-reading-dark .pf-location__intro.has-backdrop {
+  &::before,
+  &::after {
+    position: absolute;
+    inset: -12rem 0 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+  }
+
+  &::before {
+    border-image: var(--pf-location-backdrop) fill 0 / 0 / 0 100vmax;
+    opacity: .3;
+    filter: blur(32px) grayscale(.6);
+  }
+
+  &::after {
+    border-image: linear-gradient(var(--pf-location-page-bg) 0, transparent 30%, transparent 50%, var(--pf-location-page-bg)) fill 0 / 0 / 0 100vmax;
+  }
+}
+
+.pf-location-page {
+  --pf-location-page-bg: var(--pf-g-bg, var(--bs-body-bg));
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  html.pf-reading-dark .pf-location__intro.has-backdrop {
+    &::before,
+    &::after { content: none; }
+  }
+}
+
 // --- The chip: the map, small, once the map has scrolled away --------------
 // js/location-plate.js draws the building's outlines with the room filled
 // in the accent, and marks the page .is-past-map while the map is above
@@ -421,7 +469,7 @@
   &:last-of-type { padding-bottom: 0; }
 }
 
-.pf-location__ledger + .pf-location__part:not(.pf-location__part--band) {
+.pf-location__intro + .pf-location__part:not(.pf-location__part--band) {
   padding-top: calc(var(--pf-hero-gap) * .75);
 }
 

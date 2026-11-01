@@ -72,84 +72,89 @@
       </div>
     {% endif %}
     <div class="pf-location">
-      <div class="pf-location__top">
-        <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
-          <p class="pf-location__eyebrow">
-            {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
-          </p>
-          {% if page_title %}
-            <h1 class="pf-location__title">{{ page_title }}</h1>
-          {% endif %}
-          {% if location.body %}
-            <div class="pf-location__lede">{{ location.body }}</div>
-          {% endif %}
-          {# The policies at a glance, under the room's line: one mark each,
-             its name and detail in a tooltip on hover, focus or tap (Esc
-             closes it). The button's name is the policy; the tooltip adds
-             the state and the detail. #}
-          {% if location.policies %}
-            {{ attach_library('palefire/location-pins') }}
-            <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
-              {% for policy in location.policies %}
-                {% set tip = location.uid ~ '-tip-' ~ loop.index %}
-                <li class="pf-space-pin pf-space-pin--{{ policy.state|clean_class }}">
-                  <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
-                    {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
-                    <span class="visually-hidden">{{ policy.label }}</span>
-                  </button>
-                  <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
-                    <strong class="pf-space-pin__label" aria-hidden="true">{{ policy.label }}</strong>
-                    <span class="pf-space-pin__state">{{ states[policy.state] }}</span>
-                    {% if policy.detail %}<span class="pf-space-pin__detail">{{ policy.detail }}</span>{% endif %}
-                  </span>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          {# Today's hours, as under the landing hero's title (visit-hours.js
-             fills it); the link goes down to the week in Visit. #}
-          {% if visit.lid %}
-            <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
-              <span class="pf-landing__hours-label">
-                <span class="pf-landing__hours-dot" aria-hidden="true"></span>
-                <span data-pf-hours-status>{{ 'Hours'|t }}</span>
-              </span>
-              <a class="pf-landing__hours-link" href="#{{ location.uid }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+      {# The top and the ledger, over the room's first photo, blurred and
+         faint (_location.scss, dark swatches only): a CSS background, so
+         nothing for screen readers; the same file as The room's first. #}
+      <div class="pf-location__intro{{ location.photos ? ' has-backdrop' }}"{% if location.photos %} style="--pf-location-backdrop: url('{{ location.photos|first.src }}')"{% endif %}>
+        <div class="pf-location__top">
+          <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+            <p class="pf-location__eyebrow">
+              {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
             </p>
-          {% endif %}
-          {% if location.link %}
-            <p class="pf-location__actions">
-              <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
-            </p>
+            {% if page_title %}
+              <h1 class="pf-location__title">{{ page_title }}</h1>
+            {% endif %}
+            {% if location.body %}
+              <div class="pf-location__lede">{{ location.body }}</div>
+            {% endif %}
+            {# The policies at a glance, under the room's line: one mark each,
+               its name and detail in a tooltip on hover, focus or tap (Esc
+               closes it). The button's name is the policy; the tooltip adds
+               the state and the detail. #}
+            {% if location.policies %}
+              {{ attach_library('palefire/location-pins') }}
+              <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
+                {% for policy in location.policies %}
+                  {% set tip = location.uid ~ '-tip-' ~ loop.index %}
+                  <li class="pf-space-pin pf-space-pin--{{ policy.state|clean_class }}">
+                    <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
+                      {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+                      <span class="visually-hidden">{{ policy.label }}</span>
+                    </button>
+                    <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
+                      <strong class="pf-space-pin__label" aria-hidden="true">{{ policy.label }}</strong>
+                      <span class="pf-space-pin__state">{{ states[policy.state] }}</span>
+                      {% if policy.detail %}<span class="pf-space-pin__detail">{{ policy.detail }}</span>{% endif %}
+                    </span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            {# Today's hours, as under the landing hero's title (visit-hours.js
+               fills it); the link goes down to the week in Visit. #}
+            {% if visit.lid %}
+              <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
+                <span class="pf-landing__hours-label">
+                  <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+                  <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+                </span>
+                <a class="pf-landing__hours-link" href="#{{ location.uid }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+              </p>
+            {% endif %}
+            {% if location.link %}
+              <p class="pf-location__actions">
+                <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
+              </p>
+            {% endif %}
+          </div>
+
+          {% if location.map %}
+            <div class="pf-location__map" id="{{ location.uid }}-map">
+              {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
+            </div>
           {% endif %}
         </div>
 
-        {% if location.map %}
-          <div class="pf-location__map" id="{{ location.uid }}-map">
-            {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
-          </div>
-        {% endif %}
-      </div>
-
-      <div class="pf-location__ledger">
-        <dl class="pf-location__facts">
-          {% if location.building %}
-            <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
-          {% endif %}
-          {% if location.floor %}
-            <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
-          {% endif %}
-          <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
-          {% if location.sound_level %}
-            <div class="pf-location__fact">
-              <dt>{{ 'Sound'|t }}</dt>
-              <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
-            </div>
-          {% endif %}
-          {% if location.capacity %}
-            <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
-          {% endif %}
-        </dl>
+        <div class="pf-location__ledger">
+          <dl class="pf-location__facts">
+            {% if location.building %}
+              <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
+            {% endif %}
+            {% if location.floor %}
+              <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
+            {% endif %}
+            <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
+            {% if location.sound_level %}
+              <div class="pf-location__fact">
+                <dt>{{ 'Sound'|t }}</dt>
+                <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
+              </div>
+            {% endif %}
+            {% if location.capacity %}
+              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
+            {% endif %}
+          </dl>
+        </div>
       </div>
 
       {% for part in parts %}
