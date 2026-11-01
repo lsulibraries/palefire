@@ -1372,7 +1372,7 @@ function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetad
  *
  * The room term's own photo (field_space_media, the one the map's tooltip
  * crops to a band), whole, in pf_location_backdrop (1920px wide WebP);
- * without that style or photo, the first of the section's Photos.
+ * without that style or photo, the first of the page's photos.
  */
 function _palefire_location_backdrop(TermInterface $room, array $photos, CacheableMetadata $cache): string {
   $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
@@ -1388,14 +1388,41 @@ function _palefire_location_backdrop(TermInterface $room, array $photos, Cacheab
 }
 
 /**
+ * The first section of a bundle on the same page as a paragraph, or NULL.
+ *
+ * Location pages are one section per part (Location, Location: photos,
+ * hours and directions, house rules, booking): the parts read each other
+ * through this, so the room's photo can sit behind the top and a fact is
+ * said once.
+ */
+function _palefire_location_sibling(ParagraphInterface $paragraph, string $bundle): ?ParagraphInterface {
+  $host = $paragraph->getParentEntity();
+  if (!$host instanceof NodeInterface) {
+    return NULL;
+  }
+  foreach (PalefireHooks::SECTION_FIELDS as $field) {
+    if (!$host->hasField($field)) {
+      continue;
+    }
+    foreach ($host->get($field)->referencedEntities() as $section) {
+      if ($section instanceof ParagraphInterface && $section->bundle() === $bundle && (!method_exists($section, 'isPublished') || $section->isPublished())) {
+        return $section;
+      }
+    }
+  }
+  return NULL;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--location-space.
  *
  * `location` (_palefire_location_data(), plus `map`: the building map with
- * the room marked, or NULL for a building without a drawing; `rules`, the
- * room's house rules; `booking`, from this section's own booking fields, or
- * NULL when they are empty) and `visit` (the page's hours and directions,
- * as the landing's Visit card). With no Room link of its own, the button at
- * the top is the booking link.
+ * the room marked, or NULL for a building without a drawing; `backdrop`,
+ * the photo behind the top) and `visit` (the page's hours, for today's
+ * line under the title). The page's other parts are sections of their own
+ * (Location: photos, hours and directions, house rules, booking). With no
+ * Room link of its own, the button at the top is this section's Booking
+ * link.
  */
 function palefire_preprocess_paragraph__location_space(array &$variables): void {
   $variables['location'] = NULL;
@@ -1416,15 +1443,13 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
       // The drawing alone: the room is lit on it and named beside it.
       $map['no_key'] = TRUE;
     }
-    $uid = 'pf-location-' . $paragraph->id();
     $location['map'] = $map;
-    $location['uid'] = $uid;
-    $location['rules'] = _palefire_location_rules($location, $uid . '-rules');
-    $booking = _palefire_location_booking($paragraph, $location, $uid . '-book');
-    $location['booking'] = ($booking['body'] || $booking['link']) ? $booking : NULL;
-    $location['link'] = $location['link'] ?? $booking['link'];
-    $location['photos'] = _palefire_location_photos($paragraph, $cache);
-    $location['backdrop'] = _palefire_location_backdrop($room, $location['photos'], $cache);
+    $location['uid'] = 'pf-location-' . $paragraph->id();
+    $location['link'] = $location['link'] ?? _palefire_location_booking($paragraph, NULL, '')['link'];
+    // The backdrop's fallback: the first of the page's photos.
+    $photos = _palefire_location_sibling($paragraph, 'location_photos');
+    $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);
+    $location['backdrop'] = _palefire_location_backdrop($room, $photos ? array_slice(_palefire_location_photos($photos, $cache), 0, 1) : [], $cache);
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);
@@ -1444,6 +1469,10 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $variables['rules'] = _palefire_location_rules(_palefire_location_data($room, $cache), 'pf-rules-' . $paragraph->id());
+  // Beside a Location section, its ledger already gives the sound level.
+  if (_palefire_location_sibling($paragraph, 'location_space')) {
+    $variables['rules']['sound_level'] = 0;
+  }
   $cache->applyTo($variables);
 }
 
@@ -1462,7 +1491,53 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
   $room = _palefire_location_room($paragraph);
   $location = $room ? _palefire_location_data($room, $cache) : NULL;
   $variables['booking'] = _palefire_location_booking($paragraph, $location, 'pf-booking-' . $paragraph->id());
+  // Beside a Location section: its ledger gives the capacity and House
+  // rules the required policies, and its button is this link already.
+  $space = _palefire_location_sibling($paragraph, 'location_space');
+  if ($space) {
+    $variables['booking']['capacity'] = '';
+    $variables['booking']['needs'] = [];
+    $top = $location['link']['url'] ?? (_palefire_location_booking($space, NULL, '')['link']['url'] ?? NULL);
+    if ($variables['booking']['link'] && $variables['booking']['link']['url'] === $top) {
+      $variables['booking']['link'] = NULL;
+    }
+  }
   $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--location-photos.
+ *
+ * `photos` (_palefire_location_photos()): the room's photos, three across.
+ */
+function palefire_preprocess_paragraph__location_photos(array &$variables): void {
+  $variables['photos'] = [];
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $variables['photos'] = _palefire_location_photos($paragraph, $cache);
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--location-visit.
+ *
+ * `visit` (_palefire_landing_visit(): the page's LibCal location, Google
+ * Maps query and parking guide) and `uid`, for the id the hours line at the
+ * top jumps to.
+ */
+function palefire_preprocess_paragraph__location_visit(array &$variables): void {
+  $variables['uid'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    $variables['visit'] = NULL;
+    return;
+  }
+  _palefire_landing_visit($variables, $paragraph);
+  $space = _palefire_location_sibling($paragraph, 'location_space');
+  $variables['uid'] = 'pf-location-' . ($space ? $space->id() : $paragraph->id());
 }
 
 /* ---------------------------------------------------------------------------
@@ -2242,8 +2317,15 @@ function palefire_preprocess_field(array &$variables): void {
       $count += count(_palefire_hero_rules($paragraph));
       continue;
     }
-    if (!is_array($item['section'] ?? NULL)
-      || !$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
+    if (!is_array($item['section'] ?? NULL)) {
+      continue;
+    }
+    if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
+      // A location page's parts carry theirs in code (no Eyebrow field).
+      $location = _palefire_location_index($paragraph, $cache);
+      if ($location) {
+        $item['section']['index'] = ['num' => sprintf('%02d', ++$count)] + $location;
+      }
       continue;
     }
     $cache->addCacheableDependency($paragraph);
@@ -2270,6 +2352,62 @@ function palefire_preprocess_field(array &$variables): void {
   }
   unset($item);
   $cache->applyTo($variables);
+}
+
+/**
+ * The index rule of a location page's part, or NULL for any other section.
+ *
+ * Location: photos, hours and directions, house rules and booking open on
+ * an index rule as /v2/special's sections do, with a label, a lede naming
+ * the room, and on two of them a link at the rule's end (Directions, the
+ * request form). Written here rather than in Eyebrow and Lede fields, so
+ * every room's page reads the same.
+ *
+ * @return array{label: string, lede: string, link: ?array}|null
+ */
+function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetadata $cache): ?array {
+  $bundle = $paragraph->bundle();
+  if (!in_array($bundle, ['location_photos', 'location_visit', 'location_rules', 'location_booking'], TRUE)) {
+    return NULL;
+  }
+  $cache->addCacheableDependency($paragraph);
+  $room = _palefire_location_room($paragraph) ?? (($space = _palefire_location_sibling($paragraph, 'location_space')) ? _palefire_location_room($space) : NULL);
+  $location = $room ? _palefire_location_data($room, $cache) : NULL;
+  $name = $location['title'] ?? (string) t('the room');
+  $host = $paragraph->getParentEntity();
+  switch ($bundle) {
+    case 'location_photos':
+      return ['label' => (string) t('The space'), 'lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
+
+    case 'location_visit':
+      $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
+      $floor = $location['floor'] ?? NULL;
+      $building = $location['building'] ?? '';
+      return [
+        'label' => (string) t('Getting here'),
+        'lede' => $floor
+          ? (string) t('On Floor @n of @building, open whenever the building is.', ['@n' => $floor, '@building' => $building])
+          : (string) t('In @building, open whenever the building is.', ['@building' => $building]),
+        'link' => $query !== '' ? [
+          'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query),
+          'text' => (string) t('Directions'),
+          'external' => TRUE,
+          'hidden' => (string) t(' (opens in a new tab)'),
+        ] : NULL,
+      ];
+
+    case 'location_rules':
+      return ['label' => (string) t('Before you come'), 'lede' => (string) t('What the @room allows, and what to arrange first.', ['@room' => $name]), 'link' => NULL];
+
+    default:
+      $space = _palefire_location_sibling($paragraph, 'location_space');
+      $link = $location['link'] ?? ($space ? _palefire_location_booking($space, NULL, '')['link'] : NULL);
+      return [
+        'label' => (string) t('Reserve'),
+        'lede' => (string) t('How to request the @room, and what comes with it.', ['@room' => $name]),
+        'link' => $link ? ['url' => $link['url'], 'text' => (string) t('Request form'), 'external' => FALSE] : NULL,
+      ];
+  }
 }
 
 /**

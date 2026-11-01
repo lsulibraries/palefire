@@ -3167,9 +3167,9 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-tit
   color: var(--pf-toc-color);
 }
 
-// Every section heading on the shared system ($pf-system), a location
-// page's part headings among them, and the hero's own.
-html#{$pf-system} .pf-main .pf-sections :is(.pf-section__title, .pf-location__part-title),
+// Every section heading on the shared system ($pf-system), and the hero's
+// own.
+html#{$pf-system} .pf-main .pf-sections .pf-section__title,
 html[data-pf-hero] .pf-showcase-list__heading,
 html[data-pf-hero] .pf-landing--cover .pf-landing__visit .pf-map > .pf-map__heading,
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {

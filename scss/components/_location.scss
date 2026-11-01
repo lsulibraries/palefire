@@ -23,6 +23,8 @@
 }
 
 .pf-location,
+.pf-location__photos,
+.pf-location__visit,
 .pf-rules,
 .pf-booking {
   --pf-location-fg: var(--pf-section-fg, var(--bs-body-color));
@@ -78,8 +80,7 @@
 }
 
 .pf-location__head,
-.pf-location__map,
-.pf-location__part-body { min-width: 0; }
+.pf-location__map { min-width: 0; }
 
 @container pf-location (min-width: 52rem) {
   .pf-location__top {
@@ -142,11 +143,11 @@
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
 // monochrome and low in contrast, behind the title, map and
 // ledger, up under the clear header and bar and out to the section's edges
-// (its padding, so nothing scrolls sideways), down to the first part. It
+// (its padding, so nothing scrolls sideways), down to the section's foot. It
 // is fixed to the window (background-attachment: fixed, sized to the
 // window), so the page slides over it; no filter on it, which would drop
-// the fixed attachment. Where fixed backgrounds aren't kept (iOS), it
-// scrolls with the page. Two layers over it, blended rather than filtered: a
+// the fixed attachment. On portrait screens and iOS it shows whole at the
+// top instead (pf-location-backdrop-whole, below). Two layers over it, blended rather than filtered: a
 // mid grey with the `color` blend takes its colour away (so the gold title
 // and lit room are the only colour), and a dark grey veil at 87% squeezes
 // its tones into 30-64 of 255, so its detail recedes. The ceiling, 64, is
@@ -164,20 +165,32 @@
 // ground and the room shows around it. Light swatches, more contrast and
 // forced colors keep the plain page. The URL is --pf-location-backdrop on
 // the element (paragraph--location-space.html.twig), so only dark swatches
-// fetch it here; it is the same file The room shows.
+// fetch it here.
 .pf-location__intro {
   position: relative;
   isolation: isolate;
 }
 
+@mixin pf-location-backdrop-whole {
+  &::before {
+    inset: calc(-1 * (var(--pf-header-h, 0px) + var(--pf-landing-bar-h, 0px))) calc(-1 * var(--pf-section-pad-inline, 0px)) auto;
+    height: 100lvh;
+    background:
+      linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, transparent 14rem),
+      linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
+      linear-gradient(#808080, #808080),
+      var(--pf-location-backdrop) center / cover no-repeat;
+    background-blend-mode: normal, normal, color, normal;
+    -webkit-mask-image: linear-gradient(#000 60%, transparent);
+    mask-image: linear-gradient(#000 60%, transparent);
+  }
+}
+
 .pf-location__frost { display: none; }
 
 html.pf-reading-dark .pf-location__intro.has-backdrop {
-  // The photo runs on to the first part's band, with the ledger's gap
-  // inside it, so there is no strip of plain page between them.
+  // The ledger's gap inside the photo, down to the section's foot.
   padding-bottom: var(--pf-location-gap);
-
-  + .pf-location__part--band { margin-top: 0; }
 
   &::before {
     position: absolute;
@@ -191,6 +204,18 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
       linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
     background-blend-mode: normal, normal, color, normal;
+  }
+
+  // Portrait screens, and iOS, which drops fixed backgrounds (`cover` then
+  // sized the photo to the whole top, two or three screens tall on a
+  // phone, so it showed a tenth of its width): as /v2/special's video on a
+  // phone, the photo fills one screen from the page's top (under the
+  // header), scrolls with the page, and fades into it at the screen's foot.
+  @media (orientation: portrait) {
+    @include pf-location-backdrop-whole;
+  }
+  @supports (-webkit-touch-callout: none) {
+    @include pf-location-backdrop-whole;
   }
 
   // The policy marks frosted like the floors: the photo blurs behind each
@@ -218,22 +243,41 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     backdrop-filter: blur(12px);
     -webkit-mask: var(--pf-location-frost) center / 100% 100% no-repeat;
     mask: var(--pf-location-frost) center / 100% 100% no-repeat;
-    animation: pf-frost-in .8s ease both;
+    // Fades in over the whole draw: held at 0 while the map waits to draw
+    // (.is-tracing, building-map.js), then from the first line (.is-playing)
+    // to the last rooms (the trace's 1.8s and the rooms' reveal). Without the
+    // draw (reduced motion, building-map.js) it is simply there. The hide
+    // is instant, so it never fades out on load, whichever script runs first.
+  }
 
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
+  .pf-map.is-tracing:not(.is-playing) .pf-location__frost { opacity: 0; }
+
+  .pf-map.is-playing .pf-location__frost {
+    transition: opacity 2.6s cubic-bezier(.4, 0, .2, 1);
+  }
+
+  // The ledger on the same frosted ground as the floors. A ::before
+  // reaching a gutter past the text, so the facts keep their column lines.
+  .pf-location__facts {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      inset: 0 calc(-1 * min(1rem, var(--pf-section-pad-inline, 1rem)));
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
     }
   }
-}
-
-@keyframes pf-frost-in {
-  from { opacity: 0; }
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
   html.pf-reading-dark .pf-location__intro.has-backdrop {
     &::before { content: none; }
     .pf-location__frost { display: none; }
+    .pf-location__facts::before { content: none; }
   }
 }
 
@@ -458,9 +502,9 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 .pf-space-pin__detail { color: var(--pf-location-muted); }
 
 // --- The ledger: the facts in a row ----------------------------------------
-// Term over value between two rules (row rules would stop short under a
-// part-filled last row): two across on phones, three from 30rem, and from
-// 52rem one per column of the grid, so each starts on a column line.
+// Term over value, unruled (over a photo, on the floors' frost): two across
+// on phones, three from 30rem, and from 52rem one per column of the grid,
+// so each starts on a column line.
 .pf-location__ledger {
   margin-top: var(--pf-location-gap);
 }
@@ -470,8 +514,7 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem var(--pf-grid-gutter);
   margin: 0;
-  padding-block: 1rem;
-  border-block: 1px solid var(--pf-location-line);
+  padding-block: 1.25rem;
 }
 .pf-location__fact {
   min-width: 0;
@@ -501,56 +544,18 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   .pf-location__facts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 
-// --- The parts: Visit, House rules, Booking ---------------------------------
-// The hero's rhythm: the same space above each index rule and under each
-// part (--pf-hero-gap), --pf-hero-rule-gap under the rule; the heading in
-// the shared h2 style (_landing-features.scss). Odd parts on the surface,
-// edge to edge (a shadow as wide as the screen, clipped to the part's
-// height, as the landing's quick guide), with the tokens inside swapped as
-// on every band (_sections.scss), so what used the surface takes the page.
-.pf-location__part {
-  padding-block: var(--pf-hero-gap);
-
-  > .pf-index-rule { margin-bottom: var(--pf-hero-rule-gap); }
-
-  &:last-of-type { padding-bottom: 0; }
-}
-
-.pf-location__intro + .pf-location__part:not(.pf-location__part--band) {
-  padding-top: calc(var(--pf-hero-gap) * .75);
-}
-
-// --pf-band is read from the parent, before the band swaps the surface.
-html#{$pf-themed} .pf-location { --pf-band: var(--pf-g-surface); }
-
-html#{$pf-themed} .pf-location__part--band {
-  --pf-section-bg: var(--pf-band);
-  --pf-g-surface: var(--pf-g-bg);
-  --pf-guide-surface: var(--pf-g-bg);
-  --bs-secondary-bg: var(--pf-g-bg);
-  --bs-tertiary-bg: var(--pf-g-bg);
-  margin-top: var(--pf-location-gap);
-  background-color: var(--pf-band);
-  box-shadow: 0 0 0 100vmax var(--pf-band);
-  clip-path: inset(0 -100vmax);
-
-  &:last-of-type { padding-bottom: var(--pf-hero-gap); }
-}
-
-// As an indexed section's heading (.pf-section--indexed): its lede
-// (.pf-section__lede, _landing-features.scss) .75rem under it.
-.pf-location__part-title {
-  margin: 0 0 .75rem;
-  scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
-}
-
-// Under the lede at the full width: the rule groups as many across as fit,
-// Booking's text at a reading measure.
-.pf-location__part-body {
+// --- The parts: sections of their own -------------------------------------
+// The room, Hours and directions, House rules and Booking are sections after
+// the Location one (location_photos, location_visit, location_rules,
+// location_booking), numbered, headed and banded as /v2/special's by the
+// sections field and _sections.scss. On a location page the rule groups
+// sit as many across as fit, and Booking's text keeps a reading measure.
+html[data-pf-page="location"] {
   .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
   .pf-booking {
     grid-template-columns: minmax(0, 1fr);
     max-width: 46rem;
+    margin-inline: 0;
   }
 }
 

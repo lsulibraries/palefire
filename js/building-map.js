@@ -678,6 +678,9 @@
     const draw = () => {
       const current = ++run;
       state = 'drawing';
+      // From here on: what fades in with the whole draw (a location page's
+      // frosted floors, _location.scss) starts now, not on load.
+      root.classList.add('is-playing');
       fitStroke();
       const spread = Math.min(SETTINGS.stagger, SETTINGS.duration * 0.5);
       const windowMs = SETTINGS.duration - spread;

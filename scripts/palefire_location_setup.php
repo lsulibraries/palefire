@@ -31,12 +31,13 @@
  *   field_space_capacity  short text, e.g. "Fewer than 100 people"
  *
  * Paragraph types (allowed wherever bento_search is):
- *   location_space    "Location": a room's page in one section. The room's
+ *   location_space    "Location": the top of a room's page. The room's
  *                     floor, access, sound and capacity, its policies as
- *                     marks with tooltips, hours (the page's LibCal
- *                     location), the building map with the room marked,
- *                     its House rules, and Booking from its own Booking
- *                     text and link. field_location_space picks the room.
+ *                     marks with tooltips, today's hours (the page's
+ *                     LibCal location), the building map with the room
+ *                     marked, and its Booking link as the button.
+ *                     field_location_space picks the room. The other parts
+ *                     are sections of their own (palefire_location_split.php).
  *   location_rules    "Location: house rules": the room's policies in three
  *                     columns (Allowed, Required, Not allowed) and its sound
  *                     level. Room optional: empty, the page's Location
@@ -52,10 +53,9 @@
  *   sound and capacity, filled in only where empty.
  * - An unpublished Modular page "Lecture Hall" at /v2/special/lecturehall:
  *   one Location section with its booking text and link, Hill Memorial's
- *   LibCal hours (236). If a page at that alias, or at its first one
- *   (/v2/special/spaces/lecture-hall), exists, its House rules and Booking
- *   sections are merged into its Location section instead (a new
- *   revision; nothing to do the second time).
+ *   LibCal hours (236), unless a page at that alias, or at its first one
+ *   (/v2/special/spaces/lecture-hall), exists. palefire_location_split.php
+ *   then makes each part a section of its own.
  *
  * Lecture Hall facts: LSU Libraries' meeting space policy (fewer than 100
  * people; university-affiliated groups, others only when the Libraries
@@ -422,52 +422,10 @@ foreach ([$alias, '/v2/special/spaces/lecture-hall'] as $taken) {
     continue;
   }
   $page_found = TRUE;
-  // The page exists. Merge its sections into one: the Location section
-  // takes the Booking section's text and link (where its own are empty),
-  // and the House rules and Booking sections are removed (Location shows
-  // both). A new revision, so the old layout can be restored.
-  $existing = preg_match('#^/node/(\d+)$#', $path, $m) ? Node::load((int) $m[1]) : NULL;
-  if (!$existing || !$existing->hasField($sections_field)) {
-    echo "Skipped the page: $taken is $path, not a Modular page.\n";
-    break;
-  }
-  $location = NULL;
-  $booking = NULL;
-  $keep = [];
-  foreach ($existing->get($sections_field) as $item) {
-    $section = $item->entity;
-    if (!$section) {
-      continue;
-    }
-    $bundle = $section->bundle();
-    if ($bundle === 'location_space' && !$location) {
-      $location = $section;
-    }
-    if ($bundle === 'location_booking' && !$booking) {
-      $booking = $section;
-    }
-    if (!in_array($bundle, ['location_rules', 'location_booking'], TRUE)) {
-      // The loaded paragraph, so Location keeps the booking copied into it.
-      $keep[] = $section;
-    }
-  }
-  if (!$location || count($keep) === $existing->get($sections_field)->count()) {
-    echo "Page $taken: nothing to merge.\n";
-    break;
-  }
-  if ($booking) {
-    foreach (['field_booking_body', 'field_booking_link'] as $name) {
-      if ($location->hasField($name) && $location->get($name)->isEmpty() && $booking->hasField($name) && !$booking->get($name)->isEmpty()) {
-        $location->set($name, $booking->get($name)->getValue());
-      }
-    }
-    $location->setNeedsSave(TRUE);
-  }
-  $existing->set($sections_field, $keep);
-  $existing->setNewRevision(TRUE);
-  $existing->setRevisionLogMessage('Location page: House rules and Booking merged into the Location section (palefire_location_setup.php).');
-  $existing->save();
-  echo "Merged page $taken (node/" . $existing->id() . "): one Location section with House rules and Booking.\n";
+  // The page exists: left as it is. (This used to merge its House rules
+  // and Booking sections into the Location section; location pages are now
+  // one section per part, palefire_location_split.php.)
+  echo "Page $taken exists; left as it is.\n";
   break;
 }
 if ($page_found) {

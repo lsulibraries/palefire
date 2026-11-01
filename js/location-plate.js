@@ -80,10 +80,12 @@
           past = !entry.isIntersecting;
           update();
         }, { rootMargin: '0px 0px 100000px 0px' }).observe(map);
+        // The page's sections (the room's parts follow its Location section
+        // as sections of their own): hidden again at the footer.
         new IntersectionObserver(([entry]) => {
           inView = entry.isIntersecting;
           update();
-        }).observe(page.querySelector('.pf-location'));
+        }).observe(page.closest('.pf-sections') || page);
       });
     },
   };

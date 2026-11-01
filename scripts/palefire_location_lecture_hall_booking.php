@@ -36,15 +36,23 @@ if (!$node) {
   return;
 }
 $field = $node->hasField('field_scroll_section') ? 'field_scroll_section' : 'field_sections';
+// The text goes on the Booking section (palefire_location_split.php), the
+// link on the Location section, whose button it is. Before the split, both
+// on the Location section.
+$top = NULL;
 $location = NULL;
 foreach ($node->get($field) as $item) {
-  if ($item->entity && $item->entity->bundle() === 'location_space') {
+  $bundle = $item->entity ? $item->entity->bundle() : '';
+  if ($bundle === 'location_space' && !$top) {
+    $top = $item->entity;
+  }
+  if ($bundle === 'location_booking' && !$location) {
     $location = $item->entity;
-    break;
   }
 }
+$location = $location ?? $top;
 if (!$location || !$location->hasField('field_booking_body')) {
-  echo "The page has no Location section with Booking fields.\n";
+  echo "The page has no Booking or Location section with Booking fields.\n";
   return;
 }
 
@@ -98,13 +106,15 @@ $body = <<<'HTML'
 HTML;
 
 $location->set('field_booking_body', ['value' => $body, 'format' => $format]);
-if ($location->hasField('field_booking_link')) {
-  $location->set('field_booking_link', [
+$location->setNeedsSave(TRUE);
+$button = $top ?? $location;
+if ($button->hasField('field_booking_link')) {
+  $button->set('field_booking_link', [
     'uri' => 'https://lsu.formstack.com/forms/lecture_hall_reservations',
     'title' => 'Request the Lecture Hall',
   ]);
+  $button->setNeedsSave(TRUE);
 }
-$location->setNeedsSave(TRUE);
 $node->setNewRevision(TRUE);
 $node->setRevisionLogMessage('Lecture Hall: Booking text and the reservation form link from Special Collections (palefire_location_lecture_hall_booking.php).');
 $node->save();
