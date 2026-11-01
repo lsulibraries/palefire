@@ -16,6 +16,8 @@
  *   request diagram follows the text.
  * - faqs: the text had a "[special-collections-faqs]" paragraph; every
  *   Special Collections FAQ follows it, most asked first.
+ * - plates: the text had "[styleguide:<plate>]" paragraphs; each style
+ *   guide plate follows it (includes/styleguide-plate.html.twig).
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -42,4 +44,7 @@
   {% if faqs %}
     {% include '@palefire/includes/guide-faqs.html.twig' with { faqs: faqs, directory: directory } only %}
   {% endif %}
+  {% for plate in plates %}
+    {% include '@palefire/includes/styleguide-plate.html.twig' with plate|merge({ uid: 'sg-' ~ paragraph.id() ~ '-' ~ loop.index }) only %}
+  {% endfor %}
 </div>

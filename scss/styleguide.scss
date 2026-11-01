@@ -1,0 +1,747 @@
+// Palefire — style guide plates (css/styleguide.css, library
+// palefire/styleguide).
+//
+// A plate is a sheet of the design system drawn from the theme's own
+// tokens: a text block on the style guide page with a paragraph that is
+// only "[styleguide:<plate>]" (palefire_preprocess_paragraph__guide_text(),
+// templates/includes/styleguide-plate.html.twig). Its own entry point, so
+// only that page loads it. Values printed on the plates come from Sass
+// (content:) or the browser (js/styleguide.js reads the computed colors and
+// curves), never typed twice. Notes: docs/styleguide.md.
+//
+// Colors are the reading swatch's (--pf-g-*), so the plates follow
+// Settings > Reading colors. Lines are the soft hairline.
+
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+
+// Tokens only: these imports print no CSS.
+@import "bootstrap/scss/functions";
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+// Motion that is only decoration: off with the OS setting or Settings >
+// Reduce motion (as _exhibition.scss).
+@mixin pf-sg-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+// Brand colors and the motion tokens, for the swatches and the curves.
+.pf-sg-plate {
+  --sg-purple: #{$pf-purple};
+  --sg-gold: #{$pf-gold};
+  --sg-lavender: #{$pf-lavender};
+  --sg-nav: #{$pf-nav-color};
+  --sg-logo: #{$pf-logo-color};
+  --sg-ink: #{$body-color};
+  --sg-white: #{$white};
+  // Control borders: a section's own line color, else the swatch's 3:1 tone
+  // (--pf-g-scroll, as dark sections use).
+  --sg-rule: var(--pf-section-border, var(--pf-g-scroll, var(--bs-border-color)));
+  --sg-hairline: #{$pf-hairline};
+  --sg-muted: var(--pf-exhibit-muted, var(--bs-secondary-color));
+  --sg-surface: var(--pf-exhibit-surface, var(--bs-tertiary-bg));
+  --sg-accent: var(--pf-exhibit-accent, var(--bs-primary));
+  --sg-mono: var(--pf-exhibit-mono, #{$font-family-monospace});
+
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: 1rem;
+  border-top: 1px solid $pf-hairline;
+
+  @include pf-sg-motion {
+    @supports (animation-timeline: view()) {
+      animation: pf-sg-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@keyframes pf-sg-rise {
+  from {
+    opacity: 0.01;
+    transform: translateY(1.25rem);
+  }
+}
+
+// "Plate 02   Colour   …   14 tokens": a Swiss running head.
+.pf-sg-plate__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.25rem 1.25rem;
+  align-items: baseline;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sg-muted);
+}
+
+.pf-sg-plate__name {
+  color: var(--bs-body-color);
+}
+
+.pf-sg-label {
+  margin: 0 0 0.75rem;
+  font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sg-muted);
+
+  * + & {
+    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+  }
+}
+
+.pf-sg-code {
+  font: 0.8125rem / 1.5 var(--sg-mono);
+  overflow-wrap: anywhere;
+}
+
+// A spec: label over value, in hairline rows.
+.pf-sg-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 0 2rem;
+  margin: 0;
+
+  > div {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid $pf-hairline;
+  }
+
+  dt {
+    font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--sg-muted);
+  }
+
+  dd {
+    margin: 0.15rem 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// Overview -------------------------------------------------------------------
+
+.pf-sg-bento {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(7.5rem, auto);
+  gap: 0.5rem;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(10rem, auto);
+  }
+}
+
+.pf-sg-bento__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 1rem;
+  overflow: hidden;
+  background: var(--sg-surface);
+}
+
+.pf-sg-bento__tile--brand {
+  grid-column: span 2;
+  grid-row: span 2;
+  // LSU gold on purple: 8.4:1.
+  color: var(--sg-gold);
+  background: var(--sg-purple);
+
+  .pf-sg-bento__word {
+    font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    font-weight: $pf-display-weight;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+
+  .pf-sg-bento__sub {
+    margin-top: 0.75rem;
+    font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+.pf-sg-bento__tile--serif {
+  align-items: flex-start;
+  font: 500 clamp(3.5rem, 2rem + 5vw, 6rem) / 1 $pf-font-display-serif;
+  letter-spacing: -0.02em;
+}
+
+// Twelve hairline columns.
+.pf-sg-bento__tile--grid {
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--sg-accent) 18%, transparent) 0 calc(100% / 12 - 3px), transparent calc(100% / 12 - 3px) calc(100% / 12)),
+    var(--sg-surface);
+}
+
+.pf-sg-bento__tile--curve svg {
+  width: 100%;
+  height: auto;
+  color: var(--sg-accent);
+}
+
+// The current swatch's tokens as bands.
+.pf-sg-bento__tile--bands {
+  flex-direction: row;
+  padding: 0;
+
+  span {
+    flex: 1;
+  }
+}
+
+.pf-sg-bento__tile--aa {
+  grid-column: 1 / -1;
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  font-weight: $pf-display-weight;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+
+  small {
+    margin-top: 0.5rem;
+    font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sg-muted);
+  }
+}
+
+// Color ----------------------------------------------------------------------
+
+.pf-sg-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr));
+  gap: 1.5rem 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-sg-swatch--hero {
+  grid-column: 1 / -1;
+
+  @include media-breakpoint-up(sm) {
+    grid-column: span 2;
+  }
+}
+
+.pf-sg-swatch__chip {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 4 / 3;
+  padding: 0.75rem;
+  background: var(--sg-fill);
+  // Light chips on a light page (white, the page color itself) need an edge.
+  box-shadow: inset 0 0 0 1px $pf-hairline;
+
+  .pf-sg-swatch--hero & {
+    aspect-ratio: auto;
+    min-height: 100%;
+    font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    font-weight: $pf-display-weight;
+    letter-spacing: -0.02em;
+    color: var(--sg-gold);
+  }
+}
+
+.pf-sg-swatch--hero {
+  display: grid;
+  grid-template-rows: minmax(9rem, 1fr) auto;
+}
+
+.pf-sg-swatch__name {
+  display: block;
+  margin-top: 0.6rem;
+  font-weight: 500;
+}
+
+.pf-sg-swatch__token,
+.pf-sg-swatch__value {
+  display: block;
+  font: 0.8125rem / 1.5 var(--sg-mono);
+  color: var(--sg-muted);
+  overflow-wrap: anywhere;
+}
+
+.pf-sg-swatch__value {
+  font-variant-numeric: tabular-nums;
+}
+
+// "13.1:1 AA" (js/styleguide.js).
+.pf-sg-ratio {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.05rem 0.4rem;
+  font: 0.75rem / 1.5 var(--sg-mono);
+  letter-spacing: 0.04em;
+  border: 1px solid $pf-hairline;
+
+  &:empty {
+    display: none;
+  }
+}
+
+// Type -----------------------------------------------------------------------
+
+.pf-sg-specimens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 0.5rem;
+}
+
+.pf-sg-specimen {
+  display: grid;
+  align-content: space-between;
+  gap: 1.5rem;
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  background: var(--sg-surface);
+}
+
+.pf-sg-specimen__aa {
+  font-size: clamp(5rem, 3rem + 8vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.pf-sg-specimen--sans .pf-sg-specimen__aa {
+  font-weight: $pf-display-weight;
+}
+
+.pf-sg-specimen--serif {
+  font-family: $pf-font-display-serif;
+
+  .pf-sg-specimen__aa {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+}
+
+.pf-sg-specimen--clock .pf-sg-specimen__aa {
+  font-family: $pf-font-clock;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.pf-sg-specimen__set {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.pf-sg-specimen__meta {
+  margin: 0;
+  font-family: $font-family-sans-serif;
+  font-size: 0.875rem;
+  color: var(--sg-muted);
+
+  .pf-sg-title {
+    display: block;
+    font-size: 1rem;
+    color: var(--bs-body-color);
+  }
+}
+
+// The scale: spec on the left, the size itself on the right.
+.pf-sg-scale {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-sg-scale__row {
+  display: grid;
+  gap: 0.35rem 2rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid $pf-hairline;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: 13rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.pf-sg-scale__spec {
+  font: 0.8125rem / 1.5 var(--sg-mono);
+  color: var(--sg-muted);
+
+  .pf-sg-title {
+    display: block;
+    font-family: $font-family-sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--bs-body-color);
+  }
+}
+
+.pf-sg-scale__sample {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+// Sizes as the theme sets them. Page title: _landing-swiss.scss; gallery
+// title: _exhibition.scss; reading text: _exhibition.scss.
+.pf-sg-t--display {
+  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.pf-sg-t--h1 {
+  font-size: clamp(2rem, 1rem + 2vw, 3rem);
+  font-weight: $pf-display-weight;
+  line-height: 1.1;
+}
+
+.pf-sg-t--h2 {
+  font-size: $pf-h2-size;
+  font-weight: $pf-display-weight;
+  line-height: 1.15;
+}
+
+.pf-sg-t--reading {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.pf-sg-t--body {
+  font-size: 1rem;
+  line-height: $line-height-base;
+}
+
+.pf-sg-t--nav {
+  font-size: $pf-nav-font-size;
+  font-weight: 700;
+  letter-spacing: $pf-nav-tracking;
+  text-transform: uppercase;
+  color: var(--sg-nav);
+
+  [data-bs-theme="dark"] & {
+    color: inherit;
+  }
+}
+
+.pf-sg-t--mono {
+  font: var(--pf-mono-label, 0.75rem) / 1.5 var(--sg-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+// The sizes, printed from the same values.
+@each $name, $size in (display: "clamp(2rem, 1.2rem + 2.6vw, 3.5rem) · 500", h1: "clamp(2rem, 1rem + 2vw, 3rem) · #{$pf-display-weight}", h2: "#{$pf-h2-size} · #{$pf-display-weight}", reading: "1.0625rem / 1.7", body: "1rem / #{$line-height-base}", nav: "#{$pf-nav-font-size} · 700 · #{$pf-nav-tracking} tracking", mono: "var(--pf-mono-label) · 0.12em tracking") {
+  .pf-sg-size--#{$name}::after {
+    content: "#{$size}";
+    display: block;
+  }
+}
+
+// Grid -----------------------------------------------------------------------
+
+.pf-sg-columns {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(0.25rem, 1.5vw, #{$grid-gutter-width});
+  height: 9rem;
+
+  span {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.35rem;
+    font: 0.6875rem / 1 var(--sg-mono);
+    color: var(--sg-muted);
+    background: color-mix(in srgb, var(--sg-accent) 12%, transparent);
+    border-top: 2px solid color-mix(in srgb, var(--sg-accent) 55%, transparent);
+  }
+}
+
+// Common splits on the 12 columns.
+.pf-sg-splits {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  > div {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(0.25rem, 1.5vw, #{$grid-gutter-width});
+  }
+
+  span {
+    padding: 0.5rem;
+    font: 0.75rem / 1.2 var(--sg-mono);
+    background: var(--sg-surface);
+    border-left: 2px solid var(--sg-accent);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
+// Breakpoints: one segment each, the one in use marked "Now".
+.pf-sg-breakpoints {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  li {
+    position: relative;
+    padding: 0.75rem;
+    border-top: 2px solid $pf-hairline;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pf-sg-title {
+    display: block;
+    font: 500 1.5rem / 1.2 $font-family-sans-serif;
+  }
+
+  .pf-sg-bp__min {
+    font: 0.8125rem / 1.5 var(--sg-mono);
+    color: var(--sg-muted);
+  }
+}
+
+@each $bp, $min in $grid-breakpoints {
+  .pf-sg-bp--#{$bp} .pf-sg-bp__min::before {
+    content: "≥ #{$min}";
+  }
+
+  @include media-breakpoint-only($bp) {
+    .pf-sg-bp--#{$bp} {
+      border-top-color: var(--sg-accent);
+      background: var(--sg-surface);
+
+      &::after {
+        content: "Now" / "";
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        font: 0.6875rem / 1.5 var(--sg-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--sg-accent);
+      }
+    }
+  }
+}
+
+// Spacing and lines ----------------------------------------------------------
+
+.pf-sg-spacers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid $pf-hairline;
+    font: 0.8125rem / 1.5 var(--sg-mono);
+  }
+
+  i {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-style: normal;
+    color: var(--sg-muted);
+
+    &::before {
+      content: "";
+      flex: none;
+      width: var(--sg-size);
+      height: 1.5rem;
+      background: color-mix(in srgb, var(--sg-accent) 35%, transparent);
+    }
+  }
+}
+
+@each $key, $size in $spacers {
+  .pf-sg-space--#{$key} {
+    --sg-size: #{$size};
+
+    i::after {
+      content: "#{$size}";
+    }
+  }
+}
+
+.pf-sg-lines {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem;
+}
+
+.pf-sg-line__demo {
+  display: grid;
+  align-content: center;
+  min-height: 7rem;
+  padding: 1rem;
+  background: var(--sg-surface);
+}
+
+// Hours rows: the hairline's model (_visit.scss).
+.pf-sg-line__demo--hairline span {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+  font-size: 0.875rem;
+  border-bottom: 1px solid $pf-hairline;
+}
+
+.pf-sg-line__demo--control span {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--sg-muted);
+  background: var(--bs-body-bg);
+  border: 1px solid var(--pf-section-border, var(--sg-rule));
+}
+
+// The focus ring, drawn as _base.scss draws it.
+.pf-sg-line__demo--focus span {
+  justify-self: start;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.875rem;
+  outline: 3px solid var(--pf-focus-color);
+  outline-offset: 2px;
+}
+
+.pf-sg-line__spec {
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+
+  .pf-sg-title {
+    display: block;
+    font-weight: 500;
+  }
+
+  .pf-sg-line__token {
+    display: block;
+    font: 0.8125rem / 1.5 var(--sg-mono);
+    color: var(--sg-muted);
+    overflow-wrap: anywhere;
+  }
+}
+
+// Motion ---------------------------------------------------------------------
+
+.pf-sg-motions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Each card is a button: pressing it (or pointing at it) sends the dot
+// along its curve.
+.pf-sg-motion {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  font: inherit;
+  text-align: start;
+  color: inherit;
+  background: var(--sg-surface);
+  border: 0;
+  cursor: pointer;
+}
+
+.pf-sg-motion__curve {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  overflow: visible;
+  color: var(--sg-accent);
+
+  .pf-sg-motion__axis {
+    stroke: var(--sg-rule);
+    stroke-opacity: 0.4;
+  }
+}
+
+.pf-sg-motion__track {
+  position: relative;
+  height: 0.75rem;
+  border-bottom: 1px solid $pf-hairline;
+
+  span {
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--sg-accent);
+
+    @include pf-sg-motion {
+      transition: left var(--sg-dur, 0.3s) var(--sg-ease, ease);
+    }
+  }
+}
+
+.pf-sg-motion:is(:hover, .is-playing) .pf-sg-motion__track span {
+  left: calc(100% - 0.5rem);
+}
+
+.pf-sg-motion__name {
+  font-weight: 500;
+}
+
+.pf-sg-motion__value {
+  font: 0.8125rem / 1.5 var(--sg-mono);
+  color: var(--sg-muted);
+  overflow-wrap: anywhere;
+}
+
+// The motion tokens. Durations that live in a rule rather than a token are
+// noted where they come from.
+@each $name, $ease, $dur in (
+  hover-in ease $pf-hover-in,
+  hover-out ease $pf-hover-out,
+  swup-out ease $pf-swup-out,
+  swup-in $pf-swup-ease-in $pf-swup-in,
+  fade ease $pf-fade-duration,
+  settle $pf-exhibit-ease 1.4s,     // _exhibition.scss pf-exhibit-step
+  curtain $pf-exhibit-curtain 1.2s, // _exhibition.scss lead curtain
+  menu ease $pf-menu-fade
+) {
+  .pf-sg-motion--#{$name} {
+    --sg-ease: #{$ease};
+    --sg-dur: #{$dur};
+  }
+}

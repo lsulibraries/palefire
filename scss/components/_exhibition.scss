@@ -15,8 +15,8 @@
 // guide's tokens (.pf-guide, _guide.scss), so every swatch works and keeps
 // its contrast. Lines are the soft hairline. No literal colors.
 
-$pf-exhibit-ease: cubic-bezier(.2, .7, .2, 1);
-$pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
+// Easings: $pf-exhibit-ease and $pf-exhibit-curtain (_variables.scss, so
+// the style guide's motion plate draws the same curves).
 
 // A wash of the page color that is solid up to $from and fades out by $to
 // along an ease-in-out curve, in many stops: no visible bends where a few

@@ -1,0 +1,221 @@
+{#
+/**
+ * @file
+ * A style guide plate: one sheet of the design system, drawn from the
+ * theme's tokens (scss/styleguide.scss, js/styleguide.js). Printed after a
+ * guide_text block whose text has a paragraph that is only
+ * "[styleguide:<plate>]" (palefire_preprocess_paragraph__guide_text()).
+ *
+ * - plate: overview, colors, type, grid, spacing, lines or motion.
+ * - number: its place on the page ("02").
+ * - uid: id base.
+ *
+ * Values in a plate are never typed here: sizes, breakpoints and spacers
+ * come from Sass (content:), hex codes, contrast and curves from the
+ * browser. Add a plate: docs/styleguide.md.
+ */
+#}
+{{ attach_library('palefire/styleguide') }}
+{% set titles = {
+  overview: 'Overview'|t,
+  colors: 'Colour'|t,
+  type: 'Typography'|t,
+  grid: 'Grid and breakpoints'|t,
+  spacing: 'Spacing'|t,
+  lines: 'Lines and focus'|t,
+  motion: 'Motion'|t
+} %}
+<figure class="pf-sg-plate pf-sg-plate--{{ plate }}" aria-labelledby="{{ uid }}-name" data-pf-styleguide>
+  <figcaption class="pf-sg-plate__head">
+    <span>{{ 'Plate'|t }} {{ number }}</span>
+    <span class="pf-sg-plate__name" id="{{ uid }}-name">{{ titles[plate] }}</span>
+    <span>Palefire</span>
+  </figcaption>
+
+  {% if plate == 'overview' %}
+    {# Decorative: a cover for the system. The galleries say it in words. #}
+    <div class="pf-sg-bento" aria-hidden="true">
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--brand">
+        <span class="pf-sg-bento__word">Palefire</span>
+        <span class="pf-sg-bento__sub">{{ 'Design system'|t }} · LSU Libraries</span>
+      </div>
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--serif">Aa</div>
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--grid"></div>
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--bands">
+        <span style="background: var(--sg-surface)"></span>
+        <span style="background: var(--sg-muted)"></span>
+        <span style="background: var(--sg-accent)"></span>
+        <span style="background: var(--bs-body-color)"></span>
+        <span style="background: var(--sg-purple)"></span>
+      </div>
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--curve">
+        <svg viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false"><path d="M0 50C22 0 36 0 100 0"/></svg>
+      </div>
+      <div class="pf-sg-bento__tile pf-sg-bento__tile--aa">
+        WCAG 2.2 AA
+        <small>{{ 'Contrast, focus, motion, targets'|t }}</small>
+      </div>
+    </div>
+
+  {% elseif plate == 'colors' %}
+    {% set brand = [
+      { name: 'LSU Purple'|t, token: '$pf-purple', fill: '--sg-purple', hero: true, on: '--sg-white', on_name: 'white'|t },
+      { name: 'LSU Gold'|t, token: '$pf-gold', fill: '--sg-gold', on: '--sg-purple', on_name: 'purple'|t, note: 'Only on purple or dark: fails on white.'|t },
+      { name: 'Lavender'|t, token: '$pf-lavender', fill: '--sg-lavender', on: '--sg-ink', on_name: 'ink'|t, note: 'Links on dark.'|t },
+      { name: 'Ink'|t, token: '$body-color', fill: '--sg-ink', on: '--sg-white', on_name: 'white'|t },
+      { name: 'Menu'|t, token: '$pf-nav-color', fill: '--sg-nav', on: '--sg-white', on_name: 'white'|t },
+      { name: 'Wordmark'|t, token: '$pf-logo-color', fill: '--sg-logo', on: '--sg-white', on_name: 'white'|t, note: 'The logo only (logotypes are exempt from contrast).'|t }
+    ] %}
+    {% set swatch = [
+      { name: 'Page'|t, token: '--bs-body-bg', fill: '--bs-body-bg', page: true },
+      { name: 'Surface'|t, token: '--pf-g-surface', fill: '--sg-surface', ground: true },
+      { name: 'Text'|t, token: '--bs-body-color', fill: '--bs-body-color' },
+      { name: 'Muted'|t, token: '--pf-g-muted', fill: '--sg-muted' },
+      { name: 'Accent'|t, token: '--pf-g-accent', fill: '--sg-accent' },
+      { name: 'Line'|t, token: '--pf-section-border', fill: '--sg-rule', note: 'Control borders: 3:1.'|t },
+      { name: 'Hairline'|t, token: '$pf-hairline', fill: '--sg-hairline', decorative: true }
+    ] %}
+    {% for group in [{ label: 'Brand'|t, items: brand }, { label: 'Reading colour in use'|t, items: swatch }] %}
+      <p class="pf-sg-label">{{ group.label }}</p>
+      <ul class="pf-sg-swatches">
+        {% for c in group.items %}
+          <li class="pf-sg-swatch{{ c.hero ? ' pf-sg-swatch--hero' }}" style="--sg-fill: var({{ c.fill }}){{ c.on ? '; --sg-on: var(' ~ c.on ~ ')' }}"
+              data-sg-swatch{{ c.decorative ? ' data-sg-decorative' }}{{ c.page ? ' data-sg-page' }}{{ c.ground ? ' data-sg-ground' }}{% if c.on %} data-sg-on="{{ c.on_name }}"{% endif %}>
+            <div class="pf-sg-swatch__chip" aria-hidden="true">{{ c.hero ? c.name }}</div>
+            <div>
+              <span class="pf-sg-swatch__name">{{ c.name }}</span>
+              <code class="pf-sg-swatch__token">{{ c.token }}</code>
+              <span class="pf-sg-swatch__value" data-sg-hex></span>
+              <span class="pf-sg-ratio" data-sg-ratio></span>
+              {% if c.note %}<span class="pf-sg-swatch__token">{{ c.note }}</span>{% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+
+  {% elseif plate == 'type' %}
+    <div class="pf-sg-specimens">
+      <div class="pf-sg-specimen pf-sg-specimen--sans">
+        <span class="pf-sg-specimen__aa" aria-hidden="true">Aa</span>
+        <p class="pf-sg-specimen__set">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789</p>
+        <p class="pf-sg-specimen__meta"><span class="pf-sg-title">Roboto</span>{{ 'Text, menus, headings. 100–900 and italics. Google Fonts, with a metric-matched Arial fallback.'|t }}</p>
+      </div>
+      <div class="pf-sg-specimen pf-sg-specimen--serif">
+        <span class="pf-sg-specimen__aa" aria-hidden="true">Aa</span>
+        <p class="pf-sg-specimen__set">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789</p>
+        <p class="pf-sg-specimen__meta"><span class="pf-sg-title">Playfair Display</span>{{ 'Exhibition titles only, 500. Self-hosted. Display sizes: its hairlines are too thin for text.'|t }}</p>
+      </div>
+      <div class="pf-sg-specimen pf-sg-specimen--clock">
+        <span class="pf-sg-specimen__aa" aria-hidden="true">10:42</span>
+        <p class="pf-sg-specimen__meta"><span class="pf-sg-title">Handjet</span>{{ 'The Hours drawer clock only. Atkinson Hyperlegible Next replaces Roboto when a visitor turns on Settings > Easy-to-read font.'|t }}</p>
+      </div>
+    </div>
+    <p class="pf-sg-label">{{ 'Scale'|t }}</p>
+    <ul class="pf-sg-scale">
+      {% for row in [
+        { key: 'display', name: 'Gallery title'|t, sample: 'Occult Science and Philosophy'|t },
+        { key: 'h1', name: 'Page title (h1)'|t, sample: 'Special Collections'|t },
+        { key: 'h2', name: 'Section heading (h2)'|t, sample: 'Plan your visit'|t },
+        { key: 'reading', name: 'Exhibition text'|t, sample: 'Reading text runs larger and looser than guides, about 75 characters a line at the full 42rem measure.'|t },
+        { key: 'body', name: 'Body'|t, sample: 'Guides, landing pages and forms use the base size.'|t },
+        { key: 'nav', name: 'Menu'|t, sample: 'Research · Services · About'|t },
+        { key: 'mono', name: 'Label'|t, sample: 'In the collection · 06 / 19'|t }
+      ] %}
+        <li class="pf-sg-scale__row">
+          <span class="pf-sg-scale__spec pf-sg-size--{{ row.key }}"><span class="pf-sg-title">{{ row.name }}</span></span>
+          <p class="pf-sg-scale__sample pf-sg-t--{{ row.key }}">{{ row.sample }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+  {% elseif plate == 'grid' %}
+    <p class="pf-sg-label">{{ '12 columns, 1.5rem gutters (Bootstrap 5.3)'|t }}</p>
+    <div class="pf-sg-columns" aria-hidden="true">
+      {% for i in 1..12 %}<span>{{ i }}</span>{% endfor %}
+    </div>
+    <div class="pf-sg-splits" aria-hidden="true">
+      {% for split in [[8, 4], [6, 6], [4, 4, 4], [3, 3, 3, 3]] %}
+        <div>{% for n in split %}<span style="grid-column: span {{ n }}">{{ n }}</span>{% endfor %}</div>
+      {% endfor %}
+    </div>
+    <p class="pf-sg-label">{{ 'Breakpoints, mobile first'|t }}</p>
+    <ul class="pf-sg-breakpoints">
+      {% for bp in ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'] %}
+        <li class="pf-sg-bp--{{ bp }}"><span class="pf-sg-title">{{ bp }}</span><span class="pf-sg-bp__min"></span></li>
+      {% endfor %}
+    </ul>
+    <p class="pf-sg-label">{{ 'Measures'|t }}</p>
+    <dl class="pf-sg-specs">
+      <div><dt>{{ 'Content cap'|t }}</dt><dd><code class="pf-sg-code">$pf-content-max</code> 1280px</dd></div>
+      <div><dt>{{ 'Exhibition measure'|t }}</dt><dd><code class="pf-sg-code">--pf-exhibit-prose</code> 42rem</dd></div>
+      <div><dt>{{ 'Section padding'|t }}</dt><dd><code class="pf-sg-code">--pf-section-pad-inline</code> 1.25rem → 3.75rem</dd></div>
+      <div><dt>{{ 'Header gutters'|t }}</dt><dd>1 · 1.5 · 2.5 · 3rem (xs, md, xl, xxl)</dd></div>
+      <div><dt>{{ 'Test widths'|t }}</dt><dd>320 · 768 · 1024 · 1440px</dd></div>
+      <div><dt>{{ 'Touch targets'|t }}</dt><dd>44px; 36px in the compact header</dd></div>
+    </dl>
+
+  {% elseif plate == 'spacing' %}
+    <p class="pf-sg-label">{{ 'Spacers (Bootstrap: m-1 … p-5)'|t }}</p>
+    <ul class="pf-sg-spacers">
+      {% for key in 1..5 %}
+        <li class="pf-sg-space--{{ key }}"><span>{{ key }}</span><i></i></li>
+      {% endfor %}
+    </ul>
+    <p class="pf-sg-label">{{ 'Rhythm'|t }}</p>
+    <dl class="pf-sg-specs">
+      <div><dt>{{ 'Between blocks'|t }}</dt><dd>2.5rem</dd></div>
+      <div><dt>{{ 'Under a section title'|t }}</dt><dd>2.5rem</dd></div>
+      <div><dt>{{ 'Section padding (fluid)'|t }}</dt><dd>clamp(2.5rem, 5vw, 4rem)</dd></div>
+      <div><dt>{{ 'Paragraphs (exhibitions)'|t }}</dt><dd>1.5em</dd></div>
+    </dl>
+
+  {% elseif plate == 'lines' %}
+    <div class="pf-sg-lines">
+      <div>
+        <div class="pf-sg-line__demo pf-sg-line__demo--hairline" aria-hidden="true">
+          <span><b>{{ 'Mon'|t }}</b> 8am–6pm</span>
+          <span><b>{{ 'Tue'|t }}</b> 8am–6pm</span>
+          <span><b>{{ 'Wed'|t }}</b> 8am–9pm</span>
+        </div>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Hairline'|t }}</span><span class="pf-sg-line__token">$pf-hairline · 20% of the line colour · 100% in High contrast</span>{{ 'Every rule, row and frame.'|t }}</p>
+      </div>
+      <div>
+        <div class="pf-sg-line__demo pf-sg-line__demo--control" aria-hidden="true"><span>{{ 'Search the collections'|t }}</span></div>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Control border'|t }}</span><span class="pf-sg-line__token">--pf-section-border · 3:1</span>{{ 'Only where the border identifies a control (WCAG 1.4.11).'|t }}</p>
+      </div>
+      <div>
+        <div class="pf-sg-line__demo pf-sg-line__demo--focus" aria-hidden="true"><span>{{ 'Focused link'|t }}</span></div>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Focus ring'|t }}</span><span class="pf-sg-line__token">3px solid --pf-focus-color · 2px offset</span>{{ 'Every focusable element, keyboard only (:focus-visible).'|t }}</p>
+      </div>
+    </div>
+
+  {% elseif plate == 'motion' %}
+    {% set motions = [
+      { key: 'hover-in', name: 'Hover in'|t, use: 'Link colour arriving'|t },
+      { key: 'hover-out', name: 'Hover out'|t, use: 'Link colour leaving, slowly'|t },
+      { key: 'menu', name: 'Menu fade'|t, use: 'Menu pages, one after another'|t },
+      { key: 'swup-out', name: 'Page out'|t, use: 'Leaving a page'|t },
+      { key: 'swup-in', name: 'Page in'|t, use: 'The next page rising in'|t },
+      { key: 'fade', name: 'Page fade'|t, use: 'First load'|t },
+      { key: 'settle', name: 'Settle'|t, use: 'Exhibition images stepping in'|t },
+      { key: 'curtain', name: 'Curtain'|t, use: 'A lead image being drawn'|t }
+    ] %}
+    <ul class="pf-sg-motions">
+      {% for m in motions %}
+        <li>
+          <button type="button" class="pf-sg-motion pf-sg-motion--{{ m.key }}" aria-pressed="false" data-sg-motion>
+            <svg class="pf-sg-motion__curve" viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+              <path class="pf-sg-motion__axis" d="M0 50H100M0 0V50" stroke-width="1"/>
+              <path data-sg-curve d=""/>
+            </svg>
+            <span class="pf-sg-motion__track" aria-hidden="true"><span></span></span>
+            <span><span class="pf-sg-motion__name">{{ m.name }}</span> · {{ m.use }}</span>
+            <code class="pf-sg-motion__value" data-sg-timing></code>
+          </button>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="pf-sg-label">{{ 'Press a card to play its curve. All of it stops under Reduce motion.'|t }}</p>
+  {% endif %}
+</figure>

@@ -68,6 +68,10 @@ $pf-fade-duration:   .45s; // Page fade-in duration.
 $pf-swup-out:        .2s;  // Swup visit: the page's content fades out.
 $pf-swup-in:         .35s; // Swup visit: the next page's content fades and rises in.
 $pf-swup-ease-in:    cubic-bezier(.22, 1, .36, 1); // Fast start, soft landing.
+// Exhibitions (_exhibition.scss): things settling into place, and the
+// curtain that draws a lead image.
+$pf-exhibit-ease:    cubic-bezier(.2, .7, .2, 1);
+$pf-exhibit-curtain: cubic-bezier(.7, 0, .2, 1);
 
 // Top bar spans the full page width; these are its left/right padding per
 // Bootstrap breakpoint (mobile first). Keep xs >= 1rem so nothing touches

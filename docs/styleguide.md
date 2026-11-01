@@ -1,0 +1,123 @@
+# Palefire style guide: working notes
+
+The style guide is a public exhibition page at
+**/v2/special/internal/styleguide**. These notes are its source: what it
+covers, the rules behind it, and what to update when a component is added or
+changed. Keep them in step with the page.
+
+## How it is built
+
+| Part | File | Owns |
+| --- | --- | --- |
+| Page content | `scripts/palefire_styleguide.php` | Galleries, prose, editor notes, live block examples. Re-running it rebuilds the page as a new revision. Edits made in the UI are lost on the next run. |
+| Plates | `templates/includes/styleguide-plate.html.twig` | The Behance-style sheets: overview, colors, type, grid, spacing, lines, motion. |
+| Plate styles | `scss/styleguide.scss` → `css/styleguide.css` | Its own entry point and library (`palefire/styleguide`), so only this page loads it. |
+| Plate script | `js/styleguide.js` | Prints hex codes, contrast and easing curves from what the browser draws. |
+| Marker | `palefire_preprocess_paragraph__guide_text()` in `palefire.theme` | Any text block whose paragraph is only `[styleguide:<plate>]` draws that plate after its text. Unknown names stay as typed. |
+
+Plates never hard-code a token's value. Sizes, breakpoints and spacers are
+printed from Sass (`content:`). Colors and curves are read in the browser. A
+token change therefore shows up on the page after `npm run build` and a
+deploy, with no content edit. The colour plate repaints when a visitor picks
+another reading colour.
+
+Values that live in a rule rather than a token are mirrored in
+`styleguide.scss`, with a comment naming their source:
+
+- page title size (`_landing-swiss.scss`)
+- gallery title and reading text (`_exhibition.scss`)
+- settle and curtain durations (`_exhibition.scss`)
+
+If one of those changes, update its mirror. Better still, promote it to a
+token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
+`$pf-exhibit-curtain`.
+
+## When a component is added or changed
+
+1. **Notes:** add or update its row in the inventory below, and its rules if
+   it sets a new one.
+2. **Page:** if editors can add it, add a live example and a "For editors"
+   callout to the "Exhibition blocks" gallery (or a new gallery) in
+   `palefire_styleguide.php`. Guard new paragraph types with
+   `ParagraphsType::load()` so the script still runs where the type doesn't
+   exist yet.
+3. **Plate:** if it introduces a token (colour, size, easing), add it to the
+   plate that shows that kind of token. For a new plate:
+   - append its name to `PALEFIRE_STYLEGUIDE_PLATES` (at the end, so the
+     catalogue numbers of existing plates stay the same);
+   - add a branch to the plate template and a title to `titles`;
+   - style it in `styleguide.scss`;
+   - bump "Plates: N" in the script.
+4. **Build:** run `npm run build:css`, which compiles both stylesheets.
+5. **Production:** after `git pull` and `drush cr`, run
+   `drush php:script scripts/palefire_styleguide.php` (add `image=<media id>`
+   for the figure examples). Then run `drush cr` again.
+
+## Rules (the short version)
+
+- **Swiss, museum-calm.** Hierarchy comes from type, size and space, not
+  boxes. Colour is kept for meaning.
+- **Colour:**
+  - Use tokens only. Components read `--pf-g-*` (reading colours) or the
+    section tokens, never literals.
+  - LSU gold appears only on purple or dark grounds.
+- **Lines:** every rule, row and frame is `$pf-hairline` (20%). Control
+  borders that identify a control use `--pf-section-border` at 3:1.
+- **Type:**
+  - Roboto everywhere.
+  - Playfair Display for exhibition titles only, at display sizes.
+  - Inside a block with a heading, use Heading 4: an h3 becomes a TOC link.
+- **Motion:**
+  - Easing curves come from `_variables.scss`.
+  - Colour arrives fast (`$pf-hover-in`) and leaves slowly (`$pf-hover-out`).
+  - Decorative motion sits behind `prefers-reduced-motion: no-preference`
+    and `html:not(.pf-a11y-motion)`.
+- **Accessibility:**
+  - WCAG 2.2 AA in every reading colour.
+  - Visible `:focus-visible` ring (3px, 2px offset).
+  - Targets of 44px, or 36px in the compact header.
+- **Icons:** Font Awesome 5.15.4 class names only (`fas`, `far`, `fab`),
+  with `aria-hidden="true"`. The theme mostly inlines SVGs.
+- **Performance:**
+  - Attach a library only where it is needed.
+  - Lazy-load images and give them width and height.
+  - No new external dependencies without asking.
+
+## Component inventory
+
+On page: ✔ shown live · ▣ shown as a plate · – not yet.
+
+| Component | Template / styles | On page |
+| --- | --- | --- |
+| Reading colours, brand colours | `_reading-themes.scss`, `_variables.scss` | ▣ Colour |
+| Type scale, fonts | `_variables.scss`, `_fonts.scss` | ▣ Typography |
+| Grid, breakpoints, measures | Bootstrap 5.3, `_variables.scss` | ▣ Grid |
+| Spacers, rhythm | Bootstrap `$spacers` | ▣ Spacing |
+| Hairline, control border, focus ring | `_base.scss`, `_variables.scss` | ▣ Lines |
+| Motion tokens | `_variables.scss` | ▣ Motion |
+| Exhibition gallery (story) | `paragraph--exhibit-page` | ✔ every gallery |
+| Exhibition title page | `includes/exhibit-cover` | ✔ the page's own |
+| Text (Plain, Callout, Sources) | `paragraph--guide-text` | ✔ |
+| Catalogue record | `paragraph--exhibit-citation` | ✔ |
+| Entry with biography | `paragraph--exhibit-entry` | ✔ |
+| Figure | `paragraph--exhibit-figure` | ✔ with `image=` |
+| Image group / readings | `paragraph--exhibit-gallery`, `--exhibit-reading` | ✔ readings |
+| Accordion | `paragraph--guide-accordion` | ✔ |
+| Wall display, compare slider | `paragraph--exhibit-page` (wall) | – needs images |
+| Audio clip, tape deck, reel | `paragraph--exhibit-audio` | – needs a file |
+| Video | `paragraph--guide-video` | – |
+| Resource list, librarian card | `paragraph--resource-list`, `--librarian-card` | – guide only |
+| Tile showcase, covers shelf | `paragraph--tile-showcase` | – landing only |
+| Landing hero, stacks, department | `paragraph--landing-*` | – landing only |
+| Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
+| Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
+| Ask Special Collections | `includes/ask-special` | – |
+| Exhibitions showcase | `includes/exhibit-showcase` | – in progress elsewhere |
+| Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
+
+## Changelog
+
+- **2026-10-31:** First version.
+  - Seven plates: overview, colour, type, grid, spacing, lines, motion.
+  - "Exhibition blocks" gallery with editor notes.
+  - `$pf-exhibit-ease` and `$pf-exhibit-curtain` moved to `_variables.scss`.

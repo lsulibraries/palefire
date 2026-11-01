@@ -1259,6 +1259,13 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
 }
 
 /**
+ * Style guide plates, in catalogue order (includes/styleguide-plate.html.twig).
+ *
+ * Add new ones at the end, so existing plates keep their numbers.
+ */
+const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion'];
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.
  *
  * request_paths: TRUE when the text has a paragraph that is only
@@ -1274,10 +1281,17 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  * transcription: TRUE when the text opens with a Heading 4 "Transcription"
  * (Audubon's manuscripts): a primary source, set apart from the curators'
  * text (_exhibition.scss .pf-transcription).
+ *
+ * plates: style guide plates, from paragraphs that are only
+ * "[styleguide:<plate>]" (PALEFIRE_STYLEGUIDE_PLATES), in order, drawn
+ * after the text (includes/styleguide-plate.html.twig). A plate's number is
+ * its place in that list, like a catalogue number, so it never depends on
+ * which blocks were rendered from cache. docs/styleguide.md.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
   $variables['faqs'] = [];
+  $variables['plates'] = [];
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -1314,6 +1328,16 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     if (isset($item['#text']) && preg_match($faqs_marker, (string) $item['#text'])) {
       $item['#text'] = preg_replace($faqs_marker, '', (string) $item['#text']);
       $faqs = TRUE;
+    }
+    if (isset($item['#text']) && str_contains((string) $item['#text'], '[styleguide:')) {
+      $item['#text'] = preg_replace_callback('#<p>\s*\[styleguide:([a-z]+)\]\s*</p>#i', function (array $m) use (&$variables): string {
+        $number = array_search(strtolower($m[1]), PALEFIRE_STYLEGUIDE_PLATES, TRUE);
+        if ($number === FALSE) {
+          return $m[0];
+        }
+        $variables['plates'][] = ['plate' => PALEFIRE_STYLEGUIDE_PLATES[$number], 'number' => sprintf('%02d', $number + 1)];
+        return '';
+      }, (string) $item['#text']);
     }
     unset($item);
   }

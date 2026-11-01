@@ -746,18 +746,21 @@ every exhibition-mode page under its `<h1>`, then its own sections
 `_exhibit-showcase.scss`, `js/exhibit-showcase.js`):
 
 - A depth carousel: the covers stand in a row going back to the right, the
-  front one is shown, its summary beside it (label, year, title, subtitle,
-  credit line as text, Enter the exhibition). Next sends the front cover
-  off and to the back, so the row only moves one way. Arrows, dots, ← →
-  and swipe; no autoplay; changes are announced politely. Without script
-  it shows the first exhibition, still.
-- An index of all of them (year, title, label). From `lg` a plate beside it
-  turns to the cover of the row under the pointer or focus; below `lg` each
-  row has a thumbnail.
+  front one is shown, its summary beside it (mono label and year, title in
+  its own title-page face, subtitle, credit line as text, the exhibition
+  button "Enter the exhibition"). Next sends the front cover off and to
+  the back, so the row only moves one way. Browse with the square
+  Previous / Next buttons (the events carousel's, a size up; "Next" and
+  the title it brings beside them), the dots, ← →, swipe, or a click on a
+  cover behind. No autoplay; changes are announced politely. Without
+  script it shows the first exhibition, still. Arrows are inline SVG
+  (Font Awesome's font isn't loaded on these pages).
+- A table of all of them: Year, Exhibition, Summary (subtitle and credit
+  line), Kind. Below `md` each row stacks: year and kind, title, summary.
 
 Each exhibition's **Exhibitions showcase** field: Featured (first, the
-carousel opens on it, a gold "Featured" label and its "Why it is featured"
-line in the summary, on the cover and in the index), Listed, or Not
+carousel opens on it, a "Featured" label and its "Why it is featured"
+line in the summary, on the cover and in the table), Listed, or Not
 listed. Empty is Listed, except a page with a main button (a program
 page), which needs Listed or Featured to appear. Visitors see published
 pages only; editors also see unpublished ones, marked. Featured pages
@@ -994,6 +997,30 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Exhibitions page: Palefire's type and controls, and a table.** On the live page the arrows were empty circles: the template used Font Awesome classes, and these pages don't load the font (the theme inlines FA's SVGs). They are now drawn inline, as square joined buttons (3.5rem, the events carousel's style, text color boundary for 3:1), with "Next" and the coming title beside them so browsing is obvious. The panel now speaks the exhibitions' language: mono labels and count, each title in its own title-page face (`title_style`), the exhibition button for "Enter the exhibition", and a "Featured" label in text and surface swapped (on a cover, black on white). Covers behind come forward a little under the pointer. The index with its turning plate is now a table: Year, Exhibition, Summary (subtitle and credit line), Kind, stacking per row below `md`; the plate script is gone. Checked on a test page with the compiled CSS at 320, 375, 768, 1024 and 1440, light and dark (no horizontal scroll; Next updates the count, the "Next" title and the announcement). Not yet rendered by Drupal. Why: the arrows couldn't be seen, the panel's big thin numerals and gold label didn't match the rest of the site, and the index was more than the page needed.
+- **Palefire style guide, an exhibition at `/v2/special/internal/styleguide`.**
+  - **The page:** `palefire_styleguide.php` builds the published page, Sans title, not listed on the showcase. It has seven galleries:
+    - About
+    - Colour
+    - Typography
+    - Grid
+    - Spacing and lines
+    - Motion
+    - Exhibition blocks: live text, a catalogue record, an entry, an accordion, readings and sources, with a "For editors" callout naming each block. Figures appear when the script gets `image=<media id>`.
+  - **Rebuilding:** the script owns the page. Re-running it rebuilds every gallery as a new revision.
+  - **Plates:** Behance-style sheets drawn from the theme's tokens (`includes/styleguide-plate.html.twig`). A text paragraph that is only `[styleguide:<plate>]` (`palefire_preprocess_paragraph__guide_text()`) draws one:
+    - colour: brand swatches on their real grounds, and the reading colour in use, repainted when it changes;
+    - type: specimens and the scale;
+    - grid: 12 columns and the current breakpoint marked;
+    - spacing, lines and focus;
+    - motion: easing curves you can play.
+  - **No typed values:** sizes, breakpoints and spacers come from Sass `content:`. Hex codes, contrast and curves come from `js/styleguide.js`, read from what the browser draws.
+  - **Loading:** a separate stylesheet (`scss/styleguide.scss` → `css/styleguide.css`, compiled by `npm run build:css`) and library `palefire/styleguide`, attached only by the plate.
+  - **Easings moved:** `$pf-exhibit-ease` and `$pf-exhibit-curtain` moved to `_variables.scss`. `style.css` output is unchanged.
+  - **Notes:** `docs/styleguide.md` holds the rules, the component inventory and the checklist for adding to the guide.
+  - **Checked:** the plates on a test page at 320, 768, 1024 and 1440, in Twilight, Cream, Sepia and Night. No horizontal scroll, and contrast readouts match the measured values in `_reading-themes.scss`.
+  - **Not checked:** not yet rendered by Drupal, and the PHP is not linted (no PHP here).
+  - **Why:** the theme's rules lived only in Sass comments and memory. Editors had nowhere to see the blocks.
 - **Exhibitions page: a showcase of every exhibition, with Featured.** New Modular page Type "showcase" (`palefire_exhibit_showcase.php` adds it, two fields and the unpublished page at `/v2/special/exhibitions`). The page shows a depth carousel (covers in a row going back, the front one shown, its summary beside it; the row moves one way, after the Depth Carousel Pro look) over an index of all exhibitions with a turning plate. "Exhibitions showcase" on each exhibition sets Featured, Listed or Not listed; featured ones come first with a gold label and a "Why it is featured" line, for a current event or a related physical exhibition. Covers are decorative and the controls are labelled buttons (24px dots, 44px arrows), with ← →, swipe, a polite announcement, no autoplay, and both reduce-motion settings (covers keep their places and fade). Transforms and opacity in a box of fixed height, so no layout shift; the front cover loads eagerly, the rest lazily; the library is attached only on that page. Checked on a test page with the compiled CSS at 320, 768, 1024 and 1440 (no horizontal scroll) and stepping next, previous and a dot. Not yet rendered by Drupal; PHP not linted (no PHP here). Why: `/v2/special/exhibitions` had no landing, and some exhibitions need to be brought forward while something related is on.
 - **Related guides: calmer motion.** On the live guide the cards' hover read as busy and sudden: the other cards dimmed and darkened at once, and the shadow showed as a halo on dark colors. `.pf-tiles--related` now skips the shelf dimming, has no shadow, fades in without rising (0.9s), and on hover the drawn page drifts 1.5em over 1.2s (was 3em over 0.6s), none with either reduce-motion setting. The homepage's cards are unchanged. Checked with the live guide's markup and local CSS at 1440: hovering one card leaves the others at full opacity, no filter; no shadow.
 - **Related guides as cards; the Hill parking guide is now "Parking and Travel".** A Resource list whose every visible Resource links to a Modular page on the site (Related guides) now draws those pages as the Special Collections homepage's Go deeper cards: the page in miniature, the title on it, the Category label under it (`_palefire_guide_cards()`, `paragraph--resource-list.html.twig`, which imports the tile showcase's `outline` and `labels` macros). Any other list keeps its rows. `.pf-tiles--related` (`_tile-showcase.scss`): two columns on a phone, four from a 36rem section, so four never leave one over; titles cut at four lines, not three, with the scrim's floor raised to match; no pan on scroll (the pan rules now skip `.pf-tiles--related`), the homepage's hover kept; tile-reveal fades them in. Cards are h3s, h4s under a block title, and stay out of "On this page". `palefire_guide_hill_rename.php` renames the guide, rewrites its intro to mention travel, and adds the alias `/v2/special/guides/parking-and-travel-hill-memorial-library`, keeping the old one. The Visit card link and the Quick Guide button now read "Parking & travel" ("…to Hill Memorial Library" for screen readers), and `_palefire_landing_visit()` resolves the guide's first alias with `Url::fromUserInput()`, so the links go out as whatever alias is current and work before and after the script runs. `palefire_guide_related.php` and `palefire_guide_parking_travel.php` use the new title and alias. Checked with the live guide's markup and local CSS at 320, 768, 1024 and 1440 (2, 4, 4, 4 columns; no title cut; no horizontal scroll), and the homepage's buttons at the same widths (one line each). Not yet rendered by Drupal; PHP not linted (no PHP here). Why: a list of links didn't say "another guide" at the end of a guide, and the parking guide's name stopped describing it once it covered airports and hotels.
