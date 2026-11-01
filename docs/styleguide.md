@@ -116,7 +116,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Landing hero, stacks, department | `paragraph--landing-*` | – landing only |
 | Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
 | Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
-| Location page: plate (title + map), ledger, numbered parts, room photos, policy marks, map chip | `paragraph--location-space`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
+| Location page: plate (title + map), ledger, map chip; its parts as sections (room photos, hours and directions, house rules, booking); policy marks | `paragraph--location-space`, `-location-photos`, `-location-visit`, `-location-rules`, `-location-booking`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
 | Ask Special Collections | `includes/ask-special` | – |
 | Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
@@ -126,6 +126,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-01:** The dock's glass bleeds 160px below its edge (`--pf-dock-bleed`), so it runs under Safari 26's floating toolbar, where `bottom: 0` is the toolbar's top.
+- **2026-11-01:** Location pages are one section per part, as /v2/special: Location (the top only), `location_photos` (`.pf-location__photos`), `location_visit` (`.pf-location__visit`), `location_rules`, `location_booking`, numbered by `_palefire_location_index()`. The floors' frost fades in with the map's draw (`.pf-map.is-playing`). The ledger has no rules; over the photo it is frosted like the floors. On portrait screens and iOS the backdrop fills one screen from the top and fades out (`pf-location-backdrop-whole`).
 - **2026-11-01:** The dock is set in Roboto (mono only for uppercase labels and section numbers) on the landing bar's chrome frost at 92%, so muted text holds 4.5:1 over anything. The closed dot uses `--pf-g-scroll`. The dot steps in to the second line's 16px indent. The Contents ring shows "5", not "05".
 - **2026-11-01:** The dock's week gains Ask Us, an accent pill like the row's action (icon dropped below 360px), beside "See full hours". The utility menu stays in the header on every page; its Hours tile opens the dock's week on dock pages.
 - **2026-11-01:** Mobile dock on Special Collections pages, below 768px: the drawers' colors in a thicker glass (90%, `$pf-dock-glass`, so muted text holds 4.5:1 over anything), 28px top corners, a hairline top edge. Status dots differ by shape as well as color (filled open, accent ring soon, muted ring closed). The Contents ring uses the TOC's accent and mono numbers; the current TOC row takes the accent rail. Actions are accent pills (Call desk the quieter rule tone), at least 118px wide, dropping their icon below 360px. Motion: `--pf-dock-ease` (`cubic-bezier(.2, .8, .2, 1)`) over `--pf-dock-dur` (.35s); none with reduced motion.

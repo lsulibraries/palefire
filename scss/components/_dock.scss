@@ -35,6 +35,11 @@ html[data-pf-dock] .offcanvas {
     --pf-dock-row: 60px;
     --pf-dock-h: 96px;
     --pf-toolbar: 12px;
+    // Glass below the dock's bottom edge. Safari 26 on iPhone puts a fixed
+    // element's bottom: 0 at the top of its floating toolbar, not the
+    // screen's edge, so without this the dock stops short and the page
+    // shows under the toolbar. Elsewhere the bleed sits off screen.
+    --pf-dock-bleed: 160px;
     --pf-dock-ease: cubic-bezier(.2, .8, .2, 1);
     --pf-dock-dur: .35s;
   }
@@ -89,9 +94,9 @@ html[data-pf-dock] .offcanvas {
   .pf-dock {
     position: fixed;
     inset-inline: 0;
-    bottom: 0;
+    bottom: calc(-1 * var(--pf-dock-bleed));
     z-index: 1035;
-    padding: 0 max(12px, env(safe-area-inset-right)) calc(var(--pf-toolbar) + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    padding: 0 max(12px, env(safe-area-inset-right)) calc(var(--pf-toolbar) + env(safe-area-inset-bottom) + var(--pf-dock-bleed)) max(12px, env(safe-area-inset-left));
     border-top: 1px solid $pf-hairline;
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -8px 24px rgba($pf-black, .08);
