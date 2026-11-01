@@ -18,6 +18,9 @@
  *                 badge; building-map.js adds the arrow on the drawing.
  *   map.legend    extra legend entries for icons the drawing uses
  *                 (buildings.yml `legend`, e.g. [elevator])
+ *   map.no_key    TRUE on a room's page (paragraph--location-space): the
+ *                 drawing alone, without the legend, space list or the
+ *                 phone hint; the room is lit and marked with the arrow
  *   map.cache     cache metadata (room terms, overrides); print it
  *
  * Layout (_building-map.scss): heading, intro and legend in a column on
@@ -50,6 +53,7 @@
   {# Aside: the legend and space list, then the note (includes/
      map-key.html.twig). On the landing hero (map.visit), the Visit strip
      is here too, with the key across its top, so they share one panel. #}
+  {% if not map.no_key %}
   <div class="pf-map__aside">
     {% if map.visit %}
       {% embed '@palefire/includes/visit-strip.html.twig' with { visit: map.visit, visit_id: map.visit.id, keyed: true } %}
@@ -63,6 +67,7 @@
       {% include '@palefire/includes/map-key.html.twig' %}
     {% endif %}
   </div>
+  {% endif %}
 
   <figure class="pf-map__stage">
     <div class="pf-map__scroller">
@@ -71,6 +76,7 @@
     {# Phones only (_building-map.scss): the room names are hidden there and
        building-map.js numbers the rooms and the list to match. In the
        markup from the start, so nothing moves when the script runs. #}
+    {% if not map.no_key %}
     <figcaption class="pf-map__hint">
       {# Font Awesome Pro bullseye-pointer (duotone, its rings at the 40%
          .fa-secondary layer, as the Quick Start's icons), inlined from the
@@ -78,6 +84,7 @@
       <span class="pf-map__hint-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/bullseye-pointer.svg', ignore_missing = true)|raw }}</span>
       {{ 'Tap a numbered room, or choose a space from the list.'|t }}
     </figcaption>
+    {% endif %}
   </figure>
 
   {# Hidden tooltip sources, one per room (also the regions' aria-describedby).

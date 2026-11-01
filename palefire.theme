@@ -1326,8 +1326,8 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
       $map['heading'] = t('Find the @room', ['@room' => $location['title']]);
       $map['heading_tag'] = 'h2';
       $map['visit'] = NULL;
-      // Folded: the room is lit on the drawing and named beside it.
-      $map['key_closed'] = TRUE;
+      // The drawing alone: the room is lit on it and named beside it.
+      $map['no_key'] = TRUE;
     }
     $uid = 'pf-location-' . $paragraph->id();
     $location['map'] = $map;

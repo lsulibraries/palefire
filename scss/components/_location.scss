@@ -57,9 +57,9 @@
 // 1280px column and the hero's grid, its gutter (--pf-grid-gutter) and five
 // columns, read from the section's own width (pf-location).
 // - The plate: the title, its line, today's hours and the button over two
-//   columns, the building map over three (40/60).
-// - The ledger: the facts across the full width, one per column, the
-//   policy marks under them.
+//   columns, the building map over three (40/60); the policy marks under
+//   the title's line.
+// - The ledger: the facts across the full width, one per column.
 // - The parts, as the sections of /v2/special: each opens on an index rule
 //   (01, 02, …), its heading over two columns and its content over three;
 //   every other one on the swatch's surface, edge to edge.
@@ -87,8 +87,9 @@
   .pf-location__part-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  // The head on the drawing's foot, so the title sits on the ledger.
-  .pf-location__top { align-items: end; }
+  // The head centred on the drawing and its key: on the foot, a short
+  // head left the top of its column empty.
+  .pf-location__top { align-items: center; }
   .pf-location__head,
   .pf-location__part-title { grid-column: span 2; }
   .pf-location__map,
@@ -127,8 +128,8 @@
 
 .pf-location__actions { margin: 1.5rem 0 0; }
 
-// The map: its own queries switch on its column, not the window, so in
-// the narrow column it stacks (drawing, then the key, collapsed). Its
+// The map: the drawing alone (map.no_key: no legend or space list; the room
+// is lit and marked), its own queries switching on its column. Its
 // heading ("Find the …") is left to screen readers and the TOC: the title
 // beside it already says where this is.
 .pf-location__map {
@@ -139,10 +140,6 @@
   .pf-map__heading {
     @include visually-hidden;
   }
-
-  // The building's note (who walks in, what needs an appointment): this
-  // room's own access is in the ledger and House rules.
-  .pf-map__note { display: none; }
 }
 
 // --- The chip: the map, small, once the map has scrolled away --------------
@@ -260,7 +257,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: .375rem;
-  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  margin: 1.25rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -365,7 +362,7 @@
 
 .pf-space-pin__detail { color: var(--pf-location-muted); }
 
-// --- The ledger: the facts in a row, the marks under them ------------------
+// --- The ledger: the facts in a row ----------------------------------------
 // Term over value between two rules (row rules would stop short under a
 // part-filled last row): two across on phones, three from 30rem, and from
 // 52rem one per column of the grid, so each starts on a column line.

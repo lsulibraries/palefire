@@ -18,9 +18,7 @@
    _palefire_hero_rules(): after Visit Hill), it stays open, and the body is an index in three columns,
    the note and legend first, then each group of rooms (_landing-swiss.scss). #}
 {% set keyed = map.visit is defined and map.visit %}
-{# A room's page (map.key_closed) starts with it folded at every width,
-   the room lit on the drawing; building-map.js leaves it to the reader. #}
-<details class="pf-map__key{{ keyed ? ' pf-map__key--indexed' }}"{{ map.key_closed ? '' : ' open' }} data-map-key{{ map.key_closed ? ' data-map-key-closed' }} data-toc-skip>
+<details class="pf-map__key{{ keyed ? ' pf-map__key--indexed' }}" open data-map-key data-toc-skip>
   {% if keyed %}
     <summary class="pf-map__key-toggle pf-index-rule">
       <span class="pf-index-rule__num" aria-hidden="true">{{ map.visit.index }}</span>

@@ -83,6 +83,29 @@
           {% if location.body %}
             <div class="pf-location__lede">{{ location.body }}</div>
           {% endif %}
+          {# The policies at a glance, under the room's line: one mark each,
+             its name and detail in a tooltip on hover, focus or tap (Esc
+             closes it). The button's name is the policy; the tooltip adds
+             the state and the detail. #}
+          {% if location.policies %}
+            {{ attach_library('palefire/location-pins') }}
+            <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
+              {% for policy in location.policies %}
+                {% set tip = location.uid ~ '-tip-' ~ loop.index %}
+                <li class="pf-space-pin pf-space-pin--{{ policy.state|clean_class }}">
+                  <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
+                    {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+                    <span class="visually-hidden">{{ policy.label }}</span>
+                  </button>
+                  <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
+                    <strong class="pf-space-pin__label" aria-hidden="true">{{ policy.label }}</strong>
+                    <span class="pf-space-pin__state">{{ states[policy.state] }}</span>
+                    {% if policy.detail %}<span class="pf-space-pin__detail">{{ policy.detail }}</span>{% endif %}
+                  </span>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
           {# Today's hours, as under the landing hero's title (visit-hours.js
              fills it); the link goes down to the week in Visit. #}
           {% if visit.lid %}
@@ -127,29 +150,6 @@
             <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
           {% endif %}
         </dl>
-
-        {# The policies at a glance: one mark each, its name and detail in a
-           tooltip on hover, focus or tap (Esc closes it). The button's name
-           is the policy; the tooltip adds the state and the detail. #}
-        {% if location.policies %}
-          {{ attach_library('palefire/location-pins') }}
-          <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
-            {% for policy in location.policies %}
-              {% set tip = location.uid ~ '-tip-' ~ loop.index %}
-              <li class="pf-space-pin pf-space-pin--{{ policy.state|clean_class }}">
-                <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
-                  {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
-                  <span class="visually-hidden">{{ policy.label }}</span>
-                </button>
-                <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
-                  <strong class="pf-space-pin__label" aria-hidden="true">{{ policy.label }}</strong>
-                  <span class="pf-space-pin__state">{{ states[policy.state] }}</span>
-                  {% if policy.detail %}<span class="pf-space-pin__detail">{{ policy.detail }}</span>{% endif %}
-                </span>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
       </div>
 
       {% for part in parts %}
