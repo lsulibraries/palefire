@@ -61,18 +61,17 @@
 //   the title's line.
 // - The ledger: the facts across the full width, one per column.
 // - The parts, as the sections of /v2/special: each opens on an index rule
-//   (01, 02, …), its heading over two columns and its content over three;
-//   every other one on the swatch's surface, edge to edge.
-// Narrower than 52rem: one column, the map under the title, the heading
-// over its content.
+//   (01, 02, …), then its heading, a line of lede, and its content under
+//   them at the full width; every other one on the swatch's surface, edge
+//   to edge.
+// Narrower than 52rem: one column, the map under the title.
 .pf-location-page {
   --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
   --pf-location-gap: clamp(2.5rem, 5vw, 3.5rem);
   container: pf-location / inline-size;
 }
 
-.pf-location__top,
-.pf-location__part-grid {
+.pf-location__top {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--pf-location-gap) var(--pf-grid-gutter);
@@ -83,17 +82,14 @@
 .pf-location__part-body { min-width: 0; }
 
 @container pf-location (min-width: 52rem) {
-  .pf-location__top,
-  .pf-location__part-grid {
+  .pf-location__top {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
   // The head centred on the drawing and its key: on the foot, a short
   // head left the top of its column empty.
   .pf-location__top { align-items: center; }
-  .pf-location__head,
-  .pf-location__part-title { grid-column: span 2; }
-  .pf-location__map,
-  .pf-location__part-body { grid-column: span 3; }
+  .pf-location__head { grid-column: span 2; }
+  .pf-location__map { grid-column: span 3; }
 }
 
 .pf-location__eyebrow {
@@ -155,8 +151,8 @@
 // brightest pixel, pure white (the muted ledger terms, #b7b3ba, need 73%).
 // Under the drawing, the floors themselves are frosted: js/location-plate.js
 // adds .pf-location__frost, masked to the floors' shapes from the drawing
-// (Floor 1's outline and the rooms' hit areas), which blurs and dims the
-// photo behind exactly those, so the map's lines and labels keep a quiet
+// (Floor 1's outline and the rooms' hit areas), which blurs the (already
+// darkened) photo behind exactly those, so the map's lines and labels keep a quiet
 // ground and the room shows around it. Light swatches, more contrast and
 // forced colors keep the plain page. The URL is --pf-location-backdrop on
 // the element (paragraph--location-space.html.twig), so only dark swatches
@@ -196,8 +192,8 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     inset: 0;
     display: block;
     pointer-events: none;
-    -webkit-backdrop-filter: blur(12px) brightness(.55);
-    backdrop-filter: blur(12px) brightness(.55);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     -webkit-mask: var(--pf-location-frost) center / 100% 100% no-repeat;
     mask: var(--pf-location-frost) center / 100% 100% no-repeat;
     animation: pf-frost-in .8s ease both;
@@ -519,16 +515,21 @@ html#{$pf-themed} .pf-location__part--band {
   &:last-of-type { padding-bottom: var(--pf-hero-gap); }
 }
 
+// As an indexed section's heading (.pf-section--indexed): its lede
+// (.pf-section__lede, _landing-features.scss) .75rem under it.
 .pf-location__part-title {
-  margin: 0;
+  margin: 0 0 .75rem;
   scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
 }
 
-// Three columns, not a section's width: the rule groups as many across as
-// fit, and Booking's ledger under its text.
+// Under the lede at the full width: the rule groups as many across as fit,
+// Booking's text at a reading measure.
 .pf-location__part-body {
-  .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
-  .pf-booking { grid-template-columns: minmax(0, 1fr); }
+  .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .pf-booking {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 46rem;
+  }
 }
 
 // The room: its photos three across at every width (4:5, as the image

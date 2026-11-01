@@ -15,6 +15,8 @@
  *   "The room", its first part: each photo with its media name as the
  *   caption ("Lecture") and its alt text for screen readers.
  * - Image style pf_location_photo: 4:5, 800x1000, WebP.
+ * - Image style pf_location_backdrop: 1920px wide, WebP, for the photo
+ *   behind the page's top (the room term's own photo, field_space_media).
  * - Content (skipped with page=0): the Lecture Hall's three setups from
  *   Special Collections' reservation page (lectureshape, conferenceushape,
  *   classroomshape in public://2024-01), each made an Image media item once
@@ -112,6 +114,14 @@ if (!ImageStyle::load('pf_location_photo')) {
   $style->addImageEffect(['id' => 'image_convert', 'weight' => 1, 'data' => ['extension' => 'webp']]);
   $style->save();
   echo "Created image style pf_location_photo\n";
+}
+// The photo behind the page's top: the room's own, whole, 1920px wide.
+if (!ImageStyle::load('pf_location_backdrop')) {
+  $style = ImageStyle::create(['name' => 'pf_location_backdrop', 'label' => 'Location backdrop (1920 wide)']);
+  $style->addImageEffect(['id' => 'image_scale', 'weight' => 0, 'data' => ['width' => 1920, 'height' => NULL, 'upscale' => FALSE]]);
+  $style->addImageEffect(['id' => 'image_convert', 'weight' => 1, 'data' => ['extension' => 'webp']]);
+  $style->save();
+  echo "Created image style pf_location_backdrop\n";
 }
 
 if (!$make_page) {

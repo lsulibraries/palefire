@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * The 404 page (page--404.html.twig): an empty display case in front of
+ * the wall text "Currently on loan.", then the page's <h1>, a search and
+ * links out.
+ *
+ * Without JavaScript the case stands still at its resting angle and the
+ * wall text is one faint line. js/not-found.js turns the case with the
+ * pointer, bends the wall text seen through the glass, adds dust in the
+ * spotlight and glitches the <h1> on fast movement. Styles:
+ * _not-found.scss.
+ *
+ * The case is drawn in CSS 3D: a glass box (four walls and a lid) on a
+ * plinth whose top is the case floor, and a folded tent card on the floor.
+ *
+ * Variables:
+ * - path: the address that was not found, as text.
+ * - query: words from it for the search field, or ''.
+ * - links: [{label, url, note?}].
+ */
+#}
+{{ attach_library('palefire/not-found') }}
+<div class="pf-404" data-pf-404>
+  <div class="pf-404__stage" data-pf-404-stage>
+    <p class="pf-404__wall" aria-hidden="true" data-pf-404-wall>{{ 'Currently on loan.'|t }}</p>
+    <div class="pf-404__case" aria-hidden="true" data-pf-404-case>
+      <div class="pf-404__face pf-404__plinth pf-404__b"></div>
+      <div class="pf-404__face pf-404__plinth pf-404__l"></div>
+      <div class="pf-404__face pf-404__plinth pf-404__r"></div>
+      <div class="pf-404__face pf-404__floor"></div>
+      <div class="pf-404__face pf-404__glass pf-404__b"></div>
+      <div class="pf-404__face pf-404__glass pf-404__l"></div>
+      <div class="pf-404__face pf-404__glass pf-404__r"></div>
+      <div class="pf-404__tent">
+        {% for side in ['back', 'front'] %}
+          <span class="pf-404__card pf-404__card--{{ side }}">
+            <span class="pf-404__card-title">{{ 'On loan'|t }}</span>
+            <span class="pf-404__card-note">{{ 'Return date unknown'|t }}</span>
+          </span>
+        {% endfor %}
+      </div>
+      <div class="pf-404__face pf-404__plinth pf-404__f"></div>
+      <div class="pf-404__face pf-404__glass pf-404__f"></div>
+      <div class="pf-404__face pf-404__lid"></div>
+    </div>
+  </div>
+
+  <div class="pf-404__body">
+    <div class="pf-404__lead">
+      <p class="pf-404__eyebrow">{{ 'Please do not touch the glass'|t }}</p>
+      <h1 class="pf-404__title" data-pf-404-title>{{ '404: Page not found'|t }}</h1>
+      {# iPhone only: motion needs a tap to allow (js/not-found.js). #}
+      <button type="button" class="pf-404__tilt" data-pf-404-tilt hidden>{{ 'Tilt to glitch'|t }}</button>
+      <p class="pf-404__lede">
+        {% trans %}The page at <code>{{ path }}</code> isn’t on view. It may have travelled, been renamed, or been deaccessioned.{% endtrans %}
+      </p>
+      <form class="pf-404__search" role="search" method="get" action="https://lib.lsu.edu/bento">
+        <label class="pf-404__label" for="pf-404-q">{{ 'Search the library'|t }}</label>
+        <div class="pf-404__field">
+          <input class="pf-404__input" type="search" id="pf-404-q" name="search_api_fulltext_bento" value="{{ query }}"
+                 placeholder="{{ 'Books, articles, databases, guides'|t }}" autocomplete="off" enterkeyhint="search">
+          <button class="pf-404__submit" type="submit">{{ 'Search'|t }}</button>
+        </div>
+      </form>
+    </div>
+    <nav class="pf-404__exits" aria-label="{{ 'Ways back'|t }}">
+      <ul class="pf-404__list">
+        {% for link in links %}
+          <li>
+            <a class="pf-404__link" href="{{ link.url }}">
+              <span>{{ link.label }}{% if link.note %}<small class="pf-404__note">{{ link.note }}</small>{% endif %}</span>
+              <span class="pf-404__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</div>

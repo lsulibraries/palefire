@@ -115,6 +115,20 @@ function palefire_page_attachments_alter(array &$attachments) {
 }
 
 /**
+ * Implements hook_theme_suggestions_page_alter().
+ *
+ * The 404 preview page (PalefireHooks::NOT_FOUND_PREVIEW) uses the 404
+ * page's template, page--404.html.twig, as a real 404 does.
+ */
+function palefire_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
+  if (PalefireHooks::pageAlias() === PalefireHooks::NOT_FOUND_PREVIEW) {
+    $suggestions = array_values(array_diff($suggestions, ['page__4xx', 'page__404']));
+    $suggestions[] = 'page__4xx';
+    $suggestions[] = 'page__404';
+  }
+}
+
+/**
  * Implements hook_library_info_alter().
  *
  * Cache busting. Drupal adds a library's version to its CSS and JS URLs
@@ -1342,6 +1356,26 @@ function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetad
 }
 
 /**
+ * The photo behind a location page's top: a URL, or ''.
+ *
+ * The room term's own photo (field_space_media, the one the map's tooltip
+ * crops to a band), whole, in pf_location_backdrop (1920px wide WebP);
+ * without that style or photo, the first of the section's Photos.
+ */
+function _palefire_location_backdrop(TermInterface $room, array $photos, CacheableMetadata $cache): string {
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
+  $ref = $style && $room->hasField('field_space_media') ? $room->get('field_space_media')->first() : NULL;
+  $item = $ref ? _palefire_media_image_item($ref, $cache) : NULL;
+  $file = $item?->entity;
+  if ($file instanceof FileInterface) {
+    $cache->addCacheableDependency($style);
+    $cache->addCacheableDependency($file);
+    return \Drupal::service('file_url_generator')->transformRelative($style->buildUrl($file->getFileUri()));
+  }
+  return $photos[0]['src'] ?? '';
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--location-space.
  *
  * `location` (_palefire_location_data(), plus `map`: the building map with
@@ -1378,6 +1412,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['booking'] = ($booking['body'] || $booking['link']) ? $booking : NULL;
     $location['link'] = $location['link'] ?? $booking['link'];
     $location['photos'] = _palefire_location_photos($paragraph, $cache);
+    $location['backdrop'] = _palefire_location_backdrop($room, $location['photos'], $cache);
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);

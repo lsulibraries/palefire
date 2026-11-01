@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Palefire 404 page: page.html.twig with the 404 page in place of the
+ * content region (includes/not-found.html.twig).
+ *
+ * Used for every 404 this theme renders (core's page__404 suggestion) and
+ * for the preview page at PalefireHooks::NOT_FOUND_PREVIEW
+ * (palefire_theme_suggestions_page_alter()). The site's 404 node is not
+ * printed; its <title> still names the page.
+ *
+ * Extra variables (PalefireHooks::preprocessPage()):
+ * - not_found: path, query and links for the include. Empty on any other
+ *   page that gets this template; then the content region prints as usual.
+ */
+#}
+{% extends '@palefire/layout/page.html.twig' %}
+
+{% block main_content %}
+  {{ page.highlighted }}
+  {% if not_found %}
+    {% include '@palefire/includes/not-found.html.twig' with not_found only %}
+  {% else %}
+    {{ page.content }}
+  {% endif %}
+{% endblock %}

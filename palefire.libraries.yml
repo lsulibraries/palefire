@@ -236,6 +236,16 @@ staff-directory:
     - core/drupal
     - core/once
 
+# The 404 page: the case turns with the pointer, the wall text bends
+# through the glass, the <h1> glitches on fast movement. Attached by
+# templates/includes/not-found.html.twig.
+not-found:
+  js:
+    js/not-found.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Landing with a lead panel and a map: the page snaps between the two (md
 # and up). Attached by includes/landing.html.twig.
 landing-snap:

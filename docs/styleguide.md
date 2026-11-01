@@ -139,3 +139,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Location backdrop: the photo darkened rather than blurred, covering and fading out on every side, with a frosted oval under the map (`.pf-location__map::before`, backdrop-filter, radial mask).
 - **2026-10-31:** Location backdrop: the photo is fixed to the window; the oval is replaced by `.pf-location__frost`, a backdrop blur masked to the map's floors (`pf-map__floors` + room hit areas, built by `js/location-plate.js`).
 - **2026-10-31:** Location backdrop: no edge fades; one even 75% black wash, the least that keeps the top's text at AA over the photo's whitest pixel. It runs on to the first band.
+- **2026-10-31:** Location parts follow /v2/special's section pattern: index rule (with its link), `.pf-location__part-title`, `.pf-section__lede`, then the body at the full width; `.pf-location__part-grid` removed. Backdrop: the room term's photo in `pf_location_backdrop`; the frost blurs only.

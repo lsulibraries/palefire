@@ -16,6 +16,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\palefire\StaffDirectory;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
  * Hook implementations for the Palefire theme.
@@ -86,6 +87,20 @@ class PalefireHooks {
    * Other aliases that get the Special Collections footer, with their pages.
    */
   public const SPECIAL_EXTRA = ['/v2/exhibitions'];
+
+  /**
+   * Alias of a page drawn as the 404 page, to preview it with this theme.
+   *
+   * Real 404s only get this theme under /v2, and say "Error 404" in a
+   * 404 status; this page shows the same thing at an address you can open
+   * (scripts/palefire_404_preview.php makes it).
+   */
+  public const NOT_FOUND_PREVIEW = '/v2/404';
+
+  /**
+   * The missing address the preview pretends to have been asked for.
+   */
+  private const NOT_FOUND_SAMPLE = '/v2/special/exhibitons';
 
   /**
    * Routes that show a node as its page.
@@ -201,6 +216,9 @@ class PalefireHooks {
     // Printed by the footer, so the cache varies by path.
     $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
 
+    // The 404 page (page--404.html.twig): a real 404, or the preview page.
+    $variables['not_found'] = self::isNotFound() ? $this->notFound($alias) : NULL;
+
     // Core sets "node" from the route's "node" parameter only, so a Preview
     // has none: take it from pageNode(), for page.html.twig too.
     $node = $variables['node'] ?? self::pageNode();
@@ -276,6 +294,49 @@ class PalefireHooks {
       ];
       $cacheability->applyTo($variables['landing_toc']);
     }
+  }
+
+  /**
+   * Whether this page is drawn as the 404 page.
+   *
+   * A 404 (the exception the error page is rendered for, as core's
+   * page__404 suggestion checks), or the preview page (NOT_FOUND_PREVIEW).
+   */
+  public static function isNotFound(): bool {
+    $exception = \Drupal::request()->attributes->get('exception');
+    if ($exception instanceof HttpExceptionInterface && $exception->getStatusCode() === 404) {
+      return TRUE;
+    }
+    return self::pageAlias() === self::NOT_FOUND_PREVIEW;
+  }
+
+  /**
+   * Variables for includes/not-found.html.twig.
+   *
+   * The path that was asked for (on the preview, NOT_FOUND_SAMPLE), its
+   * last segment as words for the search field ("/v2/special/exhibitons"
+   * searches "exhibitons"), and the links out. Every page with this
+   * template varies by path already (footer_cache).
+   */
+  private function notFound(string $alias): array {
+    $path = $alias === self::NOT_FOUND_PREVIEW
+      ? self::NOT_FOUND_SAMPLE
+      : rawurldecode(\Drupal::requestStack()->getMainRequest()->getPathInfo());
+    $last = pathinfo(basename($path), PATHINFO_FILENAME);
+    $words = trim((string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', $last));
+    if (ctype_digit(str_replace(' ', '', $words))) {
+      $words = '';
+    }
+    return [
+      'path' => Unicode::truncate($path, 120, FALSE, TRUE),
+      'query' => Unicode::truncate($words, 60, TRUE),
+      'links' => [
+        ['label' => (string) $this->t('Special Collections'), 'note' => (string) $this->t('Hill Memorial Library'), 'url' => self::SPECIAL_ROOT],
+        ['label' => (string) $this->t('Exhibitions'), 'url' => self::SPECIAL_EXTRA[0]],
+        ['label' => (string) $this->t('Plan a research visit'), 'url' => self::SPECIAL_ROOT . '/guides/special-collections'],
+        ['label' => (string) $this->t('Ask a librarian'), 'url' => 'https://askus.lib.lsu.edu/'],
+      ],
+    ];
   }
 
   /**

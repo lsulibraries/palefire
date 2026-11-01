@@ -72,12 +72,12 @@
       </div>
     {% endif %}
     <div class="pf-location">
-      {# The top and the ledger, over the room's first photo, darkened and
-         fixed, the map's floors frosted over it (_location.scss,
-         js/location-plate.js; dark swatches only):
-         a CSS background, so nothing for screen readers; the same file as
-         The room's first. #}
-      <div class="pf-location__intro{{ location.photos ? ' has-backdrop' }}"{% if location.photos %} style="--pf-location-backdrop: url('{{ location.photos|first.src }}')"{% endif %}>
+      {# The top and the ledger, over the room's photo (location.backdrop:
+         the room term's own, else the first of Photos), darkened and fixed,
+         the map's floors frosted over it (_location.scss,
+         js/location-plate.js; dark swatches only): a CSS background, so
+         nothing for screen readers. #}
+      <div class="pf-location__intro{{ location.backdrop ? ' has-backdrop' }}"{% if location.backdrop %} style="--pf-location-backdrop: url('{{ location.backdrop }}')"{% endif %}>
         <div class="pf-location__top">
           <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
             <p class="pf-location__eyebrow">
@@ -162,87 +162,100 @@
       {% for part in parts %}
         {% set num = '%02d'|format(loop.index) %}
         {% set title_id = location.uid ~ '-' ~ part ~ '-title' %}
+        {# As /v2/special's sections: the index rule (with a link at its end
+           where there is one), the heading, a line of lede, then the
+           content under them at the full width. #}
         <section class="pf-location__part{{ loop.index is odd ? ' pf-location__part--band' }}" aria-labelledby="{{ title_id }}">
           {% if part == 'room' %}
             {# The room's photos (field_location_photos), each captioned with
                its media name ("Lecture"); the alt text says what it shows. #}
             {{ pf.index_rule(num, 'The space'|t, {}) }}
-            <div class="pf-location__part-grid">
-              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'The room'|t }}</h2>
-              <div class="pf-location__part-body">
-                <ul class="pf-location__photos">
-                  {% for photo in location.photos %}
-                    <li>
-                      <figure class="pf-location__photo">
-                        <img src="{{ photo.src }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
-                        {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
-                      </figure>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
+            <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'The room'|t }}</h2>
+            <p class="pf-section__lede">{{ 'See the @room before you come.'|t({'@room': location.title}) }}</p>
+            <div class="pf-location__part-body">
+              <ul class="pf-location__photos">
+                {% for photo in location.photos %}
+                  <li>
+                    <figure class="pf-location__photo">
+                      <img src="{{ photo.src }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
+                      {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+                    </figure>
+                  </li>
+                {% endfor %}
+              </ul>
             </div>
           {% elseif part == 'visit' %}
-            {{ pf.index_rule(num, 'Getting here'|t, {}) }}
-            <div class="pf-location__part-grid">
-              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Hours and directions'|t }}</h2>
-              <div class="pf-location__part-body pf-location__visit">
-                {% if visit.lid %}
-                  {# The hours line under the title jumps here
-                     (location.uid-visit-hours); visit-hours.js fills the
-                     status and the week. #}
-                  <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
-                    <p class="pf-visit__status" id="{{ location.uid }}-visit-hours" tabindex="-1" aria-live="polite">
-                      <span class="pf-visit__dot" aria-hidden="true"></span>
-                      <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
-                      <span class="pf-visit__today" data-pf-hours-today></span>
-                    </p>
-                    <div class="pf-visit__week">
-                      <h3 class="pf-visit__week-title" data-pf-hours-week-label>{{ 'This week'|t }}</h3>
-                      <ol class="pf-visit__days" data-pf-hours-week>
-                        {% for i in 1..7 %}<li class="pf-visit__day" aria-hidden="true">&nbsp;</li>{% endfor %}
-                      </ol>
-                    </div>
+            {{ pf.index_rule(num, 'Getting here'|t, visit.maps_url ? {
+              url: visit.maps_url,
+              text: 'Directions'|t,
+              hidden: ' (opens in a new tab)'|t,
+              external: true,
+            } : {}) }}
+            <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Hours and directions'|t }}</h2>
+            <p class="pf-section__lede">
+              {%- if location.floor -%}
+                {{ 'On Floor @n of @building, open whenever the building is.'|t({'@n': location.floor, '@building': location.building}) }}
+              {%- else -%}
+                {{ 'In @building, open whenever the building is.'|t({'@building': location.building}) }}
+              {%- endif -%}
+            </p>
+            <div class="pf-location__part-body pf-location__visit">
+              {% if visit.lid %}
+                {# The hours line under the title jumps here
+                   (location.uid-visit-hours); visit-hours.js fills the
+                   status and the week. #}
+                <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
+                  <p class="pf-visit__status" id="{{ location.uid }}-visit-hours" tabindex="-1" aria-live="polite">
+                    <span class="pf-visit__dot" aria-hidden="true"></span>
+                    <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
+                    <span class="pf-visit__today" data-pf-hours-today></span>
+                  </p>
+                  <div class="pf-visit__week">
+                    <h3 class="pf-visit__week-title" data-pf-hours-week-label>{{ 'This week'|t }}</h3>
+                    <ol class="pf-visit__days" data-pf-hours-week>
+                      {% for i in 1..7 %}<li class="pf-visit__day" aria-hidden="true">&nbsp;</li>{% endfor %}
+                    </ol>
                   </div>
+                </div>
+              {% endif %}
+              <p class="pf-location__visit-links">
+                {% if visit.lid %}
+                  <a class="pf-visit__link" href="https://lsu.libcal.com/hours">
+                    {{- 'All library hours'|t -}}
+                    <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg>
+                  </a>
                 {% endif %}
-                <p class="pf-location__visit-links">
-                  {% if visit.lid %}
-                    <a class="pf-visit__link" href="https://lsu.libcal.com/hours">
-                      {{- 'All library hours'|t -}}
-                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg>
-                    </a>
-                  {% endif %}
-                  {% if visit.maps_url %}
-                    <a class="pf-visit__link" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
-                      {{- 'Open in Google Maps'|t -}}
-                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
-                    </a>
-                  {% endif %}
-                  {% if visit.parking_url %}
-                    <a class="pf-visit__link" href="{{ visit.parking_url }}">
-                      {{- 'Parking & travel'|t -}}
-                      {%- if visit.name %}<span class="visually-hidden"> {{ 'to @place'|t({'@place': visit.name}) }}</span>{% endif -%}
-                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-                    </a>
-                  {% endif %}
-                </p>
-              </div>
+                {% if visit.maps_url %}
+                  <a class="pf-visit__link" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
+                    {{- 'Open in Google Maps'|t -}}
+                    <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+                  </a>
+                {% endif %}
+                {% if visit.parking_url %}
+                  <a class="pf-visit__link" href="{{ visit.parking_url }}">
+                    {{- 'Parking & travel'|t -}}
+                    {%- if visit.name %}<span class="visually-hidden"> {{ 'to @place'|t({'@place': visit.name}) }}</span>{% endif -%}
+                    <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                  </a>
+                {% endif %}
+              </p>
             </div>
           {% elseif part == 'rules' %}
             {{ pf.index_rule(num, 'Before you come'|t, {}) }}
-            <div class="pf-location__part-grid">
-              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'House rules'|t }}</h2>
-              <div class="pf-location__part-body">
-                {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: rules, attributes: create_attribute() } only %}
-              </div>
+            <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'House rules'|t }}</h2>
+            <p class="pf-section__lede">{{ 'What the @room allows, and what to arrange first.'|t({'@room': location.title}) }}</p>
+            <div class="pf-location__part-body">
+              {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: rules, attributes: create_attribute() } only %}
             </div>
           {% else %}
-            {{ pf.index_rule(num, 'Reserve'|t, {}) }}
-            <div class="pf-location__part-grid">
-              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
-              <div class="pf-location__part-body">
-                {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
-              </div>
+            {{ pf.index_rule(num, 'Reserve'|t, location.link ? {
+              url: location.link.url,
+              text: 'Request form'|t,
+            } : {}) }}
+            <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
+            <p class="pf-section__lede">{{ 'How to request the @room, and what comes with it.'|t({'@room': location.title}) }}</p>
+            <div class="pf-location__part-body">
+              {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
             </div>
           {% endif %}
         </section>

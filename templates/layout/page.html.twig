@@ -282,8 +282,11 @@
               <span class="visually-hidden">{{ 'Table of contents'|t }}</span>
             </button>
           {% endif %}
-          {{ page.highlighted }}
-          {{ page.content }}
+          {# page--404.html.twig replaces this block with the 404 page. #}
+          {% block main_content %}
+            {{ page.highlighted }}
+            {{ page.content }}
+          {% endblock %}
         </main>
 
         {% if has_sidebar and not toc_first %}

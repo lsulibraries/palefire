@@ -1,0 +1,484 @@
+// 404 -------------------------------------------------------------------------
+// The 404 page (includes/not-found.html.twig, page--404.html.twig,
+// js/not-found.js): an empty display case under a spotlight, in front of
+// the wall text "Currently on loan.", then the page's <h1>, a search and
+// links out.
+//
+// The wall text is decoration (aria-hidden, the <h1> says it in words), so
+// it sits faint on the wall, a touch stronger where seen through the glass.
+// The case is CSS 3D: four glass walls and a lid on a plinth whose top is
+// the case floor; a folded tent card stands on the floor. Its colors are
+// the card stock's own in every reading color, as a real card under a
+// spotlight. Lines are the soft hairline; the label is the TOC's mono
+// capitals.
+
+.pf-404 {
+  --pf-404-fg: var(--bs-body-color);
+  --pf-404-heading: var(--bs-emphasis-color);
+  --pf-404-muted: var(--bs-secondary-color);
+  --pf-404-surface: var(--pf-g-surface, var(--bs-tertiary-bg));
+  --pf-404-accent: var(--bs-link-color);
+  --pf-404-line: #{$pf-hairline};
+  --pf-404-control: var(--pf-section-border, #6c757d);
+  --pf-404-ease: #{$pf-swup-ease-in};
+  // Light rooms.
+  --pf-404-spot: rgba(255, 249, 230, .95);
+  --pf-404-shadow: rgba(31, 30, 28, .22);
+  --pf-404-glass: rgba(255, 255, 255, .34);
+  --pf-404-glass-fill: rgba(255, 255, 255, .06);
+  --pf-404-glass-edge: rgba(31, 30, 28, .3);
+  --pf-404-mote: 70, 60, 40;
+  --pf-404-glitch-a: var(--bs-link-color);
+  --pf-404-glitch-b: #{$pf-gold};
+  --pf-404-blend: multiply;
+  // Wall text: faint, and a touch stronger through the glass.
+  --pf-404-wall: .14;
+  --pf-404-lens: .24;
+  // The case: width (and depth), glass height, plinth height, drop.
+  --pf-404-s: 180px;
+  --pf-404-h: 216px;
+  --pf-404-p: 100px;
+  --pf-404-drop: 3rem;
+  max-width: $pf-content-max;
+  margin-inline: auto;
+  padding-block: 1rem 4rem;
+
+  @include media-breakpoint-up(md) {
+    --pf-404-s: 220px;
+    --pf-404-h: 260px;
+    --pf-404-p: 120px;
+  }
+}
+
+.pf-reading-dark .pf-404,
+[data-bs-theme="dark"] .pf-404 {
+  --pf-404-spot: rgba(242, 220, 155, .13);
+  --pf-404-shadow: rgba(0, 0, 0, .55);
+  --pf-404-glass: rgba(255, 255, 255, .06);
+  --pf-404-glass-fill: rgba(255, 255, 255, .015);
+  --pf-404-glass-edge: rgba(248, 247, 249, .28);
+  --pf-404-mote: 242, 220, 155;
+  --pf-404-glitch-b: #{$pf-lavender};
+  --pf-404-blend: screen;
+}
+
+// Stage: spotlight from above, the wall text, the case, the dust.
+.pf-404__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: clamp(26rem, 48vw, 36rem);
+  overflow: hidden;
+  perspective: 1100px;
+  perspective-origin: 50% 15%;
+  background: radial-gradient(ellipse 30% 80% at 50% 0%, var(--pf-404-spot), transparent 72%);
+  touch-action: pan-y;
+}
+
+// Centered on the glass: the case's middle sits half the drop below the
+// stage's middle, the glass's middle half a plinth above that.
+.pf-404__wall {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(50% + var(--pf-404-drop) / 2 - var(--pf-404-p) / 2);
+  z-index: 0;
+  margin: 0;
+  transform: translateY(-50%);
+  color: var(--pf-404-heading);
+  font-family: $pf-font-display-serif;
+  font-size: clamp(3rem, .5rem + 9vw, 9.5rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.02;
+  text-align: center;
+  text-wrap: balance;
+  opacity: var(--pf-404-wall);
+
+  // With the script: the sizer keeps the box, the copies draw.
+  &:has(.pf-404__wall-sizer) {
+    opacity: 1;
+  }
+}
+
+.pf-404__wall-sizer {
+  display: block;
+  visibility: hidden;
+}
+
+.pf-404__wall-base,
+.pf-404__wall-strip {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pf-404__wall-base {
+  opacity: var(--pf-404-wall);
+}
+
+.pf-404__wall-strip {
+  opacity: var(--pf-404-lens);
+  will-change: transform;
+}
+
+.pf-404__dust {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+// The case. Each face is placed from the case's center; horizontal faces
+// are centered on their edge, then laid flat.
+.pf-404__case {
+  position: relative;
+  z-index: 1;
+  width: var(--pf-404-s);
+  height: calc(var(--pf-404-h) + var(--pf-404-p));
+  margin-top: var(--pf-404-drop);
+  transform: rotateX(var(--pf-404-rx, -8deg)) rotateY(var(--pf-404-ry, -24deg));
+  transform-style: preserve-3d;
+}
+
+.pf-404__face {
+  position: absolute;
+  left: 0;
+  width: var(--pf-404-s);
+}
+
+.pf-404__glass {
+  top: 0;
+  height: var(--pf-404-h);
+  border: 1px solid var(--pf-404-glass-edge);
+  background:
+    linear-gradient(115deg, transparent 25%, var(--pf-404-glass) 40%, transparent 47%, transparent 60%, var(--pf-404-glass) 66%, transparent 69%),
+    var(--pf-404-glass-fill);
+  background-position: var(--pf-404-sheen, 50%) 0, 0 0;
+  background-size: 260% 100%, auto;
+}
+
+.pf-404__plinth {
+  top: var(--pf-404-h);
+  height: var(--pf-404-p);
+  border: 1px solid var(--pf-404-line);
+  background: var(--pf-404-surface);
+
+  &.pf-404__l {
+    background: color-mix(in srgb, var(--pf-404-surface) 92%, #000);
+  }
+
+  &.pf-404__r {
+    background: color-mix(in srgb, var(--pf-404-surface) 86%, #000);
+  }
+}
+
+.pf-404__f {
+  transform: translateZ(calc(var(--pf-404-s) / 2));
+}
+
+.pf-404__b {
+  transform: rotateY(180deg) translateZ(calc(var(--pf-404-s) / 2));
+}
+
+.pf-404__l {
+  transform: rotateY(-90deg) translateZ(calc(var(--pf-404-s) / 2));
+}
+
+.pf-404__r {
+  transform: rotateY(90deg) translateZ(calc(var(--pf-404-s) / 2));
+}
+
+.pf-404__lid,
+.pf-404__floor {
+  height: var(--pf-404-s);
+  transform-origin: 50% 50%;
+}
+
+.pf-404__lid {
+  top: 0;
+  border: 1px solid var(--pf-404-glass-edge);
+  background: var(--pf-404-glass-fill);
+  transform: translateY(calc(var(--pf-404-s) / -2)) rotateX(90deg);
+}
+
+.pf-404__floor {
+  top: var(--pf-404-h);
+  border: 1px solid var(--pf-404-line);
+  background: color-mix(in srgb, var(--pf-404-surface) 88%, var(--pf-404-heading) 8%);
+  transform: translateY(calc(var(--pf-404-s) / -2)) rotateX(90deg);
+
+  // The card's shadow.
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8.5rem;
+    height: 4.5rem;
+    background: radial-gradient(closest-side, var(--pf-404-shadow), transparent);
+    content: "";
+    translate: -50% -50%;
+  }
+}
+
+// Folded tent card: two panels hang from one ridge and splay 26deg, so the
+// ridge sits 3.4rem × cos 26° above the floor.
+.pf-404__tent {
+  position: absolute;
+  top: calc(var(--pf-404-h) - 3.06rem - 1px);
+  left: calc(50% - 3.75rem);
+  width: 7.5rem;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.pf-404__card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-content: center;
+  width: 7.5rem;
+  height: 3.4rem;
+  border-top: 1px solid rgba(31, 30, 28, .12);
+  background: #fffdf7;
+  text-align: center;
+  transform-origin: 50% 0;
+
+  &::before,
+  &::after {
+    position: absolute;
+    inset-inline: .45rem;
+    height: 1px;
+    background: rgba(31, 30, 28, .32);
+    content: "";
+  }
+
+  &::before {
+    top: .35rem;
+  }
+
+  &::after {
+    bottom: .35rem;
+  }
+}
+
+.pf-404__card--front {
+  box-shadow: inset 0 -12px 16px -14px rgba(0, 0, 0, .2);
+  transform: rotateX(26deg);
+}
+
+.pf-404__card--back {
+  filter: brightness(.9);
+  transform: rotateY(180deg) rotateX(26deg);
+}
+
+.pf-404__card-title {
+  color: #1f1e1c;
+  font-family: $pf-font-display-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.pf-404__card-note {
+  display: block;
+  margin-top: .3rem;
+  color: #595959;
+  font-size: .4375rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+// Text: the <h1> block and the links out.
+.pf-404__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: 3rem;
+  }
+}
+
+.pf-404__eyebrow {
+  margin: 0 0 .75rem;
+  color: var(--pf-404-muted);
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-404__title {
+  position: relative;
+  margin: 0 0 1rem;
+  color: var(--pf-404-heading);
+  font-size: clamp(2rem, 1rem + 2vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -.035em;
+  line-height: 1.05;
+  text-wrap: balance;
+  transform: translateX(var(--pf-404-jolt, 0px));
+}
+
+// Glitch copies (js/not-found.js): hidden until fast movement tears them.
+.pf-404__glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  mix-blend-mode: var(--pf-404-blend);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, clip-path;
+}
+
+.pf-404__glitch--a {
+  color: var(--pf-404-glitch-a);
+}
+
+.pf-404__glitch--b {
+  color: var(--pf-404-glitch-b);
+}
+
+.pf-404__tilt {
+  margin: 0 0 1.25rem;
+  padding: .5rem 1rem;
+  border: 1px solid var(--pf-404-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--pf-404-accent);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.pf-404__lede {
+  max-width: 34rem;
+  margin: 0 0 1.75rem;
+  font-size: 1.125rem;
+  font-weight: 300;
+
+  code {
+    color: var(--pf-404-heading);
+    font-size: .88em;
+    word-break: break-all;
+  }
+}
+
+.pf-404__search {
+  display: grid;
+  gap: .45rem;
+  max-width: 34rem;
+}
+
+.pf-404__label {
+  color: var(--pf-404-muted);
+  font-size: .8125rem;
+}
+
+// The field's line keeps the full line color: it is the control's edge
+// (3:1, WCAG 1.4.11).
+.pf-404__field {
+  display: flex;
+  border-bottom: 1px solid var(--pf-404-control);
+  transition: border-color .3s ease, box-shadow .3s ease;
+
+  &:focus-within {
+    border-bottom-color: var(--pf-404-accent);
+    box-shadow: 0 1px 0 var(--pf-404-accent);
+  }
+}
+
+.pf-404__input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: .6rem 0;
+  border: 0;
+  background: none;
+  color: var(--pf-404-heading);
+  font-size: 1.3rem;
+  font-weight: 300;
+  line-height: 1.2;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.pf-404__submit {
+  padding: 0 0 0 1rem;
+  border: 0;
+  background: none;
+  color: var(--pf-404-accent);
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.pf-404__list {
+  max-width: 34rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    border-top: 1px solid var(--pf-404-line);
+  }
+
+  li:last-child {
+    border-bottom: 1px solid var(--pf-404-line);
+  }
+}
+
+.pf-404__link {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .8rem 0;
+  color: var(--pf-404-heading);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color $pf-hover-out ease;
+
+  &:hover {
+    color: var(--pf-404-accent);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-404__note {
+  display: block;
+  color: var(--pf-404-muted);
+  font-size: .8125rem;
+  font-weight: 400;
+}
+
+.pf-404__arrow {
+  color: var(--pf-404-muted);
+  transition: transform $pf-hover-out var(--pf-404-ease);
+
+  .pf-404__link:hover & {
+    transform: translateX(4px);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-404__field,
+  .pf-404__link,
+  .pf-404__arrow {
+    transition: none;
+  }
+}
