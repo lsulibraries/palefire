@@ -18,16 +18,21 @@
  * (.pf-exhibit-button, _exhibition.scss), and each title in its own face
  * (the Exhibition title style field: serif or sans).
  *
- * Featured exhibitions (field_exhibit_showcase) come first, so the
- * carousel opens on one, with a "Featured" label and the reason
- * (field_exhibit_feature_note) in its summary and its table row.
+ * Online exhibitions and physical ones (their blog posts) share the list.
+ * A post reads "Read about it" and shows where and when; an online
+ * exhibition with a physical show has its post as a second link.
+ *
+ * Featured items (field_exhibit_showcase, or on view today) come first,
+ * so the carousel opens on one, with a "Featured" label and the reason
+ * (field_exhibit_feature_note, or "On view in … through …") in its
+ * summary and its table row.
  *
  * Covers are decorative (the titles are in the text). Arrows are drawn
  * inline: Font Awesome's font isn't loaded on these pages. No autoplay.
  *
- * Variables: showcase: items (title, url, subtitle, kicker, year, blurb,
- * physical, featured, note, unpublished, title_style, cover), featured
- * (count), cache.
+ * Variables: showcase: items (title, url, cta, subtitle, kicker, year,
+ * blurb, when, post (url, when) or NULL, featured, note, unpublished,
+ * title_style, cover), featured (count), cache.
  */
 #}
 {% macro cover(image, sizes, eager) %}
@@ -84,11 +89,20 @@
               </p>
               <h2 class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}">{{ ex.title }}</h2>
               {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
+              {% if ex.when %}<p class="pf-showcase__when">{{ ex.when }}</p>{% endif %}
               {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
-              <a class="pf-exhibit-button pf-exhibit-button--primary pf-showcase__enter" href="{{ ex.url }}">
-                {{ 'Enter the exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span>
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
-              </a>
+              <div class="pf-showcase__actions">
+                <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ ex.url }}">
+                  {{ ex.cta }}<span class="visually-hidden">: {{ ex.title }}</span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+                </a>
+                {% if ex.post %}
+                  <a class="pf-exhibit-button" href="{{ ex.post.url }}">
+                    {{ 'The physical exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span>
+                  </a>
+                {% endif %}
+              </div>
+              {% if ex.post and ex.post.when %}<p class="pf-showcase__when">{{ 'In the building: @when'|t({'@when': ex.post.when}) }}</p>{% endif %}
             </div>
           {% endfor %}
         </div>
@@ -144,10 +158,17 @@
               <td class="pf-showcase-list__year">{{ ex.year }}</td>
               <th scope="row" class="pf-showcase-list__name">
                 <a class="pf-showcase-list__link" href="{{ ex.url }}">{{ ex.title }}</a>
+                {% if ex.post %}
+                  <p class="pf-showcase-list__post">
+                    <a href="{{ ex.post.url }}">{{ 'The physical exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span></a>
+                    {% if ex.post.when %}<span class="pf-showcase-list__when">{{ ex.post.when }}</span>{% endif %}
+                  </p>
+                {% endif %}
                 {{ pf.feature(ex, 'pf-showcase-list__feature') }}
               </th>
               <td class="pf-showcase-list__summary">
                 {% if ex.subtitle %}<p class="pf-showcase-list__subtitle">{{ ex.subtitle }}</p>{% endif %}
+                {% if ex.when %}<p class="pf-showcase-list__when">{{ ex.when }}</p>{% endif %}
                 {% if ex.blurb %}<p class="pf-showcase-list__blurb">{{ ex.blurb }}</p>{% endif %}
               </td>
               <td class="pf-showcase-list__kind">{{ ex.kicker }}{% if ex.unpublished %}<br>{{ 'Unpublished'|t }}{% endif %}</td>

@@ -47,7 +47,9 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 .pf-showcase__upnext-label,
 .pf-showcase-list thead th,
 .pf-showcase-list__year,
-.pf-showcase-list__kind {
+.pf-showcase-list__kind,
+.pf-showcase__when,
+.pf-showcase-list__when {
   margin: 0;
   color: var(--pf-showcase-muted);
   font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
@@ -289,7 +291,16 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   line-height: 1.6;
 }
 
-.pf-showcase__enter {
+// A physical exhibition's place and dates: a mono line in the text color.
+.pf-showcase__when {
+  color: var(--pf-showcase-fg);
+}
+
+// Enter (or Read about it), and the physical exhibition beside it.
+.pf-showcase__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
   margin-top: .5rem;
 }
 
@@ -509,6 +520,30 @@ td.pf-showcase-list__year {
 
 .pf-showcase-list__feature {
   margin-top: .625rem;
+}
+
+// An online exhibition's physical show: a second, smaller link.
+.pf-showcase-list__post {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .125rem .75rem;
+  margin-top: .375rem !important;
+  font-size: .9375rem;
+
+  a {
+    color: var(--pf-showcase-fg);
+    text-decoration-color: var(--pf-showcase-line);
+    text-underline-offset: .25em;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+td .pf-showcase-list__when {
+  margin-block: .25rem;
 }
 
 .pf-showcase-list__summary {

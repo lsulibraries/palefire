@@ -6,6 +6,7 @@ namespace Drupal\palefire\Hook;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -197,7 +198,7 @@ class PalefireHooks {
     // Showcase mode: every exhibition, under the <h1>
     // (includes/exhibit-showcase.html.twig).
     if (self::stringValue($node, 'field_modular_type') === 'showcase') {
-      $variables['showcase'] = $this->showcase();
+      $variables['showcase'] = $this->showcase($node);
     }
 
     // Only build the TOC on routes that display the node itself.
@@ -594,38 +595,110 @@ class PalefireHooks {
   /**
    * Variables for includes/exhibit-showcase.html.twig on a showcase page.
    *
-   * Every exhibition-mode page the visitor may see (editors also get the
-   * unpublished ones, marked). field_exhibit_showcase decides each one:
-   * "featured" first, "hidden" left out, empty listed, except a page with
-   * a main button (a program page), which needs "listed" or "featured".
-   * Then the newest year first, then by title.
+   * Two kinds of item, sorted together:
+   * - Online exhibitions: every exhibition-mode page the visitor may see.
+   *   field_exhibit_showcase decides each one: "featured" first, "hidden"
+   *   left out, empty listed, except a page with a main button (a program
+   *   page), which needs "listed" or "featured". Its physical exhibition
+   *   post (field_exhibit_physical_post), if any, is a second link.
+   * - Physical exhibitions: Articles in the page's category
+   *   (field_showcase_category, "Exhibitions"), except those already a
+   *   second link. Read about it, not Enter.
+   * Editors also get unpublished ones, marked.
+   *
+   * "On view" (an Article's field_exhibit_on_view, days, inclusive):
+   * while today is in it, an item left empty in field_exhibit_showcase is
+   * featured, with "On view in <Where> through <end>" unless a note is
+   * typed. An exhibition takes its post's dates. The render cache expires
+   * at the next midnight that changes this (max-age; Internal Page Cache
+   * ignores max-age, so there it changes on the next save or cache clear).
+   *
+   * Order: featured first (latest update first), then the newest year,
+   * then by title.
    *
    * @return array{items: array, featured: int, cache: array}
    */
-  private function showcase(): array {
+  private function showcase(NodeInterface $page): array {
     $cache = (new CacheableMetadata())
-      ->addCacheTags(['node_list:' . self::MODULAR_BUNDLE])
+      ->addCacheTags(['node_list:' . self::MODULAR_BUNDLE, 'node_list:article'])
       ->addCacheContexts(['user.permissions']);
     $user = \Drupal::currentUser();
-    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
-      ->accessCheck(TRUE)
-      ->condition('type', self::MODULAR_BUNDLE)
-      ->condition('field_modular_type', 'exhibition');
     $editor = $user->hasPermission('bypass node access') || $user->hasPermission('view any unpublished content');
-    if (!$editor) {
-      $query->condition('status', 1);
-    }
-    $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($query->execute());
+    $nodes = \Drupal::entityTypeManager()->getStorage('node');
     $repository = \Drupal::service('entity.repository');
     $plain = fn (NodeInterface $node, string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
       ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags((string) $node->get($field)->value))))
       : '';
-
-    $items = [];
-    foreach ($nodes as $node) {
+    $visible = function (NodeInterface $node) use ($cache, $editor): bool {
       $access = $node->access('view', NULL, TRUE);
       $cache->addCacheableDependency($node)->addCacheableDependency($access);
-      if (!$access->isAllowed()) {
+      return $access->isAllowed() && ($editor || $node->isPublished());
+    };
+    $image = function (NodeInterface $node, string $field) use ($cache): ?array {
+      if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
+        return NULL;
+      }
+      $item = _palefire_media_image_item($node->get($field)->first(), $cache);
+      // Sizes are set per use in the template.
+      return $item ? _palefire_exhibit_image($item, '', $cache) : NULL;
+    };
+
+    // On view: the dates as words, and whether today is in them. Each
+    // future midnight that changes the answer caps the cache's max-age.
+    $zone = new \DateTimeZone(date_default_timezone_get());
+    $today = (new \DateTimeImmutable('now', $zone))->format('Y-m-d');
+    $max_age = Cache::PERMANENT;
+    $until = function (string $day) use ($zone, &$max_age): void {
+      $seconds = (new \DateTimeImmutable($day . ' 00:00', $zone))->getTimestamp() - \Drupal::time()->getRequestTime();
+      if ($seconds > 0) {
+        $max_age = $max_age === Cache::PERMANENT ? $seconds : min($max_age, $seconds);
+      }
+    };
+    $on_view = function (NodeInterface $post) use ($today, $until): ?array {
+      if (!$post->hasField('field_exhibit_on_view') || $post->get('field_exhibit_on_view')->isEmpty()) {
+        return NULL;
+      }
+      $range = $post->get('field_exhibit_on_view')->first();
+      $start = substr((string) $range->value, 0, 10);
+      $end = substr((string) ($range->end_value ?: $range->value), 0, 10);
+      $from = \DateTimeImmutable::createFromFormat('!Y-m-d', $start);
+      $to = \DateTimeImmutable::createFromFormat('!Y-m-d', $end);
+      if (!$from || !$to) {
+        return NULL;
+      }
+      $now = $start <= $today && $today <= $end;
+      if ($today < $start) {
+        $until($start);
+      }
+      elseif ($now) {
+        $until($to->modify('+1 day')->format('Y-m-d'));
+      }
+      $dates = $from->format('Y') === $to->format('Y')
+        ? $from->format('M j') . ' – ' . $to->format('M j, Y')
+        : $from->format('M j, Y') . ' – ' . $to->format('M j, Y');
+      return [
+        'now' => $now,
+        'year' => (int) $from->format('Y'),
+        'dates' => $start === $end ? $from->format('M j, Y') : $dates,
+        'end' => $to->format('F j'),
+      ];
+    };
+    // "On view in Hill Memorial Library through March 6".
+    $on_view_note = fn (string $where, array $view): string => $where !== ''
+      ? (string) $this->t('On view in @where through @end', ['@where' => $where, '@end' => $view['end']])
+      : (string) $this->t('On view through @end', ['@end' => $view['end']]);
+    $when = fn (string $where, ?array $view): string => implode(' · ', array_filter([$where, $view['dates'] ?? '']));
+
+    $items = [];
+    $paired = [];
+
+    // Online exhibitions.
+    $query = $nodes->getQuery()
+      ->accessCheck(TRUE)
+      ->condition('type', self::MODULAR_BUNDLE)
+      ->condition('field_modular_type', 'exhibition');
+    foreach ($nodes->loadMultiple($query->execute()) as $node) {
+      if (!$node instanceof NodeInterface || !$visible($node)) {
         continue;
       }
       $node = $repository->getTranslationFromContext($node);
@@ -635,11 +708,23 @@ class PalefireHooks {
         continue;
       }
 
-      $cover = NULL;
-      if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()) {
-        $item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache);
-        // Sizes are set per use in the template (card, plate, thumbnail).
-        $cover = $item ? _palefire_exhibit_image($item, '', $cache) : NULL;
+      // Its physical show: a second link, and its dates.
+      $post = NULL;
+      $view = NULL;
+      if ($node->hasField('field_exhibit_physical_post') && ($article = $node->get('field_exhibit_physical_post')->entity) instanceof NodeInterface && $visible($article)) {
+        $article = $repository->getTranslationFromContext($article);
+        $paired[$article->id()] = TRUE;
+        $view = $on_view($article);
+        $where = self::stringValue($article, 'field_exhibit_where');
+        $post = [
+          'url' => $article->toUrl()->toString(),
+          'when' => $when($where, $view),
+        ];
+      }
+      $featured = $choice === 'featured' || ($choice === '' && $view && $view['now']);
+      $note = self::stringValue($node, 'field_exhibit_feature_note');
+      if ($featured && $note === '' && $view && $view['now']) {
+        $note = $on_view_note(self::stringValue($article, 'field_exhibit_where'), $view);
       }
 
       // The summary: the credit line as text (it names the collection and
@@ -649,25 +734,87 @@ class PalefireHooks {
       $items[] = [
         'title' => $node->label(),
         'url' => $node->toUrl()->toString(),
+        'cta' => (string) $this->t('Enter the exhibition'),
         'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
         'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) $this->t('Exhibition'),
-        'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
+        'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($view['year'] ?? NULL),
         'blurb' => Unicode::truncate($blurb, 240, TRUE, TRUE),
-        'physical' => self::stringValue($node, 'field_exhibit_physical_note') ?: NULL,
-        'featured' => $choice === 'featured',
-        'note' => $choice === 'featured' ? self::stringValue($node, 'field_exhibit_feature_note') : '',
+        'when' => '',
+        'post' => $post,
+        'featured' => $featured,
+        'note' => $featured ? $note : '',
         'unpublished' => !$node->isPublished(),
         // Its title page's face, as in exhibitHead().
         'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif',
-        'cover' => $cover,
+        'cover' => $image($node, 'field_exhibit_cover'),
         'changed' => (int) $node->getChangedTime(),
       ];
+    }
+
+    // Physical exhibitions: the category's posts not already paired.
+    $terms = $page->hasField('field_showcase_category') ? $page->get('field_showcase_category')->referencedEntities() : [];
+    $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+    if ($terms && isset($storages['field_article_category'])) {
+      $cache->addCacheableDependency($terms[0]);
+      $query = $nodes->getQuery()
+        ->accessCheck(TRUE)
+        ->condition('type', 'article')
+        ->condition('field_article_category', $terms[0]->id());
+      foreach ($nodes->loadMultiple($query->execute()) as $post) {
+        if (!$post instanceof NodeInterface || isset($paired[$post->id()]) || !$visible($post)) {
+          continue;
+        }
+        $post = $repository->getTranslationFromContext($post);
+        $choice = self::stringValue($post, 'field_exhibit_showcase');
+        if ($choice === 'hidden') {
+          continue;
+        }
+        $view = $on_view($post);
+        $where = self::stringValue($post, 'field_exhibit_where');
+        $featured = $choice === 'featured' || ($choice === '' && $view && $view['now']);
+        $note = self::stringValue($post, 'field_exhibit_feature_note');
+        if ($featured && $note === '' && $view && $view['now']) {
+          $note = $on_view_note($where, $view);
+        }
+
+        // Excerpt: About Text, else the body's summary or text, as on the
+        // landing's blog card (_palefire_blog_posts()).
+        $blurb = '';
+        foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
+          if ($blurb === '' && $post->hasField($field) && !$post->get($field)->isEmpty()) {
+            $blurb = _palefire_plain_excerpt((string) $post->get($field)->first()->{$property}, 240);
+          }
+        }
+        $year = $view['year'] ?? NULL;
+        if (!$year && $post->hasField('field_article_date') && $post->get('field_article_date')->date) {
+          $year = (int) $post->get('field_article_date')->date->format('Y');
+        }
+
+        $items[] = [
+          'title' => $post->label(),
+          'url' => $post->toUrl()->toString(),
+          'cta' => (string) $this->t('Read about it'),
+          'subtitle' => '',
+          'kicker' => (string) $this->t('Physical exhibition'),
+          'year' => $year ?: (int) date('Y', (int) $post->getCreatedTime()),
+          'blurb' => $blurb,
+          'when' => $when($where, $view),
+          'post' => NULL,
+          'featured' => $featured,
+          'note' => $featured ? $note : '',
+          'unpublished' => !$post->isPublished(),
+          'title_style' => 'serif',
+          'cover' => $image($post, 'field_image'),
+          'changed' => (int) $post->getChangedTime(),
+        ];
+      }
     }
 
     usort($items, fn (array $a, array $b): int =>
       [$b['featured'], $a['featured'] ? -$a['changed'] : 0, $b['year'] ?? 0, $a['title']]
       <=> [$a['featured'], $b['featured'] ? -$b['changed'] : 0, $a['year'] ?? 0, $b['title']]);
 
+    $cache->mergeCacheMaxAge($max_age);
     $render = [];
     $cache->applyTo($render);
     return [
