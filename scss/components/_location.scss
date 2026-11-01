@@ -1,5 +1,5 @@
 // Location pages ---------------------------------------------------------------
-// A room's own page (modular_page, e.g. /v2/special/spaces/lecture-hall):
+// A room's own page (modular_page, e.g. /v2/special/lecturehall):
 // Location, House rules and Booking sections. Templates:
 // paragraph--location-space/rules/booking.html.twig and
 // includes/space-icon.html.twig; preprocess in palefire.theme ("Location
@@ -55,8 +55,8 @@
 // --- Location: details beside the map, then facts, glance, Visit strip ------
 // After the map-led mockup. Phones: the details, the map, the facts and
 // chips, the Visit strip, one under the other. lg and up with a map: the
-// details in a narrow column at the left, centred on the map, which runs
-// large at the right; the facts and chips under the details' column, the
+// details in a narrow column at the left, near the top, the map large at
+// the right; the facts and chips under the details' column, the
 // Visit strip beside them.
 .pf-location {
   display: grid;
@@ -77,8 +77,6 @@
 
 // The strip keeps its own frame and glass; here it starts on the grid line.
 .pf-location .pf-visit { margin-top: 0; }
-
-.pf-location__crumb { margin-bottom: clamp(1.25rem, 3vw, 2rem); }
 
 .pf-location__eyebrow {
   @extend %pf-location-label;
@@ -112,15 +110,14 @@
 
 // The map: its own queries switch on its column, not the window, so in
 // the narrow hero column it stacks (drawing, then the key, collapsed).
-// Its heading is a quiet label over the drawing.
+// Its heading ("Find the …") is left to screen readers and the TOC: the
+// title beside it already says where this is.
 .pf-location__map {
   container-name: pf-map;
   container-type: inline-size;
 
   .pf-map__heading {
-    @extend %pf-location-label;
-    margin: 0 0 1rem;
-    color: var(--pf-location-muted);
+    @include visually-hidden;
   }
 }
 
@@ -198,8 +195,8 @@
       "head map"
       "details details";
   }
-  // The details centred on the map, as in the mockup.
-  .pf-location--map .pf-location__head { align-self: center; }
+  // The details near the top, level with the drawing's upper floor.
+  .pf-location--map .pf-location__head { padding-top: clamp(1rem, 4vw, 4rem); }
 
   // No map: the details and the Visit strip side by side, the facts under.
   .pf-location--visit:not(.pf-location--map) {

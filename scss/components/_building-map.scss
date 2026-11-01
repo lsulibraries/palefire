@@ -460,6 +460,12 @@
 }
 .pf-map__here-badge::before { content: ""; width: 0; height: 0; border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0; }
 .pf-map__item[aria-current] .pf-map__item-name { color: var(--pf-map-hover); }
+/* The room itself in the highlight color, as in the map-led mockup: its
+   hatch at full strength and its outline in the swatch's accent. Its name
+   keeps the ink, which reads over the accent's stripes. */
+.pf-map__region[aria-current] .pf-map__hatch,
+.pf-map__region[aria-current]:is(:hover, :focus-visible, .is-active) .pf-map__hatch { fill: var(--pf-map-hover); fill-opacity: 1; }
+.pf-map__region[aria-current] .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 2); }
 
 /* Tooltip ------------------------------------------------------------------
    One per map, filled from the hidden .pf-map__tip-src for the active room and

@@ -92,8 +92,10 @@
 // which its map is drawn on. Text, muted and accent keep 4.5:1 on the surface
 // on every swatch, high contrast included (2026-10-26). Anything inside a band
 // that used the surface color takes the page color, so it still stands off;
-// --pf-band holds the surface from above that swap.
-html#{$pf-themed} .pf-sections:has(> .pf-section--landing-hero) {
+// --pf-band holds the surface from above that swap. Location pages (a room's
+// page, opened by its Location section) band the same way: House rules on
+// the surface, between the map and Booking.
+html#{$pf-themed} .pf-sections:is(:has(> .pf-section--landing-hero), :has(> .pf-section--location-space:first-child)) {
   --pf-band: var(--pf-g-surface);
 
   > .pf-section--auto:nth-child(even of .pf-section--auto),

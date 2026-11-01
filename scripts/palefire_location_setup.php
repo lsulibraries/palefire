@@ -48,10 +48,10 @@
  * - Starter Space policies (below), each created once.
  * - The Lecture Hall room term (hill_memorial.lecture_hall): its policies,
  *   sound and capacity, filled in only where empty.
- * - An unpublished Modular page "Lecture Hall" at
- *   /v2/special/spaces/lecture-hall: Location, House rules and Booking
- *   sections, Hill Memorial's LibCal hours (236). Skipped if a page at that
- *   alias exists.
+ * - An unpublished Modular page "Lecture Hall" at /v2/special/lecturehall:
+ *   Location, House rules and Booking sections, Hill Memorial's LibCal
+ *   hours (236). Skipped if a page at that alias, or at its first one
+ *   (/v2/special/spaces/lecture-hall), exists.
  *
  * Lecture Hall facts: LSU Libraries' meeting space policy (fewer than 100
  * people; university-affiliated groups, others only when the Libraries
@@ -401,12 +401,14 @@ if ($room_changed) {
 }
 
 // 6. The Lecture Hall page. --------------------------------------------------
-$alias = '/v2/special/spaces/lecture-hall';
-$path = \Drupal::service('path_alias.manager')->getPathByAlias($alias);
-if ($path !== $alias) {
-  echo "Skipped the page: $alias already exists ($path).\n";
-  echo "Done. Run: drush cr\n";
-  return;
+$alias = '/v2/special/lecturehall';
+foreach ([$alias, '/v2/special/spaces/lecture-hall'] as $taken) {
+  $path = \Drupal::service('path_alias.manager')->getPathByAlias($taken);
+  if ($path !== $taken) {
+    echo "Skipped the page: $taken already exists ($path).\n";
+    echo "Done. Run: drush cr\n";
+    return;
+  }
 }
 $node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
 $sections_field = isset($node_fields['field_scroll_section']) ? 'field_scroll_section' : 'field_sections';
