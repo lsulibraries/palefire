@@ -144,49 +144,59 @@
 
 // --- The backdrop: the room's first photo behind the top --------------------
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
-// blurred to a texture, in grey at 30%, under the title, map and ledger,
-// up under the clear header and bar, and edge to edge. It is a border
-// image outset to the screen's sides, as the bands' shadow: painted, not
-// laid out, so it adds no horizontal scroll. Over it, the page color
-// fades in at the top and back in by the ledger, so the parts start on
-// the plain page. Light swatches, more contrast and forced colors keep
-// the plain page. The URL is --pf-location-backdrop on the element
-// (paragraph--location-space.html.twig), so only dark swatches fetch it
-// here; it is the same file The room shows.
+// darkened and only softened (the photos are small), behind the title, map
+// and ledger, up under the clear header and bar and out to the section's
+// edges (its padding, so nothing scrolls sideways). It covers its box and
+// fades out on every side, so it ends on the plain page before the parts.
+// Under the drawing, a second layer blurs and dims it further in an oval
+// (.pf-location__map::before), so the map's fine lines and labels keep a
+// quiet ground while the room shows around them. Light swatches, more
+// contrast and forced colors keep the plain page. The URL is
+// --pf-location-backdrop on the element (paragraph--location-space.html.twig),
+// so only dark swatches fetch it here; it is the same file The room shows.
 .pf-location__intro {
   position: relative;
   isolation: isolate;
 }
 
 html.pf-reading-dark .pf-location__intro.has-backdrop {
-  &::before,
-  &::after {
+  &::before {
     position: absolute;
-    inset: -12rem 0 0;
+    inset: -12rem calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
     z-index: -1;
     pointer-events: none;
     content: "";
+    background: var(--pf-location-backdrop) center 35% / cover no-repeat;
+    opacity: .5;
+    filter: blur(2px) grayscale(.35) brightness(.55);
+    -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
-  &::before {
-    border-image: var(--pf-location-backdrop) fill 0 / 0 / 0 100vmax;
-    opacity: .3;
-    filter: blur(32px) grayscale(.6);
-  }
+  // The drawing's ground: an oval of frosted, dimmer photo under the map.
+  .pf-location__map {
+    position: relative;
 
-  &::after {
-    border-image: linear-gradient(var(--pf-location-page-bg) 0, transparent 30%, transparent 50%, var(--pf-location-page-bg)) fill 0 / 0 / 0 100vmax;
+    &::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      -webkit-backdrop-filter: blur(14px) brightness(.6);
+      backdrop-filter: blur(14px) brightness(.6);
+      -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent);
+      mask-image: radial-gradient(closest-side, #000 60%, transparent);
+    }
   }
-}
-
-.pf-location-page {
-  --pf-location-page-bg: var(--pf-g-bg, var(--bs-body-bg));
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
   html.pf-reading-dark .pf-location__intro.has-backdrop {
     &::before,
-    &::after { content: none; }
+    .pf-location__map::before { content: none; }
   }
 }
 

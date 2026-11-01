@@ -136,3 +136,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Location pages: the policy marks sit under the title's line; the head is centred on the drawing; the building map shows without its legend (`map.no_key`), the room lit and marked.
 - **2026-10-31:** Location pages: "The room" part (`.pf-location__photos`, `.pf-location__photo`): the room's photos three across at 4:5, captioned in the label voice under a hairline. Image style `pf_location_photo`.
 - **2026-10-31:** Location pages: `.pf-location__intro.has-backdrop` puts the room's first photo, blurred and faint, behind the top on dark swatches (`--pf-location-backdrop`, painted as an outset border image so it spans the screen without scrolling).
+- **2026-10-31:** Location backdrop: the photo darkened rather than blurred, covering and fading out on every side, with a frosted oval under the map (`.pf-location__map::before`, backdrop-filter, radial mask).
