@@ -12,7 +12,8 @@
  *   script it is a still: the first exhibition, its summary and link.
  *   Browsing: the square Previous / Next buttons (the events carousel's),
  *   with the next title beside them, the dots, a click on a cover behind.
- * - A table of all of them: year, exhibition, summary, kind.
+ * - A table of all of them: year, exhibition, summary, kind, with a
+ *   switch to show All, Digital or Physical.
  *
  * Each part is a band with an index rule (01, 02: the landing's
  * .pf-index-rule) and an id the TOC links to (Browse, All exhibitions:
@@ -166,7 +167,29 @@
         <span class="pf-index-rule__num" aria-hidden="true">{{ digital ? '02' : '01' }}</span>
         <span class="pf-index-rule__label" aria-hidden="true">{{ 'Index'|t }}</span>
       </div>
-      <h2 class="pf-showcase-list__heading" id="pf-showcase-all-title">{{ 'All exhibitions'|t }}</h2>
+      {# The heading, and with both kinds listed, a switch: All, Digital,
+         Physical (the tile showcase's Grid / List buttons,
+         .pf-tiles__view; js/exhibit-showcase.js). Hidden until the
+         script runs: without it the table shows everything. #}
+      {% set physical = count - shown %}
+      <div class="pf-showcase-list__head">
+        <h2 class="pf-showcase-list__heading" id="pf-showcase-all-title">{{ 'All exhibitions'|t }}</h2>
+        {% if shown and physical %}
+          {% set kinds = {
+            all: { label: 'All'|t, n: count },
+            digital: { label: 'Digital'|t, n: shown },
+            physical: { label: 'Physical'|t, n: physical },
+          } %}
+          <div class="pf-tiles__views pf-showcase-list__filter" role="group" aria-label="{{ 'Show'|t }}" data-pf-showcase-filter hidden>
+            {% for key, kind in kinds %}
+              <button type="button" class="pf-tiles__view" data-pf-showcase-kind="{{ key }}" aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+                {{ kind.label }}<span class="pf-showcase-list__n">{{ kind.n }}</span>
+              </button>
+            {% endfor %}
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-pf-showcase-filter-live></p>
+        {% endif %}
+      </div>
       <table class="pf-showcase-list__table" aria-labelledby="pf-showcase-all-title">
         <thead>
           <tr>
@@ -178,7 +201,7 @@
         </thead>
         <tbody>
           {% for ex in items %}
-            <tr class="pf-showcase-list__row{{ ex.featured ? ' is-featured' }}">
+            <tr class="pf-showcase-list__row{{ ex.featured ? ' is-featured' }}" data-kind="{{ ex.digital ? 'digital' : 'physical' }}">
               <td class="pf-showcase-list__year">{{ ex.year }}</td>
               <th scope="row" class="pf-showcase-list__name">
                 <a class="pf-showcase-list__link" href="{{ ex.url }}">{{ ex.title }}</a>

@@ -567,9 +567,40 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // The table of all of them -----------------------------------------------
+// The heading, and the All / Digital / Physical switch at the right end
+// of its line (the tile showcase's buttons, _tile-showcase.scss), under
+// it on phones.
+.pf-showcase-list__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: .75rem var(--pf-grid-gutter, 1.5rem);
+  margin-bottom: var(--pf-hero-rule-gap, 1.25rem);
+}
+
 // Set as the landing's section headings (_landing-features.scss).
 .pf-showcase-list__heading {
-  margin: 0 0 var(--pf-hero-rule-gap, 1.25rem);
+  margin: 0;
+}
+
+.pf-tiles__views.pf-showcase-list__filter {
+  flex-wrap: wrap;
+  max-width: 100%;
+  margin: 0;
+
+  // Phones: tighter, so the three fit on one line at 320px.
+  @include media-breakpoint-down(sm) {
+    .pf-tiles__view {
+      padding-inline: .5rem;
+    }
+  }
+}
+
+// Each choice's count, in its color (4.5:1 as the label).
+.pf-showcase-list__n {
+  margin-inline-start: .5em;
+  font-variant-numeric: tabular-nums;
 }
 
 .pf-showcase-list__table {

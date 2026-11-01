@@ -14,8 +14,12 @@
  * arrows, the title that Next brings (decorative; the change itself is
  * announced politely). Nothing moves by itself.
  *
+ * The table's switch (All, Digital, Physical) hides the other rows and
+ * says how many are shown; the rows shown fade in, one after another.
+ *
  * Reduced motion (the OS setting or the Settings drawer's
- * html.pf-a11y-motion): covers take their places at once and fade.
+ * html.pf-a11y-motion): covers take their places at once and fade, and
+ * rows appear without fading.
  */
 (function (Drupal, once) {
   'use strict';
@@ -179,10 +183,51 @@
     });
   }
 
+  function filter(root) {
+    const group = root.querySelector('[data-pf-showcase-filter]');
+    if (!group) {
+      return;
+    }
+    const buttons = Array.from(group.querySelectorAll('[data-pf-showcase-kind]'));
+    const rows = Array.from(root.querySelectorAll('.pf-showcase-list__row'));
+    const live = root.querySelector('[data-pf-showcase-filter-live]');
+    const words = {
+      all: (n) => Drupal.formatPlural(n, '1 exhibition shown', '@count exhibitions shown'),
+      digital: (n) => Drupal.formatPlural(n, '1 digital exhibition shown', '@count digital exhibitions shown'),
+      physical: (n) => Drupal.formatPlural(n, '1 physical exhibition shown', '@count physical exhibitions shown'),
+    };
+
+    group.hidden = false;
+    group.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-pf-showcase-kind]');
+      if (!button || button.getAttribute('aria-pressed') === 'true') {
+        return;
+      }
+      const kind = button.dataset.pfShowcaseKind;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      const shown = rows.filter((row) => {
+        row.hidden = kind !== 'all' && row.dataset.kind !== kind;
+        return !row.hidden;
+      });
+      if (live) {
+        live.textContent = words[kind](shown.length);
+      }
+      if (!reduceMotion() && Element.prototype.animate) {
+        shown.slice(0, 12).forEach((row, i) => {
+          row.animate([
+            { opacity: 0, transform: 'translateY(.5rem)' },
+            { opacity: 1, transform: 'none' },
+          ], { duration: 450, delay: i * 40, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' });
+        });
+      }
+    });
+  }
+
   Drupal.behaviors.palefireExhibitShowcase = {
     attach(context) {
       once('pf-showcase', '[data-pf-showcase]', context).forEach((root) => {
         carousel(root);
+        filter(root);
         root.classList.add('is-ready');
       });
     },
