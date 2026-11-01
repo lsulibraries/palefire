@@ -1,15 +1,12 @@
 /**
  * @file
- * Location pages: the small map plate (paragraph--location-space).
+ * Location pages: the map chip (paragraph--location-space).
  *
  * Draws a miniature of the page's building map (its outlines, and the
- * room marked "here" filled) into the plate, shows the plate, and marks
- * the page .is-past-map while the map is above the window and the room's
- * section is still in view. CSS shows the plate then: at the foot of the
- * details column, or as a chip at the bottom of the screen where there is
- * no column (_location.scss). It is the chip too (.is-plate-chip) when the
- * plate would not be in the window at the column's foot: the column runs
- * past the bottom of the window, or (a short window) does not stick.
+ * room marked "here" filled) into the chip, shows it, and marks the page
+ * .is-past-map while the map is above the window and the room's section is
+ * still in view; CSS then shows the chip at the bottom of the screen
+ * (_location.scss).
  */
 (function (Drupal, once) {
   const NS = 'http://www.w3.org/2000/svg';
@@ -51,18 +48,7 @@
 
         let past = false;
         let inView = true;
-        const update = () => {
-          page.classList.remove('is-plate-chip');
-          page.classList.toggle('is-past-map', past && inView);
-          if (!past || !inView || getComputedStyle(plate).position === 'fixed') {
-            return;
-          }
-          // Measured with the plate in the column, before it is painted.
-          const box = plate.getBoundingClientRect();
-          if (box.top < 0 || box.bottom > window.innerHeight) {
-            page.classList.add('is-plate-chip');
-          }
-        };
+        const update = () => page.classList.toggle('is-past-map', past && inView);
 
         // The window, run on far below its foot, so the only edge the map
         // crosses is the top: out of it is above the window, however the
@@ -75,7 +61,6 @@
           inView = entry.isIntersecting;
           update();
         }).observe(page.querySelector('.pf-location'));
-        window.addEventListener('resize', Drupal.debounce(update, 150));
       });
     },
   };

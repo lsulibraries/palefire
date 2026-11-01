@@ -52,57 +52,47 @@
 .pf-space-icon__bar { stroke-width: 1.25; }
 .pf-space-icon__fill { fill: currentColor; }
 
-// --- Location: the room's details, then everything else -----------------
+// --- Location: a plate, a ledger, then numbered parts ----------------------
 // On the shared system (html[data-pf-page="location"], $pf-system): the
-// section keeps to the 1280px column, and the page to the hero's grid, its
-// gutter (--pf-grid-gutter) and its five columns: the details over two,
-// the rest over three (40/60), on the hero's column lines. The switch reads
-// the section's own width (pf-location), not the window's.
-// Narrower: the details (title to facts), then the map, the Visit strip,
-// House rules and Booking, one under the other. Wide: the details stay in
-// view under the header and the breadcrumb bar while the right column
-// scrolls past them, where the window is tall enough for the whole column;
-// shorter, they scroll too.
+// 1280px column and the hero's grid, its gutter (--pf-grid-gutter) and five
+// columns, read from the section's own width (pf-location).
+// - The plate: the title, its line, today's hours and the button over two
+//   columns, the building map over three (40/60).
+// - The ledger: the facts across the full width, one per column, the
+//   policy marks under them.
+// - The parts, as the sections of /v2/special: each opens on an index rule
+//   (01, 02, …), its heading over two columns and its content over three;
+//   every other one on the swatch's surface, edge to edge.
+// Narrower than 52rem: one column, the map under the title, the heading
+// over its content.
 .pf-location-page {
   --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
   --pf-location-gap: clamp(2.5rem, 5vw, 3.5rem);
   container: pf-location / inline-size;
 }
 
-.pf-location {
+.pf-location__top,
+.pf-location__part-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--pf-location-gap) var(--pf-grid-gutter);
 }
+
 .pf-location__head,
-.pf-location__body { min-width: 0; }
-
-.pf-location__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--pf-location-gap);
-}
-
-// The strip keeps its own frame and glass; here it starts on its line.
-.pf-location .pf-visit { margin-top: 0; }
+.pf-location__map,
+.pf-location__part-body { min-width: 0; }
 
 @container pf-location (min-width: 52rem) {
-  .pf-location {
+  .pf-location__top,
+  .pf-location__part-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    align-items: start;
   }
-  .pf-location__head { grid-column: span 2; }
-  .pf-location__body { grid-column: span 3; }
-
-  // The strip is in a column here: hours over the mini map, not beside it.
-  .pf-location__visit .pf-visit { display: flex; }
-
-  @media (min-height: 46rem) {
-    .pf-location__head {
-      position: sticky;
-      top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + clamp(1.5rem, 3vw, 2.5rem));
-    }
-  }
+  // The head on the drawing's foot, so the title sits on the ledger.
+  .pf-location__top { align-items: end; }
+  .pf-location__head,
+  .pf-location__part-title { grid-column: span 2; }
+  .pf-location__map,
+  .pf-location__part-body { grid-column: span 3; }
 }
 
 .pf-location__eyebrow {
@@ -149,25 +139,42 @@
   .pf-map__heading {
     @include visually-hidden;
   }
+
+  // The building's note (who walks in, what needs an appointment): this
+  // room's own access is in the ledger and House rules.
+  .pf-map__note { display: none; }
 }
 
-// --- The plate: the map, small, once the map has scrolled away -------------
+// --- The chip: the map, small, once the map has scrolled away --------------
 // js/location-plate.js draws the building's outlines with the room filled
 // in the accent, and marks the page .is-past-map while the map is above
-// the window. In the details column (52rem and up) the plate sits under
-// the facts: the drawing, then the floor and "View the map", in the label
-// voice. Narrower, it is a chip at the bottom, on the content's left edge
-// (the TOC button is at the right). It fades and rises in; with reduced motion it just appears.
+// the window and the room's section is in view. The chip then fades and
+// rises in at the bottom of the screen, on the content's left edge (clear
+// of the rail and its back-to-top button; the TOC button is at the right),
+// on the page's glass in a hairline frame, 48px tall. With reduced motion
+// it just appears. A link back up to the map.
 .pf-location__plate {
+  position: fixed;
+  inset-inline-start: var(--pf-section-pad-inline, 1rem);
+  inset-block-end: max(1rem, env(safe-area-inset-bottom));
+  z-index: 1029; // under the TOC button (1030) and the offcanvas
   display: none;
-  gap: .75rem 1rem;
-  align-items: end;
+  align-items: center;
+  gap: .625rem;
+  min-height: 3rem;
+  max-width: calc(100vw - 6rem); // clear of the TOC button
+  padding: .375rem .875rem .375rem .5rem;
   color: var(--pf-location-fg);
   text-decoration: none;
+  background: var(--pf-sidebar-bg, var(--bs-body-bg));
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--pf-location-line);
+  box-shadow: 0 .5rem 1.25rem rgb(0 0 0 / .18);
 
   &:focus-visible {
     outline: 2px solid var(--pf-location-fg);
-    outline-offset: 4px;
+    outline-offset: 2px;
   }
 }
 
@@ -185,7 +192,7 @@
 
 .pf-location__plate-drawing {
   flex: none;
-  width: 10rem;
+  width: 3.25rem;
 }
 
 .pf-location__plate-svg {
@@ -210,9 +217,8 @@
 
 .pf-location__plate-text {
   display: flex;
-  flex-direction: column;
-  gap: .375rem;
-  padding-bottom: .25rem;
+  flex-wrap: wrap;
+  gap: 0 .625rem;
 }
 
 .pf-location__plate-floor {
@@ -238,57 +244,11 @@
   }
 }
 
-@container pf-location (min-width: 52rem) {
-  .pf-location__plate {
-    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
-  }
-}
-
-// The chip: on the page's glass, a hairline frame and the shadow the
-// floating buttons have, above the safe area; 44px tall at least. Where
-// there is no column, and wherever the column's foot is out of the window
-// (.is-plate-chip, js/location-plate.js).
-@mixin pf-plate-chip {
-  .pf-location__plate {
-    position: fixed;
-    margin: 0;
-    // On the content's left edge: clear of the rail and its back-to-top
-    // button (lg and up) at the screen's edge.
-    inset-inline-start: var(--pf-section-pad-inline, 1rem);
-    inset-block-end: max(1rem, env(safe-area-inset-bottom));
-    z-index: 1029; // under the TOC button (1030) and the offcanvas
-    align-items: center;
-    gap: .625rem;
-    min-height: 3rem;
-    max-width: calc(100vw - 6rem); // clear of the TOC button
-    padding: .375rem .875rem .375rem .5rem;
-    background: var(--pf-sidebar-bg, var(--bs-body-bg));
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--pf-location-line);
-    box-shadow: 0 .5rem 1.25rem rgb(0 0 0 / .18);
-  }
-
-  .pf-location__plate-drawing { width: 3.25rem; }
-
-  .pf-location__plate-text {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0 .625rem;
-    padding: 0;
-  }
-}
-
-@container pf-location (max-width: 51.999rem) {
-  @include pf-plate-chip;
-}
-
-.pf-location-page.is-plate-chip {
-  @include pf-plate-chip;
-}
-
 @include pf-solid-chrome {
-  .pf-location__plate { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .pf-location__plate {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 // --- At a glance: the policy marks and their tooltips -----------------------
@@ -405,18 +365,24 @@
 
 .pf-space-pin__detail { color: var(--pf-location-muted); }
 
-// Facts: term over value between two rules (row rules would stop short
-// under a part-filled last row); two across, three from md.
+// --- The ledger: the facts in a row, the marks under them ------------------
+// Term over value between two rules (row rules would stop short under a
+// part-filled last row): two across on phones, three from 30rem, and from
+// 52rem one per column of the grid, so each starts on a column line.
+.pf-location__ledger {
+  margin-top: var(--pf-location-gap);
+}
+
 .pf-location__facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem 0;
-  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  gap: 1rem var(--pf-grid-gutter);
+  margin: 0;
   padding-block: 1rem;
   border-block: 1px solid var(--pf-location-line);
 }
 .pf-location__fact {
-  padding-right: 1rem;
+  min-width: 0;
 
   dt {
     @extend %pf-location-label;
@@ -436,30 +402,78 @@
   }
 }
 
-@include media-breakpoint-only(md) {
+@container pf-location (min-width: 30rem) {
   .pf-location__facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+@container pf-location (min-width: 52rem) {
+  .pf-location__facts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
 
-// --- House rules and Booking in the right column -----------------------------
-// The hero's rhythm: --pf-hero-gap above each index rule (01, 02), counted
-// from what is above it, and --pf-hero-rule-gap under it; the heading in
-// the shared h2 style (_landing-features.scss).
+// --- The parts: Visit, House rules, Booking ---------------------------------
+// The hero's rhythm: the same space above each index rule and under each
+// part (--pf-hero-gap), --pf-hero-rule-gap under the rule; the heading in
+// the shared h2 style (_landing-features.scss). Odd parts on the surface,
+// edge to edge (a shadow as wide as the screen, clipped to the part's
+// height, as the landing's quick guide), with the tokens inside swapped as
+// on every band (_sections.scss), so what used the surface takes the page.
 .pf-location__part {
-  margin-top: calc(var(--pf-hero-gap) - var(--pf-location-gap));
+  padding-block: var(--pf-hero-gap);
 
   > .pf-index-rule { margin-bottom: var(--pf-hero-rule-gap); }
+
+  &:last-of-type { padding-bottom: 0; }
+}
+
+.pf-location__ledger + .pf-location__part:not(.pf-location__part--band) {
+  padding-top: calc(var(--pf-hero-gap) * .75);
+}
+
+// --pf-band is read from the parent, before the band swaps the surface.
+html#{$pf-themed} .pf-location { --pf-band: var(--pf-g-surface); }
+
+html#{$pf-themed} .pf-location__part--band {
+  --pf-section-bg: var(--pf-band);
+  --pf-g-surface: var(--pf-g-bg);
+  --pf-guide-surface: var(--pf-g-bg);
+  --bs-secondary-bg: var(--pf-g-bg);
+  --bs-tertiary-bg: var(--pf-g-bg);
+  margin-top: var(--pf-location-gap);
+  background-color: var(--pf-band);
+  box-shadow: 0 0 0 100vmax var(--pf-band);
+  clip-path: inset(0 -100vmax);
+
+  &:last-of-type { padding-bottom: var(--pf-hero-gap); }
 }
 
 .pf-location__part-title {
-  margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
+  margin: 0;
   scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
 }
 
-// The column is narrower than a section: the rule groups as many across as
+// Three columns, not a section's width: the rule groups as many across as
 // fit, and Booking's ledger under its text.
-.pf-location__body {
+.pf-location__part-body {
   .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
   .pf-booking { grid-template-columns: minmax(0, 1fr); }
+}
+
+// Visit: the strip's hours without its frame or its Google map (the
+// building map above shows the way in, Open in Google Maps the way there):
+// today's status, the week, then the links on one line.
+.pf-location__visit {
+  @extend %pf-visit-tokens;
+  max-width: 36rem;
+
+  .pf-visit__week { margin-top: 1rem; }
+}
+
+.pf-location__visit-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  margin: 1.25rem 0 0;
+
+  > .pf-visit__link { margin-top: 0; }
 }
 
 // --- CTA ------------------------------------------------------------------------
@@ -608,6 +622,52 @@
   max-width: 62ch;
 
   > p:last-child { margin-bottom: 0; }
+
+  // The editor's subheads (How to book, Service charges, Equipment,
+  // Layouts) in the label voice on a hairline, as the rules' groups; lists
+  // as ruled rows, as the ledgers. A numbered list counts its steps in the
+  // index rules' gold figures (01, 02, …).
+  h3,
+  h4 {
+    @extend %pf-location-label;
+    margin: clamp(1.75rem, 3.5vw, 2.5rem) 0 0;
+    padding-bottom: .625rem;
+    border-bottom: 1px solid var(--pf-location-line);
+    color: var(--pf-location-muted);
+  }
+
+  ul,
+  ol {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: .625rem 0;
+    border-bottom: 1px solid var(--pf-location-line);
+  }
+
+  ol {
+    counter-reset: pf-step;
+
+    > li {
+      position: relative;
+      padding-inline-start: 2.25rem;
+      counter-increment: pf-step;
+
+      &::before {
+        @extend %pf-location-label;
+        position: absolute;
+        inset-inline-start: 0;
+        top: .625rem;
+        content: counter(pf-step, decimal-leading-zero);
+        color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+        font-variant-numeric: tabular-nums;
+        line-height: 1.9;
+      }
+    }
+  }
 }
 .pf-booking__facts {
   margin: 0;

@@ -484,7 +484,8 @@
     // Without JS it is open. The landing hero's indexed key (Rooms and
     // access, in the Visit panel, map-key.html.twig) stays open: it is a
     // section of the page, laid out in columns, not a side legend.
-    const key = root.querySelector('[data-map-key]');
+    // A room's page folds it at every width (data-map-key-closed).
+    const key = root.querySelector('[data-map-key]:not([data-map-key-closed])');
     if (key) {
       let open = null;
       const indexed = key.classList.contains('pf-map__key--indexed');

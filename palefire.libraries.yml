@@ -339,7 +339,7 @@ location-pins:
     - core/drupal
     - core/once
 
-# Location pages: the small map plate that follows the details once the
+# Location pages: the map chip at the bottom of the screen once the
 # building map has scrolled away. Attached by
 # templates/paragraphs/paragraph--location-space.html.twig when the room has
 # a map.
@@ -349,7 +349,6 @@ location-plate:
     js/location-plate.js: {}
   dependencies:
     - core/drupal
-    - core/drupal.debounce
     - core/once
 
 # Louisiana Newspapers guide: the parish map (choose a parish, fill the

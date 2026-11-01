@@ -26,20 +26,25 @@
  * under the header, then stays pinned with the current section's name
  * (modular-toc.js), and the TOC title lines up with it.
  *
- * Layout (_location.scss): at the left the room's details (eyebrow, title,
- * line, today's hours, the button), its policies as a row of marks with
- * tooltips (js/location-pins.js) and its facts; from lg this column stays
- * in view while the right one scrolls: the building map, the Visit strip,
- * House rules and Booking (their own section templates, so they read the
- * same as the standalone sections). The two headings are listed in the TOC
- * (data-toc) and open on index rules (01, 02), as the hero's sections do.
- * On phones the details come first, then the rest.
+ * Layout (_location.scss), on /v2/special's five-column grid:
+ * - The plate: the eyebrow, title, line, today's hours and the button over
+ *   two columns; the building map over three, its key folded (the room is
+ *   lit on the drawing, and the title beside it names it).
+ * - The ledger: the facts in one row, the policies under them as marks
+ *   with tooltips (js/location-pins.js).
+ * - The parts, numbered as the hero's sections (01, 02, …): Visit (the
+ *   hours without the strip's frame), House rules and Booking (their own
+ *   section templates, so they read as the standalone sections), each
+ *   heading over two columns and its content over three, every other part
+ *   on the surface. The headings are listed in the TOC (data-toc).
+ * Each fact is said once: sound and capacity in the ledger (so not in
+ * House rules' meter or Booking's ledger), the required policies in House
+ * rules (so not again in Booking).
  *
- * The plate: once the building map has scrolled away, a small copy of it
- * (the room in the accent) appears at the foot of the details column, or,
- * where there is no column, as a chip at the bottom of the screen; either
- * links back up to the map (js/location-plate.js draws it from the map, so
- * without the script it stays hidden).
+ * The chip: once the building map has scrolled away, a small copy of it
+ * (the room in the accent) sits at the bottom of the screen, a link back
+ * up to the map (js/location-plate.js draws it from the map, so without
+ * the script it stays hidden).
  */
 #}
 {% import '@palefire/includes/landing.html.twig' as pf %}
@@ -47,7 +52,17 @@
   {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
   {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
   {% set states = { allowed: 'Allowed'|t, required: 'Required'|t, not_allowed: 'Not allowed'|t } %}
-  {% set has_rules = location.rules.groups or location.rules.sound_level %}
+  {% set rules = location.rules ? location.rules|merge({ sound_level: null }) : null %}
+  {% set booking = location.booking ? location.booking|merge({ capacity: '', needs: [] }) : null %}
+  {# The top button is already this link: no second one in Booking. #}
+  {% if booking and location.link and booking.link and location.link.url == booking.link.url %}
+    {% set booking = booking|merge({ link: null }) %}
+  {% endif %}
+  {% set has_visit = visit and (visit.lid or visit.maps_url or visit.parking_url) %}
+  {% set parts = [] %}
+  {% if has_visit %}{% set parts = parts|merge(['visit']) %}{% endif %}
+  {% if rules.groups %}{% set parts = parts|merge(['rules']) %}{% endif %}
+  {% if booking.body or booking.link %}{% set parts = parts|merge(['booking']) %}{% endif %}
   <div{{ attributes.addClass('pf-landing', 'pf-location-page') }}>
     {% if lead_breadcrumb %}
       <div class="pf-landing__bar">
@@ -57,32 +72,61 @@
       </div>
     {% endif %}
     <div class="pf-location">
-      <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
-        <p class="pf-location__eyebrow">
-          {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
-        </p>
-        {% if page_title %}
-          <h1 class="pf-location__title">{{ page_title }}</h1>
-        {% endif %}
-        {% if location.body %}
-          <div class="pf-location__lede">{{ location.body }}</div>
-        {% endif %}
-        {# Today's hours, as under the landing hero's title (visit-hours.js
-           fills it); the link goes down to the week in the Visit strip. #}
-        {% if visit.lid %}
-          <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
-            <span class="pf-landing__hours-label">
-              <span class="pf-landing__hours-dot" aria-hidden="true"></span>
-              <span data-pf-hours-status>{{ 'Hours'|t }}</span>
-            </span>
-            <a class="pf-landing__hours-link" href="#{{ location.uid }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+      <div class="pf-location__top">
+        <div class="pf-location__head"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}>
+          <p class="pf-location__eyebrow">
+            {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
           </p>
+          {% if page_title %}
+            <h1 class="pf-location__title">{{ page_title }}</h1>
+          {% endif %}
+          {% if location.body %}
+            <div class="pf-location__lede">{{ location.body }}</div>
+          {% endif %}
+          {# Today's hours, as under the landing hero's title (visit-hours.js
+             fills it); the link goes down to the week in Visit. #}
+          {% if visit.lid %}
+            <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
+              <span class="pf-landing__hours-label">
+                <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+                <span data-pf-hours-status>{{ 'Hours'|t }}</span>
+              </span>
+              <a class="pf-landing__hours-link" href="#{{ location.uid }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+            </p>
+          {% endif %}
+          {% if location.link %}
+            <p class="pf-location__actions">
+              <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
+            </p>
+          {% endif %}
+        </div>
+
+        {% if location.map %}
+          <div class="pf-location__map" id="{{ location.uid }}-map">
+            {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
+          </div>
         {% endif %}
-        {% if location.link %}
-          <p class="pf-location__actions">
-            <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
-          </p>
-        {% endif %}
+      </div>
+
+      <div class="pf-location__ledger">
+        <dl class="pf-location__facts">
+          {% if location.building %}
+            <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
+          {% endif %}
+          {% if location.floor %}
+            <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
+          {% endif %}
+          <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
+          {% if location.sound_level %}
+            <div class="pf-location__fact">
+              <dt>{{ 'Sound'|t }}</dt>
+              <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
+            </div>
+          {% endif %}
+          {% if location.capacity %}
+            <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
+          {% endif %}
+        </dl>
 
         {# The policies at a glance: one mark each, its name and detail in a
            tooltip on hover, focus or tap (Esc closes it). The button's name
@@ -106,72 +150,88 @@
             {% endfor %}
           </ul>
         {% endif %}
+      </div>
 
-        <dl class="pf-location__facts">
-          {% if location.building %}
-            <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
-          {% endif %}
-          {% if location.floor %}
-            <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
-          {% endif %}
-          <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
-          {% if location.sound_level %}
-            <div class="pf-location__fact">
-              <dt>{{ 'Sound'|t }}</dt>
-              <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
+      {% for part in parts %}
+        {% set num = '%02d'|format(loop.index) %}
+        {% set title_id = location.uid ~ '-' ~ part ~ '-title' %}
+        <section class="pf-location__part{{ loop.index is odd ? ' pf-location__part--band' }}" aria-labelledby="{{ title_id }}">
+          {% if part == 'visit' %}
+            {{ pf.index_rule(num, 'Getting here'|t, {}) }}
+            <div class="pf-location__part-grid">
+              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Hours and directions'|t }}</h2>
+              <div class="pf-location__part-body pf-location__visit">
+                {% if visit.lid %}
+                  {# The hours line under the title jumps here
+                     (location.uid-visit-hours); visit-hours.js fills the
+                     status and the week. #}
+                  <div class="pf-visit__hours" data-pf-hours data-lid="{{ visit.lid }}">
+                    <p class="pf-visit__status" id="{{ location.uid }}-visit-hours" tabindex="-1" aria-live="polite">
+                      <span class="pf-visit__dot" aria-hidden="true"></span>
+                      <span class="pf-visit__status-label" data-pf-hours-status>{{ 'Hours'|t }}</span>
+                      <span class="pf-visit__today" data-pf-hours-today></span>
+                    </p>
+                    <div class="pf-visit__week">
+                      <h3 class="pf-visit__week-title" data-pf-hours-week-label>{{ 'This week'|t }}</h3>
+                      <ol class="pf-visit__days" data-pf-hours-week>
+                        {% for i in 1..7 %}<li class="pf-visit__day" aria-hidden="true">&nbsp;</li>{% endfor %}
+                      </ol>
+                    </div>
+                  </div>
+                {% endif %}
+                <p class="pf-location__visit-links">
+                  {% if visit.lid %}
+                    <a class="pf-visit__link" href="https://lsu.libcal.com/hours">
+                      {{- 'All library hours'|t -}}
+                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg>
+                    </a>
+                  {% endif %}
+                  {% if visit.maps_url %}
+                    <a class="pf-visit__link" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
+                      {{- 'Open in Google Maps'|t -}}
+                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
+                    </a>
+                  {% endif %}
+                  {% if visit.parking_url %}
+                    <a class="pf-visit__link" href="{{ visit.parking_url }}">
+                      {{- 'Parking & travel'|t -}}
+                      {%- if visit.name %}<span class="visually-hidden"> {{ 'to @place'|t({'@place': visit.name}) }}</span>{% endif -%}
+                      <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                    </a>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          {% elseif part == 'rules' %}
+            {{ pf.index_rule(num, 'Before you come'|t, {}) }}
+            <div class="pf-location__part-grid">
+              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'House rules'|t }}</h2>
+              <div class="pf-location__part-body">
+                {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: rules, attributes: create_attribute() } only %}
+              </div>
+            </div>
+          {% else %}
+            {{ pf.index_rule(num, 'Reserve'|t, {}) }}
+            <div class="pf-location__part-grid">
+              <h2 class="pf-location__part-title" id="{{ title_id }}" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
+              <div class="pf-location__part-body">
+                {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
+              </div>
             </div>
           {% endif %}
-          {% if location.capacity %}
-            <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
-          {% endif %}
-        </dl>
+        </section>
+      {% endfor %}
 
-        {% if location.map %}
-          {{ attach_library('palefire/location-plate') }}
-          <a class="pf-location__plate" href="#{{ location.uid }}-map" data-pf-plate="{{ location.map.here }}" hidden>
-            <span class="pf-location__plate-drawing"></span>
-            <span class="pf-location__plate-text">
-              {%- if location.floor %}<span class="pf-location__plate-floor">{{ 'Floor @n'|t({'@n': location.floor}) }}</span>{% endif -%}
-              <span class="pf-location__plate-link">{{ 'View the map'|t }}</span>
-            </span>
-          </a>
-        {% endif %}
-      </div>
-
-      <div class="pf-location__body">
-        {% if location.map %}
-          <div class="pf-location__map" id="{{ location.uid }}-map">
-            {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
-          </div>
-        {% endif %}
-
-        {% if visit %}
-          <div class="pf-location__visit">
-            {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: location.uid ~ '-visit' } only %}
-          </div>
-        {% endif %}
-
-        {% if has_rules %}
-          <section class="pf-location__part" aria-labelledby="{{ location.uid }}-rules-title">
-            {{ pf.index_rule('01', 'Before you come'|t, {}) }}
-            <h2 class="pf-location__part-title" id="{{ location.uid }}-rules-title" data-toc>{{ 'House rules'|t }}</h2>
-            {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: location.rules, attributes: create_attribute() } only %}
-          </section>
-        {% endif %}
-
-        {% if location.booking %}
-          {# The top button is already this link: no second one here. #}
-          {% set booking = location.booking %}
-          {% if location.link and booking.link and location.link.url == booking.link.url %}
-            {% set booking = booking|merge({ link: null }) %}
-          {% endif %}
-          <section class="pf-location__part" aria-labelledby="{{ location.uid }}-book-title">
-            {{ pf.index_rule(has_rules ? '02' : '01', 'Reserve'|t, {}) }}
-            <h2 class="pf-location__part-title" id="{{ location.uid }}-book-title" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
-            {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
-          </section>
-        {% endif %}
-      </div>
+      {% if location.map %}
+        {{ attach_library('palefire/location-plate') }}
+        <a class="pf-location__plate" href="#{{ location.uid }}-map" data-pf-plate="{{ location.map.here }}" hidden>
+          <span class="pf-location__plate-drawing"></span>
+          <span class="pf-location__plate-text">
+            {%- if location.floor %}<span class="pf-location__plate-floor">{{ 'Floor @n'|t({'@n': location.floor}) }}</span>{% endif -%}
+            <span class="pf-location__plate-link">{{ 'View the map'|t }}</span>
+          </span>
+        </a>
+      {% endif %}
     </div>
   </div>
 {% endif %}

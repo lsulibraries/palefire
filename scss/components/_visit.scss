@@ -54,7 +54,9 @@
 .pf-landing__lead > .pf-landing__title + .pf-landing__intro { margin-top: 0; }
 
 // --- Visit strip -----------------------------------------------------------
-.pf-visit {
+// The strip's tokens, also read by a location page's frameless hours
+// (.pf-location__visit, _location.scss).
+%pf-visit-tokens {
   --pf-visit-line: var(--pf-section-border, #6c757d);
   // The guides' soft hairline: the strip's frame, the hours rows and the
   // mini map's edge. (The status dot and the map stripes keep the line.)
@@ -62,6 +64,10 @@
   --pf-visit-open: #2f9e4f;
   --pf-visit-soon: #fdd023;
   --pf-visit-closed: #c8102e;
+}
+
+.pf-visit {
+  @extend %pf-visit-tokens;
   display: flex;
   flex-direction: column;
   gap: .875rem;

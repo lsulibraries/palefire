@@ -116,7 +116,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Landing hero, stacks, department | `paragraph--landing-*` | – landing only |
 | Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
 | Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
-| Location page: policy marks, map plate / chip | `paragraph--location-space`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
+| Location page: plate (title + map), ledger, numbered parts, policy marks, map chip | `paragraph--location-space`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
 | Ask Special Collections | `includes/ask-special` | – |
 | Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
@@ -132,3 +132,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** The Grid / List switch (`.pf-tiles__view`) is now also a filter: the Exhibitions showcase's All / Digital / Physical buttons reuse it, with a count after each label.
 - **2026-10-31:** Page kinds. `data-pf-page` on `<html>`, with `$pf-system` and `$pf-banded` in `_variables.scss`: the 1280px column, section headings and alternating bands now apply to every Modular page but guides, forms and exhibitions. The `--pf-hero-*` type and rhythm tokens moved to `:root`; guide section headings use `--pf-hero-h2-size`. Location pages use the five-column grid, the shared title and h2, and index rules.
 - **2026-10-31:** Location pages: the map plate (the building drawing, small, at the foot of the details column once the map has scrolled away; a chip at the bottom of the screen on phones or wherever the column would cut it off). Policy marks lose their built-in square: a required mark shows a corner flag on its frame instead, and the Required group's mark is an asterisk.
+- **2026-10-31:** Location pages, layout 01: the title beside the map (2/5 and 3/5, key folded), a full-width ledger of facts with the policy marks, then numbered parts (`.pf-location__part`, heading over two columns, content over three; `--band` on odd parts). The map chip is always the bottom-left chip. New placeholder `%pf-visit-tokens` for the Visit colors; Booking text styles its h3, lists and numbered steps.
