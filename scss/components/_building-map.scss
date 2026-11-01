@@ -22,7 +22,8 @@
   --pf-map-out: .5s;                   /* hover out */
   --pf-map-surface: #000;
   --pf-map-tip-solid: rgb(10 10 10);   /* tooltip panel and its pointer */
-  --pf-map-dim: .35;                   /* the other rooms, names and icons while one is lit */
+  --pf-map-dim: .35;                   /* the other rooms' hatching and the dashed lines while one is lit: texture, no contrast floor */
+  --pf-map-dim-text: .6;               /* the other names and numbers: white at 60% keeps 4.5:1 over grey 64, the location backdrop's ceiling (56% is the least) */
   --pf-map-dim-lines: .55;             /* the outline while one is lit: it draws the lit room too */
   --pf-map-tip-line: #3a3a3a;
   --pf-map-tip-text: #d6d6d6;
@@ -289,17 +290,21 @@
     fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
 }
 /* Focus: while a room is lit (hover, focus, a tap or its list entry),
-   building-map.js sets .is-focusing and the rest of the drawing steps back:
-   the other rooms, their names, the icons and the numbers to --pf-map-dim,
+   building-map.js sets .is-focusing and the rest of the drawing steps back
+   (on a room's own page, the resting state: the room stays lit). The other
+   rooms' hatching and the dashed lines to --pf-map-dim; the other names and
+   the numbers, which are text, only to --pf-map-dim-text, so they keep AA;
    the outline (one layer, the lit room's walls included) to
-   --pf-map-dim-lines. Opacity on the rooms, icons, lines and numbers;
-   fill-opacity on the names, whose opacity the draw-on uses. Not during the
-   draw-on, so its own fades are untouched. */
+   --pf-map-dim-lines. Floor names and icons are grey already and mark the
+   way in (entrance, lift, restrooms): they stay as they are. Opacity on the
+   rooms, lines and numbers; fill-opacity on the names, whose opacity the
+   draw-on uses. Not during the draw-on, so its own fades are untouched. */
 .pf-map.is-drawn:not(.is-revealing) :is(.pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__num) { transition: opacity var(--pf-map-out) ease; }
-.pf-map.is-drawn.is-focusing :is(.pf-map__region, .pf-map__num):not(.is-active),
-.pf-map.is-drawn.is-focusing :is(.pf-map__icons, .pf-map__lines--hidden) { opacity: var(--pf-map-dim); transition-duration: var(--pf-map-in); }
+.pf-map.is-drawn.is-focusing .pf-map__region:not(.is-active),
+.pf-map.is-drawn.is-focusing .pf-map__lines--hidden { opacity: var(--pf-map-dim); transition-duration: var(--pf-map-in); }
+.pf-map.is-drawn.is-focusing .pf-map__num:not(.is-active) { opacity: var(--pf-map-dim-text); transition-duration: var(--pf-map-in); }
 .pf-map.is-drawn.is-focusing .pf-map__lines:not(.pf-map__lines--hidden) { opacity: var(--pf-map-dim-lines); transition-duration: var(--pf-map-in); }
-.pf-map.is-drawn.is-focusing .pf-map__label:not(.is-active) { fill-opacity: var(--pf-map-dim); }
+.pf-map.is-drawn.is-focusing .pf-map__label:not(.is-active, .pf-map__label--floor) { fill-opacity: var(--pf-map-dim-text); }
 .pf-map.is-revealing .pf-map__icons,
 .pf-map.is-revealing .pf-map__lines--hidden {
   transition: opacity .6s ease calc(var(--pf-map-seq-end, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag));
@@ -468,6 +473,9 @@
 .pf-map__region[aria-current] .pf-map__hatch,
 .pf-map__region[aria-current]:is(:hover, :focus-visible, .is-active) .pf-map__hatch { fill: var(--pf-map-hover); fill-opacity: 1; }
 .pf-map__region[aria-current] .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 2); }
+/* Lit, it keeps the ink too (gold would sink into its own room), over the
+   lifted name's dark halo. building-map.js marks it .is-here. */
+.pf-map__label.is-here.is-active { fill: var(--pf-map-ink); }
 
 /* Tooltip ------------------------------------------------------------------
    One per map, filled from the hidden .pf-map__tip-src for the active room and

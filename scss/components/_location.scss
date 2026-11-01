@@ -153,7 +153,10 @@
 // what a 75% black layer gives pure white: the least that keeps every text
 // in the top at 4.5:1 (the title and marks at 3:1); the muted ledger terms,
 // #b7b3ba, allow up to 69. Lowering contrast further raises the floor
-// (the veil's grey), never the ceiling.
+// (the veil's grey), never the ceiling. Over them, a soft black fall from
+// the top of the layer (under the header) to nothing 22rem down, which
+// scrolls with the page, gives the menu and breadcrumb a little weight; it
+// only darkens, so it only adds contrast.
 // Under the drawing, the floors themselves are frosted: js/location-plate.js
 // adds .pf-location__frost, masked to the floors' shapes from the drawing
 // (Floor 1's outline and the rooms' hit areas), which blurs the (already
@@ -183,11 +186,23 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     pointer-events: none;
     content: "";
     background:
+      linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, rgb(0 0 0 / .08) 14rem, transparent 22rem),
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)) fixed,
       linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
-    background-blend-mode: normal, color, normal;
+    background-blend-mode: normal, normal, color, normal;
   }
+
+  // The policy marks frosted like the floors: the photo blurs behind each
+  // tile, so the icons sit on a quiet ground of their own.
+  .pf-space-pin__button {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  // The map's grey floor names and icons over the photo: #9a9a9a gives
+  // 3.7:1 over its ceiling (grey 64); #b0b0b0 gives 4.8:1.
+  .pf-map { --pf-map-floor-ink: #b0b0b0; }
 
   // The layer sits under the drawing in its scroller, the size of the
   // drawing's box, so the mask (the same viewBox, stretched to it) lines up.

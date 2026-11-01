@@ -200,6 +200,7 @@
     let pinned = null;  // space tapped in the list and scrolled to (revealStage, hide)
     let byHover = false; // the open tooltip came from hover (not focus or a tap)
     let finishDraw = () => {}; // set by the draw-on trace, below
+    let resting = null; // the page's own room, lit while no other is (rest)
     // Hover wait before a tooltip shows: --pf-map-tip-delay (s or ms).
     const tipDelay = () => {
       const v = getComputedStyle(root).getPropertyValue('--pf-map-tip-delay').trim();
@@ -207,7 +208,7 @@
       return Number.isFinite(n) ? (v.endsWith('ms') ? n : n * 1000) : 250;
     };
 
-    function setActive(key, on) {
+    function mark(key, on) {
       regions.concat(items).forEach((el) => {
         if (el.dataset.mapRegion === key) el.classList.toggle('is-active', on);
       });
@@ -217,9 +218,41 @@
       nums.forEach((el) => {
         if (el.dataset.mapNum === key) el.classList.toggle('is-active', on);
       });
-      // While a room is lit the rest of the drawing dims (_building-map.scss).
-      root.classList.toggle('is-focusing', regions.some((r) => r.classList.contains('is-active')));
     }
+    const anyLit = () => regions.some((r) => r.classList.contains('is-active'));
+
+    // A resting room hands the light to any other that takes it and gets it
+    // back when that one goes out. Both happen in one go, so nothing flickers.
+    function setActive(key, on) {
+      if (on && resting && key !== resting) mark(resting, false);
+      mark(key, on);
+      if (resting && !anyLit()) mark(resting, true);
+      // While a room is lit the rest of the drawing dims (_building-map.scss).
+      root.classList.toggle('is-focusing', anyLit());
+    }
+
+    // On a room's own page (data-map-here) the room stays lit once the map
+    // has drawn itself in, as it looks on hover, without its tooltip.
+    const rest = () => {
+      const key = root.dataset.mapHere;
+      if (resting || !key || !live.has(key)) return;
+      resting = key;
+      if (!anyLit()) setActive(key, true);
+    };
+
+    // Where a room's name sits unlifted: a lit name rises, and the resting
+    // room's always is. Measured with the class off and no transition, so
+    // nothing moves on screen.
+    const restingBox = (el) => {
+      if (!el.classList.contains('is-active')) return el.getBoundingClientRect();
+      el.style.transition = 'none';
+      el.classList.remove('is-active');
+      const box = el.getBoundingClientRect();
+      el.classList.add('is-active');
+      el.getBoundingClientRect();
+      el.style.transition = '';
+      return box;
+    };
 
     function place(key) {
       const anchorEl = labels.find((l) => l.dataset.mapLabel === key)
@@ -450,6 +483,7 @@
       const hereRegion = regionFor(hereKey);
       hereRegion.setAttribute('aria-current', 'location');
       const hereLabel = labels.find((l) => l.dataset.mapLabel === hereKey);
+      if (hereLabel) hereLabel.classList.add('is-here');
       const marker = document.createElementNS(SVG_NS, 'g');
       marker.setAttribute('class', 'pf-map__here');
       marker.setAttribute('aria-hidden', 'true');
@@ -462,11 +496,9 @@
       const placeHere = () => {
         const target = hereLabel || hereRegion;
         const m = svg.getScreenCTM();
-        const r = target.getBoundingClientRect();
-        if (!m || !r.width) return;
         // Measure without the hover lift.
-        const lifted = target.classList.contains('is-active');
-        if (lifted) return;
+        const r = restingBox(target);
+        if (!m || !r.width) return;
         const pt = new DOMPoint(r.left + r.width / 2, r.top).matrixTransform(m.inverse());
         marker.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + (pt.y - SETTINGS.hereGap).toFixed(1) + ')');
       };
@@ -611,7 +643,7 @@
 
     // Draw-on trace (from the codepen), once: the first time the map
     // scrolls into view. After that it stays drawn.
-    if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') return;
+    if (reduceMotion() || !lines.length || typeof lines[0].animate !== 'function') { rest(); return; }
     root.classList.add('is-tracing');
     // Reveal order: rooms top to bottom (then left to right) through the
     // drawing; each name shares its room's place in the order.
@@ -664,7 +696,7 @@
       const revealMs = (seqEnd * SETTINGS.revealStep) + SETTINGS.revealLabelLag + SETTINGS.revealFade + 100;
       later(() => {
         root.classList.add('is-revealing', 'is-drawn');
-        later(() => root.classList.remove('is-revealing'), revealMs);
+        later(() => { root.classList.remove('is-revealing'); rest(); }, revealMs);
       }, SETTINGS.duration * 0.72);
       Promise.all(animations.map((a) => a.finished.catch(() => {}))).then(() => {
         if (current !== run) return;
@@ -687,6 +719,7 @@
       root.classList.remove('is-tracing', 'is-revealing');
       root.classList.add('is-drawn');
       state = 'drawn';
+      rest();
     };
     if (!('IntersectionObserver' in window)) { draw(); return; }
     // Draws when a quarter of it first comes into view, then stops
