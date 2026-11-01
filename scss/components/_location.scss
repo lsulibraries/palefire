@@ -140,15 +140,20 @@
 
 // --- The backdrop: the room's first photo behind the top --------------------
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
-// evenly darkened by a black layer over it, behind the title, map and
+// monochrome and low in contrast, behind the title, map and
 // ledger, up under the clear header and bar and out to the section's edges
 // (its padding, so nothing scrolls sideways), down to the first part. It
 // is fixed to the window (background-attachment: fixed, sized to the
 // window), so the page slides over it; no filter on it, which would drop
 // the fixed attachment. Where fixed backgrounds aren't kept (iOS), it
-// scrolls with the page. The layer is 75% black: the least that keeps every
-// text in the top at 4.5:1 (the title and marks at 3:1) over the photo's
-// brightest pixel, pure white (the muted ledger terms, #b7b3ba, need 73%).
+// scrolls with the page. Two layers over it, blended rather than filtered: a
+// mid grey with the `color` blend takes its colour away (so the gold title
+// and lit room are the only colour), and a dark grey veil at 87% squeezes
+// its tones into 30-64 of 255, so its detail recedes. The ceiling, 64, is
+// what a 75% black layer gives pure white: the least that keeps every text
+// in the top at 4.5:1 (the title and marks at 3:1); the muted ledger terms,
+// #b7b3ba, allow up to 69. Lowering contrast further raises the floor
+// (the veil's grey), never the ceiling.
 // Under the drawing, the floors themselves are frosted: js/location-plate.js
 // adds .pf-location__frost, masked to the floors' shapes from the drawing
 // (Floor 1's outline and the rooms' hit areas), which blurs the (already
@@ -178,8 +183,10 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     pointer-events: none;
     content: "";
     background:
-      linear-gradient(rgb(0 0 0 / .75), rgb(0 0 0 / .75)) fixed,
+      linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)) fixed,
+      linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
+    background-blend-mode: normal, color, normal;
   }
 
   // The layer sits under the drawing in its scroller, the size of the
