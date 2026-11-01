@@ -72,8 +72,9 @@
       </div>
     {% endif %}
     <div class="pf-location">
-      {# The top and the ledger, over the room's first photo, darkened, with
-         a frosted oval under the map (_location.scss, dark swatches only):
+      {# The top and the ledger, over the room's first photo, darkened and
+         fixed, the map's floors frosted over it (_location.scss,
+         js/location-plate.js; dark swatches only):
          a CSS background, so nothing for screen readers; the same file as
          The room's first. #}
       <div class="pf-location__intro{{ location.photos ? ' has-backdrop' }}"{% if location.photos %} style="--pf-location-backdrop: url('{{ location.photos|first.src }}')"{% endif %}>

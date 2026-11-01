@@ -144,20 +144,27 @@
 
 // --- The backdrop: the room's first photo behind the top --------------------
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
-// darkened and only softened (the photos are small), behind the title, map
+// darkened by a layer of the page's black over it, behind the title, map
 // and ledger, up under the clear header and bar and out to the section's
-// edges (its padding, so nothing scrolls sideways). It covers its box and
-// fades out on every side, so it ends on the plain page before the parts.
-// Under the drawing, a second layer blurs and dims it further in an oval
-// (.pf-location__map::before), so the map's fine lines and labels keep a
-// quiet ground while the room shows around them. Light swatches, more
-// contrast and forced colors keep the plain page. The URL is
-// --pf-location-backdrop on the element (paragraph--location-space.html.twig),
-// so only dark swatches fetch it here; it is the same file The room shows.
+// edges (its padding, so nothing scrolls sideways). It is fixed to the
+// window (background-attachment: fixed, sized to the window), so the page
+// slides over it; no filter on it, which would drop the fixed attachment.
+// Where fixed backgrounds aren't kept (iOS), it scrolls with the page. It
+// fades out on every side, so the parts start on the plain page.
+// Under the drawing, the floors themselves are frosted: js/location-plate.js
+// adds .pf-location__frost, masked to the floors' shapes from the drawing
+// (Floor 1's outline and the rooms' hit areas), which blurs and dims the
+// photo behind exactly those, so the map's lines and labels keep a quiet
+// ground and the room shows around it. Light swatches, more contrast and
+// forced colors keep the plain page. The URL is --pf-location-backdrop on
+// the element (paragraph--location-space.html.twig), so only dark swatches
+// fetch it here; it is the same file The room shows.
 .pf-location__intro {
   position: relative;
   isolation: isolate;
 }
+
+.pf-location__frost { display: none; }
 
 html.pf-reading-dark .pf-location__intro.has-backdrop {
   &::before {
@@ -166,37 +173,45 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     z-index: -1;
     pointer-events: none;
     content: "";
-    background: var(--pf-location-backdrop) center 35% / cover no-repeat;
-    opacity: .5;
-    filter: blur(2px) grayscale(.35) brightness(.55);
+    background:
+      linear-gradient(rgb(0 0 0 / .62), rgb(0 0 0 / .62)) fixed,
+      var(--pf-location-backdrop) center / cover no-repeat fixed;
     -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
     mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
     -webkit-mask-composite: source-in;
     mask-composite: intersect;
   }
 
-  // The drawing's ground: an oval of frosted, dimmer photo under the map.
-  .pf-location__map {
-    position: relative;
+  // The layer sits under the drawing in its scroller, the size of the
+  // drawing's box, so the mask (the same viewBox, stretched to it) lines up.
+  .pf-map__scroller { position: relative; }
+  .pf-map__svg { position: relative; }
 
-    &::before {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      content: "";
-      -webkit-backdrop-filter: blur(14px) brightness(.6);
-      backdrop-filter: blur(14px) brightness(.6);
-      -webkit-mask-image: radial-gradient(closest-side, #000 60%, transparent);
-      mask-image: radial-gradient(closest-side, #000 60%, transparent);
+  .pf-location__frost {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(12px) brightness(.55);
+    backdrop-filter: blur(12px) brightness(.55);
+    -webkit-mask: var(--pf-location-frost) center / 100% 100% no-repeat;
+    mask: var(--pf-location-frost) center / 100% 100% no-repeat;
+    animation: pf-frost-in .8s ease both;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
     }
   }
 }
 
+@keyframes pf-frost-in {
+  from { opacity: 0; }
+}
+
 @media (prefers-contrast: more), (forced-colors: active) {
   html.pf-reading-dark .pf-location__intro.has-backdrop {
-    &::before,
-    .pf-location__map::before { content: none; }
+    &::before { content: none; }
+    .pf-location__frost { display: none; }
   }
 }
 

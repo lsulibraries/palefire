@@ -1,6 +1,7 @@
 /**
  * @file
- * Location pages: the map chip (paragraph--location-space).
+ * Location pages: the map chip and the frosted floors
+ * (paragraph--location-space).
  *
  * Draws a miniature of the page's building map (its outlines, and the
  * room marked "here" filled) into the chip, shows it, and marks the page
@@ -34,6 +35,27 @@
     return mini;
   }
 
+  // The frosted floors: a layer under the drawing, masked to the floors'
+  // shapes (Floor 1's outline and every room's hit area, in the drawing's
+  // own viewBox), so CSS can blur and dim the photo behind exactly those
+  // and leave it clear around them (_location.scss). Only over a photo.
+  function frost(map, svg) {
+    if (!map.closest('.has-backdrop')) {
+      return;
+    }
+    const shapes = svg.querySelectorAll('.pf-map__floors path, .pf-map__hit');
+    if (!shapes.length) {
+      return;
+    }
+    const paths = Array.from(shapes, (path) => `<path d="${path.getAttribute('d')}"/>`).join('');
+    const mask = `<svg xmlns="${NS}" viewBox="${svg.getAttribute('viewBox')}" preserveAspectRatio="none">${paths}</svg>`;
+    const layer = document.createElement('div');
+    layer.className = 'pf-location__frost';
+    layer.setAttribute('aria-hidden', 'true');
+    layer.style.setProperty('--pf-location-frost', `url("data:image/svg+xml,${encodeURIComponent(mask)}")`);
+    svg.before(layer);
+  }
+
   Drupal.behaviors.palefireLocationPlate = {
     attach(context) {
       once('pf-location-plate', '[data-pf-plate]', context).forEach((plate) => {
@@ -43,6 +65,7 @@
         if (!svg || !('IntersectionObserver' in window)) {
           return;
         }
+        frost(map, svg);
         plate.querySelector('.pf-location__plate-drawing').append(miniature(svg, plate.dataset.pfPlate));
         plate.hidden = false;
 

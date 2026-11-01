@@ -28,10 +28,16 @@
  * also used by the legend). A dashed line marks where each one opens onto
  * its gallery. The Floor 2 railing is outline only (dashed back edges,
  * heavier front rail) and hovers with the Floor 2 gallery.
+ *
+ * pf-map__floors: Floor 1's whole floor as one closed shape (lobby and
+ * corridors included; the rooms are the regions), never drawn. With the
+ * rooms' hit areas it outlines both floors for a location page's frosted
+ * ground (js/location-plate.js).
  */
 #}
 <svg class="pf-map__svg" xmlns="http://www.w3.org/2000/svg" viewBox="100 240 4220 3170" role="group" aria-label="Hill Memorial Library floor map. Floor 2 is drawn above Floor 1." data-map-svg="">
 <defs><pattern id="{{ uid }}-hatch-lines" patternUnits="userSpaceOnUse" x="0" y="0" width="40" height="20"><rect x="0" y="7.5" width="40" height="5" fill="#fff"/></pattern><mask id="{{ uid }}-hatch" maskUnits="userSpaceOnUse" x="100" y="240" width="4220" height="3170"><rect x="100" y="240" width="4220" height="3170" fill="url(#{{ uid }}-hatch-lines)"/><path d="M947.5 1782 L529 1977.1 M1696.7 1432.6 L1987.4 1600.1 M2479.5 1071.5 L2668 1180.4 M3688.8 507.6 L3271.7 702.1" stroke="#000" stroke-width="40" fill="none"/></mask></defs>
+<g class="pf-map__floors" aria-hidden="true"><path d="M620.5 3050.6 L1810.3 2495.8 L1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L3780.2 1577.5 L4299.1 1877 L2779 2585.9 L2659.5 2641.2 L1139.3 3350.1 Z"/></g>
 <g class="pf-map__regions">
 {% set s = spaces.reading_room %}
 {% if s and s.url %}<a class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="reading_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" href="{{ s.url }}"><path class="pf-map__hatch" d="M3223 1837.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M3223 1837.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 Z"/></a>{% elseif s %}<g class="pf-map__region is-{{ s.access|clean_class }}" data-map-region="reading_room" aria-label="{{ s.title }}, {{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}, {{ 'Floor @n'|t({'@n': 1}) }}" aria-describedby="{{ s.tip }}" tabindex="0" role="button"><path class="pf-map__hatch" d="M3223 1837.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 Z" mask="url(#{{ uid }}-hatch)"/><path class="pf-map__hit" d="M3223 1837.3 L3780.2 1577.5 L4299.1 1877 L3741.9 2136.8 Z"/></g>{% endif %}

@@ -256,6 +256,8 @@
 .pf-map__region.is-appointment:focus-visible .pf-map__hatch,
 .pf-map__region.is-appointment.is-active .pf-map__hatch { fill-opacity: var(--pf-map-hatch-appointment-hover); }
 .pf-map__hit { fill: transparent; pointer-events: all; stroke: none; }
+/* Floor outlines for scripts only (js/location-plate.js): never drawn. */
+.pf-map__floors { display: none; }
 .pf-map__region:focus-visible .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 3); }
 
 /* Draw-on animation (building-map.js adds these; without JS nothing is hidden). */
