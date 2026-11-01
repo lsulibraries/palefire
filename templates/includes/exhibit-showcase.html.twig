@@ -29,15 +29,18 @@
  * A post reads "Read about it" and shows where and when; an online
  * exhibition with a physical show has its post as a second link.
  *
+ * The carousel holds the digital exhibitions only (digital: the
+ * exhibition-mode pages); the table lists everything.
+ *
  * Featured items (field_exhibit_showcase, or on view today) come first,
- * so the carousel opens on one, with a "Featured" label and the reason
- * (field_exhibit_feature_note, or "On view in … through …") in its
- * summary and its table row.
+ * so the carousel opens on a featured digital one, with a "Featured"
+ * label and the reason (field_exhibit_feature_note, or "On view in …
+ * through …") in its summary and its table row.
  *
  * Covers are decorative (the titles are in the text). Arrows are drawn
  * inline: Font Awesome's font isn't loaded on these pages. No autoplay.
  *
- * Variables: showcase: items (title, url, cta, subtitle, kicker, year,
+ * Variables: showcase: items (title, url, cta, digital, subtitle, kicker, year,
  * blurb, when, post (url, when) or NULL, featured, note, unpublished,
  * title_style, cover), featured (count), cache.
  */
@@ -69,18 +72,22 @@
 {% import _self as pf %}
 {% set items = showcase.items %}
 {% set count = items|length %}
+{# The carousel: the digital exhibitions only (the table lists all). #}
+{% set digital = items|filter(ex => ex.digital) %}
+{% set shown = digital|length %}
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
   <div class="pf-showcase" data-pf-showcase>
-    <section class="pf-showcase__carousel" id="pf-showcase-browse" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ 'Exhibitions'|t }}" data-pf-showcase-carousel>
+    {% if digital %}
+    <section class="pf-showcase__carousel" id="pf-showcase-browse" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ 'Digital exhibitions'|t }}" data-pf-showcase-carousel>
       <div class="pf-index-rule pf-showcase__rule">
         <span class="pf-index-rule__num" aria-hidden="true">01</span>
-        <span class="pf-index-rule__label" aria-hidden="true">{{ 'Browse'|t }}</span>
+        <span class="pf-index-rule__label" aria-hidden="true">{{ 'Digital exhibitions'|t }}</span>
         <a class="pf-index-rule__link" href="#pf-showcase-all">{{ 'All @count'|t({'@count': count}) }}<span class="visually-hidden"> {{ 'exhibitions'|t }}</span></a>
       </div>
       <div class="pf-showcase__stage">
         <div class="pf-showcase__scene" aria-hidden="true" data-pf-showcase-scene>
-          {% for ex in items %}
+          {% for ex in digital %}
             <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" style="--pf-d: {{ loop.index0 }}" data-pf-showcase-card data-url="{{ ex.url }}">
               {{ pf.cover(ex.cover, '(min-width: 62rem) 24rem, 62vw', loop.first) }}
               {% if ex.featured %}<span class="pf-showcase__badge pf-showcase__ribbon">{{ 'Featured'|t }}</span>{% endif %}
@@ -93,7 +100,7 @@
         {# All in one grid cell, as tall as the longest; only the shown one
            is visible (and read). #}
         <div class="pf-showcase__summaries">
-          {% for ex in items %}
+          {% for ex in digital %}
             <div class="pf-showcase__summary{{ loop.first ? ' is-active' }}" data-pf-showcase-summary data-title="{{ ex.title }}">
               {{ pf.feature(ex, 'pf-showcase__feature') }}
               <p class="pf-showcase__kicker">
@@ -119,7 +126,7 @@
           {% endfor %}
         </div>
 
-        {% if count > 1 %}
+        {% if shown > 1 %}
           {# Hidden (visibility) until the script is ready, so it holds its
              place and nothing moves when it appears. #}
           <div class="pf-showcase__controls" data-pf-showcase-controls>
@@ -134,13 +141,13 @@
               </button>
               <p class="pf-showcase__upnext" aria-hidden="true">
                 <span class="pf-showcase__upnext-label">{{ 'Next'|t }}</span>
-                <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ items[1].title }}</span>
+                <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ digital[1].title }}</span>
               </p>
             </div>
             <div class="pf-showcase__progress">
-              <p class="pf-showcase__count" aria-hidden="true"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(count) }}</p>
+              <p class="pf-showcase__count" aria-hidden="true"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(shown) }}</p>
               <ol class="pf-showcase__dots">
-                {% for ex in items %}
+                {% for ex in digital %}
                   <li><button type="button" class="pf-showcase__dot" data-pf-showcase-go="{{ loop.index0 }}"{% if loop.first %} aria-current="true"{% endif %}>
                     <span class="visually-hidden">{{ 'Show @title'|t({'@title': ex.title}) }}</span>
                   </button></li>
@@ -152,10 +159,11 @@
         {% endif %}
       </div>
     </section>
+    {% endif %}
 
     <section class="pf-showcase-list" id="pf-showcase-all" aria-labelledby="pf-showcase-all-title">
       <div class="pf-index-rule pf-showcase__rule">
-        <span class="pf-index-rule__num" aria-hidden="true">02</span>
+        <span class="pf-index-rule__num" aria-hidden="true">{{ digital ? '02' : '01' }}</span>
         <span class="pf-index-rule__label" aria-hidden="true">{{ 'Index'|t }}</span>
       </div>
       <h2 class="pf-showcase-list__heading" id="pf-showcase-all-title">{{ 'All exhibitions'|t }}</h2>

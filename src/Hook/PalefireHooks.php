@@ -346,10 +346,10 @@ class PalefireHooks {
       $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Home')];
       $variables['depth'] = 2;
     }
-    // Showcase: the carousel and the table first (includes/exhibit-showcase
+    // Showcase: the carousel (digital exhibitions) and the table first (includes/exhibit-showcase
     // prints the ids), then the page's own sections.
     if ($node && self::stringValue($node, 'field_modular_type') === 'showcase') {
-      $extra[] = ['id' => 'pf-showcase-browse', 'label' => $this->t('Browse')];
+      $extra[] = ['id' => 'pf-showcase-browse', 'label' => $this->t('Digital exhibitions')];
       $extra[] = ['id' => 'pf-showcase-all', 'label' => $this->t('All exhibitions')];
     }
     if ($extra) {
@@ -744,6 +744,7 @@ class PalefireHooks {
         'title' => $node->label(),
         'url' => $node->toUrl()->toString(),
         'cta' => (string) $this->t('Enter the exhibition'),
+        'digital' => TRUE,
         'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
         'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) $this->t('Exhibition'),
         'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($view['year'] ?? NULL),
@@ -803,6 +804,7 @@ class PalefireHooks {
           'title' => $post->label(),
           'url' => $post->toUrl()->toString(),
           'cta' => (string) $this->t('Read about it'),
+        'digital' => FALSE,
           'subtitle' => '',
           'kicker' => (string) $this->t('Physical exhibition'),
           'year' => $year ?: (int) date('Y', (int) $post->getCreatedTime()),
