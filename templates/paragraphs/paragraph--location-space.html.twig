@@ -34,6 +34,12 @@
  * same as the standalone sections). The two headings are listed in the TOC
  * (data-toc) and open on index rules (01, 02), as the hero's sections do.
  * On phones the details come first, then the rest.
+ *
+ * The plate: once the building map has scrolled away, a small copy of it
+ * (the room in the accent) appears at the foot of the details column, or,
+ * where there is no column, as a chip at the bottom of the screen; either
+ * links back up to the map (js/location-plate.js draws it from the map, so
+ * without the script it stays hidden).
  */
 #}
 {% import '@palefire/includes/landing.html.twig' as pf %}
@@ -119,11 +125,22 @@
             <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
           {% endif %}
         </dl>
+
+        {% if location.map %}
+          {{ attach_library('palefire/location-plate') }}
+          <a class="pf-location__plate" href="#{{ location.uid }}-map" data-pf-plate="{{ location.map.here }}" hidden>
+            <span class="pf-location__plate-drawing"></span>
+            <span class="pf-location__plate-text">
+              {%- if location.floor %}<span class="pf-location__plate-floor">{{ 'Floor @n'|t({'@n': location.floor}) }}</span>{% endif -%}
+              <span class="pf-location__plate-link">{{ 'View the map'|t }}</span>
+            </span>
+          </a>
+        {% endif %}
       </div>
 
       <div class="pf-location__body">
         {% if location.map %}
-          <div class="pf-location__map">
+          <div class="pf-location__map" id="{{ location.uid }}-map">
             {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
           </div>
         {% endif %}

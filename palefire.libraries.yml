@@ -339,6 +339,19 @@ location-pins:
     - core/drupal
     - core/once
 
+# Location pages: the small map plate that follows the details once the
+# building map has scrolled away. Attached by
+# templates/paragraphs/paragraph--location-space.html.twig when the room has
+# a map.
+location-plate:
+  version: 1.0.0
+  js:
+    js/location-plate.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.debounce
+    - core/once
+
 # Louisiana Newspapers guide: the parish map (choose a parish, fill the
 # panel, draw-on). Attached by paragraph--parish-map.html.twig.
 parish-map:

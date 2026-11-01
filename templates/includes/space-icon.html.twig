@@ -2,13 +2,12 @@
 /**
  * @file
  * A space policy mark (Space policies, field_policy_icon): one stroke icon
- * on a 24px grid, drawn in three states so shape, not color, tells them
- * apart (_location.scss):
- * - allowed: the glyph on its own;
- * - required: the glyph inside a square;
- * - not_allowed: the glyph struck through. The strike has a knockout in
- *   the surface color (--pf-space-knock) so it reads over the glyph.
- * Decorative: the policy's own words always sit beside it.
+ * on a 24px grid. Allowed and required draw the glyph on its own (the
+ * marks' square frame is the button's, so the icon has none; the frame
+ * shows a required mark with a corner flag, _location.scss, and lists name
+ * the state in words); not_allowed strikes it through, the strike with a
+ * knockout in the surface color (--pf-space-knock) so it reads over the
+ * glyph. Decorative: the policy's own words always sit beside it.
  *
  * Variables:
  * - icon: a key below (unknown keys draw nothing).
@@ -43,7 +42,7 @@
   talk: 'M3 5h11v8H8l-3 3v-3H3zM17 9h4v8h-2v3l-3-3h-5v-2',
   group: 'M9.5 7a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M3.5 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0M16.5 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0M7.5 20v-2a4.5 4.5 0 0 1 9 0v2M2.5 19v-1a3 3 0 0 1 4-2.8M21.5 19v-1a3 3 0 0 0-4-2.8',
   state_allowed: 'M5 12.5l4.5 4.5L19 7.5',
-  state_required: 'M3.5 3.5h17v17h-17z',
+  state_required: 'M12 4v16M5.1 8l13.8 8M18.9 8L5.1 16',
   state_not_allowed: 'M6 6l12 12M18 6L6 18',
 } %}
 {% set state = state ?: 'allowed' %}
@@ -55,13 +54,9 @@
   </svg>
 {% elseif paths[icon] is defined %}
   <svg class="pf-space-icon pf-space-icon--{{ state|clean_class }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    {%- if state == 'required' -%}
-      <rect x="1.5" y="1.5" width="21" height="21" rx="2"/><path d="{{ paths[icon] }}" transform="translate(5 5) scale(.583)" class="pf-space-icon__inset"/>
-    {%- else -%}
-      <path d="{{ paths[icon] }}"/>
-      {%- if state == 'not_allowed' -%}
-        <path class="pf-space-icon__knock" d="M3.5 3.5l17 17"/><path d="M3.5 3.5l17 17"/>
-      {%- endif -%}
+    <path d="{{ paths[icon] }}"/>
+    {%- if state == 'not_allowed' -%}
+      <path class="pf-space-icon__knock" d="M3.5 3.5l17 17"/><path d="M3.5 3.5l17 17"/>
     {%- endif -%}
   </svg>
 {% endif %}

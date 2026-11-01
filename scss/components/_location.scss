@@ -33,8 +33,7 @@
 
 // --- Policy marks ---------------------------------------------------------------
 // 24px grid, 1.5 stroke. The strike's knockout is the surface color so the
-// slash reads over the glyph; the inset glyph in a frame is drawn at .583,
-// so its stroke is scaled back up to match.
+// slash reads over the glyph.
 .pf-space-icon {
   flex: none;
   width: 1.25rem;
@@ -46,7 +45,6 @@
   stroke-linejoin: round;
   vertical-align: -.25em;
 }
-.pf-space-icon__inset { stroke-width: 2.57; }
 .pf-space-icon__knock {
   stroke: var(--pf-space-knock, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))));
   stroke-width: 4.5;
@@ -146,10 +144,151 @@
 .pf-location__map {
   container-name: pf-map;
   container-type: inline-size;
+  scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
 
   .pf-map__heading {
     @include visually-hidden;
   }
+}
+
+// --- The plate: the map, small, once the map has scrolled away -------------
+// js/location-plate.js draws the building's outlines with the room filled
+// in the accent, and marks the page .is-past-map while the map is above
+// the window. In the details column (52rem and up) the plate sits under
+// the facts: the drawing, then the floor and "View the map", in the label
+// voice. Narrower, it is a chip at the bottom, on the content's left edge
+// (the TOC button is at the right). It fades and rises in; with reduced motion it just appears.
+.pf-location__plate {
+  display: none;
+  gap: .75rem 1rem;
+  align-items: end;
+  color: var(--pf-location-fg);
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-location-fg);
+    outline-offset: 4px;
+  }
+}
+
+.pf-location-page.is-past-map .pf-location__plate:not([hidden]) {
+  display: flex;
+  animation: pf-plate-in .4s $pf-swup-ease-in both;
+}
+
+@keyframes pf-plate-in {
+  from {
+    opacity: 0;
+    translate: 0 .5rem;
+  }
+}
+
+.pf-location__plate-drawing {
+  flex: none;
+  width: 10rem;
+}
+
+.pf-location__plate-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+
+  path {
+    fill: none;
+    stroke: var(--pf-g-heading, currentColor);
+    stroke-width: 1;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .is-here {
+    fill: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
+    stroke: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
+  }
+}
+
+.pf-location__plate-text {
+  display: flex;
+  flex-direction: column;
+  gap: .375rem;
+  padding-bottom: .25rem;
+}
+
+.pf-location__plate-floor {
+  @extend %pf-location-label;
+  color: var(--pf-location-muted);
+}
+
+.pf-location__plate-link {
+  @extend %pf-location-label;
+  text-decoration: underline transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &::after {
+    content: "\2191" / "";
+    margin-inline-start: .5em;
+  }
+
+  .pf-location__plate:is(:hover, :focus-visible) & {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+}
+
+@container pf-location (min-width: 52rem) {
+  .pf-location__plate {
+    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+}
+
+// The chip: on the page's glass, a hairline frame and the shadow the
+// floating buttons have, above the safe area; 44px tall at least. Where
+// there is no column, and wherever the column's foot is out of the window
+// (.is-plate-chip, js/location-plate.js).
+@mixin pf-plate-chip {
+  .pf-location__plate {
+    position: fixed;
+    margin: 0;
+    // On the content's left edge: clear of the rail and its back-to-top
+    // button (lg and up) at the screen's edge.
+    inset-inline-start: var(--pf-section-pad-inline, 1rem);
+    inset-block-end: max(1rem, env(safe-area-inset-bottom));
+    z-index: 1029; // under the TOC button (1030) and the offcanvas
+    align-items: center;
+    gap: .625rem;
+    min-height: 3rem;
+    max-width: calc(100vw - 6rem); // clear of the TOC button
+    padding: .375rem .875rem .375rem .5rem;
+    background: var(--pf-sidebar-bg, var(--bs-body-bg));
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--pf-location-line);
+    box-shadow: 0 .5rem 1.25rem rgb(0 0 0 / .18);
+  }
+
+  .pf-location__plate-drawing { width: 3.25rem; }
+
+  .pf-location__plate-text {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 .625rem;
+    padding: 0;
+  }
+}
+
+@container pf-location (max-width: 51.999rem) {
+  @include pf-plate-chip;
+}
+
+.pf-location-page.is-plate-chip {
+  @include pf-plate-chip;
+}
+
+@include pf-solid-chrome {
+  .pf-location__plate { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 
 // --- At a glance: the policy marks and their tooltips -----------------------
@@ -167,6 +306,7 @@
 }
 
 .pf-space-pin__button {
+  position: relative;
   display: grid;
   place-items: center;
   width: 2.75rem;
@@ -197,6 +337,19 @@
     outline: 2px solid var(--pf-location-fg);
     outline-offset: 2px;
   }
+}
+
+// Required: a flag in the frame's top right corner, so the state reads by
+// shape as well as in the tooltip (the icon itself has no frame of its own).
+.pf-space-pin--required .pf-space-pin__button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: .5rem;
+  height: .5rem;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
 }
 
 // The tooltip on the surface, in a hairline frame, with the label, the
@@ -487,7 +640,16 @@
   .pf-space-pin__button,
   .pf-space-pin__tip,
   .pf-location__cta,
-  .pf-sound__bar {
+  .pf-sound__bar,
+  .pf-location__plate-link {
     transition: none;
   }
+
+  .pf-location-page.is-past-map .pf-location__plate:not([hidden]) {
+    animation: none;
+  }
+}
+
+html.pf-a11y-motion .pf-location-page.is-past-map .pf-location__plate:not([hidden]) {
+  animation: none;
 }
