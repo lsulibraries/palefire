@@ -144,13 +144,15 @@
 
 // --- The backdrop: the room's first photo behind the top --------------------
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
-// darkened by a layer of the page's black over it, behind the title, map
-// and ledger, up under the clear header and bar and out to the section's
-// edges (its padding, so nothing scrolls sideways). It is fixed to the
-// window (background-attachment: fixed, sized to the window), so the page
-// slides over it; no filter on it, which would drop the fixed attachment.
-// Where fixed backgrounds aren't kept (iOS), it scrolls with the page. It
-// fades out on every side, so the parts start on the plain page.
+// evenly darkened by a black layer over it, behind the title, map and
+// ledger, up under the clear header and bar and out to the section's edges
+// (its padding, so nothing scrolls sideways), down to the first part. It
+// is fixed to the window (background-attachment: fixed, sized to the
+// window), so the page slides over it; no filter on it, which would drop
+// the fixed attachment. Where fixed backgrounds aren't kept (iOS), it
+// scrolls with the page. The layer is 75% black: the least that keeps every
+// text in the top at 4.5:1 (the title and marks at 3:1) over the photo's
+// brightest pixel, pure white (the muted ledger terms, #b7b3ba, need 73%).
 // Under the drawing, the floors themselves are frosted: js/location-plate.js
 // adds .pf-location__frost, masked to the floors' shapes from the drawing
 // (Floor 1's outline and the rooms' hit areas), which blurs and dims the
@@ -167,6 +169,12 @@
 .pf-location__frost { display: none; }
 
 html.pf-reading-dark .pf-location__intro.has-backdrop {
+  // The photo runs on to the first part's band, with the ledger's gap
+  // inside it, so there is no strip of plain page between them.
+  padding-bottom: var(--pf-location-gap);
+
+  + .pf-location__part--band { margin-top: 0; }
+
   &::before {
     position: absolute;
     inset: -12rem calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
@@ -174,12 +182,8 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     pointer-events: none;
     content: "";
     background:
-      linear-gradient(rgb(0 0 0 / .62), rgb(0 0 0 / .62)) fixed,
+      linear-gradient(rgb(0 0 0 / .75), rgb(0 0 0 / .75)) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
-    -webkit-mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-    mask-image: linear-gradient(transparent, #000 22%, #000 58%, transparent), linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
   }
 
   // The layer sits under the drawing in its scroller, the size of the
