@@ -30,14 +30,74 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   --pf-showcase-muted: var(--pf-g-muted, var(--pf-section-muted, var(--bs-secondary-color)));
   --pf-showcase-line: #{$pf-hairline};
   --pf-showcase-blank: #{$pf-grey-800};
-  display: grid;
-  gap: clamp(3.5rem, 7vw, 6rem);
-  padding: clamp(1.5rem, 3vw, 2.5rem) var(--pf-section-pad-inline, 1.25rem) clamp(3.5rem, 7vw, 6rem);
+  --pf-showcase-pad: clamp(3rem, 6vw, 5rem);
+  --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace); // .pf-index-rule
   color: var(--pf-showcase-fg);
 
   :focus-visible {
     outline: 2px solid var(--pf-showcase-fg);
     outline-offset: 3px;
+  }
+}
+
+// The head: the breadcrumb in the landing's glass bar, right under the
+// header, as on exhibitions (.pf-exhibit-head, _exhibition.scss). Sticky
+// while the head is on screen, then pinned for the page (.is-pinned,
+// js/modular-toc.js).
+.pf-showcase-head {
+  --pf-bar-edge: 1rem;
+  --pf-bar-icon-edge: .375rem;
+  --pf-bar-button: 2rem; // the row's height: a slim strip, as on the landing
+  --pf-landing-bar-gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-top: 0;
+
+  > .pf-landing__bar {
+    position: sticky;
+    top: var(--pf-header-h);
+    z-index: 3;
+  }
+}
+
+// The breadcrumb starts on the content's edge, the line the <h1>, the
+// rules, the summary and the covers share (and the page's sections). Two
+// classes past the rail's (_landing-features.scss), which puts it under
+// the logo.
+.pf-showcase-head > .pf-landing__bar,
+html:not([data-pf-mode="guide"]) .pf-modular--toc-rail .pf-showcase-head > .pf-landing__bar {
+  padding-inline-start: var(--pf-section-pad-inline, 1.25rem);
+}
+
+// Two bands, Browse and All exhibitions, each opened by an index rule
+// (01, 02), as the Special Collections landing's parts are. The TOC links
+// to them.
+.pf-showcase__carousel,
+.pf-showcase-list {
+  padding: var(--pf-showcase-pad) var(--pf-section-pad-inline, 1.25rem);
+}
+
+.pf-showcase__carousel {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.pf-showcase__rule {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+// The second band, and every other section after it, in the swatch's
+// surface color, one quiet step off the page: the landing's alternating
+// tones (_sections.scss), whose text and muted colors keep 4.5:1 on it.
+// Inside a band, anything drawn in the surface color takes the page's.
+html#{$pf-themed}[data-pf-mode="showcase"] {
+  --pf-band: var(--pf-g-surface); // held here, before the swap below
+
+  .pf-showcase-list,
+  .pf-sections > .pf-section--auto:nth-child(even of .pf-section--auto) {
+    --pf-section-bg: var(--pf-band);
+    --pf-g-surface: var(--pf-g-bg);
+    --pf-guide-surface: var(--pf-g-bg);
+    --bs-secondary-bg: var(--pf-g-bg);
+    --bs-tertiary-bg: var(--pf-g-bg);
+    background-color: var(--pf-section-bg);
   }
 }
 
@@ -92,28 +152,60 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 }
 
 // The carousel -----------------------------------------------------------
+// From lg the summary is at the left, the covers at the right with the
+// browse buttons under them, so the buttons stay put whichever summary is
+// shown (summaries differ in length). The covers' tops line up with the
+// summary's first line: the scene's room for the shadow and lift (above
+// and below the cover) hangs outside the row.
 .pf-showcase__carousel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem;
+  gap: 1.5rem clamp(2rem, 4vw, 4rem);
+
+  > .pf-showcase__rule {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
 
   @include media-breakpoint-up(lg) {
     grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
-    grid-template-areas: "panel stage";
-    gap: clamp(2rem, 4vw, 4rem);
-    align-items: center;
+    grid-template-areas:
+      "rule rule"
+      "panel stage"
+      "panel controls";
+    grid-template-rows: auto auto 1fr;
+    row-gap: clamp(1.5rem, 3vw, 2.5rem);
+
+    > .pf-showcase__rule {
+      grid-area: rule;
+    }
 
     .pf-showcase__stage {
       grid-area: stage;
+      align-self: start;
     }
 
+    // Its summaries and buttons become cells of this grid.
     .pf-showcase__panel {
+      display: contents;
+    }
+
+    .pf-showcase__summaries {
       grid-area: panel;
+      align-self: start;
+    }
+
+    .pf-showcase__controls {
+      grid-area: controls;
+      align-self: start;
     }
   }
 }
 
 .pf-showcase__stage {
+  --pf-showcase-room: 2.5rem; // above and below the cover: its shadow and lift
+  // The room hangs outside the box, so the cover itself sits on the grid.
+  margin-block: calc(-1 * var(--pf-showcase-room));
   container: pf-showcase / inline-size;
   // The row runs off to the right: clipped there, fading out.
   overflow: hidden;
@@ -125,7 +217,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   --pf-showcase-step: calc(var(--pf-showcase-w) * .5);
   --pf-showcase-depth: 9rem;
   position: relative;
-  height: calc(var(--pf-showcase-w) * 4 / 3 + 3rem);
+  height: calc(var(--pf-showcase-w) * 4 / 3 + 2 * var(--pf-showcase-room, 2.5rem));
   perspective: 1600px;
   perspective-origin: 30% 45%;
   transform-style: preserve-3d;
@@ -135,7 +227,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 
 @container pf-showcase (min-width: 36rem) {
   .pf-showcase__scene {
-    --pf-showcase-w: min(44cqi, 24rem);
+    --pf-showcase-w: min(50cqi, 26rem);
     --pf-showcase-depth: 11rem;
   }
 }
@@ -147,7 +239,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   --pf-turn: -16deg;
   position: absolute;
   top: 50%;
-  left: .5rem;
+  left: 0;
   z-index: calc(100 - var(--pf-d));
   width: var(--pf-showcase-w);
   aspect-ratio: 3 / 4;
@@ -266,6 +358,12 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   line-height: 1.05;
   text-wrap: balance;
   overflow-wrap: anywhere;
+}
+
+// A long title (a blog post's, often) a size down, so it keeps to about
+// three lines.
+.pf-showcase__title--long {
+  font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.375rem);
 }
 
 .pf-showcase__title--serif {
@@ -447,13 +545,8 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
 }
 
 // The table of all of them -----------------------------------------------
-.pf-showcase-list {
-  display: grid;
-  gap: 1.25rem;
-}
-
 .pf-showcase-list__heading {
-  margin: 0;
+  margin: 0 0 1.25rem;
   font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
   font-weight: $pf-display-weight;
   letter-spacing: -.02em;

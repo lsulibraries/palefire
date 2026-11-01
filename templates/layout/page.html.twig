@@ -230,11 +230,12 @@
             {% if head_crumb or (node.label and not modular_title_in_landing) or guide_head %}
             {# Exhibition mode: the head is the title page, with its own id
                for the TOC's "Home" link (includes/exhibit-cover). #}
-            <header class="pf-modular__head{{ exhibit_head ? ' pf-exhibit-head' }}"{% if exhibit_head %} id="exhibit-title"{% endif %}>
-              {# Exhibitions: the breadcrumb in the landing's sub-header bar
-                 (sticky glass, lined up with the TOC title), which stays
-                 as the running head while a gallery is open. #}
-              {% if head_crumb and exhibit_head %}
+            <header class="pf-modular__head{{ exhibit_head ? ' pf-exhibit-head' }}{{ showcase ? ' pf-showcase-head' }}"{% if exhibit_head %} id="exhibit-title"{% endif %}>
+              {# Exhibitions and the showcase: the breadcrumb in the
+                 landing's sub-header bar (sticky glass, lined up with the
+                 TOC title), which stays as the running head while a
+                 gallery is open. #}
+              {% if head_crumb and (exhibit_head or showcase) %}
                 <div class="pf-landing__bar">
                   <div class="pf-landing__bar-inner">
                     <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">

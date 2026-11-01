@@ -238,7 +238,8 @@ $pf-cover-bar: ':has(.pf-landing--cover > .pf-landing__bar)';
 // the screen by then. An exhibition's bar is in its title page
 // (.pf-exhibit-head), already over the galleries.
 .pf-landing > .pf-landing__bar.is-pinned,
-.pf-exhibit-head > .pf-landing__bar.is-pinned {
+.pf-exhibit-head > .pf-landing__bar.is-pinned,
+.pf-showcase-head > .pf-landing__bar.is-pinned {
   position: fixed;
   top: var(--pf-header-h);
   left: var(--pf-bar-left, 0);

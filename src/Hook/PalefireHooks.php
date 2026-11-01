@@ -233,8 +233,9 @@ class PalefireHooks {
     // (heroTocIds(), added in preprocessPalefireModularToc()) never showed.
     // The same theme hook as the block; page.html.twig prints it only when
     // the block is empty. Not on Form pages, where the block hides the TOC.
+    // A showcase page always has one: Browse and All exhibitions.
     $mode = self::stringValue($node, 'field_modular_type') ?: 'page';
-    if ($mode !== 'form' && self::heroTocIds($node)) {
+    if ($mode !== 'form' && (self::heroTocIds($node) || $mode === 'showcase')) {
       $variables['landing_toc'] = [
         '#theme' => 'palefire_modular_toc',
         '#items' => [],
@@ -342,6 +343,12 @@ class PalefireHooks {
     if ($node && self::stringValue($node, 'field_modular_type') === 'exhibition') {
       $extra[] = ['id' => 'exhibit-title', 'label' => $this->t('Home')];
       $variables['depth'] = 2;
+    }
+    // Showcase: the carousel and the table first (includes/exhibit-showcase
+    // prints the ids), then the page's own sections.
+    if ($node && self::stringValue($node, 'field_modular_type') === 'showcase') {
+      $extra[] = ['id' => 'pf-showcase-browse', 'label' => $this->t('Browse')];
+      $extra[] = ['id' => 'pf-showcase-all', 'label' => $this->t('All exhibitions')];
     }
     if ($extra) {
       $variables['items'] = array_merge($extra, $variables['items'] ?? []);

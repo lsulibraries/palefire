@@ -14,6 +14,13 @@
  *   with the next title beside them, the dots, a click on a cover behind.
  * - A table of all of them: year, exhibition, summary, kind.
  *
+ * Each part is a band with an index rule (01, 02: the landing's
+ * .pf-index-rule) and an id the TOC links to (Browse, All exhibitions:
+ * PalefireHooks::preprocessPalefireModularToc()). The second band takes
+ * the swatch's surface color, as on the Special Collections landing, and
+ * the page's own sections alternate on from there. The breadcrumb is in
+ * the landing's glass bar (page.html.twig, .pf-showcase-head).
+ *
  * In Palefire's exhibition type: mono labels, the exhibition buttons
  * (.pf-exhibit-button, _exhibition.scss), and each title in its own face
  * (the Exhibition title style field: serif or sans).
@@ -65,7 +72,12 @@
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
   <div class="pf-showcase" data-pf-showcase>
-    <section class="pf-showcase__carousel" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ 'Exhibitions'|t }}" data-pf-showcase-carousel>
+    <section class="pf-showcase__carousel" id="pf-showcase-browse" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ 'Exhibitions'|t }}" data-pf-showcase-carousel>
+      <div class="pf-index-rule pf-showcase__rule">
+        <span class="pf-index-rule__num" aria-hidden="true">01</span>
+        <span class="pf-index-rule__label" aria-hidden="true">{{ 'Browse'|t }}</span>
+        <a class="pf-index-rule__link" href="#pf-showcase-all">{{ 'All @count'|t({'@count': count}) }}<span class="visually-hidden"> {{ 'exhibitions'|t }}</span></a>
+      </div>
       <div class="pf-showcase__stage">
         <div class="pf-showcase__scene" aria-hidden="true" data-pf-showcase-scene>
           {% for ex in items %}
@@ -87,7 +99,7 @@
               <p class="pf-showcase__kicker">
                 {{ ex.kicker }}{% if ex.year %} · {{ ex.year }}{% endif %}{% if ex.unpublished %} · <span class="pf-showcase__draft">{{ 'Unpublished'|t }}</span>{% endif %}
               </p>
-              <h2 class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}">{{ ex.title }}</h2>
+              <h2 class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</h2>
               {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
               {% if ex.when %}<p class="pf-showcase__when">{{ ex.when }}</p>{% endif %}
               {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
@@ -141,9 +153,13 @@
       </div>
     </section>
 
-    <section class="pf-showcase-list" aria-labelledby="pf-showcase-all">
-      <h2 class="pf-showcase-list__heading" id="pf-showcase-all">{{ 'All exhibitions'|t }}</h2>
-      <table class="pf-showcase-list__table" aria-labelledby="pf-showcase-all">
+    <section class="pf-showcase-list" id="pf-showcase-all" aria-labelledby="pf-showcase-all-title">
+      <div class="pf-index-rule pf-showcase__rule">
+        <span class="pf-index-rule__num" aria-hidden="true">02</span>
+        <span class="pf-index-rule__label" aria-hidden="true">{{ 'Index'|t }}</span>
+      </div>
+      <h2 class="pf-showcase-list__heading" id="pf-showcase-all-title">{{ 'All exhibitions'|t }}</h2>
+      <table class="pf-showcase-list__table" aria-labelledby="pf-showcase-all-title">
         <thead>
           <tr>
             <th scope="col" class="pf-showcase-list__year">{{ 'Year'|t }}</th>

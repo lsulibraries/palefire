@@ -112,7 +112,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
 | Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
 | Ask Special Collections | `includes/ask-special` | – |
-| Exhibitions showcase | `includes/exhibit-showcase` | – in progress elsewhere |
+| Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
 
 ## Changelog
@@ -121,3 +121,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
   - Seven plates: overview, colour, type, grid, spacing, lines, motion.
   - "Exhibition blocks" gallery with editor notes.
   - `$pf-exhibit-ease` and `$pf-exhibit-curtain` moved to `_variables.scss`.
+- **2026-10-31:** Exhibitions showcase follows the landing's page furniture. The breadcrumb sits in the glass sub-header bar (`.pf-showcase-head`, pinned like an exhibition's), the rail TOC lists Browse and All exhibitions, each band opens with an index rule, and the second band and every other section after it take the swatch surface, as on the Special Collections landing. Everything starts on the section padding line, and the covers line up with the summary's top.
