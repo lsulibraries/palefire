@@ -2321,10 +2321,11 @@ function palefire_preprocess_field(array &$variables): void {
       continue;
     }
     if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
-      // A location page's parts carry theirs in code (no Eyebrow field).
+      // A location page's parts carry theirs in code (no Eyebrow field), and
+      // set their heading beside the content (aside) rather than over it.
       $location = _palefire_location_index($paragraph, $cache);
       if ($location) {
-        $item['section']['index'] = ['num' => sprintf('%02d', ++$count)] + $location;
+        $item['section']['index'] = ['num' => sprintf('%02d', ++$count), 'aside' => TRUE] + $location;
       }
       continue;
     }

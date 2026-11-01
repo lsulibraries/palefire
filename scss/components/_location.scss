@@ -63,9 +63,9 @@
 //   the title's line.
 // - The ledger: the facts across the full width, one per column.
 // - The parts, as the sections of /v2/special: each opens on an index rule
-//   (01, 02, …), then its heading, a line of lede, and its content under
-//   them at the full width; every other one on the swatch's surface, edge
-//   to edge.
+//   (01, 02, …), then its heading and a line of lede, the content under
+//   them on phones and beside them (sticky) from lg; every other one on
+//   the swatch's surface, edge to edge.
 // Narrower than 52rem: one column, the map under the title.
 .pf-location-page {
   --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
@@ -188,6 +188,13 @@
 
 .pf-location__frost { display: none; }
 
+// The section ends with the photo: no padding under it, so the photo, not
+// a plain band, leads into 01, and its foot fades into the section's color
+// over the last 6rem (a layer that only darkens the ledger's ground).
+html.pf-reading-dark .pf-sections > .pf-section--location-space:has(.has-backdrop) > .pf-section__inner {
+  padding-bottom: 0;
+}
+
 html.pf-reading-dark .pf-location__intro.has-backdrop {
   // The ledger's gap inside the photo, down to the section's foot.
   padding-bottom: var(--pf-location-gap);
@@ -199,11 +206,12 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     pointer-events: none;
     content: "";
     background:
+      linear-gradient(transparent calc(100% - 6rem), var(--pf-section-bg, var(--bs-body-bg))),
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, rgb(0 0 0 / .08) 14rem, transparent 22rem),
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)) fixed,
       linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
-    background-blend-mode: normal, normal, color, normal;
+    background-blend-mode: normal, normal, normal, color, normal;
   }
 
   // Portrait screens, and iOS, which drops fixed backgrounds (`cover` then
@@ -548,14 +556,73 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 // The room, Hours and directions, House rules and Booking are sections after
 // the Location one (location_photos, location_visit, location_rules,
 // location_booking), numbered, headed and banded as /v2/special's by the
-// sections field and _sections.scss. On a location page the rule groups
-// sit as many across as fit, and Booking's text keeps a reading measure.
+// sections field and _sections.scss.
+// From lg, Swiss index columns: the rule across the full width, then the
+// heading and lede (.pf-section__head, index.aside in palefire.theme) in
+// the first four of twelve columns, the content in the other eight. The
+// head sticks under the header while a long part (Booking) scrolls past,
+// so the left column never stands empty. The rule groups sit as many
+// across as fit; Booking's text runs in two columns from xl.
 html[data-pf-page="location"] {
   .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
   .pf-booking {
     grid-template-columns: minmax(0, 1fr);
-    max-width: 46rem;
+    max-width: none;
     margin-inline: 0;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html[data-pf-page="location"] .pf-section--aside > .pf-section__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    column-gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: start;
+
+    > .pf-index-rule { grid-column: 1 / -1; }
+    > :not(.pf-index-rule, .pf-section__head) { grid-column: 2; }
+
+    > .pf-section__head {
+      position: sticky;
+      top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1.5rem);
+
+      > .pf-section__lede { margin-bottom: 0; }
+    }
+  }
+
+  // Hours beside the ways there, the links stacked.
+  html[data-pf-page="location"] .pf-location__visit {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 0 var(--pf-grid-gutter, 2rem);
+    align-items: start;
+    max-width: none;
+
+    // Placed by line: the strip's own grid-area (_visit.scss) names no
+    // area here.
+    .pf-visit__hours { grid-area: 1 / 1; }
+
+    .pf-location__visit-links {
+      grid-area: 1 / 2;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 0;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  // The opening paragraph across both columns, then each subhead kept with
+  // its list: How to book and charges in the first, equipment and layouts
+  // in the second.
+  html[data-pf-page="location"] .pf-booking__text {
+    max-width: none;
+    columns: 2;
+    column-gap: var(--pf-grid-gutter, 2rem);
+
+    > p:first-child { column-span: all; margin-bottom: 0; }
+    > :is(h3, h4) { break-after: avoid; }
+    > :is(ul, ol, p) { break-inside: avoid; }
   }
 }
 

@@ -17,7 +17,9 @@
  * item.section.index (palefire_preprocess_field(), a section with an
  * Eyebrow): the hero's index rule (includes/landing.html.twig) above the
  * heading, numbered by position, with its link at the rule's right end,
- * and the Lede under the heading.
+ * and the Lede under the heading. With index.aside (a location page's
+ * parts), the heading and Lede share a head (.pf-section__head) that sits
+ * beside the content from lg, sticky while it scrolls (_location.scss).
  */
 #}
 {% import '@palefire/includes/landing.html.twig' as pf %}
@@ -31,6 +33,9 @@
       {% if index %}
         {% set item_attributes = item.attributes.addClass('pf-section--indexed') %}
       {% endif %}
+      {% if index.aside %}
+        {% set item_attributes = item.attributes.addClass('pf-section--aside') %}
+      {% endif %}
       <section{{ item.attributes }}>
         {% if item.section.bg %}
           <div class="pf-section__bg" aria-hidden="true" inert>{{ item.section.bg }}</div>
@@ -39,6 +44,9 @@
           {% if index %}
             {{ pf.index_rule(index.num, index.label, index.link ?: {}) }}
           {% endif %}
+          {% if index.aside %}
+            <div class="pf-section__head">
+          {% endif %}
           {% if item.section.label %}
             <h2 id="{{ item.section.title_id }}"
                 class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}"
@@ -46,6 +54,9 @@
           {% endif %}
           {% if index.lede %}
             <p class="pf-section__lede">{{ index.lede }}</p>
+          {% endif %}
+          {% if index.aside %}
+            </div>
           {% endif %}
           {{ item.content }}
         </div>
