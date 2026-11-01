@@ -877,10 +877,7 @@
       const sizes = new ResizeObserver(() => {
         root.style.setProperty('--pf-dock-row', row.offsetHeight + 'px');
         if (!open) {
-          // The visible height: the glass that bleeds below the edge
-          // doesn't count.
-          const bleed = parseFloat(getComputedStyle(dock).getPropertyValue('--pf-dock-bleed')) || 0;
-          root.style.setProperty('--pf-dock-h', (dock.offsetHeight - bleed) + 'px');
+          root.style.setProperty('--pf-dock-h', dock.offsetHeight + 'px');
         }
         fitName();
       });

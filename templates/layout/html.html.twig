@@ -106,13 +106,6 @@
           l.href = 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap';
           d.head.appendChild(l);
         }
-        // iPhone Safari 26+ floats its toolbar over the page: the dock
-        // (_dock.scss) sits higher to clear it. Not other iOS browsers or
-        // a home-screen web app.
-        var u = w.navigator.userAgent, v = /Version\/(\d+)/.exec(u);
-        if (/iPhone/.test(u) && v && +v[1] >= 26 && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(u) && !w.navigator.standalone) {
-          h.setAttribute('data-pf-float-toolbar', '');
-        }
         if (s.motion || (w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches)) { return; }
         h.classList.add('pf-fade');
         d.addEventListener('DOMContentLoaded', function () {

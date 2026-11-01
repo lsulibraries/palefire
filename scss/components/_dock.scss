@@ -26,53 +26,20 @@ html[data-pf-dock] .offcanvas {
 }
 
 .pf-dock,
-.pf-dock-tab,
-.pf-dock-tint {
+.pf-dock-tab {
   display: none;
-}
-
-// The band behind Safari's floating toolbar (iPhone Safari 26 samples a
-// solid fixed element within 3px of the bottom edge, at least 80% wide):
-// the dock's glass over the page color, made solid. iOS WebKit only, and
-// only while the dock is up.
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 767.98px) {
-    html.pf-dock-on .pf-dock-tint {
-      position: fixed;
-      inset-inline: 0;
-      bottom: -8px;
-      z-index: 1034;
-      display: block;
-      height: 12px;
-      background-color: color-mix(in srgb, rgb(var(--pf-g-chrome-rgb, 247, 244, 236)) 92%, var(--pf-g-bg, #f7f4ec));
-      pointer-events: none;
-    }
-
-    html.pf-dock-on .pf-dock:is(.is-hidden, .is-aside) + .pf-dock-tint {
-      display: none;
-    }
-  }
 }
 
 @media (max-width: 767.98px) {
   :root {
     --pf-dock-row: 60px;
     --pf-dock-h: 96px;
+    // The gap under the row. Safari 26 on iPhone puts a fixed element's
+    // bottom: 0 at the top of its floating toolbar, so there the dock sits
+    // on the toolbar rather than under it.
     --pf-toolbar: 12px;
-    // Glass below the dock's bottom edge, for browsers that draw under
-    // their toolbar. Safari 26 on iPhone doesn't: its bottom: 0 is the top
-    // of its floating toolbar, and it paints the band below from
-    // .pf-dock-tint. The bleed also keeps the translucent dock itself out
-    // of Safari's sampling.
-    --pf-dock-bleed: 160px;
     --pf-dock-ease: cubic-bezier(.2, .8, .2, 1);
     --pf-dock-dur: .35s;
-  }
-
-  // Safari 26+ on iPhone floats its toolbar over the page (the head script
-  // in html.html.twig).
-  html[data-pf-float-toolbar] {
-    --pf-toolbar: 76px;
   }
 
   // Focus and anchor jumps stay clear of the dock (WCAG 2.4.11); the
@@ -119,9 +86,9 @@ html[data-pf-dock] .offcanvas {
   .pf-dock {
     position: fixed;
     inset-inline: 0;
-    bottom: calc(-1 * var(--pf-dock-bleed));
+    bottom: 0;
     z-index: 1035;
-    padding: 0 max(12px, env(safe-area-inset-right)) calc(var(--pf-toolbar) + env(safe-area-inset-bottom) + var(--pf-dock-bleed)) max(12px, env(safe-area-inset-left));
+    padding: 0 max(12px, env(safe-area-inset-right)) calc(var(--pf-toolbar) + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
     border-top: 1px solid $pf-hairline;
     border-radius: 28px 28px 0 0;
     box-shadow: 0 -8px 24px rgba($pf-black, .08);
