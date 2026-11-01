@@ -122,3 +122,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
   - "Exhibition blocks" gallery with editor notes.
   - `$pf-exhibit-ease` and `$pf-exhibit-curtain` moved to `_variables.scss`.
 - **2026-10-31:** Exhibitions showcase follows the landing's page furniture. The breadcrumb sits in the glass sub-header bar (`.pf-showcase-head`, pinned like an exhibition's), the rail TOC lists Browse and All exhibitions, each band opens with an index rule, and the second band and every other section after it take the swatch surface, as on the Special Collections landing. Everything starts on the section padding line, and the covers line up with the summary's top.
+- **2026-10-31:** Exhibitions showcase shares the landing's styles: `data-pf-hero` (1280px column, type tokens, section headings), the clear-then-glass header and bar, the 4/5-column grid with `--pf-grid-gutter`, the index-rule rhythm, and a new shared token, `--pf-hero-title-size`.

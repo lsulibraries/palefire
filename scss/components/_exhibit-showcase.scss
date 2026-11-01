@@ -30,7 +30,6 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   --pf-showcase-muted: var(--pf-g-muted, var(--pf-section-muted, var(--bs-secondary-color)));
   --pf-showcase-line: #{$pf-hairline};
   --pf-showcase-blank: #{$pf-grey-800};
-  --pf-showcase-pad: clamp(3rem, 6vw, 5rem);
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace); // .pf-index-rule
   color: var(--pf-showcase-fg);
 
@@ -40,47 +39,57 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   }
 }
 
-// The head: the breadcrumb in the landing's glass bar, right under the
-// header, as on exhibitions (.pf-exhibit-head, _exhibition.scss). Sticky
-// while the head is on screen, then pinned for the page (.is-pinned,
-// js/modular-toc.js).
+// The head, as the Special Collections landing's (_landing-features.scss
+// shares its rules): the breadcrumb in the sub-header bar under the logo,
+// a clear strip at the top that turns to glass, with the header, once the
+// page scrolls; sticky while the head is on screen, then pinned for the
+// page (.is-pinned, js/modular-toc.js). The <h1> at the hero's size.
 .pf-showcase-head {
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
   --pf-bar-button: 2rem; // the row's height: a slim strip, as on the landing
-  --pf-landing-bar-gap: clamp(1.5rem, 3vw, 2.5rem);
-  padding-top: 0;
+  --pf-landing-bar-gap: clamp(2.5rem, 5vw, 4rem);
+  padding: 0;
 
   > .pf-landing__bar {
     position: sticky;
     top: var(--pf-header-h);
     z-index: 3;
   }
+
+  // The bar and its spacer run edge to edge; the head has no side padding.
+  > :is(.pf-landing__bar, .pf-landing__bar-spacer) {
+    margin-inline: 0;
+  }
+
+  > .pf-modular__title {
+    margin-inline: var(--pf-showcase-col);
+    font-size: var(--pf-hero-title-size);
+    font-weight: 500;
+    letter-spacing: -.02em;
+    line-height: .98;
+  }
 }
 
-// The breadcrumb starts on the content's edge, the line the <h1>, the
-// rules, the summary and the covers share (and the page's sections). Two
-// classes past the rail's (_landing-features.scss), which puts it under
-// the logo.
-.pf-showcase-head > .pf-landing__bar,
-html:not([data-pf-mode="guide"]) .pf-modular--toc-rail .pf-showcase-head > .pf-landing__bar {
-  padding-inline-start: var(--pf-section-pad-inline, 1.25rem);
+// One column for the page, the landing's: at most 1280px, centred, never
+// nearer the edge than the sections' padding (html[data-pf-hero]
+// .pf-sections, _landing-features.scss, does the same for the sections
+// after it). Percentages are of the main column's width.
+.pf-showcase-head,
+.pf-showcase {
+  --pf-showcase-col: max(var(--pf-section-pad-inline, 1.25rem), (100% - 1280px) / 2);
 }
 
 // Two bands, Browse and All exhibitions, each opened by an index rule
-// (01, 02), as the Special Collections landing's parts are. The TOC links
-// to them.
+// (01, 02) with the landing's rhythm: --pf-hero-gap above a rule,
+// --pf-hero-rule-gap under it. The TOC links to them.
 .pf-showcase__carousel,
 .pf-showcase-list {
-  padding: var(--pf-showcase-pad) var(--pf-section-pad-inline, 1.25rem);
-}
-
-.pf-showcase__carousel {
-  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding: var(--pf-hero-gap, 5rem) var(--pf-showcase-col);
 }
 
 .pf-showcase__rule {
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: var(--pf-hero-rule-gap, 2rem);
 }
 
 // The second band, and every other section after it, in the swatch's
@@ -152,15 +161,27 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // The carousel -----------------------------------------------------------
-// From lg the summary is at the left, the covers at the right with the
-// browse buttons under them, so the buttons stay put whichever summary is
-// shown (summaries differ in length). The covers' tops line up with the
-// summary's first line: the scene's room for the shadow and lift (above
-// and below the cover) hangs outside the row.
+// On the landing's grid (.pf-landing--cover, _landing-features.scss): the
+// column in four equal columns from lg, five once it is 1280px wide (the
+// landing's switch, at about 1440px of window), one gutter
+// (--pf-grid-gutter). The summary takes two columns at the left, the
+// covers the rest, the browse buttons under them, so the buttons stay put
+// whichever summary is shown (summaries differ in length). The covers'
+// tops line up with the summary's first line: the scene's room for the
+// shadow and lift (above and below the cover) hangs outside the row.
+.pf-showcase {
+  container: pf-showcase-page / inline-size;
+}
+
+.pf-showcase__carousel,
+.pf-showcase-list {
+  --pf-showcase-cols: 4;
+}
+
 .pf-showcase__carousel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1.5rem clamp(2rem, 4vw, 4rem);
+  gap: var(--pf-hero-rule-gap, 1.5rem) var(--pf-grid-gutter);
 
   > .pf-showcase__rule {
     grid-column: 1 / -1;
@@ -168,21 +189,18 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   }
 
   @include media-breakpoint-up(lg) {
-    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
-    grid-template-areas:
-      "rule rule"
-      "panel stage"
-      "panel controls";
+    grid-template-columns: repeat(var(--pf-showcase-cols), minmax(0, 1fr));
     grid-template-rows: auto auto 1fr;
-    row-gap: clamp(1.5rem, 3vw, 2.5rem);
 
-    > .pf-showcase__rule {
-      grid-area: rule;
+    .pf-showcase__stage,
+    .pf-showcase__controls {
+      grid-column: 3 / -1;
+      grid-row: 2;
+      align-self: start;
     }
 
-    .pf-showcase__stage {
-      grid-area: stage;
-      align-self: start;
+    .pf-showcase__controls {
+      grid-row: 3;
     }
 
     // Its summaries and buttons become cells of this grid.
@@ -191,14 +209,18 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
     }
 
     .pf-showcase__summaries {
-      grid-area: panel;
+      grid-column: 1 / span 2;
+      grid-row: 2 / span 2;
       align-self: start;
     }
+  }
+}
 
-    .pf-showcase__controls {
-      grid-area: controls;
-      align-self: start;
-    }
+// The column is 1280px from 1280px plus the sections' padding each side.
+@container pf-showcase-page (min-width: 87.5rem) {
+  .pf-showcase__carousel,
+  .pf-showcase-list {
+    --pf-showcase-cols: 5;
   }
 }
 
@@ -545,11 +567,9 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // The table of all of them -----------------------------------------------
+// Set as the landing's section headings (_landing-features.scss).
 .pf-showcase-list__heading {
-  margin: 0 0 1.25rem;
-  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
-  font-weight: $pf-display-weight;
-  letter-spacing: -.02em;
+  margin: 0 0 var(--pf-hero-rule-gap, 1.25rem);
 }
 
 .pf-showcase-list__table {
@@ -656,6 +676,46 @@ td .pf-showcase-list__when {
 
 .pf-showcase-list__kind {
   white-space: nowrap;
+}
+
+// From lg the columns sit on the carousel's grid: year and exhibition
+// under the summary above (two columns), the summary under the covers,
+// the kind in the last column; a gutter after each cell. --c is one grid
+// column, --g the gutter; widths include the padding. In lengths, not
+// percentages, which table columns ignore inside calc(): the column's
+// width from the page's (cqi, .pf-showcase) less its two paddings.
+@include media-breakpoint-up(lg) {
+  .pf-showcase-list__table {
+    --g: var(--pf-grid-gutter);
+    --w: calc(100cqi - 2 * max(var(--pf-section-pad-inline, 1.25rem), (100cqi - 1280px) / 2));
+    --c: calc((var(--w) - (var(--pf-showcase-cols) - 1) * var(--g)) / var(--pf-showcase-cols));
+    table-layout: fixed;
+
+    th,
+    td {
+      padding-inline-end: var(--g);
+    }
+
+    .pf-showcase-list__year {
+      width: 5rem;
+    }
+
+    .pf-showcase-list__name,
+    thead th:nth-child(2) {
+      width: calc(2 * var(--c) + 2 * var(--g) - 5rem);
+    }
+
+    .pf-showcase-list__summary,
+    thead th:nth-child(3) {
+      width: calc((var(--pf-showcase-cols) - 3) * (var(--c) + var(--g)));
+      max-width: none;
+    }
+
+    .pf-showcase-list__kind {
+      width: var(--c);
+      white-space: normal;
+    }
+  }
 }
 
 // Below md: each exhibition a block, year and kind on one line over the

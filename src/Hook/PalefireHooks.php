@@ -115,7 +115,8 @@ class PalefireHooks {
    * Puts the page mode (field_modular_type: page, guide, form) on <html> as
    * data-pf-mode, for CSS and for scripts that run before <body> exists
    * (Settings > Dark guides, html.html.twig), and data-pf-hero when the page
-   * opens with a Landing hero (exhibition.js, _landing-features.scss). The page cache entry already carries the
+   * opens with a Landing hero or is the Exhibitions showcase (exhibition.js,
+   * _landing-features.scss). The page cache entry already carries the
    * node's cache tags, so editing the node updates it.
    */
   #[Hook('preprocess_html')]
@@ -135,8 +136,9 @@ class PalefireHooks {
       return;
     }
     $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
-    // Opens with a Landing hero (the Special Collections homepage).
-    if (self::titleLanding($node)?->bundle() === 'landing_hero') {
+    // Opens with a Landing hero (the Special Collections homepage), or is
+    // the Exhibitions showcase, which shares its column, grid and type.
+    if (self::titleLanding($node)?->bundle() === 'landing_hero' || self::stringValue($node, 'field_modular_type') === 'showcase') {
       $variables['html_attributes']->setAttribute('data-pf-hero', '');
     }
   }

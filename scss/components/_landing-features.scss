@@ -169,14 +169,15 @@
 // the bar; back at the top the bar clears first, then the header (below).
 $pf-chrome-stagger: .12s;
 
-.pf-landing--cover > .pf-landing__bar {
+.pf-landing--cover > .pf-landing__bar,
+.pf-showcase-head > .pf-landing__bar {
   transition:
     background-color .3s ease $pf-chrome-stagger,
     -webkit-backdrop-filter .3s ease $pf-chrome-stagger,
     backdrop-filter .3s ease $pf-chrome-stagger;
 }
 
-html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
+html:not(.pf-bar-stuck) :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
   background-color: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -186,9 +187,9 @@ html:not(.pf-bar-stuck) .pf-landing--cover > .pf-landing__bar {
 // Back at the top, the header waits for the bar to start clearing. Uses
 // the header's own selector ($pf-bg-first, below), whose transition
 // shorthand would otherwise reset the delay.
-$pf-cover-bar: ':has(.pf-landing--cover > .pf-landing__bar)';
+$pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar)';
 
-:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg)) .pf-header {
+:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head)) .pf-header {
   &,
   &::before {
     transition-delay: $pf-chrome-stagger;
@@ -196,13 +197,13 @@ $pf-cover-bar: ':has(.pf-landing--cover > .pf-landing__bar)';
 }
 
 @include pf-solid-chrome {
-  .pf-landing--cover > .pf-landing__bar {
+  :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
     background-color: var(--pf-sidebar-bg) !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-landing--cover > .pf-landing__bar {
+  :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
     transition: none;
   }
 }
@@ -378,7 +379,9 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
 // the video's top wash, as deep as the header and the bar, keeps their
 // words at 4.5:1 (below). Scrolled, it is glass again, with its shadow.
 // Reduce transparency (and its kin) keeps the glass throughout.
-$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg))';
+// The Exhibitions showcase (.pf-showcase-head) opens the same way, on the
+// page color.
+$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head))';
 
 :root#{$pf-bg-first} .pf-header {
   transition: background-color .3s ease, border-color .3s ease, box-shadow $pf-header-transition;
@@ -657,7 +660,7 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
 
     > .pf-landing__title {
       margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
-      font-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem);
+      font-size: var(--pf-hero-title-size);
       // Display tracking: -.02em like the h2s (-.035em pinched Roboto 500
       // at this size), and the first letter's side bearing pulled back so
       // the title's edge meets the intro's and the search's.
@@ -1846,6 +1849,11 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
   container: pf-cover / inline-size;
 }
 
+// The Exhibitions showcase's bands use the same grid (_exhibit-showcase.scss).
+.pf-showcase {
+  --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
+}
+
 // --- Sign-in ----------------------------------------------------------------
 // A small outlined button beside the blog post (above), in the Search
 // button's type and color, the duotone sign-in icon before the words.
@@ -2853,6 +2861,12 @@ html[data-pf-hero] {
   --pf-hero-rule-gap: clamp(1.25rem, 2.5vw, 2rem); // under each index rule
 }
 
+// The hero's <h1>, on every page: the cover's title and the Exhibitions
+// showcase's read it.
+:root {
+  --pf-hero-title-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem);
+}
+
 // One rhythm: --pf-hero-gap above each index rule (01 to 04) and
 // --pf-hero-rule-gap under it, and nothing else adding to either. Above
 // 01 the gap counts from the search; the band's solid foot is part of it.
@@ -3129,6 +3143,7 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-tit
 }
 
 html[data-pf-hero] .pf-main .pf-sections .pf-section__title,
+html[data-pf-hero] .pf-showcase-list__heading,
 html[data-pf-hero] .pf-landing--cover .pf-landing__visit .pf-map > .pf-map__heading,
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
   font-size: var(--pf-hero-h2-size);
