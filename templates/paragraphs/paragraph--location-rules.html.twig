@@ -1,0 +1,61 @@
+{#
+/**
+ * @file
+ * Location: house rules (paragraph type location_rules).
+ *
+ * Variables from palefire_preprocess_paragraph__location_rules():
+ * - rules.groups: allowed, required, not_allowed => policies (label,
+ *   detail, state, icon), empty groups left out. From the room's Building
+ *   spaces term: edit a policy's words in Space policies.
+ * - rules.sound, rules.sound_level: the room's sound level, 0 when unset.
+ *
+ * The section <h2> ("House rules") comes from the scroll-section field
+ * template. Each group is a column with its own <h3>, so the state is in
+ * words as well as in the marks' shapes.
+ */
+#}
+{% if rules %}
+  {% set headings = { allowed: 'Allowed'|t, required: 'Required'|t, not_allowed: 'Not allowed'|t } %}
+  {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
+  <div{{ attributes.addClass('pf-rules') }}>
+    {% if rules.groups %}
+      <div class="pf-rules__groups">
+        {% for state, policies in rules.groups %}
+          <section class="pf-rules__group" aria-labelledby="{{ rules.uid }}-{{ state|clean_class }}">
+            <h3 class="pf-rules__heading" id="{{ rules.uid }}-{{ state|clean_class }}">
+              {% include '@palefire/includes/space-icon.html.twig' with { icon: 'state_' ~ state } only %}
+              {{ headings[state] }}
+            </h3>
+            <ul class="pf-rules__list">
+              {% for policy in policies %}
+                <li class="pf-rules__item">
+                  {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+                  <div class="pf-rules__text">
+                    <strong class="pf-rules__label">{{ policy.label }}</strong>
+                    {% if policy.detail %}<span class="pf-rules__detail">{{ policy.detail }}</span>{% endif %}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if rules.sound_level %}
+      <section class="pf-rules__sound" aria-labelledby="{{ rules.uid }}-sound">
+        <h3 class="pf-rules__heading" id="{{ rules.uid }}-sound">{{ 'Sound'|t }}</h3>
+        {# Three steps, the room's lit up to its level; the current one is
+           named for screen readers too. #}
+        <ol class="pf-sound">
+          {% for step, label in sounds %}
+            <li class="pf-sound__step{{ loop.index <= rules.sound_level ? ' is-on' }}{{ step == rules.sound ? ' is-current' }}"{% if step == rules.sound %} aria-current="true"{% endif %}>
+              <span class="pf-sound__bar" aria-hidden="true"></span>
+              <span class="pf-sound__label">{{ label }}{% if step == rules.sound %}<span class="visually-hidden"> {{ '(this room)'|t }}</span>{% endif %}</span>
+            </li>
+          {% endfor %}
+        </ol>
+      </section>
+    {% endif %}
+  </div>
+{% endif %}

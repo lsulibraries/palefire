@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Location: booking (paragraph type location_booking).
+ *
+ * Variables from palefire_preprocess_paragraph__location_booking():
+ * - booking.body: the section's Text, rendered, or NULL.
+ * - booking.link: url and title (the button), or NULL.
+ * - booking.capacity: the room's Capacity, or ''.
+ * - booking.needs: the room's Required policies (label, detail, state,
+ *   icon), from its Building spaces term.
+ *
+ * The section <h2> comes from the scroll-section field template. Text and
+ * button on the left; on the right a short ledger of what booking needs.
+ */
+#}
+{% if booking.body or booking.link or booking.capacity or booking.needs %}
+  <div{{ attributes.addClass('pf-booking') }}>
+    <div class="pf-booking__text">
+      {% if booking.body %}{{ booking.body }}{% endif %}
+      {% if booking.link %}
+        <p class="pf-location__actions">
+          <a class="pf-location__cta" href="{{ booking.link.url }}">{{ booking.link.title }}</a>
+        </p>
+      {% endif %}
+    </div>
+    {% if booking.capacity or booking.needs %}
+      <dl class="pf-booking__facts">
+        {% if booking.capacity %}
+          <div class="pf-booking__fact">
+            <dt>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'group' } only %}{{ 'Capacity'|t }}</dt>
+            <dd>{{ booking.capacity }}</dd>
+          </div>
+        {% endif %}
+        {% for policy in booking.needs %}
+          <div class="pf-booking__fact">
+            <dt>{% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}{{ policy.label }}</dt>
+            {% if policy.detail %}<dd>{{ policy.detail }}</dd>{% endif %}
+          </div>
+        {% endfor %}
+      </dl>
+    {% endif %}
+  </div>
+{% endif %}

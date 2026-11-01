@@ -1,0 +1,67 @@
+{#
+/**
+ * @file
+ * A space policy mark (Space policies, field_policy_icon): one stroke icon
+ * on a 24px grid, drawn in three states so shape, not color, tells them
+ * apart (_location.scss):
+ * - allowed: the glyph on its own;
+ * - required: the glyph inside a square;
+ * - not_allowed: the glyph struck through. The strike has a knockout in
+ *   the surface color (--pf-space-knock) so it reads over the glyph.
+ * Decorative: the policy's own words always sit beside it.
+ *
+ * Variables:
+ * - icon: a key below (unknown keys draw nothing).
+ * - state: allowed (default) | required | not_allowed.
+ * - level: for icon "sound", the step lit on the three-bar meter (1-3).
+ */
+#}
+{% set paths = {
+  walk: 'M11.2 4.5a1.8 1.8 0 1 0 3.6 0a1.8 1.8 0 1 0-3.6 0M9 21l2.5-6.5L14 17v4M11.5 14.5l1-5.5-3 1.5-1.5 3M12.5 9l2 3h3',
+  clock: 'M3.5 12a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0M12 7.5V12l3 2',
+  calendar: 'M3.5 5.5h17v15h-17zM3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4',
+  calendar_walk: 'M3.5 5.5h17v15h-17zM3.5 10h17M8 3v4M16 3v4M8 15.5h7M12.5 13l2.5 2.5-2.5 2.5',
+  card: 'M3 5.5h18v13H3zM14 10h4M14 13.5h3M5.5 16a3 3 0 0 1 6 0M6.5 10.5a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
+  key: 'M3.5 15a4.5 4.5 0 1 0 9 0a4.5 4.5 0 1 0-9 0M11.2 11.8L20 3M16.5 6.5l2.5 2.5M14.5 8.5l2 2',
+  food: 'M4 3v5a2 2 0 0 0 4 0V3M6 3v18M18 21V3c-2 1.5-3 4.5-3 8.5h3',
+  cup_lid: 'M6 6.5h12M7 6.5L8.3 21h7.4L17 6.5M8 6.5l.8-3h6.4l.8 3M7.6 11h8.8',
+  cup: 'M6 5h12l-1.6 16H7.6zM6.6 10h10.8',
+  glass: 'M8 3h8l-.5 5.5a3.5 3.5 0 0 1-7 0zM12 12v8M8.5 20.5h7',
+  pencil: 'M15 4.5l4.5 4.5L9 19.5H4.5V15zM12.5 7l4.5 4.5M4.5 15l4.5 4.5',
+  pen: 'M12 21l-5-9 2-5h6l2 5zM9 7V3h6v4M12 21v-6.5M10.8 12.8a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0-2.4 0',
+  locker: 'M6 3h12v18H6zM12 3v18M8.5 7h1.5M14 7h1.5M8.5 9.5h1.5M14 9.5h1.5M10 14v2M14 14v2',
+  bag: 'M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2',
+  camera: 'M3 8h4l1.8-2.5h6.4L17 8h4v11H3zM8.5 13.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0-7 0',
+  flash: 'M13.5 2.5L5 13.5h6l-1 8 8.5-11h-6z',
+  book_lock: 'M5 4.5A1.5 1.5 0 0 1 6.5 3H18v10M5 4.5v14A1.5 1.5 0 0 0 6.5 20H11M14 16h6v5h-6zM15.3 16v-1.3a1.7 1.7 0 0 1 3.4 0V16',
+  step_free: 'M10.9 4a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0M12 7.5v6h5l2 5.5M12 10h4.5M9.5 10.5a5.5 5.5 0 1 0 7 7.3',
+  elevator: 'M5 3h14v18H5zM9 10l3-3.5 3 3.5zM9 14l3 3.5 3-3.5z',
+  plug: 'M9 3v4.5M15 3v4.5M6.5 7.5h11v3.5a5.5 5.5 0 0 1-11 0zM12 16.5V21',
+  screen: 'M3 4.5h18v12H3zM8.5 20.5h7M12 16.5v4',
+  mic: 'M9 6a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0zM6 11a6 6 0 0 0 12 0M12 17v4M9 21h6',
+  laptop: 'M5 5h14v10H5zM2.5 19h19l-2.5-4H5z',
+  talk: 'M3 5h11v8H8l-3 3v-3H3zM17 9h4v8h-2v3l-3-3h-5v-2',
+  group: 'M9.5 7a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M3.5 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0M16.5 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0M7.5 20v-2a4.5 4.5 0 0 1 9 0v2M2.5 19v-1a3 3 0 0 1 4-2.8M21.5 19v-1a3 3 0 0 0-4-2.8',
+  state_allowed: 'M5 12.5l4.5 4.5L19 7.5',
+  state_required: 'M3.5 3.5h17v17h-17z',
+  state_not_allowed: 'M6 6l12 12M18 6L6 18',
+} %}
+{% set state = state ?: 'allowed' %}
+{% if icon == 'sound' %}
+  <svg class="pf-space-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {%- for bar in [[3.5, 14, 6], [10.25, 9.5, 10.5], [17, 5, 15]] -%}
+      <rect x="{{ bar[0] }}" y="{{ bar[1] }}" width="3.5" height="{{ bar[2] }}" rx=".5" class="pf-space-icon__bar{{ loop.index <= level ? ' pf-space-icon__fill' }}"/>
+    {%- endfor -%}
+  </svg>
+{% elseif paths[icon] is defined %}
+  <svg class="pf-space-icon pf-space-icon--{{ state|clean_class }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {%- if state == 'required' -%}
+      <rect x="1.5" y="1.5" width="21" height="21" rx="2"/><path d="{{ paths[icon] }}" transform="translate(5 5) scale(.583)" class="pf-space-icon__inset"/>
+    {%- else -%}
+      <path d="{{ paths[icon] }}"/>
+      {%- if state == 'not_allowed' -%}
+        <path class="pf-space-icon__knock" d="M3.5 3.5l17 17"/><path d="M3.5 3.5l17 17"/>
+      {%- endif -%}
+    {%- endif -%}
+  </svg>
+{% endif %}

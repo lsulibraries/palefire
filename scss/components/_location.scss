@@ -1,0 +1,349 @@
+// Location pages ---------------------------------------------------------------
+// A room's own page (modular_page, e.g. /v2/special/spaces/lecture-hall):
+// Location, House rules and Booking sections. Templates:
+// paragraph--location-space/rules/booking.html.twig and
+// includes/space-icon.html.twig; preprocess in palefire.theme ("Location
+// pages"). Everything is read from the room's Building spaces term and its
+// Space policies, so the wording lives in one place.
+//
+// Swiss and quiet as the staff directory: facts as a ruled ledger on the
+// soft hairline, labels in the TOC's mono capitals, colors from the swatch
+// (--pf-section-* / --pf-g-*). Policy marks tell their state by shape
+// (plain, framed, struck), never by color alone; their words sit beside.
+
+%pf-location-label {
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label);
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-location,
+.pf-rules,
+.pf-booking {
+  --pf-location-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-location-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-location-line: #{$pf-hairline};
+  color: var(--pf-location-fg);
+}
+
+// --- Policy marks ---------------------------------------------------------------
+// 24px grid, 1.5 stroke. The strike's knockout is the surface color so the
+// slash reads over the glyph; the inset glyph in a frame is drawn at .583,
+// so its stroke is scaled back up to match.
+.pf-space-icon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -.25em;
+}
+.pf-space-icon__inset { stroke-width: 2.57; }
+.pf-space-icon__knock {
+  stroke: var(--pf-space-knock, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))));
+  stroke-width: 4.5;
+}
+.pf-space-icon__bar { stroke-width: 1.25; }
+.pf-space-icon__fill { fill: currentColor; }
+
+// --- Location: head, facts, glance, Visit strip, map -------------------------
+.pf-location {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "head"
+    "glance"
+    "visit"
+    "map";
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  max-width: $pf-content-max;
+  margin-inline: auto;
+}
+.pf-location__head { grid-area: head; min-width: 0; }
+.pf-location__glance { grid-area: glance; min-width: 0; }
+.pf-location__visit { grid-area: visit; min-width: 0; }
+.pf-location__map { grid-area: map; min-width: 0; }
+
+// The strip keeps its own frame and glass; here it starts on the grid line.
+.pf-location .pf-visit { margin-top: 0; }
+
+.pf-location__eyebrow {
+  @extend %pf-location-label;
+  margin: 0 0 .75rem;
+  color: var(--pf-location-muted);
+}
+
+.pf-location__lede {
+  max-width: 62ch;
+  font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+  line-height: 1.55;
+
+  > :last-child { margin-bottom: 0; }
+}
+
+.pf-location__actions { margin: 1.5rem 0 0; }
+
+// Facts: term over value between two rules (row rules would stop short
+// under a part-filled last row); two across on phones, a row from md.
+.pf-location__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 0;
+  margin: clamp(1.5rem, 3vw, 2rem) 0 0;
+  padding-block: 1rem;
+  border-block: 1px solid var(--pf-location-line);
+}
+.pf-location__fact {
+  padding-right: 1rem;
+
+  dt {
+    @extend %pf-location-label;
+    margin-bottom: .25rem;
+    color: var(--pf-location-muted);
+  }
+
+  dd {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .pf-location__facts {
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  }
+}
+
+// At a glance: the room's policies as chips.
+.pf-location__glance-title {
+  @extend %pf-location-label;
+  margin: 0 0 .75rem;
+  color: var(--pf-location-muted);
+}
+
+.pf-space-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-space-chip {
+  display: inline-flex;
+  gap: .5rem;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: .375rem .75rem .375rem .625rem;
+  font-size: .9375rem;
+  line-height: 1.3;
+  border: 1px solid var(--pf-location-line);
+}
+
+// lg and up: the room's line, facts and glance at the left, the Visit strip
+// beside them, the map across the foot.
+@include media-breakpoint-up(lg) {
+  .pf-location--visit {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      "head visit"
+      "glance visit"
+      "map map";
+    align-items: start;
+  }
+
+  // The strip is narrow here: hours over the mini map, not beside it.
+  .pf-location__visit .pf-visit {
+    display: flex;
+  }
+}
+
+// --- CTA ------------------------------------------------------------------------
+// The exhibition button, primary: square, mono capitals, solid ink; hover
+// and focus take the swatch's hover color.
+.pf-location__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: .5rem 1.25rem;
+  font: var(--pf-mono-ui)/1.2 var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--pf-section-bg, var(--bs-body-bg));
+  text-decoration: none;
+  background: var(--pf-location-fg, var(--bs-body-color));
+  // A control's boundary: the ink itself (3:1, WCAG 1.4.11).
+  border: 1px solid var(--pf-location-fg, var(--bs-body-color));
+  border-radius: 0;
+  transition:
+    color $pf-hover-out ease,
+    background-color $pf-hover-out ease,
+    border-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-section-bg, var(--bs-body-bg));
+    background: var(--pf-g-hover, var(--pf-location-fg));
+    border-color: var(--pf-g-hover, var(--pf-location-fg));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-location-fg, currentColor);
+    outline-offset: 3px;
+  }
+}
+
+// --- House rules ----------------------------------------------------------------
+// Allowed | Required | Not allowed as columns from md (two, then three),
+// the sound meter under them.
+.pf-rules {
+  max-width: $pf-content-max;
+  margin-inline: auto;
+}
+.pf-rules__groups {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.pf-rules__heading {
+  @extend %pf-location-label;
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin: 0;
+  padding-bottom: .75rem;
+  color: var(--pf-location-muted);
+  border-bottom: 1px solid var(--pf-location-line);
+
+  .pf-space-icon { width: 1rem; height: 1rem; }
+}
+.pf-rules__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-rules__item {
+  display: flex;
+  gap: .875rem;
+  align-items: flex-start;
+  padding: .875rem 0;
+  border-bottom: 1px solid var(--pf-location-line);
+
+  .pf-space-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: .0625rem;
+  }
+}
+.pf-rules__text {
+  display: grid;
+  gap: .125rem;
+  min-width: 0;
+}
+.pf-rules__label { font-weight: 600; }
+.pf-rules__detail {
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--pf-location-muted);
+}
+
+@include media-breakpoint-up(md) {
+  .pf-rules__groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@include media-breakpoint-up(lg) {
+  .pf-rules__groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+// Sound: three steps, the room's lit up to its level, its own named.
+.pf-rules__sound {
+  max-width: 36rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.pf-sound {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .375rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pf-sound__step {
+  display: grid;
+  gap: .5rem;
+  color: var(--pf-location-muted);
+}
+.pf-sound__bar {
+  display: block;
+  height: .5rem;
+  // The unlit steps keep a 3:1 edge (the section's control line).
+  border: 1px solid var(--pf-section-border, currentColor);
+  transition: background-color $pf-hover-out ease;
+}
+.pf-sound__step.is-on .pf-sound__bar {
+  background: var(--pf-location-fg);
+  border-color: var(--pf-location-fg);
+}
+.pf-sound__label { font-size: .9375rem; }
+.pf-sound__step.is-current {
+  color: var(--pf-location-fg);
+
+  .pf-sound__label { font-weight: 600; }
+}
+
+// --- Booking --------------------------------------------------------------------
+// Text and button at the left, what booking needs as a ledger at the right.
+.pf-booking {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  max-width: $pf-content-max;
+  margin-inline: auto;
+}
+.pf-booking__text {
+  max-width: 62ch;
+
+  > p:last-child { margin-bottom: 0; }
+}
+.pf-booking__facts {
+  margin: 0;
+  border-top: 1px solid var(--pf-location-line);
+}
+.pf-booking__fact {
+  padding: .875rem 0;
+  border-bottom: 1px solid var(--pf-location-line);
+
+  dt {
+    display: flex;
+    gap: .625rem;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  dd {
+    margin: .25rem 0 0 1.875rem;
+    font-size: .9375rem;
+    line-height: 1.5;
+    color: var(--pf-location-muted);
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .pf-booking { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-location__cta,
+  .pf-sound__bar {
+    transition: none;
+  }
+}

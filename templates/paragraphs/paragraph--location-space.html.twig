@@ -1,0 +1,87 @@
+{#
+/**
+ * @file
+ * Location (paragraph type location_space): the top of a location page,
+ * under the page <h1> (the room's name, from the page title).
+ *
+ * Variables from palefire_preprocess_paragraph__location_space():
+ * - location: the room (_palefire_location_data()): building, floor,
+ *   access, sound, sound_level, capacity, body, link, policies, and map
+ *   (the building map with the room marked "here", or NULL when the
+ *   building has no drawing yet).
+ * - visit: the page's hours and directions (field_hours_location and the
+ *   rest), as the landing's Visit card, or NULL.
+ *
+ * Everything about the room is edited on its Building spaces term, and its
+ * policies in Space policies, so the map's tooltip and this page agree.
+ *
+ * Layout (_location.scss): the room's line and facts beside the Visit
+ * strip, the policies at a glance under them, then the map. The glance
+ * comes before the Visit strip in the source, so its <h2> leads the
+ * strip's <h3>. Without a map the facts carry the page; the map can be
+ * added later with no change here.
+ */
+#}
+{% if location %}
+  {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
+  {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
+  <div{{ attributes.addClass('pf-location', visit ? 'pf-location--visit') }}>
+    <div class="pf-location__head">
+      <p class="pf-location__eyebrow">
+        {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
+      </p>
+      {% if location.body %}
+        <div class="pf-location__lede">{{ location.body }}</div>
+      {% endif %}
+      {% if location.link %}
+        <p class="pf-location__actions">
+          <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
+        </p>
+      {% endif %}
+      <dl class="pf-location__facts">
+        {% if location.building %}
+          <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
+        {% endif %}
+        {% if location.floor %}
+          <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
+        {% endif %}
+        <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
+        {% if location.sound_level %}
+          <div class="pf-location__fact">
+            <dt>{{ 'Sound'|t }}</dt>
+            <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
+          </div>
+        {% endif %}
+        {% if location.capacity %}
+          <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
+        {% endif %}
+      </dl>
+    </div>
+
+    {% if location.policies %}
+      <div class="pf-location__glance" role="group" aria-labelledby="{{ location.uid }}-glance">
+        <h2 class="pf-location__glance-title" id="{{ location.uid }}-glance">{{ 'At a glance'|t }}</h2>
+        <ul class="pf-space-chips">
+          {% for policy in location.policies %}
+            <li class="pf-space-chip pf-space-chip--{{ policy.state|clean_class }}">
+              {% include '@palefire/includes/space-icon.html.twig' with { icon: policy.icon, state: policy.state } only %}
+              <span>{{ policy.label }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if visit %}
+      <div class="pf-location__visit">
+        {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: location.uid ~ '-visit' } only %}
+      </div>
+    {% endif %}
+
+    {% if location.map %}
+      <div class="pf-location__map">
+        {% include '@palefire/paragraphs/paragraph--building-map.html.twig' with { map: location.map, attributes: create_attribute() } only %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

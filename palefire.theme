@@ -20,6 +20,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
@@ -972,11 +973,39 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     return;
   }
   $value = static fn (string $field) => $paragraph->hasField($field) ? $paragraph->get($field)->value : NULL;
-  $key = $value('field_map_building') ?: array_key_first($buildings);
-  $building = $buildings[$key] ?? NULL;
-  if (!$building) {
+  $map = _palefire_building_map($value('field_map_building') ?: array_key_first($buildings), (string) $value('field_map_here'), $paragraph);
+  if (!$map) {
     return;
   }
+  $variables['map'] = $map + [
+    // The landing hero's Visit card, shown in the aside with the key
+    // (palefire_preprocess_paragraph__landing_hero()), or NULL.
+    'visit' => $variables['elements']['#pf_visit'] ?? NULL,
+    // h2 on the landing hero (a section of the page), h3 elsewhere.
+    'heading_tag' => empty($variables['elements']['#pf_hero']) ? 'h3' : 'h2',
+  ];
+}
+
+/**
+ * The building map's `map` variable (paragraph--building-map.html.twig).
+ *
+ * @param string $key
+ *   The building (maps/buildings.yml).
+ * @param string $here
+ *   building.space of the room to mark "here", or ''.
+ * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+ *   The paragraph the map belongs to: its id makes the element ids, and on
+ *   a Building map its Heading, Intro and Room overrides are used.
+ *
+ * @return array|null
+ *   NULL when the building isn't in buildings.yml.
+ */
+function _palefire_building_map(string $key, string $here, ParagraphInterface $paragraph): ?array {
+  $building = palefire_buildings()[$key] ?? NULL;
+  if (!$building) {
+    return NULL;
+  }
+  $value = static fn (string $field) => $paragraph->hasField($field) ? $paragraph->get($field)->value : NULL;
 
   // Any change to a Building spaces term re-renders the map.
   $cache = (new CacheableMetadata())->addCacheTags(['taxonomy_term_list:building_space']);
@@ -1095,7 +1124,6 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
   $note = $building_term && !$building_term->get('description')->isEmpty() ? $building_term->get('description') : NULL;
 
   // "You are here": only a drawn (published) room in this building.
-  $here = (string) $value('field_map_here');
   $here = str_starts_with($here, $key . '.') ? substr($here, strlen($key) + 1) : '';
   if (!isset($spaces[$here])) {
     $here = '';
@@ -1103,7 +1131,7 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
 
   $cache_render = [];
   $cache->applyTo($cache_render);
-  $variables['map'] = [
+  return [
     'uid' => $uid,
     'key' => $key,
     'label' => $building['label'] ?? $key,
@@ -1121,12 +1149,207 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
       'floor' => (int) ($l['floor'] ?? 1),
     ], array_keys((array) ($building['landmarks'] ?? [])), array_values((array) ($building['landmarks'] ?? []))),
     'cache' => $cache_render,
-    // The landing hero's Visit card, shown in the aside with the key
-    // (palefire_preprocess_paragraph__landing_hero()), or NULL.
-    'visit' => $variables['elements']['#pf_visit'] ?? NULL,
-    // h2 on the landing hero (a section of the page), h3 elsewhere.
-    'heading_tag' => empty($variables['elements']['#pf_hero']) ? 'h3' : 'h2',
   ];
+}
+
+/* ---------------------------------------------------------------------------
+ * Location pages (scripts/palefire_location_setup.php)
+ *
+ * A room's policies, sound level and capacity live on its Building spaces
+ * term (policies are Space policies terms), so every page that shows the
+ * room reads the same words.
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Sound levels (field_space_sound) => their step on the three-step meter.
+ */
+const PALEFIRE_SPACE_SOUND = ['quiet' => 1, 'conversation' => 2, 'collaborative' => 3];
+
+/**
+ * The room a location section is about.
+ *
+ * Its own Room (field_location_space), else the Room of the page's Location
+ * section, so House rules and Booking need no Room of their own. NULL when
+ * there is none, or it is unpublished.
+ */
+function _palefire_location_room(ParagraphInterface $paragraph): ?TermInterface {
+  $term = $paragraph->hasField('field_location_space') ? $paragraph->get('field_location_space')->entity : NULL;
+  $host = $term ? NULL : $paragraph->getParentEntity();
+  if ($host instanceof NodeInterface) {
+    foreach (PalefireHooks::SECTION_FIELDS as $field) {
+      if (!$host->hasField($field)) {
+        continue;
+      }
+      foreach ($host->get($field)->referencedEntities() as $section) {
+        if ($section->bundle() === 'location_space' && $section->hasField('field_location_space')) {
+          $term = $section->get('field_location_space')->entity;
+          break 2;
+        }
+      }
+    }
+  }
+  if (!$term instanceof TermInterface || !$term->isPublished() || !$term->access('view')) {
+    return NULL;
+  }
+  return \Drupal::service('entity.repository')->getTranslationFromContext($term);
+}
+
+/**
+ * What the location templates show about a room.
+ *
+ * @return array
+ *   title, key (building.space), building_key, building (name), floor (int
+ *   or NULL), access (walk_in | appointment), sound, sound_level (0-3),
+ *   capacity, body (the room's description, rendered), link (url, title or
+ *   NULL) and policies: label, detail, state (allowed | required |
+ *   not_allowed), icon, in the room's order.
+ */
+function _palefire_location_data(TermInterface $room, CacheableMetadata $cache): array {
+  $cache->addCacheableDependency($room);
+  $string = static fn (string $field): string => $room->hasField($field) ? trim((string) $room->get($field)->value) : '';
+  $key = $string('field_map_key');
+  [$building_key, $space_key] = explode('.', $key, 2) + ['', ''];
+  $building = palefire_buildings()[$building_key] ?? [];
+  $def = $building['spaces'][$space_key] ?? [];
+
+  // The building's name: buildings.yml, else the room's parent term.
+  $building_label = (string) ($building['label'] ?? '');
+  if ($building_label === '') {
+    $parents = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($room->id());
+    $parent = reset($parents);
+    $building_label = $parent ? $parent->label() : '';
+  }
+
+  $policies = [];
+  if ($room->hasField('field_space_policies')) {
+    $repository = \Drupal::service('entity.repository');
+    foreach ($room->get('field_space_policies')->referencedEntities() as $policy) {
+      if (!$policy instanceof TermInterface || !$policy->isPublished() || !$policy->access('view')) {
+        continue;
+      }
+      $policy = $repository->getTranslationFromContext($policy);
+      $cache->addCacheableDependency($policy);
+      $state = $policy->hasField('field_policy_state') ? (string) $policy->get('field_policy_state')->value : '';
+      $policies[] = [
+        'label' => $policy->label(),
+        'detail' => trim(strip_tags((string) $policy->getDescription())),
+        'state' => in_array($state, ['allowed', 'required', 'not_allowed'], TRUE) ? $state : 'allowed',
+        'icon' => $policy->hasField('field_policy_icon') ? (string) $policy->get('field_policy_icon')->value : '',
+      ];
+    }
+  }
+
+  $link = $room->hasField('field_space_link') ? $room->get('field_space_link')->first() : NULL;
+  $sound = $string('field_space_sound');
+  $description = $room->get('description');
+  return [
+    'title' => $room->label(),
+    'key' => $key,
+    'building_key' => $building_key,
+    'building' => $building_label,
+    'floor' => isset($def['floor']) ? (int) $def['floor'] : NULL,
+    'access' => $string('field_space_access') ?: ($def['access'] ?? 'walk_in'),
+    'sound' => $sound,
+    'sound_level' => PALEFIRE_SPACE_SOUND[$sound] ?? 0,
+    'capacity' => $string('field_space_capacity'),
+    'body' => $description->isEmpty() ? NULL : [
+      '#type' => 'processed_text',
+      '#text' => $description->value,
+      '#format' => $description->format,
+    ],
+    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Plan your visit')] : NULL,
+    'policies' => $policies,
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--location-space.
+ *
+ * `location` (_palefire_location_data(), plus `map`: the building map with
+ * the room marked, or NULL for a building without a drawing) and `visit`
+ * (the page's hours and directions, as the landing's Visit card).
+ */
+function palefire_preprocess_paragraph__location_space(array &$variables): void {
+  $variables['location'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  _palefire_landing_visit($variables, $paragraph);
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $room = _palefire_location_room($paragraph);
+  if ($room) {
+    $location = _palefire_location_data($room, $cache);
+    $map = $location['building_key'] !== '' ? _palefire_building_map($location['building_key'], $location['key'], $paragraph) : NULL;
+    if ($map) {
+      $map['heading'] = t('Find the @room', ['@room' => $location['title']]);
+      $map['heading_tag'] = 'h2';
+      $map['visit'] = NULL;
+    }
+    $location['map'] = $map;
+    $location['uid'] = 'pf-location-' . $paragraph->id();
+    $variables['location'] = $location;
+  }
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--location-rules.
+ *
+ * `rules`: groups (allowed, required, not_allowed => policies; empty ones
+ * left out), sound and sound_level. NULL without a room.
+ */
+function palefire_preprocess_paragraph__location_rules(array &$variables): void {
+  $variables['rules'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  $room = $paragraph instanceof ParagraphInterface ? _palefire_location_room($paragraph) : NULL;
+  if (!$room) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $location = _palefire_location_data($room, $cache);
+  $groups = ['allowed' => [], 'required' => [], 'not_allowed' => []];
+  foreach ($location['policies'] as $policy) {
+    $groups[$policy['state']][] = $policy;
+  }
+  $variables['rules'] = [
+    'uid' => 'pf-rules-' . $paragraph->id(),
+    'groups' => array_filter($groups),
+    'sound' => $location['sound'],
+    'sound_level' => $location['sound_level'],
+  ];
+  $cache->applyTo($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--location-booking.
+ *
+ * `booking`: body (rendered), link (url, title or NULL), capacity, and
+ * needs (the room's Required policies).
+ */
+function palefire_preprocess_paragraph__location_booking(array &$variables): void {
+  $variables['booking'] = NULL;
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $room = _palefire_location_room($paragraph);
+  $location = $room ? _palefire_location_data($room, $cache) : NULL;
+  $body = $paragraph->hasField('field_booking_body') ? $paragraph->get('field_booking_body') : NULL;
+  $link = $paragraph->hasField('field_booking_link') ? $paragraph->get('field_booking_link')->first() : NULL;
+  $variables['booking'] = [
+    'uid' => 'pf-booking-' . $paragraph->id(),
+    'body' => $body && !$body->isEmpty() ? [
+      '#type' => 'processed_text',
+      '#text' => $body->value,
+      '#format' => $body->format,
+    ] : NULL,
+    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
+    'capacity' => $location['capacity'] ?? '',
+    'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
+  ];
+  $cache->applyTo($variables);
 }
 
 /* ---------------------------------------------------------------------------
