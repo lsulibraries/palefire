@@ -163,3 +163,15 @@ $pf-panel-backdrop-dark:     .55;
 // (<html data-pf-theme>), and guides always (Cream when none is picked).
 // Use after html: html#{$pf-themed}.
 $pf-themed: ':is([data-pf-theme], [data-pf-mode="guide"])';
+
+// Page kinds (<html data-pf-page>, PalefireHooks::pageKind()) ---------------
+// page (the default), landing (opens with a Landing hero), department
+// (a Department landing), location (a room's Location section), showcase,
+// guide, form, exhibition. Use after html: html#{$pf-system}.
+// - $pf-system: one column (1280px), grid, gutter and type, as on
+//   /v2/special. Guides, forms and exhibitions keep their own layouts;
+//   guides read the same type tokens (:root, _landing-features.scss).
+// - $pf-banded: alternating section tones. Not the showcase, which bands
+//   its own list (_exhibit-showcase.scss).
+$pf-system: ':is([data-pf-page="page"], [data-pf-page="landing"], [data-pf-page="department"], [data-pf-page="location"], [data-pf-page="showcase"])';
+$pf-banded: ':is([data-pf-page="page"], [data-pf-page="landing"], [data-pf-page="department"], [data-pf-page="location"])';

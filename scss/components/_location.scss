@@ -55,17 +55,26 @@
 .pf-space-icon__fill { fill: currentColor; }
 
 // --- Location: the room's details, then everything else -----------------
-// Phones: the details (title to facts), then the map, the Visit strip,
-// House rules and Booking, one under the other. lg and up: the details in
-// a narrow column at the left that stays in view under the header and the
-// breadcrumb bar while the right column scrolls past it. Only where the
-// window is tall enough for the whole column; shorter, it scrolls too.
+// On the shared system (html[data-pf-page="location"], $pf-system): the
+// section keeps to the 1280px column, and the page to the hero's grid, its
+// gutter (--pf-grid-gutter) and its five columns: the details over two,
+// the rest over three (40/60), on the hero's column lines. The switch reads
+// the section's own width (pf-location), not the window's.
+// Narrower: the details (title to facts), then the map, the Visit strip,
+// House rules and Booking, one under the other. Wide: the details stay in
+// view under the header and the breadcrumb bar while the right column
+// scrolls past them, where the window is tall enough for the whole column;
+// shorter, they scroll too.
+.pf-location-page {
+  --pf-grid-gutter: clamp(1.25rem, 2.25vw, 2rem);
+  --pf-location-gap: clamp(2.5rem, 5vw, 3.5rem);
+  container: pf-location / inline-size;
+}
+
 .pf-location {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 4vw, 4rem);
-  max-width: $pf-content-max;
-  margin-inline: auto;
+  gap: var(--pf-location-gap) var(--pf-grid-gutter);
 }
 .pf-location__head,
 .pf-location__body { min-width: 0; }
@@ -73,26 +82,28 @@
 .pf-location__body {
   display: flex;
   flex-direction: column;
-  gap: clamp(3rem, 6vw, 4.5rem);
+  gap: var(--pf-location-gap);
 }
 
 // The strip keeps its own frame and glass; here it starts on its line.
 .pf-location .pf-visit { margin-top: 0; }
 
-@include media-breakpoint-up(lg) {
+@container pf-location (min-width: 52rem) {
   .pf-location {
-    grid-template-columns: minmax(18rem, 5fr) minmax(0, 7fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: start;
   }
+  .pf-location__head { grid-column: span 2; }
+  .pf-location__body { grid-column: span 3; }
 
   // The strip is in a column here: hours over the mini map, not beside it.
   .pf-location__visit .pf-visit { display: flex; }
-}
 
-@media (min-width: 992px) and (min-height: 46rem) {
-  .pf-location__head {
-    position: sticky;
-    top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + clamp(1.5rem, 3vw, 2.5rem));
+  @media (min-height: 46rem) {
+    .pf-location__head {
+      position: sticky;
+      top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + clamp(1.5rem, 3vw, 2.5rem));
+    }
   }
 }
 
@@ -102,14 +113,16 @@
   color: var(--pf-g-accent, var(--pf-location-muted));
 }
 
-// The room's name at the mockup's size: large and tight, the page's title
-// color. Long names wrap; overflow-wrap keeps a long word inside 320px.
+// The room's name as every page <h1> on the shared system (the cover's,
+// the showcase's): --pf-hero-title-size, 500, tight. Long names wrap;
+// overflow-wrap keeps a long word inside 320px.
 .pf-location .pf-location__title {
   margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.25rem);
-  font-weight: $pf-display-weight;
-  line-height: .95;
-  letter-spacing: -.035em;
+  font-size: var(--pf-hero-title-size);
+  font-weight: 500;
+  line-height: .98;
+  letter-spacing: -.02em;
+  text-wrap: balance;
   overflow-wrap: break-word;
   hyphens: auto;
 }
@@ -258,12 +271,15 @@
     color: var(--pf-location-muted);
   }
 
+  // A word too long for the cell drops under its icon (Collaborative at
+  // 320px) rather than breaking; only a word wider than the cell breaks.
   dd {
     display: flex;
-    gap: .5rem;
+    flex-wrap: wrap;
+    gap: .25rem .5rem;
     align-items: center;
     margin: 0;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 }
 
@@ -272,6 +288,15 @@
 }
 
 // --- House rules and Booking in the right column -----------------------------
+// The hero's rhythm: --pf-hero-gap above each index rule (01, 02), counted
+// from what is above it, and --pf-hero-rule-gap under it; the heading in
+// the shared h2 style (_landing-features.scss).
+.pf-location__part {
+  margin-top: calc(var(--pf-hero-gap) - var(--pf-location-gap));
+
+  > .pf-index-rule { margin-bottom: var(--pf-hero-rule-gap); }
+}
+
 .pf-location__part-title {
   margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
   scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);

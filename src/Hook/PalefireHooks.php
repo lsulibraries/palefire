@@ -55,6 +55,15 @@ class PalefireHooks {
   public const TITLE_BUNDLES = [...self::LANDING_BUNDLES, 'location_space'];
 
   /**
+   * Opening sections that name a page's kind (pageKind()).
+   */
+  private const KIND_BUNDLES = [
+    'landing_hero' => 'landing',
+    'landing_department' => 'department',
+    'location_space' => 'location',
+  ];
+
+  /**
    * Paragraph reference field on the modular content type.
    */
   public const SECTIONS_FIELD = 'field_sections';
@@ -114,8 +123,9 @@ class PalefireHooks {
    *
    * Puts the page mode (field_modular_type: page, guide, form) on <html> as
    * data-pf-mode, for CSS and for scripts that run before <body> exists
-   * (Settings > Dark guides, html.html.twig), and data-pf-hero when the page
-   * opens with a Landing hero or is the Exhibitions showcase (exhibition.js,
+   * (Settings > Dark guides, html.html.twig), the page's kind as
+   * data-pf-page (pageKind()), and data-pf-hero when the page opens with a
+   * Landing hero or is the Exhibitions showcase (exhibition.js,
    * _landing-features.scss). The page cache entry already carries the
    * node's cache tags, so editing the node updates it.
    */
@@ -136,11 +146,30 @@ class PalefireHooks {
       return;
     }
     $variables['html_attributes']->setAttribute('data-pf-mode', self::stringValue($node, 'field_modular_type') ?: 'page');
-    // Opens with a Landing hero (the Special Collections homepage), or is
-    // the Exhibitions showcase, which shares its column, grid and type.
-    if (self::titleLanding($node)?->bundle() === 'landing_hero' || self::stringValue($node, 'field_modular_type') === 'showcase') {
+    $kind = self::pageKind($node);
+    $variables['html_attributes']->setAttribute('data-pf-page', $kind);
+    // The cover's own rules: opens with a Landing hero (the Special
+    // Collections homepage), or is the Exhibitions showcase, which shares
+    // its title and list headings.
+    if ($kind === 'landing' || $kind === 'showcase') {
       $variables['html_attributes']->setAttribute('data-pf-hero', '');
     }
+  }
+
+  /**
+   * The kind of Modular page, for <html data-pf-page> ($pf-system and
+   * $pf-banded in scss/_variables.scss).
+   *
+   * The mode when it has its own layout (guide, form, exhibition,
+   * showcase); otherwise the section that opens the page (KIND_BUNDLES:
+   * landing, department, location), or "page".
+   */
+  public static function pageKind(NodeInterface $node): string {
+    $mode = self::stringValue($node, 'field_modular_type');
+    if (in_array($mode, ['guide', 'form', 'exhibition', 'showcase'], TRUE)) {
+      return $mode;
+    }
+    return self::KIND_BUNDLES[self::titleLanding($node)?->bundle()] ?? 'page';
   }
 
   /**
@@ -910,8 +939,7 @@ class PalefireHooks {
    * The landing (TITLE_BUNDLES) that opens the page, or NULL.
    *
    * The first section the current user can see, when it is a landing: the
-   * one titleLandingUuid() names. preprocessHtml() reads its bundle to mark
-   * Landing hero pages.
+   * one titleLandingUuid() names. pageKind() reads its bundle.
    */
   public static function titleLanding(NodeInterface $node): ?FieldableEntityInterface {
     foreach (self::SECTION_FIELDS as $field) {

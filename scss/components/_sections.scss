@@ -84,21 +84,23 @@
   }
 }
 
-// Alternating tones on a landing page ------------------------------------------
-// Every other band takes the swatch's surface color, one quiet step off the
-// page (1.04–1.14:1), so the parts read apart without patterns: the quick
-// guide, then the even sections after the landing (Special Collections: Go
-// deeper, and the events and blog). The Visit strip stays the page color,
-// which its map is drawn on. Text, muted and accent keep 4.5:1 on the surface
-// on every swatch, high contrast included (2026-10-26). Anything inside a band
-// that used the surface color takes the page color, so it still stands off;
-// --pf-band holds the surface from above that swap. Location pages (a room's
-// page, opened by its Location section) band the same way: House rules on
-// the surface, between the map and Booking.
-html#{$pf-themed} .pf-sections:is(:has(> .pf-section--landing-hero), :has(> .pf-section--location-space:first-child)) {
+// Alternating tones ------------------------------------------------------------
+// On every page kind in $pf-banded (the default, landing, department and
+// location pages; not guides, forms, exhibitions or the showcase), every
+// other band takes the swatch's surface color, one quiet step off the page
+// (1.04–1.14:1), so the parts read apart without patterns: on the landing,
+// the quick guide, then the even sections after it (Special Collections:
+// Go deeper, and the events and blog). The Visit strip stays the page
+// color, which its map is drawn on. Text, muted and accent keep 4.5:1 on
+// the surface on every swatch, high contrast included (2026-10-26).
+// Anything inside a band that used the surface color takes the page color,
+// so it still stands off; --pf-band holds the surface from above that swap.
+// A section with its own color (a dark theme, a background picture) keeps
+// it, and still counts in the alternation, so the rest do not shift.
+html#{$pf-themed}#{$pf-banded} .pf-sections {
   --pf-band: var(--pf-g-surface);
 
-  > .pf-section--auto:nth-child(even of .pf-section--auto),
+  > .pf-section--auto:nth-child(even of .pf-section--auto):not(.pf-section--theme-dark, .pf-section--theme-light-map, .pf-section--has-bg),
   .pf-quick-guide {
     --pf-section-bg: var(--pf-band);
     --pf-g-surface: var(--pf-g-bg);

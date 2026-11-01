@@ -32,13 +32,16 @@
  * in view while the right one scrolls: the building map, the Visit strip,
  * House rules and Booking (their own section templates, so they read the
  * same as the standalone sections). The two headings are listed in the TOC
- * (data-toc). On phones the details come first, then the rest.
+ * (data-toc) and open on index rules (01, 02), as the hero's sections do.
+ * On phones the details come first, then the rest.
  */
 #}
+{% import '@palefire/includes/landing.html.twig' as pf %}
 {% if location %}
   {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
   {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
   {% set states = { allowed: 'Allowed'|t, required: 'Required'|t, not_allowed: 'Not allowed'|t } %}
+  {% set has_rules = location.rules.groups or location.rules.sound_level %}
   <div{{ attributes.addClass('pf-landing', 'pf-location-page') }}>
     {% if lead_breadcrumb %}
       <div class="pf-landing__bar">
@@ -131,8 +134,9 @@
           </div>
         {% endif %}
 
-        {% if location.rules.groups or location.rules.sound_level %}
+        {% if has_rules %}
           <section class="pf-location__part" aria-labelledby="{{ location.uid }}-rules-title">
+            {{ pf.index_rule('01', 'Before you come'|t, {}) }}
             <h2 class="pf-location__part-title" id="{{ location.uid }}-rules-title" data-toc>{{ 'House rules'|t }}</h2>
             {% include '@palefire/paragraphs/paragraph--location-rules.html.twig' with { rules: location.rules, attributes: create_attribute() } only %}
           </section>
@@ -145,6 +149,7 @@
             {% set booking = booking|merge({ link: null }) %}
           {% endif %}
           <section class="pf-location__part" aria-labelledby="{{ location.uid }}-book-title">
+            {{ pf.index_rule(has_rules ? '02' : '01', 'Reserve'|t, {}) }}
             <h2 class="pf-location__part-title" id="{{ location.uid }}-book-title" data-toc>{{ 'Book the @room'|t({'@room': location.title}) }}</h2>
             {% include '@palefire/paragraphs/paragraph--location-booking.html.twig' with { booking: booking, attributes: create_attribute() } only %}
           </section>

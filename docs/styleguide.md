@@ -82,6 +82,11 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Attach a library only where it is needed.
   - Lazy-load images and give them width and height.
   - No new external dependencies without asking.
+- **Page kinds:** `<html data-pf-page>` names the kind of Modular page
+  (`PalefireHooks::pageKind()`). Scope page-wide rules with `$pf-system`
+  (column, grid, section headings) or `$pf-banded` (alternating tones),
+  not with a page's own class. Guides, forms and exhibitions keep their
+  own layouts; guides read the shared type tokens.
 
 ## Component inventory
 
@@ -124,3 +129,4 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-10-31:** Exhibitions showcase follows the landing's page furniture. The breadcrumb sits in the glass sub-header bar (`.pf-showcase-head`, pinned like an exhibition's), the rail TOC lists Browse and All exhibitions, each band opens with an index rule, and the second band and every other section after it take the swatch surface, as on the Special Collections landing. Everything starts on the section padding line, and the covers line up with the summary's top.
 - **2026-10-31:** Exhibitions showcase shares the landing's styles: `data-pf-hero` (1280px column, type tokens, section headings), the clear-then-glass header and bar, the 4/5-column grid with `--pf-grid-gutter`, the index-rule rhythm, and a new shared token, `--pf-hero-title-size`.
 - **2026-10-31:** The Grid / List switch (`.pf-tiles__view`) is now also a filter: the Exhibitions showcase's All / Digital / Physical buttons reuse it, with a count after each label.
+- **2026-10-31:** Page kinds. `data-pf-page` on `<html>`, with `$pf-system` and `$pf-banded` in `_variables.scss`: the 1280px column, section headings and alternating bands now apply to every Modular page but guides, forms and exhibitions. The `--pf-hero-*` type and rhythm tokens moved to `:root`; guide section headings use `--pf-hero-h2-size`. Location pages use the five-column grid, the shared title and h2, and index rules.

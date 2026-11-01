@@ -351,10 +351,10 @@
         document.documentElement.setAttribute(name, value);
       }
     });
-    // Page mode and the Landing hero flag (PalefireHooks::preprocessHtml()):
+    // Page mode, kind and the Landing hero flag (PalefireHooks::preprocessHtml()):
     // present on some pages only, so copy or remove them. data-pf-hero has
     // no value, so it is copied when present at all.
-    ['data-pf-mode', 'data-pf-hero'].forEach((name) => {
+    ['data-pf-mode', 'data-pf-page', 'data-pf-hero'].forEach((name) => {
       if (doc.documentElement.hasAttribute(name)) {
         document.documentElement.setAttribute(name, doc.documentElement.getAttribute(name));
       }

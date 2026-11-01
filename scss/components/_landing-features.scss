@@ -170,14 +170,15 @@
 $pf-chrome-stagger: .12s;
 
 .pf-landing--cover > .pf-landing__bar,
-.pf-showcase-head > .pf-landing__bar {
+.pf-showcase-head > .pf-landing__bar,
+.pf-location-page > .pf-landing__bar {
   transition:
     background-color .3s ease $pf-chrome-stagger,
     -webkit-backdrop-filter .3s ease $pf-chrome-stagger,
     backdrop-filter .3s ease $pf-chrome-stagger;
 }
 
-html:not(.pf-bar-stuck) :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
+html:not(.pf-bar-stuck) :is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar {
   background-color: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
@@ -187,9 +188,9 @@ html:not(.pf-bar-stuck) :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing
 // Back at the top, the header waits for the bar to start clearing. Uses
 // the header's own selector ($pf-bg-first, below), whose transition
 // shorthand would otherwise reset the delay.
-$pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar)';
+$pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar)';
 
-:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head)) .pf-header {
+:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head), :has(.pf-location-page > .pf-landing__bar)) .pf-header {
   &,
   &::before {
     transition-delay: $pf-chrome-stagger;
@@ -197,13 +198,13 @@ $pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__b
 }
 
 @include pf-solid-chrome {
-  :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
+  :is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar {
     background-color: var(--pf-sidebar-bg) !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.pf-landing--cover, .pf-showcase-head) > .pf-landing__bar {
+  :is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar {
     transition: none;
   }
 }
@@ -379,9 +380,9 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
 // the video's top wash, as deep as the header and the bar, keeps their
 // words at 4.5:1 (below). Scrolled, it is glass again, with its shadow.
 // Reduce transparency (and its kin) keeps the glass throughout.
-// The Exhibitions showcase (.pf-showcase-head) opens the same way, on the
-// page color.
-$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head))';
+// The Exhibitions showcase (.pf-showcase-head) and a location page (its
+// Location section's bar) open the same way, on the page color.
+$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head), :has(.pf-location-page > .pf-landing__bar))';
 
 :root#{$pf-bg-first} .pf-header {
   transition: background-color .3s ease, border-color .3s ease, box-shadow $pf-header-transition;
@@ -2854,17 +2855,16 @@ html.pf-a11y-motion {
 // - One rhythm: the same space above each landing section, paragraphs
 //   kept to about 62 characters, balanced headings and no lone last words.
 // - Figures: hours in tabular figures, so the week's times line up.
-html[data-pf-hero] {
+//
+// The type and rhythm tokens are on every page (named for the hero, where
+// they began): the pages on the shared system ($pf-system: the default,
+// department and location pages, the showcase) and guides read them.
+:root {
+  --pf-hero-title-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem); // the page <h1>
   --pf-hero-h2-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.5rem);
   --pf-hero-text: clamp(1rem, .95rem + .2vw, 1.125rem); // every paragraph
   --pf-hero-gap: clamp(4rem, 7vw, 6rem); // above each index rule
   --pf-hero-rule-gap: clamp(1.25rem, 2.5vw, 2rem); // under each index rule
-}
-
-// The hero's <h1>, on every page: the cover's title and the Exhibitions
-// showcase's read it.
-:root {
-  --pf-hero-title-size: clamp(2.75rem, 1.5rem + 3.6vw, 5rem);
 }
 
 // One rhythm: --pf-hero-gap above each index rule (01 to 04) and
@@ -3142,7 +3142,9 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-tit
   color: var(--pf-toc-color);
 }
 
-html[data-pf-hero] .pf-main .pf-sections .pf-section__title,
+// Every section heading on the shared system ($pf-system), a location
+// page's part headings among them, and the hero's own.
+html#{$pf-system} .pf-main .pf-sections :is(.pf-section__title, .pf-location__part-title),
 html[data-pf-hero] .pf-showcase-list__heading,
 html[data-pf-hero] .pf-landing--cover .pf-landing__visit .pf-map > .pf-map__heading,
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
@@ -3303,12 +3305,12 @@ html[data-pf-theme="twilight"] .pf-quick-guide {
   initial-value: 0px;
 }
 
-html[data-pf-hero] .pf-sections {
+html#{$pf-system} .pf-sections {
   --pf-hero-pad-base: var(--pf-section-pad-inline);
   container: pf-sections / inline-size;
 }
 
-html[data-pf-hero] .pf-sections > .pf-section:not(.pf-section--flush) {
+html#{$pf-system} .pf-sections > .pf-section:not(.pf-section--flush) {
   --pf-hero-col-pad: max(var(--pf-hero-pad-base), (100cqi - 1280px) / 2);
   --pf-section-pad-inline: var(--pf-hero-col-pad);
 }
