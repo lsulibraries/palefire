@@ -263,6 +263,11 @@
               {% endif %}
             </header>
             {% endif %}
+            {# Showcase mode: every exhibition, then the page's own sections
+               (PalefireHooks::showcase()). #}
+            {% if showcase %}
+              {% include '@palefire/includes/exhibit-showcase.html.twig' with { showcase: showcase } only %}
+            {% endif %}
           {% endif %}
           {% if has_toc %}
             {# Below lg: a square list icon that opens the TOC offcanvas (lg

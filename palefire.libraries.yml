@@ -411,6 +411,16 @@ exhibition:
     - palefire/global
     - palefire/viewer
 
+# Exhibitions showcase (includes/exhibit-showcase.html.twig): the depth
+# carousel and the index plate. Attached by that template only, on a
+# Modular page in showcase mode.
+exhibit-showcase:
+  js:
+    js/exhibit-showcase.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Site footer (includes/footer.html.twig): starts the footer's LibCal hours
 # once it nears the viewport. Attached by page.html.twig on every page.
 footer:
@@ -421,3 +431,17 @@ footer:
     - core/drupal
     - core/once
     - palefire/visit
+
+# Style guide plates (includes/styleguide-plate.html.twig): their own
+# stylesheet (scss/styleguide.scss, npm run build) and the script that
+# prints hex codes, contrast and curves. Attached by that template only.
+styleguide:
+  version: 1.0.0
+  css:
+    component:
+      css/styleguide.css: {}
+  js:
+    js/styleguide.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

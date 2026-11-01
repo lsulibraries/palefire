@@ -1,0 +1,633 @@
+// Exhibitions showcase (includes/exhibit-showcase.html.twig): a Modular
+// page in "showcase" mode. A depth carousel, then an index of every
+// exhibition with a turning plate. Script: js/exhibit-showcase.js.
+//
+// The carousel: the covers stand in one row going back into the page, to
+// the right. --pf-d is a cover's place in the row (0 = the front, the one
+// shown); each step back moves it along by --pf-showcase-step and away by
+// --pf-showcase-depth, and the last ones fade out. Sizes come from the
+// stage's own width (container query units), so it fits beside the TOC
+// and at 400% zoom. Only transform and opacity move, inside a box of fixed
+// height: no layout shift.
+//
+// Colors follow the page (and a dark section or reading swatch around it):
+// text on the surface, never on a cover. "Featured" is black on gold
+// (14:1). Focus: a 2px ring in the text color.
+
+$pf-showcase-ease: cubic-bezier(.22, 1, .36, 1);
+$pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
+
+.pf-showcase {
+  --pf-showcase-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-showcase-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-showcase-line: #{$pf-hairline};
+  --pf-showcase-blank: #{$pf-grey-800};
+  display: grid;
+  gap: clamp(3.5rem, 7vw, 6rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem) var(--pf-section-pad-inline, 1.25rem) clamp(3.5rem, 7vw, 6rem);
+  color: var(--pf-showcase-fg);
+
+  :focus-visible {
+    outline: 2px solid var(--pf-showcase-fg);
+    outline-offset: 3px;
+  }
+}
+
+// A cover with no image yet: the landing tiles' hatching.
+.pf-showcase__card.is-blank,
+.pf-showcase-index__thumb.is-blank,
+.pf-showcase-index__leaf.is-blank {
+  background:
+    pf-hatch(rgb(255 255 255 / .07)),
+    linear-gradient(160deg, #3b3346, #17141c);
+}
+
+// "Featured": the label, and the reason beside it.
+.pf-showcase__feature,
+.pf-showcase-index__feature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .375rem .75rem;
+  margin: 0;
+}
+
+.pf-showcase__badge,
+.pf-showcase__ribbon {
+  display: inline-block;
+  padding: .3125rem .5rem;
+  color: $pf-black;
+  background: $pf-gold;
+  font-size: .6875rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.pf-showcase__note {
+  color: var(--pf-showcase-fg);
+  font-size: .9375rem;
+  font-weight: 500;
+}
+
+// The carousel -----------------------------------------------------------
+.pf-showcase__carousel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: minmax(17rem, 4fr) minmax(0, 8fr);
+    grid-template-areas: "panel stage";
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+
+    .pf-showcase__stage {
+      grid-area: stage;
+    }
+
+    .pf-showcase__panel {
+      grid-area: panel;
+    }
+  }
+}
+
+.pf-showcase__stage {
+  container: pf-showcase / inline-size;
+  // The row runs off to the right: clipped there, fading out.
+  overflow: hidden;
+  mask-image: linear-gradient(to right, #000 80%, transparent);
+}
+
+.pf-showcase__scene {
+  --pf-showcase-w: min(60cqi, 20rem);
+  --pf-showcase-step: calc(var(--pf-showcase-w) * .5);
+  --pf-showcase-depth: 9rem;
+  position: relative;
+  height: calc(var(--pf-showcase-w) * 4 / 3 + 3rem);
+  perspective: 1600px;
+  perspective-origin: 30% 45%;
+  transform-style: preserve-3d;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+@container pf-showcase (min-width: 36rem) {
+  .pf-showcase__scene {
+    --pf-showcase-w: min(40cqi, 24rem);
+    --pf-showcase-depth: 11rem;
+  }
+}
+
+.pf-showcase__card {
+  --pf-d: 0;
+  --pf-x: calc(var(--pf-d) * var(--pf-showcase-step));
+  --pf-z: calc(var(--pf-d) * -1 * var(--pf-showcase-depth));
+  --pf-turn: -16deg;
+  position: absolute;
+  top: 50%;
+  left: .5rem;
+  z-index: calc(100 - var(--pf-d));
+  width: var(--pf-showcase-w);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--pf-showcase-blank);
+  box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, .1);
+  transform: translate3d(var(--pf-x), -50%, var(--pf-z)) rotateY(var(--pf-turn));
+  transform-origin: 0 50%;
+  // From the fourth cover back they fade, gone by the sixth.
+  opacity: clamp(0, 1 - (var(--pf-d) - 3) * .45, 1);
+  transition:
+    transform .95s $pf-showcase-ease,
+    opacity .7s $pf-showcase-ease,
+    box-shadow .7s $pf-showcase-ease;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.is-active {
+    --pf-turn: -4deg;
+    cursor: pointer;
+    box-shadow: 1.5rem 2.75rem 2.5rem rgba($pf-black, .18);
+
+    &:hover {
+      --pf-z: 1.5rem;
+    }
+  }
+
+  // Next: the front cover steps off toward you and to the left, then
+  // (.is-jump, no transition) waits at the back of the row and fades in.
+  // Previous plays it backwards.
+  &.is-leaving {
+    --pf-x: calc(var(--pf-showcase-w) * -.7);
+    --pf-z: 10rem;
+    --pf-turn: 8deg;
+    opacity: 0;
+    transition:
+      transform .55s $pf-showcase-ease-out,
+      opacity .45s $pf-showcase-ease-out;
+  }
+
+  &.is-jump {
+    opacity: 0;
+    transition: none;
+  }
+}
+
+.pf-showcase__ribbon {
+  position: absolute;
+  top: .75rem;
+  left: .75rem;
+}
+
+// The summary beside it.
+.pf-showcase__panel {
+  display: grid;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.pf-showcase__count {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-showcase__n {
+  font-size: clamp(3rem, 2.25rem + 2.5vw, 4.5rem);
+  font-weight: 300;
+  line-height: .9;
+  letter-spacing: -.03em;
+}
+
+.pf-showcase__of {
+  padding-top: .25rem;
+  color: var(--pf-showcase-muted);
+  font-size: .8125rem;
+  letter-spacing: .08em;
+}
+
+// Every summary in one cell, so the panel is as tall as the longest and
+// the buttons under it never move. Only the shown one is visible (and
+// read); without the script, the first.
+.pf-showcase__summaries {
+  display: grid;
+}
+
+.pf-showcase__summary {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .75rem;
+  min-width: 0;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(.5rem);
+  transition:
+    opacity .35s ease,
+    transform .5s $pf-showcase-ease,
+    visibility 0s .35s;
+
+  > * {
+    margin: 0;
+  }
+
+  &.is-active {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity .5s ease .15s,
+      transform .7s $pf-showcase-ease .15s,
+      visibility 0s;
+  }
+}
+
+.pf-showcase__kicker {
+  color: var(--pf-showcase-muted);
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.pf-showcase__draft {
+  color: var(--pf-showcase-fg);
+}
+
+.pf-showcase__title {
+  font-family: $pf-font-display-serif;
+  font-size: clamp(1.875rem, 1.25rem + 1.75vw, 2.875rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.pf-showcase__subtitle {
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+
+.pf-showcase__blurb {
+  max-width: 42ch;
+  color: var(--pf-showcase-muted);
+  font-size: .9375rem;
+  line-height: 1.55;
+}
+
+.pf-showcase__enter {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  margin-top: .25rem;
+  padding: .25rem 0;
+  color: var(--pf-showcase-fg);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--pf-showcase-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .375em;
+  transition: text-decoration-color .3s ease;
+
+  .fas {
+    font-size: .8125em;
+    transition: transform .45s $pf-showcase-ease;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--pf-showcase-fg);
+    text-decoration-color: currentColor;
+  }
+
+  &:hover .fas {
+    transform: translateX(.25rem);
+  }
+}
+
+// Dots (one per exhibition, the shown one long) and the arrows. Hidden
+// until the script is ready (.is-ready), but holding their place.
+.pf-showcase__controls {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  visibility: hidden;
+
+  .pf-showcase.is-ready & {
+    visibility: visible;
+  }
+}
+
+.pf-showcase__dots {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  margin: 0 .5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+// A 24px target (WCAG 2.5.8) around a 2px line.
+.pf-showcase__dot {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: width .6s $pf-showcase-ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 50% .1875rem auto;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--pf-showcase-line);
+    transition: background-color .3s ease;
+  }
+
+  &:hover::before {
+    background: var(--pf-showcase-muted);
+  }
+
+  &[aria-current="true"] {
+    width: 4rem;
+
+    &::before {
+      background: var(--pf-showcase-fg);
+    }
+  }
+}
+
+.pf-showcase__arrow {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--pf-showcase-fg);
+  background: transparent;
+  border: 1px solid var(--pf-showcase-line);
+  border-radius: 50%;
+  font-size: .875rem;
+  cursor: pointer;
+  transition: border-color .3s ease, background-color .3s ease;
+
+  &:hover {
+    border-color: currentColor;
+  }
+}
+
+// The index ----------------------------------------------------------------
+.pf-showcase-index {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.pf-showcase-index__heading {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: $pf-display-weight;
+  letter-spacing: -.02em;
+}
+
+.pf-showcase-index__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+}
+
+.pf-showcase-index__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--pf-showcase-line);
+}
+
+.pf-showcase-index__row {
+  border-bottom: 1px solid var(--pf-showcase-line);
+}
+
+.pf-showcase-index__link {
+  display: grid;
+  grid-template-areas:
+    "thumb title"
+    "thumb meta";
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: .25rem 1rem;
+  align-items: center;
+  padding: 1rem 0;
+  color: var(--pf-showcase-fg);
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: var(--pf-showcase-fg);
+  }
+}
+
+.pf-showcase-index__thumb {
+  grid-area: thumb;
+  align-self: start;
+  width: 3.5rem;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--pf-showcase-blank);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.pf-showcase-index__title {
+  grid-area: title;
+  font-size: clamp(1.125rem, 1rem + .6vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  transition: color .3s ease, transform .6s $pf-showcase-ease;
+}
+
+.pf-showcase-index__year,
+.pf-showcase-index__kicker {
+  color: var(--pf-showcase-muted);
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-showcase-index__year {
+  grid-area: meta;
+}
+
+.pf-showcase-index__kicker {
+  display: none;
+  text-transform: uppercase;
+}
+
+.pf-showcase-index__feature {
+  padding: 0 0 1rem 4.5rem;
+}
+
+.pf-showcase-index__plate {
+  display: none;
+}
+
+// Wide: year | title | label, and the plate beside the list.
+@include media-breakpoint-up(lg) {
+  .pf-showcase-index__link {
+    grid-template-areas: "year title kicker";
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1.375rem 0;
+  }
+
+  .pf-showcase-index__thumb {
+    display: none;
+  }
+
+  .pf-showcase-index__year {
+    grid-area: year;
+  }
+
+  .pf-showcase-index__kicker {
+    display: block;
+  }
+
+  .pf-showcase-index__feature {
+    padding-left: 5.5rem;
+  }
+
+  // While the pointer or focus is in the list, the other titles step back
+  // (still 4.5:1) and the current one moves in a little.
+  .pf-showcase-index__list:is(:hover, :focus-within) .pf-showcase-index__row:not(.is-current) .pf-showcase-index__title {
+    color: var(--pf-showcase-muted);
+  }
+
+  .pf-showcase-index__list:is(:hover, :focus-within) .is-current .pf-showcase-index__title {
+    transform: translateX(.5rem);
+  }
+
+  .pf-showcase-index__plate {
+    position: sticky;
+    top: 6rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .pf-showcase-index__leaves {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    perspective: 1600px;
+  }
+
+  // A leaf turns in from its left edge like a page in a portfolio; the
+  // one it covers sinks back and fades.
+  .pf-showcase-index__leaf {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--pf-showcase-blank);
+    box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, .1);
+    transform: rotateY(-70deg) translateZ(2.5rem);
+    transform-origin: 0 50%;
+    opacity: 0;
+    transition: transform .9s $pf-showcase-ease, opacity .6s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &.is-current {
+      z-index: 1;
+      transform: none;
+      opacity: 1;
+    }
+
+    &.is-leaving {
+      transform: rotateY(10deg) translateZ(-7.5rem);
+      opacity: 0;
+    }
+  }
+
+  // Descriptions: one cell, like the summaries.
+  .pf-showcase-index__plate {
+    grid-template-areas: "leaves" "about";
+  }
+
+  .pf-showcase-index__leaves {
+    grid-area: leaves;
+  }
+
+  .pf-showcase-index__about {
+    grid-area: about;
+    display: grid;
+    gap: .375rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s ease, visibility 0s .3s;
+
+    p {
+      margin: 0;
+    }
+
+    &.is-current {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity .5s ease .1s;
+    }
+  }
+
+  .pf-showcase-index__subtitle {
+    font-weight: 500;
+  }
+
+  .pf-showcase-index__blurb {
+    color: var(--pf-showcase-muted);
+    font-size: .9375rem;
+  }
+}
+
+// Reduced motion (the OS setting; the Settings drawer's
+// html.pf-a11y-motion stops every transition already): the covers keep
+// their places and the shown one changes with a short fade.
+@media (prefers-reduced-motion: reduce) {
+  .pf-showcase__card,
+  .pf-showcase__card.is-leaving,
+  .pf-showcase-index__leaf,
+  .pf-showcase-index__title {
+    transition: opacity .2s linear;
+  }
+
+  .pf-showcase__summary,
+  .pf-showcase__summary.is-active {
+    transform: none;
+  }
+}

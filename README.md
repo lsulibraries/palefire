@@ -113,6 +113,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
 | `palefire_exhibit_redesign.php` | Builds "A New Look for LSU Libraries", the site redesign before and after, as an unpublished exhibition (`-- images=<Redesign screenshots folder> path=/v2/exhibitions/redesign`); `edition=staff` builds the staff page, which adds four staff-only galleries under its own title (`path=/v2/exhibitions/redesign-staff`, access restricted in the UI). Both share the 20 screenshots' media items |
 | `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
+| `palefire_exhibit_showcase.php` | The Exhibitions page: "showcase" on `field_modular_type`, "Exhibitions showcase" (`field_exhibit_showcase`: Featured, Listed, Not listed) and "Why it is featured" (`field_exhibit_feature_note`) under the physical exhibition note, and the page itself, unpublished, at `/v2/special/exhibitions` if nothing has that address. Run `palefire_exhibit_setup.php` first |
 | `palefire_exhibit_lead_mirror.php` | "Mirror lead image" (`field_exhibit_lead_mirror`, boolean) on Exhibition: Gallery, its checkbox under "Show whole image" (and in that field's group) |
 | `palefire_exhibit_audubon_wall.php` | Sets the already-built Audubon page's Elephant Folio, Octavo Edition and Drawings and Proofs to Display "wall", their sheet sizes, the pairs' "Drawing" / "Proof" captions and the drawings' alignments (empty ones only). Run `palefire_exhibit_setup.php` first |
 | `palefire_exhibit_audubon_readings.php` | Turns the Audubon page's Suggested Reading list into readings: Image groups "Selected works" (18 books, 5 articles) and "Fiction" (2 books), linked to their catalog records or articles, and cuts the list from the text. `-- dry-run=1` saves nothing. Run `palefire_exhibit_reading_setup.php` first. Saves a new revision; stops if the gallery already has readings |
@@ -737,6 +738,31 @@ from the media item. A figure with no image shows only to editors.
   biography". Lightbox: `<dialog>`, arrows, swipe, Esc, focus returns.
 - Without JS every gallery shows in order and images open on their own.
 
+### Exhibitions showcase
+
+A Modular page with **Type = showcase** (`/v2/special/exhibitions`) lists
+every exhibition-mode page under its `<h1>`, then its own sections
+(`PalefireHooks::showcase()`, `includes/exhibit-showcase.html.twig`,
+`_exhibit-showcase.scss`, `js/exhibit-showcase.js`):
+
+- A depth carousel: the covers stand in a row going back to the right, the
+  front one is shown, its summary beside it (label, year, title, subtitle,
+  credit line as text, Enter the exhibition). Next sends the front cover
+  off and to the back, so the row only moves one way. Arrows, dots, ← →
+  and swipe; no autoplay; changes are announced politely. Without script
+  it shows the first exhibition, still.
+- An index of all of them (year, title, label). From `lg` a plate beside it
+  turns to the cover of the row under the pointer or focus; below `lg` each
+  row has a thumbnail.
+
+Each exhibition's **Exhibitions showcase** field: Featured (first, the
+carousel opens on it, a gold "Featured" label and its "Why it is featured"
+line in the summary, on the cover and in the index), Listed, or Not
+listed. Empty is Listed, except a page with a main button (a program
+page), which needs Listed or Featured to appear. Visitors see published
+pages only; editors also see unpublished ones, marked. Featured pages
+order by last update, the rest by year (newest first), then title.
+
 ### AVES
 
 `scripts/data/aves.json` (made from the Wayback Machine's copy of
@@ -968,6 +994,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-10-31
 
+- **Exhibitions page: a showcase of every exhibition, with Featured.** New Modular page Type "showcase" (`palefire_exhibit_showcase.php` adds it, two fields and the unpublished page at `/v2/special/exhibitions`). The page shows a depth carousel (covers in a row going back, the front one shown, its summary beside it; the row moves one way, after the Depth Carousel Pro look) over an index of all exhibitions with a turning plate. "Exhibitions showcase" on each exhibition sets Featured, Listed or Not listed; featured ones come first with a gold label and a "Why it is featured" line, for a current event or a related physical exhibition. Covers are decorative and the controls are labelled buttons (24px dots, 44px arrows), with ← →, swipe, a polite announcement, no autoplay, and both reduce-motion settings (covers keep their places and fade). Transforms and opacity in a box of fixed height, so no layout shift; the front cover loads eagerly, the rest lazily; the library is attached only on that page. Checked on a test page with the compiled CSS at 320, 768, 1024 and 1440 (no horizontal scroll) and stepping next, previous and a dot. Not yet rendered by Drupal; PHP not linted (no PHP here). Why: `/v2/special/exhibitions` had no landing, and some exhibitions need to be brought forward while something related is on.
 - **Related guides: calmer motion.** On the live guide the cards' hover read as busy and sudden: the other cards dimmed and darkened at once, and the shadow showed as a halo on dark colors. `.pf-tiles--related` now skips the shelf dimming, has no shadow, fades in without rising (0.9s), and on hover the drawn page drifts 1.5em over 1.2s (was 3em over 0.6s), none with either reduce-motion setting. The homepage's cards are unchanged. Checked with the live guide's markup and local CSS at 1440: hovering one card leaves the others at full opacity, no filter; no shadow.
 - **Related guides as cards; the Hill parking guide is now "Parking and Travel".** A Resource list whose every visible Resource links to a Modular page on the site (Related guides) now draws those pages as the Special Collections homepage's Go deeper cards: the page in miniature, the title on it, the Category label under it (`_palefire_guide_cards()`, `paragraph--resource-list.html.twig`, which imports the tile showcase's `outline` and `labels` macros). Any other list keeps its rows. `.pf-tiles--related` (`_tile-showcase.scss`): two columns on a phone, four from a 36rem section, so four never leave one over; titles cut at four lines, not three, with the scrim's floor raised to match; no pan on scroll (the pan rules now skip `.pf-tiles--related`), the homepage's hover kept; tile-reveal fades them in. Cards are h3s, h4s under a block title, and stay out of "On this page". `palefire_guide_hill_rename.php` renames the guide, rewrites its intro to mention travel, and adds the alias `/v2/special/guides/parking-and-travel-hill-memorial-library`, keeping the old one. The Visit card link and the Quick Guide button now read "Parking & travel" ("…to Hill Memorial Library" for screen readers), and `_palefire_landing_visit()` resolves the guide's first alias with `Url::fromUserInput()`, so the links go out as whatever alias is current and work before and after the script runs. `palefire_guide_related.php` and `palefire_guide_parking_travel.php` use the new title and alias. Checked with the live guide's markup and local CSS at 320, 768, 1024 and 1440 (2, 4, 4, 4 columns; no title cut; no horizontal scroll), and the homepage's buttons at the same widths (one line each). Not yet rendered by Drupal; PHP not linted (no PHP here). Why: a list of links didn't say "another guide" at the end of a guide, and the parking guide's name stopped describing it once it covered airports and hotels.
 - **Special Collections guides: "Related guides".** `palefire_guide_related.php` ends How to Use Special Collections, Visitor Parking at Hill Memorial Library, Ordering Copies, the Glossary and Donating Materials with a section linking the others a reader likely needs next (How to Use Special Collections links all four). It reuses the guides' Resource list: each related guide is a "Guide or handbook" Resource linked as `entity:node/<nid>`, so a changed alias doesn't break it. No field, template or CSS. Unpublished guides are left out, so visitors never get a link they can't open. Not yet run on Drupal, and not linted (no PHP here). Why: the guides didn't point to each other, so someone reading how to visit had no way to the parking guide.

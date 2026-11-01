@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\palefire\Hook;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -185,6 +186,11 @@ class PalefireHooks {
     // Exhibition mode: the title page (includes/exhibit-cover.html.twig).
     if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'exhibition') {
       $variables['exhibit_head'] = $this->exhibitHead($node);
+    }
+    // Showcase mode: every exhibition, under the <h1>
+    // (includes/exhibit-showcase.html.twig).
+    if (self::stringValue($node, 'field_modular_type') === 'showcase') {
+      $variables['showcase'] = $this->showcase();
     }
 
     // Only build the TOC on routes that display the node itself.
@@ -574,6 +580,90 @@ class PalefireHooks {
       'keyfacts' => $keyfacts,
       'action' => $action,
       'cover' => $cover,
+      'cache' => $render,
+    ];
+  }
+
+  /**
+   * Variables for includes/exhibit-showcase.html.twig on a showcase page.
+   *
+   * Every exhibition-mode page the visitor may see (editors also get the
+   * unpublished ones, marked). field_exhibit_showcase decides each one:
+   * "featured" first, "hidden" left out, empty listed, except a page with
+   * a main button (a program page), which needs "listed" or "featured".
+   * Then the newest year first, then by title.
+   *
+   * @return array{items: array, featured: int, cache: array}
+   */
+  private function showcase(): array {
+    $cache = (new CacheableMetadata())
+      ->addCacheTags(['node_list:' . self::MODULAR_BUNDLE])
+      ->addCacheContexts(['user.permissions']);
+    $user = \Drupal::currentUser();
+    $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
+      ->accessCheck(TRUE)
+      ->condition('type', self::MODULAR_BUNDLE)
+      ->condition('field_modular_type', 'exhibition');
+    $editor = $user->hasPermission('bypass node access') || $user->hasPermission('view any unpublished content');
+    if (!$editor) {
+      $query->condition('status', 1);
+    }
+    $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($query->execute());
+    $repository = \Drupal::service('entity.repository');
+    $plain = fn (NodeInterface $node, string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
+      ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags((string) $node->get($field)->value))))
+      : '';
+
+    $items = [];
+    foreach ($nodes as $node) {
+      $access = $node->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($node)->addCacheableDependency($access);
+      if (!$access->isAllowed()) {
+        continue;
+      }
+      $node = $repository->getTranslationFromContext($node);
+      $choice = self::stringValue($node, 'field_exhibit_showcase');
+      $program = $node->hasField('field_exhibit_action') && !$node->get('field_exhibit_action')->isEmpty();
+      if ($choice === 'hidden' || ($choice === '' && $program)) {
+        continue;
+      }
+
+      $cover = NULL;
+      if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()) {
+        $item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache);
+        // Sizes are set per use in the template (card, plate, thumbnail).
+        $cover = $item ? _palefire_exhibit_image($item, '', $cache) : NULL;
+      }
+
+      // The summary: the credit line as text (it names the collection and
+      // curator), else the start of the intro.
+      $blurb = $plain($node, 'field_exhibit_credit') ?: $plain($node, 'field_intro');
+
+      $items[] = [
+        'title' => $node->label(),
+        'url' => $node->toUrl()->toString(),
+        'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
+        'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) $this->t('Exhibition'),
+        'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
+        'blurb' => Unicode::truncate($blurb, 240, TRUE, TRUE),
+        'physical' => self::stringValue($node, 'field_exhibit_physical_note') ?: NULL,
+        'featured' => $choice === 'featured',
+        'note' => $choice === 'featured' ? self::stringValue($node, 'field_exhibit_feature_note') : '',
+        'unpublished' => !$node->isPublished(),
+        'cover' => $cover,
+        'changed' => (int) $node->getChangedTime(),
+      ];
+    }
+
+    usort($items, fn (array $a, array $b): int =>
+      [$b['featured'], $a['featured'] ? -$a['changed'] : 0, $b['year'] ?? 0, $a['title']]
+      <=> [$a['featured'], $b['featured'] ? -$b['changed'] : 0, $a['year'] ?? 0, $b['title']]);
+
+    $render = [];
+    $cache->applyTo($render);
+    return [
+      'items' => $items,
+      'featured' => count(array_filter($items, fn (array $item): bool => $item['featured'])),
       'cache' => $render,
     ];
   }
