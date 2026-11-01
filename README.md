@@ -997,7 +997,8 @@ not the 404 page), a frosted sheet at the bottom of the screen
   "Hill Memorial Library · opens tomorrow 9 AM"; "Hill" when the full name
   doesn't fit on one line), from `Drupal.palefireHours`. The location is the
   page's `field_hours_location`, else Hill (236). Tapping grows the dock into
-  the week, a closure line and "See full hours".
+  the week, a closure line, "See full hours" and Ask Us (the utility menu's
+  Ask drawer; closing it comes back to the week).
 - **Action** (most pages have none): the section's, else the page's, from
   `PalefireHooks::dockActions()` (labels, icons and links in one place).
   Section actions are keyed by the TOC anchor and travel in the page's JSON,
@@ -1006,6 +1007,12 @@ not the 404 page), a frosted sheet at the bottom of the screen
 - **Contents:** a ring that fills through `<main>`, with the section's printed
   number ("03"); tapping grows the dock into the page's TOC. The breadcrumb's
   section button opens it too. Hidden when the TOC has fewer than two entries.
+
+The utility menu stays in the header on every page (WCAG 3.2.3). Where it
+overlaps the dock, it hands off: on dock pages below 768px the menu's Hours
+tile, or any other opener of the Hours drawer, opens the dock's week instead
+(`Drupal.palefireDock.openHours()`, asked by `palefire.js` and
+`utility-panels.js`).
 
 The grabber (or a swipe down) hides the dock for the visit; the tab in the
 corner brings it back. The dock lives outside `#swup`; each page brings its
@@ -1053,6 +1060,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-11-01
 
+- **Mobile dock: the utility menu hands off instead of moving in.** On dock pages below 768px, the menu's Hours tile closes the menu and opens the dock's week (`Drupal.palefireDock.openHours()`, asked by the tile handler in `palefire.js` and, for any other opener, the Hours drawer's `show.bs.offcanvas` in `utility-panels.js`), so a phone shows one hours view per page. The week gains an Ask Us button (`.pf-dock__ask`, FA Pro light `comments-alt`) that opens the existing Ask drawer; closing that drawer reopens the week with focus on Ask Us, unless a link in it was followed. The header and menu are unchanged everywhere. Checked on copies of /v2/special and the duplication guide (Twilight) at 320, 390 and 1024: the menu-to-week hand-off, Ask Us and back, focus at each step, no horizontal scroll, no hand-off at 1024. The `palefire.js` and `utility-panels.js` hooks were exercised by repeating their calls by hand, since the live copies of those scripts were on the test page. Why: moving the utility menu into the dock would put it at the bottom on some pages and the top on others (WCAG 3.2.3); hand-offs give Hours and Ask a bottom-edge door without that (Hill Dock artifact, section 12).
 - **Mobile dock on Special Collections pages (phase 1).** Below 768px, a frosted dock at the bottom of the screen: Hill's hours (state, library name, next change, today's bar; tap for the week), the section's or page's action (Find a room, All publications, Call desk on /v2/special; Order copies, Directions, Request the Lecture Hall on their pages), and Contents (a progress ring with the printed section number; tap for the TOC). Grabber or swipe to hide, a corner tab to show; Escape, close and a tap outside collapse a panel; focus stays clear of the dock (`scroll-padding-bottom`, a `focusin` check); the dock steps aside for the on-screen keyboard and goes inert under the menu and drawers. Replaces the old "On this page" square below md. New: `includes/dock.html.twig`, `js/dock.js`, `_dock.scss`, library `palefire/dock`, `PalefireHooks::dock()`/`dockActions()`/`isSpecialPage()`, `data-pf-dock` on `<html>` (synced by Swup; entering a dock page from one without it is a full load), `data-pf-float-toolbar` (head script: Safari 26+ on iPhone, whose toolbar floats over the page), `viewport-fit=cover` on dock pages, `id="rooms-and-access"` on the keyed map key, `Drupal.palefireHours.specFor`/`window`, and the breadcrumb's section button handing off to the dock. Section actions travel in the page's JSON keyed by TOC anchor rather than as `data-pf-dock-action` on sections, so section templates stay untouched. The glass is 90%, not the drawers' 65% / 30%: with no wash under it, the drawers' tint drops muted text to 1.0:1 over white on the dark swatches; 90% keeps it 4.56:1 and up on every swatch. Checked on copies of the live /v2/special and duplication guide with the local CSS and JS (Twilight and Cream) at 320, 390, 667 landscape, 768 and 1024: no horizontal scroll, panels, Escape, focus return, hide and show, actions per section, ring numbers matching the printed ones. Not checked: a real iPhone (toolbar spacing, notch padding, swipe), Drupal rendering, PHP lint, FA Pro icons (served only on the server). Why: on phones the hours, the next step and the page's contents should be one thumb away.
 
 ### 2026-10-31

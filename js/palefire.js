@@ -514,6 +514,16 @@
             return;
           }
           event.preventDefault();
+          // On phones with the mobile dock, Hours is the dock's week: the
+          // menu closes and the dock opens it (dock.js).
+          if (panel.id === 'pf-panel-hours' && Drupal.palefireDock && Drupal.palefireDock.openHours()) {
+            const menu = document.getElementById('pf-primary-menu');
+            const menuDrawer = menu && window.bootstrap.Offcanvas.getInstance(menu);
+            if (menuDrawer) {
+              menuDrawer.hide();
+            }
+            return;
+          }
           openOverMenu(panel, tile);
         });
       });

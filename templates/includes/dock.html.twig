@@ -45,6 +45,12 @@
         <a class="pf-dock__link" href="https://lsu.libcal.com/hours" target="_blank" rel="noopener" data-pf-dock-full>
           {{- 'See full hours'|t -}}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
         </a>
+        {# The utility menu's Ask drawer (js/dock.js shows it when the page
+           has one). #}
+        <button class="pf-dock__ask" type="button" aria-controls="pf-panel-ask" data-pf-dock-ask hidden>
+          <span class="pf-dock__action-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/comments-alt.svg', ignore_missing = true)|raw }}</span>
+          {{- 'Ask Us'|t -}}
+        </button>
       </div>
     </div>
 

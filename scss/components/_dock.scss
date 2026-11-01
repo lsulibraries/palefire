@@ -460,7 +460,43 @@ html[data-pf-dock] .offcanvas {
 
   .pf-dock__links {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
     padding: 6px 0 4px;
+  }
+
+  // Ask Us: an accent pill like the row's action, opening the Ask drawer.
+  .pf-dock__ask {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 14px 16px;
+    color: var(--pf-dock-on-accent);
+    font: inherit;
+    font-size: .8125rem;
+    font-weight: 700;
+    background: var(--pf-dock-accent);
+    border: 0;
+    border-radius: 22px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+
+    svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
   }
 
   .pf-dock__link {
@@ -605,7 +641,8 @@ html[data-pf-dock] .offcanvas {
       border-color: CanvasText;
     }
 
-    .pf-dock__action {
+    .pf-dock__action,
+    .pf-dock__ask {
       border: 1px solid ButtonText;
     }
   }

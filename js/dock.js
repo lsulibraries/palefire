@@ -93,6 +93,12 @@
       contents: dock.querySelector('[data-pf-dock-panel="contents"]'),
     };
     const openers = { hours: status, contents: tocButton };
+    const ask = dock.querySelector('[data-pf-dock-ask]');
+    const askPanel = document.getElementById('pf-panel-ask');
+    // A panel to open once the menu has closed, and whether closing the Ask
+    // drawer comes back to the week.
+    let pending = null;
+    let askBack = false;
 
     let config = null;
     let configText = '';
@@ -805,15 +811,51 @@
     });
 
     // The menu and the drawers cover the dock: out of reach while open.
-    document.addEventListener('show.bs.offcanvas', () => {
+    document.addEventListener('show.bs.offcanvas', (event) => {
+      // Not when the Hours drawer handed its opening to the dock.
+      if (event.defaultPrevented) {
+        return;
+      }
       covered = true;
       closePanel(false, true);
       syncInert();
     });
-    document.addEventListener('hidden.bs.offcanvas', () => {
+    document.addEventListener('hidden.bs.offcanvas', (event) => {
       covered = !!document.querySelector('.offcanvas.show, .offcanvas.showing');
       syncInert();
+      if (covered) {
+        return;
+      }
+      // The menu's Hours tile closed the menu to open the week here.
+      if (pending) {
+        const name = pending;
+        pending = null;
+        openPanel(name, openers[name]);
+      }
+      // Back from the Ask drawer opened from the week: the week again,
+      // focus on Ask Us (as the menu takes its tile back, palefire.js).
+      else if (askBack && event.target === askPanel) {
+        askBack = false;
+        openPanel('hours', status);
+        ask.focus({ preventScroll: true });
+      }
     });
+
+    // Ask Us in the week: the utility menu's Ask drawer (LibAnswers).
+    if (ask && askPanel && window.bootstrap) {
+      ask.hidden = false;
+      ask.addEventListener('click', () => {
+        closePanel(false, true);
+        askBack = true;
+        window.bootstrap.Offcanvas.getOrCreateInstance(askPanel).show(ask);
+      });
+      // Leaving for a link inside the drawer: don't reopen the week.
+      askPanel.addEventListener('click', (event) => {
+        if (event.target.closest('a[href]')) {
+          askBack = false;
+        }
+      });
+    }
 
     document.addEventListener('palefire:sectionchange', () => {
       queueFrame();
@@ -862,6 +904,22 @@
         openPanel('contents', opener);
         return true;
       },
+      // The utility menu's Hours (palefire.js, utility-panels.js): the
+      // week here instead of the Hours drawer. Under the open menu, it
+      // opens once the menu has closed; focus lands on its close button
+      // and returns to the status.
+      openHours() {
+        if (!config || MD.matches) {
+          return false;
+        }
+        if (covered) {
+          pending = 'hours';
+        }
+        else {
+          openPanel('hours', status);
+        }
+        return true;
+      },
     };
   }
 
@@ -869,6 +927,7 @@
 
   Drupal.palefireDock = {
     openContents: (opener) => !!api && api.openContents(opener),
+    openHours: () => !!api && api.openHours(),
   };
 
   Drupal.behaviors.palefireDock = {

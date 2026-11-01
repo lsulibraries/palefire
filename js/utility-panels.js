@@ -473,6 +473,13 @@
           const key = panel.dataset.pfPanel;
 
           panel.addEventListener('show.bs.offcanvas', (event) => {
+            // On phones with the mobile dock, Hours opens the dock's week
+            // instead (dock.js). Over the menu, palefire.js has decided.
+            if (key === 'hours' && !ROOT.classList.contains('pf-over-menu')
+              && Drupal.palefireDock && Drupal.palefireDock.openHours()) {
+              event.preventDefault();
+              return;
+            }
             ROOT.dataset.pfPanel = key;
             const trigger = event.relatedTarget;
             const cta = panel.querySelector('[data-pf-panel-href]');
