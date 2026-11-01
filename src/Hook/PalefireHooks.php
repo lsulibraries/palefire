@@ -103,6 +103,22 @@ class PalefireHooks {
   private const NOT_FOUND_SAMPLE = '/v2/special/exhibitons';
 
   /**
+   * The 404 page's quips, when its page (NOT_FOUND_PREVIEW) has none.
+   *
+   * Editors keep the pool in that page's Intro field, one quip a line
+   * (notFoundQuips()).
+   */
+  private const NOT_FOUND_QUIPS = [
+    'Please do not touch the glass',
+    'Temporarily off view',
+    'Out for conservation',
+    'Provenance unknown',
+    'Gallery closed for reinstallation',
+    'Possibly misshelved',
+    'Last seen in the reading room',
+  ];
+
+  /**
    * Routes that show a node as its page.
    *
    * The node's own page, its latest revision, and the edit form's Preview
@@ -200,6 +216,9 @@ class PalefireHooks {
     $variables['landing_toc'] = NULL;
     $variables['guide_head'] = NULL;
     $variables['exhibit_head'] = NULL;
+    // Guides keep the breadcrumb in their head; every other page has it in
+    // the sub-header bar (page.html.twig).
+    $variables['modular_guide'] = FALSE;
 
     // Footer: Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the
     // pages under them, the Main Library everywhere else
@@ -235,6 +254,8 @@ class PalefireHooks {
     // A Landing hero with its lead panel prints the breadcrumb at the top of
     // the panel instead (crumbInLanding()), so the head leaves it out.
     $variables['modular_crumb_in_landing'] = self::crumbInLanding($node);
+
+    $variables['modular_guide'] = self::stringValue($node, 'field_modular_type') === 'guide';
 
     // Guide mode: intro, owner, updated date and subjects under the <h1>.
     if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'guide') {
@@ -315,8 +336,9 @@ class PalefireHooks {
    *
    * The path that was asked for (on the preview, NOT_FOUND_SAMPLE), its
    * last segment as words for the search field ("/v2/special/exhibitons"
-   * searches "exhibitons"), and the links out. Every page with this
-   * template varies by path already (footer_cache).
+   * searches "exhibitons"), the quips (notFoundQuips()), and the links
+   * out. Every page with this template varies by path already
+   * (footer_cache).
    */
   private function notFound(string $alias): array {
     $path = $alias === self::NOT_FOUND_PREVIEW
@@ -327,8 +349,11 @@ class PalefireHooks {
     if (ctype_digit(str_replace(' ', '', $words))) {
       $words = '';
     }
+    [$quips, $quips_cache] = self::notFoundQuips();
     return [
       'path' => Unicode::truncate($path, 120, FALSE, TRUE),
+      'quips' => $quips,
+      'quips_cache' => $quips_cache,
       'query' => Unicode::truncate($words, 60, TRUE),
       'links' => [
         ['label' => (string) $this->t('Special Collections'), 'note' => (string) $this->t('Hill Memorial Library'), 'url' => self::SPECIAL_ROOT],
@@ -337,6 +362,50 @@ class PalefireHooks {
         ['label' => (string) $this->t('Ask a librarian'), 'url' => 'https://askus.lib.lsu.edu/'],
       ],
     ];
+  }
+
+  /**
+   * The quips over the 404 page's <h1>, and their cache render array.
+   *
+   * Editors write them in the Intro field of the page at NOT_FOUND_PREVIEW,
+   * one a line (or a paragraph each), published or not; NOT_FOUND_QUIPS
+   * when it has none. js/not-found.js shows one at random on each visit,
+   * as the page itself is cached. The page's cache tag goes with them, so
+   * saving it updates every 404.
+   *
+   * @return array
+   *   The quips (at most 50, 80 characters each), and a render array that
+   *   only carries the cache tag.
+   */
+  private static function notFoundQuips(): array {
+    $quips = [];
+    $cache = new CacheableMetadata();
+    $path = Drupal::service('path_alias.manager')->getPathByAlias(self::NOT_FOUND_PREVIEW);
+    if (preg_match('#^/node/(d+)$#', $path, $m)) {
+      $node = Drupal::entityTypeManager()->getStorage('node')->load($m[1]);
+      if ($node instanceof NodeInterface) {
+        $cache->addCacheableDependency($node);
+        if ($node->hasField('field_intro')) {
+          $text = (string) $node->get('field_intro')->value;
+          $text = (string) preg_replace('#<(br|/p|/li|/hd|/div)[^>]*>#i', "
+", $text);
+          $text = Html::decodeEntities(strip_tags($text));
+          foreach (preg_split('/R/u', $text) as $line) {
+            $line = trim((string) preg_replace('/s+/u', ' ', $line));
+            if ($line !== '') {
+              $quips[] = Unicode::truncate($line, 80, TRUE, TRUE);
+            }
+          }
+        }
+      }
+    }
+    else {
+      // Made later (scripts/palefire_404_preview.php): look again then.
+      $cache->addCacheTags(['node_list']);
+    }
+    $render = [];
+    $cache->applyTo($render);
+    return [array_slice(array_values(array_unique($quips)) ?: self::NOT_FOUND_QUIPS, 0, 50), $render];
   }
 
   /**
