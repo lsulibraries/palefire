@@ -1791,17 +1791,17 @@ html.pf-a11y-motion .pf-tiles:not([data-pf-view="list"]) :is(.pf-tile__media, .p
 }
 
 // Reveal on scroll (js/tile-reveal.js), as on the Origami concept page --------
-// The hidden state only exists under .pf-tiles--reveal, which the script
+// The waiting state (at $pf-reveal-from, readable) only exists under .pf-tiles--reveal, which the script
 // adds when motion is allowed, so without JS (or with reduced motion) the
 // cards are simply there. The card (.pf-tile) moves; its <li> stays put, so
 // the observer watching the <li> never sees the card move out of view.
 // Hiding (scrolled away) is instant; showing waits --pf-reveal-delay
 // (the script staggers cards 50ms apart).
 .pf-tiles--reveal .pf-tiles__item {
-  --pf-reveal-from: 30px; // grid: rise from below
+  --pf-reveal-from: 16px; // grid: rise from below
 
   > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
-    opacity: 0;
+    opacity: $pf-reveal-from;
     transform: translateY(var(--pf-reveal-from));
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   }
@@ -1813,12 +1813,12 @@ html.pf-a11y-motion .pf-tiles:not([data-pf-view="list"]) :is(.pf-tile__media, .p
   }
 }
 
-// Stagger: odd cards rise from 50px below, even cards drop from 50px above.
+// Stagger: odd cards rise from 24px below, even cards drop from 24px above.
 .pf-tiles--reveal.pf-tiles--stagger .pf-tiles__item {
-  --pf-reveal-from: 50px;
+  --pf-reveal-from: 24px;
 
   &:nth-child(even) {
-    --pf-reveal-from: -50px;
+    --pf-reveal-from: -24px;
   }
 }
 

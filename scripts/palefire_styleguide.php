@@ -218,7 +218,7 @@ HTML),
 
 $gallery('Motion', 'motion', [
   $text(<<<'HTML'
-<p>Movement is slow, eased and brief: colour arrives quickly and leaves slowly, pages fade and rise, exhibition images settle or are drawn by a curtain. Nothing depends on it. The system setting and Settings &gt; Reduce motion stop all of it.</p>
+<p>Movement is slow, eased and brief: colour arrives quickly and leaves slowly, pages rise into place, exhibition images settle or are drawn by a curtain. Nothing depends on it, and nothing waits hidden: a page title is at full strength from the first frame, and what reveals on scroll starts at 85% and only brightens. The system setting and Settings &gt; Reduce motion stop all of it.</p>
 <p>[styleguide:motion]</p>
 HTML),
 ]);

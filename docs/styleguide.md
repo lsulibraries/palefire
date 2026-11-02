@@ -72,6 +72,9 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Colour arrives fast (`$pf-hover-in`) and leaves slowly (`$pf-hover-out`).
   - Decorative motion sits behind `prefers-reduced-motion: no-preference`
     and `html:not(.pf-a11y-motion)`.
+  - Nothing waits hidden. Page titles (the LCP) only move, at full opacity
+    from the first frame; scroll reveals start at `$pf-reveal-from` (.85),
+    never 0.
 - **Accessibility:**
   - WCAG 2.2 AA in every reading colour.
   - Visible `:focus-visible` ring (3px, 2px offset).
@@ -131,6 +134,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Motion: no page fade (`base/_fade.scss` no longer holds the body at 0.01 until `.pf-ready`; `.pf-ready` is gone). The entrance (`_entrance.scss`) and the hero banners' rise key on `html.pf-fade` and run from the first paint; `pf-enter-title` rises 1rem at full opacity. New token `$pf-reveal-from` (.85): the waiting state of `.pf-reveal` (headings, now -.75rem), `.pf-paths--reveal` stops, `.pf-tiles--reveal` cards (16px, stagger ±24px) and the events carousel's parts. Location map chip (`.pf-location__plate`) hides once the footer reaches the screen's lowest eighth.
 - **2026-11-02:** Buttons: pressed state, mixin `pf-button-pressed` (`_buttons.scss`): `:active` lays an inset `box-shadow` of `currentColor` at 14% over the button, on at once, fading out over `$pf-hover-out`; `-webkit-tap-highlight-color: transparent`. In `%pf-button` and in the buttons with their own rules (`.pf-quick-guide__link`, the cover's `.pf-visit__link`, `.pf-inquiry__button`/`__submit`), which add `box-shadow` to their transition.
 - **2026-11-02:** Visit panel buttons (`.pf-landing--cover .pf-visit__link`): full column width below `@container pf-cover (64rem)`, stacked, .75rem from the rule or map above, .5rem apart; phones put 2rem between hours and map. From 64rem they keep `min(100%, 17.5rem)`.
 - **2026-11-02:** Location top: the policy marks and their tooltips (`.pf-space-pin*`, `js/location-pins.js`, library `palefire/location-pins`) are replaced by Need to know (`.pf-location__need*`): a mono label in the accent over ruled rows, each a mark in the accent, a label and a muted detail. Up to three: the room's Required policies less those its access says (`PALEFIRE_ACCESS_POLICY_KEYS`), and Fees apply for an Event rental (`_palefire_location_need_to_know()`). Stacked at every width.

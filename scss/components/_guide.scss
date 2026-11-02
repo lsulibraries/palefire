@@ -999,8 +999,8 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   }
 }
 
-// As each option comes into view, its stops fade up one after another and
-// the line draws between them, once per page load: js/section-reveal.js
+// As each option comes into view, its stops come up one after another
+// (from $pf-reveal-from, never hidden) and the line draws between them, once per page load: js/section-reveal.js
 // marks the list .pf-paths--reveal, then each option .is-revealed. Without
 // the script, or with reduced motion (it adds nothing then), the diagram
 // simply shows.
@@ -1010,7 +1010,7 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
 
 .pf-paths--reveal {
   .pf-paths__stop {
-    opacity: 0;
+    opacity: $pf-reveal-from;
     transform: translateY(0.5rem);
 
     &:not(:last-child)::before {

@@ -237,17 +237,18 @@ html.pf-snap-proximity .pf-section--snap {
   }
 }
 
-// Section headings (h2) slide in from the left as they fade in, each time
-// they scroll into view (js/section-reveal.js adds .pf-reveal, then
-// .is-revealed while in view). Hiding, out of view, is instant; showing
+// Section headings (h2) slide in from the left as they come up to full
+// opacity, once, as they scroll into view (js/section-reveal.js adds
+// .pf-reveal, then .is-revealed). They wait at $pf-reveal-from, readable,
+// never hidden: a jump, a search hit or a magnifier lands on words. Showing
 // takes .6-.7s. The slide is `translate`, so it never fights a heading's
 // own transform. (The hero's map heading stays still: there only the map's
 // drawing reveals itself.) Not on guides (the
 // script leaves their headings alone). Without the script, or with reduced
 // motion, there is no .pf-reveal: headings simply show.
 .pf-reveal {
-  opacity: 0;
-  translate: -1.5rem 0;
+  opacity: $pf-reveal-from;
+  translate: -.75rem 0;
 
   &.is-revealed {
     opacity: 1;

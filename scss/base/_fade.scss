@@ -1,31 +1,11 @@
-// Page fade-in. The .pf-fade / .pf-ready classes are set by the inline script
-// in html.html.twig. Without JS, or with reduced motion, nothing is hidden.
-
-@keyframes pf-reveal {
-  to { opacity: 1; }
-}
-
-// Just above 0, which looks the same: Chrome never counts content first
-// painted at opacity 0 as the Largest Contentful Paint, so a body at 0
-// left LCP to whatever repainted after the reveal (a TOC link).
-.pf-fade body {
-  opacity: 0.01;
-}
-
-// Failsafe: reveal after 3s even if DOMContentLoaded never fires.
-.pf-fade:not(.pf-ready) body {
-  animation: pf-reveal 0s 3s forwards;
-}
-
-.pf-fade.pf-ready body {
-  opacity: 1;
-  transition: opacity $pf-fade-duration ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .pf-fade body {
-    opacity: 1 !important;
-    transition: none !important;
-    animation: none !important;
-  }
-}
+// Page arrival. The inline script in html.html.twig sets .pf-fade on <html>
+// when motion is allowed (not with reduced motion or the Settings drawer's
+// switch), and .pf-ready a frame after DOMContentLoaded.
+//
+// Nothing is hidden: the body paints at full opacity from its first frame.
+// It used to start at 0.01 and fade in once .pf-ready came, which held the
+// whole page, the <h1> (Largest Contentful Paint) with it, behind a script
+// and an animation frame; a tab opened in the background gets no frames,
+// so it stayed dim until it was looked at. The arrival is the entrance
+// sequence (_entrance.scss), which now starts with the first paint, and
+// the <h1> in it only moves, at full opacity.

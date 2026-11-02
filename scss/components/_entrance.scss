@@ -6,12 +6,12 @@
 // retimed here to follow the search). The cover video settles from a
 // slight push-in under all of it.
 //
-// CSS only. It starts with the page fade (base/_fade.scss): until
-// html.pf-ready the body is all but clear, so nothing would be seen. If
-// the fade never readies (its 3s failsafe), no rule here applies and all
-// is in place, as without JS or with reduced motion (the script then sets
-// no .pf-fade). The header sits outside #swup, so it comes in once per full
-// load; the hero's parts run again when Swup brings the page in.
+// CSS only, from the first paint: it keys on html.pf-fade, which the head
+// script sets before the body is drawn (base/_fade.scss), so it waits on no
+// script or animation frame. Without JS or with reduced motion (the script
+// then sets no .pf-fade) no rule here applies and all is in place. The
+// header sits outside #swup, so it comes in once per full load; the hero's
+// parts run again when Swup brings the page in.
 //
 // Opacity and the individual translate/scale properties only, filled
 // backwards: nothing is held after the end, so hover transforms and the
@@ -21,7 +21,7 @@
 // switch.
 
 $pf-enter-ease: $pf-swup-ease-in;
-$pf-enter-on: 'html.pf-ready:not(.pf-a11y-motion)';
+$pf-enter-on: 'html.pf-fade:not(.pf-a11y-motion)';
 $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
 
 @keyframes pf-enter {
@@ -31,12 +31,11 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
-// The title: from just above 0, not 0, so Chrome still counts it as the
-// Largest Contentful Paint (see base/_fade.scss).
+// The title only rises, at full opacity from the first frame: it is the
+// Largest Contentful Paint, which a fade would hold back.
 @keyframes pf-enter-title {
   from {
-    opacity: .01;
-    translate: 0 1.5rem;
+    translate: 0 1rem;
   }
 }
 

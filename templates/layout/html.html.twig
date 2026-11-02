@@ -108,9 +108,6 @@
         }
         if (s.motion || (w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches)) { return; }
         h.classList.add('pf-fade');
-        d.addEventListener('DOMContentLoaded', function () {
-          w.requestAnimationFrame(function () { h.classList.add('pf-ready'); });
-        });
       })(document, window);
     </script>
     <css-placeholder token="{{ placeholder_token }}">

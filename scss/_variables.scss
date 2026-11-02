@@ -64,7 +64,8 @@ $pf-content-max:     1280px; // Landing search form + building map cap; the page
 // control keep --pf-section-border (WCAG 1.4.11).
 $pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
-$pf-fade-duration:   .45s; // Page fade-in duration.
+$pf-fade-duration:   .45s; // Fade duration (the style guide's motion specimen).
+$pf-reveal-from:     .85;  // Scroll reveals start at this opacity, never 0: content is readable before it moves.
 $pf-swup-out:        .2s;  // Swup visit: the page's content fades out.
 $pf-swup-in:         .35s; // Swup visit: the next page's content fades and rises in.
 $pf-swup-ease-in:    cubic-bezier(.22, 1, .36, 1); // Fast start, soft landing.

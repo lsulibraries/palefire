@@ -3,10 +3,11 @@
  * Tile showcase cards animate in as they scroll into view, as on the
  * Origami concept page (/concept/special, ScrollReveal in Origami's
  * custom.js):
- * - stagger: odd cards rise from 50px below, even cards drop from 50px
+ * - stagger: odd cards rise from 24px below, even cards drop from 24px
  *   above, 100ms after entering, 50ms apart;
- * - grid: cards rise from 30px below, 50ms apart.
- * 500ms, ease-out, from opacity 0. Once per page load: a card that has
+ * - grid: cards rise from 16px below, 50ms apart.
+ * 500ms, ease-out, from $pf-reveal-from (.85), never from 0: a card is
+ * readable before it moves (the Origami concept faded from 0). Once per page load: a card that has
  * come in stays (the concept replayed it each time it came back).
  *
  * No ScrollReveal: one IntersectionObserver per card list. Cards that enter
@@ -16,7 +17,7 @@
  *
  * Off entirely (cards simply shown) for prefers-reduced-motion, for the
  * Settings drawer's "Reduce motion" (html.pf-a11y-motion), and without
- * IntersectionObserver. Without JS nothing is hidden: the hidden state needs
+ * IntersectionObserver. Without JS nothing waits: the waiting state needs
  * .pf-tiles--reveal, which only this script adds. A card that receives
  * keyboard focus is shown at once (WCAG 2.4.7). Styles: _tile-showcase.scss.
  */

@@ -4,14 +4,14 @@
  * page load: revealed, they stay (as the Collections tiles do,
  * js/tile-reveal.js).
  * - Section headings (h2: .pf-section__title) slide in from the left as
- *   they fade in. Not on guides
+ *   they come up from $pf-reveal-from (.85) to full opacity. Not on guides
  *   (<html data-pf-mode="guide">): their headings stay still.
  * - The Events carousel (libcal_gantt_carousel, inside .pf-events-carousel):
  *   once a fifth of it is in view, its day strip, then each day's label,
- *   date, weather, hours and image card fade in and rise into place one
+ *   date, weather, hours and image card brighten and rise into place one
  *   after another.
  * - Request paths (includes/guide-request-paths.html.twig): as each option
- *   comes into view, its stops fade up one after another and the line
+ *   comes into view, its stops rise one after another and the line
  *   draws between them (.pf-paths--reveal, _guide.scss).
  *
  * One IntersectionObserver for each kind. The observed element never moves
@@ -20,7 +20,7 @@
  * observed carousel. Off (everything simply shown) for
  * prefers-reduced-motion, the Settings drawer's "Reduce motion"
  * (html.pf-a11y-motion) and without IntersectionObserver; without JS
- * nothing is hidden: the hidden states need .pf-reveal / .pf-ev-reveal,
+ * nothing waits: the waiting states (at $pf-reveal-from, never hidden) need .pf-reveal / .pf-ev-reveal,
  * which only this script adds. Anything that receives keyboard focus, or
  * that a TOC link jumps to, is shown at once. Styles: _modular.scss,
  * _events-carousel.scss.

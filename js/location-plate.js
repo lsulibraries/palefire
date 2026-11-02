@@ -5,9 +5,9 @@
  *
  * Draws a miniature of the page's building map (its outlines, and the
  * room marked "here" filled) into the chip, shows it, and marks the page
- * .is-past-map while the map is above the window and the room's section is
- * still in view; CSS then shows the chip at the bottom of the screen
- * (_location.scss).
+ * .is-past-map while the map is above the window and the room's sections
+ * still fill the foot of the screen, where the chip sits; CSS then shows
+ * the chip there (_location.scss).
  */
 (function (Drupal, once) {
   const NS = 'http://www.w3.org/2000/svg';
@@ -81,11 +81,15 @@
           update();
         }, { rootMargin: '0px 0px 100000px 0px' }).observe(map);
         // The page's sections (the room's parts follow its Location section
-        // as sections of their own): hidden again at the footer.
+        // as sections of their own), watched across the screen's lowest
+        // eighth only: hidden once the footer rises into it. The footer
+        // is a sticky curtain, always within the window behind the page,
+        // so it can't be watched itself. (Watched across the whole window,
+        // the chip sat on the footer's copyright line.)
         new IntersectionObserver(([entry]) => {
           inView = entry.isIntersecting;
           update();
-        }).observe(page.closest('.pf-sections') || page);
+        }, { rootMargin: '-88% 0px 0px 0px' }).observe(page.closest('.pf-sections') || page);
       });
     },
   };

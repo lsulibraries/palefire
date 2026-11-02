@@ -361,7 +361,7 @@
 
 // --- Reveal ---------------------------------------------------------------
 // Once a fifth of the carousel is in view (js/section-reveal.js adds
-// .pf-ev-reveal, then .is-revealed), its parts fade in and rise 1rem into
+// .pf-ev-reveal, then .is-revealed), its parts come up from $pf-reveal-from and rise 1rem into
 // place one after another: the day strip, then for each day its label,
 // date, weather, hours and image card or list (70ms apart), each day
 // starting 140ms after the one before. They hide again, at once, when the
@@ -407,7 +407,7 @@
   }
 
   :is(.libcal-day-carousel__toolbar, .libcal-day__eyebrow, .libcal-day__date, .libcal-day__weather, .libcal-day__hours, .libcal-day__main, .libcal-day__fact) {
-    opacity: 0;
+    opacity: $pf-reveal-from;
     transform: translateY(1rem);
   }
 
