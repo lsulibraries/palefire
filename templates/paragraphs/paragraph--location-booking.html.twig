@@ -11,6 +11,8 @@
  *   it has no subheads. When each step opens with a bold name, steps.items
  *   holds them for includes/steps.html.twig (steps, and rest: the text
  *   around the list); otherwise NULL and the steps print as written.
+ * - booking.contact: the room's person to ask, beside the button, or NULL
+ *   (includes/location-contact.html.twig).
  * - booking.link: url and title (the button), or NULL. Beside a Location
  *   section, the top's link when the section has none.
  * - booking.capacity: the room's Capacity (about, value), or NULL.
@@ -45,10 +47,13 @@
       {% elseif booking.body %}
         {{ booking.body }}
       {% endif %}
-      {% if booking.link %}
-        <p class="pf-location__actions">
-          <a class="pf-location__cta" href="{{ booking.link.url }}">{{ booking.link.title }}</a>
-        </p>
+      {% if booking.link or booking.contact %}
+        <div class="pf-location__actions">
+          {% if booking.link %}
+            <a class="pf-location__cta" href="{{ booking.link.url }}">{{ booking.link.title }}</a>
+          {% endif %}
+          {% include '@palefire/includes/location-contact.html.twig' with { contact: booking.contact } only %}
+        </div>
       {% endif %}
       {% if booking.parts.groups %}
         <div class="pf-booking__groups">

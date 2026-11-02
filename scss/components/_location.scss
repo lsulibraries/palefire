@@ -120,7 +120,31 @@
   > :last-child { margin-bottom: 0; }
 }
 
-.pf-location__actions { margin: 1.5rem 0 0; }
+// The button, then the person to ask beside it (under it when there is
+// no room: includes/location-contact.html.twig).
+.pf-location__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+  margin: 1.5rem 0 0;
+}
+
+.pf-location__contact {
+  flex: 1 1 14rem;
+  max-width: 28rem;
+  margin: 0;
+  font-size: .9375rem;
+  line-height: 1.45;
+  color: var(--pf-location-muted, var(--pf-section-muted, var(--bs-secondary-color)));
+
+  a {
+    color: var(--pf-location-fg, var(--bs-body-color));
+    text-underline-offset: .2em;
+  }
+}
+
+.pf-location__contact-sep { margin-inline: .375rem; }
 
 // The map: the drawing alone (map.no_key: no legend or space list; the room
 // is lit and marked), its own queries switching on its column. Its
@@ -523,7 +547,7 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 @container pf-location (min-width: 30rem) {
   .pf-location__facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-// From 40rem, one row with a column per fact (three to five), so none sits
+// From 40rem, one row with a column per fact (two to six), so none sits
 // alone on a second row.
 @container pf-location (min-width: 40rem) {
   .pf-location__facts {
@@ -538,6 +562,10 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     grid-auto-flow: row;
   }
 
+  // Six facts (a room's details): six equal columns, so none wraps alone.
+  .pf-location__facts:has(> :nth-child(6)) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
 // --- The parts: sections of their own -------------------------------------
@@ -702,6 +730,14 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
     color: var(--pf-location-fg);
     border-top: 1px solid var(--pf-location-line);
   }
+}
+
+// A layout's seats ("xx seats", the room's detail named as the photo),
+// under its name in the muted tone.
+.pf-location__photo-note {
+  display: block;
+  margin-top: .25rem;
+  color: var(--pf-location-muted);
 }
 
 // Visit: the strip's hours without its frame or its Google map (the

@@ -5,8 +5,10 @@
  *
  * Variables from palefire_preprocess_paragraph__location_space():
  * - location: the room (_palefire_location_data()): title, building, floor,
- *   access, sound, sound_level, capacity, body, link, policies,
- *   need_to_know (_palefire_location_need_to_know()); map (the
+ *   access, sound, sound_level, capacity, body, link, policies, details
+ *   (label, value: the room's own facts, "Wi-Fi: eduroam"), contact (the
+ *   person to ask, or NULL), need_to_know (_palefire_location_need_to_know());
+ *   notice, price; map (the
  *   building map with the room marked "here", or NULL when the building has
  *   no drawing yet); backdrop (the photo behind the top, or '').
  * - visit: the page's hours (field_hours_location and the rest), for
@@ -34,10 +36,12 @@
  * The rest of the page is sections of their own, numbered and banded as
  * /v2/special's (Location: photos, hours and directions, house rules,
  * booking; their index rules from _palefire_location_index()), so each is
- * in the TOC. Each fact is said once on the page: sound and capacity here
- * (so not in House rules' meter or Booking's ledger), the required policies
- * in House rules (so not again in Booking). Need to know repeats up to
- * three of them at the top, on purpose: what decides whether to come.
+ * in the TOC. Each fact is said once on the page: sound, capacity, notice
+ * and price here (so not in House rules or Booking's ledger), the other
+ * requirements in Need to know (so House rules keeps only the rest).
+ * A walk-in room (Quiet Study) reads in one screen: its policies are
+ * listed here as House rules, with their marks, and its parts after this
+ * one go unnumbered, with no House rules part (_palefire_location_index()).
  *
  * The chip: once the building map has scrolled away, a small copy of it
  * (the room in the accent) sits at the bottom of the screen, a link back
@@ -97,11 +101,11 @@
                room's policies are in House rules. #}
             {% if location.need_to_know %}
               <div class="pf-location__need">
-                <p class="pf-location__need-title" id="{{ location.uid }}-need">{{ 'Need to know'|t }}</p>
+                <p class="pf-location__need-title" id="{{ location.uid }}-need">{{ location.access == 'walk_in' ? 'House rules'|t : 'Need to know'|t }}</p>
                 <ul class="pf-location__need-list" aria-labelledby="{{ location.uid }}-need">
                   {% for item in location.need_to_know %}
                     <li class="pf-location__need-item">
-                      {% include '@palefire/includes/space-icon.html.twig' with { icon: item.icon, state: 'required' } only %}
+                      {% include '@palefire/includes/space-icon.html.twig' with { icon: item.icon, state: item.state } only %}
                       <span class="pf-location__need-label">{{ item.label }}</span>
                       {% if item.detail %}<span class="pf-location__need-detail">{{ item.detail }}</span>{% endif %}
                     </li>
@@ -109,10 +113,13 @@
                 </ul>
               </div>
             {% endif %}
-            {% if location.link %}
-              <p class="pf-location__actions">
-                <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
-              </p>
+            {% if location.link or location.contact %}
+              <div class="pf-location__actions">
+                {% if location.link %}
+                  <a class="pf-location__cta" href="{{ location.link.url }}">{{ location.link.title }}</a>
+                {% endif %}
+                {% include '@palefire/includes/location-contact.html.twig' with { contact: location.contact } only %}
+              </div>
             {% endif %}
           </div>
 
@@ -125,8 +132,9 @@
 
         <div class="pf-location__ledger">
           {#
-            Access, Capacity, Sound, then Price and Notice where the room has
-            them. Building and floor are in the kicker over the title.
+            Access, Capacity (Seats for a walk-in room), Sound, then Price and
+            Notice where the room has them, then its details (Wi-Fi, Outlets).
+            Building and floor are in the kicker over the title.
           #}
           <dl class="pf-location__facts">
             <div class="pf-location__fact">
@@ -135,7 +143,7 @@
             </div>
             {# Plain numbers as "~100" (screen readers: "about 100"). #}
             {% if location.capacity %}
-              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.capacity } only %}</span></dd></div>
+              <div class="pf-location__fact"><dt>{{ location.access == 'walk_in' ? 'Seats'|t : 'Capacity'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.capacity } only %}</span></dd></div>
             {% endif %}
             {% if location.sound_level %}
               <div class="pf-location__fact">
@@ -149,6 +157,9 @@
             {% if location.notice %}
               <div class="pf-location__fact"><dt>{{ 'Notice'|t }}</dt><dd>{{ location.notice }}</dd></div>
             {% endif %}
+            {% for detail in location.details %}
+              <div class="pf-location__fact"><dt>{{ detail.label }}</dt><dd>{{ detail.value }}</dd></div>
+            {% endfor %}
           </dl>
         </div>
       </div>

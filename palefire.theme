@@ -1316,9 +1316,11 @@ function _palefire_location_room(ParagraphInterface $paragraph): ?TermInterface 
  *   or NULL), access (walk_in | appointment | rental) and access_kind (key,
  *   label, icon, hatch), sound, sound_level (0-3), capacity and area (each
  *   about, value: _palefire_space_about(); area in square feet), body (the
- *   room's description, rendered), link (url, title or NULL) and policies:
+ *   room's description, rendered), link (url, title or NULL), policies:
  *   label, detail, state (allowed | required | not_allowed), icon, in the
- *   room's order.
+ *   room's order, details (field_space_details, "Label: value" lines: label,
+ *   value) and contact (field_space_contact, a Staff page: name, url,
+ *   title, email, phone, phone_href; or NULL).
  */
 function _palefire_location_data(TermInterface $room, CacheableMetadata $cache): array {
   $cache->addCacheableDependency($room);
@@ -1362,6 +1364,19 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
   $capacity = $string('field_space_capacity');
   $area = (int) $string('field_space_area');
   $description = $room->get('description');
+  $details = [];
+  foreach ($room->hasField('field_space_details') ? $room->get('field_space_details') : [] as $line) {
+    [$label, $value] = array_map('trim', explode(':', (string) $line->value, 2)) + ['', ''];
+    if ($label !== '' && $value !== '') {
+      $details[] = ['label' => $label, 'value' => $value];
+    }
+  }
+  $contact = NULL;
+  $person = $room->hasField('field_space_contact') ? $room->get('field_space_contact')->entity : NULL;
+  if ($person instanceof NodeInterface && $person->isPublished() && $person->access('view')) {
+    $row = StaffDirectory::row(\Drupal::service('entity.repository')->getTranslationFromContext($person), $cache);
+    $contact = array_intersect_key($row, array_flip(['name', 'url', 'title', 'email', 'phone', 'phone_href']));
+  }
   return [
     'title' => $room->label(),
     'key' => $key,
@@ -1381,6 +1396,8 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
     ],
     'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: $access['cta']] : NULL,
     'policies' => $policies,
+    'details' => $details,
+    'contact' => $contact,
     'entrance' => _palefire_space_entrance($room, $cache),
   ];
 }
@@ -1388,25 +1405,39 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
 /**
  * Space policies the Access fact and the button already say (field_policy_key).
  */
-const PALEFIRE_ACCESS_POLICY_KEYS = ['reservation', 'by_appointment', 'walk_up'];
+const PALEFIRE_ACCESS_POLICY_KEYS = ['reservation', 'by_appointment', 'walk_up', 'walk_in'];
 
 /**
  * Need to know, at the top of a room's page: what someone has to do or
  * accept before coming, in words. The room's Required policies in its
- * order (less those its access already says), and "Fees apply" for an
- * Event rental, three at most. Everything else is in House rules.
+ * order, less those the facts row already says (its access, the notice),
+ * and "Fees apply" for an Event rental whose price the facts don't give,
+ * three at most. Everything else is in House rules.
+ *
+ * A walk-in room has no House rules section (_palefire_location_index()):
+ * all its policies but its access are listed here instead, under "House
+ * rules", so the page reads in one screen.
+ *
+ * Call after setting $location['price'] (_palefire_location_price()).
  *
  * @return array
- *   Each: label, detail ('' for none), icon (includes/space-icon).
+ *   Each: label, detail ('' for none), icon (includes/space-icon), state.
  */
 function _palefire_location_need_to_know(array $location): array {
+  $walk_in = ($location['access'] ?? '') === 'walk_in';
   $items = [];
   foreach ($location['policies'] ?? [] as $policy) {
-    if ($policy['state'] === 'required' && !in_array($policy['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)) {
-      $items[] = ['label' => $policy['label'], 'detail' => $policy['detail'], 'icon' => $policy['icon']];
+    if (in_array($policy['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)) {
+      continue;
+    }
+    if ($walk_in || ($policy['state'] === 'required' && _palefire_policy_notice($policy) === '')) {
+      $items[] = ['label' => $policy['label'], 'detail' => $policy['detail'], 'icon' => $policy['icon'], 'state' => $policy['state']];
     }
   }
-  $fee = ($location['access'] ?? '') === 'rental' ? [['label' => (string) t('Fees apply'), 'detail' => '', 'icon' => 'receipt']] : [];
+  if ($walk_in) {
+    return $items;
+  }
+  $fee = ($location['access'] ?? '') === 'rental' && ($location['price'] ?? '') === '' ? [['label' => (string) t('Fees apply'), 'detail' => '', 'icon' => 'receipt', 'state' => 'required']] : [];
   return [...array_slice($items, 0, 3 - count($fee)), ...$fee];
 }
 
@@ -1416,11 +1447,18 @@ function _palefire_location_need_to_know(array $location): array {
  */
 function _palefire_location_notice(array $location): string {
   foreach ($location['policies'] ?? [] as $policy) {
-    if ($policy['state'] === 'required' && preg_match('/^(.+?)[\'\x{2019}]?\s+notice$/iu', trim($policy['label']), $match)) {
-      return $match[1];
+    if (($notice = _palefire_policy_notice($policy)) !== '') {
+      return $notice;
     }
   }
   return '';
+}
+
+/**
+ * A policy's notice ("Two weeks" from a Required "Two weeks' notice"), or ''.
+ */
+function _palefire_policy_notice(array $policy): string {
+  return $policy['state'] === 'required' && preg_match('/^(.+?)[\'\x{2019}]?\s+notice$/iu', trim($policy['label']), $match) ? $match[1] : '';
 }
 
 /**
@@ -1787,8 +1825,9 @@ function _palefire_location_sibling(ParagraphInterface $paragraph, string $bundl
  * line under the title). The page's other parts are sections of their own
  * (Location: photos, hours and directions, house rules, booking). With no
  * Room link of its own, the button at the top is this section's Booking
- * link. The facts row adds Notice (_palefire_location_notice()) and Price
- * (_palefire_location_price(), from the Booking part's text).
+ * link. The facts row adds Notice (_palefire_location_notice()), Price
+ * (_palefire_location_price(), from the Booking part's text) and the
+ * room's details (field_space_details) but those named as a photo is.
  */
 function palefire_preprocess_paragraph__location_space(array &$variables): void {
   $variables['location'] = NULL;
@@ -1812,13 +1851,18 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['map'] = $map;
     $location['uid'] = 'pf-location-' . $paragraph->id();
     $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
-    $location['need_to_know'] = _palefire_location_need_to_know($location);
     $location['notice'] = _palefire_location_notice($location);
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
-    // The backdrop's fallback: the first of the page's photos.
+    $location['need_to_know'] = _palefire_location_need_to_know($location);
     $photos = _palefire_location_sibling($paragraph, 'location_photos');
+    $photo_list = $photos ? _palefire_location_photos($photos, $cache) : [];
+    // A detail named as a photo is ("Lecture: xx seats") goes under that
+    // photo (palefire_preprocess_paragraph__location_photos()), not here.
+    $captions = array_map('mb_strtolower', array_column($photo_list, 'caption'));
+    $location['details'] = array_values(array_filter($location['details'], static fn (array $d): bool => !in_array(mb_strtolower($d['label']), $captions, TRUE)));
     $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);
-    $location['backdrop'] = _palefire_location_backdrop($room, $photos ? array_slice(_palefire_location_photos($photos, $cache), 0, 1) : [], $cache);
+    // The backdrop's fallback: the first of the page's photos.
+    $location['backdrop'] = _palefire_location_backdrop($room, array_slice($photo_list, 0, 1), $cache);
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);
@@ -1837,10 +1881,21 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
     return;
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
-  $variables['rules'] = _palefire_location_rules(_palefire_location_data($room, $cache), 'pf-rules-' . $paragraph->id());
-  // Beside a Location section, its ledger already gives the sound level.
+  $location = _palefire_location_data($room, $cache);
+  $variables['rules'] = _palefire_location_rules($location, 'pf-rules-' . $paragraph->id());
+  // Beside a Location section, its ledger already gives the sound level,
+  // access and notice, and Need to know its other requirements: the
+  // groups keep the rest (After hours, Alcohol permit).
   if (_palefire_location_sibling($paragraph, 'location_space')) {
     $variables['rules']['sound_level'] = 0;
+    $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
+    $shown = array_column(_palefire_location_need_to_know($location), 'label');
+    foreach ($variables['rules']['groups'] as $state => $policies) {
+      $variables['rules']['groups'][$state] = array_values(array_filter($policies, static fn (array $p): bool => !in_array($p['label'], $shown, TRUE)
+        && !in_array($p['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)
+        && _palefire_policy_notice($p) === ''));
+    }
+    $variables['rules']['groups'] = array_filter($variables['rules']['groups']);
   }
   $cache->applyTo($variables);
 }
@@ -1870,6 +1925,7 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
     $variables['booking']['needs'] = [];
     $variables['booking']['link'] ??= _palefire_location_not_here($location['link'] ?? NULL, $paragraph) ?? _palefire_location_booking($space, NULL, '')['link'];
   }
+  $variables['booking']['contact'] = $location['contact'] ?? NULL;
   $cache->applyTo($variables);
 }
 
@@ -1886,6 +1942,17 @@ function palefire_preprocess_paragraph__location_photos(array &$variables): void
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $variables['photos'] = _palefire_location_photos($paragraph, $cache);
+  // The room's details named as a photo is ("Lecture: xx seats"), as a
+  // second line under it.
+  $room = _palefire_location_room($paragraph);
+  $notes = [];
+  foreach ($room ? _palefire_location_data($room, $cache)['details'] : [] as $detail) {
+    $notes[mb_strtolower($detail['label'])] = $detail['value'];
+  }
+  foreach ($variables['photos'] as &$photo) {
+    $photo['note'] = $notes[mb_strtolower($photo['caption'])] ?? '';
+  }
+  unset($photo);
   $cache->applyTo($variables);
 }
 
@@ -2680,7 +2747,8 @@ function palefire_preprocess_field(array &$variables): void {
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $count = 0;
-  foreach ($variables['items'] as &$item) {
+  $hide = [];
+  foreach ($variables['items'] as $key => &$item) {
     $paragraph = $item['content']['#paragraph'] ?? NULL;
     if (!$paragraph instanceof ParagraphInterface) {
       continue;
@@ -2695,9 +2763,14 @@ function palefire_preprocess_field(array &$variables): void {
     if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
       // A location page's parts carry theirs in code (no Eyebrow field), and
       // set their heading beside the content (aside) rather than over it.
+      // A walk-in room's parts go unnumbered, and its House rules are in
+      // the top (_palefire_location_need_to_know()).
       $location = _palefire_location_index($paragraph, $cache);
-      if ($location) {
-        $item['section']['index'] = ['num' => sprintf('%02d', ++$count), 'aside' => TRUE] + $location;
+      if (!empty($location['hide'])) {
+        $hide[] = $key;
+      }
+      elseif ($location) {
+        $item['section']['index'] = ['num' => $location['walk_in'] ? '' : sprintf('%02d', ++$count), 'aside' => TRUE] + $location;
       }
       continue;
     }
@@ -2724,6 +2797,9 @@ function palefire_preprocess_field(array &$variables): void {
     ];
   }
   unset($item);
+  foreach ($hide as $key) {
+    unset($variables['items'][$key]);
+  }
   $cache->applyTo($variables);
 }
 
@@ -2738,7 +2814,10 @@ function palefire_preprocess_field(array &$variables): void {
  * rather than in Eyebrow and Lede fields, so every room's page reads the
  * same.
  *
- * @return array{lede: string, link: ?array}|null
+ * A walk-in room's parts are unnumbered (walk_in), and its House rules
+ * part is left out (hide): they are in the top, in one screen.
+ *
+ * @return array{lede: string, link: ?array, walk_in: bool}|array{hide: true}|null
  */
 function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetadata $cache): ?array {
   $bundle = $paragraph->bundle();
@@ -2750,9 +2829,13 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
   $location = $room ? _palefire_location_data($room, $cache) : NULL;
   $name = $location['title'] ?? (string) t('the room');
   $host = $paragraph->getParentEntity();
+  $walk_in = ($location['access'] ?? '') === 'walk_in';
+  if ($walk_in && $bundle === 'location_rules') {
+    return ['hide' => TRUE];
+  }
   switch ($bundle) {
     case 'location_photos':
-      return ['lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
+      return ['walk_in' => $walk_in, 'lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
 
     case 'location_visit':
       $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
@@ -2763,6 +2846,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
         ? (string) t('On Floor @n of @building', ['@n' => $floor, '@building' => $building])
         : (string) t('In @building', ['@building' => $building]);
       return [
+        'walk_in' => $walk_in,
         'lede' => ($location['access'] ?? 'walk_in') !== 'walk_in'
           ? (string) t('@where, by booking.', ['@where' => $where])
           : (string) t('@where, open whenever the building is.', ['@where' => $where]),
@@ -2779,6 +2863,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // room may have none).
       $required = in_array('required', array_column($location['policies'] ?? [], 'state'), TRUE);
       return [
+        'walk_in' => $walk_in,
         'lede' => $required
           ? (string) t('What the @room allows, and what to arrange first.', ['@room' => $name])
           : (string) t('What the @room allows, and what it doesn’t.', ['@room' => $name]),
@@ -2789,6 +2874,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // No link in the rule: the section's own button, under the steps, is
       // the way to the form (palefire_preprocess_paragraph__location_booking()).
       return [
+        'walk_in' => $walk_in,
         'lede' => (string) t('How to request the @room, and what comes with it.', ['@room' => $name]),
         'link' => NULL,
       ];

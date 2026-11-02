@@ -84,7 +84,9 @@
 #}
 {% macro index_rule(num, label, link) %}
   <div class="pf-index-rule">
-    <span class="pf-index-rule__num" aria-hidden="true">{{ num }}</span>
+    {%- if num %}
+      <span class="pf-index-rule__num" aria-hidden="true">{{ num }}</span>
+    {%- endif %}
     {%- if label %}
       <span class="pf-index-rule__label" aria-hidden="true">{{ label }}</span>
     {%- endif %}

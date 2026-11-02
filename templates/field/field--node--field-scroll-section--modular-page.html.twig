@@ -41,7 +41,9 @@
           <div class="pf-section__bg" aria-hidden="true" inert>{{ item.section.bg }}</div>
         {% endif %}
         <div class="pf-section__inner">
-          {% if index %}
+          {# A walk-in room's parts have no number: the rule only when it
+             carries its link (Directions). #}
+          {% if index.num or index.link.url %}
             {{ pf.index_rule(index.num, index.label, index.link ?: {}) }}
           {% endif %}
           {% if index.aside %}

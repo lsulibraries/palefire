@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * The person to ask about a room, beside its button: "Questions? Meredith
+ * Contreras, Outreach & Events Coordinator", the name a mail link, then
+ * the phone when the Staff page has one.
+ *
+ * Variables:
+ * - contact: the room's Contact (field_space_contact, a Staff page; see
+ *   _palefire_location_data()): name, url, title, email, phone,
+ *   phone_href. Nothing is printed without it.
+ */
+#}
+{% if contact %}
+  <p class="pf-location__contact">
+    {{ 'Questions?'|t }}
+    <a href="{{ contact.email ? 'mailto:' ~ contact.email : contact.url }}">{{ contact.name }}</a>
+    {%- if contact.title %}, {{ contact.title }}{% endif %}
+    {%- if contact.phone and contact.phone_href %}
+      <span class="pf-location__contact-sep" aria-hidden="true">·</span>
+      <a href="{{ contact.phone_href }}">{{ contact.phone }}</a>
+    {%- endif %}
+  </p>
+{% endif %}

@@ -6,7 +6,8 @@
  *
  * Variables from palefire_preprocess_paragraph__location_photos():
  * - photos: the section's Photos (field_location_photos), each with src,
- *   width, height, alt and caption (its media name, "Lecture").
+ *   width, height, alt, caption (its media name, "Lecture") and note (the
+ *   room's detail of that name, "Lecture: xx seats", or '').
  *
  * The section <h2>, its index rule and lede come from the scroll-section
  * field template (_palefire_location_index()). Three across at 4:5 from
@@ -24,7 +25,12 @@
       <li>
         <figure class="pf-location__photo">
           <img src="{{ photo.src }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
-          {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+          {% if photo.caption %}
+            <figcaption>
+              {{- photo.caption -}}
+              {%- if photo.note %}<span class="visually-hidden">, </span><span class="pf-location__photo-note">{{ photo.note }}</span>{% endif -%}
+            </figcaption>
+          {% endif %}
         </figure>
       </li>
     {% endfor %}
