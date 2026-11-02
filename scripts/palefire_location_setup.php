@@ -451,7 +451,7 @@ $sections = [
     ],
     'field_booking_link' => [
       'uri' => 'https://lib.lsu.edu/special#reservelecturehall',
-      'title' => 'Request the Lecture Hall',
+      'title' => '',
     ],
   ]),
 ];

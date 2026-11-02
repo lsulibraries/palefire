@@ -463,6 +463,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
   display: inline-flex;
   align-items: center;
   gap: .875rem;
+  white-space: nowrap; // "Floor 1" drops whole, rule first, never split
   color: var(--pf-toc-color);
 
   &::before {

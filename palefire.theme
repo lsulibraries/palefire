@@ -1206,7 +1206,7 @@ function _palefire_space_access_kinds(): array {
   return [
     'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk', 'cta' => (string) t('Plan your visit')],
     'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar', 'cta' => (string) t('Book a time')],
-    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt', 'cta' => (string) t('Reserve')],
+    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt', 'cta' => (string) t('Request a date')],
   ];
 }
 
@@ -1333,6 +1333,21 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
     'policies' => $policies,
     'entrance' => _palefire_space_entrance($room, $cache),
   ];
+}
+
+/**
+ * A room's link, unless it is the page $paragraph is on. The room's Link
+ * is where the building map sends people (often the room's own page); as
+ * the page's button it would go nowhere, so the Booking link is used.
+ */
+function _palefire_location_not_here(?array $link, ParagraphInterface $paragraph): ?array {
+  $host = $paragraph->getParentEntity();
+  if (!$link || !$host instanceof NodeInterface || $host->isNew()) {
+    return $link;
+  }
+  $path = static fn (string $url): string => rtrim((string) parse_url($url, PHP_URL_PATH), '/');
+  $here = [$path($host->toUrl()->toString()), $path($host->toUrl('canonical', ['path_processing' => FALSE])->toString())];
+  return in_array($path($link['url']), $here, TRUE) && !parse_url($link['url'], PHP_URL_FRAGMENT) ? NULL : $link;
 }
 
 /**
@@ -1688,7 +1703,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     }
     $location['map'] = $map;
     $location['uid'] = 'pf-location-' . $paragraph->id();
-    $location['link'] = $location['link'] ?? _palefire_location_booking($paragraph, NULL, '')['link'];
+    $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
     // The backdrop's fallback: the first of the page's photos.
     $photos = _palefire_location_sibling($paragraph, 'location_photos');
     $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);
@@ -1742,7 +1757,7 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
   if ($space) {
     $variables['booking']['capacity'] = NULL;
     $variables['booking']['needs'] = [];
-    $variables['booking']['link'] ??= $location['link'] ?? _palefire_location_booking($space, NULL, '')['link'];
+    $variables['booking']['link'] ??= _palefire_location_not_here($location['link'] ?? NULL, $paragraph) ?? _palefire_location_booking($space, NULL, '')['link'];
   }
   $cache->applyTo($variables);
 }

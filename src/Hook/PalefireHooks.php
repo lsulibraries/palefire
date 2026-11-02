@@ -1113,7 +1113,7 @@ class PalefireHooks {
         '/v2/special/guides/parking-hill-memorial-library' => $directions,
         // The page's own booking button goes to the same form.
         '/v2/special/lecturehall' => [
-          'label' => (string) $this->t('Request the Lecture Hall'),
+          'label' => (string) $this->t('Request a date'),
           'icon' => 'calendar-alt',
           'href' => 'https://lsu.formstack.com/forms/lecture_hall_reservations',
         ],

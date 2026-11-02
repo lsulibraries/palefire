@@ -110,7 +110,7 @@ $button = $top ?? $location;
 if ($button->hasField('field_booking_link')) {
   $button->set('field_booking_link', [
     'uri' => 'https://lsu.formstack.com/forms/lecture_hall_reservations',
-    'title' => 'Request the Lecture Hall',
+    'title' => '',
   ]);
   $button->setNeedsSave(TRUE);
 }
