@@ -131,6 +131,11 @@
   container-type: inline-size;
   scroll-margin-top: calc(var(--pf-header-h, 4rem) + var(--pf-landing-bar-h, 2rem) + 1rem);
 
+  // No row gaps: the map's head and aside rows are empty here, and their
+  // gaps (2.7rem at 1440) held the drawing down off the eyebrow's line.
+  // The drawing now starts level with the eyebrow.
+  .pf-map { row-gap: 0; }
+
   .pf-map__heading {
     @include visually-hidden;
   }
@@ -261,17 +266,11 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     transition: opacity 2.6s cubic-bezier(.4, 0, .2, 1);
   }
 
-  // The ledger on the same frosted ground as the floors. A ::before
-  // reaching a gutter past the text, so the facts keep their column lines.
+  // Over the photo the panel is frosted too, and its shadow deeper.
   .pf-location__facts {
-    position: relative;
+    --pf-ledger-shadow: .5;
 
     &::before {
-      position: absolute;
-      inset: 0 calc(-1 * min(1rem, var(--pf-section-pad-inline, 1rem)));
-      z-index: -1;
-      pointer-events: none;
-      content: "";
       -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
     }
@@ -282,7 +281,10 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   html.pf-reading-dark .pf-location__intro.has-backdrop {
     &::before { content: none; }
     .pf-location__frost { display: none; }
-    .pf-location__facts::before { content: none; }
+    .pf-location__facts::before {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
   }
 }
 
@@ -514,12 +516,48 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   margin-top: var(--pf-location-gap);
 }
 
+// A panel under the facts, as the landing hero's search field: the page
+// color at 80% with its soft drop shadow, and a hairline edge. Drawn by
+// ::before, a gutter past the text (edge to edge on phones), so the facts
+// keep their column lines. More contrast and forced colors keep the
+// hairline only.
 .pf-location__facts {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem var(--pf-grid-gutter);
   margin: 0;
   padding-block: 1.25rem;
+
+  &::before {
+    position: absolute;
+    // Edge to edge below 52rem: the screen's edges, whatever the gutter.
+    inset: 0 calc(50% - 50vw);
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-color: color-mix(in srgb, var(--pf-section-bg, var(--bs-body-bg)) 80%, transparent);
+    border-block: 1px solid #{$pf-hairline};
+    box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / var(--pf-ledger-shadow, .18));
+  }
+
+  @media (prefers-contrast: more), (forced-colors: active) {
+    &::before {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+}
+@container pf-location (min-width: 52rem) {
+  .pf-location__facts {
+    padding-block: 1.5rem;
+
+    &::before {
+      inset-inline: -1.5rem;
+      border-inline: 1px solid #{$pf-hairline};
+    }
+  }
 }
 .pf-location__fact {
   min-width: 0;
