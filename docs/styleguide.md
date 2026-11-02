@@ -127,6 +127,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** `pf-location-backdrop-whole`: bottom 0 with `max-height: 100lvh` (was `height: 100lvh`), so the backdrop never passes the Location section's foot.
 - **2026-11-02:** Map: `[aria-current]` room back to the hatch at full strength, its name in the ink (`.is-here.is-active`); the solid `--pf-map-hover` fill and dark name are undone.
 - **2026-11-02:** Location ledger: `.pf-location__facts::before` has no fill (hairline, shadow, blur over a backdrop); six facts get six columns from 52rem. Backdrop: a swatch-colour `color` layer over the veil; `--pf-location-muted` lifted 40% toward `--pf-g-heading` over it. New `includes/about.html.twig` ("~100", read "about 100") and space mark `receipt`. Map: the `[aria-current]` room is filled with `--pf-map-hover`, its name in `--pf-map-on-hover`, focus ring in the ink; the key groups Walk in / Book online / Room rental (`s.hatch`, `s.access_label`); indexed key two columns from md, one per group from 1200px.
 - **2026-11-02:** Location top: the map's empty head and aside rows lose their row gap, so the drawing starts level with the eyebrow (it sat 2.7rem lower). The ledger sits on a panel (`.pf-location__facts::before`): the section color at 80%, hairline frame, the hero search field's shadow (`0 1.5rem 3rem -1rem`, .18, .5 over a backdrop, where it is also frosted); 1.5rem past the text from 52rem, edge to edge below. More contrast and forced colors keep the hairline only.

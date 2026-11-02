@@ -176,10 +176,14 @@
   isolation: isolate;
 }
 
+// One screen at most, and never past the section's foot: in a tall desktop
+// window the top is shorter than the screen, and the photo ran on behind
+// section 01.
 @mixin pf-location-backdrop-whole {
   &::before {
-    inset: calc(-1 * (var(--pf-header-h, 0px) + var(--pf-landing-bar-h, 0px))) calc(-1 * var(--pf-section-pad-inline, 0px)) auto;
-    height: 100lvh;
+    inset: calc(-1 * (var(--pf-header-h, 0px) + var(--pf-landing-bar-h, 0px))) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+    height: auto;
+    max-height: 100lvh;
     background:
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, transparent 14rem),
       linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)),
