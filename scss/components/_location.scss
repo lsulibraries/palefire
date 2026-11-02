@@ -521,6 +521,12 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   color: var(--pf-location-muted);
 }
 
+// Required is what someone has to act on: its state in the accent, as the
+// kicker over the title.
+.pf-space-pin--required .pf-space-pin__state {
+  color: var(--pf-g-accent, var(--pf-landing-accent));
+}
+
 .pf-space-pin__detail { color: var(--pf-location-muted); }
 
 // --- The ledger: the facts in a row ----------------------------------------
