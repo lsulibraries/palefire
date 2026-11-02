@@ -3536,10 +3536,15 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   padding: 0;
   list-style: none;
 
-  // Keeps the last row from stretching.
+  // Keeps the last row from stretching. Not on phones, where the last
+  // row fills as the others do (the tiles' height cap, below).
   &::after {
     content: "";
     flex: 999 1 0;
+
+    @include media-breakpoint-down(md) {
+      content: none;
+    }
   }
 
   @include media-breakpoint-up(md) {
@@ -3551,6 +3556,13 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   flex: var(--pf-r) 1 calc(var(--pf-r) * var(--pf-wall-row));
   min-width: 0;
   max-width: calc(var(--pf-r) * var(--pf-wall-row) * 1.75);
+
+  // Phones: a photograph alone on its row fills it (the 1.75 cap left a
+  // 1.4 one 20px short of a 353px column). Held to 60% of the screen's
+  // height instead, so a lone portrait doesn't run past a screen.
+  @include media-breakpoint-down(md) {
+    max-width: calc(var(--pf-r) * 60svh);
+  }
 
   @include pf-exhibit-motion {
     @supports (animation-timeline: view()) {

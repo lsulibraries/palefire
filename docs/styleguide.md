@@ -126,6 +126,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Exhibition walls below md: a tile alone on its row fills it (cap 60svh tall, not 1.75 times the row), and the last row fills too.
 - **2026-11-02:** Bare exhibition walls below lg: the foot wash is sized to the text (solid behind it, eased out over `$pf-bare-fade`, 8rem), not a share of the screen.
 - **2026-11-02:** Phones: with the section crumb showing, the breadcrumb drops the crumbs between Home and the page, and the section keeps its name (up to 55% of the row). Bare exhibition walls below lg get a lighter foot wash (`$pf-bare-wash`, 36% to 76%).
 - **2026-11-02:** Collapsed dock glass thins to 66% at the top edge (`$pf-dock-glass-top`); the solid page-color foot is the bottom 25% so muted text keeps 4.5:1.
