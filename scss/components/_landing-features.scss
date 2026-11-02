@@ -3086,7 +3086,8 @@ html[data-pf-hero] .pf-landing--cover {
   border-radius: 0;
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   text-decoration: none;
-  transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+  transition: border-color $pf-hover-out ease, color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+  @include pf-button-pressed;
 
   svg {
     flex: none;

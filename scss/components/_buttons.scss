@@ -11,6 +11,22 @@
 // Mono capitals at --pf-mono-ui (13px) and .12em, square, 3rem tall (dense
 // rows set 2.75rem). Text links (index rules, Visit) are mono capitals at
 // --pf-mono-label, underlined at .35em, with the same arrows.
+
+// Pressed: a tint of the words' color over the button, on at once and
+// fading out as hover does, so a tap answers on touch screens, where hover
+// and focus never show. The browser's grey tap box gives way to it. (iOS
+// applies :active because the document has a touchstart listener,
+// js/palefire-swup.js.) Buttons with their own rules include it and add
+// box-shadow to their transition.
+@mixin pf-button-pressed {
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    box-shadow: inset 0 0 0 100vmax color-mix(in srgb, currentColor 14%, transparent);
+    transition-duration: 0s;
+  }
+}
+
 %pf-button {
   display: inline-flex;
   align-items: center;
@@ -30,7 +46,9 @@
   transition:
     color $pf-hover-out ease,
     background-color $pf-hover-out ease,
-    border-color $pf-hover-out ease;
+    border-color $pf-hover-out ease,
+    box-shadow $pf-hover-out ease;
+  @include pf-button-pressed;
 
   &:hover,
   &:focus-visible {

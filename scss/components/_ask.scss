@@ -533,7 +533,8 @@ textarea.pf-inquiry__control {
   text-align: start;
   text-decoration: none;
   cursor: pointer;
-  transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+  transition: border-color $pf-hover-out ease, color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+  @include pf-button-pressed;
 
   .pf-inquiry__arrow {
     width: .875rem;
