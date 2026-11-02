@@ -2384,11 +2384,15 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
       $floor = $location['floor'] ?? NULL;
       $building = $location['building'] ?? '';
+      // A room by appointment isn't open whenever the building is.
+      $where = $floor
+        ? (string) t('On Floor @n of @building', ['@n' => $floor, '@building' => $building])
+        : (string) t('In @building', ['@building' => $building]);
       return [
         'label' => (string) t('Getting here'),
-        'lede' => $floor
-          ? (string) t('On Floor @n of @building, open whenever the building is.', ['@n' => $floor, '@building' => $building])
-          : (string) t('In @building, open whenever the building is.', ['@building' => $building]),
+        'lede' => ($location['access'] ?? 'walk_in') === 'appointment'
+          ? (string) t('@where, by appointment.', ['@where' => $where])
+          : (string) t('@where, open whenever the building is.', ['@where' => $where]),
         'link' => $query !== '' ? [
           'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query),
           'text' => (string) t('Directions'),
@@ -2398,7 +2402,16 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       ];
 
     case 'location_rules':
-      return ['label' => (string) t('Before you come'), 'lede' => (string) t('What the @room allows, and what to arrange first.', ['@room' => $name]), 'link' => NULL];
+      // "What to arrange first" only when a policy is Required (a walk-in
+      // room may have none).
+      $required = in_array('required', array_column($location['policies'] ?? [], 'state'), TRUE);
+      return [
+        'label' => (string) t('Before you come'),
+        'lede' => $required
+          ? (string) t('What the @room allows, and what to arrange first.', ['@room' => $name])
+          : (string) t('What the @room allows, and what it doesn’t.', ['@room' => $name]),
+        'link' => NULL,
+      ];
 
     default:
       $space = _palefire_location_sibling($paragraph, 'location_space');

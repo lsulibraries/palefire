@@ -78,8 +78,9 @@
             {# The policies at a glance, under the room's line: one mark each,
                its name and detail in a tooltip on hover, focus or tap (Esc
                closes it). The button's name is the policy; the tooltip adds
-               the state and the detail. #}
-            {% if location.policies %}
+               the state and the detail. The sound level is the last mark,
+               the facts' meter, named in its tooltip. #}
+            {% if location.policies or location.sound_level %}
               {{ attach_library('palefire/location-pins') }}
               <ul class="pf-space-pins" aria-label="{{ 'At a glance'|t }}" data-pf-pins>
                 {% for policy in location.policies %}
@@ -96,6 +97,19 @@
                     </span>
                   </li>
                 {% endfor %}
+                {% if location.sound_level %}
+                  {% set tip = location.uid ~ '-tip-sound' %}
+                  <li class="pf-space-pin pf-space-pin--sound">
+                    <button type="button" class="pf-space-pin__button" aria-describedby="{{ tip }}">
+                      {% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}
+                      <span class="visually-hidden">{{ 'Sound: @level'|t({'@level': sounds[location.sound]}) }}</span>
+                    </button>
+                    <span class="pf-space-pin__tip" id="{{ tip }}" role="tooltip">
+                      <strong class="pf-space-pin__label" aria-hidden="true">{{ sounds[location.sound] }}</strong>
+                      <span class="pf-space-pin__state">{{ 'Sound level'|t }}</span>
+                    </span>
+                  </li>
+                {% endif %}
               </ul>
             {% endif %}
             {# Today's hours, as under the landing hero's title (visit-hours.js

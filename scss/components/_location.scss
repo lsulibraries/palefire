@@ -561,10 +561,16 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 // heading and lede (.pf-section__head, index.aside in palefire.theme) in
 // the first four of twelve columns, the content in the other eight. The
 // head sticks under the header while a long part (Booking) scrolls past,
-// so the left column never stands empty. The rule groups sit as many
-// across as fit; Booking's text runs in two columns from xl.
+// so the left column never stands empty. House rules fill the content
+// column (auto margins would shrink a grid item to its content, stacking
+// two groups in a strip); its groups keep one column width whether a room
+// has two of them or three. Booking's text runs in two columns from xl.
 html[data-pf-page="location"] {
-  .pf-rules__groups { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .pf-rules {
+    max-width: none;
+    margin-inline: 0;
+  }
+  .pf-rules__groups { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
   .pf-booking {
     grid-template-columns: minmax(0, 1fr);
     max-width: none;
