@@ -235,11 +235,12 @@ HTML),
 
 $gallery('Steps', 'steps', [
   $text(<<<'HTML'
-<p>A short how-to done in order: two to four steps, each a short name and a one-line note. Wide screens set them across, each under a large accent numeral; phones run them down one rail, each numeral in a diamond. The numbering says what kind of list it is: letters for alternatives (the Quick Start's A, B and C: pick one), Roman numerals for a sequence (step II), and 01, 02 only for the section index rules.</p>
+<p>A short how-to done in order: two to four steps, each a short name and a one-line note. Wide screens set them across, each under a large accent number; phones run them down one rail, each number in a diamond. A step can have sub-steps, the Quick Start's stops: small diamonds with a duotone icon. One step alone has no number: its name heads its sub-steps, which run across. The numbering says what kind of list it is: letters for alternatives (the Quick Start's A, B and C: pick one), 1, 2, 3 for a sequence, and 01, 02 only for the section index rules.</p>
 <p>[styleguide:steps]</p>
 HTML),
   $note(<<<'HTML'
 <p>In a Booking text, write How to book as a numbered list under its subhead, each item opening with its name in bold: <strong>Send the form</strong> At least two weeks ahead. Keep the name to two to four words and the note to one line, with no full stop. Without a bold name the list prints as written.</p>
+<p>Sub-steps are a numbered list inside a step, written the same way. Give one an icon by starting it with <code>[icon:name]</code>, a Font Awesome duotone name (search, file-signature, calendar-check); without one its diamond shows its number.</p>
 HTML),
 ]);
 

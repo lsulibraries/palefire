@@ -4,21 +4,22 @@
  * @file
  * The Lecture Hall's How to book, as named steps for pf-steps
  * (includes/steps.html.twig): each a bold name and a one-line note, in the
- * order people act. Checking a date comes first now.
+ * order people act. The form is linked from its step; the Reserve button
+ * under the steps goes there too.
  *
- *   I    Check the date      Ask Andrew Loyacano, 225-578-5723 or …
- *   II   Send the form       At least two weeks ahead
- *   III  Wait for our email  It isn't reserved until we confirm
+ *   1  Send the form       Reservation form, at least two weeks ahead
+ *   2  Wait for our email  It isn't reserved until we confirm
  *
  *   drush php:script themes/custom/palefire/scripts/palefire_location_steps.php
  *   drush cr
  *
  * Replaces only the numbered list under the How to book subhead in the
  * Booking text, and only while it is still the wording
- * palefire_location_lecture_hall_booking.php wrote (its three sentences),
- * so an editor's own steps are kept; force=1 replaces them anyway. The rest
- * of the text is left as it is. A new revision, so the old text can be
- * restored.
+ * palefire_location_lecture_hall_booking.php first wrote (three sentences)
+ * or this script's first version (Check the date, Send the form, Wait for
+ * our email), so an editor's own steps are kept; force=1 replaces them
+ * anyway. The rest of the text is left as it is. A new revision, so the
+ * old text can be restored.
  */
 
 use Drupal\Component\Utility\Html;
@@ -66,19 +67,19 @@ if (!$list) {
   return;
 }
 $old = trim(preg_replace('/\s+/', ' ', $list->textContent));
-if (str_starts_with($old, 'Check the date')) {
-  echo "The steps are already named; nothing changed.\n";
+if (str_starts_with($old, 'Send the form Reservation form')) {
+  echo "The steps are already up to date; nothing changed.\n";
   return;
 }
-if (!$force && !str_starts_with($old, 'Send the reservation form, at least two weeks ahead.')) {
+$ours = str_starts_with($old, 'Send the reservation form, at least two weeks ahead.') || str_starts_with($old, 'Check the date Ask Andrew Loyacano');
+if (!$force && !$ours) {
   echo "How to book already edited; left as it is (force=1 replaces it).\n";
   return;
 }
 
 $steps = <<<'HTML'
 <ol>
-<li><strong>Check the date</strong> Ask Andrew Loyacano, <a href="tel:+12255785723">225-578-5723</a> or <a href="mailto:aloyacano@lsu.edu">aloyacano@lsu.edu</a></li>
-<li><strong>Send the form</strong> At least two weeks ahead</li>
+<li><strong>Send the form</strong> <a href="https://lsu.formstack.com/forms/lecture_hall_reservations">Reservation form</a>, at least two weeks ahead</li>
 <li><strong>Wait for our email</strong> It isn’t reserved until we confirm</li>
 </ol>
 HTML;

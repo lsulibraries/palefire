@@ -77,8 +77,8 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Visible `:focus-visible` ring (3px, 2px offset).
   - Targets of 44px, or 36px in the compact header.
 - **Numbering:** letters for alternatives (the Quick Start's A, B, C),
-  Roman numerals for steps done in order (`pf-steps`: I, II, III), and
-  01, 02 only on section index rules, so a step is never read as a section.
+  1, 2, 3 for steps done in order (`pf-steps`, no leading zero), and
+  01, 02 only on section index rules.
 - **Icons:** Font Awesome 5.15.4 class names only (`fas`, `far`, `fab`),
   with `aria-hidden="true"`. The theme mostly inlines SVGs.
 - **Performance:**
@@ -103,7 +103,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Spacers, rhythm | Bootstrap `$spacers` | ▣ Spacing |
 | Hairline, control border, focus ring | `_base.scss`, `_variables.scss` | ▣ Lines |
 | Motion tokens | `_variables.scss` | ▣ Motion |
-| Steps (a short how-to in order: numerals and two-line names across from md, a rail of diamonds below) | `includes/steps.html.twig`, `_steps.scss`; `_palefire_steps_items()` reads `<li><strong>Name</strong> note</li>` | ▣ Steps; Reserve's How to book |
+| Steps (a short how-to in order: numbers and two-line names across from md, a rail of diamonds below; sub-steps with duotone icons; one step alone heads a row of sub-steps) | `includes/steps.html.twig`, `_steps.scss`; `_palefire_steps_items()` reads `<li><strong>Name</strong> note</li>`, sub-steps a nested `<ol>`, `[icon:name]` | ▣ Steps; Reserve's How to book |
 | Buttons (primary, secondary, arrow) and text links | `_buttons.scss` (`%pf-button-primary`, `%pf-button-secondary`, `%pf-button-arrow`; `.pf-button--*` for markup of its own), `.pf-index-rule__link` | ▣ Buttons and links |
 | Exhibition gallery (story) | `paragraph--exhibit-page` | ✔ every gallery |
 | Exhibition title page | `includes/exhibit-cover` | ✔ the page's own |
@@ -131,6 +131,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Steps: numbers again (1, 2, 3; Roman read as confusing). Sub-steps (`.pf-steps__stops`): a nested `<ol>`, each a small diamond with a Font Awesome Pro duotone icon (`[icon:name]`, inlined from `libraries/fontawesome-pro`) or its number, on a rail of its own. One step alone (`.pf-steps--single`) has no number and its sub-steps run across from md. Plate 09 shows both.
 - **2026-11-02:** Steps (`pf-steps`, `includes/steps.html.twig`, `_steps.scss`): the Quick Start's anatomy with Roman numerals (I, II, III). From md, across: a large accent numeral beside a two-line name (broken at the middle word), the note under both; below md, one rail with each numeral in a diamond. Reserve's How to book uses it when each step opens with a bold name. New plate 09, Steps; numbering rule added.
 - **2026-11-02:** Default button words by access (`_palefire_space_access_kinds()` `cta`): Plan your visit / Book a time / Reserve, kept under 24 characters for the dock.
 - **2026-11-02:** Map: `.pf-map__knock`, a black rect in the here room's hatch mask sized by `building-map.js` from the name's glyphs (cap height over each baseline, padding .7em), with the name's transform, lift and reveal; hidden below 576px. `hereGap` 36 → 68. The lit here name is `--pf-map-hover` (was the ink); on Solarized mixed 25% white.

@@ -1438,8 +1438,10 @@ function _palefire_location_booking_parts(string $html, string $format): ?array 
  * least two weeks ahead</li>. Each step is its name in two parts, broken
  * at the middle word ("Send" / "the form"; the pattern sets it on two
  * lines from md), and the rest as its note, filtered in the text's format.
- * Text around the list comes back as rest. NULL when an item has no bold
- * name (the text then prints as written).
+ * A numbered list inside an item is its sub-steps, read the same way; each
+ * may open with "[icon:name]", a Font Awesome Pro duotone file name
+ * (calendar-check), for its mark. Text around the list comes back as rest.
+ * NULL when a step has no bold name (the text then prints as written).
  */
 function _palefire_steps_items(string $html, string $format): ?array {
   $dom = Html::load($html);
@@ -1447,39 +1449,43 @@ function _palefire_steps_items(string $html, string $format): ?array {
   if (!$list) {
     return NULL;
   }
+  $text = static fn (string $value): ?array => trim(strip_tags($value)) === '' ? NULL : [
+    '#type' => 'processed_text',
+    '#text' => $value,
+    '#format' => $format,
+  ];
   $steps = [];
-  foreach (iterator_to_array($list->childNodes) as $li) {
-    if (!$li instanceof \DOMElement || strtolower($li->tagName) !== 'li') {
-      continue;
-    }
-    $lead = NULL;
-    foreach ($li->childNodes as $child) {
-      if ($child instanceof \DOMText && trim($child->textContent) === '') {
-        continue;
-      }
-      $lead = $child instanceof \DOMElement && in_array(strtolower($child->tagName), ['strong', 'b'], TRUE) ? $child : NULL;
-      break;
-    }
-    $name = $lead ? trim(preg_replace('/\s+/u', ' ', $lead->textContent)) : '';
-    if ($name === '') {
+  foreach (_palefire_steps_split($list) as $item) {
+    if ($item['lead'] === '') {
       return NULL;
     }
-    $li->removeChild($lead);
-    $note = '';
-    foreach ($li->childNodes as $child) {
-      $note .= $dom->saveHTML($child);
-    }
-    // A colon or dash an editor put after the name goes with it.
-    $note = preg_replace('/^[\s:\x{2013}\x{2014}-]+/u', '', $note);
-    $words = explode(' ', $name);
+    $words = explode(' ', $item['lead']);
     $split = max(1, intdiv(count($words), 2));
+    $stops = [];
+    foreach ($item['list'] ? _palefire_steps_split($item['list']) : [] as $stop) {
+      $label = $stop['lead'];
+      $note = $stop['note'];
+      // "[icon:name]" before the bold label (or before the words, with
+      // none). The name is checked, as it becomes part of a file path.
+      $icon = NULL;
+      if (preg_match('/^\s*\[icon:([a-z0-9-]+)\]\s*/', $stop['before'], $m)) {
+        $icon = $m[1];
+      }
+      elseif ($label === '' && preg_match('/^\s*\[icon:([a-z0-9-]+)\]\s*/', $note, $m)) {
+        $icon = $m[1];
+        $note = substr($note, strlen($m[0]));
+      }
+      // No bold label: the sub-step's words are its label.
+      if ($label === '') {
+        $label = trim(preg_replace('/\s+/u', ' ', strip_tags($note)));
+        $note = '';
+      }
+      $stops[] = ['label' => $label, 'note' => $text($note), 'icon' => $icon];
+    }
     $steps[] = [
       'name' => [implode(' ', array_slice($words, 0, $split)), implode(' ', array_slice($words, $split))],
-      'note' => trim(strip_tags($note)) === '' ? NULL : [
-        '#type' => 'processed_text',
-        '#text' => $note,
-        '#format' => $format,
-      ],
+      'note' => $text($item['note']),
+      'stops' => $stops,
     ];
   }
   if (!$steps) {
@@ -1495,6 +1501,51 @@ function _palefire_steps_items(string $html, string $format): ?array {
       '#format' => $format,
     ],
   ];
+}
+
+/**
+ * A list's items for _palefire_steps_items(), each in parts: before (the
+ * text before its bold lead, as text), lead (the bold text, or ''), note
+ * (the HTML after it) and list (a numbered list inside it, or NULL). With
+ * no bold lead, all its HTML but the inner list is the note.
+ */
+function _palefire_steps_split(\DOMElement $list): array {
+  $items = [];
+  foreach (iterator_to_array($list->childNodes) as $li) {
+    if (!$li instanceof \DOMElement || strtolower($li->tagName) !== 'li') {
+      continue;
+    }
+    $item = ['before' => '', 'lead' => '', 'note' => '', 'list' => NULL];
+    $nodes = iterator_to_array($li->childNodes);
+    // The lead: the first element, if bold, with only text before it.
+    $lead = NULL;
+    foreach ($nodes as $node) {
+      if ($node instanceof \DOMElement) {
+        $lead = in_array(strtolower($node->tagName), ['strong', 'b'], TRUE) ? $node : NULL;
+        break;
+      }
+    }
+    $after = $lead === NULL;
+    foreach ($nodes as $node) {
+      if ($node === $lead) {
+        $item['lead'] = trim(preg_replace('/\s+/u', ' ', $node->textContent));
+        $after = TRUE;
+      }
+      elseif ($node instanceof \DOMElement && strtolower($node->tagName) === 'ol' && !$item['list']) {
+        $item['list'] = $node;
+      }
+      elseif ($after) {
+        $item['note'] .= $node->ownerDocument->saveHTML($node);
+      }
+      else {
+        $item['before'] .= $node->textContent;
+      }
+    }
+    // A colon or dash an editor put after the lead goes with it.
+    $item['note'] = trim(preg_replace('/^[\s:\x{2013}\x{2014}-]+/u', '', $item['note']));
+    $items[] = $item;
+  }
+  return $items;
 }
 
 /**

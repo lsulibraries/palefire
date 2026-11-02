@@ -687,7 +687,7 @@ html[data-pf-page="location"] {
 html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 
 @include media-breakpoint-up(md) {
-  html[data-pf-page="location"] .pf-booking__steps ol:not(.pf-steps) {
+  html[data-pf-page="location"] .pf-booking__steps ol:not(.pf-steps, .pf-steps__stops) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
     gap: 0 var(--pf-grid-gutter, 2rem);
@@ -908,20 +908,21 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
     color: var(--pf-location-muted);
   }
 
-  // A list of named steps is pf-steps (_steps.scss) and keeps its own look.
+  // Named steps and their sub-steps are pf-steps (_steps.scss), with their
+  // own look.
   ul,
-  ol:not(.pf-steps) {
+  ol:not(.pf-steps, .pf-steps__stops) {
     margin: 0 0 1rem;
     padding: 0;
     list-style: none;
   }
 
-  :is(ul, ol:not(.pf-steps)) > li {
+  :is(ul, ol:not(.pf-steps, .pf-steps__stops)) > li {
     padding: .625rem 0;
     border-bottom: 1px solid var(--pf-location-line);
   }
 
-  ol:not(.pf-steps) {
+  ol:not(.pf-steps, .pf-steps__stops) {
     counter-reset: pf-step;
 
     > li {

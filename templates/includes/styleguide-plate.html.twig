@@ -238,19 +238,37 @@
       </div>
     </div>
   {% elseif plate == 'steps' %}
-    {# The live steps (includes/steps.html.twig, _steps.scss): across from
-       md, one rail below. Then what each kind of numbering is for. #}
+    {# The live steps (includes/steps.html.twig, _steps.scss): numbered
+       steps with sub-steps, then one step heading a row of sub-steps.
+       Then what each kind of numbering is for. #}
     <div class="pf-sg-steps">
       {% include '@palefire/includes/steps.html.twig' with {
         steps: [
-          { name: ['Check'|t, 'the date'|t], note: 'Ask the room’s contact'|t },
-          { name: ['Send'|t, 'the form'|t], note: 'At least two weeks ahead'|t },
-          { name: ['Wait for'|t, 'our email'|t], note: 'It isn’t reserved until we confirm'|t },
+          { name: ['Find'|t, 'the item'|t], note: 'In the library catalog'|t, stops: [
+            { label: 'Search'|t, note: 'By title or collection'|t, icon: 'search' },
+            { label: 'Open the record'|t, note: 'Holdings tab'|t, icon: 'file-alt' },
+          ] },
+          { name: ['Request'|t, 'it'|t], note: 'Sign in when asked'|t, stops: [
+            { label: 'Click Request Item'|t, note: 'Bottom right'|t, icon: 'file-signature' },
+            { label: 'Book a visit'|t, note: 'Recommended'|t, icon: 'calendar-check' },
+          ] },
+          { name: ['Read it'|t, 'at Hill'|t], note: 'Staff bring it to you'|t },
+        ],
+      } only %}
+    </div>
+    <div class="pf-sg-steps">
+      {% include '@palefire/includes/steps.html.twig' with {
+        steps: [
+          { name: ['Send the form'|t], note: 'Three stops, about five minutes'|t, stops: [
+            { label: 'Open the form'|t, note: 'Linked from the room’s page'|t, icon: 'file-signature' },
+            { label: 'Pick a date'|t, note: 'Two weeks ahead or more'|t, icon: 'calendar-check' },
+            { label: 'Submit'|t, note: 'We reply by email'|t, icon: 'paper-plane' },
+          ] },
         ],
       } only %}
     </div>
     <div class="pf-sg-lines">
-      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'I, II, III'|t }}</span><span class="pf-sg-line__token">pf-steps · numerals</span>{{ 'A sequence, done in order. Easy to point to: “at step II”.'|t }}</p>
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ '1, 2, 3'|t }}</span><span class="pf-sg-line__token">pf-steps · numbers</span>{{ 'A sequence, done in order. Sub-steps take a duotone icon. One step alone has no number.'|t }}</p>
       <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'A, B, C'|t }}</span><span class="pf-sg-line__token">pf-paths · letters</span>{{ 'Alternatives: pick one. The Quick Start Guide.'|t }}</p>
       <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ '01, 02'|t }}</span><span class="pf-sg-line__token">pf-index-rule</span>{{ 'Sections of a page, never steps.'|t }}</p>
     </div>
