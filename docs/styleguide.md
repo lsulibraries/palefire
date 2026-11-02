@@ -126,6 +126,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Collapsed dock glass is a gradient (`--pf-dock-fill`): solid in the bottom 20%, thinning to 75% (`$pf-dock-glass-top`) by 85% of its height; open panels stay 92%.
 - **2026-11-01:** The dock rests on Safari 26's floating toolbar instead of running under it: the tint strip, the bleed and the 76px toolbar reserve are removed (12px under the row everywhere).
 - **2026-11-01:** `.pf-dock-tint`, a 12px solid strip at the bottom edge in the dock's color (iOS WebKit only), so Safari 26 paints the band behind its toolbar to match the dock.
 - **2026-11-01:** The dock's glass bleeds 160px below its edge (`--pf-dock-bleed`), so it runs under Safari 26's floating toolbar, where `bottom: 0` is the toolbar's top.

@@ -15,6 +15,13 @@
 // even over solid white or black (_reading-themes.scss).
 $pf-dock-glass: .92;
 
+// Collapsed, the dock fades from solid at its foot (the bottom 20%) to a
+// thinner glass (75%) near its top edge. Its muted second line sits 40%
+// up, where the glass is still 92% (4.5:1 worst case); the bold first
+// line 60% up, at 85% (5.8:1). Open panels keep the even 92%: their lists
+// run up into where the thin glass would be.
+$pf-dock-glass-top: .75;
+
 // Dock pages run under the notch (viewport-fit=cover, palefire.theme), so
 // in landscape the page and the drawers step in from it. Zero in portrait.
 html[data-pf-dock] body {
@@ -76,10 +83,17 @@ html[data-pf-dock] .offcanvas {
     --pf-dock-track: color-mix(in srgb, var(--pf-section-muted) 35%, transparent);
     --pf-dock-chrome-rgb: var(--pf-g-chrome-rgb, 247, 244, 236);
     --pf-dock-bg: rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass});
+    --pf-dock-fill: var(--pf-dock-bg);
     color: var(--pf-section-fg);
-    background: var(--pf-dock-bg);
+    background: var(--pf-dock-fill);
     -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
     backdrop-filter: var(--pf-glass-filter, blur(26px));
+  }
+
+  // :where() keeps it at one class, so the solid fallbacks
+  // (_utility-panels.scss) still win.
+  .pf-dock:where(:not([data-open])) {
+    --pf-dock-fill: linear-gradient(to top, rgb(var(--pf-dock-chrome-rgb)) 20%, rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass-top}) 85%);
   }
 
   // Above the page and its fixed bars, under the drawers and their wash.

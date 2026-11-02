@@ -404,6 +404,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-dock,
   .pf-dock-tab {
     --pf-dock-bg: rgba(var(--pf-dock-chrome-rgb), .96);
+    --pf-dock-fill: var(--pf-dock-bg);
   }
 }
 
@@ -418,6 +419,7 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-dock,
   .pf-dock-tab {
     --pf-dock-bg: rgb(var(--pf-dock-chrome-rgb));
+    --pf-dock-fill: var(--pf-dock-bg);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }

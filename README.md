@@ -1058,6 +1058,10 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+### 2026-11-02
+
+- **Mobile dock: gradient glass.** Collapsed, the dock is solid in its bottom 20% and thins to 75% glass (`$pf-dock-glass-top`, blur unchanged) by 85% of its height, as `--pf-dock-fill`. The muted second line sits 40% up, where the glass is still 92% (4.5:1 worst case over solid white or black); the bold first line sits 60% up at 85% (5.8:1). Open panels keep the even 92%, since their lists run up into the thin part. The solid fallbacks (reduced transparency, no backdrop-filter) set `--pf-dock-fill` too, and `:where()` keeps the gradient rule from outranking them. Checked on a copy of /v2/special at 390 (Twilight and Cream). Why: a lighter, more see-through dock that still reads as resting on the edge.
+
 ### 2026-11-01
 
 - **Location pages: Swiss index columns, sticky heads.** The parts after the top left half the page empty (Hours and Booking in a narrow column) and a plain gap sat between the ledger and 01. From lg each part sets its rule across the full width, then its heading and lede in four of twelve columns, sticky under the header (`.pf-section__head` and `.pf-section--aside`, from `index.aside` set in `palefire_preprocess_field()`), and its content in the other eight. Hours sits beside its links; Booking's text runs in two columns from xl. On dark swatches the Location section has no bottom padding and its photo fades into the section color over its last 6rem. Phones are unchanged.
