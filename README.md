@@ -1058,6 +1058,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-02:** Lecture Hall: "Fees apply." comes out of the room's description, since Need to know says it right under it. Run `scripts/palefire_location_fee_line.php`.
 - **2026-11-02:** Location pages: the row of policy icons at the top becomes Need to know, up to three things in words: the room's Required policies (less Reservation only and By appointment, which the Access fact and the button already say) and, for an Event rental, Fees apply. Ten icons that each needed a tap to read made the top look busy and said little; everything else is still in House rules, the ledger and Reserve. The tooltip script (`js/location-pins.js`) is removed. No content change: it follows each policy's state.
 - **2026-11-02:** Location pages: in the policy marks' tooltips, "Required" is in the accent colour, so what someone has to do stands out from what is merely allowed. 5.7:1 or better in all 13 reading colours.
 - **2026-11-02:** Access: Room rental is now Event rental (the key stays `rental`). The Lecture Hall is booked for events, classes and meetings, for a fee, and staff approve each one; "Room rental" read like hiring an empty room. The button's "Request a date" says it needs approval. Re-run `scripts/palefire_location_access_area.php` to rename the field option.
