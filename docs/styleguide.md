@@ -127,7 +127,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
-- **2026-11-02:** Map: `.pf-map__knock`, a black rect in the here room's hatch mask sized by `building-map.js` from the name's glyphs (cap height over each baseline, padding .45em), with the name's transform, lift and reveal; hidden below 576px. `hereGap` 36 → 52.
+- **2026-11-02:** Map: `.pf-map__knock`, a black rect in the here room's hatch mask sized by `building-map.js` from the name's glyphs (cap height over each baseline, padding .7em), with the name's transform, lift and reveal; hidden below 576px. `hereGap` 36 → 68. The lit here name is `--pf-map-hover` (was the ink); on Solarized mixed 25% white.
 - **2026-11-02:** `pf-location-backdrop-whole`: bottom 0 with `max-height: 100lvh` (was `height: 100lvh`), so the backdrop never passes the Location section's foot.
 - **2026-11-02:** Map: `[aria-current]` room back to the hatch at full strength, its name in the ink (`.is-here.is-active`); the solid `--pf-map-hover` fill and dark name are undone.
 - **2026-11-02:** Location ledger: `.pf-location__facts::before` has no fill (hairline, shadow, blur over a backdrop); six facts get six columns from 52rem. Backdrop: a swatch-colour `color` layer over the veil; `--pf-location-muted` lifted 40% toward `--pf-g-heading` over it. New `includes/about.html.twig` ("~100", read "about 100") and space mark `receipt`. Map: the `[aria-current]` room is filled with `--pf-map-hover`, its name in `--pf-map-on-hover`, focus ring in the ink; the key groups Walk in / Book online / Room rental (`s.hatch`, `s.access_label`); indexed key two columns from md, one per group from 1200px.

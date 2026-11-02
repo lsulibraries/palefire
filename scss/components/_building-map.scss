@@ -472,14 +472,17 @@
 .pf-map__here-badge::before { content: ""; width: 0; height: 0; border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0; }
 .pf-map__item[aria-current] .pf-map__item-name { color: var(--pf-map-hover); }
 /* The room itself in the highlight color, as in the map-led mockup: its
-   hatch at full strength and its outline in the swatch's accent. Its name
-   keeps the ink, which reads over the accent's stripes. */
+   hatch at full strength and its outline in the swatch's accent. */
 .pf-map__region[aria-current] .pf-map__hatch,
 .pf-map__region[aria-current]:is(:hover, :focus-visible, .is-active) .pf-map__hatch { fill: var(--pf-map-hover); fill-opacity: 1; }
 .pf-map__region[aria-current] .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 2); }
-/* Lit, it keeps the ink too (gold would sink into its own room), over the
-   lifted name's dark halo. building-map.js marks it .is-here. */
-.pf-map__label.is-here.is-active { fill: var(--pf-map-ink); }
+/* Lit, its name is in the accent too: it sits in its cut-out (.pf-map__knock,
+   below), clear of the stripes. building-map.js marks it .is-here. */
+.pf-map__label.is-here.is-active { fill: var(--pf-map-hover); }
+/* Solarized's teal gives 4.1:1 over the location backdrop's ceiling (grey
+   64): lightened a quarter, 5.3:1. Every other dark swatch's accent is
+   4.75:1 or more. */
+html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-mix(in srgb, var(--pf-map-hover) 75%, #fff); }
 /* The name's cut-out: the hatch cleared in an even margin around the here
    room's name (building-map.js sizes it from the letters), on the name's
    own angle, so the name reads on the frosted photo, not over the dots.

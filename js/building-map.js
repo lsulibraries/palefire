@@ -28,7 +28,7 @@
     tipGap: 14,          // px between the room name and the tooltip
     hatchPeriod: 20,     // map units: the hatch <pattern> height in the drawing
     appointmentHatch: 'broken', // 'broken' (staggered dashes) or 'lines' (the drawing's own hatch)
-    hereGap: 52,         // map units between the "here" arrow and the room name (clears the name's cut-out)
+    hereGap: 68,         // map units between the "here" arrow and the room name (clears the name's cut-out)
   };
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -523,7 +523,7 @@
         const em = parseFloat(cs.fontSize) || 62;
         const spacing = parseFloat(cs.letterSpacing) || 0;
         const cap = em * 0.72;
-        const pad = em * 0.45;
+        const pad = em * 0.7;
         const box = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
         const lines = hereLabel.querySelectorAll('tspan');
         (lines.length ? [...lines] : [hereLabel]).forEach((line) => {
