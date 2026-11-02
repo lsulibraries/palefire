@@ -1972,7 +1972,7 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
   white-space: nowrap;
   text-decoration: underline transparent;
   text-decoration-thickness: 1px;
-  text-underline-offset: .3em;
+  text-underline-offset: .35em;
   transition: text-decoration-color $pf-hover-out ease;
 
   &::after {
@@ -1983,6 +1983,12 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
     transition: transform $pf-hover-out ease;
   }
 
+  // Out of the site (Directions to Google Maps): up-right, as the theme's
+  // buttons (_buttons.scss).
+  &[target="_blank"]::after {
+    content: "\2197" / "";
+  }
+
   &:hover,
   &:focus-visible {
     text-decoration-color: currentColor;
@@ -1991,6 +1997,10 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
     &::after {
       transform: translateX(.2em);
       transition-duration: $pf-hover-in;
+    }
+
+    &[target="_blank"]::after {
+      transform: translate(.15em, -.15em);
     }
   }
 
@@ -3071,7 +3081,7 @@ html[data-pf-hero] .pf-landing--cover {
   gap: .625rem;
   min-height: 2.75rem;
   padding: 0 1rem;
-  border: 1px solid #{$pf-hairline};
+  border: 1px solid var(--pf-section-border, var(--pf-g-scroll, currentColor));
   font-size: var(--pf-mono-ui);
   letter-spacing: .12em;
   border-radius: 0;
@@ -3611,7 +3621,8 @@ html[data-pf-hero] .pf-landing--hero {
   padding: .5rem 1rem;
   font-size: var(--pf-mono-ui);
   letter-spacing: .12em;
-  border: 1px solid #{$pf-hairline};
+  // The control line (3:1), as every secondary button (_buttons.scss).
+  border: 1px solid var(--pf-section-border, var(--pf-g-scroll, currentColor));
   border-radius: 0;
   color: var(--pf-section-fg, var(--bs-body-color));
   text-decoration: none;
@@ -3639,8 +3650,8 @@ html[data-pf-hero] .pf-landing--hero {
 }
 
 // Log in: unfilled, so the Search button stays the hero's one gold
-// button. It leads Register with a full-strength edge (the control line,
-// 3:1) and its arrow in the accent; hover turns it gold like Register.
+// button. Both buttons have the control line (3:1) as their edge; Log in
+// leads with its arrow in the accent; hover turns it gold like Register.
 .pf-landing__account-button--primary {
   border-color: var(--pf-section-border, currentColor);
   background-color: transparent;

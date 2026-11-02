@@ -5,23 +5,53 @@
  *
  * Variables from palefire_preprocess_paragraph__location_booking():
  * - booking.body: the section's Text, rendered, or NULL.
- * - booking.link: url and title (the button), or NULL.
+ * - booking.parts: the Text split at its subheads
+ *   (_palefire_location_booking_parts()): intro, steps (the part with a
+ *   numbered list: title, body) and groups (the other parts), or NULL when
+ *   it has no subheads.
+ * - booking.link: url and title (the button), or NULL. Beside a Location
+ *   section, the top's link when the section has none.
  * - booking.capacity: the room's Capacity, or ''.
  * - booking.needs: the room's Required policies (label, detail, state,
  *   icon), from its Building spaces term.
  *
- * The section <h2> comes from the scroll-section field template. Text and
- * button on the left; on the right a short ledger of what booking needs.
+ * The section <h2> comes from the scroll-section field template. In the
+ * order people act: the opening text, the steps (across from md), the
+ * button, then the other parts side by side as short ledgers. Text with
+ * no subheads prints whole, the button after it. Away from a Location
+ * section, a ledger of what booking needs sits beside it.
  */
 #}
 {% if booking.body or booking.link or booking.capacity or booking.needs %}
   <div{{ attributes.addClass('pf-booking') }}>
     <div class="pf-booking__text">
-      {% if booking.body %}{{ booking.body }}{% endif %}
+      {% if booking.parts %}
+        {% if booking.parts.intro %}
+          <div class="pf-booking__intro">{{ booking.parts.intro }}</div>
+        {% endif %}
+        {% if booking.parts.steps %}
+          <section class="pf-booking__steps" aria-labelledby="{{ booking.uid }}-steps">
+            <h3 id="{{ booking.uid }}-steps">{{ booking.parts.steps.title }}</h3>
+            {{ booking.parts.steps.body }}
+          </section>
+        {% endif %}
+      {% elseif booking.body %}
+        {{ booking.body }}
+      {% endif %}
       {% if booking.link %}
         <p class="pf-location__actions">
           <a class="pf-location__cta" href="{{ booking.link.url }}">{{ booking.link.title }}</a>
         </p>
+      {% endif %}
+      {% if booking.parts.groups %}
+        <div class="pf-booking__groups">
+          {% for group in booking.parts.groups %}
+            <section class="pf-booking__group" aria-labelledby="{{ booking.uid }}-part-{{ loop.index }}">
+              <h3 id="{{ booking.uid }}-part-{{ loop.index }}">{{ group.title }}</h3>
+              {{ group.body }}
+            </section>
+          {% endfor %}
+        </div>
       {% endif %}
     </div>
     {% if booking.capacity or booking.needs %}

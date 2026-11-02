@@ -86,18 +86,16 @@
   .pf-location__top {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-  // The head centred on the drawing and its key: on the foot, a short
-  // head left the top of its column empty.
-  .pf-location__top { align-items: center; }
+  // The head at the top of its column, so every room's title starts on
+  // the same line (centred, a short head floated mid-map).
+  .pf-location__top { align-items: start; }
   .pf-location__head { grid-column: span 2; }
   .pf-location__map { grid-column: span 3; }
 }
 
-.pf-location__eyebrow {
-  @extend %pf-location-label;
-  margin: 0 0 .75rem;
-  color: var(--pf-g-accent, var(--pf-location-muted));
-}
+// The eyebrow is the landing's kicker (.pf-landing__kicker, _landing-swiss):
+// the building in the accent, a rule, the floor muted.
+.pf-location__eyebrow { margin-top: 0; }
 
 // The room's name as every page <h1> on the shared system (the cover's,
 // the showcase's): --pf-hero-title-size, 500, tight. Long names wrap;
@@ -113,9 +111,10 @@
   hyphens: auto;
 }
 
+// The landing intro's size (--pf-hero-text, 16 to 18px).
 .pf-location__lede {
   max-width: 34rem;
-  font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+  font-size: var(--pf-hero-text, clamp(1rem, .95rem + .2vw, 1.125rem));
   line-height: 1.55;
 
   > :last-child { margin-bottom: 0; }
@@ -509,8 +508,8 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 
 // --- The ledger: the facts in a row ----------------------------------------
 // Term over value, unruled (over a photo, on the floors' frost): two across
-// on phones, three from 30rem, and from 52rem one per column of the grid,
-// so each starts on a column line.
+// on phones, three from 30rem, one row of equal columns from 40rem, and
+// from 52rem one per column of the grid, so each starts on a column line.
 .pf-location__ledger {
   margin-top: var(--pf-location-gap);
 }
@@ -546,8 +545,20 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 @container pf-location (min-width: 30rem) {
   .pf-location__facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+// From 40rem, one row with a column per fact (four or five), so none sits
+// alone on a second row.
+@container pf-location (min-width: 40rem) {
+  .pf-location__facts {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+  }
+}
 @container pf-location (min-width: 52rem) {
-  .pf-location__facts { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pf-location__facts {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-flow: row;
+  }
 }
 
 // --- The parts: sections of their own -------------------------------------
@@ -615,31 +626,60 @@ html[data-pf-page="location"] {
   }
 }
 
-@include media-breakpoint-up(xl) {
-  // The opening paragraph across both columns, then each subhead kept with
-  // its list: How to book and charges in the first, equipment and layouts
-  // in the second.
-  html[data-pf-page="location"] .pf-booking__text {
-    max-width: none;
-    columns: 2;
-    column-gap: var(--pf-grid-gutter, 2rem);
+// Reserve, in the order people act: the opening text, the steps, the
+// button, then the other parts (charges, equipment, layouts) side by side
+// as short ledgers, on the House rules' columns (14rem and up). From md the
+// steps run across, each number over its words.
+html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 
-    > p:first-child { column-span: all; margin-bottom: 0; }
-    > :is(h3, h4) { break-after: avoid; }
-    > :is(ul, ol, p) { break-inside: avoid; }
+@include media-breakpoint-up(md) {
+  html[data-pf-page="location"] .pf-booking__steps ol {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0 var(--pf-grid-gutter, 2rem);
+
+    > li {
+      padding: .875rem 0 0;
+      border-bottom: 0;
+
+      &::before {
+        position: static;
+        display: block;
+        margin-bottom: .375rem;
+      }
+    }
   }
 }
 
-// The room: its photos three across at every width (4:5, as the image
-// style crops them), each captioned in the label voice under a hairline.
-// The surface shows while a photo loads; width and height keep its place.
+// The room: its photos three across from md (4:5, as the image style crops
+// them), each captioned in the label voice under a hairline. Below md the
+// first leads across the width at 4:3 and the rest pair up under it, so
+// none is a thumbnail. The surface shows while a photo loads; width and
+// height keep its place.
 .pf-location__photos {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem clamp(.5rem, 1.5vw, var(--pf-grid-gutter));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem clamp(.75rem, 1.5vw, var(--pf-grid-gutter));
   margin: 0;
   padding: 0;
   list-style: none;
+
+  > li:first-child {
+    grid-column: 1 / -1;
+
+    img { aspect-ratio: 4 / 3; }
+  }
+
+  // An even count: the last would sit alone, so it leads too.
+  > li:last-child:nth-child(even) { grid-column: 1 / -1; }
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    > li:first-child,
+    > li:last-child:nth-child(even) { grid-column: auto; }
+    > li:first-child img { aspect-ratio: 4 / 5; }
+  }
 }
 
 .pf-location__photo {
@@ -664,8 +704,8 @@ html[data-pf-page="location"] {
 }
 
 // Visit: the strip's hours without its frame or its Google map (the
-// building map above shows the way in, Open in Google Maps the way there):
-// today's status, the week, then the links on one line.
+// building map above shows the way in, the rule's Directions the way
+// there): today's status, the week, then the links on one line.
 .pf-location__visit {
   @extend %pf-visit-tokens;
   max-width: 36rem;
@@ -683,39 +723,11 @@ html[data-pf-page="location"] {
 }
 
 // --- CTA ------------------------------------------------------------------------
-// The exhibition button, primary: square, mono capitals, solid ink; hover
-// and focus take the swatch's hover color.
+// The theme's primary button (_buttons.scss), as the footer's: the accent
+// filled, an arrow after the words.
 .pf-location__cta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: .5rem 1.25rem;
-  font: var(--pf-mono-ui)/1.2 var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--pf-section-bg, var(--bs-body-bg));
-  text-decoration: none;
-  background: var(--pf-location-fg, var(--bs-body-color));
-  // A control's boundary: the ink itself (3:1, WCAG 1.4.11).
-  border: 1px solid var(--pf-location-fg, var(--bs-body-color));
-  border-radius: 0;
-  transition:
-    color $pf-hover-out ease,
-    background-color $pf-hover-out ease,
-    border-color $pf-hover-out ease;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-section-bg, var(--bs-body-bg));
-    background: var(--pf-g-hover, var(--pf-location-fg));
-    border-color: var(--pf-g-hover, var(--pf-location-fg));
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-location-fg, currentColor);
-    outline-offset: 3px;
-  }
+  @extend %pf-button-primary;
+  @extend %pf-button-arrow;
 }
 
 // --- House rules ----------------------------------------------------------------
@@ -875,6 +887,19 @@ html[data-pf-page="location"] {
     }
   }
 }
+.pf-booking__intro {
+  max-width: 62ch;
+
+  > :last-child { margin-bottom: 0; }
+}
+.pf-booking__text > .pf-location__actions { margin: clamp(1.5rem, 3vw, 2rem) 0 0; }
+.pf-booking__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0 var(--pf-grid-gutter, 2rem);
+}
+.pf-booking__group > :last-child { margin-bottom: 0; }
+
 .pf-booking__facts {
   margin: 0;
   border-top: 1px solid var(--pf-location-line);

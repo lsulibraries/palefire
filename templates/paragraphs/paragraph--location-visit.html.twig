@@ -9,14 +9,15 @@
  * - uid: the page's Location id, so the hours line under the title jumps
  *   here (uid-visit-hours).
  *
- * The section <h2>, its index rule (with Directions) and lede come from
- * the scroll-section field template (_palefire_location_index()). The
- * Visit strip's hours without its frame or its Google map (the building
- * map at the top shows the way in, Open in Google Maps the way there):
- * today's status, the week, then the links on one line.
+ * The section <h2>, its index rule (with Directions, to Google Maps) and
+ * lede come from the scroll-section field template
+ * (_palefire_location_index()). The Visit strip's hours without its frame
+ * or its Google map (the building map at the top shows the way in, the
+ * rule's Directions the way there): today's status, the week, then the
+ * links. Google Maps is linked once, in the rule.
  */
 #}
-{% if visit and (visit.lid or visit.maps_url or visit.parking_url) %}
+{% if visit and (visit.lid or visit.parking_url) %}
   <div{{ attributes.addClass('pf-location__visit') }}>
     {% if visit.lid %}
       {# visit-hours.js fills the status and the week. #}
@@ -39,12 +40,6 @@
         <a class="pf-visit__link" href="https://lsu.libcal.com/hours">
           {{- 'All library hours'|t -}}
           <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg>
-        </a>
-      {% endif %}
-      {% if visit.maps_url %}
-        <a class="pf-visit__link" href="{{ visit.maps_url }}" target="_blank" rel="noopener">
-          {{- 'Open in Google Maps'|t -}}
-          <svg class="pf-visit__ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h7v7M13 3 4 12"/></svg><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
         </a>
       {% endif %}
       {% if visit.parking_url %}

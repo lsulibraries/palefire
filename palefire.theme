@@ -1320,10 +1320,69 @@ function _palefire_location_booking(ParagraphInterface $paragraph, ?array $locat
       '#text' => $body->value,
       '#format' => $body->format,
     ] : NULL,
+    'parts' => $body && !$body->isEmpty() ? _palefire_location_booking_parts((string) $body->value, (string) $body->format) : NULL,
     'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
     'capacity' => $location['capacity'] ?? '',
     'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
   ];
+}
+
+/**
+ * The booking text in parts, split at its subheads (h3), for Reserve's
+ * layout: the text before the first subhead (intro), the part whose list
+ * is numbered (steps: How to book), and the others (groups: Service
+ * charges, Equipment, Layouts) to sit side by side. Each part is filtered
+ * on its own in the field's format, so editors keep writing one text.
+ * NULL when the text has no subheads (the template prints it whole).
+ */
+function _palefire_location_booking_parts(string $html, string $format): ?array {
+  $dom = Html::load($html);
+  $body = $dom->getElementsByTagName('body')->item(0);
+  if (!$body) {
+    return NULL;
+  }
+  $intro = '';
+  $groups = [];
+  $current = NULL;
+  foreach (iterator_to_array($body->childNodes) as $node) {
+    $tag = $node instanceof \DOMElement ? strtolower($node->tagName) : '';
+    if ($tag === 'h3') {
+      if ($current) {
+        $groups[] = $current;
+      }
+      $current = ['title' => trim($node->textContent), 'html' => '', 'steps' => FALSE];
+      continue;
+    }
+    $chunk = (string) $dom->saveHTML($node);
+    if ($current === NULL) {
+      $intro .= $chunk;
+      continue;
+    }
+    $current['html'] .= $chunk;
+    $current['steps'] = $current['steps'] || $tag === 'ol';
+  }
+  if ($current) {
+    $groups[] = $current;
+  }
+  if (!$groups) {
+    return NULL;
+  }
+  $text = static fn (string $value): ?array => trim(strip_tags($value, '<img>')) === '' ? NULL : [
+    '#type' => 'processed_text',
+    '#text' => $value,
+    '#format' => $format,
+  ];
+  $parts = ['intro' => $text($intro), 'steps' => NULL, 'groups' => []];
+  foreach ($groups as $group) {
+    $part = ['title' => $group['title'], 'body' => $text($group['html'])];
+    if ($group['steps'] && !$parts['steps']) {
+      $parts['steps'] = $part;
+    }
+    else {
+      $parts['groups'][] = $part;
+    }
+  }
+  return $parts;
 }
 
 /**
@@ -1492,15 +1551,14 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
   $location = $room ? _palefire_location_data($room, $cache) : NULL;
   $variables['booking'] = _palefire_location_booking($paragraph, $location, 'pf-booking-' . $paragraph->id());
   // Beside a Location section: its ledger gives the capacity and House
-  // rules the required policies, and its button is this link already.
+  // rules the required policies. The button under the steps is this
+  // section's link, else the top's (the index rule has no link of its own:
+  // _palefire_location_index()).
   $space = _palefire_location_sibling($paragraph, 'location_space');
   if ($space) {
     $variables['booking']['capacity'] = '';
     $variables['booking']['needs'] = [];
-    $top = $location['link']['url'] ?? (_palefire_location_booking($space, NULL, '')['link']['url'] ?? NULL);
-    if ($variables['booking']['link'] && $variables['booking']['link']['url'] === $top) {
-      $variables['booking']['link'] = NULL;
-    }
+    $variables['booking']['link'] ??= $location['link'] ?? _palefire_location_booking($space, NULL, '')['link'];
   }
   $cache->applyTo($variables);
 }
@@ -1674,7 +1732,7 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  *
  * Add new ones at the end, so existing plates keep their numbers.
  */
-const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion'];
+const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons'];
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.
@@ -2414,12 +2472,12 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       ];
 
     default:
-      $space = _palefire_location_sibling($paragraph, 'location_space');
-      $link = $location['link'] ?? ($space ? _palefire_location_booking($space, NULL, '')['link'] : NULL);
+      // No link in the rule: the section's own button, under the steps, is
+      // the way to the form (palefire_preprocess_paragraph__location_booking()).
       return [
         'label' => (string) t('Reserve'),
         'lede' => (string) t('How to request the @room, and what comes with it.', ['@room' => $name]),
-        'link' => $link ? ['url' => $link['url'], 'text' => (string) t('Request form'), 'external' => FALSE] : NULL,
+        'link' => NULL,
       ];
   }
 }

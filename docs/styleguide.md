@@ -100,6 +100,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Spacers, rhythm | Bootstrap `$spacers` | ▣ Spacing |
 | Hairline, control border, focus ring | `_base.scss`, `_variables.scss` | ▣ Lines |
 | Motion tokens | `_variables.scss` | ▣ Motion |
+| Buttons (primary, secondary, arrow) and text links | `_buttons.scss` (`%pf-button-primary`, `%pf-button-secondary`, `%pf-button-arrow`; `.pf-button--*` for markup of its own), `.pf-index-rule__link` | ▣ Buttons and links |
 | Exhibition gallery (story) | `paragraph--exhibit-page` | ✔ every gallery |
 | Exhibition title page | `includes/exhibit-cover` | ✔ the page's own |
 | Text (Plain, Callout, Sources) | `paragraph--guide-text` | ✔ |
@@ -126,6 +127,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Buttons: one system in `_buttons.scss`. Primary is the swatch accent filled (`--pf-g-accent`, ink `--pf-g-on-accent`), hover to the text color; secondary is unfilled with the control border (`--pf-section-border`, else `--pf-g-scroll`); both 13px .12em mono capitals, 48px (dense rows 44px). Arrow: → on the site, ↗ for `target="_blank"`, stepping the way it points. The location button, the landing's Register and Quick guide buttons, the Ask buttons and the footer button follow it; index-rule links show ↗ when they open a new tab; text-link underlines sit at .35em. New plate 08, Buttons and links.
+- **2026-11-02:** Location pages: the eyebrow is the landing's kicker (building, rule, floor); the lede is `--pf-hero-text`; the head sits at the top of its column. Google Maps is linked once (the index rule). The facts run in one row of equal columns from 40rem. Reserve splits its text at the subheads: intro, the steps (across from md), the button, then the other parts on 14rem columns; no index-rule link. Room photos below md: the first across at 4:3, the rest in pairs.
 - **2026-11-02:** Exhibition walls below md: a tile alone on its row fills it (cap 60svh tall, not 1.75 times the row), and the last row fills too.
 - **2026-11-02:** Bare exhibition walls below lg: the foot wash is sized to the text (solid behind it, eased out over `$pf-bare-fade`, 8rem), not a share of the screen.
 - **2026-11-02:** Phones: with the section crumb showing, the breadcrumb drops the crumbs between Home and the page, and the section keeps its name (up to 55% of the row). Bare exhibition walls below lg get a lighter foot wash (`$pf-bare-wash`, 36% to 76%).

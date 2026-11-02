@@ -354,7 +354,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
   color: var(--pf-section-fg, var(--bs-body-color));
   text-decoration-color: var(--pf-landing-accent);
   text-decoration-thickness: 1px;
-  text-underline-offset: .45em;
+  text-underline-offset: .35em;
 }
 
 .pf-visit__link:is(:hover, :focus-visible) {

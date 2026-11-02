@@ -67,8 +67,11 @@
       <div class="pf-location__intro{{ location.backdrop ? ' has-backdrop' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}{% if location.backdrop %} style="--pf-location-backdrop: url('{{ location.backdrop }}')"{% endif %}>
         <div class="pf-location__top">
           <div class="pf-location__head">
-            <p class="pf-location__eyebrow">
-              {%- if location.floor %}{{ 'Floor @n'|t({'@n': location.floor}) }} &middot; {% endif %}{{ location.building -}}
+            {# As the landing's kicker: the building in the accent, then a
+               rule and the floor in the muted label tone. #}
+            <p class="pf-location__eyebrow pf-landing__kicker">
+              {{- location.building -}}
+              {%- if location.floor %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ 'Floor @n'|t({'@n': location.floor}) }}</span>{% endif -%}
             </p>
             {% if page_title %}
               <h1 class="pf-location__title">{{ page_title }}</h1>

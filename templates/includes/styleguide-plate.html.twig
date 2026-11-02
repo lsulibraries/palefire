@@ -6,7 +6,7 @@
  * guide_text block whose text has a paragraph that is only
  * "[styleguide:<plate>]" (palefire_preprocess_paragraph__guide_text()).
  *
- * - plate: overview, colors, type, grid, spacing, lines or motion.
+ * - plate: overview, colors, type, grid, spacing, lines, motion or buttons.
  * - number: its place on the page ("02").
  * - uid: id base.
  *
@@ -23,7 +23,8 @@
   grid: 'Grid and breakpoints'|t,
   spacing: 'Spacing'|t,
   lines: 'Lines and focus'|t,
-  motion: 'Motion'|t
+  motion: 'Motion'|t,
+  buttons: 'Buttons and links'|t
 } %}
 <figure class="pf-sg-plate pf-sg-plate--{{ plate }}" aria-labelledby="{{ uid }}-name" data-pf-styleguide>
   <figcaption class="pf-sg-plate__head">
@@ -217,5 +218,22 @@
       {% endfor %}
     </ul>
     <p class="pf-sg-label">{{ 'Press a card to play its curve. All of it stops under Reduce motion.'|t }}</p>
+
+  {% elseif plate == 'buttons' %}
+    {# The live buttons (_buttons.scss), on the lines plate's columns. #}
+    <div class="pf-sg-lines">
+      <div>
+        <p><a class="pf-button pf-button--primary pf-button--arrow" href="#{{ uid }}-name">{{ 'Plan a research visit'|t }}</a></p>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Primary'|t }}</span><span class="pf-sg-line__token">%pf-button-primary · accent fill · 13px .12em · 48px</span>{{ 'The one main action in a view: Search, Plan a research visit, Request a room.'|t }}</p>
+      </div>
+      <div>
+        <p><a class="pf-button pf-button--secondary pf-button--arrow" href="#{{ uid }}-name" target="_blank" rel="noopener">{{ 'Log in'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a></p>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Secondary'|t }}</span><span class="pf-sg-line__token">%pf-button-secondary · --pf-section-border (3:1)</span>{{ 'Every other button. Dense rows set 2.75rem.'|t }}</p>
+      </div>
+      <div>
+        <p><a class="pf-index-rule__link" href="#{{ uid }}-name">{{ 'Full guide'|t }}</a></p>
+        <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Text link'|t }}</span><span class="pf-sg-line__token">12px .16em · underline at .35em</span>{{ 'Arrows: → stays on the site, ↗ opens a new tab, none on a submit.'|t }}</p>
+      </div>
+    </div>
   {% endif %}
 </figure>

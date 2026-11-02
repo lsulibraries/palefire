@@ -140,6 +140,9 @@ html#{$pf-themed} .pf-footer {
   min-height: 3rem;
   margin: 1.75rem 0 0;
   padding: .625rem 1.375rem;
+  // The button voice (_buttons.scss), not the footer's labels.
+  font-size: var(--pf-mono-ui);
+  letter-spacing: .12em;
   border-radius: 0;
   background-color: var(--pf-footer-accent);
   color: var(--pf-footer-on-accent);
