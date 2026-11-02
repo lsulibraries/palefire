@@ -1699,10 +1699,9 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 
 // The rise-in, as the Collections tiles had (js/tile-reveal.js): on load,
 // once, each banner fades up into place, left to right, 120ms apart. CSS
-// only, so it runs with
-// the page (Swup's too), from when the page fade starts (as the cover's
-// entrance, _entrance.scss, which retimes it there). None with reduced
-// motion or the Settings drawer's switch.
+// only, so it runs with the page (Swup's too) from the first paint, as the
+// cover's entrance (_entrance.scss, which retimes it there). None with
+// reduced motion or the Settings drawer's switch.
 @keyframes pf-banner-rise {
   from {
     opacity: 0;
@@ -1711,7 +1710,7 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion):is(.pf-ready, :not(.pf-fade)) .pf-hero-banner {
+  html:not(.pf-a11y-motion) .pf-hero-banner {
     animation: pf-banner-rise .9s cubic-bezier(.2, .7, .2, 1) both;
 
     @for $i from 1 through 5 {
@@ -3127,6 +3126,31 @@ html[data-pf-hero] .pf-landing--cover {
 .pf-landing--cover .pf-map .pf-visit .pf-visit__go {
   gap: .625rem;
   justify-self: stretch;
+}
+
+// Until the four-column strip (phones and tablets): the buttons as wide as
+// the week and the map above them, stacked, on one rhythm: .75rem from the
+// week's last rule or the map, .5rem between the two.
+@container pf-cover (width < 64rem) {
+  .pf-landing--cover .pf-visit__link {
+    width: 100%;
+  }
+
+  .pf-landing--cover .pf-visit__all-hours {
+    margin-top: .75rem;
+  }
+
+  .pf-landing--cover .pf-map .pf-visit .pf-visit__go {
+    flex-direction: column;
+    gap: .5rem;
+  }
+}
+
+// Phones, one column: the map a step further (2rem) from the hours.
+@include media-breakpoint-down(md) {
+  .pf-landing--cover .pf-visit__hours + .pf-visit__place {
+    margin-top: 1.125rem;
+  }
 }
 
 // Hours: the status dot in its color (open, soon, closed), then "See

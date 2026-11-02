@@ -131,6 +131,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Visit panel buttons (`.pf-landing--cover .pf-visit__link`): full column width below `@container pf-cover (64rem)`, stacked, .75rem from the rule or map above, .5rem apart; phones put 2rem between hours and map. From 64rem they keep `min(100%, 17.5rem)`.
 - **2026-11-02:** Location top: the policy marks and their tooltips (`.pf-space-pin*`, `js/location-pins.js`, library `palefire/location-pins`) are replaced by Need to know (`.pf-location__need*`): a mono label in the accent over ruled rows, each a mark in the accent, a label and a muted detail. Up to three: the room's Required policies less those its access says (`PALEFIRE_ACCESS_POLICY_KEYS`), and Fees apply for an Event rental (`_palefire_location_need_to_know()`). Stacked at every width.
 - **2026-11-02:** Dock motion calmed: `--pf-dock-ease` `cubic-bezier(.33, 0, .15, 1)` over `--pf-dock-dur` .5s. The action pill opens, then its words fade in (folding is the reverse); panel contents fade with the panel's height.
 - **2026-11-02:** Policy mark tooltips: Required in `--pf-g-accent` (5.7:1 or better on `--pf-g-surface` in every reading colour); Allowed and Not allowed stay muted.
