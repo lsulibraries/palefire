@@ -126,6 +126,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Collapsed dock glass thins to 66% at the top edge (`$pf-dock-glass-top`); the solid page-color foot is the bottom 25% so muted text keeps 4.5:1.
 - **2026-11-02:** The dock's solid foot is the page color (`--pf-dock-foot-rgb`), not the chrome, so it meets Safari 26's toolbar band (tinted from the page background) without a seam; the fade into the 75% chrome glass ends at 90%.
 - **2026-11-02:** Dock action pill and Contents ring share a 34px size (pill 34px tall, 12px from the ring; the open ring fills a 34px disc in its 44px target). `.pf-dock-foot`, a 16px solid strip behind the dock's solid foot, lets Safari 26 tint its toolbar band to match.
 - **2026-11-02:** Collapsed dock glass is a gradient (`--pf-dock-fill`): solid in the bottom 20%, thinning to 75% (`$pf-dock-glass-top`) by 85% of its height; open panels stay 92%.
