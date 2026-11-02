@@ -286,6 +286,28 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
   min-width: 3.5em;
 }
 
+// Phones: five crumbs shared 320px into "SPECIA…", "EX…" and a one-letter
+// section. With the section showing and a trail between Home and the page,
+// the ancestors in between step out (the header's menu has them), and the
+// section, where the reader is, holds its name while the page gives way.
+@include media-breakpoint-down(md) {
+  .pf-breadcrumb--modular .breadcrumb:has(> .pf-breadcrumb__section:not([hidden]):nth-child(n + 4)) {
+    // The section is always last (js/modular-toc.js), the page just before.
+    > .breadcrumb-item:not(:first-child, :nth-last-child(-n + 2)) {
+      display: none;
+    }
+
+    > :nth-last-child(2) {
+      min-width: 4em;
+    }
+
+    > .pf-breadcrumb__section {
+      flex-shrink: 0;
+      max-width: 55%;
+    }
+  }
+}
+
 .pf-breadcrumb__toc {
   display: inline-flex;
   align-items: center;

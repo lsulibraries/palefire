@@ -2911,6 +2911,12 @@ $pf-brief-angle: 10deg;
 $pf-brief-solid: 44%;
 $pf-brief-clear: 90%;
 
+// Below lg, a wall that opens on its title and facts alone: the foot's
+// wash, dense to just above them (about 34% of the screen at 320 x 568,
+// 27% on a tall phone) and gone by three quarters up. The intro's wash
+// (46% to 98%) left only the top strip of the photograph.
+$pf-bare-wash: pf-eased-wash(to top, 36%, 76%);
+
 // The frame is pinned under the bar from the first scroll and its top edge
 // follows the bar as the header shrinks, while the image and its washes
 // inside are set back by the header's shrink so far (--pf-cover-shift, 0
@@ -2940,6 +2946,10 @@ $pf-brief-clear: 90%;
 
   &::after {
     background: pf-eased-wash(to top, 46%, 98%);
+
+    .pf-section__inner:not(:has(.pf-exhibit-wall__text)) & {
+      background: $pf-bare-wash;
+    }
 
     // From lg the text is on the side wash, and the foot only settles the
     // image into the page (::before, below). A short text (.is-brief,
@@ -3055,7 +3065,7 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         grid-column: 1;
         min-height: max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
         margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
-        background: pf-eased-wash(to top, 46%, 98%);
+        background: $pf-bare-wash;
         pointer-events: none;
 
         @include media-breakpoint-up(lg) {
