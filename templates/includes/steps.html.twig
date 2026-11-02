@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Steps (pf-steps): a short how-to done in order, on the Quick Start
+ * Guide's anatomy (includes/guide-request-paths.html.twig) with Roman
+ * numerals for its letters. Letters mark alternatives (pick one), Roman
+ * numerals a sequence (step II), and 01, 02 stay on the section index
+ * rules, so a step is never taken for a section. Two to four steps (up to
+ * eight), each a short name and a one-line note.
+ *
+ * From md the steps sit across, each headed by a large accent numeral
+ * beside its name on two lines, the note under them. Below md they run
+ * down one rail, each numeral in a diamond. An ordered list, so screen
+ * readers hear "list, 3 items" and each step's name; the drawn numerals
+ * are decorative.
+ *
+ * Available variables:
+ * - steps: a list of {name, note}: name in two parts ([first, rest]; one
+ *   line below md, two from md), note a render array or text, or NULL.
+ *   _palefire_steps_items() makes them from <li><strong>Name</strong>
+ *   note</li>.
+ * - labelledby: the id of the heading that names the list, optional.
+ */
+#}
+{% set numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'] %}
+<ol class="pf-steps"{% if labelledby|default('') %} aria-labelledby="{{ labelledby }}"{% endif %}>
+  {% for step in steps %}
+    <li class="pf-steps__step">
+      <span class="pf-steps__num" aria-hidden="true">{{ numerals[loop.index0]|default(loop.index) }}</span>
+      <span class="pf-steps__name">{{ step.name|first }}{% if step.name|last and step.name|length > 1 %} <span class="pf-steps__name-rest">{{ step.name|last }}</span>{% endif %}</span>
+      {% if step.note %}
+        <div class="pf-steps__note">{{ step.note }}</div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ol>

@@ -1058,6 +1058,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-02:** Steps: one pattern for short how-tos, from the Quick Start Guide, numbered I, II, III (Roman, so a step is never read as a section's 01, 02; letters stay for alternatives). Across from md, a rail of diamonds on phones. Reserve's How to book uses it, its steps rewritten as short names and notes in the order people act: Check the date, Send the form, Wait for our email. Run `scripts/palefire_location_steps.php`, then `scripts/palefire_styleguide.php` for the new plate 09.
 - **2026-11-02:** Location pages: a room's button, with no link text of its own, follows its access: Plan your visit (walk in), Book a time (book online), Reserve (room rental; the booking section's name). Short enough for the phone dock, which reuses the page's words. The Reserve section's button falls back the same way (was "Request this space").
 - **2026-11-02:** Map: the "here" room's name sits in a cut-out, the hatch cleared in an even margin around it on the name's own angle, so it reads on the frosted photo, in the active colour (Solarized's teal lightened a quarter for 4.5:1); the arrow sits higher to clear it. Hidden on phones with the names.
 - **2026-11-02:** Location pages: in portrait windows the room photo stops at the top section's foot (one screen at most); in tall desktop windows it ran on behind section 01.

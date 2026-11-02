@@ -604,6 +604,19 @@
   gap: 1.5rem;
 }
 
+// Steps: the live component on the plate's surface, the rules under it.
+.pf-sg-steps {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: var(--sg-surface);
+
+  .pf-steps {
+    --pf-steps-bg: var(--sg-surface);
+
+    margin: 0;
+  }
+}
+
 .pf-sg-line__demo {
   display: grid;
   align-content: center;

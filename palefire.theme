@@ -1422,6 +1422,7 @@ function _palefire_location_booking_parts(string $html, string $format): ?array 
   foreach ($groups as $group) {
     $part = ['title' => $group['title'], 'body' => $text($group['html'])];
     if ($group['steps'] && !$parts['steps']) {
+      $part['items'] = _palefire_steps_items($group['html'], $format);
       $parts['steps'] = $part;
     }
     else {
@@ -1429,6 +1430,71 @@ function _palefire_location_booking_parts(string $html, string $format): ?array 
     }
   }
   return $parts;
+}
+
+/**
+ * A numbered list's steps for includes/steps.html.twig (pf-steps), when
+ * each item opens with a bold name: <li><strong>Send the form</strong> At
+ * least two weeks ahead</li>. Each step is its name in two parts, broken
+ * at the middle word ("Send" / "the form"; the pattern sets it on two
+ * lines from md), and the rest as its note, filtered in the text's format.
+ * Text around the list comes back as rest. NULL when an item has no bold
+ * name (the text then prints as written).
+ */
+function _palefire_steps_items(string $html, string $format): ?array {
+  $dom = Html::load($html);
+  $list = $dom->getElementsByTagName('ol')->item(0);
+  if (!$list) {
+    return NULL;
+  }
+  $steps = [];
+  foreach (iterator_to_array($list->childNodes) as $li) {
+    if (!$li instanceof \DOMElement || strtolower($li->tagName) !== 'li') {
+      continue;
+    }
+    $lead = NULL;
+    foreach ($li->childNodes as $child) {
+      if ($child instanceof \DOMText && trim($child->textContent) === '') {
+        continue;
+      }
+      $lead = $child instanceof \DOMElement && in_array(strtolower($child->tagName), ['strong', 'b'], TRUE) ? $child : NULL;
+      break;
+    }
+    $name = $lead ? trim(preg_replace('/\s+/u', ' ', $lead->textContent)) : '';
+    if ($name === '') {
+      return NULL;
+    }
+    $li->removeChild($lead);
+    $note = '';
+    foreach ($li->childNodes as $child) {
+      $note .= $dom->saveHTML($child);
+    }
+    // A colon or dash an editor put after the name goes with it.
+    $note = preg_replace('/^[\s:\x{2013}\x{2014}-]+/u', '', $note);
+    $words = explode(' ', $name);
+    $split = max(1, intdiv(count($words), 2));
+    $steps[] = [
+      'name' => [implode(' ', array_slice($words, 0, $split)), implode(' ', array_slice($words, $split))],
+      'note' => trim(strip_tags($note)) === '' ? NULL : [
+        '#type' => 'processed_text',
+        '#text' => $note,
+        '#format' => $format,
+      ],
+    ];
+  }
+  if (!$steps) {
+    return NULL;
+  }
+  $list->parentNode->removeChild($list);
+  $rest = Html::serialize($dom);
+  return [
+    'steps' => $steps,
+    'rest' => trim(strip_tags($rest, '<img>')) === '' ? NULL : [
+      '#type' => 'processed_text',
+      '#text' => $rest,
+      '#format' => $format,
+    ],
+  ];
 }
 
 /**
@@ -1778,7 +1844,7 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  *
  * Add new ones at the end, so existing plates keep their numbers.
  */
-const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons'];
+const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons', 'steps'];
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.

@@ -233,6 +233,16 @@ HTML),
 HTML),
 ]);
 
+$gallery('Steps', 'steps', [
+  $text(<<<'HTML'
+<p>A short how-to done in order: two to four steps, each a short name and a one-line note. Wide screens set them across, each under a large accent numeral; phones run them down one rail, each numeral in a diamond. The numbering says what kind of list it is: letters for alternatives (the Quick Start's A, B and C: pick one), Roman numerals for a sequence (step II), and 01, 02 only for the section index rules.</p>
+<p>[styleguide:steps]</p>
+HTML),
+  $note(<<<'HTML'
+<p>In a Booking text, write How to book as a numbered list under its subhead, each item opening with its name in bold: <strong>Send the form</strong> At least two weeks ahead. Keep the name to two to four words and the note to one line, with no full stop. Without a bold name the list prints as written.</p>
+HTML),
+]);
+
 $gallery('Exhibition blocks', 'blocks', [
   $text(<<<'HTML'
 <p>The blocks an exhibition gallery is made of, each as it appears on a page. The notes say where to find them under "Add Block".</p>
@@ -287,7 +297,7 @@ $values = [
   'field_exhibit_title_style' => 'sans',
   'field_exhibit_subtitle' => 'Colour, type, grid, motion and the blocks exhibitions are built from',
   'field_exhibit_credit' => $html('<p>Palefire, the LSU Libraries theme for Drupal. Maintained with the theme.</p>'),
-  'field_exhibit_keyfacts' => ['Plates: 7', 'Standard: WCAG 2.2 AA', 'Updated: ' . date('F j, Y')],
+  'field_exhibit_keyfacts' => ['Plates: 9', 'Standard: WCAG 2.2 AA', 'Updated: ' . date('F j, Y')],
   'field_exhibit_prompt' => 'Read it in order, or choose a plate from the table of contents.',
   'field_exhibit_cover' => $image ? ['target_id' => $image->id()] : NULL,
   'field_exhibit_showcase' => 'hidden',

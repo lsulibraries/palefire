@@ -8,7 +8,9 @@
  * - booking.parts: the Text split at its subheads
  *   (_palefire_location_booking_parts()): intro, steps (the part with a
  *   numbered list: title, body) and groups (the other parts), or NULL when
- *   it has no subheads.
+ *   it has no subheads. When each step opens with a bold name, steps.items
+ *   holds them for includes/steps.html.twig (steps, and rest: the text
+ *   around the list); otherwise NULL and the steps print as written.
  * - booking.link: url and title (the button), or NULL. Beside a Location
  *   section, the top's link when the section has none.
  * - booking.capacity: the room's Capacity (about, value), or NULL.
@@ -32,7 +34,12 @@
         {% if booking.parts.steps %}
           <section class="pf-booking__steps" aria-labelledby="{{ booking.uid }}-steps">
             <h3 id="{{ booking.uid }}-steps">{{ booking.parts.steps.title }}</h3>
-            {{ booking.parts.steps.body }}
+            {% if booking.parts.steps.items %}
+              {% include '@palefire/includes/steps.html.twig' with { steps: booking.parts.steps.items.steps, labelledby: booking.uid ~ '-steps' } only %}
+              {{ booking.parts.steps.items.rest }}
+            {% else %}
+              {{ booking.parts.steps.body }}
+            {% endif %}
           </section>
         {% endif %}
       {% elseif booking.body %}

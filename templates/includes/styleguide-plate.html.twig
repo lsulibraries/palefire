@@ -6,7 +6,8 @@
  * guide_text block whose text has a paragraph that is only
  * "[styleguide:<plate>]" (palefire_preprocess_paragraph__guide_text()).
  *
- * - plate: overview, colors, type, grid, spacing, lines, motion or buttons.
+ * - plate: overview, colors, type, grid, spacing, lines, motion, buttons or
+ *   steps.
  * - number: its place on the page ("02").
  * - uid: id base.
  *
@@ -24,7 +25,8 @@
   spacing: 'Spacing'|t,
   lines: 'Lines and focus'|t,
   motion: 'Motion'|t,
-  buttons: 'Buttons and links'|t
+  buttons: 'Buttons and links'|t,
+  steps: 'Steps'|t
 } %}
 <figure class="pf-sg-plate pf-sg-plate--{{ plate }}" aria-labelledby="{{ uid }}-name" data-pf-styleguide>
   <figcaption class="pf-sg-plate__head">
@@ -234,6 +236,23 @@
         <p><a class="pf-index-rule__link" href="#{{ uid }}-name">{{ 'Full guide'|t }}</a></p>
         <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Text link'|t }}</span><span class="pf-sg-line__token">12px .16em · underline at .35em</span>{{ 'Arrows: → stays on the site, ↗ opens a new tab, none on a submit.'|t }}</p>
       </div>
+    </div>
+  {% elseif plate == 'steps' %}
+    {# The live steps (includes/steps.html.twig, _steps.scss): across from
+       md, one rail below. Then what each kind of numbering is for. #}
+    <div class="pf-sg-steps">
+      {% include '@palefire/includes/steps.html.twig' with {
+        steps: [
+          { name: ['Check'|t, 'the date'|t], note: 'Ask the room’s contact'|t },
+          { name: ['Send'|t, 'the form'|t], note: 'At least two weeks ahead'|t },
+          { name: ['Wait for'|t, 'our email'|t], note: 'It isn’t reserved until we confirm'|t },
+        ],
+      } only %}
+    </div>
+    <div class="pf-sg-lines">
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'I, II, III'|t }}</span><span class="pf-sg-line__token">pf-steps · numerals</span>{{ 'A sequence, done in order. Easy to point to: “at step II”.'|t }}</p>
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'A, B, C'|t }}</span><span class="pf-sg-line__token">pf-paths · letters</span>{{ 'Alternatives: pick one. The Quick Start Guide.'|t }}</p>
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ '01, 02'|t }}</span><span class="pf-sg-line__token">pf-index-rule</span>{{ 'Sections of a page, never steps.'|t }}</p>
     </div>
   {% endif %}
 </figure>

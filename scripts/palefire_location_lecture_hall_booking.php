@@ -79,9 +79,9 @@ $body = <<<'HTML'
 <p>The Lecture Hall is open to LSU departments, colleges and organizations for meetings, classes and events of fewer than 100 people. Groups without a university affiliation can use it only for events co-sponsored by LSU Libraries.</p>
 <h3>How to book</h3>
 <ol>
-<li>Send the <a href="https://lsu.formstack.com/forms/lecture_hall_reservations">reservation form</a>, at least two weeks ahead. Last-minute requests may not be possible.</li>
-<li>We confirm by email. A request is not a reservation until then.</li>
-<li>To check whether a date is free first, contact Andrew Loyacano at <a href="tel:+12255785723">225-578-5723</a> or <a href="mailto:aloyacano@lsu.edu">aloyacano@lsu.edu</a>.</li>
+<li><strong>Check the date</strong> Ask Andrew Loyacano, <a href="tel:+12255785723">225-578-5723</a> or <a href="mailto:aloyacano@lsu.edu">aloyacano@lsu.edu</a></li>
+<li><strong>Send the form</strong> At least two weeks ahead</li>
+<li><strong>Wait for our email</strong> It isn’t reserved until we confirm</li>
 </ol>
 <h3>Service charges</h3>
 <ul>
