@@ -14,7 +14,7 @@
  *     description         intro beside the map (default for every page)
  *   └ Room term (field_map_key = building.space, e.g. hill_memorial.reading_room)
  *     description         tooltip text
- *     field_space_access  walk_in | appointment
+ *     field_space_access  walk_in | appointment (book online) | rental
  *     field_space_link    optional: the room links here
  *     field_space_note    optional: a short note after the access line in
  *                         the tooltip, e.g. "Now showing"
@@ -168,7 +168,7 @@ $paragraphs_widget = fn (int $weight, string $title, string $plural, string $def
   ],
 ];
 
-$access_values = ['walk_in' => 'Public walk-in', 'appointment' => 'Request an appointment'];
+$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Room rental (fee)'];
 $link_settings = ['link_type' => 17, 'title' => 1];  // Generic link, optional link text.
 
 // Building spaces vocabulary ---------------------------------------------------
@@ -183,17 +183,18 @@ if (!Vocabulary::load('building_space')) {
 
 $storage('taxonomy_term', 'field_map_key', 'string', ['max_length' => 128]);
 $storage('taxonomy_term', 'field_space_access', 'list_string', ['allowed_values' => $access_values]);
+$options('taxonomy_term', 'field_space_access', $access_values);
 $storage('taxonomy_term', 'field_space_link', 'link');
 $field('taxonomy_term', 'building_space', 'field_map_key', 'Map key', [
   'required' => FALSE,
   'description' => 'Set by the setup script. Ties the term to the drawing.',
 ]);
 $field('taxonomy_term', 'building_space', 'field_space_access', 'Access', [
-  'description' => 'Rooms only. Walk-in rooms get the full hatch; appointment rooms a lighter one.',
+  'description' => 'Rooms only. Walk-in rooms get the full hatch; booked rooms (online or rental) a lighter one.',
 ]);
 $field('taxonomy_term', 'building_space', 'field_space_link', 'Link', [
   'settings' => $link_settings,
-  'description' => 'Rooms only, optional. Clicking the room or its list entry goes here (e.g. the appointment request form). The link text becomes the hint at the bottom of the tooltip; leave it empty for "Request an appointment" / "Plan your visit".',
+  'description' => 'Rooms only, optional. Clicking the room or its list entry goes here (e.g. the appointment request form). The link text becomes the hint at the bottom of the tooltip; leave it empty for "Book online" / "Request a rental" / "Plan your visit".',
 ]);
 
 $storage('taxonomy_term', 'field_space_note', 'string', ['max_length' => 40]);
@@ -419,6 +420,7 @@ $storage('paragraph', 'field_room_key', 'list_string', ['allowed_values' => $roo
 $options('paragraph', 'field_room_key', $room_options);
 $storage('paragraph', 'field_space_body', 'text_long');
 $storage('paragraph', 'field_space_access', 'list_string', ['allowed_values' => $access_values]);
+$options('paragraph', 'field_space_access', $access_values);
 $storage('paragraph', 'field_space_link', 'link');
 
 $field('paragraph', 'map_room_override', 'field_room_key', 'Room', ['required' => TRUE]);

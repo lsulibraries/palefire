@@ -149,10 +149,13 @@
 // is fixed to the window (background-attachment: fixed, sized to the
 // window), so the page slides over it; no filter on it, which would drop
 // the fixed attachment. On portrait screens and iOS it shows whole at the
-// top instead (pf-location-backdrop-whole, below). Two layers over it, blended rather than filtered: a
+// top instead (pf-location-backdrop-whole, below). Three layers over it, blended rather than filtered: a
 // mid grey with the `color` blend takes its colour away (so the gold title
-// and lit room are the only colour), and a dark grey veil at 87% squeezes
-// its tones into 30-64 of 255, so its detail recedes. The ceiling, 64, is
+// and lit room are the only colour), a dark grey veil at 87% squeezes
+// its tones into 30-64 of 255, so its detail recedes, and the swatch's
+// page colour with the `color` blend tints it to the swatch, as the hero
+// banners' wash does (hue and saturation only: `color` keeps each pixel's
+// lightness, so the tones and the contrast below don't move). The ceiling, 64, is
 // what a 75% black layer gives pure white: the least that keeps every text
 // in the top at 4.5:1 (the title and marks at 3:1); the muted ledger terms,
 // #b7b3ba, allow up to 69. Lowering contrast further raises the floor
@@ -179,10 +182,11 @@
     height: 100lvh;
     background:
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, transparent 14rem),
+      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)),
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
       linear-gradient(#808080, #808080),
       var(--pf-location-backdrop) center / cover no-repeat;
-    background-blend-mode: normal, normal, color, normal;
+    background-blend-mode: normal, color, normal, color, normal;
     -webkit-mask-image: linear-gradient(#000 60%, transparent);
     mask-image: linear-gradient(#000 60%, transparent);
   }
@@ -210,11 +214,18 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     background:
       linear-gradient(transparent calc(100% - 6rem), var(--pf-section-bg, var(--bs-body-bg))),
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, rgb(0 0 0 / .08) 14rem, transparent 22rem),
+      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)) fixed,
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)) fixed,
       linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
-    background-blend-mode: normal, normal, normal, color, normal;
+    background-blend-mode: normal, normal, color, normal, color, normal;
   }
+
+  // The ledger terms and eyebrow place over the photo: the swatch's muted
+  // tone lifted 40% toward its heading color. The ceiling (grey 64) leaves
+  // Dusk, Solarized, Cocoa, Forest and Midnight's own muted tones at 3.2 to
+  // 4:1; lifted, every dark swatch is 4.6:1 or more (Twilight 6.7:1).
+  --pf-location-muted: color-mix(in srgb, var(--pf-g-heading, #fff) 40%, var(--pf-g-muted, #b7b3ba));
 
   // Portrait screens, and iOS, which drops fixed backgrounds (`cover` then
   // sized the photo to the whole top, two or three screens tall on a
@@ -516,11 +527,11 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   margin-top: var(--pf-location-gap);
 }
 
-// A panel under the facts, as the landing hero's search field: the page
-// color at 80% with its soft drop shadow, and a hairline edge. Drawn by
-// ::before, a gutter past the text (edge to edge on phones), so the facts
-// keep their column lines. More contrast and forced colors keep the
-// hairline only.
+// A clear pane under the facts: no fill (the photo is already darkened for
+// contrast), a hairline edge and the landing hero search field's soft drop
+// shadow; over the photo it blurs what's behind (below). Drawn by ::before,
+// a gutter past the text (edge to edge on phones), so the facts keep their
+// column lines. More contrast and forced colors keep the hairline only.
 .pf-location__facts {
   position: relative;
   isolation: isolate;
@@ -537,16 +548,12 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     z-index: -1;
     pointer-events: none;
     content: "";
-    background-color: color-mix(in srgb, var(--pf-section-bg, var(--bs-body-bg)) 80%, transparent);
     border-block: 1px solid #{$pf-hairline};
     box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / var(--pf-ledger-shadow, .18));
   }
 
   @media (prefers-contrast: more), (forced-colors: active) {
-    &::before {
-      background-color: transparent;
-      box-shadow: none;
-    }
+    &::before { box-shadow: none; }
   }
 }
 @container pf-location (min-width: 52rem) {
@@ -596,6 +603,11 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   .pf-location__facts {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     grid-auto-flow: row;
+  }
+
+  // Six facts (with Area): six equal columns, so Area doesn't wrap alone.
+  .pf-location__facts:has(> :nth-child(6)) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 

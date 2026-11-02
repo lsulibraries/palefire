@@ -2,7 +2,7 @@
 /**
  * @file
  * Building map key: the legend and space list, then the note (the building
- * term's description: who can walk in, what needs an appointment). Used by
+ * term's description: who can walk in, what needs booking). Used by
  * paragraph--building-map.html.twig, in the map's aside or, on the landing
  * hero, across the top of the Visit strip.
  *
@@ -37,13 +37,12 @@
        accordions do (_building-map.scss): each row is .pf-seq with its
        place in --pf-seq, the legend line first, then each heading and its
        rooms. Capped at 5, so the sixth row and the rest come in together.
-       Twig keeps no count across loops, so the places are worked out:
-       the legend line (0 or 1 rows), then the walk-in group (its heading
-       and rooms), then the appointment group. #}
+       The places run on: the legend line (0 or 1 rows), then each group
+       that has rooms, its heading and rooms (seq_next, kept across the
+       groups' loop). #}
     {% set seq_legend = not keyed and 'elevator' in map.legend ? 1 : 0 %}
     {% set landmarks = map.landmarks|default([]) %}
-    {% set seq_walk_in = map.spaces|filter(s => s.access == 'walk_in')|length + landmarks|length %}
-    {# The walk-in and appointment hatches are on the group headings below,
+    {# The walk-in and booked hatches are on the group headings below,
        so the legend lists only the drawing's other marks. #}
     {% set legend %}
       {% if 'elevator' in map.legend %}
@@ -66,19 +65,22 @@
 
     {# Same rooms as the drawing's regions: the keyboard / small-screen route
        in. Each group's heading carries its hatch, once, rather than every
-       room repeating it. #}
+       room repeating it; both booked groups have the lighter one. #}
     <div class="pf-map__list">
+      {% set seq_next = seq_legend %}
       {% for group in [
         { access: 'walk_in', title: 'Walk in'|t },
-        { access: 'appointment', title: 'By appointment'|t },
+        { access: 'appointment', title: 'Book online'|t },
+        { access: 'rental', title: 'Room rental'|t },
       ] %}
         {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}
-        {% set seq_start = seq_legend + (group.access == 'appointment' and seq_walk_in ? seq_walk_in + 1 : 0) %}
+        {% set seq_start = seq_next %}
         {% set group_landmarks = group.access == 'walk_in' ? landmarks : [] %}
         {% if group_spaces or group_landmarks %}
+          {% set seq_next = seq_start + 1 + group_landmarks|length + group_spaces|length %}
           <div class="pf-map__group">
             <h4 class="pf-map__group-title pf-seq" style="--pf-seq: {{ min(seq_start, 5) }}">
-              <span class="pf-map__swatch{{ group.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
+              <span class="pf-map__swatch{{ group.access != 'walk_in' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
               {{ group.title }}
             </h4>
             <ul>

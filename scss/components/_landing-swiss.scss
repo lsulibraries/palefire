@@ -247,7 +247,7 @@
 // key as a section of the page. Its toggle is an index rule (number, name,
 // and at the right end the count with + or −, in the rule link's voice);
 // its body an index: the note and legend, then each group of rooms, in
-// three columns from md, stacked below. Group headings in the labels'
+// two columns from md and one per group from 1200px, stacked below. Group headings in the labels'
 // voice over the rooms' hairlines. The building map's own type (bold sans
 // capitals, the heavy chevron) stays on maps elsewhere.
 .pf-map__key--indexed {
@@ -324,14 +324,25 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 @media (min-width: 768px) {
   .pf-map__key--indexed {
     &[open] .pf-map__key-body {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0 var(--pf-grid-gutter, 2rem);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem var(--pf-grid-gutter, 2rem);
       align-items: start;
     }
 
     .pf-map__list {
       display: contents;
     }
+  }
+}
+
+// From 1200px the note and each access group (walk in, book online, room
+// rental: three or four columns) side by side.
+@media (min-width: 1200px) {
+  .pf-map__key--indexed[open] .pf-map__key-body {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    row-gap: 0;
   }
 }
 

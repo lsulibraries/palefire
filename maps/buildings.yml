@@ -43,7 +43,7 @@ hill_memorial:
     lecture_hall:
       label: Lecture Hall
       floor: 1
-      access: appointment
+      access: rental
       tooltip: Talks, class sessions and events. Request a date with your group size and AV needs.
     gallery_2:
       label: Floor 2 Gallery

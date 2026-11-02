@@ -11,7 +11,7 @@
  *   it has no subheads.
  * - booking.link: url and title (the button), or NULL. Beside a Location
  *   section, the top's link when the section has none.
- * - booking.capacity: the room's Capacity, or ''.
+ * - booking.capacity: the room's Capacity (about, value), or NULL.
  * - booking.needs: the room's Required policies (label, detail, state,
  *   icon), from its Building spaces term.
  *
@@ -59,7 +59,7 @@
         {% if booking.capacity %}
           <div class="pf-booking__fact">
             <dt>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'group' } only %}{{ 'Capacity'|t }}</dt>
-            <dd>{{ booking.capacity }}</dd>
+            <dd>{% include '@palefire/includes/about.html.twig' with { n: booking.capacity } only %}</dd>
           </div>
         {% endif %}
         {% for policy in booking.needs %}

@@ -45,7 +45,6 @@
  */
 #}
 {% if location %}
-  {% set access = location.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t %}
   {% set sounds = { quiet: 'Quiet'|t, conversation: 'Conversation'|t, collaborative: 'Collaborative'|t } %}
   {% set states = { allowed: 'Allowed'|t, required: 'Required'|t, not_allowed: 'Not allowed'|t } %}
   <div{{ attributes.addClass('pf-landing', 'pf-location-page') }}>
@@ -150,15 +149,22 @@
             {% if location.floor %}
               <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
             {% endif %}
-            <div class="pf-location__fact"><dt>{{ 'Access'|t }}</dt><dd>{{ access }}</dd></div>
+            <div class="pf-location__fact">
+              <dt>{{ 'Access'|t }}</dt>
+              <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: location.access_kind.icon } only %}{{ location.access_kind.label }}</dd>
+            </div>
             {% if location.sound_level %}
               <div class="pf-location__fact">
                 <dt>{{ 'Sound'|t }}</dt>
                 <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
               </div>
             {% endif %}
+            {# Plain numbers as "~100" (screen readers: "about 100"). #}
             {% if location.capacity %}
-              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd>{{ location.capacity }}</dd></div>
+              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.capacity } only %}</span></dd></div>
+            {% endif %}
+            {% if location.area %}
+              <div class="pf-location__fact"><dt>{{ 'Area'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.area } only %} <abbr title="{{ 'square feet'|t }}">{{ 'sq ft'|t }}</abbr></span></dd></div>
             {% endif %}
           </dl>
         </div>

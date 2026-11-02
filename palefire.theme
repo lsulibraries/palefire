@@ -1118,15 +1118,21 @@ function _palefire_building_map(string $key, string $here, ParagraphInterface $p
     }
     $cache->addCacheableDependency($term);
     $override = $overrides[$space_key] ?? NULL;
-    $access = $pick('field_space_access', $term, $override)?->value ?: ($def['access'] ?? 'walk_in');
+    $access = _palefire_space_access((string) ($pick('field_space_access', $term, $override)?->value ?: ($def['access'] ?? 'walk_in')));
     $link = $pick('field_space_link', $term, $override)?->first();
     $spaces[$space_key] = [
       'key' => $space_key,
       'title' => $term->label(),
-      'access' => $access,
+      'access' => $access['key'],
+      'access_label' => $access['label'],
+      'hatch' => $access['hatch'],
       'floor' => (int) ($def['floor'] ?? 1),
       'url' => $link ? $link->getUrl()->toString() : '',
-      'cta' => $link ? ($link->title ?: ($access === 'appointment' ? t('Request an appointment') : t('Plan your visit'))) : '',
+      'cta' => $link ? ($link->title ?: match ($access['key']) {
+        'appointment' => t('Book online'),
+        'rental' => t('Request a rental'),
+        default => t('Plan your visit'),
+      }) : '',
       'tip' => $uid . '-' . Html::cleanCssIdentifier($space_key) . '-tip',
       'body' => $text($pick('field_space_body', $term, $override, 'description')),
       // Optional words after the access line, e.g. "Now showing".
@@ -1192,6 +1198,40 @@ function _palefire_building_map(string $key, string $here, ParagraphInterface $p
 const PALEFIRE_SPACE_SOUND = ['quiet' => 1, 'conversation' => 2, 'collaborative' => 3];
 
 /**
+ * Access (field_space_access) => its words and mark (space-icon.html.twig).
+ *
+ * Booked rooms (book online, room rental) share the map's lighter hatch:
+ * _palefire_space_access() gives each its hatch.
+ */
+function _palefire_space_access_kinds(): array {
+  return [
+    'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk'],
+    'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar'],
+    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt'],
+  ];
+}
+
+/**
+ * A room's access: key, label, icon and hatch (walk-in | appointment).
+ */
+function _palefire_space_access(string $key): array {
+  $kinds = _palefire_space_access_kinds();
+  $key = isset($kinds[$key]) ? $key : 'walk_in';
+  return ['key' => $key, 'hatch' => $key === 'walk_in' ? 'walk-in' : 'appointment'] + $kinds[$key];
+}
+
+/**
+ * A short count as words and a number: "100" => about (TRUE) and 100, so the
+ * template shows "~100" and screen readers hear "about 100"; anything else
+ * (e.g. "2 to 6 people") stays as written.
+ */
+function _palefire_space_about(string $value): array {
+  return preg_match('/^~?\s*([\d,]+)$/', $value, $m)
+    ? ['about' => TRUE, 'value' => number_format((int) str_replace(',', '', $m[1]))]
+    : ['about' => FALSE, 'value' => $value];
+}
+
+/**
  * The room a location section is about.
  *
  * Its own Room (field_location_space), else the Room of the page's Location
@@ -1225,10 +1265,12 @@ function _palefire_location_room(ParagraphInterface $paragraph): ?TermInterface 
  *
  * @return array
  *   title, key (building.space), building_key, building (name), floor (int
- *   or NULL), access (walk_in | appointment), sound, sound_level (0-3),
- *   capacity, body (the room's description, rendered), link (url, title or
- *   NULL) and policies: label, detail, state (allowed | required |
- *   not_allowed), icon, in the room's order.
+ *   or NULL), access (walk_in | appointment | rental) and access_kind (key,
+ *   label, icon, hatch), sound, sound_level (0-3), capacity and area (each
+ *   about, value: _palefire_space_about(); area in square feet), body (the
+ *   room's description, rendered), link (url, title or NULL) and policies:
+ *   label, detail, state (allowed | required | not_allowed), icon, in the
+ *   room's order.
  */
 function _palefire_location_data(TermInterface $room, CacheableMetadata $cache): array {
   $cache->addCacheableDependency($room);
@@ -1267,6 +1309,9 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
 
   $link = $room->hasField('field_space_link') ? $room->get('field_space_link')->first() : NULL;
   $sound = $string('field_space_sound');
+  $access = _palefire_space_access($string('field_space_access') ?: ($def['access'] ?? 'walk_in'));
+  $capacity = $string('field_space_capacity');
+  $area = (int) $string('field_space_area');
   $description = $room->get('description');
   return [
     'title' => $room->label(),
@@ -1274,10 +1319,12 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
     'building_key' => $building_key,
     'building' => $building_label,
     'floor' => isset($def['floor']) ? (int) $def['floor'] : NULL,
-    'access' => $string('field_space_access') ?: ($def['access'] ?? 'walk_in'),
+    'access' => $access['key'],
+    'access_kind' => $access,
     'sound' => $sound,
     'sound_level' => PALEFIRE_SPACE_SOUND[$sound] ?? 0,
-    'capacity' => $string('field_space_capacity'),
+    'capacity' => $capacity === '' ? NULL : _palefire_space_about($capacity),
+    'area' => $area > 0 ? _palefire_space_about((string) $area) : NULL,
     'body' => $description->isEmpty() ? NULL : [
       '#type' => 'processed_text',
       '#text' => $description->value,
@@ -1322,7 +1369,7 @@ function _palefire_location_booking(ParagraphInterface $paragraph, ?array $locat
     ] : NULL,
     'parts' => $body && !$body->isEmpty() ? _palefire_location_booking_parts((string) $body->value, (string) $body->format) : NULL,
     'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
-    'capacity' => $location['capacity'] ?? '',
+    'capacity' => $location['capacity'] ?? NULL,
     'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
   ];
 }
@@ -1556,7 +1603,7 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
   // _palefire_location_index()).
   $space = _palefire_location_sibling($paragraph, 'location_space');
   if ($space) {
-    $variables['booking']['capacity'] = '';
+    $variables['booking']['capacity'] = NULL;
     $variables['booking']['needs'] = [];
     $variables['booking']['link'] ??= $location['link'] ?? _palefire_location_booking($space, NULL, '')['link'];
   }
@@ -2442,14 +2489,14 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
       $floor = $location['floor'] ?? NULL;
       $building = $location['building'] ?? '';
-      // A room by appointment isn't open whenever the building is.
+      // A booked room (online or rental) isn't open whenever the building is.
       $where = $floor
         ? (string) t('On Floor @n of @building', ['@n' => $floor, '@building' => $building])
         : (string) t('In @building', ['@building' => $building]);
       return [
         'label' => (string) t('Getting here'),
-        'lede' => ($location['access'] ?? 'walk_in') === 'appointment'
-          ? (string) t('@where, by appointment.', ['@where' => $where])
+        'lede' => ($location['access'] ?? 'walk_in') !== 'walk_in'
+          ? (string) t('@where, by booking.', ['@where' => $where])
           : (string) t('@where, open whenever the building is.', ['@where' => $where]),
         'link' => $query !== '' ? [
           'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query),

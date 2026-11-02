@@ -11,7 +11,7 @@
  *   map.summary   this paragraph's Intro (field_map_intro), under the heading
  *   map.note      the building term's description, above the legend
  *   map.template  the building's drawing (maps/buildings.yml)
- *   map.spaces    key => { key, title, access, floor, url, cta, tip, body },
+ *   map.spaces    key => { key, title, access, access_label, hatch, floor, url, cta, tip, body },
  *                 one per published room term, Floor 1 first
  *   map.here      key of the room this page is about (field_map_here), or ''.
  *                 Its list entry gets aria-current="location" and a "Here"
@@ -106,8 +106,8 @@
       </p>
       <div class="pf-map__tip-body">
         <div class="pf-map__tip-head">
-          <span class="pf-map__swatch{{ s.access == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
-          <p class="pf-map__tip-eyebrow">{{ s.access == 'appointment' ? 'By appointment'|t : 'Public walk-in'|t }}{% if s.note %} &middot; {{ s.note }}{% endif %}</p>
+          <span class="pf-map__swatch{{ s.hatch == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
+          <p class="pf-map__tip-eyebrow">{{ s.access_label }}{% if s.note %} &middot; {{ s.note }}{% endif %}</p>
           {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
         </div>
         <strong class="pf-map__tip-title">{{ s.title }}</strong>

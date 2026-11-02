@@ -28,7 +28,7 @@
  * Building spaces (building_space) room terms gain:
  *   field_space_policies  Space policies that apply, in order
  *   field_space_sound     quiet | conversation | collaborative
- *   field_space_capacity  short text, e.g. "Fewer than 100 people"
+ *   field_space_capacity  a number (shown "~100") or short words
  *
  * Paragraph types (allowed wherever bento_search is):
  *   location_space    "Location": the top of a room's page. The room's
@@ -218,7 +218,7 @@ $field('taxonomy_term', 'building_space', 'field_space_policies', 'Policies', 'R
   'handler_settings' => ['target_bundles' => ['space_policy' => 'space_policy'], 'sort' => ['field' => 'name', 'direction' => 'asc'], 'auto_create' => FALSE],
 ]);
 $field('taxonomy_term', 'building_space', 'field_space_sound', 'Sound level', 'Quiet, conversation or collaborative. Rooms only.');
-$field('taxonomy_term', 'building_space', 'field_space_capacity', 'Capacity', 'Short, e.g. "Fewer than 100 people" or "2 to 6 people".');
+$field('taxonomy_term', 'building_space', 'field_space_capacity', 'Capacity', 'A number, shown as "~100"; or short words, e.g. "2 to 6 people".');
 $widget('taxonomy_term', 'building_space', 'field_space_policies', [
   'type' => 'entity_reference_autocomplete',
   'settings' => ['match_operator' => 'CONTAINS', 'match_limit' => 10, 'size' => 60, 'placeholder' => 'Start typing a policy'],
@@ -401,7 +401,7 @@ if ($room->get('field_space_sound')->isEmpty()) {
   $room_changed = TRUE;
 }
 if ($room->get('field_space_capacity')->isEmpty()) {
-  $room->set('field_space_capacity', 'Fewer than 100 people');
+  $room->set('field_space_capacity', '100');
   $room_changed = TRUE;
 }
 if ($room_changed) {

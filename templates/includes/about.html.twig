@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * An estimate: "~100", read as "about 100" (the tilde is hidden from
+ * screen readers, which would say "tilde"). Words stay as written.
+ *
+ * Variables:
+ * - n: { about, value } from _palefire_space_about().
+ */
+#}
+{%- if n.about -%}
+  <span aria-hidden="true">~</span><span class="visually-hidden">{{ 'about'|t }} </span>{{ n.value }}
+{%- else -%}
+  {{ n.value }}
+{%- endif -%}
