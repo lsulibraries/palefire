@@ -1128,11 +1128,7 @@ function _palefire_building_map(string $key, string $here, ParagraphInterface $p
       'hatch' => $access['hatch'],
       'floor' => (int) ($def['floor'] ?? 1),
       'url' => $link ? $link->getUrl()->toString() : '',
-      'cta' => $link ? ($link->title ?: match ($access['key']) {
-        'appointment' => t('Book online'),
-        'rental' => t('Request a rental'),
-        default => t('Plan your visit'),
-      }) : '',
+      'cta' => $link ? ($link->title ?: $access['cta']) : '',
       'tip' => $uid . '-' . Html::cleanCssIdentifier($space_key) . '-tip',
       'body' => $text($pick('field_space_body', $term, $override, 'description')),
       // Optional words after the access line, e.g. "Now showing".
@@ -1198,16 +1194,19 @@ function _palefire_building_map(string $key, string $here, ParagraphInterface $p
 const PALEFIRE_SPACE_SOUND = ['quiet' => 1, 'conversation' => 2, 'collaborative' => 3];
 
 /**
- * Access (field_space_access) => its words and mark (space-icon.html.twig).
+ * Access (field_space_access) => its words, mark (space-icon.html.twig) and
+ * the default button words (a room's link with no text of its own). The
+ * buttons stay short for the phone dock (js/dock.js takes page words up to
+ * 24 characters), and Reserve matches the booking section's name.
  *
  * Booked rooms (book online, room rental) share the map's lighter hatch:
  * _palefire_space_access() gives each its hatch.
  */
 function _palefire_space_access_kinds(): array {
   return [
-    'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk'],
-    'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar'],
-    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt'],
+    'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk', 'cta' => (string) t('Plan your visit')],
+    'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar', 'cta' => (string) t('Book a time')],
+    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt', 'cta' => (string) t('Reserve')],
   ];
 }
 
@@ -1330,7 +1329,7 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
       '#text' => $description->value,
       '#format' => $description->format,
     ],
-    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Plan your visit')] : NULL,
+    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: $access['cta']] : NULL,
     'policies' => $policies,
   ];
 }
@@ -1368,7 +1367,7 @@ function _palefire_location_booking(ParagraphInterface $paragraph, ?array $locat
       '#format' => $body->format,
     ] : NULL,
     'parts' => $body && !$body->isEmpty() ? _palefire_location_booking_parts((string) $body->value, (string) $body->format) : NULL,
-    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: t('Request this space')] : NULL,
+    'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: ($location['access_kind']['cta'] ?? (string) t('Reserve'))] : NULL,
     'capacity' => $location['capacity'] ?? NULL,
     'needs' => array_values(array_filter($location['policies'] ?? [], static fn (array $p): bool => $p['state'] === 'required')),
   ];

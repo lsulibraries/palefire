@@ -1058,6 +1058,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-02:** Location pages: a room's button, with no link text of its own, follows its access: Plan your visit (walk in), Book a time (book online), Reserve (room rental; the booking section's name). Short enough for the phone dock, which reuses the page's words. The Reserve section's button falls back the same way (was "Request this space").
 - **2026-11-02:** Map: the "here" room's name sits in a cut-out, the hatch cleared in an even margin around it on the name's own angle, so it reads on the frosted photo, in the active colour (Solarized's teal lightened a quarter for 4.5:1); the arrow sits higher to clear it. Hidden on phones with the names.
 - **2026-11-02:** Location pages: in portrait windows the room photo stops at the top section's foot (one screen at most); in tall desktop windows it ran on behind section 01.
 - **2026-11-02:** Map: the "here" room is back to its gold hatch with a light name; the solid fill from the previous change is undone.
