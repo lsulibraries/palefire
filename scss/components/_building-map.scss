@@ -467,17 +467,15 @@
 }
 .pf-map__here-badge::before { content: ""; width: 0; height: 0; border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0; }
 .pf-map__item[aria-current] .pf-map__item-name { color: var(--pf-map-hover); }
-/* The room itself filled solid in the highlight color, its name in the
-   color made for text on it, as the key's "Here" badge: light ink over the
-   accent's stripes was hard to read. building-map.js marks the name
-   .is-here; lit, it stays dark, with no halo. */
+/* The room itself in the highlight color, as in the map-led mockup: its
+   hatch at full strength and its outline in the swatch's accent. Its name
+   keeps the ink, which reads over the accent's stripes. */
 .pf-map__region[aria-current] .pf-map__hatch,
 .pf-map__region[aria-current]:is(:hover, :focus-visible, .is-active) .pf-map__hatch { fill: var(--pf-map-hover); fill-opacity: 1; }
-.pf-map__region[aria-current] .pf-map__hit { fill: var(--pf-map-hover); fill-opacity: 1; stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 2); }
-/* A gold ring would vanish into the gold room: focused, the ink instead. */
-.pf-map__region[aria-current]:focus-visible .pf-map__hit { stroke: var(--pf-map-ink); stroke-width: calc(var(--pf-map-line) * 3); }
-.pf-map__label.is-here,
-.pf-map__label.is-here.is-active { fill: var(--pf-map-on-hover); --pf-map-label-glow: transparent; }
+.pf-map__region[aria-current] .pf-map__hit { stroke: var(--pf-map-hover); stroke-width: calc(var(--pf-map-line) * 2); }
+/* Lit, it keeps the ink too (gold would sink into its own room), over the
+   lifted name's dark halo. building-map.js marks it .is-here. */
+.pf-map__label.is-here.is-active { fill: var(--pf-map-ink); }
 
 /* Tooltip ------------------------------------------------------------------
    One per map, filled from the hidden .pf-map__tip-src for the active room and

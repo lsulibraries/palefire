@@ -1058,6 +1058,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-02:** Map: the "here" room is back to its gold hatch with a light name; the solid fill from the previous change is undone.
 - **2026-11-02:** Location pages: the ledger pane is clear (hairline, shadow, blur over the photo); the backdrop is tinted to the swatch (its page colour, `color` blend, lightness unchanged); muted labels over it lifted 40% toward the heading colour, for 4.5:1 on every dark swatch. Access has three kinds, each with a mark: Walk in, Book online (key `appointment`), Room rental (`rental`, new receipt mark); the map key groups by all three. Capacity as a number shows "~100"; new Estimated area (`field_space_area`) shows "~2,400 sq ft". The "here" room on the map is solid in the highlight colour with a dark name (light ink on its stripes was hard to read). Run `scripts/palefire_location_access_area.php`.
 ### 2026-11-02
 
