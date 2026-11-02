@@ -663,13 +663,16 @@ html[data-pf-page="location"] {
   html[data-pf-page="location"] .pf-location__visit {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    // The hours span both rows; the second takes their extra height, so
+    // the accessible entrance sits right under the links.
+    grid-template-rows: auto 1fr;
     gap: 0 var(--pf-grid-gutter, 2rem);
     align-items: start;
     max-width: none;
 
     // Placed by line: the strip's own grid-area (_visit.scss) names no
     // area here.
-    .pf-visit__hours { grid-area: 1 / 1; }
+    .pf-visit__hours { grid-area: 1 / 1 / span 2; }
 
     .pf-location__visit-links {
       grid-area: 1 / 2;
@@ -677,6 +680,8 @@ html[data-pf-page="location"] {
       align-items: flex-start;
       margin-top: 0;
     }
+
+    .pf-location__entrance { grid-area: 2 / 2; }
   }
 }
 
@@ -775,6 +780,31 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 
   > .pf-visit__link { margin-top: 0; }
 }
+
+// Where the step-free way in is: the mark, the label in the TOC's mono
+// capitals over the words, on a hairline. Directions, not a policy: every
+// building has a way in, the page says which door.
+.pf-location__entrance {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .25rem .75rem;
+  align-items: center;
+  max-width: 32rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--pf-location-line);
+
+  > .pf-space-icon {
+    grid-row: span 2;
+    align-self: start;
+    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
+}
+.pf-location__entrance-label {
+  @extend %pf-location-label;
+  color: var(--pf-location-muted);
+}
+.pf-location__entrance-text { line-height: 1.45; }
 
 // --- CTA ------------------------------------------------------------------------
 // The theme's primary button (_buttons.scss), as the footer's: the accent

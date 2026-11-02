@@ -1331,7 +1331,28 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
     ],
     'link' => $link ? ['url' => $link->getUrl()->toString(), 'title' => $link->title ?: $access['cta']] : NULL,
     'policies' => $policies,
+    'entrance' => _palefire_space_entrance($room, $cache),
   ];
+}
+
+/**
+ * Where the step-free way in is (field_space_entrance,
+ * palefire_location_entrance.php): the room's own words, else its
+ * building's (the room's parent term). '' when neither says.
+ */
+function _palefire_space_entrance(TermInterface $room, CacheableMetadata $cache): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  foreach ([$room, ...array_values($storage->loadParents($room->id()))] as $term) {
+    if (!$term->hasField('field_space_entrance')) {
+      continue;
+    }
+    $cache->addCacheableDependency($term);
+    $text = trim((string) $term->get('field_space_entrance')->value);
+    if ($text !== '') {
+      return $text;
+    }
+  }
+  return '';
 }
 
 /**
@@ -1759,6 +1780,10 @@ function palefire_preprocess_paragraph__location_visit(array &$variables): void 
   _palefire_landing_visit($variables, $paragraph);
   $space = _palefire_location_sibling($paragraph, 'location_space');
   $variables['uid'] = 'pf-location-' . ($space ? $space->id() : $paragraph->id());
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $room = _palefire_location_room($paragraph);
+  $variables['entrance'] = $room ? _palefire_space_entrance($room, $cache) : '';
+  $cache->applyTo($variables);
 }
 
 /* ---------------------------------------------------------------------------

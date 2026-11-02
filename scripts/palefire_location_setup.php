@@ -349,7 +349,6 @@ $policies = [
   'photos_form' => ['Photos allowed', 'allowed', 'camera', 'After you fill in a Camera User Policy form at the desk.'],
   'no_flash' => ['No flash', 'not_allowed', 'flash', ''],
   'non_circulating' => ['Materials stay in the room', 'required', 'book_lock', 'Special Collections materials don\'t circulate.'],
-  'step_free' => ['Step-free entrance', 'allowed', 'step_free', 'The front entrance, facing the Quad.'],
   'lsu_groups' => ['University groups', 'required', 'card', 'For university-affiliated groups. Others only when LSU Libraries co-sponsor the event.'],
   'two_weeks' => ['Two weeks\' notice', 'required', 'clock', 'Request the date at least two weeks ahead.'],
   'podium_av' => ['Podium, microphone and screen', 'allowed', 'mic', 'A projection screen, tables and chairs too.'],
@@ -392,7 +391,7 @@ if (!$room) {
 $room_changed = FALSE;
 if ($room->get('field_space_policies')->isEmpty()) {
   $room->set('field_space_policies', array_map(fn ($key) => ['target_id' => $policy_ids[$key]], [
-    'reservation', 'lsu_groups', 'two_weeks', 'food_drink_ok', 'podium_av', 'after_hours', 'alcohol_permit', 'step_free',
+    'reservation', 'lsu_groups', 'two_weeks', 'food_drink_ok', 'podium_av', 'after_hours', 'alcohol_permit',
   ]));
   $room_changed = TRUE;
 }

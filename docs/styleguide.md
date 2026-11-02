@@ -131,6 +131,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Location pages: `.pf-location__entrance`, the accessible entrance under Hours and directions (beside the hours from lg, under the links): the step-free mark, a mono label, the words, on a hairline. From `field_space_entrance` on the room or its building (`_palefire_space_entrance()`). The Step-free entrance policy mark is retired.
 - **2026-11-02:** Steps: numbers again (1, 2, 3; Roman read as confusing). Sub-steps (`.pf-steps__stops`): a nested `<ol>`, each a small diamond with a Font Awesome Pro duotone icon (`[icon:name]`, inlined from `libraries/fontawesome-pro`) or its number, on a rail of its own. One step alone (`.pf-steps--single`) has no number and its sub-steps run across from md. Plate 09 shows both.
 - **2026-11-02:** Steps (`pf-steps`, `includes/steps.html.twig`, `_steps.scss`): the Quick Start's anatomy with Roman numerals (I, II, III). From md, across: a large accent numeral beside a two-line name (broken at the middle word), the note under both; below md, one rail with each numeral in a diamond. Reserve's How to book uses it when each step opens with a bold name. New plate 09, Steps; numbering rule added.
 - **2026-11-02:** Default button words by access (`_palefire_space_access_kinds()` `cta`): Plan your visit / Book a time / Reserve, kept under 24 characters for the dock.

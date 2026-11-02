@@ -8,16 +8,19 @@
  *   rest, _palefire_landing_visit()), or NULL.
  * - uid: the page's Location id, so the hours line under the title jumps
  *   here (uid-visit-hours).
+ * - entrance: where the step-free way in is, the room's or its building's
+ *   (_palefire_space_entrance()), or ''.
  *
  * The section <h2>, its index rule (with Directions, to Google Maps) and
  * lede come from the scroll-section field template
  * (_palefire_location_index()). The Visit strip's hours without its frame
  * or its Google map (the building map at the top shows the way in, the
  * rule's Directions the way there): today's status, the week, then the
- * links. Google Maps is linked once, in the rule.
+ * links, and the accessible entrance under them. Google Maps is linked
+ * once, in the rule.
  */
 #}
-{% if visit and (visit.lid or visit.parking_url) %}
+{% if visit and (visit.lid or visit.parking_url) or entrance %}
   <div{{ attributes.addClass('pf-location__visit') }}>
     {% if visit.lid %}
       {# visit-hours.js fills the status and the week. #}
@@ -50,5 +53,12 @@
         </a>
       {% endif %}
     </p>
+    {% if entrance %}
+      <p class="pf-location__entrance">
+        {% include '@palefire/includes/space-icon.html.twig' with { icon: 'step_free' } only %}
+        <span class="pf-location__entrance-label">{{ 'Accessible entrance'|t }}</span>
+        <span class="pf-location__entrance-text">{{ entrance }}</span>
+      </p>
+    {% endif %}
   </div>
 {% endif %}
