@@ -170,6 +170,7 @@ $states = [
 $icons = [
   'walk' => 'Person walking (open to all)',
   'clock' => 'Clock (appointment, time)',
+  'moon' => 'Crescent moon (after hours)',
   'calendar' => 'Calendar with a check (reservation)',
   'calendar_walk' => 'Calendar with an arrow (walk up, bookings first)',
   'card' => 'ID card (account, eligibility)',
@@ -352,7 +353,7 @@ $policies = [
   'lsu_groups' => ['University groups', 'required', 'card', 'For university-affiliated groups. Others only when LSU Libraries co-sponsor the event.'],
   'two_weeks' => ['Two weeks\' notice', 'required', 'clock', 'Request the date at least two weeks ahead.'],
   'podium_av' => ['Podium, microphone and screen', 'allowed', 'mic', 'A projection screen, tables and chairs too.'],
-  'after_hours' => ['After hours by permission', 'required', 'clock', 'Events outside library hours need permission and may have a fee.'],
+  'after_hours' => ['After hours by permission', 'required', 'moon', 'Events outside library hours need permission and may have a fee.'],
   'alcohol_permit' => ['Alcohol by LSU permit', 'required', 'glass', 'Serving alcohol needs a special permit from LSU.'],
 ];
 $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term');

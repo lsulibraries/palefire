@@ -1060,6 +1060,7 @@ history (`git show fa05a94:README.md`).
 
 ### 2026-11-02
 
+- **Policy marks: a moon for after hours.** The Lecture Hall showed two identical clocks (Two weeks' notice and After hours by permission). A new `moon` mark in `includes/space-icon.html.twig`, a crescent on the same 24px stroke grid, is now After hours' icon in `palefire_location_setup.php`. The live term needs the new allowed value and its icon switched by hand. Why: two marks that look the same read as one rule.
 - **Mobile dock: gradient glass.** Collapsed, the dock is solid in its bottom 20% and thins to 75% glass (`$pf-dock-glass-top`, blur unchanged) by 85% of its height, as `--pf-dock-fill`. The muted second line sits 40% up, where the glass is still 92% (4.5:1 worst case over solid white or black); the bold first line sits 60% up at 85% (5.8:1). Open panels keep the even 92%, since their lists run up into the thin part. The solid fallbacks (reduced transparency, no backdrop-filter) set `--pf-dock-fill` too, and `:where()` keeps the gradient rule from outranking them. Checked on a copy of /v2/special at 390 (Twilight and Cream). Why: a lighter, more see-through dock that still reads as resting on the edge.
 
 ### 2026-11-01
