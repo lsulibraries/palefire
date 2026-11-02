@@ -15,11 +15,12 @@
 // even over solid white or black (_reading-themes.scss).
 $pf-dock-glass: .92;
 
-// Collapsed, the dock fades from solid at its foot (the bottom 20%) to a
-// thinner glass (75%) near its top edge. Its muted second line sits 40%
-// up, where the glass is still 92% (4.5:1 worst case); the bold first
-// line 60% up, at 85% (5.8:1). Open panels keep the even 92%: their lists
-// run up into where the thin glass would be.
+// Collapsed, the dock fades from a solid foot in the page color (the
+// bottom 20%) to a thinner chrome glass (75%) near its top edge. Its muted
+// second line sits 40% up, where the glass is still 93% (4.5:1 worst
+// case); the bold first line 60% up, at 86% (6:1). Open panels keep the
+// foot under the row, then the even 92%: their lists run up into where
+// the thin glass would be.
 $pf-dock-glass-top: .75;
 
 // Dock pages run under the notch (viewport-fit=cover, palefire.theme), so
@@ -83,6 +84,7 @@ html[data-pf-dock] .offcanvas {
     // dark swatches' glass.
     --pf-dock-track: color-mix(in srgb, var(--pf-section-muted) 35%, transparent);
     --pf-dock-chrome-rgb: var(--pf-g-chrome-rgb, 247, 244, 236);
+    --pf-dock-foot-rgb: var(--pf-g-bg-rgb, 247, 244, 236);
     --pf-dock-bg: rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass});
     --pf-dock-fill: var(--pf-dock-bg);
     color: var(--pf-section-fg);
@@ -91,32 +93,43 @@ html[data-pf-dock] .offcanvas {
     backdrop-filter: var(--pf-glass-filter, blur(26px));
   }
 
-  // :where() keeps it at one class, so the solid fallbacks
+  // The dock's foot is the page color, not the chrome: Safari 26 on
+  // iPhone tints the band behind its floating toolbar from the page's
+  // background (the chrome is 7.5% darker on the dark swatches, which
+  // left a seam). The foot then thins into the chrome glass above.
+  // :where() keeps these at one class, so the solid fallbacks
   // (_utility-panels.scss) still win.
   .pf-dock:where(:not([data-open])) {
-    --pf-dock-fill: linear-gradient(to top, rgb(var(--pf-dock-chrome-rgb)) 20%, rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass-top}) 85%);
+    --pf-dock-fill: linear-gradient(to top, rgb(var(--pf-dock-foot-rgb)) 20%, rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass-top}) 90%);
   }
 
-  // Safari 26 on iPhone puts bottom: 0 at the top of its floating toolbar
-  // and paints the band behind the toolbar in the color of a solid fixed
-  // element touching that edge (at least 80% wide, within 3px). The dock's
-  // gradient doesn't count, so this strip, the same color as the dock's
-  // solid foot and hidden behind it, stands in. Other browsers just have
-  // an unseen strip under the dock. Gone with the dock (hidden, or set
-  // aside for the keyboard), so the band goes back to the page's color.
+  // Open, the same foot under the row, then the even 92%.
+  .pf-dock:where([data-open]) {
+    --pf-dock-fill: linear-gradient(to top, rgb(var(--pf-dock-foot-rgb)) 16px, var(--pf-dock-bg) 48px);
+  }
+
+  // Safari also samples a solid fixed element touching the bottom edge
+  // (at least 80% wide, within 3px; backdrop-filter or a see-through
+  // background can't be sampled, which rules out the dock itself). This
+  // strip, in the foot's color and hidden behind it, gives Safari that
+  // element, so either way the band matches. Gone with the dock (hidden,
+  // or set aside for the keyboard), and back only once the dock has slid
+  // up over it.
   html.pf-dock-on .pf-dock-foot {
     position: fixed;
     inset-inline: 0;
     bottom: 0;
     z-index: 1034;
     display: block;
-    height: 16px;
-    background-color: rgb(var(--pf-g-chrome-rgb, 247, 244, 236));
+    height: 12px;
+    background-color: rgb(var(--pf-g-bg-rgb, 247, 244, 236));
     pointer-events: none;
+    transition: display 0s var(--pf-dock-dur) allow-discrete;
   }
 
   html.pf-dock-on .pf-dock:is(.is-hidden, .is-aside) + .pf-dock-foot {
     display: none;
+    transition-delay: 0s;
   }
 
   // Above the page and its fixed bars, under the drawers and their wash.
@@ -664,7 +677,8 @@ html[data-pf-dock] .offcanvas {
   @media (prefers-reduced-motion: reduce) {
     .pf-dock,
     .pf-dock *,
-    .pf-dock-tab {
+    .pf-dock-tab,
+    .pf-dock-foot {
       transition: none !important;
       animation: none !important;
     }
