@@ -11,8 +11,9 @@
  *
  * - Access (field_space_access, on room terms and map room overrides) gets
  *   three options: walk_in "Walk in", appointment "Book online" (the key
- *   stays, so nothing else moves) and rental "Room rental (fee)". The
- *   Lecture Hall becomes Room rental, on its room term and any map override
+ *   stays, so nothing else moves) and rental "Event rental (fee, approved
+ *   by staff)"; it was "Room rental (fee)", and a re-run renames it. The
+ *   Lecture Hall becomes Event rental, on its room term and any map override
  *   that said appointment.
  * - Capacity's help text asks for a number (shown "~100"); the Lecture
  *   Hall's "Fewer than 100 people" becomes "100". Other words are left.
@@ -36,7 +37,7 @@ $entity_types = \Drupal::entityTypeManager();
 $terms = $entity_types->getStorage('taxonomy_term');
 
 // 1. Access options. -----------------------------------------------------------
-$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Room rental (fee)'];
+$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Event rental (fee, approved by staff)'];
 foreach (['taxonomy_term', 'paragraph'] as $entity_type) {
   $config = FieldStorageConfig::loadByName($entity_type, 'field_space_access');
   if ($config && $config->getSetting('allowed_values') != $access_values) {
@@ -45,7 +46,7 @@ foreach (['taxonomy_term', 'paragraph'] as $entity_type) {
   }
 }
 
-// 2. The Lecture Hall: Room rental, capacity 100. -------------------------------
+// 2. The Lecture Hall: Event rental, capacity 100. ------------------------------
 $ids = $terms->getQuery()->accessCheck(FALSE)
   ->condition('vid', 'building_space')
   ->condition('field_map_key', 'hill_memorial.lecture_hall')
@@ -58,7 +59,7 @@ $changed = FALSE;
 if (in_array((string) $room->get('field_space_access')->value, ['', 'appointment'], TRUE)) {
   $room->set('field_space_access', 'rental');
   $changed = TRUE;
-  echo "Lecture Hall: Room rental\n";
+  echo "Lecture Hall: Event rental\n";
 }
 if ($room->hasField('field_space_capacity') && $room->get('field_space_capacity')->value === 'Fewer than 100 people') {
   $room->set('field_space_capacity', '100');
@@ -77,7 +78,7 @@ if ($entity_types->hasDefinition('paragraph') && FieldStorageConfig::loadByName(
     ->execute();
   foreach ($paragraphs->loadMultiple($ids) as $override) {
     $override->set('field_space_access', 'rental')->save();
-    echo "Map override {$override->id()}: Room rental\n";
+    echo "Map override {$override->id()}: Event rental\n";
   }
 }
 

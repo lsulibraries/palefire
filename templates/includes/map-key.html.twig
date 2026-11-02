@@ -71,7 +71,7 @@
       {% for group in [
         { access: 'walk_in', title: 'Walk in'|t },
         { access: 'appointment', title: 'Book online'|t },
-        { access: 'rental', title: 'Room rental'|t },
+        { access: 'rental', title: 'Event rental'|t },
       ] %}
         {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}
         {% set seq_start = seq_next %}

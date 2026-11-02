@@ -168,7 +168,7 @@ $paragraphs_widget = fn (int $weight, string $title, string $plural, string $def
   ],
 ];
 
-$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Room rental (fee)'];
+$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Event rental (fee, approved by staff)'];
 $link_settings = ['link_type' => 17, 'title' => 1];  // Generic link, optional link text.
 
 // Building spaces vocabulary ---------------------------------------------------

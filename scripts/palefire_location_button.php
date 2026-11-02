@@ -9,7 +9,7 @@
  *
  * Clears the Booking link's words while they are still the setup's
  * "Request the Lecture Hall", so the button, the Reserve section's button
- * and the phone dock all say the room's default (Room rental: "Request a
+ * and the phone dock all say the room's default (Event rental: "Request a
  * date", _palefire_space_access_kinds()). Other words are left as an
  * editor wrote them. Then lists where the room's Link and each Booking
  * link go: the room's Link is the map's way to the page, so on the page

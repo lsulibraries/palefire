@@ -1206,7 +1206,7 @@ function _palefire_space_access_kinds(): array {
   return [
     'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk', 'cta' => (string) t('Plan your visit')],
     'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar', 'cta' => (string) t('Book a time')],
-    'rental' => ['label' => (string) t('Room rental'), 'icon' => 'receipt', 'cta' => (string) t('Request a date')],
+    'rental' => ['label' => (string) t('Event rental'), 'icon' => 'receipt', 'cta' => (string) t('Request a date')],
   ];
 }
 
