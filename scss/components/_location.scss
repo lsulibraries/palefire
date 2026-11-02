@@ -3,7 +3,7 @@
 // Location section that carries House rules and Booking too (they are also
 // sections of their own). Templates:
 // paragraph--location-space/rules/booking.html.twig and
-// includes/space-icon.html.twig, js/location-pins.js; preprocess in palefire.theme ("Location
+// includes/space-icon.html.twig; preprocess in palefire.theme ("Location
 // pages"). Everything is read from the room's Building spaces term and its
 // Space policies, so the wording lives in one place.
 //
@@ -243,13 +243,6 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     @include pf-location-backdrop-whole;
   }
 
-  // The policy marks frosted like the floors: the photo blurs behind each
-  // tile, so the icons sit on a quiet ground of their own.
-  .pf-space-pin__button {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-
   // The map's grey floor names and icons over the photo: #9a9a9a gives
   // 3.7:1 over its ceiling (grey 64); #b0b0b0 gives 4.8:1.
   .pf-map { --pf-map-floor-ink: #b0b0b0; }
@@ -409,125 +402,55 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
   }
 }
 
-// --- At a glance: the policy marks and their tooltips -----------------------
-// A row of square marks (44px targets). The tooltip hangs under the row,
-// from its left edge, so it never runs off a phone's screen; it is part
-// of the mark (no gap to cross), so the pointer can move onto it.
-.pf-space-pins {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: .375rem;
-  margin: 1.25rem 0 0;
-  padding: 0;
-  list-style: none;
+// --- Need to know -------------------------------------------------------------
+// Up to three things to do or accept before coming
+// (_palefire_location_need_to_know()), as ruled rows in the ledger's voice:
+// the mark in the accent, the words beside it, a detail under them. The
+// label over them in the TOC's mono capitals. Stacked at every width: the
+// plate's column is too narrow for three side by side with their details.
+.pf-location__need {
+  max-width: 32rem;
+  margin: 1.5rem 0 0;
 }
 
-.pf-space-pin__button {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  color: var(--pf-location-fg);
-  background: transparent;
-  border: 1px solid var(--pf-location-line);
-  border-radius: 0;
-  cursor: help;
-  transition:
-    background-color $pf-hover-out ease,
-    border-color $pf-hover-out ease;
-
-  .pf-space-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  &:hover,
-  &:focus-visible {
-    background-color: color-mix(in srgb, currentColor 8%, transparent);
-    border-color: var(--pf-section-border, currentColor);
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-location-fg);
-    outline-offset: 2px;
-  }
-}
-
-// Required: a flag in the frame's top right corner, so the state reads by
-// shape as well as in the tooltip (the icon itself has no frame of its own).
-.pf-space-pin--required .pf-space-pin__button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: .5rem;
-  height: .5rem;
-  background: currentColor;
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-}
-
-// The tooltip on the surface, in a hairline frame, with the label, the
-// state in the mono capitals and the detail.
-.pf-space-pin__tip {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 4;
-  display: grid;
-  gap: .25rem;
-  width: max-content;
-  max-width: min(20rem, 100%);
-  margin-top: .5rem;
-  padding: .75rem .875rem;
-  font-size: .9375rem;
-  line-height: 1.45;
-  color: var(--pf-location-fg);
-  background: var(--pf-g-surface, var(--bs-body-bg));
-  border: 1px solid var(--pf-location-line);
-  box-shadow: 0 .75rem 2rem rgb(0 0 0 / .18);
-  opacity: 0;
-  visibility: hidden;
-  translate: 0 -.25rem;
-  pointer-events: none;
-  transition:
-    opacity .2s ease,
-    translate .2s $pf-swup-ease-in,
-    visibility 0s linear .2s;
-
-  // Covers the gap to the row, so the pointer can cross onto the tooltip.
-  &::before {
-    content: "";
-    position: absolute;
-    inset: -.5rem 0 100%;
-  }
-}
-
-.pf-space-pin:is(:hover, :focus-within, .is-open):not(.is-dismissed) .pf-space-pin__tip {
-  opacity: 1;
-  visibility: visible;
-  translate: 0 0;
-  pointer-events: auto;
-  transition-delay: 0s;
-}
-
-.pf-space-pin__label { font-weight: 600; }
-
-.pf-space-pin__state {
+.pf-location__need-title {
   @extend %pf-location-label;
-  color: var(--pf-location-muted);
-}
-
-// Required is what someone has to act on: its state in the accent, as the
-// kicker over the title.
-.pf-space-pin--required .pf-space-pin__state {
+  margin: 0 0 .5rem;
   color: var(--pf-g-accent, var(--pf-landing-accent));
 }
 
-.pf-space-pin__detail { color: var(--pf-location-muted); }
+.pf-location__need-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--pf-location-line);
+}
+
+.pf-location__need-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: .625rem;
+  align-content: start;
+  padding: .625rem 0;
+  border-bottom: 1px solid var(--pf-location-line);
+
+  > .pf-space-icon {
+    grid-row: span 2;
+    color: var(--pf-g-accent, var(--pf-landing-accent));
+  }
+}
+
+.pf-location__need-label {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pf-location__need-detail {
+  font-size: .875rem;
+  line-height: 1.4;
+  color: var(--pf-location-muted);
+}
 
 // --- The ledger: the facts in a row ----------------------------------------
 // Term over value, unruled (over a photo, on the floors' frost): two across
@@ -1020,8 +943,6 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-space-pin__button,
-  .pf-space-pin__tip,
   .pf-location__cta,
   .pf-sound__bar,
   .pf-location__plate-link {

@@ -1302,6 +1302,7 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
         'detail' => trim(strip_tags((string) $policy->getDescription())),
         'state' => in_array($state, ['allowed', 'required', 'not_allowed'], TRUE) ? $state : 'allowed',
         'icon' => $policy->hasField('field_policy_icon') ? (string) $policy->get('field_policy_icon')->value : '',
+        'key' => $policy->hasField('field_policy_key') ? (string) $policy->get('field_policy_key')->value : '',
       ];
     }
   }
@@ -1333,6 +1334,31 @@ function _palefire_location_data(TermInterface $room, CacheableMetadata $cache):
     'policies' => $policies,
     'entrance' => _palefire_space_entrance($room, $cache),
   ];
+}
+
+/**
+ * Space policies the Access fact and the button already say (field_policy_key).
+ */
+const PALEFIRE_ACCESS_POLICY_KEYS = ['reservation', 'by_appointment', 'walk_up'];
+
+/**
+ * Need to know, at the top of a room's page: what someone has to do or
+ * accept before coming, in words. The room's Required policies in its
+ * order (less those its access already says), and "Fees apply" for an
+ * Event rental, three at most. Everything else is in House rules.
+ *
+ * @return array
+ *   Each: label, detail ('' for none), icon (includes/space-icon).
+ */
+function _palefire_location_need_to_know(array $location): array {
+  $items = [];
+  foreach ($location['policies'] ?? [] as $policy) {
+    if ($policy['state'] === 'required' && !in_array($policy['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)) {
+      $items[] = ['label' => $policy['label'], 'detail' => $policy['detail'], 'icon' => $policy['icon']];
+    }
+  }
+  $fee = ($location['access'] ?? '') === 'rental' ? [['label' => (string) t('Fees apply'), 'detail' => '', 'icon' => 'receipt']] : [];
+  return [...array_slice($items, 0, 3 - count($fee)), ...$fee];
 }
 
 /**
@@ -1704,6 +1730,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['map'] = $map;
     $location['uid'] = 'pf-location-' . $paragraph->id();
     $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
+    $location['need_to_know'] = _palefire_location_need_to_know($location);
     // The backdrop's fallback: the first of the page's photos.
     $photos = _palefire_location_sibling($paragraph, 'location_photos');
     $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);

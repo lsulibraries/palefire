@@ -121,7 +121,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Landing hero, stacks, department | `paragraph--landing-*` | – landing only |
 | Events carousel, Visit strip | `paragraph--events-carousel`, `_visit.scss` | – |
 | Building map, parish map, family trees | `paragraph--building-map`, `--parish-map`, `--family-trees` | – |
-| Location page: plate (title + map), ledger, map chip; its parts as sections (room photos, hours and directions, house rules, booking), in index columns with a sticky head from lg; policy marks | `paragraph--location-space`, `-location-photos`, `-location-visit`, `-location-rules`, `-location-booking`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
+| Location page: plate (title + map), ledger, map chip; its parts as sections (room photos, hours and directions, house rules, booking), in index columns with a sticky head from lg; Need to know (up to three required items, in words) | `paragraph--location-space`, `-location-photos`, `-location-visit`, `-location-rules`, `-location-booking`, `includes/space-icon`, `_location.scss`, `js/location-plate.js` | – location pages only |
 | Ask Special Collections | `includes/ask-special` | – |
 | Exhibitions showcase | `includes/exhibit-showcase` | – its own page (`/v2/special/exhibitions`): two bands with index rules 01 and 02, the breadcrumb in the landing's glass bar, the rail TOC, alternating band colours |
 | Header, utility drawers, TOC, footer | `layout/*`, `_utility-panels.scss`, `_toc*.scss` | ✔ around the page |
@@ -131,6 +131,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Location top: the policy marks and their tooltips (`.pf-space-pin*`, `js/location-pins.js`, library `palefire/location-pins`) are replaced by Need to know (`.pf-location__need*`): a mono label in the accent over ruled rows, each a mark in the accent, a label and a muted detail. Up to three: the room's Required policies less those its access says (`PALEFIRE_ACCESS_POLICY_KEYS`), and Fees apply for an Event rental (`_palefire_location_need_to_know()`). Stacked at every width.
 - **2026-11-02:** Dock motion calmed: `--pf-dock-ease` `cubic-bezier(.33, 0, .15, 1)` over `--pf-dock-dur` .5s. The action pill opens, then its words fade in (folding is the reverse); panel contents fade with the panel's height.
 - **2026-11-02:** Policy mark tooltips: Required in `--pf-g-accent` (5.7:1 or better on `--pf-g-surface` in every reading colour); Allowed and Not allowed stay muted.
 - **2026-11-02:** Access kind `rental` is labelled Event rental (was Room rental), in the ledger, the map key and tooltips; the field option reads "Event rental (fee, approved by staff)".

@@ -339,16 +339,6 @@ building-map:
     - core/drupal
     - core/once
 
-# Location pages: the policy marks' tooltips (tap, Escape). Attached by
-# templates/paragraphs/paragraph--location-space.html.twig.
-location-pins:
-  version: 1.0.0
-  js:
-    js/location-pins.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
 # Location pages: the map chip at the bottom of the screen once the
 # building map has scrolled away. Attached by
 # templates/paragraphs/paragraph--location-space.html.twig when the room has
