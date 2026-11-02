@@ -314,7 +314,7 @@
   }
 }
 
-// The group headings are h4s, so a swatch's heading color (Twilight's
+// The group headings are h3s, so a swatch's heading color (Twilight's
 // pale gold for content headings, _reading-themes.scss) would reach them:
 // labels here, in the labels' grey.
 html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
@@ -453,6 +453,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
   flex-wrap: wrap; // on phones the building drops under the name, rule first
   align-items: center;
   gap: .25rem .875rem;
+  margin-top: 0;
   margin-bottom: clamp(.75rem, 1.5vw, 1.25rem);
   color: var(--pf-g-accent, var(--pf-landing-accent));
 }

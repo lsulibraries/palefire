@@ -77,13 +77,17 @@
   counters.) The number and name are decoration (the heading or list after
   each rule names the section), so only they are hidden from screen
   readers; the link is not.
+  - label: the section's name, or empty for the number alone (a location
+    page's parts, whose sticky heading names them).
   - link: { url, text, hidden (more of its name, read but not shown),
     external (opens in a new tab) }, or empty.
 #}
 {% macro index_rule(num, label, link) %}
   <div class="pf-index-rule">
     <span class="pf-index-rule__num" aria-hidden="true">{{ num }}</span>
-    <span class="pf-index-rule__label" aria-hidden="true">{{ label }}</span>
+    {%- if label %}
+      <span class="pf-index-rule__label" aria-hidden="true">{{ label }}</span>
+    {%- endif %}
     {%- if link.url %}
       <a class="pf-index-rule__link" href="{{ link.url }}"{% if link.external %} target="_blank" rel="noopener"{% endif %}>
         {{- link.text -}}
@@ -222,20 +226,20 @@
     {% if cover %}{{ media }}{% endif %}
     {% if hero %}<div class="pf-landing__top">{% endif %}
     {# Hero: "LSU Libraries", a hairline, then the building (the Visit
-       card's name) over the title as a small label, inside the <h1> so the
-       heading reads "LSU Libraries, Hill Memorial Library: Special
-       Collections" (_landing-swiss.scss, "Unit name"). The building is
-       named here only, not again in the hours line. Theme colors only: no
-       LSU purple or gold, which clash with the reading colors. #}
+       card's name) over the title as a small label, a line of its own
+       before the <h1>, so the heading is the page's name alone ("Special
+       Collections"), as on a location page (_landing-swiss.scss, "Unit
+       name"). The building is named here only, not again in the hours
+       line. Theme colors only: no LSU purple or gold, which clash with the
+       reading colors. #}
     {% if page_title %}
+      {% if hero %}
+        <p class="pf-landing__kicker">
+          {{- 'LSU Libraries'|t -}}
+          {%- if visit.name %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ visit.name }}</span>{% endif -%}
+        </p>
+      {% endif %}
       <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
-        {%- if hero -%}
-          <span class="pf-landing__kicker">
-            {{- 'LSU Libraries'|t -}}
-            {%- if visit.name %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ visit.name }}</span>{% endif -%}
-            <span class="visually-hidden">: </span>
-          </span>
-        {%- endif -%}
         {{- page_title -}}
       </h1>
     {% endif %}

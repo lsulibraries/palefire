@@ -523,7 +523,7 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
 @container pf-location (min-width: 30rem) {
   .pf-location__facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-// From 40rem, one row with a column per fact (four or five), so none sits
+// From 40rem, one row with a column per fact (three to five), so none sits
 // alone on a second row.
 @container pf-location (min-width: 40rem) {
   .pf-location__facts {
@@ -538,10 +538,6 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     grid-auto-flow: row;
   }
 
-  // Six facts (with Area): six equal columns, so Area doesn't wrap alone.
-  .pf-location__facts:has(> :nth-child(6)) {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
 }
 
 // --- The parts: sections of their own -------------------------------------
@@ -647,7 +643,9 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 .pf-location__photos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem clamp(.75rem, 1.5vw, var(--pf-grid-gutter));
+  // The gutter token is set on the top section only (.pf-location-page),
+  // so the fallback is what the parts use.
+  gap: 1.5rem clamp(.75rem, 1.5vw, var(--pf-grid-gutter, 2rem));
   margin: 0;
   padding: 0;
   list-style: none;
@@ -655,7 +653,7 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
   > li:first-child {
     grid-column: 1 / -1;
 
-    img { aspect-ratio: 4 / 3; }
+    :is(img, .pf-location__frame) { aspect-ratio: 4 / 3; }
   }
 
   // An even count: the last would sit alone, so it leads too.
@@ -666,20 +664,35 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
 
     > li:first-child,
     > li:last-child:nth-child(even) { grid-column: auto; }
-    > li:first-child img { aspect-ratio: 4 / 5; }
+    > li:first-child :is(img, .pf-location__frame) { aspect-ratio: 4 / 5; }
   }
 }
 
 .pf-location__photo {
   margin: 0;
 
-  img {
+  img,
+  .pf-location__frame {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
     background-color: var(--pf-g-surface, var(--bs-secondary-bg));
+  }
+
+  // A photo still to come: the frame in its place, a hairline edge and the
+  // camera mark at its middle.
+  .pf-location__frame {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--pf-location-line);
+    color: var(--pf-location-muted);
+
+    .pf-space-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
   }
 
   figcaption {

@@ -32,6 +32,11 @@
       <span class="pf-map__key-icon" aria-hidden="true"></span>
     </summary>
   {% endif %}
+  {# Indexed: a section of the page, so it has its heading (the summary,
+     a button, can't be one), and its groups step down to h3. #}
+  {% if keyed %}
+    <h2 class="visually-hidden">{{ 'Rooms and access'|t }}</h2>
+  {% endif %}
   <div class="pf-map__key-body">
     {# Opening fades the rows in one after another, as the guides'
        accordions do (_building-map.scss): each row is .pf-seq with its
@@ -79,10 +84,10 @@
         {% if group_spaces or group_landmarks %}
           {% set seq_next = seq_start + 1 + group_landmarks|length + group_spaces|length %}
           <div class="pf-map__group">
-            <h4 class="pf-map__group-title pf-seq" style="--pf-seq: {{ min(seq_start, 5) }}">
+            <{{ keyed ? 'h3' : 'h4' }} class="pf-map__group-title pf-seq" style="--pf-seq: {{ min(seq_start, 5) }}">
               <span class="pf-map__swatch{{ group.access != 'walk_in' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
               {{ group.title }}
-            </h4>
+            </{{ keyed ? 'h3' : 'h4' }}>
             <ul>
               {# Landmarks (the Lobby) first: not rooms, so plain text with
                  no tooltip, shown on phones only, where building-map.js

@@ -13,6 +13,9 @@
  * md; below it the first leads at 4:3 and the rest pair up. Each is
  * captioned in the label voice (_location.scss). The first is also the
  * photo behind the page's top when the room term has none of its own.
+ *
+ * With no photos yet, three empty frames in their place, captioned "Photo
+ * coming soon", so the section keeps its shape until they are added.
  */
 #}
 {% if photos %}
@@ -22,6 +25,18 @@
         <figure class="pf-location__photo">
           <img src="{{ photo.src }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" loading="lazy" decoding="async">
           {% if photo.caption %}<figcaption>{{ photo.caption }}</figcaption>{% endif %}
+        </figure>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <ul{{ attributes.addClass('pf-location__photos') }}>
+    {# One caption read aloud, not three. #}
+    {% for i in 1..3 %}
+      <li{% if not loop.first %} aria-hidden="true"{% endif %}>
+        <figure class="pf-location__photo">
+          <span class="pf-location__frame">{% include '@palefire/includes/space-icon.html.twig' with { icon: 'camera' } only %}</span>
+          <figcaption>{{ 'Photo coming soon'|t }}</figcaption>
         </figure>
       </li>
     {% endfor %}

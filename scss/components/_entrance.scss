@@ -106,9 +106,9 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     }
 
     > .pf-landing__top {
-      // The unit name rides in with the title (it is in the <h1>); its
-      // hairline then draws out from the left and the building follows.
-      > .pf-landing__title {
+      // The unit name rides in with the title (the line over the <h1>);
+      // its hairline then draws out from the left and the building follows.
+      > :is(.pf-landing__kicker, .pf-landing__title) {
         @include pf-enter(340ms, 1.1s, pf-enter-title);
       }
 

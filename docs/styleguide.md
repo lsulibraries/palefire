@@ -61,6 +61,11 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Use tokens only. Components read `--pf-g-*` (reading colours) or the
     section tokens, never literals.
   - LSU gold appears only on purple or dark grounds.
+  - Photographs: colour for what people look at (the cover, the hero
+    banners), monochrome for a backdrop behind data (the location top).
+    Both are pulled toward the swatch with the page colour in the `color`
+    blend, which keeps lightness, so it never moves a contrast. Grey on a
+    banner means "not this one", so a cover never goes fully grey.
 - **Lines:** every rule, row and frame is `$pf-hairline` (20%). Control
   borders that identify a control use `--pf-section-border` at 3:1.
 - **Type:**
@@ -81,7 +86,8 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Targets of 44px, or 36px in the compact header.
 - **Numbering:** letters for alternatives (the Quick Start's A, B, C),
   1, 2, 3 for steps done in order (`pf-steps`, no leading zero), and
-  01, 02 only on section index rules.
+  01, 02 only on section index rules. On a location page the rule
+  carries the number alone: its sticky heading names the part.
 - **Icons:** Font Awesome 5.15.4 class names only (`fas`, `far`, `fab`),
   with `aria-hidden="true"`. The theme mostly inlines SVGs.
 - **Performance:**
@@ -134,6 +140,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Index rule (`index_rule` macro): the label is optional; location parts print the number alone. Location facts (`.pf-location__facts`): Access, Capacity, Sound, Price, Notice (three to five; the six-column rule is gone). Photo placeholder `.pf-location__frame` (4:5, 4:3 when it leads below md): the surface fill, a hairline edge, the `camera` space mark at its middle; the photo grid's gap falls back to 2rem (the gutter token was unset outside the top section, so photos touched), caption "Photo coming soon". Landing kicker (`.pf-landing__kicker`) is a `<p>` over the `<h1>`, row 1 of the cover's grid from 40rem; it enters with the title. Building map key, indexed: hidden `<h2>` Rooms and access, group titles `<h3>`. Book titles (`.pf-book__title`) are spans.
+- **2026-11-02:** Cover swatch tint (`.pf-landing--cover .pf-landing__lead > .pf-landing__media::before`, `_landing-features.scss`): `--pf-cover-bg` at 40% in `mix-blend-mode: color` over the video and its washes. Off with more contrast (`prefers-contrast: more`, `html.pf-a11y-contrast`) and forced colours. New colour rule for photographs (above).
 - **2026-11-02:** Motion: no page fade (`base/_fade.scss` no longer holds the body at 0.01 until `.pf-ready`; `.pf-ready` is gone). The entrance (`_entrance.scss`) and the hero banners' rise key on `html.pf-fade` and run from the first paint; `pf-enter-title` rises 1rem at full opacity. New token `$pf-reveal-from` (.85): the waiting state of `.pf-reveal` (headings, now -.75rem), `.pf-paths--reveal` stops, `.pf-tiles--reveal` cards (16px, stagger ±24px) and the events carousel's parts. Location map chip (`.pf-location__plate`) hides once the footer reaches the screen's lowest eighth.
 - **2026-11-02:** Buttons: pressed state, mixin `pf-button-pressed` (`_buttons.scss`): `:active` lays an inset `box-shadow` of `currentColor` at 14% over the button, on at once, fading out over `$pf-hover-out`; `-webkit-tap-highlight-color: transparent`. In `%pf-button` and in the buttons with their own rules (`.pf-quick-guide__link`, the cover's `.pf-visit__link`, `.pf-inquiry__button`/`__submit`), which add `box-shadow` to their transition.
 - **2026-11-02:** Visit panel buttons (`.pf-landing--cover .pf-visit__link`): full column width below `@container pf-cover (64rem)`, stacked, .75rem from the rule or map above, .5rem apart; phones put 2rem between hours and map. From 64rem they keep `min(100%, 17.5rem)`.

@@ -98,7 +98,8 @@
      page edges as thick as its page count (book.depth), then the short
      title (the subtitle for screen readers only, to keep the row compact),
      author and imprint. The cover is decorative (aria-hidden, alt=""): the
-     <h3> names the link. The shelf scrolls sideways inside the section's
+     title names the link. Not headings: thirty would bury the page's
+     outline; the list and its section heading name the shelf. The shelf scrolls sideways inside the section's
      gutters, under frosted glass at the side with more books (data-pf-at:
      start, middle, end or none, kept by js/book-shelf.js, which also shows
      the Previous / Next buttons when it overflows). The buttons come first:
@@ -137,7 +138,7 @@
                 </span>
               </span>
               <span class="pf-book__text">
-                <h3 class="pf-book__title">{{ book.title }}{% if book.subtitle %}<span class="visually-hidden">: {{ book.subtitle }}</span>{% endif %}</h3>
+                <span class="pf-book__title">{{ book.title }}{% if book.subtitle %}<span class="visually-hidden">: {{ book.subtitle }}</span>{% endif %}</span>
                 {% if book.author %}
                   <span class="pf-book__author"><span class="visually-hidden">, </span>{{ book.author }}</span>
                 {% endif %}

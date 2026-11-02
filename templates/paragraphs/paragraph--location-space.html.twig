@@ -124,29 +124,30 @@
         </div>
 
         <div class="pf-location__ledger">
+          {#
+            Access, Capacity, Sound, then Price and Notice where the room has
+            them. Building and floor are in the kicker over the title.
+          #}
           <dl class="pf-location__facts">
-            {% if location.building %}
-              <div class="pf-location__fact"><dt>{{ 'Building'|t }}</dt><dd>{{ location.building }}</dd></div>
-            {% endif %}
-            {% if location.floor %}
-              <div class="pf-location__fact"><dt>{{ 'Floor'|t }}</dt><dd>{{ location.floor }}</dd></div>
-            {% endif %}
             <div class="pf-location__fact">
               <dt>{{ 'Access'|t }}</dt>
               <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: location.access_kind.icon } only %}{{ location.access_kind.label }}</dd>
             </div>
+            {# Plain numbers as "~100" (screen readers: "about 100"). #}
+            {% if location.capacity %}
+              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.capacity } only %}</span></dd></div>
+            {% endif %}
             {% if location.sound_level %}
               <div class="pf-location__fact">
                 <dt>{{ 'Sound'|t }}</dt>
                 <dd>{% include '@palefire/includes/space-icon.html.twig' with { icon: 'sound', level: location.sound_level } only %}{{ sounds[location.sound] }}</dd>
               </div>
             {% endif %}
-            {# Plain numbers as "~100" (screen readers: "about 100"). #}
-            {% if location.capacity %}
-              <div class="pf-location__fact"><dt>{{ 'Capacity'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.capacity } only %}</span></dd></div>
+            {% if location.price %}
+              <div class="pf-location__fact"><dt>{{ 'Price'|t }}</dt><dd>{{ location.price }}</dd></div>
             {% endif %}
-            {% if location.area %}
-              <div class="pf-location__fact"><dt>{{ 'Area'|t }}</dt><dd><span>{% include '@palefire/includes/about.html.twig' with { n: location.area } only %} <abbr title="{{ 'square feet'|t }}">{{ 'sq ft'|t }}</abbr></span></dd></div>
+            {% if location.notice %}
+              <div class="pf-location__fact"><dt>{{ 'Notice'|t }}</dt><dd>{{ location.notice }}</dd></div>
             {% endif %}
           </dl>
         </div>

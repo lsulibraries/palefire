@@ -7,6 +7,7 @@
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
@@ -94,6 +95,8 @@ function palefire_page_attachments_alter(array &$attachments) {
     }
     unset($item);
   }
+  _palefire_page_description($attachments);
+
   $node = \Drupal::routeMatch()->getParameter('node');
   $is_resource = $node instanceof NodeInterface && $node->bundle() === 'resource';
 
@@ -124,6 +127,52 @@ function palefire_page_attachments_alter(array &$attachments) {
       'robots',
     ];
   }
+}
+
+/**
+ * The page's description (meta description and og:description) from the
+ * lede it shows: the page's Intro (field_intro), else its Body (the
+ * summary, else the text), else a location page's room description (the
+ * line under its title). Plain text, cut at a word to about 160
+ * characters. Left alone when Metatag already gives one.
+ */
+function _palefire_page_description(array &$attachments): void {
+  $node = PalefireHooks::pageNode();
+  if (!$node) {
+    return;
+  }
+  foreach ($attachments['#attached']['html_head'] ?? [] as $item) {
+    if (($item[1] ?? '') === 'description') {
+      return;
+    }
+  }
+  $cache = CacheableMetadata::createFromRenderArray($attachments)->addCacheableDependency($node);
+  $text = '';
+  if ($node->hasField('field_intro') && !$node->get('field_intro')->isEmpty()) {
+    $text = (string) $node->get('field_intro')->value;
+  }
+  elseif ($node->hasField('body') && !$node->get('body')->isEmpty()) {
+    $text = (string) ($node->get('body')->summary ?: $node->get('body')->value);
+  }
+  else {
+    foreach (PalefireHooks::SECTION_FIELDS as $field) {
+      foreach ($node->hasField($field) ? $node->get($field)->referencedEntities() : [] as $section) {
+        $room = $section instanceof ParagraphInterface && $section->bundle() === 'location_space' ? _palefire_location_room($section) : NULL;
+        if ($room) {
+          $cache->addCacheableDependency($room);
+          $text = (string) $room->get('description')->value;
+          break 2;
+        }
+      }
+    }
+  }
+  $text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5)));
+  if ($text !== '') {
+    $text = Unicode::truncate($text, 160, TRUE, TRUE);
+    $attachments['#attached']['html_head'][] = [['#tag' => 'meta', '#attributes' => ['name' => 'description', 'content' => $text]], 'description'];
+    $attachments['#attached']['html_head'][] = [['#tag' => 'meta', '#attributes' => ['property' => 'og:description', 'content' => $text]], 'og_description'];
+  }
+  $cache->applyTo($attachments);
 }
 
 /**
@@ -1362,6 +1411,38 @@ function _palefire_location_need_to_know(array $location): array {
 }
 
 /**
+ * The facts row's Notice: how far ahead to ask, from a Required policy
+ * named "… notice" ("Two weeks' notice" gives "Two weeks"). '' for none.
+ */
+function _palefire_location_notice(array $location): string {
+  foreach ($location['policies'] ?? [] as $policy) {
+    if ($policy['state'] === 'required' && preg_match('/^(.+?)[\'\x{2019}]?\s+notice$/iu', trim($policy['label']), $match)) {
+      return $match[1];
+    }
+  }
+  return '';
+}
+
+/**
+ * The facts row's Price, from the booking text's fees ("Two hours
+ * (minimum): $100", "A full day: $250"): the lowest, as "From $100" when
+ * there are others. '' when the text names no price, so a free room shows
+ * no Price at all.
+ */
+function _palefire_location_price(ParagraphInterface $paragraph): string {
+  if (!$paragraph->hasField('field_booking_body') || $paragraph->get('field_booking_body')->isEmpty()) {
+    return '';
+  }
+  $text = html_entity_decode(strip_tags((string) $paragraph->get('field_booking_body')->value), ENT_QUOTES | ENT_HTML5);
+  if (!preg_match_all('/\$\s?(\d{1,3}(?:,\d{3})+|\d+)/', $text, $matches)) {
+    return '';
+  }
+  $amounts = array_unique(array_map(static fn (string $n): int => (int) str_replace(',', '', $n), $matches[1]));
+  $lowest = '$' . number_format(min($amounts));
+  return count($amounts) > 1 ? (string) t('From @price', ['@price' => $lowest]) : $lowest;
+}
+
+/**
  * A room's link, unless it is the page $paragraph is on. The room's Link
  * is where the building map sends people (often the room's own page); as
  * the page's button it would go nowhere, so the Booking link is used.
@@ -1706,7 +1787,8 @@ function _palefire_location_sibling(ParagraphInterface $paragraph, string $bundl
  * line under the title). The page's other parts are sections of their own
  * (Location: photos, hours and directions, house rules, booking). With no
  * Room link of its own, the button at the top is this section's Booking
- * link.
+ * link. The facts row adds Notice (_palefire_location_notice()) and Price
+ * (_palefire_location_price(), from the Booking part's text).
  */
 function palefire_preprocess_paragraph__location_space(array &$variables): void {
   $variables['location'] = NULL;
@@ -1731,6 +1813,8 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['uid'] = 'pf-location-' . $paragraph->id();
     $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
     $location['need_to_know'] = _palefire_location_need_to_know($location);
+    $location['notice'] = _palefire_location_notice($location);
+    $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
     // The backdrop's fallback: the first of the page's photos.
     $photos = _palefire_location_sibling($paragraph, 'location_photos');
     $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);
@@ -2647,12 +2731,14 @@ function palefire_preprocess_field(array &$variables): void {
  * The index rule of a location page's part, or NULL for any other section.
  *
  * Location: photos, hours and directions, house rules and booking open on
- * an index rule as /v2/special's sections do, with a label, a lede naming
- * the room, and on two of them a link at the rule's end (Directions, the
- * request form). Written here rather than in Eyebrow and Lede fields, so
- * every room's page reads the same.
+ * an index rule as /v2/special's sections do, but with only the number:
+ * the section's heading, big and sticky in the left column, names it, so a
+ * label in the rule would say it twice. Then a lede naming the room, and on
+ * Hours and directions a link at the rule's end (Directions). Written here
+ * rather than in Eyebrow and Lede fields, so every room's page reads the
+ * same.
  *
- * @return array{label: string, lede: string, link: ?array}|null
+ * @return array{lede: string, link: ?array}|null
  */
 function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetadata $cache): ?array {
   $bundle = $paragraph->bundle();
@@ -2666,7 +2752,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
   $host = $paragraph->getParentEntity();
   switch ($bundle) {
     case 'location_photos':
-      return ['label' => (string) t('The space'), 'lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
+      return ['lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
 
     case 'location_visit':
       $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
@@ -2677,7 +2763,6 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
         ? (string) t('On Floor @n of @building', ['@n' => $floor, '@building' => $building])
         : (string) t('In @building', ['@building' => $building]);
       return [
-        'label' => (string) t('Getting here'),
         'lede' => ($location['access'] ?? 'walk_in') !== 'walk_in'
           ? (string) t('@where, by booking.', ['@where' => $where])
           : (string) t('@where, open whenever the building is.', ['@where' => $where]),
@@ -2694,7 +2779,6 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // room may have none).
       $required = in_array('required', array_column($location['policies'] ?? [], 'state'), TRUE);
       return [
-        'label' => (string) t('Before you come'),
         'lede' => $required
           ? (string) t('What the @room allows, and what to arrange first.', ['@room' => $name])
           : (string) t('What the @room allows, and what it doesn’t.', ['@room' => $name]),
@@ -2705,7 +2789,6 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // No link in the rule: the section's own button, under the steps, is
       // the way to the form (palefire_preprocess_paragraph__location_booking()).
       return [
-        'label' => (string) t('Reserve'),
         'lede' => (string) t('How to request the @room, and what comes with it.', ['@room' => $name]),
         'link' => NULL,
       ];
