@@ -131,6 +131,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-02:** Dock motion calmed: `--pf-dock-ease` `cubic-bezier(.33, 0, .15, 1)` over `--pf-dock-dur` .5s. The action pill opens, then its words fade in (folding is the reverse); panel contents fade with the panel's height.
 - **2026-11-02:** Policy mark tooltips: Required in `--pf-g-accent` (5.7:1 or better on `--pf-g-surface` in every reading colour); Allowed and Not allowed stay muted.
 - **2026-11-02:** Access kind `rental` is labelled Event rental (was Room rental), in the ledger, the map key and tooltips; the field option reads "Event rental (fee, approved by staff)".
 - **2026-11-02:** `.pf-landing__kicker-place` never wraps inside ("Floor 1" drops to the next line whole, rule first). Room rental's default button words: "Request a date" (was Reserve), also the dock's.

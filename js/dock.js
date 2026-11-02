@@ -479,19 +479,26 @@
       const to = opening ? panel.scrollHeight : 0;
       panel.style.height = from + 'px';
       panel.getBoundingClientRect();
-      panel.classList.add('is-moving');
+      panel.classList.add('is-moving', opening ? 'is-opening' : 'is-closing');
       panel.style.height = to + 'px';
       let finished = false;
       const end = () => {
         if (!finished) {
           finished = true;
-          panel.classList.remove('is-moving');
+          panel.classList.remove('is-moving', 'is-opening', 'is-closing');
           panel.style.height = '';
           done();
         }
       };
-      panel.addEventListener('transitionend', end, { once: true });
-      window.setTimeout(end, 500);
+      // Only the panel's own height ends it, not its contents' fades.
+      const onEnd = (event) => {
+        if (event.target === panel && event.propertyName === 'height') {
+          panel.removeEventListener('transitionend', onEnd);
+          end();
+        }
+      };
+      panel.addEventListener('transitionend', onEnd);
+      window.setTimeout(end, 700);
     }
 
     function openPanel(name, opener) {
@@ -645,7 +652,7 @@
           if (!current) {
             action.hidden = true;
           }
-        }, reduceMotion() ? 0 : 260);
+        }, reduceMotion() ? 0 : 520);
         return;
       }
       if (had && !reduceMotion()) {
@@ -653,7 +660,7 @@
         window.setTimeout(() => {
           setAction(current);
           action.classList.remove('is-swapping');
-        }, SETTLE);
+        }, 200);
       }
       else {
         setAction(act);

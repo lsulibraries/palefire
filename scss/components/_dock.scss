@@ -48,8 +48,9 @@ html[data-pf-dock] .offcanvas {
     // bottom: 0 at the top of its floating toolbar, so there the dock sits
     // on the toolbar rather than under it.
     --pf-toolbar: 12px;
-    --pf-dock-ease: cubic-bezier(.2, .8, .2, 1);
-    --pf-dock-dur: .35s;
+    // Calm: a soft start and a long settle, slow enough to follow.
+    --pf-dock-ease: cubic-bezier(.33, 0, .15, 1);
+    --pf-dock-dur: .5s;
   }
 
   // Focus and anchor jumps stay clear of the dock (WCAG 2.4.11); the
@@ -298,8 +299,22 @@ html[data-pf-dock] .offcanvas {
     text-decoration: none;
     background: var(--pf-dock-accent);
     border-radius: 17px;
+    min-width: 0;
     opacity: 0;
-    transition: max-width .25s var(--pf-dock-ease), padding .25s var(--pf-dock-ease), opacity .25s ease, background-color .15s ease;
+    // Folding: the words fade first, then the pill closes. min-width moves
+    // too: it outranks max-width, and a jump to 118px was the pop.
+    transition:
+      max-width .4s var(--pf-dock-ease) .1s,
+      min-width .4s var(--pf-dock-ease) .1s,
+      padding .4s var(--pf-dock-ease) .1s,
+      margin .4s var(--pf-dock-ease) .1s,
+      opacity .3s ease .15s,
+      background-color .2s ease;
+
+    > * {
+      opacity: 0;
+      transition: opacity .15s ease;
+    }
 
     &[hidden] {
       display: none;
@@ -326,14 +341,28 @@ html[data-pf-dock] .offcanvas {
     padding-inline: 12px 14px;
     justify-content: center;
     opacity: 1;
+    // Unfolding: the pill opens and fades in, then its words follow.
+    transition:
+      max-width .5s var(--pf-dock-ease),
+      min-width .5s var(--pf-dock-ease),
+      padding .5s var(--pf-dock-ease),
+      margin .5s var(--pf-dock-ease),
+      opacity .3s ease,
+      background-color .2s ease;
+
+    > * {
+      opacity: 1;
+      transition: opacity .3s ease .25s;
+    }
   }
 
   .pf-dock__action-label {
-    transition: opacity .15s ease;
+    transition: opacity .2s ease;
   }
 
-  .pf-dock__action.is-swapping .pf-dock__action-label {
+  .pf-dock .pf-dock__action.is-swapping > * {
     opacity: 0;
+    transition: opacity .2s ease;
   }
 
   // The desk's phone: the button tone, not the accent.
@@ -422,6 +451,17 @@ html[data-pf-dock] .offcanvas {
 
     &.is-moving {
       transition: height var(--pf-dock-dur) var(--pf-dock-ease);
+    }
+
+    // Opening, the contents fade in as the panel nears its height; closing,
+    // they fade out before it folds, so text never wipes past the edge.
+    &.is-opening > * {
+      animation: pf-dock-fade .35s ease .15s both;
+    }
+
+    &.is-closing > * {
+      opacity: 0;
+      transition: opacity .15s ease;
     }
   }
 
@@ -659,7 +699,13 @@ html[data-pf-dock] .offcanvas {
   @keyframes pf-dock-tab-in {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes pf-dock-fade {
+    from {
+      opacity: 0;
     }
   }
 
