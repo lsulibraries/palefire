@@ -134,6 +134,7 @@
 .pf-map__stage { scroll-margin-top: calc(var(--pf-header-h, 50px) + 1rem); }
 @media (max-width: 575.98px) {
   .pf-map__labels > .pf-map__label:not(.pf-map__label--floor) { visibility: hidden; }
+  .pf-map__knock { display: none; }
   /* Type grows less (9-11.5px): FLOOR 2 has to fit between the Floor 2
      Gallery's number and McIlhenny Room's edge. */
   .pf-map__labels > .pf-map__label--floor { --scale: calc(var(--pf-map-px, 15) * .1157 + .767); }
@@ -201,7 +202,7 @@
 /* Labels are plain SVG <text>. Position comes from --x/--y on each element
    (map units); the rotate + skew live here, so the angles are one edit.
    In SVG, CSS px = map units and the origin is the text's anchor point. */
-.pf-map__label, .pf-map__icon {
+.pf-map__label, .pf-map__icon, .pf-map__knock {
   --skew: var(--pf-map-skew-room);
   transform-box: view-box;
   transform-origin: 0 0;
@@ -276,16 +277,19 @@
 }
 .pf-map.is-tracing .pf-map__region,
 .pf-map.is-tracing .pf-map__label,
+.pf-map.is-tracing .pf-map__knock,
 .pf-map.is-tracing .pf-map__icons,
 .pf-map.is-tracing .pf-map__lines--hidden { opacity: 0; }
 .pf-map.is-drawn .pf-map__region,
 .pf-map.is-drawn .pf-map__label,
+.pf-map.is-drawn .pf-map__knock,
 .pf-map.is-drawn .pf-map__icons,
 .pf-map.is-drawn .pf-map__lines--hidden { opacity: 1; }
 .pf-map.is-revealing .pf-map__region {
   transition: opacity var(--pf-map-reveal-fade) ease calc(var(--pf-map-seq, 0) * var(--pf-map-reveal-step));
 }
-.pf-map.is-revealing .pf-map__label {
+.pf-map.is-revealing .pf-map__label,
+.pf-map.is-revealing .pf-map__knock {
   transition: opacity var(--pf-map-reveal-fade) ease calc(var(--pf-map-seq, 0) * var(--pf-map-reveal-step) + var(--pf-map-reveal-label-lag)),
     fill var(--pf-map-out) ease, transform var(--pf-map-out) ease;
 }
@@ -476,6 +480,12 @@
 /* Lit, it keeps the ink too (gold would sink into its own room), over the
    lifted name's dark halo. building-map.js marks it .is-here. */
 .pf-map__label.is-here.is-active { fill: var(--pf-map-ink); }
+/* The name's cut-out: the hatch cleared in an even margin around the here
+   room's name (building-map.js sizes it from the letters), on the name's
+   own angle, so the name reads on the frosted photo, not over the dots.
+   A black shape in the hatch's mask; it rises with the lit name. */
+.pf-map__knock { transition: transform var(--pf-map-out) ease; }
+.pf-map__knock.is-active { --lift: var(--pf-map-lift); transition: transform var(--pf-map-in) ease; }
 
 /* Tooltip ------------------------------------------------------------------
    One per map, filled from the hidden .pf-map__tip-src for the active room and
@@ -589,8 +599,8 @@
 .pf-landing.is-map-in-view .pf-landing__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num { transition: none !important; }
-  .pf-map__label.is-active { --lift: 0px; }
+  .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num, .pf-map__knock { transition: none !important; }
+  .pf-map__label.is-active, .pf-map__knock.is-active { --lift: 0px; }
   .pf-landing__bg-video, .pf-landing__media::after { transition: none !important; }
   /* Tooltip: a plain short fade, no movement. */
   .pf-map__tip, .pf-map__tip.is-below { transform: none; }

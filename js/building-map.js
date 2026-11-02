@@ -28,7 +28,7 @@
     tipGap: 14,          // px between the room name and the tooltip
     hatchPeriod: 20,     // map units: the hatch <pattern> height in the drawing
     appointmentHatch: 'broken', // 'broken' (staggered dashes) or 'lines' (the drawing's own hatch)
-    hereGap: 36,         // map units between the "here" arrow and the room name
+    hereGap: 52,         // map units between the "here" arrow and the room name (clears the name's cut-out)
   };
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -493,7 +493,60 @@
       arrow.setAttribute('stroke-linejoin', 'round');
       marker.appendChild(arrow);
       svg.appendChild(marker);
+
+      // The name's cut-out (_building-map.scss, .pf-map__knock): a black
+      // rect in the room's hatch mask around the name's letters, with an
+      // even margin. It carries the name's --x/--y and .is-active, so CSS
+      // gives it the same angle and lift.
+      const hatch = hereRegion.querySelector('.pf-map__hatch');
+      const maskRef = hatch && /#([^)"']+)/.exec(hatch.getAttribute('mask') || '');
+      const hatchMask = maskRef && document.getElementById(maskRef[1]);
+      let knock = null;
+      if (hereLabel && hatchMask) {
+        knock = document.createElementNS(SVG_NS, 'rect');
+        knock.setAttribute('class', 'pf-map__knock');
+        knock.setAttribute('fill', '#000');
+        hatchMask.appendChild(knock);
+        const follow = () => {
+          knock.setAttribute('style', hereLabel.getAttribute('style') || '');
+          knock.classList.toggle('is-active', hereLabel.classList.contains('is-active'));
+        };
+        follow();
+        new MutationObserver(follow).observe(hereLabel, { attributes: true, attributeFilter: ['class', 'style'] });
+      }
+      // From the letters themselves (not the line box or the trailing
+      // letter-spacing), in the name's own units: cap height over each
+      // baseline, the first glyph's left to the last glyph's right.
+      const sizeKnock = () => {
+        if (!knock) return;
+        const cs = getComputedStyle(hereLabel);
+        const em = parseFloat(cs.fontSize) || 62;
+        const spacing = parseFloat(cs.letterSpacing) || 0;
+        const cap = em * 0.72;
+        const pad = em * 0.45;
+        const box = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+        const lines = hereLabel.querySelectorAll('tspan');
+        (lines.length ? [...lines] : [hereLabel]).forEach((line) => {
+          const text = line.textContent;
+          for (let i = 0; i < line.getNumberOfChars() && i < text.length; i++) {
+            if (/\s/.test(text[i])) continue;
+            const start = line.getStartPositionOfChar(i);
+            const extent = line.getExtentOfChar(i);
+            box.left = Math.min(box.left, extent.x);
+            box.right = Math.max(box.right, extent.x + extent.width - spacing);
+            box.top = Math.min(box.top, start.y - cap);
+            box.bottom = Math.max(box.bottom, start.y);
+          }
+        });
+        if (!Number.isFinite(box.left)) return;
+        knock.setAttribute('x', (box.left - pad).toFixed(1));
+        knock.setAttribute('y', (box.top - pad).toFixed(1));
+        knock.setAttribute('width', (box.right - box.left + pad * 2).toFixed(1));
+        knock.setAttribute('height', (box.bottom - box.top + pad * 2).toFixed(1));
+      };
+
       const placeHere = () => {
+        sizeKnock();
         const target = hereLabel || hereRegion;
         const m = svg.getScreenCTM();
         // Measure without the hover lift.
