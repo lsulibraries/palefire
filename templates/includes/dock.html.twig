@@ -97,6 +97,12 @@
   </template>
 </aside>
 
+{# Behind the dock's solid foot, unseen: Safari 26 on iPhone colors the
+   band behind its floating toolbar from a solid fixed element at the
+   viewport's bottom edge, so the dock runs on into the toolbar
+   (_dock.scss). #}
+<div class="pf-dock-foot" aria-hidden="true"></div>
+
 {# Hidden dock: a phone with its dock, Font Awesome duotone style (the
    screen at 40%). Not an arrow: in this corner that reads as "back to
    top". #}

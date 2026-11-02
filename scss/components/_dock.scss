@@ -33,7 +33,8 @@ html[data-pf-dock] .offcanvas {
 }
 
 .pf-dock,
-.pf-dock-tab {
+.pf-dock-tab,
+.pf-dock-foot {
   display: none;
 }
 
@@ -94,6 +95,28 @@ html[data-pf-dock] .offcanvas {
   // (_utility-panels.scss) still win.
   .pf-dock:where(:not([data-open])) {
     --pf-dock-fill: linear-gradient(to top, rgb(var(--pf-dock-chrome-rgb)) 20%, rgba(var(--pf-dock-chrome-rgb), #{$pf-dock-glass-top}) 85%);
+  }
+
+  // Safari 26 on iPhone puts bottom: 0 at the top of its floating toolbar
+  // and paints the band behind the toolbar in the color of a solid fixed
+  // element touching that edge (at least 80% wide, within 3px). The dock's
+  // gradient doesn't count, so this strip, the same color as the dock's
+  // solid foot and hidden behind it, stands in. Other browsers just have
+  // an unseen strip under the dock. Gone with the dock (hidden, or set
+  // aside for the keyboard), so the band goes back to the page's color.
+  html.pf-dock-on .pf-dock-foot {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 1034;
+    display: block;
+    height: 16px;
+    background-color: rgb(var(--pf-g-chrome-rgb, 247, 244, 236));
+    pointer-events: none;
+  }
+
+  html.pf-dock-on .pf-dock:is(.is-hidden, .is-aside) + .pf-dock-foot {
+    display: none;
   }
 
   // Above the page and its fixed bars, under the drawers and their wash.
@@ -240,13 +263,17 @@ html[data-pf-dock] .offcanvas {
 
   // Unfolds when the section has an action, folds away (and turns inert,
   // js/dock.js) when it has none or the page shows the same link.
+  // The action and the Contents ring share one 34px size, so the row
+  // reads as two equal marks. The pill is 34px tall (above WCAG 2.5.8's
+  // 24px) and sits 12px from the ring, so a thumb aimed at either, or at
+  // the status, is less likely to land on the action by mistake.
   .pf-dock__action {
     display: inline-flex;
     flex: none;
     gap: 6px;
     align-items: center;
     max-width: 0;
-    min-height: 44px;
+    height: 34px;
     padding-inline: 0;
     overflow: hidden;
     color: var(--pf-dock-on-accent);
@@ -256,7 +283,7 @@ html[data-pf-dock] .offcanvas {
     white-space: nowrap;
     text-decoration: none;
     background: var(--pf-dock-accent);
-    border-radius: 22px;
+    border-radius: 17px;
     opacity: 0;
     transition: max-width .25s var(--pf-dock-ease), padding .25s var(--pf-dock-ease), opacity .25s ease, background-color .15s ease;
 
@@ -281,7 +308,8 @@ html[data-pf-dock] .offcanvas {
   .pf-dock.has-action:not([data-pf-dock-dup]) .pf-dock__action {
     max-width: 60vw;
     min-width: 118px;
-    padding-inline: 14px 16px;
+    margin-inline-end: 4px;
+    padding-inline: 12px 14px;
     justify-content: center;
     opacity: 1;
   }
@@ -324,15 +352,17 @@ html[data-pf-dock] .offcanvas {
       display: none;
     }
 
+    // A 34px disc inside the 44px target, the ring as its rim.
     &[aria-expanded="true"] {
       color: rgb(var(--pf-panel-bg-rgb));
-      background: var(--pf-section-fg);
+      background: radial-gradient(circle closest-side, var(--pf-section-fg) 16.5px, transparent 17px);
     }
   }
 
+  // The ring's outer edge is 34px across, the action's height.
   .pf-dock__ring {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
     overflow: visible;
   }
 
@@ -662,6 +692,13 @@ html[data-pf-dock] .offcanvas {
     .pf-dock__action,
     .pf-dock__ask {
       border: 1px solid ButtonText;
+    }
+
+    .pf-dock__toc-button[aria-expanded="true"] {
+      color: ButtonText;
+      background: none;
+      outline: 2px solid Highlight;
+      outline-offset: -4px;
     }
   }
 }
