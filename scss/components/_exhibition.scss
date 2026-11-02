@@ -2914,8 +2914,13 @@ $pf-brief-clear: 90%;
 // Below lg, a wall that opens on its title and facts alone: the foot's
 // wash, dense to just above them (about 34% of the screen at 320 x 568,
 // 27% on a tall phone) and gone by three quarters up. The intro's wash
-// (46% to 98%) left only the top strip of the photograph.
+// (46% to 98%) left only the top strip of the photograph. With scroll
+// timelines the wash follows the text instead ($pf-bare-fade, below).
 $pf-bare-wash: pf-eased-wash(to top, 36%, 76%);
+
+// That wash: the page color behind the number, title and facts (and 1rem
+// above), then gone over this much of the photograph.
+$pf-bare-fade: 8rem;
 
 // The frame is pinned under the bar from the first scroll and its top edge
 // follows the bar as the header shrinks, while the image and its washes
@@ -3065,11 +3070,34 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         grid-column: 1;
         min-height: max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
         margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
-        background: $pf-bare-wash;
         pointer-events: none;
 
         @include media-breakpoint-up(lg) {
           background: pf-eased-wash(to top, 10%, 46%);
+        }
+      }
+
+      // Below lg, the wash is sized to the text, not the screen: solid
+      // behind its rows (2-4, the facts' foot margin included, so it runs
+      // on into the wall's page color), eased out over $pf-bare-fade above.
+      // A share of the screen fit one phone and left a dead band on a
+      // taller one, or a two-line title. Under the text (z-index 2).
+      @include media-breakpoint-down(lg) {
+        &::after {
+          content: "";
+          position: relative;
+          z-index: 1;
+          grid-row: 2 / 5;
+          grid-column: 1;
+          align-self: stretch;
+          margin: calc(-1 * (#{$pf-bare-fade} + 1rem)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+          background: pf-eased-wash(to top, calc(100% - #{$pf-bare-fade}), 100%);
+          pointer-events: none;
+        }
+
+        > .pf-section__title,
+        .pf-exhibit-wall__stats {
+          z-index: 2;
         }
       }
 
