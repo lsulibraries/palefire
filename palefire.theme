@@ -392,9 +392,10 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
  * The page's Section tabs that the landing hero draws in its Quick Start.
  *
  * The first published Section tabs section on the hero's page, when the
- * hero shows its Quick Start (the guide rule, _palefire_hero_rules()). The
- * hero draws its tabs in place of the request paths, between the intro and
- * Before you visit, and palefire_preprocess_field() leaves the section out
+ * hero shows its Quick Start (the guide rule, _palefire_hero_rules()) and a
+ * Tab draws the request paths (_palefire_tab_has_paths()). The hero draws
+ * the tabs under its rule 01, that Tab's panel holding the whole Quick
+ * Start, and palefire_preprocess_field() leaves the section out
  * of the page, so it shows once, and the sections after it keep their
  * numbers. NULL when there is none.
  */
@@ -410,11 +411,33 @@ function _palefire_hero_tabs(ParagraphInterface $hero): ?ParagraphInterface {
     return NULL;
   }
   foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
-    if ($section->bundle() === 'section_tabs' && $section->isPublished()) {
-      return $section;
+    if ($section->bundle() !== 'section_tabs' || !$section->isPublished() || !$section->hasField('field_tabs')) {
+      continue;
+    }
+    foreach ($section->get('field_tabs')->referencedEntities() as $tab) {
+      if ($tab->isPublished() && _palefire_tab_has_paths($tab)) {
+        return $section;
+      }
     }
   }
   return NULL;
+}
+
+/**
+ * Whether a Tab's blocks draw the request paths.
+ *
+ * TRUE when one of its published Guide texts has a paragraph that is only
+ * "[request-paths]" (palefire_preprocess_paragraph__guide_text()): the
+ * Special Collections homepage's Research tab.
+ */
+function _palefire_tab_has_paths(ParagraphInterface $tab): bool {
+  foreach ($tab->hasField('field_guide_blocks') ? $tab->get('field_guide_blocks')->referencedEntities() : [] as $block) {
+    if ($block->bundle() === 'guide_text' && $block->isPublished() && $block->hasField('field_block_body')
+      && preg_match('#<p>\s*\[request-paths\]\s*</p>#i', (string) $block->get('field_block_body')->value)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -447,11 +470,17 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     }
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
-    // The page's Section tabs, drawn in the Quick Start in place of the
-    // paths (_palefire_hero_tabs()). The page's tag redraws the hero when
-    // its sections change.
-    $tabs = _palefire_hero_tabs($paragraph);
-    $variables['quick_tabs'] = $tabs ? \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($tabs) : NULL;
+    // The page's Section tabs over the Quick Start (_palefire_hero_tabs()):
+    // tabs and tabs_label as the paragraph's template gets them; the tab
+    // with the request paths shows the Quick Start. The page's tag redraws
+    // the hero when its sections change.
+    $variables['quick_tabs'] = NULL;
+    if ($tabs = _palefire_hero_tabs($paragraph)) {
+      $tab_variables = ['paragraph' => $tabs];
+      palefire_preprocess_paragraph__section_tabs($tab_variables);
+      CacheableMetadata::createFromRenderArray($tab_variables)->applyTo($variables);
+      $variables['quick_tabs'] = ['tabs' => $tab_variables['tabs'], 'label' => $tab_variables['tabs_label']];
+    }
     $host = $paragraph;
     for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
       $host = $host->getParentEntity();
@@ -2353,6 +2382,8 @@ function palefire_preprocess_views_view(array &$variables): void {
  *   name with anything but lowercase letters, digits and hyphens is left
  *   out.
  * - content: the Tab's blocks (field_guide_blocks), rendered.
+ * - quick: the Tab draws the request paths (_palefire_tab_has_paths()); in
+ *   the landing hero its panel shows the whole Quick Start.
  * tabs_label names the tablist: the section's title, else "Sections".
  */
 function palefire_preprocess_paragraph__section_tabs(array &$variables): void {
@@ -2397,6 +2428,7 @@ function palefire_preprocess_paragraph__section_tabs(array &$variables): void {
       'label' => $label,
       'icon' => $icon,
       'content' => $tab->hasField('field_guide_blocks') ? $tab->get('field_guide_blocks')->view(['label' => 'hidden']) : [],
+      'quick' => _palefire_tab_has_paths($tab),
     ];
   }
   $cache->applyTo($variables);

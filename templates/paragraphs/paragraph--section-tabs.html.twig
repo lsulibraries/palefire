@@ -2,49 +2,20 @@
 /**
  * @file
  * Section tabs: a few ways in, one panel at a time (the Special Collections
- * homepage's Visit / Study / Ask). Styles: _section-tabs.scss; behaviour:
- * js/section-tabs.js.
+ * homepage's Research / Study / Ask). The markup is
+ * includes/section-tabs.html.twig, which the landing hero's Quick Start
+ * also draws.
  *
  * Variables from palefire_preprocess_paragraph__section_tabs():
- * - tabs: id, label, icon (a Font Awesome Pro SVG path under
- *   libraries/fontawesome-pro/svgs/, or empty) and content (the Tab's
- *   blocks, rendered).
+ * - tabs: id, label, icon, content and quick.
  * - tabs_label: the tablist's name (the section's title).
  *
  * The section <h2>, Eyebrow, Lede and Link come from the scroll-section
  * field template.
- *
- * Each tab is the whole column: its label printed above the track, its
- * face (where the key rests, with the carved icon) in the track, and its
- * indicator under it. The key and the track are drawn once, for the list.
- *
- * Without JS there is no tablist (.is-ready shows it): every panel shows,
- * each under its own heading (an h3, visually hidden once the tabs work, so
- * a screen reader still hears it at the top of the panel).
  */
 #}
-{% if tabs %}
-  {{ attach_library('palefire/section-tabs') }}
-  <div{{ attributes.addClass('pf-tabs') }} data-pf-tabs>
-    <div class="pf-tabs__list" role="tablist" aria-label="{{ tabs_label }}">
-      <span class="pf-tabs__rail" aria-hidden="true"></span>
-      <span class="pf-tabs__key is-instant" aria-hidden="true"></span>
-      {% for tab in tabs %}
-        {% set svg = tab.icon ? source('libraries/fontawesome-pro/svgs/' ~ tab.icon ~ '.svg', ignore_missing = true) : '' %}
-        <button type="button" class="pf-tabs__tab" role="tab" id="{{ tab.id }}-tab" aria-controls="{{ tab.id }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" tabindex="{{ loop.first ? '0' : '-1' }}">
-          <span class="pf-tabs__label">{{ tab.label }}</span>
-          <span class="pf-tabs__face">
-            {%- if svg %}<span class="pf-tabs__icon" aria-hidden="true">{{ svg|raw }}</span>{% endif -%}
-          </span>
-          <span class="pf-tabs__dot" aria-hidden="true"></span>
-        </button>
-      {% endfor %}
-    </div>
-    {% for tab in tabs %}
-      <div class="pf-tabs__panel" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0">
-        <h3 class="pf-tabs__heading">{{ tab.label }}</h3>
-        <div class="pf-tabs__body pf-guide">{{ tab.content }}</div>
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
+{% include '@palefire/includes/section-tabs.html.twig' with {
+  tabs: tabs,
+  tabs_label: tabs_label,
+  attributes: attributes,
+} only %}

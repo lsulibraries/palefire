@@ -1209,14 +1209,14 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 }
 
 @include media-breakpoint-down(md) {
-  .pf-quick-guide.is-folded > .pf-paths {
+  :is(.pf-quick-guide.is-folded, .pf-quick-guide.is-folded .pf-quick-guide__panel) > .pf-paths {
     max-height: 26rem;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
     mask-image: linear-gradient(to bottom, #000 55%, transparent);
   }
 
-  .pf-quick-guide.is-folded > .pf-quick-guide__expand {
+  :is(.pf-quick-guide.is-folded, .pf-quick-guide.is-folded .pf-quick-guide__panel) > .pf-quick-guide__expand {
     display: inline-flex;
     align-items: center;
     gap: .4rem;
@@ -2241,7 +2241,12 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 // shared styles (_guide.scss) set its stops as the narrow column they are:
 // the mark on the left, the line down through them, the letter over it.
 @container pf-cover (min-width: 64rem) {
-  .pf-quick-guide {
+  // With the page's Section tabs (pf-quick-guide--tabs, _palefire_hero_tabs())
+  // the rule and the tab bar run across the top, and the grid is the
+  // Research panel's (includes/section-tabs.html.twig): the same rows, the
+  // rule's left empty.
+  .pf-quick-guide:not(.pf-quick-guide--tabs),
+  .pf-quick-guide__panel {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: auto auto auto 1fr;
@@ -2277,33 +2282,20 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
     max-width: calc((100% - 3 * var(--pf-grid-gutter)) * .75 + 2 * var(--pf-grid-gutter));
   }
 
-  .pf-quick-guide > .pf-paths,
-  .pf-quick-guide > .pf-tabs {
+  :is(.pf-quick-guide, .pf-quick-guide__panel) > .pf-paths {
+    display: grid;
     grid-column: 2 / -1;
     grid-row: 2 / -1;
-  }
-
-  // With the page's Section tabs (_palefire_hero_tabs()), the tabs take
-  // the columns beside the heading, and the Research tab's paths keep
-  // them, one option to a column.
-  .pf-quick-guide > .pf-paths,
-  .pf-quick-guide .pf-tabs__panel .pf-paths {
-    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--pf-grid-gutter);
     container-type: normal;
-  }
-
-  // The tab bar sits on the heading's line, A over its left edge.
-  .pf-quick-guide > .pf-tabs > .pf-tabs__list {
-    margin-top: 0;
   }
 
   // On screens tall enough to show A, B and C whole under the header and
   // the bar, they ride along under the bar while the longer first column
   // (heading, intro, Before you visit) scrolls past, until the guide ends.
   @media (min-height: 46rem) {
-    .pf-quick-guide > .pf-paths {
+    :is(.pf-quick-guide, .pf-quick-guide__panel) > .pf-paths {
       position: sticky;
       top: calc(var(--pf-header-h) + var(--pf-landing-bar-h, 0px) + 1.5rem);
     }
@@ -3019,7 +3011,9 @@ html[data-pf-hero] .pf-landing--cover {
 // miniature), in the paragraphs' tone, at 16px. An editor's list (the
 // optional field) takes the same look.
 .pf-quick-guide__visit {
-  margin-bottom: clamp(1.5rem, 3vw, 2rem); // the timetable sets its own top (above)
+  // After the paths (and "Show all steps"); the timetable sets its own
+  // margins (above).
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
 
   ul {
     margin: 0;
@@ -3454,7 +3448,8 @@ html[data-pf-hero] .pf-landing--hero {
     max-width: calc((100% - 4 * var(--pf-grid-gutter)) * .4 + var(--pf-grid-gutter));
   }
 
-  .pf-quick-guide {
+  .pf-quick-guide:not(.pf-quick-guide--tabs),
+  .pf-quick-guide__panel {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
@@ -3468,8 +3463,7 @@ html[data-pf-hero] .pf-landing--hero {
     max-width: none;
   }
 
-  .pf-quick-guide > .pf-paths,
-  .pf-quick-guide > .pf-tabs {
+  :is(.pf-quick-guide, .pf-quick-guide__panel) > .pf-paths {
     grid-column: 3 / -1;
   }
 

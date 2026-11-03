@@ -27,16 +27,19 @@
  * - Its blocks are replaced by one Guide text that is only
  *   "[request-paths]": the paths A, B and C. "Reach out" goes to the Ask us
  *   tab's question form.
- * - The theme draws the page's Section tabs in the hero's Quick Start, in
- *   place of its paths, between the intro and Before you visit
- *   (_palefire_hero_tabs() in palefire.theme), and leaves the section out
- *   of the page below. Nothing to do here for that.
+ * - Ask us (anchor "ask", or the label "Ask us") takes the utility menu's
+ *   Ask icon, "duotone/comments-alt".
+ * - The theme draws the page's Section tabs under the hero's rule 01, the
+ *   Research panel holding the whole Quick Start (_palefire_hero_tabs() in
+ *   palefire.theme), and leaves the section out of the page below. Nothing
+ *   to do here for that.
  * - Saves a new revision of the homepage. The old Visit text stays in the
  *   previous revision.
  *
  * It stops, saving nothing, when:
  * - there is no Section tabs section, or neither a Research nor a Visit tab;
- * - the Research tab already holds only the request paths;
+ * - the Research tab already holds only the request paths and Ask us has
+ *   the Ask icon;
  * - the homepage has a newer draft than its published revision.
  */
 
@@ -85,7 +88,11 @@ if (!$tabs instanceof ParagraphInterface) {
 $value = static fn (ParagraphInterface $p, string $name): string => $p->hasField($name) ? trim((string) $p->get($name)->value) : '';
 $visit = NULL;
 $research = NULL;
+$ask = NULL;
 foreach ($tabs->get('field_tabs')->referencedEntities() as $tab) {
+  if ($ask === NULL && ($value($tab, 'field_tab_anchor') === 'ask' || strcasecmp($value($tab, 'field_tab_label'), 'Ask us') === 0)) {
+    $ask = $tab;
+  }
   if ($research === NULL && (strcasecmp($value($tab, 'field_tab_label'), 'Research') === 0 || $value($tab, 'field_tab_anchor') === 'research')) {
     $research = $tab;
   }
@@ -99,8 +106,12 @@ if (!$visit instanceof ParagraphInterface) {
 }
 $html = '<p>[request-paths]</p>';
 $blocks = $visit->get('field_guide_blocks')->referencedEntities();
-if ($research && count($blocks) === 1 && $blocks[0]->bundle() === 'guide_text' && trim((string) $blocks[0]->get('field_block_body')->value) === $html) {
-  echo "The Research tab on $alias already holds only the request paths. Nothing to do." . PHP_EOL;
+$paths_done = $research && count($blocks) === 1 && $blocks[0]->bundle() === 'guide_text' && trim((string) $blocks[0]->get('field_block_body')->value) === $html;
+// Ask us: the utility menu's Ask icon (menu--utility.html.twig, fa_map).
+$ask_icon = 'duotone/comments-alt';
+$ask_done = !$ask || $value($ask, 'field_tab_icon') === $ask_icon;
+if ($paths_done && $ask_done) {
+  echo "The Research tab on $alias already holds only the request paths, and Ask us has the utility menu's icon. Nothing to do." . PHP_EOL;
   return;
 }
 
@@ -123,24 +134,36 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-$old = count($visit->get('field_guide_blocks')->referencedEntities());
-echo ($apply ? '' : '[dry run] ') . "Tab \"{$value($visit, 'field_tab_label')}\" becomes Research (#research, icon search); its $old block(s) are replaced by the request paths (text format $format)." . PHP_EOL;
-echo ($apply ? '' : '[dry run] ') . 'The hero draws the tabs in its Quick Start, between the intro and Before you visit.' . PHP_EOL;
+$old = count($blocks);
+$prefix = $apply ? '' : '[dry run] ';
+if (!$paths_done) {
+  echo $prefix . "Tab \"{$value($visit, 'field_tab_label')}\" becomes Research (#research, icon search); its $old block(s) are replaced by the request paths (text format $format)." . PHP_EOL;
+}
+if (!$ask_done) {
+  echo $prefix . "Ask us: icon \"{$value($ask, 'field_tab_icon')}\" becomes \"$ask_icon\", as in the utility menu." . PHP_EOL;
+}
+echo $prefix . 'The hero draws the tabs under its rule 01; Research shows the whole Quick Start.' . PHP_EOL;
 if (!$apply) {
   echo 'Dry run: nothing saved. Run again with apply=1 to save.' . PHP_EOL;
   return;
 }
 
-$visit->set('field_tab_label', 'Research');
-$visit->set('field_tab_anchor', 'research');
-$visit->set('field_tab_icon', 'search');
-$visit->set('field_guide_blocks', [Paragraph::create([
-  'type' => 'guide_text',
-  'field_block_body' => ['value' => $html, 'format' => $format],
-])]);
-$visit->setNeedsSave(TRUE);
+if (!$paths_done) {
+  $visit->set('field_tab_label', 'Research');
+  $visit->set('field_tab_anchor', 'research');
+  $visit->set('field_tab_icon', 'search');
+  $visit->set('field_guide_blocks', [Paragraph::create([
+    'type' => 'guide_text',
+    'field_block_body' => ['value' => $html, 'format' => $format],
+  ])]);
+  $visit->setNeedsSave(TRUE);
+}
+if (!$ask_done) {
+  $ask->set('field_tab_icon', $ask_icon);
+  $ask->setNeedsSave(TRUE);
+}
 $tabs->setNeedsSave(TRUE);
 $node->setNewRevision(TRUE);
-$node->setRevisionLogMessage('Special Collections: Visit tab renamed Research, holding the request paths (palefire_section_tabs_research.php).');
+$node->setRevisionLogMessage('Special Collections: Research tab holds the request paths; Ask us takes the utility menu icon (palefire_section_tabs_research.php).');
 $node->save();
 echo "Saved a new revision of \"{$node->label()}\". Run: drush cr" . PHP_EOL;

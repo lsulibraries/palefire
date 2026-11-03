@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * Section tabs: the tablist and its panels. Styles: _section-tabs.scss;
+ * behaviour: js/section-tabs.js. Drawn by paragraph--section-tabs.html.twig
+ * and by the landing hero's Quick Start (includes/landing.html.twig).
+ *
+ * Variables:
+ * - tabs: id, label, icon (a Font Awesome Pro SVG path under
+ *   libraries/fontawesome-pro/svgs/, or empty), content (the Tab's blocks,
+ *   rendered) and quick (the Tab draws the request paths,
+ *   palefire_preprocess_paragraph__section_tabs()).
+ * - tabs_label: the tablist's name.
+ * - attributes: the wrapper's attributes, or empty.
+ * - quick_panel: the hero's Quick Start (heading, intro, Before you visit
+ *   and the paths), shown in the quick tab's panel in place of its blocks,
+ *   with no heading of its own (the Quick Start has its h2). Empty
+ *   elsewhere.
+ *
+ * Each tab is the whole column: its label printed above the track, its
+ * face (where the key rests, with the carved icon) in the track, and its
+ * indicator under it. The key and the track are drawn once, for the list.
+ *
+ * Without JS there is no tablist (.is-ready shows it): every panel shows,
+ * each under its own heading (an h3, visually hidden once the tabs work, so
+ * a screen reader still hears it at the top of the panel).
+ */
+#}
+{% if tabs %}
+  {{ attach_library('palefire/section-tabs') }}
+  {% set attributes = attributes ?: create_attribute() %}
+  <div{{ attributes.addClass('pf-tabs') }} data-pf-tabs>
+    <div class="pf-tabs__list" role="tablist" aria-label="{{ tabs_label }}">
+      <span class="pf-tabs__rail" aria-hidden="true"></span>
+      <span class="pf-tabs__key is-instant" aria-hidden="true"></span>
+      {% for tab in tabs %}
+        {% set svg = tab.icon ? source('libraries/fontawesome-pro/svgs/' ~ tab.icon ~ '.svg', ignore_missing = true) : '' %}
+        <button type="button" class="pf-tabs__tab" role="tab" id="{{ tab.id }}-tab" aria-controls="{{ tab.id }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" tabindex="{{ loop.first ? '0' : '-1' }}">
+          <span class="pf-tabs__label">{{ tab.label }}</span>
+          <span class="pf-tabs__face">
+            {%- if svg %}<span class="pf-tabs__icon" aria-hidden="true">{{ svg|raw }}</span>{% endif -%}
+          </span>
+          <span class="pf-tabs__dot" aria-hidden="true"></span>
+        </button>
+      {% endfor %}
+    </div>
+    {% for tab in tabs %}
+      <div class="pf-tabs__panel" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0">
+        {% if tab.quick and quick_panel %}
+          <div class="pf-tabs__body pf-quick-guide__panel">{{ quick_panel }}</div>
+        {% else %}
+          <h3 class="pf-tabs__heading">{{ tab.label }}</h3>
+          <div class="pf-tabs__body pf-guide">{{ tab.content }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
