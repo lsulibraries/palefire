@@ -438,16 +438,54 @@
          the 5-column one), straddling the cover's foot, offset unevenly,
          and rising in on load; narrower, a row to swipe. The picture is
          decoration: the words name the link.
-         - First, the newest blog post (hero_blog,
-           _palefire_hero_blog_banner()): its Image, else its date large.
-         - Then the paragraph's optional Banners (hero_banners,
+         - First, the paragraph's optional Banners (hero_banners,
            _palefire_hero_banners()): Tile or Modular pages with their
            portrait cover, Category and title, linking as in a Tile
            showcase. The first of these holds the next event instead when
            there is one (js/hero-event.js, from the events feed); it is the
-           backup. #}
+           backup. On the stage it is the lead.
+         - Last, the newest blog post (hero_blog,
+           _palefire_hero_blog_banner()): its Image, else its date large.
+         The lead carries the others' labels and titles, for the stage: there
+         the lead's large words change with the picture as another item is
+         in hand (_landing-features.scss, "Scroll: the stage"). A repeat for
+         the eye only, hidden from screen readers and elsewhere. #}
       {% if hero_blog or hero_banners %}
+        {% set hero_listed = hero_banners|slice(0, hero_blog ? 4 : 5) %}
         <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
+          {% for banner in hero_listed %}
+            <li class="pf-hero-banner"{% if loop.first %} data-pf-hero-event{% endif %}>
+              <a class="pf-hero-banner__link" href="{{ banner.url }}">
+                {% if banner.image %}
+                  <span class="pf-hero-banner__media" aria-hidden="true">{{ banner.image }}</span>
+                {% endif %}
+                <span class="pf-hero-banner__text">
+                  {% if banner.label %}
+                    <span class="pf-hero-banner__label">{{ banner.label }}</span>
+                  {% endif %}
+                  <span class="pf-hero-banner__title">{{ banner.title }}</span>
+                </span>
+              </a>
+              {% if loop.first %}
+                <span class="pf-hero-banner__others" aria-hidden="true">
+                  {% for other in hero_listed|slice(1) %}
+                    <span class="pf-hero-banner__other">
+                      {% if other.label %}
+                        <span class="pf-hero-banner__label">{{ other.label }}</span>
+                      {% endif %}
+                      <span class="pf-hero-banner__title">{{ other.title }}</span>
+                    </span>
+                  {% endfor %}
+                  {% if hero_blog %}
+                    <span class="pf-hero-banner__other">
+                      <span class="pf-hero-banner__label">{{ 'From the blog'|t }}</span>
+                      <span class="pf-hero-banner__title">{{ hero_blog.title }}</span>
+                    </span>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </li>
+          {% endfor %}
           {% if hero_blog %}
             <li class="pf-hero-banner pf-hero-banner--blog">
               <a class="pf-hero-banner__link" href="{{ hero_blog.url }}">
@@ -472,21 +510,6 @@
               </a>
             </li>
           {% endif %}
-          {% for banner in hero_banners|slice(0, hero_blog ? 4 : 5) %}
-            <li class="pf-hero-banner"{% if loop.first %} data-pf-hero-event{% endif %}>
-              <a class="pf-hero-banner__link" href="{{ banner.url }}">
-                {% if banner.image %}
-                  <span class="pf-hero-banner__media" aria-hidden="true">{{ banner.image }}</span>
-                {% endif %}
-                <span class="pf-hero-banner__text">
-                  {% if banner.label %}
-                    <span class="pf-hero-banner__label">{{ banner.label }}</span>
-                  {% endif %}
-                  <span class="pf-hero-banner__title">{{ banner.title }}</span>
-                </span>
-              </a>
-            </li>
-          {% endfor %}
         </ul>
       {% endif %}
 
