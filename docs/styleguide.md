@@ -143,6 +143,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-03:** Footer curtain: `.pf-swup` shadow `0 2rem 3rem -1.5rem rgb(0 0 0 / .35)` (nothing above its top edge). Section tabs: `--pf-tabs-light-glow`, `--pf-tabs-light-bloom`, `--pf-tabs-light-edge` on the lit `.pf-tabs__dot`; light styles (`html:not(.pf-reading-dark)`) set `--pf-tabs-light-on: #fff7e8`, glow `rgb(255 172 64 / .9)`, bloom `rgb(255 190 110 / .5)`, edge `rgb(0 0 0 / .18)`.
 - **2026-11-03:** Cover (`$pf-split`): `.pf-landing__hours-link` extends `%pf-landing-label`; `.pf-landing__hours-label::after` is a silent `\00b7` once `.pf-landing__hours-today` is filled.
 - **2026-11-03:** `.pf-landing__account-title` removed (template and styles); `.pf-landing__account` is a `div`, no `aria-labelledby`.
 - **2026-11-03:** `.pf-landing__account-label` removed (template and styles); `.pf-landing__account-title` has no top margin. `.pf-landing__account-note a::after`: `\2192` (`\2190` in RTL), silent, .2em nudge on hover/focus, still under reduced motion.

@@ -513,8 +513,12 @@ html#{$pf-themed} .pf-footer {
       position: relative;
       z-index: 1;
       background-color: var(--bs-body-bg);
-      // A soft shade along the page's edge, over the footer as it shows.
-      box-shadow: 0 1.5rem 3rem rgb(0 0 0 / .35);
+      // A soft shade along the page's foot, over the footer as it shows.
+      // Pulled in by its blur (-1.5rem spread, 2rem down) so none of it
+      // rises past the page's top edge: there it lay over the header as a
+      // dark band on the cover, whose header is clear until the page moves
+      // (2026-11-03).
+      box-shadow: 0 2rem 3rem -1.5rem rgb(0 0 0 / .35);
     }
 
     .pf-footer {

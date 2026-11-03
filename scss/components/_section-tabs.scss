@@ -76,6 +76,9 @@
   --pf-tabs-strong: var(--bs-heading-color, var(--bs-emphasis-color));
   --pf-tabs-hover: var(--pf-g-hover, var(--bs-emphasis-color));
   --pf-tabs-light-on: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  --pf-tabs-light-glow: color-mix(in srgb, var(--pf-tabs-light-on) 50%, transparent);
+  --pf-tabs-light-edge: transparent;
+  --pf-tabs-light-bloom: transparent;
 
   // The mockup's relief: the well's lit lower-right wall as deep as its
   // shaded upper-left one, so the track reads as cut into the surface. The
@@ -89,6 +92,17 @@
 
   --pf-tabs-ease: cubic-bezier(.22, 1, .36, 1);
   --pf-tabs-snap: cubic-bezier(.34, 1.45, .64, 1);
+}
+
+// Light styles (2026-11-03): the lit indicator is a warm-white LED, not
+// the swatch's dark accent (which read as a hole, not a light): a warm
+// white core, an amber glow and a wider bloom, and a hairline edge so it holds on the pale
+// track. The bold label and the inked icon still mark the tab.
+html:not(.pf-reading-dark) .pf-tabs {
+  --pf-tabs-light-on: #fff7e8;
+  --pf-tabs-light-glow: rgb(255 172 64 / .9);
+  --pf-tabs-light-bloom: rgb(255 190 110 / .5);
+  --pf-tabs-light-edge: rgb(0 0 0 / .18);
 }
 
 // Desktop: a little taller than on phones, but kept low so the control and
@@ -326,7 +340,7 @@
 
   .pf-tabs__dot {
     background: var(--pf-tabs-light-on);
-    box-shadow: 0 0 4px 1px color-mix(in srgb, var(--pf-tabs-light-on) 50%, transparent);
+    box-shadow: 0 0 0 .5px var(--pf-tabs-light-edge), 0 0 4px 1px var(--pf-tabs-light-glow), 0 0 12px 3px var(--pf-tabs-light-bloom);
   }
 }
 
