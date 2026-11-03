@@ -3702,16 +3702,6 @@ html[data-pf-hero] .pf-landing--hero {
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
 }
 
-.pf-landing__account-title {
-  margin: 0 0 1rem;
-  font-family: inherit;
-  font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.25;
-  color: inherit;
-}
-
 .pf-landing__account-actions {
   display: flex;
   flex-wrap: wrap;
@@ -3913,7 +3903,7 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
   }
 
   // The researcher card as a row under the intro: no plate, frame or blur.
-  // "Request items", the Log in or register button and the guide line
+  // The Log in or register button and the guide line
   // side by side, wrapping as needed.
   > .pf-landing__top > .pf-landing__links {
     display: flex;
@@ -3925,11 +3915,6 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     background: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-  }
-
-  .pf-landing__account-title {
-    margin: 0;
-    color: var(--bs-heading-color, var(--pf-section-fg));
   }
 
   .pf-landing__account-actions > li {

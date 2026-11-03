@@ -326,17 +326,15 @@
       </div>
     {% endif %}
     {# Hero: the researcher card beside the intro, its foot on the intro's:
-       "Request items" (in the Reading Room or as digital copies),
+       the Log in or register button (no heading: the button says it),
        Log in and Register outlined (Log in with the stronger edge and
        an accent arrow; Search is the hero's one filled button), then a line to the
        guide for first-timers. On the five-column grid in columns 4-5
        (its end over the Search button's); narrower, the intro's other
        half; on phones, under it (_landing-features.scss). #}
     {% if account_url %}
-      {% set account_id = input_id ~ '-account' %}
       {% set account_arrow %}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>{% endset %}
-      <section class="pf-landing__links pf-landing__account" aria-labelledby="{{ account_id }}">
-        <h2 class="pf-landing__account-title" id="{{ account_id }}">{{ 'Request items'|t }}</h2>
+      <div class="pf-landing__links pf-landing__account">
         <ul class="pf-landing__account-actions" role="list">
           <li>
             <a class="pf-landing__account-button pf-landing__account-button--primary" href="{{ account_url }}" target="_blank" rel="noopener">
@@ -349,7 +347,7 @@
         <p class="pf-landing__account-note">
           {{- 'First time?'|t }} <a href="{{ quick_guide.url|default('/v2/special/guides/special-collections') }}">{{ 'Read the guide'|t }}{% if not quick_guide.url %}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>{% endif %}</a>
         </p>
-      </section>
+      </div>
     {% endif %}
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
