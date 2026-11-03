@@ -134,6 +134,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_ask_section.php` | Adds "Ask Special Collections" to `/v2/special` before the stacks (`-- after=<title>` to place it): a Tile showcase in the Ask layout (Special Collections FAQs beside a question form), and the `ask` Layout value if missing. The dry run lists the FAQ tiles it would show. Dry run unless `-- apply=1`; stops if the section exists or the page has a pending draft |
 | `palefire_staff_setup.php` | Staff directory and profiles: the View `palefire_staff` (`/v2/staff`, `/v2/staff/%`; the theme prints both, `src/StaffDirectory.php`), the "Who to ask" section (`staff_contacts`, rows `staff_contact`: Topic + Person) and the `pf_staff_thumb` / `pf_staff_portrait` image styles (`-- staff=<type>`, default `staff`). Run after the tile showcase scripts |
 | `palefire_staff_contacts_section.php` | Adds "Who to ask" to `/v2/special` after "Ask Special Collections" (`-- after=`): six topics, each person found by Job title (a topic with no single match is listed and left out), linked to `/v2/staff?department=special-collections`. Dry run unless `-- apply=1`; stops if the section exists or the page has a pending draft |
+| `palefire_glossary_setup.php` | Glossary vocabulary (`glossary`: Name, Description as the definition, Other forms `field_glossary_forms`) for the tap-to-define terms in guide text. `-- import=1` lists the Special Collections Glossary guide's terms not yet in it; add `apply=1` to create them |
 | `palefire_section_tabs_setup.php` | Section tabs: the `section_tabs` section (shared section fields, Eyebrow, Lede, Link, Tabs) and `section_tab` (Label, Icon, Link name, and Content: the guide section's blocks plus the Tile showcase). `section_tabs` is allowed wherever `bento_search` is. Run after `palefire_guide_setup.php` |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
 | `palefire_modular_setup_undo.php` | Removes what a partial legacy run left on a palefire_modular site |
@@ -437,6 +438,32 @@ page add a Section tabs section and its tabs. For `/v2/special`: Visit
 (`landmark`), Study (`book-reader`), Ask us (`comments`, holding the Ask
 Special Collections Tile showcase), and take the Quick Guide's and the old
 Ask section's places so nothing shows twice.
+
+## Glossary terms
+
+The first use of a Glossary term in a guide text block (guides, exhibitions,
+Section tabs) is a button in the sentence, with a dotted underline, that
+opens a small card: the term, its definition and "Glossary →" to the
+Special Collections Glossary guide (when `/v2/guides/special-collections-glossary`
+exists). Native popovers (`popovertarget`): keyboard, Escape and tapping
+elsewhere come from the browser, one card open at a time. The card sits
+under the word with CSS anchor positioning (`position-area`, sliding aside
+near a window edge, above with no room below) where supported, and
+`js/glossary.js` places it elsewhere.
+
+- Terms: the `glossary` vocabulary (`scripts/palefire_glossary_setup.php`).
+  Name as it reads in text, Description as the definition (one or two
+  sentences; tags are dropped on the card, cut at 320 characters), Other
+  forms for variants. A plain plural matches without one. Unpublished terms
+  are ignored.
+- Marking: `src/GlossaryTerms.php`, a `#post_render` on the text
+  (`palefire_preprocess_paragraph__guide_text()`): whole words, longest form
+  first, any capitals, each term once per block. Never inside a link,
+  heading, button, code, citation, figure caption or abbreviation, nor in a
+  Sources list or a transcription. Cached with the text; any Glossary
+  change clears it (`taxonomy_term_list:glossary`).
+- Styles: `_glossary.scss`. No relief: the card is the page's surface with a
+  hairline and a soft shadow.
 
 ## Guide pages
 
@@ -1133,6 +1160,7 @@ history (`git show fa05a94:README.md`).
 - **2026-11-02:** Location pages: the ledger pane is clear (hairline, shadow, blur over the photo); the backdrop is tinted to the swatch (its page colour, `color` blend, lightness unchanged); muted labels over it lifted 40% toward the heading colour, for 4.5:1 on every dark swatch. Access has three kinds, each with a mark: Walk in, Book online (key `appointment`), Room rental (`rental`, new receipt mark); the map key groups by all three. Capacity as a number shows "~100"; new Estimated area (`field_space_area`) shows "~2,400 sq ft". The "here" room on the map is solid in the highlight colour with a dark name (light ink on its stripes was hard to read). Run `scripts/palefire_location_access_area.php`.
 ### 2026-11-03
 
+- **Glossary terms.** Archive terms in guide text open their definition on a tap. New vocabulary `glossary` (`scripts/palefire_glossary_setup.php`; `-- import=1 apply=1` brings in the Special Collections Glossary guide's terms) and `src/GlossaryTerms.php`, which marks the first use of each term per text block as a button with a dotted underline opening a native popover card: the term in mono capitals, its definition, and Glossary → (`_glossary.scss`). Placed with CSS anchor positioning (`position-area` with edge and flip fallbacks); `js/glossary.js` places it where that isn't supported. Not inside links, headings, code, captions or citations, Sources lists or transcriptions. Checked: the marking on sample text with a stubbed Drupal (multi-word terms across line breaks, plurals, a term inside a link skipped, each term once), the card at 390 in Twilight (under the word, kept inside the window, Escape closes). Not yet rendered by Drupal. Run the script with `import=1` to review, then `apply=1`, then `drush cr`. Why: "finding aid" and "call number" stop first-time visitors; the answer should be where the word is.
 - **Object labels (styles only).** `includes/object-label.html.twig` and `_object-label.scss`: the caption block a museum sets beside an object. Maker and dates in mono capitals, the title as the one bright line (italic for a published work), date, medium and size, then a hairline, the collection and the call number (mono, tabular, never broken) with View record ↗. A compact version for cards. Not placed on any record yet: include it where a record's fields can fill it (exhibit figures, Tiles, showcase cards). New style guide plate 10, Object labels: re-run `scripts/palefire_styleguide.php` after `drush cr`. Checked in Twilight and Cream with the built CSS. Why: a call number and a date range say archive at a glance, from content the records already have.
 - **Section tabs: haptics.** Where `navigator.vibrate` exists (Android Chrome; iOS has none), choosing a tab by tap, key or drag gives a 10ms tap, and a dragged key ticks (5ms) as it passes each slot, like a detent. Links, Find in page and the first load stay silent; Reduce motion turns it off. Checked with a stubbed `vibrate` in the harness: tap, same-tab tap (silent), arrow key, a two-slot drag (two ticks and the snap), and a deep link (silent). Not felt on a device. Why: the key should feel like hardware where the phone can say so.
 - **Section tabs.** New `section_tabs` paragraph (`scripts/palefire_section_tabs_setup.php`, `paragraph--section-tabs.html.twig`, `_section-tabs.scss`, `js/section-tabs.js`): labelled tabs over their panels, for Visit / Study / Ask us on `/v2/special`. Labels in small tracked capitals above an inset track; a raised key slides between carved Font Awesome icons; an indicator light under each slot. Only the indicator lights; nothing glows on touch (hover only with a real pointer). Panels follow the key's direction and their parts rise in sequence. Draggable key, ARIA keyboard support, deep links to a tab or anything inside it, Find in page where supported, a no-JS fallback with every panel shown. Relief colors per reading swatch (`pf-relief()`, `--pf-g-relief-*`), tuned by eye on all 13 (Twilight and Night by hand); flattened under high contrast and forced colors. Checked in a harness with the built CSS at 390 in every swatch: keyboard, drag, deep link on load, no-JS and high contrast; axe found nothing in the component. Not yet rendered by Drupal. Run the script, `drush cr`, then build the section. Why: the Quick Guide, FAQs and Ask form competed under the hero; one control gives three clear ways in.

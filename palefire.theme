@@ -25,6 +25,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
+use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -2150,6 +2151,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   // after the text format has run (it would strip ids typed in the text).
   if ($variables['paragraph']->get('field_text_style')->value === 'sources') {
     $variables['content']['field_block_body']['#post_render'][] = [ExhibitSources::class, 'addIds'];
+  }
+  // Glossary terms open a definition card where they first appear
+  // (GlossaryTerms, scripts/palefire_glossary_setup.php). Not in a list of
+  // sources or a transcription, whose words are a document's own.
+  elseif (!$variables['transcription'] && GlossaryTerms::available()) {
+    $variables['content']['field_block_body']['#post_render'][] = [GlossaryTerms::class, 'mark'];
+    $variables['content']['field_block_body']['#attached']['library'][] = 'palefire/glossary';
+    $variables['content']['field_block_body']['#cache']['tags'] = Cache::mergeTags($variables['content']['field_block_body']['#cache']['tags'] ?? [], GlossaryTerms::cacheTags());
   }
   // A link to a bird in Audubon's field guide becomes a ruled row with the
   // bird's names (ExhibitFieldGuide).

@@ -207,6 +207,16 @@ ask-reveal:
     - core/drupal
     - core/once
 
+# Glossary terms (src/GlossaryTerms.php): places a term's card under the
+# word where CSS anchor positioning isn't supported. Attached with any guide
+# text that may hold a term (palefire_preprocess_paragraph__guide_text()).
+glossary:
+  js:
+    js/glossary.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Section tabs: ARIA tabs with the sliding key, the panels' hand-off and
 # links to a panel. Attached by paragraph--section-tabs.html.twig.
 section-tabs:

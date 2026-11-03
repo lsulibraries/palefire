@@ -1,0 +1,131 @@
+// Glossary terms -----------------------------------------------------------------
+// src/GlossaryTerms.php, js/glossary.js. A term in running text is a
+// button that reads as part of the sentence: the text's own type and
+// color, a dotted underline (a dashed line says "defined here", where a
+// solid one says "link"). It opens a small card under the word: the term in
+// the eyebrows' mono capitals, its definition, and "Glossary →". The card
+// is the page's surface with a hairline frame and the soft shadow of the
+// hero's search field, never relief (that is the Section tabs' alone).
+//
+// Placement: CSS anchor positioning (anchor-name / position-anchor, set
+// inline per term; position-area under the word, sliding to one side near a
+// window edge, flipping above with no room below); js/glossary.js sets top
+// and left where it isn't supported.
+
+.pf-term {
+  display: inline;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, currentColor 60%, transparent);
+  text-decoration-thickness: from-font;
+  text-underline-offset: .22em;
+  background: none;
+  cursor: help;
+  transition: text-decoration-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-focus-color);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+.pf-term__card {
+  // Out of the page's flow until opened (the popover's UA style), then in
+  // the top layer under its word.
+  position: fixed;
+  inset: auto;
+  position-area: block-end;
+  // Near a window edge it runs off to one side of the word instead; with
+  // no room below, above it.
+  position-try-fallbacks: block-end span-inline-end, block-end span-inline-start, flip-block;
+  width: min(20rem, calc(100vw - 2rem));
+  margin: .5rem 0 0;
+  padding: 1rem 1.125rem;
+  border: 1px solid #{$pf-hairline};
+  border-radius: 2px;
+  color: var(--pf-g-fg, var(--bs-body-color));
+  font-size: .9375rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: start;
+  text-transform: none;
+  letter-spacing: normal;
+  background: var(--pf-g-surface, var(--bs-tertiary-bg));
+  box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .18);
+
+  &:popover-open {
+    display: grid;
+    gap: .375rem;
+  }
+}
+
+.pf-term__name {
+  color: var(--pf-g-muted, var(--bs-secondary-color));
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label, .75rem);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.pf-term__definition {
+  color: var(--bs-heading-color, var(--bs-emphasis-color));
+}
+
+.pf-term__more {
+  justify-self: start;
+  margin-top: .25rem;
+  color: var(--bs-heading-color, var(--bs-emphasis-color));
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label, .75rem);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: #{$pf-hairline};
+  text-underline-offset: .35em;
+
+  &::after {
+    content: "\2192" / "";
+    margin-left: .35em;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: currentColor;
+  }
+}
+
+// Opening: a short rise and fade, from the word.
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-term__card:popover-open {
+    animation: pf-term-in .2s ease-out;
+  }
+}
+
+@keyframes pf-term-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-term {
+    text-decoration-color: LinkText;
+  }
+
+  .pf-term__card {
+    border-color: CanvasText;
+  }
+}
