@@ -416,6 +416,62 @@ html.pf-a11y-motion .pf-tile .pf-tile__outline-page {
   scroll-snap-align: none start;
 }
 
+// Indicator lights under the strip (CSS scroll markers, Chrome 135+): one
+// per card, the Section tabs' lights (_section-tabs.scss): a small pit
+// in the page, the one in view lit in the swatch's highlight. The browser
+// makes them a keyboard-reachable group, and a tap scrolls to that card.
+// Each light sits in a 24px target (WCAG 2.5.8). Where markers exist the
+// strip's scrollbar steps aside; elsewhere it stays.
+@supports selector(::scroll-marker) {
+  .pf-tiles--stagger .pf-tiles__list {
+    scroll-marker-group: after;
+    scrollbar-width: none;
+  }
+
+  .pf-tiles--stagger .pf-tiles__list::scroll-marker-group {
+    display: flex;
+    justify-content: center;
+    gap: .25rem;
+    margin-top: -.75rem; // into the strip's bottom padding
+  }
+
+  .pf-tiles--stagger .pf-tiles__item::scroll-marker {
+    content: "";
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, var(--pf-g-relief-carve, rgba(0, 0, 0, .3)) 2.5px, transparent 3px);
+    transition: background .3s ease;
+  }
+
+  .pf-tiles--stagger .pf-tiles__item::scroll-marker:target-current {
+    background:
+      radial-gradient(circle, var(--pf-g-highlight, #{$pf-gold}) 2.5px, color-mix(in srgb, var(--pf-g-highlight, #{$pf-gold}) 35%, transparent) 3.5px, transparent 6px);
+  }
+
+  .pf-tiles--stagger .pf-tiles__item::scroll-marker:focus-visible {
+    outline: 2px solid var(--pf-focus-color);
+    outline-offset: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pf-tiles--stagger .pf-tiles__item::scroll-marker {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .pf-tiles--stagger .pf-tiles__item::scroll-marker {
+      background: radial-gradient(circle, CanvasText 2px, transparent 3px);
+    }
+
+    .pf-tiles--stagger .pf-tiles__item::scroll-marker:target-current {
+      background: radial-gradient(circle, Highlight 4px, transparent 5px);
+    }
+  }
+}
+
 @container pf-tiles (min-width: #{$pf-tile-break-wide}) {
   .pf-tiles--stagger .pf-tiles__list {
     align-items: flex-start;
