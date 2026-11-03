@@ -77,9 +77,13 @@
   --pf-tabs-light-on: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 
   // The mockup's relief: the well's lit lower-right wall as deep as its
-  // shaded upper-left one, so the track reads as cut into the surface.
-  --pf-tabs-raise: 3px 3px 6px var(--pf-tabs-shade), -2px -2px 5px var(--pf-tabs-light);
-  --pf-tabs-lift: 6px 6px 14px var(--pf-tabs-shade), -3px -3px 8px var(--pf-tabs-light);
+  // shaded upper-left one, so the track reads as cut into the surface. The
+  // key's lit side is a 1px bevel on its own upper-left edge, not a glow
+  // around it: in a well the upper wall is in shadow, and an outward light
+  // there read as a halo.
+  --pf-tabs-bevel: inset 1px 1px 0 color-mix(in srgb, var(--pf-tabs-light) 70%, transparent);
+  --pf-tabs-raise: 3px 3px 6px var(--pf-tabs-shade), var(--pf-tabs-bevel);
+  --pf-tabs-lift: 6px 6px 14px var(--pf-tabs-shade), var(--pf-tabs-bevel);
   --pf-tabs-well: inset 4px 4px 9px var(--pf-tabs-shade), inset -4px -4px 9px var(--pf-tabs-light);
 
   --pf-tabs-ease: cubic-bezier(.22, 1, .36, 1);

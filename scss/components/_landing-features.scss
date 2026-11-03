@@ -2987,7 +2987,7 @@ html.pf-a11y-motion {
   @include media-breakpoint-up(md) {
     @media (max-height: 50rem) {
       .pf-landing__lead--hero > .pf-quick-guide--tabs {
-        --pf-quick-tabs-gap: min(var(--pf-hero-gap), 3.5rem);
+        --pf-quick-tabs-gap: min(var(--pf-hero-gap), 5rem); // clear of the banners' shadows
       }
     }
   }
