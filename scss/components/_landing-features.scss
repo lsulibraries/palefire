@@ -4361,6 +4361,28 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
+// Trading places: as the picture takes the column, the letters take the
+// film's still (.pf-landing__title--still), its veil rising from the first
+// load's to the least that keeps them at 3:1 on it. Their color stays gold,
+// only the fill goes.
+@property --pf-title-veil {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 22%;
+}
+
+@keyframes pf-title-trade {
+  from {
+    --pf-title-veil: 22%;
+    -webkit-text-fill-color: currentcolor;
+  }
+
+  to {
+    --pf-title-veil: var(--pf-title-veil-on);
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 @keyframes pf-hl-settle {
   from {
     scale: 1.08;
@@ -4688,6 +4710,36 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
         animation: pf-stage-hold linear both, pf-split-wipe ease-out both;
         animation-timeline: scroll(root), scroll(root);
         animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .3);
+      }
+
+      // The still in the letters, under the veil. With the entrance
+      // (html.pf-fade) _entrance.scss adds the trade to the title's list.
+      // Not with more contrast or forced colours: they stay solid.
+      @media (prefers-contrast: no-preference) and (forced-colors: none) {
+        html:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
+          // 3:1 for the letters on the still's darkest and lightest pixels in
+          // every reading colour; less where the colour allows.
+          --pf-title-veil-on: 70%;
+          background:
+            linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
+            var(--pf-title-still) 58% 50% / cover no-repeat;
+          -webkit-background-clip: text;
+          background-clip: text;
+        }
+
+        html:is([data-pf-theme="twilight"], [data-pf-theme="night"]):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
+          --pf-title-veil-on: 51%;
+        }
+
+        html:is([data-pf-theme="cream"], [data-pf-theme="soft"], [data-pf-theme="lavender"]):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
+          --pf-title-veil-on: 55%;
+        }
+
+        html:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
+          animation: pf-title-trade ease-out both;
+          animation-timeline: scroll(root);
+          animation-range: 0 calc(var(--pf-stage-run) * .3);
+        }
       }
     }
   }

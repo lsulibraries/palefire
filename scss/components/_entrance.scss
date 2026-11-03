@@ -219,6 +219,22 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
         pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
         pf-title-fill 1.2s ease-in-out 2s backwards;
     }
+
+    // On the stage the letters take the still again with the film's sweep
+    // (pf-title-trade, _landing-features.scss), under the entrance's two,
+    // which win while they run.
+    @supports (animation-timeline: scroll()) {
+      @media (min-height: 40rem) and (prefers-contrast: no-preference) and (forced-colors: none) {
+        #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title--still {
+          animation:
+            pf-title-trade ease-out both,
+            pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
+            pf-title-fill 1.2s ease-in-out 2s backwards;
+          animation-timeline: scroll(root), auto, auto;
+          animation-range: 0 calc(var(--pf-stage-run) * .3), normal, normal;
+        }
+      }
+    }
   }
 
   @media (prefers-contrast: more), (forced-colors: active) {

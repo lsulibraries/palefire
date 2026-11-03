@@ -296,7 +296,9 @@
       {% endif %}
       {# Cover with a poster: the still shows in the title's letters from the
          first paint, until the film's column opens (_entrance.scss,
-         .pf-landing__title--still). #}
+         .pf-landing__title--still), and again on the stage as the film's sweep
+         brings the Highlights' picture (pf-title-trade,
+         _landing-features.scss). #}
       {% set title_still = cover and bg_videos and bg_poster %}
       <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}')"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}

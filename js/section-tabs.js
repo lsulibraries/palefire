@@ -18,7 +18,9 @@
  * - Links: a panel's id (#visit) opens it, on arrival, on hashchange, and
  *   for any same-page link to it or to something inside it (#ask-question,
  *   a TOC sub-link), before the browser or Swup scrolls there. Choosing a
- *   tab puts its id in the address (replaceState: no history entries).
+ *   tab leaves no id in the address: one there would scroll the page back to
+ *   the panel on a reload, wherever the visitor had got to, and once they
+ *   have chosen another tab it would name the wrong one.
  * - Find in page opens a hidden panel where the browser supports
  *   hidden="until-found" (its beforematch event).
  *
@@ -116,8 +118,7 @@
       key.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
     }
 
-    // A link to a panel's own id (the address a tab writes, so a reload too)
-    // stops with the tab bar in view, not above the window: a margin as tall
+    // A link to a panel's own id, or a reload at one, stops with the tab bar in view, not above the window: a margin as tall
     // as the bar, past the sticky breadcrumb strip. A link to something inside
     // a panel (#ask-question) still lands on that.
     function placeMargin() {
@@ -168,7 +169,7 @@
       }
     }
 
-    function select(index, { focus = false, hash = true } = {}) {
+    function select(index, { focus = false } = {}) {
       const from = panels.findIndex((panel) => !panel.hasAttribute('hidden'));
       tabs.forEach((tab, i) => {
         tab.setAttribute('aria-selected', String(i === index));
@@ -202,9 +203,9 @@
       if (focus) {
         tabs[index].focus();
       }
-      if (hash) {
+      if (window.location.hash) {
         try {
-          history.replaceState(history.state, '', '#' + panels[index].id);
+          history.replaceState(history.state, '', window.location.pathname + window.location.search);
         }
         catch (e) {
           // Sandboxed or file: pages.
