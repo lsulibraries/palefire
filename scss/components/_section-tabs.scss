@@ -254,11 +254,11 @@
   color: var(--pf-tabs-carve);
   transition: color .3s var(--pf-tabs-ease) .12s;
 
-  // One size at every width: a legend on the key, not a picture.
+  // A legend on the key, not a picture: 24px on phones, 28px from md.
   svg {
     grid-area: 1 / 1;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
     fill: currentColor;
     filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
     transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
@@ -273,17 +273,25 @@
 
   .pf-tabs__idle {
     // The wall's tone, not the floor's (the well's own shading darkens the
-    // track, and a floor-dark line would vanish into it), let 35% of the
-    // floor through, with a half-pixel lip: the lip is what reads as weight,
-    // so a thin one keeps the Light strokes light.
+    // track, and a floor-dark line would vanish into it), letting 35% of the
+    // floor through, then carved like the solid icons: a soft shadowed
+    // upper-left wall and a lit lower-right lip, which give the thin Light
+    // strokes their depth.
     color: color-mix(in srgb, var(--pf-tabs-carve-wall) 65%, transparent);
-    filter: drop-shadow(.5px .5px 0 var(--pf-tabs-carve-lip));
+    filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
   }
 
   // Duotone icons: one tone, carved as a whole.
   svg :is(.fa-primary, .fa-secondary) {
     opacity: 1;
     fill: currentColor;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .pf-tabs__icon svg {
+    width: 1.75rem;
+    height: 1.75rem;
   }
 }
 
@@ -465,6 +473,7 @@ html.pf-a11y-motion {
 
   .pf-tabs__icon .pf-tabs__idle {
     color: var(--pf-tabs-idle);
+    filter: none;
   }
 }
 
