@@ -2277,13 +2277,26 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
     max-width: calc((100% - 3 * var(--pf-grid-gutter)) * .75 + 2 * var(--pf-grid-gutter));
   }
 
-  .pf-quick-guide > .pf-paths {
-    display: grid;
+  .pf-quick-guide > .pf-paths,
+  .pf-quick-guide > .pf-tabs {
     grid-column: 2 / -1;
     grid-row: 2 / -1;
+  }
+
+  // With the page's Section tabs (_palefire_hero_tabs()), the tabs take
+  // the columns beside the heading, and the Research tab's paths keep
+  // them, one option to a column.
+  .pf-quick-guide > .pf-paths,
+  .pf-quick-guide .pf-tabs__panel .pf-paths {
+    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--pf-grid-gutter);
     container-type: normal;
+  }
+
+  // The tab bar sits on the heading's line, A over its left edge.
+  .pf-quick-guide > .pf-tabs > .pf-tabs__list {
+    margin-top: 0;
   }
 
   // On screens tall enough to show A, B and C whole under the header and
@@ -3455,7 +3468,8 @@ html[data-pf-hero] .pf-landing--hero {
     max-width: none;
   }
 
-  .pf-quick-guide > .pf-paths {
+  .pf-quick-guide > .pf-paths,
+  .pf-quick-guide > .pf-tabs {
     grid-column: 3 / -1;
   }
 

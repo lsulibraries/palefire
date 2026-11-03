@@ -351,9 +351,7 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * templates use: the lead shows unless the map leads alone, and only with
  * the page title or an intro (show_lead, includes/landing.html.twig); the
  * map when it is published; the Visit card when the host page has a
- * location (_palefire_landing_visit()). No guide when a Section tab on the
- * page draws the request paths (_palefire_tab_paths()): the Quick Start
- * lives there. The hero numbers its rules from
+ * location (_palefire_landing_visit()). The hero numbers its rules from
  * this, and palefire_preprocess_field() counts on from its length, so no
  * number is typed by hand and they always agree.
  *
@@ -378,7 +376,7 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $visit = $filled('field_hours_location') || $filled('field_location_name') || $filled('field_location_query');
 
   $rules = [];
-  if (!$map_only && ($title || $intro) && !_palefire_tab_paths($host)) {
+  if (!$map_only && ($title || $intro)) {
     $rules[] = 'guide';
   }
   if ($has_map) {
@@ -391,34 +389,32 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
 }
 
 /**
- * Whether a Section tab on the page draws the request paths.
+ * The page's Section tabs that the landing hero draws in its Quick Start.
  *
- * TRUE when one of the node's sections is a Section tabs section with a tab
- * whose Guide text has a "[request-paths]" paragraph (the Special
- * Collections homepage's Research tab). The hero then leaves its Quick
- * Start out, so the page doesn't show the paths twice.
+ * The first published Section tabs section on the hero's page, when the
+ * hero shows its Quick Start (the guide rule, _palefire_hero_rules()). The
+ * hero draws its tabs in place of the request paths, between the intro and
+ * Before you visit, and palefire_preprocess_field() leaves the section out
+ * of the page, so it shows once, and the sections after it keep their
+ * numbers. NULL when there is none.
  */
-function _palefire_tab_paths(mixed $host): bool {
+function _palefire_hero_tabs(ParagraphInterface $hero): ?ParagraphInterface {
+  if (!in_array('guide', _palefire_hero_rules($hero), TRUE)) {
+    return NULL;
+  }
+  $host = $hero;
+  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+    $host = $host->getParentEntity();
+  }
   if (!$host instanceof NodeInterface || !$host->hasField('field_scroll_section')) {
-    return FALSE;
+    return NULL;
   }
   foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
-    if ($section->bundle() !== 'section_tabs' || !$section->isPublished() || !$section->hasField('field_tabs')) {
-      continue;
-    }
-    foreach ($section->get('field_tabs')->referencedEntities() as $tab) {
-      if (!$tab->isPublished() || !$tab->hasField('field_guide_blocks')) {
-        continue;
-      }
-      foreach ($tab->get('field_guide_blocks')->referencedEntities() as $block) {
-        if ($block->bundle() === 'guide_text' && $block->isPublished() && $block->hasField('field_block_body')
-          && preg_match('#<p>s*[request-paths]s*</p>#i', (string) $block->get('field_block_body')->value)) {
-          return TRUE;
-        }
-      }
+    if ($section->bundle() === 'section_tabs' && $section->isPublished()) {
+      return $section;
     }
   }
-  return FALSE;
+  return NULL;
 }
 
 /**
@@ -451,13 +447,15 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     }
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
-    // The Quick Start moves into a Section tab when one draws the paths;
-    // the page's tag redraws the hero when its sections change.
+    // The page's Section tabs, drawn in the Quick Start in place of the
+    // paths (_palefire_hero_tabs()). The page's tag redraws the hero when
+    // its sections change.
+    $tabs = _palefire_hero_tabs($paragraph);
+    $variables['quick_tabs'] = $tabs ? \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($tabs) : NULL;
     $host = $paragraph;
     for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
       $host = $host->getParentEntity();
     }
-    $variables['quick_guide_in_tabs'] = _palefire_tab_paths($host);
     if ($host instanceof NodeInterface) {
       CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($host)->applyTo($variables);
     }
@@ -2871,7 +2869,8 @@ function _palefire_lead_cover(FieldItemInterface $image, string $sizes, Cacheabl
  * the landing hero's rules count first (as many as it shows,
  * _palefire_hero_rules()), then each section with an Eyebrow, in order.
  * The link's text drops a trailing arrow typed by hand: the rule draws
- * its own.
+ * its own. A Section tabs section the hero's Quick Start draws
+ * (_palefire_hero_tabs()) is left out.
  */
 function palefire_preprocess_field(array &$variables): void {
   if (($variables['field_name'] ?? '') !== 'field_scroll_section' || empty($variables['items'])) {
@@ -2887,6 +2886,13 @@ function palefire_preprocess_field(array &$variables): void {
     }
     if ($paragraph->bundle() === 'landing_hero') {
       $count += count(_palefire_hero_rules($paragraph));
+      // Its Quick Start draws the page's Section tabs: not again below.
+      $tabs = _palefire_hero_tabs($paragraph);
+      foreach ($tabs ? $variables['items'] : [] as $other => $candidate) {
+        if (($candidate['content']['#paragraph'] ?? NULL) instanceof ParagraphInterface && $candidate['content']['#paragraph']->id() === $tabs->id()) {
+          $hide[] = $other;
+        }
+      }
       continue;
     }
     if (!is_array($item['section'] ?? NULL)) {

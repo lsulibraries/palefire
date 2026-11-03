@@ -458,12 +458,13 @@
          - quick_guide: title, intro, url and link_text from the paragraph's
            optional Quick Guide fields (_palefire_quick_guide()); each one
            left empty keeps the built-in text below.
-         - quick_guide_in_tabs: a Section tab on the page draws the paths
-           (the Research tab), so the hero leaves the Quick Start out. #}
+         - quick_tabs: the page's Section tabs (_palefire_hero_tabs()),
+           drawn in place of the paths, between the intro and Before you
+           visit (Research holds the paths); on the four columns, in the
+           three beside the heading. #}
       {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
-      {% if not quick_guide_in_tabs %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
         {# Index rule 01, "Full guide" at its end. The full name keeps the
            visible words first (WCAG 2.5.3) and says which guide; with its
@@ -480,6 +481,7 @@
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
+        {{ quick_tabs }}
         {# Before you visit: a few things first-time visitors ask, under the
            intro. The paragraph's optional field (quick_guide.visit) replaces
            the built-in list, each line of which the full guide states. #}
@@ -540,12 +542,13 @@
            Collections section further down (includes/ask-special.html.twig),
            which frames itself in gold, as the footer's Ask link does
            (js/footer.js). #}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: '#ask-question' } only %}
-        {# Phones: the paths fold to their first option under a fade, and
-           this shows the rest (js/palefire.js; without it, all show). #}
-        <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
+        {% if not quick_tabs %}
+          {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: '#ask-question' } only %}
+          {# Phones: the paths fold to their first option under a fade, and
+             this shows the rest (js/palefire.js; without it, all show). #}
+          <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
+        {% endif %}
       </div>
-      {% endif %}
     {% endif %}
   </div>
   {% endif %}

@@ -2,8 +2,8 @@
 
 /**
  * @file
- * Turns the Special Collections homepage's Visit tab into Research, with the
- * Quick Start Guide's content, and takes the Quick Start out of the hero.
+ * Turns the Special Collections homepage's Visit tab into Research, holding
+ * the Quick Start Guide's request paths (A, B and C).
  *
  * Run after palefire_section_tabs_special.php. From the Drupal root:
  *   drush php:script themes/custom/palefire/scripts/palefire_section_tabs_research.php
@@ -21,22 +21,22 @@
  * What it does:
  * - The Section tabs' Visit tab (anchor "visit", or the label "Visit")
  *   becomes Research: label "Research", anchor "research" (#research),
- *   icon "search".
- * - Its blocks are replaced by one Guide text with the Quick Start Guide's
- *   content: the intro, "Before you visit" (a Heading 4), the Full guide,
- *   Prices and Parking & travel links, and the request paths A, B and C
- *   ("[request-paths]"). The intro, the Before you visit list and the full
- *   guide's URL come from the hero's Quick Guide fields when they are
- *   filled, else the hero's built-in text.
- * - With the paths in a tab, the hero leaves its Quick Start out
- *   (_palefire_tab_paths() in palefire.theme), and "Reach out" goes to the
- *   Ask us tab's question form.
+ *   icon "search". A Research tab already there (this script's first
+ *   version, which also copied the intro and Before you visit into it) is
+ *   reworked in place.
+ * - Its blocks are replaced by one Guide text that is only
+ *   "[request-paths]": the paths A, B and C. "Reach out" goes to the Ask us
+ *   tab's question form.
+ * - The theme draws the page's Section tabs in the hero's Quick Start, in
+ *   place of its paths, between the intro and Before you visit
+ *   (_palefire_hero_tabs() in palefire.theme), and leaves the section out
+ *   of the page below. Nothing to do here for that.
  * - Saves a new revision of the homepage. The old Visit text stays in the
  *   previous revision.
  *
  * It stops, saving nothing, when:
- * - there is no Section tabs section, or no Visit tab, and no Research tab;
- * - a Research tab is already there;
+ * - there is no Section tabs section, or neither a Research nor a Visit tab;
+ * - the Research tab already holds only the request paths;
  * - the homepage has a newer draft than its published revision.
  */
 
@@ -75,10 +75,8 @@ if ($latest && (int) $latest !== (int) $node->getRevisionId()) {
 }
 
 $tabs = NULL;
-$hero = NULL;
 foreach ($node->get('field_scroll_section')->referencedEntities() as $section) {
   $tabs ??= $section->bundle() === 'section_tabs' ? $section : NULL;
-  $hero ??= $section->bundle() === 'landing_hero' ? $section : NULL;
 }
 if (!$tabs instanceof ParagraphInterface) {
   throw new \RuntimeException("No Section tabs section on $alias. Run palefire_section_tabs_special.php first.");
@@ -86,17 +84,24 @@ if (!$tabs instanceof ParagraphInterface) {
 
 $value = static fn (ParagraphInterface $p, string $name): string => $p->hasField($name) ? trim((string) $p->get($name)->value) : '';
 $visit = NULL;
+$research = NULL;
 foreach ($tabs->get('field_tabs')->referencedEntities() as $tab) {
-  if (strcasecmp($value($tab, 'field_tab_label'), 'Research') === 0 || $value($tab, 'field_tab_anchor') === 'research') {
-    echo "A Research tab is already on $alias. Nothing to do." . PHP_EOL;
-    return;
+  if ($research === NULL && (strcasecmp($value($tab, 'field_tab_label'), 'Research') === 0 || $value($tab, 'field_tab_anchor') === 'research')) {
+    $research = $tab;
   }
   if ($visit === NULL && ($value($tab, 'field_tab_anchor') === 'visit' || strcasecmp($value($tab, 'field_tab_label'), 'Visit') === 0)) {
     $visit = $tab;
   }
 }
+$visit = $research ?? $visit;
 if (!$visit instanceof ParagraphInterface) {
-  throw new \RuntimeException("No Visit tab in the Section tabs on $alias.");
+  throw new \RuntimeException("No Research or Visit tab in the Section tabs on $alias.");
+}
+$html = '<p>[request-paths]</p>';
+$blocks = $visit->get('field_guide_blocks')->referencedEntities();
+if ($research && count($blocks) === 1 && $blocks[0]->bundle() === 'guide_text' && trim((string) $blocks[0]->get('field_block_body')->value) === $html) {
+  echo "The Research tab on $alias already holds only the request paths. Nothing to do." . PHP_EOL;
+  return;
 }
 
 // Text format: the Visit text's, else WYSIWYG. ---------------------------------
@@ -118,37 +123,9 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-// The Quick Start's content: the hero's fields, else its built-in text
-// (includes/landing.html.twig). ---------------------------------------------------
-$field = static fn (string $name): string => $hero instanceof ParagraphInterface && $hero->hasField($name) ? trim((string) $hero->get($name)->value) : '';
-$intro = $field('field_quick_guide_intro') ?: '<p>Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).</p>';
-$before = $field('field_quick_guide_visit') ?: <<<'HTML'
-<ul>
-<li>You don’t need to be affiliated with LSU: sign in or register as a Guest.</li>
-<li>Appointments aren’t required, but with one your materials are waiting when you arrive.</li>
-<li>Staff bring the materials to you in the Reading Room at Hill.</li>
-<li>Scans are 50 cents a page, plus a $10 fee per order, emailed in 5–7 business days.</li>
-</ul>
-HTML;
-$guide_url = '/v2/special/guides/special-collections';
-$link = $hero instanceof ParagraphInterface && $hero->hasField('field_quick_guide_link') ? $hero->get('field_quick_guide_link')->first() : NULL;
-if ($link && !$link->isEmpty()) {
-  $guide_url = $link->getUrl()->toString();
-}
-
-$html = trim($intro) . "\n<h4>Before you visit</h4>\n" . trim($before) . "\n" . <<<HTML
-<ul>
-<li><a href="$guide_url">Full guide: How to Use Special Collections</a></li>
-<li><a href="/v2/special/guides/duplication">Prices for copies</a></li>
-<li><a href="/v2/special/guides/parking-hill-memorial-library">Parking &amp; travel</a></li>
-</ul>
-<p>[request-paths]</p>
-HTML;
-
 $old = count($visit->get('field_guide_blocks')->referencedEntities());
-echo ($apply ? '' : '[dry run] ') . "Tab \"{$value($visit, 'field_tab_label')}\" becomes Research (#research, icon search); its $old block(s) are replaced by the Quick Start text and the request paths." . PHP_EOL;
-echo ($apply ? '' : '[dry run] ') . 'Intro and Before you visit from ' . ($field('field_quick_guide_intro') || $field('field_quick_guide_visit') ? "the hero's Quick Guide fields" : "the hero's built-in text") . "; text format $format; full guide $guide_url." . PHP_EOL;
-echo ($apply ? '' : '[dry run] ') . 'The hero leaves its Quick Start out once the theme sees the paths in a tab.' . PHP_EOL;
+echo ($apply ? '' : '[dry run] ') . "Tab \"{$value($visit, 'field_tab_label')}\" becomes Research (#research, icon search); its $old block(s) are replaced by the request paths (text format $format)." . PHP_EOL;
+echo ($apply ? '' : '[dry run] ') . 'The hero draws the tabs in its Quick Start, between the intro and Before you visit.' . PHP_EOL;
 if (!$apply) {
   echo 'Dry run: nothing saved. Run again with apply=1 to save.' . PHP_EOL;
   return;
@@ -164,6 +141,6 @@ $visit->set('field_guide_blocks', [Paragraph::create([
 $visit->setNeedsSave(TRUE);
 $tabs->setNeedsSave(TRUE);
 $node->setNewRevision(TRUE);
-$node->setRevisionLogMessage('Special Collections: Visit tab renamed Research, with the Quick Start Guide content; Quick Start out of the hero (palefire_section_tabs_research.php).');
+$node->setRevisionLogMessage('Special Collections: Visit tab renamed Research, holding the request paths (palefire_section_tabs_research.php).');
 $node->save();
 echo "Saved a new revision of \"{$node->label()}\". Run: drush cr" . PHP_EOL;
