@@ -22,12 +22,13 @@
 //   the key), the labels are ink, and nothing glows when touched.
 //
 // The active tab is shown four ways besides the key's place (not by shadow
-// alone): its icon solid on the key where the others are Light outlines
-// printed in the label color (or, with no Light icon of that name, faint
-// carvings), its label bright and bold, and its indicator lit in the
-// highlight color. Inactive labels are the muted text dimmed toward the page
-// at 5:1 (--pf-g-relief-idle). Icons are decorative (the label names the
-// tab), so the outlines and carvings need no 3:1.
+// alone): its icon printed on the key as a Light outline where the others
+// are solid carvings (a filled shape shows the carving's shadow and lit lip;
+// a hairline barely holds them), its label bright and bold, and its
+// indicator lit in the highlight color. With no Light icon of that name the
+// key prints the solid one. Inactive labels are the muted text dimmed
+// toward the page at 5:1 (--pf-g-relief-idle). Icons are decorative (the
+// label names the tab), so the carvings need no 3:1.
 //
 // Labels: small sans capitals, widely tracked, as a hardware legend is
 // silkscreened (sans, not mono: the section eyebrows keep the mono voice).
@@ -265,21 +266,11 @@
     transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
   }
 
-  // With a Light icon: the outline is engraved while the tab is off (cut
-  // dark, its lower-right lip catching the light), and the tab's own icon
-  // waits, unseen, for the key.
-  &.has-idle > svg:not(.pf-tabs__idle) {
+  // With a Light icon of the same name: its outline waits, unseen, for the
+  // key, which prints it in place of the carving.
+  .pf-tabs__line {
     opacity: 0;
-  }
-
-  .pf-tabs__idle {
-    // The wall's tone, not the floor's (the well's own shading darkens the
-    // track, and a floor-dark line would vanish into it), letting 35% of the
-    // floor through, then carved like the solid icons: a soft shadowed
-    // upper-left wall and a lit lower-right lip, which give the thin Light
-    // strokes their depth.
-    color: color-mix(in srgb, var(--pf-tabs-carve-wall) 65%, transparent);
-    filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
+    filter: none;
   }
 
   // Duotone icons: one tone, carved as a whole.
@@ -324,12 +315,12 @@
       filter: none;
     }
 
-    &.has-idle > svg:not(.pf-tabs__idle) {
-      opacity: 1;
+    &.has-line > svg:not(.pf-tabs__line) {
+      opacity: 0;
     }
 
-    .pf-tabs__idle {
-      opacity: 0;
+    .pf-tabs__line {
+      opacity: 1;
     }
   }
 
@@ -468,12 +459,12 @@ html.pf-a11y-motion {
     box-shadow: none;
   }
 
-  .pf-tabs__icon svg {
-    filter: none;
+  // Flat: no carving, so the inactive icons take the labels' color.
+  .pf-tabs__icon {
+    color: var(--pf-tabs-idle);
   }
 
-  .pf-tabs__icon .pf-tabs__idle {
-    color: var(--pf-tabs-idle);
+  .pf-tabs__icon svg {
     filter: none;
   }
 }
