@@ -3702,14 +3702,8 @@ html[data-pf-hero] .pf-landing--hero {
   text-shadow: 0 0 .5rem var(--pf-cover-bg, var(--bs-body-bg)), 0 0 .125rem var(--pf-cover-bg, var(--bs-body-bg));
 }
 
-.pf-landing__account-label {
-  @extend %pf-landing-label;
-  margin: 0;
-  color: var(--pf-g-accent, var(--pf-landing-accent));
-}
-
 .pf-landing__account-title {
-  margin: .375rem 0 1rem;
+  margin: 0 0 1rem;
   font-family: inherit;
   font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem);
   font-weight: 500;
@@ -3803,12 +3797,42 @@ html[data-pf-hero] .pf-landing--hero {
     text-underline-offset: .2em;
     transition: color $pf-hover-out ease;
 
+    // The theme's in-site arrow, as on the index rules' links (Full
+    // guide); inline-block keeps it out of the underline. Silent.
+    &::after {
+      content: "\2192" / "";
+      display: inline-block;
+      margin-inline-start: .375em;
+      transition: transform $pf-hover-out ease;
+    }
+
+    [dir="rtl"] &::after {
+      content: "\2190" / "";
+    }
+
     &:hover,
     &:focus-visible {
       color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
       transition-duration: $pf-hover-in;
+
+      &::after {
+        transform: translateX(.2em);
+        transition-duration: $pf-hover-in;
+      }
     }
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing__account-note a::after {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+html.pf-a11y-motion .pf-landing__account-note a::after {
+  transition: none;
+  transform: none !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -3889,8 +3913,8 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
   }
 
   // The researcher card as a row under the intro: no plate, frame or blur.
-  // The label over the row, then "Request items", Log in, Register and the
-  // guide line side by side, wrapping as needed.
+  // "Request items", the Log in or register button and the guide line
+  // side by side, wrapping as needed.
   > .pf-landing__top > .pf-landing__links {
     display: flex;
     flex-wrap: wrap;
@@ -3901,11 +3925,6 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     background: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-  }
-
-  .pf-landing__account-label {
-    flex: 0 0 100%;
-    color: var(--pf-toc-color);
   }
 
   .pf-landing__account-title {

@@ -326,7 +326,7 @@
       </div>
     {% endif %}
     {# Hero: the researcher card beside the intro, its foot on the intro's:
-       a label, "Request items" (in the Reading Room or as digital copies),
+       "Request items" (in the Reading Room or as digital copies),
        Log in and Register outlined (Log in with the stronger edge and
        an accent arrow; Search is the hero's one filled button), then a line to the
        guide for first-timers. On the five-column grid in columns 4-5
@@ -336,7 +336,6 @@
       {% set account_id = input_id ~ '-account' %}
       {% set account_arrow %}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>{% endset %}
       <section class="pf-landing__links pf-landing__account" aria-labelledby="{{ account_id }}">
-        <p class="pf-landing__account-label">{{ 'Researcher account'|t }}</p>
         <h2 class="pf-landing__account-title" id="{{ account_id }}">{{ 'Request items'|t }}</h2>
         <ul class="pf-landing__account-actions" role="list">
           <li>
