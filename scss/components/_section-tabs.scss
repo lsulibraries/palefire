@@ -399,6 +399,48 @@
   }
 }
 
+// From the cover's 80rem (the first column two of five), the Ask tab's
+// FAQs join the first column, between the intro and Before you ask, and
+// the form takes the other three, as the paths do on Research: the block
+// and its wrapper step aside (display: contents) so their two parts sit on
+// the panel's grid; the block's tokens still inherit. Under 80rem one
+// column would be too narrow for the questions, so the block stays whole.
+@container pf-cover (min-width: 80rem) {
+  .pf-quick-guide__panel:has(> .pf-tabs__content > .pf-inquiry) {
+    grid-template-rows: auto auto auto auto 1fr;
+
+    > .pf-tabs__content,
+    > .pf-tabs__content > .pf-inquiry {
+      display: contents;
+    }
+
+    .pf-inquiry__faqs {
+      grid-column: 1 / span 2;
+      grid-row: 4;
+      margin-top: clamp(2rem, 4vw, 3rem);
+    }
+
+    > .pf-quick-guide__visit {
+      grid-row: 5;
+    }
+
+    .pf-inquiry__panel {
+      grid-column: 3 / -1;
+      grid-row: 2 / -1;
+    }
+  }
+
+  // On windows tall enough to show the whole form under the header and
+  // the bar, it rides along while the questions scroll past, until the
+  // panel ends; on shorter ones Send would be out of reach, so it scrolls.
+  @media (min-height: 52rem) {
+    .pf-quick-guide__panel > .pf-tabs__content > .pf-inquiry > .pf-inquiry__panel {
+      position: sticky;
+      top: calc(var(--pf-header-h) + var(--pf-landing-bar-h, 0px) + 1.5rem);
+    }
+  }
+}
+
 // "Find in page" can open a hidden panel (hidden="until-found", js adds
 // .has-find where the browser supports it): Bootstrap's [hidden] rule would
 // otherwise keep it display:none. Its contents take no room, but its own
