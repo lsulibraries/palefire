@@ -414,19 +414,25 @@
       display: contents;
     }
 
-    .pf-inquiry__faqs {
-      grid-column: 1 / span 2;
+    .pf-inquiry__faqs,
+    .pf-inquiry__panel {
       grid-row: 4;
       margin-top: clamp(2rem, 4vw, 3rem);
+    }
+
+    .pf-inquiry__faqs {
+      grid-column: 1 / span 2;
     }
 
     > .pf-quick-guide__visit {
       grid-row: 5;
     }
 
+    // Level with the questions: Send us a question on Common questions'
+    // line, under the heading and intro.
     .pf-inquiry__panel {
       grid-column: 3 / -1;
-      grid-row: 2 / -1;
+      grid-row: 4 / -1;
     }
   }
 
