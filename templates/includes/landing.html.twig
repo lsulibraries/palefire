@@ -129,6 +129,11 @@
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}
+    {# Cover: the clip through the title's letters on first load
+       (js/hero-title-window.js, split cover in _landing-features.scss). #}
+    {% if cover %}
+      {{ attach_library('palefire/hero-title-window') }}
+    {% endif %}
     {# The media layer: fixed behind the whole landing, or (cover) inside
        the lead's cover band, printed there below. #}
     {% set media %}

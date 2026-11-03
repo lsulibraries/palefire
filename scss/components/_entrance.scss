@@ -51,6 +51,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
+@keyframes pf-split-open {
+  from {
+    clip-path: inset(100% 0 0);
+  }
+}
+
 @mixin pf-enter($delay, $duration: .9s, $name: pf-enter) {
   animation: $name $duration $pf-enter-ease $delay backwards;
 }
@@ -154,6 +160,29 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
         &:nth-child(#{$i}) {
           animation-delay: #{1140 + ($i - 1) * 110}ms;
         }
+      }
+    }
+  }
+
+  // Split cover (_landing-features.scss, from 64rem): the film's column
+  // stays closed while js/hero-title-window.js plays the clip through the
+  // title's letters, then opens from its foot as the letters turn gold.
+  // CSS alone keeps the time, so the column opens on cue even when the
+  // script doesn't run (the clip not ready, an old browser): the title is
+  // then simply gold throughout. The scroll fade keeps its place in the
+  // list.
+  @container pf-cover (min-width: 64rem) {
+    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
+      animation: pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
+    }
+
+    @supports (animation-timeline: view()) {
+      #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
+        animation:
+          pf-cover-fade linear both,
+          pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
+        animation-timeline: view(), auto;
+        animation-range: exit 0% exit 100%, normal;
       }
     }
   }

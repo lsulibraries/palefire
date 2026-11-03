@@ -286,6 +286,13 @@ exhibit-rotate:
 
 # Landing hero: "Next event" card from the events carousel's feed. Attached
 # by includes/landing.html.twig only for the landing hero.
+hero-title-window:
+  js:
+    js/hero-title-window.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 hero-event:
   js:
     js/hero-event.js: {}

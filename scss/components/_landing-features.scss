@@ -3817,3 +3817,337 @@ html[data-pf-hero] .pf-landing--hero {
   }
 }
 
+
+// =========================================================================
+// Split cover (2026-11-03, hero review option C″): the type on the plain
+// page, the film beside it, nothing over the picture.
+// From 64rem of landing the lead's first screen is two parts: the
+// kicker, title, hours, intro, researcher row and search in the left
+// two-thirds, and the cover's video in the right third, from the page's
+// top to the search row's foot, at full colour (no washes but the one
+// under the header, no swatch tint). The right third of a landing screen
+// is close to 9:16 (480 × 900 at 1440 × 900), so a clip shot in portrait
+// fills it with little cropped; a landscape clip is cropped to its middle
+// (object-position). Under 64rem the video sits under the search at 4:5,
+// inside the gutters. Rules here come last in the file, so they override
+// the washed band's above (the band's comments describe what is undone).
+// Specificity: the html prefix matches the pinned-video rules
+// (html:not(.pf-a11y-motion) …), so these win by order.
+// =========================================================================
+$pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
+
+#{$pf-split} {
+  --pf-split-film: 33.333%; // the film's share of the lead (the landing's width)
+  position: relative;
+
+  // No swatch tint: the clip as shot.
+  > .pf-landing__media::before {
+    content: none;
+  }
+
+  // No halos: the words sit on the page, not on the video.
+  :is(.pf-landing__kicker, .pf-landing__hours, .pf-landing__account) {
+    text-shadow: none;
+  }
+
+  // The kicker in the muted label tone, the hours as a line of text: the
+  // gold is the title's and the Search button's alone.
+  .pf-landing__kicker {
+    color: var(--pf-toc-color);
+  }
+
+  .pf-landing__hours-label {
+    --pf-hours-badge-bg: transparent;
+    --pf-hours-badge-fg: var(--pf-section-fg, var(--bs-body-color));
+    padding-inline: 0;
+  }
+
+  // The search on the page: the surface fill and the hairline frame, no
+  // shadow (it was there to lift the field off the video).
+  .pf-landing__field {
+    border-color: #{$pf-hairline};
+    background-color: var(--pf-g-surface, var(--bs-secondary-bg));
+    box-shadow: none;
+
+    &:focus-within {
+      box-shadow: 0 0 0 1px var(--pf-landing-accent, var(--pf-toc-accent, #{$pf-gold}));
+    }
+  }
+
+  // The researcher card as a row under the intro: no plate, frame or blur.
+  // The label over the row, then "Request items", Log in, Register and the
+  // guide line side by side, wrapping as needed.
+  > .pf-landing__top > .pf-landing__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .pf-landing__account-label {
+    flex: 0 0 100%;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-landing__account-title {
+    margin: 0;
+    color: var(--bs-heading-color, var(--pf-section-fg));
+  }
+
+  .pf-landing__account-actions > li {
+    flex: 0 0 auto;
+  }
+
+  .pf-landing__account-note {
+    margin: 0;
+  }
+}
+
+// --- Wide: type in two-thirds, the film in the last third --------------------
+@container pf-cover (min-width: 64rem) {
+  #{$pf-split} {
+    // The first screen, held by the spacer: from the page's top to the
+    // screen's foot (no peek: the banners start under it).
+    --pf-cover-peek: 0px;
+
+    // The spacer (the pinned video's, which reduced motion lacks): rows 1
+    // and 2 at least a screen tall from the page's top, whatever the motion
+    // setting.
+    &::before {
+      content: "";
+      grid-row: 1 / 3;
+      grid-column: 1;
+      min-height: 100svh;
+      margin-top: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px)));
+      pointer-events: none;
+    }
+
+    // The film: placed on the first two rows' area (the lead is the
+    // positioned grid), its right third, from the page's top (under the
+    // header and the bar) to the search row's foot. No pinning: it
+    // scrolls away with the type.
+    > .pf-landing__media {
+      position: absolute;
+      inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
+      display: block;
+      grid-row: 1 / 3;
+      grid-column: 1;
+      width: var(--pf-split-film);
+      min-height: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    > .pf-landing__media .pf-landing__bg-video {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      // A landscape clip keeps the building's entrance and inscription in
+      // the column.
+      object-position: 58% 50%;
+    }
+
+    // Only the wash under the header and the bar (clear over the film at the
+    // top of the page), which keeps their white words at 4.5:1 on the sky.
+    > .pf-landing__media::after {
+      background-image: pf-cover-top-wash();
+    }
+
+    // The type keeps clear of the film: the column's gutter on the left as
+    // before, two gutters before the film on the right.
+    > :is(.pf-landing__top, .pf-landing__form) {
+      margin-inline-end: calc(var(--pf-split-film) + 2 * var(--pf-grid-gutter));
+    }
+
+    > .pf-landing__form {
+      margin-bottom: clamp(3rem, 9svh, 6rem);
+    }
+
+    // The banners follow the first screen (the row sets its own 9rem lift
+    // over the band above).
+    > .pf-hero-banners {
+      --pf-banner-rise: 0px;
+    }
+
+    // One column of type: kicker, title, hours, intro, then the researcher
+    // row, each a row of its own (the card no longer rises beside them).
+    > .pf-landing__top {
+      grid-template-columns: minmax(0, 1fr);
+
+      > * {
+        grid-column: 1;
+        grid-row: auto;
+      }
+
+      > .pf-landing__intro {
+        max-width: 44ch;
+      }
+
+      > .pf-landing__links {
+        width: auto;
+        justify-self: stretch;
+        margin-top: clamp(1.25rem, 2.5vw, 2rem);
+      }
+
+      // The title at poster size, two lines, as wide as the type's column
+      // allows: 9.2% of the landing is "Collections" filling about nine
+      // tenths of it at every width (Roboto 500, measured at 1024 to 2560).
+      > .pf-landing__title {
+        max-width: none;
+        font-size: clamp(4rem, 9.2cqi, 9rem);
+        letter-spacing: -.03em;
+        line-height: .92;
+      }
+    }
+  }
+}
+
+// --- Narrow: the film under the search -----------------------------------------
+// Phones and tablets: the type as before, then the film as a 4:5 frame in
+// the gutters (cropped wider where 60% of the screen is shorter), then the
+// banners. No washes, no pinning, no first-screen spacer.
+@container pf-cover (width < 64rem) {
+  #{$pf-split} {
+    &::before {
+      content: none;
+    }
+
+    > .pf-landing__form {
+      margin-bottom: var(--pf-grid-gutter);
+    }
+
+    > .pf-landing__media {
+      position: relative;
+      display: block;
+      grid-row: 3;
+      // Across the gutters at any height: a grid item with a ratio would
+      // otherwise shrink to the height cap's width and sit to the left.
+      justify-self: stretch;
+      aspect-ratio: 4 / 5;
+      // Never more than most of a screen, so the Quick Start stays close:
+      // a phone keeps the 4:5 frame, a tablet crops it wider.
+      max-height: 60svh;
+      min-height: 0;
+      margin: 0 var(--pf-cover-gutter) clamp(2rem, 6vw, 3rem);
+      overflow: hidden;
+    }
+
+    > .pf-landing__media .pf-landing__bg-video {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      object-position: 58% 50%;
+    }
+
+    > .pf-landing__media::after {
+      content: none;
+    }
+
+    > .pf-hero-banners {
+      grid-row: 4;
+    }
+  }
+}
+
+// --- Highlights as a compact strip (review option 3) ---------------------------
+// The Quick Start comes first, so the banners step back to a strip: from
+// 44rem one row, each item a 16:10 picture with its category and then its
+// title under it (no scrim, no shadow), every picture in colour at rest.
+// Under 44rem the blog post stays a line of text and the rest go two by two
+// at 16:10. Hover still brings the one in hand forward and dims the rest.
+$pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banner';
+
+#{$pf-strip} {
+  --pf-banner-pan: .75rem;
+
+  .pf-hero-banner__link {
+    --pf-banner-ratio: 16 / 10;
+    --pf-banner-shadow: none;
+    grid-template-rows: auto auto auto;
+    box-shadow: none;
+  }
+
+  // In colour from the first frame: the scroll timelines that greyed them
+  // are off, and their values held at "colour".
+  .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+    --pf-banner-grey: 0;
+    --pf-banner-wait: 0;
+    animation: none;
+  }
+
+  .pf-hero-banner__media--date {
+    gap: .25rem;
+    padding: .75rem 1rem;
+  }
+
+  .pf-hero-banner__day {
+    font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  }
+}
+
+// The caption under the picture: the category, then the title, in the
+// page's colours. Not the blog post where it is a line of text (under 44rem).
+@mixin pf-strip-caption {
+  .pf-hero-banner__label {
+    grid-area: 2 / 1;
+    margin-top: .75rem;
+  }
+
+  .pf-hero-banner__title {
+    grid-area: 3 / 1;
+    align-self: start;
+    padding: .375rem 0 0;
+    border-bottom: 0;
+    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
+    line-height: 1.25;
+    color: var(--bs-heading-color, var(--pf-section-fg));
+    background: none;
+  }
+}
+
+#{$pf-strip}:not(.pf-hero-banner--blog) {
+  @include pf-strip-caption;
+}
+
+@container pf-cover (width < 44rem) {
+  #{$pf-split} > .pf-hero-banners {
+    gap: var(--pf-grid-gutter) clamp(.625rem, 2.5cqi, 1rem);
+  }
+}
+
+@container pf-cover (min-width: 44rem) {
+  #{$pf-strip}.pf-hero-banner--blog {
+    @include pf-strip-caption;
+  }
+
+  #{$pf-split} > .pf-hero-banners {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+  }
+}
+
+@media (forced-colors: active) {
+  #{$pf-split} .pf-landing__field {
+    border-color: CanvasText;
+  }
+}
+
+// The title as a window (js/hero-title-window.js): the canvas lies exactly
+// over the <h1>'s box for the few seconds it plays, above its gold words.
+#{$pf-split} .pf-landing__title {
+  position: relative;
+}
+
+.pf-landing__title-window {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
