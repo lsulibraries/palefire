@@ -260,16 +260,18 @@
     transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
   }
 
-  // With a Light icon: the outline is engraved while the tab is off (the
-  // carving's dark floor, its lower-right lip catching the light), and the
-  // tab's own icon waits, unseen, for the key.
+  // With a Light icon: the outline is engraved while the tab is off (cut
+  // dark, its lower-right lip catching the light), and the tab's own icon
+  // waits, unseen, for the key.
   &.has-idle > svg:not(.pf-tabs__idle) {
     opacity: 0;
   }
 
   .pf-tabs__idle {
-    color: var(--pf-tabs-carve);
-    filter: drop-shadow(.75px .75px 0 var(--pf-tabs-carve-lip));
+    // The wall's tone, not the floor's: the well's own shading darkens the
+    // track, and a floor-dark line would vanish into it.
+    color: var(--pf-tabs-carve-wall);
+    filter: drop-shadow(1px 1px 0 var(--pf-tabs-carve-lip));
   }
 
   // Duotone icons: one tone, carved as a whole.
