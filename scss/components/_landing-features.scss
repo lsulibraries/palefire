@@ -2993,6 +2993,22 @@ html.pf-a11y-motion {
   }
 }
 
+// Its track is cut from the band, not the page: the band's color and that
+// color's relief (--pf-g-relief-band-*, _reading-themes.scss). A page-colored
+// track read as a dark plate laid on the band, its lit lower edge lost
+// against the lighter color; this way the lower half is the band itself
+// pressed in, and the upper half stands just proud of the darker page.
+// The labels stay on the page, in its colors.
+.pf-quick-guide--tabs > .pf-tabs {
+  --pf-tabs-bg: var(--pf-band, var(--pf-g-surface, var(--pf-g-bg, var(--bs-body-bg))));
+  --pf-tabs-shade: var(--pf-g-relief-band-shade, var(--pf-g-relief-shade, rgba(0, 0, 0, .3)));
+  --pf-tabs-light: var(--pf-g-relief-band-light, var(--pf-g-relief-light, rgba(255, 255, 255, .06)));
+  --pf-tabs-carve: var(--pf-g-relief-band-carve, var(--pf-g-relief-carve, rgba(0, 0, 0, .3)));
+  --pf-tabs-carve-hover: var(--pf-g-relief-band-carve-hover, var(--pf-g-relief-carve-hover, rgba(0, 0, 0, .2)));
+  --pf-tabs-carve-wall: var(--pf-g-relief-band-carve-wall, var(--pf-g-relief-carve-wall, rgba(0, 0, 0, .5)));
+  --pf-tabs-carve-lip: var(--pf-g-relief-band-carve-lip, var(--pf-g-relief-carve-lip, rgba(255, 255, 255, .12)));
+}
+
 // The Quick Start's tab bar: no room of its own above (the guide's top space
 // sets it), centred in the column from md, as wide as the control allows
 // (_section-tabs.scss); full width below.

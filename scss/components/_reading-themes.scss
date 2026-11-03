@@ -307,8 +307,26 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
 //               while it keeps 5:1 (AA with a margin at 12px)
 @function pf-relief($t) {
   $bg: map.get($t, bg);
+  $relief: pf-relief-from($bg, map.get($t, dark));
+  $idle: map.get($t, muted);
+  @for $i from 1 through 60 {
+    $c: pf-mix($bg, map.get($t, muted), $i * 1%);
+    @if pf-contrast($c, $bg) >= 5 {
+      $idle: $c;
+    }
+  }
+  $relief: map.merge($relief, (idle: $idle));
+  @if map.has-key($t, relief) {
+    $relief: map.merge($relief, map.get($t, relief));
+  }
+  @return $relief;
+}
+
+// The material alone, from any base color: the page's (pf-relief()) or the
+// band's (--pf-g-relief-band-*, for a control set into the band's edge).
+@function pf-relief-from($bg, $dark) {
   $relief: ();
-  @if map.get($t, dark) {
+  @if $dark {
     $relief: (
       shade: pf-mix(#000, $bg, 40%),
       light: pf-mix(#fff, $bg, 7%),
@@ -327,17 +345,6 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
       carve-wall: pf-mix(#000, $bg, 32%),
       carve-lip: #fff,
     );
-  }
-  $idle: map.get($t, muted);
-  @for $i from 1 through 60 {
-    $c: pf-mix($bg, map.get($t, muted), $i * 1%);
-    @if pf-contrast($c, $bg) >= 5 {
-      $idle: $c;
-    }
-  }
-  $relief: map.merge($relief, (idle: $idle));
-  @if map.has-key($t, relief) {
-    $relief: map.merge($relief, map.get($t, relief));
   }
   @return $relief;
 }
@@ -442,6 +449,11 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   // Relief: the Section tabs' track and key (pf-relief()).
   @each $key, $value in pf-relief($t) {
     --pf-g-relief-#{$key}: #{$value};
+  }
+  // The same material from the band color (the surface), for the Quick
+  // Start's tab bar, whose track is set into the band's top edge.
+  @each $key, $value in pf-relief-from(map.get($t, surface), $dark) {
+    --pf-g-relief-band-#{$key}: #{$value};
   }
   @if $dark {
     color-scheme: dark;
