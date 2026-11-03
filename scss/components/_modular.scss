@@ -259,6 +259,34 @@ html.pf-snap-proximity .pf-section--snap {
   }
 }
 
+// The same slide driven by the scroll (js/section-reveal.js adds
+// .pf-reveal--scroll where animation-timeline: view() works): it runs from
+// the heading's first pixel at the window's foot until it is a quarter of
+// the way up (about a fifth of a screen of scrolling), so it moves with the
+// page instead of after it. Higher (a TOC jump, a search hit) it's at rest. Off for Reduce motion, set in Settings after load.
+@keyframes pf-reveal-heading {
+  from {
+    opacity: $pf-reveal-from;
+    translate: -.75rem 0;
+  }
+}
+
+.pf-reveal--scroll {
+  animation: pf-reveal-heading cubic-bezier(.2, .7, .2, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 25%;
+}
+
+html.pf-a11y-motion .pf-reveal--scroll {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-reveal--scroll {
+    animation: none;
+  }
+}
+
 // field_section_theme "light-map" ("Light, dark at the map"): light until the
 // landing's building map is in view, then every dark-section rule applies.
 // building-map.js toggles .is-map-dark (and data-bs-theme) on the section.
