@@ -11,6 +11,7 @@
  * Inside a block that has a heading, use Heading 4 in the editor: every h3
  * in a guide section becomes a TOC sub-link.
  *
+ * - ask_href: where the paths' "Reach out" goes (empty: AskUs).
  * - request_paths: the text had a "[request-paths]" paragraph
  *   (palefire_preprocess_paragraph__guide_text()); the Special Collections
  *   request diagram follows the text.
@@ -39,7 +40,7 @@
     {{ content.field_block_body }}
   </div>
   {% if request_paths %}
-    {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id(), img_base: file_url(directory) ~ '/images/guides/special-collections/' } only %}
+    {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: paragraph.id(), img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: ask_href } only %}
   {% endif %}
   {% if faqs %}
     {% include '@palefire/includes/guide-faqs.html.twig' with { faqs: faqs, directory: directory } only %}

@@ -457,10 +457,13 @@
            empty leaves the link out.
          - quick_guide: title, intro, url and link_text from the paragraph's
            optional Quick Guide fields (_palefire_quick_guide()); each one
-           left empty keeps the built-in text below. #}
+           left empty keeps the built-in text below.
+         - quick_guide_in_tabs: a Section tab on the page draws the paths
+           (the Research tab), so the hero leaves the Quick Start out. #}
       {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
+      {% if not quick_guide_in_tabs %}
       <div class="pf-quick-guide" aria-labelledby="{{ quick_id }}" role="region">
         {# Index rule 01, "Full guide" at its end. The full name keeps the
            visible words first (WCAG 2.5.3) and says which guide; with its
@@ -542,6 +545,7 @@
            this shows the rest (js/palefire.js; without it, all show). #}
         <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
       </div>
+      {% endif %}
     {% endif %}
   </div>
   {% endif %}

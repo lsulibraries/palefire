@@ -351,7 +351,9 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * templates use: the lead shows unless the map leads alone, and only with
  * the page title or an intro (show_lead, includes/landing.html.twig); the
  * map when it is published; the Visit card when the host page has a
- * location (_palefire_landing_visit()). The hero numbers its rules from
+ * location (_palefire_landing_visit()). No guide when a Section tab on the
+ * page draws the request paths (_palefire_tab_paths()): the Quick Start
+ * lives there. The hero numbers its rules from
  * this, and palefire_preprocess_field() counts on from its length, so no
  * number is typed by hand and they always agree.
  *
@@ -376,7 +378,7 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $visit = $filled('field_hours_location') || $filled('field_location_name') || $filled('field_location_query');
 
   $rules = [];
-  if (!$map_only && ($title || $intro)) {
+  if (!$map_only && ($title || $intro) && !_palefire_tab_paths($host)) {
     $rules[] = 'guide';
   }
   if ($has_map) {
@@ -386,6 +388,37 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
     }
   }
   return $rules;
+}
+
+/**
+ * Whether a Section tab on the page draws the request paths.
+ *
+ * TRUE when one of the node's sections is a Section tabs section with a tab
+ * whose Guide text has a "[request-paths]" paragraph (the Special
+ * Collections homepage's Research tab). The hero then leaves its Quick
+ * Start out, so the page doesn't show the paths twice.
+ */
+function _palefire_tab_paths(mixed $host): bool {
+  if (!$host instanceof NodeInterface || !$host->hasField('field_scroll_section')) {
+    return FALSE;
+  }
+  foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
+    if ($section->bundle() !== 'section_tabs' || !$section->isPublished() || !$section->hasField('field_tabs')) {
+      continue;
+    }
+    foreach ($section->get('field_tabs')->referencedEntities() as $tab) {
+      if (!$tab->isPublished() || !$tab->hasField('field_guide_blocks')) {
+        continue;
+      }
+      foreach ($tab->get('field_guide_blocks')->referencedEntities() as $block) {
+        if ($block->bundle() === 'guide_text' && $block->isPublished() && $block->hasField('field_block_body')
+          && preg_match('#<p>s*[request-paths]s*</p>#i', (string) $block->get('field_block_body')->value)) {
+          return TRUE;
+        }
+      }
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -418,6 +451,16 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     }
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
+    // The Quick Start moves into a Section tab when one draws the paths;
+    // the page's tag redraws the hero when its sections change.
+    $host = $paragraph;
+    for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+      $host = $host->getParentEntity();
+    }
+    $variables['quick_guide_in_tabs'] = _palefire_tab_paths($host);
+    if ($host instanceof NodeInterface) {
+      CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($host)->applyTo($variables);
+    }
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
@@ -2129,6 +2172,10 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * homepage's Ask Special Collections section uses (_palefire_ask_faqs()),
  * drawn after the text as the guides' accordion (guide-faqs.html.twig).
  *
+ * ask_href: where the paths' "Reach out" goes: the question form
+ * (#ask-question) when the text is in a Section tab beside an Ask showcase
+ * tab (the Special Collections homepage), else empty (AskUs).
+ *
  * transcription: TRUE when the text opens with a Heading 4 "Transcription"
  * (Audubon's manuscripts): a primary source, set apart from the curators'
  * text (_exhibition.scss .pf-transcription).
@@ -2202,6 +2249,19 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   }
   if ($faqs) {
     $variables['faqs'] = _palefire_ask_faqs(NULL, $variables, NULL);
+  }
+  $variables['ask_href'] = '';
+  $tab = $variables['request_paths'] ? $variables['paragraph']->getParentEntity() : NULL;
+  $tabs = $tab instanceof ParagraphInterface && $tab->bundle() === 'section_tab' ? $tab->getParentEntity() : NULL;
+  if ($tabs instanceof ParagraphInterface && $tabs->hasField('field_tabs')) {
+    foreach ($tabs->get('field_tabs')->referencedEntities() as $sibling) {
+      foreach ($sibling->hasField('field_guide_blocks') ? $sibling->get('field_guide_blocks')->referencedEntities() : [] as $block) {
+        if ($block->bundle() === 'tile_showcase' && $block->hasField('field_tile_layout') && $block->get('field_tile_layout')->value === 'ask') {
+          $variables['ask_href'] = '#ask-question';
+        }
+      }
+    }
+    CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($tabs)->applyTo($variables);
   }
 }
 
