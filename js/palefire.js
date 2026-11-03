@@ -88,22 +88,25 @@
    * The hero cover's sub-header bar is a clear caption strip at the top of
    * the page and turns to glass once the page scrolls and it sticks under
    * the header (_landing-features.scss): <html> gets .pf-bar-stuck while the
-   * page is scrolled. One passive listener, read once a frame.
+   * page is scrolled. A 1px probe at the page's top, watched by an
+   * IntersectionObserver: reading scrollY on scroll forced a full style
+   * pass every frame (the scroll-driven headings leave it stale).
    */
   Drupal.behaviors.palefireBarStuck = {
     attach() {
       once('pf-bar-stuck', 'html').forEach(() => {
-        let frame = 0;
-        const update = () => {
-          frame = 0;
+        if (!('IntersectionObserver' in window)) {
           root.classList.toggle('pf-bar-stuck', window.scrollY > 1);
-        };
-        window.addEventListener('scroll', () => {
-          if (!frame) {
-            frame = window.requestAnimationFrame(update);
-          }
-        }, { passive: true });
-        update();
+          window.addEventListener('scroll', () => root.classList.toggle('pf-bar-stuck', window.scrollY > 1), { passive: true });
+          return;
+        }
+        const probe = document.createElement('div');
+        probe.setAttribute('aria-hidden', 'true');
+        probe.style.cssText = 'position:absolute;top:1px;left:0;width:1px;height:1px;pointer-events:none;';
+        document.body.prepend(probe);
+        new IntersectionObserver(([entry]) => {
+          root.classList.toggle('pf-bar-stuck', !entry.isIntersecting);
+        }).observe(probe);
       });
     },
   };

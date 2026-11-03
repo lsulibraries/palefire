@@ -552,6 +552,7 @@
     let dismissedOn = null; // the entry the pointer was on when the panel closed
     let hushed = false;
     let hushedAt = null; // where the jump landed (null while it glides)
+    let railPeek = null; // --pf-rail-peek as last written
 
     // Weights from the sections' heights, on load and when they resize,
     // never on scroll.
@@ -585,6 +586,9 @@
       }
     }
 
+    // Runs every scroll frame. Everything is read first (rects, scrollY,
+    // the peek's hit test) and only what changed is written after, so the
+    // frame never forces a style or layout pass of its own.
     function updateRail() {
       railTicking = false;
       if (destroyed || !railOn()) {
@@ -593,15 +597,9 @@
       const head = headerHeight();
       const span = window.innerHeight - head;
       const line = head + span * ACTIVATION_LINE;
-      entries.forEach((entry) => {
+      const fills = entries.map((entry) => {
         const rect = entry.section.getBoundingClientRect();
-        const p = isShown(entry) && rect.height ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
-        entry.li.style.setProperty('--pf-rail-p', p.toFixed(3));
-        entry.li.classList.toggle('is-read', p >= 1);
-        if (entry.row) {
-          entry.row.classList.toggle('is-read', p >= 1);
-          entry.row.classList.toggle('is-current', entry === active);
-        }
+        return isShown(entry) && rect.height ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
       });
       let peek = 0;
       if (active && isShown(active)) {
@@ -629,7 +627,29 @@
       if (crumb || hushed || (peek > 0 && peekCovers(active))) {
         peek = 0;
       }
-      nav.style.setProperty('--pf-rail-peek', peek.toFixed(3));
+      entries.forEach((entry, i) => {
+        const p = fills[i].toFixed(3);
+        const read = fills[i] >= 1;
+        const current = entry === active;
+        if (entry.railP !== p) {
+          entry.railP = p;
+          entry.li.style.setProperty('--pf-rail-p', p);
+        }
+        if (entry.railRead !== read || entry.railCurrent !== current) {
+          entry.railRead = read;
+          entry.railCurrent = current;
+          entry.li.classList.toggle('is-read', read);
+          if (entry.row) {
+            entry.row.classList.toggle('is-read', read);
+            entry.row.classList.toggle('is-current', current);
+          }
+        }
+      });
+      const peekValue = peek.toFixed(3);
+      if (railPeek !== peekValue) {
+        railPeek = peekValue;
+        nav.style.setProperty('--pf-rail-peek', peekValue);
+      }
     }
 
     function hushPeek() {
