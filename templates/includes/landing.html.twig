@@ -203,14 +203,12 @@
      far end of the bar's row and stays under the header while the landing
      (and its video) is on screen, like the TOC's hide/show button. After the
      breadcrumb in the source, so it comes after it in the tab order. #}
-  {# Hero: the researcher card's "Log in" and "Register" (the Special
-     Collections request system, Aeon; .pf-landing__account, below). Both
-     open in a new tab (an up-right arrow; their names say so for screen
-     readers). Aeon makes the account on a first log in, so Register goes
-     to the same place until it has a page of its own (register_url).
-     account_url: empty leaves the card out. #}
+  {# Hero: the researcher card's one button, "Log in or register" (the
+     Special Collections request system, Aeon; .pf-landing__account,
+     below). Aeon makes the account on a first log in, so one link serves
+     both. It opens in a new tab (an up-right arrow; its name says so for
+     screen readers). account_url: empty leaves the card out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
-  {% set register_url = account_url %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
@@ -246,7 +244,11 @@
           {%- if visit.name %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ visit.name }}</span>{% endif -%}
         </p>
       {% endif %}
-      <h1 class="pf-modular__title pf-landing__title"{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
+      {# Cover with a poster: the still shows in the title's letters from the
+         first paint, until the film's column opens (_entrance.scss,
+         .pf-landing__title--still). #}
+      {% set title_still = cover and bg_videos and bg_poster %}
+      <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}')"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}
       </h1>
     {% endif %}
@@ -289,14 +291,7 @@
         <ul class="pf-landing__account-actions" role="list">
           <li>
             <a class="pf-landing__account-button pf-landing__account-button--primary" href="{{ account_url }}" target="_blank" rel="noopener">
-              {{- 'Log in'|t -}}
-              <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
-              {{- account_arrow -}}
-            </a>
-          </li>
-          <li>
-            <a class="pf-landing__account-button" href="{{ register_url }}" target="_blank" rel="noopener">
-              {{- 'Register'|t -}}
+              {{- 'Log in or register'|t -}}
               <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
               {{- account_arrow -}}
             </a>

@@ -57,6 +57,15 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
+// The title's still (.pf-landing__title--still): the letters' own fill
+// gives way to their gold. Their color stays gold throughout, so the
+// script's veil (js/hero-title-window.js) reads it as before.
+@keyframes pf-title-fill {
+  from {
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 @mixin pf-enter($delay, $duration: .9s, $name: pf-enter) {
   animation: $name $duration $pf-enter-ease $delay backwards;
 }
@@ -176,14 +185,42 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
       animation: pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
     }
 
-    @supports (animation-timeline: view()) {
-      #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
-        animation:
-          pf-cover-fade linear both,
-          pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
-        animation-timeline: view(), auto;
-        animation-range: exit 0% exit 100%, normal;
+    // The stage (_landing-features.scss): held for the run, the page's
+    // colour sweeping across over its first part.
+    @supports (animation-timeline: scroll()) {
+      @media (min-height: 40rem) {
+        #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
+          animation:
+            pf-stage-hold linear both,
+            pf-split-wipe linear both,
+            pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
+          animation-timeline: scroll(root), scroll(root), auto;
+          animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .45), normal;
+        }
       }
+    }
+
+    // With a poster (the cover's still), the title opens on it: the
+    // still in the letters under a faint layer of their own gold, from the
+    // first paint, until the column opens and the gold fills them. The
+    // clip's canvas, when it comes, lies over the same picture. Not with
+    // more contrast or forced colours (below).
+    #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title--still {
+      background:
+        linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
+        var(--pf-title-still) 58% 50% / cover no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation:
+        pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
+        pf-title-fill 1.2s $pf-enter-ease 2.6s backwards;
+    }
+  }
+
+  @media (prefers-contrast: more), (forced-colors: active) {
+    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title.pf-landing__title--still {
+      background: none;
+      animation: pf-enter-title 1.1s $pf-enter-ease 340ms backwards;
     }
   }
 
