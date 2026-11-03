@@ -468,16 +468,14 @@
       {# Index rule 01, "Full guide" at its end. The full name keeps the
          visible words first (WCAG 2.5.3) and says which guide; with its
          own text or URL (the Link field) the link names itself. #}
-      {% set guide_rule %}
-        {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_url ? {
-          url: guide_url,
-          text: quick_guide.link_text ?: 'Full guide'|t,
-          hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
-        } : {}) }}
-      {% endset %}
+      {% set guide_link = guide_url ? {
+        url: guide_url,
+        text: quick_guide.link_text ?: 'Full guide'|t,
+        hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
+      } : {} %}
       <div class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
         {% if not quick_tabs %}
-          {{ guide_rule }}
+          {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_link) }}
         {% endif %}
         {% set quick_body %}
         {# The TOC label is the heading's own text once the title is set. #}
@@ -554,9 +552,10 @@
         {% endset %}
         {% if quick_tabs %}
           {# The tab bar first, on the band's top edge (_landing-features.scss),
-             then each panel under its own rule 01, which names what is open
-             and links on from it: Research the guide's rule, Study the Quiet
-             Study room, Ask us AskUs; another tab its label alone. #}
+             then each panel under its own rule, numbered by tab (01.1, 01.2,
+             01.3: letters are the Research paths' A, B, C), which names what
+             is open and links on from it: Research the guide's rule, Study the
+             Quiet Study room, Ask us AskUs; another tab its label alone. #}
           {% set tab_links = {
             study: { label: 'Study at Hill'|t, url: '/v2/special/quietstudy', text: 'Quiet Study room'|t },
             ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special', text: 'More ways to ask'|t, external: true, hidden: ' (opens in a new tab)'|t },
@@ -564,11 +563,12 @@
           {% set tab_rules = {} %}
           {% for tab in quick_tabs.tabs %}
             {% set tab_link = tab_links[tab.id] ?? {} %}
+            {% set tab_num = hero_index.guide ? hero_index.guide ~ '.' ~ loop.index %}
             {% set tab_rule %}
               {%- if tab.quick -%}
-                {{ guide_rule }}
+                {{ pf.index_rule(tab_num, 'Start your research'|t, guide_link) }}
               {%- else -%}
-                {{ pf.index_rule(hero_index.guide, tab_link.label ?? tab.label, tab_link) }}
+                {{ pf.index_rule(tab_num, tab_link.label ?? tab.label, tab_link) }}
               {%- endif -%}
             {% endset %}
             {% set tab_rules = tab_rules|merge({ (tab.id): tab_rule }) %}

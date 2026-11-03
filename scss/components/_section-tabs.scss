@@ -329,9 +329,12 @@
 
 // "Find in page" can open a hidden panel (hidden="until-found", js adds
 // .has-find where the browser supports it): Bootstrap's [hidden] rule would
-// otherwise keep it display:none.
+// otherwise keep it display:none. Its contents take no room, but its own
+// padding still would, pushing every later panel down by the panel's top
+// space: none while hidden, so each tab opens at the same height.
 .pf-tabs.has-find > .pf-tabs__panel[hidden="until-found"] {
   display: block !important; // stylelint-disable-line declaration-no-important
+  padding-block: 0;
   content-visibility: hidden;
 }
 

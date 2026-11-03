@@ -146,8 +146,10 @@ html:not(.pf-vt).is-animating .pf-swup > * {
 // $pf-swup-in, and a card's picture and title glide into the new page's
 // lead picture and <h1> (pf-morph-image, pf-morph-title) on the
 // exhibitions' easing. The header holds still: it is the same on both
-// pages, so it gets its own name and doesn't cross-fade.
-.pf-header {
+// pages, so it gets its own name and doesn't cross-fade. Only during the
+// visit (html.pf-vt): a named element is a backdrop root, so the rest of
+// the time its frosted ::before would blur nothing behind the bar.
+html.pf-vt .pf-header {
   view-transition-name: pf-header;
 }
 
