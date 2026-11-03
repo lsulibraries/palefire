@@ -244,6 +244,16 @@ HTML),
 HTML),
 ]);
 
+$gallery('Object labels', 'labels', [
+  $text(<<<'HTML'
+<p>The caption a museum sets beside an object, for a record in the collections: who made it and when they lived, what it is called, its date, medium and size, then a hairline, the collection it belongs to and its call number. The title is the one bright line; the maker and the record are in mono capitals, and the call number never breaks across lines. A card uses the compact label: maker, title, date and call number.</p>
+<p>[styleguide:labels]</p>
+HTML),
+  $note(<<<'HTML'
+<p>Labels come from a record's fields: there is nothing to add in the editor yet. Write the date as the catalog has it ("1820–1865", "ca. 1850"), sizes in centimetres, height first, and the collection's full name.</p>
+HTML),
+]);
+
 $gallery('Exhibition blocks', 'blocks', [
   $text(<<<'HTML'
 <p>The blocks an exhibition gallery is made of, each as it appears on a page. The notes say where to find them under "Add Block".</p>
@@ -298,7 +308,7 @@ $values = [
   'field_exhibit_title_style' => 'sans',
   'field_exhibit_subtitle' => 'Colour, type, grid, motion and the blocks exhibitions are built from',
   'field_exhibit_credit' => $html('<p>Palefire, the LSU Libraries theme for Drupal. Maintained with the theme.</p>'),
-  'field_exhibit_keyfacts' => ['Plates: 9', 'Standard: WCAG 2.2 AA', 'Updated: ' . date('F j, Y')],
+  'field_exhibit_keyfacts' => ['Plates: 10', 'Standard: WCAG 2.2 AA', 'Updated: ' . date('F j, Y')],
   'field_exhibit_prompt' => 'Read it in order, or choose a plate from the table of contents.',
   'field_exhibit_cover' => $image ? ['target_id' => $image->id()] : NULL,
   'field_exhibit_showcase' => 'hidden',

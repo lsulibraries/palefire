@@ -1,0 +1,74 @@
+{#
+/**
+ * @file
+ * Object label: the caption block a museum sets beside an object, for a
+ * record in the collections (a manuscript, a print, a book). Styles:
+ * _object-label.scss. Not yet placed on any record: include it where a
+ * record's fields can fill it (an exhibit figure, a Tile, a showcase card).
+ *
+ * The tombstone order, each line optional: maker (and their dates), the
+ * title, the date, the medium, the size; then a hairline and the credit
+ * line (the collection it belongs to) and the call number, in mono
+ * capitals, with the catalog record's link.
+ *
+ * Variables:
+ * - maker: who made it ("John James Audubon").
+ * - maker_dates: their dates ("1785–1851").
+ * - title: what it is called; set in italics when it is a published work
+ *   (title_italic).
+ * - title_italic: TRUE for a book, print or periodical title.
+ * - title_tag: the title's element: p (default), h3 or h4, when the label
+ *   heads its own block.
+ * - date, medium, dimensions: one line each ("1825", "Hand-coloured
+ *   engraving and aquatint", "99 × 66 cm").
+ * - credit: the collection ("Louisiana and Lower Mississippi Valley
+ *   Collections").
+ * - call_number: "Mss. 893".
+ * - url: the catalog record; "View record ↗" opens it in a new tab.
+ * - compact: TRUE for a card: maker, title, date and call number only.
+ * - id: an id for the label, so a figure can point to it
+ *   (aria-describedby).
+ */
+#}
+{% set title_tag = title_tag|default('p') in ['p', 'h3', 'h4'] ? title_tag|default('p') : 'p' %}
+{% set compact = compact|default(false) %}
+<div class="pf-object-label{{ compact ? ' pf-object-label--compact' }}"{% if id|default('') %} id="{{ id }}"{% endif %}>
+  {% if maker|default('') %}
+    <p class="pf-object-label__maker">{{ maker }}{% if maker_dates|default('') %} <span class="pf-object-label__dates">({{ maker_dates }})</span>{% endif %}</p>
+  {% endif %}
+  {% if title|default('') %}
+    <{{ title_tag }} class="pf-object-label__title">{% if title_italic|default(false) %}<cite>{{ title }}</cite>{% else %}{{ title }}{% endif %}</{{ title_tag }}>
+  {% endif %}
+  {% if date|default('') %}
+    <p class="pf-object-label__line pf-object-label__date">{{ date }}</p>
+  {% endif %}
+  {% if not compact %}
+    {% if medium|default('') %}
+      <p class="pf-object-label__line">{{ medium }}</p>
+    {% endif %}
+    {% if dimensions|default('') %}
+      <p class="pf-object-label__line pf-object-label__size">{{ dimensions }}</p>
+    {% endif %}
+  {% endif %}
+  {% if (credit|default('') and not compact) or call_number|default('') %}
+    <dl class="pf-object-label__record">
+      {% if credit|default('') and not compact %}
+        <div class="pf-object-label__credit">
+          <dt class="visually-hidden">{{ 'Collection'|t }}</dt>
+          <dd>{{ credit }}</dd>
+        </div>
+      {% endif %}
+      {% if call_number|default('') %}
+        <div class="pf-object-label__call">
+          <dt>{{ 'Call no.'|t }}</dt>
+          <dd>
+            <span class="pf-object-label__number">{{ call_number }}</span>
+            {% if url|default('') %}
+              <a class="pf-object-label__link" href="{{ url }}" target="_blank" rel="noopener">{{ 'View record'|t }}<span class="visually-hidden">{{ ', opens in a new tab'|t }}</span></a>
+            {% endif %}
+          </dd>
+        </div>
+      {% endif %}
+    </dl>
+  {% endif %}
+</div>

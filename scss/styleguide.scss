@@ -758,3 +758,12 @@
     --sg-dur: #{$dur};
   }
 }
+
+// Object labels plate: the full label beside the compact one, top-aligned.
+.pf-sg-labels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 2.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}

@@ -2113,7 +2113,7 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
  *
  * Add new ones at the end, so existing plates keep their numbers.
  */
-const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons', 'steps'];
+const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons', 'steps', 'labels'];
 
 /**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.

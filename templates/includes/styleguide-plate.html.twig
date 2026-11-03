@@ -6,8 +6,8 @@
  * guide_text block whose text has a paragraph that is only
  * "[styleguide:<plate>]" (palefire_preprocess_paragraph__guide_text()).
  *
- * - plate: overview, colors, type, grid, spacing, lines, motion, buttons or
- *   steps.
+ * - plate: overview, colors, type, grid, spacing, lines, motion, buttons,
+ *   steps or labels.
  * - number: its place on the page ("02").
  * - uid: id base.
  *
@@ -26,7 +26,8 @@
   lines: 'Lines and focus'|t,
   motion: 'Motion'|t,
   buttons: 'Buttons and links'|t,
-  steps: 'Steps'|t
+  steps: 'Steps'|t,
+  labels: 'Object labels'|t
 } %}
 <figure class="pf-sg-plate pf-sg-plate--{{ plate }}" aria-labelledby="{{ uid }}-name" data-pf-styleguide>
   <figcaption class="pf-sg-plate__head">
@@ -271,6 +272,35 @@
       <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ '1, 2, 3'|t }}</span><span class="pf-sg-line__token">pf-steps · numbers</span>{{ 'A sequence, done in order. Sub-steps take a duotone icon. One step alone has no number.'|t }}</p>
       <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'A, B, C'|t }}</span><span class="pf-sg-line__token">pf-paths · letters</span>{{ 'Alternatives: pick one. The Quick Start Guide.'|t }}</p>
       <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ '01, 02'|t }}</span><span class="pf-sg-line__token">pf-index-rule</span>{{ 'Sections of a page, never steps.'|t }}</p>
+    </div>
+  {% elseif plate == 'labels' %}
+    {# The object label (includes/object-label.html.twig,
+       _object-label.scss): full, beside a work; compact, on a card. Sample
+       records for the guide. #}
+    <div class="pf-sg-labels">
+      {% include '@palefire/includes/object-label.html.twig' with {
+        maker: 'John James Audubon'|t,
+        maker_dates: '1785–1851',
+        title: 'Carolina Parrot'|t,
+        date: '1825',
+        medium: 'Hand-coloured engraving and aquatint'|t,
+        dimensions: '99 × 66 cm',
+        credit: 'Louisiana and Lower Mississippi Valley Collections'|t,
+        call_number: 'QL674 .A9 1827',
+        url: 'https://lib.lsu.edu',
+      } only %}
+      {% include '@palefire/includes/object-label.html.twig' with {
+        maker: 'Unknown maker'|t,
+        title: 'Plantation ledger'|t,
+        date: '1820–1865',
+        call_number: 'Mss. 893',
+        compact: true,
+      } only %}
+    </div>
+    <div class="pf-sg-lines">
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Maker'|t }}</span><span class="pf-sg-line__token">mono · 12px .14em</span>{{ 'Who made it, with their dates.'|t }}</p>
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Title'|t }}</span><span class="pf-sg-line__token">18px 500 · heading colour</span>{{ 'The one bright line. Italic for a published work.'|t }}</p>
+      <p class="pf-sg-line__spec"><span class="pf-sg-title">{{ 'Record'|t }}</span><span class="pf-sg-line__token">hairline · mono</span>{{ 'Collection, then the call number, never broken, and the record ↗.'|t }}</p>
     </div>
   {% endif %}
 </figure>
