@@ -8,17 +8,20 @@
 // and dark sections work.
 
 // The map needs more than the guide's 52rem column: the guide lets it out to
-// 80rem and keeps the other blocks at 52rem.
+// 80rem and keeps the other blocks at 52rem. A variable, not `:has() > *`:
+// that form restyles the whole page whenever the page changes (see
+// _events-carousel.scss).
+:where(.pf-guide) > * {
+  max-width: var(--pf-guide-measure, none);
+}
+
 .pf-guide:has(> .pf-parishes) {
+  --pf-guide-measure: 52rem;
   max-width: none;
+}
 
-  > * {
-    max-width: 52rem;
-  }
-
-  > .pf-parishes {
-    max-width: 80rem;
-  }
+.pf-guide > .pf-parishes {
+  max-width: 80rem;
 }
 
 .pf-parishes {

@@ -19,6 +19,7 @@
   --pf-inquiry-muted: var(--pf-section-muted, var(--bs-secondary-color));
   --pf-inquiry-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-inquiry-muted)));
   --pf-inquiry-error: var(--bs-form-invalid-color);
+  --pf-inquiry-question: clamp(1.0625rem, 1rem + .35vw, 1.25rem);
   // The accordion's own tokens, which guides set on their wrapper.
   --pf-guide-rule: #{$pf-hairline};
   --pf-guide-accent: var(--pf-inquiry-accent);
@@ -53,7 +54,7 @@
 
 .pf-inquiry__accordion .pf-accordion__summary {
   color: var(--bs-heading-color, var(--pf-inquiry-fg));
-  font-size: clamp(1.0625rem, 1rem + .35vw, 1.25rem);
+  font-size: var(--pf-inquiry-question);
   text-wrap: pretty;
 
   &:focus {
@@ -161,9 +162,17 @@
 
 // Form ---------------------------------------------------------------------
 
+// The form's opening line, set as the first question beside it (the
+// accordion's rule, padding and type), so the columns start on one line.
 .pf-inquiry__intro {
-  margin: -.5rem 0 1.75rem;
-  color: var(--pf-inquiry-muted);
+  margin: 0 0 1.75rem;
+  padding: .85rem .25rem;
+  border-top: 1px solid var(--pf-guide-rule);
+  color: var(--bs-heading-color, var(--pf-inquiry-fg));
+  font-size: var(--pf-inquiry-question);
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: pretty;
 }
 
 // The panel is the container: the form can't query its own width.

@@ -1401,7 +1401,14 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
 // A photo sits beside the name and details from sm up, its top on the
 // name's cap height.
 @include media-breakpoint-up(sm) {
+  // A variable, not `:has() … > :not()`: that form restyles the whole page
+  // whenever the page changes (see _events-carousel.scss).
+  :where(.pf-person__details > :not(.field--type-image)) {
+    grid-column: var(--pf-person-details-col, auto);
+  }
+
   .pf-person:has(.field--type-image) {
+    --pf-person-details-col: 2;
     grid-template-columns: var(--pf-person-photo) minmax(0, 1fr);
     column-gap: 1.5rem;
     align-items: start;
@@ -1414,10 +1421,6 @@ $pf-paths-ping-end: 1970 + 1000 + 450;
       grid-column: 1;
       grid-row: 1 / span 6;
       margin: 0.2rem 0 0;
-    }
-
-    .pf-person__details > :not(.field--type-image) {
-      grid-column: 2;
     }
   }
 }

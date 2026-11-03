@@ -1980,13 +1980,16 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 // Reading lists (an Image group of readings) ---------------------------------
 // The full width of the gallery, not the guide's 52rem: a gallery body that
-// holds one opens up, and its other blocks keep the guide's measure.
-.pf-gallery__body:has(> .pf-exhibit-group--readings) {
-  max-width: none;
+// holds one opens up, and its other blocks keep the guide's measure. A
+// variable, not `:has() > :not()`: that form restyles the whole page whenever
+// the page changes (see _events-carousel.scss).
+:where(.pf-gallery__body > :not(.pf-exhibit-group--readings)) {
+  max-width: var(--pf-gallery-measure, none);
+}
 
-  > :not(.pf-exhibit-group--readings) {
-    max-width: 52rem;
-  }
+.pf-gallery__body:has(> .pf-exhibit-group--readings) {
+  --pf-gallery-measure: 52rem;
+  max-width: none;
 }
 
 // The heading and the Grid / List switch (the tile showcase's,

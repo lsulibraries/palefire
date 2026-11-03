@@ -437,18 +437,23 @@
 // 4.5:1 over any image, a white one included. Lines between rows: the
 // site's hairline, in white.
 // A day without an image keeps the ruled list above.
+// The children read variables the :has() sets, at no specificity: a :has()
+// rule ending in `> *` restyles the whole page whenever the page changes
+// (measured, 2026-11-03), even on pages without a carousel.
+:where(.pf-events-carousel .libcal-day__main) > * {
+  grid-area: var(--pf-day-area, auto);
+  min-width: var(--pf-day-min, auto);
+}
+
 .pf-events-carousel .libcal-day__main:has(> .libcal-day__feature) {
+  --pf-day-area: card;
+  --pf-day-min: 0;
   position: relative;
   display: grid;
   grid-template-areas: "card";
   overflow: hidden;
   isolation: isolate;
   color: #fff;
-
-  > * {
-    grid-area: card;
-    min-width: 0;
-  }
 
   > .libcal-day__feature {
     min-height: 100%;
