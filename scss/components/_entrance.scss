@@ -51,9 +51,11 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
+// The film's column fades in (2026-11-03: a fade, not a curtain from the
+// foot, which drew the eye from the title).
 @keyframes pf-split-open {
   from {
-    clip-path: inset(100% 0 0);
+    opacity: 0;
   }
 }
 
@@ -174,15 +176,16 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 
   // Split cover (_landing-features.scss, from 64rem): the film's column
-  // stays closed while js/hero-title-window.js plays the clip through the
-  // title's letters, then opens from its foot as the letters turn gold.
+  // stays clear while js/hero-title-window.js plays the clip through the
+  // title's letters, then fades in as the letters turn gold: the picture
+  // passes from the letters to the column.
   // CSS alone keeps the time, so the column opens on cue even when the
   // script doesn't run (the clip not ready, an old browser): the title is
   // then simply gold throughout. The scroll fade keeps its place in the
   // list.
   @container pf-cover (min-width: 64rem) {
     #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
-      animation: pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
+      animation: pf-split-open 1.6s ease-in-out 2.6s backwards;
     }
 
     // The stage (_landing-features.scss): held for the run, the page's
@@ -193,7 +196,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
           animation:
             pf-stage-hold linear both,
             pf-split-wipe linear both,
-            pf-split-open 1.2s $pf-enter-ease 2.6s backwards;
+            pf-split-open 1.6s ease-in-out 2.6s backwards;
           animation-timeline: scroll(root), scroll(root), auto;
           animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .45), normal;
         }
@@ -202,7 +205,8 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
 
     // With a poster (the cover's still), the title opens on it: the
     // still in the letters under a faint layer of their own gold, from the
-    // first paint, until the column opens and the gold fills them. The
+    // first paint, until the column has faded in (2.6s + 1.6s); then the
+    // gold fills them. The
     // clip's canvas, when it comes, lies over the same picture. Not with
     // more contrast or forced colours (below).
     #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title--still {
@@ -213,7 +217,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
       background-clip: text;
       animation:
         pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
-        pf-title-fill 1.2s $pf-enter-ease 2.6s backwards;
+        pf-title-fill 1.2s ease-in-out 4.2s backwards;
     }
   }
 

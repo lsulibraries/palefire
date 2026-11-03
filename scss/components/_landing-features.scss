@@ -4056,80 +4056,188 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 }
 
 // --- Highlights as a compact strip (review option 3) ---------------------------
-// The Quick Start comes first, so the banners step back to a strip: from
-// 44rem one row, each item a 16:10 picture with its category and then its
+// The Quick Start comes first, so from 44rem the banners step back to a
+// strip: one row, each item a 16:10 picture with its category and then its
 // title under it (no scrim, no shadow), every picture in colour at rest.
-// Under 44rem the blog post stays a line of text and the rest go two by two
-// at 16:10. Hover still brings the one in hand forward and dims the rest.
+// Hover still brings the one in hand forward and dims the rest. Under 44rem
+// they stay as they were, the words on the picture over a scrim, close set
+// two by two under the blog post's line, greying to colour as they pan
+// (2026-11-03: the tight grid matches the rest of the phone page).
 $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banner';
 
-#{$pf-strip} {
-  --pf-banner-pan: .75rem;
-
-  .pf-hero-banner__link {
-    --pf-banner-ratio: 16 / 10;
-    --pf-banner-shadow: none;
-    grid-template-rows: auto auto auto;
-    box-shadow: none;
-  }
-
-  // In colour from the first frame: the scroll timelines that greyed them
-  // are off, and their values held at "colour".
-  .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
-    --pf-banner-grey: 0;
-    --pf-banner-wait: 0;
-    animation: none;
-  }
-
-  .pf-hero-banner__media--date {
-    gap: .25rem;
-    padding: .75rem 1rem;
-  }
-
-  .pf-hero-banner__day {
-    font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
-  }
-}
-
-// The caption under the picture: the category, then the title, in the
-// page's colours. Not the blog post where it is a line of text (under 44rem).
-@mixin pf-strip-caption {
-  .pf-hero-banner__label {
-    grid-area: 2 / 1;
-    margin-top: .75rem;
-  }
-
-  .pf-hero-banner__title {
-    grid-area: 3 / 1;
-    align-self: start;
-    padding: .375rem 0 0;
-    border-bottom: 0;
-    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
-    line-height: 1.25;
-    color: var(--bs-heading-color, var(--pf-section-fg));
-    background: none;
-  }
-}
-
-#{$pf-strip}:not(.pf-hero-banner--blog) {
-  @include pf-strip-caption;
-}
-
-@container pf-cover (width < 44rem) {
-  #{$pf-split} > .pf-hero-banners {
-    gap: var(--pf-grid-gutter) clamp(.625rem, 2.5cqi, 1rem);
-  }
-}
-
 @container pf-cover (min-width: 44rem) {
-  #{$pf-strip}.pf-hero-banner--blog {
-    @include pf-strip-caption;
+  #{$pf-strip} {
+    --pf-banner-pan: .75rem;
+
+    .pf-hero-banner__link {
+      --pf-banner-ratio: 16 / 10;
+      --pf-banner-shadow: none;
+      grid-template-rows: auto auto auto;
+      box-shadow: none;
+    }
+
+    // In colour from the first frame: the scroll timelines that greyed
+    // them are off, and their values held at "colour".
+    .pf-hero-banner__media:not(.pf-hero-banner__media--date) {
+      --pf-banner-grey: 0;
+      --pf-banner-wait: 0;
+      animation: none;
+    }
+
+    .pf-hero-banner__media--date {
+      gap: .25rem;
+      padding: .75rem 1rem;
+    }
+
+    .pf-hero-banner__day {
+      font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+    }
+
+    // The caption under the picture: the category, then the title, in the
+    // page's colours.
+    .pf-hero-banner__label {
+      grid-area: 2 / 1;
+      margin-top: .75rem;
+    }
+
+    .pf-hero-banner__title {
+      grid-area: 3 / 1;
+      align-self: start;
+      padding: .375rem 0 0;
+      border-bottom: 0;
+      font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
+      line-height: 1.25;
+      color: var(--bs-heading-color, var(--pf-section-fg));
+      background: none;
+    }
   }
 
   #{$pf-split} > .pf-hero-banners {
     grid-template-columns: none;
     grid-auto-columns: minmax(0, 1fr);
     grid-auto-flow: column;
+  }
+}
+
+// --- Film bar ----------------------------------------------------------------
+// The film's foot, as a wall label (includes/landing.html.twig): the
+// building in mono capitals on the left, the video button as "❚❚ Pause"
+// on the right, white over a shade that rises from the foot (70% black
+// there, so 12px white keeps 4.5:1 on the palest frame). The button's full
+// name ("Pause background video", landing-video.js) is what is read; the
+// short word is what shows. At every width of the cover: on phones the
+// film's frame under the search carries it too.
+.pf-landing__bg-toggle-word {
+  display: none;
+}
+
+#{$pf-split} > .pf-landing__media .pf-landing__film-bar {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 3; // over the clip and the wash under the header
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 4rem clamp(1rem, 2.5cqi, 1.5rem) clamp(.5rem, 1.5cqi, .875rem);
+  color: $pf-white;
+  background-image: linear-gradient(to top, rgb(0 0 0 / .7), rgb(0 0 0 / .4) 45%, rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+#{$pf-split} .pf-landing__film-caption {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--pf-toc-font, monospace);
+  font-size: var(--pf-mono-label);
+  letter-spacing: .14em;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+// The button as a line of text: no frame, glass or shadow, 44px tall to
+// tap; the clip's progress still fills under it in gold.
+#{$pf-split} .pf-landing__film-bar .pf-landing__bg-toggle {
+  --size: 2.75rem;
+  position: relative;
+  top: auto;
+  inset-inline-end: auto;
+  flex: none;
+  flex-direction: row;
+  gap: .5rem;
+  min-width: 0;
+  padding: 0 .25rem;
+  margin-inline-end: -.25rem;
+  border: 0;
+  border-radius: 0;
+  font-size: var(--pf-mono-label);
+  letter-spacing: .14em;
+  color: $pf-white;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  pointer-events: auto;
+
+  &:hover {
+    color: var(--pf-g-highlight, #{$pf-gold});
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-toc-accent, #{$pf-gold});
+    outline-offset: 0;
+  }
+
+  .pf-landing__bg-toggle-icon {
+    width: .75rem;
+    height: .75rem;
+  }
+
+  // Read, never shown (the hover and focus reveal is the dock's).
+  .pf-landing__bg-toggle-label,
+  &:is(:hover, :focus-visible) .pf-landing__bg-toggle-label {
+    position: absolute;
+    width: 1px;
+    max-width: none;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pf-landing__bg-toggle-word {
+    display: grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  &[data-state='playing'] .pf-landing__bg-toggle-word-play,
+  &[data-state='paused'] .pf-landing__bg-toggle-word-pause {
+    visibility: hidden;
+  }
+}
+
+// A focused button shows its film, whatever the entrance or the stage is
+// doing to it (an animation gives way to !important).
+#{$pf-split} > .pf-landing__media:has(.pf-landing__bg-toggle:focus-visible) {
+  opacity: 1 !important;
+  clip-path: none !important;
+}
+
+@media (forced-colors: active) {
+  #{$pf-split} > .pf-landing__media .pf-landing__film-bar {
+    color: CanvasText;
+    background: Canvas;
+  }
+
+  #{$pf-split} .pf-landing__film-bar .pf-landing__bg-toggle {
+    color: ButtonText;
   }
 }
 

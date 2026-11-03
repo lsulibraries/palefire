@@ -2,8 +2,9 @@
  * @file
  * The title as a window (split cover, _landing-features.scss): on the
  * first load the cover's clip plays inside the letters of the page title,
- * then the letters turn gold as the film's column opens beside them
- * (_entrance.scss, pf-split-open).
+ * then, once the film's column has faded in beside them (_entrance.scss,
+ * pf-split-open), the letters turn gold: the picture passes from the
+ * letters to the column, and only then do they take their colour.
  *
  * A canvas laid exactly over the <h1> draws the clip's current frame,
  * a faint layer of the title's own gold over it (so the letters never sink
@@ -21,7 +22,7 @@
 (function (Drupal, once) {
   const OPEN = 'pf-split-open'; // the column's keyframes (_entrance.scss)
   const FADE_IN = 300; // ms
-  const FADE_OUT = 1200; // ms, as long as the column's opening
+  const FADE_OUT = 1200; // ms, the letters' gold (_entrance.scss, pf-title-fill)
   const VEIL = 0.22; // the gold under the clip's frame
 
   const skip = () => {
@@ -74,6 +75,7 @@
         const open = media.getAnimations().find((a) => a.animationName === OPEN);
         if (!open || !open.effect) return;
         const delay = open.effect.getTiming().delay || 0;
+        const span = Number(open.effect.getTiming().duration) || 0;
         // Time left before the column opens; too little and the effect would
         // only flash.
         const until = () => delay - (open.currentTime || 0);
@@ -138,7 +140,8 @@
           };
           canvas.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE_IN, easing: 'ease-out' });
           canvas.animate([{ opacity: 1 }, { opacity: 0 }], {
-            duration: FADE_OUT, delay: left, easing: 'ease-in-out', fill: 'forwards',
+            // Held until the column has faded in.
+            duration: FADE_OUT, delay: left + span, easing: 'ease-in-out', fill: 'forwards',
           }).finished.then(done, done);
         };
 
