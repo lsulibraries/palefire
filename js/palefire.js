@@ -91,22 +91,63 @@
    * page is scrolled. A 1px probe at the page's top, watched by an
    * IntersectionObserver: reading scrollY on scroll forced a full style
    * pass every frame (the scroll-driven headings leave it stale).
+   * The hero's stage (_landing-features.scss) holds the first screen still
+   * for a run of scroll while the film is swept away and the Highlights
+   * come in, so nothing passes under the bars until it lets go: a second
+   * probe, a run down the hero's lead, keeps them clear till then. Without
+   * the stage its offset is unset and the probe sits far above the page,
+   * so it never holds them back.
+   * A third, a screen further down, marks <html> .pf-hero-past once the
+   * hero's first screen has gone up off the page: the TOC rail waits for
+   * it (_landing-features.scss).
    */
+  const stuck = { page: false, stage: null };
+  const applyStuck = () => {
+    const held = stuck.stage && stuck.stage.probe.isConnected && !stuck.stage.past;
+    root.classList.toggle('pf-bar-stuck', stuck.page && !held);
+  };
+  const makeProbe = (top) => {
+    const probe = document.createElement('div');
+    probe.setAttribute('aria-hidden', 'true');
+    probe.style.cssText = `position:absolute;top:${top};left:0;width:1px;height:1px;pointer-events:none;`;
+    return probe;
+  };
+  // Calls back with true once the probe has gone up off the screen (not
+  // while it is still below it).
+  const watchPast = (probe, onChange) => {
+    new IntersectionObserver(([entry]) => {
+      onChange(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }).observe(probe);
+  };
+
   Drupal.behaviors.palefireBarStuck = {
-    attach() {
+    attach(context) {
       once('pf-bar-stuck', 'html').forEach(() => {
         if (!('IntersectionObserver' in window)) {
+          root.classList.add('pf-hero-past');
           root.classList.toggle('pf-bar-stuck', window.scrollY > 1);
           window.addEventListener('scroll', () => root.classList.toggle('pf-bar-stuck', window.scrollY > 1), { passive: true });
           return;
         }
-        const probe = document.createElement('div');
-        probe.setAttribute('aria-hidden', 'true');
-        probe.style.cssText = 'position:absolute;top:1px;left:0;width:1px;height:1px;pointer-events:none;';
+        const probe = makeProbe('1px');
         document.body.prepend(probe);
         new IntersectionObserver(([entry]) => {
-          root.classList.toggle('pf-bar-stuck', !entry.isIntersecting);
+          stuck.page = !entry.isIntersecting;
+          applyStuck();
         }).observe(probe);
+      });
+      if (!('IntersectionObserver' in window)) return;
+      once('pf-bar-stuck-stage', '.pf-landing--cover > .pf-landing__lead--hero', context).forEach((lead) => {
+        const probe = makeProbe('calc(var(--pf-stage-run, -100000px) + 1px)');
+        const hero = makeProbe('calc(var(--pf-stage-run, 0px) + 100svh)');
+        lead.prepend(probe, hero);
+        const state = { probe, past: false };
+        stuck.stage = state;
+        watchPast(probe, (past) => {
+          state.past = past;
+          applyStuck();
+        });
+        watchPast(hero, (past) => root.classList.toggle('pf-hero-past', past));
       });
     },
   };

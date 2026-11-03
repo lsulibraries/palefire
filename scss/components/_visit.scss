@@ -72,7 +72,7 @@
   flex-direction: column;
   gap: .875rem;
   width: 100%;
-  max-width: 1280px;
+  max-width: var(--pf-col-max, 1280px);
   margin: clamp(1.5rem, 3vw, 2rem) auto 0;
   padding: 1.25rem 1.25rem 1.125rem;
   border: 1px solid var(--pf-visit-rule);

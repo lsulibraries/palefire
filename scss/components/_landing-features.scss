@@ -49,7 +49,7 @@
 // bar's own .375rem padding), so each sits square in its corner.
 .pf-landing--hero {
   --pf-hero-gutter: clamp(2rem, 6vw, 6rem);
-  --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - 1280px) / 2);
+  --pf-hero-inset: max(var(--pf-hero-gutter), (100% + 2 * var(--pf-section-pad-inline, 0px) - var(--pf-col-max, 1280px)) / 2);
 }
 
 // The bar's measures, on every landing: the older Bento search landing
@@ -547,7 +547,7 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
   --pf-cover-space: clamp(3rem, 9vw, 7.5rem); // above the title
   --pf-cover-top: calc(var(--pf-landing-bar-h) + var(--pf-cover-space));
   --pf-cover-foot: clamp(2.5rem, 5vw, 4rem); // under the search, the wash's solid foot
-  --pf-cover-gutter: max(var(--pf-hero-gutter), (100% - 1280px) / 2);
+  --pf-cover-gutter: max(var(--pf-hero-gutter), (100% - var(--pf-col-max, 1280px)) / 2);
   --pf-cover-bg: var(--pf-g-bg, var(--bs-body-bg));
   // The landing's washes (_landing, _visit, _building-map) are off here:
   // the band has its own.
@@ -2470,7 +2470,7 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
   position: relative;
   container: pf-features / inline-size;
   width: 100%;
-  max-width: 1280px;
+  max-width: var(--pf-col-max, 1280px);
   margin: clamp(3rem, 7vw, 6rem) auto 0;
   padding: 1.5rem;
   border: 1px solid #{$pf-hairline};
@@ -3476,8 +3476,22 @@ html#{$pf-system} .pf-sections {
 }
 
 html#{$pf-system} .pf-sections > .pf-section:not(.pf-section--flush) {
-  --pf-hero-col-pad: max(var(--pf-hero-pad-base), (100cqi - 1280px) / 2);
+  --pf-hero-col-pad: max(var(--pf-hero-pad-base), (100cqi - var(--pf-col-max, 1280px)) / 2);
   --pf-section-pad-inline: var(--pf-hero-col-pad);
+}
+
+// The cover (2026-11-03): no rail beside the hero, so the column takes the
+// header's grid instead. Its gutter is the header's side padding
+// (--pf-header-gutter), so every heading and text block starts on the LSU
+// Libraries logo's and the breadcrumb's left edge at every width, not a
+// near miss 28px in (at 1440 the centred 1280px column started at 76px, the
+// logo at 48px). The column grows to 1824px (1920 less the two 48px
+// gutters) and is centred only past that, where the gap is plainly wide.
+// When the rail appears below the hero it lays over the gutter: its line
+// sits 20px from the edge, clear of the text.
+html#{$pf-system} .pf-sections:has(.pf-landing--cover) {
+  --pf-hero-pad-base: var(--pf-header-gutter);
+  --pf-col-max: 1824px;
 }
 
 html[data-pf-hero] .pf-landing--hero {
@@ -4241,10 +4255,31 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
+// --- The TOC waits for the hero -------------------------------------------------
+// On the hero the page's own first screen is the contents: the TOC rail
+// (lg and up) and its Contents button (below lg) come in once that screen,
+// and the stage's run with it, has gone up off the page (js/palefire.js
+// marks <html> .pf-hero-past). Hidden, not just faded, so they leave the
+// tab order with it. Only with JS (html.js), so without it they are there
+// from the start; an open offcanvas is never hidden.
+:root.js:has(.pf-landing--cover):not(.pf-hero-past) {
+  .pf-modular__toc-toggle {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  @include media-breakpoint-up(lg) {
+    .pf-sidebar.pf-modular__sidebar .offcanvas-body {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+}
+
 // --- Scroll: the stage -------------------------------------------------------
 // From 64rem, on a window at least 40rem tall, with motion and scroll
 // timelines: the first screen is a stage that holds for one more screen of
-// scroll (--pf-stage-run). Over its first part the page's colour sweeps
+// scroll (--pf-stage-run). Over its first 30% the page's colour sweeps
 // right across the film (its clip from the left edge), so the type's field
 // takes the whole width; then the Highlights come into the film's third
 // one after another, a vertical list (picture, category, title). Then the
@@ -4319,20 +4354,23 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           padding-inline: var(--pf-grid-gutter) var(--pf-cover-gutter);
         }
 
-        // (In place by 85% of the run, so the list rests a moment before
-        // the stage moves on.)
+        // One after another, each in a short window of its own (8% of the
+        // run, 10% apart) that eases to rest, so wherever the page stops
+        // the list is whole items in and the rest not begun, never five
+        // half-faded. All in by 80% of the run: the list rests before the
+        // stage moves on.
         // Each a row: the picture at 4:3 on the left, the category and the
         // title beside it (two lines at most).
         > .pf-hero-banners > .pf-hero-banner {
-          animation: pf-split-appear linear both;
+          animation: pf-split-appear ease-out both;
           animation-timeline: scroll(root);
 
           @for $i from 1 through 5 {
             &:nth-child(#{$i}) {
               animation-delay: 0s;
               animation-range:
-                calc(var(--pf-stage-run) * #{.35 + ($i - 1) * .09})
-                calc(var(--pf-stage-run) * #{.55 + ($i - 1) * .075});
+                calc(var(--pf-stage-run) * #{.32 + ($i - 1) * .1})
+                calc(var(--pf-stage-run) * #{.4 + ($i - 1) * .1});
             }
           }
 
@@ -4375,9 +4413,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
       }
 
       html:not(.pf-fade):not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__media {
-        animation: pf-stage-hold linear both, pf-split-wipe linear both;
+        animation: pf-stage-hold linear both, pf-split-wipe ease-out both;
         animation-timeline: scroll(root), scroll(root);
-        animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .45);
+        animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .3);
       }
     }
   }

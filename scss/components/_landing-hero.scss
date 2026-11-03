@@ -58,7 +58,7 @@ $pf-hero-media-wash: .8 !default;
   }
 
   .pf-landing--hero .pf-map__stage {
-    margin-inline: calc(-1 * max(0px, min(var(--pf-hero-gutter) - var(--pf-section-pad-inline, 0px), (1280px - 100cqi) / 2)));
+    margin-inline: calc(-1 * max(0px, min(var(--pf-hero-gutter) - var(--pf-section-pad-inline, 0px), (var(--pf-col-max, 1280px) - 100cqi) / 2)));
   }
 }
 

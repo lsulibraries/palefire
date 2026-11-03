@@ -76,9 +76,9 @@
         if (!open || !open.effect) return;
         const delay = open.effect.getTiming().delay || 0;
         const span = Number(open.effect.getTiming().duration) || 0;
-        // Time left before the column opens; too little and the effect would
-        // only flash.
-        const until = () => delay - (open.currentTime || 0);
+        // Time left until the column is in, when the letters turn gold; too
+        // little and the effect would only flash.
+        const until = () => delay + span - (open.currentTime || 0);
         if (until() < FADE_IN + 800) return;
 
         const canvas = document.createElement('canvas');
@@ -141,7 +141,7 @@
           canvas.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE_IN, easing: 'ease-out' });
           canvas.animate([{ opacity: 1 }, { opacity: 0 }], {
             // Held until the column has faded in.
-            duration: FADE_OUT, delay: left + span, easing: 'ease-in-out', fill: 'forwards',
+            duration: FADE_OUT, delay: left, easing: 'ease-in-out', fill: 'forwards',
           }).finished.then(done, done);
         };
 

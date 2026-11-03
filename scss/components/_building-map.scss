@@ -595,7 +595,7 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
    the h3's type. */
 .pf-landing__heading .pf-landing__label { display: block; font: inherit; color: inherit; margin: 0; }
 /* Same 1280px cap as the form; also the container .pf-map's layout queries. */
-.pf-landing__visit { position: relative; width: 100%; max-width: 1280px; margin: clamp(2.5rem, 6vw, 4.5rem) auto 0; container-name: pf-map; container-type: inline-size; }
+.pf-landing__visit { position: relative; width: 100%; max-width: var(--pf-col-max, 1280px); margin: clamp(2.5rem, 6vw, 4.5rem) auto 0; container-name: pf-map; container-type: inline-size; }
 .pf-landing__bg-video { transition: filter .8s ease, transform .8s ease; }
 .pf-landing__media::after { transition: background-color .8s ease; }
 // .pf-landing.is-map-in-view .pf-landing__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }

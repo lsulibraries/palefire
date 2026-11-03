@@ -441,7 +441,7 @@ html.pf-a11y-motion .pf-reveal--scroll {
 
   > .pf-landing__lead {
     width: 100%;
-    max-width: 1280px;
+    max-width: var(--pf-col-max, 1280px);
     margin-inline: auto;
   }
 }
