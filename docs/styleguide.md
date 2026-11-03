@@ -143,6 +143,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-03:** Cover (`$pf-split`): `.pf-landing__hours-link` extends `%pf-landing-label`; `.pf-landing__hours-label::after` is a silent `\00b7` once `.pf-landing__hours-today` is filled.
 - **2026-11-03:** `.pf-landing__account-title` removed (template and styles); `.pf-landing__account` is a `div`, no `aria-labelledby`.
 - **2026-11-03:** `.pf-landing__account-label` removed (template and styles); `.pf-landing__account-title` has no top margin. `.pf-landing__account-note a::after`: `\2192` (`\2190` in RTL), silent, .2em nudge on hover/focus, still under reduced motion.
 - **2026-11-03:** Ask us tab from 80rem of `pf-cover`: `.pf-quick-guide__panel:has(> .pf-tabs__content > .pf-inquiry)` sets the content and `.pf-inquiry` to `display: contents`; `.pf-inquiry__faqs` columns 1–2 row 4, Before you ask row 5, `.pf-inquiry__panel` columns 3–5 from row 4 (level with the FAQs, same top margin), sticky at `--pf-header-h` + `--pf-landing-bar-h` + 1.5rem on windows ≥ 52rem tall.

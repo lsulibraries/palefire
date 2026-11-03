@@ -3890,6 +3890,20 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     padding-inline: 0;
   }
 
+  // Today's hours in the status's voice (2026-11-03): one line, one size,
+  // so "Open now · 9 AM–5 PM today" reads as a single label, not a label
+  // and a 16px sentence. The underline still marks the link.
+  .pf-landing__hours-link {
+    @extend %pf-landing-label;
+  }
+
+  // In one voice the two would run together: the line's middle dot (as
+  // before the building) between them, once LibCal has filled the hours.
+  .pf-landing__hours:not(:has(.pf-landing__hours-today:empty)) > .pf-landing__hours-label::after {
+    content: "\00b7" / "";
+    margin-inline-start: .25rem;
+  }
+
   // The search on the page: the surface fill and the hairline frame, no
   // shadow (it was there to lift the field off the video).
   .pf-landing__field {
