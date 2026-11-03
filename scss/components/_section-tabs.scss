@@ -76,10 +76,11 @@
   --pf-tabs-hover: var(--pf-g-hover, var(--bs-emphasis-color));
   --pf-tabs-light-on: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 
-  // Soft: short offsets, wide blurs, so the edges shade rather than outline.
-  --pf-tabs-raise: 2px 3px 8px var(--pf-tabs-shade), -2px -2px 6px var(--pf-tabs-light);
-  --pf-tabs-lift: 5px 6px 16px var(--pf-tabs-shade), -3px -3px 9px var(--pf-tabs-light);
-  --pf-tabs-well: inset 2px 3px 10px var(--pf-tabs-shade), inset -2px -2px 8px var(--pf-tabs-light);
+  // The mockup's relief: the well's lit lower-right wall as deep as its
+  // shaded upper-left one, so the track reads as cut into the surface.
+  --pf-tabs-raise: 3px 3px 6px var(--pf-tabs-shade), -2px -2px 5px var(--pf-tabs-light);
+  --pf-tabs-lift: 6px 6px 14px var(--pf-tabs-shade), -3px -3px 8px var(--pf-tabs-light);
+  --pf-tabs-well: inset 4px 4px 9px var(--pf-tabs-shade), inset -4px -4px 9px var(--pf-tabs-light);
 
   --pf-tabs-ease: cubic-bezier(.22, 1, .36, 1);
   --pf-tabs-snap: cubic-bezier(.34, 1.45, .64, 1);
