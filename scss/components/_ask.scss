@@ -524,11 +524,12 @@ textarea.pf-inquiry__control {
   width: min(100%, 17.5rem);
   min-height: 2.75rem;
   padding: 0 1rem;
-  border: 1px solid var(--pf-section-border, var(--pf-g-scroll, currentColor));
+  border: 1px solid #{$pf-hairline};
   border-radius: 0;
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   background: transparent;
   font-size: var(--pf-mono-ui);
+  font-weight: $pf-button-weight;
   letter-spacing: .12em;
   text-align: start;
   text-decoration: none;

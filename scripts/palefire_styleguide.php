@@ -207,7 +207,7 @@ HTML),
 
 $gallery('Spacing and lines', 'spacing', [
   $text(<<<'HTML'
-<p>Space is the main divider. Where a line is needed it is the hairline, a fifth of the section's line colour, like the rows of the opening hours. Borders that mark a control keep a full 3:1, and every focusable thing shows a clear ring.</p>
+<p>Space is the main divider. Where a line is needed it is the hairline, a fifth of the section's line colour, like the rows of the opening hours. Fields and buttons without words keep a full 3:1, and every focusable thing shows a clear ring.</p>
 <p>[styleguide:spacing]</p>
 <p>[styleguide:lines]</p>
 HTML),
@@ -225,7 +225,7 @@ HTML),
 
 $gallery('Buttons and links', 'buttons', [
   $text(<<<'HTML'
-<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is unfilled with a control border. Words are mono capitals. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
+<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is unfilled in a hairline frame. Words are mono capitals. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
 <p>[styleguide:buttons]</p>
 HTML),
   $note(<<<'HTML'

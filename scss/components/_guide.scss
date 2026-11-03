@@ -855,7 +855,7 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
   min-height: 3rem;
   margin: 0 0 1.25rem;
   padding: 0.75rem 1.25rem; // the label wraps on a phone
-  font: 700 var(--pf-mono-ui) / 1.5 var(--pf-guide-mono);
+  font: $pf-button-weight var(--pf-mono-ui) / 1.5 var(--pf-guide-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bs-emphasis-color);

@@ -66,8 +66,9 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
     Both are pulled toward the swatch with the page colour in the `color`
     blend, which keeps lightness, so it never moves a contrast. Grey on a
     banner means "not this one", so a cover never goes fully grey.
-- **Lines:** every rule, row and frame is `$pf-hairline` (20%). Control
-  borders that identify a control use `--pf-section-border` at 3:1.
+- **Lines:** every rule, row and frame is `$pf-hairline` (20%), and so is a
+  button with words, which its label identifies. Fields and wordless buttons
+  keep `--pf-section-border` at 3:1.
 - **Type:**
   - Roboto everywhere.
   - Playfair Display for exhibition titles only, at display sizes.
@@ -143,6 +144,9 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-03:** Section tabs: `[data-pf-tabs]` animates its height between panels (`GLIDE_MS` 450, the entrance's easing, `overflow-y: clip` while it runs, released at the end; `js/section-tabs.js`). Not for links, Find or reduced motion. `placeMargin()` sets each panel's `scroll-margin-top` to the tab bar's height plus the sticky strip and 1rem.
+- **2026-11-03:** Split cover: `--pf-split-title` holds the title's size; `.pf-landing__intro` is capped at 4.68 times it, the width of "Collections" (was 44ch).
+- **2026-11-03:** Buttons: `$pf-button-weight` (500; Consolas and Monaco have no 500, so regular) on both tiers and the buttons with their own rules. Secondary edges are `$pf-hairline`, gold on hover and focus as before: `%pf-button-secondary`, `.pf-quick-guide__link`, the cover's `.pf-visit__link`, `.pf-inquiry__button`/`__submit`, `.pf-landing__account-button`, `.pf-exhibit-button`. Fields and wordless buttons keep 3:1.
 - **2026-11-03:** Footer curtain: `.pf-swup` shadow `0 2rem 3rem -1.5rem rgb(0 0 0 / .35)` (nothing above its top edge). Section tabs: `--pf-tabs-light-glow`, `--pf-tabs-light-bloom`, `--pf-tabs-light-edge` on the lit `.pf-tabs__dot`; light styles (`html:not(.pf-reading-dark)`) set `--pf-tabs-light-on: #fff7e8`, glow `rgb(255 172 64 / .9)`, bloom `rgb(255 190 110 / .5)`, edge `rgb(0 0 0 / .18)`.
 - **2026-11-03:** Cover (`$pf-split`): `.pf-landing__hours-link` extends `%pf-landing-label`; `.pf-landing__hours-label::after` is a silent `\00b7` once `.pf-landing__hours-today` is filled.
 - **2026-11-03:** `.pf-landing__account-title` removed (template and styles); `.pf-landing__account` is a `div`, no `aria-labelledby`.

@@ -4,11 +4,11 @@
 // - %pf-button-primary: the swatch accent, filled, ink on it, as the
 //   footer's Plan a research visit and the landing's Search. One per view.
 //   Hover and focus turn it to the text color.
-// - %pf-button-secondary: unfilled, the control line (--pf-section-border,
-//   3:1) as its edge; hover and focus turn words and edge gold.
+// - %pf-button-secondary: unfilled, in a hairline frame (its words name it,
+//   so the edge needn't reach 3:1); hover and focus turn words and edge gold.
 // - %pf-button-arrow: an arrow after the words. → stays on the site;
 //   ↗ (target="_blank") leaves it. It steps the way it points on hover.
-// Mono capitals at --pf-mono-ui (13px) and .12em, square, 3rem tall (dense
+// Mono capitals at --pf-mono-ui (13px), $pf-button-weight and .12em, square, 3rem tall (dense
 // rows set 2.75rem). Text links (index rules, Visit) are mono capitals at
 // --pf-mono-label, underlined at .35em, with the same arrows.
 
@@ -36,7 +36,7 @@
   padding: .5rem 1.375rem;
   font-family: var(--pf-landing-label, var(--pf-toc-font, 'Consolas', 'Monaco', monospace));
   font-size: var(--pf-mono-ui);
-  font-weight: 700;
+  font-weight: $pf-button-weight;
   line-height: 1.2;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -87,7 +87,7 @@
   @extend %pf-button;
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   background-color: transparent;
-  border-color: var(--pf-section-border, var(--pf-g-scroll, currentColor));
+  border-color: #{$pf-hairline};
 
   &:hover,
   &:focus-visible {

@@ -26,6 +26,12 @@
  *   10ms tap when a tab is chosen by tap, key or drag, and a 5ms tick as a
  *   dragged key passes each slot, like a detent. Never for a link or Find.
  *
+ * - Landing: a link to a panel's own id, or a reload at one, stops with the
+ *   tab bar in view (placeMargin).
+ * - Height: panels differ a lot (on /v2/special 544, 644 and 1264px at 1440),
+ *   so the control's height glides from one to the next with the panel's
+ *   entrance; everything under it moves with it instead of snapping.
+ *
  * Off for prefers-reduced-motion and Reduce motion (html.pf-a11y-motion):
  * everything switches at once, without haptics. Without JS the template shows every panel
  * under its own heading; this script adds .is-ready and hides the rest.
@@ -38,6 +44,7 @@
   const findable = 'onbeforematch' in document.documentElement;
   const LEAVE_MS = 120;
   const SNAP_MS = 520;
+  const GLIDE_MS = 450; // the panel's entrance (pf-tabs-enter)
   const PARTS_SKIP = '.pf-inquiry';
   const TAP_MS = 10;
   const TICK_MS = 5;
@@ -84,6 +91,7 @@
       return;
     }
     let swap = null;
+    let glide = null;
 
     root.style.setProperty('--pf-tabs-count', tabs.length);
     if (findable) {
@@ -108,7 +116,42 @@
       key.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
     }
 
+    // A link to a panel's own id (the address a tab writes, so a reload too)
+    // stops with the tab bar in view, not above the window: a margin as tall
+    // as the bar, past the sticky breadcrumb strip. A link to something inside
+    // a panel (#ask-question) still lands on that.
+    function placeMargin() {
+      const shown = panels.find((panel) => !panel.hasAttribute('hidden'));
+      if (!shown) {
+        return;
+      }
+      const strip = document.querySelector('.pf-landing__bar');
+      const margin = shown.getBoundingClientRect().top - list.getBoundingClientRect().top
+        + (strip ? strip.offsetHeight : 0) + 16;
+      panels.forEach((panel) => {
+        panel.style.scrollMarginTop = Math.round(margin) + 'px';
+      });
+    }
+
+    // Clipped while it runs (clip, not hidden: no scroll container, so what
+    // is pinned inside stays pinned). The height is released at the end.
+    function glideFrom(before) {
+      const after = root.offsetHeight;
+      if (Math.abs(after - before) < 2) {
+        return;
+      }
+      glide = root.animate([
+        { height: before + 'px', overflowY: 'clip' },
+        { height: after + 'px', overflowY: 'clip' },
+      ], { duration: GLIDE_MS, easing: 'cubic-bezier(.22, 1, .36, 1)' });
+    }
+
     function show(panel, dir) {
+      // Measured first: mid-glide, this is the height it has reached.
+      const before = root.offsetHeight;
+      if (glide) {
+        glide.cancel();
+      }
       panels.forEach((other) => {
         if (other !== panel) {
           hide(other);
@@ -121,6 +164,7 @@
       if (!still()) {
         void panel.offsetWidth;
         panel.classList.add('is-entering');
+        glideFrom(before);
       }
     }
 
@@ -181,6 +225,9 @@
       if (swap) {
         clearTimeout(swap);
         swap = null;
+      }
+      if (glide) {
+        glide.cancel();
       }
       panels.forEach((panel, i) => {
         if (i === index) {
@@ -341,10 +388,15 @@
       }
     });
     placeKey();
+    placeMargin();
     requestAnimationFrame(() => requestAnimationFrame(() => key.classList.remove('is-instant')));
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(placeKey);
+      document.fonts.ready.then(() => {
+        placeKey();
+        placeMargin();
+      });
     }
+    window.addEventListener('resize', placeMargin);
   }
 
   // Opens the panel holding the element with this id, if it is in one.

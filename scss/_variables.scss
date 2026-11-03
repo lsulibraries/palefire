@@ -60,9 +60,13 @@ $pf-content-max:     1280px; // Landing search form + building map cap; the page
 // frame (rows, rules, panel edges). A share of the section's line color
 // (--pf-section-border, 3:1), so it follows light and dark sections and
 // every reading color; --pf-hairline-strength (20%, _base.scss) goes to
-// 100% under Settings > High contrast. Control borders that identify a
-// control keep --pf-section-border (WCAG 1.4.11).
+// 100% under Settings > High contrast. Fields and wordless buttons, whose
+// border identifies the control, keep --pf-section-border (WCAG 1.4.11); a
+// button with words is named by them and takes the hairline.
 $pf-hairline: color-mix(in srgb, var(--pf-section-border, #6c757d) var(--pf-hairline-strength, 20%), transparent);
+// Buttons' words. Consolas and Monaco have no 500, so they set regular; the
+// readable font in Settings has a true medium.
+$pf-button-weight: 500;
 $pf-snap-breakpoint: md;   // Full-page scroll-snap sections from this width up.
 $pf-fade-duration:   .45s; // Fade duration (the style guide's motion specimen).
 $pf-reveal-from:     .85;  // Scroll reveals start at this opacity, never 0: content is readable before it moves.

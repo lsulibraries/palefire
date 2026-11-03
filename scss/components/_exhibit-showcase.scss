@@ -15,8 +15,8 @@
 // and the events carousel's square Previous / Next with a drawn arrow
 // (_events-carousel.scss). Colors follow the page, its dark sections and
 // the reading swatches (--pf-g-*): text sits on the surface, never on a
-// cover. Control boundaries are the text color (3:1, WCAG 1.4.11), lines
-// the hairline.
+// cover. Wordless controls' boundaries are the text color (3:1, WCAG
+// 1.4.11), lines and worded buttons the hairline.
 
 $pf-showcase-ease: cubic-bezier(.22, 1, .36, 1);
 $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
