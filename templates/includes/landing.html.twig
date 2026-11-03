@@ -465,15 +465,20 @@
       {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
-      <div class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
-        {# Index rule 01, "Full guide" at its end. The full name keeps the
-           visible words first (WCAG 2.5.3) and says which guide; with its
-           own text or URL (the Link field) the link names itself. #}
+      {# Index rule 01, "Full guide" at its end. The full name keeps the
+         visible words first (WCAG 2.5.3) and says which guide; with its
+         own text or URL (the Link field) the link names itself. #}
+      {% set guide_rule %}
         {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_url ? {
           url: guide_url,
           text: quick_guide.link_text ?: 'Full guide'|t,
           hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
         } : {}) }}
+      {% endset %}
+      <div class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
+        {% if not quick_tabs %}
+          {{ guide_rule }}
+        {% endif %}
         {% set quick_body %}
         {# The TOC label is the heading's own text once the title is set. #}
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}" data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}">{{ quick_title }}</h2>
@@ -548,7 +553,27 @@
         </div>
         {% endset %}
         {% if quick_tabs %}
-          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body } only %}
+          {# The tab bar first, on the band's top edge (_landing-features.scss),
+             then each panel under its own rule 01, which names what is open
+             and links on from it: Research the guide's rule, Study the Quiet
+             Study room, Ask us AskUs; another tab its label alone. #}
+          {% set tab_links = {
+            study: { label: 'Study at Hill'|t, url: '/v2/special/quietstudy', text: 'Quiet Study room'|t },
+            ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special', text: 'More ways to ask'|t, external: true, hidden: ' (opens in a new tab)'|t },
+          } %}
+          {% set tab_rules = {} %}
+          {% for tab in quick_tabs.tabs %}
+            {% set tab_link = tab_links[tab.id] ?? {} %}
+            {% set tab_rule %}
+              {%- if tab.quick -%}
+                {{ guide_rule }}
+              {%- else -%}
+                {{ pf.index_rule(hero_index.guide, tab_link.label ?? tab.label, tab_link) }}
+              {%- endif -%}
+            {% endset %}
+            {% set tab_rules = tab_rules|merge({ (tab.id): tab_rule }) %}
+          {% endfor %}
+          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules } only %}
         {% else %}
           {{ quick_body }}
         {% endif %}

@@ -2969,6 +2969,31 @@ html.pf-a11y-motion {
     --pf-quick-band-top: calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
     padding: calc(2 * var(--pf-quick-band-top)) 0 var(--pf-quick-band-top);
   }
+
+  // With the page's Section tabs (_palefire_hero_tabs()): the tab bar opens
+  // the guide, --pf-hero-gap under the banners' labels (the space over any
+  // index rule), and the band's top edge runs through its track's centre
+  // line (the tab tokens, _section-tabs.scss), so the control sits on the
+  // band it switches. Each panel then opens with its own rule 01. The foot
+  // keeps the guide's usual space.
+  .pf-landing__lead--hero > .pf-quick-guide--tabs {
+    --pf-quick-band-top: calc(var(--pf-hero-gap) + var(--pf-tabs-label-h) + var(--pf-tabs-rail-h) / 2);
+    padding: var(--pf-hero-gap) 0 calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
+  }
+}
+
+// The Quick Start's tab bar: no room of its own above (the guide's top space
+// sets it), centred in the column from md, as wide as the control allows
+// (_section-tabs.scss); full width below.
+.pf-quick-guide > .pf-tabs.is-ready > .pf-tabs__list {
+  margin-top: 0;
+}
+
+@include media-breakpoint-up(md) {
+  .pf-quick-guide > .pf-tabs.is-ready > .pf-tabs__list {
+    max-width: calc(var(--pf-tabs-count, 3) * 13.333rem);
+    margin-inline: auto;
+  }
 }
 
 // The scale on these pages: 11px labels, 14px notes, 16px values, one

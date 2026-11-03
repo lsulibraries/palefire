@@ -47,13 +47,19 @@
 // Without JS (no .is-ready): no tablist; every panel shows under its own
 // heading, in order.
 
-.pf-tabs {
+// The control's sizes, also read by the hero's Quick Start, whose band's
+// top edge runs through the track's centre line (_landing-features.scss).
+.pf-tabs,
+.pf-quick-guide--tabs {
   --pf-tabs-gap: .375rem;
-  --pf-tabs-key-r: .875rem;
-  --pf-tabs-track-r: calc(var(--pf-tabs-key-r) + var(--pf-tabs-gap));
   --pf-tabs-key-h: 4.25rem;
   --pf-tabs-label-h: 2rem;
   --pf-tabs-rail-h: calc(var(--pf-tabs-key-h) + 2 * var(--pf-tabs-gap));
+}
+
+.pf-tabs {
+  --pf-tabs-key-r: .875rem;
+  --pf-tabs-track-r: calc(var(--pf-tabs-key-r) + var(--pf-tabs-gap));
   --pf-tabs-dot: 5px;
 
   --pf-tabs-bg: var(--pf-g-bg, var(--bs-body-bg));
@@ -78,7 +84,8 @@
 }
 
 @include media-breakpoint-up(md) {
-  .pf-tabs {
+  .pf-tabs,
+  .pf-quick-guide--tabs {
     --pf-tabs-key-h: 5rem;
     --pf-tabs-label-h: 2.125rem;
   }

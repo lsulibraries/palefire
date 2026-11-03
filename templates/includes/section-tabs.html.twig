@@ -16,6 +16,8 @@
  *   and the paths), shown in the quick tab's panel in place of its blocks,
  *   with no heading of its own (the Quick Start has its h2). Empty
  *   elsewhere.
+ * - rules: markup by tab id printed at the top of that tab's panel (the
+ *   hero's index rule 01, naming the open tab). Empty elsewhere.
  *
  * Each tab is the whole column: its label printed above the track, its
  * face (where the key rests, with the carved icon) in the track, and its
@@ -46,6 +48,7 @@
     </div>
     {% for tab in tabs %}
       <div class="pf-tabs__panel" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0">
+        {{ rules[tab.id] ?? '' }}
         {% if tab.quick and quick_panel %}
           <div class="pf-tabs__body pf-quick-guide__panel">{{ quick_panel }}</div>
         {% else %}
