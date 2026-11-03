@@ -425,8 +425,11 @@ Ask section keeps its own reveal). A panel's id opens it from a link, on
 arrival and on hashchange, and so does a link to anything inside it
 (`#ask-question`, a TOC sub-link), before the browser or Swup scrolls;
 choosing a tab writes its id to the address with `replaceState`. Find in
-page opens a hidden panel where `hidden="until-found"` is supported. Reduce
-motion (OS or Settings) switches everything at once. Without JS every panel
+page opens a hidden panel where `hidden="until-found"` is supported.
+Where the browser can vibrate (Android, not iOS), choosing a tab gives a
+10ms tap and a dragged key a 5ms tick at each slot, like a detent; links
+and Find never do. Reduce motion (OS or Settings) switches everything at
+once, without haptics. Without JS every panel
 shows under its own heading.
 
 **Set up.** Run `palefire_section_tabs_setup.php`, `drush cr`, then on the
@@ -1130,6 +1133,7 @@ history (`git show fa05a94:README.md`).
 - **2026-11-02:** Location pages: the ledger pane is clear (hairline, shadow, blur over the photo); the backdrop is tinted to the swatch (its page colour, `color` blend, lightness unchanged); muted labels over it lifted 40% toward the heading colour, for 4.5:1 on every dark swatch. Access has three kinds, each with a mark: Walk in, Book online (key `appointment`), Room rental (`rental`, new receipt mark); the map key groups by all three. Capacity as a number shows "~100"; new Estimated area (`field_space_area`) shows "~2,400 sq ft". The "here" room on the map is solid in the highlight colour with a dark name (light ink on its stripes was hard to read). Run `scripts/palefire_location_access_area.php`.
 ### 2026-11-03
 
+- **Section tabs: haptics.** Where `navigator.vibrate` exists (Android Chrome; iOS has none), choosing a tab by tap, key or drag gives a 10ms tap, and a dragged key ticks (5ms) as it passes each slot, like a detent. Links, Find in page and the first load stay silent; Reduce motion turns it off. Checked with a stubbed `vibrate` in the harness: tap, same-tab tap (silent), arrow key, a two-slot drag (two ticks and the snap), and a deep link (silent). Not felt on a device. Why: the key should feel like hardware where the phone can say so.
 - **Section tabs.** New `section_tabs` paragraph (`scripts/palefire_section_tabs_setup.php`, `paragraph--section-tabs.html.twig`, `_section-tabs.scss`, `js/section-tabs.js`): labelled tabs over their panels, for Visit / Study / Ask us on `/v2/special`. Labels in small tracked capitals above an inset track; a raised key slides between carved Font Awesome icons; an indicator light under each slot. Only the indicator lights; nothing glows on touch (hover only with a real pointer). Panels follow the key's direction and their parts rise in sequence. Draggable key, ARIA keyboard support, deep links to a tab or anything inside it, Find in page where supported, a no-JS fallback with every panel shown. Relief colors per reading swatch (`pf-relief()`, `--pf-g-relief-*`), tuned by eye on all 13 (Twilight and Night by hand); flattened under high contrast and forced colors. Checked in a harness with the built CSS at 390 in every swatch: keyboard, drag, deep link on load, no-JS and high contrast; axe found nothing in the component. Not yet rendered by Drupal. Run the script, `drush cr`, then build the section. Why: the Quick Guide, FAQs and Ask form competed under the hero; one control gives three clear ways in.
 
 ### 2026-11-02

@@ -22,8 +22,12 @@
  * - Find in page opens a hidden panel where the browser supports
  *   hidden="until-found" (its beforematch event).
  *
+ * - Haptics (Android Chrome and others with navigator.vibrate; not iOS): a
+ *   10ms tap when a tab is chosen by tap, key or drag, and a 5ms tick as a
+ *   dragged key passes each slot, like a detent. Never for a link or Find.
+ *
  * Off for prefers-reduced-motion and Reduce motion (html.pf-a11y-motion):
- * everything switches at once. Without JS the template shows every panel
+ * everything switches at once, without haptics. Without JS the template shows every panel
  * under its own heading; this script adds .is-ready and hides the rest.
  */
 (function (Drupal, once) {
@@ -35,6 +39,21 @@
   const LEAVE_MS = 120;
   const SNAP_MS = 520;
   const PARTS_SKIP = '.pf-inquiry';
+  const TAP_MS = 10;
+  const TICK_MS = 5;
+
+  // A short vibration where the browser has one; nothing otherwise.
+  function buzz(ms) {
+    if (still() || typeof navigator.vibrate !== 'function') {
+      return;
+    }
+    try {
+      navigator.vibrate(ms);
+    }
+    catch (e) {
+      // Blocked without a user gesture.
+    }
+  }
 
   // A panel's parts: the children of its first element with more than one,
   // up to four levels down (a field's wrappers hold one item each).
@@ -175,7 +194,12 @@
       placeKey();
     }
 
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i)));
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => {
+      if (i !== current()) {
+        buzz(TAP_MS);
+      }
+      select(i);
+    }));
 
     list.addEventListener('keydown', (event) => {
       const i = tabs.indexOf(document.activeElement);
@@ -190,6 +214,9 @@
       }[event.key];
       if (next !== undefined) {
         event.preventDefault();
+        if (next !== i) {
+          buzz(TAP_MS);
+        }
         select(next, { focus: true });
       }
     });
@@ -247,7 +274,11 @@
         x = max + (x - max) * 0.25;
       }
       key.style.transform = 'translateX(' + x + 'px)';
-      drag.near = nearest(x + key.offsetWidth / 2);
+      const near = nearest(x + key.offsetWidth / 2);
+      if (near !== drag.near) {
+        buzz(TICK_MS);
+      }
+      drag.near = near;
       tabs.forEach((tab, i) => tab.classList.toggle('is-near', i === drag.near));
     });
 
@@ -265,6 +296,7 @@
       key.classList.remove('is-dragging');
       key.classList.add('is-snapping');
       setTimeout(() => key.classList.remove('is-snapping'), SNAP_MS);
+      buzz(TAP_MS);
       eatClick = true;
       setTimeout(() => {
         eatClick = false;
