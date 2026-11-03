@@ -2975,10 +2975,21 @@ html.pf-a11y-motion {
   // index rule), and the band's top edge runs through its track's centre
   // line (the tab tokens, _section-tabs.scss), so the control sits on the
   // band it switches. Each panel then opens with its own rule 01. The foot
-  // keeps the guide's usual space.
+  // keeps the guide's usual space. On a short desktop window the space over
+  // the bar narrows (--pf-quick-tabs-gap), so the control and the top of its
+  // panel show together.
   .pf-landing__lead--hero > .pf-quick-guide--tabs {
-    --pf-quick-band-top: calc(var(--pf-hero-gap) + var(--pf-tabs-label-h) + var(--pf-tabs-rail-h) / 2);
-    padding: var(--pf-hero-gap) 0 calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
+    --pf-quick-tabs-gap: var(--pf-hero-gap);
+    --pf-quick-band-top: calc(var(--pf-quick-tabs-gap) + var(--pf-tabs-label-h) + var(--pf-tabs-rail-h) / 2);
+    padding: var(--pf-quick-tabs-gap) 0 calc(var(--pf-hero-gap) - var(--pf-quick-space) / 2);
+  }
+
+  @include media-breakpoint-up(md) {
+    @media (max-height: 50rem) {
+      .pf-landing__lead--hero > .pf-quick-guide--tabs {
+        --pf-quick-tabs-gap: min(var(--pf-hero-gap), 3.5rem);
+      }
+    }
   }
 }
 

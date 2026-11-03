@@ -21,12 +21,13 @@
 // - Only the indicator lights. The key's icon is ink (the text grey, 7:1 on
 //   the key), the labels are ink, and nothing glows when touched.
 //
-// The active tab is shown three ways besides the key's place (not by shadow
-// alone): its icon printed on the key where the others are faint carvings,
-// its label bright and bold, and its indicator lit in the highlight color.
-// Inactive labels are the muted text dimmed toward the page at 5:1
-// (--pf-g-relief-idle). Icons are decorative (the label names the tab), so
-// the carvings need no 3:1.
+// The active tab is shown four ways besides the key's place (not by shadow
+// alone): its icon solid on the key where the others are Light outlines
+// printed in the label color (or, with no Light icon of that name, faint
+// carvings), its label bright and bold, and its indicator lit in the
+// highlight color. Inactive labels are the muted text dimmed toward the page
+// at 5:1 (--pf-g-relief-idle). Icons are decorative (the label names the
+// tab), so the outlines and carvings need no 3:1.
 //
 // Labels: small sans capitals, widely tracked, as a hardware legend is
 // silkscreened (sans, not mono: the section eyebrows keep the mono voice).
@@ -75,19 +76,32 @@
   --pf-tabs-hover: var(--pf-g-hover, var(--bs-emphasis-color));
   --pf-tabs-light-on: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 
-  --pf-tabs-raise: 3px 3px 6px var(--pf-tabs-shade), -2px -2px 5px var(--pf-tabs-light);
-  --pf-tabs-lift: 6px 6px 14px var(--pf-tabs-shade), -3px -3px 8px var(--pf-tabs-light);
-  --pf-tabs-well: inset 4px 4px 9px var(--pf-tabs-shade), inset -4px -4px 9px var(--pf-tabs-light);
+  // Soft: short offsets, wide blurs, so the edges shade rather than outline.
+  --pf-tabs-raise: 2px 3px 8px var(--pf-tabs-shade), -2px -2px 6px var(--pf-tabs-light);
+  --pf-tabs-lift: 5px 6px 16px var(--pf-tabs-shade), -3px -3px 9px var(--pf-tabs-light);
+  --pf-tabs-well: inset 2px 3px 10px var(--pf-tabs-shade), inset -2px -2px 8px var(--pf-tabs-light);
 
   --pf-tabs-ease: cubic-bezier(.22, 1, .36, 1);
   --pf-tabs-snap: cubic-bezier(.34, 1.45, .64, 1);
 }
 
+// Desktop: a little taller than on phones, but kept low so the control and
+// the start of its panel fit together on a short laptop screen; lower still
+// where the window is short.
 @include media-breakpoint-up(md) {
   .pf-tabs,
   .pf-quick-guide--tabs {
-    --pf-tabs-key-h: 5rem;
+    --pf-tabs-key-h: 4.5rem;
     --pf-tabs-label-h: 2.125rem;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  @media (max-height: 50rem) {
+    .pf-tabs,
+    .pf-quick-guide--tabs {
+      --pf-tabs-key-h: 4.25rem;
+    }
   }
 }
 
@@ -235,26 +249,31 @@
   color: var(--pf-tabs-carve);
   transition: color .3s var(--pf-tabs-ease) .12s;
 
+  // One size at every width: a legend on the key, not a picture.
   svg {
+    grid-area: 1 / 1;
     width: 1.75rem;
     height: 1.75rem;
     fill: currentColor;
-    filter: drop-shadow(-1px -1px 0 var(--pf-tabs-carve-wall)) drop-shadow(1px 1px 0 var(--pf-tabs-carve-lip));
-    transition: filter .3s var(--pf-tabs-ease) .12s;
+    filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
+    transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
+  }
+
+  // With a Light icon: the outline is printed while the tab is off, in the
+  // label's color, and the tab's own icon waits, unseen, for the key.
+  &.has-idle > svg:not(.pf-tabs__idle) {
+    opacity: 0;
+  }
+
+  .pf-tabs__idle {
+    color: var(--pf-tabs-idle);
+    filter: none;
   }
 
   // Duotone icons: one tone, carved as a whole.
   svg :is(.fa-primary, .fa-secondary) {
     opacity: 1;
     fill: currentColor;
-  }
-}
-
-@include media-breakpoint-up(md) {
-  .pf-tabs__icon svg {
-    width: 2.125rem;
-    height: 2.125rem;
-    filter: drop-shadow(-1.5px -1.5px 0 var(--pf-tabs-carve-wall)) drop-shadow(1.5px 1.5px 0 var(--pf-tabs-carve-lip));
   }
 }
 
@@ -285,6 +304,14 @@
     svg {
       filter: none;
     }
+
+    &.has-idle > svg:not(.pf-tabs__idle) {
+      opacity: 1;
+    }
+
+    .pf-tabs__idle {
+      opacity: 0;
+    }
   }
 
   .pf-tabs__dot {
@@ -301,6 +328,10 @@
 
     .pf-tabs__icon {
       color: var(--pf-tabs-carve-hover);
+    }
+
+    .pf-tabs__idle {
+      color: var(--pf-tabs-hover);
     }
   }
 }

@@ -20,8 +20,10 @@
  *   hero's index rule 01, naming the open tab). Empty elsewhere.
  *
  * Each tab is the whole column: its label printed above the track, its
- * face (where the key rests, with the carved icon) in the track, and its
- * indicator under it. The key and the track are drawn once, for the list.
+ * face (where the key rests, with its icon) in the track, and its indicator
+ * under it. The icon comes twice where Font Awesome has a Light one of the
+ * same name: the Light outline, printed, while the tab is off, and the
+ * tab's own (solid or duotone) on the key, crossfading as the key arrives. The key and the track are drawn once, for the list.
  *
  * Without JS there is no tablist (.is-ready shows it): every panel shows,
  * each under its own heading (an h3, visually hidden once the tabs work, so
@@ -37,10 +39,16 @@
       <span class="pf-tabs__key is-instant" aria-hidden="true"></span>
       {% for tab in tabs %}
         {% set svg = tab.icon ? source('libraries/fontawesome-pro/svgs/' ~ tab.icon ~ '.svg', ignore_missing = true) : '' %}
+        {% set idle = svg ? source('libraries/fontawesome-pro/svgs/light/' ~ tab.icon|split('/')|last ~ '.svg', ignore_missing = true) : '' %}
         <button type="button" class="pf-tabs__tab" role="tab" id="{{ tab.id }}-tab" aria-controls="{{ tab.id }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" tabindex="{{ loop.first ? '0' : '-1' }}">
           <span class="pf-tabs__label">{{ tab.label }}</span>
           <span class="pf-tabs__face">
-            {%- if svg %}<span class="pf-tabs__icon" aria-hidden="true">{{ svg|raw }}</span>{% endif -%}
+            {%- if svg -%}
+              <span class="pf-tabs__icon{{ idle ? ' has-idle' }}" aria-hidden="true">
+                {{- svg|raw -}}
+                {%- if idle %}{{ idle|replace({'<svg ': '<svg class="pf-tabs__idle" '})|raw }}{% endif -%}
+              </span>
+            {%- endif -%}
           </span>
           <span class="pf-tabs__dot" aria-hidden="true"></span>
         </button>
