@@ -8,15 +8,15 @@
 // #swup is the opaque curtain over the sticky footer (_footer.scss), so
 // fading it showed the footer until the next page arrived (2026-10-26).
 
-html.is-changing .pf-swup > * {
+html:not(.pf-vt).is-changing .pf-swup > * {
   transition: opacity $pf-swup-out ease-in;
 }
 
-html.is-rendering .pf-swup > * {
+html:not(.pf-vt).is-rendering .pf-swup > * {
   transition: opacity $pf-swup-in $pf-swup-ease-in;
 }
 
-html.is-animating .pf-swup > * {
+html:not(.pf-vt).is-animating .pf-swup > * {
   opacity: 0;
 }
 
@@ -25,14 +25,14 @@ html.is-animating .pf-swup > * {
 // TOC drawer is outside <main>): a transform would pin it to the moving box
 // for the length of the rise, then let it jump back to the window.
 @media (prefers-reduced-motion: no-preference) {
-  html.is-rendering .pf-swup > .pf-page-bar,
-  html.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
+  html:not(.pf-vt).is-rendering .pf-swup > .pf-page-bar,
+  html:not(.pf-vt).is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
     // Opacity too: this outranks the fade above on the breadcrumb.
     transition: opacity $pf-swup-in $pf-swup-ease-in, transform $pf-swup-in $pf-swup-ease-in;
   }
 
-  html.is-animating.is-rendering .pf-swup > .pf-page-bar,
-  html.is-animating.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
+  html:not(.pf-vt).is-animating.is-rendering .pf-swup > .pf-page-bar,
+  html:not(.pf-vt).is-animating.is-rendering .pf-swup main > :not(.pf-modular__toc-toggle):not(:has(.pf-landing__media)) {
     transform: translateY(.5rem);
   }
 }
@@ -74,7 +74,7 @@ html.is-animating .pf-swup > * {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html.is-changing.pf-is-loading:not(.pf-a11y-motion) .pf-loading-mark {
+  html:not(.pf-vt).is-changing.pf-is-loading:not(.pf-a11y-motion) .pf-loading-mark {
     visibility: visible;
     opacity: 1;
     transition: opacity .4s ease .4s, visibility 0s linear .4s;
@@ -133,8 +133,76 @@ html.is-animating .pf-swup > * {
 // Reduced motion: the JS skips the animation; this is a belt-and-braces
 // fallback so nothing is ever left faded out.
 @media (prefers-reduced-motion: reduce) {
-  html:is(.is-changing, .is-animating) .pf-swup > * {
+  html:not(.pf-vt):is(.is-changing, .is-animating) .pf-swup > * {
     transition: none;
     opacity: 1;
+  }
+}
+
+// View transitions (native Swup visits, js/palefire-swup.js) ------------------
+// Where the browser has them and the next page is already fetched, the
+// whole swap is one view transition: the old page leaves as the CSS fade
+// does ($pf-swup-out), the new one rises .5rem into place over
+// $pf-swup-in, and a card's picture and title glide into the new page's
+// lead picture and <h1> (pf-morph-image, pf-morph-title) on the
+// exhibitions' easing. The header holds still: it is the same on both
+// pages, so it gets its own name and doesn't cross-fade.
+.pf-header {
+  view-transition-name: pf-header;
+}
+
+::view-transition-old(root) {
+  animation: pf-vt-out $pf-swup-out ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: pf-vt-in $pf-swup-in $pf-swup-ease-in both;
+}
+
+::view-transition-group(pf-morph-image),
+::view-transition-group(pf-morph-title) {
+  animation-duration: .5s;
+  animation-timing-function: $pf-exhibit-ease;
+}
+
+// The picture keeps its proportions as it grows: the old and new
+// snapshots fill the box, cropped, instead of stretching.
+::view-transition-old(pf-morph-image),
+::view-transition-new(pf-morph-image) {
+  height: 100%;
+  object-fit: cover;
+}
+
+// A title changes size and wraps differently: cross-fade the words
+// quickly so they never look smeared.
+::view-transition-old(pf-morph-title) {
+  animation-duration: .15s;
+}
+
+::view-transition-new(pf-morph-title) {
+  animation-duration: .3s;
+  animation-delay: .1s;
+}
+
+@keyframes pf-vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(.5rem);
+  }
+}
+
+// Reduce motion: Swup skips the animation (visit.animation.animate), so no
+// view transition runs; this keeps one that does from moving.
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important; // stylelint-disable-line declaration-no-important
   }
 }

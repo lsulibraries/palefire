@@ -33,6 +33,15 @@
  *   (.pf-loading-mark, _swup.scss). Cleared when a page is
  *   shown again from the back/forward cache.
  *
+ * - View transitions (2026-11-03): where the browser has them (Chrome,
+ *   Edge, Safari 18+) and the next page is already in the cache (a
+ *   prefetch), the visit runs as a native view transition (Swup's native
+ *   option): the old page fades out and the new one rises in as one
+ *   picture, and a card's picture and title glide into the new page's
+ *   lead picture and <h1> (see "Morph"). Otherwise, and in every other
+ *   browser, the CSS fade runs as before. <html class="pf-vt"> marks a
+ *   native visit, so base/_swup.scss leaves its fade alone.
+ *
  * Swup is only enabled for anonymous visitors (page.html.twig attaches this
  * library when not logged in); editors get normal page loads so the toolbar,
  * contextual links, and editing UI are never swapped. Add data-no-swup to any
@@ -528,6 +537,66 @@
     }, { passive: true });
   };
 
+  /* ---------------------------------------------------------------------
+   * Morph (native visits only)
+   * ------------------------------------------------------------------ */
+
+  // A card's picture and title (the link that started the visit) glide
+  // into the new page's lead picture and <h1>: each pair shares a
+  // view-transition-name for the one snapshot, then the names come off.
+  const MORPH_IMAGE = 'pf-morph-image';
+  const MORPH_TITLE = 'pf-morph-title';
+  const morphed = [];
+
+  const nameMorph = (el, name) => {
+    if (el) {
+      el.style.viewTransitionName = name;
+      morphed.push(el);
+    }
+  };
+
+  const clearMorph = () => {
+    morphed.splice(0).forEach((el) => {
+      el.style.viewTransitionName = '';
+    });
+  };
+
+  // Visible, and at least this share of the window wide: a lead picture,
+  // not an icon or a thumbnail. fromTop: measured as it will be once the
+  // new page opens at its top (Swup scrolls after the swap).
+  const inView = (el, share, fromTop = false) => {
+    const box = el.getBoundingClientRect();
+    const top = fromTop ? box.top + window.scrollY : box.top;
+    return box.width >= window.innerWidth * share && top + box.height > 0 && top < window.innerHeight;
+  };
+
+  const morphFrom = (link) => {
+    if (!link || !link.closest(CONTAINER)) {
+      return;
+    }
+    // The card the link belongs to: the link itself, or a covering link's
+    // card (tiles, banners, showcase cards).
+    const card = link.closest('li, article, .pf-tile, .pf-hero-banner') || link;
+    const image = Array.from(card.querySelectorAll('img')).find((img) => inView(img, 0.08));
+    const title = card.querySelector('h2, h3, h4, [class*="__title"]');
+    nameMorph(image, MORPH_IMAGE);
+    nameMorph(title && inView(title, 0) ? title : null, MORPH_TITLE);
+  };
+
+  const morphTo = () => {
+    const main = document.querySelector(`${CONTAINER} main`) || document.querySelector(CONTAINER);
+    if (!main) {
+      return;
+    }
+    if (morphed.some((el) => el.style.viewTransitionName === MORPH_IMAGE)) {
+      nameMorph(Array.from(main.querySelectorAll('img')).find((img) => inView(img, 0.4, true)), MORPH_IMAGE);
+    }
+    if (morphed.some((el) => el.style.viewTransitionName === MORPH_TITLE)) {
+      const h1 = main.querySelector('h1');
+      nameMorph(h1 && inView(h1, 0, true) ? h1 : null, MORPH_TITLE);
+    }
+  };
+
   const init = () => {
     const containers = [CONTAINER].concat(OPTIONAL_CONTAINERS.filter((sel) => document.querySelector(sel)));
     const loadedAssets = new Set(assetUrls(document));
@@ -541,6 +610,8 @@
       // The content fades, not #swup: it's the curtain over the footer
       // (base/_swup.scss).
       animationSelector: `${CONTAINER} > *`,
+      // View transitions where the browser has them (per visit, below).
+      native: true,
     });
 
     // A visit to a page still being prefetched waits for that request
@@ -570,6 +641,18 @@
       startLoading();
       if (reducedMotion.matches || document.documentElement.classList.contains('pf-a11y-motion')) {
         visit.animation.animate = false;
+      }
+      // Native only for a page already fetched: a view transition freezes
+      // the screen until the new page is in, so a page still on its way
+      // fades out with the loading line instead.
+      if (visit.animation.native && !swup.cache.has(visit.to.url)) {
+        visit.animation.native = false;
+      }
+      const native = visit.animation.animate && visit.animation.native;
+      document.documentElement.classList.toggle('pf-vt', native);
+      clearMorph();
+      if (native && !visit.history.popstate) {
+        morphFrom(visit.trigger.el);
       }
       closeMenu();
     });
@@ -640,6 +723,26 @@
       containers.forEach((sel) => {
         document.querySelectorAll(sel).forEach((el) => Drupal.attachBehaviors(el, drupalSettings));
       });
+      if (morphed.length) {
+        morphTo();
+      }
+    });
+
+    // A native visit has no CSS fade to wait for (the view transition is
+    // the animation): skip Swup's wait, which would only warn.
+    ['animation:out:await', 'animation:in:await'].forEach((hook) => {
+      swup.hooks.before(hook, (visit, args) => {
+        if (document.documentElement.classList.contains('pf-vt')) {
+          args.skip = true;
+        }
+      });
+    });
+
+    // The names come off once the transition is over, so the next visit
+    // starts clean.
+    swup.hooks.on('visit:end', () => {
+      clearMorph();
+      document.documentElement.classList.remove('pf-vt');
     });
 
     swup.hooks.on('page:view', (visit) => {

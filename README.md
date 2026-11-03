@@ -1110,6 +1110,19 @@ a full load. Skipped: links with `data-no-swup`, `data-bs-toggle` or
 `data-pf-over-menu`, and any click a script already handled
 (`defaultPrevented`).
 
+**View transitions.** Where the browser has the View Transitions API
+(Chrome, Edge, Safari 18+) and the next page is already in Swup's cache
+(prefetched on hover, focus or touch), the visit is a native view transition
+(Swup's `native` option, decided per visit in `visit:start`): the old page
+fades out, the new one rises .5rem in, and the card that was tapped glides
+into the new page: its picture into the first picture at least 40% of the
+window wide in the new page's first screen, its title into the `<h1>`
+(`pf-morph-image`, `pf-morph-title`, on `$pf-exhibit-ease`). The header holds
+still (`view-transition-name: pf-header`). A page still on its way, Back and
+Forward, and every other browser get the CSS fade and loading line as
+before; `<html class="pf-vt">` marks a native visit so `base/_swup.scss`
+leaves its fade alone. Reduce motion skips both.
+
 ## Design conventions
 
 - **Style:** sophisticated, modern museum feel with Swiss/International
@@ -1160,6 +1173,7 @@ history (`git show fa05a94:README.md`).
 - **2026-11-02:** Location pages: the ledger pane is clear (hairline, shadow, blur over the photo); the backdrop is tinted to the swatch (its page colour, `color` blend, lightness unchanged); muted labels over it lifted 40% toward the heading colour, for 4.5:1 on every dark swatch. Access has three kinds, each with a mark: Walk in, Book online (key `appointment`), Room rental (`rental`, new receipt mark); the map key groups by all three. Capacity as a number shows "~100"; new Estimated area (`field_space_area`) shows "~2,400 sq ft". The "here" room on the map is solid in the highlight colour with a dark name (light ink on its stripes was hard to read). Run `scripts/palefire_location_access_area.php`.
 ### 2026-11-03
 
+- **Page transitions: view transitions and the card morph.** Swup's `native` option is on, chosen per visit: a prefetched page in Chrome, Edge or Safari 18+ swaps as one view transition, and the tapped card's picture and title glide into the new page's lead picture and `<h1>` (`js/palefire-swup.js`, "Morph"; `base/_swup.scss`). An uncached page keeps the CSS fade with the loading line, since a view transition freezes the screen until the page is in. Swup's wait for CSS transitions is skipped on native visits (it only warned). The class-based fade is scoped to `html:not(.pf-vt)`. The header holds still. Checked with the real Swup 4 on two test pages in Chromium at 390: the native transition starts on a prefetched visit, the picture and title pair up and the names come off afterwards; a cache-cleared visit falls back to the fade; no console warnings or errors. Not yet tried on the live pages. Why: moving from a card to its page should feel like one object opening.
 - **Glossary terms.** Archive terms in guide text open their definition on a tap. New vocabulary `glossary` (`scripts/palefire_glossary_setup.php`; `-- import=1 apply=1` brings in the Special Collections Glossary guide's terms) and `src/GlossaryTerms.php`, which marks the first use of each term per text block as a button with a dotted underline opening a native popover card: the term in mono capitals, its definition, and Glossary → (`_glossary.scss`). Placed with CSS anchor positioning (`position-area` with edge and flip fallbacks); `js/glossary.js` places it where that isn't supported. Not inside links, headings, code, captions or citations, Sources lists or transcriptions. Checked: the marking on sample text with a stubbed Drupal (multi-word terms across line breaks, plurals, a term inside a link skipped, each term once), the card at 390 in Twilight (under the word, kept inside the window, Escape closes). Not yet rendered by Drupal. Run the script with `import=1` to review, then `apply=1`, then `drush cr`. Why: "finding aid" and "call number" stop first-time visitors; the answer should be where the word is.
 - **Object labels (styles only).** `includes/object-label.html.twig` and `_object-label.scss`: the caption block a museum sets beside an object. Maker and dates in mono capitals, the title as the one bright line (italic for a published work), date, medium and size, then a hairline, the collection and the call number (mono, tabular, never broken) with View record ↗. A compact version for cards. Not placed on any record yet: include it where a record's fields can fill it (exhibit figures, Tiles, showcase cards). New style guide plate 10, Object labels: re-run `scripts/palefire_styleguide.php` after `drush cr`. Checked in Twilight and Cream with the built CSS. Why: a call number and a date range say archive at a glance, from content the records already have.
 - **Section tabs: haptics.** Where `navigator.vibrate` exists (Android Chrome; iOS has none), choosing a tab by tap, key or drag gives a 10ms tap, and a dragged key ticks (5ms) as it passes each slot, like a detent. Links, Find in page and the first load stay silent; Reduce motion turns it off. Checked with a stubbed `vibrate` in the harness: tap, same-tab tap (silent), arrow key, a two-slot drag (two ticks and the snap), and a deep link (silent). Not felt on a device. Why: the key should feel like hardware where the phone can say so.
