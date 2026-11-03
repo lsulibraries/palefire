@@ -98,6 +98,44 @@
     {%- endif %}
   </div>
 {% endmacro %}
+{#
+  The Quick Start's square link buttons (.pf-quick-guide__links), under the
+  notes in its first column: the Research panel's and the other tabs'.
+  - links: [{ url, text }], each in a new tab: an up-right arrow after it,
+    and its name says so for screen readers.
+  - hours: { href, lid } for "Hours" after a dot in today's status color
+    (visit-hours.js), down to the week in the Visit panel (same page, so no
+    new tab and the arrow points down), or empty. The status words are for
+    screen readers only ("Open now, Hours"), so the dot's color never
+    carries it alone (WCAG 1.4.1); the hero's badge shows them. The dot
+    shows once LibCal answers; the button goes if LibCal fails, since the
+    week does too.
+#}
+{% macro quick_links(links, hours) %}
+  <ul class="pf-quick-guide__links" role="list">
+    {% for link in links %}
+      <li>
+        <a class="pf-quick-guide__link" href="{{ link.url }}" target="_blank" rel="noopener">
+          {{- link.text -}}
+          <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </a>
+      </li>
+    {% endfor %}
+    {% if hours.lid %}
+      <li class="pf-quick-guide__hours">
+        <a class="pf-quick-guide__link pf-quick-guide__link--hours" href="{{ hours.href }}" data-pf-hours-jump data-pf-hours data-lid="{{ hours.lid }}">
+          <span class="pf-quick-guide__hours-status">
+            <span class="pf-quick-guide__hours-dot" aria-hidden="true"></span>
+            <span class="visually-hidden"><span data-pf-hours-status></span>, </span>
+          </span>
+          {{- 'Hours'|t -}}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+{% endmacro %}
 {% import _self as pf %}
 {% set landing_action = 'https://lib.lsu.edu/bento' %}
 {% set landing_name = landing.identifier|default('search_api_fulltext_bento') %}
@@ -134,16 +172,6 @@
     {% if cover %}
       {{ attach_library('palefire/hero-title-window') }}
     {% endif %}
-    {# The media layer: fixed behind the whole landing, or (cover) inside
-       the lead's cover band, printed there below. #}
-    {% set media %}
-    <div class="pf-landing__media" data-landing-video data-sources="{{ bg_videos|json_encode }}">
-      <video class="pf-landing__bg-video" muted playsinline preload="metadata"
-             aria-hidden="true" tabindex="-1"
-             {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
-    </div>
-    {% endset %}
-    {% if not cover %}{{ media }}{% endif %}
     {# Same look as the TOC hide/show button: icon square + a gold bar that
        fills as the current clip plays; the label slides out on
        hover/focus and is always read by screen readers. landing-video.js
@@ -161,11 +189,33 @@
         <path class="pf-landing__bg-toggle-play" d="M4.5 3.1v9.8c0 .8.9 1.3 1.6.9l7.6-4.9c.6-.4.6-1.3 0-1.7L6.1 2.2c-.7-.4-1.6.1-1.6.9z"/>
       </svg>
       <span class="pf-landing__bg-toggle-label" data-landing-video-label>{{ 'Pause background video'|t }}</span>
+      {# The film bar's visible word (the label above is read; hidden there). #}
+      <span class="pf-landing__bg-toggle-word" aria-hidden="true"><span class="pf-landing__bg-toggle-word-pause">{{ 'Pause'|t }}</span><span class="pf-landing__bg-toggle-word-play">{{ 'Play'|t }}</span></span>
     </button>
     {% endset %}
-    {% if not (show_lead and lead_breadcrumb) %}
+    {% if not cover and not (show_lead and lead_breadcrumb) %}
       {{ video_toggle }}
     {% endif %}
+    {# The media layer: fixed behind the whole landing, or (cover) inside
+       the lead's cover band, printed there below. #}
+    {% set media %}
+    <div class="pf-landing__media" data-landing-video data-sources="{{ bg_videos|json_encode }}">
+      <video class="pf-landing__bg-video" muted playsinline preload="metadata"
+             aria-hidden="true" tabindex="-1"
+             {% if bg_poster %}poster="{{ bg_poster }}"{% endif %}></video>
+      {# Cover: the film's foot, as a wall label: the building on the
+         left, the video button on the right (in place of the bar's dock),
+         so the control sits on what it controls (_landing-features.scss,
+         film bar). #}
+      {% if cover %}
+        <div class="pf-landing__film-bar">
+          {% if visit.name %}<p class="pf-landing__film-caption" aria-hidden="true">{{ visit.name }}</p>{% endif %}
+          {{ video_toggle }}
+        </div>
+      {% endif %}
+    </div>
+    {% endset %}
+    {% if not cover %}{{ media }}{% endif %}
   {% endif %}
 
   {% if not show_lead %}
@@ -215,7 +265,7 @@
         <div class="pf-breadcrumb pf-breadcrumb--modular pf-breadcrumb--lead">{{ lead_breadcrumb }}</div>
       </div>
     </div>
-    {% if video_toggle %}
+    {% if video_toggle and not cover %}
       <div class="pf-landing__dock">{{ video_toggle }}</div>
     {% endif %}
   {% endif %}
@@ -473,6 +523,7 @@
         text: quick_guide.link_text ?: 'Full guide'|t,
         hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
       } : {} %}
+      {% set quick_hours = hero and visit.lid ? { href: '#' ~ input_id ~ '-visit-hours', lid: visit.lid } : {} %}
       <div class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
         {% if not quick_tabs %}
           {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_link) }}
@@ -508,46 +559,14 @@
               <li>{{ 'Scans are 50 cents a page, plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>
             </ul>
           {% endif %}
-          {# The full guide, the copy prices (palefire_guide_duplication.php)
-             and the building's parking and travel guide (visit.parking_url), as square
-             buttons, each in a new tab: an up-right arrow after it, and its
-             name says so for screen readers. #}
-          {% set visit_links = [
+          {# The full guide, the copy prices (palefire_guide_duplication.php),
+             the building's parking and travel guide (visit.parking_url) and
+             the hours, as square buttons (pf.quick_links). #}
+          {{ pf.quick_links([
             guide_url ? { url: guide_url, text: 'Full guide'|t },
             { url: '/v2/special/guides/duplication', text: 'Prices'|t },
             visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
-          ]|filter(link => link) %}
-          <ul class="pf-quick-guide__links" role="list">
-            {% for link in visit_links %}
-              <li>
-                <a class="pf-quick-guide__link" href="{{ link.url }}" target="_blank" rel="noopener">
-                  {{- link.text -}}
-                  <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
-                </a>
-              </li>
-            {% endfor %}
-            {# Hours: "Hours" after a dot in today's status color
-               (visit-hours.js), down to the week in the Visit panel, as the
-               hero's hours line does (same page, so no new tab and the
-               arrow points down). The status words are for screen readers
-               only ("Open now, Hours"), so the dot's color never
-               carries it alone (WCAG 1.4.1); the hero's badge shows them.
-               The dot shows once LibCal answers; the button goes if LibCal
-               fails, since the week does too. #}
-            {% if hero and visit.lid %}
-              <li class="pf-quick-guide__hours">
-                <a class="pf-quick-guide__link pf-quick-guide__link--hours" href="#{{ input_id }}-visit-hours" data-pf-hours-jump data-pf-hours data-lid="{{ visit.lid }}">
-                  <span class="pf-quick-guide__hours-status">
-                    <span class="pf-quick-guide__hours-dot" aria-hidden="true"></span>
-                    <span class="visually-hidden"><span data-pf-hours-status></span>, </span>
-                  </span>
-                  {{- 'Hours'|t -}}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
+          ]|filter(link => link), quick_hours) }}
         </div>
         {% endset %}
         {% if quick_tabs %}
@@ -573,7 +592,65 @@
             {% endset %}
             {% set tab_rules = tab_rules|merge({ (tab.id): tab_rule }) %}
           {% endfor %}
-          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules } only %}
+          {# Every other tab keeps the Quick Start's first column: a heading
+             and intro, then notes and link buttons as Before you visit's,
+             with the tab's blocks across the other columns. Built-in text by
+             tab id ("[Editor: …]" where Hill staff have yet to confirm); a
+             tab added later takes its label as the heading alone. #}
+          {% set tab_copy = {
+            study: {
+              title: 'Quiet Study'|t,
+              intro: 'A quiet room at Hill for reading, writing and research with your own work, apart from the Reading Room.'|t,
+              notes_title: 'Good to know'|t,
+              notes: [
+                'On the second floor of Hill Memorial Library.'|t,
+                'Food and drink are welcome in the first-floor lobby.'|t,
+                'Special Collections materials stay in the Reading Room: ask the staff there to see them.'|t,
+                '[Editor: the room’s hours, if they differ from the building’s.]'|t,
+              ],
+              links: [
+                visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
+              ],
+            },
+            ask: {
+              title: 'Ask us'|t,
+              intro: 'Questions about the collections, a visit, copies or a class? Start with the common questions, or send us yours.'|t,
+              notes_title: 'Before you ask'|t,
+              notes: [
+                'Name the collection, call number or catalog link, if you have one.'|t,
+                'Say when you plan to visit, so your materials can be ready.'|t,
+                '[Editor: the usual reply time, for example two business days.]'|t,
+              ],
+              links: [
+                guide_url ? { url: guide_url, text: 'Full guide'|t },
+                { url: '/v2/special/guides/duplication', text: 'Prices'|t },
+              ],
+            },
+          } %}
+          {% set tab_asides = {} %}
+          {% for tab in quick_tabs.tabs|filter(tab => not tab.quick) %}
+            {% set copy = tab_copy[tab.id] ?? { title: tab.label } %}
+            {% set links = (copy.links ?? [])|filter(link => link) %}
+            {% set aside_head %}
+              <h2 class="pf-quick-guide__title" id="{{ quick_id }}-{{ tab.id }}">{{ copy.title }}</h2>
+              {% if copy.intro %}<p class="pf-quick-guide__intro">{{ copy.intro }}</p>{% endif %}
+            {% endset %}
+            {% set aside_foot %}
+              {% if copy.notes or links or quick_hours %}
+                <div class="pf-quick-guide__visit">
+                  {% if copy.notes %}
+                    <h3 class="pf-quick-guide__visit-title">{{ copy.notes_title }}</h3>
+                    <ul role="list">
+                      {% for note in copy.notes %}<li>{{ note }}</li>{% endfor %}
+                    </ul>
+                  {% endif %}
+                  {{ pf.quick_links(links, quick_hours) }}
+                </div>
+              {% endif %}
+            {% endset %}
+            {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot } }) %}
+          {% endfor %}
+          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides } only %}
         {% else %}
           {{ quick_body }}
         {% endif %}

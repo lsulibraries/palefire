@@ -364,8 +364,39 @@
 // A panel's blocks keep the guides' reading measure (.pf-guide, 52rem), but
 // the Ask block is a layout of its own (FAQs beside the form, _ask.scss):
 // it takes the whole column, as it does outside the tabs.
-.pf-tabs__body.pf-guide:has(.pf-inquiry) {
+:is(.pf-tabs__body, .pf-tabs__content).pf-guide:has(.pf-inquiry) {
   max-width: none;
+}
+
+// The hero's other tabs (asides, includes/section-tabs.html.twig) take the
+// Quick Start's grid (.pf-quick-guide__panel, _landing-features.scss): its
+// first column for the heading, intro and notes, and the tab's blocks
+// where the Research paths run, from the cover's 64rem. On phones they
+// follow the intro, before the notes, as the paths do.
+.pf-quick-guide__panel > .pf-tabs__content {
+  container: pf-tab-content / inline-size;
+}
+
+@container pf-cover (min-width: 64rem) {
+  .pf-quick-guide__panel > .pf-tabs__content {
+    grid-column: 2 / -1;
+    grid-row: 2 / -1;
+  }
+}
+
+@container pf-cover (min-width: 80rem) {
+  .pf-quick-guide__panel > .pf-tabs__content {
+    grid-column: 3 / -1;
+  }
+}
+
+// The Ask block sets its FAQs beside the form from lg (_ask.scss); in the
+// tab's narrower columns (three of four at 1024px) they stack until there
+// is room for both.
+@container pf-tab-content (max-width: 47.99rem) {
+  .pf-inquiry {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 // "Find in page" can open a hidden panel (hidden="until-found", js adds

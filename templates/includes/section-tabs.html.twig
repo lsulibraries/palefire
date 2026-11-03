@@ -18,6 +18,11 @@
  *   elsewhere.
  * - rules: markup by tab id printed at the top of that tab's panel (the
  *   hero's index rule 01, naming the open tab). Empty elsewhere.
+ * - asides: { head, foot } markup by tab id for the hero's other tabs: the
+ *   Quick Start's first column (its heading and intro before the tab's
+ *   blocks, its notes and links after), on the Quick Start's grid, the
+ *   blocks across the other columns. The heading names the panel, so there
+ *   is no hidden one. Empty elsewhere.
  *
  * Each tab is the whole column: its label printed above the track, its
  * face (where the key rests, with its icon) in the track, and its indicator
@@ -61,6 +66,12 @@
         {{ rules[tab.id] ?? '' }}
         {% if tab.quick and quick_panel %}
           <div class="pf-tabs__body pf-quick-guide__panel">{{ quick_panel }}</div>
+        {% elseif asides[tab.id] ?? false %}
+          <div class="pf-tabs__body pf-quick-guide__panel">
+            {{ asides[tab.id].head }}
+            <div class="pf-tabs__content pf-guide">{{ tab.content }}</div>
+            {{ asides[tab.id].foot }}
+          </div>
         {% else %}
           <h3 class="pf-tabs__heading">{{ tab.label }}</h3>
           <div class="pf-tabs__body pf-guide">{{ tab.content }}</div>
