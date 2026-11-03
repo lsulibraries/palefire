@@ -13,6 +13,7 @@ at https://lib.lsu.edu/v2/special.
 - [Building maps](#building-maps)
 - [Tile showcase](#tile-showcase)
 - [Events carousel](#events-carousel)
+- [Section tabs](#section-tabs)
 - [Guide pages](#guide-pages)
 - [Exhibition pages](#exhibition-pages)
 - [Reading colors and Settings](#reading-colors-and-settings)
@@ -133,6 +134,7 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_ask_section.php` | Adds "Ask Special Collections" to `/v2/special` before the stacks (`-- after=<title>` to place it): a Tile showcase in the Ask layout (Special Collections FAQs beside a question form), and the `ask` Layout value if missing. The dry run lists the FAQ tiles it would show. Dry run unless `-- apply=1`; stops if the section exists or the page has a pending draft |
 | `palefire_staff_setup.php` | Staff directory and profiles: the View `palefire_staff` (`/v2/staff`, `/v2/staff/%`; the theme prints both, `src/StaffDirectory.php`), the "Who to ask" section (`staff_contacts`, rows `staff_contact`: Topic + Person) and the `pf_staff_thumb` / `pf_staff_portrait` image styles (`-- staff=<type>`, default `staff`). Run after the tile showcase scripts |
 | `palefire_staff_contacts_section.php` | Adds "Who to ask" to `/v2/special` after "Ask Special Collections" (`-- after=`): six topics, each person found by Job title (a topic with no single match is listed and left out), linked to `/v2/staff?department=special-collections`. Dry run unless `-- apply=1`; stops if the section exists or the page has a pending draft |
+| `palefire_section_tabs_setup.php` | Section tabs: the `section_tabs` section (shared section fields, Eyebrow, Lede, Link, Tabs) and `section_tab` (Label, Icon, Link name, and Content: the guide section's blocks plus the Tile showcase). `section_tabs` is allowed wherever `bento_search` is. Run after `palefire_guide_setup.php` |
 | `palefire_modular_setup.php` | Legacy: only for sites **without** palefire_modular; exits otherwise |
 | `palefire_modular_setup_undo.php` | Removes what a partial legacy run left on a palefire_modular site |
 
@@ -385,6 +387,53 @@ prev/next buttons, ruled hours and event lists, image cards with events over a
 gradient, and the module's "On this day" fact as a muted footnote.
 `section-reveal.js` reveals its parts in sequence. The next three timed events
 are listed in the TOC through `palefire:tocrefresh`.
+
+## Section tabs
+
+`section_tabs` (`paragraph--section-tabs.html.twig`, `_section-tabs.scss`,
+`js/section-tabs.js`; made by `scripts/palefire_section_tabs_setup.php`): a
+few ways in, one panel at a time, such as the Special Collections homepage's
+Visit / Study / Ask us. The section fields, Eyebrow, Lede and Link, then
+Tabs (`field_tabs`), each a `section_tab`:
+
+| Field | What |
+| --- | --- |
+| `field_tab_label` | Label, one or two short words ("Visit", "Study", "Ask us") |
+| `field_tab_icon` | A Font Awesome 5 name ("landmark"; "duotone/landmark" for another style; solid by default), inlined from `/libraries/fontawesome-pro/svgs`. Check it exists on production and libstage |
+| `field_tab_anchor` | Link name (optional): `/v2/special#visit` opens the tab. Defaults to the label as an id |
+| `field_guide_blocks` | Content: text, resource lists, accordions, librarian cards, videos, or a Tile showcase (its Ask layout for the question form) |
+
+**The look.** One physical control on the flat page, in the manner of
+premium audio hardware: small tracked capitals printed above, an inset track
+holding a raised key that slides between carved icons, and an indicator
+light under each slot. Track, key and page are one material (the page
+color), shaped only by shading lit from the upper left. Only the indicator
+lights (the swatch's highlight); the key's icon and the labels are ink.
+The panels below stay flat Swiss. **Use one per page at most, and never put
+relief on cards or buttons.** The relief colors come from each reading
+swatch (`pf-relief()` in `_reading-themes.scss`, as `--pf-g-relief-*`), with
+hand-tuned values for Twilight and Night in `$pf-relief-tune`; inactive
+labels are the muted text dimmed toward the page at 5:1. High contrast and
+forced colors flatten it to outlines.
+
+**Behaviour.** ARIA tabs: arrow keys, Home and End select; Tab moves into
+the panel. The key can also be dragged and snaps to the nearest slot
+(tapping and the keys do everything, WCAG 2.5.7). The panels follow the
+key: the old one leaves the way it left, the new one comes in from the side
+it travels toward, then its parts rise one after another (60ms apart; an
+Ask section keeps its own reveal). A panel's id opens it from a link, on
+arrival and on hashchange, and so does a link to anything inside it
+(`#ask-question`, a TOC sub-link), before the browser or Swup scrolls;
+choosing a tab writes its id to the address with `replaceState`. Find in
+page opens a hidden panel where `hidden="until-found"` is supported. Reduce
+motion (OS or Settings) switches everything at once. Without JS every panel
+shows under its own heading.
+
+**Set up.** Run `palefire_section_tabs_setup.php`, `drush cr`, then on the
+page add a Section tabs section and its tabs. For `/v2/special`: Visit
+(`landmark`), Study (`book-reader`), Ask us (`comments`, holding the Ask
+Special Collections Tile showcase), and take the Quick Guide's and the old
+Ask section's places so nothing shows twice.
 
 ## Guide pages
 
@@ -1047,6 +1096,8 @@ a full load. Skipped: links with `data-no-swup`, `data-bs-toggle` or
   section titles (guides keep their own scale).
 - **Motion off** under `prefers-reduced-motion` and Settings > Reduce motion,
   in CSS and in every script.
+- **Relief:** only the Section tabs control. One per page at most; never on
+  cards, buttons or fields.
 - **Icons:** inline SVG only (Bootstrap Icons, FA 5 Pro from `/libraries`),
   `aria-hidden="true"` when decorative.
 - **Contrast:** 4.5:1 text, 3:1 large text and UI, checked on every reading
@@ -1077,6 +1128,10 @@ history (`git show fa05a94:README.md`).
 - **2026-11-02:** Location pages: in portrait windows the room photo stops at the top section's foot (one screen at most); in tall desktop windows it ran on behind section 01.
 - **2026-11-02:** Map: the "here" room is back to its gold hatch with a light name; the solid fill from the previous change is undone.
 - **2026-11-02:** Location pages: the ledger pane is clear (hairline, shadow, blur over the photo); the backdrop is tinted to the swatch (its page colour, `color` blend, lightness unchanged); muted labels over it lifted 40% toward the heading colour, for 4.5:1 on every dark swatch. Access has three kinds, each with a mark: Walk in, Book online (key `appointment`), Room rental (`rental`, new receipt mark); the map key groups by all three. Capacity as a number shows "~100"; new Estimated area (`field_space_area`) shows "~2,400 sq ft". The "here" room on the map is solid in the highlight colour with a dark name (light ink on its stripes was hard to read). Run `scripts/palefire_location_access_area.php`.
+### 2026-11-03
+
+- **Section tabs.** New `section_tabs` paragraph (`scripts/palefire_section_tabs_setup.php`, `paragraph--section-tabs.html.twig`, `_section-tabs.scss`, `js/section-tabs.js`): labelled tabs over their panels, for Visit / Study / Ask us on `/v2/special`. Labels in small tracked capitals above an inset track; a raised key slides between carved Font Awesome icons; an indicator light under each slot. Only the indicator lights; nothing glows on touch (hover only with a real pointer). Panels follow the key's direction and their parts rise in sequence. Draggable key, ARIA keyboard support, deep links to a tab or anything inside it, Find in page where supported, a no-JS fallback with every panel shown. Relief colors per reading swatch (`pf-relief()`, `--pf-g-relief-*`), tuned by eye on all 13 (Twilight and Night by hand); flattened under high contrast and forced colors. Checked in a harness with the built CSS at 390 in every swatch: keyboard, drag, deep link on load, no-JS and high contrast; axe found nothing in the component. Not yet rendered by Drupal. Run the script, `drush cr`, then build the section. Why: the Quick Guide, FAQs and Ask form competed under the hero; one control gives three clear ways in.
+
 ### 2026-11-02
 
 - **Mobile dock: calmer motion.** The dock's curve goes from a fast start (`cubic-bezier(.2, .8, .2, 1)`, .35s) to a soft start and a long settle (`cubic-bezier(.33, 0, .15, 1)`, `--pf-dock-dur` .5s), for hiding, showing and the panels' height. The action pill no longer pops. Its `min-width: 118px` wasn't transitioned and outranks `max-width`, so it jumped to full size; `min-width`, `max-width`, padding and margin now move together over .5s. The pill's shape opens first and its words fade in after (.25s delay); folding, the words fade first, then the pill closes. A swapped label fades out over .2s before it changes. Panel contents fade in as the panel nears its height and fade out before it folds, so text never wipes past the edge. `dock.js` now ends a panel's move only on the panel's own `height` transition (fallback 700ms). The tab rises 8px instead of 12px. Reduced motion still turns all of it off. Checked on copies of /v2/special and the duplication guide at 390: pill widths and label opacity sampled through fold and unfold; the panel's height transition ends at about 510ms. Why: the dock should move like the rest of Palefire, quiet and easy to follow.

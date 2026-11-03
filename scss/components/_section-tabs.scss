@@ -1,0 +1,445 @@
+// Section tabs ---------------------------------------------------------------
+// paragraph--section-tabs.html.twig, js/section-tabs.js.
+//
+// One physical control on a flat page, in the manner of premium audio
+// hardware: labels printed above, an inset track holding a raised key that
+// slides between carved icons, and an indicator light under each slot. The
+// only relief on the page: everything in the panels below stays Palefire's
+// flat Swiss (steps, ruled fields, hairlines, square buttons). Use one per
+// page at most, and never put relief on cards or buttons.
+//
+// The material:
+// - One color: track, key and page are all the page color (--pf-g-bg); the
+//   shading alone shapes them, lit from the upper left (--pf-g-relief-*,
+//   pf-relief() in _reading-themes.scss, tuned per swatch).
+// - Raised means you can press it (the key); recessed holds something (the
+//   track, the carved icons); flat is read only (labels).
+// - Concentric radii: the key sits an even gap inside the track (the track's
+//   radius is the key's plus the gap). The bottom gap is 2px less: the key's
+//   shadow falls downward and the lit lower lip shows under it, so an even
+//   gap reads wider there.
+// - Only the indicator lights. The key's icon is ink (the text grey, 7:1 on
+//   the key), the labels are ink, and nothing glows when touched.
+//
+// The active tab is shown three ways besides the key's place (not by shadow
+// alone): its icon printed on the key where the others are faint carvings,
+// its label bright and bold, and its indicator lit in the highlight color.
+// Inactive labels are the muted text dimmed toward the page at 5:1
+// (--pf-g-relief-idle). Icons are decorative (the label names the tab), so
+// the carvings need no 3:1.
+//
+// Labels: small sans capitals, widely tracked, as a hardware legend is
+// silkscreened (sans, not mono: the section eyebrows keep the mono voice).
+// text-transform only, so screen readers hear them in sentence case.
+//
+// Motion: the key slides (.45s), the label and icon brighten a beat after
+// the tap (.12s), and the panels follow the key: the old one steps aside
+// the way the key left and fades (.12s), the new one comes in 24px from the
+// side the key travels toward and lands with it, then its parts rise 8px,
+// 60ms apart (Palefire's content reveal, capped at 8). The key can also be
+// dragged: it lifts, follows the finger, and snaps to the nearest slot with
+// a small overshoot. All of it is off for prefers-reduced-motion and the
+// Settings drawer's Reduce motion (html.pf-a11y-motion).
+//
+// High contrast (Settings or the OS) and forced colors flatten it: no
+// shadows, solid outlines on the track and the key, labels at full text.
+//
+// Without JS (no .is-ready): no tablist; every panel shows under its own
+// heading, in order.
+
+.pf-tabs {
+  --pf-tabs-gap: .375rem;
+  --pf-tabs-key-r: .875rem;
+  --pf-tabs-track-r: calc(var(--pf-tabs-key-r) + var(--pf-tabs-gap));
+  --pf-tabs-key-h: 4.25rem;
+  --pf-tabs-label-h: 2rem;
+  --pf-tabs-rail-h: calc(var(--pf-tabs-key-h) + 2 * var(--pf-tabs-gap));
+  --pf-tabs-dot: 5px;
+
+  --pf-tabs-bg: var(--pf-g-bg, var(--bs-body-bg));
+  --pf-tabs-shade: var(--pf-g-relief-shade, rgba(0, 0, 0, .3));
+  --pf-tabs-light: var(--pf-g-relief-light, rgba(255, 255, 255, .06));
+  --pf-tabs-carve: var(--pf-g-relief-carve, rgba(0, 0, 0, .3));
+  --pf-tabs-carve-hover: var(--pf-g-relief-carve-hover, rgba(0, 0, 0, .2));
+  --pf-tabs-carve-wall: var(--pf-g-relief-carve-wall, rgba(0, 0, 0, .5));
+  --pf-tabs-carve-lip: var(--pf-g-relief-carve-lip, rgba(255, 255, 255, .12));
+  --pf-tabs-idle: var(--pf-g-relief-idle, var(--bs-secondary-color));
+  --pf-tabs-ink: var(--pf-g-fg, var(--bs-body-color));
+  --pf-tabs-strong: var(--bs-heading-color, var(--bs-emphasis-color));
+  --pf-tabs-hover: var(--pf-g-hover, var(--bs-emphasis-color));
+  --pf-tabs-light-on: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+
+  --pf-tabs-raise: 3px 3px 6px var(--pf-tabs-shade), -2px -2px 5px var(--pf-tabs-light);
+  --pf-tabs-lift: 6px 6px 14px var(--pf-tabs-shade), -3px -3px 8px var(--pf-tabs-light);
+  --pf-tabs-well: inset 4px 4px 9px var(--pf-tabs-shade), inset -4px -4px 9px var(--pf-tabs-light);
+
+  --pf-tabs-ease: cubic-bezier(.22, 1, .36, 1);
+  --pf-tabs-snap: cubic-bezier(.34, 1.45, .64, 1);
+}
+
+@include media-breakpoint-up(md) {
+  .pf-tabs {
+    --pf-tabs-key-h: 5rem;
+    --pf-tabs-label-h: 2.125rem;
+  }
+}
+
+// The control ------------------------------------------------------------------
+
+.pf-tabs__list {
+  display: none;
+}
+
+.pf-tabs.is-ready > .pf-tabs__list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--pf-tabs-count, 3), minmax(0, 1fr));
+  column-gap: .25rem;
+  margin-top: .75rem; // room to sit in: a physical object needs space
+  padding-inline: var(--pf-tabs-gap);
+  touch-action: pan-y; // vertical scrolling stays the browser's
+}
+
+// A control, not a banner: capped on wide screens, aligned with the heading.
+@include media-breakpoint-up(lg) {
+  .pf-tabs.is-ready > .pf-tabs__list {
+    max-width: calc(var(--pf-tabs-count, 3) * 13.333rem);
+  }
+}
+
+.pf-tabs__rail {
+  position: absolute;
+  inset: var(--pf-tabs-label-h) 0 auto;
+  height: var(--pf-tabs-rail-h);
+  border-radius: var(--pf-tabs-track-r);
+  background: var(--pf-tabs-bg);
+  box-shadow: var(--pf-tabs-well);
+  pointer-events: none;
+}
+
+.pf-tabs__key {
+  position: absolute;
+  top: calc(var(--pf-tabs-label-h) + var(--pf-tabs-gap));
+  left: 0;
+  width: 0;
+  height: calc(var(--pf-tabs-key-h) + 2px);
+  border-radius: var(--pf-tabs-key-r);
+  // The page's color; its face catches a little of the upper-left light.
+  background: linear-gradient(145deg, color-mix(in srgb, var(--pf-tabs-light) 45%, var(--pf-tabs-bg)), var(--pf-tabs-bg) 70%);
+  box-shadow: var(--pf-tabs-raise);
+  pointer-events: none;
+  transition: transform .45s var(--pf-tabs-ease), width .45s var(--pf-tabs-ease);
+
+  &.is-instant,
+  &.is-dragging {
+    transition: none;
+  }
+
+  &.is-dragging {
+    box-shadow: var(--pf-tabs-lift);
+  }
+
+  &.is-snapping {
+    transition: transform .5s var(--pf-tabs-snap), width .3s var(--pf-tabs-ease);
+  }
+}
+
+.pf-tabs__tab {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: var(--pf-tabs-label-h) var(--pf-tabs-rail-h) auto;
+  justify-items: center;
+  align-content: start;
+  min-width: 0;
+  padding: 0 .25rem .25rem;
+  border: 0;
+  color: var(--pf-tabs-idle);
+  font: inherit;
+  line-height: 1.25;
+  text-align: center;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .3s var(--pf-tabs-ease) .12s;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &[aria-selected="true"] {
+    cursor: grab;
+  }
+}
+
+.pf-tabs__list.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .pf-tabs__tab {
+    cursor: grabbing;
+  }
+}
+
+// The silkscreen label, above the track.
+.pf-tabs__label {
+  grid-row: 1;
+  align-self: end;
+  max-width: 100%;
+  margin-right: -.16em; // the tracking pads the right side; center by eye
+  padding-bottom: .625rem;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+@include media-breakpoint-up(md) {
+  .pf-tabs__label {
+    font-size: .8125rem;
+  }
+}
+
+// The key's footprint in the track: where the focus ring goes.
+.pf-tabs__face {
+  grid-row: 2;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--pf-tabs-key-h);
+  border-radius: var(--pf-tabs-key-r);
+}
+
+.pf-tabs__tab:focus-visible .pf-tabs__face {
+  outline: 3px solid var(--pf-focus-color);
+  outline-offset: 2px;
+}
+
+// Carved: a floor darker than the page, the upper-left wall in shadow, the
+// lower-right lip catching the light.
+.pf-tabs__icon {
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  color: var(--pf-tabs-carve);
+  transition: color .3s var(--pf-tabs-ease) .12s;
+
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    fill: currentColor;
+    filter: drop-shadow(-1px -1px 0 var(--pf-tabs-carve-wall)) drop-shadow(1px 1px 0 var(--pf-tabs-carve-lip));
+    transition: filter .3s var(--pf-tabs-ease) .12s;
+  }
+
+  // Duotone icons: one tone, carved as a whole.
+  svg :is(.fa-primary, .fa-secondary) {
+    opacity: 1;
+    fill: currentColor;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .pf-tabs__icon svg {
+    width: 2.125rem;
+    height: 2.125rem;
+    filter: drop-shadow(-1.5px -1.5px 0 var(--pf-tabs-carve-wall)) drop-shadow(1.5px 1.5px 0 var(--pf-tabs-carve-lip));
+  }
+}
+
+// The indicator, set into the page under the slot.
+.pf-tabs__dot {
+  grid-row: 3;
+  width: var(--pf-tabs-dot);
+  height: var(--pf-tabs-dot);
+  margin-top: .75rem;
+  border-radius: 50%;
+  background: var(--pf-tabs-carve);
+  box-shadow: inset 1px 1px 1px var(--pf-tabs-carve-wall), inset -1px -1px 0 var(--pf-tabs-carve-lip);
+  transition: background-color .3s var(--pf-tabs-ease) .12s, box-shadow .3s var(--pf-tabs-ease) .12s;
+}
+
+// On: the selected tab, or while dragging, the slot under the key.
+.pf-tabs__list:not(.is-dragging) .pf-tabs__tab[aria-selected="true"],
+.pf-tabs__list.is-dragging .pf-tabs__tab.is-near {
+  color: var(--pf-tabs-strong);
+
+  .pf-tabs__label {
+    font-weight: 700;
+  }
+
+  .pf-tabs__icon {
+    color: var(--pf-tabs-ink);
+
+    svg {
+      filter: none;
+    }
+  }
+
+  .pf-tabs__dot {
+    background: var(--pf-tabs-light-on);
+    box-shadow: 0 0 4px 1px color-mix(in srgb, var(--pf-tabs-light-on) 50%, transparent);
+  }
+}
+
+// Hover only with a real pointer: on touch, :hover sticks after a tap and
+// reads as a glow.
+@media (hover: hover) {
+  .pf-tabs__tab:not([aria-selected="true"]):hover {
+    color: var(--pf-tabs-hover);
+
+    .pf-tabs__icon {
+      color: var(--pf-tabs-carve-hover);
+    }
+  }
+}
+
+// Panels -----------------------------------------------------------------------
+
+.pf-tabs__panel {
+  padding-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+
+  &:focus-visible {
+    outline: 3px solid var(--pf-focus-color);
+    outline-offset: 4px;
+  }
+}
+
+// Without JS every panel shows, under its own heading; with it the tablist
+// names them.
+.pf-tabs__heading {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.pf-tabs.is-ready .pf-tabs__heading {
+  @include visually-hidden;
+}
+
+// "Find in page" can open a hidden panel (hidden="until-found", js adds
+// .has-find where the browser supports it): Bootstrap's [hidden] rule would
+// otherwise keep it display:none.
+.pf-tabs.has-find > .pf-tabs__panel[hidden="until-found"] {
+  display: block !important; // stylelint-disable-line declaration-no-important
+  content-visibility: hidden;
+}
+
+// The old panel steps aside the way the key left; the new one comes in from
+// the side the key travels toward (--pf-tabs-dir: 1 rightward, -1 leftward).
+.pf-tabs__panel.is-leaving {
+  animation: pf-tabs-leave .12s ease-in forwards;
+}
+
+.pf-tabs__panel.is-entering {
+  animation: pf-tabs-enter .45s var(--pf-tabs-ease) both;
+}
+
+.pf-tabs__panel.is-entering .pf-tabs__part {
+  animation: pf-tabs-part .4s var(--pf-tabs-ease) both;
+  animation-delay: calc(80ms + min(var(--pf-tabs-i, 0), 8) * 60ms);
+}
+
+@keyframes pf-tabs-leave {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--pf-tabs-dir, 1) * -12px));
+  }
+}
+
+@keyframes pf-tabs-enter {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--pf-tabs-dir, 1) * 24px));
+  }
+}
+
+@keyframes pf-tabs-part {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+// Reduced motion: everything switches at once.
+@mixin pf-tabs-still {
+  .pf-tabs__key,
+  .pf-tabs__key.is-snapping,
+  .pf-tabs__tab,
+  .pf-tabs__icon,
+  .pf-tabs__icon svg,
+  .pf-tabs__dot {
+    transition: none;
+  }
+
+  .pf-tabs__panel.is-leaving,
+  .pf-tabs__panel.is-entering,
+  .pf-tabs__panel.is-entering .pf-tabs__part {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @include pf-tabs-still;
+}
+
+html.pf-a11y-motion {
+  @include pf-tabs-still;
+}
+
+// High contrast: flat, outlined, labels at full text.
+@mixin pf-tabs-flat {
+  .pf-tabs {
+    --pf-tabs-idle: var(--pf-g-muted, var(--bs-secondary-color));
+  }
+
+  .pf-tabs__rail {
+    border: 1px solid var(--pf-section-border, currentColor);
+    box-shadow: none;
+  }
+
+  .pf-tabs__key,
+  .pf-tabs__key.is-dragging {
+    border: 2px solid var(--pf-tabs-strong);
+    background: var(--pf-tabs-bg);
+    box-shadow: none;
+  }
+
+  .pf-tabs__icon svg {
+    filter: none;
+  }
+}
+
+html.pf-a11y-contrast {
+  @include pf-tabs-flat;
+}
+
+@media (prefers-contrast: more) {
+  @include pf-tabs-flat;
+}
+
+@media (forced-colors: active) {
+  .pf-tabs__rail {
+    border: 1px solid CanvasText;
+  }
+
+  .pf-tabs__key {
+    border: 2px solid Highlight;
+  }
+
+  .pf-tabs__icon svg {
+    filter: none;
+  }
+
+  .pf-tabs__dot {
+    forced-color-adjust: none;
+    outline: 1px solid CanvasText;
+  }
+
+  .pf-tabs__tab[aria-selected="true"] .pf-tabs__dot {
+    background: Highlight;
+  }
+}

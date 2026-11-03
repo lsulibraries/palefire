@@ -188,6 +188,20 @@ $pf-reading-themes: (
   ),
 ) !default;
 
+// Relief fine-tuning per swatch, checked by eye on each one (pf-relief()
+// computes the rest). Twilight's are the mockup's hand-picked values.
+$pf-relief-tune: (
+  'twilight': (shade: #19171a, light: #38343b, carve: #1e1c20, carve-hover: #2b282e, carve-wall: #121013, carve-lip: #46414a),
+  // Night's page is near black: shadows can't go much darker, so the lit
+  // edges carry the shape (a brighter light and lip).
+  'night': (light: #2e2d30, carve: #0c0a0d, carve-hover: #1b1a1d, carve-wall: #050506, carve-lip: #464548),
+) !default;
+@each $name, $relief in $pf-relief-tune {
+  @if map.has-key($pf-reading-themes, $name) {
+    $pf-reading-themes: map.set($pf-reading-themes, $name, relief, $relief);
+  }
+}
+
 // The swatch every page opens in. Keep in step with html.html.twig and
 // DEFAULT_THEME in utility-panels.js.
 $pf-reading-default: 'twilight' !default;
@@ -275,6 +289,57 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
     }
   }
   @return 100%;
+}
+
+// Relief (the Section tabs' track and key, _section-tabs.scss): one material,
+// lit from the upper left. Every color is the page color moved toward black
+// or white, so the key and track read as the page itself pressed in and
+// raised. Light swatches need a darker shade and a near-white light; dark
+// ones a deep shade and only a faint light. A swatch fine-tunes any of
+// them with its own relief map ($pf-relief-tune, below).
+//   shade       the shadow side (lower right of a raised key)
+//   light       the lit side (upper left)
+//   carve       the floor of a carved icon, darker than the page
+//   carve-hover the floor under a pointer, a step back toward the page
+//   carve-wall  a carving's upper-left wall, in shadow
+//   carve-lip   its lower-right lip, catching the light
+//   idle        inactive tab labels: the muted text dimmed toward the page
+//               while it keeps 5:1 (AA with a margin at 12px)
+@function pf-relief($t) {
+  $bg: map.get($t, bg);
+  $relief: ();
+  @if map.get($t, dark) {
+    $relief: (
+      shade: pf-mix(#000, $bg, 40%),
+      light: pf-mix(#fff, $bg, 7%),
+      carve: pf-mix(#000, $bg, 24%),
+      carve-hover: pf-mix(#000, $bg, 12%),
+      carve-wall: pf-mix(#000, $bg, 55%),
+      carve-lip: pf-mix(#fff, $bg, 14%),
+    );
+  }
+  @else {
+    $relief: (
+      shade: pf-mix(#000, $bg, 14%),
+      light: pf-mix(#fff, $bg, 80%),
+      carve: pf-mix(#000, $bg, 15%),
+      carve-hover: pf-mix(#000, $bg, 9%),
+      carve-wall: pf-mix(#000, $bg, 32%),
+      carve-lip: #fff,
+    );
+  }
+  $idle: map.get($t, muted);
+  @for $i from 1 through 60 {
+    $c: pf-mix($bg, map.get($t, muted), $i * 1%);
+    @if pf-contrast($c, $bg) >= 5 {
+      $idle: $c;
+    }
+  }
+  $relief: map.merge($relief, (idle: $idle));
+  @if map.has-key($t, relief) {
+    $relief: map.merge($relief, map.get($t, relief));
+  }
+  @return $relief;
 }
 
 // High contrast version of a swatch: page colors pushed toward white (light
@@ -374,6 +439,10 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   --pf-g-panel-text: #{map.get($t, heading)};
   --pf-g-panel-muted: #{map.get($t, panel-muted)};
   --pf-g-chrome-rgb: #{pf-rgb($chrome)};
+  // Relief: the Section tabs' track and key (pf-relief()).
+  @each $key, $value in pf-relief($t) {
+    --pf-g-relief-#{$key}: #{$value};
+  }
   @if $dark {
     color-scheme: dark;
   }

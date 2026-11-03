@@ -207,6 +207,15 @@ ask-reveal:
     - core/drupal
     - core/once
 
+# Section tabs: ARIA tabs with the sliding key, the panels' hand-off and
+# links to a panel. Attached by paragraph--section-tabs.html.twig.
+section-tabs:
+  js:
+    js/section-tabs.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Ask Special Collections: checks the question form and sends it to
 # LibAnswers in the background. Attached by
 # templates/includes/ask-special.html.twig.

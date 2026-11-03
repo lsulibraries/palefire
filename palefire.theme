@@ -2273,6 +2273,69 @@ function palefire_preprocess_views_view(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph--section-tabs.
+ *
+ * Section tabs (scripts/palefire_section_tabs_setup.php): tabs, one per
+ * published Tab (field_tabs), in order:
+ * - id: the panel's id and link (#visit): the Tab's Link name
+ *   (field_tab_anchor) or its label, made an HTML id, unique in the section.
+ * - label: Label (field_tab_label).
+ * - icon: Icon (field_tab_icon), a Font Awesome 5 name ("landmark", or
+ *   "duotone/landmark"; solid when no style is given), as the SVG's path
+ *   under libraries/fontawesome-pro/svgs/ for the template to inline. A
+ *   name with anything but lowercase letters, digits and hyphens is left
+ *   out.
+ * - content: the Tab's blocks (field_guide_blocks), rendered.
+ * tabs_label names the tablist: the section's title, else "Sections".
+ */
+function palefire_preprocess_paragraph__section_tabs(array &$variables): void {
+  $paragraph = $variables['paragraph'] ?? NULL;
+  $variables['tabs'] = [];
+  if (!$paragraph instanceof ParagraphInterface || !$paragraph->hasField('field_tabs')) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $title = $paragraph->hasField('field_section_title') ? trim((string) $paragraph->get('field_section_title')->value) : '';
+  $variables['tabs_label'] = $title !== '' ? $title : t('Sections');
+  $value = static fn (ParagraphInterface $tab, string $name): string => $tab->hasField($name) ? trim((string) $tab->get($name)->value) : '';
+  $used = [];
+  foreach ($paragraph->get('field_tabs') as $item) {
+    $tab = $item->entity;
+    if (!$tab instanceof ParagraphInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($tab);
+    if (!$tab->isPublished()) {
+      continue;
+    }
+    $label = $value($tab, 'field_tab_label');
+    if ($label === '') {
+      continue;
+    }
+    $base = Html::getId($value($tab, 'field_tab_anchor') ?: $label);
+    $id = $base;
+    for ($n = 2; isset($used[$id]); $n++) {
+      $id = $base . '-' . $n;
+    }
+    $used[$id] = TRUE;
+    $icon = strtolower($value($tab, 'field_tab_icon'));
+    if (preg_match('/^(?:(solid|regular|light|thin|duotone)\/)?([a-z0-9]+(?:-[a-z0-9]+)*)$/', $icon, $m)) {
+      $icon = ($m[1] ?: 'solid') . '/' . $m[2];
+    }
+    else {
+      $icon = '';
+    }
+    $variables['tabs'][] = [
+      'id' => $id,
+      'label' => $label,
+      'icon' => $icon,
+      'content' => $tab->hasField('field_guide_blocks') ? $tab->get('field_guide_blocks')->view(['label' => 'hidden']) : [],
+    ];
+  }
+  $cache->applyTo($variables);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--staff-contacts.
  *
  * Who to ask (scripts/palefire_staff_setup.php): contacts, one per Contact
