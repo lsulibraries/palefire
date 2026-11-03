@@ -259,15 +259,16 @@
     transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
   }
 
-  // With a Light icon: the outline is printed while the tab is off, in the
-  // label's color, and the tab's own icon waits, unseen, for the key.
+  // With a Light icon: the outline is engraved while the tab is off (the
+  // carving's dark floor, its lower-right lip catching the light), and the
+  // tab's own icon waits, unseen, for the key.
   &.has-idle > svg:not(.pf-tabs__idle) {
     opacity: 0;
   }
 
   .pf-tabs__idle {
-    color: var(--pf-tabs-idle);
-    filter: none;
+    color: var(--pf-tabs-carve);
+    filter: drop-shadow(.75px .75px 0 var(--pf-tabs-carve-lip));
   }
 
   // Duotone icons: one tone, carved as a whole.
@@ -321,18 +322,11 @@
 }
 
 // Hover only with a real pointer: on touch, :hover sticks after a tap and
-// reads as a glow.
+// reads as a glow. Only the label answers: the icons are cut into the
+// track and stay as they are.
 @media (hover: hover) {
   .pf-tabs__tab:not([aria-selected="true"]):hover {
     color: var(--pf-tabs-hover);
-
-    .pf-tabs__icon {
-      color: var(--pf-tabs-carve-hover);
-    }
-
-    .pf-tabs__idle {
-      color: var(--pf-tabs-hover);
-    }
   }
 }
 
@@ -451,6 +445,10 @@ html.pf-a11y-motion {
 
   .pf-tabs__icon svg {
     filter: none;
+  }
+
+  .pf-tabs__icon .pf-tabs__idle {
+    color: var(--pf-tabs-idle);
   }
 }
 
