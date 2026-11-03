@@ -254,11 +254,12 @@
   color: var(--pf-tabs-carve);
   transition: color .3s var(--pf-tabs-ease) .12s;
 
-  // A legend on the key, not a picture: 24px on phones, 28px from md.
+  // A legend on the key, not a picture: 20px on phones (smaller and the
+  // carving clogs the details), 28px from md.
   svg {
     grid-area: 1 / 1;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
     fill: currentColor;
     filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
     transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
