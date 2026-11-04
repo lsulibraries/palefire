@@ -144,6 +144,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Object label on the stage: no panel; a caption at the column's foot (`.pf-hero-banner__plate`, the label's lines run in at 12px, muted, two lines at most, hidden under 45rem tall). The lead's words sit at the foot of their row.
 - **2026-11-04:** Object label's first placement: the stage's lead picture (`.pf-hero-banner__plate`, a solid panel of `--pf-hl-wash`, stage only), from `field_exhibit_cover_maker`, `_title`, `_date` and `_medium` on Modular page. Stage row labels sit behind their titles at `--pf-hl-label-strength`, per reading colour, measured at 4.5:1 on the current picture; solid with more contrast.
 - **2026-11-04:** Stage title: `--pf-title-veil-on` per reading colour, measured on the pixels under the letters at 1100, 1440 and 1920: Twilight and Night 51%, Cream, Soft and Lavender 55%, Material 56%, Forest 57%, Midnight 58%, Dusk 61%, Cocoa 62%, Sepia 66%, Sage and Solarized 70%. Tuned to the current poster.
 - **2026-11-04:** Hero Highlights on the stage: the wash is one gradient, `.pf-hero-banners::after`, spanning the list's rows on the `ul`'s grid (`minmax(0, 1fr) repeat(5, auto)`) and 10rem above: transparent, 78% at 10rem, 88% at 40%, the page colour at the foot. It fades in over 28% to 38% of the run (`pf-hl-wash`). Hairlines are `.pf-hero-banner__link::before`, drawn out with `pf-hl-draw`; words rise 36% to 76%, 8% apart. Replaces `--pf-hl-mix`.

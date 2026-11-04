@@ -4410,10 +4410,10 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
 $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
-// How far a row's label sits behind its title: the least that keeps 4.5:1 on
-// every pixel under the labels, from 1100 to 1920 wide, on the current lead
-// picture, where 80% (the default) would not hold or more can go. A new
-// picture may need measuring again.
+// How far a row's label sits behind its title, keeping 4.5:1 on every pixel
+// under the labels, from 1100 to 1920 wide, on the current lead picture, where
+// 80% (the default) would not hold or more can go. A new picture may need
+// measuring again.
 @each $theme, $strength in ("night": 72%, "twilight": 76%, "forest": 82%, "midnight": 83%, "cocoa": 85%, "sage": 85%, "sepia": 85%, "soft": 88%, "dusk": 92%, "lavender": 98%) {
   html[data-pf-theme="#{$theme}"] {
     --pf-hl-label-strength: #{$strength};
@@ -4547,26 +4547,48 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             background: var(--pf-hl-wash);
           }
 
-          // The lead picture's object label: a wall label on the picture, a
-          // solid panel of the page's colour so its words keep their contrast
-          // on any picture. It rises once the sweep has passed and gives way
-          // with the picture, when another item is in hand or the next event
-          // has taken the banner (js/hero-event.js).
+          // The lead picture's object label, as a caption at the column's
+          // foot, where the film's own caption stood: one small run of text
+          // in the last row's bottom padding, on the wash's strongest part.
+          // Comes in last, after the rows, and gives way with the picture,
+          // when another item is in hand or the next event has taken the
+          // banner (js/hero-event.js). Two lines at most, so it never reaches
+          // the row above.
           .pf-hero-banner__plate {
             position: absolute;
-            top: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 1.5rem);
-            left: 0;
+            right: var(--pf-hl-pad);
+            bottom: clamp(.5rem, 1.5svh, 1rem);
+            left: var(--pf-hl-pad);
             z-index: 2;
             display: block;
-            max-width: calc(100% - var(--pf-hl-pad));
-            animation: pf-split-appear ease-out both;
+            animation: pf-hl-wash linear both;
             animation-timeline: scroll(root);
-            animation-range: calc(var(--pf-stage-run) * .2) calc(var(--pf-stage-run) * .3);
+            animation-range: calc(var(--pf-stage-run) * .7) calc(var(--pf-stage-run) * .8);
 
             .pf-object-label {
-              padding: 1rem var(--pf-hl-pad);
-              background: var(--pf-hl-wash);
+              display: -webkit-box;
+              overflow: hidden;
+              max-width: none;
+              color: var(--pf-label-muted);
+              font-size: .75rem;
+              line-height: 1.4;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              line-clamp: 2;
               transition: opacity .35s ease-out .08s;
+            }
+
+            p {
+              display: inline;
+              margin: 0;
+              color: inherit;
+              font: inherit;
+              letter-spacing: normal;
+              text-transform: none;
+
+              &::after {
+                content: ".";
+              }
             }
           }
 
@@ -4737,8 +4759,11 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             display: grid;
             grid-template-columns: minmax(0, 1fr);
 
+            // One row only: with no hairline, a second would take half the
+            // spare height and lift the words off the rule below them.
             .pf-hero-banner__link {
               grid-area: 1 / 1;
+              grid-template-rows: minmax(0, 1fr);
 
               &::before {
                 content: none;
@@ -4809,6 +4834,14 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
         @media (max-height: 52rem) {
           > .pf-hero-banners > .pf-hero-banner:not(:first-child) .pf-hero-banner__label {
             @include visually-hidden;
+          }
+        }
+
+        // Shorter still, the column's foot falls below the window: no caption
+        // cut in half at the fold.
+        @media (max-height: 45rem) {
+          > .pf-hero-banners .pf-hero-banner__plate {
+            display: none;
           }
         }
       }
