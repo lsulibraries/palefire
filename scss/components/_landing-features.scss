@@ -3499,22 +3499,35 @@ html#{$pf-system} .pf-sections > .pf-section:not(.pf-section--flush) {
   --pf-section-pad-inline: var(--pf-hero-col-pad);
 }
 
-// The cover (2026-11-03): no rail beside the hero, so the column takes the
-// header's grid instead. Its gutter is the header's side padding
-// (--pf-header-gutter), so every heading and text block starts on the LSU
-// Libraries logo's and the breadcrumb's left edge at every width, not a
-// near miss 28px in (at 1440 the centred 1280px column started at 76px, the
-// logo at 48px). The column grows to 1824px (1920 less the two 48px
-// gutters) and is centred only past that, where the gap is plainly wide.
-// When the rail appears below the hero it lays over the gutter: its line
-// sits 20px from the edge, clear of the text.
-html#{$pf-system} .pf-sections:has(.pf-landing--cover) {
-  --pf-hero-pad-base: var(--pf-header-gutter);
+// The cover's first screen (.pf-landing__run: title, film, Highlights) has
+// no rail beside it, so it takes the header's grid: its gutter is the
+// header's side padding (--pf-header-gutter), on the LSU Libraries logo's
+// edge at every width, and its column grows to 1824px (1920 less the two
+// 48px gutters), centred only past that. The hero's section is that wide
+// from md, so the first screen's cqi sizes read its width. Everything after
+// the first screen (the Quick Start, the map, the sections below) keeps the
+// page's centred 1280px column, its gutter the sections' own padding: the
+// hero inset and --pf-cover-gutter measure it from the section's edges.
+html#{$pf-system} .pf-sections > .pf-section:not(.pf-section--flush):has(.pf-landing--cover) {
+  @include media-breakpoint-up(md) {
+    --pf-hero-col-pad: max(var(--pf-header-gutter), (100cqi - 1824px) / 2);
+  }
+}
+
+.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__run {
   --pf-col-max: 1824px;
+  --pf-hero-gutter: var(--pf-header-gutter);
+  --pf-cover-gutter: max(var(--pf-header-gutter), (100% - 1824px) / 2);
 }
 
 html[data-pf-hero] .pf-landing--hero {
   --pf-hero-gutter: var(--pf-hero-pad-base);
+}
+
+// The drawing stays on the column with its rule and text: the hero's spill
+// into the gutters (_landing-hero.scss) would now reach for the wider section.
+html[data-pf-hero] .pf-landing--cover .pf-map__stage {
+  margin-inline: 0;
 }
 
 // --- Five columns, from 80rem -------------------------------------------------

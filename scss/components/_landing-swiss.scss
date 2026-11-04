@@ -280,6 +280,34 @@
   }
 }
 
+// The drawing's legend, under the map's description on the hero: the labels'
+// voice, its marks one width so the words start on one edge.
+.pf-map__legend--hero {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .375rem;
+  margin: 1.25rem 0 0;
+
+  li {
+    @extend %pf-landing-label;
+    gap: .75rem;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-map__swatch,
+  .pf-map__legend-icon {
+    width: 28px;
+  }
+
+  .pf-map__swatch {
+    height: calc(var(--p) * 3);
+  }
+
+  .pf-map__legend-icon {
+    height: 18px;
+  }
+}
+
 // The group headings are h3s, so a swatch's heading color (Twilight's
 // pale gold for content headings, _reading-themes.scss) would reach them:
 // labels here, in the labels' grey.

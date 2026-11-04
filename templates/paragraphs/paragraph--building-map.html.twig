@@ -45,9 +45,35 @@
      hero, Hill Memorial only and wide enough, it sits in the drawing's
      empty top-left corner instead (_landing-hero.scss, "Typography in the
      drawing"). #}
-  {% if map.summary %}
+  {# On the hero the drawing's legend follows it: each hatch once (booked
+     rooms and rentals share one), then the drawing's other marks. #}
+  {% set legend_hatches = map.key_indexed ? {
+    walk_in: map.spaces|filter(s => s.access == 'walk_in')|length > 0,
+    book: map.spaces|filter(s => s.access == 'appointment')|length > 0,
+    rent: map.spaces|filter(s => s.access == 'rental')|length > 0,
+  } : {} %}
+  {% if map.summary or map.key_indexed %}
     <div class="pf-map__type">
-      <div class="pf-map__summary">{{ map.summary }}</div>
+      {% if map.summary %}
+        <div class="pf-map__summary">{{ map.summary }}</div>
+      {% endif %}
+      {% if map.key_indexed %}
+        <ul class="pf-map__legend pf-map__legend--hero" aria-label="{{ 'Map legend'|t }}">
+          {% if legend_hatches.walk_in %}
+            <li><span class="pf-map__swatch" aria-hidden="true"></span>{{ 'Walk in'|t }}</li>
+          {% endif %}
+          {% if legend_hatches.book or legend_hatches.rent %}
+            <li><span class="pf-map__swatch pf-map__swatch--appointment" aria-hidden="true"></span>
+              {%- if legend_hatches.book and legend_hatches.rent %}{{ 'Book online or event rental'|t }}
+              {%- elseif legend_hatches.book %}{{ 'Book online'|t }}
+              {%- else %}{{ 'Event rental'|t }}{% endif -%}
+            </li>
+          {% endif %}
+          {% if 'elevator' in map.legend %}
+            <li><svg class="pf-map__legend-icon" viewBox="-66 -40 132 80" aria-hidden="true" focusable="false">{% include '@palefire/includes/map-icon-elevator.svg.twig' %}</svg>{{ 'Elevator'|t }}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
     </div>
   {% endif %}
   {# Aside: the legend and space list, then the note (includes/
