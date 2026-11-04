@@ -28,6 +28,7 @@ use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
+use Drupal\palefire_modular\ModularSections;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -450,10 +451,12 @@ function _palefire_hero_contents(ParagraphInterface $hero, CacheableMetadata $ca
     $items[] = ['num' => sprintf('%02d', (int) $visit_num), 'label' => t('Visit Hill'), 'url' => '#' . $visit];
   }
   $tabs = _palefire_hero_tabs($hero);
-  $anchors = PalefireHooks::sectionData($host);
+  // The ids the sections print, from the module that prints them. Only the
+  // sections it describes are rendered, so only those are counted.
+  $described = class_exists(ModularSections::class) ? ModularSections::describe($host) : [];
   $repository = \Drupal::service('entity.repository');
   foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
-    if ($section->bundle() === 'landing_hero' || !$section->isPublished() || ($tabs && $tabs->id() === $section->id())) {
+    if ($section->bundle() === 'landing_hero' || !isset($described[$section->id()]) || ($tabs && $tabs->id() === $section->id())) {
       continue;
     }
     $section = $repository->getTranslationFromContext($section);
@@ -461,14 +464,11 @@ function _palefire_hero_contents(ParagraphInterface $hero, CacheableMetadata $ca
       continue;
     }
     $cache->addCacheableDependency($section);
-    $count++;
-    if (isset($anchors[$section->uuid()])) {
-      $items[] = [
-        'num' => sprintf('%02d', $count),
-        'label' => $section->get('field_tile_eyebrow')->value,
-        'url' => '#' . $anchors[$section->uuid()]['anchor'],
-      ];
-    }
+    $items[] = [
+      'num' => sprintf('%02d', ++$count),
+      'label' => $section->get('field_tile_eyebrow')->value,
+      'url' => '#' . $described[$section->id()]['id'],
+    ];
   }
   return count($items) > 1 ? $items : [];
 }
