@@ -4378,37 +4378,26 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// Trading places: as the picture takes the column, the letters take the same
-// picture (--pf-title-feature, the lead Highlight's; the film's still without
-// one), its veil rising from the first load's to the least that keeps them at
-// 3:1 on any picture (below). Their color stays gold, only the fill goes.
-@property --pf-title-veil {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 22%;
-}
-
+// Trading places: as the picture takes the column, the letters' gold fades and
+// the same picture (--pf-title-feature, the lead Highlight's; the film's still
+// without one) shows through them as it is, with no veil. By choice, so the
+// letters don't hold 3:1 on a picture's dark pixels: keep the lead picture
+// light. Their color stays gold, only the fill goes.
 @keyframes pf-title-trade {
-  from {
-    --pf-title-veil: 22%;
-    -webkit-text-fill-color: currentcolor;
-  }
-
   to {
-    --pf-title-veil: var(--pf-title-veil-on);
     -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
   }
 }
 
 // The picture in the letters, from the first pixel of scroll: the fill is
 // still solid there, so the change can't be seen, and the first load keeps
-// the film's still. It loads with the column's, the same file.
+// the film's still. It loads with the column's, the same file. The gold stays
+// under it, so the words never vanish if the picture fails to load.
 @keyframes pf-title-feature {
   from,
   to {
-    background-image:
-      linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
-      var(--pf-title-feature, var(--pf-title-still));
+    background-color: currentcolor;
+    background-image: var(--pf-title-feature, var(--pf-title-still));
     background-position: 50% 50%;
   }
 }
@@ -4907,28 +4896,16 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
         animation-range: 0 calc(var(--pf-stage-run) * .3);
       }
 
-      // The picture in the letters, under the veil, on the dark reading colours
+      // The picture in the letters, on the dark reading colours
       // ($pf-title-trade-on), until an event takes the lead (its flyer may be
       // dark). With the entrance (html.pf-fade) _entrance.scss adds the trade
       // to the title's list. Not with more contrast or forced colours: they
       // stay solid.
       @media (prefers-contrast: no-preference) and (forced-colors: none) {
         html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          // The least that keeps 3:1 on a black pixel, each colour's title
-          // gold over its page, rounded up: any picture holds, so a new one
-          // needs no measuring. Solarized here, the others below.
-          --pf-title-veil-on: 70%;
-          background:
-            linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
-            var(--pf-title-still) 58% 50% / cover no-repeat;
+          background: var(--pf-title-still) 58% 50% / cover no-repeat;
           -webkit-background-clip: text;
           background-clip: text;
-        }
-
-        @each $theme, $veil in ("twilight": 51%, "night": 51%, "material": 56%, "forest": 57%, "midnight": 59%, "dusk": 61%, "cocoa": 63%) {
-          html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-            --pf-title-veil-on: #{$veil};
-          }
         }
 
         html#{$pf-title-trade-on}:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
