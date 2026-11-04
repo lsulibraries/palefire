@@ -4350,6 +4350,20 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
+// A row's hairline draws out from the left, ahead of its words.
+@keyframes pf-hl-draw {
+  from {
+    scale: 0 1;
+  }
+}
+
+// The list's wash comes in whole, once the sweep has nearly done.
+@keyframes pf-hl-wash {
+  from {
+    opacity: 0;
+  }
+}
+
 // The list's pictures come in at the film's sweep, its edge theirs.
 @keyframes pf-hl-sweep {
   from {
@@ -4420,9 +4434,10 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           position: absolute;
           inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
           isolation: isolate;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
+          // A spare row takes up the height; the items sit in the five
+          // under it, whatever their heights, and the wash spans them.
+          grid-template: minmax(0, 1fr) repeat(5, auto) / minmax(0, 1fr);
+          grid-auto-flow: row;
           grid-row: 1 / 3;
           grid-column: 1;
           gap: 0;
@@ -4443,6 +4458,29 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             animation: pf-hl-sweep ease-out both;
             animation-timeline: scroll(root);
             animation-range: 0 calc(var(--pf-stage-run) * .3);
+          }
+
+          // One gradient behind all the words, sized from the list (not the
+          // column), so they stay on at least 78% of the page's colour at
+          // any window height (4.5:1 in every reading colour). It fades in
+          // whole, ahead of the words, and starts 10rem above the lead.
+          &::after {
+            content: "";
+            z-index: 1;
+            grid-area: 2 / 1 / 7 / 2;
+            align-self: stretch;
+            margin-top: -10rem;
+            background: linear-gradient(
+              to bottom,
+              transparent,
+              color-mix(in srgb, var(--pf-hl-wash) 78%, transparent) 10rem,
+              color-mix(in srgb, var(--pf-hl-wash) 88%, transparent) calc(10rem + 40%),
+              var(--pf-hl-wash)
+            );
+            pointer-events: none;
+            animation: pf-hl-wash linear both;
+            animation-timeline: scroll(root);
+            animation-range: calc(var(--pf-stage-run) * .28) calc(var(--pf-stage-run) * .38);
           }
 
           // The first item's picture stays under the others, which fade in
@@ -4505,6 +4543,8 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           // Hand back on the keyboard: every word shows at once, and the
           // picture needs no sweep.
           &:has(.pf-hero-banner__link:focus-visible) {
+            &::after,
+            .pf-hero-banner__link::before,
             .pf-hero-banner__text,
             .pf-hero-banner__media {
               animation: none;
@@ -4533,13 +4573,25 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           .pf-hero-banner__link {
             position: static;
             display: grid;
-            grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+            grid-template: auto auto / minmax(0, 1fr);
             width: 100%;
             overflow: visible;
             isolation: auto;
             color: var(--bs-heading-color, var(--pf-section-fg));
 
-            // The ring on the row: its wash would paint over the link's.
+            // A hairline over the row, above the wash.
+            &::before {
+              content: "";
+              position: relative;
+              z-index: 2;
+              height: 1px;
+              background: $pf-hairline;
+              transform-origin: 0 50%;
+              animation: pf-hl-draw ease-out both;
+              animation-timeline: scroll(root);
+            }
+
+            // The ring on the row: the wash would paint over the link's.
             &:focus-visible {
               outline: none;
 
@@ -4550,16 +4602,13 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             }
           }
 
-          // A row of words on its own strip of wash, stronger towards the
-          // foot: no band with an edge, and the hairline hides the steps.
+          // A row of words, over the list's wash.
           .pf-hero-banner__text {
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             gap: .25rem;
             padding: clamp(.625rem, 1.6svh, 1rem) calc(var(--pf-hl-pad) + 1.75rem) clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
-            border-top: 1px solid $pf-hairline;
-            background: color-mix(in srgb, var(--pf-hl-wash) var(--pf-hl-mix, 82%), transparent);
             pointer-events: auto;
             animation: pf-split-appear ease-out both;
             animation-timeline: scroll(root);
@@ -4577,16 +4626,25 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           }
 
           // One after another, each in a short window of its own (8% of the
-          // run, 10% apart) that eases to rest, so wherever the page stops
+          // run, 8% apart) that eases to rest, so wherever the page stops
           // the list is whole items in and the rest not begun, never five
-          // half-faded. All in by 80% of the run: the list rests before the
+          // half-faded. All in by 76% of the run: the list rests before the
           // stage moves on.
           @for $i from 1 through 5 {
-            &:nth-child(#{$i}) .pf-hero-banner__text {
-              --pf-hl-mix: #{74% + $i * 4%};
-              animation-range:
-                calc(var(--pf-stage-run) * #{.32 + ($i - 1) * .1})
-                calc(var(--pf-stage-run) * #{.4 + ($i - 1) * .1});
+            &:nth-child(#{$i}) {
+              grid-area: #{$i + 1} / 1;
+
+              .pf-hero-banner__link::before {
+                animation-range:
+                  calc(var(--pf-stage-run) * #{.34 + ($i - 1) * .08})
+                  calc(var(--pf-stage-run) * #{.41 + ($i - 1) * .08});
+              }
+
+              .pf-hero-banner__text {
+                animation-range:
+                  calc(var(--pf-stage-run) * #{.36 + ($i - 1) * .08})
+                  calc(var(--pf-stage-run) * #{.44 + ($i - 1) * .08});
+              }
             }
           }
 
@@ -4617,29 +4675,21 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             color: var(--pf-g-title, var(--pf-toc-active));
           }
 
-          // Off the bare picture without an edge: the wash fades in above
-          // the lead, and under the last row it runs on to the column's foot,
-          // where its words end level with the search.
+          // The lead: no hairline, its words large.
           &:first-child {
             display: grid;
             grid-template-columns: minmax(0, 1fr);
 
             .pf-hero-banner__link {
               grid-area: 1 / 1;
+
+              &::before {
+                content: none;
+              }
             }
 
             .pf-hero-banner__text {
               padding-right: var(--pf-hl-pad);
-              border-top: 0;
-
-              &::before {
-                content: "";
-                position: absolute;
-                inset: auto 0 100%;
-                height: 10rem;
-                background: linear-gradient(to top, color-mix(in srgb, var(--pf-hl-wash) var(--pf-hl-mix), transparent), transparent);
-                pointer-events: none;
-              }
 
               &::after {
                 content: none;
@@ -4658,9 +4708,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             }
           }
 
+          // The last row's words end level with the search's foot.
           &:last-child .pf-hero-banner__text {
             padding-bottom: clamp(3rem, 9svh, 6rem);
-            background: linear-gradient(to bottom, color-mix(in srgb, var(--pf-hl-wash) var(--pf-hl-mix), transparent), var(--pf-hl-wash));
           }
 
           // The lead's words for another item, in the lead's place. Each
