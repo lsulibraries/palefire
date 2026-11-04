@@ -118,11 +118,11 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 
   #{$pf-enter-on} #{$pf-enter-cover} {
-    > .pf-landing__media .pf-landing__bg-video {
+    .pf-landing__media .pf-landing__bg-video {
       @include pf-enter(0ms, 2.4s, pf-enter-settle);
     }
 
-    > .pf-landing__top {
+    .pf-landing__top {
       // The unit name rides in with the title (the line over the <h1>);
       // its hairline then draws out from the left and the building follows.
       > :is(.pf-landing__kicker, .pf-landing__title) {
@@ -161,12 +161,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
       }
     }
 
-    > .pf-landing__form .pf-landing__field {
+    .pf-landing__form .pf-landing__field {
       @include pf-enter(1000ms);
     }
 
     // The banners after the search (their own rise and stagger).
-    > .pf-hero-banners > .pf-hero-banner {
+    .pf-hero-banners > .pf-hero-banner {
       @for $i from 1 through 5 {
         &:nth-child(#{$i}) {
           animation-delay: #{1140 + ($i - 1) * 110}ms;
@@ -183,7 +183,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   // CSS alone keeps the time, so the column comes in on cue even when the
   // script doesn't run (the clip not ready, an old browser).
   @container pf-cover (min-width: 64rem) {
-    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media {
       animation: pf-split-open 1.4s ease-in-out .6s backwards;
     }
 
@@ -192,13 +192,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     // goes quickly and a half-swept frame is rare.
     @supports (animation-timeline: scroll()) {
       @media (min-height: 40rem) {
-        #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__media {
+        #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media {
           animation:
-            pf-stage-hold linear both,
             pf-split-wipe ease-out both,
             pf-split-open 1.4s ease-in-out .6s backwards;
-          animation-timeline: scroll(root), scroll(root), auto;
-          animation-range: 0 var(--pf-stage-run), 0 calc(var(--pf-stage-run) * .3), normal;
+          animation-timeline: scroll(root), auto;
+          animation-range: 0 calc(var(--pf-stage-run) * .3), normal;
         }
       }
     }
@@ -209,7 +208,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     // gold fills them. The
     // clip's canvas, when it comes, lies over the same picture. Not with
     // more contrast or forced colours (below).
-    #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title--still {
+    #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} .pf-landing__top > .pf-landing__title--still {
       background:
         linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
         var(--pf-title-still) 58% 50% / cover no-repeat;
@@ -225,7 +224,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     // which win while they run.
     @supports (animation-timeline: scroll()) {
       @media (min-height: 40rem) and (prefers-contrast: no-preference) and (forced-colors: none) {
-        #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title--still {
+        #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} .pf-landing__top > .pf-landing__title--still {
           animation:
             pf-title-trade ease-out both,
             pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
@@ -238,7 +237,7 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 
   @media (prefers-contrast: more), (forced-colors: active) {
-    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__title.pf-landing__title--still {
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__top > .pf-landing__title.pf-landing__title--still {
       background: none;
       animation: pf-enter-title 1.1s $pf-enter-ease 340ms backwards;
     }
@@ -246,12 +245,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
 
   // The plate holds the links' unblur on scroll (_landing-features.scss),
   // so its fade joins that animation's list rather than replacing it.
-  #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__links {
+  #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__top > .pf-landing__links {
     @include pf-enter(780ms);
   }
 
   @supports (animation-timeline: view()) {
-    #{$pf-enter-on} #{$pf-enter-cover} > .pf-landing__top > .pf-landing__links {
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__top > .pf-landing__links {
       animation:
         pf-links-unblur linear both,
         pf-enter .9s $pf-enter-ease 780ms backwards;

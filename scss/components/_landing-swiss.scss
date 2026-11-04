@@ -63,7 +63,7 @@
 }
 
 // Search: a hairline across the panel, then the label and the field.
-.pf-landing__lead > .pf-landing__form {
+.pf-landing__lead .pf-landing__form {
   padding-top: clamp(1.25rem, 2.5vw, 2rem);
   border-top: 1px solid var(--pf-landing-line);
 }

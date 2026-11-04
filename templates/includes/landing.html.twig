@@ -278,6 +278,9 @@
        themselves keep their own text and level. #}
     {# Cover: the video's layer, laid across the title, intro and search
        (_landing-features.scss, "Cover"). #}
+    {# The first screen, in two wrappers that are no boxes except where the
+       stage holds it (position: sticky, _landing-features.scss). #}
+    {% if hero %}<div class="pf-landing__run"><div class="pf-landing__stage">{% endif %}
     {% if cover %}{{ media }}{% endif %}
     {% if hero %}<div class="pf-landing__top">{% endif %}
     {# Hero: "LSU Libraries", a hairline, then the building (the Visit
@@ -521,7 +524,7 @@
           {% endif %}
         </ul>
       {% endif %}
-
+      </div></div>{# .pf-landing__stage, .pf-landing__run #}
 
       {# Quick guide: under the banners, still in the lead panel. Index rule
          01 with the link to the full guide at its end, the heading and

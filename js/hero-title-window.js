@@ -69,7 +69,7 @@
     attach(context) {
       once('hero-title-window', '.pf-landing--cover .pf-landing__lead--hero', context).forEach((lead) => {
         if (skip()) return;
-        const media = lead.querySelector(':scope > .pf-landing__media');
+        const media = lead.querySelector('.pf-landing__media');
         const title = lead.querySelector('.pf-landing__title');
         if (!media || !title || !media.getAnimations) return;
         const open = media.getAnimations().find((a) => a.animationName === OPEN);
