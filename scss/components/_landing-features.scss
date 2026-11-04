@@ -4767,8 +4767,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
       // Not with more contrast or forced colours: they stay solid.
       @media (prefers-contrast: no-preference) and (forced-colors: none) {
         html:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
-          // 3:1 for the letters on the still's darkest and lightest pixels in
-          // every reading colour; less where the colour allows.
+          // The least that keeps 3:1 on every pixel under the letters, from
+          // 1100 to 1920 wide, on the current poster: Sage and Solarized here,
+          // the other colours below. A new poster may need measuring again.
           --pf-title-veil-on: 70%;
           background:
             linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
@@ -4777,12 +4778,10 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           background-clip: text;
         }
 
-        html:is([data-pf-theme="twilight"], [data-pf-theme="night"]):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
-          --pf-title-veil-on: 51%;
-        }
-
-        html:is([data-pf-theme="cream"], [data-pf-theme="soft"], [data-pf-theme="lavender"]):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
-          --pf-title-veil-on: 55%;
+        @each $theme, $veil in ("twilight": 51%, "night": 51%, "cream": 55%, "soft": 55%, "lavender": 55%, "material": 56%, "forest": 57%, "midnight": 58%, "dusk": 61%, "cocoa": 62%, "sepia": 66%) {
+          html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {
+            --pf-title-veil-on: #{$veil};
+          }
         }
 
         html:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero > .pf-landing__top > .pf-landing__title--still {

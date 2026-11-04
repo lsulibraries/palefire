@@ -144,6 +144,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Stage title: `--pf-title-veil-on` per reading colour, measured on the pixels under the letters at 1100, 1440 and 1920: Twilight and Night 51%, Cream, Soft and Lavender 55%, Material 56%, Forest 57%, Midnight 58%, Dusk 61%, Cocoa 62%, Sepia 66%, Sage and Solarized 70%. Tuned to the current poster.
 - **2026-11-04:** Hero Highlights on the stage: the wash is one gradient, `.pf-hero-banners::after`, spanning the list's rows on the `ul`'s grid (`minmax(0, 1fr) repeat(5, auto)`) and 10rem above: transparent, 78% at 10rem, 88% at 40%, the page colour at the foot. It fades in over 28% to 38% of the run (`pf-hl-wash`). Hairlines are `.pf-hero-banner__link::before`, drawn out with `pf-hl-draw`; words rise 36% to 76%, 8% apart. Replaces `--pf-hl-mix`.
 - **2026-11-03:** Section tabs: choosing a tab no longer writes its id to the address, and clears one already there (`select()`, `replaceState`, no history entry). `#ask` and `#ask-question` links still open their panel.
 - **2026-11-03:** Stage title: `pf-title-trade` (scroll timeline, first 30% of the run, the film's sweep) takes `.pf-landing__title--still` from gold to the still. `@property --pf-title-veil` rises from 22% to `--pf-title-veil-on`: 51% Twilight and Night, 55% Cream, Soft and Lavender, 70% otherwise, for 3:1 on the still's extreme pixels. With `html.pf-fade` the trade joins the title's list in `_entrance.scss`. Solid gold with `.pf-a11y-motion`, `.pf-a11y-contrast`, more contrast or forced colours.
