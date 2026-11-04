@@ -51,21 +51,10 @@
     </div>
   {% endif %}
   {# Aside: the legend and space list, then the note (includes/
-     map-key.html.twig). On the landing hero (map.visit), the Visit strip
-     is here too, with the key across its top, so they share one panel. #}
+     map-key.html.twig). #}
   {% if not map.no_key %}
   <div class="pf-map__aside">
-    {% if map.visit %}
-      {% embed '@palefire/includes/visit-strip.html.twig' with { visit: map.visit, visit_id: map.visit.id, keyed: true } %}
-        {% block key %}
-          <div class="pf-visit__key">
-            {% include '@palefire/includes/map-key.html.twig' %}
-          </div>
-        {% endblock %}
-      {% endembed %}
-    {% else %}
-      {% include '@palefire/includes/map-key.html.twig' %}
-    {% endif %}
+    {% include '@palefire/includes/map-key.html.twig' %}
   </div>
   {% endif %}
 

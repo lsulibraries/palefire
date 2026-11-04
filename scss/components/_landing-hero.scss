@@ -49,7 +49,7 @@ $pf-hero-media-wash: .8 !default;
 // never past the old 1280px cap: the drawing keeps its size, the text
 // stays in the column.
 @include media-breakpoint-up(md) {
-  .pf-landing--hero > .pf-landing__visit {
+  .pf-landing--hero > :is(.pf-landing__visit, .pf-landing__directions) {
     width: auto;
     max-width: none;
     margin-inline: calc(-1 * var(--pf-section-pad-inline, 0px));

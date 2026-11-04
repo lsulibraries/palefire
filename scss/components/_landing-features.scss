@@ -888,7 +888,7 @@ html.pf-a11y-contrast .pf-landing--cover .pf-landing__lead .pf-landing__media::b
 // (building-map.js). The map wrapper keeps its own 5rem stop, which already
 // clears the bar.
 .pf-landing:has(> .pf-landing__bar) {
-  > :is(.pf-landing__lead, .pf-landing__visit) :is(a[href], button, input, select, textarea, summary, [tabindex]) {
+  > :is(.pf-landing__lead, .pf-landing__visit, .pf-landing__directions) :is(a[href], button, input, select, textarea, summary, [tabindex]) {
     scroll-margin-top: calc(var(--pf-landing-bar-h) + 1rem);
   }
 
@@ -2081,8 +2081,22 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 // The space under a rule before its heading, the same for 02, 03 and 04.
 .pf-quick-guide > .pf-index-rule,
 .pf-landing__visit > .pf-index-rule,
+.pf-landing__directions > .pf-index-rule,
 .pf-landing__onview > .pf-index-rule {
   margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+// 02's link runs down to the rooms under the drawing: a down arrow, stepping
+// down on hover.
+.pf-landing__visit > .pf-index-rule > .pf-index-rule__link {
+  &::after,
+  [dir="rtl"] &::after {
+    content: "\2193" / "";
+  }
+
+  &:is(:hover, :focus-visible)::after {
+    transform: translateY(.15em);
+  }
 }
 
 // A section after the landing with an Eyebrow (field--node--field-scroll-
@@ -2416,7 +2430,7 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 
   // Two columns, on the hero's grid: hours in the first, the mini map in
   // the second.
-  .pf-landing--cover .pf-map .pf-visit {
+  .pf-landing--cover .pf-landing__directions .pf-visit {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--pf-grid-gutter);
   }
@@ -2425,7 +2439,7 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
 // Hours | mini map, the map a frame as tall as the hours, the two links on
 // one line under them (the parts as _visit.scss lays them out).
 @container pf-cover (min-width: 64rem) {
-  .pf-landing--cover .pf-map .pf-visit {
+  .pf-landing--cover .pf-landing__directions .pf-visit {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
@@ -2435,16 +2449,6 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
       "all all directions directions";
     column-gap: var(--pf-grid-gutter);
     @include pf-visit-frames;
-  }
-
-  .pf-landing--cover .pf-map .pf-visit--keyed {
-    grid-template-rows: auto auto auto 1fr auto;
-    grid-template-areas:
-      "key key key key"
-      "head head head head"
-      "status status map map"
-      "week week map map"
-      "all all directions directions";
   }
 
   .pf-landing--cover > .pf-landing__onview {
@@ -3228,7 +3232,7 @@ html[data-pf-hero] .pf-landing--cover {
 
 // Across the map's column (not shrunk to fit, which stacks the two), over
 // pf-visit-frames' justify-self: start on the hero's grid.
-.pf-landing--cover .pf-map .pf-visit .pf-visit__go {
+.pf-landing--cover .pf-landing__directions .pf-visit .pf-visit__go {
   gap: .625rem;
   justify-self: stretch;
 }
@@ -3245,7 +3249,7 @@ html[data-pf-hero] .pf-landing--cover {
     margin-top: .75rem;
   }
 
-  .pf-landing--cover .pf-map .pf-visit .pf-visit__go {
+  .pf-landing--cover .pf-landing__directions .pf-visit .pf-visit__go {
     flex-direction: column;
     gap: .5rem;
   }
@@ -3333,6 +3337,7 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__visit-tit
 html#{$pf-system} .pf-main .pf-sections .pf-section__title,
 html[data-pf-hero] .pf-showcase-list__heading,
 html[data-pf-hero] .pf-landing--cover .pf-landing__visit .pf-map > .pf-map__heading,
+html[data-pf-hero] .pf-landing--cover .pf-visit--indexed .pf-visit__name,
 html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
   font-size: var(--pf-hero-h2-size);
   font-weight: 500;
@@ -3346,12 +3351,6 @@ html[data-pf-hero] .pf-landing--cover .pf-quick-guide .pf-quick-guide__title {
 
 html[data-pf-hero] .pf-landing--cover .pf-landing__title {
   text-wrap: balance;
-}
-
-// The Visit panel's own heading ("Plan your visit") a step down, an h3.
-html[data-pf-hero] .pf-landing--cover .pf-visit .pf-visit__name {
-  font-size: clamp(1.25rem, 1.1rem + .5vw, 1.5rem);
-  color: var(--pf-section-fg, var(--bs-body-color));
 }
 
 // The search's label in the muted label tone, not gold.
@@ -3448,15 +3447,14 @@ html[data-pf-theme="twilight"] .pf-quick-guide {
   }
 }
 
-// The map: the same space above it as On view.
-.pf-landing--cover > .pf-landing__visit {
+// The map and Hours and directions: the same space above them as On view.
+.pf-landing--cover > :is(.pf-landing__visit, .pf-landing__directions) {
   margin-top: var(--pf-hero-gap);
 }
 
-// The map's Visit panel: no box and no hairline above (03 Rooms and
-// access opens it with its own rule), its content on the column's edge
-// (its legend, hours and mini map keep their grid).
-.pf-landing--cover .pf-map .pf-visit {
+// The Visit strip: no box (its index rule opens it), its content on the
+// column's edge (its hours and mini map keep their grid).
+.pf-landing--cover .pf-landing__directions .pf-visit {
   border-width: 0;
   border-radius: 0;
   // !important over the reading colors' panel glass (_reading-themes.scss).
@@ -3580,18 +3578,9 @@ html[data-pf-hero] .pf-landing--hero {
     }
   }
 
-  .pf-landing--cover .pf-map .pf-visit {
+  .pf-landing--cover .pf-landing__directions .pf-visit {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     grid-template-areas:
-      "head head head head head"
-      "status status map map map"
-      "week week map map map"
-      "all all directions directions directions";
-  }
-
-  .pf-landing--cover .pf-map .pf-visit--keyed {
-    grid-template-areas:
-      "key key key key key"
       "head head head head head"
       "status status map map map"
       "week week map map map"
@@ -3878,7 +3867,7 @@ html.pf-a11y-motion .pf-landing__account-note a::after {
 // under the header, no swatch tint). The right third of a landing screen
 // is close to 9:16 (480 × 900 at 1440 × 900), so a clip shot in portrait
 // fills it with little cropped; a landscape clip is cropped to its middle
-// (object-position). Under 64rem the video sits under the search at 4:5,
+// (object-position). Under 44rem the video sits under the search at 4:5,
 // inside the gutters. Rules here come last in the file, so they override
 // the washed band's above (the band's comments describe what is undone).
 // Specificity: the html prefix matches the pinned-video rules
@@ -3963,7 +3952,9 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 }
 
 // --- Wide: type in two-thirds, the film in the last third --------------------
-@container pf-cover (min-width: 64rem) {
+// From 44rem, so a portrait tablet has it too: its tall window suits the
+// narrow column.
+@container pf-cover (min-width: 44rem) {
   #{$pf-split} {
     // The first screen, held by the spacer: from the page's top to the
     // screen's foot (no peek: the banners start under it).
@@ -4065,10 +4056,10 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 }
 
 // --- Narrow: the film under the search -----------------------------------------
-// Phones and tablets: the type as before, then the film as a 4:5 frame in
-// the gutters (cropped wider where 60% of the screen is shorter), then the
-// banners. No washes, no pinning, no first-screen spacer.
-@container pf-cover (width < 64rem) {
+// Phones: the type as before, then the film as a 4:5 frame in the gutters
+// (cropped wider where 60% of the screen is shorter), then the banners. No
+// washes, no pinning, no first-screen spacer.
+@container pf-cover (width < 44rem) {
   #{$pf-split} {
     &::before {
       content: none;
@@ -4319,7 +4310,7 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 }
 
 // --- Scroll: the stage -------------------------------------------------------
-// From 64rem, on a window at least 40rem tall, with motion and scroll
+// From 44rem, on a window at least 40rem tall, with motion and scroll
 // timelines: the first screen is a stage that holds for one more screen of
 // scroll (--pf-stage-run). Over its first 30% the page's colour sweeps
 // right across the film (its clip from the left edge), so the type's field
@@ -4379,10 +4370,10 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// Trading places: as the picture takes the column, the letters take the
-// film's still (.pf-landing__title--still), its veil rising from the first
-// load's to the least that keeps them at 3:1 on it. Their color stays gold,
-// only the fill goes.
+// Trading places: as the picture takes the column, the letters take the same
+// picture (--pf-title-feature, the lead Highlight's; the film's still without
+// one), its veil rising from the first load's to the least that keeps them at
+// 3:1 on any picture (below). Their color stays gold, only the fill goes.
 @property --pf-title-veil {
   syntax: "<percentage>";
   inherits: true;
@@ -4398,6 +4389,19 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   to {
     --pf-title-veil: var(--pf-title-veil-on);
     -webkit-text-fill-color: transparent;
+  }
+}
+
+// The picture in the letters, from the first pixel of scroll: the fill is
+// still solid there, so the change can't be seen, and the first load keeps
+// the film's still. It loads with the column's, the same file.
+@keyframes pf-title-feature {
+  from,
+  to {
+    background-image:
+      linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
+      var(--pf-title-feature, var(--pf-title-still));
+    background-position: 50% 50%;
   }
 }
 
@@ -4421,7 +4425,7 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 40rem) {
-    @container pf-cover (min-width: 64rem) {
+    @container pf-cover (min-width: 44rem) {
       #{$pf-split-moving} {
         --pf-stage-run: 100svh;
 
@@ -4859,6 +4863,27 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             display: none;
           }
         }
+
+        // Under the phone's dock (_dock.scss, under 768px, so a small tablet
+        // has it here): the type and the list end above it, and no caption.
+        @media (max-width: 767.98px) {
+          .pf-landing__form,
+          .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
+            --pf-over-dock: calc(var(--pf-dock-h, 6rem) + 1.5rem);
+          }
+
+          .pf-landing__form {
+            margin-bottom: var(--pf-over-dock);
+          }
+
+          .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
+            padding-bottom: var(--pf-over-dock);
+          }
+
+          .pf-hero-banners .pf-hero-banner__plate {
+            display: none;
+          }
+        }
       }
 
       html:not(.pf-fade):not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__media {
@@ -4867,14 +4892,16 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
         animation-range: 0 calc(var(--pf-stage-run) * .3);
       }
 
-      // The still in the letters, under the veil. With the entrance
-      // (html.pf-fade) _entrance.scss adds the trade to the title's list.
-      // Not with more contrast or forced colours: they stay solid.
+      // The picture in the letters, under the veil, on the dark reading colours
+      // ($pf-title-trade-on), until an event takes the lead (its flyer may be
+      // dark). With the entrance (html.pf-fade) _entrance.scss adds the trade
+      // to the title's list. Not with more contrast or forced colours: they
+      // stay solid.
       @media (prefers-contrast: no-preference) and (forced-colors: none) {
-        html:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          // The least that keeps 3:1 on every pixel under the letters, from
-          // 1100 to 1920 wide, on the current poster: Sage and Solarized here,
-          // the other colours below. A new poster may need measuring again.
+        html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
+          // The least that keeps 3:1 on a black pixel, each colour's title
+          // gold over its page, rounded up: any picture holds, so a new one
+          // needs no measuring. Solarized here, the others below.
           --pf-title-veil-on: 70%;
           background:
             linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
@@ -4883,16 +4910,205 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           background-clip: text;
         }
 
-        @each $theme, $veil in ("twilight": 51%, "night": 51%, "cream": 55%, "soft": 55%, "lavender": 55%, "material": 56%, "forest": 57%, "midnight": 58%, "dusk": 61%, "cocoa": 62%, "sepia": 66%) {
+        @each $theme, $veil in ("twilight": 51%, "night": 51%, "material": 56%, "forest": 57%, "midnight": 59%, "dusk": 61%, "cocoa": 63%) {
           html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
             --pf-title-veil-on: #{$veil};
           }
         }
 
-        html:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          animation: pf-title-trade ease-out both;
-          animation-timeline: scroll(root);
-          animation-range: 0 calc(var(--pf-stage-run) * .3);
+        html#{$pf-title-trade-on}:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
+          animation:
+            pf-title-trade ease-out both,
+            pf-title-feature linear forwards;
+          animation-timeline: scroll(root), scroll(root);
+          animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3);
+        }
+
+        // Solid gold under an event: no trade, whichever list set it.
+        html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__top > .pf-landing__title--still {
+          -webkit-text-fill-color: currentcolor;
+          animation-name: none;
+        }
+      }
+    }
+  }
+}
+
+// --- Scroll: the film gives way (phones) -------------------------------------
+// Under 44rem there is no room to hold a stage: the first screen is already
+// full, and a flick would pass it. So nothing is held. The lead Highlight lies
+// in the film's own box, and as that box crosses the screen its picture rises
+// over the film, its edge moving with the scroll, and its words follow. The
+// other Highlights come after as ruled rows, one line of words each, with no
+// pictures to load. No script.
+// Without view timelines, with reduced motion or the Settings drawer's switch,
+// none of this: the film scrolls away and the two-by-two grid follows it.
+@keyframes pf-film-rise {
+  from {
+    clip-path: inset(100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @container pf-cover (width < 44rem) {
+      #{$pf-split-moving} {
+        // The film's box, as a length, so the lead can be laid exactly on it.
+        --pf-film-h: min((100cqi + 2 * var(--pf-section-pad-inline, 0px) - 2 * var(--pf-cover-gutter)) * 1.25, 60svh);
+        --pf-film-foot: clamp(2rem, 6vw, 3rem);
+
+        .pf-landing__media {
+          height: var(--pf-film-h);
+          max-height: none;
+          margin-bottom: var(--pf-film-foot);
+          aspect-ratio: auto;
+        }
+
+        // Only the links take the pointer: the list lies over the film's bar.
+        .pf-hero-banners {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0;
+          pointer-events: none;
+
+          .pf-hero-banner__link {
+            pointer-events: auto;
+          }
+        }
+
+        // Back up over the film, when there is a lead to lay on it.
+        .pf-hero-banners:has(> .pf-hero-banner:first-child:not(.pf-hero-banner--blog)) {
+          margin-top: calc(-1 * (var(--pf-film-h) + var(--pf-film-foot)));
+        }
+
+        // A focused video button shows its film (the film bar's rule, above).
+        .pf-landing__media:has(.pf-landing__bg-toggle:focus-visible) ~ .pf-hero-banners .pf-hero-banner:first-child .pf-hero-banner__link {
+          clip-path: inset(100% 0 0) !important;
+        }
+
+        .pf-hero-banners > .pf-hero-banner {
+          display: block;
+          animation: none;
+        }
+
+        // The lead: the film's box. The clip takes the pointer with it, so
+        // the film's button stays in reach until the picture covers it.
+        .pf-hero-banners > .pf-hero-banner:first-child:not(.pf-hero-banner--blog) {
+          .pf-hero-banner__link {
+            grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+            height: var(--pf-film-h);
+            overflow: hidden;
+            background-color: #1f1b26;
+            animation: pf-film-rise ease-out both;
+            animation-timeline: --pf-banner-own;
+            animation-range: contain 5% contain 70%;
+          }
+
+          .pf-hero-banner__media {
+            --pf-banner-grey: 0;
+            --pf-banner-wait: 0;
+            --pf-banner-dim: 0;
+            --pf-banner-hush: 0;
+            height: 100%;
+            aspect-ratio: auto;
+            animation: none;
+          }
+
+          .pf-hero-banner__title {
+            font-size: clamp(1.375rem, 1.1rem + 1.5cqi, 1.75rem);
+            animation: pf-split-appear ease-out both;
+            animation-timeline: --pf-banner-own;
+            animation-range: contain 50% contain 80%;
+          }
+
+          // Hand back on the keyboard: the whole of it, at once.
+          .pf-hero-banner__link:focus-visible,
+          .pf-hero-banner__link:focus-visible .pf-hero-banner__title {
+            animation: none;
+          }
+        }
+
+        // No rule between the lead's picture and the first row.
+        .pf-hero-banners > .pf-hero-banner:first-child:not(.pf-hero-banner--blog) + .pf-hero-banner .pf-hero-banner__link::before {
+          visibility: hidden;
+        }
+
+        // The rows. Each comes in as it reaches the screen's foot, on the
+        // timeline of its own item, which the rise doesn't move.
+        .pf-hero-banners > :is(.pf-hero-banner:not(:first-child), .pf-hero-banner--blog) {
+          margin-top: 0;
+
+          .pf-hero-banner__link {
+            position: relative;
+            display: grid;
+            grid-template: auto auto / minmax(0, 1fr);
+            aspect-ratio: auto;
+            overflow: visible;
+            color: var(--bs-heading-color, var(--pf-section-fg));
+            background: none;
+
+            &::before {
+              content: "";
+              height: 1px;
+              background: $pf-hairline;
+              transform-origin: 0 50%;
+              animation: pf-hl-draw ease-out both;
+              animation-timeline: --pf-banner-own;
+              animation-range: cover 0% cover 12%;
+            }
+          }
+
+          .pf-hero-banner__media {
+            display: none;
+          }
+
+          .pf-hero-banner__text {
+            display: flex;
+            flex-flow: column;
+            align-items: flex-start;
+            gap: .25rem;
+            padding: .875rem 0;
+            animation: pf-split-appear ease-out both;
+            animation-timeline: --pf-banner-own;
+            animation-range: cover 0% cover 15%;
+          }
+
+          .pf-hero-banner__link:focus-visible::before,
+          .pf-hero-banner__link:focus-visible .pf-hero-banner__text {
+            animation: none;
+          }
+
+          .pf-hero-banner__label {
+            padding: 0;
+            color: var(--pf-toc-color);
+            background: none;
+          }
+
+          .pf-hero-banner__title {
+            flex: none;
+            align-self: auto;
+            padding: 0;
+            border-bottom: 0;
+            font-size: clamp(1rem, .95rem + .5cqi, 1.125rem);
+            line-height: 1.3;
+            text-decoration: none;
+            color: inherit;
+            background: none;
+            opacity: 1;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+
+            &::after {
+              content: " \2192" / "";
+            }
+          }
+
+          .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title {
+            color: var(--pf-g-title, var(--pf-toc-active));
+          }
         }
       }
     }

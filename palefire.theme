@@ -324,6 +324,7 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['page_title'] = NULL;
   $variables['toc_home_id'] = NULL;
   $variables['toc_map_id'] = NULL;
+  $variables['toc_hours_id'] = NULL;
   $variables['lead_breadcrumb'] = NULL;
   $variables['map_only'] = FALSE;
   $paragraph = $variables['paragraph'] ?? NULL;
@@ -345,18 +346,18 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
 
 /**
  * The landing hero's index rules, in the order it shows them: guide (Start
- * your research, the Quick Start in the lead panel), visit (Visit Hill, over
- * the map) and rooms (Rooms and access: the map's key, when the map carries
- * the Visit card, map-key.html.twig). Read from the same facts the
- * templates use: the lead shows unless the map leads alone, and only with
- * the page title or an intro (show_lead, includes/landing.html.twig); the
- * map when it is published; the Visit card when the host page has a
- * location (_palefire_landing_visit()). The hero numbers its rules from
+ * your research, the Quick Start in the lead panel), rooms (Rooms and access,
+ * over the map and its key) and hours (Hours and directions, over the Visit
+ * strip). Read from the same facts the templates use: the lead shows unless
+ * the map leads alone, and only with the page title or an intro (show_lead,
+ * includes/landing.html.twig); the map when it is published; the Visit strip
+ * when the host page has a location (_palefire_landing_visit()). The hero
+ * numbers its rules from
  * this, and palefire_preprocess_field() counts on from its length, so no
  * number is typed by hand and they always agree.
  *
  * @return string[]
- *   Rule keys: 'guide', 'visit', 'rooms', those the hero shows.
+ *   Rule keys: 'guide', 'rooms', 'hours', those the hero shows.
  */
 function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
@@ -380,10 +381,10 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
     $rules[] = 'guide';
   }
   if ($has_map) {
-    $rules[] = 'visit';
-    if ($visit) {
-      $rules[] = 'rooms';
-    }
+    $rules[] = 'rooms';
+  }
+  if ($visit) {
+    $rules[] = 'hours';
   }
   return $rules;
 }
@@ -396,8 +397,8 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
  * Tab draws the request paths (_palefire_tab_has_paths()). The hero draws
  * the tabs under its rule 01, that Tab's panel holding the whole Quick
  * Start, and palefire_preprocess_field() leaves the section out
- * of the page, so it shows once, and the sections after it keep their
- * numbers. NULL when there is none.
+ * of the page, so it shows once and takes no number of its own. NULL when
+ * there is none.
  */
 function _palefire_hero_tabs(ParagraphInterface $hero): ?ParagraphInterface {
   if (!in_array('guide', _palefire_hero_rules($hero), TRUE)) {
@@ -448,17 +449,15 @@ function _palefire_tab_has_paths(ParagraphInterface $tab): bool {
  * the same variables, plus hero, which includes/landing.html.twig reads.
  * input_id only keeps the Visit card's ids unique on the page.
  *
- * With both a map and a Visit card, the map shows the card itself: under
- * the drawing, with the legend and space list across its top, one panel
- * (paragraph--building-map.html.twig reads #pf_visit as map.visit), and
- * visit_in_map tells the landing not to print it again. Hero only: the
- * stacked hero map gives the aside the map's full width; beside the drawing
- * (other landings) it is a narrow column.
+ * With both a map and a Visit strip, the map's key is an index across the
+ * map's full width (#pf_key_indexed, read as map.key_indexed), the rooms and
+ * the drawing one section; hero_rooms is its count, for the section's rule.
+ * The strip follows as a section of its own (includes/landing.html.twig).
  */
 function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   palefire_preprocess_paragraph__bento_search($variables);
   $variables['hero'] = TRUE;
-  $variables['visit_in_map'] = FALSE;
+  $variables['hero_rooms'] = 0;
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
@@ -497,16 +496,16 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $variables['landing_map']['#cache']['keys'][] = 'pf_hero';
     }
     if (!empty($variables['landing_map']) && !empty($variables['visit'])) {
-      $variables['landing_map']['#pf_visit'] = $variables['visit'] + [
-        'id' => $variables['landing']['input_id'] . '-visit',
-        // Rooms and access, the key's index rule (map-key.html.twig).
-        'index' => $variables['hero_index']['rooms'] ?? '',
-      ];
-      // The map's render cache: its own entry with the card, cleared when
-      // the page's location fields change (the host node's tags).
-      $variables['landing_map']['#cache']['keys'][] = 'pf_visit';
-      $variables['landing_map']['#cache']['tags'] = Cache::mergeTags($variables['landing_map']['#cache']['tags'] ?? [], $variables['#cache']['tags'] ?? []);
-      $variables['visit_in_map'] = TRUE;
+      $variables['landing_map']['#pf_key_indexed'] = TRUE;
+      // The map's render cache: its own entry with the indexed key.
+      $variables['landing_map']['#cache']['keys'][] = 'pf_key_indexed';
+      // The rooms' count at the end of the section's rule. Any change to a
+      // room term redraws it, as it does the map.
+      $map = $paragraph->get('field_bento_map')->entity;
+      $building = $map->hasField('field_map_building') ? $map->get('field_map_building')->value : NULL;
+      $built = _palefire_building_map($building ?: (string) array_key_first(palefire_buildings()), '', $map);
+      $variables['hero_rooms'] = count($built['spaces'] ?? []);
+      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], ['taxonomy_term_list:building_space']);
     }
   }
 }
@@ -514,11 +513,30 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
 /**
  * The Landing hero banners' sizes value.
  *
- * On the stage from 64rem a picture fills the column's third to the window's
- * height, so the portrait crop is wider than the column (the 648w file up to
- * 1440); from 44rem they are a strip of five, under it two by two.
+ * On the stage a picture fills the column's third to the window's height, so
+ * the portrait crop is wider than the column: the 648w file up to 1440 from
+ * 64rem, and on a portrait tablet (from 44rem) most of the window's width.
+ * Under 44rem the lead fills the film's box, across the phone, and the other
+ * pictures don't load.
  */
-const PALEFIRE_HERO_BANNER_SIZES = '(min-width: 64rem) 46vw, (min-width: 44rem) 20vw, 50vw';
+const PALEFIRE_HERO_BANNER_SIZES = '(min-width: 64rem) 46vw, (min-width: 44rem) 90vw, 100vw';
+
+/**
+ * A hero banner's picture as a URL, for the title's letters, or ''.
+ *
+ * The file the column shows from 44rem (the portrait cover's md), so the
+ * letters (_landing-features.scss, pf-title-feature) cost no second download.
+ */
+function _palefire_hero_banner_still($image, CacheableMetadata $cache): string {
+  $file = $image?->entity;
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('tile_showcase_portrait_md');
+  if (!$file instanceof FileInterface || !$style) {
+    return '';
+  }
+  $cache->addCacheableDependency($file);
+  $cache->addCacheableDependency($style);
+  return \Drupal::service('file_url_generator')->transformRelative($style->buildUrl($file->getFileUri()));
+}
 
 /**
  * The Landing hero's banners, from its optional field, or [].
@@ -549,6 +567,7 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
       'url' => $card['url'],
       'label' => $card['label'],
       'image' => $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL,
+      'still' => _palefire_hero_banner_still($card['image_item'] ?? NULL, $cache),
       'object' => _palefire_cover_object_label($node),
     ];
     if (count($banners) === 5) {
@@ -1079,10 +1098,11 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
   // prints the <h1> itself on every other Modular page.
   if ($host->bundle() === PalefireHooks::MODULAR_BUNDLE && PalefireHooks::titleLandingUuid($host) === $paragraph->uuid()) {
     $variables['page_title'] = $host->label();
-    // The TOC's "Home" and "Map" targets (PalefireHooks::heroTocIds()).
+    // The TOC's "Home", "Map" and "Hours" targets (PalefireHooks::heroTocIds()).
     $ids = PalefireHooks::heroTocIds($host);
     $variables['toc_home_id'] = $ids['home'] ?? NULL;
     $variables['toc_map_id'] = $ids['map'] ?? NULL;
+    $variables['toc_hours_id'] = $ids['hours'] ?? NULL;
     // The breadcrumb at the top of the lead panel (PalefireHooks::
     // crumbInLanding(); page.html.twig then leaves the head's out). Built by
     // the same service as the System Breadcrumb block, so the trail and its
@@ -1154,9 +1174,9 @@ function palefire_preprocess_paragraph__building_map(array &$variables): void {
     return;
   }
   $variables['map'] = $map + [
-    // The landing hero's Visit card, shown in the aside with the key
-    // (palefire_preprocess_paragraph__landing_hero()), or NULL.
-    'visit' => $variables['elements']['#pf_visit'] ?? NULL,
+    // The landing hero's key, an index across the map (map-key.html.twig,
+    // palefire_preprocess_paragraph__landing_hero()).
+    'key_indexed' => !empty($variables['elements']['#pf_key_indexed']),
     // h2 on the landing hero (a section of the page), h3 elsewhere.
     'heading_tag' => empty($variables['elements']['#pf_hero']) ? 'h3' : 'h2',
   ];
@@ -2932,7 +2952,7 @@ function _palefire_lead_cover(FieldItemInterface $image, string $sizes, Cacheabl
  * _palefire_hero_rules()), then each section with an Eyebrow, in order.
  * The link's text drops a trailing arrow typed by hand: the rule draws
  * its own. A Section tabs section the hero's Quick Start draws
- * (_palefire_hero_tabs()) is left out.
+ * (_palefire_hero_tabs()) is left out, and takes no number.
  */
 function palefire_preprocess_field(array &$variables): void {
   if (($variables['field_name'] ?? '') !== 'field_scroll_section' || empty($variables['items'])) {
@@ -2941,6 +2961,14 @@ function palefire_preprocess_field(array &$variables): void {
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $count = 0;
   $hide = [];
+  // Sections the hero draws itself, wherever they sit on the page.
+  $drawn = [];
+  foreach ($variables['items'] as $item) {
+    $paragraph = $item['content']['#paragraph'] ?? NULL;
+    if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && ($tabs = _palefire_hero_tabs($paragraph))) {
+      $drawn[] = $tabs->id();
+    }
+  }
   foreach ($variables['items'] as $key => &$item) {
     $paragraph = $item['content']['#paragraph'] ?? NULL;
     if (!$paragraph instanceof ParagraphInterface) {
@@ -2948,13 +2976,11 @@ function palefire_preprocess_field(array &$variables): void {
     }
     if ($paragraph->bundle() === 'landing_hero') {
       $count += count(_palefire_hero_rules($paragraph));
-      // Its Quick Start draws the page's Section tabs: not again below.
-      $tabs = _palefire_hero_tabs($paragraph);
-      foreach ($tabs ? $variables['items'] : [] as $other => $candidate) {
-        if (($candidate['content']['#paragraph'] ?? NULL) instanceof ParagraphInterface && $candidate['content']['#paragraph']->id() === $tabs->id()) {
-          $hide[] = $other;
-        }
-      }
+      continue;
+    }
+    // Its Quick Start draws the page's Section tabs: not again here.
+    if (in_array($paragraph->id(), $drawn, TRUE)) {
+      $hide[] = $key;
       continue;
     }
     if (!is_array($item['section'] ?? NULL)) {

@@ -516,6 +516,9 @@ class PalefireHooks {
     if (!empty($ids['map'])) {
       $extra[] = ['id' => $ids['map'], 'label' => $this->t('Map')];
     }
+    if (!empty($ids['hours'])) {
+      $extra[] = ['id' => $ids['hours'], 'label' => $this->t('Hours and directions')];
+    }
     // Exhibitions: "Home" first (the title page: the head,
     // includes/exhibit-cover), and every gallery lists its entries (h3s)
     // whatever the block's
@@ -564,11 +567,13 @@ class PalefireHooks {
    *
    * home: the lead panel's id, when the landing has no section title of its
    * own (with one, palefire_modular already lists it). map: the building
-   * map's wrapper, when the landing has a map. Fixed ids, so the links read
-   * #home and #map; a section anchored "home" or "map" keeps it, and the
-   * landing then gets none.
+   * map's wrapper, when the landing has a map. hours: the Hours and directions
+   * section, when the page has a location (a Landing hero only; other
+   * landings have no such section). Fixed ids, so the links read #home, #map
+   * and #hours; a section anchored with one of them keeps it, and the landing
+   * then gets none.
    *
-   * @return array{home?: string, map?: string}
+   * @return array{home?: string, map?: string, hours?: string}
    */
   public static function heroTocIds(NodeInterface $node): array {
     $uuid = self::titleLandingUuid($node);
@@ -586,6 +591,12 @@ class PalefireHooks {
     }
     if ($paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty() && !in_array('map', $taken, TRUE)) {
       $ids['map'] = 'map';
+    }
+    $located = self::stringValue($node, 'field_hours_location') !== ''
+      || self::stringValue($node, 'field_location_name') !== ''
+      || self::stringValue($node, 'field_location_query') !== '';
+    if ($paragraph->bundle() === 'landing_hero' && $located && !in_array('hours', $taken, TRUE)) {
+      $ids['hours'] = 'hours';
     }
     return $ids;
   }

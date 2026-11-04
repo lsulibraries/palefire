@@ -180,3 +180,9 @@ $pf-themed: ':is([data-pf-theme], [data-pf-mode="guide"])';
 //   its own list (_exhibit-showcase.scss).
 $pf-system: ':is([data-pf-page="page"], [data-pf-page="landing"], [data-pf-page="department"], [data-pf-page="location"], [data-pf-page="showcase"])';
 $pf-banded: ':is([data-pf-page="page"], [data-pf-page="landing"], [data-pf-page="department"], [data-pf-page="location"])';
+
+// Where the hero title's letters may take the Highlights' picture on scroll
+// (pf-title-trade, _landing-features.scss): the dark reading colours. On a
+// light page a picture's pale pixels would need so much gold over them that
+// little of it showed, so there the letters stay solid.
+$pf-title-trade-on: ':not([data-pf-theme="cream"], [data-pf-theme="soft"], [data-pf-theme="lavender"], [data-pf-theme="sepia"], [data-pf-theme="sage"])';

@@ -9,24 +9,25 @@
  * - visit: ['name', 'lid', 'maps_url', 'embed_url', 'query']
  *   (_palefire_landing_visit()).
  * - visit_id: id prefix, unique on the page.
- * - keyed: TRUE when the key block is filled in. The landing hero's map
- *   embeds this strip and puts its legend and space list there, across the
- *   top (paragraph--building-map.html.twig), so the two share one panel.
+ * - indexed: TRUE on the landing hero, where the strip is a section of the
+ *   page under an index rule (includes/landing.html.twig). The rule says
+ *   what it holds, so it has a section heading and no eyebrow of its own.
  */
 #}
-<aside class="pf-visit{{ keyed ? ' pf-visit--keyed' }}" aria-labelledby="{{ visit_id }}-heading">
-  {% block key %}{% endblock %}
-
+{% if indexed %}
+<section class="pf-visit pf-visit--indexed" aria-labelledby="{{ visit_id }}-heading">
+  <h2 class="pf-visit__heading" id="{{ visit_id }}-heading">
+    <span class="pf-visit__name">{{ 'Plan your visit'|t }}</span>
+  </h2>
+{% else %}
+<aside class="pf-visit" aria-labelledby="{{ visit_id }}-heading">
   <h3 class="pf-visit__heading" id="{{ visit_id }}-heading">
     <span class="pf-visit__eyebrow">{{ 'Visit'|t }}</span>
-    {# In the map's panel (keyed, the landing hero) the map's own heading
-       already names the building, so this one says what the panel is for. #}
-    {% if keyed %}
-      <span class="pf-visit__name">{{ 'Hours and directions'|t }}</span>
-    {% elseif visit.name %}
+    {% if visit.name %}
       <span class="pf-visit__name">{{ visit.name }}</span>
     {% endif %}
   </h3>
+{% endif %}
 
   {% if visit.lid %}
     {# The status line is the hero's "This week's hours" link target
@@ -86,4 +87,8 @@
       {% endif %}
     </div>
   {% endif %}
+{% if indexed %}
+</section>
+{% else %}
 </aside>
+{% endif %}

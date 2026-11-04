@@ -4,7 +4,7 @@
  * Building map key: the legend and space list, then the note (the building
  * term's description: who can walk in, what needs booking). Used by
  * paragraph--building-map.html.twig, in the map's aside or, on the landing
- * hero, across the top of the Visit strip.
+ * hero, as an index across the map's width.
  *
  * Variables:
  * - map: the building map (palefire_preprocess_paragraph__building_map()).
@@ -13,30 +13,21 @@
 {# The toggle always shows. Open beside the map, collapsed when it moves
    under the map (building-map.js); the reader can open or close it either
    way. data-toc-skip keeps anything in here out of the TOC.
-   In the landing hero's Visit panel (map.visit) it is a section of the
-   page: the toggle is an index rule (its number map.visit.index, from
-   _palefire_hero_rules(): after Visit Hill), it stays open, and the body is an index in three columns,
-   the note and legend first, then each group of rooms (_landing-swiss.scss). #}
-{% set keyed = map.visit is defined and map.visit %}
-<details{{ keyed ? ' id="rooms-and-access"' }} class="pf-map__key{{ keyed ? ' pf-map__key--indexed' }}" open data-map-key data-toc-skip>
-  {% if keyed %}
-    <summary class="pf-map__key-toggle pf-index-rule">
-      <span class="pf-index-rule__num" aria-hidden="true">{{ map.visit.index }}</span>
-      <span class="pf-index-rule__label">{{ 'Rooms and access'|t }}</span>
-      <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
-    </summary>
-  {% else %}
-    <summary class="pf-map__key-toggle">
-      <span>{{ 'Legend & spaces'|t }}</span>
-      <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
-      <span class="pf-map__key-icon" aria-hidden="true"></span>
-    </summary>
-  {% endif %}
-  {# Indexed: a section of the page, so it has its heading (the summary,
-     a button, can't be one), and its groups step down to h3. #}
-  {% if keyed %}
-    <h2 class="visually-hidden">{{ 'Rooms and access'|t }}</h2>
-  {% endif %}
+   On the landing hero (map.key_indexed) it belongs to the map's own section,
+   under its rule and heading: always shown, no toggle, the note first and
+   then each group of rooms in columns, the groups as h3s
+   (_landing-swiss.scss). #}
+{% set keyed = map.key_indexed|default(false) %}
+{% if keyed %}
+<div id="rooms-and-access" class="pf-map__key pf-map__key--indexed" data-toc-skip>
+{% else %}
+<details class="pf-map__key" open data-map-key data-toc-skip>
+  <summary class="pf-map__key-toggle">
+    <span>{{ 'Legend & spaces'|t }}</span>
+    <span class="pf-map__key-count">{{ '@count spaces'|t({'@count': map.spaces|length}) }}</span>
+    <span class="pf-map__key-icon" aria-hidden="true"></span>
+  </summary>
+{% endif %}
   <div class="pf-map__key-body">
     {# Opening fades the rows in one after another, as the guides'
        accordions do (_building-map.scss): each row is .pf-seq with its
@@ -118,7 +109,11 @@
       {% endfor %}
     </div>
   </div>
+{% if keyed %}
+</div>
+{% else %}
 </details>
+{% endif %}
 {# Outside the <details>, so it shows while the legend is collapsed (in
    the indexed key it is the first column instead). #}
 {% if map.note and not keyed %}

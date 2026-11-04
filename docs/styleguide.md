@@ -144,6 +144,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Landing hero sections: `_palefire_hero_rules()` keys are `guide`, `rooms`, `hours`. The key on the hero (`map.key_indexed`, `.pf-map__key--indexed`) is a plain block under the drawing, no toggle, no rule of its own. `.pf-landing__directions` (`#hours`) holds rule 03 and `.pf-visit--indexed`, a `<section>` with an h2 in the section heading style. Retired: `.pf-visit--keyed`, `.pf-visit__key`, `map.visit`. A section the hero draws itself takes no number.
 - **2026-11-04:** Stage hold: `position: sticky` on `.pf-landing__stage` inside `.pf-landing__run` (`display: contents` off the stage), replacing `pf-stage-hold`. The sweep, wash and rows still run on the root scroll timeline.
 - **2026-11-04:** Object label on the stage: no panel; a caption at the column's foot (`.pf-hero-banner__plate`, the label's lines run in at 12px, muted, two lines at most, hidden under 45rem tall). The lead's words sit at the foot of their row.
 - **2026-11-04:** Object label's first placement: the stage's lead picture (`.pf-hero-banner__plate`, a solid panel of `--pf-hl-wash`, stage only), from `field_exhibit_cover_maker`, `_title`, `_date` and `_medium` on Modular page. Stage row labels sit behind their titles at `--pf-hl-label-strength`, per reading colour, measured at 4.5:1 on the current picture; solid with more contrast.

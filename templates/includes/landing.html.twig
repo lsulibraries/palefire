@@ -56,6 +56,7 @@
  *   search landing (search form, map, Visit strip), plus the hero's tile
  *   accordion under the search (includes/landing-exhibits.html.twig) when
  *   the paragraph has Tiles (hero_tiles).
+ * - toc_hours_id: id for the TOC's "Hours and directions" (the Visit strip).
  * - toc_home_id, toc_map_id: ids for the TOC's "Home" (the lead) and "Map"
  *   (the map) links, when this landing opens the page
  *   (PalefireHooks::heroTocIds()).
@@ -70,9 +71,8 @@
   Index rule (.pf-index-rule, _landing-features.scss): a hairline with the
   section's number and name in the mono label voice, and at its right end
   an optional link (a running head, as in a catalogue). The numbers come
-  from _palefire_hero_rules() in palefire.theme (hero_index here; the map's
-  Rooms and access gets its own as map.visit.index), and the sections after
-  the hero count on from them, so none is typed by hand. (Not a CSS
+  from _palefire_hero_rules() in palefire.theme (hero_index here), and the
+  sections after the hero count on from them, so none is typed by hand. (Not a CSS
   counter: the map and the cover are size containers, which scope
   counters.) The number and name are decoration (the heading or list after
   each rule names the section), so only they are hidden from screen
@@ -299,11 +299,12 @@
       {% endif %}
       {# Cover with a poster: the still shows in the title's letters from the
          first paint, until the film's column opens (_entrance.scss,
-         .pf-landing__title--still), and again on the stage as the film's sweep
-         brings the Highlights' picture (pf-title-trade,
-         _landing-features.scss). #}
+         .pf-landing__title--still). On the stage, with the film's sweep, they
+         take the lead Highlight's picture, as the column does (pf-title-trade,
+         pf-title-feature, _landing-features.scss). #}
       {% set title_still = cover and bg_videos and bg_poster %}
-      <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}')"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
+      {% set title_feature = title_still and hero_banners ? hero_banners|first.still %}
+      <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}'){% if title_feature %}; --pf-title-feature: url('{{ title_feature }}'){% endif %}"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}
       </h1>
     {% endif %}
@@ -694,24 +695,33 @@
   {% if landing_map %}
     <div class="pf-landing__visit"{% if toc_map_id %} id="{{ toc_map_id }}" tabindex="-1"{% endif %}>
       {%- if hero -%}
-        {# Index rule 02: directions in Google Maps, as the Visit panel's
-           link, in a new tab. #}
-        {{ pf.index_rule(hero_index.visit, 'Visit Hill'|t, visit.maps_url ? {
-          url: visit.maps_url,
-          text: 'Directions'|t,
-          hidden: ' ' ~ 'to @place (opens in a new tab)'|t({ '@place': visit.name }),
-          external: true,
+        {# The map and its rooms, one section. The link runs down to the
+           rooms, under the drawing (map-key.html.twig). #}
+        {{ pf.index_rule(hero_index.rooms, 'Rooms and access'|t, hero_rooms ? {
+          url: '#rooms-and-access',
+          text: '@count spaces'|t({ '@count': hero_rooms }),
+          hidden: ' ' ~ 'listed under the map'|t,
         } : {}) }}
       {%- endif -%}
       {{ landing_map }}
     </div>
   {% endif %}
 
-  {# Visit strip: under the map, as wide as legend + map. On the hero the
-     map shows it itself, under the drawing with its legend
-     (visit_in_map, palefire_preprocess_paragraph__landing_hero()). #}
-  {% if visit and not visit_in_map %}
-    {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', keyed: false } only %}
+  {# Visit strip: under the map, as wide as legend + map. On the hero it is
+     a section of the page, with its own index rule: directions in Google
+     Maps at the rule's end, in a new tab. #}
+  {% if visit and hero %}
+    <div class="pf-landing__directions"{% if toc_hours_id %} id="{{ toc_hours_id }}" tabindex="-1"{% endif %}>
+      {{ pf.index_rule(hero_index.hours, 'Hours and directions'|t, visit.maps_url ? {
+        url: visit.maps_url,
+        text: 'Directions'|t,
+        hidden: ' ' ~ 'to @place (opens in a new tab)'|t({ '@place': visit.name }),
+        external: true,
+      } : {}) }}
+      {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', indexed: true } only %}
+    </div>
+  {% elseif visit %}
+    {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', indexed: false } only %}
   {% endif %}
 
   {# The hero's On view (exhibition tiles under the map) was removed

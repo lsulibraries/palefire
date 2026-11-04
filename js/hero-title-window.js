@@ -14,7 +14,7 @@
  * gold, and shows again as the canvas fades out. Decorative: the canvas
  * is aria-hidden and takes no pointer.
  *
- * Runs only where the column's opening animation runs (so from 64rem of
+ * Runs only where the column's opening animation runs (so from 44rem of
  * landing, motion allowed, first paint of the page) and only if the clip
  * is ready in time; otherwise nothing happens and the title stays gold.
  * More contrast and forced colours skip it too.
