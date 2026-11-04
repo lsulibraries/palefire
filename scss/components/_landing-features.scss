@@ -521,12 +521,12 @@ $pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-b
 // white frame (5.6:1 on Twilight), then easing out (a cosine, so no edge
 // shows) over the next 12rem, so it reads as the video darkening towards
 // the top rather than as a band.
-@function pf-cover-top-wash($fade: 12, $steps: 10) {
+@function pf-cover-top-wash($fade: 12, $steps: 10, $top: 72, $edge-mix: 70) {
   $edge: 'var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem)';
-  $stops: (color-mix(in srgb, var(--pf-cover-bg) 72%, transparent) 0,);
+  $stops: (color-mix(in srgb, var(--pf-cover-bg) $top * 1%, transparent) 0,);
   @for $i from 0 through $steps {
     $t: math.div($i, $steps);
-    $mix: math.div(math.round(70 * math.div(1 + math.cos(math.$pi * $t), 2) * 10), 10) * 1%;
+    $mix: math.div(math.round($edge-mix * math.div(1 + math.cos(math.$pi * $t), 2) * 10), 10) * 1%;
     $stops: list.append($stops, color-mix(in srgb, var(--pf-cover-bg) $mix, transparent) calc(#{$edge} + #{$t * $fade}rem), comma);
   }
   @return linear-gradient(to bottom, $stops);
@@ -4003,6 +4003,14 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
       background-image: pf-cover-top-wash();
     }
 
+    // Under 64rem the column lies under the header's words, not only its
+    // icons: a stronger wash holds them at 4.5:1 on a white picture.
+    @container pf-cover (width < 64rem) {
+      .pf-landing__media::after {
+        background-image: pf-cover-top-wash($top: 80, $edge-mix: 78);
+      }
+    }
+
     // The type keeps clear of the film: the column's gutter on the left as
     // before, two gutters before the film on the right.
     :is(.pf-landing__top, .pf-landing__form) {
@@ -4388,7 +4396,7 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
   to {
     --pf-title-veil: var(--pf-title-veil-on);
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
   }
 }
 
@@ -4864,6 +4872,13 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           }
         }
 
+        // The film's stronger wash (above), on the picture too.
+        @container pf-cover (width < 64rem) {
+          .pf-hero-banners::before {
+            background-image: pf-cover-top-wash($top: 80, $edge-mix: 78);
+          }
+        }
+
         // Under the phone's dock (_dock.scss, under 768px, so a small tablet
         // has it here): the type and the list end above it, and no caption.
         @media (max-width: 767.98px) {
@@ -4924,10 +4939,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3);
         }
 
-        // Solid gold under an event: no trade, whichever list set it.
-        html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__top > .pf-landing__title--still {
-          -webkit-text-fill-color: currentcolor;
-          animation-name: none;
+        // Solid under an event: the trade runs, but its fill stays the words'.
+        .pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__title--still {
+          --pf-title-trade-fill: currentcolor;
         }
       }
     }
