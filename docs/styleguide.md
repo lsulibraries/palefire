@@ -116,7 +116,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Motion tokens | `_variables.scss` | ▣ Motion |
 | Steps (a short how-to in order: numbers and two-line names across from md, a rail of diamonds below; sub-steps with duotone icons; one step alone heads a row of sub-steps) | `includes/steps.html.twig`, `_steps.scss`; `_palefire_steps_items()` reads `<li><strong>Name</strong> note</li>`, sub-steps a nested `<ol>`, `[icon:name]` | ▣ Steps; Reserve's How to book |
 | Buttons (primary, secondary, arrow) and text links | `_buttons.scss` (`%pf-button-primary`, `%pf-button-secondary`, `%pf-button-arrow`; `.pf-button--*` for markup of its own), `.pf-index-rule__link` | ▣ Buttons and links |
-| Object label (a museum tombstone: maker and dates, title, date, medium, size; a hairline, credit line and call number with View record ↗; compact for cards) | `includes/object-label.html.twig`, `_object-label.scss` | ▣ Object labels; not yet on a record |
+| Object label (a museum tombstone: maker and dates, title, date, medium, size; a hairline, credit line and call number with View record ↗; compact for cards) | `includes/object-label.html.twig`, `_object-label.scss` | ▣ Object labels; on the stage's lead picture |
 | Section tabs (labelled tabs over panels: the one relief control, an inset track, a sliding key, solid icons carved when off and Light outlines printed on the key when on, indicator lights) | `paragraph--section-tabs.html.twig`, `_section-tabs.scss`, `js/section-tabs.js`; relief colours `pf-relief()` | – (/v2/special) |
 | Exhibition gallery (story) | `paragraph--exhibit-page` | ✔ every gallery |
 | Exhibition title page | `includes/exhibit-cover` | ✔ the page's own |
@@ -144,6 +144,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Object label's first placement: the stage's lead picture (`.pf-hero-banner__plate`, a solid panel of `--pf-hl-wash`, stage only), from `field_exhibit_cover_maker`, `_title`, `_date` and `_medium` on Modular page. Stage row labels sit behind their titles at `--pf-hl-label-strength`, per reading colour, measured at 4.5:1 on the current picture; solid with more contrast.
 - **2026-11-04:** Stage title: `--pf-title-veil-on` per reading colour, measured on the pixels under the letters at 1100, 1440 and 1920: Twilight and Night 51%, Cream, Soft and Lavender 55%, Material 56%, Forest 57%, Midnight 58%, Dusk 61%, Cocoa 62%, Sepia 66%, Sage and Solarized 70%. Tuned to the current poster.
 - **2026-11-04:** Hero Highlights on the stage: the wash is one gradient, `.pf-hero-banners::after`, spanning the list's rows on the `ul`'s grid (`minmax(0, 1fr) repeat(5, auto)`) and 10rem above: transparent, 78% at 10rem, 88% at 40%, the page colour at the foot. It fades in over 28% to 38% of the run (`pf-hl-wash`). Hairlines are `.pf-hero-banner__link::before`, drawn out with `pf-hl-draw`; words rise 36% to 76%, 8% apart. Replaces `--pf-hl-mix`.
 - **2026-11-03:** Section tabs: choosing a tab no longer writes its id to the address, and clears one already there (`select()`, `replaceState`, no history entry). `#ask` and `#ask-question` links still open their panel.

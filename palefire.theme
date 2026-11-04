@@ -549,6 +549,7 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
       'url' => $card['url'],
       'label' => $card['label'],
       'image' => $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL,
+      'object' => _palefire_cover_object_label($node),
     ];
     if (count($banners) === 5) {
       break;
@@ -556,6 +557,26 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
   }
   $cache->applyTo($variables);
   return $banners;
+}
+
+/**
+ * A page's object label for its cover picture, or NULL.
+ *
+ * The values includes/object-label.html.twig takes, from the optional
+ * field_exhibit_cover_* fields (scripts/palefire_exhibit_cover_label.php).
+ * With no title there is no label. The caller's cache metadata already
+ * depends on the node.
+ */
+function _palefire_cover_object_label(NodeInterface $node): ?array {
+  $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
+  $label = [];
+  foreach (['maker', 'title', 'date', 'medium'] as $key) {
+    $field = 'field_exhibit_cover_' . $key;
+    if ($node->hasField($field) && !$node->get($field)->isEmpty()) {
+      $label[$key] = (string) $node->get($field)->value;
+    }
+  }
+  return isset($label['title']) ? $label : NULL;
 }
 
 /**

@@ -468,6 +468,13 @@
                   <span class="pf-hero-banner__title">{{ banner.title }}</span>
                 </span>
               </a>
+              {# The lead picture's object label, on the stage only: a repeat
+                 of no words a reader needs, as the picture is hidden too. #}
+              {% if loop.first and banner.image and banner.object %}
+                <div class="pf-hero-banner__plate" aria-hidden="true">
+                  {% include '@palefire/includes/object-label.html.twig' with banner.object only %}
+                </div>
+              {% endif %}
               {% if loop.first %}
                 <span class="pf-hero-banner__others" aria-hidden="true">
                   {% for other in hero_listed|slice(1) %}

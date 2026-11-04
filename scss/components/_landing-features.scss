@@ -1432,6 +1432,11 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
   transform: scale(1.04);
 }
 
+// The lead picture's object label shows only on the stage (below).
+.pf-hero-banner__plate {
+  display: none;
+}
+
 // The pictures in the page's own color at first: each one grey, then
 // half washed with the page color (the cover's, so the swatch's), so it
 // sinks into the ground around it (Twilight's dark violet grey, Cream's
@@ -4405,6 +4410,16 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
 $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
+// How far a row's label sits behind its title: the least that keeps 4.5:1 on
+// every pixel under the labels, from 1100 to 1920 wide, on the current lead
+// picture, where 80% (the default) would not hold or more can go. A new
+// picture may need measuring again.
+@each $theme, $strength in ("night": 72%, "twilight": 76%, "forest": 82%, "midnight": 83%, "cocoa": 85%, "sage": 85%, "sepia": 85%, "soft": 88%, "dusk": 92%, "lavender": 98%) {
+  html[data-pf-theme="#{$theme}"] {
+    --pf-hl-label-strength: #{$strength};
+  }
+}
+
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 40rem) {
     @container pf-cover (min-width: 64rem) {
@@ -4532,6 +4547,38 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             background: var(--pf-hl-wash);
           }
 
+          // The lead picture's object label: a wall label on the picture, a
+          // solid panel of the page's colour so its words keep their contrast
+          // on any picture. It rises once the sweep has passed and gives way
+          // with the picture, when another item is in hand or the next event
+          // has taken the banner (js/hero-event.js).
+          .pf-hero-banner__plate {
+            position: absolute;
+            top: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 1.5rem);
+            left: 0;
+            z-index: 2;
+            display: block;
+            max-width: calc(100% - var(--pf-hl-pad));
+            animation: pf-split-appear ease-out both;
+            animation-timeline: scroll(root);
+            animation-range: calc(var(--pf-stage-run) * .2) calc(var(--pf-stage-run) * .3);
+
+            .pf-object-label {
+              padding: 1rem var(--pf-hl-pad);
+              background: var(--pf-hl-wash);
+              transition: opacity .35s ease-out .08s;
+            }
+          }
+
+          .pf-hero-banner.is-event .pf-hero-banner__plate {
+            display: none;
+          }
+
+          &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__plate .pf-object-label {
+            opacity: 0;
+            transition: opacity .25s ease-out;
+          }
+
           .pf-hero-banner__day {
             font-size: clamp(5rem, 8cqi, 9rem);
           }
@@ -4546,7 +4593,8 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             &::after,
             .pf-hero-banner__link::before,
             .pf-hero-banner__text,
-            .pf-hero-banner__media {
+            .pf-hero-banner__media,
+            .pf-hero-banner__plate {
               animation: none;
             }
           }
@@ -4653,9 +4701,18 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             translate: 0 -50%;
           }
 
+          // The label a step behind its title. Solid with more contrast.
           .pf-hero-banner__label {
             margin-top: 0;
-            color: inherit;
+            color: color-mix(in srgb, currentcolor var(--pf-hl-label-strength, 80%), transparent);
+
+            html.pf-a11y-contrast & {
+              color: inherit;
+            }
+
+            @media (prefers-contrast: more) {
+              color: inherit;
+            }
           }
 
           .pf-hero-banner__title {
