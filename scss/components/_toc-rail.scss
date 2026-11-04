@@ -132,17 +132,17 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
         background-color: var(--pf-rail-track);
       }
 
+      // The read part: a quiet line, a step over the track and never the
+      // gold, so only the current section looks active. The gold mark and the
+      // crumb say where you are; this line is decoration.
       &::after {
         height: calc(var(--pf-rail-p, 0) * 100%);
+        background-color: color-mix(in srgb, var(--pf-toc-color) 45%, transparent);
+      }
+
+      &[aria-current]::after {
         background-color: var(--pf-rail-mark);
       }
-    }
-
-    // Sections already read step back: their fill in the TOC text color,
-    // softened toward the track, so only the current one is bright. 70%
-    // keeps it above 3:1 on both chromes (about 3.3:1 light, 3.9:1 dark).
-    .pf-toc__item.is-read > .pf-toc__link:not([aria-current])::after {
-      background-color: color-mix(in srgb, var(--pf-toc-color) 70%, var(--pf-toc-rail));
     }
 
     // The segment whose row is under the pointer brightens, and the current

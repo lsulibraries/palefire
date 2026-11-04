@@ -28,7 +28,6 @@ use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
-use Drupal\palefire_modular\ModularSections;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -394,83 +393,17 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
 /**
  * The landing hero's index numbers, by rule key (_palefire_hero_rules()).
  *
- * Rooms and access and Hours and directions are two parts of one visit
- * section, so together they read 02.1 and 02.2, as the Quick Start's tabs
- * read 01.1, 01.2; either one alone is plain 02.
+ * Each is a section of its own, in the order the hero shows them.
  *
  * @return string[]
- *   Rule key => number ('01', '02.1').
+ *   Rule key => number ('01').
  */
 function _palefire_hero_index(ParagraphInterface $paragraph): array {
-  $rules = _palefire_hero_rules($paragraph);
   $index = [];
-  $section = 0;
-  if (in_array('guide', $rules, TRUE)) {
-    $index['guide'] = sprintf('%02d', ++$section);
-  }
-  $visit = array_values(array_intersect(['rooms', 'hours'], $rules));
-  if ($visit) {
-    $section++;
-    foreach ($visit as $i => $rule) {
-      $index[$rule] = count($visit) > 1 ? sprintf('%02d.%d', $section, $i + 1) : sprintf('%02d', $section);
-    }
+  foreach (_palefire_hero_rules($paragraph) as $i => $rule) {
+    $index[$rule] = sprintf('%02d', $i + 1);
   }
   return $index;
-}
-
-/**
- * The first screen's index: the page's sections, numbered as their rules are.
- *
- * The Quick Start, the visit section (one entry, to the map, whether or not
- * it splits into 02.1 and 02.2), then each published section with an Eyebrow,
- * as palefire_preprocess_field() numbers them. A section's Eyebrow is its name
- * here.
- *
- * @return array
- *   Entries: ['num', 'label', 'url' (a same-page #id)], or [] on a page with
- *   no sections to list.
- */
-function _palefire_hero_contents(ParagraphInterface $hero, CacheableMetadata $cache): array {
-  $host = $hero;
-  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
-    $host = $host->getParentEntity();
-  }
-  if (!$host instanceof NodeInterface || !$host->hasField('field_scroll_section')) {
-    return [];
-  }
-  $index = _palefire_hero_index($hero);
-  $ids = PalefireHooks::heroTocIds($host);
-  $count = count(array_unique(array_map('intval', $index)));
-  $items = [];
-  if (isset($index['guide'], $ids['start'])) {
-    $items[] = ['num' => $index['guide'], 'label' => t('Start your research'), 'url' => '#' . $ids['start']];
-  }
-  $visit = $ids['map'] ?? $ids['hours'] ?? NULL;
-  $visit_num = $index['rooms'] ?? $index['hours'] ?? NULL;
-  if ($visit && $visit_num) {
-    $items[] = ['num' => sprintf('%02d', (int) $visit_num), 'label' => t('Visit Hill'), 'url' => '#' . $visit];
-  }
-  $tabs = _palefire_hero_tabs($hero);
-  // The ids the sections print, from the module that prints them. Only the
-  // sections it describes are rendered, so only those are counted.
-  $described = class_exists(ModularSections::class) ? ModularSections::describe($host) : [];
-  $repository = \Drupal::service('entity.repository');
-  foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
-    if ($section->bundle() === 'landing_hero' || !isset($described[$section->id()]) || ($tabs && $tabs->id() === $section->id())) {
-      continue;
-    }
-    $section = $repository->getTranslationFromContext($section);
-    if (!$section->hasField('field_tile_eyebrow') || $section->get('field_tile_eyebrow')->isEmpty()) {
-      continue;
-    }
-    $cache->addCacheableDependency($section);
-    $items[] = [
-      'num' => sprintf('%02d', ++$count),
-      'label' => $section->get('field_tile_eyebrow')->value,
-      'url' => '#' . $described[$section->id()]['id'],
-    ];
-  }
-  return count($items) > 1 ? $items : [];
 }
 
 /**
@@ -546,9 +479,6 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_index'] = _palefire_hero_index($paragraph);
-    $contents_cache = CacheableMetadata::createFromRenderArray($variables);
-    $variables['hero_contents'] = _palefire_hero_contents($paragraph, $contents_cache);
-    $contents_cache->applyTo($variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     // The page's Section tabs over the Quick Start (_palefire_hero_tabs()):
@@ -3058,8 +2988,7 @@ function palefire_preprocess_field(array &$variables): void {
       continue;
     }
     if ($paragraph->bundle() === 'landing_hero') {
-      // 02.1 and 02.2 are one section.
-      $count += count(array_unique(array_map('intval', _palefire_hero_index($paragraph))));
+      $count += count(_palefire_hero_index($paragraph));
       continue;
     }
     // Its Quick Start draws the page's Section tabs: not again here.

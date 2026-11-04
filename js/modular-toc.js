@@ -933,9 +933,8 @@
       if (!crumb) {
         return;
       }
-      // At the top of a page with the first screen's index: "Contents", shown
-      // only where the index isn't (_landing-features.scss).
-      const first = !!active && active === entries[0] && !!document.querySelector('.pf-landing__contents');
+      // On a cover's first screen, where the rail and its toggle wait: "Contents".
+      const first = !!active && active === entries[0] && !!document.querySelector('.pf-landing--cover');
       const show = !!active && (active !== entries[0] || first);
       let text = show ? active.link.textContent.replace(/\s+/g, ' ').trim() : '';
       if (first) {
@@ -1040,18 +1039,6 @@
       crumb.append(button);
       crumbList.append(crumb);
       button.addEventListener('click', openContents, { signal });
-
-      // The first screen's index jumps as the rail does (glide, history, focus).
-      document.querySelectorAll('.pf-landing__contents-link').forEach((link) => {
-        link.addEventListener('click', (event) => {
-          const entry = entries.find((item) => item.link.getAttribute('href') === link.getAttribute('href'));
-          if (!entry || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-            return;
-          }
-          event.preventDefault();
-          entry.link.click();
-        }, { signal });
-      });
       // Esc in the panel it opened: back to the crumb. (The rail's own Esc
       // handler, above, closes the panel.)
       nav.addEventListener('keydown', (event) => {

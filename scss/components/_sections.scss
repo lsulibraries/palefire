@@ -90,17 +90,26 @@
 // other band takes the swatch's surface color, one quiet step off the page
 // (1.04–1.14:1), so the parts read apart without patterns: on the landing,
 // the quick guide, then the even sections after it (Special Collections:
-// Go deeper, and the events and blog). The Visit strip stays the page
-// color, which its map is drawn on. Text, muted and accent keep 4.5:1 on
-// the surface on every swatch, high contrast included (2026-10-26).
+// Go deeper, and the events and blog). The building map stays the page
+// color, which it is drawn on. A cover's Hours and directions, after that
+// map, is a band of its own, so the sections after it start on the page
+// color: the odd ones take the band instead. Text, muted and accent keep 4.5:1
+// on the surface on every swatch, high contrast included (2026-10-26).
 // Anything inside a band that used the surface color takes the page color,
 // so it still stands off; --pf-band holds the surface from above that swap.
 // A section with its own color (a dark theme, a background picture) keeps
 // it, and still counts in the alternation, so the rest do not shift.
+$pf-hours-band: '.pf-landing--cover > .pf-landing__visit ~ .pf-landing__directions';
+$pf-band-own: ':not(.pf-section--theme-dark, .pf-section--theme-light-map, .pf-section--has-bg)';
+$pf-band-even: '> .pf-section--auto:nth-child(even of .pf-section--auto)#{$pf-band-own}';
+$pf-band-odd: '> .pf-section--auto:nth-child(odd of .pf-section--auto)#{$pf-band-own}:not(:has(.pf-landing--cover))';
+
 html#{$pf-themed}#{$pf-banded} .pf-sections {
   --pf-band: var(--pf-g-surface);
 
-  > .pf-section--auto:nth-child(even of .pf-section--auto):not(.pf-section--theme-dark, .pf-section--theme-light-map, .pf-section--has-bg),
+  &:not(:has(#{$pf-hours-band})) #{$pf-band-even},
+  &:has(#{$pf-hours-band}) #{$pf-band-odd},
+  #{$pf-hours-band},
   .pf-quick-guide {
     --pf-section-bg: var(--pf-band);
     --pf-g-surface: var(--pf-g-bg);
@@ -109,8 +118,27 @@ html#{$pf-themed}#{$pf-banded} .pf-sections {
     --bs-tertiary-bg: var(--pf-g-bg);
   }
 
-  > .pf-section--auto:nth-child(even of .pf-section--auto):not(.pf-section--theme-dark, .pf-section--theme-light-map, .pf-section--has-bg) {
+  &:not(:has(#{$pf-hours-band})) #{$pf-band-even},
+  &:has(#{$pf-hours-band}) #{$pf-band-odd} {
     background-color: var(--pf-band);
+  }
+
+  // Hours and directions' band: a layer behind it, edge to edge, as the
+  // guide's below.
+  #{$pf-hours-band} {
+    isolation: isolate;
+    padding-block: clamp(3rem, 6vw, 5rem);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--pf-band);
+      box-shadow: 0 0 0 100vmax var(--pf-band);
+      clip-path: inset(0 -100vmax);
+      pointer-events: none;
+    }
   }
 
   // The guide sits in the landing's 1280px column: its band is a layer

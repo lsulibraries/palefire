@@ -58,7 +58,6 @@
  *   the paragraph has Tiles (hero_tiles).
  * - toc_start_id: id for the TOC's "Start your research" (the Quick Start).
  * - toc_hours_id: id for the TOC's "Hours and directions" (the Visit strip).
- * - hero_contents: the first screen's index (_palefire_hero_contents()).
  * - toc_home_id, toc_map_id: ids for the TOC's "Home" (the lead) and "Map"
  *   (the map) links, when this landing opens the page
  *   (PalefireHooks::heroTocIds()).
@@ -358,8 +357,7 @@
       </div>
     {% endif %}
     {% if hero %}</div>{% endif %}
-    <form class="pf-landing__form" method="get" action="{{ landing_action }}">
-      <div role="search" aria-labelledby="{{ input_id }}-heading">
+    <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       {# Hero: the label for screen readers only (the field and its placeholder
          say it on screen), so the links above sit close over the field. #}
       <h3 class="pf-landing__heading{{ hero ? ' visually-hidden' }}" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
@@ -383,21 +381,6 @@
           {% endif %}
         </button>
       </div>
-      </div>
-      {# The first screen's index, in the form's box so it shares the search's
-         place on the cover, outside its landmark. Numbers are decoration, as
-         on the rules (_palefire_hero_contents()). #}
-      {% if cover and hero_contents %}
-        <nav class="pf-landing__contents" aria-label="{{ 'On this page'|t }}">
-          <ol class="pf-landing__contents-list">
-            {% for item in hero_contents %}
-              <li>
-                <a class="pf-landing__contents-link" href="{{ item.url }}"><span class="pf-landing__contents-num" aria-hidden="true">{{ item.num }}</span><span>{{ item.label }}</span></a>
-              </li>
-            {% endfor %}
-          </ol>
-        </nav>
-      {% endif %}
     </form>
     {# Landing department: the hero's tile accordion under the search, only
        when the paragraph has tiles (no placeholders). Its own wrapper, not

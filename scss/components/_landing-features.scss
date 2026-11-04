@@ -4335,8 +4335,7 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
     opacity: 0;
   }
 
-  // Opened from the crumb, it comes in while it's open (a window too short
-  // for the index, below).
+  // Opened from the crumb's "Contents", it comes in while it's open.
   @include media-breakpoint-up(lg) {
     .pf-sidebar.pf-modular__sidebar .offcanvas-body:not(:has(.pf-toc.is-open)) {
       visibility: hidden;
@@ -4345,88 +4344,10 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// --- The first screen's index ---------------------------------------------------
-// Under the search (includes/landing.html.twig): the page's sections with
-// their numbers, as a catalogue's contents page, in the labels' voice over a
-// hairline. In place of the crumb's "Contents" where it fits: from 44rem of
-// landing and 52.5rem of window (its last row ends by 830px up to 1920 wide).
-// Elsewhere the crumb opens the contents.
-// Without JS, always here.
-.pf-landing__contents {
-  display: none;
-  margin-top: clamp(1rem, 2.5svh, 1.5rem);
-  padding-top: .625rem;
-  border-top: 1px solid #{$pf-hairline};
-}
-
-:root:not(.js) .pf-landing__contents {
-  display: block;
-}
-
-.pf-landing__contents-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 var(--pf-grid-gutter);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.pf-landing__contents-link {
-  @extend %pf-landing-label;
-  display: flex;
-  gap: .75em;
-  padding-block: .3125rem;
-  color: var(--pf-section-fg, var(--bs-body-color));
-  text-decoration: underline transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: .35em;
-  transition: text-decoration-color $pf-hover-out ease;
-
-  &:hover,
-  &:focus-visible {
-    text-decoration-color: var(--pf-landing-accent);
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: 2px;
-  }
-}
-
-.pf-landing__contents-num {
-  flex: none;
-  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-  font-variant-numeric: tabular-nums;
-}
-
+// The crumb's "Contents" on the first screen (js/modular-toc.js): never cut
+// short, whatever else the breadcrumb has to give up.
 .pf-breadcrumb--modular .pf-breadcrumb__section--first {
   flex-shrink: 0;
-}
-
-@container pf-cover (min-width: 44rem) {
-  @media (min-height: 52.5rem) {
-    .pf-landing__contents {
-      display: block;
-    }
-
-    .pf-breadcrumb--modular .pf-breadcrumb__section--first {
-      display: none;
-    }
-  }
-}
-
-@container pf-cover (min-width: 64rem) {
-  .pf-landing__contents-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media print {
-  .pf-landing__contents {
-    display: none !important;
-  }
 }
 
 // --- Scroll: the stage -------------------------------------------------------

@@ -87,8 +87,8 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Targets of 44px, or 36px in the compact header.
 - **Numbering:** letters for alternatives (the Quick Start's A, B, C),
   1, 2, 3 for steps done in order (`pf-steps`, no leading zero), and
-  01, 02 only on section index rules, with 02.1, 02.2 for the parts of one
-  section (a hero's tabs, its rooms and hours). On a location page the rule
+  01, 02 only on section index rules, with 01.1, 01.2 for a hero's tabs. On a
+  location page the rule
   carries the number alone: its sticky heading names the part. A walk-in
   room's parts have no number; their rule shows only with its link.
 - **Icons:** Font Awesome 5.15.4 class names only (`fas`, `far`, `fab`),
@@ -145,6 +145,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Hours and directions is a numbered section on the band (`--pf-band`) after a cover's map; the sections after it take the band on odd positions. `_palefire_hero_index()` numbers each rule once (no 02.1, 02.2). `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.
+- **2026-11-04:** `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.
 - **2026-11-04:** Rail: `--pf-rail-track` (`$pf-hairline`, 1px) and `--pf-rail-mark` (`--pf-g-highlight`, 2px on the current segment); the halo and 5px hover are gone. `.pf-landing__contents`: the first screen's index under the search (`_palefire_hero_contents()`), from 44rem of landing and 52.5rem of window, two columns then three from 64rem. `.pf-breadcrumb__section--first`: "Contents" in the crumb where the index isn't. Panel rows: `.pf-toc__row-num`, number and name read from the section's index rule. TOC ids: `#start` for the Quick Start.
 - **2026-11-04:** Index rule numbers on the hero: `_palefire_hero_index()`. Rooms and hours are one section, 02.1 and 02.2 (either alone is 02); sections after the hero count on from whole sections.
 - **2026-11-04:** Cover column: 1824px and `--pf-header-gutter` now apply to `.pf-landing__run` only (the hero's section stays that wide from md so its `cqi` sizes hold); the Quick Start, map and sections below keep `--pf-col-max`'s default 1280px and `--pf-section-pad-inline`. `.pf-map__legend--hero`: under `.pf-map__summary`, mono labels, one row per hatch plus the elevator.
