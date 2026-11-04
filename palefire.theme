@@ -324,6 +324,7 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['page_title'] = NULL;
   $variables['toc_home_id'] = NULL;
   $variables['toc_map_id'] = NULL;
+  $variables['toc_start_id'] = NULL;
   $variables['toc_hours_id'] = NULL;
   $variables['lead_breadcrumb'] = NULL;
   $variables['map_only'] = FALSE;
@@ -417,6 +418,62 @@ function _palefire_hero_index(ParagraphInterface $paragraph): array {
 }
 
 /**
+ * The first screen's index: the page's sections, numbered as their rules are.
+ *
+ * The Quick Start, the visit section (one entry, to the map, whether or not
+ * it splits into 02.1 and 02.2), then each published section with an Eyebrow,
+ * as palefire_preprocess_field() numbers them. A section's Eyebrow is its name
+ * here.
+ *
+ * @return array
+ *   Entries: ['num', 'label', 'url' (a same-page #id)], or [] on a page with
+ *   no sections to list.
+ */
+function _palefire_hero_contents(ParagraphInterface $hero, CacheableMetadata $cache): array {
+  $host = $hero;
+  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+    $host = $host->getParentEntity();
+  }
+  if (!$host instanceof NodeInterface || !$host->hasField('field_scroll_section')) {
+    return [];
+  }
+  $index = _palefire_hero_index($hero);
+  $ids = PalefireHooks::heroTocIds($host);
+  $count = count(array_unique(array_map('intval', $index)));
+  $items = [];
+  if (isset($index['guide'], $ids['start'])) {
+    $items[] = ['num' => $index['guide'], 'label' => t('Start your research'), 'url' => '#' . $ids['start']];
+  }
+  $visit = $ids['map'] ?? $ids['hours'] ?? NULL;
+  $visit_num = $index['rooms'] ?? $index['hours'] ?? NULL;
+  if ($visit && $visit_num) {
+    $items[] = ['num' => sprintf('%02d', (int) $visit_num), 'label' => t('Visit Hill'), 'url' => '#' . $visit];
+  }
+  $tabs = _palefire_hero_tabs($hero);
+  $anchors = PalefireHooks::sectionData($host);
+  $repository = \Drupal::service('entity.repository');
+  foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
+    if ($section->bundle() === 'landing_hero' || !$section->isPublished() || ($tabs && $tabs->id() === $section->id())) {
+      continue;
+    }
+    $section = $repository->getTranslationFromContext($section);
+    if (!$section->hasField('field_tile_eyebrow') || $section->get('field_tile_eyebrow')->isEmpty()) {
+      continue;
+    }
+    $cache->addCacheableDependency($section);
+    $count++;
+    if (isset($anchors[$section->uuid()])) {
+      $items[] = [
+        'num' => sprintf('%02d', $count),
+        'label' => $section->get('field_tile_eyebrow')->value,
+        'url' => '#' . $anchors[$section->uuid()]['anchor'],
+      ];
+    }
+  }
+  return count($items) > 1 ? $items : [];
+}
+
+/**
  * The page's Section tabs that the landing hero draws in its Quick Start.
  *
  * The first published Section tabs section on the hero's page, when the
@@ -489,6 +546,9 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
     $variables['hero_index'] = _palefire_hero_index($paragraph);
+    $contents_cache = CacheableMetadata::createFromRenderArray($variables);
+    $variables['hero_contents'] = _palefire_hero_contents($paragraph, $contents_cache);
+    $contents_cache->applyTo($variables);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     // The page's Section tabs over the Quick Start (_palefire_hero_tabs()):
@@ -1123,6 +1183,7 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
     // The TOC's "Home", "Map" and "Hours" targets (PalefireHooks::heroTocIds()).
     $ids = PalefireHooks::heroTocIds($host);
     $variables['toc_home_id'] = $ids['home'] ?? NULL;
+    $variables['toc_start_id'] = $ids['start'] ?? NULL;
     $variables['toc_map_id'] = $ids['map'] ?? NULL;
     $variables['toc_hours_id'] = $ids['hours'] ?? NULL;
     // The breadcrumb at the top of the lead panel (PalefireHooks::

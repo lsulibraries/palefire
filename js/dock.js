@@ -354,6 +354,10 @@
           return after && before;
         });
         entry.num = nums.length ? (num ? num.textContent.trim() : '') : pad(i + 1);
+        // The Quick Start's rule is its first tab's (01.1): the list names the section.
+        if (entry.target.matches('.pf-quick-guide')) {
+          entry.num = entry.num.split('.')[0];
+        }
       });
       const printed = nums.map((n) => parseInt(n.textContent, 10)).filter((n) => !isNaN(n));
       total = printed.length ? Math.max(...printed) : entries.length;
@@ -401,8 +405,9 @@
         const i = entries.findIndex((e) => e.link === link);
         n = String((i < 0 ? 0 : i) + 1);
       }
-      // The ring drops the leading zero the page's numbers and the list keep.
-      n = n.replace(/^0+(?=\d)/, '');
+      // The ring shows the whole section: no leading zero and no part (02.1
+      // reads 2), which the page's numbers and the list keep.
+      n = n.replace(/\..*$/, '').replace(/^0+(?=\d)/, '');
       if (ringNum.textContent !== n) {
         ringNum.textContent = n;
         tocName.textContent = Drupal.t('Contents, section @n of @total', { '@n': parseInt(n, 10) || 1, '@total': total });

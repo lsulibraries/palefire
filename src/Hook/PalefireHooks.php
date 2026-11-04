@@ -17,6 +17,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\palefire\StaffDirectory;
+use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 /**
@@ -513,8 +514,12 @@ class PalefireHooks {
     if (!empty($ids['home'])) {
       $extra[] = ['id' => $ids['home'], 'label' => $this->t('Home')];
     }
+    if (!empty($ids['start'])) {
+      $extra[] = ['id' => $ids['start'], 'label' => $this->t('Start your research')];
+    }
     if (!empty($ids['map'])) {
-      $extra[] = ['id' => $ids['map'], 'label' => $this->t('Map')];
+      // With Hours and directions beside it, the map is the rooms' section.
+      $extra[] = ['id' => $ids['map'], 'label' => !empty($ids['hours']) ? $this->t('Rooms and access') : $this->t('Map')];
     }
     if (!empty($ids['hours'])) {
       $extra[] = ['id' => $ids['hours'], 'label' => $this->t('Hours and directions')];
@@ -566,14 +571,15 @@ class PalefireHooks {
    * TOC targets for the landing that opens a Modular page.
    *
    * home: the lead panel's id, when the landing has no section title of its
-   * own (with one, palefire_modular already lists it). map: the building
+   * own (with one, palefire_modular already lists it). start: the Quick
+   * Start, when a Landing hero shows it. map: the building
    * map's wrapper, when the landing has a map. hours: the Hours and directions
    * section, when the page has a location (a Landing hero only; other
    * landings have no such section). Fixed ids, so the links read #home, #map
    * and #hours; a section anchored with one of them keeps it, and the landing
    * then gets none.
    *
-   * @return array{home?: string, map?: string, hours?: string}
+   * @return array{home?: string, start?: string, map?: string, hours?: string}
    */
   public static function heroTocIds(NodeInterface $node): array {
     $uuid = self::titleLandingUuid($node);
@@ -588,6 +594,9 @@ class PalefireHooks {
     $ids = [];
     if (self::stringValue($paragraph, 'field_section_title') === '' && !in_array('home', $taken, TRUE)) {
       $ids['home'] = 'home';
+    }
+    if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && !in_array('start', $taken, TRUE) && in_array('guide', \_palefire_hero_rules($paragraph), TRUE)) {
+      $ids['start'] = 'start';
     }
     if ($paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty() && !in_array('map', $taken, TRUE)) {
       $ids['map'] = 'map';

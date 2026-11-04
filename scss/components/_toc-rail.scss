@@ -4,7 +4,7 @@
 // the offcanvas.
 //
 // The same <nav> as the sidebar (palefire-modular-toc.html.twig), restyled:
-// - Each link is a segment of a 3px line, as long as its section is
+// - Each link is a segment of a 1px hairline, as long as its section is
 //   (--pf-rail-w, flex-grow), filled as far as the activation line has
 //   read into it (--pf-rail-p). Both are set by js/modular-toc.js, which
 //   switches to even ticks (.pf-toc--ticks) when the segments can't all be
@@ -22,9 +22,10 @@
 // - The column closes (0px) and section backgrounds run to the page edge.
 //   The rail overlays the sections' side padding (3.75rem from md).
 // - Colors are the TOC tokens, so the rail follows dark sections and
-//   reading swatches like the sidebar did: the read part in --pf-toc-active,
-//   the rest in --pf-toc-rail. A 1px halo in the glass color keeps the line
-//   visible where the section under it has the other theme's background.
+//   reading swatches like the sidebar did: the unread part in the hairline,
+//   the read part a step brighter, and where you are a 2px mark in the index
+//   numbers' gold (3:1; the hairline itself is decoration, and the crumb and
+//   the links carry the names).
 //
 // page.html.twig adds .pf-modular--toc-rail when the sidebar holds only the
 // TOC: with other blocks it stays a column, so they keep their place.
@@ -46,6 +47,8 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     --pf-rail-line: 1.25rem; // the line's distance from the page edge
     --pf-rail-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     --pf-rail-panel-w: 19rem;
+    --pf-rail-track: #{$pf-hairline};
+    --pf-rail-mark: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 
     grid-template-columns: 0px minmax(0, 1fr);
     --pf-bleed-inline-start: 0px;
@@ -120,19 +123,18 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
         position: absolute;
         top: 0;
         inset-inline-start: var(--pf-rail-line);
-        width: 3px;
+        width: 1px;
         transition: width 0.25s var(--pf-rail-ease), background-color 0.3s ease;
       }
 
       &::before {
         bottom: 0;
-        background-color: var(--pf-toc-rail);
-        box-shadow: 0 0 0 1px var(--pf-sidebar-bg);
+        background-color: var(--pf-rail-track);
       }
 
       &::after {
         height: calc(var(--pf-rail-p, 0) * 100%);
-        background-color: var(--pf-toc-active);
+        background-color: var(--pf-rail-mark);
       }
     }
 
@@ -143,23 +145,22 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       background-color: color-mix(in srgb, var(--pf-toc-color) 70%, var(--pf-toc-rail));
     }
 
-    // The segment whose row is under the pointer widens and brightens.
+    // The segment whose row is under the pointer brightens, and the current
+    // one is a step wider.
     .pf-toc__item.is-hot > .pf-toc__link::before {
-      width: 5px;
+      width: 2px;
       background-color: color-mix(in srgb, var(--pf-toc-color) 70%, var(--pf-toc-rail));
     }
 
     .pf-toc__item.is-hot > .pf-toc__link::after {
-      width: 5px;
-      background-color: var(--pf-toc-active);
+      width: 2px;
     }
 
     .pf-toc__link {
       &:hover::before,
       &:hover::after,
-      &[aria-current]::before,
       &[aria-current]::after {
-        width: 5px;
+        width: 2px;
       }
 
       &:focus-visible {
@@ -291,6 +292,13 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
 
   // Rows: 36px, a fill and a marker under the pointer (or on the row of the
   // focused rail link), the current one in the heading color.
+  #{$pf-rail} .pf-toc__row-num {
+    flex: none;
+    min-width: 3em;
+    color: var(--pf-rail-mark);
+    font-variant-numeric: tabular-nums;
+  }
+
   #{$pf-rail} .pf-toc__row {
     position: relative;
     display: flex;
@@ -377,7 +385,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       top: 50%;
       bottom: auto;
       width: 0.75rem;
-      height: 2px;
+      height: 1px;
     }
 
     .pf-toc__link::after {
@@ -392,7 +400,8 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     .pf-toc__item.is-hot > .pf-toc__link::before,
     .pf-toc__link[aria-current]::before {
       width: 1.25rem;
-      background-color: var(--pf-toc-active);
+      height: 2px;
+      background-color: var(--pf-rail-mark);
     }
 
     // The name's top level with its tick.
@@ -431,6 +440,11 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       transition-duration: 0s !important;
     }
   }
+}
+
+// High contrast: the whole line, not the hairline.
+#{$pf-rail-html}.pf-a11y-contrast #{$pf-rail-row} {
+  --pf-rail-track: currentColor;
 }
 
 #{$pf-rail-html}.pf-a11y-motion #{$pf-rail-row} {

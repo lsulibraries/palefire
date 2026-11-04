@@ -163,7 +163,7 @@ and its own breadcrumb bar instead (`PalefireHooks::titleLandingUuid()`,
 - Its visible title is "Table of contents", a plain label that names the
   `<nav>`.
 - **Reading rail** (lg and up, not on guides, `_toc-rail.scss`): the same
-  `<nav>` as a 3px line at the page edge, one segment per section, as long as
+  `<nav>` as a 1px hairline at the page edge, one segment per section, as long as
   the section, filled as far as the activation line has read into it. The
   column closes and backgrounds run to the edge. Hover, focus or a first tap
   opens the **index panel** beside it: every section on an even row, a visual
@@ -1160,6 +1160,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-04:** Special Collections contents. The rail was the loudest thing beside the map, so it is now a 1px hairline with a 2px gold mark for where you are. The first screen gets a numbered index under the search, because nothing there showed what the page holds; the phone, and a window too short for the index, get a Contents button in the breadcrumb instead. The panel now lists sections by their rules' numbers and names, with Start your research as an entry of its own. The phone dock's ring shows whole section numbers (2, not 2.1), since the decimals crowded the circle.
 - **2026-11-04:** Special Collections: Rooms and access and Hours and directions are now 02.1 and 02.2, because two whole numbers made them look like unrelated sections. It follows the Quick Start's 01.1 to 01.3. Later sections move up one, so Go deeper is 03 and Teaching & Research is 06.
 - **2026-11-04:** Special Collections: only the first screen keeps the thin margins on the logo's edge. Taking the rail off the cover had widened the whole page's column, so the Quick Start, map, hours and every section below ran 48px from the screen at 1440; they are back on the centred 1280px column (76px at 1440). The map also gets its legend under the description: the walk-in hatch, the booked and rental hatch, and the elevator, so the drawing can be read without scrolling to the room list.
 - **2026-11-04:** Special Collections hero: the title is now always two lines, because it reads more easily and it ran to one line on wide desktops and landscape phones. Its box hugs the words, so the picture in the letters is centred on them rather than on the whole column.

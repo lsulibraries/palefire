@@ -801,7 +801,14 @@
         row.className = 'pf-toc__row';
         row.href = entry.link.getAttribute('href');
         row.tabIndex = -1;
-        row.textContent = entry.link.textContent.replace(/\s+/g, ' ').trim();
+        const index = railRowIndex(entry);
+        if (index.num) {
+          const num = document.createElement('span');
+          num.className = 'pf-toc__row-num';
+          num.textContent = index.num;
+          row.append(num);
+        }
+        row.append(index.label || entry.link.textContent.replace(/\s+/g, ' ').trim());
         li.append(row);
         panelList.append(li);
         entry.row = row;
@@ -829,6 +836,26 @@
       });
       panel.append(head, panelList);
       nav.append(panel);
+    }
+
+    // A row's number and name, from the index rule that opens its section,
+    // so the panel reads as the page does. Empty without one (Home). The
+    // Quick Start's rule is its first tab's (01.1): the panel lists the
+    // section (01).
+    function railRowIndex(entry) {
+      const id = (entry.link.getAttribute('href') || '').slice(1);
+      const target = id ? document.getElementById(id) : null;
+      if (!target) {
+        return {};
+      }
+      const guide = target.matches('.pf-quick-guide');
+      const rule = guide ? target.querySelector('.pf-index-rule') : target.querySelector(':scope > .pf-index-rule, :scope > .pf-section__inner > .pf-index-rule');
+      if (!rule) {
+        return {};
+      }
+      const text = (selector) => ((rule.querySelector(selector) || {}).textContent || '').replace(/\s+/g, ' ').trim();
+      const num = text('.pf-index-rule__num');
+      return { num: guide ? num.split('.')[0] : num, label: text('.pf-index-rule__label') };
     }
 
     function setHot(target) {
@@ -906,9 +933,16 @@
       if (!crumb) {
         return;
       }
-      const show = !!active && active !== entries[0];
-      const text = show ? active.link.textContent.replace(/\s+/g, ' ').trim() : '';
+      // At the top of a page with the first screen's index: "Contents", shown
+      // only where the index isn't (_landing-features.scss).
+      const first = !!active && active === entries[0] && !!document.querySelector('.pf-landing__contents');
+      const show = !!active && (active !== entries[0] || first);
+      let text = show ? active.link.textContent.replace(/\s+/g, ' ').trim() : '';
+      if (first) {
+        text = Drupal.t('Contents');
+      }
       crumb.hidden = !show;
+      crumb.classList.toggle('pf-breadcrumb__section--first', first);
       if (!show || text === crumbLabel.textContent) {
         crumbShown = show ? crumbShown : null;
         return;
@@ -1006,6 +1040,18 @@
       crumb.append(button);
       crumbList.append(crumb);
       button.addEventListener('click', openContents, { signal });
+
+      // The first screen's index jumps as the rail does (glide, history, focus).
+      document.querySelectorAll('.pf-landing__contents-link').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const entry = entries.find((item) => item.link.getAttribute('href') === link.getAttribute('href'));
+          if (!entry || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return;
+          }
+          event.preventDefault();
+          entry.link.click();
+        }, { signal });
+      });
       // Esc in the panel it opened: back to the crumb. (The rail's own Esc
       // handler, above, closes the panel.)
       nav.addEventListener('keydown', (event) => {

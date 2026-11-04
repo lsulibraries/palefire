@@ -145,6 +145,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Rail: `--pf-rail-track` (`$pf-hairline`, 1px) and `--pf-rail-mark` (`--pf-g-highlight`, 2px on the current segment); the halo and 5px hover are gone. `.pf-landing__contents`: the first screen's index under the search (`_palefire_hero_contents()`), from 44rem of landing and 52.5rem of window, two columns then three from 64rem. `.pf-breadcrumb__section--first`: "Contents" in the crumb where the index isn't. Panel rows: `.pf-toc__row-num`, number and name read from the section's index rule. TOC ids: `#start` for the Quick Start.
 - **2026-11-04:** Index rule numbers on the hero: `_palefire_hero_index()`. Rooms and hours are one section, 02.1 and 02.2 (either alone is 02); sections after the hero count on from whole sections.
 - **2026-11-04:** Cover column: 1824px and `--pf-header-gutter` now apply to `.pf-landing__run` only (the hero's section stays that wide from md so its `cqi` sizes hold); the Quick Start, map and sections below keep `--pf-col-max`'s default 1280px and `--pf-section-pad-inline`. `.pf-map__legend--hero`: under `.pf-map__summary`, mono labels, one row per hatch plus the elevator.
 - **2026-11-04:** Hero title: `width: min-content` on `.pf-landing__title` in the split cover, at every width: two lines for "Special Collections", and `background-position` centres on the words. A longer title would take a line a word.
