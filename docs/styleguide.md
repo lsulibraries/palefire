@@ -87,7 +87,8 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
   - Targets of 44px, or 36px in the compact header.
 - **Numbering:** letters for alternatives (the Quick Start's A, B, C),
   1, 2, 3 for steps done in order (`pf-steps`, no leading zero), and
-  01, 02 only on section index rules. On a location page the rule
+  01, 02 only on section index rules, with 02.1, 02.2 for the parts of one
+  section (a hero's tabs, its rooms and hours). On a location page the rule
   carries the number alone: its sticky heading names the part. A walk-in
   room's parts have no number; their rule shows only with its link.
 - **Icons:** Font Awesome 5.15.4 class names only (`fas`, `far`, `fab`),
@@ -144,6 +145,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-04:** Index rule numbers on the hero: `_palefire_hero_index()`. Rooms and hours are one section, 02.1 and 02.2 (either alone is 02); sections after the hero count on from whole sections.
 - **2026-11-04:** Cover column: 1824px and `--pf-header-gutter` now apply to `.pf-landing__run` only (the hero's section stays that wide from md so its `cqi` sizes hold); the Quick Start, map and sections below keep `--pf-col-max`'s default 1280px and `--pf-section-pad-inline`. `.pf-map__legend--hero`: under `.pf-map__summary`, mono labels, one row per hatch plus the elevator.
 - **2026-11-04:** Hero title: `width: min-content` on `.pf-landing__title` in the split cover, at every width: two lines for "Special Collections", and `background-position` centres on the words. A longer title would take a line a word.
 - **2026-11-04:** Hero below desktop. Split cover, stage, `pf-split-open` and the title's window start at 44rem of `pf-cover` (was 64rem). Under 44rem, with motion and view timelines: `--pf-film-h` sizes the film's box, the lead lies on it and rises with `pf-film-rise` on `--pf-banner-own` (contain 5% to 70%), its title `pf-split-appear` (contain 50% to 80%); the rest are ruled rows with `.pf-hero-banner__media` off. `$pf-title-trade-on` (`_variables.scss`) limits the title's trade to dark reading colours. `pf-title-feature` sets `--pf-title-feature` (`_palefire_hero_banner_still()`, the portrait cover's md) from 1px of scroll. `--pf-title-veil-on` is now the 3:1 floor on a black pixel per colour (51 to 70%). `--pf-title-trade-fill` keeps the letters solid when `.is-event` holds the lead. `pf-cover-top-wash()` takes `$top` and `$edge-mix`: 80 and 78 under 64rem, where the header's words lie over the column. `PALEFIRE_HERO_BANNER_SIZES`: 90vw from 44rem, 100vw under.

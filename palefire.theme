@@ -352,9 +352,9 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * the map leads alone, and only with the page title or an intro (show_lead,
  * includes/landing.html.twig); the map when it is published; the Visit strip
  * when the host page has a location (_palefire_landing_visit()). The hero
- * numbers its rules from
- * this, and palefire_preprocess_field() counts on from its length, so no
- * number is typed by hand and they always agree.
+ * numbers its rules from this (_palefire_hero_index()), and
+ * palefire_preprocess_field() counts on from those numbers, so no number is
+ * typed by hand and they always agree.
  *
  * @return string[]
  *   Rule keys: 'guide', 'rooms', 'hours', those the hero shows.
@@ -387,6 +387,33 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
     $rules[] = 'hours';
   }
   return $rules;
+}
+
+/**
+ * The landing hero's index numbers, by rule key (_palefire_hero_rules()).
+ *
+ * Rooms and access and Hours and directions are two parts of one visit
+ * section, so together they read 02.1 and 02.2, as the Quick Start's tabs
+ * read 01.1, 01.2; either one alone is plain 02.
+ *
+ * @return string[]
+ *   Rule key => number ('01', '02.1').
+ */
+function _palefire_hero_index(ParagraphInterface $paragraph): array {
+  $rules = _palefire_hero_rules($paragraph);
+  $index = [];
+  $section = 0;
+  if (in_array('guide', $rules, TRUE)) {
+    $index['guide'] = sprintf('%02d', ++$section);
+  }
+  $visit = array_values(array_intersect(['rooms', 'hours'], $rules));
+  if ($visit) {
+    $section++;
+    foreach ($visit as $i => $rule) {
+      $index[$rule] = count($visit) > 1 ? sprintf('%02d.%d', $section, $i + 1) : sprintf('%02d', $section);
+    }
+  }
+  return $index;
 }
 
 /**
@@ -461,12 +488,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
-    // The index rules' numbers (_palefire_hero_rules()): 01, 02, … in the
-    // order the hero shows them.
-    $variables['hero_index'] = [];
-    foreach (_palefire_hero_rules($paragraph) as $i => $rule) {
-      $variables['hero_index'][$rule] = sprintf('%02d', $i + 1);
-    }
+    $variables['hero_index'] = _palefire_hero_index($paragraph);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
     // The page's Section tabs over the Quick Start (_palefire_hero_tabs()):
@@ -2948,8 +2970,8 @@ function _palefire_lead_cover(FieldItemInterface $image, string $sizes, Cacheabl
  * or ''), and link (url, text, external, from field_tile_link) or NULL.
  *
  * Numbered by position, so a section moved in the editor renumbers itself:
- * the landing hero's rules count first (as many as it shows,
- * _palefire_hero_rules()), then each section with an Eyebrow, in order.
+ * the landing hero's sections count first (as many as it numbers,
+ * _palefire_hero_index()), then each section with an Eyebrow, in order.
  * The link's text drops a trailing arrow typed by hand: the rule draws
  * its own. A Section tabs section the hero's Quick Start draws
  * (_palefire_hero_tabs()) is left out, and takes no number.
@@ -2975,7 +2997,8 @@ function palefire_preprocess_field(array &$variables): void {
       continue;
     }
     if ($paragraph->bundle() === 'landing_hero') {
-      $count += count(_palefire_hero_rules($paragraph));
+      // 02.1 and 02.2 are one section.
+      $count += count(array_unique(array_map('intval', _palefire_hero_index($paragraph))));
       continue;
     }
     // Its Quick Start draws the page's Section tabs: not again here.
