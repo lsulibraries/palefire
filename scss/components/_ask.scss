@@ -519,14 +519,21 @@ textarea.pf-inquiry__control {
   font-size: .875rem;
 }
 
-// The Quick Start Guide's buttons (.pf-quick-guide__link,
-// _landing-features.scss): mono capitals in a hairline frame, the words at
-// the start and the arrow at the end, the frame turning gold on hover. As
-// wide as one of those (half the notes' column), the whole form's on a
-// phone. The FAQs' links (.pf-inquiry__button) share the look.
+// The FAQs' links are secondary, as the Quick Start Guide's buttons
+// (.pf-quick-guide__link, _landing-features.scss). Send question is this
+// view's one primary: the form's main action. Both have the words at the
+// start and the arrow at the end, as wide as a Quick Start button (half the
+// notes' column), the whole form's on a phone.
+.pf-inquiry__button {
+  @extend %pf-button-secondary;
+}
+
+.pf-inquiry__submit {
+  @extend %pf-button-primary;
+}
+
 .pf-inquiry__button,
 .pf-inquiry__submit {
-  @extend %pf-button-secondary;
   justify-content: flex-start;
   gap: .625rem;
   width: min(100%, 17.5rem);

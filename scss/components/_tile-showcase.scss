@@ -1496,7 +1496,8 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  border: 1px solid $pf-hairline;
+  // Wordless, so the edge keeps 3:1 (WCAG 1.4.11), not the hairline.
+  border: 1px solid var(--pf-section-border, currentColor);
   background: none;
   color: var(--pf-index-muted);
   cursor: pointer;
