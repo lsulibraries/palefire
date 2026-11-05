@@ -371,6 +371,8 @@
     height: 100%;
     padding: 1.25rem 1.25rem 0;
     overflow-y: auto;
+    scrollbar-color: var(--pf-index-line) transparent;
+    scrollbar-width: thin;
   }
 }
 
@@ -853,19 +855,11 @@
   list-style: none;
 }
 
-// Every other row sits on the page's band color, as the landing's sections do,
-// so the eye keeps its place going down a long list.
-.pf-index-list__rows {
-  border-bottom: 1px solid var(--pf-index-line);
-}
-
+// Rows part on the soft hairline, as the landing's lists do, with room to breathe.
 .pf-index-row {
-  padding: 1.25rem clamp(.75rem, 2vw, 1.25rem);
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--pf-index-line);
   overflow-wrap: anywhere;
-
-  &:nth-child(even) {
-    background: var(--pf-band, var(--pf-g-surface, var(--bs-tertiary-bg)));
-  }
 }
 
 // Names in the strongest text color, as the landing's rows; color arrives fast
