@@ -293,7 +293,7 @@
   // The results dim while the next ones load, after a moment so a quick answer
   // doesn't flicker. Dimming isn't movement, so only its easing is optional.
   &[aria-busy="true"] .pf-index__results {
-    opacity: .25;
+    opacity: .5;
   }
 
   @include pf-index-motion {
@@ -315,7 +315,6 @@
 
 .pf-index__results {
   min-width: 0;
-  counter-reset: pf-index-section;
 }
 
 .pf-index__filters-open {
@@ -729,17 +728,7 @@
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-// Each section opens on the theme's index rule (_landing-features.scss). The
-// number is counted, so a late section with no results leaves no gap.
-.pf-index-section:not([hidden]),
-.pf-index__elsewhere {
-  counter-increment: pf-index-section;
-}
-
-.pf-index-rule__num::before {
-  content: counter(pf-index-section, decimal-leading-zero);
-}
-
+// Each section opens on the theme's index rule (_landing-features.scss).
 // Four classes: the reading colors set every heading through html[...] .pf-main.
 .pf-main .pf-index .pf-index-rule .pf-index-section__title {
   @include pf-index-label;
@@ -764,15 +753,20 @@
 
 // While results are on their way: the LSU mark traced as on a page change
 // (base/_swup.scss, whose keyframes these use), with a word to say what it
-// means. In the middle of the window for a new search, and in its place for a
-// late section. Shown after a moment, so a quick answer never flashes it. With
-// reduced motion the mark and the word simply show, and nothing moves.
+// means. In the middle of the window for a new search, on a veil of the page
+// color so it doesn't read as stray marks over the results, and in the middle
+// of its place for a late section. Shown after a moment, so a quick answer never
+// flashes it. With reduced motion the mark and the word simply show, and nothing
+// moves.
 .pf-index__loading {
   position: fixed;
   inset: var(--pf-header-h, 4rem) 0 0;
   z-index: 2;
   display: grid;
   place-items: center;
+  background: color-mix(in srgb, var(--pf-g-bg, var(--bs-body-bg)) 70%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   pointer-events: none;
   visibility: hidden;
   opacity: 0;
@@ -811,8 +805,12 @@
   color: var(--pf-index-muted);
 }
 
+.pf-index-section__late.is-searching {
+  display: grid;
+  place-items: center;
+}
+
 .pf-index-section__late > .pf-index__mark {
-  justify-items: start;
   padding-block: 1.5rem;
 
   svg {
@@ -855,10 +853,19 @@
   list-style: none;
 }
 
-.pf-index-row {
-  padding-block: 1.125rem;
+// Every other row sits on the page's band color, as the landing's sections do,
+// so the eye keeps its place going down a long list.
+.pf-index-list__rows {
   border-bottom: 1px solid var(--pf-index-line);
+}
+
+.pf-index-row {
+  padding: 1.25rem clamp(.75rem, 2vw, 1.25rem);
   overflow-wrap: anywhere;
+
+  &:nth-child(even) {
+    background: var(--pf-band, var(--pf-g-surface, var(--bs-tertiary-bg)));
+  }
 }
 
 // Names in the strongest text color, as the landing's rows; color arrives fast
@@ -1062,7 +1069,7 @@
   margin: 0 0 .375rem;
   padding: .1em .45em;
   border: 1px solid var(--pf-index-line);
-  background: var(--pf-g-surface, var(--bs-tertiary-bg));
+  background: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
   color: var(--pf-index-muted);
   font-family: var(--pf-guide-mono, var(--pf-landing-label));
   font-size: .8125rem;
