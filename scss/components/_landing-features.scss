@@ -3204,11 +3204,10 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
-// The Visit buttons as wide as the Quick Guide's (and Send question), the
-// words at the start and the arrow at the end; Google Maps and Parking
-// side by side, wrapping when the map's column can't hold both.
+// The Visit buttons fill their column, the words at the start and the arrow
+// at the end.
 .pf-landing--cover .pf-visit__link {
-  width: min(100%, 17.5rem);
+  width: 100%;
   margin-top: 0;
 
   .pf-visit__ext {
@@ -3224,14 +3223,18 @@ html[data-pf-hero] .pf-landing--cover {
   justify-self: stretch;
 }
 
-// Until the four-column strip (phones and tablets): the buttons as wide as
-// the week and the map above them, stacked, on one rhythm: .75rem from the
-// week's last rule or the map, .5rem between the two.
-@container pf-cover (width < 64rem) {
-  .pf-landing--cover .pf-visit__link {
-    width: 100%;
+// The four-column strip: Google Maps and Parking share the map's column,
+// wrapping before a label would.
+@container pf-cover (width >= 64rem) {
+  .pf-landing--cover .pf-visit__go > .pf-visit__link {
+    flex: 1 1 14rem;
   }
+}
 
+// Until the four-column strip (phones and tablets): the buttons stacked on
+// one rhythm: .75rem from the week's last rule or the map, .5rem between the
+// two.
+@container pf-cover (width < 64rem) {
   .pf-landing--cover .pf-visit__all-hours {
     margin-top: .75rem;
   }
