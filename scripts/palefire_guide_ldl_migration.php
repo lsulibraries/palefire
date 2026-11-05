@@ -162,8 +162,8 @@ $section('Status at a glance', [
 <p><strong>Status as of Thu 5 Nov 2026, 10:47 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs; progress by institution added; Loyola and other harvested collections out of the migration; exporter now skips Loyola.</p>
 HTML, 'callout'),
   $stats(NULL, [
-    ['55%', 'done by data size'],
-    ['75%', 'done by number of files'],
+    ['55%', 'downloaded, by data size'],
+    ['75%', 'downloaded, by number of files'],
     ['1.36 TB', 'left to download (1.66 TB on L:)'],
     ['15 of 38', 'institutions with nothing left; 8 more at 99% or better'],
   ]),
@@ -181,9 +181,10 @@ HTML),
 </ul>
 HTML),
   $text('Progress by institution (Nov 5, 10:47)', <<<'HTML'
+<p><strong>These percentages count downloads only.</strong> They show how many files are on L:, not how many have passed their checks. Audits, replacements, review and manifests aren't included.</p>
 <p>Sorted with the least finished first. There are two percentages because they tell different stories: by size is mostly images, and by files counts every file. An institution with a low size figure and a higher files figure has much of its metadata on L:, but few of its images.</p>
 <table>
-<thead><tr><th scope="col">Institution</th><th scope="col">Done by size</th><th scope="col">Done by files</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Downloads</th></tr></thead>
+<thead><tr><th scope="col">Institution</th><th scope="col">Downloaded by size</th><th scope="col">Downloaded by files</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Downloads</th></tr></thead>
 <tbody>
 <tr><td>Law Library of Louisiana</td><td>0%</td><td>35%</td><td>90.7</td><td>130,760</td><td>In progress</td></tr>
 <tr><td>The Historic New Orleans Collection</td><td>0%</td><td>67%</td><td>145.0</td><td>40,375</td><td>In progress</td></tr>
@@ -232,7 +233,9 @@ HTML),
 <ul>
 <li><strong>Few or no images on L: yet:</strong> Law Library has none. Historic New Orleans has images in 1 of its 12 collections (7 images), and Louisiana Newspapers in 1 of its 30.</li>
 <li><strong>Not part of the migration:</strong> Loyola is the only harvested collection named so far, and any others would come out of these figures. Loyola's 120,009 small files already on L: (0.7 GB) are still there.</li>
-<li><strong>Done means nothing is left to download.</strong> Review, replacements and manifests are separate, and images waiting to be replaced count as on L:. Anything with files left shows 99% at most.</li>
+<li><strong>Done means nothing is left to download, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 17 institutions. Anything with files left shows 99% at most.</li>
+<li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
+<li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including the 8,313 in the queue.</li>
 <li><strong>Some of the last files may not really exist.</strong> Many at 99% are files with no size on record in Fedora, including all 1,799 of LSU's, so they add nothing to the size left.</li>
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.0 TB in all. The 5.7 TB is everything in Fedora. The 2.7 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
