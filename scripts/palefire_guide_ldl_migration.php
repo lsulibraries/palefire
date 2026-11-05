@@ -159,7 +159,7 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026, 09:35 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve.</p>
+<p><strong>Status as of Thu 5 Nov 2026, 10:00 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs.</p>
 HTML, 'callout'),
   $text(NULL, <<<'HTML'
 <p>The export to L: is about 70% done by data size (about 1.68 TB left of 5.7 TB), and 20 of the 38 institutions are finished. Uploading to Quartex isn't counted. LSU and LSUHSC New Orleans now have no TIFFs or JPEGs left in their queues. The 28 pages with no usable JP2 in Fedora were converted directly from their TIFFs. The Newspaper Clippings images are on L:, as the team decided. All 45,929 JPEGs from the first audit are replaced. Franklin Parish's images are on L:, apart from 24 waiting to be converted. Overnight, 17,248 more wrong-format images were replaced at four institutions, and the last first audits found 8,312 more, queued to be replaced.</p>
@@ -175,7 +175,7 @@ HTML),
     ['done', 'Remaining institutions: checksum lists and reconcile', '30 institutions compared with the accounting. 12 are clean. The main finding: 105 Franklin Parish newspaper issues (2,607 pages) aren\'t in the accounting.'],
   ]),
   $text(NULL, <<<'HTML'
-<p>Compiled from the exporter's run logs, progress database and dry-run summaries. Figures for the running audit will change. The cleanup list and open questions are current as of this writing.</p>
+<p>Compiled from the exporter's run logs, progress database and dry-run summaries. Figures for the running audit will change. The cleanup list is current as of this writing.</p>
 HTML),
 ]);
 
@@ -422,7 +422,7 @@ HTML),
 <li><strong>LSUHSC New Orleans:</strong> 15,105 match and 1 has no checksum. <strong>15,062 are TIFFs saved as <code>.jp2</code></strong>, queued for their real JP2 (by collection, below).</li>
 <li><strong>2 Agramonte MODS files</strong> differ in size from Fedora's and are queued for a fresh copy. All other MODS, RDF and text files have no checksum in Fedora, which is normal for these datastreams.</li>
 <li><strong>Newspaper Clippings images: all 8,187 on L: (Nov 4).</strong> The team confirmed this collection is moving. The website refuses these images (403), so they came from Fedora's own API through the tunnel (<code>--direct-fedora</code>). 1,819 JPEGs were replaced with their JP2, and 2,443 were fetched as JP2 from the start. Every 40th file was sampled (204 files) and all are JP2. The audit shows Match 1,574 and Unavailable 6,620, where Fedora has no checksum for the JP2 derivative.</li>
-<li><strong>6 extra Clippings files are orphans.</strong> <code>lsuhsc-ncc:180</code>, <code>182</code>, <code>183</code>, <code>254</code>, <code>255</code> and <code>256</code> were copied on Nov 4 to complete the collection, but their parents (<code>lsuhsc-ncc:181</code> and <code>253</code>) no longer exist in Fedora. They're the same kind of object as the 34,243 orphaned pages, so they're on L: ahead of that decision. See open questions.</li>
+<li><strong>6 extra Clippings files are orphans.</strong> <code>lsuhsc-ncc:180</code>, <code>182</code>, <code>183</code>, <code>254</code>, <code>255</code> and <code>256</code> were copied on Nov 4 to complete the collection, but their parents (<code>lsuhsc-ncc:181</code> and <code>253</code>) no longer exist in Fedora. They're the same kind of object as the 34,243 orphaned pages, so they're on L: ahead of that decision.</li>
 </ul>
 <table>
 <caption>LSUHSC New Orleans: TIFFs saved as .jp2</caption>
@@ -560,13 +560,13 @@ HTML, 'callout'),
 </tbody>
 </table>
 <ul>
-<li><strong>Loyola is most of the proposed leave-outs:</strong> 41 books, 7,231 of the 7,297 objects, all in the Joseph-Aurelien Cornet FSC Collection. Their sampled page images aren't on L: yet, so those matches rest on Fedora's records and the MODS. Deciding before Loyola's download could avoid fetching them, but the exporter can't skip approved leave-outs yet.</li>
+<li><strong>Loyola is most of the proposed leave-outs:</strong> 41 books, 7,231 of the 7,297 objects, all in the Joseph-Aurelien Cornet FSC Collection. Their sampled page images aren't on L: yet, so those matches rest on Fedora's records and the MODS. If they're approved before Loyola's download, the exporter can now skip them. A rehearsal showed 7,190 fewer images (about 9.4 GB of Loyola's 218 GB of images), and their text and metadata files would be skipped as well. The bigger gain is keeping those duplicates out of Quartex.</li>
 <li><strong>Spot check:</strong> in the proposals whose files are on L:, 48 of 48 sampled pairs were identical when the actual files were hashed, including <code>lsu-sc-jjad:10</code> and <code>lsu-sc-jjadp:14</code>.</li>
 <li><strong>Not compared:</strong> a book's PDF, OCR and other files. Only the main page images and MODS were checked.</li>
 </ul>
 HTML),
   $text('Recommendation', <<<'HTML'
-<p>Don't rename objects or files. The PID is what links an object back to Fedora and the accounting. Decide what to keep or leave out, and apply those decisions when building the Quartex ingest. The full list is at <code>L:\datastreams_downloads\reports\duplicates\duplicates-and-namespaces.csv</code>. The short list, <code>triage.csv</code>, and its batch summary are on the export PC under <code>state\duplicates-review\reports\duplicates\</code> until step <code>0-triage</code> is run against L:.</p>
+<p>Don't rename objects or files. The PID is what links an object back to Fedora and the accounting. Decide what to keep or leave out. Approved objects that aren't on L: yet are never downloaded. Those already on L:, like <code>lsu-sc-jjad:10</code>, stay there and still need removing from the Quartex handoff. The full list is at <code>L:\datastreams_downloads\reports\duplicates\duplicates-and-namespaces.csv</code>. The short list, <code>triage.csv</code>, and its batch summary, <code>triage-batches.csv</code>, are in the same folder.</p>
 HTML),
 ]);
 
@@ -596,7 +596,7 @@ HTML),
 
 $section('Exporter changes this phase', [
   $text(NULL, <<<'HTML'
-<p>Every change was tested against a simulated Islandora/Fedora before use, across 13 test suites that all pass.</p>
+<p>Every change was tested against a simulated Islandora/Fedora before use, across 14 test suites that all pass.</p>
 <table>
 <thead><tr><th scope="col">Version</th><th scope="col">Change</th></tr></thead>
 <tbody>
@@ -615,7 +615,8 @@ $section('Exporter changes this phase', [
 <tr><td>v2.23</td><td><strong>Parallel runs wait for the state database</strong> for up to 5 minutes instead of crashing. Step 3 also fetches the JP2 for a queued OBJ that turns out not to be a JP2.</td></tr>
 <tr><td>v2.24</td><td><strong>Step <code>3-convert</code></strong> makes a lossless JP2 from the TIFF when Fedora has no usable JP2. It compares every pixel before placing the file, keeps the old file in <code>_replaced</code>, converts CMYK to RGB, and writes <code>converted_jp2.csv</code>. DPI and colour profiles are not carried over. So far 28 pages, 26 in the main run and LSU's 2.</td></tr>
 <tr><td>v2.25</td><td><strong>Step <code>0-duplicates</code></strong> writes a review list of duplicate objects and odd namespaces across all institutions. It only reads Fedora's lists and the accounting, and it never runs by default.</td></tr>
-<tr><td>v2.26</td><td><strong>Step <code>0-triage</code></strong> groups that list into one row per decision, proposes what to keep, and sorts everything into batches for a person to approve. It also reads MODS files on L:, changes nothing, and never runs by default. Approved leave-outs aren't applied anywhere yet.</td></tr>
+<tr><td>v2.26</td><td><strong>Step <code>0-triage</code></strong> groups that list into one row per decision, proposes what to keep, and sorts everything into batches for a person to approve. It also reads MODS files on L:, changes nothing, and never runs by default.</td></tr>
+<tr><td>v2.27</td><td><strong>Step <code>0-leave-out</code></strong> turns the rows approved in <code>triage.csv</code> into a list that downloads, retries and dry runs skip automatically, for every datastream. A book's pages go with it. Files already on L: aren't touched, and the audit and manifests still include them.</td></tr>
 </tbody>
 </table>
 HTML),
@@ -637,34 +638,6 @@ $section('Cleanup list before handoff', [
 HTML),
 ]);
 
-$section('Open questions', [
-  $text('For Adam Matthew', <<<'HTML'
-<ul>
-<li>Does Quartex need page-level MODS? Thousands of newspaper pages have none in Fedora, including Sugar Bulletin's 2,373 and the Reveille's 5,132.</li>
-<li>How should single-page PDFs be handled?</li>
-<li>Can Quartex ingest JPEG? Over 58,000 of the images audited so far are JPEG originals. For now we're sending the JP2 Islandora made from each one, and keeping the JPEGs in <code>_replaced</code>.</li>
-<li>Does Quartex use the FULL_TEXT we supply with a PDF for search, or extract its own text?</li>
-</ul>
-HTML),
-  $text('For the migration team', <<<'HTML'
-<ul>
-<li>Example PIDs of the JP2s that broke in the Quartex viewer, to check against the new JP2 validation. Many are likely TIFFs saved under a .jp2 name.</li>
-<li>Should the 2,006 Reveille RDF files for purged objects simply be dropped? Does anyone know why those 2010 issues were removed?</li>
-<li>LSUHSC New Orleans: should the 34,243 pages of purged books (about 66 GB, not on L:) be exported, or left behind? A sample of 700 on Nov 4 found every one active with its parent gone from Fedora. Nearly all look like leftovers of items that were redone. Catalog and Bulletin (18,118 pages, 46 GB): the book counts per school match the 128 PDFs now in the accounting, but these page images are far higher quality than the PDFs (1.3 GB). Agramonte (12,328, 19 GB): 98% of sampled pages belong to a title that still exists, and 3,011 of the 3,232 with a checksum are identical to a live page. Graduation Programs (1,906): 1,861 identical. Student newspapers (1,791): 1,783 identical. About 88 pages have no match yet, including 12 medical illustrations. Should the 140 inactive Catalog and Bulletin objects be exported?</li>
-<li>LSUHSC Newspaper Clippings: the images are moving, but they're restricted on the public site. Should they be restricted in Quartex too?</li>
-<li>The 6 orphaned Clippings pages already on L: (<code>lsuhsc-ncc:180</code>, <code>182</code>, <code>183</code>, <code>254</code>, <code>255</code>, <code>256</code>): keep them or remove them, following the decision on orphaned pages? They aren't in the accounting.</li>
-<li>Franklin Parish Newspapers: the exporter can now write the 2,712 missing rows (105 issues, 2,607 pages) as a file for patching the accounting, and download them from Fedora's list. Is that okay, or should the accounting be regenerated first?</li>
-<li>Orphaned pages at 13 more institutions (about 5,700 in all): the same question as for LSUHSC.</li>
-<li>Should the 298 ULM images and 37 State Museum audio files that belong to no collection be exported, and into which collection?</li>
-<li>Should inactive objects be exported? The Law Library has 728.</li>
-<li>Should <code>lsu-sc-jjad:10</code> be left out of Quartex? It's an exact copy of <code>lsu-sc-jjadp:14</code> and is still in the Audubon manifest. The recommendation is to leave it out. No Audubon folder was found in <code>quartex-ingest</code>, so there should still be time.</li>
-<li>Is <code>state-lhp:8296</code> / <code>state-lwp:862</code> a deliberate cross-listing or a duplicate?</li>
-<li>Who should approve the short list of 533 decisions, starting with the two leave-out batches (87 decisions, 7,297 objects)? Should Loyola's 41 duplicate books be decided before its download?</li>
-<li>Do the <code>lsm-</code> and <code>oplib-</code> namespaces with no collection name need any special handling in Quartex? Should the 288 <code>apl-</code> pages and <code>lasc-:5</code>, which aren't in the accounting, stay behind?</li>
-</ul>
-HTML),
-]);
-
 $section('Next steps', [
   $text('Done Nov 4', <<<'HTML'
 <p>LSU's JPEG replacements and audit, LSUHSC's Newspaper Clippings images, 28 JP2s converted from TIFFs, and Franklin Parish's OCR, HOCR and PDF.</p>
@@ -675,7 +648,7 @@ HTML),
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up: about 2,300 left across all institutions (at most about 98 GB), most of them in Louisiana Newspapers. The original count of 2,387 included the 28 already converted and 16 orphaned Agramonte pages.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). 24 pages have no JP2 in Fedora and still need <code>3-convert</code>. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>The other 18: their audits are done. Download the 14 small institutions first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers.</li>
-<li>Get the short list in <code>triage.csv</code> approved, and record what to leave out of the Quartex ingest.</li>
+<li>Get the short list in <code>triage.csv</code> approved, ideally the Loyola books before Loyola's download, then run <code>0-leave-out</code>.</li>
 </ul>
 HTML),
   $text('Then', <<<'HTML'
