@@ -145,6 +145,7 @@ HTML, 'callout'),
     ['running', 'E-Textbook covers and details', 'Every E-Textbook shows its cover, with a Book details toggle for its class, instructor, section and term, carrying over what worked in the old search.'],
     ['running', 'One row per E-Textbook', 'Each book shows once, however many class sections use it, and Book details lists every section. Copies are merged on display only: nodes and the index are unchanged.'],
     ['running', 'Links to Discovery and the Catalog', 'Articles & Books says it uses Discovery, and links to the same search in Discovery and the Catalog.'],
+    ['running', 'Catalog results', 'A Catalog section in All and Research, read from the public results feed with no login. The feed gives up to 300 records and no total, and it is replaced when the Catalog moves to Alma.'],
     ['running', 'Fuller Discovery search', 'Articles & Books searches Discovery directly, with Full text online, Peer reviewed, Type and Year published filters. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
     ['running', 'Loading indicator and current styles', 'The LSU mark shows while a search runs, and the page follows the latest Special Collections styles.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
@@ -162,7 +163,7 @@ $section('What it searches', [
 <thead><tr><th scope="col">Mode</th><th scope="col">Sources</th><th scope="col">Shown as</th></tr></thead>
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
-<tr><td>Research</td><td>Articles &amp; Books, Databases, E-Textbooks, Research Guides, Archive Records, plus links to the Scholarly Repository and Catalog</td><td>Labelled sections</td></tr>
+<tr><td>Research</td><td>Articles &amp; Books, Catalog, Databases, E-Textbooks, Research Guides, Archive Records, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
 <tr><td>Special Collections</td><td>Archive Records, Special Collections news</td><td>One ranked list with filters</td></tr>
 </tbody>

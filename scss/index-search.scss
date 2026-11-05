@@ -123,6 +123,11 @@
     transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
   }
 
+  &:hover {
+    border-color: var(--pf-index-fg);
+    transition-duration: $pf-hover-in;
+  }
+
   &:focus-within {
     border-color: var(--pf-index-highlight);
     box-shadow: 0 0 0 1px var(--pf-index-highlight);
@@ -139,6 +144,17 @@
   color: var(--pf-index-fg);
   font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
   font-weight: 300;
+  // As on the Special Collections page (_landing-features.scss): on hover a 2px
+  // line draws in along the field's foot and ends at the button. It's the input's
+  // own background, so it stops where the input does.
+  background-image: linear-gradient(var(--pf-index-accent), var(--pf-index-accent));
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  background-size: 0 2px;
+
+  @include pf-index-motion {
+    transition: background-size .45s cubic-bezier(.2, .7, .2, 1);
+  }
 
   &:focus {
     outline: 0;
@@ -146,6 +162,41 @@
 
   &::-webkit-search-cancel-button {
     display: none;
+  }
+}
+
+[dir="rtl"] .pf-index__input {
+  background-position: right bottom;
+}
+
+.pf-index__field:hover .pf-index__input {
+  background-size: 100% 2px;
+}
+
+// Focused, the gold frame takes over and the line folds into the foot.
+.pf-index__field:focus-within .pf-index__input {
+  background-size: 100% 0;
+}
+
+// While results are on their way, a search or a late section, the same line
+// runs back and forth. With reduced motion it holds still at full width.
+.pf-index.is-searching .pf-index__input,
+.pf-index:has(.pf-index-section__late.is-searching) .pf-index__input {
+  background-size: 100% 2px;
+
+  @include pf-index-motion {
+    background-size: 30% 2px;
+    animation: pf-index-chase 1.1s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes pf-index-chase {
+  from {
+    background-position: 0% 100%;
+  }
+
+  to {
+    background-position: 100% 100%;
   }
 }
 
@@ -774,6 +825,11 @@
 // Articles & Books shows five rows, and takes the longest.
 .pf-index-section--articles .pf-index-section__late[aria-busy="true"] {
   min-height: 34rem;
+}
+
+// The Catalog also shows five, in shorter rows with no covers.
+.pf-index-section--catalog .pf-index-section__late[aria-busy="true"] {
+  min-height: 26rem;
 }
 
 .pf-index-section__late.is-searching .pf-index-list__status {

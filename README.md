@@ -1175,6 +1175,8 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** The Index: the search box takes the Special Collections hover, a gold line drawn along its foot. While results load, that line runs back and forth, so people can see their search went through. With reduced motion it holds still.
+- **2026-11-05:** The Index: a Catalog section in All and Research, read from the catalog's public results feed, with format, author, date, call number and any online copy. The feed gives up to 300 records and no total, so a full list says 300+.
 - **2026-11-05:** The Index: Articles & Books says it uses Discovery, with links to run the same search in Discovery and the Catalog, for people who want those dedicated searches.
 - **2026-11-05:** The Index: results that tie now keep one fixed order, in every local source. They used to change order between requests, so paging repeated some rows and never showed others.
 - **2026-11-05:** The Index: each E-Textbook shows once, however many class sections use it, with Book details listing every section. Copies are matched by their link and merged only on display: nodes and the search index are unchanged. E-Textbook counts now count books.
