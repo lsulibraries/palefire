@@ -659,6 +659,107 @@
   }
 }
 
+// An E-Textbook's Book details: a native <details>, so it works by keyboard,
+// by touch and without a script. Inside, an object label: a large cover beside
+// the record, in the same mono capitals as the museum's labels.
+.pf-index-row__details {
+  margin-top: .25rem;
+
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    min-height: 2.75rem;
+    color: var(--pf-index-muted);
+    font-size: .875rem;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      color: var(--pf-index-fg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-fg);
+      outline-offset: 2px;
+    }
+
+    @include pf-index-motion {
+      transition: color .2s var(--pf-index-ease);
+    }
+  }
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+
+    @include pf-index-motion {
+      transition: transform .25s var(--pf-index-ease);
+    }
+  }
+
+  &[open] svg {
+    transform: rotate(90deg);
+  }
+
+  &[open] .pf-index-row__label {
+    @include pf-index-motion {
+      animation: pf-index-arrive .35s var(--pf-index-ease);
+    }
+  }
+}
+
+[dir="rtl"] .pf-index-row__details:not([open]) svg {
+  transform: scaleX(-1);
+}
+
+.pf-index-row__label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  max-width: 36rem;
+  padding-block: .75rem .25rem;
+  border-top: 1px solid var(--pf-index-line);
+
+  @media (min-width: 30rem) {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  dl {
+    display: grid;
+    gap: .75rem;
+    margin: 0;
+    min-width: 0;
+  }
+
+  dt {
+    @include pf-index-label;
+    color: var(--pf-index-muted);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.pf-index-row__label-cover {
+  width: 8rem;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    outline: 1px solid var(--pf-index-line);
+    outline-offset: -1px;
+  }
+}
+
 .pf-index-row__out {
   display: inline-block;
   width: .875em;

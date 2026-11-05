@@ -178,11 +178,13 @@
   const dropEmptyCover = (event) => {
     const image = event.target;
     if (image instanceof HTMLImageElement
-      && image.parentElement.matches('.pf-index-row__thumb')
+      && image.parentElement.matches('.pf-index-row__thumb, .pf-index-row__label-cover')
       && (event.type === 'error' || image.naturalWidth <= 1)) {
       const row = image.closest('.pf-index-row');
       image.parentElement.remove();
-      row.classList.remove('pf-index-row--image');
+      if (!row.querySelector('.pf-index-row__thumb')) {
+        row.classList.remove('pf-index-row--image');
+      }
     }
   };
 
