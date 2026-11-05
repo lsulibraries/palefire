@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** Special Collections hero: hovering or tabbing to the Contents button lights the breadcrumb's Contents, to show they are the same menu
 - **2026-11-05:** Special Collections hero: from 1024px the Contents button opens the menu beside itself instead of up by the breadcrumb, so it reads as the button's own menu
 - **2026-11-05:** Special Collections hero: a Contents button beside Log in or register opens the same menu as the breadcrumb, because the breadcrumb's control is easy to miss on arrival; closing any contents menu with Esc now returns focus to the button that opened it
 - **2026-11-05:** Special Collections hero: hovering or tabbing to a Highlight now fades the picture in the title's letters straight to the row's picture, with the same beat and fade as the column, instead of dipping through solid gold. The brightness floor stays on top throughout, so 3:1 holds during the fade.

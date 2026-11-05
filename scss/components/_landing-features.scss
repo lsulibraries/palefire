@@ -360,6 +360,38 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
   .pf-breadcrumb__toc:is(:hover, :focus-visible) & {
     background-size: 100% 2px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+html.pf-a11y-motion .pf-breadcrumb__section-label {
+  transition: none;
+}
+
+// The hero's Contents button lights the crumb's Contents, as they open the same
+// menu. One way only: the crumb would flash the button's full fill. Not while
+// the menu is open: the crumb didn't open it.
+@mixin pf-crumb-lit {
+  .pf-breadcrumb__toc {
+    color: var(--pf-toc-active);
+    transition-duration: $pf-hover-in;
+  }
+
+  .pf-breadcrumb__section-label {
+    background-size: 100% 2px;
+  }
+}
+
+:root:not(:has(.pf-toc.is-open)) .pf-landing:has([data-pf-landing-contents]:focus-visible) {
+  @include pf-crumb-lit;
+}
+
+@media (hover: hover) {
+  :root:not(:has(.pf-toc.is-open)) .pf-landing:has([data-pf-landing-contents]:hover) {
+    @include pf-crumb-lit;
+  }
 }
 
 // Hero: "Sign in" at the bar's end (before the docked video button's
