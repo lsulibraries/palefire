@@ -1,0 +1,462 @@
+// Palefire — guide blocks with their own stylesheet (css/guide-blocks.css,
+// library palefire/guide-blocks): Flow chart, Status board, Figures and Code.
+// Attached by their templates, so only pages using them load it.
+//
+// No literal colors: everything reads the reading-color tokens through
+// --pf-guide-* (_guide.scss) and --bs-*, so every swatch and high contrast
+// follow. Meaning is carried by words first; tone and shape only support
+// them. Lines that a reader needs in order to follow a chart use the muted
+// text color, which is 4.5:1 and up, not the soft hairline.
+
+$pf-flow-spine: 1.5rem; // Where the main line runs, from the step's edge.
+$pf-flow-arrow: 0.3rem;
+$pf-reveal-from: 0.85; // As _variables.scss.
+
+@mixin pf-gb-mono-label {
+  font: 700 var(--pf-mono-label)/1.5 var(--pf-guide-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+// Flow chart ----------------------------------------------------------------
+// Mobile first: a branch hangs under its step, off the main line. From 34rem
+// of block width it sits beside the step, on a horizontal arrow.
+.pf-flow {
+  container: pf-flow / inline-size;
+  max-width: 54rem;
+  margin: 0;
+}
+
+.pf-flow__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+}
+
+.pf-flow__step {
+  margin: 0;
+  list-style-type: "\200B"; // Hides the number, keeps Safari's list semantics.
+
+  &::marker {
+    content: "";
+  }
+}
+
+.pf-flow__group {
+  @include pf-gb-mono-label;
+
+  margin: 0.5rem 0 0.75rem;
+  padding-top: 0.75rem;
+  color: var(--pf-guide-muted);
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+.pf-flow__row {
+  position: relative;
+  display: grid;
+  gap: 0.75rem;
+
+  // The main line behind the row, seen where a branch makes it taller than
+  // the step's own box.
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: $pf-flow-spine;
+    border-inline-start: 1px solid var(--pf-guide-muted);
+  }
+}
+
+.pf-flow__node {
+  position: relative;
+  display: grid;
+  gap: 0.2rem;
+  align-content: start;
+  padding: 0.7rem 1rem;
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+}
+
+.pf-flow__title {
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-flow__note {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--pf-guide-muted);
+}
+
+.pf-flow__tag {
+  @include pf-gb-mono-label;
+
+  color: var(--pf-guide-accent);
+}
+
+.pf-flow__step--start > .pf-flow__row > .pf-flow__node {
+  border-radius: 1.5rem;
+}
+
+.pf-flow__step--question > .pf-flow__row > .pf-flow__node {
+  border-color: var(--pf-guide-accent);
+  border-inline-start-width: 3px;
+}
+
+.pf-flow__step--person > .pf-flow__row > .pf-flow__node {
+  border: 1px dashed var(--pf-guide-accent);
+}
+
+// The arrow to the next step.
+.pf-flow__link {
+  position: relative;
+  min-height: 2rem;
+  padding: 0.3rem 0 0.5rem calc(#{$pf-flow-spine} + 0.6rem);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: $pf-flow-spine;
+    border-inline-start: 1px solid var(--pf-guide-muted);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: calc(#{$pf-flow-spine} - #{$pf-flow-arrow} + 0.5px);
+    border-style: solid;
+    border-width: $pf-flow-arrow * 1.5 $pf-flow-arrow 0;
+    border-color: var(--pf-guide-muted) transparent transparent;
+  }
+}
+
+.pf-flow__link-label,
+.pf-flow__branch-label {
+  font-size: 0.8125rem;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--pf-guide-muted);
+}
+
+.pf-flow__step:last-child {
+  .pf-flow__link {
+    display: none;
+  }
+
+  .pf-flow__row::before {
+    display: none;
+  }
+}
+
+// A branch: an elbow off the main line.
+.pf-flow__branch {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  margin-inline-start: calc(#{$pf-flow-spine} * 2);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 1.1rem;
+    inset-inline-start: calc(#{$pf-flow-spine} * -1);
+    width: $pf-flow-spine;
+    border-top: 1px solid var(--pf-guide-muted);
+  }
+}
+
+.pf-flow__branch-label {
+  order: -1;
+}
+
+.pf-flow__branch--good .pf-flow__node {
+  border-color: var(--pf-guide-accent);
+}
+
+.pf-flow__branch--attention .pf-flow__node {
+  background: var(--pf-guide-accent-soft);
+  border-color: transparent;
+  border-inline-start: 3px solid var(--pf-guide-accent);
+
+  // Muted text falls to 4.3:1 on this tint in Lavender.
+  .pf-flow__note {
+    color: var(--bs-body-color);
+  }
+}
+
+@container pf-flow (min-width: 34rem) {
+  .pf-flow__row--branched {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .pf-flow__row::before {
+    display: none;
+  }
+
+  .pf-flow__branch {
+    align-content: center;
+    margin-inline-start: 0;
+
+    // Across the gap, ending in an arrowhead at the branch's box.
+    &::before {
+      top: 50%;
+      inset-inline-start: -3.5rem;
+      width: 3.5rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      inset-inline-start: -$pf-flow-arrow * 1.5;
+      border-style: solid;
+      border-width: $pf-flow-arrow 0 $pf-flow-arrow ($pf-flow-arrow * 1.5);
+      border-color: transparent transparent transparent var(--pf-guide-muted);
+      transform: translateY(calc(-50% + 0.5px));
+    }
+
+    &:dir(rtl)::after {
+      border-width: $pf-flow-arrow ($pf-flow-arrow * 1.5) $pf-flow-arrow 0;
+      border-color: transparent var(--pf-guide-muted) transparent transparent;
+    }
+  }
+
+  // The label sits on the arrow, centred above the line.
+  .pf-flow__branch-label {
+    position: absolute;
+    bottom: 50%;
+    inset-inline-start: -3.5rem;
+    width: 3.5rem;
+    padding-bottom: 0.15rem;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+}
+
+.pf-flow__caption {
+  max-width: var(--pf-guide-prose);
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pf-guide-muted);
+}
+
+// Status board ---------------------------------------------------------------
+.pf-status {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.pf-status__item {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--pf-guide-rule);
+  list-style-type: "\200B";
+
+  &::marker {
+    content: "";
+  }
+}
+
+.pf-status__state {
+  @include pf-gb-mono-label;
+
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-self: start;
+}
+
+// Borders, not backgrounds, so forced colors keep the marks.
+.pf-status__mark {
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid currentcolor;
+  border-radius: 50%;
+}
+
+.pf-status__title {
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-status__note {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pf-guide-muted);
+}
+
+.pf-status__item--done .pf-status__state {
+  color: var(--bs-emphasis-color);
+
+  .pf-status__mark {
+    border-width: 0.375rem;
+  }
+}
+
+.pf-status__item--running .pf-status__state {
+  color: var(--pf-guide-accent);
+
+  .pf-status__mark {
+    border-inline-end-color: transparent;
+  }
+}
+
+// The one tile meant to catch the eye: the text color as a plate, so its
+// contrast is the page's own.
+.pf-status__item--attention {
+  border-top: 2px solid var(--bs-emphasis-color);
+
+  .pf-status__state {
+    padding: 0.15rem 0.5rem;
+    color: var(--bs-body-bg);
+    background: var(--bs-emphasis-color);
+  }
+
+  .pf-status__mark {
+    border-width: 0.375rem;
+    border-radius: 0;
+    transform: rotate(45deg) scale(0.75);
+  }
+}
+
+.pf-status__item--todo .pf-status__state {
+  color: var(--pf-guide-muted);
+}
+
+// Figures ---------------------------------------------------------------------
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 1.5rem;
+  max-width: var(--pf-guide-prose);
+  margin: 0;
+}
+
+.pf-stats__item {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--pf-guide-accent);
+}
+
+.pf-stats__value {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--bs-emphasis-color);
+  overflow-wrap: anywhere;
+}
+
+.pf-stats__label {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--pf-guide-muted);
+}
+
+// Code ------------------------------------------------------------------------
+.pf-code {
+  max-width: 54rem;
+  margin: 0;
+}
+
+.pf-code__pre {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font: 400 0.875rem/1.6 var(--pf-guide-mono);
+  color: var(--bs-body-color);
+  white-space: pre;
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+
+  code {
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-code__caption {
+  max-width: var(--pf-guide-prose);
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pf-guide-muted);
+}
+
+// Notes and captions are WYSIWYG text, so they hold paragraphs and links.
+.pf-flow__note,
+.pf-flow__caption,
+.pf-status__note,
+.pf-code__caption {
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin: 0 0 0.4rem;
+  }
+}
+
+// Motion: a quiet rise as each part scrolls in, only where the scroll timeline
+// exists. Reduced motion (the OS or Settings) keeps them still.
+@keyframes pf-gb-rise {
+  from {
+    opacity: $pf-reveal-from;
+    transform: translateY(0.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html:not(.pf-a11y-motion) :is(.pf-flow__step, .pf-status__item, .pf-stats__item) {
+      animation: pf-gb-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+// Forced colors: tones are gone, so the node borders and marks must hold.
+@media (forced-colors: active) {
+  .pf-flow__branch--attention .pf-flow__node {
+    border: 1px solid CanvasText;
+    border-inline-start-width: 3px;
+  }
+
+  .pf-flow__link::after,
+  .pf-flow__branch::after {
+    forced-color-adjust: none;
+    border-top-color: CanvasText;
+  }
+
+  .pf-flow__branch::after {
+    border-color: transparent transparent transparent CanvasText;
+  }
+}

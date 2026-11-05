@@ -297,6 +297,48 @@ HTML),
 HTML, 'sources'),
 ]);
 
+if (ParagraphsType::load('guide_flow')) {
+  $gallery('Guide blocks', 'guide-blocks', [
+    $text(<<<'HTML'
+<p>Blocks for showing how work flows and where it stands. All of them are filled in through a form: no code. Find them under "Add Block" in a guide section.</p>
+HTML),
+    $note('<p><strong>' . $label('guide_flow') . '</strong>: add a step for each box, top to bottom, and drag to reorder. Pick its kind from the menu. To branch to one side, fill in the Branch fields. The theme draws the boxes and arrows, and on a phone the branches move under their steps. Notes and the caption use the normal text editor.</p>'),
+    Paragraph::create([
+      'type' => 'guide_flow',
+      'field_flow_steps' => [
+        Paragraph::create(['type' => 'guide_flow_step', 'field_item_title' => 'A reader asks for an item', 'field_flow_kind' => 'start']),
+        Paragraph::create(['type' => 'guide_flow_step', 'field_item_title' => 'Is it on the shelf?', 'field_flow_kind' => 'question', 'field_flow_link' => 'no', 'field_flow_branch_title' => 'Bring it to the Reading Room', 'field_flow_branch_label' => 'yes', 'field_flow_branch_tone' => 'good']),
+        Paragraph::create(['type' => 'guide_flow_step', 'field_item_title' => 'A curator checks the record', 'field_flow_kind' => 'person']),
+      ],
+      'field_flow_caption' => $html('<p>A sample chart for this guide.</p>'),
+    ]),
+    $note('<p><strong>' . $label('guide_status_board') . '</strong>: one item per piece of work. Choose its status from the menu; the words and mark follow.</p>'),
+    Paragraph::create([
+      'type' => 'guide_status_board',
+      'field_status_items' => [
+        Paragraph::create(['type' => 'guide_status_item', 'field_status_state' => 'done', 'field_item_title' => 'Finished work', 'field_status_note' => $html('<p>A sentence on what was done.</p>')]),
+        Paragraph::create(['type' => 'guide_status_item', 'field_status_state' => 'running', 'field_item_title' => 'Work under way', 'field_status_note' => $html('<p>What it is doing now.</p>')]),
+        Paragraph::create(['type' => 'guide_status_item', 'field_status_state' => 'attention', 'field_item_title' => 'Waiting on a decision', 'field_status_note' => $html('<p>Who needs to do what.</p>')]),
+        Paragraph::create(['type' => 'guide_status_item', 'field_status_state' => 'todo', 'field_item_title' => 'Work to come', 'field_status_note' => $html('<p>What comes next.</p>')]),
+      ],
+    ]),
+    $note('<p><strong>' . $label('guide_stats') . '</strong>: two to four large numbers. Keep each value short and say in its label what it counts.</p>'),
+    Paragraph::create([
+      'type' => 'guide_stats',
+      'field_stat_items' => [
+        Paragraph::create(['type' => 'guide_stat', 'field_stat_value' => '1,240', 'field_stat_label' => 'sample items']),
+        Paragraph::create(['type' => 'guide_stat', 'field_stat_value' => '5.7 TB', 'field_stat_label' => 'of sample content']),
+      ],
+    ]),
+    $note('<p><strong>' . $label('guide_code') . '</strong>: paste a command or code as it is. It keeps its line breaks, and long lines scroll inside the block. For a short file name or command inside a sentence, use Text instead.</p>'),
+    Paragraph::create([
+      'type' => 'guide_code',
+      'field_code_text' => "drush cr",
+      'field_code_caption' => $html('<p>A sample command.</p>'),
+    ]),
+  ]);
+}
+
 // The page. ------------------------------------------------------------------
 
 $values = [

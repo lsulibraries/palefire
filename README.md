@@ -129,6 +129,8 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_guide_related.php` | Adds "Related guides" to the five Special Collections guides, before "Get help" or "Contact a curator": a Resource list linking each related guide by node, unpublished ones left out (`-- only=<title>`). Content only. Dry run unless `-- apply=1`; skips a guide that has the section |
 | `palefire_guide_hill_rename.php` | Renames the Hill parking guide "Parking and Travel to Hill Memorial Library": title, intro (if unedited), a new alias `/v2/special/guides/parking-and-travel-hill-memorial-library` (the old one kept), and the Resources that link to it (`-- page=`, `path=`). Dry run unless `-- apply=1`; skips what's done |
 | `palefire_guide_parking_travel.php` | Adds "Coming from out of town" (airports, hotels, Baton Rouge) to the Hill parking guide, before "Get help" (`-- page=`, `before=`). Content only. Dry run unless `-- apply=1`; stops if the section exists |
+| `palefire_guide_blocks_setup.php` | Guide blocks Flow chart, Status board, Figures and Code (`guide_flow`, `guide_status_board`, `guide_stats`, `guide_code` and their items), allowed in guide sections and Section tabs tabs. Run after `palefire_guide_setup.php` |
+| `palefire_guide_ldl_migration.php` | Builds the LDL Quartex Migration status guide as an unpublished page (`/v2/guides/ldl-quartex-migration`; `-- path=`), after `palefire_guide_blocks_setup.php`. Unlike the other guide scripts it can be run again: it replaces the intro and sections in a new revision and keeps the publishing state. Dry run unless `-- apply=1`; stops if the page was edited in Drupal (`-- force=1` overrides) or has a newer draft |
 | `palefire_special_programs.php` | Builds the Special Collections program pages as unpublished exhibitions: Teaching with Special Collections, Research Grants, Faculty Fellowship and Summer Project (`-- prefix=/v2/special/programs` gives `…/teaching`, `…/research-grants`, `…/faculty-fellowship`, `…/summer-project`). Title page with key facts and an Apply button; galleries for the program, its people, how to apply and questions. Drafted from LSU's announcements, with `[Editor: …]` notes for current terms. No title images yet. Skips a page whose title exists (run `palefire_exhibit_setup.php` first) |
 | `palefire_special_programs_section.php` | Adds "Time in the Archive" (Teaching & Research) to `/v2/special` after "Off the Walls, Online": a Ledger Tile showcase of the four program pages, and the `ledger` Layout value if missing. Dry run unless `-- apply=1`; stops if a program page is unpublished (`force=1` overrides), the section exists, or the page has a pending draft |
 | `palefire_ask_section.php` | Adds "Ask Special Collections" to `/v2/special` before the stacks (`-- after=<title>` to place it): a Tile showcase in the Ask layout (Special Collections FAQs beside a question form), and the `ask` Layout value if missing. The dry run lists the FAQ tiles it would show. Dry run unless `-- apply=1`; stops if the section exists or the page has a pending draft |
@@ -537,6 +539,10 @@ Paragraph types:
 | `guide_accordion` / `accordion_item` | Block title and intro / item title, body, resources |
 | `librarian_card` | `field_block_title`, `field_librarian` (→ Staff) |
 | `guide_video` | `field_block_title`, `field_video` (Remote video; player loads only on Play, nocookie/`dnt=1`) |
+| `guide_flow` / `guide_flow_step` | Heading, intro, steps, caption / title, note, kind (step, start or end, question, a person), group label, arrow label, and a branch's title, label, note and tone |
+| `guide_status_board` / `guide_status_item` | Heading, intro, items / status (Done, Running, Needs attention, Not started), title, note |
+| `guide_stats` / `guide_stat` | Heading, intro, figures / value, label |
+| `guide_code` | Heading, code (plain text, kept as typed), caption |
 | `exhibit_gallery` (Image group) | As in exhibitions (below), once ticked in `field_guide_blocks` by hand. In a guide it brings its own lightbox (`palefire/guide-gallery`) |
 | `parish_map` / `parish_entry` / `family_trees` | Louisiana Newspapers only (below) |
 
@@ -556,6 +562,10 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
 - A bulleted list with a nested list is drawn as a decision tree.
 - Numbered lists become steps; a leading **bold** phrase is the step's title.
 - No "Next / Previous" text: the TOC does navigation.
+- **Flow chart, Status board, Figures and Code need no code to edit:** each is a
+  form, with the WYSIWYG editor for notes and captions. A flow chart is a main
+  line whose steps can each branch once to one side; the theme draws the boxes
+  and arrows. It can't draw a chart that loops or joins back up.
 
 ### Look and behaviour
 
@@ -592,6 +602,11 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
   the Duplication tile on lib.lsu.edu/special as a guide: prices, how to order,
   copyright and citation. Its alias defaults to `/v2/special/guides/duplication`,
   where the landing's "Order prices" button points; publish it after review.
+- **LDL Quartex Migration** (`palefire_guide_ldl_migration.php`): the living
+  status of the Louisiana Digital Library's move to Quartex, for the migration
+  team. The script is its source: change the text there, pull, and run it
+  again. Its Scope and Operator sections name servers and internal paths, so
+  review them before publishing.
 - **Louisiana Newspapers** (`palefire_guide_louisiana_newspapers.php`, after
   `palefire_louisiana_newspapers_setup.php`): the LibGuide word for word, with
   a clickable map of the 64 parishes.
@@ -1166,6 +1181,7 @@ history (`git show fa05a94:README.md`).
 - **2026-11-05:** Ask: Send question is now the gold primary button, because it is the main action in its view and looked the same as the links beside it.
 - **2026-11-05:** Buttons: secondary buttons are now a quiet filled plate in Roboto sentence case, and on hover the text color wipes across and the words invert. Primary buttons take the same type and wipe and keep their accent fill. The old 13px mono capitals in a 1.56:1 hairline frame read as captions, not actions, and looked like every label on the page. Quick guide, Visit, Ask, Log in and guide-path buttons now extend one rule in `_buttons.scss`, replacing four restated rules. Exhibition buttons are unchanged. Text on the plate is 9.96:1 in Twilight and 12.72:1 in Cream; re-run the style guide script for its Buttons plate.
 - **2026-11-05:** Special Collections hero: hovering or tabbing to a Highlight now changes the picture in the title's letters as well as the column's, on dark reading colours. The letters have one background and can't crossfade, so they pass through solid gold and the picture changes while it's hidden; moving the pointer quickly over the rows changes nothing. CSS only. The veil is unchanged, so 3:1 still holds for any picture. Light reading colours, more contrast, reduced motion and an event in the lead keep solid letters. Touch screens keep the lead picture.
+- **2026-11-05:** Guide blocks: Flow chart, Status board, Figures and Code, so a guide can show how work flows and where it stands without tables standing in. They are edited through forms and the WYSIWYG editor, with no code. A flow chart is a real ordered list rather than a drawing, so it reflows on phones and reads in order to screen readers, and it can't draw loops. Colours come from the reading tokens; measured at 4.5:1 and up in all 13 swatches. The styles are their own library, loaded only where used. First use: the LDL Quartex Migration guide, the migration status document as an unpublished guide with a re-runnable script (`palefire_guide_ldl_migration.php`), which stops rather than overwrite edits made in Drupal.
 - **2026-11-04:** Special Collections sections: Rooms and access is 02 and Hours and directions is its own 03 on the alternating surface colour, replacing 02.1 and 02.2, so later sections are 04 to 07. The sections after it swap tones so two bands never touch. Read sections on the rail are now a quiet grey line, because they looked as active as the gold current one. The numbered index under the search is gone, and the breadcrumb's Contents opens the contents at every width, because the index only fit windows 840px tall or more.
 - **2026-11-04:** Special Collections first screen: the numbered index under the search is gone, and the breadcrumb's Contents opens the contents at every width. The index only fit windows 840px tall or more, so most laptops never saw it, and one way in at every size is simpler. This also drops the `palefire_modular` lookup it needed.
 - **2026-11-04:** Special Collections index: it listed only Start your research and Visit Hill, because it looked up section ids in the older `field_sections` data. It now reads them from `ModularSections::describe()`, the same source that prints the ids, so all six entries show.

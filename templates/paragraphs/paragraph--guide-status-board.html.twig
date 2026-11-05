@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Guide: Status board (paragraph type guide_status_board).
+ *
+ * Each tile says its status in words beside a mark, so color and shape are
+ * never the only signal. Fields: palefire_guide_blocks_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set labels = { done: 'Done'|t, running: 'Running'|t, attention: 'Needs attention'|t, todo: 'Not started'|t } %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--status', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  <ul class="pf-status">
+    {% for item in paragraph.field_status_items %}
+      {% set tile = item.entity %}
+      {% if tile and tile.isPublished() %}
+        {% set state = tile.field_status_state.value|default('todo') %}
+        {% set note = tile.field_status_note.value|default('')|trim %}
+        <li class="pf-status__item pf-status__item--{{ state|clean_class }}">
+          <span class="pf-status__state"><span class="pf-status__mark" aria-hidden="true"></span>{{ labels[state] }}</span>
+          <span class="pf-status__title">{{ tile.field_item_title.value }}</span>
+          {% if note %}
+            <div class="pf-status__note">{{ tile.field_status_note.processed }}</div>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Guide: Code (paragraph type guide_code).
+ *
+ * Plain text, autoescaped and printed exactly as typed. The <pre> takes
+ * keyboard focus so it can be scrolled without a mouse. It stays on one line
+ * below: a line break inside <pre> would print.
+ * Fields: palefire_guide_blocks_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set caption = paragraph.field_code_caption.value|default('')|trim %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--code', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  <figure class="pf-code">
+    <pre class="pf-code__pre" tabindex="0" role="region" aria-label="{{ title ?: 'Code'|t }}"><code>{{ paragraph.field_code_text.value }}</code></pre>
+    {% if caption %}
+      <figcaption class="pf-code__caption">{{ paragraph.field_code_caption.processed }}</figcaption>
+    {% endif %}
+  </figure>
+</div>

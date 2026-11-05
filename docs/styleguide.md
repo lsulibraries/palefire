@@ -110,6 +110,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Component | Template / styles | On page |
 | --- | --- | --- |
 | Reading colours, brand colours | `_reading-themes.scss`, `_variables.scss` | ▣ Colour |
+| Guide blocks: Flow chart, Status board, Figures, Code | `paragraph--guide-flow`, `-guide-status-board`, `-guide-stats`, `-guide-code`, `guide-blocks.scss` (library `palefire/guide-blocks`) | ✔ Guide blocks |
 | Type scale, fonts | `_variables.scss`, `_fonts.scss` | ▣ Typography |
 | Grid, breakpoints, measures | Bootstrap 5.3, `_variables.scss` | ▣ Grid |
 | Spacers, rhythm | Bootstrap `$spacers` | ▣ Spacing |
@@ -146,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 ## Changelog
 
 - **2026-11-05:** Title's picture: `--pf-title-floor` (a grey per reading colour, 97 to 122, the 3:1 line on its page) replaces `--pf-title-veil` and `--pf-title-veil-on`. `pf-title-feature` paints the dip's gold, the floor and the picture, with `background-blend-mode: normal, lighten, normal`. `pf-title-trade` now only fades the fill.
+- **2026-11-05:** Guide blocks (`guide-blocks.scss`, own library): `.pf-flow` (an `<ol>` on a container query, branches beside their step from 34rem, under it below; lines and arrows in the muted text colour, for 3:1), `.pf-status` (mark and words; Needs attention is the text colour as a plate), `.pf-stats` (a `<dl>`, value drawn above its label), `.pf-code` (focusable `<pre>`). Tokens only. New gallery on the style guide page: re-run its script.
 - **2026-11-05:** Title's picture follows the row in hand (`$pf-title-trade-on`, stage only). `--pf-title-pic-2` to `-5` on the `h1`, by place in the list, from each item's `still`, including the blog post. `.pf-landing__stage:has(row k)` sets `--pf-title-shown` (discrete transition, .32s delay) and `pf-title-dip-k` on `.pf-landing__top` (.5s after .12s, one set of keyframes per name so a change restarts them); `--pf-title-dip` is inherited, and the veil layer is `max(--pf-title-veil, --pf-title-dip)`.
 - **2026-11-04:** Hours and directions is a numbered section on the band (`--pf-band`) after a cover's map; the sections after it take the band on odd positions. `_palefire_hero_index()` numbers each rule once (no 02.1, 02.2). `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.
 - **2026-11-04:** `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.

@@ -434,6 +434,14 @@ guide-gallery:
     - core/once
     - palefire/viewer
 
+# Guide blocks with their own stylesheet (scss/guide-blocks.scss, npm run
+# build): Flow chart, Status board, Figures, Code. Attached by their templates.
+guide-blocks:
+  version: 1.0.0
+  css:
+    component:
+      css/guide-blocks.css: {}
+
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has
 # content. Needs palefire/visit for Drupal.palefireHours (visit-hours.js).

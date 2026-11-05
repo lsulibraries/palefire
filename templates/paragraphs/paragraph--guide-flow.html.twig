@@ -1,0 +1,78 @@
+{#
+/**
+ * @file
+ * Guide: Flow chart (paragraph type guide_flow).
+ *
+ * A real ordered list, not a drawing: steps run down a main line, and each
+ * can branch once to one side (scss/guide-blocks.scss). From 34rem of block
+ * width a branch sits beside its step; under that it hangs below, so nothing
+ * scrolls sideways. Screen readers hear the steps in order with their
+ * labels, so there is no separate text alternative to keep in step.
+ *
+ * Notes and the caption are WYSIWYG text, printed through their text format;
+ * the other fields are plain and autoescaped. Fields: palefire_guide_blocks_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set caption = paragraph.field_flow_caption.value|default('')|trim %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--flow', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  <figure class="pf-flow">
+    <ol class="pf-flow__list">
+      {% for item in paragraph.field_flow_steps %}
+        {% set step = item.entity %}
+        {% if step and step.isPublished() %}
+          {% set kind = step.field_flow_kind.value|default('step') %}
+          {% set note = step.field_flow_note.value|default('')|trim %}
+          {% set group = step.field_flow_group.value|default('')|trim %}
+          {% set link = step.field_flow_link.value|default('')|trim %}
+          {% set branch = step.field_flow_branch_title.value|default('')|trim %}
+          <li class="pf-flow__step pf-flow__step--{{ kind|clean_class }}">
+            {% if group %}
+              <p class="pf-flow__group">{{ group }}</p>
+            {% endif %}
+            <div class="pf-flow__row{{ branch ? ' pf-flow__row--branched' }}">
+              <div class="pf-flow__node">
+                {% if kind == 'person' %}
+                  <span class="pf-flow__tag">{{ 'A person'|t }}</span>
+                {% endif %}
+                <span class="pf-flow__title">{{ step.field_item_title.value }}</span>
+                {% if note %}
+                  <div class="pf-flow__note">{{ step.field_flow_note.processed }}</div>
+                {% endif %}
+              </div>
+              {% if branch %}
+                {% set branch_label = step.field_flow_branch_label.value|default('')|trim %}
+                {% set branch_note = step.field_flow_branch_note.value|default('')|trim %}
+                <div class="pf-flow__branch pf-flow__branch--{{ step.field_flow_branch_tone.value|default('plain')|clean_class }}">
+                  {% if branch_label %}
+                    <span class="pf-flow__branch-label">{{ branch_label }}</span>
+                  {% endif %}
+                  <div class="pf-flow__node pf-flow__node--branch">
+                    <span class="pf-flow__title">{{ branch }}</span>
+                    {% if branch_note %}
+                      <div class="pf-flow__note">{{ step.field_flow_branch_note.processed }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="pf-flow__link">
+              {% if link %}<span class="pf-flow__link-label">{{ link }}</span>{% endif %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+    {% if caption %}
+      <figcaption class="pf-flow__caption">{{ paragraph.field_flow_caption.processed }}</figcaption>
+    {% endif %}
+  </figure>
+</div>

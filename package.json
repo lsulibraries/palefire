@@ -9,8 +9,8 @@
   "bugs": { "url": "https://github.com/lsulibraries/palefire/issues" },
   "scripts": {
     "build": "npm run build:css && npm run copy:assets",
-    "build:css": "sass --style=compressed --no-source-map --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss:css/style.css scss/styleguide.scss:css/styleguide.css",
-    "watch": "sass --watch --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss:css/style.css scss/styleguide.scss:css/styleguide.css",
+    "build:css": "sass --style=compressed --no-source-map --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss:css/style.css scss/styleguide.scss:css/styleguide.css scss/guide-blocks.scss:css/guide-blocks.css",
+    "watch": "sass --watch --quiet-deps --silence-deprecation=import --load-path=node_modules scss/style.scss:css/style.css scss/styleguide.scss:css/styleguide.css scss/guide-blocks.scss:css/guide-blocks.css",
     "copy:assets": "node build/copy-assets.js"
   },
   "license": "GPL-2.0-or-later",

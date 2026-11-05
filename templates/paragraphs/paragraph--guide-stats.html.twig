@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Guide: Figures (paragraph type guide_stats).
+ *
+ * A description list, label before value in the source, so a screen reader
+ * says what a number counts first. CSS draws the value on top.
+ * Fields: palefire_guide_blocks_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--stats', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  <dl class="pf-stats">
+    {% for item in paragraph.field_stat_items %}
+      {% set stat = item.entity %}
+      {% if stat and stat.isPublished() %}
+        <div class="pf-stats__item">
+          <dt class="pf-stats__label">{{ stat.field_stat_label.value }}</dt>
+          <dd class="pf-stats__value">{{ stat.field_stat_value.value }}</dd>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </dl>
+</div>
