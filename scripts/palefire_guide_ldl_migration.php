@@ -680,30 +680,30 @@ HTML),
 
 $section('Exporter changes this phase', [
   $text(NULL, <<<'HTML'
-<p>Every change was tested against a simulated Islandora/Fedora before use, across 14 test suites that all pass.</p>
+<p>Every change was tested against a simulated Islandora/Fedora before use, across 16 test suites that all pass. Applied is when the change was committed to the exporter, in Central time (2026).</p>
 <table>
-<thead><tr><th scope="col">Version</th><th scope="col">Change</th></tr></thead>
+<thead><tr><th scope="col">Version</th><th scope="col">Applied</th><th scope="col">Change</th></tr></thead>
 <tbody>
-<tr><td>v2.11</td><td><strong>Reconcile:</strong> model names compared case-insensitively, the Islandora root collection ignored, pages placed through their parent book, orphans whose parent was purged flagged.</td></tr>
-<tr><td>v2.12</td><td><strong>FITS and S3 both compared</strong>, with disagreements reported. <code>--collections</code> now limits the audit too. <code>-OBJ.pdf</code> leftovers are recognised instead of being queued for download.</td></tr>
-<tr><td>v2.13</td><td><strong>JP2 validation:</strong> a structure check plus a full decode for any JP2 with no checksum, on download and in the audit.</td></tr>
-<tr><td>v2.14</td><td><strong>Compressed responses:</strong> the site gzips text, which made every OCR file fail the size check. The size Fedora records is used instead. Nothing bad had been saved.</td></tr>
-<tr><td>v2.15</td><td><strong>Accounting folders that differ only in spacing</strong> are treated as one collection (the Colville case).</td></tr>
-<tr><td>v2.16</td><td><strong><code>--direct-fedora</code>:</strong> download from Fedora's own API through an SSH tunnel, skipping the WAF and Drupal.</td></tr>
-<tr><td>v2.17</td><td><strong>Faster step 2:</strong> one listing per folder instead of a check per file over the share.</td></tr>
-<tr><td>v2.18</td><td><strong>Parallel audit:</strong> <code>--workers</code> sets how many files are read at once. The report is identical to a single-reader run.</td></tr>
-<tr><td>v2.19</td><td><strong>Oral history transcripts saved as <code>-OBJ.pdf</code></strong> are recognised as leftovers. Step 3 won't replace them with the audio.</td></tr>
-<tr><td>v2.20</td><td><strong>Objects in two collections</strong> keep a queue row for each copy, so replacing one copy no longer drops the other from the queue (the <code>lsu-test-2</code> case).</td></tr>
-<tr><td>v2.21</td><td><strong>Missing accounting rows as a file:</strong> the reconcile step also writes <code>{institution}-fedora-only.csv</code>, the objects Fedora has but the accounting lacks, in the accounting's own columns. The accounting can be patched from it, and <code>--include-fedora-only</code> downloads the same rows (the Franklin Parish case). The accounting itself is never changed.</td></tr>
-<tr><td>v2.22</td><td><strong>JPEGs labelled as JP2</strong> are queued for the object's real JP2, the same way as TIFFs under the .jp2 name (the State Library WPA case).</td></tr>
-<tr><td>v2.23</td><td><strong>Parallel runs wait for the state database</strong> for up to 5 minutes instead of crashing. Step 3 also fetches the JP2 for a queued OBJ that turns out not to be a JP2.</td></tr>
-<tr><td>v2.24</td><td><strong>Step <code>3-convert</code></strong> makes a lossless JP2 from the TIFF when Fedora has no usable JP2. It compares every pixel before placing the file, keeps the old file in <code>_replaced</code>, converts CMYK to RGB, and writes <code>converted_jp2.csv</code>. DPI and colour profiles are not carried over. So far 28 pages, 26 in the main run and LSU's 2.</td></tr>
-<tr><td>v2.25</td><td><strong>Step <code>0-duplicates</code></strong> writes a review list of duplicate objects and odd namespaces across all institutions. It only reads Fedora's lists and the accounting, and it never runs by default.</td></tr>
-<tr><td>v2.26</td><td><strong>Step <code>0-triage</code></strong> groups that list into one row per decision, proposes what to keep, and sorts everything into batches for a person to approve. It also reads MODS files on L:, changes nothing, and never runs by default.</td></tr>
-<tr><td>v2.27</td><td><strong>Step <code>0-leave-out</code></strong> turns the rows approved in <code>triage.csv</code> into a list that downloads, retries and dry runs skip automatically, for every datastream. A book's pages go with it. Files already on L: aren't touched, and the audit and manifests still include them.</td></tr>
-<tr><td>v2.28</td><td><strong>Loyola is now an excluded institution,</strong> because it's harvested and isn't part of the migration. Runs by size skip it. Files already on L: aren't touched, and the review lists still read its Fedora list.</td></tr>
-<tr><td>v2.29</td><td><strong>Loyola is back in the migration.</strong> The LDL team confirmed it isn't harvested, so it's off the excluded list and runs by size include it again. Nothing had been removed for it.</td></tr>
-<tr><td>v2.30</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
+<tr><td>v2.11</td><td>Oct 30, 09:56</td><td><strong>Reconcile:</strong> model names compared case-insensitively, the Islandora root collection ignored, pages placed through their parent book, orphans whose parent was purged flagged.</td></tr>
+<tr><td>v2.12</td><td>Oct 30, 10:57</td><td><strong>FITS and S3 both compared</strong>, with disagreements reported. <code>--collections</code> now limits the audit too. <code>-OBJ.pdf</code> leftovers are recognised instead of being queued for download.</td></tr>
+<tr><td>v2.13</td><td>Oct 30, 12:05</td><td><strong>JP2 validation:</strong> a structure check plus a full decode for any JP2 with no checksum, on download and in the audit.</td></tr>
+<tr><td>v2.14</td><td>Oct 30, 14:15</td><td><strong>Compressed responses:</strong> the site gzips text, which made every OCR file fail the size check. The size Fedora records is used instead. Nothing bad had been saved.</td></tr>
+<tr><td>v2.15</td><td>Nov 2, 08:33</td><td><strong>Accounting folders that differ only in spacing</strong> are treated as one collection (the Colville case).</td></tr>
+<tr><td>v2.16</td><td>Nov 2, 09:04</td><td><strong><code>--direct-fedora</code>:</strong> download from Fedora's own API through an SSH tunnel, skipping the WAF and Drupal.</td></tr>
+<tr><td>v2.17</td><td>Nov 2, 09:38</td><td><strong>Faster step 2:</strong> one listing per folder instead of a check per file over the share.</td></tr>
+<tr><td>v2.18</td><td>Nov 2, 12:54</td><td><strong>Parallel audit:</strong> <code>--workers</code> sets how many files are read at once. The report is identical to a single-reader run.</td></tr>
+<tr><td>v2.19</td><td>Nov 2, 15:46</td><td><strong>Oral history transcripts saved as <code>-OBJ.pdf</code></strong> are recognised as leftovers. Step 3 won't replace them with the audio.</td></tr>
+<tr><td>v2.20</td><td>Nov 3, 08:17</td><td><strong>Objects in two collections</strong> keep a queue row for each copy, so replacing one copy no longer drops the other from the queue (the <code>lsu-test-2</code> case).</td></tr>
+<tr><td>v2.21</td><td>Nov 3, 14:54</td><td><strong>Missing accounting rows as a file:</strong> the reconcile step also writes <code>{institution}-fedora-only.csv</code>, the objects Fedora has but the accounting lacks, in the accounting's own columns. The accounting can be patched from it, and <code>--include-fedora-only</code> downloads the same rows (the Franklin Parish case). The accounting itself is never changed.</td></tr>
+<tr><td>v2.22</td><td>Nov 3, 14:54</td><td><strong>JPEGs labelled as JP2</strong> are queued for the object's real JP2, the same way as TIFFs under the .jp2 name (the State Library WPA case).</td></tr>
+<tr><td>v2.23</td><td>Nov 4, 12:38</td><td><strong>Parallel runs wait for the state database</strong> for up to 5 minutes instead of crashing. Step 3 also fetches the JP2 for a queued OBJ that turns out not to be a JP2.</td></tr>
+<tr><td>v2.24</td><td>Nov 4, 15:11</td><td><strong>Step <code>3-convert</code></strong> makes a lossless JP2 from the TIFF when Fedora has no usable JP2. It compares every pixel before placing the file, keeps the old file in <code>_replaced</code>, converts CMYK to RGB, and writes <code>converted_jp2.csv</code>. DPI and colour profiles are not carried over. So far 28 pages, 26 in the main run and LSU's 2.</td></tr>
+<tr><td>v2.25</td><td>Nov 5, 08:56</td><td><strong>Step <code>0-duplicates</code></strong> writes a review list of duplicate objects and odd namespaces across all institutions. It only reads Fedora's lists and the accounting, and it never runs by default.</td></tr>
+<tr><td>v2.26</td><td>Nov 5, 09:45</td><td><strong>Step <code>0-triage</code></strong> groups that list into one row per decision, proposes what to keep, and sorts everything into batches for a person to approve. It also reads MODS files on L:, changes nothing, and never runs by default.</td></tr>
+<tr><td>v2.27</td><td>Nov 5, 10:00</td><td><strong>Step <code>0-leave-out</code></strong> turns the rows approved in <code>triage.csv</code> into a list that downloads, retries and dry runs skip automatically, for every datastream. A book's pages go with it. Files already on L: aren't touched, and the audit and manifests still include them.</td></tr>
+<tr><td>v2.28</td><td>Nov 5, 11:02</td><td><strong>Loyola is now an excluded institution,</strong> because it's harvested and isn't part of the migration. Runs by size skip it. Files already on L: aren't touched, and the review lists still read its Fedora list.</td></tr>
+<tr><td>v2.29</td><td>Nov 5, 11:13</td><td><strong>Loyola is back in the migration.</strong> The LDL team confirmed it isn't harvested, so it's off the excluded list and runs by size include it again. Nothing had been removed for it.</td></tr>
+<tr><td>v2.30</td><td>Nov 5, 11:45</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
 </tbody>
 </table>
 HTML),
