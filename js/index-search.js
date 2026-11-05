@@ -103,6 +103,12 @@
         params.delete(name);
       }
     });
+    // A round button's Any has no value, so nothing to send.
+    [...params.entries()].forEach(([name, value]) => {
+      if (name.startsWith('refine[') && value === '') {
+        params.delete(name);
+      }
+    });
     return `${form.getAttribute('action')}?${params}`;
   };
 
@@ -184,7 +190,7 @@
   };
 
   // The selector that finds a filter or sort again in the new page.
-  const focusFor = (control) => (control.type === 'checkbox'
+  const focusFor = (control) => (control.type === 'checkbox' || control.type === 'radio'
     ? `input[name="${CSS.escape(control.name)}"][value="${CSS.escape(control.value)}"]`
     : `#${CSS.escape(control.id)}`);
 
@@ -266,7 +272,7 @@
       const control = event.target;
       const isSort = control.matches('select[form="pf-index-filter-form"]');
       const isYear = control.matches('[data-pf-index-year]');
-      const isFilter = wide.matches && (control.matches('[data-pf-index-form] input[type="checkbox"]') || isYear);
+      const isFilter = wide.matches && (control.matches('[data-pf-index-form] input:is([type="checkbox"], [type="radio"])') || isYear);
       // A wrong year stays put and says why, rather than running a search.
       if (isFilter && isYear && !control.reportValidity()) {
         return;

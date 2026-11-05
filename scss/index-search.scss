@@ -484,6 +484,81 @@
   padding: 0 0 .5rem;
   border-bottom: 1px solid var(--pf-index-line);
   color: var(--pf-index-muted);
+
+  &:has(.pf-index__about-open) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 .75rem;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+}
+
+// What each source is: the glossary's card (_glossary.scss), from a plain button
+// in the Source filter's title, with a dotted line as the glossary's words have.
+.pf-index .pf-index__about-open {
+  padding-block: .25rem;
+  margin-block: -.25rem;
+  padding-inline: 0;
+  border: 0;
+  background: none;
+  color: var(--pf-index-fg);
+  font-family: inherit;
+  font-size: .8125rem;
+  letter-spacing: normal;
+  text-transform: none;
+  text-decoration: underline dotted;
+  text-underline-offset: .22em;
+  cursor: help;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+}
+
+.pf-index__about {
+  width: min(24rem, calc(100vw - 2rem));
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  p {
+    margin: 0;
+  }
+
+  dl {
+    margin: .25rem 0 0;
+  }
+
+  dt {
+    color: var(--bs-heading-color, var(--bs-emphasis-color));
+    font-weight: 500;
+  }
+
+  dd {
+    margin: 0 0 .75rem;
+    color: var(--pf-g-muted, var(--bs-secondary-color));
+  }
+
+  dd:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// A heading's definition, in the glossary's card. A taller target than its line
+// (WCAG 2.5.8) without moving the line.
+.pf-index-section__title .pf-term {
+  display: inline-block;
+  padding-block: .25rem;
+  margin-block: -.25rem;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.pf-index-rule .pf-term__card p {
+  margin: 0;
 }
 
 .pf-index__option {
@@ -543,6 +618,26 @@
         &::before {
           border-color: HighlightText;
         }
+      }
+    }
+  }
+
+  // One choice to a filter: round, with a dot once chosen.
+  input[type="radio"] {
+    border-radius: 50%;
+
+    &::before {
+      width: .5rem;
+      height: .5rem;
+      border: 0;
+      border-radius: 50%;
+      background: var(--pf-g-on-accent, #000);
+      transform: none;
+    }
+
+    @media (forced-colors: active) {
+      &:checked::before {
+        background: HighlightText;
       }
     }
   }
