@@ -132,14 +132,15 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. Nothing links to it yet: the site's search forms still go to the old page. Filters that combine, chosen-filter chips, sorting and results that change without a page reload are built and checked on sample data, and are next to test on production.</p>
+<p><strong>Status as of Thu 5 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. Nothing links to it yet: the site's search forms still go to the old page. Filters that combine, chosen-filter chips, sorting and results that change without a page reload are on production, and the filters and sorting are checked for logged-out visitors. Search operators are the current work.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
     ['done', 'Names', 'Index is the working name for visitors, with four modes: All, Research, Website and Special Collections. The address is /v2/search.'],
     ['done', 'Page design', 'Layout and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
     ['done', 'Module first run', 'palefire_search is enabled on production. All four modes, source filters, paging, Articles & Books, Research Guides, Staff, Gear, Databases and E-Textbooks return real results.'],
-    ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Articles & Books by date. Results change in place, without reloading the page. Checked on sample data; not yet on production.'],
+    ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Articles & Books by date. Results change in place, without reloading the page. Filters and sorting are checked on production for logged-out visitors; changing in place still needs a check in a browser, logged in and out.'],
+    ['running', 'Search operators', 'AND, OR, NOT, a minus sign and parentheses, read the same way in every source that can honor them. Research Guides can\'t, so the page says what it searched for instead. Exact phrases in the site\'s own content wait for a reindex.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
     ['todo', 'Scholarly Repository', 'A link for now. The repository\'s public address answered a request from outside the site with a Cloudflare challenge; the server\'s log will confirm whether the site gets the same.'],
@@ -199,7 +200,7 @@ $section('Next steps', [
 <ol>
 <li>Test the new filters, sorting and in-place results on production, logged in and logged out.</li>
 <li>Review the page's design together.</li>
-<li>Add Palefire pages to the search index and reindex, along with the date range and title sorting.</li>
+<li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
 <li>Confirm whether the Scholarly Repository can be searched from the server.</li>
 <li>Move the site's search forms to the Index and redirect /bento.</li>
 <li>Connect Alma when the sandbox is ready.</li>
