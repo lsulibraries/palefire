@@ -146,6 +146,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-05:** Title's picture: `--pf-title-floor` and the `lighten` blend are back, and `--pf-title-outline` and its drop shadows are removed: the full colour was too distracting. Same floor values as before, 97 to 122.
 - **2026-11-05:** Title's picture: `--pf-title-outline` (the same per-theme greys, 97 to 122, the 3:1 line on each page) replaces `--pf-title-floor` and the `lighten` blend. `pf-title-trade` fades in four chained 2px `drop-shadow()`s; `-webkit-text-stroke` draws the variable font's overlapping contours. `pf-title-feature` keeps the grey as `background-color` under the picture, so letters stay painted, and outlined, if it fails to load.
 - **2026-11-05:** Title's picture: `--pf-title-floor` (a grey per reading colour, 97 to 122, the 3:1 line on its page) replaces `--pf-title-veil` and `--pf-title-veil-on`. `pf-title-feature` paints the dip's gold, the floor and the picture, with `background-blend-mode: normal, lighten, normal`. `pf-title-trade` now only fades the fill.
 - **2026-11-05:** Guide blocks (`guide-blocks.scss`, own library): `.pf-flow` (an `<ol>` on a container query, branches beside their step from 34rem, under it below; lines and arrows in the muted text colour, for 3:1), `.pf-status` (mark and words; Needs attention is the text colour as a plate), `.pf-stats` (a `<dl>`, value drawn above its label), `.pf-code` (focusable `<pre>`). Tokens only. New gallery on the style guide page: re-run its script.

@@ -4350,8 +4350,8 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
 // Trading places: as the picture takes the column, the letters' gold fades and
 // the same picture shows through them (--pf-title-feature, the lead
-// Highlight's; the film's still without one), in its own colours, and a thin
-// outline fades in around them. Their color stays gold, only the fill goes.
+// Highlight's; the film's still without one), in its own colours, over a floor
+// (below). Their color stays gold, only the fill goes.
 // A row in hand changes the letters' picture too, through gold: the veil rises
 // to solid, the picture changes under it, the veil falls back. The letters
 // have one background, so they can't crossfade as the column does. The same
@@ -4380,36 +4380,32 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// The outline is what holds 3:1 on any picture, whatever its dark areas, so a
-// new picture needs no measuring: a narrow border counts as part of the letter
-// (WCAG 1.4.3, Understanding). Drop shadows and not -webkit-text-stroke, which
-// draws the variable font's overlapping contours inside the letters. 2px: on a
-// 1x screen 1.5px leaves about one edge in eight with no pixel at full grey.
 @keyframes pf-title-trade {
   from {
-    filter: drop-shadow(2px 0 0 transparent) drop-shadow(-2px 0 0 transparent) drop-shadow(0 2px 0 transparent) drop-shadow(0 -2px 0 transparent);
     -webkit-text-fill-color: currentcolor;
   }
 
   to {
-    filter: drop-shadow(2px 0 0 var(--pf-title-outline)) drop-shadow(-2px 0 0 var(--pf-title-outline)) drop-shadow(0 2px 0 var(--pf-title-outline)) drop-shadow(0 -2px 0 var(--pf-title-outline));
     -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
   }
 }
 
 // The picture in the letters, from the first pixel of scroll: the fill is
 // still solid there, so the change can't be seen, and the first load keeps
-// the film's still. It loads with the column's, the same file. The dip's gold
-// over the picture, the outline's grey under it: until the picture loads, or if
-// it never does, the letters show the grey. The outline needs them painted.
+// the film's still. It loads with the column's, the same file. Three layers:
+// the dip's gold, then the floor (--pf-title-floor, a grey), blended lighten
+// so each channel of each pixel keeps at least the floor's value and anything
+// brighter stays as it is, then the picture. If the picture fails to load the
+// letters show the floor.
 @keyframes pf-title-feature {
   from,
   to {
-    background-color: var(--pf-title-outline);
     background-image:
       linear-gradient(color-mix(in srgb, currentColor var(--pf-title-dip), transparent), color-mix(in srgb, currentColor var(--pf-title-dip), transparent)),
+      linear-gradient(var(--pf-title-floor), var(--pf-title-floor)),
       var(--pf-title-shown, var(--pf-title-feature, var(--pf-title-still)));
     background-position: 50% 50%;
+    background-blend-mode: normal, lighten, normal;
   }
 }
 
@@ -4913,15 +4909,11 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
       // to the title's list. Not with more contrast or forced colours: they
       // stay solid.
       @media (prefers-contrast: no-preference) and (forced-colors: none) {
-        // The outline: the grey that keeps 3:1 on the reading colour's page.
-        // Material's here, the highest, for a colour without its own value below.
-        // Set on the type's box, so the title's own rule under an event can clear
-        // it.
-        html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top {
-          --pf-title-outline: rgb(122 122 122);
-        }
-
         html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
+          // The floor: the grey that keeps 3:1 on the reading colour's page, so
+          // any picture holds and a new one needs no measuring. Material's here,
+          // the highest, for a colour without its own value below.
+          --pf-title-floor: rgb(122 122 122);
           background:
             linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
             var(--pf-title-still) 58% 50% / cover no-repeat;
@@ -4929,9 +4921,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           background-clip: text;
         }
 
-        @each $theme, $grey in ("twilight": 112, "night": 97, "forest": 109, "midnight": 110, "dusk": 117, "cocoa": 109, "solarized": 113) {
-          html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top {
-            --pf-title-outline: rgb(#{$grey} #{$grey} #{$grey});
+        @each $theme, $floor in ("twilight": 112, "night": 97, "forest": 109, "midnight": 110, "dusk": 117, "cocoa": 109, "solarized": 113) {
+          html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
+            --pf-title-floor: rgb(#{$floor} #{$floor} #{$floor});
           }
         }
 
@@ -4969,11 +4961,9 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           }
         }
 
-        // Solid under an event: the trade runs, but its fill stays the words' and
-        // it draws no outline.
+        // Solid under an event: the trade runs, but its fill stays the words'.
         .pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__title--still {
           --pf-title-trade-fill: currentcolor;
-          --pf-title-outline: transparent;
         }
       }
     }
