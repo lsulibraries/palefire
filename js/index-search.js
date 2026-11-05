@@ -30,6 +30,12 @@
   let visiting = null;
 
   const load = async (holder) => {
+    // The site's mark while this section's service answers.
+    const mark = holder.closest('[data-pf-index]')?.querySelector('[data-pf-index-loading] .pf-index__mark');
+    if (mark) {
+      holder.prepend(mark.cloneNode(true));
+      holder.classList.add('is-searching');
+    }
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
     controllers.add(controller);
@@ -54,16 +60,23 @@
     finally {
       window.clearTimeout(timer);
       controllers.delete(controller);
+      holder.classList.remove('is-searching');
+      holder.querySelector(':scope > .pf-index__mark')?.remove();
       holder.setAttribute('aria-busy', 'false');
     }
   };
 
-  // A form's address, leaving out the default sort.
+  // A form's address, leaving out the default sort and empty years.
   const addressOf = (form) => {
     const params = new URLSearchParams(new FormData(form));
     if (params.get('sort') === 'relevance') {
       params.delete('sort');
     }
+    ['from', 'to'].forEach((name) => {
+      if (params.get(name) === '') {
+        params.delete(name);
+      }
+    });
     return `${form.getAttribute('action')}?${params}`;
   };
 
@@ -90,6 +103,8 @@
     visiting = new AbortController();
     const { signal } = visiting;
     main.setAttribute('aria-busy', 'true');
+    root.classList.add('is-searching');
+    Drupal.announce(Drupal.t('Searching'));
 
     let page;
     try {
@@ -118,6 +133,7 @@
     swap(root, page, '.pf-index__form');
     swap(root, page, '.pf-index__modes');
     const next = swap(root, page, '[data-pf-index-main]');
+    root.classList.remove('is-searching');
     next.classList.add('is-arriving');
     Drupal.attachBehaviors(next, drupalSettings);
 
@@ -222,7 +238,12 @@
     root.addEventListener('change', (event) => {
       const control = event.target;
       const isSort = control.matches('select[form="pf-index-filter-form"]');
-      const isFilter = wide.matches && control.matches('[data-pf-index-form] input[type="checkbox"]');
+      const isYear = control.matches('[data-pf-index-year]');
+      const isFilter = wide.matches && (control.matches('[data-pf-index-form] input[type="checkbox"]') || isYear);
+      // A wrong year stays put and says why, rather than running a search.
+      if (isFilter && isYear && !control.reportValidity()) {
+        return;
+      }
       if ((isSort || isFilter) && control.form) {
         visit(root, addressOf(control.form), { focus: focusFor(control) });
       }

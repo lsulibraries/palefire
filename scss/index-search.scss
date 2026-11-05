@@ -36,10 +36,17 @@
 }
 
 .pf-index {
-  --pf-index-fg: var(--pf-section-fg, var(--bs-body-color));
-  --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  // The strongest text color for what's being read, as the landing's headings
+  // and row names, and the body color for what supports it.
+  --pf-index-fg: var(--pf-section-fg, var(--bs-emphasis-color));
+  --pf-index-muted: var(--pf-section-muted, var(--bs-body-color));
   --pf-index-line: #{$pf-hairline};
-  --pf-index-control: var(--pf-section-border, #6c757d);
+  // Fields hold 3:1 against the page, in every reading color.
+  --pf-index-control: var(--pf-section-border, var(--bs-body-color));
+  --pf-index-accent: var(--pf-g-accent, #{$pf-gold});
+  --pf-index-highlight: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  // The label font .pf-index-rule reads, as _exhibit-showcase.scss sets it.
+  --pf-landing-label: var(--pf-toc-font, "Consolas", "Monaco", monospace);
   --pf-index-ease: #{$pf-swup-ease-in};
   max-width: $pf-content-max;
   margin-inline: auto;
@@ -58,11 +65,36 @@
   margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 
+// "LSU Libraries", a hairline, then what this is, as the Special Collections
+// title's kicker.
+.pf-index__kicker {
+  @include pf-index-label;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1rem;
+  margin: 0;
+  color: var(--pf-toc-color, var(--pf-index-muted));
+}
+
+.pf-index__kicker-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+
+  &::before {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    background: var(--pf-index-highlight);
+  }
+}
+
 .pf-index .pf-index__title {
   margin: 0;
   font-size: clamp(2.75rem, 2rem + 3vw, 4.5rem);
   font-weight: 500;
-  letter-spacing: -.04em;
+  letter-spacing: -.03em;
   line-height: .95;
 }
 
@@ -78,35 +110,35 @@
   margin-top: 1rem;
 }
 
+// The search as on the Special Collections page: a square field on the surface
+// color, and one filled button with its icon at the far end.
 .pf-index__field {
   display: flex;
-  align-items: center;
-  gap: .5rem;
-  padding-inline-start: .875rem;
+  align-items: stretch;
+  min-height: 4rem;
   border: 1px solid var(--pf-index-control);
   background: var(--pf-g-surface, var(--bs-body-bg));
 
-  &:focus-within {
-    outline: 2px solid var(--pf-index-fg);
-    outline-offset: 2px;
+  @include pf-index-motion {
+    transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
   }
-}
 
-.pf-index__field-icon {
-  flex: none;
-  width: 1.25rem;
-  height: 1.25rem;
-  color: var(--pf-index-muted);
+  &:focus-within {
+    border-color: var(--pf-index-highlight);
+    box-shadow: 0 0 0 1px var(--pf-index-highlight);
+    transition-duration: $pf-hover-in;
+  }
 }
 
 .pf-index__input {
   flex: 1;
   min-width: 0;
-  min-height: 3.25rem;
+  padding-inline: clamp(.875rem, 2vw, 1.25rem);
   border: 0;
   background: transparent;
-  color: inherit;
-  font-size: 1.125rem;
+  color: var(--pf-index-fg);
+  font-size: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+  font-weight: 300;
 
   &:focus {
     outline: 0;
@@ -117,27 +149,80 @@
   }
 }
 
+// The theme's primary button (_buttons.scss), which this entry point can't
+// extend: the text color wipes in on hover and fades out in place.
 .pf-index__submit {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
   flex: none;
-  align-self: stretch;
-  padding-inline: clamp(1rem, 3vw, 1.75rem);
+  align-items: center;
+  gap: clamp(.75rem, 3vw, 2.5rem);
+  padding-inline: clamp(.875rem, 2vw, 1.25rem);
   border: 0;
-  background: var(--pf-index-fg);
-  color: var(--pf-g-surface, var(--bs-body-bg));
+  background: var(--pf-index-accent);
+  color: var(--pf-g-on-accent, #000);
+  font-size: .9375rem;
   font-weight: $pf-button-weight;
+  transition: color $pf-hover-out ease;
 
-  @include pf-index-motion {
-    transition: opacity .2s var(--pf-index-ease);
+  svg {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
-  &:hover {
-    opacity: .85;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bs-emphasis-color);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity $pf-hover-out ease, transform 0s linear $pf-hover-out;
   }
 
   &:focus-visible {
-    outline: 2px solid var(--pf-g-surface, var(--bs-body-bg));
-    outline-offset: -5px;
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
   }
+
+  &:focus-visible,
+  &:hover {
+    color: var(--bs-body-bg);
+    transition-duration: $pf-hover-in;
+
+    &::before {
+      opacity: 1;
+      transform: scaleX(1);
+      transition-duration: 0s, $pf-hover-in;
+      transition-delay: 0s;
+    }
+  }
+
+  html.pf-a11y-motion &,
+  html.pf-a11y-motion &::before {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    &::before {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    &::before {
+      content: none;
+    }
+  }
+}
+
+[dir="rtl"] .pf-index__submit::before {
+  transform-origin: right;
 }
 
 // Modes: links, since each is its own address. The current one has a rule and
@@ -156,26 +241,28 @@
   }
 
   a {
-    display: block;
-    padding-block: .75rem;
+    @include pf-index-label;
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     color: var(--pf-index-muted);
     text-decoration: none;
 
     @include pf-index-motion {
-      transition: color .2s var(--pf-index-ease), border-color .2s var(--pf-index-ease);
+      transition: color $pf-hover-out ease, border-color $pf-hover-out ease;
     }
 
     &:hover {
       color: var(--pf-index-fg);
       border-bottom-color: var(--pf-index-line);
+      transition-duration: $pf-hover-in;
     }
 
     &[aria-current] {
-      border-bottom-color: currentColor;
+      border-bottom-color: var(--pf-index-highlight);
       color: var(--pf-index-fg);
-      font-weight: 600;
     }
   }
 }
@@ -206,7 +293,7 @@
   // The results dim while the next ones load, after a moment so a quick answer
   // doesn't flicker. Dimming isn't movement, so only its easing is optional.
   &[aria-busy="true"] .pf-index__results {
-    opacity: .5;
+    opacity: .25;
   }
 
   @include pf-index-motion {
@@ -228,6 +315,7 @@
 
 .pf-index__results {
   min-width: 0;
+  counter-reset: pf-index-section;
 }
 
 .pf-index__filters-open {
@@ -237,9 +325,11 @@
   gap: .5rem;
   min-height: 2.75rem;
   padding-inline: 1rem;
-  border: 1px solid var(--pf-index-control);
-  background: transparent;
-  color: inherit;
+  border: 0;
+  background: color-mix(in srgb, var(--pf-index-fg) 9%, transparent);
+  color: var(--pf-index-fg);
+  font-size: .9375rem;
+  font-weight: $pf-button-weight;
 
   svg {
     width: 1.125rem;
@@ -352,21 +442,66 @@
   border-bottom: 1px solid var(--pf-index-line);
   cursor: pointer;
 
+  // Square and clear, as the page's fields, filled with the accent once chosen.
   input {
     flex: none;
+    display: grid;
+    place-items: center;
     width: 1.125rem;
     height: 1.125rem;
     margin: 0;
-    accent-color: var(--pf-index-fg);
+    border: 1px solid var(--pf-index-control);
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+
+    @include pf-index-motion {
+      transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease;
+    }
+
+    &::before {
+      content: "";
+      width: .625rem;
+      height: .3125rem;
+      border-bottom: 2px solid var(--pf-g-on-accent, #000);
+      border-inline-start: 2px solid var(--pf-g-on-accent, #000);
+      opacity: 0;
+      transform: translateY(-.0625rem) rotate(-45deg);
+    }
+
+    &:hover {
+      border-color: var(--pf-index-fg);
+      transition-duration: $pf-hover-in;
+    }
+
+    &:checked {
+      border-color: var(--pf-index-accent);
+      background: var(--pf-index-accent);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    @media (forced-colors: active) {
+      &:checked {
+        background: Highlight;
+        forced-color-adjust: none;
+
+        &::before {
+          border-color: HighlightText;
+        }
+      }
+    }
   }
 
   input:focus-visible {
-    outline: 2px solid var(--pf-index-fg);
+    outline: 2px solid var(--pf-index-highlight);
     outline-offset: 2px;
   }
 
   &:has(:checked) .pf-index__option-label {
-    font-weight: 600;
+    color: var(--pf-index-fg);
   }
 }
 
@@ -379,6 +514,50 @@
   color: var(--pf-index-muted);
   font-size: .875rem;
   font-variant-numeric: tabular-nums;
+}
+
+// A year range: two short fields, side by side at every width.
+.pf-index__years {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  padding-block: .75rem;
+  border-bottom: 1px solid var(--pf-index-line);
+
+  label {
+    display: block;
+    margin-bottom: .25rem;
+    color: var(--pf-index-muted);
+    font-size: .875rem;
+  }
+
+  input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding-inline: .625rem;
+    border: 1px solid var(--pf-index-muted);
+    border-radius: 0;
+    background: transparent;
+    color: var(--pf-index-fg);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .2s ease;
+  }
+
+  input:hover {
+    border-color: var(--pf-index-fg);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    input {
+      transition: none;
+    }
+  }
 }
 
 .pf-index__apply {
@@ -550,18 +729,109 @@
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-.pf-index .pf-index-section__title {
+// Each section opens on the theme's index rule (_landing-features.scss). The
+// number is counted, so a late section with no results leaves no gap.
+.pf-index-section:not([hidden]),
+.pf-index__elsewhere {
+  counter-increment: pf-index-section;
+}
+
+.pf-index-rule__num::before {
+  content: counter(pf-index-section, decimal-leading-zero);
+}
+
+// Four classes: the reading colors set every heading through html[...] .pf-main.
+.pf-main .pf-index .pf-index-rule .pf-index-section__title {
   @include pf-index-label;
   margin: 0;
-  padding-bottom: .5rem;
-  border-bottom: 1px solid var(--pf-index-line);
-  color: var(--pf-index-muted);
+  color: var(--pf-toc-color, var(--pf-index-muted));
 }
 
 // Holds a late section's place, about three rows, so results below don't
 // jump when it arrives. Released once it has.
 .pf-index-section__late[aria-busy="true"] {
   min-height: 15rem;
+}
+
+// Articles & Books shows five rows, and takes the longest.
+.pf-index-section--articles .pf-index-section__late[aria-busy="true"] {
+  min-height: 34rem;
+}
+
+.pf-index-section__late.is-searching .pf-index-list__status {
+  display: none;
+}
+
+// While results are on their way: the LSU mark traced as on a page change
+// (base/_swup.scss, whose keyframes these use), with a word to say what it
+// means. In the middle of the window for a new search, and in its place for a
+// late section. Shown after a moment, so a quick answer never flashes it. With
+// reduced motion the mark and the word simply show, and nothing moves.
+.pf-index__loading {
+  position: fixed;
+  inset: var(--pf-header-h, 4rem) 0 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+}
+
+.pf-index.is-searching > .pf-index__loading {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .2s ease .2s, visibility 0s linear .2s;
+}
+
+.pf-index__mark {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+
+  svg {
+    width: clamp(6.5rem, 22vw, 9.5rem);
+    height: auto;
+    overflow: visible;
+  }
+
+  :is(path, polygon) {
+    fill: var(--pf-index-highlight);
+    stroke: var(--pf-index-highlight);
+    stroke-width: 1px;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.pf-index__mark-label {
+  @include pf-index-label;
+  color: var(--pf-index-muted);
+}
+
+.pf-index-section__late > .pf-index__mark {
+  justify-items: start;
+  padding-block: 1.5rem;
+
+  svg {
+    width: 5rem;
+  }
+}
+
+.pf-index {
+  @include pf-index-motion {
+    &.is-searching > .pf-index__loading svg,
+    .is-searching > .pf-index__mark svg {
+      animation: pf-mark-cycle 2.4s linear .2s infinite;
+    }
+
+    &.is-searching > .pf-index__loading :is(path, polygon),
+    .is-searching > .pf-index__mark :is(path, polygon) {
+      animation: pf-mark-trace 2.4s linear .2s backwards infinite;
+    }
+  }
 }
 
 .pf-index-section__late.is-loaded {
@@ -591,24 +861,37 @@
   overflow-wrap: anywhere;
 }
 
-.pf-index .pf-index-row__title {
+// Names in the strongest text color, as the landing's rows; color arrives fast
+// and leaves slowly.
+.pf-main .pf-index .pf-index-row .pf-index-row__title {
   margin: 0;
+  color: var(--pf-index-fg);
   font-size: clamp(1.125rem, 1.05rem + .3vw, 1.3125rem);
   font-weight: 500;
-  letter-spacing: -.01em;
+  letter-spacing: -.015em;
   line-height: 1.3;
 
   a {
     color: inherit;
-    text-decoration-thickness: from-font;
-    text-decoration-color: var(--pf-index-line);
+    text-decoration: underline transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+    transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
 
-    @include pf-index-motion {
-      transition: text-decoration-color .2s var(--pf-index-ease);
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-index-highlight);
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
     }
 
-    &:hover {
-      text-decoration-color: currentColor;
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-highlight);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 }
@@ -772,6 +1055,31 @@
   transform: scaleX(-1);
 }
 
+// What a record is, above its title, so an article and a book read differently
+// at a glance. Set like inline code in a guide (_guide.scss).
+.pf-index-row__type {
+  width: fit-content;
+  margin: 0 0 .375rem;
+  padding: .1em .45em;
+  border: 1px solid var(--pf-index-line);
+  background: var(--pf-g-surface, var(--bs-tertiary-bg));
+  color: var(--pf-index-muted);
+  font-family: var(--pf-guide-mono, var(--pf-landing-label));
+  font-size: .8125rem;
+  line-height: 1.5;
+}
+
+.pf-index-row__links {
+  margin: .375rem 0 0;
+  font-size: .875rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+  }
+}
+
 .pf-index-row__meta {
   margin: .25rem 0 0;
   color: var(--pf-index-muted);
@@ -781,6 +1089,7 @@
 .pf-index-row__summary {
   max-width: 48rem;
   margin: .375rem 0 0;
+  color: var(--pf-index-muted);
   text-wrap: pretty;
 }
 
@@ -799,7 +1108,13 @@
 }
 
 .pf-index-list__more {
+  display: flex;
   margin: 1rem 0 0;
+
+  // The theme's rule link. One that leaves the site points up and out.
+  a[href^="http"]::after {
+    content: "\2197" / "";
+  }
 }
 
 // Searches elsewhere. --------------------------------------------------------
