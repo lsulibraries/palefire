@@ -301,11 +301,14 @@
       {# Cover with a poster: the still shows in the title's letters from the
          first paint, until the film's column opens (_entrance.scss,
          .pf-landing__title--still). On the stage, with the film's sweep, they
-         take the lead Highlight's picture, as the column does (pf-title-trade,
-         pf-title-feature, _landing-features.scss). #}
+         take the lead Highlight's picture, as the column does, and another
+         item's while it is in hand: --pf-title-pic-2 to -5, by its place in the
+         list (pf-title-trade, pf-title-feature, pf-title-dip,
+         _landing-features.scss). #}
       {% set title_still = cover and bg_videos and bg_poster %}
       {% set title_feature = title_still and hero_banners ? hero_banners|first.still %}
-      <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}'){% if title_feature %}; --pf-title-feature: url('{{ title_feature }}'){% endif %}"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
+      {% set title_pics = title_still ? hero_banners|slice(0, hero_blog ? 4 : 5)|merge(hero_blog ? [hero_blog] : []) : [] %}
+      <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}'){% if title_feature %}; --pf-title-feature: url('{{ title_feature }}'){% endif %}{% for pic in title_pics %}{% if not loop.first and pic.still %}; --pf-title-pic-{{ loop.index }}: url('{{ pic.still }}'){% endif %}{% endfor %}"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}
       </h1>
     {% endif %}

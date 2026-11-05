@@ -4421,6 +4421,34 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   initial-value: 22%;
 }
 
+// A row in hand changes the letters' picture too, through gold: the veil rises
+// to solid, the picture changes under it, the veil falls back. The letters
+// have one background, so they can't crossfade as the column does. The same
+// keyframes under a name per row, so each change of row restarts them.
+@property --pf-title-dip {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+@for $k from 0 through 5 {
+  @keyframes pf-title-dip-#{$k} {
+    0% {
+      --pf-title-dip: 0%;
+      animation-timing-function: ease-in;
+    }
+
+    40% {
+      --pf-title-dip: 100%;
+      animation-timing-function: ease-out;
+    }
+
+    100% {
+      --pf-title-dip: 0%;
+    }
+  }
+}
+
 @keyframes pf-title-trade {
   from {
     --pf-title-veil: 22%;
@@ -4440,8 +4468,8 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   from,
   to {
     background-image:
-      linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
-      var(--pf-title-feature, var(--pf-title-still));
+      linear-gradient(color-mix(in srgb, currentColor max(var(--pf-title-veil), var(--pf-title-dip)), transparent), color-mix(in srgb, currentColor max(var(--pf-title-veil), var(--pf-title-dip)), transparent)),
+      var(--pf-title-shown, var(--pf-title-feature, var(--pf-title-still)));
     background-position: 50% 50%;
   }
 }
@@ -4970,6 +4998,32 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
             pf-title-feature linear forwards;
           animation-timeline: scroll(root), scroll(root);
           animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3);
+        }
+
+        // A row in hand: a beat (the column's own .12s, so a pointer passing
+        // over the rows starts nothing), the rise, and at its top, unseen, the
+        // picture. The dip runs on the type's box and is inherited, so it needs
+        // no place in the title's lists of animations. A row with no picture
+        // keeps the lead's, as the column does.
+        html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__stage {
+          > .pf-landing__top {
+            animation: pf-title-dip-0 .5s linear .12s;
+
+            > .pf-landing__title--still {
+              --pf-title-shown: var(--pf-title-feature, var(--pf-title-still));
+              transition: --pf-title-shown 0s .32s allow-discrete;
+            }
+          }
+
+          @for $k from 2 through 5 {
+            &:has(> .pf-hero-banners > .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-landing__top {
+              animation-name: pf-title-dip-#{$k};
+
+              > .pf-landing__title--still {
+                --pf-title-shown: var(--pf-title-pic-#{$k}, var(--pf-title-feature, var(--pf-title-still)));
+              }
+            }
+          }
         }
 
         // Solid under an event: the trade runs, but its fill stays the words'.

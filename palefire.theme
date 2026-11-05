@@ -626,6 +626,7 @@ function _palefire_hero_blog_banner(ParagraphInterface $paragraph, array &$varia
   $post = $posts[0] ?? NULL;
   if ($post) {
     $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL;
+    $post['still'] = _palefire_hero_banner_still($post['image_item'], $cache);
     unset($post['image_item']);
   }
   $cache->applyTo($variables);
