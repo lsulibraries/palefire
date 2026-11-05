@@ -1034,6 +1034,21 @@
   }
 }
 
+// One entry per class section using the book, with a hairline between them.
+.pf-index-row__copies {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    padding-top: 1rem;
+    border-top: 1px solid var(--pf-index-line);
+  }
+}
+
 .pf-index-row__label-cover {
   width: 8rem;
 
