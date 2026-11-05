@@ -266,6 +266,15 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
       visibility 0s linear 0.3s;
   }
 
+  // Opened from the hero's Contents button: by that button, not the rail
+  // (modular-toc.js, placeAnchor). It rises or drops in from the button's side.
+  #{$pf-rail} .pf-toc.is-anchored .pf-toc__panel {
+    top: var(--pf-anchor-top);
+    inset-inline-start: var(--pf-anchor-start);
+    max-height: var(--pf-anchor-height);
+    transform: translateY(var(--pf-anchor-from));
+  }
+
   #{$pf-rail} .pf-toc__panel-head {
     flex: none;
     margin: 0;

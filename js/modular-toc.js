@@ -926,6 +926,9 @@
     let crumbShown = null;
     let crumbOpened = false;
     let contentsOpener = null;
+    let anchorOpener = null;
+    let anchorFrame = 0;
+    const ANCHOR_GAP = 8;
     let spacer = null;
     let pinned = false;
     let pinFrame = 0;
@@ -959,6 +962,56 @@
       crumbShown = text;
     }
 
+    // Opened from the hero's Contents button, the rail's panel sits by that
+    // button: under it if the panel fits, else over it, else on the roomier
+    // side with its list scrolling. It follows the button as the page scrolls
+    // and closes once the button is gone. Anchored stays on after closing, so
+    // the panel fades out where it is; the next opening any other way clears it.
+    function placeAnchor() {
+      anchorFrame = 0;
+      if (destroyed || !anchorOpener) {
+        return;
+      }
+      const panel = nav.querySelector('.pf-toc__panel');
+      if (!panel || !panelList || !railOn()) {
+        clearAnchor();
+        return;
+      }
+      const box = anchorOpener.getBoundingClientRect();
+      const limit = (bar ? bar.getBoundingClientRect().bottom : headerHeight()) + ANCHOR_GAP;
+      if (box.bottom <= limit || box.top >= window.innerHeight) {
+        anchorOpener = null;
+        dismiss(null);
+        return;
+      }
+      panel.style.maxHeight = 'none';
+      const natural = panel.offsetHeight;
+      panel.style.maxHeight = '';
+      const below = window.innerHeight - box.bottom - ANCHOR_GAP * 2;
+      const above = box.top - ANCHOR_GAP - limit;
+      const under = natural <= below || (natural > above && below >= above);
+      const height = Math.min(natural, under ? below : above);
+      const frame = (panel.offsetParent || nav).getBoundingClientRect();
+      const top = under ? box.bottom + ANCHOR_GAP : box.top - ANCHOR_GAP - height;
+      const rtl = getComputedStyle(nav).direction === 'rtl';
+      nav.style.setProperty('--pf-anchor-top', (top - frame.top) + 'px');
+      nav.style.setProperty('--pf-anchor-start', (rtl ? frame.right - box.right : box.left - frame.left) + 'px');
+      nav.style.setProperty('--pf-anchor-height', height + 'px');
+      nav.style.setProperty('--pf-anchor-from', under ? '-0.5rem' : '0.5rem');
+      nav.classList.add('is-anchored');
+    }
+
+    function clearAnchor() {
+      anchorOpener = null;
+      nav.classList.remove('is-anchored');
+    }
+
+    function queueAnchor() {
+      if (!anchorFrame && anchorOpener && nav.classList.contains('is-open')) {
+        anchorFrame = requestAnimationFrame(placeAnchor);
+      }
+    }
+
     function openContents(event) {
       const opener = event && event.currentTarget;
       // Below md on Special Collections pages, the mobile dock's Contents
@@ -967,6 +1020,13 @@
         return;
       }
       if (railOn()) {
+        if (opener && opener.matches('[data-pf-landing-contents]')) {
+          anchorOpener = opener;
+          placeAnchor();
+        }
+        else {
+          clearAnchor();
+        }
         nav.classList.remove('is-dismissed');
         nav.classList.add('is-open');
         dismissedOn = null;
@@ -1058,6 +1118,16 @@
         heroButton.addEventListener('click', openContents, { signal });
         heroButton.hidden = false;
       });
+      window.addEventListener('scroll', queueAnchor, { passive: true, signal });
+      window.addEventListener('resize', queueAnchor, { passive: true, signal });
+      // The rail's own hover and focus open the panel in its usual place.
+      const leaveAnchor = () => {
+        if (!nav.classList.contains('is-open')) {
+          clearAnchor();
+        }
+      };
+      nav.addEventListener('pointerenter', leaveAnchor, { signal });
+      nav.addEventListener('focusin', leaveAnchor, { signal });
       // Esc in the panel it opened: back to the button that opened it. (The
       // rail's own Esc handler, above, closes the panel.)
       nav.addEventListener('keydown', (event) => {
