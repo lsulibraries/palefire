@@ -159,13 +159,13 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026, 10:47 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs; progress by institution added; Loyola back in the migration.</p>
+<p><strong>Status as of Thu 5 Nov 2026, 10:47 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs; progress by institution added; Loyola back in the migration; empty text files no longer exported.</p>
 HTML, 'callout'),
   $stats(NULL, [
     ['51%', 'downloaded, by data size'],
     ['72%', 'downloaded, by number of files'],
     ['1.59 TB', 'left to download (1.66 TB on L:)'],
-    ['15 of 39', 'institutions with nothing left; 8 more at 99% or better'],
+    ['20 of 39', 'institutions with nothing left; 3 more at 99% or better'],
   ]),
   $text(NULL, <<<'HTML'
 <p>Uploading to Quartex isn't counted.</p>
@@ -204,23 +204,23 @@ HTML),
 <tr><td>Teaching American History in Louisiana (TAHIL)</td><td>99%</td><td>98%</td><td>97%</td><td>0</td><td>122</td><td>In progress</td></tr>
 <tr><td>Amistad Research Center</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>1</td><td>In progress</td></tr>
 <tr><td>Louisiana State Museum</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>11</td><td>In progress</td></tr>
-<tr><td>Louisiana State University</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>1,799</td><td>In progress</td></tr>
-<tr><td>Louisiana State University Health Sciences Center New Orleans</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>218</td><td>In progress</td></tr>
-<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>99%</td><td>99%</td><td>79%</td><td>0</td><td>12</td><td>In progress</td></tr>
-<tr><td>Louisiana State University of Alexandria</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>1</td><td>In progress</td></tr>
-<tr><td>Southeastern Louisiana University</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>2</td><td>In progress</td></tr>
-<tr><td>Webster Parish Library</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>33</td><td>In progress</td></tr>
+<tr><td>Webster Parish Library</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>1</td><td>In progress</td></tr>
 <tr><td>Calcasieu Parish Public Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Centenary Placeholder Collection</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Franklin Parish Library</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Free People of Color in Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana Purchase Bicentennial Collection</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State University Health Sciences Center New Orleans</td><td>100%</td><td>100%</td><td>99%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>100%</td><td>100%</td><td>79%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State University of Alexandria</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana Tech University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>McNeese State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Newcomb Institute</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Nicholls State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Northwestern State University of Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>SOWELA Technical Community College</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Southeastern Louisiana University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Southern University and A&amp;M College</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>State Library of Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Vermilionville Living History Museum and Folklife Park</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
@@ -236,13 +236,13 @@ HTML),
 <li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
 <li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including those still in the queue.</li>
 <li><strong>Images audited (Nov 5, 11:11):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
-<li><strong>Some of the last files may not really exist.</strong> Many at 99% are files with no size on record in Fedora, including all 1,799 of LSU's, so they add nothing to the size left.</li>
+<li><strong>Empty text files aren't exported.</strong> Some pages and scanned PDFs have OCR or FULL_TEXT with nothing in it. The exporter no longer saves those, and they count as done. The 2,064 already on L: are going to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export. Files left with no size on record may turn out empty too.</li>
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.25 TB in all. The 5.7 TB is everything in Fedora. The 2.45 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
 HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). The 41 duplicate books at Loyola are best decided before its download.'],
-    ['todo', 'Remaining downloads', '642,340 files, about 1.59 TB, across the 39 institutions as of Nov 5. The 14 small institutions come first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers, which are nearly all of it.'],
+    ['todo', 'Remaining downloads', '640,276 files, about 1.59 TB, across the 39 institutions as of Nov 5. The 14 small institutions come first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers, which are nearly all of it.'],
     ['todo', 'Queued image replacements', '8,313 images queued from the last audits, plus retries for UL Lafayette\'s 22 and Amistad\'s 4.'],
     ['todo', 'TIFFs with no usable JP2', 'About 2,300 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers. Franklin Parish has 24 waiting.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
@@ -554,9 +554,9 @@ $section('Remaining institutions', [
 HTML),
   $text('Downloads left (Nov 5, 10:47)', <<<'HTML'
 <ul>
-<li><strong>642,340 files left to download, about 1.59 TB.</strong> OBJ 248,285 (1,390 GB), OCR 191,353, HOCR 186,296 (33 GB), PDF 7,041 (164 GB), FULL_TEXT 6,319, RDF 2,977, PDF-TRANSCRIPT 38, MODS 31.</li>
+<li><strong>640,276 files left to download, about 1.59 TB.</strong> OBJ 248,285 (1,390 GB), OCR 190,991, HOCR 186,296 (33 GB), PDF 7,041 (164 GB), FULL_TEXT 4,617, RDF 2,977, PDF-TRANSCRIPT 38, MODS 31.</li>
 <li><strong>Four institutions are nearly all of it:</strong> Louisiana Newspapers 313,065 files (1,070 GB), Loyola 131,276 (233 GB), Law Library 130,760 (91 GB), Historic New Orleans Collection 40,375 (145 GB).</li>
-<li><strong>The other 35 total about 26,900 files and 51 GB.</strong> The progress table under Status at a glance has each institution.</li>
+<li><strong>The other 35 total about 24,800 files and 51 GB.</strong> The progress table under Status at a glance has each institution.</li>
 <li><strong>As of Nov 4, 2,002 TIFF images had no JP2 in Fedora</strong> (Louisiana Newspapers 1,998, Law Library 3, Hicks Foundation 1). They need derivatives generated before they can go to Quartex.</li>
 <li><strong>As of Nov 4, 69,597 images already on L: hadn't been audited,</strong> so they may include TIFFs or JPEGs saved as .jp2.</li>
 </ul>
@@ -703,6 +703,7 @@ $section('Exporter changes this phase', [
 <tr><td>v2.27</td><td><strong>Step <code>0-leave-out</code></strong> turns the rows approved in <code>triage.csv</code> into a list that downloads, retries and dry runs skip automatically, for every datastream. A book's pages go with it. Files already on L: aren't touched, and the audit and manifests still include them.</td></tr>
 <tr><td>v2.28</td><td><strong>Loyola is now an excluded institution,</strong> because it's harvested and isn't part of the migration. Runs by size skip it. Files already on L: aren't touched, and the review lists still read its Fedora list.</td></tr>
 <tr><td>v2.29</td><td><strong>Loyola is back in the migration.</strong> The LDL team confirmed it isn't harvested, so it's off the excluded list and runs by size include it again. Nothing had been removed for it.</td></tr>
+<tr><td>v2.30</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
 </tbody>
 </table>
 HTML),
@@ -734,6 +735,7 @@ HTML),
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up: about 2,300 left across all institutions (at most about 98 GB), most of them in Louisiana Newspapers. The original count of 2,387 included the 28 already converted and 16 orphaned Agramonte pages.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). 24 pages have no JP2 in Fedora and still need <code>3-convert</code>. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>The other 18: their audits are done. Download the 14 small institutions first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers.</li>
+<li>Run <code>0-empty-list</code>, then <code>0-empty-move</code>, to move the 2,064 empty text files out of the export, then rerun <code>6-manifests</code> at the six institutions that have them.</li>
 <li>Get the short list in <code>triage.csv</code> approved, ideally the Loyola books before Loyola's download, then run <code>0-leave-out</code>.</li>
 </ul>
 HTML),
