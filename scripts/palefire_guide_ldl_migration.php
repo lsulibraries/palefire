@@ -159,7 +159,7 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026, 10:47 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs; progress by institution added; Loyola back in the migration; empty text files no longer exported; accounting spreadsheet table added.</p>
+<p><strong>Status as of Thu 5 Nov 2026, 15:00 (CST):</strong> image replacements are running, with about 1,900 left, nearly all at Ascension Parish. Downloads for the other 18 institutions come next. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
     ['51%', 'downloaded, by data size'],
@@ -243,7 +243,7 @@ HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). The 41 duplicate books at Loyola are best decided before its download.'],
     ['todo', 'Remaining downloads', '640,276 files, about 1.59 TB, across the 39 institutions as of Nov 5. The 14 small institutions come first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers, which are nearly all of it.'],
-    ['running', 'Queued image replacements', 'About 2,600 of the 8,313 are left as of Nov 5, 12:05: Ascension Parish 2,323, State Archives 291 and Jeanerette Museum 1. The State Archives run is slow because connections keep dropping. UL Lafayette\'s 22 are done, and one Amistad image still fails its checksum.'],
+    ['running', 'Queued image replacements', 'About 1,900 of the 8,313 are left as of Nov 5, 15:00: Ascension Parish about 1,880, State Archives 19 and Jeanerette Museum 1. Ascension is running with fewer downloads at once, and connections have been steadier so far. UL Lafayette\'s 22 are done, and one Amistad image still fails its checksum.'],
     ['todo', 'TIFFs with no usable JP2', 'About 2,300 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers. Franklin Parish has 24 waiting.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
     ['todo', 'The other 18 institutions: review, replacements, manifests', 'The same pattern as the finished institutions, once their downloads are done.'],
@@ -750,6 +750,7 @@ HTML),
 <li><strong>The Synology NAS</strong> comes next: a shared campus box, probably spinning disks behind a 1 Gbit link.</li>
 <li><strong>Not the PC's CPU</strong> (Core Ultra 9, 16 threads, about 10% busy) and <strong>not the server</strong> (c5.4xlarge).</li>
 <li>Worker count doesn't need to match CPU cores. Workers spend nearly all their time waiting on the network.</li>
+<li>More workers don't add speed on large files. On Nov 5, runs without long pauses stayed near 3 to 4 MB/s at both 3 and 16 workers. State Archives' 50 MB images went from long pauses at 16 and 8 workers to none at 3, and total speed more than doubled. What causes the dropped connections isn't known yet.</li>
 </ul>
 HTML),
 ]);
@@ -780,6 +781,7 @@ $section('Exporter changes this phase', [
 <tr><td>v2.28</td><td>Nov 5, 11:02</td><td><strong>Loyola is now an excluded institution,</strong> because it's harvested and isn't part of the migration. Runs by size skip it. Files already on L: aren't touched, and the review lists still read its Fedora list.</td></tr>
 <tr><td>v2.29</td><td>Nov 5, 11:13</td><td><strong>Loyola is back in the migration.</strong> The LDL team confirmed it isn't harvested, so it's off the excluded list and runs by size include it again. Nothing had been removed for it.</td></tr>
 <tr><td>v2.30</td><td>Nov 5, 11:45</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
+<tr><td>v2.31</td><td>Nov 5, 13:55</td><td><strong>Fewer downloads at once when connections drop.</strong> <code>--workers</code> is now the most that run at once. When 5 downloads in a row lose their connection, the exporter halves the number running, down to 2, and pauses 30 seconds. After 20 successful downloads it adds one back. These pauses now stop at 2 minutes instead of 10. Firewall blocks still pause for up to 10 minutes.</td></tr>
 </tbody>
 </table>
 HTML),
@@ -810,7 +812,7 @@ HTML),
 HTML),
   $text('Next', <<<'HTML'
 <ul>
-<li>Finish the image replacements: about 2,600 left, at Ascension Parish, State Archives and Jeanerette Museum. Look into Amistad's one checksum failure and the State Museum's 2,230 Unavailable.</li>
+<li>Finish the image replacements: about 1,900 left, nearly all at Ascension Parish. Look into Amistad's one checksum failure and the State Museum's 2,230 Unavailable.</li>
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up: about 2,300 left across all institutions (at most about 98 GB), most of them in Louisiana Newspapers. The original count of 2,387 included the 28 already converted and 16 orphaned Agramonte pages.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). 24 pages have no JP2 in Fedora and still need <code>3-convert</code>. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>The other 18: their audits are done. Download the 14 small institutions first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers.</li>
@@ -829,7 +831,7 @@ $section('Operator notes', [
 <li>Each terminal pane is its own shell. Activate the venv and set the variables again in every new one.</li>
 <li>PowerShell 5.1 has no <code>&amp;&amp;</code>. Chain commands with <code>;</code>. Each step starts when the previous one finishes.</li>
 <li>Ctrl+C stops the whole chain. Click away from a running terminal so a stray copy shortcut can't stop it. Interrupted runs resume safely: downloads skip finished files, and the audit skips verified ones.</li>
-<li>Pass <code>--workers 16</code> for downloads and the audit. The default is 4.</li>
+<li>Pass <code>--workers</code> for downloads and the audit. The default is 4. For downloads it's the most that run at once: 16 has worked for files under about 10 MB, and 3 to 5 suits large files. The exporter runs fewer by itself if connections keep dropping.</li>
 <li>If <code>FEDORA_BASE_URL</code> is set in <code>.env</code>, keep the SSH tunnel open, because missing checksums are looked up through it.</li>
 <li>For long runs: no sleep, Windows updates paused, on the campus network, ideally wired.</li>
 <li>The <code>--note</code> text is only a label in the run log. "Stage" in a note isn't the pipeline step number.</li>
