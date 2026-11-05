@@ -225,7 +225,7 @@ HTML),
 
 $gallery('Buttons and links', 'buttons', [
   $text(<<<'HTML'
-<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is unfilled in a hairline frame. Words are mono capitals. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
+<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is a quiet plate of the text colour, with no line. Words are Roboto in sentence case, so an action never reads as a label. On hover the text colour wipes across and the words invert. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
 <p>[styleguide:buttons]</p>
 HTML),
   $note(<<<'HTML'

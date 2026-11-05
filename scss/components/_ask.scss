@@ -526,42 +526,19 @@ textarea.pf-inquiry__control {
 // phone. The FAQs' links (.pf-inquiry__button) share the look.
 .pf-inquiry__button,
 .pf-inquiry__submit {
-  @extend %pf-landing-label;
-  display: inline-flex;
-  align-items: center;
+  @extend %pf-button-secondary;
+  justify-content: flex-start;
   gap: .625rem;
   width: min(100%, 17.5rem);
   min-height: 2.75rem;
   padding: 0 1rem;
-  border: 1px solid #{$pf-hairline};
-  border-radius: 0;
-  color: var(--pf-section-fg, var(--bs-emphasis-color));
-  background: transparent;
-  font-size: var(--pf-mono-ui);
-  font-weight: $pf-button-weight;
-  letter-spacing: .12em;
   text-align: start;
-  text-decoration: none;
   cursor: pointer;
-  transition: border-color $pf-hover-out ease, color $pf-hover-out ease, box-shadow $pf-hover-out ease;
-  @include pf-button-pressed;
 
   .pf-inquiry__arrow {
     width: .875rem;
     height: .875rem;
     margin-inline-start: auto;
-  }
-
-  &:hover,
-  &:focus-visible {
-    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    color: var(--pf-section-fg, var(--bs-emphasis-color));
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: 2px;
   }
 
   &:disabled {

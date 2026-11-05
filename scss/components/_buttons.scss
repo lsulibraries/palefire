@@ -3,14 +3,99 @@
 // (no Twig changes) and @extends these:
 // - %pf-button-primary: the swatch accent, filled, ink on it, as the
 //   footer's Plan a research visit and the landing's Search. One per view.
-//   Hover and focus turn it to the text color.
-// - %pf-button-secondary: unfilled, in a hairline frame (its words name it,
-//   so the edge needn't reach 3:1); hover and focus turn words and edge gold.
+// - %pf-button-secondary: a plate of the text color at 9%, with no line. Its
+//   words name it, so the plate's edge needn't reach 3:1 (9.96:1 words on it,
+//   Twilight; 12.72:1, Cream).
 // - %pf-button-arrow: an arrow after the words. → stays on the site;
 //   ↗ (target="_blank") leaves it. It steps the way it points on hover.
-// Mono capitals at --pf-mono-ui (13px), $pf-button-weight and .12em, square, 3rem tall (dense
-// rows set 2.75rem). Text links (index rules, Visit) are mono capitals at
+// Both tiers: Roboto at 15px and $pf-button-weight, sentence case, so an action
+// never reads as one of the mono labels. Square, 3rem tall (dense rows set
+// 2.75rem). On hover and focus the text color wipes across and the words
+// invert. Text links (index rules, Visit) stay mono capitals at
 // --pf-mono-label, underlined at .35em, with the same arrows.
+
+// The button's words.
+@mixin pf-button-type {
+  font-family: var(--bs-body-font-family);
+  font-size: .9375rem;
+  font-weight: $pf-button-weight;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+// Hover and focus. Hover only where a pointer can leave again: on a touch
+// screen it would stick after the tap, and the pressed state answers instead.
+@mixin pf-button-on {
+  &:focus-visible {
+    @content;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// The wipe: the text color scales in from the start and leaves past the end.
+// Only transform moves, so nothing lays out or repaints the page. The words'
+// color is the caller's, in pf-button-on. No motion: it's there at once. Forced
+// colors drop backgrounds, so the fill goes and the system's colors stay.
+@mixin pf-button-wipe {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background-color: var(--bs-emphasis-color);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform $pf-hover-out ease;
+  }
+
+  [dir="rtl"] &::before {
+    transform-origin: left;
+  }
+
+  @include pf-button-on {
+    &::before {
+      transform: scaleX(1);
+      transform-origin: left;
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  @include pf-button-on {
+    [dir="rtl"] &::before {
+      transform-origin: right;
+    }
+  }
+
+  // The fill covers the pressed tint, so a press with a pointer dims the fill.
+  &:active::before {
+    opacity: .86;
+  }
+
+  html.pf-a11y-motion &::before {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    &::before {
+      content: none;
+    }
+  }
+}
 
 // Pressed: a tint of the words' color over the button, on at once and
 // fading out as hover does, so a tap answers on touch screens, where hover
@@ -34,12 +119,7 @@
   gap: 1rem;
   min-height: 3rem;
   padding: .5rem 1.375rem;
-  font-family: var(--pf-landing-label, var(--pf-toc-font, 'Consolas', 'Monaco', monospace));
-  font-size: var(--pf-mono-ui);
-  font-weight: $pf-button-weight;
-  line-height: 1.2;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  @include pf-button-type;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 0;
@@ -49,6 +129,7 @@
     border-color $pf-hover-out ease,
     box-shadow $pf-hover-out ease;
   @include pf-button-pressed;
+  @include pf-button-wipe;
 
   &:hover,
   &:focus-visible {
@@ -73,26 +154,24 @@
   @extend %pf-button;
   color: var(--pf-g-on-accent, #000);
   background-color: var(--pf-g-accent, #{$pf-gold});
-  border-color: var(--pf-g-accent, #{$pf-gold});
 
-  &:hover,
-  &:focus-visible {
+  @include pf-button-on {
     color: var(--bs-body-bg);
-    background-color: var(--bs-emphasis-color);
-    border-color: var(--bs-emphasis-color);
   }
 }
 
 %pf-button-secondary {
   @extend %pf-button;
   color: var(--pf-section-fg, var(--bs-emphasis-color));
-  background-color: transparent;
-  border-color: #{$pf-hairline};
+  background-color: color-mix(in srgb, var(--pf-section-fg, var(--bs-emphasis-color)) 9%, transparent);
 
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    border-color: currentColor;
+  @include pf-button-on {
+    color: var(--bs-body-bg);
+  }
+
+  // High contrast promises brighter edges: the hairline is at full strength there.
+  html.pf-a11y-contrast & {
+    border-color: #{$pf-hairline};
   }
 }
 
@@ -103,15 +182,18 @@
 .pf-button--arrow { @extend %pf-button-arrow; }
 
 %pf-button-arrow {
+  // The arrows keep the mono font: Roboto has no ↗, and Windows would fall
+  // back to its blue emoji. U+FE0E asks for the text form too.
   &::after {
     content: "\2192" / "";
     display: inline-block;
+    font-family: var(--pf-landing-label, var(--pf-toc-font, 'Consolas', 'Monaco', monospace));
     letter-spacing: 0;
     transition: transform $pf-hover-out ease;
   }
 
   &[target="_blank"]::after {
-    content: "\2197" / "";
+    content: "\2197\FE0E" / "";
   }
 
   [dir="rtl"] &::after {

@@ -140,20 +140,21 @@ html#{$pf-themed} .pf-footer {
   min-height: 3rem;
   margin: 1.75rem 0 0;
   padding: .625rem 1.375rem;
-  // The button voice (_buttons.scss), not the footer's labels.
-  font-size: var(--pf-mono-ui);
-  font-weight: $pf-button-weight;
-  letter-spacing: .12em;
+  // The button voice and wipe (_buttons.scss), not the footer's labels.
+  @include pf-button-type;
   border-radius: 0;
   background-color: var(--pf-footer-accent);
   color: var(--pf-footer-on-accent);
   text-decoration: none;
-  transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
+  transition: color $pf-hover-out ease;
+  @include pf-button-wipe;
 
   &:is(:hover, :focus-visible) {
-    background-color: var(--bs-emphasis-color);
-    color: var(--bs-body-bg);
     transition-duration: $pf-hover-in;
+  }
+
+  @include pf-button-on {
+    color: var(--bs-body-bg);
   }
 }
 
