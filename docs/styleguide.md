@@ -163,6 +163,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-11-04:** Object label on the stage: no panel; a caption at the column's foot (`.pf-hero-banner__plate`, the label's lines run in at 12px, muted, two lines at most, hidden under 45rem tall). The lead's words sit at the foot of their row.
 - **2026-11-04:** Object label's first placement: the stage's lead picture (`.pf-hero-banner__plate`, a solid panel of `--pf-hl-wash`, stage only), from `field_exhibit_cover_maker`, `_title`, `_date` and `_medium` on Modular page. Stage row labels sit behind their titles at `--pf-hl-label-strength`, per reading colour, measured at 4.5:1 on the current picture; solid with more contrast.
 - **2026-11-05:** `.pf-tiles__shelf-button`: border `var(--pf-section-border, currentColor)`, not `$pf-hairline`.
+- **2026-11-05:** `pf-button-wipe`: the fill scales in over `$pf-hover-in` as before and fades out over `$pf-hover-out`, with its scale resetting after the fade. No movement on leaving.
 - **2026-11-05:** Ask: `.pf-inquiry__actions` spans the form grid again (`grid-column: 1 / -1`), so `.pf-inquiry__submit` is the form's full width.
 - **2026-11-05:** Visit panel buttons (`.pf-landing--cover .pf-visit__link`): `width: 100%` at every width. From `@container pf-cover (64rem)`, `.pf-visit__go > .pf-visit__link` is `flex: 1 1 14rem`.
 - **2026-11-05:** Ask: `.pf-inquiry__button` and `__submit` are `width: 100%`. `.pf-inquiry__links > li` has no `max-width`. `.pf-inquiry__actions` no longer spans the form grid, so it sits in the first column.

@@ -38,10 +38,12 @@
   }
 }
 
-// The wipe: the text color scales in from the start and leaves past the end.
-// Only transform moves, so nothing lays out or repaints the page. The words'
-// color is the caller's, in pf-button-on. No motion: it's there at once. Forced
-// colors drop backgrounds, so the fill goes and the system's colors stay.
+// The wipe: the text color scales in from the start and fades out in place, so
+// nothing moves once the pointer has left. It resets its scale only after the
+// fade, so coming back mid-fade doesn't replay the wipe. Only transform and
+// opacity change, so nothing lays out or repaints the page. The words' color is
+// the caller's, in pf-button-on. No motion: it's there at once. Forced colors
+// drop backgrounds, so the fill goes and the system's colors stay.
 @mixin pf-button-wipe {
   position: relative;
   isolation: isolate;
@@ -52,26 +54,23 @@
     inset: -1px;
     z-index: -1;
     background-color: var(--bs-emphasis-color);
+    opacity: 0;
     transform: scaleX(0);
-    transform-origin: right;
-    transition: transform $pf-hover-out ease;
+    transform-origin: left;
+    transition: opacity $pf-hover-out ease, transform 0s linear $pf-hover-out;
   }
 
   [dir="rtl"] &::before {
-    transform-origin: left;
+    transform-origin: right;
   }
 
+  // Longhands, so the no-motion rules' transition: none still holds.
   @include pf-button-on {
     &::before {
+      opacity: 1;
       transform: scaleX(1);
-      transform-origin: left;
-      transition-duration: $pf-hover-in;
-    }
-  }
-
-  @include pf-button-on {
-    [dir="rtl"] &::before {
-      transform-origin: right;
+      transition-duration: 0s, $pf-hover-in;
+      transition-delay: 0s;
     }
   }
 

@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** Buttons: when the pointer leaves, the hover fill now fades out in place instead of wiping off past the end. The moving bright bar was too loud for the theme, more so now that buttons fill their columns. The wipe on the way in is unchanged.
 - **2026-11-05:** Ask: Send question now spans the whole form, so its edges match the Question and More detail fields above it and it fills its column like the buttons on the left.
 - **2026-11-05:** Visit: All library hours, Open in Google Maps and Parking & travel now fill their columns on the Special Collections page, so their edges match the week above and the map, instead of stopping at a fixed width.
 - **2026-11-05:** Ask: the buttons now line up with their columns. The two links fill the left column, as Hours does, instead of stopping at a fixed width, and Send question is one form column wide, ending on the edge of the fields above it. It fills the form on a phone.
