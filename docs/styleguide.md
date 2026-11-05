@@ -146,6 +146,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-05:** Title's picture: `pf-title-dip-*`, `--pf-title-dip` and `--pf-title-shown` are removed. `pf-title-feature` paints the floor, a `-webkit-cross-fade()` layer per row, then the lead's picture. A row in hand sets its registered `--pf-title-show-N` to 100%, .5s ease-out after .12s, the column's timing.
 - **2026-11-05:** Title's picture: `--pf-title-floor` and the `lighten` blend are back, and `--pf-title-outline` and its drop shadows are removed: the full colour was too distracting. Same floor values as before, 97 to 122.
 - **2026-11-05:** Title's picture: `--pf-title-outline` (the same per-theme greys, 97 to 122, the 3:1 line on each page) replaces `--pf-title-floor` and the `lighten` blend. `pf-title-trade` fades in four chained 2px `drop-shadow()`s; `-webkit-text-stroke` draws the variable font's overlapping contours. `pf-title-feature` keeps the grey as `background-color` under the picture, so letters stay painted, and outlined, if it fails to load.
 - **2026-11-05:** Title's picture: `--pf-title-floor` (a grey per reading colour, 97 to 122, the 3:1 line on its page) replaces `--pf-title-veil` and `--pf-title-veil-on`. `pf-title-feature` paints the dip's gold, the floor and the picture, with `background-blend-mode: normal, lighten, normal`. `pf-title-trade` now only fades the fill.

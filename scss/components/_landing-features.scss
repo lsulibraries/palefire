@@ -4355,31 +4355,15 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 // the same picture shows through them (--pf-title-feature, the lead
 // Highlight's; the film's still without one), in its own colours, over a floor
 // (below). Their color stays gold, only the fill goes.
-// A row in hand changes the letters' picture too, through gold: the veil rises
-// to solid, the picture changes under it, the veil falls back. The letters
-// have one background, so they can't crossfade as the column does. The same
-// keyframes under a name per row, so each change of row restarts them.
-@property --pf-title-dip {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 0%;
-}
-
-@for $k from 0 through 5 {
-  @keyframes pf-title-dip-#{$k} {
-    0% {
-      --pf-title-dip: 0%;
-      animation-timing-function: ease-in;
-    }
-
-    40% {
-      --pf-title-dip: 100%;
-      animation-timing-function: ease-out;
-    }
-
-    100% {
-      --pf-title-dip: 0%;
-    }
+// A row in hand changes the letters' picture too, fading as the column does.
+// The letters have one background, and a background's layers have no opacity,
+// so each row's picture is a layer in a cross-fade with nothing, at its own
+// registered percentage.
+@for $k from 2 through 5 {
+  @property --pf-title-show-#{$k} {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
   }
 }
 
@@ -4395,20 +4379,26 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
 // The picture in the letters, from the first pixel of scroll: the fill is
 // still solid there, so the change can't be seen, and the first load keeps
-// the film's still. It loads with the column's, the same file. Three layers:
-// the dip's gold, then the floor (--pf-title-floor, a grey), blended lighten
-// so each channel of each pixel keeps at least the floor's value and anything
-// brighter stays as it is, then the picture. If the picture fails to load the
-// letters show the floor.
+// the film's still. It loads with the column's, the same file. The floor
+// (--pf-title-floor, a grey) is on top, blended lighten so each channel of each
+// pixel keeps at least the floor's value and anything brighter stays as it is,
+// whichever pictures show and however far they have faded. Then the rows'
+// pictures, then the lead's. If the pictures fail to load the letters show the
+// floor.
+$pf-title-none: linear-gradient(transparent, transparent);
+
 @keyframes pf-title-feature {
   from,
   to {
     background-image:
-      linear-gradient(color-mix(in srgb, currentColor var(--pf-title-dip), transparent), color-mix(in srgb, currentColor var(--pf-title-dip), transparent)),
       linear-gradient(var(--pf-title-floor), var(--pf-title-floor)),
-      var(--pf-title-shown, var(--pf-title-feature, var(--pf-title-still)));
+      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-5, #{$pf-title-none}), var(--pf-title-show-5)),
+      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-4, #{$pf-title-none}), var(--pf-title-show-4)),
+      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-3, #{$pf-title-none}), var(--pf-title-show-3)),
+      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-2, #{$pf-title-none}), var(--pf-title-show-2)),
+      var(--pf-title-feature, var(--pf-title-still));
     background-position: 50% 50%;
-    background-blend-mode: normal, lighten, normal;
+    background-blend-mode: lighten, normal;
   }
 }
 
@@ -4938,28 +4928,21 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3);
         }
 
-        // A row in hand: a beat (the column's own .12s, so a pointer passing
-        // over the rows starts nothing), the rise, and at its top, unseen, the
-        // picture. The dip runs on the type's box and is inherited, so it needs
-        // no place in the title's lists of animations. A row with no picture
-        // keeps the lead's, as the column does.
+        // A row in hand: the column's own beat and fade, so a pointer passing
+        // over the rows starts nothing. A row with no picture keeps the lead's,
+        // as the column does.
         html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__stage {
-          > .pf-landing__top {
-            animation: pf-title-dip-0 .5s linear .12s;
-
-            > .pf-landing__title--still {
-              --pf-title-shown: var(--pf-title-feature, var(--pf-title-still));
-              transition: --pf-title-shown 0s .32s allow-discrete;
-            }
+          > .pf-landing__top > .pf-landing__title--still {
+            transition:
+              --pf-title-show-2 .5s ease-out .12s,
+              --pf-title-show-3 .5s ease-out .12s,
+              --pf-title-show-4 .5s ease-out .12s,
+              --pf-title-show-5 .5s ease-out .12s;
           }
 
           @for $k from 2 through 5 {
-            &:has(> .pf-hero-banners > .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-landing__top {
-              animation-name: pf-title-dip-#{$k};
-
-              > .pf-landing__title--still {
-                --pf-title-shown: var(--pf-title-pic-#{$k}, var(--pf-title-feature, var(--pf-title-still)));
-              }
+            &:has(> .pf-hero-banners > .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-landing__top > .pf-landing__title--still {
+              --pf-title-show-#{$k}: 100%;
             }
           }
         }
