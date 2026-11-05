@@ -161,27 +161,25 @@ $section('Status at a glance', [
   $text(NULL, <<<'HTML'
 <p><strong>Status as of Thu 5 Nov 2026, 10:47 (CST):</strong> overnight replacements and first audits finished; Franklin Parish images on L:; short list for duplicates ready to approve; exporter can skip approved leave-outs; progress by institution added; Loyola and other harvested collections out of the migration; exporter now skips Loyola.</p>
 HTML, 'callout'),
-  $text(NULL, <<<'HTML'
-<p>The export to L: is about 55% done by data size (about 1.66 TB on L:, about 1.36 TB left) and about 75% by number of files. Of the 38 institutions in the migration, 15 have nothing left to download and 8 more are at 99% or better by files. Harvested collections like Loyola aren't part of the migration, so they aren't counted. Uploading to Quartex isn't counted. LSU and LSUHSC New Orleans now have no TIFFs or JPEGs left in their queues. The 28 pages with no usable JP2 in Fedora were converted directly from their TIFFs. The Newspaper Clippings images are on L:, as the team decided. All 45,929 JPEGs from the first audit are replaced. Franklin Parish's images are on L:, apart from 24 waiting to be converted. Overnight, 17,248 more wrong-format images were replaced at four institutions, and the last first audits found 8,312 more, queued to be replaced.</p>
-HTML),
-  $status('Where each stage stands', [
-    ['attention', 'Short list of duplicates', '490 decisions are waiting for approval, starting with the two leave-out batches (46 decisions, 66 objects). The 43 decisions for Loyola are set aside, since it is not moving.'],
-    ['todo', 'Remaining downloads', '511,064 files, about 1.36 TB, across the 38 institutions as of Nov 5. The 14 small institutions come first, then Law Library, Historic New Orleans and Louisiana Newspapers, which are nearly all of it.'],
-    ['todo', 'Queued image replacements', '8,313 images queued from the last audits, plus retries for UL Lafayette\'s 22 and Amistad\'s 4.'],
-    ['todo', 'TIFFs with no usable JP2', 'About 2,300 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers. Franklin Parish has 24 waiting.'],
-    ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
-    ['todo', 'The other 17 institutions: review, replacements, manifests', 'The same pattern as the finished institutions, once their downloads are done.'],
-    ['todo', 'Cleanup before handoff', 'The cleanup list is done by hand once the runs touching those files are finished. Manifests are then copied into the handoff package.'],
-    ['todo', 'Upload to Quartex', 'Isn\'t counted in the percentages above.'],
-    ['done', 'LSU downloads', 'Every remaining file across all LSU collections and datastreams. 0 failures, 0 retries.'],
-    ['done', 'LSU image audit', '135,432 files checked. 114,073 match their checksum and no corrupt images were found. 9,879 are TIFFs saved as .jp2.'],
-    ['done', 'LSU TIFF replacements', 'All 9,879 pages are finished. 9,877 have their real JP2, and 2 CMYK TIFFs with no JP2 in Fedora were converted directly. The Gumbo page that wouldn\'t save is now a valid JP2 on L:.'],
-    ['done', 'Next 7 institutions: downloads, audit, replacements', 'About 59,000 text files downloaded with 0 failures. LSUHSC: all 15,062 TIFFs are now JP2 (5 converted directly). All 8,187 Newspaper Clippings images are on L:, fetched from Fedora.'],
-    ['done', 'Next 7 institutions: checksum lists and reconcile', 'Five are clean. LSUHSC New Orleans has 34,243 orphaned pages and 140 inactive objects to ask about.'],
-    ['done', 'Sugar Bulletin', 'The pilot collection: every datastream exported and verified, TIFF pages replaced.'],
-    ['done', '12 clean institutions: downloads and audit', 'Only about 1,270 small text and RDF files were left to download. Re-audit found 27,993 JPEGs saved as .jp2 here (State Library 17,356, Louisiana Purchase 10,392, Louisiana Tech 243, Free People of Color 2). All are replaced. Northwestern, Southern and LSUHSC Shreveport turned up 1,827 more, also replaced.'],
-    ['done', 'Remaining institutions: checksum lists and reconcile', '30 institutions compared with the accounting. 12 are clean. The main finding: 105 Franklin Parish newspaper issues (2,607 pages) aren\'t in the accounting.'],
+  $stats(NULL, [
+    ['55%', 'done by data size'],
+    ['75%', 'done by number of files'],
+    ['1.36 TB', 'left to download (1.66 TB on L:)'],
+    ['15 of 38', 'institutions with nothing left; 8 more at 99% or better'],
   ]),
+  $text(NULL, <<<'HTML'
+<p>Harvested collections like Loyola aren't counted, because they aren't part of the migration. Uploading to Quartex isn't counted either.</p>
+HTML),
+  $text('Recent progress', <<<'HTML'
+<ul>
+<li><strong>LSU and LSUHSC New Orleans:</strong> no TIFFs or JPEGs left in their queues.</li>
+<li><strong>Pages with no usable JP2:</strong> 28 converted directly from their TIFFs.</li>
+<li><strong>Newspaper Clippings:</strong> images are on L:, as the team decided.</li>
+<li><strong>JPEGs from the first audit:</strong> all 45,929 replaced.</li>
+<li><strong>Franklin Parish:</strong> images are on L:, apart from 24 waiting to be converted.</li>
+<li><strong>Overnight:</strong> 17,248 more wrong-format images replaced at four institutions. The last first audits found 8,312 more, queued to be replaced.</li>
+</ul>
+HTML),
   $text('Progress by institution (Nov 5, 10:47)', <<<'HTML'
 <p>Sorted with the least finished first. There are two percentages because they tell different stories: by size is mostly images, and by files counts every file. An institution with a low size figure and a higher files figure has much of its metadata on L:, but few of its images.</p>
 <table>
@@ -239,6 +237,24 @@ HTML),
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.0 TB in all. The 5.7 TB is everything in Fedora. The 2.7 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
 HTML),
+  $status('Where each stage stands', [
+    ['attention', 'Short list of duplicates', '490 decisions are waiting for approval, starting with the two leave-out batches (46 decisions, 66 objects). The 43 decisions for Loyola are set aside, since it is not moving.'],
+    ['todo', 'Remaining downloads', '511,064 files, about 1.36 TB, across the 38 institutions as of Nov 5. The 14 small institutions come first, then Law Library, Historic New Orleans and Louisiana Newspapers, which are nearly all of it.'],
+    ['todo', 'Queued image replacements', '8,313 images queued from the last audits, plus retries for UL Lafayette\'s 22 and Amistad\'s 4.'],
+    ['todo', 'TIFFs with no usable JP2', 'About 2,300 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers. Franklin Parish has 24 waiting.'],
+    ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
+    ['todo', 'The other 17 institutions: review, replacements, manifests', 'The same pattern as the finished institutions, once their downloads are done.'],
+    ['todo', 'Cleanup before handoff', 'The cleanup list is done by hand once the runs touching those files are finished. Manifests are then copied into the handoff package.'],
+    ['todo', 'Upload to Quartex', 'Isn\'t counted in the percentages above.'],
+    ['done', 'LSU downloads', 'Every remaining file across all LSU collections and datastreams. 0 failures, 0 retries.'],
+    ['done', 'LSU image audit', '135,432 files checked. 114,073 match their checksum and no corrupt images were found. 9,879 are TIFFs saved as .jp2.'],
+    ['done', 'LSU TIFF replacements', 'All 9,879 pages are finished. 9,877 have their real JP2, and 2 CMYK TIFFs with no JP2 in Fedora were converted directly. The Gumbo page that wouldn\'t save is now a valid JP2 on L:.'],
+    ['done', 'Next 7 institutions: downloads, audit, replacements', 'About 59,000 text files downloaded with 0 failures. LSUHSC: all 15,062 TIFFs are now JP2 (5 converted directly). All 8,187 Newspaper Clippings images are on L:, fetched from Fedora.'],
+    ['done', 'Next 7 institutions: checksum lists and reconcile', 'Five are clean. LSUHSC New Orleans has 34,243 orphaned pages and 140 inactive objects to ask about.'],
+    ['done', 'Sugar Bulletin', 'The pilot collection: every datastream exported and verified, TIFF pages replaced.'],
+    ['done', '12 clean institutions: downloads and audit', 'Only about 1,270 small text and RDF files were left to download. Re-audit found 27,993 JPEGs saved as .jp2 here (State Library 17,356, Louisiana Purchase 10,392, Louisiana Tech 243, Free People of Color 2). All are replaced. Northwestern, Southern and LSUHSC Shreveport turned up 1,827 more, also replaced.'],
+    ['done', 'Remaining institutions: checksum lists and reconcile', '30 institutions compared with the accounting. 12 are clean. The main finding: 105 Franklin Parish newspaper issues (2,607 pages) aren\'t in the accounting.'],
+  ]),
   $text(NULL, <<<'HTML'
 <p>Compiled from the exporter's run logs, progress database and dry-run summaries. Figures for the running audit will change. The cleanup list is current as of this writing.</p>
 HTML),
