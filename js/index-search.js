@@ -17,6 +17,8 @@
  * - The address keeps up, so a search can be shared and Back works.
  * - Late sections: each outside source loads after the page, so a slow or
  *   failing service can't hold it up. One with no results is removed.
+ * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
+ *   back to the row's text.
  */
 (function (Drupal, drupalSettings, once) {
   'use strict';
@@ -172,7 +174,30 @@
     });
   };
 
+  // Load and error don't bubble, so these listen on the way down.
+  const dropEmptyCover = (event) => {
+    const image = event.target;
+    if (image instanceof HTMLImageElement
+      && image.parentElement.matches('.pf-index-row__thumb')
+      && (event.type === 'error' || image.naturalWidth <= 1)) {
+      const row = image.closest('.pf-index-row');
+      image.parentElement.remove();
+      row.classList.remove('pf-index-row--image');
+    }
+  };
+
+  // One that finished before this script ran has no event left to hear. An
+  // image still waiting, lazily or on the network, isn't complete.
+  const checkCover = (image) => {
+    if (image.complete && image.naturalWidth <= 1) {
+      dropEmptyCover({ target: image, type: 'error' });
+    }
+  };
+
   const setUp = (root) => {
+    root.addEventListener('load', dropEmptyCover, true);
+    root.addEventListener('error', dropEmptyCover, true);
+
     root.addEventListener('click', (event) => {
       const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
       if (isSearchLink(event, link)) {
@@ -233,6 +258,7 @@
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
+      once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
     },
     detach(context, settings, trigger) {
       if (trigger === 'unload') {
