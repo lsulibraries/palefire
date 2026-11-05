@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** The Index: filters combine (several options, removable chips, Clear all), News and Articles & Books sort by date, and tabs, chips, pager, the search box, filters and sort replace only the results instead of reloading the page, because every search is a full page build and Swup's hover prefetch and whole-page fade don't suit it (`data-no-swup` on those controls; result links keep Swup). Filters are a drawer under 62rem and a sticky column above. `scripts/palefire_guide_index_search.php` has the current status. Needs the `palefire_search` module's new files.
 - **2026-11-05:** The Index, the new search page at `/v2/search`: styles and script (`scss/index-search.scss`, `js/index-search.js`, library `palefire/index-search`) for the new `palefire_search` module, which replaces `/bento` once tested. It does nothing until the module is enabled, and the site's search forms still go to `/bento`. `scripts/palefire_guide_index_search.php` builds its progress guide, unpublished.
 - **2026-11-05:** Special Collections hero: hovering or tabbing to the Contents button lights the breadcrumb's Contents, to show they are the same menu
 - **2026-11-05:** Special Collections hero: from 1024px the Contents button opens the menu beside itself instead of up by the breadcrumb, so it reads as the button's own menu

@@ -453,6 +453,8 @@ index-search:
     js/index-search.js: {}
   dependencies:
     - core/drupal
+    - core/drupalSettings
+    - core/drupal.announce
     - core/once
 
 # Utility menu panels (offcanvas drawers from the left): live clock and

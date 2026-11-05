@@ -132,14 +132,15 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026:</strong> first build written and checked against sample data. It hasn't run on a Drupal site yet, so nothing here has searched real content.</p>
+<p><strong>Status as of Thu 5 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. Nothing links to it yet: the site's search forms still go to the old page. Filters that combine, chosen-filter chips, sorting and results that change without a page reload are built and checked on sample data, and are next to test on production.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
     ['done', 'Names', 'Index is the working name for visitors, with four modes: All, Research, Website and Special Collections. The address is /v2/search.'],
-    ['done', 'Page design', 'Layout, filters and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
-    ['running', 'Module first run', 'palefire_search is written but hasn\'t run on Drupal. The first run needs a place to test.'],
-    ['attention', 'A place to test', '/v2 pages return 404 on libstage, so real results need a local Drupal copy or another agreed place.'],
+    ['done', 'Page design', 'Layout and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
+    ['done', 'Module first run', 'palefire_search is enabled on production. All four modes, source filters, paging, Articles & Books, Research Guides, Staff, Gear, Databases and E-Textbooks return real results.'],
+    ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Articles & Books by date. Results change in place, without reloading the page. Checked on sample data; not yet on production.'],
+    ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
     ['todo', 'Scholarly Repository', 'A link for now. The repository\'s public address answered a request from outside the site with a Cloudflare challenge; the server\'s log will confirm whether the site gets the same.'],
     ['todo', 'Point the search forms here', 'The header panel, landing and 404 searches still go to /bento. They move once the page has been tested.'],
@@ -196,10 +197,10 @@ HTML),
 $section('Next steps', [
   $text(NULL, <<<'HTML'
 <ol>
-<li>Choose where to test, and run the module for the first time.</li>
-<li>Check real results in every mode, including result links and access for logged-out visitors.</li>
-<li>Add Palefire pages to the search index and reindex.</li>
-<li>Confirm why the Scholarly Repository and "maps" in Discovery return nothing.</li>
+<li>Test the new filters, sorting and in-place results on production, logged in and logged out.</li>
+<li>Review the page's design together.</li>
+<li>Add Palefire pages to the search index and reindex, along with the date range and title sorting.</li>
+<li>Confirm whether the Scholarly Repository can be searched from the server.</li>
 <li>Move the site's search forms to the Index and redirect /bento.</li>
 <li>Connect Alma when the sandbox is ready.</li>
 </ol>

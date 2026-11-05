@@ -1,7 +1,7 @@
 // Palefire — the Index, the search page at /v2/search (css/index-search.css,
 // library palefire/index-search). Its own entry point, so only that page
-// loads it. Markup: the palefire_search module's templates. Late sections:
-// js/index-search.js.
+// loads it. Markup: the palefire_search module's templates. Filters, swaps and
+// late sections: js/index-search.js.
 //
 // Swiss and quiet, as the staff directory: a large title, ruled rows on the
 // soft hairline, labels in the TOC's mono capitals. No literal colors, so
@@ -192,107 +192,355 @@
   border-inline-start: 2px solid currentColor;
 }
 
-// Body: results alone, or filters beside them from 62rem. --------------------
+// Body: results, with the filters beside them from 62rem. --------------------
+
+.pf-index__main {
+  scroll-margin-top: calc(var(--pf-header-height, 5rem) + 1rem);
+
+  // Focus lands here after a swap with no control to return to. It can't be
+  // tabbed to, so it needs no ring of its own.
+  &:focus {
+    outline: 0;
+  }
+
+  // The results dim while the next ones load, after a moment so a quick answer
+  // doesn't flicker. Dimming isn't movement, so only its easing is optional.
+  &[aria-busy="true"] .pf-index__results {
+    opacity: .5;
+  }
+
+  @include pf-index-motion {
+    .pf-index__results {
+      transition: opacity .25s var(--pf-index-ease) .12s;
+    }
+
+    &.is-arriving .pf-index__results {
+      animation: pf-index-arrive .45s var(--pf-index-ease);
+    }
+  }
+}
 
 .pf-index__body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 2rem clamp(2rem, 5vw, 5rem);
+  gap: 1.5rem clamp(2rem, 5vw, 5rem);
 }
 
 .pf-index__results {
   min-width: 0;
 }
 
-@media (min-width: 62rem) {
-  .pf-index__body--filtered {
-    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .pf-index__filters {
-    position: sticky;
-    top: calc(var(--pf-header-height, 5rem) + 1rem);
-  }
-}
-
-.pf-index__filters {
-  min-width: 0;
-}
-
-.pf-index__filter-title {
-  @include pf-index-label;
-  margin: 0 0 .5rem;
-  color: var(--pf-index-muted);
-
-  .pf-index__filter + & {
-    margin-top: 1.5rem;
-  }
-}
-
-// A strip that scrolls on its own under 62rem, so results stay near the top
-// of a phone's screen; a ruled column from there up.
-.pf-index__filter {
-  display: flex;
+.pf-index__filters-open {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
   gap: .5rem;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--pf-index-control);
+  background: transparent;
+  color: inherit;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+// Under 62rem a drawer from the inline end. A <dialog>, so it stays closed
+// without any script, and the browser handles focus, Esc and the page behind.
+.pf-index__filters {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(24rem, 100%);
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--pf-g-surface, var(--bs-body-bg));
+  color: var(--pf-index-fg);
+
+  &::backdrop {
+    background: rgb(0 0 0 / .5);
+  }
+
+  &[open] {
+    @include pf-index-motion {
+      animation: pf-index-drawer .35s var(--pf-index-ease);
+
+      &::backdrop {
+        animation: pf-index-backdrop .35s var(--pf-index-ease);
+      }
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.25rem 1.25rem 0;
+    overflow-y: auto;
+  }
+}
+
+@keyframes pf-index-drawer {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+@keyframes pf-index-backdrop {
+  from {
+    opacity: 0;
+  }
+}
+
+[dir="rtl"] .pf-index__filters[open] {
+  animation-name: none;
+}
+
+.pf-index__filters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pf-index .pf-index__filters-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+
+.pf-index__filters-close {
+  min-height: 2.75rem;
+  padding-inline: .75rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+}
+
+.pf-index__group {
+  min-width: 0;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.pf-index__group-title {
+  @include pf-index-label;
+  float: none;
+  width: 100%;
   margin: 0;
   padding: 0 0 .5rem;
-  overflow-x: auto;
-  list-style: none;
+  border-bottom: 1px solid var(--pf-index-line);
+  color: var(--pf-index-muted);
+}
 
-  li {
+.pf-index__option {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+  min-height: 2.75rem;
+  border-bottom: 1px solid var(--pf-index-line);
+  cursor: pointer;
+
+  input {
     flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var(--pf-index-fg);
   }
 
-  a {
-    display: flex;
-    justify-content: space-between;
-    gap: .75rem;
-    padding: .5rem .75rem;
-    border: 1px solid var(--pf-index-line);
-    color: var(--pf-index-fg);
-    text-decoration: none;
-
-    @include pf-index-motion {
-      transition: background-color .2s var(--pf-index-ease);
-    }
-
-    &:hover {
-      background: var(--pf-index-line);
-    }
-
-    &[aria-current] {
-      border-color: currentColor;
-      font-weight: 600;
-    }
+  input:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
   }
 
-  @media (min-width: 62rem) {
-    display: block;
-    overflow: visible;
-    padding-bottom: 0;
-
-    a {
-      padding-inline: 0;
-      border-width: 0 0 1px;
-      border-color: var(--pf-index-line);
-
-      &:hover {
-        background: transparent;
-        text-decoration: underline;
-      }
-
-      &[aria-current] {
-        border-color: currentColor;
-      }
-    }
+  &:has(:checked) .pf-index__option-label {
+    font-weight: 600;
   }
+}
+
+.pf-index__option-label {
+  flex: 1;
+  min-width: 0;
 }
 
 .pf-index__count {
   color: var(--pf-index-muted);
+  font-size: .875rem;
   font-variant-numeric: tabular-nums;
-  font-weight: 400;
+}
+
+.pf-index__apply {
+  position: sticky;
+  bottom: 0;
+  flex: none;
+  width: calc(100% + 2.5rem);
+  min-height: 3.25rem;
+  margin: auto -1.25rem 0;
+  border: 0;
+  background: var(--pf-index-fg);
+  color: var(--pf-g-surface, var(--bs-body-bg));
+  font-weight: $pf-button-weight;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-surface, var(--bs-body-bg));
+    outline-offset: -5px;
+  }
+}
+
+// From 62rem, a sticky column in the page. Choosing a filter applies it, so
+// there's no Apply button or drawer to open.
+@media (min-width: 62rem) {
+  .pf-index__body {
+    grid-template-columns: minmax(13rem, 17rem) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .pf-index__filters-open,
+  .pf-index__filters-close,
+  .pf-index__apply {
+    display: none;
+  }
+
+  .pf-index__filters {
+    display: block;
+    position: sticky;
+    top: calc(var(--pf-header-height, 5rem) + 1rem);
+    inset-inline: auto;
+    bottom: auto;
+    width: auto;
+    height: auto;
+    background: transparent;
+    color: inherit;
+
+    form {
+      height: auto;
+      max-height: calc(100vh - var(--pf-header-height, 5rem) - 2rem);
+      padding: 0 .25rem 0 0;
+    }
+  }
+
+  .pf-index .pf-index__filters-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pf-index__filters-head {
+    margin: 0;
+  }
+
+  .pf-index__option {
+    min-height: 2.5rem;
+  }
+}
+
+// Toolbar: how many, and the order. Chosen filters under it. ------------------
+
+.pf-index__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem 1.5rem;
+  margin-bottom: .75rem;
+}
+
+.pf-index__total {
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-index__sort {
+  display: flex;
+  align-items: center;
+  gap: .625rem;
+
+  label {
+    color: var(--pf-index-muted);
+    font-size: .875rem;
+  }
+
+  select {
+    min-height: 2.75rem;
+    padding-inline: .625rem;
+    border: 1px solid var(--pf-index-control);
+    background: var(--pf-g-surface, var(--bs-body-bg));
+    color: inherit;
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-fg);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.pf-index__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  margin-bottom: 1.25rem;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.pf-index__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  min-height: 2.25rem;
+  padding-inline: .75rem .5rem;
+  border: 1px solid var(--pf-index-line);
+  color: inherit;
+  font-size: .9375rem;
+  text-decoration: none;
+
+  @include pf-index-motion {
+    transition: border-color .2s var(--pf-index-ease);
+  }
+
+  &:hover {
+    border-color: currentColor;
+  }
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.pf-index__clear {
+  color: inherit;
+  font-size: .9375rem;
+  text-decoration-thickness: from-font;
+}
+
+.pf-index-list__pager {
+  margin-top: 1.5rem;
 }
 
 // Sections: one per source. --------------------------------------------------
