@@ -738,6 +738,33 @@
   color: var(--pf-toc-color, var(--pf-index-muted));
 }
 
+// The service behind a source, at the rule's right end, or above a source's own
+// list. Links stay underlined, and 24px tall without moving the line (WCAG 2.5.8).
+.pf-index-via {
+  margin: 0 0 1rem;
+  color: var(--pf-index-muted);
+  font-size: .8125rem;
+  line-height: 1.5;
+
+  .pf-index-rule & {
+    margin: 0;
+    margin-inline-start: auto;
+  }
+
+  a {
+    display: inline-block;
+    margin-block: -.2rem;
+    padding-block: .2rem;
+    color: var(--pf-index-fg);
+    text-underline-offset: .2em;
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-fg);
+      outline-offset: 2px;
+    }
+  }
+}
+
 // Holds a late section's place, about three rows, so results below don't
 // jump when it arrives. Released once it has.
 .pf-index-section__late[aria-busy="true"] {

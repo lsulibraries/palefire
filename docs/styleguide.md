@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-05:** The Index: `.pf-index-via` names the service behind a source, set by `via` and `also` in its definition. It sits at the right end of the section's rule, or above the list when the source is chosen alone.
 - **2026-11-05:** The Index: Book details holds `.pf-index-row__copies`, one list item per class section with a hairline between them, and its summary gives the section count when there is more than one.
 - **2026-11-05:** The Index: `.pf-index-row__login` holds `-out` (lock, LSU login) and `-in` (tick, Signed in, muted). `[data-pf-signed-in]` on `.pf-index` chooses between them, set by `checkSignIn()` in `js/index-search.js`.
 - **2026-11-05:** The Index: `.pf-index-row__details` clears Drupal's default details border and summary padding, and `.pf-index-row__label` drops its top hairline.
