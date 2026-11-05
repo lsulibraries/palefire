@@ -1031,19 +1031,24 @@ html.pf-a11y-contrast .pf-landing--cover .pf-landing__lead .pf-landing__media::b
   // The Search button filled with the swatch's accent, its words in the
   // text color for that fill, as in the mockup, so the action stands out
   // (black on Twilight's gold, white on the light swatches' dark accents;
-  // LSU gold and black unthemed). Hover moves the fill a little toward the
-  // page's text color, which also keeps the words at contrast.
+  // LSU gold and black unthemed). Hover wipes in the text color, as every
+  // button (_buttons.scss), and the words invert.
   .pf-landing__submit {
     border-inline-start: 0;
     color: var(--pf-g-on-accent, #{$pf-black});
     background-color: var(--pf-g-accent, #{$pf-gold});
-    transition: background-color $pf-hover-out ease;
+    transition: color $pf-hover-out ease;
+    @include pf-button-pressed;
+    @include pf-button-wipe;
 
     &:hover,
     &:focus-visible {
       color: var(--pf-g-on-accent, #{$pf-black});
-      background-color: color-mix(in srgb, var(--pf-g-accent, #{$pf-gold}) 85%, var(--pf-g-fg, #{$pf-white}));
       transition-duration: $pf-hover-in;
+    }
+
+    @include pf-button-on {
+      color: var(--bs-body-bg);
     }
 
     &:focus-visible {
@@ -3186,39 +3191,16 @@ html[data-pf-hero] .pf-landing--cover {
 // Maps, Parking) are these buttons too.
 .pf-quick-guide__link,
 .pf-landing--cover .pf-visit__link {
-  @extend %pf-landing-label;
-  display: inline-flex;
-  align-items: center;
+  @extend %pf-button-secondary;
   gap: .625rem;
   min-height: 2.75rem;
-  padding: 0 1rem;
-  border: 1px solid #{$pf-hairline};
-  font-size: var(--pf-mono-ui);
-  font-weight: $pf-button-weight;
-  letter-spacing: .12em;
-  border-radius: 0;
-  color: var(--pf-section-fg, var(--bs-emphasis-color));
-  text-decoration: none;
-  transition: border-color $pf-hover-out ease, color $pf-hover-out ease, box-shadow $pf-hover-out ease;
-  @include pf-button-pressed;
+  padding: .5rem 1rem;
 
   svg {
     flex: none;
     width: .875rem;
     height: .875rem;
     transition: transform $pf-hover-out ease;
-  }
-
-  &:hover,
-  &:focus-visible {
-    border-color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    color: var(--pf-section-fg, var(--bs-emphasis-color));
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: 2px;
   }
 }
 
@@ -3383,15 +3365,10 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
     }
   }
 
-  // Search in the mono label voice of the links over it, the magnifier
-  // after the word (held still on hover: the arrow's nudge was a "go on").
+  // Search in the button voice of the links over it, the magnifier after
+  // the word (held still on hover: the arrow's nudge was a "go on").
   .pf-landing__lead--hero .pf-landing__submit {
-    font-family: var(--pf-landing-label);
-    font-size: var(--pf-mono-ui);
-    font-weight: $pf-button-weight;
-    letter-spacing: .12em;
-    line-height: 1.5;
-    text-transform: uppercase;
+    @include pf-button-type;
 
     .pf-landing__submit-icon--search {
       width: 1.125rem;
@@ -3750,59 +3727,19 @@ html[data-pf-hero] .pf-landing--cover .pf-map__stage {
 // in the mono label voice of the Search button, an up-right arrow after
 // them (both leave for the request system).
 .pf-landing__account-button {
-  @extend %pf-landing-label;
+  @extend %pf-button-secondary;
   display: flex;
   flex: 1 1 auto;
-  align-items: center;
-  justify-content: space-between;
   gap: .625rem;
   min-height: 2.75rem;
   padding: .5rem 1rem;
-  font-size: var(--pf-mono-ui);
-  font-weight: $pf-button-weight;
-  letter-spacing: .12em;
-  // The hairline, as every secondary button (_buttons.scss).
-  border: 1px solid #{$pf-hairline};
-  border-radius: 0;
-  color: var(--pf-section-fg, var(--bs-body-color));
-  text-decoration: none;
   text-shadow: none;
-  transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease, color $pf-hover-out ease;
 
   svg {
     flex: none;
     width: .875rem;
     height: .875rem;
     transition: transform $pf-hover-out ease;
-  }
-
-  &:hover,
-  &:focus-visible {
-    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    border-color: currentColor;
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
-    outline-offset: 2px;
-  }
-}
-
-// Log in: unfilled, so the Search button stays the hero's one gold
-// button. Both buttons have the hairline as their edge; Log in
-// leads with its arrow in the accent; hover turns it gold like Register.
-.pf-landing__account-button--primary {
-  border-color: #{$pf-hairline};
-  background-color: transparent;
-
-  &:hover,
-  &:focus-visible {
-    background-color: transparent;
-  }
-
-  svg {
-    color: var(--pf-g-accent, var(--pf-ui-gold, #{$pf-gold}));
   }
 }
 
@@ -4411,16 +4348,10 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// Trading places: as the picture takes the column, the letters take the same
-// picture (--pf-title-feature, the lead Highlight's; the film's still without
-// one), its veil rising from the first load's to the least that keeps them at
-// 3:1 on any picture (below). Their color stays gold, only the fill goes.
-@property --pf-title-veil {
-  syntax: "<percentage>";
-  inherits: true;
-  initial-value: 22%;
-}
-
+// Trading places: as the picture takes the column, the letters' gold fades and
+// the same picture shows through them (--pf-title-feature, the lead
+// Highlight's; the film's still without one), in its own colours, over a floor
+// (below). Their color stays gold, only the fill goes.
 // A row in hand changes the letters' picture too, through gold: the veil rises
 // to solid, the picture changes under it, the veil falls back. The letters
 // have one background, so they can't crossfade as the column does. The same
@@ -4451,26 +4382,30 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 
 @keyframes pf-title-trade {
   from {
-    --pf-title-veil: 22%;
     -webkit-text-fill-color: currentcolor;
   }
 
   to {
-    --pf-title-veil: var(--pf-title-veil-on);
     -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
   }
 }
 
 // The picture in the letters, from the first pixel of scroll: the fill is
 // still solid there, so the change can't be seen, and the first load keeps
-// the film's still. It loads with the column's, the same file.
+// the film's still. It loads with the column's, the same file. Three layers:
+// the dip's gold, then the floor (--pf-title-floor, a grey), blended lighten
+// so each channel of each pixel keeps at least the floor's value and anything
+// brighter stays as it is, then the picture. If the picture fails to load the
+// letters show the floor.
 @keyframes pf-title-feature {
   from,
   to {
     background-image:
-      linear-gradient(color-mix(in srgb, currentColor max(var(--pf-title-veil), var(--pf-title-dip)), transparent), color-mix(in srgb, currentColor max(var(--pf-title-veil), var(--pf-title-dip)), transparent)),
+      linear-gradient(color-mix(in srgb, currentColor var(--pf-title-dip), transparent), color-mix(in srgb, currentColor var(--pf-title-dip), transparent)),
+      linear-gradient(var(--pf-title-floor), var(--pf-title-floor)),
       var(--pf-title-shown, var(--pf-title-feature, var(--pf-title-still)));
     background-position: 50% 50%;
+    background-blend-mode: normal, lighten, normal;
   }
 }
 
@@ -4968,27 +4903,27 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
         animation-range: 0 calc(var(--pf-stage-run) * .3);
       }
 
-      // The picture in the letters, under the veil, on the dark reading colours
+      // The picture in the letters, on the dark reading colours
       // ($pf-title-trade-on), until an event takes the lead (its flyer may be
       // dark). With the entrance (html.pf-fade) _entrance.scss adds the trade
       // to the title's list. Not with more contrast or forced colours: they
       // stay solid.
       @media (prefers-contrast: no-preference) and (forced-colors: none) {
         html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          // The least that keeps 3:1 on a black pixel, each colour's title
-          // gold over its page, rounded up: any picture holds, so a new one
-          // needs no measuring. Solarized here, the others below.
-          --pf-title-veil-on: 70%;
+          // The floor: the grey that keeps 3:1 on the reading colour's page, so
+          // any picture holds and a new one needs no measuring. Material's here,
+          // the highest, for a colour without its own value below.
+          --pf-title-floor: rgb(122 122 122);
           background:
-            linear-gradient(color-mix(in srgb, currentColor var(--pf-title-veil), transparent), color-mix(in srgb, currentColor var(--pf-title-veil), transparent)),
+            linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
             var(--pf-title-still) 58% 50% / cover no-repeat;
           -webkit-background-clip: text;
           background-clip: text;
         }
 
-        @each $theme, $veil in ("twilight": 51%, "night": 51%, "material": 56%, "forest": 57%, "midnight": 59%, "dusk": 61%, "cocoa": 63%) {
+        @each $theme, $floor in ("twilight": 112, "night": 97, "forest": 109, "midnight": 110, "dusk": 117, "cocoa": 109, "solarized": 113) {
           html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-            --pf-title-veil-on: #{$veil};
+            --pf-title-floor: rgb(#{$floor} #{$floor} #{$floor});
           }
         }
 

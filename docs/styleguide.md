@@ -66,9 +66,9 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
     Both are pulled toward the swatch with the page colour in the `color`
     blend, which keeps lightness, so it never moves a contrast. Grey on a
     banner means "not this one", so a cover never goes fully grey.
-- **Lines:** every rule, row and frame is `$pf-hairline` (20%), and so is a
-  button with words, which its label identifies. Fields and wordless buttons
-  keep `--pf-section-border` at 3:1.
+- **Lines:** every rule, row and frame is `$pf-hairline` (20%). A button with
+  words has no line: its plate and its label identify it. Fields and wordless
+  buttons keep `--pf-section-border` at 3:1.
 - **Type:**
   - Roboto everywhere.
   - Playfair Display for exhibition titles only, at display sizes.
@@ -145,6 +145,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-05:** Title's picture: `--pf-title-floor` (a grey per reading colour, 97 to 122, the 3:1 line on its page) replaces `--pf-title-veil` and `--pf-title-veil-on`. `pf-title-feature` paints the dip's gold, the floor and the picture, with `background-blend-mode: normal, lighten, normal`. `pf-title-trade` now only fades the fill.
 - **2026-11-05:** Title's picture follows the row in hand (`$pf-title-trade-on`, stage only). `--pf-title-pic-2` to `-5` on the `h1`, by place in the list, from each item's `still`, including the blog post. `.pf-landing__stage:has(row k)` sets `--pf-title-shown` (discrete transition, .32s delay) and `pf-title-dip-k` on `.pf-landing__top` (.5s after .12s, one set of keyframes per name so a change restarts them); `--pf-title-dip` is inherited, and the veil layer is `max(--pf-title-veil, --pf-title-dip)`.
 - **2026-11-04:** Hours and directions is a numbered section on the band (`--pf-band`) after a cover's map; the sections after it take the band on odd positions. `_palefire_hero_index()` numbers each rule once (no 02.1, 02.2). `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.
 - **2026-11-04:** `.pf-landing__contents` and `_palefire_hero_contents()` removed: `.pf-breadcrumb__section--first` ("Contents" in the crumb) now shows on a cover's first screen at every width.
@@ -157,6 +158,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-11-04:** Stage hold: `position: sticky` on `.pf-landing__stage` inside `.pf-landing__run` (`display: contents` off the stage), replacing `pf-stage-hold`. The sweep, wash and rows still run on the root scroll timeline.
 - **2026-11-04:** Object label on the stage: no panel; a caption at the column's foot (`.pf-hero-banner__plate`, the label's lines run in at 12px, muted, two lines at most, hidden under 45rem tall). The lead's words sit at the foot of their row.
 - **2026-11-04:** Object label's first placement: the stage's lead picture (`.pf-hero-banner__plate`, a solid panel of `--pf-hl-wash`, stage only), from `field_exhibit_cover_maker`, `_title`, `_date` and `_medium` on Modular page. Stage row labels sit behind their titles at `--pf-hl-label-strength`, per reading colour, measured at 4.5:1 on the current picture; solid with more contrast.
+- **2026-11-05:** Buttons: both tiers are Roboto 15px at `$pf-button-weight`, sentence case (`pf-button-type`). Secondary is a plate, `--pf-section-fg` at 9%, with a transparent 1px border (`$pf-hairline` at full strength with `.pf-a11y-contrast`). Hover and focus (`pf-button-on`: hover only with `@media (hover: hover)`): `pf-button-wipe`, a `::before` of `--bs-emphasis-color` scaling in from the start and out past the end on `$pf-hover-in` and `$pf-hover-out`, words to `--bs-body-bg`; instant with reduced motion or `.pf-a11y-motion`, gone with forced colors. `.pf-quick-guide__link`, the cover's `.pf-visit__link`, `.pf-inquiry__button`/`__submit`, `.pf-landing__account-button` and `.pf-paths__cta` now extend `%pf-button-secondary`; `.pf-landing__submit` and `.pf-footer__cta` include the type and wipe. `.pf-landing__account-button--primary` has no rules left. `.pf-exhibit-button` is unchanged.
 - **2026-11-04:** Stage title: `--pf-title-veil-on` per reading colour, measured on the pixels under the letters at 1100, 1440 and 1920: Twilight and Night 51%, Cream, Soft and Lavender 55%, Material 56%, Forest 57%, Midnight 58%, Dusk 61%, Cocoa 62%, Sepia 66%, Sage and Solarized 70%. Tuned to the current poster.
 - **2026-11-04:** Hero Highlights on the stage: the wash is one gradient, `.pf-hero-banners::after`, spanning the list's rows on the `ul`'s grid (`minmax(0, 1fr) repeat(5, auto)`) and 10rem above: transparent, 78% at 10rem, 88% at 40%, the page colour at the foot. It fades in over 28% to 38% of the run (`pf-hl-wash`). Hairlines are `.pf-hero-banner__link::before`, drawn out with `pf-hl-draw`; words rise 36% to 76%, 8% apart. Replaces `--pf-hl-mix`.
 - **2026-11-03:** Section tabs: choosing a tab no longer writes its id to the address, and clears one already there (`select()`, `replaceState`, no history entry). `#ask` and `#ask-question` links still open their panel.
