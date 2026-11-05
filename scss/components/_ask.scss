@@ -131,9 +131,8 @@
   }
 }
 
-// The guide and all the FAQs: two buttons (.pf-inquiry__button, as Send
-// question below) side by side, each at least as wide as Send question;
-// stacked when the column can't hold both.
+// The guide and all the FAQs: two buttons (.pf-inquiry__button) that fill the
+// column, side by side when it holds both, otherwise stacked.
 .pf-inquiry__links {
   display: flex;
   flex-wrap: wrap;
@@ -144,12 +143,10 @@
 
   > li {
     flex: 1 1 17.5rem;
-    max-width: 22rem;
   }
 
   // Room above and below for a label that wraps on a phone.
   .pf-inquiry__button {
-    width: 100%;
     padding-block: .5rem;
   }
 }
@@ -245,7 +242,8 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   gap: 1.5rem 1.25rem;
 }
 
-// Wide enough: the two menus side by side, then name and email.
+// Wide enough: the two menus side by side, then name and email. The actions
+// stay in the first column, so Send question ends on the fields' edge.
 @container pf-inquiry-form (min-width: 30rem) {
   .pf-inquiry__form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -253,7 +251,6 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
 
   .pf-inquiry__field--wide,
   .pf-inquiry__required,
-  .pf-inquiry__actions,
   .pf-inquiry__status {
     grid-column: 1 / -1;
   }
@@ -522,8 +519,7 @@ textarea.pf-inquiry__control {
 // The FAQs' links are secondary, as the Quick Start Guide's buttons
 // (.pf-quick-guide__link, _landing-features.scss). Send question is this
 // view's one primary: the form's main action. Both have the words at the
-// start and the arrow at the end, as wide as a Quick Start button (half the
-// notes' column), the whole form's on a phone.
+// start and the arrow at the end, and fill the space they're given.
 .pf-inquiry__button {
   @extend %pf-button-secondary;
 }
@@ -536,7 +532,7 @@ textarea.pf-inquiry__control {
 .pf-inquiry__submit {
   justify-content: flex-start;
   gap: .625rem;
-  width: min(100%, 17.5rem);
+  width: 100%;
   min-height: 2.75rem;
   padding: 0 1rem;
   text-align: start;
