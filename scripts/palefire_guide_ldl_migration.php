@@ -37,7 +37,7 @@
  *   format=<text format>  Text format for the guide's text (default: the
  *                         WYSIWYG format).
  *   path=<alias>          URL alias for a new page (default
- *                         /v2/guides/ldl-quartex-migration).
+ *                         /v2/special/guides/ldl-quartex-migration).
  *
  * Blocks used: Text (tables, Heading 4, numbered steps, callouts), Accordion,
  * Flow chart, Status board, Figures and Code. Text formats drop classes and
@@ -165,13 +165,21 @@ HTML, 'callout'),
 <p>The export to L: is about 70% done by data size (about 1.68 TB left of 5.7 TB), and 20 of the 38 institutions are finished. Uploading to Quartex isn't counted. LSU and LSUHSC New Orleans now have no TIFFs or JPEGs left in their queues. The 28 pages with no usable JP2 in Fedora were converted directly from their TIFFs. The Newspaper Clippings images are on L:, as the team decided. All 45,929 JPEGs from the first audit are replaced. Franklin Parish's images are on L:, apart from 24 waiting to be converted. Overnight, 17,248 more wrong-format images were replaced at four institutions, and the last first audits found 8,312 more, queued to be replaced.</p>
 HTML),
   $status('Where each stage stands', [
+    ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s 41 duplicate books are best decided before its download.'],
+    ['todo', 'The other 18 institutions: downloads', '676,036 files, about 1.68 TB, as of the Nov 4 dry runs. The 14 small institutions come first, then Law Library, Historic New Orleans, Loyola and Louisiana Newspapers.'],
+    ['todo', 'Queued image replacements', '8,313 images queued from the last audits, plus retries for UL Lafayette\'s 22 and Amistad\'s 4.'],
+    ['todo', 'TIFFs with no usable JP2', 'About 2,300 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers. Franklin Parish has 24 waiting.'],
+    ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
+    ['todo', 'The other 18 institutions: review, replacements, manifests', 'The same pattern as the finished institutions, once their downloads are done.'],
+    ['todo', 'Cleanup before handoff', 'The cleanup list is done by hand once the runs touching those files are finished. Manifests are then copied into the handoff package.'],
+    ['todo', 'Upload to Quartex', 'Isn\'t counted in the 70% above.'],
     ['done', 'LSU downloads', 'Every remaining file across all LSU collections and datastreams. 0 failures, 0 retries.'],
     ['done', 'LSU image audit', '135,432 files checked. 114,073 match their checksum and no corrupt images were found. 9,879 are TIFFs saved as .jp2.'],
     ['done', 'LSU TIFF replacements', 'All 9,879 pages are finished. 9,877 have their real JP2, and 2 CMYK TIFFs with no JP2 in Fedora were converted directly. The Gumbo page that wouldn\'t save is now a valid JP2 on L:.'],
     ['done', 'Next 7 institutions: downloads, audit, replacements', 'About 59,000 text files downloaded with 0 failures. LSUHSC: all 15,062 TIFFs are now JP2 (5 converted directly). All 8,187 Newspaper Clippings images are on L:, fetched from Fedora.'],
     ['done', 'Next 7 institutions: checksum lists and reconcile', 'Five are clean. LSUHSC New Orleans has 34,243 orphaned pages and 140 inactive objects to ask about.'],
     ['done', 'Sugar Bulletin', 'The pilot collection: every datastream exported and verified, TIFF pages replaced.'],
-    ['done', '12 clean institutions: downloads and audit', 'Only about 1,270 small text and RDF files were left to download. Re-audit found 27,993 JPEGs saved as .jp2 here (State Library 17,356, Louisiana Purchase 10,392, Louisiana Tech 243, Free People of Color 2). All are replaced. Northwestern, Southern and LSUHSC Shreveport turned up 1,827 more, still queued.'],
+    ['done', '12 clean institutions: downloads and audit', 'Only about 1,270 small text and RDF files were left to download. Re-audit found 27,993 JPEGs saved as .jp2 here (State Library 17,356, Louisiana Purchase 10,392, Louisiana Tech 243, Free People of Color 2). All are replaced. Northwestern, Southern and LSUHSC Shreveport turned up 1,827 more, also replaced.'],
     ['done', 'Remaining institutions: checksum lists and reconcile', '30 institutions compared with the accounting. 12 are clean. The main finding: 105 Franklin Parish newspaper issues (2,607 pages) aren\'t in the accounting.'],
   ]),
   $text(NULL, <<<'HTML'
@@ -865,7 +873,7 @@ $values = [
   'title' => $title,
   'status' => 0,
   'field_scroll_section' => $paragraphs,
-  'path' => ['alias' => '/' . ltrim($args['path'] ?? '/v2/guides/ldl-quartex-migration', '/')],
+  'path' => ['alias' => '/' . ltrim($args['path'] ?? '/v2/special/guides/ldl-quartex-migration', '/')],
 ];
 if (isset($node_fields['field_modular_type'])) {
   $values['field_modular_type'] = 'guide';
