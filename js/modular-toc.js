@@ -925,6 +925,7 @@
     let crumbLabel = null;
     let crumbShown = null;
     let crumbOpened = false;
+    let contentsOpener = null;
     let spacer = null;
     let pinned = false;
     let pinFrame = 0;
@@ -959,9 +960,10 @@
     }
 
     function openContents(event) {
+      const opener = event && event.currentTarget;
       // Below md on Special Collections pages, the mobile dock's Contents
       // (dock.js) instead of the drawer.
-      if (Drupal.palefireDock && Drupal.palefireDock.openContents(event && event.currentTarget)) {
+      if (Drupal.palefireDock && Drupal.palefireDock.openContents(opener)) {
         return;
       }
       if (railOn()) {
@@ -969,6 +971,7 @@
         nav.classList.add('is-open');
         dismissedOn = null;
         crumbOpened = true;
+        contentsOpener = opener;
         revealRow(active);
         if (active) {
           active.link.focus({ preventScroll: true });
@@ -978,6 +981,16 @@
       const drawer = document.getElementById(TOC_DRAWER);
       const Offcanvas = window.bootstrap && window.bootstrap.Offcanvas;
       if (drawer && Offcanvas) {
+        // Bootstrap only returns focus to its own data-api toggles. Leave it
+        // alone if something outside the drawer already took it.
+        if (opener) {
+          drawer.addEventListener('hidden.bs.offcanvas', () => {
+            const now = document.activeElement;
+            if (opener.isConnected && (!now || now === document.body || drawer.contains(now))) {
+              opener.focus({ preventScroll: true });
+            }
+          }, { once: true, signal });
+        }
         Offcanvas.getOrCreateInstance(drawer).show();
       }
     }
@@ -1039,12 +1052,18 @@
       crumb.append(button);
       crumbList.append(crumb);
       button.addEventListener('click', openContents, { signal });
-      // Esc in the panel it opened: back to the crumb. (The rail's own Esc
-      // handler, above, closes the panel.)
+      // The hero's Contents button (includes/landing.html.twig): the same menu.
+      bar.parentElement.querySelectorAll('[data-pf-landing-contents]').forEach((heroButton) => {
+        heroButton.setAttribute('aria-controls', TOC_DRAWER);
+        heroButton.addEventListener('click', openContents, { signal });
+        heroButton.hidden = false;
+      });
+      // Esc in the panel it opened: back to the button that opened it. (The
+      // rail's own Esc handler, above, closes the panel.)
       nav.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && crumbOpened) {
           crumbOpened = false;
-          button.focus();
+          (contentsOpener || button).focus();
         }
       }, { signal });
       nav.addEventListener('focusout', () => requestAnimationFrame(() => {

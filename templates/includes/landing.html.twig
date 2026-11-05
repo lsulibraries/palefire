@@ -353,6 +353,15 @@
               {{- account_arrow -}}
             </a>
           </li>
+          {# Opens the page's contents in place, so a list icon, not an arrow.
+             modular-toc.js reveals and wires it; the same menu as the crumb. #}
+          <li>
+            <button class="pf-landing__account-button pf-landing__account-button--contents" type="button" data-pf-landing-contents hidden>
+              {{- 'Contents'|t -}}
+              <span class="visually-hidden">{{ ' of this page'|t }}</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
+            </button>
+          </li>
         </ul>
         <p class="pf-landing__account-note">
           {{- 'First time?'|t }} <a href="{{ quick_guide.url|default('/v2/special/guides/special-collections') }}">{{ 'Read the guide'|t }}{% if not quick_guide.url %}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>{% endif %}</a>

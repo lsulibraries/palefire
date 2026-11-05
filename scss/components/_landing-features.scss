@@ -3746,6 +3746,41 @@ html[data-pf-hero] .pf-landing--cover .pf-map__stage {
   }
 }
 
+// Contents: quieter than the plate beside it, a hairline and no fill. Hidden
+// until modular-toc.js wires it; on a page with a TOC it holds its place, so
+// the row doesn't shift when it appears.
+.pf-landing__account-button--contents {
+  border-color: #{$pf-hairline};
+  background-color: transparent;
+  cursor: pointer;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  .pf-modular--has-toc &[hidden] {
+    display: flex;
+    visibility: hidden;
+  }
+}
+
+// Under 22rem the two buttons need this to share a row.
+@media (max-width: 22rem) {
+  .pf-landing__account-actions {
+    gap: .375rem;
+  }
+
+  .pf-landing__account-button {
+    gap: .5rem;
+    padding-inline: .75rem;
+  }
+}
+
 .pf-landing__account-note {
   margin: 1rem 0 0;
   font-size: .875rem;
@@ -3795,7 +3830,7 @@ html.pf-a11y-motion .pf-landing__account-note a::after {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion) .pf-landing__account-button:is(:hover, :focus-visible) svg {
+  html:not(.pf-a11y-motion) .pf-landing__account-button:not(.pf-landing__account-button--contents):is(:hover, :focus-visible) svg {
     transform: translate(.125rem, -.125rem);
   }
 }
