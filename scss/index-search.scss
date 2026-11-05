@@ -946,14 +946,17 @@
 // An E-Textbook's Book details: a native <details>, so it works by keyboard,
 // by touch and without a script. Inside, an object label: a large cover beside
 // the record, in the same mono capitals as the museum's labels.
+// Drupal's own details style draws a grey box and pads the summary: no box here.
 .pf-index-row__details {
   margin-top: .25rem;
+  border: 0;
 
   summary {
     display: inline-flex;
     align-items: center;
     gap: .25rem;
     min-height: 2.75rem;
+    padding: 0;
     color: var(--pf-index-muted);
     font-size: .875rem;
     cursor: pointer;
@@ -1007,8 +1010,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   max-width: 36rem;
-  padding-block: .75rem .25rem;
-  border-top: 1px solid var(--pf-index-line);
+  padding-block: .5rem .25rem;
 
   @media (min-width: 30rem) {
     grid-template-columns: 8rem minmax(0, 1fr);
@@ -1077,11 +1079,10 @@
   line-height: 1.5;
 }
 
-// The highlight color and a lock, so it's told apart without the color.
+// The highlight color and a lock, so it's told apart without the color. Once the
+// proxy knows this browser, a quieter tick and Signed in (js/index-search.js).
 .pf-index-row__login {
   display: inline-flex;
-  align-items: center;
-  gap: .3em;
   color: var(--pf-index-highlight);
 
   svg {
@@ -1089,6 +1090,29 @@
     width: 1em;
     height: 1em;
   }
+}
+
+.pf-index-row__login-out,
+.pf-index-row__login-in {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+}
+
+.pf-index-row__login-in {
+  display: none;
+}
+
+[data-pf-signed-in] .pf-index-row__login {
+  color: var(--pf-index-muted);
+}
+
+[data-pf-signed-in] .pf-index-row__login-out {
+  display: none;
+}
+
+[data-pf-signed-in] .pf-index-row__login-in {
+  display: inline-flex;
 }
 
 .pf-index-row__links {

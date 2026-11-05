@@ -1175,6 +1175,8 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** The Index: the LSU login tag changes to Signed in when the library's proxy already has a session for this browser, tested by loading one small image through the proxy. It can't see a saved Microsoft sign-in, so it only changes on proof and otherwise stays at LSU login.
+- **2026-11-05:** The Index: Book details has no box or line around it. Drupal's default details style was drawing a grey border.
 - **2026-11-05:** The Index: alternating row bands are removed. Rows part on the soft hairline again, with more space between them.
 - **2026-11-05:** The Index: results whose link goes through the library's proxy show an "LSU login" tag beside their type, so people know off campus they'll be asked to sign in. It's read from each link, so it covers every source. It says nothing about what's on the far side of a link that doesn't use the proxy.
 - **2026-11-05:** The Index: section numbers are gone and every other result sits on the band color, so a long list is easier to scan. The search's LSU mark now sits on a blurred veil of the page color, and a late section's mark is centered. NewsBank results, which only carry their title in the bibliography, now appear instead of being dropped.

@@ -29,6 +29,32 @@
   const controllers = new Set();
   let visiting = null;
 
+  // Whether the library's proxy already knows this browser. The proxy serves
+  // this image only with a session, and sends its login page otherwise, which
+  // an image can't load. It can't see a saved Microsoft sign-in, so someone may
+  // get straight through while the tag still says LSU login: the tag only ever
+  // moves to Signed in on proof. If the image goes away, it stays at LSU login.
+  const SIGN_IN_IMAGE = 'https://libezp.lib.lsu.edu/login?url=https://www.jstor.org/favicon.ico';
+  const checking = new WeakSet();
+
+  const checkSignIn = (root) => {
+    if (!root || checking.has(root) || root.hasAttribute('data-pf-signed-in') || !root.querySelector('.pf-index-row__login, [data-pf-index-late]')) {
+      return;
+    }
+    checking.add(root);
+    const image = new Image();
+    image.referrerPolicy = 'no-referrer';
+    image.onload = () => {
+      checking.delete(root);
+      if (image.naturalWidth > 0) {
+        root.setAttribute('data-pf-signed-in', '');
+      }
+    };
+    image.onerror = () => checking.delete(root);
+    // A fresh address each time: a stored copy would outlive the session.
+    image.src = `${SIGN_IN_IMAGE}?${Date.now()}`;
+  };
+
   const load = async (holder) => {
     // The site's mark while this section's service answers.
     const mark = holder.closest('[data-pf-index]')?.querySelector('[data-pf-index-loading] .pf-index__mark');
@@ -134,6 +160,7 @@
     swap(root, page, '.pf-index__modes');
     const next = swap(root, page, '[data-pf-index-main]');
     root.classList.remove('is-searching');
+    checkSignIn(root);
     next.classList.add('is-arriving');
     Drupal.attachBehaviors(next, drupalSettings);
 
@@ -252,6 +279,18 @@
 
   // Once for the whole visit: the page may be gone when Back brings it up.
   const pageStates = () => {
+    // Back from signing in, in another tab or by the Back button.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkSignIn(document.querySelector('[data-pf-index]'));
+      }
+    });
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        checkSignIn(document.querySelector('[data-pf-index]'));
+      }
+    });
+
     // A drawer left open has no place in the wider layout.
     wide.addEventListener('change', () => {
       const dialog = document.querySelector('[data-pf-index-filters]');
@@ -279,6 +318,7 @@
     attach(context) {
       once('pf-index-states', 'html').forEach(pageStates);
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
+      once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
