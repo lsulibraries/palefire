@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** Ask: Send question now spans the whole form, so its edges match the Question and More detail fields above it and it fills its column like the buttons on the left.
 - **2026-11-05:** Visit: All library hours, Open in Google Maps and Parking & travel now fill their columns on the Special Collections page, so their edges match the week above and the map, instead of stopping at a fixed width.
 - **2026-11-05:** Ask: the buttons now line up with their columns. The two links fill the left column, as Hours does, instead of stopping at a fixed width, and Send question is one form column wide, ending on the edge of the fields above it. It fills the form on a phone.
 - **2026-11-05:** Special Collections hero: back to the brightness floor on the title's picture, and the outline is gone. With the picture's full range of colours the letters were too distracting; the floor keeps them calmer by lifting dark pixels to a grey that holds 3:1 against the page. The first load and the dip through gold are unchanged.

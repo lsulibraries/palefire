@@ -242,8 +242,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   gap: 1.5rem 1.25rem;
 }
 
-// Wide enough: the two menus side by side, then name and email. The actions
-// stay in the first column, so Send question ends on the fields' edge.
+// Wide enough: the two menus side by side, then name and email.
 @container pf-inquiry-form (min-width: 30rem) {
   .pf-inquiry__form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -251,6 +250,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
 
   .pf-inquiry__field--wide,
   .pf-inquiry__required,
+  .pf-inquiry__actions,
   .pf-inquiry__status {
     grid-column: 1 / -1;
   }
