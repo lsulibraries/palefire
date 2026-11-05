@@ -442,6 +442,19 @@ guide-blocks:
     component:
       css/guide-blocks.css: {}
 
+# The Index, the search page at /v2/search (css/index-search.css, its own
+# npm run build entry). Attached by the palefire_search module's controller.
+index-search:
+  version: 1.0.0
+  css:
+    component:
+      css/index-search.css: {}
+  js:
+    js/index-search.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Utility menu panels (offcanvas drawers from the left): live clock and
 # LibCal hours. Attached by page.html.twig when the Utility menu region has
 # content. Needs palefire/visit for Drupal.palefireHours (visit-hours.js).

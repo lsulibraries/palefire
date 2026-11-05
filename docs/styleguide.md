@@ -143,9 +143,11 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Breadcrumb bar (glass sub-header, sticky under the header) | `layout/page.html.twig`, `.pf-landing__bar` / `.pf-page-bar` in `_landing-features.scss` | ✔ the exhibition's own; every page but guides |
 | Mobile dock: hours, action, Contents ring; hidden-state tab | `includes/dock.html.twig`, `_dock.scss`, `js/dock.js` | – Special Collections pages, below 768px |
 | 404 page: display case, wall text, quips | `includes/not-found`, `_not-found.scss`, `js/not-found.js` | – its own page (`/v2/404`); editors keep the quips in that page's Intro, one a line |
+| The Index: search field, modes, filters, result rows, late sections | `palefire_search` module's templates, `index-search.scss` (library `palefire/index-search`), `js/index-search.js` | – its own page (`/v2/search`), once the module is enabled |
 
 ## Changelog
 
+- **2026-11-05:** The Index (`.pf-index`, `.pf-index-row`, `.pf-index-section`): modes are links with a 2px rule and weight on the current one; filters are a scrolling strip under 62rem and a sticky ruled column from there; searched words use `<mark>` with weight and a rule in the text's own color, never a fill. Lines are the soft hairline, and the field's edge keeps the full control color.
 - **2026-11-05:** Title's picture: `pf-title-dip-*`, `--pf-title-dip` and `--pf-title-shown` are removed. `pf-title-feature` paints the floor, a `-webkit-cross-fade()` layer per row, then the lead's picture. A row in hand sets its registered `--pf-title-show-N` to 100%, .5s ease-out after .12s, the column's timing.
 - **2026-11-05:** Title's picture: `--pf-title-floor` and the `lighten` blend are back, and `--pf-title-outline` and its drop shadows are removed: the full colour was too distracting. Same floor values as before, 97 to 122.
 - **2026-11-05:** Title's picture: `--pf-title-outline` (the same per-theme greys, 97 to 122, the 3:1 line on each page) replaces `--pf-title-floor` and the `lighten` blend. `pf-title-trade` fades in four chained 2px `drop-shadow()`s; `-webkit-text-stroke` draws the variable font's overlapping contours. `pf-title-feature` keeps the grey as `background-color` under the picture, so letters stay painted, and outlined, if it fails to load.

@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** The Index, the new search page at `/v2/search`: styles and script (`scss/index-search.scss`, `js/index-search.js`, library `palefire/index-search`) for the new `palefire_search` module, which replaces `/bento` once tested. It does nothing until the module is enabled, and the site's search forms still go to `/bento`. `scripts/palefire_guide_index_search.php` builds its progress guide, unpublished.
 - **2026-11-05:** Special Collections hero: hovering or tabbing to the Contents button lights the breadcrumb's Contents, to show they are the same menu
 - **2026-11-05:** Special Collections hero: from 1024px the Contents button opens the menu beside itself instead of up by the breadcrumb, so it reads as the button's own menu
 - **2026-11-05:** Special Collections hero: a Contents button beside Log in or register opens the same menu as the breadcrumb, because the breadcrumb's control is easy to miss on arrival; closing any contents menu with Esc now returns focus to the button that opened it

@@ -1,0 +1,421 @@
+// Palefire — the Index, the search page at /v2/search (css/index-search.css,
+// library palefire/index-search). Its own entry point, so only that page
+// loads it. Markup: the palefire_search module's templates. Late sections:
+// js/index-search.js.
+//
+// Swiss and quiet, as the staff directory: a large title, ruled rows on the
+// soft hairline, labels in the TOC's mono capitals. No literal colors, so
+// every reading color follows. Searched words are marked with weight and a
+// rule in the text's own color, so a mark can never lower its contrast.
+
+// Tokens only: these imports print no CSS.
+@import "bootstrap/scss/functions";
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+// Motion that is only decoration: off with the OS setting or Settings >
+// Reduce motion (as _exhibition.scss).
+@mixin pf-index-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+@mixin pf-index-label {
+  font-family: var(--pf-toc-font, "Consolas", "Monaco", monospace);
+  font-size: var(--pf-mono-label, .75rem);
+  font-weight: 700;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-index {
+  --pf-index-fg: var(--pf-section-fg, var(--bs-body-color));
+  --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
+  --pf-index-line: #{$pf-hairline};
+  --pf-index-control: var(--pf-section-border, #6c757d);
+  --pf-index-ease: #{$pf-swup-ease-in};
+  max-width: $pf-content-max;
+  margin-inline: auto;
+  padding-block: clamp(1.5rem, 4vw, 3.5rem) clamp(3rem, 8vw, 6rem);
+  color: var(--pf-index-fg);
+}
+
+// Head: the title, one line on what it searches, the field, the modes. -------
+
+.pf-index__head {
+  display: grid;
+  // minmax(0, …): the field's input would otherwise hold the column at its
+  // default width, too wide for a 320px screen.
+  grid-template-columns: minmax(0, 1fr);
+  gap: .75rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.pf-index .pf-index__title {
+  margin: 0;
+  font-size: clamp(2.75rem, 2rem + 3vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  line-height: .95;
+}
+
+.pf-index__lede {
+  max-width: 40rem;
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: clamp(1rem, .95rem + .2vw, 1.125rem);
+  text-wrap: pretty;
+}
+
+.pf-index__form {
+  margin-top: 1rem;
+}
+
+.pf-index__field {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding-inline-start: .875rem;
+  border: 1px solid var(--pf-index-control);
+  background: var(--pf-g-surface, var(--bs-body-bg));
+
+  &:focus-within {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
+  }
+}
+
+.pf-index__field-icon {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--pf-index-muted);
+}
+
+.pf-index__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 3.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.125rem;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.pf-index__submit {
+  flex: none;
+  align-self: stretch;
+  padding-inline: clamp(1rem, 3vw, 1.75rem);
+  border: 0;
+  background: var(--pf-index-fg);
+  color: var(--pf-g-surface, var(--bs-body-bg));
+  font-weight: $pf-button-weight;
+
+  @include pf-index-motion {
+    transition: opacity .2s var(--pf-index-ease);
+  }
+
+  &:hover {
+    opacity: .85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-surface, var(--bs-body-bg));
+    outline-offset: -5px;
+  }
+}
+
+// Modes: links, since each is its own address. The current one has a rule and
+// weight, so it isn't shown by color alone.
+.pf-index__modes {
+  margin-top: .5rem;
+  border-bottom: 1px solid var(--pf-index-line);
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(1rem, 3vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    padding-block: .75rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    color: var(--pf-index-muted);
+    text-decoration: none;
+
+    @include pf-index-motion {
+      transition: color .2s var(--pf-index-ease), border-color .2s var(--pf-index-ease);
+    }
+
+    &:hover {
+      color: var(--pf-index-fg);
+      border-bottom-color: var(--pf-index-line);
+    }
+
+    &[aria-current] {
+      border-bottom-color: currentColor;
+      color: var(--pf-index-fg);
+      font-weight: 600;
+    }
+  }
+}
+
+.pf-index__prompt,
+.pf-index__notice {
+  max-width: 40rem;
+  color: var(--pf-index-muted);
+}
+
+.pf-index__notice {
+  margin-bottom: 2rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid currentColor;
+}
+
+// Body: results alone, or filters beside them from 62rem. --------------------
+
+.pf-index__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem clamp(2rem, 5vw, 5rem);
+}
+
+.pf-index__results {
+  min-width: 0;
+}
+
+@media (min-width: 62rem) {
+  .pf-index__body--filtered {
+    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .pf-index__filters {
+    position: sticky;
+    top: calc(var(--pf-header-height, 5rem) + 1rem);
+  }
+}
+
+.pf-index__filters {
+  min-width: 0;
+}
+
+.pf-index__filter-title {
+  @include pf-index-label;
+  margin: 0 0 .5rem;
+  color: var(--pf-index-muted);
+
+  .pf-index__filter + & {
+    margin-top: 1.5rem;
+  }
+}
+
+// A strip that scrolls on its own under 62rem, so results stay near the top
+// of a phone's screen; a ruled column from there up.
+.pf-index__filter {
+  display: flex;
+  gap: .5rem;
+  margin: 0;
+  padding: 0 0 .5rem;
+  overflow-x: auto;
+  list-style: none;
+
+  li {
+    flex: none;
+  }
+
+  a {
+    display: flex;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .5rem .75rem;
+    border: 1px solid var(--pf-index-line);
+    color: var(--pf-index-fg);
+    text-decoration: none;
+
+    @include pf-index-motion {
+      transition: background-color .2s var(--pf-index-ease);
+    }
+
+    &:hover {
+      background: var(--pf-index-line);
+    }
+
+    &[aria-current] {
+      border-color: currentColor;
+      font-weight: 600;
+    }
+  }
+
+  @media (min-width: 62rem) {
+    display: block;
+    overflow: visible;
+    padding-bottom: 0;
+
+    a {
+      padding-inline: 0;
+      border-width: 0 0 1px;
+      border-color: var(--pf-index-line);
+
+      &:hover {
+        background: transparent;
+        text-decoration: underline;
+      }
+
+      &[aria-current] {
+        border-color: currentColor;
+      }
+    }
+  }
+}
+
+.pf-index__count {
+  color: var(--pf-index-muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+}
+
+// Sections: one per source. --------------------------------------------------
+
+.pf-index-section + .pf-index-section,
+.pf-index__elsewhere {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.pf-index .pf-index-section__title {
+  @include pf-index-label;
+  margin: 0;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--pf-index-line);
+  color: var(--pf-index-muted);
+}
+
+// Holds a late section's place, about three rows, so results below don't
+// jump when it arrives. Released once it has.
+.pf-index-section__late[aria-busy="true"] {
+  min-height: 15rem;
+}
+
+.pf-index-section__late.is-loaded {
+  @include pf-index-motion {
+    animation: pf-index-arrive .45s var(--pf-index-ease);
+  }
+}
+
+@keyframes pf-index-arrive {
+  from {
+    opacity: $pf-reveal-from;
+    transform: translateY(.25rem);
+  }
+}
+
+// Rows. ----------------------------------------------------------------------
+
+.pf-index-list__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-index-row {
+  padding-block: 1.125rem;
+  border-bottom: 1px solid var(--pf-index-line);
+  overflow-wrap: anywhere;
+}
+
+.pf-index .pf-index-row__title {
+  margin: 0;
+  font-size: clamp(1.125rem, 1.05rem + .3vw, 1.3125rem);
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+
+  a {
+    color: inherit;
+    text-decoration-thickness: from-font;
+    text-decoration-color: var(--pf-index-line);
+
+    @include pf-index-motion {
+      transition: text-decoration-color .2s var(--pf-index-ease);
+    }
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+.pf-index-row__out {
+  display: inline-block;
+  width: .875em;
+  height: .875em;
+  margin-inline-start: .25em;
+  vertical-align: -.05em;
+}
+
+[dir="rtl"] .pf-index-row__out {
+  transform: scaleX(-1);
+}
+
+.pf-index-row__meta {
+  margin: .25rem 0 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+}
+
+.pf-index-row__summary {
+  max-width: 48rem;
+  margin: .375rem 0 0;
+  text-wrap: pretty;
+}
+
+.pf-index mark {
+  padding: 0;
+  background: transparent;
+  box-shadow: inset 0 -.08em currentColor;
+  color: inherit;
+  font-weight: 600;
+}
+
+.pf-index-list__status {
+  margin: 0;
+  padding-block: 1.125rem;
+  color: var(--pf-index-muted);
+}
+
+.pf-index-list__more {
+  margin: 1rem 0 0;
+}
+
+// Searches elsewhere. --------------------------------------------------------
+
+.pf-index__elsewhere ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-index__elsewhere li {
+  padding-block: .75rem;
+  border-bottom: 1px solid var(--pf-index-line);
+}

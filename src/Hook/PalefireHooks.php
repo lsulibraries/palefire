@@ -483,10 +483,11 @@ class PalefireHooks {
     // Modular pages print their own <h1> (page.html.twig, or the landing
     // search when it is the first section), so a placed Page title block
     // would be a second one.
-    // So do the staff directory and profiles (views-view--palefire-staff--*).
+    // So do the staff directory and profiles (views-view--palefire-staff--*)
+    // and the Index (the palefire_search module's page).
     if (($variables['plugin_id'] ?? '') === 'page_title_block') {
       $variables['#cache']['contexts'][] = 'route';
-      if ($this->currentModularNode() || StaffDirectory::isRoute()) {
+      if ($this->currentModularNode() || StaffDirectory::isRoute() || \Drupal::routeMatch()->getRouteName() === 'palefire_search.page') {
         $variables['content'] = [];
         $variables['attributes']['hidden'] = 'hidden';
       }
