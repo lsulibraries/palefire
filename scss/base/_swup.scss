@@ -40,10 +40,14 @@ html:not(.pf-vt).is-animating .pf-swup > * {
 // Loading mark (js/palefire-swup.js): while a visit's content is faded out
 // and the next page is still on its way, the LSU mark is drawn in the middle
 // of the window, under the header's loading line. Hidden until .4s in, so a
-// prefetched visit never shows it. Each loop: the letters trace in a soft
-// line in the text color, warm into gold, then the mark fades away and
-// draws again. Leaves with a quick fade as the new page fades in. Never
-// with reduced motion: the content doesn't fade then, and the line breathes.
+// prefetched visit never shows it. Each loop: the letters start to trace in
+// a soft line in the text color and fill to gold about .6s later, so even a
+// short wait sees the gold (it used to start at 1.8s, and most pages had
+// arrived by then: 2026-11-05). Then the mark holds, fades away and draws
+// again. Leaves with a quick fade as the new page fades in: at rest the
+// letters are solid gold, so ending the animation doesn't blank them before
+// the fade. Never with reduced motion: the content doesn't fade then, and
+// the line breathes.
 .pf-loading-mark {
   position: fixed;
   inset: var(--pf-header-h) 0 0;
@@ -63,12 +67,10 @@ html:not(.pf-vt).is-animating .pf-swup > * {
 
   :is(path, polygon) {
     fill: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-    fill-opacity: 0;
-    stroke: currentColor;
-    stroke-opacity: .55;
+    stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
     stroke-width: 1px;
     stroke-dasharray: 1;
-    stroke-dashoffset: 1;
+    stroke-dashoffset: 0;
     vector-effect: non-scaling-stroke;
   }
 }
@@ -77,14 +79,14 @@ html:not(.pf-vt).is-animating .pf-swup > * {
   html:not(.pf-vt).is-changing.pf-is-loading:not(.pf-a11y-motion) .pf-loading-mark {
     visibility: visible;
     opacity: 1;
-    transition: opacity .4s ease .4s, visibility 0s linear .4s;
+    transition: opacity .2s ease .4s, visibility 0s linear .4s;
 
     > svg {
-      animation: pf-mark-cycle 3.2s linear .4s infinite;
+      animation: pf-mark-cycle 2.4s linear .4s infinite;
     }
 
     :is(path, polygon) {
-      animation: pf-mark-trace 3.2s linear .4s infinite;
+      animation: pf-mark-trace 2.4s linear .4s backwards infinite;
     }
   }
 }
@@ -102,19 +104,21 @@ html:not(.pf-vt).is-animating .pf-swup > * {
 
 @keyframes pf-mark-trace {
   0% {
+    stroke: currentColor;
+    stroke-opacity: .55;
     stroke-dashoffset: 1;
+    fill-opacity: 0;
     animation-timing-function: cubic-bezier(.45, 0, .2, 1);
   }
 
-  56% {
+  10% {
     stroke: currentColor;
     stroke-opacity: .55;
-    stroke-dashoffset: 0;
     fill-opacity: 0;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-out;
   }
 
-  76%,
+  26%,
   100% {
     stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
     stroke-opacity: 1;

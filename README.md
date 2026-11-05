@@ -1160,6 +1160,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-05:** Page loads: the LSU mark now fills to gold about 1s after the click, in a 2.4s loop. It used to start filling at about 2.2s, so most visits only ever showed the gray outline. At rest the letters are solid gold, so the mark fades out whole when the page arrives instead of blanking first.
 - **2026-11-05:** Special Collections hero: the title's picture no longer has a gold tint at rest, so its own colours show through the letters on dark reading colours. A brightness floor replaces the tint: each colour channel keeps at least a grey set per reading colour, so dark pixels lift to 3:1 against the page and anything brighter stays as it is, on any picture. The darkest areas of a picture flatten to that grey, so lighter pictures look best. The dip through gold between pictures stays, and the first load's faint gold on the film's still is unchanged.
 - **2026-11-05:** Book shelf arrows: the frame is now at least 3:1 instead of the 20% hairline. They have no words to identify them, which is the rule for wordless buttons.
 - **2026-11-05:** Ask: Send question is now the gold primary button, because it is the main action in its view and looked the same as the links beside it.
