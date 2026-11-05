@@ -1063,10 +1063,17 @@
 }
 
 // What a record is, above its title, so an article and a book read differently
-// at a glance. Set like inline code in a guide (_guide.scss).
-.pf-index-row__type {
-  width: fit-content;
+// at a glance, and whether its link asks for an LSU account. Set like inline
+// code in a guide (_guide.scss).
+.pf-index-row__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
   margin: 0 0 .375rem;
+}
+
+.pf-index-row__type,
+.pf-index-row__login {
   padding: .1em .45em;
   border: 1px solid var(--pf-index-line);
   background: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
@@ -1074,6 +1081,20 @@
   font-family: var(--pf-guide-mono, var(--pf-landing-label));
   font-size: .8125rem;
   line-height: 1.5;
+}
+
+// The highlight color and a lock, so it's told apart without the color.
+.pf-index-row__login {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  color: var(--pf-index-highlight);
+
+  svg {
+    flex: none;
+    width: 1em;
+    height: 1em;
+  }
 }
 
 .pf-index-row__links {
