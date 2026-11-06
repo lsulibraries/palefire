@@ -159,6 +159,7 @@ HTML, 'callout'),
     ['running', 'Source definitions', 'Section headings and a What are these? button in the Source filter say what each source searches, in the glossary\'s cards.'],
     ['running', 'Fuller Discovery search', 'Discovery searches Discovery directly, with Full text online, Peer reviewed, Type and Year published filters. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
     ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
+    ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
@@ -192,25 +193,26 @@ $section('How it works', [
   ]),
 ]);
 
-$section('What we found in the old search', [
+$section('Before and after', [
   $text(NULL, <<<'HTML'
 <table>
-<thead><tr><th scope="col">Finding</th><th scope="col">What the Index does</th></tr></thead>
+<thead><tr><th scope="col">Before: the old search</th><th scope="col">After: the Index</th></tr></thead>
 <tbody>
-<tr><td>Some sources match any word, others all words. "huey long" finds 1,267 Archive Records; "huey" alone finds 630.</td><td>Matches all words across the local sources.</td></tr>
-<tr><td>Words under three letters are ignored, which seems to turn off the filter. "ai" and "r&amp;b" return identical counts.</td><td>Doesn't send those to the index, and tells the visitor why.</td></tr>
-<tr><td>The search term goes into outside addresses unencoded, which is likely why "r&amp;b" returns about 51.9 million results.</td><td>Encodes the term first. To be confirmed on first run.</td></tr>
-<tr><td>Errors from outside services look like zero results.</td><td>Reports them as unavailable and doesn't keep them.</td></tr>
-<tr><td>Result descriptions only appear in hover tooltips.</td><td>Shows them in the result.</td></tr>
+<tr><td>Some sources match any word, others all words. "huey long" finds 1,267 Archive Records, more than twice the 630 for "huey" alone.</td><td>Every local source matches all the words. "huey long" finds 611 Archive Records, and "huey" finds 630.</td></tr>
+<tr><td>Words under three letters are ignored, which seems to turn off the filter. "ai" and "r&amp;b" return identical counts.</td><td>Those words aren't sent to the site's index, and the page says why. Outside services still search for them.</td></tr>
+<tr><td>The search term goes into outside addresses unencoded, which is likely why "r&amp;b" returns about 51.9 million results.</td><td>The term is encoded first. "r&amp;b" finds about 490,000 results in Discovery.</td></tr>
+<tr><td>Errors from outside services look like zero results.</td><td>They're reported as unavailable, and the failure isn't kept.</td></tr>
+<tr><td>Result descriptions only appear in hover tooltips.</td><td>They're shown in the result.</td></tr>
 </tbody>
 </table>
+<p>The Index's counts were checked on Fri 6 Nov 2026, and they change as records are added.</p>
 HTML),
 ]);
 
 $section('Alma', [
   $text(NULL, <<<'HTML'
 <p>The Libraries are moving from EDS and the current catalog to Alma. A sandbox may be available, but it isn't fully populated yet.</p>
-<p>The page is ready for this. Visitors see "Discovery" and "Catalog", not a vendor's name, and each service is one definition in the module, so moving it won't change the page's addresses or design.</p>
+<p>The page is ready for this. Results stay under "Discovery" and "Catalog", not a vendor's name, and each service is one definition in the module, so moving it won't change the page's addresses or design. Research and Special Collections already list Alma (coming soon) as a dimmed source.</p>
 HTML),
 ]);
 
@@ -254,6 +256,7 @@ HTML),
 <li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it.</li>
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
+<li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
 </ul>
 HTML),
 ]);
