@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-06:** Landing searches, including the Special Collections hero, now fade the page and show the loading line and mark while the results load, since the wait looked as if nothing had happened.
 - **2026-11-06:** The Index: result rows go back to their hairlines and boxed tags, with no hatched bands, since the bands proved confusing. The Show location slab stays, to the left of the availability text.
 - **2026-11-06:** Loading: the rule's worm in the LSU Libraries mark is longer, for more movement, and the line in the Index's search field now runs as a matching worm, in step with it.
 - **2026-11-06:** The Index: the hatched result rows lose their background color, so only the diagonal lines mark them. Their slabs are solid, so the lines do not run through the words. The Show location slab moves to the left of the availability text.

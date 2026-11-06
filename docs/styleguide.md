@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-06:** `.pf-landing__form` submits show the loading line, and within `#swup` the Swup fade and loading mark, until the next page loads (`onSearch`, `palefire-swup.js`). Reduced motion gets the line only.
 - **2026-11-06:** The Index: the hatched rows and line-free filters are withdrawn, and `index-search.scss` is back to its earlier rows. `.pf-index-row__toggle` keeps its `.pf-button--secondary` first (`order: -1`, `wrap-reverse`).
 - **2026-11-06:** `pf-mark-worm` moves to `base/_mark-worm.scss`, printed by `style.css` and `index-search.css`: 20% long at each end, 75% mid-run. `pf-index-chase` follows the same steps at 2.4s.
 - **2026-11-06:** The Index: `.pf-index-row:nth-child(even)` is the hatch alone, with no fill. Its slabs are the text color at 9% mixed into `--bs-body-bg`. `.pf-index-row__toggle` leads with its slab (`order: -1`, `wrap-reverse`).

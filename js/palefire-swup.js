@@ -481,6 +481,22 @@
     startLoading();
   };
 
+  // A landing's search is a plain GET form, so the next page loads in full and
+  // the wait is the server's. The line, and within #swup the same fade and mark
+  // as a visit, until that page replaces this one. pageshow undoes it if Back
+  // brings this page back as it was left.
+  const onSearch = (event) => {
+    const form = event.target;
+    if (event.defaultPrevented || !form.matches('.pf-landing__form') || (form.target && form.target !== '_self')) {
+      return;
+    }
+    startLoading();
+    const root = document.documentElement;
+    if (form.closest(CONTAINER) && !reducedMotion.matches && !root.classList.contains('pf-a11y-motion')) {
+      root.classList.add('is-changing', 'is-animating');
+    }
+  };
+
   /* ---------------------------------------------------------------------
    * Prefetch
    *
@@ -773,10 +789,12 @@
         addLine();
         addMark();
         document.addEventListener('click', onLeave);
+        document.addEventListener('submit', onSearch);
         // Back/forward cache: the page comes back as it was left, line on.
         window.addEventListener('pageshow', (event) => {
           if (event.persisted) {
             stopLoading();
+            document.documentElement.classList.remove('is-changing', 'is-animating');
           }
         });
       });
