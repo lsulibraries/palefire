@@ -4361,8 +4361,8 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 // From 44rem, on a window at least 40rem tall: the first screen is the type on
 // the left and, in the column, the Highlights' words over the film, on a wash of
 // the page's colour: the lead large, the rest as rows. js/hero-highlights.js
-// gives the film five seconds, shows each Highlight's picture in turn, and rests
-// on the first (.is-shown), with the film stopped. A row in hand brings its
+// gives the film five seconds and rests on the first Highlight's picture
+// (.is-shown), with the film stopped. A row in hand brings its
 // picture, its words to the lead's place, its object label to the column's foot
 // and its picture to the title's letters, with no script. The title is solid
 // otherwise. The page scrolls as any page does: nothing is tied to the scroll.
@@ -4401,8 +4401,8 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
 $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
 // --- The scroll cue ---------------------------------------------------------
-// Under the search (js/hero-highlights.js): the page goes on, and a way on
-// without a wheel. Only on a window tall enough to show it with the search, and
+// Centered under the search (js/hero-highlights.js): the page goes on, and a way
+// on without a wheel. Only on a window tall enough to show it with the search, and
 // only at the top of the page. Once the page has moved it fades and leaves the
 // tab order, unless the keyboard is on it.
 .pf-hero-cue {
@@ -4439,29 +4439,45 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 @media (min-height: 48rem) {
   @container pf-cover (min-width: 44rem) {
     #{$pf-stage} .pf-hero-cue:not([hidden]) {
-      position: absolute;
-      inset: auto auto .25rem 0;
-      display: inline-flex;
+      // In the search's grid cell, at the foot of its bottom margin: its width.
+      position: relative;
+      display: flex;
       grid-row: 2;
+      grid-column: 1;
+      align-self: end;
       align-items: center;
-      gap: .625rem;
+      margin: 0 calc(var(--pf-split-film) + 2 * var(--pf-grid-gutter)) .25rem var(--pf-cover-gutter);
+      gap: 1rem;
       min-height: 2.75rem;
       padding: 0;
       border: 0;
       background: none;
       color: var(--pf-section-fg, var(--bs-body-color));
-      font-size: .9375rem;
-      font-weight: 500;
+      font-family: var(--pf-toc-font, monospace);
+      font-size: var(--pf-mono-label);
+      letter-spacing: .14em;
+      text-transform: uppercase;
       cursor: pointer;
 
-      &:hover {
-        text-decoration: underline;
-        text-underline-offset: .25em;
+      // A rule either side, so the cue stands centered under the search.
+      &::before,
+      &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #{$pf-hairline};
       }
 
+      // The arrow on a disc in the Search button's colors.
       svg {
         flex: none;
-        color: var(--pf-g-accent, var(--pf-landing-accent));
+        box-sizing: border-box;
+        width: 2.75rem;
+        height: 2.75rem;
+        padding: .75rem;
+        border-radius: 50%;
+        color: var(--pf-g-on-accent, #{$pf-black});
+        background: var(--pf-g-accent, #{$pf-gold});
       }
     }
   }
@@ -4703,15 +4719,13 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
         }
 
         // Another item up: the lead's words give way to its words.
-        &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title),
-        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))):has(> .pf-hero-banner:not(:first-child).is-shown) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title) {
+        &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title) {
           opacity: 0;
           transition: opacity .25s ease-out;
         }
 
         @for $k from 2 through 5 {
-          &:has(> .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__other:nth-child(#{$k - 1}),
-          &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))):has(> .pf-hero-banner:nth-child(#{$k}).is-shown) .pf-hero-banner__other:nth-child(#{$k - 1}) {
+          &:has(> .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__other:nth-child(#{$k - 1}) {
             opacity: 1;
             transition-delay: .08s;
           }
@@ -4812,8 +4826,7 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
           line-clamp: 2;
         }
 
-        .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title,
-        &.is-shown:not(:first-child) .pf-hero-banner__title {
+        .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title {
           color: var(--pf-g-title, var(--pf-toc-active));
         }
 

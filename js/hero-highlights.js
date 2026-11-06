@@ -4,12 +4,11 @@
  * _landing-features.scss).
  *
  * The Highlights are on the film from the start. Once the film is playing it
- * has VIDEO ms, then the column shows each Highlight's picture in turn for DWELL
- * ms and comes to rest on the first, the featured one, with the film stopped.
- * The sequence runs once, and holds while the Pause button is pressed, a row is
- * in hand, or the stage is out of sight. With reduced motion or "Pause
- * background videos" it starts at the rest. .is-shown on a row says whose
- * picture is up; a row in hand wins over it, in the CSS.
+ * has VIDEO ms, then the column comes to rest on the first Highlight's picture,
+ * the featured one, with the film stopped. The VIDEO ms hold while the Pause
+ * button is pressed, a row is in hand, or the stage is out of sight. With reduced
+ * motion or "Pause background videos" it starts at the rest. .is-shown says the
+ * featured picture is up; a row in hand wins over it, in the CSS.
  *
  * The Scroll cue glides to what follows the stage and moves focus there. It is
  * there only at the top of the page, and fades once the page has moved. Its
@@ -20,7 +19,6 @@
  */
 (function (Drupal, once) {
   const VIDEO = 5000; // ms
-  const DWELL = 3500; // ms
   const TICK = 250; // ms
   const LOAD_LIMIT = 4000; // ms, how long the film may take to start playing
   // ms: the entrance's last animation (the film's column, _entrance.scss, ends
@@ -39,14 +37,6 @@
     }
     const wrap = stage.querySelector('[data-landing-video]');
     const button = stage.querySelector('[data-landing-video-toggle]');
-    const pictures = () => [...list.children].filter((item) => item.querySelector('.pf-hero-banner__media img'));
-    const show = (item) => {
-      [...list.children].forEach((other) => other.classList.toggle('is-shown', other === item));
-    };
-    const stopFilm = () => {
-      wrap.setAttribute('data-pf-film-rest', '');
-      wrap.querySelectorAll('video').forEach((video) => video.pause());
-    };
 
     let begun = false;
     let playing = false;
@@ -58,11 +48,15 @@
     const rest = () => {
       window.clearInterval(timer);
       stage.classList.add('is-picturing');
-      show(pictures()[0] || null);
+      const featured = [...list.children].find((item) => item.querySelector('.pf-hero-banner__media img'));
+      if (featured) {
+        featured.classList.add('is-shown');
+      }
       if (!wrap || !button) {
         return;
       }
-      stopFilm();
+      wrap.setAttribute('data-pf-film-rest', '');
+      wrap.querySelectorAll('video').forEach((video) => video.pause());
       if (button === document.activeElement) {
         list.querySelector('a').focus({ preventScroll: true });
       }
@@ -84,7 +78,6 @@
       if (!begun) {
         begun = true;
         wrap.setAttribute('data-pf-film-sequence', '');
-        button.querySelector('[data-landing-video-label]').textContent = Drupal.t('Pause the video and pictures');
       }
       if (button.dataset.state === 'paused' || document.hidden || !inView || list.querySelector(IN_HAND)) {
         return;
@@ -98,15 +91,9 @@
       }
       stage.classList.add('is-picturing');
       elapsed += TICK;
-      const items = pictures();
-      const total = VIDEO + DWELL * items.length;
-      button.style.setProperty('--pf-landing-progress', Math.min(1, elapsed / total).toFixed(4));
-      if (elapsed >= total) {
+      button.style.setProperty('--pf-landing-progress', Math.min(1, elapsed / VIDEO).toFixed(4));
+      if (elapsed >= VIDEO) {
         rest();
-      }
-      else if (elapsed >= VIDEO) {
-        stopFilm();
-        show(items[Math.floor((elapsed - VIDEO) / DWELL)]);
       }
     };
 
