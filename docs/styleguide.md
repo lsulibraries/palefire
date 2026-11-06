@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-06:** The Index: `.pf-index-row__holdings` holds a Catalog row's `2.75rem` availability line until it loads. It uses `.pf-index-row__details`, with `.pf-index-row__status` stating availability in words and `.pf-index-row__label--holdings` listing copies, in two columns from `30rem`. The Catalog section's held place grows to `40rem`.
 - **2026-11-05:** The Index: `.pf-index__option` takes a round radio for a pick-one filter, with an Any row. Section headings use `.pf-term` and `.pf-term__card` from the glossary to define each source. `.pf-index__about` is the same card listing every source, opened from `.pf-index__about-open` in the Source filter.
 - **2026-11-05:** The Index: `.pf-index__input` draws the landing search's 2px foot line on hover. `pf-index-chase` runs it back and forth while `.pf-index` or a late section has `.is-searching`.
 - **2026-11-05:** The Index: the Catalog is a late-loading section like Articles & Books, using the same rows and type chip. Its place is held at `26rem` so results below don't jump.

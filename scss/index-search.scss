@@ -922,9 +922,10 @@
   min-height: 34rem;
 }
 
-// The Catalog also shows five, in shorter rows with no covers.
+// The Catalog also shows five, in shorter rows with no covers, each with a line
+// saying where it's held.
 .pf-index-section--catalog .pf-index-section__late[aria-busy="true"] {
-  min-height: 26rem;
+  min-height: 40rem;
 }
 
 .pf-index-section__late.is-searching .pf-index-list__status {
@@ -1158,7 +1159,7 @@
     }
   }
 
-  svg {
+  summary svg {
     flex: none;
     width: 1rem;
     height: 1rem;
@@ -1168,7 +1169,7 @@
     }
   }
 
-  &[open] svg {
+  &[open] summary svg {
     transform: rotate(90deg);
   }
 
@@ -1179,7 +1180,7 @@
   }
 }
 
-[dir="rtl"] .pf-index-row__details:not([open]) svg {
+[dir="rtl"] .pf-index-row__details:not([open]) summary svg {
   transform: scaleX(-1);
 }
 
@@ -1224,6 +1225,58 @@
   li + li {
     padding-top: 1rem;
     border-top: 1px solid var(--pf-index-line);
+  }
+}
+
+// A Catalog record's holdings, which load after the row. With a script, their
+// line's height is held so the row doesn't move. Without one the record's own
+// link is the way on, and there's nothing to wait for.
+.js .pf-index-row__holdings:empty {
+  min-height: 2.75rem;
+}
+
+.pf-index-row__holdings.is-loaded {
+  @include pf-index-motion {
+    animation: pf-index-arrive .35s var(--pf-index-ease);
+  }
+}
+
+.pf-index-row__holdings .pf-index-row__details {
+  margin-top: 0;
+}
+
+.pf-index-row__holdings-line {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin: 0;
+  font-size: .875rem;
+}
+
+// Says it in words, so nothing rests on color.
+.pf-index-row__status {
+  color: var(--pf-index-fg);
+  font-weight: 500;
+}
+
+.pf-index-row__label--holdings {
+  @media (min-width: 30rem) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  dd {
+    overflow-wrap: anywhere;
+  }
+
+  dl {
+    @media (min-width: 30rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .pf-index-row__links {
+    margin: 0;
   }
 }
 

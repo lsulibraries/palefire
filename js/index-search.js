@@ -17,6 +17,8 @@
  * - The address keeps up, so a search can be shared and Back works.
  * - Late sections: each outside source loads after the page, so a slow or
  *   failing service can't hold it up. One with no results is removed.
+ * - A Catalog row's holdings load after the list, on an address of their own
+ *   that stays fresher than results can. If they fail, the row just has no line.
  * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
  *   back to the row's text.
  */
@@ -24,6 +26,7 @@
   'use strict';
 
   const TIMEOUT_MS = 20000;
+  const HOLDINGS_TIMEOUT_MS = 10000;
   const wide = window.matchMedia('(min-width: 62rem)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const controllers = new Set();
@@ -55,6 +58,37 @@
     image.src = `${SIGN_IN_IMAGE}?${Date.now()}`;
   };
 
+  // Fills each row's place from one answer, and removes the places left empty.
+  const loadHoldings = async (rows) => {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), HOLDINGS_TIMEOUT_MS);
+    controllers.add(controller);
+    const template = document.createElement('template');
+    try {
+      const response = await fetch(rows.dataset.pfIndexHoldingsUrl, { signal: controller.signal });
+      if (response.ok) {
+        template.innerHTML = await response.text();
+      }
+    }
+    catch (error) {
+      // The rows are still whole, with the record's link.
+    }
+    finally {
+      window.clearTimeout(timer);
+      controllers.delete(controller);
+    }
+    rows.querySelectorAll('[data-pf-index-holdings]').forEach((place) => {
+      const found = template.content.querySelector(`[data-pf-index-holdings-for="${CSS.escape(place.dataset.pfIndexHoldings)}"]`);
+      if (found) {
+        place.replaceChildren(...found.childNodes);
+        place.classList.add('is-loaded');
+      }
+      else {
+        place.remove();
+      }
+    });
+  };
+
   const load = async (holder) => {
     // The site's mark while this section's service answers.
     const mark = holder.closest('[data-pf-index]')?.querySelector('[data-pf-index-loading] .pf-index__mark');
@@ -79,6 +113,7 @@
       }
       holder.replaceChildren(template.content);
       holder.classList.add('is-loaded');
+      once('pf-index-holdings', '[data-pf-index-holdings-url]', holder).forEach(loadHoldings);
     }
     catch (error) {
       // The server's link is still there, so the visitor has a way on.
@@ -327,6 +362,7 @@
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
+      once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
     },
     detach(context, settings, trigger) {

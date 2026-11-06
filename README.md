@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-06:** The Index: Catalog rows now say whether a copy is available and where, with a toggle listing each library, shelf, call number and what LSU has, and a link to the full record. The feed still chooses and orders the rows, and the catalog's web service adds the copies just after, so availability stays fresh. If the feed goes down, the service answers the search too, newest first and saying so, because it can't rank by relevance.
 - **2026-11-05:** The Index: Catalog filters for Type, Library, Language and Year, one choice to a filter because that's all the service takes, with real totals and counts read from the catalog's results page. Articles & Books is now called Discovery. Section headings and a "What are these?" button in the Source filter define each source, using the glossary's cards.
 - **2026-11-05:** The Index: the search box takes the Special Collections hover, a gold line drawn along its foot. While results load, that line runs back and forth, so people can see their search went through. With reduced motion it holds still.
 - **2026-11-05:** The Index: a Catalog section in All and Research, read from the catalog's public results feed, with format, author, date, call number and any online copy. The feed gives up to 300 records and no total, so a full list says 300+.
