@@ -1827,7 +1827,7 @@
 // A soft panel, in place of a shadow or more lines, says this belongs to the
 // result above it. The same mix on a light page goes the other way.
 .pf-index-row__copies-table {
-  padding: .25rem 1rem 1rem;
+  padding: .25rem .75rem 1rem;
   background-color: color-mix(in srgb, var(--pf-index-fg) 4%, transparent);
 
   table {
@@ -1870,7 +1870,7 @@
   td {
     display: grid;
     grid-template-columns: 7.5rem minmax(0, 1fr);
-    gap: .75rem;
+    gap: .5rem;
     padding-block: .25rem;
     color: var(--pf-index-fg);
     overflow-wrap: break-word;
@@ -1911,7 +1911,7 @@
     }
 
     > span + span {
-      margin-top: .5rem;
+      margin-top: .25rem;
     }
   }
 
@@ -1926,6 +1926,8 @@
   }
 
   @container (min-width: 46rem) {
+    padding-inline: 1rem;
+
     thead {
       position: static;
       display: table-header-group;
@@ -2007,10 +2009,11 @@
     }
   }
 
-  // Where there's room, an item's call number stays on one line.
+  // Where there's room, enough for most call numbers on one line. A long one
+  // wraps, so the columns beside it keep their room.
   @container (min-width: 56rem) {
     .pf-index-row__item-call {
-      white-space: nowrap;
+      width: 13rem;
     }
   }
 }

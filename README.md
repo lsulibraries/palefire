@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-06:** The Index: each item now shows what the catalog says that call number holds, so people can tell which item to request. A shelf whose items have different call numbers no longer names one of them as if it covered the lot.
 - **2026-11-06:** The Index: an open result's table sits on a soft tonal panel, so it reads as part of that result without a shadow or more lines. Its button now says Hide when open, and a double click no longer selects its words.
 - **2026-11-06:** The Index: Special Collections copies now say Available to view and Request to view, with a note that they are viewed in the Hill Memorial reading room, since Request item read like something that could be taken away. Vendor names stay out of this wording.
 - **2026-11-06:** Special Collections hero search: opens the Index with Catalog already chosen, set to Special Collections, since it used to arrive with no filter on.
