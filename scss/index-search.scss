@@ -1834,6 +1834,7 @@
   th {
     @include pf-index-label;
     color: var(--pf-index-muted);
+    overflow-wrap: normal; // Never mid-word, whatever the row allows.
     text-align: start;
     vertical-align: bottom;
   }
@@ -1855,6 +1856,32 @@
       @include pf-index-label;
       color: var(--pf-index-muted);
     }
+  }
+
+  // What a serial's copy holds, under its row, in one measure.
+  tbody tr:has(+ .pf-index-row__copy-has) {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  tbody .pf-index-row__copy-has {
+    padding-top: 0;
+  }
+
+  // Too long to run beside its label: the label goes above, here and on a table.
+  .pf-index-row__copy-has td {
+    display: block;
+
+    &[data-label]::before {
+      display: block;
+      margin-bottom: .25rem;
+    }
+  }
+
+  // The note under a shelf's items takes the row: it has no label beside it.
+  .pf-index-row__copy-more td {
+    display: block;
+    color: var(--pf-index-muted);
   }
 
   .pf-index-list__more {
@@ -1901,6 +1928,28 @@
     th:last-child,
     td:last-child {
       padding-inline-end: 0;
+    }
+
+    tbody tr:has(+ .pf-index-row__copy-has) td {
+      padding-bottom: .25rem;
+    }
+
+    .pf-index-row__copy-has td {
+      display: table-cell;
+      padding-top: 0;
+
+      &[data-label]::before {
+        content: attr(data-label);
+      }
+
+      > span {
+        display: block;
+        max-width: 48rem;
+      }
+    }
+
+    .pf-index-row__copy-more td {
+      display: table-cell;
     }
   }
 }
