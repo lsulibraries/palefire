@@ -422,9 +422,8 @@
         return;
       }
       const row = up.closest('.pf-index__source');
-      slide(rowsNow(), () => list.insertBefore(row, row.previousElementSibling));
-      // Moving an element takes focus from it.
-      up.focus();
+      // Moves its neighbor: an element that's moved itself loses focus.
+      slide(rowsNow(), () => row.after(row.previousElementSibling));
       save();
       announce(row);
     });
@@ -446,8 +445,16 @@
           const box = other.getBoundingClientRect();
           return moved.clientY < box.top + box.height / 2;
         }) || reset;
-        if (row.nextElementSibling !== next) {
-          slide(others, () => list.insertBefore(row, next));
+        // Moves the rows around it: an element that's moved itself loses the
+        // pointer, and the drag would end there.
+        const all = rowsNow();
+        const from = all.indexOf(row);
+        const to = next === reset ? all.length : all.indexOf(next);
+        if (to < from) {
+          slide(others, () => row.after(...all.slice(to, from)));
+        }
+        else if (to > from + 1) {
+          slide(others, () => row.before(...all.slice(from + 1, to)));
         }
       };
       const end = () => {

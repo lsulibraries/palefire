@@ -705,8 +705,24 @@
   }
 }
 
+// Shown on hover and on keyboard focus, and always on a touch screen, where it's
+// the way to reorder without dragging (WCAG 2.1.1 and 2.5.7). Its space stays
+// held, so counts don't move.
 .pf-index__source-up {
   cursor: pointer;
+
+  @media (hover: hover) {
+    opacity: 0;
+
+    .pf-index__source:hover &,
+    &:focus-visible {
+      opacity: 1;
+    }
+
+    @include pf-index-motion {
+      transition: color $pf-hover-out ease, opacity $pf-hover-out ease;
+    }
+  }
 
   &:focus-visible {
     outline: 2px solid var(--pf-index-highlight);
@@ -714,8 +730,18 @@
   }
 
   &[aria-disabled="true"] {
-    opacity: .45;
     cursor: default;
+  }
+
+  .pf-index__source:hover &[aria-disabled="true"],
+  &[aria-disabled="true"]:focus-visible {
+    opacity: .45;
+  }
+
+  @media (hover: none) {
+    &[aria-disabled="true"] {
+      opacity: .45;
+    }
   }
 }
 
@@ -827,7 +853,7 @@
 // there's no Apply button or drawer to open.
 @media (min-width: 62rem) {
   .pf-index__body {
-    grid-template-columns: minmax(13rem, 17rem) minmax(0, 1fr);
+    grid-template-columns: minmax(14rem, 19rem) minmax(0, 1fr);
     align-items: start;
   }
 
@@ -851,7 +877,9 @@
     form {
       height: auto;
       max-height: calc(100vh - var(--pf-header-height, 5rem) - 2rem);
-      padding: 0 .25rem 0 0;
+      padding: 0;
+      padding-inline-end: 1rem;
+      scrollbar-gutter: stable;
     }
   }
 
@@ -1436,6 +1464,28 @@
   margin-top: 0;
 }
 
+// The toggle is the theme's secondary button, so it reads as one. Its words go
+// to full strength: the button's hover inverts them, and muted words wouldn't.
+.pf-index-row__holdings .pf-index-row__details summary {
+  justify-content: flex-start;
+  gap: .5rem;
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding: .375rem .875rem .375rem .625rem;
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  font-size: .875rem;
+
+  &:focus-visible {
+    color: var(--bs-body-bg);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--bs-body-bg);
+    }
+  }
+}
+
 .pf-index-row__holdings-line {
   display: flex;
   align-items: center;
@@ -1444,38 +1494,175 @@
   font-size: .875rem;
 }
 
-// Says it in words, so nothing rests on color.
+// Says it in words and weight, so nothing rests on color.
 .pf-index-row__status {
-  color: var(--pf-index-fg);
-  font-weight: 500;
+  font-weight: 700;
 }
 
-.pf-index-row__label--holdings {
-  @media (min-width: 30rem) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1rem;
+// Where a record is held, as the catalog's table: hairlines between rows only.
+// It's a table once its column has the room, whatever the screen, and each row
+// stacks with its own labels until then. Roles keep it a table to screen readers
+// while it's stacked.
+.pf-index-row__holdings {
+  container-type: inline-size;
+}
+
+.pf-index-row__copies-table {
+  padding-top: .5rem;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
   }
 
-  dd {
-    overflow-wrap: anywhere;
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
-  dl {
-    @media (min-width: 30rem) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+  tr,
+  td {
+    display: block;
+  }
+
+  tbody tr {
+    padding-block: .75rem;
+    border-bottom: 1px solid var(--pf-index-line);
+  }
+
+  th {
+    @include pf-index-label;
+    color: var(--pf-index-muted);
+    text-align: start;
+    vertical-align: bottom;
+  }
+
+  td {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: .75rem;
+    padding-block: .25rem;
+    color: var(--pf-index-fg);
+    overflow-wrap: break-word;
+
+    &:empty {
+      display: none;
+    }
+
+    &[data-label]::before {
+      content: attr(data-label);
+      @include pf-index-label;
+      color: var(--pf-index-muted);
     }
   }
 
-  .pf-index-row__links {
-    margin: 0;
+  .pf-index-list__more {
+    margin-top: .75rem;
+  }
+
+  @container (min-width: 46rem) {
+    thead {
+      position: static;
+      display: table-header-group;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip-path: none;
+    }
+
+    thead tr {
+      border-bottom: 1px solid var(--pf-index-line);
+    }
+
+    tr {
+      display: table-row;
+    }
+
+    tbody tr {
+      padding-block: 0;
+    }
+
+    th,
+    td {
+      display: table-cell;
+      padding: .75rem 1.25rem .75rem 0;
+      vertical-align: top;
+    }
+
+    td:empty {
+      display: table-cell;
+    }
+
+    td[data-label]::before {
+      content: none;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-inline-end: 0;
+    }
   }
 }
 
-.pf-index-row__copy-links {
+.pf-index-row__floor {
+  display: block;
+  color: var(--pf-index-muted);
+}
+
+// Slabs, tightened for a table row. Three classes: links here are underlined.
+.pf-main .pf-index .pf-index-row__copy-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: .25rem 1rem;
-  margin-top: .75rem;
+  gap: .5rem;
+  padding-top: .5rem;
+
+  &:empty {
+    display: none;
+  }
+
+  a {
+    gap: .5rem;
+    min-height: 2.75rem;
+    padding: .375rem .75rem;
+    color: var(--pf-section-fg, var(--bs-emphasis-color));
+    font-size: .875rem;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:focus-visible {
+      color: var(--bs-body-bg);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--bs-body-bg);
+      }
+    }
+  }
+
+  @container (min-width: 46rem) {
+    display: table-cell;
+    width: 1%;
+    padding-top: .5rem;
+
+    &:empty {
+      display: table-cell;
+    }
+
+    a {
+      display: flex;
+      margin-bottom: .375rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .pf-index-row__label-cover {

@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-06:** The Index: the filter column grows to `19rem`, with its scrollbar in a gutter of its own and `1rem` clear of the controls. `.pf-index-row__copies-table` is a table from a `46rem` container, with hairlines between rows, and stacks each row with its `data-label` below that. Its toggle and copy links are `.pf-button--secondary` at `2.75rem`. `.pf-index__source-up` shows on hover, focus or touch.
 - **2026-11-06:** The Index: `.pf-index__source` wraps a reorderable filter option, with `.pf-index__source-up` for keyboard and single-press use and `.pf-index__source-grip` for dragging. The pager under `.pf-index-list__pager` is mono labels on a hairline, its current page marked by `aria-current` and a 2px accent line, and First and Last drop out under `30rem`. Other pagers keep their own style.
 - **2026-11-06:** The Index: `.pf-index-row__copy-links` puts a Catalog copy's links in a wrapping row under its details.
 - **2026-11-06:** The Index: `.pf-index-row__holdings` holds a Catalog row's `2.75rem` availability line until it loads. It uses `.pf-index-row__details`, with `.pf-index-row__status` stating availability in words and `.pf-index-row__label--holdings` listing copies, in two columns from `30rem`. The Catalog section's held place grows to `40rem`.
