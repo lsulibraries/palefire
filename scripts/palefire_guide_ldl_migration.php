@@ -242,9 +242,9 @@ HTML),
 </ul>
 HTML),
   $status('Where each stage stands', [
-    ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). The 41 duplicate books at Loyola are best decided before its download.'],
+    ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola's download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
     ['attention', 'Files the website refuses', 'The website refused 4,197 main files and 822 text files with a 403: University of New Orleans 4,027 and 728, Historic New Orleans 76 and 0, TAHIL 51 and 51, LSU Shreveport 43 and 43. They come next from Fedora through the tunnel, as Newspaper Clippings did.'],
-    ['running', 'Remaining downloads', 'About 1.30 TB and 450,000 files as of Nov 6: Louisiana Newspapers about 1.07 TB and Loyola about 0.23 TB, plus the files the website refused. Loyola waits for the short list.'],
+    ['running', 'Remaining downloads', 'About 1.30 TB and 450,000 files as of Nov 6: Louisiana Newspapers about 1.07 TB and Loyola about 0.23 TB, plus the files the website refused. Loyola is queued to start after Louisiana Newspapers.'],
     ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. A few need another try: State Archives 6, Ascension 1, Hicks 1 and Amistad 1. The new audits added Historic New Orleans 183 and Law Library 2.'],
     ['todo', 'TIFFs with no usable JP2', 'About 2,000 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
@@ -894,7 +894,7 @@ HTML),
 <li>Fetch the files the website refused directly from Fedora, then run the replacements the new audits queued. Download Louisiana Newspapers. Look into Amistad's one checksum failure and the State Museum's 2,230 Unavailable.</li>
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up: about 2,000 left across all institutions (at most about 98 GB), most of them in Louisiana Newspapers. The original count of 2,387 included the 28 already converted and 16 orphaned Agramonte pages.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
-<li>Download Loyola once its short list decisions are made.</li>
+<li>Download Loyola after Louisiana Newspapers. It was queued on Nov 6 ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
 <li>Get the short list in <code>triage.csv</code> approved, ideally the Loyola books before Loyola's download, then run <code>0-leave-out</code>.</li>
 </ul>
 HTML),
