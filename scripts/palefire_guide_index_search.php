@@ -260,6 +260,7 @@ HTML),
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
 <li>Special Collections copies now say Available to view and Request to view, with a note about the reading room.</li>
 <li>Compared the Russell B. Long papers with the catalog. No items were missing, but holdings had lost their link to call numbers, so each item now shows what it holds, and the summary row no longer names one call number for all of them.</li>
+<li>Compared Huey Long with the catalog and found a copy shown as 4 that the catalog calls 7. The catalog service gives no copy numbers, so these were list positions, and item rows now leave them out.</li>
 <li>An open result's table now sits on a soft panel, and its button says Hide while open.</li>
 <li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
 </ul>
