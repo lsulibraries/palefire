@@ -1469,13 +1469,13 @@
   overflow-wrap: anywhere;
 
   &:nth-child(even) {
-    background-color: color-mix(in srgb, var(--pf-index-fg) 5%, transparent);
     // As pf-hatch() (base/_mixins.scss), which this file's imports don't bring in.
     background-image: repeating-linear-gradient(135deg, transparent 0 10.25px, color-mix(in srgb, var(--pf-index-fg) 9%, transparent) 10.75px 11.25px, transparent 11.75px 12px);
 
+    // Solid, at the slab's usual color, so the lines don't run through it.
     .pf-index-row__toggle .pf-button--secondary,
     .pf-index-row__copy-actions a {
-      background-color: var(--bs-body-bg);
+      background-color: color-mix(in srgb, var(--pf-index-fg) 9%, var(--bs-body-bg));
     }
   }
 
@@ -1744,12 +1744,17 @@
   }
 }
 
+// The slab leads where there's room. Where they wrap, wrap-reverse puts it under
+// the words. Reading order isn't affected: it's all one control's name.
 .pf-index-row__toggle {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   align-items: center;
-  justify-content: space-between;
   gap: .5rem 1rem;
+
+  > .pf-button--secondary {
+    order: -1;
+  }
 }
 
 .pf-index-row__where {
