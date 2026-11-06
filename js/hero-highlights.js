@@ -11,8 +11,8 @@
  * featured picture is up; a row in hand wins over it, in the CSS.
  *
  * The Scroll cue glides to what follows the stage and moves focus there. It is
- * there only at the top of the page, and fades once the page has moved. Its
- * arrow dips once, if nothing has happened for four seconds after the entrance.
+ * there only at the top of the page, and fades once the page has moved. The
+ * line's movement is the CSS's.
  *
  * Without script: the film's poster, the rows and no cue. Phones have no stage,
  * so none of this runs there.
@@ -21,9 +21,6 @@
   const VIDEO = 5000; // ms
   const TICK = 250; // ms
   const LOAD_LIMIT = 4000; // ms, how long the film may take to start playing
-  // ms: the entrance's last animation (the film's column, _entrance.scss, ends
-  // at 2s), the rows' after it, then four quiet seconds.
-  const NUDGE_AFTER = 6500;
   const AT_TOP = 16; // px, so a trackpad's bounce doesn't flicker the cue
   const html = document.documentElement;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -131,27 +128,6 @@
           heading.focus({ preventScroll: true });
         }
       }, { interruptible: true });
-    });
-
-    const stop = new AbortController();
-    const cancel = () => {
-      window.clearTimeout(nudge);
-      stop.abort();
-    };
-    const nudge = window.setTimeout(() => {
-      const shown = button.isConnected && getComputedStyle(button).display !== 'none';
-      cancel();
-      if (shown && window.scrollY < 1) {
-        button.classList.add('is-nudging');
-      }
-    }, NUDGE_AFTER);
-    ['scroll', 'wheel', 'keydown', 'pointerdown'].forEach((type) => {
-      window.addEventListener(type, cancel, { passive: true, signal: stop.signal });
-    });
-    button.addEventListener('animationend', (event) => {
-      if (event.animationName === 'pf-hero-cue-nudge') {
-        button.classList.remove('is-nudging');
-      }
     });
   };
 
