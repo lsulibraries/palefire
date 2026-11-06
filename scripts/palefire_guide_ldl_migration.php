@@ -211,7 +211,7 @@ HTML),
 <tr><td>Louisiana State Museum</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana State University Health Sciences Center New Orleans</td><td>100%</td><td>100%</td><td>99%</td><td>0</td><td>0</td><td>In audit</td></tr>
-<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>100%</td><td>100%</td><td>79%</td><td>0</td><td>0</td><td>In audit</td></tr>
+<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>100%</td><td>100%</td><td>79%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana State University of Alexandria</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana Tech University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>McNeese State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
@@ -235,7 +235,9 @@ HTML),
 </table>
 <ul>
 <li><strong>Few or no images on L: yet:</strong> Loyola has none, and Louisiana Newspapers is about 15% done by size.</li>
-<li><strong>In audit means nothing is left to download, but some images have no check on record yet:</strong> 1 of 38,361 at LSUHSC New Orleans and 589 of 2,852 at LSUHSC Shreveport.</li>
+<li><strong>In audit means nothing is left to download, but some images have no check on record yet:</strong> 1 of 38,361 at LSUHSC New Orleans.</li>
+<li><strong>LSUHSC Shreveport is Done with Images audited at 79%.</strong> 589 Newspaper Clippings PDFs can't get a checksum check: Fedora has checksums turned off for them, and there's no FITS or S3 hash either, so no audit can finish them. All 589 match Fedora's size and have a PDF start and end marker, so they look complete, but that isn't proof their contents are unchanged.</li>
+<li><strong>One Amistad recording is empty in Fedora itself:</strong> <code>amistad-ay:148</code>, "Andrew Young's inserts for manuscript, 1984 August 6, Part 2", original file <code>Dent.Young_8.6.1984_Item_5-02.wav</code>. Fedora returns 0 bytes and has only one version. Its technical record from ingest (Nov 11, 2024) already says size 0, so it was empty when it arrived. Its S3 record lists no datastreams, and the 521-byte MP3 looks like it was made from the empty file. Downloading again can't fix it, and the only likely source is Amistad's own copy. It's being set aside in <code>L:\LDL1-datastreams\_empty_other\</code>, outside the export, and nothing is deleted.</li>
 <li><strong>Done means nothing is left to download and every image has a check on record, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 18 institutions. Anything with files left shows 99% at most.</li>
 <li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
 <li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including those still in the queue.</li>
@@ -341,6 +343,7 @@ HTML),
 <li>Audits found 183 more Historic New Orleans images and 2 Law Library images to replace.</li>
 <li>The website refused 4,197 main files and 822 text files, most of them at UNO. UNO's started coming directly from Fedora at 8:09 AM, and the rest follow.</li>
 <li>Louisiana Newspapers started downloading at 8:09 AM.</li>
+<li>Found that one Amistad recording (<code>amistad-ay:148</code>) has been empty in Fedora since ingest, and that LSUHSC Shreveport's 589 unchecked PDFs have no checksum to check against.</li>
 <li>By 11:45 AM, UNO had 38 main files left to come from Fedora, and Louisiana Newspapers was about 15% done by size.</li>
 </ul>
 HTML),
@@ -866,6 +869,7 @@ $section('Exporter changes this phase', [
 <tr><td>v2.29</td><td>Nov 5, 11:13</td><td><strong>Loyola is back in the migration.</strong> The LDL team confirmed it isn't harvested, so it's off the excluded list and runs by size include it again. Nothing had been removed for it.</td></tr>
 <tr><td>v2.30</td><td>Nov 5, 11:45</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
 <tr><td>v2.31</td><td>Nov 5, 13:55</td><td><strong>Fewer downloads at once when connections drop.</strong> <code>--workers</code> is now the most that run at once. When 5 downloads in a row lose their connection, the exporter halves the number running, down to 2, and pauses 30 seconds. After 20 successful downloads it adds one back. These pauses now stop at 2 minutes instead of 10. Firewall blocks still pause for up to 10 minutes.</td></tr>
+<tr><td>v2.32</td><td>Nov 6, 12:05</td><td><strong>Files confirmed empty in Fedora are set aside.</strong> Steps <code>0-empty-list</code> and <code>0-empty-move</code> also cover files on a short hand-checked list, moving them to <code>L:\LDL1-datastreams\_empty_other\</code>. Later steps don't ask for them again, and manifests leave them out. Other empty files stay until they've been checked. The first on the list is the empty Amistad recording.</td></tr>
 </tbody>
 </table>
 HTML),
@@ -897,6 +901,7 @@ HTML),
   $text('Next', <<<'HTML'
 <ul>
 <li>Finish fetching the files the website refused directly from Fedora, then run the replacements the new audits queued. Finish Louisiana Newspapers, then download Loyola. Look into Amistad's one checksum failure and the State Museum's 2,230 Unavailable.</li>
+<li>Run <code>0-empty-move</code> to set the empty Amistad recording aside, then rerun <code>6-manifests</code> for Amistad.</li>
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up: about 2,000 left across all institutions (at most about 98 GB), most of them in Louisiana Newspapers. The original count of 2,387 included the 28 already converted and 16 orphaned Agramonte pages.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>Download Loyola after Louisiana Newspapers. It was queued on Nov 6 ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
