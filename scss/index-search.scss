@@ -622,23 +622,13 @@
     }
   }
 
-  // One choice to a filter: round, with a dot once chosen.
+  // One choice to a filter: round, and solid once chosen, so filled against
+  // empty says it without leaning on color.
   input[type="radio"] {
     border-radius: 50%;
 
     &::before {
-      width: .5rem;
-      height: .5rem;
-      border: 0;
-      border-radius: 50%;
-      background: var(--pf-g-on-accent, #000);
-      transform: none;
-    }
-
-    @media (forced-colors: active) {
-      &:checked::before {
-        background: HighlightText;
-      }
+      content: none;
     }
   }
 
@@ -650,6 +640,59 @@
   &:has(:checked) .pf-index__option-label {
     color: var(--pf-index-fg);
   }
+
+  // Nothing to add: dimmed and out of reach, with its 0 still saying why. Disabled
+  // controls are exempt from contrast (WCAG 1.4.3).
+  &:has(input:disabled) {
+    cursor: not-allowed;
+
+    input,
+    .pf-index__option-label,
+    .pf-index__count {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+  }
+
+  // The whole row answers: its words and count come up, the box takes a heavier
+  // highlighted edge, and its hairline firms up. Arrives fast, leaves slowly.
+  @media (hover: hover) {
+    &:hover:not(:has(input:disabled)) {
+      border-bottom-color: var(--pf-index-control);
+
+      .pf-index__option-label,
+      .pf-index__count {
+        color: var(--pf-index-fg);
+        transition-duration: $pf-hover-in;
+      }
+
+      .pf-index__option-label {
+        transform: translateX(.1875rem);
+      }
+
+      input {
+        border-color: var(--pf-index-highlight);
+        box-shadow: inset 0 0 0 1px var(--pf-index-highlight);
+        transition-duration: $pf-hover-in;
+      }
+    }
+  }
+
+  @include pf-index-motion {
+    transition: border-color $pf-hover-out ease;
+
+    .pf-index__option-label {
+      transition: color $pf-hover-out ease, transform $pf-hover-out ease;
+    }
+
+    .pf-index__count {
+      transition: color $pf-hover-out ease;
+    }
+  }
+}
+
+[dir="rtl"] .pf-index__option:hover .pf-index__option-label {
+  transform: translateX(-.1875rem);
 }
 
 .pf-index__option-label {
@@ -669,6 +712,17 @@
     flex: 1;
     min-width: 0;
     border-bottom: 0;
+  }
+
+  // The row holds the hairline here.
+  @media (hover: hover) {
+    &:has(.pf-index__option:hover:not(:has(input:disabled))) {
+      border-bottom-color: var(--pf-index-control);
+    }
+  }
+
+  @include pf-index-motion {
+    transition: border-color $pf-hover-out ease;
   }
 
   &.is-dragging {
@@ -903,25 +957,78 @@
 
 // Toolbar: how many, and the order. Chosen filters under it. ------------------
 
+// What was searched and how much was found, kept in view under the page bar.
+// One line, so it costs little of a phone's screen: a long search is cut short
+// here, and is whole in the search field. Not held on a short screen, where it
+// would take too much of what's left (WCAG 1.4.10).
 .pf-index__toolbar {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: .5rem 1.5rem;
+  gap: 1rem 1.5rem;
+  min-height: 3rem;
   margin-bottom: .75rem;
+  padding-block: .25rem;
+  border-bottom: 1px solid var(--pf-index-line);
+  background: var(--bs-body-bg);
+
+  @media (min-height: 30rem) {
+    position: sticky;
+    top: calc(var(--pf-header-h, 3rem) + 2rem);
+    z-index: 2;
+  }
+}
+
+// A control reached by keyboard stops below the bar, not behind it (WCAG 2.4.11).
+@media (min-height: 30rem) {
+  html:has(.pf-index__toolbar) {
+    scroll-padding-top: calc(var(--pf-header-h, 3rem) + 5.5rem);
+  }
 }
 
 .pf-index__total {
+  min-width: 0;
   margin: 0;
+  overflow: hidden;
   color: var(--pf-index-muted);
   font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-index__term {
+  color: var(--pf-index-fg);
+}
+
+// The list under a leading section: its name, then what it alone found.
+.pf-index__list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1.5rem;
+
+  .pf-index__total {
+    margin-inline-start: auto;
+  }
 }
 
 .pf-index__sort {
   display: flex;
+  flex: none;
   align-items: center;
   gap: .625rem;
+
+  // On a phone the words are for screen readers, to keep the bar to one line.
+  @media (max-width: 35.98rem) {
+    label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
 
   label {
     color: var(--pf-index-muted);
@@ -1460,30 +1567,74 @@
   }
 }
 
-.pf-index-row__holdings .pf-index-row__details {
+// A row across the record, between two hairlines, as the site's accordions: the
+// words at one end and a plus at the other. The record's own rule is the lower
+// hairline, so it loses its padding, and only with a script: without one this
+// place stays empty.
+.pf-index-row__holdings {
+  margin-top: 1rem;
+}
+
+.js .pf-index-row__holdings {
+  border-top: 1px solid var(--pf-index-line);
+}
+
+.js .pf-index-row:has(> .pf-index-row__holdings) {
+  padding-bottom: 0;
+}
+
+.pf-index-row--image > .pf-index-row__holdings {
+  grid-column: 1 / -1;
   margin-top: 0;
 }
 
-// The toggle is the theme's secondary button, so it reads as one. Its words go
-// to full strength: the button's hover inverts them, and muted words wouldn't.
-.pf-index-row__holdings .pf-index-row__details summary {
-  justify-content: flex-start;
-  gap: .5rem;
-  max-width: 100%;
-  min-height: 2.75rem;
-  padding: .375rem .875rem .375rem .625rem;
-  color: var(--pf-section-fg, var(--bs-emphasis-color));
-  font-size: .875rem;
+.pf-index-row__holdings .pf-index-row__details {
+  margin-top: 0;
 
-  &:focus-visible {
-    color: var(--bs-body-bg);
-  }
+  // A block, with the row inside it: a flex summary has toggle bugs.
+  summary {
+    display: block;
+    min-height: 2.75rem;
+    padding: .8125rem .25rem;
+    line-height: 1.3;
 
-  @media (hover: hover) {
-    &:hover {
-      color: var(--bs-body-bg);
+    &:focus-visible {
+      outline-offset: -2px;
     }
   }
+
+  summary svg {
+    color: var(--pf-index-highlight);
+  }
+
+  &[open] summary svg {
+    transform: rotate(45deg);
+  }
+
+  // It glides open where the browser can, as the site's accordions. Closing is
+  // at once, and other browsers open at once.
+  @supports (interpolate-size: allow-keywords) {
+    @include pf-index-motion {
+      interpolate-size: allow-keywords;
+
+      &::details-content {
+        block-size: 0;
+        overflow: hidden;
+      }
+
+      &[open]::details-content {
+        block-size: auto;
+        transition: block-size .35s var(--pf-index-ease), content-visibility .35s allow-discrete;
+      }
+    }
+  }
+}
+
+.pf-index-row__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .pf-index-row__holdings-line {
@@ -1494,8 +1645,17 @@
   font-size: .875rem;
 }
 
+// Same height as the toggle, where a record has nothing to open.
+.pf-index-row__holdings > .pf-index-row__holdings-line {
+  align-items: center;
+  min-height: 2.75rem;
+  margin: 0;
+  padding-inline: .25rem;
+}
+
 // Says it in words and weight, so nothing rests on color.
 .pf-index-row__status {
+  color: var(--pf-index-fg);
   font-weight: 700;
 }
 
@@ -1508,7 +1668,7 @@
 }
 
 .pf-index-row__copies-table {
-  padding-top: .5rem;
+  padding-block: .5rem 1.25rem;
 
   table {
     width: 100%;
@@ -1533,6 +1693,10 @@
   tbody tr {
     padding-block: .75rem;
     border-bottom: 1px solid var(--pf-index-line);
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 
   th {

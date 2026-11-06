@@ -230,7 +230,7 @@
 
   // The selector that finds a filter or sort again in the new page.
   const focusFor = (control) => (control.type === 'checkbox' || control.type === 'radio'
-    ? `input[name="${CSS.escape(control.name)}"][value="${CSS.escape(control.value)}"]`
+    ? `input[name="${CSS.escape(control.name)}"][value="${CSS.escape(control.value)}"]:not(:disabled)`
     : `#${CSS.escape(control.id)}`);
 
   // True for a plain click on a link to another search on this page.
