@@ -1100,6 +1100,96 @@
 
 // The theme's mono labels on the page's hairline, with the mode tabs' accent line
 // on the current page. Four classes: links everywhere else are underlined.
+// Show more results: a row across the list, under the last result's rule, as the
+// availability row. Script adds it.
+.pf-index-list__grow {
+  button {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .25rem 1rem;
+    width: 100%;
+    min-height: 3.5rem;
+    padding-block: .5rem;
+    border: 0;
+    background: none;
+    color: var(--pf-index-fg);
+    text-align: start;
+    cursor: pointer;
+
+    &[aria-busy] {
+      cursor: progress;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-highlight);
+      outline-offset: -2px;
+    }
+  }
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--pf-index-highlight);
+  }
+
+  @media (hover: hover) {
+    button:not([aria-busy]):hover {
+      .pf-index-list__grow-count {
+        color: var(--pf-index-fg);
+        transition-duration: $pf-hover-in;
+      }
+
+      svg {
+        transform: rotate(90deg);
+        transition-duration: $pf-hover-in;
+      }
+    }
+  }
+
+  @include pf-index-motion {
+    svg {
+      transition: transform $pf-hover-out ease;
+    }
+
+    .pf-index-list__grow-count {
+      transition: color $pf-hover-out ease;
+    }
+
+    button[aria-busy] svg {
+      animation: pf-index-grow-turn 1.2s linear infinite;
+    }
+  }
+}
+
+.pf-index-list__grow-label {
+  font-weight: 500;
+}
+
+.pf-index-list__grow-count {
+  flex: 1;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+@keyframes pf-index-grow-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Rows it adds arrive in turn, the first few at least.
+.pf-index-row.is-new {
+  @include pf-index-motion {
+    animation: pf-index-arrive .35s var(--pf-index-ease) backwards;
+    animation-delay: calc(var(--pf-row-order, 0) * 50ms);
+  }
+}
+
 .pf-index-list__pager {
   margin-top: 1.5rem;
 
@@ -1305,6 +1395,10 @@
     stroke-dashoffset: 0;
     vector-effect: non-scaling-stroke;
   }
+
+  line {
+    stroke: var(--pf-index-highlight);
+  }
 }
 
 .pf-index__mark-label {
@@ -1321,7 +1415,7 @@
   padding-block: 1.5rem;
 
   svg {
-    width: 5rem;
+    width: 6.5rem;
   }
 }
 
@@ -1335,6 +1429,16 @@
     &.is-searching > .pf-index__loading :is(path, polygon),
     .is-searching > .pf-index__mark :is(path, polygon) {
       animation: pf-mark-trace 2.4s linear .2s backwards infinite;
+    }
+
+    &.is-searching > .pf-index__loading .pf-mark-track,
+    .is-searching > .pf-index__mark .pf-mark-track {
+      stroke-opacity: .25;
+    }
+
+    &.is-searching > .pf-index__loading .pf-mark-worm,
+    .is-searching > .pf-index__mark .pf-mark-worm {
+      animation: pf-mark-worm 2.4s ease-in-out .2s backwards infinite;
     }
   }
 }
@@ -1567,16 +1671,11 @@
   }
 }
 
-// A row across the record, between two hairlines, as the site's accordions: the
-// words at one end and a plus at the other. The record's own rule is the lower
-// hairline, so it loses its padding, and only with a script: without one this
-// place stays empty.
+// A row across the record with no lines of its own: the words at one end and a
+// plus at the other, closed by the record's rule. So the record loses its padding,
+// and only with a script: without one this place stays empty.
 .pf-index-row__holdings {
-  margin-top: 1rem;
-}
-
-.js .pf-index-row__holdings {
-  border-top: 1px solid var(--pf-index-line);
+  margin-top: .25rem;
 }
 
 .js .pf-index-row:has(> .pf-index-row__holdings) {
@@ -1589,13 +1688,13 @@
 }
 
 .pf-index-row__holdings .pf-index-row__details {
-  margin-top: 0;
+  margin-block: 0;
 
   // A block, with the row inside it: a flex summary has toggle bugs.
   summary {
     display: block;
     min-height: 2.75rem;
-    padding: .8125rem .25rem;
+    padding-block: .8125rem;
     line-height: 1.3;
 
     &:focus-visible {
@@ -1650,7 +1749,6 @@
   align-items: center;
   min-height: 2.75rem;
   margin: 0;
-  padding-inline: .25rem;
 }
 
 // Says it in words and weight, so nothing rests on color.

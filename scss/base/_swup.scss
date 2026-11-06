@@ -73,6 +73,10 @@ html:not(.pf-vt).is-animating .pf-swup > * {
     stroke-dashoffset: 0;
     vector-effect: non-scaling-stroke;
   }
+
+  line {
+    stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -88,6 +92,39 @@ html:not(.pf-vt).is-animating .pf-swup > * {
     :is(path, polygon) {
       animation: pf-mark-trace 2.4s linear .4s backwards infinite;
     }
+
+    .pf-mark-track {
+      stroke-opacity: .25;
+    }
+
+    .pf-mark-worm {
+      animation: pf-mark-worm 2.4s ease-in-out .4s backwards infinite;
+    }
+  }
+}
+
+// The rule between LSU and Libraries, as a worm running end to end and back: its
+// front races ahead, and its back catches up on arrival. At rest the line is solid.
+@keyframes pf-mark-worm {
+  0%,
+  100% {
+    stroke-dasharray: .1 2;
+    stroke-dashoffset: 0;
+  }
+
+  25% {
+    stroke-dasharray: .55 2;
+    stroke-dashoffset: -.1;
+  }
+
+  50% {
+    stroke-dasharray: .1 2;
+    stroke-dashoffset: -.9;
+  }
+
+  75% {
+    stroke-dasharray: .55 2;
+    stroke-dashoffset: -.35;
   }
 }
 
@@ -128,7 +165,7 @@ html:not(.pf-vt).is-animating .pf-swup > * {
 }
 
 @media (forced-colors: active) {
-  .pf-loading-mark :is(path, polygon) {
+  .pf-loading-mark :is(path, polygon, line) {
     fill: CanvasText;
     stroke: CanvasText;
   }

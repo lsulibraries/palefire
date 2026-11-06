@@ -24,6 +24,9 @@
  *   a preference: without storage or this file, the page's own order stands.
  * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
  *   back to the row's text.
+ * - A paged list gets a Show more results button, which adds the next page under
+ *   the rows it has. It's only ever on request: a list that grew by itself would
+ *   keep the footer out of reach. The pager stays, for jumping ahead.
  */
 (function (Drupal, drupalSettings, once) {
   'use strict';
@@ -64,6 +67,8 @@
 
   // Fills each row's place from one answer, and removes the places left empty.
   const loadHoldings = async (rows) => {
+    // Now: a list that's being added to hands these rows on while this waits.
+    const places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), HOLDINGS_TIMEOUT_MS);
     controllers.add(controller);
@@ -81,7 +86,7 @@
       window.clearTimeout(timer);
       controllers.delete(controller);
     }
-    rows.querySelectorAll('[data-pf-index-holdings]').forEach((place) => {
+    places.forEach((place) => {
       const found = template.content.querySelector(`[data-pf-index-holdings-for="${CSS.escape(place.dataset.pfIndexHoldings)}"]`);
       if (found) {
         place.replaceChildren(...found.childNodes);
@@ -129,6 +134,110 @@
       holder.querySelector(':scope > .pf-index__mark')?.remove();
       holder.setAttribute('aria-busy', 'false');
     }
+  };
+
+  // Adds the next page of a list to the rows it has, on request. The address
+  // follows, so a reload or a shared link lands on the page reached. Anything
+  // unexpected falls back to loading that page normally, which always works.
+  const setUpMore = (pager) => {
+    const list = pager.closest('.pf-index-list');
+    const rows = list && list.querySelector(':scope > .pf-index-list__rows');
+    if (!rows || !pager.querySelector('a[rel="next"]')) {
+      return;
+    }
+    const pageNumber = Number(new URLSearchParams(window.location.search).get('page')) || 0;
+    const first = pageNumber * rows.children.length + 1;
+    const total = Number(list.dataset.pfIndexTotal);
+
+    const box = document.createElement('div');
+    box.className = 'pf-index-list__grow';
+    const button = document.createElement('button');
+    button.type = 'button';
+    const label = document.createElement('span');
+    label.className = 'pf-index-list__grow-label';
+    const count = document.createElement('span');
+    count.className = 'pf-index-list__grow-count';
+    button.append(label, count);
+    button.insertAdjacentHTML('beforeend', icon('M12 5v14M5 12h14'));
+    box.append(button);
+    rows.after(box);
+
+    const shown = () => (first === 1
+      ? Drupal.t('@shown of @total shown', { '@shown': rows.children.length.toLocaleString(), '@total': total.toLocaleString() })
+      : Drupal.t('@first to @last of @total shown', { '@first': first.toLocaleString(), '@last': (first + rows.children.length - 1).toLocaleString(), '@total': total.toLocaleString() }));
+    const rest = () => {
+      label.textContent = Drupal.t('Show more results');
+      count.textContent = shown();
+      button.removeAttribute('aria-busy');
+    };
+    rest();
+
+    button.addEventListener('click', async () => {
+      const next = list.querySelector('.pf-index-list__pager a[rel="next"]');
+      if (!next || button.hasAttribute('aria-busy')) {
+        return;
+      }
+      const url = next.href;
+      button.setAttribute('aria-busy', 'true');
+      label.textContent = Drupal.t('Loading more results');
+      Drupal.announce(Drupal.t('Loading more results'));
+
+      const controller = new AbortController();
+      controllers.add(controller);
+      let more;
+      let added;
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(String(response.status));
+        }
+        const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+        more = page.querySelector('[data-pf-index] .pf-index-list__pager')?.closest('.pf-index-list');
+        added = more ? more.querySelector(':scope > .pf-index-list__rows') : null;
+        if (!added || !added.children.length || page.querySelector('[data-big-pipe-placeholder-id]')) {
+          throw new Error('Not a page that can be added.');
+        }
+      }
+      catch (error) {
+        if (error.name !== 'AbortError') {
+          window.location.assign(url);
+        }
+        return;
+      }
+      finally {
+        controllers.delete(controller);
+      }
+
+      if (added.dataset.pfIndexHoldingsUrl) {
+        loadHoldings(added);
+      }
+      const arriving = [...added.children];
+      arriving.forEach((row, index) => {
+        row.classList.add('is-new');
+        row.style.setProperty('--pf-row-order', Math.min(index, 5));
+      });
+      rows.append(...arriving);
+      arriving.forEach((row) => once('pf-index-thumb', '.pf-index-row__thumb img', row).forEach(checkCover));
+
+      // The pager's links are relative, so the address goes first.
+      window.history.replaceState({ pfIndex: true }, '', url);
+      list.querySelector(':scope > .pf-index-list__pager').replaceWith(more.querySelector(':scope > .pf-index-list__pager'));
+      // The note that this is as far as the service reads, on its last page.
+      more.querySelectorAll(':scope > .pf-index-list__rows ~ .pf-index-list__status').forEach((note) => box.before(note));
+
+      const message = Drupal.t('@count more results added. @shown.', { '@count': arriving.length, '@shown': shown() });
+      if (list.querySelector('.pf-index-list__pager a[rel="next"]')) {
+        rest();
+      }
+      else {
+        box.remove();
+      }
+      // The new rows open where the button was, so this rarely needs to scroll.
+      const firstLink = arriving[0].querySelector('.pf-index-row__title a');
+      firstLink?.focus({ preventScroll: true });
+      firstLink?.scrollIntoView({ block: 'nearest' });
+      Drupal.announce(message);
+    });
   };
 
   // A form's address, leaving out the default sort and empty years.
@@ -567,6 +676,7 @@
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
       once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
+      once('pf-index-more', '.pf-index-list__pager', context).forEach(setUpMore);
     },
     detach(context, settings, trigger) {
       if (trigger === 'unload') {
