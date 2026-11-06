@@ -3,11 +3,10 @@
 // loads it. Markup: the palefire_search module's templates. Filters, swaps and
 // late sections: js/index-search.js.
 //
-// Swiss and quiet: a large title, labels in the TOC's mono capitals, and hatched
-// bands on every other record in place of ruled rows. What can be clicked looks
-// it: titles are underlined and actions are slabs, while tags and searched words
-// (marked by weight alone) stay plain text. No literal colors, so every reading
-// color follows.
+// Swiss and quiet, as the staff directory: a large title, ruled rows on the
+// soft hairline, labels in the TOC's mono capitals. No literal colors, so
+// every reading color follows. Searched words are marked with weight and a
+// rule in the text's own color, so a mark can never lower its contrast.
 
 // Tokens only: these imports print no CSS.
 @import "bootstrap/scss/functions";
@@ -179,27 +178,45 @@
   background-size: 100% 0;
 }
 
-// While results are on their way, a search or a late section, the same line
-// runs back and forth. With reduced motion it holds still at full width.
+// While results are on their way, a search or a late section, the same line is a
+// worm, in step with the rule in the loading mark. With reduced motion it holds
+// still at full width.
 .pf-index.is-searching .pf-index__input,
 .pf-index:has(.pf-index-section__late.is-searching) .pf-index__input {
   background-size: 100% 2px;
 
   @include pf-index-motion {
-    background-size: 30% 2px;
-    animation: pf-index-chase 1.1s ease-in-out infinite alternate;
+    background-size: 20% 2px;
+    animation: pf-index-chase 2.4s ease-in-out infinite;
   }
 }
 
+// pf-mark-worm's steps. A background's position is a share of the room left beside
+// it, so a start of s at a length of l is s / (1 - l).
 @keyframes pf-index-chase {
-  from {
+  0%,
+  100% {
     background-position: 0% 100%;
+    background-size: 20% 2px;
   }
 
-  to {
+  25% {
+    background-position: 20% 100%;
+    background-size: 75% 2px;
+  }
+
+  50% {
     background-position: 100% 100%;
+    background-size: 20% 2px;
+  }
+
+  75% {
+    background-position: 80% 100%;
+    background-size: 75% 2px;
   }
 }
+
+@import "base/mark-worm";
 
 // The theme's primary button (_buttons.scss), which this entry point can't
 // extend: the text color wipes in on hover and fades out in place.
@@ -483,6 +500,7 @@
   width: 100%;
   margin: 0;
   padding: 0 0 .5rem;
+  border-bottom: 1px solid var(--pf-index-line);
   color: var(--pf-index-muted);
 
   &:has(.pf-index__about-open) {
@@ -565,7 +583,8 @@
   display: flex;
   align-items: center;
   gap: .625rem;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
+  border-bottom: 1px solid var(--pf-index-line);
   cursor: pointer;
 
   // Square and clear, as the page's fields, filled with the accent once chosen.
@@ -653,19 +672,20 @@
     }
   }
 
-  // The whole row answers: its words take the highlight, its count comes up and
-  // the box takes a heavier edge. Arrives fast, leaves slowly.
+  // The whole row answers: its words and count come up, the box takes a heavier
+  // highlighted edge, and its hairline firms up. Arrives fast, leaves slowly.
   @media (hover: hover) {
     &:hover:not(:has(input:disabled)) {
-      .pf-index__option-label {
-        color: var(--pf-index-highlight);
-        transform: translateX(.1875rem);
-        transition-duration: $pf-hover-in;
-      }
+      border-bottom-color: var(--pf-index-control);
 
+      .pf-index__option-label,
       .pf-index__count {
         color: var(--pf-index-fg);
         transition-duration: $pf-hover-in;
+      }
+
+      .pf-index__option-label {
+        transform: translateX(.1875rem);
       }
 
       input {
@@ -677,6 +697,8 @@
   }
 
   @include pf-index-motion {
+    transition: border-color $pf-hover-out ease;
+
     .pf-index__option-label {
       transition: color $pf-hover-out ease, transform $pf-hover-out ease;
     }
@@ -702,10 +724,23 @@
   display: flex;
   align-items: center;
   gap: .125rem;
+  border-bottom: 1px solid var(--pf-index-line);
 
   .pf-index__option {
     flex: 1;
     min-width: 0;
+    border-bottom: 0;
+  }
+
+  // The row holds the hairline here.
+  @media (hover: hover) {
+    &:has(.pf-index__option:hover:not(:has(input:disabled))) {
+      border-bottom-color: var(--pf-index-control);
+    }
+  }
+
+  @include pf-index-motion {
+    transition: border-color $pf-hover-out ease;
   }
 
   &.is-dragging {
@@ -830,6 +865,7 @@
   grid-template-columns: 1fr 1fr;
   gap: .75rem;
   padding-block: .75rem;
+  border-bottom: 1px solid var(--pf-index-line);
 
   label {
     display: block;
@@ -951,6 +987,7 @@
   min-height: 3rem;
   margin-bottom: .75rem;
   padding-block: .25rem;
+  border-bottom: 1px solid var(--pf-index-line);
   background: var(--bs-body-bg);
 
   @media (min-height: 30rem) {
@@ -1091,17 +1128,12 @@
     gap: .25rem 1rem;
     width: 100%;
     min-height: 3.5rem;
-    margin-top: .5rem;
-    padding: .5rem 1.25rem;
+    padding-block: .5rem;
     border: 0;
-    background: color-mix(in srgb, var(--pf-index-fg) 9%, transparent);
+    background: none;
     color: var(--pf-index-fg);
     text-align: start;
     cursor: pointer;
-
-    @media (forced-colors: active) {
-      border: 1px solid ButtonText;
-    }
 
     &[aria-busy] {
       cursor: progress;
@@ -1117,16 +1149,13 @@
     flex: none;
     width: 1rem;
     height: 1rem;
+    color: var(--pf-index-highlight);
   }
 
   @media (hover: hover) {
     button:not([aria-busy]):hover {
-      background: var(--pf-index-fg);
-      color: var(--bs-body-bg);
-      transition-duration: $pf-hover-in;
-
       .pf-index-list__grow-count {
-        color: inherit;
+        color: var(--pf-index-fg);
         transition-duration: $pf-hover-in;
       }
 
@@ -1138,10 +1167,6 @@
   }
 
   @include pf-index-motion {
-    button {
-      transition: background-color $pf-hover-out ease, color $pf-hover-out ease;
-    }
-
     svg {
       transition: transform $pf-hover-out ease;
     }
@@ -1191,6 +1216,7 @@
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    border-top: 1px solid var(--pf-index-line);
     list-style: none;
   }
 
@@ -1284,13 +1310,7 @@
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-// Each section opens on the theme's index rule (_landing-features.scss), without
-// its line here: the bands below it already mark where a list starts.
-.pf-index .pf-index-rule {
-  padding-bottom: .5rem;
-  border-bottom: 0;
-}
-
+// Each section opens on the theme's index rule (_landing-features.scss).
 // Four classes: the reading colors set every heading through html[...] .pf-main.
 .pf-main .pf-index .pf-index-rule .pf-index-section__title {
   @include pf-index-label;
@@ -1462,27 +1482,11 @@
   list-style: none;
 }
 
-// Records part by bands, not lines: every other one sits on the hatch of the
-// site's placeholders (pf-hatch()). Faint enough for the text to hold its contrast.
+// Rows part on the soft hairline, as the landing's lists do, with room to breathe.
 .pf-index-row {
-  padding: 1.25rem clamp(.875rem, 2.5vw, 1.25rem);
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--pf-index-line);
   overflow-wrap: anywhere;
-
-  &:nth-child(even) {
-    // As pf-hatch() (base/_mixins.scss), which this file's imports don't bring in.
-    background-image: repeating-linear-gradient(135deg, transparent 0 10.25px, color-mix(in srgb, var(--pf-index-fg) 9%, transparent) 10.75px 11.25px, transparent 11.75px 12px);
-
-    // Solid, at the slab's usual color, so the lines don't run through it.
-    .pf-index-row__toggle .pf-button--secondary,
-    .pf-index-row__copy-actions a {
-      background-color: color-mix(in srgb, var(--pf-index-fg) 9%, var(--bs-body-bg));
-    }
-  }
-
-  // Forced colors drop the bands.
-  @media (forced-colors: active) {
-    border-bottom: 1px solid CanvasText;
-  }
 }
 
 // Names in the strongest text color, as the landing's rows; color arrives fast
@@ -1495,11 +1499,10 @@
   letter-spacing: -.015em;
   line-height: 1.3;
 
-  // Always underlined: this is the record's link.
   a {
     color: inherit;
-    text-decoration: underline var(--pf-index-highlight);
-    text-decoration-thickness: 2px;
+    text-decoration: underline transparent;
+    text-decoration-thickness: 1px;
     text-underline-offset: .2em;
     transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
 
@@ -1686,9 +1689,15 @@
   }
 }
 
-// A row across the record: where it's held at one end, and a slab at the other.
+// A row across the record with no lines of its own: the words at one end and a
+// plus at the other, closed by the record's rule. So the record loses its padding,
+// and only with a script: without one this place stays empty.
 .pf-index-row__holdings {
-  margin-top: .5rem;
+  margin-top: .25rem;
+}
+
+.js .pf-index-row:has(> .pf-index-row__holdings) {
+  padding-bottom: 0;
 }
 
 .pf-index-row--image > .pf-index-row__holdings {
@@ -1702,15 +1711,14 @@
   // A block, with the row inside it: a flex summary has toggle bugs.
   summary {
     display: block;
-    min-height: 2.75rem;
-    padding: 0;
+    padding-block: .5rem .75rem;
     line-height: 1.3;
 
     &:focus-visible {
       outline-offset: 2px;
     }
 
-    // The theme's slab, tightened for a row. Three classes for its size.
+    // The theme's slab, tightened for a row.
     .pf-button--secondary {
       flex: none;
       gap: .5rem;
@@ -1863,6 +1871,10 @@
       clip-path: none;
     }
 
+    thead tr {
+      border-bottom: 1px solid var(--pf-index-line);
+    }
+
     tr {
       display: table-row;
     }
@@ -1983,9 +1995,11 @@
   margin: 0 0 .375rem;
 }
 
-// Plain text: a box would make them look like buttons.
 .pf-index-row__type,
 .pf-index-row__login {
+  padding: .1em .45em;
+  border: 1px solid var(--pf-index-line);
+  background: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
   color: var(--pf-index-muted);
   font-family: var(--pf-guide-mono, var(--pf-landing-label));
   font-size: .8125rem;
@@ -2054,10 +2068,10 @@
 
 .pf-index mark {
   padding: 0;
-  background: none;
+  background: transparent;
+  box-shadow: inset 0 -.08em currentColor;
   color: inherit;
-  font-weight: 700;
-  text-decoration: none;
+  font-weight: 600;
 }
 
 .pf-index-list__status {
@@ -2085,5 +2099,6 @@
 }
 
 .pf-index__elsewhere li {
-  padding-block: .5rem;
+  padding-block: .75rem;
+  border-bottom: 1px solid var(--pf-index-line);
 }
