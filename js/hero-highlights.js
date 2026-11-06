@@ -11,7 +11,8 @@
  * background videos" it starts at the rest. .is-shown on a row says whose
  * picture is up; a row in hand wins over it, in the CSS.
  *
- * The Scroll cue glides to what follows the stage and moves focus there. Its
+ * The Scroll cue glides to what follows the stage and moves focus there. It is
+ * there only at the top of the page, and fades once the page has moved. Its
  * arrow dips once, if nothing has happened for four seconds after the entrance.
  *
  * Without script: the film's poster, the rows and no cue. Phones have no stage,
@@ -25,6 +26,7 @@
   // ms: the entrance's last animation (the film's column, _entrance.scss, ends
   // at 2s), the rows' after it, then four quiet seconds.
   const NUDGE_AFTER = 6500;
+  const AT_TOP = 16; // px, so a trackpad's bounce doesn't flicker the cue
   const html = document.documentElement;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const still = () => reduce.matches || html.classList.contains('pf-a11y-motion') || html.classList.contains('pf-a11y-pausevideo');
@@ -123,6 +125,15 @@
       return;
     }
     button.hidden = false;
+    const away = () => {
+      if (!button.isConnected) {
+        window.removeEventListener('scroll', away);
+        return;
+      }
+      button.classList.toggle('is-away', window.scrollY > AT_TOP);
+    };
+    window.addEventListener('scroll', away, { passive: true });
+    away();
     button.addEventListener('click', () => {
       const pad = parseFloat(getComputedStyle(html).scrollPaddingTop) || 0;
       const top = Math.round(next.getBoundingClientRect().top + window.scrollY - pad);

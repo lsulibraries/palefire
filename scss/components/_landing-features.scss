@@ -4402,9 +4402,16 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 
 // --- The scroll cue ---------------------------------------------------------
 // Under the search (js/hero-highlights.js): the page goes on, and a way on
-// without a wheel. Only on a window tall enough to show it with the search.
+// without a wheel. Only on a window tall enough to show it with the search, and
+// only at the top of the page. Once the page has moved it fades and leaves the
+// tab order, unless the keyboard is on it.
 .pf-hero-cue {
   display: none;
+}
+
+.pf-hero-cue.is-away:not(:focus-visible) {
+  visibility: hidden;
+  opacity: 0;
 }
 
 // Three shrinking dips, then still.
@@ -4462,6 +4469,8 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) .pf-hero-cue {
+    transition: opacity .35s ease-out, visibility .35s;
+
     svg {
       transition: translate $pf-hover-out ease;
     }
