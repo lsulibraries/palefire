@@ -165,13 +165,13 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Fri 6 Nov 2026, 09:05 (CST):</strong> Law Library and Historic New Orleans finished overnight, along with the 14 small institutions and the Ascension Parish replacements. Louisiana Newspapers and UNO's refused files are downloading now, and Loyola follows Louisiana Newspapers.</p>
+<p><strong>Status as of Fri 6 Nov 2026, 11:45 (CST):</strong> Louisiana Newspapers and UNO's refused files are downloading, with Louisiana Newspapers about 15% done by size. Loyola follows it. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
-    ['60%', 'downloaded, by data size: 1.95 TB on L:, 1.30 TB left', 60],
+    ['60%', 'downloaded, by data size: 1.93 TB on L:, 1.25 TB left', 60],
     ['80%', 'downloaded, by number of files', 80],
-    ['31 of 39', 'institutions with nothing left to download, as of Nov 6', 79],
-  ], 'Newspapers make up most of what\'s left: Louisiana Newspapers is about 1.07 TB of the 1.30 TB (82%), and Loyola is about 0.23 TB, as of Nov 6. Uploading to Quartex isn\'t counted.'),
+    ['28 of 39', 'institutions with nothing left to download, as of Nov 6, 11:45', 71],
+  ], 'Newspapers make up most of what\'s left: Louisiana Newspapers is about 1.01 TB of the 1.25 TB (81%), and Loyola is about 0.23 TB, as of Nov 6, 11:45. Uploading to Quartex isn\'t counted.'),
   $text('Recent progress', <<<'HTML'
 <ul>
 <li><strong>Overnight, Nov 5 to 6:</strong> the 14 small institutions, Law Library and Historic New Orleans finished downloading.</li>
@@ -183,49 +183,49 @@ HTML, 'callout'),
 <li><strong>Overnight:</strong> 17,248 more wrong-format images replaced at four institutions. The last first audits found 8,312 more, queued to be replaced.</li>
 </ul>
 HTML),
-  $text('Progress by institution (Nov 5, 10:47)', <<<'HTML'
+  $text('Progress by institution (Nov 6, 11:45)', <<<'HTML'
 <p><strong>The two Downloaded columns count files on L: only,</strong> not whether they passed their checks. Images audited shows how far the checks have got. Replacements, review and manifests aren't included in any column.</p>
 <p>Sorted with the least finished first. There are two percentages because they tell different stories: by size is mostly images, and by files counts every file. An institution with a low size figure and a higher files figure has much of its metadata on L:, but few of its images.</p>
 <table>
-<thead><tr><th scope="col">Institution</th><th scope="col">Downloaded by size</th><th scope="col">Downloaded by files</th><th scope="col">Images audited</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Downloads</th></tr></thead>
+<thead><tr><th scope="col">Institution</th><th scope="col">Downloaded by size</th><th scope="col">Downloaded by files</th><th scope="col">Images audited</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Status</th></tr></thead>
 <tbody>
-<tr><td>Law Library of Louisiana</td><td>0%</td><td>35%</td><td>0%</td><td>90.7</td><td>130,760</td><td>In progress</td></tr>
 <tr><td>Loyola University New Orleans</td><td>0%</td><td>47%</td><td>0%</td><td>233.2</td><td>131,276</td><td>In progress</td></tr>
-<tr><td>The Historic New Orleans Collection</td><td>0%</td><td>67%</td><td>0%</td><td>145.0</td><td>40,375</td><td>In progress</td></tr>
-<tr><td>Louisiana Newspapers</td><td>11%</td><td>34%</td><td>13%</td><td>1,069.8</td><td>313,065</td><td>In progress</td></tr>
-<tr><td>Delgado Community College</td><td>51%</td><td>36%</td><td>75%</td><td>6.3</td><td>4,142</td><td>In progress</td></tr>
-<tr><td>University of New Orleans</td><td>64%</td><td>89%</td><td>77%</td><td>26.0</td><td>6,087</td><td>In progress</td></tr>
-<tr><td>University of Louisiana Lafayette</td><td>79%</td><td>86%</td><td>100%</td><td>7.4</td><td>4,881</td><td>In progress</td></tr>
-<tr><td>Jeanerette Museum</td><td>86%</td><td>65%</td><td>100%</td><td>1.6</td><td>1,187</td><td>In progress</td></tr>
-<tr><td>Ascension Parish Library</td><td>91%</td><td>53%</td><td>100%</td><td>8.8</td><td>4,067</td><td>In progress</td></tr>
-<tr><td>Louisiana State University Shreveport</td><td>98%</td><td>80%</td><td>96%</td><td>0.1</td><td>999</td><td>In progress</td></tr>
-<tr><td>Louisiana State Archives</td><td>98%</td><td>92%</td><td>96%</td><td>0.6</td><td>134</td><td>In progress</td></tr>
+<tr><td>Louisiana Newspapers</td><td>15%</td><td>35%</td><td>17%</td><td>1,014.2</td><td>308,122</td><td>In progress</td></tr>
+<tr><td>University of New Orleans</td><td>97%</td><td>98%</td><td>99%</td><td>1.9</td><td>830</td><td>In progress</td></tr>
+<tr><td>Louisiana State Archives</td><td>98%</td><td>98%</td><td>97%</td><td>0.6</td><td>19</td><td>In progress</td></tr>
 <tr><td>LDL Training</td><td>99%</td><td>83%</td><td>0%</td><td>0</td><td>9</td><td>In progress</td></tr>
-<tr><td>University of Louisiana Monroe</td><td>99%</td><td>84%</td><td>100%</td><td>0.1</td><td>2,265</td><td>In progress</td></tr>
-<tr><td>The Robert Bob Hicks Foundation</td><td>99%</td><td>85%</td><td>100%</td><td>0</td><td>405</td><td>In progress</td></tr>
-<tr><td>Ouachita Parish Public Library</td><td>99%</td><td>92%</td><td>100%</td><td>0</td><td>489</td><td>In progress</td></tr>
-<tr><td>Teaching American History in Louisiana (TAHIL)</td><td>99%</td><td>98%</td><td>97%</td><td>0</td><td>122</td><td>In progress</td></tr>
+<tr><td>Louisiana State University Shreveport</td><td>99%</td><td>98%</td><td>100%</td><td>0.1</td><td>86</td><td>In progress</td></tr>
+<tr><td>Teaching American History in Louisiana (TAHIL)</td><td>99%</td><td>98%</td><td>100%</td><td>0</td><td>102</td><td>In progress</td></tr>
 <tr><td>Amistad Research Center</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>1</td><td>In progress</td></tr>
-<tr><td>Louisiana State Museum</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>11</td><td>In progress</td></tr>
+<tr><td>Law Library of Louisiana</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>2</td><td>In progress</td></tr>
+<tr><td>The Historic New Orleans Collection</td><td>99%</td><td>99%</td><td>100%</td><td>0.3</td><td>83</td><td>In progress</td></tr>
 <tr><td>Webster Parish Library</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>1</td><td>In progress</td></tr>
+<tr><td>Ascension Parish Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Calcasieu Parish Public Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Centenary Placeholder Collection</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Delgado Community College</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Franklin Parish Library</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Free People of Color in Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Jeanerette Museum</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana Purchase Bicentennial Collection</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State Museum</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
-<tr><td>Louisiana State University Health Sciences Center New Orleans</td><td>100%</td><td>100%</td><td>99%</td><td>0</td><td>0</td><td>Done</td></tr>
-<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>100%</td><td>100%</td><td>79%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Louisiana State University Health Sciences Center New Orleans</td><td>100%</td><td>100%</td><td>99%</td><td>0</td><td>0</td><td>In audit</td></tr>
+<tr><td>Louisiana State University Health Sciences Center Shreveport</td><td>100%</td><td>100%</td><td>79%</td><td>0</td><td>0</td><td>In audit</td></tr>
 <tr><td>Louisiana State University of Alexandria</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Louisiana Tech University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>McNeese State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Newcomb Institute</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Nicholls State University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Northwestern State University of Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>Ouachita Parish Public Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>SOWELA Technical Community College</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Southeastern Louisiana University</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Southern University and A&amp;M College</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>State Library of Louisiana</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>The Robert Bob Hicks Foundation</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>University of Louisiana Lafayette</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
+<tr><td>University of Louisiana Monroe</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Vermilionville Living History Museum and Folklife Park</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>West Feliciana Parish Library</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>East Baton Rouge Parish Library</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Excluded: not migrating</td></tr>
@@ -234,19 +234,20 @@ HTML),
 </tbody>
 </table>
 <ul>
-<li><strong>Few or no images on L: yet:</strong> Law Library and Loyola have none. Historic New Orleans has images in 1 of its 12 collections (7 images), and Louisiana Newspapers in 1 of its 30.</li>
-<li><strong>Done means nothing is left to download, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 18 institutions. Anything with files left shows 99% at most.</li>
+<li><strong>Few or no images on L: yet:</strong> Loyola has none, and Louisiana Newspapers is about 15% done by size.</li>
+<li><strong>In audit means nothing is left to download, but some images have no check on record yet:</strong> 1 of 38,361 at LSUHSC New Orleans and 589 of 2,852 at LSUHSC Shreveport.</li>
+<li><strong>Done means nothing is left to download and every image has a check on record, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 18 institutions. Anything with files left shows 99% at most.</li>
 <li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
 <li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including those still in the queue.</li>
-<li><strong>Images audited (Nov 5, 11:11):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
+<li><strong>Images audited (Nov 6, 11:45):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
 <li><strong>Empty text files aren't exported.</strong> Some pages and scanned PDFs have OCR or FULL_TEXT with nothing in it. The exporter no longer saves those, and they count as done. The 2,064 already on L: moved to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export, on Nov 5, and nothing was deleted. Manifests at the six institutions were rebuilt without them. Another 1,159 found empty since then were never saved. Files left with no size on record may turn out empty too.</li>
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.25 TB in all. The 5.7 TB is everything in Fedora. The 2.45 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
 HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
-    ['running', 'Files the website refuses', 'The website refused 4,197 main files and 822 text files with a 403. University of New Orleans is now coming from Fedora through the tunnel, as Newspaper Clippings did, with about 2,150 main files and 728 text files left as of Nov 6, 09:05. Historic New Orleans (76 and 0), TAHIL (51 and 51) and LSU Shreveport (43 and 43) come after it.'],
-    ['running', 'Remaining downloads', 'About 1.30 TB and 450,000 files as of Nov 6: Louisiana Newspapers about 1.07 TB and Loyola about 0.23 TB, plus the files the website refused. Loyola is queued to start after Louisiana Newspapers.'],
+    ['running', 'Files the website refuses', 'The website refused 4,197 main files and 822 text files with a 403. University of New Orleans is now coming from Fedora through the tunnel, as Newspaper Clippings did, with 38 main files and 728 text files left as of Nov 6, 11:45. Historic New Orleans (76 and 0), TAHIL (51 and 51) and LSU Shreveport (43 and 43) come after it.'],
+    ['running', 'Remaining downloads', 'About 1.25 TB and 440,000 files as of Nov 6, 11:45: Louisiana Newspapers about 1.01 TB and Loyola about 0.23 TB, plus the files the website refused. Loyola is queued to start after Louisiana Newspapers.'],
     ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. A few need another try: State Archives 6, Ascension 1, Hicks 1 and Amistad 1. The new audits added Historic New Orleans 183 and Law Library 2.'],
     ['todo', 'TIFFs with no usable JP2', 'About 2,000 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), most of them in Louisiana Newspapers.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
@@ -340,6 +341,7 @@ HTML),
 <li>Audits found 183 more Historic New Orleans images and 2 Law Library images to replace.</li>
 <li>The website refused 4,197 main files and 822 text files, most of them at UNO. UNO's started coming directly from Fedora at 8:09 AM, and the rest follow.</li>
 <li>Louisiana Newspapers started downloading at 8:09 AM.</li>
+<li>By 11:45 AM, UNO had 38 main files left to come from Fedora, and Louisiana Newspapers was about 15% done by size.</li>
 </ul>
 HTML),
 ]);
@@ -633,11 +635,11 @@ $section('Remaining institutions', [
 <li>Smaller relation differences: Loyola 12, Delgado 10, Robert Bob Hicks Foundation 7, Law Library 5.</li>
 </ul>
 HTML),
-  $text('Downloads left (Nov 5, 10:47)', <<<'HTML'
+  $text('Downloads left (Nov 6, 11:45)', <<<'HTML'
 <ul>
-<li><strong>640,276 files left to download, about 1.59 TB.</strong> OBJ 248,285 (1,390 GB), OCR 190,991, HOCR 186,296 (33 GB), PDF 7,041 (164 GB), FULL_TEXT 4,617, RDF 2,977, PDF-TRANSCRIPT 38, MODS 31.</li>
-<li><strong>Four institutions are nearly all of it:</strong> Louisiana Newspapers 313,065 files (1,070 GB), Loyola 131,276 (233 GB), Law Library 130,760 (91 GB), Historic New Orleans Collection 40,375 (145 GB).</li>
-<li><strong>The other 35 total about 24,800 files and 51 GB.</strong> The progress table under Status at a glance has each institution.</li>
+<li><strong>440,531 files left to download, about 1.25 TB.</strong> OBJ 155,253 (1,087 GB), OCR 140,065, HOCR 135,707 (31 GB), PDF 6,348 (130 GB), FULL_TEXT 1,691, RDF 1,448, MODS 11, PDF-TRANSCRIPT 8.</li>
+<li><strong>Two institutions are nearly all of it:</strong> Louisiana Newspapers 308,122 files (1,014 GB) and Loyola 131,276 (233 GB).</li>
+<li><strong>The other 37 total about 1,130 files and 3 GB.</strong> The progress table under Status at a glance has each institution.</li>
 <li><strong>As of Nov 4, 2,002 TIFF images had no JP2 in Fedora</strong> (Louisiana Newspapers 1,998, Law Library 3, Hicks Foundation 1). They need derivatives generated before they can go to Quartex.</li>
 <li><strong>As of Nov 4, 69,597 images already on L: hadn't been audited,</strong> so they may include TIFFs or JPEGs saved as .jp2.</li>
 </ul>
