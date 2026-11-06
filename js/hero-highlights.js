@@ -17,6 +17,10 @@
  * line's movement is the CSS's; the script says when, once, after IDLE ms with
  * nothing happening at the top of the page.
  *
+ * Once the entrance is over, or as soon as someone clicks or presses a key, the
+ * sections below are laid out in full (.is-laid, _landing-features.scss), so
+ * that jumps to them land exactly.
+ *
  * Without script: the film's poster, the rows and no cue. Phones have no stage,
  * so none of this runs there.
  */
@@ -26,6 +30,7 @@
   const LOAD_LIMIT = 4000; // ms, how long the film may take to start playing
   const AT_TOP = 16; // px, so a trackpad's bounce doesn't flicker the cue
   const IDLE = 10000; // ms
+  const LAY_AFTER = 5000; // ms, past the entrance's movement
   const html = document.documentElement;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const still = () => reduce.matches || html.classList.contains('pf-a11y-motion') || html.classList.contains('pf-a11y-pausevideo');
@@ -171,11 +176,33 @@
     away();
   };
 
+  const layOut = (stage) => {
+    const sections = stage.closest('.pf-sections');
+    if (!sections) {
+      return;
+    }
+    const stop = new AbortController();
+    const lay = () => {
+      stop.abort();
+      sections.classList.add('is-laid');
+    };
+    if (window.location.hash) {
+      lay();
+      return;
+    }
+    const later = window.requestIdleCallback || window.setTimeout;
+    window.setTimeout(() => later(lay, { timeout: 2000 }), LAY_AFTER);
+    ['pointerdown', 'keydown'].forEach((type) => {
+      window.addEventListener(type, lay, { passive: true, signal: stop.signal });
+    });
+  };
+
   Drupal.behaviors.palefireHeroHighlights = {
     attach(context) {
       once('hero-highlights', '.pf-landing--cover .pf-landing__stage', context).forEach((stage) => {
         sequence(stage);
         cue(stage);
+        layOut(stage);
       });
     },
   };

@@ -1175,10 +1175,12 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-06:** The Index: Special Collections copies now say Available to view and Request to view, with a note that they are viewed in the Hill Memorial reading room, since Request item read like something that could be taken away. Vendor names stay out of this wording.
 - **2026-11-06:** Special Collections hero search: opens the Index with Catalog already chosen, set to Special Collections, since it used to arrive with no filter on.
 - **2026-11-06:** Loading mark: the line that traces the letters now fades once they fill, so the Libraries text matches the logo's weight instead of looking about a quarter heavier.
 - **2026-11-06:** Index Search Project guide: the old search findings are now a before and after, with counts from the Index. Alma (coming soon) is listed as a dimmed source in Research and Special Collections, so people can see it is on the way.
 - **2026-11-06:** Index Search Project guide: brought up to date, with a Day by day log like the LDL migration guide, so the project has a running record.
+- **2026-11-06:** Special Collections hero: a lighter load. The sections below the first screen are skipped until the entrance is over, the column comes in as one behind a page-colored panel, the header's groups move as wholes, the video's push-in is gone, and tiles and the Ask section no longer run transitions off-screen as the page opens. Why: the page's first seconds stuttered, mostly from laying out everything below the fold during the entrance.
 - **2026-11-06:** Special Collections hero: once someone scrolls to the section after the first screen, or presses the Scroll cue, the cue stays gone for that page view and its replay is cancelled. A small scroll still only fades it until they're back at the top. Why: anyone who has reached the next section already knows the page goes on.
 - **2026-11-06:** Special Collections hero: on load, the side column is uncovered by a wipe of the page's color, drawing back toward the type, instead of fading in. Why: a wipe suits the page's flat, ruled look better than a fade.
 - **2026-11-06:** Special Collections hero: the Scroll cue's line now has one pass after the entrance and fills, then runs once more after ten quiet seconds at the top of the page. Why: that second pass reaches someone sitting on the page unsure what to do, without moving for anyone already using it.

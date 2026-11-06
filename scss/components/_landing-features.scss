@@ -4394,6 +4394,16 @@ $pf-title-none: linear-gradient(transparent, transparent);
 $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
+// --- Below the first screen ---------------------------------------------------
+// The page is long, and laying it all out as it arrives is what held the entrance
+// back. The sections under a cover are skipped until they're near the screen, or
+// until js/hero-highlights.js adds .is-laid once the entrance is over, so that
+// jumps to them land exactly.
+.pf-sections:not(.is-laid):has(> .pf-section:first-child .pf-landing--cover) > .pf-section:not(:first-child) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 50rem;
+}
+
 // --- The scroll cue ---------------------------------------------------------
 // Centered under the search (js/hero-highlights.js): the page goes on, and a way
 // on without a wheel. Only on a window tall enough to show it with the search, and
@@ -4462,7 +4472,9 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
       --pf-hero-cue-room: clamp(4.5rem, 11svh, 7rem);
     }
 
-    #{$pf-stage} .pf-landing__stage:has(> .pf-landing__top > .pf-hero-cue:not([hidden]), > .pf-hero-cue:not([hidden])) .pf-landing__form {
+    // Held from the first paint, not from when the script shows the cue, so nothing
+    // moves when it does.
+    #{$pf-stage} .pf-landing__stage .pf-landing__form {
       margin-bottom: var(--pf-hero-cue-room);
     }
 

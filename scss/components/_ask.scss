@@ -615,11 +615,12 @@ html.pf-a11y-motion {
 .pf-inquiry--reveal .pf-inquiry__part {
   opacity: 0;
   translate: 0 1rem;
-  transition: opacity .6s ease-out, translate .7s cubic-bezier(.2, .7, .2, 1);
+  transition: none;
 
   &.is-revealed {
     opacity: 1;
     translate: none;
+    transition: opacity .6s ease-out, translate .7s cubic-bezier(.2, .7, .2, 1);
     transition-delay: var(--pf-reveal-delay, 0ms);
   }
 }

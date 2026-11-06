@@ -1860,12 +1860,13 @@ html.pf-a11y-motion .pf-tiles:not([data-pf-view="list"]) :is(.pf-tile__media, .p
   > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
     opacity: $pf-reveal-from;
     transform: translateY(var(--pf-reveal-from));
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    transition: none;
   }
 
   &.is-revealed > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
     opacity: 1;
     transform: none;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     transition-delay: var(--pf-reveal-delay, 0ms);
   }
 }

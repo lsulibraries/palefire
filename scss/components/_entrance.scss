@@ -3,8 +3,9 @@
 // left, the breadcrumb bar, the title (the unit name's hairline drawing
 // out after it), today's hours, the intro, the links plate and its
 // cells, the search, then the banners (their rise, _landing-features.scss,
-// retimed here to follow the search). The cover video settles from a
-// slight push-in under all of it.
+// retimed here to follow the search). On the split cover the column comes as
+// one, from behind a panel. Kept to about fifteen animations: the header's
+// groups and the column move as wholes.
 //
 // CSS only, from the first paint: it keys on html.pf-fade, which the head
 // script sets before the body is drawn (base/_fade.scss), so it waits on no
@@ -45,22 +46,17 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
-@keyframes pf-enter-settle {
-  from {
-    scale: 1.06;
-  }
-}
-
-// The film's column is uncovered from the screen's edge, the page's color drawing
-// back to the type it belongs to (not from the foot, which drew the eye from the
-// title).
+// The film's column is uncovered from the screen's edge, a panel in the page's
+// color drawing back to the type it belongs to (not from the foot, which drew
+// the eye from the title). `scale`, not clip-path: it needs no repaint, so it
+// keeps moving while the page is still being laid out.
 @keyframes pf-split-open {
   from {
-    clip-path: inset(0 0 0 100%);
+    scale: 1 1;
   }
 
   to {
-    clip-path: inset(0);
+    scale: 0 1;
   }
 }
 
@@ -70,8 +66,8 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
 
 @media (prefers-reduced-motion: no-preference) {
   // --- Header ----------------------------------------------------------------
-  // Down a little into the bar: the logo, the menu's sections one after
-  // another (the Menu button below lg), then the utility icons.
+  // Down a little into the bar: the logo and the menu (the Menu button below
+  // lg), then the utility icons.
   #{$pf-enter-on} .pf-header {
     --pf-enter-y: -.5rem;
 
@@ -80,27 +76,15 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
       @include pf-enter(0ms, .7s);
     }
 
-    .pf-utility-nav > li {
+    .pf-utility-nav {
       @include pf-enter(240ms, .7s);
-
-      @for $i from 2 through 6 {
-        &:nth-child(#{$i}) {
-          animation-delay: #{240 + ($i - 1) * 50}ms;
-        }
-      }
     }
   }
 
   // From lg only: below it the sections are in the menu drawer.
   @include media-breakpoint-up(lg) {
-    #{$pf-enter-on} .pf-header .pf-primary-nav > li {
+    #{$pf-enter-on} .pf-header .pf-primary-nav {
       @include pf-enter(80ms, .7s);
-
-      @for $i from 2 through 6 {
-        &:nth-child(#{$i}) {
-          animation-delay: #{80 + ($i - 1) * 60}ms;
-        }
-      }
     }
   }
 
@@ -114,10 +98,6 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 
   #{$pf-enter-on} #{$pf-enter-cover} {
-    .pf-landing__media .pf-landing__bg-video {
-      @include pf-enter(0ms, 2.4s, pf-enter-settle);
-    }
-
     .pf-landing__top {
       // The unit name rides in with the title (the line over the <h1>);
       // its hairline then draws out from the left and the building follows.
@@ -171,29 +151,23 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     }
   }
 
-  // Split cover (_landing-features.scss, from 44rem): the film's column wipes in
-  // with the lines under the title (from .6s, as the hours and the intro come
-  // in), the Highlights' wash with it. Then, after the search, the rows and the
-  // scroll cue.
+  // Split cover (_landing-features.scss, from 44rem): the film's whole column,
+  // words and all, is uncovered with the lines under the title (from .6s, as the
+  // hours and the intro come in). Then, after the search, the scroll cue.
   @container pf-cover (min-width: 44rem) {
-    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media,
-    #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-banners::after {
-      animation: pf-split-open 1.2s cubic-bezier(.77, 0, .18, 1) .6s backwards;
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__stage::after {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
+      z-index: 4;
+      width: var(--pf-split-film);
+      background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+      transform-origin: 0 50%;
+      pointer-events: none;
+      animation: pf-split-open 1.2s cubic-bezier(.77, 0, .18, 1) .6s both;
     }
 
     @media (min-height: 40rem) {
-      @for $i from 1 through 5 {
-        #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-banners > .pf-hero-banner:nth-child(#{$i}) {
-          .pf-hero-banner__text {
-            @include pf-enter(#{1140 + ($i - 1) * 110}ms);
-          }
-
-          .pf-hero-banner__link::before {
-            @include pf-enter(#{1100 + ($i - 1) * 110}ms, .7s, pf-enter-rule);
-          }
-        }
-      }
-
       #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-cue {
         @include pf-enter(1700ms);
       }
