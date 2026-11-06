@@ -1989,6 +1989,13 @@
   }
 }
 
+// How a Special Collections request works, once per record.
+.pf-index-row__copy-note {
+  margin: .75rem 0 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+}
+
 .pf-index-row__floor {
   display: block;
   color: var(--pf-index-muted);

@@ -150,6 +150,7 @@ HTML, 'callout'),
     ['running', 'Catalog filters', 'Type, Library, Language and Year, one choice to a filter because that is all the service takes. Totals and counts come from the catalog\'s results page, and the filters still work without them.'],
     ['running', 'Catalog holdings', 'Catalog rows say whether a copy is available and where, and open to list each library, shelf, floor, material type, call number and what LSU has, with links to the shelf map, holds and Special Collections requests. Special Collections can search the Catalog too, set to its own library until changed. The feed still orders the rows, and the catalog\'s web service adds copies just after, and takes over the search, newest first, if the feed goes down.'],
     ['running', 'Each box and volume', 'A shelf with several items lists each one, up to 20, with its own status and request, so a request names the box wanted. Where the catalog names a box in what LSU has, those issues appear on that box\'s row. Requests still need a check in a browser, to confirm the form receives the right box.'],
+    ['running', 'Reading room wording', 'Special Collections copies say Available to view and Request to view, with one note per record that they are viewed in the Hill Memorial reading room and a link to how requests work. Sign-in wording waits until requests move to Alma.'],
     ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with Catalog chosen and set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Archives and News list, set to Special Collections, until a source is chosen.'],
@@ -220,11 +221,12 @@ $section('Next steps', [
   $text(NULL, <<<'HTML'
 <ol>
 <li>Test the new filters, sorting and in-place results on production, logged in and logged out.</li>
-<li>Click Request item on a record with several boxes, and confirm the form receives the right box.</li>
+<li>Click Request to view on a record with several boxes, and confirm the form receives the right box.</li>
 <li>Review the page's design together, and choose a design for the result rows.</li>
 <li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
 <li>Confirm whether the Scholarly Repository can be searched from the server.</li>
 <li>Move the site's search forms to the Index and redirect /bento.</li>
+<li>Decide what requesters sign in with once requests move to Alma, and add that to the request note. Visitors see what they sign in with, not the system's name.</li>
 <li>Connect Alma when the sandbox is ready.</li>
 </ol>
 HTML),
@@ -256,6 +258,7 @@ HTML),
 <li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it. The line tracing its letters now fades once they fill, so the Libraries text matches the logo's weight.</li>
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
+<li>Special Collections copies now say Available to view and Request to view, with a note about the reading room.</li>
 <li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
 </ul>
 HTML),
