@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Fri 6 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Fri 6 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -150,7 +150,7 @@ HTML, 'callout'),
     ['running', 'Catalog filters', 'Type, Library, Language and Year, one choice to a filter because that is all the service takes. Totals and counts come from the catalog\'s results page, and the filters still work without them.'],
     ['running', 'Catalog holdings', 'Catalog rows say whether a copy is available and where, and open to list each library, shelf, floor, material type, call number and what LSU has, with links to the shelf map, holds and Special Collections requests. Special Collections can search the Catalog too, set to its own library until changed. The feed still orders the rows, and the catalog\'s web service adds copies just after, and takes over the search, newest first, if the feed goes down.'],
     ['running', 'Each box and volume', 'A shelf with several items lists each one, up to 20, with its own status and request, so a request names the box wanted. Where the catalog names a box in what LSU has, those issues appear on that box\'s row. Requests still need a check in a browser, to confirm the form receives the right box.'],
-    ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
+    ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with Catalog chosen and set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Archives and News list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
@@ -252,7 +252,7 @@ HTML),
 <li>The Catalog comes first in Research and Special Collections, and Special Collections can search it, set to its own library. The Special Collections tab moved between Research and Website.</li>
 <li>Sources can be put in your own order. Added Show more results, and a results bar that keeps the count and the search in view.</li>
 <li>Filters have clearer hover styles, and empty ones are dimmed instead of hidden.</li>
-<li>Switched on the Special Collections hero search, the first link to the Index from the site, and landing searches now show the loading mark while results load.</li>
+<li>Switched on the Special Collections hero search, the first link to the Index from the site, with the Catalog chosen by default, and landing searches now show the loading mark while results load.</li>
 <li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it. The line tracing its letters now fades once they fill, so the Libraries text matches the logo's weight.</li>
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>

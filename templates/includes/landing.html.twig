@@ -232,6 +232,7 @@
     {% set landing_action = '/v2/search' %}
     {% set landing_name = 'q' %}
     {% set search_mode = 'special' %}
+    {% set search_source = 'catalog' %}
     {% set search_label = 'Search Special Collections'|t %}
     {% set search_placeholder = 'Search the collections'|t %}
   {% else %}
@@ -361,6 +362,7 @@
     {% if hero %}</div>{% endif %}
     <form class="pf-landing__form" role="search" method="get" action="{{ landing_action }}" aria-labelledby="{{ input_id }}-heading">
       {% if search_mode %}<input type="hidden" name="mode" value="{{ search_mode }}">{% endif %}
+      {% if search_source %}<input type="hidden" name="source[]" value="{{ search_source }}">{% endif %}
       {# Hero: the label for screen readers only (the field and its placeholder
          say it on screen), so the links above sit close over the field. #}
       <h3 class="pf-landing__heading{{ hero ? ' visually-hidden' }}" id="{{ input_id }}-heading"{% if not hero %} data-toc{% endif %}>
