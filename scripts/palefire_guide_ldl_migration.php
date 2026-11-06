@@ -242,7 +242,7 @@ HTML),
 </ul>
 HTML),
   $status('Where each stage stands', [
-    ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola's download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
+    ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
     ['running', 'Files the website refuses', 'The website refused 4,197 main files and 822 text files with a 403. University of New Orleans is now coming from Fedora through the tunnel, as Newspaper Clippings did, with about 2,150 main files and 728 text files left as of Nov 6, 09:05. Historic New Orleans (76 and 0), TAHIL (51 and 51) and LSU Shreveport (43 and 43) come after it.'],
     ['running', 'Remaining downloads', 'About 1.30 TB and 450,000 files as of Nov 6: Louisiana Newspapers about 1.07 TB and Loyola about 0.23 TB, plus the files the website refused. Loyola is queued to start after Louisiana Newspapers.'],
     ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. A few need another try: State Archives 6, Ascension 1, Hicks 1 and Amistad 1. The new audits added Historic New Orleans 183 and Law Library 2.'],
