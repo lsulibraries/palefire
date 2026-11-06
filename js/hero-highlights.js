@@ -11,7 +11,9 @@
  * featured picture is up; a row in hand wins over it, in the CSS.
  *
  * The Scroll cue glides to what follows the stage and moves focus there. It is
- * there only at the top of the page, and fades once the page has moved. The
+ * there only at the top of the page, and fades once the page has moved. Once
+ * someone has reached what follows the stage or pressed it, it has done its job
+ * and stays gone for this page view, keeping its room so nothing shifts. The
  * line's movement is the CSS's; the script says when, once, after IDLE ms with
  * nothing happening at the top of the page.
  *
@@ -111,18 +113,32 @@
       return;
     }
     button.hidden = false;
+    const stop = new AbortController();
+    const calm = new AbortController();
+    let idle = 0;
+    const padding = () => parseFloat(getComputedStyle(html).scrollPaddingTop) || 0;
+    const retire = () => {
+      window.clearTimeout(idle);
+      stop.abort();
+      calm.abort();
+      button.classList.add('is-away');
+    };
     const away = () => {
       if (!button.isConnected) {
-        window.removeEventListener('scroll', away);
+        retire();
         return;
       }
-      button.classList.toggle('is-away', window.scrollY > AT_TOP);
+      const moved = window.scrollY > AT_TOP;
+      if (moved && next.getBoundingClientRect().top <= padding() + 2) {
+        retire();
+        return;
+      }
+      button.classList.toggle('is-away', moved);
     };
-    window.addEventListener('scroll', away, { passive: true });
-    away();
+    window.addEventListener('scroll', away, { passive: true, signal: stop.signal });
     button.addEventListener('click', () => {
-      const pad = parseFloat(getComputedStyle(html).scrollPaddingTop) || 0;
-      const top = Math.round(next.getBoundingClientRect().top + window.scrollY - pad);
+      retire();
+      const top = Math.round(next.getBoundingClientRect().top + window.scrollY - padding());
       Drupal.palefireGlide(top, () => {
         if (Math.abs(window.scrollY - top) < 2) {
           const heading = next.querySelector('h2, h3') || next;
@@ -132,17 +148,15 @@
       }, { interruptible: true });
     });
 
-    const stop = new AbortController();
-    let idle = 0;
     const replay = () => {
       if (!button.isConnected) {
-        stop.abort();
+        retire();
       }
       else if (document.hidden || window.scrollY > AT_TOP || getComputedStyle(button).display === 'none') {
         wait();
       }
       else {
-        stop.abort();
+        calm.abort();
         button.classList.add('is-replaying');
       }
     };
@@ -151,9 +165,10 @@
       idle = window.setTimeout(replay, IDLE);
     };
     ['scroll', 'wheel', 'keydown', 'pointerdown'].forEach((type) => {
-      window.addEventListener(type, wait, { passive: true, signal: stop.signal });
+      window.addEventListener(type, wait, { passive: true, signal: calm.signal });
     });
     wait();
+    away();
   };
 
   Drupal.behaviors.palefireHeroHighlights = {
