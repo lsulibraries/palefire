@@ -51,11 +51,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
-// The film's column is uncovered from the type's side, the page's color drawing
-// back to the right (not from the foot, which drew the eye from the title).
+// The film's column is uncovered from the screen's edge, the page's color drawing
+// back to the type it belongs to (not from the foot, which drew the eye from the
+// title).
 @keyframes pf-split-open {
   from {
-    clip-path: inset(0 100% 0 0);
+    clip-path: inset(0 0 0 100%);
   }
 
   to {
