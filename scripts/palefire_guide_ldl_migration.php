@@ -325,7 +325,7 @@ HTML),
   $text('Thu Nov 5: Replacements, the short list and steadier runs', <<<'HTML'
 <ul>
 <li>About 71,000 files saved, including replacements. 351 images were converted from TIFFs, including Franklin Parish's 24.</li>
-<li>The PC restarted unexpectedly at 12:26 AM. Nothing was lost, because every run had already finished.</li>
+<li>The PC restarted unexpectedly at 12:26 AM, and Windows recorded a fatal hardware error. The cause hasn't been identified. Nothing was lost, because every run had already finished. The PC stayed off Wi-Fi until someone signed in at 8:23 AM, so a restart during a run would leave that run stopped until someone signs in and restarts it.</li>
 <li>Nearly all of the 8,313 queued images were replaced, at 10 institutions.</li>
 <li>Duplicates and odd namespaces were grouped into a short list of 533 decisions, and the exporter can now skip approved leave-outs.</li>
 <li>Loyola was excluded and then put back after the LDL team confirmed it isn't harvested.</li>
