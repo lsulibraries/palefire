@@ -26,7 +26,7 @@
  *     guide_status_item   Status (Done, Running, Needs attention, Not
  *                         started), Title, Note.
  *     guide_stats         Figures: Heading, Intro, Figures.
- *     guide_stat          Value ("5.7 TB") and Label.
+ *     guide_stat          Value ("5.7 TB"), Label and optional Progress (0-100).
  *     guide_code          Code: Heading, Code, Caption.
  * - Allows guide_flow, guide_status_board, guide_stats and guide_code in the
  *   blocks of a guide section and of a Section tabs tab. Exhibition entries
@@ -93,6 +93,7 @@ $storages = [
   'field_stat_items' => ['entity_reference_revisions', ['target_type' => 'paragraph'], -1],
   'field_stat_value' => ['string', ['max_length' => 32], 1],
   'field_stat_label' => ['string', ['max_length' => 128], 1],
+  'field_stat_progress' => ['integer', [], 1],
   'field_code_text' => ['string_long', [], 1],
   'field_code_caption' => ['text_long', [], 1],
 ];
@@ -148,6 +149,7 @@ $fields = [
   'guide_stat' => [
     'field_stat_value' => ['Value', TRUE, 'Short: "~663k", "5.7 TB".'],
     'field_stat_label' => ['Label', TRUE, 'What it counts.'],
+    'field_stat_progress' => ['Progress (0 to 100)', FALSE, 'Optional. Turns the rule above the figure into a progress bar. Only for figures that measure progress toward a whole.'],
   ],
   'guide_code' => [
     'field_block_title' => $block_title,
@@ -186,6 +188,9 @@ foreach ($fields as $bundle => $bundle_fields) {
           'target_bundles_drag_drop' => [$child => ['enabled' => TRUE, 'weight' => 0]],
         ],
       ];
+    }
+    if ($name === 'field_stat_progress') {
+      $values['settings'] = ['min' => 0, 'max' => 100];
     }
     FieldConfig::create($values)->save();
     echo "Added $name to paragraph.$bundle\n";
@@ -230,6 +235,7 @@ foreach ($fields as $bundle => $bundle_fields) {
     $widget = match (FieldStorageConfig::loadByName('paragraph', $name)->getType()) {
       'list_string' => ['type' => 'options_select'],
       'text_long' => ['type' => 'text_textarea', 'settings' => ['rows' => 2, 'placeholder' => '']],
+      'integer' => ['type' => 'number'],
       'string_long' => ['type' => 'string_textarea', 'settings' => ['rows' => $name === 'field_code_text' ? 8 : 2, 'placeholder' => '']],
       default => ['type' => 'string_textfield', 'settings' => ['size' => 60, 'placeholder' => '']],
     };

@@ -79,6 +79,9 @@ foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code'] as $i
     throw new \RuntimeException("'$id' not found. Run palefire_guide_blocks_setup.php first.");
   }
 }
+if (!\Drupal\field\Entity\FieldConfig::loadByName('paragraph', 'guide_stat', 'field_stat_progress')) {
+  throw new \RuntimeException("'field_stat_progress' not found. Run palefire_guide_blocks_setup.php first.");
+}
 
 $title = 'LDL Quartex Migration';
 
@@ -162,12 +165,12 @@ $section('Status at a glance', [
 <p><strong>Status as of Fri 6 Nov 2026, 09:05 (CST):</strong> Law Library and Historic New Orleans finished overnight, along with the 14 small institutions and the Ascension Parish replacements. Louisiana Newspapers and UNO's refused files are downloading now, and Loyola follows Louisiana Newspapers.</p>
 HTML, 'callout'),
   $stats(NULL, [
-    ['60%', 'downloaded, by data size'],
-    ['80%', 'downloaded, by number of files'],
-    ['1.30 TB', 'left to download (1.95 TB on L:)'],
-    ['31 of 39', 'institutions with nothing left to download, as of Nov 6'],
+    ['60%', 'downloaded, by data size: 1.95 TB on L:, 1.30 TB left', 60],
+    ['80%', 'downloaded, by number of files', 80],
+    ['31 of 39', 'institutions with nothing left to download, as of Nov 6', 79],
   ]),
   $text(NULL, <<<'HTML'
+<p>Newspapers make up most of what's left: Louisiana Newspapers is about 1.07 TB of the 1.30 TB (82%), and Loyola is about 0.23 TB, as of Nov 6.</p>
 <p>Uploading to Quartex isn't counted.</p>
 HTML),
   $text('Recent progress', <<<'HTML'
@@ -1034,11 +1037,12 @@ $to_paragraph = function (array $block) use ($html, $keep): Paragraph {
   }
   if ($block['kind'] === 'stats') {
     $children = [];
-    foreach ($block['items'] as [$value, $label]) {
+    foreach ($block['items'] as $item) {
       $children[] = Paragraph::create([
         'type' => 'guide_stat',
-        'field_stat_value' => $value,
-        'field_stat_label' => $label,
+        'field_stat_value' => $item[0],
+        'field_stat_label' => $item[1],
+        'field_stat_progress' => $item[2] ?? NULL,
       ]);
     }
     return Paragraph::create($keep([

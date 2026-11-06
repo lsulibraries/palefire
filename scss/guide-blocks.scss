@@ -372,6 +372,33 @@ $pf-reveal-from: 0.85; // As _variables.scss.
   color: var(--pf-guide-muted);
 }
 
+// A figure with a progress value: the hairline is the whole, gold is the part
+// done. The number stays the text, so the bar is only decoration. Figures with
+// no value keep the plain gold rule above.
+.pf-stats__item--progress {
+  position: relative;
+  border-top-color: var(--pf-guide-rule);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: var(--pf-stats-progress, 0%);
+    height: 2px;
+    background: var(--pf-guide-accent);
+  }
+
+  @media (forced-colors: active) {
+    border-top-color: GrayText;
+
+    &::before {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
 // Code ------------------------------------------------------------------------
 .pf-code {
   max-width: 54rem;

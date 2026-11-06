@@ -22,7 +22,12 @@
     {% for item in paragraph.field_stat_items %}
       {% set stat = item.entity %}
       {% if stat and stat.isPublished() %}
-        <div class="pf-stats__item">
+        {% set progress = stat.hasField('field_stat_progress') ? stat.field_stat_progress.value : null %}
+        {% if progress is not null and progress != '' %}
+          <div class="pf-stats__item pf-stats__item--progress" style="--pf-stats-progress: {{ progress }}%">
+        {% else %}
+          <div class="pf-stats__item">
+        {% endif %}
           <dt class="pf-stats__label">{{ stat.field_stat_label.value }}</dt>
           <dd class="pf-stats__value">{{ stat.field_stat_value.value }}</dd>
         </div>
