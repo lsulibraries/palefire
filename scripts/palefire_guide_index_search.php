@@ -19,8 +19,9 @@
  * Optional arguments after "--": apply=1, force=1, format=<text format>,
  * path=<alias> (default /v2/guides/index-search-project).
  *
- * Status changes go in the "Status at a glance" section below. This page may
- * be published, so security findings and server details stay out of it.
+ * Status changes go in the "Status at a glance" section below, and each working
+ * day's work goes in "Day by day" at the end. This page may be published, so
+ * security findings and server details stay out of it.
  */
 declare(strict_types=1);
 
@@ -132,11 +133,11 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 5 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. Nothing links to it yet: the site's search forms still go to the old page. Filters that combine, chosen-filter chips, sorting and results that change without a page reload are on production, and the filters and sorting are checked for logged-out visitors. Search operators and pictures in results are live too.</p>
+<p><strong>Status as of Fri 6 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
-    ['done', 'Names', 'Index is the working name for visitors, with four modes: All, Research, Website and Special Collections. The address is /v2/search.'],
+    ['done', 'Names', 'Index is the working name for visitors, with four modes: All, Research, Special Collections and Website. The address is /v2/search.'],
     ['done', 'Page design', 'Layout and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
     ['done', 'Module first run', 'palefire_search is enabled on production. All four modes, source filters, paging, Discovery, Research Guides, Staff, Gear, Databases and E-Textbooks return real results.'],
     ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Discovery by date. Results change in place, without reloading the page. Filters and sorting are checked on production for logged-out visitors; changing in place still needs a check in a browser, logged in and out.'],
@@ -148,18 +149,21 @@ HTML, 'callout'),
     ['running', 'Catalog results', 'A Catalog section in All and Research, read from the public results feed with no login. The feed gives up to 300 records and no total, and it is replaced when the Catalog moves to Alma.'],
     ['running', 'Catalog filters', 'Type, Library, Language and Year, one choice to a filter because that is all the service takes. Totals and counts come from the catalog\'s results page, and the filters still work without them.'],
     ['running', 'Catalog holdings', 'Catalog rows say whether a copy is available and where, and open to list each library, shelf, floor, material type, call number and what LSU has, with links to the shelf map, holds and Special Collections requests. Special Collections can search the Catalog too, set to its own library until changed. The feed still orders the rows, and the catalog\'s web service adds copies just after, and takes over the search, newest first, if the feed goes down.'],
+    ['running', 'Each box and volume', 'A shelf with several items lists each one, up to 20, with its own status and request, so a request names the box wanted. Where the catalog names a box in what LSU has, those issues appear on that box\'s row. Requests still need a check in a browser, to confirm the form receives the right box.'],
+    ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
+    ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Archives and News list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
     ['running', 'Source definitions', 'Section headings and a What are these? button in the Source filter say what each source searches, in the glossary\'s cards.'],
     ['running', 'Fuller Discovery search', 'Discovery searches Discovery directly, with Full text online, Peer reviewed, Type and Year published filters. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
-    ['running', 'Loading indicator and current styles', 'The LSU mark shows while a search runs, and the page follows the latest Special Collections styles.'],
+    ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
     ['todo', 'Scholarly Repository', 'A link for now. The repository\'s public address answered a request from outside the site with a Cloudflare challenge; the server\'s log will confirm whether the site gets the same.'],
-    ['todo', 'Point the search forms here', 'The header panel, landing and 404 searches still go to /bento. They move once the page has been tested.'],
+    ['todo', 'Point the search forms here', 'The Special Collections hero search has moved. The header panel, other landing and 404 searches still go to /bento, and they move once the page has been tested.'],
     ['todo', 'Move Discovery and the Catalog to Alma', 'Waiting on the migration. See Alma below.'],
   ]),
 ]);
@@ -171,8 +175,8 @@ $section('What it searches', [
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
 <tr><td>Research</td><td>Discovery, Catalog, Databases, E-Textbooks, Research Guides, Archive Records, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
+<tr><td>Special Collections</td><td>Catalog, set to Special Collections, then Archive Records and Special Collections news</td><td>The Catalog above one ranked list with filters</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
-<tr><td>Special Collections</td><td>Archive Records, Special Collections news</td><td>One ranked list with filters</td></tr>
 </tbody>
 </table>
 <p>Sources that live in the site's own index can share one ranked list. Outside services can't be ranked against them, so they stay in their own sections.</p>
@@ -214,12 +218,43 @@ $section('Next steps', [
   $text(NULL, <<<'HTML'
 <ol>
 <li>Test the new filters, sorting and in-place results on production, logged in and logged out.</li>
-<li>Review the page's design together.</li>
+<li>Click Request item on a record with several boxes, and confirm the form receives the right box.</li>
+<li>Review the page's design together, and choose a design for the result rows.</li>
 <li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
 <li>Confirm whether the Scholarly Repository can be searched from the server.</li>
 <li>Move the site's search forms to the Index and redirect /bento.</li>
 <li>Connect Alma when the sandbox is ready.</li>
 </ol>
+HTML),
+]);
+
+$section('Day by day', [
+  $text(NULL, <<<'HTML'
+<p>What was done on each working day, newest last.</p>
+HTML),
+  $text('Thu Nov 5: First build', <<<'HTML'
+<ul>
+<li>Put the first build on production at /v2/search, searching real content in all four modes, and started this status page.</li>
+<li>Added filters that combine, chips to remove them, sorting, and results that change without a page reload.</li>
+<li>Added search operators and small pictures in results.</li>
+<li>E-Textbooks got covers and Book details, and each book now shows once, with every class section listed under it.</li>
+<li>Discovery now searches Discovery directly, with its own filters, labels for each type of result, and a tag on links that need an LSU login.</li>
+<li>Added a Catalog section from the public results feed, with filters, real totals, and links to the same search in Discovery and the Catalog.</li>
+<li>Added definitions of each source, and a fixed order for tied results so paging doesn't repeat rows.</li>
+<li>Added the loading mark and the current Special Collections styles. Tried alternating bands on results, then settled on hairlines.</li>
+</ul>
+HTML),
+  $text('Fri Nov 6: Catalog holdings and first public link', <<<'HTML'
+<ul>
+<li>Catalog rows now say whether a copy is available and where, and open to a table with shelf maps, holds and Special Collections requests. If the feed goes down, the catalog's web service takes over the search.</li>
+<li>The Catalog comes first in Research and Special Collections, and Special Collections can search it, set to its own library. The Special Collections tab moved between Research and Website.</li>
+<li>Sources can be put in your own order. Added Show more results, and a results bar that keeps the count and the search in view.</li>
+<li>Filters have clearer hover styles, and empty ones are dimmed instead of hidden.</li>
+<li>Switched on the Special Collections hero search, the first link to the Index from the site, and landing searches now show the loading mark while results load.</li>
+<li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it.</li>
+<li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
+<li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
+</ul>
 HTML),
 ]);
 
