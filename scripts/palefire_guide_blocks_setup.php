@@ -25,7 +25,7 @@
  *     guide_status_board  Status board: Heading, Intro, Items.
  *     guide_status_item   Status (Done, Running, Needs attention, Not
  *                         started), Title, Note.
- *     guide_stats         Figures: Heading, Intro, Figures.
+ *     guide_stats         Figures: Heading, Intro, Figures, Caption.
  *     guide_stat          Value ("5.7 TB"), Label and optional Progress (0-100).
  *     guide_code          Code: Heading, Code, Caption.
  * - Allows guide_flow, guide_status_board, guide_stats and guide_code in the
@@ -94,6 +94,7 @@ $storages = [
   'field_stat_value' => ['string', ['max_length' => 32], 1],
   'field_stat_label' => ['string', ['max_length' => 128], 1],
   'field_stat_progress' => ['integer', [], 1],
+  'field_stats_caption' => ['text_long', [], 1],
   'field_code_text' => ['string_long', [], 1],
   'field_code_caption' => ['text_long', [], 1],
 ];
@@ -145,6 +146,7 @@ $fields = [
     'field_block_title' => $block_title,
     'field_block_intro' => $block_intro,
     'field_stat_items' => ['Figures', TRUE, 'Two to four read best.'],
+    'field_stats_caption' => ['Caption', FALSE, 'Optional small print under the figures: what they cover, or what they leave out.'],
   ],
   'guide_stat' => [
     'field_stat_value' => ['Value', TRUE, 'Short: "~663k", "5.7 TB".'],

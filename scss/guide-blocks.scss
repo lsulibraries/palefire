@@ -399,6 +399,14 @@ $pf-reveal-from: 0.85; // As _variables.scss.
   }
 }
 
+.pf-stats__caption {
+  max-width: var(--pf-guide-prose);
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pf-guide-muted);
+}
+
 // Code ------------------------------------------------------------------------
 .pf-code {
   max-width: 54rem;
@@ -441,6 +449,7 @@ $pf-reveal-from: 0.85; // As _variables.scss.
 .pf-flow__note,
 .pf-flow__caption,
 .pf-status__note,
+.pf-stats__caption,
 .pf-code__caption {
   > :last-child {
     margin-bottom: 0;

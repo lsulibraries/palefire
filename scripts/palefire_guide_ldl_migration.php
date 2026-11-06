@@ -79,8 +79,10 @@ foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code'] as $i
     throw new \RuntimeException("'$id' not found. Run palefire_guide_blocks_setup.php first.");
   }
 }
-if (!\Drupal\field\Entity\FieldConfig::loadByName('paragraph', 'guide_stat', 'field_stat_progress')) {
-  throw new \RuntimeException("'field_stat_progress' not found. Run palefire_guide_blocks_setup.php first.");
+foreach ([['guide_stat', 'field_stat_progress'], ['guide_stats', 'field_stats_caption']] as [$bundle, $field]) {
+  if (!\Drupal\field\Entity\FieldConfig::loadByName('paragraph', $bundle, $field)) {
+    throw new \RuntimeException("'$field' not found. Run palefire_guide_blocks_setup.php first.");
+  }
 }
 
 $title = 'LDL Quartex Migration';
@@ -144,8 +146,9 @@ $status = fn (?string $heading, array $items) => [
   'heading' => $heading,
   'items' => $items,
 ];
-$stats = fn (?string $heading, array $items) => [
+$stats = fn (?string $heading, array $items, string $caption = '') => [
   'kind' => 'stats',
+  'caption' => $caption,
   'heading' => $heading,
   'items' => $items,
 ];
@@ -168,11 +171,7 @@ HTML, 'callout'),
     ['60%', 'downloaded, by data size: 1.95 TB on L:, 1.30 TB left', 60],
     ['80%', 'downloaded, by number of files', 80],
     ['31 of 39', 'institutions with nothing left to download, as of Nov 6', 79],
-  ]),
-  $text(NULL, <<<'HTML'
-<p>Newspapers make up most of what's left: Louisiana Newspapers is about 1.07 TB of the 1.30 TB (82%), and Loyola is about 0.23 TB, as of Nov 6.</p>
-<p>Uploading to Quartex isn't counted.</p>
-HTML),
+  ], 'Newspapers make up most of what\'s left: Louisiana Newspapers is about 1.07 TB of the 1.30 TB (82%), and Loyola is about 0.23 TB, as of Nov 6. Uploading to Quartex isn\'t counted.'),
   $text('Recent progress', <<<'HTML'
 <ul>
 <li><strong>Overnight, Nov 5 to 6:</strong> the 14 small institutions, Law Library and Historic New Orleans finished downloading.</li>
@@ -1049,6 +1048,7 @@ $to_paragraph = function (array $block) use ($html, $keep): Paragraph {
       'type' => 'guide_stats',
       'field_block_title' => $block['heading'],
       'field_stat_items' => $children,
+      'field_stats_caption' => $rich($block['caption']),
     ]));
   }
   if ($block['kind'] === 'code') {

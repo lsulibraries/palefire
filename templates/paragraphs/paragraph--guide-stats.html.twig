@@ -34,4 +34,7 @@
       {% endif %}
     {% endfor %}
   </dl>
+  {% if paragraph.hasField('field_stats_caption') and paragraph.field_stats_caption.value|default('')|trim %}
+    <div class="pf-stats__caption">{{ paragraph.field_stats_caption.processed }}</div>
+  {% endif %}
 </div>
