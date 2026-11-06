@@ -1728,11 +1728,34 @@
       padding: .375rem .75rem;
       font-size: .875rem;
       white-space: nowrap;
+      user-select: none; // A double click shouldn't select its words.
     }
   }
 
   &[open] summary svg {
     transform: rotate(45deg);
+  }
+
+  // Show or Hide, in one cell, so the button keeps its width. Hidden words are
+  // left out of the control's name.
+  .pf-index-row__toggle-label {
+    display: grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  .pf-index-row__when-open {
+    visibility: hidden;
+  }
+
+  &[open] .pf-index-row__when-closed {
+    visibility: hidden;
+  }
+
+  &[open] .pf-index-row__when-open {
+    visibility: visible;
   }
 
   // It glides open where the browser can, as the site's accordions. Closing is
@@ -1801,8 +1824,11 @@
   container-type: inline-size;
 }
 
+// A soft panel, in place of a shadow or more lines, says this belongs to the
+// result above it. The same mix on a light page goes the other way.
 .pf-index-row__copies-table {
-  padding-block: .5rem 1.25rem;
+  padding: .25rem 1rem 1rem;
+  background-color: color-mix(in srgb, var(--pf-index-fg) 4%, transparent);
 
   table {
     width: 100%;

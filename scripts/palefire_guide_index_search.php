@@ -152,7 +152,7 @@ HTML, 'callout'),
     ['running', 'Each box and volume', 'A shelf with several items lists each one, up to 20, with its own status and request, so a request names the box wanted. Where the catalog names a box in what LSU has, those issues appear on that box\'s row. Requests still need a check in a browser, to confirm the form receives the right box.'],
     ['running', 'Reading room wording', 'Special Collections copies say Available to view and Request to view, with one note per record that they are viewed in the Hill Memorial reading room and a link to how requests work. Sign-in wording waits until requests move to Alma.'],
     ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with Catalog chosen and set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
-    ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
+    ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text, saying Hide once open. An open result\'s table sits on a soft panel. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Archives and News list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
@@ -259,6 +259,7 @@ HTML),
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
 <li>Special Collections copies now say Available to view and Request to view, with a note about the reading room.</li>
+<li>An open result's table now sits on a soft panel, and its button says Hide while open.</li>
 <li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
 </ul>
 HTML),

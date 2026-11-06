@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-06:** The Index: `.pf-index-row__copies-table` is a panel of the text color at 4%. `.pf-index-row__when-closed` and `.pf-index-row__when-open` share one grid cell, so the toggle keeps its width. Shadows and neumorphism were considered and left out: they read poorly on the dark background and aren't the theme's flat Swiss language.
 - **2026-11-06:** The Index: `.pf-index-row__copy-note` is a small muted note under a record's holdings table, shown once for Special Collections copies.
 - **2026-11-06:** Loading mark: `pf-mark-trace` moves to `base/_mark-trace.scss`, printed by `style.css` and `index-search.css`, and fades the stroke by 40% of the cycle. At rest the letters have no visible stroke.
 - **2026-11-06:** Landing hero: `.pf-hero-banner__others` is gone. A row in hand no longer puts its words in the lead's place.
