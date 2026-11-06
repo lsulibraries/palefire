@@ -24,7 +24,13 @@
         let inView = false;
         const setState = () => {
           btn.dataset.state = paused ? 'paused' : 'playing';
-          label.textContent = paused ? Drupal.t('Play background video') : Drupal.t('Pause background video');
+          // The stage's button also holds the pictures (js/hero-highlights.js).
+          if (wrap.hasAttribute('data-pf-film-sequence')) {
+            label.textContent = paused ? Drupal.t('Play the video and pictures') : Drupal.t('Pause the video and pictures');
+          }
+          else {
+            label.textContent = paused ? Drupal.t('Play background video') : Drupal.t('Pause background video');
+          }
         };
 
         // Two <video> layers, so a playlist never cuts to black: while one
@@ -56,7 +62,7 @@
           v.src = sources[nextClip()];
           v.load();
         };
-        const play = (v = video()) => { if (!paused && inView) v.play().catch(() => {}); };
+        const play = (v = video()) => { if (!paused && inView && !wrap.hasAttribute('data-pf-film-rest')) v.play().catch(() => {}); };
         const pauseAll = () => videos.forEach((v) => v.pause());
 
         // Progress bar (the gold line along the button's bottom edge): how
@@ -64,6 +70,8 @@
         // without animating the bar backwards.
         let shown = 0;
         const progress = (event) => {
+          // On the stage the bar follows the whole sequence.
+          if (wrap.hasAttribute('data-pf-film-sequence')) return;
           if (event && event.target !== video()) return;
           const v = video();
           const p = v.duration ? Math.min(1, v.currentTime / v.duration) : 0;

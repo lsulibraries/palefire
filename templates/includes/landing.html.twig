@@ -168,11 +168,6 @@
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}
-    {# Cover: the clip through the title's letters on first load
-       (js/hero-title-window.js, split cover in _landing-features.scss). #}
-    {% if cover %}
-      {{ attach_library('palefire/hero-title-window') }}
-    {% endif %}
     {# Same look as the TOC hide/show button: icon square + a gold bar that
        fills as the current clip plays; the label slides out on
        hover/focus and is always read by screen readers. landing-video.js
@@ -297,13 +292,10 @@
           {%- if visit.name %}<span class="visually-hidden">, </span><span class="pf-landing__kicker-place">{{ visit.name }}</span>{% endif -%}
         </p>
       {% endif %}
-      {# Cover with a poster: the still shows in the title's letters from the
-         first paint, until the film's column opens (_entrance.scss,
-         .pf-landing__title--still). On the stage, with the film's sweep, they
-         take the lead Highlight's picture, as the column does, and another
-         item's while it is in hand: --pf-title-pic-2 to -5, by its place in the
-         list (pf-title-trade, pf-title-feature,
-         _landing-features.scss). #}
+      {# Cover with a poster: a row in hand shows its picture in the title's
+         letters: --pf-title-feature for the first, --pf-title-pic-2 to -5 by its
+         place in the list, the poster's still without one
+         (_landing-features.scss, "The stage"). Solid otherwise. #}
       {% set title_still = cover and bg_videos and bg_poster %}
       {% set title_feature = title_still and hero_banners ? hero_banners|first.still %}
       {% set title_pics = title_still ? hero_banners|slice(0, hero_blog ? 4 : 5)|merge(hero_blog ? [hero_blog] : []) : [] %}
@@ -393,21 +385,16 @@
         </button>
       </div>
     </form>
-    {# The index on the stage: says the page goes on and what comes next, and
-       moves it without a wheel. js/hero-index.js adds the section links and
-       shows it; the CSS keeps it to the stage (_landing-features.scss). #}
+    {# The scroll cue on the stage: says the page goes on, and moves it without
+       a wheel. js/hero-highlights.js shows it; the CSS keeps it to the stage
+       (_landing-features.scss). #}
     {% if cover %}
-      {{ attach_library('palefire/hero-index') }}
-      <nav class="pf-hero-index" aria-label="{{ 'On this page'|t }}" data-pf-hero-index hidden>
-        <ul role="list">
-          <li>
-            <button type="button">
-              {{- 'Highlights'|t -}}
-              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          </li>
-        </ul>
-      </nav>
+      {{ attach_library('palefire/hero-highlights') }}
+      <button type="button" class="pf-hero-cue" data-pf-hero-cue hidden>
+        {{- 'Scroll'|t -}}
+        <span class="visually-hidden">{{ ' to the rest of the page'|t }}</span>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     {% endif %}
     {# Landing department: the hero's tile accordion under the search, only
        when the paragraph has tiles (no placeholders). Its own wrapper, not
@@ -500,9 +487,9 @@
                   <span class="pf-hero-banner__title">{{ banner.title }}</span>
                 </span>
               </a>
-              {# The lead picture's object label, on the stage only: a repeat
-                 of no words a reader needs, as the picture is hidden too. #}
-              {% if loop.first and banner.image and banner.object %}
+              {# The picture's object label, on the stage only: a repeat of no
+                 words a reader needs, as the picture is hidden too. #}
+              {% if banner.image and banner.object %}
                 <div class="pf-hero-banner__plate" aria-hidden="true">
                   {% include '@palefire/includes/object-label.html.twig' with banner.object only %}
                 </div>

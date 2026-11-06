@@ -4357,34 +4357,17 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   flex-shrink: 0;
 }
 
-// --- Scroll: the stage -------------------------------------------------------
-// From 44rem, on a window at least 40rem tall, with motion and scroll
-// timelines: the first screen is a stage that holds for one more screen of
-// scroll (--pf-stage-run). Over its first 30% the page's colour sweeps
-// right across the film (its clip from the left edge), so the type's field
-// takes the whole width, and the Highlights' first picture takes the film's
-// third behind that same edge. Then their words come in over it one after
-// another, on a wash of the page's colour: the lead large, the rest as rows.
-// A row in hand brings its picture, and its words to the lead's place, with
-// no script. Then the stage moves on and the Quick Start follows, a run lower.
-// Held by position: sticky, on the first screen's wrapper (.pf-landing__stage,
-// in .pf-landing__run, a run taller than it): the browser scrolls and holds it
-// as one, so a fast scroll can't get ahead of it and no change in the page's
-// height can put it out of step. No script.
-// Without scroll timelines, with reduced motion or the Settings drawer's
-// switch, none of this: the film scrolls away and the strip follows it
-// (above). With the entrance (html.pf-fade) the film's rule is in
-// _entrance.scss, which adds the column's opening.
-@keyframes pf-split-wipe {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-
-  to {
-    clip-path: inset(0 0 0 100%);
-  }
-}
-
+// --- The stage -------------------------------------------------------------
+// From 44rem, on a window at least 40rem tall: the first screen is the type on
+// the left and, in the column, the Highlights' words over the film, on a wash of
+// the page's colour: the lead large, the rest as rows. js/hero-highlights.js
+// gives the film five seconds, shows each Highlight's picture in turn, and rests
+// on the first (.is-shown), with the film stopped. A row in hand brings its
+// picture, its words to the lead's place, its object label to the column's foot
+// and its picture to the title's letters, with no script. The title is solid
+// otherwise. The page scrolls as any page does: nothing is tied to the scroll.
+// With reduced motion the column starts at the rest. Phones have their own
+// (below).
 @keyframes pf-split-appear {
   from {
     opacity: 0;
@@ -4400,33 +4383,11 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-// The list's wash comes in whole, once the sweep has nearly done.
-@keyframes pf-hl-wash {
-  from {
-    opacity: 0;
-  }
-}
-
-// The list's pictures come in at the film's sweep, its edge theirs.
-@keyframes pf-hl-sweep {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-// Trading places: as the picture takes the column, the letters' gold fades and
-// the same picture shows through them (--pf-title-feature, the lead
-// Highlight's; the film's still without one), in its own colours, over a floor
-// (below). Their color stays gold, only the fill goes.
-// A row in hand changes the letters' picture too, fading as the column does.
-// The letters have one background, and a background's layers have no opacity,
-// so each row's picture is a layer in a cross-fade with nothing, at its own
-// registered percentage.
-@for $k from 2 through 5 {
+// A row in hand shows in the letters too, fading as the column does. The letters
+// have one background, and a background's layers have no opacity, so each row's
+// picture is a layer in a cross-fade with nothing, at its own registered
+// percentage.
+@for $k from 1 through 5 {
   @property --pf-title-show-#{$k} {
     syntax: "<percentage>";
     inherits: true;
@@ -4434,68 +4395,20 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
   }
 }
 
-@keyframes pf-title-trade {
-  from {
-    -webkit-text-fill-color: currentcolor;
-  }
-
-  to {
-    -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
-  }
-}
-
-// The picture in the letters, from the first pixel of scroll: the fill is
-// still solid there, so the change can't be seen, and the first load keeps
-// the film's still. It loads with the column's, the same file. The floor
-// (--pf-title-floor, a grey) is on top, blended lighten so each channel of each
-// pixel keeps at least the floor's value and anything brighter stays as it is,
-// whichever pictures show and however far they have faded. Then the rows'
-// pictures, then the lead's. If the pictures fail to load the letters show the
-// floor.
 $pf-title-none: linear-gradient(transparent, transparent);
 
-@keyframes pf-title-feature {
-  from,
-  to {
-    background-image:
-      linear-gradient(var(--pf-title-floor), var(--pf-title-floor)),
-      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-5, #{$pf-title-none}), var(--pf-title-show-5)),
-      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-4, #{$pf-title-none}), var(--pf-title-show-4)),
-      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-3, #{$pf-title-none}), var(--pf-title-show-3)),
-      -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-2, #{$pf-title-none}), var(--pf-title-show-2)),
-      var(--pf-title-feature, var(--pf-title-still));
-    background-position: 50% 50%;
-    background-blend-mode: lighten, normal;
-  }
-}
-
-@keyframes pf-hl-settle {
-  from {
-    scale: 1.08;
-  }
-}
-
 $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
+$pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
-// --- The stage's index -------------------------------------------------------
-// Under the search (js/hero-index.js): Highlights, which glides there, then the
-// page's first sections. One line on a hairline at the foot of the search's
-// row and column, in the room under the search, fading as the page scrolls.
-// Only on the stage, where a press of an arrow key or a notch of the wheel
-// moves little, and only on a window tall enough to show it with the search.
-.pf-hero-index {
+// --- The scroll cue ---------------------------------------------------------
+// Under the search (js/hero-highlights.js): the page goes on, and a way on
+// without a wheel. Only on a window tall enough to show it with the search.
+.pf-hero-cue {
   display: none;
 }
 
-@keyframes pf-hero-index-out {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
 // Three shrinking dips, then still.
-@keyframes pf-hero-index-nudge {
+@keyframes pf-hero-cue-nudge {
   0%,
   30%,
   60%,
@@ -4516,81 +4429,50 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
   }
 }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 48rem) {
-    @container pf-cover (min-width: 44rem) {
-      #{$pf-split-moving} .pf-hero-index:not([hidden]) {
-        position: absolute;
-        inset: auto 0 0;
-        display: block;
-        grid-row: 2;
-        margin-inline-end: calc(var(--pf-split-film) + 2 * var(--pf-grid-gutter));
-        border-top: 1px solid #{$pf-hairline};
-        font-size: .9375rem;
-        animation: pf-hero-index-out linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 8vh;
+@media (min-height: 48rem) {
+  @container pf-cover (min-width: 44rem) {
+    #{$pf-stage} .pf-hero-cue:not([hidden]) {
+      position: absolute;
+      inset: auto auto .25rem 0;
+      display: inline-flex;
+      grid-row: 2;
+      align-items: center;
+      gap: .625rem;
+      min-height: 2.75rem;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--pf-section-fg, var(--bs-body-color));
+      font-size: .9375rem;
+      font-weight: 500;
+      cursor: pointer;
 
-        // Hidden overflow, so js/hero-index.js can tell what fits. Each item
-        // holds room for the focus outline, which it would clip; the first's
-        // hangs in the gutter, so the words start at the search's edge.
-        ul {
-          display: flex;
-          gap: 1.375rem;
-          margin: 0 0 0 -.3125rem;
-          padding: 0;
-          overflow: hidden;
-          list-style: none;
-        }
-
-        li {
-          flex: none;
-          padding: .3125rem;
-        }
-
-        :is(a, button) {
-          display: inline-flex;
-          align-items: center;
-          min-height: 2.75rem;
-          white-space: nowrap;
-          color: var(--pf-toc-color);
-          text-decoration: none;
-          transition: color $pf-hover-out ease;
-
-          &:hover,
-          &:focus-visible {
-            color: var(--pf-section-fg, var(--bs-body-color));
-            text-decoration: underline;
-            text-underline-offset: .25em;
-            transition-duration: $pf-hover-in;
-          }
-        }
-
-        button {
-          gap: .625rem;
-          padding: 0;
-          border: 0;
-          background: none;
-          color: var(--pf-section-fg, var(--bs-body-color));
-          font-weight: 500;
-          cursor: pointer;
-        }
-
-        svg {
-          flex: none;
-          color: var(--pf-g-accent, var(--pf-landing-accent));
-          transition: translate $pf-hover-out ease;
-        }
-
-        button:is(:hover, :focus-visible) svg {
-          translate: 0 .1875rem;
-          transition-duration: $pf-hover-in;
-        }
-
-        button.is-nudging svg {
-          animation: pf-hero-index-nudge 2s ease-in-out;
-        }
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: .25em;
       }
+
+      svg {
+        flex: none;
+        color: var(--pf-g-accent, var(--pf-landing-accent));
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-hero-cue {
+    svg {
+      transition: translate $pf-hover-out ease;
+    }
+
+    &:is(:hover, :focus-visible) svg {
+      translate: 0 .1875rem;
+      transition-duration: $pf-hover-in;
+    }
+
+    &.is-nudging svg {
+      animation: pf-hero-cue-nudge 2s ease-in-out;
     }
   }
 }
@@ -4605,424 +4487,356 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
   }
 }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 40rem) {
-    @container pf-cover (min-width: 44rem) {
-      #{$pf-split-moving} {
-        --pf-stage-run: 100svh;
+@media (min-height: 40rem) {
+  @container pf-cover (min-width: 44rem) {
+    #{$pf-stage} {
 
-        // The run: the first screen and a screen more, so the Quick Start
-        // follows a run lower.
-        > .pf-landing__run {
-          display: block;
-          grid-row: 1 / 3;
-          margin: 0;
+      // The first screen's wrappers, boxes here: the stage is the lead's two
+      // rows, from under the header and the bar to the screen's foot.
+      > .pf-landing__run {
+        display: block;
+        grid-row: 1 / 3;
+        margin: 0;
+      }
 
-          // In the box, not padding: sticky stops at the content's edge.
-          &::after {
-            content: "";
-            display: block;
-            height: var(--pf-stage-run);
-          }
+      .pf-landing__stage {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 1fr auto;
+        min-height: calc(100svh - var(--pf-cover-top) - var(--pf-header-h, 0px));
+      }
+
+      // A small laptop's window (about 650px tall): a smaller title keeps the
+      // search on the first screen.
+      @media (max-height: 47.98rem) {
+        .pf-landing__top > .pf-landing__title {
+          font-size: min(11svh, 8cqi);
         }
+      }
 
-        // The stage, held where it starts for the run. As tall as the lead's
-        // spacer, from under the header and the bar to the screen's foot; the
-        // lead's two rows, now its own.
-        .pf-landing__stage {
-          position: sticky;
-          top: calc(var(--pf-cover-top) + var(--pf-header-h, 0px));
-          display: grid;
-          grid-template-columns: minmax(0, 1fr);
-          grid-template-rows: 1fr auto;
-          min-height: calc(100svh - var(--pf-cover-top) - var(--pf-header-h, 0px));
-        }
+      // Under the list, so the film's bar stays in reach over its wash. It has
+      // no shade of its own here: the wash is the page's colour at the foot.
+      .pf-landing__media {
+        z-index: auto;
+      }
 
-        // The list: the film's whole third, a picture from its head to its
-        // foot (the film's own box, so the two meet at the sweep's edge),
-        // the words over it on a wash of the page's colour. It holds the
-        // pictures (the items and their links stay static), and only the
-        // words and the lead's picture take the pointer, so the film's bar
-        // stays in reach under it.
-        .pf-hero-banners {
-          --pf-hl-wash: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
-          --pf-hl-pad: var(--pf-grid-gutter);
+      .pf-landing__stage:has(> .pf-hero-banners) .pf-landing__film-bar {
+        color: var(--bs-heading-color, var(--pf-section-fg));
+        background-image: none;
+      }
+
+      .pf-landing__stage:has(> .pf-hero-banners) .pf-landing__film-bar .pf-landing__bg-toggle:not(:hover) {
+        color: inherit;
+      }
+
+      // The building's name gives way to a picture's own label.
+      .pf-landing__film-caption {
+        transition: opacity .35s ease-out;
+      }
+
+      .pf-landing__stage:has(.pf-hero-banner.is-shown, .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-landing__film-caption {
+        opacity: 0;
+      }
+
+      // The list: the film's whole third, from its head to its foot, with the
+      // words on a wash of the page's colour. It holds the pictures, and only
+      // the words take the pointer.
+      .pf-hero-banners {
+        --pf-hl-wash: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+        --pf-hl-pad: var(--pf-grid-gutter);
+        position: absolute;
+        inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
+        isolation: isolate;
+        // A spare row takes up the height; the items sit in the five
+        // under it, whatever their heights, and the wash spans them.
+        grid-template: minmax(0, 1fr) repeat(5, auto) / minmax(0, 1fr);
+        grid-auto-flow: row;
+        grid-row: 1 / 3;
+        grid-column: 1;
+        gap: 0;
+        width: var(--pf-split-film);
+        margin: 0;
+        pointer-events: none;
+
+        // The film's top wash, on a picture: the header's words keep 4.5:1.
+        &::before {
+          content: "";
           position: absolute;
-          inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
-          isolation: isolate;
-          // A spare row takes up the height; the items sit in the five
-          // under it, whatever their heights, and the wash spans them.
-          grid-template: minmax(0, 1fr) repeat(5, auto) / minmax(0, 1fr);
-          grid-auto-flow: row;
-          grid-row: 1 / 3;
-          grid-column: 1;
-          gap: 0;
-          width: var(--pf-split-film);
-          margin: 0;
+          inset: 0 0 auto;
+          z-index: 1;
+          height: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 12rem);
+          background-image: pf-cover-top-wash();
+          opacity: 0;
           pointer-events: none;
+          transition: opacity .6s ease-out;
+        }
 
-          // The film's top wash, on the picture: the header's words keep
-          // 4.5:1. Swept in with the picture, so it never doubles the film's.
-          &::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto;
-            z-index: 1;
-            height: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 12rem);
-            background-image: pf-cover-top-wash();
-            pointer-events: none;
-            animation: pf-hl-sweep ease-out both;
-            animation-timeline: scroll(root);
-            animation-range: 0 calc(var(--pf-stage-run) * .3);
-          }
+        &:has(.pf-hero-banner.is-shown, .pf-hero-banner__link:is(:hover, :focus-visible))::before {
+          opacity: 1;
+        }
 
-          // One gradient behind all the words, sized from the list (not the
-          // column), so they stay on at least 78% of the page's colour at
-          // any window height (4.5:1 in every reading colour). It fades in
-          // whole, ahead of the words, and starts 10rem above the lead.
-          &::after {
-            content: "";
-            z-index: 1;
-            grid-area: 2 / 1 / 7 / 2;
-            align-self: stretch;
-            margin-top: -10rem;
-            background: linear-gradient(
-              to bottom,
-              transparent,
-              color-mix(in srgb, var(--pf-hl-wash) 78%, transparent) 10rem,
-              color-mix(in srgb, var(--pf-hl-wash) 88%, transparent) calc(10rem + 40%),
-              var(--pf-hl-wash)
-            );
-            pointer-events: none;
-            animation: pf-hl-wash linear both;
-            animation-timeline: scroll(root);
-            animation-range: calc(var(--pf-stage-run) * .28) calc(var(--pf-stage-run) * .38);
-          }
+        // One gradient behind all the words, sized from the list (not the
+        // column), so they stay on at least 78% of the page's colour at
+        // any window height (4.5:1 in every reading colour). It starts 10rem
+        // above the lead.
+        &::after {
+          content: "";
+          z-index: 1;
+          grid-area: 2 / 1 / 7 / 2;
+          align-self: stretch;
+          margin-top: -10rem;
+          background: linear-gradient(
+            to bottom,
+            transparent,
+            color-mix(in srgb, var(--pf-hl-wash) 78%, transparent) 10rem,
+            color-mix(in srgb, var(--pf-hl-wash) 88%, transparent) calc(10rem + 40%),
+            var(--pf-hl-wash)
+          );
+          pointer-events: none;
+        }
 
-          // The first item's picture stays under the others, which fade in
-          // over it and out late, so a change never dips to the ground. In
-          // full colour, not the row's hush: the column is one picture.
-          .pf-hero-banner .pf-hero-banner__media {
-            --pf-banner-grey: 0;
-            --pf-banner-wait: 0;
-            --pf-banner-dim: 0;
-            --pf-banner-hush: 0;
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            width: auto;
-            aspect-ratio: auto;
-            opacity: 0;
-            box-shadow: none;
-            pointer-events: none;
-            transition: opacity .5s ease-out .12s;
-            animation: pf-hl-sweep ease-out both;
-            animation-timeline: scroll(root);
-            animation-range: 0 calc(var(--pf-stage-run) * .3);
+        // The pictures, in full colour, not the row's hush: the column is one
+        // picture. The one going waits for the one coming, so a change never
+        // dips to the film.
+        .pf-hero-banner .pf-hero-banner__media {
+          --pf-banner-grey: 0;
+          --pf-banner-wait: 0;
+          --pf-banner-dim: 0;
+          --pf-banner-hush: 0;
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          width: auto;
+          aspect-ratio: auto;
+          opacity: 0;
+          box-shadow: none;
+          pointer-events: none;
+          transition: opacity .6s ease-out .6s;
 
-            img {
-              top: 0;
-              height: 100%;
-              animation: pf-hl-settle linear both;
-              animation-timeline: scroll(root);
-              animation-range: 0 var(--pf-stage-run);
-            }
-          }
-
-          > .pf-hero-banner:first-child .pf-hero-banner__media {
-            opacity: 1;
-            pointer-events: auto;
-            transition: none;
-          }
-
-          .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media {
-            opacity: 1;
-            transition-delay: 0s;
-          }
-
-          // A date set large, where the item has no picture.
-          .pf-hero-banner__media--date {
-            justify-content: flex-start;
-            padding: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 3rem) var(--pf-hl-pad) 0;
-            color: var(--bs-heading-color, var(--pf-section-fg));
-            background: var(--pf-hl-wash);
-          }
-
-          // The lead picture's object label, as a caption at the column's
-          // foot, where the film's own caption stood: one small run of text
-          // in the last row's bottom padding, on the wash's strongest part.
-          // Comes in last, after the rows, and gives way with the picture,
-          // when another item is in hand or the next event has taken the
-          // banner (js/hero-event.js). Two lines at most, so it never reaches
-          // the row above.
-          .pf-hero-banner__plate {
-            position: absolute;
-            right: var(--pf-hl-pad);
-            bottom: clamp(.5rem, 1.5svh, 1rem);
-            left: var(--pf-hl-pad);
-            z-index: 2;
-            display: block;
-            animation: pf-hl-wash linear both;
-            animation-timeline: scroll(root);
-            animation-range: calc(var(--pf-stage-run) * .7) calc(var(--pf-stage-run) * .8);
-
-            .pf-object-label {
-              display: -webkit-box;
-              overflow: hidden;
-              max-width: none;
-              color: var(--pf-label-muted);
-              font-size: .75rem;
-              line-height: 1.4;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 2;
-              line-clamp: 2;
-              transition: opacity .35s ease-out .08s;
-            }
-
-            p {
-              display: inline;
-              margin: 0;
-              color: inherit;
-              font: inherit;
-              letter-spacing: normal;
-              text-transform: none;
-
-              &::after {
-                content: ".";
-              }
-            }
-          }
-
-          .pf-hero-banner.is-event .pf-hero-banner__plate {
-            display: none;
-          }
-
-          &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__plate .pf-object-label {
-            opacity: 0;
-            transition: opacity .25s ease-out;
-          }
-
-          .pf-hero-banner__day {
-            font-size: clamp(5rem, 8cqi, 9rem);
-          }
-
-          .pf-hero-banner__month {
-            color: inherit;
-          }
-
-          // Hand back on the keyboard: every word shows at once, and the
-          // picture needs no sweep.
-          &:has(.pf-hero-banner__link:focus-visible) {
-            &::after,
-            .pf-hero-banner__link::before,
-            .pf-hero-banner__text,
-            .pf-hero-banner__media,
-            .pf-hero-banner__plate {
-              animation: none;
-            }
-          }
-
-          // Another item in hand: the lead's words give way to its words.
-          &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title) {
-            opacity: 0;
-            transition: opacity .25s ease-out;
-          }
-
-          @for $k from 2 through 5 {
-            &:has(> .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__other:nth-child(#{$k - 1}) {
-              opacity: 1;
-              transition-delay: .08s;
-            }
+          img {
+            top: 0;
+            height: 100%;
           }
         }
 
-        .pf-hero-banners > .pf-hero-banner {
-          position: static;
-          width: 100%;
-          animation: none;
+        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) > .pf-hero-banner.is-shown .pf-hero-banner__media,
+        .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media {
+          opacity: 1;
+          transition-delay: .12s;
+        }
 
-          .pf-hero-banner__link {
-            position: static;
-            display: grid;
-            grid-template: auto auto / minmax(0, 1fr);
-            width: 100%;
-            overflow: visible;
-            isolation: auto;
-            color: var(--bs-heading-color, var(--pf-section-fg));
+        // A date set large, where the item has no picture.
+        .pf-hero-banner__media--date {
+          justify-content: flex-start;
+          padding: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 3rem) var(--pf-hl-pad) 0;
+          color: var(--bs-heading-color, var(--pf-section-fg));
+          background: var(--pf-hl-wash);
+        }
 
-            // A hairline over the row, above the wash.
-            &::before {
-              content: "";
-              position: relative;
-              z-index: 2;
-              height: 1px;
-              background: $pf-hairline;
-              transform-origin: 0 50%;
-              animation: pf-hl-draw ease-out both;
-              animation-timeline: scroll(root);
-            }
+        // The picture's object label, at the column's foot, where the film's
+        // own caption stands: one small run of text in the last row's bottom
+        // padding, on the wash's strongest part. With its picture, and not
+        // once the next event has taken the banner (js/hero-event.js). Two
+        // lines at most, so it never reaches the row above.
+        .pf-hero-banner__plate {
+          position: absolute;
+          right: calc(var(--pf-hl-pad) + 5.5rem); // clear of the video button
+          bottom: clamp(.5rem, 1.5svh, 1rem);
+          left: var(--pf-hl-pad);
+          z-index: 2;
+          display: block;
+          opacity: 0;
+          transition: opacity .35s ease-out;
 
-            // The ring on the row: the wash would paint over the link's.
-            &:focus-visible {
-              outline: none;
-
-              .pf-hero-banner__text {
-                outline: 2px solid currentcolor;
-                outline-offset: -.3125rem;
-              }
-            }
-          }
-
-          // A row of words, over the list's wash.
-          .pf-hero-banner__text {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            gap: .25rem;
-            padding: clamp(.625rem, 1.6svh, 1rem) calc(var(--pf-hl-pad) + 1.75rem) clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
-            pointer-events: auto;
-            animation: pf-split-appear ease-out both;
-            animation-timeline: scroll(root);
-
-            // The arrow of the row in hand.
-            &::after {
-              content: "\2192" / "";
-              position: absolute;
-              top: 50%;
-              right: var(--pf-hl-pad);
-              opacity: 0;
-              translate: -.375rem -50%;
-              transition: opacity .3s ease-out, translate .3s ease-out;
-            }
-          }
-
-          // One after another, each in a short window of its own (8% of the
-          // run, 8% apart) that eases to rest, so wherever the page stops
-          // the list is whole items in and the rest not begun, never five
-          // half-faded. All in by 76% of the run: the list rests before the
-          // stage moves on.
-          @for $i from 1 through 5 {
-            &:nth-child(#{$i}) {
-              grid-area: #{$i + 1} / 1;
-
-              .pf-hero-banner__link::before {
-                animation-range:
-                  calc(var(--pf-stage-run) * #{.34 + ($i - 1) * .08})
-                  calc(var(--pf-stage-run) * #{.41 + ($i - 1) * .08});
-              }
-
-              .pf-hero-banner__text {
-                animation-range:
-                  calc(var(--pf-stage-run) * #{.36 + ($i - 1) * .08})
-                  calc(var(--pf-stage-run) * #{.44 + ($i - 1) * .08});
-              }
-            }
-          }
-
-          .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__text::after {
-            opacity: 1;
-            translate: 0 -50%;
-          }
-
-          // The label a step behind its title. Solid with more contrast.
-          .pf-hero-banner__label {
-            margin-top: 0;
-            color: color-mix(in srgb, currentcolor var(--pf-hl-label-strength, 80%), transparent);
-
-            html.pf-a11y-contrast & {
-              color: inherit;
-            }
-
-            @media (prefers-contrast: more) {
-              color: inherit;
-            }
-          }
-
-          .pf-hero-banner__title {
-            align-self: auto;
-            padding: 0;
-            border-bottom: 0;
-            font-size: clamp(1rem, .9rem + .3vw, 1.125rem);
-            line-height: 1.25;
-            color: inherit;
-            background: none;
-            opacity: 1;
+          .pf-object-label {
+            display: -webkit-box;
+            overflow: hidden;
+            max-width: none;
+            color: var(--pf-label-muted);
+            font-size: .75rem;
+            line-height: 1.4;
+            -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
             line-clamp: 2;
           }
 
-          .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title {
-            color: var(--pf-g-title, var(--pf-toc-active));
+          p {
+            display: inline;
+            margin: 0;
+            color: inherit;
+            font: inherit;
+            letter-spacing: normal;
+            text-transform: none;
+
+            &::after {
+              content: ".";
+            }
+          }
+        }
+
+        .pf-hero-banner.is-event .pf-hero-banner__plate {
+          display: none;
+        }
+
+        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) > .pf-hero-banner.is-shown .pf-hero-banner__plate,
+        > .pf-hero-banner:has(.pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__plate {
+          opacity: 1;
+          transition-delay: .08s;
+        }
+
+        .pf-hero-banner__day {
+          font-size: clamp(5rem, 8cqi, 9rem);
+        }
+
+        .pf-hero-banner__month {
+          color: inherit;
+        }
+
+        // Another item up: the lead's words give way to its words.
+        &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title),
+        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))):has(> .pf-hero-banner:not(:first-child).is-shown) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title) {
+          opacity: 0;
+          transition: opacity .25s ease-out;
+        }
+
+        @for $k from 2 through 5 {
+          &:has(> .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__other:nth-child(#{$k - 1}),
+          &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))):has(> .pf-hero-banner:nth-child(#{$k}).is-shown) .pf-hero-banner__other:nth-child(#{$k - 1}) {
+            opacity: 1;
+            transition-delay: .08s;
+          }
+        }
+      }
+
+      .pf-hero-banners > .pf-hero-banner {
+        position: static;
+        width: 100%;
+        animation: none;
+
+        .pf-hero-banner__link {
+          position: static;
+          display: grid;
+          grid-template: auto auto / minmax(0, 1fr);
+          width: 100%;
+          overflow: visible;
+          isolation: auto;
+          color: var(--bs-heading-color, var(--pf-section-fg));
+
+          // A hairline over the row, above the wash.
+          &::before {
+            content: "";
+            position: relative;
+            z-index: 2;
+            height: 1px;
+            background: $pf-hairline;
+            transform-origin: 0 50%;
           }
 
-          // The lead: no hairline, its words large.
-          &:first-child {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-
-            // One row only: with no hairline, a second would take half the
-            // spare height and lift the words off the rule below them.
-            .pf-hero-banner__link {
-              grid-area: 1 / 1;
-              grid-template-rows: minmax(0, 1fr);
-
-              &::before {
-                content: none;
-              }
-            }
+          // The ring on the row: the wash would paint over the link's.
+          &:focus-visible {
+            outline: none;
 
             .pf-hero-banner__text {
-              padding-right: var(--pf-hl-pad);
-
-              &::after {
-                content: none;
-              }
-            }
-
-            :is(.pf-hero-banner__label, .pf-hero-banner__title) {
-              transition: opacity .35s ease-out .08s;
-            }
-
-            .pf-hero-banner__title {
-              font-size: clamp(1.625rem, 2.5cqi, 2.25rem);
-              line-height: 1.1;
-              -webkit-line-clamp: 3;
-              line-clamp: 3;
+              outline: 2px solid currentcolor;
+              outline-offset: -.3125rem;
             }
           }
+        }
 
-          // The last row's words end level with the search's foot.
-          &:last-child .pf-hero-banner__text {
-            padding-bottom: clamp(3rem, 9svh, 6rem);
-          }
+        // A row of words, over the list's wash.
+        .pf-hero-banner__text {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          gap: .25rem;
+          padding: clamp(.625rem, 1.6svh, 1rem) calc(var(--pf-hl-pad) + 1.75rem) clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
+          pointer-events: auto;
 
-          // The lead's words for another item, in the lead's place. Each
-          // holds its room in the cell, so a change moves nothing.
-          .pf-hero-banner__others {
-            display: contents;
-          }
-
-          .pf-hero-banner__other {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            grid-area: 1 / 1;
-            justify-content: flex-end;
-            gap: .25rem;
-            padding: clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
-            color: var(--bs-heading-color, var(--pf-section-fg));
+          // The arrow of the row in hand.
+          &::after {
+            content: "\2192" / "";
+            position: absolute;
+            top: 50%;
+            right: var(--pf-hl-pad);
             opacity: 0;
-            transition: opacity .25s ease-out;
+            translate: -.375rem -50%;
+            transition: opacity .3s ease-out, translate .3s ease-out;
+          }
+        }
+
+        @for $i from 1 through 5 {
+          &:nth-child(#{$i}) {
+            grid-area: #{$i + 1} / 1;
+          }
+        }
+
+        .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__text::after {
+          opacity: 1;
+          translate: 0 -50%;
+        }
+
+        // The label a step behind its title. Solid with more contrast.
+        .pf-hero-banner__label {
+          margin-top: 0;
+          color: color-mix(in srgb, currentcolor var(--pf-hl-label-strength, 80%), transparent);
+
+          html.pf-a11y-contrast & {
+            color: inherit;
           }
 
-          .pf-hero-banner__other .pf-hero-banner__label {
-            align-self: flex-start;
-            padding: 0;
-            background: none;
+          @media (prefers-contrast: more) {
+            color: inherit;
+          }
+        }
+
+        .pf-hero-banner__title {
+          align-self: auto;
+          padding: 0;
+          border-bottom: 0;
+          font-size: clamp(1rem, .9rem + .3vw, 1.125rem);
+          line-height: 1.25;
+          color: inherit;
+          background: none;
+          opacity: 1;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+        }
+
+        .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title,
+        &.is-shown:not(:first-child) .pf-hero-banner__title {
+          color: var(--pf-g-title, var(--pf-toc-active));
+        }
+
+        // The lead: no hairline, its words large.
+        &:first-child {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+
+          // One row only: with no hairline, a second would take half the
+          // spare height and lift the words off the rule below them.
+          .pf-hero-banner__link {
+            grid-area: 1 / 1;
+            grid-template-rows: minmax(0, 1fr);
+
+            &::before {
+              content: none;
+            }
           }
 
-          .pf-hero-banner__other .pf-hero-banner__title {
+          .pf-hero-banner__text {
+            padding-right: var(--pf-hl-pad);
+
+            &::after {
+              content: none;
+            }
+          }
+
+          :is(.pf-hero-banner__label, .pf-hero-banner__title) {
+            transition: opacity .35s ease-out .08s;
+          }
+
+          .pf-hero-banner__title {
             font-size: clamp(1.625rem, 2.5cqi, 2.25rem);
             line-height: 1.1;
             -webkit-line-clamp: 3;
@@ -5030,114 +4844,152 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
           }
         }
 
-        // A short window: the rows' categories for screen readers only, so
-        // the list still clears the header.
-        @media (max-height: 52rem) {
-          .pf-hero-banners > .pf-hero-banner:not(:first-child) .pf-hero-banner__label {
-            @include visually-hidden;
-          }
+        // The last row's words end level with the search's foot.
+        &:last-child .pf-hero-banner__text {
+          padding-bottom: clamp(3rem, 9svh, 6rem);
         }
 
-        // Shorter still, the column's foot falls below the window: no caption
-        // cut in half at the fold.
-        @media (max-height: 45rem) {
-          .pf-hero-banners .pf-hero-banner__plate {
-            display: none;
-          }
+        // The lead's words for another item, in the lead's place. Each
+        // holds its room in the cell, so a change moves nothing.
+        .pf-hero-banner__others {
+          display: contents;
         }
 
-        // The film's stronger wash (above), on the picture too.
-        @container pf-cover (width < 64rem) {
-          .pf-hero-banners::before {
-            background-image: pf-cover-top-wash($top: 80, $edge-mix: 78);
-          }
+        .pf-hero-banner__other {
+          position: relative;
+          z-index: 3;
+          display: flex;
+          flex-direction: column;
+          grid-area: 1 / 1;
+          justify-content: flex-end;
+          gap: .25rem;
+          padding: clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
+          color: var(--bs-heading-color, var(--pf-section-fg));
+          opacity: 0;
+          transition: opacity .25s ease-out;
         }
 
-        // Under the phone's dock (_dock.scss, under 768px, so a small tablet
-        // has it here): the type and the list end above it, and no caption.
-        @media (max-width: 767.98px) {
-          .pf-landing__form,
-          .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
-            --pf-over-dock: calc(var(--pf-dock-h, 6rem) + 1.5rem);
-          }
+        .pf-hero-banner__other .pf-hero-banner__label {
+          align-self: flex-start;
+          padding: 0;
+          background: none;
+        }
 
-          .pf-landing__form {
-            margin-bottom: var(--pf-over-dock);
-          }
-
-          .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
-            padding-bottom: var(--pf-over-dock);
-          }
-
-          .pf-hero-banners .pf-hero-banner__plate {
-            display: none;
-          }
+        .pf-hero-banner__other .pf-hero-banner__title {
+          font-size: clamp(1.625rem, 2.5cqi, 2.25rem);
+          line-height: 1.1;
+          -webkit-line-clamp: 3;
+          line-clamp: 3;
         }
       }
 
-      html:not(.pf-fade):not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__media {
-        animation: pf-split-wipe ease-out both;
-        animation-timeline: scroll(root);
-        animation-range: 0 calc(var(--pf-stage-run) * .3);
+      // A short window: the rows' categories for screen readers only, so
+      // the list still clears the header.
+      @media (max-height: 52rem) {
+        .pf-hero-banners > .pf-hero-banner:not(:first-child) .pf-hero-banner__label {
+          @include visually-hidden;
+        }
       }
 
-      // The picture in the letters, on the dark reading colours
-      // ($pf-title-trade-on), until an event takes the lead (its flyer may be
-      // dark). With the entrance (html.pf-fade) _entrance.scss adds the trade
-      // to the title's list. Not with more contrast or forced colours: they
-      // stay solid.
-      @media (prefers-contrast: no-preference) and (forced-colors: none) {
-        html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          // The floor: the grey that keeps 3:1 on the reading colour's page, so
-          // any picture holds and a new one needs no measuring. Material's here,
-          // the highest, for a colour without its own value below.
-          --pf-title-floor: rgb(122 122 122);
-          background:
-            linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
-            var(--pf-title-still) 58% 50% / cover no-repeat;
-          -webkit-background-clip: text;
-          background-clip: text;
+      // Shorter still, the column's foot falls below the window: no caption
+      // cut in half at the fold.
+      @media (max-height: 45rem) {
+        .pf-hero-banners .pf-hero-banner__plate {
+          display: none;
+        }
+      }
+
+      // The film's stronger wash (above), on the picture too.
+      @container pf-cover (width < 64rem) {
+        .pf-hero-banners::before {
+          background-image: pf-cover-top-wash($top: 80, $edge-mix: 78);
+        }
+      }
+
+      // Under the phone's dock (_dock.scss, under 768px, so a small tablet
+      // has it here): the type and the list end above it, and no caption.
+      @media (max-width: 767.98px) {
+        .pf-landing__form,
+        .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
+          --pf-over-dock: calc(var(--pf-dock-h, 6rem) + 1.5rem);
         }
 
-        @each $theme, $floor in ("twilight": 112, "night": 97, "forest": 109, "midnight": 110, "dusk": 117, "cocoa": 109, "solarized": 113) {
-          html[data-pf-theme="#{$theme}"]:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-            --pf-title-floor: rgb(#{$floor} #{$floor} #{$floor});
-          }
+        .pf-landing__form {
+          margin-bottom: var(--pf-over-dock);
         }
 
-        html#{$pf-title-trade-on}:not(.pf-fade):not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__top > .pf-landing__title--still {
-          animation:
-            pf-title-trade ease-out both,
-            pf-title-feature linear forwards;
-          animation-timeline: scroll(root), scroll(root);
-          animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3);
+        .pf-hero-banners > .pf-hero-banner:last-child .pf-hero-banner__text {
+          padding-bottom: var(--pf-over-dock);
         }
 
-        // A row in hand: the column's own beat and fade, so a pointer passing
-        // over the rows starts nothing. A row with no picture keeps the lead's,
-        // as the column does.
-        html#{$pf-title-trade-on}:not(.pf-a11y-motion):not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__stage {
-          > .pf-landing__top > .pf-landing__title--still {
-            transition:
-              --pf-title-show-2 .5s ease-out .12s,
-              --pf-title-show-3 .5s ease-out .12s,
-              --pf-title-show-4 .5s ease-out .12s,
-              --pf-title-show-5 .5s ease-out .12s;
-          }
-
-          @for $k from 2 through 5 {
-            &:has(> .pf-hero-banners > .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-landing__top > .pf-landing__title--still {
-              --pf-title-show-#{$k}: 100%;
-            }
-          }
-        }
-
-        // Solid under an event: the trade runs, but its fill stays the words'.
-        .pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__title--still {
-          --pf-title-trade-fill: currentcolor;
+        .pf-hero-banners .pf-hero-banner__plate {
+          display: none;
         }
       }
     }
+
+    // The picture in the letters, on the dark reading colours
+    // ($pf-title-trade-on), only while its row is in hand: the column's beat
+    // and fade, so a pointer passing over the rows starts nothing. Its colour
+    // stays gold, only the fill goes. In the picture's own colours over a
+    // floor, a grey that keeps 3:1 on the reading colour's page, so any picture
+    // holds: blended lighten, each channel of each pixel keeps at least the
+    // floor's value. Material's here, the highest, for a colour without its
+    // own below. Solid under an event (its flyer may be dark), with more
+    // contrast and with forced colours. .is-picturing holds the pictures back
+    // until the film is playing.
+    @media (prefers-contrast: no-preference) and (forced-colors: none) {
+      html#{$pf-title-trade-on}:not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__stage.is-picturing {
+        > .pf-landing__top > .pf-landing__title--still {
+          --pf-title-floor: rgb(122 122 122);
+          background-image:
+            linear-gradient(var(--pf-title-floor), var(--pf-title-floor)),
+            -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-5, var(--pf-title-feature, var(--pf-title-still))), var(--pf-title-show-5)),
+            -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-4, var(--pf-title-feature, var(--pf-title-still))), var(--pf-title-show-4)),
+            -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-3, var(--pf-title-feature, var(--pf-title-still))), var(--pf-title-show-3)),
+            -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-pic-2, var(--pf-title-feature, var(--pf-title-still))), var(--pf-title-show-2)),
+            -webkit-cross-fade(#{$pf-title-none}, var(--pf-title-feature, var(--pf-title-still)), var(--pf-title-show-1));
+          background-position: 50% 50%;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-blend-mode: lighten, normal, normal, normal, normal, normal;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: currentcolor;
+          transition:
+            -webkit-text-fill-color .5s ease-out .12s,
+            --pf-title-show-1 .5s ease-out .12s,
+            --pf-title-show-2 .5s ease-out .12s,
+            --pf-title-show-3 .5s ease-out .12s,
+            --pf-title-show-4 .5s ease-out .12s,
+            --pf-title-show-5 .5s ease-out .12s;
+        }
+
+        @for $k from 1 through 5 {
+          &:has(> .pf-hero-banners > .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-landing__top > .pf-landing__title--still {
+            --pf-title-show-#{$k}: 100%;
+            -webkit-text-fill-color: var(--pf-title-trade-fill, transparent);
+          }
+        }
+      }
+
+      @each $theme, $floor in ("twilight": 112, "night": 97, "forest": 109, "midnight": 110, "dusk": 117, "cocoa": 109, "solarized": 113) {
+        html[data-pf-theme="#{$theme}"]:not(.pf-a11y-contrast) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero .pf-landing__stage.is-picturing > .pf-landing__top > .pf-landing__title--still {
+          --pf-title-floor: rgb(#{$floor} #{$floor} #{$floor});
+        }
+      }
+
+      .pf-landing__lead--hero:has(.pf-hero-banner.is-event) .pf-landing__title--still {
+        --pf-title-trade-fill: currentcolor;
+      }
+    }
+  }
+}
+
+// Changes at once with reduced motion (html.pf-a11y-motion has its own rule).
+@media (prefers-reduced-motion: reduce) {
+  .pf-landing--cover :is(.pf-hero-banners *, .pf-hero-banners, .pf-landing__film-caption, .pf-landing__title--still) {
+    transition: none !important;
   }
 }
 
@@ -5328,16 +5180,4 @@ $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf
   }
 }
 
-// The title as a window (js/hero-title-window.js): the canvas lies exactly
-// over the <h1>'s box for the few seconds it plays, above its gold words.
-#{$pf-split} .pf-landing__title {
-  position: relative;
-}
 
-.pf-landing__title-window {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}

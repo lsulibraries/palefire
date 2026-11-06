@@ -59,15 +59,6 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
-// The title's still (.pf-landing__title--still): the letters' own fill
-// gives way to their gold. Their color stays gold throughout, so the
-// script's veil (js/hero-title-window.js) reads it as before.
-@keyframes pf-title-fill {
-  from {
-    -webkit-text-fill-color: transparent;
-  }
-}
-
 @mixin pf-enter($delay, $duration: .9s, $name: pf-enter) {
   animation: $name $duration $pf-enter-ease $delay backwards;
 }
@@ -175,80 +166,33 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     }
   }
 
-  // Split cover (_landing-features.scss, from 44rem): the film's column
-  // fades in with the lines under the title (from .6s, as the hours and
-  // the intro come in), while js/hero-title-window.js plays the clip
-  // through the title's letters; once the column is in (2s), the letters
-  // turn gold.
-  // CSS alone keeps the time, so the column comes in on cue even when the
-  // script doesn't run (the clip not ready, an old browser).
+  // Split cover (_landing-features.scss, from 44rem): the film's column fades in
+  // with the lines under the title (from .6s, as the hours and the intro come
+  // in), the Highlights' wash with it. Then, after the search, the rows and the
+  // scroll cue.
   @container pf-cover (min-width: 44rem) {
-    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media {
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media,
+    #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-banners::after {
       animation: pf-split-open 1.4s ease-in-out .6s backwards;
     }
 
-    // The stage (_landing-features.scss): held for the run, the page's
-    // colour sweeping across over its first 30%, easing out, so the film
-    // goes quickly and a half-swept frame is rare.
-    @supports (animation-timeline: scroll()) {
-      @media (min-height: 40rem) {
-        #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media {
-          animation:
-            pf-split-wipe ease-out both,
-            pf-split-open 1.4s ease-in-out .6s backwards;
-          animation-timeline: scroll(root), auto;
-          animation-range: 0 calc(var(--pf-stage-run) * .3), normal;
+    @media (min-height: 40rem) {
+      @for $i from 1 through 5 {
+        #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-banners > .pf-hero-banner:nth-child(#{$i}) {
+          .pf-hero-banner__text {
+            @include pf-enter(#{1140 + ($i - 1) * 110}ms);
+          }
+
+          .pf-hero-banner__link::before {
+            @include pf-enter(#{1100 + ($i - 1) * 110}ms, .7s, pf-enter-rule);
+          }
         }
       }
-    }
 
-    // With a poster (the cover's still), the title opens on it: the
-    // still in the letters under a faint layer of their own gold, from the
-    // first paint, until the column has faded in (.6s + 1.4s); then the
-    // gold fills them. The
-    // clip's canvas, when it comes, lies over the same picture. Not with
-    // more contrast or forced colours (below).
-    #{$pf-enter-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} .pf-landing__top > .pf-landing__title--still {
-      background:
-        linear-gradient(color-mix(in srgb, currentColor 22%, transparent), color-mix(in srgb, currentColor 22%, transparent)),
-        var(--pf-title-still) 58% 50% / cover no-repeat;
-      -webkit-background-clip: text;
-      background-clip: text;
-      animation:
-        pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
-        pf-title-fill 1.2s ease-in-out 2s backwards;
-    }
-
-    // On the stage the letters take the lead Highlight's picture with the
-    // film's sweep (pf-title-trade, pf-title-feature, _landing-features.scss),
-    // on the dark reading colours, under the entrance's two, which win while
-    // they run.
-    @supports (animation-timeline: scroll()) {
-      @media (min-height: 40rem) and (prefers-contrast: no-preference) and (forced-colors: none) {
-        #{$pf-enter-on}#{$pf-title-trade-on}:not(.pf-a11y-contrast) #{$pf-enter-cover} .pf-landing__top > .pf-landing__title--still {
-          animation:
-            pf-title-trade ease-out both,
-            pf-title-feature linear forwards,
-            pf-enter-title 1.1s $pf-enter-ease 340ms backwards,
-            pf-title-fill 1.2s ease-in-out 2s backwards;
-          animation-timeline: scroll(root), scroll(root), auto, auto;
-          animation-range: 0 calc(var(--pf-stage-run) * .3), 1px calc(var(--pf-stage-run) * .3), normal, normal;
-        }
+      #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-cue {
+        @include pf-enter(1700ms);
       }
     }
-  }
-
-  @media (prefers-contrast: more), (forced-colors: active) {
-    #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__top > .pf-landing__title.pf-landing__title--still {
-      background: none;
-      animation: pf-enter-title 1.1s $pf-enter-ease 340ms backwards;
-    }
-  }
-
-  // The stage's index, last, after the search. On its list: the index itself
-  // holds its fade on scroll (_landing-features.scss).
-  #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-index ul {
-    @include pf-enter(1120ms);
   }
 
   // The plate holds the links' unblur on scroll (_landing-features.scss),
