@@ -12,7 +12,8 @@
  *
  * The Scroll cue glides to what follows the stage and moves focus there. It is
  * there only at the top of the page, and fades once the page has moved. The
- * line's movement is the CSS's.
+ * line's movement is the CSS's; the script says when, once, after IDLE ms with
+ * nothing happening at the top of the page.
  *
  * Without script: the film's poster, the rows and no cue. Phones have no stage,
  * so none of this runs there.
@@ -22,6 +23,7 @@
   const TICK = 250; // ms
   const LOAD_LIMIT = 4000; // ms, how long the film may take to start playing
   const AT_TOP = 16; // px, so a trackpad's bounce doesn't flicker the cue
+  const IDLE = 10000; // ms
   const html = document.documentElement;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const still = () => reduce.matches || html.classList.contains('pf-a11y-motion') || html.classList.contains('pf-a11y-pausevideo');
@@ -129,6 +131,29 @@
         }
       }, { interruptible: true });
     });
+
+    const stop = new AbortController();
+    let idle = 0;
+    const replay = () => {
+      if (!button.isConnected) {
+        stop.abort();
+      }
+      else if (document.hidden || window.scrollY > AT_TOP || getComputedStyle(button).display === 'none') {
+        wait();
+      }
+      else {
+        stop.abort();
+        button.classList.add('is-replaying');
+      }
+    };
+    const wait = () => {
+      window.clearTimeout(idle);
+      idle = window.setTimeout(replay, IDLE);
+    };
+    ['scroll', 'wheel', 'keydown', 'pointerdown'].forEach((type) => {
+      window.addEventListener(type, wait, { passive: true, signal: stop.signal });
+    });
+    wait();
   };
 
   Drupal.behaviors.palefireHeroHighlights = {

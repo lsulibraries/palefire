@@ -51,11 +51,15 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   }
 }
 
-// The film's column fades in (2026-11-03: a fade, not a curtain from the
-// foot, which drew the eye from the title).
+// The film's column is uncovered from the type's side, the page's color drawing
+// back to the right (not from the foot, which drew the eye from the title).
 @keyframes pf-split-open {
   from {
-    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
   }
 }
 
@@ -166,14 +170,14 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     }
   }
 
-  // Split cover (_landing-features.scss, from 44rem): the film's column fades in
+  // Split cover (_landing-features.scss, from 44rem): the film's column wipes in
   // with the lines under the title (from .6s, as the hours and the intro come
   // in), the Highlights' wash with it. Then, after the search, the rows and the
   // scroll cue.
   @container pf-cover (min-width: 44rem) {
     #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__media,
     #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-banners::after {
-      animation: pf-split-open 1.4s ease-in-out .6s backwards;
+      animation: pf-split-open 1.2s cubic-bezier(.77, 0, .18, 1) .6s backwards;
     }
 
     @media (min-height: 40rem) {

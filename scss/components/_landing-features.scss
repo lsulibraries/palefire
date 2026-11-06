@@ -4399,8 +4399,10 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 // on without a wheel. Only on a window tall enough to show it with the search, and
 // only at the top of the page. Once the page has moved it fades and leaves the
 // tab order, unless the keyboard is on it. A line runs from its label off the
-// foot of the screen: gold goes down it twice after the entrance, then fills it
-// and stays, under five seconds of movement in all (WCAG 2.2.2).
+// foot of the screen: gold goes down it once after the entrance, then fills it
+// and stays. After ten quiet seconds at the top of the page (.is-replaying) it
+// runs out and fills again, once. Under five seconds of movement in all (WCAG
+// 2.2.2).
 .pf-hero-cue {
   display: none;
 }
@@ -4421,6 +4423,25 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 
   100% {
     translate: 0 100%;
+  }
+}
+
+// From full to full: out through the foot, back in from the top.
+@keyframes pf-hero-cue-replay {
+  0% {
+    translate: 0 0;
+  }
+
+  45% {
+    translate: 0 100%;
+  }
+
+  45.01% {
+    translate: 0 -100%;
+  }
+
+  100% {
+    translate: 0 0;
   }
 }
 
@@ -4514,8 +4535,13 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
   // the line filled.
   html:not(.pf-a11y-motion, .pf-a11y-pausevideo) .pf-hero-cue__line::after {
     animation:
-      pf-hero-cue-run 2s cubic-bezier(.65, 0, .35, 1) 2.6s 2 backwards,
-      pf-hero-cue-fill .8s ease-out 6.6s;
+      pf-hero-cue-run 2s cubic-bezier(.65, 0, .35, 1) 2.6s backwards,
+      pf-hero-cue-fill .8s ease-out 4.6s;
+  }
+
+  // The class stays once set, so the entrance's passes never start over.
+  html:not(.pf-a11y-motion, .pf-a11y-pausevideo) .pf-hero-cue.is-replaying .pf-hero-cue__line::after {
+    animation: pf-hero-cue-replay 2s cubic-bezier(.65, 0, .35, 1);
   }
 }
 
