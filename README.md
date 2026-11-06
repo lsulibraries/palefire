@@ -1175,6 +1175,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-06:** Loading mark: the line that traces the letters now fades once they fill, so the Libraries text matches the logo's weight instead of looking about a quarter heavier.
 - **2026-11-06:** Index Search Project guide: the old search findings are now a before and after, with counts from the Index. Alma (coming soon) is listed as a dimmed source in Research and Special Collections, so people can see it is on the way.
 - **2026-11-06:** Index Search Project guide: brought up to date, with a Day by day log like the LDL migration guide, so the project has a running record.
 - **2026-11-06:** Special Collections hero: the Scroll cue is now the word Scroll centered under the search, with a line running from it off the foot of the screen. Gold travels down the line twice after the entrance, then fills it and stays. It replaces the arrow on a square and its idle dip. Why: the square looked out of place, and a line going past the edge of the window shows the page carries on.

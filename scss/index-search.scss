@@ -217,6 +217,7 @@
 }
 
 @import "base/mark-worm";
+@import "base/mark-trace";
 
 // The theme's primary button (_buttons.scss), which this entry point can't
 // extend: the text color wipes in on hover and fades out in place.
@@ -1409,6 +1410,7 @@
     fill: var(--pf-index-highlight);
     stroke: var(--pf-index-highlight);
     stroke-width: 1px;
+    stroke-opacity: 0; // At rest, the logo's own weight.
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
     vector-effect: non-scaling-stroke;

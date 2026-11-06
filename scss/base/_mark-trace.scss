@@ -1,0 +1,35 @@
+// The letters of the loading mark: a soft line traces each one, it fills to gold,
+// and the line then fades. A stroke sits half outside the shape, which made the
+// small Libraries text about a quarter heavier than the logo, so the finished
+// letters are the fill alone. Both style.css and index-search.css print this.
+@keyframes pf-mark-trace {
+  0% {
+    stroke: currentColor;
+    stroke-opacity: .55;
+    stroke-dashoffset: 1;
+    fill-opacity: 0;
+    animation-timing-function: cubic-bezier(.45, 0, .2, 1);
+  }
+
+  10% {
+    stroke: currentColor;
+    stroke-opacity: .55;
+    fill-opacity: 0;
+    animation-timing-function: ease-out;
+  }
+
+  26% {
+    stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    stroke-opacity: 1;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+
+  40%,
+  100% {
+    stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    stroke-opacity: 0;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}

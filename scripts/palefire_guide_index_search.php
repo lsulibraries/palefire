@@ -158,7 +158,7 @@ HTML, 'callout'),
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
     ['running', 'Source definitions', 'Section headings and a What are these? button in the Source filter say what each source searches, in the glossary\'s cards.'],
     ['running', 'Fuller Discovery search', 'Discovery searches Discovery directly, with Full text online, Peer reviewed, Type and Year published filters. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
-    ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
+    ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, at the logo\'s own weight, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
@@ -253,7 +253,7 @@ HTML),
 <li>Sources can be put in your own order. Added Show more results, and a results bar that keeps the count and the search in view.</li>
 <li>Filters have clearer hover styles, and empty ones are dimmed instead of hidden.</li>
 <li>Switched on the Special Collections hero search, the first link to the Index from the site, and landing searches now show the loading mark while results load.</li>
-<li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it.</li>
+<li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it. The line tracing its letters now fades once they fill, so the Libraries text matches the logo's weight.</li>
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
 <li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
