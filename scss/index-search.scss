@@ -657,6 +657,104 @@
   min-width: 0;
 }
 
+// A source row the visitor can reorder. Script adds it around the option, and
+// takes the option's line. Both controls are 24px wide or more (WCAG 2.5.8).
+.pf-index__source {
+  display: flex;
+  align-items: center;
+  gap: .125rem;
+  border-bottom: 1px solid var(--pf-index-line);
+
+  .pf-index__option {
+    flex: 1;
+    min-width: 0;
+    border-bottom: 0;
+  }
+
+  &.is-dragging {
+    position: relative;
+    z-index: 1;
+    outline: 1px solid var(--pf-index-control);
+  }
+}
+
+.pf-index__source-up,
+.pf-index__source-grip {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pf-index-muted);
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @include pf-index-motion {
+    transition: color $pf-hover-out ease;
+  }
+
+  &:hover {
+    color: var(--pf-index-fg);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-index__source-up {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: -2px;
+  }
+
+  &[aria-disabled="true"] {
+    opacity: .45;
+    cursor: default;
+  }
+}
+
+.pf-index__source-grip {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  .is-dragging & {
+    cursor: grabbing;
+  }
+}
+
+.pf-index__source-reset {
+  min-height: 1.5rem;
+  margin-top: .375rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pf-index-muted);
+  font-size: .8125rem;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--pf-index-fg);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
 .pf-index__count {
   color: var(--pf-index-muted);
   font-size: .875rem;
@@ -865,8 +963,101 @@
   text-decoration-thickness: from-font;
 }
 
+// The theme's mono labels on the page's hairline, with the mode tabs' accent line
+// on the current page. Four classes: links everywhere else are underlined.
 .pf-index-list__pager {
   margin-top: 1.5rem;
+
+  .pager__items {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--pf-index-line);
+    list-style: none;
+  }
+
+  .pager__item {
+    margin: 0;
+    padding: 0;
+  }
+
+  .pager__item--ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    color: var(--pf-index-muted);
+  }
+
+  // Previous, Next and the numbers are enough on a phone.
+  @media (max-width: 29.99rem) {
+    .pager__item--first,
+    .pager__item--last {
+      display: none;
+    }
+  }
+}
+
+.pf-main .pf-index .pf-index-list__pager a {
+  @include pf-index-label;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding-inline: .5rem;
+  color: var(--pf-index-muted);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+
+  @include pf-index-motion {
+    transition: color $pf-hover-out ease;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px 0 auto;
+    height: 2px;
+    background: var(--pf-index-fg);
+    transform: scaleX(0);
+    transform-origin: left;
+
+    @include pf-index-motion {
+      transition: transform .25s var(--pf-index-ease);
+    }
+  }
+
+  &:hover {
+    color: var(--pf-index-fg);
+    transition-duration: $pf-hover-in;
+
+    &::before {
+      transform: scaleX(1);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: -2px;
+  }
+
+  &[aria-current="page"] {
+    color: var(--pf-index-fg);
+
+    &::before {
+      background: var(--pf-index-accent);
+      transform: scaleX(1);
+    }
+
+    // The line is a background, which forced colors removes.
+    @media (forced-colors: active) {
+      text-decoration: underline;
+    }
+  }
 }
 
 // Sections: one per source. --------------------------------------------------
@@ -1278,6 +1469,13 @@
   .pf-index-row__links {
     margin: 0;
   }
+}
+
+.pf-index-row__copy-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1rem;
+  margin-top: .75rem;
 }
 
 .pf-index-row__label-cover {

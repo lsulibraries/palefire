@@ -19,6 +19,9 @@
  *   failing service can't hold it up. One with no results is removed.
  * - A Catalog row's holdings load after the list, on an address of their own
  *   that stays fresher than results can. If they fail, the row just has no line.
+ * - Source options can be put in the visitor's own order, by dragging or with
+ *   an up button, and the sections follow. It's kept in this browser, and only
+ *   a preference: without storage or this file, the page's own order stands.
  * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
  *   back to the row's text.
  */
@@ -27,6 +30,7 @@
 
   const TIMEOUT_MS = 20000;
   const HOLDINGS_TIMEOUT_MS = 10000;
+  const ORDER_KEY = 'pf-index-source-order';
   const wide = window.matchMedia('(min-width: 62rem)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const controllers = new Set();
@@ -280,6 +284,197 @@
     }
   };
 
+  const readOrder = () => {
+    try {
+      const order = JSON.parse(window.localStorage.getItem(ORDER_KEY));
+      return Array.isArray(order) ? order : [];
+    }
+    catch (error) {
+      return [];
+    }
+  };
+
+  const writeOrder = (order) => {
+    try {
+      if (order) {
+        window.localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+      }
+      else {
+        window.localStorage.removeItem(ORDER_KEY);
+      }
+    }
+    catch (error) {
+      // It still applies until the next page.
+    }
+  };
+
+  // Slides rows from where they were to where a change puts them.
+  const slide = (rows, change) => {
+    if (reducedMotion.matches) {
+      change();
+      return;
+    }
+    const before = new Map(rows.map((row) => [row, row.getBoundingClientRect().top]));
+    change();
+    rows.forEach((row) => {
+      const distance = before.get(row) - row.getBoundingClientRect().top;
+      if (distance) {
+        row.animate([{ transform: `translateY(${distance}px)` }, { transform: 'none' }], { duration: 200, easing: 'cubic-bezier(.2, 0, 0, 1)' });
+      }
+    });
+  };
+
+  const icon = (path) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="${path}"/></svg>`;
+
+  // Source rows the visitor can reorder. Runs again each time results are replaced.
+  const setUpSources = (body) => {
+    const labels = [...body.querySelectorAll('.pf-index__option input[name="source[]"]')].map((input) => input.closest('.pf-index__option'));
+    if (labels.length < 2) {
+      return;
+    }
+    const scope = body.closest('[data-pf-index-main]') || body;
+    const sections = [...scope.querySelectorAll('[data-pf-index-source]')];
+    const list = labels[0].parentElement;
+    const rowsNow = () => [...list.querySelectorAll(':scope > .pf-index__source')];
+    const keysNow = () => rowsNow().map((row) => row.dataset.source);
+
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'pf-index__source-reset';
+    reset.textContent = Drupal.t('Reset order');
+
+    // The move button and handle sit beside the label, because a label can't hold
+    // a second control.
+    const rows = labels.map((label) => {
+      const name = label.querySelector('.pf-index__option-label').textContent.trim();
+      const row = document.createElement('div');
+      row.className = 'pf-index__source';
+      row.dataset.source = label.querySelector('input').value;
+      label.before(row);
+      row.append(label);
+
+      const up = document.createElement('button');
+      up.type = 'button';
+      up.className = 'pf-index__source-up';
+      up.setAttribute('aria-label', Drupal.t('Move @source up', { '@source': name }));
+      up.innerHTML = icon('M12 19V5M6 11l6-6 6 6');
+      row.append(up);
+
+      // For a mouse or finger: the up button does the same with one press or key.
+      const grip = document.createElement('span');
+      grip.className = 'pf-index__source-grip';
+      grip.setAttribute('aria-hidden', 'true');
+      grip.title = Drupal.t('Drag to reorder');
+      grip.innerHTML = icon('M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01');
+      row.append(grip);
+      return row;
+    });
+    const firstOrder = rows.map((row) => row.dataset.source);
+    const firstSections = [...sections];
+
+    const placeSections = (rank) => {
+      if (!sections.length) {
+        return;
+      }
+      const after = sections[sections.length - 1].nextSibling;
+      const parent = sections[0].parentElement;
+      [...firstSections].sort((a, b) => rank(a.dataset.pfIndexSource) - rank(b.dataset.pfIndexSource)).forEach((section) => parent.insertBefore(section, after));
+      sections.sort((a, b) => rank(a.dataset.pfIndexSource) - rank(b.dataset.pfIndexSource));
+    };
+
+    const refresh = () => {
+      rowsNow().forEach((row, index) => {
+        row.querySelector('.pf-index__source-up').setAttribute('aria-disabled', index === 0 ? 'true' : 'false');
+      });
+      reset.hidden = keysNow().join() === firstOrder.join();
+    };
+
+    const rankIn = (order) => (key) => {
+      const place = order.indexOf(key);
+      return place === -1 ? Infinity : place;
+    };
+
+    const apply = (order) => {
+      const rank = rankIn(order);
+      list.append(...[...rows].sort((a, b) => rank(a.dataset.source) - rank(b.dataset.source)), reset);
+      placeSections(rank);
+      refresh();
+    };
+
+    // Sources this mode doesn't show keep their places for the modes that do.
+    const save = () => {
+      const keys = keysNow();
+      const order = [...keys, ...readOrder().filter((key) => !keys.includes(key))];
+      writeOrder(order);
+      placeSections(rankIn(order));
+      refresh();
+    };
+
+    const announce = (row) => {
+      const name = row.querySelector('.pf-index__option-label').textContent.trim();
+      const keys = keysNow();
+      Drupal.announce(Drupal.t('@source moved to position @place of @total.', { '@source': name, '@place': keys.indexOf(row.dataset.source) + 1, '@total': keys.length }));
+    };
+
+    list.addEventListener('click', (event) => {
+      const up = event.target instanceof Element ? event.target.closest('.pf-index__source-up') : null;
+      if (!up || up.getAttribute('aria-disabled') === 'true') {
+        return;
+      }
+      const row = up.closest('.pf-index__source');
+      slide(rowsNow(), () => list.insertBefore(row, row.previousElementSibling));
+      // Moving an element takes focus from it.
+      up.focus();
+      save();
+      announce(row);
+    });
+
+    list.addEventListener('pointerdown', (event) => {
+      const grip = event.target instanceof Element ? event.target.closest('.pf-index__source-grip') : null;
+      if (!grip || event.button !== 0) {
+        return;
+      }
+      event.preventDefault();
+      const row = grip.closest('.pf-index__source');
+      grip.setPointerCapture(event.pointerId);
+      row.classList.add('is-dragging');
+      const start = keysNow().join();
+
+      const move = (moved) => {
+        const others = rowsNow().filter((other) => other !== row);
+        const next = others.find((other) => {
+          const box = other.getBoundingClientRect();
+          return moved.clientY < box.top + box.height / 2;
+        }) || reset;
+        if (row.nextElementSibling !== next) {
+          slide(others, () => list.insertBefore(row, next));
+        }
+      };
+      const end = () => {
+        grip.removeEventListener('pointermove', move);
+        grip.removeEventListener('pointerup', end);
+        grip.removeEventListener('pointercancel', end);
+        row.classList.remove('is-dragging');
+        if (keysNow().join() !== start) {
+          save();
+          announce(row);
+        }
+      };
+      grip.addEventListener('pointermove', move);
+      grip.addEventListener('pointerup', end);
+      grip.addEventListener('pointercancel', end);
+    });
+
+    reset.addEventListener('click', () => {
+      writeOrder(null);
+      apply(firstOrder);
+      rowsNow()[0].querySelector('.pf-index__source-up').focus();
+      Drupal.announce(Drupal.t('Sources are back in their usual order.'));
+    });
+
+    apply(readOrder().length ? readOrder() : firstOrder);
+  };
+
   const setUp = (root) => {
     root.addEventListener('load', dropEmptyCover, true);
     root.addEventListener('error', dropEmptyCover, true);
@@ -361,6 +556,7 @@
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
+      once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
       once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
