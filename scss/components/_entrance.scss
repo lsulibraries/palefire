@@ -245,6 +245,12 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
     }
   }
 
+  // The stage's index, last, after the search. On its list: the index itself
+  // holds its fade on scroll (_landing-features.scss).
+  #{$pf-enter-on} #{$pf-enter-cover} .pf-hero-index ul {
+    @include pf-enter(1120ms);
+  }
+
   // The plate holds the links' unblur on scroll (_landing-features.scss),
   // so its fade joins that animation's list rather than replacing it.
   #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__top > .pf-landing__links {

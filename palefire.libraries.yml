@@ -293,6 +293,16 @@ hero-title-window:
     - core/drupal
     - core/once
 
+# The index under the search on the Special Collections stage. Attached by
+# includes/landing.html.twig on a cover.
+hero-index:
+  js:
+    js/hero-index.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/global
+
 hero-event:
   js:
     js/hero-event.js: {}

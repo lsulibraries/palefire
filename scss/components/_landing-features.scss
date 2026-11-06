@@ -4477,6 +4477,124 @@ $pf-title-none: linear-gradient(transparent, transparent);
 
 $pf-split-moving: 'html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero';
 
+// --- The stage's index -------------------------------------------------------
+// Under the search (js/hero-index.js): Highlights, which glides there, then the
+// page's first sections. One line on a hairline at the foot of the search's
+// row and column, in the room under the search, fading as the page scrolls.
+// Only on the stage, where a press of an arrow key or a notch of the wheel
+// moves little, and only on a window tall enough to show it with the search.
+.pf-hero-index {
+  display: none;
+}
+
+@keyframes pf-hero-index-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+// Three shrinking dips, then still.
+@keyframes pf-hero-index-nudge {
+  0%,
+  30%,
+  60%,
+  100% {
+    translate: 0 0;
+  }
+
+  15% {
+    translate: 0 .3125rem;
+  }
+
+  45% {
+    translate: 0 .25rem;
+  }
+
+  75% {
+    translate: 0 .1875rem;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (min-height: 48rem) {
+    @container pf-cover (min-width: 44rem) {
+      #{$pf-split-moving} .pf-hero-index:not([hidden]) {
+        position: absolute;
+        inset: auto 0 0;
+        display: block;
+        grid-row: 2;
+        margin-inline-end: calc(var(--pf-split-film) + 2 * var(--pf-grid-gutter));
+        border-top: 1px solid #{$pf-hairline};
+        font-size: .9375rem;
+        animation: pf-hero-index-out linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 8vh;
+
+        // Hidden overflow, so js/hero-index.js can tell what fits. Each item
+        // holds room for the focus outline, which it would clip; the first's
+        // hangs in the gutter, so the words start at the search's edge.
+        ul {
+          display: flex;
+          gap: 1.375rem;
+          margin: 0 0 0 -.3125rem;
+          padding: 0;
+          overflow: hidden;
+          list-style: none;
+        }
+
+        li {
+          flex: none;
+          padding: .3125rem;
+        }
+
+        :is(a, button) {
+          display: inline-flex;
+          align-items: center;
+          min-height: 2.75rem;
+          white-space: nowrap;
+          color: var(--pf-toc-color);
+          text-decoration: none;
+          transition: color $pf-hover-out ease;
+
+          &:hover,
+          &:focus-visible {
+            color: var(--pf-section-fg, var(--bs-body-color));
+            text-decoration: underline;
+            text-underline-offset: .25em;
+            transition-duration: $pf-hover-in;
+          }
+        }
+
+        button {
+          gap: .625rem;
+          padding: 0;
+          border: 0;
+          background: none;
+          color: var(--pf-section-fg, var(--bs-body-color));
+          font-weight: 500;
+          cursor: pointer;
+        }
+
+        svg {
+          flex: none;
+          color: var(--pf-g-accent, var(--pf-landing-accent));
+          transition: translate $pf-hover-out ease;
+        }
+
+        button:is(:hover, :focus-visible) svg {
+          translate: 0 .1875rem;
+          transition-duration: $pf-hover-in;
+        }
+
+        button.is-nudging svg {
+          animation: pf-hero-index-nudge 2s ease-in-out;
+        }
+      }
+    }
+  }
+}
+
 // How far a row's label sits behind its title, keeping 4.5:1 on every pixel
 // under the labels, from 1100 to 1920 wide, on the current lead picture, where
 // 80% (the default) would not hold or more can go. A new picture may need
