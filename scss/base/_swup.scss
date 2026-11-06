@@ -103,30 +103,7 @@ html:not(.pf-vt).is-animating .pf-swup > * {
   }
 }
 
-// The rule between LSU and Libraries, as a worm running end to end and back: its
-// front races ahead, and its back catches up on arrival. At rest the line is solid.
-@keyframes pf-mark-worm {
-  0%,
-  100% {
-    stroke-dasharray: .1 2;
-    stroke-dashoffset: 0;
-  }
-
-  25% {
-    stroke-dasharray: .55 2;
-    stroke-dashoffset: -.1;
-  }
-
-  50% {
-    stroke-dasharray: .1 2;
-    stroke-dashoffset: -.9;
-  }
-
-  75% {
-    stroke-dasharray: .55 2;
-    stroke-dashoffset: -.35;
-  }
-}
+@import "mark-worm";
 
 @keyframes pf-mark-cycle {
   0%,

@@ -1,0 +1,27 @@
+// The rule between LSU and Libraries, as a worm running end to end and back: its
+// front races ahead, and its back catches up on arrival. At rest the line is solid.
+// Both style.css and index-search.css print this, so the search page has it
+// whichever arrives first. The search field's line follows the same steps
+// (pf-index-chase, index-search.scss).
+@keyframes pf-mark-worm {
+  0%,
+  100% {
+    stroke-dasharray: .2 2;
+    stroke-dashoffset: 0;
+  }
+
+  25% {
+    stroke-dasharray: .75 2;
+    stroke-dashoffset: -.05;
+  }
+
+  50% {
+    stroke-dasharray: .2 2;
+    stroke-dashoffset: -.8;
+  }
+
+  75% {
+    stroke-dasharray: .75 2;
+    stroke-dashoffset: -.2;
+  }
+}
