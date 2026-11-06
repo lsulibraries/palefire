@@ -1865,16 +1865,25 @@
   }
 
   tbody .pf-index-row__copy-has {
-    padding-top: 0;
+    padding-top: .5rem;
   }
 
-  // Too long to run beside its label: the label goes above, here and on a table.
-  .pf-index-row__copy-has td {
+  // Too long to run beside a label: the label goes above. One line to a span.
+  .pf-index-row__copy-has td,
+  td.pf-index-row__item-contents {
     display: block;
 
     &[data-label]::before {
       display: block;
       margin-bottom: .25rem;
+    }
+
+    > span {
+      display: block;
+    }
+
+    > span + span {
+      margin-top: .5rem;
     }
   }
 
@@ -1931,25 +1940,49 @@
     }
 
     tbody tr:has(+ .pf-index-row__copy-has) td {
-      padding-bottom: .25rem;
+      padding-bottom: .5rem;
+    }
+
+    .pf-index-row__copy-has td,
+    td.pf-index-row__item-contents {
+      display: table-cell;
+
+      // Takes the cell's width without setting the columns'.
+      > span {
+        max-width: 48rem;
+        contain: inline-size;
+      }
     }
 
     .pf-index-row__copy-has td {
-      display: table-cell;
       padding-top: 0;
 
       &[data-label]::before {
         content: attr(data-label);
       }
+    }
 
-      > span {
-        display: block;
-        max-width: 48rem;
-      }
+    // Under the table's headings, so its label is for screen readers only.
+    td.pf-index-row__item-contents[data-label]::before {
+      content: attr(data-label);
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
 
     .pf-index-row__copy-more td {
       display: table-cell;
+    }
+  }
+
+  // Where there's room, an item's call number stays on one line.
+  @container (min-width: 56rem) {
+    .pf-index-row__item-call {
+      white-space: nowrap;
     }
   }
 }

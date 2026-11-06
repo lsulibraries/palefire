@@ -91,6 +91,12 @@
       if (found) {
         place.replaceChildren(...found.childNodes);
         place.classList.add('is-loaded');
+        // The list only knows the first box of a run. Its call number comes last.
+        const meta = place.closest('.pf-index-row')?.querySelector('.pf-index-row__meta');
+        const { pfIndexCall: call, pfIndexCallFirst: first } = found.dataset;
+        if (meta && call && first && meta.textContent.endsWith(first)) {
+          meta.textContent = meta.textContent.slice(0, -first.length) + call;
+        }
       }
       else {
         place.remove();
