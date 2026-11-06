@@ -1607,12 +1607,6 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
   transition-duration: 0s;
 }
 
-// The lead's copy of the others' words: for the stage alone ("Scroll: the
-// stage", below), which opens it.
-.pf-hero-banner__others {
-  display: none;
-}
-
 .pf-hero-banner__text {
   position: relative;
   z-index: 2;
@@ -4363,8 +4357,8 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 // the page's colour: the lead large, the rest as rows. js/hero-highlights.js
 // gives the film five seconds and rests on the first Highlight's picture
 // (.is-shown), with the film stopped. A row in hand brings its
-// picture, its words to the lead's place, its object label to the column's foot
-// and its picture to the title's letters, with no script. The title is solid
+// picture, its object label to the column's foot and its picture to the title's
+// letters, with no script. The words in the list never move. The title is solid
 // otherwise. The page scrolls as any page does: nothing is tied to the scroll.
 // With reduced motion the column starts at the rest. Phones have their own
 // (below).
@@ -4468,14 +4462,14 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
         background: #{$pf-hairline};
       }
 
-      // The arrow on a disc in the Search button's colors.
+      // The arrow on a small square in the Search button's colors. The whole
+      // row is the target, 44px tall.
       svg {
         flex: none;
         box-sizing: border-box;
-        width: 2.75rem;
-        height: 2.75rem;
-        padding: .75rem;
-        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        padding: .5rem;
         color: var(--pf-g-on-accent, #{$pf-black});
         background: var(--pf-g-accent, #{$pf-gold});
       }
@@ -4717,19 +4711,6 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
         .pf-hero-banner__month {
           color: inherit;
         }
-
-        // Another item up: the lead's words give way to its words.
-        &:has(> .pf-hero-banner:not(:first-child) .pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner:first-child .pf-hero-banner__link :is(.pf-hero-banner__label, .pf-hero-banner__title) {
-          opacity: 0;
-          transition: opacity .25s ease-out;
-        }
-
-        @for $k from 2 through 5 {
-          &:has(> .pf-hero-banner:nth-child(#{$k}) .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__other:nth-child(#{$k - 1}) {
-            opacity: 1;
-            transition-delay: .08s;
-          }
-        }
       }
 
       .pf-hero-banners > .pf-hero-banner {
@@ -4869,39 +4850,6 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
         // The last row's words end level with the search's foot.
         &:last-child .pf-hero-banner__text {
           padding-bottom: clamp(3rem, 9svh, 6rem);
-        }
-
-        // The lead's words for another item, in the lead's place. Each
-        // holds its room in the cell, so a change moves nothing.
-        .pf-hero-banner__others {
-          display: contents;
-        }
-
-        .pf-hero-banner__other {
-          position: relative;
-          z-index: 3;
-          display: flex;
-          flex-direction: column;
-          grid-area: 1 / 1;
-          justify-content: flex-end;
-          gap: .25rem;
-          padding: clamp(.625rem, 1.6svh, 1rem) var(--pf-hl-pad);
-          color: var(--bs-heading-color, var(--pf-section-fg));
-          opacity: 0;
-          transition: opacity .25s ease-out;
-        }
-
-        .pf-hero-banner__other .pf-hero-banner__label {
-          align-self: flex-start;
-          padding: 0;
-          background: none;
-        }
-
-        .pf-hero-banner__other .pf-hero-banner__title {
-          font-size: clamp(1.625rem, 2.5cqi, 2.25rem);
-          line-height: 1.1;
-          -webkit-line-clamp: 3;
-          line-clamp: 3;
         }
       }
 

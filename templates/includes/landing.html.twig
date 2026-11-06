@@ -494,24 +494,6 @@
                   {% include '@palefire/includes/object-label.html.twig' with banner.object only %}
                 </div>
               {% endif %}
-              {% if loop.first %}
-                <span class="pf-hero-banner__others" aria-hidden="true">
-                  {% for other in hero_listed|slice(1) %}
-                    <span class="pf-hero-banner__other">
-                      {% if other.label %}
-                        <span class="pf-hero-banner__label">{{ other.label }}</span>
-                      {% endif %}
-                      <span class="pf-hero-banner__title">{{ other.title }}</span>
-                    </span>
-                  {% endfor %}
-                  {% if hero_blog %}
-                    <span class="pf-hero-banner__other">
-                      <span class="pf-hero-banner__label">{{ 'From the blog'|t }}</span>
-                      <span class="pf-hero-banner__title">{{ hero_blog.title }}</span>
-                    </span>
-                  {% endif %}
-                </span>
-              {% endif %}
             </li>
           {% endfor %}
           {% if hero_blog %}
