@@ -279,7 +279,8 @@ HTML),
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
 <ul>
-<li>Archive records that are PDFs got an Open PDF button, in the style of Show location, opening in a new tab.</li>
+<li>Archive Records became PDF Finding Aids: it searches only finding aids and oral history abstracts, all PDFs, and Oral histories is a checkbox under it in place of the Record type list. Breaux Data, Louisiana Folklife, Manuscript Collections and University Archives records left the Index.</li>
+<li>Archive records that are PDFs got an Open PDF button, in the style of Show location, opening in a new tab, with the file's pages and size beside it (18 pages · 296 KB), so it's plain what opening it means.</li>
 <li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts. Turned on the same day: all 20 results for "cotton gin" now show the words from the PDF.</li>
 </ul>
 HTML),

@@ -470,6 +470,11 @@
       const row = document.createElement('div');
       row.className = 'pf-index__source';
       row.dataset.source = label.querySelector('input').value;
+      // A source's own narrower choices move with it, under the controls.
+      const subs = [];
+      for (let next = label.nextElementSibling; next && next.matches('.pf-index__option--sub'); next = next.nextElementSibling) {
+        subs.push(next);
+      }
       label.before(row);
       row.append(label);
 
@@ -486,7 +491,7 @@
       grip.setAttribute('aria-hidden', 'true');
       grip.title = Drupal.t('Drag to reorder');
       grip.innerHTML = icon('M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01');
-      row.append(grip);
+      row.append(grip, ...subs);
       return row;
     });
     const firstOrder = rows.map((row) => row.dataset.source);
