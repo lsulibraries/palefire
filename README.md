@@ -1035,8 +1035,8 @@ landing, the map and the calendar read those.
   rest behind "More colors". Every swatch keeps text, muted text and links at
   4.5:1 or more, including on glass over a video.
 - Optional swatch keys: `title`, `strong`, `em` (multicolor, as Material),
-  `highlight` (hero title, Quick Start letters, index numbers; Cream sets
-  warm ink), `chrome`, `hover`, `link-hover`.
+  `highlight` (hero title, Quick Start letters, index numbers; else the
+  `title` colour, else the accent), `chrome`, `hover`, `link-hover`.
 - **To add a swatch:** an entry in `$pf-reading-themes`, its key in
   `reading_themes` (`utility-panels.html.twig`), `THEMES` (`utility-panels.js`)
   and the pattern in `html.html.twig`; dark ones in `DARK_THEMES` too.
@@ -1184,6 +1184,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-09:** Cream in dusty plum `#5b4f72`, one colour for both its accent (Search button, links, focus) and its highlight (hero title, Quick Start letters and icons, index numbers), as Twilight's pale gold does both. Was LSU purple on the actions and warm ink on the highlight. Plum on the page 6.8:1, on the surface 6.3:1, white on plum 7.5:1; the callout tint is a dusty lilac `#ebe6ec`. Why: LSU purple was too loud for a swatch called Cream, and warm ink left it with less colour than the other swatches.
 - **2026-11-09:** The Study tab on /v2/special switches from the photo behind the panel to a framed print, as in the recommended mockup: the Quiet Study room's photo at 3:2 in the right column, a hairline frame, a mono caption (Second floor · Hill Memorial Library, Hours and directions), the whole print a link to the room's page, easing in slightly on hover. The three facts sit in a row under it, the width of the photo. It ties in with the homepage's other plates better than a full-panel backdrop did. The veil, glass and backdrop styles are gone; `_palefire_tab_photos()` replaces `_palefire_tab_backdrops()`, and `palefire_section_tabs_study_facts.php` now also drops the tab's own link line, since the photo carries it.
 - **2026-11-09:** Location pages: on phones, tablets held upright and tall windows (portrait, and iOS), the room photo now starts at the top of the page, under the header and breadcrumb. It began 81px down (49px on phones), below the breadcrumb, so a band of page colour sat over it: the portrait layout (`pf-location-backdrop-whole`, `_location.scss`) counted the header and the bar above the intro but not the section's top padding (`--pf-section-pad-block`). Wide windows already reached the top. Checked on the live Lecture Hall and Quiet Study with the new rule at 320×640, 375×812, 768×1024 and 1629×1634 (the photo now starts at 0) and at 1024×768 and 1440×900 (unchanged, starts 30px above the page), no horizontal scroll. `drush cr` to deploy.
 - **2026-11-09:** The Study tab on /v2/special shows the Quiet Study room behind its panel: the room's own photo (the one on its location page), in colour under the same veil, fading into the band on every side, so the tab bar stays plain. The tab's text sits on frosted glass and opens with three facts in a row (Open to all, Quiet, No food or drink); the repeated opening sentence is gone and the lobby note moved into the facts (`scripts/palefire_section_tabs_study_facts.php`). The photo loads only when the tab is opened and turns off with more contrast or forced colours. Other tabs can take a room's photo by adding their id and room key in `_palefire_tab_backdrops()`.
