@@ -573,6 +573,39 @@ html#{$pf-themed}.pf-reading-dark [data-bs-theme="dark"] {
   --pf-ui-gold: var(--pf-g-accent);
 }
 
+// --- Photo veil: room photos behind text ----------------------------------
+// The lit room's photo behind the landing map (.pf-map-photo,
+// _building-map.scss) and a room page's photo behind its top
+// (.pf-location__intro.has-backdrop, _location.scss), in colour under a veil
+// that caps how far any pixel can reach toward the text:
+// - Dark swatches: a dark grey veil at 87%, so every channel is 30-64 of
+//   255 and nothing is lighter than grey 64 (a darkness ceiling).
+// - Light swatches: the page colour at 85%, so every channel is at least
+//   85% of the page's and nothing is darker than that (a brightness floor):
+//   the photo shows as a faint print on the page.
+// Text over the photo keeps 4.5:1 against that limit on every swatch: grey
+// text moves toward the heading colour (40% lighter on dark, 60% darker on
+// light), and on light swatches body text takes the heading colour (Soft
+// cream's and Lavender's own text colors need a 93% veil). The black fall
+// under the header only darkens, so light swatches have none.
+html[data-pf-theme] {
+  --pf-photo-veil: color-mix(in srgb, var(--pf-g-bg, #f7f4ec) 85%, transparent);
+  --pf-photo-fall: transparent;
+  --pf-photo-fall-soft: transparent;
+  --pf-photo-fall-faint: transparent;
+  --pf-photo-muted: color-mix(in srgb, var(--pf-g-heading, #1f1e1c) 60%, var(--pf-g-muted, #595959));
+  --pf-photo-floor-ink: color-mix(in srgb, var(--pf-g-heading, #1f1e1c) 60%, var(--pf-g-panel-muted, #505050));
+}
+
+html[data-pf-theme].pf-reading-dark {
+  --pf-photo-veil: rgb(35 35 35 / .87);
+  --pf-photo-fall: rgb(0 0 0 / .4);
+  --pf-photo-fall-soft: rgb(0 0 0 / .22);
+  --pf-photo-fall-faint: rgb(0 0 0 / .08);
+  --pf-photo-muted: color-mix(in srgb, var(--pf-g-heading, #fff) 40%, var(--pf-g-muted, #b7b3ba));
+  --pf-photo-floor-ink: color-mix(in srgb, var(--pf-g-heading, #fff) 40%, var(--pf-g-panel-muted, #9a9a9a));
+}
+
 // --- Chrome: header, dropdowns, TOC sidebar, footer ----------------------
 // Glass a little darker than the page; text in the heading color, hover
 // and the TOC bar in the accent.
@@ -739,6 +772,14 @@ html#{$pf-themed} :is(.pf-landing, .pf-landing__lead) {
     --pf-map-tip-solid: rgb(var(--pf-g-chrome-rgb));
     --pf-map-tip-line: var(--pf-g-rule);
     --pf-map-tip-text: var(--pf-g-fg);
+  }
+
+  // Light swatches: the other room names, while one is lit, at 90% rather
+  // than 60%. The heading colour at 60% on the page was 3.1-4.3:1 (Lavender
+  // the lowest), and lower over a room photo; at 90% every light swatch is
+  // 4.6:1 or more, photo or not.
+  html#{$pf-themed}:not(.pf-reading-dark) .pf-map {
+    --pf-map-dim-text: .9;
   }
 }
 

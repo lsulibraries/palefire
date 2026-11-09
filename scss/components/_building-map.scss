@@ -588,17 +588,17 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
 
 // --- The room's photo behind the map (landing) ------------------------------
 // building-map.js (photoBackdrop) adds .pf-map-photo to #map, and
-// .is-map-photo while a lit room's photo shows. Dark swatches only, as the
-// room pages' backdrop (_location.scss), with the same dark grey veil at 87%
-// but in colour: the veil squeezes every channel into 30-64 of 255, so the
-// room's own colours show, quiet and dark, and no pixel is lighter than grey
-// 64, the ceiling every text on the map was set against (--pf-map-dim-text,
-// the floor ink below). No blend: the room pages take the colour out and
-// tint to the swatch; here the photo keeps its colour. The layer
+// .is-map-photo while a lit room's photo shows. In colour under the
+// swatch's photo veil (--pf-photo-veil, _reading-themes.scss), as the room
+// pages' backdrop (_location.scss): on dark swatches no pixel is lighter
+// than grey 64, on light ones none is darker than 85% of the page colour,
+// the limits every text on the map is set against (--pf-map-dim-text, the
+// floor ink below). The layer
 // fills #map, which is full bleed, and fades in and out at its top and foot
 // into the page. The view inside is one screen tall and sticky, so the
 // photo stays in the window while the tall map scrolls past. Each slot fades
-// as a whole, veil and all, so a half-faded photo is only ever darker.
+// as a whole, veil and all, so a half-faded photo only ever sits closer to
+// the page colour, never nearer the text.
 .pf-map-photo,
 .pf-map__frost { display: none; }
 
@@ -609,7 +609,7 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
   initial-value: #9a9a9a;
 }
 
-html.pf-reading-dark .pf-landing__visit.has-map-photos {
+html[data-pf-theme] .pf-landing__visit.has-map-photos {
   --pf-map-photo-fade: .7s;
   isolation: isolate;
 
@@ -635,7 +635,7 @@ html.pf-reading-dark .pf-landing__visit.has-map-photos {
     inset: 0;
     opacity: 0;
     background:
-      linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
+      linear-gradient(var(--pf-photo-veil), var(--pf-photo-veil)),
       var(--pf-map-photo) center / cover no-repeat;
     transition: opacity var(--pf-map-photo-fade) cubic-bezier(.4, 0, .2, 1);
 
@@ -665,15 +665,19 @@ html.pf-reading-dark .pf-landing__visit.has-map-photos {
   }
 
   // The floor names, intro, legend and list over the photo: the swatch's
-  // panel grey lifted 40% toward its heading color, as the room pages lift
-  // their muted text (--pf-location-muted), so it only ever gets lighter:
-  // 5.1:1 or more over the ceiling (grey 64) on every dark swatch (unlifted,
-  // Solarized, Cocoa, Forest and Midnight fall to 3.8-4.1:1). Eased
-  // with the photo (registered above).
+  // panel grey moved toward its heading color (--pf-photo-floor-ink: 40%
+  // lighter on dark swatches, 60% darker on light), so it only ever gains
+  // contrast: 5.1:1 or more over the ceiling (grey 64) on every dark swatch
+  // (unlifted, Solarized, Cocoa, Forest and Midnight fall to 3.8-4.1:1).
+  // Eased with the photo (registered above).
   .pf-map { transition: --pf-map-floor-ink var(--pf-map-photo-fade) ease; }
 
   &.is-map-photo {
-    .pf-map { --pf-map-floor-ink: color-mix(in srgb, var(--pf-g-heading, #fff) 40%, var(--pf-g-panel-muted, #9a9a9a)); }
+    // The labels in the section's grey (the list's group titles, the index
+    // rule) move with it: Lavender's muted grey was 3.5:1 over the floor.
+    --pf-section-muted: var(--pf-photo-muted);
+
+    .pf-map { --pf-map-floor-ink: var(--pf-photo-floor-ink); }
 
     .pf-map__frost {
       visibility: visible;
@@ -683,10 +687,18 @@ html.pf-reading-dark .pf-landing__visit.has-map-photos {
   }
 }
 
+// Light swatches: the text over the photo in the heading colour, as on the
+// room pages, the map's intro at full strength (it is the heading colour at
+// 80% elsewhere, --pf-quick-text): Lavender's was 3.9:1 over the floor.
+html[data-pf-theme]:not(.pf-reading-dark) .pf-landing__visit.has-map-photos.is-map-photo {
+  --pf-section-fg: var(--pf-g-heading);
+  --pf-quick-text: var(--pf-g-heading);
+}
+
 // Under md the map keeps to the section's padding (from md on it runs out
 // over it, _landing-hero.scss): the photo runs out to the screen's edges.
 @media (max-width: 767.98px) {
-  html.pf-reading-dark .pf-landing__visit.has-map-photos .pf-map-photo {
+  html[data-pf-theme] .pf-landing__visit.has-map-photos .pf-map-photo {
     inset-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
   }
 }
@@ -694,11 +706,11 @@ html.pf-reading-dark .pf-landing__visit.has-map-photos {
 // Phones: the drawing is small and the label covers most of it; the photo
 // shows, but no frost (a large blur while it fades is too slow there).
 @media (max-width: 575.98px) {
-  html.pf-reading-dark .pf-landing__visit.has-map-photos .pf-map__frost { display: none; }
+  html[data-pf-theme] .pf-landing__visit.has-map-photos .pf-map__frost { display: none; }
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
-  html.pf-reading-dark .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-map__frost) { display: none; }
+  html[data-pf-theme] .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-map__frost) { display: none; }
 }
 
 html.pf-a11y-contrast .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-map__frost) { display: none !important; }
@@ -718,9 +730,9 @@ html.pf-a11y-contrast .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-m
 html.pf-a11y-motion .pf-map__key[open]::details-content { transition: none; }
 /* The room's photo behind the map changes at once, with no fade. */
 @media (prefers-reduced-motion: reduce) {
-  html.pf-reading-dark .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
+  html[data-pf-theme] .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
 }
-html.pf-a11y-motion.pf-reading-dark .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
+html[data-pf-theme].pf-a11y-motion .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
 @media print {
   .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
   .pf-map__scroller { overflow: visible; }
