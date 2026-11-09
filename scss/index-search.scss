@@ -2375,6 +2375,36 @@
   text-wrap: pretty;
 }
 
+// Open PDF: the Show location slab, with a page in place of the plus.
+.pf-index-row__open {
+  margin: .75rem 0 0;
+
+  .pf-button--secondary {
+    gap: .5rem;
+    min-height: 2.75rem;
+    padding: .375rem .75rem;
+    font-size: .875rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// As strong as the holdings buttons' rule, over the page's link styles.
+.pf-main .pf-index .pf-index-row__open a {
+  color: var(--pf-section-fg, var(--bs-emphasis-color));
+  text-decoration: none;
+
+  &:focus-visible {
+    color: var(--bs-body-bg);
+  }
+}
+
 .pf-index-row__excerpt-label {
   @include pf-index-label;
   display: block;
