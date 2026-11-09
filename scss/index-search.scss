@@ -2400,8 +2400,15 @@
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   text-decoration: none;
 
+  // The words invert as the slab wipes across, on hover as on focus.
   &:focus-visible {
     color: var(--bs-body-bg);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--bs-body-bg);
+    }
   }
 }
 
