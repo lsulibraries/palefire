@@ -375,7 +375,7 @@
     }
     const date = answer.querySelector('[data-pf-index-answer-date]');
     if (date) {
-      date.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).replace(',', '');
+      date.textContent = Drupal.t('Today, @date', { '@date': new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).replace(',', '') });
     }
     list.hidden = false;
     list.querySelectorAll('[data-pf-hours-loc][data-lid]').forEach((row) => {

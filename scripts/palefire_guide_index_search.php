@@ -284,6 +284,8 @@ HTML),
 <li>In Special Collections, taking the Catalog's Special Collections filter off (with no finding aids, oral histories or news chosen) moves the search to Research, keeping its other filters.</li>
 <li>Oral histories that have no PDF yet are left out of results.</li>
 <li>Fixed: a short source description could sit beside the result count instead of under it, and large counts were missing their commas.</li>
+<li>The hours answer now looks like the mockup: a quiet band with each library's hours on one line.</li>
+<li>When a search finds results in only one or two sources, each shows more of them: 10 rows, or 8 for Discovery and the Catalog.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'

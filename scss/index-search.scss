@@ -1381,8 +1381,7 @@
   }
 }
 
-.pf-main .pf-index .pf-index-section__head .pf-index-section__title,
-.pf-main .pf-index .pf-index-answer__title {
+.pf-main .pf-index .pf-index-section__head .pf-index-section__title {
   flex: 1 1 auto;
   min-width: 0;
   margin: 0;
@@ -1454,32 +1453,39 @@
   }
 }
 
-// A short answer above the results ("hours"): the Hours drawer's rows
-// (_utility-panels.scss), in the page's colors instead of the drawer's.
+// A short answer above the results ("hours"): a soft band set off by the
+// accent at its start, a label with the day, then a compact row per place,
+// name on the left and hours on the right. The rows are the Hours drawer's
+// (_utility-panels.scss, filled by the same script), restyled here.
 .pf-index-answer {
-  --pf-toc-rail: var(--pf-index-line);
-  --pf-toc-sub-color: var(--pf-index-muted);
-  --pf-toc-active: var(--pf-index-fg);
   --pf-toc-accent: var(--pf-index-accent);
-  --pf-on-accent: var(--pf-g-on-accent, #000);
   display: grid;
   gap: 1rem;
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding: 1.25rem clamp(1rem, 2.5vw, 1.75rem);
+  border-inline-start: 2px solid var(--pf-index-accent);
+  background-color: color-mix(in srgb, var(--pf-index-fg) 5%, transparent);
 }
 
 .pf-index-answer__head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: .25rem 1rem;
-  padding-bottom: .875rem;
-  border-bottom: 1px solid var(--pf-index-line);
+}
+
+// A label, not a section heading: four classes, past the reading themes' gold.
+.pf-main .pf-index .pf-index-answer .pf-index-answer__title,
+.pf-index-answer__date {
+  @include pf-index-label;
+  margin: 0;
+  color: var(--pf-index-muted);
 }
 
 .pf-index-answer__date {
-  margin: 0;
-  color: var(--pf-index-muted);
-  font-size: .875rem;
+  &::before {
+    content: "\00b7" / "";
+    margin-inline: .625em;
+  }
 
   &:empty {
     display: none;
@@ -1487,7 +1493,68 @@
 }
 
 .pf-index-answer__hours {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 0 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Three classes and the list: past the drawer's card, stripes and state sizes.
+.pf-index-answer .pf-hours__list .pf-hours__loc {
+  display: block;
+  min-height: 0;
+  border: 0;
+  border-bottom: 1px solid var(--pf-index-line);
+  background: none;
+
+  .pf-hours__badge {
+    @include visually-hidden;
+  }
+
+  .pf-hours__text {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .125rem 1rem;
+    padding: .625rem 0;
+  }
+
+  .pf-hours__name {
+    order: -1;
+    color: var(--pf-index-fg);
+    font-size: .9375rem;
+    font-weight: 400;
+  }
+
+  .pf-hours__when {
+    color: var(--pf-index-fg);
+    font-family: inherit;
+    font-size: .9375rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    letter-spacing: normal;
+    line-height: 1.4;
+    text-transform: none;
+  }
+
+  .pf-hours__when-lead {
+    color: var(--pf-index-muted);
+    font-weight: 400;
+  }
+}
+
+// Closing within half an hour: said in the accent, as in the drawer.
+.pf-index-answer .pf-hours__list .pf-hours__loc[data-hours-state="closing"] .pf-hours__when {
+  color: var(--pf-index-accent);
+}
+
+.pf-index-answer .pf-hours__list .pf-hours__loc:is(.is-loading, .is-failed) .pf-hours__when {
+  color: var(--pf-index-muted);
+  font-weight: 400;
 }
 
 .pf-index-answer__links {
