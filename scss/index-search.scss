@@ -1964,6 +1964,15 @@
     color: var(--pf-index-muted);
   }
 
+  // Each library starts a group: room above it, and its name a little heavier.
+  tbody .pf-index-row__copy-row:not(:first-child) {
+    padding-top: 1.5rem;
+  }
+
+  .pf-index-row__copy-row > td:first-child {
+    font-weight: 500;
+  }
+
   // A sortable heading: the words alone while stacked (the headings are for
   // screen readers then), a button once the table has its columns.
   .pf-index-row__sort {
@@ -1996,7 +2005,32 @@
   }
 
   @container (min-width: 46rem) {
-    padding-inline: 1rem;
+    padding-inline: 1.5rem;
+
+    // A line only where a library starts; its items run on beneath it, closer.
+    tbody tr {
+      border-bottom: 0;
+    }
+
+    tbody .pf-index-row__copy-row:not(:first-child) {
+      padding-top: 0;
+      border-top: 1px solid var(--pf-index-line);
+
+      > td {
+        padding-top: 1.5rem;
+      }
+    }
+
+    .pf-index-row__copy-item > td {
+      padding-block: .375rem;
+    }
+
+    // Short, one-word columns take only their words' width.
+    thead th:nth-child(2),
+    thead th:nth-child(4) {
+      width: 1%;
+      white-space: nowrap;
+    }
 
     td.pf-index-row__item-same {
       display: table-cell;
@@ -2149,6 +2183,11 @@
     .pf-index-row__item-call {
       width: 13rem;
     }
+
+    // Enough for Available to view on one line.
+    thead th:nth-child(6) {
+      min-width: 9rem;
+    }
   }
 }
 
@@ -2176,6 +2215,17 @@
 }
 
 // Slabs, tightened for a table row. Three classes: links here are underlined.
+// An item's own request is a size down from its library's buttons, so its
+// row stays close to its words.
+.pf-main .pf-index .pf-index-row__copy-item .pf-index-row__copy-actions {
+  padding-top: .25rem;
+
+  a {
+    min-height: 2.25rem;
+    padding-block: .25rem;
+  }
+}
+
 .pf-main .pf-index .pf-index-row__copy-actions {
   display: flex;
   flex-wrap: wrap;

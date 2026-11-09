@@ -273,6 +273,7 @@ HTML),
 <li>Item rows in a holdings table now repeat their library, shelf and material type in a lighter color, so the table matches the catalog's. Full record became a larger link, Full record in the catalog.</li>
 <li>The reading room note moved under the Special Collections row it describes, with an information icon.</li>
 <li>Call number and Status can sort a holdings table, as in the catalog, but only within each library, so the libraries stay together.</li>
+<li>Holdings tables now have the catalog's columns in the catalog's order, including Copy. The catalog's web service has no copy numbers, so they're read from the record's catalog page when someone opens the table. Libraries are spaced apart as groups, with tighter rows for their items.</li>
 </ul>
 HTML),
 ]);

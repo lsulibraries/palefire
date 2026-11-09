@@ -24,6 +24,9 @@
  *   a preference: without storage or this file, the page's own order stands.
  * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
  *   back to the row's text.
+ * - A holdings table's copy numbers load when it's first opened, from an
+ *   address of their own: they come from the catalog's record page, too slow
+ *   to ask for every result. If they fail, the column stays empty.
  * - A holdings table's Call number and Status headings sort the items under
  *   each library, which keeps its place: ascending, then descending.
  * - A paged list gets a Show more results button, which adds the next page under
@@ -691,7 +694,8 @@
     const text = (row, selector) => row.querySelector(selector)?.textContent.trim() || '';
     const compare = button.dataset.pfIndexSort === 'status'
       ? (a, b) => (b.dataset.pfIndexAvailable - a.dataset.pfIndexAvailable) || collator.compare(text(a, '.pf-index-row__item-status'), text(b, '.pf-index-row__item-status'))
-      : (a, b) => collator.compare(text(a, '.pf-index-row__item-call'), text(b, '.pf-index-row__item-call'));
+      : (a, b) => collator.compare(text(a, '.pf-index-row__item-call'), text(b, '.pf-index-row__item-call'))
+        || collator.compare(text(a, '.pf-index-row__item-copy'), text(b, '.pf-index-row__item-copy'));
     table.querySelectorAll('tbody').forEach((body) => {
       let run = [];
       const flush = () => {
@@ -719,10 +723,45 @@
     }));
   };
 
+  // Holdings: the catalog's copy numbers, the first time a table opens.
+  const loadCopies = async (event) => {
+    const details = event.target;
+    if (!(details instanceof HTMLDetailsElement) || !details.open || !details.dataset.pfIndexCopies || details.dataset.pfIndexCopiesAsked) {
+      return;
+    }
+    const cells = details.querySelectorAll('[data-pf-index-copy-of]');
+    if (!cells.length) {
+      return;
+    }
+    details.dataset.pfIndexCopiesAsked = 'true';
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), HOLDINGS_TIMEOUT_MS);
+    try {
+      const response = await fetch(details.dataset.pfIndexCopies, { signal: controller.signal });
+      const copies = response.ok ? await response.json() : {};
+      cells.forEach((cell) => {
+        const copy = copies[cell.dataset.pfIndexCopyOf];
+        if (copy) {
+          cell.textContent = String(copy);
+        }
+      });
+    }
+    catch (error) {
+      // The column stays empty.
+    }
+    finally {
+      window.clearTimeout(timer);
+    }
+  };
+
   Drupal.behaviors.palefireIndexSearch = {
     attach(context) {
       once('pf-index-states', 'html').forEach(pageStates);
-      once('pf-index-sort', 'html').forEach(() => document.addEventListener('click', sortHoldings));
+      once('pf-index-sort', 'html').forEach(() => {
+        document.addEventListener('click', sortHoldings);
+        // toggle doesn't bubble, so it's caught on the way down.
+        document.addEventListener('toggle', loadCopies, true);
+      });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
