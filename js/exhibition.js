@@ -627,6 +627,15 @@
       // Not in the TOC: the wall is the gallery's index, and dozens of
       // entries made the TOC a long scroll (js/modular-toc.js skips them).
       page.querySelectorAll('.pf-exhibit-entry').forEach((entry) => entry.setAttribute('data-toc-skip', ''));
+      // A sub-gallery's heading takes its folded entry's id, so a link to
+      // the show (#pure-vision) lands on the heading over its tiles.
+      wall.querySelectorAll('[data-pf-group]').forEach((heading) => {
+        const folded = document.getElementById(heading.dataset.pfGroup);
+        if (folded && page.contains(folded)) {
+          folded.removeAttribute('id');
+          heading.id = heading.dataset.pfGroup;
+        }
+      });
       const buttons = wall.querySelectorAll('[data-pf-sort]');
       if (buttons.length) {
         sortWall(wall, 'plate', false);
@@ -1486,7 +1495,8 @@
       return;
     }
     objectView();
-    wallState.tiles = Array.from(tile.parentElement.children);
+    // Every tile on the wall, across its sub-galleries' lists.
+    wallState.tiles = Array.from(tile.closest('[data-pf-wall]').querySelectorAll('[data-pf-tile]'));
     const index = wallState.tiles.indexOf(tile);
     history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
     viewer.show(objectHandler, () => fillObject(index), { from: animate ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit' });

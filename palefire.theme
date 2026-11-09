@@ -3921,14 +3921,22 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * view: its first two show (the second on hover), tagged "4 pages". A clip
  * with no image is drawn as a reel in its box (exhibit-reel.html.twig).
  *
- * @return array{tiles: array, sortable: bool, sheets: array}|null
+ * An entry with a heading but no image or clip starts a sub-gallery: a
+ * heading across the wall, with the entry's text under it, over the tiles
+ * that follow (the Union Art Gallery's shows). A wall with sub-galleries
+ * keeps its order (no sorting).
+ *
+ * @return array{tiles: array, groups: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
  *   audio clip's speaker, or "4 pages"), 'audio' (the entry has a clip),
  *   'year' (the clip's year, from the end of its credit, or NULL),
  *   'pages' (a manuscript's page count, or 0), 'ratio',
- *   'images' (_palefire_exhibit_image() values; none for a reel)]. sortable: two or more
- *   tiles have a plate number. sheets: this page's sheet sizes, ['label',
+ *   'images' (_palefire_exhibit_image() values; none for a reel)]. groups:
+ *   the tiles in order under their sub-galleries, ['title', 'anchor',
+ *   'text' (render arrays), 'tiles'] each; the first has no title when
+ *   tiles come before any sub-gallery. sortable: two or more tiles have a
+ *   plate number and there are no sub-galleries. sheets: this page's sheet sizes, ['label',
  *   'h', 'w', 'current'] each, when this gallery has one. stats: the
  *   opening's facts ("22 entries" or "7 clips", "Plates 2–154", "11
  *   drawing–proof pairs", "Sheet 40 × 27 in").
@@ -3940,6 +3948,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   $sizes = '(min-width: 62rem) 24vw, (min-width: 36rem) 45vw, 90vw';
   $text = fn ($field) => trim(preg_replace('/\s+/', ' ', strip_tags((string) $field->value)));
   $tiles = [];
+  $groups = [['title' => '', 'anchor' => '', 'text' => [], 'tiles' => []]];
   foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
     if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
       continue;
@@ -3984,8 +3993,28 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
         $images[] = $image;
       }
     }
-    // No image and no clip: nothing to hang.
+    // No image and no clip: nothing to hang. With a heading it starts a
+    // sub-gallery, its text blocks under the heading.
     if (!$images && $speaker === NULL) {
+      $heading = trim((string) $entry->get('field_block_title')->value);
+      if ($heading !== '') {
+        $text_blocks = [];
+        foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+          if ($block->bundle() === 'guide_text' && $block->isPublished() && !$block->get('field_block_body')->isEmpty()) {
+            $text_blocks[] = [
+              '#type' => 'processed_text',
+              '#text' => $block->get('field_block_body')->value,
+              '#format' => $block->get('field_block_body')->format,
+            ];
+          }
+        }
+        $groups[] = [
+          'title' => $heading,
+          'anchor' => _palefire_exhibit_entry_anchor($entry),
+          'text' => $text_blocks,
+          'tiles' => [],
+        ];
+      }
       continue;
     }
     $tags = count($figures) === 2 ? array_filter(array_map(fn ($f) => $text($f->get('field_figure_caption')), $figures)) : [];
@@ -4001,10 +4030,15 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'ratio' => $first && $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
       'images' => $images,
     ];
+    $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }
   if (!$tiles) {
     return NULL;
   }
+  // Sub-galleries with no tiles drop out, and so does the untitled start
+  // when the first sub-gallery heads the wall.
+  $groups = array_values(array_filter($groups, fn ($group) => $group['tiles']));
+  $grouped = (bool) array_filter(array_column($groups, 'title'));
 
   // "Actual size": every wall gallery's sheet on this page, to scale.
   $sheets = [];
@@ -4046,7 +4080,8 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
 
   return [
     'tiles' => $tiles,
-    'sortable' => count($plates) >= 2,
+    'groups' => $groups,
+    'sortable' => count($plates) >= 2 && !$grouped,
     'sheets' => $sheets,
     'stats' => $stats,
   ];

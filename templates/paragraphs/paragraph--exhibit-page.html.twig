@@ -39,7 +39,9 @@
  * - wall: Display "wall" (_palefire_exhibit_wall()), or NULL. The wall is
  *   printed [hidden] after the blocks: js/exhibition.js shows it and folds
  *   the entries away, and each tile opens its entry in the object view.
- *   Without the script the gallery reads as a story.
+ *   Its tiles come in wall.groups: a list each, under a sub-gallery heading
+ *   when an imageless entry starts one. Without the script the gallery
+ *   reads as a story.
  *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
@@ -193,18 +195,34 @@
     {% if wall %}
       <div class="pf-exhibit-wall" data-pf-wall hidden
            {% if wall.sheets %}data-pf-sheets="{{ wall.sheets|json_encode }}"{% endif %}>
-        {% if wall.sortable %}
+        {% set grouped = wall.groups|length > 1 or (wall.groups|first).title %}
+        {% if wall.sortable or grouped %}
           <div class="pf-exhibit-wall__tools">
             <p class="pf-exhibit-wall__hint">{{ 'Select an entry to view it full screen'|t }}</p>
-            <div class="pf-exhibit-wall__sort" role="group" aria-label="{{ 'Order'|t }}">
-              <span class="pf-exhibit-wall__sort-label" aria-hidden="true">{{ 'Order'|t }}</span>
-              <button type="button" data-pf-sort="plate" aria-pressed="true">{{ 'Plate'|t }}</button>
-              <button type="button" data-pf-sort="title" aria-pressed="false">{{ 'A–Z'|t }}</button>
-            </div>
+            {% if wall.sortable %}
+              <div class="pf-exhibit-wall__sort" role="group" aria-label="{{ 'Order'|t }}">
+                <span class="pf-exhibit-wall__sort-label" aria-hidden="true">{{ 'Order'|t }}</span>
+                <button type="button" data-pf-sort="plate" aria-pressed="true">{{ 'Plate'|t }}</button>
+                <button type="button" data-pf-sort="title" aria-pressed="false">{{ 'A–Z'|t }}</button>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+        {# Sub-galleries (an entry with no image heads the tiles after it):
+           a heading and its text over each group's list. The heading takes
+           its entry's id from js/exhibition.js, so links to the show land
+           here once the entries fold away. #}
+        {% for group in wall.groups %}
+        {% if group.title %}
+          <div class="pf-exhibit-wall__group">
+            <h3 class="pf-exhibit-wall__group-title" data-pf-group="{{ group.anchor }}">{{ group.title }}</h3>
+            {% if group.text %}
+              <div class="pf-exhibit-wall__group-text pf-guide-prose">{{ group.text }}</div>
+            {% endif %}
           </div>
         {% endif %}
         <ul class="pf-exhibit-wall__list">
-          {% for tile in wall.tiles %}
+          {% for tile in group.tiles %}
             {% set image = tile.images|first %}
             <li class="pf-exhibit-wall__tile{{ not image ? ' pf-exhibit-wall__tile--reel' }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
@@ -240,6 +258,7 @@
             </li>
           {% endfor %}
         </ul>
+        {% endfor %}
       </div>
     {% endif %}
   </div>

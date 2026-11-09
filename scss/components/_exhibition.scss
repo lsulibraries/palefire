@@ -1069,8 +1069,9 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   container-type: inline-size;
   padding-top: clamp(10rem, 40vh, 24rem);
 
+  // Less on a short window (1.5rem at 730px tall), so the page fits it.
   @include media-breakpoint-up(md) {
-    padding-top: 4rem;
+    padding-top: clamp(1.5rem, 8svh - 2rem, 4rem);
   }
 }
 
@@ -1097,6 +1098,9 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 // exhibit-cover.html.twig): the smallest of the full display size, about
 // three lines of the column (a letter is about half an em), and the longest
 // word on one line. A short title such as "AVES" keeps the full size.
+// Also at most 12% of the window's height, so on a short window (a 1080p
+// laptop at 125%, about 730px) the title page, buttons and Scroll cue fit
+// the first screen; from about 900px tall the width terms decide.
 // The Exhibition title style field (PalefireHooks::exhibitHead()) picks the
 // face: --serif (the default) or --sans. Settings > Easy-to-read font puts
 // either in that font, at the sans display weight and tracking.
@@ -1106,6 +1110,7 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   margin: 0;
   font-size: max(1.75rem, min(
     clamp(3.5rem, 1.5rem + 8vw, 8.5rem),
+    12svh,
     600cqi / var(--pf-title-chars, 1),
     100cqi / (var(--pf-title-word, 1) * .62)
   ));
@@ -1385,10 +1390,11 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 // The scroll cue (exhibit-cover.html.twig, js/exhibition.js): the landing's
 // .pf-hero-cue (_landing-features.scss: its line, gold run and replay),
 // centred under the text column with its line running to the foot of the
-// screen. From md on a window tall enough, as on the landing. Its room is
-// the head's foot, held from the first paint, not from when the script
-// shows the cue, so nothing moves when it does.
-@media (min-height: 48rem) {
+// screen. From md on a window at least 45rem (720px) tall, so a 1080p
+// laptop at 125% gets it (the title's height cap, above, makes room). Its
+// room is the head's foot, held from the first paint, not from when the
+// script shows the cue, so nothing moves when it does.
+@media (min-height: 45rem) {
   @include media-breakpoint-up(md) {
     .pf-exhibit-head:has(.pf-exhibit-cover__cue) {
       --pf-hero-cue-room: clamp(4.5rem, 11svh, 7rem);
@@ -3556,6 +3562,57 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   gap: 0.75rem 1.5rem;
   padding-block: 0.75rem;
   border-block: 1px solid $pf-hairline;
+}
+
+// A sub-gallery (_palefire_exhibit_wall(): an entry with no image heads the
+// tiles after it): its name across the wall on a hairline, like a room's
+// title on a gallery wall, and its text at the reading measure, then its
+// tiles. Room above it, so each show reads as its own run of plates.
+.pf-exhibit-wall__group {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $pf-hairline;
+
+  .pf-exhibit-wall__tools + & {
+    margin-top: 0.5rem;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  @include media-breakpoint-up(md) {
+    margin-top: 4rem;
+  }
+}
+
+.pf-exhibit-wall__group-title {
+  margin: 0;
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  font-size: clamp(1.375rem, 1rem + 1.2vw, 2.25rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  text-wrap: balance;
+  scroll-margin-top: 1.5rem; // past the header and bar (scroll-padding-top)
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+}
+
+.pf-exhibit-wall__group-text {
+  max-width: var(--pf-exhibit-prose);
+  color: var(--pf-exhibit-muted);
+
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 .pf-exhibit-wall__hint,

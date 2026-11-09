@@ -114,6 +114,8 @@ All setup scripts only add what's missing and are safe to re-run.
 | `palefire_exhibit_mossville.php` | Builds the Mossville History Project oral history exhibition as an unpublished exhibition (`-- images=<2560 px masters> audio=<M4A clips> path=/v2/exhibitions/mossville`), importing its 60 photos into Media and its 70 clips as files. Text in `data/mossville.json` |
 | `palefire_exhibit_audubon.php` | Builds John James Audubon in Louisiana as an unpublished exhibition (`-- images=<Audubon 4K folder> path=/v2/exhibitions/audubon`), importing its 93 images into Media |
 | `palefire_exhibit_redesign.php` | Builds "A New Look for LSU Libraries", the site redesign before and after, as an unpublished exhibition (`-- images=<Redesign screenshots folder> path=/v2/exhibitions/redesign`); `edition=staff` builds the staff page, which adds four staff-only galleries under its own title (`path=/v2/exhibitions/redesign-staff`, access restricted in the UI). Both share the 20 screenshots' media items |
+| `palefire_exhibit_unionartgallery.php` | Builds "LSU Union Art Gallery: Building Community Through Art, 1964–2016" as an unpublished exhibition (`-- path=/v2/special/exhibitions/unionartgallery`), importing its 91 images into Media from the files already on the server. Text in `data/unionartgallery.json`, with the old pages' encoding fixed. Galleries 2 to 6 are walls |
+| `palefire_exhibit_unionartgallery_wall.php` | Turns the Union Art Gallery page built before 2026-11-09 into walls in place: Studio Art, Louisiana Artists, Interdisciplinary Collaboration, Celebration of Books and Visiting Artists get Display "wall", rebuilt as one entry per image under a heading per show, reusing the page's media. `-- dry-run=1` lists the changes; `nid=` picks the page. A gallery that is already a wall is left alone |
 | `palefire_exhibit_replace_image.php` | Swaps an Image media item's file for a new one (`-- media="<media name>" file=<path>`), keeping the item, its alt text and every figure using it. For a better scan found after an exhibition was built |
 | `palefire_exhibit_showcase.php` | The Exhibitions page: "showcase" on `field_modular_type`, "Exhibitions showcase" (`field_exhibit_showcase`: Featured, Listed, Not listed) and "Why it is featured" (`field_exhibit_feature_note`) under the physical exhibition note, and the page itself, unpublished, at `/v2/special/exhibitions` if nothing has that address. Run `palefire_exhibit_setup.php` first |
 | `palefire_exhibit_showcase_posts.php` | Physical exhibitions on the Exhibitions page: on Article, "On view" (`field_exhibit_on_view`, a date range), "Where" (`field_exhibit_where`) and the two showcase fields, after the category; on Modular page, "Physical exhibition post" (`field_exhibit_physical_post`) and "Showcase category" (`field_showcase_category`), set to the Exhibitions term on every showcase page. Run `palefire_exhibit_showcase.php` first |
@@ -666,8 +668,8 @@ On `node.modular_page` (exhibition mode only, printed by
 `includes/exhibit-cover.html.twig`): `field_exhibit_title_style` (Serif,
 Playfair Display, the default; or Sans), `field_exhibit_subtitle`,
 `field_exhibit_cover` (Media: Image, decorative), `field_exhibit_credit`,
-`field_exhibit_prompt` (default "Scroll through every gallery in order, or
-choose one from the table of contents."), and `field_intro` if filled. Optional tiles under the credit:
+`field_exhibit_prompt` (a line over Begin and Contents; empty, none: the
+buttons and the Scroll cue say it), and `field_intro` if filled. Optional tiles under the credit:
 `field_exhibit_year` (a number) and `field_exhibit_physical_note` (a short
 note on the physical exhibition). The note sits behind a tile with FA Pro's
 light treasure chest, inlined from
@@ -1019,6 +1021,45 @@ title, subtitle and intro. Restrict the staff page's access in the Drupal UI.
 - **To fill:** the `[Editor: …]` notes (credit, feedback link, contacts,
   redirect plan) and screenshots for Made for Every Reader.
 
+### LSU Union Art Gallery
+
+`scripts/data/unionartgallery.json` holds "LSU Union Art Gallery: Building
+Community Through Art, 1964–2016", the six-page showcase at
+/lsu-unionartgallery (on libstage only; a 404 on lib.lsu.edu): the
+Introduction, then Studio Art, Louisiana Artists, Interdisciplinary
+Collaboration, Celebration of Books and Visiting Artists, one entry per show
+(Celebration of Books has one show, so its images sit straight in the
+gallery). 85 captioned figures; each old page's cover is its gallery's lead.
+
+The five galleries of shows are **walls**, as Audubon's Elephant Folio: one
+tile per image, titled by its caption, with the show's name as the label
+line in the object view. Each show is a sub-gallery heading (an entry with
+no image) over its tiles, with the show's text if it has any (Pure Vision).
+Its anchor (#pure-vision) lands on the heading; the tiles are
+#<show>-1, -2 and so on.
+
+- **Encoding fixed.** The old pages' apostrophes and quotes were UTF-8 saved
+  as Latin-1 up to four times over ("DufourÃÂÃÂ¢ÃÂÃÂÃÂÃÂs", and a run after
+  "International Expo" that was a no-break space). The bytes survive as
+  entities, so they decode exactly to ’ “ ”, nothing left over. Straight
+  apostrophes and quotes are set curly too.
+- **Corrected:** "Clyde Connel" (Connell, as in its own captions), "Judi
+  Stalh" (Stahl, as elsewhere), "gallery talk aby", the missing closing
+  quote on "Humor in the Jugular Vein", and trailing full stops on some
+  captions.
+- **To verify** (left as written): "Claude Roberts Trevithick" /
+  "Claudia Roberts" / "Claudia Robert Trevnthick" for one artist; "Pamela
+  Micheal"; the "Transparent Motifs" heading over a "Transparent Motives"
+  flyer.
+- **New wording to check:** the credit line, the cover's caption and alt
+  text (Janice Sachse, *Noon in My Garden*). The other leads use the old
+  covers' alt text as their caption.
+- **Images** are already on the server (`sites/all/files/sc/exhibitions/
+  undergrad_projects/Blandino_Project`, covers in `sites/default/files/
+  2025-12`); the script imports them from there, no upload needed (scans are
+  about 1,300px on the long edge). A better scan can replace any with
+  `palefire_exhibit_replace_image.php`.
+
 ## Reading colors and Settings
 
 Settings > **Reading colors** sets page and text colors for the whole site.
@@ -1184,6 +1225,20 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-09:** LSU Union Art Gallery: its five galleries of shows (Studio Art to Visiting Artists) are walls that use the full page width, as Audubon's, one tile per photo or flyer, each titled by its caption. Shows are sub-gallery headings over their tiles (Paul Dufour, Pure Vision with its text, Tamarind…), so the grouping of the old pages stays. Any wall can now do this: an entry with no image and a title heads the tiles after it, its anchor moves to the heading, and the object view steps through every tile on the wall; a grouped wall has no sort buttons (sorting would scatter the shows). No existing wall has such entries, so Audubon, Mossville and the redesign are unchanged. Walls bring the openings' darker bottom-left wash, as on Elephant Folio. Live page: `palefire_exhibit_unionartgallery_wall.php` (`dry-run=1` first). Headings checked on live Audubon with the new CSS at 320, 768, 1024 and 1440: full width, no horizontal scroll.
+- **2026-11-09:** Exhibitions: the Scroll cue now shows on common laptops. It needs a window 45rem (720px) tall, was 48rem (768px), and the title is capped at 12% of the screen's height with less space above it on short screens, so the cover fits. Checked on live Audubon with the new CSS: the cover fits with the cue at 1280 × 720, 1366 × 730, 1536 × 730, 1440 × 760 and 1024 × 768 (was 832px tall at least); taller screens are unchanged (1920 × 960, 768 × 1024). No horizontal scroll.
+- **2026-11-09:** Exhibitions: no default prompt on the title page. "Scroll through every gallery in order, or choose one from the table of contents" (and its arrow toward the rail) repeated what Begin, Contents and the Scroll cue now say. `PalefireHooks::exhibitHead()` gives an empty prompt unless the Exhibition prompt field is filled, and `exhibit-cover.html.twig` prints the line only then, so the program pages keep theirs. The hairline over the buttons stays. The field's help text in Manage fields may still quote the old default; edit it there if wanted.
+- **2026-11-09:** Exhibitions: the title page gets v2/special's Contents button and Scroll cue. Contents (list icon) sits beside Begin at every width and opens the table of contents as the landing's does (the rail's panel under the button from lg, the drawer or dock below); it was a drawer-only button below lg. The Scroll cue with its gold line runs from under the buttons to the foot of the screen and glides to the first gallery. As on the landing it shows from 768px on a window at least 48rem tall, only when the cover fits the screen, fades once the page moves, and replays once after ten quiet seconds. Its room is reserved from the first paint, so nothing shifts. Checked on live Audubon with the new CSS and markup at 1440 × 900, 1024 × 768 (cover taller than the screen: no cue), 768 × 1024 and 320 (no cue; Begin and Contents share a row); no horizontal scroll.
+- **2026-11-10:** The Index in Special Collections mode has Special Collections in its breadcrumb (Home / Special Collections / Index), linking back to /v2/special, so a search from that page has a way back. Set by the module from the address; the Index swaps the breadcrumb along with the results when the mode changes in place.
+- **2026-11-10:** Special Collections hero search opens the Index with both Catalog and PDF Finding Aids chosen (was the Catalog alone), so a search there shows finding aids beside catalog records from the start.
+- **2026-11-10:** The Index: Archive Records is now PDF Finding Aids and searches only finding aids and oral history abstracts, the records that are PDFs. Oral histories is a checkbox under it in the sidebar, in place of the Record type group, and moves with it when sources are reordered. Breaux Data, Louisiana Folklife, Manuscript Collections and University Archives records are no longer in the Index. Pages and size beside Open PDF now also read oral history abstracts (sites/all/files) and www. links.
+- **2026-11-10:** The Index: Open PDF shows how long the file is beside it ("18 pages · 296 KB"), read from the PDF on the server once and cached until the file changes, so it's plain what opening it means. Only files under the site's own public files are read; a file it can't read shows its size alone.
+- **2026-11-09:** Exhibitions: the side wash behind gallery openings (Covers and walls) and the title page is a bit darker. Its density at the text is now the swatch's AA floor plus `$pf-wash-lift` (10%, at most solid), e.g. Twilight 85% → 95%, and the whole eased fade scales up with it. Contrast only rises. Checked on the live Audubon page (Elephant Folio, Audubon at Oakley) at 1440.
+- **2026-11-10:** The Index: results that are PDFs (finding aids) have an Open PDF button, styled like Show location with a page icon, opening in a new tab.
+- **2026-11-09:** The Index: a record's holdings panel is now a group per library. Its heading names the library as the catalog does (LSU Library, Special Collections), with the rest of its name, shelf and type on the line under and its buttons beside. A short table under it keeps only what differs from copy to copy: call number, copy and status. The reading room note is a soft band under its library, and the panel ends on a footer with the copy count and an outlined Full record in the catalog button. Per-copy Place hold links stay out: the catalog's need a session token and answer 403 from outside it.
+- **2026-11-10:** The Index: archive records can show the words around a match inside their PDF, under "Found in the PDF", so it's plain that Finding Aids searches read the whole document. Needs the index's Highlight processor making excerpts; without it nothing changes.
+- **2026-11-09:** The Index: item rows in a holdings table repeat their library, shelf and material type, muted, so the table no longer looks half empty next to the catalog. Full record is now a full-size link, Full record in the catalog, at the start of the panel. The reading room note sits under the Special Collections row it is about, with an information icon. Call number and Status headings sort the items under each library, as the catalog's columns do, without breaking up the libraries. Holdings tables now follow the catalog's column order and have a Copy column, read from the catalog's record page when a table is opened (the catalog's web service has no copy numbers). Each library is a group with room and a line above it, and its items sit closer beneath.
+- **2026-11-09:** No LSU brand colour interrupts a swatch. Lavender's accent and highlight are a blue-violet of its own, `#55418f` (7.4:1, white on it 8.3:1), not LSU purple. The Quick Start's click-here ring (`.pf-paths__mark`, `_guide.scss`) is the swatch's highlight with a page-colour edge, not LSU gold on a black edge. The placeholder book jackets (`.pf-book__jacket`, `_tile-showcase.scss`) cycle accent, ink, accent tint, paper, not LSU purple and gold. Checked by scanning computed colours on six pages in all 12 swatches. Dusk and Night keep `#cdb8ee`, a lightened lilac of their own. Why: brand colours dropped into a calm swatch read as interruptions.
 - **2026-11-09:** Special Collections hero: a faint warm light from the picture column across the type's side, still and painted once, fading out before the screen's foot. Why: the left side read as empty next to the picture; this ties the two halves without moving anything behind the text. Contrast stays 7.4:1 or better in every theme.
 - **2026-11-09:** Lavender: the lavender moved from the text to the paper. A pale lavender page `#f4f1f8`, cool grey ink (text `#5f5b67` 5.9:1, headings `#34303d`, muted `#67626f` 5.3:1), and LSU purple for both accent and highlight (10.9:1), now the one swatch with the full brand purple. Why: its text was purple too, so the purple titles didn't stand out, and on Cream's paper it read as Cream with purple ink. Every swatch now follows one rule: neutral ink, one hue for the voice and the actions.
 - **2026-11-09:** Cream in dusty plum `#5b4f72`, one colour for both its accent (Search button, links, focus) and its highlight (hero title, Quick Start letters and icons, index numbers), as Twilight's pale gold does both. Was LSU purple on the actions and warm ink on the highlight. Plum on the page 6.8:1, on the surface 6.3:1, white on plum 7.5:1; the callout tint is a dusty lilac `#ebe6ec`. Why: LSU purple was too loud for a swatch called Cream, and warm ink left it with less colour than the other swatches.

@@ -243,7 +243,9 @@ $block = function (array $b) use (&$block, $figure, $keep, $html): ?Paragraph {
 };
 
 // Each lead is the old page's cover, with its alt text as the caption.
+// Display "wall" for the five galleries of shows (data: "display").
 $has_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
+$has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
 $sections = [];
 foreach ($data['pages'] as $page) {
   $sections[] = Paragraph::create($keep([
@@ -253,6 +255,7 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead' => $ref($media($page['lead'] ?? NULL)),
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
     'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
+    'field_exhibit_display' => $has_display ? ($page['display'] ?? 'story') : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;
