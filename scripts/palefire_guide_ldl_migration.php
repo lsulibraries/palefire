@@ -430,77 +430,6 @@ HTML),
 HTML),
 ]);
 
-$section('Hidden New Orleans Jazz & Heritage records', [
-  $text(NULL, <<<'HTML'
-<p>On Nov 9, every New Orleans Jazz &amp; Heritage Foundation Archive record (namespace <code>nojh</code>) was hidden from the LDL at the LDL team's request. Nothing was deleted. This section records what was done, where everything is kept, and how to bring the records back, in the LDL or in Quartex.</p>
-HTML),
-  $stats(NULL, [
-    ['6,880', 'records hidden: 6,857 items and 23 collections'],
-    ['0', 'nojh records left in search'],
-    ['6,857', 'items with MODS and RELS-EXT already on L:'],
-  ]),
-  $text('Why they were hidden', <<<'HTML'
-<ul>
-<li><strong>Harvested records:</strong> the LDL harvests these records from the foundation's own site. Elisa Naquin confirmed this on Nov 5, and asked for the records to be hidden, because the foundation is mid-migration too and the links to its old site are dead.</li>
-<li><strong>Link records only:</strong> every item is a link record (<code>sp_remote_resource</code>). Its main file is only a link to the item on the old site, <code>nojh.saas.dgicloud.com</code>. All 6,857 links point there, and that site now refuses every request with a 403.</li>
-<li><strong>Not in the migration:</strong> nojh is one of the 3 excluded institutions (<code>EXCLUDED_INSTITUTIONS</code> in the exporter's <code>config.py</code>), so hiding it doesn't change any export.</li>
-</ul>
-HTML),
-  $text('What was done', <<<'HTML'
-<table>
-<thead><tr><th scope="col">When</th><th scope="col">Change</th><th scope="col">Result</th></tr></thead>
-<tbody>
-<tr><td>Nov 6</td><td>Test: one record, <code>nojh-27114:131</code> ("Jason Marsalis"), set Inactive in Fedora</td><td>It left its collection page at once, but was still in search 72 hours later. Search doesn't update on its own after a change in Fedora.</td></tr>
-<tr><td>Nov 9, morning</td><td>The test record reindexed through GSearch, the service that updates search from Fedora</td><td>It left search at once</td></tr>
-<tr><td>Nov 9, 10:03 to 10:11</td><td>6,876 records (6,856 items and 20 collections) each set Inactive, then reindexed</td><td>All 6,876 succeeded, with no failures</td></tr>
-<tr><td>Already Inactive</td><td>Kid Ory Video Collection, Ice Cube Slim Audio Collection and Mick Burns Project Interviews (<code>nojh-51271</code>, <code>51272</code> and <code>51273</code>)</td><td>Left as they were. Each holds no items.</td></tr>
-</tbody>
-</table>
-<p>Checked afterwards: all 6,880 nojh objects are Inactive in Fedora, none are left in the search index, a website search for nojh finds nothing, and <code>louisianadigitallibrary.org/nojh</code> lists no collections. In Fedora, each record's history notes the change as an LDL request from Elisa Naquin.</p>
-<p>What hasn't changed: the objects and all their files are still in Fedora. A direct link to an item still forwards to the dead old site. A collection's page still opens, but lists no items.</p>
-HTML),
-  $text('Where the records are kept', <<<'HTML'
-<p>In the <code>reports\</code> folder of the islandora-exporter repo:</p>
-<table>
-<thead><tr><th scope="col">File</th><th scope="col">What's in it</th></tr></thead>
-<tbody>
-<tr><td><code>nojh-records-2026-11-09.csv</code></td><td>One row per record: PID, title, collection, old link, where its MODS and RELS-EXT are on L:, date added to the LDL, and its state before Nov 9. Opens in Excel.</td></tr>
-<tr><td><code>nojh-states-before-inactive-2026-11-09.csv</code></td><td>Fedora's state for every nojh object, and every datastream, just before the change</td></tr>
-<tr><td><code>nojh-inactive-log-2026-11-09.csv</code></td><td>The result for each of the 6,876 records changed on Nov 9</td></tr>
-<tr><td><code>nojh_hide_2026-11-09.py</code></td><td>The script that hid them</td></tr>
-<tr><td><code>nojh_restore.py</code></td><td>The script that brings them back (below)</td></tr>
-</tbody>
-</table>
-<p>On L:, the MODS and RELS-EXT for all 6,857 items are in <code>L:\LDL1-datastreams\The New Orleans Jazz &amp; Heritage Foundation Archive\&lt;collection&gt;\Data\MODS\</code> and <code>\RDF\</code>, and the accounting CSVs are in <code>L:\LDL1-accounting\The New Orleans Jazz &amp; Heritage Foundation Archive\</code>. The link files themselves weren't downloaded, but every link is in the records CSV.</p>
-HTML),
-  $text(NULL, <<<'HTML'
-<p><strong>After Fedora is retired.</strong> The hidden records stay in Fedora only until it's switched off after the migration. From then on, the records CSV and the files on L: are the only copy, so keep them.</p>
-HTML, 'callout'),
-  $text('Bring them back in the LDL', <<<'HTML'
-<ol>
-<li>Have new links first. Restoring the records as they are would bring back the dead links, so get the foundation's new links, or re-harvest the records from its new site.</li>
-<li>Open the tunnel to Fedora, as for downloads from Fedora.</li>
-<li>From the islandora-exporter folder, do a dry run. It lists what it would restore and changes nothing. Add <code>--collection</code> with a collection PID to restore one collection only.</li>
-<li>Run it again with <code>--apply</code>. For each record it sets the state back to Active, then reindexes it so it returns to search. Collections go first. The 3 collections that were already Inactive stay that way.</li>
-<li>Check <code>nojh-restore-log.csv</code> in the reports folder: every row should show 200 and 200. Then search the site for a few titles. A rerun skips records already restored.</li>
-</ol>
-HTML),
-  $code('Restore commands', <<<'HTML'
-.\.venv\Scripts\Activate.ps1
-python reports\nojh_restore.py
-python reports\nojh_restore.py --collection nojh-27114:collection
-python reports\nojh_restore.py --apply
-HTML),
-  $text('Put them in Quartex later', <<<'HTML'
-<ol>
-<li>Get the foundation's new link for each record. The old site's ID is at the end of each old link (for example <code>islandora:51696</code>), which may help match old to new. Titles are in the records CSV.</li>
-<li>Agree with Adam Matthew how Quartex should hold records whose content lives on another site.</li>
-<li>Use the files already on L: for the metadata: the MODS has the description, and the RELS-EXT and the records CSV give each item's collection. They don't need exporting again.</li>
-<li>Supply the new links alongside, from the records CSV with the old links swapped out.</li>
-</ol>
-HTML),
-]);
-
 $section('How the export works', [
   $text(NULL, <<<'HTML'
 <p>Each run works through numbered steps, per institution and per datastream. The accounting tree on L: is the source of truth for which collections should exist.</p>
@@ -732,6 +661,77 @@ $section('JPEGs saved as .jp2', [
 <li><strong>Found since, not counted above:</strong> 1,819 in Newspaper Clippings and 10,519 at the State Museum, UNO and UL Lafayette (all replaced), and 1,931 in the last 10 audits (queued).</li>
 <li><strong>No JPEGs:</strong> Southeastern, Calcasieu, SOWELA, Webster and LSU Alexandria. Centenary, Newcomb, West Feliciana and Franklin Parish Library have no audited images.</li>
 </ul>
+HTML),
+]);
+
+$section('Hidden New Orleans Jazz & Heritage records', [
+  $text(NULL, <<<'HTML'
+<p>On Nov 9, every New Orleans Jazz &amp; Heritage Foundation Archive record (namespace <code>nojh</code>) was hidden from the LDL at the LDL team's request. Nothing was deleted. This section records what was done, where everything is kept, and how to bring the records back, in the LDL or in Quartex.</p>
+HTML),
+  $stats(NULL, [
+    ['6,880', 'records hidden: 6,857 items and 23 collections'],
+    ['0', 'nojh records left in search'],
+    ['6,857', 'items with MODS and RELS-EXT already on L:'],
+  ]),
+  $text('Why they were hidden', <<<'HTML'
+<ul>
+<li><strong>Harvested records:</strong> the LDL harvests these records from the foundation's own site. Elisa Naquin confirmed this on Nov 5, and asked for the records to be hidden, because the foundation is mid-migration too and the links to its old site are dead.</li>
+<li><strong>Link records only:</strong> every item is a link record (<code>sp_remote_resource</code>). Its main file is only a link to the item on the old site, <code>nojh.saas.dgicloud.com</code>. All 6,857 links point there, and that site now refuses every request with a 403.</li>
+<li><strong>Not in the migration:</strong> nojh is one of the 3 excluded institutions (<code>EXCLUDED_INSTITUTIONS</code> in the exporter's <code>config.py</code>), so hiding it doesn't change any export.</li>
+</ul>
+HTML),
+  $text('What was done', <<<'HTML'
+<table>
+<thead><tr><th scope="col">When</th><th scope="col">Change</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><td>Nov 6</td><td>Test: one record, <code>nojh-27114:131</code> ("Jason Marsalis"), set Inactive in Fedora</td><td>It left its collection page at once, but was still in search 72 hours later. Search doesn't update on its own after a change in Fedora.</td></tr>
+<tr><td>Nov 9, morning</td><td>The test record reindexed through GSearch, the service that updates search from Fedora</td><td>It left search at once</td></tr>
+<tr><td>Nov 9, 10:03 to 10:11</td><td>6,876 records (6,856 items and 20 collections) each set Inactive, then reindexed</td><td>All 6,876 succeeded, with no failures</td></tr>
+<tr><td>Already Inactive</td><td>Kid Ory Video Collection, Ice Cube Slim Audio Collection and Mick Burns Project Interviews (<code>nojh-51271</code>, <code>51272</code> and <code>51273</code>)</td><td>Left as they were. Each holds no items.</td></tr>
+</tbody>
+</table>
+<p>Checked afterwards: all 6,880 nojh objects are Inactive in Fedora, none are left in the search index, a website search for nojh finds nothing, and <code>louisianadigitallibrary.org/nojh</code> lists no collections. In Fedora, each record's history notes the change as an LDL request from Elisa Naquin.</p>
+<p>What hasn't changed: the objects and all their files are still in Fedora. A direct link to an item still forwards to the dead old site. A collection's page still opens, but lists no items.</p>
+HTML),
+  $text('Where the records are kept', <<<'HTML'
+<p>In the <code>reports\</code> folder of the islandora-exporter repo:</p>
+<table>
+<thead><tr><th scope="col">File</th><th scope="col">What's in it</th></tr></thead>
+<tbody>
+<tr><td><code>nojh-records-2026-11-09.csv</code></td><td>One row per record: PID, title, collection, old link, where its MODS and RELS-EXT are on L:, date added to the LDL, and its state before Nov 9. Opens in Excel.</td></tr>
+<tr><td><code>nojh-states-before-inactive-2026-11-09.csv</code></td><td>Fedora's state for every nojh object, and every datastream, just before the change</td></tr>
+<tr><td><code>nojh-inactive-log-2026-11-09.csv</code></td><td>The result for each of the 6,876 records changed on Nov 9</td></tr>
+<tr><td><code>nojh_hide_2026-11-09.py</code></td><td>The script that hid them</td></tr>
+<tr><td><code>nojh_restore.py</code></td><td>The script that brings them back (below)</td></tr>
+</tbody>
+</table>
+<p>On L:, the MODS and RELS-EXT for all 6,857 items are in <code>L:\LDL1-datastreams\The New Orleans Jazz &amp; Heritage Foundation Archive\&lt;collection&gt;\Data\MODS\</code> and <code>\RDF\</code>, and the accounting CSVs are in <code>L:\LDL1-accounting\The New Orleans Jazz &amp; Heritage Foundation Archive\</code>. The link files themselves weren't downloaded, but every link is in the records CSV.</p>
+HTML),
+  $text(NULL, <<<'HTML'
+<p><strong>After Fedora is retired.</strong> The hidden records stay in Fedora only until it's switched off after the migration. From then on, the records CSV and the files on L: are the only copy, so keep them.</p>
+HTML, 'callout'),
+  $text('Bring them back in the LDL', <<<'HTML'
+<ol>
+<li>Have new links first. Restoring the records as they are would bring back the dead links, so get the foundation's new links, or re-harvest the records from its new site.</li>
+<li>Open the tunnel to Fedora, as for downloads from Fedora.</li>
+<li>From the islandora-exporter folder, do a dry run. It lists what it would restore and changes nothing. Add <code>--collection</code> with a collection PID to restore one collection only.</li>
+<li>Run it again with <code>--apply</code>. For each record it sets the state back to Active, then reindexes it so it returns to search. Collections go first. The 3 collections that were already Inactive stay that way.</li>
+<li>Check <code>nojh-restore-log.csv</code> in the reports folder: every row should show 200 and 200. Then search the site for a few titles. A rerun skips records already restored.</li>
+</ol>
+HTML),
+  $code('Restore commands', <<<'HTML'
+.\.venv\Scripts\Activate.ps1
+python reports\nojh_restore.py
+python reports\nojh_restore.py --collection nojh-27114:collection
+python reports\nojh_restore.py --apply
+HTML),
+  $text('Put them in Quartex later', <<<'HTML'
+<ol>
+<li>Get the foundation's new link for each record. The old site's ID is at the end of each old link (for example <code>islandora:51696</code>), which may help match old to new. Titles are in the records CSV.</li>
+<li>Agree with Adam Matthew how Quartex should hold records whose content lives on another site.</li>
+<li>Use the files already on L: for the metadata: the MODS has the description, and the RELS-EXT and the records CSV give each item's collection. They don't need exporting again.</li>
+<li>Supply the new links alongside, from the records CSV with the old links swapped out.</li>
+</ol>
 HTML),
 ]);
 
