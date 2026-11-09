@@ -31,10 +31,10 @@
 // light swatches; on dark ones with a little black ($pf-reading-chrome-*),
 // so it reads as a quiet layer just under the page.
 //
-// Contrast, measured (normal text, WCAG AA 4.5:1; Soft cream, Lavender and
+// Contrast, measured (normal text, WCAG AA 4.5:1; Cream, Lavender and
 // Dusk are the deliberately soft ones, closest to the minimum):
-//   cream    text 13.1  muted 6.4  accent 11.1
-//   soft     text  5.3  muted 5.1  accent 11.1   (light grey on cream)
+//   cream    text  5.3  muted 5.1  accent 11.1   (light grey on cream;
+//                                                 highlight 10.0)
 //   lavender text  5.5  muted 5.0  accent 11.1   (muted LSU purple on cream)
 //   sepia    text  7.5  muted 5.5  accent  7.0
 //   sage     text  7.7  muted 5.4  accent  6.5
@@ -104,17 +104,15 @@ $pf-reading-themes: (
     // cream gold (13.6:1).
     hover: #d4c9dc, link-hover: #fbf1d6,
   ),
+  // Cream (2026-11-09): Soft cream's greys took over; the two were near
+  // twins. Warm ink, not purple, for the highlight (hero title, Quick Start
+  // letters, index numbers): purple stays on what can be clicked (buttons,
+  // links, focus).
   'cream': (
     label: 'Cream', dark: false,
-    bg: #f7f4ec, fg: #2b2a28, heading: #1f1e1c, muted: #595959, rule: #e2ddd1,
-    surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7a7772, panel-muted: #505050,
-  ),
-  'soft': (
-    label: 'Soft cream', dark: false,
     bg: #f7f4ec, fg: #676561, heading: #3d3c39, muted: #696763, rule: #e2ddd1,
     surface: #efebe1, accent: $pf-purple, accent-soft: #ebe4f0,
-    scroll: #7f7c77, panel-muted: #514f4c,
+    scroll: #7f7c77, panel-muted: #514f4c, highlight: #3d3c39,
   ),
   'lavender': (
     label: 'Lavender', dark: false,
@@ -407,7 +405,7 @@ $pf-reading-lead-glass-dark-hero: 55% !default;
   // title, the index rules' numbers and the Quick Start's letters
   // (_landing-features.scss). A swatch's highlight key, else its title
   // color (Twilight's pale gold, Material's green), else its accent, so
-  // every swatch has one (Cream: LSU purple).
+  // every swatch has one (Cream sets warm ink).
   $highlight: map.get($t, accent);
   @if map.has-key($t, highlight) {
     $highlight: map.get($t, highlight);

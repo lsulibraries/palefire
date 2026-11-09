@@ -4561,7 +4561,7 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 // under the labels, from 1100 to 1920 wide, on the current lead picture, where
 // 80% (the default) would not hold or more can go. A new picture may need
 // measuring again.
-@each $theme, $strength in ("night": 72%, "twilight": 76%, "forest": 82%, "midnight": 83%, "cocoa": 85%, "sage": 85%, "sepia": 85%, "soft": 88%, "dusk": 92%, "lavender": 98%) {
+@each $theme, $strength in ("night": 72%, "twilight": 76%, "forest": 82%, "midnight": 83%, "cocoa": 85%, "sage": 85%, "sepia": 85%, "cream": 88%, "dusk": 92%, "lavender": 98%) {
   html[data-pf-theme="#{$theme}"] {
     --pf-hl-label-strength: #{$strength};
   }

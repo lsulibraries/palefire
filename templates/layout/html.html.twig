@@ -87,8 +87,8 @@
         ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'].forEach(function (k) {
           if (s[k]) { h.classList.add('pf-a11y-' + k); }
         });
-        var t = s.theme || (s.dark ? 'night' : '');
-        if (/^(twilight|cream|soft|lavender|sepia|sage|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
+        var t = s.theme === 'soft' ? 'cream' : (s.theme || (s.dark ? 'night' : ''));
+        if (/^(twilight|cream|lavender|sepia|sage|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
           h.setAttribute('data-pf-theme', t);
           if (/^(twilight|dusk|night|solarized|cocoa|forest|midnight|material)$/.test(t)) {
             h.classList.add('pf-reading-dark');

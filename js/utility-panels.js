@@ -170,7 +170,7 @@
   const SWITCHES = ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'];
   // Reading colors (_reading-themes.scss), in the drawer's order. See
   // DEFAULT_THEME and DARK_THEMES.
-  const THEMES = ['twilight', 'material', 'cocoa', 'forest', 'dusk', 'night', 'midnight', 'solarized', 'cream', 'soft', 'lavender', 'sepia', 'sage'];
+  const THEMES = ['twilight', 'material', 'cocoa', 'forest', 'dusk', 'night', 'midnight', 'solarized', 'cream', 'lavender', 'sepia', 'sage'];
   const DARK_THEMES = ['twilight', 'dusk', 'night', 'solarized', 'cocoa', 'forest', 'midnight', 'material'];
   // What every page opens in (html.html.twig sets it on <html>). Not saved:
   // only a different choice is.
@@ -192,6 +192,10 @@
         settings.theme = 'night';
       }
       delete settings.dark;
+    }
+    // Soft cream merged into Cream (2026-11-09).
+    if (settings.theme === 'soft') {
+      settings.theme = 'cream';
     }
     return settings;
   }

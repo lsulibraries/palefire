@@ -1030,11 +1030,12 @@ landing, the map and the calendar read those.
   hovers to lilac `#d4c9dc` / cream gold `#fbf1d6`. `html.html.twig` puts it on
   `<html>` before any script runs; the default is never saved.
 - **Others:** Material, Cocoa, Forest, Dusk, Night, Midnight, Solarized (dark),
-  Cream, Soft cream, Lavender, Sepia, Sage (light). The first four show, the
+  Cream, Lavender, Sepia, Sage (light). The first four show, the
   rest behind "More colors". Every swatch keeps text, muted text and links at
   4.5:1 or more, including on glass over a video.
 - Optional swatch keys: `title`, `strong`, `em` (multicolor, as Material),
-  `chrome`, `hover`, `link-hover`.
+  `highlight` (hero title, Quick Start letters, index numbers; Cream sets
+  warm ink), `chrome`, `hover`, `link-hover`.
 - **To add a swatch:** an entry in `$pf-reading-themes`, its key in
   `reading_themes` (`utility-panels.html.twig`), `THEMES` (`utility-panels.js`)
   and the pattern in `html.html.twig`; dark ones in `DARK_THEMES` too.
@@ -1182,6 +1183,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-09:** Soft cream merged into Cream. Cream now has Soft cream's warm greys (text 5.3:1, muted 5.1:1), and its highlight (the hero title, Quick Start A/B/C letters and index numbers) is the warm heading ink `#3d3c39` (10.0:1), not LSU purple. Purple stays on buttons, links and focus rings. A saved `soft` choice moves to `cream` (`html.html.twig`, `utility-panels.js`). Why: the two swatches were near twins, and a page called "cream" was mostly purple.
 - **2026-11-09:** Quick Start Guide: the step panels show only the screenshot of where to click. The sign-in page (Click Request Item) and the duplication form's Order Information (Switch to duplication) are gone, and the control to click in the remaining shots (the Request Item links, the Switch to Duplication Order Form button) is ringed in gold with a dark edge, drawn in as the panel opens (still with reduced motion). "Read it at Hill" now links to a new Reading Room page: `scripts/palefire_location_reading_room.php` fills the Reading Room room term (Open to all, Research account, Materials stay in the room, Pencils only, Bags in a locker, Photos allowed, No flash, No food or drink; sound Quiet) and makes an unpublished Modular page at `/v2/special/readingroom` laid out as the Lecture Hall's (Location with a Book a visit button to the request system, Hours and directions, House rules, Book a visit). Checked the rings in Edge at 1440 and 510px. Why: the extra screenshots buried the one that matters, and the last step of option A had nowhere to go.
 - **2026-11-09:** Building map tooltips cast the ledger's long, low shadow, so the label lifts just off the page: barely there on the plain map (18%) and stronger over a room's photo (40%), where the hairline edge alone got lost. It fades with the label; the pointer has none. Checked on the live landing map with local CSS in Twilight. Why: over the photos the panel and the room behind it ran together.
 - **2026-11-09:** Room photos on light swatches: the photo behind the landing map and behind a room page's top now shows on Cream, Soft cream, Lavender, Sepia and Sage too, as a faint print under an 85% veil of the page colour, so no pixel is darker than 85% of the paper (a brightness floor, the light twin of the dark swatches' grey-64 ceiling). Over a photo, grey text and the floor ink are darkened 60% toward the heading colour and body text takes the heading colour. Also fixes the dimmed room names on light swatches, which were 3.1–4.3:1 even without a photo (now dimmed to 90%). Checked on the live page with local CSS in every light swatch: lowest 4.59:1 (Sage), Twilight unchanged. Why: the room's character should come through whichever reading colour is chosen.
