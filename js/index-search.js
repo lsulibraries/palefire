@@ -24,6 +24,8 @@
  *   a preference: without storage or this file, the page's own order stands.
  * - A cover that fails, or a host's 1px "no cover" stand-in, gives its width
  *   back to the row's text.
+ * - A holdings table's Call number and Status headings sort the items under
+ *   each library, which keeps its place: ascending, then descending.
  * - A paged list gets a Show more results button, which adds the next page under
  *   the rows it has. It's only ever on request: a list that grew by itself would
  *   keep the footer out of reach. The pager stays, for jumping ahead.
@@ -672,9 +674,55 @@
     });
   };
 
+  // Holdings: the items under each library, in the order of the pressed
+  // column. Ties keep the catalog's order.
+  const collator = new Intl.Collator(document.documentElement.lang || undefined, { numeric: true, sensitivity: 'base' });
+  const sortHoldings = (event) => {
+    const button = event.target.closest('[data-pf-index-sort]');
+    if (!button) {
+      return;
+    }
+    const heading = button.closest('th');
+    const table = heading.closest('table');
+    const direction = heading.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+    table.querySelectorAll('th[aria-sort]').forEach((cell) => cell.removeAttribute('aria-sort'));
+    heading.setAttribute('aria-sort', direction);
+    const sign = direction === 'ascending' ? 1 : -1;
+    const text = (row, selector) => row.querySelector(selector)?.textContent.trim() || '';
+    const compare = button.dataset.pfIndexSort === 'status'
+      ? (a, b) => (b.dataset.pfIndexAvailable - a.dataset.pfIndexAvailable) || collator.compare(text(a, '.pf-index-row__item-status'), text(b, '.pf-index-row__item-status'))
+      : (a, b) => collator.compare(text(a, '.pf-index-row__item-call'), text(b, '.pf-index-row__item-call'));
+    table.querySelectorAll('tbody').forEach((body) => {
+      let run = [];
+      const flush = () => {
+        if (run.length > 1) {
+          const after = run[run.length - 1].nextElementSibling;
+          run.sort((a, b) => sign * compare(a, b) || a.dataset.pfIndexOrder - b.dataset.pfIndexOrder)
+            .forEach((row) => (after ? after.before(row) : body.append(row)));
+        }
+        run = [];
+      };
+      [...body.children].forEach((row) => {
+        if (row.classList.contains('pf-index-row__copy-item')) {
+          row.dataset.pfIndexOrder ??= String(run.length);
+          run.push(row);
+        }
+        else {
+          flush();
+        }
+      });
+      flush();
+    });
+    Drupal.announce(Drupal.t('Sorted by @column, @direction, within each library.', {
+      '@column': text(heading, '.pf-index-row__th-text'),
+      '@direction': direction === 'ascending' ? Drupal.t('ascending') : Drupal.t('descending'),
+    }));
+  };
+
   Drupal.behaviors.palefireIndexSearch = {
     attach(context) {
       once('pf-index-states', 'html').forEach(pageStates);
+      once('pf-index-sort', 'html').forEach(() => document.addEventListener('click', sortHoldings));
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);

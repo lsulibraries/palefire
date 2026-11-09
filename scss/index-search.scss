@@ -1964,6 +1964,12 @@
     color: var(--pf-index-muted);
   }
 
+  // A sortable heading: the words alone while stacked (the headings are for
+  // screen readers then), a button once the table has its columns.
+  .pf-index-row__sort {
+    display: none;
+  }
+
   // A box's shelf, said again under its shelf's row. Stacked, each would take
   // a labelled line saying what the row above says, so it's left out.
   td.pf-index-row__item-same {
@@ -1994,6 +2000,60 @@
 
     td.pf-index-row__item-same {
       display: table-cell;
+    }
+
+    .pf-index-row__th-text:has(+ .pf-index-row__sort) {
+      display: none;
+    }
+
+    .pf-index-row__sort {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      min-height: 1.5rem;
+      margin-block: -.25rem;
+      padding: .25rem 0;
+      border: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-align: start;
+      text-transform: inherit;
+      cursor: pointer;
+
+      @include pf-index-motion {
+        transition: color .2s var(--pf-index-ease);
+      }
+
+      &:hover {
+        color: var(--pf-index-fg);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--pf-index-fg);
+        outline-offset: 2px;
+      }
+    }
+
+    [aria-sort] > .pf-index-row__sort {
+      color: var(--pf-index-fg);
+    }
+
+    // Both ways faint until a column is sorted, then the one it goes.
+    .pf-index-row__sort-icon {
+      flex: none;
+      width: .875rem;
+      height: .875rem;
+
+      path {
+        opacity: .35;
+      }
+    }
+
+    [aria-sort="ascending"] .pf-index-row__sort-up,
+    [aria-sort="descending"] .pf-index-row__sort-down {
+      opacity: 1;
     }
 
     thead {

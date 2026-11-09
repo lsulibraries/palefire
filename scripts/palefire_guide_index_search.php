@@ -272,6 +272,7 @@ HTML),
 <li>The reading room note's How requests work link opens in a new tab, with an arrow, so the search results stay open.</li>
 <li>Item rows in a holdings table now repeat their library, shelf and material type in a lighter color, so the table matches the catalog's. Full record became a larger link, Full record in the catalog.</li>
 <li>The reading room note moved under the Special Collections row it describes, with an information icon.</li>
+<li>Call number and Status can sort a holdings table, as in the catalog, but only within each library, so the libraries stay together.</li>
 </ul>
 HTML),
 ]);
