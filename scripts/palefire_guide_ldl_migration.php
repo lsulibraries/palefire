@@ -379,7 +379,8 @@ HTML),
 HTML),
   $text('Mon Nov 9: Status check', <<<'HTML'
 <ul>
-<li>The Louisiana Newspapers run stopped at 9:10 AM, with nothing left running, for a reason not yet known. It was restarted at 10:04 and was downloading again within minutes.</li>
+<li>The Louisiana Newspapers run stopped at about 9:11 AM, when the PC had to be restarted. It was started again at 9:50, with Loyola set to follow in the same window, and was downloading again within minutes.</li>
+<li>From about 10:00 AM, the run couldn't write its log on L: after a brief drop in the connection to the network share, so every log line printed an error on screen. Downloads weren't affected, and the copy of the log kept on the export PC has everything. v2.33 reopens the log file when this happens.</li>
 <li>At 10:18 AM, 86% was downloaded by size and 85% by files, with nothing left to download at 31 of 39 institutions.</li>
 <li>Louisiana Newspapers had 5,523 images left, 4,446 of them in St Bernard Parish Newspapers, then its text files and PDFs. Loyola is next.</li>
 <li>At the LDL team's request, all 6,880 New Orleans Jazz &amp; Heritage records were hidden from the LDL, because their links to the foundation's old site are dead. Each was set Inactive in Fedora and taken out of search, with no failures. Nothing was deleted, and the records can be brought back: see Hidden New Orleans Jazz &amp; Heritage records.</li>
@@ -980,6 +981,7 @@ $section('Exporter changes this phase', [
 <tr><td>v2.30</td><td>Nov 5, 11:45</td><td><strong>Empty text files aren't exported.</strong> An OCR, HOCR or FULL_TEXT download that comes back with nothing in it isn't saved, and it counts as done. Steps <code>0-empty-list</code> and <code>0-empty-move</code> move the ones already on L: to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export.</td></tr>
 <tr><td>v2.31</td><td>Nov 5, 13:55</td><td><strong>Fewer downloads at once when connections drop.</strong> <code>--workers</code> is now the most that run at once. When 5 downloads in a row lose their connection, the exporter halves the number running, down to 2, and pauses 30 seconds. After 20 successful downloads it adds one back. These pauses now stop at 2 minutes instead of 10. Firewall blocks still pause for up to 10 minutes.</td></tr>
 <tr><td>v2.32</td><td>Nov 6, 12:05</td><td><strong>Files confirmed empty in Fedora are set aside.</strong> Steps <code>0-empty-list</code> and <code>0-empty-move</code> also cover files on a short hand-checked list, moving them to <code>L:\LDL1-datastreams\_empty_other\</code>. Later steps don't ask for them again, and manifests leave them out. Other empty files stay until they've been checked. The first on the list is the empty Amistad recording.</td></tr>
+<tr><td>v2.33</td><td>Nov 9, 12:45</td><td><strong>Run logs survive a drop in the connection to L:.</strong> When a write to the log file fails, the exporter reopens the file and tries again, instead of printing an error for every line. If L: is still unreachable, it prints one short note at most every 5 minutes and keeps downloading.</td></tr>
 </tbody>
 </table>
 HTML),
