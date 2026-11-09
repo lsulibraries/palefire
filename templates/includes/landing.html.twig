@@ -632,6 +632,8 @@
           {% set tab_copy = {
             study: {
               title: 'Quiet Study'|t,
+              photo_caption: 'Second floor · Hill Memorial Library'|t,
+              photo_link: 'Hours and directions'|t,
               intro: 'A quiet room at Hill for reading, writing and research with your own work, apart from the Reading Room.'|t,
               notes_title: 'Good to know'|t,
               notes: [
@@ -658,6 +660,16 @@
               ],
             },
           } %}
+          {# A tab's room photo (quick_tabs.photos, _palefire_tab_photos()), as a
+             framed print linking on to the tab rule's page, with its caption. #}
+          {% set tab_photos = {} %}
+          {% for tab_id, photo in quick_tabs.photos ?? {} %}
+            {% set tab_photos = tab_photos|merge({ (tab_id): photo|merge({
+              url: tab_links[tab_id].url ?? null,
+              caption: tab_copy[tab_id].photo_caption ?? null,
+              link: (tab_links[tab_id].url ?? false) ? (tab_copy[tab_id].photo_link ?? null) : null,
+            }) }) %}
+          {% endfor %}
           {% set tab_asides = {} %}
           {% for tab in quick_tabs.tabs|filter(tab => not tab.quick) %}
             {% set copy = tab_copy[tab.id] ?? { title: tab.label } %}
@@ -681,7 +693,7 @@
             {% endset %}
             {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot } }) %}
           {% endfor %}
-          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, backdrops: quick_tabs.backdrops ?? {} } only %}
+          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos } only %}
         {% else %}
           {{ quick_body }}
         {% endif %}

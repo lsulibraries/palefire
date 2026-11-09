@@ -593,134 +593,143 @@ html.pf-a11y-contrast {
   }
 }
 
-// Photo behind a panel (has-backdrop, --pf-tabs-backdrop: includes/
-// section-tabs.html.twig, _palefire_tab_backdrops()). The hero's Study tab
-// shows the Quiet Study room; other tabs can take a room the same way.
-// The room's photo, in colour, under the swatch's photo veil
-// (--pf-photo-veil, _reading-themes.scss), as behind a room's own page
-// (_location.scss): on dark swatches no pixel is lighter than grey 64, on
-// light ones none darker than 85% of the page, so text keeps 4.5:1 over
-// it with greys moved toward the heading colour (--pf-photo-muted) and, on
-// light swatches, body text in the heading colour. It runs out to the
-// section's padding (nothing scrolls sideways) and fades into the band on
-// every side, so the tab bar and the band's edges stay plain. It enters
-// and leaves with its panel (the panel's slide and fade), and the browser
-// fetches it only when the panel shows. The tab's blocks sit on frosted
-// glass. A lead list of short facts (each item opening with a bold term)
-// reads as a row of columns. More contrast and forced colors keep the
-// plain band.
-html[data-pf-theme] .pf-tabs__panel.has-backdrop {
-  position: relative;
-  isolation: isolate;
+// A room's photo in a panel (photos: includes/section-tabs.html.twig,
+// _palefire_tab_photos()): the hero's Study tab prints the Quiet Study room
+// over the tab's blocks, as a framed print. The photo in its own colours at
+// 3:2 (cropped to fill, the width and height set, so nothing shifts while
+// it loads), a hairline frame standing 6px off it, and a mono caption under
+// it: where the room is, and on the right the link on to its page, which
+// is the whole print. Pointing at it or focusing it, the photo eases in by
+// 3.5% over 1.4s and the link turns the accent; no zoom with reduced
+// motion. The image is lazy, so it loads once the panel shows. Other tabs
+// can take a room the same way.
+.pf-tabs__print {
+  display: block;
+  max-width: 48rem; // where the panel stacks (under 64rem), not a wall of photo
+  margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  color: inherit;
+  text-decoration: none;
 
-  &::before {
-    position: absolute;
-    inset: 0 calc(-1 * var(--pf-section-pad-inline, 0px)) -2rem;
-    z-index: -1;
-    pointer-events: none;
-    content: "";
-    background:
-      linear-gradient(var(--pf-photo-veil), var(--pf-photo-veil)),
-      var(--pf-tabs-backdrop) center 40% / cover no-repeat;
-    -webkit-mask-image:
-      linear-gradient(transparent, #000 6rem, #000 calc(100% - 6rem), transparent),
-      linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(transparent, #000 6rem, #000 calc(100% - 6rem), transparent),
-      linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    mask-composite: intersect;
+  &:focus-visible {
+    outline: 3px solid var(--pf-focus-color);
+    outline-offset: .75rem;
+  }
+}
+
+.pf-tabs__print-frame {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  outline: 1px solid #{$pf-hairline};
+  outline-offset: 6px;
+  background: var(--pf-band, var(--pf-g-surface, var(--bs-secondary-bg)));
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.4s cubic-bezier(.2, .7, .2, 1);
+  }
+}
+
+.pf-tabs__print-caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .25rem 1rem;
+  margin-top: 1.125rem;
+  font-family: var(--bs-font-monospace);
+  font-size: var(--pf-mono-label, .75rem);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--pf-g-muted, var(--bs-secondary-color));
+}
+
+.pf-tabs__print-link {
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+  transition: color .3s ease;
+}
+
+@media (hover: hover) {
+  a.pf-tabs__print:hover {
+    img { transform: scale(1.035); }
+    .pf-tabs__print-link { color: var(--pf-g-accent, var(--bs-link-color)); }
+  }
+}
+
+a.pf-tabs__print:focus-visible {
+  img { transform: scale(1.035); }
+  .pf-tabs__print-link { color: var(--pf-g-accent, var(--bs-link-color)); }
+}
+
+// The facts under the print: a lead list in the tab's text whose items each
+// open with a bold term reads as a row of columns between hairlines, the
+// term on its own line, from 30rem of the column; stacked below. The text
+// runs as wide as the print, its paragraphs kept to the reading measure.
+.pf-tabs__panel.has-print .pf-guide-prose {
+  max-width: none;
+
+  p {
+    max-width: 42rem;
+  }
+}
+
+.pf-tabs__panel.has-print .pf-guide-prose ul:first-child {
+  display: grid;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border-top: 1px solid #{$pf-hairline};
+
+  > li {
+    margin: 0;
+    padding-block: .875rem;
+    color: var(--pf-g-muted, var(--bs-secondary-color));
+    list-style-type: "\200B";
+
+    &::marker {
+      content: "";
+    }
   }
 
-  :is(.pf-index-rule__label, .pf-quick-guide__intro, .pf-quick-guide__visit-title, .pf-quick-guide__visit li) {
-    color: var(--pf-photo-muted);
+  > li + li {
+    border-top: 1px solid #{$pf-hairline};
   }
 
-  .pf-tabs__content {
-    align-self: start;
-    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
-    border: 1px solid #{$pf-hairline};
-    background: color-mix(in srgb, var(--pf-band, var(--pf-g-bg)) 55%, transparent);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+  strong {
+    display: block;
+    color: var(--pf-g-heading, var(--bs-emphasis-color));
+    font-size: 1.0625rem;
+    font-weight: 600;
   }
+}
 
-  // The facts: a row of columns, each under a hairline, the bold term on
-  // its own line; stacked where the glass is narrow.
-  .pf-guide-prose ul:first-child {
-    display: grid;
-    margin: 0 0 1.5rem;
-    padding: 0;
+@container pf-tab-content (min-width: 30rem) {
+  .pf-tabs__panel.has-print .pf-guide-prose ul:first-child {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
 
     > li {
-      margin: 0;
-      padding-block: .875rem;
-      border-top: 1px solid #{$pf-hairline};
-      color: var(--pf-photo-muted);
-      list-style-type: "\200B";
-
-      &::marker {
-        content: "";
-      }
+      padding: 1rem 1rem 0 0;
     }
 
-    // The glass's own edge is the first line.
-    > li:first-child {
-      padding-top: 0;
+    > li + li {
+      padding-inline-start: 1rem;
       border-top: 0;
-    }
-
-    strong {
-      display: block;
-      color: var(--pf-g-heading, inherit);
-      font-size: 1.0625rem;
-      font-weight: 600;
-    }
-  }
-
-  @container pf-tab-content (min-width: 30rem) {
-    .pf-guide-prose ul:first-child {
-      grid-auto-columns: minmax(0, 1fr);
-      grid-auto-flow: column;
-
-      > li {
-        padding: 0 1rem 0 0;
-        border-top: 0;
-      }
-
-      > li + li {
-        padding-inline-start: 1rem;
-        border-inline-start: 1px solid #{$pf-hairline};
-      }
+      border-inline-start: 1px solid #{$pf-hairline};
     }
   }
 }
 
-// Light swatches: the text over the photo in the heading colour.
-html[data-pf-theme]:not(.pf-reading-dark) .pf-tabs__panel.has-backdrop :is(.pf-quick-guide__title, .pf-tabs__content) {
-  color: var(--pf-g-heading);
-}
-
-@mixin pf-tabs-backdrop-off {
-  .pf-tabs__panel.has-backdrop {
-    &::before {
-      content: none;
-    }
-
-    .pf-tabs__content {
-      background: none;
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .pf-tabs__print-frame img {
+    transition: none;
+    transform: none !important; // stylelint-disable-line declaration-no-important
   }
 }
 
-html[data-pf-theme].pf-a11y-contrast {
-  @include pf-tabs-backdrop-off;
-}
-
-@media (prefers-contrast: more), (forced-colors: active) {
-  html[data-pf-theme] {
-    @include pf-tabs-backdrop-off;
-  }
+html.pf-a11y-motion .pf-tabs__print-frame img {
+  transition: none;
+  transform: none !important; // stylelint-disable-line declaration-no-important
 }

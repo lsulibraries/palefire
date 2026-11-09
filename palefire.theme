@@ -493,7 +493,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $variables['quick_tabs'] = [
         'tabs' => $tab_variables['tabs'],
         'label' => $tab_variables['tabs_label'],
-        'backdrops' => _palefire_tab_backdrops($tab_variables['tabs'], $variables),
+        'photos' => _palefire_tab_photos($tab_variables['tabs'], $variables),
       ];
     }
     $host = $paragraph;
@@ -1924,23 +1924,26 @@ function _palefire_location_backdrop(TermInterface $room, array $photos, Cacheab
 }
 
 /**
- * Room photos behind the hero's tab panels: URLs by tab id.
+ * Room photos for the hero's tabs: by tab id, src, width, height and alt.
  *
- * A tab whose id is listed below shows that room's photo behind its panel
- * (the room term's photo in pf_location_backdrop, as behind the room's own
- * page, _palefire_location_backdrop()), under the swatch's photo veil
- * (_section-tabs.scss). A tab without a room, or a room without a photo,
- * keeps the plain band. To give another tab a photo, add its id and room.
+ * A tab whose id is listed below shows that room's photo in its panel, a
+ * framed print over the tab's blocks (includes/section-tabs.html.twig,
+ * _section-tabs.scss): the room term's photo (field_space_media) in
+ * pf_location_backdrop, the one behind the room's own page. A tab without a
+ * room, or a room without a photo, keeps its blocks alone. To give another
+ * tab a photo, add its id and room.
  */
-function _palefire_tab_backdrops(array $tabs, array &$variables): array {
+function _palefire_tab_photos(array $tabs, array &$variables): array {
   $rooms = [
     'study' => 'hill_memorial.quiet_study',
   ];
   $wanted = array_intersect_key($rooms, array_flip(array_column($tabs, 'id')));
-  if (!$wanted) {
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
+  if (!$wanted || !$style) {
     return [];
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
+  $cache->addCacheableDependency($style);
   // A room added or given a photo later redraws the hero.
   $cache->addCacheTags(['taxonomy_term_list:building_space']);
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
@@ -1953,19 +1956,32 @@ function _palefire_tab_backdrops(array $tabs, array &$variables): array {
   foreach ($storage->loadMultiple($ids) as $room) {
     $by_key[(string) $room->get('field_map_key')->value] = $room;
   }
-  $backdrops = [];
+  $photos = [];
   foreach ($wanted as $tab_id => $key) {
     $room = $by_key[$key] ?? NULL;
-    if ($room instanceof TermInterface) {
-      $cache->addCacheableDependency($room);
-      $url = _palefire_location_backdrop($room, [], $cache);
-      if ($url !== '') {
-        $backdrops[$tab_id] = $url;
-      }
+    if (!$room instanceof TermInterface || !$room->hasField('field_space_media')) {
+      continue;
     }
+    $cache->addCacheableDependency($room);
+    $ref = $room->get('field_space_media')->first();
+    $item = $ref ? _palefire_media_image_item($ref, $cache) : NULL;
+    $file = $item?->entity;
+    if (!$file instanceof FileInterface) {
+      continue;
+    }
+    $cache->addCacheableDependency($file);
+    $uri = $file->getFileUri();
+    $dimensions = ['width' => (int) $item->width ?: NULL, 'height' => (int) $item->height ?: NULL];
+    $style->transformDimensions($dimensions, $uri);
+    $photos[$tab_id] = [
+      'src' => \Drupal::service('file_url_generator')->transformRelative($style->buildUrl($uri)),
+      'width' => (int) ($dimensions['width'] ?? 1920),
+      'height' => (int) ($dimensions['height'] ?? 1440),
+      'alt' => (string) $item->alt,
+    ];
   }
   $cache->applyTo($variables);
-  return $backdrops;
+  return $photos;
 }
 
 /**

@@ -4,11 +4,11 @@
  * @file
  * The Special Collections homepage's Study tab: its text as three facts.
  *
- * The tab's panel now has the Quiet Study room's photo behind it, and its
- * text on frosted glass (_section-tabs.scss). The hero's first column
- * already says what the room is, so the tab's opening sentence goes, the
- * three facts lead (a row of columns over the photo), and the link is
- * shorter.
+ * The tab's panel prints the Quiet Study room's photo over its text, a
+ * framed print that links to the room's page (_section-tabs.scss). The
+ * hero's first column already says what the room is and the photo carries
+ * the link, so the tab's opening sentence and its link go, and the three
+ * facts (a row of columns under the photo) lead.
  *
  * From the theme folder:
  *   drush php:script scripts/palefire_section_tabs_study_facts.php
@@ -18,8 +18,9 @@
  * A dry run unless apply=1. Optional: page=<alias> (default /v2/special).
  *
  * It changes the text only while it is still the text that
- * palefire_section_tabs_special.php wrote (spacing aside): text an editor
- * has changed is reported and left as it is. It stops, saving nothing, when
+ * palefire_section_tabs_special.php wrote, or the earlier version of this
+ * script's (2026-11-09, the facts with their own link), spacing aside: text
+ * an editor has changed is reported and left as it is. It stops, saving nothing, when
  * the page has a newer draft than its published revision.
  */
 
@@ -41,7 +42,8 @@ foreach ((isset($extra) && is_array($extra)) ? $extra : [] as $arg) {
 $apply = ($args['apply'] ?? '') === '1';
 $alias = '/' . trim($args['page'] ?? '/v2/special', '/');
 
-$old = <<<'HTML'
+$olds = [];
+$olds[] = <<<'HTML'
 <p>Hill Memorial Library has a Quiet Study room, open to everyone whenever the building is open. No request or appointment needed to study with your own work.</p>
 <ul>
 <li><strong>Open to all.</strong> LSU or not.</li>
@@ -52,15 +54,16 @@ $old = <<<'HTML'
 <p><a href="/v2/special/quietstudy">The Quiet Study room: hours and directions</a></p>
 HTML;
 
-$new = <<<'HTML'
+$facts = <<<'HTML'
 <ul>
 <li><strong>Open to all.</strong> LSU or not. No request or appointment.</li>
 <li><strong>Quiet.</strong> Keep conversations and calls outside.</li>
 <li><strong>No food or drink.</strong> Both are welcome in the first-floor lobby.</li>
 </ul>
 <p>[Editor: seats, Wi-Fi, outlets and lighting, once confirmed with Hill staff.]</p>
-<p><a href="/v2/special/quietstudy">Quiet Study hours and directions</a></p>
 HTML;
+$olds[] = $facts . "\n" . '<p><a href="/v2/special/quietstudy">Quiet Study hours and directions</a></p>';
+$new = $facts;
 
 $same = static fn (string $a, string $b): bool => preg_replace('/\s+/', ' ', trim($a)) === preg_replace('/\s+/', ' ', trim($b));
 
@@ -107,12 +110,12 @@ if ($same($body, $new)) {
   echo 'The Study tab already has the three facts. Nothing to do.' . PHP_EOL;
   return;
 }
-if (!$same($body, $old)) {
-  echo 'The Study tab\'s text has been edited since it was set up, so it is left as it is. To get the row of facts over the photo, start the text with a list whose items each open with a bold term:' . PHP_EOL . PHP_EOL . $new . PHP_EOL;
+if (!array_filter($olds, static fn (string $old): bool => $same($body, $old))) {
+  echo 'The Study tab\'s text has been edited since it was set up, so it is left as it is. To get the row of facts under the photo, start the text with a list whose items each open with a bold term:' . PHP_EOL . PHP_EOL . $new . PHP_EOL;
   return;
 }
 
-echo ($apply ? '' : '[dry run] ') . 'Study tab: drop the opening sentence (the hero says it), lead with the three facts, shorten the link.' . PHP_EOL;
+echo ($apply ? '' : '[dry run] ') . 'Study tab: the three facts and the editor note only (the hero says what the room is; the photo links to its page).' . PHP_EOL;
 if (!$apply) {
   echo 'Dry run: nothing saved. Run again with apply=1 to save.' . PHP_EOL;
   return;
@@ -123,6 +126,6 @@ foreach ([$block, $tab, $section] as $paragraph) {
   $paragraph->setNeedsSave(TRUE);
 }
 $node->setNewRevision(TRUE);
-$node->setRevisionLogMessage('Study tab: three facts over the Quiet Study photo (palefire_section_tabs_study_facts.php).');
+$node->setRevisionLogMessage('Study tab: three facts under the Quiet Study photo (palefire_section_tabs_study_facts.php).');
 $node->save();
 echo "Saved a new revision of \"{$node->label()}\". Run: drush cr" . PHP_EOL;
