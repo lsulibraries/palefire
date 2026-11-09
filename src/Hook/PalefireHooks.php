@@ -789,7 +789,9 @@ class PalefireHooks {
       'title_style' => $title_style,
       'credit' => $text('field_exhibit_credit'),
       'intro' => $text('field_intro'),
-      'prompt' => self::stringValue($node, 'field_exhibit_prompt') ?: (string) $this->t('Scroll through every gallery in order, or choose one from the table of contents.'),
+      // An editor's own line only: Begin, Contents and the Scroll cue say
+      // what the old default did.
+      'prompt' => self::stringValue($node, 'field_exhibit_prompt'),
       // Optional tiles under the credit.
       'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
       'physical' => self::stringValue($node, 'field_exhibit_physical_note') ?: NULL,

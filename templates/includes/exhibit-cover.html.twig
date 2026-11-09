@@ -9,7 +9,8 @@
  * - title_style: "serif" (Playfair Display) or "sans" (the site's display
  *   sans), from the Exhibition title style field.
  * - credit, intro: render arrays or NULL.
- * - prompt: the line that points at the table of contents.
+ * - prompt: the Exhibition prompt field's line over the buttons, or '' (no
+ *   line; the buttons and the Scroll cue speak for themselves).
  * - year, physical: optional tiles under the credit: the exhibition's year,
  *   and a note on the physical exhibition, behind FA Pro's light treasure
  *   chest (a word where the server has no FA Pro files). The note is a
@@ -100,10 +101,12 @@
       </dl>
     {% endif %}
     <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 5">
-      <p class="pf-exhibit-cover__prompt-text">
-        <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
-        {{ head.prompt }}
-      </p>
+      {% if head.prompt %}
+        <p class="pf-exhibit-cover__prompt-text">
+          <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
+          {{ head.prompt }}
+        </p>
+      {% endif %}
       {% if head.action %}
         <div class="pf-exhibit-cover__buttons">
           <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ head.action.url }}">
