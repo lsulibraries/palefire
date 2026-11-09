@@ -6,7 +6,8 @@
 // Swiss and quiet, as the staff directory: a large title, ruled rows on the
 // soft hairline, labels in the TOC's mono capitals. No literal colors, so
 // every reading color follows. Searched words are marked with weight and a
-// rule in the text's own color, so a mark can never lower its contrast.
+// tint of the text's own color behind them: no line, which would read as a
+// link, and no accent, which means chosen or active here.
 
 // Tokens only: these imports print no CSS.
 @import "bootstrap/scss/functions";
@@ -979,12 +980,14 @@
 // What was searched and how much was found, kept in view under the page bar.
 // One line, so it costs little of a phone's screen: a long search is cut short
 // here, and is whole in the search field. Not held on a short screen, where it
-// would take too much of what's left (WCAG 1.4.10).
+// would take too much of what's left (WCAG 1.4.10). Chosen filters sit on the
+// right, before the sort. Under 75rem they take a second line, with the sort.
 .pf-index__toolbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem 1.5rem;
+  gap: .25rem 1rem;
   min-height: 3rem;
   margin-bottom: .75rem;
   padding-block: .25rem;
@@ -998,10 +1001,29 @@
   }
 }
 
+@media (max-width: 74.98rem) {
+  .pf-index__toolbar:has(.pf-index__chips) .pf-index__total {
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 75rem) {
+  .pf-index__toolbar {
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+  }
+}
+
 // A control reached by keyboard stops below the bar, not behind it (WCAG 2.4.11).
 @media (min-height: 30rem) {
   html:has(.pf-index__toolbar) {
     scroll-padding-top: calc(var(--pf-header-h, 3rem) + 5.5rem);
+  }
+}
+
+@media (min-height: 30rem) and (max-width: 74.98rem) {
+  html:has(.pf-index__toolbar .pf-index__chips) {
+    scroll-padding-top: calc(var(--pf-header-h, 3rem) + 8.5rem);
   }
 }
 
@@ -1068,20 +1090,33 @@
   }
 }
 
+// One line: more chips than fit scroll sideways inside it, never the page.
+// The padding keeps a focused chip's outline clear of the scroll's edge.
 .pf-index__chips {
   display: flex;
-  flex-wrap: wrap;
+  flex: 1 1 0;
   align-items: center;
-  gap: .5rem 1rem;
-  margin-bottom: 1.25rem;
+  gap: 1rem;
+  min-width: 0;
 
   ul {
     display: flex;
-    flex-wrap: wrap;
     gap: .5rem;
-    margin: 0;
-    padding: 0;
+    min-width: 0;
+    margin: -.25rem;
+    padding: .25rem;
+    overflow-x: auto;
     list-style: none;
+    scrollbar-width: thin;
+  }
+
+  li {
+    flex: none;
+  }
+
+  @media (min-width: 75rem) {
+    flex: 0 1 auto;
+    margin-inline-start: auto;
   }
 }
 
@@ -1112,6 +1147,7 @@
 }
 
 .pf-index__clear {
+  flex: none;
   color: inherit;
   font-size: .9375rem;
   text-decoration-thickness: from-font;
@@ -2186,10 +2222,12 @@
   text-wrap: pretty;
 }
 
+// The padding is taken back by the margin, so a mark never moves the words.
 .pf-index mark {
-  padding: 0;
-  background: transparent;
-  box-shadow: inset 0 -.08em currentColor;
+  margin-inline: -.08em;
+  padding: 0 .08em;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  box-decoration-break: clone;
   color: inherit;
   font-weight: 600;
 }

@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Fri 6 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Mon 9 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -263,6 +263,13 @@ HTML),
 <li>Compared Huey Long with the catalog and found a copy shown as 4 that the catalog calls 7. The catalog service gives no copy numbers, so these were list positions, and item rows now leave them out.</li>
 <li>An open result's table now sits on a soft panel, and its button says Hide while open.</li>
 <li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
+</ul>
+HTML),
+  $text('Mon Nov 9: Results bar', <<<'HTML'
+<ul>
+<li>Searched words in results are now marked with a soft tint instead of an underline, which looked like a second link inside the title.</li>
+<li>Chosen filters and Clear all moved into the results bar, so they stay in view while scrolling.</li>
+<li>The reading room note's How requests work link opens in a new tab, with an arrow, so the search results stay open.</li>
 </ul>
 HTML),
 ]);
