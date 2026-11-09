@@ -279,7 +279,7 @@ HTML),
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
 <ul>
-<li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts.</li>
+<li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts. Turned on the same day: all 20 results for "cotton gin" now show the words from the PDF.</li>
 </ul>
 HTML),
 ]);
