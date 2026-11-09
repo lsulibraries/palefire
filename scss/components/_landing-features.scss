@@ -3991,12 +3991,21 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     // The spacer (the pinned video's, which reduced motion lacks): rows 1
     // and 2 at least a screen tall from the page's top, whatever the motion
     // setting.
+    // It also carries a warm light from the film's edge (2026-11-09), so the
+    // type's side seems lit by the picture beside it: still, painted once,
+    // faint enough that the type keeps its contrast. Twilight's pale gold in
+    // every theme: it stands for the picture's light, not the theme's accent.
     &::before {
       content: "";
       grid-row: 1 / 3;
       grid-column: 1;
       min-height: 100svh;
       margin-top: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px)));
+      background:
+        radial-gradient(80% 90% at calc(100% - var(--pf-split-film)) 62%, rgb(242 220 155 / var(--pf-cover-glow, .11)), transparent 62%),
+        linear-gradient(90deg, transparent 36%, rgb(242 220 155 / calc(var(--pf-cover-glow, .11) * .27)) calc(100% - var(--pf-split-film)));
+      // Gone before the screen's foot, so no edge shows as the page scrolls.
+      mask-image: linear-gradient(#000 70%, transparent);
       pointer-events: none;
     }
 
