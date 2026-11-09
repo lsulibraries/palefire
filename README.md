@@ -1182,6 +1182,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-09:** Location pages: the room's photo behind the top now keeps its colour too, matching the photo behind the landing map, so the room you hover on the map is the room that greets you on its page. It is just as dark (contrast unchanged); it is no longer tinted to the reading colour.
 - **2026-11-09:** Building map room photos now keep their colour, still dark and low in contrast, so each room's own character (the McIlhenny Room's wood, for example) comes through. The same dark veil keeps every pixel at or below the grey the map's text was checked against, so contrast is unchanged.
 - **2026-11-09:** Building map on the Special Collections landing: lighting a room (hover, focus, tap or its list entry) now fades its photo in behind the whole map, greyed and darkened as on the room's own page, with the floors frosted so the drawing stays easy to read. The photo replaces the small strip that used to sit at the top of the tooltip. Over the photo, the grey map text is lightened slightly so it stays at 5.1:1 or better on every dark swatch. Light swatches and higher contrast keep the plain map.
 - **2026-11-06:** The Index: item rows no longer show a copy number. The catalog service doesn't provide one, so the numbers were list positions and could name a copy that doesn't exist.

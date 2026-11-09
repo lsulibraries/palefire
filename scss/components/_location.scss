@@ -167,19 +167,19 @@
 
 // --- The backdrop: the room's first photo behind the top --------------------
 // On dark swatches only (html.pf-reading-dark), with photos: the photo,
-// monochrome and low in contrast, behind the title, map and
+// in colour, dark and low in contrast, behind the title, map and
 // ledger, up under the clear header and bar and out to the section's edges
 // (its padding, so nothing scrolls sideways), down to the section's foot. It
 // is fixed to the window (background-attachment: fixed, sized to the
 // window), so the page slides over it; no filter on it, which would drop
 // the fixed attachment. On portrait screens and iOS it shows whole at the
-// top instead (pf-location-backdrop-whole, below). Three layers over it, blended rather than filtered: a
-// mid grey with the `color` blend takes its colour away (so the gold title
-// and lit room are the only colour), a dark grey veil at 87% squeezes
-// its tones into 30-64 of 255, so its detail recedes, and the swatch's
-// page colour with the `color` blend tints it to the swatch, as the hero
-// banners' wash does (hue and saturation only: `color` keeps each pixel's
-// lightness, so the tones and the contrast below don't move). The ceiling, 64, is
+// top instead (pf-location-backdrop-whole, below). Over it, a dark grey veil
+// at 87% squeezes every channel into 30-64 of 255, so its detail recedes
+// and the room keeps its own colours, quiet and dark, as behind the
+// landing's map (_building-map.scss, .pf-map-photo): the photo seen there
+// on hover is the one that greets you here. (Until 2026-11-09 two `color`
+// blends took the colour out and tinted it to the swatch.) With each
+// channel at 64 at most, no pixel is lighter than grey 64. The ceiling, 64, is
 // what a 75% black layer gives pure white: the least that keeps every text
 // in the top at 4.5:1 (the title and marks at 3:1); the muted ledger terms,
 // #b7b3ba, allow up to 69. Lowering contrast further raises the floor
@@ -210,11 +210,8 @@
     max-height: 100lvh;
     background:
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, transparent 14rem),
-      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)),
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
-      linear-gradient(#808080, #808080),
       var(--pf-location-backdrop) center / cover no-repeat;
-    background-blend-mode: normal, color, normal, color, normal;
     -webkit-mask-image: linear-gradient(#000 60%, transparent);
     mask-image: linear-gradient(#000 60%, transparent);
   }
@@ -242,11 +239,8 @@ html.pf-reading-dark .pf-location__intro.has-backdrop {
     background:
       linear-gradient(transparent calc(100% - 6rem), var(--pf-section-bg, var(--bs-body-bg))),
       linear-gradient(rgb(0 0 0 / .4), rgb(0 0 0 / .22) 6rem, rgb(0 0 0 / .08) 14rem, transparent 22rem),
-      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)) fixed,
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)) fixed,
-      linear-gradient(#808080, #808080) fixed,
       var(--pf-location-backdrop) center / cover no-repeat fixed;
-    background-blend-mode: normal, normal, color, normal, color, normal;
   }
 
   // The ledger terms and eyebrow place over the photo: the swatch's muted
