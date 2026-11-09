@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog (set to Special Collections) and PDF Finding Aids chosen. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -279,6 +279,7 @@ HTML),
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
 <ul>
+<li>The Special Collections hero search now opens with both the Catalog and PDF Finding Aids chosen.</li>
 <li>Archive Records became PDF Finding Aids: it searches only finding aids and oral history abstracts, all PDFs, and Oral histories is a checkbox under it in place of the Record type list. Breaux Data, Louisiana Folklife, Manuscript Collections and University Archives records left the Index.</li>
 <li>Archive records that are PDFs got an Open PDF button, in the style of Show location, opening in a new tab, with the file's pages and size beside it (18 pages · 296 KB), so it's plain what opening it means.</li>
 <li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts. Turned on the same day: all 20 results for "cotton gin" now show the words from the PDF.</li>
