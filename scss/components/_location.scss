@@ -206,10 +206,14 @@
 
 // One screen at most, and never past the section's foot: in a tall desktop
 // window the top is shorter than the screen, and the photo ran on behind
-// section 01.
+// section 01. It starts at the page's top: above the intro are the section's
+// own offset (the header, --pf-bleed-block-start), the bar and the
+// section's top padding. (It counted only the header and the bar, so on
+// phones and tall windows the photo began under the breadcrumb, a band of
+// page colour above it.)
 @mixin pf-location-backdrop-whole {
   &::before {
-    inset: calc(-1 * (var(--pf-header-h, 0px) + var(--pf-landing-bar-h, 0px))) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+    inset: calc(-1 * (var(--pf-bleed-block-start, var(--pf-header-h, 0px)) + var(--pf-landing-bar-h, 0px) + var(--pf-section-pad-block, 0px))) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
     height: auto;
     max-height: 100lvh;
     background:
