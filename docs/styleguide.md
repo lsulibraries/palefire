@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-09:** Building map, landing: `.pf-map-photo` (built by `building-map.js`) fills `#map` with the lit room's photo in `pf_location_backdrop`, with the room pages' recipe (grey `color` blend, 35-grey veil at 87%, swatch tint; ceiling grey 64), a sticky one-screen view, 10rem fades at top and foot, and a crossfade (`--pf-map-photo-fade`, .7s). `.pf-map__frost` blurs it under the floors, as `.pf-location__frost` does. `--pf-map-floor-ink` is a registered `<color>` and lifts 40% toward the heading colour over a photo. `.pf-map__tip-photo` and `pf-map-photo` keyframes are gone. Dark swatches only.
 - **2026-11-06:** The Index: `.pf-index-row__item-contents` is labelled LSU has and can hold several lines, one `span` each.
 - **2026-11-06:** The Index: `.pf-index-row__copies-table` is a panel of the text color at 4%. `.pf-index-row__when-closed` and `.pf-index-row__when-open` share one grid cell, so the toggle keeps its width. Shadows and neumorphism were considered and left out: they read poorly on the dark background and aren't the theme's flat Swiss language.
 - **2026-11-06:** The Index: `.pf-index-row__copy-note` is a small muted note under a record's holdings table, shown once for Special Collections copies.

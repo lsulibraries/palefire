@@ -540,22 +540,9 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
    serif, the text at the page's body size; the link in plain words.
    building-map.js loads the serif when the pointer first reaches the map, so
    the first tooltip doesn't swap fonts. */
-/* A room's photo runs across the top, under the gold rule: always a 4:1
-   band (pf_map_room crops the middle of the photo to 960x240), so every
-   label with a photo is the same shape and fits beside its room. Black and
-   white like the drawing; color rises in slowly once the label has opened.
-   An animation, not a transition, so moving to another room while open
-   plays it again for the new photo. */
-.pf-map__tip-photo {
-  grid-column: 1 / -1; display: block; width: 100%; height: auto; aspect-ratio: 4 / 1; object-fit: cover;
-  border-bottom: 1px solid #{$pf-hairline};
-  filter: grayscale(1);
-}
-.pf-map__tip.is-open .pf-map__tip-photo { animation: pf-map-photo 1.6s ease .4s both; }
 /* Where the label can't fit beside its room in what the window shows,
    building-map.js slides it into view without its pointer (.is-adrift). */
 .pf-map__tip.is-adrift::after { display: none; }
-@keyframes pf-map-photo { from { filter: grayscale(1); } to { filter: grayscale(0); } }
 .pf-map__tip-floor {
   display: flex; flex-direction: column; align-items: center; gap: .25rem;
   margin: 0; padding: 2.125rem 0; border-right: 1px solid #{$pf-hairline};
@@ -583,8 +570,6 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
   .pf-map__tip-floor-num { font: 700 var(--pf-mono-label)/1.5 var(--pf-landing-label, var(--bs-font-monospace)); letter-spacing: .16em; color: var(--pf-map-floor-ink); }
   .pf-map__tip-body { padding: .625rem 1.375rem 1.625rem; }
   .pf-map__tip-title { font-size: 1.375rem; }
-  /* The label already covers most of a phone's drawing: no photo. */
-  .pf-map__tip-photo { display: none; }
 }
 
 /* Landing integration ------------------------------------------------------
@@ -601,6 +586,126 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
 // .pf-landing.is-map-in-view .pf-landing__bg-video { filter: blur(12px) brightness(.55); transform: scale(1.06); }
 .pf-landing.is-map-in-view .pf-landing__media::after { background-color: var(--pf-media-wash-map, rgb(0 0 0 / .72)); }
 
+// --- The room's photo behind the map (landing) ------------------------------
+// building-map.js (photoBackdrop) adds .pf-map-photo to #map, and
+// .is-map-photo while a lit room's photo shows. Dark swatches only, as the
+// room pages' backdrop (_location.scss), and with the same treatment, so
+// its contrast sums hold here: a mid grey with the `color` blend takes the
+// colour away (the gold lit room stays the only colour), a dark grey veil at
+// 87% squeezes the photo into greys 30-64 of 255, and the swatch's page
+// colour with the `color` blend tints it. 64 is the ceiling every text on the
+// map was set against (--pf-map-dim-text, the floor ink below). The layer
+// fills #map, which is full bleed, and fades in and out at its top and foot
+// into the page. The view inside is one screen tall and sticky, so the
+// photo stays in the window while the tall map scrolls past. Each slot fades
+// as a whole, veil and all, so a half-faded photo is only ever darker.
+.pf-map-photo,
+.pf-map__frost { display: none; }
+
+// A colour, so it can ease (the floor ink's lift over a photo, below).
+@property --pf-map-floor-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #9a9a9a;
+}
+
+html.pf-reading-dark .pf-landing__visit.has-map-photos {
+  --pf-map-photo-fade: .7s;
+  isolation: isolate;
+
+  .pf-map-photo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(transparent, #000 10rem, #000 calc(100% - 10rem), transparent);
+    mask-image: linear-gradient(transparent, #000 10rem, #000 calc(100% - 10rem), transparent);
+  }
+
+  .pf-map-photo__view {
+    position: sticky;
+    top: 0;
+    height: 100lvh;
+    max-height: 100%;
+  }
+
+  .pf-map-photo__img {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background:
+      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)),
+      linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
+      linear-gradient(#808080, #808080),
+      var(--pf-map-photo) center / cover no-repeat;
+    background-blend-mode: color, normal, color, normal;
+    transition: opacity var(--pf-map-photo-fade) cubic-bezier(.4, 0, .2, 1);
+
+    // The new photo fades in over the old; the old goes once it is covered.
+    &.is-on { z-index: 1; opacity: 1; }
+    &.is-prev { transition-delay: var(--pf-map-photo-fade); }
+  }
+
+  // The frosted floors: under the drawing, the size of its box, so the mask
+  // (the same viewBox, stretched to it) lines up. Shown with the photo;
+  // hidden after its fade, so the blur costs nothing while no photo shows.
+  .pf-map__scroller,
+  .pf-map__svg { position: relative; }
+
+  .pf-map__frost {
+    position: absolute;
+    inset: 0;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    -webkit-mask: var(--pf-map-frost) center / 100% 100% no-repeat;
+    mask: var(--pf-map-frost) center / 100% 100% no-repeat;
+    transition: opacity var(--pf-map-photo-fade) ease, visibility 0s var(--pf-map-photo-fade);
+  }
+
+  // The floor names, intro, legend and list over the photo: the swatch's
+  // panel grey lifted 40% toward its heading color, as the room pages lift
+  // their muted text (--pf-location-muted), so it only ever gets lighter:
+  // 5.1:1 or more over the ceiling (grey 64) on every dark swatch (unlifted,
+  // Solarized, Cocoa, Forest and Midnight fall to 3.8-4.1:1). Eased
+  // with the photo (registered above).
+  .pf-map { transition: --pf-map-floor-ink var(--pf-map-photo-fade) ease; }
+
+  &.is-map-photo {
+    .pf-map { --pf-map-floor-ink: color-mix(in srgb, var(--pf-g-heading, #fff) 40%, var(--pf-g-panel-muted, #9a9a9a)); }
+
+    .pf-map__frost {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity var(--pf-map-photo-fade) ease, visibility 0s;
+    }
+  }
+}
+
+// Under md the map keeps to the section's padding (from md on it runs out
+// over it, _landing-hero.scss): the photo runs out to the screen's edges.
+@media (max-width: 767.98px) {
+  html.pf-reading-dark .pf-landing__visit.has-map-photos .pf-map-photo {
+    inset-inline: calc(-1 * var(--pf-section-pad-inline, 0px));
+  }
+}
+
+// Phones: the drawing is small and the label covers most of it; the photo
+// shows, but no frost (a large blur while it fades is too slow there).
+@media (max-width: 575.98px) {
+  html.pf-reading-dark .pf-landing__visit.has-map-photos .pf-map__frost { display: none; }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  html.pf-reading-dark .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-map__frost) { display: none; }
+}
+
+html.pf-a11y-contrast .pf-landing__visit.has-map-photos :is(.pf-map-photo, .pf-map__frost) { display: none !important; }
+
 @media (prefers-reduced-motion: reduce) {
   .pf-map__hatch, .pf-map__swatch, .pf-map__label, .pf-map__region, .pf-map__icons, .pf-map__lines, .pf-map__item-name, .pf-map__key-icon, .pf-map__num, .pf-map__num *, .pf-map__item-num, .pf-map__knock { transition: none !important; }
   .pf-map__label.is-active, .pf-map__knock.is-active { --lift: 0px; }
@@ -608,15 +713,17 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
   /* Tooltip: a plain short fade, no movement. */
   .pf-map__tip, .pf-map__tip.is-below { transform: none; }
   .pf-map__tip.is-open { transition: opacity var(--pf-map-tip-in) linear, visibility 0s; }
-  /* The photo stays in black and white. */
-  .pf-map__tip.is-open .pf-map__tip-photo { animation: none; }
   .pf-map__here-arrow { animation: none !important; }
   .pf-landing.is-map-in-view .pf-landing__bg-video { transform: none; }
   .pf-map__key[open]::details-content { transition: none; }
   .pf-map__key[open] .pf-seq { animation: none; }
 }
 html.pf-a11y-motion .pf-map__key[open]::details-content { transition: none; }
-html.pf-a11y-motion .pf-map__tip.is-open .pf-map__tip-photo { animation: none; }
+/* The room's photo behind the map changes at once, with no fade. */
+@media (prefers-reduced-motion: reduce) {
+  html.pf-reading-dark .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
+}
+html.pf-a11y-motion.pf-reading-dark .pf-landing__visit.has-map-photos { --pf-map-photo-fade: 0s; }
 @media print {
   .pf-map { --pf-map-ink: #111; --pf-map-floor-ink: #555; --pf-map-hidden-ink: #999; --pf-map-hatch: #111; --pf-map-surface: #fff; }
   .pf-map__scroller { overflow: visible; }

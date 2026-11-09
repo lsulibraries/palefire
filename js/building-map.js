@@ -71,6 +71,114 @@
     root.classList.add('has-broken-hatch');
   }
 
+  // The landing's room photos: while a room with a photo is lit (hover,
+  // focus, a tap, its list entry), its photo fills the map's background
+  // (#map), darkened as the room's own page darkens it, and the floors are
+  // frosted over it (_building-map.scss). Each photo is fetched the first
+  // time its room is lit and shown once decoded; the swap waits the
+  // tooltip's hover wait, so sweeping across rooms doesn't flash photos,
+  // and the photo lingers a moment after the last room goes out. Two
+  // slots crossfade: the new photo fades in over the old, which goes once
+  // it is covered. Nothing happens where CSS hides the layer (light
+  // swatches, more contrast, forced colors).
+  function photoBackdrop(root, wrap, svg, delay) {
+    const urls = {};
+    root.querySelectorAll('.pf-map__tip-src[data-map-photo]').forEach((src) => {
+      urls[src.dataset.mapTip] = src.dataset.mapPhoto;
+    });
+    if (!Object.keys(urls).length) return null;
+    const LINGER = 400; // ms the photo stays after the last room goes out
+
+    const layer = document.createElement('div');
+    layer.className = 'pf-map-photo';
+    layer.setAttribute('aria-hidden', 'true');
+    const view = document.createElement('div');
+    view.className = 'pf-map-photo__view';
+    const slots = [0, 1].map(() => {
+      const slot = document.createElement('div');
+      slot.className = 'pf-map-photo__img';
+      view.append(slot);
+      return slot;
+    });
+    layer.append(view);
+    wrap.prepend(layer);
+    wrap.classList.add('has-map-photos');
+
+    // The frosted floors (as on a room's page, js/location-plate.js): a
+    // layer under the drawing masked to Floor 1's outline and the rooms'
+    // hit areas, in the drawing's own viewBox, so CSS blurs the photo
+    // behind exactly those.
+    const shapes = svg.querySelectorAll('.pf-map__floors path, .pf-map__hit');
+    let frost = null;
+    if (shapes.length) {
+      const paths = Array.from(shapes, (path) => '<path d="' + path.getAttribute('d') + '"/>').join('');
+      const mask = '<svg xmlns="' + SVG_NS + '" viewBox="' + svg.getAttribute('viewBox') + '" preserveAspectRatio="none">' + paths + '</svg>';
+      frost = document.createElement('div');
+      frost.className = 'pf-map__frost';
+      frost.setAttribute('aria-hidden', 'true');
+      frost.style.setProperty('--pf-map-frost', 'url("data:image/svg+xml,' + encodeURIComponent(mask) + '")');
+      svg.before(frost);
+    }
+
+    const ready = {};
+    const load = (url) => {
+      if (!ready[url]) {
+        const img = new Image();
+        img.src = url;
+        ready[url] = img.decode().then(() => true, () => false);
+      }
+      return ready[url];
+    };
+    let wanted = null;
+    let shown = null;
+    let front = 0;
+    let timer = 0;
+
+    const apply = (key) => {
+      if (key === shown) return;
+      if (!key) {
+        slots.forEach((slot) => slot.classList.remove('is-on', 'is-prev'));
+        wrap.classList.remove('is-map-photo');
+        shown = null;
+        return;
+      }
+      const url = urls[key];
+      load(url).then((ok) => {
+        if (!ok || wanted !== key || shown === key) return;
+        const old = slots[front];
+        front = 1 - front;
+        const slot = slots[front];
+        slot.style.setProperty('--pf-map-photo', 'url("' + url + '")');
+        slot.classList.remove('is-prev');
+        slot.classList.add('is-on');
+        if (old.classList.contains('is-on')) {
+          old.classList.remove('is-on');
+          old.classList.add('is-prev');
+        }
+        wrap.classList.add('is-map-photo');
+        shown = key;
+      });
+    };
+
+    return {
+      want(key) {
+        let next = key && urls[key] ? key : null;
+        if (next && getComputedStyle(layer).display === 'none') next = null;
+        if (next === wanted) return;
+        wanted = next;
+        clearTimeout(timer);
+        timer = setTimeout(() => apply(next), next ? delay() : LINGER);
+      },
+      disconnect() {
+        clearTimeout(timer);
+        wanted = null;
+        layer.remove();
+        if (frost) frost.remove();
+        wrap.classList.remove('has-map-photos', 'is-map-photo');
+      },
+    };
+  }
+
   function initMap(root) {
     const svg = root.querySelector('[data-map-svg]');
     if (svg && SETTINGS.appointmentHatch === 'broken') brokenHatch(root, svg);
@@ -182,14 +290,10 @@
     tip.setAttribute('aria-hidden', 'true');
     stage.appendChild(tip);
     // Tooltip titles are set in the exhibition serif, which other pages
-    // never download, and rooms may have photos, which the hidden sources
-    // load lazily (so never): fetch both when the pointer or focus first
-    // reaches the map, so they are in before the hover wait ends.
+    // never download: fetch it when the pointer or focus first reaches the
+    // map, so it is in before the hover wait ends.
     const warm = () => {
       if (document.fonts && document.fonts.load) document.fonts.load('500 1em "Playfair Display"').catch(() => {});
-      root.querySelectorAll('.pf-map__tip-src img').forEach((img) => {
-        new Image().src = img.getAttribute('src');
-      });
     };
     root.addEventListener('pointerenter', warm, { once: true });
     root.addEventListener('focusin', warm, { once: true });
@@ -207,6 +311,9 @@
       const n = parseFloat(v);
       return Number.isFinite(n) ? (v.endsWith('ms') ? n : n * 1000) : 250;
     };
+    // The landing's room photos behind the map (photoBackdrop, above).
+    const photos = wrap ? photoBackdrop(root, wrap, svg, tipDelay) : null;
+    if (photos) root.pfMapPhoto = photos;
 
     function mark(key, on) {
       regions.concat(items).forEach((el) => {
@@ -229,6 +336,10 @@
       if (resting && !anyLit()) mark(resting, true);
       // While a room is lit the rest of the drawing dims (_building-map.scss).
       root.classList.toggle('is-focusing', anyLit());
+      if (photos) {
+        const lit = regions.find((r) => r.classList.contains('is-active'));
+        photos.want(lit ? lit.dataset.mapRegion : null);
+      }
     }
 
     // On a room's own page (data-map-here) the room stays lit once the map
@@ -811,6 +922,7 @@
       context.querySelectorAll('[data-pf-map]').forEach((root) => {
         if (root.pfMapDim) root.pfMapDim.disconnect();
         if (root.pfMapDraw) root.pfMapDraw.disconnect();
+        if (root.pfMapPhoto) root.pfMapPhoto.disconnect();
         const landing = root.closest('.pf-landing');
         if (landing) landing.classList.remove('is-map-in-view', 'has-map-view', 'has-map-seen');
         const section = landing ? landing.closest('[data-section-theme="light-map"]') : null;

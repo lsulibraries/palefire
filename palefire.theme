@@ -1266,30 +1266,24 @@ function _palefire_building_map(string $key, string $here, ParagraphInterface $p
     '#format' => $items->format,
   ] : NULL;
 
-  // The room's photo for the top of its tooltip: pf_map_room (960x240 WebP,
-  // twice the tooltip's width). Rooms without one, or before the setup
-  // script has made the style, get none.
-  $photo_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_map_room');
+  // The room's photo behind the map while the room is lit (building-map.js,
+  // landing only): a URL in pf_location_backdrop (1920px wide WebP, the
+  // style the room's own page sets behind its top), fetched only when the
+  // room is lit. Rooms without one, or without the style, get ''.
+  $photo_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
   if ($photo_style) {
     $cache->addCacheableDependency($photo_style);
   }
-  $photo = static function ($term) use ($photo_style, $cache): ?array {
+  $photo = static function ($term) use ($photo_style, $cache): string {
     // An Image media item from the library, as the rest of Modular.
     $ref = $photo_style && $term->hasField('field_space_media') ? $term->get('field_space_media')->first() : NULL;
     $item = $ref ? _palefire_media_image_item($ref, $cache) : NULL;
     $file = $item?->entity;
     if (!$file instanceof FileInterface) {
-      return NULL;
+      return '';
     }
     $cache->addCacheableDependency($file);
-    $uri = $file->getFileUri();
-    $dimensions = ['width' => (int) $item->width ?: NULL, 'height' => (int) $item->height ?: NULL];
-    $photo_style->transformDimensions($dimensions, $uri);
-    return [
-      'src' => \Drupal::service('file_url_generator')->transformRelative($photo_style->buildUrl($uri)),
-      'width' => (int) ($dimensions['width'] ?? 960),
-      'height' => (int) ($dimensions['height'] ?? 240),
-    ];
+    return \Drupal::service('file_url_generator')->transformRelative($photo_style->buildUrl($file->getFileUri()));
   };
 
   $uid = 'pf-map-' . $paragraph->id();

@@ -106,15 +106,11 @@
      building-map.js copies the active one into the visible tooltip. Set as a
      museum wall label: the floor in its own column, then the access, the
      room and its text. The floor column reads "Floor 1" to screen readers,
-     so the access line doesn't repeat it. A room's photo runs across the top;
-     its alt is empty, since the label already names and describes the room.
-     Lazy, so the hidden sources fetch nothing: building-map.js preloads the
-     photos when the pointer or focus first reaches the map. #}
+     so the access line doesn't repeat it. A room's photo is not in its label:
+     on the landing it fills the map's background while the room is lit
+     (data-map-photo, a URL building-map.js fetches only then). #}
   {% for s in map.spaces %}
-    <div class="pf-map__tip-src" id="{{ s.tip }}" data-map-tip="{{ s.key }}" hidden>
-      {% if s.photo %}
-        <img class="pf-map__tip-photo" src="{{ s.photo.src }}" width="{{ s.photo.width }}" height="{{ s.photo.height }}" alt="" loading="lazy" decoding="async">
-      {% endif %}
+    <div class="pf-map__tip-src" id="{{ s.tip }}" data-map-tip="{{ s.key }}"{% if s.photo %} data-map-photo="{{ s.photo }}"{% endif %} hidden>
       <p class="pf-map__tip-floor">
         <span class="pf-map__tip-floor-label">{{ 'Floor'|t }}</span>
         <span class="pf-map__tip-floor-num">{{ s.floor }}</span>

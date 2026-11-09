@@ -346,6 +346,13 @@ plain floor.
   (`SETTINGS.duration`, `stagger`, `reveal*`; `--pf-map-reveal-*`).
   Appointment rooms get a broken hatch. Legend swatches follow the map's hatch
   at any size (`--pf-map-hatch-*`).
+- **Room photos** (landing, dark swatches): while a room is lit, its photo
+  (the room term's Media, in `pf_location_backdrop`, as `data-map-photo` on
+  its tooltip source) fills the map's background, greyed and darkened as on
+  the room's own page, with the floors frosted over it. The swap waits the
+  tooltip's delay and crossfades (`--pf-map-photo-fade`, .7s; none with
+  reduced motion). Photos load only when their room is first lit. Tooltips
+  no longer carry a photo.
 - "Legend & spaces" is a `<details>` that opens like the guide accordions.
 - The map heading is an h2 on the hero, h3 elsewhere; it carries `data-toc`.
 
@@ -1175,6 +1182,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-09:** Building map on the Special Collections landing: lighting a room (hover, focus, tap or its list entry) now fades its photo in behind the whole map, greyed and darkened as on the room's own page, with the floors frosted so the drawing stays easy to read. The photo replaces the small strip that used to sit at the top of the tooltip. Over the photo, the grey map text is lightened slightly so it stays at 5.1:1 or better on every dark swatch. Light swatches and higher contrast keep the plain map.
 - **2026-11-06:** The Index: item rows no longer show a copy number. The catalog service doesn't provide one, so the numbers were list positions and could name a copy that doesn't exist.
 - **2026-11-06:** The Index: each item now shows what the catalog says that call number holds, so people can tell which item to request. A shelf whose items have different call numbers no longer names one of them as if it covered the lot.
 - **2026-11-06:** The Index: an open result's table sits on a soft tonal panel, so it reads as part of that result without a shadow or more lines. Its button now says Hide when open, and a double click no longer selects its words.
