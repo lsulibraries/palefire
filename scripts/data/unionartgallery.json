@@ -1,0 +1,738 @@
+{
+ "title": "LSU Union Art Gallery",
+ "subtitle": "Building Community Through Art, 1964–2016",
+ "credit": "<p>Flyers, photographs and negatives from the records of the LSU Union Art Gallery, LSU Libraries Special Collections.</p>",
+ "year": 2025,
+ "physical_note": null,
+ "source": "https://libstage.lsu.edu/lsu-unionartgallery/introduction",
+ "cover": "sites/default/files/2025-12/janice_sachse002_trimmed.jpg",
+ "cover_alt": "Noon in My Garden, a painting by Janice Sachse",
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "lead": "sites/default/files/2025-12/janice_sachse002_trimmed.jpg",
+   "lead_alt": "Noon in My Garden, a painting by Janice Sachse",
+   "focus": "center",
+   "lead_caption": "<p>Janice Sachse, <em>Noon in My Garden</em>, from the gallery’s retrospective of her work</p>",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>When you think of the art world at LSU, you probably think first of the Allen Hall murals and of LSU’s many locations of galleries and museums, past and present. While the Allen Hall murals are well known and likely the most viewed part of LSU art history due to their central location, another truly influential venue for art is The Union Art Gallery. It served as an important venue for bringing the art world to LSU and exploring Louisiana culture while occupying a space frequently passed by students, making it accessible to the entire student body.</p>\n<p>LSU’s art galleries today are mainly located either in art buildings like Barnes Ogden or downtown and off-campus at venues like the Glassell Gallery and the LSU Museum of Art (MOA). The Union Art Gallery operated differently; many of its events were not only interdisciplinary and designed to appeal to a large group of students but also were on campus and easily accessible for viewing.</p>\n<p>LSU Special Collections in Hill Memorial Library holds records of the Union Art Gallery containing flyers from various exhibitions and photos or negatives of displayed works. It also houses the records of influential figures who gave talks in conjunction with these shows, revealing the scale of artistic and educational events organized for the LSU and Baton Rouge community.</p>\n<p>The Union Art Gallery operated with its committee from 1964 to 2016 using three key approaches. First, it preserved endangered art forms by hosting exhibitions featuring studio art and traditional techniques. The tradition of artists working together in studios has long been threatened by the ever-modernizing art world, yet it remains essential to the practice of printmaking, ceramics, glass, and many other art forms. The gallery showcased the important work done by remaining studios in the U.S. and the techniques which they maintained and created.</p>\n<p>Second, the gallery celebrated Louisiana identity by featuring Louisiana culture and artists for exhibitions. The Union Art Gallery brought in many Louisiana artists and presented many events showcasing Louisiana culture and tradition. It also worked to feature artists and figures who have been influential in Louisiana history and who possess a unique understanding of it because of their lived experience.</p>\n<p>Lastly, the gallery fostered critical dialogue with exhibitions addressing the struggles of Katrina, race relations in the 1940s, women’s history and more. Through these thought-provoking exhibitions, the Union Art Gallery established itself as more than just a display space, it became a forum for meaningful conversation and social engagement that enriched the entire LSU community.</p>"
+    }
+   ]
+  },
+  {
+   "title": "Studio Art",
+   "anchor": "studio-art",
+   "lead": "sites/default/files/2025-12/book_fest_2.jpg",
+   "lead_alt": "Scrapbook pages from the Paul Dufour Stained Glass Retrospective Show",
+   "focus": "center",
+   "lead_caption": "<p>Scrapbook pages from the Paul Dufour Stained Glass Retrospective Show</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Paul Dufour",
+     "anchor": "paul-dufour",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/book fest 2.jpg",
+         "alt": "Scrapbook pages from the Paul Dufour Stained Glass Retrospective Show",
+         "caption": "<p>Scrapbook pages from the Paul Dufour Stained Glass Retrospective Show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/Dufour.jpg",
+         "alt": "Scrapbook pages from Paul Dufour and student A Splendor in Glass Show",
+         "caption": "<p>Scrapbook pages from Paul Dufour and student A Splendor in Glass Show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/Paul Dufour.jpg",
+         "alt": "Poster for Dufour’s Retrospective Show",
+         "caption": "<p>Poster for Dufour’s Retrospective Show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour003.jpg",
+         "alt": "Poster for The LSU Student Stained Glass show",
+         "caption": "<p>Poster for The LSU Student Stained Glass show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour004.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour005.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour006.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour007.jpg",
+         "alt": "Image of stained glass made in studio",
+         "caption": "<p>Image of stained glass made in studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour008.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour009.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour010.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour011.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Paul Dufour/pauldufour012.jpg",
+         "alt": "Image from stained glass studio",
+         "caption": "<p>Image from stained glass studio</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Pure Vision",
+     "anchor": "pure-vision",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The gallery simultaneously hosted exhibitions called “Turn, Turning, Turned” and “Pure Vision: American Bead Artists,” showcasing contemporary wood turning and beadwork.</p>"
+      },
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Pure Vision/Woodturning001.jpg",
+         "alt": "Cover of Pure Vision exhibition handbill",
+         "caption": "<p>Cover of Pure Vision exhibition handbill</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Pure Vision/Woodturning002.jpg",
+         "alt": "Grizzly Crawl Necklace by Tis Mal Crow",
+         "caption": "<p>Grizzly Crawl Necklace by Tis Mal Crow</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Pure Vision/Woodturning004.jpg",
+         "alt": "Turn Turning Turned exhibition handbill",
+         "caption": "<p>Turn Turning Turned exhibition handbill</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Pure Vision/Woodturning005.jpg",
+         "alt": "Adav and Eem b",
+         "caption": "<p>Adav &amp; Eem b</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Pure Vision/Woodturning006.jpg",
+         "alt": "Good Girl / Bad Girl",
+         "caption": "<p>Good Girl / Bad Girl</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Tamarind",
+     "anchor": "tamarind",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Tamarind/Tamarind1.jpg",
+         "alt": "Flyer for Tamarind’s show",
+         "caption": "<p>Flyer for Tamarind’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Tamarind/Tamarind3.jpg",
+         "alt": "Tamarind’s “A Renaissance of Lithography”",
+         "caption": "<p>Tamarind’s “A Renaissance of Lithography”</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Tamarind/Tamarind.jpg",
+         "alt": "Back of Tamarind’s “A Renaissance of Lithography”",
+         "caption": "<p>Back of Tamarind’s “A Renaissance of Lithography”</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Teaberry",
+     "anchor": "teaberry",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Teaberry/Teaberry.jpg",
+         "alt": "Flyer for Teaberry Press’s Show",
+         "caption": "<p>Flyer for Teaberry Press’s Show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/Teaberry/Teaberry1.jpg",
+         "alt": "Back of Flyer for Teaberry Press’s Studio",
+         "caption": "<p>Back of Flyer for Teaberry Press’s Studio</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Transparent Motifs",
+     "anchor": "transparent-motifs",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "layout": "center",
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/studio_art/transparent motifs/transparent motives001.jpg",
+       "alt": "Flyer for Littleton Studio’s Transparent Motives show",
+       "caption": "<p>Flyer for Littleton Studio’s Transparent Motives show</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Louisiana Artists",
+   "anchor": "louisiana-artists",
+   "lead": "sites/default/files/2025-12/4women_artists.jpg",
+   "lead_alt": "Photo of Claude Roberts Trevithick, Van Wade-Day, Leslie Lopez, and Malaika Favorite",
+   "focus": "center",
+   "lead_caption": "<p>Photo of Claude Roberts Trevithick, Van Wade-Day, Leslie Lopez, and Malaika Favorite</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Four Women Artists",
+     "anchor": "four-women-artists",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists.jpg",
+         "alt": "Photo of Claude Roberts Trevithick, Van Wade-Day, Leslie Lopez, and Malaika Favorite",
+         "caption": "<p>Photo of Claude Roberts Trevithick, Van Wade-Day, Leslie Lopez, and Malaika Favorite</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists1.jpg",
+         "alt": "Advocate Article called She’s an Artist and Her Name is Malaika",
+         "caption": "<p>Advocate Article called She’s an Artist and Her Name is Malaika</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists2.jpg",
+         "alt": "Flyer for four women artists with Malaika Favorite, Leslie Lopez, Claudia Roberts, and Van Wade-Day",
+         "caption": "<p>Flyer for four women artists with Malaika Favorite, Leslie Lopez, Claudia Roberts, and Van Wade-Day</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists3.jpg",
+         "alt": "Van Wade-Day’s Artist Statement",
+         "caption": "<p>Van Wade-Day’s Artist Statement</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists4.jpg",
+         "alt": "Leslie Lopez’s Artist Statement",
+         "caption": "<p>Leslie Lopez’s Artist Statement</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists5.jpg",
+         "alt": "Malaika Favorite’s Artist Statement",
+         "caption": "<p>Malaika Favorite’s Artist Statement</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/4 Women Artists/4women artists6.jpg",
+         "alt": "Claudia Robert Trevnthick’s Artist Statement",
+         "caption": "<p>Claudia Robert Trevnthick’s Artist Statement</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Chalk Festival",
+     "anchor": "chalk-festival",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/chalk festival/chalk festival pic001.jpg",
+         "alt": "Chalk festival goers outside of the Union",
+         "caption": "<p>Chalk festival goers outside of the Union</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/chalk festival/chalk festival pic002.jpg",
+         "alt": "People at the Chalk Festival",
+         "caption": "<p>People at the Chalk Festival</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Clyde Connell",
+     "anchor": "clyde-connell",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/Clyde Connell/CLydeConnell001.jpg",
+         "alt": "Pamphlet from Clyde Connell’s show",
+         "caption": "<p>Pamphlet from Clyde Connell’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/Clyde Connell/CLydeConnell002.jpg",
+         "alt": "Magazine page featuring Clyde Connell",
+         "caption": "<p>Magazine page featuring Clyde Connell</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Where We Live: FEMA’s Airport Village",
+     "anchor": "where-we-live-femas-airport-village",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village001.jpg",
+         "alt": "Where We Live: Children’s Photographs From FEMA’s Airport Village flyer",
+         "caption": "<p>Where We Live: Children’s Photographs from FEMA’s Airport Village flyer</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village list001.jpg",
+         "alt": "Names of children photographers and titles of their work (page 1)",
+         "caption": "<p>Names of children photographers and titles of their work (page 1)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village list002.jpg",
+         "alt": "Names of children photographers and titles of their work (page 2)",
+         "caption": "<p>Names of children photographers and titles of their work (page 2)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village list003.jpg",
+         "alt": "Names of children photographers and titles of their work (page 3)",
+         "caption": "<p>Names of children photographers and titles of their work (page 3)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village list004.jpg",
+         "alt": "Email from Pam Connolly (page 1)",
+         "caption": "<p>Email from Pam Connolly (page 1)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/fema where we live/where we live fema airport village list005.jpg",
+         "alt": "Email from Pam Connolly (page 2)",
+         "caption": "<p>Email from Pam Connolly (page 2)</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Janice Sachse",
+     "anchor": "janice-sachse",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/Janice Sache/janice Sachse001.jpg",
+         "alt": "Pamphlet image from Janice Sachse’s retrospective",
+         "caption": "<p>Pamphlet image from Janice Sachse’s retrospective</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/Janice Sache/janice Sachse002.jpg",
+         "alt": "Noon in My Garden",
+         "caption": "<p>Noon in My Garden</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/Janice Sache/janice Sachse003.jpg",
+         "alt": "Table with Flowers",
+         "caption": "<p>Table with Flowers</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Uprooted",
+     "anchor": "uprooted",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/uprooted/Uprooted001.jpg",
+         "alt": "Flyer for Uprooted: Hurricane Katrina/Rita",
+         "caption": "<p>Flyer for Uprooted: Hurricane Katrina/Rita</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/uprooted/Uprooted002.jpg",
+         "alt": "Reveille article about the art show",
+         "caption": "<p>Reveille article about the art show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/uprooted/Uprooted003.jpg",
+         "alt": "Email from Susan Hoffman to Judi Stahl about her Katrina experiences (page 1)",
+         "caption": "<p>Email from Susan Hoffman to Judi Stahl about her Katrina experiences (page 1)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/uprooted/Uprooted004.jpg",
+         "alt": "Email from Susan Hoffman to Judi Stahl about her Katrina experiences (page 2)",
+         "caption": "<p>Email from Susan Hoffman to Judi Stahl about her Katrina experiences (page 2)</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "William Claxton Jazz",
+     "anchor": "william-claxton-jazz",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/William Claxton Jazz/Ella01-001.Jpeg",
+         "alt": "Flyer for William Claxton’s exhibit (front)",
+         "caption": "<p>Flyer for William Claxton’s exhibit (front)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/William Claxton Jazz/Ella01-002.Jpeg",
+         "alt": "Flyer for William Claxton’s exhibit (back)",
+         "caption": "<p>Flyer for William Claxton’s exhibit (back)</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/louisiana_artists/William Claxton Jazz/william claxton photos001.jpg",
+         "alt": "Ray Charles at a piano with a woman photographed by William Claxton",
+         "caption": "<p>Ray Charles at a piano with a woman photographed by William Claxton</p>"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Interdisciplinary Collaboration",
+   "anchor": "interdisciplinary-collaboration",
+   "lead": "sites/default/files/2025-12/artofwestafrica001_trimmed57.jpg",
+   "lead_alt": "Photo from Art of West Africa event",
+   "focus": "center",
+   "lead_caption": "<p>Photo from Art of West Africa event</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "International Expo",
+     "anchor": "international-expo",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "layout": "center",
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/International show.jpg",
+       "alt": "International Art and Fashion Show hosted in Union",
+       "caption": "<p>International Art and Fashion Show hosted in Union</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Arts of West Africa",
+     "anchor": "arts-of-west-africa",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/art of west africa/ArtofWestAfrica001.jpg",
+         "alt": "Photo from Art of West Africa event",
+         "caption": "<p>Photo from Art of West Africa event</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/art of west africa/ArtofWestAfrica002.jpg",
+         "alt": "Photo from Art of West Africa event",
+         "caption": "<p>Photo from Art of West Africa event</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/art of west africa/ArtofWestAfrica003.jpg",
+         "alt": "Photo from Art of West Africa event",
+         "caption": "<p>Photo from Art of West Africa event</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/art of west africa/ArtofWestAfrica004.jpg",
+         "alt": "Photo from Reveille advertising mask making demonstration by Doris Sane done in association with the show",
+         "caption": "<p>Photo from Reveille advertising mask making demonstration by Doris Sane done in association with the show</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Getting Along",
+     "anchor": "getting-along",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong002.jpg",
+         "alt": "Flyer for “Getting Along” show",
+         "caption": "<p>Flyer for “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong003.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong004.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong005.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong006.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong007.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong008.jpg",
+         "alt": "Photo from “Getting Along” show",
+         "caption": "<p>Photo from “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong009.jpg",
+         "alt": "Flyer from panel discussion “Race Relations” in conjunction with “Getting Along” show",
+         "caption": "<p>Flyer from panel discussion “Race Relations” in conjunction with “Getting Along” show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/getting along/GettingAlong010.jpg",
+         "alt": "Article on “Getting Along” show",
+         "caption": "<p>Article on “Getting Along” show</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mad Magazine",
+     "anchor": "mad-magazine",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/Mad Magazine/Mad Magazine001.jpg",
+         "alt": "Post sent for “Humor in the Jugular Vein”",
+         "caption": "<p>Post sent for “Humor in the Jugular Vein”</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/Mad Magazine/Mad Magazine002.jpg",
+         "alt": "Flyer for event called “Humor in the Jugular Vein” including exhibition in the Union Art Gallery",
+         "caption": "<p>Flyer for event called “Humor in the Jugular Vein” including exhibition in the Union Art Gallery</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/interdisciplinary_collab/Mad Magazine/Mad Magazine003.jpg",
+         "alt": "Images featured in “Humor in the Jugular Vein”",
+         "caption": "<p>Images featured in “Humor in the Jugular Vein”</p>"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Celebration of Books",
+   "anchor": "celebration-of-books",
+   "lead": "sites/default/files/2025-12/artists_books_by_printmakers001.jpg",
+   "lead_alt": "Flyer for Artists’ Books by Printmakers exhibit",
+   "focus": "center",
+   "lead_caption": "<p>Flyer for Artists’ Books by Printmakers exhibit</p>",
+   "blocks": [
+    {
+     "type": "gallery",
+     "figures": [
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/Ella01-003.Jpeg",
+       "alt": "Exhibit poster for Turning the Page: A Celebration of the Book",
+       "caption": "<p>Exhibit poster for Turning the Page: A Celebration of the Book</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/book fest.jpg",
+       "alt": "Scrapbook page of article by Jenny Heil in The Reveille about the book arts exhibit",
+       "caption": "<p>Scrapbook page of article by Jenny Heil in The Reveille about the book arts exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/book fest1.jpg",
+       "alt": "Scrapbook page of LSU News Service clipping about the book arts exhibit",
+       "caption": "<p>Scrapbook page of LSU News Service clipping about the book arts exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers001.jpg",
+       "alt": "Flyer for Artists’ Books by Printmakers exhibit",
+       "caption": "<p>Flyer for Artists’ Books by Printmakers exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers002.jpg",
+       "alt": "Flyer for gallery talk by John Risseeuw",
+       "caption": "<p>Flyer for gallery talk by John Risseeuw</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers003.jpg",
+       "alt": "Artist book authors featured in the exhibit",
+       "caption": "<p>Artist book authors featured in the exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers004.jpg",
+       "alt": "Artist book authors featured in the exhibit",
+       "caption": "<p>Artist book authors featured in the exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers005.jpg",
+       "alt": "Artist book authors featured in the exhibit",
+       "caption": "<p>Artist book authors featured in the exhibit</p>"
+      },
+      {
+       "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/celebration_of_books/artists books by printmakers006.jpg",
+       "alt": "Artist book authors featured in the exhibit",
+       "caption": "<p>Artist book authors featured in the exhibit</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Visiting Artists",
+   "anchor": "visiting-artists",
+   "lead": "sites/default/files/2025-12/luis_cruz_azaceta003_trimmed.jpg",
+   "lead_alt": "Photo of a piece from Azaceta’s show",
+   "focus": "center",
+   "lead_caption": "<p>Photo of a piece from Azaceta’s show</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Bill Hutson",
+     "anchor": "bill-hutson",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Bill Hutson/BillHutson001.jpg",
+         "alt": "Flyer for Hutson’s show",
+         "caption": "<p>Flyer for Hutson’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Bill Hutson/BillHutson002.jpg",
+         "alt": "Evaluation of Hutson’s show written by Pamela Micheal",
+         "caption": "<p>Evaluation of Hutson’s show written by Pamela Micheal</p>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Luis Cruz Azaceta",
+     "anchor": "luis-cruz-azaceta",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "gallery",
+       "figures": [
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta001.jpg",
+         "alt": "Photo of a piece from Azaceta’s show",
+         "caption": "<p>Photo of a piece from Azaceta’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta002.jpg",
+         "alt": "Photo of a piece from Azaceta’s show",
+         "caption": "<p>Photo of a piece from Azaceta’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta003.jpg",
+         "alt": "Photo of a piece from Azaceta’s show",
+         "caption": "<p>Photo of a piece from Azaceta’s show</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta004.jpg",
+         "alt": "Article on Azaceta’s show with the Union Art Gallery",
+         "caption": "<p>Article on Azaceta’s show with the Union Art Gallery</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta005.jpg",
+         "alt": "Letter from Azaceta to Judi Stahl",
+         "caption": "<p>Letter from Azaceta to Judi Stahl</p>"
+        },
+        {
+         "image": "sites/all/files/sc/exhibitions/undergrad_projects/Blandino_Project/visiting_artists/Luiz Cruz Azaceta/Luis Cruz Azaceta006.jpg",
+         "alt": "Back of letter from Azaceta to Judi Stahl",
+         "caption": "<p>Back of letter from Azaceta to Judi Stahl</p>"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
