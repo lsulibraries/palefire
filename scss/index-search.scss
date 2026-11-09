@@ -1017,6 +1017,10 @@
     position: sticky;
     top: calc(var(--pf-header-h, 3rem) + 2rem);
     z-index: 2;
+    // Its cover reaches a little past the column on both sides: a mark's
+    // tint (.08em) and a button's hover fill (1px) stand just outside the
+    // column, and passing under the bar they showed beside it as a thin line.
+    box-shadow: -.5rem 0 0 var(--bs-body-bg), .5rem 0 0 var(--bs-body-bg);
 
     // Held, it covers what passes under it. Above it, the page's color up to
     // the header, so results don't show through the breadcrumb's glass (which
@@ -1027,7 +1031,7 @@
     &::after {
       content: "";
       position: absolute;
-      inset-inline: 0;
+      inset-inline: -.5rem;
       pointer-events: none;
     }
 
@@ -1041,6 +1045,29 @@
       top: calc(100% + 1px);
       height: .75rem;
       background: linear-gradient(var(--bs-body-bg), transparent);
+    }
+  }
+}
+
+// While held (scroll-state queries; elsewhere the fade above stays), a
+// clear band under the line, so results go under the bar before they reach
+// it and nothing is cut at the line. Drawn by the total's ::after, placed on
+// the bar (the bar is its containing block): a container query can't style
+// the bar's own pseudo-elements.
+@media (min-height: 30rem) {
+  .pf-index__toolbar {
+    container-type: scroll-state;
+  }
+
+  @container scroll-state(stuck: top) {
+    .pf-index__total::after {
+      content: "";
+      position: absolute;
+      top: calc(100% + 1px);
+      inset-inline: -.5rem;
+      height: 2.25rem;
+      background: linear-gradient(var(--bs-body-bg) .75rem, transparent);
+      pointer-events: none;
     }
   }
 }

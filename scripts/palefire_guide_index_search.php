@@ -289,6 +289,7 @@ HTML),
 <li>The header's Search drawer now explains its four choices: All, Research, Special Collections and Website are rows, each with a line on what it searches.</li>
 <li>Questions & Answers results show the whole answer, paragraph by paragraph, instead of the first couple of lines.</li>
 <li>Results no longer show through the bar that follows you down the page: the strip above it is filled, and results fade as they pass under it.</li>
+<li>Found the real cause of the thin line beside that bar: a searched word's tint and a button's hover fill stand just outside the results column, past the bar's edge. The bar now covers a little beyond the column, and results go under a clear band before reaching it.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
