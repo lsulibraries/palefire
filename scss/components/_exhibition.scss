@@ -1382,6 +1382,55 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   }
 }
 
+// The scroll cue (exhibit-cover.html.twig, js/exhibition.js): the landing's
+// .pf-hero-cue (_landing-features.scss: its line, gold run and replay),
+// centred under the text column with its line running to the foot of the
+// screen. From md on a window tall enough, as on the landing. Its room is
+// the head's foot, held from the first paint, not from when the script
+// shows the cue, so nothing moves when it does.
+@media (min-height: 48rem) {
+  @include media-breakpoint-up(md) {
+    .pf-exhibit-head:has(.pf-exhibit-cover__cue) {
+      --pf-hero-cue-room: clamp(4.5rem, 11svh, 7rem);
+      padding-bottom: var(--pf-hero-cue-room);
+    }
+
+    .pf-exhibit-cover__text:has(> .pf-exhibit-cover__cue) {
+      position: relative;
+    }
+
+    .pf-exhibit-cover__cue:not([hidden]) {
+      position: absolute;
+      top: calc(100% + 1.25rem);
+      inset-inline: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 6rem;
+      height: calc(var(--pf-hero-cue-room) - 1.25rem);
+      margin-inline: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--bs-body-color);
+      font: var(--pf-mono-label)/1.2 var(--pf-exhibit-mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+
+      &:is(:hover, :focus-visible) {
+        color: var(--pf-g-title, var(--pf-exhibit-accent));
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--bs-body-color);
+        outline-offset: 3px;
+      }
+    }
+  }
+}
+
 .pf-exhibit-button {
   display: inline-flex;
   gap: 0.6rem;
@@ -1430,6 +1479,16 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   &:focus-visible {
     outline: 2px solid var(--bs-body-color);
     outline-offset: 3px;
+  }
+
+  // Contents opens a list in place: its icon stays put on hover. Hidden
+  // until js/modular-toc.js wires it.
+  &--contents:is(:hover, :focus-visible) svg {
+    translate: none;
+  }
+
+  &[hidden] {
+    display: none;
   }
 }
 

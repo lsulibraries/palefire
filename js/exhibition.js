@@ -361,6 +361,61 @@
     go(target);
   }
 
+  // The title page's "Scroll" cue (exhibit-cover.html.twig), as the
+  // landing's (js/hero-highlights.js): shown when the cover's foot is on
+  // the first screen, so it never sits below the fold. A click glides to
+  // the first gallery, as Begin. Once the page moves it fades and leaves
+  // the tab order (.is-away), unless the keyboard is on it; after ten quiet
+  // seconds at the top it runs its line once more (.is-replaying, the
+  // CSS's, none under reduced motion).
+  function cue(head) {
+    const button = head.querySelector('[data-pf-exhibit-cue]');
+    if (!button || !state.pages[0] || window.scrollY > 8 || head.getBoundingClientRect().bottom > window.innerHeight + 2) {
+      return;
+    }
+    button.hidden = false;
+    const stop = new AbortController();
+    let idle = 0;
+    const retire = () => {
+      window.clearTimeout(idle);
+      stop.abort();
+      button.classList.add('is-away');
+    };
+    const wait = () => {
+      window.clearTimeout(idle);
+      idle = window.setTimeout(() => {
+        if (document.hidden || window.scrollY > 8 || getComputedStyle(button).display === 'none') {
+          wait();
+        }
+        else {
+          button.classList.add('is-replaying');
+        }
+      }, 10000);
+    };
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 8 && state.pages[0].getBoundingClientRect().top <= window.innerHeight / 2) {
+        retire();
+        return;
+      }
+      button.classList.toggle('is-away', window.scrollY > 8);
+      if (!button.classList.contains('is-replaying')) {
+        wait();
+      }
+    }, { passive: true, signal: stop.signal });
+    ['wheel', 'keydown', 'pointerdown'].forEach((type) => {
+      window.addEventListener(type, () => {
+        if (!button.classList.contains('is-replaying')) {
+          wait();
+        }
+      }, { passive: true, signal: stop.signal });
+    });
+    button.addEventListener('click', () => {
+      retire();
+      go(state.pages[0]);
+    });
+    wait();
+  }
+
   function closeToc() {
     const panel = document.querySelector('#pf-modular-sidebar.show');
     const Offcanvas = window.bootstrap && window.bootstrap.Offcanvas;
@@ -435,6 +490,7 @@
     if (actions) {
       actions.hidden = false;
     }
+    cue(head);
     // Capture, ahead of the TOC's own click handler.
     document.addEventListener('click', onClick, true);
     window.addEventListener('popstate', onPopState);

@@ -28,8 +28,9 @@
  * image, title, subtitle, credit, then the prompt. The galleries follow
  * it as one long page ("Home" in the TOC is this page).
  *
- * "Begin" glides to the first gallery; below lg, "Contents" opens the TOC
- * drawer, which is where the prompt points there.
+ * "Begin" glides to the first gallery; "Contents" opens the TOC (the rail's
+ * panel from lg, the drawer below), as on the landing's hero. Under them,
+ * the "Scroll" cue runs a line to the foot of the screen.
  */
 #}
 {{ attach_library('palefire/exhibition') }}
@@ -115,14 +116,28 @@
           {{ 'Begin'|t }}
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
         </a>
-        <button type="button" class="pf-exhibit-button d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#pf-modular-sidebar" aria-controls="pf-modular-sidebar">
-          {{ 'Contents'|t }}
+        {# Opens the table of contents in place, as the landing's Contents
+           (includes/landing.html.twig): a list icon, not an arrow.
+           js/modular-toc.js shows and wires it: the rail's panel under the
+           button from lg, the drawer (or the dock's Contents) below. #}
+        <button type="button" class="pf-exhibit-button pf-exhibit-button--contents" data-pf-landing-contents hidden>
+          {{- 'Contents'|t -}}
+          <span class="visually-hidden">{{ ' of this exhibition'|t }}</span><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
         </button>
       </div>
       {% if head.action %}
         </div>
       {% endif %}
     </div>
+    {# The scroll cue, as on the landing's hero (.pf-hero-cue,
+       _landing-features.scss): the page goes on, and a way to the first
+       gallery without a wheel. js/exhibition.js shows it when the cover
+       fits the screen; _exhibition.scss lays it under the buttons. #}
+    <button type="button" class="pf-hero-cue pf-exhibit-cover__cue pf-exhibit-cover__step" style="--pf-step: 6" data-pf-exhibit-cue hidden>
+      {{- 'Scroll'|t -}}
+      <span class="visually-hidden">{{ ' to the first gallery'|t }}</span>
+      <span class="pf-hero-cue__line"></span>
+    </button>
   </div>
   {{ head.cache }}
 </div>
