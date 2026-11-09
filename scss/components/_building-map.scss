@@ -498,8 +498,12 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
    fades in and rises a few px with a slight overshoot (the bump), growing
    from its pointer. Position is left/top so the bump's transform never moves
    it across the map.
-   Set as a museum wall label, flat like the page around it: a solid panel,
-   a hairline edge under a gold rule, the floor numeral in its own column. */
+   Set as a museum wall label: a solid panel, a hairline edge under a gold
+   rule, the floor numeral in its own column, lifted just off the wall by
+   the ledger's long, low shadow (_location.scss), barely there on the plain
+   map and stronger over a room's photo (--pf-map-tip-shadow), where the
+   hairline alone loses the edge. It fades with the panel; the pointer has
+   none (its clipping would show). */
 .pf-map__tip-src { display: none; }
 .pf-map__tip {
   position: absolute; z-index: 5; left: var(--tip-x, 0px); top: var(--tip-y, 0px);
@@ -507,6 +511,7 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
   width: max-content; max-width: min(27rem, calc(100% - 1rem));
   border: 1px solid #{$pf-hairline}; border-top: 2px solid var(--pf-map-hover); border-radius: 0;
   background: var(--pf-map-tip-solid); color: var(--pf-map-ink);
+  box-shadow: 0 1.5rem 3rem -1rem rgb(0 0 0 / var(--pf-map-tip-shadow, .18));
   font-size: 1rem; line-height: 1.6; text-align: left;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; /* true weight on macOS, as the page <h1> */
   opacity: 0; visibility: hidden; pointer-events: none;
@@ -677,7 +682,7 @@ html[data-pf-theme] .pf-landing__visit.has-map-photos {
     // rule) move with it: Lavender's muted grey was 3.5:1 over the floor.
     --pf-section-muted: var(--pf-photo-muted);
 
-    .pf-map { --pf-map-floor-ink: var(--pf-photo-floor-ink); }
+    .pf-map { --pf-map-floor-ink: var(--pf-photo-floor-ink); --pf-map-tip-shadow: .4; }
 
     .pf-map__frost {
       visibility: visible;

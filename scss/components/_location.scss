@@ -270,7 +270,7 @@ html[data-pf-theme] .pf-location__intro.has-backdrop {
   // The map's grey floor names and icons over the photo, as behind the
   // landing's map (--pf-photo-floor-ink): 5.1:1 or more on every dark
   // swatch (#9a9a9a gave 3.7:1 over grey 64).
-  .pf-map { --pf-map-floor-ink: var(--pf-photo-floor-ink); }
+  .pf-map { --pf-map-floor-ink: var(--pf-photo-floor-ink); --pf-map-tip-shadow: .4; }
 
   // The layer sits under the drawing in its scroller, the size of the
   // drawing's box, so the mask (the same viewBox, stretched to it) lines up.
