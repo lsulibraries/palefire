@@ -79,7 +79,7 @@ foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code'] as $i
     throw new \RuntimeException("'$id' not found. Run palefire_guide_blocks_setup.php first.");
   }
 }
-foreach ([['guide_stat', 'field_stat_progress'], ['guide_stats', 'field_stats_caption']] as [$bundle, $field]) {
+foreach ([['guide_stat', 'field_stat_progress'], ['guide_stats', 'field_stats_caption'], ['guide_progress', 'field_progress_rows'], ['guide_progress_row', 'field_progress_to']] as [$bundle, $field]) {
   if (!\Drupal\field\Entity\FieldConfig::loadByName('paragraph', $bundle, $field)) {
     throw new \RuntimeException("'$field' not found. Run palefire_guide_blocks_setup.php first.");
   }
@@ -152,6 +152,12 @@ $stats = fn (?string $heading, array $items, string $caption = '') => [
   'heading' => $heading,
   'items' => $items,
 ];
+$progress = fn (?string $heading, array $rows, string $caption = '') => [
+  'kind' => 'progress',
+  'heading' => $heading,
+  'rows' => $rows,
+  'caption' => $caption,
+];
 $code = fn (?string $heading, string $text, string $caption = '') => [
   'kind' => 'code',
   'heading' => $heading,
@@ -165,13 +171,13 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Mon 9 Nov 2026, 09:02 (CST):</strong> Louisiana Newspapers downloaded steadily all weekend and is about 82% done by size, now on St Bernard Parish Newspapers. Loyola follows it. The files the website wouldn't serve were all downloaded straight from Fedora instead on Friday. The short list of duplicates is waiting for approval.</p>
+<p><strong>Status as of Mon 9 Nov 2026, 10:18 (CST):</strong> Louisiana Newspapers downloaded steadily all weekend and is about 83% done by size. Its run stopped at 9:10 this morning and was restarted at 10:04, and it's picking up a few leftovers before it goes back to St Bernard Parish Newspapers. Loyola follows it. The files the website wouldn't serve were all downloaded straight from Fedora instead on Friday. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
-    ['86%', 'downloaded, by data size: 2.73 TB on L:, 0.44 TB left', 86],
+    ['86%', 'downloaded, by data size: 2.74 TB on L:, 0.44 TB left', 86],
     ['85%', 'downloaded, by number of files', 85],
-    ['31 of 39', 'institutions with nothing left to download, as of Nov 9, 09:02', 79],
-  ], 'Two institutions make up nearly all of what\'s left: Loyola is about 0.23 TB and Louisiana Newspapers about 0.21 TB of the 0.44 TB, as of Nov 9, 09:02. Uploading to Quartex isn\'t counted.'),
+    ['31 of 39', 'institutions with nothing left to download, as of Nov 9, 10:18', 79],
+  ], 'Two institutions make up nearly all of what\'s left: Loyola is about 0.23 TB and Louisiana Newspapers about 0.20 TB of the 0.44 TB, as of Nov 9, 10:18. Uploading to Quartex isn\'t counted.'),
   $text('Recent progress', <<<'HTML'
 <ul>
 <li><strong>Weekend, Nov 7 to 8:</strong> Louisiana Newspapers downloaded about 550 GB at a steady 3 MB/s with no stalls. On Nov 6, the files the website wouldn't serve were all downloaded straight from Fedora instead.</li>
@@ -184,14 +190,14 @@ HTML, 'callout'),
 <li><strong>Overnight:</strong> 17,248 more wrong-format images replaced at four institutions. The last first audits found 8,312 more, queued to be replaced.</li>
 </ul>
 HTML),
-  $text('Progress by institution (Nov 9, 09:02)', <<<'HTML'
+  $text('Progress by institution (Nov 9, 10:18)', <<<'HTML'
 <p><strong>The two Downloaded columns count files on L: only,</strong> not whether they passed their checks. Images audited shows how far the checks have got. Replacements, review and manifests aren't included in any column.</p>
 <p>Sorted with the least finished first. There are two percentages because they tell different stories: by size is mostly images, and by files counts every file. An institution with a low size figure and a higher files figure has much of its metadata on L:, but few of its images.</p>
 <table>
 <thead><tr><th scope="col">Institution</th><th scope="col">Downloaded by size</th><th scope="col">Downloaded by files</th><th scope="col">Images audited</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Status</th></tr></thead>
 <tbody>
 <tr><td>Loyola University New Orleans</td><td>0%</td><td>47%</td><td>0%</td><td>233.2</td><td>131,276</td><td>In progress</td></tr>
-<tr><td>Louisiana Newspapers</td><td>82%</td><td>54%</td><td>96%</td><td>210.1</td><td>216,704</td><td>In progress</td></tr>
+<tr><td>Louisiana Newspapers</td><td>83%</td><td>55%</td><td>96%</td><td>203.7</td><td>216,182</td><td>In progress</td></tr>
 <tr><td>Louisiana State Archives</td><td>98%</td><td>98%</td><td>97%</td><td>0.6</td><td>19</td><td>In progress</td></tr>
 <tr><td>LDL Training</td><td>99%</td><td>83%</td><td>0%</td><td>0</td><td>9</td><td>In progress</td></tr>
 <tr><td>Amistad Research Center</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>1</td><td>In progress</td></tr>
@@ -235,14 +241,14 @@ HTML),
 </tbody>
 </table>
 <ul>
-<li><strong>Few or no images on L: yet:</strong> Loyola has none, and Louisiana Newspapers is about 82% done by size, with 6,045 images left, then its text files and PDFs.</li>
+<li><strong>Few or no images on L: yet:</strong> Loyola has none, and Louisiana Newspapers is about 83% done by size, with 5,523 images left, then its text files and PDFs.</li>
 <li><strong>In audit means nothing is left to download, but some images have no check on record yet:</strong> 1 of 38,361 at LSUHSC New Orleans.</li>
 <li><strong>LSUHSC Shreveport is Done with Images audited at 79%.</strong> 589 Newspaper Clippings PDFs can't get a checksum check: Fedora has checksums turned off for them, and there's no FITS or S3 hash either, so no audit can finish them. All 589 match Fedora's size and have a PDF start and end marker, so they look complete, but that isn't proof their contents are unchanged.</li>
 <li><strong>One Amistad recording is empty in Fedora itself:</strong> <code>amistad-ay:148</code>, "Andrew Young's inserts for manuscript, 1984 August 6, Part 2", original file <code>Dent.Young_8.6.1984_Item_5-02.wav</code>. Fedora returns 0 bytes and has only one version. Its technical record from ingest (Nov 11, 2024) already says size 0, so it was empty when it arrived. Its S3 record lists no datastreams, and the 521-byte MP3 looks like it was made from the empty file. Downloading again can't fix it, and the only likely source is Amistad's own copy. It's being set aside in <code>L:\LDL1-datastreams\_empty_other\</code>, outside the export, and nothing is deleted.</li>
 <li><strong>Done means nothing is left to download and every image has a check on record, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 18 institutions. Anything with files left shows 99% at most.</li>
 <li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
 <li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including those still in the queue.</li>
-<li><strong>Images audited (Nov 9, 09:02):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
+<li><strong>Images audited (Nov 9, 10:18):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
 <li><strong>Empty text files aren't exported.</strong> Some pages and scanned PDFs have OCR or FULL_TEXT with nothing in it. The exporter no longer saves those, and they count as done. The 2,064 already on L: moved to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export, on Nov 5, and nothing was deleted. Manifests at the six institutions were rebuilt without them. Another 1,635 found empty since then were never saved. Files left with no size on record may turn out empty too.</li>
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.18 TB in all. The 5.7 TB is everything in Fedora. The 2.52 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
@@ -250,7 +256,7 @@ HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
     ['done', 'Files the website refuses', 'The exporter normally downloads through the LDL website. For some files the website answers 403 (access denied), usually because the item is restricted on the site. Nothing is lost: those files are downloaded straight from Fedora, the repository behind the website, over a secure connection to the server (an SSH tunnel). They\'re the same files and get the same checks. 4,197 main files and 822 text files were refused, and all of them came from Fedora on Nov 6: University of New Orleans 4,027 and 252 (its other 476 text files were empty, so they aren\'t exported), Historic New Orleans 76, TAHIL 51 and 51, and LSU Shreveport 43 and 43.'],
-    ['running', 'Remaining downloads', 'About 0.44 TB and 348,000 files as of Nov 9, 09:02: Loyola about 0.23 TB (131,000 files) and Louisiana Newspapers about 0.21 TB (217,000 files, mostly small text files). Louisiana Newspapers has 6,045 images left, then about 0.15 TB of text files and PDFs. Loyola is queued to start after it. 39 files at six other institutions need another try or a review.'],
+    ['running', 'Remaining downloads', 'About 0.44 TB and 347,000 files as of Nov 9, 10:18: Loyola about 0.23 TB (131,000 files) and Louisiana Newspapers about 0.20 TB (216,000 files, mostly small text files). Louisiana Newspapers has 5,523 images left, 4,446 of them in St Bernard Parish Newspapers, then about 0.15 TB of text files and PDFs. Loyola is queued to start after it. 39 files at six other institutions need another try or a review.'],
     ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. The audit of UNO\'s images from Fedora found 2,021 JPEGs labelled as JP2, queued to be replaced. Louisiana Newspapers has 128 images that hit network errors, to retry after its run. Still to sort out: State Archives 4 network errors and 2 TIFFs, Historic New Orleans 7 to review and 1 TIFF, Law Library 1 to review, and Ascension 1, Hicks 1 and Amistad 1.'],
     ['todo', 'TIFFs with no usable JP2', 'About 2,000 across all institutions still need a JP2 converted from the TIFF (at most about 98 GB), 1,974 of them in Louisiana Newspapers. They\'re converted once its downloads finish.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
@@ -275,6 +281,18 @@ $section('Day by day', [
   $text(NULL, <<<'HTML'
 <p>What was done on each working day. File counts include replacements and small text files, and a run counts on the day it started, so an overnight run can appear under the day before.</p>
 HTML),
+  $progress('Share of the LDL downloaded each day', [
+    ['Before Oct 29', 0.0, 44.7],
+    ['Fri Oct 30', 44.7, 45.0],
+    ['Mon Nov 2', 45.0, 45.5],
+    ['Tue Nov 3', 45.5, 46.0],
+    ['Wed Nov 4', 46.0, 50.0],
+    ['Thu Nov 5', 50.0, 51.9],
+    ['Fri Nov 6', 51.9, 65.7],
+    ['Sat Nov 7', 65.7, 74.1],
+    ['Sun Nov 8', 74.1, 83.1],
+    ['Mon Nov 9, so far', 83.1, 86.2],
+  ], 'Each bar is the whole LDL by size, about 3.18 TB: the 2.74 TB on L: plus the 0.44 TB still to download. The pale part is what was already on L: when the day began, and the gold part is what that day added. Before Oct 29 is everything exported before this exporter\'s runs. Only new files count: replacements and TIFF-to-JP2 conversions don\'t add to the total, and days with no new downloads are left out. As of Nov 9, 10:18.'),
   $text('Wed Oct 28: Getting the exporter ready', <<<'HTML'
 <ul>
 <li>Downloads are now checked against the checksums Fedora already stores.</li>
@@ -361,8 +379,10 @@ HTML),
 HTML),
   $text('Mon Nov 9: Status check', <<<'HTML'
 <ul>
-<li>At 9:02 AM, 86% was downloaded by size and 85% by files, with nothing left to download at 31 of 39 institutions.</li>
-<li>Louisiana Newspapers was on St Bernard Parish Newspapers (about 2,150 of 7,197 images), with 6,045 images left, then its text files and PDFs. Loyola is next.</li>
+<li>The Louisiana Newspapers run stopped at 9:10 AM, with nothing left running, for a reason not yet known. It was restarted at 10:04 and was downloading again within minutes.</li>
+<li>At 10:18 AM, 86% was downloaded by size and 85% by files, with nothing left to download at 31 of 39 institutions.</li>
+<li>Louisiana Newspapers had 5,523 images left, 4,446 of them in St Bernard Parish Newspapers, then its text files and PDFs. Loyola is next.</li>
+<li>At the LDL team's request, all 6,880 New Orleans Jazz &amp; Heritage records were hidden from the LDL, because their links to the foundation's old site are dead. Each was set Inactive in Fedora and taken out of search, with no failures. Nothing was deleted, and the records can be brought back: see Hidden New Orleans Jazz &amp; Heritage records.</li>
 </ul>
 HTML),
 ]);
@@ -406,6 +426,77 @@ HTML),
 </tbody>
 </table>
 <p>Not exported: <code>PROXY_MP3</code>, <code>TN</code>, <code>TECHMD</code> and <code>S3_MANIFEST</code>. These are derivatives or Islandora-specific. <code>sp_remote_resource</code> objects (about 42k, mostly in the excluded institutions) have an OBJ that's just a link to content hosted elsewhere.</p>
+HTML),
+]);
+
+$section('Hidden New Orleans Jazz & Heritage records', [
+  $text(NULL, <<<'HTML'
+<p>On Nov 9, every New Orleans Jazz &amp; Heritage Foundation Archive record (namespace <code>nojh</code>) was hidden from the LDL at the LDL team's request. Nothing was deleted. This section records what was done, where everything is kept, and how to bring the records back, in the LDL or in Quartex.</p>
+HTML),
+  $stats(NULL, [
+    ['6,880', 'records hidden: 6,857 items and 23 collections'],
+    ['0', 'nojh records left in search'],
+    ['6,857', 'items with MODS and RELS-EXT already on L:'],
+  ]),
+  $text('Why they were hidden', <<<'HTML'
+<ul>
+<li><strong>Harvested records:</strong> the LDL harvests these records from the foundation's own site. Elisa Naquin confirmed this on Nov 5, and asked for the records to be hidden, because the foundation is mid-migration too and the links to its old site are dead.</li>
+<li><strong>Link records only:</strong> every item is a link record (<code>sp_remote_resource</code>). Its main file is only a link to the item on the old site, <code>nojh.saas.dgicloud.com</code>. All 6,857 links point there, and that site now refuses every request with a 403.</li>
+<li><strong>Not in the migration:</strong> nojh is one of the 3 excluded institutions (<code>EXCLUDED_INSTITUTIONS</code> in the exporter's <code>config.py</code>), so hiding it doesn't change any export.</li>
+</ul>
+HTML),
+  $text('What was done', <<<'HTML'
+<table>
+<thead><tr><th scope="col">When</th><th scope="col">Change</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><td>Nov 6</td><td>Test: one record, <code>nojh-27114:131</code> ("Jason Marsalis"), set Inactive in Fedora</td><td>It left its collection page at once, but was still in search 72 hours later. Search doesn't update on its own after a change in Fedora.</td></tr>
+<tr><td>Nov 9, morning</td><td>The test record reindexed through GSearch, the service that updates search from Fedora</td><td>It left search at once</td></tr>
+<tr><td>Nov 9, 10:03 to 10:11</td><td>6,876 records (6,856 items and 20 collections) each set Inactive, then reindexed</td><td>All 6,876 succeeded, with no failures</td></tr>
+<tr><td>Already Inactive</td><td>Kid Ory Video Collection, Ice Cube Slim Audio Collection and Mick Burns Project Interviews (<code>nojh-51271</code>, <code>51272</code> and <code>51273</code>)</td><td>Left as they were. Each holds no items.</td></tr>
+</tbody>
+</table>
+<p>Checked afterwards: all 6,880 nojh objects are Inactive in Fedora, none are left in the search index, a website search for nojh finds nothing, and <code>louisianadigitallibrary.org/nojh</code> lists no collections. In Fedora, each record's history notes the change as an LDL request from Elisa Naquin.</p>
+<p>What hasn't changed: the objects and all their files are still in Fedora. A direct link to an item still forwards to the dead old site. A collection's page still opens, but lists no items.</p>
+HTML),
+  $text('Where the records are kept', <<<'HTML'
+<p>In the <code>reports\</code> folder of the islandora-exporter repo:</p>
+<table>
+<thead><tr><th scope="col">File</th><th scope="col">What's in it</th></tr></thead>
+<tbody>
+<tr><td><code>nojh-records-2026-11-09.csv</code></td><td>One row per record: PID, title, collection, old link, where its MODS and RELS-EXT are on L:, date added to the LDL, and its state before Nov 9. Opens in Excel.</td></tr>
+<tr><td><code>nojh-states-before-inactive-2026-11-09.csv</code></td><td>Fedora's state for every nojh object, and every datastream, just before the change</td></tr>
+<tr><td><code>nojh-inactive-log-2026-11-09.csv</code></td><td>The result for each of the 6,876 records changed on Nov 9</td></tr>
+<tr><td><code>nojh_hide_2026-11-09.py</code></td><td>The script that hid them</td></tr>
+<tr><td><code>nojh_restore.py</code></td><td>The script that brings them back (below)</td></tr>
+</tbody>
+</table>
+<p>On L:, the MODS and RELS-EXT for all 6,857 items are in <code>L:\LDL1-datastreams\The New Orleans Jazz &amp; Heritage Foundation Archive\&lt;collection&gt;\Data\MODS\</code> and <code>\RDF\</code>, and the accounting CSVs are in <code>L:\LDL1-accounting\The New Orleans Jazz &amp; Heritage Foundation Archive\</code>. The link files themselves weren't downloaded, but every link is in the records CSV.</p>
+HTML),
+  $text(NULL, <<<'HTML'
+<p><strong>After Fedora is retired.</strong> The hidden records stay in Fedora only until it's switched off after the migration. From then on, the records CSV and the files on L: are the only copy, so keep them.</p>
+HTML, 'callout'),
+  $text('Bring them back in the LDL', <<<'HTML'
+<ol>
+<li>Have new links first. Restoring the records as they are would bring back the dead links, so get the foundation's new links, or re-harvest the records from its new site.</li>
+<li>Open the tunnel to Fedora, as for downloads from Fedora.</li>
+<li>From the islandora-exporter folder, do a dry run. It lists what it would restore and changes nothing. Add <code>--collection</code> with a collection PID to restore one collection only.</li>
+<li>Run it again with <code>--apply</code>. For each record it sets the state back to Active, then reindexes it so it returns to search. Collections go first. The 3 collections that were already Inactive stay that way.</li>
+<li>Check <code>nojh-restore-log.csv</code> in the reports folder: every row should show 200 and 200. Then search the site for a few titles. A rerun skips records already restored.</li>
+</ol>
+HTML),
+  $code('Restore commands', <<<'HTML'
+.\.venv\Scripts\Activate.ps1
+python reports\nojh_restore.py
+python reports\nojh_restore.py --collection nojh-27114:collection
+python reports\nojh_restore.py --apply
+HTML),
+  $text('Put them in Quartex later', <<<'HTML'
+<ol>
+<li>Get the foundation's new link for each record. The old site's ID is at the end of each old link (for example <code>islandora:51696</code>), which may help match old to new. Titles are in the records CSV.</li>
+<li>Agree with Adam Matthew how Quartex should hold records whose content lives on another site.</li>
+<li>Use the files already on L: for the metadata: the MODS has the description, and the RELS-EXT and the records CSV give each item's collection. They don't need exporting again.</li>
+<li>Supply the new links alongside, from the records CSV with the old links swapped out.</li>
+</ol>
 HTML),
 ]);
 
@@ -656,10 +747,10 @@ $section('Remaining institutions', [
 <li>Smaller relation differences: Loyola 12, Delgado 10, Robert Bob Hicks Foundation 7, Law Library 5.</li>
 </ul>
 HTML),
-  $text('Downloads left (Nov 9, 09:02)', <<<'HTML'
+  $text('Downloads left (Nov 9, 10:18)', <<<'HTML'
 <ul>
-<li><strong>348,019 files left to download, about 0.44 TB.</strong> OBJ 63,563 (281 GB), OCR 140,065, HOCR 135,707 (31 GB), PDF 6,348 (130 GB), RDF 1,448, FULL_TEXT 869, MODS 11, PDF-TRANSCRIPT 8.</li>
-<li><strong>Two institutions are nearly all of it:</strong> Louisiana Newspapers 216,704 files (210 GB) and Loyola 131,276 (233 GB).</li>
+<li><strong>347,497 files left to download, about 0.44 TB.</strong> OBJ 63,041 (274 GB), OCR 140,065, HOCR 135,707 (31 GB), PDF 6,348 (130 GB), RDF 1,448, FULL_TEXT 869, MODS 11, PDF-TRANSCRIPT 8.</li>
+<li><strong>Two institutions are nearly all of it:</strong> Louisiana Newspapers 216,182 files (204 GB) and Loyola 131,276 (233 GB).</li>
 <li><strong>The other 37 total 39 files and about 0.6 GB.</strong> The progress table under Status at a glance has each institution.</li>
 <li><strong>As of Nov 4, 2,002 TIFF images had no JP2 in Fedora</strong> (Louisiana Newspapers 1,998, Law Library 3, Hicks Foundation 1). They need derivatives generated before they can go to Quartex.</li>
 <li><strong>As of Nov 4, 69,597 images already on L: hadn't been audited,</strong> so they may include TIFFs or JPEGs saved as .jp2.</li>
@@ -1078,6 +1169,23 @@ $to_paragraph = function (array $block) use ($html, $keep): Paragraph {
       'field_block_title' => $block['heading'],
       'field_stat_items' => $children,
       'field_stats_caption' => $rich($block['caption']),
+    ]));
+  }
+  if ($block['kind'] === 'progress') {
+    $children = [];
+    foreach ($block['rows'] as [$label, $from, $to]) {
+      $children[] = Paragraph::create([
+        'type' => 'guide_progress_row',
+        'field_item_title' => $label,
+        'field_progress_from' => $from,
+        'field_progress_to' => $to,
+      ]);
+    }
+    return Paragraph::create($keep([
+      'type' => 'guide_progress',
+      'field_block_title' => $block['heading'],
+      'field_progress_rows' => $children,
+      'field_progress_caption' => $rich($block['caption']),
     ]));
   }
   if ($block['kind'] === 'code') {

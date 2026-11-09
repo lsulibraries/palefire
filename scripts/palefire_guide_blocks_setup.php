@@ -28,6 +28,8 @@
  *     guide_stats         Figures: Heading, Intro, Figures, Caption.
  *     guide_stat          Value ("5.7 TB"), Label and optional Progress (0-100).
  *     guide_code          Code: Heading, Code, Caption.
+ *     guide_progress      Progress chart: Heading, Intro, Rows, Caption.
+ *     guide_progress_row  Label, From and To (percent of the whole).
  * - Allows guide_flow, guide_status_board, guide_stats and guide_code in the
  *   blocks of a guide section and of a Section tabs tab. Exhibition entries
  *   also have field_guide_blocks; tick them there by hand if wanted.
@@ -66,6 +68,8 @@ $types = [
   'guide_status_item' => ['Status board item', 'One tile: a status, a title and a short note.'],
   'guide_stats' => ['Guide: Figures', 'A row of large numbers with labels.'],
   'guide_stat' => ['Figure', 'One large number and its label.'],
+  'guide_progress' => ['Guide: Progress chart', 'One row per step, such as a day: a bar from where it started to where it ended, out of 100.'],
+  'guide_progress_row' => ['Progress chart row', 'One row: a label and the percent at its start and end.'],
   'guide_code' => ['Guide: Code', 'Commands or code, kept exactly as typed and scrolling inside the block.'],
 ];
 foreach ($types as $id => [$label, $description]) {
@@ -95,6 +99,10 @@ $storages = [
   'field_stat_label' => ['string', ['max_length' => 128], 1],
   'field_stat_progress' => ['integer', [], 1],
   'field_stats_caption' => ['text_long', [], 1],
+  'field_progress_rows' => ['entity_reference_revisions', ['target_type' => 'paragraph'], -1],
+  'field_progress_from' => ['decimal', ['precision' => 5, 'scale' => 1], 1],
+  'field_progress_to' => ['decimal', ['precision' => 5, 'scale' => 1], 1],
+  'field_progress_caption' => ['text_long', [], 1],
   'field_code_text' => ['string_long', [], 1],
   'field_code_caption' => ['text_long', [], 1],
 ];
@@ -153,6 +161,17 @@ $fields = [
     'field_stat_label' => ['Label', TRUE, 'What it counts.'],
     'field_stat_progress' => ['Progress (0 to 100)', FALSE, 'Optional. Turns the rule above the figure into a progress bar. Only for figures that measure progress toward a whole.'],
   ],
+  'guide_progress' => [
+    'field_block_title' => $block_title,
+    'field_block_intro' => $block_intro,
+    'field_progress_rows' => ['Rows', TRUE, 'From top to bottom, such as one per day.'],
+    'field_progress_caption' => ['Caption', FALSE, 'Optional small print: what the whole is, and what isn\'t counted.'],
+  ],
+  'guide_progress_row' => [
+    'field_item_title' => ['Label', TRUE, 'Short: "Fri Nov 6".'],
+    'field_progress_from' => ['From (percent)', TRUE, 'Where it stood at the start, 0 to 100.'],
+    'field_progress_to' => ['To (percent)', TRUE, 'Where it stood at the end, 0 to 100.'],
+  ],
   'guide_code' => [
     'field_block_title' => $block_title,
     'field_code_text' => ['Code', TRUE, 'Printed exactly as typed. Long lines scroll inside the block.'],
@@ -163,6 +182,7 @@ $children = [
   'field_flow_steps' => 'guide_flow_step',
   'field_status_items' => 'guide_status_item',
   'field_stat_items' => 'guide_stat',
+  'field_progress_rows' => 'guide_progress_row',
 ];
 foreach ($fields as $bundle => $bundle_fields) {
   foreach ($bundle_fields as $name => $spec) {
@@ -191,7 +211,7 @@ foreach ($fields as $bundle => $bundle_fields) {
         ],
       ];
     }
-    if ($name === 'field_stat_progress') {
+    if (in_array($name, ['field_stat_progress', 'field_progress_from', 'field_progress_to'], TRUE)) {
       $values['settings'] = ['min' => 0, 'max' => 100];
     }
     FieldConfig::create($values)->save();
@@ -237,7 +257,7 @@ foreach ($fields as $bundle => $bundle_fields) {
     $widget = match (FieldStorageConfig::loadByName('paragraph', $name)->getType()) {
       'list_string' => ['type' => 'options_select'],
       'text_long' => ['type' => 'text_textarea', 'settings' => ['rows' => 2, 'placeholder' => '']],
-      'integer' => ['type' => 'number'],
+      'integer', 'decimal' => ['type' => 'number'],
       'string_long' => ['type' => 'string_textarea', 'settings' => ['rows' => $name === 'field_code_text' ? 8 : 2, 'placeholder' => '']],
       default => ['type' => 'string_textfield', 'settings' => ['size' => 60, 'placeholder' => '']],
     };
@@ -259,7 +279,7 @@ foreach (['guide_section', 'section_tab'] as $bundle) {
     continue;
   }
   $changed = FALSE;
-  foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code'] as $block) {
+  foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code', 'guide_progress'] as $block) {
     if (!isset($handler['target_bundles'][$block])) {
       $handler['target_bundles'][$block] = $block;
       if (isset($handler['target_bundles_drag_drop'])) {

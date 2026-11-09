@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Guide: Progress chart (paragraph type guide_progress).
+ *
+ * One row per step, such as a day: a bar from where it started to where it
+ * ended, out of 100. The earlier part is pale and the step's own gain is gold.
+ * A list, so a screen reader hears each row's words; the bars are decoration.
+ * Fields: palefire_guide_blocks_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--progress', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+  <ol class="pf-progress">
+    {% for item in paragraph.field_progress_rows %}
+      {% set row = item.entity %}
+      {% if row and row.isPublished() %}
+        {% set from = row.field_progress_from.value|default(0) + 0 %}
+        {% set to = row.field_progress_to.value|default(0) + 0 %}
+        {% set gain = to - from %}
+        <li class="pf-progress__row">
+          <span class="pf-progress__label">{{ row.field_item_title.value }}</span>
+          <span class="pf-progress__bar" aria-hidden="true">
+            <span class="pf-progress__before" style="width: {{ from }}%"></span>
+            <span class="pf-progress__gain" style="left: {{ from }}%; width: {{ gain }}%"></span>
+          </span>
+          <span class="pf-progress__value" aria-hidden="true">+{{ gain|number_format(1) }} → {{ to|number_format(1) }}%</span>
+          <span class="visually-hidden">up {{ gain|number_format(1) }} points, to {{ to|number_format(1) }}%</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+  {% if paragraph.field_progress_caption.value|default('')|trim %}
+    <div class="pf-progress__caption">{{ paragraph.field_progress_caption.processed }}</div>
+  {% endif %}
+</div>
