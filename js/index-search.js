@@ -323,6 +323,12 @@
     Drupal.detachBehaviors(main, drupalSettings, 'unload');
     swap(root, page, '.pf-index__form');
     swap(root, page, '.pf-index__modes');
+    // The trail is outside the Index, and Special Collections mode adds a step.
+    const crumbs = document.querySelectorAll('.pf-breadcrumb__nav');
+    const nextCrumbs = page.querySelectorAll('.pf-breadcrumb__nav');
+    if (crumbs.length === nextCrumbs.length) {
+      crumbs.forEach((crumb, index) => crumb.replaceWith(nextCrumbs[index]));
+    }
     const next = swap(root, page, '[data-pf-index-main]');
     root.classList.remove('is-searching');
     checkSignIn(root);
