@@ -1923,9 +1923,16 @@
   }
 
   // What a serial's copy holds, under its row, in one measure.
-  tbody tr:has(+ .pf-index-row__copy-has) {
+  tbody tr:has(+ .pf-index-row__copy-has),
+  tbody tr:has(+ .pf-index-row__copy-note-row) {
     padding-bottom: 0;
     border-bottom: 0;
+  }
+
+  // The reading room note, under the shelf it's about, with no label.
+  .pf-index-row__copy-note-row td {
+    display: block;
+    padding-top: 0;
   }
 
   tbody .pf-index-row__copy-has {
@@ -1957,12 +1964,37 @@
     color: var(--pf-index-muted);
   }
 
-  .pf-index-list__more {
-    margin-top: .75rem;
+  // A box's shelf, said again under its shelf's row. Stacked, each would take
+  // a labelled line saying what the row above says, so it's left out.
+  td.pf-index-row__item-same {
+    display: none;
+    color: var(--pf-index-muted);
+  }
+
+  // The way to everything the table leaves out: a text link at the panel's
+  // start, as large as the table's words, not a fourth button beside theirs.
+  .pf-index-row__full {
+    margin: 1rem 0 0;
+    font-size: 1rem;
+    font-weight: 500;
+
+    a {
+      color: var(--pf-index-fg);
+      text-decoration-thickness: from-font;
+      text-underline-offset: .2em;
+
+      &:hover {
+        text-decoration-thickness: 2px;
+      }
+    }
   }
 
   @container (min-width: 46rem) {
     padding-inline: 1rem;
+
+    td.pf-index-row__item-same {
+      display: table-cell;
+    }
 
     thead {
       position: static;
@@ -2005,8 +2037,14 @@
       padding-inline-end: 0;
     }
 
-    tbody tr:has(+ .pf-index-row__copy-has) td {
+    tbody tr:has(+ .pf-index-row__copy-has) td,
+    tbody tr:has(+ .pf-index-row__copy-note-row) td {
       padding-bottom: .5rem;
+    }
+
+    .pf-index-row__copy-note-row td {
+      display: table-cell;
+      padding-top: 0;
     }
 
     .pf-index-row__copy-has td,
@@ -2054,11 +2092,22 @@
   }
 }
 
-// How a Special Collections request works, once per record.
+// How a Special Collections request works, once per record, under the first
+// shelf it's about. The icon sits on the first line however the words wrap.
 .pf-index-row__copy-note {
-  margin: .75rem 0 0;
+  display: flex;
+  gap: .5rem;
+  max-width: 48rem;
+  margin: 0;
   color: var(--pf-index-muted);
   font-size: .875rem;
+}
+
+.pf-index-row__info {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: .05rem;
 }
 
 .pf-index-row__floor {

@@ -270,6 +270,8 @@ HTML),
 <li>Searched words in results are now marked with a soft tint instead of an underline, which looked like a second link inside the title.</li>
 <li>Chosen filters and Clear all moved into the results bar, so they stay in view while scrolling.</li>
 <li>The reading room note's How requests work link opens in a new tab, with an arrow, so the search results stay open.</li>
+<li>Item rows in a holdings table now repeat their library, shelf and material type in a lighter color, so the table matches the catalog's. Full record became a larger link, Full record in the catalog.</li>
+<li>The reading room note moved under the Special Collections row it describes, with an information icon.</li>
 </ul>
 HTML),
 ]);
