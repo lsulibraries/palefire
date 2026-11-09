@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Mon 9 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog chosen and set to Special Collections. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -274,6 +274,12 @@ HTML),
 <li>The reading room note moved under the Special Collections row it describes, with an information icon.</li>
 <li>Call number and Status can sort a holdings table, as in the catalog, but only within each library, so the libraries stay together.</li>
 <li>Holdings tables now have the catalog's columns in the catalog's order, including Copy. The catalog's web service has no copy numbers, so they're read from the record's catalog page when someone opens the table. Libraries are spaced apart as groups, with tighter rows for their items.</li>
+<li>Mocked up three layouts for the holdings table and four styles for its note and Full record link, and built the chosen one: each library has a heading with its buttons and a short table of its copies, the reading room note sits in a soft band under its library, and the panel ends with the copy count and a Full record in the catalog button. The catalog's per-copy Place hold links can't be used from outside the catalog, so each library keeps one Place hold.</li>
+</ul>
+HTML),
+  $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
+<ul>
+<li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts.</li>
 </ul>
 HTML),
 ]);

@@ -1852,10 +1852,10 @@
   font-weight: 700;
 }
 
-// Where a record is held, as the catalog's table: hairlines between rows only.
-// It's a table once its column has the room, whatever the screen, and each row
-// stacks with its own labels until then. Roles keep it a table to screen readers
-// while it's stacked.
+// Where a record is held: a group for each library, its heading saying what's
+// the same for its copies, and a short table of what differs. Laid out by the
+// panel's own width, whatever the screen. Roles keep each table a table to
+// screen readers while its rows stack.
 .pf-index-row__holdings {
   container-type: inline-size;
 }
@@ -1863,7 +1863,7 @@
 // A soft panel, in place of a shadow or more lines, says this belongs to the
 // result above it. The same mix on a light page goes the other way.
 .pf-index-row__copies-table {
-  padding: .25rem .75rem 1rem;
+  padding: .75rem .75rem 1rem;
   background-color: color-mix(in srgb, var(--pf-index-fg) 4%, transparent);
 
   table {
@@ -1881,20 +1881,6 @@
     white-space: nowrap;
   }
 
-  tr,
-  td {
-    display: block;
-  }
-
-  tbody tr {
-    padding-block: .75rem;
-    border-bottom: 1px solid var(--pf-index-line);
-
-    &:last-child {
-      border-bottom: 0;
-    }
-  }
-
   th {
     @include pf-index-label;
     color: var(--pf-index-muted);
@@ -1904,73 +1890,54 @@
   }
 
   td {
-    display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
-    gap: .5rem;
-    padding-block: .25rem;
+    padding: 0;
     color: var(--pf-index-fg);
     overflow-wrap: break-word;
+  }
+
+  // Stacked, a copy is one entry: its call number and copy on the first line,
+  // its status under them, its request beside both.
+  tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto;
+    grid-template-areas:
+      "call copy action"
+      "status status action";
+    gap: .125rem .5rem;
+    align-items: center;
+    padding-block: .625rem;
+    border-top: 1px solid var(--pf-index-line);
+  }
+
+  td.pf-index-row__item-call {
+    grid-area: call;
+  }
+
+  td.pf-index-row__item-copy {
+    grid-area: copy;
+    color: var(--pf-index-muted);
+
+    &::before {
+      content: "· " attr(data-label) " ";
+    }
 
     &:empty {
       display: none;
     }
-
-    &[data-label]::before {
-      content: attr(data-label);
-      @include pf-index-label;
-      color: var(--pf-index-muted);
-    }
   }
 
-  // What a serial's copy holds, under its row, in one measure.
-  tbody tr:has(+ .pf-index-row__copy-has),
-  tbody tr:has(+ .pf-index-row__copy-note-row) {
-    padding-bottom: 0;
-    border-bottom: 0;
-  }
-
-  // The reading room note, under the shelf it's about, with no label.
-  .pf-index-row__copy-note-row td {
-    display: block;
-    padding-top: 0;
-  }
-
-  tbody .pf-index-row__copy-has {
-    padding-top: .5rem;
-  }
-
-  // Too long to run beside a label: the label goes above. One line to a span.
-  .pf-index-row__copy-has td,
-  td.pf-index-row__item-contents {
-    display: block;
-
-    &[data-label]::before {
-      display: block;
-      margin-bottom: .25rem;
-    }
-
-    > span {
-      display: block;
-    }
-
-    > span + span {
-      margin-top: .25rem;
-    }
-  }
-
-  // The note under a shelf's items takes the row: it has no label beside it.
-  .pf-index-row__copy-more td {
-    display: block;
+  td.pf-index-row__item-status {
+    grid-area: status;
     color: var(--pf-index-muted);
   }
 
-  // Each library starts a group: room above it, and its name a little heavier.
-  tbody .pf-index-row__copy-row:not(:first-child) {
-    padding-top: 1.5rem;
+  td.pf-index-row__copy-actions {
+    grid-area: action;
   }
 
-  .pf-index-row__copy-row > td:first-child {
-    font-weight: 500;
+  .pf-index-row__copy-more td {
+    grid-column: 1 / -1;
+    color: var(--pf-index-muted);
   }
 
   // A sortable heading: the words alone while stacked (the headings are for
@@ -1979,60 +1946,69 @@
     display: none;
   }
 
-  // A box's shelf, said again under its shelf's row. Stacked, each would take
-  // a labelled line saying what the row above says, so it's left out.
-  td.pf-index-row__item-same {
-    display: none;
-    color: var(--pf-index-muted);
-  }
-
-  // The way to everything the table leaves out: a text link at the panel's
-  // start, as large as the table's words, not a fourth button beside theirs.
-  .pf-index-row__full {
-    margin: 1rem 0 0;
-    font-size: 1rem;
-    font-weight: 500;
-
-    a {
-      color: var(--pf-index-fg);
-      text-decoration-thickness: from-font;
-      text-underline-offset: .2em;
-
-      &:hover {
-        text-decoration-thickness: 2px;
-      }
-    }
-  }
-
   @container (min-width: 46rem) {
-    padding-inline: 1.5rem;
+    padding: 1rem 1.5rem 1.25rem;
 
-    // A line only where a library starts; its items run on beneath it, closer.
-    tbody tr {
-      border-bottom: 0;
+    thead {
+      position: static;
+      display: table-header-group;
+      width: auto;
+      height: auto;
+      overflow: visible;
+      clip-path: none;
     }
 
-    tbody .pf-index-row__copy-row:not(:first-child) {
-      padding-top: 0;
-      border-top: 1px solid var(--pf-index-line);
+    tbody tr {
+      display: table-row;
+      padding-block: 0;
+    }
 
-      > td {
-        padding-top: 1.5rem;
+    th,
+    td {
+      display: table-cell;
+      padding: .5rem 1.5rem .5rem 0;
+      vertical-align: middle;
+    }
+
+    th {
+      border-bottom: 1px solid var(--pf-index-line);
+      vertical-align: bottom;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-inline-end: 0;
+    }
+
+    td.pf-index-row__item-copy,
+    td.pf-index-row__item-status {
+      color: var(--pf-index-fg);
+    }
+
+    td.pf-index-row__item-copy {
+      font-variant-numeric: tabular-nums;
+
+      &::before {
+        content: none;
+      }
+
+      &:empty {
+        display: table-cell;
       }
     }
 
-    .pf-index-row__copy-item > td {
-      padding-block: .375rem;
-    }
-
-    // Short, one-word columns take only their words' width.
-    thead th:nth-child(2),
-    thead th:nth-child(4) {
+    // Copy is a number: its column takes only its heading's width. Status has
+    // room for Available to view on one line.
+    th:nth-child(2) {
       width: 1%;
       white-space: nowrap;
     }
 
-    td.pf-index-row__item-same {
+    th:nth-child(3) {
+      width: 11rem;
+    }
+
+    .pf-index-row__copy-more td {
       display: table-cell;
     }
 
@@ -2089,117 +2065,60 @@
     [aria-sort="descending"] .pf-index-row__sort-down {
       opacity: 1;
     }
-
-    thead {
-      position: static;
-      display: table-header-group;
-      width: auto;
-      height: auto;
-      overflow: visible;
-      clip-path: none;
-    }
-
-    thead tr {
-      border-bottom: 1px solid var(--pf-index-line);
-    }
-
-    tr {
-      display: table-row;
-    }
-
-    tbody tr {
-      padding-block: 0;
-    }
-
-    th,
-    td {
-      display: table-cell;
-      padding: .75rem 1.25rem .75rem 0;
-      vertical-align: top;
-    }
-
-    td:empty {
-      display: table-cell;
-    }
-
-    td[data-label]::before {
-      content: none;
-    }
-
-    th:last-child,
-    td:last-child {
-      padding-inline-end: 0;
-    }
-
-    tbody tr:has(+ .pf-index-row__copy-has) td,
-    tbody tr:has(+ .pf-index-row__copy-note-row) td {
-      padding-bottom: .5rem;
-    }
-
-    .pf-index-row__copy-note-row td {
-      display: table-cell;
-      padding-top: 0;
-    }
-
-    .pf-index-row__copy-has td,
-    td.pf-index-row__item-contents {
-      display: table-cell;
-
-      // Takes the cell's width without setting the columns'.
-      > span {
-        max-width: 48rem;
-        contain: inline-size;
-      }
-    }
-
-    .pf-index-row__copy-has td {
-      padding-top: 0;
-
-      &[data-label]::before {
-        content: attr(data-label);
-      }
-    }
-
-    // Under the table's headings, so its label is for screen readers only.
-    td.pf-index-row__item-contents[data-label]::before {
-      content: attr(data-label);
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      margin: 0;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    .pf-index-row__copy-more td {
-      display: table-cell;
-    }
-  }
-
-  // Where there's room, enough for most call numbers on one line. A long one
-  // wraps, so the columns beside it keep their room.
-  @container (min-width: 56rem) {
-    .pf-index-row__item-call {
-      width: 13rem;
-    }
-
-    // Enough for Available to view on one line.
-    thead th:nth-child(6) {
-      min-width: 9rem;
-    }
   }
 }
 
-// How a Special Collections request works, once per record, under the first
-// shelf it's about. The icon sits on the first line however the words wrap.
+// One library: room and the hairline above each after the first.
+.pf-index-row__place + .pf-index-row__place {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pf-index-line);
+}
+
+.pf-index-row__place-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+  margin-bottom: .75rem;
+}
+
+.pf-index-row__place-about {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.pf-main .pf-index .pf-index-row__place-name {
+  margin: 0;
+  color: var(--pf-index-fg);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.pf-index-row__place-detail {
+  margin: .125rem 0 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  text-wrap: pretty;
+}
+
+// How a Special Collections request works, once per record, in a soft band
+// under the library it's about. The icon sits on the first line however the
+// words wrap.
 .pf-index-row__copy-note {
   display: flex;
   gap: .5rem;
-  max-width: 48rem;
-  margin: 0;
-  color: var(--pf-index-muted);
-  font-size: .875rem;
+  align-items: flex-start;
+  margin: 0 0 .75rem;
+  padding: .625rem .75rem;
+  background-color: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
+  color: var(--pf-index-fg);
+  font-size: .8125rem;
 }
 
 .pf-index-row__info {
@@ -2209,28 +2128,92 @@
   margin-top: .05rem;
 }
 
-.pf-index-row__floor {
-  display: block;
+// What a serial's run holds that no one box claims, under the heading.
+.pf-index-row__copy-has {
+  margin: 0 0 .75rem;
   color: var(--pf-index-muted);
-}
+  font-size: .8125rem;
 
-// Slabs, tightened for a table row. Three classes: links here are underlined.
-// An item's own request is a size down from its library's buttons, so its
-// row stays close to its words.
-.pf-main .pf-index .pf-index-row__copy-item .pf-index-row__copy-actions {
-  padding-top: .25rem;
+  p {
+    max-width: 48rem;
+    margin: 0;
+  }
 
-  a {
-    min-height: 2.25rem;
-    padding-block: .25rem;
+  p + p {
+    margin-top: .25rem;
   }
 }
 
+.pf-index .pf-index-row__copy-has-label {
+  @include pf-index-label;
+  margin-bottom: .25rem;
+}
+
+// What a box holds, under its call number. One line to a span.
+.pf-index-row__item-contents {
+  display: block;
+  max-width: 40rem;
+  margin-top: .25rem;
+  color: var(--pf-index-muted);
+  font-size: .8125rem;
+
+  > span {
+    display: block;
+  }
+}
+
+// What the panel covered, then the way to everything it leaves out: an
+// outlined button, quieter than the filled ones it follows.
+.pf-index-row__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem 1.5rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--pf-index-line);
+}
+
+.pf-index-row__foot-count {
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-main .pf-index a.pf-index-row__full {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-inline-start: auto;
+  padding: .375rem .875rem;
+  border: 1px solid var(--pf-index-line);
+  color: var(--pf-index-fg);
+  font-size: .875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+
+  @include pf-index-motion {
+    transition: border-color .2s var(--pf-index-ease);
+  }
+
+  &:hover {
+    border-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
+  }
+}
+
+// Slabs, tightened for the panel. Three classes: links here are underlined.
 .pf-main .pf-index .pf-index-row__copy-actions {
   display: flex;
   flex-wrap: wrap;
   gap: .5rem;
-  padding-top: .5rem;
 
   &:empty {
     display: none;
@@ -2255,23 +2238,22 @@
       }
     }
   }
+}
+
+// A copy's own request is a size down from its library's buttons, so its row
+// stays close to its words.
+.pf-main .pf-index td.pf-index-row__copy-actions {
+  a {
+    min-height: 2.25rem;
+    padding-block: .25rem;
+  }
 
   @container (min-width: 46rem) {
     display: table-cell;
     width: 1%;
-    padding-top: .5rem;
 
     &:empty {
       display: table-cell;
-    }
-
-    a {
-      display: flex;
-      margin-bottom: .375rem;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
   }
 }
@@ -2379,6 +2361,25 @@
   margin: .375rem 0 0;
   color: var(--pf-index-muted);
   text-wrap: pretty;
+}
+
+// The words around a match inside a record's PDF, under its own small label,
+// set in from a hairline so it reads as a quotation of the document.
+.pf-index-row__excerpt {
+  max-width: 48rem;
+  margin: .625rem 0 0;
+  padding-inline-start: .875rem;
+  border-inline-start: 1px solid var(--pf-index-line);
+  color: var(--pf-index-muted);
+  font-size: .9375rem;
+  text-wrap: pretty;
+}
+
+.pf-index-row__excerpt-label {
+  @include pf-index-label;
+  display: block;
+  margin-bottom: .125rem;
+  font-size: .6875rem;
 }
 
 // The padding is taken back by the margin, so a mark never moves the words.
