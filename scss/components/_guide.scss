@@ -885,13 +885,62 @@ html[data-pf-mode="guide"] .pf-modular__title:not(:first-child) {
 // Screenshots: full panel width, a hairline frame so white pages don't
 // melt into a light panel.
 .pf-paths__shot {
-  display: block;
-  width: 100%;
-  height: auto;
+  position: relative;
   border: 1px solid var(--pf-guide-rule);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 
   + .pf-paths__shot {
     margin-top: 1rem;
+  }
+}
+
+// The control to click, ringed: gold, with a dark edge outside it so it
+// holds 3:1 on the white screenshot as well as on the purple buttons.
+// Placed in percent of the image (--x, --y, --w, --h), so it scales with it.
+.pf-paths__mark {
+  position: absolute;
+  inset-block-start: var(--y);
+  inset-inline-start: var(--x);
+  width: var(--w);
+  height: var(--h);
+  pointer-events: none;
+  border: 2px solid $pf-gold;
+  border-radius: 0.375rem;
+  box-shadow:
+    0 0 0 2px rgba($pf-black, 0.85),
+    0 0 1rem rgba($pf-gold, 0.45);
+}
+
+// As the panel opens the ring settles onto the control, a beat after the
+// panel, then breathes once. Reduced motion: it is simply there.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-paths__pop:popover-open .pf-paths__mark {
+    animation: pf-paths-mark 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
+  }
+
+  @keyframes pf-paths-mark {
+    0% {
+      opacity: 0;
+      transform: scale(1.25);
+    }
+
+    40% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    70% {
+      transform: scale(1.04);
+    }
+
+    100% {
+      transform: scale(1);
+    }
   }
 }
 
