@@ -27,8 +27,8 @@
  * - A holdings table's copy numbers load when it's first opened, from an
  *   address of their own: they come from the catalog's record page, too slow
  *   to ask for every result. If they fail, the column stays empty.
- * - A holdings table's Call number and Status headings sort the items under
- *   each library, which keeps its place: ascending, then descending.
+ * - Each library's table in a holdings panel sorts by Call number or Status:
+ *   ascending, then descending.
  * - A paged list gets a Show more results button, which adds the next page under
  *   the rows it has. It's only ever on request: a list that grew by itself would
  *   keep the footer out of reach. The pager stays, for jumping ahead.
@@ -694,7 +694,7 @@
     const text = (row, selector) => row.querySelector(selector)?.textContent.trim() || '';
     const compare = button.dataset.pfIndexSort === 'status'
       ? (a, b) => (b.dataset.pfIndexAvailable - a.dataset.pfIndexAvailable) || collator.compare(text(a, '.pf-index-row__item-status'), text(b, '.pf-index-row__item-status'))
-      : (a, b) => collator.compare(text(a, '.pf-index-row__item-call'), text(b, '.pf-index-row__item-call'))
+      : (a, b) => collator.compare(text(a, '.pf-index-row__item-number'), text(b, '.pf-index-row__item-number'))
         || collator.compare(text(a, '.pf-index-row__item-copy'), text(b, '.pf-index-row__item-copy'));
     table.querySelectorAll('tbody').forEach((body) => {
       let run = [];
@@ -717,7 +717,7 @@
       });
       flush();
     });
-    Drupal.announce(Drupal.t('Sorted by @column, @direction, within each library.', {
+    Drupal.announce(Drupal.t('Sorted by @column, @direction.', {
       '@column': text(heading, '.pf-index-row__th-text'),
       '@direction': direction === 'ascending' ? Drupal.t('ascending') : Drupal.t('descending'),
     }));
