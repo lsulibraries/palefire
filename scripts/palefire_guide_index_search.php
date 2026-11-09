@@ -283,6 +283,7 @@ HTML),
 <li>The search box's border is softer, like the page's other lines.</li>
 <li>In Special Collections, taking the Catalog's Special Collections filter off (with no finding aids, oral histories or news chosen) moves the search to Research, keeping its other filters.</li>
 <li>Oral histories that have no PDF yet are left out of results.</li>
+<li>Fixed: a short source description could sit beside the result count instead of under it, and large counts were missing their commas.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
