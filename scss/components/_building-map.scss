@@ -589,12 +589,12 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
 // --- The room's photo behind the map (landing) ------------------------------
 // building-map.js (photoBackdrop) adds .pf-map-photo to #map, and
 // .is-map-photo while a lit room's photo shows. Dark swatches only, as the
-// room pages' backdrop (_location.scss), and with the same treatment, so
-// its contrast sums hold here: a mid grey with the `color` blend takes the
-// colour away (the gold lit room stays the only colour), a dark grey veil at
-// 87% squeezes the photo into greys 30-64 of 255, and the swatch's page
-// colour with the `color` blend tints it. 64 is the ceiling every text on the
-// map was set against (--pf-map-dim-text, the floor ink below). The layer
+// room pages' backdrop (_location.scss), with the same dark grey veil at 87%
+// but in colour: the veil squeezes every channel into 30-64 of 255, so the
+// room's own colours show, quiet and dark, and no pixel is lighter than grey
+// 64, the ceiling every text on the map was set against (--pf-map-dim-text,
+// the floor ink below). No blend: the room pages take the colour out and
+// tint to the swatch; here the photo keeps its colour. The layer
 // fills #map, which is full bleed, and fades in and out at its top and foot
 // into the page. The view inside is one screen tall and sticky, so the
 // photo stays in the window while the tall map scrolls past. Each slot fades
@@ -635,11 +635,8 @@ html.pf-reading-dark .pf-landing__visit.has-map-photos {
     inset: 0;
     opacity: 0;
     background:
-      linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080)),
       linear-gradient(rgb(35 35 35 / .87), rgb(35 35 35 / .87)),
-      linear-gradient(#808080, #808080),
       var(--pf-map-photo) center / cover no-repeat;
-    background-blend-mode: color, normal, color, normal;
     transition: opacity var(--pf-map-photo-fade) cubic-bezier(.4, 0, .2, 1);
 
     // The new photo fades in over the old; the old goes once it is covered.
