@@ -41,7 +41,8 @@
   const ORDER_KEY = 'pf-index-source-order';
   const wide = window.matchMedia('(min-width: 62rem)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const controllers = new Set();
+  // Each request in flight, with the element it fills.
+  const controllers = new Map();
   let visiting = null;
 
   // Whether the library's proxy already knows this browser. The proxy serves
@@ -76,7 +77,7 @@
     const places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), HOLDINGS_TIMEOUT_MS);
-    controllers.add(controller);
+    controllers.set(controller, rows);
     const template = document.createElement('template');
     try {
       const response = await fetch(rows.dataset.pfIndexHoldingsUrl, { signal: controller.signal });
@@ -118,7 +119,7 @@
     }
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), TIMEOUT_MS);
-    controllers.add(controller);
+    controllers.set(controller, holder);
     try {
       const response = await fetch(holder.dataset.pfIndexLate, { signal: controller.signal });
       if (!response.ok) {
@@ -194,7 +195,7 @@
       Drupal.announce(Drupal.t('Loading more results'));
 
       const controller = new AbortController();
-      controllers.add(controller);
+      controllers.set(controller, button);
       let more;
       let added;
       try {
@@ -783,8 +784,14 @@
       once('pf-index-more', '.pf-index-list__pager', context).forEach(setUpMore);
     },
     detach(context, settings, trigger) {
+      // Only the requests for what is going away. Signed in, BigPipe detaches
+      // each piece it fills in (toolbar, messages) while the sections load.
       if (trigger === 'unload') {
-        controllers.forEach((controller) => controller.abort());
+        controllers.forEach((element, controller) => {
+          if (context === document || context.contains(element)) {
+            controller.abort();
+          }
+        });
       }
     },
   };

@@ -9,7 +9,10 @@
  *   can dim more on light pages than on dark ones (_utility-panels.scss).
  * - "See full hours" goes to the URL of the menu link that opened the
  *   panel (falls back to the LibCal hours page in the markup).
- * - Focus moves to the search box when the Search panel opens.
+ * - Focus moves to the search box when the Search panel opens, and its mode
+ *   starts on the section the page is in: the Index's own mode there,
+ *   Special Collections under /v2/special, else All. All is left out of the
+ *   address, as the Index leaves it out.
  * - Links inside a panel close it first, so a Swup visit never leaves an
  *   open drawer (the panels are outside #swup and are kept between pages).
  * - Hours panel: today's date, a clock that ticks on the minute, and an
@@ -492,6 +495,22 @@
               cta.setAttribute('href', href);
             }
           });
+
+          if (key === 'search') {
+            panel.addEventListener('show.bs.offcanvas', () => {
+              const path = window.location.pathname;
+              const mode = path.startsWith('/v2/search')
+                ? new URLSearchParams(window.location.search).get('mode')
+                : (path.startsWith('/v2/special') ? 'special' : null);
+              const radios = [...panel.querySelectorAll('[data-pf-panel-mode]')];
+              (radios.find((radio) => radio.value === mode) || radios[0]).checked = true;
+            });
+            panel.querySelector('form').addEventListener('formdata', (event) => {
+              if (event.formData.get('mode') === 'all') {
+                event.formData.delete('mode');
+              }
+            });
+          }
 
           panel.addEventListener('shown.bs.offcanvas', () => {
             const field = panel.querySelector('[data-pf-panel-autofocus]');
