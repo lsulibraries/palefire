@@ -490,7 +490,11 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       $tab_variables = ['paragraph' => $tabs];
       palefire_preprocess_paragraph__section_tabs($tab_variables);
       CacheableMetadata::createFromRenderArray($tab_variables)->applyTo($variables);
-      $variables['quick_tabs'] = ['tabs' => $tab_variables['tabs'], 'label' => $tab_variables['tabs_label']];
+      $variables['quick_tabs'] = [
+        'tabs' => $tab_variables['tabs'],
+        'label' => $tab_variables['tabs_label'],
+        'backdrops' => _palefire_tab_backdrops($tab_variables['tabs'], $variables),
+      ];
     }
     $host = $paragraph;
     for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
@@ -1917,6 +1921,51 @@ function _palefire_location_backdrop(TermInterface $room, array $photos, Cacheab
     return \Drupal::service('file_url_generator')->transformRelative($style->buildUrl($file->getFileUri()));
   }
   return $photos[0]['src'] ?? '';
+}
+
+/**
+ * Room photos behind the hero's tab panels: URLs by tab id.
+ *
+ * A tab whose id is listed below shows that room's photo behind its panel
+ * (the room term's photo in pf_location_backdrop, as behind the room's own
+ * page, _palefire_location_backdrop()), under the swatch's photo veil
+ * (_section-tabs.scss). A tab without a room, or a room without a photo,
+ * keeps the plain band. To give another tab a photo, add its id and room.
+ */
+function _palefire_tab_backdrops(array $tabs, array &$variables): array {
+  $rooms = [
+    'study' => 'hill_memorial.quiet_study',
+  ];
+  $wanted = array_intersect_key($rooms, array_flip(array_column($tabs, 'id')));
+  if (!$wanted) {
+    return [];
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  // A room added or given a photo later redraws the hero.
+  $cache->addCacheTags(['taxonomy_term_list:building_space']);
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $ids = $storage->getQuery()->accessCheck(TRUE)
+    ->condition('vid', 'building_space')
+    ->condition('field_map_key', array_values($wanted), 'IN')
+    ->condition('status', 1)
+    ->execute();
+  $by_key = [];
+  foreach ($storage->loadMultiple($ids) as $room) {
+    $by_key[(string) $room->get('field_map_key')->value] = $room;
+  }
+  $backdrops = [];
+  foreach ($wanted as $tab_id => $key) {
+    $room = $by_key[$key] ?? NULL;
+    if ($room instanceof TermInterface) {
+      $cache->addCacheableDependency($room);
+      $url = _palefire_location_backdrop($room, [], $cache);
+      if ($url !== '') {
+        $backdrops[$tab_id] = $url;
+      }
+    }
+  }
+  $cache->applyTo($variables);
+  return $backdrops;
 }
 
 /**

@@ -23,6 +23,10 @@
  *   blocks, its notes and links after), on the Quick Start's grid, the
  *   blocks across the other columns. The heading names the panel, so there
  *   is no hidden one. Empty elsewhere.
+ * - backdrops: a photo URL by tab id, shown behind that tab's panel under
+ *   the swatch's photo veil (_palefire_tab_backdrops(); the hero's Study
+ *   tab, the Quiet Study room). It loads only once the panel is shown.
+ *   Empty elsewhere.
  *
  * Each tab is the whole column: its label printed above the track, its
  * face (where the key rests, with its icon) in the track, and its indicator
@@ -62,7 +66,8 @@
       {% endfor %}
     </div>
     {% for tab in tabs %}
-      <div class="pf-tabs__panel" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0">
+      {% set backdrop = backdrops[tab.id] ?? '' %}
+      <div class="pf-tabs__panel{{ backdrop ? ' has-backdrop' }}" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0"{% if backdrop %} style="--pf-tabs-backdrop: url('{{ backdrop }}')"{% endif %}>
         {{ rules[tab.id] ?? '' }}
         {% if tab.quick and quick_panel %}
           <div class="pf-tabs__body pf-quick-guide__panel">{{ quick_panel }}</div>

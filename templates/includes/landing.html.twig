@@ -636,7 +636,6 @@
               notes_title: 'Good to know'|t,
               notes: [
                 'On the second floor of Hill Memorial Library.'|t,
-                'Food and drink are welcome in the first-floor lobby.'|t,
                 'Special Collections materials stay in the Reading Room: ask the staff there to see them.'|t,
                 '[Editor: the room’s hours, if they differ from the building’s.]'|t,
               ],
@@ -682,7 +681,7 @@
             {% endset %}
             {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot } }) %}
           {% endfor %}
-          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides } only %}
+          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, backdrops: quick_tabs.backdrops ?? {} } only %}
         {% else %}
           {{ quick_body }}
         {% endif %}
