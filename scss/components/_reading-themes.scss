@@ -36,7 +36,9 @@
 //   cream    text  5.3  muted 5.1  accent  6.8   (light grey on cream;
 //                                                 dusty plum accent and
 //                                                 highlight, white on it 7.5)
-//   lavender text  5.5  muted 5.0  accent 11.1   (muted LSU purple on cream)
+//   lavender text  5.9  muted 5.3  accent 10.9   (cool grey on pale
+//                                                 lavender; LSU purple accent
+//                                                 and highlight)
 //   sepia    text  7.5  muted 5.5  accent  7.0
 //   sage     text  7.7  muted 5.4  accent  6.5
 //   dusk     text  6.9  muted 5.4  accent  7.9
@@ -115,11 +117,16 @@ $pf-reading-themes: (
     surface: #efebe1, accent: #5b4f72, accent-soft: #ebe6ec,
     scroll: #7f7c77, panel-muted: #514f4c,
   ),
+  // Lavender (2026-11-09): the lavender moved from the text to the paper.
+  // Its text was purple too, so the purple titles didn't stand out, and on
+  // Cream's paper it was Cream with purple ink. Now a pale lavender page,
+  // cool grey ink, and LSU purple for both accent and highlight: the one
+  // swatch that keeps the full brand purple.
   'lavender': (
     label: 'Lavender', dark: false,
-    bg: #f7f4ec, fg: #6b5a8e, heading: #4f3f73, muted: #6e6679, rule: #e4dde8,
-    surface: #efeaf0, accent: $pf-purple, accent-soft: #e9e1f1,
-    scroll: #857a96, panel-muted: #574975,
+    bg: #f4f1f8, fg: #5f5b67, heading: #34303d, muted: #67626f, rule: #ddd6e6,
+    surface: #ece8f2, accent: $pf-purple, accent-soft: #e8e0f2,
+    scroll: #7d7887, panel-muted: #4f4a58,
   ),
   'sepia': (
     label: 'Sepia', dark: false,
