@@ -113,12 +113,15 @@
 
 // The search as on the Special Collections page: a square field on the surface
 // color, and one filled button with its icon at the far end.
+// At rest the page's hairline, as every other line here, over a faint tint of
+// the text color; the full border on hover and the highlight on focus. The
+// Search button beside it marks the field at rest.
 .pf-index__field {
   display: flex;
   align-items: stretch;
   min-height: 4rem;
-  border: 1px solid var(--pf-index-control);
-  background: var(--pf-g-surface, var(--bs-body-bg));
+  border: 1px solid var(--pf-index-line);
+  background: color-mix(in srgb, var(--pf-index-fg) 4%, var(--pf-g-surface, var(--bs-body-bg)));
 
   @include pf-index-motion {
     transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
@@ -1057,16 +1060,9 @@
   color: var(--pf-index-fg);
 }
 
-// The list under a leading section: its name, then what it alone found.
+// The list under a leading section: a section's head, with its sort.
 .pf-index__list-head {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: .5rem 1.5rem;
-
-  .pf-index__total {
-    margin-inline-start: auto;
-  }
 }
 
 .pf-index__sort {
@@ -1363,8 +1359,158 @@
   margin-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-// Each section opens on the theme's index rule (_landing-features.scss).
-// Four classes: the reading colors set every heading through html[...] .pf-main.
+// A source's heading, large enough to mark where one source ends and the next
+// begins on a long page: its name, how many it found on the right, then what
+// it holds. The color is the reading theme's, as the page's other headings.
+.pf-index-section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .25rem 1rem;
+  margin-bottom: .25rem;
+  padding-bottom: .875rem;
+  border-bottom: 1px solid var(--pf-index-line);
+
+  .pf-index-via {
+    flex-basis: 100%;
+    margin: .25rem 0 0;
+  }
+}
+
+.pf-main .pf-index .pf-index-section__head .pf-index-section__title,
+.pf-main .pf-index .pf-index-answer__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: clamp(1.25rem, 1.0625rem + .75vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  text-transform: none;
+  text-wrap: balance;
+}
+
+.pf-index-section__count {
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.pf-index-section__about {
+  flex-basis: 100%;
+  max-width: 44rem;
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  text-wrap: pretty;
+}
+
+// The source in view, at the start of the results bar, once its heading has
+// gone under the bar (index-search.js). Words only: screen readers have the
+// headings. Under 36rem it takes the place of the words "Results for".
+.pf-index__where {
+  color: var(--pf-index-fg);
+  font-weight: 600;
+
+  &::after {
+    content: "\00b7" / "";
+    margin-inline: .5em;
+    color: var(--pf-index-muted);
+    font-weight: 400;
+  }
+
+  @include pf-index-motion {
+    animation: pf-index-where .25s var(--pf-index-ease);
+  }
+}
+
+.pf-index__where-count {
+  margin-inline-start: .375em;
+  color: var(--pf-index-muted);
+  font-weight: 400;
+}
+
+@keyframes pf-index-where {
+  from {
+    opacity: 0;
+    transform: translateY(.25rem);
+  }
+}
+
+@media (max-width: 35.98rem) {
+  .pf-index__total:has(.pf-index__where:not([hidden])) .pf-index__total-words {
+    display: none;
+  }
+}
+
+// A short answer above the results ("hours"): the Hours drawer's rows
+// (_utility-panels.scss), in the page's colors instead of the drawer's.
+.pf-index-answer {
+  --pf-toc-rail: var(--pf-index-line);
+  --pf-toc-sub-color: var(--pf-index-muted);
+  --pf-toc-active: var(--pf-index-fg);
+  --pf-toc-accent: var(--pf-index-accent);
+  --pf-on-accent: var(--pf-g-on-accent, #000);
+  display: grid;
+  gap: 1rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.pf-index-answer__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .25rem 1rem;
+  padding-bottom: .875rem;
+  border-bottom: 1px solid var(--pf-index-line);
+}
+
+.pf-index-answer__date {
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.pf-index-answer__hours {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+
+.pf-index-answer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  margin: 0;
+  font-size: .9375rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    min-height: 1.5rem;
+    color: var(--pf-index-fg);
+    text-underline-offset: .2em;
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-fg);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// "Search elsewhere" keeps the theme's index rule (_landing-features.scss): it
+// isn't a source. Four classes: the reading colors set every heading through
+// html[...] .pf-main.
 .pf-main .pf-index .pf-index-rule .pf-index-section__title {
   @include pf-index-label;
   margin: 0;

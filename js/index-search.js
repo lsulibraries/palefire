@@ -132,6 +132,10 @@
         holder.closest('.pf-index-section').hidden = true;
         return;
       }
+      const count = holder.closest('.pf-index-section')?.querySelector('[data-pf-index-section-count]');
+      if (count && list && list.dataset.pfIndexCount) {
+        count.textContent = list.dataset.pfIndexCount;
+      }
       holder.replaceChildren(template.content);
       holder.classList.add('is-loaded');
       once('pf-index-holdings', '[data-pf-index-holdings-url]', holder).forEach(loadHoldings);
@@ -263,6 +267,8 @@
         params.delete(name);
       }
     });
+    // All sources is what no source means, not a filter.
+    params.delete('all');
     // A round button's Any has no value, so nothing to send.
     [...params.entries()].forEach(([name, value]) => {
       if (name.startsWith('refine[') && value === '') {
@@ -280,6 +286,107 @@
       current.replaceWith(next);
     }
     return next;
+  };
+
+  // The results bar names the source in view once its heading has gone under
+  // the bar: on a long page of sections it's easy to lose track. Hidden from
+  // screen readers, which have the headings.
+  const followSections = (toolbar) => {
+    const total = toolbar.querySelector('.pf-index__total');
+    const scope = toolbar.closest('[data-pf-index-main]');
+    if (!total || !scope || scope.querySelectorAll('.pf-index-section__head').length < 2) {
+      return;
+    }
+    // "Results for “…”" in its own span, and "Results for" in one of its own, so
+    // a phone can show the source in place of those words.
+    const text = document.createElement('span');
+    text.className = 'pf-index__total-text';
+    text.append(...total.childNodes);
+    const lead = text.firstChild;
+    if (lead && lead.nodeType === Node.TEXT_NODE) {
+      const words = document.createElement('span');
+      words.className = 'pf-index__total-words';
+      lead.replaceWith(words);
+      words.append(lead);
+    }
+    const where = document.createElement('span');
+    where.className = 'pf-index__where';
+    where.setAttribute('aria-hidden', 'true');
+    where.hidden = true;
+    const name = document.createElement('span');
+    const count = document.createElement('span');
+    count.className = 'pf-index__where-count';
+    where.append(name, count);
+    total.replaceChildren(where, text);
+
+    let current = null;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!toolbar.isConnected) {
+        window.removeEventListener('scroll', schedule);
+        window.removeEventListener('resize', schedule);
+        return;
+      }
+      const line = toolbar.getBoundingClientRect().bottom;
+      let next = null;
+      scope.querySelectorAll('.pf-index-section').forEach((section) => {
+        const head = section.querySelector(':scope > .pf-index-section__head');
+        if (head && !section.hidden && head.getBoundingClientRect().bottom <= line) {
+          next = section;
+        }
+      });
+      if (!next) {
+        where.hidden = true;
+        current = null;
+        return;
+      }
+      const head = next.querySelector(':scope > .pf-index-section__head');
+      name.textContent = head.querySelector('.pf-index-section__title').textContent.trim();
+      // A late section's count arrives after its heading.
+      const number = head.querySelector('[data-pf-index-section-count]');
+      count.textContent = number ? number.textContent.trim().replace(/\s*results?$/i, '') : '';
+      if (next !== current) {
+        current = next;
+        where.hidden = false;
+        // Again for each source, so the change is seen.
+        where.style.animation = 'none';
+        void where.offsetWidth;
+        where.style.animation = '';
+      }
+    };
+    function schedule() {
+      if (!frame) {
+        frame = window.requestAnimationFrame(update);
+      }
+    }
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    update();
+  };
+
+  // Today's hours in a search's hours answer, from the same LibCal requests as
+  // the Hours drawer (utility-panels.js, visit-hours.js). Without them, the
+  // answer keeps its link to the full hours.
+  const fillAnswer = (answer) => {
+    const list = answer.querySelector('.pf-index-answer__hours');
+    if (!list || !Drupal.palefireHours || !Drupal.palefireHoursRow) {
+      return;
+    }
+    const date = answer.querySelector('[data-pf-index-answer-date]');
+    if (date) {
+      date.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }).replace(',', '');
+    }
+    list.hidden = false;
+    list.querySelectorAll('[data-pf-hours-loc][data-lid]').forEach((row) => {
+      Drupal.palefireHours.load(row.dataset.lid).then((data) => {
+        Drupal.palefireHoursRow(row, data);
+      }).catch(() => {
+        row.classList.remove('is-loading');
+        row.classList.add('is-failed');
+        row.querySelector('[data-pf-hours-when]').textContent = Drupal.t('Hours unavailable');
+      });
+    });
   };
 
   // Moves to another search in place. Anything unexpected falls back to loading
@@ -303,6 +410,11 @@
       const response = await fetch(url, { signal });
       if (!response.ok) {
         throw new Error(String(response.status));
+      }
+      // A search that moved to another mode (Special Collections without its
+      // filters is a Research one) keeps the address it ended at.
+      if (response.redirected) {
+        url = response.url;
       }
       page = new DOMParser().parseFromString(await response.text(), 'text/html');
       if (!page.querySelector('[data-pf-index] [data-pf-index-main]') || page.querySelector('[data-big-pipe-placeholder-id]')) {
@@ -352,7 +464,8 @@
     }
 
     const count = next.querySelector('[data-pf-index-count]');
-    Drupal.announce(count ? count.textContent : Drupal.t('Results updated.'));
+    const words = count && (count.querySelector('.pf-index__total-text') || count);
+    Drupal.announce(words ? words.textContent : Drupal.t('Results updated.'));
   };
 
   // The selector that finds a filter or sort again in the new page.
@@ -637,6 +750,31 @@
       visit(root, addressOf(form), { focus });
     });
 
+    // All sources and the sources under it agree: choosing All clears them,
+    // clearing them all chooses All. All can't be cleared by itself: choose a
+    // source instead. Before the change below, which runs the search.
+    root.addEventListener('click', (event) => {
+      // The click has already cleared it: put it back, with no change.
+      if (event.target.matches('[data-pf-index-all]') && !event.target.checked) {
+        event.preventDefault();
+      }
+    });
+    root.addEventListener('change', (event) => {
+      const group = event.target.closest('.pf-index__group');
+      const all = group && group.querySelector('[data-pf-index-all]');
+      if (!all) {
+        return;
+      }
+      const sources = [...group.querySelectorAll('input[type="checkbox"]:not([data-pf-index-all])')];
+      if (event.target === all) {
+        sources.forEach((input) => { input.checked = false; });
+        all.checked = true;
+      }
+      else {
+        all.checked = !sources.some((input) => input.checked);
+      }
+    }, true);
+
     root.addEventListener('change', (event) => {
       const control = event.target;
       const isSort = control.matches('select[form="pf-index-filter-form"]');
@@ -779,6 +917,8 @@
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
+      once('pf-index-where', '.pf-index__toolbar', context).forEach(followSections);
+      once('pf-index-answer', '[data-pf-index-answer]', context).forEach(fillAnswer);
       once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
       once('pf-index-more', '.pf-index-list__pager', context).forEach(setUpMore);

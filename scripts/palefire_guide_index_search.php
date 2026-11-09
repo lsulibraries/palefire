@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog (set to Special Collections) and PDF Finding Aids chosen. The header's Search drawer opens it too, starting on the section you're in. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog (set to Special Collections) and PDF Finding Aids chosen. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -277,6 +277,12 @@ HTML),
 <li>Mocked up three layouts for the holdings table and four styles for its note and Full record link, and built the chosen one: each library has a heading with its buttons and a short table of its copies, the reading room note sits in a soft band under its library, and the panel ends with the copy count and a Full record in the catalog button. The catalog's per-copy Place hold links can't be used from outside the catalog, so each library keeps one Place hold.</li>
 <li>The Search drawer in the header (the magnifier at the top right) now searches the Index, with All, Research, Special Collections and Website to choose from. It starts on the section you're in.</li>
 <li>Fixed: signed-in staff saw "Show results from Catalog" links instead of Catalog, Discovery and Guides results. Drupal filling in the staff toolbar was cancelling those searches; now only a search whose section is going away is cancelled.</li>
+<li>Mocked up six ways to tell which source you're looking at on a long page of results, and built the chosen two: each source now opens with a proper heading (its name, how many it found, and what it holds), and the bar that follows you down the page names the source you're in.</li>
+<li>A search for hours (or "library hours", "is the library open" and the like) now starts with today's hours for the Main Library and Hill Memorial, the same as the Hours drawer. Other services can get a short answer like this later.</li>
+<li>The Source list starts with "All sources" checked, so it's clear every source is searched until you pick some.</li>
+<li>The search box's border is softer, like the page's other lines.</li>
+<li>In Special Collections, taking the Catalog's Special Collections filter off (with no finding aids, oral histories or news chosen) moves the search to Research, keeping its other filters.</li>
+<li>Oral histories that have no PDF yet are left out of results.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'

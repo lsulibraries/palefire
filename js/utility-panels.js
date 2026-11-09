@@ -83,6 +83,9 @@
     li.classList.remove('is-loading', 'is-failed');
   }
 
+  // One location's row, for the Index's hours answer too (index-search.js).
+  Drupal.palefireHoursRow = renderLocation;
+
   function initHours(panel) {
     const dateEl = panel.querySelector('[data-pf-clock-date]');
     const clockEl = panel.querySelector('[data-pf-clock]');
