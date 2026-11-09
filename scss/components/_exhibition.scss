@@ -28,6 +28,10 @@
 // whose far edges are the screen's or masked. A foot wash stays solid,
 // where it meets the page color below (a wall's tiles, the next gallery).
 // $from and $to are percents, or calc() lengths to follow a text column.
+// The floor is lifted by $pf-wash-lift (at most solid), so the photograph
+// darkens a little more behind and beside the text than the bare minimum.
+$pf-wash-lift: 10%;
+
 @function pf-eased-wash($direction, $from, $to, $steps: 12, $strength: 1, $floor: false) {
   $stops: ();
   @for $i from 0 through $steps {
@@ -35,7 +39,7 @@
     $alpha: math.div(1 + math.cos(math.$pi * $t), 2) * $strength;
     $mix: math.div(math.round($alpha * 1000), 10) * 1%;
     @if $floor {
-      $mix: calc(var(--pf-g-wash, 100%) * #{math.div(math.round($alpha * 1000), 1000)});
+      $mix: calc(min(100%, var(--pf-g-wash, 100%) + #{$pf-wash-lift}) * #{math.div(math.round($alpha * 1000), 1000)});
     }
     $at: null;
     @if meta.type-of($from) == number and meta.type-of($to) == number {
