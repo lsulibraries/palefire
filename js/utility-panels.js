@@ -392,66 +392,6 @@
 
   /* ---------------- Text size and reading colors in the mobile menu ---------------- */
 
-  // The menu drawer (page.html.twig, below lg) offers the Settings drawer's
-  // text sizes and reading colors too, so they can be changed from the
-  // menu on a phone. data-pf-menu-setting names the Settings radio group
-  // ("size" or "theme"). The tiles are copies of the Settings ones (same
-  // tiles, own ids and radio group). Picking one ticks the matching
-  // Settings radio and lets the Settings form apply and save it, so there
-  // is one way settings are saved. Every change (here, in Settings, or in
-  // another tab) fires palefire:a11ychange, which keeps the copies in step.
-  function initMenuSetting(box) {
-    const form = document.querySelector('[data-pf-settings]');
-    const grid = box.querySelector('[data-pf-menu-grid]');
-    const name = box.dataset.pfMenuSetting;
-    if (!form || !grid || !['size', 'theme'].includes(name)) {
-      return;
-    }
-    form.querySelectorAll(`input[name="${name}"]`).forEach((input) => {
-      const label = form.querySelector(`label[for="${input.id}"]`);
-      if (!label) {
-        return;
-      }
-      const copy = input.cloneNode(true);
-      copy.name = `pf-menu-${name}`;
-      copy.id = `pf-menu-${input.id}`;
-      copy.removeAttribute('aria-describedby');
-      const copyLabel = label.cloneNode(true);
-      copyLabel.htmlFor = copy.id;
-      grid.append(copy, copyLabel);
-    });
-    if (!grid.children.length) {
-      return;
-    }
-
-    const valueOf = (settings) => {
-      if (name === 'theme') {
-        return themeOf(settings);
-      }
-      return SIZES.includes(settings.size) ? settings.size : '100';
-    };
-    const sync = (settings) => {
-      const value = valueOf(settings);
-      grid.querySelectorAll('input').forEach((input) => {
-        input.checked = input.value === value;
-      });
-    };
-
-    grid.addEventListener('change', (event) => {
-      const source = form.querySelector(`input[name="${name}"][value="${event.target.value}"]`);
-      if (source && event.target.checked) {
-        source.checked = true;
-        form.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
-    document.addEventListener('palefire:a11ychange', (event) => {
-      sync((event.detail && event.detail.settings) || readSettings());
-    });
-    sync(readSettings());
-    initThemesMore(grid, box.querySelector('[data-pf-themes-more]'));
-    box.hidden = false;
-  }
-
   /* ---------------- Utility icon tooltips ---------------- */
 
   // The label shows on hover/focus (CSS). Escape hides it until the pointer
@@ -548,8 +488,6 @@
           }
         });
       });
-      // After the Settings drawer: the menu's copies are built from it.
-      once('pf-menu-setting', '[data-pf-menu-setting]').forEach(initMenuSetting);
     },
   };
 })(Drupal, once);

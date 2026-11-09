@@ -19,6 +19,8 @@
  *   dropdown button is hidden and .pf-primary-nav__heading, a disclosure
  *   button, opens the section's pages underneath it (palefireMenuSections,
  *   js/palefire.js). The section holding the current page starts open.
+ *   Under its name, a line of what's in it: its first three pages and how
+ *   many more (the button's description, not part of its name).
  */
 #}
 {% import _self as menus %}
@@ -56,8 +58,12 @@
                     data-bs-toggle="dropdown" aria-expanded="false">
               {{ item.title }}
             </button>
-            <button type="button" class="pf-primary-nav__heading" aria-expanded="{{ item.in_active_trail ? 'true' : 'false' }}">
-              <span class="pf-primary-nav__heading-text">{{ item.title }}</span>
+            {% set section_id = 'pf-menu-section-' ~ loop.index %}
+            {% set pages = item.below|map(page => page.title) %}
+            <button type="button" class="pf-primary-nav__heading" aria-expanded="{{ item.in_active_trail ? 'true' : 'false' }}"
+                    aria-labelledby="{{ section_id }}" aria-describedby="{{ section_id }}-about">
+              <span class="pf-primary-nav__heading-text" id="{{ section_id }}">{{ item.title }}</span>
+              <span class="pf-primary-nav__heading-about" id="{{ section_id }}-about"><span>{{ pages|slice(0, 3)|join(', ') }}{% if pages|length > 3 %} {{ 'and @count more'|t({'@count': pages|length - 3}) }}{% endif %}</span></span>
               <span class="pf-primary-nav__heading-mark" aria-hidden="true"></span>
             </button>
             {{ menus.menu_links(item.below, attributes, menu_level + 1, is_placeholder ? null : item) }}

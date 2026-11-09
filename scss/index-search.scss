@@ -2596,6 +2596,12 @@
   text-wrap: pretty;
 }
 
+// Between the paragraphs of a whole answer (Questions & Answers).
+.pf-index-row__break {
+  display: block;
+  height: .625rem;
+}
+
 // The words around a match inside a record's PDF, under its own small label,
 // set in from a hairline so it reads as a quotation of the document.
 .pf-index-row__excerpt {

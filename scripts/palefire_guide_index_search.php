@@ -287,6 +287,7 @@ HTML),
 <li>The hours answer now looks like the mockup: a quiet band with each library's hours on one line.</li>
 <li>When a search finds results in only one or two sources, each shows more of them: 10 rows, or 8 for Discovery and the Catalog.</li>
 <li>The header's Search drawer now explains its four choices: All, Research, Special Collections and Website are rows, each with a line on what it searches.</li>
+<li>Questions & Answers results show the whole answer, paragraph by paragraph, instead of the first couple of lines.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
