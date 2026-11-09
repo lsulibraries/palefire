@@ -288,6 +288,7 @@ HTML),
 <li>When a search finds results in only one or two sources, each shows more of them: 10 rows, or 8 for Discovery and the Catalog.</li>
 <li>The header's Search drawer now explains its four choices: All, Research, Special Collections and Website are rows, each with a line on what it searches.</li>
 <li>Questions & Answers results show the whole answer, paragraph by paragraph, instead of the first couple of lines.</li>
+<li>Results no longer show through the bar that follows you down the page: the strip above it is filled, and results fade as they pass under it.</li>
 </ul>
 HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'

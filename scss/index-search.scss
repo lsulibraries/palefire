@@ -1017,6 +1017,31 @@
     position: sticky;
     top: calc(var(--pf-header-h, 3rem) + 2rem);
     z-index: 2;
+
+    // Held, it covers what passes under it. Above it, the page's color up to
+    // the header, so results don't show through the breadcrumb's glass (which
+    // stays in front). Under its line, a fade the depth of its margin, so a
+    // result goes under it softly instead of cut through a line of text. At
+    // rest the fade lies on that margin, over nothing.
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      pointer-events: none;
+    }
+
+    &::before {
+      bottom: 100%;
+      height: 2rem;
+      background: var(--bs-body-bg);
+    }
+
+    &::after {
+      top: calc(100% + 1px);
+      height: .75rem;
+      background: linear-gradient(var(--bs-body-bg), transparent);
+    }
   }
 }
 
