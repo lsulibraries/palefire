@@ -1678,8 +1678,11 @@ html.pf-index-docked {
 // The source in view, at the start of the results bar, once its heading has
 // gone under the bar (index-search.js). Words only: screen readers have the
 // headings. Under 36rem it takes the place of the words "Results for".
+// The source's name in its heading's color (the page's headings take
+// --pf-g-title in a reading color, the accent in most), so the bar names it
+// as the page introduced it.
 .pf-index__where {
-  color: var(--pf-index-fg);
+  color: var(--pf-g-title, var(--bs-heading-color));
   font-weight: 600;
 
   &::after {
