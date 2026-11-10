@@ -4010,27 +4010,8 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
       pointer-events: none;
     }
 
-    // The same light carried on over the film's third, above its washes
-    // (the top one, and the one behind the list's words), so it meets the
-    // type's side with no edge where the column starts. The ::before's
-    // gradients in the column's terms, on the same box: centred on its left
-    // edge, reaching --pf-split-reach, and the side light past the film's
-    // edge is that gradient's last colour. Over the film and the list (both
-    // z-index 1); it takes no pointer, so the links stay in reach.
-    &::after {
-      content: "";
-      position: absolute;
-      z-index: 2;
-      inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
-      grid-row: 1 / 3;
-      grid-column: 1;
-      width: var(--pf-split-film);
-      background:
-        radial-gradient(var(--pf-split-reach) 90% at 0 62%, rgb(242 220 155 / var(--pf-cover-glow, .11)), transparent 62%),
-        rgb(242 220 155 / calc(var(--pf-cover-glow, .11) * .27));
-      mask-image: linear-gradient(#000 70%, transparent);
-      pointer-events: none;
-    }
+    // The film itself stays as shot: the light carries on over the panel
+    // that uncovers it on load (_entrance.scss), not over the picture.
 
     // The film: placed on the first two rows' area (the lead is the
     // positioned grid), its right third, from the page's top (under the

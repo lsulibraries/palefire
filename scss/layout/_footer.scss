@@ -515,12 +515,21 @@ html#{$pf-themed} .pf-footer {
       position: relative;
       z-index: 1;
       background-color: var(--bs-body-bg);
+
       // A soft shade along the page's foot, over the footer as it shows.
-      // Pulled in by its blur (-1.5rem spread, 2rem down) so none of it
-      // rises past the page's top edge: there it lay over the header as a
-      // dark band on the cover, whose header is clear until the page moves
-      // (2026-11-03).
-      box-shadow: 0 2rem 3rem -1.5rem rgb(0 0 0 / .35);
+      // A gradient under the foot, not a box-shadow: a shadow's blur runs
+      // round every edge, and Edge drew it over the page's top edge too, a
+      // dark line under the clear cover header (2026-11-03, again
+      // 2026-11-10 after the spread was pulled in). This one has no top.
+      &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        inset-inline: 0;
+        height: 3rem;
+        background: linear-gradient(rgb(0 0 0 / .22), transparent);
+        pointer-events: none;
+      }
     }
 
     .pf-footer {

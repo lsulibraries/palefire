@@ -154,14 +154,26 @@ $pf-enter-cover: '.pf-landing--cover .pf-landing__lead--hero';
   // Split cover (_landing-features.scss, from 44rem): the film's whole column,
   // words and all, is uncovered with the lines under the title (from .6s, as the
   // hours and the intro come in). Then, after the search, the scroll cue.
+  // The panel carries the type side's warm light (the lead's ::before) on
+  // over the column, so the two read as one lit wall: the same gradients in
+  // the column's terms on the same box (centred on its left edge, reaching
+  // --pf-split-reach; the side light is the linear gradient's last colour).
+  // The top layer, the page's colour from 70% down, stands in for the
+  // ::before's mask (the panel itself must stay opaque to its foot). The
+  // scale draws it back with the panel, so the film is never lit.
   @container pf-cover (min-width: 44rem) {
     #{$pf-enter-on} #{$pf-enter-cover} .pf-landing__stage::after {
+      --pf-panel-bg: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
       content: "";
       position: absolute;
       inset: calc(-1 * (var(--pf-cover-top) + var(--pf-header-h, 0px))) 0 0 auto;
       z-index: 4;
       width: var(--pf-split-film);
-      background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+      background:
+        linear-gradient(transparent 70%, var(--pf-panel-bg)),
+        radial-gradient(var(--pf-split-reach, 240%) 90% at 0 62%, rgb(242 220 155 / var(--pf-cover-glow, .11)), transparent 62%),
+        linear-gradient(rgb(242 220 155 / calc(var(--pf-cover-glow, .11) * .27)) 0 0),
+        var(--pf-panel-bg);
       transform-origin: 0 50%;
       pointer-events: none;
       animation: pf-split-open 1.2s cubic-bezier(.77, 0, .18, 1) .6s both;
