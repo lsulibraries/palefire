@@ -504,6 +504,7 @@ $pf-reveal-from: 0.85; // As _variables.scss.
 
 // Code ------------------------------------------------------------------------
 .pf-code {
+  min-width: 0; // a grid item: let the code scroll instead of widening the page
   max-width: 54rem;
   margin: 0;
 }
