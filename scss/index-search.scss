@@ -16,6 +16,7 @@
 @import "bootstrap/scss/variables-dark";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
+@import "base/mixins";
 
 // Motion that is only decoration: off with the OS setting or Settings >
 // Reduce motion (as _exhibition.scss).
@@ -2402,11 +2403,68 @@ html.pf-index-docked {
   }
 }
 
-// A Catalog record's holdings, which load after the row. With a script, their
-// line's height is held so the row doesn't move. Without one the record's own
-// link is the way on, and there's nothing to wait for.
+// A Catalog record's holdings, which load after the row. With a script, a quiet
+// outline of the line that's coming holds its place: a hatched slab where Show
+// location goes and two soft bars for the words, laid out as that line is
+// (summary, .pf-index-row__toggle) and as tall (64px, or 108px where the slab
+// wraps above two lines of words on a phone), so nothing moves when it fills.
+// It fades in, then breathes slowly; still with reduced motion. Without a
+// script the record's own link is the way on, and there's nothing to wait for.
 .js .pf-index-row__holdings:empty {
-  min-height: 2.75rem;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: center;
+  gap: .5rem 1rem;
+  padding-block: .5rem .75rem;
+  font-size: .875rem;
+  line-height: 1.3;
+
+  &::before,
+  &::after {
+    content: "";
+  }
+
+  &::before {
+    flex: none;
+    order: -1;
+    inline-size: var(--pf-index-row-button);
+    block-size: 2.75rem;
+    background: pf-hatch(var(--pf-index-line));
+    box-shadow: inset 0 0 0 1px var(--pf-index-line);
+  }
+
+  // Two lines' height, as where a copy is often takes on a phone; beside the
+  // slab it fits within the slab's height.
+  &::after {
+    flex: 1 1 14rem;
+    max-inline-size: 22rem;
+    block-size: 2lh;
+    background:
+      linear-gradient(var(--pf-index-line) 0 0) 0 25% / 85% .5em no-repeat,
+      linear-gradient(var(--pf-index-line) 0 0) 0 75% / 55% .5em no-repeat;
+  }
+}
+
+// Not under .js: the motion mixin's html selector would come before it, and
+// .js is on html. Without a script an empty place draws nothing to move.
+.pf-index-row__holdings:empty {
+  @include pf-index-motion {
+    animation:
+      pf-index-placeholder-in .35s var(--pf-index-ease) backwards,
+      pf-index-placeholder-breathe 1.6s ease-in-out .35s infinite alternate;
+  }
+}
+
+@keyframes pf-index-placeholder-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pf-index-placeholder-breathe {
+  to {
+    opacity: .5;
+  }
 }
 
 .pf-index-row__holdings.is-loaded {

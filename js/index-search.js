@@ -18,7 +18,9 @@
  * - Late sections: each outside source loads after the page, so a slow or
  *   failing service can't hold it up. One with no results is removed.
  * - A Catalog row's holdings load after the list, on an address of their own
- *   that stays fresher than results can. If they fail, the row just has no line.
+ *   that stays fresher than results can. A late section's mark waits up to
+ *   HOLDINGS_GRACE_MS for them, so quick ones arrive with the rows; slower ones
+ *   fill a placeholder of the same height. If they fail, the row has no line.
  * - Source options can be put in the visitor's own order, by dragging or with
  *   an up button, and the sections follow. It's kept in this browser, and only
  *   a preference: without storage or this file, the page's own order stands.
@@ -41,6 +43,8 @@
 
   const TIMEOUT_MS = 20000;
   const HOLDINGS_TIMEOUT_MS = 10000;
+  // How long a late section's mark waits for its Catalog copies, at most.
+  const HOLDINGS_GRACE_MS = 500;
   const ORDER_KEY = 'pf-index-source-order';
   const wide = window.matchMedia('(min-width: 62rem)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -74,27 +78,38 @@
     image.src = `${SIGN_IN_IMAGE}?${Date.now()}`;
   };
 
-  // Fills each row's place from one answer, and removes the places left empty.
-  const loadHoldings = async (rows) => {
-    // Now: a list that's being added to hands these rows on while this waits.
-    const places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
+  // One answer for a list's holdings, as a template: empty if it failed, and
+  // the rows are still whole, with the record's link. owner: the element whose
+  // leaving the page cancels it.
+  const fetchHoldings = async (url, owner) => {
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), HOLDINGS_TIMEOUT_MS);
-    controllers.set(controller, rows);
+    controllers.set(controller, owner);
     const template = document.createElement('template');
     try {
-      const response = await fetch(rows.dataset.pfIndexHoldingsUrl, { signal: controller.signal });
+      const response = await fetch(url, { signal: controller.signal });
       if (response.ok) {
         template.innerHTML = await response.text();
       }
     }
     catch (error) {
-      // The rows are still whole, with the record's link.
+      // Left empty.
     }
     finally {
       window.clearTimeout(timer);
       controllers.delete(controller);
     }
+    return template;
+  };
+
+  // Fills each row's place from one answer, and removes the places left empty.
+  // pending: an answer already asked for (load() starts it early).
+  const loadHoldings = async (rows, pending = null) => {
+    // Now: a list that's being added to hands these rows on while this waits.
+    const places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
+    rows.setAttribute('aria-busy', 'true');
+    const template = await (pending || fetchHoldings(rows.dataset.pfIndexHoldingsUrl, rows));
+    rows.removeAttribute('aria-busy');
     places.forEach((place) => {
       const found = template.content.querySelector(`[data-pf-index-holdings-for="${CSS.escape(place.dataset.pfIndexHoldings)}"]`);
       if (found) {
@@ -139,9 +154,18 @@
       if (count && list && list.dataset.pfIndexCount) {
         count.textContent = list.dataset.pfIndexCount;
       }
+      // Catalog rows: their copies are asked for now, and the mark stays a
+      // moment for them, so a quick answer arrives with the rows instead of
+      // after them. A slow one never holds the rows up: they show with the
+      // line's placeholder (index-search.scss) and it fills in when it comes.
+      const holdingsRows = template.content.querySelector('[data-pf-index-holdings-url]');
+      const pending = holdingsRows && fetchHoldings(holdingsRows.dataset.pfIndexHoldingsUrl, holder);
+      if (pending) {
+        await Promise.race([pending, new Promise((resolve) => { window.setTimeout(resolve, HOLDINGS_GRACE_MS); })]);
+      }
       holder.replaceChildren(template.content);
       holder.classList.add('is-loaded');
-      once('pf-index-holdings', '[data-pf-index-holdings-url]', holder).forEach(loadHoldings);
+      once('pf-index-holdings', '[data-pf-index-holdings-url]', holder).forEach((rows) => loadHoldings(rows, rows === holdingsRows ? pending : null));
     }
     catch (error) {
       // The server's link is still there, so the visitor has a way on.
@@ -1097,7 +1121,7 @@
       once('pf-index-where', '.pf-index__toolbar', context).forEach(followSections);
       once('pf-index-dock', '.pf-index__toolbar', context).forEach(dockToolbar);
       once('pf-index-answer', '[data-pf-index-answer]', context).forEach(fillAnswer);
-      once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
+      once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach((rows) => loadHoldings(rows));
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
       once('pf-index-more', '.pf-index-list__pager', context).forEach(setUpMore);
       once('pf-index-chips', '.pf-index__toolbar', context).forEach(placeChips);
