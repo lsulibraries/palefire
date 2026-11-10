@@ -1116,54 +1116,59 @@
   }
 }
 
-// No line under the bar, so it isn't read as one more of the chosen
-// filters' outlines. Held, it rises off the page instead: the page itself
-// raised (the theme's relief, as the Section tabs' key), a solid band the
-// depth of its margin and a soft shade under that, so results go under it
-// before they reach its words. At rest the band lies on the margin, over
-// nothing, and the shade is out. Drawn by the total's ::after, placed on the
-// bar (the bar is its containing block): a container query can't style the
-// bar's own pseudo-elements.
+// No hairline under the bar, so it isn't read as one more of the chosen
+// filters' outlines. Held, it is the header's and the breadcrumb bar's
+// frosted glass (--pf-sidebar-bg and --pf-glass-filter, as .pf-page-bar),
+// running on the depth of its margin under its words, with one soft
+// shadow under it; results pass under it blurred, as they do under
+// the header. Nothing opaque fills above it: the breadcrumb bar's own glass
+// covers that gap. At rest the bar is clear (only the page lies behind it)
+// and the glass fades out. Drawn by the total's ::after, placed on the bar
+// (the bar is its containing block) and behind its words (z-index -1 in the
+// bar's stacking context): a container query can't style the bar itself.
 @media (min-height: 30rem) {
   .pf-index__toolbar {
     container-type: scroll-state;
   }
 
   @supports (container-type: scroll-state) {
+    .pf-index__toolbar {
+      background: transparent;
+      box-shadow: none;
+    }
+
     .pf-index__total::after {
       content: "";
       position: absolute;
-      top: 100%;
-      inset-inline: calc(var(--pf-index-cover) * -1);
-      height: .75rem;
-      background: var(--bs-body-bg);
-      box-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent;
+      inset: 0 calc(var(--pf-index-cover) * -1) -.75rem;
+      z-index: -1;
+      background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+      -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+      backdrop-filter: var(--pf-glass-filter, blur(26px));
+      // One soft shadow under it, black, lighter on a light page (the
+      // reading colors set color-scheme). Its spread is taken in by its
+      // offset, so it shows only below, never at the bar's ends.
+      box-shadow: 0 .5rem .75rem -.5rem light-dark(rgb(0 0 0 / .2), rgb(0 0 0 / .55));
+      opacity: 0;
       pointer-events: none;
 
       @include pf-index-motion {
-        transition: box-shadow .35s var(--pf-index-ease);
+        transition: opacity .3s var(--pf-index-ease);
       }
     }
 
     @container scroll-state(stuck: top) {
-      .pf-index__total::before {
-        content: "";
-        position: absolute;
-        bottom: 100%;
-        inset-inline: calc(var(--pf-index-cover) * -1);
-        height: 2rem;
-        background: var(--bs-body-bg);
-        pointer-events: none;
-      }
-
       .pf-index__total::after {
-        // A close shade under the edge and a wide soft one, the wide one
-        // twice over: the shade is the page moved toward black, so on a dark
-        // page one layer barely reads.
-        box-shadow:
-          0 .25rem .375rem -.125rem var(--pf-g-relief-shade, rgb(0 0 0 / .3)),
-          0 .75rem 1.5rem -.25rem var(--pf-g-relief-shade, rgb(0 0 0 / .3)),
-          0 .75rem 1.5rem -.25rem var(--pf-g-relief-shade, rgb(0 0 0 / .3));
+        opacity: 1;
+      }
+    }
+
+    // Reduce transparency: the glass solid, as the header's.
+    @media (prefers-reduced-transparency: reduce) {
+      .pf-index__total::after {
+        background-color: var(--bs-body-bg);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
       }
     }
   }
