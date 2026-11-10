@@ -246,19 +246,23 @@ class PalefireHooks {
     $variables['modular_guide'] = FALSE;
 
     // Footer: Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the
-    // pages under them, the Main Library everywhere else
-    // (includes/footer.html.twig).
+    // pages under them, and on Combined Search in its Special Collections
+    // mode, whose breadcrumb names Special Collections too; the Main Library
+    // everywhere else (includes/footer.html.twig).
     $alias = self::pageAlias();
-    $variables['footer_special'] = self::isSpecialPage($alias);
+    $special_page = self::isSpecialPage($alias);
+    $variables['footer_special'] = $special_page || self::isSpecialSearch();
     $variables['footer_special_root'] = self::SPECIAL_ROOT;
-    // Printed by the footer, so the cache varies by path.
-    $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path']]];
+    // Printed by the footer, so the cache varies by path, and by the search
+    // page's mode.
+    $variables['footer_cache'] = ['#cache' => ['contexts' => ['url.path', 'url.query_args:mode']]];
 
     // The 404 page (page--404.html.twig): a real 404, or the preview page.
     $variables['not_found'] = self::isNotFound() ? $this->notFound($alias) : NULL;
 
-    // The mobile dock, on the same pages as the Special Collections footer.
-    $variables['dock'] = $variables['footer_special'] && !$variables['not_found'] ? $this->dock($alias) : NULL;
+    // The mobile dock, on the Special Collections pages (not the search,
+    // whose own bar holds the foot of the screen).
+    $variables['dock'] = $special_page && !$variables['not_found'] ? $this->dock($alias) : NULL;
 
     // Core sets "node" from the route's "node" parameter only, so a Preview
     // has none: take it from pageNode(), for page.html.twig too.
@@ -1166,6 +1170,18 @@ class PalefireHooks {
         ],
       ],
     ];
+  }
+
+  /**
+   * Whether the page is Combined Search in its Special Collections mode.
+   */
+  public static function isSpecialSearch(): bool {
+    if (\Drupal::routeMatch()->getRouteName() !== 'palefire_search.page') {
+      return FALSE;
+    }
+    // all(), not get(): a ?mode[]= array would make get() throw.
+    $mode = \Drupal::request()->query->all()['mode'] ?? NULL;
+    return $mode === 'special';
   }
 
   /**

@@ -591,6 +591,16 @@
     if (crumbs.length === nextCrumbs.length) {
       crumbs.forEach((crumb, index) => crumb.replaceWith(nextCrumbs[index]));
     }
+    // So does the footer: Special Collections mode has Hill's, the others
+    // the Main Library's. Swapped only when it changes, so its hours aren't
+    // fetched again on every search.
+    const footer = document.getElementById('pf-footer');
+    const nextFooter = page.getElementById('pf-footer');
+    if (footer && nextFooter && footer.classList.contains('pf-footer--special') !== nextFooter.classList.contains('pf-footer--special')) {
+      Drupal.detachBehaviors(footer, drupalSettings, 'unload');
+      footer.replaceWith(nextFooter);
+      Drupal.attachBehaviors(nextFooter, drupalSettings);
+    }
     const next = swap(root, page, '[data-pf-index-main]');
     root.classList.remove('is-searching');
     checkSignIn(root);

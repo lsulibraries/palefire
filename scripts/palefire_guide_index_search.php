@@ -349,6 +349,7 @@ HTML),
 <li>Searches from the Special Collections page and from the header's Search drawer now start with All sources, instead of choosing sources: they still show the Catalog set to Special Collections, Special Collections Guides and PDF Finding Aids.</li>
 <li>On a Catalog result, the PDF button now says PDF Finding Aid (or PDF Abstract for an oral history) instead of Open PDF, so it isn't mistaken for a digital copy of the item.</li>
 <li>Added Special Collections Guides to Special Collections mode, between the Catalog and PDF Finding Aids: the research guides tagged Special Collections, searched through the guides site's own search, so a guide shows up as soon as it is tagged. The hero search on the Special Collections page now includes it.</li>
+<li>In Special Collections mode the page now ends with the Special Collections footer (Hill Memorial Library's hours, phone and question form), as its breadcrumb already says Special Collections. The other modes keep the Main Library footer.</li>
 </ul>
 HTML),
 ]);
