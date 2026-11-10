@@ -305,6 +305,7 @@ HTML),
 <li>The source named in that bar (Catalog, PDF Finding Aids…) is now gold, like its heading on the page.</li>
 <li>When that bar joins the breadcrumb row, the row grows so the filters and Clear all are full size and easy to press, and its shadow now darkens everything passing under it.</li>
 <li>The search page is now called Combined Search. Its search term in the results bar turns gold once searched, so you can see which words are in use, and the search box has an × to clear it in one press.</li>
+<li>Show more results is now a full-width button you can see at a glance, and the loading animation moves more calmly.</li>
 </ul>
 HTML),
 ]);

@@ -248,7 +248,7 @@
 
   @include pf-index-motion {
     background-size: 0 2px;
-    animation: pf-index-chase .8s cubic-bezier(.77, 0, .175, 1) infinite;
+    animation: pf-index-chase 1.4s cubic-bezier(.77, 0, .175, 1) infinite;
   }
 }
 
@@ -1513,9 +1513,12 @@ html.pf-index-docked {
 
 // The theme's mono labels on the page's hairline, with the mode tabs' accent line
 // on the current page. Four classes: links everywhere else are underlined.
-// Show more results: a row across the list, under the last result's rule, as the
-// availability row. Script adds it.
+// Show more results: a filled slab across the whole column, under the last
+// result's rule, in the Show location fill so it reads as a button. Script
+// adds it.
 .pf-index-list__grow {
+  margin-top: 1.5rem;
+
   button {
     display: flex;
     flex-wrap: wrap;
@@ -1523,15 +1526,19 @@ html.pf-index-docked {
     gap: .25rem 1rem;
     width: 100%;
     min-height: 3.5rem;
-    padding-block: .5rem;
-    border: 0;
-    background: none;
+    padding: .5rem 1.25rem;
+    border: 1px solid transparent;
+    background-color: color-mix(in srgb, var(--pf-index-fg) 9%, transparent);
     color: var(--pf-index-fg);
     text-align: start;
     cursor: pointer;
 
     &[aria-busy] {
       cursor: progress;
+    }
+
+    html.pf-a11y-contrast & {
+      border-color: #{$pf-hairline};
     }
 
     &:focus-visible {
@@ -1549,6 +1556,9 @@ html.pf-index-docked {
 
   @media (hover: hover) {
     button:not([aria-busy]):hover {
+      background-color: color-mix(in srgb, var(--pf-index-fg) 15%, transparent);
+      transition-duration: $pf-hover-in;
+
       .pf-index-list__grow-count {
         color: var(--pf-index-fg);
         transition-duration: $pf-hover-in;
@@ -1562,6 +1572,10 @@ html.pf-index-docked {
   }
 
   @include pf-index-motion {
+    button {
+      transition: background-color $pf-hover-out ease;
+    }
+
     svg {
       transition: transform $pf-hover-out ease;
     }
@@ -2070,7 +2084,7 @@ html.pf-index-docked {
 
     &.is-searching > .pf-index__loading .pf-mark-worm,
     .is-searching > .pf-index__mark .pf-mark-worm {
-      animation: pf-mark-worm .8s cubic-bezier(.77, 0, .175, 1) .2s backwards infinite;
+      animation: pf-mark-worm 1.4s cubic-bezier(.77, 0, .175, 1) .2s backwards infinite;
     }
   }
 }
