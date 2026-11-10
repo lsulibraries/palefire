@@ -391,23 +391,63 @@
   min-width: 0;
 }
 
+// The drawer's button: the column's full width, as easy to reach as the
+// search field above it. Its words are trimmed to the capitals, so they sit
+// in the middle of the bar with the icon, not low in the line box. How many
+// are chosen sits at the end, on the accent.
 .pf-index__filters-open {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-self: start;
-  gap: .5rem;
-  min-height: 2.75rem;
-  padding-inline: 1rem;
+  justify-self: stretch;
+  gap: .625rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 1rem;
   border: 0;
   background: color-mix(in srgb, var(--pf-index-fg) 9%, transparent);
   color: var(--pf-index-fg);
   font-size: .9375rem;
   font-weight: $pf-button-weight;
+  line-height: 1;
+  text-align: start;
+
+  @include pf-index-motion {
+    transition: background-color .2s var(--pf-index-ease);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in srgb, var(--pf-index-fg) 14%, transparent);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
+  }
 
   svg {
+    flex: none;
     width: 1.125rem;
     height: 1.125rem;
   }
+}
+
+.pf-index__filters-label {
+  text-box: trim-both cap alphabetic;
+}
+
+.pf-index__filters-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  margin-inline-start: auto;
+  padding-inline: .375rem;
+  background: var(--pf-index-accent);
+  color: var(--bs-body-bg);
+  font-size: .8125rem;
+  font-variant-numeric: tabular-nums;
 }
 
 // Under 62rem a drawer from the inline end. A <dialog>, so it stays closed
@@ -1002,6 +1042,10 @@
 // would take too much of what's left (WCAG 1.4.10). Chosen filters sit on the
 // right, before the sort. Under 75rem they take a second line, with the sort.
 .pf-index__toolbar {
+  // How far its cover reaches past the column (below), and on a phone how
+  // far it reaches to the screen's edges.
+  --pf-index-cover: .5rem;
+  --pf-index-bleed: 0px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1010,8 +1054,16 @@
   min-height: 3rem;
   margin-bottom: .75rem;
   padding-block: .25rem;
-  border-bottom: 1px solid var(--pf-index-line);
   background: var(--bs-body-bg);
+
+  // Under 62rem, edge to edge: the column's gutter becomes its padding, and
+  // chosen filters scroll out to the screen's edge.
+  @media (max-width: 61.98rem) {
+    --pf-index-cover: 0px;
+    --pf-index-bleed: calc(var(--bs-gutter-x, 1.5rem) * .5);
+    margin-inline: calc(var(--pf-index-bleed) * -1);
+    padding-inline: var(--pf-index-bleed);
+  }
 
   @media (min-height: 30rem) {
     position: sticky;
@@ -1020,61 +1072,141 @@
     // Its cover reaches a little past the column on both sides: a mark's
     // tint (.08em) and a button's hover fill (1px) stand just outside the
     // column, and passing under the bar they showed beside it as a thin line.
-    box-shadow: -.5rem 0 0 var(--bs-body-bg), .5rem 0 0 var(--bs-body-bg);
+    box-shadow: calc(var(--pf-index-cover) * -1) 0 0 var(--bs-body-bg), var(--pf-index-cover) 0 0 var(--bs-body-bg);
+  }
+}
 
-    // Held, it covers what passes under it. Above it, the page's color up to
-    // the header, so results don't show through the breadcrumb's glass (which
-    // stays in front). Under its line, a fade the depth of its margin, so a
-    // result goes under it softly instead of cut through a line of text. At
-    // rest the fade lies on that margin, over nothing.
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      inset-inline: -.5rem;
-      pointer-events: none;
-    }
+// Held, it covers what passes under it. Above it, the page's color up to
+// the header (2rem), so results don't show through the breadcrumb's glass
+// (which stays in front). Only while held, below: at rest that strip lay
+// over the bottom of the Filters button above it.
+//
+// Where scroll-state queries aren't supported, the strip is always there, so
+// the bar stands its depth below the button; and the bar keeps its hairline,
+// with a fade under it the depth of its margin.
+@supports not (container-type: scroll-state) {
+  .pf-index__toolbar {
+    border-bottom: 1px solid var(--pf-index-line);
 
-    &::before {
-      bottom: 100%;
-      height: 2rem;
-      background: var(--bs-body-bg);
-    }
+    @media (min-height: 30rem) {
+      @media (max-width: 61.98rem) {
+        margin-top: .5rem;
+      }
 
-    &::after {
-      top: calc(100% + 1px);
-      height: .75rem;
-      background: linear-gradient(var(--bs-body-bg), transparent);
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        inset-inline: calc(var(--pf-index-cover) * -1);
+        height: 2rem;
+        background: var(--bs-body-bg);
+        pointer-events: none;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: calc(100% + 1px);
+        inset-inline: calc(var(--pf-index-cover) * -1);
+        height: .75rem;
+        background: linear-gradient(var(--bs-body-bg), transparent);
+        pointer-events: none;
+      }
     }
   }
 }
 
-// While held (scroll-state queries; elsewhere the fade above stays), a
-// clear band under the line, so results go under the bar before they reach
-// it and nothing is cut at the line. Drawn by the total's ::after, placed on
-// the bar (the bar is its containing block): a container query can't style
-// the bar's own pseudo-elements.
+// No line under the bar, so it isn't read as one more of the chosen
+// filters' outlines. Held, it rises off the page instead: the page itself
+// raised (the theme's relief, as the Section tabs' key), a solid band the
+// depth of its margin and a soft shade under that, so results go under it
+// before they reach its words. At rest the band lies on the margin, over
+// nothing, and the shade is out. Drawn by the total's ::after, placed on the
+// bar (the bar is its containing block): a container query can't style the
+// bar's own pseudo-elements.
 @media (min-height: 30rem) {
   .pf-index__toolbar {
     container-type: scroll-state;
   }
 
-  @container scroll-state(stuck: top) {
+  @supports (container-type: scroll-state) {
     .pf-index__total::after {
       content: "";
       position: absolute;
-      top: calc(100% + 1px);
-      inset-inline: -.5rem;
-      height: 2.25rem;
-      background: linear-gradient(var(--bs-body-bg) .75rem, transparent);
+      top: 100%;
+      inset-inline: calc(var(--pf-index-cover) * -1);
+      height: .75rem;
+      background: var(--bs-body-bg);
+      box-shadow: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent;
       pointer-events: none;
+
+      @include pf-index-motion {
+        transition: box-shadow .35s var(--pf-index-ease);
+      }
+    }
+
+    @container scroll-state(stuck: top) {
+      .pf-index__total::before {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        inset-inline: calc(var(--pf-index-cover) * -1);
+        height: 2rem;
+        background: var(--bs-body-bg);
+        pointer-events: none;
+      }
+
+      .pf-index__total::after {
+        // A close shade under the edge and a wide soft one, the wide one
+        // twice over: the shade is the page moved toward black, so on a dark
+        // page one layer barely reads.
+        box-shadow:
+          0 .25rem .375rem -.125rem var(--pf-g-relief-shade, rgb(0 0 0 / .3)),
+          0 .75rem 1.5rem -.25rem var(--pf-g-relief-shade, rgb(0 0 0 / .3)),
+          0 .75rem 1.5rem -.25rem var(--pf-g-relief-shade, rgb(0 0 0 / .3));
+      }
     }
   }
 }
 
+// Under 75rem, two lines: the search and Clear all, then the chosen
+// filters (with the sort, when there is one). The chips' box steps aside
+// (display: contents), so its list and Clear all are the bar's own items.
 @media (max-width: 74.98rem) {
-  .pf-index__toolbar:has(.pf-index__chips) .pf-index__total {
-    flex-basis: 100%;
+  .pf-index__toolbar:has(.pf-index__chips) {
+    .pf-index__total {
+      flex: 1 0 60%;
+    }
+
+    .pf-index__chips {
+      display: contents;
+    }
+
+    .pf-index__clear {
+      order: 1;
+    }
+
+    .pf-index__chips ul {
+      flex: 1 1 50%;
+      order: 2;
+    }
+
+    .pf-index__sort {
+      order: 3;
+    }
+  }
+
+  // Edge to edge, the list scrolls out to the screen's edges (to the sort's
+  // side only when there's no sort).
+  .pf-index__toolbar .pf-index__chips ul {
+    margin-inline-start: calc(max(.25rem, var(--pf-index-bleed)) * -1);
+    padding-inline-start: max(.25rem, var(--pf-index-bleed));
+    scroll-padding-inline: var(--pf-index-bleed);
+  }
+
+  .pf-index__toolbar:not(:has(.pf-index__sort)) .pf-index__chips ul {
+    margin-inline-end: calc(max(.25rem, var(--pf-index-bleed)) * -1);
+    padding-inline-end: max(.25rem, var(--pf-index-bleed));
   }
 }
 
@@ -1174,6 +1306,12 @@
     overflow-x: auto;
     list-style: none;
     scrollbar-width: thin;
+
+    // On a touch screen no bar under the chips: the chip cut at the screen's
+    // edge shows there's more, and a finger scrolls it.
+    @media (pointer: coarse) {
+      scrollbar-width: none;
+    }
   }
 
   li {
@@ -1212,11 +1350,16 @@
   }
 }
 
+// Clear all, under 75rem beside the search on the bar's first line.
 .pf-index__clear {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  min-height: 2.75rem;
   color: inherit;
-  font-size: .9375rem;
+  font-size: .875rem;
   text-decoration-thickness: from-font;
+  text-underline-offset: .2em;
 }
 
 // The theme's mono labels on the page's hairline, with the mode tabs' accent line
@@ -2687,6 +2830,22 @@
     flex: none;
     width: 1rem;
     height: 1rem;
+  }
+}
+
+// Font Awesome's duotone file-pdf, from the server's Font Awesome Pro files:
+// the words' color, its second tone at the file's own 40%. A little taller
+// than the capitals and centred on them, not on the line box, which sits
+// lower (Roboto's descender is shallower than its ascender).
+.pf-index-row__pdf-icon {
+  display: inline-flex;
+  flex: none;
+  translate: 0 -.0625rem;
+
+  svg {
+    width: .65625rem;
+    height: .875rem;
+    fill: currentColor;
   }
 }
 
