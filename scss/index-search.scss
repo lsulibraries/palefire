@@ -1174,6 +1174,66 @@
   }
 }
 
+// Docked (js/index-search.js, from 75rem wide and 30rem tall): held, the
+// bar moves up into the breadcrumb bar's row instead of sticking under it.
+// The crumbs stay over the filter column on the left, the bar's words take
+// the row over the results; one band of glass (the breadcrumb bar's), one
+// shadow under it, and about 60px more for the results. The bar slims to
+// the row (chips 28px, still past the 24px target size), and keeps its
+// height as margin so nothing under it moves. Its own glass, strip, fade
+// and line are off here: the breadcrumb bar's glass is behind it.
+html.pf-index-dock {
+  .pf-index__toolbar {
+    top: var(--pf-header-h, 3rem);
+    z-index: 4;
+    border-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+
+  .pf-index__total::before,
+  .pf-index__total::after {
+    content: none;
+  }
+
+  .pf-index__chip {
+    @include pf-index-motion {
+      transition: border-color .2s var(--pf-index-ease), min-height .2s var(--pf-index-ease);
+    }
+  }
+}
+
+html.pf-index-docked {
+  .pf-index__toolbar {
+    height: var(--pf-landing-bar-h, 2rem);
+    min-height: 0;
+    margin-bottom: calc(.75rem + var(--pf-index-toolbar-h, 3.25rem) - var(--pf-landing-bar-h, 2rem));
+    padding-block: 0;
+  }
+
+  .pf-index__chip {
+    min-height: 1.75rem;
+  }
+
+  .pf-index__clear {
+    min-height: var(--pf-landing-bar-h, 2rem);
+  }
+
+  // The crumbs give way (their own ellipsis) before the bar's words.
+  .pf-page-bar {
+    box-shadow: 0 .5rem .75rem -.5rem light-dark(rgb(0 0 0 / .2), rgb(0 0 0 / .55));
+
+    .breadcrumb {
+      max-width: var(--pf-index-crumbs-room, none);
+    }
+  }
+}
+
 // Under 75rem, two lines: the search and Clear all, then the chosen
 // filters (with the sort, when there is one). The chips' box steps aside
 // (display: contents), so its list and Clear all are the bar's own items.

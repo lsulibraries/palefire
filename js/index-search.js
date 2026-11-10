@@ -288,6 +288,72 @@
     return next;
   };
 
+  // From 75rem the held results bar moves up into the breadcrumb bar's row,
+  // so there is one band of glass under the header, not two (styles:
+  // index-search.scss, "Docked"). Classes on <html>, as the breadcrumb bar
+  // is outside the Index: pf-index-dock while the window is wide enough,
+  // pf-index-docked while the bar is held. Before it docks, its height is
+  // kept (--pf-index-toolbar-h), so the results under it don't move when it
+  // slims to the row; and the room left of its words is measured
+  // (--pf-index-crumbs-room), so the breadcrumb gives way (ellipsis) before
+  // it reaches them.
+  const DOCK_CLASSES = ['pf-index-dock', 'pf-index-docked'];
+  const undock = () => {
+    document.documentElement.classList.remove(...DOCK_CLASSES);
+  };
+
+  const dockToolbar = (toolbar) => {
+    const root = document.documentElement;
+    const wide = window.matchMedia('(min-width: 75rem) and (min-height: 30rem)');
+    const total = toolbar.querySelector('.pf-index__total');
+    if (!document.querySelector('.pf-page-bar .breadcrumb') || !total) {
+      return;
+    }
+    let frame = 0;
+    let measured = false;
+    const update = () => {
+      frame = 0;
+      if (!toolbar.isConnected) {
+        window.removeEventListener('scroll', schedule);
+        window.removeEventListener('resize', resize);
+        undock();
+        return;
+      }
+      if (!wide.matches) {
+        undock();
+        return;
+      }
+      root.classList.add('pf-index-dock');
+      const docked = root.classList.contains('pf-index-docked');
+      if (!docked) {
+        root.style.setProperty('--pf-index-toolbar-h', `${toolbar.offsetHeight}px`);
+      }
+      const stick = parseFloat(window.getComputedStyle(toolbar).top) || 0;
+      const held = toolbar.getBoundingClientRect().top <= stick + 0.5;
+      if (held && (!docked || !measured)) {
+        const crumbs = document.querySelector('.pf-page-bar .breadcrumb');
+        // 1.5rem between the crumbs and the bar's words.
+        const gap = 1.5 * parseFloat(window.getComputedStyle(root).fontSize);
+        const room = total.getBoundingClientRect().left - crumbs.getBoundingClientRect().left - gap;
+        root.style.setProperty('--pf-index-crumbs-room', `${Math.max(0, Math.floor(room))}px`);
+        measured = true;
+      }
+      root.classList.toggle('pf-index-docked', held);
+    };
+    const schedule = () => {
+      if (!frame) {
+        frame = window.requestAnimationFrame(update);
+      }
+    };
+    const resize = () => {
+      measured = false;
+      schedule();
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', resize);
+    schedule();
+  };
+
   // The results bar names the source in view once its heading has gone under
   // the bar: on a long page of sections it's easy to lose track. Hidden from
   // screen readers, which have the headings.
@@ -918,6 +984,7 @@
       once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);
       once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
       once('pf-index-where', '.pf-index__toolbar', context).forEach(followSections);
+      once('pf-index-dock', '.pf-index__toolbar', context).forEach(dockToolbar);
       once('pf-index-answer', '[data-pf-index-answer]', context).forEach(fillAnswer);
       once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
@@ -927,6 +994,10 @@
       // Only the requests for what is going away. Signed in, BigPipe detaches
       // each piece it fills in (toolbar, messages) while the sections load.
       if (trigger === 'unload') {
+        // Leaving the Index (swup): the breadcrumb bar is the next page's.
+        if (context === document || context.querySelector?.('.pf-index__toolbar')) {
+          undock();
+        }
         controllers.forEach((element, controller) => {
           if (context === document || context.contains(element)) {
             controller.abort();

@@ -301,6 +301,7 @@ HTML),
 <li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts. Turned on the same day: all 20 results for "cotton gin" now show the words from the PDF.</li>
 <li>On phones the Filters button spans the screen and shows how many filters are chosen, and its word sits in the middle (the bar below had been covering its bottom edge). The bar of chosen filters runs edge to edge, with Clear all beside the search. The line under that bar is gone; while it follows you down the page it rises off the page with a soft shadow instead. Open PDF buttons show a PDF icon.</li>
 <li>The bar that follows you down the results is now frosted glass, like the menu bar and the breadcrumb above it: results blur as they pass under all three. A soft shadow sits under it.</li>
+<li>On wide screens, that bar now moves up into the breadcrumb's row as you scroll: the search and its filters sit beside Home / Special Collections / Index, leaving more of the screen for results.</li>
 </ul>
 HTML),
 ]);
