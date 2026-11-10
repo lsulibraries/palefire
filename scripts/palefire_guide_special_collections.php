@@ -194,7 +194,7 @@ HTML),
 </ol>
 HTML),
   $text('Option 2: Order a digital copy', <<<'HTML'
-<p>Special Collections makes copies for a fee, for personal or research use. Scans cost 50 cents a page, plus a $10 processing fee for each order; one fee covers requests you submit together. Every copy needs a staff member's approval, and staff can refuse or change an order because of an item's format, condition or restrictions.</p>
+<p>Special Collections makes copies for a fee, for personal or research use. Photocopies and low-resolution PDF scans cost 50 cents an item, and high-resolution JPEG or TIFF scans $1 an item, plus a $10 processing fee for each order; one fee covers requests you submit together. Every copy needs a staff member's approval, and staff can refuse or change an order because of an item's format, condition or restrictions.</p>
 <ol>
 <li><strong>Find the catalog record</strong> for each book, manuscript collection or other item you want copied.</li>
 <li><strong>Choose "Request Item"</strong> under the record's Available tab, and sign in to your Special Collections account.</li>

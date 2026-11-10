@@ -126,7 +126,7 @@ $visit = <<<'HTML'
 <li><strong>Book an appointment.</strong> Not required, but recommended: your items are waiting when you arrive. Check the Reading Room hours before you come.</li>
 <li><strong>Read it at Hill.</strong> Staff bring your materials to you in the Reading Room.</li>
 </ol>
-<p><strong>Need a copy instead?</strong> Choose Request Item, then Switch to Duplication Order Form. Scans are 50 cents a page plus a $10 order fee, emailed in 5 to 7 business days.</p>
+<p><strong>Need a copy instead?</strong> Choose Request Item, then Switch to Duplication Order Form. Scans are 50 cents an item ($1 at high resolution) plus a $10 order fee, emailed in 5 to 7 business days.</p>
 <p><a href="/v2/special/guides/special-collections">Read the full guide: How to Use Special Collections</a></p>
 HTML;
 

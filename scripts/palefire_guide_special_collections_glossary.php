@@ -234,7 +234,7 @@ $section('In the Reading Room', [
 
 $section('Copies, rights and citing', [
   $accordion('After your visit', [
-    ['Duplication order', '<p>A request for copies, placed through your Special Collections account with "Switch to Duplication Order Form". Scans are 50 cents a page plus a $10 processing fee per order, and every order needs staff approval.</p>', ['account']],
+    ['Duplication order', '<p>A request for copies, placed through your Special Collections account with "Switch to Duplication Order Form". Scans are 50 cents an item ($1 at high resolution) plus a $10 processing fee per order, and every order needs staff approval.</p>', ['account']],
     ['Copyright', '<p>The legal right to copy and publish a work. LSU doesn\'t own the copyright to most of its materials, and having a copy doesn\'t give you permission to publish it.</p>'],
     ['Public domain', '<p>Works no longer protected by copyright, which anyone can reuse. Old doesn\'t always mean public domain, and being digitized doesn\'t make an item public domain.</p>'],
     ['Rights statement', '<p>A short statement on a digital item that says what is known about its copyright and reuse. Check it before you share or publish an image.</p>', ['ldl']],
