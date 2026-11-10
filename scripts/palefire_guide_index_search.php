@@ -303,6 +303,7 @@ HTML),
 <li>The bar that follows you down the results is now frosted glass, like the menu bar and the breadcrumb above it: results blur as they pass under all three. A soft shadow sits under it.</li>
 <li>On wide screens, that bar now moves up into the breadcrumb's row as you scroll: the search and its filters sit beside Home / Special Collections / Index, leaving more of the screen for results.</li>
 <li>The source named in that bar (Catalog, PDF Finding Aids…) is now gold, like its heading on the page.</li>
+<li>When that bar joins the breadcrumb row, the row grows so the filters and Clear all are full size and easy to press, and its shadow now darkens everything passing under it.</li>
 </ul>
 HTML),
 ]);
