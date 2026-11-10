@@ -64,22 +64,24 @@
    default every page opens in (Twilight, set on <html> by
    html.html.twig); its radio is checked when nothing is saved. Order:
    favourite darks, the other darks, then the lights. Only the first
-   three show, then a "More colors" tile (utility-panels.js moves the
-   button into the grid); the chosen one always stays in view. #}
+   three show, then a "Show 9 more colors" link (utility-panels.js); the
+   chosen one always stays in view. Each row: the swatch, its name and a
+   line on what it looks like (note). 'group' starts a labelled run in the
+   opened list. #}
 {%
   set reading_themes = [
-    { key: 'twilight', label: 'Twilight'|t },
-    { key: 'material', label: 'Material'|t },
-    { key: 'cocoa', label: 'Cocoa'|t },
-    { key: 'forest', label: 'Forest'|t },
-    { key: 'dusk', label: 'Dusk'|t },
-    { key: 'night', label: 'Night'|t },
-    { key: 'midnight', label: 'Midnight'|t },
-    { key: 'solarized', label: 'Solarized'|t },
-    { key: 'cream', label: 'Cream'|t },
-    { key: 'lavender', label: 'Lavender'|t },
-    { key: 'sepia', label: 'Sepia'|t },
-    { key: 'sage', label: 'Sage'|t },
+    { key: 'twilight', label: 'Twilight'|t, note: 'Dark warm grey, gold links'|t },
+    { key: 'material', label: 'Material'|t, note: 'Slate blue, brightest text'|t },
+    { key: 'cocoa', label: 'Cocoa'|t, note: 'Dark brown, amber links'|t },
+    { key: 'forest', label: 'Forest'|t, note: 'Deep green, mint links'|t },
+    { key: 'dusk', label: 'Dusk'|t, note: 'Soft grey, lavender links'|t },
+    { key: 'night', label: 'Night'|t, note: 'Near black, highest contrast'|t },
+    { key: 'midnight', label: 'Midnight'|t, note: 'Navy, pale blue links'|t },
+    { key: 'solarized', label: 'Solarized'|t, note: 'Dark teal, low glare'|t },
+    { key: 'cream', label: 'Cream'|t, note: 'Warm paper, violet links'|t, group: 'Light'|t },
+    { key: 'lavender', label: 'Lavender'|t, note: 'Pale violet paper'|t },
+    { key: 'sepia', label: 'Sepia'|t, note: 'Brown ink on tan'|t },
+    { key: 'sage', label: 'Sage'|t, note: 'Green ink on pale green'|t },
   ]
 %}
 {# Settings: group > settings. type 'size' is the radio group; the rest are
@@ -107,6 +109,14 @@
 {% set close_icon %}
   <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 {% endset %}
+{# "‹ Menu": shown only while a drawer is open over the phone menu, where it
+   covers the menu (openOverMenu, js/palefire.js). It goes back to the menu;
+   the × closes both. #}
+{% set back_button %}
+  <button type="button" class="pf-panel__back" aria-label="{{ 'Back to the menu'|t }}" data-pf-panel-back hidden>
+    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ 'Menu'|t }}
+  </button>
+{% endset %}
 {% set ext_icon %}
   <svg class="pf-panel__cta-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 7 9M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
 {% endset %}
@@ -117,6 +127,7 @@
   <div class="offcanvas offcanvas-start pf-panel pf-panel--search" id="pf-panel-search" tabindex="-1"
        aria-labelledby="pf-panel-search-title" data-pf-panel="search">
     <div class="pf-panel__header">
+      {{ back_button }}
       <h2 class="pf-panel__title" id="pf-panel-search-title">{{ 'Search'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
         {{ close_icon }}<span class="visually-hidden">{{ 'Close search'|t }}</span>
@@ -166,6 +177,7 @@
   <div class="offcanvas offcanvas-start pf-panel pf-panel--hours" id="pf-panel-hours" tabindex="-1"
        aria-labelledby="pf-panel-hours-title" data-pf-panel="hours">
     <div class="pf-panel__header">
+      {{ back_button }}
       <h2 class="pf-panel__title" id="pf-panel-hours-title">{{ 'Hours'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
         {{ close_icon }}<span class="visually-hidden">{{ 'Close hours'|t }}</span>
@@ -200,6 +212,7 @@
   <div class="offcanvas offcanvas-start pf-panel pf-panel--ask" id="pf-panel-ask" tabindex="-1"
        aria-labelledby="pf-panel-ask-title" data-pf-panel="ask">
     <div class="pf-panel__header">
+      {{ back_button }}
       <h2 class="pf-panel__title" id="pf-panel-ask-title">{{ 'Ask Us'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
         {{ close_icon }}<span class="visually-hidden">{{ 'Close Ask Us'|t }}</span>
@@ -239,6 +252,7 @@
   <div class="offcanvas offcanvas-start pf-panel pf-panel--accounts" id="pf-panel-accounts" tabindex="-1"
        aria-labelledby="pf-panel-accounts-title" data-pf-panel="accounts">
     <div class="pf-panel__header">
+      {{ back_button }}
       <h2 class="pf-panel__title" id="pf-panel-accounts-title">{{ 'Accounts'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
         {{ close_icon }}<span class="visually-hidden">{{ 'Close accounts'|t }}</span>
@@ -267,14 +281,14 @@
   <div class="offcanvas offcanvas-start pf-panel pf-panel--settings" id="pf-panel-settings" tabindex="-1"
        aria-labelledby="pf-panel-settings-title" data-pf-panel="settings">
     <div class="pf-panel__header">
+      {{ back_button }}
       <h2 class="pf-panel__title" id="pf-panel-settings-title">{{ 'Settings'|t }}</h2>
       <button type="button" class="pf-panel__close" data-bs-dismiss="offcanvas">
         {{ close_icon }}<span class="visually-hidden">{{ 'Close settings'|t }}</span>
       </button>
     </div>
     <form class="pf-panel__body pf-settings" data-pf-settings aria-labelledby="pf-panel-settings-title">
-      <p class="pf-settings__intro">{{ 'Changes apply right away and are saved in this browser.'|t }}</p>
-
+      {# Text size: a segmented control, its A growing across the four. #}
       <fieldset class="pf-settings__group">
         <legend class="pf-settings__legend">{{ 'Text size'|t }}</legend>
         <div class="pf-settings__sizes">
@@ -285,21 +299,31 @@
         </div>
       </fieldset>
 
+      {# Colors: one row each, as the Search drawer's modes. The input is
+         named by the row's name and described by its note. #}
       <fieldset class="pf-settings__group">
-        <legend class="pf-settings__legend">{{ 'Reading colors'|t }}</legend>
+        <legend class="pf-settings__legend">{{ 'Colors'|t }}</legend>
+        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colors for the whole site, including the header, menus and these drawers.'|t }}</p>
         <div class="pf-settings__themes" id="pf-set-themes" data-pf-themes>
           {% for theme in reading_themes %}
-            <input class="pf-settings__theme-input visually-hidden{{ loop.index > 3 ? ' is-more' }}" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-describedby="pf-set-theme-help">
-            <label class="pf-settings__theme" for="pf-set-theme-{{ theme.key }}" data-theme="{{ theme.key }}"><span class="pf-settings__theme-chip" aria-hidden="true">Aa</span>{{ theme.label }}</label>
+            {% if theme.group is defined %}
+              <p class="pf-settings__theme-group">{{ theme.group }}</p>
+            {% endif %}
+            <input class="pf-settings__theme-input visually-hidden{{ loop.index > 3 ? ' is-more' }}" type="radio" name="theme" id="pf-set-theme-{{ theme.key }}" value="{{ theme.key }}"{{ loop.first ? ' checked' }} aria-labelledby="pf-set-theme-{{ theme.key }}-name" aria-describedby="pf-set-theme-{{ theme.key }}-note pf-set-theme-help">
+            <label class="pf-settings__theme" for="pf-set-theme-{{ theme.key }}" data-theme="{{ theme.key }}">
+              <span class="pf-settings__theme-chip" aria-hidden="true">Aa</span>
+              <span class="pf-settings__theme-text">
+                <span class="pf-settings__theme-name" id="pf-set-theme-{{ theme.key }}-name">{{ theme.label }}</span>
+                <span class="pf-settings__theme-note" id="pf-set-theme-{{ theme.key }}-note">{{ theme.note }}</span>
+              </span>
+              <span class="pf-settings__theme-mark" aria-hidden="true"></span>
+            </label>
           {% endfor %}
         </div>
-        {# A tile like the swatches, "+" in its chip ("−" when open). Moved
-           to the end of the grid and shown by utility-panels.js. #}
-        <button type="button" class="pf-settings__theme pf-settings__more" aria-controls="pf-set-themes" aria-expanded="false" data-pf-themes-more hidden>
-          <span class="pf-settings__theme-chip" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8h10"/><path class="pf-settings__more-v" d="M8 3v10"/></svg></span>
-          <span data-pf-themes-more-label>{{ 'More colors'|t }}</span>
+        {# Shown by utility-panels.js; without JS every color shows. #}
+        <button type="button" class="pf-settings__more" aria-controls="pf-set-themes" aria-expanded="false" data-pf-themes-more hidden>
+          <span data-pf-themes-more-label>{{ 'Show @count more colors'|t({'@count': reading_themes|length - 3}) }}</span>
         </button>
-        <p class="pf-settings__themes-help" id="pf-set-theme-help">{{ 'Page and text colors for the whole site, including the header, menus and these drawers.'|t }}</p>
       </fieldset>
 
       {% for group in settings_groups %}
@@ -314,10 +338,14 @@
           {% endfor %}
         </fieldset>
       {% endfor %}
-
-      <p class="pf-settings__status" role="status" data-pf-settings-status></p>
     </form>
-    <div class="pf-panel__footer">
+    {# Pinned under the form, like the menu's quick links. "Saved on this
+       device." takes the note's place for a moment after each change. #}
+    <div class="pf-panel__footer pf-settings__foot">
+      <div class="pf-settings__saved">
+        <p class="pf-settings__status" role="status" data-pf-settings-status></p>
+        <p class="pf-settings__note">{{ 'Changes apply right away and are saved in this browser.'|t }}</p>
+      </div>
       <button type="button" class="pf-panel__cta pf-settings__reset" data-pf-settings-reset>
         <span>{{ 'Reset to default'|t }}</span>
         <svg class="pf-panel__cta-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-3.97M2.5 2.5v2.5H5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

@@ -268,12 +268,13 @@
     document.dispatchEvent(new CustomEvent('palefire:a11ychange', { detail: { settings } }));
   }
 
-  // "More colors": the swatches after the first four (.is-more) stay
-  // hidden until the button opens them. A hidden swatch that is chosen
-  // still shows (CSS: .is-more:checked), so the choice is never out of
-  // sight. Without JS the button stays hidden and every swatch shows.
+  // "Show 9 more colors": the rows after the first three (.is-more) stay
+  // hidden until the link under the list opens them. A hidden row that is
+  // chosen still shows (CSS: .is-more:checked), so the choice is never out
+  // of sight. Without JS the link stays hidden and every row shows.
   function initThemesMore(grid, button) {
-    if (!grid || !button || !grid.querySelector('.is-more')) {
+    const more = grid ? grid.querySelectorAll('.is-more').length : 0;
+    if (!button || !more) {
       return;
     }
     const label = button.querySelector('[data-pf-themes-more-label]');
@@ -288,15 +289,14 @@
       }
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (label) {
-        label.textContent = open ? Drupal.t('Fewer colors') : Drupal.t('More colors');
+        label.textContent = open
+          ? Drupal.t('Show fewer colors')
+          : Drupal.t('Show @count more colors', { '@count': more });
       }
     };
     button.addEventListener('click', () => {
       set(button.getAttribute('aria-expanded') !== 'true');
     });
-    // The button is a tile after the swatches (in the grid, so it sits in
-    // the next free cell). Not a radio, so arrow keys skip it.
-    grid.append(button);
     grid.classList.add('is-collapsed');
     button.hidden = false;
   }
@@ -389,8 +389,6 @@
       }
     });
   }
-
-  /* ---------------- Text size and reading colors in the mobile menu ---------------- */
 
   /* ---------------- Utility icon tooltips ---------------- */
 

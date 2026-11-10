@@ -456,23 +456,63 @@
    * Opens a utility drawer over the open menu drawer, keeping the menu
    * underneath (Bootstrap would close it: one offcanvas at a time). While
    * it is up, <html class="pf-over-menu"> lifts the drawer and its backdrop
-   * above the menu (_utility-panels.scss). Closing it (its × button, Escape
-   * or a tap on the backdrop) goes back to the menu: focus returns to the
-   * tile that opened it, and the menu's focus trap (Bootstrap keeps one
-   * active at a time) is restored.
+   * above the menu and makes it as wide as the menu, so it reads as a page
+   * inside the menu: it slides in from the right while the menu's contents
+   * ease left and fade (.pf-menu-covered, _utility-panels.scss). "‹ Menu",
+   * Escape or a tap on the backdrop go back to the menu: focus returns to
+   * the tile that opened it, and the menu's focus trap (Bootstrap keeps
+   * one active at a time) is restored. Its × closes both drawers, sliding
+   * them out together, and focus goes to the Menu button.
    */
   function openOverMenu(panel, tile) {
     const bs = window.bootstrap;
     const menu = document.getElementById('pf-primary-menu');
+    const back = panel.querySelector('[data-pf-panel-back]');
+    let closeAll = false;
+
+    const onBack = () => bs.Offcanvas.getOrCreateInstance(panel).hide();
+    const onClose = (event) => {
+      if (event.target.closest('[data-bs-dismiss="offcanvas"]')) {
+        closeAll = true;
+        root.classList.add('pf-menu-closing');
+        const menuDrawer = menu && bs.Offcanvas.getInstance(menu);
+        if (menuDrawer) {
+          menu.addEventListener('hidden.bs.offcanvas', () => {
+            root.classList.remove('pf-menu-covered');
+            const toggle = document.querySelector('[data-bs-target="#pf-primary-menu"]');
+            if (toggle) {
+              toggle.focus();
+            }
+          }, { once: true });
+          menuDrawer.hide();
+        }
+      }
+    };
+    // Going back: the menu returns as the drawer starts to leave.
+    const onHide = (event) => {
+      if (event.target === panel && !closeAll) {
+        root.classList.remove('pf-menu-covered');
+      }
+    };
 
     const onHidden = (event) => {
       if (event.target !== panel) {
         return;
       }
       document.removeEventListener('hidden.bs.offcanvas', onHidden);
-      root.classList.remove('pf-over-menu');
+      panel.removeEventListener('hide.bs.offcanvas', onHide);
+      panel.removeEventListener('click', onClose);
+      if (back) {
+        back.removeEventListener('click', onBack);
+        back.hidden = true;
+      }
+      // Back to its usual start (off to the left) with no transition.
+      panel.style.transition = 'none';
+      root.classList.remove('pf-over-menu', 'pf-menu-closing');
+      panel.getBoundingClientRect();
+      panel.style.transition = '';
       const menuDrawer = menu && bs.Offcanvas.getInstance(menu);
-      if (!menuDrawer || !menu.classList.contains('show')) {
+      if (closeAll || !menuDrawer || !menu.classList.contains('show')) {
         return;
       }
       // Back on the menu: its backdrop wash, its focus trap, the tile.
@@ -493,7 +533,19 @@
       menuDrawer._focustrap.deactivate();
     }
 
-    root.classList.add('pf-over-menu');
+    if (back) {
+      back.hidden = false;
+      back.addEventListener('click', onBack);
+    }
+    panel.addEventListener('click', onClose);
+    panel.addEventListener('hide.bs.offcanvas', onHide);
+    // Move the drawer to its new start (off to the right) without a
+    // transition, and settle it there before Bootstrap slides it in, or
+    // it would come from the left.
+    panel.style.transition = 'none';
+    root.classList.add('pf-over-menu', 'pf-menu-covered');
+    panel.getBoundingClientRect();
+    panel.style.transition = '';
     // On document, so it runs after the drawer's own hidden handlers
     // (utility-panels.js clears data-pf-panel there).
     document.addEventListener('hidden.bs.offcanvas', onHidden);

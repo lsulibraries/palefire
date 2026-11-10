@@ -70,6 +70,56 @@ html.pf-over-menu .pf-panel.offcanvas {
   z-index: $zindex-offcanvas + 1;
 }
 
+// Over the menu the drawer is a page inside it, not a second drawer: the
+// menu's full width (one ×, nothing of the menu showing beside it), in
+// from the right as the menu's contents ease left and fade, the way a
+// phone's own settings go one level down. Its × closes both together, out
+// to the left (.pf-menu-closing). Bootstrap's own reduced-motion rule
+// (and html.pf-a11y-motion) make both a cut.
+@include media-breakpoint-down(lg) {
+  html.pf-over-menu .pf-panel.offcanvas {
+    --bs-offcanvas-width: 100vw;
+    --bs-offcanvas-padding-x: 1.5rem; // the menu's
+    transition-duration: .42s;
+    transition-timing-function: cubic-bezier(.2, .7, .2, 1);
+  }
+
+  html.pf-over-menu .pf-panel.offcanvas-start {
+    transform: translateX(100%);
+
+    &.showing,
+    &.show:not(.hiding) {
+      transform: none;
+    }
+  }
+
+  html.pf-over-menu.pf-menu-closing .pf-panel.offcanvas-start.hiding {
+    transform: translateX(-100%);
+  }
+
+  .pf-menu-drawer > * {
+    transition: opacity .3s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s linear 0s;
+  }
+
+  html.pf-menu-covered .pf-menu-drawer > * {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-1.5rem);
+    transition: opacity .3s ease, transform .42s cubic-bezier(.2, .7, .2, 1), visibility 0s linear .42s;
+  }
+
+  // Closing both: the menu leaves as it is, empty under the drawer.
+  html.pf-menu-closing .pf-menu-drawer > * {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-menu-drawer > * {
+    transition: none !important;
+  }
+}
+
 
 // The mobile menu drawer (#pf-primary-menu, _header.scss) wears the same
 // glass and colors as these drawers. Below lg only: from lg up the same
@@ -106,9 +156,10 @@ html.pf-over-menu .pf-panel.offcanvas {
   // (sans, medium, tight), the close button right, a hairline under both.
   &__header {
     display: flex;
+    flex-wrap: wrap; // "‹ Menu" takes a row of its own, over the title
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0 1rem;
     margin-inline: var(--bs-offcanvas-padding-x);
     padding: calc(var(--bs-offcanvas-padding-y) - .5rem) 0 .75rem;
     border-bottom: 1px solid var(--pf-toc-rail);
@@ -149,6 +200,40 @@ html.pf-over-menu .pf-panel.offcanvas {
     &:focus-visible {
       color: var(--pf-g-hover, var(--pf-toc-accent));
       transition-duration: $pf-hover-in;
+    }
+  }
+
+  // "‹ Menu" (openOverMenu, js/palefire.js): a quiet link on its own row
+  // above the title, 44px tall, pulled up so the title doesn't drop.
+  &__back {
+    flex: 0 0 100%;
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    min-height: 2.75rem;
+    margin: -.75rem 0 -.25rem -.25rem;
+    padding: 0 .25rem;
+    color: var(--pf-toc-color);
+    font-family: var(--bs-body-font-family);
+    font-size: .9375rem;
+    background-color: transparent;
+    border: 0;
+    transition: color $pf-hover-out ease;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-g-hover, var(--pf-toc-accent));
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-toc-accent);
+      outline-offset: -2px;
     }
   }
 
@@ -583,12 +668,15 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-panel__cta,
   .pf-ask__tab,
   .pf-accounts__link,
+  .pf-panel__back,
   .pf-settings__size,
   .pf-settings__switch,
+  .pf-settings__switch::before,
   .pf-settings__theme,
   .pf-settings__theme-chip,
-  .pf-settings__more,
-  .pf-settings__more-v {
+  .pf-settings__theme-mark,
+  .pf-settings__theme-mark::after,
+  .pf-settings__more {
     transition: none;
   }
 }
@@ -728,19 +816,15 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 }
 
 // Settings panel ------------------------------------------------------------
+// In the phone menu's voice (2026-11-09): sentence-case headings over
+// hairline rows, as the menu's sections and the Search drawer's modes.
+// Text size is one segmented control; each color is a described row with
+// its radio on the right; each switch sits at the end of its row. The note
+// and Reset are pinned at the foot.
 
 .pf-settings {
-  gap: 1.75rem;
+  gap: 2rem;
   padding-top: 1.5rem;
-
-  // Body text in the body sans, as on guides; labels stay monospace.
-  &__intro {
-    margin: 0;
-    font-family: var(--bs-body-font-family);
-    font-size: .875rem;
-    line-height: 1.5;
-    color: var(--pf-toc-sub-color);
-  }
 
   &__group {
     margin: 0;
@@ -748,25 +832,27 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     border: 0;
   }
 
-  // Tracked caps over a hairline, like the Hours date.
+  // Sentence case, the body sans, as the menu's sections (smaller: they
+  // head controls, not pages).
   &__legend {
     float: none; // Bootstrap reboot floats legends.
     width: 100%;
-    margin-bottom: .75rem;
-    padding-bottom: .5rem;
-    font-size: .75rem;
+    margin-bottom: .625rem;
+    padding: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: 1.125rem;
     font-weight: $font-weight-bold;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--pf-toc-sub-color);
-    border-bottom: 1px solid var(--pf-toc-rail);
+    letter-spacing: -.01em;
+    line-height: 1.25;
+    color: var(--pf-toc-active);
   }
 
-  // Text size: four tabs on one hairline; the chosen one carries a short
-  // accent bar on it (no boxes).
+  // Text size: four cells in one hairline frame; the chosen one is tinted
+  // and carries the accent bar (not color alone). The A grows across them.
   &__sizes {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--pf-toc-rail);
   }
 
   &__size {
@@ -775,20 +861,24 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     align-items: center;
     justify-content: flex-end;
     gap: .25rem;
-    min-height: 3.75rem;
-    padding: .5rem .25rem .625rem;
-    font-size: .75rem;
+    min-height: 3.5rem;
+    padding: .5rem .25rem;
+    font-size: .6875rem;
     color: var(--pf-toc-color);
     cursor: pointer;
-    border-bottom: 1px solid var(--pf-toc-rail);
+    background-color: transparent;
     box-shadow: inset 0 0 0 var(--pf-toc-accent);
-    transition: color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+    transition: color $pf-hover-out ease, background-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
 
     &:hover {
       color: var(--pf-toc-active);
-      box-shadow: inset 0 -1px 0 var(--pf-section-border);
-      transition: color $pf-hover-in ease, box-shadow $pf-hover-in ease;
+      background-color: color-mix(in srgb, var(--pf-toc-active) 5%, transparent);
+      transition-duration: $pf-hover-in;
     }
+  }
+
+  &__size + &__size-input + &__size {
+    border-inline-start: 1px solid var(--pf-toc-rail);
   }
 
   &__size-a {
@@ -798,65 +888,107 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     color: var(--pf-toc-active);
   }
 
-  &__size[data-size="100"] &__size-a { font-size: 1rem; }
-  &__size[data-size="115"] &__size-a { font-size: 1.15rem; }
-  &__size[data-size="130"] &__size-a { font-size: 1.3rem; }
-  &__size[data-size="150"] &__size-a { font-size: 1.5rem; }
+  &__size[data-size="100"] &__size-a { font-size: .875rem; }
+  &__size[data-size="115"] &__size-a { font-size: 1rem; }
+  &__size[data-size="130"] &__size-a { font-size: 1.1875rem; }
+  &__size[data-size="150"] &__size-a { font-size: 1.375rem; }
 
-  // Selected: the accent bar and full-strength text, not color alone.
   &__size-input:checked + &__size {
     color: var(--pf-toc-active);
+    background-color: color-mix(in srgb, var(--pf-toc-active) 8%, transparent);
     box-shadow: inset 0 -2px 0 var(--pf-toc-accent);
   }
 
   &__size-input:focus-visible + &__size {
     outline: 3px solid var(--pf-focus-color);
-    outline-offset: 2px;
+    outline-offset: -3px;
   }
 
-  // Reading colors: "Aa" in the swatch's own text on its own page color
-  // (colors: _reading-themes.scss), the name under it, no box. The chosen
-  // one gets an accent ring around its chip and full-strength name.
+  // Colors -------------------------------------------------------------
+  &__themes-help {
+    margin: -.25rem 0 .75rem;
+    font-family: var(--bs-body-font-family);
+    font-size: .8125rem;
+    line-height: 1.45;
+    color: var(--pf-toc-sub-color);
+  }
+
   &__themes {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: .75rem .375rem;
+    border-top: 1px solid var(--pf-toc-rail);
   }
 
+  // A row: swatch | name over its note | radio mark.
   &__theme {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: .5rem;
-    padding: .25rem;
-    font-size: var(--pf-mono-label);
-    letter-spacing: .08em;
-    text-align: center;
-    text-transform: uppercase;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .875rem;
+    min-height: 3.25rem;
+    padding: .5rem 0;
+    font-family: var(--bs-body-font-family);
     color: var(--pf-toc-color);
     cursor: pointer;
+    border-bottom: 1px solid var(--pf-toc-rail);
     transition: color $pf-hover-out ease;
 
     &:hover {
       color: var(--pf-toc-active);
-      transition: color $pf-hover-in ease;
+      transition-duration: $pf-hover-in;
     }
   }
 
+  // "Aa" in the swatch's own text on its own page color
+  // (_reading-themes.scss). Its hairline sets it off a drawer of nearly
+  // the same color; the chosen one's turns to the accent.
   &__theme-chip {
     display: grid;
     place-items: center;
-    height: 2.25rem;
-    font-family: var(--bs-body-font-family);
-    font-size: 1rem;
+    width: 2.75rem;
+    height: 2rem;
+    font-size: .875rem;
     font-weight: $font-weight-medium;
-    letter-spacing: 0;
-    text-transform: none;
-    // Its hairline separates a chip from a drawer of nearly the same
-    // color, and is also the hover and selected mark: brighter on hover,
-    // a 2px accent line when chosen.
     box-shadow: inset 0 0 0 1px var(--pf-toc-rail);
     transition: box-shadow $pf-hover-out ease;
+  }
+
+  &__theme-text {
+    display: grid;
+    min-width: 0;
+  }
+
+  &__theme-name {
+    font-size: .9375rem;
+    font-weight: $font-weight-medium;
+    line-height: 1.3;
+    color: var(--pf-toc-active);
+  }
+
+  &__theme-note {
+    font-size: .8125rem;
+    line-height: 1.35;
+    color: var(--pf-toc-sub-color);
+  }
+
+  // The radio, drawn: a ring, filled with an accent dot when chosen.
+  &__theme-mark {
+    display: grid;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1.5px solid var(--pf-section-border); // 3:1+ (UI component)
+    border-radius: 50%;
+    transition: border-color $pf-hover-out ease;
+
+    &::after {
+      content: "";
+      width: .5rem;
+      height: .5rem;
+      background-color: var(--pf-toc-accent);
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform .25s ease;
+    }
   }
 
   &__theme:hover &__theme-chip {
@@ -864,25 +996,47 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     transition-duration: $pf-hover-in;
   }
 
-  &__theme-input:checked + &__theme {
-    color: var(--pf-toc-active);
-  }
-
   &__theme-input:checked + &__theme &__theme-chip {
     box-shadow: inset 0 0 0 2px var(--pf-toc-accent);
   }
 
-  // "More colors" (initThemesMore, utility-panels.js): only the first
-  // three, and the chosen one wherever it is, until the list is opened.
+  &__theme-input:checked + &__theme &__theme-mark {
+    border-color: var(--pf-toc-accent);
+
+    &::after {
+      transform: scale(1);
+    }
+  }
+
+  &__theme-input:focus-visible + &__theme {
+    outline: 3px solid var(--pf-focus-color);
+    outline-offset: -3px;
+  }
+
+  // "Light" over the light colors, in the opened list.
+  &__theme-group {
+    margin: 0;
+    padding: 1rem 0 .375rem;
+    font-size: var(--pf-mono-label);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--pf-toc-sub-color);
+    border-bottom: 1px solid var(--pf-toc-rail);
+  }
+
+  // Collapsed (initThemesMore, utility-panels.js): only the first three,
+  // and the chosen one wherever it is.
   &__themes.is-collapsed &__theme-input.is-more:not(:checked),
-  &__themes.is-collapsed &__theme-input.is-more:not(:checked) + &__theme {
+  &__themes.is-collapsed &__theme-input.is-more:not(:checked) + &__theme,
+  &__themes.is-collapsed &__theme-group {
     display: none;
   }
 
   // Opened: the rest fade in one after another (.is-revealing is on for
   // just that moment, so later picks don't replay it).
   @media (prefers-reduced-motion: no-preference) {
-    &__themes.is-revealing &__theme-input.is-more:not(:checked) + &__theme {
+    &__themes.is-revealing &__theme-input.is-more:not(:checked) + &__theme,
+    &__themes.is-revealing &__theme-group {
       animation: pf-accordion-in $pf-menu-fade ease both;
     }
 
@@ -891,26 +1045,33 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
         animation-delay: ($i - 4) * $pf-menu-stagger;
       }
     }
+
+    &__themes.is-revealing &__theme-group {
+      animation-delay: 5 * $pf-menu-stagger;
+    }
   }
 
-  // The "More colors" tile: the swatch tile (.pf-settings__theme) with a
-  // "+" in its chip, turning to "−" while the list is open.
+  // "Show 9 more colors": a text link under the list.
   &__more {
-    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: .875rem;
+    color: var(--pf-toc-active);
+    text-decoration: underline;
+    text-decoration-color: var(--pf-toc-rail);
+    text-underline-offset: .25em;
     background: none;
     border: 0;
+    transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
 
-    .pf-settings__theme-chip {
-      color: var(--pf-toc-active);
-    }
-
-    svg {
-      width: 1rem;
-      height: 1rem;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.5;
-      stroke-linecap: round;
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-g-hover, var(--pf-toc-accent));
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
     }
 
     &:focus-visible {
@@ -919,42 +1080,24 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     }
   }
 
-  &__more-v {
-    transform-origin: center;
-    transition: transform $pf-menu-fade ease;
+  // Switches -------------------------------------------------------------
+  // One row: label over its help, the switch at the end. Hairlines between.
+  &__legend + &__item {
+    border-top: 1px solid var(--pf-toc-rail);
   }
 
-  &__more[aria-expanded="true"] &__more-v {
-    transform: scaleY(0);
-  }
-
-  &__theme-input:focus-visible + &__theme {
-    outline: 3px solid var(--pf-focus-color);
-    outline-offset: 2px;
-  }
-
-  &__themes-help {
-    margin: .625rem 0 0;
-    font-family: var(--bs-body-font-family);
-    font-size: .8125rem;
-    line-height: 1.45;
-    color: var(--pf-toc-sub-color);
-  }
-
-  // One switch: control | label, help text under the label.
   &__item {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: .875rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
     align-items: center;
-    padding: .375rem 0;
-
-    + .pf-settings__item {
-      margin-top: .375rem;
-    }
+    padding: .375rem 0 .625rem;
+    border-bottom: 1px solid var(--pf-toc-rail);
   }
 
   &__label {
+    grid-row: 1;
+    grid-column: 1;
     min-height: 2.75rem;
     display: flex;
     align-items: center;
@@ -966,19 +1109,20 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   }
 
   &__help {
-    grid-column: 2;
-    margin: -.375rem 0 0;
+    grid-column: 1;
+    margin: -.5rem 0 0;
     font-family: var(--bs-body-font-family);
     font-size: .8125rem;
     line-height: 1.45;
     color: var(--pf-toc-sub-color);
   }
 
-  // Native checkbox drawn as a switch (role="switch" in the markup). The
-  // track is 2.75rem wide (44px target with the label beside it).
+  // Native checkbox drawn as a switch (role="switch" in the markup).
   &__switch {
     appearance: none;
     position: relative;
+    grid-row: 1 / span 2;
+    grid-column: 2;
     flex: none;
     width: 2.75rem;
     height: 1.5rem;
@@ -1019,14 +1163,34 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     }
   }
 
-  // "Saved on this device." Visible too, for sighted keyboard users.
+  // Foot: the note, then Reset. "Saved on this device." takes the note's
+  // place for a moment (same cell; visible too, for sighted keyboard users).
+  &__foot {
+    padding-top: .75rem;
+  }
+
+  &__saved {
+    display: grid;
+    font-family: var(--bs-body-font-family);
+    font-size: .8125rem;
+    line-height: 1.4;
+
+    > * {
+      grid-area: 1 / 1;
+      margin: 0;
+    }
+  }
+
+  &__note {
+    color: var(--pf-toc-sub-color);
+  }
+
   &__status {
-    min-height: 1.25rem;
-    margin: 0;
-    font-size: .75rem;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--pf-toc-accent);
+    color: var(--pf-toc-active);
+  }
+
+  &__status:not(:empty) + &__note {
+    visibility: hidden;
   }
 }
 
@@ -1051,6 +1215,11 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
   .pf-ask__tab.active,
   .pf-settings__size-input:checked + .pf-settings__size {
     border-width: 3px;
+  }
+
+  .pf-settings__theme-mark::after {
+    forced-color-adjust: none;
+    background-color: Highlight;
   }
 
   // Box shadows aren't drawn here: the chosen chip gets an outline.
