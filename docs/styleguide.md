@@ -147,6 +147,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-10:** `pf-mark-trace` runs once (`both`) on the loading marks; `pf-mark-cycle` removed. `pf-mark-worm` (base/_mark-worm.scss): left end → whole rule → right end → whole rule → left end, `.8s cubic-bezier(.77, 0, .175, 1) infinite`, with a .02 dot left at the ends. `pf-index-chase` follows the same steps (anchor swapped at full width).
 - **2026-11-10:** Docked bar: `--pf-index-dock-h: 3.25rem` on `html.pf-index-dock`; docked, `.pf-page-bar .pf-landing__bar-inner` min-height and the toolbar height take it, `.pf-page-bar` margin-bottom `calc(2rem - dock-h)`, `.pf-index__filters` top `header-h + dock-h + 1rem`. Bar shadows: `0 1rem 1.25rem -.75rem light-dark(rgb(0 0 0 / .28), rgb(0 0 0 / .85))`.
 - **2026-11-10:** `.pf-index__where` takes `var(--pf-g-title, var(--bs-heading-color))`, the section h2's colour; its count stays muted.
 - **2026-11-10:** The Index, docked results bar: `html.pf-index-dock` (≥75rem wide, ≥30rem tall) sticks `.pf-index__toolbar` at `--pf-header-h`, z-index 4 over `.pf-page-bar`, with no glass, strip, fade or line of its own. `html.pf-index-docked` (held) sets its height to `--pf-landing-bar-h`, margin-bottom compensated from `--pf-index-toolbar-h`, chips 1.75rem, a shadow on `.pf-page-bar`, and `.breadcrumb { max-width: var(--pf-index-crumbs-room) }`.

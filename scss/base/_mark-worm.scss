@@ -1,27 +1,29 @@
-// The rule between LSU and Libraries, as a worm running end to end and back: its
-// front races ahead, and its back catches up on arrival. At rest the line is solid.
-// Both style.css and index-search.css print this, so the search page has it
-// whichever arrives first. The search field's line follows the same steps
-// (pf-index-chase, index-search.scss).
+// The rule between LSU and Libraries, as a worm: it grows from the left end
+// to the whole rule, draws into the right end, grows back from there and
+// draws into the left end, each step on a strong ease in and out (the Oral
+// History presentations' loader, _reference/). A dot is left at the ends, so
+// it never quite vanishes. Run it with cubic-bezier(.77, 0, .175, 1) as the
+// timing function, which applies to each step. A dash on a pathLength="1"
+// line, so only the dash's length and start change: one line repainted,
+// nothing laid out. At rest the line is solid. Both style.css and
+// index-search.css print this, so the search page has it whichever arrives
+// first. The search field's line follows the same steps (pf-index-chase,
+// index-search.scss).
 @keyframes pf-mark-worm {
   0%,
   100% {
-    stroke-dasharray: .2 2;
+    stroke-dasharray: .02 2;
     stroke-dashoffset: 0;
   }
 
-  25% {
-    stroke-dasharray: .75 2;
-    stroke-dashoffset: -.05;
+  25%,
+  75% {
+    stroke-dasharray: 1 2;
+    stroke-dashoffset: 0;
   }
 
   50% {
-    stroke-dasharray: .2 2;
-    stroke-dashoffset: -.8;
-  }
-
-  75% {
-    stroke-dasharray: .75 2;
-    stroke-dashoffset: -.2;
+    stroke-dasharray: .02 2;
+    stroke-dashoffset: -.98;
   }
 }
