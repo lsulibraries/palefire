@@ -2537,6 +2537,22 @@ html.pf-index-docked {
   font-weight: 700;
 }
 
+// A record read online says so beside its Open online button, so its
+// holdings leave out the same words. Nothing is held for them while they
+// load, and the record keeps its own padding: most such records have no
+// other copies, so nothing moves. One with print copies too gets its toggle
+// under the button when they arrive.
+.pf-index-row:has(.pf-index-row__open--online .pf-index-row__status) {
+  .pf-index-row__holdings:empty,
+  .pf-index-row__holdings:has(.pf-index-row__holdings-line--online) {
+    display: none;
+  }
+
+  &:not(:has(.pf-index-row__details)) {
+    padding-bottom: 1.5rem;
+  }
+}
+
 // Where a record is held: a group for each library, its heading saying what's
 // the same for its copies, and a short table of what differs. Laid out by the
 // panel's own width, whatever the screen. Roles keep each table a table to
@@ -3022,17 +3038,6 @@ html.pf-index-docked {
 
 [data-pf-signed-in] .pf-index-row__login-in {
   display: inline-flex;
-}
-
-.pf-index-row__links {
-  margin: .375rem 0 0;
-  font-size: .875rem;
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 1.5rem;
-  }
 }
 
 .pf-index-row__meta {

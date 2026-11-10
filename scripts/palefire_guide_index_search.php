@@ -329,6 +329,7 @@ HTML),
 <li>Printing a search now gives a clean black-on-white list of the results, with what was searched at the top, and no menus, filters or buttons.</li>
 <li>Show more is now a thin line under the last result that fills in gold as you load more, with how many are shown and a Show 20 more button. The page numbers fold away behind Go to page, so there is one way forward instead of two. On phones the button spans the screen.</li>
 <li>On phones the chosen filters now sit in their own line under the results bar instead of inside it, so the bar that follows you down the page stays one line. The Filters button above still shows how many are chosen.</li>
+<li>Online records now have an Open online button, like Open PDF, with Available online beside it, the way print records show their status beside Show location. It replaces the small Full text link.</li>
 <li>Alma (coming soon) now shows in the source list under All, as it does under Research and Special Collections.</li>
 <li>The guide now explains why Discovery's results here differ from EBSCO's own Discovery site: the same index, asked with different word matching and settings.</li>
 </ul>
