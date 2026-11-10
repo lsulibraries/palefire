@@ -3080,3 +3080,121 @@ html.pf-index-docked {
   padding-block: .75rem;
   border-bottom: 1px solid var(--pf-index-line);
 }
+
+// Printed: the search and its results as a plain list in one column. The
+// paper, the header, footer and motion are site-wide (base/_print.scss);
+// here every control (search field, modes, filters, sort, Show location,
+// Show more, pager) is left off, and the line that says what was searched
+// and the chosen sources stay, as text. Results don't split across pages.
+@media print {
+  .pf-index {
+    --pf-index-fg: #111;
+    --pf-index-muted: #444;
+    --pf-index-line: #c8c8c8;
+    --pf-index-accent: #111;
+    --pf-index-highlight: #111;
+    --pf-g-title: #111;
+    --bs-heading-color: #111;
+    color: #333;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  .pf-index__form,
+  .pf-index__modes,
+  .pf-index__filters,
+  .pf-index__filters-open,
+  .pf-index__sort,
+  .pf-index__clear,
+  .pf-index__chip svg,
+  .pf-index__mark,
+  .pf-index__loading,
+  .pf-index-list__grow,
+  .pf-index-list__pager,
+  .pf-index-row__thumb,
+  .pf-index-row__out,
+  .pf-index-row .pf-button--secondary,
+  .pf-index-row__login {
+    display: none;
+  }
+
+  .pf-index__title {
+    color: #111;
+    font-size: 22pt;
+  }
+
+  .pf-index__lede,
+  .pf-index__kicker {
+    color: #444;
+  }
+
+  // What was searched: plain text in the flow, no glass, shadow or dock.
+  html .pf-index .pf-index__toolbar {
+    position: static;
+    inset: auto;
+    height: auto;
+    margin: 0 0 1rem;
+    padding: 0 0 .5rem;
+    border-bottom: 1px solid #c8c8c8;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transform: none;
+
+    &::before,
+    &::after,
+    .pf-index__total::before,
+    .pf-index__total::after {
+      display: none;
+    }
+  }
+
+  .pf-index__chips ul {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .pf-index__chip {
+    min-height: 0;
+    padding: .125rem .5rem;
+    border: 1px solid #c8c8c8;
+    background: none;
+    color: #111;
+  }
+
+  .pf-index__body {
+    display: block;
+  }
+
+  .pf-index-section__head,
+  .pf-index-section__title {
+    break-after: avoid;
+  }
+
+  .pf-index-section__title {
+    font-size: 14pt;
+  }
+
+  .pf-index-row,
+  .pf-index-answer,
+  .pf-index__elsewhere li {
+    break-inside: avoid;
+  }
+
+  .pf-index a {
+    color: #111;
+  }
+
+  .pf-index mark {
+    background: none;
+    color: inherit;
+    font-weight: 700;
+  }
+
+  .pf-index-row__type,
+  .pf-index-row__copies-table {
+    border: 1px solid #c8c8c8;
+    background: none;
+  }
+}

@@ -1,0 +1,277 @@
+// =========================================================================
+// Print, site-wide. Imported last in style.scss, after the Settings
+// overrides, so it wins over every reading color and high contrast.
+//
+// Paper is white whatever swatch is on screen: the --pf-g-* tokens, which
+// everything reads (_reading-themes.scss), get one light print palette, so
+// the dark swatches don't print pale text on a page the printer leaves
+// white. Ink is near-black, with LSU purple as the one accent.
+//
+// Left off: the header, breadcrumb bar, mobile dock, drawers, the loading
+// mark, background videos and everything that only works on screen. All
+// motion is off, so nothing waits half-faded for an entrance or scroll
+// animation that never runs on paper. Glass, shadows and photo washes go.
+// Headings stay with what follows them; figures, cards and rows don't
+// split across pages.
+//
+// Pages add their own rules beside their components (the landing,
+// location and Visit parts below; the search page in index-search.scss).
+// =========================================================================
+
+$pf-print-theme: (
+  label: 'Print', dark: false,
+  bg: #fff, fg: #2b2b2b, heading: #111, muted: #555, rule: #c8c8c8,
+  surface: #f3f3f3, accent: $pf-purple, accent-soft: #f1edf6,
+  scroll: #777, panel-muted: #444,
+  title: #111, strong: #111, highlight: $pf-purple,
+);
+
+@media print {
+  @page {
+    margin: 1.5cm 1.75cm;
+  }
+
+  // The reading colors' own selectors go up to html.pf-a11y-contrast
+  // [data-pf-theme] (0,2,1); this matches that and comes later.
+  html,
+  html:is([data-pf-theme], [data-pf-mode]),
+  html.pf-a11y-contrast:is([data-pf-theme], [data-pf-mode]) {
+    @include pf-reading-tokens($pf-print-theme);
+    color-scheme: light;
+    --pf-photo-veil: transparent;
+    --pf-photo-fall: transparent;
+    --pf-photo-fall-soft: transparent;
+    --pf-photo-fall-faint: transparent;
+    --pf-sidebar-bg: #fff;
+  }
+
+  html body,
+  html :is([data-bs-theme], .pf-section--theme-dark, .pf-section.is-map-dark, .pf-section--light, .pf-section--dark, .pf-section--brand, .pf-footer) {
+    color-scheme: light;
+    --bs-body-bg: #fff;
+    --bs-body-bg-rgb: 255, 255, 255;
+    --bs-body-color: #2b2b2b;
+    --bs-emphasis-color: #111;
+    --bs-heading-color: #111;
+    --bs-secondary-color: #555;
+    --bs-border-color: #c8c8c8;
+    --bs-link-color: #111;
+    --bs-link-color-rgb: 17, 17, 17;
+    --bs-link-hover-color: #111;
+  }
+
+  html body {
+    background: #fff;
+    color: #2b2b2b;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .pf-header,
+  .pf-header-sentinel,
+  .pf-page-bar,
+  .skip-link,
+  .pf-loading-mark,
+  .pf-dock,
+  .pf-dock-tab,
+  .pf-dock-foot,
+  .offcanvas,
+  .offcanvas-backdrop,
+  .modal,
+  .tooltip,
+  .popover,
+  video,
+  iframe {
+    display: none !important;
+  }
+
+  // Sticky things sit in the flow: on paper they would repeat or cover text.
+  .sticky-top,
+  .position-sticky {
+    position: static !important;
+  }
+
+  // Ink for the parts that set their own light-on-dark color.
+  :is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6) {
+    color: #111;
+    break-after: avoid;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img,
+  svg,
+  figure,
+  blockquote,
+  table,
+  tr,
+  li,
+  .card {
+    break-inside: avoid;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  // --- Landing pages (/v2/special) ---------------------------------------
+  // The hero keeps its title, hours and intro; the search, the account
+  // buttons and the crumb's Contents menu only work on screen.
+  .pf-landing__form,
+  .pf-landing__account,
+  .pf-breadcrumb__section:has(.pf-breadcrumb__toc),
+  .pf-tabs__list,
+  .pf-quick-guide__expand,
+  .pf-tiles__views,
+  .pf-tiles__shelf-button,
+  .pf-map-photo,
+  .pf-map__key-toggle {
+    display: none !important;
+  }
+
+  // The cover hero in reading order: title, intro, Highlights, then the
+  // tabs, one under another. Its grid is built around the search and the
+  // film, both left off, and the Highlights rising over the film's foot.
+  .pf-landing--cover > .pf-landing__lead.pf-landing__lead--hero {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    padding-top: 0;
+
+    // !important: the cover's own rules for these are more specific.
+    .pf-landing__media {
+      display: none !important;
+    }
+
+    .pf-hero-banners {
+      margin-top: 1.5rem !important;
+    }
+
+    > .pf-quick-guide {
+      order: 1;
+      margin-top: 2rem;
+    }
+  }
+
+  // Ask us: the common questions, not the form.
+  .pf-inquiry--reveal .pf-inquiry__part {
+    opacity: 1 !important;
+    translate: none !important;
+  }
+
+  .pf-inquiry__panel {
+    display: none;
+  }
+
+  // Research, Study and Ask us: every tab's panel, one after another.
+  .pf-tabs > .pf-tabs__panel[hidden],
+  .pf-tabs.has-find > .pf-tabs__panel[hidden="until-found"] {
+    display: block !important;
+    padding-top: 2rem;
+    content-visibility: visible;
+  }
+
+  // The Quick Start, folded on phones, prints whole.
+  :is(.pf-quick-guide.is-folded, .pf-quick-guide.is-folded .pf-quick-guide__panel) > .pf-paths {
+    max-height: none;
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  // The building map as drawn, whether or not it was ever scrolled to.
+  .pf-map.is-tracing :is(.pf-map__region, .pf-map__label, .pf-map__knock, .pf-map__icons, .pf-map__lines--hidden, .pf-map__here, .pf-map__num) {
+    opacity: 1 !important;
+  }
+
+  .pf-map.is-tracing .pf-map__num {
+    transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--pf-map-grow, 1)) !important;
+  }
+
+  .pf-map.is-tracing path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  // Cards and books that wait to rise in are simply there.
+  .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-row, .pf-tile-line, .pf-book) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  // Grid cards: the title moves under the picture, in ink, above the
+  // caption, not white on a scrim the printer leaves out.
+  html body .pf-tiles--masonry[data-pf-view="grid"] .pf-tile {
+    grid-template-rows: auto auto auto;
+
+    .pf-tile__title {
+      grid-area: 2 / 1;
+      margin: .625rem 0 0;
+      color: #111;
+      font-size: 12pt;
+    }
+
+    .pf-tile__labels {
+      grid-area: 3 / 1;
+      padding-top: .25rem;
+    }
+
+    .pf-tile__media {
+      background: none;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  // Written at Hill's shelf: the newest eight books, wrapped onto the
+  // page, no glass at its ends. The catalog holds the rest.
+  .pf-tiles--covers .pf-tiles__list {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .pf-tiles--covers .pf-tiles__item:nth-child(n + 9) {
+    display: none;
+  }
+
+  .pf-tiles__shelf::before,
+  .pf-tiles__shelf::after {
+    display: none;
+  }
+
+  // --- Location pages ----------------------------------------------------
+  // The room's photo behind the top is a backdrop for the screen: on paper
+  // the title and facts sit on white, the map under them. Photos still to
+  // come leave no empty frames.
+  .has-backdrop::before,
+  .pf-location__plate {
+    display: none !important;
+  }
+
+  // The room you're in, on the map: LSU purple, as the rest of the
+  // page's accent, not a gold too pale for white paper.
+  .pf-map {
+    --pf-map-hover: #{$pf-purple};
+    --pf-map-on-hover: #fff;
+  }
+
+  .pf-section:has(.pf-location__frame) {
+    display: none;
+  }
+}

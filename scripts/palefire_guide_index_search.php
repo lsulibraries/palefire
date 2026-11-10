@@ -177,7 +177,7 @@ $section('What it searches', [
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
 <tr><td>Research</td><td>Discovery, Catalog, Databases, E-Textbooks, Research Guides, Archive Records, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
-<tr><td>Special Collections</td><td>Catalog, set to Special Collections, then Archive Records and Special Collections news</td><td>The Catalog above one ranked list with filters</td></tr>
+<tr><td>Special Collections</td><td>Catalog, set to Special Collections, then PDF Finding Aids</td><td>The Catalog above one ranked list with filters</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
 </tbody>
 </table>
@@ -207,6 +207,25 @@ $section('Before and after', [
 </tbody>
 </table>
 <p>The Index's counts were checked on Fri 6 Nov 2026, and they change as records are added.</p>
+HTML),
+]);
+
+$section('Why Discovery shows different results here', [
+  $text(NULL, <<<'HTML'
+<p>The same search can give different results and counts here and on EBSCO's own Discovery site. Both search the same Discovery index, but each asks it with different settings. Neither is wrong: they are tuned for different jobs.</p>
+HTML, 'callout'),
+  $text(NULL, <<<'HTML'
+<table>
+<thead><tr><th scope="col">Setting</th><th scope="col">EBSCO's Discovery site</th><th scope="col">Combined Search</th></tr></thead>
+<tbody>
+<tr><td>How words match</td><td>Proximity: the words must appear within five words of each other.</td><td>All words: every word must appear somewhere in the record, as in every other source on the page.</td></tr>
+<tr><td>What it includes</td><td>Set by the library's profile for that site in EBSCOadmin. It mixes in Catalog records, such as books and DVDs with call numbers.</td><td>Set by the profile the site's connection uses, which can include different databases and default options. Its results are mostly articles and reference entries; the Catalog has its own section, and Discovery's results link to it.</td></tr>
+<tr><td>Extras at the top</td><td>An encyclopedia card pinned above the results, and an AI-assisted search option.</td><td>None: the ranked results only.</td></tr>
+<tr><td>Signed in</td><td>Through the library proxy.</td><td>Through the site's connection. A guest on either one can see fewer records.</td></tr>
+</tbody>
+</table>
+<p>In short: same collection, different search settings. EBSCO's site looks for the words near each other and mixes in the Catalog. Combined Search requires all the words and shows the Catalog as its own section.</p>
+<p>Still to confirm: which EBSCOadmin profile the site's connection uses, and how its databases and default options compare with the Discovery site's. If the counts should match more closely, that is where to align them.</p>
 HTML),
 ]);
 
@@ -307,6 +326,8 @@ HTML),
 <li>The search page is now called Combined Search. Its search term in the results bar turns gold once searched, so you can see which words are in use, and the search box has an × to clear it in one press.</li>
 <li>Show more results is now a full-width button you can see at a glance, and the loading animation moves more calmly.</li>
 <li>Special Collections searches no longer include News and Notes: just the Catalog and PDF Finding Aids. News is still in All and Website.</li>
+<li>Printing a search now gives a clean black-on-white list of the results, with what was searched at the top, and no menus, filters or buttons.</li>
+<li>The guide now explains why Discovery's results here differ from EBSCO's own Discovery site: the same index, asked with different word matching and settings.</li>
 </ul>
 HTML),
 ]);
