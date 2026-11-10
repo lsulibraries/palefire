@@ -344,6 +344,7 @@ HTML),
 <li>A new search from the search box now keeps the filters, years and sort already chosen. Before, it started over with none.</li>
 <li>A chosen filter's tick is now a deeper shade of its gold box instead of black, like the two tones of a duotone icon.</li>
 <li>Research Guides and Special Collections Guides now show the words around the match in each guide page, labelled Found in the guide, as finding aids show Found in the PDF. They come from the guides site's own search, so each result is a guide page.</li>
+<li>After an update, searches no longer show sections saved from before it: each update gives the late-loading sections new addresses, and browsers check for a fresh results page on every visit instead of keeping it for a day.</li>
 <li>Added Special Collections Guides to Special Collections mode, between the Catalog and PDF Finding Aids: the research guides tagged Special Collections, searched through the guides site's own search, so a guide shows up as soon as it is tagged. The hero search on the Special Collections page now includes it.</li>
 </ul>
 HTML),
