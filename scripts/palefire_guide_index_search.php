@@ -304,6 +304,7 @@ HTML),
 <li>On wide screens, that bar now moves up into the breadcrumb's row as you scroll: the search and its filters sit beside Home / Special Collections / Index, leaving more of the screen for results.</li>
 <li>The source named in that bar (Catalog, PDF Finding Aids…) is now gold, like its heading on the page.</li>
 <li>When that bar joins the breadcrumb row, the row grows so the filters and Clear all are full size and easy to press, and its shadow now darkens everything passing under it.</li>
+<li>The search page is now called Combined Search. Its search term in the results bar turns gold once searched, so you can see which words are in use, and the search box has an × to clear it in one press.</li>
 </ul>
 HTML),
 ]);

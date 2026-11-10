@@ -288,6 +288,15 @@
     return next;
   };
 
+  // The search field's clear button, hidden while the field is empty.
+  const syncErase = (root) => {
+    const input = root.querySelector('#pf-index-q');
+    const erase = root.querySelector('[data-pf-index-erase]');
+    if (input && erase) {
+      erase.hidden = !input.value;
+    }
+  };
+
   // From 75rem the held results bar moves up into the breadcrumb bar's row,
   // so there is one band of glass under the header, not two (styles:
   // index-search.scss, "Docked"). Classes on <html>, as the breadcrumb bar
@@ -501,6 +510,7 @@
     document.title = page.title;
     Drupal.detachBehaviors(main, drupalSettings, 'unload');
     swap(root, page, '.pf-index__form');
+    syncErase(root);
     swap(root, page, '.pf-index__modes');
     // The trail is outside the Index, and Special Collections mode adds a step.
     const crumbs = document.querySelectorAll('.pf-breadcrumb__nav');
@@ -794,6 +804,25 @@
   };
 
   const setUp = (root) => {
+    // The search field's clear button (×): shown while the field has words.
+    // It empties the field and puts the cursor back in it; the results stay
+    // until the next search.
+    syncErase(root);
+    root.addEventListener('input', (event) => {
+      if (event.target.matches('#pf-index-q')) {
+        syncErase(root);
+      }
+    });
+    root.addEventListener('click', (event) => {
+      const erase = event.target instanceof Element ? event.target.closest('[data-pf-index-erase]') : null;
+      const input = root.querySelector('#pf-index-q');
+      if (erase && input) {
+        input.value = '';
+        syncErase(root);
+        input.focus();
+      }
+    });
+
     root.addEventListener('load', dropEmptyCover, true);
     root.addEventListener('error', dropEmptyCover, true);
 

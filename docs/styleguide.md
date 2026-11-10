@@ -143,10 +143,11 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Breadcrumb bar (glass sub-header, sticky under the header) | `layout/page.html.twig`, `.pf-landing__bar` / `.pf-page-bar` in `_landing-features.scss` | ✔ the exhibition's own; every page but guides |
 | Mobile dock: hours, action, Contents ring; hidden-state tab | `includes/dock.html.twig`, `_dock.scss`, `js/dock.js` | – Special Collections pages, below 768px |
 | 404 page: display case, wall text, quips | `includes/not-found`, `_not-found.scss`, `js/not-found.js` | – its own page (`/v2/404`); editors keep the quips in that page's Intro, one a line |
-| The Index: search field, modes, filter drawer and column, chips, sort, result rows, late sections | `palefire_search` module's templates, `index-search.scss` (library `palefire/index-search`), `js/index-search.js` | – its own page (`/v2/search`), once the module is enabled |
+| Combined Search (the Index): search field, modes, filter drawer and column, chips, sort, result rows, late sections | `palefire_search` module's templates, `index-search.scss` (library `palefire/index-search`), `js/index-search.js` | – its own page (`/v2/search`), once the module is enabled |
 
 ## Changelog
 
+- **2026-11-10:** Search field: `.pf-index__entry` wraps the input; `.pf-index__erase` (2.75rem, muted, `[hidden]` until the field has text) sits at its inline end and the input gains `padding-inline-end: 3.25rem` while it shows. `.pf-index__term` takes `var(--pf-g-title, var(--bs-heading-color))`. Page title is now Combined Search.
 - **2026-11-10:** `pf-mark-trace` runs once (`both`) on the loading marks; `pf-mark-cycle` removed. `pf-mark-worm` (base/_mark-worm.scss): left end → whole rule → right end → whole rule → left end, `.8s cubic-bezier(.77, 0, .175, 1) infinite`, with a .02 dot left at the ends. `pf-index-chase` follows the same steps (anchor swapped at full width).
 - **2026-11-10:** Docked bar: `--pf-index-dock-h: 3.25rem` on `html.pf-index-dock`; docked, `.pf-page-bar .pf-landing__bar-inner` min-height and the toolbar height take it, `.pf-page-bar` margin-bottom `calc(2rem - dock-h)`, `.pf-index__filters` top `header-h + dock-h + 1rem`. Bar shadows: `0 1rem 1.25rem -.75rem light-dark(rgb(0 0 0 / .28), rgb(0 0 0 / .85))`.
 - **2026-11-10:** `.pf-index__where` takes `var(--pf-g-title, var(--bs-heading-color))`, the section h2's colour; its count stays muted.

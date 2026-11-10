@@ -139,6 +139,16 @@
   }
 }
 
+// The field's words and its clear button (×), as one: the input fills it,
+// so the line along its foot still runs to the Search button, and the ×
+// sits over the input's end, in room the input keeps for it.
+.pf-index__entry {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
 .pf-index__input {
   flex: 1;
   min-width: 0;
@@ -171,6 +181,53 @@
 
 [dir="rtl"] .pf-index__input {
   background-position: right bottom;
+}
+
+.pf-index__entry:has(.pf-index__erase:not([hidden])) .pf-index__input {
+  padding-inline-end: 3.25rem;
+}
+
+// A 44px target, muted until it's pointed at or focused.
+.pf-index__erase {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: .25rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  margin-block: auto;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pf-index-muted);
+  cursor: pointer;
+
+  @include pf-index-motion {
+    transition: color .2s var(--pf-index-ease), background-color .2s var(--pf-index-ease);
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in srgb, var(--pf-index-fg) 9%, transparent);
+      color: var(--pf-index-fg);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: -2px;
+    color: var(--pf-index-fg);
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 .pf-index__field:hover .pf-index__input {
@@ -1330,8 +1387,10 @@ html.pf-index-docked {
   white-space: nowrap;
 }
 
+// The term searched, in the headings' color (as the source's name beside
+// it, .pf-index__where): the record of what the results are for.
 .pf-index__term {
-  color: var(--pf-index-fg);
+  color: var(--pf-g-title, var(--bs-heading-color));
 }
 
 // The list under a leading section: a section's head, with its sort.
