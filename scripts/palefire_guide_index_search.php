@@ -153,7 +153,7 @@ HTML, 'callout'),
     ['running', 'Reading room wording', 'Special Collections copies say Available to view and Request to view, with one note per record that they are viewed in the Hill Memorial reading room and a link to how requests work. Sign-in wording waits until requests move to Alma.'],
     ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with Catalog chosen and set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text, saying Hide once open. An open result\'s table sits on a soft panel. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
-    ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Archives and News list, set to Special Collections, until a source is chosen.'],
+    ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the PDF Finding Aids list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
@@ -306,6 +306,7 @@ HTML),
 <li>When that bar joins the breadcrumb row, the row grows so the filters and Clear all are full size and easy to press, and its shadow now darkens everything passing under it.</li>
 <li>The search page is now called Combined Search. Its search term in the results bar turns gold once searched, so you can see which words are in use, and the search box has an × to clear it in one press.</li>
 <li>Show more results is now a full-width button you can see at a glance, and the loading animation moves more calmly.</li>
+<li>Special Collections searches no longer include News and Notes: just the Catalog and PDF Finding Aids. News is still in All and Website.</li>
 </ul>
 HTML),
 ]);
