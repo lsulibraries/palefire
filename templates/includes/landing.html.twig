@@ -227,13 +227,13 @@
      The lead's id is the TOC's "Home" target (toc_home_id,
      PalefireHooks::heroTocIds()). #}
   {% if hero %}
-    {# The Index, in its Special Collections mode, with the Catalog and PDF
-       Finding Aids chosen. A plain GET form, so it works
-       without a script. The placeholder is kept short enough for 320px. #}
+    {# The Index, in its Special Collections mode, with the Catalog, Special
+       Collections Guides and PDF Finding Aids chosen. A plain GET form, so it
+       works without a script. The placeholder is kept short enough for 320px. #}
     {% set landing_action = '/v2/search' %}
     {% set landing_name = 'q' %}
     {% set search_mode = 'special' %}
-    {% set search_sources = ['catalog', 'archive'] %}
+    {% set search_sources = ['catalog', 'special_guides', 'archive'] %}
     {% set search_label = 'Search Special Collections'|t %}
     {% set search_placeholder = 'Search the collections'|t %}
   {% else %}
