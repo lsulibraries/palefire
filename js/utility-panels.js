@@ -450,10 +450,6 @@
               if (event.formData.get('mode') === 'all') {
                 event.formData.delete('mode');
               }
-              // A mode's own sources, ticked as the hero search ticks them.
-              const chosen = panel.querySelector('[data-pf-panel-mode]:checked');
-              (chosen?.dataset.pfPanelSources || '').split(' ').filter(Boolean)
-                .forEach((source) => event.formData.append('source[]', source));
             });
           }
 

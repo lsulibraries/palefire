@@ -150,14 +150,12 @@
         {# The Index's modes, each with what it covers (the Index's
            SearchSources::modes()). utility-panels.js starts on the section the
            page is in; All is the default without it. The whole row picks it;
-           what it covers is read after its name. sources: chosen with the
-           mode, as the Special Collections hero search chooses them
-           (landing.html.twig); utility-panels.js sends them. #}
+           what it covers is read after its name. #}
         {%
           set panel_modes = [
             { value: 'all', label: 'All'|t, about: 'Everything at once: articles, books, archives and library pages.'|t },
             { value: 'research', label: 'Research'|t, about: 'Articles, books, databases, e-textbooks and research guides.'|t },
-            { value: 'special', label: 'Special Collections'|t, about: 'Rare books, manuscripts, finding aids and oral histories.'|t, sources: ['catalog', 'special_guides', 'archive'] },
+            { value: 'special', label: 'Special Collections'|t, about: 'Rare books, manuscripts, finding aids and oral histories.'|t },
             { value: 'website', label: 'Website'|t, about: 'Library pages, services, news, equipment and staff.'|t },
           ]
         %}
@@ -165,7 +163,7 @@
           <legend class="pf-panel__modes-label">{{ 'Search in'|t }}</legend>
           {% for mode in panel_modes %}
             <div class="pf-panel__mode">
-              <input type="radio" name="mode" id="pf-panel-mode-{{ mode.value }}" value="{{ mode.value }}"{% if loop.first %} checked{% endif %} aria-describedby="pf-panel-mode-{{ mode.value }}-about" data-pf-panel-mode{% if mode.sources %} data-pf-panel-sources="{{ mode.sources|join(' ') }}"{% endif %}>
+              <input type="radio" name="mode" id="pf-panel-mode-{{ mode.value }}" value="{{ mode.value }}"{% if loop.first %} checked{% endif %} aria-describedby="pf-panel-mode-{{ mode.value }}-about" data-pf-panel-mode>
               <label class="pf-panel__mode-name" for="pf-panel-mode-{{ mode.value }}">{{ mode.label }}</label>
               <p class="pf-panel__mode-about" id="pf-panel-mode-{{ mode.value }}-about">{{ mode.about }}</p>
             </div>
