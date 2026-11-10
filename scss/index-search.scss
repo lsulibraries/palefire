@@ -744,11 +744,16 @@
       transition-duration: $pf-hover-in;
     }
 
+    // The tick is the fill's own color, deepened, as a duotone icon pairs two
+    // tones of one hue: a darker shade on a dark swatch's light accent, a paler
+    // tint on a light swatch's dark one. At 60% it keeps 4:1 or more against
+    // the fill on every swatch (WCAG 1.4.11 asks 3:1).
     &:checked {
       border-color: var(--pf-index-accent);
       background: var(--pf-index-accent);
 
       &::before {
+        border-color: color-mix(in srgb, var(--pf-index-accent), var(--pf-g-on-accent, #000) 60%);
         opacity: 1;
       }
     }

@@ -341,6 +341,9 @@ HTML),
 <li>Catalog records and PDF finding aids now point to each other. A Catalog record whose full record links a finding aid shows the same Open PDF button as the finding aid itself, and a finding aid shows its Catalog record's Show items button, with the same boxes, status and Request to view buttons. They are matched by the PDF's own address, so a finding aid with no Catalog record simply has no button.</li>
 <li>For archives and manuscripts, the copies table now heads its first column Stack location instead of Call number, since those numbers say where the boxes stand.</li>
 <li>Oral histories are linked to their Catalog records too: a Catalog record with an oral history abstract gets Open PDF, and the oral history result gets the record's Show location button. They had not matched, because only finding aids were looked up.</li>
+<li>A new search from the search box now keeps the filters, years and sort already chosen. Before, it started over with none.</li>
+<li>A chosen filter's tick is now a deeper shade of its gold box instead of black, like the two tones of a duotone icon.</li>
+<li>Research Guides and Special Collections Guides now show the words around the match in each guide page, labelled Found in the guide, as finding aids show Found in the PDF. They come from the guides site's own search, so each result is a guide page.</li>
 <li>Added Special Collections Guides to Special Collections mode, between the Catalog and PDF Finding Aids: the research guides tagged Special Collections, searched through the guides site's own search, so a guide shows up as soon as it is tagged. The hero search on the Special Collections page now includes it.</li>
 </ul>
 HTML),
