@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog (set to Special Collections) and PDF Finding Aids chosen. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision.</p>
+<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with the Catalog (set to Special Collections) and PDF Finding Aids chosen. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -161,6 +161,7 @@ HTML, 'callout'),
     ['running', 'Fuller Discovery search', 'Discovery searches Discovery directly, with Full text online, Peer reviewed, Type and Year published filters. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
     ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, at the logo\'s own weight, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
+    ['running', 'Journals', 'The homepage\'s e-journal search, brought into Research as its own section: journals, newspapers, newsletters and reports the Libraries can read online, each with where to read it and which years, and a Type filter. A search that is a journal\'s name (Nature, The New York Times) shows that journal first, above Discovery\'s results. It uses Discovery\'s own connection, so it moves to Alma with Discovery. Needs a check on production.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
@@ -176,7 +177,7 @@ $section('What it searches', [
 <thead><tr><th scope="col">Mode</th><th scope="col">Sources</th><th scope="col">Shown as</th></tr></thead>
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
-<tr><td>Research</td><td>Discovery, Catalog, Databases, E-Textbooks, Research Guides, Archive Records, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
+<tr><td>Research</td><td>Catalog, Discovery, Journals, Databases, E-Textbooks, Research Guides, PDF Finding Aids, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
 <tr><td>Special Collections</td><td>Catalog, set to Special Collections, then PDF Finding Aids</td><td>The Catalog above one ranked list with filters</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
 </tbody>
@@ -332,6 +333,9 @@ HTML),
 <li>Online records now have an Open online button, like Open PDF, with Available online beside it, the way print records show their status beside Show location. It replaces the small Full text link.</li>
 <li>Alma (coming soon) now shows in the source list under All, as it does under Research and Special Collections.</li>
 <li>The guide now explains why Discovery's results here differ from EBSCO's own Discovery site: the same index, asked with different word matching and settings.</li>
+<li>Added Journals to Research: the homepage's e-journal search, as a section of its own. Each journal lists up to three places to read it, with the years each covers and any delay on the newest issues ("1946–present · except the latest 4 years"), best first. A Type filter picks journals, newspapers, newsletters or reports. Books are left out, as on the homepage, since the Catalog and Discovery cover them.</li>
+<li>A search that is a journal's name now shows that journal in a card above Discovery's results, with where to read it. Only an exact title counts: "climate change" doesn't bring up WIREs Climate Change.</li>
+<li>Open online, Open PDF and Show location buttons are now all the same width, so a column of buttons lines up.</li>
 </ul>
 HTML),
 ]);

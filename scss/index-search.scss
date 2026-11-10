@@ -2207,6 +2207,9 @@ html.pf-index-docked {
 
 // Rows part on the soft hairline, as the landing's lists do, with room to breathe.
 .pf-index-row {
+  // The width every row button shares (Show location, Open online, Open PDF):
+  // room for the longest usual label, "Show 12 locations", and its plus.
+  --pf-index-row-button: 10.5rem;
   padding-block: 1.5rem;
   border-bottom: 1px solid var(--pf-index-line);
   overflow-wrap: anywhere;
@@ -2441,10 +2444,13 @@ html.pf-index-docked {
       outline-offset: 2px;
     }
 
-    // The theme's slab, tightened for a row.
+    // The theme's slab, tightened for a row. As wide as Open online and Open
+    // PDF (.pf-index-row__open), so stacked buttons line up, icons at the end.
     .pf-button--secondary {
       flex: none;
+      justify-content: space-between;
       gap: .5rem;
+      min-inline-size: var(--pf-index-row-button);
       min-height: 2.75rem;
       padding: .375rem .75rem;
       font-size: .875rem;
@@ -3079,8 +3085,11 @@ html.pf-index-docked {
   align-items: center;
   margin: .75rem 0 0;
 
+  // One width with Show location, so a column of buttons lines up.
   .pf-button--secondary {
+    justify-content: space-between;
     gap: .5rem;
+    min-inline-size: var(--pf-index-row-button);
     min-height: 2.75rem;
     padding: .375rem .75rem;
     font-size: .875rem;
@@ -3179,6 +3188,136 @@ html.pf-index-docked {
 .pf-index__elsewhere li {
   padding-block: .75rem;
   border-bottom: 1px solid var(--pf-index-line);
+}
+
+// Journals. ------------------------------------------------------------------
+
+// Where a journal can be read, and which years: one line per package, its
+// name a link in the text color and its years in the muted one, set in
+// figures that line up. Under a Journals row's meta, and on the journal card.
+.pf-index-coverage {
+  display: grid;
+  gap: .375rem;
+  margin: .625rem 0 0;
+  padding: 0;
+  font-size: .9375rem;
+  list-style: none;
+}
+
+.pf-index-coverage__package {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .125rem .75rem;
+  min-width: 0;
+}
+
+.pf-index-coverage__name,
+.pf-index-coverage__more a {
+  color: var(--pf-index-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--pf-index-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+  transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-index-highlight);
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.pf-index-coverage__years {
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-index-coverage__more {
+  margin: .375rem 0 0;
+  font-size: .875rem;
+}
+
+// The journal a search names, ahead of Discovery's rows: the hours answer's
+// soft band, its label in the TOC's mono capitals, and the title a step
+// larger than a row's, so "nature" lands on Nature before the articles about
+// it. It rises in with its section; still with reduced motion.
+.pf-index-journal {
+  display: grid;
+  margin-block: .5rem 1rem;
+  padding: 1.25rem clamp(1rem, 2.5vw, 1.75rem);
+  border-inline-start: 2px solid var(--pf-index-accent);
+  background-color: color-mix(in srgb, var(--pf-index-fg) 5%, transparent);
+  overflow-wrap: anywhere;
+
+  @include pf-index-motion {
+    animation: pf-index-arrive .6s var(--pf-index-ease) .1s both;
+  }
+}
+
+.pf-index-journal__label {
+  @include pf-index-label;
+  margin: 0 0 .5rem;
+  color: var(--pf-index-muted);
+}
+
+// Four classes: the reading colors set every heading through html[...] .pf-main.
+.pf-main .pf-index .pf-index-journal .pf-index-journal__title {
+  margin: 0;
+  color: var(--pf-index-fg);
+  font-size: clamp(1.375rem, 1.25rem + .5vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+
+  a {
+    color: inherit;
+    text-decoration: underline transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+    transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-index-highlight);
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-highlight);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+.pf-index-journal__meta {
+  margin: .375rem 0 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+}
+
+@media print {
+  .pf-index-journal {
+    border: 1px solid #c8c8c8;
+    background: none;
+    break-inside: avoid;
+  }
 }
 
 // Printed: the search and its results as a plain list in one column. The
