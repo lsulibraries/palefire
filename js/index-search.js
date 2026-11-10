@@ -29,9 +29,12 @@
  *   to ask for every result. If they fail, the column stays empty.
  * - Each library's table in a holdings panel sorts by Call number or Status:
  *   ascending, then descending.
- * - A paged list gets a Show more results button, which adds the next page under
- *   the rows it has. It's only ever on request: a list that grew by itself would
- *   keep the footer out of reach. The pager stays, for jumping ahead.
+ * - A paged list gets a Show more button, which adds the next page under the
+ *   rows it has, over a rule that fills as more are shown. It's only ever on
+ *   request: a list that grew by itself would keep the footer out of reach.
+ *   The pager folds away behind Go to page, for jumping ahead.
+ * - On a phone the chosen filters leave the held results bar for a line of
+ *   their own under it, which scrolls away with the page.
  */
 (function (Drupal, drupalSettings, once) {
   'use strict';
@@ -162,28 +165,73 @@
       return;
     }
     const pageNumber = Number(new URLSearchParams(window.location.search).get('page')) || 0;
-    const first = pageNumber * rows.children.length + 1;
+    const size = rows.children.length;
+    const first = pageNumber * size + 1;
     const total = Number(list.dataset.pfIndexTotal);
+    const last = () => first + rows.children.length - 1;
 
+    // A rule that fills as more are shown, then the count, Go to page and the
+    // button on one line (on a phone the button takes a line of its own).
     const box = document.createElement('div');
     box.className = 'pf-index-list__grow';
+    const progress = document.createElement('div');
+    progress.className = 'pf-index-list__progress';
+    progress.setAttribute('aria-hidden', 'true');
+    const line = document.createElement('div');
+    line.className = 'pf-index-list__grow-row';
+    const count = document.createElement('p');
+    count.className = 'pf-index-list__grow-count';
+    const jump = document.createElement('button');
+    jump.type = 'button';
+    jump.className = 'pf-index-list__jump';
+    jump.textContent = Drupal.t('Go to page');
+    jump.setAttribute('aria-expanded', 'false');
     const button = document.createElement('button');
     button.type = 'button';
+    button.className = 'pf-index-list__grow-button';
     const label = document.createElement('span');
-    label.className = 'pf-index-list__grow-label';
-    const count = document.createElement('span');
-    count.className = 'pf-index-list__grow-count';
-    button.append(label, count);
-    button.insertAdjacentHTML('beforeend', icon('M12 5v14M5 12h14'));
-    box.append(button);
+    button.append(label);
+    button.insertAdjacentHTML('beforeend', icon('M12 5v14M6 13l6 6 6-6'));
+    line.append(count, jump, button);
+    box.append(progress, line);
     rows.after(box);
 
+    // The pager folds away behind Go to page. Without this file it shows.
+    const pagerId = 'pf-index-pager-' + Math.random().toString(36).slice(2, 8);
+    const fold = (element) => {
+      element.id = pagerId;
+      element.hidden = jump.getAttribute('aria-expanded') !== 'true';
+    };
+    jump.setAttribute('aria-controls', pagerId);
+    fold(pager);
+    jump.addEventListener('click', () => {
+      const open = jump.getAttribute('aria-expanded') !== 'true';
+      jump.setAttribute('aria-expanded', String(open));
+      const current = list.querySelector(':scope > .pf-index-list__pager');
+      if (current) {
+        fold(current);
+        // Into the pager, on its first link that shows (First and Last are
+        // hidden on a small phone).
+        if (open) {
+          [...current.querySelectorAll('a')].find((link) => link.getClientRects().length)?.focus({ preventScroll: true });
+        }
+      }
+    });
+
     const shown = () => (first === 1
-      ? Drupal.t('@shown of @total shown', { '@shown': rows.children.length.toLocaleString(), '@total': total.toLocaleString() })
-      : Drupal.t('@first to @last of @total shown', { '@first': first.toLocaleString(), '@last': (first + rows.children.length - 1).toLocaleString(), '@total': total.toLocaleString() }));
+      ? Drupal.t('@shown of @total', { '@shown': last().toLocaleString(), '@total': total.toLocaleString() })
+      : Drupal.t('@first to @last of @total', { '@first': first.toLocaleString(), '@last': last().toLocaleString(), '@total': total.toLocaleString() }));
     const rest = () => {
-      label.textContent = Drupal.t('Show more results');
-      count.textContent = shown();
+      const more = Math.min(size, total - last());
+      label.textContent = more > 0 ? Drupal.t('Show @count more', { '@count': more.toLocaleString() }) : Drupal.t('Show more');
+      const numbers = document.createElement('span');
+      numbers.className = 'pf-index-list__grow-numbers';
+      numbers.textContent = shown();
+      const words = document.createElement('span');
+      words.className = 'pf-index-list__grow-words';
+      words.textContent = Drupal.t('results shown');
+      count.replaceChildren(numbers, ' ', words);
+      box.style.setProperty('--pf-index-shown', Math.min(100, (last() / total) * 100).toFixed(2) + '%');
       button.removeAttribute('aria-busy');
     };
     rest();
@@ -195,7 +243,7 @@
       }
       const url = next.href;
       button.setAttribute('aria-busy', 'true');
-      label.textContent = Drupal.t('Loading more results');
+      label.textContent = Drupal.t('Loading…');
       Drupal.announce(Drupal.t('Loading more results'));
 
       const controller = new AbortController();
@@ -237,16 +285,17 @@
 
       // The pager's links are relative, so the address goes first.
       window.history.replaceState({ pfIndex: true }, '', url);
-      list.querySelector(':scope > .pf-index-list__pager').replaceWith(more.querySelector(':scope > .pf-index-list__pager'));
+      const nextPager = more.querySelector(':scope > .pf-index-list__pager');
+      fold(nextPager);
+      list.querySelector(':scope > .pf-index-list__pager').replaceWith(nextPager);
       // The note that this is as far as the service reads, on its last page.
       more.querySelectorAll(':scope > .pf-index-list__rows ~ .pf-index-list__status').forEach((note) => box.before(note));
 
       const message = Drupal.t('@count more results added. @shown.', { '@count': arriving.length, '@shown': shown() });
-      if (list.querySelector('.pf-index-list__pager a[rel="next"]')) {
-        rest();
-      }
-      else {
-        box.remove();
+      rest();
+      // All of them: the rule full, the count and Go to page stay.
+      if (!list.querySelector('.pf-index-list__pager a[rel="next"]')) {
+        button.remove();
       }
       // The new rows open where the button was, so this rarely needs to scroll.
       const firstLink = arriving[0].querySelector('.pf-index-row__title a');
@@ -999,6 +1048,39 @@
     }
   };
 
+  // On a phone the held bar keeps only the count and the sort, one line, so it
+  // costs little of the screen. The chosen filters take a line of their own
+  // under it, which scrolls away with the page; the Filters button above says
+  // how many are chosen. From 36rem they go back into the bar.
+  const phone = window.matchMedia('(max-width: 35.98rem)');
+  const placeChips = (toolbar) => {
+    const chips = toolbar.querySelector(':scope > .pf-index__chips');
+    if (!chips) {
+      return;
+    }
+    const place = () => {
+      if (!toolbar.isConnected) {
+        phone.removeEventListener('change', place);
+        return;
+      }
+      if (phone.matches) {
+        toolbar.after(chips);
+      }
+      else {
+        const sort = toolbar.querySelector(':scope > .pf-index__sort');
+        if (sort) {
+          sort.before(chips);
+        }
+        else {
+          toolbar.append(chips);
+        }
+      }
+      chips.classList.toggle('is-apart', phone.matches);
+    };
+    place();
+    phone.addEventListener('change', place);
+  };
+
   Drupal.behaviors.palefireIndexSearch = {
     attach(context) {
       once('pf-index-states', 'html').forEach(pageStates);
@@ -1018,6 +1100,7 @@
       once('pf-index-holdings', '[data-pf-index-holdings-url]', context).forEach(loadHoldings);
       once('pf-index-thumb', '.pf-index-row__thumb img', context).forEach(checkCover);
       once('pf-index-more', '.pf-index-list__pager', context).forEach(setUpMore);
+      once('pf-index-chips', '.pf-index__toolbar', context).forEach(placeChips);
     },
     detach(context, settings, trigger) {
       // Only the requests for what is going away. Signed in, BigPipe detaches
