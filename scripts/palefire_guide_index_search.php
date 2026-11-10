@@ -347,6 +347,7 @@ HTML),
 <li>After an update, searches no longer show sections saved from before it: each update gives the late-loading sections new addresses, and browsers check for a fresh results page on every visit instead of keeping it for a day.</li>
 <li>The header's Search drawer, set to Special Collections (as it is on every Special Collections page), now ticks the Catalog, Special Collections Guides and PDF Finding Aids, like the search on the Special Collections page.</li>
 <li>Searches from the Special Collections page and from the header's Search drawer now start with All sources, instead of choosing sources: they still show the Catalog set to Special Collections, Special Collections Guides and PDF Finding Aids.</li>
+<li>On a Catalog result, the PDF button now says PDF Finding Aid (or PDF Abstract for an oral history) instead of Open PDF, so it isn't mistaken for a digital copy of the item.</li>
 <li>Added Special Collections Guides to Special Collections mode, between the Catalog and PDF Finding Aids: the research guides tagged Special Collections, searched through the guides site's own search, so a guide shows up as soon as it is tagged. The hero search on the Special Collections page now includes it.</li>
 </ul>
 HTML),
