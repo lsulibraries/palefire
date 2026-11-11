@@ -437,6 +437,21 @@ guide-gallery:
     - core/once
     - palefire/viewer
 
+# Guide: Field crosswalk. Reads the uploaded mapping CSV and draws the chart.
+# Attached by paragraph--guide-crosswalk.html.twig. Styles: its own entry
+# (scss/guide-crosswalk.scss, npm run build), so other pages don't load it.
+guide-crosswalk:
+  version: 1.0.0
+  css:
+    component:
+      css/guide-crosswalk.css: {}
+  js:
+    js/guide-crosswalk.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.debounce
+    - core/once
+
 # Guide blocks with their own stylesheet (scss/guide-blocks.scss, npm run
 # build): Flow chart, Status board, Figures, Code. Attached by their templates.
 guide-blocks:

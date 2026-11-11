@@ -1,0 +1,55 @@
+{#
+/**
+ * @file
+ * Guide: Field crosswalk (paragraph type guide_crosswalk).
+ *
+ * A chart of which MODS elements become which ingest CSV columns, one
+ * institution at a time. js/guide-crosswalk.js reads the uploaded mapping
+ * spreadsheet (field_crosswalk_file, CSV) and draws everything inside
+ * [data-crosswalk-app]; without script the block offers the spreadsheet
+ * itself. The URL keeps the institution (#crosswalk-louisiana-state-university),
+ * replaced, never pushed, so a link opens on it.
+ *
+ * Headings: the block title is the h3 ("On this page" lists it); the panel
+ * is data-toc-skip so its headings are never listed.
+ * Fields: palefire_guide_crosswalk_setup.php.
+ */
+#}
+{{ attach_library('palefire/guide-crosswalk') }}
+{% set title = paragraph.field_block_title.value|default('')|trim %}
+{% set file = paragraph.field_crosswalk_file.entity %}
+{% set src = file ? file_url(file.uri.value) : '' %}
+{% set caption = paragraph.field_crosswalk_caption.value|default('')|trim %}
+{% set show_table = paragraph.field_crosswalk_table.value is same as(null) or paragraph.field_crosswalk_table.value %}
+{% set show_tbd = paragraph.field_crosswalk_tbd.value is same as(null) or paragraph.field_crosswalk_tbd.value %}
+{% set uid = 'pf-crosswalk-' ~ paragraph.id() %}
+{% set classes = ['pf-guide-block', 'pf-guide-block--crosswalk', 'pf-crosswalk', not paragraph.isPublished() ? 'paragraph--unpublished'] %}
+<div{{ attributes.addClass(classes) }}
+  data-crosswalk
+  data-crosswalk-src="{{ src }}"
+  data-crosswalk-default="{{ paragraph.field_crosswalk_default.value|default('')|trim }}"
+  data-crosswalk-table="{{ show_table ? '1' : '0' }}"
+  data-crosswalk-tbd="{{ show_tbd ? '1' : '0' }}"
+  data-crosswalk-uid="{{ uid }}">
+  {% if title %}
+    <h3 class="pf-guide-block__title">{{ title }}</h3>
+  {% endif %}
+  {% if content.field_block_intro|render|trim %}
+    <div class="pf-guide-prose">{{ content.field_block_intro }}</div>
+  {% endif %}
+
+  <div class="pf-crosswalk__app" data-crosswalk-app data-toc-skip>
+    <p class="pf-crosswalk__status" data-crosswalk-status>
+      {% if src %}
+        {{ 'The chart needs JavaScript. The mapping it is drawn from:'|t }}
+        <a href="{{ src }}" download>{{ file.filename.value }}</a>
+      {% else %}
+        {{ 'No mapping spreadsheet has been uploaded to this block yet.'|t }}
+      {% endif %}
+    </p>
+  </div>
+
+  {% if caption %}
+    <div class="pf-crosswalk__caption">{{ paragraph.field_crosswalk_caption.processed }}</div>
+  {% endif %}
+</div>

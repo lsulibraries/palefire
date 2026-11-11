@@ -1,0 +1,472 @@
+// Palefire — guide block "Field crosswalk" (paragraph--guide-crosswalk,
+// js/guide-crosswalk.js). Its own entry point (css/guide-crosswalk.css,
+// library palefire/guide-crosswalk), so only pages with the block load it.
+//
+// No literal colors. The eight section tones are Bootstrap's palette mixed
+// toward the body text color, so they lighten on dark swatches and darken on
+// light ones. Tone is only a visual aid: every line's section is also named
+// in the left column, and the panel and table say everything in words.
+
+.pf-guide > .pf-crosswalk {
+  max-width: 80rem; // As the parish map: the chart needs the room.
+}
+
+.pf-crosswalk {
+  container: pf-crosswalk / inline-size;
+
+  --pf-cw-0: color-mix(in srgb, var(--bs-blue) 78%, var(--bs-body-color));
+  --pf-cw-1: color-mix(in srgb, var(--bs-orange) 72%, var(--bs-body-color));
+  --pf-cw-2: color-mix(in srgb, var(--bs-green) 78%, var(--bs-body-color));
+  --pf-cw-3: color-mix(in srgb, var(--bs-purple) 78%, var(--bs-body-color));
+  --pf-cw-4: color-mix(in srgb, var(--bs-yellow) 62%, var(--bs-body-color));
+  --pf-cw-5: color-mix(in srgb, var(--bs-teal) 70%, var(--bs-body-color));
+  --pf-cw-6: color-mix(in srgb, var(--bs-pink) 75%, var(--bs-body-color));
+  --pf-cw-7: var(--pf-guide-muted);
+}
+
+@for $i from 0 through 7 {
+  .pf-crosswalk [data-tone="#{$i}"] {
+    --pf-cw-tone: var(--pf-cw-#{$i});
+  }
+}
+
+@mixin pf-cw-label {
+  font: 700 var(--pf-mono-label, 0.75rem)/1.5 var(--pf-guide-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pf-guide-muted);
+}
+
+.pf-crosswalk__app {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.pf-crosswalk__status {
+  margin: 0;
+  color: var(--pf-guide-muted);
+}
+
+.pf-crosswalk__status--error {
+  padding: 0.75rem 1rem;
+  color: var(--bs-body-color);
+  background: var(--pf-guide-accent-soft);
+  border-inline-start: 3px solid var(--bs-danger);
+}
+
+// Controls ------------------------------------------------------------------
+.pf-crosswalk__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+
+  > :first-child { flex: 1 1 22rem; max-width: 30rem; }
+  > :last-child { flex: 1 1 14rem; max-width: 20rem; }
+}
+
+.pf-crosswalk__control {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.pf-crosswalk__label {
+  @include pf-cw-label;
+}
+
+.pf-crosswalk__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  color: var(--pf-guide-muted);
+  font-variant-numeric: tabular-nums;
+
+  strong {
+    color: var(--bs-body-color);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+.pf-crosswalk__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.pf-crosswalk__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0.15rem 0.7rem 0.15rem 0.55rem;
+  font: 400 0.8125rem/1.2 var(--pf-guide-mono);
+  color: var(--bs-body-color);
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+  border-radius: 999px;
+  cursor: pointer;
+
+  &[aria-pressed="false"] {
+    color: var(--pf-guide-muted);
+    background: transparent;
+    text-decoration: line-through;
+
+    .pf-crosswalk__dot { background: transparent; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-guide-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-crosswalk__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 2px solid var(--pf-cw-tone);
+  border-radius: 50%;
+  background: var(--pf-cw-tone);
+}
+
+.pf-crosswalk__n {
+  color: var(--pf-guide-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+// Chart and panel: stacked (panel first, so a choice shows right above the
+// chart), side by side once there is room for both. ------------------------
+.pf-crosswalk__layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.pf-crosswalk__panel { order: -1; }
+
+@container pf-crosswalk (min-width: 62rem) {
+  .pf-crosswalk__layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+
+  .pf-crosswalk__panel {
+    order: 0;
+    position: sticky;
+    top: calc(var(--pf-header-h, 50px) + 1rem);
+    max-height: calc(100vh - var(--pf-header-h, 50px) - 2rem);
+    overflow: auto;
+  }
+}
+
+.pf-crosswalk__chart {
+  min-width: 0;
+  max-height: 80vh;
+  overflow: auto;
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+  overscroll-behavior: contain;
+}
+
+.pf-crosswalk__heads {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 45rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--pf-guide-surface);
+  border-bottom: 1px solid var(--pf-guide-rule);
+
+  span { @include pf-cw-label; }
+}
+
+.pf-crosswalk__svg {
+  display: block;
+}
+
+.pf-crosswalk__line {
+  fill: none;
+  stroke: var(--pf-cw-tone);
+  stroke-width: 1.6;
+  opacity: 0.5;
+  transition: opacity 0.12s;
+
+  &--att { stroke-dasharray: 5 3; }
+}
+
+.pf-crosswalk__node {
+  cursor: pointer;
+  outline: none;
+
+  rect {
+    fill: var(--pf-g-bg, var(--bs-body-bg));
+    stroke: var(--pf-guide-rule);
+  }
+
+  text {
+    fill: var(--bs-body-color);
+    font: 400 12.5px var(--pf-guide-mono);
+  }
+
+  .pf-crosswalk__bar {
+    fill: var(--pf-cw-tone);
+    stroke: none;
+  }
+
+  &:hover rect:first-child,
+  &:focus-visible rect:first-child,
+  &.is-picked rect:first-child {
+    stroke: var(--pf-guide-accent);
+    stroke-width: 2;
+  }
+}
+
+.pf-crosswalk__node--helper rect:first-child {
+  fill: var(--pf-guide-surface);
+  stroke: var(--pf-guide-muted);
+  stroke-dasharray: 4 3;
+}
+
+.pf-crosswalk__node--tbd rect:first-child {
+  fill: var(--pf-guide-accent-soft);
+  stroke: var(--bs-warning);
+}
+
+.pf-crosswalk__node .pf-crosswalk__sub,
+.pf-crosswalk__sub {
+  fill: var(--pf-guide-muted);
+  font: 400 11px var(--pf-guide-mono);
+}
+
+.pf-crosswalk__node .pf-crosswalk__badge {
+  fill: var(--pf-guide-accent);
+  font: 700 9.5px var(--pf-guide-mono);
+  letter-spacing: 0.08em;
+}
+
+text.pf-crosswalk__sec {
+  fill: var(--pf-cw-tone, var(--pf-guide-muted));
+  font: 700 11px var(--pf-guide-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pf-crosswalk__svg.is-picking {
+  .pf-crosswalk__line { opacity: 0.07; }
+  .pf-crosswalk__node { opacity: 0.35; }
+  .pf-crosswalk__line.is-on { opacity: 1; stroke-width: 2.4; }
+  .pf-crosswalk__node.is-on,
+  .pf-crosswalk__node.is-picked { opacity: 1; }
+}
+
+.pf-crosswalk__empty {
+  margin: 0;
+  padding: 2.5rem 1rem;
+  color: var(--pf-guide-muted);
+  text-align: center;
+}
+
+// Panel ----------------------------------------------------------------------
+.pf-crosswalk__panel {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 1rem;
+  background: var(--pf-guide-surface);
+  border: 1px solid var(--pf-guide-rule);
+
+  p { margin: 0; }
+}
+
+.pf-crosswalk__eyebrow { @include pf-cw-label; }
+
+.pf-crosswalk__name {
+  font: 400 1rem/1.4 var(--pf-guide-mono);
+  overflow-wrap: anywhere;
+}
+
+.pf-crosswalk__meta {
+  color: var(--pf-guide-muted);
+  font-size: 0.875rem;
+}
+
+.pf-crosswalk__group {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--pf-guide-rule);
+}
+
+.pf-crosswalk__to {
+  font: 600 0.875rem/1.4 var(--pf-guide-mono);
+  overflow-wrap: anywhere;
+}
+
+.pf-crosswalk__xpath,
+.pf-crosswalk__rule {
+  padding: 0.4rem 0.6rem;
+  font: 400 0.75rem/1.5 var(--pf-guide-mono);
+  overflow-wrap: anywhere;
+}
+
+.pf-crosswalk__xpath {
+  color: var(--pf-guide-muted);
+  background: var(--pf-g-bg, var(--bs-body-bg));
+  border: 1px solid var(--pf-guide-rule);
+}
+
+.pf-crosswalk__rule {
+  color: var(--bs-body-color);
+  background: var(--pf-guide-accent-soft);
+  border-inline-start: 3px solid var(--pf-guide-accent);
+}
+
+.pf-crosswalk__rule--tbd { border-inline-start-color: var(--bs-warning); }
+
+.pf-crosswalk__display {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--bs-body-color);
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.pf-crosswalk__tag {
+  @include pf-cw-label;
+
+  padding: 0 0.35rem;
+  font-size: 0.6875rem;
+  border: 1px solid var(--pf-guide-rule);
+
+  &--tbd { border-color: var(--bs-warning); }
+}
+
+.pf-crosswalk__clear {
+  justify-self: start;
+  padding: 0;
+  color: var(--pf-guide-accent);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pf-crosswalk__legend {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  color: var(--pf-guide-muted);
+  font-size: 0.875rem;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+}
+
+.pf-crosswalk__swatch {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 1rem;
+  background: var(--pf-g-bg, var(--bs-body-bg));
+  border: 1px solid var(--pf-guide-rule);
+
+  &--helper {
+    background: var(--pf-guide-surface);
+    border: 1px dashed var(--pf-guide-muted);
+  }
+
+  &--tbd {
+    background: var(--pf-guide-accent-soft);
+    border-color: var(--bs-warning);
+  }
+
+  &--rule {
+    color: var(--pf-guide-accent);
+    font: 700 0.5625rem/1 var(--pf-guide-mono);
+    letter-spacing: 0.08em;
+  }
+}
+
+.pf-crosswalk__key {
+  flex: none;
+  width: 2.25rem;
+  border-top: 2px solid var(--pf-guide-muted);
+
+  &--att { border-top-style: dashed; }
+}
+
+// Every row, as a table ------------------------------------------------------
+.pf-crosswalk__rows {
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+
+.pf-crosswalk__table {
+  max-height: 70vh;
+  margin-top: 0.75rem;
+  overflow: auto;
+
+  table { margin: 0; font-size: 0.8125rem; }
+
+  thead th {
+    @include pf-cw-label;
+
+    position: sticky;
+    top: 0;
+    background: var(--pf-g-bg, var(--bs-body-bg));
+  }
+}
+
+.pf-crosswalk__td-x {
+  min-width: 18rem;
+  color: var(--pf-guide-muted);
+  font-family: var(--pf-guide-mono);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.pf-crosswalk__td-f {
+  font-family: var(--pf-guide-mono);
+  white-space: nowrap;
+}
+
+.pf-crosswalk__td-n {
+  min-width: 14rem;
+  font-family: var(--pf-guide-mono);
+  font-size: 0.75rem;
+}
+
+.pf-crosswalk__caption {
+  max-width: var(--pf-guide-prose);
+  color: var(--pf-guide-muted);
+  font-size: 0.875rem;
+
+  > :last-child { margin-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-crosswalk__line { transition: none; }
+}
+
+html.pf-a11y-motion .pf-crosswalk__line { transition: none; }
+
+// Forced colors: tones are gone, so lines and boxes use the system colors.
+@media (forced-colors: active) {
+  .pf-crosswalk__line { stroke: CanvasText; }
+  .pf-crosswalk__node rect { fill: Canvas; stroke: CanvasText; }
+  .pf-crosswalk__node text { fill: CanvasText; }
+  .pf-crosswalk__node.is-picked rect:first-child { stroke: Highlight; }
+}
