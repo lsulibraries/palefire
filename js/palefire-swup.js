@@ -374,7 +374,7 @@
     // (PalefireHooks::preprocessHtml()): present on some pages only, so copy
     // or remove them. data-pf-hero and data-pf-dock have no value, so they
     // are copied when present at all.
-    ['data-pf-mode', 'data-pf-page', 'data-pf-hero', 'data-pf-dock'].forEach((name) => {
+    ['data-pf-mode', 'data-pf-page', 'data-pf-hero', 'data-pf-dock', 'data-pf-section', 'data-pf-type'].forEach((name) => {
       if (doc.documentElement.hasAttribute(name)) {
         document.documentElement.setAttribute(name, doc.documentElement.getAttribute(name));
       }
@@ -778,6 +778,17 @@
       stopLoading();
       focusTarget(visit.to.hash || window.location.hash);
       Drupal.announce(Drupal.t('Page loaded: @title', { '@title': document.title }));
+      // Analytics: a Swup visit is a page view Google Tag Manager can't see
+      // (no page load). Sent once the title and <html> labels are the new
+      // page's (syncDocument()), so the view isn't filed under the last one.
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+          event: 'pf_page_view',
+          page_location: window.location.href,
+          page_referrer: new URL(visit.from.url, window.location.href).href,
+          page_title: document.title,
+        });
+      }
     });
 
     Drupal.palefireSwup = swup;

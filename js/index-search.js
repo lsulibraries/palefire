@@ -588,9 +588,42 @@
     });
   };
 
+  // Analytics: a "pf_search" event in Google Tag Manager's dataLayer for each
+  // new search: its words (search_term) and mode (search_mode). Only when GTM
+  // is on the page. A filter, sort, page or mode tab on the same words is not
+  // a new search, nor is Back, Forward or a reload: the history entry keeps
+  // pfSearchSent. Email addresses are left out (Google's terms forbid personal
+  // data), and the words are cut to GA4's 100-character limit.
+  const EMAIL = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
+  const sendSearch = (url) => {
+    if (!Array.isArray(window.dataLayer)) {
+      return;
+    }
+    const params = new URL(url, window.location.href).searchParams;
+    const term = (params.get('q') || '').replace(EMAIL, '[email]').trim().slice(0, 100);
+    if (term) {
+      window.dataLayer.push({
+        event: 'pf_search',
+        search_term: term,
+        search_mode: params.get('mode') || 'all',
+      });
+    }
+  };
+
+  // A search reached by loading its address (the menu's or a landing's search
+  // box, a shared link), once per history entry.
+  const sendFirstSearch = () => {
+    const state = window.history.state || {};
+    if (!state.pfSearchSent) {
+      sendSearch(window.location.href);
+      window.history.replaceState({ ...state, pfSearchSent: true }, '');
+    }
+  };
+
   // Moves to another search in place. Anything unexpected falls back to loading
-  // the address normally, which always works.
-  const visit = async (root, url, { focus = null, history = true } = {}) => {
+  // the address normally, which always works. "search" marks a new search
+  // (the search box), for sendSearch().
+  const visit = async (root, url, { focus = null, history = true, search = false } = {}) => {
     const main = root.querySelector('[data-pf-index-main]');
     const rail = main.querySelector('[data-pf-index-form]');
     const railScroll = rail ? rail.scrollTop : 0;
@@ -629,7 +662,10 @@
 
     // Before the swap: the new pager's links are relative to this address.
     if (history) {
-      window.history.pushState({ pfIndex: true }, '', url);
+      window.history.pushState({ pfIndex: true, pfSearchSent: true }, '', url);
+    }
+    if (search && history) {
+      sendSearch(url);
     }
     document.title = page.title;
     Drupal.detachBehaviors(main, drupalSettings, 'unload');
@@ -975,8 +1011,8 @@
       if (dialog && dialog.open) {
         dialog.close();
       }
-      const focus = form.matches('[data-pf-index-form]') ? '[data-pf-index-open]' : '#pf-index-q';
-      visit(root, addressOf(form), { focus });
+      const isFilters = form.matches('[data-pf-index-form]');
+      visit(root, addressOf(form), { focus: isFilters ? '[data-pf-index-open]' : '#pf-index-q', search: !isFilters });
     });
 
     // All sources and the sources under it agree: choosing All clears them,
@@ -1260,6 +1296,7 @@
         document.addEventListener('click', toggleAbout);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
+      once('pf-index-sent', '[data-pf-index]', context).forEach(sendFirstSearch);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);

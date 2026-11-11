@@ -182,11 +182,18 @@ class PalefireHooks {
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
+    $special = self::isSpecialPage(self::pageAlias());
+    $not_found = self::isNotFound();
     // The mobile dock (includes/dock.html.twig): its reserved space and
     // scroll padding are in the first paint, so nothing shifts.
-    if (self::isSpecialPage(self::pageAlias()) && !self::isNotFound()) {
+    if ($special && !$not_found) {
       $variables['html_attributes']->setAttribute('data-pf-dock', '');
     }
+    // Analytics labels, read by Google Tag Manager (analyticsType()). They
+    // name what a page is, never its address, so reports carry on when the
+    // pages leave /v2.
+    $variables['html_attributes']->setAttribute('data-pf-section', ($special || self::isSpecialSearch()) ? 'special' : 'library');
+    $variables['html_attributes']->setAttribute('data-pf-type', $not_found ? 'not-found' : self::analyticsType());
     // A staff profile's <title> is the person's name: the View's own title
     // can only repeat the slug.
     if (StaffDirectory::isRoute('profile')) {
@@ -210,6 +217,27 @@ class PalefireHooks {
     if ($kind === 'landing' || $kind === 'showcase') {
       $variables['html_attributes']->setAttribute('data-pf-hero', '');
     }
+  }
+
+  /**
+   * The page type for analytics (<html data-pf-type>).
+   *
+   * Combined Search, the staff directory and profiles by route; a Modular
+   * page by its kind (pageKind(): guide, exhibition, landing…); another
+   * node by its content type; anything else "other".
+   */
+  public static function analyticsType(): string {
+    if (\Drupal::routeMatch()->getRouteName() === 'palefire_search.page') {
+      return 'search';
+    }
+    if (StaffDirectory::isRoute()) {
+      return StaffDirectory::isRoute('profile') ? 'staff-profile' : 'staff-directory';
+    }
+    $node = self::pageNode();
+    if (!$node) {
+      return 'other';
+    }
+    return $node->bundle() === self::MODULAR_BUNDLE ? self::pageKind($node) : $node->bundle();
   }
 
   /**
