@@ -369,6 +369,7 @@ HTML),
 <li>An oral history now opens with what that interview is about, from its catalog record (Green describes her life as a Louisiana resident…), not the description of the project it belongs to, which was the same for every interview in it. The project is still named under Part of in About this item.</li>
 <li>Part of in About this item is now a link: for an oral history it searches the catalog for the project, which lists its other interviews (21 for the Louisiana Sea Grant coastal change project). The project's description itself stays off the interview's row and panel.</li>
 <li>Oral histories show their series under what they're about, as a link to the same search within that series. Choosing Oral histories in the Source filter now lists its series under it, with how many match, so you can narrow to one or more. Series come from each record's Series field.</li>
+<li>The search index held 41,676 items, mostly archive records the search never shows, such as Breaux Data. A new setting in the index leaves them out, keeping only finding aids and oral histories, so reindexing is much quicker.</li>
 </ul>
 HTML),
 ]);
