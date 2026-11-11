@@ -2936,8 +2936,7 @@ html.pf-index-docked {
   min-width: 0;
 }
 
-.pf-main .pf-index .pf-index-row__place-name,
-.pf-main .pf-index .pf-index-row__about-title {
+.pf-main .pf-index .pf-index-row__place-name {
   margin: 0;
   color: var(--pf-index-fg);
   font-family: inherit;
@@ -3015,15 +3014,32 @@ html.pf-index-docked {
 // their values below it.
 // A long text shows four lines until Read more (index-search.js); a long
 // list folds after six.
+// What the item is, quieter than where it is: more room above it than
+// between libraries, its words in the muted color, so the call numbers,
+// statuses and buttons stay the brightest things in the panel.
 .pf-index-row__about {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--pf-index-line);
 }
 
-// A section as each library is, in the same type.
+// Set like an object label beside the copies: the page's kicker (small
+// capitals, then a short rule in the highlight), not a library's heading.
 .pf-main .pf-index h4.pf-index-row__about-title {
-  margin-bottom: 1rem;
+  @include pf-index-label;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+  color: var(--pf-toc-color, var(--pf-index-muted));
+
+  &::after {
+    content: "";
+    flex: none;
+    width: 2rem;
+    height: 1px;
+    background: var(--pf-index-highlight);
+  }
 }
 
 .pf-index-row__about-list {
@@ -3034,15 +3050,15 @@ html.pf-index-docked {
   line-height: 1.55;
 
   dt {
-    color: var(--pf-index-muted);
-    font-size: .8125rem;
-    font-weight: 500;
+    @include pf-index-label;
+    padding-top: .125rem;
+    color: var(--pf-toc-color, var(--pf-index-muted));
   }
 
   dd {
     max-width: 48rem;
     margin: 0;
-    color: var(--pf-index-fg);
+    color: var(--pf-index-muted);
     overflow-wrap: anywhere;
   }
 
@@ -3092,18 +3108,19 @@ html.pf-index-docked {
 // A search for more like it: the text color, a hairline underline that takes
 // the highlight on hover, as the coverage lines' names.
 .pf-main .pf-index a.pf-index-row__about-link {
-  color: var(--pf-index-fg);
+  color: var(--pf-index-muted);
   text-decoration: underline;
   text-decoration-color: var(--pf-index-line);
   text-decoration-thickness: 1px;
   text-underline-offset: .2em;
 
   @include pf-index-motion {
-    transition: text-decoration-color $pf-hover-out ease;
+    transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
   }
 
   &:hover,
   &:focus-visible {
+    color: var(--pf-index-fg);
     text-decoration-color: var(--pf-index-highlight);
     transition-duration: $pf-hover-in;
   }

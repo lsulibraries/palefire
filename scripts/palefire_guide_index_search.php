@@ -363,6 +363,7 @@ HTML),
 <li>The index's Stopwords setting was turned off, so phrases such as "battle of new orleans" keep their small words, and the shortest word it reads went from three letters to two, so searches such as WW II or St. Joseph keep their two-letter words. The search now passes two-letter words on too. Both take effect after a reindex.</li>
 <li>Checked what the Catalog and Discovery can do for power searches: both read word endings (econom* finds economics and economy). Discovery reads author, title and subject searches in any mix. The Catalog reads one of them per search.</li>
 <li>The Show location panel is tidier: Copy and Status sit right after the call number instead of at the far edge, About this item lines up with them and is headed like the libraries, and a library with one copy no longer shows column headings over its single row.</li>
+<li>About this item now looks like a museum object label, set apart from the copies: a small-capitals heading with a short gold rule, small-capitals field names, quieter text, and more space above it. The call numbers, statuses and request buttons stay the brightest things in the panel.</li>
 </ul>
 HTML),
 ]);
