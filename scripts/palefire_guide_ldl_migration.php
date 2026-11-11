@@ -422,6 +422,7 @@ HTML),
 <li>v2.39: Hicks <code>hicks-hon:44</code> is empty in Fedora with no JP2, though the spreadsheet lists it as an image. As the team decided, it follows Fedora: it's recorded as empty in Fedora and its 0-byte placeholder was moved to <code>_empty_other</code>.</li>
 <li>v2.40: 4 newspaper pages whose JP2s the network drive won't store correctly (<code>lasalle:10164</code>, <code>livingston:14474</code>, <code>ouachita:21361</code>, <code>plaquemines:3567</code>) were converted from their CMYK TIFFs at 10:37 AM. Copies made by hand arrived filled mostly with zeros and were set aside in <code>_replaced</code>.</li>
 <li>At 11:22 AM, 14 files were left, all empty in Fedora itself, and 34 of 39 institutions had nothing left.</li>
+<li>In the afternoon, both AWS servers were measured to size them for after the export. The backend can go from 16 processors to 4 and keep its 32 GB of memory, and the website from 8 processors to 4 and keep its 16 GB, saving about $455 a month. See Hardware downgrade.</li>
 </ul>
 HTML),
 ]);
@@ -1001,6 +1002,51 @@ HTML),
 HTML),
 ]);
 
+$section('Hardware downgrade', [
+  $text(NULL, <<<'HTML'
+<p><strong>Planned, not done yet:</strong> once no more Fedora runs are planned, both LDL servers on AWS move to smaller sizes. That saves about $455 a month, or about $5,500 a year, roughly a quarter of the AWS bill. It takes one quiet window of about 30 minutes of website downtime. The sizes come from measurements taken on both servers on Nov 11.</p>
+HTML, 'callout'),
+  $text('The change', <<<'HTML'
+<p>Only the size of each server changes. Their addresses, disks, data and settings stay as they are.</p>
+<table>
+<thead><tr><th scope="col">Server</th><th scope="col">What it runs</th><th scope="col">Now</th><th scope="col">After</th><th scope="col">Cost per month (approx.)</th></tr></thead>
+<tbody>
+<tr><td>Backend (Fedora)</td><td>Fedora, Solr search, Blazegraph, the image server and MySQL</td><td>c5.4xlarge: 16 processors, 32 GB memory</td><td>r6a.xlarge: 4 processors, 32 GB memory</td><td>~$500 → ~$165</td></tr>
+<tr><td>Website (front end)</td><td>The Drupal site, the SafeLine firewall and a page cache</td><td>c5.2xlarge: 8 processors, 16 GB memory</td><td>m6a.xlarge: 4 processors, 16 GB memory</td><td>~$250 → ~$125</td></tr>
+</tbody>
+</table>
+HTML),
+  $text('Why these sizes', <<<'HTML'
+<ul>
+<li><strong>The processors are mostly idle.</strong> During the heaviest export nights the backend was only 6 to 12% busy, and AWS's own sizing tool (Compute Optimizer) marks both servers as larger than they need.</li>
+<li><strong>The backend keeps all 32 GB of memory, for search speed.</strong> The search index is 19 GB (688,760 records), and 8 to 13 GB of it is read on most searches. Blazegraph, which answers which pages belong to which book or collection, holds another 13 GB. On a 16 GB server only about 6 GB would be left to keep that data in memory, so searches would keep reading from disk and slow down. The 16 GB option would have saved only about $45 a month more.</li>
+<li><strong>The backend's search index can't be shrunk.</strong> Only 1% of its records are deleted ones, so compacting it would gain almost nothing.</li>
+<li><strong>The website keeps 16 GB of memory.</strong> Each of its web workers uses about 52 MB, and up to 150 can run at once, about 7.8 GB. The firewall and page cache add about 2.3 GB. That fits 16 GB without changing any settings.</li>
+<li><strong>The website keeps 4 processors.</strong> Its processors spike to 50 to 100% busy for a few minutes every few days. AWS's own forecast for 2 processors hits 100% again and again, which would mean slow pages during those spikes.</li>
+<li><strong>AWS's suggested sizes don't fit.</strong> Compute Optimizer suggests ARM (Graviton) servers, and the software on both servers would have to be rebuilt to run on them.</li>
+<li><strong>Nothing prepaid is lost.</strong> There are no Reserved Instances or Savings Plans; everything is billed On Demand. The account averaged about $1,840 a month from May to October 2026.</li>
+</ul>
+HTML),
+  $text('How it\'s kept safe', <<<'HTML'
+<ul>
+<li><strong>The addresses don't change.</strong> Both servers have fixed addresses (Elastic IPs), and the website's address points at the front end's, so stopping and starting them changes nothing for visitors.</li>
+<li><strong>A full backup image of each server is taken</strong> while it's stopped, before its size changes.</li>
+<li><strong>Termination protection is on</strong> for the backend, so it can't be deleted by mistake. The front end gets the same before the window.</li>
+<li><strong>Undoing it takes a few minutes:</strong> stop the server, set the old size back and start it again.</li>
+<li><strong>After the restart, searches are slower for up to an hour</strong> while the servers fill their memory again, as after any restart.</li>
+</ul>
+HTML),
+  $text('When and how', <<<'HTML'
+<ol>
+<li>Wait until no more Fedora runs are planned.</li>
+<li>In a quiet window, stop the backend, take its backup image, change its size and start it.</li>
+<li>Check the website, a search and one download by the exporter.</li>
+<li>Do the same for the front end, then check the website again.</li>
+<li>Watch both for a few days, then delete the backup images, which cost a little every month.</li>
+</ol>
+HTML),
+]);
+
 $section('Exporter changes this phase', [
   $text(NULL, <<<'HTML'
 <p>Every change was tested against a simulated Islandora/Fedora before use, across 17 test suites that all pass. Applied is when the change was committed to the exporter, in Central time (2026).</p>
@@ -1084,6 +1130,7 @@ HTML),
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>Loyola's download finished at 1:43 AM on Nov 10, ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
 <li>Get the short list in <code>triage.csv</code> approved, then run <code>0-leave-out</code>, and move any Loyola books marked to leave out off L: by hand.</li>
+<li>Once no more Fedora runs are planned, move both AWS servers to their smaller sizes in one window of about 30 minutes. See Hardware downgrade.</li>
 </ul>
 HTML),
   $text('Then', <<<'HTML'
