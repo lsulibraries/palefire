@@ -1140,6 +1140,44 @@
     phone.addEventListener('change', place);
   };
 
+  // About this item, in a Catalog record's panel: a text longer than its
+  // four lines gets Read more, measured when the panel opens, as the page's
+  // width decides what is long. One already given a button keeps it.
+  let clampCount = 0;
+  const clampDetails = (event) => {
+    const details = event.target;
+    if (!(details instanceof HTMLDetailsElement) || !details.open) {
+      return;
+    }
+    details.querySelectorAll('[data-pf-index-clamp]:not([id])').forEach((text) => {
+      if (text.scrollHeight <= text.clientHeight + 1) {
+        return;
+      }
+      clampCount += 1;
+      text.id = `pf-index-clamp-${clampCount}`;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-index-row__about-more';
+      button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-controls', text.id);
+      button.dataset.pfIndexUnclamp = '';
+      button.textContent = Drupal.t('Read more');
+      text.after(button);
+    });
+  };
+
+  const unclamp = (event) => {
+    const button = event.target.closest('[data-pf-index-unclamp]');
+    const text = button && document.getElementById(button.getAttribute('aria-controls'));
+    if (!text) {
+      return;
+    }
+    const whole = button.getAttribute('aria-expanded') !== 'true';
+    text.classList.toggle('is-whole', whole);
+    button.setAttribute('aria-expanded', String(whole));
+    button.textContent = whole ? Drupal.t('Show less') : Drupal.t('Read more');
+  };
+
   Drupal.behaviors.palefireIndexSearch = {
     attach(context) {
       once('pf-index-states', 'html').forEach(pageStates);
@@ -1147,6 +1185,8 @@
         document.addEventListener('click', sortHoldings);
         // toggle doesn't bubble, so it's caught on the way down.
         document.addEventListener('toggle', loadCopies, true);
+        document.addEventListener('toggle', clampDetails, true);
+        document.addEventListener('click', unclamp);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);

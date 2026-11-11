@@ -352,6 +352,7 @@ HTML),
 <li>In Special Collections mode the page now ends with the Special Collections footer (Hill Memorial Library's hours, phone and question form), as its breadcrumb already says Special Collections. The other modes keep the Main Library footer.</li>
 <li>In a search of several sources, the Source filter now marks the source you are reading, as a table of contents does: a short bar beside it and its name in the headings' color. It moves on when the bar above the results names the next source. The sources under All sources are set in a little, so they read as its parts.</li>
 <li>The line under the page title now names the catalog and ebooks too: Search the catalog, articles and ebooks, databases, archives and library pages at once.</li>
+<li>A Catalog record's Show location panel now ends with About this item: the record's summary, contents, publication, physical description, notes and local notes, subjects and more, from the same request as the copies. Subjects, series, earlier and later titles and other names each link to a Catalog search. Long texts show four lines until Read more.</li>
 </ul>
 HTML),
 ]);

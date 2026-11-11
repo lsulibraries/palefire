@@ -2985,6 +2985,157 @@ html.pf-index-docked {
   }
 }
 
+// About this item: what a Catalog record says beyond its row, after its
+// copies. Names in a narrow column from 48rem, over their values below it.
+// A long text shows four lines until Read more (index-search.js); a long
+// list folds after six.
+.pf-index-row__about {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pf-index-line);
+}
+
+.pf-index .pf-index-row__about-title {
+  @include pf-index-label;
+  margin: 0 0 1rem;
+  color: var(--pf-index-muted);
+}
+
+.pf-index-row__about-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  font-size: .875rem;
+  line-height: 1.55;
+
+  dt {
+    color: var(--pf-index-muted);
+    font-size: .8125rem;
+    font-weight: 500;
+  }
+
+  dd {
+    max-width: 48rem;
+    margin: 0;
+    color: var(--pf-index-fg);
+    overflow-wrap: anywhere;
+  }
+
+  dd + dd {
+    margin-top: .25rem;
+  }
+
+  ul {
+    margin: .25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li + li {
+    margin-top: .25rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .pf-index-row__about-group {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: 1.5rem;
+
+    dd {
+      grid-column: 2;
+    }
+  }
+}
+
+.pf-index-row__about-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+
+  &.is-whole {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: none;
+  }
+}
+
+// A search for more like it: the text color, a hairline underline that takes
+// the highlight on hover, as the coverage lines' names.
+.pf-main .pf-index a.pf-index-row__about-link {
+  color: var(--pf-index-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--pf-index-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .2em;
+
+  @include pf-index-motion {
+    transition: text-decoration-color $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration-color: var(--pf-index-highlight);
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+}
+
+// Read more and a long list's fold: small text buttons, 24px tall (WCAG 2.5.8).
+// The fold's summary is inside the panel's, whose summary rules it outranks.
+.pf-index-row__about-more,
+.pf-index-row__details .pf-index-row__about-fold summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pf-index-fg);
+  font-size: .8125rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--pf-index-control);
+  text-underline-offset: .2em;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration-color: var(--pf-index-highlight);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+}
+
+.pf-index-row__details .pf-index-row__about-fold summary {
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+// The theme's details box, left off.
+.pf-index-row__details .pf-index-row__about-fold details {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.pf-index-row__about-fold details:not([open]) .pf-index-row__fold-open,
+.pf-index-row__about-fold details[open] .pf-index-row__fold-closed {
+  display: none;
+}
+
 // What the panel covered, then the way to everything it leaves out: an
 // outlined button, quieter than the filled ones it follows.
 .pf-index-row__foot {
