@@ -741,6 +741,12 @@
   font-size: .9375rem;
 }
 
+// A series of the choice above it (Oral histories): one step further in.
+.pf-index__group .pf-index__option--series {
+  padding-inline-start: 3.5rem;
+  font-size: .875rem;
+}
+
 .pf-index__option {
   display: flex;
   align-items: center;
@@ -3584,6 +3590,38 @@ html.pf-index-docked {
   @include pf-index-label;
   display: block;
   margin-bottom: .125rem;
+  font-size: .6875rem;
+}
+
+// An oral history's series, under what it's about: the label as the PDF's,
+// then the series as a link to the rest of it.
+.pf-index-row__series {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .25rem .625rem;
+  max-width: 48rem;
+  margin: .5rem 0 0;
+  font-size: .9375rem;
+
+  a {
+    color: var(--pf-index-fg);
+    text-decoration-color: var(--pf-index-line);
+    text-underline-offset: .2em;
+
+    @include pf-index-motion {
+      transition: text-decoration-color $pf-hover-out ease;
+    }
+
+    &:hover {
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
+.pf-index-row__series-label {
+  @include pf-index-label;
   font-size: .6875rem;
 }
 
