@@ -370,6 +370,7 @@ HTML),
 <li>Part of in About this item is now a link: for an oral history it searches the catalog for the project, which lists its other interviews (21 for the Louisiana Sea Grant coastal change project). The project's description itself stays off the interview's row and panel.</li>
 <li>Oral histories show their series under what they're about, as a link to the same search within that series. Choosing Oral histories in the Source filter now lists its series under it, with how many match, so you can narrow to one or more. Series come from each record's Series field.</li>
 <li>The search index held 41,676 items, mostly archive records the search never shows, such as Breaux Data. A new setting in the index leaves them out, keeping only finding aids and oral histories, so reindexing is much quicker.</li>
+<li>What are these? now opens inside the Source filter and pushes the sources down, so the descriptions no longer cover the checkboxes they describe. Search tips lines up with the right edge of the page, puts each example on its own line beside what it does, fits the screen without a scroll box of its own on most screens, and has a Close button.</li>
 </ul>
 HTML),
 ]);

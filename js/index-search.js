@@ -1207,6 +1207,19 @@
     }
   };
 
+  // What are these? opens what each source searches inside the filter, above
+  // its options, and closes it again.
+  const toggleAbout = (event) => {
+    const button = event.target.closest('[data-pf-index-about]');
+    const panel = button && document.getElementById(button.getAttribute('aria-controls'));
+    if (!panel) {
+      return;
+    }
+    const open = button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+  };
+
   const closeCopies = (event) => {
     const button = event.target.closest('[data-pf-index-close-copies]');
     const details = button && button.closest('details');
@@ -1244,6 +1257,7 @@
         document.addEventListener('click', unclamp);
         document.addEventListener('toggle', offerClose, true);
         document.addEventListener('click', closeCopies);
+        document.addEventListener('click', toggleAbout);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);

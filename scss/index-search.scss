@@ -433,20 +433,107 @@
   margin-inline-start: auto;
 }
 
+// Its right edge on the button's, so it opens into the page, never past the
+// content's edge. Tall enough for all of it on most screens; on a short one
+// it scrolls as a whole, with a thin bar. Its containing block is the space
+// its position-area gives it, so 100% is the room below the button (or above
+// it, flipped).
 .pf-index__tips {
-  width: min(30rem, calc(100vw - 2rem));
+  container-type: inline-size;
+  position-area: block-end span-inline-start;
+  position-try-fallbacks: flip-block;
+  position-try-order: most-block-size;
+  width: min(44rem, calc(100vw - 2rem));
+  max-height: calc(100% - 1rem);
+  padding: 1.25rem 1.5rem 1.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pf-index-line) transparent;
+
+  p {
+    margin: 0;
+  }
+
+  dl {
+    display: grid;
+    margin: .5rem 0 0;
+  }
+
+  // Example and meaning, one row each, a hairline between rows. Side by side
+  // once there's room: the examples in a column of their own.
+  dt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+    padding-top: .875rem;
+    border-top: 1px solid var(--pf-index-line);
+  }
+
+  dd {
+    margin: .375rem 0 .875rem;
+    color: var(--pf-g-muted, var(--bs-secondary-color));
+  }
+
+  @container (min-width: 36rem) {
+    dl {
+      grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+      column-gap: 1.5rem;
+    }
+
+    dt,
+    dd {
+      margin: 0;
+      padding-block: .875rem;
+      border-top: 1px solid var(--pf-index-line);
+    }
+  }
 
   code {
     color: var(--bs-heading-color, var(--bs-emphasis-color));
     font-size: .875em;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
   }
 
   dl + p {
-    margin-top: .75rem;
-    padding-top: .75rem;
+    padding-top: .875rem;
     border-top: 1px solid var(--pf-index-line);
     color: var(--pf-g-muted, var(--bs-secondary-color));
+  }
+}
+
+.pf-index__tips-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+// A plain word, 44px tall (WCAG 2.5.8), for touch and for anyone who doesn't
+// know Esc closes it.
+.pf-index .pf-index__tips-close {
+  min-height: 2.75rem;
+  margin-block: -.75rem;
+  margin-inline-end: -.25rem;
+  padding: 0 .25rem;
+  border: 0;
+  background: none;
+  color: var(--pf-index-fg);
+  font: inherit;
+  font-size: .875rem;
+  text-decoration: underline;
+  text-decoration-color: var(--pf-index-line);
+  text-underline-offset: .22em;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
   }
 }
 
@@ -681,7 +768,7 @@
   text-transform: none;
   text-decoration: underline dotted;
   text-underline-offset: .22em;
-  cursor: help;
+  cursor: pointer;
 
   &:focus-visible {
     outline: 2px solid var(--pf-index-highlight);
@@ -689,18 +776,25 @@
   }
 }
 
+// What each source searches, opened under the filter's title and above its
+// options, which move down for it: in the sidebar's own column, covering
+// nothing.
 .pf-index__about {
-  width: min(24rem, calc(100vw - 2rem));
-  max-height: min(70vh, 32rem);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: .875rem 0 1rem;
+  border-bottom: 1px solid var(--pf-index-line);
+  font-size: .875rem;
+  line-height: 1.5;
 
-  p {
-    margin: 0;
+  @include pf-index-motion {
+    animation: pf-index-about-in .25s ease-out;
+  }
+
+  &[hidden] {
+    display: none;
   }
 
   dl {
-    margin: .25rem 0 0;
+    margin: 0;
   }
 
   dt {
@@ -715,6 +809,13 @@
 
   dd:last-child {
     margin-bottom: 0;
+  }
+}
+
+@keyframes pf-index-about-in {
+  from {
+    opacity: 0;
+    transform: translateY(-.25rem);
   }
 }
 
