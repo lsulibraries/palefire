@@ -413,6 +413,48 @@
   }
 }
 
+// Search tips at the end of the modes' line, which moves from the modes to the
+// row (the script swaps the modes on their own). Wrapping in reverse keeps the
+// modes on the line when the row is too narrow, with the button above them.
+.pf-index__bar {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  gap: 0 1.5rem;
+  align-items: stretch;
+  margin-top: .5rem;
+  border-bottom: 1px solid var(--pf-index-line);
+
+  .pf-index__modes {
+    margin-top: 0;
+    border-bottom: 0;
+  }
+}
+
+// A 44px target (WCAG 2.5.8) without changing the line's height.
+.pf-index .pf-index__tips-open {
+  align-self: center;
+  min-height: 2.75rem;
+  margin-block: 0;
+  margin-inline-start: auto;
+}
+
+.pf-index__tips {
+  width: min(30rem, calc(100vw - 2rem));
+
+  code {
+    color: var(--bs-heading-color, var(--bs-emphasis-color));
+    font-size: .875em;
+    white-space: nowrap;
+  }
+
+  dl + p {
+    margin-top: .75rem;
+    padding-top: .75rem;
+    border-top: 1px solid var(--pf-index-line);
+    color: var(--pf-g-muted, var(--bs-secondary-color));
+  }
+}
+
 .pf-index__prompt,
 .pf-index__notice {
   max-width: 40rem;
@@ -2916,8 +2958,10 @@ html.pf-index-docked {
 }
 
 // One library: room and the hairline above each after the first.
+// The hairline evenly between libraries: the last row's own .5rem and this
+// make the room above it about the room below.
 .pf-index-row__place + .pf-index-row__place {
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--pf-index-line);
 }
@@ -3009,6 +3053,15 @@ html.pf-index-docked {
   }
 }
 
+// The run's span first, in the text color, as the line to scan for a year:
+// 1961–1968 · nos. 118–180. The issues under it stay muted.
+.pf-index-row__item-contents > .pf-index-row__item-run {
+  margin-bottom: .125rem;
+  color: var(--pf-index-fg);
+  font-size: .875rem;
+  font-variant-numeric: tabular-nums;
+}
+
 // About this item: what a Catalog record says beyond its row, after its
 // copies. Names in the copies table's first column from a 46rem panel, over
 // their values below it.
@@ -3018,8 +3071,8 @@ html.pf-index-docked {
 // between libraries, its words in the muted color, so the call numbers,
 // statuses and buttons stay the brightest things in the panel.
 .pf-index-row__about {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
+  margin-top: 1.75rem;
+  padding-top: 2rem;
   border-top: 1px solid var(--pf-index-line);
 }
 
@@ -3200,6 +3253,40 @@ html.pf-index-docked {
   font-variant-numeric: tabular-nums;
 }
 
+// A second Hide, for a panel taller than the screen (index-search.js): a text
+// button beside the full record, which then gives up its push to the end.
+.pf-index-row__close {
+  min-height: 2.75rem;
+  margin-inline-start: auto;
+  padding: .375rem .25rem;
+  border: 0;
+  background: none;
+  color: var(--pf-index-fg);
+  font-size: .875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--pf-index-control);
+  text-underline-offset: .2em;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration-color: var(--pf-index-highlight);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-fg);
+    outline-offset: 2px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-main .pf-index .pf-index-row__close:not([hidden]) + a.pf-index-row__full {
+  margin-inline-start: 0;
+}
+
 .pf-main .pf-index a.pf-index-row__full {
   display: inline-flex;
   align-items: center;
@@ -3286,11 +3373,14 @@ html.pf-index-docked {
 }
 
 // A copy's own request is a size down from its library's buttons, so its row
-// stays close to its words.
+// stays close to its words, and outlined, not a plate: a run of boxes would
+// otherwise stack its heaviest things down the panel. The wipe on hover stays.
 .pf-main .pf-index td.pf-index-row__copy-actions {
   a {
     min-height: 2.25rem;
     padding-block: .25rem;
+    border: 1px solid var(--pf-index-line);
+    background-color: transparent;
   }
 
   @container (min-width: 46rem) {
@@ -3679,6 +3769,7 @@ html.pf-index-docked {
 
   .pf-index__form,
   .pf-index__modes,
+  .pf-index__tips-open,
   .pf-index__filters,
   .pf-index__filters-open,
   .pf-index__sort,

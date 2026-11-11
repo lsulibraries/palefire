@@ -1166,6 +1166,35 @@
     });
   };
 
+  // A copies panel taller than the screen gets a second Hide at its foot.
+  // Closing there brings its toggle back into view and gives it focus, so
+  // the visitor stays where the row is.
+  const offerClose = (event) => {
+    const details = event.target;
+    if (!(details instanceof HTMLDetailsElement) || !details.open || !details.dataset.pfIndexCopies) {
+      return;
+    }
+    const close = details.querySelector('[data-pf-index-close-copies]');
+    const panel = details.querySelector('.pf-index-row__copies-table');
+    if (close && panel) {
+      close.hidden = panel.scrollHeight <= window.innerHeight;
+    }
+  };
+
+  const closeCopies = (event) => {
+    const button = event.target.closest('[data-pf-index-close-copies]');
+    const details = button && button.closest('details');
+    if (!details) {
+      return;
+    }
+    details.open = false;
+    const summary = details.querySelector(':scope > summary');
+    summary.focus({ preventScroll: true });
+    if (summary.getBoundingClientRect().top < 0) {
+      summary.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
+    }
+  };
+
   const unclamp = (event) => {
     const button = event.target.closest('[data-pf-index-unclamp]');
     const text = button && document.getElementById(button.getAttribute('aria-controls'));
@@ -1187,6 +1216,8 @@
         document.addEventListener('toggle', loadCopies, true);
         document.addEventListener('toggle', clampDetails, true);
         document.addEventListener('click', unclamp);
+        document.addEventListener('toggle', offerClose, true);
+        document.addEventListener('click', closeCopies);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
