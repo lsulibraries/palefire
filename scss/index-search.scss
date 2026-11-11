@@ -2718,16 +2718,19 @@ html.pf-index-docked {
     overflow-wrap: break-word;
   }
 
-  // Stacked, a copy is one entry: its call number and copy on the first line,
-  // its status under them, its request beside both.
+  // Stacked, a copy is one entry: its call number with its copy on the first
+  // line, its status under them, its request on a line of its own. The copy
+  // keeps its width, and the request leaves the call number the row: a box's
+  // contents, in that cell, would otherwise be squeezed to a few letters a line.
   tbody tr {
     display: grid;
-    grid-template-columns: minmax(0, max-content) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) max-content;
     grid-template-areas:
-      "call copy action"
-      "status status action";
+      "call copy"
+      "status status"
+      "action action";
     gap: .125rem .5rem;
-    align-items: center;
+    align-items: start;
     padding-block: .625rem;
     border-top: 1px solid var(--pf-index-line);
   }
@@ -2738,10 +2741,12 @@ html.pf-index-docked {
 
   td.pf-index-row__item-copy {
     grid-area: copy;
+    align-self: start;
     color: var(--pf-index-muted);
+    white-space: nowrap;
 
     &::before {
-      content: "· " attr(data-label) " ";
+      content: attr(data-label) " ";
     }
 
     &:empty {
@@ -2756,6 +2761,11 @@ html.pf-index-docked {
 
   td.pf-index-row__copy-actions {
     grid-area: action;
+    margin-top: .375rem;
+
+    &:empty {
+      display: none;
+    }
   }
 
   .pf-index-row__copy-more td {
