@@ -171,7 +171,7 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Wed 11 Nov 2026, 15:33 (CST):</strong> Downloads are finished: nothing is left to download at any of the 39 institutions. The last 14 files are empty in Fedora itself (0 bytes), so, as the team decided for Hicks, they follow Fedora and are recorded as empty in Fedora (v2.41). This morning the last 9 LDL Training files came down, and the last flagged images were converted from their TIFFs or checked again. The short list of duplicates is waiting for approval.</p>
+<p><strong>Status as of Wed 11 Nov 2026, 15:50 (CST):</strong> Downloads are finished at all 39 institutions, and the migration figures haven't changed since 15:33. From 3:32 to 3:39 PM both AWS servers moved to smaller sizes, saving about $455 a month, and the monthly backups were stopped, saving about $170 a month more once the last two expire (Nov 30 and Dec 30). Projected AWS bills, as estimates: November about $1,700, December about $1,230 and about $1,150 a month from January, down from $1,773 in October and about $2,300 a month in the year before May 2026. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
     ['100%', 'downloaded, by data size: 3.22 TB on L:, nothing left', 100],
@@ -180,6 +180,7 @@ HTML, 'callout'),
   ], 'Nothing is left to download. The last 14 files, at five institutions, are empty in Fedora itself and are recorded as empty in Fedora, so they count as done. Converting TIFFs to JP2 doesn\'t change these figures, and uploading to Quartex isn\'t counted. As of Nov 11, 15:33.'),
   $text('Recent progress', <<<'HTML'
 <ul>
+<li><strong>Nov 11, afternoon:</strong> both AWS servers moved to smaller sizes from 3:32 to 3:39 PM, with nothing rolled back, saving about $455 a month. The monthly backups were stopped and the existing ones kept for 1 year, saving about $170 a month more from Dec 30. The AWS bill is projected to fall from $1,773 in October to about $1,230 in December and about $1,150 a month from January.</li>
 <li><strong>Nov 10 to 11:</strong> All of Louisiana Newspapers' 1,854 TIFFs with no JP2 were converted by 8:15 PM on Nov 10, with none failing. UNO's 2,021 JPEG replacements finished, State Archives' two Board of Health images were converted, and the empty Amistad recording was set aside.</li>
 <li><strong>Nov 11:</strong> downloads are finished at all 39 institutions. The last LDL Training files came down, every flagged image was converted, checked again or, for Hicks, recorded as empty in Fedora, and the last 14 files, empty in Fedora itself, were recorded as such.</li>
 <li><strong>Nov 10:</strong> Loyola's 228 refused files came from Fedora, and Loyola is finished downloading.</li>
@@ -260,6 +261,7 @@ HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
     ['done', 'Files the website refuses', 'The exporter normally downloads through the LDL website. For some files the website answers 403 (access denied), usually because the item is restricted on the site. Nothing is lost: those files are downloaded straight from Fedora, the repository behind the website, over a secure connection to the server (an SSH tunnel). They\'re the same files and get the same checks. 4,197 main files and 822 text files were refused, and all of them came from Fedora on Nov 6: University of New Orleans 4,027 and 252 (its other 476 text files were empty, so they aren\'t exported), Historic New Orleans 76, TAHIL 51 and 51, and LSU Shreveport 43 and 43. Loyola\'s download on Nov 9 to 10 was refused 228 main files and 6 text files, about 28 GB, nearly all videos: 172 Fichter tapes and 49 Department of Dance recordings. All of them came from Fedora on Nov 10, between 9:27 AM and 2:45 PM.'],
+    ['done', 'Smaller AWS servers', 'Done Nov 11, 3:32 to 3:39 PM, about 6 minutes of website downtime. The backend went from 16 processors to 4 and kept its 32 GB, and the website from 8 to 4 and kept its 16 GB. Saves about $455 a month; with the backup change, about $625 a month from January.'],
     ['done', 'Remaining downloads', 'Nothing left as of Nov 11, 15:33. The last 14 files, at five institutions (Historic New Orleans 7, Louisiana Newspapers 4, and Law Library, State Archives and Webster 1 each), are empty in Fedora itself and were recorded as empty in Fedora on Nov 11 (v2.41). State Archives\' Festival Oral Histories, which the website had failed on since Nov 6, all came from Fedora on Nov 10.'],
     ['done', 'Queued image replacements', 'Nearly all of the 8,313 are done. UNO\'s 2,021 JPEGs labelled as JP2 were all replaced from Fedora by 4:36 PM on Nov 10, and Loyola\'s 15 that morning. State Archives\' two Board of Health images, whose JP2 in Fedora is empty, were converted from their TIFFs on Nov 11. Louisiana Newspapers\' 128 images that hit network errors all went through. On Nov 11 the last flagged images were finished: 9 converted from their TIFFs (newspapers 6, Law Library, Ascension and Historic New Orleans 1 each), Amistad\'s recording passed its check, and Hicks\' empty image was recorded as empty in Fedora. Historic New Orleans\' 7 images that are empty in Fedora were recorded as such (v2.41).'],
     ['done', 'TIFFs with no usable JP2', 'All of Louisiana Newspapers\' were converted on Nov 10, 1,854 in all, with none failing. The first 314, from 8:56 AM to 3:20 PM, came through the SSH tunnel at about 50 an hour, because the tunnel was shared with the Loyola and UNO runs. From 3:23 PM (v2.36) the other 1,540 came through the website, apart from 29 that came from Fedora after a website download broke partway, and they finished at 8:15 PM. Once UNO\'s run had finished at 4:36 PM, about 480 were converted an hour, 3 at a time. State Archives\' two Board of Health images, whose JP2 in Fedora is empty, were converted on Nov 11. None are waiting now.'],
@@ -424,7 +426,9 @@ HTML),
 <li>At 11:22 AM, 14 files were left, all empty in Fedora itself, and 34 of 39 institutions had nothing left.</li>
 <li>v2.41: the last 14 files are 0 bytes in Fedora itself (7 Historic New Orleans images, 5 PDFs and 2 collection records). As with Hicks, they follow Fedora and are recorded as empty in Fedora. The 7 that had 0-byte placeholders on L: were moved to <code>_empty_other</code>, and the manifests at the five institutions were rebuilt.</li>
 <li>At 3:33 PM, nothing was left to download, and all 39 institutions were finished downloading.</li>
-<li>In the afternoon, both AWS servers were measured to size them for after the export. The backend can go from 16 processors to 4 and keep its 32 GB of memory, and the website from 8 processors to 4 and keep its 16 GB, saving about $455 a month. See Hardware downgrade.</li>
+<li>In the afternoon, both AWS servers were measured to size them for after the export: the backend could go from 16 processors to 4 and keep its 32 GB of memory, and the website from 8 to 4 and keep its 16 GB.</li>
+<li>The monthly AWS backups were stopped, and the existing ones are now kept for 1 year instead of forever. The Aug 31 backup expires on Nov 30 and the Sep 30 one on Dec 30, which saves about $170 a month from then. The Oct 31 backups stay until Nov 2027.</li>
+<li>From 3:32 to 3:39 PM, both servers were stopped, imaged, resized (backend to r6a.xlarge, website to m6a.xlarge) and started again, the backend first. The website, a search, Fedora and the services on both servers all checked out, and nothing was rolled back. This saves about $455 a month. See Hardware downgrade and AWS costs.</li>
 </ul>
 HTML),
 ]);
@@ -449,8 +453,8 @@ HTML),
 HTML),
   $text('The LDL servers', <<<'HTML'
 <ul>
-<li><strong>Backend (Fedora):</strong> AWS c5.4xlarge (16 vCPU, 32 GB, not burstable). Fedora runs on port 8080, which isn't reachable from outside the server.</li>
-<li><strong>Website:</strong> <code>louisianadigitallibrary.org</code>, behind the SafeLine WAF (free edition). The export PC's IP is now on its allow list.</li>
+<li><strong>Backend (Fedora):</strong> AWS r6a.xlarge since Nov 11 (4 vCPU, 32 GB; before that a c5.4xlarge, 16 vCPU). Fedora runs on port 8080, which isn't reachable from outside the server.</li>
+<li><strong>Website:</strong> <code>louisianadigitallibrary.org</code>, behind the SafeLine WAF (free edition), on an AWS m6a.xlarge since Nov 11 (4 vCPU, 16 GB; before that a c5.2xlarge, 8 vCPU). The export PC's IP is now on its allow list.</li>
 </ul>
 HTML),
   $text('What gets exported per object', <<<'HTML'
@@ -1004,14 +1008,96 @@ HTML),
 HTML),
 ]);
 
-$section('Hardware downgrade', [
+$section('Hardware downgrade and AWS costs', [
   $text(NULL, <<<'HTML'
-<p><strong>Planned, not done yet:</strong> once no more Fedora runs are planned, both LDL servers on AWS move to smaller sizes. That saves about $455 a month, or about $5,500 a year, roughly a quarter of the AWS bill. It takes one quiet window of about 30 minutes of website downtime. The sizes come from measurements taken on both servers on Nov 11.</p>
+<p><strong>Done Wed Nov 11, 3:32 to 3:39 PM (CST):</strong> both LDL servers on AWS moved to smaller sizes, with about 6 minutes of website downtime and nothing rolled back. That saves about $455 a month. The same day the monthly backups were stopped, which saves about $170 a month more from Dec 30. Together that's about $625 a month, or about $7,500 a year, a third of October's bill. Projected bills: November about $1,700, December about $1,230 and about $1,150 a month from January, half the $2,298 a month of the 12 months before May 2026.</p>
 HTML, 'callout'),
-  $text('The change', <<<'HTML'
-<p>Only the size of each server changes. Their addresses, disks, data and settings stay as they are.</p>
+  $stats(NULL, [
+    ['$2,298', 'a month on average, the 12 months before May 2026'],
+    ['$1,773', 'October 2026 bill, actual'],
+    ['~$1,700', 'November, projected'],
+    ['~$1,230', 'December, projected'],
+    ['~$1,150', 'a month from January, projected'],
+  ], 'Projections are estimates: October\'s bill less the savings that apply in each month, with data transfer back to normal now that the exports are finished. About $625 a month less than October from January, and about $1,150 a month less than the 12 months before May 2026.'),
+  $text('Savings, done and coming up', <<<'HTML'
 <table>
-<thead><tr><th scope="col">Server</th><th scope="col">What it runs</th><th scope="col">Now</th><th scope="col">After</th><th scope="col">Cost per month (approx.)</th></tr></thead>
+<thead><tr><th scope="col">Change</th><th scope="col">Saving per month (approx.)</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>Both servers moved to smaller sizes</td><td>~$455</td><td>Done Nov 11. Full saving from December.</td></tr>
+<tr><td>Monthly backups stopped, existing ones kept for 1 year instead of forever</td><td>~$170</td><td>Done Nov 11. About $86 from Dec 1, all of it from Dec 30. Everything is on L:, so one recent backup is enough.</td></tr>
+<tr><td>Old S3 copies of Fedora (28.9 TB) moved to Deep Archive or removed</td><td>~$135 to $160</td><td>Not decided.</td></tr>
+<tr><td>Stopped servers, unused addresses and unattached disks removed</td><td>~$90</td><td>Not decided.</td></tr>
+<tr><td>Disks switched from gp2 to gp3</td><td>~$7</td><td>Not decided. No downtime.</td></tr>
+</tbody>
+</table>
+HTML),
+  $text('Cost history and projected bills', <<<'HTML'
+<p>Bills for the LDL AWS account. Projected months are estimates.</p>
+<table>
+<thead><tr><th scope="col">Month</th><th scope="col">Bill</th><th scope="col">What changed</th></tr></thead>
+<tbody>
+<tr><td>May 2025 to Apr 2026</td><td>$2,298 a month on average</td><td>Before the May 2026 changes, under the previous administration. April 2026 was $2,493.</td></tr>
+<tr><td>May 2026</td><td>$2,059</td><td>Backups and other changes made late in the month.</td></tr>
+<tr><td>Jun to Aug 2026</td><td>$1,813, $1,846, $1,792</td><td>Actual, after the May changes.</td></tr>
+<tr><td>Sep 2026</td><td>$1,750</td><td>Actual.</td></tr>
+<tr><td>Oct 2026</td><td>$1,773</td><td>Actual. The baseline for the savings below.</td></tr>
+<tr><td>Nov 2026</td><td>~$1,700 (projected)</td><td>$777 by Nov 10, higher than usual because the exports sent data out of AWS ($184 by Nov 10). The smaller servers take about $230 off the last 19 days. Before the changes, AWS forecast $2,204.</td></tr>
+<tr><td>Dec 2026</td><td>~$1,230 (projected)</td><td>The first full month at the smaller sizes (about $455 less), and the Aug 31 backup expires on Nov 30 (about $86 less).</td></tr>
+<tr><td>Jan 2027 on</td><td>~$1,150 a month (projected)</td><td>The Sep 30 backup expires on Dec 30, so the full backup saving (about $170) applies.</td></tr>
+<tr><td>Later, if all of the undecided items go ahead</td><td>~$890 a month (projected)</td><td>About $230 to $260 a month more, from the items marked Not decided above.</td></tr>
+</tbody>
+</table>
+HTML),
+  $text('Compared with earlier years', <<<'HTML'
+<p>Monthly bills from AWS Cost Explorer, checked on Nov 11. Before May 2026, under the previous administration, the account ran at about $2,250 to $2,300 a month. The changes made in late May 2026, mostly to AWS Backup, brought it to about $1,800 a month. The Nov 11 changes bring it to about $1,150 a month from January, half of what it was a year ago.</p>
+<table>
+<thead><tr><th scope="col">Period</th><th scope="col">Average a month</th><th scope="col">A year at that rate</th><th scope="col">Compared with the 12 months before May 2026</th></tr></thead>
+<tbody>
+<tr><td>2024</td><td>$2,245</td><td>$26,939 (actual)</td><td>About the same.</td></tr>
+<tr><td>2025</td><td>$2,283</td><td>$27,394 (actual)</td><td>About the same.</td></tr>
+<tr><td>May 2025 to Apr 2026, the 12 months before the May changes</td><td>$2,298</td><td>$27,577 (actual)</td><td>The baseline.</td></tr>
+<tr><td>Jun to Oct 2026, after the May changes</td><td>$1,795</td><td>~$21,500</td><td>$503 a month less (22%).</td></tr>
+<tr><td>From Jan 2027, after the Nov 11 changes (projected)</td><td>~$1,150</td><td>~$13,800</td><td>About $1,150 a month less (50%), about $13,800 a year.</td></tr>
+<tr><td>Later, if all of the undecided items go ahead (projected)</td><td>~$890</td><td>~$10,700</td><td>About $1,400 a month less (61%), about $16,900 a year.</td></tr>
+</tbody>
+</table>
+<p>The highest months were Feb 2024 ($2,671) and Apr 2026 ($2,493). The earlier figures for Feb 2024 to Mar 2025 that were shared with the team match Cost Explorer to within a few cents.</p>
+HTML),
+  $text('What changed in May 2026', <<<'HTML'
+<p>The bill by service before and after the May 2026 changes, and in October. AWS Backup accounts for most of the May drop, about $413 a month.</p>
+<table>
+<thead><tr><th scope="col">Service</th><th scope="col">Apr 2026</th><th scope="col">Jun 2026</th><th scope="col">Oct 2026</th></tr></thead>
+<tbody>
+<tr><td>AWS Backup</td><td>$762</td><td>$349</td><td>$287</td></tr>
+<tr><td>Servers (EC2 instances)</td><td>$908</td><td>$770</td><td>$808</td></tr>
+<tr><td>Disks, snapshots and data transfer (EC2 other)</td><td>$306</td><td>$227</td><td>$219</td></tr>
+<tr><td>Shared file storage (EFS)</td><td>$307</td><td>$258</td><td>$251</td></tr>
+<tr><td>S3 storage</td><td>$176</td><td>$177</td><td>$177</td></tr>
+<tr><td>Public IPv4 addresses</td><td>$29</td><td>$29</td><td>$29</td></tr>
+<tr><td>Database (RDS)</td><td>$3</td><td>$3</td><td>$3</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>$2,493</strong></td><td><strong>$1,813</strong></td><td><strong>$1,773</strong></td></tr>
+</tbody>
+</table>
+HTML),
+  $text('October\'s bill by service', <<<'HTML'
+<p>Where October's $1,773 went.</p>
+<table>
+<thead><tr><th scope="col">Service</th><th scope="col">October 2026</th><th scope="col">Affected by</th></tr></thead>
+<tbody>
+<tr><td>Servers (EC2 instances)</td><td>~$808</td><td>The resize: about $455 less a month.</td></tr>
+<tr><td>AWS Backup</td><td>~$287</td><td>The backup change: about $170 less a month from Dec 30.</td></tr>
+<tr><td>Shared file storage (EFS)</td><td>~$251</td><td>Unchanged.</td></tr>
+<tr><td>Disks, snapshots and data transfer (EC2 other)</td><td>~$219</td><td>Unattached disks and gp3, not decided. Data transfer rose in November with the exports and should fall back now.</td></tr>
+<tr><td>S3 storage</td><td>~$177</td><td>The old copies of Fedora, not decided.</td></tr>
+<tr><td>Public IPv4 addresses</td><td>~$29</td><td>Unused addresses, not decided.</td></tr>
+<tr><td>Database (RDS)</td><td>~$3</td><td>Unchanged.</td></tr>
+</tbody>
+</table>
+HTML),
+  $text('The change', <<<'HTML'
+<p>Only the size of each server changed. Their addresses, disks, data and settings stayed as they were.</p>
+<table>
+<thead><tr><th scope="col">Server</th><th scope="col">What it runs</th><th scope="col">Before</th><th scope="col">Since Nov 11</th><th scope="col">Cost per month (approx.)</th></tr></thead>
 <tbody>
 <tr><td>Backend (Fedora)</td><td>Fedora, Solr search, Blazegraph, the image server and MySQL</td><td>c5.4xlarge: 16 processors, 32 GB memory</td><td>r6a.xlarge: 4 processors, 32 GB memory</td><td>~$500 → ~$165</td></tr>
 <tr><td>Website (front end)</td><td>The Drupal site, the SafeLine firewall and a page cache</td><td>c5.2xlarge: 8 processors, 16 GB memory</td><td>m6a.xlarge: 4 processors, 16 GB memory</td><td>~$250 → ~$125</td></tr>
@@ -1026,26 +1112,35 @@ HTML),
 <li><strong>The website keeps 16 GB of memory.</strong> Each of its web workers uses about 52 MB, and up to 150 can run at once, about 7.8 GB. The firewall and page cache add about 2.3 GB. That fits 16 GB without changing any settings.</li>
 <li><strong>The website keeps 4 processors.</strong> Its processors spike to 50 to 100% busy for a few minutes every few days. AWS's own forecast for 2 processors hits 100% again and again, which would mean slow pages during those spikes.</li>
 <li><strong>AWS's suggested sizes don't fit.</strong> Compute Optimizer suggests ARM (Graviton) servers, and the software on both servers would have to be rebuilt to run on them.</li>
-<li><strong>Nothing prepaid is lost.</strong> There are no Reserved Instances or Savings Plans; everything is billed On Demand. The account averaged about $1,840 a month from May to October 2026.</li>
+<li><strong>Nothing prepaid is lost.</strong> There are no Reserved Instances or Savings Plans; everything is billed On Demand. The account averaged about $1,795 a month from June to October 2026, and $2,298 a month in the 12 months before May 2026.</li>
 </ul>
 HTML),
   $text('How it\'s kept safe', <<<'HTML'
 <ul>
-<li><strong>The addresses don't change.</strong> Both servers have fixed addresses (Elastic IPs), and the website's address points at the front end's, so stopping and starting them changes nothing for visitors.</li>
-<li><strong>A full backup image of each server is taken</strong> while it's stopped, before its size changes.</li>
-<li><strong>Termination protection is on</strong> for the backend, so it can't be deleted by mistake. The front end gets the same before the window.</li>
+<li><strong>The addresses didn't change.</strong> Both servers have fixed addresses (Elastic IPs), and the website's address points at the front end's, so stopping and starting them changed nothing for visitors.</li>
+<li><strong>A full backup image of each server was taken</strong> while it was stopped, before its size changed. They're kept for about a week.</li>
+<li><strong>Termination protection is on</strong> for the backend, so it can't be deleted by mistake.</li>
 <li><strong>Undoing it takes a few minutes:</strong> stop the server, set the old size back and start it again.</li>
-<li><strong>After the restart, searches are slower for up to an hour</strong> while the servers fill their memory again, as after any restart.</li>
+<li><strong>After the restart, searches may be slower for up to an hour</strong> while the servers fill their memory again, as after any restart.</li>
 </ul>
 HTML),
-  $text('When and how', <<<'HTML'
+  $text('What happened on Nov 11', <<<'HTML'
 <ol>
-<li>Wait until no more Fedora runs are planned.</li>
-<li>In a quiet window, stop the backend, take its backup image, change its size and start it.</li>
-<li>Check the website, a search and one download by the exporter.</li>
-<li>Do the same for the front end, then check the website again.</li>
-<li>Watch both for a few days, then delete the backup images, which cost a little every month.</li>
+<li>At 3:32 PM, both servers were stopped together, once no more Fedora runs were planned.</li>
+<li>A full backup image of each was started while they were stopped.</li>
+<li>The backend was changed to r6a.xlarge and the website to m6a.xlarge.</li>
+<li>The backend was started first, then the website. The website was back by about 3:39 PM.</li>
+<li>The website from outside, a search, Fedora, Solr and the services on both servers were checked. All passed, and nothing was rolled back.</li>
+<li>Next: watch both for a week, then delete the backup images around Nov 18, since they cost a little every month.</li>
 </ol>
+HTML),
+  $text('Where we differ from AWS\'s suggestions', <<<'HTML'
+<ul>
+<li><strong>Different server types.</strong> AWS suggests ARM (Graviton) servers. The software on both servers would have to be rebuilt to run on them, so same-family AMD sizes were used instead, for most of the saving.</li>
+<li><strong>No Savings Plan or Reserved Instances.</strong> AWS suggests committing to 1 or 3 years for a discount. The servers are expected to retire once the move to Quartex is done, so a commitment could cost more than it saves.</li>
+<li><strong>More memory on the backend than AWS suggests.</strong> The search index and Blazegraph need the 32 GB to keep searches fast; see Why these sizes.</li>
+<li><strong>Backups cut further than AWS suggests.</strong> AWS doesn't know that every file is now on L:, so it doesn't suggest stopping the monthly backups.</li>
+</ul>
 HTML),
 ]);
 
@@ -1124,7 +1219,7 @@ HTML),
 <p>Louisiana Newspapers' 1,854 TIFF conversions, UNO's 2,021 JPEG replacements, State Archives' two Board of Health conversions, and the empty Amistad recording set aside.</p>
 HTML),
   $text('Done Nov 11', <<<'HTML'
-<p>LDL Training's last 9 files, every flagged image (9 converted from their TIFFs, Amistad's recording checked again, and Hicks' empty image recorded as empty in Fedora, v2.37 to v2.40), and the last 14 files recorded as empty in Fedora (v2.41). Downloads are finished.</p>
+<p>LDL Training's last 9 files, every flagged image (9 converted from their TIFFs, Amistad's recording checked again, and Hicks' empty image recorded as empty in Fedora, v2.37 to v2.40), and the last 14 files recorded as empty in Fedora (v2.41). Downloads are finished. Both AWS servers moved to smaller sizes and the monthly backups were stopped, saving about $625 a month from January.</p>
 HTML),
   $text('Next', <<<'HTML'
 <ul>
@@ -1133,7 +1228,8 @@ HTML),
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>Loyola's download finished at 1:43 AM on Nov 10, ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
 <li>Get the short list in <code>triage.csv</code> approved, then run <code>0-leave-out</code>, and move any Loyola books marked to leave out off L: by hand.</li>
-<li>Once no more Fedora runs are planned, move both AWS servers to their smaller sizes in one window of about 30 minutes. See Hardware downgrade.</li>
+<li>Watch both AWS servers for a week, then, around Nov 18, delete the two backup images taken before the resize, and their snapshots. See Hardware downgrade and AWS costs.</li>
+<li>Further AWS savings not decided yet, about $230 to $260 a month more: the old S3 copies of Fedora, the stopped servers, unused addresses and unattached disks, and switching the disks to gp3.</li>
 </ul>
 HTML),
   $text('Then', <<<'HTML'
