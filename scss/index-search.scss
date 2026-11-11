@@ -115,8 +115,8 @@
 // The search as on the Special Collections page: a square field on the surface
 // color, and one filled button with its icon at the far end.
 // At rest the page's hairline, as every other line here, over a faint tint of
-// the text color; the full border on hover and the highlight on focus. The
-// Search button beside it marks the field at rest.
+// the text color; on hover only the gold line along its foot (below), and the
+// highlight on focus. The Search button beside it marks the field at rest.
 .pf-index__field {
   display: flex;
   align-items: stretch;
@@ -126,11 +126,6 @@
 
   @include pf-index-motion {
     transition: border-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
-  }
-
-  &:hover {
-    border-color: var(--pf-index-fg);
-    transition-duration: $pf-hover-in;
   }
 
   &:focus-within {
@@ -3485,6 +3480,19 @@ html.pf-index-docked {
   margin: .375rem 0 0;
   color: var(--pf-index-muted);
   text-wrap: pretty;
+}
+
+// An oral history's own Summary, arriving with its holdings.
+.pf-index-row__summary[data-pf-index-summary] {
+  @include pf-index-motion {
+    animation: pf-index-summary-in .3s ease-out;
+  }
+}
+
+@keyframes pf-index-summary-in {
+  from {
+    opacity: 0;
+  }
 }
 
 // Between the paragraphs of a whole answer (Questions & Answers).

@@ -102,6 +102,31 @@
     return template;
   };
 
+  // An oral history's row shows its Catalog record's Summary, not its series'
+  // description. Cut as the module cuts a row's summary; when it's whole, the
+  // panel's About leaves it out rather than say it twice.
+  const SUMMARY_LENGTH = 240;
+  const fillSummary = (place, text) => {
+    const summary = place.closest('.pf-index-row')?.querySelector('[data-pf-index-summary]');
+    if (!summary || !text) {
+      return;
+    }
+    if (text.length > SUMMARY_LENGTH) {
+      const cut = text.slice(0, SUMMARY_LENGTH);
+      summary.textContent = `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,;:.]+$/, '')}…`;
+    }
+    else {
+      summary.textContent = text;
+      const group = place.querySelector('[data-pf-index-detail="summary"]');
+      const about = group?.closest('.pf-index-row__about');
+      group?.remove();
+      if (about && !about.querySelector('[data-pf-index-detail]')) {
+        about.remove();
+      }
+    }
+    summary.hidden = false;
+  };
+
   // Fills each row's place from one answer, and removes the places left empty.
   // pending: an answer already asked for (load() starts it early).
   const loadHoldings = async (rows, pending = null) => {
@@ -121,6 +146,7 @@
         if (meta && call && first && meta.textContent.endsWith(first)) {
           meta.textContent = meta.textContent.slice(0, -first.length) + call;
         }
+        fillSummary(place, found.dataset.pfIndexSummary);
       }
       else {
         place.remove();
