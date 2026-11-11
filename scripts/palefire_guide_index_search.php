@@ -372,6 +372,7 @@ HTML),
 <li>The search index held 41,676 items, mostly archive records the search never shows, such as Breaux Data. A new setting in the index leaves them out, keeping only finding aids and oral histories, so reindexing is much quicker.</li>
 <li>What are these? now opens inside the Source filter and pushes the sources down, so the descriptions no longer cover the checkboxes they describe. Search tips lines up with the right edge of the page, puts each example on its own line beside what it does, fits the screen without a scroll box of its own on most screens, and has a Close button.</li>
 <li>The oral history series are now one dropdown under Oral histories (All series, then each with its count) instead of a long list of checkboxes whose names wrapped in the sidebar. Choosing one updates the results straight away.</li>
+<li>About 130 catalogued oral history interviews had no record on the site, so the search never showed them, including the newer Sicilian-Italian and 272 Slaves (Georgetown) series. A new import adds a record for each from the catalog: its abstract PDF, series, summary and interviewer. The module now keeps the list of series by the folder their abstracts are in.</li>
 </ul>
 HTML),
 ]);
