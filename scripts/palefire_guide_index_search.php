@@ -141,7 +141,8 @@ HTML, 'callout'),
     ['done', 'Page design', 'Layout and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
     ['done', 'Module first run', 'palefire_search is enabled on production. All four modes, source filters, paging, Discovery, Research Guides, Staff, Gear, Databases and E-Textbooks return real results.'],
     ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Discovery by date. Results change in place, without reloading the page. Filters and sorting are checked on production for logged-out visitors; changing in place still needs a check in a browser, logged in and out.'],
-    ['done', 'Search operators', 'AND, OR, NOT, a minus sign and parentheses, read the same way in every source that can honor them. Research Guides can\'t, so the page says what it searched for instead. Exact phrases in the site\'s own content wait for a reindex.'],
+    ['done', 'Search operators', 'AND, OR, NOT, a minus sign and parentheses, read the same way in every source that can honor them. Research Guides can\'t, so the page says what it searched for instead. Exact phrases in the site\'s own content are still read as separate words, because its index matches single words only.'],
+    ['todo', 'Power searches', 'Word endings (econom*), author:, title: and subject: searches, year: ranges and a Search tips panel. Discovery and the Catalog can read them; the site\'s own content needs work in the module.'],
     ['done', 'Pictures in results', 'Staff, News, Gear and Pages show their picture, and Discovery shows a cover when Discovery has one. A result with no picture keeps its text at full width.'],
     ['running', 'E-Textbook covers and details', 'Every E-Textbook shows its cover, with a Book details toggle for its class, instructor, section and term, carrying over what worked in the old search.'],
     ['running', 'One row per E-Textbook', 'Each book shows once, however many class sections use it, and Book details lists every section. Copies are merged on display only: nodes and the index are unchanged.'],
@@ -354,6 +355,14 @@ HTML),
 <li>The line under the page title now names the catalog and ebooks too: Search the catalog, articles and ebooks, databases, archives and library pages at once.</li>
 <li>A Catalog record's Show location panel now ends with About this item: the record's summary, contents, publication, physical description, notes and local notes, subjects and more, from the same request as the copies. Subjects, series, earlier and later titles and other names each link to a Catalog search. Long texts show four lines until Read more.</li>
 <li>On narrower screens, a box's copy number no longer runs down the side one letter a line: the call number and what the box holds take the row, Copy 1 sits at its end, and Request to view goes on its own line.</li>
+</ul>
+HTML),
+  $text('Wed Nov 11: Exact phrases and short words', <<<'HTML'
+<ul>
+<li>Found why "exact phrases" in quotes still matched the words anywhere in finding aids and other site content: the site's own index matches single words only, so it reads "barry allen" as barry and allen. The Catalog and Discovery already honor phrases.</li>
+<li>The index's Stopwords setting was turned off, so phrases such as "battle of new orleans" keep their small words, and the shortest word it reads went from three letters to two, so searches such as WW II or St. Joseph keep their two-letter words. The search now passes two-letter words on too. Both take effect after a reindex.</li>
+<li>Checked what the Catalog and Discovery can do for power searches: both read word endings (econom* finds economics and economy). Discovery reads author, title and subject searches in any mix. The Catalog reads one of them per search.</li>
+<li>The Show location panel is tidier: Copy and Status sit right after the call number instead of at the far edge, About this item lines up with them and is headed like the libraries, and a library with one copy no longer shows column headings over its single row.</li>
 </ul>
 HTML),
 ]);

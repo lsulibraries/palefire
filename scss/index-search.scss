@@ -2680,6 +2680,9 @@ html.pf-index-docked {
 // panel's own width, whatever the screen. Roles keep each table a table to
 // screen readers while its rows stack.
 .pf-index-row__holdings {
+  // The first column's width, with its 1.5rem gap: the call number in the
+  // copies tables, the names in About this item.
+  --pf-index-key: 13.5rem;
   container-type: inline-size;
 }
 
@@ -2841,6 +2844,17 @@ html.pf-index-docked {
       width: 11rem;
     }
 
+    // One copy: the row says what it is without headings over it, which
+    // stay for screen readers.
+    .pf-index-row__one thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
     .pf-index-row__copy-more td {
       display: table-cell;
     }
@@ -2922,7 +2936,8 @@ html.pf-index-docked {
   min-width: 0;
 }
 
-.pf-main .pf-index .pf-index-row__place-name {
+.pf-main .pf-index .pf-index-row__place-name,
+.pf-main .pf-index .pf-index-row__about-title {
   margin: 0;
   color: var(--pf-index-fg);
   font-family: inherit;
@@ -2996,7 +3011,8 @@ html.pf-index-docked {
 }
 
 // About this item: what a Catalog record says beyond its row, after its
-// copies. Names in a narrow column from 48rem, over their values below it.
+// copies. Names in the copies table's first column from a 46rem panel, over
+// their values below it.
 // A long text shows four lines until Read more (index-search.js); a long
 // list folds after six.
 .pf-index-row__about {
@@ -3005,10 +3021,9 @@ html.pf-index-docked {
   border-top: 1px solid var(--pf-index-line);
 }
 
-.pf-index .pf-index-row__about-title {
-  @include pf-index-label;
-  margin: 0 0 1rem;
-  color: var(--pf-index-muted);
+// A section as each library is, in the same type.
+.pf-main .pf-index h4.pf-index-row__about-title {
+  margin-bottom: 1rem;
 }
 
 .pf-index-row__about-list {
@@ -3046,10 +3061,12 @@ html.pf-index-docked {
   }
 }
 
-@media (min-width: 48rem) {
+// From the panel's 46rem, the names' column and its gap are the copies
+// table's first column (--pf-index-key), so values start where Copy does.
+@container (min-width: 46rem) {
   .pf-index-row__about-group {
     display: grid;
-    grid-template-columns: 11rem minmax(0, 1fr);
+    grid-template-columns: calc(var(--pf-index-key) - 1.5rem) minmax(0, 1fr);
     column-gap: 1.5rem;
 
     dd {
@@ -3220,6 +3237,33 @@ html.pf-index-docked {
       &:hover {
         color: var(--bs-body-bg);
       }
+    }
+  }
+}
+
+// Copy and Status follow the call number, on the grid About this item keeps
+// (--pf-index-key), and Status takes what's left. On the cells, so it holds
+// where the headings are hidden. Not where a box's contents sit under its
+// number: those need the room.
+@container (min-width: 46rem) {
+  .pf-main .pf-index table:not(:has(.pf-index-row__item-contents)) {
+    // Its number holds the width, less the cell's 1.5rem gap: a table cell's
+    // own width gives way to Status's 100%, its content's doesn't.
+    .pf-index-row__item-number {
+      display: inline-block;
+      min-inline-size: calc(var(--pf-index-key) - 1.5rem);
+    }
+
+    // The copy's column as wide with its heading hidden as with it shown, so
+    // Status lines up from table to table.
+    td.pf-index-row__item-copy::after {
+      content: "";
+      display: inline-block;
+      width: 3rem;
+    }
+
+    td.pf-index-row__item-status {
+      width: 100%;
     }
   }
 }
