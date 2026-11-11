@@ -467,6 +467,28 @@
     where.append(name, count);
     total.replaceChildren(where, text);
 
+    // The Source filter marks the source being read, as a table of contents
+    // marks its section, at the same point the bar above names it: the first
+    // source until a heading goes under the bar, and the last at the page's
+    // foot. Only a look: the row's checkbox still says what's filtered, and
+    // screen readers have the headings.
+    const sources = [...scope.querySelectorAll('[data-pf-index-form] input[name="source[]"]')];
+    let marked = null;
+    const mark = (passed) => {
+      const sections = [...scope.querySelectorAll('.pf-index-section[data-pf-index-source]')].filter((section) => !section.hidden);
+      const doc = document.documentElement;
+      const atFoot = window.innerHeight + window.scrollY >= doc.scrollHeight - 2;
+      const reading = atFoot ? sections[sections.length - 1] : passed || sections[0];
+      const input = sections.length > 1 && reading ? sources.find((source) => source.value === reading.dataset.pfIndexSource) : null;
+      const option = input && input.closest('.pf-index__option');
+      const row = option && (option.closest('.pf-index__source') || option);
+      if (row !== marked) {
+        marked?.classList.remove('is-in-view');
+        row?.classList.add('is-in-view');
+        marked = row;
+      }
+    };
+
     let current = null;
     let frame = 0;
     const update = () => {
@@ -484,6 +506,9 @@
           next = section;
         }
       });
+      if (sources.length) {
+        mark(next);
+      }
       if (!next) {
         where.hidden = true;
         current = null;

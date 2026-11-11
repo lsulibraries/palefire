@@ -848,6 +848,55 @@
   min-width: 0;
 }
 
+// The Source group: its sources set in under "All sources", hairlines and
+// all, as the parts of it. The indent holds the in-view mark.
+.pf-index__group:has(> .pf-index__option--all) > :is(.pf-index__option:not(.pf-index__option--all), .pf-index__source) {
+  position: relative;
+  margin-inline-start: 1.25rem;
+}
+
+// The source being read, in a search of several (index-search.js): a bar in
+// the indent and the name in the section headings' color, as a table of
+// contents marks its section and the results bar names it. Unlike a checked
+// box, it fills nothing.
+.pf-index__group > .is-in-view {
+  --pf-index-reading: var(--pf-g-title, var(--bs-heading-color));
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: .625rem;
+    inset-inline-start: -.875rem;
+    width: 2px;
+    height: 1.5rem;
+    background: var(--pf-index-reading);
+  }
+
+  > .pf-index__option-label,
+  > .pf-index__option > .pf-index__option-label {
+    color: var(--pf-index-reading);
+  }
+
+  @include pf-index-motion {
+    &::before {
+      animation: pf-index-in-view .35s var(--pf-index-ease);
+    }
+  }
+
+  @media (forced-colors: active) {
+    &::before {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@keyframes pf-index-in-view {
+  from {
+    transform: scaleY(0);
+  }
+}
+
 // A source row the visitor can reorder. Script adds it around the option, and
 // takes the option's line. Both controls are 24px wide or more (WCAG 2.5.8).
 .pf-index__source {
@@ -1108,6 +1157,10 @@
 
   .pf-index__option {
     min-height: 2.5rem;
+  }
+
+  .pf-index__group > .is-in-view::before {
+    top: .5rem;
   }
 }
 
