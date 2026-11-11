@@ -153,7 +153,8 @@
   overflow: auto;
   background: var(--pf-guide-surface);
   border: 1px solid var(--pf-guide-rule);
-  overscroll-behavior: contain;
+  // No overscroll-behavior: at its top or bottom the wheel moves on to the
+  // page, so the chart never traps scrolling.
 }
 
 .pf-crosswalk__heads {
@@ -449,9 +450,12 @@ text.pf-crosswalk__sec {
     grid-template-columns: minmax(0, 1fr) 21rem;
   }
 
+  // Full height, scrolling with the page. Sideways scrolling stays (the
+  // drawing can be wider than a narrow column); hidden, not visible, so the
+  // box isn't a vertical scroller that would swallow the mouse wheel.
   .pf-crosswalk__chart {
     max-height: none;
-    overflow-y: visible;
+    overflow-y: hidden;
   }
 
   .pf-crosswalk__panel {
