@@ -1,0 +1,23 @@
+// Palefire — wide guide sections (css/guide-wide.css, library
+// palefire/guide-wide). Attached by paragraph--guide-section.html.twig only
+// when a section's "Wide section" box is ticked (field_section_wide,
+// palefire_guide_wide_setup.php), so other pages never load it.
+//
+// The section drops the guide's 52rem cap and runs the width of the page
+// column. Blocks keep whatever width they set themselves (text stays at the
+// reading width), and a block with no width of its own stays at the old
+// 52rem, so ticking the box never makes prose lines longer. Only the blocks
+// listed below, which are built to use the room, spread out.
+
+.pf-guide.pf-guide--wide {
+  max-width: none;
+}
+
+// Zero specificity: a block's own max-width always wins over this.
+:where(.pf-guide--wide) > * {
+  max-width: 52rem;
+}
+
+.pf-guide--wide > :is(.pf-crosswalk, .pf-parishes) {
+  max-width: none;
+}

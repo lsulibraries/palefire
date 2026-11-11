@@ -7,10 +7,6 @@
 // light ones. Tone is only a visual aid: every line's section is also named
 // in the left column, and the panel and table say everything in words.
 
-.pf-guide > .pf-crosswalk {
-  max-width: 80rem; // As the parish map: the chart needs the room.
-}
-
 .pf-crosswalk {
   container: pf-crosswalk / inline-size;
 
@@ -137,29 +133,19 @@
   font-variant-numeric: tabular-nums;
 }
 
-// Chart and panel: stacked (panel first, so a choice shows right above the
-// chart), side by side once there is room for both. ------------------------
+// Chart and panel: stacked on narrow blocks (panel first, so a choice shows
+// right above the chart, which scrolls in its own box), side by side once
+// there is room for both: then the chart runs its full height with the page
+// and the panel stays in view beside it. A "Wide section" (guide-wide.scss)
+// gives the block that room on most screens. ------------------------------
 .pf-crosswalk__layout {
   display: grid;
   gap: 1.25rem;
   align-items: start;
 }
 
-.pf-crosswalk__panel { order: -1; }
+.pf-crosswalk__panel { order: -1; } // Side by side: see the end of the file.
 
-@container pf-crosswalk (min-width: 62rem) {
-  .pf-crosswalk__layout {
-    grid-template-columns: minmax(0, 1fr) 22rem;
-  }
-
-  .pf-crosswalk__panel {
-    order: 0;
-    position: sticky;
-    top: calc(var(--pf-header-h, 50px) + 1rem);
-    max-height: calc(100vh - var(--pf-header-h, 50px) - 2rem);
-    overflow: auto;
-  }
-}
 
 .pf-crosswalk__chart {
   min-width: 0;
@@ -455,6 +441,26 @@ text.pf-crosswalk__sec {
   font-size: 0.875rem;
 
   > :last-child { margin-bottom: 0; }
+}
+
+// Side by side (after the base rules, so these win).
+@container pf-crosswalk (min-width: 55rem) {
+  .pf-crosswalk__layout {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+  }
+
+  .pf-crosswalk__chart {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .pf-crosswalk__panel {
+    order: 0;
+    position: sticky;
+    top: calc(var(--pf-header-h, 50px) + 1rem);
+    max-height: calc(100vh - var(--pf-header-h, 50px) - 2rem);
+    overflow: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

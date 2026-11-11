@@ -568,11 +568,19 @@
       const k = fromHash();
       if (k !== null && k !== state.inst) { choose(k, false); }
     });
-    let width = $('[data-cw-chart]').clientWidth;
-    window.addEventListener('resize', Drupal.debounce(() => {
-      const w = $('[data-cw-chart]').clientWidth;
-      if (Math.abs(w - width) > 24) { width = w; render(); }
-    }, 200));
+    // Redraw when the chart's own width changes: a window resize, the panel
+    // moving beside it, or the section turning wide.
+    const chart = $('[data-cw-chart]');
+    let width = chart.clientWidth;
+    const redraw = Drupal.debounce(() => {
+      const w = chart.clientWidth;
+      if (Math.abs(w - width) > 4) {
+        width = w;
+        render(); // Keeps the institution, filter and chosen box.
+      }
+    }, 150);
+    if ('ResizeObserver' in window) { new ResizeObserver(redraw).observe(chart); }
+    else { window.addEventListener('resize', redraw); }
 
     render();
   }

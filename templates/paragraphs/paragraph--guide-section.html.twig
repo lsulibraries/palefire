@@ -15,8 +15,15 @@
  * guide_video, exhibit_gallery (an image group, with its own lightbox in a
  * guide). Each prints its heading as an <h3>, which modular-toc.js lists
  * under the section in guide mode.
+ *
+ * Wide section (field_section_wide, palefire_guide_wide_setup.php): adds
+ * .pf-guide--wide and its stylesheet, palefire/guide-wide, only when ticked.
  */
 #}
-<div{{ attributes.addClass('pf-guide') }}>
+{% set wide = paragraph.hasField('field_section_wide') and paragraph.field_section_wide.value %}
+{% if wide %}
+  {{ attach_library('palefire/guide-wide') }}
+{% endif %}
+<div{{ attributes.addClass('pf-guide', wide ? 'pf-guide--wide') }}>
   {{ content.field_guide_blocks }}
 </div>

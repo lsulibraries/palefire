@@ -437,6 +437,14 @@ guide-gallery:
     - core/once
     - palefire/viewer
 
+# Wide guide sections ("Wide section" ticked on a guide section). Attached by
+# paragraph--guide-section.html.twig only then (scss/guide-wide.scss).
+guide-wide:
+  version: 1.0.0
+  css:
+    component:
+      css/guide-wide.css: {}
+
 # Guide: Field crosswalk. Reads the uploaded mapping CSV and draws the chart.
 # Attached by paragraph--guide-crosswalk.html.twig. Styles: its own entry
 # (scss/guide-crosswalk.scss, npm run build), so other pages don't load it.

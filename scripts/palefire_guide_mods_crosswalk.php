@@ -46,6 +46,9 @@
  *                         /v2/special/guides/mods-field-crosswalk).
  *   owner=<First Last>    Staff node to set as the guide owner of a new page.
  *
+ * "The crosswalk" is a Wide section when palefire_guide_wide_setup.php has
+ * run, so the chart and its panel sit side by side.
+ *
  * Text bodies follow the guide-mode rules in palefire_guide_ldl_migration.php:
  * no bullets inside bullets, and every table that isn't a price list has a
  * <thead>. Long bodies are nowdocs, so quotes and brackets are safe.
@@ -191,8 +194,9 @@ if (!in_array($default_institution, $mapping['institutions'], TRUE)) {
 // fingerprint covers exactly what the page will say. ------------------------
 
 $sections = [];
-$section = function (string $heading, array $blocks) use (&$sections): void {
-  $sections[] = ['title' => $heading, 'blocks' => $blocks];
+// $wide: tick "Wide section" (palefire_guide_wide_setup.php) when it exists.
+$section = function (string $heading, array $blocks, bool $wide = FALSE) use (&$sections): void {
+  $sections[] = ['title' => $heading, 'blocks' => $blocks, 'wide' => $wide];
 };
 $text = fn (?string $heading, string $body, string $style = 'default') => [
   'kind' => 'text',
@@ -226,7 +230,7 @@ HTML, 'callout'),
     '',
     "<p>Drawn from the shared master mapping (mapping.xlsx), saved on $built. A row counts when it is marked needed or att_needed, and its institution_list names the institution.</p>",
   ),
-]);
+], TRUE);
 
 $section('How to read the chart', [
   $text(NULL, <<<'HTML'
@@ -336,7 +340,7 @@ else {
   echo "{$prefix}Create '$title' as an unpublished guide page." . PHP_EOL;
 }
 foreach ($sections as $item) {
-  echo "{$prefix}  {$item['title']} (" . count($item['blocks']) . ' blocks)' . PHP_EOL;
+  echo "{$prefix}  {$item['title']} (" . count($item['blocks']) . ' blocks' . ($item['wide'] ? ', wide' : '') . ')' . PHP_EOL;
 }
 if (!$apply) {
   echo 'Dry run: nothing saved. Run again with apply=1 to save.' . PHP_EOL;
@@ -383,6 +387,7 @@ $to_paragraph = function (array $block) use ($html, $keep, $file): Paragraph {
 };
 
 $has_theme = (bool) FieldConfig::loadByName('paragraph', 'guide_section', 'field_section_theme');
+$has_wide = (bool) FieldConfig::loadByName('paragraph', 'guide_section', 'field_section_wide');
 $paragraphs = [];
 foreach ($sections as $item) {
   $values = [
@@ -392,6 +397,9 @@ foreach ($sections as $item) {
   ];
   if ($has_theme) {
     $values['field_section_theme'] = 'light';
+  }
+  if ($has_wide) {
+    $values['field_section_wide'] = $item['wide'] ? 1 : 0;
   }
   $paragraphs[] = ['entity' => Paragraph::create($values)];
 }

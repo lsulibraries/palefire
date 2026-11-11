@@ -1,4 +1,3 @@
-.pf-guide>.pf-crosswalk{max-width:80rem}
 .pf-crosswalk{container:pf-crosswalk/inline-size;--pf-cw-0:color-mix(in srgb, var(--bs-blue) 78%, var(--bs-body-color));--pf-cw-1:color-mix(in srgb, var(--bs-orange) 72%, var(--bs-body-color));--pf-cw-2:color-mix(in srgb, var(--bs-green) 78%, var(--bs-body-color));--pf-cw-3:color-mix(in srgb, var(--bs-purple) 78%, var(--bs-body-color));--pf-cw-4:color-mix(in srgb, var(--bs-yellow) 62%, var(--bs-body-color));--pf-cw-5:color-mix(in srgb, var(--bs-teal) 70%, var(--bs-body-color));--pf-cw-6:color-mix(in srgb, var(--bs-pink) 75%, var(--bs-body-color));--pf-cw-7:var(--pf-guide-muted)}
 .pf-crosswalk [data-tone="0"]{--pf-cw-tone:var(--pf-cw-0)}
 .pf-crosswalk [data-tone="1"]{--pf-cw-tone:var(--pf-cw-1)}
@@ -27,7 +26,6 @@
 .pf-crosswalk__n{color:var(--pf-guide-muted);font-variant-numeric:tabular-nums}
 .pf-crosswalk__layout{display:grid;gap:1.25rem;align-items:start}
 .pf-crosswalk__panel{order:-1}
-@container pf-crosswalk (min-width: 62rem){.pf-crosswalk__layout{grid-template-columns:minmax(0, 1fr) 22rem}.pf-crosswalk__panel{order:0;position:sticky;top:calc(var(--pf-header-h, 50px) + 1rem);max-height:calc(100vh - var(--pf-header-h, 50px) - 2rem);overflow:auto}}
 .pf-crosswalk__chart{min-width:0;max-height:80vh;overflow:auto;background:var(--pf-guide-surface);border:1px solid var(--pf-guide-rule);overscroll-behavior:contain}
 .pf-crosswalk__heads{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;gap:1rem;min-width:45rem;padding:.6rem .75rem;background:var(--pf-guide-surface);border-bottom:1px solid var(--pf-guide-rule)}
 .pf-crosswalk__heads span{font:700 var(--pf-mono-label, 0.75rem)/1.5 var(--pf-guide-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--pf-guide-muted)}
@@ -81,6 +79,7 @@ text.pf-crosswalk__sec{fill:var(--pf-cw-tone, var(--pf-guide-muted));font:700 11
 .pf-crosswalk__td-n{min-width:14rem;font-family:var(--pf-guide-mono);font-size:.75rem}
 .pf-crosswalk__caption{max-width:var(--pf-guide-prose);color:var(--pf-guide-muted);font-size:.875rem}
 .pf-crosswalk__caption>:last-child{margin-bottom:0}
+@container pf-crosswalk (min-width: 55rem){.pf-crosswalk__layout{grid-template-columns:minmax(0, 1fr) 21rem}.pf-crosswalk__chart{max-height:none;overflow-y:visible}.pf-crosswalk__panel{order:0;position:sticky;top:calc(var(--pf-header-h, 50px) + 1rem);max-height:calc(100vh - var(--pf-header-h, 50px) - 2rem);overflow:auto}}
 @media(prefers-reduced-motion: reduce){.pf-crosswalk__line{transition:none}}
 html.pf-a11y-motion .pf-crosswalk__line{transition:none}
 @media(forced-colors: active){.pf-crosswalk__line{stroke:CanvasText}.pf-crosswalk__node rect{fill:Canvas;stroke:CanvasText}.pf-crosswalk__node text{fill:CanvasText}.pf-crosswalk__node.is-picked rect:first-child{stroke:Highlight}}
