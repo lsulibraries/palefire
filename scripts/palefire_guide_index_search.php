@@ -375,6 +375,7 @@ HTML),
 <li>About 130 catalogued oral history interviews had no record on the site, so the search never showed them, including the newer Sicilian-Italian and 272 Slaves (Georgetown) series. A new import adds a record for each from the catalog: its abstract PDF, series, summary and interviewer. The module now keeps the list of series by the folder their abstracts are in.</li>
 <li>Oral History confirmed the names of the seven series added from the catalog. Robert Ray Cox Series now has a capital S, and a new script keeps every record's series in line with the module's list, so a rename is one edit and one command.</li>
 <li>Oral histories became a source of its own beside PDF Finding Aids, which now holds finding aids only. Its Series list shows every series, greying out those with no match, so it reads as the whole collection. Old links to the Oral histories filter still work.</li>
+<li>The Series list is now as wide as its row, so long series names fit, and its border is softer until you point at it or tab to it.</li>
 </ul>
 HTML),
 ]);

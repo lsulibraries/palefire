@@ -863,7 +863,9 @@
     min-width: 0;
     min-height: 2.75rem;
     padding-inline: .625rem;
-    border: 1px solid var(--pf-index-control);
+    // Softer than the checkboxes, still 3:1 or more against the page and its
+    // own fill (WCAG 1.4.11); full strength on hover and focus.
+    border: 1px solid color-mix(in srgb, var(--pf-index-control) 60%, transparent);
     border-radius: 0;
     background-color: var(--pf-g-surface, var(--bs-body-bg));
     color: inherit;
@@ -871,6 +873,16 @@
     font-size: .875rem;
     text-overflow: ellipsis;
     cursor: pointer;
+    transition: border-color .2s ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--pf-index-control);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
 
     &:focus-visible {
       outline: 2px solid var(--pf-index-highlight);
@@ -1092,6 +1104,11 @@
   .pf-index__option--sub {
     flex-basis: 100%;
     padding-inline-end: 3.25rem;
+  }
+
+  // A series list has no count to line up: it runs to the row's end.
+  .pf-index__series {
+    padding-inline-end: 0;
   }
 
   // The row holds the hairline here.
