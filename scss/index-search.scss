@@ -842,10 +842,40 @@
   font-size: .9375rem;
 }
 
-// A series of the choice above it (Oral histories): one step further in.
-.pf-index__group .pf-index__option--series {
+// A series of the choice above it (Oral histories), from a list: in line
+// with that choice's words, the label as the filter titles', and the list the
+// column's width, so a long name is never wrapped in the sidebar.
+.pf-index__group .pf-index__series {
+  display: grid;
+  gap: .375rem;
+  padding-block: .25rem .875rem;
   padding-inline-start: 3.5rem;
-  font-size: .875rem;
+
+  label {
+    @include pf-index-label;
+    color: var(--pf-index-muted);
+    font-size: .6875rem;
+  }
+
+  select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding-inline: .625rem;
+    border: 1px solid var(--pf-index-control);
+    border-radius: 0;
+    background-color: var(--pf-g-surface, var(--bs-body-bg));
+    color: inherit;
+    font: inherit;
+    font-size: .875rem;
+    text-overflow: ellipsis;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-highlight);
+      outline-offset: 2px;
+    }
+  }
 }
 
 .pf-index__option {

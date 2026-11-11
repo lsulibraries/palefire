@@ -371,6 +371,7 @@ HTML),
 <li>Oral histories show their series under what they're about, as a link to the same search within that series. Choosing Oral histories in the Source filter now lists its series under it, with how many match, so you can narrow to one or more. Series come from each record's Series field.</li>
 <li>The search index held 41,676 items, mostly archive records the search never shows, such as Breaux Data. A new setting in the index leaves them out, keeping only finding aids and oral histories, so reindexing is much quicker.</li>
 <li>What are these? now opens inside the Source filter and pushes the sources down, so the descriptions no longer cover the checkboxes they describe. Search tips lines up with the right edge of the page, puts each example on its own line beside what it does, fits the screen without a scroll box of its own on most screens, and has a Close button.</li>
+<li>The oral history series are now one dropdown under Oral histories (All series, then each with its count) instead of a long list of checkboxes whose names wrapped in the sidebar. Choosing one updates the results straight away.</li>
 </ul>
 HTML),
 ]);

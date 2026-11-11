@@ -1008,7 +1008,7 @@
       const control = event.target;
       const isSort = control.matches('select[form="pf-index-filter-form"]');
       const isYear = control.matches('[data-pf-index-year]');
-      const isFilter = wide.matches && (control.matches('[data-pf-index-form] input:is([type="checkbox"], [type="radio"])') || isYear);
+      const isFilter = wide.matches && (control.matches('[data-pf-index-form] :is(input[type="checkbox"], input[type="radio"], select)') || isYear);
       // A wrong year stays put and says why, rather than running a search.
       if (isFilter && isYear && !control.reportValidity()) {
         return;
