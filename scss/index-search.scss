@@ -842,14 +842,15 @@
   font-size: .9375rem;
 }
 
-// A series of the choice above it (Oral histories), from a list: in line
-// with that choice's words, the label as the filter titles', and the list the
-// column's width, so a long name is never wrapped in the sidebar.
+// A series of the source above it (Oral histories), from a list: in line
+// with that source's words, the label as the filter titles', and the list the
+// column's width, so a long name is never wrapped in the sidebar. Series with
+// no match are listed, disabled, so the list stays the same between searches.
 .pf-index__group .pf-index__series {
   display: grid;
   gap: .375rem;
   padding-block: .25rem .875rem;
-  padding-inline-start: 3.5rem;
+  padding-inline-start: 1.75rem;
 
   label {
     @include pf-index-label;

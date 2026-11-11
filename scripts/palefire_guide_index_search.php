@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Tue 10 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first.</p>
+<p><strong>Status as of Wed 11 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first. Oral histories is a source of its own beside PDF Finding Aids, with a list of every series under it.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -180,8 +180,8 @@ $section('What it searches', [
 <thead><tr><th scope="col">Mode</th><th scope="col">Sources</th><th scope="col">Shown as</th></tr></thead>
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
-<tr><td>Research</td><td>Catalog, Discovery, Journals, Databases, E-Textbooks, Research Guides, PDF Finding Aids, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
-<tr><td>Special Collections</td><td>Catalog, set to Special Collections, then PDF Finding Aids</td><td>The Catalog above one ranked list with filters</td></tr>
+<tr><td>Research</td><td>Catalog, Discovery, Journals, Databases, E-Textbooks, Research Guides, PDF Finding Aids, Oral histories, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
+<tr><td>Special Collections</td><td>Catalog, set to Special Collections, then PDF Finding Aids and Oral histories</td><td>The Catalog above one ranked list with filters</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
 </tbody>
 </table>
@@ -374,6 +374,7 @@ HTML),
 <li>The oral history series are now one dropdown under Oral histories (All series, then each with its count) instead of a long list of checkboxes whose names wrapped in the sidebar. Choosing one updates the results straight away.</li>
 <li>About 130 catalogued oral history interviews had no record on the site, so the search never showed them, including the newer Sicilian-Italian and 272 Slaves (Georgetown) series. A new import adds a record for each from the catalog: its abstract PDF, series, summary and interviewer. The module now keeps the list of series by the folder their abstracts are in.</li>
 <li>Oral History confirmed the names of the seven series added from the catalog. Robert Ray Cox Series now has a capital S, and a new script keeps every record's series in line with the module's list, so a rename is one edit and one command.</li>
+<li>Oral histories became a source of its own beside PDF Finding Aids, which now holds finding aids only. Its Series list shows every series, greying out those with no match, so it reads as the whole collection. Old links to the Oral histories filter still work.</li>
 </ul>
 HTML),
 ]);
