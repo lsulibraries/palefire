@@ -1083,6 +1083,7 @@ $section('Exporter changes this phase', [
 <tr><td>v2.38</td><td>Nov 11, 10:20</td><td><strong>Two last image fixes.</strong> A checksum recorded from an empty file is ignored when Fedora says the file has content: one Amistad recording failed its check only because of that. And a page whose JP2 in Fedora is really a TIFF is now converted, as with one Historic New Orleans photograph.</td></tr>
 <tr><td>v2.39</td><td>Nov 11, 10:45</td><td><strong>Hicks' empty image follows Fedora.</strong> <code>hicks-hon:44</code> is empty in Fedora, with no JP2, while the spreadsheet lists it as an image. As the team decided, it's recorded as empty in Fedora and documented, and isn't asked for again.</td></tr>
 <tr><td>v2.40</td><td>Nov 11, 11:05</td><td><strong>4 newspaper pages are converted from their TIFFs.</strong> Their JP2s download and decode fine, but the network drive doesn't store them correctly: every time the exporter saved one it failed partway with a write error, and copies from Explorer arrived the right size but filled mostly with zeros. All 4 are CMYK TIFFs, so the lossless JP2 built from each TIFF, in sRGB, is used instead, as for the other newspaper pages converted on Nov 10.</td></tr>
+<tr><td>v2.41</td><td>Nov 11, 12:10</td><td><strong>The last 14 files follow Fedora.</strong> 7 Historic New Orleans images, 5 PDFs and 2 collection records are 0 bytes in Fedora itself. As with Hicks, they're recorded as empty in Fedora and documented, so nothing is left to download.</td></tr>
 </tbody>
 </table>
 HTML),
