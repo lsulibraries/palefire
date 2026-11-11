@@ -171,16 +171,17 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Tue 10 Nov 2026, 16:04 (CST):</strong> Nearly everything is on L:: only 31 small files are left to download. Loyola finished this afternoon with its 228 refused files from Fedora, and so did the State Archives files the website kept refusing. Louisiana Newspapers' TIFFs with no JP2 are converting, with 1,515 left. Through the SSH tunnel they managed only about 50 an hour. Since 3:23 PM (v2.36) they come through the website, at about 80 an hour so far, which would finish around mid-morning on Nov 11. UNO's JPEG replacements have 651 left. The short list of duplicates is waiting for approval.</p>
+<p><strong>Status as of Wed 11 Nov 2026, 08:46 (CST):</strong> Nearly everything is on L:: only 30 small files are left to download, at six institutions. All of Louisiana Newspapers' TIFFs with no JP2 were converted by 8:15 PM on Nov 10, with none failing, and UNO's 2,021 JPEG replacements finished at 4:36 PM. This morning State Archives' two Board of Health images were converted and the empty Amistad recording was set aside. What's left is a short list of files to review by hand. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
-    ['99%', 'downloaded, by data size: 3.19 TB on L:, less than 0.1 GB left', 99],
+    ['99%', 'downloaded, by data size: 3.22 TB on L:, less than 0.1 GB left', 99],
     ['99%', 'downloaded, by number of files', 99],
-    ['32 of 39', 'institutions with nothing left to download, as of Nov 10, 16:04', 82],
-  ], 'What\'s left is 31 small files at seven institutions that need another try or a review. Converting TIFFs to JP2 doesn\'t change these figures, and uploading to Quartex isn\'t counted. As of Nov 10, 16:04.'),
+    ['33 of 39', 'institutions with nothing left to download, as of Nov 11, 08:46', 85],
+  ], 'What\'s left is 30 small files at six institutions that need another try or a review. Converting TIFFs to JP2 doesn\'t change these figures, and uploading to Quartex isn\'t counted. As of Nov 11, 08:46.'),
   $text('Recent progress', <<<'HTML'
 <ul>
-<li><strong>Nov 10:</strong> Loyola's 228 refused files came from Fedora, and Loyola is finished downloading. UNO's JPEG replacements are about two-thirds done, and TIFF conversions now come through the website.</li>
+<li><strong>Nov 10 to 11:</strong> All of Louisiana Newspapers' 1,854 TIFFs with no JP2 were converted by 8:15 PM on Nov 10, with none failing. UNO's 2,021 JPEG replacements finished, State Archives' two Board of Health images were converted, and the empty Amistad recording was set aside.</li>
+<li><strong>Nov 10:</strong> Loyola's 228 refused files came from Fedora, and Loyola is finished downloading.</li>
 <li><strong>Overnight, Nov 9 to 10:</strong> every download the website will serve finished: Louisiana Newspapers' text files and PDFs (about 150 GB) and all of Loyola (about 205 GB). Loyola's images came down at about 25 MB/s.</li>
 <li><strong>Weekend, Nov 7 to 8:</strong> Louisiana Newspapers downloaded about 550 GB at a steady 3 MB/s with no stalls. On Nov 6, the files the website wouldn't serve were all downloaded straight from Fedora instead.</li>
 <li><strong>Overnight, Nov 5 to 6:</strong> the 14 small institutions, Law Library and Historic New Orleans finished downloading.</li>
@@ -192,19 +193,19 @@ HTML, 'callout'),
 <li><strong>Overnight:</strong> 17,248 more wrong-format images replaced at four institutions. The last first audits found 8,312 more, queued to be replaced.</li>
 </ul>
 HTML),
-  $text('Progress by institution (Nov 10, 16:04)', <<<'HTML'
+  $text('Progress by institution (Nov 11, 08:46)', <<<'HTML'
 <p><strong>The two Downloaded columns count files on L: only,</strong> not whether they passed their checks. Images audited shows how far the checks have got. Replacements, review and manifests aren't included in any column.</p>
 <p>Sorted with the least finished first. There are two percentages because they tell different stories: by size is mostly images, and by files counts every file. An institution with a low size figure and a higher files figure has much of its metadata on L:, but few of its images.</p>
 <table>
 <thead><tr><th scope="col">Institution</th><th scope="col">Downloaded by size</th><th scope="col">Downloaded by files</th><th scope="col">Images audited</th><th scope="col">GB left</th><th scope="col">Files left</th><th scope="col">Status</th></tr></thead>
 <tbody>
 <tr><td>LDL Training</td><td>99%</td><td>83%</td><td>0%</td><td>0</td><td>9</td><td>In progress</td></tr>
-<tr><td>Amistad Research Center</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>1</td><td>In progress</td></tr>
 <tr><td>Law Library of Louisiana</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>2</td><td>In progress</td></tr>
-<tr><td>Louisiana Newspapers</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>10</td><td>In progress</td></tr>
+<tr><td>Louisiana Newspapers</td><td>99%</td><td>99%</td><td>99%</td><td>0</td><td>10</td><td>In progress</td></tr>
 <tr><td>Louisiana State Archives</td><td>99%</td><td>99%</td><td>97%</td><td>0</td><td>1</td><td>In progress</td></tr>
 <tr><td>The Historic New Orleans Collection</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>7</td><td>In progress</td></tr>
 <tr><td>Webster Parish Library</td><td>99%</td><td>99%</td><td>100%</td><td>0</td><td>1</td><td>In progress</td></tr>
+<tr><td>Amistad Research Center</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Ascension Parish Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Calcasieu Parish Public Library</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Centenary Placeholder Collection</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
@@ -234,7 +235,7 @@ HTML),
 <tr><td>The Robert Bob Hicks Foundation</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>University of Louisiana Lafayette</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>University of Louisiana Monroe</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
-<tr><td>University of New Orleans</td><td>100%</td><td>100%</td><td>99%</td><td>0</td><td>0</td><td>In audit</td></tr>
+<tr><td>University of New Orleans</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>Vermilionville Living History Museum and Folklife Park</td><td>100%</td><td>100%</td><td>100%</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>West Feliciana Parish Library</td><td>100%</td><td>100%</td><td>—</td><td>0</td><td>0</td><td>Done</td></tr>
 <tr><td>East Baton Rouge Parish Library</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Excluded: not migrating</td></tr>
@@ -243,14 +244,14 @@ HTML),
 </tbody>
 </table>
 <ul>
-<li><strong>Loyola's and Louisiana Newspapers' images are on L:,</strong> apart from 6 newspaper images and 4 PDFs that keep failing or need review. Louisiana Newspapers is still converting 1,515 TIFFs to JP2.</li>
+<li><strong>Loyola's and Louisiana Newspapers' images are on L:,</strong> apart from 6 newspaper images and 4 PDFs that keep failing or need review. Its TIFFs with no JP2 were all converted by 8:15 PM on Nov 10.</li>
 <li><strong>In audit means nothing is left to download, but some images have no check on record yet:</strong> 1 of 38,361 at LSUHSC New Orleans.</li>
 <li><strong>LSUHSC Shreveport is Done with Images audited at 79%.</strong> 589 Newspaper Clippings PDFs can't get a checksum check: Fedora has checksums turned off for them, and there's no FITS or S3 hash either, so no audit can finish them. All 589 match Fedora's size and have a PDF start and end marker, so they look complete, but that isn't proof their contents are unchanged.</li>
-<li><strong>One Amistad recording is empty in Fedora itself:</strong> <code>amistad-ay:148</code>, "Andrew Young's inserts for manuscript, 1984 August 6, Part 2", original file <code>Dent.Young_8.6.1984_Item_5-02.wav</code>. Fedora returns 0 bytes and has only one version. Its technical record from ingest (Nov 11, 2024) already says size 0, so it was empty when it arrived. Its S3 record lists no datastreams, and the 521-byte MP3 looks like it was made from the empty file. Downloading again can't fix it, and the only likely source is Amistad's own copy. It's being set aside in <code>L:\LDL1-datastreams\_empty_other\</code>, outside the export, and nothing is deleted.</li>
+<li><strong>One Amistad recording is empty in Fedora itself:</strong> <code>amistad-ay:148</code>, "Andrew Young's inserts for manuscript, 1984 August 6, Part 2", original file <code>Dent.Young_8.6.1984_Item_5-02.wav</code>. Fedora returns 0 bytes and has only one version. Its technical record from ingest (Nov 11, 2024) already says size 0, so it was empty when it arrived. Its S3 record lists no datastreams, and the 521-byte MP3 looks like it was made from the empty file. Downloading again can't fix it, and the only likely source is Amistad's own copy. It was set aside in <code>L:\LDL1-datastreams\_empty_other\</code> on Nov 11, outside the export, and nothing is deleted.</li>
 <li><strong>Done means nothing is left to download and every image has a check on record, not that the institution is finished.</strong> Review, replacements and manifests come afterward, and are still to do for 18 institutions. Anything with files left shows 99% at most.</li>
 <li><strong>New downloads are checked as they arrive:</strong> size, plus a checksum or a full JP2 decode where one is possible. Text and metadata files have no checksum, so they only get a size check.</li>
 <li><strong>Images from earlier exports are checked by the audit.</strong> The first audits are finished, but an image that failed still counts as on L: until it's replaced, including those still in the queue.</li>
-<li><strong>Images audited (Nov 10, 16:04):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
+<li><strong>Images audited (Nov 11, 08:46):</strong> the share of each institution's main files, on L: or still to download, with a checksum or JP2 decode check on record. It includes checks made as files download. It also counts images that failed, so 100% doesn't mean they all passed. Text and metadata files aren't counted.</li>
 <li><strong>Empty text files aren't exported.</strong> Some pages and scanned PDFs have OCR or FULL_TEXT with nothing in it. The exporter no longer saves those, and they count as done. The 2,064 already on L: moved to <code>L:\LDL1-datastreams\_empty_text\</code>, outside the export, on Nov 5, and nothing was deleted. Manifests at the six institutions were rebuilt without them. Another 1,635 found empty since then were never saved. Files left with no size on record may turn out empty too.</li>
 <li><strong>This replaces the earlier "about 70% of 5.7 TB".</strong> The new figure compares what's on L: with what's left to export, about 3.18 TB in all. The 5.7 TB is everything in Fedora. The 2.52 TB difference hasn't been fully traced. TIFF masters exported as smaller JP2s are likely a large part of it.</li>
 </ul>
@@ -258,9 +259,9 @@ HTML),
   $status('Where each stage stands', [
     ['attention', 'Short list of duplicates', '533 decisions are waiting for approval, starting with the two leave-out batches (87 decisions, 7,297 objects). Loyola\'s download is queued ahead of these decisions, so any of its duplicate books marked to leave out will need to be moved off L: by hand.'],
     ['done', 'Files the website refuses', 'The exporter normally downloads through the LDL website. For some files the website answers 403 (access denied), usually because the item is restricted on the site. Nothing is lost: those files are downloaded straight from Fedora, the repository behind the website, over a secure connection to the server (an SSH tunnel). They\'re the same files and get the same checks. 4,197 main files and 822 text files were refused, and all of them came from Fedora on Nov 6: University of New Orleans 4,027 and 252 (its other 476 text files were empty, so they aren\'t exported), Historic New Orleans 76, TAHIL 51 and 51, and LSU Shreveport 43 and 43. Loyola\'s download on Nov 9 to 10 was refused 228 main files and 6 text files, about 28 GB, nearly all videos: 172 Fichter tapes and 49 Department of Dance recordings. All of them came from Fedora on Nov 10, between 9:27 AM and 2:45 PM.'],
-    ['running', 'Remaining downloads', '31 small files as of Nov 10, 16:04, at seven institutions: Louisiana Newspapers 10, LDL Training 9, Historic New Orleans 7, Law Library 2, and Amistad, State Archives and Webster 1 each. They need another try or a review. State Archives\' Festival Oral Histories, which the website had failed on since Nov 6, all came from Fedora on Nov 10.'],
-    ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. UNO\'s 2,021 JPEGs labelled as JP2 are being replaced from Fedora, with 651 left as of 4:04 PM on Nov 10, and Loyola\'s 15 were replaced that morning. State Archives\' two Board of Health images have an empty JP2 in Fedora, so they need converting from their TIFFs. Louisiana Newspapers\' 128 images that hit network errors all went through. 4 of its images fail with a write error on L: every time they\'re tried, and 2 have an empty JP2 in Fedora: these 6 are to review. Still to sort out: State Archives 4 network errors and 2 TIFFs, Historic New Orleans 7 to review and 1 TIFF, Law Library 1 to review, and Ascension 1, Hicks 1 and Amistad 1.'],
-    ['running', 'TIFFs with no usable JP2', 'Louisiana Newspapers has 1,515 left as of 4:04 PM on Nov 10. 314 were converted on Nov 10 from 8:56 AM to 3:20 PM, about 50 an hour, because each TIFF came through the SSH tunnel, which was shared with the Loyola and UNO runs. Since 3:23 PM (v2.36) the TIFFs come through the website, which sent a 129 MB page in 7 seconds. Its first 20 minutes ran at about 80 an hour, which would finish around mid-morning on Nov 11. State Archives\' two Board of Health images, whose JP2 in Fedora is empty, follow.'],
+    ['running', 'Remaining downloads', '30 small files as of Nov 11, 08:46, at six institutions: Louisiana Newspapers 10, LDL Training 9, Historic New Orleans 7, Law Library 2, and State Archives and Webster 1 each. They need another try or a review. State Archives\' Festival Oral Histories, which the website had failed on since Nov 6, all came from Fedora on Nov 10.'],
+    ['running', 'Queued image replacements', 'Nearly all of the 8,313 are done. UNO\'s 2,021 JPEGs labelled as JP2 were all replaced from Fedora by 4:36 PM on Nov 10, and Loyola\'s 15 that morning. State Archives\' two Board of Health images, whose JP2 in Fedora is empty, were converted from their TIFFs on Nov 11. Louisiana Newspapers\' 128 images that hit network errors all went through. 4 of its images fail with a write error on L: every time they\'re tried, and 2 have an empty JP2 in Fedora: these 6 are to review. Still to sort out: Historic New Orleans 7 to review and 1 TIFF, Law Library 1 to review, and Ascension 1, Hicks 1 and Amistad 1.'],
+    ['done', 'TIFFs with no usable JP2', 'All of Louisiana Newspapers\' were converted on Nov 10, 1,854 in all, with none failing. The first 314, from 8:56 AM to 3:20 PM, came through the SSH tunnel at about 50 an hour, because the tunnel was shared with the Loyola and UNO runs. From 3:23 PM (v2.36) the other 1,540 came through the website, apart from 29 that came from Fedora after a website download broke partway, and they finished at 8:15 PM. Once UNO\'s run had finished at 4:36 PM, about 480 were converted an hour, 3 at a time. State Archives\' two Board of Health images, whose JP2 in Fedora is empty, were converted on Nov 11. None are waiting now.'],
     ['todo', 'State Museum images marked Unavailable', '2,230 images, not yet looked into.'],
     ['todo', 'The other 18 institutions: review, replacements, manifests', 'The same pattern as the finished institutions, once their downloads are done.'],
     ['todo', 'Cleanup before handoff', 'The cleanup list is done by hand once the runs touching those files are finished. Manifests are then copied into the handoff package.'],
@@ -295,7 +296,7 @@ HTML),
     ['Sun Nov 8', 74.1, 83.1],
     ['Mon Nov 9', 83.1, 97.3],
     ['Tue Nov 10, so far', 97.3, 99.9],
-  ], 'Each bar is the whole LDL by size, about 3.18 TB: the 3.19 TB on L: plus less than 0.1 GB still to download. The pale part is what was already on L: when the day began, and the gold part is what that day added. Before Oct 29 is everything exported before this exporter\'s runs. Only new files count: replacements and TIFF-to-JP2 conversions don\'t add to the total, and days with no new downloads are left out. As of Nov 10, 16:04.'),
+  ], 'Each bar is the whole LDL by size, about 3.22 TB: the 3.22 TB on L: plus less than 0.1 GB still to download. The pale part is what was already on L: when the day began, and the gold part is what that day added. Before Oct 29 is everything exported before this exporter\'s runs. Only new files count: replacements and TIFF-to-JP2 conversions don\'t add to the total, and days with no new downloads are left out. As of Nov 11, 08:46.'),
   $text('Wed Oct 28: Getting the exporter ready', <<<'HTML'
 <ul>
 <li>Downloads are now checked against the checksums Fedora already stores.</li>
@@ -404,8 +405,16 @@ HTML),
 <li>UNO's 2,021 JPEG replacements started from Fedora at 2:45 PM, with 1,135 left by 3:29 PM.</li>
 <li>The conversions ran at only about 50 an hour: 314 by 3:20 PM. Every TIFF came through the SSH tunnel, which carries about 2 MB/s in all and was shared with the Loyola and UNO runs. The website sent one 129 MB TIFF in 7 seconds, so v2.36 fetches TIFFs through the website, with Fedora as the fallback. The conversions restarted on it at 3:23 PM.</li>
 <li>State Archives' Festival Oral Histories, which the website had failed on since Nov 6, all came from Fedora in about 15 minutes: 4 recordings, 2 text files, 6 MODS and 6 RDF. Two Board of Health images there turned out to have an empty JP2 in Fedora, so they need converting from their TIFFs.</li>
-<li>On the website route, conversions ran at about 80 an hour in their first 20 minutes. A few TIFFs whose website download broke partway came from Fedora instead, as v2.36 intends.</li>
 <li>At 4:04 PM, 31 small files were left to download, and 32 of 39 institutions had nothing left.</li>
+<li>UNO's 2,021 JPEG replacements finished at 4:36 PM.</li>
+<li>On the website route, the conversions sped up to about 480 an hour once the UNO run had finished. All 1,540 were done by 8:15 PM with none failing, and the audit and manifests that followed finished at 8:20 PM. 29 TIFFs whose website download broke partway came from Fedora instead, as v2.36 intends.</li>
+</ul>
+HTML),
+  $text('Wed Nov 11: Last conversions, and the empty recording set aside', <<<'HTML'
+<ul>
+<li>At 8:32 AM, State Archives' two Board of Health images (<code>lsa-lastateboardofhealth:407</code> and <code>412</code>), whose JP2 in Fedora is empty, were converted from their TIFFs in under 2 minutes. State Archives' audit and manifests were rerun.</li>
+<li>At the same time, the empty Amistad recording (<code>amistad-ay:148</code>) was moved to <code>L:\LDL1-datastreams\_empty_other\</code>, outside the export, and Amistad's manifests were rebuilt. Amistad has nothing left to download.</li>
+<li>At 8:46 AM, 30 small files were left to download, and 33 of 39 institutions had nothing left.</li>
 </ul>
 HTML),
 ]);
@@ -770,11 +779,11 @@ $section('Remaining institutions', [
 <li>Smaller relation differences: Loyola 12, Delgado 10, Robert Bob Hicks Foundation 7, Law Library 5.</li>
 </ul>
 HTML),
-  $text('Downloads left (Nov 10, 16:04)', <<<'HTML'
+  $text('Downloads left (Nov 11, 08:46)', <<<'HTML'
 <ul>
-<li><strong>31 files left to download, less than 0.1 GB.</strong> OBJ 15, PDF-TRANSCRIPT 8, PDF 5, MODS 2, FULL_TEXT 1.</li>
+<li><strong>30 files left to download, less than 0.1 GB.</strong> OBJ 14, PDF-TRANSCRIPT 8, PDF 5, MODS 2, FULL_TEXT 1.</li>
 <li><strong>Loyola is finished:</strong> its 228 main files and 6 text files that the website refuses (28.2 GB) came from Fedora on Nov 10.</li>
-<li><strong>The 31 are at seven institutions:</strong> Louisiana Newspapers 10, LDL Training 9, Historic New Orleans 7, Law Library 2, and Amistad, State Archives and Webster 1 each. They need another try or a review. The progress table under Status at a glance has each institution.</li>
+<li><strong>The 30 are at six institutions:</strong> Louisiana Newspapers 10, LDL Training 9, Historic New Orleans 7, Law Library 2, and State Archives and Webster 1 each. They need another try or a review. The progress table under Status at a glance has each institution.</li>
 <li><strong>As of Nov 4, 2,002 TIFF images had no JP2 in Fedora</strong> (Louisiana Newspapers 1,998, Law Library 3, Hicks Foundation 1). They need derivatives generated before they can go to Quartex.</li>
 <li><strong>As of Nov 4, 69,597 images already on L: hadn't been audited,</strong> so they may include TIFFs or JPEGs saved as .jp2.</li>
 </ul>
@@ -975,7 +984,7 @@ HTML),
 <li>Speed varies a lot. Early on Nov 6, Historic New Orleans images came down at about 27.6 MB/s, while Law Library averaged 4.6 MB/s overnight with smaller files, many needing a full decode check. Why the speed changes isn't known yet.</li>
 <li>Over the weekend of Nov 7 to 8, Louisiana Newspapers held a steady 3 MB/s, with the exporter setting the number of workers by itself, between 2 and 8.</li>
 <li>On the night of Nov 9, Louisiana Newspapers' text files and PDFs averaged about 8 MB/s, and Loyola's images about 25 MB/s, close to Historic New Orleans' 27.6 MB/s on Nov 6. Conversions fetching through the tunnel were limited by the speed of a single connection, which is why v2.34 runs three at once.</li>
-<li>The SSH tunnel to Fedora carries only about 2 MB/s in all, shared by everything using it. On Nov 10 the website sent a 129 MB TIFF at 18.5 MB/s, so since v2.36 conversions fetch through the website, and the tunnel is kept for files the website refuses. Conversions went from about 50 an hour to about 80 an hour in their first 20 minutes on the website route.</li>
+<li>The SSH tunnel to Fedora carries only about 2 MB/s in all, shared by everything using it. On Nov 10 the website sent a 129 MB TIFF at 18.5 MB/s, so since v2.36 conversions fetch through the website, and the tunnel is kept for files the website refuses. Conversions went from about 50 an hour through the tunnel to about 480 an hour through the website, once the other runs had finished.</li>
 </ul>
 HTML),
 ]);
@@ -1046,11 +1055,13 @@ HTML),
   $text('Done Nov 9 to 10', <<<'HTML'
 <p>Louisiana Newspapers' downloads and all of Loyola's, including its 228 refused files from Fedora on Nov 10.</p>
 HTML),
+  $text('Done Nov 10 to 11', <<<'HTML'
+<p>Louisiana Newspapers' 1,854 TIFF conversions, UNO's 2,021 JPEG replacements, State Archives' two Board of Health conversions, and the empty Amistad recording set aside.</p>
+HTML),
   $text('Next', <<<'HTML'
 <ul>
-<li>Finish converting Louisiana Newspapers' 1,515 TIFFs (through the website since 3:23 PM on Nov 10) and UNO's JPEG replacements, then convert State Archives' two Board of Health images. Look into the 4 newspaper images that fail with a write error and the 2 with an empty JP2. Look into Amistad's one checksum failure, the 8 images to review at Historic New Orleans and Law Library, and the State Museum's 2,230 Unavailable.</li>
-<li>Run <code>0-empty-move</code> to set the empty Amistad recording aside, then rerun <code>6-manifests</code> for Amistad.</li>
-<li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up. Louisiana Newspapers' 1,515 are being converted now, and State Archives' 2 Board of Health images follow.</li>
+<li>Look into the 4 newspaper images that fail with a write error and the 2 with an empty JP2. Look into Amistad's one checksum failure, the 8 images to review at Historic New Orleans and Law Library, and the State Museum's 2,230 Unavailable.</li>
+<li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up. None are waiting as of Nov 11.</li>
 <li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
 <li>Loyola's download finished at 1:43 AM on Nov 10, ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
 <li>Get the short list in <code>triage.csv</code> approved, then run <code>0-leave-out</code>, and move any Loyola books marked to leave out off L: by hand.</li>
