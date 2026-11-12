@@ -138,6 +138,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Spacers, rhythm | Bootstrap `$spacers` | ▣ Spacing |
 | Hairline, control border, focus ring | `_base.scss`, `_variables.scss` | ▣ Lines |
 | Motion tokens | `_variables.scss` | ▣ Motion |
+| Favicon, home-screen icons | `images/favicon/`, `html.html.twig` (core favicon off in `palefire.info.yml`) | – |
 | Steps (a short how-to in order: numbers and two-line names across from md, a rail of diamonds below; sub-steps with duotone icons; one step alone heads a row of sub-steps) | `includes/steps.html.twig`, `_steps.scss`; `_palefire_steps_items()` reads `<li><strong>Name</strong> note</li>`, sub-steps a nested `<ol>`, `[icon:name]` | ▣ Steps; Reserve's How to book |
 | Buttons (primary, secondary, arrow) and text links | `_buttons.scss` (`%pf-button-primary`, `%pf-button-secondary`, `%pf-button-arrow`; `.pf-button--*` for markup of its own), `.pf-index-rule__link` | ▣ Buttons and links |
 | Object label (a museum tombstone: maker and dates, title, date, medium, size; a hairline, credit line and call number with View record ↗; compact for cards) | `includes/object-label.html.twig`, `_object-label.scss` | ▣ Object labels; on the stage's lead picture |
@@ -169,6 +170,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-12:** Favicons: official LSU letters, `#461d7c` on light tabs and `#fdd023` (LSU gold, as the dark header's logo hover) on dark tabs via `prefers-color-scheme` inside `favicon.svg`. Home-screen tiles: white letters at 56% of the width on `#461d7c`, inside the maskable safe zone. Letters are never stretched or redrawn; they come from `logo.svg`.
 - **2026-11-12:** Ask: `.pf-inquiry__sheet` is gone (with `--pf-inquiry-sheet-bg`, `--pf-inquiry-inset`, `--pf-inquiry-gap`, `--pf-inquiry-key-r`). `.pf-inquiry__slip` (container `pf-inquiry-form`, 3px accent top rule, `--pf-inquiry-rule` = `$pf-hairline`, full `--pf-section-border` in high contrast, CanvasText in forced colors). `.pf-inquiry__slip-head`: flex, wrap, 1rem padding, bottom rule; `.pf-inquiry__slip-title` in `--pf-inquiry-question` at 500; `.pf-inquiry__stamp` mono label, muted, .12em, its `time[data-pf-today]` nowrap and hidden while empty. `.pf-inquiry__form` has no gap and a left rule; `.pf-inquiry__field` (padding .875rem 1rem 1rem, gap .25rem) and `.pf-inquiry__required` (flex, space-between, padding .875rem 1rem) draw right and bottom rules. `.pf-inquiry__key` is square, `space-between`, 1rem inline padding. `.pf-inquiry__status` sits on the key (`bottom: var(--pf-inquiry-key-h)`), square, padding 1.375rem 1.25rem. `.pf-inquiry__intro` only shows without the form.
 - **2026-11-12:** Color gallery: rationale for the palette (coordinated design package under PS-10 Addendum A; chosen for long, seated reading; soft contrast, dark default, reader's choice, color kept for meaning) and an editors' note on the campaign palette. New "Why these colors" section above.
 

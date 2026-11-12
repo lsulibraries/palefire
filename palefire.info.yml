@@ -8,6 +8,15 @@ version: 1.0.0
 logo: logo.svg
 screenshot: screenshot.png
 
+# Every core theme feature except favicon. The theme prints its own icon
+# set (images/favicon, html.html.twig), so core's single uploaded favicon
+# and its Appearance setting are turned off.
+features:
+  - logo
+  - node_user_picture
+  - comment_user_picture
+  - comment_user_verification
+
 # Global assets. core/normalize is intentionally omitted: Bootstrap Reboot
 # (compiled into css/style.css) already normalizes browser defaults.
 libraries:

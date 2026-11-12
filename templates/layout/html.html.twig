@@ -46,6 +46,23 @@
     <title>{{ head_title|safe_join(' | ') }}</title>
     <meta name="theme-color" content="#461d7c">
     {#
+      Favicons: the official LSU letters (images/favicon). Core's uploaded
+      favicon is switched off (features in palefire.info.yml), so these are
+      the only icons printed.
+      - favicon.svg: purple LSU, LSU gold when the browser is in dark mode
+        (a media query inside the SVG). Chrome, Edge, Firefox.
+      - favicon.ico (16 + 32): Safari and older browsers, link previews.
+      - apple-touch-icon.png (180) and site.webmanifest (192/512, maskable):
+        home screens. White letters on a purple tile.
+      The ICO is listed first with sizes="32x32" so browsers that understand
+      SVG prefer it, per the usual pattern.
+    #}
+    {% set pf_icons = base_path ~ directory ~ '/images/favicon/' %}
+    <link rel="icon" href="{{ pf_icons }}favicon.ico" sizes="32x32">
+    <link rel="icon" href="{{ pf_icons }}favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ pf_icons }}apple-touch-icon.png">
+    <link rel="manifest" href="{{ pf_icons }}site.webmanifest">
+    {#
       Google Fonts: Roboto (body and menus) and Handjet (the Hours drawer
       clock). Loaded without blocking the first paint (preload, then
       rel=stylesheet on load). The browser only downloads a font file when
