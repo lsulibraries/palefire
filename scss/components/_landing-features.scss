@@ -4496,8 +4496,12 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 @media (min-height: 48rem) {
   @container pf-cover (min-width: 44rem) {
     // More room under the search for the cue, taken from the space over the type.
+    // The gap keeps the label clear of the search (2.5rem, so it doesn't read as
+    // part of the field); the room grows by the same 1.25rem so the line keeps
+    // its length.
     #{$pf-stage} {
-      --pf-hero-cue-room: clamp(4.5rem, 11svh, 7rem);
+      --pf-hero-cue-room: clamp(5.75rem, calc(11svh + 1.25rem), 8.25rem);
+      --pf-hero-cue-gap: 2.5rem;
     }
 
     // Held from the first paint, not from when the script shows the cue, so nothing
@@ -4519,7 +4523,7 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
       justify-self: center;
       gap: .5rem;
       width: 6rem;
-      height: calc(var(--pf-hero-cue-room) - 1.25rem);
+      height: calc(var(--pf-hero-cue-room) - var(--pf-hero-cue-gap));
       margin: 0 calc(var(--pf-split-film) + 2 * var(--pf-grid-gutter)) 0 var(--pf-cover-gutter);
       padding: 0;
       border: 0;

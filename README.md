@@ -1231,6 +1231,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-12:** Hero Scroll cue (landing stage only): its label now starts 2.5rem under the search, up from 1.25rem (`--pf-hero-cue-gap`), and `--pf-hero-cue-room` grows by the same 1.25rem (`clamp(5.75rem, 11svh + 1.25rem, 8.25rem)`) so the line keeps its length. Why: with the field's new bottom rule, the cue sat close enough to read as part of the search. The exhibition title page's cue is unchanged.
 - **2026-11-12:** /v2/special hero search: a rule under the field (`border-bottom-color` at the 65% control border in `_landing-features.scss`), other sides clear; the gold frame and ring on focus are unchanged. Why: with no frame the field floated loose; a shadow was considered but barely reads on the dark themes and isn't Swiss. The rule anchors it and measures 4.4:1 against the page on Twilight (3.2:1 lowest, Solarized).
 - **2026-11-12:** /v2/special hero search: no frame at rest (`border-color: transparent` in `_landing-features.scss`), replacing the 65% control border from c841080; on focus the frame turns gold with its 1px ring. Why: the full frame looked heavy. With no visible boundary, WCAG 1.4.11 asks nothing of the edge; the field is marked by the gold Search button and its placeholder (7.4:1 on the field).
 

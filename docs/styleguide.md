@@ -170,6 +170,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-12:** Landing `.pf-hero-cue`: `--pf-hero-cue-gap: 2.5rem` between the search and the label (was a fixed 1.25rem); `--pf-hero-cue-room: clamp(5.75rem, calc(11svh + 1.25rem), 8.25rem)`, so the line is as long as before. Exhibition title page cue unchanged.
 - **2026-11-12:** Hero search field: a bottom rule at rest, `border-bottom-color: color-mix(in srgb, var(--pf-section-border) 65%, transparent)`, other sides transparent; `:focus-within` still turns the whole frame `--pf-landing-accent` with a 1px ring.
 - **2026-11-12:** Hero search field: `border-color: transparent` at rest (the 65% control border is withdrawn); `:focus-within` sets the border to `--pf-landing-accent` with a 1px ring of it.
 
