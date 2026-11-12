@@ -296,55 +296,33 @@ $pf-index-bar-shadow:
   background-size: 100% 0;
 }
 
-// While results are on their way, a search or a late section, the same line is a
-// worm, in step with the rule in the loading mark. With reduced motion it holds
-// still at full width.
+// While results are on their way the line holds still at full width. The
+// loading marks are the only things that move: under the veil of a new search
+// nothing else does, and while a late section is still coming the line only
+// breathes, so it's still a sign when that section's mark is below the fold.
+// The breath is the line's own color, so the typed text never fades. Where
+// @property isn't supported, and with reduced motion, the line simply holds.
+@property --pf-index-line-tone {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
 .pf-index.is-searching .pf-index__input,
 .pf-index:has(.pf-index-section__late.is-searching) .pf-index__input {
   background-size: 100% 2px;
+}
 
+.pf-index:not(.is-searching):has(.pf-index-section__late.is-searching) .pf-index__input {
   @include pf-index-motion {
-    background-size: 0 2px;
-    animation: pf-index-chase 1.4s cubic-bezier(.77, 0, .175, 1) infinite;
+    background-image: linear-gradient(color-mix(in srgb, var(--pf-index-accent) var(--pf-index-line-tone), transparent) 0 0);
+    animation: pf-index-breathe 1.6s ease-in-out .3s infinite;
   }
 }
 
-// pf-mark-worm's steps: from the left end, grown to the whole line, into the
-// right end and back. A background's position is a share of the room left
-// beside it, so 0% holds it to the left end and 100% to the right while its
-// size changes. The anchor changes only when it spans the whole line (25%
-// and 75%), where the position makes no difference; each change is a pair of
-// keyframes .01% apart so the size's ease isn't split.
-@keyframes pf-index-chase {
-  0%,
-  100% {
-    background-position: 0% 100%;
-    background-size: 1% 2px;
-  }
-
-  25% {
-    background-position: 0% 100%;
-    background-size: 100% 2px;
-  }
-
-  25.01% {
-    background-position: 100% 100%;
-    background-size: 100% 2px;
-  }
-
+@keyframes pf-index-breathe {
   50% {
-    background-position: 100% 100%;
-    background-size: 1% 2px;
-  }
-
-  75% {
-    background-position: 100% 100%;
-    background-size: 100% 2px;
-  }
-
-  75.01% {
-    background-position: 0% 100%;
-    background-size: 100% 2px;
+    --pf-index-line-tone: 35%;
   }
 }
 
