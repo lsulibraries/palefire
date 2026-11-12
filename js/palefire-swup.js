@@ -18,6 +18,8 @@
  * - Accessibility: focus moves to the new page's <h1> (or the #anchor
  *   target, or <main>), and the page title is announced via Drupal.announce.
  *   Transitions are skipped when the user prefers reduced motion.
+ * - Only /v2 paths use Swup for now; any other page loads normally
+ *   (2026-11-12: a Swup visit there broke Back, see the fallback below).
  * - Exhibitions (/…/exhibitions/<name>) always load normally: they need
  *   their own scripts, so a visit there faded the page out, fetched it, found
  *   it incompatible and loaded it a second time (2026-10-26). Any other page
@@ -453,6 +455,11 @@
     if (prefix && path.startsWith(prefix)) {
       path = path.slice(prefix.length);
     }
+    // Only the redesign (/v2/…) for now: any other page is a normal load, so
+    // Swup never pushes a history entry for a page it can't swap in.
+    if (!/^\/v2(\/|$)/.test(`/${path}`)) {
+      return true;
+    }
     return IGNORE_PATHS.some((pattern) => pattern.test(`/${path}`)) || hardPaths().includes(next.pathname);
   };
 
@@ -714,10 +721,15 @@
         if (typeof visit.abort === 'function') {
           visit.abort();
         }
-        // Replace, not assign: Swup has already pushed a history entry for
-        // this URL (on this document), so assign() left two, and Back from
-        // the loaded page landed on the first and reloaded it.
-        window.location.replace(`${visit.to.url}${visit.to.hash || ''}`);
+        // Swup has already pushed a history entry for this URL on this
+        // document. assign() left two entries; replace() kept Swup's state,
+        // and Chrome then treated Back as a same-document step (the URL
+        // changed, the page didn't). Step back off the pushed entry first,
+        // then load the page normally, as Swup's own fallback does.
+        const target = `${visit.to.url}${visit.to.hash || ''}`;
+        window.removeEventListener('popstate', swup.handlePopState);
+        window.addEventListener('popstate', () => window.location.assign(target), { once: true });
+        window.history.back();
         return;
       }
       incoming = { doc, settings };
