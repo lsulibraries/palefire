@@ -1231,6 +1231,7 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-12:** Contents panel (the reading rail's index and the hero's Contents button, lg and up): 23rem wide (was 19rem), 44px rows (was 36px) with more padding, names at 13px with .06em tracking (was 12px, .08em). Why: long section names wrapped and the rows were cramped to read and hard to point at. `scss/components/_toc-rail.scss`.
 - **2026-11-12:** /v2/special hero search: the field's frame is the control border at 65% (`color-mix(in srgb, var(--pf-section-border) 65%, transparent)` in `_landing-features.scss`), not the 20% hairline. Why: the edge measured 1.7:1 against the page, under WCAG 1.4.11's 3:1, so the field faded into the photo; it is now 4.4:1 on Twilight and at least 3.2:1 in every swatch. The Search button's text already matched the hero buttons (15px Roboto 500), so it is unchanged.
 
 - **2026-11-12:** Favicons: the links now use `file_url()`, so they start at the site root. `html.html.twig` has no `base_path`, so they came out relative and 404ed under /v2 (browsers fell back to the purple root `favicon.ico`, so dark tabs never got the gold icon).
