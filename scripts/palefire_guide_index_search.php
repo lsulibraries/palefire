@@ -2,8 +2,9 @@
 
 /**
  * @file
- * Guide page: "Index Search Project", the living status of the new search
- * page at /v2/search, as a Modular page in guide mode. Run
+ * Guide page: "Combined Search Project" (was "Index Search Project"), the
+ * living status of the new search page at /v2/search, as a Modular page in
+ * guide mode. Run
  * palefire_guide_setup.php and palefire_guide_blocks_setup.php first.
  *
  *   drush php:script scripts/palefire_guide_index_search.php
@@ -54,7 +55,9 @@ foreach (['guide_flow', 'guide_status_board', 'guide_stats', 'guide_code'] as $i
   }
 }
 
-$title = 'Index Search Project';
+$title = 'Combined Search Project';
+// Its title until 12 Nov 2026: the page is found by either, and renamed.
+$old_titles = ['Index Search Project'];
 
 // Guide text uses the WYSIWYG format (machine name or label "WYSIWYG"),
 // never full_html.
@@ -127,17 +130,17 @@ $code = fn (?string $heading, string $text, string $caption = '') => [
   'caption' => $caption,
 ];
 
-$intro = '<p>What the new search page, the Index, covers, what\'s finished, what we found along the way, and what comes next.</p>';
+$intro = '<p>What the new search page, Combined Search, covers, what\'s finished, what we found along the way, and what comes next.</p>';
 
 // Sections. ----------------------------------------------------------------
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 12 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first. Oral histories is a source of its own beside PDF Finding Aids, with a list of every series under it, and its own section in Special Collections. An interview no longer shows a second time as its Catalog record.</p>
+<p><strong>Status as of Thu 12 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first. Oral histories is a source of its own beside PDF Finding Aids, with a list of every series under it, and its own section in Special Collections. An interview no longer shows a second time as its Catalog record. Results now arrive with some motion, the term searched is set large over them, and a search that finds nothing suggests searches to try and shows a piece from the collections.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
-    ['done', 'Names', 'Index is the working name for visitors, with four modes: All, Research, Special Collections and Website. The address is /v2/search.'],
+    ['done', 'Names', 'Combined Search is the name for visitors (Index was its working name until Tue 10 Nov), with four modes: All, Research, Special Collections and Website. The address is /v2/search.'],
     ['done', 'Page design', 'Layout and rows are styled, with no sideways scrolling at 320, 768, 1024 and 1440 pixels on sample data.'],
     ['done', 'Module first run', 'palefire_search is enabled on production. All four modes, source filters, paging, Discovery, Research Guides, Staff, Gear, Databases and E-Textbooks return real results.'],
     ['running', 'Filters and sorting', 'Choose several filters at once, remove them one at a time, and sort News and Discovery by date. Results change in place, without reloading the page. Filters and sorting are checked on production for logged-out visitors; changing in place still needs a check in a browser, logged in and out.'],
@@ -154,7 +157,7 @@ HTML, 'callout'),
     ['running', 'Special Collections Guides', 'Research guides tagged Special Collections, as their own source in Special Collections mode, from the guides site search with no key. A guide joins when it is tagged. Needs a check on production.'],
     ['running', 'Catalog and finding aids linked', 'A Catalog record that links a finding aid or oral history abstract gets an Open PDF button, and a PDF Finding Aids result gets its Catalog record\'s copies, matched by the PDF\'s address. Archive and manuscript copies head their numbers Stack location. Needs a check on production.'],
     ['running', 'Reading room wording', 'Special Collections copies say Available to view and Request to view, with one note per record that they are viewed in the Hill Memorial reading room and a link to how requests work. Sign-in wording waits until requests move to Alma.'],
-    ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with All sources and the Catalog set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
+    ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens Combined Search in Special Collections mode, with All sources and the Catalog set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text, saying Hide once open. An open result\'s table sits on a soft panel. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Special Collections Guides and Oral histories sections and the PDF Finding Aids list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
@@ -165,6 +168,7 @@ HTML, 'callout'),
     ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, at the logo\'s own weight, its rule moving end to end, and the line in the search field moves with it. The page follows the latest Special Collections styles.'],
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
     ['running', 'Journals', 'The homepage\'s e-journal search, brought into Research as its own section: journals, newspapers, newsletters and reports the Libraries can read online, each with where to read it and which years, and a Type filter. A search that is a journal\'s name (Nature, The New York Times) shows that journal first, above Discovery\'s results. It uses Discovery\'s own connection, so it moves to Alma with Discovery. Needs a check on production.'],
+    ['running', 'Finishing touches', 'Results rise into place in turn, counts count up, the Source filter shows each source's share as a gold bar, the term searched is set large over the results, and the empty field types out searches to try. Ctrl+K jumps to the search field and the arrow keys move between results. A search with no results offers searches to try and a picture from the exhibitions. Nothing moves for anyone who has asked for reduced motion. Needs a check on production.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
@@ -201,7 +205,7 @@ $section('How it works', [
 $section('Before and after', [
   $text(NULL, <<<'HTML'
 <table>
-<thead><tr><th scope="col">Before: the old search</th><th scope="col">After: the Index</th></tr></thead>
+<thead><tr><th scope="col">Before: the old search</th><th scope="col">After: Combined Search</th></tr></thead>
 <tbody>
 <tr><td>Some sources match any word, others all words. "huey long" finds 1,267 Archive Records, more than twice the 630 for "huey" alone.</td><td>Every local source matches all the words. "huey long" finds 611 Archive Records, and "huey" finds 630.</td></tr>
 <tr><td>Words under three letters are ignored, which seems to turn off the filter. "ai" and "r&amp;b" return identical counts.</td><td>Those words aren't sent to the site's index, and the page says why. Outside services still search for them.</td></tr>
@@ -210,7 +214,7 @@ $section('Before and after', [
 <tr><td>Result descriptions only appear in hover tooltips.</td><td>They're shown in the result.</td></tr>
 </tbody>
 </table>
-<p>The Index's counts were checked on Fri 6 Nov 2026, and they change as records are added.</p>
+<p>Combined Search's counts were checked on Fri 6 Nov 2026, and they change as records are added.</p>
 HTML),
 ]);
 
@@ -248,7 +252,7 @@ $section('Next steps', [
 <li>Review the page's design together, and choose a design for the result rows.</li>
 <li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
 <li>Confirm whether the Scholarly Repository can be searched from the server.</li>
-<li>Move the site's search forms to the Index and redirect /bento.</li>
+<li>Move the site's search forms to Combined Search and redirect /bento.</li>
 <li>Decide what requesters sign in with once requests move to Alma, and add that to the request note. Visitors see what they sign in with, not the system's name.</li>
 <li>Connect Alma when the sandbox is ready.</li>
 </ol>
@@ -277,7 +281,7 @@ HTML),
 <li>The Catalog comes first in Research and Special Collections, and Special Collections can search it, set to its own library. The Special Collections tab moved between Research and Website.</li>
 <li>Sources can be put in your own order. Added Show more results, and a results bar that keeps the count and the search in view.</li>
 <li>Filters have clearer hover styles, and empty ones are dimmed instead of hidden.</li>
-<li>Switched on the Special Collections hero search, the first link to the Index from the site, with the Catalog chosen by default, and landing searches now show the loading mark while results load.</li>
+<li>Switched on the Special Collections hero search, the first link to Combined Search from the site, with the Catalog chosen by default, and landing searches now show the loading mark while results load.</li>
 <li>The loading mark became the vertical LSU Libraries mark, with a moving rule, and the line in the search field now moves with it. The line tracing its letters now fades once they fill, so the Libraries text matches the logo's weight.</li>
 <li>Tried hatched result rows, then withdrew them as confusing. Rows are back to their hairlines and boxed labels, with the Show location button on the left. Four more designs are drafted for review.</li>
 <li>A serial with a long run (Green Lantern) was pushing Status and the request button out of view. What LSU has now wraps, each box has its own row, contents and request, and the button says Show 3 items.</li>
@@ -285,7 +289,7 @@ HTML),
 <li>Compared the Russell B. Long papers with the catalog. No items were missing, but holdings had lost their link to call numbers, so each item now shows what it holds, and the summary row no longer names one call number for all of them.</li>
 <li>Compared Huey Long with the catalog and found a copy shown as 4 that the catalog calls 7. The catalog service gives no copy numbers, so these were list positions, and item rows now leave them out.</li>
 <li>An open result's table now sits on a soft panel, and its button says Hide while open.</li>
-<li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with the Index's own counts.</li>
+<li>Added Alma (coming soon) as a dimmed source in Research and Special Collections, and turned this page's findings into a before and after, with Combined Search's own counts.</li>
 </ul>
 HTML),
   $text('Mon Nov 9: Results bar', <<<'HTML'
@@ -298,7 +302,7 @@ HTML),
 <li>Call number and Status can sort a holdings table, as in the catalog, but only within each library, so the libraries stay together.</li>
 <li>Holdings tables now have the catalog's columns in the catalog's order, including Copy. The catalog's web service has no copy numbers, so they're read from the record's catalog page when someone opens the table. Libraries are spaced apart as groups, with tighter rows for their items.</li>
 <li>Mocked up three layouts for the holdings table and four styles for its note and Full record link, and built the chosen one: each library has a heading with its buttons and a short table of its copies, the reading room note sits in a soft band under its library, and the panel ends with the copy count and a Full record in the catalog button. The catalog's per-copy Place hold links can't be used from outside the catalog, so each library keeps one Place hold.</li>
-<li>The Search drawer in the header (the magnifier at the top right) now searches the Index, with All, Research, Special Collections and Website to choose from. It starts on the section you're in.</li>
+<li>The Search drawer in the header (the magnifier at the top right) now searches Combined Search, with All, Research, Special Collections and Website to choose from. It starts on the section you're in.</li>
 <li>Fixed: signed-in staff saw "Show results from Catalog" links instead of Catalog, Discovery and Guides results. Drupal filling in the staff toolbar was cancelling those searches; now only a search whose section is going away is cancelled.</li>
 <li>Mocked up six ways to tell which source you're looking at on a long page of results, and built the chosen two: each source now opens with a proper heading (its name, how many it found, and what it holds), and the bar that follows you down the page names the source you're in.</li>
 <li>A search for hours (or "library hours", "is the library open" and the like) now starts with today's hours for the Main Library and Hill Memorial, the same as the Hours drawer. Other services can get a short answer like this later.</li>
@@ -318,13 +322,13 @@ HTML),
   $text('Tue Nov 10: Finding aid excerpts', <<<'HTML'
 <ul>
 <li>The Special Collections hero search now opens with both the Catalog and PDF Finding Aids chosen.</li>
-<li>In Special Collections mode the breadcrumb reads Home / Special Collections / Index, so there is a way back to the Special Collections page after a search.</li>
-<li>Archive Records became PDF Finding Aids: it searches only finding aids and oral history abstracts, all PDFs, and Oral histories is a checkbox under it in place of the Record type list. Breaux Data, Louisiana Folklife, Manuscript Collections and University Archives records left the Index.</li>
+<li>In Special Collections mode the breadcrumb reads Home / Special Collections / Combined Search, so there is a way back to the Special Collections page after a search.</li>
+<li>Archive Records became PDF Finding Aids: it searches only finding aids and oral history abstracts, all PDFs, and Oral histories is a checkbox under it in place of the Record type list. Breaux Data, Louisiana Folklife, Manuscript Collections and University Archives records left the search.</li>
 <li>Archive records that are PDFs got an Open PDF button, in the style of Show location, opening in a new tab, with the file's pages and size beside it (18 pages · 296 KB), so it's plain what opening it means.</li>
 <li>Finding Aids searches already read the text of each PDF, but results didn't show it, so a match could look like a mistake. Archive records can now show the words around the match, labelled Found in the PDF, once the index makes excerpts. Turned on the same day: all 20 results for "cotton gin" now show the words from the PDF.</li>
 <li>On phones the Filters button spans the screen and shows how many filters are chosen, and its word sits in the middle (the bar below had been covering its bottom edge). The bar of chosen filters runs edge to edge, with Clear all beside the search. The line under that bar is gone; while it follows you down the page it rises off the page with a soft shadow instead. Open PDF buttons show a PDF icon.</li>
 <li>The bar that follows you down the results is now frosted glass, like the menu bar and the breadcrumb above it: results blur as they pass under all three. A soft shadow sits under it.</li>
-<li>On wide screens, that bar now moves up into the breadcrumb's row as you scroll: the search and its filters sit beside Home / Special Collections / Index, leaving more of the screen for results.</li>
+<li>On wide screens, that bar now moves up into the breadcrumb's row as you scroll: the search and its filters sit beside Home / Special Collections / Combined Search, leaving more of the screen for results.</li>
 <li>The source named in that bar (Catalog, PDF Finding Aids…) is now gold, like its heading on the page.</li>
 <li>When that bar joins the breadcrumb row, the row grows so the filters and Clear all are full size and easy to press, and its shadow now darkens everything passing under it.</li>
 <li>The search page is now called Combined Search. Its search term in the results bar turns gold once searched, so you can see which words are in use, and the search box has an × to clear it in one press.</li>
@@ -383,6 +387,13 @@ HTML),
 <li>In Special Collections, oral histories now have their own section instead of sharing one list with the finding aids, which is now called PDF Finding Aids. All and Research already worked this way.</li>
 <li>An interview showed twice: as an oral history and again as its catalog record, with the same abstract PDF. When the Oral histories section is on the page, the Catalog section leaves those records out and fills its rows with others. Choosing the Catalog on its own, or narrowing Oral histories to one series, still shows them.</li>
 <li>Search tips now starts with a lightbulb, and What are these? with an information circle, both in gold, so they look like the helpers they are rather than plain links.</li>
+<li>The Catalog and other outside sources now show how many they found in the Source filter, like the site's own sources, as soon as their results arrive. Until then, or if one doesn't answer, the space stays empty rather than showing 0.</li>
+<li>The results bar no longer jumps while you scroll. On wide screens, when it moves up into the breadcrumb row, that row grows smoothly to fit and shrinks back at the top, and the bar's words rise into place. The name of the source you're reading fades in and out, and the words beside it slide over instead of jumping. With reduced motion, it all changes at once as before.</li>
+<li>The shadow under the results bar is softer and fades out gradually, instead of ending in a dark band.</li>
+<li>The Search button now shows only the word Search, and only the magnifier on narrow phones, so it no longer sits as a second small icon beside the clear button.</li>
+<li>The page and this guide now use the name Combined Search instead of the working name Index.</li>
+<li>Some flair: results rise into place one after another, counts count up, the Source filter draws each source's share as a gold bar, pictures fade up as they load, and the term searched is set large over the results like a gallery label. The results bar's own words appear once it sticks to the top. The empty search field types out example searches for its tab. Ctrl+K (⌘K on a Mac) jumps to the search field, and the up and down arrows move between result titles.</li>
+<li>A search that finds nothing now says so plainly, suggests a few searches to try, and shows a picture from one of the exhibitions with a link to it. Nothing moves for anyone who has asked their device for reduced motion.</li>
 </ul>
 HTML),
 ]);
@@ -402,7 +413,7 @@ $log_message = "$log_prefix $fingerprint";
 $storage = \Drupal::entityTypeManager()->getStorage('node');
 $found = \Drupal::entityQuery('node')->accessCheck(FALSE)
   ->condition('type', 'modular_page')
-  ->condition('title', $title)
+  ->condition('title', [$title, ...$old_titles], 'IN')
   ->range(0, 1)->execute();
 $node = $found ? $storage->load((int) reset($found)) : NULL;
 $prefix = $apply ? '' : '[dry run] ';
@@ -549,6 +560,7 @@ foreach ($sections as $item) {
 $node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
 
 if ($node) {
+  $node->setTitle($title);
   $node->set('field_scroll_section', $paragraphs);
   if (isset($node_fields['field_intro'])) {
     $node->set('field_intro', $html($intro));

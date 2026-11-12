@@ -1,0 +1,435 @@
+// Combined Search: motion and small touches around the results
+// (js/index-flair.js). Part of index-search.scss, so its tokens and mixins
+// (pf-index-motion, pf-index-label) are in scope. Nothing here moves with
+// reduced motion or the site's own motion setting.
+
+// --- Results arriving --------------------------------------------------------
+// A section's head, then its first rows, rising .5rem in turn, 45ms apart, as
+// a wall is hung left to right. Opacity and transform only, so nothing shifts.
+.pf-index-section__head.is-rising,
+.pf-index-row.is-rising {
+  @include pf-index-motion {
+    animation: pf-index-rise .55s var(--pf-index-ease) backwards;
+    animation-delay: calc(var(--pf-rise-order, 0) * 45ms);
+  }
+}
+
+// The late section's own fade would play under its rows' rise.
+.pf-index-section__late.is-loaded.has-rising {
+  animation: none;
+}
+
+@keyframes pf-index-rise {
+  from {
+    opacity: 0;
+    transform: translateY(.5rem);
+  }
+}
+
+// --- The term searched, as a wall label ---------------------------------------
+// Over the results: the results bar's words in the labels' small capitals
+// with the kicker's gold rule, and the term in the title's voice.
+.pf-index__echo {
+  margin-bottom: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.pf-index__echo-lead,
+.pf-index-empty__lead {
+  @include pf-index-label;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 .75rem;
+  color: var(--pf-toc-color, var(--pf-index-muted));
+
+  &::after {
+    content: "";
+    flex: none;
+    width: 2rem;
+    height: 1px;
+    background: var(--pf-index-highlight);
+  }
+}
+
+.pf-index__echo-term,
+.pf-main .pf-index .pf-index-empty__title {
+  margin: 0;
+  color: var(--pf-g-title, var(--bs-heading-color));
+  font-size: clamp(2rem, 1.35rem + 2.75vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+// Unveiled from its foot as it arrives.
+.pf-index__echo-term {
+  @include pf-index-motion {
+    animation: pf-index-unveil .8s var(--pf-index-ease) .05s backwards;
+  }
+}
+
+@keyframes pf-index-unveil {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(.3em);
+  }
+
+  to {
+    clip-path: inset(0 0 -.25em 0);
+  }
+}
+
+// With the label over the results, the results bar keeps its words for when
+// it's held: they fade in as the label goes under it. Where scroll-state
+// queries aren't supported, the bar keeps them throughout.
+@media (min-height: 30rem) {
+  @supports (container-type: scroll-state) {
+    .pf-index__results:not(:has(> .pf-index-empty:not([hidden]))) > .pf-index__echo + .pf-index__toolbar .pf-index__total {
+      &,
+      .pf-index__term {
+        color: transparent;
+
+        @include pf-index-motion {
+          transition: color .3s var(--pf-index-ease);
+        }
+      }
+    }
+
+    @container scroll-state(stuck: top) {
+      .pf-index__results:not(:has(> .pf-index-empty:not([hidden]))) > .pf-index__echo + .pf-index__toolbar .pf-index__total {
+        color: var(--pf-index-muted);
+
+        .pf-index__term {
+          color: var(--pf-g-title, var(--bs-heading-color));
+        }
+      }
+    }
+  }
+}
+
+// --- Source bars --------------------------------------------------------------
+// Each source's share of the most any source found, along its row's hairline,
+// drawn in from the start (where @starting-style is supported).
+.pf-index__option.has-share {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--pf-index-highlight);
+    opacity: .75;
+    transform: scaleX(var(--pf-index-share, 0));
+    transform-origin: left;
+    pointer-events: none;
+
+    @include pf-index-motion {
+      transition: transform .9s var(--pf-index-ease);
+
+      @starting-style {
+        transform: scaleX(0);
+      }
+    }
+  }
+}
+
+[dir="rtl"] .pf-index__option.has-share::after {
+  transform-origin: right;
+}
+
+@media (forced-colors: active) {
+  .pf-index__option.has-share::after {
+    background: CanvasText;
+  }
+}
+
+// --- Pictures fading up ---------------------------------------------------------
+// From a faint tint of the text color, sharpening as they load. Covers sit in a
+// box larger than they are, so only cropped pictures get the tint.
+.pf-index-row__thumb:not(.pf-index-row__thumb--cover),
+.pf-index-vault__frame {
+  background: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
+}
+
+.pf-index-row__thumb img,
+.pf-index-vault__frame img {
+  @include pf-index-motion {
+    transition: opacity .6s ease, filter .8s ease, transform .8s var(--pf-index-ease);
+  }
+
+  &.is-pending {
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.03);
+  }
+}
+
+// --- The field ------------------------------------------------------------------
+// Examples typed into the empty field in the muted text color.
+.pf-index__input::placeholder {
+  color: var(--pf-index-muted);
+  opacity: 1;
+}
+
+// Ctrl K or ⌘K at the field's end, for a mouse and a keyboard on a wide screen:
+// gone while the field is focused or has words.
+.pf-index__key {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 62rem) {
+  .pf-index__key {
+    @include pf-index-label;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 1rem;
+    display: block;
+    height: max-content;
+    margin-block: auto;
+    padding: .25rem .5rem;
+    border: 1px solid var(--pf-index-line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--pf-index-muted);
+    letter-spacing: .08em;
+    line-height: 1.4;
+    pointer-events: none;
+
+    @include pf-index-motion {
+      transition: opacity .2s ease;
+    }
+  }
+
+  .pf-index__entry:focus-within .pf-index__key {
+    opacity: 0;
+  }
+
+  .pf-index__entry:has(.pf-index__erase:not([hidden])) .pf-index__key {
+    display: none;
+  }
+}
+
+// --- Moving between results ----------------------------------------------------------
+// The title focused from the keyboard gets a gold rule at its row's start,
+// drawn down from the top. From 48rem, where the column has room beside it.
+@media (min-width: 48rem) {
+  .pf-index-row:has(.pf-index-row__title a:focus-visible) {
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: 1.5rem;
+      inset-inline-start: -.75rem;
+      width: 2px;
+      background: var(--pf-index-highlight);
+      transform-origin: top;
+
+      @include pf-index-motion {
+        animation: pf-index-rule-in .3s var(--pf-index-ease);
+      }
+    }
+  }
+}
+
+@keyframes pf-index-rule-in {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+// --- Nothing found ---------------------------------------------------------------------
+// The term in the label's voice, a line on what to do, searches to try and a
+// piece from the collections. It takes the place of the empty lists.
+.pf-index-empty {
+  padding-block: clamp(.5rem, 2vw, 1.5rem) 1rem;
+
+  @include pf-index-motion {
+    animation: pf-index-rise .5s var(--pf-index-ease);
+  }
+}
+
+.pf-main .pf-index .pf-index-empty__title {
+  margin-bottom: 1rem;
+}
+
+.pf-index-empty__text {
+  max-width: 40rem;
+  margin: 0 0 2rem;
+  color: var(--pf-index-muted);
+  text-wrap: pretty;
+}
+
+.pf-index-empty__label {
+  @include pf-index-label;
+  margin: 0 0 .75rem;
+  color: var(--pf-toc-color, var(--pf-index-muted));
+}
+
+.pf-index-empty__try {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border: 1px solid var(--pf-index-line);
+    color: var(--pf-index-fg);
+    text-decoration: none;
+    transition: border-color $pf-hover-out ease, color $pf-hover-out ease;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--pf-index-highlight);
+      color: var(--pf-index-highlight);
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-index-highlight);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Picture and caption side by side from 40rem, the caption at the picture's
+// foot, as a label beside a work on a wall.
+.pf-index-vault {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--pf-index-line);
+
+  @include pf-index-motion {
+    animation: pf-index-rise .7s var(--pf-index-ease) .15s backwards;
+  }
+
+  @media (min-width: 40rem) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: 2rem;
+  }
+}
+
+.pf-index-vault__frame {
+  display: block;
+  justify-self: start;
+  width: fit-content;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: auto;
+    max-width: min(16rem, calc(100vw - 2rem));
+    height: auto;
+    max-height: min(24rem, 60vh);
+  }
+
+  @include pf-index-motion {
+    &:hover img:not(.is-pending) {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.pf-index-vault__caption p {
+  margin: 0;
+}
+
+.pf-index-vault__title {
+  max-width: 32rem;
+  color: var(--pf-g-title, var(--bs-heading-color));
+  font-size: clamp(1.25rem, 1.1rem + .6vw, 1.625rem);
+  font-weight: 500;
+  letter-spacing: -.015em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.pf-index-vault__caption .pf-index-vault__credit {
+  margin-top: .375rem;
+  color: var(--pf-index-muted);
+  font-size: .9375rem;
+}
+
+.pf-index-vault__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  margin-top: .75rem;
+  color: var(--pf-index-fg);
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: .2em;
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+
+    @include pf-index-motion {
+      transition: transform .25s ease;
+    }
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-index-highlight);
+
+    svg {
+      transform: translateX(3px);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: 2px;
+  }
+}
+
+[dir="rtl"] .pf-index-vault__link svg {
+  scale: -1 1;
+}
+
+// While it shows, the lists that found nothing, and the label over them, step
+// aside: it says the same.
+.pf-index__results:has(> .pf-index-empty:not([hidden])) {
+  > .pf-index__echo,
+  .pf-index__where,
+  .pf-index-section:has(.pf-index-list[data-pf-index-total="0"]),
+  .pf-index-list[data-pf-index-total="0"] {
+    display: none;
+  }
+}
+
+@media print {
+  .pf-index__echo,
+  .pf-index__key,
+  .pf-index-vault {
+    display: none;
+  }
+
+  .pf-index__results > .pf-index__echo + .pf-index__toolbar .pf-index__total {
+    &,
+    .pf-index__term {
+      color: inherit;
+    }
+  }
+}

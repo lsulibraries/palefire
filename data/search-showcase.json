@@ -1,0 +1,82 @@
+{
+  "examples": {
+    "all": ["Huey Long", "Hurricane Katrina", "Mardi Gras", "coastal erosion", "Audubon", "study rooms"],
+    "research": ["coastal erosion", "Hurricane Katrina", "jazz", "cajun music"],
+    "special": ["Huey Long", "Civil War diaries", "Mardi Gras", "sugar plantations", "Audubon", "Creole", "Mississippi River floods"],
+    "website": ["study rooms", "printing", "interlibrary loan", "laptops"]
+  },
+  "vault": [
+    {
+      "title": "Carolina Parrot, now the extinct Carolina Parakeet",
+      "credit": "John James Audubon, folio edition, plate 26",
+      "image": "/sites/default/files/styles/exhibit_640/public/exhibitions/audubon/folio-carolina-parrot.jpg.webp?itok=kMKz9HsH",
+      "width": 2735,
+      "height": 3840,
+      "exhibition": "John James Audubon in Louisiana",
+      "url": "/v2/special/exhibitions/audubon"
+    },
+    {
+      "title": "American Flamingo",
+      "credit": "John James Audubon, octavo edition, plate 375",
+      "image": "/sites/default/files/styles/exhibit_1280/public/exhibitions/audubon/drawing-american-flamingo.jpg.webp?itok=pcur26Nm",
+      "width": 1000,
+      "height": 1490,
+      "exhibition": "John James Audubon in Louisiana",
+      "url": "/v2/special/exhibitions/audubon"
+    },
+    {
+      "title": "Common Mocking Bird, now the Northern Mockingbird",
+      "credit": "John James Audubon, octavo edition, plate 136",
+      "image": "/sites/default/files/styles/exhibit_1280/public/exhibitions/audubon/drawing-common-mocking-bird.jpg.webp?itok=kmSozQlJ",
+      "width": 1000,
+      "height": 1542,
+      "exhibition": "John James Audubon in Louisiana",
+      "url": "/v2/special/exhibitions/audubon"
+    },
+    {
+      "title": "The sunflower",
+      "credit": "Plate 796",
+      "image": "/sites/default/files/styles/exhibit_640/public/exhibitions/occult/francisci-sunflower-plate-796.jpg.webp?itok=jQgR4Dvw",
+      "width": 3111,
+      "height": 3840,
+      "exhibition": "Occult Science and Philosophy in the Renaissance",
+      "url": "/v2/special/exhibitions/occult"
+    },
+    {
+      "title": "An alchemist in his laboratory",
+      "credit": "",
+      "image": "/sites/default/files/styles/exhibit_1280/public/exhibitions/occult/khunrath-alchemist-laboratory.jpg.webp?itok=YIEVN_9R",
+      "width": 1000,
+      "height": 1020,
+      "exhibition": "Occult Science and Philosophy in the Renaissance",
+      "url": "/v2/special/exhibitions/occult"
+    },
+    {
+      "title": "Winged and sea dragons",
+      "credit": "",
+      "image": "/sites/default/files/styles/exhibit_1280/public/exhibitions/occult/pare-dragons.jpg.webp?itok=UcmOwzTm",
+      "width": 1000,
+      "height": 1638,
+      "exhibition": "Occult Science and Philosophy in the Renaissance",
+      "url": "/v2/special/exhibitions/occult"
+    },
+    {
+      "title": "The pelican under the rosy cross",
+      "credit": "",
+      "image": "/sites/default/files/styles/exhibit_1280/public/exhibitions/occult/hall-pelican.jpg.webp?itok=efZ21rVd",
+      "width": 1000,
+      "height": 1515,
+      "exhibition": "Occult Science and Philosophy in the Renaissance",
+      "url": "/v2/special/exhibitions/occult"
+    },
+    {
+      "title": "Map of Mossville, 1932",
+      "credit": "LSU Cartographic Information Center",
+      "image": "/sites/default/files/styles/exhibit_640/public/exhibitions/mossville/mossville1932.jpg.webp?itok=jru6wBdz",
+      "width": 2560,
+      "height": 1522,
+      "exhibition": "Mossville History Project",
+      "url": "/v2/special/exhibitions/mossville"
+    }
+  ]
+}

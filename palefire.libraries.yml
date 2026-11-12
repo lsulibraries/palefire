@@ -477,6 +477,7 @@ index-search:
       css/index-search.css: {}
   js:
     js/index-search.js: {}
+    js/index-flair.js: {}
   dependencies:
     - core/drupal
     - core/drupalSettings
