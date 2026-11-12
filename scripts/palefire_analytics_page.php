@@ -62,13 +62,19 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-$intro = '<p>How people use the new library website while it is tested: page views, the kinds of page people read, what they search for and what they find, and the controls they use. For library staff; updated each night from Google Analytics.</p>';
+$intro = '<p>How people use the new library website while it is tested: page views, the kinds of page people read, what they search for and what they find, the controls they use, and what they say in the Combined Search feedback. For library staff; updated each night from Google Analytics, with feedback as it arrives.</p>';
 
 $sections = [
   [
     'title' => 'Last 28 days',
     'blocks' => [
       [NULL, '<p>[analytics:report]</p>'],
+    ],
+  ],
+  [
+    'title' => 'Combined Search feedback',
+    'blocks' => [
+      [NULL, '<p>[analytics:feedback]</p>'],
     ],
   ],
   [
@@ -83,7 +89,7 @@ HTML],
 <p>Controls are counted by what was pressed, in plain words: a section tab's name, a reading color, the map's floor or room, the phone toolbar's buttons, the Ask Us form being sent. What people type is never recorded, except Combined Search terms.</p>
 HTML],
       ['Privacy', <<<'HTML'
-<p>Search terms are what people typed. Email addresses are removed before anything reaches Google Analytics, and Google withholds rare rows, but a search can still contain a name, so this page stays unpublished and the report shows only to signed-in staff. Please don't copy search terms to public places.</p>
+<p>Search terms are what people typed. Email addresses are removed before anything reaches Google Analytics, and Google withholds rare rows, but a search can still contain a name, so this page stays unpublished and the report shows only to signed-in staff. Feedback comments show here without the email addresses some people leave for a reply; those stay in the Webform. Please don't copy search terms or comments to public places.</p>
 HTML],
       ['More detail', <<<'HTML'
 <p>For anything this page doesn't show, use Google Analytics itself (property "Library Website"): Reports, then Engagement, then Pages and screens, with Page section or Page type added as a second column; or Explore, with Search term and Search mode. Nov 11–12, 2026 carries an annotation: page views from in-page navigation changed how they were counted that week.</p>

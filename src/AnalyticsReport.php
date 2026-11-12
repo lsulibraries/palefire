@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\palefire;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 
 /**
  * The staff analytics report (scripts/palefire_analytics_pull.php).
@@ -71,6 +73,38 @@ final class AnalyticsReport {
     'settings' => 'Reading settings',
     'dock' => 'Phone toolbar',
     'map' => 'Building map',
+  ];
+
+  /**
+   * The Combined Search feedback Webform (palefire_search module).
+   */
+  public const FEEDBACK_FORM = 'combined_search_feedback';
+
+  /**
+   * Its answers, as the form words them (scripts/create_feedback_webform.php
+   * in palefire_search). "none": the question was left blank.
+   */
+  private const ANSWERS = [
+    'yes' => 'Yes',
+    'partly' => 'Partly',
+    'no' => 'No',
+    'none' => 'No answer',
+  ];
+
+  private const COMPARED = [
+    'better' => 'Better',
+    'same' => 'About the same',
+    'worse' => 'Worse',
+    'not_used' => 'Hasn’t used the current one',
+  ];
+
+  private const ROLES = [
+    'undergraduate' => 'Undergraduates',
+    'graduate' => 'Graduate students',
+    'faculty' => 'Faculty',
+    'staff' => 'LSU staff',
+    'library_staff' => 'Library staff',
+    'visitor' => 'Visitors',
   ];
 
   /**
@@ -190,6 +224,16 @@ final class AnalyticsReport {
         'dimensionFilter' => $event('pf_search_result'),
         'limit' => 100,
       ],
+      // 11: the Combined Search feedback form opened, and sent.
+      [
+        'dateRanges' => [$now],
+        'dimensions' => [['name' => 'eventName']],
+        'metrics' => [['name' => 'eventCount']],
+        'dimensionFilter' => ['andGroup' => ['expressions' => [
+          ['filter' => ['fieldName' => 'eventName', 'inListFilter' => ['values' => ['pf_search_feedback', 'pf_search_feedback_sent']]]],
+          $palefire,
+        ]]],
+      ],
     ]);
 
     $data = [
@@ -249,6 +293,10 @@ final class AnalyticsReport {
       $data['positions'][$place] = ($data['positions'][$place] ?? 0) + (int) $row['m'][0];
     }
     ksort($data['positions']);
+    $data['feedback_events'] = ['pf_search_feedback' => 0, 'pf_search_feedback_sent' => 0];
+    foreach (self::rows($reports[11]) as $row) {
+      $data['feedback_events'][$row['d'][0]] = (int) $row['m'][0];
+    }
     return $data;
   }
 
@@ -351,6 +399,109 @@ final class AnalyticsReport {
       'sources' => $bars($data['sources'] ?? [], 'source', 'count', fn (string $source) => ucfirst(str_replace('_', ' ', $source))),
       'positions' => $bars($positions, 'place', 'count'),
       'weeks' => $weeks,
+    ];
+  }
+
+  /**
+   * The Combined Search feedback form's responses in the last 28 days.
+   *
+   * Read from Drupal as they arrive (the cache tag webform_submission_list
+   * redraws it), with GA4's count of forms opened and sent from the nightly
+   * pull. NULL without the Webform module or the form.
+   */
+  public static function feedback(): ?array {
+    $types = \Drupal::entityTypeManager();
+    if (!$types->hasDefinition('webform_submission') || !$types->getStorage('webform')->load(self::FEEDBACK_FORM)) {
+      return NULL;
+    }
+    $formatter = \Drupal::service('date.formatter');
+    $storage = $types->getStorage('webform_submission');
+    $ids = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('webform_id', self::FEEDBACK_FORM)
+      ->condition('in_draft', 0)
+      ->condition('created', \Drupal::time()->getRequestTime() - 28 * 86400, '>=')
+      ->sort('created', 'DESC')
+      ->range(0, 2000)
+      ->execute();
+
+    $answers = array_fill_keys(array_keys(self::ANSWERS), 0);
+    $compared = array_fill_keys(array_keys(self::COMPARED), 0);
+    $roles = array_fill_keys(array_keys(self::ROLES), 0);
+    $latest = [];
+    foreach ($storage->loadMultiple($ids) as $submission) {
+      $found = (string) $submission->getElementData('found');
+      $found = isset(self::ANSWERS[$found]) ? $found : 'none';
+      $answers[$found]++;
+      $compare = (string) $submission->getElementData('compared');
+      if (isset($compared[$compare])) {
+        $compared[$compare]++;
+      }
+      $role = (string) $submission->getElementData('role');
+      if (isset($roles[$role])) {
+        $roles[$role]++;
+      }
+      $comment = trim((string) $submission->getElementData('what_would_help'));
+      if ($comment !== '' && count($latest) < 10) {
+        $created = (int) $submission->getCreatedTime();
+        $latest[] = [
+          'date' => $formatter->format($created, 'custom', 'M j'),
+          'datetime' => $formatter->format($created, 'custom', 'Y-m-d'),
+          'answer' => self::ANSWERS[$found],
+          'search' => trim((string) ($submission->getElementData('looking_for') ?: $submission->getElementData('search_terms'))),
+          'comment' => Unicode::truncate($comment, 400, TRUE, TRUE),
+          'url' => $submission->toUrl()->toString(),
+        ];
+      }
+    }
+
+    // The ring: each answer's share of the whole as a stroke on a circle
+    // whose length is 100, starting where the one before ended. A hair is
+    // taken off each slice, so they part with a gap of the page's color.
+    $total = array_sum($answers);
+    $slices = count(array_filter($answers));
+    $offset = 0.0;
+    $ring = [];
+    foreach ($answers as $key => $count) {
+      if (!$count && $key === 'none') {
+        continue;
+      }
+      $share = $total ? $count / $total * 100 : 0;
+      $ring[] = [
+        'key' => $key,
+        'label' => self::ANSWERS[$key],
+        'count' => $count,
+        'percent' => (int) round($share),
+        'dash' => $count ? round($slices > 1 ? max($share - 0.8, 0.2) : $share, 2) : 0,
+        'offset' => round($offset, 2),
+      ];
+      $offset += $share;
+    }
+
+    $bars = function (array $counts, array $labels): array {
+      $max = max(array_merge([1], $counts));
+      $rows = [];
+      foreach ($counts as $key => $count) {
+        $rows[] = ['label' => $labels[$key], 'value' => number_format($count), 'width' => round($count / $max * 100, 1)];
+      }
+      return $rows;
+    };
+    $events = \Drupal::state()->get(self::STATE)['feedback_events'] ?? NULL;
+    $opened = $events ? (int) $events['pf_search_feedback'] : NULL;
+    $sent = $events ? (int) $events['pf_search_feedback_sent'] : NULL;
+
+    return [
+      'total' => $total,
+      'figures' => [
+        ['label' => 'Responses', 'value' => number_format($total)],
+        ['label' => 'Forms opened', 'value' => $opened === NULL ? '–' : number_format($opened)],
+        ['label' => 'Opened forms sent', 'value' => $opened ? round($sent / $opened * 100) . '%' : '–'],
+      ],
+      'ring' => $ring,
+      'compared' => array_sum($compared) ? $bars($compared, self::COMPARED) : [],
+      'roles' => array_sum($roles) ? $bars(array_filter($roles), self::ROLES) : [],
+      'latest' => $latest,
+      'results' => Url::fromRoute('entity.webform.results_submissions', ['webform' => self::FEEDBACK_FORM])->toString(),
     ];
   }
 

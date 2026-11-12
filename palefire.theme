@@ -2339,8 +2339,10 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  *
  * analytics: a paragraph that is only "[analytics:report]" draws the staff
  * analytics report after the text (includes/analytics-report.html.twig,
- * Drupal\palefire\AnalyticsReport): allowed, and the figures (report) for
- * visitors who may see them. NULL without the marker.
+ * Drupal\palefire\AnalyticsReport), "[analytics:feedback]" the Combined
+ * Search feedback (includes/analytics-feedback.html.twig): part, allowed,
+ * and the figures (report or feedback) for visitors who may see them. NULL
+ * without a marker.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
@@ -2380,8 +2382,8 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
   $faqs_marker = '#<p>\s*\[special-collections-faqs\]\s*</p>#i';
   $faqs = FALSE;
-  $analytics_marker = '#<p>\s*\[analytics:report\]\s*</p>#i';
-  $analytics = FALSE;
+  $analytics_marker = '#<p>\s*\[analytics:(report|feedback)\]\s*</p>#i';
+  $analytics = NULL;
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
   foreach (Element::children($variables['content']['field_block_body']) as $delta) {
@@ -2394,9 +2396,9 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       $item['#text'] = preg_replace($faqs_marker, '', (string) $item['#text']);
       $faqs = TRUE;
     }
-    if (isset($item['#text']) && preg_match($analytics_marker, (string) $item['#text'])) {
+    if (isset($item['#text']) && preg_match($analytics_marker, (string) $item['#text'], $analytics_match)) {
       $item['#text'] = preg_replace($analytics_marker, '', (string) $item['#text']);
-      $analytics = TRUE;
+      $analytics = strtolower($analytics_match[1]);
     }
     if (isset($item['#text']) && str_contains((string) $item['#text'], '[styleguide:')) {
       $item['#text'] = preg_replace_callback('#<p>\s*\[styleguide:([a-z]+)\]\s*</p>#i', function (array $m) use (&$variables): string {
@@ -2418,13 +2420,19 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   if ($analytics) {
     $allowed = \Drupal::currentUser()->hasPermission(AnalyticsReport::PERMISSION);
     $variables['analytics'] = [
+      'part' => $analytics,
       'allowed' => $allowed,
-      'report' => $allowed ? AnalyticsReport::view() : NULL,
+      'report' => $allowed && $analytics === 'report' ? AnalyticsReport::view() : NULL,
+      'feedback' => $allowed && $analytics === 'feedback' ? AnalyticsReport::feedback() : NULL,
     ];
-    CacheableMetadata::createFromRenderArray($variables)
+    $cache = CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags([AnalyticsReport::CACHE_TAG])
-      ->addCacheContexts(['user.permissions'])
-      ->applyTo($variables);
+      ->addCacheContexts(['user.permissions']);
+    // Feedback is read as it arrives; an hour's limit moves its 28 days on.
+    if ($analytics === 'feedback') {
+      $cache->addCacheTags(['webform_submission_list'])->setCacheMaxAge(3600);
+    }
+    $cache->applyTo($variables);
   }
   $variables['ask_href'] = '';
   $tab = $variables['request_paths'] ? $variables['paragraph']->getParentEntity() : NULL;

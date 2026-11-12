@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * The Combined Search feedback, drawn after a guide text whose paragraph is
+ * only "[analytics:feedback]" (palefire_preprocess_paragraph__guide_text(),
+ * Drupal\palefire\AnalyticsReport::feedback()). Responses are read from the
+ * Webform as they arrive; forms opened and sent come from GA4 each night.
+ *
+ * - allowed: the visitor may see it (staff).
+ * - feedback: total, figures, ring (the pie: key, label, count, percent,
+ *   dash and offset on a circle 100 long), compared and roles (bars),
+ *   latest (comments: date, datetime, answer, search, comment, url) and
+ *   results (the Webform's results page). NULL without the form.
+ *
+ * The ring is decoration: its legend says every count and share in words.
+ * Email addresses stay in the Webform, never on this page.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+<div class="pf-analytics">
+  {% if not allowed %}
+    <p class="pf-stats__caption">{{ 'This report is for library staff. Sign in to see it.'|t }}</p>
+  {% elseif not feedback %}
+    <p class="pf-stats__caption">{{ 'The feedback form isn’t on this site yet.'|t }}</p>
+  {% else %}
+    <p class="pf-stats__caption">{{ 'Responses to the Combined Search feedback form in the last 28 days, as they arrive. Forms opened come from Google Analytics, through yesterday.'|t }}</p>
+
+    <dl class="pf-stats">
+      {% for figure in feedback.figures %}
+        <div class="pf-stats__item">
+          <dt class="pf-stats__label">{{ figure.label }}</dt>
+          <dd class="pf-stats__value">{{ figure.value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+
+    {% if feedback.total %}
+      <h4>{{ 'Did they find what they were looking for?'|t }}</h4>
+      <figure class="pf-pie">
+        <div class="pf-pie__ring">
+          <svg class="pf-pie__chart" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+            {% for slice in feedback.ring|filter(slice => slice.count > 0) %}
+              <circle class="pf-pie__slice pf-pie__slice--{{ slice.key }}" cx="18" cy="18" r="15" pathLength="100" style="--pf-pie-dash: {{ slice.dash }}; --pf-pie-offset: {{ slice.offset }}"></circle>
+            {% endfor %}
+          </svg>
+          <p class="pf-pie__total" aria-hidden="true"><strong>{{ feedback.total }}</strong>{{ feedback.total == 1 ? 'response'|t : 'responses'|t }}</p>
+        </div>
+        <figcaption class="pf-pie__legend">
+          <ul class="pf-pie__list">
+            {% for slice in feedback.ring %}
+              <li class="pf-pie__item pf-pie__item--{{ slice.key }}">
+                <span class="pf-pie__swatch" aria-hidden="true"></span>
+                <span class="pf-pie__label">{{ slice.label }}</span>
+                <span class="pf-pie__value">{{ '@count, @percent%'|t({ '@count': slice.count, '@percent': slice.percent }) }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </figcaption>
+      </figure>
+    {% else %}
+      <p class="pf-stats__caption">{{ 'No responses in the last 28 days.'|t }}</p>
+    {% endif %}
+
+    {% if feedback.compared %}
+      <h4>{{ 'Compared with the current library search'|t }}</h4>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: feedback.compared, unit: '' } only %}
+    {% endif %}
+
+    {% if feedback.roles %}
+      <h4>{{ 'Who answered'|t }}</h4>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: feedback.roles, unit: '' } only %}
+    {% endif %}
+
+    {% if feedback.latest %}
+      <h4>{{ 'Latest comments'|t }}</h4>
+      <ol class="pf-analytics__notes">
+        {% for note in feedback.latest %}
+          <li class="pf-analytics__note">
+            <p class="pf-analytics__note-meta">
+              <time datetime="{{ note.datetime }}">{{ note.date }}</time>
+              <span aria-hidden="true"> · </span>{{ 'Found it: @answer'|t({ '@answer': note.answer }) }}
+              {%- if note.search %}<span aria-hidden="true"> · </span>{{ 'Searched “@search”'|t({ '@search': note.search }) }}{% endif %}
+            </p>
+            <p class="pf-analytics__note-text">{{ note.comment }}</p>
+            <a class="pf-analytics__note-link" href="{{ note.url }}">{{ 'Open response'|t }}<span class="visually-hidden">{{ ' from @date'|t({ '@date': note.date }) }}</span></a>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+
+    <p class="pf-stats__caption"><a href="{{ feedback.results }}">{{ 'All responses in the Webform'|t }}</a>{{ ', with each one’s full details and a spreadsheet download.'|t }}</p>
+  {% endif %}
+</div>

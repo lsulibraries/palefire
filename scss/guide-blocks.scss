@@ -556,6 +556,173 @@ $pf-reveal-from: 0.85; // As _variables.scss.
   }
 }
 
+// Comments (the feedback): a date line, the words, a link to the response.
+.pf-analytics__notes {
+  max-width: var(--pf-guide-prose);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-analytics__note {
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--pf-guide-rule);
+
+  &:last-child {
+    border-bottom: 1px solid var(--pf-guide-rule);
+  }
+}
+
+.pf-analytics__note-meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--pf-guide-muted);
+}
+
+.pf-analytics__note-text {
+  margin: 0 0 0.35rem;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.pf-analytics__note-link {
+  font-size: 0.8125rem;
+}
+
+// Pie chart ---------------------------------------------------------------------
+// Shares of one whole as a ring: each slice a stroke on a circle 100 long
+// (pathLength), --pf-pie-dash long, starting at --pf-pie-offset, from twelve
+// o'clock. The slices part with a hair of the page's color. The legend says
+// every count and share, so the ring is decoration. Gold for the first
+// answer, pale gold, the muted text color, then the hairline.
+.pf-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  max-width: var(--pf-guide-prose);
+  margin: 0;
+}
+
+.pf-pie__ring {
+  position: relative;
+  flex: 0 0 auto;
+  width: 11rem;
+  aspect-ratio: 1;
+}
+
+.pf-pie__chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.pf-pie__slice {
+  fill: none;
+  stroke: var(--pf-pie-color);
+  stroke-width: 4;
+  stroke-dasharray: var(--pf-pie-dash) 100;
+  stroke-dashoffset: calc(var(--pf-pie-offset) * -1);
+}
+
+.pf-pie__slice--yes,
+.pf-pie__item--yes {
+  --pf-pie-color: var(--pf-guide-accent);
+}
+
+.pf-pie__slice--partly,
+.pf-pie__item--partly {
+  --pf-pie-color: color-mix(in srgb, var(--pf-guide-accent) 45%, var(--bs-body-bg));
+}
+
+.pf-pie__slice--no,
+.pf-pie__item--no {
+  --pf-pie-color: var(--pf-guide-muted);
+}
+
+.pf-pie__slice--none,
+.pf-pie__item--none {
+  --pf-pie-color: var(--pf-guide-rule);
+}
+
+.pf-pie__total {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--pf-guide-muted);
+
+  strong {
+    font-size: 2rem;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+    color: var(--bs-emphasis-color);
+  }
+}
+
+.pf-pie__legend {
+  flex: 1 1 13rem;
+}
+
+.pf-pie__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-pie__item {
+  display: grid;
+  grid-template-columns: 0.75rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.55rem 0;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--pf-guide-rule);
+}
+
+.pf-pie__swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--pf-pie-color);
+  border-radius: 1px;
+}
+
+.pf-pie__value {
+  font-variant-numeric: tabular-nums;
+  color: var(--pf-guide-muted);
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  .pf-pie__slice,
+  .pf-pie__swatch {
+    forced-color-adjust: none;
+  }
+
+  .pf-pie__slice--yes,
+  .pf-pie__item--yes {
+    --pf-pie-color: CanvasText;
+  }
+
+  .pf-pie__slice--partly,
+  .pf-pie__item--partly,
+  .pf-pie__slice--none,
+  .pf-pie__item--none {
+    --pf-pie-color: GrayText;
+  }
+
+  .pf-pie__slice--no,
+  .pf-pie__item--no {
+    --pf-pie-color: Highlight;
+  }
+}
+
 // Code ------------------------------------------------------------------------
 .pf-code {
   min-width: 0; // a grid item: let the code scroll instead of widening the page
@@ -627,6 +794,19 @@ $pf-reveal-from: 0.85; // As _variables.scss.
       animation-timeline: view();
       animation-range: entry 0% entry 35%;
     }
+
+    // The ring's slices draw round from twelve o'clock as it comes in.
+    html:not(.pf-a11y-motion) .pf-pie__slice {
+      animation: pf-gb-pie ease-out both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 40%;
+    }
+  }
+}
+
+@keyframes pf-gb-pie {
+  from {
+    stroke-dasharray: 0 100;
   }
 }
 
