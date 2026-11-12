@@ -864,7 +864,60 @@
         search_term: term,
         search_mode: params.get('mode') || 'all',
       });
+      outcomeFor = { term, mode: params.get('mode') || 'all' };
     }
+  };
+
+  // Analytics: a search that found nothing anywhere sends "pf_search_empty"
+  // (its words and mode) once every late section has answered, so the report
+  // can list what people looked for and didn't find. A section that couldn't
+  // reach its service isn't "nothing": then no event (as index-flair.js's
+  // empty page). outcomeFor is the search just sent, checked by the next
+  // behaviors pass, which starts its late sections.
+  let outcomeFor = null;
+  const nothingFound = (root) => {
+    const empty = root.querySelector('[data-pf-index-empty]');
+    if (empty && !empty.hidden) {
+      return true;
+    }
+    const main = root.querySelector('[data-pf-index-main]');
+    if (!main || main.querySelector('.pf-index-answer')) {
+      return false;
+    }
+    const lists = [...main.querySelectorAll('.pf-index-list')].filter((list) => !list.closest('[hidden]'));
+    const waiting = [...main.querySelectorAll('[data-pf-index-late]')].filter((holder) => !holder.closest('[hidden]') && !holder.querySelector('.pf-index-list'));
+    return !waiting.length && lists.every((list) => list.dataset.pfIndexTotal === '0' && !list.hasAttribute('data-pf-index-failed'));
+  };
+  const sendOutcome = (late) => {
+    const search = outcomeFor;
+    outcomeFor = null;
+    Promise.allSettled(late).then(() => {
+      const root = document.querySelector('[data-pf-index]');
+      if (root && Array.isArray(window.dataLayer) && nothingFound(root)) {
+        window.dataLayer.push({ event: 'pf_search_empty', search_term: search.term, search_mode: search.mode });
+      }
+    });
+  };
+
+  // Analytics: which result people open, "pf_search_result" with its source
+  // (catalog, articles, guides…) and place in that list as shown (1 is the
+  // first). Middle clicks count too; the result's address and title never.
+  const sendResult = (event) => {
+    if (event.type === 'auxclick' && event.button !== 1) {
+      return;
+    }
+    const link = event.target instanceof Element ? event.target.closest('.pf-index-row a[href]') : null;
+    const row = link && link.closest('.pf-index-row');
+    if (!row || !row.closest('[data-pf-index]') || !Array.isArray(window.dataLayer)) {
+      return;
+    }
+    const rows = [...(row.parentElement?.children || [])].filter((child) => child.classList.contains('pf-index-row'));
+    window.dataLayer.push({
+      event: 'pf_search_result',
+      result_source: row.closest('[data-pf-index-source]')?.dataset.pfIndexSource || 'results',
+      result_position: String(rows.indexOf(row) + 1),
+      search_mode: new URL(window.location.href).searchParams.get('mode') || 'all',
+    });
   };
 
   // The feedback drawer: the feedback Webform's own page, fetched into a
@@ -978,19 +1031,57 @@
     }
   };
 
+  // The feedback form's page, fetched once per address: by openFeedback(), or
+  // ahead of the click by prefetchFeedback(). Each is used once (its form is
+  // built for one sending) and kept a minute at most, so it's never stale.
+  const feedbackPages = new Map();
+  const fetchFeedback = (href) => {
+    if (!feedbackPages.has(href)) {
+      const page = fetch(href, { credentials: 'same-origin' })
+        .then(async (response) => ({ ok: response.ok, url: response.url || href, html: await response.text() }));
+      page.catch(() => feedbackPages.delete(href));
+      feedbackPages.set(href, page);
+      setTimeout(() => {
+        if (feedbackPages.get(href) === page) {
+          feedbackPages.delete(href);
+        }
+      }, 60000);
+    }
+    return feedbackPages.get(href);
+  };
+
+  // Where the form loads: the form's shape, its lines and boxes breathing as
+  // the copies' placeholder does. Unseen for its first .4s (.is-showing after
+  // that), so a quick answer opens straight onto the form. Read out at once.
+  const feedbackPlaceholder = () => {
+    const holder = document.createElement('div');
+    holder.className = 'pf-index-feedback-drawer__placeholder';
+    holder.setAttribute('role', 'status');
+    holder.innerHTML = `<span class="visually-hidden"></span>
+      <span class="pf-index-feedback-drawer__bone" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--short" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--label" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bones" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--label" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--field" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--label" aria-hidden="true"></span>
+      <span class="pf-index-feedback-drawer__bone pf-index-feedback-drawer__bone--area" aria-hidden="true"></span>`;
+    holder.firstElementChild.textContent = Drupal.t('Loading the form…');
+    setTimeout(() => holder.classList.add('is-showing'), 400);
+    return holder;
+  };
+
   const openFeedback = async (link, url) => {
     const dialog = feedbackDrawer(link.closest('[data-pf-index]'));
     const body = dialog.querySelector('[data-pf-index-feedback-body]');
-    const loading = document.createElement('p');
-    loading.className = 'pf-index-feedback-drawer__status';
-    loading.textContent = Drupal.t('Loading the form…');
-    body.replaceChildren(loading);
+    body.replaceChildren(feedbackPlaceholder());
     dialog.showModal();
     dialog.querySelector('h2').focus();
     try {
-      const response = await fetch(url, { credentials: 'same-origin' });
-      if (!response.ok || !showFeedback(dialog, await response.text(), response.url || url.href)) {
-        throw new Error(String(response.status));
+      const page = await fetchFeedback(url.href);
+      feedbackPages.delete(url.href);
+      if (!page.ok || !showFeedback(dialog, page.html, page.url)) {
+        throw new Error('Not a feedback form');
       }
     }
     catch (error) {
@@ -1089,11 +1180,9 @@
   // section came back empty. Notes
   // the answer in the dataLayer too, without the words: pf_search has them.
   // A plain click opens the form in the drawer; a new tab gets its page.
-  const sendFeedback = (event) => {
-    const link = event.target.closest?.('[data-pf-index-feedback-answer]');
-    if (!link) {
-      return;
-    }
+  // feedbackAddress() builds the form's address for a link, the same for the
+  // click and for prefetchFeedback(), so a page fetched ahead is the one used.
+  const feedbackAddress = (link) => {
     const url = new URL(link.href, window.location.href);
     // The Feedback link beside Search tips stays through an in-place search,
     // so its details may be an earlier search's: take the current one's from
@@ -1126,6 +1215,15 @@
     if (empty && !empty.hidden) {
       url.searchParams.set('result_count', '0');
     }
+    return url;
+  };
+
+  const sendFeedback = (event) => {
+    const link = event.target.closest?.('[data-pf-index-feedback-answer]');
+    if (!link) {
+      return;
+    }
+    const url = feedbackAddress(link);
     link.href = url.href;
     if (Array.isArray(window.dataLayer)) {
       window.dataLayer.push({
@@ -1139,6 +1237,30 @@
       && typeof HTMLDialogElement === 'function' && link.closest('[data-pf-index]')) {
       event.preventDefault();
       openFeedback(link, url);
+    }
+  };
+
+  // The form starts loading before the click: on a pointer resting on an
+  // answer for 120ms (not one passing over it), on a press (touch, pen or
+  // mouse, just before the click) and on keyboard focus. Not where the
+  // drawer can't open, nor with Data Saver on.
+  let feedbackHover = 0;
+  const prefetchFeedback = (event) => {
+    const link = event.target.closest?.('[data-pf-index-feedback-answer]');
+    if (!link || !link.closest('[data-pf-index]') || typeof HTMLDialogElement !== 'function' || navigator.connection?.saveData) {
+      return;
+    }
+    clearTimeout(feedbackHover);
+    if (event.type === 'pointerover') {
+      feedbackHover = setTimeout(() => fetchFeedback(feedbackAddress(link).href), 120);
+    }
+    else {
+      fetchFeedback(feedbackAddress(link).href);
+    }
+  };
+  const leaveFeedback = (event) => {
+    if (event.target.closest?.('[data-pf-index-feedback-answer]')) {
+      clearTimeout(feedbackHover);
     }
   };
 
@@ -1835,6 +1957,10 @@
         // auxclick: a middle click opens the form in a new tab.
         document.addEventListener('click', sendFeedback);
         document.addEventListener('auxclick', sendFeedback);
+        document.addEventListener('pointerover', prefetchFeedback);
+        document.addEventListener('pointerout', leaveFeedback);
+        document.addEventListener('pointerdown', prefetchFeedback);
+        document.addEventListener('focusin', prefetchFeedback);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-modes', '.pf-index__modes', context).forEach(showMode);
@@ -1842,7 +1968,14 @@
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);
-      once('pf-index-late', '[data-pf-index-late]', context).forEach(load);
+      const late = once('pf-index-late', '[data-pf-index-late]', context).map(load);
+      if (outcomeFor) {
+        sendOutcome(late);
+      }
+      once('pf-index-results', 'html').forEach(() => {
+        document.addEventListener('click', sendResult, true);
+        document.addEventListener('auxclick', sendResult, true);
+      });
       once('pf-index-where', '.pf-index__toolbar', context).forEach(followSections);
       once('pf-index-dock', '.pf-index__toolbar', context).forEach(dockToolbar);
       once('pf-index-answer', '[data-pf-index-answer]', context).forEach(fillAnswer);

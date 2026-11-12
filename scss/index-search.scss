@@ -4264,8 +4264,67 @@ html.pf-index-docked {
   text-decoration-thickness: from-font;
 }
 
-.pf-index-feedback-drawer__status {
-  color: var(--pf-index-muted);
+// While the form loads (index-search.js feedbackPlaceholder()): the form's
+// shape in the hairline color, as the copies' placeholder: the opening lines,
+// a question and its three answers, two labelled fields. Unseen until the
+// script adds .is-showing after .4s (a timer, since the site's reduced-motion
+// switch zeroes animation delays), so a quick answer opens straight onto the
+// form; then it fades in and breathes, motion allowing.
+// Only the shapes wait: its words for screen readers are read at once.
+.pf-index-feedback-drawer__placeholder {
+  display: grid;
+  gap: .625rem;
+
+  &:not(.is-showing) > [aria-hidden] {
+    visibility: hidden;
+  }
+
+  &.is-showing {
+    @include pf-index-motion {
+      animation:
+        pf-index-placeholder-in .3s var(--pf-index-ease) backwards,
+        pf-index-placeholder-breathe 1.6s ease-in-out .3s infinite alternate;
+    }
+  }
+}
+
+.pf-index-feedback-drawer__bone,
+.pf-index-feedback-drawer__bones span {
+  display: block;
+  height: .875rem;
+  background: var(--pf-index-line);
+}
+
+.pf-index-feedback-drawer__bone--short {
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.pf-index-feedback-drawer__bone--label {
+  width: 45%;
+  margin-top: .875rem;
+}
+
+.pf-index-feedback-drawer__bone--field,
+.pf-index-feedback-drawer__bones span {
+  height: 2.75rem;
+  border: 1px solid var(--pf-index-line);
+  background: none;
+}
+
+.pf-index-feedback-drawer__bone--area {
+  height: 7rem;
+  border: 1px solid var(--pf-index-line);
+  background: none;
+}
+
+.pf-index-feedback-drawer__bones {
+  display: flex;
+  gap: .5rem;
+
+  span {
+    width: 5rem;
+  }
 }
 
 .pf-index-feedback-drawer__body {
