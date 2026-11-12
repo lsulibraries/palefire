@@ -888,15 +888,21 @@ $pf-index-bar-shadow:
   border: 0;
   background: none;
   color: var(--pf-index-fg);
-  font-family: inherit;
+  // The body face, not the mono label of the Source filter's title it sits
+  // in, so What are these?, Feedback and Search tips read as one set.
+  font-family: var(--bs-body-font-family);
   font-size: .8125rem;
+  font-weight: 400;
+  line-height: 1.5;
   letter-spacing: normal;
   text-transform: none;
   text-decoration: none;
   cursor: pointer;
 
   // Words underlined dotted, as the glossary's are, after a duotone icon
-  // (FA Pro, inlined from the server's root libraries) that isn't.
+  // (FA Pro, inlined from the server's root libraries) that isn't. Quiet at
+  // rest (35% of the text color), full on hover and focus: helpers, not the
+  // page's main links.
   &:has(.pf-index__link-icon) {
     display: inline-flex;
     gap: .4em;
@@ -904,8 +910,19 @@ $pf-index-bar-shadow:
   }
 
   .pf-index__link-text {
-    text-decoration: underline dotted;
-    text-underline-offset: .22em;
+    text-decoration: underline dotted 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    text-underline-offset: .28em;
+
+    @include pf-index-motion {
+      transition: text-decoration-color .2s ease;
+    }
+  }
+
+  &:hover .pf-index__link-text,
+  &:focus-visible .pf-index__link-text,
+  &[aria-expanded='true'] .pf-index__link-text {
+    text-decoration-color: currentColor;
   }
 
   .pf-index__link-icon {
