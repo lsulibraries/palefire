@@ -766,9 +766,50 @@
   font-size: .8125rem;
   letter-spacing: normal;
   text-transform: none;
-  text-decoration: underline dotted;
-  text-underline-offset: .22em;
+  text-decoration: none;
   cursor: pointer;
+
+  // Words underlined dotted, as the glossary's are, after a duotone icon
+  // (FA Pro, inlined from the server's root libraries) that isn't.
+  &:has(.pf-index__link-icon) {
+    display: inline-flex;
+    gap: .4em;
+    align-items: center;
+  }
+
+  .pf-index__link-text {
+    text-decoration: underline dotted;
+    text-underline-offset: .22em;
+  }
+
+  .pf-index__link-icon {
+    display: inline-flex;
+    flex: none;
+
+    svg {
+      width: 1.125em;
+      height: 1.125em;
+      fill: var(--pf-index-highlight);
+    }
+
+    .fa-secondary {
+      opacity: .4;
+
+      @include pf-index-motion {
+        transition: opacity .2s ease;
+      }
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  &:hover .fa-secondary,
+  &:focus-visible .fa-secondary,
+  &[aria-expanded='true'] .fa-secondary {
+    opacity: .7;
+  }
 
   &:focus-visible {
     outline: 2px solid var(--pf-index-highlight);

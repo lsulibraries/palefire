@@ -133,7 +133,7 @@ $intro = '<p>What the new search page, the Index, covers, what\'s finished, what
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Wed 11 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first. Oral histories is a source of its own beside PDF Finding Aids, with a list of every series under it.</p>
+<p><strong>Status as of Thu 12 Nov 2026:</strong> the first build is running on production at /v2/search and searches real content in all four modes. The Special Collections hero search now opens it, with All sources: the Catalog (set to Special Collections), Special Collections Guides and PDF Finding Aids. The header's Search drawer opens it too, starting on the section you're in. A search for hours starts with today's hours. The site's other search forms still go to the old page. Catalog rows now show where each copy is, and a shelf with several boxes or volumes lists each one with its own request. The look of the result rows may still change: a second round of designs is waiting for a decision. Research now has a Journals section, and a search for a journal by name shows that journal first. Oral histories is a source of its own beside PDF Finding Aids, with a list of every series under it, and its own section in Special Collections. An interview no longer shows a second time as its Catalog record.</p>
 HTML, 'callout'),
   $status('Where each stage stands', [
     ['done', 'Review of the current search', 'The one_search module, its 11 Views, the search index and the connector modules are read.'],
@@ -156,7 +156,7 @@ HTML, 'callout'),
     ['running', 'Reading room wording', 'Special Collections copies say Available to view and Request to view, with one note per record that they are viewed in the Hill Memorial reading room and a link to how requests work. Sign-in wording waits until requests move to Alma.'],
     ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens the Index in Special Collections mode, with All sources and the Catalog set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text, saying Hide once open. An open result\'s table sits on a soft panel. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
-    ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the PDF Finding Aids list, set to Special Collections, until a source is chosen.'],
+    ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Special Collections Guides and Oral histories sections and the PDF Finding Aids list, set to Special Collections, until a source is chosen.'],
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
@@ -376,6 +376,13 @@ HTML),
 <li>Oral History confirmed the names of the seven series added from the catalog. Robert Ray Cox Series now has a capital S, and a new script keeps every record's series in line with the module's list, so a rename is one edit and one command.</li>
 <li>Oral histories became a source of its own beside PDF Finding Aids, which now holds finding aids only. Its Series list shows every series, greying out those with no match, so it reads as the whole collection. Old links to the Oral histories filter still work.</li>
 <li>The Series list is now as wide as its row, so long series names fit, and its border is softer until you point at it or tab to it.</li>
+</ul>
+HTML),
+  $text('Thu Nov 12: Oral histories in Special Collections', <<<'HTML'
+<ul>
+<li>In Special Collections, oral histories now have their own section instead of sharing one list with the finding aids, which is now called PDF Finding Aids. All and Research already worked this way.</li>
+<li>An interview showed twice: as an oral history and again as its catalog record, with the same abstract PDF. When the Oral histories section is on the page, the Catalog section leaves those records out and fills its rows with others. Choosing the Catalog on its own, or narrowing Oral histories to one series, still shows them.</li>
+<li>Search tips now starts with a lightbulb, and What are these? with an information circle, both in gold, so they look like the helpers they are rather than plain links.</li>
 </ul>
 HTML),
 ]);
