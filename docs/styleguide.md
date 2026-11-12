@@ -170,6 +170,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-12:** Covers shelf: the end panes are a plain fade, no `backdrop-filter` (`linear-gradient(dir, section bg 20%, 88% mix 50%, transparent)` under the same mask). `[data-pf-moving]` is withdrawn.
 - **2026-11-12:** Covers shelf glass: `.pf-tiles__shelf[data-pf-moving]::before, ::after` set `backdrop-filter: none` and a denser gradient (section color to 20%, 88% mix at 50%, transparent). `data-pf-moving` is set by `js/book-shelf.js` from the first scroll or drag and cleared 150ms after the last scroll, when nothing is held or gliding.
 - **2026-11-12:** Covers shelf (`js/book-shelf.js`): `update()` writes `hidden`, `disabled`, `data-pf-at` and the inline cursor only on change; `.pf-tiles__item` gets inline `pointer-events: none` while dragging or gliding; drag scroll writes are batched to one per animation frame.
 - **2026-11-12:** `.pf-index-list__more .pf-index-rule__link`: `white-space: normal`, `text-align: end`, `text-wrap: balance`, for labels that name the source.

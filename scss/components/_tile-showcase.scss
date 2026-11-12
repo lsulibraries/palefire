@@ -1366,8 +1366,8 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 // One shelf of books, the guide's whole list, newest first: a row that
 // scrolls sideways at every width (swipe, trackpad, Tab, or the Previous /
 // Next buttons js/book-shelf.js shows when it overflows), inside the
-// section's gutters like the rest of the page. Books slide under a pane of
-// frosted glass at the side that has more of them. Each book stands in a
+// section's gutters like the rest of the page. Books fade into the
+// section's color at the side that has more of them. Each book stands in a
 // 2:3 frame on a hairline, at its own shape, so books of different shapes
 // stand at different heights.
 // It is drawn turned a little to the left, so its page edges show, as
@@ -1409,15 +1409,17 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  // Snapped or focused, a book stops clear of the glass.
+  // Snapped or focused, a book stops clear of the fade.
   scroll-padding-inline: var(--pf-shelf-glass);
   @include pf-thin-scrollbar;
 }
 
-// The glass: a pane at each end, over the books (not the scrollbar), that
-// blurs and darkens what passes under it toward the section's color, its
-// inner edge fading out. Shown at the side with more books
-// (data-pf-at, js/book-shelf.js); without JS, at the end only.
+// The fade: a pane at each end, over the books (not the scrollbar), solid
+// section color at the outer edge, clearing toward the books. Shown at the
+// side with more books (data-pf-at, js/book-shelf.js); without JS, at the
+// end only. No blur (2026-11-12): a backdrop blur is redrawn on every
+// frame the books move, and swapping it for a tint while moving showed.
+// The --pf-shelf-glass names are kept from when it was frosted glass.
 .pf-tiles__shelf::before,
 .pf-tiles__shelf::after {
   content: "";
@@ -1426,10 +1428,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   top: 0;
   bottom: 1.25rem;
   width: var(--pf-shelf-glass);
-  // Solid at the outer edge, where the blur would show its own seam.
-  background: linear-gradient(var(--pf-shelf-glass-dir), var(--pf-shelf-glass-bg) 12%, color-mix(in srgb, var(--pf-shelf-glass-bg) 70%, transparent) 45%, transparent);
-  -webkit-backdrop-filter: blur(6px) saturate(0.8);
-  backdrop-filter: blur(6px) saturate(0.8);
+  background: linear-gradient(var(--pf-shelf-glass-dir), var(--pf-shelf-glass-bg) 20%, color-mix(in srgb, var(--pf-shelf-glass-bg) 88%, transparent) 50%, transparent);
   -webkit-mask-image: linear-gradient(var(--pf-shelf-glass-dir), #000 50%, transparent);
   mask-image: linear-gradient(var(--pf-shelf-glass-dir), #000 50%, transparent);
   opacity: 0;
@@ -1450,16 +1449,6 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 .pf-tiles__shelf:is([data-pf-at="middle"], [data-pf-at="end"])::before,
 .pf-tiles__shelf:is([data-pf-at="start"], [data-pf-at="middle"])::after {
   opacity: 1;
-}
-
-// While the books move (data-pf-moving, js/book-shelf.js), these two panes
-// set aside their blur, which would be redrawn every frame, and the tint
-// thickens instead, so the books under them don't turn sharp.
-.pf-tiles__shelf[data-pf-moving]::before,
-.pf-tiles__shelf[data-pf-moving]::after {
-  background: linear-gradient(var(--pf-shelf-glass-dir), var(--pf-shelf-glass-bg) 20%, color-mix(in srgb, var(--pf-shelf-glass-bg) 88%, transparent) 50%, transparent);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
 }
 
 // Positioned, so the visually hidden subtitles (absolute) are clipped by

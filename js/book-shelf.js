@@ -6,8 +6,8 @@
  * The shelf scrolls by itself (swipe, trackpad, Tab); the buttons are for a
  * mouse. Shown only while the shelf overflows, each moves it most of its
  * width, and is disabled at its end. Keeps data-pf-at on .pf-tiles__shelf
- * (start, middle, end or none), which shows the frosted glass at the side
- * with more books. Smooth unless motion is reduced (OS
+ * (start, middle, end or none), which shows the fade at the side with more
+ * books. Smooth unless motion is reduced (OS
  * setting or the Settings drawer's html.pf-a11y-motion). Without JS the
  * buttons stay hidden. Styles: _tile-showcase.scss.
  *
@@ -58,8 +58,8 @@
 
         // Runs on every scroll frame, so it only writes what changed: a
         // rewritten cursor restyles every book (it is inherited, and the
-        // dimming rule uses :has()), and a rewritten data-pf-at repaints
-        // the blurred glass, even when the value is the same.
+        // dimming rule uses :has()), and a rewritten data-pf-at restyles
+        // the fades, even when the value is the same.
         const shown = {};
         const set = (key, value, apply) => {
           if (shown[key] !== value) {
@@ -104,25 +104,6 @@
           });
         };
 
-        // While the books move at all (drag, glide, swipe, trackpad), the
-        // glass sets aside its blur, which would be redrawn every frame
-        // (data-pf-moving, _tile-showcase.scss). It comes back 150ms after
-        // the last scroll, once nothing is held or gliding.
-        let settleTimer = 0;
-        const setGlass = (on) => {
-          if (shelfEl) {
-            set('glass', on, (v) => shelfEl.toggleAttribute('data-pf-moving', v));
-          }
-        };
-        const settle = () => {
-          clearTimeout(settleTimer);
-          settleTimer = setTimeout(() => {
-            if (!dragging && !glide) {
-              setGlass(false);
-            }
-          }, 150);
-        };
-
         // The glide: an exponential ease toward a fixed target, so it lands
         // on the book's snap point and snapping has nothing left to do.
         let glide = 0;
@@ -134,7 +115,7 @@
         };
 
         // Where each book snaps to: its start, less the scroll padding (the
-        // glass), within the shelf's range. The end counts too, so a fling
+        // fade), within the shelf's range. The end counts too, so a fling
         // can reach the last books when they can't snap to their start.
         const nearestSnap = (x) => {
           const max = maxScroll();
@@ -215,7 +196,6 @@
             list.style.scrollSnapType = 'none';
             list.style.userSelect = 'none';
             setMoving(true);
-            setGlass(true);
             update();
             window.getSelection()?.removeAllRanges();
           }
@@ -240,7 +220,6 @@
             return;
           }
           dragging = false;
-          settle();
           // The last move's position, if its frame hasn't come yet.
           if (dragFrame) {
             cancelAnimationFrame(dragFrame);
@@ -300,8 +279,6 @@
 
         let frame = 0;
         list.addEventListener('scroll', () => {
-          setGlass(true);
-          settle();
           cancelAnimationFrame(frame);
           frame = requestAnimationFrame(update);
         }, { passive: true });
