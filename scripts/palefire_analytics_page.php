@@ -62,7 +62,7 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-$intro = '<p>How people use the library website: page views on the new and old sites, the kinds of page they read, and what they search for. For library staff; updated each night from Google Analytics.</p>';
+$intro = '<p>How people use the new library website while it is tested: page views, the kinds of page people read, what they search for and what they find, and the controls they use. For library staff; updated each night from Google Analytics.</p>';
 
 $sections = [
   [
@@ -75,8 +75,12 @@ $sections = [
     'title' => 'About these figures',
     'blocks' => [
       ['How pages are counted', <<<'HTML'
-<p>Every page on the new site says what it is: its part of the site (Special Collections, or the rest of the library) and its kind (a guide, an exhibition, a location, Combined Search…). The figures are grouped by those labels, not by web address, so they carry on unchanged when the new pages leave /v2. A page without the labels is counted as the old site.</p>
+<p>Every page on the new site says what it is: its part of the site (Special Collections, or the rest of the library) and its kind (a guide, an exhibition, a location, Combined Search…). The figures are grouped by those labels, not by web address, so they carry on unchanged when the new pages leave /v2. Pages without the labels, the old site, are left out for now.</p>
 <p>A page view is counted when a page opens, including moves between new-site pages that don't reload the browser. A search is counted when someone runs a new Combined Search; changing filters, sorting or pages of results doesn't count again.</p>
+HTML],
+      ['Searches, results and controls', <<<'HTML'
+<p>A search "found nothing" when every source came back empty; a source that couldn't be reached doesn't count, as nothing was learned. An opened result is counted with its source and its place in that source's list (1st is the top), never its title or address.</p>
+<p>Controls are counted by what was pressed, in plain words: a section tab's name, a reading color, the map's floor or room, the phone toolbar's buttons, the Ask Us form being sent. What people type is never recorded, except Combined Search terms.</p>
 HTML],
       ['Privacy', <<<'HTML'
 <p>Search terms are what people typed. Email addresses are removed before anything reaches Google Analytics, and Google withholds rare rows, but a search can still contain a name, so this page stays unpublished and the report shows only to signed-in staff. Please don't copy search terms to public places.</p>

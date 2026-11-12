@@ -39,7 +39,7 @@
     {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.sections, unit: 'views'|t } only %}
 
     {% if report.types %}
-      <h4>{{ 'New site page views by kind of page'|t }}</h4>
+      <h4>{{ 'Page views by kind of page'|t }}</h4>
       {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.types, unit: 'views'|t } only %}
     {% endif %}
 
@@ -50,22 +50,22 @@
           <li class="pf-progress__row">
             <span class="pf-progress__label">{{ week.current ? 'Week of @week, so far'|t({ '@week': week.week }) : 'Week of @week'|t({ '@week': week.week }) }}</span>
             <span class="pf-progress__bar" aria-hidden="true">
-              {% if week.palefire_width > 0 %}
-                <span class="pf-progress__gain" style="width: {{ week.palefire_width }}%"></span>
+              {% if week.special_width > 0 %}
+                <span class="pf-progress__gain" style="width: {{ week.special_width }}%"></span>
               {% endif %}
-              {% if week.old_width > 0 %}
-                <span class="pf-progress__before" style="left: {{ week.palefire_width }}%; width: {{ week.old_width }}%"></span>
+              {% if week.library_width > 0 %}
+                <span class="pf-progress__before" style="left: {{ week.special_width }}%; width: {{ week.library_width }}%"></span>
               {% endif %}
             </span>
-            <span class="pf-progress__value">{{ '@new new, @old old'|t({ '@new': week.palefire, '@old': week.old }) }}</span>
+            <span class="pf-progress__value">{{ '@special Special Collections, @library library'|t({ '@special': week.special, '@library': week.library }) }}</span>
           </li>
         {% endfor %}
       </ol>
-      <p class="pf-progress__caption">{{ 'Gold is the new site, pale gold the old site.'|t }}</p>
+      <p class="pf-progress__caption">{{ 'Gold is Special Collections, pale gold the rest of the library.'|t }}</p>
     {% endif %}
 
     {% if report.pages %}
-      <h4>{{ 'Most viewed pages on the new site'|t }}</h4>
+      <h4>{{ 'Most viewed pages'|t }}</h4>
       <div class="pf-guide-prose">
         <table>
           <thead>
@@ -100,6 +100,59 @@
         </table>
       </div>
       <p class="pf-stats__caption">{{ 'The 25 most frequent. Email addresses are removed before they reach Google Analytics; rare searches may be withheld by Google.'|t }}</p>
+    {% else %}
+      <p class="pf-stats__caption">{{ 'None recorded yet.'|t }}</p>
+    {% endif %}
+
+    <h4>{{ 'Searches that found nothing'|t }}</h4>
+    {% if report.empty %}
+      <div class="pf-guide-prose">
+        <table>
+          <thead>
+            <tr><th scope="col">{{ 'Search'|t }}</th><th scope="col">{{ 'Times'|t }}</th></tr>
+          </thead>
+          <tbody>
+            {% for term in report.empty %}
+              <tr><td>{{ term.term }}</td><td>{{ term.count_text }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="pf-stats__caption">{{ 'Every source came back empty. Worth a look for misspellings, missing guides or words the catalog doesn’t use.'|t }}</p>
+    {% else %}
+      <p class="pf-stats__caption">{{ 'None recorded yet.'|t }}</p>
+    {% endif %}
+
+    <h4>{{ 'Results opened, by source'|t }}</h4>
+    {% if report.sources %}
+      <p class="pf-stats__caption">
+        {%- if report.opened_share is not null -%}
+          {{ '@count results opened, @share for every 100 searches.'|t({ '@count': report.opened, '@share': report.opened_share }) }}
+        {%- else -%}
+          {{ '@count results opened.'|t({ '@count': report.opened }) }}
+        {%- endif -%}
+      </p>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.sources, unit: 'opened'|t } only %}
+      <h4>{{ 'Results opened, by place in the list'|t }}</h4>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.positions, unit: 'opened'|t } only %}
+    {% else %}
+      <p class="pf-stats__caption">{{ 'None recorded yet.'|t }}</p>
+    {% endif %}
+
+    <h4>{{ 'Most used controls'|t }}</h4>
+    {% if report.controls %}
+      <div class="pf-guide-prose">
+        <table>
+          <thead>
+            <tr><th scope="col">{{ 'Control'|t }}</th><th scope="col">{{ 'Pressed'|t }}</th><th scope="col">{{ 'Times'|t }}</th></tr>
+          </thead>
+          <tbody>
+            {% for row in report.controls %}
+              <tr><td>{{ row.control }}</td><td>{{ row.action }}</td><td>{{ row.count_text }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% else %}
       <p class="pf-stats__caption">{{ 'None recorded yet.'|t }}</p>
     {% endif %}

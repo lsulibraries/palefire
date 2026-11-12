@@ -39,11 +39,11 @@ $views = 0;
 foreach ($data['sections'] as $ranges) {
   $views += (int) ($ranges[0]['views'] ?? 0);
 }
-$summary = sprintf('%s page views, %d searches, %d search terms, %d weeks.', number_format($views), $data['searches'][0], count($data['terms']), count($data['weeks']));
+$summary = sprintf('%s new-site page views, %d searches (%d found nothing), %d results opened, %d controls, %d weeks.', number_format($views), $data['searches'][0], $data['empty_total'], $data['opened_total'], count($data['controls']), count($data['weeks']));
 
 if (($args['dry'] ?? '') === '1') {
   print "Dry run, nothing kept. $summary\n";
-  print json_encode(array_diff_key($data, ['terms' => 1]), JSON_PRETTY_PRINT) . "\n";
+  print json_encode(array_diff_key($data, ['terms' => 1, 'empty' => 1]), JSON_PRETTY_PRINT) . "\n";
   return;
 }
 AnalyticsReport::save($data);

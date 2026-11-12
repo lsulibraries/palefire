@@ -21,7 +21,8 @@ use Drupal\Core\Cache\Cache;
  *
  * Pages are grouped by the labels Palefire puts on <html> (data-pf-section,
  * data-pf-type, sent as pf_section and pf_type), not by URL, so the report
- * keeps working after /v2 is dropped. Pages without them are the old site.
+ * keeps working after /v2 is dropped. For now it counts the new site only:
+ * pages without the labels (the old site) are left out while v2 is tested.
  * No PHP library: the service account's token is a JWT signed with OpenSSL,
  * and the requests go through Drupal's HTTP client.
  */
@@ -61,6 +62,18 @@ final class AnalyticsReport {
   ];
 
   /**
+   * Labels for the data-pf-track names of controls (js/palefire.js).
+   */
+  private const CONTROLS = [
+    'section-tabs' => 'Section tabs',
+    'ask-tabs' => 'Ask Us tabs',
+    'ask-form' => 'Ask Us form',
+    'settings' => 'Reading settings',
+    'dock' => 'Phone toolbar',
+    'map' => 'Building map',
+  ];
+
+  /**
    * Reads GA4 and returns the figures to keep in State.
    *
    * @param string $key_file
@@ -74,7 +87,12 @@ final class AnalyticsReport {
     $now = ['startDate' => '28daysAgo', 'endDate' => 'yesterday'];
     $before = ['startDate' => '56daysAgo', 'endDate' => '29daysAgo'];
     $palefire = ['filter' => ['fieldName' => 'customEvent:pf_section', 'inListFilter' => ['values' => ['special', 'library']]]];
-    $searches = ['filter' => ['fieldName' => 'eventName', 'stringFilter' => ['value' => 'search']]];
+    // A GA4 event on new-site pages.
+    $event = fn (string $name) => ['andGroup' => ['expressions' => [
+      ['filter' => ['fieldName' => 'eventName', 'stringFilter' => ['value' => $name]]],
+      $palefire,
+    ]]];
+    $most = fn (string $metric) => [['metric' => ['metricName' => $metric], 'desc' => TRUE]];
 
     $reports = self::run($token, [
       // 0: page views and users by section, this period and the one before.
@@ -82,38 +100,39 @@ final class AnalyticsReport {
         'dateRanges' => [$now, $before],
         'dimensions' => [['name' => 'customEvent:pf_section']],
         'metrics' => [['name' => 'screenPageViews'], ['name' => 'activeUsers']],
+        'dimensionFilter' => $palefire,
       ],
-      // 1: Palefire page views by kind of page.
+      // 1: page views by kind of page.
       [
         'dateRanges' => [$now],
         'dimensions' => [['name' => 'customEvent:pf_type']],
         'metrics' => [['name' => 'screenPageViews']],
         'dimensionFilter' => $palefire,
-        'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => TRUE]],
+        'orderBys' => $most('screenPageViews'),
         'limit' => 12,
       ],
-      // 2: the most viewed Palefire pages.
+      // 2: the most viewed pages.
       [
         'dateRanges' => [$now],
         'dimensions' => [['name' => 'pagePath'], ['name' => 'pageTitle']],
         'metrics' => [['name' => 'screenPageViews']],
         'dimensionFilter' => $palefire,
-        'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => TRUE]],
+        'orderBys' => $most('screenPageViews'),
         'limit' => 15,
       ],
       // 3: searches, this period and the one before.
       [
         'dateRanges' => [$now, $before],
         'metrics' => [['name' => 'eventCount']],
-        'dimensionFilter' => $searches,
+        'dimensionFilter' => $event('search'),
       ],
       // 4: what people searched for.
       [
         'dateRanges' => [$now],
         'dimensions' => [['name' => 'customEvent:search_term']],
         'metrics' => [['name' => 'eventCount']],
-        'dimensionFilter' => $searches,
-        'orderBys' => [['metric' => ['metricName' => 'eventCount'], 'desc' => TRUE]],
+        'dimensionFilter' => $event('search'),
+        'orderBys' => $most('eventCount'),
         'limit' => 25,
       ],
       // 5: searches by mode (All, Special Collections...).
@@ -121,8 +140,8 @@ final class AnalyticsReport {
         'dateRanges' => [$now],
         'dimensions' => [['name' => 'customEvent:search_mode']],
         'metrics' => [['name' => 'eventCount']],
-        'dimensionFilter' => $searches,
-        'orderBys' => [['metric' => ['metricName' => 'eventCount'], 'desc' => TRUE]],
+        'dimensionFilter' => $event('search'),
+        'orderBys' => $most('eventCount'),
       ],
       // 6: page views each week, by section: twelve whole weeks from a
       // Monday, so the first bar isn't a partial week, then this week so far.
@@ -130,7 +149,46 @@ final class AnalyticsReport {
         'dateRanges' => [['startDate' => (new \DateTimeImmutable('monday this week'))->modify('-12 weeks')->format('Y-m-d'), 'endDate' => 'yesterday']],
         'dimensions' => [['name' => 'isoYearIsoWeek'], ['name' => 'customEvent:pf_section']],
         'metrics' => [['name' => 'screenPageViews']],
+        'dimensionFilter' => $palefire,
         'orderBys' => [['dimension' => ['dimensionName' => 'isoYearIsoWeek']]],
+      ],
+      // 7: searches that found nothing anywhere (js/index-search.js), with
+      // the total beyond the 25 listed.
+      [
+        'dateRanges' => [$now],
+        'dimensions' => [['name' => 'customEvent:search_term']],
+        'metrics' => [['name' => 'eventCount']],
+        'dimensionFilter' => $event('pf_search_empty'),
+        'orderBys' => $most('eventCount'),
+        'metricAggregations' => ['TOTAL'],
+        'limit' => 25,
+      ],
+      // 8: the controls people use (data-pf-track, js/palefire.js).
+      [
+        'dateRanges' => [$now],
+        'dimensions' => [['name' => 'customEvent:pf_component'], ['name' => 'customEvent:pf_action']],
+        'metrics' => [['name' => 'eventCount']],
+        'dimensionFilter' => $event('pf_interaction'),
+        'orderBys' => $most('eventCount'),
+        'limit' => 30,
+      ],
+      // 9: Combined Search results opened, by source.
+      [
+        'dateRanges' => [$now],
+        'dimensions' => [['name' => 'customEvent:result_source']],
+        'metrics' => [['name' => 'eventCount']],
+        'dimensionFilter' => $event('pf_search_result'),
+        'orderBys' => $most('eventCount'),
+        'metricAggregations' => ['TOTAL'],
+        'limit' => 12,
+      ],
+      // 10: ...and by place in their list.
+      [
+        'dateRanges' => [$now],
+        'dimensions' => [['name' => 'customEvent:result_position']],
+        'metrics' => [['name' => 'eventCount']],
+        'dimensionFilter' => $event('pf_search_result'),
+        'limit' => 100,
       ],
     ]);
 
@@ -143,9 +201,15 @@ final class AnalyticsReport {
       'terms' => [],
       'modes' => [],
       'weeks' => [],
+      'empty' => [],
+      'empty_total' => self::total($reports[7]),
+      'controls' => [],
+      'sources' => [],
+      'opened_total' => self::total($reports[9]),
+      'positions' => [],
     ];
     foreach (self::rows($reports[0]) as $row) {
-      $section = self::section($row['d'][0]);
+      $section = $row['d'][0];
       // With two date ranges GA4 adds a dateRange dimension last.
       $range = ($row['d'][1] ?? 'date_range_0') === 'date_range_0' ? 0 : 1;
       $data['sections'][$section][$range]['views'] = ($data['sections'][$section][$range]['views'] ?? 0) + (int) $row['m'][0];
@@ -168,9 +232,23 @@ final class AnalyticsReport {
       $data['modes'][] = ['mode' => $row['d'][0], 'count' => (int) $row['m'][0]];
     }
     foreach (self::rows($reports[6]) as $row) {
-      $section = self::section($row['d'][1]);
-      $data['weeks'][$row['d'][0]][$section] = ($data['weeks'][$row['d'][0]][$section] ?? 0) + (int) $row['m'][0];
+      $data['weeks'][$row['d'][0]][$row['d'][1]] = ($data['weeks'][$row['d'][0]][$row['d'][1]] ?? 0) + (int) $row['m'][0];
     }
+    foreach (self::rows($reports[7]) as $row) {
+      $data['empty'][] = ['term' => $row['d'][0], 'count' => (int) $row['m'][0]];
+    }
+    foreach (self::rows($reports[8]) as $row) {
+      $data['controls'][] = ['component' => $row['d'][0], 'action' => $row['d'][1], 'count' => (int) $row['m'][0]];
+    }
+    foreach (self::rows($reports[9]) as $row) {
+      $data['sources'][] = ['source' => $row['d'][0], 'count' => (int) $row['m'][0]];
+    }
+    foreach (self::rows($reports[10]) as $row) {
+      // The first ten places, then the rest together (11).
+      $place = ctype_digit($row['d'][0]) && (int) $row['d'][0] >= 1 && (int) $row['d'][0] <= 10 ? (int) $row['d'][0] : 11;
+      $data['positions'][$place] = ($data['positions'][$place] ?? 0) + (int) $row['m'][0];
+    }
+    ksort($data['positions']);
     return $data;
   }
 
@@ -191,9 +269,9 @@ final class AnalyticsReport {
       return NULL;
     }
     $formatter = \Drupal::service('date.formatter');
-    $sum = fn (int $range, string $key, array $sections) => array_sum(array_map(fn ($s) => (int) ($data['sections'][$s][$range][$key] ?? 0), $sections));
     $palefire = ['special', 'library'];
-    $figure = function (string $label, int $now, int $before): array {
+    $sum = fn (int $range, string $key, array $sections) => array_sum(array_map(fn ($s) => (int) ($data['sections'][$s][$range][$key] ?? 0), $sections));
+    $figure = function (string $label, int $now, ?int $before = NULL): array {
       $change = $before > 0 ? (int) round(($now - $before) / $before * 100) : NULL;
       return [
         'label' => $label,
@@ -209,6 +287,8 @@ final class AnalyticsReport {
         'width' => round((int) $row[$count] / $max * 100, 1),
       ], $rows);
     };
+    $counted = fn (array $rows) => array_map(fn ($row) => $row + ['count_text' => number_format((int) $row['count'])], $rows);
+
     $weeks = [];
     // The week the pull ran in is only partly counted (through yesterday).
     $pulled = (new \DateTimeImmutable('@' . (int) $data['updated']))->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -217,48 +297,76 @@ final class AnalyticsReport {
       $weeks[] = [
         'current' => (string) $week === $pulled_week && $pulled->format('N') !== '1',
         'week' => self::weekLabel((string) $week),
-        'palefire' => array_sum(array_intersect_key($sections, array_flip($palefire))),
-        'old' => (int) ($sections['old'] ?? 0),
+        'special' => (int) ($sections['special'] ?? 0),
+        'library' => (int) ($sections['library'] ?? 0),
       ];
     }
-    $week_max = max(array_merge([1], array_map(fn ($w) => $w['palefire'] + $w['old'], $weeks)));
+    $week_max = max(array_merge([1], array_map(fn ($w) => $w['special'] + $w['library'], $weeks)));
     foreach ($weeks as &$week) {
-      $week['palefire_width'] = round($week['palefire'] / $week_max * 100, 1);
-      $week['old_width'] = round($week['old'] / $week_max * 100, 1);
-      $week['palefire'] = number_format($week['palefire']);
-      $week['old'] = number_format($week['old']);
+      $week['special_width'] = round($week['special'] / $week_max * 100, 1);
+      $week['library_width'] = round($week['library'] / $week_max * 100, 1);
+      $week['special'] = number_format($week['special']);
+      $week['library'] = number_format($week['library']);
     }
     unset($week);
-    $total_terms = array_sum(array_column($data['terms'], 'count'));
+    // Weeks before the new site's first page view say nothing.
+    while (count($weeks) > 1 && $weeks[0]['special_width'] + $weeks[0]['library_width'] == 0) {
+      array_shift($weeks);
+    }
+
+    $positions = [];
+    foreach ($data['positions'] ?? [] as $place => $count) {
+      $positions[] = ['place' => $place > 10 ? 'Below 10th' : self::ordinal((int) $place), 'count' => $count];
+    }
+    $searches = (int) $data['searches'][0];
+    $opened = (int) ($data['opened_total'] ?? 0);
 
     return [
       'updated' => $formatter->format((int) $data['updated'], 'custom', 'F j, Y, g:i a'),
       'through' => $formatter->format((int) $data['updated'] - 86400, 'custom', 'F j'),
       'figures' => [
-        $figure('Page views, new site', $sum(0, 'views', $palefire), $sum(1, 'views', $palefire)),
-        $figure('Page views, old site', $sum(0, 'views', ['old']), $sum(1, 'views', ['old'])),
-        $figure('Combined Searches', (int) $data['searches'][0], (int) $data['searches'][1]),
-        $figure('Visitors, new site', $sum(0, 'users', $palefire), $sum(1, 'users', $palefire)),
+        $figure('Page views', $sum(0, 'views', $palefire), $sum(1, 'views', $palefire)),
+        $figure('Visitors', $sum(0, 'users', $palefire), $sum(1, 'users', $palefire)),
+        $figure('Combined Searches', $searches, (int) $data['searches'][1]),
+        $figure('Searches that found nothing', (int) ($data['empty_total'] ?? 0)),
       ],
       'sections' => $bars([
         ['name' => 'Special Collections', 'views' => $sum(0, 'views', ['special'])],
         ['name' => 'Rest of the library', 'views' => $sum(0, 'views', ['library'])],
-        ['name' => 'Old site', 'views' => $sum(0, 'views', ['old'])],
       ], 'name', 'views'),
       'types' => $bars($data['types'], 'type', 'views', fn (string $type) => self::TYPES[$type] ?? $type),
       'pages' => array_map(fn ($page) => $page + ['views_text' => number_format($page['views'])], $data['pages']),
       'modes' => $bars($data['modes'], 'mode', 'count', fn (string $mode) => ['all' => 'All', '(not set)' => 'All', 'special' => 'Special Collections'][$mode] ?? ucfirst($mode)),
-      'terms' => array_map(fn ($term) => $term + ['count_text' => number_format($term['count'])], $data['terms']),
-      'terms_total' => $total_terms,
+      'terms' => $counted($data['terms']),
+      'empty' => $counted($data['empty'] ?? []),
+      'controls' => $counted(array_map(fn ($row) => [
+        'control' => self::CONTROLS[$row['component']] ?? $row['component'],
+        'action' => $row['action'],
+        'count' => $row['count'],
+      ], $data['controls'] ?? [])),
+      'opened' => number_format($opened),
+      // Results opened per hundred searches: some open several, so it can
+      // pass 100.
+      'opened_share' => $searches > 0 ? (int) round($opened / $searches * 100) : NULL,
+      'sources' => $bars($data['sources'] ?? [], 'source', 'count', fn (string $source) => ucfirst(str_replace('_', ' ', $source))),
+      'positions' => $bars($positions, 'place', 'count'),
       'weeks' => $weeks,
     ];
   }
 
   /**
-   * "special", "library", or "old" for a page with no Palefire label.
+   * 1 as "1st", 2 as "2nd"...
    */
-  private static function section(string $value): string {
-    return in_array($value, ['special', 'library'], TRUE) ? $value : 'old';
+  private static function ordinal(int $n): string {
+    $suffix = in_array($n % 100, [11, 12, 13], TRUE) ? 'th' : (['th', 'st', 'nd', 'rd'][$n % 10] ?? 'th');
+    return $n . $suffix;
+  }
+
+  /**
+   * A report's first metric over all its rows (metricAggregations TOTAL).
+   */
+  private static function total(array $report): int {
+    return (int) ($report['totals'][0]['metricValues'][0]['value'] ?? 0);
   }
 
   /**

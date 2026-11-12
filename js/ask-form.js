@@ -149,10 +149,14 @@
       }
       const email = form.elements.pemail.value;
       form.reset();
+      // Analytics: that a question was sent, never what it said
+      // (Drupal.palefireTrack(), js/palefire.js).
+      Drupal.palefireTrack?.('ask-form', 'sent');
       say(form, Drupal.t('Thank you. Your question is with Special Collections; we’ll reply to @email.', { '@email': email }), 'done');
     }
     catch (e) {
       say(form, Drupal.t('Sorry, your question couldn’t be sent.'), 'error', true);
+      Drupal.palefireTrack?.('ask-form', 'failed');
     }
     finally {
       button.disabled = false;

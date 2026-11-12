@@ -35,7 +35,7 @@
 {% if map %}
 {{ attach_library('palefire/building-map') }}
 {{ map.cache }}
-<div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
+<div{{ attributes.addClass('pf-map', 'pf-map--' ~ map.key|clean_class).setAttribute('aria-labelledby', map.uid ~ '-heading').setAttribute('role', 'region') }} data-pf-map data-pf-track="map"{% if map.here %} data-map-here="{{ map.here }}"{% endif %}>
   {# Inside the grid, so the drawing starts level with the heading. #}
   {# h2 on the landing hero, where the map is a section of the page under
      its h1 (map.heading_tag); h3 elsewhere. data-toc keeps it in the TOC

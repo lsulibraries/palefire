@@ -21,8 +21,8 @@
 {% set close_icon %}
   <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 {% endset %}
-<aside id="pf-dock" class="pf-dock" aria-label="{{ 'Page tools'|t }}" data-pf-dock data-lid="{{ dock.lid }}">
-  <button class="pf-dock__grab" type="button" data-pf-dock-hide>
+<aside id="pf-dock" class="pf-dock" aria-label="{{ 'Page tools'|t }}" data-pf-dock data-pf-track="dock" data-lid="{{ dock.lid }}">
+  <button class="pf-dock__grab" type="button" data-pf-dock-hide data-pf-track-action="hide">
     <span class="visually-hidden">{{ 'Hide page tools'|t }}</span>
   </button>
   <div class="pf-dock__body">
@@ -32,7 +32,7 @@
       <div class="pf-dock__head">
         <p class="pf-dock__eyebrow">{{ 'Hours'|t }}</p>
         <h2 class="pf-dock__title" id="pf-dock-hours-title" data-pf-dock-fullname>{{ 'Hill Memorial Library'|t }}</h2>
-        <button class="pf-dock__close" type="button" data-pf-dock-close>
+        <button class="pf-dock__close" type="button" data-pf-dock-close data-pf-track-action="close">
           {{ close_icon }}<span class="visually-hidden">{{ 'Close hours'|t }}</span>
         </button>
       </div>
@@ -42,12 +42,12 @@
       <ol class="pf-dock__week" data-pf-dock-week></ol>
       <p class="pf-dock__closure" data-pf-dock-closure hidden></p>
       <div class="pf-dock__links" data-pf-dock-links>
-        <a class="pf-dock__link" href="https://lsu.libcal.com/hours" target="_blank" rel="noopener" data-pf-dock-full>
+        <a class="pf-dock__link" href="https://lsu.libcal.com/hours" target="_blank" rel="noopener" data-pf-dock-full data-pf-track-action="full hours">
           {{- 'See full hours'|t -}}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span>
         </a>
         {# The utility menu's Ask drawer (js/dock.js shows it when the page
            has one). #}
-        <button class="pf-dock__ask" type="button" aria-controls="pf-panel-ask" data-pf-dock-ask hidden>
+        <button class="pf-dock__ask" type="button" aria-controls="pf-panel-ask" data-pf-dock-ask data-pf-track-action="ask" hidden>
           <span class="pf-dock__action-icon" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/comments-alt.svg', ignore_missing = true)|raw }}</span>
           {{- 'Ask Us'|t -}}
         </button>
@@ -59,17 +59,18 @@
       <div class="pf-dock__head">
         <p class="pf-dock__eyebrow">{{ 'Contents'|t }}</p>
         <h2 class="pf-dock__title" id="pf-dock-contents-title" data-pf-dock-page-title></h2>
-        <button class="pf-dock__close" type="button" data-pf-dock-close>
+        <button class="pf-dock__close" type="button" data-pf-dock-close data-pf-track-action="close">
           {{ close_icon }}<span class="visually-hidden">{{ 'Close contents'|t }}</span>
         </button>
       </div>
-      <nav class="pf-dock__toc" aria-label="{{ 'On this page'|t }}">
+      {# Its links count as "contents link", not each heading's words. #}
+    <nav class="pf-dock__toc" aria-label="{{ 'On this page'|t }}" data-pf-track="dock" data-pf-track-action="contents link">
         <ol data-pf-dock-toc></ol>
       </nav>
     </div>
 
     <div class="pf-dock__row">
-      <button class="pf-dock__status" type="button" aria-expanded="false" aria-controls="pf-dock-hours" data-pf-dock-status>
+      <button class="pf-dock__status" type="button" aria-expanded="false" aria-controls="pf-dock-hours" data-pf-dock-status data-pf-track-action="hours">
         <span class="pf-dock__state"><span class="pf-dock__dot" aria-hidden="true"></span><span data-pf-dock-state>{{ 'Hours'|t }}</span></span>
         <span class="pf-dock__next" data-pf-dock-next>{{ 'Hill Memorial Library'|t }}</span>
         <span class="pf-dock__bar" aria-hidden="true"><i></i></span>
@@ -78,7 +79,7 @@
         <span class="pf-dock__action-icon" aria-hidden="true" data-pf-dock-action-icon></span>
         <span class="pf-dock__action-label" data-pf-dock-action-label></span>
       </a>
-      <button class="pf-dock__toc-button" type="button" aria-expanded="false" aria-controls="pf-dock-contents" data-pf-dock-toc-button hidden>
+      <button class="pf-dock__toc-button" type="button" aria-expanded="false" aria-controls="pf-dock-contents" data-pf-dock-toc-button data-pf-track-action="contents" hidden>
         <svg class="pf-dock__ring" viewBox="0 0 36 36" aria-hidden="true" focusable="false">
           <circle class="pf-dock__ring-track" cx="18" cy="18" r="14"/>
           <circle class="pf-dock__ring-fill" cx="18" cy="18" r="14" pathLength="100"/>
@@ -106,7 +107,7 @@
 {# Hidden dock: a phone with its dock, Font Awesome duotone style (the
    screen at 40%). Not an arrow: in this corner that reads as "back to
    top". #}
-<button class="pf-dock-tab" type="button" data-pf-dock-show hidden>
+<button class="pf-dock-tab" type="button" data-pf-dock-show data-pf-track="dock" data-pf-track-action="show" hidden>
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <rect class="fa-secondary" x="5" y="2" width="14" height="20" rx="3"/>
     <path class="fa-primary" d="M5 16.6a2.6 2.6 0 0 1 2.6-2.6h8.8a2.6 2.6 0 0 1 2.6 2.6V19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/>

@@ -746,4 +746,55 @@
       });
     },
   };
+
+  /**
+   * Analytics: which controls people use. An element marked
+   * data-pf-track="<component>" sends one "pf_interaction" event to Google Tag
+   * Manager's dataLayer (pf_component, pf_action) when a link, button or tab
+   * inside it is used, or a radio, checkbox or select inside it changes. The
+   * action is the control's data-pf-track-action, a map room's
+   * data-map-region, the marked element's own data-pf-track-action (one name
+   * for all its links, as the dock's contents), or the control's visible
+   * words; for a choice, its name and value
+   * ("theme twilight", "pf-a11y-motion on"). Never the contents of a text
+   * field. Only when GTM is on the page. Drupal.palefireTrack() sends one by
+   * hand (the Ask form, once its question is sent).
+   */
+  const track = (component, action) => {
+    if (Array.isArray(window.dataLayer) && component && action) {
+      window.dataLayer.push({
+        event: 'pf_interaction',
+        pf_component: String(component).slice(0, 40),
+        pf_action: String(action).slice(0, 60),
+      });
+    }
+  };
+  Drupal.palefireTrack = track;
+  // Visible words: the text without screen-reader-only notes such as "(opens
+  // in a new tab)"; a control with no visible words falls back to its name.
+  const words = (el) => {
+    let text = el.textContent || '';
+    el.querySelectorAll('.visually-hidden').forEach((note) => {
+      text = text.replace(note.textContent, '');
+    });
+    return text.replace(/\s+/g, ' ').trim() || (el.getAttribute('aria-label') || el.textContent || '').replace(/\s+/g, ' ').trim();
+  };
+  once('pf-track', 'html').forEach(() => {
+    // Capture, so a component that stops a click still counts.
+    document.addEventListener('click', (event) => {
+      const el = event.target instanceof Element ? event.target.closest('a, button, [role="button"], [role="tab"]') : null;
+      const scope = el && el.closest('[data-pf-track]');
+      if (scope) {
+        track(scope.dataset.pfTrack, el.dataset.pfTrackAction || el.dataset.mapRegion || scope.dataset.pfTrackAction || words(el));
+      }
+    }, true);
+    document.addEventListener('change', (event) => {
+      const input = event.target;
+      const scope = input instanceof Element ? input.closest('[data-pf-track]') : null;
+      if (!scope || !input.name || !(input.type === 'radio' || input.type === 'checkbox' || input.tagName === 'SELECT')) {
+        return;
+      }
+      track(scope.dataset.pfTrack, `${input.name} ${input.type === 'checkbox' ? (input.checked ? 'on' : 'off') : input.value}`);
+    }, true);
+  });
 })(Drupal, once);

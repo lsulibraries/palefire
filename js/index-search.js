@@ -894,7 +894,11 @@
     Promise.allSettled(late).then(() => {
       const root = document.querySelector('[data-pf-index]');
       if (root && Array.isArray(window.dataLayer) && nothingFound(root)) {
-        window.dataLayer.push({ event: 'pf_search_empty', search_term: search.term, search_mode: search.mode });
+        window.dataLayer.push({
+          event: 'pf_search_empty',
+          search_term: search.term,
+          search_mode: search.mode,
+        });
       }
     });
   };
@@ -902,6 +906,8 @@
   // Analytics: which result people open, "pf_search_result" with its source
   // (catalog, articles, guides…) and place in that list as shown (1 is the
   // first). Middle clicks count too; the result's address and title never.
+  // GTM's data layer still holds the search's words from pf_search, so GA4
+  // has them with the click.
   const sendResult = (event) => {
     if (event.type === 'auxclick' && event.button !== 1) {
       return;

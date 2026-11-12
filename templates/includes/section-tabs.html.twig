@@ -46,13 +46,13 @@
   {{ attach_library('palefire/section-tabs') }}
   {% set attributes = attributes ?: create_attribute() %}
   <div{{ attributes.addClass('pf-tabs') }} data-pf-tabs>
-    <div class="pf-tabs__list" role="tablist" aria-label="{{ tabs_label }}">
+    <div class="pf-tabs__list" role="tablist" aria-label="{{ tabs_label }}" data-pf-track="section-tabs">
       <span class="pf-tabs__rail" aria-hidden="true"></span>
       <span class="pf-tabs__key is-instant" aria-hidden="true"></span>
       {% for tab in tabs %}
         {% set svg = tab.icon ? source('libraries/fontawesome-pro/svgs/' ~ tab.icon ~ '.svg', ignore_missing = true) : '' %}
         {% set line = svg ? source('libraries/fontawesome-pro/svgs/light/' ~ tab.icon|split('/')|last ~ '.svg', ignore_missing = true) : '' %}
-        <button type="button" class="pf-tabs__tab" role="tab" id="{{ tab.id }}-tab" aria-controls="{{ tab.id }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" tabindex="{{ loop.first ? '0' : '-1' }}">
+        <button type="button" class="pf-tabs__tab" role="tab" data-pf-track-action="{{ tab.label|striptags|trim }}" id="{{ tab.id }}-tab" aria-controls="{{ tab.id }}" aria-selected="{{ loop.first ? 'true' : 'false' }}" tabindex="{{ loop.first ? '0' : '-1' }}">
           <span class="pf-tabs__label">{{ tab.label }}</span>
           <span class="pf-tabs__face">
             {%- if svg -%}
