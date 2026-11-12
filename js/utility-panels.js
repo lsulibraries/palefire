@@ -446,6 +446,22 @@
               const radios = [...panel.querySelectorAll('[data-pf-panel-mode]')];
               (radios.find((radio) => radio.value === mode) || radios[0]).checked = true;
             });
+            // Go to Discovery / the Catalog: their own search for the words
+            // in the field, or their start page while it's empty.
+            const field = panel.querySelector('[data-pf-panel-autofocus]');
+            const elsewhere = [...panel.querySelectorAll('[data-pf-panel-elsewhere]')];
+            const followWords = () => {
+              const words = field.value.trim();
+              elsewhere.forEach((link) => {
+                link.href = words
+                  ? link.dataset.pfPanelElsewhere.replace('@q', encodeURIComponent(words))
+                  : link.dataset.pfPanelHome;
+              });
+            };
+            if (field && elsewhere.length) {
+              field.addEventListener('input', followWords);
+              panel.addEventListener('show.bs.offcanvas', followWords);
+            }
             panel.querySelector('form').addEventListener('formdata', (event) => {
               if (event.formData.get('mode') === 'all') {
                 event.formData.delete('mode');

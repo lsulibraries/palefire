@@ -171,6 +171,24 @@
         </fieldset>
       </form>
     </div>
+    {# Straight to the two services people ask for by name, as the Index's own
+       "Go to" links (palefire_search's SearchSources more_url). Each opens the
+       service's start; utility-panels.js swaps in its search for the field's
+       words once there are some (@q). Addresses in one place for the move to
+       Alma. #}
+    {%
+      set panel_elsewhere = [
+        { label: 'Go to Discovery'|t, url: 'https://libezp.lib.lsu.edu/login?url=https://search.ebscohost.com/login.aspx?direct=true&site=eds-live&scope=site', search: 'https://libezp.lib.lsu.edu/login?url=https://search.ebscohost.com/login.aspx?direct=true&site=eds-live&scope=site&type=0&mode=and&lang=en&bquery=@q' },
+        { label: 'Go to the Catalog'|t, url: 'https://catalog.lib.lsu.edu', search: 'https://lsu.ent.sirsi.net/client/en_US/lsu/search/results?qu=@q&rt=Keyword&qf=ALL' },
+      ]
+    %}
+    <div class="pf-panel__footer pf-panel__elsewhere">
+      {% for link in panel_elsewhere %}
+        <a class="pf-panel__cta" href="{{ link.url }}" data-pf-panel-elsewhere="{{ link.search }}" data-pf-panel-home="{{ link.url }}">
+          <span>{{ link.label }}<span class="visually-hidden"> {{ '(another site)'|t }}</span></span>{{ ext_icon }}
+        </a>
+      {% endfor %}
+    </div>
   </div>
 
   {# Hours -------------------------------------------------------------- #}

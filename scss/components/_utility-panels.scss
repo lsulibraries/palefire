@@ -255,6 +255,11 @@ html.pf-over-menu .pf-panel.offcanvas {
     border-top: 1px solid var(--pf-toc-rail);
   }
 
+  // Search drawer: Go to Discovery and Go to the Catalog, a hairline between.
+  &__elsewhere .pf-panel__cta + .pf-panel__cta {
+    border-top: 1px solid var(--pf-toc-rail);
+  }
+
   // "SEE FULL HOURS ↗" (also the Settings drawer's Reset <button>)
   &__cta {
     display: flex;
