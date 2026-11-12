@@ -3941,12 +3941,14 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     margin-inline-start: .25rem;
   }
 
-  // The search on the page: the surface fill, no frame and no shadow (it
-  // was there to lift the field off the video). The gold Search button and
-  // the placeholder mark the field; the frame stays in the layout, clear,
-  // and turns gold with its ring on focus.
+  // The search on the page: the surface fill and a rule under it, no frame
+  // and no shadow. The rule is the control border at 65% (the full frame at
+  // that strength held 3:1 against the page in every swatch, WCAG 1.4.11).
+  // The other sides stay in the layout, clear, so on focus the whole frame
+  // turns gold with its 1px ring and nothing shifts.
   .pf-landing__field {
     border-color: transparent;
+    border-bottom-color: color-mix(in srgb, var(--pf-section-border, #6c757d) 65%, transparent);
     background-color: var(--pf-g-surface, var(--bs-secondary-bg));
     box-shadow: none;
 

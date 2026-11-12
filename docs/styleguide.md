@@ -170,6 +170,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-12:** Hero search field: a bottom rule at rest, `border-bottom-color: color-mix(in srgb, var(--pf-section-border) 65%, transparent)`, other sides transparent; `:focus-within` still turns the whole frame `--pf-landing-accent` with a 1px ring.
 - **2026-11-12:** Hero search field: `border-color: transparent` at rest (the 65% control border is withdrawn); `:focus-within` sets the border to `--pf-landing-accent` with a 1px ring of it.
 
 - **2026-11-12:** Combined Search: `.pf-index-list__share` (Copy link, or Share on a touch screen that can share) sits in `.pf-index-list__grow-row` between Go to page and Show more, with Go to page's look (`.pf-index-list__jump`). Its two labels (`.pf-index-list__share-words`, `.pf-index-list__share-done` "Link copied", `aria-hidden`) share one grid cell, so the width holds; `.is-copied` swaps them by opacity for 2s and takes the text color. Under 22.5rem the row's column gap is 1rem (was 1.5rem), so the count, Go to page and Copy link fit on one line at 320px. No button in browsers without the Clipboard or Share API.
