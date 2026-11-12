@@ -309,6 +309,9 @@
           // ($pf-header-transition) has finished.
           header.setAttribute('data-pf-resizing', '');
           header.classList.toggle(COMPACT, compact);
+          // Mirrored on <html> for the logo width and utility cells
+          // (_header.scss), in place of :root:has(.pf-header--compact).
+          root.classList.toggle('pf-header-compact', compact);
           follow(window.performance.now() + RESIZE_MS);
           window.clearTimeout(timer);
           timer = window.setTimeout(() => {

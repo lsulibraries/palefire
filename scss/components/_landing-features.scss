@@ -188,9 +188,9 @@ html:not(.pf-bar-stuck) :is(.pf-landing--cover, .pf-showcase-head, .pf-location-
 // Back at the top, the header waits for the bar to start clearing. Uses
 // the header's own selector ($pf-bg-first, below), whose transition
 // shorthand would otherwise reset the delay.
-$pf-cover-bar: ':has(:is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar)';
+$pf-cover-bar: '.pf-cover-bar';
 
-:root:not(.pf-bar-stuck)#{$pf-cover-bar}:is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head), :has(.pf-location-page > .pf-landing__bar)) .pf-header {
+:root:not(.pf-bar-stuck)#{$pf-cover-bar}.pf-bg-first .pf-header {
   &,
   &::before {
     transition-delay: $pf-chrome-stagger;
@@ -384,12 +384,12 @@ html.pf-a11y-motion .pf-breadcrumb__section-label {
   }
 }
 
-:root:not(:has(.pf-toc.is-open)) .pf-landing:has([data-pf-landing-contents]:focus-visible) {
+:root:not(.pf-toc-open) .pf-landing:has([data-pf-landing-contents]:focus-visible) {
   @include pf-crumb-lit;
 }
 
 @media (hover: hover) {
-  :root:not(:has(.pf-toc.is-open)) .pf-landing:has([data-pf-landing-contents]:hover) {
+  :root:not(.pf-toc-open) .pf-landing:has([data-pf-landing-contents]:hover) {
     @include pf-crumb-lit;
   }
 }
@@ -440,13 +440,13 @@ html.pf-a11y-motion .pf-breadcrumb__section-label {
 // same glass, and showed as a second bar that blinked on and off as the
 // header compacted and grew back. The bar does its job on these pages, so
 // the strip is off.
-.pf-page:has(.pf-landing__bar)::before {
+html.pf-has-landing-bar .pf-page::before {
   display: none;
 }
 
 // The bar continues the header, so no shadow between them: the compact
 // header's fell across the bar's top (2026-10-31).
-.pf-page:has(.pf-landing__bar) .pf-header--compact {
+html.pf-has-landing-bar .pf-header--compact {
   box-shadow: none;
 }
 
@@ -461,7 +461,7 @@ html.pf-a11y-motion .pf-breadcrumb__section-label {
 // Reduce transparency (and its kin) keeps the glass throughout.
 // The Exhibitions showcase (.pf-showcase-head) and a location page (its
 // Location section's bar) open the same way, on the page color.
-$pf-bg-first: ':is(:has(.pf-sections > .pf-section:first-child .pf-landing.has-bg-video), :has(.pf-sections > .pf-section:first-child.pf-section--has-bg), :has(.pf-showcase-head), :has(.pf-location-page > .pf-landing__bar))';
+$pf-bg-first: '.pf-bg-first';
 
 :root#{$pf-bg-first} .pf-header {
   transition: background-color .3s ease, border-color .3s ease, box-shadow $pf-header-transition;
@@ -4358,7 +4358,7 @@ $pf-strip: 'html .pf-landing.pf-landing--cover .pf-hero-banners > .pf-hero-banne
 // marks <html> .pf-hero-past). Hidden, not just faded, so they leave the
 // tab order with it. Only with JS (html.js), so without it they are there
 // from the start; an open offcanvas is never hidden.
-:root.js:has(.pf-landing--cover):not(.pf-hero-past) {
+:root.js.pf-has-cover:not(.pf-hero-past) {
   .pf-modular__toc-toggle {
     visibility: hidden;
     opacity: 0;

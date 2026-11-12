@@ -632,11 +632,13 @@ html[data-pf-mode="guide"] body {
 }
 
 // Over a background video the sidebar is thinner glass on the video's wash.
-html#{$pf-themed}:has(.pf-landing.has-bg-video) body {
+// :root, not html: the specificity the :has() test it replaced had, so it
+// still wins over the Settings drawer's solid sidebar (below).
+:root#{$pf-themed}.pf-has-bg-video body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass});
 }
 
-html#{$pf-themed}.pf-reading-dark:has(.pf-landing.has-bg-video) body {
+:root#{$pf-themed}.pf-reading-dark.pf-has-bg-video body {
   --pf-sidebar-bg: rgba(var(--pf-g-chrome-rgb), #{$pf-reading-media-glass-dark});
 }
 

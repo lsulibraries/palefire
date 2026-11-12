@@ -19,10 +19,11 @@
 }
 
 // The header renders compact for good on every page (page.html.twig,
-// data-pf-compact="always"): 49px at every width. The fallback matches it,
+// data-pf-compact="always", flagged on <html> by html.html.twig): 49px at
+// every width. The fallback matches it,
 // so nothing placed by the header's height (the hero's first screen, the
 // sticky bars) moves when js/palefire.js measures it a few seconds in.
-:root:has(.pf-header[data-pf-compact='always']) {
+:root.pf-header-fixed-compact {
   --pf-header-h: #{$pf-header-bar-compact-h};
 }
 

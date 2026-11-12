@@ -296,7 +296,7 @@
   }
 }
 
-:root:has(.pf-header--compact) {
+:root.pf-header-compact {
   --pf-logo-w: #{$pf-logo-compact-width};
 
   @include media-breakpoint-up(xl) {
@@ -305,7 +305,7 @@
 }
 
 @media (max-width: $pf-utility-wide-bp - .02px) {
-  :root:has(.pf-header--compact) {
+  :root.pf-header-compact {
     --pf-utility-cell: #{$pf-header-compact-target};
   }
 }
@@ -1096,7 +1096,7 @@
 // top of them; they stay just below instead. :where() keeps this at the
 // specificity of .sticky-top, so the open menu drawer (above) still rises to
 // the offcanvas layer.
-:where(body:has(#toolbar-administration, .admin-toolbar)) {
+:where(html.pf-admin-toolbar) {
   .pf-header {
     z-index: 500;
   }

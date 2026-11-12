@@ -64,7 +64,7 @@
 // viewport instead of being clipped (WCAG 1.4.10 Reflow, 1.4.4 Resize text).
 
 @include media-breakpoint-up($pf-snap-breakpoint) {
-  html:has(.pf-section--full-page) {
+  html.pf-has-full-page {
     scroll-snap-type: y proximity;
   }
 
@@ -79,7 +79,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:has(.pf-section--full-page) {
+  html.pf-has-full-page {
     scroll-snap-type: none;
   }
 }

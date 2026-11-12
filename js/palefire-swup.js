@@ -758,6 +758,10 @@
       }
       replaceSettings(incoming.settings);
       syncDocument(incoming.doc);
+      // What the new page holds, as <html> classes (html.html.twig).
+      if (typeof window.palefirePageFlags === 'function') {
+        window.palefirePageFlags();
+      }
       containers.forEach((sel) => {
         document.querySelectorAll(sel).forEach((el) => Drupal.attachBehaviors(el, drupalSettings));
       });

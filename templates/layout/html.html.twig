@@ -39,6 +39,12 @@
   (utility-panels.js).
 #}
 {% set html_attributes = html_attributes.addClass('pf-reading-dark').setAttribute('data-pf-theme', 'twilight').setAttribute('data-bs-theme', 'dark') %}
+{#
+  The header is compact on every page (page.html.twig), so its two page
+  flags are printed here, right without JavaScript too. The page-flags
+  script at the end of <body> checks them against the page.
+#}
+{% set html_attributes = html_attributes.addClass('pf-header-fixed-compact', 'pf-header-compact') %}
 <!DOCTYPE html>
 <html{{ html_attributes }}>
   <head>
@@ -142,6 +148,50 @@
     {{ page_top }}
     {{ page }}
     {{ page_bottom }}
+    {#
+      Page flags: classes on <html> naming what the page holds, for styles
+      that depend on it (a background video, a landing first, the 404).
+      They replace :root:has() and body:has() tests, which made the browser
+      re-check <html> and restyle the whole page whenever a class used in
+      any :has() changed anywhere, such as the map drawing or the dock
+      swapping its button: about 35-40% of the style work in a scroll down
+      /v2/special (2026-11-12). Runs once the page is parsed, before the
+      footer scripts. js/palefire-swup.js runs it again after each swap
+      (window.palefirePageFlags), and a map turning dark sends
+      palefire:mapview. States that change in place have their own mirrors:
+      pf-header-compact (js/palefire.js) and pf-toc-open
+      (js/modular-toc.js). Keep the class names in step with the Sass.
+      If you enable a strict Content-Security-Policy, add this script's hash.
+    #}
+    <script>
+      (function (d, w) {
+        var h = d.documentElement;
+        var first = '.pf-sections > .pf-section:first-child';
+        var flags = {
+          'pf-admin-toolbar': '#toolbar-administration, .admin-toolbar',
+          'pf-header-fixed-compact': '.pf-header[data-pf-compact="always"]',
+          'pf-header-compact': '.pf-header.pf-header--compact',
+          'pf-has-bg-video': '.pf-landing.has-bg-video',
+          'pf-has-cover': '.pf-landing--cover',
+          'pf-has-events': '.pf-events-carousel, [data-pf-upcoming]',
+          'pf-has-full-page': '.pf-section--full-page',
+          'pf-has-landing-bar': '.pf-page .pf-landing__bar',
+          'pf-is-404': '.pf-404',
+          'pf-cover-bar': ':is(.pf-landing--cover, .pf-showcase-head, .pf-location-page) > .pf-landing__bar',
+          'pf-bg-first': first + ' .pf-landing.has-bg-video, ' + first + '.pf-section--has-bg, .pf-showcase-head, .pf-location-page > .pf-landing__bar',
+          'pf-lead-landing': first + ' .pf-landing',
+          'pf-lead-video-toggle': first + ' [data-landing-video-toggle]',
+          'pf-lead-video-light': first + ':not(.pf-section--theme-dark):not(.pf-section--theme-light-map.is-map-dark) .pf-landing.has-bg-video'
+        };
+        w.palefirePageFlags = function () {
+          Object.keys(flags).forEach(function (name) {
+            h.classList.toggle(name, !!d.querySelector(flags[name]));
+          });
+        };
+        w.palefirePageFlags();
+        d.addEventListener('palefire:mapview', w.palefirePageFlags);
+      })(document, window);
+    </script>
     <js-bottom-placeholder token="{{ placeholder_token }}">
   </body>
 </html>

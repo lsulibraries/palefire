@@ -174,6 +174,13 @@
     // Removes every window listener added below in one go on teardown.
     const listeners = new AbortController();
     const { signal } = listeners;
+    // <html> mirrors the open rail (.pf-toc-open) for the landing's
+    // Contents crumb (_landing-features.scss), in place of
+    // :root:has(.pf-toc.is-open), which re-checked the whole page.
+    const openWatch = new MutationObserver(() => {
+      ROOT.classList.toggle('pf-toc-open', nav.classList.contains('is-open'));
+    });
+    openWatch.observe(nav, { attributes: true, attributeFilter: ['class'] });
 
     /* ---------------- Active state ---------------- */
 
@@ -1302,6 +1309,8 @@
     return function teardown() {
       destroyed = true;
       listeners.abort();
+      openWatch.disconnect();
+      ROOT.classList.remove('pf-toc-open');
       clearTimeout(resizeTimer);
       if (observer) {
         observer.disconnect();

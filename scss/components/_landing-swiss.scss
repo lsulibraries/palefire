@@ -374,7 +374,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 // 51 + 0.45 * 204 = 143, about 6.4:1 for black. The "Reduce transparency"
 // and "High contrast" settings still make it solid: they set the
 // background color directly, not this variable (_header.scss).
-:where(:root:has(.pf-landing.has-bg-video)) .pf-header:not([data-bs-theme="dark"]) {
+:where(:root.pf-has-bg-video) .pf-header:not([data-bs-theme="dark"]) {
   --pf-header-bg: rgba(var(--bs-body-bg-rgb), .45);
   --pf-utility-color: #{$black};
 
@@ -388,7 +388,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 }
 
 // The strip under the compact header (_header.scss) matches it.
-:where(:root:has(.pf-landing.has-bg-video)) .pf-page::before {
+:where(:root.pf-has-bg-video) .pf-page::before {
   background-color: rgba(var(--bs-body-bg-rgb), .45);
 }
 
@@ -401,7 +401,7 @@ html[data-pf-theme] .pf-main .pf-map__key--indexed .pf-map__group-title {
 // breadcrumb's text kept the content edge instead.)
 // Not inside the lead panel (.pf-breadcrumb--lead, _landing-features.scss),
 // which is glass already.
-.pf-body--modular:has(.pf-sections > .pf-section:first-child:not(.pf-section--theme-dark) .pf-landing.has-bg-video) .pf-breadcrumb--modular:not(.pf-breadcrumb--lead) .breadcrumb {
+:root.pf-lead-video-light .pf-body--modular .pf-breadcrumb--modular:not(.pf-breadcrumb--lead) .breadcrumb {
   width: fit-content;
   min-height: 2.25rem;
   align-items: center;

@@ -42,7 +42,7 @@
 // Libraries". When the first section is a landing, the head uses the same
 // edge: the section padding, or half the space left beside the cap,
 // whichever is larger (100% is the main column, as for the sections).
-body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
+html.pf-lead-landing .pf-modular__head {
   padding-inline: max(var(--pf-section-pad-inline, 1.25rem), calc((100% - #{$pf-content-max}) / 2));
 }
 
@@ -175,7 +175,7 @@ body:has(.pf-sections > .pf-section:first-child .pf-landing) .pf-modular__head {
   // Keep the breadcrumb clear of the background-video button when the
   // landing (with a video) is the first section: the button sits on this
   // line at the right (landing-video.js).
-  body:has(.pf-sections > .pf-section:first-child [data-landing-video-toggle]) & .breadcrumb {
+  html.pf-lead-video-toggle & .breadcrumb {
     padding-inline-end: 3.5rem;
   }
 

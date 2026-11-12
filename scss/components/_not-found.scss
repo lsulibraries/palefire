@@ -511,38 +511,38 @@
 // the Special Collections cover. The bar is 90% on reading colors, so it
 // takes the header's weight here too. Reduce transparency and more
 // contrast keep both solid.
-:root:has(.pf-404) .pf-header {
+:root.pf-is-404 .pf-header {
   transition: background-color .3s ease, box-shadow $pf-header-transition;
 }
 
-:root:not(.pf-bar-stuck):has(.pf-404) .pf-header {
+:root.pf-is-404:not(.pf-bar-stuck) .pf-header {
   --pf-header-bg: rgba(var(--bs-body-bg-rgb), .3);
 }
 
-.pf-swup:has(.pf-404) > .pf-page-bar {
+:root.pf-is-404 .pf-swup > .pf-page-bar {
   background-color: rgba(var(--bs-body-bg-rgb), #{$pf-header-bg-alpha});
   transition: background-color .3s ease;
 }
 
-:root:not(.pf-bar-stuck) .pf-swup:has(.pf-404) > .pf-page-bar {
+:root.pf-is-404:not(.pf-bar-stuck) .pf-swup > .pf-page-bar {
   background-color: rgba(var(--bs-body-bg-rgb), .3);
 }
 
 @include pf-solid-chrome {
-  :root .pf-swup:has(.pf-404) > .pf-page-bar {
+  :root.pf-is-404 .pf-swup > .pf-page-bar {
     background-color: var(--bs-body-bg) !important; // over the not-scrolled rule above
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root:has(.pf-404) .pf-header,
-  .pf-swup:has(.pf-404) > .pf-page-bar {
+  :root.pf-is-404 .pf-header,
+  :root.pf-is-404 .pf-swup > .pf-page-bar {
     transition: none;
   }
 }
 
 // No band of page between the bar and the stage: its light starts at the
 // bar (the page's top padding read as a gap, and as a shadow under it).
-.pf-body:has(.pf-404) {
+:root.pf-is-404 .pf-body {
   padding-top: 0;
 }
