@@ -15,11 +15,11 @@
  *     Sound ("Wi-Fi: eduroam"). A label that is a photo's name puts its
  *     value under that photo instead ("Lecture: 80 seats").
  *   - Contact (field_space_contact, a Staff page): the person to ask,
- *     shown beside the room's button ("Questions? Meredith Contreras").
+ *     shown beside the room's button ("Questions? Andrew Loyacano").
  * - Lecture Hall (content, while each is empty or as the setup left it):
  *   seats for its three layouts, "xx" until they are counted; capacity
- *   "Under 100" (was 100, shown "~100"), as the policy words it; Meredith
- *   Contreras (mcontreras@lsu.edu) as its contact. Its Booking text loses
+ *   "Under 100" (was 100, shown "~100"), as the policy words it; Andrew
+ *   Loyacano (aloyacano@lsu.edu) as its contact. Its Booking text loses
  *   the Layouts list (the photos show them, with their seats) and says
  *   "under 100 people". A new revision.
  * - Quiet Study: seats "xx"; Wi-Fi eduroam, Outlets and Lighting "xx",
@@ -142,13 +142,13 @@ if (!$room instanceof TermInterface) {
   echo "No Lecture Hall page or room; its content is left for an editor.\n";
 }
 else {
-  $staff = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'staff', 'field_staff_email' => 'mcontreras@lsu.edu']);
+  $staff = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'staff', 'field_staff_email' => 'aloyacano@lsu.edu']);
   $values = ['field_space_details' => ['Lecture: xx seats', 'Conference or U-shape: xx seats', 'Classroom: xx seats']];
   if ($staff) {
     $values['field_space_contact'] = ['target_id' => (int) reset($staff)->id()];
   }
   else {
-    echo "No Staff page with mcontreras@lsu.edu; the Lecture Hall's Contact is left for an editor.\n";
+    echo "No Staff page with aloyacano@lsu.edu; the Lecture Hall's Contact is left for an editor.\n";
   }
   $changed = $fill($room, $values);
   if (in_array(trim((string) $room->get('field_space_capacity')->value), ['100', '~100'], TRUE)) {
