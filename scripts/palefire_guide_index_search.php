@@ -160,7 +160,7 @@ HTML, 'callout'),
     ['running', 'Special Collections hero search', 'The search on /v2/special is switched on and opens Combined Search in Special Collections mode, with All sources and the Catalog set to Special Collections. Landing searches now show the loading mark while results load, so the wait no longer looks as if nothing happened.'],
     ['running', 'Result row design', 'Rows keep their hairlines and boxed type labels, with the Show location button to the left of the availability text, saying Hide once open. An open result\'s table sits on a soft panel. Hatched rows were tried and withdrawn as confusing. Four more designs are drafted, and none is chosen yet.'],
     ['running', 'Catalog first', 'Catalog comes first in Research and Special Collections. In Special Collections it sits above the Special Collections Guides and Oral histories sections and the PDF Finding Aids list, set to Special Collections, until a source is chosen.'],
-    ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead.'],
+    ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead. A shared link, a reload or Back brings back every result shown, not only the last batch. Needs a check on production.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
     ['running', 'Source definitions', 'Section headings and a What are these? button in the Source filter say what each source searches, in the glossary\'s cards.'],
@@ -398,6 +398,7 @@ HTML),
 <li>The Catalog's count was missing from the Source filter on production: the script that fills it in hadn't gone out with the rest. It has now. The numbers in the filter count up as they arrive, like the section counts, a little slower so the count-up is seen.</li>
 <li>The Search button is solid gold again, here and on the Special Collections page, with just the word Search in the middle. A flatter version tried earlier today made the search hard to spot on the Special Collections photo. On phones both buttons show only the magnifier, from the same width.</li>
 <li>The Search button is no longer a solid gold block. It now sits inside the search box behind a thin line, the word Search in gold capitals like the tabs below it, and fills with gold when you point at it or tab to it. The search on the Special Collections page matches. The gold block was the brightest thing on the page and drew the eye away from the title and the results.</li>
+<li>A tester likes sharing results by their address, but after Show more the address pointed only at the last batch, so whoever opened it (or anyone who reloaded or came Back from a result) lost the results above. The address now keeps where the list starts and how far it was shown, and those results load again on arrival, up to ten pages.</li>
 </ul>
 HTML),
 ]);

@@ -34,7 +34,8 @@
  * - A paged list gets a Show more button, which adds the next page under the
  *   rows it has, over a rule that fills as more are shown. It's only ever on
  *   request: a list that grew by itself would keep the footer out of reach.
- *   The pager folds away behind Go to page, for jumping ahead.
+ *   The pager folds away behind Go to page, for jumping ahead. The address
+ *   gains through=, so a shared link, reload or Back shows every row shown.
  * - On a phone the chosen filters leave the held results bar for a line of
  *   their own under it, which scrolls away with the page.
  */
@@ -232,19 +233,75 @@
   };
 
   // Adds the next page of a list to the rows it has, on request. The address
-  // follows, so a reload or a shared link lands on the page reached. Anything
-  // unexpected falls back to loading that page normally, which always works.
+  // keeps the page the list starts on and gains through=, the last page shown,
+  // so a reload, Back or a shared link brings back every row, not only the
+  // last batch: those pages load again on arrival, up to MORE_RESTORE_MAX of
+  // them. The server ignores through=, so without this file it's the start
+  // page. Anything unexpected on a click falls back to loading that page
+  // normally, which always works.
+  const MORE_RESTORE_MAX = 10;
+  const MORE_RESTORE_AT_ONCE = 4;
+  // A pager's address without through=, which the server copies into it.
+  const unthrough = (link) => {
+    const url = new URL(link.href, window.location.href);
+    if (url.searchParams.has('through')) {
+      url.searchParams.delete('through');
+      link.setAttribute('href', url.search);
+    }
+  };
+  // One page of a list, or an error: its list and rows.
+  const fetchMore = async (url, owner) => {
+    const controller = new AbortController();
+    controllers.set(controller, owner);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) {
+        throw new Error(String(response.status));
+      }
+      const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const more = page.querySelector('[data-pf-index] .pf-index-list__pager')?.closest('.pf-index-list');
+      const added = more ? more.querySelector(':scope > .pf-index-list__rows') : null;
+      if (!added || !added.children.length || page.querySelector('[data-big-pipe-placeholder-id]')) {
+        throw new Error('Not a page that can be added.');
+      }
+      return { more, added };
+    }
+    finally {
+      controllers.delete(controller);
+    }
+  };
+
   const setUpMore = (pager) => {
     const list = pager.closest('.pf-index-list');
     const rows = list && list.querySelector(':scope > .pf-index-list__rows');
+    pager.querySelectorAll('a').forEach(unthrough);
     if (!rows || !pager.querySelector('a[rel="next"]')) {
       return;
     }
-    const pageNumber = Number(new URLSearchParams(window.location.search).get('page')) || 0;
+    const params = new URLSearchParams(window.location.search);
+    const pageNumber = Math.max(0, Math.floor(Number(params.get('page')) || 0));
+    const wanted = Math.min(Math.floor(Number(params.get('through')) || 0), pageNumber + MORE_RESTORE_MAX);
+    let through = pageNumber;
+    let restoring = false;
     const size = rows.children.length;
     const first = pageNumber * size + 1;
     const total = Number(list.dataset.pfIndexTotal);
     const last = () => first + rows.children.length - 1;
+    // This address with the pages now shown. replaceState: the shown pages
+    // are part of this search, not steps of their own for Back.
+    const remember = () => {
+      const url = new URL(window.location.href);
+      if (through > pageNumber) {
+        url.searchParams.set('through', through);
+      }
+      else {
+        url.searchParams.delete('through');
+      }
+      // Only the Index's own marks: Back to this entry is the Index's to
+      // restore, and a reload doesn't count the search again.
+      const sent = window.history.state?.pfSearchSent;
+      window.history.replaceState(sent ? { pfIndex: true, pfSearchSent: true } : { pfIndex: true }, '', url.pathname + url.search + url.hash);
+    };
 
     // A rule that fills as more are shown, then the count, Go to page and the
     // button on one line (on a phone the button takes a line of its own).
@@ -308,9 +365,48 @@
       words.textContent = Drupal.t('results shown');
       count.replaceChildren(numbers, ' ', words);
       box.style.setProperty('--pf-index-shown', Math.min(100, (last() / total) * 100).toFixed(2) + '%');
-      button.removeAttribute('aria-busy');
+      if (restoring) {
+        button.setAttribute('aria-busy', 'true');
+        label.textContent = Drupal.t('Loading…');
+      }
+      else {
+        button.removeAttribute('aria-busy');
+      }
     };
     rest();
+
+    // A fetched page's rows under these, and its pager in place of this one.
+    // animate: rows the visitor asked for fade in; restored ones are simply
+    // there, as they were.
+    const add = ({ more, added }, animate) => {
+      if (added.dataset.pfIndexHoldingsUrl) {
+        loadHoldings(added);
+      }
+      const arriving = [...added.children];
+      if (animate) {
+        arriving.forEach((row, index) => {
+          row.classList.add('is-new');
+          row.style.setProperty('--pf-row-order', Math.min(index, 5));
+        });
+      }
+      rows.append(...arriving);
+      arriving.forEach((row) => once('pf-index-thumb', '.pf-index-row__thumb img', row).forEach(checkCover));
+
+      through += 1;
+      remember();
+      const nextPager = more.querySelector(':scope > .pf-index-list__pager');
+      nextPager.querySelectorAll('a').forEach(unthrough);
+      fold(nextPager);
+      list.querySelector(':scope > .pf-index-list__pager').replaceWith(nextPager);
+      // The note that this is as far as the service reads, on its last page.
+      more.querySelectorAll(':scope > .pf-index-list__rows ~ .pf-index-list__status').forEach((note) => box.before(note));
+      rest();
+      // All of them: the rule full, the count and Go to page stay.
+      if (!list.querySelector('.pf-index-list__pager a[rel="next"]')) {
+        button.remove();
+      }
+      return arriving;
+    };
 
     button.addEventListener('click', async () => {
       const next = list.querySelector('.pf-index-list__pager a[rel="next"]');
@@ -322,21 +418,9 @@
       label.textContent = Drupal.t('Loading…');
       Drupal.announce(Drupal.t('Loading more results'));
 
-      const controller = new AbortController();
-      controllers.set(controller, button);
-      let more;
-      let added;
+      let fetched;
       try {
-        const response = await fetch(url, { signal: controller.signal });
-        if (!response.ok) {
-          throw new Error(String(response.status));
-        }
-        const page = new DOMParser().parseFromString(await response.text(), 'text/html');
-        more = page.querySelector('[data-pf-index] .pf-index-list__pager')?.closest('.pf-index-list');
-        added = more ? more.querySelector(':scope > .pf-index-list__rows') : null;
-        if (!added || !added.children.length || page.querySelector('[data-big-pipe-placeholder-id]')) {
-          throw new Error('Not a page that can be added.');
-        }
+        fetched = await fetchMore(url, button);
       }
       catch (error) {
         if (error.name !== 'AbortError') {
@@ -344,41 +428,59 @@
         }
         return;
       }
-      finally {
-        controllers.delete(controller);
-      }
 
-      if (added.dataset.pfIndexHoldingsUrl) {
-        loadHoldings(added);
-      }
-      const arriving = [...added.children];
-      arriving.forEach((row, index) => {
-        row.classList.add('is-new');
-        row.style.setProperty('--pf-row-order', Math.min(index, 5));
-      });
-      rows.append(...arriving);
-      arriving.forEach((row) => once('pf-index-thumb', '.pf-index-row__thumb img', row).forEach(checkCover));
-
-      // The pager's links are relative, so the address goes first.
-      window.history.replaceState({ pfIndex: true }, '', url);
-      const nextPager = more.querySelector(':scope > .pf-index-list__pager');
-      fold(nextPager);
-      list.querySelector(':scope > .pf-index-list__pager').replaceWith(nextPager);
-      // The note that this is as far as the service reads, on its last page.
-      more.querySelectorAll(':scope > .pf-index-list__rows ~ .pf-index-list__status').forEach((note) => box.before(note));
-
-      const message = Drupal.t('@count more results added. @shown.', { '@count': arriving.length, '@shown': shown() });
-      rest();
-      // All of them: the rule full, the count and Go to page stay.
-      if (!list.querySelector('.pf-index-list__pager a[rel="next"]')) {
-        button.remove();
-      }
+      const arriving = add(fetched, true);
       // The new rows open where the button was, so this rarely needs to scroll.
       const firstLink = arriving[0].querySelector('.pf-index-row__title a');
       firstLink?.focus({ preventScroll: true });
       firstLink?.scrollIntoView({ block: 'nearest' });
-      Drupal.announce(message);
+      Drupal.announce(Drupal.t('@count more results added. @shown.', { '@count': arriving.length, '@shown': shown() }));
     });
+
+    // Arriving with through=: the pages shown before come back, all asked for
+    // at once and added in order. Focus and scroll stay put. A page that fails
+    // ends it there, and the address says what's shown.
+    if (wanted > pageNumber) {
+      restoring = true;
+      rest();
+      const pages = [];
+      // MORE_RESTORE_AT_ONCE in flight: outside services take seconds a page.
+      const start = (index) => {
+        const number = pageNumber + 1 + index;
+        if (number <= wanted && !pages[index]) {
+          const url = new URL(window.location.href);
+          url.searchParams.set('page', number);
+          url.searchParams.delete('through');
+          pages[index] = fetchMore(url.pathname + url.search, button);
+          // None left unhandled when an earlier one ends it.
+          pages[index].catch(() => {});
+        }
+      };
+      for (let index = 0; index < MORE_RESTORE_AT_ONCE; index++) {
+        start(index);
+      }
+      (async () => {
+        for (let index = 0; pages[index]; index++) {
+          try {
+            add(await pages[index], false);
+          }
+          catch (error) {
+            break;
+          }
+          // The last page, or the search has moved on.
+          if (!button.isConnected || !list.isConnected) {
+            break;
+          }
+          start(index + MORE_RESTORE_AT_ONCE);
+        }
+        restoring = false;
+        if (list.isConnected) {
+          remember();
+          rest();
+          Drupal.announce(Drupal.t('@shown results shown.', { '@shown': shown() }));
+        }
+      })();
+    }
   };
 
   // A form's address, leaving out the default sort and empty years.
