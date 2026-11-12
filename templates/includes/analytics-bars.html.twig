@@ -13,7 +13,9 @@
     <li class="pf-progress__row">
       <span class="pf-progress__label">{{ row.label }}</span>
       <span class="pf-progress__bar" aria-hidden="true">
-        <span class="pf-progress__gain" style="width: {{ row.width }}%"></span>
+        {% if row.width > 0 %}
+          <span class="pf-progress__gain" style="width: {{ row.width }}%"></span>
+        {% endif %}
       </span>
       <span class="pf-progress__value">{{ row.value }} {{ unit }}</span>
     </li>

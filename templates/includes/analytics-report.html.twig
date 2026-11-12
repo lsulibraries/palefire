@@ -48,10 +48,14 @@
       <ol class="pf-progress">
         {% for week in report.weeks %}
           <li class="pf-progress__row">
-            <span class="pf-progress__label">{{ 'Week of @week'|t({ '@week': week.week }) }}</span>
+            <span class="pf-progress__label">{{ week.current ? 'Week of @week, so far'|t({ '@week': week.week }) : 'Week of @week'|t({ '@week': week.week }) }}</span>
             <span class="pf-progress__bar" aria-hidden="true">
-              <span class="pf-progress__gain" style="width: {{ week.palefire_width }}%"></span>
-              <span class="pf-progress__before" style="left: {{ week.palefire_width }}%; width: {{ week.old_width }}%"></span>
+              {% if week.palefire_width > 0 %}
+                <span class="pf-progress__gain" style="width: {{ week.palefire_width }}%"></span>
+              {% endif %}
+              {% if week.old_width > 0 %}
+                <span class="pf-progress__before" style="left: {{ week.palefire_width }}%; width: {{ week.old_width }}%"></span>
+              {% endif %}
             </span>
             <span class="pf-progress__value">{{ '@new new, @old old'|t({ '@new': week.palefire, '@old': week.old }) }}</span>
           </li>

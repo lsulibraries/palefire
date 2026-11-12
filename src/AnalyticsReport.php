@@ -124,9 +124,10 @@ final class AnalyticsReport {
         'dimensionFilter' => $searches,
         'orderBys' => [['metric' => ['metricName' => 'eventCount'], 'desc' => TRUE]],
       ],
-      // 6: page views each week for twelve weeks, by section.
+      // 6: page views each week, by section: twelve whole weeks from a
+      // Monday, so the first bar isn't a partial week, then this week so far.
       [
-        'dateRanges' => [['startDate' => '84daysAgo', 'endDate' => 'yesterday']],
+        'dateRanges' => [['startDate' => (new \DateTimeImmutable('monday this week'))->modify('-12 weeks')->format('Y-m-d'), 'endDate' => 'yesterday']],
         'dimensions' => [['name' => 'isoYearIsoWeek'], ['name' => 'customEvent:pf_section']],
         'metrics' => [['name' => 'screenPageViews']],
         'orderBys' => [['dimension' => ['dimensionName' => 'isoYearIsoWeek']]],
@@ -209,8 +210,12 @@ final class AnalyticsReport {
       ], $rows);
     };
     $weeks = [];
+    // The week the pull ran in is only partly counted (through yesterday).
+    $pulled = (new \DateTimeImmutable('@' . (int) $data['updated']))->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+    $pulled_week = $pulled->modify('-1 day')->format('oW');
     foreach ($data['weeks'] as $week => $sections) {
       $weeks[] = [
+        'current' => (string) $week === $pulled_week && $pulled->format('N') !== '1',
         'week' => self::weekLabel((string) $week),
         'palefire' => array_sum(array_intersect_key($sections, array_flip($palefire))),
         'old' => (int) ($sections['old'] ?? 0),
