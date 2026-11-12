@@ -1059,27 +1059,31 @@ html.pf-a11y-contrast .pf-landing--cover .pf-landing__lead .pf-landing__media::b
     }
   }
 
-  // The Search button filled with the swatch's accent, its words in the
-  // text color for that fill, as in the mockup, so the action stands out
-  // (black on Twilight's gold, white on the light swatches' dark accents;
-  // LSU gold and black unthemed). Hover wipes in the text color, as every
-  // button (_buttons.scss), and the words invert.
+  // Search is part of the field, as on Combined Search (index-search.scss):
+  // on the field's glass behind its hairline, the word in the swatch's
+  // accent and the labels' mono capitals, so the gold stays with the title.
+  // Hover and focus wipe the accent in (_buttons.scss) and the words take
+  // the text color for that fill (black on Twilight's gold, white on the
+  // light swatches' dark accents). Unthemed, the words keep the title color.
   .pf-landing__submit {
-    border-inline-start: 0;
-    color: var(--pf-g-on-accent, #{$pf-black});
-    background-color: var(--pf-g-accent, #{$pf-gold});
+    color: var(--pf-g-accent, var(--pf-g-title, var(--pf-toc-active, #{$pf-white})));
     transition: color $pf-hover-out ease;
     @include pf-button-pressed;
     @include pf-button-wipe;
 
+    &::before {
+      background-color: var(--pf-g-accent, #{$pf-gold});
+    }
+
     &:hover,
     &:focus-visible {
-      color: var(--pf-g-on-accent, #{$pf-black});
+      color: var(--pf-g-accent, var(--pf-g-title, var(--pf-toc-active, #{$pf-white})));
+      background-color: transparent;
       transition-duration: $pf-hover-in;
     }
 
     @include pf-button-on {
-      color: var(--bs-body-bg);
+      color: var(--pf-g-on-accent, #{$pf-black});
     }
 
     &:focus-visible {
@@ -3393,10 +3397,9 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
     }
   }
 
-  // Search in the button voice of the links over it, the magnifier after
-  // the word (held still on hover: the arrow's nudge was a "go on").
+  // The magnifier after the word, held still on hover (the arrow's nudge
+  // was a "go on"). The word keeps the field's mono capitals.
   .pf-landing__lead--hero .pf-landing__submit {
-    @include pf-button-type;
 
     .pf-landing__submit-icon--search {
       width: 1.125rem;

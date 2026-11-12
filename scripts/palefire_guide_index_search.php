@@ -395,6 +395,7 @@ HTML),
 <li>Some flair: results rise into place one after another, counts count up, the Source filter draws each source's share as a gold bar, pictures fade up as they load, and the term searched is set large over the results like a gallery label. The results bar's own words appear once it sticks to the top. In Special Collections, the empty search field types out example searches. Ctrl+K (⌘K on a Mac) jumps to the search field, and the up and down arrows move between result titles.</li>
 <li>A search that finds nothing now says so plainly, suggests a few searches to try, and shows a picture from one of the exhibitions with a link to it. Nothing moves for anyone who has asked their device for reduced motion.</li>
 <li>The gold bars under each source in the Source filter are gone: they looked like underlines or progress bars and were more confusing than useful.</li>
+<li>The Search button is no longer a solid gold block. It now sits inside the search box behind a thin line, the word Search in gold capitals like the tabs below it, and fills with gold when you point at it or tab to it. The search on the Special Collections page matches. The gold block was the brightest thing on the page and drew the eye away from the title and the results.</li>
 </ul>
 HTML),
 ]);

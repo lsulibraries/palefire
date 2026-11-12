@@ -299,12 +299,18 @@ $pf-index-bar-shadow:
 @import "base/mark-worm";
 @import "base/mark-trace";
 
-// The theme's primary button (_buttons.scss), which this entry point can't
-// extend: the text color wipes in on hover and fades out in place. The word
-// alone, so it doesn't sit as a second line icon beside the clear (×); on
-// narrow phones the magnifier alone, so the field keeps its width. The word
-// stays the button's name either way (font-size 0 hides it from sight only).
+// Search is part of the field, not a block beside it: on the field's own
+// surface behind a hairline, the word in the swatch's accent and in the
+// tabs' mono capitals, so the gold stays with the title and the results.
+// The accent wipes in on hover and focus and the word inverts, as the
+// theme's buttons do (_buttons.scss, which this entry point can't extend).
+// 5.4:1 to 9.6:1 on the field in every swatch; unthemed, where gold on
+// white would be 1.4:1, the word takes the text color. The word alone, so
+// it doesn't sit as a second line icon beside the clear (×); on narrow
+// phones the magnifier alone, so the field keeps its width. The word stays
+// the button's name either way (font-size 0 hides it from sight only).
 .pf-index__submit {
+  @include pf-index-label;
   position: relative;
   isolation: isolate;
   display: inline-flex;
@@ -313,10 +319,9 @@ $pf-index-bar-shadow:
   justify-content: center;
   padding-inline: clamp(1.25rem, 3vw, 2.5rem);
   border: 0;
-  background: var(--pf-index-accent);
-  color: var(--pf-g-on-accent, #000);
-  font-size: .9375rem;
-  font-weight: $pf-button-weight;
+  border-inline-start: 1px solid var(--pf-index-line);
+  background: transparent;
+  color: var(--pf-g-accent, var(--pf-index-fg));
   transition: color $pf-hover-out ease;
 
   svg {
@@ -341,7 +346,7 @@ $pf-index-bar-shadow:
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--bs-emphasis-color);
+    background: var(--pf-index-accent);
     opacity: 0;
     transform: scaleX(0);
     transform-origin: left;
@@ -355,7 +360,7 @@ $pf-index-bar-shadow:
 
   &:focus-visible,
   &:hover {
-    color: var(--bs-body-bg);
+    color: var(--pf-g-on-accent, #000);
     transition-duration: $pf-hover-in;
 
     &::before {
