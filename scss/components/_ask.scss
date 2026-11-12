@@ -187,10 +187,11 @@
   --pf-inquiry-sheet-bg: var(--pf-tabs-bg, var(--pf-inquiry-bg));
   --pf-inquiry-inset: clamp(1.25rem, .75rem + 2vw, 2.25rem);
   container: pf-inquiry-form / inline-size;
-  padding: var(--pf-inquiry-inset);
-  // The status line under Send question holds 1.5rem even while empty
-  // (no shift when a message comes); take it back from the bottom.
-  padding-bottom: max(.5rem, var(--pf-inquiry-inset) - 1.5rem);
+  // The tab track's gap: the Send key sits this far from the sheet's
+  // sides and foot, as the tab key does in its track.
+  --pf-inquiry-gap: var(--pf-tabs-gap, .375rem);
+  --pf-inquiry-key-r: var(--pf-tabs-key-r, .875rem);
+  padding: var(--pf-inquiry-inset) var(--pf-inquiry-inset) var(--pf-inquiry-gap);
   border-radius: var(--pf-tabs-track-r, 1.25rem);
   background: var(--pf-inquiry-sheet-bg);
   box-shadow: var(--pf-tabs-well, inset 4px 4px 9px var(--pf-g-relief-shade, rgb(0 0 0 / .3)), inset -4px -4px 9px var(--pf-g-relief-light, rgb(255 255 255 / .06)));
@@ -289,8 +290,7 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
 
   .pf-inquiry__field--wide,
   .pf-inquiry__required,
-  .pf-inquiry__actions,
-  .pf-inquiry__status {
+  .pf-inquiry__actions {
     grid-column: 1 / -1;
   }
 }
@@ -555,20 +555,11 @@ textarea.pf-inquiry__control {
   font-size: .875rem;
 }
 
-// The FAQs' links are secondary, as the Quick Start Guide's buttons
-// (.pf-quick-guide__link, _landing-features.scss). Send question is this
-// view's one primary: the form's main action. Both have the words at the
-// start and the arrow at the end, and fill the space they're given.
+// The FAQs' links are secondary buttons, as the Quick Start Guide's
+// (.pf-quick-guide__link, _landing-features.scss): words at the start, the
+// arrow at the end, filling the space they're given.
 .pf-inquiry__button {
   @extend %pf-button-secondary;
-}
-
-.pf-inquiry__submit {
-  @extend %pf-button-primary;
-}
-
-.pf-inquiry__button,
-.pf-inquiry__submit {
   justify-content: flex-start;
   gap: .625rem;
   width: 100%;
@@ -589,9 +580,135 @@ textarea.pf-inquiry__control {
   }
 }
 
+// Send question: the tab slider's key (_section-tabs.scss) at the foot of
+// the sheet, flat. Its words are printed above it in the tab labels' voice
+// (and are its name); the key is the swatch accent, the view's one primary,
+// across the sheet's width, the track's gap from its sides and foot (the
+// negative margins undo the sheet's padding), with the key's radius, so
+// its corners run with the sheet's. A Light paper plane on it nudges up and
+// out on hover. No shadows: the sheet is the only carved thing here.
+.pf-inquiry__actions {
+  --pf-inquiry-key-h: 3.5rem;
+  position: relative;
+  isolation: isolate;
+  margin-inline: calc(var(--pf-inquiry-gap) - var(--pf-inquiry-inset));
+
+  // Drupal's own wrapper brings a 1rem margin, which lifted the key off
+  // the foot.
+  > .form-actions {
+    margin: 0;
+  }
+}
+
+.pf-inquiry__submit {
+  display: grid;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--pf-inquiry-strong);
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible .pf-inquiry__key {
+    outline: 3px solid var(--pf-inquiry-accent);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: progress;
+
+    .pf-inquiry__key {
+      opacity: .6;
+    }
+  }
+}
+
+.pf-inquiry__key-label {
+  justify-self: center;
+  margin-right: -.16em; // the tracking pads the right side; center by eye
+  padding-bottom: .625rem;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+@include media-breakpoint-up(md) {
+  .pf-inquiry__key-label {
+    font-size: .8125rem;
+  }
+}
+
+.pf-inquiry__key {
+  position: relative;
+  z-index: 2; // over the status card, which rises from behind it
+  display: grid;
+  place-items: center;
+  height: var(--pf-inquiry-key-h);
+  border-radius: var(--pf-inquiry-key-r);
+  color: var(--pf-g-on-accent, #000);
+  background-color: var(--pf-g-accent, #{$pf-gold});
+  transition: background-color $pf-hover-out ease;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+  }
+
+  // The arrow (without Font Awesome) is drawn in strokes.
+  .pf-inquiry__arrow {
+    fill: none;
+  }
+}
+
+@media (hover: hover) {
+  .pf-inquiry__submit:hover .pf-inquiry__key {
+    background-color: color-mix(in srgb, var(--pf-g-accent, #{$pf-gold}) 88%, #fff);
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-inquiry__submit:active .pf-inquiry__key {
+  background-color: color-mix(in srgb, var(--pf-g-accent, #{$pf-gold}) 90%, #000);
+}
+
+// The status: a flat card that rises from behind the key (data-kind,
+// js/ask-form.js) and sinks again once the visitor types. Laid over the
+// form, not in its flow, so a message never moves the key or the page; its
+// foot is tucked a radius under the key, so only its rounded top shows.
+// The sheet's color with a 6% wash of the text and a hairline, as a plate.
 .pf-inquiry__status {
-  min-height: 1.5rem; // Holds its line, so a message never shifts the page.
-  color: var(--pf-inquiry-fg);
+  position: absolute;
+  z-index: 1;
+  inset-inline: 0;
+  bottom: calc(var(--pf-inquiry-key-h) - var(--pf-inquiry-key-r));
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  padding: 1.375rem 1.25rem calc(1.375rem + var(--pf-inquiry-key-r));
+  border: 1px solid #{$pf-hairline};
+  border-bottom: 0;
+  border-radius: var(--pf-inquiry-key-r) var(--pf-inquiry-key-r) 0 0;
+  color: var(--pf-inquiry-strong);
+  background-color: color-mix(in srgb, var(--pf-inquiry-fg) 6%, var(--pf-inquiry-sheet-bg, var(--pf-inquiry-bg)));
+  font-size: .9375rem;
+  line-height: 1.45;
+
+  &:not([data-kind]) {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(1.5rem);
+    pointer-events: none;
+  }
 
   &:focus {
     outline: none;
@@ -602,48 +719,74 @@ textarea.pf-inquiry__control {
     outline-offset: 2px;
   }
 
-  &[data-kind="done"],
-  &[data-kind="error"] {
-    padding-left: 1rem;
-    border-left: 3px solid var(--pf-inquiry-accent);
-  }
-
-  &[data-kind="error"] {
-    border-left-color: var(--pf-inquiry-error);
-  }
-
   a {
     color: inherit;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .pf-inquiry__arrow {
-    transition: transform .3s ease-out;
+.pf-inquiry__status-icon {
+  display: none;
+  flex: none;
+  margin-top: .1rem;
+  color: var(--pf-inquiry-accent);
+
+  svg {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
   }
 
-  :is(.pf-inquiry__link, .pf-inquiry__button, .pf-inquiry__submit):is(:hover, :focus-visible) .pf-inquiry__arrow {
-    transform: translateX(.25rem);
-  }
-
-  // A message settles in.
-  .pf-inquiry__status[data-kind] {
-    animation: pf-inquiry-status $pf-menu-fade ease both;
+  &[data-for="error"] {
+    color: var(--pf-inquiry-error);
   }
 }
 
-@keyframes pf-inquiry-status {
-  from {
-    opacity: 0;
-    transform: translateY(.25rem);
+.pf-inquiry__status[data-kind="done"] .pf-inquiry__status-icon[data-for="done"],
+.pf-inquiry__status[data-kind="error"] .pf-inquiry__status-icon[data-for="error"] {
+  display: block;
+}
+
+@media (forced-colors: active) {
+  .pf-inquiry__key {
+    border: 2px solid ButtonText;
+  }
+
+  .pf-inquiry__status {
+    border-color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-inquiry__arrow,
+  .pf-inquiry__key svg {
+    transition: transform .3s ease-out;
+  }
+
+  :is(.pf-inquiry__link, .pf-inquiry__button):is(:hover, :focus-visible) .pf-inquiry__arrow {
+    transform: translateX(.25rem);
+  }
+
+  .pf-inquiry__submit:is(:hover, :focus-visible) .pf-inquiry__key svg {
+    transform: translate(.2rem, -.2rem);
+  }
+
+  // Up from behind the key, and back down (visibility waits for the end).
+  .pf-inquiry__status {
+    transition: opacity .3s ease, transform .45s cubic-bezier(.22, 1, .36, 1), visibility 0s;
+
+    &:not([data-kind]) {
+      transition: opacity .25s ease, transform .3s ease-in, visibility 0s .3s;
+    }
   }
 }
 
 html.pf-a11y-motion {
   .pf-inquiry__arrow,
-  .pf-inquiry__status[data-kind] {
+  .pf-inquiry__key svg,
+  .pf-inquiry__status,
+  .pf-inquiry__status:not([data-kind]) {
     transition: none;
-    animation: none;
   }
 }
 

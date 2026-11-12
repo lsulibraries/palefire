@@ -14,7 +14,8 @@
  *
  * Errors: each invalid field gets aria-invalid and its message under it
  * (aria-describedby), and focus moves to the first. The outcome is said in
- * the status line (role="status"), which takes focus so it is read.
+ * the status card (role="status"), which takes focus so it is read; it
+ * rises from behind the Send key and sinks again once the visitor types.
  */
 (function (Drupal, once) {
   'use strict';
@@ -46,19 +47,39 @@
     error.hidden = !text;
   };
 
+  // The status card (_ask.scss): data-kind raises it from behind the Send
+  // key; the words go in its text, so the icons stay.
+  const timers = new WeakMap();
+
   const say = (form, text, kind, link) => {
     const status = form.querySelector('.pf-inquiry__status');
-    status.textContent = text;
+    const words = status.querySelector('.pf-inquiry__status-text') || status;
+    clearTimeout(timers.get(status));
+    words.textContent = text;
     status.dataset.kind = kind;
     if (link) {
       const a = document.createElement('a');
       a.href = ASKUS;
       a.textContent = Drupal.t('Ask on AskUs instead');
-      status.append(' ', a, '.');
+      words.append(' ', a, '.');
     }
     if (kind !== 'busy') {
       status.focus();
     }
+  };
+
+  // The card sinks back behind the key once the visitor types again, so it
+  // never sits over a field they're filling in. Its words go after the
+  // slide, so nothing stale is left to read.
+  const unsay = (form) => {
+    const status = form.querySelector('.pf-inquiry__status');
+    if (!status.dataset.kind || status.dataset.kind === 'busy') {
+      return;
+    }
+    delete status.dataset.kind;
+    timers.set(status, setTimeout(() => {
+      (status.querySelector('.pf-inquiry__status-text') || status).textContent = '';
+    }, 400));
   };
 
   const showErrors = (form, invalid) => {
@@ -152,6 +173,7 @@
           }
           send(form, event.submitter);
         });
+        form.addEventListener('input', () => unsay(form));
         // Clear a field's error once it is fixed, not on every key.
         form.addEventListener('change', (event) => {
           const field = event.target;
