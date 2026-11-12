@@ -127,9 +127,13 @@
     },
   };
 
+  // Positions come from palefire.js's cache (Drupal.palefireLayout), not
+  // from measuring every scroll frame, which forced a restyle and layout
+  // of the page each time.
+  const layout = Drupal.palefireLayout;
+
   function headerHeight() {
-    const value = getComputedStyle(document.documentElement).getPropertyValue('--pf-header-h');
-    return parseFloat(value) || 0;
+    return layout.header();
   }
 
   function initToc(nav) {
@@ -270,11 +274,10 @@
         if (locked || destroyed) {
           return;
         }
-        const doc = document.documentElement;
         if (window.scrollY <= 2) {
           setActive(firstShown());
         }
-        else if (window.innerHeight + window.scrollY >= doc.scrollHeight - 2) {
+        else if (window.innerHeight + window.scrollY >= layout.pageHeight() - 2) {
           setActive(lastShown());
         }
         trackSubHeadings();
@@ -293,7 +296,7 @@
         if (sub.passive) {
           continue;
         }
-        if (sub.heading.getBoundingClientRect().top <= line) {
+        if (layout.top(sub.heading) <= line) {
           current = sub;
         }
         else {
@@ -598,12 +601,12 @@
       const span = window.innerHeight - head;
       const line = head + span * ACTIVATION_LINE;
       const fills = entries.map((entry) => {
-        const rect = entry.section.getBoundingClientRect();
-        return isShown(entry) && rect.height ? Math.min(1, Math.max(0, (line - rect.top) / rect.height)) : 0;
+        const box = layout.box(entry.section);
+        return isShown(entry) && box.height ? Math.min(1, Math.max(0, (line - (box.top - window.scrollY)) / box.height)) : 0;
       });
       let peek = 0;
       if (active && isShown(active)) {
-        const top = (active.title || active.section).getBoundingClientRect().top;
+        const top = layout.top(active.title || active.section);
         const end = head + span * PEEK_END;
         peek = Math.min(1, Math.max(0, (top - end) / ((line - end) / 2)));
         // Not yet at the line (the first section on load, a section made
@@ -932,6 +935,8 @@
     let spacer = null;
     let pinned = false;
     let pinFrame = 0;
+    let pinMeasure = { version: -1 };
+    let pinPlace = '';
 
     function updateCrumb() {
       if (!crumb) {
@@ -950,7 +955,7 @@
         crumbShown = show ? crumbShown : null;
         return;
       }
-      crumbLabel.textContent = text;
+      Drupal.palefireSetText(crumbLabel, text);
       // Rises in, as the page's other changes of place do. Not on load.
       const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches || ROOT.classList.contains('pf-a11y-motion');
       if (crumbShown !== null && !still && crumbLabel.animate) {
@@ -1060,27 +1065,40 @@
       if (destroyed || !bar) {
         return;
       }
-      const landing = bar.parentElement;
-      const head = headerHeight();
-      const height = (pinned ? spacer : bar).getBoundingClientRect().height;
-      const gap = parseFloat(getComputedStyle(pinned ? spacer : bar).marginBottom) || 0;
-      // Where the sticky bar would start to be pushed up: the landing's
-      // content box ends a bar (and its margin) under the header.
-      const end = landing.getBoundingClientRect().bottom - (parseFloat(getComputedStyle(landing).paddingBottom) || 0);
-      const pin = end - height - gap <= head;
+      // Measured once per layout (palefire.js clears it), not every frame:
+      // where the sticky bar would start to be pushed up, as a scroll
+      // position. The landing's content box ends a bar (and its margin)
+      // under the header. The bar is sticky, so its own height is read,
+      // never its place.
+      if (pinMeasure.version !== layout.version()) {
+        const landing = bar.parentElement;
+        const held = pinned ? spacer : bar;
+        const height = held.getBoundingClientRect().height;
+        const gap = parseFloat(getComputedStyle(held).marginBottom) || 0;
+        const box = layout.box(landing);
+        const end = box.top + box.height - (parseFloat(getComputedStyle(landing).paddingBottom) || 0);
+        pinMeasure = { version: layout.version(), height, at: end - height - gap };
+      }
+      const pin = pinMeasure.at - window.scrollY <= headerHeight();
       if (pin !== pinned) {
         if (pin) {
-          spacer.style.height = height + 'px';
+          spacer.style.height = pinMeasure.height + 'px';
         }
         spacer.hidden = !pin;
         bar.classList.toggle('is-pinned', pin);
         ROOT.classList.toggle('pf-bar-pinned', pin);
         pinned = pin;
+        pinPlace = '';
       }
       if (pinned) {
-        const box = spacer.getBoundingClientRect();
-        bar.style.setProperty('--pf-bar-left', box.left + 'px');
-        bar.style.setProperty('--pf-bar-width', box.width + 'px');
+        // The spacer stands where the bar was; written only when it moves.
+        const box = layout.box(spacer);
+        const place = box.left + '/' + box.width;
+        if (place !== pinPlace) {
+          pinPlace = place;
+          bar.style.setProperty('--pf-bar-left', box.left - window.scrollX + 'px');
+          bar.style.setProperty('--pf-bar-width', box.width + 'px');
+        }
       }
     }
 

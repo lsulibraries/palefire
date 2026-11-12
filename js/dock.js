@@ -35,6 +35,7 @@
   const FIELDS = 'input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]):not([type=reset]), textarea, select';
 
   const root = document.documentElement;
+  const layout = Drupal.palefireLayout;
   const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
     || root.classList.contains('pf-a11y-motion');
   const pad = (n) => String(Math.min(n, 99)).padStart(2, '0');
@@ -334,6 +335,7 @@
     let entries = [];
     let total = 0;
     let nums = [];
+    let ringDash = '';
 
     function tocNav() {
       return document.querySelector('#pf-modular-sidebar .pf-toc');
@@ -373,8 +375,11 @@
       return nav && nav.querySelector('.pf-toc__link[aria-current]');
     }
 
+    // Positions come from palefire.js's cache (Drupal.palefireLayout), not
+    // from measuring every scroll frame, which forced a restyle and layout
+    // of the page each time.
     function headerLine() {
-      const head = parseFloat(getComputedStyle(root).getPropertyValue('--pf-header-h')) || 0;
+      const head = layout.header();
       return head + (window.innerHeight - head) * 0.75;
     }
 
@@ -386,18 +391,26 @@
       const main = document.querySelector('#swup main') || document.querySelector('main');
       let share = 0;
       if (main) {
-        const box = main.getBoundingClientRect();
+        const box = layout.box(main);
         const run = box.height - window.innerHeight;
-        share = run > 0 ? Math.max(0, Math.min(1, -box.top / run)) : 1;
+        share = run > 0 ? Math.max(0, Math.min(1, (window.scrollY - box.top) / run)) : 1;
       }
-      ringFill.style.strokeDasharray = `${Math.round(share * 100)} 100`;
-      // No round-capped dot at 0%.
-      ringFill.style.opacity = share < 0.01 ? '0' : '';
+      // Written only when the percent changes.
+      const dash = `${Math.round(share * 100)} 100`;
+      if (dash !== ringDash) {
+        ringDash = dash;
+        ringFill.style.strokeDasharray = dash;
+        // No round-capped dot at 0%.
+        ringFill.style.opacity = share < 0.01 ? '0' : '';
+      }
 
       let n = '';
       if (nums.length) {
         const line = headerLine();
-        const passed = nums.filter((el) => el.getBoundingClientRect().top < line && el.getClientRects().length);
+        const passed = nums.filter((el) => {
+          const box = layout.box(el);
+          return box.shown && box.top - window.scrollY < line;
+        });
         n = (passed.length ? passed[passed.length - 1] : nums[0]).textContent.trim();
       }
       else {
@@ -409,8 +422,8 @@
       // reads 2), which the page's numbers and the list keep.
       n = n.replace(/\..*$/, '').replace(/^0+(?=\d)/, '');
       if (ringNum.textContent !== n) {
-        ringNum.textContent = n;
-        tocName.textContent = Drupal.t('Contents, section @n of @total', { '@n': parseInt(n, 10) || 1, '@total': total });
+        Drupal.palefireSetText(ringNum, n);
+        Drupal.palefireSetText(tocName, Drupal.t('Contents, section @n of @total', { '@n': parseInt(n, 10) || 1, '@total': total }));
       }
     }
 

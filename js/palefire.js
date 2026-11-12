@@ -33,6 +33,8 @@
           // menu is a fixed drawer, so it never adds to the bar's height.)
           const height = bar.getBoundingClientRect().height;
           root.style.setProperty('--pf-header-h', `${height}px`);
+          headerHeight = height;
+          scrollPadding = null;
           // Expanded height, remembered while the header is compact or
           // changing size, so its bottom margin can hold the page in place.
           if (!header.classList.contains(COMPACT) && !header.hasAttribute('data-pf-resizing')) {
@@ -51,6 +53,122 @@
         }
       });
     },
+  };
+
+  /**
+   * Page geometry for scroll handlers (the "On this page" rail, the
+   * contents ring, the hero's Scroll cue, the landing bar).
+   *
+   * Asking where an element is (getBoundingClientRect, getComputedStyle,
+   * scrollHeight) after anything has changed a style makes the browser
+   * restyle and lay out the page first. With several handlers each reading
+   * and writing in turn, that happened several times a frame: 4.6s of
+   * 10.6s of main-thread work in a 7s scroll down /v2/special (2026-11-12
+   * trace, CPU slowed 4x). So positions are measured once and kept as page
+   * offsets (offsetTop up the offsetParent chain: no transforms, so a
+   * section still sliding in from a reveal doesn't skew them), and a
+   * handler subtracts scrollY, which costs nothing. The cache is cleared
+   * whenever the layout may have moved: the page or window changing size,
+   * fonts loading, new content attached (Swup), and, to catch anything
+   * else, the end of every scroll.
+   */
+  let layoutVersion = 0;
+  const layoutCache = new WeakMap();
+  let headerHeight = null;
+  let scrollPadding = null;
+  let pageHeight = null;
+  const clearLayout = () => {
+    layoutVersion += 1;
+    scrollPadding = null;
+    pageHeight = null;
+  };
+
+  Drupal.palefireLayout = {
+    // The element's box on the page: top and left from the document's
+    // origin, width and height, and whether it renders at all. Elements
+    // inside something fixed or sticky move with it, so don't ask for those.
+    box(el) {
+      let box = layoutCache.get(el);
+      if (box && box.version === layoutVersion) {
+        return box;
+      }
+      box = { version: layoutVersion, top: 0, left: 0, width: 0, height: 0, shown: el.getClientRects().length > 0 };
+      if ('offsetTop' in el) {
+        box.width = el.offsetWidth;
+        box.height = el.offsetHeight;
+        for (let node = el; node; node = node.offsetParent) {
+          box.top += node.offsetTop + (node.offsetParent ? node.offsetParent.clientTop : 0);
+          box.left += node.offsetLeft + (node.offsetParent ? node.offsetParent.clientLeft : 0);
+        }
+      }
+      else {
+        // SVG has no offsets.
+        const rect = el.getBoundingClientRect();
+        Object.assign(box, { top: rect.top + window.scrollY, left: rect.left + window.scrollX, width: rect.width, height: rect.height });
+      }
+      layoutCache.set(el, box);
+      return box;
+    },
+    // Where the element's top is on screen now, as getBoundingClientRect().top.
+    top(el) {
+      return Drupal.palefireLayout.box(el).top - window.scrollY;
+    },
+    // The sticky header's height (--pf-header-h), kept by palefireHeaderOffset.
+    header() {
+      if (headerHeight === null) {
+        headerHeight = parseFloat(getComputedStyle(root).getPropertyValue('--pf-header-h')) || 0;
+      }
+      return headerHeight;
+    },
+    scrollPadding() {
+      if (scrollPadding === null) {
+        scrollPadding = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+      }
+      return scrollPadding;
+    },
+    pageHeight() {
+      if (pageHeight === null) {
+        pageHeight = root.scrollHeight;
+      }
+      return pageHeight;
+    },
+    // Bumped whenever the layout may have moved, for a handler keeping its
+    // own measurements.
+    version: () => layoutVersion,
+    clear: clearLayout,
+  };
+
+  /**
+   * Sets an element's text by changing its one text node in place, not
+   * swapping the node as textContent does. A swapped node makes the
+   * browser re-check every :has() rule on html, body and .pf-page and
+   * restyle about a thousand elements: a 40-50ms stall each time a scroll
+   * crossed a section and the contents ring or the breadcrumb renamed it
+   * (2026-11-12 trace). Same text, same announcements.
+   */
+  Drupal.palefireSetText = (el, text) => {
+    const node = el.firstChild;
+    if (node && node.nodeType === Node.TEXT_NODE && !node.nextSibling) {
+      if (node.data !== text) {
+        node.data = text;
+      }
+    }
+    else if (el.textContent !== text) {
+      el.textContent = text;
+    }
+  };
+
+  if ('ResizeObserver' in window && document.body) {
+    new ResizeObserver(clearLayout).observe(document.body);
+  }
+  window.addEventListener('resize', clearLayout, { passive: true });
+  window.addEventListener('load', clearLayout);
+  window.addEventListener('scrollend', clearLayout, { passive: true });
+  if (document.fonts) {
+    document.fonts.addEventListener('loadingdone', clearLayout);
+  }
+  Drupal.behaviors.palefireLayout = {
+    attach: clearLayout,
   };
 
   /**

@@ -1414,6 +1414,17 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   @include pf-thin-scrollbar;
 }
 
+// On touch screens a swipe coasts on the phone's own momentum and only
+// settles onto a book when it stops near one. Mandatory snapping cut long
+// flicks short and tugged short ones on iPhone (2026-11-12). A mouse
+// (js/book-shelf.js lands its glide on a book itself) and the keyboard
+// keep mandatory.
+@media (pointer: coarse) {
+  .pf-tiles--covers .pf-tiles__list {
+    scroll-snap-type: x proximity;
+  }
+}
+
 // The fade: a pane at each end, over the books (not the scrollbar), solid
 // section color at the outer edge, clearing toward the books. Shown at the
 // side with more books (data-pf-at, js/book-shelf.js); without JS, at the

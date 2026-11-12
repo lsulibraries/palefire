@@ -134,7 +134,9 @@
         return;
       }
       const moved = window.scrollY > AT_TOP;
-      if (moved && next.getBoundingClientRect().top <= padding() + 2) {
+      // Runs on every scroll event: positions from palefire.js's cache, so
+      // it never makes the browser lay out the page mid-scroll.
+      if (moved && Drupal.palefireLayout.top(next) <= Drupal.palefireLayout.scrollPadding() + 2) {
         retire();
         return;
       }
