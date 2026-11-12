@@ -62,13 +62,17 @@
   {# The footer's Ask link (includes/footer.html.twig) lands here. #}
   <div class="pf-inquiry__panel" id="ask-question">
     <h3 class="pf-inquiry__heading">{{ 'Send us a question'|t }}</h3>
-    {% if ask_form %}
-      {{ attach_library('palefire/ask-form') }}
-      <p class="pf-inquiry__intro">{{ 'Special Collections staff reply by email.'|t }}</p>
-      {{ ask_form }}
-    {% else %}
-      <p class="pf-inquiry__intro">{{ 'Special Collections staff answer questions on AskUs, by email or chat.'|t }}</p>
-      <a class="pf-inquiry__link" href="https://askus.lib.lsu.edu/special">{{ 'Ask Special Collections on AskUs'|t }}{{ arrow }}</a>
-    {% endif %}
+    {# The sheet: the form pressed into the band like the tab track above
+       (_ask.scss), so writing to staff reads apart from the browsing. #}
+    <div class="pf-inquiry__sheet">
+      {% if ask_form %}
+        {{ attach_library('palefire/ask-form') }}
+        <p class="pf-inquiry__intro">{{ 'Special Collections staff reply by email.'|t }}</p>
+        {{ ask_form }}
+      {% else %}
+        <p class="pf-inquiry__intro">{{ 'Special Collections staff answer questions on AskUs, by email or chat.'|t }}</p>
+        <a class="pf-inquiry__link" href="https://askus.lib.lsu.edu/special">{{ 'Ask Special Collections on AskUs'|t }}{{ arrow }}</a>
+      {% endif %}
+    </div>
   </div>
 </div>

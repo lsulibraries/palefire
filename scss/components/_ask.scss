@@ -4,7 +4,7 @@
 //
 // One column on phones: the FAQs, then the form. From lg, two: the FAQs
 // on the left (7 parts), the form on the right (5), tops aligned. The FAQs are the guides' accordion (_guide.scss) in the
-// section's colors; the form is Swiss and quiet: ruled fields with no
+// section's colors; the form is Swiss and quiet in a carved sheet: ruled fields with no
 // boxes, labels in the eyebrows' mono capitals, a solid button. Field
 // rules are the muted text color at full strength, not the 20% hairline:
 // a control's edge needs 3:1 (WCAG 1.4.11).
@@ -159,12 +159,9 @@
 
 // Form ---------------------------------------------------------------------
 
-// The form's opening line, set as the first question beside it (the
-// accordion's rule, padding and type), so the columns start on one line.
+// The form's opening line: the sheet's title, in the FAQ questions' type.
 .pf-inquiry__intro {
   margin: 0 0 1.75rem;
-  padding: .85rem .25rem;
-  border-top: 1px solid var(--pf-guide-rule);
   color: var(--bs-heading-color, var(--pf-inquiry-fg));
   font-size: var(--pf-inquiry-question);
   font-weight: 500;
@@ -172,12 +169,54 @@
   text-wrap: pretty;
 }
 
-// The panel is the container: the form can't query its own width.
 .pf-inquiry__panel {
   --pf-inquiry-frame: clamp(.5rem, 2vw, 1.5rem);
-  container: pf-inquiry-form / inline-size;
   // Room for the frame below under the sticky header.
   scroll-margin-top: calc(var(--pf-inquiry-frame) + .5rem);
+}
+
+// The sheet: the form pressed into the band, the tab track's well
+// (.pf-tabs__rail, _section-tabs.scss) at the size of a form, so writing to
+// staff reads apart from the browsing around it. Same color, radius and
+// carved shadows (shaded upper left, lit lower right) as the track; outside
+// the tabs, the same relief from the swatch's tokens. Its color is the band
+// the block already sits on, so every text and field contrast holds. Its
+// top edge sits on the first FAQ's rule. The sheet is the container: the
+// form can't query its own width.
+.pf-inquiry__sheet {
+  --pf-inquiry-sheet-bg: var(--pf-tabs-bg, var(--pf-inquiry-bg));
+  --pf-inquiry-inset: clamp(1.25rem, .75rem + 2vw, 2.25rem);
+  container: pf-inquiry-form / inline-size;
+  padding: var(--pf-inquiry-inset);
+  // The status line under Send question holds 1.5rem even while empty
+  // (no shift when a message comes); take it back from the bottom.
+  padding-bottom: max(.5rem, var(--pf-inquiry-inset) - 1.5rem);
+  border-radius: var(--pf-tabs-track-r, 1.25rem);
+  background: var(--pf-inquiry-sheet-bg);
+  box-shadow: var(--pf-tabs-well, inset 4px 4px 9px var(--pf-g-relief-shade, rgb(0 0 0 / .3)), inset -4px -4px 9px var(--pf-g-relief-light, rgb(255 255 255 / .06)));
+}
+
+// High contrast, the Settings drawer's or the OS's: flat, as the track
+// goes (pf-tabs-flat), a 1px rule for the carving.
+@mixin pf-inquiry-sheet-flat {
+  .pf-inquiry__sheet {
+    border: 1px solid var(--pf-section-border, currentColor);
+    box-shadow: none;
+  }
+}
+
+html.pf-a11y-contrast {
+  @include pf-inquiry-sheet-flat;
+}
+
+@media (prefers-contrast: more) {
+  @include pf-inquiry-sheet-flat;
+}
+
+@media (forced-colors: active) {
+  .pf-inquiry__sheet {
+    border: 1px solid CanvasText;
+  }
 }
 
 // Arrival from the footer's Ask link (#ask-question): a gold hairline and
@@ -339,10 +378,10 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
     -webkit-text-fill-color: var(--pf-inquiry-strong);
     caret-color: var(--pf-inquiry-strong);
     // Autofilled is filled: the 2px rule rides along.
-    box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))), 0 1px 0 var(--pf-inquiry-strong);
+    box-shadow: inset 0 0 0 100vmax var(--pf-inquiry-sheet-bg, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)))), 0 1px 0 var(--pf-inquiry-strong);
 
     &:focus {
-      box-shadow: inset 0 0 0 100vmax var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))), 0 2px 0 var(--pf-inquiry-accent);
+      box-shadow: inset 0 0 0 100vmax var(--pf-inquiry-sheet-bg, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)))), 0 2px 0 var(--pf-inquiry-accent);
     }
   }
 }
@@ -368,7 +407,7 @@ select.pf-inquiry__control {
   // or a dark section's light text lands on a white list.
   option {
     color: var(--pf-inquiry-fg);
-    background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+    background-color: var(--pf-inquiry-sheet-bg, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))));
   }
 
   // "Select one" reads as a prompt, in the labels' muted color, until a
@@ -424,7 +463,7 @@ select.pf-inquiry__control {
       border: 1px solid #{$pf-hairline};
       border-radius: 0;
       color: var(--pf-inquiry-fg);
-      background-color: var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg)));
+      background-color: var(--pf-inquiry-sheet-bg, var(--pf-section-bg, var(--pf-g-bg, var(--bs-body-bg))));
       box-shadow: 0 .75rem 2rem rgb(0 0 0 / .25);
       opacity: 1;
       transform: none;
