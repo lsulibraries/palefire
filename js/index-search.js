@@ -867,10 +867,127 @@
     }
   };
 
+  // The feedback drawer: the feedback Webform's own page, fetched into a
+  // <dialog> so a visitor keeps their results, and its form posted from here.
+  // No Drupal Ajax, so no jQuery. Made on first use, inside the page's
+  // [data-pf-index] for its colors; Swup takes it away with the page. Anything
+  // unexpected opens the form's page instead, which always works.
+  const feedbackDrawer = (root) => {
+    let dialog = root.querySelector('[data-pf-index-feedback-drawer]');
+    if (dialog) {
+      return dialog;
+    }
+    dialog = document.createElement('dialog');
+    dialog.className = 'pf-index-feedback-drawer';
+    dialog.setAttribute('data-pf-index-feedback-drawer', '');
+    dialog.setAttribute('aria-labelledby', 'pf-index-feedback-drawer-title');
+    dialog.innerHTML = `<div class="pf-index-feedback-drawer__inner">
+      <div class="pf-index-feedback-drawer__head">
+        <h2 class="pf-index-feedback-drawer__title" id="pf-index-feedback-drawer-title" tabindex="-1"></h2>
+        <button class="pf-index-feedback-drawer__close" type="button"></button>
+      </div>
+      <div class="pf-index-feedback-drawer__body" data-pf-index-feedback-body></div>
+    </div>`;
+    dialog.querySelector('h2').textContent = Drupal.t('Feedback on Combined Search');
+    const close = dialog.querySelector('button');
+    close.textContent = Drupal.t('Close');
+    close.addEventListener('click', () => dialog.close());
+    // A click on the backdrop lands on the dialog itself.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+    root.append(dialog);
+    return dialog;
+  };
+
+  // Puts a page from the feedback Webform in the drawer: its form (with any
+  // errors), or its thank-you once sent. FALSE when the page has neither.
+  const showFeedback = (dialog, html, address) => {
+    const page = new DOMParser().parseFromString(html, 'text/html');
+    page.querySelectorAll('script').forEach((script) => script.remove());
+    const body = dialog.querySelector('[data-pf-index-feedback-body]');
+    const thanks = page.querySelector('.webform-confirmation');
+    if (thanks) {
+      thanks.tabIndex = -1;
+      body.replaceChildren(document.adoptNode(thanks));
+      thanks.focus();
+      Drupal.announce(thanks.textContent.trim());
+      return true;
+    }
+    const form = page.querySelector('form.webform-submission-form');
+    if (!form) {
+      return false;
+    }
+    const errors = [...page.querySelectorAll('[data-drupal-messages] .messages--error')];
+    body.replaceChildren(...errors.map((error) => document.adoptNode(error)), document.adoptNode(form));
+    form.setAttribute('action', new URL(form.getAttribute('action') || address, address).href);
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      // eslint-disable-next-line no-use-before-define
+      postFeedback(dialog, form, event.submitter);
+    });
+    if (errors.length) {
+      errors[0].tabIndex = -1;
+      errors[0].focus();
+    }
+    return true;
+  };
+
+  const postFeedback = async (dialog, form, submitter) => {
+    if (form.getAttribute('aria-busy') === 'true') {
+      return;
+    }
+    const data = new FormData(form);
+    // Drupal tells its buttons apart by name (Send, or a screenshot's Remove).
+    if (submitter?.name && !data.has(submitter.name)) {
+      data.append(submitter.name, submitter.value);
+    }
+    form.setAttribute('aria-busy', 'true');
+    let response;
+    try {
+      response = await fetch(form.action, { method: 'POST', body: data, credentials: 'same-origin' });
+    }
+    catch (error) {
+      // It never arrived: sent the normal way instead.
+      form.removeAttribute('aria-busy');
+      HTMLFormElement.prototype.submit.call(form);
+      return;
+    }
+    // It arrived, so it's never sent twice: an answer the drawer can't show
+    // opens as a page.
+    const address = response.url || form.action;
+    if (!response.ok || !showFeedback(dialog, await response.text(), address)) {
+      window.location.href = address;
+    }
+  };
+
+  const openFeedback = async (link, url) => {
+    const dialog = feedbackDrawer(link.closest('[data-pf-index]'));
+    const body = dialog.querySelector('[data-pf-index-feedback-body]');
+    const loading = document.createElement('p');
+    loading.className = 'pf-index-feedback-drawer__status';
+    loading.textContent = Drupal.t('Loading the form…');
+    body.replaceChildren(loading);
+    dialog.showModal();
+    dialog.querySelector('h2').focus();
+    try {
+      const response = await fetch(url, { credentials: 'same-origin' });
+      if (!response.ok || !showFeedback(dialog, await response.text(), response.url || url.href)) {
+        throw new Error(String(response.status));
+      }
+    }
+    catch (error) {
+      window.location.href = url.href;
+    }
+  };
+
   // Feedback answers (palefire_search's "Did you find what you needed?"). On
   // the way to the feedback Webform, adds what only the browser knows: the
   // screen size, and no results once every late section came back empty. Notes
   // the answer in the dataLayer too, without the words: pf_search has them.
+  // A plain click opens the form in the drawer; a new tab gets its page.
   const sendFeedback = (event) => {
     const link = event.target.closest?.('[data-pf-index-feedback-answer]');
     if (!link) {
@@ -896,6 +1013,12 @@
         search_feedback: link.dataset.pfIndexFeedbackAnswer,
         search_mode: url.searchParams.get('search_mode') || 'all',
       });
+    }
+    if (event.type === 'click' && event.button === 0 && !event.defaultPrevented
+      && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey
+      && typeof HTMLDialogElement === 'function' && link.closest('[data-pf-index]')) {
+      event.preventDefault();
+      openFeedback(link, url);
     }
   };
 
