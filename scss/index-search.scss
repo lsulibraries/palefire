@@ -2000,6 +2000,41 @@ html.pf-index-docked {
   }
 }
 
+// Copy link: Go to page's look. Both labels share one cell, so the button
+// keeps the longer one's width and Link copied moves nothing beside it.
+.pf-index-list__share {
+  display: inline-grid;
+  align-items: center;
+
+  > span {
+    grid-area: 1 / 1;
+  }
+
+  // Kept in the accessibility tree (opacity, not visibility), so the
+  // button's name stays Copy link.
+  &.is-copied .pf-index-list__share-words,
+  &:not(.is-copied) .pf-index-list__share-done {
+    opacity: 0;
+  }
+
+  &.is-copied {
+    color: var(--pf-index-fg);
+  }
+
+  @include pf-index-motion {
+    > span {
+      transition: opacity $pf-hover-out ease;
+    }
+  }
+}
+
+// A small phone: the count, Go to page and Copy link on one line.
+@media (max-width: 22.49rem) {
+  .pf-index-list__grow-row {
+    column-gap: 1rem;
+  }
+}
+
 .pf-index-list__grow-button {
   display: inline-flex;
   align-items: center;

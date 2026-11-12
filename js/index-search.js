@@ -36,6 +36,8 @@
  *   request: a list that grew by itself would keep the footer out of reach.
  *   The pager folds away behind Go to page, for jumping ahead. The address
  *   gains through=, so a shared link, reload or Back shows every row shown.
+ *   Copy link (Share on a touch screen) beside Go to page hands that address
+ *   on.
  * - On a phone the chosen filters leave the held results bar for a line of
  *   their own under it, which scrolls away with the page.
  */
@@ -271,6 +273,58 @@
     }
   };
 
+  // Copy link, beside Go to page: this address, with every row shown
+  // (through=). On a touch screen that can share, it opens the share sheet
+  // instead, as Share. "Link copied" takes the label's place for a moment, in
+  // a cell sized to the longer of the two, so nothing beside it moves. None
+  // where the browser can do neither: the address bar still works.
+  const COPIED_MS = 2000;
+  const shareButton = () => {
+    const share = typeof navigator.share === 'function' && window.matchMedia('(pointer: coarse)').matches;
+    if (!share && !(navigator.clipboard && window.isSecureContext)) {
+      return null;
+    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-index-list__jump pf-index-list__share';
+    const words = document.createElement('span');
+    words.className = 'pf-index-list__share-words';
+    words.textContent = share ? Drupal.t('Share') : Drupal.t('Copy link');
+    button.append(words);
+    let timer;
+    if (!share) {
+      const done = document.createElement('span');
+      done.className = 'pf-index-list__share-done';
+      done.setAttribute('aria-hidden', 'true');
+      done.textContent = Drupal.t('Link copied');
+      button.append(done);
+    }
+    button.addEventListener('click', async () => {
+      const url = window.location.href;
+      if (share) {
+        try {
+          await navigator.share({ title: document.title, url });
+        }
+        catch (error) {
+          // Closed without sharing.
+        }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+      }
+      catch (error) {
+        Drupal.announce(Drupal.t('The link could not be copied. Copy it from the address bar.'));
+        return;
+      }
+      button.classList.add('is-copied');
+      Drupal.announce(Drupal.t('Link copied'));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => button.classList.remove('is-copied'), COPIED_MS);
+    });
+    return button;
+  };
+
   const setUpMore = (pager) => {
     const list = pager.closest('.pf-index-list');
     const rows = list && list.querySelector(':scope > .pf-index-list__rows');
@@ -325,7 +379,12 @@
     const label = document.createElement('span');
     button.append(label);
     button.insertAdjacentHTML('beforeend', icon('M12 5v14M6 13l6 6 6-6'));
-    line.append(count, jump, button);
+    line.append(count, jump);
+    const copy = shareButton();
+    if (copy) {
+      line.append(copy);
+    }
+    line.append(button);
     box.append(progress, line);
     rows.after(box);
 
