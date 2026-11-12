@@ -7,7 +7,7 @@
  * - Section counts count up to their number.
  * - The Source filter draws a bar under each source, its share of the hits.
  * - Thumbnails fade up from a tint as they load.
- * - The empty field types out searches to try, one for each tab.
+ * - In Special Collections, the empty field types out searches to try.
  * - Ctrl+K (⌘K on a Mac) goes to the field from anywhere on the page, and the
  *   up and down arrows move between result titles.
  * - With nothing found, searches to try and a piece from the collections.
@@ -145,11 +145,15 @@
 
   // Examples in the field. -----------------------------------------------------
 
+  // Special Collections only for now: the other tabs keep a still field. Their
+  // examples stay in the data file for the no-results suggestions.
+  const TYPED_MODES = ['special'];
+
   const typeExamples = (input) => {
-    if (still() || input.value) {
+    const root = input.closest('[data-pf-index]');
+    if (still() || input.value || !root || !TYPED_MODES.includes(modeOf(root))) {
       return;
     }
-    const root = input.closest('[data-pf-index]');
     const original = input.getAttribute('placeholder') || '';
     let timer = 0;
     let running = false;
@@ -202,7 +206,7 @@
     // Only once the page is idle: the field works without them.
     (window.requestIdleCallback || window.setTimeout)(() => {
       loadShowcase().then((data) => {
-        examples = data.examples?.[modeOf(root)] || data.examples?.all || [];
+        examples = data.examples?.[modeOf(root)] || [];
         which = Math.floor(Math.random() * Math.max(1, examples.length));
         start();
       });
