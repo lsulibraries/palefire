@@ -63,21 +63,41 @@
   text-wrap: balance;
 }
 
-// Unveiled from its foot as it arrives.
-.pf-index__echo-term {
+// Rises in letter by letter (js/index-flair.js letters it). Until the script
+// gets to it, the term is held back; if it never does, the term fades in
+// after 2s.
+.pf-index__echo-term:not(.is-lettered) {
   @include pf-index-motion {
-    animation: pf-index-unveil .8s var(--pf-index-ease) .05s backwards;
+    animation: pf-index-echo-late .5s var(--pf-index-ease) 2s backwards;
   }
 }
 
-@keyframes pf-index-unveil {
+@keyframes pf-index-echo-late {
   from {
-    clip-path: inset(0 0 100% 0);
-    transform: translateY(.3em);
+    opacity: 0;
   }
+}
 
-  to {
-    clip-path: inset(0 0 -.25em 0);
+// A word moves to the next line whole; one wider than the column still breaks.
+.pf-index__echo-word {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.pf-index__echo-letter {
+  display: inline-block;
+
+  @include pf-index-motion {
+    animation: pf-index-letter .5s var(--pf-index-ease) backwards;
+    animation-delay: calc(var(--pf-letter-order, 0) * var(--pf-letter-step, 50ms));
+  }
+}
+
+@keyframes pf-index-letter {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(.35em);
   }
 }
 

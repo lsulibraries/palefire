@@ -170,6 +170,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-12:** Combined Search echo: `.pf-index__echo-word` (inline-block, max-width 100%) and `.pf-index__echo-letter` (inline-block, `pf-index-letter`: opacity, 4px blur, .35em rise, .5s, delay `--pf-letter-order` × `--pf-letter-step`, capped at 55ms); `.pf-index__echo-term:not(.is-lettered)` waits with `pf-index-echo-late` (2s). Replaces `pf-index-unveil`.
 - **2026-11-12:** Covers shelf (`js/book-shelf.js`): a mouse can drag the shelf and fling it. Release speed over the last 100ms (capped at 3px/ms) projects a glide (time constant 325ms, finishing at 5x) onto the nearest snap point, so it lands on a book; `scroll-snap-type` is set to `none` inline while dragging and gliding. 5px threshold, then pointer capture; the click after a drag is cancelled. Mouse only: touch and trackpads keep native momentum. Reduced motion: settles on the nearest book at once. `cursor: grab` / `grabbing` inline while the shelf overflows. No CSS change.
 - **2026-11-12:** Landing `.pf-hero-cue`: `--pf-hero-cue-gap: 2.5rem` between the search and the label (was a fixed 1.25rem); `--pf-hero-cue-room: clamp(5.75rem, calc(11svh + 1.25rem), 8.25rem)`, so the line is as long as before. Exhibition title page cue unchanged.
 - **2026-11-12:** Hero search field: a bottom rule at rest, `border-bottom-color: color-mix(in srgb, var(--pf-section-border) 65%, transparent)`, other sides transparent; `:focus-within` still turns the whole frame `--pf-landing-accent` with a 1px ring.

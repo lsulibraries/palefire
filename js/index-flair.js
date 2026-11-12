@@ -3,6 +3,7 @@
  * Combined Search: the motion and small touches around the results, apart
  * from index-search.js, which does the searching.
  *
+ * - The term searched, over the results, rises in letter by letter.
  * - Results arrive in turn: each section's head, then its first rows.
  * - Counts count up to their number: each section's, and the Source filter's.
  * - Thumbnails fade up from a tint as they load.
@@ -60,6 +61,47 @@
         group.querySelector('.pf-index-section__late.is-loaded')?.classList.add('has-rising');
       }
     });
+  };
+
+  // The term searched, letter by letter. -----------------------------------------
+
+  // Each letter rises into place in turn, the whole term within about a second
+  // however long it is. Words are kept whole on a line, unless one is wider
+  // than the column. When the last letter lands, the plain text goes back, for
+  // the font's own kerning. The echo is aria-hidden, so nothing is read twice.
+  // The CSS holds the term back until then, and shows it after a pause if this
+  // never runs.
+  const ECHO_MS = 1100;
+  const segment = (text) => (window.Intl?.Segmenter ? [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text)].map((part) => part.segment) : Array.from(text));
+  const letterEcho = (term) => {
+    const text = term.textContent.trim();
+    if (still() || !text) {
+      term.classList.add('is-lettered');
+      return;
+    }
+    const letters = text.replace(/\s+/g, ' ').split(' ').map(segment);
+    const count = letters.reduce((sum, word) => sum + word.length, 0);
+    term.style.setProperty('--pf-letter-step', `${Math.min(55, Math.round(ECHO_MS / count))}ms`);
+    let order = 0;
+    let last = null;
+    const words = letters.map((word) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'pf-index__echo-word';
+      word.forEach((letter) => {
+        last = document.createElement('span');
+        last.className = 'pf-index__echo-letter';
+        last.style.setProperty('--pf-letter-order', order++);
+        last.textContent = letter;
+        wordSpan.append(last);
+      });
+      return wordSpan;
+    });
+    term.replaceChildren(...words.flatMap((word, i) => (i ? [' ', word] : [word])));
+    term.classList.add('is-lettered');
+    last.addEventListener('animationend', () => {
+      term.textContent = text;
+      term.style.removeProperty('--pf-letter-step');
+    }, { once: true });
   };
 
   // Counting up. ---------------------------------------------------------------
@@ -407,6 +449,7 @@
     attach(context) {
       once('pf-index-flair-keys', 'html').forEach(() => document.addEventListener('keydown', onKey));
       once('pf-index-flair', '[data-pf-index]', context).forEach(watch);
+      once('pf-index-flair-echo', '.pf-index__echo-term', context).forEach(letterEcho);
       once('pf-index-flair-main', '[data-pf-index-main]', context).forEach((main) => setUpMain(main, context === document));
       once('pf-index-flair-input', '.pf-index__input', context).forEach((input) => {
         keyHint(input);
