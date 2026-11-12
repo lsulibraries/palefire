@@ -62,12 +62,20 @@
   {# The footer's Ask link (includes/footer.html.twig) lands here. #}
   <div class="pf-inquiry__panel" id="ask-question">
     <h3 class="pf-inquiry__heading">{{ 'Send us a question'|t }}</h3>
-    {# The sheet: the form pressed into the band like the tab track above
-       (_ask.scss), so writing to staff reads apart from the browsing. #}
-    <div class="pf-inquiry__sheet">
+    {# The slip: the form set as a question slip, a ruled form with a dated
+       header (_ask.scss), so writing to staff reads apart from the browsing
+       around it. The date is today's, written by js/ask-form.js (a cached
+       page would freeze one written here); without it, the place alone. #}
+    <div class="pf-inquiry__slip">
+      <p class="pf-inquiry__slip-head">
+        <span class="pf-inquiry__slip-title">{{ 'Question slip'|t }}</span>
+        <span class="pf-inquiry__stamp">
+          <span>{{ 'Special Collections · Hill Memorial Library'|t }}</span>
+          <time data-pf-today></time>
+        </span>
+      </p>
       {% if ask_form %}
         {{ attach_library('palefire/ask-form') }}
-        <p class="pf-inquiry__intro">{{ 'Special Collections staff reply by email.'|t }}</p>
         {{ ask_form }}
       {% else %}
         <p class="pf-inquiry__intro">{{ 'Special Collections staff answer questions on AskUs, by email or chat.'|t }}</p>

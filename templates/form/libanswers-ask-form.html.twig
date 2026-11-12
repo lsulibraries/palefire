@@ -36,8 +36,11 @@
 {% endfor %}
 {{ _self.field(form.pquestion, true) }}
 {{ _self.field(form.pdetails, true) }}
-<p class="pf-inquiry__required"><span aria-hidden="true">* </span>{{ 'Required'|t }}</p>
-{# The status is a card that rises from behind the Send key (_ask.scss):
+<p class="pf-inquiry__required">
+  <span><span aria-hidden="true">* </span>{{ 'Required'|t }}</span>
+  <span>{{ 'Special Collections staff reply by email.'|t }}</span>
+</p>
+{# The status is a card that rises from behind the Send bar (_ask.scss):
    after the button, as the answer to pressing it. The script writes the
    words into its text; the icon shows by data-kind (done or error). #}
 {% set done_icon = source('libraries/fontawesome-pro/svgs/light/check-circle.svg', ignore_missing = true) %}

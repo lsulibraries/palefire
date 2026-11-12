@@ -15,7 +15,9 @@
  * Errors: each invalid field gets aria-invalid and its message under it
  * (aria-describedby), and focus moves to the first. The outcome is said in
  * the status card (role="status"), which takes focus so it is read; it
- * rises from behind the Send key and sinks again once the visitor types.
+ * rises from behind the Send bar and sinks again once the visitor types.
+ * It also dates the slip's stamp with today's date, as the visitor's own
+ * clock has it (a date in the markup would freeze in Drupal's page cache).
  */
 (function (Drupal, once) {
   'use strict';
@@ -161,6 +163,12 @@
   Drupal.behaviors.palefireAskForm = {
     attach(context) {
       once('pf-inquiry-form', '.pf-inquiry__form', context).forEach((form) => {
+        const today = form.closest('.pf-inquiry__slip')?.querySelector('[data-pf-today]');
+        if (today) {
+          const now = new Date();
+          today.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          today.setAttribute('datetime', now.toISOString().slice(0, 10));
+        }
         form.addEventListener('submit', (event) => {
           event.preventDefault();
           if (form.getAttribute('aria-busy')) {

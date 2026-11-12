@@ -4,8 +4,8 @@
  * scrolls into view, each column's parts rise 16px and fade in one after
  * another, 60ms apart, as the Collections rows do (js/tile-reveal.js).
  * - FAQs: the column heading, each question, then the two buttons;
- * - the form: its heading, the sheet (the well), then inside it the intro,
- *   each field, Required, Send question.
+ * - the form: its heading, the slip, then inside it the slip's header,
+ *   each field, Required, Send.
  * Both columns count from their own first part, so on wide screens they
  * come in side by side. Once per page load: a part that has come in stays.
  *
@@ -26,12 +26,13 @@
     '.pf-inquiry__accordion > .pf-accordion__item',
     '.pf-inquiry__links > li',
     '.pf-inquiry__panel > .pf-inquiry__heading',
-    '.pf-inquiry__sheet',
+    '.pf-inquiry__slip',
+    '.pf-inquiry__slip-head',
     '.pf-inquiry__intro',
     '.pf-inquiry__field',
     '.pf-inquiry__required',
     '.pf-inquiry__actions',
-    '.pf-inquiry__sheet > .pf-inquiry__link',
+    '.pf-inquiry__slip > .pf-inquiry__link',
   ].join(', ');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
