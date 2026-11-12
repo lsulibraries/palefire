@@ -169,10 +169,10 @@ HTML, 'callout'),
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
     ['running', 'Journals', 'The homepage\'s e-journal search, brought into Research as its own section: journals, newspapers, newsletters and reports the Libraries can read online, each with where to read it and which years, and a Type filter. A search that is a journal\'s name (Nature, The New York Times) shows that journal first, above Discovery\'s results. It uses Discovery\'s own connection, so it moves to Alma with Discovery. Needs a check on production.'],
     ['running', 'Finishing touches', 'Results rise into place in turn, counts count up, the term searched is set large over the results and rises in letter by letter, and in Special Collections the empty field types out searches to try. Ctrl+K jumps to the search field and the arrow keys move between results. A search with no results offers searches to try and a picture from the exhibitions. Nothing moves for anyone who has asked for reduced motion. Needs a check on production.'],
+    ['running', 'Scholarly Repository', 'Its own section again in All and Research, with highlighted abstracts, authors, type and year, a Year published filter and newest or oldest sorting. The repository\'s search turns away requests from our server, so the site keeps its own copy of the repository\'s records, refreshed daily. It searches titles, authors, abstracts and keywords; a note under the heading and a Go to link send people to the repository for the full text of each document. Needs the first copy made on production.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['todo', 'More sorting and filters', 'A date range, sorting by title, and a clean year for Archive Records. These need changes to the search index and a reindex.'],
     ['todo', 'Palefire pages in search', 'modular_page isn\'t in the search index, so Palefire pages can\'t appear in results until it\'s added and the site is reindexed.'],
-    ['todo', 'Scholarly Repository', 'A link for now. The repository\'s public address answered a request from outside the site with a Cloudflare challenge; the server\'s log will confirm whether the site gets the same.'],
     ['todo', 'Point the search forms here', 'The Special Collections hero search has moved. The header panel, other landing and 404 searches still go to /bento, and they move once the page has been tested.'],
     ['todo', 'Move Discovery and the Catalog to Alma', 'Waiting on the migration. See Alma below.'],
   ]),
@@ -184,7 +184,7 @@ $section('What it searches', [
 <thead><tr><th scope="col">Mode</th><th scope="col">Sources</th><th scope="col">Shown as</th></tr></thead>
 <tbody>
 <tr><td>All</td><td>Every source</td><td>Labelled sections, top three of each</td></tr>
-<tr><td>Research</td><td>Catalog, Discovery, Journals, Databases, E-Textbooks, Research Guides, PDF Finding Aids, Oral histories, plus a link to the Scholarly Repository</td><td>Labelled sections</td></tr>
+<tr><td>Research</td><td>Catalog, Discovery, Journals, Databases, E-Textbooks, Research Guides, Scholarly Repository, PDF Finding Aids, Oral histories</td><td>Labelled sections</td></tr>
 <tr><td>Special Collections</td><td>Catalog, set to Special Collections, then PDF Finding Aids and Oral histories</td><td>The Catalog above one ranked list with filters</td></tr>
 <tr><td>Website</td><td>Pages, Questions &amp; Answers, Gear, News and Notes, Staff</td><td>One ranked list with filters</td></tr>
 </tbody>
@@ -251,7 +251,7 @@ $section('Next steps', [
 <li>Click Request to view on a record with several boxes, and confirm the form receives the right box.</li>
 <li>Review the page's design together, and choose a design for the result rows.</li>
 <li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
-<li>Confirm whether the Scholarly Repository can be searched from the server.</li>
+<li>Make the first copy of the Scholarly Repository on production, and ask the repository team whether our server can use its search, for full-text matches.</li>
 <li>Move the site's search forms to Combined Search and redirect /bento.</li>
 <li>Decide what requesters sign in with once requests move to Alma, and add that to the request note. Visitors see what they sign in with, not the system's name.</li>
 <li>Connect Alma when the sandbox is ready.</li>
@@ -403,6 +403,7 @@ HTML),
 <li>A question came up: Discovery's own site orders results differently. Checked side by side, the order of articles is the same. Both search for the words within five words of each other. The difference is Discovery's own site puts LSU catalog books first, and our Discovery connection doesn't search the catalog database, so those books show in our Catalog section instead. Adding the catalog to the connection is a setting at EBSCO, not a change here, and is on hold for now.</li>
 <li>Discovery has three more filters: In the Libraries’ collection and EPUB e-books under Limit to, and a Language filter with the same twelve languages as the Catalog's. Choosing two languages finds either; a language with a type finds that type in that language. Each language shows how many results it has until one is chosen.</li>
 <li>The words searched, set large over the results, now rise in letter by letter, each sharpening as it lands, the whole phrase in about a second and a half however long it is. Words stay whole on a line. Nothing moves for anyone who has asked for reduced motion.</li>
+<li>The Scholarly Repository is back as a section in All and Research. The old search asked the repository's own search, which now turns away requests from our server, so it had become only a link. The repository's record feed still answers, so the site now keeps its own copy of its 82,000 or so records (titles, authors, abstracts, keywords, type and date), refreshed daily. Results show the part of the abstract where the words were found, highlighted, which the old search never did. It can't search inside the documents, so a note under the heading says so and links to the repository's own search. We're asking the repository team whether our server can be let through, which would bring full-text matches back.</li>
 </ul>
 HTML),
 ]);
