@@ -20,6 +20,15 @@
 
 // Motion that is only decoration: off with the OS setting or Settings >
 // Reduce motion (as _exhibition.scss).
+// The held results bar's shadow (its glass, or the breadcrumb bar docked):
+// a soft close layer and a wide faint one, so it fades over about 1.5rem
+// instead of ending in a dark band. Their spread is taken in by their
+// offsets, so they show below the bar, not at its ends. Black, lighter on a
+// light page (the reading colors set color-scheme).
+$pf-index-bar-shadow:
+  0 .375rem .75rem -.375rem light-dark(rgb(0 0 0 / .16), rgb(0 0 0 / .45)),
+  0 1.25rem 2.5rem -1rem light-dark(rgb(0 0 0 / .14), rgb(0 0 0 / .5));
+
 @mixin pf-index-motion {
   @media (prefers-reduced-motion: no-preference) {
     html:not(.pf-a11y-motion) & {
@@ -291,15 +300,18 @@
 @import "base/mark-trace";
 
 // The theme's primary button (_buttons.scss), which this entry point can't
-// extend: the text color wipes in on hover and fades out in place.
+// extend: the text color wipes in on hover and fades out in place. The word
+// alone, so it doesn't sit as a second line icon beside the clear (×); on
+// narrow phones the magnifier alone, so the field keeps its width. The word
+// stays the button's name either way (font-size 0 hides it from sight only).
 .pf-index__submit {
   position: relative;
   isolation: isolate;
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: clamp(.75rem, 3vw, 2.5rem);
-  padding-inline: clamp(.875rem, 2vw, 1.25rem);
+  justify-content: center;
+  padding-inline: clamp(1.25rem, 3vw, 2.5rem);
   border: 0;
   background: var(--pf-index-accent);
   color: var(--pf-g-on-accent, #000);
@@ -308,9 +320,20 @@
   transition: color $pf-hover-out ease;
 
   svg {
+    display: none;
     flex: none;
     width: 1.125rem;
     height: 1.125rem;
+  }
+
+  @media (max-width: 399.98px) {
+    min-width: 3.5rem;
+    padding-inline: 1rem;
+    font-size: 0;
+
+    svg {
+      display: block;
+    }
   }
 
   &::before {
@@ -1277,6 +1300,19 @@
   color: var(--pf-index-muted);
   font-size: .875rem;
   font-variant-numeric: tabular-nums;
+
+  // An outside source's, filled in when its section arrives (index-search.js).
+  &.is-late {
+    @include pf-index-motion {
+      animation: pf-index-count-in .4s ease-out;
+    }
+  }
+}
+
+@keyframes pf-index-count-in {
+  from {
+    opacity: 0;
+  }
 }
 
 // A year range: two short fields, side by side at every width.
@@ -1508,10 +1544,8 @@
       background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
       -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
       backdrop-filter: var(--pf-glass-filter, blur(26px));
-      // One soft shadow under it, black, lighter on a light page (the
-      // reading colors set color-scheme). Its spread is taken in by its
-      // offset, so it shows only below, never at the bar's ends.
-      box-shadow: 0 1rem 1.25rem -.75rem light-dark(rgb(0 0 0 / .28), rgb(0 0 0 / .85));
+      // The bar's shadow ($pf-index-bar-shadow), below it only.
+      box-shadow: $pf-index-bar-shadow;
       opacity: 0;
       pointer-events: none;
 
@@ -1551,10 +1585,9 @@
 html.pf-index-dock {
   --pf-index-dock-h: 3.25rem;
 
-  .pf-index__filters {
-    @include pf-index-motion {
-      transition: top .3s var(--pf-index-ease);
-    }
+  // A length to ease from, as none can't be (the docked one is measured).
+  .pf-page-bar .breadcrumb {
+    max-width: 100%;
   }
 
   .pf-index__toolbar {
@@ -1594,7 +1627,7 @@ html.pf-index-docked {
 
   // The crumbs give way (their own ellipsis) before the bar's words.
   .pf-page-bar {
-    box-shadow: 0 1rem 1.25rem -.75rem light-dark(rgb(0 0 0 / .28), rgb(0 0 0 / .85));
+    box-shadow: $pf-index-bar-shadow;
     // It grows over the page, not into it: the page keeps its 2rem row.
     margin-bottom: calc(var(--pf-landing-bar-h, 2rem) - var(--pf-index-dock-h));
 
@@ -1603,8 +1636,58 @@ html.pf-index-docked {
     }
 
     .breadcrumb {
-      max-width: var(--pf-index-crumbs-room, none);
+      max-width: var(--pf-index-crumbs-room, 100%);
     }
+  }
+}
+
+// Docking and undocking, eased: the breadcrumb bar grows to the results
+// bar's height and back, its shadow and the crumbs' room with it, the
+// filter column steps with them, and the bar's words rise into the row (or
+// settle back under it) instead of jumping. The words only play once the bar
+// has moved (pf-index-dock-moved, index-search.js), not on arrival. Written
+// out, not with pf-index-motion: that mixin puts html before the selector,
+// and these already start at html.
+@media (prefers-reduced-motion: no-preference) {
+  html.pf-index-dock:not(.pf-a11y-motion) {
+    .pf-index__filters {
+      transition: top .3s var(--pf-index-ease);
+    }
+
+    // Outside .pf-index, so not --pf-index-ease (unset here): its value.
+    .pf-page-bar {
+      transition: margin-bottom .3s $pf-swup-ease-in, box-shadow .3s $pf-swup-ease-in;
+
+      .pf-landing__bar-inner {
+        transition: min-height .3s $pf-swup-ease-in;
+      }
+
+      .breadcrumb {
+        transition: max-width .3s $pf-swup-ease-in;
+      }
+    }
+  }
+
+  html.pf-index-docked:not(.pf-a11y-motion) .pf-index__toolbar > * {
+    animation: pf-index-dock-in .3s var(--pf-index-ease);
+  }
+
+  html.pf-index-dock-moved:not(.pf-index-docked, .pf-a11y-motion) .pf-index__toolbar > * {
+    animation: pf-index-undock-in .3s var(--pf-index-ease);
+  }
+}
+
+@keyframes pf-index-dock-in {
+  from {
+    opacity: 0;
+    transform: translateY(.5rem);
+  }
+}
+
+@keyframes pf-index-undock-in {
+  from {
+    opacity: 0;
+    transform: translateY(-.5rem);
   }
 }
 
@@ -2179,6 +2262,36 @@ html.pf-index-docked {
 
   @include pf-index-motion {
     animation: pf-index-where .25s var(--pf-index-ease);
+
+    // Scrolled back above the first heading: it fades away, then goes.
+    &.is-leaving {
+      animation: pf-index-where-out .2s var(--pf-index-ease) forwards;
+    }
+  }
+}
+
+// The words after it ease over as it comes or goes, instead of jumping.
+// Moved by left, not transform: it stays inline, so the bar's ellipsis holds.
+.pf-index__total-text {
+  position: relative;
+
+  @include pf-index-motion {
+    &.is-shifting {
+      animation: pf-index-total-shift .25s var(--pf-index-ease);
+    }
+  }
+}
+
+@keyframes pf-index-total-shift {
+  from {
+    left: var(--pf-index-shift, 0);
+  }
+}
+
+@keyframes pf-index-where-out {
+  to {
+    opacity: 0;
+    transform: translateY(-.25rem);
   }
 }
 
