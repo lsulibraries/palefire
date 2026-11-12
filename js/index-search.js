@@ -668,6 +668,12 @@
       sendSearch(url);
     }
     document.title = page.title;
+    // The analytics section label follows the mode (Special Collections or
+    // not, PalefireHooks::preprocessHtml()), so the next search carries it.
+    const section = page.documentElement.getAttribute('data-pf-section');
+    if (section) {
+      document.documentElement.setAttribute('data-pf-section', section);
+    }
     Drupal.detachBehaviors(main, drupalSettings, 'unload');
     swap(root, page, '.pf-index__form');
     syncErase(root);
