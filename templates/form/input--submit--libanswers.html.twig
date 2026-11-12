@@ -3,9 +3,10 @@
  * @file
  * The question form's Send button (palefire_form_libanswers_ask_form_alter()):
  * a <button>, so it can hold its parts, styled as the tab slider's key
- * (_ask.scss): the words printed above it, the gold key across the foot of
- * the sheet, a paper plane on it. Its name and value still go with the
- * form, as an input's do, and the words are its accessible name.
+ * (_ask.scss): the gold key across the foot of the sheet, "Send" and a
+ * paper plane centered on it. The form (named "Send us a question") gives
+ * the short word its context. Its name and value ("Send question") still
+ * go with the form, as an input's do.
  *
  * The plane is Font Awesome Pro's Light one, from the server's
  * libraries/fontawesome-pro (never in this repo); without it, the arrow.
@@ -17,13 +18,15 @@
 #}
 {% set plane = source('libraries/fontawesome-pro/svgs/light/paper-plane.svg', ignore_missing = true) %}
 <button{{ attributes }}>
-  <span class="pf-inquiry__key-label">{{ attributes.value }}</span>
-  <span class="pf-inquiry__key" aria-hidden="true">
-    {%- if plane -%}
-      {# Theme-server SVG file, so |raw is safe here. #}
-      {{- plane|raw -}}
-    {%- else -%}
-      <svg class="pf-inquiry__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-    {%- endif -%}
+  <span class="pf-inquiry__key">
+    {{- 'Send'|t -}}
+    <span class="pf-inquiry__key-icon" aria-hidden="true">
+      {%- if plane -%}
+        {# Theme-server SVG file, so |raw is safe here. #}
+        {{- plane|raw -}}
+      {%- else -%}
+        <svg class="pf-inquiry__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      {%- endif -%}
+    </span>
   </span>
 </button>{{ children }}

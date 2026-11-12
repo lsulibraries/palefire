@@ -580,13 +580,13 @@ textarea.pf-inquiry__control {
   }
 }
 
-// Send question: the tab slider's key (_section-tabs.scss) at the foot of
-// the sheet, flat. Its words are printed above it in the tab labels' voice
-// (and are its name); the key is the swatch accent, the view's one primary,
-// across the sheet's width, the track's gap from its sides and foot (the
-// negative margins undo the sheet's padding), with the key's radius, so
-// its corners run with the sheet's. A Light paper plane on it nudges up and
-// out on hover. No shadows: the sheet is the only carved thing here.
+// Send: the tab slider's key (_section-tabs.scss) at the foot of the
+// sheet, flat. The key is the swatch accent, the view's one primary, across
+// the sheet's width, the track's gap from its sides and foot (the negative
+// margins undo the sheet's padding), with the key's radius, so its corners
+// run with the sheet's. "Send" in the buttons' type and a Light paper plane
+// are centered on it; the plane nudges up and out on hover. No shadows:
+// the sheet is the only carved thing here.
 .pf-inquiry__actions {
   --pf-inquiry-key-h: 3.5rem;
   position: relative;
@@ -630,37 +630,25 @@ textarea.pf-inquiry__control {
   }
 }
 
-.pf-inquiry__key-label {
-  justify-self: center;
-  margin-right: -.16em; // the tracking pads the right side; center by eye
-  padding-bottom: .625rem;
-  font-size: .75rem;
-  font-weight: 500;
-  letter-spacing: .16em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-@include media-breakpoint-up(md) {
-  .pf-inquiry__key-label {
-    font-size: .8125rem;
-  }
-}
-
 .pf-inquiry__key {
+  @include pf-button-type;
   position: relative;
   z-index: 2; // over the status card, which rises from behind it
-  display: grid;
-  place-items: center;
+  display: flex;
+  gap: .625rem;
+  align-items: center;
+  justify-content: center;
   height: var(--pf-inquiry-key-h);
+  padding-inline: 1.25rem;
   border-radius: var(--pf-inquiry-key-r);
   color: var(--pf-g-on-accent, #000);
   background-color: var(--pf-g-accent, #{$pf-gold});
   transition: background-color $pf-hover-out ease;
 
   svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
     fill: currentColor;
   }
 
