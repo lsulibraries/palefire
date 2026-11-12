@@ -171,7 +171,7 @@ $intro = '<p>What the export from Islandora 7 to Adam Matthew\'s Quartex is doin
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 12 Nov 2026, 09:05 (CST):</strong> Downloads are finished at all 39 institutions, and the migration figures haven't changed since Nov 11, 15:33. On Nov 11 both AWS servers moved to smaller sizes, saving about $455 a month, and the monthly backups were stopped, saving about $170 a month more from Dec 30. On Nov 12 the unused Ingest server and three old disks were removed, saving about $60 a month more. Projected AWS bills, as estimates: November about $1,700, December about $1,170 and about $1,090 a month from January, down from $1,773 in October and about $2,300 a month in the year before May 2026. The short list of duplicates is waiting for approval.</p>
+<p><strong>Status as of Thu 12 Nov 2026, 09:43 (CST):</strong> Downloads are finished at all 39 institutions, and the migration figures haven't changed since Nov 11, 15:33. On Nov 11 both AWS servers moved to smaller sizes, saving about $455 a month, and the monthly backups were stopped, saving about $170 a month more from Dec 30. On Nov 12 the unused Ingest server and three old disks were removed, saving about $60 a month more. Projected AWS bills, as estimates: November about $1,700, December about $1,170 and about $1,090 a month from January, down from $1,773 in October and about $2,300 a month in the year before May 2026. The short list of duplicates is waiting for approval.</p>
 HTML, 'callout'),
   $stats(NULL, [
     ['100%', 'downloaded, by data size: 3.22 TB on L:, nothing left', 100],
@@ -1257,16 +1257,11 @@ HTML),
   $text('Next', <<<'HTML'
 <ul>
 <li>Run <code>3-convert</code> as TIFFs with no usable JP2 turn up. None are waiting as of Nov 11.</li>
-<li>Franklin Parish: 15,755 images on L: (finished Nov 4, 21:30). Earlier runs stopped at a PC standby (Nov 3) and a network drop (Nov 4, 14:55). Its 24 pages with no JP2 in Fedora were converted on Nov 5. This collection's images were never exported, so the run covers the whole collection, not only the 2,712 missing objects. The missing-rows file for the accounting is written: <code>reports\reconciliation\Louisiana Newspapers-fedora-only.csv</code>.</li>
-<li>Loyola's download finished at 1:43 AM on Nov 10, ahead of the short list, so any of its objects later marked to leave out will need to be moved off L: by hand.</li>
-<li>Get the short list in <code>triage.csv</code> approved, then run <code>0-leave-out</code>, and move any Loyola books marked to leave out off L: by hand.</li>
+<li>Get the short list in <code>triage.csv</code> approved, then run <code>0-leave-out</code>. Loyola's download finished at 1:43 AM on Nov 10, ahead of the short list, so any Loyola books marked to leave out will need to be moved off L: by hand.</li>
 <li>Watch both AWS servers for a week, then, around Nov 18, delete the two backup images taken before the resize, and their snapshots. See Hardware downgrade and AWS costs.</li>
 <li>Further AWS savings, about $180 to $200 a month more: the old S3 copies of Fedora and switching the disks to gp3, not decided yet, and, once the DSL sites have moved to LSU Sites and old DNS records are removed, the last stopped servers and unused addresses.</li>
 <li>Ask LSU's DNS admins to remove <code>ingest.louisianadigitallibrary.org</code>, then release the Ingest server's old address.</li>
 </ul>
-HTML),
-  $text('Then', <<<'HTML'
-<p>The remaining institutions, in batches, on the same pattern: dry run, downloads, audit, review, replace, manifests.</p>
 HTML),
 ]);
 
