@@ -867,6 +867,38 @@
     }
   };
 
+  // Feedback answers (palefire_search's "Did you find what you needed?"). On
+  // the way to the feedback Webform, adds what only the browser knows: the
+  // screen size, and no results once every late section came back empty. Notes
+  // the answer in the dataLayer too, without the words: pf_search has them.
+  const sendFeedback = (event) => {
+    const link = event.target.closest?.('[data-pf-index-feedback-answer]');
+    if (!link) {
+      return;
+    }
+    const url = new URL(link.href, window.location.href);
+    let screen = 'phone';
+    if (window.matchMedia('(min-width: 62rem)').matches) {
+      screen = 'desktop';
+    }
+    else if (window.matchMedia('(min-width: 48rem)').matches) {
+      screen = 'tablet';
+    }
+    url.searchParams.set('screen', screen);
+    const empty = document.querySelector('[data-pf-index-empty]');
+    if (empty && !empty.hidden) {
+      url.searchParams.set('result_count', '0');
+    }
+    link.href = url.href;
+    if (Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({
+        event: 'pf_search_feedback',
+        search_feedback: link.dataset.pfIndexFeedbackAnswer,
+        search_mode: url.searchParams.get('search_mode') || 'all',
+      });
+    }
+  };
+
   // A search reached by loading its address (the menu's or a landing's search
   // box, a shared link), once per history entry.
   const sendFirstSearch = () => {
@@ -1557,6 +1589,9 @@
         document.addEventListener('toggle', offerClose, true);
         document.addEventListener('click', closeCopies);
         document.addEventListener('click', toggleAbout);
+        // auxclick: a middle click opens the form in a new tab.
+        document.addEventListener('click', sendFeedback);
+        document.addEventListener('auxclick', sendFeedback);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
       once('pf-index-modes', '.pf-index__modes', context).forEach(showMode);

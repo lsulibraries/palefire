@@ -4093,6 +4093,79 @@ html.pf-index-docked {
   }
 }
 
+// Feedback. ------------------------------------------------------------------
+
+// "Did you find what you needed?" under the results (palefire_search): a quiet
+// band between hairlines, the question and three plain answers, set as the
+// chips are. Each answer is a link to the feedback Webform, 44px tall. The
+// question and answers share a line where the column has room for both (it
+// wraps rather than squeezing the question), the note under them.
+.pf-index-feedback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-block: 1.25rem;
+  border-block: 1px solid var(--pf-index-line);
+}
+
+.pf-main .pf-index .pf-index-feedback .pf-index-feedback__title {
+  flex: 1 1 16rem;
+  margin: 0;
+  color: var(--pf-index-fg);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.pf-index-feedback__answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 5rem;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border: 1px solid var(--pf-index-line);
+    color: var(--pf-index-fg);
+    font-size: .9375rem;
+    text-decoration: none;
+
+    @include pf-index-motion {
+      transition: border-color .2s var(--pf-index-ease), background-color .2s var(--pf-index-ease);
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: currentColor;
+      background-color: color-mix(in srgb, currentColor 6%, transparent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  }
+}
+
+.pf-index-feedback__note {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--pf-index-muted);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
 // Searches elsewhere. --------------------------------------------------------
 
 .pf-index__elsewhere ul {
@@ -4270,7 +4343,8 @@ html.pf-index-docked {
   .pf-index-row__thumb,
   .pf-index-row__out,
   .pf-index-row .pf-button--secondary,
-  .pf-index-row__login {
+  .pf-index-row__login,
+  .pf-index-feedback {
     display: none;
   }
 
