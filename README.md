@@ -613,6 +613,11 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
   Prices (now "Copy prices", `#copy-prices`), Copyright and Citing sections
   are in that guide and its build script; `/v2/special/guides/duplication`
   opens the merged guide.
+- **Palefire Redesign Project** (`palefire_guide_palefire_redesign.php`): the
+  project record for the whole redesign, with workstreams, analytics,
+  decisions, open questions and a Day by day log. Like the LDL guide, the
+  script is its source: change the text there, pull, and run it again. Add a
+  day's entry under Day by day as the work moves.
 - **LDL Quartex Migration** (`palefire_guide_ldl_migration.php`): the living
   status of the Louisiana Digital Library's move to Quartex, for the migration
   team. The script is its source: change the text there, pull, and run it
@@ -1225,6 +1230,8 @@ leaves its fade alone. Reduce motion skips both.
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
+
+- **2026-11-12:** New guide: Palefire Redesign Project (`scripts/palefire_guide_palefire_redesign.php`, a dry run unless `-- apply=1`, default alias `/v2/guides/palefire-redesign-project`), the project record for the whole redesign, built like the LDL Quartex Migration and Combined Search guides: purpose, Status at a glance, a status board of workstreams (Special Collections, mobile dock, exhibitions, Combined Search, locations and hours, staff directory, guides, style guide, analytics, the move from /v2/special to /special, Alma), Analytics (GA4 through GTM, page labels, events and the checklist still to do), decisions, open questions, next steps and a Day by day log from the git history. It links the Combined Search guide, the LDL guide and the style guide instead of copying them. Why: one place to see where the whole redesign stands.
 
 - **2026-11-12:** Style guide: the Colour gallery now explains the palette: Palefire as the Libraries' coordinated design package (PS-10 Addendum A), with colours chosen for long, seated research sessions (soft contrast, Twilight dark default, twelve reader-chosen reading colours, purple and gold kept for meaning). Why: the new university brand guide raises the question of why the site doesn't wear its palette throughout, and the answer should be on record. The style guide, its plates, the Reading colors notes, the 404 page and the exhibit and guide setup scripts also switch to American spelling (color, gray, center, catalog).
 
