@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * A list of labeled bars in the Progress chart's style, for the analytics
+ * report (analytics-report.html.twig).
+ *
+ * - rows: label, value (formatted) and width (0 to 100, of the longest).
+ * - unit: what the value counts ("views").
+ */
+#}
+<ol class="pf-progress">
+  {% for row in rows %}
+    <li class="pf-progress__row">
+      <span class="pf-progress__label">{{ row.label }}</span>
+      <span class="pf-progress__bar" aria-hidden="true">
+        <span class="pf-progress__gain" style="width: {{ row.width }}%"></span>
+      </span>
+      <span class="pf-progress__value">{{ row.value }} {{ unit }}</span>
+    </li>
+  {% endfor %}
+</ol>

@@ -1,0 +1,103 @@
+{#
+/**
+ * @file
+ * The staff analytics report, drawn after a guide text whose paragraph is
+ * only "[analytics:report]" (palefire_preprocess_paragraph__guide_text(),
+ * Drupal\palefire\AnalyticsReport). Built from the guide blocks' Figures and
+ * Progress chart styles and the guide's own tables, so it adds no CSS.
+ *
+ * - allowed: the visitor may see the figures (staff).
+ * - report: AnalyticsReport::view(), or NULL before the first nightly pull.
+ *
+ * Bars are decoration: every row says its number in words.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+<div class="pf-analytics">
+  {% if not allowed %}
+    <p class="pf-stats__caption">{{ 'This report is for library staff. Sign in to see it.'|t }}</p>
+  {% elseif not report %}
+    <p class="pf-stats__caption">{{ 'No figures yet. They arrive from Google Analytics each night.'|t }}</p>
+  {% else %}
+    <p class="pf-stats__caption">{{ 'The last 28 days, through @through, compared with the 28 days before. Updated @updated.'|t({ '@through': report.through, '@updated': report.updated }) }}</p>
+
+    <dl class="pf-stats">
+      {% for figure in report.figures %}
+        <div class="pf-stats__item">
+          <dt class="pf-stats__label">
+            {{ figure.label }}
+            {% if figure.change is not null %}
+              <br>{{ figure.change >= 0 ? 'up @n%'|t({ '@n': figure.change }) : 'down @n%'|t({ '@n': -figure.change }) }}
+            {% endif %}
+          </dt>
+          <dd class="pf-stats__value">{{ figure.value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+
+    <h4>{{ 'Page views by part of the site'|t }}</h4>
+    {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.sections, unit: 'views'|t } only %}
+
+    {% if report.types %}
+      <h4>{{ 'New site page views by kind of page'|t }}</h4>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.types, unit: 'views'|t } only %}
+    {% endif %}
+
+    {% if report.weeks %}
+      <h4>{{ 'Page views each week'|t }}</h4>
+      <ol class="pf-progress">
+        {% for week in report.weeks %}
+          <li class="pf-progress__row">
+            <span class="pf-progress__label">{{ 'Week of @week'|t({ '@week': week.week }) }}</span>
+            <span class="pf-progress__bar" aria-hidden="true">
+              <span class="pf-progress__gain" style="width: {{ week.palefire_width }}%"></span>
+              <span class="pf-progress__before" style="left: {{ week.palefire_width }}%; width: {{ week.old_width }}%"></span>
+            </span>
+            <span class="pf-progress__value">{{ '@new new, @old old'|t({ '@new': week.palefire, '@old': week.old }) }}</span>
+          </li>
+        {% endfor %}
+      </ol>
+      <p class="pf-progress__caption">{{ 'Gold is the new site, pale gold the old site.'|t }}</p>
+    {% endif %}
+
+    {% if report.pages %}
+      <h4>{{ 'Most viewed pages on the new site'|t }}</h4>
+      <div class="pf-guide-prose">
+        <table>
+          <thead>
+            <tr><th scope="col">{{ 'Page'|t }}</th><th scope="col">{{ 'Views'|t }}</th></tr>
+          </thead>
+          <tbody>
+            {% for page in report.pages %}
+              <tr><td><a href="{{ page.path }}">{{ page.title|default(page.path) }}</a></td><td>{{ page.views_text }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    {% if report.modes %}
+      <h4>{{ 'Combined Searches by mode'|t }}</h4>
+      {% include '@palefire/includes/analytics-bars.html.twig' with { rows: report.modes, unit: 'searches'|t } only %}
+    {% endif %}
+
+    <h4>{{ 'What people searched for'|t }}</h4>
+    {% if report.terms %}
+      <div class="pf-guide-prose">
+        <table>
+          <thead>
+            <tr><th scope="col">{{ 'Search'|t }}</th><th scope="col">{{ 'Times'|t }}</th></tr>
+          </thead>
+          <tbody>
+            {% for term in report.terms %}
+              <tr><td>{{ term.term }}</td><td>{{ term.count_text }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="pf-stats__caption">{{ 'The 25 most frequent. Email addresses are removed before they reach Google Analytics; rare searches may be withheld by Google.'|t }}</p>
+    {% else %}
+      <p class="pf-stats__caption">{{ 'None recorded yet.'|t }}</p>
+    {% endif %}
+  {% endif %}
+</div>

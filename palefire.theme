@@ -22,6 +22,7 @@ use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\taxonomy\TermInterface;
+use Drupal\palefire\AnalyticsReport;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
@@ -2335,11 +2336,17 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * after the text (includes/styleguide-plate.html.twig). A plate's number is
  * its place in that list, like a catalogue number, so it never depends on
  * which blocks were rendered from cache. docs/styleguide.md.
+ *
+ * analytics: a paragraph that is only "[analytics:report]" draws the staff
+ * analytics report after the text (includes/analytics-report.html.twig,
+ * Drupal\palefire\AnalyticsReport): allowed, and the figures (report) for
+ * visitors who may see them. NULL without the marker.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
   $variables['faqs'] = [];
   $variables['plates'] = [];
+  $variables['analytics'] = NULL;
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -2373,6 +2380,8 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $marker = '#<p>\s*\[request-paths\]\s*</p>#i';
   $faqs_marker = '#<p>\s*\[special-collections-faqs\]\s*</p>#i';
   $faqs = FALSE;
+  $analytics_marker = '#<p>\s*\[analytics:report\]\s*</p>#i';
+  $analytics = FALSE;
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
   foreach (Element::children($variables['content']['field_block_body']) as $delta) {
@@ -2384,6 +2393,10 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     if (isset($item['#text']) && preg_match($faqs_marker, (string) $item['#text'])) {
       $item['#text'] = preg_replace($faqs_marker, '', (string) $item['#text']);
       $faqs = TRUE;
+    }
+    if (isset($item['#text']) && preg_match($analytics_marker, (string) $item['#text'])) {
+      $item['#text'] = preg_replace($analytics_marker, '', (string) $item['#text']);
+      $analytics = TRUE;
     }
     if (isset($item['#text']) && str_contains((string) $item['#text'], '[styleguide:')) {
       $item['#text'] = preg_replace_callback('#<p>\s*\[styleguide:([a-z]+)\]\s*</p>#i', function (array $m) use (&$variables): string {
@@ -2399,6 +2412,19 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   }
   if ($faqs) {
     $variables['faqs'] = _palefire_ask_faqs(NULL, $variables, NULL);
+  }
+  // Staff only, even if the page is published by mistake: search terms are
+  // people's own words.
+  if ($analytics) {
+    $allowed = \Drupal::currentUser()->hasPermission(AnalyticsReport::PERMISSION);
+    $variables['analytics'] = [
+      'allowed' => $allowed,
+      'report' => $allowed ? AnalyticsReport::view() : NULL,
+    ];
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags([AnalyticsReport::CACHE_TAG])
+      ->addCacheContexts(['user.permissions'])
+      ->applyTo($variables);
   }
   $variables['ask_href'] = '';
   $tab = $variables['request_paths'] ? $variables['paragraph']->getParentEntity() : NULL;

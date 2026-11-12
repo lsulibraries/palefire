@@ -502,6 +502,60 @@ $pf-reveal-from: 0.85; // As _variables.scss.
   }
 }
 
+// The staff analytics report (includes/analytics-report.html.twig) reuses the
+// Figures, Progress chart and table styles. Its values are words of varying
+// length ("1,204 new, 310 old"), so their column fits them.
+.pf-analytics {
+  display: grid;
+  gap: 1.25rem;
+
+  h4 {
+    margin: 1.25rem 0 0;
+  }
+
+  // One set of columns for the whole list (subgrid), so every bar starts and
+  // ends at the same place however long its row's value is.
+  .pf-progress {
+    grid-template-columns: minmax(5.5rem, 11rem) minmax(0, 1fr) auto;
+  }
+
+  .pf-progress__row {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+  }
+
+  .pf-progress__caption,
+  .pf-stats__caption {
+    margin-top: 0;
+  }
+
+  // Two columns (a name and its count) fit a phone, so they don't need the
+  // guide tables' scrolling minimum width. Counts line up on the right.
+  table {
+    min-width: 0;
+    max-width: var(--pf-guide-prose);
+    margin-bottom: 0;
+  }
+
+  td:first-child {
+    overflow-wrap: anywhere;
+  }
+
+  th:last-child,
+  td:last-child {
+    width: 1%;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 36em) {
+    .pf-progress {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+}
+
 // Code ------------------------------------------------------------------------
 .pf-code {
   min-width: 0; // a grid item: let the code scroll instead of widening the page

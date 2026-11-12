@@ -19,6 +19,8 @@
  *   Special Collections FAQ follows it, most asked first.
  * - plates: the text had "[styleguide:<plate>]" paragraphs; each style
  *   guide plate follows it (includes/styleguide-plate.html.twig).
+ * - analytics: the text had an "[analytics:report]" paragraph; the staff
+ *   analytics report follows it (includes/analytics-report.html.twig).
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -44,6 +46,9 @@
   {% endif %}
   {% if faqs %}
     {% include '@palefire/includes/guide-faqs.html.twig' with { faqs: faqs, directory: directory } only %}
+  {% endif %}
+  {% if analytics %}
+    {% include '@palefire/includes/analytics-report.html.twig' with analytics only %}
   {% endif %}
   {% for plate in plates %}
     {% include '@palefire/includes/styleguide-plate.html.twig' with plate|merge({ uid: 'sg-' ~ paragraph.id() ~ '-' ~ loop.index }) only %}
