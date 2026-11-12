@@ -57,11 +57,12 @@
       The ICO is listed first with sizes="32x32" so browsers that understand
       SVG prefer it, per the usual pattern.
     #}
-    {% set pf_icons = base_path ~ directory ~ '/images/favicon/' %}
-    <link rel="icon" href="{{ pf_icons }}favicon.ico" sizes="32x32">
-    <link rel="icon" href="{{ pf_icons }}favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="{{ pf_icons }}apple-touch-icon.png">
-    <link rel="manifest" href="{{ pf_icons }}site.webmanifest">
+    {# file_url() gives root-relative URLs; html.html.twig has no base_path. #}
+    {% set pf_icons = directory ~ '/images/favicon/' %}
+    <link rel="icon" href="{{ file_url(pf_icons ~ 'favicon.ico') }}" sizes="32x32">
+    <link rel="icon" href="{{ file_url(pf_icons ~ 'favicon.svg') }}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ file_url(pf_icons ~ 'apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ file_url(pf_icons ~ 'site.webmanifest') }}">
     {#
       Google Fonts: Roboto (body and menus) and Handjet (the Hours drawer
       clock). Loaded without blocking the first paint (preload, then
