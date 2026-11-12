@@ -121,6 +121,55 @@ $pf-index-bar-shadow:
   margin-top: 1rem;
 }
 
+// With a query, the head steps back so the first result shows without
+// scrolling on a laptop (1366×650) or a phone (375×667). The title drops to
+// a plain label, the line on what it searches goes (the modes and sources
+// say it), and the term over the results is set smaller. The landing, with
+// no query, keeps the large title. :has() also catches results the script
+// swaps in; without it, the page keeps the landing's head.
+.pf-index:has(.pf-index__echo) {
+  padding-top: clamp(1rem, 2.5vw, 2rem);
+
+  .pf-index__head {
+    gap: .5rem;
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .pf-index__title {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+  }
+
+  .pf-index__lede {
+    display: none;
+  }
+
+  .pf-index__form {
+    margin-top: .5rem;
+  }
+
+  .pf-index__echo {
+    margin-bottom: clamp(.75rem, 2vw, 1.25rem);
+  }
+
+  .pf-index__echo-lead {
+    margin-bottom: .5rem;
+  }
+
+  .pf-index__echo-term {
+    font-size: clamp(1.75rem, 1.35rem + 1.5vw, 2.5rem);
+  }
+
+  // On a phone the results bar under it says the same in one line, so the
+  // label goes and the bar shows its words at rest (_index-flair.scss).
+  @media (max-width: 35.98rem) {
+    .pf-index__echo {
+      display: none;
+    }
+  }
+}
+
 // The search as on the Special Collections page: a square field on the surface
 // color, and one filled button with its icon at the far end.
 // At rest the page's hairline, as every other line here, over a faint tint of

@@ -103,8 +103,9 @@
 
 // With the label over the results, the results bar keeps its words for when
 // it's held: they fade in as the label goes under it. Where scroll-state
-// queries aren't supported, the bar keeps them throughout.
-@media (min-height: 30rem) {
+// queries aren't supported, the bar keeps them throughout. On a phone the
+// label goes (index-search.scss) and the bar says it from the start.
+@media (min-height: 30rem) and (min-width: 36rem) {
   @supports (container-type: scroll-state) {
     .pf-index__results:not(:has(> .pf-index-empty:not([hidden]))) > .pf-index__echo + .pf-index__toolbar .pf-index__total {
       &,
