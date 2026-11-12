@@ -104,6 +104,25 @@
           });
         };
 
+        // While the books move at all (drag, glide, swipe, trackpad), the
+        // glass sets aside its blur, which would be redrawn every frame
+        // (data-pf-moving, _tile-showcase.scss). It comes back 150ms after
+        // the last scroll, once nothing is held or gliding.
+        let settleTimer = 0;
+        const setGlass = (on) => {
+          if (shelfEl) {
+            set('glass', on, (v) => shelfEl.toggleAttribute('data-pf-moving', v));
+          }
+        };
+        const settle = () => {
+          clearTimeout(settleTimer);
+          settleTimer = setTimeout(() => {
+            if (!dragging && !glide) {
+              setGlass(false);
+            }
+          }, 150);
+        };
+
         // The glide: an exponential ease toward a fixed target, so it lands
         // on the book's snap point and snapping has nothing left to do.
         let glide = 0;
@@ -196,6 +215,7 @@
             list.style.scrollSnapType = 'none';
             list.style.userSelect = 'none';
             setMoving(true);
+            setGlass(true);
             update();
             window.getSelection()?.removeAllRanges();
           }
@@ -220,6 +240,7 @@
             return;
           }
           dragging = false;
+          settle();
           // The last move's position, if its frame hasn't come yet.
           if (dragFrame) {
             cancelAnimationFrame(dragFrame);
@@ -279,6 +300,8 @@
 
         let frame = 0;
         list.addEventListener('scroll', () => {
+          setGlass(true);
+          settle();
           cancelAnimationFrame(frame);
           frame = requestAnimationFrame(update);
         }, { passive: true });

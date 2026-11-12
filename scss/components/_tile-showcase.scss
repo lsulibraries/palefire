@@ -1452,6 +1452,16 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   opacity: 1;
 }
 
+// While the books move (data-pf-moving, js/book-shelf.js), these two panes
+// set aside their blur, which would be redrawn every frame, and the tint
+// thickens instead, so the books under them don't turn sharp.
+.pf-tiles__shelf[data-pf-moving]::before,
+.pf-tiles__shelf[data-pf-moving]::after {
+  background: linear-gradient(var(--pf-shelf-glass-dir), var(--pf-shelf-glass-bg) 20%, color-mix(in srgb, var(--pf-shelf-glass-bg) 88%, transparent) 50%, transparent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 // Positioned, so the visually hidden subtitles (absolute) are clipped by
 // the shelf instead of widening the page.
 // On phones, 45% of the shelf: "Reconstruction" fits on one line at 320.
@@ -1607,20 +1617,22 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   height: 100%;
   padding: 9cqi 8cqi;
   overflow: hidden;
-  background: $pf-purple;
-  color: $pf-white;
+  background: var(--pf-g-accent, #{$pf-purple});
+  color: var(--pf-g-on-accent, #{$pf-white});
   box-shadow: 0.375rem 0.75rem 1.5rem rgba($pf-black, 0.18);
 }
 
-// Four swatches in turn: purple, ink, gold, paper.
+// Four jackets in turn: the swatch's accent, ink, its accent tint, paper
+// (2026-11-09: were LSU purple and gold on every swatch). Ink and paper are
+// neutral, so they sit on any swatch.
 .pf-tiles__item:nth-child(4n + 2) .pf-book__jacket {
   background: #1b1b1b;
-  color: $pf-gold;
+  color: #ece7dc;
 }
 
 .pf-tiles__item:nth-child(4n + 3) .pf-book__jacket {
-  background: $pf-gold;
-  color: $pf-black;
+  background: var(--pf-g-accent-soft, #{$pf-gold});
+  color: var(--pf-g-accent, #{$pf-black});
 }
 
 .pf-tiles__item:nth-child(4n + 4) .pf-book__jacket {
