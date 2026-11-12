@@ -3941,10 +3941,13 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
     margin-inline-start: .25rem;
   }
 
-  // The search on the page: the surface fill and the hairline frame, no
-  // shadow (it was there to lift the field off the video).
+  // The search on the page: the surface fill and a frame, no shadow (it
+  // was there to lift the field off the video). The frame is the control
+  // border at 65%, not the 20% hairline (1.7:1), so the field's edge holds
+  // 3:1 against the page in every swatch (WCAG 1.4.11): 3.2:1 on Solarized,
+  // 3.3–3.4:1 on the light swatches, 4.4:1 on Twilight.
   .pf-landing__field {
-    border-color: #{$pf-hairline};
+    border-color: color-mix(in srgb, var(--pf-section-border, #6c757d) 65%, transparent);
     background-color: var(--pf-g-surface, var(--bs-secondary-bg));
     box-shadow: none;
 
