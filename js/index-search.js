@@ -965,6 +965,16 @@
     const address = response.url || form.action;
     if (!response.ok || !showFeedback(dialog, await response.text(), address)) {
       window.location.href = address;
+      return;
+    }
+    // Sent: the drawer shows the thanks. Beside pf_search_feedback (opened),
+    // so the two counts show how many open the form and leave.
+    if (dialog.querySelector('.webform-confirmation') && Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({
+        event: 'pf_search_feedback_sent',
+        search_feedback: data.get('found') || 'none',
+        search_mode: data.get('search_mode') || 'all',
+      });
     }
   };
 
@@ -988,10 +998,95 @@
     }
   };
 
+  // What a feedback response says about the visitor's setup, for reproducing
+  // what they saw. Coarse on purpose, so it can't single anyone out: browser
+  // and system by name and major version (never the whole user-agent string),
+  // sizes, and display settings, the site's own and the device's.
+  const feedbackDevice = () => {
+    const ua = navigator.userAgent;
+    const find = (pattern) => (ua.match(pattern) || [])[1];
+    const browsers = [
+      ['Edge', /Edg(?:A|iOS)?\/(\d+)/],
+      ['Opera', /OPR\/(\d+)/],
+      ['Samsung Internet', /SamsungBrowser\/(\d+)/],
+      ['Firefox', /(?:Firefox|FxiOS)\/(\d+)/],
+      ['Chrome', /(?:Chrome|CriOS)\/(\d+)/],
+      ['Safari', /Version\/(\d+)[\d.]* (?:Mobile\/\S+ )?Safari/],
+    ];
+    let browser = 'Other';
+    browsers.some(([name, pattern]) => {
+      const version = find(pattern);
+      if (version) {
+        browser = `${name} ${version}`;
+      }
+      return !!version;
+    });
+    // An iPad asks for desktop pages as a Mac: a Mac with a touch screen.
+    const iPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    let os = 'Other';
+    if (iPad || /iPhone|iPod/.test(ua)) {
+      os = `${iPad ? 'iPadOS' : 'iOS'} ${find(/OS (\d+)_/) || ''}`.trim();
+    }
+    else if (/Android/.test(ua)) {
+      os = `Android ${find(/Android (\d+)/) || ''}`.trim();
+    }
+    else if (/CrOS/.test(ua)) {
+      os = 'ChromeOS';
+    }
+    else if (/Windows/.test(ua)) {
+      os = 'Windows';
+    }
+    else if (/Mac OS X/.test(ua)) {
+      os = 'macOS';
+    }
+    else if (/Linux/.test(ua)) {
+      os = 'Linux';
+    }
+
+    const root = document.documentElement;
+    const media = (query) => window.matchMedia(query).matches;
+    const settings = [`${root.getAttribute('data-pf-theme') || 'default'} reading colors`];
+    // The site's Text size sets the root size (_a11y-settings.scss), so it's
+    // taken out of the browser's own text size below.
+    const siteText = parseInt(root.getAttribute('data-pf-text-size'), 10) || 100;
+    if (siteText !== 100) {
+      settings.push(`site text ${siteText}%`);
+    }
+    // The site's Accessibility switches: pf-a11y-font, -spacing, -motion…
+    root.classList.forEach((name) => {
+      if (name.startsWith('pf-a11y-')) {
+        settings.push(`site ${name.slice(8)}`);
+      }
+    });
+    const textZoom = Math.round(parseFloat(getComputedStyle(root).fontSize) / 16 / siteText * 10000);
+    if (textZoom !== 100) {
+      settings.push(`browser text ${textZoom}%`);
+    }
+    if (media('(prefers-color-scheme: dark)')) {
+      settings.push('device dark mode');
+    }
+    if (media('(prefers-reduced-motion: reduce)')) {
+      settings.push('device reduced motion');
+    }
+    if (media('(forced-colors: active)')) {
+      settings.push('forced colors');
+    }
+    const ratio = Math.round(window.devicePixelRatio * 100) / 100;
+    return {
+      browser,
+      os,
+      viewport: `${window.innerWidth} × ${window.innerHeight}`,
+      display: `${window.screen.width} × ${window.screen.height} @${ratio}x`,
+      settings: settings.join(', '),
+      page_address: window.location.pathname + window.location.search,
+    };
+  };
+
   // Feedback answers (palefire_search's "Did you find what you needed?", and
   // the Feedback link beside Search tips, search_feedback "open"). On
   // the way to the feedback Webform, adds what only the browser knows: the
-  // screen size, and no results once every late section came back empty. Notes
+  // screen size and setup (feedbackDevice()), and no results once every late
+  // section came back empty. Notes
   // the answer in the dataLayer too, without the words: pf_search has them.
   // A plain click opens the form in the drawer; a new tab gets its page.
   const sendFeedback = (event) => {
@@ -1026,6 +1121,7 @@
       screen = 'tablet';
     }
     url.searchParams.set('screen', screen);
+    Object.entries(feedbackDevice()).forEach(([key, value]) => url.searchParams.set(key, value));
     const empty = document.querySelector('[data-pf-index-empty]');
     if (empty && !empty.hidden) {
       url.searchParams.set('result_count', '0');
