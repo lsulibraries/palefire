@@ -169,6 +169,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Combined Search (the Index): search field, modes, filter drawer and column, chips, sort, result rows, late sections, journal card and coverage lines, query label, no-results state | `palefire_search` module's templates, `index-search.scss` with `components/_index-flair.scss` (library `palefire/index-search`), `js/index-search.js`, `js/index-flair.js`, `data/search-showcase.json` | – its own page (`/v2/search`), once the module is enabled |
 
 ## Changelog
+- **2026-11-12:** Covers shelf (`js/book-shelf.js`): `update()` writes `hidden`, `disabled`, `data-pf-at` and the inline cursor only on change; `.pf-tiles__item` gets inline `pointer-events: none` while dragging or gliding; drag scroll writes are batched to one per animation frame.
 
 - **2026-11-12:** `.pf-index-list__more .pf-index-rule__link`: `white-space: normal`, `text-align: end`, `text-wrap: balance`, for labels that name the source.
 - **2026-11-12:** Combined Search modes under 36rem: `.pf-index__modes` is `flex: 1 1 100%`; its `ul` is nowrap, gap .875rem, padding-inline-end 1rem, `overflow-x: auto`, scrollbar hidden, `mask-image` fading the last 1rem (mirrored for `[dir=rtl]`); links `letter-spacing: .1em`, `margin-bottom: 0` (the scroller would clip the rule over the hairline), focus ring `outline-offset: -3px`. `.pf-index-section__about` is hidden with a query under 36rem.

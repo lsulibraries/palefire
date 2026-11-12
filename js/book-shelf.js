@@ -56,18 +56,52 @@
         let startScroll = 0;
         let samples = [];
 
+        // Runs on every scroll frame, so it only writes what changed: a
+        // rewritten cursor restyles every book (it is inherited, and the
+        // dimming rule uses :has()), and a rewritten data-pf-at repaints
+        // the blurred glass, even when the value is the same.
+        const shown = {};
+        const set = (key, value, apply) => {
+          if (shown[key] !== value) {
+            shown[key] = value;
+            apply(value);
+          }
+        };
         const update = () => {
           const max = maxScroll();
           const atStart = list.scrollLeft <= 1;
           const atEnd = list.scrollLeft >= max - 1;
-          nav.hidden = max <= 1;
-          prev.disabled = atStart;
-          next.disabled = atEnd;
+          set('hidden', max <= 1, (v) => {
+            nav.hidden = v;
+          });
+          set('prev', atStart, (v) => {
+            prev.disabled = v;
+          });
+          set('next', atEnd, (v) => {
+            next.disabled = v;
+          });
           if (shelfEl) {
-            shelfEl.dataset.pfAt = max <= 1 ? 'none' : atStart ? 'start' : atEnd ? 'end' : 'middle';
+            set('at', max <= 1 ? 'none' : atStart ? 'start' : atEnd ? 'end' : 'middle', (v) => {
+              shelfEl.dataset.pfAt = v;
+            });
           }
           // A hand where there is something to grab.
-          list.style.cursor = max > 1 && !dragging ? 'grab' : '';
+          set('cursor', max > 1 ? (dragging ? 'grabbing' : 'grab') : '', (v) => {
+            list.style.cursor = v;
+          });
+        };
+
+        // While dragging or gliding, the books ignore the pointer: books
+        // sliding under a still pointer would otherwise each set off the
+        // hover dimming across the whole shelf. The list still takes the
+        // pointer, so a new grab stops a glide.
+        const items = list.getElementsByClassName('pf-tiles__item');
+        const setMoving = (on) => {
+          set('moving', on, (v) => {
+            for (const item of items) {
+              item.style.pointerEvents = v ? 'none' : '';
+            }
+          });
         };
 
         // The glide: an exponential ease toward a fixed target, so it lands
@@ -77,6 +111,7 @@
           cancelAnimationFrame(glide);
           glide = 0;
           list.style.scrollSnapType = '';
+          setMoving(false);
         };
 
         // Where each book snaps to: its start, less the scroll padding (the
@@ -140,6 +175,13 @@
           samples = [{ t: event.timeStamp, x: event.clientX }];
         });
 
+        let dragTo = 0;
+        let dragFrame = 0;
+        const applyDrag = () => {
+          dragFrame = 0;
+          list.scrollLeft = dragTo;
+        };
+
         list.addEventListener('pointermove', (event) => {
           if (event.pointerId !== pointer) {
             return;
@@ -153,10 +195,16 @@
             list.setPointerCapture(pointer);
             list.style.scrollSnapType = 'none';
             list.style.userSelect = 'none';
-            list.style.cursor = 'grabbing';
+            setMoving(true);
+            update();
             window.getSelection()?.removeAllRanges();
           }
-          list.scrollLeft = startScroll - dx;
+          // One scroll write a frame: a high-rate mouse sends several moves
+          // a frame, and each write would scroll and run the scroll handler.
+          dragTo = startScroll - dx;
+          if (!dragFrame) {
+            dragFrame = requestAnimationFrame(applyDrag);
+          }
           samples.push({ t: event.timeStamp, x: event.clientX });
           while (samples.length > 2 && event.timeStamp - samples[0].t > VELOCITY_WINDOW) {
             samples.shift();
@@ -172,6 +220,11 @@
             return;
           }
           dragging = false;
+          // The last move's position, if its frame hasn't come yet.
+          if (dragFrame) {
+            cancelAnimationFrame(dragFrame);
+            applyDrag();
+          }
           // Only until the click this release makes, which comes first, so
           // a later Enter on a book still opens it.
           justDragged = true;
@@ -199,6 +252,7 @@
           if (reduceMotion()) {
             list.scrollLeft = target;
             list.style.scrollSnapType = '';
+            setMoving(false);
           }
           else {
             glideTo(target);
