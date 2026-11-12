@@ -1226,6 +1226,10 @@ Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
 
+- **2026-11-12:** Style guide: the Colour gallery now explains the palette: Palefire as the Libraries' coordinated design package (PS-10 Addendum A), with colours chosen for long, seated research sessions (soft contrast, Twilight dark default, twelve reader-chosen reading colours, purple and gold kept for meaning). Why: the new university brand guide raises the question of why the site doesn't wear its palette throughout, and the answer should be on record.
+
+- **2026-11-12:** Search buttons: the gold button is back on both the /v2/special hero and Combined Search, undoing the flat look from 3004978 (`_landing-features.scss`, `index-search.scss`): accent fill, the on-accent text color, the text color wiping in on hover. Both show the word only, centered (the hero keeps its one-banner width, no longer word and magnifier at opposite ends), and both turn to the magnifier alone below 480px (Combined Search was 400px). Why: on the photo the flat button read as a label and the field all but disappeared, and the two searches had drifted apart.
+
 - **2026-11-12:** Ask us: the Send key now says "Send" with the paper plane, both centered on the gold key, in the buttons' Roboto type. The label printed above it is gone. Why: spaced capitals over the key read as a heading and repeated "Send us a question"; the words belong on the button.
 
 - **2026-11-12:** Combined Search counts: the Source filter's numbers now count up too, over 1s instead of .6s, and the count stays one text node throughout (it was two spans, so the results bar read "9 results13 results" while it ran). `js/index-search.js` (outside sources' counts in the Source filter, results bar motion) was left uncommitted on 2026-11-12 although its CSS and changelog went out; it ships now. Why: the Catalog showed no count in the filter, and the count-up was too quick to notice.

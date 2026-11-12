@@ -177,11 +177,19 @@ HTML),
 
 $gallery('Colour', 'colour', [
   $text(<<<'HTML'
-<p>LSU purple and gold are the brand. Gold fails contrast on white, so it appears only on purple or dark grounds. Everything else comes from the reading colour a visitor has chosen in Settings, so these swatches show the reading colour in use: pick another one and they repaint, with their contrast measured again.</p>
+<p>Palefire is the Libraries' coordinated design package: one palette, one type family and one set of design elements on every page, the approach PS-10 Addendum A sets out for a unit that speaks to an audience of its own. Its audience reads. A library page is studied for an hour, not glanced at for a second, so the palette is chosen for the long, seated session of research rather than for a poster or a game day.</p>
+<ul>
+<li><strong>Soft, not stark.</strong> No reading colour pairs pure black with pure white. Text clears WCAG AA (4.5:1) with room to spare, without the glare of a white screen that tires the eyes over an afternoon of finding aids and transcripts.</li>
+<li><strong>Dark by default.</strong> Twilight, the default, sets soft grey text on a deep ground with pale gold headings: easy in a dim reading room or late at night, and quiet beside the images of the collections.</li>
+<li><strong>The reader chooses.</strong> No one ground suits every eye, room and hour: light text on dark can blur for readers with astigmatism, dark text on light can glare. Settings offers twelve reading colours, from Cream and Sepia to Night, with high contrast and reduced motion, and remembers the choice.</li>
+<li><strong>Colour kept for meaning.</strong> Saturated colour pulls the eye away from the text. LSU purple and gold mark identity and the one main action in a view, so they mean something when they appear.</li>
+</ul>
+<p>Gold fails contrast on white, so it appears only on purple or dark grounds. Everything else comes from the reading colour a visitor has chosen in Settings, so these swatches show the reading colour in use: pick another one and they repaint, with their contrast measured again.</p>
 <p>[styleguide:colors]</p>
 HTML),
   $note(<<<'HTML'
 <p>Colour comes from the theme, not from the editor. For emphasis use a Callout block, like this one. Every reading colour keeps it legible.</p>
+<p>Asked why the site does not wear the campaign palette throughout? The university's colours identify LSU; the reading colours serve people who stay for hours. Both belong to one coordinated package, and the reading colours are what make long research comfortable and accessible.</p>
 HTML),
 ]);
 

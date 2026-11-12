@@ -53,6 +53,28 @@ token in `_variables.scss`, as was done for `$pf-exhibit-ease` and
    `drush php:script scripts/palefire_styleguide.php` (add `image=<media id>`
    for the figure examples). Then run `drush cr` again.
 
+## Why these colours
+
+Palefire is the Libraries' coordinated design package (PS-10 Addendum A: a
+unit with its own audience uses a coordinated palette, typefaces and design
+elements, not a unique logo). Its audience reads for long, seated sessions,
+so the palette serves reading first. The Colour gallery says this to
+editors; keep the two in step.
+
+- **Soft, not stark.** No swatch pairs pure black with pure white; text
+  clears 4.5:1 with room to spare, without white-screen glare.
+- **Dark by default.** Twilight: soft grey text, deep ground, pale gold
+  headings. Suits dim reading rooms and late sessions.
+- **The reader chooses.** Twelve reading colours plus high contrast, because
+  light-on-dark blurs for some (astigmatism) and dark-on-light glares for
+  others.
+- **Colour kept for meaning.** Purple and gold mark identity and the one
+  main action; they never compete with the text.
+
+Don't overclaim: say "glare" and "comfort", not that dark mode is proven to
+prevent eye strain. The evidence is mixed, which is why the choice is the
+reader's.
+
 ## Rules (the short version)
 
 - **Swiss, museum-calm.** Hierarchy comes from type, size and space, not
@@ -146,6 +168,10 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Combined Search (the Index): search field, modes, filter drawer and column, chips, sort, result rows, late sections, journal card and coverage lines, query label, no-results state | `palefire_search` module's templates, `index-search.scss` with `components/_index-flair.scss` (library `palefire/index-search`), `js/index-search.js`, `js/index-flair.js`, `data/search-showcase.json` | – its own page (`/v2/search`), once the module is enabled |
 
 ## Changelog
+
+- **2026-11-12:** Colour gallery: rationale for the palette (coordinated design package under PS-10 Addendum A; chosen for long, seated reading; soft contrast, dark default, reader's choice, colour kept for meaning) and an editors' note on the campaign palette. New "Why these colours" section above.
+
+- **2026-11-12:** Search buttons (`.pf-landing__lead--hero .pf-landing__submit`, `.pf-index__submit`): filled with `--pf-g-accent`, text `--pf-g-on-accent`, `pf-button-type` / `$pf-button-weight` at .9375rem, wipe to the text color on hover. Word only and centered; the hero's `.pf-landing__submit-icon--search` is `display: none` except below 480px, and `.pf-index__submit` turns to its magnifier below 480px (was 400px).
 
 - **2026-11-12:** Ask: `.pf-inquiry__key-label` is gone. `.pf-inquiry__key` holds "Send" and `.pf-inquiry__key-icon` (1.25rem paper plane): flex, centered, .625rem gap, 1.25rem inline padding, `pf-button-type`. The button's value stays "Send question".
 - **2026-11-12:** Combined Search: count-up (`js/index-flair.js`) covers `[data-pf-index-section-count]` and `.pf-index__count`, 1s ease-out, written as one text node.
