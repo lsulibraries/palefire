@@ -154,6 +154,30 @@
     });
   };
 
+  // An outside source's count in the Source filter, from its section's heading
+  // once that arrives ("13 results" gives 13, "300+ results" 300+). Nothing
+  // known, nothing shown: never a 0 that only means it hasn't answered.
+  const showSourceCount = (holder, text) => {
+    const key = holder.closest('[data-pf-index-source]')?.dataset.pfIndexSource;
+    const scope = holder.closest('[data-pf-index]') || document;
+    const label = key && [...scope.querySelectorAll('[data-pf-index-form] input[name="source[]"]')].find((input) => input.value === key)?.closest('.pf-index__option');
+    if (!label) {
+      return;
+    }
+    const number = (text || '').match(/^[\d.,\s]*\d\+?/);
+    let count = label.querySelector(':scope > .pf-index__count');
+    if (!number) {
+      count?.remove();
+      return;
+    }
+    if (!count) {
+      count = document.createElement('span');
+      count.className = 'pf-index__count is-late';
+      label.querySelector(':scope > .pf-index__option-label')?.after(count);
+    }
+    count.textContent = number[0].trim();
+  };
+
   const load = async (holder) => {
     // The site's mark while this section's service answers.
     const mark = holder.closest('[data-pf-index]')?.querySelector('[data-pf-index-loading] .pf-index__mark');
@@ -174,12 +198,14 @@
       const list = template.content.querySelector('.pf-index-list');
       if (list && list.dataset.pfIndexTotal === '0') {
         holder.closest('.pf-index-section').hidden = true;
+        showSourceCount(holder, '');
         return;
       }
       const count = holder.closest('.pf-index-section')?.querySelector('[data-pf-index-section-count]');
       if (count && list && list.dataset.pfIndexCount) {
         count.textContent = list.dataset.pfIndexCount;
       }
+      showSourceCount(holder, list && list.dataset.pfIndexCount);
       // Catalog rows: their copies are asked for now, and the mark stays a
       // moment for them, so a quick answer arrives with the rows instead of
       // after them. A slow one never holds the rows up: they show with the
@@ -405,7 +431,10 @@
   // slims to the row; and the room left of its words is measured
   // (--pf-index-crumbs-room), so the breadcrumb gives way (ellipsis) before
   // it reaches them.
-  const DOCK_CLASSES = ['pf-index-dock', 'pf-index-docked'];
+  // pf-index-dock-moved once the bar has docked or undocked, so the words'
+  // undocking motion plays only after a move, not on arrival.
+  const DOCK_CLASSES = ['pf-index-dock', 'pf-index-docked', 'pf-index-dock-moved'];
+  const still = () => reducedMotion.matches || document.documentElement.classList.contains('pf-a11y-motion');
   const undock = () => {
     document.documentElement.classList.remove(...DOCK_CLASSES);
   };
@@ -445,6 +474,9 @@
         const room = total.getBoundingClientRect().left - crumbs.getBoundingClientRect().left - gap;
         root.style.setProperty('--pf-index-crumbs-room', `${Math.max(0, Math.floor(room))}px`);
         measured = true;
+      }
+      if (held !== docked) {
+        root.classList.add('pf-index-dock-moved');
       }
       root.classList.toggle('pf-index-docked', held);
     };
@@ -515,6 +547,28 @@
       }
     };
 
+    // A change to the name before the words moves them; they ease over from
+    // where they were (index-search.scss, .is-shifting), measured either side.
+    const LEAVE_MS = 200;
+    let leaving = 0;
+    const shift = (change) => {
+      const before = text.getBoundingClientRect().left;
+      change();
+      const by = before - text.getBoundingClientRect().left;
+      if (Math.abs(by) < 1 || still()) {
+        return;
+      }
+      text.style.setProperty('--pf-index-shift', `${Math.round(by)}px`);
+      text.classList.remove('is-shifting');
+      void text.offsetWidth;
+      text.classList.add('is-shifting');
+    };
+    text.addEventListener('animationend', (event) => {
+      if (event.target === text) {
+        text.classList.remove('is-shifting');
+      }
+    });
+
     let current = null;
     let frame = 0;
     const update = () => {
@@ -536,18 +590,38 @@
         mark(next);
       }
       if (!next) {
-        where.hidden = true;
-        current = null;
+        // Above the first heading again: the name fades, then makes way.
+        if (current) {
+          current = null;
+          where.classList.add('is-leaving');
+          window.clearTimeout(leaving);
+          leaving = window.setTimeout(() => {
+            shift(() => {
+              where.hidden = true;
+              where.classList.remove('is-leaving');
+            });
+          }, still() ? 0 : LEAVE_MS);
+        }
         return;
       }
+      window.clearTimeout(leaving);
       const head = next.querySelector(':scope > .pf-index-section__head');
-      name.textContent = head.querySelector('.pf-index-section__title').textContent.trim();
+      const label = head.querySelector('.pf-index-section__title').textContent.trim();
       // A late section's count arrives after its heading.
       const number = head.querySelector('[data-pf-index-section-count]');
-      count.textContent = number ? number.textContent.trim().replace(/\s*results?$/i, '') : '';
-      if (next !== current) {
-        current = next;
+      const counted = number ? number.textContent.trim().replace(/\s*results?$/i, '') : '';
+      if (next === current && !where.hidden && name.textContent === label && count.textContent === counted) {
+        return;
+      }
+      const fresh = next !== current;
+      shift(() => {
+        name.textContent = label;
+        count.textContent = counted;
+        where.classList.remove('is-leaving');
         where.hidden = false;
+      });
+      if (fresh) {
+        current = next;
         // Again for each source, so the change is seen.
         where.style.animation = 'none';
         void where.offsetWidth;

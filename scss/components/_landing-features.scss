@@ -1059,31 +1059,27 @@ html.pf-a11y-contrast .pf-landing--cover .pf-landing__lead .pf-landing__media::b
     }
   }
 
-  // Search is part of the field, as on Combined Search (index-search.scss):
-  // on the field's glass behind its hairline, the word in the swatch's
-  // accent and the labels' mono capitals, so the gold stays with the title.
-  // Hover and focus wipe the accent in (_buttons.scss) and the words take
-  // the text color for that fill (black on Twilight's gold, white on the
-  // light swatches' dark accents). Unthemed, the words keep the title color.
+  // The Search button filled with the swatch's accent, its words in the
+  // text color for that fill, as in the mockup, so the action stands out
+  // (black on Twilight's gold, white on the light swatches' dark accents;
+  // LSU gold and black unthemed). Hover wipes in the text color, as every
+  // button (_buttons.scss), and the words invert.
   .pf-landing__submit {
-    color: var(--pf-g-accent, var(--pf-g-title, var(--pf-toc-active, #{$pf-white})));
+    border-inline-start: 0;
+    color: var(--pf-g-on-accent, #{$pf-black});
+    background-color: var(--pf-g-accent, #{$pf-gold});
     transition: color $pf-hover-out ease;
     @include pf-button-pressed;
     @include pf-button-wipe;
 
-    &::before {
-      background-color: var(--pf-g-accent, #{$pf-gold});
-    }
-
     &:hover,
     &:focus-visible {
-      color: var(--pf-g-accent, var(--pf-g-title, var(--pf-toc-active, #{$pf-white})));
-      background-color: transparent;
+      color: var(--pf-g-on-accent, #{$pf-black});
       transition-duration: $pf-hover-in;
     }
 
     @include pf-button-on {
-      color: var(--pf-g-on-accent, #{$pf-black});
+      color: var(--bs-body-bg);
     }
 
     &:focus-visible {
@@ -1106,11 +1102,11 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input 
 
 // Where the banners are five to a row, the Search button is one banner
 // wide (the field spans the row, so its left edge falls on banner 5's), the
-// word at its start and the arrow at its end, as the hero's links.
+// word centered in it.
 @container pf-cover (min-width: 44rem) {
   .pf-landing__lead.pf-landing__lead--hero .pf-landing__submit {
     flex: 0 0 calc((100% - 4 * var(--pf-grid-gutter)) / 5);
-    justify-content: space-between;
+    justify-content: center;
     // Over the field's 1px frame at the end, so both edges meet banner 5's.
     margin-inline-end: -1px;
     padding-inline: 1.25rem;
@@ -3397,14 +3393,22 @@ html[data-pf-hero] .pf-landing--cover .pf-landing__lead .pf-landing__heading {
     }
   }
 
-  // The magnifier after the word, held still on hover (the arrow's nudge
-  // was a "go on"). The word keeps the field's mono capitals.
+  // Search in the button voice of the links over it, the word alone, as on
+  // Combined Search (index-search.scss). On phones the word is hidden from
+  // sight (_landing.scss) and the magnifier takes its place, held still on
+  // hover (the arrow's nudge was a "go on").
   .pf-landing__lead--hero .pf-landing__submit {
+    @include pf-button-type;
 
     .pf-landing__submit-icon--search {
+      display: none;
       width: 1.125rem;
       height: 1.125rem;
       transform: none;
+
+      @media (max-width: 479.98px) {
+        display: block;
+      }
     }
   }
 }

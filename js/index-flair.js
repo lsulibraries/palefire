@@ -4,7 +4,7 @@
  * from index-search.js, which does the searching.
  *
  * - Results arrive in turn: each section's head, then its first rows.
- * - Section counts count up to their number.
+ * - Counts count up to their number: each section's, and the Source filter's.
  * - Thumbnails fade up from a tint as they load.
  * - In Special Collections, the empty field types out searches to try.
  * - Ctrl+K (⌘K on a Mac) goes to the field from anywhere on the page, and the
@@ -22,7 +22,9 @@
   const SHOWCASE = `${base}themes/custom/palefire/data/search-showcase.json`;
   // Rows that arrive in turn: the rest are there with the last of them.
   const REVEAL_ROWS = 8;
-  const COUNT_MS = 600;
+  const COUNT_MS = 1000;
+  // Every count that counts up: the sections' and the Source filter's.
+  const COUNTS = '[data-pf-index-section-count], .pf-index__count';
 
   let showcase = null;
   const loadShowcase = () => {
@@ -62,48 +64,44 @@
 
   // Counting up. ---------------------------------------------------------------
 
-  const counting = new WeakMap();
   const format = new Intl.NumberFormat(document.documentElement.lang || 'en');
 
   // "13 results", "300+ results", "1,204 results": the number counts up and the
   // words stay. Screen readers get the final words only.
+  // What each count was last set to, by the page or by a count in progress,
+  // so a count's own steps aren't taken for a new number.
+  const written = new WeakMap();
+
+  // "13 results", "300+ results", "1,204": the number counts up from 0 and the
+  // words stay. One text node throughout, so anything reading the count (the
+  // results bar names the section in view with it) reads one number.
   const countUp = (element) => {
-    if (element.querySelector(':scope > [aria-hidden="true"] + .visually-hidden')) {
-      return;
-    }
     const text = element.textContent.trim();
-    if (counting.get(element) === text) {
+    const seen = written.get(element);
+    if (seen && (seen.final === text || seen.step === text)) {
       return;
     }
     const match = text.match(/^([\d.,\s]*\d)(.*)$/);
     const target = match ? parseInt(match[1].replace(/\D/g, ''), 10) : NaN;
+    const state = { final: text, step: '' };
+    written.set(element, state);
     if (still() || !match || !(target > 1)) {
-      counting.set(element, text);
       return;
     }
     const rest = match[2];
-    const shown = document.createElement('span');
-    shown.setAttribute('aria-hidden', 'true');
-    const spoken = document.createElement('span');
-    spoken.className = 'visually-hidden';
-    spoken.textContent = text;
-    counting.set(element, text);
-    element.replaceChildren(shown, spoken);
     const start = performance.now();
     const step = (now) => {
-      if (!element.isConnected || !element.contains(shown)) {
+      // Another number arrived meanwhile: that one counts instead.
+      if (!element.isConnected || written.get(element) !== state) {
         return;
       }
       const t = Math.min(1, (now - start) / COUNT_MS);
       // Ease out: quick at first, settling on the number.
       const eased = 1 - (1 - t) ** 3;
-      shown.textContent = `${format.format(Math.round(target * eased))}${rest}`;
+      state.step = t < 1 ? `${format.format(Math.round(target * eased))}${rest}` : text;
+      element.textContent = state.step;
       if (t < 1) {
         window.requestAnimationFrame(step);
-      }
-      else {
-        counting.set(element, text);
-        element.textContent = text;
       }
     };
     window.requestAnimationFrame(step);
@@ -357,8 +355,8 @@
         if (node.matches('.pf-index-section__late')) {
           reveal(node);
         }
-        node.querySelectorAll('[data-pf-index-section-count]').forEach(countUp);
-        if (node.matches('[data-pf-index-section-count]')) {
+        node.querySelectorAll(COUNTS).forEach(countUp);
+        if (node.matches(COUNTS)) {
           countUp(node);
         }
         node.querySelectorAll('.pf-index-row__thumb img').forEach(fadeUp);
@@ -369,7 +367,7 @@
     new MutationObserver((records) => {
       records.forEach((record) => {
         const target = record.target.nodeType === Node.ELEMENT_NODE ? record.target : record.target.parentElement;
-        const count = target?.closest('[data-pf-index-section-count]');
+        const count = target?.closest(COUNTS);
         const late = target?.closest('.pf-index-section__late');
         if (count) {
           pending.add(count);
@@ -398,7 +396,7 @@
     if (!first) {
       reveal(main);
     }
-    main.querySelectorAll('[data-pf-index-section-count]').forEach(countUp);
+    main.querySelectorAll(COUNTS).forEach(countUp);
     main.querySelectorAll('.pf-index-row__thumb img').forEach(fadeUp);
     if (root) {
       checkEmpty(root);
