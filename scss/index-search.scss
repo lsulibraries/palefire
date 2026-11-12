@@ -162,9 +162,12 @@ $pf-index-bar-shadow:
   }
 
   // On a phone the results bar under it says the same in one line, so the
-  // label goes and the bar shows its words at rest (_index-flair.scss).
+  // label goes and the bar shows its words at rest (_index-flair.scss). A
+  // source's line on what it holds goes too (three lines there): What are
+  // these? in Filters says it for every source.
   @media (max-width: 35.98rem) {
-    .pf-index__echo {
+    .pf-index__echo,
+    .pf-index-section__about {
       display: none;
     }
   }
@@ -496,6 +499,48 @@ $pf-index-bar-shadow:
   .pf-index__modes {
     margin-top: 0;
     border-bottom: 0;
+  }
+}
+
+// On a phone the modes keep to one line (Search tips keeps its own above)
+// and scroll sideways, under a fade at the end that says more are there.
+// Wrapped, Website took a second line. index-search.js scrolls the current
+// mode into view. Inside the scroller the focus ring is drawn inset and the
+// current mode's rule sits on the hairline, not over it: the scroller clips
+// what reaches past it.
+@media (max-width: 35.98rem) {
+  .pf-index__modes {
+    flex: 1 1 100%;
+    min-width: 0;
+
+    ul {
+      flex-wrap: nowrap;
+      gap: 0 .875rem;
+      padding-inline-end: 1rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to left, transparent, #000 1rem);
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    a {
+      margin-bottom: 0;
+      // .1em, not the labels' .16em: all four fit at 375px.
+      letter-spacing: .1em;
+      white-space: nowrap;
+
+      &:focus-visible {
+        outline-offset: -3px;
+      }
+    }
+  }
+
+  [dir="rtl"] .pf-index__modes ul {
+    mask-image: linear-gradient(to right, transparent, #000 1rem);
   }
 }
 
@@ -4033,6 +4078,14 @@ html.pf-index-docked {
 .pf-index-list__more {
   display: flex;
   margin: 1rem 0 0;
+
+  // It names the source ("Show all Catalog results (44)"), longer than the
+  // rule link's one line on a phone: it wraps, ending flush right.
+  .pf-index-rule__link {
+    white-space: normal;
+    text-align: end;
+    text-wrap: balance;
+  }
 
   // The theme's rule link. One that leaves the site points up and out.
   a[href^="http"]::after {

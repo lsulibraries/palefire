@@ -574,6 +574,28 @@
     return next;
   };
 
+  // On a phone the modes keep to one line and scroll sideways
+  // (index-search.scss). The current one is scrolled into view, so a mode at
+  // the line's end isn't chosen out of sight. Only the line scrolls, never
+  // the page.
+  const showMode = (nav) => {
+    const list = nav?.querySelector('ul');
+    const current = nav?.querySelector('[aria-current]');
+    if (!list || !current || list.scrollWidth <= list.clientWidth) {
+      return;
+    }
+    const box = list.getBoundingClientRect();
+    const item = current.getBoundingClientRect();
+    // Past the fade at the line's end (1rem).
+    const room = 16;
+    if (item.right > box.right - room) {
+      list.scrollLeft += item.right - box.right + room;
+    }
+    else if (item.left < box.left + room) {
+      list.scrollLeft -= box.left - item.left + room;
+    }
+  };
+
   // The search field's clear button, hidden while the field is empty.
   const syncErase = (root) => {
     const input = root.querySelector('#pf-index-q');
@@ -912,7 +934,7 @@
     Drupal.detachBehaviors(main, drupalSettings, 'unload');
     swap(root, page, '.pf-index__form');
     syncErase(root);
-    swap(root, page, '.pf-index__modes');
+    showMode(swap(root, page, '.pf-index__modes'));
     // The trail is outside the Index, and Special Collections mode adds a step.
     const crumbs = document.querySelectorAll('.pf-breadcrumb__nav');
     const nextCrumbs = page.querySelectorAll('.pf-breadcrumb__nav');
@@ -1537,6 +1559,7 @@
         document.addEventListener('click', toggleAbout);
       });
       once('pf-index', '[data-pf-index]', context).forEach(setUp);
+      once('pf-index-modes', '.pf-index__modes', context).forEach(showMode);
       once('pf-index-sent', '[data-pf-index]', context).forEach(sendFirstSearch);
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
