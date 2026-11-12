@@ -898,6 +898,11 @@
         dialog.close();
       }
     });
+    // The search listens for these across the page, to search or filter on
+    // them: the form's own stay in the drawer.
+    ['submit', 'change', 'input', 'click'].forEach((type) => {
+      dialog.addEventListener(type, (event) => event.stopPropagation());
+    });
     root.append(dialog);
     return dialog;
   };
