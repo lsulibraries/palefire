@@ -4,7 +4,7 @@
  * prints what the browser actually draws, so the plates can't drift from
  * the Sass.
  *
- * - Colour: each swatch's hex code and its contrast with the page color
+ * - Color: each swatch's hex code and its contrast with the page color
  *   (brand colors: with the ground named in data-sg-on, from --sg-on),
  *   read from the computed color (a canvas pixel, so color-mix() and
  *   translucent tokens resolve too; translucent ones are measured over the

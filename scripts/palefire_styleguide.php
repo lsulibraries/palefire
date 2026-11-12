@@ -19,7 +19,7 @@
  * editor are replaced on the next run: change the text here instead.
  * Notes and the checklist for adding a component: docs/styleguide.md.
  *
- * Plates (colour, type, grid, spacing, lines, motion) are drawn by the
+ * Plates (color, type, grid, spacing, lines, motion) are drawn by the
  * theme from its tokens: a text paragraph that is only "[styleguide:<plate>]"
  * (palefire_preprocess_paragraph__guide_text()). The rest of the page is
  * live examples of the exhibition blocks, each with a note for editors.
@@ -159,12 +159,12 @@ $gallery = function (string $gallery_title, string $anchor, array $blocks) use (
 
 $gallery('About this guide', 'about', [
   $text(<<<'HTML'
-<p>Palefire is the LSU Libraries theme: a quiet, typographic frame for collections, in the manner of a museum catalogue. Its grammar is Swiss. Type, a strict grid and generous space carry the page, the hairline separates, and colour is kept for meaning.</p>
+<p>Palefire is the LSU Libraries theme: a quiet, typographic frame for collections, in the manner of a museum catalog. Its grammar is Swiss. Type, a strict grid and generous space carry the page, the hairline separates, and color is kept for meaning.</p>
 <p>This guide is built from the theme itself. Every plate is drawn from the same tokens the site uses, so when a token changes the plate changes with it. Every example below is a real block, as editors add it.</p>
 <ul>
-<li><strong>Calm.</strong> Few colours, soft lines, slow and subtle motion.</li>
+<li><strong>Calm.</strong> Few colors, soft lines, slow and subtle motion.</li>
 <li><strong>Typographic.</strong> Hierarchy from size, weight and space, not from boxes.</li>
-<li><strong>Accessible.</strong> WCAG 2.2 AA in every reading colour, with or without motion.</li>
+<li><strong>Accessible.</strong> WCAG 2.2 AA in every reading color, with or without motion.</li>
 <li><strong>Light.</strong> Little CSS and script, images sized and lazy, no layout shift.</li>
 </ul>
 <p>[styleguide:overview]</p>
@@ -175,21 +175,21 @@ HTML),
 HTML),
 ]);
 
-$gallery('Colour', 'colour', [
+$gallery('Color', 'color', [
   $text(<<<'HTML'
 <p>Palefire is the Libraries' coordinated design package: one palette, one type family and one set of design elements on every page, the approach PS-10 Addendum A sets out for a unit that speaks to an audience of its own. Its audience reads. A library page is studied for an hour, not glanced at for a second, so the palette is chosen for the long, seated session of research rather than for a poster or a game day.</p>
 <ul>
-<li><strong>Soft, not stark.</strong> No reading colour pairs pure black with pure white. Text clears WCAG AA (4.5:1) with room to spare, without the glare of a white screen that tires the eyes over an afternoon of finding aids and transcripts.</li>
-<li><strong>Dark by default.</strong> Twilight, the default, sets soft grey text on a deep ground with pale gold headings: easy in a dim reading room or late at night, and quiet beside the images of the collections.</li>
-<li><strong>The reader chooses.</strong> No one ground suits every eye, room and hour: light text on dark can blur for readers with astigmatism, dark text on light can glare. Settings offers twelve reading colours, from Cream and Sepia to Night, with high contrast and reduced motion, and remembers the choice.</li>
-<li><strong>Colour kept for meaning.</strong> Saturated colour pulls the eye away from the text. LSU purple and gold mark identity and the one main action in a view, so they mean something when they appear.</li>
+<li><strong>Soft, not stark.</strong> No reading color pairs pure black with pure white. Text clears WCAG AA (4.5:1) with room to spare, without the glare of a white screen that tires the eyes over an afternoon of finding aids and transcripts.</li>
+<li><strong>Dark by default.</strong> Twilight, the default, sets soft gray text on a deep ground with pale gold headings: easy in a dim reading room or late at night, and quiet beside the images of the collections.</li>
+<li><strong>The reader chooses.</strong> No one ground suits every eye, room and hour: light text on dark can blur for readers with astigmatism, dark text on light can glare. Settings offers twelve reading colors, from Cream and Sepia to Night, with high contrast and reduced motion, and remembers the choice.</li>
+<li><strong>Color kept for meaning.</strong> Saturated color pulls the eye away from the text. LSU purple and gold mark identity and the one main action in a view, so they mean something when they appear.</li>
 </ul>
-<p>Gold fails contrast on white, so it appears only on purple or dark grounds. Everything else comes from the reading colour a visitor has chosen in Settings, so these swatches show the reading colour in use: pick another one and they repaint, with their contrast measured again.</p>
+<p>Gold fails contrast on white, so it appears only on purple or dark grounds. Everything else comes from the reading color a visitor has chosen in Settings, so these swatches show the reading color in use: pick another one and they repaint, with their contrast measured again.</p>
 <p>[styleguide:colors]</p>
 HTML),
   $note(<<<'HTML'
-<p>Colour comes from the theme, not from the editor. For emphasis use a Callout block, like this one. Every reading colour keeps it legible.</p>
-<p>Asked why the site does not wear the campaign palette throughout? The university's colours identify LSU; the reading colours serve people who stay for hours. Both belong to one coordinated package, and the reading colours are what make long research comfortable and accessible.</p>
+<p>Color comes from the theme, not from the editor. For emphasis use a Callout block, like this one. Every reading color keeps it legible.</p>
+<p>Asked why the site does not wear the campaign palette throughout? The university's colors identify LSU; the reading colors serve people who stay for hours. Both belong to one coordinated package, and the reading colors are what make long research comfortable and accessible.</p>
 HTML),
 ]);
 
@@ -209,13 +209,13 @@ $gallery('Grid and breakpoints', 'grid', [
 <p>[styleguide:grid]</p>
 HTML),
   $note(<<<'HTML'
-<p>An image's Layout places it on the grid: beside the text (image first or second), centred in the text column, or full width with a slow parallax.</p>
+<p>An image's Layout places it on the grid: beside the text (image first or second), centered in the text column, or full width with a slow parallax.</p>
 HTML),
 ]);
 
 $gallery('Spacing and lines', 'spacing', [
   $text(<<<'HTML'
-<p>Space is the main divider. Where a line is needed it is the hairline, a fifth of the section's line colour, like the rows of the opening hours. Fields and buttons without words keep a full 3:1, and every focusable thing shows a clear ring.</p>
+<p>Space is the main divider. Where a line is needed it is the hairline, a fifth of the section's line color, like the rows of the opening hours. Fields and buttons without words keep a full 3:1, and every focusable thing shows a clear ring.</p>
 <p>[styleguide:spacing]</p>
 <p>[styleguide:lines]</p>
 HTML),
@@ -226,14 +226,14 @@ HTML),
 
 $gallery('Motion', 'motion', [
   $text(<<<'HTML'
-<p>Movement is slow, eased and brief: colour arrives quickly and leaves slowly, pages rise into place, exhibition images settle or are drawn by a curtain. Nothing depends on it, and nothing waits hidden: a page title is at full strength from the first frame, and what reveals on scroll starts at 85% and only brightens. The system setting and Settings &gt; Reduce motion stop all of it.</p>
+<p>Movement is slow, eased and brief: color arrives quickly and leaves slowly, pages rise into place, exhibition images settle or are drawn by a curtain. Nothing depends on it, and nothing waits hidden: a page title is at full strength from the first frame, and what reveals on scroll starts at 85% and only brightens. The system setting and Settings &gt; Reduce motion stop all of it.</p>
 <p>[styleguide:motion]</p>
 HTML),
 ]);
 
 $gallery('Buttons and links', 'buttons', [
   $text(<<<'HTML'
-<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is a quiet plate of the text colour, with no line. Words are Roboto in sentence case, so an action never reads as a label. On hover the text colour wipes across and the words invert. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
+<p>One button in two strengths, and one text link. The primary button is the accent, filled, for the one main action in a view; every other button is a quiet plate of the text color, with no line. Words are Roboto in sentence case, so an action never reads as a label. On hover the text color wipes across and the words invert. An arrow says where a link goes: → stays on the site, ↗ opens another site in a new tab.</p>
 <p>[styleguide:buttons]</p>
 HTML),
   $note(<<<'HTML'
@@ -269,7 +269,7 @@ HTML),
   $note('<p><strong>' . $label('guide_text') . '</strong>, Style: Plain. Text with Heading 4, lists, links and tables.</p>'),
   $text(<<<'HTML'
 <h4>A heading inside a block</h4>
-<p>Reading text in an exhibition is set larger and looser than elsewhere on the site, for long reading. Links stay <a href="#about">underlined</a>, so they never depend on colour alone.</p>
+<p>Reading text in an exhibition is set larger and looser than elsewhere on the site, for long reading. Links stay <a href="#about">underlined</a>, so they never depend on color alone.</p>
 <ol>
 <li>Numbered lists for sequences.</li>
 <li>Bulleted lists for everything else.</li>
@@ -288,7 +288,7 @@ HTML),
     ])),
   ]),
   $image ? $note('<p><strong>' . $label('exhibit_figure') . '</strong>: one image with a caption. Its alt text comes from the media item: describe what the image shows.</p>') : NULL,
-  $figure('<p>Layout: Centred in the text column.</p>', 'center'),
+  $figure('<p>Layout: Centered in the text column.</p>', 'center'),
   $note('<p><strong>' . $label('guide_accordion') . '</strong>: questions and details a reader can open when they need them.</p>'),
   $accordion([
     ['What belongs in an accordion?', '<p>Material most readers can skip: rules, prices, long lists.</p>'],
@@ -356,7 +356,7 @@ $values = [
   'field_modular_type' => 'exhibition',
   'field_exhibit_kicker' => 'Style guide',
   'field_exhibit_title_style' => 'sans',
-  'field_exhibit_subtitle' => 'Colour, type, grid, motion and the blocks exhibitions are built from',
+  'field_exhibit_subtitle' => 'Color, type, grid, motion and the blocks exhibitions are built from',
   'field_exhibit_credit' => $html('<p>Palefire, the LSU Libraries theme for Drupal. Maintained with the theme.</p>'),
   'field_exhibit_keyfacts' => ['Plates: 10', 'Standard: WCAG 2.2 AA', 'Updated: ' . date('F j, Y')],
   'field_exhibit_prompt' => 'Read it in order, or choose a plate from the table of contents.',

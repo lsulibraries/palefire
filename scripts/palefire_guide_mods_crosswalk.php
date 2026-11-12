@@ -244,7 +244,7 @@ $section('How to read the chart', [
 <ul>
 <li><strong>A solid line</strong> carries the element's text.</li>
 <li><strong>A dashed line</strong> carries one of its attributes instead, such as a date's <code>@qualifier</code> becoming <code>att_date_qualifier</code>.</li>
-<li><strong>Colour</strong> only shows which part of the record a line starts from. It means nothing on its own.</li>
+<li><strong>Color</strong> only shows which part of the record a line starts from. It means nothing on its own.</li>
 </ul>
 <h4>Boxes on the right</h4>
 <ul>

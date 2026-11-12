@@ -7,7 +7,7 @@
  * Utility menu region has content. Each panel is a Bootstrap 5.3 offcanvas
  * that slides in from the left, in the dark TOC sidebar's look (dark
  * glass, monospace tracked labels, gold accent): _utility-panels.scss.
- * Behaviour (clock, LibCal hours, "See full hours" link, Ask Us iframes,
+ * Behavior (clock, LibCal hours, "See full hours" link, Ask Us iframes,
  * Settings): utility-panels.js.
  *
  * Panels, in the utility menu's order: Search, Hours, Ask Us, Accounts,
@@ -63,18 +63,18 @@
    utility-panels.js and the pattern in html.html.twig. The first is the
    default every page opens in (Twilight, set on <html> by
    html.html.twig); its radio is checked when nothing is saved. Order:
-   favourite darks, the other darks, then the lights. Only the first
+   favorite darks, the other darks, then the lights. Only the first
    three show, then a "Show 9 more colors" link (utility-panels.js); the
    chosen one always stays in view. Each row: the swatch, its name and a
    line on what it looks like (note). 'group' starts a labelled run in the
    opened list. #}
 {%
   set reading_themes = [
-    { key: 'twilight', label: 'Twilight'|t, note: 'Dark warm grey, gold links'|t },
+    { key: 'twilight', label: 'Twilight'|t, note: 'Dark warm gray, gold links'|t },
     { key: 'material', label: 'Material'|t, note: 'Slate blue, brightest text'|t },
     { key: 'cocoa', label: 'Cocoa'|t, note: 'Dark brown, amber links'|t },
     { key: 'forest', label: 'Forest'|t, note: 'Deep green, mint links'|t },
-    { key: 'dusk', label: 'Dusk'|t, note: 'Soft grey, lavender links'|t },
+    { key: 'dusk', label: 'Dusk'|t, note: 'Soft gray, lavender links'|t },
     { key: 'night', label: 'Night'|t, note: 'Near black, highest contrast'|t },
     { key: 'midnight', label: 'Midnight'|t, note: 'Navy, pale blue links'|t },
     { key: 'solarized', label: 'Solarized'|t, note: 'Dark teal, low glare'|t },

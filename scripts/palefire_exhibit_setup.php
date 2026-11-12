@@ -46,7 +46,7 @@
  *     2026-10-21) an alignment that lays a drawing over its proof in a
  *     wall's compare view (field_figure_align).
  *   - exhibit_gallery: several figures in a grid, with a shared caption.
- *   - exhibit_citation: a catalogue record, set like a museum label.
+ *   - exhibit_citation: a catalog record, set like a museum label.
  *   - exhibit_audio: an oral history clip with a required transcript.
  * - "Sources" on guide_text's Style (field_text_style): a bibliography whose
  *   items become link targets (#src-<surname>).
@@ -248,7 +248,7 @@ $storage('node', 'field_exhibit_action', 'link');
 
 $storage('paragraph', 'field_exhibit_lead', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_exhibit_lead_focus', 'list_string', ['allowed_values' => [
-  'center' => 'Centre',
+  'center' => 'Center',
   'top' => 'Top',
   'bottom' => 'Bottom',
   'left' => 'Left',
@@ -283,7 +283,7 @@ $storage('paragraph', 'field_figure_align', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_figure_layout', 'list_string', ['allowed_values' => [
   'side_start' => 'Beside the text, image first',
   'side_end' => 'Beside the text, image second',
-  'center' => 'Centred in the text column',
+  'center' => 'Centered in the text column',
   'wide' => 'Full width, slow parallax',
 ]]);
 $storage('paragraph', 'field_gallery_items', 'entity_reference_revisions', ['target_type' => 'paragraph'], -1);
@@ -301,7 +301,7 @@ foreach (['field_block_title', 'field_block_body', 'field_guide_blocks', 'field_
 
 $paragraph_type('exhibit_figure', 'Exhibition: Image', 'One image with its caption. Click opens it full screen.');
 $paragraph_type('exhibit_gallery', 'Exhibition: Image group', 'Several images side by side, each with its own caption, and an optional caption for the group.');
-$paragraph_type('exhibit_citation', 'Exhibition: Catalogue record', 'The book\'s bibliographic record, set like a museum label.');
+$paragraph_type('exhibit_citation', 'Exhibition: Catalog record', 'The book\'s bibliographic record, set like a museum label.');
 $paragraph_type('exhibit_audio', 'Exhibition: Audio', 'An oral history clip with its transcript.');
 $paragraph_type('exhibit_entry', 'Exhibition: Entry', 'A person or a book: heading, biography and its images, records and text.');
 $paragraph_type('exhibit_page', 'Exhibition: Gallery', 'One page of an exhibition. Visitors move between galleries with the table of contents.');
@@ -343,7 +343,7 @@ $view('paragraph', 'exhibit_gallery', [
 ]);
 
 // exhibit_citation.
-$field('paragraph', 'exhibit_citation', 'field_block_body', ['label' => 'Record', 'required' => TRUE, 'description' => 'Title, imprint, format and references, as in the catalogue.']);
+$field('paragraph', 'exhibit_citation', 'field_block_body', ['label' => 'Record', 'required' => TRUE, 'description' => 'Title, imprint, format and references, as in the catalog.']);
 $form('paragraph', 'exhibit_citation', ['field_block_body' => $wysiwyg(0, 4)]);
 $view('paragraph', 'exhibit_citation', ['field_block_body' => ['type' => 'text_default', 'label' => 'hidden', 'weight' => 0]]);
 
@@ -376,7 +376,7 @@ $field('paragraph', 'exhibit_entry', 'field_section_anchor', ['label' => 'Anchor
 $field('paragraph', 'exhibit_entry', 'field_entry_bio', ['label' => 'Biography (optional)', 'description' => 'The full biography. Long ones show their opening lines with a "Read the full biography" button.']);
 $field('paragraph', 'exhibit_entry', 'field_guide_blocks', [
   'label' => 'Content',
-  'description' => 'Images, catalogue records, audio and text, in order.',
+  'description' => 'Images, catalog records, audio and text, in order.',
   'settings' => $err($entry_blocks),
 ]);
 $form('paragraph', 'exhibit_entry', [
@@ -425,7 +425,7 @@ if ($opener_field->getDescription() !== $opener_description) {
 }
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_whole', [
   'label' => 'Show whole image (compact opening only)',
-  'description' => 'Show the lead uncropped, centred on the page, instead of as a full-width band. Good for plates on white paper and tall images.',
+  'description' => 'Show the lead uncropped, centered on the page, instead of as a full-width band. Good for plates on white paper and tall images.',
   'settings' => ['on_label' => 'Whole image', 'off_label' => 'Full-width band'],
 ]);
 $field('paragraph', 'exhibit_page', 'field_exhibit_lead_mirror', [
@@ -450,7 +450,7 @@ $field('paragraph', 'exhibit_page', 'field_exhibit_sheet', [
 ]);
 $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
   'label' => 'Content',
-  'description' => 'Entries, images, catalogue records, audio and text, in order.',
+  'description' => 'Entries, images, catalog records, audio and text, in order.',
   'settings' => $err($page_blocks),
 ]);
 $section_form['field_exhibit_opener'] = ['type' => 'options_buttons', 'weight' => 9];
