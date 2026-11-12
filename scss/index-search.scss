@@ -544,12 +544,19 @@ $pf-index-bar-shadow:
   }
 }
 
-// A 44px target (WCAG 2.5.8) without changing the line's height.
-.pf-index .pf-index__tips-open {
+// A 44px target (WCAG 2.5.8) without changing the line's height. Feedback
+// (palefire_search, while its Webform is open) goes before Search tips and
+// takes the push to the row's end.
+.pf-index .pf-index__tips-open,
+.pf-index .pf-index__feedback-open {
   align-self: center;
   min-height: 2.75rem;
   margin-block: 0;
   margin-inline-start: auto;
+}
+
+.pf-index .pf-index__feedback-open + .pf-index__tips-open {
+  margin-inline-start: 0;
 }
 
 // Its right edge on the button's, so it opens into the page, never past the
@@ -4616,6 +4623,7 @@ html.pf-index-docked {
   .pf-index__form,
   .pf-index__modes,
   .pf-index__tips-open,
+  .pf-index__feedback-open,
   .pf-index__filters,
   .pf-index__filters-open,
   .pf-index__sort,

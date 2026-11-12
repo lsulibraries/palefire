@@ -988,7 +988,8 @@
     }
   };
 
-  // Feedback answers (palefire_search's "Did you find what you needed?"). On
+  // Feedback answers (palefire_search's "Did you find what you needed?", and
+  // the Feedback link beside Search tips, search_feedback "open"). On
   // the way to the feedback Webform, adds what only the browser knows: the
   // screen size, and no results once every late section came back empty. Notes
   // the answer in the dataLayer too, without the words: pf_search has them.
@@ -999,6 +1000,24 @@
       return;
     }
     const url = new URL(link.href, window.location.href);
+    // The Feedback link beside Search tips stays through an in-place search,
+    // so its details may be an earlier search's: take the current one's from
+    // the answers under the results, without an answer. No answers there (no
+    // search yet): only the tab.
+    if (link.hasAttribute('data-pf-index-feedback-bar')) {
+      const answer = document.querySelector('[data-pf-index-feedback] [data-pf-index-feedback-answer]');
+      url.search = '';
+      if (answer) {
+        new URL(answer.getAttribute('href'), window.location.href).searchParams.forEach((value, key) => {
+          if (key !== 'found' && key !== 'screen') {
+            url.searchParams.set(key, value);
+          }
+        });
+      }
+      else {
+        url.searchParams.set('search_mode', new URL(window.location.href).searchParams.get('mode') || 'all');
+      }
+    }
     let screen = 'phone';
     if (window.matchMedia('(min-width: 62rem)').matches) {
       screen = 'desktop';
