@@ -408,6 +408,7 @@ HTML),
 <li>The Search drawer in the header now ends with Go to Discovery and Go to the Catalog, for people who already know which one they want. With words typed in the drawer, each link searches those words there.</li>
 <li>Before the link goes out to testers, the page now asks for feedback. Under the results, and under a search that finds nothing, it asks "Did you find what you needed?" with Yes, Partly and No. Each opens a short form, every question optional, that already knows the search, the tab, how many results there were and which sources showed, so a note arrives with what it is about. The question only appears once the form exists on the site.</li>
 <li>Feedback is now easier to find. A Feedback link sits beside Search tips at the top of the page, on every search and before one, so nobody has to scroll to the bottom to reach it. It opens the same form with the current search filled in and no answer chosen.</li>
+<li>The feedback form now opens by saying it is anonymous, so people feel free to be frank. That is true for everyone: the form never kept IP addresses, and now it no longer notes the account of someone signed in to the website either. Only an email address typed in the form, for a reply, says who sent it.</li>
 </ul>
 HTML),
 ]);
