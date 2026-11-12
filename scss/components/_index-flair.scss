@@ -109,44 +109,6 @@
   }
 }
 
-// --- Source bars --------------------------------------------------------------
-// Each source's share of the most any source found, along its row's hairline,
-// drawn in from the start (where @starting-style is supported).
-.pf-index__option.has-share {
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: -1px;
-    height: 2px;
-    background: var(--pf-index-highlight);
-    opacity: .75;
-    transform: scaleX(var(--pf-index-share, 0));
-    transform-origin: left;
-    pointer-events: none;
-
-    @include pf-index-motion {
-      transition: transform .9s var(--pf-index-ease);
-
-      @starting-style {
-        transform: scaleX(0);
-      }
-    }
-  }
-}
-
-[dir="rtl"] .pf-index__option.has-share::after {
-  transform-origin: right;
-}
-
-@media (forced-colors: active) {
-  .pf-index__option.has-share::after {
-    background: CanvasText;
-  }
-}
-
 // --- Pictures fading up ---------------------------------------------------------
 // From a faint tint of the text color, sharpening as they load. Covers sit in a
 // box larger than they are, so only cropped pictures get the tint.

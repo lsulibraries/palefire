@@ -5,7 +5,6 @@
  *
  * - Results arrive in turn: each section's head, then its first rows.
  * - Section counts count up to their number.
- * - The Source filter draws a bar under each source, its share of the hits.
  * - Thumbnails fade up from a tint as they load.
  * - In Special Collections, the empty field types out searches to try.
  * - Ctrl+K (⌘K on a Mac) goes to the field from anywhere on the page, and the
@@ -108,27 +107,6 @@
       }
     };
     window.requestAnimationFrame(step);
-  };
-
-  // Source bars. ---------------------------------------------------------------
-
-  // Each source's share of the most any source found, as a bar along its row's
-  // hairline. Counts that arrive late redraw them all.
-  const drawShares = (root) => {
-    const options = [...root.querySelectorAll('[data-pf-index-form] input[name="source[]"]')]
-      .map((input) => input.closest('.pf-index__option'))
-      .filter(Boolean);
-    const counts = options.map((option) => {
-      const text = option.querySelector(':scope > .pf-index__count')?.textContent || '';
-      const number = parseInt(text.replace(/\D/g, ''), 10);
-      return Number.isFinite(number) ? number : 0;
-    });
-    const most = Math.max(0, ...counts);
-    const shown = counts.filter((count) => count > 0).length > 1;
-    options.forEach((option, index) => {
-      option.classList.toggle('has-share', shown && counts[index] > 0);
-      option.style.setProperty('--pf-index-share', shown && most ? (counts[index] / most).toFixed(3) : '0');
-    });
   };
 
   // Thumbnails. ----------------------------------------------------------------
@@ -386,7 +364,6 @@
         node.querySelectorAll('.pf-index-row__thumb img').forEach(fadeUp);
       });
       pending.clear();
-      drawShares(root);
       checkEmpty(root);
     };
     new MutationObserver((records) => {
@@ -424,7 +401,6 @@
     main.querySelectorAll('[data-pf-index-section-count]').forEach(countUp);
     main.querySelectorAll('.pf-index-row__thumb img').forEach(fadeUp);
     if (root) {
-      drawShares(root);
       checkEmpty(root);
     }
   };
