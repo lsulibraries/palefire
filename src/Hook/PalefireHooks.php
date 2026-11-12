@@ -1158,11 +1158,6 @@ class PalefireHooks {
     ];
     return [
       'pages' => [
-        '/v2/special/guides/duplication' => [
-          'label' => (string) $this->t('Order copies'),
-          'icon' => 'copy',
-          'href' => 'https://specialcollections.lib.lsu.edu/logon',
-        ],
         '/v2/special/guides/parking-and-travel-hill-memorial-library' => $directions,
         // The guide's old alias, kept by palefire_guide_hill_rename.php.
         '/v2/special/guides/parking-hill-memorial-library' => $directions,
@@ -1174,6 +1169,15 @@ class PalefireHooks {
         ],
       ],
       'sections' => [
+        // How to Use Special Collections, with the old Ordering Copies
+        // guide merged in (palefire_guide_merge_duplication.php).
+        self::SPECIAL_ROOT . '/guides/special-collections' => [
+          'copy-prices' => [
+            'label' => (string) $this->t('Order copies'),
+            'icon' => 'copy',
+            'href' => 'https://specialcollections.lib.lsu.edu/logon',
+          ],
+        ],
         self::SPECIAL_ROOT => [
           // The map's room list (includes/map-key.html.twig).
           'map' => [

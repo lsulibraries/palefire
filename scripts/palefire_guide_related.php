@@ -56,16 +56,16 @@ $before = ['Get help', 'Contact a curator'];
 $desc = [
   'How to Use Special Collections' => 'Requesting materials, visiting the Reading Room, reading a finding aid and asking for help.',
   'Parking and Travel to Hill Memorial Library' => 'Where to park without an LSU permit, accessible parking, and getting to Baton Rouge.',
-  'Ordering Copies from Special Collections' => 'Prices, how to order scans, copyright and how to cite what you use.',
   'Special Collections Glossary' => 'The archive terms you meet when finding, requesting and using materials, in plain words.',
   'Donating Materials to Special Collections' => 'What Special Collections collects and accepts, and how a gift is made.',
 ];
 
-// Guide => related guides, in the order shown.
+// Guide => related guides, in the order shown. Ordering Copies from Special
+// Collections is part of How to Use Special Collections now
+// (palefire_guide_merge_duplication.php).
 $related = [
   'How to Use Special Collections' => [
     'Parking and Travel to Hill Memorial Library',
-    'Ordering Copies from Special Collections',
     'Special Collections Glossary',
     'Donating Materials to Special Collections',
   ],
@@ -73,13 +73,8 @@ $related = [
     'How to Use Special Collections',
     'Special Collections Glossary',
   ],
-  'Ordering Copies from Special Collections' => [
-    'How to Use Special Collections',
-    'Special Collections Glossary',
-  ],
   'Special Collections Glossary' => [
     'How to Use Special Collections',
-    'Ordering Copies from Special Collections',
   ],
   'Donating Materials to Special Collections' => [
     'How to Use Special Collections',

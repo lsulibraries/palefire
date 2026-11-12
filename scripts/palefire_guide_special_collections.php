@@ -18,7 +18,9 @@
  * digital copy, as a decision tree), then how a collection is described
  * (catalog record, finding aid, box, folder, item), the path through
  * Manuscripts, University Archives and Oral History, and the do's and
- * don'ts of asking Special Collections a question through Ask Us. Service
+ * don'ts of asking Special Collections a question through Ask Us. Copy
+ * prices, copyright and citing come from the former "Ordering Copies from
+ * Special Collections" guide, merged in November 2026. Service
  * details come from lib.lsu.edu/special, /findingaids, /oralhistory, /visitsc
  * (duplication) and the Special Collections Ask Us form (October 2026).
  *
@@ -230,6 +232,14 @@ HTML],
   $list(NULL, ['account', 'catalog']),
 ]);
 
+// The old "Ordering Copies from Special Collections" guide's Prices,
+// Copyright and Citing sections (palefire_guide_merge_duplication.php moved
+// them onto the live page). The price list is a two-column table with no
+// header row, which _guide.scss sets as one.
+$section('Copy prices', [
+  $text(NULL, (string) file_get_contents(__DIR__ . '/palefire_guide_copy_prices.html')),
+]);
+
 $section('What Special Collections is', [
   $text(NULL, <<<'HTML'
 <p>LSU Libraries Special Collections keeps rare books, manuscripts, university records, oral histories and other materials that exist nowhere else. It's in Hill Memorial Library on the LSU Quad (95 Fieldhouse Dr., Baton Rouge), and its Reading Room is open to the LSU community and to researchers from anywhere.</p>
@@ -317,6 +327,32 @@ HTML, ['archives', 'findingaids']],
 <p>Unprocessed interviews haven't been fully described yet. You can use them only with a curator's permission, so ask us first.</p>
 HTML, ['oralhistory', 'ldl']],
   ]),
+]);
+
+$section('Copyright and permissions', [
+  $text(NULL, <<<'HTML'
+<p>Copies of Special Collections materials, whether you make them or Special Collections does, fall under Section 107 (fair use) and Section 108 (libraries and archives) of the United States Copyright Act.</p>
+<p>LSU owns the objects in Special Collections, but not their copyright, except where it has been explicitly transferred; LSU Libraries holds no copyrights. Special Collections can't search for copyright holders or advise you on copyright law.</p>
+<p>A copy is for private study and research only; it isn't permission to use the material any other way. Whether your use is lawful, or needs the copyright holder's permission, is for you to decide, and you're responsible for it.</p>
+<ul>
+<li>LSU Libraries doesn't grant or deny permission to publish or otherwise distribute material.</li>
+<li>Clearing copyright, trademark, patent, privacy and publicity rights is your responsibility.</li>
+<li>Special Collections doesn't provide signed letters of permission or sign other permission forms.</li>
+</ul>
+HTML),
+  $text(NULL, '<p>YOU AGREE TO INDEMNIFY AND HOLD HARMLESS LOUISIANA STATE UNIVERSITY, ITS OFFICERS, EMPLOYEES AND AGENTS FROM AND AGAINST ALL SUITS, CLAIMS, ACTIONS AND EXPENSES ARISING OUT OF YOUR USE OF DUPLICATIONS PROVIDED BY SPECIAL COLLECTIONS.</p>', 'callout'),
+]);
+
+$section('Citing Special Collections', [
+  $text(NULL, '<p>Material from Special Collections must carry a citation or credit line in the form below.</p>'),
+  $text('Manuscript collections', <<<'HTML'
+<p>Name of the Manuscript Collection, Mss. [number], Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, La.</p>
+<p>Spell out "Louisiana and Lower Mississippi Valley Collections" the first time; after that, "LLMVC" will do. If your work has a list of abbreviations, you can use "LLMVC" throughout.</p>
+HTML),
+  $text('University Archives', <<<'HTML'
+<p>Name of the originating office followed by "Records", RG [record group number], Louisiana State University Archives, LSU Libraries, Baton Rouge, La.</p>
+<p>Spell out "Louisiana State University Archives" the first time; after that, "LSUA" will do. If your work has a list of abbreviations, you can use "LSUA" throughout.</p>
+HTML),
 ]);
 
 $section('Asking Special Collections a question', [

@@ -608,10 +608,11 @@ View modes: `node.guide_item` (Resource in a list) and `node.guide_card`
     Duplication Request" LibGuide pages (September 2026), cropped to the part
     that matters. Replace a file under the same name when the catalog or
     request system changes.
-- **Ordering Copies from Special Collections** (`palefire_guide_duplication.php`):
-  the Duplication tile on lib.lsu.edu/special as a guide: prices, how to order,
-  copyright and citation. Its alias defaults to `/v2/special/guides/duplication`,
-  where the landing's "Order prices" button points; publish it after review.
+- **Ordering Copies from Special Collections**: merged into How to Use Special
+  Collections in November 2026 (`palefire_guide_merge_duplication.php`). Its
+  Prices (now "Copy prices", `#copy-prices`), Copyright and Citing sections
+  are in that guide and its build script; `/v2/special/guides/duplication`
+  opens the merged guide.
 - **LDL Quartex Migration** (`palefire_guide_ldl_migration.php`): the living
   status of the Louisiana Digital Library's move to Quartex, for the migration
   team. The script is its source: change the text there, pull, and run it
@@ -1224,6 +1225,8 @@ leaves its fade alone. Reduce motion skips both.
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
+
+- **2026-11-12:** Ordering Copies from Special Collections is merged into How to Use Special Collections. New `scripts/palefire_guide_merge_duplication.php` (a dry run unless `-- apply=1`) copies the live page's Prices (renamed Copy prices, after Requesting and visiting), Copyright and permissions and Citing Special Collections (before Asking Special Collections a question) into the guide, drops the old guide from every Related guides list and unpublishes its Resource, unpublishes the old page (a new revision), and points `/v2/special/guides/duplication` at the merged guide, re-saving `/guides/special-collections` so it stays the main address. Its How to order and Get help are left out: Option 2 and Get help already say the same. The homepage Quick Start's Prices buttons go to `#copy-prices`, the dock's Order copies moves to that section, `palefire_guide_special_collections.php` builds the three sections, the price list is `palefire_guide_copy_prices.html` (matched to the live wording), and `palefire_guide_related.php` no longer lists the old guide. The old build scripts `palefire_guide_duplication.php` and `palefire_guide_duplication_prices.php` are gone (removed in b945958). Why: two guides covered the same request flow; copies belong in the one patrons already use.
 
 - **2026-11-12:** Lecture Hall: the contact beside its buttons ("Questions? …") is Andrew Loyacano again, not Meredith Contreras. `scripts/palefire_location_lecture_hall_contact.php` (new) sets the room's Contact to the Staff page with aloyacano@lsu.edu; `palefire_location_details.php` now names him too, so a re-run can't put Meredith back. Why: the Lecture Hall contact goes back to Andrew.
 

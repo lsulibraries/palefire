@@ -591,12 +591,12 @@
               <li>{{ 'Scans are 50 cents an item ($1 at high resolution), plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>
             </ul>
           {% endif %}
-          {# The full guide, the copy prices (palefire_guide_duplication.php),
+          {# The full guide, its Copy prices section,
              the building's parking and travel guide (visit.parking_url) and
              the hours, as square buttons (pf.quick_links). #}
           {{ pf.quick_links([
             guide_url ? { url: guide_url, text: 'Full guide'|t },
-            { url: '/v2/special/guides/duplication', text: 'Prices'|t },
+            { url: '/v2/special/guides/special-collections#copy-prices', text: 'Prices'|t },
             visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
           ]|filter(link => link), quick_hours) }}
         </div>
@@ -656,7 +656,7 @@
               ],
               links: [
                 guide_url ? { url: guide_url, text: 'Full guide'|t },
-                { url: '/v2/special/guides/duplication', text: 'Prices'|t },
+                { url: '/v2/special/guides/special-collections#copy-prices', text: 'Prices'|t },
               ],
             },
           } %}
