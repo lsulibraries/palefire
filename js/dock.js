@@ -633,21 +633,39 @@
       return Array.from(document.querySelectorAll('#swup a[href]')).filter((a) => place(a.href) === target);
     }
 
+    // The label is one text node and one screen-reader note, both kept: the
+    // text changes in place and the note is hidden or shown, and the icon is
+    // only replaced when it differs. Swapping nodes made the browser re-check
+    // the page-level :has() rules and restyle much of the page on every
+    // change of action (2026-11-12 trace).
+    let labelText = null;
+    let labelNote = null;
+    let iconName = null;
     function setAction(act) {
       const links = pageLinks(act);
       const words = links.length ? links[0].textContent.replace(/\s+/g, ' ').trim() : '';
-      actionLabel.textContent = words && words.length <= 24 ? words : act.label;
-      const src = icons && icons.content.querySelector(`[data-icon="${act.icon}"] svg`);
-      actionIcon.replaceChildren(...(src ? [src.cloneNode(true)] : []));
+      if (!labelText || labelText.parentNode !== actionLabel) {
+        labelText = document.createTextNode('');
+        labelNote = document.createElement('span');
+        labelNote.className = 'visually-hidden';
+        labelNote.textContent = ' ' + Drupal.t('(opens in a new tab)');
+        actionLabel.replaceChildren(labelText, labelNote);
+      }
+      const text = words && words.length <= 24 ? words : act.label;
+      if (labelText.data !== text) {
+        labelText.data = text;
+      }
+      labelNote.hidden = !act.external;
+      if (act.icon !== iconName) {
+        iconName = act.icon;
+        const src = icons && icons.content.querySelector(`[data-icon="${act.icon}"] svg`);
+        actionIcon.replaceChildren(...(src ? [src.cloneNode(true)] : []));
+      }
       action.href = act.href;
       action.classList.toggle('pf-dock__action--secondary', act.style === 'secondary');
       if (act.external) {
         action.target = '_blank';
         action.rel = 'noopener';
-        const note = document.createElement('span');
-        note.className = 'visually-hidden';
-        note.textContent = ' ' + Drupal.t('(opens in a new tab)');
-        actionLabel.append(note);
       }
       else {
         action.removeAttribute('target');
@@ -685,7 +703,12 @@
       }
       action.hidden = false;
       action.inert = false;
-      action.getBoundingClientRect();
+      // Only when the button is just appearing: lay it out once, so its
+      // entrance transition runs. Swapping one action for another needs no
+      // layout here, and forcing one made that frame restyle the page.
+      if (!had) {
+        action.getBoundingClientRect();
+      }
       dock.classList.add('has-action');
       watchDuplicates();
     }

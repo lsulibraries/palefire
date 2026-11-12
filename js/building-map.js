@@ -201,13 +201,25 @@
 
     // Keep the outline at 0.5pt at any size without non-scaling-stroke, so
     // dash lengths and getTotalLength() share the same (user) units.
+    // Only values that changed are written: each is inherited by every
+    // line, room and label in the drawing (about 770 elements), so a rewrite,
+    // even of the same value, restyled them all. draw() calls this again as
+    // the map scrolls into view, which made a 300ms stall (2026-11-12 trace,
+    // CPU slowed 4x).
+    const mapVars = {};
+    const setMapVar = (name, value) => {
+      if (mapVars[name] !== value) {
+        mapVars[name] = value;
+        root.style.setProperty(name, value);
+      }
+    };
     const fitStroke = () => {
       const m = svg.getScreenCTM();
       const scale = m ? Math.hypot(m.a, m.b) : 0;
       if (scale > 0) {
-        root.style.setProperty('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
+        setMapVar('--pf-map-line', String((SETTINGS.strokeWidthPt * 96 / 72) / scale));
         // Map units per screen px: keeps the room numbers one size.
-        root.style.setProperty('--pf-map-px', String(1 / scale));
+        setMapVar('--pf-map-px', String(1 / scale));
         // Legend swatches draw the map's hatch at the map's current size,
         // snapped to whole device pixels: with a fractional period every line
         // lands on a different sub-pixel offset and is antialiased
@@ -217,9 +229,9 @@
         const period = Math.max(4, Math.round(SETTINGS.hatchPeriod * scale * dpr));
         const line = Math.max(1, Math.round(period * 0.25));
         const offset = Math.round((period - line) / 2);
-        root.style.setProperty('--pf-map-hatch-period', (period / dpr) + 'px');
-        root.style.setProperty('--pf-map-hatch-line', (line / dpr) + 'px');
-        root.style.setProperty('--pf-map-hatch-offset', (offset / dpr) + 'px');
+        setMapVar('--pf-map-hatch-period', (period / dpr) + 'px');
+        setMapVar('--pf-map-hatch-line', (line / dpr) + 'px');
+        setMapVar('--pf-map-hatch-offset', (offset / dpr) + 'px');
       }
     };
     if ('ResizeObserver' in window) new ResizeObserver(fitStroke).observe(svg);
