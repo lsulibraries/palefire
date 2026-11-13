@@ -1656,6 +1656,37 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   min-width: 0;
 }
 
+// A roster: two or more text-only entries in a row (people with a
+// biography and no images, such as a program's fellows) sit side by side,
+// two columns from md and three from xl, each row on one hairline. The
+// gallery body opens to the full column like a reading list's; its other
+// blocks keep the guide's measure (--pf-gallery-measure) and the full row.
+// Only from md: on a phone they stay one under another. Not on a wall,
+// whose text-only entries head its sub-galleries.
+@include media-breakpoint-up(md) {
+  .pf-gallery__body:has(> .pf-exhibit-entry--text + .pf-exhibit-entry--text):not(:has(> .pf-exhibit-wall)) {
+    --pf-gallery-measure: 52rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(2rem, 4vw, 4rem);
+    align-items: start;
+    max-width: none;
+
+    > * {
+      grid-column: 1 / -1;
+    }
+
+    > .pf-exhibit-entry--text {
+      grid-column: auto;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .pf-gallery__body:has(> .pf-exhibit-entry--text + .pf-exhibit-entry--text):not(:has(> .pf-exhibit-wall)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 // Reading text (text blocks, biographies, transcripts; also in the object
 // view): larger and looser than guides and landing pages, for long
 // reading (17px at 100%, about 75 characters a line at the full measure).

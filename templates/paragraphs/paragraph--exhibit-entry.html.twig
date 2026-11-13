@@ -9,11 +9,15 @@
  *   of a long one with a "Read the full biography" button; without the
  *   script it is shown in full.
  * - Blocks: images, catalogue records, audio and text (field_guide_blocks).
+ *   An entry without any is text only (pf-exhibit-entry--text): two or more
+ *   in a row sit side by side in columns from md (_exhibition.scss).
  */
 #}
+{% set blocks = content.field_guide_blocks|render|trim %}
 {%
   set classes = [
     'pf-exhibit-entry',
+    not blocks ? 'pf-exhibit-entry--text',
     not paragraph.isPublished() ? 'paragraph--unpublished',
   ]
 %}
@@ -27,7 +31,7 @@
       </div>
     </div>
   {% endif %}
-  {% if content.field_guide_blocks|render|trim %}
+  {% if blocks %}
     <div class="pf-exhibit-entry__body">
       {{ content.field_guide_blocks }}
     </div>

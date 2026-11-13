@@ -150,6 +150,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Text (Plain, Callout, Sources) | `paragraph--guide-text` | ✔ |
 | Catalog record | `paragraph--exhibit-citation` | ✔ |
 | Entry with biography | `paragraph--exhibit-entry` | ✔ |
+| Roster (two or more text-only entries in a row, `.pf-exhibit-entry--text`: 2 columns from md, 3 from xl, not on a wall) | `paragraph--exhibit-entry`, `_exhibition.scss` | ✔ Ruder and Hofmann |
 | Figure | `paragraph--exhibit-figure` | ✔ with `image=` |
 | Image group / readings | `paragraph--exhibit-gallery`, `--exhibit-reading` | ✔ readings |
 | Accordion | `paragraph--guide-accordion` | ✔ |
