@@ -126,7 +126,25 @@
                 </tbody>
               </table>
             </div>
-            <p class="pf-rdash__caption">{{ 'Darker cells mark each publisher’s busiest years. A publisher’s count includes its imprints.'|t }}</p>
+            <p class="pf-rdash__caption">{{ 'Stronger shading marks each publisher’s busiest years. A publisher’s count includes its imprints.'|t }}</p>
+          </section>
+        {% endif %}
+
+        {% if data.apc.rows %}
+          <section class="pf-rdash__panel pf-rdash__panel--apc" aria-labelledby="{{ uid }}-apc">
+            <h3 class="pf-rdash__title" id="{{ uid }}-apc">{{ 'Estimated publishing fees (APCs)'|t }}</h3>
+            <p class="pf-rdash__lede">{{ 'About @total since @from, on @works of the @of works whose corresponding author is at LSU.'|t({ '@total': data.apc.total, '@from': data.from, '@works': data.apc.works, '@of': data.apc.of }) }}</p>
+            <ol class="pf-rdash__columns pf-rdash__columns--money">
+              {% for row in data.apc.rows %}
+                <li class="pf-rdash__column{{ row.current ? ' is-current' }}" style="--pf-rdash-share: {{ row.width }}%">
+                  <span class="visually-hidden">{{ row.text }}</span>
+                  <span class="pf-rdash__column-value" aria-hidden="true">{{ row.money }}</span>
+                  <span class="pf-rdash__column-bar" aria-hidden="true"></span>
+                  <span class="pf-rdash__column-year" aria-hidden="true">{{ row.year }}{% if row.current %}<span class="pf-rdash__column-note">{{ 'so far'|t }}</span>{% endif %}</span>
+                </li>
+              {% endfor %}
+            </ol>
+            <p class="pf-rdash__caption">{{ 'Article processing charges are fees some journals ask to publish a work open access. Each is the fee reported to OpenAPC or, failing that, the journal’s list price. Read-and-publish agreements, waivers and discounts aren’t counted, and who paid (a grant, a department, the Libraries) isn’t known, so these are estimates, not spending.'|t }}</p>
           </section>
         {% endif %}
 

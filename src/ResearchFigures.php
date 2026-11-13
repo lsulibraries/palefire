@@ -13,7 +13,7 @@ use Drupal\Core\Cache\Cache;
  * presents Colton Ray's OpenAlex dashboard (lsuopenalex.lsusites.org). Its
  * figures are the same kind of counts, drawn by Palefire: each night a drush
  * script asks the OpenAlex API for grouped counts and a few short lists
- * (about 50 requests, $0.0001 each, well inside the free daily $0.10) and
+ * (about 65 requests, $0.0001 each, well inside the free daily $0.10) and
  * keeps them in Drupal's State. A guide text
  * paragraph that is only "[research:<part>]"
  * (palefire_preprocess_paragraph__guide_text()) draws one part
@@ -41,7 +41,7 @@ final class ResearchFigures {
   /**
    * The parts a "[research:<part>]" marker can draw.
    */
-  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'authors', 'cited', 'dashboard'];
+  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'authors', 'apc', 'cited', 'dashboard'];
 
   private const API = 'https://api.openalex.org/';
 
@@ -222,7 +222,69 @@ final class ResearchFigures {
       'publisher_years' => $publisher_years,
       'authors' => self::authors($get, $works),
       'recent' => self::recent($get, $works),
+      'apc' => self::apc($get, $works, array_keys($years)),
     ];
+  }
+
+  /**
+   * Estimated publishing fees (APCs) each year, for works whose
+   * corresponding author is at LSU: the institution that usually pays.
+   *
+   * Each work's apc_paid is the fee reported to OpenAPC, or else the
+   * journal's list price. OpenAlex has no sum, so a year's works are grouped
+   * by fee and each fee times its works is added up. A grouped count stops at
+   * 200 fees; a range that hits that is split in two until every work is
+   * counted. A year that still does not add up is left out (NULL).
+   *
+   * @return array
+   *   [year => ['usd' => total, 'works' => works with a fee, 'of' => works
+   *   with an LSU corresponding author, or NULL]].
+   */
+  private static function apc(callable $get, string $works, array $years): array {
+    $scope = $works . ',corresponding_institution_ids:' . self::INSTITUTION;
+    $body = $get('works', ['filter' => $scope, 'group_by' => 'publication_year']);
+    $of = [];
+    foreach ($body['group_by'] ?? [] as $row) {
+      $of[(int) $row['key']] = (int) $row['count'];
+    }
+
+    // One fee range: [sum, works] when complete, NULL when it can't be.
+    $range = function (int $year, int $low, int $high, int $depth) use (&$range, $get, $scope): ?array {
+      $body = $get('works', [
+        'filter' => "$scope,publication_year:$year,apc_paid.value_usd:>" . ($low - 1) . ",apc_paid.value_usd:<" . ($high + 1),
+        'group_by' => 'apc_paid.value_usd',
+        'per_page' => 200,
+      ]);
+      $sum = $counted = 0;
+      foreach ($body['group_by'] ?? [] as $row) {
+        if (is_numeric($row['key'] ?? NULL)) {
+          $sum += (int) round((float) $row['key']) * (int) $row['count'];
+          $counted += (int) $row['count'];
+        }
+      }
+      if ($counted === (int) ($body['meta']['count'] ?? -1)) {
+        return [$sum, $counted];
+      }
+      if ($depth >= 4 || $high - $low < 2) {
+        return NULL;
+      }
+      $middle = intdiv($low + $high, 2);
+      $lower = $range($year, $low, $middle, $depth + 1);
+      $upper = $lower ? $range($year, $middle + 1, $high, $depth + 1) : NULL;
+      return $lower && $upper ? [$lower[0] + $upper[0], $lower[1] + $upper[1]] : NULL;
+    };
+
+    $out = [];
+    foreach ($years as $year) {
+      // Fees run to about $13,000; split at $2,000 from the start, as most
+      // fall below it.
+      $low = $range((int) $year, 1, 1999, 1);
+      $high = $low ? $range((int) $year, 2000, 100000, 1) : NULL;
+      $out[(int) $year] = $low && $high
+        ? ['usd' => $low[0] + $high[0], 'works' => $low[1] + $high[1], 'of' => $of[(int) $year] ?? 0]
+        : NULL;
+    }
+    return $out;
   }
 
   /**
@@ -400,6 +462,30 @@ final class ResearchFigures {
           $view[$each] = self::view($each);
         }
         $view += self::trends($data, $year);
+        break;
+
+      case 'apc':
+        $rows = $marks = [];
+        $usd = $fee_works = $of = 0;
+        foreach ($data['apc'] ?? [] as $y => $row) {
+          if (!$row) {
+            continue;
+          }
+          $rows[] = [(string) $y, $row['usd']];
+          $marks[] = [
+            'year' => (int) $y,
+            'current' => $y == $year,
+            'money' => self::money($row['usd']),
+            'text' => (string) t('@year: about @money in fees on @works of @of works', ['@year' => $y, '@money' => self::money($row['usd']), '@works' => number_format($row['works']), '@of' => number_format($row['of'])]),
+          ];
+          $usd += $row['usd'];
+          $fee_works += $row['works'];
+          $of += $row['of'];
+        }
+        $view['rows'] = array_map(fn ($row, $mark) => $row + $mark, self::bars($rows), $marks);
+        $view['total'] = self::money($usd);
+        $view['works'] = number_format($fee_works);
+        $view['of'] = number_format($of);
         break;
 
       case 'authors':
@@ -584,6 +670,73 @@ final class ResearchFigures {
     return count($authors) === 2
       ? (string) t('@first and @second', ['@first' => $authors[0], '@second' => $authors[1]])
       : $authors[0];
+  }
+
+  /**
+   * Dollars at a glance: $1.6M, $850k, $9,200.
+   */
+  private static function money(int $usd): string {
+    if ($usd >= 1000000) {
+      return '
+  private static function short(int $n): string {
+    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
+  }
+
+  /**
+   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
+   * sources a doubled name ("Physical review. D/Physical review. D.").
+   */
+  private static function plain(string $text): string {
+    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+    $halves = explode('/', $text);
+    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
+      $text = rtrim($halves[0]);
+    }
+    return $text;
+  }
+
+}
+ . number_format($usd / 1000000, 1) . 'M';
+    }
+    return $usd >= 10000 ? '
+  private static function short(int $n): string {
+    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
+  }
+
+  /**
+   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
+   * sources a doubled name ("Physical review. D/Physical review. D.").
+   */
+  private static function plain(string $text): string {
+    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+    $halves = explode('/', $text);
+    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
+      $text = rtrim($halves[0]);
+    }
+    return $text;
+  }
+
+}
+ . round($usd / 1000) . 'k' : '
+  private static function short(int $n): string {
+    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
+  }
+
+  /**
+   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
+   * sources a doubled name ("Physical review. D/Physical review. D.").
+   */
+  private static function plain(string $text): string {
+    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+    $halves = explode('/', $text);
+    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
+      $text = rtrim($halves[0]);
+    }
+    return $text;
+  }
+
+}
+ . number_format($usd);
   }
 
   /**

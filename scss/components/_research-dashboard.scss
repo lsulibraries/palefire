@@ -42,8 +42,18 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 // Figures ---------------------------------------------------------------------
 .pf-rdash__kpis {
+  // Six figures: two, three or six across, so a row is never left with one.
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @container pf-rdash (min-width: 40rem) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @container pf-rdash (min-width: 96rem) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
   gap: var(--pf-rdash-gap);
   margin: 0;
 }
@@ -75,6 +85,18 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   color: var(--bs-emphasis-color);
 }
 
+// Two across on a phone: a little less padding and type, so "443,241"
+// fits at 320px.
+@container pf-rdash (max-width: 39.99rem) {
+  .pf-rdash__kpi {
+    padding: 1rem 1rem 1.125rem;
+  }
+
+  .pf-rdash__kpi-value {
+    font-size: 1.75rem;
+  }
+}
+
 // Panels ----------------------------------------------------------------------
 .pf-rdash__grid {
   display: grid;
@@ -104,6 +126,7 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   .pf-rdash__panel--years,
   .pf-rdash__panel--publishertrend,
+  .pf-rdash__panel--apc,
   .pf-rdash__panel--recent,
   .pf-rdash__panel--cited {
     grid-column: 1 / -1;
@@ -128,9 +151,26 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
     grid-column: span 6;
   }
 
+  .pf-rdash__panel--apc,
   .pf-rdash__panel--recent,
   .pf-rdash__panel--cited {
     grid-column: 1 / -1;
+  }
+
+  // Fees: the title, lede and caption in a third, the columns in the rest.
+  .pf-rdash__panel--apc {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: clamp(1.5rem, 3cqi, 3rem);
+
+    > :not(.pf-rdash__columns) {
+      grid-column: 1;
+    }
+
+    > .pf-rdash__columns {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      align-self: end;
+    }
   }
 }
 
@@ -349,7 +389,25 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   opacity: 0.55;
 }
 
+.pf-rdash__lede {
+  max-width: var(--pf-guide-prose, 42rem);
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--bs-body-color);
+}
+
+// Fee columns: shorter than the works columns, under the lede.
+.pf-rdash__columns--money {
+  min-height: 0;
+
+  .pf-rdash__column {
+    grid-template-rows: auto 7rem auto;
+  }
+}
+
 .pf-rdash__caption {
+  max-width: var(--pf-guide-prose, 42rem);
   margin: 0;
   font-size: 0.75rem;
   line-height: 1.45;
@@ -370,21 +428,24 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 .pf-rdash__table {
   width: 100%;
-  min-width: 30rem;
+  min-width: 25rem;
   border-collapse: collapse;
   font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
 
   th,
   td {
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.3125rem;
     border-bottom: 1px solid var(--pf-rdash-line);
     text-align: end;
     white-space: nowrap;
   }
 
+  // The mono label voice, tracked less than the titles: seven year
+  // columns at 0.12em made the table wider than a half-width panel.
   thead th {
     @include pf-rdash-mono;
+    letter-spacing: 0.04em;
     vertical-align: bottom;
     color: var(--pf-guide-muted);
   }
@@ -407,7 +468,7 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   .pf-rdash__column-note {
     display: block;
     font-weight: 400;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     text-transform: none;
   }
 }

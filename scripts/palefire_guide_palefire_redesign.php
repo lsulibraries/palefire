@@ -435,6 +435,7 @@ HTML),
 <li>LSU Research, by the Numbers: the most cited works are now cards set like a journal offprint, with the journal, title, first authors and year, the citation count and the DOI.</li>
 <li>LSU Research, by the Numbers now carries what the old dashboard showed: total and average citations, open access and the top publishers year by year, the most published LSU authors, the latest works, and the 20 most cited.</li>
 <li>On the same page, pointing at or tapping a band in the open access bars shows its count, and highlights that kind of access everywhere on the page, so nobody has to match shades of color. The most cited works also say whether each is open access.</li>
+<li>LSU Research, by the Numbers also estimates the open access publishing fees (APCs) on works led by LSU authors each year, about $9.8 million since 2020, with a note on what the estimate can’t know. The publishers table no longer needs a scroll bar.</li>
 <li>Faculty Fellowship page brought up to date from the program's own files: the five 2026 fellows, earlier cohorts with the classes they have taught, and the four-day orientation.</li>
 <li>Exhibitions: people with a biography and no images, such as the fellows and grant recipients, now sit side by side in two or three columns on wider screens.</li>
 </ul>
