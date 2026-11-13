@@ -672,6 +672,18 @@
   }
 }
 
+// On a review page, under the draft and its form: a hairline, then the
+// heading, set as the guide's h3.
+.pf-nla--headed {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  padding-top: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-nla__heading {
+  margin: 0 0 1rem;
+}
+
 .pf-nla__year {
   display: grid;
   gap: .75rem;
@@ -769,7 +781,9 @@
 // keep to the sections' column. From 80rem, where the sections keep about
 // 600px beside the 300px contents sidebar; narrower, the head stays above.
 @media (min-width: 80rem) {
-  .pf-main:has(.pf-nla) {
+  // Not on a review page, where the archive follows the draft and the email
+  // and its form need the full width.
+  .pf-main:has(.pf-nla):not(:has(.pf-nlr)) {
     display: grid;
     grid-template-columns: minmax(18rem, 1fr) minmax(0, 2.75fr);
     align-items: start;

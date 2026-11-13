@@ -2514,7 +2514,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   // keeps these pages out of it.
   if ($newsletter) {
     $variables['newsletter'] = NewsletterReview::view(...$newsletter);
+    // Below the draft and its form, the past issues to hold it against: the
+    // newsletters page's own list, so there is one list to keep.
+    $past = NewsletterReview::pastIssues();
+    if ($past['issues'] && empty($newsletter_parts['archive'])) {
+      $variables['newsletter_archive'] = NewsletterReview::archive($past['issues']) + ['heading' => t('Past issues')];
+    }
     CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags($past['tags'])
       ->addCacheTags(NewsletterReview::cacheTags())
       ->setCacheMaxAge(NewsletterReview::MAX_AGE)
       ->applyTo($variables);

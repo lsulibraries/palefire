@@ -85,6 +85,11 @@ final class NewsletterReview {
   public const ARCHIVE_MARKER = '#<p>\s*\[newsletter-archive\]\s*</p>#i';
 
   /**
+   * The page whose "[newsletter-archive]" block lists the past issues.
+   */
+  public const ARCHIVE_PAGE = '/v2/newsletters';
+
+  /**
    * "[newsletter-compare]": the block's first two issues, before and after.
    */
   public const COMPARE_MARKER = '#<p>\s*\[newsletter-compare\]\s*</p>#i';
@@ -196,6 +201,40 @@ final class NewsletterReview {
       $items[] = $item;
     }
     return ['items' => $items, 'years' => $years];
+  }
+
+  /**
+   * The past issues as the newsletters page lists them, for a review page.
+   *
+   * One list, kept on ARCHIVE_PAGE: its first text block with the archive
+   * marker (sections, then their blocks). Empty when the page or the block
+   * isn't there.
+   *
+   * @return array{issues: array, tags: string[]}
+   *   The issues, as issues() reads them, and the page's cache tags, so an
+   *   edit to the list redraws the review page.
+   */
+  public static function pastIssues(): array {
+    $empty = ['issues' => [], 'tags' => []];
+    $repository = \Drupal::service('path_alias.repository');
+    $alias = $repository->lookupByAlias(self::ARCHIVE_PAGE, \Drupal::languageManager()->getDefaultLanguage()->getId());
+    if (!$alias || !preg_match('#^/node/(\d+)$#', $alias['path'], $m)) {
+      return $empty;
+    }
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($m[1]);
+    if (!$node || !$node->hasField('field_scroll_section')) {
+      return $empty;
+    }
+    foreach ($node->get('field_scroll_section')->referencedEntities() as $section) {
+      $blocks = $section->hasField('field_guide_blocks') ? $section->get('field_guide_blocks')->referencedEntities() : [];
+      foreach ($blocks as $block) {
+        $text = $block->hasField('field_block_body') ? (string) $block->get('field_block_body')->value : '';
+        if (preg_match(self::ARCHIVE_MARKER, $text)) {
+          return ['issues' => self::issues($text)[0], 'tags' => $node->getCacheTags()];
+        }
+      }
+    }
+    return ['issues' => [], 'tags' => $node->getCacheTags()];
   }
 
   /**

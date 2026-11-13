@@ -12,6 +12,9 @@
  *   (The Awards Issue), sent (July 7, 2026) and sent_iso (2026-07-07) or
  *   NULL, number (counting up from the oldest), preview, and front (the
  *   theme's capture of the email's top, 480 by 640) or NULL.
+ * - heading: optional, a heading over the grid (a review page's "Past
+ *   issues", NewsletterReview::pastIssues()); the years then sit a level
+ *   under it.
  *
  * Each issue is a sheet, drawn as the Written at Hill books are
  * (.pf-tiles--covers, .pf-book: the turn, lift and the others dimming), set
@@ -27,10 +30,15 @@
 #}
 {{ attach_library('palefire/newsletter-review') }}
 {{ attach_library('palefire/tile-reveal') }}
+{% set heading = heading|default('') %}
+{% set year_tag = heading ? 'h4' : 'h3' %}
 {% if years %}
-  <div class="pf-nla pf-tiles pf-tiles--covers pf-tiles--sheets" data-pf-nla data-toc-skip>
+  <div class="pf-nla pf-tiles pf-tiles--covers pf-tiles--sheets{{ heading ? ' pf-nla--headed' }}" data-pf-nla data-toc-skip>
+    {% if heading %}
+      <h3 class="pf-nla__heading" id="{{ uid }}-heading">{{ heading }}</h3>
+    {% endif %}
     {% if years|length > 1 %}
-      <nav class="pf-nla__years" aria-label="{{ 'Issues by year'|t }}">
+      <nav class="pf-nla__years" aria-label="{{ heading ? 'Past issues by year'|t : 'Issues by year'|t }}">
         <ul role="list">
           {% for group in years %}
             <li><a href="#{{ uid }}-{{ group.year ?: 'undated' }}">{{ group.year ?: 'Undated'|t }}<span class="visually-hidden">, {{ '@count issues'|t({ '@count': group.items|length }) }}</span></a></li>
@@ -40,7 +48,7 @@
     {% endif %}
     {% for group in years %}
       <section class="pf-nla__year" aria-labelledby="{{ uid }}-{{ group.year ?: 'undated' }}">
-        <h3 class="pf-nla__year-label" id="{{ uid }}-{{ group.year ?: 'undated' }}" tabindex="-1">{{ group.year ?: 'Undated'|t }}</h3>
+        <{{ year_tag }} class="pf-nla__year-label" id="{{ uid }}-{{ group.year ?: 'undated' }}" tabindex="-1">{{ group.year ?: 'Undated'|t }}</{{ year_tag }}>
         <ol class="pf-tiles__list" role="list">
           {% for item in group.items %}
             <li class="pf-tiles__item">

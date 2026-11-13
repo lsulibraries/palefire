@@ -458,7 +458,10 @@
       once('pf-nl-years', '.pf-nla__years', context).forEach((years) => {
         const main = years.closest('.pf-main');
         const head = main && main.querySelector(':scope > .pf-modular__head');
-        if (!head) {
+        // A review page keeps its intro above (no intro column there: the
+        // email and its form need the width), so the years stay with the
+        // issues.
+        if (!head || main.querySelector('[data-pf-nlr]')) {
           return;
         }
         const home = document.createComment('pf-nla-years');
