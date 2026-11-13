@@ -303,80 +303,148 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   color: var(--bs-body-color);
 }
 
-// Most cited ------------------------------------------------------------------
-.pf-rdash__cited {
+// Most cited: offprints ------------------------------------------------------
+// Each work set like a journal's title page, as the exhibitions' reading
+// list sets an article (_exhibition.scss, .pf-exhibit-reading--article), in
+// a sober register: paper, a mono masthead over a rule, the title in the
+// sans, then the citations as the figure. One across, two from a 40rem
+// dashboard, five from 64rem; rows share their lines (subgrid), so every
+// title, byline and figure starts at the same height across a row.
+.pf-rdash__offprints {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--pf-rdash-gap);
   margin: 0;
   padding: 0;
   list-style: none;
-  counter-reset: pf-rdash-rank;
+
+  @container pf-rdash (min-width: 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
   @container pf-rdash (min-width: 64rem) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 2.5rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
-.pf-rdash__work {
+.pf-rdash__offprint {
+  position: relative;
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
   gap: 0.75rem;
-  align-items: baseline;
-  padding: 0.875rem 0;
-  border-top: 1px solid var(--pf-rdash-line);
-  counter-increment: pf-rdash-rank;
+  padding: 1.125rem 1.125rem 1rem;
+  background: color-mix(in srgb, var(--bs-emphasis-color) 2.5%, var(--bs-body-bg));
+  border: 1px solid var(--pf-rdash-line);
 
-  &::before {
-    @include pf-rdash-mono;
-    content: counter(pf-rdash-rank, decimal-leading-zero);
-    color: var(--pf-guide-muted);
+  // Without subgrid each card stacks its own lines, the figure at its foot.
+  @supports not (grid-template-rows: subgrid) {
+    grid-row: auto;
+    grid-template-rows: auto auto 1fr auto auto;
+  }
+
+  > * {
+    margin: 0;
   }
 }
 
-.pf-rdash__work-text {
+.pf-rdash__offprint-masthead {
   display: grid;
-  gap: 0.25rem;
-  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.625rem;
+  align-items: baseline;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid var(--pf-rdash-line);
 }
 
-.pf-rdash__work-link {
-  font-size: 0.9375rem;
-  line-height: 1.35;
+.pf-rdash__offprint-rank,
+.pf-rdash__offprint-journal {
+  @include pf-rdash-mono;
+}
+
+.pf-rdash__offprint-rank {
   color: var(--bs-body-color);
-  text-decoration: underline;
-  text-decoration-color: var(--pf-rdash-line);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+}
+
+.pf-rdash__offprint-journal {
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--pf-guide-muted);
   overflow-wrap: anywhere;
-  transition: text-decoration-color 0.25s ease;
+}
+
+.pf-rdash__offprint-title {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+// The title's link covers the card; its underline marks it on hover and focus.
+.pf-rdash__offprint-link {
+  color: var(--bs-emphasis-color);
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
 
   &:hover,
   &:focus-visible {
-    text-decoration-color: currentColor;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::after {
+      outline: 2px solid var(--bs-focus-ring-color, currentColor);
+      outline-offset: 2px;
+    }
   }
 }
 
-.pf-rdash__work-meta {
+.pf-rdash__offprint-byline {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--pf-guide-muted);
+}
+
+// The figure, over a rule as long as its share of the most cited work.
+.pf-rdash__offprint-figure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  align-items: baseline;
+  align-self: end;
+  padding-top: 0.75rem;
+  background: linear-gradient(var(--pf-rdash-fill), var(--pf-rdash-fill)) top left / var(--pf-rdash-share) 2px no-repeat,
+    linear-gradient(var(--pf-rdash-line), var(--pf-rdash-line)) top left / 100% 1px no-repeat;
+}
+
+.pf-rdash__offprint-count {
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--bs-emphasis-color);
+}
+
+.pf-rdash__offprint-unit {
   font-size: 0.8125rem;
   color: var(--pf-guide-muted);
 }
 
-.pf-rdash__work-count {
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--bs-body-color);
-  white-space: nowrap;
-}
-
-// Under 30rem the count drops under the title, so titles keep their room.
-@container pf-rdash (max-width: 30rem) {
-  .pf-rdash__work {
-    grid-template-columns: 2rem minmax(0, 1fr);
-  }
-
-  .pf-rdash__work-count {
-    grid-column: 2;
-  }
+.pf-rdash__offprint-doi {
+  font: 400 0.6875rem / 1.4 var(--pf-guide-mono);
+  color: var(--pf-guide-muted);
+  overflow-wrap: anywhere;
 }
 
 .pf-rdash__note {

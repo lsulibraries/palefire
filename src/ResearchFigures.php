@@ -93,7 +93,8 @@ final class ResearchFigures {
       }
       $response = \Drupal::httpClient()->get(self::API . $path, [
         'query' => $query,
-        'timeout' => 30,
+        // A long author list is a few MB.
+        'timeout' => 60,
         'headers' => ['Accept' => 'application/json'],
       ]);
       $body = json_decode((string) $response->getBody(), TRUE, 64, JSON_THROW_ON_ERROR);
@@ -135,12 +136,36 @@ final class ResearchFigures {
       'select' => 'id,doi,display_name,publication_year,cited_by_count,primary_location',
     ]);
     foreach ($top['results'] ?? [] as $work) {
+      // The byline: the first two authors and how many there are, asked for
+      // one work at a time, as a collaboration's list runs to thousands of
+      // names (a few MB). Only those three values are kept. A failure leaves
+      // the work without a byline rather than losing the pull.
+      $authors = [];
+      $author_count = 0;
+      try {
+        $one = $get('works/' . basename((string) ($work['id'] ?? '')), ['select' => 'authorships']);
+        $author_count = count($one['authorships'] ?? []);
+        foreach (array_slice($one['authorships'] ?? [], 0, 2) as $authorship) {
+          $name = self::plain((string) ($authorship['author']['display_name'] ?? ''));
+          if ($name !== '') {
+            $authors[] = $name;
+          }
+        }
+        unset($one);
+      }
+      catch (\Throwable $e) {
+        $authors = [];
+      }
+      $doi = (string) ($work['doi'] ?? '');
       $cited[] = [
         'title' => self::plain((string) ($work['display_name'] ?? '')),
-        'url' => (string) (($work['doi'] ?? '') ?: ($work['id'] ?? '')),
+        'url' => $doi ?: (string) ($work['id'] ?? ''),
+        'doi' => $doi ? preg_replace('#^https?://(dx\.)?doi\.org/#i', '', $doi) : '',
         'year' => (int) ($work['publication_year'] ?? 0),
         'venue' => self::plain((string) ($work['primary_location']['source']['display_name'] ?? '')),
         'citations' => (int) ($work['cited_by_count'] ?? 0),
+        'authors' => $authors,
+        'author_count' => $author_count,
       ];
     }
 
@@ -246,7 +271,12 @@ final class ResearchFigures {
         break;
 
       case 'cited':
-        $view['works'] = array_map(fn (array $work) => $work + ['count' => number_format($work['citations'])], $data['cited']);
+        $top = max(array_merge([1], array_column($data['cited'], 'citations')));
+        $view['works'] = array_map(fn (array $work) => $work + [
+          'count' => number_format($work['citations']),
+          'share' => round($work['citations'] / $top * 100, 1),
+          'byline' => self::byline($work['authors'] ?? [], (int) ($work['author_count'] ?? 0)),
+        ], $data['cited']);
         break;
     }
     return $view;
@@ -306,6 +336,22 @@ final class ResearchFigures {
       ];
     }
     return $out;
+  }
+
+  /**
+   * "Smith", "Smith and Jones", or "Smith et al." (three or more), as in a
+   * citation. '' when the pull had no authors for the work.
+   */
+  private static function byline(array $authors, int $count): string {
+    if (!$authors) {
+      return '';
+    }
+    if ($count > 2) {
+      return (string) t('@first et al.', ['@first' => $authors[0]]);
+    }
+    return count($authors) === 2
+      ? (string) t('@first and @second', ['@first' => $authors[0], '@second' => $authors[1]])
+      : $authors[0];
   }
 
   /**
