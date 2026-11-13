@@ -140,13 +140,14 @@ HTML),
 <li><a href="/node/133022">Combined Search Project</a>: the new search page, with its own status board and Day by day log.</li>
 <li><a href="/v2/special/guides/ldl-quartex-migration">LDL Quartex Migration</a>: the Louisiana Digital Library's move to Quartex, which runs beside the redesign.</li>
 <li><a href="/v2/special/internal/styleguide">Palefire style guide</a>: the palette, type, components and the rules behind them, for editors and developers.</li>
+<li><a href="/v2/internal/analytics">Website Analytics</a>: the last 28 days of visits, searches and Combined Search feedback, for staff only.</li>
 </ul>
 HTML),
 ]);
 
 $section('Status at a glance', [
   $text(NULL, <<<'HTML'
-<p><strong>Status as of Thu 12 Nov 2026:</strong> the Special Collections section at /v2/special is built and live, with its landing, guides, exhibitions, location pages, Ask us form and mobile dock. Combined Search is running at /v2/search and the header's Search drawer uses it, while the site's other search forms still go to the old page. The staff directory is at /v2/staff. The style guide records the palette and components and grows with them. Analytics now label every page by its section and kind, so reports carry over when /v2 is dropped. Still ahead: pointing the remaining searches at Combined Search, the desktop booking dock, the Alma connection, and the move from /v2/special to /special.</p>
+<p><strong>Status as of Thu 12 Nov 2026:</strong> the Special Collections section at /v2/special is built and live, with its landing, guides, exhibitions, location pages, Ask us form and mobile dock. Combined Search is running at /v2/search and the header's Search drawer uses it, while the site's other search forms still go to the old page. The staff directory is at /v2/staff. The style guide records the palette and components and grows with them. Analytics label every page by its section and kind, so reports carry over when /v2 is dropped, and a staff-only Website Analytics page shows the figures. Combined Search asks visitors whether they found what they needed, ahead of sharing it for testing. Still ahead: pointing the remaining searches at Combined Search, the desktop booking dock, the Alma connection, and the move from /v2/special to /special.</p>
 HTML, 'callout'),
   $stats(NULL, [
     ['30', 'Days since the first Modular page, Tue 13 Oct'],
@@ -166,7 +167,7 @@ $section('Workstreams', [
     ['done', 'Staff directory', '/v2/staff: the directory, profiles, and a Who to ask section on Special Collections pages.'],
     ['running', 'Guides', 'Guide pages in the LibGuides model, with flow charts, status boards, figures, code, field crosswalks and glossary terms. How to Use Special Collections (now holding copy prices), Research Help, Louisiana Newspapers, Parking and Travel, Donating Materials, the Glossary and the MODS crosswalk are built, plus the project guides above.'],
     ['running', 'Style guide', 'A living style guide at <a href="/v2/special/internal/styleguide">/v2/special/internal/styleguide</a>, with plates drawn from the theme\'s own tokens and a written source of rules. It is updated with every new component or token.'],
-    ['running', 'Analytics', 'GA4 through Google Tag Manager, with every page labeled by section and kind rather than by address. Live since Thu 12 Nov; key event, annotation and reports to come. See Analytics below.'],
+    ['running', 'Analytics', 'GA4 through Google Tag Manager, with every page labeled by section and kind rather than by address. Live since Thu 12 Nov, with a staff-only Website Analytics page. Key event and annotation to come. See Analytics below.'],
     ['todo', 'Move from /v2/special to /special', 'Drop /v2 from the addresses once the section is ready to replace the old pages, with redirects so old links and bookmarks still work.'],
     ['todo', 'Alma', 'The Libraries are moving from Discovery and the current catalog to Alma. Combined Search is ready for it, with vendor names kept out of labels and each source swappable. Waiting on the sandbox.'],
   ]),
@@ -212,16 +213,25 @@ HTML),
 <li><strong>Page views between pages:</strong> Palefire moves between pages without a full reload, so it sends a <code>pf_page_view</code> event once each new page is in. GA4's own history-based page views are turned off, so nothing is counted twice.</li>
 <li><strong>Searches:</strong> each new Combined Search sends <code>pf_search</code> with the words searched (email addresses removed) and the mode. Filters, sorting, paging, Back and reloads don't count again.</li>
 <li><strong>The old site:</strong> its pages open some content in pop-ups that change the address. Since GTM version 11 (Thu 12 Nov), the "Old site - GA4 page_view (history)" tag counts those, on pages without the Palefire labels only.</li>
+<li><strong>Controls:</strong> <code>pf_interaction</code> records which tabs, buttons and settings are used in the section tabs, Ask us, reading settings, the phone dock and the building map. Text that visitors type is never sent.</li>
+<li><strong>Search outcomes:</strong> <code>pf_search_empty</code> when every source comes back empty, and <code>pf_search_result</code> with the source and position when a result is opened.</li>
+<li><strong>Feedback:</strong> <code>pf_search_feedback</code> when someone opens Combined Search's feedback form, and <code>pf_search_feedback_sent</code> when it is sent.</li>
 </ul>
+HTML),
+  $text('Website Analytics page', <<<'HTML'
+<p>A staff-only guide page, <a href="/v2/internal/analytics">Website Analytics</a>, shows the last 28 days: page views and visitors with the change since the 28 days before, views by part of the site and kind of page, twelve weeks of views, the most viewed pages, Combined Searches by mode and the most frequent search terms, searches that found nothing, results opened, the most used controls, and the Combined Search feedback with its latest comments. Figures are fetched from GA4 each night. While /v2 is being tested it counts the new site only, and its figures show only to signed-in staff, even if the page is published by mistake.</p>
 HTML),
   $status('Analytics checklist', [
     ['done', 'Page labels', 'data-pf-section and data-pf-type on every Palefire page, kept in step between pages.'],
     ['done', 'Palefire tags', 'Published in GTM version 10, with custom dimensions Page section, Page type and Search mode in GA4.'],
     ['done', 'No double counting', 'GA4\'s history-based page views turned off; Palefire sends its own.'],
     ['done', 'Old site page views', 'GTM version 11 (Thu 12 Nov) counts the old site\'s pop-up pages.'],
+    ['done', 'Controls and search outcomes', 'GTM version 12 (Thu 12 Nov) sends controls used, searches that found nothing and results opened.'],
+    ['done', 'Feedback events', 'GTM version 13 (Thu 12 Nov) sends Combined Search feedback opened and sent.'],
+    ['done', 'Website Analytics page', 'A staff-only page with the last 28 days, updated each night.'],
     ['todo', 'Search as a key event', 'Star search as a key event once GA4 lists it, a day or so after the first searches arrive.'],
     ['todo', 'Annotation', 'Add a GA4 annotation for Thu 12 Nov 2026, so the change in counting is explained in every report.'],
-    ['todo', 'Reports', 'Build reports or explorations by Page section and Page type, and searches by Search mode.'],
+    ['todo', 'More reports', 'Explorations in GA4 by Page section, Page type and Search mode, for questions the Website Analytics page can\'t answer.'],
   ]),
 ]);
 
@@ -261,7 +271,8 @@ HTML),
 $section('Next steps', [
   $text(NULL, <<<'HTML'
 <ol>
-<li>Star search as a key event in GA4, add the 12 Nov annotation, and build the first reports by Page section and Page type.</li>
+<li>Star search as a key event in GA4 and add the 12 Nov annotation.</li>
+<li>Share Combined Search with testers and read their feedback on the Website Analytics page.</li>
 <li>Finish testing Combined Search and move the site's other search forms to it.</li>
 <li>Build the next location pages, then the desktop booking dock.</li>
 <li>Plan the move from /v2/special to /special: a list of addresses, redirects and the date.</li>
@@ -396,12 +407,17 @@ HTML),
 <li>Added the analytics labels and events: page section and kind on every page, page views between pages and Combined Search searches.</li>
 </ul>
 HTML),
-  $text('Thu Nov 12: Analytics live, one guide for copies', <<<'HTML'
+  $text('Thu Nov 12: Analytics live, feedback and a staff report', <<<'HTML'
 <ul>
 <li>Analytics went live: GTM version 10 added the Palefire tags, GA4's own history page views were turned off, and version 11 counts the old site's pop-up pages.</li>
 <li>Merged Ordering Copies into How to Use Special Collections.</li>
 <li>The Ask us form became a carved sheet with a Send key, and the search buttons were restyled on both searches.</li>
 <li>The style guide now explains the palette, and started this project guide.</li>
+<li>New favicons: the official LSU letters, gold in dark mode.</li>
+<li>Combined Search: a Show more list can be shared or reloaded without losing its results, with a Copy link button, and the first result shows without scrolling. The Search drawer can send the typed words to Discovery or the Catalog.</li>
+<li>Combined Search asks "Did you find what you needed?" under the results. An answer opens a feedback form in a drawer, with the search filled in, so visitors keep their results.</li>
+<li>Smoother scrolling: the page restyles about half as much while scrolling, and the Written at Hill shelf can be dragged with the mouse.</li>
+<li>Analytics now also count controls used, searches that found nothing, results opened and feedback, and a staff-only Website Analytics page shows the last 28 days, updated each night.</li>
 </ul>
 HTML),
 ]);
