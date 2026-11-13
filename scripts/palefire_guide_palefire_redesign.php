@@ -434,6 +434,7 @@ HTML),
 <li>On plain pages the page title now lines up with the sections below it on wide screens.</li>
 <li>LSU Research, by the Numbers: the most cited works are now cards set like a journal offprint, with the journal, title, first authors and year, the citation count and the DOI.</li>
 <li>LSU Research, by the Numbers now carries what the old dashboard showed: total and average citations, open access and the top publishers year by year, the most published LSU authors, the latest works, and the 20 most cited.</li>
+<li>Faculty Fellowship page brought up to date from the program's own files: the five 2026 fellows, earlier cohorts with the classes they have taught, and the four-day orientation.</li>
 </ul>
 HTML),
 ]);

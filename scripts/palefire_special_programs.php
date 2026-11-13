@@ -55,6 +55,9 @@
  *
  * Creates up to four Modular pages, UNPUBLISHED. A page whose title already
  * exists is skipped (delete an earlier guide-mode draft to rebuild it).
+ *
+ * The Faculty Fellowship page, once built, is kept up to date by
+ * palefire_faculty_fellowship_update.php, which has its current text.
  */
 
 declare(strict_types=1);
