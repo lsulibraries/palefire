@@ -134,7 +134,7 @@ $settings = [
 $modules = \Drupal::moduleHandler();
 $spam = array_values(array_filter(['honeypot', 'antibot'], [$modules, 'moduleExists']));
 
-echo "{$prefix}" . ($existing ? 'Resetting' : 'Creating') . " $id (no page of its own; shown on /v2/special/internal/newsletter-review/<issue>)\n";
+echo "{$prefix}" . ($existing ? 'Resetting' : 'Creating') . " $id (no page of its own; shown on /v2/internal/newsletter-review/<issue>)\n";
 echo "{$prefix}Fields: " . implode(', ', array_keys(array_diff_key($elements, ['actions' => 1]))) . "\n";
 echo "{$prefix}Spam protection: " . ($spam ? implode(', ', $spam) : 'none (neither Honeypot nor Antibot is enabled)') . "\n";
 echo "{$prefix}Deleted after: " . ($purge_days > 0 ? "$purge_days days" : 'never') . "\n";
@@ -147,7 +147,7 @@ if (!$apply) {
 
 $webform = $existing ?: Webform::create(['id' => $id]);
 $webform->set('title', 'Newsletter review');
-$webform->set('description', 'Notes on a newsletter draft from the review pages under /v2/special/internal/newsletter-review. Created by the Palefire theme\'s scripts/palefire_newsletter_webform.php.');
+$webform->set('description', 'Notes on a newsletter draft from the review pages under /v2/internal/newsletter-review. Created by the Palefire theme\'s scripts/palefire_newsletter_webform.php.');
 $webform->set('category', 'Palefire');
 $webform->setStatus(WebformInterface::STATUS_OPEN);
 $webform->setElements($elements);

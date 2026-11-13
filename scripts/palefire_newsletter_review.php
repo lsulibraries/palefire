@@ -40,7 +40,7 @@
  *   campaign=<id>         The campaign's activity id, from the address of
  *                         its editor in Constant Contact (.../edit/activity/<id>).
  *   account=<number>      The Constant Contact account in the preview address.
- *   path=<alias>          Default /v2/special/internal/newsletter-review/<issue>.
+ *   path=<alias>          Default /v2/internal/newsletter-review/<issue>.
  *   format=<text format>  Default: the WYSIWYG format.
  */
 
@@ -79,7 +79,7 @@ if (!preg_match(\Drupal\palefire\NewsletterReview::MARKER, "<p>$marker</p>")) {
   throw new \RuntimeException("account= must be digits and campaign= a Constant Contact activity id (8-4-4-4-12 hex).");
 }
 $slug = trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($issue)), '-');
-$path = '/' . ltrim($args['path'] ?? "/v2/special/internal/newsletter-review/$slug", '/');
+$path = '/' . ltrim($args['path'] ?? "/v2/internal/newsletter-review/$slug", '/');
 $title = "Newsletter Review: $issue";
 $name = Html::escape($issue);
 

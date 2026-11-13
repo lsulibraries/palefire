@@ -107,8 +107,9 @@ function palefire_page_attachments_alter(array &$attachments) {
   // Newsletter review pages (scripts/palefire_newsletter_review.php): a draft
   // that changes by the minute, for the people asked to read it. Never kept
   // whole by the anonymous page cache (NewsletterReview::MAX_AGE governs the
-  // draft), never indexed.
-  $is_review = (bool) preg_match('#^/v2/special/internal/newsletter-review(/|$)#i', $path);
+  // draft), never indexed. Under /v2/internal since 2026-11-13; the old
+  // /v2/special/internal address still matches.
+  $is_review = (bool) preg_match('#^/v2/(?:special/)?internal/newsletter-review(/|$)#i', $path);
   if ($is_review) {
     \Drupal::service('page_cache_kill_switch')->trigger();
   }
@@ -2518,7 +2519,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     // newsletters page's own list, so there is one list to keep.
     $past = NewsletterReview::pastIssues();
     if ($past['issues'] && empty($newsletter_parts['archive'])) {
-      $variables['newsletter_archive'] = NewsletterReview::archive($past['issues']) + ['heading' => t('Past issues')];
+      $variables['newsletter_archive'] = NewsletterReview::archive($past['issues']) + ['heading' => t('Past issues'), 'plain' => TRUE];
     }
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags($past['tags'])

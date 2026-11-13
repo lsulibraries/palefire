@@ -1069,3 +1069,101 @@
     }
   }
 }
+
+// Plain (review pages, .pf-nla--plain): a catalog, not a shelf. The sheets
+// lie flat, with no page edge, shadow, lift, dimming or reveal; smaller,
+// about 8rem each; titles at body size, no "Read the
+// issue" line. Hover and focus: the title underlines, nothing moves.
+.pf-nla--plain.pf-tiles--covers.pf-tiles--sheets {
+  .pf-tiles__list {
+    gap: 1.5rem 1rem;
+  }
+
+  .pf-book {
+    gap: .625rem;
+  }
+
+  .pf-book__cover {
+    border-bottom: 0;
+    perspective: none;
+  }
+
+  .pf-book__object,
+  a.pf-book:is(:hover, :focus-visible) .pf-book__object {
+    transform: none;
+    transition: none;
+  }
+
+  .pf-book__object::after {
+    content: none;
+  }
+
+  .pf-book__object img {
+    filter: none;
+  }
+
+  .pf-book__jacket {
+    box-shadow: none;
+  }
+
+  .pf-book .pf-book__title {
+    font-size: .9375rem;
+    font-weight: 400;
+    line-height: 1.4;
+    hyphens: manual;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: .2em;
+    transition: none;
+  }
+
+  a.pf-book:is(:hover, :focus-visible) .pf-book__title {
+    color: var(--bs-heading-color, var(--bs-body-color));
+    text-decoration-color: currentColor;
+  }
+
+  .pf-book__cover {
+    transition: none;
+  }
+
+  .pf-book__cta {
+    display: none;
+  }
+
+  // No dimming of the others.
+  .pf-tiles__list:has(a.pf-book:is(:hover, :focus-visible)) .pf-tiles__item:not(:has(a.pf-book:is(:hover, :focus-visible))) {
+    .pf-book__cover {
+      opacity: 1;
+    }
+
+    .pf-book__title {
+      color: var(--bs-heading-color, var(--bs-body-color));
+    }
+  }
+
+  .pf-nla__year-label {
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
+}
+
+@container pf-tiles (min-width: 24rem) {
+  .pf-nla--plain.pf-tiles--covers.pf-tiles--sheets .pf-tiles__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+// Wider: as many 8rem sheets as fit (six beside the year at 1440), so they
+// stay small on a wide screen instead of growing with it.
+@container pf-tiles (min-width: 36rem) {
+  .pf-nla--plain.pf-tiles--covers.pf-tiles--sheets .pf-tiles__list {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 1.75rem 1.25rem;
+  }
+}
+
+@container pf-tiles (min-width: 60rem) {
+  .pf-nla--plain .pf-nla__year {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
+}

@@ -15,6 +15,8 @@
  * - heading: optional, a heading over the grid (a review page's "Past
  *   issues", NewsletterReview::pastIssues()); the years then sit a level
  *   under it.
+ * - plain: optional; a flat catalog grid (review pages): no turn, lift,
+ *   dimming or reveal, smaller sheets.
  *
  * Each issue is a sheet, drawn as the Written at Hill books are
  * (.pf-tiles--covers, .pf-book: the turn, lift and the others dimming), set
@@ -29,11 +31,14 @@
  */
 #}
 {{ attach_library('palefire/newsletter-review') }}
-{{ attach_library('palefire/tile-reveal') }}
 {% set heading = heading|default('') %}
+{% set plain = plain|default(false) %}
+{% if not plain %}
+  {{ attach_library('palefire/tile-reveal') }}
+{% endif %}
 {% set year_tag = heading ? 'h4' : 'h3' %}
 {% if years %}
-  <div class="pf-nla pf-tiles pf-tiles--covers pf-tiles--sheets{{ heading ? ' pf-nla--headed' }}" data-pf-nla data-toc-skip>
+  <div class="pf-nla pf-tiles pf-tiles--covers pf-tiles--sheets{{ heading ? ' pf-nla--headed' }}{{ plain ? ' pf-nla--plain' }}" data-pf-nla data-toc-skip>
     {% if heading %}
       <h3 class="pf-nla__heading" id="{{ uid }}-heading">{{ heading }}</h3>
     {% endif %}
