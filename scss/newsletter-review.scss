@@ -6,7 +6,7 @@
 // The email is shown like a print on a mat: centered on a quiet plate, at
 // its own 600px width, with Comment buttons in the margin beside it. The
 // feedback form stands to the right and follows the reader down the page
-// once the block is 63rem wide; narrower, it is a sheet opened from a bar
+// once the block is 56rem wide; narrower, it is a sheet opened from a bar
 // that sticks to the foot of the screen while the email is in view.
 //
 // No literal colors: the section's own tokens, so it reads on any swatch.
@@ -83,9 +83,21 @@
   align-items: start;
 }
 
-@container pf-nlr (min-width: 63rem) {
+// From 56rem: an 18rem form, the email at its 30rem phone width until the
+// stage has 40rem (a 1440px screen with a scrollbar does); 21rem from 68rem.
+// It was 63rem, which such a screen missed by 11px, so the form never
+// followed there.
+@container pf-nlr (min-width: 56rem) {
+  .pf-nlr__layout {
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 1.5rem;
+  }
+}
+
+@container pf-nlr (min-width: 68rem) {
   .pf-nlr__layout {
     grid-template-columns: minmax(0, 1fr) 21rem;
+    gap: 2rem;
   }
 }
 
@@ -471,7 +483,7 @@
 }
 
 // Side by side: the form follows the reader.
-@container pf-nlr (min-width: 63rem) {
+@container pf-nlr (min-width: 56rem) {
   .pf-nlr__panel {
     position: sticky;
     top: var(--pf-nlr-top);
@@ -482,7 +494,7 @@
 }
 
 // Narrow: a sheet from the foot of the screen. -----------------------------------
-// The script sets .is-narrow below 63rem and makes the form a popover, so it
+// The script sets .is-narrow below 56rem and makes the form a popover, so it
 // opens in the top layer (the block is a size container, which would trap a
 // fixed sheet), closes on Esc or a tap outside, and keeps the page behind it.
 // Without the script the form simply follows the email.
@@ -1007,5 +1019,39 @@
   a {
     margin-inline-start: .5rem;
     color: var(--bs-body-color);
+  }
+}
+
+// The years in the intro column (js/newsletter-review.js,
+// pfNewsletterYears): a column of their own under the date, each on a
+// hairline, the one in view with an accent rule and ink. They keep the
+// archive's tokens, which they leave behind with .pf-nla.
+.pf-nla__years.is-in-head {
+  --pf-nla-ink: var(--bs-body-color);
+  --pf-nla-muted: var(--pf-guide-muted, var(--bs-secondary-color));
+  --pf-nla-accent: var(--pf-guide-accent, var(--bs-primary));
+
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border: 0;
+
+  ul {
+    display: grid;
+    gap: 0;
+  }
+
+  a {
+    display: block;
+    padding: .3rem 0 .3rem .75rem;
+    border-inline-start: 2px solid $pf-hairline;
+
+    @include pf-nlr-motion {
+      transition: color $pf-hover-out ease, border-color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
+    }
+
+    &[aria-current] {
+      border-inline-start-color: var(--pf-nla-accent);
+      color: var(--pf-nla-ink);
+    }
   }
 }

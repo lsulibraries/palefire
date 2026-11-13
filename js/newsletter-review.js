@@ -14,15 +14,17 @@
  * the email that does, and marks it "Your story", so someone featured lands
  * on their own part. Unmatched words do nothing.
  *
- * Below 63rem the form is a popover sheet, opened from a bar at the foot of
+ * Below 56rem the form is a popover sheet, opened from a bar at the foot of
  * the screen or by a Comment button.
  */
 (function (Drupal, once, debounce) {
   'use strict';
 
-  // The form beside a full 600px email: 40rem frame, 1rem plate edges, 2rem
-  // gap, 21rem form (newsletter-review.scss).
-  const NARROW_REM = 63;
+  // The form beside the email: an 18rem form and 1.5rem gap leave the email
+  // its 30rem phone width (newsletter-review.scss). It was 63rem, beside the
+  // full 600px email, which a 1440px screen with a scrollbar missed by 11px,
+  // so the form never followed there.
+  const NARROW_REM = 56;
 
   const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -440,6 +442,60 @@
         if ('ResizeObserver' in window) {
           new ResizeObserver(resize).observe(stage);
         }
+      });
+    },
+  };
+
+  /**
+   * The newsletters page on wide screens: the intro is a sticky column
+   * (newsletter-review.scss, .pf-main:has(.pf-nla)), and the list of years
+   * moves into it, under the intro, so the column holds a way through the
+   * past issues instead of empty page. It moves back above the issues when
+   * the screen narrows. The year in view is marked in the list.
+   */
+  Drupal.behaviors.pfNewsletterYears = {
+    attach(context) {
+      once('pf-nl-years', '.pf-nla__years', context).forEach((years) => {
+        const main = years.closest('.pf-main');
+        const head = main && main.querySelector(':scope > .pf-modular__head');
+        if (!head) {
+          return;
+        }
+        const home = document.createComment('pf-nla-years');
+        years.before(home);
+        const wide = window.matchMedia('(min-width: 80rem)');
+        let placed = null;
+        const place = () => {
+          if (placed === wide.matches) {
+            return;
+          }
+          placed = wide.matches;
+          if (placed) {
+            head.appendChild(years);
+          }
+          else {
+            home.after(years);
+          }
+          years.classList.toggle('is-in-head', placed);
+        };
+        wide.addEventListener('change', place);
+        window.addEventListener('resize', debounce(place, 150));
+        place();
+
+        if (!('IntersectionObserver' in window)) {
+          return;
+        }
+        const links = new Map(Array.from(years.querySelectorAll('a[href^="#"]')).map((a) => [a.getAttribute('href').slice(1), a]));
+        const mark = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            const id = entry.target.getAttribute('aria-labelledby');
+            if (entry.isIntersecting && links.has(id)) {
+              links.forEach((a) => a.removeAttribute('aria-current'));
+              links.get(id).setAttribute('aria-current', 'location');
+            }
+          });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        main.querySelectorAll('.pf-nla__year').forEach((section) => mark.observe(section));
       });
     },
   };

@@ -112,6 +112,14 @@ function palefire_page_attachments_alter(array &$attachments) {
   if ($is_review) {
     \Drupal::service('page_cache_kill_switch')->trigger();
   }
+  // The newsletter archive compares the latest issue, a draft until it is
+  // sent, with the one before: kept out of the anonymous page cache too, or
+  // visitors saw the draft as it was when the page was first cached (until
+  // drush cr). Its parts are still render cached (five minutes for the
+  // comparison, a day for the archive).
+  if (preg_match('#^/v2/newsletters/?$#i', $path)) {
+    \Drupal::service('page_cache_kill_switch')->trigger();
+  }
 
   if (!$is_resource && !$is_review && !preg_match('#^/concept(/|$)#i', $path)) {
     return;
