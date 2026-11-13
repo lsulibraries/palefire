@@ -65,7 +65,7 @@
           <h3 class="pf-rdash__title" id="{{ uid }}-access">{{ 'Open access'|t }}</h3>
           <div class="pf-rdash__stack" aria-hidden="true">
             {% for row in data.access.rows %}
-              <span class="pf-rdash__segment pf-rdash__tone--{{ row.key }}" style="--pf-rdash-share: {{ row.width }}%"></span>
+              <span class="pf-rdash__segment pf-rdash__tone--{{ row.key }}" style="--pf-rdash-share: {{ row.width }}%" data-pf-tip="{{ row.tip }}" tabindex="-1"></span>
             {% endfor %}
           </div>
           <ul class="pf-rdash__legend">
@@ -88,14 +88,15 @@
                   <span class="pf-rdash__trend-year">{{ row.year }}{% if row.current %}<span class="visually-hidden"> {{ 'so far'|t }}</span>{% endif %}</span>
                   <span class="pf-rdash__stack pf-rdash__stack--thin" aria-hidden="true">
                     {% for segment in row.segments %}
-                      <span class="pf-rdash__segment pf-rdash__tone--{{ segment.key }}" style="--pf-rdash-share: {{ segment.width }}%"></span>
+                      <span class="pf-rdash__segment pf-rdash__tone--{{ segment.key }}" style="--pf-rdash-share: {{ segment.width }}%" data-pf-tip="{{ segment.tip }}" tabindex="-1"></span>
                     {% endfor %}
                   </span>
                   <span class="pf-rdash__trend-value">{{ '@share open'|t({ '@share': row.open }) }}</span>
+                  <span class="visually-hidden">{% for segment in row.segments %}{{ segment.text }}{{ not loop.last ? ', ' }}{% endfor %}</span>
                 </li>
               {% endfor %}
             </ol>
-            <p class="pf-rdash__caption">{{ 'Shaded as in Open access, most open on the left.'|t }}</p>
+            <p class="pf-rdash__caption">{{ 'Shaded as in Open access, most open on the left. Point to or tap a band for its count.'|t }}</p>
           </section>
         {% endif %}
 
@@ -189,8 +190,11 @@
                   <span class="pf-rdash__offprint-count">{{ work.count }}</span>
                   <span class="pf-rdash__offprint-unit">{{ 'citations'|t }}</span>
                 </p>
-                {% if work.doi %}
-                  <p class="pf-rdash__offprint-doi"><span class="visually-hidden">{{ 'DOI'|t }} </span>{{ work.doi }}</p>
+                {% if work.doi or work.access_label %}
+                  <p class="pf-rdash__offprint-doi">
+                    {%- if work.access_label %}<span class="pf-rdash__offprint-access">{{ work.access_label }}</span>{% endif -%}
+                    {%- if work.doi %}<span class="visually-hidden">{{ 'DOI'|t }} </span>{{ work.doi }}{% endif -%}
+                  </p>
                 {% endif %}
               </li>
             {% endfor %}

@@ -144,7 +144,7 @@ final class ResearchFigures {
       'filter' => $works,
       'sort' => 'cited_by_count:desc',
       'per_page' => 20,
-      'select' => 'id,doi,display_name,publication_year,cited_by_count,primary_location',
+      'select' => 'id,doi,display_name,publication_year,cited_by_count,primary_location,open_access',
     ]);
     foreach ($top['results'] ?? [] as $work) {
       // The byline: the first two authors and how many there are, asked for
@@ -175,6 +175,7 @@ final class ResearchFigures {
         'year' => (int) ($work['publication_year'] ?? 0),
         'venue' => self::plain((string) ($work['primary_location']['source']['display_name'] ?? '')),
         'citations' => (int) ($work['cited_by_count'] ?? 0),
+        'access' => (string) ($work['open_access']['oa_status'] ?? ''),
         'authors' => $authors,
         'author_count' => $author_count,
       ];
@@ -307,13 +308,13 @@ final class ResearchFigures {
   }
 
   /**
-   * The eight latest works, leaving out corrections and front matter.
+   * The twelve latest works, leaving out corrections and front matter.
    */
   private static function recent(callable $get, string $works): array {
     $body = $get('works', [
       'filter' => "$works,type:!erratum,type:!paratext,type:!retraction",
       'sort' => 'publication_date:desc',
-      'per_page' => 8,
+      'per_page' => 12,
       'select' => 'id,doi,display_name,publication_date,open_access,primary_location',
     ]);
     $out = [];
@@ -389,7 +390,8 @@ final class ResearchFigures {
           }
         }
         // Each row's key names its tone in the dashboard's stacked bar.
-        $view['rows'] = array_map(fn ($row, $key) => $row + ['key' => $key], self::bars($rows, $data['total']), $keys);
+        // tip: the segment's own readout on hover or tap ("Gold · 6,090 (18%)").
+        $view['rows'] = array_map(fn ($row, $key) => $row + ['key' => $key, 'tip' => ucfirst($key) . ' · ' . $row['value']], self::bars($rows, $data['total']), $keys);
         break;
 
       case 'dashboard':
@@ -409,7 +411,8 @@ final class ResearchFigures {
         foreach (array_slice($data['kinds'], 0, 8, TRUE) as $kind => $count) {
           $rows[] = [self::KINDS[$kind] ?? ucfirst(str_replace('-', ' ', (string) $kind)), $count];
         }
-        $view['rows'] = self::bars($rows);
+        // Shares of every work, as the old dashboard labeled them.
+        $view['rows'] = self::bars($rows, (int) $data['total']);
         break;
 
       case 'journals':
@@ -425,6 +428,7 @@ final class ResearchFigures {
           'count' => number_format($work['citations']),
           'share' => round($work['citations'] / $top * 100, 1),
           'byline' => self::byline($work['authors'] ?? [], (int) ($work['author_count'] ?? 0)),
+          'access_label' => self::accessLabel($work['access'] ?? ''),
         ], $data['cited']);
         break;
     }
@@ -455,7 +459,15 @@ final class ResearchFigures {
       $segments = [];
       foreach (array_keys(self::ACCESS) as $key) {
         if (!empty($data['access_years'][$key][$y])) {
-          $segments[] = ['key' => $key, 'width' => round($data['access_years'][$key][$y] / $whole * 100, 1)];
+          $count = (int) $data['access_years'][$key][$y];
+          $segments[] = [
+            'key' => $key,
+            'width' => round($count / $whole * 100, 1),
+            // text for the row's spoken breakdown; tip, with the year, for
+            // the readout, which floats over the row above.
+            'text' => (string) t('@status @count (@percent%)', ['@status' => ucfirst($key), '@count' => number_format($count), '@percent' => round($count / $whole * 100)]),
+            'tip' => (string) t('@year · @status · @count (@percent%)', ['@year' => $y, '@status' => ucfirst($key), '@count' => number_format($count), '@percent' => round($count / $whole * 100)]),
+          ];
         }
       }
       $closed = (int) ($data['access_years']['closed'][$y] ?? 0);
@@ -485,11 +497,7 @@ final class ResearchFigures {
       $time = strtotime($work['date'] . ' 12:00');
       $out['recent'][] = $work + [
         'when' => $time ? date('M j, Y', $time) : '',
-        'access_label' => match ($work['access']) {
-          'closed' => (string) t('Subscription only'),
-          '' => '',
-          default => (string) t('@status open access', ['@status' => ucfirst($work['access'])]),
-        },
+        'access_label' => self::accessLabel($work['access']),
       ];
     }
     return $out;
@@ -549,6 +557,17 @@ final class ResearchFigures {
       ];
     }
     return $out;
+  }
+
+  /**
+   * "Gold open access", "Subscription only", or '' when unknown.
+   */
+  private static function accessLabel(string $status): string {
+    return match ($status) {
+      'closed' => (string) t('Subscription only'),
+      '' => '',
+      default => (string) t('@status open access', ['@status' => ucfirst($status)]),
+    };
   }
 
   /**

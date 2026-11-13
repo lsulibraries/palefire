@@ -227,6 +227,54 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   width: calc(var(--pf-rdash-share) - 2px);
   min-width: 2px;
   background: var(--pf-rdash-tone);
+  cursor: default;
+  outline: none;
+
+  // The readout: pointed at or tapped (tapping focuses it), a segment says
+  // its status, count and share in a label over the bar's start, so it never
+  // runs off the panel. Every figure is also in text (legend, row text).
+  &::after {
+    content: attr(data-pf-tip);
+    position: absolute;
+    bottom: calc(100% + 0.375rem);
+    left: 0;
+    z-index: 2;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--bs-body-bg);
+    background: var(--bs-emphasis-color);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover::after,
+  &:focus::after {
+    opacity: 1;
+  }
+}
+
+// The bar is the readout's anchor, not the segment.
+.pf-rdash__stack {
+  position: relative;
+}
+
+// One status at a time: pointing at a segment or a legend row keeps that
+// status's segments (in both open access panels) and its legend row at full
+// strength and fades the rest, so a status is found by place, not by
+// telling shades apart.
+@each $key in "diamond", "gold", "hybrid", "green", "bronze", "closed" {
+  .pf-rdash:has(.pf-rdash__segment.pf-rdash__tone--#{$key}:is(:hover, :focus), .pf-rdash__legend-item:hover > .pf-rdash__tone--#{$key}) {
+    .pf-rdash__segment:not(.pf-rdash__tone--#{$key}) {
+      opacity: 0.22;
+    }
+
+    .pf-rdash__legend-item:not(:has(> .pf-rdash__tone--#{$key})) {
+      opacity: 0.5;
+    }
+  }
 }
 
 .pf-rdash__legend {
@@ -599,9 +647,18 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pf-rdash__offprint-doi {
+  display: grid;
+  gap: 0.125rem;
   font: 400 0.6875rem / 1.4 var(--pf-guide-mono);
   color: var(--pf-guide-muted);
   overflow-wrap: anywhere;
+}
+
+// Open access status, over the DOI in the sans.
+.pf-rdash__offprint-access {
+  font-family: var(--bs-body-font-family);
+  font-size: 0.75rem;
+  color: var(--bs-body-color);
 }
 
 .pf-rdash__note {
@@ -641,6 +698,15 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   .pf-rdash__panel {
     transition: border-color 0.4s $pf-rdash-ease;
+  }
+
+  .pf-rdash__segment,
+  .pf-rdash__legend-item {
+    transition: opacity 0.2s $pf-rdash-ease;
+  }
+
+  .pf-rdash__segment::after {
+    transition: opacity 0.15s $pf-rdash-ease;
   }
 }
 
