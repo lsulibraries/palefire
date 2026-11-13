@@ -27,6 +27,7 @@ use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
+use Drupal\palefire\NewsletterReview;
 use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
@@ -103,7 +104,16 @@ function palefire_page_attachments_alter(array &$attachments) {
   $node = \Drupal::routeMatch()->getParameter('node');
   $is_resource = $node instanceof NodeInterface && $node->bundle() === 'resource';
 
-  if (!$is_resource && !preg_match('#^/concept(/|$)#i', $path)) {
+  // Newsletter review pages (scripts/palefire_newsletter_review.php): a draft
+  // that changes by the minute, for the people asked to read it. Never kept
+  // whole by the anonymous page cache (NewsletterReview::MAX_AGE governs the
+  // draft), never indexed.
+  $is_review = (bool) preg_match('#^/v2/special/internal/newsletter-review(/|$)#i', $path);
+  if ($is_review) {
+    \Drupal::service('page_cache_kill_switch')->trigger();
+  }
+
+  if (!$is_resource && !$is_review && !preg_match('#^/concept(/|$)#i', $path)) {
     return;
   }
 
@@ -2349,6 +2359,20 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * the LSU research figures from OpenAlex after the text
  * (includes/research-figures.html.twig, Drupal\palefire\ResearchFigures):
  * part and data. Public. NULL without a marker.
+ *
+ * newsletter: a paragraph that is only
+ * "[newsletter-review:<account>/<activity id>]" draws that Constant Contact
+ * draft for review, with Comment buttons and the feedback form
+ * (includes/newsletter-review.html.twig, Drupal\palefire\NewsletterReview).
+ * Kept five minutes, so reviewers read the draft as it is now. NULL without
+ * a marker.
+ *
+ * newsletter_archive, newsletter_compare: a paragraph that is only
+ * "[newsletter-archive]" turns the block's links to Constant Contact
+ * previews into a gallery of past issues (includes/newsletter-archive.html.twig);
+ * "[newsletter-compare]" draws its first two linked issues under a
+ * before/after slider (includes/newsletter-compare.html.twig). The links
+ * leave the text. NULL without a marker.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
@@ -2356,6 +2380,9 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['plates'] = [];
   $variables['analytics'] = NULL;
   $variables['research'] = NULL;
+  $variables['newsletter'] = NULL;
+  $variables['newsletter_archive'] = NULL;
+  $variables['newsletter_compare'] = NULL;
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -2393,6 +2420,12 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $analytics = NULL;
   $research_marker = '#<p>\s*\[research:(' . implode('|', ResearchFigures::PARTS) . ')\]\s*</p>#i';
   $research = NULL;
+  $newsletter = NULL;
+  // Guarded, so this file never needs src/NewsletterReview.php to be deployed
+  // with it.
+  $newsletter_ready = class_exists(NewsletterReview::class);
+  $newsletter_issues = [];
+  $newsletter_parts = [];
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
   foreach (Element::children($variables['content']['field_block_body']) as $delta) {
@@ -2412,6 +2445,20 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     if (isset($item['#text']) && preg_match($research_marker, (string) $item['#text'], $research_match)) {
       $item['#text'] = preg_replace($research_marker, '', (string) $item['#text']);
       $research = strtolower($research_match[1]);
+    }
+    if ($newsletter_ready && isset($item['#text']) && preg_match(NewsletterReview::MARKER, (string) $item['#text'], $newsletter_match)) {
+      $item['#text'] = preg_replace(NewsletterReview::MARKER, '', (string) $item['#text']);
+      $newsletter = [$newsletter_match[1], $newsletter_match[2]];
+    }
+    foreach ($newsletter_ready ? ['archive' => NewsletterReview::ARCHIVE_MARKER, 'compare' => NewsletterReview::COMPARE_MARKER] : [] as $part => $part_marker) {
+      if (isset($item['#text']) && preg_match($part_marker, (string) $item['#text'])) {
+        $item['#text'] = preg_replace($part_marker, '', (string) $item['#text']);
+        $newsletter_parts[$part] = TRUE;
+      }
+    }
+    if ($newsletter_parts && isset($item['#text'])) {
+      [$found, $item['#text']] = NewsletterReview::issues((string) $item['#text']);
+      $newsletter_issues = array_merge($newsletter_issues, $found);
     }
     if (isset($item['#text']) && str_contains((string) $item['#text'], '[styleguide:')) {
       $item['#text'] = preg_replace_callback('#<p>\s*\[styleguide:([a-z]+)\]\s*</p>#i', function (array $m) use (&$variables): string {
@@ -2452,6 +2499,26 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     $variables['research'] = ['part' => $research, 'data' => ResearchFigures::view($research)];
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags([ResearchFigures::CACHE_TAG])
+      ->applyTo($variables);
+  }
+  // The draft changes while it is reviewed: redrawn every five minutes. The
+  // anonymous page cache ignores max-age, so palefire_page_attachments_alter()
+  // keeps these pages out of it.
+  if ($newsletter) {
+    $variables['newsletter'] = NewsletterReview::view(...$newsletter);
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags(NewsletterReview::cacheTags())
+      ->setCacheMaxAge(NewsletterReview::MAX_AGE)
+      ->applyTo($variables);
+  }
+  // Sent issues are kept a day; a comparison, which is often of a draft,
+  // five minutes.
+  if ($newsletter_parts) {
+    $variables['newsletter_archive'] = isset($newsletter_parts['archive']) ? NewsletterReview::archive($newsletter_issues) : NULL;
+    $variables['newsletter_compare'] = isset($newsletter_parts['compare']) ? NewsletterReview::compare($newsletter_issues) : NULL;
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags([NewsletterReview::cacheTag()])
+      ->setCacheMaxAge(isset($newsletter_parts['compare']) ? NewsletterReview::MAX_AGE : NewsletterReview::SENT_MAX_AGE)
       ->applyTo($variables);
   }
   $variables['ask_href'] = '';

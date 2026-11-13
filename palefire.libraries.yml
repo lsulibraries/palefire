@@ -555,3 +555,19 @@ styleguide:
   dependencies:
     - core/drupal
     - core/once
+
+# Newsletter review: a Constant Contact draft beside its feedback form
+# (includes/newsletter-review.html.twig, Drupal\palefire\NewsletterReview).
+# Attached by that template. Styles: its own entry (scss/newsletter-review.scss,
+# npm run build), so other pages don't load it.
+newsletter-review:
+  version: 1.0.0
+  css:
+    component:
+      css/newsletter-review.css: {}
+  js:
+    js/newsletter-review.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.debounce
+    - core/once

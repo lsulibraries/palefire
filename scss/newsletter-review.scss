@@ -1,0 +1,952 @@
+// Palefire — newsletter review (includes/newsletter-review.html.twig,
+// js/newsletter-review.js), and the archive's gallery of past issues and
+// before/after slider (newsletter-archive, newsletter-compare; at the end). Its own entry point (css/newsletter-review.css,
+// library palefire/newsletter-review), so only review pages load it.
+//
+// The email is shown like a print on a mat: centered on a quiet plate, at
+// its own 600px width, with Comment buttons in the margin beside it. The
+// feedback form stands to the right and follows the reader down the page
+// once the block is 63rem wide; narrower, it is a sheet opened from a bar
+// that sticks to the foot of the screen while the email is in view.
+//
+// No literal colors: the section's own tokens, so it reads on any swatch.
+
+@import "variables";
+
+// A wide section lets the block take the full column (guide-wide.scss caps
+// blocks it doesn't know at 52rem with zero specificity).
+.pf-guide--wide > .pf-guide-block:has(> :is(.pf-nlr, .pf-nla, .pf-nlc)) {
+  max-width: none;
+}
+
+.pf-nlr {
+  --pf-nlr-ink: var(--bs-body-color);
+  --pf-nlr-muted: var(--pf-guide-muted, var(--bs-secondary-color));
+  --pf-nlr-accent: var(--pf-guide-accent, var(--bs-primary));
+  --pf-nlr-rule: #{$pf-hairline};
+  --pf-nlr-plate: color-mix(in srgb, var(--bs-body-color) 5%, transparent);
+  --pf-nlr-ease: cubic-bezier(.2, .7, .2, 1);
+  --pf-nlr-top: calc(var(--pf-header-h, 50px) + 1rem);
+
+  container: pf-nlr / inline-size;
+  margin-top: 1.5rem;
+}
+
+@mixin pf-nlr-label {
+  font: 700 var(--pf-mono-label, .75rem)/1.5 var(--pf-guide-mono, monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@mixin pf-nlr-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+// Version and the preview link. ----------------------------------------------
+.pf-nlr__meta {
+  @include pf-nlr-label;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 1rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--pf-nlr-rule);
+  color: var(--pf-nlr-muted);
+}
+
+.pf-nlr__code {
+  margin-inline-start: .5rem;
+  letter-spacing: .04em;
+  text-transform: none;
+}
+
+.pf-nlr__preview {
+  color: var(--pf-nlr-ink);
+  text-decoration: underline;
+  text-underline-offset: .35em;
+
+  &::after {
+    content: " \2197";
+  }
+}
+
+// Layout. ----------------------------------------------------------------------
+.pf-nlr__layout {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@container pf-nlr (min-width: 63rem) {
+  .pf-nlr__layout {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+  }
+}
+
+// The email on its plate. -------------------------------------------------------
+.pf-nlr__stage {
+  // The email is 600px wide and reflows only at 480px or less: between the
+  // two it would be cut off, so a frame with less than 40rem gets 30rem.
+  --pf-nlr-frame-w: 40rem;
+
+  container: pf-nlr-stage / inline-size;
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  background: var(--pf-nlr-plate);
+}
+
+@container pf-nlr (min-width: 30rem) {
+  .pf-nlr__stage {
+    padding: 2rem 1rem;
+  }
+}
+
+@container pf-nlr-stage (max-width: 39.99rem) {
+  .pf-nlr__frame,
+  .pf-nlr__mark {
+    --pf-nlr-frame-w: 30rem;
+  }
+}
+
+.pf-nlr__frame {
+  display: block;
+  width: 100%;
+  max-width: var(--pf-nlr-frame-w);
+  // A first guess until the script measures the email: no jump when it does
+  // for most issues, and the page never scrolls inside the frame.
+  height: 2400px;
+  margin-inline: auto;
+  border: 0;
+  background: #fff; // The email's own paper, whatever the swatch.
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+}
+
+.pf-nlr__missing {
+  margin: 0;
+  padding: 2rem 1rem;
+}
+
+// Comment buttons, one per section, placed by the script. -------------------------
+.pf-nlr__pins {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.pf-nlr__pin {
+  position: absolute;
+  inset-inline-end: .5rem;
+  pointer-events: auto;
+}
+
+// A round button over the email's corner when there's no margin for words.
+.pf-nlr__pin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bs-body-color);
+  color: var(--bs-body-bg);
+  font-family: var(--bs-body-font-family);
+  font-size: .875rem;
+  font-weight: $pf-button-weight;
+  line-height: 1.2;
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 22%, transparent);
+  cursor: pointer;
+
+  @include pf-nlr-motion {
+    transition: transform $pf-hover-out var(--pf-nlr-ease), background-color $pf-hover-out ease;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nlr-accent);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    background: var(--pf-nlr-accent);
+    color: var(--pf-on-accent, var(--bs-body-color));
+  }
+}
+
+.pf-nlr__pin-words {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// Room beside the email: the words, in the margin.
+@container pf-nlr-stage (min-width: 54rem) {
+  .pf-nlr__pin {
+    inset-inline-end: auto;
+    inset-inline-start: calc(50% + var(--pf-nlr-frame-w) / 2 + .75rem);
+  }
+
+  .pf-nlr__pin-button {
+    padding-inline: .875rem 1rem;
+    border-radius: 0;
+    background: transparent;
+    color: var(--pf-nlr-ink);
+    box-shadow: inset 0 0 0 1px var(--pf-nlr-rule);
+
+    @include pf-nlr-motion {
+      transition: box-shadow $pf-hover-out ease, background-color $pf-hover-out ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--bs-body-color) 9%, transparent);
+      box-shadow: inset 0 -2px 0 var(--pf-nlr-accent);
+      transition-duration: $pf-hover-in;
+    }
+
+    &[aria-pressed="true"] {
+      background: color-mix(in srgb, var(--bs-body-color) 9%, transparent);
+      color: var(--pf-nlr-ink);
+      box-shadow: inset 0 -2px 0 var(--pf-nlr-accent);
+    }
+  }
+
+  .pf-nlr__pin-words {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+// The section being commented on, or the reader's own story: a frame drawn
+// in the text color just outside the email's 600px, never over its words or
+// lost against its purple bands.
+.pf-nlr__mark {
+  position: absolute;
+  left: 50%;
+  width: min(100%, var(--pf-nlr-frame-w));
+  translate: -50% 0;
+  outline: 2px solid var(--pf-nlr-ink);
+  outline-offset: 0;
+  pointer-events: none;
+  opacity: 0;
+
+  @include pf-nlr-motion {
+    transition: opacity .6s ease, top .4s var(--pf-nlr-ease), height .4s var(--pf-nlr-ease);
+  }
+
+  &.is-on {
+    opacity: 1;
+  }
+}
+
+.pf-nlr__mark--own {
+  outline-width: 3px;
+}
+
+.pf-nlr__mark-label {
+  @include pf-nlr-label;
+  position: absolute;
+  bottom: 100%;
+  left: -3px;
+  padding: .25rem .625rem;
+  background: var(--pf-nlr-ink);
+  color: var(--bs-body-bg);
+  white-space: nowrap;
+}
+
+// The form. ----------------------------------------------------------------------
+.pf-nlr__panel {
+  display: grid;
+  gap: .75rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  background: var(--pf-guide-surface, var(--bs-tertiary-bg));
+  border: 1px solid var(--pf-nlr-rule);
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.pf-nlr__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pf-nlr__title {
+  @include pf-nlr-label;
+  margin: 0;
+  color: var(--pf-nlr-ink);
+}
+
+.pf-nlr__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -.5rem -.5rem -.5rem 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pf-nlr-ink);
+  font-size: 1.125rem;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nlr-accent);
+    outline-offset: -2px;
+  }
+}
+
+.pf-nlr__for {
+  margin: 0;
+  padding: .5rem .75rem;
+  border-inline-start: 3px solid var(--pf-nlr-accent);
+  background: color-mix(in srgb, var(--bs-body-color) 5%, transparent);
+  font-size: .9375rem;
+}
+
+.pf-nlr__help,
+.pf-nlr__fallback {
+  margin: 0;
+  color: var(--pf-nlr-muted);
+  font-size: .9375rem;
+  line-height: 1.5;
+}
+
+// Webform fields, in the theme's square, quiet manner.
+.pf-nlr__panel {
+  form[aria-busy="true"] {
+    opacity: .6;
+    pointer-events: none;
+  }
+
+  .form-item,
+  fieldset {
+    min-width: 0;
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+
+  label,
+  legend {
+    display: block;
+    float: none;
+    width: 100%;
+    margin-bottom: .375rem;
+    padding: 0;
+    color: var(--pf-nlr-ink);
+    font-size: .9375rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .form-radios label,
+  .form-type-radio label {
+    display: inline;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .form-radios .form-item,
+  .form-type-radio {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 2.75rem;
+    margin: 0;
+  }
+
+  .webform-options-display-side-by-side {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.25rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: .5rem .75rem;
+    border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+    border-radius: 0;
+    background: var(--bs-body-bg);
+    color: var(--pf-nlr-ink);
+    font: inherit;
+  }
+
+  textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  input[type="radio"] {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    accent-color: var(--bs-body-color);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    border-color: var(--pf-nlr-accent);
+    outline: 2px solid var(--pf-nlr-accent);
+    outline-offset: 0;
+    box-shadow: none;
+  }
+
+  .description {
+    margin: .375rem 0 0;
+    color: var(--pf-nlr-muted);
+    font-size: .875rem;
+  }
+
+  .form-actions {
+    margin: .25rem 0 0;
+  }
+
+  input[type="submit"] {
+    min-height: 2.75rem;
+    padding-inline: 1.5rem;
+    border: 1px solid var(--bs-body-color);
+    border-radius: 0;
+    background: var(--bs-body-color);
+    color: var(--bs-body-bg);
+    font: inherit;
+    font-weight: $pf-button-weight;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .88;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-nlr-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  .messages--error,
+  .webform-confirmation {
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    border-inline-start: 3px solid currentColor;
+    font-size: .9375rem;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .webform-confirmation {
+    border-color: var(--pf-nlr-accent);
+  }
+}
+
+// Side by side: the form follows the reader.
+@container pf-nlr (min-width: 63rem) {
+  .pf-nlr__panel {
+    position: sticky;
+    top: var(--pf-nlr-top);
+    max-height: calc(100vh - var(--pf-nlr-top) - 1rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+// Narrow: a sheet from the foot of the screen. -----------------------------------
+// The script sets .is-narrow below 63rem and makes the form a popover, so it
+// opens in the top layer (the block is a size container, which would trap a
+// fixed sheet), closes on Esc or a tap outside, and keeps the page behind it.
+// Without the script the form simply follows the email.
+.pf-nlr__close,
+.pf-nlr__dock {
+  display: none;
+}
+
+.pf-nlr.is-narrow {
+  .pf-nlr__close {
+    display: inline-flex;
+  }
+
+  .pf-nlr__dock {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: .75rem 0 calc(.75rem + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+  }
+}
+
+// Above the Special Collections mobile dock (_dock.scss) where it shows.
+@media (max-width: 767.98px) {
+  html.pf-dock-on .pf-nlr.is-narrow .pf-nlr__dock {
+    bottom: calc(var(--pf-dock-h, 96px) + .25rem);
+  }
+}
+
+.pf-nlr__open {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 3rem;
+  padding-inline: 1.25rem 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bs-body-color);
+  color: var(--bs-body-bg);
+  font-family: var(--bs-body-font-family);
+  font-size: .9375rem;
+  font-weight: $pf-button-weight;
+  box-shadow: 0 4px 14px color-mix(in srgb, #000 25%, transparent);
+  pointer-events: auto;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nlr-accent);
+    outline-offset: 3px;
+  }
+}
+
+.pf-nlr__panel[popover] {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 85svh;
+  margin: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  border: 0;
+  border-top: 1px solid var(--pf-nlr-rule);
+  background: var(--pf-g-surface, var(--bs-body-bg));
+  color: var(--bs-body-color);
+  box-shadow: 0 -8px 30px color-mix(in srgb, #000 25%, transparent);
+  translate: 0 100%;
+
+  // The panel's own display: grid would otherwise keep a closed popover on
+  // screen.
+  &:not(:popover-open) {
+    display: none;
+  }
+
+  &:popover-open {
+    translate: 0 0;
+  }
+
+  &::backdrop {
+    background: color-mix(in srgb, #000 40%, transparent);
+    opacity: 0;
+  }
+
+  &:popover-open::backdrop {
+    opacity: 1;
+  }
+
+  @include pf-nlr-motion {
+    transition: translate .45s var(--pf-nlr-ease), display .45s allow-discrete, overlay .45s allow-discrete;
+
+    &::backdrop {
+      transition: opacity .45s ease, display .45s allow-discrete, overlay .45s allow-discrete;
+    }
+  }
+}
+
+@starting-style {
+  .pf-nlr__panel[popover]:popover-open {
+    translate: 0 100%;
+  }
+
+  .pf-nlr__panel[popover]:popover-open::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-nlr *,
+  .pf-nlr__panel[popover]::backdrop {
+    transition: none !important;
+  }
+}
+
+// Archive: past issues as a gallery of covers. ------------------------------------
+// A Swiss index: a plain grid, the cover cropped to 4:3, the issue number in
+// mono over a hairline, the name and its line below. The cover settles in a
+// little on hover, as a print would under glass.
+.pf-nla {
+  --pf-nla-ink: var(--bs-body-color);
+  --pf-nla-muted: var(--pf-guide-muted, var(--bs-secondary-color));
+  --pf-nla-accent: var(--pf-guide-accent, var(--bs-primary));
+  --pf-nla-ease: cubic-bezier(.2, .7, .2, 1);
+
+  container: pf-nla / inline-size;
+  margin-top: 1.5rem;
+}
+
+.pf-nla__grid {
+  display: grid;
+  gap: 2.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container pf-nla (min-width: 36rem) {
+  .pf-nla__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container pf-nla (min-width: 60rem) {
+  .pf-nla__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pf-nla__item {
+  min-width: 0;
+}
+
+.pf-nla__card {
+  display: grid;
+  gap: .375rem;
+  color: var(--pf-nla-ink);
+  text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nla-accent);
+    outline-offset: 4px;
+  }
+}
+
+.pf-nla__cover {
+  display: block;
+  aspect-ratio: 4 / 3;
+  margin-bottom: .5rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bs-body-color) 6%, transparent);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    @include pf-nlr-motion {
+      transition: scale 1.2s var(--pf-nla-ease);
+    }
+  }
+}
+
+.pf-nla__blank {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--pf-nla-muted);
+  font: 300 4rem/1 var(--bs-body-font-family);
+}
+
+.pf-nla__number {
+  @include pf-nlr-label;
+  padding-bottom: .375rem;
+  border-bottom: 1px solid $pf-hairline;
+  color: var(--pf-nla-muted);
+}
+
+.pf-nla__name {
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.pf-nla__line {
+  color: var(--pf-nla-muted);
+  font-size: .9375rem;
+  line-height: 1.45;
+}
+
+.pf-nla__go {
+  @include pf-nlr-label;
+  margin-top: .25rem;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .35em;
+
+  &::after {
+    content: " \2192";
+    display: inline-block;
+
+    @include pf-nlr-motion {
+      transition: translate $pf-hover-out var(--pf-nla-ease);
+    }
+  }
+
+  @include pf-nlr-motion {
+    transition: text-decoration-color $pf-hover-out ease;
+  }
+}
+
+.pf-nla__card:focus-visible,
+.pf-nla__card:hover {
+  .pf-nla__cover img {
+    scale: 1.03;
+  }
+
+  .pf-nla__go {
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    &::after {
+      translate: .25em 0;
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
+// The issue, read on the page: a tall sheet over a dimmed page.
+.pf-nla__dialog {
+  width: min(100% - 2rem, 42rem);
+  max-width: none;
+  height: min(100% - 2rem, 64rem);
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: var(--pf-g-surface, var(--bs-body-bg));
+  color: var(--bs-body-color);
+  box-shadow: 0 12px 40px color-mix(in srgb, #000 30%, transparent);
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &::backdrop {
+    background: color-mix(in srgb, #000 55%, transparent);
+  }
+
+  @include pf-nlr-motion {
+    transition: opacity .35s ease, translate .45s var(--pf-nla-ease), display .45s allow-discrete, overlay .45s allow-discrete;
+
+    &::backdrop {
+      transition: opacity .35s ease, display .45s allow-discrete, overlay .45s allow-discrete;
+    }
+  }
+
+  &:not([open]) {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@starting-style {
+  .pf-nla__dialog[open] {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+
+  .pf-nla__dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 35.99rem) {
+  .pf-nla__dialog {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.pf-nla__bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .5rem .5rem .5rem 1.25rem;
+  border-bottom: 1px solid $pf-hairline;
+}
+
+.pf-nla__title {
+  @include pf-nlr-label;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pf-nla__own {
+  @include pf-nlr-label;
+  color: var(--bs-body-color);
+  text-decoration: underline;
+  text-underline-offset: .35em;
+  white-space: nowrap;
+
+  &::after {
+    content: " \2197";
+  }
+}
+
+.pf-nla__close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--bs-body-color);
+  font-size: 1.125rem;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nla-accent);
+    outline-offset: -2px;
+  }
+}
+
+.pf-nla__frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
+}
+
+// Before and after: two issues under one slider. ----------------------------------
+.pf-nlc {
+  --pf-nlc-cut: 50%;
+
+  container: pf-nlc / inline-size;
+  margin: 1.5rem 0 0;
+}
+
+.pf-nlc__stage {
+  --pf-nlr-frame-w: 40rem;
+}
+
+@container pf-nlc (max-width: 39.99rem) {
+  .pf-nlc__stage {
+    --pf-nlr-frame-w: 30rem;
+  }
+}
+
+// The slider stays in view while the emails scroll by.
+.pf-nlc__control {
+  position: sticky;
+  top: calc(var(--pf-header-h, 50px) + .5rem);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  width: min(100%, 32rem);
+  margin: 0 auto 1rem;
+  padding: .25rem 1rem;
+  background: var(--pf-g-surface, var(--bs-body-bg));
+  border: 1px solid $pf-hairline;
+
+  input {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    margin: 0;
+    accent-color: var(--bs-body-color);
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--pf-guide-accent, var(--bs-primary));
+    outline-offset: 2px;
+  }
+}
+
+.pf-nlc__end {
+  @include pf-nlr-label;
+  white-space: nowrap;
+}
+
+.pf-nlc__stage {
+  position: relative;
+  width: min(100%, var(--pf-nlr-frame-w));
+  margin-inline: auto;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--bs-body-color) 12%, transparent);
+  cursor: ew-resize;
+  touch-action: pan-y;
+}
+
+.pf-nlc__frame {
+  display: block;
+  width: 100%;
+  height: 2400px;
+  border: 0;
+  pointer-events: none;
+}
+
+.pf-nlc__frame--after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: inset(0 0 0 var(--pf-nlc-cut));
+  background: #fff;
+}
+
+// White with an ink edge: seen on the emails' white and on their purple.
+.pf-nlc__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pf-nlc-cut);
+  width: 2px;
+  translate: -1px 0;
+  background: #fff;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #000 55%, transparent);
+  pointer-events: none;
+}
+
+.pf-nlc__caption {
+  max-width: 40rem;
+  margin: 1rem auto 0;
+  color: var(--pf-guide-muted, var(--bs-secondary-color));
+  font-size: .9375rem;
+  line-height: 1.5;
+
+  a {
+    margin-inline-start: .5rem;
+    color: var(--bs-body-color);
+  }
+}

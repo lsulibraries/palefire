@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Past issues of the newsletter, as a gallery of covers.
+ *
+ * From a guide text paragraph that is only "[newsletter-archive]"; the
+ * block's links to Constant Contact previews are the issues, newest first
+ * (palefire_preprocess_paragraph__guide_text(), Drupal\palefire\NewsletterReview::archive()).
+ *
+ * - uid: unique on the page.
+ * - items: each with name (July 2026), line (The Awards Issue), number
+ *   (counting up from the oldest), preview, and cover ({src, alt} or NULL).
+ *
+ * Each card is a link to the issue's preview, so it works without the
+ * script; js/newsletter-review.js opens the issue in a dialog on the page
+ * instead, framed with no scripts, with a link to open it on its own.
+ */
+#}
+{{ attach_library('palefire/newsletter-review') }}
+{% if items %}
+  <div class="pf-nla" data-pf-nla>
+    <ol class="pf-nla__grid" role="list">
+      {% for item in items %}
+        <li class="pf-nla__item">
+          <a class="pf-nla__card" href="{{ item.preview }}" target="_blank" rel="noopener" data-pf-nla-open data-name="{{ item.name }}">
+            <span class="pf-nla__cover">
+              {% if item.cover %}
+                <img src="{{ item.cover.src }}" alt="" width="560" height="420" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+              {% else %}
+                <span class="pf-nla__blank" aria-hidden="true">{{ item.number }}</span>
+              {% endif %}
+            </span>
+            <span class="pf-nla__number" aria-hidden="true">{{ 'No. @n'|t({ '@n': item.number }) }}</span>
+            <span class="pf-nla__name">{{ item.name }}</span>
+            {% if item.line %}
+              <span class="pf-nla__line">{{ item.line }}</span>
+            {% endif %}
+            <span class="pf-nla__go">{{ 'Read the issue'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></span>
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+    <dialog class="pf-nla__dialog" id="{{ uid }}-dialog" aria-labelledby="{{ uid }}-dialog-title" data-pf-nla-dialog>
+      <div class="pf-nla__bar">
+        <p class="pf-nla__title" id="{{ uid }}-dialog-title" data-pf-nla-title></p>
+        <a class="pf-nla__own" href="#" target="_blank" rel="noopener" data-pf-nla-own>{{ 'Open on its own'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+        <button type="button" class="pf-nla__close" data-pf-nla-close aria-label="{{ 'Close'|t }}"><i class="fas fa-times" aria-hidden="true"></i></button>
+      </div>
+      <iframe class="pf-nla__frame" data-pf-nla-frame title="" sandbox="allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe>
+    </dialog>
+  </div>
+{% endif %}

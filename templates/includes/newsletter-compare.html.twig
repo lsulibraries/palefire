@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Two issues of the newsletter, one over the other, under a slider: before
+ * and after a redesign.
+ *
+ * From a guide text paragraph that is only "[newsletter-compare]"; the
+ * block's first two links to Constant Contact previews are before and after
+ * (palefire_preprocess_paragraph__guide_text(), Drupal\palefire\NewsletterReview::compare()).
+ *
+ * - uid: unique on the page.
+ * - before, after: name, line, preview and html (the email, scripts removed;
+ *   NULL if it couldn't be fetched).
+ *
+ * Both emails are drawn whole in sandboxed frames that take no pointer (the
+ * slider is the control). js/newsletter-review.js sizes them and moves the
+ * cut: the after issue shows to the right of it. The range input does the
+ * same from the keyboard, and stays in view at the top while the emails
+ * scroll past. Without the script the cut stays at the middle.
+ */
+#}
+{{ attach_library('palefire/newsletter-review') }}
+{% if before.html and after.html %}
+  <figure class="pf-nlc" data-pf-nlc aria-labelledby="{{ uid }}-caption">
+    <div class="pf-nlc__control">
+      <span class="pf-nlc__end" aria-hidden="true">{{ before.name }}</span>
+      <input type="range" min="0" max="100" value="50" step="1" data-pf-nlc-range aria-label="{{ 'Compare @a and @b: share of @a shown'|t({ '@a': before.name, '@b': after.name }) }}">
+      <span class="pf-nlc__end" aria-hidden="true">{{ after.name }}</span>
+    </div>
+    <div class="pf-nlc__stage" data-pf-nlc-stage>
+      <iframe class="pf-nlc__frame pf-nlc__frame--before" data-pf-nlc-frame title="{{ before.name }}" srcdoc="{{ before.html }}" sandbox="allow-same-origin" referrerpolicy="no-referrer" tabindex="-1" width="640" height="2400"></iframe>
+      <iframe class="pf-nlc__frame pf-nlc__frame--after" data-pf-nlc-frame title="{{ after.name }}" srcdoc="{{ after.html }}" sandbox="allow-same-origin" referrerpolicy="no-referrer" tabindex="-1" width="640" height="2400"></iframe>
+      <span class="pf-nlc__line" aria-hidden="true"></span>
+    </div>
+    <figcaption class="pf-nlc__caption" id="{{ uid }}-caption">
+      {{ 'Left: @a. Right: @b. Drag across the emails or use the slider.'|t({ '@a': before.name ~ (before.line ? ', ' ~ before.line : ''), '@b': after.name ~ (after.line ? ', ' ~ after.line : '') }) }}
+      <a href="{{ before.preview }}" target="_blank" rel="noopener">{{ 'Open @name on its own'|t({ '@name': before.name }) }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+      <a href="{{ after.preview }}" target="_blank" rel="noopener">{{ 'Open @name on its own'|t({ '@name': after.name }) }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+    </figcaption>
+  </figure>
+{% endif %}

@@ -25,6 +25,14 @@
  *   analytics-feedback.html.twig).
  * - research: the text had a "[research:<part>]" paragraph; that part of the
  *   LSU research figures follows it (includes/research-figures.html.twig).
+ * - newsletter: the text had a "[newsletter-review:<account>/<activity id>]"
+ *   paragraph; that Constant Contact draft follows it, for review, with its
+ *   feedback form (includes/newsletter-review.html.twig).
+ * - newsletter_compare, newsletter_archive: the text had a
+ *   "[newsletter-compare]" or "[newsletter-archive]" paragraph; its links to
+ *   Constant Contact previews become a before/after slider or a gallery of
+ *   past issues (includes/newsletter-compare.html.twig,
+ *   newsletter-archive.html.twig).
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -56,6 +64,15 @@
   {% endif %}
   {% if research %}
     {% include '@palefire/includes/research-figures.html.twig' with research only %}
+  {% endif %}
+  {% if newsletter %}
+    {% include '@palefire/includes/newsletter-review.html.twig' with newsletter|merge({ uid: 'nlr-' ~ paragraph.id() }) only %}
+  {% endif %}
+  {% if newsletter_compare %}
+    {% include '@palefire/includes/newsletter-compare.html.twig' with newsletter_compare|merge({ uid: 'nlc-' ~ paragraph.id() }) only %}
+  {% endif %}
+  {% if newsletter_archive %}
+    {% include '@palefire/includes/newsletter-archive.html.twig' with newsletter_archive|merge({ uid: 'nla-' ~ paragraph.id() }) only %}
   {% endif %}
   {% for plate in plates %}
     {% include '@palefire/includes/styleguide-plate.html.twig' with plate|merge({ uid: 'sg-' ~ paragraph.id() ~ '-' ~ loop.index }) only %}

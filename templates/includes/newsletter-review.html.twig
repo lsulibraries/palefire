@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * A Constant Contact newsletter draft, for review, beside its feedback form.
+ *
+ * From a guide text paragraph that is only
+ * "[newsletter-review:<account>/<activity id>]"
+ * (palefire_preprocess_paragraph__guide_text(), Drupal\palefire\NewsletterReview).
+ *
+ * - uid: unique on the page.
+ * - html: the email as Constant Contact's preview shows it now, scripts
+ *   removed (NULL: it couldn't be fetched).
+ * - version: a short fingerprint of that email, saved with each comment.
+ * - fetched: when it was fetched (timestamp).
+ * - preview: Constant Contact's own public preview.
+ * - form: the newsletter_review Webform (NULL: not created yet).
+ * - issue: the campaign's id, saved with each comment.
+ *
+ * The email sits in a sandboxed frame (no scripts; links open a new tab), so
+ * its own styles never touch the page. js/newsletter-review.js sizes the
+ * frame to the email, adds a Comment button beside each story, fills the
+ * form's Section when one is chosen, and, for ?for=<words>, scrolls to and
+ * marks the story whose headline has those words. Below 63rem the form is a
+ * sheet opened from a bar at the foot of the screen.
+ */
+#}
+{{ attach_library('palefire/newsletter-review') }}
+{% set panel_id = uid ~ '-panel' %}
+<div class="pf-nlr" data-pf-nlr data-version="{{ version }}">
+  <p class="pf-nlr__meta">
+    {% if version %}
+      <span class="pf-nlr__version">{{ 'Draft as of @time'|t({ '@time': fetched|format_date('custom', 'M j, g:i a') }) }} <span class="pf-nlr__code">v{{ version }}</span></span>
+    {% endif %}
+    <a class="pf-nlr__preview" href="{{ preview }}" target="_blank" rel="noopener">{{ 'Open the preview on its own'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+  </p>
+  <div class="pf-nlr__layout">
+    <div class="pf-nlr__stage">
+      {% if html %}
+        <iframe class="pf-nlr__frame" data-pf-nlr-frame title="{{ 'Newsletter draft'|t }}" srcdoc="{{ html }}" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" width="640" height="2400"></iframe>
+        <ol class="pf-nlr__pins" data-pf-nlr-pins aria-label="{{ 'Comment on a section'|t }}"></ol>
+      {% else %}
+        <p class="pf-nlr__missing">{{ 'The draft could not be loaded just now. Try again in a minute, or'|t }} <a href="{{ preview }}" target="_blank" rel="noopener">{{ 'open the preview on its own'|t }}</a>.</p>
+      {% endif %}
+    </div>
+    <aside class="pf-nlr__panel" id="{{ panel_id }}" data-pf-nlr-panel aria-labelledby="{{ uid }}-title" tabindex="-1">
+      <div class="pf-nlr__head">
+        <p class="pf-nlr__title" id="{{ uid }}-title">{{ 'Your feedback'|t }}</p>
+        <button type="button" class="pf-nlr__close" data-pf-nlr-close aria-label="{{ 'Close feedback'|t }}"><i class="fas fa-times" aria-hidden="true"></i></button>
+      </div>
+      <p class="pf-nlr__for" data-pf-nlr-for hidden></p>
+      <p class="pf-nlr__help">{{ 'Choose Comment beside a story to tie your note to it, or write about the whole issue. Send as many notes as you like.'|t }}</p>
+      {% if form %}
+        {{ form }}
+      {% else %}
+        <p class="pf-nlr__fallback">{{ 'The feedback form isn’t set up yet. Reply to the email that sent you this link.'|t }}</p>
+      {% endif %}
+    </aside>
+  </div>
+  <div class="pf-nlr__dock">
+    <button type="button" class="pf-nlr__open" data-pf-nlr-open aria-controls="{{ panel_id }}" aria-expanded="false"><i class="far fa-comment" aria-hidden="true"></i> {{ 'Leave feedback'|t }}</button>
+  </div>
+</div>
