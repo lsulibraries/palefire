@@ -600,12 +600,15 @@
   }
 }
 
-// Archive: past issues as a shelf of front pages. ---------------------------------
-// The Written at Hill shelf (.pf-tiles--covers, _tile-showcase.scss: drag,
-// Previous / Next, the fade, the turn and lift, the others dimming), each
-// issue a sheet instead of a book: the email's front page at 3:4, its page
-// edge a sliver, turned a little less. Wider than a book, so the masthead
-// and lead story read. A hairline keeps a white email off a white page.
+// Archive: past issues as front pages, a row per year. -----------------------------
+// Each issue a sheet drawn as the Written at Hill books are (.pf-tiles--covers,
+// .pf-book in _tile-showcase.scss: the turn, the lift, the others dimming):
+// the email's front page at 3:4, its page edge a sliver, turned a little
+// less. A grid, not the sideways shelf, so 35 issues stay in reach: the year
+// in a light numeral beside its row (above it when narrow), over a hairline,
+// and a list of the years above to jump to one. Two sheets across on
+// phones, up to five beside the year when wide. A hairline keeps a white
+// email off a white page.
 .pf-nla {
   --pf-nla-ink: var(--bs-body-color);
   --pf-nla-muted: var(--pf-guide-muted, var(--bs-secondary-color));
@@ -615,12 +618,88 @@
   margin-top: 1.5rem;
 }
 
+.pf-nla__years {
+  margin-bottom: .5rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid $pf-hairline;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    @include pf-nlr-label;
+    display: inline-block;
+    padding-block: .375rem;
+    color: var(--pf-nla-muted);
+    font-variant-numeric: tabular-nums;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: .4em;
+
+    @include pf-nlr-motion {
+      transition: color $pf-hover-out ease, text-decoration-color $pf-hover-out ease;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-nla-ink);
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-nla-accent);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.pf-nla__year {
+  display: grid;
+  gap: .75rem;
+  padding-block: 1.5rem;
+
+  & + & {
+    border-top: 1px solid $pf-hairline;
+  }
+}
+
+.pf-nla__year-label {
+  margin: 0;
+  color: var(--pf-nla-ink);
+  font: 300 clamp(1.75rem, 1.4rem + 1vw, 2.5rem)/1 var(--bs-body-font-family);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+
+  &:focus {
+    outline: none;
+  }
+}
+
 .pf-tiles--covers.pf-tiles--sheets {
-  --pf-book-turn: -12deg;
+  --pf-book-turn: -10deg;
+
+  .pf-tiles__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.25rem;
+    margin: 0;
+    // Room for a sheet's lift on hover.
+    padding: .5rem 0 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
 
   .pf-tiles__item {
     --pf-book-depth: .015;
-    flex-basis: min(62%, 13rem);
+    min-width: 0;
+    scroll-snap-align: none;
   }
 
   .pf-book__cover {
@@ -632,18 +711,84 @@
     outline: 1px solid $pf-hairline;
     outline-offset: -1px;
   }
+
+  // Three lines at most; the link still says it all.
+  .pf-book .pf-book__title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
 }
 
-// No lede beside this shelf, so the buttons stay above it on the right.
+@container pf-tiles (min-width: 30rem) {
+  .pf-tiles--covers.pf-tiles--sheets .pf-tiles__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container pf-tiles (min-width: 44rem) {
+  .pf-tiles--covers.pf-tiles--sheets .pf-tiles__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+}
+
 @container pf-tiles (min-width: 60rem) {
-  .pf-tiles--covers.pf-tiles--sheets {
-    .pf-tiles__item {
-      flex-basis: 15rem;
+  .pf-nla__year {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 2rem;
+    padding-block: 2rem;
+  }
+
+  .pf-nla__year-label {
+    padding-top: .5rem;
+  }
+
+  .pf-tiles--covers.pf-tiles--sheets .pf-tiles__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+// Wide screens: the page's title, intro and date become a column of their
+// own beside the sections and stay in view while the years scroll past, so
+// the intro no longer sits over a band of empty page. Only on a page with
+// the archive (this file loads with it); the button and messages region
+// keep to the sections' column. From 80rem, where the sections keep about
+// 600px beside the 300px contents sidebar; narrower, the head stays above.
+@media (min-width: 80rem) {
+  .pf-main:has(.pf-nla) {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1fr) minmax(0, 2.75fr);
+    align-items: start;
+
+    > * {
+      grid-column: 2;
     }
 
-    .pf-tiles__shelf-nav {
-      position: static;
-      margin-bottom: .25rem;
+    > .pf-modular__head {
+      position: sticky;
+      top: var(--pf-header-h);
+      grid-column: 1;
+      grid-row: 1 / span 3;
+      max-height: calc(100dvh - var(--pf-header-h));
+      overflow-y: auto;
+      padding-block-end: 2rem;
+      padding-inline-end: 0;
+      // Nothing sits under it in a column of its own; a long intro can scroll.
+      pointer-events: auto;
+      scrollbar-width: thin;
+    }
+
+    // Sized to the column, not the screen: a scrolling box clips sideways,
+    // and "Newsletter" at the full 3.25rem overran 300px.
+    .pf-modular__title {
+      font-size: clamp(2rem, 1rem + 1.4vw, 2.75rem);
+      overflow-wrap: break-word;
+    }
+
+    .pf-guide-head {
+      padding-bottom: 1.5rem;
     }
   }
 }

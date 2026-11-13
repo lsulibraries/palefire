@@ -156,27 +156,46 @@ final class NewsletterReview {
   }
 
   /**
-   * The shelf: each issue with its front page, newest first as listed.
+   * The archive: each issue with its front page, newest first as listed,
+   * grouped by year.
    *
    * The front page is the theme's capture of the email's top (FRONT). An
    * issue without one, newly added, is a cover set in type with its name
    * and number until its capture is added. Nothing is fetched: the issues
-   * open from Constant Contact itself.
+   * open from Constant Contact itself. The year is the one it was sent,
+   * else the one in its name; issues with neither join the year before.
+   *
+   * @return array{items: list<array>, years: list<array{year: string, items: list<array>}>}
    */
   public static function archive(array $issues): array {
     $count = count($issues);
     $theme = \Drupal::service('extension.list.theme')->getPath('palefire');
     $urls = \Drupal::service('file_url_generator');
     $items = [];
+    $years = [];
+    $year = '';
     foreach (array_values($issues) as $i => $issue) {
       $front = $theme . '/' . sprintf(self::FRONT, $issue['id']);
-      $items[] = $issue + [
+      $item = $issue + [
         'number' => sprintf('%02d', $count - $i),
         'preview' => sprintf(self::PREVIEW, $issue['account'], $issue['id']),
         'front' => is_file(DRUPAL_ROOT . '/' . $front) ? $urls->generateString($front) : NULL,
       ];
+      if (!empty($issue['sent_iso'])) {
+        $year = substr($issue['sent_iso'], 0, 4);
+      }
+      elseif (preg_match('/\b(?:19|20)\d{2}\b/', $issue['name'], $m)) {
+        $year = $m[0];
+      }
+      $last = array_key_last($years);
+      if ($last === NULL || $years[$last]['year'] !== $year) {
+        $years[] = ['year' => $year, 'items' => []];
+        $last = array_key_last($years);
+      }
+      $years[$last]['items'][] = $item;
+      $items[] = $item;
     }
-    return ['items' => $items];
+    return ['items' => $items, 'years' => $years];
   }
 
   /**
