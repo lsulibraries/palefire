@@ -31,7 +31,12 @@
  *   before then after.
  *
  * Issues as of 2026-11-13, from the campaigns sent in Constant Contact: the
- * five newsletters (giving, Audubon Day and holiday emails left out).
+ * 35 newsletters from February 2018 to July 2026 (giving, event, Audubon Day
+ * and holiday emails left out; of two sends of one issue, the corrected one).
+ * Constant Contact has no public preview of its older "legacy" emails, the
+ * newsletters of 2013 to 2017, so they can't be listed here. The issue's
+ * name is the one on its masthead, which is sometimes a month after the
+ * campaign's (the campaign "January 2021" went out as February 2021).
  *
  * This script owns the page's words until it is edited in Drupal: a run
  * replaces its sections in a new revision and stops if the page was saved
@@ -112,6 +117,36 @@ $sections = [
         . $issue('15ea6191-b5f5-496e-85ed-bc8296c2cb03', 'January 2026', '50 Years of Book Bazaars', 'February 2, 2026')
         . $issue('2b549e7a-fcc8-4a17-95d2-014a39d37ba8', 'October 2025', 'Public Pathogens: Louisiana’s historical struggle with disease', 'October 8, 2025')
         . $issue('99cd96c7-42d1-4a07-b301-a32428303f22', 'August 2025 Special Edition', 'Enhancing LSU research and scholarship, and a student guide to the fall semester', 'August 27, 2025')
+        . $issue('de84829b-ff71-441b-8116-da466d524001', 'July 2025', 'From LSU to France: a Fulbright award for Bozza research abroad', 'July 10, 2025')
+        . $issue('629060ac-fe5b-432d-8e37-2e8220813b32', 'April 2025', 'A milestone for the new Main Library building, and ten years of free e-textbooks', 'April 7, 2025')
+        . $issue('4efc43c2-5645-48ac-9f9d-6c248d8429fb', 'January 2025', 'Remembering Phil Kitchens, a legacy of generosity and intellectual curiosity', 'January 14, 2025')
+        . $issue('71c40ebb-a4cf-4903-8e8e-510ccc5fe3b5', 'October 2024', 'Woven Louisiana History: Acadian Textiles', 'October 11, 2024')
+        . $issue('f20b85fc-bbaa-487d-a290-21ba5f4c7001', 'August 2024 Special Edition', 'LSU Libraries’ guide to the fall semester', 'August 21, 2024')
+        . $issue('fb1bb182-6203-4d5c-a74c-aa0065fb8048', 'July 2024', 'Nicollette Davis named a 2024 Mover &amp; Shaker', 'July 8, 2024')
+        . $issue('6cccaf0a-5c1d-428f-a32d-ad1b79558cdc', 'April 2024', '“Literary Layers,” a new permanent display', 'April 4, 2024')
+        . $issue('a8ab8fa7-b9fa-497e-ad8f-1f6d0427bfd6', 'January 2024', 'A design team for the new Main Library building', 'January 17, 2024')
+        . $issue('35f774c6-fbe9-47a5-b876-b70006601442', 'October 2023', 'The Legacies They Built: Pinkie Gordon Lane, Lutrill and Pearl Payne, and Julian T. White', 'October 5, 2023')
+        . $issue('cdb53997-5e82-4ef3-a6cd-fb4c0a700c43', 'August 2023 Special Edition', 'Progress on a new Main Library building', 'August 30, 2023')
+        . $issue('228a49d8-f8c3-4993-b0f2-23526849c2a9', 'July 2023', 'A record-breaking LSU Giving Day', 'July 6, 2023')
+        . $issue('d9c55af3-89d7-4618-9a68-29ec9e554faa', 'April 2023', 'Descendants of an African American poet find their roots in Special Collections', 'April 4, 2023')
+        . $issue('5363d236-e503-4ade-bb5a-2b56f5edde09', 'January 2023', 'Voices of Louisiana Veterans', 'January 6, 2023')
+        . $issue('1de07ff9-18df-4036-952a-40735fd6e06d', 'November 2022', 'Water, Water Everywhere: Louisiana’s coastal wetlands', 'November 2, 2022')
+        . $issue('42607b72-37a4-4601-b3c7-3e8479653eb9', 'March 2022', 'The Wyatt Houston Day Collection of Poetry by African Americans', 'February 24, 2022')
+        . $issue('ca1941ca-0296-4c0c-9020-665f012bbb71', 'December 2021', 'A semester back on campus, and the Free e-Textbooks Initiative', 'December 9, 2021')
+        . $issue('fdf91816-cebe-46f2-8d24-449fb1993244', 'May 2021', 'An 1863 muster roll of the Louisiana Volunteer Corps d’Afrique', 'May 3, 2021')
+        . $issue('a46fca3f-d434-4a03-830e-117c5e33e956', 'February 2021', 'Laptops for students, and new arrivals of African American literature', 'February 8, 2021')
+        . $issue('f3e48b74-6321-4ed3-804d-8b44db2d083a', 'December 2020', 'Congratulations to our graduating employees', 'December 21, 2020')
+        . $issue('0a033758-fedb-49f4-aa8a-9dce6914ad30', 'September 2020', 'The Main Library at LSU takes a new name', 'September 15, 2020')
+        . $issue('cbb85b00-356d-428d-8bb6-df5b86031d16', 'May 2020', 'Library services during the COVID-19 closures', 'May 11, 2020')
+        . $issue('08dc2603-9fea-40c1-8d05-cd395924478f', 'February 2020', 'Special Collections acquires a monumental work of medieval printing', 'February 10, 2020')
+        . $issue('4ddcdaca-35b3-474c-925f-3fb2b0bb8aa0', 'December 2019', 'The Mobile Digitization Lab', 'December 10, 2019')
+        . $issue('3d90678f-54aa-45d7-a380-088c4112db47', 'September 2019', 'A first-floor transformation for Middleton Library', 'September 9, 2019')
+        . $issue('63282cca-c530-4258-9cb1-f09bf9e76a6c', 'May 2019', 'Hill Memorial Library’s roof renovation', 'May 13, 2019')
+        . $issue('484ad67f-fe6e-4c3e-a9c4-11ce6ec8be01', 'January 2019', 'Ebony McDonald joins LSU Libraries in its diversity residency program', 'January 22, 2019')
+        . $issue('59ea98a1-ffa5-403f-8171-6e9cce31e86b', 'December 2018', '“We Built This City,” an exhibition on urban systems', 'December 17, 2018')
+        . $issue('2a8a0690-40ff-4360-9476-1bb488fc0ae6', 'August 2018', 'Digitizing The Daily Reveille, and a new catalog', 'August 27, 2018')
+        . $issue('1ca5a846-57e9-48b7-9ce0-f6016d05d1ff', 'May 2018', 'Congratulations, class of 2018', 'May 17, 2018')
+        . $issue('3c922394-2843-46f0-a6bd-fc9753647d07', 'February 2018', 'The LSU Libraries Strategic Plan, 2017–2022', 'February 5, 2018')
         . '</ul>'],
     ],
   ],
