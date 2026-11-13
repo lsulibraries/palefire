@@ -868,6 +868,58 @@
     }
   };
 
+  // Analytics: each filter added to a search sends "pf_search_filter" with
+  // what was chosen (search_filter) and the mode. Values are the form's own,
+  // never words typed: "source:catalog" for a source, the refine value as is
+  // ("catalog:type_book", "articles:peer_reviewed"), "sort:<order>", and
+  // "years" for a year range. Only filters new to this search count: not
+  // ones carried over to a new search, not clearing one, not the pager, not
+  // Back or Forward (those don't come through here), and nothing when the
+  // words or the mode changed. GTM's data layer still holds the words from
+  // pf_search, so GA4 has them with the filter.
+  const filtersOf = (url) => {
+    const chosen = new Set();
+    new URL(url, window.location.href).searchParams.forEach((value, key) => {
+      if (!value) {
+        return;
+      }
+      if (/^source\[\d*\]$/.test(key)) {
+        chosen.add(`source:${value}`);
+      }
+      else if (/^refine\[[^\]]*\]$/.test(key)) {
+        chosen.add(value);
+      }
+      else if (key === 'sort') {
+        chosen.add(`sort:${value}`);
+      }
+      else if (key === 'from' || key === 'to') {
+        chosen.add('years');
+      }
+    });
+    return chosen;
+  };
+  const sendFilters = (before, after) => {
+    if (!Array.isArray(window.dataLayer)) {
+      return;
+    }
+    const was = new URL(before, window.location.href).searchParams;
+    const now = new URL(after, window.location.href).searchParams;
+    const mode = now.get('mode') || 'all';
+    if ((was.get('q') || '') !== (now.get('q') || '') || (was.get('mode') || 'all') !== mode) {
+      return;
+    }
+    const old = filtersOf(before);
+    filtersOf(after).forEach((filter) => {
+      if (!old.has(filter)) {
+        window.dataLayer.push({
+          event: 'pf_search_filter',
+          search_filter: filter.slice(0, 100),
+          search_mode: mode,
+        });
+      }
+    });
+  };
+
   // Analytics: a search that found nothing anywhere sends "pf_search_empty"
   // (its words and mode) once every late section has answered, so the report
   // can list what people looked for and didn't find. A section that couldn't
@@ -1322,7 +1374,11 @@
 
     // Before the swap: the new pager's links are relative to this address.
     if (history) {
+      const before = window.location.href;
       window.history.pushState({ pfIndex: true, pfSearchSent: true }, '', url);
+      if (!search) {
+        sendFilters(before, url);
+      }
     }
     if (search && history) {
       sendSearch(url);

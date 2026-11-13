@@ -899,7 +899,8 @@ $pf-index-bar-shadow:
 
   &:hover .pf-index__link-text,
   &:focus-visible .pf-index__link-text,
-  &[aria-expanded='true'] .pf-index__link-text {
+  &[aria-expanded='true'] .pf-index__link-text,
+  &[aria-pressed='true'] .pf-index__link-text {
     text-decoration-color: currentColor;
   }
 
@@ -928,7 +929,8 @@ $pf-index-bar-shadow:
 
   &:hover .fa-secondary,
   &:focus-visible .fa-secondary,
-  &[aria-expanded='true'] .fa-secondary {
+  &[aria-expanded='true'] .fa-secondary,
+  &[aria-pressed='true'] .fa-secondary {
     opacity: .7;
   }
 
@@ -938,39 +940,32 @@ $pf-index-bar-shadow:
   }
 }
 
-// What each source searches, opened under the filter's title and above its
-// options, which move down for it: in the sidebar's own column, covering
-// nothing.
-.pf-index__about {
-  padding: .875rem 0 1rem;
+// What each source searches, under its own name once What are these? is
+// pressed (index-search.js): one short line in the muted text, lined up with
+// the name after the checkbox. The hairline moves from under the name to under
+// the line, so the two read as one row. Each line is also its checkbox's
+// description (aria-describedby), shown or not.
+.pf-index__option-about {
+  display: none;
+  margin: -.375rem 0 0;
+  padding: 0 0 .75rem 1.75rem; // the checkbox (1.125rem) and its gap
   border-bottom: 1px solid var(--pf-index-line);
-  font-size: .875rem;
-  line-height: 1.5;
+  color: var(--pf-g-muted, var(--bs-secondary-color));
+  font-size: .8125rem;
+  line-height: 1.45;
+}
 
-  @include pf-index-motion {
-    animation: pf-index-about-in .25s ease-out;
+.pf-index__group.is-described {
+  .pf-index__option-about {
+    display: block;
+
+    @include pf-index-motion {
+      animation: pf-index-about-in .3s ease-out;
+    }
   }
 
-  &[hidden] {
-    display: none;
-  }
-
-  dl {
-    margin: 0;
-  }
-
-  dt {
-    color: var(--bs-heading-color, var(--bs-emphasis-color));
-    font-weight: 500;
-  }
-
-  dd {
-    margin: 0 0 .75rem;
-    color: var(--pf-g-muted, var(--bs-secondary-color));
-  }
-
-  dd:last-child {
-    margin-bottom: 0;
+  .pf-index__option:has(+ .pf-index__option-about) {
+    border-bottom-color: transparent;
   }
 }
 
@@ -4077,21 +4072,103 @@ html.pf-index-docked {
   color: var(--pf-index-muted);
 }
 
+// A section's closing row (palefire_search's list template): the whole width
+// of the results, 48px, under the last result's hairline and over one of its
+// own, so it ends the section before the next heading. The words at the left
+// edge, where the eye already runs down the titles, in the body face; the
+// total in the mono figures and a gold arrow at the right. Hover and focus
+// tint the row and nudge the arrow on (up and out, for another site).
 .pf-index-list__more {
-  display: flex;
-  margin: 1rem 0 0;
+  margin: 0;
+}
 
-  // It names the source ("Show all Catalog results (44)"), longer than the
-  // rule link's one line on a phone: it wraps, ending flush right.
-  .pf-index-rule__link {
-    white-space: normal;
-    text-align: end;
-    text-wrap: balance;
+.pf-index-list__all {
+  display: flex;
+  align-items: center;
+  gap: .25rem 1rem;
+  min-height: 3rem;
+  // The words on the titles' left edge: the tint reaches .75rem past the
+  // column on each side, inside the page's gutter at 320px.
+  // The hairline keeps to the column, in line with the rows' own.
+  position: relative;
+  margin-inline: -.75rem;
+  padding: .625rem .75rem;
+  color: var(--pf-index-fg);
+  font-size: .9375rem;
+  line-height: 1.35;
+  text-decoration: none;
+
+  @include pf-index-motion {
+    transition: background-color $pf-hover-out ease;
   }
 
-  // The theme's rule link. One that leaves the site points up and out.
-  a[href^="http"]::after {
-    content: "\2197" / "";
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
+
+    @include pf-index-motion {
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto .75rem 0;
+    border-bottom: 1px solid var(--pf-index-line);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-index-highlight);
+    outline-offset: -2px;
+  }
+}
+
+.pf-index-list__all-words {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-wrap: balance;
+}
+
+.pf-index-list__all-count {
+  flex: none;
+  color: var(--pf-index-muted);
+  font-family: var(--pf-toc-font, "Consolas", "Monaco", monospace);
+  font-size: .8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-index-list__all-arrow {
+  flex: none;
+  color: var(--pf-index-highlight);
+  line-height: 1;
+
+  @include pf-index-motion {
+    transition: transform $pf-hover-out ease;
+  }
+
+  // Still with reduced motion: only the row's tint changes then.
+  .pf-index-list__all:hover &,
+  .pf-index-list__all:focus-visible & {
+    @include pf-index-motion {
+      transform: translateX(.25rem);
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  .pf-index-list__all[href^="http"]:hover &,
+  .pf-index-list__all[href^="http"]:focus-visible & {
+    @include pf-index-motion {
+      transform: translate(.15rem, -.15rem);
+    }
+  }
+
+  [dir="rtl"] & {
+    scale: -1 1;
+  }
+
+  @media (forced-colors: active) {
+    color: LinkText;
   }
 }
 

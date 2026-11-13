@@ -214,12 +214,13 @@ HTML),
 <li><strong>Searches:</strong> each new Combined Search sends <code>pf_search</code> with the words searched (email addresses removed) and the mode. Filters, sorting, paging, Back and reloads don't count again.</li>
 <li><strong>The old site:</strong> its pages open some content in pop-ups that change the address. Since GTM version 11 (Thu 12 Nov), the "Old site - GA4 page_view (history)" tag counts those, on pages without the Palefire labels only.</li>
 <li><strong>Controls:</strong> <code>pf_interaction</code> records which tabs, buttons and settings are used in the section tabs, Ask us, reading settings, the phone dock and the building map. Text that visitors type is never sent.</li>
+<li><strong>Filters:</strong> <code>pf_search_filter</code> each time a source, filter, year range or sort order is added to a Combined Search, with the mode.</li>
 <li><strong>Search outcomes:</strong> <code>pf_search_empty</code> when every source comes back empty, and <code>pf_search_result</code> with the source and position when a result is opened.</li>
 <li><strong>Feedback:</strong> <code>pf_search_feedback</code> when someone opens Combined Search's feedback form, and <code>pf_search_feedback_sent</code> when it is sent.</li>
 </ul>
 HTML),
   $text('Website Analytics page', <<<'HTML'
-<p>A staff-only guide page, <a href="/v2/internal/analytics">Website Analytics</a>, shows the last 28 days: page views and visitors with the change since the 28 days before, views by part of the site and kind of page, twelve weeks of views, the most viewed pages, Combined Searches by mode and the most frequent search terms, searches that found nothing, results opened, the most used controls, and the Combined Search feedback with its latest comments. Figures are fetched from GA4 each night. While /v2 is being tested it counts the new site only, and its figures show only to signed-in staff, even if the page is published by mistake.</p>
+<p>A staff-only guide page, <a href="/v2/internal/analytics">Website Analytics</a>, shows the last 28 days: page views and visitors with the change since the 28 days before, views by part of the site and kind of page, twelve weeks of views, the most viewed pages, Combined Searches by mode, the most frequent search terms with the mode each was searched in, the filters chosen, searches that found nothing, results opened, the most used controls, and the Combined Search feedback with its latest comments. Figures are fetched from GA4 each night. While /v2 is being tested it counts the new site only, and its figures show only to signed-in staff, even if the page is published by mistake.</p>
 HTML),
   $status('Analytics checklist', [
     ['done', 'Page labels', 'data-pf-section and data-pf-type on every Palefire page, kept in step between pages.'],
@@ -227,6 +228,7 @@ HTML),
     ['done', 'No double counting', 'GA4\'s history-based page views turned off; Palefire sends its own.'],
     ['done', 'Old site page views', 'GTM version 11 (Thu 12 Nov) counts the old site\'s pop-up pages.'],
     ['done', 'Controls and search outcomes', 'GTM version 12 (Thu 12 Nov) sends controls used, searches that found nothing and results opened.'],
+    ['running', 'Filters', 'Combined Search sends each filter chosen (Fri 13 Nov). Waiting on a GTM tag and the Search filter custom dimension in GA4.'],
     ['done', 'Feedback events', 'GTM version 13 (Thu 12 Nov) sends Combined Search feedback opened and sent.'],
     ['done', 'Website Analytics page', 'A staff-only page with the last 28 days, updated each night.'],
     ['todo', 'Search as a key event', 'Star search as a key event once GA4 lists it, a day or so after the first searches arrive.'],
@@ -418,6 +420,13 @@ HTML),
 <li>Combined Search asks "Did you find what you needed?" under the results. An answer opens a feedback form in a drawer, with the search filled in, so visitors keep their results.</li>
 <li>Smoother scrolling: the page restyles about half as much while scrolling, and the Written at Hill shelf can be dragged with the mouse.</li>
 <li>Analytics now also count controls used, searches that found nothing, results opened and feedback, and a staff-only Website Analytics page shows the last 28 days, updated each night.</li>
+</ul>
+HTML),
+  $text('Fri Nov 13: Analytics catch-up', <<<'HTML'
+<ul>
+<li>This guide caught up with the afternoon of Nov 12, and the Website Analytics figures now refresh every night.</li>
+<li>The Website Analytics page shows the mode of each search (All, Research, Special Collections or Website) beside its words, and Combined Search now sends each filter chosen, for a Filters chosen table on the same page.</li>
+<li>Combined Search: each section now ends in a full-width row leading to its full list (Show all Discovery results, with the total and a gold arrow), easier to find than the small link at the far right it replaces.</li>
 </ul>
 HTML),
 ]);

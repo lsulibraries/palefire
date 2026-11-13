@@ -416,6 +416,13 @@ HTML),
 <li>Analytics now learns what searches find. A search that comes back empty from every source is counted with its words, so staff can see what people looked for and didn't find; a source that couldn't be reached doesn't count, since nothing was learned. Opening a result is counted with its source and its place in the list (1st, 2nd…), never the result itself. Both appear for staff on the Website Analytics page.</li>
 </ul>
 HTML),
+  $text('Fri Nov 13: Search modes and filters in the staff report', <<<'HTML'
+<ul>
+<li>The Website Analytics page now shows which mode each search was made in, beside the words: All, Research, Special Collections or Website, with how many times in each when a search was made in more than one. Searches that found nothing show their mode the same way.</li>
+<li>Analytics now counts the filters people choose: each source, filter, year range or sort order added to a search, with its mode. Only what is added counts, not filters carried over to a new search or cleared. They appear on the Website Analytics page as Filters chosen once Google Analytics has the new Search filter setting.</li>
+<li>The link to a section's full list (Show all Discovery results) was easy to miss: small capitals at the far right, under the last result. It's now a full-width row that closes the section: the words at the left, where the eye runs down the titles, the total and a gold arrow at the right, and a faint tint when pointed at or tabbed to. Links to another site, such as See all databases, look the same with an arrow pointing up and out.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
