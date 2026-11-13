@@ -10,8 +10,10 @@
 //   ↗ (target="_blank") leaves it. It steps the way it points on hover.
 // Both tiers: Roboto at 15px and $pf-button-weight, sentence case, so an action
 // never reads as one of the mono labels. Square, 3rem tall (dense rows set
-// 2.75rem). On hover and focus the text color wipes across and the words
-// invert. Text links (index rules, Visit) stay mono capitals at
+// 2.75rem). On hover and focus the primary's fill wipes to the text color
+// and the words invert; the secondary keeps its words, its plate deepens to
+// 13% and a 2px accent rule wipes along its foot (a full invert across a wide
+// plate, FAQ or Show all rows, flashed). Text links (index rules, Visit) stay mono capitals at
 // --pf-mono-label, underlined at .35em, with the same arrows.
 
 // The button's words.
@@ -164,8 +166,17 @@
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   background-color: color-mix(in srgb, var(--pf-section-fg, var(--bs-emphasis-color)) 9%, transparent);
 
+  // The wipe (pf-button-wipe) as a rule along the foot, in the theme's accent,
+  // as under the active tab: the same motion, scale and fade, a 2px line in
+  // place of the fill. The words keep their color; the plate deepens.
+  &::before {
+    inset: auto 0 0;
+    height: 2px;
+    background-color: var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+  }
+
   @include pf-button-on {
-    color: var(--bs-body-bg);
+    background-color: color-mix(in srgb, var(--pf-section-fg, var(--bs-emphasis-color)) 13%, transparent);
   }
 
   // High contrast promises brighter edges: the hairline is at full strength there.

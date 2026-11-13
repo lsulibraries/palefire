@@ -3764,16 +3764,6 @@ html.pf-index-docked {
     font-size: .875rem;
     text-decoration: none;
     white-space: nowrap;
-
-    &:focus-visible {
-      color: var(--bs-body-bg);
-    }
-
-    @media (hover: hover) {
-      &:hover {
-        color: var(--bs-body-bg);
-      }
-    }
   }
 }
 
@@ -4004,17 +3994,6 @@ html.pf-index-docked {
 .pf-main .pf-index .pf-index-row__open a {
   color: var(--pf-section-fg, var(--bs-emphasis-color));
   text-decoration: none;
-
-  // The words invert as the slab wipes across, on hover as on focus.
-  &:focus-visible {
-    color: var(--bs-body-bg);
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      color: var(--bs-body-bg);
-    }
-  }
 }
 
 .pf-index-row__excerpt-label {
@@ -4077,9 +4056,9 @@ html.pf-index-docked {
 // location) across the whole width of the results, so it reads as the
 // section's last control rather than one more line of text. The words at the
 // left, in line with the buttons' own; the total in the mono figures and a gold
-// arrow at the right. Hover and focus wipe in the text color as every slab
-// does, the count and arrow take the fill's words color, and the arrow nudges
-// on (up and out, for another site).
+// arrow at the right. Hover and focus as every slab (the plate deepens and the
+// accent rule wipes along its foot); the arrow nudges on (up and out, for
+// another site).
 .pf-index-list__more {
   margin: 1.5rem 0 0;
 }
@@ -4137,17 +4116,6 @@ html.pf-index-docked {
     @include pf-index-motion {
       transform: translate(.15rem, -.15rem);
     }
-  }
-
-  // On the fill, gold would sink into it: the words' color instead.
-  @media (hover: hover) {
-    .pf-index-list__all:hover & {
-      color: inherit;
-    }
-  }
-
-  .pf-index-list__all:focus-visible & {
-    color: inherit;
   }
 
   [dir="rtl"] & {
