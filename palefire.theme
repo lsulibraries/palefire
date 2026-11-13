@@ -27,6 +27,7 @@ use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
+use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -2343,12 +2344,18 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * Search feedback (includes/analytics-feedback.html.twig): part, allowed,
  * and the figures (report or feedback) for visitors who may see them. NULL
  * without a marker.
+ *
+ * research: a paragraph that is only "[research:<part>]" draws that part of
+ * the LSU research figures from OpenAlex after the text
+ * (includes/research-figures.html.twig, Drupal\palefire\ResearchFigures):
+ * part and data. Public. NULL without a marker.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
   $variables['faqs'] = [];
   $variables['plates'] = [];
   $variables['analytics'] = NULL;
+  $variables['research'] = NULL;
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -2384,6 +2391,8 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $faqs = FALSE;
   $analytics_marker = '#<p>\s*\[analytics:(report|feedback)\]\s*</p>#i';
   $analytics = NULL;
+  $research_marker = '#<p>\s*\[research:(' . implode('|', ResearchFigures::PARTS) . ')\]\s*</p>#i';
+  $research = NULL;
   // Element::children() takes its argument by reference, so it gets the
   // variable itself, not an expression.
   foreach (Element::children($variables['content']['field_block_body']) as $delta) {
@@ -2399,6 +2408,10 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     if (isset($item['#text']) && preg_match($analytics_marker, (string) $item['#text'], $analytics_match)) {
       $item['#text'] = preg_replace($analytics_marker, '', (string) $item['#text']);
       $analytics = strtolower($analytics_match[1]);
+    }
+    if (isset($item['#text']) && preg_match($research_marker, (string) $item['#text'], $research_match)) {
+      $item['#text'] = preg_replace($research_marker, '', (string) $item['#text']);
+      $research = strtolower($research_match[1]);
     }
     if (isset($item['#text']) && str_contains((string) $item['#text'], '[styleguide:')) {
       $item['#text'] = preg_replace_callback('#<p>\s*\[styleguide:([a-z]+)\]\s*</p>#i', function (array $m) use (&$variables): string {
@@ -2433,6 +2446,13 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       $cache->addCacheTags(['webform_submission_list'])->setCacheMaxAge(3600);
     }
     $cache->applyTo($variables);
+  }
+  // Redrawn when the nightly pull saves (ResearchFigures::save()).
+  if ($research) {
+    $variables['research'] = ['part' => $research, 'data' => ResearchFigures::view($research)];
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags([ResearchFigures::CACHE_TAG])
+      ->applyTo($variables);
   }
   $variables['ask_href'] = '';
   $tab = $variables['request_paths'] ? $variables['paragraph']->getParentEntity() : NULL;

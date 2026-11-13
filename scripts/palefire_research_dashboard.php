@@ -4,9 +4,8 @@
  * @file
  * "LSU Research, by the Numbers": a page that presents Colton Ray's OpenAlex
  * Research Dashboard (lsuopenalex.lsusites.org) and links out to it, as an
- * UNPUBLISHED Modular page of the plain kind (no mode: banded sections, the
- * shared column and headings). Run palefire_guide_setup.php and
- * palefire_guide_blocks_setup.php first.
+ * UNPUBLISHED Modular page in exhibition mode. Run palefire_exhibit_setup.php
+ * (title page fields, galleries) and palefire_guide_setup.php first.
  *
  *   drush php:script scripts/palefire_research_dashboard.php
  *   drush php:script scripts/palefire_research_dashboard.php -- apply=1
@@ -17,17 +16,26 @@
  * should not carry, and a frame would hide its tables from keyboard and
  * screen-reader users.
  *
- * Sections: At a glance (Figures and the link to the dashboard), What you can
- * explore, About the data, Questions (Colton's librarian card when his Staff
- * page exists, else his contact in words).
+ * Title page: the kicker "Research", the title, a subtitle, the intro, three
+ * live key facts, the prompt, and "Open the dashboard" as the main button
+ * beside Begin and Contents. No cover image: a type-only title page until an
+ * editor adds one (Exhibition title image).
  *
- * The figures were counted from the OpenAlex API on 2026-11-13: works with at
- * least one LSU author (OpenAlex I121820613, ROR 05ect4e57) published since
- * 2020-01-01. They are typed in, so they do not change with the dashboard;
- * refresh them here once a semester, or ask Colton for his.
+ * Galleries: Output, Open access, Where it is published, Funding and topics,
+ * Most cited, The full dashboard, About the data, Questions (Colton's
+ * librarian card when his Staff page exists and galleries allow the card,
+ * else his contact in words).
+ *
+ * The figures are live: a text block holding "[research:<part>]" draws that
+ * part, and a key fact "Label: [research:<name>]" that figure, from what
+ * palefire_research_pull.php last fetched from OpenAlex
+ * (Drupal\palefire\ResearchFigures, nightly cron). Run the pull once before
+ * the page is first viewed: until then each part says the figures are on
+ * their way, and the key facts are left out.
  *
  * This script owns the page's words and can be run again; each build is a
- * new revision and leaves the page unpublished. It stops if the page was
+ * new revision and leaves the page unpublished. A page built as the plain
+ * kind by an earlier version becomes an exhibition. It stops if the page was
  * edited in Drupal (force=1 overrides).
  *
  * Optional arguments after "--": apply=1, force=1, format=<text format>,
@@ -54,9 +62,15 @@ $apply = ($args['apply'] ?? '') === '1';
 $force = ($args['force'] ?? '') === '1';
 
 $paragraph_types = \Drupal::entityTypeManager()->getStorage('paragraphs_type');
-foreach (['guide_section', 'guide_text', 'guide_stats', 'guide_stat'] as $id) {
+foreach (['exhibit_page', 'guide_text'] as $id) {
   if (!$paragraph_types->load($id)) {
-    throw new \RuntimeException("'$id' not found. Run palefire_guide_setup.php and palefire_guide_blocks_setup.php first.");
+    throw new \RuntimeException("'$id' not found. Run palefire_exhibit_setup.php and palefire_guide_setup.php first.");
+  }
+}
+$node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
+foreach (['field_modular_type', 'field_exhibit_kicker', 'field_exhibit_keyfacts', 'field_exhibit_action'] as $name) {
+  if (!isset($node_fields[$name])) {
+    throw new \RuntimeException("node.modular_page.$name not found. Run palefire_exhibit_setup.php first.");
   }
 }
 
@@ -75,64 +89,114 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-// Colton's Staff page, for the librarian card. None: his contact in words.
+// Colton's Staff page, for the librarian card, if galleries take the card.
+// None: his contact in words.
+$blocks_field = FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_guide_blocks');
+$allowed = $blocks_field ? ($blocks_field->getSetting('handler_settings')['target_bundles'] ?? []) : [];
 $staff = \Drupal::entityQuery('node')->accessCheck(FALSE)
   ->condition('type', 'staff')
   ->condition('title', 'Colton Ray')
   ->range(0, 1)->execute();
 $staff_id = $staff ? (int) reset($staff) : NULL;
-$has_card = $staff_id && $paragraph_types->load('librarian_card');
+$has_card = $staff_id && $paragraph_types->load('librarian_card') && (!$allowed || isset($allowed['librarian_card']));
 
-$intro = '<p>What LSU researchers publish, where it appears, how often it is cited and how much of it anyone can read for free. The LSU Research Dashboard, built by LSU Libraries from open OpenAlex data, follows every work with an LSU author since 2020 and updates daily.</p>';
+// The title page. -------------------------------------------------------------
+$head = [
+  'kicker' => 'Research',
+  'subtitle' => 'What LSU researchers publish, and who reads it',
+  'intro' => '<p>Where LSU research appears, who funds it, how often it is cited and how much of it anyone can read for free: every work with an LSU author since 2020, counted from open OpenAlex data and updated each night.</p>',
+  'keyfacts' => [
+    'Works since 2020: [research:works]',
+    'Free to read: [research:open]',
+    'Citations in {year}: [research:citations]',
+  ],
+  'prompt' => 'Explore the figures here, or open the full dashboard.',
+  'action' => ['uri' => $dashboard, 'title' => 'Open the dashboard'],
+];
 
 $link = '<p><a href="' . $dashboard . '">Open the LSU Research Dashboard</a> (opens lsuopenalex.lsusites.org)</p>';
 
-// [heading, body, style] for text; ['stats', heading, figures, caption].
-$sections = [
+// A text block whose body holds "[research:<part>]" draws that part live.
+$live = fn (string $part, string $lead = '') => $lead . '<p>[research:' . $part . ']</p>';
+
+// Galleries: title, anchor and blocks. A block is [heading, body, style], or
+// ['card', heading, staff node id].
+$galleries = [
   [
-    'title' => 'At a glance',
+    'title' => 'Output',
+    'anchor' => 'output',
     'blocks' => [
-      ['stats', NULL, [
-        ['33,000+', 'Works with an LSU author since 2020'],
-        ['75%', 'Free to read (open access)'],
-        ['~4,800', 'New works a year'],
-      ], '<p>Counted from OpenAlex on November 13, 2026: articles, books, chapters, datasets and other works with at least one LSU author, published since January 1, 2020. The dashboard has today’s figures.</p>'],
+      ['Works each year', $live('years', '<p>Articles, books, chapters, dissertations, datasets and other works with at least one LSU author, published since January 1, 2020.</p>'), 'default'],
+      ['Kinds of work', $live('kinds'), 'default'],
+    ],
+  ],
+  [
+    'title' => 'Open access',
+    'anchor' => 'open-access',
+    'blocks' => [
+      [NULL, $live('access', '<p>How LSU research can be read: free in an open access journal, free in a repository or on the publisher’s site, or by subscription only. Shares are of all works since 2020.</p>'), 'default'],
+    ],
+  ],
+  [
+    'title' => 'Where it is published',
+    'anchor' => 'where-published',
+    'blocks' => [
+      ['Top journals', $live('journals'), 'default'],
+      ['Top publishers', $live('publishers', '<p>Counted with their imprints, so a publisher’s many journals add up together.</p>'), 'default'],
+    ],
+  ],
+  [
+    'title' => 'Funding and topics',
+    'anchor' => 'funding-topics',
+    'blocks' => [
+      ['Top funders', $live('funders', '<p>Works that name the funder in their acknowledgments.</p>'), 'default'],
+      ['Top research topics', $live('topics', '<p>Each work’s main topic, as OpenAlex classifies it.</p>'), 'default'],
+    ],
+  ],
+  [
+    'title' => 'Most cited',
+    'anchor' => 'most-cited',
+    'blocks' => [
+      [NULL, $live('cited', '<p>The ten works with an LSU author since 2020 that other works cite most. Large collaborations, such as physics reviews written by hundreds of authors, often lead.</p>'), 'default'],
+    ],
+  ],
+  [
+    'title' => 'The full dashboard',
+    'anchor' => 'dashboard',
+    'blocks' => [
+      [NULL, <<<'HTML'
+<p>Colton Ray’s LSU Research Dashboard goes further: choose any range of years and every chart and table follows.</p>
+<ul>
+<li>Open access by type and over time, and estimated article processing charges.</li>
+<li>Publication trends for the leading publishers.</li>
+<li>The newest publications, searchable and sortable.</li>
+<li>The most published LSU authors.</li>
+</ul>
+HTML, 'default'],
       [NULL, $link, 'callout'],
     ],
   ],
   [
-    'title' => 'What you can explore',
-    'blocks' => [
-      [NULL, <<<'HTML'
-<p>Choose a range of years, and every figure, chart and table follows it.</p>
-<ul>
-<li><strong>Overview:</strong> works per year, kinds of work, open access by type and over time, the leading publishers and journals, funding agencies, and estimated article processing charges.</li>
-<li><strong>Recent Publications:</strong> the newest works, searchable and sortable.</li>
-<li><strong>Top Cited:</strong> the twenty most cited works in the range.</li>
-<li><strong>Authors and Topics:</strong> the most published LSU authors and the main research topics.</li>
-</ul>
-HTML, 'default'],
-    ],
-  ],
-  [
     'title' => 'About the data',
+    'anchor' => 'about-the-data',
     'blocks' => [
       ['OpenAlex', <<<'HTML'
 <p><a href="https://openalex.org/">OpenAlex</a> is a free, open index of the world’s scholarly works, authors, sources and institutions, run by the nonprofit OurResearch. Its data is in the public domain, so anyone can check, reuse or build on these figures.</p>
-<p>A work counts for LSU when OpenAlex links one of its authors to Louisiana State University (<a href="https://ror.org/05ect4e57">ROR 05ect4e57</a>). The dashboard gathers them once a day and keeps a copy, so it opens quickly.</p>
+<p>A work counts for LSU when OpenAlex links one of its authors to Louisiana State University (<a href="https://ror.org/05ect4e57">ROR 05ect4e57</a>). This page asks OpenAlex for its counts each night; the figures on it can differ slightly from the dashboard’s, which keeps its own daily copy.</p>
 HTML, 'default'],
       ['Read with care', <<<'HTML'
 <ul>
 <li>Affiliations come from the publications themselves and are sometimes missing or wrong, so a few LSU works are absent and a few are counted that should not be.</li>
 <li>Counts differ from Scopus, Web of Science and Google Scholar, which index different works.</li>
 <li>Citations grow over time, so recent works look less cited than they will be.</li>
-<li>Article processing charges are estimates from publishers’ list prices, not what LSU or its authors paid.</li>
+<li>The current year is partial, and works are still being added to it.</li>
 </ul>
 HTML, 'default'],
     ],
   ],
   [
     'title' => 'Questions',
+    'anchor' => 'questions',
     'blocks' => [
       $has_card
         ? ['card', 'Ask about the dashboard', $staff_id]
@@ -141,7 +205,7 @@ HTML, 'default'],
   ],
 ];
 
-$fingerprint = substr(sha1(json_encode([$intro, $sections], JSON_THROW_ON_ERROR)), 0, 12);
+$fingerprint = substr(sha1(json_encode([$head, $galleries], JSON_THROW_ON_ERROR)), 0, 12);
 $log_prefix = 'palefire_research_dashboard.php build';
 $log_message = "$log_prefix $fingerprint";
 
@@ -153,7 +217,10 @@ $found = \Drupal::entityQuery('node')->accessCheck(FALSE)
 $node = $found ? $storage->load((int) reset($found)) : NULL;
 $prefix = $apply ? '' : '[dry run] ';
 
-echo $prefix . ($has_card ? "Questions: librarian card for Colton Ray (node/$staff_id)." : 'Questions: no Staff page titled "Colton Ray", so his contact is in words.') . PHP_EOL;
+echo $prefix . ($has_card ? "Questions: librarian card for Colton Ray (node/$staff_id)." : 'Questions: no librarian card (no Staff page titled "Colton Ray", or galleries do not take the card), so his contact is in words.') . PHP_EOL;
+if (!\Drupal::state()->get('palefire.research_figures')) {
+  echo $prefix . 'No research figures yet: run palefire_research_pull.php, or the parts wait and the key facts are left out.' . PHP_EOL;
+}
 if ($node) {
   $latest = $storage->getLatestRevisionId($node->id());
   if ($latest && (int) $latest !== (int) $node->getRevisionId()) {
@@ -167,10 +234,10 @@ if ($node) {
   if (!str_starts_with($last_log, $log_prefix) && !$force) {
     throw new \RuntimeException("'$title' (node/{$node->id()}) was last saved outside this script (log: \"$last_log\"). Copy anything worth keeping into this script, then run with force=1.");
   }
-  echo "{$prefix}Rebuild node/{$node->id()} in a new revision, unpublished." . PHP_EOL;
+  echo "{$prefix}Rebuild node/{$node->id()} as an exhibition in a new revision, unpublished." . PHP_EOL;
 }
 else {
-  echo "{$prefix}Create '$title' as an unpublished Modular page." . PHP_EOL;
+  echo "{$prefix}Create '$title' as an unpublished exhibition page." . PHP_EOL;
 }
 if (!$apply) {
   echo 'Dry run: nothing saved. Run again with apply=1 to save.' . PHP_EOL;
@@ -178,33 +245,12 @@ if (!$apply) {
 }
 
 $html = fn (string $markup) => ['value' => trim($markup), 'format' => $format];
-$has_caption = (bool) FieldConfig::loadByName('paragraph', 'guide_stats', 'field_stats_caption');
 $has_style = (bool) FieldConfig::loadByName('paragraph', 'guide_text', 'field_text_style');
+$has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
 $paragraphs = [];
-foreach ($sections as $item) {
+foreach ($galleries as $item) {
   $blocks = [];
   foreach ($item['blocks'] as $block) {
-    if ($block[0] === 'stats') {
-      [, $heading, $figures, $caption] = $block;
-      $stats = [];
-      foreach ($figures as [$value, $label]) {
-        $stats[] = Paragraph::create([
-          'type' => 'guide_stat',
-          'field_stat_value' => $value,
-          'field_stat_label' => $label,
-        ]);
-      }
-      $values = array_filter([
-        'type' => 'guide_stats',
-        'field_block_title' => $heading,
-        'field_stat_items' => $stats,
-      ], fn ($v) => $v !== NULL);
-      if ($has_caption) {
-        $values['field_stats_caption'] = $html($caption);
-      }
-      $blocks[] = Paragraph::create($values);
-      continue;
-    }
     if ($block[0] === 'card') {
       $blocks[] = Paragraph::create([
         'type' => 'librarian_card',
@@ -224,28 +270,42 @@ foreach ($sections as $item) {
     }
     $blocks[] = Paragraph::create($values);
   }
-  $paragraphs[] = ['entity' => Paragraph::create([
-    'type' => 'guide_section',
+  $values = [
+    'type' => 'exhibit_page',
     'field_section_title' => $item['title'],
+    'field_section_anchor' => $item['anchor'],
     'field_guide_blocks' => $blocks,
-  ])];
+  ];
+  if ($has_display) {
+    $values['field_exhibit_display'] = 'story';
+  }
+  $paragraphs[] = ['entity' => Paragraph::create($values)];
 }
 
-$node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
-
 if (!$node) {
-  // No field_modular_type: the plain kind ("page"), banded.
   $node = Node::create([
     'type' => 'modular_page',
     'title' => $title,
     'path' => ['alias' => '/' . ltrim($args['path'] ?? '/v2/research-dashboard', '/')],
   ]);
 }
+$fields = [
+  'field_modular_type' => 'exhibition',
+  'field_exhibit_title_style' => 'sans',
+  'field_exhibit_kicker' => $head['kicker'],
+  'field_exhibit_subtitle' => $head['subtitle'],
+  'field_intro' => $html($head['intro']),
+  'field_exhibit_keyfacts' => array_map(fn ($line) => ['value' => $line], $head['keyfacts']),
+  'field_exhibit_prompt' => $head['prompt'],
+  'field_exhibit_action' => $head['action'],
+];
+foreach ($fields as $name => $value) {
+  if (isset($node_fields[$name])) {
+    $node->set($name, $value);
+  }
+}
 $node->setUnpublished();
 $node->set('field_scroll_section', $paragraphs);
-if (isset($node_fields['field_intro'])) {
-  $node->set('field_intro', $html($intro));
-}
 $node->setNewRevision(TRUE);
 $node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
 $node->setRevisionLogMessage($log_message);

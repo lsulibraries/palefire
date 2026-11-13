@@ -16,6 +16,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
+use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
 use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -750,12 +751,18 @@ class PalefireHooks {
 
     // Program pages: "Label: value" lines, split at a colon and a space
     // within the first 40 characters, so "Hours: 9:00" and a URL in a value
-    // stay whole; any other line is a value with no label. Then the main
+    // stay whole; any other line is a value with no label. A value may be a
+    // live research figure, "[research:works]" (ResearchFigures::fact()); a
+    // fact whose figure has not arrived yet is left out. Then the main
     // button.
     $keyfacts = [];
     if ($node->hasField('field_exhibit_keyfacts')) {
       foreach ($node->get('field_exhibit_keyfacts') as $item) {
         $line = trim((string) $item->value);
+        if (str_contains($line, '[research:')) {
+          $cache->addCacheTags([ResearchFigures::CACHE_TAG]);
+          $line = ResearchFigures::facts($line) ?? '';
+        }
         if ($line === '') {
           continue;
         }

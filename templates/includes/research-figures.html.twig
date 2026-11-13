@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * One part of the LSU research figures, drawn after a guide text whose
+ * paragraph is only "[research:<part>]" (palefire_preprocess_paragraph__guide_text(),
+ * Drupal\palefire\ResearchFigures). Built from the guide blocks' Figures and
+ * Progress chart styles and the guide's own tables, so it adds no CSS.
+ *
+ * - part: glance, years, access, kinds, journals, publishers, funders,
+ *   topics or cited.
+ * - data: ResearchFigures::view(part), or NULL before the first nightly pull:
+ *   updated (date), from (first year), and figures, rows or works.
+ *
+ * Bars are decoration: every row says its number in words.
+ */
+#}
+{{ attach_library('palefire/guide-blocks') }}
+<div class="pf-analytics pf-research" data-pf-research="{{ part }}">
+  {% if not data %}
+    <p class="pf-stats__caption">{{ 'These figures arrive from OpenAlex each night.'|t }}</p>
+  {% elseif part == 'glance' %}
+    <dl class="pf-stats">
+      {% for figure in data.figures %}
+        <div class="pf-stats__item">
+          <dt class="pf-stats__label">{{ figure.label }}</dt>
+          <dd class="pf-stats__value">{{ figure.value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+    <p class="pf-stats__caption">{{ 'Articles, books, chapters, dissertations, datasets and other works with at least one LSU author, published since January 1, @from. From OpenAlex, updated @updated.'|t({ '@from': data.from, '@updated': data.updated }) }}</p>
+  {% elseif part == 'cited' %}
+    <table>
+      <caption class="visually-hidden">{{ 'The most cited works with an LSU author since @from'|t({ '@from': data.from }) }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'Work'|t }}</th>
+          <th scope="col">{{ 'Citations'|t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for work in data.works %}
+          <tr>
+            <td>
+              <a href="{{ work.url }}">{{ work.title }}</a>
+              <br><small>{{ work.year }}{% if work.venue %}<span aria-hidden="true"> · </span>{{ work.venue }}{% endif %}</small>
+            </td>
+            <td>{{ work.count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="pf-stats__caption">{{ 'Updated @updated.'|t({ '@updated': data.updated }) }}</p>
+  {% else %}
+    {% include '@palefire/includes/analytics-bars.html.twig' with { rows: data.rows, unit: '' } only %}
+    <p class="pf-stats__caption">{{ 'Since @from. Updated @updated.'|t({ '@from': data.from, '@updated': data.updated }) }}</p>
+  {% endif %}
+</div>
