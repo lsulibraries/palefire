@@ -23,9 +23,9 @@
  * its fields and settings to these (submissions are kept).
  *
  * The form has no page of its own: it lives on the review pages, which are
- * published but unlisted, so anyone with the link can send a note. Every
- * note says who sent it (a name is required), and Honeypot or Antibot guard
- * it when either module is on.
+ * published but unlisted, so anyone with the link can send a note, with a
+ * name or without (anonymous notes are welcome), and Honeypot or Antibot
+ * guard it when either module is on.
  */
 
 declare(strict_types=1);
@@ -75,8 +75,7 @@ $elements = [
   'name' => [
     '#type' => 'textfield',
     '#title' => 'Your name',
-    '#required' => TRUE,
-    '#required_error' => 'Add your name, so we know whose note it is.',
+    '#description' => 'Optional. Leave it empty to send your note anonymously.',
     '#autocomplete' => 'name',
     '#maxlength' => 120,
   ],
