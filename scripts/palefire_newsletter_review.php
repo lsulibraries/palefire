@@ -24,8 +24,8 @@
  * (Drupal\palefire\NewsletterReview). Edit the campaign in Constant Contact
  * and the page follows.
  *
- * Comments go to the Webform "newsletter_review", created by hand in the
- * Webform UI (fields in docs/styleguide.md, Newsletter review). Until it
+ * Comments go to the Webform "newsletter_review", made by
+ * scripts/palefire_newsletter_webform.php. Until it
  * exists the page asks readers to reply to the email instead.
  *
  * Run it again for the next issue with its own issue=, campaign= and path=.
@@ -143,7 +143,7 @@ if ($alias && preg_match('#^/node/(\d+)$#', $alias['path'], $m)) {
 echo "Issue: $issue. Draft: https://campaignlp.constantcontact.com/em/$account/$campaign" . PHP_EOL;
 $types = \Drupal::entityTypeManager();
 if (!$types->hasDefinition('webform') || !$types->getStorage('webform')->load(\Drupal\palefire\NewsletterReview::WEBFORM)) {
-  echo "No Webform 'newsletter_review' yet: the page will ask readers to reply by email until it is created (docs/styleguide.md, Newsletter review)." . PHP_EOL;
+  echo "No Webform 'newsletter_review' yet: the page will ask readers to reply by email until it is created (scripts/palefire_newsletter_webform.php -- apply=1)." . PHP_EOL;
 }
 if ($node) {
   $latest = $storage->getLatestRevisionId($node->id());

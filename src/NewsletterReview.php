@@ -37,7 +37,7 @@ use Drupal\Core\Cache\Cache;
 final class NewsletterReview {
 
   /**
-   * The Webform reviewers answer (created in the Webform UI by hand).
+   * The Webform reviewers answer (scripts/palefire_newsletter_webform.php).
    */
   public const WEBFORM = 'newsletter_review';
 
