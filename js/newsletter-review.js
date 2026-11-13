@@ -328,7 +328,7 @@
         let opener = null;
         root.querySelectorAll('[data-pf-nla-open]').forEach((card) => {
           // It opens here now, not in a new tab.
-          card.querySelectorAll('.visually-hidden').forEach((note) => note.remove());
+          card.querySelectorAll('[data-pf-nla-tab]').forEach((note) => note.remove());
           card.addEventListener('click', (e) => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) {
               return;
@@ -345,18 +345,26 @@
             dialog.querySelector('[data-pf-nla-close]').focus();
           });
         });
-        dialog.querySelector('[data-pf-nla-close]').addEventListener('click', () => dialog.close());
+        // Back to the issue it was opened from. Also straight after close():
+        // the close event comes a task later, and the shelf may have moved.
+        const back = () => {
+          if (opener && !dialog.open) {
+            opener.focus({ preventScroll: true });
+          }
+        };
+        const shut = () => {
+          dialog.close();
+          back();
+        };
+        dialog.querySelector('[data-pf-nla-close]').addEventListener('click', shut);
         // A click on the dimmed page closes it.
         dialog.addEventListener('click', (e) => {
           if (e.target === dialog) {
-            dialog.close();
+            shut();
           }
         });
-        dialog.addEventListener('close', () => {
-          if (opener) {
-            opener.focus({ preventScroll: true });
-          }
-        });
+        // Escape.
+        dialog.addEventListener('close', back);
       });
     },
   };

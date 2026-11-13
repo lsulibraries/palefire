@@ -29,7 +29,7 @@ use Drupal\Core\Cache\Cache;
  *
  * The same previews draw the public archive (scripts/palefire_newsletter_archive.php):
  * a block holding "[newsletter-archive]" turns its list of issue links into a
- * gallery of covers (includes/newsletter-archive.html.twig), and one holding
+ * shelf of front pages (includes/newsletter-archive.html.twig), and one holding
  * "[newsletter-compare]" sets its first two issues side by side under a
  * slider (includes/newsletter-compare.html.twig). Editors add an issue by
  * adding a link to the list.
@@ -92,6 +92,21 @@ final class NewsletterReview {
   /**
    * A link to an issue's public preview, with its words.
    */
+  /**
+   * A sent date ending an issue's line: "· July 7, 2026" or ", sent July 7, 2026".
+   * Never a bare date, which may belong to the line ("Opening March 3, 2027").
+   */
+  private const SENT = '/\s*(?:[·|–—]\s*(?:sent\s+)?|,\s*sent\s+)((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s*\d{4})\s*$/iu';
+
+  /**
+   * Where a sent issue's front page is kept: a WebP 480 by 640 pixels, the
+   * top 600 by 800 of the email captured in a browser and scaled to 80%,
+   * named by its Constant Contact id. The server can't capture it, so it is
+   * made once, when the issue is sent, and added to the theme (README,
+   * Newsletter front pages).
+   */
+  public const FRONT = 'images/newsletters/%s.webp';
+
   private const LINK = '#<a\b[^>]*\bhref="https://campaignlp\.constantcontact\.com/em/(\d{6,15})/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?"[^>]*>(.*?)</a>#is';
 
   /**
@@ -99,10 +114,12 @@ final class NewsletterReview {
    *
    * Each issue is a link to its Constant Contact preview, its words the
    * issue's name (July 2026); words after the link in the same list item or
-   * paragraph, past a colon or dash, are its line (The Awards Issue). The
-   * lists and paragraphs that held them are taken out of the text.
+   * paragraph, past a colon or dash, are its line (The Awards Issue). A date
+   * at the end of the line, after a middle dot ("· July 7, 2026"), is
+   * the day it was sent. The lists and paragraphs that held them are taken
+   * out of the text.
    *
-   * @return array{0: list<array{account: string, id: string, name: string, line: string}>, 1: string}
+   * @return array{0: list<array{account: string, id: string, name: string, line: string, sent: ?string, sent_iso: ?string}>, 1: string}
    */
   public static function issues(string $text): array {
     $issues = [];
@@ -111,11 +128,25 @@ final class NewsletterReview {
         return $m[0];
       }
       $line = trim(html_entity_decode(strip_tags(str_replace($link[0], '', $m[2])), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+      // No-break spaces from the editor count as spaces.
+      $line = trim(preg_replace(['/[\s\x{00A0}]+/u', '/^[\s:–—-]+/u'], [' ', ''], $line));
+      $sent = NULL;
+      $sent_iso = NULL;
+      if (preg_match(self::SENT, $line, $date)) {
+        $day = \DateTimeImmutable::createFromFormat('!F j, Y', preg_replace('/\s+/', ' ', $date[1]));
+        if ($day) {
+          $sent = $day->format('F j, Y');
+          $sent_iso = $day->format('Y-m-d');
+          $line = trim(substr($line, 0, -strlen($date[0])));
+        }
+      }
       $issues[] = [
         'account' => $link[1],
         'id' => strtolower($link[2]),
         'name' => trim(html_entity_decode(strip_tags($link[3]), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
-        'line' => trim(preg_replace('/^[\s:–—-]+/u', '', $line)),
+        'line' => $line,
+        'sent' => $sent,
+        'sent_iso' => $sent_iso,
       ];
       return '';
     }, $text);
@@ -125,24 +156,24 @@ final class NewsletterReview {
   }
 
   /**
-   * The gallery: each issue with its cover photo, newest first as listed.
+   * The shelf: each issue with its front page, newest first as listed.
    *
-   * The cover is the email's first photo after its masthead that weighs
-   * COVER_BYTES or less (JPEGs first; an email's PNGs and GIFs can run to
-   * megabytes), hot-linked from Constant Contact's image host as the email
-   * itself does. Without one, or if the preview can't be fetched, the card
-   * shows its number instead.
+   * The front page is the theme's capture of the email's top (FRONT). An
+   * issue without one, newly added, is a cover set in type with its name
+   * and number until its capture is added. Nothing is fetched: the issues
+   * open from Constant Contact itself.
    */
   public static function archive(array $issues): array {
     $count = count($issues);
+    $theme = \Drupal::service('extension.list.theme')->getPath('palefire');
+    $urls = \Drupal::service('file_url_generator');
     $items = [];
     foreach (array_values($issues) as $i => $issue) {
-      $preview = sprintf(self::PREVIEW, $issue['account'], $issue['id']);
-      $draft = self::draft($preview, self::SENT_MAX_AGE);
+      $front = $theme . '/' . sprintf(self::FRONT, $issue['id']);
       $items[] = $issue + [
         'number' => sprintf('%02d', $count - $i),
-        'preview' => $preview,
-        'cover' => $draft ? self::lightest($preview, $draft['cover'] ?? []) : NULL,
+        'preview' => sprintf(self::PREVIEW, $issue['account'], $issue['id']),
+        'front' => is_file(DRUPAL_ROOT . '/' . $front) ? $urls->generateString($front) : NULL,
       ];
     }
     return ['items' => $items];
@@ -164,63 +195,6 @@ final class NewsletterReview {
       $sides[] = ['name' => $issue['name'], 'line' => $issue['line'], 'preview' => $preview, 'html' => $draft['html'] ?? NULL];
     }
     return ['before' => $sides[0], 'after' => $sides[1]];
-  }
-
-  /**
-   * Heaviest cover a gallery card loads, in bytes.
-   */
-  public const COVER_BYTES = 400000;
-
-  /**
-   * The first of the candidates no heavier than COVER_BYTES, or NULL.
-   *
-   * Asked of the image host once a week (a HEAD request each, at most four),
-   * since a sent issue's photos don't change.
-   */
-  private static function lightest(string $preview, array $candidates): ?array {
-    $cid = 'palefire:newsletter_cover:' . sha1($preview);
-    $cache = \Drupal::cache();
-    if ($hit = $cache->get($cid)) {
-      return $hit->data ?: NULL;
-    }
-    $chosen = NULL;
-    foreach (array_slice($candidates, 0, 4) as $photo) {
-      try {
-        $response = \Drupal::httpClient()->head($photo['src'], ['timeout' => 5, 'allow_redirects' => TRUE]);
-        $bytes = (int) $response->getHeaderLine('Content-Length');
-        if ($response->getStatusCode() === 200 && $bytes > 0 && $bytes <= self::COVER_BYTES) {
-          $chosen = $photo;
-          break;
-        }
-      }
-      catch (\Throwable $e) {
-        // Try the next.
-      }
-    }
-    $cache->set($cid, $chosen ?? FALSE, \Drupal::time()->getRequestTime() + 7 * self::SENT_MAX_AGE, [self::cacheTag()]);
-    return $chosen;
-  }
-
-  /**
-   * Candidate covers: the photos after the masthead, JPEGs first.
-   *
-   * @return list<array{src: string, alt: string}>
-   */
-  private static function cover(string $html): array {
-    preg_match_all('#<img\b[^>]*>#i', $html, $tags);
-    $photos = [];
-    foreach ($tags[0] as $tag) {
-      if (preg_match('#\bsrc="(https://files\.constantcontact\.com/[^"]+)"#i', $tag, $src) && preg_match('#\bwidth="(\d+)"#i', $tag, $width) && (int) $width[1] >= 300) {
-        preg_match('#\balt="([^"]*)"#i', $tag, $alt);
-        $photos[] = ['src' => html_entity_decode($src[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'alt' => html_entity_decode($alt[1] ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8')];
-      }
-    }
-    // The first wide image is the masthead, unless it is the only one.
-    if (count($photos) > 1) {
-      array_shift($photos);
-    }
-    usort($photos, fn (array $a, array $b) => (int) !preg_match('#\.jpe?g(\?|$)#i', $a['src']) <=> (int) !preg_match('#\.jpe?g(\?|$)#i', $b['src']));
-    return $photos;
   }
 
   /**
@@ -246,7 +220,7 @@ final class NewsletterReview {
       $body = (string) $response->getBody();
       if ($response->getStatusCode() === 200 && stripos($body, '<html') !== FALSE && strlen($body) < 2000000) {
         $html = self::clean($body);
-        $draft = ['html' => $html, 'version' => substr(sha1($html), 0, 7), 'fetched' => $now, 'cover' => self::cover($html)];
+        $draft = ['html' => $html, 'version' => substr(sha1($html), 0, 7), 'fetched' => $now];
       }
     }
     catch (\Throwable $e) {

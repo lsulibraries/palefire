@@ -3,7 +3,7 @@
 /**
  * @file
  * "LSU Libraries Newsletter": the public archive of the email newsletter. A
- * gallery of past issues, each opened on the page, and a before/after slider
+ * shelf of past issues' front pages, each opened on the page, and a before/after slider
  * for the newest redesign. A Modular page in guide mode at /v2/newsletters,
  * saved UNPUBLISHED: the slider shows the Fall 2026 issue, so publish the
  * page once that issue is sent. Run palefire_guide_setup.php first;
@@ -21,9 +21,12 @@
  *   first. Each item is a link to the issue's Constant Contact preview
  *   (campaignlp.constantcontact.com/em/<account>/<id>, the address behind
  *   "View This Email in Your Browser") with the issue's name as its words,
- *   then a colon and its line. The cover is the email's first photo after
- *   its masthead (Drupal\palefire\NewsletterReview::archive()). To add an
- *   issue once sent, add a list item at the top.
+ *   then a colon, its line, and " · " and the day it was sent
+ *   (<a>July 2026</a>: The Awards Issue · July 7, 2026). To add an issue
+ *   once sent, add a list item at the top. Its front page is a capture kept
+ *   in the theme, images/newsletters/<id>.webp (README, Newsletter front pages);
+ *   until it is added the issue shows a cover set in type
+ *   (Drupal\palefire\NewsletterReview::archive()).
  * - The new look: a block holding "[newsletter-compare]" and two such links,
  *   before then after.
  *
@@ -81,7 +84,7 @@ if ($format === NULL || !isset($formats[$format])) {
 }
 
 $preview = fn (string $id) => 'https://campaignlp.constantcontact.com/em/1114771561534/' . $id;
-$issue = fn (string $id, string $name, string $line) => '<li><a href="' . $preview($id) . '">' . $name . '</a>: ' . $line . '</li>';
+$issue = fn (string $id, string $name, string $line, string $sent = '') => '<li><a href="' . $preview($id) . '">' . $name . '</a>: ' . $line . ($sent !== '' ? ' · ' . $sent : '') . '</li>';
 
 $intro = '<p>News from LSU Libraries, a few times a year: new collections and acquisitions, research and teaching, events and the people behind them.</p>';
 
@@ -104,11 +107,11 @@ $sections = [
     'blocks' => [
       [NULL, '<p>[newsletter-archive]</p>'
         . '<ul>'
-        . $issue('b6748903-9540-4a50-ade8-a48cab890ee6', 'July 2026', 'The Awards Issue')
-        . $issue('70df0842-0b91-419d-b694-dd5ce5818670', 'April 2026', 'A rare first edition of Audubon’s Quadrupeds of North America')
-        . $issue('15ea6191-b5f5-496e-85ed-bc8296c2cb03', 'January 2026', '50 Years of Book Bazaars')
-        . $issue('2b549e7a-fcc8-4a17-95d2-014a39d37ba8', 'October 2025', 'Public Pathogens: Louisiana’s historical struggle with disease')
-        . $issue('99cd96c7-42d1-4a07-b301-a32428303f22', 'August 2025 Special Edition', 'Enhancing LSU research and scholarship, and a student guide to the fall semester')
+        . $issue('b6748903-9540-4a50-ade8-a48cab890ee6', 'July 2026', 'The Awards Issue', 'July 7, 2026')
+        . $issue('70df0842-0b91-419d-b694-dd5ce5818670', 'April 2026', 'A rare first edition of Audubon’s Quadrupeds of North America', 'April 8, 2026')
+        . $issue('15ea6191-b5f5-496e-85ed-bc8296c2cb03', 'January 2026', '50 Years of Book Bazaars', 'February 2, 2026')
+        . $issue('2b549e7a-fcc8-4a17-95d2-014a39d37ba8', 'October 2025', 'Public Pathogens: Louisiana’s historical struggle with disease', 'October 8, 2025')
+        . $issue('99cd96c7-42d1-4a07-b301-a32428303f22', 'August 2025 Special Edition', 'Enhancing LSU research and scholarship, and a student guide to the fall semester', 'August 27, 2025')
         . '</ul>'],
     ],
   ],

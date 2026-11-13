@@ -600,136 +600,50 @@
   }
 }
 
-// Archive: past issues as a gallery of covers. ------------------------------------
-// A Swiss index: a plain grid, the cover cropped to 4:3, the issue number in
-// mono over a hairline, the name and its line below. The cover settles in a
-// little on hover, as a print would under glass.
+// Archive: past issues as a shelf of front pages. ---------------------------------
+// The Written at Hill shelf (.pf-tiles--covers, _tile-showcase.scss: drag,
+// Previous / Next, the fade, the turn and lift, the others dimming), each
+// issue a sheet instead of a book: the email's front page at 3:4, its page
+// edge a sliver, turned a little less. Wider than a book, so the masthead
+// and lead story read. A hairline keeps a white email off a white page.
 .pf-nla {
   --pf-nla-ink: var(--bs-body-color);
   --pf-nla-muted: var(--pf-guide-muted, var(--bs-secondary-color));
   --pf-nla-accent: var(--pf-guide-accent, var(--bs-primary));
   --pf-nla-ease: cubic-bezier(.2, .7, .2, 1);
 
-  container: pf-nla / inline-size;
   margin-top: 1.5rem;
 }
 
-.pf-nla__grid {
-  display: grid;
-  gap: 2.5rem 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+.pf-tiles--covers.pf-tiles--sheets {
+  --pf-book-turn: -12deg;
 
-@container pf-nla (min-width: 36rem) {
-  .pf-nla__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .pf-tiles__item {
+    --pf-book-depth: .015;
+    flex-basis: min(62%, 13rem);
+  }
+
+  .pf-book__cover {
+    aspect-ratio: 3 / 4;
+  }
+
+  .pf-book__object img {
+    max-height: calc(100cqi * 4 / 3);
+    outline: 1px solid $pf-hairline;
+    outline-offset: -1px;
   }
 }
 
-@container pf-nla (min-width: 60rem) {
-  .pf-nla__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.pf-nla__item {
-  min-width: 0;
-}
-
-.pf-nla__card {
-  display: grid;
-  gap: .375rem;
-  color: var(--pf-nla-ink);
-  text-decoration: none;
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-nla-accent);
-    outline-offset: 4px;
-  }
-}
-
-.pf-nla__cover {
-  display: block;
-  aspect-ratio: 4 / 3;
-  margin-bottom: .5rem;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--bs-body-color) 6%, transparent);
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-
-    @include pf-nlr-motion {
-      transition: scale 1.2s var(--pf-nla-ease);
+// No lede beside this shelf, so the buttons stay above it on the right.
+@container pf-tiles (min-width: 60rem) {
+  .pf-tiles--covers.pf-tiles--sheets {
+    .pf-tiles__item {
+      flex-basis: 15rem;
     }
-  }
-}
 
-.pf-nla__blank {
-  display: grid;
-  place-items: center;
-  height: 100%;
-  color: var(--pf-nla-muted);
-  font: 300 4rem/1 var(--bs-body-font-family);
-}
-
-.pf-nla__number {
-  @include pf-nlr-label;
-  padding-bottom: .375rem;
-  border-bottom: 1px solid $pf-hairline;
-  color: var(--pf-nla-muted);
-}
-
-.pf-nla__name {
-  font-size: 1.375rem;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.pf-nla__line {
-  color: var(--pf-nla-muted);
-  font-size: .9375rem;
-  line-height: 1.45;
-}
-
-.pf-nla__go {
-  @include pf-nlr-label;
-  margin-top: .25rem;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: .35em;
-
-  &::after {
-    content: " \2192";
-    display: inline-block;
-
-    @include pf-nlr-motion {
-      transition: translate $pf-hover-out var(--pf-nla-ease);
-    }
-  }
-
-  @include pf-nlr-motion {
-    transition: text-decoration-color $pf-hover-out ease;
-  }
-}
-
-.pf-nla__card:focus-visible,
-.pf-nla__card:hover {
-  .pf-nla__cover img {
-    scale: 1.03;
-  }
-
-  .pf-nla__go {
-    text-decoration-color: currentColor;
-    transition-duration: $pf-hover-in;
-
-    &::after {
-      translate: .25em 0;
-      transition-duration: $pf-hover-in;
+    .pf-tiles__shelf-nav {
+      position: static;
+      margin-bottom: .25rem;
     }
   }
 }
