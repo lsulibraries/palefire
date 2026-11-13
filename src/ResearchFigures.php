@@ -677,66 +677,9 @@ final class ResearchFigures {
    */
   private static function money(int $usd): string {
     if ($usd >= 1000000) {
-      return '
-  private static function short(int $n): string {
-    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
-  }
-
-  /**
-   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
-   * sources a doubled name ("Physical review. D/Physical review. D.").
-   */
-  private static function plain(string $text): string {
-    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
-    $halves = explode('/', $text);
-    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
-      $text = rtrim($halves[0]);
+      return '$' . number_format($usd / 1000000, 1) . 'M';
     }
-    return $text;
-  }
-
-}
- . number_format($usd / 1000000, 1) . 'M';
-    }
-    return $usd >= 10000 ? '
-  private static function short(int $n): string {
-    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
-  }
-
-  /**
-   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
-   * sources a doubled name ("Physical review. D/Physical review. D.").
-   */
-  private static function plain(string $text): string {
-    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
-    $halves = explode('/', $text);
-    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
-      $text = rtrim($halves[0]);
-    }
-    return $text;
-  }
-
-}
- . round($usd / 1000) . 'k' : '
-  private static function short(int $n): string {
-    return $n >= 10000 ? round($n / 1000) . 'k' : number_format($n);
-  }
-
-  /**
-   * OpenAlex names can carry markup (<i>, <sub>) and entities, and some
-   * sources a doubled name ("Physical review. D/Physical review. D.").
-   */
-  private static function plain(string $text): string {
-    $text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
-    $halves = explode('/', $text);
-    if (count($halves) === 2 && $halves[0] !== '' && strcasecmp(rtrim($halves[0], '. '), rtrim($halves[1], '. ')) === 0) {
-      $text = rtrim($halves[0]);
-    }
-    return $text;
-  }
-
-}
- . number_format($usd);
+    return $usd >= 10000 ? '$' . round($usd / 1000) . 'k' : '$' . number_format($usd);
   }
 
   /**
