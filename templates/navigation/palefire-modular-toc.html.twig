@@ -16,6 +16,8 @@
  * _toc-rail.scss) can make the link the segment and set the name beside it.
  */
 #}
+{# Newsletter review pages: no TOC (PalefireHooks::preprocessPalefireModularToc()). #}
+{% if hide_toc %}{% else %}
 {{ attach_library('palefire/modular-toc') }}
 <nav class="pf-toc" aria-labelledby="pf-toc-title" data-pf-toc data-depth="{{ depth }}" data-mode="{{ mode }}">
   <p id="pf-toc-title" class="pf-toc__heading pf-toc__heading--page">{{ 'Table of contents'|t }}</p>
@@ -34,3 +36,4 @@
     <span class="pf-toc__top-label">{{ 'Back to top'|t }}</span>
   </a>
 </nav>
+{% endif %}

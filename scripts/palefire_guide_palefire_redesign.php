@@ -441,6 +441,7 @@ HTML),
 <li>LSU Research, by the Numbers also estimates the open access publishing fees (APCs) on works led by LSU authors each year, about $9.8 million since 2020, with a note on what the estimate can’t know. The publishers table no longer needs a scroll bar.</li>
 <li>Faculty Fellowship page brought up to date from the program's own files: the five 2026 fellows, earlier cohorts with the classes they have taught, and the four-day orientation.</li>
 <li>Exhibitions: people with a biography and no images, such as the fellows and grant recipients, now sit side by side in two or three columns on wider screens.</li>
+<li>Newsletter review pages no longer show a table of contents: each is one draft to read from top to bottom.</li>
 </ul>
 HTML),
 ]);

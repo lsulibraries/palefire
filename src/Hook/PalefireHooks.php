@@ -539,6 +539,15 @@ class PalefireHooks {
     $variables['page_title'] = $node ? $node->label() : NULL;
     $variables['#cache']['contexts'][] = 'route';
 
+    // Newsletter review pages (scripts/palefire_newsletter_review.php) are
+    // one draft to read top to bottom: no TOC. The template prints nothing,
+    // so page.html.twig drops the TOC column (has_toc).
+    if ($node && self::isNewsletterReview($node)) {
+      $variables['hide_toc'] = TRUE;
+      $variables['items'] = [];
+      return;
+    }
+
     // A landing that opens the page has no section title, so palefire_modular
     // leaves it out of the TOC, and the map heading inside it with it. Add
     // "Home" (the lead panel) and "Map" (the building map) at the top. The
@@ -1074,6 +1083,19 @@ class PalefireHooks {
       'featured' => count(array_filter($items, fn (array $item): bool => $item['featured'])),
       'cache' => $render,
     ];
+  }
+
+  /**
+   * Whether the node is a newsletter review page (by its address).
+   *
+   * Same rule as palefire_page_attachments_alter() in palefire.theme.
+   */
+  private static function isNewsletterReview(NodeInterface $node): bool {
+    if ($node->isNew()) {
+      return FALSE;
+    }
+    $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $node->id());
+    return (bool) preg_match('#/internal/newsletter-review(/|$)#i', $alias);
   }
 
   /**
