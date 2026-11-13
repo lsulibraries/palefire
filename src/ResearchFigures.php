@@ -12,8 +12,9 @@ use Drupal\Core\Cache\Cache;
  * The page "LSU Research, by the Numbers" (scripts/palefire_research_dashboard.php)
  * presents Colton Ray's OpenAlex dashboard (lsuopenalex.lsusites.org). Its
  * figures are the same kind of counts, drawn by Palefire: each night a drush
- * script asks the OpenAlex API for a handful of grouped counts (about ten
- * requests, $0.0001 each) and keeps them in Drupal's State. A guide text
+ * script asks the OpenAlex API for grouped counts and a few short lists
+ * (about 50 requests, $0.0001 each, well inside the free daily $0.10) and
+ * keeps them in Drupal's State. A guide text
  * paragraph that is only "[research:<part>]"
  * (palefire_preprocess_paragraph__guide_text()) draws one part
  * (includes/research-figures.html.twig) with the Figures, Progress chart and
@@ -22,8 +23,8 @@ use Drupal\Core\Cache\Cache;
  *
  * Works counted: at least one author linked to LSU (OpenAlex I121820613,
  * ROR 05ect4e57), published from January 1, 2020 through today, as on the
- * dashboard. No authors' names: a public ranking of colleagues is the
- * dashboard's to make, with its own context.
+ * dashboard. Top authors are those OpenAlex lists at LSU since 2020, as the
+ * dashboard does.
  */
 final class ResearchFigures {
 
@@ -40,7 +41,7 @@ final class ResearchFigures {
   /**
    * The parts a "[research:<part>]" marker can draw.
    */
-  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'cited', 'dashboard'];
+  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'authors', 'cited', 'dashboard'];
 
   private const API = 'https://api.openalex.org/';
 
@@ -116,6 +117,16 @@ final class ResearchFigures {
       arsort($rows);
       return $rows;
     };
+    // Works each year for one more filter: [year => count], oldest first.
+    $by_year = function (string $filter) use ($get, $works): array {
+      $body = $get('works', ['filter' => $works . $filter, 'group_by' => 'publication_year']);
+      $rows = [];
+      foreach ($body['group_by'] ?? [] as $row) {
+        $rows[(int) $row['key']] = (int) $row['count'];
+      }
+      ksort($rows);
+      return $rows;
+    };
 
     $body = $get('works', ['filter' => $works, 'group_by' => 'publication_year']);
     $years = [];
@@ -132,7 +143,7 @@ final class ResearchFigures {
     $top = $get('works', [
       'filter' => $works,
       'sort' => 'cited_by_count:desc',
-      'per_page' => 10,
+      'per_page' => 20,
       'select' => 'id,doi,display_name,publication_year,cited_by_count,primary_location',
     ]);
     foreach ($top['results'] ?? [] as $work) {
@@ -175,6 +186,24 @@ final class ResearchFigures {
       $citations[(int) $row['year']] = (int) $row['cited_by_count'];
     }
 
+    // Each year's works by open access status: one count per status.
+    $access_years = [];
+    foreach (array_keys(self::ACCESS) as $status) {
+      $access_years[$status] = $by_year(",open_access.oa_status:$status");
+    }
+
+    // The top five publishers' works each year. A publisher counts its
+    // imprints (publisher_lineage), as in the Top publishers panel.
+    $publisher_years = [];
+    $body = $get('works', ['filter' => $works, 'group_by' => 'primary_location.source.publisher_lineage']);
+    foreach (array_slice($body['group_by'] ?? [], 0, 5) as $row) {
+      $name = self::plain((string) ($row['key_display_name'] ?? ''));
+      $id = basename((string) ($row['key'] ?? ''));
+      if ($name !== '' && preg_match('/^P\d+$/', $id)) {
+        $publisher_years[$name] = $by_year(",primary_location.source.publisher_lineage:$id");
+      }
+    }
+
     return [
       'updated' => \Drupal::time()->getRequestTime(),
       'total' => $total,
@@ -187,7 +216,117 @@ final class ResearchFigures {
       'topics' => array_slice($group('primary_topic.id'), 0, 10, TRUE),
       'cited' => $cited,
       'citations' => $citations,
+      'cited_total' => self::citedTotal($get, $works, $total),
+      'access_years' => $access_years,
+      'publisher_years' => $publisher_years,
+      'authors' => self::authors($get, $works),
+      'recent' => self::recent($get, $works),
     ];
+  }
+
+  /**
+   * Every citation to the works counted, without fetching 30,000 works.
+   *
+   * One grouped count by citation count gives up to 200 groups, the lowest
+   * counts, and each group's number of works; the few works cited more than
+   * the highest group are then fetched (just their counts, 200 a page). The
+   * groups and the rest must add up to the total, or the figure is left out
+   * (NULL) rather than shown short.
+   */
+  private static function citedTotal(callable $get, string $works, int $total): ?int {
+    $body = $get('works', ['filter' => $works, 'group_by' => 'cited_by_count', 'per_page' => 200]);
+    $sum = $counted = 0;
+    $top = -1;
+    foreach ($body['group_by'] ?? [] as $row) {
+      $sum += (int) $row['key'] * (int) $row['count'];
+      $counted += (int) $row['count'];
+      $top = max($top, (int) $row['key']);
+    }
+    if ($top < 0) {
+      return NULL;
+    }
+    for ($page = 1; $counted < $total && $page <= 10; $page++) {
+      $rest = $get('works', [
+        'filter' => "$works,cited_by_count:>$top",
+        'select' => 'cited_by_count',
+        'per_page' => 200,
+        'page' => $page,
+      ]);
+      if (empty($rest['results'])) {
+        break;
+      }
+      foreach ($rest['results'] as $work) {
+        $sum += (int) ($work['cited_by_count'] ?? 0);
+        $counted++;
+      }
+    }
+    return $counted === $total ? $sum : NULL;
+  }
+
+  /**
+   * The ten people who appear on the most works counted, LSU people only.
+   *
+   * OpenAlex counts every author on a work, so a collaboration's outside
+   * members rank too. The top 60 are looked up, and only those OpenAlex lists
+   * at LSU in FROM_YEAR or later are kept: [name => works].
+   */
+  private static function authors(callable $get, string $works): array {
+    $body = $get('works', ['filter' => $works, 'group_by' => 'authorships.author.id', 'per_page' => 60]);
+    $counts = [];
+    foreach ($body['group_by'] ?? [] as $row) {
+      $id = basename((string) ($row['key'] ?? ''));
+      if (preg_match('/^A\d+$/', $id)) {
+        $counts[$id] = (int) $row['count'];
+      }
+    }
+    if (!$counts) {
+      return [];
+    }
+    $found = $get('authors', [
+      'filter' => 'openalex:' . implode('|', array_keys($counts)),
+      'select' => 'id,display_name,affiliations',
+      'per_page' => 60,
+    ]);
+    $lsu = [];
+    foreach ($found['results'] ?? [] as $author) {
+      foreach ($author['affiliations'] ?? [] as $affiliation) {
+        if (str_ends_with((string) ($affiliation['institution']['id'] ?? ''), self::INSTITUTION)
+          && max(array_merge([0], $affiliation['years'] ?? [])) >= self::FROM_YEAR) {
+          $lsu[basename((string) $author['id'])] = self::plain((string) ($author['display_name'] ?? ''));
+          break;
+        }
+      }
+    }
+    $out = [];
+    foreach ($counts as $id => $count) {
+      if (!empty($lsu[$id]) && count($out) < 10) {
+        $out[$lsu[$id]] = $count;
+      }
+    }
+    return $out;
+  }
+
+  /**
+   * The eight latest works, leaving out corrections and front matter.
+   */
+  private static function recent(callable $get, string $works): array {
+    $body = $get('works', [
+      'filter' => "$works,type:!erratum,type:!paratext,type:!retraction",
+      'sort' => 'publication_date:desc',
+      'per_page' => 8,
+      'select' => 'id,doi,display_name,publication_date,open_access,primary_location',
+    ]);
+    $out = [];
+    foreach ($body['results'] ?? [] as $work) {
+      $out[] = [
+        'title' => self::plain((string) ($work['display_name'] ?? '')),
+        'url' => (string) (($work['doi'] ?? '') ?: ($work['id'] ?? '')),
+        'date' => (string) ($work['publication_date'] ?? ''),
+        'venue' => self::plain((string) ($work['primary_location']['source']['display_name'] ?? '')),
+        'access' => (string) ($work['open_access']['oa_status'] ?? ''),
+      ];
+    }
+    return $out;
   }
 
   /**
@@ -217,9 +356,14 @@ final class ResearchFigures {
         $last = $year - 1;
         $view['figures'] = [
           ['label' => t('Works with an LSU author since @year', ['@year' => self::FROM_YEAR]), 'value' => number_format($data['total'])],
-          ['label' => t('Free to read (open access)'), 'value' => round(($data['total'] - $closed) / $data['total'] * 100) . '%'],
-          ['label' => t('New works in @year', ['@year' => $last]), 'value' => number_format($data['years'][$last] ?? 0)],
         ];
+        // Citations to those works, and per work (pulls from 2026-11-13 on).
+        if (!empty($data['cited_total'])) {
+          $view['figures'][] = ['label' => t('Citations to those works'), 'value' => number_format($data['cited_total'])];
+          $view['figures'][] = ['label' => t('Citations per work, on average'), 'value' => number_format($data['cited_total'] / $data['total'], 1)];
+        }
+        $view['figures'][] = ['label' => t('Free to read (open access)'), 'value' => round(($data['total'] - $closed) / $data['total'] * 100) . '%'];
+        $view['figures'][] = ['label' => t('New works in @year', ['@year' => $last]), 'value' => number_format($data['years'][$last] ?? 0)];
         if (!empty($data['citations'][$last])) {
           $view['figures'][] = ['label' => t('Citations to LSU research in @year', ['@year' => $last]), 'value' => self::short($data['citations'][$last])];
         }
@@ -253,6 +397,11 @@ final class ResearchFigures {
         foreach (array_diff(self::PARTS, ['dashboard']) as $each) {
           $view[$each] = self::view($each);
         }
+        $view += self::trends($data, $year);
+        break;
+
+      case 'authors':
+        $view['rows'] = self::bars(array_map(fn ($name, $count) => [(string) $name, $count], array_keys($data['authors'] ?? []), $data['authors'] ?? []));
         break;
 
       case 'kinds':
@@ -280,6 +429,70 @@ final class ResearchFigures {
         break;
     }
     return $view;
+  }
+
+  /**
+   * The dashboard's own parts, from pulls since 2026-11-13 (empty before).
+   *
+   * - opentrend: each year as one stacked bar of open access statuses, its
+   *   segments as shares of that year, and the share open in words.
+   * - publishertrend: the top publishers' works each year, a table; each
+   *   cell's share is of that publisher's best year (its shading).
+   * - recent: the latest works, dated, with venue and access in words.
+   */
+  private static function trends(array $data, int $year): array {
+    $out = ['opentrend' => [], 'publishertrend' => [], 'recent' => []];
+    $years = array_keys($data['years']);
+
+    foreach ($years as $y) {
+      $whole = 0;
+      foreach (array_keys(self::ACCESS) as $key) {
+        $whole += (int) ($data['access_years'][$key][$y] ?? 0);
+      }
+      if ($whole < 1) {
+        continue;
+      }
+      $segments = [];
+      foreach (array_keys(self::ACCESS) as $key) {
+        if (!empty($data['access_years'][$key][$y])) {
+          $segments[] = ['key' => $key, 'width' => round($data['access_years'][$key][$y] / $whole * 100, 1)];
+        }
+      }
+      $closed = (int) ($data['access_years']['closed'][$y] ?? 0);
+      $out['opentrend'][] = [
+        'year' => $y,
+        'current' => $y == $year,
+        'segments' => $segments,
+        'open' => round(($whole - $closed) / $whole * 100) . '%',
+      ];
+    }
+
+    if (!empty($data['publisher_years'])) {
+      $out['publishertrend'] = ['years' => array_map(fn ($y) => ['year' => $y, 'current' => $y == $year], $years), 'rows' => []];
+      foreach ($data['publisher_years'] as $name => $counts) {
+        $best = max(array_merge([1], $counts));
+        $out['publishertrend']['rows'][] = [
+          'name' => (string) $name,
+          'cells' => array_map(fn ($y) => [
+            'value' => number_format($counts[$y] ?? 0),
+            'share' => round(($counts[$y] ?? 0) / $best * 100),
+          ], $years),
+        ];
+      }
+    }
+
+    foreach ($data['recent'] ?? [] as $work) {
+      $time = strtotime($work['date'] . ' 12:00');
+      $out['recent'][] = $work + [
+        'when' => $time ? date('M j, Y', $time) : '',
+        'access_label' => match ($work['access']) {
+          'closed' => (string) t('Subscription only'),
+          '' => '',
+          default => (string) t('@status open access', ['@status' => ucfirst($work['access'])]),
+        },
+      ];
+    }
+    return $out;
   }
 
   /**

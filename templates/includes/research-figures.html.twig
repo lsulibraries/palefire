@@ -16,8 +16,11 @@
  * dashboard: every part in one grid of panels (library palefire/guide-blocks,
  * scss/components/_research-dashboard.scss): the figures in
  * a row, then works each year as columns, open access as one stacked bar
- * with its legend, the ranked lists as labeled bars, and the most cited
- * works. Each panel is a <section> named by its <h3>.
+ * with its legend, open access each year as thin stacked bars, the top
+ * publishers each year as a shaded table, the ranked lists (authors among
+ * them) as labeled bars, the latest works, and the most cited works as
+ * offprints. Each panel is a <section> named by its <h3>. Panels whose data
+ * a pull from before 2026-11-13 lacks are left out.
  */
 #}
 {% if part == 'dashboard' %}
@@ -29,6 +32,7 @@
     { key: 'publishers', title: 'Top publishers'|t },
     { key: 'funders', title: 'Top funders'|t },
     { key: 'topics', title: 'Top research topics'|t },
+    { key: 'authors', title: 'Most published LSU authors'|t },
   ] %}
   <div class="pf-rdash" data-pf-research="dashboard">
     {% if not data %}
@@ -75,7 +79,57 @@
           </ul>
         </section>
 
-        {% for panel in panels %}
+        {% if data.opentrend %}
+          <section class="pf-rdash__panel pf-rdash__panel--opentrend" aria-labelledby="{{ uid }}-opentrend">
+            <h3 class="pf-rdash__title" id="{{ uid }}-opentrend">{{ 'Open access each year'|t }}</h3>
+            <ol class="pf-rdash__trend">
+              {% for row in data.opentrend %}
+                <li class="pf-rdash__trend-row{{ row.current ? ' is-current' }}">
+                  <span class="pf-rdash__trend-year">{{ row.year }}{% if row.current %}<span class="visually-hidden"> {{ 'so far'|t }}</span>{% endif %}</span>
+                  <span class="pf-rdash__stack pf-rdash__stack--thin" aria-hidden="true">
+                    {% for segment in row.segments %}
+                      <span class="pf-rdash__segment pf-rdash__tone--{{ segment.key }}" style="--pf-rdash-share: {{ segment.width }}%"></span>
+                    {% endfor %}
+                  </span>
+                  <span class="pf-rdash__trend-value">{{ '@share open'|t({ '@share': row.open }) }}</span>
+                </li>
+              {% endfor %}
+            </ol>
+            <p class="pf-rdash__caption">{{ 'Shaded as in Open access, most open on the left.'|t }}</p>
+          </section>
+        {% endif %}
+
+        {% if data.publishertrend %}
+          <section class="pf-rdash__panel pf-rdash__panel--publishertrend" aria-labelledby="{{ uid }}-publishertrend">
+            <h3 class="pf-rdash__title" id="{{ uid }}-publishertrend">{{ 'Top publishers each year'|t }}</h3>
+            <div class="pf-rdash__scroll" role="region" tabindex="0" aria-labelledby="{{ uid }}-publishertrend">
+              <table class="pf-rdash__table">
+                <caption class="visually-hidden">{{ 'Works with an LSU author each year, by publisher'|t }}</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'Publisher'|t }}</th>
+                    {% for column in data.publishertrend.years %}
+                      <th scope="col">{{ column.year }}{% if column.current %}<span class="pf-rdash__column-note">{{ 'so far'|t }}</span>{% endif %}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in data.publishertrend.rows %}
+                    <tr>
+                      <th scope="row">{{ row.name }}</th>
+                      {% for cell in row.cells %}
+                        <td style="--pf-rdash-share: {{ cell.share }}">{{ cell.value }}</td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <p class="pf-rdash__caption">{{ 'Darker cells mark each publisher’s busiest years. A publisher’s count includes its imprints.'|t }}</p>
+          </section>
+        {% endif %}
+
+        {% for panel in panels|filter(panel => attribute(data, panel.key).rows) %}
           <section class="pf-rdash__panel pf-rdash__panel--{{ panel.key }}" aria-labelledby="{{ uid }}-{{ panel.key }}">
             <h3 class="pf-rdash__title" id="{{ uid }}-{{ panel.key }}">{{ panel.title }}</h3>
             <ol class="pf-rdash__bars">
@@ -89,6 +143,25 @@
             </ol>
           </section>
         {% endfor %}
+
+        {% if data.recent %}
+          <section class="pf-rdash__panel pf-rdash__panel--recent" aria-labelledby="{{ uid }}-recent">
+            <h3 class="pf-rdash__title" id="{{ uid }}-recent">{{ 'Latest works'|t }}</h3>
+            <ol class="pf-rdash__recent">
+              {% for work in data.recent %}
+                <li class="pf-rdash__recent-item">
+                  <p class="pf-rdash__recent-date">{{ work.when }}</p>
+                  <p class="pf-rdash__recent-title"><a href="{{ work.url }}">{{ work.title }}</a></p>
+                  <p class="pf-rdash__recent-meta">
+                    {%- if work.venue %}{{ work.venue }}{% endif -%}
+                    {%- if work.venue and work.access_label %}<span aria-hidden="true"> · </span>{% endif -%}
+                    {%- if work.access_label %}<span class="visually-hidden">, </span>{{ work.access_label }}{% endif -%}
+                  </p>
+                </li>
+              {% endfor %}
+            </ol>
+          </section>
+        {% endif %}
 
         <section class="pf-rdash__panel pf-rdash__panel--cited" aria-labelledby="{{ uid }}-cited">
           <h3 class="pf-rdash__title" id="{{ uid }}-cited">{{ 'Most cited works'|t }}</h3>

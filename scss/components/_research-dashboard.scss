@@ -103,6 +103,8 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .pf-rdash__panel--years,
+  .pf-rdash__panel--publishertrend,
+  .pf-rdash__panel--recent,
   .pf-rdash__panel--cited {
     grid-column: 1 / -1;
   }
@@ -121,11 +123,12 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
     grid-column: span 8;
   }
 
-  .pf-rdash__panel--funders,
-  .pf-rdash__panel--topics {
+  .pf-rdash__panel--opentrend,
+  .pf-rdash__panel--publishertrend {
     grid-column: span 6;
   }
 
+  .pf-rdash__panel--recent,
   .pf-rdash__panel--cited {
     grid-column: 1 / -1;
   }
@@ -260,6 +263,160 @@ $pf-rdash-ease: cubic-bezier(0.22, 1, 0.36, 1);
   font-variant-numeric: tabular-nums;
   color: var(--bs-body-color);
   white-space: nowrap;
+}
+
+// Open access each year: a thin stacked bar a year, the share open in words.
+.pf-rdash__trend {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-rdash__trend-row {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) 5.5rem;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-rdash__trend-year {
+  color: var(--pf-guide-muted);
+}
+
+.pf-rdash__trend-value {
+  text-align: end;
+  white-space: nowrap;
+}
+
+.pf-rdash__stack--thin {
+  height: 0.875rem;
+}
+
+// The year in progress: its bar at half strength, as for the columns.
+.pf-rdash__trend-row.is-current .pf-rdash__stack {
+  opacity: 0.55;
+}
+
+.pf-rdash__caption {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--pf-guide-muted);
+}
+
+// Top publishers each year: a table, each cell shaded by its share of that
+// publisher's best year (at most 30% of the accent, so text keeps its
+// contrast). Scrolls sideways inside the panel on a phone.
+.pf-rdash__scroll {
+  overflow-x: auto;
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-focus-ring-color, currentColor);
+    outline-offset: 2px;
+  }
+}
+
+.pf-rdash__table {
+  width: 100%;
+  min-width: 30rem;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: 0.5rem 0.5rem;
+    border-bottom: 1px solid var(--pf-rdash-line);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  thead th {
+    @include pf-rdash-mono;
+    vertical-align: bottom;
+    color: var(--pf-guide-muted);
+  }
+
+  th:first-child {
+    padding-inline-start: 0;
+    text-align: start;
+    white-space: normal;
+  }
+
+  tbody th {
+    font-weight: 400;
+    color: var(--bs-body-color);
+  }
+
+  td {
+    background: color-mix(in srgb, var(--pf-rdash-fill) calc(var(--pf-rdash-share) * 0.3%), transparent);
+  }
+
+  .pf-rdash__column-note {
+    display: block;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+}
+
+// Latest works: a ruled list, two across from a 40rem dashboard.
+.pf-rdash__recent {
+  display: grid;
+  gap: 0 var(--pf-rdash-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @container pf-rdash (min-width: 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pf-rdash__recent-item {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  padding-block: 0.875rem;
+  border-top: 1px solid var(--pf-rdash-line);
+
+  > p {
+    margin: 0;
+  }
+}
+
+.pf-rdash__recent-date {
+  font: 400 var(--pf-mono-label, 0.6875rem) / 1.5 var(--pf-guide-mono);
+  letter-spacing: 0.06em;
+  color: var(--pf-guide-muted);
+}
+
+.pf-rdash__recent-title {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+
+  a {
+    color: var(--bs-emphasis-color);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+    }
+  }
+}
+
+.pf-rdash__recent-meta {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--pf-guide-muted);
 }
 
 // Ranked lists: a name and its count over a bar ----------------------------

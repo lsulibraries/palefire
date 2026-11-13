@@ -433,6 +433,7 @@ HTML),
 <li>Drafted an unpublished page, LSU Research, by the Numbers, that introduces the Libraries’ OpenAlex research dashboard and links to it. Its figures and charts (works each year, open access, top journals, funders and topics, the most cited works) refresh from OpenAlex each night. It is now a dashboard on first load: four headline figures, then one grid of panels with every chart and list, and a short About the data section.</li>
 <li>On plain pages the page title now lines up with the sections below it on wide screens.</li>
 <li>LSU Research, by the Numbers: the most cited works are now cards set like a journal offprint, with the journal, title, first authors and year, the citation count and the DOI.</li>
+<li>LSU Research, by the Numbers now carries what the old dashboard showed: total and average citations, open access and the top publishers year by year, the most published LSU authors, the latest works, and the 20 most cited.</li>
 </ul>
 HTML),
 ]);
