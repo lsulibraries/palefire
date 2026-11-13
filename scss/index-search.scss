@@ -4072,55 +4072,27 @@ html.pf-index-docked {
   color: var(--pf-index-muted);
 }
 
-// A section's closing row (palefire_search's list template): the whole width
-// of the results, 48px, under the last result's hairline and over one of its
-// own, so it ends the section before the next heading. The words at the left
-// edge, where the eye already runs down the titles, in the body face; the
-// total in the mono figures and a gold arrow at the right. Hover and focus
-// tint the row and nudge the arrow on (up and out, for another site).
+// A section's closing row (palefire_search's list template): the theme's
+// slab (.pf-button--secondary, the plate behind Open online and Show
+// location) across the whole width of the results, so it reads as the
+// section's last control rather than one more line of text. The words at the
+// left, in line with the buttons' own; the total in the mono figures and a gold
+// arrow at the right. Hover and focus wipe in the text color as every slab
+// does, the count and arrow take the fill's words color, and the arrow nudges
+// on (up and out, for another site).
 .pf-index-list__more {
-  margin: 0;
+  margin: 1.5rem 0 0;
 }
 
-.pf-index-list__all {
+.pf-index-list__more .pf-index-list__all {
   display: flex;
-  align-items: center;
   gap: .25rem 1rem;
-  min-height: 3rem;
-  // The words on the titles' left edge: the tint reaches .75rem past the
-  // column on each side, inside the page's gutter at 320px.
-  // The hairline keeps to the column, in line with the rows' own.
-  position: relative;
-  margin-inline: -.75rem;
+  inline-size: 100%;
   padding: .625rem .75rem;
-  color: var(--pf-index-fg);
-  font-size: .9375rem;
   line-height: 1.35;
-  text-decoration: none;
-
-  @include pf-index-motion {
-    transition: background-color $pf-hover-out ease;
-  }
-
-  &:hover,
-  &:focus-visible {
-    background-color: color-mix(in srgb, var(--pf-index-fg) 6%, transparent);
-
-    @include pf-index-motion {
-      transition-duration: $pf-hover-in;
-    }
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: auto .75rem 0;
-    border-bottom: 1px solid var(--pf-index-line);
-  }
 
   &:focus-visible {
-    outline: 2px solid var(--pf-index-highlight);
-    outline-offset: -2px;
+    outline-color: var(--pf-index-highlight);
   }
 }
 
@@ -4132,7 +4104,7 @@ html.pf-index-docked {
 
 .pf-index-list__all-count {
   flex: none;
-  color: var(--pf-index-muted);
+  color: color-mix(in srgb, currentColor 72%, transparent);
   font-family: var(--pf-toc-font, "Consolas", "Monaco", monospace);
   font-size: .8125rem;
   font-variant-numeric: tabular-nums;
@@ -4141,6 +4113,10 @@ html.pf-index-docked {
 .pf-index-list__all-arrow {
   flex: none;
   color: var(--pf-index-highlight);
+  // The mono face, as the theme's button arrows: Roboto has no ↗ and Windows
+  // falls back to its blue emoji. The template adds U+FE0E too.
+  font-family: var(--pf-toc-font, "Consolas", "Monaco", monospace);
+  font-variant-emoji: text;
   line-height: 1;
 
   @include pf-index-motion {
@@ -4161,6 +4137,17 @@ html.pf-index-docked {
     @include pf-index-motion {
       transform: translate(.15rem, -.15rem);
     }
+  }
+
+  // On the fill, gold would sink into it: the words' color instead.
+  @media (hover: hover) {
+    .pf-index-list__all:hover & {
+      color: inherit;
+    }
+  }
+
+  .pf-index-list__all:focus-visible & {
+    color: inherit;
   }
 
   [dir="rtl"] & {

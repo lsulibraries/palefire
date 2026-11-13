@@ -426,7 +426,7 @@ HTML),
 <ul>
 <li>This guide caught up with the afternoon of Nov 12, and the Website Analytics figures now refresh every night.</li>
 <li>The Website Analytics page shows the mode of each search (All, Research, Special Collections or Website) beside its words, and Combined Search now sends each filter chosen, for a Filters chosen table on the same page.</li>
-<li>Combined Search: each section now ends in a full-width row leading to its full list (Show all Discovery results, with the total and a gold arrow), easier to find than the small link at the far right it replaces.</li>
+<li>Combined Search: each section now ends in a full-width row leading to its full list (Show all Discovery results, with the total and a gold arrow) on the same gray slab as the Open online buttons, easier to find than the small link at the far right it replaces.</li>
 </ul>
 HTML),
 ]);

@@ -420,7 +420,7 @@ HTML),
 <ul>
 <li>The Website Analytics page now shows which mode each search was made in, beside the words: All, Research, Special Collections or Website, with how many times in each when a search was made in more than one. Searches that found nothing show their mode the same way.</li>
 <li>Analytics now counts the filters people choose: each source, filter, year range or sort order added to a search, with its mode. Only what is added counts, not filters carried over to a new search or cleared. They appear on the Website Analytics page as Filters chosen once Google Analytics has the new Search filter setting.</li>
-<li>The link to a section's full list (Show all Discovery results) was easy to miss: small capitals at the far right, under the last result. It's now a full-width row that closes the section: the words at the left, where the eye runs down the titles, the total and a gold arrow at the right, and a faint tint when pointed at or tabbed to. Links to another site, such as See all databases, look the same with an arrow pointing up and out.</li>
+<li>The link to a section's full list (Show all Discovery results) was easy to miss: small capitals at the far right, under the last result. It's now a full-width row that closes the section: the words at the left, where the eye runs down the titles, the total and a gold arrow at the right. It sits on the same gray slab as Open online and Show location, so it reads as a button rather than another line of text, and fills in the same way when pointed at or tabbed to. Links to another site, such as See all databases, look the same with an arrow pointing up and out.</li>
 </ul>
 HTML),
 ]);
