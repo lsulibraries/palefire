@@ -46,6 +46,14 @@ html.pf-lead-landing .pf-modular__head {
   padding-inline: max(var(--pf-section-pad-inline, 1.25rem), calc((100% - #{$pf-content-max}) / 2));
 }
 
+// Plain Modular pages (no mode, no landing): their sections sit on the
+// centred 1280px column ($pf-system, _landing-features.scss), so the <h1>
+// takes the same edge rather than the bare padding, which left it 16px
+// left of every section from 1312px of main column up.
+html[data-pf-page="page"] .pf-modular__head {
+  padding-inline: max(var(--pf-section-pad-inline, 1.25rem), calc((100% - #{$pf-content-max}) / 2));
+}
+
 .pf-modular__title {
   margin: 0.85rem 0 0;
   font-size: clamp(2rem, 1.25rem + 2vw, 3.25rem);

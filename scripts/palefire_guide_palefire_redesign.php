@@ -428,7 +428,9 @@ HTML),
 <li>The Website Analytics page shows the mode of each search (All, Research, Special Collections or Website) beside its words, and Combined Search now sends each filter chosen, for a Filters chosen table on the same page.</li>
 <li>Combined Search: each section now ends in a full-width row leading to its full list (Show all Discovery results, with the total and a gold arrow) on the same gray slab as the Open online buttons, easier to find than the small link at the far right it replaces.</li>
 <li>Buttons: the gray buttons site-wide (Quick Start Guide and Visit links, account buttons, FAQ buttons, Combined Search's row buttons) now answer hover and focus with a slightly deeper gray and a thin accent line drawn along the bottom, instead of turning fully white or black with the words reversed. Main actions such as Search and Plan a research visit keep the full fill.</li>
+<li>Newsletter review page: an unlisted page per issue (first, Fall 2026) that shows the Constant Contact draft as it is now, with a Comment button beside each story and a feedback form that follows the reader down the page (a sheet on phones). A link ending in ?for= and a name or headline words takes each featured person straight to their own story, marked "Your story". Comments are saved with the draft's version.</li>
 <li>Drafted an unpublished page, LSU Research, by the Numbers, that introduces the Libraries’ OpenAlex research dashboard and links to it. Its figures and charts (works each year, open access, top journals, funders and topics, the most cited works) refresh from OpenAlex each night. It is now a dashboard on first load: four headline figures, then one grid of panels with every chart and list, and a short About the data section.</li>
+<li>On plain pages the page title now lines up with the sections below it on wide screens.</li>
 </ul>
 HTML),
 ]);
