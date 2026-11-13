@@ -422,6 +422,7 @@ HTML),
 <li>Analytics now counts the filters people choose: each source, filter, year range or sort order added to a search, with its mode. Only what is added counts, not filters carried over to a new search or cleared. They appear on the Website Analytics page as Filters chosen once Google Analytics has the new Search filter setting.</li>
 <li>The link to a section's full list (Show all Discovery results) was easy to miss: small capitals at the far right, under the last result. It's now a full-width row that closes the section: the words at the left, where the eye runs down the titles, the total and a gold arrow at the right. It sits on the same gray slab as Open online and Show location, so it reads as a button rather than another line of text, and fills in the same way when pointed at or tabbed to. Links to another site, such as See all databases, look the same with an arrow pointing up and out.</li>
 <li>Gray buttons across the site (Open online, Show location, Open PDF, Show all, and on other pages the Quick Start Guide and Visit links and the FAQ buttons) no longer flash to white with the words reversed when pointed at or tabbed to. The gray deepens a little and a thin gold line draws in along the bottom, like the line under the selected tab. The gold Search button keeps its fill.</li>
+<li>The closing rows that leave the site now name their source as the filter and heading do: See all Research Guides, See all Databases (were lowercase).</li>
 </ul>
 HTML),
 ]);
