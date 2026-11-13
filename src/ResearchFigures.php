@@ -40,7 +40,7 @@ final class ResearchFigures {
   /**
    * The parts a "[research:<part>]" marker can draw.
    */
-  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'cited'];
+  public const PARTS = ['glance', 'years', 'access', 'kinds', 'journals', 'publishers', 'funders', 'topics', 'cited', 'dashboard'];
 
   private const API = 'https://api.openalex.org/';
 
@@ -201,21 +201,33 @@ final class ResearchFigures {
         break;
 
       case 'years':
-        $rows = [];
+        $rows = $marks = [];
         foreach ($data['years'] as $y => $count) {
           $rows[] = [$y == $year ? t('@year, so far', ['@year' => $y]) : (string) $y, $count];
+          $marks[] = ['year' => (int) $y, 'current' => $y == $year];
         }
-        $view['rows'] = self::bars($rows);
+        // year and current: the dashboard's columns print the year alone and
+        // mark the year in progress.
+        $view['rows'] = array_map(fn ($row, $mark) => $row + $mark, self::bars($rows), $marks);
         break;
 
       case 'access':
-        $rows = [];
+        $rows = $keys = [];
         foreach (self::ACCESS as $key => $label) {
           if (isset($data['access'][$key])) {
             $rows[] = [$label, $data['access'][$key]];
+            $keys[] = $key;
           }
         }
-        $view['rows'] = self::bars($rows, $data['total']);
+        // Each row's key names its tone in the dashboard's stacked bar.
+        $view['rows'] = array_map(fn ($row, $key) => $row + ['key' => $key], self::bars($rows, $data['total']), $keys);
+        break;
+
+      case 'dashboard':
+        // Every part at once, for the dashboard grid.
+        foreach (array_diff(self::PARTS, ['dashboard']) as $each) {
+          $view[$each] = self::view($each);
+        }
         break;
 
       case 'kinds':

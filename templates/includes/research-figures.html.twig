@@ -12,8 +12,104 @@
  *   updated (date), from (first year), and figures, rows or works.
  *
  * Bars are decoration: every row says its number in words.
+ *
+ * dashboard: every part in one grid of panels (library palefire/guide-blocks,
+ * scss/components/_research-dashboard.scss): the figures in
+ * a row, then works each year as columns, open access as one stacked bar
+ * with its legend, the ranked lists as labeled bars, and the most cited
+ * works. Each panel is a <section> named by its <h3>.
  */
 #}
+{% if part == 'dashboard' %}
+  {{ attach_library('palefire/guide-blocks') }}
+  {% set uid = 'pf-rdash-' ~ random() %}
+  {% set panels = [
+    { key: 'kinds', title: 'Kinds of work'|t },
+    { key: 'journals', title: 'Top journals'|t },
+    { key: 'publishers', title: 'Top publishers'|t },
+    { key: 'funders', title: 'Top funders'|t },
+    { key: 'topics', title: 'Top research topics'|t },
+  ] %}
+  <div class="pf-rdash" data-pf-research="dashboard">
+    {% if not data %}
+      <p class="pf-rdash__note">{{ 'These figures arrive from OpenAlex each night.'|t }}</p>
+    {% else %}
+      <dl class="pf-rdash__kpis">
+        {% for figure in data.glance.figures %}
+          <div class="pf-rdash__kpi">
+            <dt class="pf-rdash__kpi-label">{{ figure.label }}</dt>
+            <dd class="pf-rdash__kpi-value">{{ figure.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+
+      <div class="pf-rdash__grid">
+        <section class="pf-rdash__panel pf-rdash__panel--years" aria-labelledby="{{ uid }}-years">
+          <h3 class="pf-rdash__title" id="{{ uid }}-years">{{ 'Works each year'|t }}</h3>
+          <ol class="pf-rdash__columns">
+            {% for row in data.years.rows %}
+              <li class="pf-rdash__column{{ row.current ? ' is-current' }}" style="--pf-rdash-share: {{ row.width }}%">
+                <span class="pf-rdash__column-value">{{ row.value }}</span>
+                <span class="pf-rdash__column-bar" aria-hidden="true"></span>
+                <span class="pf-rdash__column-year">{{ row.year }}{% if row.current %}<span class="pf-rdash__column-note">{{ 'so far'|t }}</span>{% endif %}</span>
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+
+        <section class="pf-rdash__panel pf-rdash__panel--access" aria-labelledby="{{ uid }}-access">
+          <h3 class="pf-rdash__title" id="{{ uid }}-access">{{ 'Open access'|t }}</h3>
+          <div class="pf-rdash__stack" aria-hidden="true">
+            {% for row in data.access.rows %}
+              <span class="pf-rdash__segment pf-rdash__tone--{{ row.key }}" style="--pf-rdash-share: {{ row.width }}%"></span>
+            {% endfor %}
+          </div>
+          <ul class="pf-rdash__legend">
+            {% for row in data.access.rows %}
+              <li class="pf-rdash__legend-item">
+                <span class="pf-rdash__swatch pf-rdash__tone--{{ row.key }}" aria-hidden="true"></span>
+                <span class="pf-rdash__legend-name">{{ row.label }}</span>
+                <span class="pf-rdash__legend-value">{{ row.value }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        {% for panel in panels %}
+          <section class="pf-rdash__panel pf-rdash__panel--{{ panel.key }}" aria-labelledby="{{ uid }}-{{ panel.key }}">
+            <h3 class="pf-rdash__title" id="{{ uid }}-{{ panel.key }}">{{ panel.title }}</h3>
+            <ol class="pf-rdash__bars">
+              {% for row in attribute(data, panel.key).rows %}
+                <li class="pf-rdash__bar" style="--pf-rdash-share: {{ row.width }}%">
+                  <span class="pf-rdash__bar-name">{{ row.label }}</span>
+                  <span class="pf-rdash__bar-value">{{ row.value }}</span>
+                  <span class="pf-rdash__bar-track" aria-hidden="true"><span class="pf-rdash__bar-fill"></span></span>
+                </li>
+              {% endfor %}
+            </ol>
+          </section>
+        {% endfor %}
+
+        <section class="pf-rdash__panel pf-rdash__panel--cited" aria-labelledby="{{ uid }}-cited">
+          <h3 class="pf-rdash__title" id="{{ uid }}-cited">{{ 'Most cited works'|t }}</h3>
+          <ol class="pf-rdash__cited">
+            {% for work in data.cited.works %}
+              <li class="pf-rdash__work">
+                <span class="pf-rdash__work-text">
+                  <a class="pf-rdash__work-link" href="{{ work.url }}">{{ work.title }}</a>
+                  <span class="pf-rdash__work-meta">{{ work.year }}{% if work.venue %}<span aria-hidden="true"> · </span>{{ work.venue }}{% endif %}</span>
+                </span>
+                <span class="pf-rdash__work-count">{{ '@count citations'|t({ '@count': work.count }) }}</span>
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+      </div>
+
+      <p class="pf-rdash__note">{{ 'Works with at least one LSU author published since January 1, @from: articles, books, chapters, dissertations, datasets and more. From OpenAlex, updated @updated.'|t({ '@from': data.from, '@updated': data.updated }) }}</p>
+    {% endif %}
+  </div>
+{% else %}
 {{ attach_library('palefire/guide-blocks') }}
 <div class="pf-analytics pf-research" data-pf-research="{{ part }}">
   {% if not data %}
@@ -55,3 +151,4 @@
     <p class="pf-stats__caption">{{ 'Since @from. Updated @updated.'|t({ '@from': data.from, '@updated': data.updated }) }}</p>
   {% endif %}
 </div>
+{% endif %}

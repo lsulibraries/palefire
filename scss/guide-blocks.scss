@@ -827,3 +827,7 @@ $pf-reveal-from: 0.85; // As _variables.scss.
     border-color: transparent transparent transparent CanvasText;
   }
 }
+
+// The LSU research dashboard (includes/research-figures.html.twig, its
+// "dashboard" part).
+@import "components/research-dashboard";
