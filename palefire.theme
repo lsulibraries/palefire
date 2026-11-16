@@ -1569,7 +1569,11 @@ const PALEFIRE_ACCESS_POLICY_KEYS = ['reservation', 'by_appointment', 'walk_up',
  * accept before coming, in words. The room's Required policies in its
  * order, less those the facts row already says (its access, the notice),
  * and "Fees apply" for an Event rental whose price the facts don't give,
- * three at most. Everything else is in House rules.
+ * three at most. Everything else is in House rules. A room with no such
+ * requirement (Quiet Study) lists its Not allowed policies instead, three
+ * at most, so its top still says what to know before coming. House rules
+ * keeps those too (palefire_preprocess_paragraph__location_rules() drops
+ * only the Required ones shown here), so it is never left empty.
  *
  * Every room reads the same way: a few requirements here, the full rules
  * in its House rules section. Only a walk-in room whose page has no House
@@ -1596,6 +1600,13 @@ function _palefire_location_need_to_know(array $location): array {
   }
   if ($all) {
     return $items;
+  }
+  if (!$items) {
+    foreach ($location['policies'] ?? [] as $policy) {
+      if ($policy['state'] === 'not_allowed' && !in_array($policy['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)) {
+        $items[] = ['label' => $policy['label'], 'detail' => $policy['detail'], 'icon' => $policy['icon'], 'state' => $policy['state']];
+      }
+    }
   }
   $fee = ($location['access'] ?? '') === 'rental' && ($location['price'] ?? '') === '' ? [['label' => (string) t('Fees apply'), 'detail' => '', 'icon' => 'receipt', 'state' => 'required']] : [];
   return [...array_slice($items, 0, 3 - count($fee)), ...$fee];
@@ -2187,7 +2198,9 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
     $variables['rules']['sound_level'] = 0;
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
     $location['rules_section'] = TRUE;
-    $shown = array_column(_palefire_location_need_to_know($location), 'label');
+    // Only the Required items: a Not allowed rule Need to know shows for a
+    // room with no requirements stays here too.
+    $shown = array_column(array_filter(_palefire_location_need_to_know($location), static fn (array $item): bool => $item['state'] === 'required'), 'label');
     foreach ($variables['rules']['groups'] as $state => $policies) {
       $variables['rules']['groups'][$state] = array_values(array_filter($policies, static fn (array $p): bool => !in_array($p['label'], $shown, TRUE)
         && !in_array($p['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)

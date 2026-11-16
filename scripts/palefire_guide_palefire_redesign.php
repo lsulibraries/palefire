@@ -464,6 +464,7 @@ HTML),
 <li>Building map on room pages: the room's name now sits on a short plate shaped to the room's floor, instead of a band running the room's whole length.</li>
 <li>Building map on room pages: back to the box around the room's name, which now also hides the walls and room edges it overlaps, so no line runs through the name.</li>
 <li>Lecture Hall and McIlhenny Room pages: no more opening hours under the title, since neither room is open to walk into. The same spot now says By request, with a link down to how to request it (Request a date, Plan a class). The Reading Room and Quiet Study keep their hours.</li>
+<li>Quiet Study page: a Need to know at the top, like the other rooms. It has no requirements, so it lists what isn’t allowed (No food or drink).</li>
 </ul>
 HTML),
 ]);
