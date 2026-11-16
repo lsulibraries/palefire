@@ -136,7 +136,7 @@ $pick = static function (int|string $ref, string $why) use ($storage, $at, &$log
   $log[] = "  $why: \"{$node->label()}\" (node {$node->id()}, {$node->bundle()}" . ($node->isPublished() ? '' : ', unpublished: visitors won’t see it') . ').';
   return (int) $node->id();
 };
-$mossville = $pick('/v2/special/exhibitions/mossville', 'Mossville exhibition') ?? $pick(91045, 'Mossville tile');
+$mossville = $at('/v2/oralhistory/exhibitions/mossville') ? $pick('/v2/oralhistory/exhibitions/mossville', 'Mossville exhibition') : ($at('/v2/special/exhibitions/mossville') ? $pick('/v2/special/exhibitions/mossville', 'Mossville exhibition') : $pick(91045, 'Mossville tile'));
 
 // The hero. ----------------------------------------------------------------
 $hero = $hero_source->createDuplicate();

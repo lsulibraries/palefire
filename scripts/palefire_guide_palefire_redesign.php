@@ -476,6 +476,7 @@ HTML),
 <li>Exhibition titles are now in the site’s plain sans type by default, on the title page and in the Exhibitions list. An exhibition keeps the elegant serif only when its editor picks Serif under Exhibition title style.</li>
 <li>Drafted nine more oral history exhibitions from the old Oral History site, as unpublished pages like Mossville’s: History of Graphic Design in South Louisiana, Georgetown 272, History of KLSU, Tempests, the New Orleans Jazz &amp; Heritage Festival, Cooperative Extension at LSU, A Lady in the South, Integrating LSU and Saturday Night in Tiger Stadium. Every clip was evened out the same way, in one channel and at one comfortable loudness, so no interview is much quieter or louder than the next.</li>
 <li>All exhibition audio, Mossville’s included, is now a little louder (-16 LUFS, the level podcasts use), so it doesn’t sound quiet next to other sites.</li>
+<li>The oral history exhibitions, Mossville and the ten new ones, now live under Oral History (/v2/oralhistory/exhibitions/…) rather than Special Collections. Old addresses forward to the new ones.</li>
 </ul>
 HTML),
 ]);
