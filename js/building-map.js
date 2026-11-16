@@ -618,73 +618,64 @@
       svg.appendChild(marker);
 
       // The name's cut-out (_building-map.scss, .pf-map__knock): a black
-      // band in the room's hatch mask behind the name, so the name reads on
-      // the frosted photo, not over the stripes. The name stands upright
-      // (its sides stay vertical) while the room's sides slope, so a plain
-      // box around the letters ended in vertical cuts that read as a tear.
-      // The band is drawn on the floor instead: its long sides follow the
-      // name's baseline, its ends the room's other edge, an even margin
-      // past the letters each way. It is clipped to the room's outline
-      // (the mask is shared by every room's hatch) and keeps the class, so
-      // the reveal, the lift with the lit name and reduced motion still
-      // apply: zeroed --x/--y, angle and skew leave only the lift.
+      // rect around the name's letters, with an even margin, on the name's
+      // own plane. It carries the name's --x/--y and .is-active, so CSS
+      // gives it the same angle and lift. Two copies: one in the room's
+      // hatch mask clears the stripes; one in a mask of its own over the
+      // drawing's lines and the rooms' outlines clears any wall or edge the
+      // box overlaps, so the name sits on a clear plate, never crossed by a
+      // line drawn over it.
       const hatch = hereRegion.querySelector('.pf-map__hatch');
       const maskRef = hatch && /#([^)"']+)/.exec(hatch.getAttribute('mask') || '');
       const hatchMask = maskRef && document.getElementById(maskRef[1]);
-      let knock = null;
+      const knocks = [];
       if (hereLabel && hatchMask) {
-        const clip = document.createElementNS(SVG_NS, 'clipPath');
-        clip.id = maskRef[1] + '-here-clip';
-        clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
-        const outline = document.createElementNS(SVG_NS, 'path');
-        outline.setAttribute('d', hatch.getAttribute('d') || '');
-        clip.appendChild(outline);
-        const band = document.createElementNS(SVG_NS, 'g');
-        band.setAttribute('clip-path', 'url(#' + clip.id + ')');
-        knock = document.createElementNS(SVG_NS, 'path');
-        knock.setAttribute('class', 'pf-map__knock');
-        knock.setAttribute('fill', '#000');
-        band.appendChild(knock);
-        hatchMask.append(clip, band);
+        const makeKnock = () => {
+          const knock = document.createElementNS(SVG_NS, 'rect');
+          knock.setAttribute('class', 'pf-map__knock');
+          knock.setAttribute('fill', '#000');
+          knocks.push(knock);
+          return knock;
+        };
+        hatchMask.appendChild(makeKnock());
+        const walls = document.createElementNS(SVG_NS, 'mask');
+        walls.id = maskRef[1] + '-here-walls';
+        walls.setAttribute('maskUnits', 'userSpaceOnUse');
+        const view = svg.viewBox.baseVal;
+        const sheet = document.createElementNS(SVG_NS, 'rect');
+        sheet.setAttribute('fill', '#fff');
+        if (view && view.width) {
+          [walls, sheet].forEach((el) => {
+            el.setAttribute('x', view.x);
+            el.setAttribute('y', view.y);
+            el.setAttribute('width', view.width);
+            el.setAttribute('height', view.height);
+          });
+        }
+        walls.append(sheet, makeKnock());
+        hatchMask.parentNode.insertBefore(walls, hatchMask);
+        svg.querySelectorAll('.pf-map__lines, .pf-map__hit').forEach((el) => {
+          if (!el.hasAttribute('mask')) el.setAttribute('mask', 'url(#' + walls.id + ')');
+        });
         const follow = () => {
-          knock.setAttribute('style', (hereLabel.getAttribute('style') || '') + ';--x:0;--y:0;--pf-map-rotate:0deg;--skew:0deg');
-          knock.classList.toggle('is-active', hereLabel.classList.contains('is-active'));
+          knocks.forEach((knock) => {
+            knock.setAttribute('style', hereLabel.getAttribute('style') || '');
+            knock.classList.toggle('is-active', hereLabel.classList.contains('is-active'));
+          });
         };
         follow();
         new MutationObserver(follow).observe(hereLabel, { attributes: true, attributeFilter: ['class', 'style'] });
       }
-
-      // The room's sloping edge: of its outline's sides, the one furthest
-      // from the name's baseline (u). Unit vectors, map units.
-      const roomSlope = (u) => {
-        const n = (hatch.getAttribute('d') || '').match(/-?\d+(?:\.\d+)?/g) || [];
-        let best = null;
-        let bestCross = 0;
-        for (let i = 0; i + 3 < n.length; i += 2) {
-          const dx = n[i + 2] - n[i];
-          const dy = n[i + 3] - n[i + 1];
-          const len = Math.hypot(dx, dy);
-          if (!len) continue;
-          const cross = Math.abs(u.x * dy - u.y * dx) / len;
-          if (cross > bestCross) {
-            bestCross = cross;
-            best = { x: dx / len, y: dy / len };
-          }
-        }
-        return bestCross > 0.2 ? best : null;
-      };
-
-      // From the letters themselves (not the line box), in the name's own
-      // units: cap height over each baseline, the first glyph's left to the
-      // last glyph's right, then placed on the map with the name's resting
-      // transform (without its lift).
+      // From the letters themselves (not the line box or the trailing
+      // letter-spacing), in the name's own units: cap height over each
+      // baseline, the first glyph's left to the last glyph's right.
       const sizeKnock = () => {
-        if (!knock) return;
+        if (!knocks.length) return;
         const cs = getComputedStyle(hereLabel);
         const em = parseFloat(cs.fontSize) || 62;
         const spacing = parseFloat(cs.letterSpacing) || 0;
         const cap = em * 0.72;
-        const pad = em * 0.65;
+        const pad = em * 0.7;
         const box = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
         const lines = hereLabel.querySelectorAll('tspan');
         (lines.length ? [...lines] : [hereLabel]).forEach((line) => {
@@ -700,40 +691,12 @@
           }
         });
         if (!Number.isFinite(box.left)) return;
-        const m = new DOMMatrix(cs.transform === 'none' ? undefined : cs.transform);
-        const style = hereLabel.style;
-        m.e = parseFloat(style.getPropertyValue('--x')) || 0;
-        m.f = parseFloat(style.getPropertyValue('--y')) || 0;
-        const at = (x, y) => new DOMPoint(x, y).matrixTransform(m);
-        const u = { x: m.a, y: m.b };
-        const ul = Math.hypot(u.x, u.y) || 1;
-        u.x /= ul;
-        u.y /= ul;
-        const v = roomSlope(u);
-        const top = box.top - pad;
-        const bottom = box.bottom + pad;
-        const left = box.left - pad;
-        const right = box.right + pad;
-        let corners;
-        if (v) {
-          // Where a baseline-parallel side (through p) meets a slope-parallel
-          // end (through q).
-          const meet = (p, q) => {
-            const det = u.x * v.y - u.y * v.x;
-            const t = ((q.x - p.x) * v.y - (q.y - p.y) * v.x) / det;
-            return { x: p.x + u.x * t, y: p.y + u.y * t };
-          };
-          const mid = (top + bottom) / 2;
-          const qL = at(left, mid);
-          const qR = at(right, mid);
-          const pT = at(left, top);
-          const pB = at(left, bottom);
-          corners = [meet(pT, qL), meet(pT, qR), meet(pB, qR), meet(pB, qL)];
-        }
-        else {
-          corners = [at(left, top), at(right, top), at(right, bottom), at(left, bottom)];
-        }
-        knock.setAttribute('d', 'M' + corners.map((c) => c.x.toFixed(1) + ' ' + c.y.toFixed(1)).join(' L') + ' Z');
+        knocks.forEach((knock) => {
+          knock.setAttribute('x', (box.left - pad).toFixed(1));
+          knock.setAttribute('y', (box.top - pad).toFixed(1));
+          knock.setAttribute('width', (box.right - box.left + pad * 2).toFixed(1));
+          knock.setAttribute('height', (box.bottom - box.top + pad * 2).toFixed(1));
+        });
       };
 
       const placeHere = () => {
