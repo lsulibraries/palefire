@@ -121,7 +121,9 @@ final class ExhibitTimeline {
    *   - events: in date order, each ['anchor', 'title', 'label', 'iso',
    *     'strand' (the gallery's title), 'row' (its index in strands),
    *     'media' (a picture or clip), 'audio', 'thumb'
-   *     (_palefire_exhibit_image() values or NULL), 'index'].
+   *     (_palefire_exhibit_image() values or NULL), 'text' (an entry with
+   *     no picture or clip: its biography and text blocks as a render
+   *     array, shown in place; it has no link), 'index'].
    *   - decades: ['label' ("1950s"), 'events'].
    */
   public static function build(ParagraphInterface $page, CacheableMetadata $cache): ?array {
@@ -151,7 +153,7 @@ final class ExhibitTimeline {
           $row = count($strands);
           $strands[] = ['title' => $title, 'anchor' => $anchor];
         }
-        [$media, $audio, $thumb] = self::media($entry, $cache);
+        [$media, $audio, $thumb, $text] = self::media($entry, $cache);
         $events[] = [
           'anchor' => _palefire_exhibit_entry_anchor($entry),
           'title' => trim((string) $entry->get('field_block_title')->value),
@@ -163,6 +165,8 @@ final class ExhibitTimeline {
           'media' => $media,
           'audio' => $audio,
           'thumb' => $thumb,
+          // Text only: read on the timeline itself, not opened.
+          'text' => $media ? NULL : $text,
         ];
       }
     }
@@ -196,14 +200,27 @@ final class ExhibitTimeline {
 
   /**
    * Whether an entry has a picture or a clip, whether a clip, and its first
-   * picture (for the card), as [media, audio, thumb].
+   * picture (for the card), and its words (biography and text blocks, as
+   * a render array), as [media, audio, thumb, text].
    */
   private static function media(ParagraphInterface $entry, CacheableMetadata $cache): array {
     $audio = FALSE;
     $item = NULL;
+    $text = [];
+    $add = function ($field) use (&$text): void {
+      if (!$field->isEmpty() && trim(strip_tags((string) $field->value)) !== '') {
+        $text[] = ['#type' => 'processed_text', '#text' => $field->value, '#format' => $field->format];
+      }
+    };
+    if ($entry->hasField('field_entry_bio')) {
+      $add($entry->get('field_entry_bio'));
+    }
     foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
       if (!$block->isPublished()) {
         continue;
+      }
+      if ($block->bundle() === 'guide_text' && $block->hasField('field_block_body')) {
+        $add($block->get('field_block_body'));
       }
       if ($block->bundle() === 'exhibit_audio') {
         $audio = TRUE;
@@ -225,7 +242,7 @@ final class ExhibitTimeline {
       $image = _palefire_media_image_item($item, $cache);
       $thumb = $image ? _palefire_exhibit_image($image, '5rem', $cache) : NULL;
     }
-    return [$audio || $thumb !== NULL, $audio, $thumb];
+    return [$audio || $thumb !== NULL, $audio, $thumb, $text ?: NULL];
   }
 
 }

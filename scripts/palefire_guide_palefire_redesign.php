@@ -505,6 +505,7 @@ HTML),
 <li>The Reading Room page no longer has a booking button at the top: it is a walk-in room.</li>
 <li>Room pages: the photos of a room open full screen, the same way exhibition pictures do, with arrows to step through them.</li>
 <li>Exhibitions can now have a Timeline gallery: every dated event from the other galleries in one list, in date order and grouped by decade, read top to bottom on phones and computers alike. Each event says which gallery it belongs to and opens it. Entries can carry a date, shown under their heading, and on a wall an event with no picture hangs as a card with its date. Integrating LSU opens with one, like the old listening station’s timeline.</li>
+<li>Exhibition timelines: events with only text are no longer clickable. Their few lines are shown right on the timeline, so nothing opens just to show a sentence; events with a picture or clip still open them.</li>
 </ul>
 HTML),
 ]);

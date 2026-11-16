@@ -330,7 +330,7 @@ HTML, 'sources'),
 
 if ($date && FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display')) {
   $gallery('Timeline', 'timeline', [
-    $note('<p><strong>Timeline</strong>: a Gallery with Display set to Timeline lists every entry with a Date in the exhibition’s other galleries, in date order, grouped by decade, each naming its gallery. A filled dot means the entry has a picture or clip; an open ring, text only. Each opens its entry. Write dates as 1953, 1953-06, 1953-06-20, or a range with a slash: 1941/1945. Below, the three designers from Exhibition blocks.</p>'),
+    $note('<p><strong>Timeline</strong>: a Gallery with Display set to Timeline lists every entry with a Date in the exhibition’s other galleries, in date order, grouped by decade, each naming its gallery. A filled dot means the entry has a picture or clip, and opens it; an open ring is text only, shown right on the timeline. Write dates as 1953, 1953-06, 1953-06-20, or a range with a slash: 1941/1945. Below, the three designers from Exhibition blocks.</p>'),
   ]);
   $sections[array_key_last($sections)]->set('field_exhibit_display', 'timeline');
 }
