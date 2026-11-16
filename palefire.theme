@@ -3144,6 +3144,10 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     }
   }
 
+  // Every card a whole wide cover (oral history exhibitions): the Grid
+  // draws them 16:9, the title under the picture (.pf-tiles--whole).
+  $variables['whole_covers'] = $variables['tiles'] && !array_filter($variables['tiles'], static fn (array $tile): bool => !$tile['whole']);
+
   // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)
   // spans two to five columns: its cover is the landscape crop, sized for
   // that width (beside the sidebar from 1480px; a column below).

@@ -665,6 +665,8 @@
           {% set tab_links = {
             study: { label: 'Study at Hill'|t, url: '/v2/special/quietstudy', text: 'Quiet Study room'|t },
             ask: { label: 'Ask Special Collections'|t, url: 'https://askus.lib.lsu.edu/special', text: 'More ways to ask'|t, external: true, hidden: ' (opens in a new tab)'|t },
+            record: { label: 'The Williams Center’s services'|t },
+            explore: { label: 'Online exhibitions'|t },
           } %}
           {% set tab_rules = {} %}
           {% for tab in quick_tabs.tabs %}
@@ -715,6 +717,20 @@
               ],
             },
           } %}
+          {# Oral History's Record and Explore. Explore is wide: its heading
+             and intro over the exhibitions, which take the panel's whole
+             width (no first column, no notes or hours). #}
+          {% set tab_copy = tab_copy|merge({
+            record: {
+              title: 'Record your own'|t,
+              intro: 'Plan an oral history project, learn to interview and record, or work with the Williams Center on yours, so what you record is kept.'|t,
+            },
+            explore: {
+              title: 'Online exhibitions'|t,
+              intro: 'Stories told from the interviews: their voices with the pictures and papers around them. Each opens as a presentation.'|t,
+              wide: true,
+            },
+          }) %}
           {# A tab's room photo (quick_tabs.photos, _palefire_tab_photos()), as a
              framed print linking on to the tab rule's page, with its caption. #}
           {% set tab_photos = {} %}
@@ -734,7 +750,7 @@
               {% if copy.intro %}<p class="pf-quick-guide__intro">{{ copy.intro }}</p>{% endif %}
             {% endset %}
             {% set aside_foot %}
-              {% if copy.notes or links or quick_hours %}
+              {% if not copy.wide and (copy.notes or links or quick_hours) %}
                 <div class="pf-quick-guide__visit">
                   {% if copy.notes %}
                     <h3 class="pf-quick-guide__visit-title">{{ copy.notes_title }}</h3>
@@ -746,7 +762,7 @@
                 </div>
               {% endif %}
             {% endset %}
-            {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot } }) %}
+            {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot, wide: copy.wide ?? false } }) %}
           {% endfor %}
           {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos } only %}
         {% else %}

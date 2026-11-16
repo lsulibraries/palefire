@@ -1957,3 +1957,79 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
     object-position: 50% 30%;
   }
 }
+
+// A showcase of whole covers only (.pf-tiles--whole, palefire.theme): in
+// the Grid each card is its 16:9 picture, whole, with no scrim, and the
+// title and label under it on the section's ground, as a film still and
+// its caption. 1, then 2 from 32rem, 3 from 56rem, 4 from 100rem. No lead
+// card and no phone mosaic: every card the same.
+.pf-tiles--whole.pf-tiles--masonry .pf-tiles__list {
+  --pf-cols: 1;
+  row-gap: clamp(1.75rem, 3cqi, 2.5rem);
+}
+
+@container pf-tiles (min-width: 32rem) {
+  .pf-tiles--whole.pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 2;
+  }
+}
+
+@container pf-tiles (min-width: 56rem) {
+  .pf-tiles--whole.pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 3;
+  }
+}
+
+@container pf-tiles (min-width: 100rem) {
+  .pf-tiles--whole.pf-tiles--masonry .pf-tiles__list {
+    --pf-cols: 4;
+  }
+}
+
+.pf-tiles--whole.pf-tiles--masonry[data-pf-view="grid"] {
+  .pf-tiles__list .pf-tiles__item {
+    grid-column: auto;
+  }
+
+  .pf-tile {
+    grid-template-rows: auto auto auto;
+  }
+
+  .pf-tiles__list .pf-tile .pf-tile__media {
+    aspect-ratio: 16 / 9;
+    height: auto;
+
+    &::after {
+      content: none;
+    }
+
+    img {
+      object-position: 50% 50%;
+    }
+  }
+
+  .pf-tile .pf-tile__title {
+    grid-area: 2 / 1;
+    align-self: start;
+    margin: .875rem 0 0;
+    font-size: clamp(1rem, .85rem + .6cqi, 1.375rem);
+    line-height: 1.2;
+  }
+
+  .pf-tile__labels {
+    grid-area: 3 / 1;
+    padding-top: .375rem;
+  }
+
+  .pf-tile:focus-visible {
+    outline-offset: 4px;
+  }
+}
+
+@container pf-tiles (width < 36rem) {
+  .pf-tiles--whole.pf-tiles--masonry[data-pf-view="grid"] {
+    .pf-tiles__list {
+      --pf-gap: 1rem;
+    }
+  }
+}

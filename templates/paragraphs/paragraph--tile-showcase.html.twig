@@ -17,6 +17,8 @@
  *   subtitle, author, imprint, url, image.
  * - groups: the ledger's tiles by Category: label, tiles.
  * - faqs: layout 'ask' only (includes/ask-special.html.twig).
+ * - whole_covers: every card is a whole wide cover (oral history
+ *   exhibitions): .pf-tiles--whole, 16:9 pictures with the title under.
  *
  * The section <h2> comes from the scroll-section field template, so each
  * card is an <h3>. The title comes first in the source so the link's name
@@ -163,7 +165,8 @@
   {# Scroll-in animation, as on the concept page, once per page load
      (skipped for reduced motion). #}
   {{ attach_library('palefire/tile-reveal') }}
-  <div{{ attributes.addClass('pf-tiles', 'pf-tiles--' ~ layout) }} data-toc-skip{% if layout == 'masonry' %} data-pf-view="grid" data-pf-count="{{ tiles|length }}"{% endif %}>
+  {% set tiles_classes = ['pf-tiles', 'pf-tiles--' ~ layout]|merge(whole_covers ? ['pf-tiles--whole'] : []) %}
+  <div{{ attributes.addClass(tiles_classes) }} data-toc-skip{% if layout == 'masonry' %} data-pf-view="grid" data-pf-count="{{ tiles|length }}"{% endif %}>
     {% if layout == 'index' %}
       <ol class="pf-tiles__list" role="list">
         {% for tile in tiles %}

@@ -404,6 +404,47 @@ html:not(.pf-reading-dark) .pf-tabs {
   }
 }
 
+// A wide aside (Oral History's Explore): the heading in the first column
+// and the intro beside it, level with its foot, then the blocks across the
+// whole panel, under them.
+@container pf-cover (min-width: 64rem) {
+  .pf-quick-guide__panel--wide {
+    grid-template-rows: auto auto;
+
+    > .pf-quick-guide__title {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+
+    > .pf-quick-guide__intro {
+      grid-column: 2 / -1;
+      grid-row: 1;
+      align-self: end;
+      max-width: 40rem;
+    }
+  }
+
+  .pf-quick-guide__panel.pf-quick-guide__panel--wide > .pf-tabs__content {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    max-width: none;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+}
+
+@container pf-cover (min-width: 80rem) {
+  .pf-quick-guide__panel--wide {
+    > .pf-quick-guide__title {
+      grid-column: 1 / span 2;
+    }
+
+    > .pf-quick-guide__intro {
+      grid-column: 3 / -1;
+    }
+  }
+}
+
 // The Ask block sets its FAQs beside the form from lg (_ask.scss); in the
 // tab's narrower columns (three of four at 1024px) they stack until there
 // is room for both.
