@@ -36,6 +36,11 @@
  *   follows it. The Quick Guide fields are emptied so that text shows.
  * - Banners: the Mossville History Project exhibition, the Georgetown 272
  *   tile and the podcast tile (the newest blog post comes after them).
+ * - Section tabs under the hero, as on /v2/special: Listen (the Quick
+ *   Start's three ways), Record ("Recording Your Own") and Explore ("Listen
+ *   In", the exhibitions): the old page's Oral History, Doing Oral History
+ *   and Showcase. Without the Section tabs type, Record and Explore stay
+ *   sections of their own.
  * - Tile showcases: "Voices in the Collection" (finding aids, the LDL,
  *   copies, FAQs), "Recording Your Own" (the Center's services, as a
  *   ledger) and "Listen In" (the digital exhibitions and the podcast).
@@ -231,6 +236,7 @@ $showcases = [
   [
     'title' => 'Recording Your Own',
     'eyebrow' => 'Services',
+    'tab' => ['Record', 'microphone-alt', 'record'],
     'lede' => 'Guides, workshops and seminars for anyone starting an oral history, and partnerships with the Williams Center to record Louisiana’s communities.',
     'link' => NULL,
     'layout' => 'ledger',
@@ -245,6 +251,7 @@ $showcases = [
   [
     'title' => 'Listen In',
     'eyebrow' => 'Exhibitions',
+    'tab' => ['Explore', 'images', 'explore'],
     'lede' => 'Digital exhibitions made from the Center’s interviews, from Mossville to Tiger Stadium, and What Endures, its podcast.',
     'link' => ['uri' => 'https://oralhistory.blogs.lib.lsu.edu/podcast-library/', 'title' => 'All podcast episodes'],
     'layout' => 'masonry',
@@ -267,6 +274,17 @@ $showcases = [
 ];
 
 $sections = [$hero];
+// The Section tabs under the hero, as on /v2/special: Listen (the Quick
+// Start's three ways, "[request-paths]", _palefire_tab_has_paths()),
+// Record (the Center's services) and Explore (the exhibitions), the old
+// page's Oral History, Doing Oral History and Showcase. The theme draws
+// them under the hero's rule 01, Listen holding the Quick Start.
+$tabs_ready = \Drupal::entityTypeManager()->getStorage('paragraphs_type')->load('section_tabs')
+  && FieldConfig::loadByName('paragraph', 'section_tab', 'field_guide_blocks');
+$tab_blocks = [];
+if (!$tabs_ready) {
+  $log[] = 'No Section tabs paragraph type (palefire_section_tabs_setup.php): Record and Explore stay sections of their own.';
+}
 foreach ($showcases as $spec) {
   $layout = isset($layouts[$spec['layout']]) ? $spec['layout'] : 'grid';
   $log[] = "Section \"{$spec['title']}\" ($layout" . ($layout !== $spec['layout'] ? ", as {$spec['layout']} isn't a Layout option" : '') . '):';
@@ -292,6 +310,13 @@ foreach ($showcases as $spec) {
   if ($spec['link']) {
     $values['field_tile_link'] = $spec['link'];
   }
+  // A tab's showcase: the tab names it, so no title or eyebrow.
+  if (!empty($spec['tab']) && $tabs_ready) {
+    unset($values['field_section_title'], $values['field_tile_eyebrow']);
+    $tab_blocks[] = [$spec['tab'], Paragraph::create($values)];
+    $log[] = "  In the Section tabs, as \"{$spec['tab'][0]}\".";
+    continue;
+  }
   // Snap, height, theme and TOC as the Special Collections page's showcases.
   foreach (['field_section_snap', 'field_section_height', 'field_section_theme', 'field_section_toc_hide'] as $name) {
     if ($showcase_source && $showcase_source->hasField($name) && !$showcase_source->get($name)->isEmpty()
@@ -300,6 +325,31 @@ foreach ($showcases as $spec) {
     }
   }
   $sections[] = Paragraph::create($values);
+}
+
+if ($tabs_ready && $tab_blocks) {
+  $formats = filter_formats();
+  $format = isset($formats['wysiwyg']) ? 'wysiwyg' : (string) array_key_first($formats);
+  $tab = static fn (array $spec, array $blocks): Paragraph => Paragraph::create([
+    'type' => 'section_tab',
+    'field_tab_label' => $spec[0],
+    'field_tab_icon' => $spec[1],
+    'field_tab_anchor' => $spec[2],
+    'field_guide_blocks' => $blocks,
+  ]);
+  $tabs = [$tab(['Listen', 'headphones', 'listen'], [Paragraph::create([
+    'type' => 'guide_text',
+    'field_block_body' => ['value' => '<p>[request-paths]</p>', 'format' => $format],
+  ])])];
+  foreach ($tab_blocks as [$spec, $block]) {
+    $tabs[] = $tab($spec, [$block]);
+  }
+  array_splice($sections, 1, 0, [Paragraph::create([
+    'type' => 'section_tabs',
+    'field_section_title' => 'Oral History',
+    'field_tabs' => $tabs,
+  ])]);
+  $log[] = 'Section tabs under the hero: ' . implode(', ', array_map(static fn ($t) => $t->get('field_tab_label')->value, $tabs)) . '.';
 }
 
 // Who to ask. --------------------------------------------------------------
