@@ -53,9 +53,12 @@
  *   books-ashburnham-noah.jpg      lsu-sc-mmf:11
  *   books-stones-iris.jpg          lsu-sc-msw:209
  *   books-audubon-crane.jpg        lsu-sc-jjadp:51
- * The book collections other than Rare Book and McIlhenny have no pictures
- * on the LDL: their entries are text until Special Collections photographs
- * them.
+ * Every other gallery's lead image (eleven more JPEGs, in the same folder)
+ * is listed in data/special-collections-leads.json; see
+ * palefire_special_collections_leads.php. The book collections other than
+ * Rare Book and McIlhenny have no pictures on the LDL: their entries are
+ * text until Special Collections photographs them, and their galleries
+ * open on manuscript facsimiles.
  *
  * Creates up to two Modular pages, UNPUBLISHED, with no "Exhibitions
  * showcase" listing (Not listed). A page whose title already exists is
@@ -160,7 +163,7 @@ if ($images_dir !== '') {
 $media_ids = [];
 
 // One media item per file, reused when it exists ("Collections: <file>").
-$media = function (string $file) use (&$media_ids, &$skipped, $images_dir, $fs, $destination, $media_type, $source_field, $alt): ?int {
+$media = function (string $file) use (&$media_ids, &$skipped, $images_dir, $fs, $destination, $media_type, $source_field, &$alt): ?int {
   if (array_key_exists($file, $media_ids)) {
     return $media_ids[$file];
   }
@@ -228,16 +231,32 @@ $entry = fn (string $name, string $anchor, array $blocks) => Paragraph::create([
 
 $has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
 $has_lead_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
-$gallery = fn (string $title, string $anchor, array $blocks, ?string $lead = NULL, ?string $lead_caption = NULL, string $focus = 'center') => Paragraph::create($keep([
-  'type' => 'exhibit_page',
-  'field_section_title' => $title,
-  'field_section_anchor' => $anchor,
-  'field_exhibit_display' => $has_display ? 'story' : NULL,
-  'field_exhibit_lead' => $lead ? $ref($media($lead)) : NULL,
-  'field_exhibit_lead_focus' => $lead ? $focus : NULL,
-  'field_exhibit_lead_caption' => $lead && $lead_caption && $has_lead_caption ? $html('<p>' . $lead_caption . '</p>') : NULL,
-  'field_guide_blocks' => array_values(array_filter($blocks)),
-]));
+// Every gallery opens on a lead image. Manuscripts passes its own; the rest
+// are in data/special-collections-leads.json (by gallery anchor: file,
+// caption, alt), which palefire_special_collections_leads.php also reads to
+// add them to pages built before they existed.
+$lead_table = [];
+foreach (json_decode((string) file_get_contents(__DIR__ . '/data/special-collections-leads.json'), TRUE) ?: [] as $page_leads) {
+  $lead_table += $page_leads;
+}
+foreach ($lead_table as $row) {
+  $alt[$row[0]] = $row[2];
+}
+$gallery = function (string $title, string $anchor, array $blocks, ?string $lead = NULL, ?string $lead_caption = NULL, string $focus = 'center') use ($keep, $ref, $media, $html, $has_display, $has_lead_caption, &$lead_table): Paragraph {
+  if ($lead === NULL && isset($lead_table[$anchor])) {
+    [$lead, $lead_caption] = $lead_table[$anchor];
+  }
+  return Paragraph::create($keep([
+    'type' => 'exhibit_page',
+    'field_section_title' => $title,
+    'field_section_anchor' => $anchor,
+    'field_exhibit_display' => $has_display ? 'story' : NULL,
+    'field_exhibit_lead' => $lead ? $ref($media($lead)) : NULL,
+    'field_exhibit_lead_focus' => $lead ? $focus : NULL,
+    'field_exhibit_lead_caption' => $lead && $lead_caption && $has_lead_caption ? $html('<p>' . $lead_caption . '</p>') : NULL,
+    'field_guide_blocks' => array_values(array_filter($blocks)),
+  ]));
+};
 
 // Combined Search, Special Collections sources.
 $search = fn (string $query) => '/v2/search?q=' . rawurlencode($query) . '&amp;mode=special';

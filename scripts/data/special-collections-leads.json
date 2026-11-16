@@ -1,0 +1,17 @@
+{
+  "/v2/special/llmvc": {
+    "books": ["llmvc-delisle-map", "Guillaume de L’Isle, Carte de la Louisiane et du cours du Mississipi, 1718, hand colored. Maps of Louisiana Collection.", "Guillaume de L’Isle’s hand-colored 1718 map of Louisiana and the course of the Mississippi."],
+    "photographs": ["llmvc-winans-capitol", "Fonville Winans, the State Capitol from the air, February 10, 1947. Fonville Winans Collection.", "The Louisiana State Capitol tower and the buildings and grounds around it, seen from the air in 1947."],
+    "political-papers": ["llmvc-long-platform", "Huey P. Long and others on the platform, Inauguration Day, Baton Rouge, May 21, 1928. Huey P. Long Photograph Album.", "Huey P. Long and men in pale suits on a draped platform on Inauguration Day."],
+    "louisiana-newspapers": ["llmvc-new-advocate", "The New Advocate, Baton Rouge, June 10, 1909, front page. Louisiana Digital Library.", "The front page of The New Advocate, a Baton Rouge newspaper, June 10, 1909."],
+    "giving": ["llmvc-norman-natchez", "Norman Studio, Main Street towards the river, Natchez, 1925. Thomas H. and Joan W. Gandy Photograph Collection.", "Main Street in Natchez lined with shops, parked cars and onlookers, 1925."]
+  },
+  "/v2/special/bookcollections": {
+    "finding-books": ["books-codex-aureus", "Canon tables from a facsimile of the Codex Aureus, an eighth-century British Gospel book.", "Gold arches framing columns of text on a page of an eighth-century Gospel book."],
+    "foundations": ["books-dioscorides", "A plant from a facsimile of the Vienna Dioscorides (Codex Vindobonensis), the earliest known illustrated herbal, made for Anicia Juliana of Constantinople about 512.", "A tall flowering plant with broad leaves and roots, painted on a page of an early herbal."],
+    "poetry-and-fiction": ["books-cantigas", "A page of scenes from a facsimile of the Cantigas de Santa María, songs written at the court of Alfonso X of Castile in the 13th century.", "Six framed scenes of figures and buildings on an illuminated page of a medieval songbook."],
+    "imagination": ["books-beato", "A vision of the Apocalypse from a facsimile of the Beato de San Millán, a commentary on the Book of Revelation, 10th–11th century.", "Winged figures and beasts circling a central figure in a brightly painted medieval miniature."],
+    "games": ["books-ajedrez", "Chess in a tent, from a facsimile of the Libro del ajedrez, dados et tablas, Alfonso X’s book of chess, dice and backgammon, 1284.", "Two players at a chessboard inside a blue and white tent, from a medieval book of games."],
+    "subject-collections": ["books-medicamentos", "Plants and a snail, from a facsimile of the Libro de los medicamentos simples, a 15th-century copy of Platearius’s treatise on remedies from plants, animals and minerals.", "Flowering plants, labeled by hand, with a snail at their feet, on a page of a medieval herbal."]
+  }
+}
