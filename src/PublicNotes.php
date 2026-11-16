@@ -9,10 +9,12 @@ namespace Drupal\palefire;
  *
  * Used by the PR timeline (PrTimeline, Webform pr_timeline) and the
  * newsletter review pages (NewsletterReview, Webform newsletter_review).
- * Both forms share three keys: comment (the note), approved (a private box
- * only staff see and tick) and verdict ('good' for thumbs up, 'changes' for
- * thumbs down). A note shows once it is approved; a thumb counts as soon as
- * it is sent, since it carries no words to check.
+ * Both forms share these keys: comment (the note), approved (a private box
+ * only staff see and tick), verdict ('good' for thumbs up, 'changes' for
+ * thumbs down, chosen with a note), vote (the same, or 'none', sent by the
+ * thumbs buttons) and voter (a random token per browser). A note shows once
+ * it is approved; a thumb counts as soon as it is sent, since it carries no
+ * words to check.
  */
 final class PublicNotes {
 
@@ -65,6 +67,13 @@ final class PublicNotes {
   /**
    * Thumbs up and down, counted by what they're about.
    *
+   * A thumb is a submission's vote (sent by a thumbs button: good, changes,
+   * or none to take it back) or, without one, its verdict (Your take, sent
+   * with a note). A submission with a voter (the browser's own random token,
+   * js/public-notes.js) replaces that voter's earlier thumb on the same
+   * thing, so a thumb can be changed or taken back; one without (sent with
+   * no script, or a sample) simply counts.
+   *
    * @param string $webform
    *   The Webform's id.
    * @param string $key
@@ -81,23 +90,40 @@ final class PublicNotes {
     }
     try {
       $query = self::query($webform, $match);
-      $query->join('webform_submission_data', 'v', 'v.sid = d.sid AND v.name = :verdict', [':verdict' => 'verdict']);
-      $query->leftJoin('webform_submission_data', 'k', 'k.sid = d.sid AND k.name = :key', [':key' => $key]);
-      $query->addField('v', 'value', 'verdict');
-      $query->addField('k', 'value', 'about');
+      foreach (['verdict' => 'v', 'vote' => 't', 'voter' => 'w', $key => 'k'] as $name => $alias) {
+        $query->leftJoin('webform_submission_data', $alias, "$alias.sid = d.sid AND $alias.name = :name_$alias", [":name_$alias" => $name]);
+        $query->addField($alias, 'value', $alias);
+      }
       $rows = $query->execute()->fetchAll();
     }
     catch (\Throwable $e) {
       return [];
     }
-    $votes = [];
+    // Oldest first, so a voter's later thumb wins.
+    $latest = [];
+    $loose = [];
     foreach ($rows as $row) {
-      if (!in_array($row->verdict, ['good', 'changes'], TRUE)) {
+      $vote = (string) $row->t;
+      $thumb = $vote !== '' ? $vote : (string) $row->v;
+      if (!in_array($thumb, ['good', 'changes', 'none'], TRUE)) {
         continue;
       }
-      $about = trim((string) $row->about);
+      $about = trim((string) $row->k);
+      $voter = (string) $row->w;
+      if ($voter !== '') {
+        $latest[$voter . "\n" . $about] = [$about, $thumb];
+      }
+      else {
+        $loose[] = [$about, $thumb];
+      }
+    }
+    $votes = [];
+    foreach (array_merge($loose, array_values($latest)) as [$about, $thumb]) {
+      if ($thumb === 'none') {
+        continue;
+      }
       $votes[$about] ??= ['good' => 0, 'changes' => 0];
-      $votes[$about][$row->verdict]++;
+      $votes[$about][$thumb]++;
     }
     return $votes;
   }

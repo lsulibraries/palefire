@@ -24,8 +24,8 @@
  * purge_days=N changes that, and purge_days=0 keeps them. If the form already
  * exists it is left alone, so edits made in the UI are kept. replace=1 resets
  * its fields and settings to these (submissions are kept): run it with
- * replace=1 once to add the Approved box, Your take and the new thank-you
- * (2026-11-16).
+ * replace=1 once to add the Approved box, Your take, the thumbs' vote and
+ * voter, and the new thank-you (2026-11-16).
  *
  * To approve a note: the Webform's Results tab, open the note, Edit, tick
  * "Approved to show on the review page", Save. Untick it to take it down.
@@ -80,8 +80,8 @@ if ($existing && !$replace) {
 }
 
 // The keys are the ones NewsletterReview::form(), js/newsletter-review.js and
-// js/public-notes.js fill in (section, issue, version, verdict), and
-// PublicNotes reads (comment, verdict, approved).
+// js/public-notes.js fill in (section, issue, version, verdict, vote, voter),
+// and PublicNotes reads (comment, verdict, vote, voter, approved).
 $elements = [
   'name' => [
     '#type' => 'textfield',
@@ -101,7 +101,7 @@ $elements = [
     '#title' => 'Your note',
     '#description' => 'What to fix or change: names, titles, dates, figures, wording, photos.',
     // Needed unless a thumb is chosen: a thumb alone is a whole answer.
-    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE]]],
+    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE], ':input[name="vote"]' => ['empty' => TRUE]]],
     '#required_error' => 'Write a note, or choose Looks good or Needs changes.',
     '#rows' => 5,
     '#maxlength' => 4000,
@@ -125,6 +125,11 @@ $elements = [
     '#private' => TRUE,
     '#access_create_roles' => [],
   ],
+  // Sent by the thumbs buttons (js/public-notes.js), never shown: vote is
+  // good, changes or none (taken back), voter a random token per browser, so
+  // only a browser's latest thumb on a thing counts (PublicNotes::votes()).
+  'vote' => ['#type' => 'hidden', '#title' => 'Thumb (from the thumbs buttons)'],
+  'voter' => ['#type' => 'hidden', '#title' => 'Voter (a random token per browser)'],
   // Filled in by the review page, never shown.
   'issue' => ['#type' => 'hidden', '#title' => 'Issue (Constant Contact campaign)'],
   'version' => ['#type' => 'hidden', '#title' => 'Draft version'],

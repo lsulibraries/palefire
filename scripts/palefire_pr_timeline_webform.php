@@ -16,8 +16,8 @@
  *   drush php:script scripts/palefire_pr_timeline_webform.php -- apply=1 email=group@example.edu
  *   drush cr
  *
- * A dry run unless apply=1. Made before thumbs were added (2026-11-16)? Run
- * it with replace=1 to add Your take and the new thank-you. email= also sends each note to that address
+ * A dry run unless apply=1. Made before 2026-11-16? Run it with replace=1 to
+ * add Your take, the thumbs' vote and voter, and the new thank-you. email= also sends each note to that address
  * (several, comma-separated), so staff know there is one to approve. Notes
  * are kept until deleted; purge_days=N deletes them after N days. If the
  * form already exists it is left alone, so edits made in the UI are kept.
@@ -75,7 +75,7 @@ if ($existing && !$replace) {
 }
 
 // The keys are the ones Drupal\palefire\PrTimeline and js/pr-timeline.js
-// read and fill in: name, item, comment, verdict, approved.
+// read and fill in: name, item, comment, verdict, vote, voter, approved.
 $elements = [
   'name' => [
     '#type' => 'textfield',
@@ -94,7 +94,7 @@ $elements = [
     '#type' => 'textarea',
     '#title' => 'Your note',
     // Needed unless a thumb is chosen: a thumb alone is a whole answer.
-    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE]]],
+    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE], ':input[name="vote"]' => ['empty' => TRUE]]],
     '#required_error' => 'Write a note, or choose Like or Dislike.',
     '#rows' => 5,
     '#maxlength' => 4000,
@@ -117,6 +117,11 @@ $elements = [
     '#private' => TRUE,
     '#access_create_roles' => [],
   ],
+  // Sent by the thumbs buttons (js/public-notes.js), never shown: vote is
+  // good, changes or none (taken back), voter a random token per browser, so
+  // only a browser's latest thumb on a thing counts (PublicNotes::votes()).
+  'vote' => ['#type' => 'hidden', '#title' => 'Thumb (from the thumbs buttons)'],
+  'voter' => ['#type' => 'hidden', '#title' => 'Voter (a random token per browser)'],
   'actions' => [
     '#type' => 'webform_actions',
     '#submit__label' => 'Send note',

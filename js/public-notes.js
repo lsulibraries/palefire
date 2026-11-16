@@ -10,9 +10,11 @@
  *   until the reader turns them on, and remembers the choice here.
  * - Thumbs: a thumb sends itself through the page's note form
  *   ([data-pf-pn-form]) with the thing it's about filled in, at once when no
- *   note is being written; otherwise it goes with that note. This browser
- *   remembers each thumb so it counts once from here (not proof against
- *   someone set on voting twice).
+ *   note is being written; otherwise it goes with that note. Choosing the
+ *   other thumb changes it, and choosing the same one again takes it back.
+ *   Each browser sends a random token of its own (voter), and only its
+ *   latest thumb on a thing counts (PublicNotes::votes()); not proof against
+ *   someone set on voting twice.
  * - The form's Your take choices get the thumbs icons.
  */
 (function (Drupal, once) {
@@ -20,6 +22,24 @@
 
   const NOTES_KEY = 'pf-pn-notes';
   const VOTES_KEY = 'pf-pn-votes';
+  const VOTER_KEY = 'pf-pn-voter';
+
+  // This browser's token: random, saying nothing about the person.
+  function voter() {
+    let token = read(VOTER_KEY, '');
+    if (typeof token !== 'string' || !/^[a-z0-9-]{16,64}$/.test(token)) {
+      token = window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : Array.from({ length: 4 }, () => Math.random().toString(36).slice(2, 10)).join('-');
+      write(VOTER_KEY, token);
+    }
+    return token;
+  }
+
+  function bump(button, by) {
+    const count = button && button.querySelector('[data-pf-pn-count]');
+    if (count) {
+      count.textContent = String(Math.max(0, (parseInt(count.textContent, 10) || 0) + by));
+    }
+  }
 
   function read(key, fallback) {
     try {
@@ -104,26 +124,26 @@
           }
           const group = button.closest('[data-pf-pn-votes]');
           const about = group.dataset.about || '';
-          const verdict = button.dataset.pfPnVote;
+          const chosen = button.dataset.pfPnVote;
           const votes = read(VOTES_KEY, {});
-          if (votes[page + '|' + about]) {
-            Drupal.announce(Drupal.t('You already gave a thumb here.'));
-            return;
-          }
+          const before = votes[page + '|' + about] || '';
+          // The same thumb again takes it back.
+          const after = before === chosen ? 'none' : chosen;
           const panel = root.querySelector('[data-pf-pn-form]');
           const form = panel ? panel.querySelector('form') : null;
           const field = form ? form.querySelector('[name="' + key + '"]') : null;
-          const radio = form ? form.querySelector('[name="verdict"][value="' + verdict + '"]') : null;
+          const vote = form ? form.querySelector('[name="vote"]') : null;
+          const radio = form ? form.querySelector('[name="verdict"][value="' + chosen + '"]') : null;
           if (!field || !radio) {
             return;
           }
-          field.value = about;
-          radio.checked = true;
-          radio.dispatchEvent(new Event('change', { bubbles: true }));
+          const word = chosen === 'good' ? Drupal.t('Thumbs up') : Drupal.t('Thumbs down');
           const text = form.querySelector('textarea');
-          const word = verdict === 'good' ? Drupal.t('Thumbs up') : Drupal.t('Thumbs down');
-          if (text && text.value.trim() !== '') {
-            // A note is being written: the thumb goes with it.
+          field.value = about;
+          if (text && text.value.trim() !== '' && after !== 'none') {
+            // A note is being written: the thumb goes with it as its take.
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
             Drupal.announce(Drupal.t('@thumb added to your note. Send it when you’re ready.', { '@thumb': word }));
             const submit = form.querySelector('.webform-button--submit, [type="submit"]');
             if (submit) {
@@ -131,18 +151,46 @@
             }
             return;
           }
-          if (!send(form)) {
+          // A thumb on its own: sent as the vote, with no take or note, so
+          // the form needs neither. A form made before thumbs could be
+          // changed has no vote field: the thumb then goes as the take, and
+          // can't be taken back.
+          if (!vote && after === 'none') {
             return;
           }
-          votes[page + '|' + about] = verdict;
-          write(VOTES_KEY, votes);
-          button.setAttribute('aria-pressed', 'true');
-          const count = button.querySelector('[data-pf-pn-count]');
-          if (count) {
-            count.textContent = String((parseInt(count.textContent, 10) || 0) + 1);
+          form.querySelectorAll('[name="verdict"]').forEach((input) => {
+            input.checked = !vote && input === radio;
+          });
+          if (vote) {
+            vote.value = after;
           }
-          Drupal.announce(Drupal.t('@thumb sent.', { '@thumb': word }));
+          const sent = send(form);
+          if (vote) {
+            vote.value = '';
+          }
+          if (!sent) {
+            return;
+          }
+          votes[page + '|' + about] = after === 'none' ? '' : after;
+          write(VOTES_KEY, votes);
+          group.querySelectorAll('[data-pf-pn-vote]').forEach((other) => {
+            if (other.dataset.pfPnVote === before) {
+              bump(other, -1);
+            }
+            if (other.dataset.pfPnVote === after) {
+              bump(other, 1);
+            }
+            other.setAttribute('aria-pressed', String(other.dataset.pfPnVote === after));
+          });
+          Drupal.announce(after === 'none' ? Drupal.t('@thumb taken back.', { '@thumb': word }) : Drupal.t('@thumb sent.', { '@thumb': word }));
         });
+      });
+
+      // Every note form carries this browser's token, so a note's take
+      // replaces an earlier thumb from here (the form is redrawn after each
+      // note, so this runs on every attach).
+      once('pf-pn-voter', '[data-pf-pn-form] [name="voter"]', context).forEach((input) => {
+        input.value = voter();
       });
 
       // Your take: the thumbs icons beside Looks good / Needs changes (or
