@@ -3862,6 +3862,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
   color: var(--pf-g-fg, var(--bs-body-color));
 
   .pf-exhibit-wall__link:is(:hover, :focus-visible) &,
+  .pf-series__link:is(:hover, :focus-visible) &,
   .pf-viewer & {
     --pf-reel-out: 1;
   }
@@ -3898,6 +3899,7 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 
   // Only turns where the motion rule above gives it an animation.
   .pf-exhibit-wall__link:is(:hover, :focus-visible) &,
+  .pf-series__link:is(:hover, :focus-visible) &,
   .pf-viewer:has(.pf-audio.is-playing) & {
     animation-play-state: running;
   }

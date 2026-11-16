@@ -5431,93 +5431,92 @@ html.pf-a11y-motion .pf-hero-banner__map {
   color: var(--pf-section-fg, inherit);
 }
 
+// The series as reels (exhibit-reel.html.twig, _exhibition.scss): each a
+// box with the series' name and its interview count, the reel faint behind
+// it, rolling out to the right in hand. The pair is 1.5 boxes wide; two to
+// six to a row by the section's width. The reel's mono and muted tokens are
+// the exhibition's, given here for the landing.
 .pf-series__list {
+  --pf-exhibit-mono: var(--pf-landing-label, 'Consolas', 'Monaco', monospace);
+  --pf-exhibit-muted: var(--pf-toc-color, var(--pf-g-muted, var(--bs-secondary-color)));
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  column-gap: var(--pf-grid-gutter, 2rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem) var(--pf-grid-gutter, 2rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-@container pf-series (min-width: 40rem) {
-  .pf-series__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@container pf-series (min-width: 64rem) {
+@container pf-series (min-width: 36rem) {
   .pf-series__list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.pf-series__item {
-  border-top: 1px solid $pf-hairline;
+@container pf-series (min-width: 56rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@container pf-series (min-width: 76rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@container pf-series (min-width: 96rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }
 
 .pf-series__link {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  min-height: 2.75rem;
-  padding: .75rem 0;
+  position: relative;
+  display: block;
+  aspect-ratio: 1.5;
   color: var(--pf-section-fg, inherit);
   text-decoration: none;
 
-  &:hover .pf-series__name,
-  &:focus-visible .pf-series__name {
+  .pf-exhibit-reel {
+    color: inherit;
+  }
+
+  // The box on the column's left edge, in line with the heading; in hand
+  // it stays and the reel alone rolls out, half its width.
+  :is(.pf-exhibit-reel__box, .pf-exhibit-reel__reel) {
+    left: 0;
+  }
+
+  .pf-exhibit-reel__box {
+    translate: 0 0;
+  }
+
+  .pf-exhibit-reel__reel {
+    translate: calc(var(--pf-reel-out) * 48%) 0;
+  }
+
+  // A series' name is longer than a clip's title: five lines, a size down.
+  // The box's name in the title color in hand, as the other rows.
+  .pf-exhibit-reel__title {
+    font-size: clamp(.8125rem, 9.5cqi, 1.25rem);
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    transition: color .5s ease;
+  }
+
+  &:is(:hover, :focus-visible) .pf-exhibit-reel__title {
     color: var(--pf-g-title, var(--pf-toc-active));
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: .2em;
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-landing-accent, currentcolor);
-    outline-offset: 2px;
-  }
-}
-
-.pf-series__name {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-size: 1rem;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-  transition: color $pf-hover-out ease;
-}
-
-.pf-series__count {
-  @extend %pf-landing-label;
-  flex: none;
-  font-variant-numeric: tabular-nums;
-  color: var(--pf-toc-color, inherit);
-  transition: color $pf-hover-out ease;
-
-  &::after {
-    content: "\2192" / "";
-    display: inline-block;
-    margin-left: .4em;
-    opacity: 0;
-    transform: translateX(-.35em);
-    transition: opacity $pf-hover-out ease, transform $pf-hover-out ease;
-  }
-}
-
-.pf-series__link:is(:hover, :focus-visible) .pf-series__count {
-  color: var(--pf-landing-accent, inherit);
-
-  &::after {
-    opacity: 1;
-    transform: none;
+    outline-offset: 4px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-series__name,
-  .pf-series__count,
-  .pf-series__count::after {
+  .pf-series__link .pf-exhibit-reel__title {
     transition: none;
   }
 }

@@ -773,10 +773,14 @@
           {% if oral_history_series %}
             <ul class="pf-series__list" role="list">
               {% for series in oral_history_series %}
+                {% set series_count = series.count == 1 ? '1 interview'|t : '@count interviews'|t({'@count': series.count|number_format}) %}
                 <li class="pf-series__item">
+                  {# A reel in its box, as an exhibition's audio-only clip
+                     (exhibit-reel.html.twig): the series on the box, its
+                     count on top; the reel rolls out in hand. #}
                   <a class="pf-series__link" href="{{ series.url }}">
-                    <span class="pf-series__name">{{ series.name }}</span>
-                    <span class="pf-series__count">{{ series.count|number_format }}<span class="visually-hidden"> {{ series.count == 1 ? 'interview'|t : 'interviews'|t }}</span></span>
+                    <span class="visually-hidden">{{ series.name }}, {{ series_count }}</span>
+                    {% include '@palefire/includes/exhibit-reel.html.twig' with { title: series.name, kicker: series_count, year: null } only %}
                   </a>
                 </li>
               {% endfor %}

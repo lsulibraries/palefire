@@ -11,6 +11,8 @@
  *
  * Variables:
  * - title: the entry's title, set on the box.
+ * - kicker: the box's top line (default "Audio only"; Oral History's
+ *   series cards: the interview count, landing.html.twig).
  * - year: the clip's year, or NULL (the slot stays empty).
  * - deck: URL of images/exhibit-deck.svg, the tape deck the object view's
  *   stage plays the clip on instead (js/exhibition.js), or NULL.
@@ -28,7 +30,7 @@
   </svg>
   <span class="pf-exhibit-reel__box">
     <span class="pf-exhibit-reel__head">
-      <span>{{ 'Audio only'|t }}</span>
+      <span>{{ kicker ?: 'Audio only'|t }}</span>
       <span>{{ year }}</span>
     </span>
     <span class="pf-exhibit-reel__title">{{ title }}</span>
