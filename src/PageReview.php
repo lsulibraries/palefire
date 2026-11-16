@@ -50,6 +50,37 @@ final class PageReview {
   }
 
   /**
+   * Review mode on <html> and the panel at the foot of the page.
+   *
+   * Called from PalefireHooks::preprocessHtml() (a theme may implement a
+   * hook only once). Pages load in full from page to page (data-no-swup:
+   * js/palefire-swup.js stays off), so each draws its own panel. Themes
+   * can't implement hook_page_bottom(), so the panel joins page_bottom here.
+   */
+  public static function preprocessHtml(array &$variables): void {
+    if (!self::applies()) {
+      return;
+    }
+    $variables['html_attributes']->setAttribute('data-no-swup', '');
+    $variables['html_attributes']->addClass('pf-review-mode');
+    $tags = self::cacheTags();
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof NodeInterface) {
+      $tags = array_values(array_unique(array_merge($tags, $node->getCacheTags())));
+    }
+    $variables['page_bottom'] = (array) ($variables['page_bottom'] ?? []);
+    $variables['page_bottom']['palefire_page_review'] = [
+      '#type' => 'inline_template',
+      '#template' => "{% include '@palefire/includes/page-review.html.twig' %}",
+      '#context' => self::panel(),
+      '#cache' => [
+        'contexts' => ['url.path', 'url.query_args:' . self::QUERY],
+        'tags' => $tags,
+      ],
+    ];
+  }
+
+  /**
    * A page's address as notes keep it: no trailing slash, no query.
    */
   public static function path(string $path): string {

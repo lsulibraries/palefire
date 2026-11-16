@@ -16,6 +16,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
+use Drupal\palefire\PageReview;
 use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
 use Drupal\paragraphs\ParagraphInterface;
@@ -179,10 +180,16 @@ class PalefireHooks {
    * data-pf-page (pageKind()), and data-pf-hero when the page opens with a
    * Landing hero or is the Exhibitions showcase (exhibition.js,
    * _landing-features.scss). The page cache entry already carries the
-   * node's cache tags, so editing the node updates it.
+   * node's cache tags, so editing the node updates it. Review mode's panel:
+   * PageReview::preprocessHtml().
    */
   #[Hook('preprocess_html')]
   public function preprocessHtml(array &$variables): void {
+    // Review mode (any /v2 page with ?review): first, since the rest may
+    // return early.
+    if (class_exists(PageReview::class)) {
+      PageReview::preprocessHtml($variables);
+    }
     $special = self::isSpecialPage(self::pageAlias());
     $not_found = self::isNotFound();
     // The mobile dock (includes/dock.html.twig): its reserved space and
