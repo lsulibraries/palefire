@@ -1,0 +1,64 @@
+{#
+/**
+ * @file
+ * The review mode hub: the pages listed after a "[page-review-hub]"
+ * paragraph, each with its thumbs and approved notes and a link into review
+ * mode, then any other page with some (Drupal\palefire\PageReview::hub()).
+ *
+ * - uid: unique on the page.
+ * - pages, others: each with path, label, review (its address in review
+ *   mode), votes (good, changes), notes (how many) and groups (by section:
+ *   about, notes; about '' is the page as a whole).
+ * - notes, thumbs: how many in all.
+ * - ready: whether the page_review Webform exists.
+ *
+ * Show notes: js/public-notes.js (data-pf-pn-*).
+ */
+#}
+{{ attach_library('palefire/page-review') }}
+<div class="pf-rvh" data-pf-pn-root data-pf-pn-key="section">
+  <div class="pf-rvh__bar">
+    <p class="pf-rvh__summary">
+      {{ notes == 1 ? '1 approved note'|t : '@count approved notes'|t({ '@count': notes }) }}
+      <span aria-hidden="true">·</span>
+      {{ thumbs == 1 ? '1 thumb'|t : '@count thumbs'|t({ '@count': thumbs }) }}
+    </p>
+    {% if notes %}
+      {% include '@palefire/includes/public-notes-toggle.html.twig' only %}
+    {% endif %}
+  </div>
+  {% if not ready %}
+    <p class="pf-rvh__missing">{{ 'The review form isn’t set up yet: run scripts/palefire_page_review_webform.php with apply=1.'|t }}</p>
+  {% endif %}
+  {% for part in [{ list: pages, title: '' }, { list: others, title: 'Other pages with feedback'|t }] %}
+    {% if part.list %}
+      {% if part.title %}
+        <h3 class="pf-rvh__heading" id="{{ uid }}-others">{{ part.title }}</h3>
+      {% endif %}
+      <ol class="pf-rvh__list" role="list"{% if part.title %} aria-labelledby="{{ uid }}-others"{% endif %}>
+        {% for page in part.list %}
+          <li class="pf-rvh__page">
+            <div class="pf-rvh__head">
+              <h4 class="pf-rvh__title">{{ page.label }}</h4>
+              <p class="pf-rvh__path">{{ page.path }}</p>
+            </div>
+            <p class="pf-rvh__tally">
+              {% include '@palefire/includes/icon-fa.html.twig' with { name: 'thumbs-up' } only %}<span class="visually-hidden">{{ 'Thumbs up:'|t }} </span>{{ page.votes.good }}
+              {% include '@palefire/includes/icon-fa.html.twig' with { name: 'thumbs-down' } only %}<span class="visually-hidden">{{ 'Thumbs down:'|t }} </span>{{ page.votes.changes }}
+              <span aria-hidden="true">·</span>
+              {{ page.notes == 1 ? '1 note'|t : '@count notes'|t({ '@count': page.notes }) }}
+            </p>
+            <a class="pf-rvh__open" href="{{ page.review }}">{{ 'Open in review mode'|t }}<span class="visually-hidden">: {{ page.label }}</span></a>
+            {% for group in page.groups|filter(g => g.notes) %}
+              {% set group_label = group.about ?: 'The page as a whole'|t %}
+              <div class="pf-rvh__group" data-pf-pn-notes>
+                <p class="pf-rvh__section">{{ group_label }}</p>
+                {% include '@palefire/includes/public-notes.html.twig' with { notes: group.notes, label: page.label ~ ', ' ~ group_label } only %}
+              </div>
+            {% endfor %}
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+  {% endfor %}
+</div>

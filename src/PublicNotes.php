@@ -32,11 +32,14 @@ final class PublicNotes {
    *   The element that says what a note is about (item, section).
    * @param array $match
    *   Other values a note must have, element => value (issue => <id>).
+   * @param string[] $fields
+   *   Other elements to carry in each note (section, on the page review
+   *   hub, where notes are keyed by page).
    *
    * @return array<string, list<array{name: string, comment: string, verdict: string, created: int}>>
    *   Oldest first, keyed by the note's $key value ('' for none).
    */
-  public static function approved(string $webform, string $key, array $match = []): array {
+  public static function approved(string $webform, string $key, array $match = [], array $fields = []): array {
     $types = \Drupal::entityTypeManager();
     if (!$types->hasDefinition('webform_submission')) {
       return [];
@@ -54,12 +57,16 @@ final class PublicNotes {
       if (empty($data['approved']) || $comment === '') {
         continue;
       }
-      $notes[trim((string) ($data[$key] ?? ''))][] = [
+      $note = [
         'name' => trim((string) ($data['name'] ?? '')),
         'comment' => $comment,
         'verdict' => (string) ($data['verdict'] ?? ''),
         'created' => (int) $submission->getCreatedTime(),
       ];
+      foreach ($fields as $field) {
+        $note[$field] = trim((string) ($data[$field] ?? ''));
+      }
+      $notes[trim((string) ($data[$key] ?? ''))][] = $note;
     }
     return $notes;
   }
@@ -80,17 +87,24 @@ final class PublicNotes {
    *   The element that says what a thumb is about (item, section).
    * @param array $match
    *   Other values a submission must have, element => value.
+   * @param string $by
+   *   Count by this element instead of $key (page, on the page review hub:
+   *   a voter's thumbs on different sections of a page all count).
    *
    * @return array<string, array{good: int, changes: int}>
-   *   Keyed by the $key value ('' for none).
+   *   Keyed by the $key value, or $by's ('' for none).
    */
-  public static function votes(string $webform, string $key, array $match = []): array {
+  public static function votes(string $webform, string $key, array $match = [], string $by = ''): array {
     if (!\Drupal::entityTypeManager()->hasDefinition('webform_submission')) {
       return [];
     }
     try {
       $query = self::query($webform, $match);
-      foreach (['verdict' => 'v', 'vote' => 't', 'voter' => 'w', $key => 'k'] as $name => $alias) {
+      $joins = ['verdict' => 'v', 'vote' => 't', 'voter' => 'w', $key => 'k'];
+      if ($by !== '' && $by !== $key) {
+        $joins[$by] = 'b';
+      }
+      foreach ($joins as $name => $alias) {
         $query->leftJoin('webform_submission_data', $alias, "$alias.sid = d.sid AND $alias.name = :name_$alias", [":name_$alias" => $name]);
         $query->addField($alias, 'value', $alias);
       }
@@ -109,12 +123,13 @@ final class PublicNotes {
         continue;
       }
       $about = trim((string) $row->k);
+      $group = property_exists($row, 'b') ? trim((string) $row->b) : $about;
       $voter = (string) $row->w;
       if ($voter !== '') {
-        $latest[$voter . "\n" . $about] = [$about, $thumb];
+        $latest[$voter . "\n" . $group . "\n" . $about] = [$group, $thumb];
       }
       else {
-        $loose[] = [$about, $thumb];
+        $loose[] = [$group, $thumb];
       }
     }
     $votes = [];

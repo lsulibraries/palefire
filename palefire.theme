@@ -28,6 +28,7 @@ use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\NewsletterReview;
+use Drupal\palefire\PageReview;
 use Drupal\palefire\PrTimeline;
 use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
@@ -127,8 +128,13 @@ function palefire_page_attachments_alter(array &$attachments) {
   // published so anyone with the link can leave a note, never indexed. Its
   // approved notes redraw it through the page cache's tags.
   $is_timeline = (bool) preg_match('#^/v2/(?:special/)?internal/pr-timeline(/|$)#i', $path);
+  // Review mode (any /v2 page with ?review) and its hub: for reviewers, never
+  // indexed. Both are page cached by address, and redrawn through the
+  // Webform's tags when a note or a thumb comes in.
+  $is_page_review = (class_exists(PageReview::class) && PageReview::applies())
+    || preg_match('#^/v2/internal/page-review(/|$)#i', $path);
 
-  if (!$is_resource && !$is_review && !$is_timeline && !preg_match('#^/concept(/|$)#i', $path)) {
+  if (!$is_resource && !$is_review && !$is_timeline && !$is_page_review && !preg_match('#^/concept(/|$)#i', $path)) {
     return;
   }
 
@@ -2541,6 +2547,38 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
 const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons', 'steps', 'labels'];
 
 /**
+ * Implements hook_preprocess_html().
+ *
+ * Review mode (Drupal\palefire\PageReview): any /v2 page opened with
+ * ?review gets the Review this page panel at the foot of the page
+ * (includes/page-review.html.twig), and loads in full from page to page
+ * (data-no-swup: js/palefire-swup.js stays off), so each page draws its own
+ * panel. Themes can't implement hook_page_bottom(), so the panel joins
+ * page_bottom here.
+ */
+function palefire_preprocess_html(array &$variables): void {
+  if (!class_exists(PageReview::class) || !PageReview::applies()) {
+    return;
+  }
+  $variables['html_attributes']->setAttribute('data-no-swup', '');
+  $variables['html_attributes']->addClass('pf-review-mode');
+  $variables['page_bottom'] = (array) ($variables['page_bottom'] ?? []);
+  $variables['page_bottom']['palefire_page_review'] = [
+    '#type' => 'inline_template',
+    '#template' => "{% include '@palefire/includes/page-review.html.twig' %}",
+    '#context' => PageReview::panel(),
+    '#cache' => [
+      'contexts' => ['url.path', 'url.query_args:' . PageReview::QUERY],
+      'tags' => PageReview::cacheTags(),
+    ],
+  ];
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface) {
+    $variables['page_bottom']['palefire_page_review']['#cache']['tags'] = Cache::mergeTags($variables['page_bottom']['palefire_page_review']['#cache']['tags'], $node->getCacheTags());
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.
  *
  * request_paths: TRUE when the text has a paragraph that is only
@@ -2593,6 +2631,12 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * before/after slider (includes/newsletter-compare.html.twig). The links
  * leave the text. NULL without a marker.
  *
+ * page_review_hub: a paragraph that is only "[page-review-hub]" turns the
+ * first list of links after it into the review mode hub: each page's thumbs
+ * and approved notes, with a link into review mode, then any other page that
+ * has some (includes/page-review-hub.html.twig, Drupal\palefire\PageReview).
+ * NULL without a marker.
+ *
  * pr_timeline: a paragraph that is only "[pr-timeline]" turns the first list
  * after it in the block into a timeline anyone can leave notes on, with the
  * notes staff approved (includes/pr-timeline.html.twig,
@@ -2609,6 +2653,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['newsletter_archive'] = NULL;
   $variables['newsletter_compare'] = NULL;
   $variables['pr_timeline'] = NULL;
+  $variables['page_review_hub'] = NULL;
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -2690,6 +2735,13 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       $item['#text'] = preg_replace(PrTimeline::MARKER, '', $before . $after);
       $variables['pr_timeline'] = $pr_items;
     }
+    if (class_exists(PageReview::class) && isset($item['#text']) && preg_match(PageReview::HUB_MARKER, (string) $item['#text'])) {
+      // Only a list after the marker is the hub's.
+      [$before, $after] = explode('<!--pf-page-review-->', preg_replace(PageReview::HUB_MARKER, '<!--pf-page-review-->', (string) $item['#text'], 1), 2);
+      [$hub_pages, $after] = PageReview::links($after);
+      $item['#text'] = $before . $after;
+      $variables['page_review_hub'] = $hub_pages;
+    }
     if ($newsletter_parts && isset($item['#text'])) {
       [$found, $item['#text']] = NewsletterReview::issues((string) $item['#text']);
       $newsletter_issues = array_merge($newsletter_issues, $found);
@@ -2758,6 +2810,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     $variables['pr_timeline'] = PrTimeline::view($variables['pr_timeline']);
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags(PrTimeline::cacheTags())
+      ->applyTo($variables);
+  }
+  // Notes and thumbs show as they come in and are approved, as on the
+  // timeline.
+  if ($variables['page_review_hub'] !== NULL) {
+    $variables['page_review_hub'] = PageReview::hub($variables['page_review_hub']);
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags(PageReview::cacheTags())
       ->applyTo($variables);
   }
   // Sent issues are kept a day; a comparison, which is often of a draft,
@@ -4422,7 +4482,9 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'audio' => $speaker !== NULL,
       'year' => $year,
       'pages' => $pages,
-      'ratio' => $first && $first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1,
+      // A clip with no picture: its reel and box (exhibit-reel.html.twig),
+      // 1.5 boxes wide, so the box is as tall as the row's photographs.
+      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : 1.5,
       'images' => $images,
     ];
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);

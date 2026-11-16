@@ -33,6 +33,8 @@
  *   Constant Contact previews become a before/after slider or a gallery of
  *   past issues (includes/newsletter-compare.html.twig,
  *   newsletter-archive.html.twig).
+ * - page_review_hub: the text had a "[page-review-hub]" paragraph; the list
+ *   of links after it is the review mode hub (includes/page-review-hub.html.twig).
  * - pr_timeline: the text had a "[pr-timeline]" paragraph; the list after it
  *   is a timeline readers can leave notes on (includes/pr-timeline.html.twig).
  */
@@ -72,6 +74,9 @@
   {% endif %}
   {% if newsletter_compare %}
     {% include '@palefire/includes/newsletter-compare.html.twig' with newsletter_compare|merge({ uid: 'nlc-' ~ paragraph.id() }) only %}
+  {% endif %}
+  {% if page_review_hub %}
+    {% include '@palefire/includes/page-review-hub.html.twig' with page_review_hub|merge({ uid: 'prh-' ~ paragraph.id() }) only %}
   {% endif %}
   {% if pr_timeline %}
     {% include '@palefire/includes/pr-timeline.html.twig' with pr_timeline|merge({ uid: 'prt-' ~ paragraph.id() }) only %}

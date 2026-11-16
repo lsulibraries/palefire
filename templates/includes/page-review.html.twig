@@ -1,0 +1,92 @@
+{#
+/**
+ * @file
+ * Review mode on a Palefire page: any /v2 page opened with ?review
+ * (palefire_preprocess_html(), Drupal\palefire\PageReview).
+ *
+ * - path: the page's address, as notes keep it.
+ * - exit: the same page without ?review.
+ * - form: the page_review Webform, with the page and revision filled in
+ *   (NULL: not created yet).
+ * - groups: notes and thumbs by section (about, votes, notes); about '' is
+ *   the page as a whole.
+ * - notes, thumbs: how many in all.
+ * - counts: per section, notes and thumbs, for the pins.
+ *
+ * js/page-review.js adds a pin beside each section heading in the main
+ * content, opens the panel from it with Section filled in, lists every
+ * section in the page's order under On this page, sends the form without
+ * leaving the page, and keeps ?review on links to other /v2 pages. Without
+ * the script the panel simply follows the page. Thumbs and Show notes:
+ * js/public-notes.js (data-pf-pn-*).
+ */
+#}
+{{ attach_library('palefire/page-review') }}
+<div class="pf-rv" data-pf-rv data-pf-pn-root data-pf-pn-key="section" data-counts="{{ counts|json_encode }}">
+  <button type="button" class="pf-rv__open" data-pf-rv-open aria-controls="pf-rv-panel" aria-expanded="false" hidden>
+    {% include '@palefire/includes/icon-fa.html.twig' with { name: 'comment-alt-lines', class: 'pf-rv__icon' } only %}
+    <span>{{ 'Review this page'|t }}</span>
+    {% if notes + thumbs %}
+      <span class="pf-rv__open-count">{{ notes + thumbs }}<span class="visually-hidden"> {{ 'notes and thumbs so far'|t }}</span></span>
+    {% endif %}
+  </button>
+  <section class="pf-rv__panel" id="pf-rv-panel" data-pf-rv-panel data-pf-pn-form aria-labelledby="pf-rv-title" tabindex="-1">
+    <div class="pf-rv__head">
+      <h2 class="pf-rv__title" id="pf-rv-title">{{ 'Review this page'|t }}</h2>
+      <a class="pf-rv__exit" href="{{ exit }}" data-pf-rv-exit>{{ 'Exit review'|t }}</a>
+      <button type="button" class="pf-rv__close" data-pf-rv-close aria-label="{{ 'Close the review panel'|t }}" hidden><svg class="pf-rv-x" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></button>
+    </div>
+    <div class="pf-rv__body">
+      {% include '@palefire/includes/public-take-icons.html.twig' only %}
+      <p class="pf-rv__help">{{ 'Choose the pin beside a heading to tie your note to that section, or write about the page as a whole. No sign-in, and your name is optional. Thumbs count right away; notes show here only after staff approve them, with your name if you give one.'|t }}</p>
+      <p class="pf-rv__tip">{% include '@palefire/includes/icon-fa.html.twig' with { name: 'cog', class: 'pf-rv__tip-icon' } only %}<span>{{ 'Text too small, or the colors hard to read? Text size and colors can be changed in Settings, the gear icon at the top of every page. Mention it in your note if the default should change.'|t }}</span></p>
+      <p class="pf-rv__status" data-pf-rv-status role="status"></p>
+      <div class="pf-rv__form" data-pf-rv-form>
+        {% if form %}
+          {{ form }}
+        {% else %}
+          <p class="pf-rv__fallback">{{ 'The review form isn’t set up yet. Send your notes to whoever shared this link.'|t }}</p>
+        {% endif %}
+      </div>
+      <section class="pf-rv__public" aria-labelledby="pf-rv-public">
+        <div class="pf-rv__public-bar">
+          <h3 class="pf-rv__public-title" id="pf-rv-public">{{ 'On this page'|t }}</h3>
+          <p class="pf-rv__public-count">
+            {{ notes == 1 ? '1 approved note'|t : '@count approved notes'|t({ '@count': notes }) }}
+            <span aria-hidden="true">·</span>
+            {{ thumbs == 1 ? '1 thumb'|t : '@count thumbs'|t({ '@count': thumbs }) }}
+          </p>
+          {% if notes %}
+            {% include '@palefire/includes/public-notes-toggle.html.twig' only %}
+          {% endif %}
+        </div>
+        <div class="pf-rv__groups" data-pf-rv-groups>
+          {% for group in groups %}
+            {% set group_label = group.about ?: 'The page as a whole'|t %}
+            <div class="pf-rv__group" data-pf-rv-group data-about="{{ group.about }}">
+              <h4 class="pf-rv__group-title">{{ group_label }}</h4>
+              <div class="pf-rv__group-actions">
+                <button type="button" class="pf-rv__comment" data-pf-rv-comment data-about="{{ group.about }}">{{ 'Comment'|t }}<span class="visually-hidden"> {{ 'on @label'|t({ '@label': group_label }) }}</span></button>
+                {% include '@palefire/includes/public-votes.html.twig' with { votes: group.votes, about: group.about, label: group_label } only %}
+              </div>
+              {% if group.notes %}
+                {% include '@palefire/includes/public-notes.html.twig' with { notes: group.notes, label: group_label } only %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        {# A section with nothing yet: js/page-review.js fills in {label}. #}
+        <template data-pf-rv-group-template>
+          <div class="pf-rv__group" data-pf-rv-group data-about="">
+            <h4 class="pf-rv__group-title">{label}</h4>
+            <div class="pf-rv__group-actions">
+              <button type="button" class="pf-rv__comment" data-pf-rv-comment data-about="">{{ 'Comment'|t }}<span class="visually-hidden"> {{ 'on @label'|t({ '@label': '{label}' }) }}</span></button>
+              {% include '@palefire/includes/public-votes.html.twig' with { votes: {}, about: '', label: '{label}' } only %}
+            </div>
+          </div>
+        </template>
+        <p class="pf-rv__gone" data-pf-rv-gone hidden>{{ 'Not on the page now (the heading was reworded or removed)'|t }}</p>
+      </section>
+    </div>
+  </section>
+</div>

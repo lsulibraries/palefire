@@ -589,6 +589,24 @@ pr-timeline:
     - core/once
     - palefire/public-notes
 
+# Review mode: notes and thumbs on any /v2 page opened with ?review, and the
+# hub that gathers them (includes/page-review.html.twig,
+# page-review-hub.html.twig, Drupal\palefire\PageReview). Attached by those
+# templates only. Styles: its own entry (scss/page-review.scss).
+page-review:
+  version: 1.0.0
+  css:
+    component:
+      css/page-review.css: {}
+  js:
+    js/page-review.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.announce
+    - core/drupalSettings
+    - core/once
+    - palefire/public-notes
+
 # Newsletter review: a Constant Contact draft beside its feedback form
 # (includes/newsletter-review.html.twig, Drupal\palefire\NewsletterReview).
 # Attached by that template. Styles: its own entry (scss/newsletter-review.scss,
