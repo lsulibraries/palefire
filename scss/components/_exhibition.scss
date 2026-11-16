@@ -3298,20 +3298,60 @@ $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf
   }
 }
 
-// From lg, nothing under the title to read, so its first screen leaves
-// room for the wall's first row: the photograph (and the spacer that
-// holds the title at its foot, below) is the screen less --pf-bare-peek,
-// and the tiles come up under the title on the same screen. Below lg the
-// photograph keeps the whole screen.
-$pf-bare-peek: clamp(12rem, 36svh, 22rem);
+// From lg, a wall with nothing under its title scrolls as one: the
+// title, its facts and the wall come up together over the photograph,
+// which stays full screen under the header (its area spans the gallery),
+// with no reveal hold (below). The spacer that holds the title (::before,
+// rows 1-4) is the first screen less $pf-bare-peek, so the top of the
+// first row shows under the title. Its wash is long and soft: clear from
+// 62% of the way up, eased to solid at the wall's edge, where the wall
+// carries on in the page color; and behind the text's corner a soft
+// shadow out of the bottom left, so the number and a two-line title,
+// higher up the wash, keep their contrast over a bright photograph
+// without a band across it. With or without motion; motion adds only the
+// fades. Below lg, as before.
+$pf-bare-peek: clamp(8rem, 22svh, 14rem);
+$pf-bare-open: max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)) - #{$pf-bare-peek}));
+$pf-bare-wash-lg:
+  radial-gradient(ellipse 62% 85% at 0% 100%, color-mix(in srgb, var(--bs-body-bg) 80%, transparent), color-mix(in srgb, var(--bs-body-bg) 64%, transparent) 35%, color-mix(in srgb, var(--bs-body-bg) 30%, transparent) 68%, transparent),
+  pf-eased-wash(to top, 0%, 62%);
 
 @include media-breakpoint-up(lg) {
   #{$pf-wall-bare} {
-    --pf-bare-peek: #{$pf-bare-peek};
+    &::before {
+      content: "";
+      position: relative;
+      z-index: 1;
+      grid-row: 1 / 5;
+      grid-column: 1;
+      min-height: $pf-bare-open;
+      margin: calc(-1 * var(--pf-section-pad-block, 0px)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+      background: $pf-bare-wash-lg;
+      pointer-events: none;
+    }
+
+    > .pf-section__title,
+    .pf-exhibit-wall__stats {
+      z-index: 2;
+    }
 
     .pf-exhibit-wall-hero {
-      --pf-wall-hero-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek));
-      --pf-cover-img-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-bare-peek));
+      grid-row: 1 / 6;
+    }
+
+    .pf-exhibit-wall-hero__frame::after {
+      background: none;
+    }
+
+    // Over the half pixel the spacer's rounding can leave between its wash
+    // and this edge, where the photograph showed as a line.
+    .pf-exhibit-wall {
+      position: relative;
+      z-index: 1;
+      margin: 0 calc(-1 * var(--pf-section-pad-inline, 0px));
+      padding: clamp(2rem, 4vw, 3rem) var(--pf-section-pad-inline, 0px) 0;
+      background: var(--bs-body-bg);
+      box-shadow: 0 -2px 0 var(--bs-body-bg);
     }
   }
 }
@@ -3349,7 +3389,8 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         pointer-events: none;
 
         @include media-breakpoint-up(lg) {
-          background: pf-eased-wash(to top, 10%, 46%);
+          min-height: $pf-bare-open;
+          background: $pf-bare-wash-lg;
         }
       }
 
@@ -3456,6 +3497,8 @@ $pf-reveal-slide: -50%;
 $pf-reveal-slide-ease: cubic-bezier(.4, 0, .2, 1);
 $pf-reveal-section: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery:is(.pf-gallery--cover, .is-walled) .pf-exhibit-wall-hero)';
 $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
+// A wall with no intro (as $pf-wall-photo, at the section).
+$pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery.is-walled .pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -3617,29 +3660,39 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
         }
       }
 
-      // A wall with no intro: its wash rides on the spacer (above), which
-      // is held and comes in like the frame's, and the photograph's
-      // fade starts after the reveal.
+      // A wall with no intro: no hold (nothing to reveal but the title,
+      // and a held title with the wall creeping up to it read as a stuck
+      // page). The title, facts and wall scroll together; the spacer's
+      // wash fades in as the gallery comes up (as below lg), and the
+      // title and facts fade up as they pass the screen's foot, in by the
+      // time a link to the gallery lands.
+      #{$pf-reveal-bare} {
+        --pf-reveal: 0px;
+
+        #{$pf-reveal-text} {
+          animation: pf-exhibit-reveal $pf-exhibit-ease both;
+          animation-timeline: view();
+          animation-range: cover 0svh cover 22svh;
+        }
+
+        > .pf-section__inner > .pf-section__title:focus-within,
+        .pf-exhibit-wall__stats:focus-within {
+          animation: none;
+        }
+      }
+
       #{$pf-wall-photo} {
         view-timeline: --pf-open block, --pf-wall-open block;
         view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
 
         &::before {
-          min-height: calc(max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek, 0px))) + var(--pf-reveal));
-          background-position: bottom;
-          background-size: 100% max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek, 0px)));
-          background-repeat: no-repeat;
-          animation: pf-exhibit-pin linear both, pf-exhibit-reveal-wash linear both;
-          animation-timeline: --pf-open, --pf-open;
-          animation-range: contain 0px contain var(--pf-reveal), contain 2svh contain 16svh;
+          animation: pf-exhibit-reveal-wash ease-in-out both;
+          animation-timeline: --pf-open;
+          animation-range: entry 20% entry 75%;
         }
 
         &:has(:focus-within)::before {
-          animation-name: pf-exhibit-pin, none;
-        }
-
-        .pf-exhibit-wall-hero {
-          animation-range: contain var(--pf-reveal) contain calc(var(--pf-reveal) + 70svh);
+          animation: none;
         }
       }
     }
