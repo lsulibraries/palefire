@@ -46,12 +46,19 @@
      empty top-left corner instead (_landing-hero.scss, "Typography in the
      drawing"). #}
   {# On the hero the drawing's legend follows it: each hatch once (booked
-     rooms and rentals share one), then the drawing's other marks. #}
+     rooms, class rooms and rentals share one, named together: "Book
+     online, for classes or event rental"), then the drawing's other marks. #}
   {% set legend_hatches = map.key_indexed ? {
     walk_in: map.spaces|filter(s => s.access == 'walk_in')|length > 0,
     book: map.spaces|filter(s => s.access == 'appointment')|length > 0,
+    class: map.spaces|filter(s => s.access == 'class')|length > 0,
     rent: map.spaces|filter(s => s.access == 'rental')|length > 0,
   } : {} %}
+  {% set legend_booked = [] %}
+  {% if legend_hatches.book %}{% set legend_booked = legend_booked|merge(['book online'|t]) %}{% endif %}
+  {% if legend_hatches.class %}{% set legend_booked = legend_booked|merge(['for classes'|t]) %}{% endif %}
+  {% if legend_hatches.rent %}{% set legend_booked = legend_booked|merge(['event rental'|t]) %}{% endif %}
+  {% set legend_booked = legend_booked|join(', ', ' or '|t) %}
   {% if map.summary or map.key_indexed %}
     <div class="pf-map__type">
       {% if map.summary %}
@@ -62,11 +69,9 @@
           {% if legend_hatches.walk_in %}
             <li><span class="pf-map__swatch" aria-hidden="true"></span>{{ 'Walk in'|t }}</li>
           {% endif %}
-          {% if legend_hatches.book or legend_hatches.rent %}
+          {% if legend_booked %}
             <li><span class="pf-map__swatch pf-map__swatch--appointment" aria-hidden="true"></span>
-              {%- if legend_hatches.book and legend_hatches.rent %}{{ 'Book online or event rental'|t }}
-              {%- elseif legend_hatches.book %}{{ 'Book online'|t }}
-              {%- else %}{{ 'Event rental'|t }}{% endif -%}
+              {{- legend_booked|slice(0, 1)|upper ~ legend_booked|slice(1) -}}
             </li>
           {% endif %}
           {% if 'elevator' in map.legend %}
@@ -104,19 +109,17 @@
 
   {# Hidden tooltip sources, one per room (also the regions' aria-describedby).
      building-map.js copies the active one into the visible tooltip. Set as a
-     museum wall label: the floor in its own column, then the access, the
-     room and its text. The floor column reads "Floor 1" to screen readers,
-     so the access line doesn't repeat it. A room's photo is not in its label:
+     museum wall label: one line with the floor and the access, then the
+     room and its text. No link line: the room itself is the link, and the
+     label stays small enough to keep browsing the map around it. The line
+     reads "Floor 1, Walk in" to screen readers. A room's photo is not in its label:
      on the landing it fills the map's background while the room is lit
      (data-map-photo, a URL building-map.js fetches only then). #}
   {% for s in map.spaces %}
     <div class="pf-map__tip-src" id="{{ s.tip }}" data-map-tip="{{ s.key }}"{% if s.photo %} data-map-photo="{{ s.photo }}"{% endif %} hidden>
-      <p class="pf-map__tip-floor">
-        <span class="pf-map__tip-floor-label">{{ 'Floor'|t }}</span>
-        <span class="pf-map__tip-floor-num">{{ s.floor }}</span>
-      </p>
       <div class="pf-map__tip-body">
         <div class="pf-map__tip-head">
+          <p class="pf-map__tip-floor">{{ 'Floor'|t }} {{ s.floor }}<span class="visually-hidden">,</span></p>
           <span class="pf-map__swatch{{ s.hatch == 'appointment' ? ' pf-map__swatch--appointment' }}" aria-hidden="true"></span>
           <p class="pf-map__tip-eyebrow">{{ s.access_label }}{% if s.note %} &middot; {{ s.note }}{% endif %}</p>
           {% if s.key == map.here %}<span class="pf-map__here-badge">{{ 'Here'|t }}</span>{% endif %}
@@ -124,9 +127,6 @@
         <strong class="pf-map__tip-title">{{ s.title }}</strong>
         {% if s.body %}
           <div class="pf-map__tip-text">{{ s.body }}</div>
-        {% endif %}
-        {% if s.cta %}
-          <p class="pf-map__tip-cta">{{ s.cta }}</p>
         {% endif %}
       </div>
     </div>

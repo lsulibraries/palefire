@@ -449,9 +449,11 @@ HTML),
 <li>Newsletter review pages no longer show a table of contents: each is one draft to read from top to bottom.</li>
 </ul>
 HTML),
-  $text('Mon Nov 16: Smaller map labels', <<<'HTML'
+  $text('Mon Nov 16: Smaller map labels, Ask Us drawer', <<<'HTML'
 <ul>
 <li>Building map: the label that opens over a room (floor, access, name, a line about the room and its link) is about half its old size, narrower and with smaller type, so it no longer covers neighboring rooms and the map is easier to keep exploring.</li>
+<li>Building map: the room label no longer repeats the room's link (the room itself is the link), and the floor now sits beside the access on one line (Floor 2 | Walk in), so the label is shorter again.</li>
+<li>Ask Us drawer: the Email Special Collections tab now shows the same question slip as the Ask us section, in place of the old AskUs widget. A question sent from any page reaches Special Collections the same way. The form loads only when the drawer opens.</li>
 </ul>
 HTML),
 ]);
