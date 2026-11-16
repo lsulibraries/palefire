@@ -5259,11 +5259,16 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 // hairline whatever its size, the lit room's hatch and name in the accent,
 // the other names left out (at this size they would be specks). No grey
 // and wash as the pictures have: it is already in the page's colors.
+// The page's own color, exactly the column wash's (--pf-hl-wash), not the
+// pictures' dark ground (.pf-hero-banners > .pf-hero-banner .pf-hero-banner__media),
+// so the column is one solid color under the drawing, with no band where
+// the wash over the rows begins.
+.pf-hero-banners > .pf-hero-banner.pf-hero-banner--map .pf-hero-banner__media--map,
 .pf-hero-banner__media--map {
   display: grid;
   place-items: center;
   color: var(--bs-heading-color, var(--pf-section-fg));
-  background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+  background: var(--pf-hl-wash, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))));
 
   &::after {
     content: none;
@@ -5526,8 +5531,8 @@ html.pf-a11y-motion .pf-hero-banner__map {
 // --- Wash: the film as a faded ground (Oral History) ---------------------------
 // .pf-landing--wash (includes/landing.html.twig: a unit's homepage with
 // background videos): the film is not the column's spotlight but a faint
-// ground behind the whole first screen, the type over it, fading out
-// toward the column and the screen's foot. The column is the Highlights'
+// ground behind the type's two thirds, the type over it, under one even
+// veil (no fades). The column is the Highlights'
 // from the start, resting on the map banner (js/hero-highlights.js), and
 // the film keeps playing behind; its button stays, at the type's foot, as
 // it must for a moving picture that runs on (WCAG 2.2.2). Faint enough
@@ -5538,20 +5543,16 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
   #{$pf-wash} {
     isolation: isolate;
 
+    // The type's two thirds, up to the column (solid, the map's), with no
+    // fades: one even veil of the page's color.
     .pf-landing__media {
-      inset-inline: 0;
+      inset-inline: 0 var(--pf-split-film);
       z-index: -1;
       width: auto;
     }
 
-    // Faded by a veil of the page's color (the films' own opacity is
-    // their crossfade's), and masked away toward the column and the foot.
     .pf-landing__media .pf-landing__bg-video {
       object-position: 50% 40%;
-      mask-image:
-        linear-gradient(to right, #000 35%, transparent calc(100% - var(--pf-split-film))),
-        linear-gradient(to bottom, #000 45%, transparent 92%);
-      mask-composite: intersect;
     }
 
     // The veil, in place of the dark band under the header.
@@ -5562,6 +5563,7 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
       z-index: 1;
       height: auto;
       background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 82%, transparent);
+      // (The cover's other light, the Spotlight, is the hero's box.)
       opacity: 1;
       pointer-events: none;
     }
