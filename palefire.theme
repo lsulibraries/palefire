@@ -424,7 +424,10 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
       $rules[] = 'series';
     }
   }
-  if ($has_map) {
+  // A unit's homepage (its map marks a room Here) shows the map as its Find
+  // us banner only, with no Rooms and access section.
+  $unit = $has_map && $map->hasField('field_map_here') && trim((string) $map->get('field_map_here')->value) !== '';
+  if ($has_map && !$unit) {
     $rules[] = 'rooms';
   }
   if ($visit) {
@@ -555,6 +558,12 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
     $variables += _palefire_hero_map_banner($paragraph, $variables);
+    // A unit's homepage (Oral History): the map draws the Find us banner
+    // only, with no Rooms and access section of its own; the banner links
+    // to the room's page.
+    if ($variables['hero_unit'] !== '') {
+      $variables['landing_map'] = NULL;
+    }
     // Oral History: the Podcast banner is the newest episode, with Play.
     if (($variables['hero_unit'] ?? '') === 'oral_history') {
       PodcastFeed::heroBanner($variables);
@@ -661,8 +670,10 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
  * - hero_map_banner: the first of the banners, before the configured ones,
  *   or NULL. Its picture is the building's drawing with the room lit
  *   (static: no controls in it), so the column rests on where the unit is.
- *   It links down to the map section. Keys: template, spaces (the room
- *   alone, without its link), lit, title, floor, building, anchor.
+ *   It links down to Hours and directions, else to the room's location page
+ *   (url), the unit's homepage having no Rooms and access section
+ *   (palefire_preprocess_paragraph__landing_hero(), _palefire_hero_rules()). Keys: template, spaces (every room, none a
+ *   link), lit, title, floor, building, anchor, url.
  *
  * @return array
  *   ['hero_unit' => string, 'hero_map_banner' => ?array].
@@ -700,6 +711,8 @@ function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variab
       'floor' => $room['floor'],
       'building' => $built['label'],
       'anchor' => $built['uid'] . '-heading',
+      // The room's own page, for a homepage with no Hours and directions.
+      'url' => (string) ($room['url'] ?? ''),
     ],
   ];
 }

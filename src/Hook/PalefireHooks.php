@@ -648,7 +648,10 @@ class PalefireHooks {
     if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && !in_array('start', $taken, TRUE) && in_array('guide', \_palefire_hero_rules($paragraph), TRUE)) {
       $ids['start'] = 'start';
     }
-    if ($paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty() && !in_array('map', $taken, TRUE)) {
+    // No map section on a unit's homepage (a landing hero whose map marks a
+    // room Here, \_palefire_hero_rules()): its map is the Find us banner.
+    $no_map_section = $paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && !in_array('rooms', \_palefire_hero_rules($paragraph), TRUE);
+    if ($paragraph->hasField('field_bento_map') && !$paragraph->get('field_bento_map')->isEmpty() && !$no_map_section && !in_array('map', $taken, TRUE)) {
       $ids['map'] = 'map';
     }
     $located = self::stringValue($node, 'field_hours_location') !== ''

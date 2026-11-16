@@ -504,7 +504,9 @@
         <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
           {% if hero_map_banner %}
             <li class="pf-hero-banner pf-hero-banner--map">
-              <a class="pf-hero-banner__link" href="#{{ toc_map_id ?: hero_map_banner.anchor }}">
+              {# Find us: down to Hours and directions (a unit's homepage has
+                 no map section), else the room's page. #}
+              <a class="pf-hero-banner__link" href="{{ toc_hours_id ? '#' ~ toc_hours_id : (hero_map_banner.url ?: '#' ~ (toc_map_id ?: hero_map_banner.anchor)) }}">
                 <span class="pf-hero-banner__media pf-hero-banner__media--map" aria-hidden="true">
                   <span class="pf-hero-banner__map">
                     {% include hero_map_banner.template with { uid: input_id ~ '-banner-map', spaces: hero_map_banner.spaces, static: true, lit: hero_map_banner.lit } only %}
