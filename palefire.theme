@@ -2547,38 +2547,6 @@ function palefire_preprocess_paragraph__accordion_item(array &$variables): void 
 const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spacing', 'lines', 'motion', 'buttons', 'steps', 'labels'];
 
 /**
- * Implements hook_preprocess_html().
- *
- * Review mode (Drupal\palefire\PageReview): any /v2 page opened with
- * ?review gets the Review this page panel at the foot of the page
- * (includes/page-review.html.twig), and loads in full from page to page
- * (data-no-swup: js/palefire-swup.js stays off), so each page draws its own
- * panel. Themes can't implement hook_page_bottom(), so the panel joins
- * page_bottom here.
- */
-function palefire_preprocess_html(array &$variables): void {
-  if (!class_exists(PageReview::class) || !PageReview::applies()) {
-    return;
-  }
-  $variables['html_attributes']->setAttribute('data-no-swup', '');
-  $variables['html_attributes']->addClass('pf-review-mode');
-  $variables['page_bottom'] = (array) ($variables['page_bottom'] ?? []);
-  $variables['page_bottom']['palefire_page_review'] = [
-    '#type' => 'inline_template',
-    '#template' => "{% include '@palefire/includes/page-review.html.twig' %}",
-    '#context' => PageReview::panel(),
-    '#cache' => [
-      'contexts' => ['url.path', 'url.query_args:' . PageReview::QUERY],
-      'tags' => PageReview::cacheTags(),
-    ],
-  ];
-  $node = \Drupal::routeMatch()->getParameter('node');
-  if ($node instanceof NodeInterface) {
-    $variables['page_bottom']['palefire_page_review']['#cache']['tags'] = Cache::mergeTags($variables['page_bottom']['palefire_page_review']['#cache']['tags'], $node->getCacheTags());
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK() for paragraph--guide-text.
  *
  * request_paths: TRUE when the text has a paragraph that is only

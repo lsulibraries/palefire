@@ -1075,7 +1075,7 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   }
 }
 
-// In one after another: kicker, title, intro, credit, prompt.
+// In one after another: kicker, title, prompt and buttons, intro, credit.
 .pf-exhibit-cover__step {
   @include pf-exhibit-motion {
     animation: pf-exhibit-step 1.1s $pf-exhibit-ease both;
@@ -1177,7 +1177,7 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 // exhibition was also on display. Small hairline boxes, set like the
 // gallery numbers.
 .pf-exhibit-cover__facts {
-  // Above the prompt, which the note's tooltip covers (each step's
+  // Above what follows it, which the note's tooltip covers (each step's
   // entrance animation makes its own stacking context).
   position: relative;
   z-index: 3;
@@ -1403,6 +1403,12 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 
     .pf-exhibit-cover__text:has(> .pf-exhibit-cover__cue) {
       position: relative;
+    }
+
+    // The cue is the way on, so Begin goes once the cue shows, leaving
+    // Contents. Phones and short windows have no cue and keep Begin.
+    .pf-exhibit-cover__text:has(> .pf-exhibit-cover__cue:not([hidden])) [data-pf-exhibit-begin] {
+      display: none;
     }
 
     .pf-exhibit-cover__cue:not([hidden]) {
@@ -3837,8 +3843,10 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
 // in 1px lines of the swatch's text color at one opacity per part (the
 // box's edge 60%, the reel 100%, its tape 35% and 20%). The box is 82% the
 // swatch's color, so the reel shows faintly through it. The pair stands in
-// the tile's square frame, 1.5 boxes wide; on hover or focus the box steps
-// left and the reel rolls out to the right, turning. On the object view's
+// the tile's frame, 1.5 boxes wide and a box high (its --pf-r, from
+// palefire.theme), so the box is as tall as the photographs in its row. On
+// hover or focus the box steps left and the reel rolls out to the right,
+// turning. On the object view's
 // stage, where the tape deck (.pf-deck, below) cannot be had, it is out,
 // and turns while the clip plays. Reduced motion: it
 // steps out without sliding and never turns.

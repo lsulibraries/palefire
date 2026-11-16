@@ -26,7 +26,7 @@
  *   Its focal point, when set, is where it stays in view when cropped.
  *
  * The parts come in one after another on load (_exhibition.scss):
- * image, title, subtitle, credit, then the prompt. The galleries follow
+ * image, title, subtitle, the prompt and buttons, intro, then credit. The galleries follow
  * it as one long page ("Home" in the TOC is this page).
  *
  * "Begin" glides to the first gallery; "Contents" opens the TOC (the rail's
@@ -61,8 +61,43 @@
         <span class="visually-hidden">: </span><span class="pf-exhibit-cover__subtitle">{{ head.subtitle }}</span>
       {% endif %}
     </h1>
+    {# Begin and Contents (and the editor's prompt) right under the title,
+       ahead of the intro, so they are on the first screen however long the
+       title and intro run. #}
+    <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 3">
+      {% if head.prompt %}
+        <p class="pf-exhibit-cover__prompt-text">
+          <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
+          {{ head.prompt }}
+        </p>
+      {% endif %}
+      {% if head.action %}
+        <div class="pf-exhibit-cover__buttons">
+          <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ head.action.url }}">
+            {{- head.action.text -}}
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+          </a>
+      {% endif %}
+      <div class="pf-exhibit-cover__actions" data-pf-exhibit-actions hidden>
+        <a class="pf-exhibit-button{{ head.action ? '' : ' pf-exhibit-button--primary' }}" href="#" data-pf-exhibit-begin>
+          {{ 'Begin'|t }}
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
+        </a>
+        {# Opens the table of contents in place, as the landing's Contents
+           (includes/landing.html.twig): a list icon, not an arrow.
+           js/modular-toc.js shows and wires it: the rail's panel under the
+           button from lg, the drawer (or the dock's Contents) below. #}
+        <button type="button" class="pf-exhibit-button pf-exhibit-button--contents" data-pf-landing-contents hidden>
+          {{- 'Contents'|t -}}
+          <span class="visually-hidden">{{ ' of this exhibition'|t }}</span><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
+        </button>
+      </div>
+      {% if head.action %}
+        </div>
+      {% endif %}
+    </div>
     {% if head.intro %}
-      <div class="pf-exhibit-cover__intro pf-exhibit-cover__step" style="--pf-step: 3">{{ head.intro }}</div>
+      <div class="pf-exhibit-cover__intro pf-exhibit-cover__step" style="--pf-step: 3.5">{{ head.intro }}</div>
     {% endif %}
     {% if head.credit %}
       <div class="pf-exhibit-cover__credit pf-exhibit-cover__step" style="--pf-step: 4">{{ head.credit }}</div>
@@ -100,38 +135,6 @@
         {% endfor %}
       </dl>
     {% endif %}
-    <div class="pf-exhibit-cover__prompt pf-exhibit-cover__step" style="--pf-step: 5">
-      {% if head.prompt %}
-        <p class="pf-exhibit-cover__prompt-text">
-          <svg class="pf-exhibit-cover__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5"/></svg>
-          {{ head.prompt }}
-        </p>
-      {% endif %}
-      {% if head.action %}
-        <div class="pf-exhibit-cover__buttons">
-          <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ head.action.url }}">
-            {{- head.action.text -}}
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
-          </a>
-      {% endif %}
-      <div class="pf-exhibit-cover__actions" data-pf-exhibit-actions hidden>
-        <a class="pf-exhibit-button{{ head.action ? '' : ' pf-exhibit-button--primary' }}" href="#" data-pf-exhibit-begin>
-          {{ 'Begin'|t }}
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
-        </a>
-        {# Opens the table of contents in place, as the landing's Contents
-           (includes/landing.html.twig): a list icon, not an arrow.
-           js/modular-toc.js shows and wires it: the rail's panel under the
-           button from lg, the drawer (or the dock's Contents) below. #}
-        <button type="button" class="pf-exhibit-button pf-exhibit-button--contents" data-pf-landing-contents hidden>
-          {{- 'Contents'|t -}}
-          <span class="visually-hidden">{{ ' of this exhibition'|t }}</span><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
-        </button>
-      </div>
-      {% if head.action %}
-        </div>
-      {% endif %}
-    </div>
     {# The scroll cue, as on the landing's hero (.pf-hero-cue,
        _landing-features.scss): the page goes on, and a way to the first
        gallery without a wheel. js/exhibition.js shows it when the cover
