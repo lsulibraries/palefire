@@ -111,6 +111,15 @@
   hyphens: auto;
 }
 
+// A room people ask for: "By request" in the hours' slot, the badge's
+// plate as hours show while closed, its dot an open ring (no state, so
+// not a traffic light), then the room's ask as the hours' link. Static, so
+// it's there from first paint: no load, no shift.
+.pf-location__hours--request .pf-landing__hours-dot {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+
 // The landing intro's size (--pf-hero-text, 16 to 18px).
 .pf-location__lede {
   max-width: 34rem;

@@ -2093,6 +2093,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     if (!_palefire_location_contact_part($paragraph, $location, 'location_space')) {
       $location['contact'] = NULL;
     }
+    $location['request'] = $asked ? _palefire_location_request($paragraph, $location) : NULL;
     $location['notice'] = _palefire_location_notice($location);
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
     $location['rules_section'] = (bool) _palefire_location_sibling($paragraph, 'location_rules');
@@ -2132,6 +2133,36 @@ function _palefire_location_contact_part(ParagraphInterface $paragraph, array $l
     }
   }
   return FALSE;
+}
+
+/**
+ * The line under the title for a room people ask for, in place of hours.
+ *
+ * A room people ask for (Event rental, For classes) isn't open to walk
+ * into, so today's hours under its title would mislead. In their place, in
+ * the same slot and at the same height: "By request" and the room's ask
+ * (Request a date, Plan a class), a link down to the part that carries the
+ * request: Booking (the form), else House rules (the person to ask,
+ * _palefire_location_contact_part()); no link when the page has neither.
+ *
+ * @return array{label: string, link: ?array{url: string, title: string}}
+ */
+function _palefire_location_request(ParagraphInterface $paragraph, array $location): array {
+  $link = NULL;
+  $host = $paragraph->getParentEntity();
+  $part = _palefire_location_sibling($paragraph, 'location_booking')
+    ?? (!empty($location['contact']) ? NULL : _palefire_location_sibling($paragraph, 'location_rules'));
+  if ($part && $host instanceof NodeInterface) {
+    $anchor = PalefireHooks::sectionData($host)[$part->uuid()]['anchor'] ?? '';
+    if ($anchor !== '') {
+      // The part's <h2> (tabindex -1), so the jump lands focus on it.
+      $link = [
+        'url' => '#' . $anchor . '-title',
+        'title' => $location['access_kind']['cta'] ?? (string) t('How to ask'),
+      ];
+    }
+  }
+  return ['label' => (string) t('By request'), 'link' => $link];
 }
 
 /**

@@ -8,7 +8,8 @@
  *   access, sound, sound_level, capacity, body, link, policies, details
  *   (label, value: the room's own facts, "Wi-Fi: eduroam"), contact (the
  *   person to ask, or NULL), need_to_know (_palefire_location_need_to_know());
- *   notice, price; map (the
+ *   notice, price; request (a room people ask for: "By request" and a
+ *   link down to the request, in place of today's hours, else NULL); map (the
  *   building map with the room marked "here", or NULL when the building has
  *   no drawing yet); backdrop (the photo behind the top, or '').
  * - visit: the page's hours (field_hours_location and the rest), for
@@ -83,7 +84,21 @@
             {# Today's hours right under the title, as on the landing hero
                (visit-hours.js fills it); the link goes down to the week in
                Visit. #}
-            {% if visit.lid %}
+            {# A room people ask for (Event rental, For classes) isn't open to
+               walk into: "By request" in the same slot, at the same height,
+               and its ask as a link down to the part with the request
+               (_palefire_location_request()). Its hours stay in Visit. #}
+            {% if location.request %}
+              <p class="pf-landing__hours pf-location__hours pf-location__hours--request">
+                <span class="pf-landing__hours-label">
+                  <span class="pf-landing__hours-dot" aria-hidden="true"></span>
+                  <span>{{ location.request.label }}</span>
+                </span>
+                {% if location.request.link %}
+                  <a class="pf-landing__hours-link" href="{{ location.request.link.url }}" data-pf-hours-jump>{{ location.request.link.title }}</a>
+                {% endif %}
+              </p>
+            {% elseif visit.lid %}
               <p class="pf-landing__hours pf-location__hours" data-pf-hours data-lid="{{ visit.lid }}">
                 <span class="pf-landing__hours-label">
                   <span class="pf-landing__hours-dot" aria-hidden="true"></span>

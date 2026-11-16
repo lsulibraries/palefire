@@ -462,6 +462,8 @@ HTML),
 <li>The Lecture Hall page no longer has a Reserve button at the top, like the McIlhenny Room: the request form and the person to ask are in its Book section, after the house rules.</li>
 <li>On the Lecture Hall page, the line with the person to ask now sits at the end of House rules, instead of at the top or beside the Reserve button.</li>
 <li>Building map on room pages: the room's name now sits on a short plate shaped to the room's floor, instead of a band running the room's whole length.</li>
+<li>Building map on room pages: back to the box around the room's name, which now also hides the walls and room edges it overlaps, so no line runs through the name.</li>
+<li>Lecture Hall and McIlhenny Room pages: no more opening hours under the title, since neither room is open to walk into. The same spot now says By request, with a link down to how to request it (Request a date, Plan a class). The Reading Room and Quiet Study keep their hours.</li>
 </ul>
 HTML),
 ]);
