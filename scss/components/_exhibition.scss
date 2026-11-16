@@ -2586,8 +2586,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 // A timed transcript (js/exhibition.js), once its clip has played: like a
-// lyrics view, the phrase being heard is in the accent (Twilight's pale
-// gold), what's been heard in the transcript's color and what's still to
+// progress bar, everything heard so far, up to and including the phrase
+// being heard, is in the accent (Twilight's pale gold) and what's still to
 // come in the muted color (all 4.5:1 and up in every reading theme), so
 // the reader sees where the voice is and how far it has come. Each
 // phrase takes its color in a slow crossfade. Hovering
@@ -2610,13 +2610,10 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     }
   }
 
-  // Heard: back to the transcript's color. Only the phrase being spoken
-  // is in the accent, so the gold follows the voice instead of filling
-  // the panel; what's still to come stays muted.
-  .pf-phrase.is-past {
-    color: inherit;
-  }
-
+  // Heard, and being heard: the accent, so the gold fills the transcript
+  // as the voice goes, showing how far it has come; what's still to come
+  // stays muted. A seek back unlights what comes after (js/exhibition.js).
+  .pf-phrase.is-past,
   .pf-phrase.is-current {
     color: var(--pf-exhibit-accent);
   }
