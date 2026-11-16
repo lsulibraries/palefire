@@ -282,7 +282,7 @@ HTML),
 HTML),
   $note('<p><strong>' . $label('exhibit_citation') . '</strong>: the book\'s record, set like a museum label.</p>'),
   $citation('<p>Müller-Brockmann, Josef. <em>Grid Systems in Graphic Design.</em> Niggli, 1981. (Sample record for this guide.)</p>'),
-  $note('<p><strong>' . $label('exhibit_entry') . '</strong>: a person or book inside a gallery. Its heading is a link under the gallery in the table of contents; a long biography folds behind "Read the full biography". Date (optional) shows under the heading, puts the entry on the exhibition’s Timeline, and on a wall an entry with a date and no image or clip hangs as a card with its date.</p>'),
+  $note('<p><strong>' . $label('exhibit_entry') . '</strong>: a person or book inside a gallery. Its heading is a link under the gallery in the table of contents; a long biography folds behind "Read the full biography". Date (optional) shows under the heading, puts the entry on the exhibition’s Timeline, and on a wall an entry with a date and no image or clip hangs as a label, its words read in place.</p>'),
   Paragraph::create([
     'type' => 'exhibit_entry',
     'field_block_title' => 'Josef Müller-Brockmann (1914–1996)',

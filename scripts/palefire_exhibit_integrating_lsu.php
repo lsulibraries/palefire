@@ -30,7 +30,7 @@
  * Each is split into periods: an undated entry with a heading and no image
  * or clip starts a sub-gallery. Every event is an entry with its date in
  * field_entry_date (photos, the description, then each clip with its
- * transcript); a dated event with no picture or clip hangs as a date card. The Nation (the overview timeline’s
+ * transcript); a dated event with no picture or clip hangs as a label, read in place. The Nation (the overview timeline’s
  * national events) and About the Exhibition are stories. Changes: events
  * in date order, events shown on two timelines kept once, typos fixed,
  * speaker labels in bold, curly quotes, new alt text and captions, and

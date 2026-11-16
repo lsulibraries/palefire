@@ -265,6 +265,17 @@
    *   The element to show (a gallery, an entry heading, the head...).
    */
   function go(target) {
+    const note = noteFor(target);
+    if (note) {
+      // A wall's note (an event with no picture): read in place.
+      closeObject(false, true);
+      history.replaceState(history.state, '', location.pathname + location.search + '#' + note.dataset.pfNote);
+      glideTo(note, () => {
+        focusOn(note);
+        flash(note);
+      });
+      return;
+    }
     const entry = wallEntry(target);
     if (entry) {
       const tile = tileFor(entry);
@@ -471,7 +482,11 @@
     ROOT.classList.remove('pf-exhibit-deep');
     const target = targetOf(location.hash);
     const entry = wallEntry(target);
-    if (entry) {
+    const note = noteFor(target);
+    if (note) {
+      requestAnimationFrame(() => note.scrollIntoView({ block: 'center' }));
+    }
+    else if (entry) {
       // An address for a wall's entry: the entry open, over its wall.
       requestAnimationFrame(() => {
         const tile = tileFor(entry);
@@ -526,10 +541,20 @@
     return !reduceMotion() && typeof document.startViewTransition === 'function';
   }
 
-  // The entry an element belongs to, when that entry is on a wall.
+  // The entry an element belongs to, when that entry is on a wall and
+  // has a tile (a note is read on the wall instead: noteFor()).
   function wallEntry(el) {
     const entry = el && el.closest ? el.closest('.pf-exhibit-entry') : null;
-    return entry && entry.closest('.pf-gallery.is-walled') ? entry : null;
+    return entry && entry.closest('.pf-gallery.is-walled') && !noteFor(entry) ? entry : null;
+  }
+
+  // The wall note (.pf-exhibit-wall__tile--note) for an element in an
+  // entry that hangs as one: a dated event with no picture or clip.
+  function noteFor(el) {
+    const entry = el && el.closest ? el.closest('.pf-exhibit-entry') : null;
+    const heading = entry ? entry.querySelector('.pf-exhibit-entry__title') : null;
+    const page = entry ? galleryOf(entry) : null;
+    return heading && heading.id && page ? page.querySelector('[data-pf-note="' + CSS.escape(heading.id) + '"]') : null;
   }
 
   function tileFor(entry) {
@@ -1482,13 +1507,6 @@
       else {
         frame.append(reel.cloneNode(true));
       }
-      view.media.replaceChildren(frame);
-    }
-    else if (tile.querySelector('.pf-exhibit-card')) {
-      // A dated event with no picture: its card, the date set large
-      // (_exhibit-dates.scss).
-      frame.classList.add('pf-viewer__frame--card');
-      frame.append(tile.querySelector('.pf-exhibit-card').cloneNode(true));
       view.media.replaceChildren(frame);
     }
     else {

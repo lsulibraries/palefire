@@ -507,6 +507,7 @@ HTML),
 <li>Room pages: the photos of a room open full screen, the same way exhibition pictures do, with arrows to step through them.</li>
 <li>Exhibitions can now have a Timeline gallery: every dated event from the other galleries in one list, in date order and grouped by decade, read top to bottom on phones and computers alike. Each event says which gallery it belongs to and opens it. Entries can carry a date, shown under their heading, and on a wall an event with no picture hangs as a card with its date. Integrating LSU opens with one, like the old listening station’s timeline.</li>
 <li>Exhibition timelines: events with only text are no longer clickable. Their few lines are shown right on the timeline, so nothing opens just to show a sentence; events with a picture or clip still open them.</li>
+<li>Exhibition walls: the same events now hang beside the pictures as wall labels, with their date, heading and text, instead of date cards that opened a nearly empty window. A link to one scrolls to its label.</li>
 </ul>
 HTML),
 ]);

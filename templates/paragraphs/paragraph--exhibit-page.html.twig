@@ -41,8 +41,8 @@
  *   the entries away, and each tile opens its entry in the object view.
  *   Its tiles come in wall.groups: a list each, under a sub-gallery heading
  *   when an imageless entry starts one. Without the script the gallery
- *   reads as a story. A dated entry with no picture or clip is a card
- *   (tile.card): its date set large.
+ *   reads as a story. A dated entry with no picture or clip is a note
+ *   (tile.note): a wall label read in place, not a link.
  * - timeline: Display "timeline" (src/ExhibitTimeline.php), or NULL: every
  *   dated entry of the other galleries on one rail, printed after the
  *   gallery's own text (includes/exhibit-timeline.html.twig).
@@ -231,15 +231,25 @@
         <ul class="pf-exhibit-wall__list">
           {% for tile in group.tiles %}
             {% set image = tile.images|first %}
-            <li class="pf-exhibit-wall__tile{{ tile.card ? ' pf-exhibit-wall__tile--card' : (not image ? ' pf-exhibit-wall__tile--reel') }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+            {% if tile.note %}
+              {# A dated event with no picture or clip: a wall label, read
+                 in place, not a link. js/exhibition.js glides here for its
+                 entry's address (data-pf-note). #}
+              <li class="pf-exhibit-wall__tile pf-exhibit-wall__tile--note" style="--pf-r: {{ tile.ratio }}" data-pf-note="{{ tile.anchor }}" tabindex="-1">
+                <div class="pf-exhibit-note">
+                  <p class="pf-exhibit-note__date"><time datetime="{{ tile.note.iso }}">{{ tile.note.label }}</time></p>
+                  <p class="pf-exhibit-note__title">{{ tile.title }}</p>
+                  {% if tile.note.text %}
+                    <div class="pf-exhibit-note__text">{{ tile.note.text }}</div>
+                  {% endif %}
+                </div>
+              </li>
+            {% else %}
+            <li class="pf-exhibit-wall__tile{{ not image ? ' pf-exhibit-wall__tile--reel' }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
               <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
                 <span class="pf-exhibit-wall__frame">
-                  {% if tile.card %}
-                    {# A dated event with no picture: its date, set large
-                       (the label under it carries the date for everyone). #}
-                    <span class="pf-exhibit-card" aria-hidden="true"><span class="pf-exhibit-card__date">{{ tile.card.label }}</span></span>
-                  {% elseif not image %}
+                  {% if not image %}
                     {# A clip with no picture. #}
                     {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year, deck: file_url(directory) ~ '/images/exhibit-deck.svg' } only %}
                   {% else %}
@@ -258,9 +268,7 @@
                 </span>
                 <span class="pf-exhibit-wall__label">
                   <span class="pf-exhibit-wall__name">{{ tile.title }}</span>
-                  {% if tile.card %}
-                    <span class="pf-exhibit-wall__tag"><time datetime="{{ tile.card.iso }}">{{ tile.card.label }}</time></span>
-                  {% elseif tile.tag %}
+                  {% if tile.tag %}
                     {# A clip's speaker can be long: it wraps on its own line. #}
                     <span class="pf-exhibit-wall__tag{{ tile.audio ? ' pf-exhibit-wall__tag--speaker' }}">{{ tile.tag }}</span>
                   {% elseif tile.plate %}
@@ -269,6 +277,7 @@
                 </span>
               </a>
             </li>
+            {% endif %}
           {% endfor %}
         </ul>
         {% endfor %}

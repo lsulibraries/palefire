@@ -4514,8 +4514,10 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * view: its first two show (the second on hover), tagged "4 pages". A clip
  * with no image is drawn as a reel in its box (exhibit-reel.html.twig).
  *
- * An entry with a date (field_entry_date) but no image or clip is a card:
- * its date set large on the page color ('card': ['label', 'iso']). One
+ * An entry with a date (field_entry_date) but no image or clip is a note:
+ * a wall label read in place, not a link ('note': ['label', 'iso', 'text'
+ * (its biography and text blocks, render arrays)]), as wide as its words
+ * need. One
  * with a heading but no image, clip or date starts a sub-gallery: a
  * heading across the wall, with the entry's text under it, over the tiles
  * that follow (the Union Art Gallery's shows). A wall with sub-galleries
@@ -4527,7 +4529,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  *   audio clip's speaker, or "4 pages"), 'audio' (the entry has a clip),
  *   'year' (the clip's year, from the end of its credit, or NULL),
  *   'pages' (a manuscript's page count, or 0), 'ratio',
- *   'images' (_palefire_exhibit_image() values; none for a reel)]. groups:
+ *   'images' (_palefire_exhibit_image() values; none for a reel),
+ *   'note' (a dated entry with no picture or clip, read in place, or
+ *   NULL)]. groups:
  *   the tiles in order under their sub-galleries, ['title', 'anchor',
  *   'text' (render arrays), 'tiles'] each; the first has no title when
  *   tiles come before any sub-gallery. sortable: two or more tiles have a
@@ -4589,9 +4593,27 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       }
     }
     // A dated entry with no image and no clip (a timeline's event) hangs as
-    // a card with its date (exhibit-page.html.twig).
+    // a note: its date, heading and words on the wall, read in place, so
+    // nothing opens for a few lines of text (exhibit-page.html.twig).
     $date = $entry->hasField('field_entry_date') ? ExhibitTimeline::parse($entry->get('field_entry_date')->value) : NULL;
-    $card = !$images && $speaker === NULL && $date ? ['label' => $date['label'], 'iso' => $date['iso']] : NULL;
+    $card = NULL;
+    $words = 0;
+    if (!$images && $speaker === NULL && $date) {
+      $note_text = [];
+      $fields = $entry->hasField('field_entry_bio') ? [$entry->get('field_entry_bio')] : [];
+      foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+        if ($block->bundle() === 'guide_text' && $block->isPublished()) {
+          $fields[] = $block->get('field_block_body');
+        }
+      }
+      foreach ($fields as $field) {
+        if (!$field->isEmpty() && ($plain = $text($field)) !== '') {
+          $words += mb_strlen($plain);
+          $note_text[] = ['#type' => 'processed_text', '#text' => $field->value, '#format' => $field->format];
+        }
+      }
+      $card = ['label' => $date['label'], 'iso' => $date['iso'], 'text' => $note_text];
+    }
     // No image, no clip and no date: nothing to hang. With a heading it
     // starts a sub-gallery, its text blocks under the heading.
     if (!$images && $speaker === NULL && !$card) {
@@ -4628,10 +4650,11 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'pages' => $pages,
       // A clip with no picture: its reel and box (exhibit-reel.html.twig),
       // 1.5 boxes wide, so the box is as tall as the row's photographs.
-      // A card (a dated event with no picture) is square.
-      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($card ? 1 : 1.5),
+      // A note (a dated event with no picture) is as wide as its words
+      // need beside the row's photographs: 1 to 3 rows' heights.
+      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($card ? round(max(1, min(3, $words / 170)), 2) : 1.5),
       'images' => $images,
-      'card' => $card,
+      'note' => $card,
     ];
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }

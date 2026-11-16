@@ -48,7 +48,7 @@
  *     field_entry_date, added 2026-11-16): "1953", "1953-06", "1953-06-20"
  *     or a range with a slash ("1941/1945"). It shows over the text, puts
  *     the entry on the exhibition's timeline, and an entry with a date but
- *     no image or clip is a card on a wall.
+ *     no image or clip hangs on a wall as a label, read in place.
  *   - exhibit_figure: one image with a caption and a layout, and (added
  *     2026-10-21) an alignment that lays a drawing over its proof in a
  *     wall's compare view (field_figure_align).
@@ -389,7 +389,7 @@ $page_blocks = array_merge(['guide_text', 'exhibit_entry', 'exhibit_figure', 'ex
 // exhibit_entry.
 $field('paragraph', 'exhibit_entry', 'field_block_title', ['label' => 'Heading', 'required' => TRUE, 'description' => 'e.g. "Francisco Hernández (1514-1587)". Shows as a sub-link under the gallery in the table of contents.']);
 $field('paragraph', 'exhibit_entry', 'field_section_anchor', ['label' => 'Anchor (optional)', 'description' => 'Link fragment, e.g. "hernandez", so other pages can link to #hernandez. Defaults to the heading.']);
-$field('paragraph', 'exhibit_entry', 'field_entry_date', ['label' => 'Date (optional)', 'description' => 'e.g. "1953", "1953-06", "1953-06-20", or a range with a slash: "1953-06-20/1953-06-22", "1941/1945". Shown over the text as "June 20–22, 1953". It puts the entry on the exhibition’s timeline (a gallery set to Display: Timeline); on a wall, an entry with a date but no image or clip shows as a card with its date.']);
+$field('paragraph', 'exhibit_entry', 'field_entry_date', ['label' => 'Date (optional)', 'description' => 'e.g. "1953", "1953-06", "1953-06-20", or a range with a slash: "1953-06-20/1953-06-22", "1941/1945". Shown over the text as "June 20–22, 1953". It puts the entry on the exhibition’s timeline (a gallery set to Display: Timeline); on a wall, an entry with a date but no image or clip hangs as a label, its words read in place.']);
 $field('paragraph', 'exhibit_entry', 'field_entry_bio', ['label' => 'Biography (optional)', 'description' => 'The full biography. Long ones show their opening lines with a "Read the full biography" button.']);
 $field('paragraph', 'exhibit_entry', 'field_guide_blocks', [
   'label' => 'Content',
