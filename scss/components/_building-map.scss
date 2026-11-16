@@ -557,9 +557,11 @@ html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-m
 .pf-map__tip-floor { display: inline-flex; flex-direction: row; align-items: center; gap: .45rem; padding: 0 .6rem 0 0; border-right: 1px solid #{$pf-hairline}; color: var(--pf-map-ink); font-variant-numeric: lining-nums; white-space: nowrap; }
 /* The floors mark: the building as flat floors in the map's angle, the
    room's floor filled in the lit room's gold, the others outlined in the
-   floor ink over the panel's fill, so an upper floor hides the one below. */
+   hatch's own line (--pf-map-hatch at the walk-in swatch's opacity, as the
+   access swatch beside it) over the panel's fill, so an upper floor hides
+   the one below. */
 .pf-map__tip-floors { flex: none; width: 1rem; height: auto; overflow: visible; }
-.pf-map__tip-layer { fill: var(--pf-map-tip-solid); stroke: var(--pf-map-floor-ink); stroke-width: 1; stroke-linejoin: round; }
+.pf-map__tip-layer { fill: var(--pf-map-tip-solid); stroke: color-mix(in srgb, var(--pf-map-hatch) calc(var(--pf-map-hatch-walk-in) * 100%), transparent); stroke-width: 1; stroke-linejoin: round; }
 .pf-map__tip-layer.is-current { fill: var(--pf-map-hover); stroke: var(--pf-map-hover); }
 @media (forced-colors: active) {
   .pf-map__tip-layer { fill: Canvas; stroke: CanvasText; }
