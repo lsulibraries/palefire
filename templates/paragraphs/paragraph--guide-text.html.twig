@@ -25,6 +25,8 @@
  *   analytics-feedback.html.twig).
  * - research: the text had a "[research:<part>]" paragraph; that part of the
  *   LSU research figures follows it (includes/research-figures.html.twig).
+ * - podcast: the text had a "[podcast]" paragraph; Oral History's podcast
+ *   episodes follow it (includes/podcast.html.twig, PodcastFeed).
  * - newsletter: the text had a "[newsletter-review:<account>/<activity id>]"
  *   paragraph; that Constant Contact draft follows it, for review, with its
  *   feedback form (includes/newsletter-review.html.twig).
@@ -68,6 +70,9 @@
   {% endif %}
   {% if research %}
     {% include '@palefire/includes/research-figures.html.twig' with research only %}
+  {% endif %}
+  {% if podcast %}
+    {% include '@palefire/includes/podcast.html.twig' with podcast only %}
   {% endif %}
   {% if newsletter %}
     {% include '@palefire/includes/newsletter-review.html.twig' with newsletter|merge({ uid: 'nlr-' ~ paragraph.id() }) only %}

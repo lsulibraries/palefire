@@ -1,0 +1,67 @@
+{#
+/**
+ * @file
+ * What Endures, the Oral History podcast: the newest episode, then the next
+ * ones as ruled rows (Drupal\palefire\PodcastFeed, nightly from SoundCloud's
+ * podcast feed). Shown after a guide text whose paragraph is "[podcast]".
+ *
+ * Play opens the episode in the docked listening bar, the exhibitions' own
+ * player (js/podcast.js); nothing loads from SoundCloud until then. Each
+ * title links to the episode's SoundCloud page, for its comments and
+ * sharing. Without a pull yet: a link to the account only.
+ *
+ * Available variables:
+ * - latest: the newest episode (title, number, kicker, time, duration, mp3,
+ *   cover, link, summary), or absent before the first pull.
+ * - more: the next episodes, the same keys.
+ * - profile: the SoundCloud account's address.
+ */
+#}
+{% macro play(episode, label) %}
+  <button type="button" class="pf-podcast__play" data-pf-podcast-src="{{ episode.mp3 }}" data-pf-podcast-title="{{ episode.title }}" data-pf-podcast-kicker="{{ episode.kicker }}">
+    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-podcast__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-podcast__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg>
+    {%- if label -%}
+      <span class="pf-podcast__play-text" aria-hidden="true">{{ 'Play'|t }} · {{ episode.time }}</span>
+    {%- endif -%}
+    <span class="visually-hidden" data-pf-podcast-state>{{ 'Play @title'|t({ '@title': episode.title }) }}</span>
+  </button>
+{% endmacro %}
+{% import _self as podcast %}
+{{ attach_library('palefire/podcast') }}
+<div class="pf-podcast" id="podcast">
+<div class="pf-podcast__inner">
+  {% if latest %}
+    <article class="pf-podcast__feature" aria-labelledby="podcast-latest">
+      <img class="pf-podcast__cover" src="{{ latest.cover }}" alt="" width="500" height="500" loading="lazy" decoding="async">
+      <div class="pf-podcast__body">
+        <p class="pf-podcast__kicker">
+          <span class="visually-hidden">{{ 'Latest episode:'|t }} </span>{{ latest.kicker }} · <time datetime="{{ latest.duration }}">{{ latest.time }}</time>
+        </p>
+        <h3 class="pf-podcast__title" id="podcast-latest">
+          <a href="{{ latest.link }}" target="_blank" rel="noopener">{{ latest.title }}<span class="visually-hidden"> {{ '(on SoundCloud, opens in a new tab)'|t }}</span></a>
+        </h3>
+        {% if latest.summary %}
+          <p class="pf-podcast__summary">{{ latest.summary }}</p>
+        {% endif %}
+        {{ podcast.play(latest, true) }}
+      </div>
+    </article>
+    {% if more %}
+      <ul class="pf-podcast__list" role="list" aria-label="{{ 'Earlier episodes'|t }}">
+        {% for episode in more %}
+          <li class="pf-podcast__row">
+            {{ podcast.play(episode, false) }}
+            <div class="pf-podcast__row-text">
+              <a class="pf-podcast__row-title" href="{{ episode.link }}" target="_blank" rel="noopener">{{ episode.title }}<span class="visually-hidden"> {{ '(on SoundCloud, opens in a new tab)'|t }}</span></a>
+              <span class="pf-podcast__row-meta">{{ episode.kicker }} · <time datetime="{{ episode.duration }}">{{ episode.time }}</time></span>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+  <p class="pf-podcast__all">
+    <a href="{{ profile }}" target="_blank" rel="noopener">{{ 'Every episode on SoundCloud'|t }} <span aria-hidden="true">&#8599;</span><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+  </p>
+</div>
+</div>

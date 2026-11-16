@@ -42,12 +42,17 @@
  *   mails to the person in Who to ask, through the libanswers module).
  *   Without the Section tabs type, Record stays a section of its own and
  *   there is no Ask us.
- * - Tile showcases: "Showcase" (the digital exhibitions and the podcast,
- *   a gallery listing, right under Browse by series), "Voices in the
+ * - Tile showcases: "Showcase" (the digital exhibitions, a gallery
+ *   listing, right under Browse by series), "Voices in the
  *   Collection" (finding aids, the LDL, copies, FAQs) and "Recording Your
  *   Own" (the Center's services, as a ledger, in its tab).
  *   The tiles are the old /oralhistory page's, by node ID; one that is
  *   missing is left out and listed.
+ * - "What Endures", after Showcase: the podcast's episodes, played in the
+ *   site's own docked player (a Guide section whose text is "[podcast]";
+ *   the theme draws it from the nightly feed pull, PodcastFeed and
+ *   palefire_podcast_pull.php). The hero's podcast banner becomes the
+ *   newest episode, with Play.
  * - "Who to ask", with the Director of the Williams Center (the published
  *   Staff node whose Job title matches), when there is exactly one.
  *
@@ -225,8 +230,8 @@ $showcases = [
   [
     'title' => 'Showcase',
     'eyebrow' => 'Exhibitions',
-    'lede' => 'Digital exhibitions made from the Center’s interviews, from Mossville to Tiger Stadium, and What Endures, its podcast.',
-    'link' => ['uri' => 'https://oralhistory.blogs.lib.lsu.edu/podcast-library/', 'title' => 'All podcast episodes'],
+    'lede' => 'Digital exhibitions made from the Center’s interviews, from Mossville to Tiger Stadium.',
+    'link' => ['uri' => 'internal:/v2/oralhistory/exhibitions', 'title' => 'All exhibitions'],
     'layout' => 'masonry',
     'tiles' => [
       [$mossville, 'Mossville History Project'],
@@ -240,7 +245,6 @@ $showcases = [
       [$exhibit('rpoe', 50502), 'The Relentless Pursuit of “Equal”'],
       [$exhibit('dntume', 50501), 'Do Not Tear Up My Earth'],
       [$exhibit('football', 50500), 'Saturday Night in Tiger Stadium'],
-      [92, 'Oral History Podcast'],
       [94, 'Oral History on Facebook'],
     ],
   ],
@@ -325,6 +329,25 @@ foreach ($showcases as $spec) {
     }
   }
   $sections[] = Paragraph::create($values);
+  // What Endures, the podcast, right after Showcase (PodcastFeed).
+  if ($spec['title'] === 'Showcase' && FieldConfig::loadByName('paragraph', 'guide_section', 'field_guide_blocks')) {
+    $formats = filter_formats();
+    $podcast = [
+      'type' => 'guide_section',
+      'field_section_title' => 'What Endures',
+      'field_guide_blocks' => [Paragraph::create([
+        'type' => 'guide_text',
+        'field_block_body' => ['value' => '<p>[podcast]</p>', 'format' => isset($formats['wysiwyg']) ? 'wysiwyg' : (string) array_key_first($formats)],
+      ])],
+    ];
+    foreach (['field_section_snap', 'field_section_height', 'field_section_theme', 'field_section_toc_hide'] as $name) {
+      if (isset($values[$name]) && FieldConfig::loadByName('paragraph', 'guide_section', $name)) {
+        $podcast[$name] = $values[$name];
+      }
+    }
+    $sections[] = Paragraph::create($podcast);
+    $log[] = 'Section "What Endures": the podcast’s episodes ("[podcast]"; run palefire_podcast_pull.php once to fill it).';
+  }
 }
 
 if ($tabs_ready && $tab_blocks) {

@@ -26,9 +26,11 @@ use Drupal\palefire\AnalyticsReport;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
+use Drupal\palefire\ExhibitTimeline;
 use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\NewsletterReview;
 use Drupal\palefire\PageReview;
+use Drupal\palefire\PodcastFeed;
 use Drupal\palefire\PrTimeline;
 use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
@@ -553,6 +555,10 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
     $variables += _palefire_hero_map_banner($paragraph, $variables);
+    // Oral History: the Podcast banner is the newest episode, with Play.
+    if (($variables['hero_unit'] ?? '') === 'oral_history') {
+      PodcastFeed::heroBanner($variables);
+    }
     $variables['oral_history_series'] = isset($variables['hero_index']['series']) ? _palefire_oral_history_series($variables) : [];
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
@@ -2639,6 +2645,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['plates'] = [];
   $variables['analytics'] = NULL;
   $variables['research'] = NULL;
+  $variables['podcast'] = NULL;
   $variables['newsletter'] = NULL;
   $variables['newsletter_archive'] = NULL;
   $variables['newsletter_compare'] = NULL;
@@ -2706,6 +2713,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     if (isset($item['#text']) && preg_match($research_marker, (string) $item['#text'], $research_match)) {
       $item['#text'] = preg_replace($research_marker, '', (string) $item['#text']);
       $research = strtolower($research_match[1]);
+    }
+    // "[podcast]": Oral History's podcast episodes follow (PodcastFeed).
+    if (isset($item['#text']) && preg_match(PodcastFeed::MARKER, (string) $item['#text'])) {
+      $item['#text'] = preg_replace(PodcastFeed::MARKER, '', (string) $item['#text']);
+      $variables['podcast'] = PodcastFeed::view() ?? ['profile' => PodcastFeed::PROFILE];
+      CacheableMetadata::createFromRenderArray($variables)
+        ->addCacheTags([PodcastFeed::CACHE_TAG])
+        ->applyTo($variables);
     }
     if ($newsletter_ready && isset($item['#text']) && preg_match(NewsletterReview::MARKER, (string) $item['#text'], $newsletter_match)) {
       $item['#text'] = preg_replace(NewsletterReview::MARKER, '', (string) $item['#text']);
@@ -3600,6 +3615,18 @@ function palefire_preprocess_field(array &$variables): void {
       continue;
     }
     if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
+      // The podcast's section (a Guide section, no Eyebrow field): its rule
+      // in code, with the way to every episode at its end.
+      if (PodcastFeed::isSection($paragraph)) {
+        $cache->addCacheableDependency($paragraph);
+        $item['section']['index'] = [
+          'num' => sprintf('%02d', ++$count),
+          'label' => t('The podcast'),
+          'lede' => '',
+          'link' => ['url' => PodcastFeed::PROFILE, 'text' => t('All episodes'), 'external' => TRUE, 'hidden' => (string) t(' (on SoundCloud, opens in a new tab)')],
+        ];
+        continue;
+      }
       // A location page's parts carry theirs in code (no Eyebrow field), and
       // set their heading beside the content (aside) rather than over it.
       $location = _palefire_location_index($paragraph, $cache);
@@ -4368,6 +4395,8 @@ function _palefire_focal_point(FileInterface $file, ?int $width, ?int $height, C
  * opening; the default without a lead) or "compact".
  * wall: the wall's tiles (_palefire_exhibit_wall()) when Display is "wall",
  * else NULL.
+ * timeline: ExhibitTimeline::build() when Display is "timeline" (the
+ * library palefire/exhibit-timeline is attached), else NULL.
  * wall_lead, wall_lead_caption: the lead of a wall or a cover opening,
  * shown full screen and fixed, with the title, the entry links or a wall's
  * facts, and the opening text over its lower left (_exhibition.scss); lead
@@ -4415,8 +4444,14 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $variables['lead']['sizes'] = '(min-width: 62rem) 60vw, 100vw';
   }
 
-  // Display: "story" (default, also when empty) or "wall".
+  // Display: "story" (default, also when empty), "wall" or "timeline".
   $display = $paragraph->hasField('field_exhibit_display') ? (string) $paragraph->get('field_exhibit_display')->value : '';
+  // A timeline: the other galleries' dated entries on one rail
+  // (src/ExhibitTimeline.php), with its own CSS, loaded only here.
+  $variables['timeline'] = $display === 'timeline' ? ExhibitTimeline::build($paragraph, $cache) : NULL;
+  if ($variables['timeline']) {
+    $variables['#attached']['library'][] = 'palefire/exhibit-timeline';
+  }
   $variables['wall'] = $display === 'wall' ? _palefire_exhibit_wall($paragraph, $cache) : NULL;
   $variables['wall_lead'] = NULL;
   $variables['wall_lead_caption'] = NULL;
@@ -4466,7 +4501,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * view: its first two show (the second on hover), tagged "4 pages". A clip
  * with no image is drawn as a reel in its box (exhibit-reel.html.twig).
  *
- * An entry with a heading but no image or clip starts a sub-gallery: a
+ * An entry with a date (field_entry_date) but no image or clip is a card:
+ * its date set large on the page color ('card': ['label', 'iso']). One
+ * with a heading but no image, clip or date starts a sub-gallery: a
  * heading across the wall, with the entry's text under it, over the tiles
  * that follow (the Union Art Gallery's shows). A wall with sub-galleries
  * keeps its order (no sorting).
@@ -4538,9 +4575,13 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
         $images[] = $image;
       }
     }
-    // No image and no clip: nothing to hang. With a heading it starts a
-    // sub-gallery, its text blocks under the heading.
-    if (!$images && $speaker === NULL) {
+    // A dated entry with no image and no clip (a timeline's event) hangs as
+    // a card with its date (exhibit-page.html.twig).
+    $date = $entry->hasField('field_entry_date') ? ExhibitTimeline::parse($entry->get('field_entry_date')->value) : NULL;
+    $card = !$images && $speaker === NULL && $date ? ['label' => $date['label'], 'iso' => $date['iso']] : NULL;
+    // No image, no clip and no date: nothing to hang. With a heading it
+    // starts a sub-gallery, its text blocks under the heading.
+    if (!$images && $speaker === NULL && !$card) {
       $heading = trim((string) $entry->get('field_block_title')->value);
       if ($heading !== '') {
         $text_blocks = [];
@@ -4574,8 +4615,10 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'pages' => $pages,
       // A clip with no picture: its reel and box (exhibit-reel.html.twig),
       // 1.5 boxes wide, so the box is as tall as the row's photographs.
-      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : 1.5,
+      // A card (a dated event with no picture) is square.
+      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($card ? 1 : 1.5),
       'images' => $images,
+      'card' => $card,
     ];
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }
@@ -4650,11 +4693,14 @@ function _palefire_exhibit_entry_anchor(ParagraphInterface $entry): string {
  *
  * anchor: the heading's id, from the Anchor field or the heading, so text
  * on any gallery can link to #anchor (js/exhibition.js opens its gallery).
+ * date: field_entry_date read by ExhibitTimeline::parse() (['label',
+ * 'iso', ...]), or NULL.
  */
 function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
   $paragraph = $variables['paragraph'];
   $variables['title'] = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
   $variables['anchor'] = _palefire_exhibit_entry_anchor($paragraph);
+  $variables['date'] = $paragraph->hasField('field_entry_date') ? ExhibitTimeline::parse($paragraph->get('field_entry_date')->value) : NULL;
 }
 
 /**

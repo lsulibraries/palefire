@@ -518,7 +518,17 @@
             </li>
           {% endif %}
           {% for banner in hero_listed %}
-            <li class="pf-hero-banner"{% if loop.first %} data-pf-hero-event{% endif %}>
+            <li class="pf-hero-banner{{ banner.episode ? ' pf-hero-banner--episode' }}"{% if loop.first %} data-pf-hero-event{% endif %}>
+              {# Oral History's newest podcast episode (PodcastFeed::heroBanner()):
+                 Play beside the link, never in it, in the docked player
+                 (js/podcast.js). #}
+              {% if banner.episode %}
+                {{ attach_library('palefire/podcast') }}
+                <button type="button" class="pf-podcast__play pf-hero-banner__play" data-pf-podcast-src="{{ banner.episode.mp3 }}" data-pf-podcast-title="{{ banner.episode.title }}" data-pf-podcast-kicker="{{ banner.episode.kicker }}">
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-podcast__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-podcast__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg>
+                  <span class="visually-hidden" data-pf-podcast-state>{{ 'Play @title'|t({ '@title': banner.episode.title }) }}</span>
+                </button>
+              {% endif %}
               <a class="pf-hero-banner__link" href="{{ banner.url }}">
                 {% if banner.image %}
                   <span class="pf-hero-banner__media" aria-hidden="true">{{ banner.image }}</span>

@@ -31,6 +31,7 @@
 
 declare(strict_types=1);
 
+use Drupal\field\Entity\FieldConfig;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -145,6 +146,10 @@ if (!$image) {
 }
 
 // Galleries. -----------------------------------------------------------------
+
+// Entry dates (field_entry_date) and the Timeline display, when set up.
+$date = (bool) FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_date');
+$dated = fn (string $value) => $date ? ['field_entry_date' => $value] : [];
 
 $sections = [];
 $gallery = function (string $gallery_title, string $anchor, array $blocks) use (&$sections): void {
@@ -277,11 +282,12 @@ HTML),
 HTML),
   $note('<p><strong>' . $label('exhibit_citation') . '</strong>: the book\'s record, set like a museum label.</p>'),
   $citation('<p>Müller-Brockmann, Josef. <em>Grid Systems in Graphic Design.</em> Niggli, 1981. (Sample record for this guide.)</p>'),
-  $note('<p><strong>' . $label('exhibit_entry') . '</strong>: a person or book inside a gallery. Its heading is a link under the gallery in the table of contents; a long biography folds behind "Read the full biography".</p>'),
+  $note('<p><strong>' . $label('exhibit_entry') . '</strong>: a person or book inside a gallery. Its heading is a link under the gallery in the table of contents; a long biography folds behind "Read the full biography". Date (optional) shows under the heading, puts the entry on the exhibition’s Timeline, and on a wall an entry with a date and no image or clip hangs as a card with its date.</p>'),
   Paragraph::create([
     'type' => 'exhibit_entry',
     'field_block_title' => 'Josef Müller-Brockmann (1914–1996)',
     'field_section_anchor' => 'muller-brockmann',
+  ] + $dated('1914/1996') + [
     'field_entry_bio' => $html('<p>Swiss graphic designer and teacher in Zurich, and a leading voice of the International Typographic Style. His <em>Grid Systems in Graphic Design</em> (1981) set out the modular grid this theme follows.</p>'),
     'field_guide_blocks' => array_values(array_filter([
       $figure('<p>An example figure: the caption sits under the image, which opens full screen.</p>', 'side_start'),
@@ -292,17 +298,20 @@ HTML),
     'type' => 'exhibit_entry',
     'field_block_title' => 'Emil Ruder (1914–1970)',
     'field_section_anchor' => 'ruder',
+  ] + $dated('1914/1970') + [
     'field_entry_bio' => $html('<p>Swiss typographer who taught at the Basel School of Design. His <em>Typographie</em> (1967) argued for type set with clarity, contrast and generous white space.</p>'),
   ]),
   Paragraph::create([
     'type' => 'exhibit_entry',
     'field_block_title' => 'Armin Hofmann (1920–2020)',
     'field_section_anchor' => 'hofmann',
+  ] + $dated('1920/2020') + [
     'field_entry_bio' => $html('<p>Swiss graphic designer and Ruder’s colleague at Basel. His <em>Graphic Design Manual</em> (1965) taught form, contrast and rhythm from first principles.</p>'),
   ]),
   $image ? $note('<p><strong>' . $label('exhibit_figure') . '</strong>: one image with a caption. Its alt text comes from the media item: describe what the image shows.</p>') : NULL,
   $figure('<p>Layout: Centered in the text column.</p>', 'center'),
   $note('<p><strong>' . $label('exhibit_audio') . '</strong>: an oral history clip with its transcript. On a wall, a clip with no photo shows as an Audio only box, as tall as the photos beside it, and opens as a panel beside the page, so readers can keep scrolling the exhibition. A clip with a photo has a Hide image button on the photo: the photo goes and the clip’s panel stays open beside the page, playing on; Show image (the square icon) brings the photo back. Keep listening (the minimize line), beside Close, sends the clip to a bar at the foot of the screen, and the title in the bar opens it again where it left off.</p>'),
+  $note('<p><strong>Podcast episodes</strong>: a Text block that is only <code>[podcast]</code> shows Oral History’s podcast, What Endures: the newest episode beside the five before it, each with a Play button. Play uses the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from SoundCloud each night; there is nothing to type or update.</p>'),
   $note('<p><strong>' . $label('guide_accordion') . '</strong>: questions and details a reader can open when they need them.</p>'),
   $accordion([
     ['What belongs in an accordion?', '<p>Material most readers can skip: rules, prices, long lists.</p>'],
@@ -318,6 +327,13 @@ HTML),
 </ul>
 HTML, 'sources'),
 ]);
+
+if ($date && FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display')) {
+  $gallery('Timeline', 'timeline', [
+    $note('<p><strong>Timeline</strong>: a Gallery with Display set to Timeline lists every entry with a Date in the exhibition’s other galleries, in date order, grouped by decade, each naming its gallery. A filled dot means the entry has a picture or clip; an open ring, text only. Each opens its entry. Write dates as 1953, 1953-06, 1953-06-20, or a range with a slash: 1941/1945. Below, the three designers from Exhibition blocks.</p>'),
+  ]);
+  $sections[array_key_last($sections)]->set('field_exhibit_display', 'timeline');
+}
 
 if (ParagraphsType::load('guide_flow')) {
   $gallery('Guide blocks', 'guide-blocks', [

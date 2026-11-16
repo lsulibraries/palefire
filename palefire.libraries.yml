@@ -573,6 +573,16 @@ public-notes:
     - core/drupal.announce
     - core/once
 
+# An exhibition's timeline (a gallery set to Display "timeline";
+# includes/exhibit-timeline.html.twig, Drupal\palefire\ExhibitTimeline).
+# Attached by palefire_preprocess_paragraph__exhibit_page() only when the
+# gallery has one. Styles only: its links go through js/exhibition.js.
+exhibit-timeline:
+  version: 1.0.0
+  css:
+    component:
+      css/exhibit-timeline.css: {}
+
 # Public relations timeline: items anyone can leave a note or a thumb on, and
 # the notes staff approved (includes/pr-timeline.html.twig,
 # Drupal\palefire\PrTimeline). Attached by that template. Styles: its own
@@ -624,3 +634,18 @@ newsletter-review:
     - core/drupal.debounce
     - core/once
     - palefire/public-notes
+
+# Oral History podcast (What Endures): the episodes and the docked player
+# (includes/podcast.html.twig, js/podcast.js, src/PodcastFeed.php).
+# Attached by that template and the hero's episode banner. Styles: its own
+# entry (scss/podcast.scss); the bar and player are style.css's (.pf-listen).
+podcast:
+  version: 1.0.0
+  css:
+    component:
+      css/podcast.css: {}
+  js:
+    js/podcast.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
