@@ -11,14 +11,14 @@
  * Copy the "storm-web" folder's masters/ (41 JPEGs, up to 2560 px) and
  * audio/ (41 M4A clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_tempests.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/tempests
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_tempests.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/storm
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The JPEG masters.
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/tempests
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/storm
  *
  * The text is carried over from the old site’s pages, in data/tempests.json:
  * its one list of 42 clips is grouped by era into five galleries, each a

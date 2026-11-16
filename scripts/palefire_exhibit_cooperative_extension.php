@@ -12,14 +12,14 @@
  * Copy the "LSUAG-web" folder's masters/ (33 JPEGs, up to 2560 px) and
  * audio/ (12 M4A clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_cooperative_extension.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/cooperative-extension
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_cooperative_extension.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/lsuag
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The JPEG masters.
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/cooperative-extension
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/lsuag
  *
  * The text is carried over from the old site's pages, in
  * data/cooperative-extension.json: Oral Histories, a wall (Display "wall")

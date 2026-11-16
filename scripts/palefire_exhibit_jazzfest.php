@@ -10,14 +10,14 @@
  * Copy the "jf-web" folder's masters/ (10 JPEGs, 2560 px) and audio/
  * (7 M4A clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_jazzfest.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/jazzfest
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_jazzfest.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/jf
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The 2560 px JPEG masters.
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/jazzfest
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/jf
  *
  * The text is carried over from the old site's pages, in data/jazzfest.json:
  * Voices of the Festival, a wall of one entry per clip (photo, player and

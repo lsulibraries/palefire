@@ -3,8 +3,9 @@
 /**
  * @file
  * Moves the oral history exhibitions already built to
- * /v2/oralhistory/exhibitions/<name>, from /v2/special/exhibitions/<name>
- * or /v2/exhibitions/<name>.
+ * /v2/oralhistory/exhibitions/<folder>, the old site's folder name
+ * lowercased (jf, gu272, storm...), from /v2/oralhistory/exhibitions/<name>,
+ * /v2/special/exhibitions/<name> or /v2/exhibitions/<name>.
  *
  *   drush php:script scripts/palefire_oral_history_exhibit_paths.php
  *   drush php:script scripts/palefire_oral_history_exhibit_paths.php -- apply=1
@@ -32,28 +33,31 @@ foreach ((isset($extra) && is_array($extra)) ? $extra : [] as $arg) {
 }
 $apply = ($args['apply'] ?? '') === '1';
 
+// The name each was built under so far => its address, the old site's
+// folder (lib.lsu.edu/sites/all/files/oralhistory/presentations/<folder>),
+// lowercased.
 $names = [
-  'mossville',
-  'do-not-tear-up-my-earth',
-  'georgetown-272',
-  'graphic-design',
-  'integrating-lsu',
-  'jazzfest',
-  'klsu',
-  'lady-in-the-south',
-  'tempests',
-  'tiger-stadium',
-  'cooperative-extension',
+  'mossville' => 'mossvilleexhibit',
+  'do-not-tear-up-my-earth' => 'dntume',
+  'georgetown-272' => 'gu272',
+  'graphic-design' => 'graphicdesign',
+  'integrating-lsu' => 'rpoe',
+  'jazzfest' => 'jf',
+  'klsu' => 'klsu',
+  'lady-in-the-south' => 'lady',
+  'tempests' => 'storm',
+  'tiger-stadium' => 'football',
+  'cooperative-extension' => 'lsuag',
 ];
-$old_bases = ['/v2/special/exhibitions/', '/v2/exhibitions/'];
+$old_bases = ['/v2/oralhistory/exhibitions/', '/v2/special/exhibitions/', '/v2/exhibitions/'];
 $new_base = '/v2/oralhistory/exhibitions/';
 
 $aliases = \Drupal::entityTypeManager()->getStorage('path_alias');
 $redirects = \Drupal::moduleHandler()->moduleExists('redirect') ? \Drupal::entityTypeManager()->getStorage('redirect') : NULL;
 $prefix = $apply ? '' : '[dry run] ';
 
-foreach ($names as $name) {
-  $new = $new_base . $name;
+foreach ($names as $name => $folder) {
+  $new = $new_base . $folder;
   if ($aliases->loadByProperties(['alias' => $new])) {
     echo "{$prefix}$name: already at $new." . PHP_EOL;
     continue;

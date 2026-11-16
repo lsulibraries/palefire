@@ -11,7 +11,7 @@
  * Copy the "LADY-web" folder’s masters/ (45 JPEGs) and audio/ (15 M4A
  * clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_lady_in_the_south.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/lady-in-the-south
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_lady_in_the_south.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/lady
  *   drush cr
  *
  * Optional arguments after "--":
@@ -20,7 +20,7 @@
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS;
  *                         scripts/palefire_exhibit_media.py).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/lady-in-the-south
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/lady
  *
  * The text is carried over from the old one-page site, in
  * data/lady-in-the-south.json: two walls (Display "wall") of one entry per

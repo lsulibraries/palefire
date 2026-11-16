@@ -12,14 +12,14 @@
  * Copy the "RPOE-web" folder's masters/ (28 JPEGs) and audio/ (32 M4A
  * clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_integrating_lsu.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/integrating-lsu
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_integrating_lsu.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/rpoe
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The JPEG masters (most sources are web-sized, under 1000 px).
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS; scripts/palefire_exhibit_media.py).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/integrating-lsu
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/rpoe
  *
  * The text is carried over from the listening station’s TimelineJS data
  * (main/<timeline>.jsonp) and its About page, in data/integrating-lsu.json. Three

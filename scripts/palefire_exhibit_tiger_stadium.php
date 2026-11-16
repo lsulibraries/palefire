@@ -12,7 +12,7 @@
  * Copy the "football-web" folder's masters/ (63 JPEGs) and audio/ (64 M4A
  * clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_tiger_stadium.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/tiger-stadium
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_tiger_stadium.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/football
  *   drush cr
  *
  * Optional arguments after "--":
@@ -21,7 +21,7 @@
  *                         enlarged).
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS; scripts/palefire_exhibit_media.py).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/tiger-stadium
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/football
  *
  * The text is carried over from the old site's pages, in
  * data/tiger-stadium.json: one gallery per section of its menus (The Game:

@@ -11,14 +11,14 @@
  * Copy the "GU272-web" folder's masters/ (24 JPEGs, 2560 px or smaller)
  * and audio/ (23 M4A clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_georgetown_272.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/georgetown-272
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_georgetown_272.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/gu272
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The JPEG masters.
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS; scripts/palefire_exhibit_media.py).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/georgetown-272
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/gu272
  *
  * The text is carried over from the old site's pages, in
  * data/georgetown-272.json: one gallery per sub-group of its History and

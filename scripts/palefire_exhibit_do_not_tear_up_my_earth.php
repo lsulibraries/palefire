@@ -12,14 +12,14 @@
  * Copy the "DNTUME-web" folder’s masters/ (14 JPEGs) and audio/ (9 M4A
  * clips) to the server first, then:
  *
- *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_do_not_tear_up_my_earth.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/do-not-tear-up-my-earth
+ *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_do_not_tear_up_my_earth.php -- images=/path/to/masters audio=/path/to/audio path=/v2/oralhistory/exhibitions/dntume
  *   drush cr
  *
  * Optional arguments after "--":
  *   images=<folder>       Required. The JPEG masters.
  *   audio=<folder>        Required. The M4A clips (AAC 64 kbps mono, -16 LUFS).
  *   format=<text format>  Text format for the text (default: WYSIWYG).
- *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/do-not-tear-up-my-earth
+ *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/dntume
  *
  * The text is carried over from the old one-page presentation, in
  * data/do-not-tear-up-my-earth.json: its three chapters (Awakening,
