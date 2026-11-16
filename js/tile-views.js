@@ -17,6 +17,13 @@
  * gets a name for the length of the change only, so it never meets the
  * page transitions' own. None with prefers-reduced-motion or the Settings
  * drawer's "Reduce motion" (html.pf-a11y-motion): the view just changes.
+ *
+ * Oral History's series (.pf-series__views, landing.html.twig) open
+ * folded: two rows of the grid, or five of the list, at the columns of the
+ * moment, then a "Show all" button that opens the rest in place, the first
+ * of them taking focus. The fold follows the view and the width until it
+ * is opened. Without this script every series shows and there is no
+ * button.
  */
 (function (Drupal, once) {
   'use strict';
@@ -89,6 +96,63 @@
     });
   };
 
+  // Rows shown while folded, by view.
+  const FOLD_ROWS = { grid: 2, list: 5 };
+
+  const fold = (wrapper) => {
+    const list = wrapper.querySelector('.pf-series__list');
+    const items = list ? Array.from(list.children) : [];
+    if (!list || items.length < 2) {
+      return;
+    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-tiles__view pf-series__more';
+    button.setAttribute('aria-expanded', 'false');
+    if (!list.id) {
+      list.id = 'pf-series-list-' + (++uid);
+    }
+    button.setAttribute('aria-controls', list.id);
+    button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span></span>';
+    button.querySelector('span').textContent = Drupal.t('Show all @count series', { '@count': items.length });
+    list.after(button);
+
+    let open = false;
+    const apply = () => {
+      if (open) {
+        return;
+      }
+      const cols = getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+      const shown = cols * (FOLD_ROWS[wrapper.dataset.pfView] || FOLD_ROWS.grid);
+      items.forEach((item, i) => {
+        item.hidden = i >= shown;
+      });
+      button.hidden = shown >= items.length;
+    };
+
+    button.addEventListener('click', () => {
+      open = true;
+      const first = items.find((item) => item.hidden);
+      items.forEach((item) => {
+        if (item.hidden) {
+          item.hidden = false;
+          item.classList.add('is-unfolding');
+        }
+      });
+      button.remove();
+      const link = first && first.querySelector('a');
+      if (link) {
+        link.focus({ preventScroll: true });
+      }
+    });
+
+    apply();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(apply).observe(list);
+    }
+    new MutationObserver(apply).observe(wrapper, { attributes: true, attributeFilter: ['data-pf-view'] });
+  };
+
   Drupal.behaviors.palefireTileViews = {
     attach(context) {
       once('pf-tile-views', '.pf-tiles--masonry, [data-pf-views]', context).forEach((wrapper) => {
@@ -103,6 +167,7 @@
           button.addEventListener('click', () => change(wrapper, button.dataset.pfView));
         });
       });
+      once('pf-series-fold', '.pf-series__views', context).forEach(fold);
     },
   };
 })(Drupal, once);
