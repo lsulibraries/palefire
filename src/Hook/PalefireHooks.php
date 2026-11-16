@@ -754,9 +754,9 @@ class PalefireHooks {
       $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
     }
 
-    // Title style: "serif" (the default, also when the field is empty or
-    // not yet added) or "sans".
-    $title_style = self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif';
+    // Title style: "sans" (the default, also when the field is empty or
+    // not yet added) or "serif" when an editor picks it.
+    $title_style = self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans';
 
     // Program pages: "Label: value" lines, split at a colon and a space
     // within the first 40 characters, so "Hours: 9:00" and a URL in a value
@@ -1005,7 +1005,7 @@ class PalefireHooks {
         'note' => $featured ? $note : '',
         'unpublished' => !$node->isPublished(),
         // Its title page's face, as in exhibitHead().
-        'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'sans' ? 'sans' : 'serif',
+        'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans',
         'cover' => $image($node, 'field_exhibit_cover'),
         'changed' => (int) $node->getChangedTime(),
       ];
@@ -1064,7 +1064,7 @@ class PalefireHooks {
           'featured' => $featured,
           'note' => $featured ? $note : '',
           'unpublished' => !$post->isPublished(),
-          'title_style' => 'serif',
+          'title_style' => 'sans',
           'cover' => $image($post, 'field_image'),
           'changed' => (int) $post->getChangedTime(),
         ];

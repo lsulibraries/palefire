@@ -374,7 +374,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   color: var(--pf-showcase-fg);
 }
 
-// The title in its exhibition's face (the title page's: serif by default).
+// The title in its exhibition's face (the title page's: sans by default).
 .pf-showcase__title {
   font-size: clamp(2rem, 1.4rem + 1.8vw, 3rem);
   line-height: 1.05;

@@ -473,6 +473,7 @@ HTML),
 <li>Drafted an Oral History homepage at /v2/oralhistory, built like the Special Collections one. Its right-hand column opens on the Hill building map with the Oral History room lit; its search looks in the oral histories only; its Quick Start gives three ways in (listen online, order a copy, meet with the Center’s staff); and a new Browse by series lists every series with how many interviews it holds, each opening that series in Combined Search. The videos already chosen for the old draft play as a faint background behind the whole intro, rather than in the right-hand column, which keeps the map. Below come the collection, the Center’s services, the digital exhibitions and the podcast, and who to ask.</li>
 <li>Thumbs up and down on the PR timeline’s items and on the newsletter review page’s stories, counted right away; the review page now also shows the notes the team approves, under the draft, behind the same Show notes switch. Sample notes show what it looks like.</li>
 <li>A thumb can now be changed: choose the other one to switch, or the same one again to take it back.</li>
+<li>Exhibition titles are now in the site’s plain sans type by default, on the title page and in the Exhibitions list. An exhibition keeps the elegant serif only when its editor picks Serif under Exhibition title style.</li>
 </ul>
 HTML),
 ]);

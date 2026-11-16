@@ -1102,7 +1102,7 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 // laptop at 125%, about 730px) the title page, buttons and Scroll cue fit
 // the first screen; from about 900px tall the width terms decide.
 // The Exhibition title style field (PalefireHooks::exhibitHead()) picks the
-// face: --serif (the default) or --sans. Settings > Easy-to-read font puts
+// face: --sans (the default) or --serif. Settings > Easy-to-read font puts
 // either in that font, at the sans display weight and tracking.
 .pf-exhibit-head .pf-exhibit-cover__title {
   display: grid;

@@ -24,8 +24,9 @@
  *   added 2026-10-21). An earlier version made a checkbox,
  *   field_exhibit_physical, in its place: it is no longer used, and can be
  *   deleted in Manage fields. field_exhibit_title_style (added
- *   2026-10-29): the title in Serif (Playfair Display, the default when
- *   empty) or Sans (the site's display sans). For program pages (added
+ *   2026-10-29): the title in Sans (the site's display sans, the default
+ *   when empty; serif until 2026-11-16) or Serif (Playfair Display). For
+ *   program pages (added
  *   2026-10-30): field_exhibit_kicker (the word over the title, in place
  *   of "Exhibition"), field_exhibit_keyfacts (any number of "Label: value"
  *   lines, e.g. "Deadline: June 1") and field_exhibit_action (a link shown
@@ -484,7 +485,7 @@ $field('node', $bundle, 'field_exhibit_physical_note', [
 ]);
 $field('node', $bundle, 'field_exhibit_title_style', [
   'label' => 'Exhibition title style',
-  'description' => 'Exhibition pages only: the typeface of the title on the title page. Empty means Serif.',
+  'description' => 'Exhibition pages only: the typeface of the title on the title page. Empty means Sans.',
 ]);
 $field('node', $bundle, 'field_exhibit_kicker', [
   'label' => 'Title page label (optional)',
