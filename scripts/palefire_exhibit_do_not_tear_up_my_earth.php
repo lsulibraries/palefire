@@ -9,7 +9,7 @@
  * unpublished Modular page in exhibition mode. Run palefire_exhibit_setup.php
  * first.
  *
- * Copy the "DNTUME-web" folder’s masters/ (13 JPEGs) and audio/ (9 M4A
+ * Copy the "DNTUME-web" folder’s masters/ (14 JPEGs) and audio/ (9 M4A
  * clips) to the server first, then:
  *
  *   drush php:script themes/custom/palefire/scripts/palefire_exhibit_do_not_tear_up_my_earth.php -- images=/path/to/masters audio=/path/to/audio path=/v2/special/exhibitions/do-not-tear-up-my-earth
