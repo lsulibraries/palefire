@@ -963,10 +963,6 @@
       if (audio) {
         audio.setAttribute('aria-labelledby', 'pf-viewer-title');
         initAudio(wrap);
-        // An entry's clip only, not a picture opened from the text.
-        if (!wallState.loose) {
-          minimizeButton(wrap);
-        }
       }
       // The title and its credit, small, over the pinned player once the
       // view's own has scrolled away, running by as a marquee while the
@@ -1042,7 +1038,8 @@
   /* ---------------------------------------------------------------------
    * Listening bar
    *
-   * A clip in the object view can be minimized (its player's Minimize):
+   * A clip in the object view can be minimized (Keep listening, in the
+   * view's top row):
    * the view closes and the clip plays on in a slim bar at the foot of the
    * screen (.pf-listen, _exhibition.scss), so the reader goes on through
    * the exhibition. The bar holds the view's own player, moved there whole
@@ -1173,14 +1170,18 @@
     }
   }, true);
 
-  // The player's Minimize, after its own controls (initAudio()).
-  function minimizeButton(wrap) {
+  // Keep listening, in the view's top row beside Close: the playing clip
+  // (else the entry's first) into the bar.
+  function keepButton(view) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'pf-audio__min';
-    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 3.5h11v9h-11z"/><path d="M5 10h6"/></svg><span class="visually-hidden">' + Drupal.t('Minimize: keep listening while you browse') + '</span>';
-    button.addEventListener('click', () => minimize(wrap));
-    wrap.append(button);
+    button.className = 'pf-viewer__act pf-viewer__keep';
+    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 3.5h11v9h-11z"/><path d="M5 10h6"/></svg><span>' + Drupal.t('Keep listening') + '</span>';
+    button.addEventListener('click', () => {
+      const wraps = Array.from(view.body.querySelectorAll('[data-pf-audio]'));
+      minimize(wraps.find((wrap) => wrap.classList.contains('is-playing')) || wraps[0]);
+    });
+    return button;
   }
 
 
@@ -1515,7 +1516,10 @@
 
     view.count.textContent = Drupal.t('@n of @total', { '@n': wallState.index + 1, '@total': n });
     fillScale(tile);
-    viewer.sync({ steps: n });
+    // A clip: the reader may hide the picture, or minimize the clip, and go
+    // on through the exhibition while it plays.
+    const clip = !!view.body.querySelector('[data-pf-audio] audio');
+    viewer.sync({ steps: n, hide: clip, extra: clip ? [keepButton(view)] : [] });
   }
 
   /* ---------------------------------------------------------------------
@@ -1679,6 +1683,10 @@
       if (!viewer.inSight(thumb, headerOffset())) {
         thumb = null;
       }
+    }
+    else if (viewer.isSide()) {
+      // A side panel: the reader has gone on down the page; no jump back.
+      thumb = null;
     }
     else if (animate && thumb && viewer.canMorph()) {
       const r = thumb.getBoundingClientRect();

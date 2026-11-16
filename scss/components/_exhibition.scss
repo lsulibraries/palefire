@@ -2527,8 +2527,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   color: var(--pf-exhibit-muted);
 }
 
-.pf-audio__mute,
-.pf-audio__min {
+.pf-audio__mute {
   display: grid;
   place-items: center;
   width: 2.75rem;
@@ -2559,12 +2558,6 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     outline: 2px solid var(--bs-body-color);
     outline-offset: 2px;
   }
-}
-
-// Minimize (the object view's player only, js/exhibition.js): the clip
-// plays on in the listening bar (.pf-listen, below).
-.pf-audio__min {
-  margin-inline-start: 0;
 }
 
 .pf-audio.is-muted {
@@ -2707,8 +2700,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     height: 2.5rem;
   }
 
-  .pf-audio__now,
-  .pf-audio__min {
+  .pf-audio__now {
     display: none;
   }
 }

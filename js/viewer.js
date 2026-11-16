@@ -31,6 +31,12 @@
  * through it with the panel open. Esc still closes it from inside. Shown
  * the other way while open (a picture opened from the page), the dialog
  * reopens in that mode, without the handler hearing a close.
+ *
+ * sync({ hide: true }) offers the reader the same switch: Hide image on the
+ * stage folds the stage away and leaves the panel open beside the page
+ * (whatever plays in it plays on), and Show image in the panel's top row
+ * brings the stage back. sync({ extra }) puts a page's own buttons in that
+ * row, before Close (.pf-viewer__act, the same labelled style).
  */
 (function (Drupal) {
   'use strict';
@@ -47,6 +53,8 @@
     next: '<path d="M6 3.5 10.5 8 6 12.5"/>',
     zoom: '<circle cx="7" cy="7" r="4.25"/><path d="M10.2 10.2 13.5 13.5M5 7h4"/><path class="pf-viewer__plus" d="M7 5v4"/>',
     panel: '<path d="M2.5 3.5h11v9h-11z"/><path class="pf-viewer__side" d="M9.5 3.5v9"/><path class="pf-viewer__foot" d="M2.5 9.5h11"/>',
+    hide: '<path d="M2.5 3.5h11v9h-11z"/><path d="M9.5 3.5v9M4.5 8h3M6 6.5 7.5 8 6 9.5"/>',
+    image: '<path d="M2.5 3.5h11v9h-11z"/><path d="m2.5 11 3.5-3.5 3 3 1.5-1.5 3 3"/>',
   };
 
   function icon(name) {
@@ -81,6 +89,7 @@
       '<div class="pf-viewer__stage">'
       + '<div class="pf-viewer__media"></div>'
       + '<div class="pf-viewer__tools">'
+      + '<button type="button" class="pf-viewer__tool pf-viewer__hide" hidden>' + icon('hide') + '<span>' + Drupal.t('Hide image') + '</span></button>'
       + '<button type="button" class="pf-viewer__tool pf-viewer__zoom" aria-pressed="false">' + icon('zoom') + '<span class="visually-hidden">' + Drupal.t('Zoom') + '</span></button>'
       + '<button type="button" class="pf-viewer__tool pf-viewer__info" aria-controls="pf-viewer-panel">' + icon('panel') + '<span class="visually-hidden">' + Drupal.t('Text beside the image') + '</span></button>'
       + '<button type="button" class="pf-viewer__tool pf-viewer__shut">' + icon('close') + '<span class="visually-hidden">' + Drupal.t('Close') + '</span></button>'
@@ -91,7 +100,11 @@
       + '<div class="pf-viewer__panel" id="pf-viewer-panel">'
       + '<div class="pf-viewer__top">'
       + '<p class="pf-viewer__count" aria-live="polite"></p>'
+      + '<div class="pf-viewer__actions">'
+      + '<span class="pf-viewer__extra"></span>'
+      + '<button type="button" class="pf-viewer__act pf-viewer__unhide" hidden>' + icon('image') + '<span>' + Drupal.t('Show image') + '</span></button>'
       + '<button type="button" class="pf-viewer__close">' + icon('close') + '<span>' + Drupal.t('Close') + '</span></button>'
+      + '</div>'
       + '</div>'
       + '<h2 class="pf-viewer__title" id="pf-viewer-title"></h2>'
       + '<div class="pf-viewer__label pf-guide-prose"></div>'
@@ -109,6 +122,9 @@
       panel: dialog.querySelector('.pf-viewer__panel'),
       zoom: dialog.querySelector('.pf-viewer__zoom'),
       info: dialog.querySelector('.pf-viewer__info'),
+      hide: dialog.querySelector('.pf-viewer__hide'),
+      unhide: dialog.querySelector('.pf-viewer__unhide'),
+      extra: dialog.querySelector('.pf-viewer__extra'),
       steps: dialog.querySelectorAll('.pf-viewer__step'),
     };
     const step = (delta) => {
@@ -122,6 +138,8 @@
     dialog.querySelector('.pf-viewer__close').addEventListener('click', shut);
     dialog.querySelector('.pf-viewer__shut').addEventListener('click', shut);
     parts.info.addEventListener('click', () => setFull(!dialog.classList.contains('is-full'), true));
+    parts.hide.addEventListener('click', () => setSide(true));
+    parts.unhide.addEventListener('click', () => setSide(false));
     parts.zoom.addEventListener('click', () => {
       if (handler.zoom) {
         handler.zoom();
@@ -214,8 +232,13 @@
     });
     // Also run straight after close(): a dialog closed inside a view
     // transition's update doesn't always fire "close" (Chrome, when the
-    // transition is skipped).
-    dialog.addEventListener('close', closed);
+    // transition is skipped). "close" comes a task later, so a dialog open
+    // again by then was only reopened the other way (setSide(), show()).
+    dialog.addEventListener('close', () => {
+      if (!dialog.open) {
+        closed();
+      }
+    });
     return parts;
   }
 
@@ -293,17 +316,50 @@
     }
   }
 
+  // The stage folded away, the panel left open beside the page (on), or
+  // the stage back (off): the dialog reopens the other way, its content
+  // untouched, so a clip in the panel plays on. Focus goes to the button
+  // that switches back.
+  function setSide(on) {
+    if (!view || !view.dialog.open || !!view.side === on) {
+      return;
+    }
+    view.dialog.close();
+    view.side = on;
+    view.switched = on;
+    view.dialog.classList.toggle('is-side', on);
+    if (on) {
+      ROOT.classList.remove('pf-viewer-open');
+      view.dialog.show();
+    }
+    else {
+      ROOT.classList.add('pf-viewer-open');
+      view.dialog.showModal();
+    }
+    view.hide.hidden = on || !view.canHide;
+    view.unhide.hidden = !on;
+    setFull(!on && (view.bare || savedFull()), false);
+    (on ? view.unhide : view.hide).focus();
+  }
+
   // After the page has filled the parts. steps: how many things the arrows
   // step through (under 2, no arrows). bare: nothing in the panel worth a
   // column, so it stays folded and its button goes. zoom: the Zoom button
-  // shows (default: when the stage has something zoomable).
-  function sync({ steps = 0, bare = false, zoom: zoomable } = {}) {
+  // shows (default: when the stage has something zoomable). hide: Hide
+  // image shows (the reader may want the panel alone). extra: the page's
+  // own buttons for the panel's top row.
+  function sync({ steps = 0, bare = false, zoom: zoomable, hide = false, extra = [] } = {}) {
     view.steps.forEach((button) => {
       button.hidden = steps < 2;
     });
     view.zoom.hidden = zoomable === undefined ? !view.media.querySelector('.pf-viewer__zoomable') : !zoomable;
     view.zoom.setAttribute('aria-pressed', 'false');
     view.info.hidden = bare;
+    view.bare = bare;
+    view.canHide = hide;
+    view.hide.hidden = !hide || view.side;
+    view.unhide.hidden = !(view.side && view.switched);
+    view.extra.replaceChildren(...extra);
     // A side panel is the text alone: never folded away.
     setFull(!view.side && (bare || savedFull()), false);
     view.panel.scrollTop = 0;
@@ -347,6 +403,7 @@
       parts.dialog.close();
     }
     parts.side = side;
+    parts.switched = false;
     parts.dialog.className = 'pf-viewer' + (kind ? ' pf-viewer--' + kind : '') + (side ? ' is-side' : '') + (parts.dialog.classList.contains('is-full') ? ' is-full' : '');
     const open = () => {
       fill(parts);
@@ -412,6 +469,7 @@
     destroy: destroy,
     icon: icon,
     canMorph: canMorph,
+    setSide: setSide,
     inSight: inSight,
     isOpen: () => !!view && view.dialog.open,
     isSide: () => !!view && view.dialog.open && !!view.side,
