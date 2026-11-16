@@ -618,18 +618,32 @@
       svg.appendChild(marker);
 
       // The name's cut-out (_building-map.scss, .pf-map__knock): a black
-      // rect in the room's hatch mask around the name's letters, with an
-      // even margin. It carries the name's --x/--y and .is-active, so CSS
-      // gives it the same angle and lift.
+      // band in the room's hatch mask through the name's letters, room edge
+      // to room edge. It carries the name's --x/--y and .is-active, so CSS
+      // gives it the same angle and lift. The name stands upright (its
+      // sides stay vertical) while the room's sides slope, so a box just
+      // around the letters ended in vertical cuts that read as a tear: the
+      // band runs long and is clipped to the room's own outline instead,
+      // so its ends follow the room's edges. The mask is shared by every
+      // room's hatch, so the clip also keeps it off the other rooms.
       const hatch = hereRegion.querySelector('.pf-map__hatch');
       const maskRef = hatch && /#([^)"']+)/.exec(hatch.getAttribute('mask') || '');
       const hatchMask = maskRef && document.getElementById(maskRef[1]);
       let knock = null;
       if (hereLabel && hatchMask) {
+        const clip = document.createElementNS(SVG_NS, 'clipPath');
+        clip.id = maskRef[1] + '-here-clip';
+        clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
+        const outline = document.createElementNS(SVG_NS, 'path');
+        outline.setAttribute('d', hatch.getAttribute('d') || '');
+        clip.appendChild(outline);
+        const band = document.createElementNS(SVG_NS, 'g');
+        band.setAttribute('clip-path', 'url(#' + clip.id + ')');
         knock = document.createElementNS(SVG_NS, 'rect');
         knock.setAttribute('class', 'pf-map__knock');
         knock.setAttribute('fill', '#000');
-        hatchMask.appendChild(knock);
+        band.appendChild(knock);
+        hatchMask.append(clip, band);
         const follow = () => {
           knock.setAttribute('style', hereLabel.getAttribute('style') || '');
           knock.classList.toggle('is-active', hereLabel.classList.contains('is-active'));
@@ -637,16 +651,18 @@
         follow();
         new MutationObserver(follow).observe(hereLabel, { attributes: true, attributeFilter: ['class', 'style'] });
       }
-      // From the letters themselves (not the line box or the trailing
-      // letter-spacing), in the name's own units: cap height over each
-      // baseline, the first glyph's left to the last glyph's right.
+      // From the letters themselves (not the line box), in the name's own
+      // units: cap height over each baseline, with an even margin above
+      // and below. Across, it runs far past the letters both ways; the
+      // room's outline (the clip) ends it.
       const sizeKnock = () => {
         if (!knock) return;
         const cs = getComputedStyle(hereLabel);
         const em = parseFloat(cs.fontSize) || 62;
         const spacing = parseFloat(cs.letterSpacing) || 0;
         const cap = em * 0.72;
-        const pad = em * 0.7;
+        const pad = em * 0.65;
+        const reach = 4000;
         const box = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
         const lines = hereLabel.querySelectorAll('tspan');
         (lines.length ? [...lines] : [hereLabel]).forEach((line) => {
@@ -662,9 +678,9 @@
           }
         });
         if (!Number.isFinite(box.left)) return;
-        knock.setAttribute('x', (box.left - pad).toFixed(1));
+        knock.setAttribute('x', (box.left - reach).toFixed(1));
         knock.setAttribute('y', (box.top - pad).toFixed(1));
-        knock.setAttribute('width', (box.right - box.left + pad * 2).toFixed(1));
+        knock.setAttribute('width', (box.right - box.left + reach * 2).toFixed(1));
         knock.setAttribute('height', (box.bottom - box.top + pad * 2).toFixed(1));
       };
 
