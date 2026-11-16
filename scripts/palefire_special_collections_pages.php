@@ -292,7 +292,6 @@ HTML),
 <h3>Finding manuscripts</h3>
 <ul>
 <li><a href="/v2/special/guides/special-collections">How to Use Special Collections</a>: from a collection’s finding aid down to the box and folder you need.</li>
-<li><a href="https://lib.lsu.edu/special/manuscriptsubjectguides">Manuscript Subject Guides</a>: the manuscripts on a topic, gathered in one list.</li>
 <li><a href="/v2/search?mode=special">Combined Search</a>: catalog records and PDF finding aids, searched together.</li>
 </ul>
 HTML),
@@ -391,7 +390,7 @@ $pages['books'] = [
   'galleries' => fn () => [
     $gallery('Finding books', 'finding-books', [
       $text(<<<'HTML'
-<p>Every book in Special Collections is in the catalog, and you can search it with the other Special Collections sources in <a href="/v2/search?mode=special">Combined Search</a>. Need help starting? See <a href="https://lib.lsu.edu/special/research/find-books">Tips for Finding Books</a>.</p>
+<p>Every book in Special Collections is in the catalog, and you can search it with the other Special Collections sources in <a href="/v2/search?mode=special">Combined Search</a>.</p>
 <p>Many rare books on the history and culture of Louisiana belong to the <a href="/v2/special/llmvc">Louisiana and Lower Mississippi Valley Collections</a>, whose 50,000 published items are described there.</p>
 <p>Teaching? Librarians build class sessions around rare books, from the history of printing to books as material culture. See <a href="/v2/special/programs/teaching">Teaching with Special Collections</a>.</p>
 HTML),
@@ -416,7 +415,7 @@ HTML),
           $figure('books-audubon-crane', 'John James Audubon, Whooping Crane, pen and ink over pencil, for the first octavo edition of Birds of America (1840–1844). John James Audubon Drawings and Proofs.', 'center'),
           $figure('books-stones-iris', 'Margaret Stones, Virginia Iris, watercolor. Native Flora of Louisiana.', 'center'),
         ], 'Both are on the Louisiana Digital Library with the rest of their collections.'),
-        $text('<p>See them in person on <a href="/special/audubon">Audubon Day</a>, when the double elephant folio is shown, or online in <a href="/v2/special/exhibitions/audubon">John James Audubon in Louisiana</a>.</p>'),
+        $text('<p>See them in person on Audubon Day, when the double elephant folio is shown, or online in <a href="/v2/special/exhibitions/audubon">John James Audubon in Louisiana</a>.</p>'),
       ]),
     ]),
 
