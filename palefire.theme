@@ -532,6 +532,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     }
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
+    $variables += _palefire_hero_map_banner($paragraph, $variables);
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -619,6 +620,60 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
   }
   $cache->applyTo($variables);
   return $banners;
+}
+
+/**
+ * The Landing hero's unit and map banner, from its map's Here room.
+ *
+ * A hero whose Building map marks a room "here" (field_map_here, e.g.
+ * hill_memorial.oral_history) is the homepage of the unit in that room
+ * (/v2/oralhistory, scripts/palefire_oral_history_page.php):
+ * - hero_unit: the room's key ('oral_history'), or ''. In
+ *   includes/landing.html.twig it picks that unit's search, buttons and
+ *   Quick Start; '' keeps Special Collections'.
+ * - hero_map_banner: the first of the banners, before the configured ones,
+ *   or NULL. Its picture is the building's drawing with the room lit
+ *   (static: no controls in it), so the column rests on where the unit is.
+ *   It links down to the map section. Keys: template, spaces (the room
+ *   alone, without its link), lit, title, floor, building, anchor.
+ *
+ * @return array
+ *   ['hero_unit' => string, 'hero_map_banner' => ?array].
+ */
+function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variables): array {
+  $none = ['hero_unit' => '', 'hero_map_banner' => NULL];
+  $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
+  if (!$map instanceof ParagraphInterface || !$map->isPublished() || !$map->hasField('field_map_here')) {
+    return $none;
+  }
+  $here = trim((string) $map->get('field_map_here')->value);
+  if ($here === '') {
+    return $none;
+  }
+  $building = ($map->hasField('field_map_building') ? $map->get('field_map_building')->value : NULL) ?: (string) array_key_first(palefire_buildings());
+  $built = _palefire_building_map($building, $here, $map);
+  if (!$built) {
+    return $none;
+  }
+  CacheableMetadata::createFromRenderArray($variables)
+    ->merge(CacheableMetadata::createFromRenderArray($built['cache']))
+    ->applyTo($variables);
+  if ($built['here'] === '') {
+    return $none;
+  }
+  $room = $built['spaces'][$built['here']];
+  return [
+    'hero_unit' => $built['here'],
+    'hero_map_banner' => [
+      'template' => $built['template'],
+      'spaces' => [$built['here'] => ['url' => ''] + $room],
+      'lit' => $built['here'],
+      'title' => $room['title'],
+      'floor' => $room['floor'],
+      'building' => $built['label'],
+      'anchor' => $built['uid'] . '-heading',
+    ],
+  ];
 }
 
 /**
