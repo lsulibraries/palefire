@@ -8,6 +8,8 @@
  *   detail, state, icon), empty groups left out. From the room's Building
  *   spaces term: edit a policy's words in Space policies.
  * - rules.sound, rules.sound_level: the room's sound level, 0 when unset.
+ * - rules.contact: the person to ask, under the rules, on a room people
+ *   ask for (_palefire_location_contact_part()), or NULL.
  *
  * The section <h2> ("House rules") comes from the scroll-section field
  * template. Each group is a column with its own <h3>, so the state is in
@@ -56,6 +58,12 @@
           {% endfor %}
         </ol>
       </section>
+    {% endif %}
+
+    {% if rules.contact %}
+      <div class="pf-rules__contact">
+        {% include '@palefire/includes/location-contact.html.twig' with { contact: rules.contact } only %}
+      </div>
     {% endif %}
   </div>
 {% endif %}

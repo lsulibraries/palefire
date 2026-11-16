@@ -2089,9 +2089,8 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['link'] = $asked
       ? NULL
       : _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
-    // Its person to ask, too, when the Booking section names them beside
-    // the form; a room without one (the McIlhenny Room) keeps them here.
-    if ($asked && _palefire_location_sibling($paragraph, 'location_booking')) {
+    // Its person to ask, once, further down (_palefire_location_contact_part()).
+    if (!_palefire_location_contact_part($paragraph, $location, 'location_space')) {
       $location['contact'] = NULL;
     }
     $location['notice'] = _palefire_location_notice($location);
@@ -2110,6 +2109,29 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);
+}
+
+/**
+ * Whether a room's person to ask ("Questions? …") shows in a part.
+ *
+ * A room people book online or walk into shows them at the top, beside the
+ * button, and in Booking. A room people ask for (Event rental, For
+ * classes) shows them once, further down: under House rules, else in
+ * Booking, else at the top when the page has neither.
+ *
+ * @param string $bundle
+ *   The part asking: location_space, location_rules or location_booking.
+ */
+function _palefire_location_contact_part(ParagraphInterface $paragraph, array $location, string $bundle): bool {
+  if (!in_array($location['access'] ?? '', ['rental', 'class'], TRUE)) {
+    return $bundle !== 'location_rules';
+  }
+  foreach (['location_rules', 'location_booking', 'location_space'] as $part) {
+    if ($part === $bundle || $paragraph->bundle() === $part || _palefire_location_sibling($paragraph, $part)) {
+      return $part === $bundle;
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -2142,6 +2164,8 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
     }
     $variables['rules']['groups'] = array_filter($variables['rules']['groups']);
   }
+  // The person to ask, under the rules, for a room people ask for.
+  $variables['rules']['contact'] = _palefire_location_contact_part($paragraph, $location, 'location_rules') ? ($location['contact'] ?? NULL) : NULL;
   $cache->applyTo($variables);
 }
 
@@ -2170,7 +2194,7 @@ function palefire_preprocess_paragraph__location_booking(array &$variables): voi
     $variables['booking']['needs'] = [];
     $variables['booking']['link'] ??= _palefire_location_not_here($location['link'] ?? NULL, $paragraph) ?? _palefire_location_booking($space, NULL, '')['link'];
   }
-  $variables['booking']['contact'] = $location['contact'] ?? NULL;
+  $variables['booking']['contact'] = $location && _palefire_location_contact_part($paragraph, $location, 'location_booking') ? ($location['contact'] ?? NULL) : NULL;
   $cache->applyTo($variables);
 }
 

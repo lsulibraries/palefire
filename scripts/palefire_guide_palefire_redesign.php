@@ -459,6 +459,7 @@ HTML),
 <li>The McIlhenny Room is now marked For classes, not Book online: it isn’t booked by the public, it’s where faculty hold classes with Special Collections. The building map lists it under its own heading.</li>
 <li>Building map on room pages: the room you are looking at now has its name in a clean band across the room, instead of a cut-out that looked torn against the room's stripes.</li>
 <li>The Lecture Hall page no longer has a Reserve button at the top, like the McIlhenny Room: the request form and the person to ask are in its Book section, after the house rules.</li>
+<li>On the Lecture Hall page, the line with the person to ask now sits at the end of House rules, instead of at the top or beside the Reserve button.</li>
 </ul>
 HTML),
 ]);

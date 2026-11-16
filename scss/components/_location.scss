@@ -865,6 +865,16 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
   .pf-rules__groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+// The person to ask, under the rules (a room people ask for): a footnote
+// over a hairline, the full measure.
+.pf-rules__contact {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--pf-location-line);
+
+  .pf-location__contact { max-width: none; }
+}
+
 // Sound: three steps, the room's lit up to its level, its own named.
 .pf-rules__sound {
   max-width: 36rem;
