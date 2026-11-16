@@ -5534,8 +5534,10 @@ html.pf-a11y-motion .pf-hero-banner__map {
 // veil (no fades). The column is the Highlights'
 // from the start, resting on the map banner (js/hero-highlights.js), and
 // the film keeps playing behind; its button stays, at the type's foot, as
-// it must for a moving picture that runs on (WCAG 2.2.2). Faint enough
-// (an 82% veil) that the type keeps its contrast on any frame.
+// it must for a moving picture that runs on (WCAG 2.2.2). The film is
+// multiplied, in gray, into the page's color: its lightest frame is the
+// page's color exactly and its darks are shadows, half veiled, so the
+// ground is never lighter than the page and the type keeps its contrast.
 $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
 
 @container pf-cover (min-width: 44rem) {
@@ -5543,25 +5545,29 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
     isolation: isolate;
 
     // The type's two thirds, up to the column (solid, the map's), with no
-    // fades: one even veil of the page's color.
+    // fades: the film multiplied into the page's color.
     .pf-landing__media {
       inset-inline: 0 var(--pf-split-film);
       z-index: -1;
       width: auto;
+      background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
     }
 
     .pf-landing__media .pf-landing__bg-video {
       object-position: 50% 40%;
+      filter: grayscale(1);
+      mix-blend-mode: multiply;
     }
 
-    // The veil, in place of the dark band under the header.
+    // Half a veil over the shadows, in place of the dark band under the
+    // header.
     .pf-landing__media::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: 1;
       height: auto;
-      background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 82%, transparent);
+      background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 50%, transparent);
       // (The cover's other light, the Spotlight, is the hero's box.)
       opacity: 1;
       pointer-events: none;
