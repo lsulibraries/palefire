@@ -2,6 +2,8 @@
  * @file
  * Ask Special Collections: the question form
  * (templates/form/libanswers-ask-form.html.twig, styled in _ask.scss).
+ * Also the Ask Us drawer's copy, which utility-panels.js fetches and
+ * places when the drawer first opens; it posts to its own route.
  *
  * Checks the required fields and the email, then posts the form to Drupal
  * in the background, so the visitor stays on the page. The libanswers

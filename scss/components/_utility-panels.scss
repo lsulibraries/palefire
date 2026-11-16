@@ -687,12 +687,86 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 }
 
 // Ask Us panel --------------------------------------------------------------
-// Origami's three LibAnswers widgets as tabs. The widget fills the rest of
-// the drawer's height.
+// A Main Library | Special Collections switch, then that library's ways to
+// ask: Live Chat and Email (LibAnswers widgets, as tabs; the widget fills
+// the rest of the drawer's height), or the question slip.
 
 .pf-ask {
-  gap: 1rem;
+  gap: 1.25rem;
   padding-top: 1.5rem;
+
+  // The switch: two equal halves in a frame of the muted tone (a control's
+  // edge, 3:1), and a key in the drawer's text color that slides under the
+  // chosen one, its label in the glass's color. Labels in the drawer's
+  // mono capitals, wrapping to two lines on a phone.
+  &__libs {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--pf-section-border);
+
+    &::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0 auto 0 0;
+      width: 50%;
+      background-color: var(--pf-toc-active);
+      content: '';
+      transition: translate .35s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    &:has(.pf-ask__lib-tab:last-child.active)::before {
+      translate: 100% 0;
+    }
+  }
+
+  &__lib-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: .5rem .75rem;
+    color: var(--pf-toc-color);
+    font-family: inherit;
+    font-size: .75rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: .12em;
+    line-height: 1.35;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    transition: color $pf-hover-out ease;
+
+    &:hover {
+      color: var(--pf-toc-active);
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-toc-accent);
+      outline-offset: 2px;
+    }
+
+    &.active {
+      color: rgb(var(--pf-panel-bg-rgb));
+    }
+  }
+
+  // A library's side: its tabs and widget, or the slip. It fades up a
+  // little as the switch turns.
+  &__lib {
+    display: none;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 1rem;
+
+    &.active {
+      display: flex;
+    }
+  }
 
   // Ruled rows like the guides' lists: label left, icon right.
   &__tabs {
@@ -768,6 +842,127 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     background-color: $white;
     border: 0;
     border-radius: 0;
+  }
+
+  // Email Special Collections: the Ask section's question slip (_ask.scss)
+  // in the drawer's colors (the --pf-section-* tokens above). Its status
+  // card and the select's open list need a solid ground: the glass's own
+  // color, unblended.
+  &__inquiry {
+    --pf-section-bg: rgb(var(--pf-panel-bg-rgb));
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // The form's outline while it's fetched: the slip's cells, empty, and
+  // the Send bar in the rule color, so the form drops into place.
+  &__ghost {
+    display: grid;
+    border-left: 1px solid var(--pf-inquiry-rule, #{$pf-hairline});
+  }
+
+  &__ghost-cell {
+    position: relative;
+    height: 5.875rem;
+    border-right: 1px solid var(--pf-inquiry-rule, #{$pf-hairline});
+    border-bottom: 1px solid var(--pf-inquiry-rule, #{$pf-hairline});
+
+    // The field's own rule.
+    &::after {
+      position: absolute;
+      inset: auto 1rem 1rem;
+      height: 1px;
+      background-color: var(--pf-toc-rail);
+      content: '';
+    }
+
+    // More detail: the textarea.
+    &--tall {
+      height: 12rem;
+    }
+  }
+
+  &__ghost-key {
+    height: 3.5rem;
+    margin-top: 2.625rem; // the Required row
+    background-color: var(--pf-toc-rail);
+  }
+
+  &__fallback {
+    margin-block-end: 0;
+  }
+}
+
+html.pf-reading-dark .pf-ask__inquiry {
+  --pf-section-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
+}
+
+// A slow breath while the form is on its way; a library's side fades up as
+// the switch turns to it.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-ask__ghost {
+    animation: pf-ask-ghost 1.6s ease-in-out infinite alternate;
+  }
+
+  .pf-ask__lib.active {
+    animation: pf-ask-lib .4s cubic-bezier(.2, .7, .2, 1);
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-ask__ghost,
+  .pf-ask__lib.active {
+    animation: none;
+  }
+
+  .pf-ask__libs::before {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-ask__libs::before {
+    transition: none;
+  }
+}
+
+@keyframes pf-ask-lib {
+  from {
+    opacity: 0;
+    translate: 0 .375rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+// Forced colors: the key in Highlight, its label in HighlightText.
+@media (forced-colors: active) {
+  .pf-ask__libs {
+    border-color: CanvasText;
+
+    &::before {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
+  }
+
+  .pf-ask__lib-tab.active {
+    forced-color-adjust: none;
+    color: HighlightText;
+  }
+}
+
+@keyframes pf-ask-ghost {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: .55;
   }
 }
 

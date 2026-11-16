@@ -228,7 +228,9 @@ section-tabs:
 
 # Ask Special Collections: checks the question form and sends it to
 # LibAnswers in the background. Attached by
-# templates/includes/ask-special.html.twig.
+# templates/includes/ask-special.html.twig and by the Ask Us drawer
+# (templates/includes/utility-panels.html.twig), whose copy of the form
+# arrives when the drawer opens.
 ask-form:
   js:
     js/ask-form.js: {}

@@ -20,8 +20,11 @@
  *   time the panel opens, and through Drupal.palefireHours
  *   (visit-hours.js), so a location the Visit card already loaded is not
  *   requested again.
- * - Ask Us: each tab's LibAnswers iframe gets its src the first time the
- *   tab is shown, so nothing loads from LibAnswers until the drawer opens.
+ * - Ask Us: the Main Library | Special Collections switch starts on the
+ *   page's section. Each Main Library tab's LibAnswers iframe gets its src
+ *   the first time it shows, so nothing loads from LibAnswers until then;
+ *   the Special Collections question slip gets its form the first time
+ *   that side shows (loadSlip).
  * - Settings: saves the visitor's choices (localStorage "pf-a11y") and
  *   applies them to <html> at once. html.html.twig applies the saved
  *   copy before the first paint on every page load. Sends
@@ -158,15 +161,76 @@
     }
   }
 
-  function initAsk(panel) {
-    panel.addEventListener('show.bs.offcanvas', () => {
-      loadFrame(panel.querySelector('.pf-ask__pane.active'));
-    });
-    panel.querySelectorAll('[data-bs-toggle="tab"]').forEach((tab) => {
-      tab.addEventListener('show.bs.tab', () => {
-        loadFrame(panel.querySelector(tab.dataset.bsTarget));
+  // Special Collections: the question slip's form, fetched once from the
+  // libanswers module (the form alone, no page) the first time that side
+  // of the switch shows. Its ids are the ones the Ask Special
+  // Collections section's own form has, and that form can be on the same
+  // page, so they're prefixed; each label and error line follows its
+  // control. js/ask-form.js takes it from there (attachBehaviors). If it
+  // can't be fetched (or the module is off), the AskUs link shows.
+  function loadSlip(panel) {
+    const slip = panel.querySelector('[data-pf-ask-form]');
+    if (!slip) {
+      return;
+    }
+    const url = slip.dataset.pfAskForm;
+    slip.removeAttribute('data-pf-ask-form');
+    const ghost = slip.querySelector('.pf-ask__ghost');
+    fetch(url, { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.text();
+      })
+      .then((html) => {
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        const form = template.content.querySelector('form.pf-inquiry__form');
+        if (!form) {
+          throw new Error('No form');
+        }
+        const own = (id) => `pf-drawer-${id}`;
+        form.querySelectorAll('[id]').forEach((el) => {
+          el.id = own(el.id);
+        });
+        form.id = own(form.id);
+        form.querySelectorAll('label[for]').forEach((label) => {
+          label.htmlFor = own(label.htmlFor);
+        });
+        ghost.replaceWith(form);
+        Drupal.attachBehaviors(slip);
+      })
+      .catch(() => {
+        ghost.remove();
+        slip.querySelector('.pf-ask__fallback').hidden = false;
       });
+  }
+
+  // The library switch starts on the page's section, and turns to it again
+  // only when a visit lands in the other section (the drawer outlives Swup
+  // visits), so a visitor's own choice holds while they stay in one.
+  // Whatever side and tab are showing load their widget or form then.
+  function initAsk(panel) {
+    let section = null;
+    const loadShown = () => {
+      const library = panel.querySelector('.pf-ask__lib.active');
+      if (library && library.querySelector('[data-pf-ask-form]')) {
+        loadSlip(panel);
+      }
+      loadFrame(library && library.querySelector('.pf-ask__pane.active'));
+    };
+    panel.addEventListener('show.bs.offcanvas', () => {
+      const here = window.location.pathname.startsWith('/v2/special') ? 'special' : 'main';
+      const tab = panel.querySelector(`[data-pf-ask-lib="${here}"]`);
+      if (here !== section && tab && window.bootstrap) {
+        window.bootstrap.Tab.getOrCreateInstance(tab).show();
+      }
+      section = here;
+      loadShown();
     });
+    // Bootstrap's tab events bubble: the switch's and the inner tabs'.
+    panel.addEventListener('shown.bs.tab', loadShown);
   }
 
   /* ---------------- Settings ---------------- */
