@@ -3107,12 +3107,14 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     // An oral history exhibition's cover is a wide still from its old
     // presentation (about 16:9): shown whole, uncropped (exhibit_640, scale
     // only), on the card's dark ground, not cut to the card's 3:4.
-    $whole = $show_image && _palefire_is_oral_history_exhibition($node)
+    $oral_history = _palefire_is_oral_history_exhibition($node);
+    $whole = $show_image && $oral_history
       && $card['image_item']->width && $card['image_item']->height
       && $card['image_item']->width / $card['image_item']->height >= 1.4;
     $image = $show_image ? ($whole ? _palefire_image_build($card['image_item'], ['exhibit_640'], $cache) : _palefire_responsive_cover($card['image_item'], $style, $cache)) : NULL;
     $variables['tiles'][] = [
       'whole' => $whole,
+      'oral_history' => $oral_history,
       'title' => $card['title'],
       'url' => $card['url'],
       'label' => $card['label'],
@@ -3144,15 +3146,25 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     }
   }
 
-  // Every card a whole wide cover (oral history exhibitions): the Grid
-  // draws them 16:9, the title under the picture (.pf-tiles--whole).
-  $variables['whole_covers'] = $variables['tiles'] && !array_filter($variables['tiles'], static fn (array $tile): bool => !$tile['whole']);
+  // A showcase of oral history exhibitions (any card one) is a gallery
+  // listing (.pf-tiles--whole): in the Grid every picture 16:9, the title
+  // and label under it on the page, no scrim. Wide covers stay whole
+  // (letterboxed); the other cards' pictures are the landscape crop
+  // (1280 x 800, from the whole file, not the 3:4 one), cut to 16:9.
+  $variables['whole_covers'] = (bool) array_filter($variables['tiles'] ?? [], static fn (array $tile): bool => !empty($tile['oral_history']));
+  if ($variables['whole_covers']) {
+    foreach ($variables['tiles'] as $i => $tile) {
+      if (!$tile['whole'] && !empty($covers[$i])) {
+        $variables['tiles'][$i]['image'] = _palefire_image_build($covers[$i], ['tile_showcase_landscape_lg'], $cache) ?? $tile['image'];
+      }
+    }
+  }
 
   // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)
   // spans two to five columns: its cover is the landscape crop, sized for
   // that width (beside the sidebar from 1480px; a column below).
   $count = count($variables['tiles']);
-  if ($variables['layout'] === 'masonry' && $count <= 4 && !empty($covers[0]) && empty($variables['tiles'][0]['whole'])) {
+  if ($variables['layout'] === 'masonry' && $count <= 4 && !empty($covers[0]) && !$variables['whole_covers']) {
     $lead = [1 => 85, 2 => 50, 3 => 50, 4 => 34][$count];
     $variables['tiles'][0]['image'] = _palefire_lead_cover($covers[0], "(min-width: 1480px) {$lead}vw, (min-width: 768px) 34vw, 50vw", $cache) ?? $variables['tiles'][0]['image'];
   }

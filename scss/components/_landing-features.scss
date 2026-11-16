@@ -5433,41 +5433,35 @@ html.pf-a11y-motion .pf-hero-banner__map {
 
 // The series as reels (exhibit-reel.html.twig, _exhibition.scss): each a
 // box with the series' name and its interview count, the reel faint behind
-// it, rolling out to the right in hand. The pair is 1.5 boxes wide; two to
-// six to a row by the section's width. The reel's mono and muted tokens are
+// it, rolling out to the right in hand. The pair is 1.5 boxes wide; one to
+// four to a row by the section's width, so the boxes stay large. The reel's mono and muted tokens are
 // the exhibition's, given here for the landing.
 .pf-series__list {
   --pf-exhibit-mono: var(--pf-landing-label, 'Consolas', 'Monaco', monospace);
   --pf-exhibit-muted: var(--pf-toc-color, var(--pf-g-muted, var(--bs-secondary-color)));
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(1.5rem, 3vw, 2.5rem) var(--pf-grid-gutter, 2rem);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-@container pf-series (min-width: 36rem) {
+@container pf-series (min-width: 28rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container pf-series (min-width: 48rem) {
   .pf-series__list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@container pf-series (min-width: 56rem) {
+@container pf-series (min-width: 72rem) {
   .pf-series__list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@container pf-series (min-width: 76rem) {
-  .pf-series__list {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-
-@container pf-series (min-width: 96rem) {
-  .pf-series__list {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
@@ -5499,7 +5493,7 @@ html.pf-a11y-motion .pf-hero-banner__map {
   // A series' name is longer than a clip's title: five lines, a size down.
   // The box's name in the title color in hand, as the other rows.
   .pf-exhibit-reel__title {
-    font-size: clamp(.8125rem, 9.5cqi, 1.25rem);
+    font-size: clamp(.9375rem, 9.5cqi, 1.625rem);
     -webkit-line-clamp: 5;
     line-clamp: 5;
     transition: color .5s ease;
@@ -5535,39 +5529,37 @@ html.pf-a11y-motion .pf-hero-banner__map {
 // from the start, resting on the map banner (js/hero-highlights.js), and
 // the film keeps playing behind; its button stays, at the type's foot, as
 // it must for a moving picture that runs on (WCAG 2.2.2). The film is
-// multiplied, in gray, into the page's color: its lightest frame is the
-// page's color exactly and its darks are shadows, half veiled, so the
-// ground is never lighter than the page and the type keeps its contrast.
+// under an 82% veil of the page's color that deepens to the page's color
+// itself at the foot, so it ends in the page with no edge, and the type
+// keeps its contrast on any frame.
 $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
 
 @container pf-cover (min-width: 44rem) {
   #{$pf-wash} {
+    --pf-wash-bg: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
     isolation: isolate;
 
     // The type's two thirds, up to the column (solid, the map's), with no
-    // fades: the film multiplied into the page's color.
+    // side fade: its foot fades into the page.
     .pf-landing__media {
       inset-inline: 0 var(--pf-split-film);
       z-index: -1;
       width: auto;
-      background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
     }
 
     .pf-landing__media .pf-landing__bg-video {
       object-position: 50% 40%;
-      filter: grayscale(1);
-      mix-blend-mode: multiply;
     }
 
-    // Half a veil over the shadows, in place of the dark band under the
-    // header.
+    // The veil, even over the top half and solid at the foot, in place of
+    // the dark band under the header.
     .pf-landing__media::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: 1;
       height: auto;
-      background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 50%, transparent);
+      background: linear-gradient(to bottom, color-mix(in srgb, var(--pf-wash-bg) 82%, transparent) 50%, var(--pf-wash-bg));
       // (The cover's other light, the Spotlight, is the hero's box.)
       opacity: 1;
       pointer-events: none;

@@ -482,6 +482,8 @@ HTML),
 <li>The oral history exhibition cards use the same pictures as the old Oral History page’s Showcase, so they’re recognizable at a glance. The exhibitions’ own title pages keep their large covers.</li>
 <li>The Oral History homepage has tabs under its intro, Listen, Record and Explore, like the old page’s three parts, and its series are shown as tape reels in their boxes, each rolling out when you point at it. Explore shows the online exhibitions across the full width as film stills, each with its title underneath.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
+<li>The Oral History exhibitions are listed like a gallery catalog: each picture in a wide frame with its title underneath, instead of dark gradient cards.</li>
+<li>Second try: the Oral History film is back to a plain faded film that melts into the page at its foot, with no edge, and the series reels are larger, at most four to a row.</li>
 <li>Oral History’s Browse by series is now a grid of tape reels in their boxes, like the audio-only clips in the exhibitions: each box names a series and how many interviews it holds, and the reel rolls out when you point at it.</li>
 <li>Exhibition title pages: the Contents button now sits right under the title, before the introduction, so it’s always on the first screen. Where the Scroll cue shows, the Begin button is gone, since the cue does the same job.</li>
 <li>Exhibition walls: the Audio only boxes for clips without a picture are now as tall as the photographs beside them.</li>

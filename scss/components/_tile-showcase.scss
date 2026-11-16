@@ -1958,10 +1958,11 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
   }
 }
 
-// A showcase of whole covers only (.pf-tiles--whole, palefire.theme): in
-// the Grid each card is its 16:9 picture, whole, with no scrim, and the
-// title and label under it on the section's ground, as a film still and
-// its caption. 1, then 2 from 32rem, 3 from 56rem, 4 from 100rem. No lead
+// A showcase of oral history exhibitions (.pf-tiles--whole, palefire.theme:
+// any card one): in the Grid each card is its picture in a 16:9 frame, with
+// no scrim, and the title and label under it on the section's ground, as a
+// gallery listing. Other pictures fill the frame (cut to 16:9); a wide
+// cover (.pf-tile--whole) is letterboxed in it, its words kept. 1, then 2 from 32rem, 3 from 56rem, 4 from 100rem. No lead
 // card and no phone mosaic: every card the same.
 .pf-tiles--whole.pf-tiles--masonry .pf-tiles__list {
   --pf-cols: 1;
@@ -2004,8 +2005,13 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
     }
 
     img {
+      object-fit: cover;
       object-position: 50% 50%;
     }
+  }
+
+  .pf-tiles__list .pf-tile.pf-tile--whole .pf-tile__media img {
+    object-fit: contain;
   }
 
   .pf-tile .pf-tile__title {
