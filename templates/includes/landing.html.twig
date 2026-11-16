@@ -164,7 +164,7 @@
     </div>
   {% endset %}
 {% endif %}
-<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', cover ? 'pf-landing--cover', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen') }} data-pf-landing>
+<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', cover ? 'pf-landing--cover', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen', cover and bg_videos and hero_unit == 'oral_history' ? 'pf-landing--wash') }} data-pf-landing>
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}
@@ -235,6 +235,14 @@
     {% set search_mode = 'special' %}
     {% set search_label = 'Search Special Collections'|t %}
     {% set search_placeholder = 'Search the collections'|t %}
+    {# Oral History (hero_unit, _palefire_hero_map_banner()): the same mode
+       with Oral histories its one source, so the results open on the
+       interviews and the Source list shows that box checked. #}
+    {% if hero_unit == 'oral_history' %}
+      {% set search_sources = ['oral_histories'] %}
+      {% set search_label = 'Search Oral Histories'|t %}
+      {% set search_placeholder = 'Search the interviews'|t %}
+    {% endif %}
   {% else %}
     {% set search_label = 'Search LSU Libraries'|t %}
     {% set search_placeholder = landing.placeholder|default('Search books, articles, databases, guides and more'|t) %}
@@ -255,6 +263,16 @@
      both. It opens in a new tab (an up-right arrow; its name says so for
      screen readers). account_url: empty leaves the card out. #}
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
+  {# Oral History: the card's button is the interviews online (the Louisiana
+     Digital Library's Williams Center collection), and the line under it
+     goes to the Oral History FAQs in AskUs. #}
+  {% set account_label = 'Log in or register'|t %}
+  {% set account_note = { lead: 'First time?'|t, text: 'Read the guide'|t, url: quick_guide.url|default('/v2/special/guides/special-collections'), hidden: quick_guide.url ? '' : ': How to Use Special Collections'|t, external: false } %}
+  {% if hero and hero_unit == 'oral_history' %}
+    {% set account_url = 'https://www.louisianadigitallibrary.org/lsu-thwcoh' %}
+    {% set account_label = 'Listen online'|t %}
+    {% set account_note = { lead: 'Questions?'|t, text: 'Read the FAQs'|t, url: 'https://askus.lib.lsu.edu/search/?t=0&g=12395', hidden: ': Oral History'|t, external: true } %}
+  {% endif %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
       <div class="pf-landing__bar-inner">
@@ -297,9 +315,12 @@
          letters: --pf-title-feature for the first, --pf-title-pic-2 to -5 by its
          place in the list, the poster's still without one
          (_landing-features.scss, "The stage"). Solid otherwise. #}
+      {# The rows in the list's order, the map banner first when there is
+         one (no picture of its own for the letters: they stay solid). #}
       {% set title_still = cover and bg_videos and bg_poster %}
-      {% set title_feature = title_still and hero_banners ? hero_banners|first.still %}
-      {% set title_pics = title_still ? hero_banners|slice(0, hero_blog ? 4 : 5)|merge(hero_blog ? [hero_blog] : []) : [] %}
+      {% set banner_room = (hero_map_banner ? 4 : 5) - (hero_blog ? 1 : 0) %}
+      {% set title_pics = title_still ? (hero_map_banner ? [{ still: '' }] : [])|merge(hero_banners|slice(0, banner_room))|merge(hero_blog ? [hero_blog] : []) : [] %}
+      {% set title_feature = title_pics ? title_pics|first.still %}
       <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}'){% if title_feature %}; --pf-title-feature: url('{{ title_feature }}'){% endif %}{% for pic in title_pics %}{% if not loop.first and pic.still %}; --pf-title-pic-{{ loop.index }}: url('{{ pic.still }}'){% endif %}{% endfor %}"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}
       </h1>
@@ -340,7 +361,7 @@
         <ul class="pf-landing__account-actions" role="list">
           <li>
             <a class="pf-landing__account-button pf-landing__account-button--primary" href="{{ account_url }}" target="_blank" rel="noopener">
-              {{- 'Log in or register'|t -}}
+              {{- account_label -}}
               <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
               {{- account_arrow -}}
             </a>
@@ -355,7 +376,7 @@
           </li>
         </ul>
         <p class="pf-landing__account-note">
-          {{- 'First time?'|t }} <a href="{{ quick_guide.url|default('/v2/special/guides/special-collections') }}">{{ 'Read the guide'|t }}{% if not quick_guide.url %}<span class="visually-hidden">{{ ': How to Use Special Collections'|t }}</span>{% endif %}</a>
+          {{- account_note.lead }} <a href="{{ account_note.url }}"{% if account_note.external %} target="_blank" rel="noopener"{% endif %}>{{ account_note.text }}{% if account_note.hidden %}<span class="visually-hidden">{{ account_note.hidden }}</span>{% endif %}{% if account_note.external %}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>{% endif %}</a>
         </p>
       </div>
     {% endif %}
@@ -473,9 +494,29 @@
          the lead's large words change with the picture as another item is
          in hand (_landing-features.scss, "Scroll: the stage"). A repeat for
          the eye only, hidden from screen readers and elsewhere. #}
-      {% if hero_blog or hero_banners %}
-        {% set hero_listed = hero_banners|slice(0, hero_blog ? 4 : 5) %}
+      {# - First of all, on a unit's homepage (hero_map_banner,
+           _palefire_hero_map_banner()): the building's drawing with the
+           unit's room lit, linking down to the map. The featured picture
+           the column rests on (js/hero-highlights.js); never the next
+           event, which takes the first banner after it. #}
+      {% if hero_blog or hero_banners or hero_map_banner %}
+        {% set hero_listed = hero_banners|slice(0, (hero_map_banner ? 4 : 5) - (hero_blog ? 1 : 0)) %}
         <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
+          {% if hero_map_banner %}
+            <li class="pf-hero-banner pf-hero-banner--map">
+              <a class="pf-hero-banner__link" href="#{{ toc_map_id ?: hero_map_banner.anchor }}">
+                <span class="pf-hero-banner__media pf-hero-banner__media--map" aria-hidden="true">
+                  <span class="pf-hero-banner__map">
+                    {% include hero_map_banner.template with { uid: input_id ~ '-banner-map', spaces: hero_map_banner.spaces, static: true, lit: hero_map_banner.lit } only %}
+                  </span>
+                </span>
+                <span class="pf-hero-banner__text">
+                  <span class="pf-hero-banner__label">{{ 'Floor @n · @building'|t({ '@n': hero_map_banner.floor, '@building': hero_map_banner.building }) }}</span>
+                  <span class="pf-hero-banner__title">{{ 'Find us: @room'|t({ '@room': hero_map_banner.title }) }}</span>
+                </span>
+              </a>
+            </li>
+          {% endif %}
           {% for banner in hero_listed %}
             <li class="pf-hero-banner"{% if loop.first %} data-pf-hero-event{% endif %}>
               <a class="pf-hero-banner__link" href="{{ banner.url }}">
@@ -544,7 +585,11 @@
            (_palefire_hero_tabs()), drawn under rule 01: each tab changes
            the whole section, and the one with the request paths (Research)
            holds the Quick Start below (includes/section-tabs.html.twig). #}
-      {% set guide_url = quick_guide.url|default('/v2/special/guides/special-collections') %}
+      {# Oral History (hero_unit): rule 01 links to the collection's finding
+         aids, and the request paths are its own three
+         (guide-request-paths.html.twig, unit). #}
+      {% set oral_history = hero_unit == 'oral_history' %}
+      {% set guide_url = quick_guide.url|default(oral_history ? '/oralhistory/collections' : '/v2/special/guides/special-collections') %}
       {% set quick_title = quick_guide.title|default('Quick Guide'|t) %}
       {% set quick_id = input_id ~ '-quick-guide' %}
       {# Index rule 01, "Full guide" at its end. The full name keeps the
@@ -552,8 +597,8 @@
          own text or URL (the Link field) the link names itself. #}
       {% set guide_link = guide_url ? {
         url: guide_url,
-        text: quick_guide.link_text ?: 'Full guide'|t,
-        hidden: quick_guide.link_text or quick_guide.url ? '' : ': How to Use Special Collections'|t,
+        text: quick_guide.link_text ?: (oral_history ? 'Collections'|t : 'Full guide'|t),
+        hidden: quick_guide.link_text or quick_guide.url ? '' : (oral_history ? ': Oral history finding aids'|t : ': How to Use Special Collections'|t),
       } : {} %}
       {% set quick_hours = hero and visit.lid ? { href: '#' ~ input_id ~ '-visit-hours', lid: visit.lid } : {} %}
       <div{% if toc_start_id %} id="{{ toc_start_id }}" tabindex="-1"{% endif %} class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
@@ -565,6 +610,8 @@
         <h2 class="pf-quick-guide__title" id="{{ quick_id }}"{% if not toc_start_id %} data-toc data-toc-label="{{ quick_guide.title ? quick_title : 'Quick guide'|t }}"{% endif %}>{{ quick_title }}</h2>
         {% if quick_guide.intro %}
           <div class="pf-quick-guide__intro">{{ quick_guide.intro }}</div>
+        {% elseif oral_history %}
+          <p class="pf-quick-guide__intro">{{ 'Louisiana’s largest oral history collection, many of its interviews online. Choose one of <strong>three ways</strong> to start: listen online (A), order a copy (B), or meet with the Williams Center’s staff (C).'|t }}</p>
         {% else %}
           <p class="pf-quick-guide__intro">{{ 'Special Collections materials don’t circulate. Choose one of <strong>three ways</strong> to start: see it in the Reading Room (A), order a digital copy (B), or have a librarian help you find what you need first (C).'|t }}</p>
         {% endif %}
@@ -572,7 +619,7 @@
            Collections section (includes/ask-special.html.twig: further
            down, or in the Ask us tab, which opens for it), which frames
            itself in gold, as the footer's Ask link does (js/footer.js). #}
-        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: '#ask-question' } only %}
+        {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id, img_base: file_url(directory) ~ '/images/guides/special-collections/', ask_href: oral_history ? 'https://askus.lib.lsu.edu/search/?t=0&g=12395' : '#ask-question', unit: hero_unit } only %}
         {# Phones: the paths fold to their first option under a fade, and
            this shows the rest (js/palefire.js; without it, all show). #}
         <button type="button" class="pf-quick-guide__expand" aria-expanded="true">{{ 'Show all steps'|t }}</button>
@@ -583,6 +630,13 @@
           <h3 class="pf-quick-guide__visit-title">{{ 'Before you visit'|t }}</h3>
           {% if quick_guide.visit %}
             {{ quick_guide.visit }}
+          {% elseif oral_history %}
+            <ul role="list">
+              <li>{{ 'Many interviews can be heard online, in the Louisiana Digital Library.'|t }}</li>
+              <li>{{ 'Listening and research consultations are by appointment, in Room 201 at Hill.'|t }}</li>
+              <li>{{ 'Copies of recordings and transcripts are ordered as Special Collections copies are, for a small fee.'|t }}</li>
+              <li>{{ 'You don’t need to be affiliated with LSU.'|t }}</li>
+            </ul>
           {% else %}
             <ul role="list">
               <li>{{ 'You don’t need to be affiliated with LSU: sign in or register as a Guest.'|t }}</li>
@@ -595,7 +649,8 @@
              the building's parking and travel guide (visit.parking_url) and
              the hours, as square buttons (pf.quick_links). #}
           {{ pf.quick_links([
-            guide_url ? { url: guide_url, text: 'Full guide'|t },
+            guide_url ? { url: guide_url, text: oral_history ? 'Collections'|t : 'Full guide'|t },
+            oral_history ? { url: 'https://askus.lib.lsu.edu/search/?t=0&g=12395', text: 'FAQs'|t },
             { url: '/v2/special/guides/special-collections#copy-prices', text: 'Prices'|t },
             visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
           ]|filter(link => link), quick_hours) }}
@@ -698,6 +753,39 @@
           {{ quick_body }}
         {% endif %}
       </div>
+      {# Oral History: the collection's series, A to Z, each with how many
+         interviews Combined Search holds for it and a link to them all
+         (_palefire_oral_history_series(): the module's own list and counts,
+         so the two always agree). Its rule follows the Quick Start's
+         (hero_index.series, _palefire_hero_rules()). #}
+      {% if hero_index.series %}
+        {% set series_id = input_id ~ '-series' %}
+        <section class="pf-series" aria-labelledby="{{ series_id }}">
+          {{ pf.index_rule(hero_index.series, 'Browse by series'|t, oral_history_series ? {
+            url: '/v2/search?mode=special&source%5B%5D=oral_histories',
+            text: 'Search them all'|t,
+            hidden: ': ' ~ 'Oral histories in Combined Search'|t,
+          } : {}) }}
+          <div class="pf-series__head">
+            <h2 class="pf-series__title" id="{{ series_id }}" data-toc>{{ 'Series'|t }}</h2>
+            <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
+          </div>
+          {% if oral_history_series %}
+            <ul class="pf-series__list" role="list">
+              {% for series in oral_history_series %}
+                <li class="pf-series__item">
+                  <a class="pf-series__link" href="{{ series.url }}">
+                    <span class="pf-series__name">{{ series.name }}</span>
+                    <span class="pf-series__count">{{ series.count|number_format }}<span class="visually-hidden"> {{ series.count == 1 ? 'interview'|t : 'interviews'|t }}</span></span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="pf-series__intro"><a href="/v2/search?mode=special&amp;source%5B%5D=oral_histories">{{ 'Search the oral histories'|t }}</a></p>
+          {% endif %}
+        </section>
+      {% endif %}
     {% endif %}
   </div>
   {% endif %}

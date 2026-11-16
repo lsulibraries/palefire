@@ -37,6 +37,8 @@
  *   guides, which have none, go to AskUs: Special Collections.
  * - img_base: URL of images/guides/special-collections/ with a trailing
  *   slash. Without it the panels show their text only.
+ * - unit: optional; 'oral_history' draws Oral History's three ways instead
+ *   (the landing hero's hero_unit).
  */
 #}
 {% set find = {
@@ -104,6 +106,38 @@
     ],
   },
 ] %}
+{# Oral History's three ways (unit 'oral_history', from the landing hero on
+   /v2/oralhistory): A listens online, B orders a copy as Special
+   Collections does (B above, renamed), C meets the Williams Center's staff
+   in Room 201 at Hill. #}
+{% if unit|default('') == 'oral_history' %}
+  {% set paths = [
+    {
+      key: 'listen',
+      letter: 'A',
+      name: ['Listen'|t, 'online'|t],
+      stops: [
+        { icon: 'search', label: 'Find an interview'|t, note: 'In Combined Search'|t, href: '/v2/search?mode=special&source%5B%5D=oral_histories' },
+        {
+          icon: 'file-alt', label: 'Read its abstract'|t, note: 'A PDF summary'|t,
+          detail: 'Most interviews have an abstract, a PDF summary of the conversation. Open it from the interview’s row in the results: PDF Abstract.'|t,
+        },
+        { icon: 'headphones', label: 'Listen in the LDL'|t, note: 'Where it’s digitized'|t, href: 'https://www.louisianadigitallibrary.org/lsu-thwcoh' },
+      ],
+    },
+    paths[1]|merge({ name: ['Order a'|t, 'copy'|t] }),
+    {
+      key: 'assist',
+      letter: 'C',
+      name: ['Meet with'|t, 'our staff'|t],
+      stops: [
+        { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email'|t, href: ask_href|default('https://askus.lib.lsu.edu/search/?t=0&g=12395') },
+        { icon: 'calendar-check', label: 'Book a time'|t, note: 'By appointment'|t },
+        { icon: 'headphones-alt', label: 'Listen at Hill'|t, note: 'Room 201'|t },
+      ],
+    },
+  ] %}
+{% endif %}
 <div class="pf-paths">
   {% for path in paths %}
     {% set heading_id = 'pf-paths-' ~ uid ~ '-' ~ path.key %}

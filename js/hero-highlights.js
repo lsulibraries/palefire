@@ -54,7 +54,8 @@
     const rest = () => {
       window.clearInterval(timer);
       stage.classList.add('is-picturing');
-      const featured = [...list.children].find((item) => item.querySelector('.pf-hero-banner__media img'));
+      // A picture, or a unit homepage's map banner (its drawing).
+      const featured = [...list.children].find((item) => item.querySelector('.pf-hero-banner__media img, .pf-hero-banner__map svg'));
       if (featured) {
         featured.classList.add('is-shown');
       }
@@ -68,6 +69,18 @@
       }
       button.hidden = true;
     };
+
+    // A unit homepage's faded film (.pf-landing--wash) is a ground, not the
+    // column's spotlight: the column rests on its first item at once and the
+    // film plays on behind, its button left as it is.
+    if (stage.closest('.pf-landing--wash')) {
+      stage.classList.add('is-picturing');
+      const first = [...list.children].find((item) => item.querySelector('.pf-hero-banner__media img, .pf-hero-banner__map svg'));
+      if (first) {
+        first.classList.add('is-shown');
+      }
+      return;
+    }
 
     const tick = () => {
       if (!stage.isConnected) {

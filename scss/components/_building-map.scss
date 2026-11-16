@@ -1,8 +1,11 @@
 // Building map (paragraph--building-map), shown inside the landing under search.
 // Plain CSS syntax so it can be copied into the prototype unchanged.
 /* Building map (paragraph--building-map). Colors are custom properties so a
-   section theme, a print sheet or a light variant can swap them in one place. */
-.pf-map {
+   section theme, a print sheet or a light variant can swap them in one place.
+   The landing hero's map banner (.pf-hero-banner__map, _landing-features.scss)
+   draws the same drawing, so it takes the same tokens. */
+.pf-map,
+.pf-hero-banner__map {
   --pf-map-ink: #fff;                  /* outline + room names */
   --pf-map-floor-ink: #9a9a9a;         /* floor names (FLOOR 2, ENTRANCE) */
   --pf-map-hidden-ink: #5c5c5c;        /* dashed lines between floors */
@@ -40,6 +43,8 @@
   --pf-map-tip-in: .24s;               /* tooltip fade in */
   --pf-map-tip-out: .16s;              /* tooltip fade out */
   --pf-map-tip-ease: cubic-bezier(.34, 1.45, .64, 1); /* slight overshoot: the bump */
+}
+.pf-map {
   display: grid;
   gap: clamp(1.5rem, 3vw, 3rem);
   color: var(--pf-map-ink);

@@ -5249,3 +5249,312 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 }
 
 
+
+// --- The map banner -----------------------------------------------------------
+// A unit's homepage (/v2/oralhistory): the first banner is the building's
+// drawing with the unit's room lit (includes/landing.html.twig,
+// _palefire_hero_map_banner()), not a picture. Drawn in the page's own
+// colors on the page's ground, as the map further down is (the tokens are
+// the map's: _building-map.scss, _reading-themes.scss): the outline at a
+// hairline whatever its size, the lit room's hatch and name in the accent,
+// the other names left out (at this size they would be specks). No grey
+// and wash as the pictures have: it is already in the page's colors.
+.pf-hero-banner__media--map {
+  display: grid;
+  place-items: center;
+  color: var(--bs-heading-color, var(--pf-section-fg));
+  background: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+
+  &::after {
+    content: none;
+  }
+}
+
+.pf-hero-banner__map {
+  --pf-map-ink: currentcolor;
+  --pf-map-hatch: currentcolor;
+  display: block;
+  width: 100%;
+  // The words sit over the banner's foot: the drawing keeps above them.
+  padding: 12% 10% 45%;
+  transition: transform .9s cubic-bezier(.2, .7, .2, 1);
+
+  .pf-map__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .pf-map__lines path {
+    fill: none;
+    stroke: var(--pf-map-ink);
+    stroke-width: 1px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pf-map__lines--hidden path {
+    stroke: var(--pf-map-hidden-ink);
+    stroke-dasharray: 3 3;
+  }
+
+  .pf-map__rail {
+    stroke-width: 1.5px;
+  }
+
+  .pf-map__region .pf-map__hatch {
+    fill: var(--pf-map-hover);
+    fill-opacity: .6;
+  }
+
+  .pf-map__hit,
+  .pf-map__floors,
+  .pf-map__icons {
+    display: none;
+  }
+
+  .pf-map__label {
+    visibility: hidden;
+  }
+
+  // The lit room's name, raised and large enough to read: the drawing is a
+  // fifth of the map's size or less.
+  .pf-map__label.is-active {
+    --scale: 2.6;
+    --lift: var(--pf-map-lift);
+    visibility: visible;
+    fill: var(--pf-map-hover);
+    paint-order: stroke;
+    stroke: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+    stroke-width: 18px;
+    stroke-linejoin: round;
+  }
+}
+
+// In hand, the drawing leans in a little, as a picture zooms.
+.pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__map {
+  transform: scale(1.03);
+}
+
+// The stage: the drawing fills the column's top, clear of the header and
+// the bar, over the Highlights' words (from half way down: the list and its
+// wash start there on a window the stage allows).
+@media (min-height: 40rem) {
+  @container pf-cover (min-width: 44rem) {
+    #{$pf-stage} .pf-hero-banners .pf-hero-banner__media--map {
+      display: block;
+
+      .pf-hero-banner__map {
+        position: absolute;
+        inset: calc(var(--pf-header-h, 3rem) + var(--pf-landing-bar-h, 2rem) + 2rem) var(--pf-hl-pad) 48%;
+        width: auto;
+        padding: 0;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-hero-banner__map {
+    transition: none;
+  }
+}
+
+html.pf-a11y-motion .pf-hero-banner__map {
+  transition: none;
+}
+
+@media (forced-colors: active) {
+  .pf-hero-banner__map {
+    --pf-map-ink: CanvasText;
+    --pf-map-hover: Highlight;
+  }
+}
+
+// --- Browse by series (Oral History) -----------------------------------------
+// The collection's series after the Quick Start (includes/landing.html.twig,
+// hero_index.series): an index of rows, one hairline each, the name and its
+// count of interviews set apart at the row's end in tabular figures, in as
+// many columns as fit (one on phones). In hand, the name takes the title's
+// color and the count the accent, and an arrow slides in after the count.
+.pf-series {
+  container: pf-series / inline-size;
+  padding-top: clamp(3rem, 6vw, 5rem);
+
+  > .pf-index-rule {
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+  }
+}
+
+.pf-series__title {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.375rem, 1.2rem + .7vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+.pf-series__intro {
+  max-width: 48rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
+  line-height: 1.55;
+  color: var(--pf-section-fg, inherit);
+}
+
+.pf-series__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--pf-grid-gutter, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@container pf-series (min-width: 40rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container pf-series (min-width: 64rem) {
+  .pf-series__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pf-series__item {
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-series__link {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding: .75rem 0;
+  color: var(--pf-section-fg, inherit);
+  text-decoration: none;
+
+  &:hover .pf-series__name,
+  &:focus-visible .pf-series__name {
+    color: var(--pf-g-title, var(--pf-toc-active));
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-landing-accent, currentcolor);
+    outline-offset: 2px;
+  }
+}
+
+.pf-series__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  transition: color $pf-hover-out ease;
+}
+
+.pf-series__count {
+  @extend %pf-landing-label;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--pf-toc-color, inherit);
+  transition: color $pf-hover-out ease;
+
+  &::after {
+    content: "\2192" / "";
+    display: inline-block;
+    margin-left: .4em;
+    opacity: 0;
+    transform: translateX(-.35em);
+    transition: opacity $pf-hover-out ease, transform $pf-hover-out ease;
+  }
+}
+
+.pf-series__link:is(:hover, :focus-visible) .pf-series__count {
+  color: var(--pf-landing-accent, inherit);
+
+  &::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-series__name,
+  .pf-series__count,
+  .pf-series__count::after {
+    transition: none;
+  }
+}
+
+// The map banner in hand: the title stays solid, as under an event (the
+// letters take a picture, and the drawing is none).
+.pf-landing__lead--hero:has(.pf-hero-banner--map .pf-hero-banner__link:is(:hover, :focus-visible)) .pf-landing__title--still {
+  --pf-title-trade-fill: currentcolor;
+}
+
+// --- Wash: the film as a faded ground (Oral History) ---------------------------
+// .pf-landing--wash (includes/landing.html.twig: a unit's homepage with
+// background videos): the film is not the column's spotlight but a faint
+// ground behind the whole first screen, the type over it, fading out
+// toward the column and the screen's foot. The column is the Highlights'
+// from the start, resting on the map banner (js/hero-highlights.js), and
+// the film keeps playing behind; its button stays, at the type's foot, as
+// it must for a moving picture that runs on (WCAG 2.2.2). Faint enough
+// (an 82% veil) that the type keeps its contrast on any frame.
+$pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
+
+@container pf-cover (min-width: 44rem) {
+  #{$pf-wash} {
+    isolation: isolate;
+
+    .pf-landing__media {
+      inset-inline: 0;
+      z-index: -1;
+      width: auto;
+    }
+
+    // Faded by a veil of the page's color (the films' own opacity is
+    // their crossfade's), and masked away toward the column and the foot.
+    .pf-landing__media .pf-landing__bg-video {
+      object-position: 50% 40%;
+      mask-image:
+        linear-gradient(to right, #000 35%, transparent calc(100% - var(--pf-split-film))),
+        linear-gradient(to bottom, #000 45%, transparent 92%);
+      mask-composite: intersect;
+    }
+
+    // The veil, in place of the dark band under the header.
+    .pf-landing__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      height: auto;
+      background: color-mix(in srgb, var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg))) 82%, transparent);
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    .pf-landing__media .pf-landing__film-bar {
+      inset-inline-end: calc(var(--pf-split-film) + var(--pf-grid-gutter));
+      z-index: 2;
+      padding-top: 0;
+      color: var(--bs-heading-color, var(--pf-section-fg));
+      background-image: none;
+    }
+
+    .pf-landing__film-caption {
+      display: none;
+    }
+  }
+}
+

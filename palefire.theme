@@ -385,7 +385,8 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * typed by hand and they always agree.
  *
  * @return string[]
- *   Rule keys: 'guide', 'rooms', 'hours', those the hero shows.
+ *   Rule keys: 'guide', 'series' (Oral History only), 'rooms', 'hours',
+ *   those the hero shows.
  */
 function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
@@ -407,6 +408,13 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $rules = [];
   if (!$map_only && ($title || $intro)) {
     $rules[] = 'guide';
+    // Oral History's homepage (its map's Here room): Browse by series, after
+    // the Quick Start, when Combined Search (palefire_search) is there to
+    // list them (_palefire_oral_history_series()).
+    $here = $has_map && $map->hasField('field_map_here') ? (string) $map->get('field_map_here')->value : '';
+    if (str_ends_with($here, '.oral_history') && \Drupal::hasService('palefire_search.local')) {
+      $rules[] = 'series';
+    }
   }
   if ($has_map) {
     $rules[] = 'rooms';
@@ -533,6 +541,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['hero_banners'] = _palefire_hero_banners($paragraph, $variables);
     $variables['hero_blog'] = _palefire_hero_blog_banner($paragraph, $variables);
     $variables += _palefire_hero_map_banner($paragraph, $variables);
+    $variables['oral_history_series'] = isset($variables['hero_index']['series']) ? _palefire_oral_history_series($variables) : [];
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -674,6 +683,48 @@ function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variab
       'anchor' => $built['uid'] . '-heading',
     ],
   ];
+}
+
+/**
+ * The oral history series for Oral History's homepage, A to Z.
+ *
+ * From Combined Search itself (palefire_search's LocalSearch::seriesCounts()
+ * with no words: its series list, OralHistorySeries, and how many indexed
+ * interviews each has), so a series' count is what its link lists. A series
+ * with none yet is left out. Each links to Combined Search browsing that
+ * series (no words, oral_histories:series:<name>). The index's list tag
+ * redraws it when records change.
+ *
+ * @return array
+ *   [name, count, url] rows, or [] without the module.
+ */
+function _palefire_oral_history_series(array &$variables): array {
+  if (!\Drupal::hasService('palefire_search.local')) {
+    return [];
+  }
+  try {
+    $counts = \Drupal::service('palefire_search.local')->seriesCounts('oral_histories', '');
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('palefire')->error('Oral history series could not be listed: @message', ['@message' => $e->getMessage()]);
+    return [];
+  }
+  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], ['search_api_list:bento_search']);
+  $rows = [];
+  foreach ($counts as $name => $count) {
+    if ($count > 0) {
+      $rows[] = [
+        'name' => (string) $name,
+        'count' => (int) $count,
+        'url' => '/v2/search?' . http_build_query([
+          'mode' => 'special',
+          'source' => ['oral_histories'],
+          'refine' => ['oral_histories:series:' . $name],
+        ], '', '&', PHP_QUERY_RFC3986),
+      ];
+    }
+  }
+  return $rows;
 }
 
 /**
