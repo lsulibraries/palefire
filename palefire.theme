@@ -2082,7 +2082,18 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     }
     $location['map'] = $map;
     $location['uid'] = 'pf-location-' . $paragraph->id();
-    $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
+    // No button at the top for a room people ask for rather than book
+    // (Event rental, For classes): its Booking section, after the rules,
+    // carries the request form, so nobody sends it before reading them.
+    $asked = in_array($location['access'], ['rental', 'class'], TRUE);
+    $location['link'] = $asked
+      ? NULL
+      : _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
+    // Its person to ask, too, when the Booking section names them beside
+    // the form; a room without one (the McIlhenny Room) keeps them here.
+    if ($asked && _palefire_location_sibling($paragraph, 'location_booking')) {
+      $location['contact'] = NULL;
+    }
     $location['notice'] = _palefire_location_notice($location);
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
     $location['rules_section'] = (bool) _palefire_location_sibling($paragraph, 'location_rules');

@@ -454,10 +454,11 @@ HTML),
 <li>Building map: the label that opens over a room (floor, access, name, a line about the room and its link) is about half its old size, narrower and with smaller type, so it no longer covers neighboring rooms and the map is easier to keep exploring.</li>
 <li>Building map: the room label no longer repeats the room's link (the room itself is the link), and the floor now sits beside the access on one line (Floor 2 | Walk in), so the label is shorter again.</li>
 <li>Building map: a small stacked-floors mark before the floor in each room label, the room’s floor lit in gold, like a building directory. It draws one layer for each floor of the building, so a five-floor Middleton map will get five layers without new work.</li>
-<li>Ask Us drawer: the Email Special Collections tab now shows the same question slip as the Ask us section, in place of the old AskUs widget. A question sent from any page reaches Special Collections the same way. The form loads only when the drawer opens.</li>
+<li>Ask Us drawer: a Main Library | Special Collections switch at the top, starting on the section you are in. Main Library offers Live Chat and email as before. Special Collections now shows the same question slip as the Ask us section, in place of the old AskUs widget, so a question sent from any page reaches Special Collections the same way. The form loads only when that side is shown.</li>
 <li>Room pages now read alike: every section is numbered, and the Reading Room shows its full rules in a House rules section, with just the essentials at the top, so its facts and photos are no longer pushed down. Photos no longer show file names as captions, and a section without a title gets a default heading.</li>
 <li>The McIlhenny Room is now marked For classes, not Book online: it isn’t booked by the public, it’s where faculty hold classes with Special Collections. The building map lists it under its own heading.</li>
 <li>Building map on room pages: the room you are looking at now has its name in a clean band across the room, instead of a cut-out that looked torn against the room's stripes.</li>
+<li>The Lecture Hall page no longer has a Reserve button at the top, like the McIlhenny Room: the request form and the person to ask are in its Book section, after the house rules.</li>
 </ul>
 HTML),
 ]);
