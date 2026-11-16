@@ -16,6 +16,13 @@
  *
  * Below 56rem the form is a popover sheet, opened from a bar at the foot of
  * the screen or by a Comment button.
+ *
+ * A section with approved notes or thumbs gets a chip under its Comment
+ * button ("2 notes · 3 thumbs"); the chip opens a card right below it with
+ * that section's thumbs and notes, moved there from Notes and thumbs under
+ * the draft (which keeps the whole issue and any section no longer in the
+ * email). A card that would run past the next section is cut short, with
+ * Show more.
  */
 (function (Drupal, once, debounce) {
   'use strict';
@@ -115,6 +122,123 @@
         let following = true;
 
         const field = (name) => panel.querySelector('[name="' + name + '"]');
+
+        // Notes and thumbs by section, as cards for the Comment buttons. ------
+        const cards = new Map();
+        root.querySelectorAll('.pf-nlr__public .pf-nlr__group').forEach((group, i) => {
+          const votes = group.querySelector('[data-pf-pn-votes]');
+          const about = votes ? votes.dataset.about || '' : '';
+          if (!about) {
+            return;
+          }
+          const card = document.createElement('div');
+          card.className = 'pf-nlr__card';
+          card.id = (root.id || 'pf-nlr') + '-card-' + i;
+          card.hidden = true;
+          card.append(votes);
+          const notes = group.querySelector('[data-pf-pn-notes]');
+          const body = document.createElement('div');
+          body.className = 'pf-nlr__card-notes';
+          if (notes) {
+            body.append(notes);
+          }
+          card.append(body);
+          const more = document.createElement('button');
+          more.type = 'button';
+          more.className = 'pf-nlr__card-more';
+          more.hidden = true;
+          more.setAttribute('aria-expanded', 'false');
+          more.addEventListener('click', () => {
+            const full = !card.classList.contains('is-full');
+            card.classList.toggle('is-full', full);
+            fit(card);
+            if (!full) {
+              more.focus();
+            }
+          });
+          card.append(more);
+          group.hidden = true;
+          cards.set(about, { card, notes, group });
+        });
+
+        // "2 notes · 3 thumbs", from the card's own counts, so a thumb just
+        // given shows at once.
+        function tally(entry) {
+          const n = entry.notes ? entry.notes.querySelectorAll('.pf-pn__n').length : 0;
+          let thumbs = 0;
+          entry.card.querySelectorAll('[data-pf-pn-count]').forEach((c) => {
+            thumbs += parseInt(c.textContent, 10) || 0;
+          });
+          const parts = [];
+          if (n) {
+            parts.push(n === 1 ? Drupal.t('1 note') : Drupal.t('@count notes', { '@count': n }));
+          }
+          if (thumbs || !n) {
+            parts.push(thumbs === 1 ? Drupal.t('1 thumb') : Drupal.t('@count thumbs', { '@count': thumbs }));
+          }
+          return parts.join(' · ');
+        }
+
+        // Cut short at the next section, unless Show more was chosen.
+        function fit(card) {
+          const li = card.closest('.pf-nlr__pin');
+          const body = card.querySelector('.pf-nlr__card-notes');
+          const more = card.querySelector('.pf-nlr__card-more');
+          body.style.maxHeight = '';
+          body.classList.remove('is-cut');
+          if (!li || card.hidden) {
+            return;
+          }
+          const room = (parseFloat(li.dataset.room) || 0) - card.offsetTop;
+          const rest = card.offsetHeight - body.offsetHeight;
+          const items = Array.from(body.querySelectorAll('.pf-pn__n'));
+          const over = body.scrollHeight > room - rest;
+          more.hidden = !over && !card.classList.contains('is-full');
+          if (!over || card.classList.contains('is-full')) {
+            more.textContent = Drupal.t('Show less');
+            more.setAttribute('aria-expanded', 'true');
+            return;
+          }
+          const max = Math.max(72, room - rest - 40);
+          body.style.maxHeight = max + 'px';
+          body.classList.add('is-cut');
+          // Notes not begun above the cut (a note cut partway still shows).
+          const hiddenCount = items.filter((item) => item.offsetTop + 24 > max).length;
+          more.textContent = hiddenCount ? Drupal.t('Show more (@count)', { '@count': hiddenCount }) : Drupal.t('Show more');
+          more.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleCard(chip, card, open) {
+          card.hidden = !open;
+          chip.setAttribute('aria-expanded', String(open));
+          card.closest('.pf-nlr__pin').classList.toggle('is-open', open);
+          if (open) {
+            fit(card);
+          }
+        }
+
+        root.addEventListener('keydown', (e) => {
+          const card = e.key === 'Escape' && e.target.closest && e.target.closest('.pf-nlr__card:not([hidden])');
+          if (card) {
+            const chip = root.querySelector('[aria-controls="' + card.id + '"]');
+            toggleCard(chip, card, false);
+            chip.focus();
+          }
+        });
+        // After js/public-notes.js has counted a thumb (its listener is on
+        // the same root, added first), or Show notes has hidden the notes.
+        root.addEventListener('click', (e) => {
+          if (!e.target.closest('[data-pf-pn-vote], [data-pf-pn-toggle]')) {
+            return;
+          }
+          cards.forEach((entry) => {
+            const chip = root.querySelector('[aria-controls="' + entry.card.id + '"] .pf-nlr__chip-words');
+            if (chip) {
+              chip.textContent = tally(entry);
+            }
+            fit(entry.card);
+          });
+        });
 
         // The form: beside the email, or a sheet. ------------------------------
         function setMode() {
@@ -231,8 +355,26 @@
             button.setAttribute('aria-label', Drupal.t('Comment on section @n: @label', { '@n': i + 1, '@label': section.label }));
             button.addEventListener('click', () => choose(section, button));
             li.append(button);
+            const entry = cards.get(section.label);
+            if (entry) {
+              const chip = document.createElement('button');
+              chip.type = 'button';
+              chip.className = 'pf-nlr__chip';
+              chip.setAttribute('aria-controls', entry.card.id);
+              chip.setAttribute('aria-expanded', String(!entry.card.hidden));
+              chip.innerHTML = '<span class="pf-nlr__chip-words"></span><span class="visually-hidden"></span>';
+              chip.firstChild.textContent = tally(entry);
+              chip.lastChild.textContent = ' ' + Drupal.t('on @label', { '@label': section.label });
+              chip.addEventListener('click', () => toggleCard(chip, entry.card, entry.card.hidden));
+              li.append(chip, entry.card);
+              li.classList.toggle('is-open', !entry.card.hidden);
+            }
+            // Room down to the next section's button (or the email's foot).
+            const next = i + 1 < list.length ? list[i + 1].top + 8 : h;
+            li.dataset.room = String(Math.max(0, next - section.top - 8 - 12));
             pins.append(li);
           });
+          cards.forEach((entry) => fit(entry.card));
           if (active) {
             const same = list.find((s) => s.label === active.label);
             if (same) {
