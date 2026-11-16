@@ -302,7 +302,7 @@ HTML),
   ]),
   $image ? $note('<p><strong>' . $label('exhibit_figure') . '</strong>: one image with a caption. Its alt text comes from the media item: describe what the image shows.</p>') : NULL,
   $figure('<p>Layout: Centered in the text column.</p>', 'center'),
-  $note('<p><strong>' . $label('exhibit_audio') . '</strong>: an oral history clip with its transcript. On a wall, a clip with no photo shows as an Audio only box, as tall as the photos beside it, and opens as a panel beside the page, so readers can keep scrolling the exhibition. A clip with a photo has a Hide image button on the photo: the photo goes and the clip’s panel stays open beside the page, playing on; Show image brings the photo back. Keep listening, beside Close, sends the clip to a bar at the foot of the screen, and the title in the bar opens it again where it left off.</p>'),
+  $note('<p><strong>' . $label('exhibit_audio') . '</strong>: an oral history clip with its transcript. On a wall, a clip with no photo shows as an Audio only box, as tall as the photos beside it, and opens as a panel beside the page, so readers can keep scrolling the exhibition. A clip with a photo has a Hide image button on the photo: the photo goes and the clip’s panel stays open beside the page, playing on; Show image (the square icon) brings the photo back. Keep listening (the minimize line), beside Close, sends the clip to a bar at the foot of the screen, and the title in the bar opens it again where it left off.</p>'),
   $note('<p><strong>' . $label('guide_accordion') . '</strong>: questions and details a reader can open when they need them.</p>'),
   $accordion([
     ['What belongs in an accordion?', '<p>Material most readers can skip: rules, prices, long lists.</p>'],

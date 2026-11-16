@@ -36,7 +36,9 @@
  * stage folds the stage away and leaves the panel open beside the page
  * (whatever plays in it plays on), and Show image in the panel's top row
  * brings the stage back. sync({ extra }) puts a page's own buttons in that
- * row, before Close (.pf-viewer__act, the same labelled style).
+ * row, before Close (.pf-viewer__act). Beside them Close is a square too:
+ * icons in a window's own language (minimize, maximize, close), each
+ * named in a small label on hover and focus (.pf-viewer__name).
  */
 (function (Drupal) {
   'use strict';
@@ -54,7 +56,7 @@
     zoom: '<circle cx="7" cy="7" r="4.25"/><path d="M10.2 10.2 13.5 13.5M5 7h4"/><path class="pf-viewer__plus" d="M7 5v4"/>',
     panel: '<path d="M2.5 3.5h11v9h-11z"/><path class="pf-viewer__side" d="M9.5 3.5v9"/><path class="pf-viewer__foot" d="M2.5 9.5h11"/>',
     hide: '<path d="M2.5 3.5h11v9h-11z"/><path d="M9.5 3.5v9M4.5 8h3M6 6.5 7.5 8 6 9.5"/>',
-    image: '<path d="M2.5 3.5h11v9h-11z"/><path d="m2.5 11 3.5-3.5 3 3 1.5-1.5 3 3"/>',
+    image: '<path d="M3.5 3.5h9v9h-9z"/>',
   };
 
   function icon(name) {
@@ -102,8 +104,8 @@
       + '<p class="pf-viewer__count" aria-live="polite"></p>'
       + '<div class="pf-viewer__actions">'
       + '<span class="pf-viewer__extra"></span>'
-      + '<button type="button" class="pf-viewer__act pf-viewer__unhide" hidden>' + icon('image') + '<span>' + Drupal.t('Show image') + '</span></button>'
-      + '<button type="button" class="pf-viewer__close">' + icon('close') + '<span>' + Drupal.t('Close') + '</span></button>'
+      + '<button type="button" class="pf-viewer__act pf-viewer__unhide" hidden>' + icon('image') + '<span class="pf-viewer__name">' + Drupal.t('Show image') + '</span></button>'
+      + '<button type="button" class="pf-viewer__close">' + icon('close') + '<span class="pf-viewer__name">' + Drupal.t('Close') + '</span></button>'
       + '</div>'
       + '</div>'
       + '<h2 class="pf-viewer__title" id="pf-viewer-title"></h2>'

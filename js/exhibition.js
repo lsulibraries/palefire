@@ -1176,7 +1176,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'pf-viewer__act pf-viewer__keep';
-    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 3.5h11v9h-11z"/><path d="M5 10h6"/></svg><span>' + Drupal.t('Keep listening') + '</span>';
+    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 12.5h9"/></svg><span class="pf-viewer__name">' + Drupal.t('Keep listening') + '</span>';
     button.addEventListener('click', () => {
       const wraps = Array.from(view.body.querySelectorAll('[data-pf-audio]'));
       minimize(wraps.find((wrap) => wrap.classList.contains('is-playing')) || wraps[0]);
