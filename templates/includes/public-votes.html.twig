@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Thumbs up and down on one thing, with their counts
+ * (Drupal\palefire\PublicNotes::votes()). Each is a button: js/public-notes.js
+ * sends the thumb through the page's note form at once (with Item or
+ * Section filled in), or adds it to a note being written. This browser
+ * remembers a thumb, so it counts once from here.
+ *
+ * - votes: good and changes, the counts.
+ * - about: what the thumbs are about, as the form's Item or Section holds it
+ *   ('' for the whole page).
+ * - label: the same in words, for screen readers.
+ */
+#}
+<div class="pf-pn-votes" data-pf-pn-votes data-about="{{ about }}">
+  {% for key in ['good', 'changes'] %}
+    <button type="button" class="pf-pn-vote pf-pn-vote--{{ key }}" data-pf-pn-vote="{{ key }}" aria-pressed="false">
+      {% include '@palefire/includes/icon-fa.html.twig' with { name: key == 'good' ? 'thumbs-up' : 'thumbs-down' } only %}
+      <span class="visually-hidden">{{ key == 'good' ? 'Thumbs up for @label'|t({ '@label': label }) : 'Thumbs down for @label'|t({ '@label': label }) }}, </span>
+      <span class="pf-pn-vote__count" data-pf-pn-count>{{ votes[key]|default(0) }}</span>
+    </button>
+  {% endfor %}
+</div>

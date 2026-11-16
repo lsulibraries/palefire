@@ -2,57 +2,27 @@
  * @file
  * The public relations timeline (includes/pr-timeline.html.twig).
  *
- * Show notes: approved notes are in the page for everyone; this hides them
- * until the reader turns them on, and remembers the choice in this browser.
  * Comment: fills the form's Item with the item's date and title, marks the
  * item, and brings the form to the reader (it follows the timeline on
- * narrow screens; wider, it is already beside it).
+ * narrow screens; wider, it is already beside it). Show notes and thumbs:
+ * js/public-notes.js.
  */
 (function (Drupal, once) {
   'use strict';
-
-  const KEY = 'pf-prt-notes';
 
   function stillMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       document.documentElement.classList.contains('pf-a11y-motion');
   }
 
+  function clearActive(root) {
+    root.querySelectorAll('[data-pf-prt-item].is-active').forEach((el) => el.classList.remove('is-active'));
+  }
+
   Drupal.behaviors.pfPrTimeline = {
     attach(context) {
       once('pf-prt', '[data-pf-prt]', context).forEach((root) => {
-        const toggle = root.querySelector('[data-pf-prt-toggle]');
         const panel = root.querySelector('[data-pf-prt-panel]');
-        const notes = root.querySelectorAll('[data-pf-prt-notes]');
-
-        if (toggle && notes.length) {
-          let on = false;
-          try {
-            on = window.localStorage.getItem(KEY) === '1';
-          }
-          catch (e) {
-            // Storage may be blocked; notes start hidden.
-          }
-          const set = (value, remember) => {
-            on = value;
-            toggle.setAttribute('aria-pressed', String(on));
-            notes.forEach((el) => {
-              el.hidden = !on;
-            });
-            if (remember) {
-              try {
-                window.localStorage.setItem(KEY, on ? '1' : '0');
-              }
-              catch (e) {
-                // Not remembered; fine.
-              }
-            }
-          };
-          set(on, false);
-          toggle.hidden = false;
-          toggle.addEventListener('click', () => set(!on, true));
-        }
-
         if (!panel) {
           return;
         }
@@ -70,7 +40,7 @@
           }
           event.preventDefault();
           field.value = link.dataset.item || '';
-          root.querySelectorAll('[data-pf-prt-item].is-active').forEach((el) => el.classList.remove('is-active'));
+          clearActive(root);
           const item = link.closest('[data-pf-prt-item]');
           if (item) {
             item.classList.add('is-active');
@@ -85,7 +55,7 @@
         // Clearing Item by hand writes about the timeline as a whole.
         panel.addEventListener('input', (event) => {
           if (event.target.name === 'item' && event.target.value.trim() === '') {
-            root.querySelectorAll('[data-pf-prt-item].is-active').forEach((el) => el.classList.remove('is-active'));
+            clearActive(root);
           }
         });
       });

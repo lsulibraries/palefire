@@ -103,7 +103,7 @@ $sections = [
     'wide' => TRUE,
     'blocks' => [
       [NULL, <<<HTML
-<p>This is the email as it stands in Constant Contact right now; changes appear here within five minutes. Choose <strong>Comment</strong> beside a story to send a note about it, or write about the whole issue. Your name and notes go only to the newsletter team.</p>
+<p>This is the email as it stands in Constant Contact right now; changes appear here within five minutes. Choose <strong>Comment</strong> beside a story to send a note about it, or write about the whole issue. Give a thumbs up or down, too: thumbs show below the draft right away, and notes once the newsletter team approves them.</p>
 <p>$marker</p>
 HTML, 'default'],
     ],

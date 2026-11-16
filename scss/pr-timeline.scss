@@ -6,12 +6,16 @@
 // at each item, the date set in the guide's mono label, the title in the
 // body face. The note form stands to the right and follows the reader once
 // the block is 56rem wide; narrower, it follows the timeline. Approved notes
-// sit under their item, hidden until Show notes is on.
+// sit under their item, hidden until Show notes is on; thumbs beside each
+// item's Comment link.
 //
 // No literal colors: the section's own tokens, so it reads on any swatch.
 
 @import "variables";
 @import "components/note-form";
+@import "components/public-notes";
+
+@include pf-public-notes(prt);
 
 // A wide section lets the block take the full column (guide-wide.scss caps
 // blocks it doesn't know at 52rem with zero specificity).
@@ -48,7 +52,7 @@
   }
 }
 
-// Counts and the Show notes switch. -------------------------------------------
+// Counts and the Show notes switch (components/_public-notes.scss). -------
 .pf-prt__bar {
   display: flex;
   flex-wrap: wrap;
@@ -64,68 +68,6 @@
   @include pf-prt-label;
   margin: 0;
   color: var(--pf-prt-muted);
-}
-
-.pf-prt__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: .625rem;
-  min-height: 2.75rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--pf-prt-ink);
-  font-family: var(--bs-body-font-family);
-  font-size: .9375rem;
-  font-weight: $pf-button-weight;
-  cursor: pointer;
-
-  &[hidden] {
-    display: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-prt-accent);
-    outline-offset: 2px;
-  }
-}
-
-// A square-cornered switch: an outlined track, filled in ink when on.
-.pf-prt__switch {
-  position: relative;
-  flex: none;
-  width: 2.25rem;
-  height: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
-  background: transparent;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: calc(1.25rem - 8px);
-    height: calc(1.25rem - 8px);
-    background: var(--pf-prt-ink);
-  }
-
-  @include pf-prt-motion {
-    transition: background-color $pf-hover-out var(--pf-prt-ease);
-
-    &::after {
-      transition: translate .3s var(--pf-prt-ease), background-color $pf-hover-out ease;
-    }
-  }
-
-  [aria-pressed="true"] > & {
-    border-color: var(--pf-prt-ink);
-    background: var(--pf-prt-ink);
-
-    &::after {
-      translate: 1rem 0;
-      background: var(--bs-body-bg);
-    }
-  }
 }
 
 // The timeline. ----------------------------------------------------------------
@@ -271,13 +213,6 @@
   }
 }
 
-// The icons are inline SVGs (the theme loads no Font Awesome CSS).
-.pf-prt__icon {
-  flex: none;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
 .pf-prt__tally {
   @include pf-prt-label;
   color: var(--pf-prt-muted);
@@ -333,66 +268,16 @@
   }
 }
 
-// Approved notes. ---------------------------------------------------------------
-.pf-prt__notes {
-  margin-top: .75rem;
-
-  &[hidden] {
-    display: none;
-  }
-
-  @include pf-prt-motion {
-    animation: pf-prt-notes .4s var(--pf-prt-ease);
-  }
-}
-
-@keyframes pf-prt-notes {
-  from {
-    opacity: 0;
-    translate: 0 -.25rem;
-  }
-}
-
-.pf-prt__note-list {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.pf-prt__n {
-  padding-inline-start: 1rem;
-  border-inline-start: 2px solid var(--pf-prt-rule);
-}
-
-.pf-prt__n-text {
-  margin: 0;
-  color: var(--pf-prt-ink);
-  font-size: .9375rem;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
-}
-
-.pf-prt__n-who {
-  margin: .25rem 0 0;
-  color: var(--pf-prt-muted);
-  font-size: .8125rem;
-}
-
+// Notes and thumbs on the timeline as a whole (each note: .pf-pn). --------
 .pf-prt__general {
   margin-top: 2.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--pf-prt-rule);
-
-  &:has(> .pf-prt__notes[hidden]) {
-    display: none;
-  }
 }
 
 .pf-prt__general-title {
   @include pf-prt-label;
-  margin: 0;
+  margin: 0 0 .5rem;
   color: var(--pf-prt-ink);
 }
 

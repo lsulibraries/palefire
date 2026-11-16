@@ -15,18 +15,22 @@
  * - preview: Constant Contact's own public preview.
  * - form: the newsletter_review Webform (NULL: not created yet).
  * - issue: the campaign's id, saved with each comment.
+ * - public: this issue's approved notes and thumbs (groups, each with about,
+ *   notes and votes; count; thumbs), shown under the draft: thumbs count at
+ *   once, notes once staff approve them (Drupal\palefire\PublicNotes).
  *
  * The email sits in a sandboxed frame (no scripts; links open a new tab), so
  * its own styles never touch the page. js/newsletter-review.js sizes the
  * frame to the email, adds a Comment button beside each story, fills the
  * form's Section when one is chosen, and, for ?for=<words>, scrolls to and
- * marks the story whose headline has those words. Below 63rem the form is a
- * sheet opened from a bar at the foot of the screen.
+ * marks the story whose headline has those words. Below 56rem the form is a
+ * sheet opened from a bar at the foot of the screen. Show notes and thumbs:
+ * js/public-notes.js (data-pf-pn-*).
  */
 #}
 {{ attach_library('palefire/newsletter-review') }}
 {% set panel_id = uid ~ '-panel' %}
-<div class="pf-nlr" data-pf-nlr data-version="{{ version }}">
+<div class="pf-nlr" data-pf-nlr data-version="{{ version }}" data-pf-pn-root data-pf-pn-key="section">
   <p class="pf-nlr__meta">
     {% if version %}
       <span class="pf-nlr__version">{{ 'Draft as of @time'|t({ '@time': fetched|format_date('custom', 'M j, g:i a') }) }} <span class="pf-nlr__code">v{{ version }}</span></span>
@@ -42,13 +46,14 @@
         <p class="pf-nlr__missing">{{ 'The draft could not be loaded just now. Try again in a minute, or'|t }} <a href="{{ preview }}" target="_blank" rel="noopener">{{ 'open the preview on its own'|t }}</a>.</p>
       {% endif %}
     </div>
-    <aside class="pf-nlr__panel" id="{{ panel_id }}" data-pf-nlr-panel aria-labelledby="{{ uid }}-title" tabindex="-1">
+    <aside class="pf-nlr__panel" id="{{ panel_id }}" data-pf-nlr-panel data-pf-pn-form aria-labelledby="{{ uid }}-title" tabindex="-1">
       <div class="pf-nlr__head">
         <p class="pf-nlr__title" id="{{ uid }}-title">{{ 'Your feedback'|t }}</p>
         <button type="button" class="pf-nlr__close" data-pf-nlr-close aria-label="{{ 'Close feedback'|t }}"><svg class="pf-nl-x" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></button>
       </div>
       <p class="pf-nlr__for" data-pf-nlr-for hidden></p>
-      <p class="pf-nlr__help">{{ 'Choose Comment beside a story to tie your note to it, or write about the whole issue. Send as many notes as you like. Your name is optional: anonymous notes are welcome too.'|t }}</p>
+      {% include '@palefire/includes/public-take-icons.html.twig' only %}
+      <p class="pf-nlr__help">{{ 'Choose Comment beside a story to tie your note to it, or write about the whole issue. Send as many notes as you like. Your name is optional: anonymous notes are welcome too. Thumbs count right away; notes show under the draft only after the newsletter team approves them, with your name if you give one.'|t }}</p>
       {% if form %}
         {{ form }}
       {% else %}
@@ -56,7 +61,32 @@
       {% endif %}
     </aside>
   </div>
+  {% if public.groups %}
+    <section class="pf-nlr__public" aria-labelledby="{{ uid }}-public">
+      <div class="pf-nlr__public-bar">
+        <h3 class="pf-nlr__public-title" id="{{ uid }}-public">{{ 'Notes and thumbs'|t }}</h3>
+        <p class="pf-nlr__public-count">
+          {{ public.count == 1 ? '1 approved note'|t : '@count approved notes'|t({ '@count': public.count }) }}
+          <span aria-hidden="true">·</span>
+          {{ public.thumbs == 1 ? '1 thumb'|t : '@count thumbs'|t({ '@count': public.thumbs }) }}
+        </p>
+        {% if public.count %}
+          {% include '@palefire/includes/public-notes-toggle.html.twig' only %}
+        {% endif %}
+      </div>
+      {% for group in public.groups %}
+        {% set group_label = group.about ?: 'The whole issue'|t %}
+        <div class="pf-nlr__group">
+          <h4 class="pf-nlr__group-title">{{ group_label }}</h4>
+          {% include '@palefire/includes/public-votes.html.twig' with { votes: group.votes, about: group.about, label: group_label } only %}
+          {% if group.notes %}
+            {% include '@palefire/includes/public-notes.html.twig' with { notes: group.notes, label: group_label } only %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
   <div class="pf-nlr__dock">
-    <button type="button" class="pf-nlr__open" data-pf-nlr-open aria-controls="{{ panel_id }}" aria-expanded="false">{% include '@palefire/includes/icon-feedback.svg.twig' with { class: 'pf-nlr__icon' } only %} {{ 'Leave feedback'|t }}</button>
+    <button type="button" class="pf-nlr__open" data-pf-nlr-open aria-controls="{{ panel_id }}" aria-expanded="false">{% include '@palefire/includes/icon-fa.html.twig' with { name: 'comment-alt-lines', class: 'pf-nlr__icon' } only %} {{ 'Leave feedback'|t }}</button>
   </div>
 </div>

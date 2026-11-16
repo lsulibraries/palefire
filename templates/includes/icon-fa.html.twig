@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * A Font Awesome Pro 5 duotone icon, inline, read from the server's copy at
+ * /libraries/fontawesome-pro (never kept in this public repo; the theme
+ * attaches no Font Awesome CSS, so an <i class="fa…"> draws nothing).
+ * Draws nothing if the file is missing. Decorative: the control it sits in
+ * names itself. Sized and colored by .pf-fa (components/_public-notes.scss):
+ * both tones take the text color, the secondary at 40%.
+ *
+ * - name: the icon's file name in svgs/duotone, such as comment-alt-lines.
+ * - class: optional extra class.
+ */
+#}
+<span class="pf-fa{{ class ? ' ' ~ class }}" aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/duotone/' ~ name ~ '.svg', ignore_missing = true)|raw }}</span>

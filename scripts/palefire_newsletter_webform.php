@@ -9,7 +9,10 @@
  * readers to reply to the email instead. Drupal\palefire\NewsletterReview
  * renders it with the issue and the draft's version filled in, and
  * js/newsletter-review.js fills in the section when a reader chooses
- * Comment beside a story. Rename a key below and that stops.
+ * Comment beside a story. Drupal\palefire\PublicNotes shows the issue's
+ * thumbs under the draft at once, and a note once staff tick its Approved
+ * box; js/public-notes.js sends a thumb from there through this form.
+ * Rename a key below and that stops.
  *
  *   drush php:script scripts/palefire_newsletter_webform.php
  *   drush php:script scripts/palefire_newsletter_webform.php -- apply=1
@@ -20,7 +23,14 @@
  * (several, comma-separated). Notes are deleted after 365 days;
  * purge_days=N changes that, and purge_days=0 keeps them. If the form already
  * exists it is left alone, so edits made in the UI are kept. replace=1 resets
- * its fields and settings to these (submissions are kept).
+ * its fields and settings to these (submissions are kept): run it with
+ * replace=1 once to add the Approved box, Your take and the new thank-you
+ * (2026-11-16).
+ *
+ * To approve a note: the Webform's Results tab, open the note, Edit, tick
+ * "Approved to show on the review page", Save. Untick it to take it down.
+ * The box is private: readers never see it, and a note can't arrive
+ * approved.
  *
  * The form has no page of its own: it lives on the review pages, which are
  * published but unlisted, so anyone with the link can send a note, with a
@@ -69,8 +79,9 @@ if ($existing && !$replace) {
   return;
 }
 
-// The keys are the ones NewsletterReview::form() and js/newsletter-review.js
-// fill in: section, issue, version.
+// The keys are the ones NewsletterReview::form(), js/newsletter-review.js and
+// js/public-notes.js fill in (section, issue, version, verdict), and
+// PublicNotes reads (comment, verdict, approved).
 $elements = [
   'name' => [
     '#type' => 'textfield',
@@ -89,19 +100,30 @@ $elements = [
     '#type' => 'textarea',
     '#title' => 'Your note',
     '#description' => 'What to fix or change: names, titles, dates, figures, wording, photos.',
-    '#required' => TRUE,
-    '#required_error' => 'Write your note before sending.',
+    // Needed unless a thumb is chosen: a thumb alone is a whole answer.
+    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE]]],
+    '#required_error' => 'Write a note, or choose Looks good or Needs changes.',
     '#rows' => 5,
     '#maxlength' => 4000,
   ],
+  // Thumbs up (good) and down (changes), on the story chosen or the whole
+  // issue.
   'verdict' => [
     '#type' => 'radios',
-    '#title' => 'Overall',
+    '#title' => 'Your take',
     '#options' => [
       'good' => 'Looks good',
       'changes' => 'Needs changes',
     ],
     '#options_display' => 'side_by_side',
+  ],
+  // Staff only: a private element is left off the form readers see and
+  // shown to those who can see the results; no role may set it when sending.
+  'approved' => [
+    '#type' => 'checkbox',
+    '#title' => 'Approved to show on the review page',
+    '#private' => TRUE,
+    '#access_create_roles' => [],
   ],
   // Filled in by the review page, never shown.
   'issue' => ['#type' => 'hidden', '#title' => 'Issue (Constant Contact campaign)'],
@@ -121,11 +143,10 @@ $settings = [
   'ajax_scroll_top' => '',
   'form_remote_addr' => FALSE,
   'form_previous_submissions' => FALSE,
-  'confirmation_type' => 'inline',
+  // A message over a fresh form, so the next note or thumb can follow.
+  'confirmation_type' => 'message',
   'confirmation_title' => '',
-  'confirmation_message' => '<p>Thank you, your note is in. Choose Comment beside another story, or send another below.</p>',
-  'confirmation_back' => TRUE,
-  'confirmation_back_label' => 'Send another note',
+  'confirmation_message' => '<p>Thank you, it’s in. Thumbs count right away; a note shows under the draft once the newsletter team approves it.</p>',
   'purge' => $purge_days > 0 ? 'all' : 'none',
   'purge_days' => $purge_days > 0 ? $purge_days : NULL,
 ];

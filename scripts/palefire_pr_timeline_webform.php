@@ -6,16 +6,18 @@
  *
  * The timeline page (scripts/palefire_pr_timeline.php) shows this form beside
  * the timeline once it exists. js/pr-timeline.js fills in the item when a
- * reader chooses Comment beside one, and Drupal\palefire\PrTimeline shows a
- * note on the page once staff tick its Approved box. Rename a key below and
- * that stops.
+ * reader chooses Comment beside one, and js/public-notes.js sends a thumb
+ * through it (item and verdict, no note). Drupal\palefire\PublicNotes counts
+ * the thumbs at once and shows a note once staff tick its Approved box.
+ * Rename a key below and that stops.
  *
  *   drush php:script scripts/palefire_pr_timeline_webform.php
  *   drush php:script scripts/palefire_pr_timeline_webform.php -- apply=1
  *   drush php:script scripts/palefire_pr_timeline_webform.php -- apply=1 email=group@example.edu
  *   drush cr
  *
- * A dry run unless apply=1. email= also sends each note to that address
+ * A dry run unless apply=1. Made before thumbs were added (2026-11-16)? Run
+ * it with replace=1 to add Your take and the new thank-you. email= also sends each note to that address
  * (several, comma-separated), so staff know there is one to approve. Notes
  * are kept until deleted; purge_days=N deletes them after N days. If the
  * form already exists it is left alone, so edits made in the UI are kept.
@@ -73,7 +75,7 @@ if ($existing && !$replace) {
 }
 
 // The keys are the ones Drupal\palefire\PrTimeline and js/pr-timeline.js
-// read and fill in: name, item, comment, approved.
+// read and fill in: name, item, comment, verdict, approved.
 $elements = [
   'name' => [
     '#type' => 'textfield',
@@ -91,10 +93,21 @@ $elements = [
   'comment' => [
     '#type' => 'textarea',
     '#title' => 'Your note',
-    '#required' => TRUE,
-    '#required_error' => 'Write your note before sending.',
+    // Needed unless a thumb is chosen: a thumb alone is a whole answer.
+    '#states' => ['required' => [':input[name="verdict"]' => ['empty' => TRUE]]],
+    '#required_error' => 'Write a note, or choose Like or Dislike.',
     '#rows' => 5,
     '#maxlength' => 4000,
+  ],
+  // Thumbs up and down; the timeline's thumbs fill it in.
+  'verdict' => [
+    '#type' => 'radios',
+    '#title' => 'Your take',
+    '#options' => [
+      'good' => 'Like',
+      'changes' => 'Dislike',
+    ],
+    '#options_display' => 'side_by_side',
   ],
   // Staff only: a private element is left off the form readers see and
   // shown to those who can see the results; no role may set it when sending.
@@ -118,11 +131,10 @@ $settings = [
   'ajax_scroll_top' => '',
   'form_remote_addr' => FALSE,
   'form_previous_submissions' => FALSE,
-  'confirmation_type' => 'inline',
+  // A message over a fresh form, so the next note or thumb can follow.
+  'confirmation_type' => 'message',
   'confirmation_title' => '',
-  'confirmation_message' => '<p>Thank you, your note is in. It will show on the timeline once staff approve it.</p>',
-  'confirmation_back' => TRUE,
-  'confirmation_back_label' => 'Send another note',
+  'confirmation_message' => '<p>Thank you, it’s in. Thumbs count right away; a note shows on the timeline once staff approve it.</p>',
   'purge' => $purge_days > 0 ? 'all' : 'none',
   'purge_days' => $purge_days > 0 ? $purge_days : NULL,
 ];

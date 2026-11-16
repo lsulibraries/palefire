@@ -56,10 +56,11 @@ final class NewsletterReview {
   /**
    * What the template needs, from the marker's two ids.
    *
-   * @return array{html: ?string, version: ?string, fetched: ?int, preview: string, form: ?array, issue: string}
+   * @return array{html: ?string, version: ?string, fetched: ?int, preview: string, form: ?array, issue: string, public: array}
    *   The email (NULL when it can't be fetched), its fingerprint, when it was
-   *   fetched, the public preview address, the Webform (NULL without it), and
-   *   the issue key saved with comments.
+   *   fetched, the public preview address, the Webform (NULL without it), the
+   *   issue key saved with comments, and the issue's approved notes and
+   *   thumbs (publicNotes()).
    */
   public static function view(string $account, string $activity): array {
     $preview = sprintf(self::PREVIEW, $account, strtolower($activity));
@@ -71,7 +72,35 @@ final class NewsletterReview {
       'preview' => $preview,
       'form' => self::form($draft['version'] ?? '', strtolower($activity)),
       'issue' => strtolower($activity),
+      'public' => self::publicNotes(strtolower($activity)),
     ];
+  }
+
+  /**
+   * This issue's approved notes and thumbs, by story (PublicNotes).
+   *
+   * @return array{groups: list<array{about: string, notes: array, votes: array}>, count: int, thumbs: int}
+   *   One group per story with any (the whole issue first, then in the order
+   *   notes arrived), how many approved notes and how many thumbs in all.
+   */
+  private static function publicNotes(string $issue): array {
+    $notes = PublicNotes::approved(self::WEBFORM, 'section', ['issue' => $issue]);
+    $votes = PublicNotes::votes(self::WEBFORM, 'section', ['issue' => $issue]);
+    $order = array_unique(array_merge([''], array_keys($notes), array_keys($votes)));
+    $groups = [];
+    $count = 0;
+    $thumbs = 0;
+    foreach ($order as $about) {
+      $about = (string) $about;
+      if (!isset($notes[$about]) && !isset($votes[$about])) {
+        continue;
+      }
+      $tally = $votes[$about] ?? ['good' => 0, 'changes' => 0];
+      $groups[] = ['about' => $about, 'notes' => $notes[$about] ?? [], 'votes' => $tally];
+      $count += count($notes[$about] ?? []);
+      $thumbs += $tally['good'] + $tally['changes'];
+    }
+    return ['groups' => $groups, 'count' => $count, 'thumbs' => $thumbs];
   }
 
   /**
@@ -331,10 +360,11 @@ final class NewsletterReview {
   }
 
   /**
-   * Cache tags for the paragraph: the Webform's, so editing it redraws.
+   * Cache tags for the paragraph: the Webform's, so editing it redraws,
+   * and its submissions', so a note approved or a thumb sent shows.
    */
   public static function cacheTags(): array {
-    return Cache::mergeTags([self::cacheTag()], ['config:webform.webform.' . self::WEBFORM]);
+    return Cache::mergeTags([self::cacheTag()], PublicNotes::cacheTags(self::WEBFORM));
   }
 
 }

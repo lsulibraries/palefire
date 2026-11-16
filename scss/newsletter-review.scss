@@ -13,6 +13,9 @@
 
 @import "variables";
 @import "components/note-form";
+@import "components/public-notes";
+
+@include pf-public-notes(nlr);
 
 // A wide section lets the block take the full column (guide-wide.scss caps
 // blocks it doesn't know at 52rem with zero specificity).
@@ -195,23 +198,16 @@
     background: var(--pf-nlr-accent);
     color: var(--pf-on-accent, var(--bs-body-color));
   }
-
 }
 
 // The icons are inline SVGs (the theme loads no Font Awesome CSS, so an
 // <i class="fa…"> draws nothing): the feedback mark /v2/search uses on the
-// round pins and the Leave feedback button (includes/icon-feedback.svg.twig;
-// the pins' only sign when their words are hidden), and a drawn X on the
-// close buttons. Both take the button's color.
-.pf-nlr__pin-button svg,
-.pf-nlr__icon,
+// round pins and the Leave feedback button (.pf-fa, read from the server's
+// Font Awesome Pro by includes/icon-fa.html.twig; the pins' only sign when
+// their words are hidden), and a drawn X on the close buttons. Both take the
+// button's color.
 .pf-nl-x {
   flex: none;
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.pf-nl-x {
   width: 1rem;
   height: 1rem;
 }
@@ -371,6 +367,54 @@
 // shared with the PR timeline).
 .pf-nlr__panel {
   @include pf-note-form(nlr);
+}
+
+// Notes and thumbs under the draft: each story with any, its thumbs and the
+// notes the team approved (hidden until Show notes is on). ------------------
+.pf-nlr__public {
+  max-width: 48rem;
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pf-nlr-rule);
+}
+
+.pf-nlr__public-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1.5rem;
+  align-items: center;
+  margin-bottom: .5rem;
+}
+
+.pf-nlr__public-title {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--pf-guide-heading, var(--pf-nlr-ink));
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.pf-nlr__public-count {
+  @include pf-nlr-label;
+  margin: 0 auto 0 0;
+  color: var(--pf-nlr-muted);
+}
+
+.pf-nlr__group {
+  padding: 1.25rem 0;
+
+  & + & {
+    border-top: 1px solid var(--pf-nlr-rule);
+  }
+}
+
+.pf-nlr__group-title {
+  margin: 0 0 .5rem;
+  color: var(--pf-nlr-ink);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 // Side by side: the form follows the reader.

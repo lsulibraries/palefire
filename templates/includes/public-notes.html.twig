@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Approved notes on one thing: a timeline item, a newsletter story, or the
+ * whole page (Drupal\palefire\PublicNotes). Hidden by js/public-notes.js
+ * until the reader turns on Show notes; without it they simply show.
+ *
+ * - notes: each with name ('' when sent without one), comment, verdict
+ *   ('good', 'changes' or '') and created (timestamp).
+ * - label: what the notes are about, for screen readers.
+ */
+#}
+<div class="pf-pn" data-pf-pn-notes>
+  <ul class="pf-pn__list" role="list" aria-label="{{ 'Notes on @label'|t({ '@label': label }) }}">
+    {% for note in notes %}
+      <li class="pf-pn__n">
+        <p class="pf-pn__text">{{ note.comment|nl2br }}</p>
+        <p class="pf-pn__who">
+          {% if note.verdict in ['good', 'changes'] %}
+            {% include '@palefire/includes/icon-fa.html.twig' with { name: note.verdict == 'good' ? 'thumbs-up' : 'thumbs-down', class: 'pf-pn__mark' } only %}
+            <span class="visually-hidden">{{ note.verdict == 'good' ? 'Thumbs up.'|t : 'Thumbs down.'|t }} </span>
+          {% endif %}
+          {{ note.name ?: 'Anonymous'|t }}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><time datetime="{{ note.created|date('Y-m-d') }}">{{ note.created|format_date('custom', 'M j, Y') }}</time>
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

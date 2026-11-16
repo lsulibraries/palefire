@@ -14,11 +14,11 @@ namespace Drupal\palefire;
  *   <strong>Date</strong> Title — an optional short note, links allowed
  *
  * (the note can also follow a line break instead of the dash). Each item has
- * a Comment link that ties a note to it; the notes go to the Webform
- * "pr_timeline" (scripts/palefire_pr_timeline_webform.php), with a name or
- * without. A note shows on the page only once staff tick its Approved box
- * in the Webform's results, and then only when the reader turns on Show
- * notes (js/pr-timeline.js).
+ * a Comment link that ties a note to it, and thumbs up and down; both go to
+ * the Webform "pr_timeline" (scripts/palefire_pr_timeline_webform.php), with
+ * a name or without. A thumb counts at once; a note shows on the page only
+ * once staff tick its Approved box in the Webform's results, and then only
+ * when the reader turns on Show notes (PublicNotes, js/public-notes.js).
  */
 final class PrTimeline {
 
@@ -31,11 +31,6 @@ final class PrTimeline {
    * The paragraph that draws the timeline.
    */
   public const MARKER = '#<p>\s*\[pr-timeline\]\s*</p>#i';
-
-  /**
-   * The most approved notes read at once (oldest first).
-   */
-  private const MAX_NOTES = 500;
 
   /**
    * Takes the timeline's list out of a text that had the marker.
@@ -89,69 +84,37 @@ final class PrTimeline {
    * @param array $items
    *   From items().
    *
-   * @return array{items: array, general: array, count: int, form: ?array}
-   *   The items, each with its approved notes; notes on the timeline as a
-   *   whole (or on an item since renamed); how many notes in all; the
-   *   Webform (NULL until it is created).
+   * @return array{items: array, general: array, general_votes: array, count: int, form: ?array}
+   *   The items, each with its approved notes and its thumbs (votes: good,
+   *   changes); notes and thumbs on the timeline as a whole (or on an item
+   *   since renamed); how many notes in all; the Webform (NULL until it is
+   *   created).
    */
   public static function view(array $items): array {
-    $notes = self::notes();
+    $notes = PublicNotes::approved(self::WEBFORM, 'item');
+    $votes = PublicNotes::votes(self::WEBFORM, 'item');
     $count = 0;
     foreach ($items as &$item) {
       $item['notes'] = $notes[$item['label']] ?? [];
+      $item['votes'] = $votes[$item['label']] ?? ['good' => 0, 'changes' => 0];
       $count += count($item['notes']);
-      unset($notes[$item['label']]);
+      unset($notes[$item['label']], $votes[$item['label']]);
     }
     unset($item);
     $general = $notes ? array_merge(...array_values($notes)) : [];
     usort($general, fn (array $a, array $b): int => $a['created'] <=> $b['created']);
+    $general_votes = ['good' => 0, 'changes' => 0];
+    foreach ($votes as $tally) {
+      $general_votes['good'] += $tally['good'];
+      $general_votes['changes'] += $tally['changes'];
+    }
     return [
       'items' => $items,
       'general' => $general,
+      'general_votes' => $general_votes,
       'count' => $count + count($general),
       'form' => self::form(),
     ];
-  }
-
-  /**
-   * Approved notes by item label, oldest first.
-   *
-   * @return array<string, list<array{name: string, comment: string, created: int}>>
-   *   Keyed by the label the note was left on ('' for the whole timeline).
-   */
-  private static function notes(): array {
-    $types = \Drupal::entityTypeManager();
-    if (!$types->hasDefinition('webform_submission')) {
-      return [];
-    }
-    try {
-      $ids = \Drupal::database()->select('webform_submission_data', 'd')
-        ->fields('d', ['sid'])
-        ->condition('d.webform_id', self::WEBFORM)
-        ->condition('d.name', 'approved')
-        ->condition('d.value', '1')
-        ->orderBy('d.sid')
-        ->range(0, self::MAX_NOTES)
-        ->execute()
-        ->fetchCol();
-    }
-    catch (\Throwable $e) {
-      return [];
-    }
-    $notes = [];
-    foreach ($ids ? $types->getStorage('webform_submission')->loadMultiple($ids) : [] as $submission) {
-      $data = $submission->getData();
-      $comment = trim((string) ($data['comment'] ?? ''));
-      if (empty($data['approved']) || $comment === '') {
-        continue;
-      }
-      $notes[trim((string) ($data['item'] ?? ''))][] = [
-        'name' => trim((string) ($data['name'] ?? '')),
-        'comment' => $comment,
-        'created' => (int) $submission->getCreatedTime(),
-      ];
-    }
-    return $notes;
   }
 
   /**
@@ -166,10 +129,11 @@ final class PrTimeline {
   }
 
   /**
-   * Redrawn when a note is sent, approved or deleted, or the form changes.
+   * Redrawn when a note or a thumb is sent, approved or deleted, or the form
+   * changes.
    */
   public static function cacheTags(): array {
-    return ['webform_submission_list', 'config:webform.webform.' . self::WEBFORM];
+    return PublicNotes::cacheTags(self::WEBFORM);
   }
 
   /**

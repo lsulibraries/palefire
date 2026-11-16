@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * The Show notes switch (js/public-notes.js): shows or hides the approved
+ * notes in its data-pf-pn-root. Hidden until the script runs, since without
+ * it the notes simply show.
+ */
+#}
+<button type="button" class="pf-pn-toggle" data-pf-pn-toggle aria-pressed="false" hidden>
+  <span class="pf-pn-toggle__switch" aria-hidden="true"></span>
+  {{ 'Show notes'|t }}
+</button>

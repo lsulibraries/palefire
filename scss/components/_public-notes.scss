@@ -1,0 +1,210 @@
+// Palefire — public notes and thumbs (includes/public-notes.html.twig,
+// public-votes.html.twig, public-notes-toggle.html.twig, icon-fa.html.twig;
+// js/public-notes.js), on the PR timeline (pr-timeline.scss) and the
+// newsletter review pages (newsletter-review.scss). Each entry includes
+// these once at its root.
+//
+// $p is the block's custom property prefix: it supplies --pf-<p>-ink,
+// --pf-<p>-muted, --pf-<p>-accent, --pf-<p>-rule and --pf-<p>-ease.
+
+// Font Awesome icons read from the server (icon-fa.html.twig): both tones in
+// the text color, the secondary at 40% (the file's own .fa-secondary rule).
+@mixin pf-fa {
+  .pf-fa {
+    display: inline-flex;
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+  }
+}
+
+@mixin pf-public-notes($p) {
+  @include pf-fa;
+
+  $motion: 'html:not(.pf-a11y-motion)';
+
+  // The Show notes switch: a square-cornered track, filled in ink when on.
+  .pf-pn-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .625rem;
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--pf-#{$p}-ink);
+    font-family: var(--bs-body-font-family);
+    font-size: .9375rem;
+    font-weight: $pf-button-weight;
+    cursor: pointer;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-#{$p}-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  .pf-pn-toggle__switch {
+    position: relative;
+    flex: none;
+    width: 2.25rem;
+    height: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+    background: transparent;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: calc(1.25rem - 8px);
+      height: calc(1.25rem - 8px);
+      background: var(--pf-#{$p}-ink);
+    }
+
+    [aria-pressed="true"] > & {
+      border-color: var(--pf-#{$p}-ink);
+      background: var(--pf-#{$p}-ink);
+
+      &::after {
+        translate: 1rem 0;
+        background: var(--bs-body-bg);
+      }
+    }
+  }
+
+  // Thumbs: square buttons ringed in the hairline, the count beside the icon.
+  .pf-pn-votes {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .375rem;
+  }
+
+  .pf-pn-vote {
+    display: inline-flex;
+    align-items: center;
+    gap: .4375rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0 .75rem;
+    border: 0;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--pf-#{$p}-rule);
+    color: var(--pf-#{$p}-ink);
+    font-family: var(--bs-body-font-family);
+    font-size: .875rem;
+    font-weight: $pf-button-weight;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--bs-body-color) 9%, transparent);
+      box-shadow: inset 0 -2px 0 var(--pf-#{$p}-accent), inset 0 0 0 1px var(--pf-#{$p}-rule);
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-#{$p}-accent);
+      outline-offset: 2px;
+    }
+
+    // The thumb this browser gave.
+    &[aria-pressed="true"] {
+      background: color-mix(in srgb, var(--bs-body-color) 9%, transparent);
+      box-shadow: inset 0 -2px 0 var(--pf-#{$p}-accent), inset 0 0 0 1px var(--pf-#{$p}-rule);
+
+      .pf-fa {
+        color: var(--pf-#{$p}-accent);
+      }
+    }
+  }
+
+  // Your take, in the form: the thumbs before Looks good / Needs changes.
+  .pf-pn-take {
+    margin-inline-end: .375rem;
+    vertical-align: -.1875rem;
+  }
+
+  // Approved notes.
+  .pf-pn {
+    margin-top: .75rem;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .pf-pn__list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pf-pn__n {
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--pf-#{$p}-rule);
+  }
+
+  .pf-pn__text {
+    margin: 0;
+    color: var(--pf-#{$p}-ink);
+    font-size: .9375rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .pf-pn__who {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 .375rem;
+    margin: .25rem 0 0;
+    color: var(--pf-#{$p}-muted);
+    font-size: .8125rem;
+  }
+
+  .pf-pn__mark {
+    width: .875rem;
+    height: .875rem;
+    color: var(--pf-#{$p}-ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #{$motion} .pf-pn-toggle__switch {
+      transition: background-color $pf-hover-out var(--pf-#{$p}-ease);
+
+      &::after {
+        transition: translate .3s var(--pf-#{$p}-ease), background-color $pf-hover-out ease;
+      }
+    }
+
+    #{$motion} .pf-pn-vote {
+      transition: background-color $pf-hover-out ease, box-shadow $pf-hover-out ease;
+    }
+
+    #{$motion} .pf-pn {
+      animation: pf-pn-in .4s var(--pf-#{$p}-ease);
+    }
+  }
+
+  @keyframes pf-pn-in {
+    from {
+      opacity: 0;
+      translate: 0 -.25rem;
+    }
+  }
+}

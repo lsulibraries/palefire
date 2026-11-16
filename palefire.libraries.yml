@@ -558,9 +558,24 @@ styleguide:
     - core/drupal
     - core/once
 
-# Public relations timeline: items anyone can leave a note on, and the notes
-# staff approved (includes/pr-timeline.html.twig, Drupal\palefire\PrTimeline).
-# Attached by that template. Styles: its own entry (scss/pr-timeline.scss).
+# Public notes and thumbs: the Show notes switch and thumbs that send
+# themselves through the page's note form (js/public-notes.js,
+# Drupal\palefire\PublicNotes). No styles of its own: each page's entry
+# includes components/_public-notes.scss. A dependency of pr-timeline and
+# newsletter-review.
+public-notes:
+  version: 1.0.0
+  js:
+    js/public-notes.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.announce
+    - core/once
+
+# Public relations timeline: items anyone can leave a note or a thumb on, and
+# the notes staff approved (includes/pr-timeline.html.twig,
+# Drupal\palefire\PrTimeline). Attached by that template. Styles: its own
+# entry (scss/pr-timeline.scss).
 pr-timeline:
   version: 1.0.0
   css:
@@ -572,6 +587,7 @@ pr-timeline:
     - core/drupal
     - core/drupal.announce
     - core/once
+    - palefire/public-notes
 
 # Newsletter review: a Constant Contact draft beside its feedback form
 # (includes/newsletter-review.html.twig, Drupal\palefire\NewsletterReview).
@@ -588,3 +604,4 @@ newsletter-review:
     - core/drupal
     - core/drupal.debounce
     - core/once
+    - palefire/public-notes

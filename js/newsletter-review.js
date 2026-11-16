@@ -104,7 +104,7 @@
         const opener = root.querySelector('[data-pf-nlr-open]');
         const closer = root.querySelector('[data-pf-nlr-close]');
         const forNote = root.querySelector('[data-pf-nlr-for]');
-        const feedbackMark = opener ? opener.querySelector('svg') : null;
+        const feedbackMark = opener ? opener.querySelector('.pf-fa') : null;
         const words = forWords();
         let list = [];
         let active = null;
@@ -222,7 +222,7 @@
             button.className = 'pf-nlr__pin-button';
             button.setAttribute('aria-pressed', String(active && active.label === section.label));
             // The feedback icon, copied from the Leave feedback button
-            // (includes/icon-feedback.svg.twig).
+            // (includes/icon-fa.html.twig).
             button.innerHTML = '<span class="pf-nlr__pin-words"></span>';
             if (feedbackMark) {
               button.prepend(feedbackMark.cloneNode(true));

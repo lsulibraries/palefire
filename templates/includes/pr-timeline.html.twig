@@ -1,7 +1,8 @@
 {#
 /**
  * @file
- * A timeline of public relations events, with notes anyone can leave.
+ * A timeline of public relations events, with notes and thumbs anyone can
+ * leave.
  *
  * From a guide text paragraph that is only "[pr-timeline]": the list after
  * it is the timeline (palefire_preprocess_paragraph__guide_text(),
@@ -9,22 +10,20 @@
  *
  * - uid: unique on the page.
  * - items: each with date, title, label (what a note's Item holds), note (a
- *   render array or NULL) and notes, the approved notes on it, each with
- *   name ('' when sent without one), comment and created (timestamp).
+ *   render array or NULL), notes (the approved notes on it) and votes (good,
+ *   changes).
  * - general: approved notes on the timeline as a whole, or on an item since
- *   renamed.
+ *   renamed; general_votes, their thumbs.
  * - count: approved notes in all.
  * - form: the pr_timeline Webform (NULL: not created yet).
  *
  * Each item's Comment link goes to the form; js/pr-timeline.js also fills
- * in its Item. Approved notes are in the page for everyone; the script hides
- * them until the reader turns on Show notes (remembered in this browser),
- * so without it they simply show.
+ * in its Item. Thumbs and Show notes: js/public-notes.js (data-pf-pn-*).
  */
 #}
 {{ attach_library('palefire/pr-timeline') }}
 {% set form_id = uid ~ '-form' %}
-<div class="pf-prt" data-pf-prt>
+<div class="pf-prt" data-pf-prt data-pf-pn-root data-pf-pn-key="item">
   <div class="pf-prt__bar">
     <p class="pf-prt__summary">
       {{ items|length == 1 ? '1 item'|t : '@count items'|t({ '@count': items|length }) }}
@@ -32,10 +31,7 @@
       {{ count == 1 ? '1 approved note'|t : '@count approved notes'|t({ '@count': count }) }}
     </p>
     {% if count %}
-      <button type="button" class="pf-prt__toggle" data-pf-prt-toggle aria-pressed="true" hidden>
-        <span class="pf-prt__switch" aria-hidden="true"></span>
-        {{ 'Show notes'|t }}
-      </button>
+      {% include '@palefire/includes/public-notes-toggle.html.twig' only %}
     {% endif %}
   </div>
   <div class="pf-prt__layout">
@@ -51,14 +47,15 @@
                 {% if item.note %}
                   <div class="pf-prt__note">{{ item.note }}</div>
                 {% endif %}
-                <p class="pf-prt__actions">
-                  <a class="pf-prt__comment" href="#{{ form_id }}" data-pf-prt-comment data-item="{{ item.label }}">{% include '@palefire/includes/icon-feedback.svg.twig' with { class: 'pf-prt__icon' } only %}<span>{{ 'Comment'|t }}<span class="visually-hidden"> {{ 'on @title'|t({ '@title': item.title }) }}</span></span></a>
+                <div class="pf-prt__actions">
+                  <a class="pf-prt__comment" href="#{{ form_id }}" data-pf-prt-comment data-item="{{ item.label }}">{% include '@palefire/includes/icon-fa.html.twig' with { name: 'comment-alt-lines', class: 'pf-prt__icon' } only %}<span>{{ 'Comment'|t }}<span class="visually-hidden"> {{ 'on @title'|t({ '@title': item.title }) }}</span></span></a>
+                  {% include '@palefire/includes/public-votes.html.twig' with { votes: item.votes, about: item.label, label: item.title } only %}
                   {% if item.notes %}
                     <span class="pf-prt__tally">{{ item.notes|length == 1 ? '1 note'|t : '@count notes'|t({ '@count': item.notes|length }) }}</span>
                   {% endif %}
-                </p>
+                </div>
                 {% if item.notes %}
-                  {% include '@palefire/includes/pr-timeline-notes.html.twig' with { notes: item.notes, labelledby: item_id ~ '-title' } only %}
+                  {% include '@palefire/includes/public-notes.html.twig' with { notes: item.notes, label: item.title } only %}
                 {% endif %}
               </div>
             </li>
@@ -67,16 +64,18 @@
       {% else %}
         <p class="pf-prt__empty">{{ 'No items yet: add them as a list under [pr-timeline] in this block, each one “Date Title — note”, with the date in bold.'|t }}</p>
       {% endif %}
-      {% if general %}
-        <section class="pf-prt__general" aria-labelledby="{{ uid }}-general">
-          <h4 class="pf-prt__general-title" id="{{ uid }}-general">{{ 'On the timeline as a whole'|t }}</h4>
-          {% include '@palefire/includes/pr-timeline-notes.html.twig' with { notes: general, labelledby: uid ~ '-general' } only %}
-        </section>
-      {% endif %}
+      <section class="pf-prt__general" aria-labelledby="{{ uid }}-general">
+        <h4 class="pf-prt__general-title" id="{{ uid }}-general">{{ 'On the timeline as a whole'|t }}</h4>
+        {% include '@palefire/includes/public-votes.html.twig' with { votes: general_votes, about: '', label: 'the timeline as a whole'|t } only %}
+        {% if general %}
+          {% include '@palefire/includes/public-notes.html.twig' with { notes: general, label: 'the timeline as a whole'|t } only %}
+        {% endif %}
+      </section>
     </div>
-    <aside class="pf-prt__panel" id="{{ form_id }}" data-pf-prt-panel aria-labelledby="{{ uid }}-panel-title" tabindex="-1">
+    <aside class="pf-prt__panel" id="{{ form_id }}" data-pf-prt-panel data-pf-pn-form aria-labelledby="{{ uid }}-panel-title" tabindex="-1">
       <p class="pf-prt__panel-title" id="{{ uid }}-panel-title">{{ 'Leave a note'|t }}</p>
-      <p class="pf-prt__help">{{ 'Choose Comment beside an item to tie your note to it, or write about the timeline as a whole. No sign-in, and your name is optional. Notes show on this page only after staff approve them, with your name if you give one.'|t }}</p>
+      {% include '@palefire/includes/public-take-icons.html.twig' only %}
+      <p class="pf-prt__help">{{ 'Choose Comment beside an item to tie your note to it, or write about the timeline as a whole. No sign-in, and your name is optional. Thumbs count right away; notes show on this page only after staff approve them, with your name if you give one.'|t }}</p>
       {% if form %}
         {{ form }}
       {% else %}
