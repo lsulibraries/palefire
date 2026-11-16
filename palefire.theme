@@ -28,6 +28,7 @@ use Drupal\palefire\ExhibitFieldGuide;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\GlossaryTerms;
 use Drupal\palefire\NewsletterReview;
+use Drupal\palefire\PrTimeline;
 use Drupal\palefire\ResearchFigures;
 use Drupal\palefire\StaffDirectory;
 use Drupal\palefire\Hook\PalefireHooks;
@@ -122,7 +123,12 @@ function palefire_page_attachments_alter(array &$attachments) {
     \Drupal::service('page_cache_kill_switch')->trigger();
   }
 
-  if (!$is_resource && !$is_review && !preg_match('#^/concept(/|$)#i', $path)) {
+  // The public relations timeline (scripts/palefire_pr_timeline.php):
+  // published so anyone with the link can leave a note, never indexed. Its
+  // approved notes redraw it through the page cache's tags.
+  $is_timeline = (bool) preg_match('#^/v2/(?:special/)?internal/pr-timeline(/|$)#i', $path);
+
+  if (!$is_resource && !$is_review && !$is_timeline && !preg_match('#^/concept(/|$)#i', $path)) {
     return;
   }
 
@@ -2480,6 +2486,12 @@ const PALEFIRE_STYLEGUIDE_PLATES = ['overview', 'colors', 'type', 'grid', 'spaci
  * "[newsletter-compare]" draws its first two linked issues under a
  * before/after slider (includes/newsletter-compare.html.twig). The links
  * leave the text. NULL without a marker.
+ *
+ * pr_timeline: a paragraph that is only "[pr-timeline]" turns the first list
+ * after it in the block into a timeline anyone can leave notes on, with the
+ * notes staff approved (includes/pr-timeline.html.twig,
+ * Drupal\palefire\PrTimeline). The list leaves the text. NULL without a
+ * marker.
  */
 function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['request_paths'] = FALSE;
@@ -2490,6 +2502,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['newsletter'] = NULL;
   $variables['newsletter_archive'] = NULL;
   $variables['newsletter_compare'] = NULL;
+  $variables['pr_timeline'] = NULL;
   $variables['transcription'] = (bool) preg_match('#^\s*<h4[^>]*>\s*Transcription\s*</h4>#i', (string) $variables['paragraph']->get('field_block_body')->value);
   if (empty($variables['content']['field_block_body'])) {
     return;
@@ -2563,6 +2576,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
         $newsletter_parts[$part] = TRUE;
       }
     }
+    if (class_exists(PrTimeline::class) && isset($item['#text']) && preg_match(PrTimeline::MARKER, (string) $item['#text'])) {
+      $pr_text = preg_replace(PrTimeline::MARKER, '<!--pf-pr-timeline-->', (string) $item['#text'], 1);
+      // Only a list after the marker is the timeline.
+      [$before, $after] = explode('<!--pf-pr-timeline-->', $pr_text, 2);
+      [$pr_items, $after] = PrTimeline::items($after, (string) ($item['#format'] ?? ''));
+      $item['#text'] = preg_replace(PrTimeline::MARKER, '', $before . $after);
+      $variables['pr_timeline'] = $pr_items;
+    }
     if ($newsletter_parts && isset($item['#text'])) {
       [$found, $item['#text']] = NewsletterReview::issues((string) $item['#text']);
       $newsletter_issues = array_merge($newsletter_issues, $found);
@@ -2623,6 +2644,14 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       ->addCacheTags($past['tags'])
       ->addCacheTags(NewsletterReview::cacheTags())
       ->setCacheMaxAge(NewsletterReview::MAX_AGE)
+      ->applyTo($variables);
+  }
+  // Approved notes show as soon as they're approved: the Webform's
+  // submissions list tag clears the paragraph (and the page cache).
+  if ($variables['pr_timeline'] !== NULL) {
+    $variables['pr_timeline'] = PrTimeline::view($variables['pr_timeline']);
+    CacheableMetadata::createFromRenderArray($variables)
+      ->addCacheTags(PrTimeline::cacheTags())
       ->applyTo($variables);
   }
   // Sent issues are kept a day; a comparison, which is often of a draft,

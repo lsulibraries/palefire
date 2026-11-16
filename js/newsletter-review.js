@@ -104,6 +104,7 @@
         const opener = root.querySelector('[data-pf-nlr-open]');
         const closer = root.querySelector('[data-pf-nlr-close]');
         const forNote = root.querySelector('[data-pf-nlr-for]');
+        const feedbackMark = opener ? opener.querySelector('svg') : null;
         const words = forWords();
         let list = [];
         let active = null;
@@ -220,7 +221,12 @@
             button.type = 'button';
             button.className = 'pf-nlr__pin-button';
             button.setAttribute('aria-pressed', String(active && active.label === section.label));
-            button.innerHTML = '<i class="far fa-comment" aria-hidden="true"></i><span class="pf-nlr__pin-words"></span>';
+            // The feedback icon, copied from the Leave feedback button
+            // (includes/icon-feedback.svg.twig).
+            button.innerHTML = '<span class="pf-nlr__pin-words"></span>';
+            if (feedbackMark) {
+              button.prepend(feedbackMark.cloneNode(true));
+            }
             button.lastChild.textContent = Drupal.t('Comment');
             button.setAttribute('aria-label', Drupal.t('Comment on section @n: @label', { '@n': i + 1, '@label': section.label }));
             button.addEventListener('click', () => choose(section, button));

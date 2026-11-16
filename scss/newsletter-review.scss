@@ -12,6 +12,7 @@
 // No literal colors: the section's own tokens, so it reads on any swatch.
 
 @import "variables";
+@import "components/note-form";
 
 // A wide section lets the block take the full column (guide-wide.scss caps
 // blocks it doesn't know at 52rem with zero specificity).
@@ -194,6 +195,25 @@
     background: var(--pf-nlr-accent);
     color: var(--pf-on-accent, var(--bs-body-color));
   }
+
+}
+
+// The icons are inline SVGs (the theme loads no Font Awesome CSS, so an
+// <i class="fa…"> draws nothing): the feedback mark /v2/search uses on the
+// round pins and the Leave feedback button (includes/icon-feedback.svg.twig;
+// the pins' only sign when their words are hidden), and a drawn X on the
+// close buttons. Both take the button's color.
+.pf-nlr__pin-button svg,
+.pf-nlr__icon,
+.pf-nl-x {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.pf-nl-x {
+  width: 1rem;
+  height: 1rem;
 }
 
 .pf-nlr__pin-words {
@@ -347,139 +367,10 @@
   line-height: 1.5;
 }
 
-// Webform fields, in the theme's square, quiet manner.
+// Webform fields, in the theme's square, quiet manner (components/_note-form.scss,
+// shared with the PR timeline).
 .pf-nlr__panel {
-  form[aria-busy="true"] {
-    opacity: .6;
-    pointer-events: none;
-  }
-
-  .form-item,
-  fieldset {
-    min-width: 0;
-    margin: 0 0 1rem;
-    padding: 0;
-    border: 0;
-  }
-
-  label,
-  legend {
-    display: block;
-    float: none;
-    width: 100%;
-    margin-bottom: .375rem;
-    padding: 0;
-    color: var(--pf-nlr-ink);
-    font-size: .9375rem;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  .form-radios label,
-  .form-type-radio label {
-    display: inline;
-    margin: 0;
-    font-weight: 400;
-  }
-
-  .form-radios .form-item,
-  .form-type-radio {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    min-height: 2.75rem;
-    margin: 0;
-  }
-
-  .webform-options-display-side-by-side {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 1.25rem;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  textarea,
-  select {
-    display: block;
-    width: 100%;
-    min-height: 2.75rem;
-    padding: .5rem .75rem;
-    border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
-    border-radius: 0;
-    background: var(--bs-body-bg);
-    color: var(--pf-nlr-ink);
-    font: inherit;
-  }
-
-  textarea {
-    min-height: 7rem;
-    resize: vertical;
-  }
-
-  input[type="radio"] {
-    flex: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    margin: 0;
-    accent-color: var(--bs-body-color);
-  }
-
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    border-color: var(--pf-nlr-accent);
-    outline: 2px solid var(--pf-nlr-accent);
-    outline-offset: 0;
-    box-shadow: none;
-  }
-
-  .description {
-    margin: .375rem 0 0;
-    color: var(--pf-nlr-muted);
-    font-size: .875rem;
-  }
-
-  .form-actions {
-    margin: .25rem 0 0;
-  }
-
-  input[type="submit"] {
-    min-height: 2.75rem;
-    padding-inline: 1.5rem;
-    border: 1px solid var(--bs-body-color);
-    border-radius: 0;
-    background: var(--bs-body-color);
-    color: var(--bs-body-bg);
-    font: inherit;
-    font-weight: $pf-button-weight;
-    cursor: pointer;
-
-    &:hover {
-      opacity: .88;
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--pf-nlr-accent);
-      outline-offset: 2px;
-    }
-  }
-
-  .messages--error,
-  .webform-confirmation {
-    margin-bottom: 1rem;
-    padding: .75rem 1rem;
-    border-inline-start: 3px solid currentColor;
-    font-size: .9375rem;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  .webform-confirmation {
-    border-color: var(--pf-nlr-accent);
-  }
+  @include pf-note-form(nlr);
 }
 
 // Side by side: the form follows the reader.

@@ -33,6 +33,8 @@
  *   Constant Contact previews become a before/after slider or a gallery of
  *   past issues (includes/newsletter-compare.html.twig,
  *   newsletter-archive.html.twig).
+ * - pr_timeline: the text had a "[pr-timeline]" paragraph; the list after it
+ *   is a timeline readers can leave notes on (includes/pr-timeline.html.twig).
  */
 #}
 {% set title = paragraph.field_block_title.value|default('')|trim %}
@@ -70,6 +72,9 @@
   {% endif %}
   {% if newsletter_compare %}
     {% include '@palefire/includes/newsletter-compare.html.twig' with newsletter_compare|merge({ uid: 'nlc-' ~ paragraph.id() }) only %}
+  {% endif %}
+  {% if pr_timeline %}
+    {% include '@palefire/includes/pr-timeline.html.twig' with pr_timeline|merge({ uid: 'prt-' ~ paragraph.id() }) only %}
   {% endif %}
   {% if newsletter_archive %}
     {% include '@palefire/includes/newsletter-archive.html.twig' with newsletter_archive|merge({ uid: 'nla-' ~ paragraph.id() }) only %}

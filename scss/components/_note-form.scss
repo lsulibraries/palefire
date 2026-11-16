@@ -1,0 +1,139 @@
+// Palefire — the Webform note forms on the newsletter review pages
+// (newsletter-review.scss) and the PR timeline (pr-timeline.scss): fields,
+// radios, the send button, errors and the thank-you line, in the block's own
+// tokens. $p is the block's custom property prefix: it supplies
+// --pf-<p>-ink, --pf-<p>-muted and --pf-<p>-accent.
+
+@mixin pf-note-form($p) {
+  form[aria-busy="true"] {
+    opacity: .6;
+    pointer-events: none;
+  }
+
+  .form-item,
+  fieldset {
+    min-width: 0;
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+
+  label,
+  legend {
+    display: block;
+    float: none;
+    width: 100%;
+    margin-bottom: .375rem;
+    padding: 0;
+    color: var(--pf-#{$p}-ink);
+    font-size: .9375rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .form-radios label,
+  .form-type-radio label {
+    display: inline;
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .form-radios .form-item,
+  .form-type-radio {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 2.75rem;
+    margin: 0;
+  }
+
+  .webform-options-display-side-by-side {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.25rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    display: block;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: .5rem .75rem;
+    border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+    border-radius: 0;
+    background: var(--bs-body-bg);
+    color: var(--pf-#{$p}-ink);
+    font: inherit;
+  }
+
+  textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  input[type="radio"] {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    accent-color: var(--bs-body-color);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    border-color: var(--pf-#{$p}-accent);
+    outline: 2px solid var(--pf-#{$p}-accent);
+    outline-offset: 0;
+    box-shadow: none;
+  }
+
+  .description {
+    margin: .375rem 0 0;
+    color: var(--pf-#{$p}-muted);
+    font-size: .875rem;
+  }
+
+  .form-actions {
+    margin: .25rem 0 0;
+  }
+
+  input[type="submit"] {
+    min-height: 2.75rem;
+    padding-inline: 1.5rem;
+    border: 1px solid var(--bs-body-color);
+    border-radius: 0;
+    background: var(--bs-body-color);
+    color: var(--bs-body-bg);
+    font: inherit;
+    font-weight: $pf-button-weight;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .88;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-#{$p}-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  .messages--error,
+  .webform-confirmation {
+    margin-bottom: 1rem;
+    padding: .75rem 1rem;
+    border-inline-start: 3px solid currentColor;
+    font-size: .9375rem;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .webform-confirmation {
+    border-color: var(--pf-#{$p}-accent);
+  }
+}

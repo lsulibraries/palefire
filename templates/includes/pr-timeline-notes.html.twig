@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Approved notes on a timeline item, or on the timeline as a whole
+ * (includes/pr-timeline.html.twig).
+ *
+ * - notes: each with name ('' when sent without one), comment and created.
+ * - labelledby: the id of the heading the notes are about.
+ */
+#}
+<div class="pf-prt__notes" data-pf-prt-notes>
+  <ul class="pf-prt__note-list" role="list" aria-labelledby="{{ labelledby }}">
+    {% for note in notes %}
+      <li class="pf-prt__n">
+        <p class="pf-prt__n-text">{{ note.comment|nl2br }}</p>
+        <p class="pf-prt__n-who">{{ note.name ?: 'Anonymous'|t }}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><time datetime="{{ note.created|date('Y-m-d') }}">{{ note.created|format_date('custom', 'M j, Y') }}</time></p>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

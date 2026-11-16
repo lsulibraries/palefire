@@ -1,0 +1,456 @@
+// Palefire — the public relations timeline (includes/pr-timeline.html.twig,
+// js/pr-timeline.js). Its own entry point (css/pr-timeline.css, library
+// palefire/pr-timeline), so only the timeline page loads it.
+//
+// A ruled list read top to bottom: a hairline spine with a small open ring
+// at each item, the date set in the guide's mono label, the title in the
+// body face. The note form stands to the right and follows the reader once
+// the block is 56rem wide; narrower, it follows the timeline. Approved notes
+// sit under their item, hidden until Show notes is on.
+//
+// No literal colors: the section's own tokens, so it reads on any swatch.
+
+@import "variables";
+@import "components/note-form";
+
+// A wide section lets the block take the full column (guide-wide.scss caps
+// blocks it doesn't know at 52rem with zero specificity).
+.pf-guide--wide > .pf-guide-block:has(> .pf-prt) {
+  max-width: none;
+}
+
+.pf-prt {
+  --pf-prt-ink: var(--bs-body-color);
+  --pf-prt-muted: var(--pf-guide-muted, var(--bs-secondary-color));
+  --pf-prt-accent: var(--pf-guide-accent, var(--bs-primary));
+  --pf-prt-rule: #{$pf-hairline};
+  --pf-prt-ease: cubic-bezier(.2, .7, .2, 1);
+  --pf-prt-top: calc(var(--pf-header-h, 50px) + 1rem);
+  // Where the spine runs: the middle of the ring column.
+  --pf-prt-ring: .75rem;
+  --pf-prt-axis: calc(var(--pf-prt-ring) / 2);
+
+  container: pf-prt / inline-size;
+  margin-top: 1.5rem;
+}
+
+@mixin pf-prt-label {
+  font: 700 var(--pf-mono-label, .75rem)/1.5 var(--pf-guide-mono, monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@mixin pf-prt-motion {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.pf-a11y-motion) & {
+      @content;
+    }
+  }
+}
+
+// Counts and the Show notes switch. -------------------------------------------
+.pf-prt__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 1.75rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--pf-prt-rule);
+}
+
+.pf-prt__summary {
+  @include pf-prt-label;
+  margin: 0;
+  color: var(--pf-prt-muted);
+}
+
+.pf-prt__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pf-prt-ink);
+  font-family: var(--bs-body-font-family);
+  font-size: .9375rem;
+  font-weight: $pf-button-weight;
+  cursor: pointer;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-prt-accent);
+    outline-offset: 2px;
+  }
+}
+
+// A square-cornered switch: an outlined track, filled in ink when on.
+.pf-prt__switch {
+  position: relative;
+  flex: none;
+  width: 2.25rem;
+  height: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+  background: transparent;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: calc(1.25rem - 8px);
+    height: calc(1.25rem - 8px);
+    background: var(--pf-prt-ink);
+  }
+
+  @include pf-prt-motion {
+    transition: background-color $pf-hover-out var(--pf-prt-ease);
+
+    &::after {
+      transition: translate .3s var(--pf-prt-ease), background-color $pf-hover-out ease;
+    }
+  }
+
+  [aria-pressed="true"] > & {
+    border-color: var(--pf-prt-ink);
+    background: var(--pf-prt-ink);
+
+    &::after {
+      translate: 1rem 0;
+      background: var(--bs-body-bg);
+    }
+  }
+}
+
+// The timeline. ----------------------------------------------------------------
+.pf-prt__layout {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.pf-prt__main {
+  min-width: 0;
+}
+
+.pf-prt__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-prt__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(var(--pf-prt-ring) + 1rem) minmax(0, 1fr);
+  padding-bottom: 2.25rem;
+  scroll-margin-top: var(--pf-prt-top);
+
+  // The spine, from this ring to the next.
+  &::before {
+    content: "";
+    position: absolute;
+    top: 1.25rem;
+    bottom: 0;
+    left: var(--pf-prt-axis);
+    border-inline-start: 1px solid var(--pf-prt-rule);
+    translate: -.5px 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  // The ring.
+  &::after {
+    content: "";
+    position: absolute;
+    top: .3125rem;
+    left: 0;
+    width: var(--pf-prt-ring);
+    height: var(--pf-prt-ring);
+    border: 1px solid color-mix(in srgb, var(--bs-body-color) 55%, transparent);
+    border-radius: 50%;
+    background: var(--bs-body-bg);
+
+    @include pf-prt-motion {
+      transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease, scale .3s var(--pf-prt-ease);
+    }
+  }
+
+  // The item a note is being written about.
+  &.is-active::after {
+    border-color: var(--pf-prt-accent);
+    background: var(--pf-prt-accent);
+    scale: 1.2;
+  }
+}
+
+.pf-prt__date {
+  @include pf-prt-label;
+  grid-column: 2;
+  margin: 0 0 .375rem;
+  color: var(--pf-prt-muted);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.pf-prt__body {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.pf-prt__title {
+  margin: 0;
+  color: var(--pf-guide-heading, var(--pf-prt-ink));
+  font-size: 1.1875rem;
+  font-weight: 500;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.pf-prt__note {
+  margin-top: .5rem;
+  color: var(--pf-prt-ink);
+  font-size: .9375rem;
+  line-height: 1.6;
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-prt__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem 1rem;
+  margin: .25rem 0 0;
+}
+
+.pf-prt__comment {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  color: var(--pf-prt-ink);
+  font-size: .875rem;
+  font-weight: $pf-button-weight;
+  text-decoration: underline;
+  // Stronger than the hairline, so it still reads as a link.
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+
+  @include pf-prt-motion {
+    transition: text-decoration-color $pf-hover-out ease, color $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-prt-ink);
+    text-decoration-color: var(--pf-prt-accent);
+    text-decoration-thickness: 2px;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-prt-accent);
+    outline-offset: 2px;
+  }
+}
+
+// The icons are inline SVGs (the theme loads no Font Awesome CSS).
+.pf-prt__icon {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.pf-prt__tally {
+  @include pf-prt-label;
+  color: var(--pf-prt-muted);
+}
+
+// From 40rem: the dates take a column of their own, left of the spine.
+@container pf-prt (min-width: 40rem) {
+  // (On the items: a container query can't style the container itself.)
+  .pf-prt__item {
+    --pf-prt-date-w: 8.5rem;
+    --pf-prt-axis: calc(var(--pf-prt-date-w) + 1.25rem + var(--pf-prt-ring) / 2);
+
+    grid-template-columns: var(--pf-prt-date-w) calc(var(--pf-prt-ring) + 2.5rem) minmax(0, 1fr);
+
+    &::after {
+      left: calc(var(--pf-prt-date-w) + 1.25rem);
+    }
+  }
+
+  .pf-prt__date {
+    grid-row: 1;
+    grid-column: 1;
+    margin: .125rem 0 0;
+    text-align: end;
+
+    &:empty {
+      display: block;
+    }
+  }
+
+  .pf-prt__body {
+    grid-row: 1;
+    grid-column: 3;
+  }
+}
+
+// Items settle in as they scroll into view, where the browser can tie it to
+// the scroll; nothing waits on a script.
+@supports (animation-timeline: view()) {
+  .pf-prt__item {
+    @include pf-prt-motion {
+      animation: pf-prt-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+@keyframes pf-prt-in {
+  from {
+    opacity: 0;
+    translate: 0 .75rem;
+  }
+}
+
+// Approved notes. ---------------------------------------------------------------
+.pf-prt__notes {
+  margin-top: .75rem;
+
+  &[hidden] {
+    display: none;
+  }
+
+  @include pf-prt-motion {
+    animation: pf-prt-notes .4s var(--pf-prt-ease);
+  }
+}
+
+@keyframes pf-prt-notes {
+  from {
+    opacity: 0;
+    translate: 0 -.25rem;
+  }
+}
+
+.pf-prt__note-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-prt__n {
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--pf-prt-rule);
+}
+
+.pf-prt__n-text {
+  margin: 0;
+  color: var(--pf-prt-ink);
+  font-size: .9375rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.pf-prt__n-who {
+  margin: .25rem 0 0;
+  color: var(--pf-prt-muted);
+  font-size: .8125rem;
+}
+
+.pf-prt__general {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pf-prt-rule);
+
+  &:has(> .pf-prt__notes[hidden]) {
+    display: none;
+  }
+}
+
+.pf-prt__general-title {
+  @include pf-prt-label;
+  margin: 0;
+  color: var(--pf-prt-ink);
+}
+
+.pf-prt__empty {
+  color: var(--pf-prt-muted);
+}
+
+// The note form. ------------------------------------------------------------------
+.pf-prt__panel {
+  display: grid;
+  gap: .75rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1.25rem;
+  background: var(--pf-guide-surface, var(--bs-tertiary-bg));
+  border: 1px solid var(--pf-prt-rule);
+  scroll-margin-top: var(--pf-prt-top);
+  @include pf-note-form(prt);
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.pf-prt__panel-title {
+  @include pf-prt-label;
+  margin: 0;
+  color: var(--pf-prt-ink);
+}
+
+.pf-prt__help,
+.pf-prt__fallback {
+  margin: 0;
+  color: var(--pf-prt-muted);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+// Side by side: the form follows the reader.
+@container pf-prt (min-width: 56rem) {
+  .pf-prt__layout {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .pf-prt__panel {
+    position: sticky;
+    top: var(--pf-prt-top);
+    max-height: calc(100vh - var(--pf-prt-top) - 1rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+@container pf-prt (min-width: 72rem) {
+  .pf-prt__layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: 4rem;
+  }
+}

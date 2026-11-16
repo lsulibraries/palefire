@@ -465,6 +465,7 @@ HTML),
 <li>Building map on room pages: back to the box around the room's name, which now also hides the walls and room edges it overlaps, so no line runs through the name.</li>
 <li>Lecture Hall and McIlhenny Room pages: no more opening hours under the title, since neither room is open to walk into. The same spot now says By request, with a link down to how to request it (Request a date, Plan a class). The Reading Room and Quiet Study keep their hours.</li>
 <li>Quiet Study page: a Need to know at the top, like the other rooms. It has no requirements, so it lists what isn’t allowed (No food or drink).</li>
+<li>New internal PR timeline page: the main public relations events in a vertical timeline. Anyone with the link can leave a note on an item without signing in; notes show on the page only after staff approve them, and readers turn them on with Show notes.</li>
 </ul>
 HTML),
 ]);

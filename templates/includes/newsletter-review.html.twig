@@ -45,7 +45,7 @@
     <aside class="pf-nlr__panel" id="{{ panel_id }}" data-pf-nlr-panel aria-labelledby="{{ uid }}-title" tabindex="-1">
       <div class="pf-nlr__head">
         <p class="pf-nlr__title" id="{{ uid }}-title">{{ 'Your feedback'|t }}</p>
-        <button type="button" class="pf-nlr__close" data-pf-nlr-close aria-label="{{ 'Close feedback'|t }}"><i class="fas fa-times" aria-hidden="true"></i></button>
+        <button type="button" class="pf-nlr__close" data-pf-nlr-close aria-label="{{ 'Close feedback'|t }}"><svg class="pf-nl-x" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></button>
       </div>
       <p class="pf-nlr__for" data-pf-nlr-for hidden></p>
       <p class="pf-nlr__help">{{ 'Choose Comment beside a story to tie your note to it, or write about the whole issue. Send as many notes as you like. Your name is optional: anonymous notes are welcome too.'|t }}</p>
@@ -57,6 +57,6 @@
     </aside>
   </div>
   <div class="pf-nlr__dock">
-    <button type="button" class="pf-nlr__open" data-pf-nlr-open aria-controls="{{ panel_id }}" aria-expanded="false"><i class="far fa-comment" aria-hidden="true"></i> {{ 'Leave feedback'|t }}</button>
+    <button type="button" class="pf-nlr__open" data-pf-nlr-open aria-controls="{{ panel_id }}" aria-expanded="false">{% include '@palefire/includes/icon-feedback.svg.twig' with { class: 'pf-nlr__icon' } only %} {{ 'Leave feedback'|t }}</button>
   </div>
 </div>

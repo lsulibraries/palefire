@@ -558,6 +558,21 @@ styleguide:
     - core/drupal
     - core/once
 
+# Public relations timeline: items anyone can leave a note on, and the notes
+# staff approved (includes/pr-timeline.html.twig, Drupal\palefire\PrTimeline).
+# Attached by that template. Styles: its own entry (scss/pr-timeline.scss).
+pr-timeline:
+  version: 1.0.0
+  css:
+    component:
+      css/pr-timeline.css: {}
+  js:
+    js/pr-timeline.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.announce
+    - core/once
+
 # Newsletter review: a Constant Contact draft beside its feedback form
 # (includes/newsletter-review.html.twig, Drupal\palefire\NewsletterReview).
 # Attached by that template. Styles: its own entry (scss/newsletter-review.scss,
