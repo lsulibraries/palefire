@@ -212,6 +212,88 @@
     });
   };
 
+  // The map banner (a unit's homepage): the lit room as a location page
+  // shows it (js/building-map.js, "Here" marker): the "here" arrow over its
+  // name, and the name on a clear plate, a black rect in the room's hatch
+  // mask (the stripes) and in a mask over the lines (any wall it crosses),
+  // on the name's own plane (it copies the name's --x/--y). Measured from
+  // the name's own box, before its transform.
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const markHere = (map) => {
+    const svg = map.querySelector('svg');
+    const label = svg && svg.querySelector('.pf-map__label.is-active');
+    const region = svg && svg.querySelector('.pf-map__region.is-active');
+    const hatch = region && region.querySelector('.pf-map__hatch');
+    const ref = hatch && /#([^)"']+)/.exec(hatch.getAttribute('mask') || '');
+    const mask = ref && document.getElementById(ref[1]);
+    if (!label || !mask) {
+      return;
+    }
+    const knocks = [0, 1].map(() => {
+      const knock = document.createElementNS(SVG_NS, 'rect');
+      knock.setAttribute('class', 'pf-map__knock is-active');
+      knock.setAttribute('fill', '#000');
+      knock.setAttribute('style', label.getAttribute('style') || '');
+      return knock;
+    });
+    mask.appendChild(knocks[0]);
+    const walls = document.createElementNS(SVG_NS, 'mask');
+    walls.id = ref[1] + '-here-walls';
+    walls.setAttribute('maskUnits', 'userSpaceOnUse');
+    const sheet = document.createElementNS(SVG_NS, 'rect');
+    sheet.setAttribute('fill', '#fff');
+    const view = svg.viewBox.baseVal;
+    [walls, sheet].forEach((el) => {
+      el.setAttribute('x', view.x);
+      el.setAttribute('y', view.y);
+      el.setAttribute('width', view.width);
+      el.setAttribute('height', view.height);
+    });
+    walls.append(sheet, knocks[1]);
+    mask.parentNode.insertBefore(walls, mask);
+    svg.querySelectorAll('.pf-map__lines').forEach((el) => el.setAttribute('mask', 'url(#' + walls.id + ')'));
+
+    const marker = document.createElementNS(SVG_NS, 'g');
+    marker.setAttribute('class', 'pf-map__here');
+    marker.setAttribute('aria-hidden', 'true');
+    const arrow = document.createElementNS(SVG_NS, 'path');
+    arrow.setAttribute('class', 'pf-map__here-arrow');
+    arrow.setAttribute('d', 'M-46 -92 H46 L0 0 Z');
+    arrow.setAttribute('stroke-linejoin', 'round');
+    marker.appendChild(arrow);
+    svg.appendChild(marker);
+
+    const place = () => {
+      const box = label.getBBox();
+      if (!box.width) {
+        return;
+      }
+      const pad = (parseFloat(getComputedStyle(label).fontSize) || 62) * 0.3;
+      knocks.forEach((knock) => {
+        knock.setAttribute('x', (box.x - pad).toFixed(1));
+        knock.setAttribute('y', (box.y - pad).toFixed(1));
+        knock.setAttribute('width', (box.width + pad * 2).toFixed(1));
+        knock.setAttribute('height', (box.height + pad * 2).toFixed(1));
+      });
+      // Over the room's middle, clear of its name, as drawn.
+      const m = svg.getScreenCTM();
+      const r = hatch.getBoundingClientRect();
+      const top = Math.min(r.top, label.getBoundingClientRect().top);
+      if (!m || !r.width) {
+        return;
+      }
+      const pt = new DOMPoint(r.left + r.width / 2, top).matrixTransform(m.inverse());
+      marker.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + (pt.y - 40).toFixed(1) + ')');
+    };
+    place();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(place);
+    }
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(place).observe(svg);
+    }
+  };
+
   Drupal.behaviors.palefireHeroHighlights = {
     attach(context) {
       once('hero-highlights', '.pf-landing--cover .pf-landing__stage', context).forEach((stage) => {
@@ -219,6 +301,7 @@
         cue(stage);
         layOut(stage);
       });
+      once('hero-map-here', '.pf-hero-banner__map', context).forEach(markHere);
     },
   };
 })(Drupal, once);

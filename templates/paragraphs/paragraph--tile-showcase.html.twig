@@ -231,7 +231,7 @@
       <ul class="pf-tiles__list" role="list">
         {% for tile in tiles %}
           <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
-            <a class="pf-tile pf-tile--banner{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+            <a class="pf-tile pf-tile--banner{{ tile.image ? '' : ' pf-tile--no-image' }}{{ tile.whole ? ' pf-tile--whole' }}" href="{{ tile.url }}">
               <span class="pf-tile__media">{{ tile.image ?: _self.outline(tile) }}</span>
               <span class="pf-tile__body">
                 <h3 class="pf-tile__title">{{ tile.title }}</h3>
@@ -249,7 +249,7 @@
       <ul class="pf-tiles__list" role="list">
         {% for tile in tiles %}
           <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
-            <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}" href="{{ tile.url }}">
+            <a class="pf-tile{{ tile.image ? '' : ' pf-tile--no-image' }}{{ tile.whole ? ' pf-tile--whole' }}" href="{{ tile.url }}">
               <span class="pf-tile__media">{{ tile.image ?: _self.outline(tile) }}</span>
               <span class="pf-tile__body">
                 <h3 class="pf-tile__title">{{ tile.title }}</h3>

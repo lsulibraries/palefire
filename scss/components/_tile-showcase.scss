@@ -1943,3 +1943,17 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
     outline-color: Highlight;
   }
 }
+
+// Whole covers ---------------------------------------------------------------
+// An oral history exhibition's cover (.pf-tile--whole, palefire.theme): a
+// wide still from its old presentation, shown entire on the card's dark
+// ground, set a little above the middle so the title below it sits on bare
+// ground, not on the picture.
+.pf-tiles .pf-tile.pf-tile--whole .pf-tile__media {
+  background: $pf-grey-900;
+
+  img {
+    object-fit: contain;
+    object-position: 50% 30%;
+  }
+}

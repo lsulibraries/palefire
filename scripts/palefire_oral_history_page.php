@@ -136,6 +136,10 @@ $pick = static function (int|string $ref, string $why) use ($storage, $at, &$log
   $log[] = "  $why: \"{$node->label()}\" (node {$node->id()}, {$node->bundle()}" . ($node->isPublished() ? '' : ', unpublished: visitors won’t see it') . ').';
   return (int) $node->id();
 };
+// An oral history exhibition: the v2 page at
+// /v2/oralhistory/exhibitions/<folder> once it is built, else the old
+// presentation's tile.
+$exhibit = static fn (string $folder, int $tile): int|string => $at('/v2/oralhistory/exhibitions/' . $folder) ? '/v2/oralhistory/exhibitions/' . $folder : $tile;
 $mossville = $at('/v2/oralhistory/exhibitions/mossvilleexhibit') ? $pick('/v2/oralhistory/exhibitions/mossvilleexhibit', 'Mossville exhibition') : ($at('/v2/special/exhibitions/mossville') ? $pick('/v2/special/exhibitions/mossville', 'Mossville exhibition') : $pick(91045, 'Mossville tile'));
 
 // The hero. ----------------------------------------------------------------
@@ -169,7 +173,7 @@ if ($hero->hasField('field_hero_banners')) {
   $log[] = 'Banners (after the map banner):';
   $banners = array_values(array_filter([
     $mossville,
-    $pick(91044, 'Georgetown 272 tile'),
+    $pick($exhibit('gu272', 91044), 'Georgetown 272'),
     $pick(92, 'Oral History Podcast tile'),
   ]));
   $hero->set('field_hero_banners', array_map(static fn (int $id): array => ['target_id' => $id], $banners));
@@ -239,16 +243,16 @@ $showcases = [
     'layout' => 'masonry',
     'tiles' => [
       [$mossville, 'Mossville History Project'],
-      [91044, 'The Georgetown 272'],
-      [91043, 'History of Graphic Design in South Louisiana'],
-      [50508, 'History of KLSU'],
-      [50506, 'Tempests: Storms in the Archives'],
-      [50505, 'New Orleans Jazz & Heritage Festival'],
-      [50504, 'Cooperative Extension at LSU'],
-      [50503, 'A Lady in the South'],
-      [50502, 'The Relentless Pursuit of “Equal”'],
-      [50501, 'Do Not Tear Up My Earth'],
-      [50500, 'Saturday Night in Tiger Stadium'],
+      [$exhibit('gu272', 91044), 'The Georgetown 272'],
+      [$exhibit('graphicdesign', 91043), 'History of Graphic Design in South Louisiana'],
+      [$exhibit('klsu', 50508), 'History of KLSU'],
+      [$exhibit('storm', 50506), 'Tempests: Storms in the Archives'],
+      [$exhibit('jf', 50505), 'New Orleans Jazz & Heritage Festival'],
+      [$exhibit('lsuag', 50504), 'Cooperative Extension at LSU'],
+      [$exhibit('lady', 50503), 'A Lady in the South'],
+      [$exhibit('rpoe', 50502), 'The Relentless Pursuit of “Equal”'],
+      [$exhibit('dntume', 50501), 'Do Not Tear Up My Earth'],
+      [$exhibit('football', 50500), 'Saturday Night in Tiger Stadium'],
       [92, 'Oral History Podcast'],
       [94, 'Oral History on Facebook'],
     ],

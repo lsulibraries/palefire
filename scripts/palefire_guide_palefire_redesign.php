@@ -477,10 +477,13 @@ HTML),
 <li>Drafted nine more oral history exhibitions from the old Oral History site, as unpublished pages like Mossville’s: History of Graphic Design in South Louisiana, Georgetown 272, History of KLSU, Tempests, the New Orleans Jazz &amp; Heritage Festival, Cooperative Extension at LSU, A Lady in the South, Integrating LSU and Saturday Night in Tiger Stadium. Every clip was evened out the same way, in one channel and at one comfortable loudness, so no interview is much quieter or louder than the next.</li>
 <li>All exhibition audio, Mossville’s included, is now a little louder (-16 LUFS, the level podcasts use), so it doesn’t sound quiet next to other sites.</li>
 <li>The oral history exhibitions, Mossville and the ten new ones, now live under Oral History rather than Special Collections, at addresses named like the old site’s folders: /v2/oralhistory/exhibitions/jf for the Jazz Fest exhibition, gu272 for Georgetown 272, storm for Tempests, and so on. Old addresses forward to the new ones.</li>
+<li>On the Oral History homepage, the map now marks the room the way the location pages do, with the gold arrow and a clear plate behind the name; the exhibition cards show their whole picture; and they link to the new exhibition pages. In Combined Search, chosen filters no longer sit over a scrollbar: they wrap, and long series names are shortened.</li>
+<li>On the Oral History homepage, the exhibition cards open the new exhibitions and show their whole pictures, and the small map at the top marks the Oral History room as its location page does: gold stripes, a clear label and a bobbing arrow.</li>
 <li>Exhibition title pages: the Contents button now sits right under the title, before the introduction, so it’s always on the first screen. Where the Scroll cue shows, the Begin button is gone, since the cue does the same job.</li>
 <li>Exhibition walls: the Audio only boxes for clips without a picture are now as tall as the photographs beside them.</li>
 <li>Review mode: add ?review to the end of any Palefire page’s address to leave notes and thumbs on it, section by section, with a pin beside each heading. No sign-in. Approved notes show on the page and on a hub at /v2/internal/page-review. The panel also points out that text size and colors can be changed in Settings.</li>
 <li>Approved notes now show right away on the PR timeline, the newsletter review and in review mode. Show notes is on to start; turn it off to hide them.</li>
+<li>Newsletter review: each story’s notes and thumbs open from a small chip under its Comment button, with Show more when there are more than fit before the next story.</li>
 </ul>
 HTML),
 ]);

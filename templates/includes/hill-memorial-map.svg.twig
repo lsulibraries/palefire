@@ -41,7 +41,7 @@
  */
 #}
 <svg class="pf-map__svg" xmlns="http://www.w3.org/2000/svg" viewBox="100 240 4220 3170" role="group" aria-label="Hill Memorial Library floor map. Floor 2 is drawn above Floor 1." data-map-svg="">
-<defs><pattern id="{{ uid }}-hatch-lines" patternUnits="userSpaceOnUse" x="0" y="0" width="40" height="20"><rect x="0" y="7.5" width="40" height="5" fill="#fff"/></pattern><mask id="{{ uid }}-hatch" maskUnits="userSpaceOnUse" x="100" y="240" width="4220" height="3170"><rect x="100" y="240" width="4220" height="3170" fill="url(#{{ uid }}-hatch-lines)"/><path d="M947.5 1782 L529 1977.1 M1696.7 1432.6 L1987.4 1600.1 M2479.5 1071.5 L2668 1180.4 M3688.8 507.6 L3271.7 702.1" stroke="#000" stroke-width="40" fill="none"/></mask></defs>
+<defs><pattern id="{{ uid }}-hatch-lines" patternUnits="userSpaceOnUse" x="0" y="0" width="40" height="20"{% if static %} patternTransform="scale(3)"{% endif %}><rect x="0" y="7.5" width="40" height="5" fill="#fff"/></pattern><mask id="{{ uid }}-hatch" maskUnits="userSpaceOnUse" x="100" y="240" width="4220" height="3170"><rect x="100" y="240" width="4220" height="3170" fill="url(#{{ uid }}-hatch-lines)"/><path d="M947.5 1782 L529 1977.1 M1696.7 1432.6 L1987.4 1600.1 M2479.5 1071.5 L2668 1180.4 M3688.8 507.6 L3271.7 702.1" stroke="#000" stroke-width="40" fill="none"/></mask></defs>
 <g class="pf-map__floors" aria-hidden="true"><path d="M620.5 3050.6 L1810.3 2495.8 L1587.1 2366.9 L1900 2221 L1793.1 2159.3 L1950.9 2085.7 L2054.8 2145.7 L2369.3 1999.1 L2595.7 2129.8 L3780.2 1577.5 L4299.1 1877 L2779 2585.9 L2659.5 2641.2 L1139.3 3350.1 Z"/></g>
 <g class="pf-map__regions">
 {% set s = spaces.reading_room %}

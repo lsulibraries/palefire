@@ -5304,9 +5304,19 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
     stroke-width: 1.5px;
   }
 
+  // The room as on its location page: the hatch in the accent at full
+  // strength, its outline too.
   .pf-map__region .pf-map__hatch {
     fill: var(--pf-map-hover);
-    fill-opacity: .6;
+    fill-opacity: 1;
+  }
+
+  .pf-map__region.is-active .pf-map__hit {
+    display: block;
+    fill: none;
+    stroke: var(--pf-map-hover);
+    stroke-width: 1.5px;
+    vector-effect: non-scaling-stroke;
   }
 
   .pf-map__hit,
@@ -5319,17 +5329,29 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
     visibility: hidden;
   }
 
-  // The lit room's name, raised and large enough to read: the drawing is a
-  // fifth of the map's size or less.
+  // The lit room's name, raised and a little larger than on the map: the
+  // drawing is a fifth of the map's size or less. Its hatch is drawn three
+  // times coarser here (patternTransform, the template's static), so the
+  // stripes read at this size.
   .pf-map__label.is-active {
-    --scale: 2.6;
+    --scale: 1.5;
     --lift: var(--pf-map-lift);
     visibility: visible;
     fill: var(--pf-map-hover);
-    paint-order: stroke;
-    stroke: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
-    stroke-width: 18px;
-    stroke-linejoin: round;
+  }
+
+  // Its plate and the "here" arrow (js/hero-highlights.js), at the name's
+  // size: the knock takes the name's plane, the arrow bobs as on the
+  // location page (building-map.scss), its keyframes scaled with it.
+  .pf-map__knock {
+    --scale: 1.5;
+    --lift: var(--pf-map-lift);
+  }
+
+  .pf-map__here-arrow {
+    scale: 2;
+    fill: var(--pf-map-hover);
+    stroke: none;
   }
 }
 

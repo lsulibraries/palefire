@@ -1120,6 +1120,15 @@ function _palefire_page_outline(NodeInterface $node, CacheableMetadata $cache): 
 }
 
 /**
+ * Whether a node is an oral history exhibition: its address is under
+ * /v2/oralhistory/exhibitions/ (scripts/palefire_oral_history_exhibit_paths.php).
+ */
+function _palefire_is_oral_history_exhibition(NodeInterface $node): bool {
+  $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $node->id());
+  return str_starts_with($alias, '/v2/oralhistory/exhibitions/');
+}
+
+/**
  * A card's cover image item, or NULL.
  *
  * A Tile's Tile cover (field_tile_cover). Any other node (a Modular page):
@@ -3088,8 +3097,15 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       continue;
     }
     $show_image = !$rows && $card['image_item'];
-    $image = $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL;
+    // An oral history exhibition's cover is a wide still from its old
+    // presentation (about 16:9): shown whole, uncropped (exhibit_640, scale
+    // only), on the card's dark ground, not cut to the card's 3:4.
+    $whole = $show_image && _palefire_is_oral_history_exhibition($node)
+      && $card['image_item']->width && $card['image_item']->height
+      && $card['image_item']->width / $card['image_item']->height >= 1.4;
+    $image = $show_image ? ($whole ? _palefire_image_build($card['image_item'], ['exhibit_640'], $cache) : _palefire_responsive_cover($card['image_item'], $style, $cache)) : NULL;
     $variables['tiles'][] = [
+      'whole' => $whole,
       'title' => $card['title'],
       'url' => $card['url'],
       'label' => $card['label'],
@@ -3125,7 +3141,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   // spans two to five columns: its cover is the landscape crop, sized for
   // that width (beside the sidebar from 1480px; a column below).
   $count = count($variables['tiles']);
-  if ($variables['layout'] === 'masonry' && $count <= 4 && !empty($covers[0])) {
+  if ($variables['layout'] === 'masonry' && $count <= 4 && !empty($covers[0]) && empty($variables['tiles'][0]['whole'])) {
     $lead = [1 => 85, 2 => 50, 3 => 50, 4 => 34][$count];
     $variables['tiles'][0]['image'] = _palefire_lead_cover($covers[0], "(min-width: 1480px) {$lead}vw, (min-width: 768px) 34vw, 50vw", $cache) ?? $variables['tiles'][0]['image'];
   }
