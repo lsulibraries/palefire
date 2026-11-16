@@ -155,7 +155,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 | Image group / readings | `paragraph--exhibit-gallery`, `--exhibit-reading` | ✔ readings |
 | Accordion | `paragraph--guide-accordion` | ✔ |
 | Wall display (one tile per entry with an image; an imageless entry heads a sub-gallery: `.pf-exhibit-wall__group`, h3 `.pf-exhibit-wall__group-title`, optional `.pf-exhibit-wall__group-text`), compare slider | `paragraph--exhibit-page` (wall) | – needs images |
-| Audio clip, tape deck, reel | `paragraph--exhibit-audio` | – needs a file |
+| Audio clip, tape deck, reel; side panel for a clip with no picture (`.pf-viewer.is-side`); listening bar (`.pf-listen`, the player's Minimize) | `paragraph--exhibit-audio`, `js/viewer.js`, `js/exhibition.js` | – needs a file |
 | Video | `paragraph--guide-video` | – |
 | Resource list, librarian card | `paragraph--resource-list`, `--librarian-card` | – guide only |
 | Tile showcase, covers shelf | `paragraph--tile-showcase` | – landing only |
@@ -179,6 +179,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-16:** Object view: `show(…, { side: true })` (`js/viewer.js`) opens the panel alone, without the modal (`.pf-viewer.is-side`: from lg a column at the right edge, `--pf-panel-w` wide, a hairline at its left and a soft shadow; below lg a sheet at the foot of the screen, `min(70svh, 40rem)` tall; slides in from its edge, `.5s`, none with reduced motion; z-index 1055). A wall's clip with no picture opens this way, so the page stays in reach; no arrows or count, Close at every width, Esc closes from inside. Listening bar `.pf-listen`: a clip's player has `.pf-audio__min` (after Mute, same 2.75rem square); it moves the playing player into a fixed bar at the foot of the screen (max 50rem, page color, `$pf-hairline` border, soft shadow; Expand = kicker "Now playing" + title · credit; the player; a 2.75rem Close), stacked on phones and in one row from md, above the dock on phones, rising in over .6s (none with reduced motion). Expand puts the same player back in the view; another clip starting closes the bar.
 - **2026-11-16:** `.pf-tile--whole` (an oral history exhibition’s card): the cover uncropped, `object-fit: contain` at `50% 30%` on `$pf-grey-900`. Map banner: `.pf-map__here-arrow` at `scale: 2.6`, `.pf-map__knock` on the name’s plane at `--scale: 2.6`, hatch `fill-opacity: 1`, the lit room’s outline 1.5px gold. `.pf-index__chip-label`: `max-width: 13rem`, ellipsis; chips `flex-wrap: wrap` with a fine pointer.
 - **2026-11-16:** Newsletter review notes under each Comment button: `.pf-nlr__chip`, a 2rem pill (0.75rem/600, tabular figures) ringed in the hairline on the page background, its ring in the ink when open; `.pf-nlr__card`, up to 20rem (the margin’s width beside the email), hairline border, soft shadow, 0.875rem text, rising 0.375rem as it opens; a cut ends in a 2.5rem fade, then `.pf-nlr__card-more` (Show more (n) / Show less, underlined in the hairline). An open card stacks over the next Comment button.
 - **2026-11-16:** Show notes (`.pf-pn-toggle`) starts pressed (`aria-pressed="true"`): approved notes show until the reader turns it off.

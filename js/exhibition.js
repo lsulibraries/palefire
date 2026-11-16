@@ -963,6 +963,10 @@
       if (audio) {
         audio.setAttribute('aria-labelledby', 'pf-viewer-title');
         initAudio(wrap);
+        // An entry's clip only, not a picture opened from the text.
+        if (!wallState.loose) {
+          minimizeButton(wrap);
+        }
       }
       // The title and its credit, small, over the pinned player once the
       // view's own has scrolled away, running by as a marquee while the
@@ -1027,6 +1031,158 @@
     close: () => closeObject(true),
     closed: objectClosed,
   };
+
+  // A clip with no picture opens as a side panel beside the page (no
+  // stage, so no arrows): the reader can go on through the exhibition.
+  const sideHandler = {
+    close: () => closeObject(true),
+    closed: objectClosed,
+  };
+
+  /* ---------------------------------------------------------------------
+   * Listening bar
+   *
+   * A clip in the object view can be minimized (its player's Minimize):
+   * the view closes and the clip plays on in a slim bar at the foot of the
+   * screen (.pf-listen, _exhibition.scss), so the reader goes on through
+   * the exhibition. The bar holds the view's own player, moved there whole
+   * (an <audio> moved within one task keeps playing), with the entry's
+   * title as its Expand button and a Close that stops it. Expand opens the
+   * entry again and puts the same player and transcript back, so it plays
+   * on without a gap and the read-along stays where it was. Another clip
+   * starting anywhere ends the bar: one clip at a time.
+   * ------------------------------------------------------------------ */
+
+  const listen = { bar: null, wrap: null, saved: null };
+
+  // The view's player for this entry into the bar; the view closes.
+  function minimize(wrap) {
+    const view = wallState.view;
+    if (!view || !wrap || !wallState.tile) {
+      return;
+    }
+    dismissBar();
+    const credit = wrap.parentElement && wrap.parentElement.querySelector('.pf-exhibit-audio__credit');
+    // Where the player sat in the view's text, to put it back on Expand.
+    const mark = document.createComment('pf-listen');
+    wrap.before(mark);
+    listen.saved = {
+      tile: wallState.tile,
+      nodes: Array.from(view.body.childNodes),
+      mark: mark,
+    };
+    const bar = buildBar(view.title.textContent.trim(), credit ? credit.textContent.trim() : '');
+    bar.querySelector('.pf-listen__player').append(wrap);
+    listen.bar = bar;
+    listen.wrap = wrap;
+    document.body.append(bar);
+    closeObject(false, true);
+    const page = galleryOf(listen.saved.tile);
+    if (page) {
+      history.replaceState(history.state, '', urlFor(page));
+    }
+    // Its hidden style read first, so it slides in rather than appears.
+    window.getComputedStyle(bar).opacity;
+    bar.classList.add('is-shown');
+    bar.querySelector('.pf-listen__expand').focus({ preventScroll: true });
+  }
+
+  function buildBar(title, credit) {
+    const bar = document.createElement('section');
+    bar.className = 'pf-listen';
+    bar.setAttribute('aria-label', Drupal.t('Now playing'));
+    bar.innerHTML = '<div class="pf-listen__inner">'
+      + '<button type="button" class="pf-listen__expand">'
+      + '<span class="pf-listen__kicker">' + Drupal.t('Now playing') + '</span>'
+      + '<span class="pf-listen__title"></span>'
+      + '<span class="visually-hidden">' + Drupal.t(', open with its transcript') + '</span>'
+      + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>'
+      + '</button>'
+      + '<div class="pf-listen__player"></div>'
+      + '<button type="button" class="pf-listen__close">'
+      + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9"/></svg>'
+      + '<span class="visually-hidden">' + Drupal.t('Stop and close the player') + '</span>'
+      + '</button>'
+      + '</div>';
+    bar.querySelector('.pf-listen__title').textContent = credit ? title + ' · ' + credit : title;
+    bar.querySelector('.pf-listen__expand').addEventListener('click', expandBar);
+    bar.querySelector('.pf-listen__close').addEventListener('click', () => {
+      const tile = listen.saved && listen.saved.tile;
+      dismissBar();
+      const link = tile && tile.querySelector('a');
+      if (link && link.isConnected) {
+        link.focus({ preventScroll: true });
+      }
+    });
+    bar.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        bar.querySelector('.pf-listen__close').click();
+      }
+    });
+    return bar;
+  }
+
+  // The entry again, with the bar's player and its transcript back in it.
+  function expandBar() {
+    const saved = listen.saved;
+    const wrap = listen.wrap;
+    if (!saved || !wrap) {
+      return;
+    }
+    const heading = document.getElementById(saved.tile.dataset.pfTile);
+    const entry = heading ? heading.closest('.pf-exhibit-entry') : null;
+    if (!entry || !saved.tile.isConnected) {
+      dismissBar();
+      return;
+    }
+    const bar = listen.bar;
+    listen.bar = null;
+    listen.wrap = null;
+    listen.saved = null;
+    openObject(entry, false);
+    const view = wallState.view;
+    // The fresh copy out, the saved one (and its player) in.
+    stopAudio(view);
+    view.body.replaceChildren(...saved.nodes);
+    saved.mark.replaceWith(wrap);
+    topHeight(view);
+    bar.remove();
+    viewer.focusClose();
+  }
+
+  // Stops the bar's clip and takes the bar away.
+  function dismissBar() {
+    if (!listen.bar) {
+      return;
+    }
+    const audio = listen.wrap && listen.wrap.querySelector('audio');
+    if (audio) {
+      audio.pause();
+    }
+    listen.bar.remove();
+    listen.bar = null;
+    listen.wrap = null;
+    listen.saved = null;
+  }
+
+  // One clip at a time: another starting ends the bar.
+  document.addEventListener('play', (event) => {
+    if (listen.wrap && event.target.tagName === 'AUDIO' && !listen.wrap.contains(event.target)) {
+      dismissBar();
+    }
+  }, true);
+
+  // The player's Minimize, after its own controls (initAudio()).
+  function minimizeButton(wrap) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-audio__min';
+    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 3.5h11v9h-11z"/><path d="M5 10h6"/></svg><span class="visually-hidden">' + Drupal.t('Minimize: keep listening while you browse') + '</span>';
+    button.addEventListener('click', () => minimize(wrap));
+    wrap.append(button);
+  }
+
 
   // Closed: focus back where the view was opened from, and (an entry) the
   // address back to its gallery. quiet: the caller does both.
@@ -1499,7 +1655,8 @@
     wallState.tiles = Array.from(tile.closest('[data-pf-wall]').querySelectorAll('[data-pf-tile]'));
     const index = wallState.tiles.indexOf(tile);
     history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
-    viewer.show(objectHandler, () => fillObject(index), { from: animate ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit' });
+    const side = !!tile.querySelector('.pf-exhibit-reel');
+    viewer.show(side ? sideHandler : objectHandler, () => fillObject(index), { from: animate && !side ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit', side: side });
   }
 
   // animate: shrink back into the tile (scrolled into view first), or the
@@ -2272,6 +2429,7 @@
       window.removeEventListener('resize', onResize);
       window.removeEventListener('scroll', queueCover);
       document.removeEventListener('palefire:a11ychange', onResize);
+      dismissBar();
       if (wallState.view) {
         viewer.destroy();
         wallState.view = null;

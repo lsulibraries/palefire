@@ -2527,7 +2527,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   color: var(--pf-exhibit-muted);
 }
 
-.pf-audio__mute {
+.pf-audio__mute,
+.pf-audio__min {
   display: grid;
   place-items: center;
   width: 2.75rem;
@@ -2560,6 +2561,12 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// Minimize (the object view's player only, js/exhibition.js): the clip
+// plays on in the listening bar (.pf-listen, below).
+.pf-audio__min {
+  margin-inline-start: 0;
+}
+
 .pf-audio.is-muted {
   .pf-audio__waves {
     display: none;
@@ -2579,6 +2586,159 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 @container (max-width: 22rem) {
   .pf-audio__volume {
     display: none;
+  }
+}
+
+// The listening bar (js/exhibition.js): a minimized clip playing on at the
+// foot of the screen while the reader goes on through the exhibition. The
+// entry's title (its Expand button) over the player on phones, beside it
+// from md, and a Close that stops the clip; on the page color with a
+// hairline and a soft shadow, above the dock on phones. It rises in (at
+// once with reduced motion).
+.pf-listen {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 1050;
+  padding: 0 max(.75rem, env(safe-area-inset-right, 0px)) max(.75rem, env(safe-area-inset-bottom, 0px)) max(.75rem, env(safe-area-inset-left, 0px));
+  pointer-events: none;
+  opacity: 0;
+  translate: 0 1rem;
+
+  &.is-shown {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @include pf-exhibit-motion {
+    transition: opacity .4s ease, translate .6s $pf-exhibit-ease;
+  }
+
+  @include media-breakpoint-down(md) {
+    html.pf-dock-on & {
+      bottom: var(--pf-dock-h, 0px);
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.pf-listen__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "expand close" "player player";
+  gap: .5rem 1rem;
+  align-items: center;
+  max-width: 50rem;
+  margin-inline: auto;
+  padding: .75rem 1rem;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  border: 1px solid $pf-hairline;
+  box-shadow: 0 1rem 2.5rem -1.5rem rgba(0, 0, 0, .45);
+  pointer-events: auto;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto;
+    grid-template-areas: "expand player close";
+    gap: 1.25rem;
+  }
+}
+
+.pf-listen__expand {
+  grid-area: expand;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: .75rem;
+  align-items: center;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 3px;
+  }
+}
+
+.pf-listen__kicker {
+  @extend %pf-exhibit-kicker;
+  grid-column: 1;
+}
+
+.pf-listen__title {
+  grid-column: 1;
+  overflow: hidden;
+  font-size: .9375rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color $pf-hover-out ease;
+
+  .pf-listen__expand:is(:hover, :focus-visible) & {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+  }
+}
+
+.pf-listen__icon {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 1rem;
+  height: 1rem;
+  color: var(--pf-exhibit-accent);
+}
+
+.pf-listen__player {
+  grid-area: player;
+  min-width: 0;
+
+  .pf-audio {
+    gap: .75rem;
+  }
+
+  .pf-audio__play {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .pf-audio__now,
+  .pf-audio__min {
+    display: none;
+  }
+}
+
+.pf-listen__close {
+  grid-area: close;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 1px solid $pf-hairline;
+  transition: color $pf-hover-out ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
   }
 }
 

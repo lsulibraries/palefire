@@ -24,6 +24,13 @@
  * stage's frame (.pf-viewer__frame) out of an element on the page and back
  * into it. Reduced motion (the OS setting or Settings > Reduce motion)
  * makes every change instant.
+ *
+ * show(…, { side: true }) opens the panel alone (.is-side), beside the page
+ * from lg and as a sheet at the foot of the screen below it, and without
+ * the modal: the page stays in reach and scrolls, so a reader can go on
+ * through it with the panel open. Esc still closes it from inside. Shown
+ * the other way while open (a picture opened from the page), the dialog
+ * reopens in that mode, without the handler hearing a close.
  */
 (function (Drupal) {
   'use strict';
@@ -130,6 +137,12 @@
       shut();
     });
     dialog.addEventListener('keydown', (event) => {
+      // A side panel is no modal, so no "cancel": Esc closes it here.
+      if (event.key === 'Escape' && parts.side) {
+        event.preventDefault();
+        shut();
+        return;
+      }
       if (event.target.matches('input')) {
         return;
       }
@@ -291,7 +304,8 @@
     view.zoom.hidden = zoomable === undefined ? !view.media.querySelector('.pf-viewer__zoomable') : !zoomable;
     view.zoom.setAttribute('aria-pressed', 'false');
     view.info.hidden = bare;
-    setFull(bare || savedFull(), false);
+    // A side panel is the text alone: never folded away.
+    setFull(!view.side && (bare || savedFull()), false);
     view.panel.scrollTop = 0;
   }
 
@@ -315,7 +329,8 @@
   // open, just fills it again (the handler changes). from: an element on
   // the page to grow the stage's frame out of, when it is on screen.
   // kind: a modifier for the page's own styles (.pf-viewer--<kind>).
-  function show(next, fill, { from = null, kind = '' } = {}) {
+  // side: the panel alone, beside the page and without the modal.
+  function show(next, fill, { from = null, kind = '', side = false } = {}) {
     // Another kind of page (Swup keeps the dialog between pages): a fresh
     // one, without the last page's own parts.
     if (view && view.kind && view.kind !== kind && !view.dialog.open) {
@@ -324,17 +339,30 @@
     const parts = get();
     parts.kind = kind;
     handler = next || {};
-    parts.dialog.className = 'pf-viewer' + (kind ? ' pf-viewer--' + kind : '') + (parts.dialog.classList.contains('is-full') ? ' is-full' : '');
+    // Open the other way: closed quietly (shown cleared first, so the
+    // handler hears no close) and opened again in this mode below.
+    if (parts.dialog.open && !!parts.side !== side) {
+      shown = false;
+      ROOT.classList.remove('pf-viewer-open');
+      parts.dialog.close();
+    }
+    parts.side = side;
+    parts.dialog.className = 'pf-viewer' + (kind ? ' pf-viewer--' + kind : '') + (side ? ' is-side' : '') + (parts.dialog.classList.contains('is-full') ? ' is-full' : '');
     const open = () => {
       fill(parts);
       if (!parts.dialog.open) {
-        ROOT.classList.add('pf-viewer-open');
-        parts.dialog.showModal();
+        if (side) {
+          parts.dialog.show();
+        }
+        else {
+          ROOT.classList.add('pf-viewer-open');
+          parts.dialog.showModal();
+        }
         shown = true;
         focusClose();
       }
     };
-    if (parts.dialog.open || !canMorph() || !inSight(from)) {
+    if (parts.dialog.open || side || !canMorph() || !inSight(from)) {
       open();
       return;
     }
@@ -386,5 +414,6 @@
     canMorph: canMorph,
     inSight: inSight,
     isOpen: () => !!view && view.dialog.open,
+    isSide: () => !!view && view.dialog.open && !!view.side,
   };
 })(Drupal);

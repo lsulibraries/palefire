@@ -302,6 +302,7 @@ HTML),
   ]),
   $image ? $note('<p><strong>' . $label('exhibit_figure') . '</strong>: one image with a caption. Its alt text comes from the media item: describe what the image shows.</p>') : NULL,
   $figure('<p>Layout: Centered in the text column.</p>', 'center'),
+  $note('<p><strong>' . $label('exhibit_audio') . '</strong>: an oral history clip with its transcript. On a wall, a clip with no photo shows as an Audio only box, as tall as the photos beside it, and opens as a panel beside the page, so readers can keep scrolling the exhibition. Any clip’s player has a Minimize button: the clip plays on in a bar at the foot of the screen, and the title in the bar opens it again where it left off.</p>'),
   $note('<p><strong>' . $label('guide_accordion') . '</strong>: questions and details a reader can open when they need them.</p>'),
   $accordion([
     ['What belongs in an accordion?', '<p>Material most readers can skip: rules, prices, long lists.</p>'],

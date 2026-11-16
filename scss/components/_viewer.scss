@@ -83,6 +83,64 @@ html.pf-viewer-open {
   }
 }
 
+// The panel alone (show(…, { side: true }), js/viewer.js): no stage, and no
+// modal, so the page stays in reach and scrolls beside it. From lg a column
+// at the right edge, the panel's own width; below lg a sheet at the foot of
+// the screen, up to 70% of its height. It slides in from its edge (at once
+// with reduced motion), above the site's header and dock.
+.pf-viewer.is-side {
+  --pf-side-from: 0 100%;
+
+  &[open] {
+    inset: auto 0 0;
+    z-index: 1055;
+    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr);
+    height: min(70svh, 40rem);
+    border-top: 1px solid $pf-hairline;
+    box-shadow: 0 -1.5rem 3rem -2rem rgba(0, 0, 0, .4);
+
+    @include media-breakpoint-up(lg) {
+      --pf-side-from: 100% 0;
+      inset: 0 0 0 auto;
+      width: var(--pf-panel-w);
+      height: 100%;
+      border-top: 0;
+      border-left: 1px solid $pf-hairline;
+      box-shadow: -1.5rem 0 3rem -2rem rgba(0, 0, 0, .4);
+    }
+
+    @include pf-viewer-motion {
+      animation: pf-viewer-side .5s $pf-viewer-ease both;
+    }
+  }
+
+  .pf-viewer__stage {
+    display: none;
+  }
+
+  .pf-viewer__panel {
+    width: auto;
+    border: 0;
+  }
+
+  // No arrows here, so no count; Close at every width (the stage's × is
+  // gone with the stage).
+  .pf-viewer__count {
+    visibility: hidden;
+  }
+
+  .pf-viewer__close {
+    display: inline-flex;
+  }
+}
+
+@keyframes pf-viewer-side {
+  from {
+    translate: var(--pf-side-from);
+  }
+}
+
 .pf-viewer__stage {
   position: relative;
   display: grid;
