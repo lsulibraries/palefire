@@ -14,7 +14,7 @@
  *     description         intro beside the map (default for every page)
  *   └ Room term (field_map_key = building.space, e.g. hill_memorial.reading_room)
  *     description         tooltip text
- *     field_space_access  walk_in | appointment (book online) | rental
+ *     field_space_access  walk_in | appointment (book online) | class | rental
  *     field_space_link    optional: the room links here
  *     field_space_note    optional: a short note after the access line in
  *                         the tooltip, e.g. "Now showing"
@@ -168,7 +168,7 @@ $paragraphs_widget = fn (int $weight, string $title, string $plural, string $def
   ],
 ];
 
-$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'rental' => 'Event rental (fee, approved by staff)'];
+$access_values = ['walk_in' => 'Walk in', 'appointment' => 'Book online', 'class' => 'For classes (faculty plan a class with us)', 'rental' => 'Event rental (fee, approved by staff)'];
 $link_settings = ['link_type' => 17, 'title' => 1];  // Generic link, optional link text.
 
 // Building spaces vocabulary ---------------------------------------------------

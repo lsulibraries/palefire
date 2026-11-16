@@ -63,8 +63,8 @@ hill_memorial:
     mcilhenny_room:
       label: McIlhenny Room
       floor: 2
-      access: appointment
-      tooltip: Available by request for meetings and events. Contact Special Collections to book.
+      access: class
+      tooltip: Our main instruction space. Faculty plan class sessions with Special Collections.
     oral_history:
       label: Oral History
       floor: 2

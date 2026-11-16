@@ -449,11 +449,13 @@ HTML),
 <li>Newsletter review pages no longer show a table of contents: each is one draft to read from top to bottom.</li>
 </ul>
 HTML),
-  $text('Mon Nov 16: Smaller map labels, Ask Us drawer', <<<'HTML'
+  $text('Mon Nov 16: Smaller map labels, Ask Us drawer, room pages', <<<'HTML'
 <ul>
 <li>Building map: the label that opens over a room (floor, access, name, a line about the room and its link) is about half its old size, narrower and with smaller type, so it no longer covers neighboring rooms and the map is easier to keep exploring.</li>
 <li>Building map: the room label no longer repeats the room's link (the room itself is the link), and the floor now sits beside the access on one line (Floor 2 | Walk in), so the label is shorter again.</li>
 <li>Ask Us drawer: the Email Special Collections tab now shows the same question slip as the Ask us section, in place of the old AskUs widget. A question sent from any page reaches Special Collections the same way. The form loads only when the drawer opens.</li>
+<li>Room pages now read alike: every section is numbered, and the Reading Room shows its full rules in a House rules section, with just the essentials at the top, so its facts and photos are no longer pushed down. Photos no longer show file names as captions, and a section without a title gets a default heading.</li>
+<li>The McIlhenny Room is now marked For classes, not Book online: it isn’t booked by the public, it’s where faculty hold classes with Special Collections. The building map lists it under its own heading.</li>
 </ul>
 HTML),
 ]);

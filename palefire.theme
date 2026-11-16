@@ -1402,13 +1402,16 @@ const PALEFIRE_SPACE_SOUND = ['quiet' => 1, 'conversation' => 2, 'collaborative'
  * buttons stay short for the phone dock (js/dock.js takes page words up to
  * 24 characters), and Reserve matches the booking section's name.
  *
- * Booked rooms (book online, room rental) share the map's lighter hatch:
- * _palefire_space_access() gives each its hatch.
+ * Booked rooms (book online, room rental) and class rooms share the map's
+ * lighter hatch: _palefire_space_access() gives each its hatch. A class
+ * room (the McIlhenny Room) isn't booked by the public: faculty plan a
+ * class with Special Collections (scripts/palefire_space_access_class.php).
  */
 function _palefire_space_access_kinds(): array {
   return [
     'walk_in' => ['label' => (string) t('Walk in'), 'icon' => 'walk', 'cta' => (string) t('Plan your visit')],
     'appointment' => ['label' => (string) t('Book online'), 'icon' => 'calendar', 'cta' => (string) t('Book a time')],
+    'class' => ['label' => (string) t('For classes'), 'icon' => 'group', 'cta' => (string) t('Plan a class')],
     'rental' => ['label' => (string) t('Event rental'), 'icon' => 'receipt', 'cta' => (string) t('Request a date')],
   ];
 }
@@ -1568,27 +1571,30 @@ const PALEFIRE_ACCESS_POLICY_KEYS = ['reservation', 'by_appointment', 'walk_up',
  * and "Fees apply" for an Event rental whose price the facts don't give,
  * three at most. Everything else is in House rules.
  *
- * A walk-in room has no House rules section (_palefire_location_index()):
- * all its policies but its access are listed here instead, under "House
- * rules", so the page reads in one screen.
+ * Every room reads the same way: a few requirements here, the full rules
+ * in its House rules section. Only a walk-in room whose page has no House
+ * rules section (rules_section FALSE, set by the caller) lists all its
+ * policies but its access here instead, under "House rules", so none is
+ * lost.
  *
- * Call after setting $location['price'] (_palefire_location_price()).
+ * Call after setting $location['price'] (_palefire_location_price()) and
+ * $location['rules_section'].
  *
  * @return array
  *   Each: label, detail ('' for none), icon (includes/space-icon), state.
  */
 function _palefire_location_need_to_know(array $location): array {
-  $walk_in = ($location['access'] ?? '') === 'walk_in';
+  $all = ($location['access'] ?? '') === 'walk_in' && empty($location['rules_section']);
   $items = [];
   foreach ($location['policies'] ?? [] as $policy) {
     if (in_array($policy['key'] ?? '', PALEFIRE_ACCESS_POLICY_KEYS, TRUE)) {
       continue;
     }
-    if ($walk_in || ($policy['state'] === 'required' && _palefire_policy_notice($policy) === '')) {
+    if ($all || ($policy['state'] === 'required' && _palefire_policy_notice($policy) === '')) {
       $items[] = ['label' => $policy['label'], 'detail' => $policy['detail'], 'icon' => $policy['icon'], 'state' => $policy['state']];
     }
   }
-  if ($walk_in) {
+  if ($all) {
     return $items;
   }
   $fee = ($location['access'] ?? '') === 'rental' && ($location['price'] ?? '') === '' ? [['label' => (string) t('Fees apply'), 'detail' => '', 'icon' => 'receipt', 'state' => 'required']] : [];
@@ -1884,12 +1890,23 @@ function _palefire_steps_split(\DOMElement $list): array {
 }
 
 /**
+ * A location photo's caption from its media name: '' for a name that is
+ * still the uploaded file's name ("screadingroom-1.jpg"), which Drupal
+ * gives a media item until an editor names it.
+ */
+function _palefire_location_caption(string $name): string {
+  $name = trim($name);
+  return preg_match('/\.(jpe?g|png|webp|gif|tiff?|heic|avif)$/i', $name) ? '' : $name;
+}
+
+/**
  * The room's photos (field_location_photos, palefire_location_photos.php).
  *
  * Each Image media item in pf_location_photo (4:5 WebP), or the original
  * before the script has made the style: src, width, height, its alt text,
- * and its media name as the caption. Media items without a file are left
- * out.
+ * and its media name as the caption (none while the name is still a file
+ * name, _palefire_location_caption()). Media items without a file are
+ * left out.
  */
 function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
   if (!$paragraph->hasField('field_location_photos')) {
@@ -1918,7 +1935,7 @@ function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetad
       'width' => (int) ($dimensions['width'] ?? 800),
       'height' => (int) ($dimensions['height'] ?? 1000),
       'alt' => (string) $item->alt,
-      'caption' => $ref->entity ? $ref->entity->label() : '',
+      'caption' => _palefire_location_caption($ref->entity ? (string) $ref->entity->label() : ''),
     ];
   }
   return $photos;
@@ -2068,6 +2085,7 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $location['link'] = _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
     $location['notice'] = _palefire_location_notice($location);
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
+    $location['rules_section'] = (bool) _palefire_location_sibling($paragraph, 'location_rules');
     $location['need_to_know'] = _palefire_location_need_to_know($location);
     $photos = _palefire_location_sibling($paragraph, 'location_photos');
     $photo_list = $photos ? _palefire_location_photos($photos, $cache) : [];
@@ -2104,6 +2122,7 @@ function palefire_preprocess_paragraph__location_rules(array &$variables): void 
   if (_palefire_location_sibling($paragraph, 'location_space')) {
     $variables['rules']['sound_level'] = 0;
     $location['price'] = _palefire_location_price(_palefire_location_sibling($paragraph, 'location_booking') ?? $paragraph);
+    $location['rules_section'] = TRUE;
     $shown = array_column(_palefire_location_need_to_know($location), 'label');
     foreach ($variables['rules']['groups'] as $state => $policies) {
       $variables['rules']['groups'][$state] = array_values(array_filter($policies, static fn (array $p): bool => !in_array($p['label'], $shown, TRUE)
@@ -3199,14 +3218,15 @@ function palefire_preprocess_field(array &$variables): void {
     if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
       // A location page's parts carry theirs in code (no Eyebrow field), and
       // set their heading beside the content (aside) rather than over it.
-      // A walk-in room's parts go unnumbered, and its House rules are in
-      // the top (_palefire_location_need_to_know()).
       $location = _palefire_location_index($paragraph, $cache);
-      if (!empty($location['hide'])) {
-        $hide[] = $key;
-      }
-      elseif ($location) {
-        $item['section']['index'] = ['num' => $location['walk_in'] ? '' : sprintf('%02d', ++$count), 'aside' => TRUE] + $location;
+      if ($location) {
+        // Numbered on every room's page, so the pages read alike.
+        $item['section']['index'] = ['num' => sprintf('%02d', ++$count), 'aside' => TRUE] + $location;
+        // A part saved without a Section title still gets its heading (the
+        // section is aria-labelledby it, and the TOC lists it).
+        if (trim((string) ($item['section']['label'] ?? '')) === '') {
+          $item['section']['label'] = $location['heading'];
+        }
       }
       continue;
     }
@@ -3248,12 +3268,13 @@ function palefire_preprocess_field(array &$variables): void {
  * label in the rule would say it twice. Then a lede naming the room, and on
  * Hours and directions a link at the rule's end (Directions). Written here
  * rather than in Eyebrow and Lede fields, so every room's page reads the
- * same.
+ * same. heading is the section's title when its Section title is empty.
  *
- * A walk-in room's parts are unnumbered (walk_in), and its House rules
- * part is left out (hide): they are in the top, in one screen.
+ * Every room's parts are numbered, walk-in or not, and every room has its
+ * House rules part (the top keeps only a few requirements,
+ * _palefire_location_need_to_know()).
  *
- * @return array{lede: string, link: ?array, walk_in: bool}|array{hide: true}|null
+ * @return array{heading: string, lede: string, link: ?array, walk_in: bool}|null
  */
 function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetadata $cache): ?array {
   $bundle = $paragraph->bundle();
@@ -3265,27 +3286,28 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
   $location = $room ? _palefire_location_data($room, $cache) : NULL;
   $name = $location['title'] ?? (string) t('the room');
   $host = $paragraph->getParentEntity();
-  $walk_in = ($location['access'] ?? '') === 'walk_in';
-  if ($walk_in && $bundle === 'location_rules') {
-    return ['hide' => TRUE];
-  }
+  $access = $location['access'] ?? 'walk_in';
+  $walk_in = $access === 'walk_in';
   switch ($bundle) {
     case 'location_photos':
-      return ['walk_in' => $walk_in, 'lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
+      return ['heading' => (string) t('The room'), 'walk_in' => $walk_in, 'lede' => (string) t('See the @room before you come.', ['@room' => $name]), 'link' => NULL];
 
     case 'location_visit':
       $query = $host instanceof NodeInterface && $host->hasField('field_location_query') ? trim((string) $host->get('field_location_query')->value) : '';
       $floor = $location['floor'] ?? NULL;
       $building = $location['building'] ?? '';
-      // A booked room (online or rental) isn't open whenever the building is.
+      // A booked or class room isn't open whenever the building is.
       $where = $floor
         ? (string) t('On Floor @n of @building', ['@n' => $floor, '@building' => $building])
         : (string) t('In @building', ['@building' => $building]);
+      $ledes = [
+        'walk_in' => (string) t('@where, open whenever the building is.', ['@where' => $where]),
+        'class' => (string) t('@where, for scheduled classes.', ['@where' => $where]),
+      ];
       return [
+        'heading' => (string) t('Hours and directions'),
         'walk_in' => $walk_in,
-        'lede' => ($location['access'] ?? 'walk_in') !== 'walk_in'
-          ? (string) t('@where, by booking.', ['@where' => $where])
-          : (string) t('@where, open whenever the building is.', ['@where' => $where]),
+        'lede' => $ledes[$access] ?? (string) t('@where, by booking.', ['@where' => $where]),
         'link' => $query !== '' ? [
           'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($query),
           'text' => (string) t('Directions'),
@@ -3299,6 +3321,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // room may have none).
       $required = in_array('required', array_column($location['policies'] ?? [], 'state'), TRUE);
       return [
+        'heading' => (string) t('House rules'),
         'walk_in' => $walk_in,
         'lede' => $required
           ? (string) t('What the @room allows, and what to arrange first.', ['@room' => $name])
@@ -3310,6 +3333,7 @@ function _palefire_location_index(ParagraphInterface $paragraph, CacheableMetada
       // No link in the rule: the section's own button, under the steps, is
       // the way to the form (palefire_preprocess_paragraph__location_booking()).
       return [
+        'heading' => (string) t('Book the @room', ['@room' => $name]),
         'walk_in' => $walk_in,
         'lede' => (string) t('How to request the @room, and what comes with it.', ['@room' => $name]),
         'link' => NULL,

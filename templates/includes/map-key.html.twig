@@ -67,6 +67,7 @@
       {% for group in [
         { access: 'walk_in', title: 'Walk in'|t },
         { access: 'appointment', title: 'Book online'|t },
+        { access: 'class', title: 'For classes'|t },
         { access: 'rental', title: 'Event rental'|t },
       ] %}
         {% set group_spaces = map.spaces|filter(s => s.access == group.access) %}

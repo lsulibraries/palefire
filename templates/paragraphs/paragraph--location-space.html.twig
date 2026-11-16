@@ -39,9 +39,10 @@
  * in the TOC. Each fact is said once on the page: sound, capacity, notice
  * and price here (so not in House rules or Booking's ledger), the other
  * requirements in Need to know (so House rules keeps only the rest).
- * A walk-in room (Quiet Study) reads in one screen: its policies are
- * listed here as House rules, with their marks, and its parts after this
- * one go unnumbered, with no House rules part (_palefire_location_index()).
+ * Every room reads alike: a few requirements here, its parts after this
+ * one numbered, the full rules in its House rules part. Only a walk-in room
+ * whose page has no House rules part (rules_section FALSE) lists all its
+ * policies here, as House rules.
  *
  * The chip: once the building map has scrolled away, a small copy of it
  * (the room in the accent) sits at the bottom of the screen, a link back
@@ -101,7 +102,7 @@
                room's policies are in House rules. #}
             {% if location.need_to_know %}
               <div class="pf-location__need">
-                <p class="pf-location__need-title" id="{{ location.uid }}-need">{{ location.access == 'walk_in' ? 'House rules'|t : 'Need to know'|t }}</p>
+                <p class="pf-location__need-title" id="{{ location.uid }}-need">{{ location.access == 'walk_in' and not location.rules_section ? 'House rules'|t : 'Need to know'|t }}</p>
                 <ul class="pf-location__need-list" aria-labelledby="{{ location.uid }}-need">
                   {% for item in location.need_to_know %}
                     <li class="pf-location__need-item">
