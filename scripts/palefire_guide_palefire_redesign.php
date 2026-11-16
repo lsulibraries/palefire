@@ -467,6 +467,7 @@ HTML),
 <li>Lecture Hall and McIlhenny Room pages: no more opening hours under the title, since neither room is open to walk into. The same spot now says By request, with a link down to how to request it (Request a date, Plan a class). The Reading Room and Quiet Study keep their hours.</li>
 <li>Quiet Study page: a Need to know at the top, like the other rooms. It has no requirements, so it lists what isn’t allowed (No food or drink).</li>
 <li>New internal PR timeline page: the main public relations events in a vertical timeline. Anyone with the link can leave a note on an item without signing in; notes show on the page only after staff approve them, and readers turn them on with Show notes.</li>
+<li>Drafted two unpublished collection pages: the Louisiana and Lower Mississippi Valley Collections (manuscripts, books, photographs, political papers, newspapers and giving) and the Book Collections (every named collection, from the Rare Book Collection to the Bowlus comic books, with links to the Rare Books guide’s subject checklists). The text comes from the fuller 2023 pages, and ten pictures from the Louisiana Digital Library. Once they’re published, a short Collections section, What Hill Holds, lists them on the Special Collections homepage with University Archives and Oral History, and old links to the LLMVC tile land on its row.</li>
 </ul>
 HTML),
 ]);

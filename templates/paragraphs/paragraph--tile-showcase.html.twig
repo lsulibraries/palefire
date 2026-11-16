@@ -39,7 +39,8 @@
  * Ledger: the index's rows without numbers, under their Category labels
  * (groups), each row the title, note and an arrow. Wide, the section's
  * heading and lede sit in a column to its left (_tile-showcase.scss).
- * Partnerships on the Special Collections homepage.
+ * Partnerships on the Special Collections homepage. Each row's <li> has the
+ * old site's tile anchor as its id (see the row).
  *
  * Outline: a card with no image draws the page it links to instead, as a
  * desktop shows it, photographed on a desk at an angle and blurred: the
@@ -195,7 +196,11 @@
             {% endif %}
             <ul class="pf-tiles__list" role="list">
               {% for tile in group.tiles %}
-                <li class="pf-tiles__item" data-toc data-toc-label="{{ tile.title }}">
+                {# The old site's tile anchor: the title in lowercase letters
+                   and digits (#louisianaandlowermississippivalleycollections),
+                   so old links land on the row. modular-toc.js keeps an id
+                   it finds. #}
+                <li class="pf-tiles__item" id="{{ tile.title|clean_class|replace({'-': '', '_': ''}) }}" data-toc data-toc-label="{{ tile.title }}">
                   <a class="pf-tile-line" href="{{ tile.url }}">
                     <{{ row_heading }} class="pf-tile-line__title">{{ tile.title }}</{{ row_heading }}>
                     {% if tile.note %}
