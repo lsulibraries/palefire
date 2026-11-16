@@ -428,6 +428,7 @@ HTML),
 <li>The Website Analytics page shows the mode of each search (All, Research, Special Collections or Website) beside its words, and Combined Search now sends each filter chosen, for a Filters chosen table on the same page.</li>
 <li>Combined Search: each section now ends in a full-width row leading to its full list (Show all Discovery results, with the total and a gold arrow) on the same gray slab as the Open online buttons, easier to find than the small link at the far right it replaces.</li>
 <li>Buttons: the gray buttons site-wide (Quick Start Guide and Visit links, account buttons, FAQ buttons, Combined Search's row buttons) now answer hover and focus with a slightly deeper gray and a thin accent line drawn along the bottom, instead of turning fully white or black with the words reversed. Main actions such as Search and Plan a research visit keep the full fill.</li>
+<li>Newsletter review page: the round Comment buttons on narrow screens now show the same feedback icon as /v2/search, instead of a blank circle; the close buttons show an X again.</li>
 <li>Newsletter review page: the feedback form now says a name is optional, so reviewers can leave notes anonymously.</li>
 <li>Newsletter review page: the past issues are now a plain catalog grid, with small flat front pages and no movement, so the draft stays the focus. Review pages now live at /v2/internal/newsletter-review/.</li>
 <li>Newsletter review page: the past issues now sit below the draft and the feedback form, the same grid as the newsletters page, so reviewers can compare the new issue with earlier ones. It reads the newsletters page’s list, so there’s only one list to keep up to date.</li>
@@ -446,6 +447,11 @@ HTML),
 <li>Faculty Fellowship page brought up to date from the program's own files: the five 2026 fellows, earlier cohorts with the classes they have taught, and the four-day orientation.</li>
 <li>Exhibitions: people with a biography and no images, such as the fellows and grant recipients, now sit side by side in two or three columns on wider screens.</li>
 <li>Newsletter review pages no longer show a table of contents: each is one draft to read from top to bottom.</li>
+</ul>
+HTML),
+  $text('Mon Nov 16: Smaller map labels', <<<'HTML'
+<ul>
+<li>Building map: the label that opens over a room (floor, access, name, a line about the room and its link) is about half its old size, narrower and with smaller type, so it no longer covers neighboring rooms and the map is easier to keep exploring.</li>
 </ul>
 HTML),
 ]);
