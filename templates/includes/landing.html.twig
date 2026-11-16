@@ -812,20 +812,42 @@
             <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
           </div>
           {% if oral_history_series %}
-            <ul class="pf-series__list" role="list">
-              {% for series in oral_history_series %}
-                {% set series_count = series.count == 1 ? '1 interview'|t : '@count interviews'|t({'@count': series.count|number_format}) %}
-                <li class="pf-series__item">
-                  {# A reel in its box, as an exhibition's audio-only clip
-                     (exhibit-reel.html.twig): the series on the box, its
-                     count on top; the reel rolls out in hand. #}
-                  <a class="pf-series__link" href="{{ series.url }}">
-                    <span class="visually-hidden">{{ series.name }}, {{ series_count }}</span>
-                    {% include '@palefire/includes/exhibit-reel.html.twig' with { title: series.name, kicker: series_count, year: null } only %}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
+            {# Grid / List, as the Tile showcases' (js/tile-views.js: the
+               same remembered pick, data-pf-views on the wrapper). #}
+            {{ attach_library('palefire/tile-views') }}
+            <div class="pf-series__views" data-pf-views="pf-tile-view" data-pf-view="grid">
+              <div class="pf-tiles__views" role="group" aria-label="{{ 'Show as'|t }}" hidden>
+                {% for key, view in {
+                  grid: { label: 'Grid'|t, icon: '<rect x="3" y="3" width="7.5" height="7.5"/><rect x="13.5" y="3" width="7.5" height="7.5"/><rect x="3" y="13.5" width="7.5" height="7.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5"/>' },
+                  list: { label: 'List'|t, icon: '<path d="M3 5h18M3 12h18M3 19h18"/>' },
+                } %}
+                  <button type="button" class="pf-tiles__view" data-pf-view="{{ key }}" aria-pressed="{{ loop.first ? 'true' : 'false' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ view.icon|raw }}</svg>
+                    <span>{{ view.label }}</span>
+                  </button>
+                {% endfor %}
+              </div>
+              <ul class="pf-series__list" role="list">
+                {% for series in oral_history_series %}
+                  {% set series_count = series.count == 1 ? '1 interview'|t : '@count interviews'|t({'@count': series.count|number_format}) %}
+                  <li class="pf-series__item">
+                    {# Grid: a reel in its box, as an exhibition's audio-only
+                       clip (exhibit-reel.html.twig), the series on the box,
+                       its count on top. List: a ruled row, the name and the
+                       count (.pf-series__row). Either way the link's name is
+                       the hidden line. #}
+                    <a class="pf-series__link" href="{{ series.url }}">
+                      <span class="visually-hidden">{{ series.name }}, {{ series_count }}</span>
+                      {% include '@palefire/includes/exhibit-reel.html.twig' with { title: series.name, kicker: series_count, year: null } only %}
+                      <span class="pf-series__row" aria-hidden="true">
+                        <span class="pf-series__name">{{ series.name }}</span>
+                        <span class="pf-series__count">{{ series_count }}</span>
+                      </span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
           {% else %}
             <p class="pf-series__intro"><a href="/v2/search?mode=special&amp;source%5B%5D=oral_histories">{{ 'Search the oral histories'|t }}</a></p>
           {% endif %}

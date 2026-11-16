@@ -5431,44 +5431,57 @@ html.pf-a11y-motion .pf-hero-banner__map {
   color: var(--pf-section-fg, inherit);
 }
 
-// The series as reels (exhibit-reel.html.twig, _exhibition.scss): each a
-// box with the series' name and its interview count, the reel faint behind
-// it, rolling out to the right in hand. The pair is 1.5 boxes wide; one to
-// four to a row by the section's width, so the boxes stay large. The reel's mono and muted tokens are
-// the exhibition's, given here for the landing.
+// The series (exhibit-reel.html.twig, _exhibition.scss), Grid or List as
+// the Tile showcases (js/tile-views.js, data-pf-view on .pf-series__views,
+// the same remembered pick). Grid: on the showcases' columns and gutters,
+// 2, 3 from 36rem, 4 from 56rem, 5 from 72rem, each a reel in its box a
+// column wide, the series' name on the box and its interview count on top.
+// In hand the box clears a little and the reel behind it turns (it can't
+// roll out: the next box is a gutter away); its name takes the title
+// color. List: ruled rows, the name and the count in tabular figures, one
+// column, two from 48rem, three from 72rem. The reel's mono and muted
+// tokens are the exhibition's, given here for the landing.
 .pf-series__list {
   --pf-exhibit-mono: var(--pf-landing-label, 'Consolas', 'Monaco', monospace);
   --pf-exhibit-muted: var(--pf-toc-color, var(--pf-g-muted, var(--bs-secondary-color)));
+  --pf-cols: 2;
+  --pf-gap: clamp(.625rem, 2.5cqi, 1rem);
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem) var(--pf-grid-gutter, 2rem);
+  grid-template-columns: repeat(var(--pf-cols), minmax(0, 1fr));
+  gap: var(--pf-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-@container pf-series (min-width: 28rem) {
+@container pf-series (min-width: 36rem) {
   .pf-series__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --pf-cols: 3;
   }
 }
 
-@container pf-series (min-width: 48rem) {
+@container pf-series (min-width: 44rem) {
   .pf-series__list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    --pf-gap: clamp(1.25rem, 2.25vw, 2rem);
+  }
+}
+
+@container pf-series (min-width: 56rem) {
+  .pf-series__list {
+    --pf-cols: 4;
   }
 }
 
 @container pf-series (min-width: 72rem) {
   .pf-series__list {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    --pf-cols: 5;
   }
 }
 
 .pf-series__link {
   position: relative;
   display: block;
-  aspect-ratio: 1.5;
+  aspect-ratio: 1;
   color: var(--pf-section-fg, inherit);
   text-decoration: none;
 
@@ -5476,31 +5489,34 @@ html.pf-a11y-motion .pf-hero-banner__map {
     color: inherit;
   }
 
-  // The box on the column's left edge, in line with the heading; in hand
-  // it stays and the reel alone rolls out, half its width.
+  // The box and the reel fill the column, one over the other; in hand
+  // neither moves.
   :is(.pf-exhibit-reel__box, .pf-exhibit-reel__reel) {
     left: 0;
-  }
-
-  .pf-exhibit-reel__box {
+    width: 100%;
     translate: 0 0;
   }
 
-  .pf-exhibit-reel__reel {
-    translate: calc(var(--pf-reel-out) * 48%) 0;
+  .pf-exhibit-reel__box {
+    transition: background-color .5s ease;
   }
 
-  // A series' name is longer than a clip's title: five lines, a size down.
-  // The box's name in the title color in hand, as the other rows.
+  // A series' name is longer than a clip's title: five lines.
   .pf-exhibit-reel__title {
-    font-size: clamp(.9375rem, 9.5cqi, 1.625rem);
+    font-size: clamp(.9375rem, 10cqi, 1.5rem);
     -webkit-line-clamp: 5;
     line-clamp: 5;
     transition: color .5s ease;
   }
 
-  &:is(:hover, :focus-visible) .pf-exhibit-reel__title {
-    color: var(--pf-g-title, var(--pf-toc-active));
+  &:is(:hover, :focus-visible) {
+    .pf-exhibit-reel__box {
+      background-color: color-mix(in srgb, var(--pf-g-bg, var(--bs-body-bg)) 62%, transparent);
+    }
+
+    :is(.pf-exhibit-reel__title, .pf-series__name) {
+      color: var(--pf-g-title, var(--pf-toc-active));
+    }
   }
 
   &:focus-visible {
@@ -5509,8 +5525,67 @@ html.pf-a11y-motion .pf-hero-banner__map {
   }
 }
 
+.pf-series__row {
+  display: none;
+}
+
+// List.
+.pf-series__views[data-pf-view="list"] {
+  .pf-series__list {
+    --pf-cols: 1;
+    gap: 0 var(--pf-grid-gutter, 2rem);
+  }
+
+  .pf-series__link {
+    aspect-ratio: auto;
+  }
+
+  .pf-exhibit-reel {
+    display: none;
+  }
+
+  .pf-series__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: .75rem 0;
+    border-top: 1px solid #{$pf-hairline};
+  }
+
+  .pf-series__name {
+    font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
+    line-height: 1.35;
+    transition: color .5s ease;
+  }
+
+  .pf-series__count {
+    @extend %pf-landing-label;
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--pf-toc-color);
+  }
+
+  .pf-series__link:focus-visible {
+    outline-offset: 2px;
+  }
+}
+
+@container pf-series (min-width: 48rem) {
+  .pf-series__views[data-pf-view="list"] .pf-series__list {
+    --pf-cols: 2;
+  }
+}
+
+@container pf-series (min-width: 72rem) {
+  .pf-series__views[data-pf-view="list"] .pf-series__list {
+    --pf-cols: 3;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pf-series__link .pf-exhibit-reel__title {
+  .pf-series__link :is(.pf-exhibit-reel__box, .pf-exhibit-reel__title, .pf-series__name) {
     transition: none;
   }
 }
