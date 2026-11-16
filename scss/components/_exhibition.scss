@@ -3298,6 +3298,24 @@ $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf
   }
 }
 
+// From lg, nothing under the title to read, so its first screen leaves
+// room for the wall's first row: the photograph (and the spacer that
+// holds the title at its foot, below) is the screen less --pf-bare-peek,
+// and the tiles come up under the title on the same screen. Below lg the
+// photograph keeps the whole screen.
+$pf-bare-peek: clamp(12rem, 36svh, 22rem);
+
+@include media-breakpoint-up(lg) {
+  #{$pf-wall-bare} {
+    --pf-bare-peek: #{$pf-bare-peek};
+
+    .pf-exhibit-wall-hero {
+      --pf-wall-hero-h: calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek));
+      --pf-cover-img-h: calc(100svh - #{$pf-header-bar-compact-h} - var(--pf-bare-peek));
+    }
+  }
+}
+
 // Its area spans the whole gallery, so the photograph stays pinned under
 // the header while the page slides up over it: the foot's wash moves from
 // the pinned frame to the content (the ::before spacer, then the wall on
@@ -3378,6 +3396,9 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         margin: 0 calc(-1 * var(--pf-section-pad-inline, 0px));
         padding: clamp(2rem, 4vw, 3rem) var(--pf-section-pad-inline, 0px) 0;
         background: var(--bs-body-bg);
+        // Over the half pixel the pinned spacer's rounding leaves between
+        // its wash and this edge, where the photograph showed as a line.
+        box-shadow: 0 -2px 0 var(--bs-body-bg);
       }
     }
   }
@@ -3604,9 +3625,9 @@ $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__s
         view-timeline-inset: var(--pf-header-h) 0px, var(--pf-header-h) 0px;
 
         &::before {
-          min-height: calc(max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)))) + var(--pf-reveal));
+          min-height: calc(max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek, 0px))) + var(--pf-reveal));
           background-position: bottom;
-          background-size: 100% max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h))));
+          background-size: 100% max(22rem, calc(100svh - var(--pf-header-full, var(--pf-header-h)) - var(--pf-bare-peek, 0px)));
           background-repeat: no-repeat;
           animation: pf-exhibit-pin linear both, pf-exhibit-reveal-wash linear both;
           animation-timeline: --pf-open, --pf-open;
