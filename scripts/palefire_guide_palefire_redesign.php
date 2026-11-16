@@ -474,6 +474,8 @@ HTML),
 <li>Thumbs up and down on the PR timeline’s items and on the newsletter review page’s stories, counted right away; the review page now also shows the notes the team approves, under the draft, behind the same Show notes switch. Sample notes show what it looks like.</li>
 <li>A thumb can now be changed: choose the other one to switch, or the same one again to take it back.</li>
 <li>Exhibition titles are now in the site’s plain sans type by default, on the title page and in the Exhibitions list. An exhibition keeps the elegant serif only when its editor picks Serif under Exhibition title style.</li>
+<li>Drafted nine more oral history exhibitions from the old Oral History site, as unpublished pages like Mossville’s: History of Graphic Design in South Louisiana, Georgetown 272, History of KLSU, Tempests, the New Orleans Jazz &amp; Heritage Festival, Cooperative Extension at LSU, A Lady in the South, Integrating LSU and Saturday Night in Tiger Stadium. Every clip was evened out the same way, in one channel and at one comfortable loudness, so no interview is much quieter or louder than the next.</li>
+<li>All exhibition audio, Mossville’s included, is now a little louder (-16 LUFS, the level podcasts use), so it doesn’t sound quiet next to other sites.</li>
 </ul>
 HTML),
 ]);

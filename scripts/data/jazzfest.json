@@ -1,0 +1,297 @@
+{
+  "title": "New Orleans Jazz & Heritage Festival",
+  "subtitle": "Doing oral history at Jazz Fest",
+  "credit": "<p>A student exhibition from the T. Harry Williams Center for Oral History, LSU Libraries, 2014.</p>",
+  "intro": "<p>For more than four decades, the New Orleans Jazz & Heritage Festival has drawn musicians, artists, cooks, and music lovers to the city each spring. In this 2014 student exhibition, students working with the T. Harry Williams Center for Oral History recorded the people who make the festival what it is: crew members who work it year after year, a poster artist, a street musician, a second line culture bearer, and New Orleanians who remember what the festival meant for a segregated city.</p><p>Alongside their excerpts are memory maps that festivalgoers drew of their own Jazz Fest, and pages from the students’ fieldwork: interview questions, field notes, and a reflection on oral history method.</p>",
+  "cover": "memory3.jpg",
+  "year": 2014,
+  "physical_note": "",
+  "source": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/jf/audio.html",
+  "pages": [
+    {
+      "title": "Voices of the Festival",
+      "anchor": "voices",
+      "category": "Oral History",
+      "lead": "vauc.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>Geraldine Vaucresson, Tape No. 4300.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "Geraldine Vaucresson",
+          "anchor": "geraldine-vaucresson",
+          "bio": "",
+          "published": true,
+          "source": "audio.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "vauc.jpg",
+              "source": "audio.html",
+              "caption": "<p>Geraldine Vaucresson, Tape No. 4300.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Geraldine Vaucresson",
+              "file": "vaucresson.m4a",
+              "credit": "Geraldine Vaucresson, Tape No. 4300",
+              "transcript": "<p><strong>GERALDINE VAUCRESSON:</strong> My grandmother, like I said, my great-grandmother didn’t speak English. They spoke Creole. What they call Creole.</p><p><strong>NGUYEN:</strong> Creole French?</p><p><strong>VAUCRESSON:</strong> Yes. The only thing is . . . We grew up with that. But what they would tell us when we would go to school, “English! No. When you go to school, you got to speak English.” So we had to speak English in the schools, you know. And we all went to Catholic school. We stayed in our little neighborhoods, and that was it. You grew up like that. My daddy used to say, “You see them children down there? Don’t you play with them. They’re too black.” They didn’t want you to mix. Of course it’s not like that now. You know, I mean, things have changed. But at the height of segregation it was not nice. That Jazz Fest made a big difference, because when you went to Jazz Fest, white, blacks, blue, greens, yellow, everybody’s out there having a good time. Nobody cared about nothing but the music and having a . . . Jazz Fest did something for New Orleans. It really did. Because people, like I said, they came from all over. And this is the only city [laughs] . . . You come out your house sometimes, and you hear music playing. They’re walking out in the street, they’re dancing. What are you doing? That’s a part of our culture. We love it.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Patrick Gallagher",
+          "anchor": "patrick-gallagher",
+          "bio": "",
+          "published": true,
+          "source": "C2.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "gallagher.jpg",
+              "source": "C2.html",
+              "caption": "<p>Patrick Gallagher, Tape No. 4298.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Patrick Gallagher",
+              "file": "gallagher.m4a",
+              "credit": "Patrick Gallagher, Tape No. 4298",
+              "transcript": "<p><strong>PATRICK GALLAGHER:</strong> Working with the people at Jazz Fest, the people that I work with. They’re a wonderfully wretched family.</p><p>Usually, I might see a few of them throughout the year, but when I get together, at the festival, they’re just a wonderful group of people. A buddy of mine who works there, Mark Courbet. You know, he calls me up at the beginning of the year and he asks, “Are you doing community service this year?” “Yep.” And basically what he’s referring to is we don’t get paid that much to work Jazz Fest. I lose money, everyone loses money to work Jazz Fest.</p><p><strong>BAUER:</strong> So why do you do it?</p><p><strong>GALLAGHER:</strong> Because of people like Mark, and J.T., Popcorn. They’re all my wretched family. In 2003, I almost died. I got real sick. I came down with Guillain-Barré syndrome. The bar I hang out at, they put on a benefit, and the people from Jazz Fest found out about it. All those people got together and they raised well over six thousand dollars. And that money enabled me to not have to go back to work immediately, and pay my bills, so on and so forth. So, they took care of me, I’ve got to take care of them.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Joseph “Cool” Davis",
+          "anchor": "joseph-cool-davis",
+          "bio": "",
+          "published": true,
+          "source": "C3.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "davis.jpg",
+              "source": "C3.html",
+              "caption": "<p>Joseph “Cool” Davis, Tape No. 4303.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Joseph “Cool” Davis",
+              "file": "davis.m4a",
+              "credit": "Joseph “Cool” Davis, Tape No. 4303",
+              "transcript": "<p><strong>JOSEPH “COOL” DAVIS:</strong> Jazz Fest is the [most] beautiful thing that ever happened to New Orleans. It was really way before its time. You know, nowadays, with Internet and online websites and all that doing, Jazz Fest did that to . . . They had a lot of New Orleans artists got used that would not come down south. People are still afraid to come down south . . . to see gospel music. Now, how I do that, the jobs I had working, the experienced jobs, Essence and working Jazz Fest, as bouncers, and Tipitina’s. People come and look at you and talk to you and then they knew a lot of things was happening here because they’d hear all these things, like “New Orleans is still like a plantation” and “Blacks don’t have no freedom here.” But my point is that Jazz Fest opened that and had people coming from all over the world, all over. And this was before Internet and all of this.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Tanya Huang",
+          "anchor": "tanya-huang",
+          "bio": "",
+          "published": true,
+          "source": "C4.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "huang.jpg",
+              "source": "C4.html",
+              "caption": "<p>Tanya Huang, Tape No. 4307.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Tanya Huang",
+              "file": "huang.m4a",
+              "credit": "Tanya Huang, Tape No. 4307",
+              "transcript": "<p><strong>DONNER:</strong> What’s your favorite part of Jazz Fest as a whole? Like, if you’re going as a patron, or performing, or just being there, what’s your favorite part about it?</p><p><strong>TANYA HUANG:</strong> I like how it attracts music lovers to this city. Whether I’m at Jazz Fest enjoying Jazz Fest or just playing on the street as . . . During Jazz Fest time, it’s just very apparent that this is not your average crowd, you know? It’s a very different crowd than say the Super Bowl crowd, of course. [laughs] It’s just very nice. There’s something about people who really love music that just makes them very . . . I don’t know. Very nice to be around, you know? There’s something about music. And, of course, as a musician we love to play for people who love music, of course. But it’s just . . . I don’t know. It’s kind of a charmed time for the city when like-minded people come.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Philip Giroir",
+          "anchor": "philip-giroir",
+          "bio": "",
+          "published": true,
+          "source": "C5.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "giroir.jpg",
+              "source": "C5.html",
+              "caption": "<p>Philip Giroir, Tape No. 4311.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Philip Giroir",
+              "file": "giroir.m4a",
+              "credit": "Philip Giroir, Tape No. 4311",
+              "transcript": "<p><strong>PONTIFF:</strong> What’s your favorite part of Jazz Fest?</p><p><strong>PHILIP GIROIR:</strong> Got to be the people, the friends, camaraderie during the fest, like putting it together. Because, like I said, I’ve been here a long time and a lot of people that are here have been here a long time. So, it’s kind of a big dysfunctional family reunion. Because everybody here, you take a cut in pay. I get half my normal pay to be here. So, nobody’s here for the money. It’s all just a love of music and the event and the people. So it’s a big family of friends. And then I have friends from all over come in for the event that I only see that one time of year. So, it’s a good reunion for them as well. It’s pretty good.</p><p><strong>PONTIFF:</strong> So how would you define a successful year at Jazz Fest? What makes it a good year versus not a good year?</p><p><strong>GIROIR:</strong> Successful year at Jazz Fest . . . they’ve all been pretty good. You know what I mean? Like, some . . . last year we had a ton of rain and lots of mud, and that doesn’t really bother me that much. It’s a little smelly, but I kind of embrace the rain and mud. I can’t do nothing about it. [laughs] And successful year at Jazz Fest is just seeing all the friends I want to see. I have my special friends come to town and everybody having a good time.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Terrence Osborne",
+          "anchor": "terrence-osborne",
+          "bio": "",
+          "published": true,
+          "source": "C6.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "osborne.jpg",
+              "source": "C6.html",
+              "caption": "<p>Terrence Osborne, Tape No. 4305.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Terrence Osborne",
+              "file": "osborne.m4a",
+              "credit": "Terrence Osborne, Tape No. 4305",
+              "transcript": "<p><strong>ROUX:</strong> So how do you think your relationship to the festival has changed throughout the years? So, now that you’re the actual artist of the poster versus just going and selling some of your art.</p><p><strong>TERRENCE OSBORNE:</strong> Well, the poster and Jazz Festival are two separate entities. So, Jazz Festival hasn’t always honored the poster artist. You know, most festivals you go to, if you’re doing the poster, then they’ll accommodate you and kind of almost put you on a pedestal. Well, because Jazz Festival subcontracts another company to take care of that, they haven’t always recognized the artist, so . . . And okay, well that’s fine. So, but what I’ve had to do over the years is kind of say, “Hey, listen. I’m doing the poster, and just like your musicians are bringing a crowd and generating income or profit for you, the artist, in the same way, is bringing a crowd and generating a profit for you, so, can I get two weekends?” [laughs] You know, or, “Can you waive my booth fee?” Or you know, just . . . That was the relationship at first, but now it’s a lot better. And so, now I get two weekends, and I’ve managed to get my own booth. Whereas before, I had to—even if I did the poster—I had to share booths or a tent, at least, with other artists. And it’s cool because now I know that by speaking up about it, I changed it. And so, now, every artist that does a poster has his own booth and has two weekends from here on out. So, that’s probably the major difference.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Wynoka Boudreaux",
+          "anchor": "wynoka-boudreaux",
+          "bio": "",
+          "published": true,
+          "source": "C7.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "boudreaux.jpg",
+              "source": "C7.html",
+              "caption": "<p>Wynoka Boudreaux, Tape No. 4308.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Wynoka Boudreaux",
+              "file": "boudreaux.m4a",
+              "credit": "Wynoka Boudreaux, Tape No. 4308",
+              "transcript": "<p><strong>WYNOKA BOUDREAUX:</strong> So we’ve been involved in Jazz Fest since we was, like, kids you know. Like . . . I’ll say about six or seven. We went to Jazz Fest, and he used to set up long time ago out there. So they asked me . . . He was going to do something else, and they asked me did I want to do it and I was like, “Okay.” I actually used to work the Grandstand, too. But the Folks Village . . . I think it was 2007 or eight that I started doing Folks Village. Yeah, I don’t do the Grandstand no more, but Folks Village. My dad used to do it years before I did. So after him moving to somewhere else I was able to come in and keep the demonstration flow going with the second line culture.</p><p>Working with the kids, like, is a Thursday. The second week is when all the kids from schools come in. It’s busy, and I love it because they’re so interested in it, and it’s not too much more. Like when we was going growing up in school, you know, we had . . . Well, we did my colors some pine cones with glitter, just something, you know. I don’t think it’s more of it, you know. And on Saturdays we used to go to the YMCA and do demonstrations of just coloring, whatever. But it was something interesting. And with the kids at Jazz Fest, once they get to my booth, it’s kind of . . . The teachers be telling them, “Let’s go!” and they just don’t want to move, you know. [laughs] That Thursday at Jazz Fest is when all the kids come, and that is the interesting part that I love. If I could just go set up every Thursday I’ll be alright.</p><p>It means a whole lot because here in New Orleans it’s not much you can do. And single parents is the ones that’s struggling with the kids. I don’t look for excuses, you know, for kids. But it’s not there, so if it’s not there then you know they don’t have it. So my son, he’s seventeen now, but I try to keep him involved. I was a single mom raising him, you know. I kept him involved in a whole lot even though things I bought he would take it all loose. And I didn’t understand why, but it was probably part of trying to be creative. But it means a whole lot. And to see them involved in it. I’d like to see much more of it.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Memory Maps",
+      "anchor": "memory-maps",
+      "category": "Pictures",
+      "lead": "memory1.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>Memory Map 1: Studio Inferno, Jazz Fest vendor, 1991–2013.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "Memory Map 1",
+          "anchor": "memory-map-1",
+          "bio": "",
+          "published": true,
+          "source": "C8.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "memory1.jpg",
+              "source": "C8.html",
+              "caption": "<p>Memory Map 1: Studio Inferno, Jazz Fest vendor, 1991–2013.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Memory Map 2",
+          "anchor": "memory-map-2",
+          "bio": "",
+          "published": true,
+          "source": "C9.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "memory2.jpg",
+              "source": "C9.html",
+              "caption": "<p>Memory Map 2: Old friends getting older.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Memory Map 3",
+          "anchor": "memory-map-3",
+          "bio": "",
+          "published": true,
+          "source": "C10.html",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "memory3.jpg",
+              "source": "C10.html",
+              "caption": "<p>Memory Map 3: Mary Ann Caffery, a day in her 2013 Jazz Fest.</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "In the Field",
+      "anchor": "in-the-field",
+      "category": "",
+      "lead": null,
+      "display": "story",
+      "focus": "center",
+      "lead_caption": "",
+      "blocks": [
+        {
+          "type": "text",
+          "body": "<h3>Field Notes: Reflections on Oral History with Jo “Cool” Davis</h3><p>An old, battered Econoline van sits on the curb outside Mr. Davis’ home, off-white, with “Jo ‘Cool’ Davis” painted in rust-orange letters across the back. The paint may be faded, but the sentiment still rang true. In that moment, I believe it struck both Charlotte and me that we were about to meet a legend. Mrs. Davis opened the front door and warmly shook both my and Charlotte’s hands, and motioned for us to sit and wait for Mr. Davis. A few moments later, he wheeled himself into the living room and greeted both of us with a warm grin. He wore a white T-shirt with the same “Jo ‘Cool’ Davis” design as on the van proudly emblazoned across the front. To complete the ensemble, he sported an intricate metal necklace with yet again the same insignia. He would later inform us that the necklace was a birthday gift from his daughter, and no, unfortunately, he does not have any more of the T-shirts for sale. Bummer.</p><p>This man can talk. I mean, really, really talk. He was eager to tell his tale—all of it, any of it, peppered with as much name-dropping and one-liner wisdom as one could expect from someone who had seen as much as he.</p><p><strong>Potential follow-up questions</strong></p><ol><li>Where did you get the nickname “Cool”? (I can’t believe I didn’t ask this one. It smacked me across my face as soon as I walked out the door.)</li><li>Can you share some more memories of different years of Jazz Fest? People you’ve met? Perhaps other musicians?</li><li>Can you describe anything special or different about Jazz Fest the year after Katrina?</li></ol>"
+        },
+        {
+          "type": "text",
+          "body": "<h3>Questions for Dwayne Breashears</h3><p>Prepared by Wilcox for an interview with Dwayne Breashears of WWOZ, New Orleans’ community radio station.</p><ul><li>Where were you born?</li><li>Can you describe the neighborhood you grew up in?</li><li>How did it shape your childhood or adolescence?</li><li>Who are your parents?</li><li>What did they do?</li><li>Was your family and home more nuclear or extended?</li><li>Did you have any influential family members that perhaps sparked your interest in radio and music?</li><li>Did you have a mentor figure in your formative years? Can you describe him or her?</li><li>Where did you attend school as a child?</li><li>What was your high school experience like?</li><li>Did you attend college? Where?</li><li>How did you get involved at WWOZ?</li><li>How long have you been working at WWOZ?</li><li>When did you become program director?</li><li>What is the role of a program director?</li><li>What kinds of genres does WWOZ play?</li><li>How was the station affected by Katrina?</li><li>How is radio different than when you started? How has it evolved?</li><li>How do you see WWOZ’s place in New Orleans culture?</li><li>Can you describe how the Jazz Fest broadcast works? Do you broadcast specifically from the WWOZ tent?</li><li>Are interviews from the heritage stage included in the broadcast?</li><li>What are the challenges of broadcasting from Jazz Fest?</li><li>Are there any changes in Jazz Fest you have noticed since you have been working it?</li><li>Can you describe Piano Night?</li><li>What is the atmosphere like?</li><li>Do you book the artists yourself?</li></ul>"
+        },
+        {
+          "type": "text",
+          "body": "<h3>Interview Reflections: A Review of <em>Number Our Days</em></h3><p><em>Number Our Days</em> is an ethnographic work on elderly Jewish immigrants from Eastern Europe living in a city in southern California. Barbara Myerhoff developed a rapport with the group through their Jewish Community Center, as they spend their days fraternizing and pontificating. The group is impoverished in terms of money, but immeasurably wealthy in terms of memory, perspective, and philosophy. More than an ethnography of the aging process, Myerhoff’s study of the group’s fears, joys, ceremonies, and life histories emerges as a testament not only to the strength of the Jewish people, but also to the enduring nature of the human spirit in the face of adversity. As Myerhoff takes the advice of one of her main informants, Schmuel, “Let people surprise you” (41), the individuals she studies offer brilliant and honest accounts of maintaining identity in the face of adversity.</p><p><em>Number Our Days</em> contributes to studies of the Jewish people, the elderly, and the immigrant experience. Myerhoff nimbly weaves perspectives pertaining to each of these points throughout her highly empathetic narrative and memoir-esque musings. By viewing the subjects of her ethnographic studies through a variety of theoretical gazes, she allows a holistic representation of the individuals to emerge. She did not approach her work with the intent of viewing the elders strictly through, per se, the gaze of the immigrant experience. She incorporates a variety of perspectives, allowing the intricate and resounding humanity of the elders to emerge, both individually and collectively. The undeniable humanity of the elders is perhaps represented in its truest and quirkiest light through Myerhoff’s inclusion of the bobbe-mysehs (grandmother’s tales). Each of the elders’ individual personalities is allowed to shine, and a sense of their collective identity emerges. For instance, one of the elders, Jake, rattles off a list of curses from the Old World: “‘May your teeth get mad and eat your head off.’ ‘May you inherit a hotel with one hundred rooms and be found dead in every one.’ ‘May you have ten sons and all your daughters-in-law hate you.’ ‘May all your teeth fall out but one, and that one has a cavity.’ ‘May the gypsies camp on your stomach and the bears do the kazotskhi in your liver’” (156). Myerhoff’s inclusion of these phrases and squabbles is not merely “for color,” but truly allows the elders an opportunity to leave their personal mark on her ethnographic work while representing some of the philosophies and perspectives of Judaism and their experience as immigrants.</p><p>Ultimately, Myerhoff’s compassion for and dedication to these people shine through this work. The section dedicated to the retelling of her grandmother’s tale, for instance, is markedly personal and reflexive, but represents the deep connection she felt with these people. “Sometimes she would awaken and we would begin whispering in the darkness, gathering in all our past, telling the stories again, forestalling everything that waited outside the room. When her eyes and legs were gone, in extreme old age, the stories were with her still, lasting as long as she needed them” (241). Myerhoff applied the same sensitive attention to detail to her subjects in the Center. She clearly strove to paint an accurate picture of these people’s lives, both in their similarities and their differences, but she eschewed objectivity in favor of a highly subjective and personal approach. If she had applied this same methodology to another subject, it perhaps would have lacked authenticity, or been rendered flat or overreaching. However, due to her cultural connection to Judaism, the loving eye with which she gazed at her subjects, and the careful hand with which she penned their stories, the extreme subjectivity of the work allows <em>Number Our Days</em> to emerge as a genuine labor of love.</p><p>Though Myerhoff’s reflections on and analysis of her subjects are fascinating, the most valuable segments of the work are the elders’ monologues and dialogue. Each of their individual life stories could fill a lengthy tome. Though Myerhoff’s memoir-esque reflections on her own Jewish identity and personal evolution are eloquent and enriching, she possibly could have offered more to the elders’ community by strictly publishing their life histories. All of the individuals, from Schmuel to Rebekkah to Hannah to Nathan, have such intricate and compelling personalities and are veritable gold mines of stories and perspectives. The elders seem to have an innate trustworthiness. Their stories present a sort of timeless validity that transcends interpretation or analysis. Perhaps this trustworthiness is derived from the context of their lives’ struggles—from poverty in the shtetl, to survivor’s guilt, to their unrequited parental labors of love, to their languishing health. There is an undeniable trustworthiness, or authenticity, in the stories of these Jewish elders.</p>"
+        }
+      ]
+    }
+  ],
+  "alt": {
+    "vauc.jpg": "Geraldine Vaucresson, in a striped top, stands arm in arm with a young woman in the doorway of a home.",
+    "gallagher.jpg": "Patrick Gallagher, long-haired and bearded, points to an aerial photograph of the festival grounds on a dining table as a young woman looks on; a 1979 Jazz Fest poster hangs behind them.",
+    "davis.jpg": "Joseph “Cool” Davis, seated in a wheelchair in a shirt printed “Jo Cool,” beside a young woman holding an orange folder.",
+    "huang.jpg": "Tanya Huang laughs with another young woman on a green couch, a black and white dog sitting between them.",
+    "giroir.jpg": "An older snapshot in a photo album: a bearded man in a dark hat and sunglasses with a smiling young child.",
+    "osborne.jpg": "Terrence Osborne in his studio points to a large painting in progress, sketched in colored lines on a shaped wooden panel; a finished painting of a blue shotgun house hangs above it.",
+    "boudreaux.jpg": "Wynoka Boudreaux, smiling, stands with an older man in a white bucket hat who has his arm around her shoulder, in front of a house and a parked car.",
+    "memory1.jpg": "Hand-drawn marker map of the festival grounds titled “Studio Inferno, 1991–2013, Jazz Fest Vendor,” tracing a route from home and Bayou Sauvage to the vendor’s booth locations, with food stops, a red pepper, and a small figure holding a pitchfork.",
+    "memory2.jpg": "Hand-drawn map of the festival grounds crowded with stick figures, stages, VIP areas, food booths, bikes, and notes such as “Jazz,” “Lagniappe Stage,” “Food Exhibits,” and “Old friends getting older.”",
+    "memory3.jpg": "Colored-pencil map titled “Mary Ann Caffery, a Day in My 2013 Jazzfest, My Path,” a looping arrowed route past music tents, food stands, and crafts booths, with notes like “Tasty!” and “Yum Yum.”"
+  },
+  "audio": [
+    "vaucresson.m4a",
+    "gallagher.m4a",
+    "davis.m4a",
+    "huang.m4a",
+    "giroir.m4a",
+    "osborne.m4a",
+    "boudreaux.m4a"
+  ]
+}

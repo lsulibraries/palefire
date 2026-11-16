@@ -1,0 +1,2027 @@
+{
+  "title": "History of KLSU",
+  "subtitle": "A century of campus radio at LSU, 1915–2015",
+  "credit": "<p>T. Harry Williams Center for Oral History, LSU Libraries. Curated by Charlotte Willcox.</p>",
+  "intro": "<p>In 1915, LSU physics professor David Vance Guthrie and his students began building a wireless station from spare parts. It became KFGC, the university’s first broadcast station, and the start of a century of campus radio: programs over WJBO, the FM station WLSU, WPRG and, from 1983, KLSU.</p><p>Told in newspaper clippings, university records, yearbook pages and the voices of the people who ran the stations, the exhibition follows each call sign in turn.</p>",
+  "cover": "c69_1.jpg",
+  "year": null,
+  "physical_note": "",
+  "source": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/KLSU/home.html",
+  "pages": [
+    {
+      "title": "KFGC, 1915–1934",
+      "anchor": "kfgc",
+      "category": "",
+      "lead": "fall1915_1.jpg",
+      "display": "wall",
+      "focus": "center 30%",
+      "lead_caption": "<p>David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "Fall 1915",
+          "anchor": "fall-1915",
+          "bio": "",
+          "published": true,
+          "source": "C1.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Physics department classes, under supervision of Dr. David Vance Guthrie, construct short wave radio sets and a transmitter from spare parts. Dr. Guthrie begins construction of a university wireless radio station.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "fall1915_1.jpg",
+              "source": "C1.html",
+              "caption": "<p>David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "fall1915_2.jpg",
+              "source": "C1.html",
+              "caption": "<p>“Wireless Station to Be Erected at L.S.U.,” The Reveille, October 6, 1915. Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 1916",
+          "anchor": "february-1916",
+          "bio": "",
+          "published": true,
+          "source": "C2.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The wireless radio station is completed. Two eighty-foot towers atop the Chemistry building and the Physics building are connected via four three-hundred-foot wires.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c2_1.jpg",
+              "source": "C2.html",
+              "caption": "<p>The first chemistry building, L.S.U., old campus, 1899, a50000007, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c2_2.jpg",
+              "source": "C2.html",
+              "caption": "<p>Physics Laboratory, Heard Hall, 1903, a50000030, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "March 1916",
+          "anchor": "march-1916",
+          "bio": "",
+          "published": true,
+          "source": "C3.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Station receives messages from New Orleans from the United Fruit Company and the Naval Support Activity. An expert wireless operator from the Standard Oil fleet deems the university apparatus efficient.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c3_1.jpg",
+              "source": "C3.html",
+              "caption": "<p>“Wireless Station Receives Messages From New Orleans,” The Reveille, March 2, 1916. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "April 1917",
+          "anchor": "april-1917",
+          "bio": "",
+          "published": true,
+          "source": "C4.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The university radio plans are put on hold when the United States enters World War I as radio reception and transmission is prohibited to amateurs. Transmission would resume at the end of 1918.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c4_1.jpg",
+              "source": "C4.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1923",
+          "anchor": "1923",
+          "bio": "",
+          "published": true,
+          "source": "C5.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Amateur radio telegraph and radiophone shortwave unit W5YW also begins transmitting from campus and uses essentially the same equipment as KFGC through 1925.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c5_1.jpg",
+              "source": "C5.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "April 20, 1923",
+          "anchor": "april-20-1923",
+          "bio": "",
+          "published": true,
+          "source": "C6.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The LSU Physics Department is granted a federal license to operate a broadcast transmitter on 1,180 kilocycles, with 100 watts of power, for “unlimited” time.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c6_1.jpg",
+              "source": "C6.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "July 19, 1923",
+          "anchor": "july-19-1923",
+          "bio": "",
+          "published": true,
+          "source": "C7.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC is granted a “Limited Commercial” license from the Department of Commerce, Bureau of Navigation to broadcast “entertainment and like matter only.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c7_1.jpg",
+              "source": "C7.html",
+              "caption": "<p>Jaynie K. Reed, “Station KFGC Part of the Early Radio Craze,” Morning Advocate, February 27, 1977. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 4, 1924, 8:15 p.m.",
+          "anchor": "january-4-1924-8-15-p-m",
+          "bio": "",
+          "published": true,
+          "source": "C8.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC airs its first program with The Department of Music performing vocal and piano selections.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c8_1.jpg",
+              "source": "C8.html",
+              "caption": "<p>Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 11, 1924",
+          "anchor": "january-11-1924",
+          "bio": "",
+          "published": true,
+          "source": "C9.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The LSU band performs on air.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c9_1.jpg",
+              "source": "C9.html",
+              "caption": "<p>“Band Concert To Be Broadcasted At Physics Bldg. Fri.,” The Reveille, January 11, 1924. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c9_2.jpg",
+              "source": "C9.html",
+              "caption": "<p>Jaynie K. Reed, “Station KFGC Part of the Early Radio Craze,” Morning Advocate, February 27, 1977. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 1924",
+          "anchor": "february-1924",
+          "bio": "",
+          "published": true,
+          "source": "C10.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC broadcasts the returns of the governor’s race between Hewitt Bouanchaud, Henry Fuqua and Huey P. Long. As Dr. D.V. Guthrie recounted, “We had no telephone connection with the local newspaper then, so we had to get the election returns by sending couriers back and forth to the bulletin board in front of the newspaper office where the returns were posted.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c10_1.jpg",
+              "source": "C10.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 27, 1924",
+          "anchor": "november-27-1924",
+          "bio": "",
+          "published": true,
+          "source": "C11.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC broadcasts a play-by-play account of the Thanksgiving Day football game between Tulane and LSU.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c11_1.jpg",
+              "source": "C11.html",
+              "caption": "<p>“Football Fans Throughout State Prepare to Listen in on Returns,” State Times, November 21, 1924. LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c11_2.jpg",
+              "source": "C11.html",
+              "caption": "<p>“Broadcasting Football Games Proves Success,” State Times, November 28, 1924. LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c11_3.jpg",
+              "source": "C11.html",
+              "caption": "<p>J. A. Busse, Doherty Hardware Company, to Station KFGC, November 28, 1924. Reproduced in Jaynie K. Reed, “Station KFGC Part of the Early Radio Craze,” Morning Advocate, February 27, 1977. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Spring 1925",
+          "anchor": "spring-1925",
+          "bio": "",
+          "published": true,
+          "source": "C12.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC airs its last program. The station declined in popularity as other high-powered stations opened across the country and Baton Rouge residents bought improved receiving sets.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c12_1.jpg",
+              "source": "C12.html",
+              "caption": "<p>“KFGC Loses Right To Broadcast; No Station Here Now,” The Reveille, January 27, 1926. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Summer 1925",
+          "anchor": "summer-1925",
+          "bio": "",
+          "published": true,
+          "source": "C13.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KFGC moves from the downtown campus to the Physics building on the new, current-day campus, but Dr. Guthrie does not put the apparatus back into operation.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c13_1.jpg",
+              "source": "C13.html",
+              "caption": "<p>“KFGC Loses Right To Broadcast; No Station Here Now,” The Reveille, January 27, 1926. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1926–1931",
+          "anchor": "1926-1931",
+          "bio": "",
+          "published": true,
+          "source": "C14.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p><strong>January 15, 1926.</strong> The federal government does not renew the KFGC broadcast license. Dr. Guthrie never reassembles the radio apparatus after the move, and fast pace of technological innovation renders the equipment obsolete.</p><p><strong>1931.</strong> LSU establishes the School of Journalism as its own department where, in the future, radio at LSU will make its home.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c14_1.jpg",
+              "source": "C14.html",
+              "caption": "<p>“KFGC Loses Right To Broadcast; No Station Here Now,” The Reveille, January 27, 1926. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "March 15, 1934",
+          "anchor": "march-15-1934",
+          "bio": "",
+          "published": true,
+          "source": "C16.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Ham radio amateurs at LSU, led by Dr. Guthrie, receive International Radio Amateurs Union Certificate “for having carried on operations with other amateur stations on every continent.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c16_1.jpg",
+              "source": "C16.html",
+              "caption": "<p>Bill Rivers, “Guthrie Soon to Revive Old Amateur Radio Station,” The Reveille, October 1, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "WJBO, 1934–1947",
+      "anchor": "wjbo",
+      "category": "",
+      "lead": "c26_1.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "December 1934",
+          "anchor": "december-1934",
+          "bio": "",
+          "published": true,
+          "source": "C17.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Baton Rouge Broadcasting Company purchases the former New Orleans radio station, WJBO, and relocates it to downtown Baton Rouge.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c17_1.jpg",
+              "source": "C17.html",
+              "caption": "<p>“L.S.U. Goes on the Air With Expanded Program,” Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Spring 1936",
+          "anchor": "spring-1936",
+          "bio": "",
+          "published": true,
+          "source": "C18.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Ten LSU radio program series are broadcast across Louisiana via the Southern Broadcasting Network and through cooperation with WJBO. Topics covered include LSU history and current university events. This marks the beginning of the eleven-year collaboration between LSU and WJBO to air university news and educational content.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c18_1.jpg",
+              "source": "C18.html",
+              "caption": "<p>“L.S.U. Radio Broadcast Series Now In Process Bring Enthusiastic Response From Alumni, Others,” Louisiana Leader, April 3, 1936. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c18_2.jpg",
+              "source": "C18.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1936",
+          "anchor": "1936",
+          "bio": "",
+          "published": true,
+          "source": "C19.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Dr. Harley Smith organizes the Louisiana Radio Guild.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c19_1.jpg",
+              "source": "C19.html",
+              "caption": "<p>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 15, 1937",
+          "anchor": "february-15-1937",
+          "bio": "",
+          "published": true,
+          "source": "C20.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Dr. Harley Smith’s students broadcast their first show in conjunction with WJBO.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c20_1.jpg",
+              "source": "C20.html",
+              "caption": "<p>“Radio Class Gives News,” The Reveille, February 19, 1937. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "August 1, 1937",
+          "anchor": "august-1-1937",
+          "bio": "",
+          "published": true,
+          "source": "C21.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WJBO becomes a member station of the Blue Network of the National Broadcasting Company (NBC).</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c21_1.jpg",
+              "source": "C21.html",
+              "caption": "<p>“L.S.U. Goes on the Air With Expanded Program,” Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c21_2.jpg",
+              "source": "C21.html",
+              "caption": "<p>Program schedule. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c21_3.jpg",
+              "source": "C21.html",
+              "caption": "<p>Program schedule for Wednesday, November 3, 1937. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1938",
+          "anchor": "fall-1938",
+          "bio": "",
+          "published": true,
+          "source": "C22.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Ralph Steetle becomes LSU general program director of radio.</p><p>Ralph Steetle, the first Director of Broadcasting at LSU and founder of WLSU, discusses his early influences.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Ralph Steetle on his early influences",
+              "file": "steetle_ralph_22.m4a",
+              "credit": "Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996",
+              "transcript": "<p><strong>RON ROSS:</strong> Now, what year was this?</p><p><strong>RALPH STEETLE:</strong> This was 1934. I graduated in ’36, and a master’s degree in linguistics and broadcasting in ’38. I was influenced a great deal by Dr. Harley Smith, who was on the speech faculty and was a superb teacher and good person. One of the things that impressed me about his teaching is that he would ask, “Before you do anything, it would be useful if you would ask yourself, ‘What’s the purpose of this?’ Whether it’s writing or whether it’s acting. If you start with a sense of what the purpose of this is, it would be a lot easier to do.” And so part of my life has been marked by an internal sense of questioning, what is the purpose of this before I start. So I owe that to Dr. Harley Smith, who through his efforts, I became the first Director of Broadcasting at the university, and the first, I guess . . . He taught radio classes and I first became his assistant and replaced him as he went into other fields.</p><p><strong>ROSS:</strong> What was the locus of speech and broadcasting? In what building?</p><p><strong>STEETLE:</strong> Music and Dramatic Arts building. The half to the right as you entered.</p><p><strong>ROSS:</strong> Yes.</p><p><strong>STEETLE:</strong> And because I knew quite a few of the people and faculty in Music because of my broadcast activities, of course, I always narrated yearly broadcasts of The Messiah. Jo sang. I never met her. So my future wife and I were in the same building for some years and never met.</p><p>But I was very fortunate to receive a Rockefeller Foundation Fellowship that occurred as my master’s year ended. I suddenly had to complete my thesis in six weeks instead of three months. So I worked day and night and finished my thesis to get on the train for New York and the Rockefeller Foundation. Never have caught up that sleep. I thought I would do it in New York, but I never did.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "September 1938",
+          "anchor": "september-1938",
+          "bio": "",
+          "published": true,
+          "source": "C23.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>New program “Campus Comment,” a combination of 1937’s programs “March of Education” and “Reveille on the Air” begins broadcast. Students from Journalism Professor C.R.F. Smith’s course compose and present the material.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c23_1.jpg",
+              "source": "C23.html",
+              "caption": "<p>“L.S.U. Goes on the Air With Expanded Program,” Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 1938",
+          "anchor": "december-1938",
+          "bio": "",
+          "published": true,
+          "source": "C24.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Radio equipment dedicated by university officials. Transmittal of educational programs in conjunction with WJBO begins.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c24_1.jpg",
+              "source": "C24.html",
+              "caption": "<p>“University Officials Inspect, Dedicate Radio Equipment,” The Reveille, December 16, 1938. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 1939",
+          "anchor": "january-1939",
+          "bio": "",
+          "published": true,
+          "source": "C25.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WJBO and LSU, in conjunction with radio stations throughout southern Louisiana, conduct a “series of broadcasts in French to revive interest in French language.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c25_1.jpg",
+              "source": "C25.html",
+              "caption": "<p>“Plan Series To Spur Interest in French,” State Times, January 7, 1939. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 6, 1939",
+          "anchor": "november-6-1939",
+          "bio": "",
+          "published": true,
+          "source": "C26.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Weekly fifteen-minute campus newscasts begin in conjunction with WJBO. Sponsored by the Daily Reveille and Sigma Delta Chi professional journalism fraternity.</p><p>Former professor and Manship Advisory Committee member Sig Mickelson discusses his radio journalism course at LSU and his students’ production of a radio news broadcast at station WJBO.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c26_1.jpg",
+              "source": "C26.html",
+              "caption": "<p>“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Sig Mickelson on teaching radio journalism",
+              "file": "mickelson_sig_25.m4a",
+              "credit": "Sig Mickelson, interviewed by Melisse Campbell, Mss. 4700.0220, 1993",
+              "transcript": "<p><strong>SIG MICKELSON:</strong> You know, I don’t think there were any adjunct teachers. I know that I met some members of the staff, the managing editor I think was a man named C.P. Lighter if I’m not mistaken. I know I met him and the manager of the radio station, they owned WJBO at that time. And I . . . Actually I’m not sure whether I taught the first course in radio journalism or not but at least I had one. And we talked the manager of the station into giving us a half-hour once a week or maybe just fifteen minutes once a week to do a student produced show from here on WJBO. So we had that contact with a Manship organization. I understand Doug Manship was in school here at that time, but I didn’t know him until many years later.</p><p><strong>MELISSE CAMPBELL:</strong> Did you . . . Did the students consider the radio broadcasting innovative at the time? To be able to broadcast a program from LSU?</p><p><strong>MICKELSON:</strong> Yeah, I think so. Because, you see, radio news really only dates back, oh, six or seven years before that. And there was really very little before about 1936 or ’37. It was still on a real state of flux at that time so that this was something quite new. I’m not sure we did very well, but at least there was something.</p><p><strong>CAMPBELL:</strong> What type of facilities were available to the journalism students?</p><p><strong>MICKELSON:</strong> Well, at that time, it was over where the president . . . the Chancellor now sits. In that building, the Reveille has its presses and linotype machines and engraving facilities all in that building. I think that was operated largely professionally with some students working on an hourly basis as helpers. Facilities, there really wasn’t very much. I know that there was a type lab there. At that time apparently typography was a very important course. And so they had some type places enough for students to play around with that. Since many of them were going out to the rural press, it seems to make sense to teach. They had an editing lab with a horseshoe table. But I’m not sure if there were very many typewriters around during that period, a few but that’s about it. For broadcasting purposes, we got a microphone and a loudspeaker and strung a wire along the ceiling so you could put a microphone in my office and listen to it down at the . . .</p><p><strong>CAMPBELL:</strong> So y’all broadcasted from here?</p><p><strong>MICKELSON:</strong> Well, that wasn’t broadcast. That was just room to room but at least it was possible to simulate a broadcast. Put a person at the microphone in the office and everybody else listens. Now it’s pretty primitive, but at least that’s about the best we could do.</p><p><strong>CAMPBELL:</strong> So when y’all produced the show for WJBO y’all would go down to the station?</p><p><strong>MICKELSON:</strong> Yeah. And generally the way that was assigned was that it was sort of a Reveille type of operation. You’d assign the students to go out and cover certain things happening on the campus or futures. And each student then would cover his own story and read it on the air. I imagine it was pretty bad. I’d hate to have to listen to it.</p><p><strong>CAMPBELL:</strong> Do you think the students were prepared very well for a career in journalism at that point? Or was it . . .</p><p><strong>MICKELSON:</strong> Well for the types . . . yeah, now they were . . . I think . . . You see we were really closer to a trade school than anything very thoughtful. Now they were getting a college education, so it really wasn’t trade school in that sense. But yeah, they seemed to be able to move into a weekly newspaper fairly adequately and move through it quite well. Some of them went on like Jewel Claitor, for example, who wound up at the AP [Associated Press] in New York, and it seemed . . . I don’t know what happened to her, but she seems to have done fairly well there. So yeah, in terms of status of journalism at the time from a purely professional point of view. What we were not doing too much of, I think, was talking ideas. I think it was pretty well restricted to . . . I won’t call it trade school, but at least to techniques, how to do it.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 14, 1940",
+          "anchor": "january-14-1940",
+          "bio": "",
+          "published": true,
+          "source": "C27.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WJBO broadcasts NBC show National Farm and Home Hour, a land grant college program sponsored by the USDA and NBC. The broadcast focuses on Louisiana agriculture, especially within the LSU College of Agriculture and the Agricultural Extension Division.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c27_1.jpg",
+              "source": "C27.html",
+              "caption": "<p>“L.S.U. Scheduled On NBC Broadcast,” Louisiana Leader, January 7, 1940. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1941",
+          "anchor": "1941",
+          "bio": "",
+          "published": true,
+          "source": "C28.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Amateur station W5YW ceases operations following wartime governmental ban on amateur stations.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c16_1.jpg",
+              "source": "C28.html",
+              "caption": "<p>Bill Rivers, “Guthrie Soon to Revive Old Amateur Radio Station,” The Reveille, October 1, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 5, 1941–May 6, 1942",
+          "anchor": "november-5-1941-may-6-1942",
+          "bio": "",
+          "published": true,
+          "source": "C29.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>University defense council presents forum series “Aspects of a World at War” over WJBO. Series is broadcast regularly on alternate Wednesdays and features university professors.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c29_1.jpg",
+              "source": "C29.html",
+              "caption": "<p>“Begin Radio Forum On World at War,” Louisiana Leader, November 8, 1941. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "July 1, 1942",
+          "anchor": "july-1-1942",
+          "bio": "",
+          "published": true,
+          "source": "C30.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>LSU completes two broadcast studios in the Music and Dramatic Arts building from what were formerly an orchestra room and three small music practice rooms.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c30_1.jpg",
+              "source": "C30.html",
+              "caption": "<p>“Construction Is Started On Two Radio Studios,” The Reveille, May 9, 1942. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Spring 1944",
+          "anchor": "spring-1944",
+          "bio": "",
+          "published": true,
+          "source": "C31.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>“The Shape of Things To Come,” a faculty radio forum series, is broadcast weekly during March and April of 1944, and features faculty from different departments discussing various issues of World War II.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c31_1.jpg",
+              "source": "C31.html",
+              "caption": "<p>“The Shape Of Things To Come,” 1944. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "April 7, 1945",
+          "anchor": "april-7-1945",
+          "bio": "",
+          "published": true,
+          "source": "C32.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Board of Supervisors authorizes President W.B. Hatcher and the Radio Department of the General Extension Division to “make formal application for a construction permit to build a high-frequency modulation radio broadcasting station.” The Board “allocated $56,000 from the university’s funds for construction and operation and maintenance for one year.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c32_1.jpg",
+              "source": "C32.html",
+              "caption": "<p>“Board Plans Revised Housing and Radio Station,” The Reveille, April 10, 1945. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "April 12, 1945",
+          "anchor": "april-12-1945",
+          "bio": "",
+          "published": true,
+          "source": "C33.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Radio Guild broadcasts its first FM play, an eighty-minute broadcast of “J. Smith and Wife.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c33_1.jpg",
+              "source": "C33.html",
+              "caption": "<p>“Board Plans Revised Housing and Radio Station,” The Reveille, April 10, 1945. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 1, 1946",
+          "anchor": "february-1-1946",
+          "bio": "",
+          "published": true,
+          "source": "C34.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>University President W.B. Hatcher appoints the Radio Advisory Committee to research policies and programming for the operation of a university FM radio station.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c34_1.jpg",
+              "source": "C34.html",
+              "caption": "<p>J.W. Brouillette to W.B. Hatcher, 16 January 1946, Correspondence, Box 27, Folder 32, Louisiana State University Office of the Chancellor Records, A0001, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 15, 1946",
+          "anchor": "february-15-1946",
+          "bio": "",
+          "published": true,
+          "source": "C35.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>LSU begins broadcasting content on WJBO for two hours a day.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c34_1.jpg",
+              "source": "C35.html",
+              "caption": "<p>J.W. Brouillette to W.B. Hatcher, 16 January 1946, Correspondence, Box 27, Folder 32, Louisiana State University Office of the Chancellor Records, A0001, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1946",
+          "anchor": "fall-1946",
+          "bio": "",
+          "published": true,
+          "source": "C36.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Lucile Ruby Woodard becomes radio program director.</p><p>Lucile Ruby Woodard, former LSU Professor Emerita of Speech and WLSU Program Director, speaks about the beginnings of the radio station and her involvement with Dr. Joseph Brouillette, Dr. Harley Smith, and Ralph Steetle.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c36_1.jpg",
+              "source": "C36.html",
+              "caption": "<p>“LSU’s New Radio Head Of Programs Arrives,” State Times, November 5, 1946. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Lucile Ruby Woodard on the beginnings of LSU radio",
+              "file": "woodard_lucile_36.m4a",
+              "credit": "Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997",
+              "transcript": "<p><strong>JACK FISER:</strong> Tell me about the job that you came into when they started the station here. What was here at the time?</p><p><strong>LUCILE WOODARD:</strong> Well, I don’t know just exactly what the date was. But when they started radio at LSU, Harley Smith worked with the Speech Department and with the General Extension Division. It’s now Continuing Education, but at that time it was called General Extension under Dr. [Joseph W.] Brouillette. Harley and Dr. Brouillette had been working in developing this area of radio. One of Harley’s students was Ralph Steetle. So after Harley left, Ralph took over and went full time with the General Extension Division in developing radio. I came here when the thousand-watt FM station was in the planning stage. I was brought here as Program Director of that FM station. I wore two hats. I taught half-time in the Speech Department . . . broadcasting courses in the Speech Department. Then I was half-time with General Extension in production as Program Director of the radio station. So that’s how I came to Louisiana.</p><p><strong>FISER:</strong> Well, you were here a while working under Steetle at the radio station.</p><p><strong>WOODARD:</strong> Yes. Yes.</p><p><strong>FISER:</strong> I was around at that time then, too. I remember Steetle very well. I think he was a Midwesterner. He was from Ohio, or something.</p><p><strong>WOODARD:</strong> He was from Ohio.</p><p><strong>FISER:</strong> And later became head of educational television for the state of Oregon.</p><p><strong>WOODARD:</strong> That’s right.</p><p><strong>FISER:</strong> He’s now retired from there. Tell me some of the problems that you faced in those days . . . Very little help, I’m sure.</p><p><strong>WOODARD:</strong> Well, of course, there were a number of universities who had radio stations at that time. They were AM stations. I worked with the one at the University of Iowa when I was there. Wisconsin, Iowa, Iowa State College, now Iowa State University, Illinois . . . were some that just come to my mind that had operating AM stations at that time. But LSU . . . Baton Rouge did not have an AM frequency available at that time for an AM station for education. So when FM frequencies were set aside for the universities and other educational institutions, they decided that LSU should have such a station. That was when Ralph and Dr. Brouillette started building one.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "October 1946",
+          "anchor": "october-1946",
+          "bio": "",
+          "published": true,
+          "source": "C37.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>A Radio Guild workshop begins presenting a series of five radio plays directed by members of the Radio Guild.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c37_1.jpg",
+              "source": "C37.html",
+              "caption": "<p>“Radio Play Series Opens With ‘Mirage’,” The Reveille, November 1, 1946. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "May 1947",
+          "anchor": "may-1947",
+          "bio": "",
+          "published": true,
+          "source": "C38.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>New station construction begins on Dalrymple Drive across from the Sigma Chi house and Ralph Steetle returns to LSU as WLSU Radio Director.</p><p>Ralph Steetle discusses returning to LSU in 1947 to develop FM radio station WLSU and the type of programming that WLSU broadcasted.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c38_1.jpg",
+              "source": "C38.html",
+              "caption": "<p>“Foundation Laid For Radio Station,” The Reveille, July 17, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Ralph Steetle on building WLSU",
+              "file": "steetle_ralph_38.m4a",
+              "credit": "Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996",
+              "transcript": "<p><strong>RALPH STEETLE:</strong> Returned from the navy to my job which was held for me at the Department of State. They wanted me back . . . And to look at LSU which also wanted me back. So I was on equal leave from both of them. I chose the low bidder and I came back to the university. Because at this time, frequency modulation was being developed and I had a great interest in developing it and using it for education and for university extension purposes.</p><p><strong>RON ROSS:</strong> This is what we call FM radio?</p><p><strong>STEETLE:</strong> FM radio. And this resulted in my return to the university. It would be about 1947 that I began the construction of station WLSU. I think it was probably the . . . one of the first of the non-commercial frequency modulation stations in the South. And the equipment we got was from the inventor of FM, Major Armstrong, and it was all extremely high-quality stuff. And we began relaying programs. I remember a symphony that was broadcast in New Jersey by Major Armstrong, picked up by my engineer in New Orleans, sent to our tower at LSU, and rebroadcast.</p><p>So we began with a serious interest in music. One of our most significant programs was “Music in American Life.” We were an active role in extending Agricultural Extension. We had a special project in which we did a farm and home hour in Cajun, and this was very exciting. That was before the station—we used commercial radio stations. It was an exciting time, and I’m sorry the university, in my departure for other things, somehow lost its radio station just when things began to become very significant. And National Public Radio made that station very important, had it still been in existence.</p><p><strong>ROSS:</strong> That is true. Where was WLSU? Was it still in the Music and Dramatic Arts building or was it . . . ?</p><p><strong>STEETLE:</strong> The studio building was over at Dalrymple Drive, right on the edge of the lake. The studio and the transmitter building combination, small but very useful. I miss it. I’m sorry it’s gone.</p><p><strong>ROSS:</strong> So the building is gone,or the station?</p><p><strong>STEETLE:</strong> I believe the station is gone. Probably the building, too.</p><p><strong>ROSS:</strong> So how long were you involved in the creation of WLSU? How long did you stay to help run it?</p><p><strong>STEETLE:</strong> I stayed until 1951, so that would be ’47 to ’51. And then I was asked to go and help develop public television.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "WLSU, 1947–1973",
+      "anchor": "wlsu",
+      "category": "",
+      "lead": "c39_2.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>“Station WLSU,” L.S.U. Alumni News, September 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "October 16, 1947",
+          "anchor": "october-16-1947",
+          "bio": "",
+          "published": true,
+          "source": "C39.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU goes on the air at 91.7 megacycles with 1,000 watts of power. WLSU is the first FM station in the Deep South.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c39_1.jpg",
+              "source": "C39.html",
+              "caption": "<p>“FM Station to Use UP Wire Service And Associated Transcription Library,” The Reveille, October 7, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c39_2.jpg",
+              "source": "C39.html",
+              "caption": "<p>“Station WLSU,” L.S.U. Alumni News, September 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "October 18, 1947",
+          "anchor": "october-18-1947",
+          "bio": "",
+          "published": true,
+          "source": "C40.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU staff raise a temporary FM antenna on a ninety-foot pole while waiting for the 400-foot steel tower and the official completion of the WLSU building which is delayed because of damage from Hurricane George.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c40_1.jpg",
+              "source": "C40.html",
+              "caption": "<p>“FM Station to Use UP Wire Service And Associated Transcription Library,” The Reveille, October 7, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c40_2.jpg",
+              "source": "C40.html",
+              "caption": "<p>“Antenna Raised For Station WLSU,” The Reveille, October 22, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 1947",
+          "anchor": "december-1947",
+          "bio": "",
+          "published": true,
+          "source": "C41.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins broadcasting with 400-foot antenna and is on air for seven hours a day.</p><p>Lucile Ruby Woodard, former LSU Professor Emerita of Speech and WLSU Program Director, details WLSU programming and the educational nature of the radio station.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c41_1.jpg",
+              "source": "C41.html",
+              "caption": "<p>“WLSU, Pioneer FM Unit in South, Extends University Services to Off-Campus Group,” The Reveille, July 29, 1949. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Lucile Ruby Woodard on WLSU’s programming",
+              "file": "woodard_lucile_41.m4a",
+              "credit": "Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997",
+              "transcript": "<p><strong>JACK FISER:</strong> Where was your station physically on the campus?</p><p><strong>LUCILE WOODARD:</strong> In a small building right across from the Sigma Chi house. It was a cornfield when we . . . an experimental cornfield. And we had to wait until the Agriculture Department to finish their experiment with the corn before we could build . . . [laughs] start the building. But there were some cracks made about that—where the station was being built. That it was appropriate to build it in a cornfield. I don’t . . . I think we lived up to a better reputation than that.</p><p><strong>FISER:</strong> Tell me exactly what the main part of the programming consisted of on that station.</p><p><strong>WOODARD:</strong> We had a varied program, but the greatest emphasis was on good music. All kinds of good . . . no . . . we didn’t have any country music. Most of our program was music. But we did have other programming sources. We were a part of an educational radio network at that time that shipped discs, these fifteen-inch platters, from one station to another in sort of a round-robin fashion. That was our network. After a while, a telephone wire network was established. But that was our beginning. Then we developed a School of the Air in cooperation with East Baton Rouge Parish Schools where a number of subjects were taught. We started with music and then went into . . . we found sources of recordings . . . recorded programs in other fields. Western Electric, for example, put out a series of excellent science programs and sources like that. We had school programs. Then we developed various programs of our own. But during, I would say about a third of the day . . . weekdays, we’d broadcast to the schools of East Baton Rouge Parish. Of course that, too, was a problem because not many of them had FM radios. There was an FM presence in Baton Rouge when we started. WJBO had established an FM station in addition to their AM. And it was a good music station for part of the day so that people sort of knew that there was such a thing. But a great deal of my time was spent visiting schools and PTA meetings and so on, telling them of the advantages of FM radio.</p><p><strong>FISER:</strong> Now what exactly was the sponsorship of and the financing of all this? Was it strictly an LSU affair?</p><p><strong>WOODARD:</strong> That’s right. That’s right.</p><p><strong>FISER:</strong> There was no state involved.</p><p><strong>WOODARD:</strong> No, no. No, the state was not involved other than through the LSU appropriation.</p><p><strong>FISER:</strong> Certainly not the Fed?</p><p><strong>WOODARD:</strong> No, no. It was purely an LSU project. Of course we had . . . It served an educational purpose on campus, too. Because our announcing staff . . . All of the announcers on the station were students who got the positions by auditions. All of our assistant engineers were students. Our chief engineer was not. But we started with a very small paid staff. Most of it was student work, but they were held to professional standards. All of the announcers who worked for us in our first year or two . . . first five years I would say . . . Particularly, I kept track of the ones that worked for us for the first two years. They all went into jobs at radio stations.</p><p><strong>FISER:</strong> I remember some of them. I remember one young man particularly by the name of Chuck Phillips.</p><p><strong>WOODARD:</strong> Yes.</p><p><strong>FISER:</strong> He was also from Iowa.</p><p><strong>WOODARD:</strong> Yes, right.</p><p><strong>FISER:</strong> He was here as a veteran.</p><p><strong>WOODARD:</strong> [agrees]</p><p><strong>FISER:</strong> And I later knew him as a regular radio staffer up in [?]. There was a young man by the name of Campbell . . .</p><p><strong>WOODARD:</strong> Yes.</p><p><strong>FISER:</strong> . . . who became a fine major league play-by-play man for the Chicago White Sox.</p><p><strong>WOODARD:</strong> Yes, yes. Of course didn’t broadcast any sports, so they didn’t get their background or training in that area. But they learned to be at home with the microphone. They started out announcing programs of recorded classical music, most of them. It was a good training for them, because we had some good listeners who were helpful, in that if one of those announcers would mispronounce the name of a composer or a musical selection, the telephone rang. When the program was over, the telephone would ring and these helpful listeners would say, “I want to talk to the announcer. Did you realize that you mispronounced that composer’s name?” They got an education. It served two purposes. I could have told them the same thing, and it wouldn’t have had the effect. One thing, they knew that somebody had caught them in an error. But the most important thing was they knew they had a listener who cared and who was following them and was a fan of theirs. It was great education.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Winter 1947–1948",
+          "anchor": "winter-1947-1948",
+          "bio": "",
+          "published": true,
+          "source": "C42.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Dr. D.V. Guthrie resumes operations of W5YW ham amateur radio after wartime amateur radio ban.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c42_1.jpg",
+              "source": "C42.html",
+              "caption": "<p>“Guthrie Soon to Revive Old Amateur Radio Station,” The Reveille, October 1, 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "March 15, 1948",
+          "anchor": "march-15-1948",
+          "bio": "",
+          "published": true,
+          "source": "C43.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU becomes the first college FM station to broadcast a complete campus opera: the entire performance of Offenbach’s “Tales of Hoffmann” along with interviews and commentary.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c43_1.jpg",
+              "source": "C43.html",
+              "caption": "<p>“WLSU Is First College Station To Broadcast a Campus Opera,” The Reveille, March 12, 1948. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c43_2.jpg",
+              "source": "C43.html",
+              "caption": "<p>“Tales of Hoffmann,” Gumbo, 1948. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 1948",
+          "anchor": "november-1948",
+          "bio": "",
+          "published": true,
+          "source": "C44.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU in conjunction with Continental Network provides coverage of the presidential election.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c44_1.jpg",
+              "source": "C44.html",
+              "caption": "<p>“Progress Marks Station WLSU’s First Anniversary: Membership in National Network Increases Air Time,” The Reveille, December 14, 1948. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Summer 1949",
+          "anchor": "summer-1949",
+          "bio": "",
+          "published": true,
+          "source": "C45.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins using high-fidelity tape recorders to rebroadcast campus activities from anywhere on campus. The station was previously using a disc recorder and telephone wires to broadcast events from the Music and Dramatic Arts building and the Band Hall.</p><p>Lucile Ruby Woodard recalls the difficulties of broadcasting with disc recorders and the arrival of magnetic tape recorders.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c45_1.jpg",
+              "source": "C45.html",
+              "caption": "<p>“New Tape Recorder Will Permit WLSU To Rebroadcast Any Campus Activities,” The Reveille, June 14, 1949. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Lucile Ruby Woodard on discs and magnetic tape",
+              "file": "woodard_lucile_45.m4a",
+              "credit": "Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997",
+              "transcript": "<p><strong>LUCILE WOODARD:</strong> Well, of course, if you can imagine what it would be like to develop programming without magnetic tape recorders [laughs]. When we wanted to record a concert done by LSU Music School —and they were worth recording—we had to cut them on a disc, by telephone line, from the station to the music building. Those were recorded on fifteen-inch wax discs.</p><p><strong>JACK FISER:</strong> Platters?</p><p><strong>WOODARD:</strong> Platters. We tampered with wire recorders for a while but as you know . . .</p><p><strong>FISER:</strong> I remember those things.</p><p><strong>WOODARD:</strong> . . . as you know, [laughs] they were a headache. It was very difficult to edit. When you got to the magnetic tape where there was something you didn’t like, you could just cut it out and splice it back together again. All of those advantages of magnetic tape, they’re a real boon. We take it for granted now.</p><p><strong>FISER:</strong> Oh yes.</p><p><strong>WOODARD:</strong> Audio tape and video tape. But what a great thing it was for broadcasting when magnetic tape came in. But that was one of our big, big problems.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "September 17, 1950",
+          "anchor": "september-17-1950",
+          "bio": "",
+          "published": true,
+          "source": "C46.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU programs relayed by WNOE in New Orleans. One weekly and two daily programs from WLSU are carried to the 50,000-watt WNOE station. The programs are the weekly “WLSU Speaks” and the daily “Adjusting Louisiana Agriculture to the ’50s” and “School of the Air.”</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c46_1.jpg",
+              "source": "C46.html",
+              "caption": "<p>“WLSU Programs Relayed By WNOE in New Orleans,” The Reveille, September 19, 1950. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "October 1950",
+          "anchor": "october-1950",
+          "bio": "",
+          "published": true,
+          "source": "C47.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins series “Headlines in Chemistry” presented by the Baton Rouge group of the American Chemical Society in which professors and professionals speak on chemistry in their field.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c47_1.jpg",
+              "source": "C47.html",
+              "caption": "<p>“Chemistry Series Starts on WLSU,” The Reveille, October 30, 1950. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Summer 1951",
+          "anchor": "summer-1951",
+          "bio": "",
+          "published": true,
+          "source": "C48.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Station renovated to accommodate storage for LP records in the control room as announcers also begin training for control room operation.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c48_1.jpg",
+              "source": "C48.html",
+              "caption": "<p>“WLSU Renovated to Meet Changes in Fall Operation,” The Reveille, July 12, 1951. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1952",
+          "anchor": "fall-1952",
+          "bio": "",
+          "published": true,
+          "source": "C49.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins broadcasting “This is LSU” via tape recordings to Shreveport, Monroe, Lake Charles, Alexandria, and Lafayette for rebroadcast.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c49_1.jpg",
+              "source": "C49.html",
+              "caption": "<p>“University FM Station to Tape Record Program Showing Phases of LSU Life,” The Reveille, September 25, 1952. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Spring 1953",
+          "anchor": "spring-1953",
+          "bio": "",
+          "published": true,
+          "source": "C50.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins broadcasting four educational programs produced by the National Association of Educational Broadcasters for instruction during night classes.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c50_1.jpg",
+              "source": "C50.html",
+              "caption": "<p>“LSU Will Have Radio Instruction In Night Classes,” State Times, February 19, 1953. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1955",
+          "anchor": "fall-1955",
+          "bio": "",
+          "published": true,
+          "source": "C51.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>By this time WLSU has many more student workers, and its broadcasting hours have doubled.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c51_1.jpg",
+              "source": "C51.html",
+              "caption": "<p>“Lucile Ruby Helped Guide WLSU to New Importance,” The Reveille, September 30, 1955. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "June 1957",
+          "anchor": "june-1957",
+          "bio": "",
+          "published": true,
+          "source": "C52.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>President Troy H. Middleton cuts budget, ceasing station operations. The 1,000-watt antenna is dismantled and the transmitter is transferred to the Music and Dramatic Arts Building annex.</p><p>Lucile Ruby Woodard laments the dissolution of WLSU resulting from 1957 university budget cuts.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c52_1.jpg",
+              "source": "C52.html",
+              "caption": "<p>“WLSU Closed 3 Years But News Work Continues,” The Reveille, July 26, 1960. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Lucile Ruby Woodard on the end of WLSU",
+              "file": "woodard_lucile_52.m4a",
+              "credit": "Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997",
+              "transcript": "<p><strong>JACK FISER:</strong> Well tell me how this got over into the television field. First, the station, as I understand, came [?] because the money ran out.</p><p><strong>LUCILE WOODARD:</strong> That’s right. That’s right. After ten years. It was established in 1947, and in 1957, the funds for the university were cut drastically. To keep the academic departments of the university afloat, the extras of the side things had to be cut off. The radio station was one of those victims at that time in 1957. LSU didn’t just drop out of the whole interest because we then cooperated with commercial stations, radio and television stations, to produce programs for commercial stations.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1960",
+          "anchor": "1960",
+          "bio": "",
+          "published": true,
+          "source": "C53.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The former WLSU building houses the Bureau of Public Relations. The old equipment is used for making short films on campus news events for distribution to television stations throughout the state.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c53_1.jpg",
+              "source": "C53.html",
+              "caption": "<p>“WLSU Closed 3 Years But News Work Continues,” The Reveille, July 26, 1960. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 4, 1962",
+          "anchor": "december-4-1962",
+          "bio": "",
+          "published": true,
+          "source": "C54.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Dr. D.V. Guthrie passes away at his home in Fort Defiance, Virginia, at age seventy-eight.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c54_1.jpg",
+              "source": "C54.html",
+              "caption": "<p>“Dr. D.V. Guthrie Dies in Virginia; Services Slated,” State Times, December 4, 1962. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 15, 1965, 3:00 p.m.",
+          "anchor": "november-15-1965-3-00-p-m",
+          "bio": "",
+          "published": true,
+          "source": "C55.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU returns as a closed-circuit amplitude modulation (AM) system connected to thirty-one buildings on campus under the direction of faculty advisor Dr. John H. Pennybacker and Union Program Director Richard D. Madison. The station is located in the Student Union and found at 660 KC on the campus radio dial. Commercial member stations of the Louisiana Broadcasters’ Association donated the equipment that allowed the station to open.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c55_1.jpg",
+              "source": "C55.html",
+              "caption": "<p>“From ‘ham shack’ to wireless; history of WLSU radio related,” The Reveille, September 18, 1968. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c55_2.jpg",
+              "source": "C55.html",
+              "caption": "<p>WLSU Radio: Gumbo, 1966. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 1966",
+          "anchor": "january-1966",
+          "bio": "",
+          "published": true,
+          "source": "C56.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU broadcasts on air twenty-four hours a day.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c56_1.jpg",
+              "source": "C56.html",
+              "caption": "<p>“LSU Radio Station Now On Air 24 Hours a Day,” State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 1967",
+          "anchor": "february-1967",
+          "bio": "",
+          "published": true,
+          "source": "C57.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Chancellor Cecil G. Taylor appears on “Open Line 66,” a series of radio conversations with university administrators.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c57_1.jpg",
+              "source": "C57.html",
+              "caption": "<p>“Taylor Defends Administrators on WLSU,” The Reveille, February 16, 1967. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1969",
+          "anchor": "1969",
+          "bio": "",
+          "published": true,
+          "source": "C58.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU begins broadcasting commercials by record and electronic equipment retailers in Baton Rouge area.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c58_1.jpg",
+              "source": "C58.html",
+              "caption": "<p>WLSU: Gumbo, 1969. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "July 1, 1970",
+          "anchor": "july-1-1970",
+          "bio": "",
+          "published": true,
+          "source": "C59.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU is transferred in the university’s table of organization from the Student Union to the Division of Student Affairs. Administration of the operation of the station goes to the Office of the Business Manager of the Reveille and Gumbo. Faculty Council Committee on Student Publications is responsible for establishing policies and guidelines for WLSU.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c59_1.jpg",
+              "source": "C59.html",
+              "caption": "<p>Chancellor Taylor to Phillips, Coco, Reddoch, 7 July 1970, Correspondence, Box 136, Folder 33, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "August 15, 1972",
+          "anchor": "august-15-1972",
+          "bio": "",
+          "published": true,
+          "source": "C60.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WLSU sells broadcast time to advertisers both on and off campus.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c60_1.jpg",
+              "source": "C60.html",
+              "caption": "<p>WLSU Radio Station Sales Contract Procedures, 1972, unpublished data.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c60_2.jpg",
+              "source": "C60.html",
+              "caption": "<p>1972–73 Commercial Time Rates, 1972, unpublished data.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1973",
+          "anchor": "1973",
+          "bio": "",
+          "published": true,
+          "source": "C61.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Station Manager George Waldroup petitions Governor Edwin Edwards and the Louisiana Educational Television Authority (LETA), requesting support for an FM-Radio Educational License. LETA says that the university must financially support the transition instead of relying on funding from selling commercial time. Chancellor Cecil G. Taylor denies university funding and support, citing financial infeasibility.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c61_1.jpg",
+              "source": "C61.html",
+              "caption": "<p>George M. Waldroup to Chancellor Taylor, 19 March 1973, Correspondence, unpublished data.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c61_2.jpg",
+              "source": "C61.html",
+              "caption": "<p>Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data.</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "WPRG, 1979–1982",
+      "anchor": "wprg",
+      "category": "",
+      "lead": "c64_1.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>“WPRG Begins Broadcasting,” Advocate, January 16, 1980. LSU Libraries.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "June 21, 1979",
+          "anchor": "june-21-1979",
+          "bio": "",
+          "published": true,
+          "source": "C63.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>FCC grants LSU an FM license as WPRG and station facilities relocate from the Student Union to East Tiger Stadium.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c63_1.jpg",
+              "source": "C63.html",
+              "caption": "<p>Federal Communications Commission to LSU Systems Office, 21 June 1979, Correspondence, Box 136, Folder 33, Louisiana State University Office of the Chancellor records, 1835–2005, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 15, 1980",
+          "anchor": "january-15-1980",
+          "bio": "",
+          "published": true,
+          "source": "C64.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WPRG goes on air at 107.3 FM with a 10-watt transmitter and 130-foot antenna.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c64_1.jpg",
+              "source": "C64.html",
+              "caption": "<p>“WPRG Begins Broadcasting,” Advocate, January 16, 1980. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1980",
+          "anchor": "fall-1980",
+          "bio": "",
+          "published": true,
+          "source": "C65.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>WPRG begins broadcasting LSU football games in stereo surround sound using eleven microphones positioned around the stadium.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c65_1.jpg",
+              "source": "C65.html",
+              "caption": "<p>“Tigers in Stereo,” Advocate, September 17, 1982. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 22, 1982",
+          "anchor": "december-22-1982",
+          "bio": "",
+          "published": true,
+          "source": "C66.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>LSU enters a contract with WJBO/Baton Rouge Broadcasting Company Inc. granting the company sole and exclusive radio rights to all athletic competitions, thus ending live sports broadcasting at WPRG.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c66_1.jpg",
+              "source": "C66.html",
+              "caption": "<p>“Station’s Rights to LSU Events Challenged in Court,” Advocate, December 21, 1983. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "KLSU, 1983–2015",
+      "anchor": "klsu",
+      "category": "",
+      "lead": "c77_1.jpg",
+      "display": "wall",
+      "focus": "center",
+      "lead_caption": "<p>KLSU: Gumbo 1988. LSU Archives, LSU Libraries.</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "May 31, 1983",
+          "anchor": "may-31-1983",
+          "bio": "",
+          "published": true,
+          "source": "C68.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The station call letters change from WPRG to KLSU.</p><p>Dez Crawford, a KLSU deejay from 1980 to 1983, speaks about her late husband and former station manager David Crawford and his successful petition to Congressman Billy Tauzin to change the station call letters.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c68_1.jpg",
+              "source": "C68.html",
+              "caption": "<p>WPRG becomes KLSU: Gumbo 1984. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Dez Crawford on winning back the KLSU call letters",
+              "file": "crawford_dez_68.m4a",
+              "credit": "Dez Crawford, interviewed for Mss. 4700.2593",
+              "transcript": "<p><strong>DEZ CRAWFORD:</strong> He [David Crawford, Dez Crawford’s late husband] wanted the radio station not to be the orphan, red-haired stepchild of the university. And he struggled to get funding. Things like chairs . . . I mean, everything from chairs to tape, to degaussers, to a microphone that didn’t collapse every time you put it up in the air [laughs]. To finally successfully lobbying Congressman Billy Tauzin to get a power increase for the station, which we already had in hand. He worked very hard for that. He went to Congressman Tauzin and said, you know, “Right now, we’re WPRG.” We used the PRG which was randomly thrown at us when WLSU . . . Somebody didn’t do the paperwork, and we lost WLSU to the University of Wisconsin at La Crosse. WLSU, Wisconsin La Crosse State University, because somebody didn’t bother to re-apply for the name. I don’t recall what year that was, but that was a couple years before he [Dave] started. And he went to Billy Tauzin and said, “Look, we’re like . . . You can throw a rock from the Mississippi River from the edge of campus. The “K” and “W” border is right there. Can you petition the FCC for an exemption?” And Congressman Tauzin did and we got that exemption. That’s how we got KLSU back. And Wisconsin La Crosse State University had to settle for something else. And because Congressman Tauzin was so magnanimous, he spoke to the FCC in this very compelling way to make them say that, you know, “We had this first and we want it back.”</p><p>My understanding is that that was a very low wattage station that basically broadcast to the dorms. And we were trying to do something and expand our influence on the community and provide more coverage and to expand the School of Journalism. He made some very compelling arguments. Dave wrote most of the arguments that were presented to the FCC, and he worked with Congressman Tauzin and we got . . . Thanks to Dave, we got KLSU back.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1983",
+          "anchor": "fall-1983",
+          "bio": "",
+          "published": true,
+          "source": "C69.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Students build a new transmitter without university assistance.</p><p>Dez Crawford recounts how she and a group of KLSU deejays secretly constructed a new radio transmitter atop the Life Sciences building.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c69_1.jpg",
+              "source": "C69.html",
+              "caption": "<p>KLSU antenna: Gumbo 1984. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Dez Crawford on building the tower",
+              "file": "crawford_dez_69.m4a",
+              "credit": "Dez Crawford, interviewed for Mss. 4700.2593",
+              "transcript": "<p><strong>DEZ CRAWFORD:</strong> And when we got that permit, we built the tower on top of the Life Sciences building. And it was built by Paul Burt—who was a radio engineer, not a physical engineer—two other students who had some engineering background with actual mechanical engineers . . . Paul Burt, Tony Larosa, Miles Jackson, Elizabeth Chinn Dade . . . Who else was there? Of course myself and David [Crawford], and there were a couple of other people who helped alternately. We put it up in about the course of a week. We’d go up there after the Life Science building closed. We’d load all the gear onto the freight elevator. We’d go to the roof. We had rented a gin pole from AAA, which is the thing you ratchet heavy things up with as you build a tower. I had climbing gear because I was outdoorsy. I made a couple of Swiss seats, which are the seats that you use when you’re climbing that you can hook on to. I made a couple of them out of webbing . . . webbing, and rope, and crossing my fingers. A couple of carabiners for the people who would actually be up on the tower. Dave and Paul Burt climbed the tower and we were tensioning the wires, and tensioning the guy lines, and putting in bolts, and getting the transmitter . . . I’m sorry, getting the antenna up there and . . . We did this all when no one was looking, and all the sudden the dean looks up and says, “How the hell did that get up there?” About two years later [laughs]. Nobody noticed it. But, you know, all the sudden, it’s like, “We got it! We’re going to broadcast. We’re building that tower.” And when the university said, “Well we have to put in an application and we have to put in for a . . . We have to put in for a work order and that might take six months,” We all looked at each other and said, “We’re doing this.” And that was entirely built by students. Lo and behold, it’s still there.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "October 24, 1983",
+          "anchor": "october-24-1983",
+          "bio": "",
+          "published": true,
+          "source": "C70.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Power increases from 8 watts to 5,000 watts, and the station moves from 107.3 FM to 91.1 FM. Deejays take requests for the first 91 minutes on air with the new power.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c70_1.jpg",
+              "source": "C70.html",
+              "caption": "<p>“BR real estate will soon be reel estate,” Advocate, October 21, 1983. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "November 29, 1984",
+          "anchor": "november-29-1984",
+          "bio": "",
+          "published": true,
+          "source": "C72.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>LSU Board of Supervisors changes the name of the LSU Journalism School to the Manship School of Journalism in recognition of a $2.6 million donation from members of the Manship family.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c72_1.jpg",
+              "source": "C72.html",
+              "caption": "<p>“LSU Board Agrees to Study Reveille Advertising Policy,” December 1, 1984. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "September 8, 1985",
+          "anchor": "september-8-1985",
+          "bio": "",
+          "published": true,
+          "source": "C73.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KLSU hosts Juke in the Box fundraising concert in Alex Box Stadium. Over 3,000 people attend and eight bands perform over eleven hours.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c73_1.jpg",
+              "source": "C73.html",
+              "caption": "<p>Juke In The Box: Gumbo 1985. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "July 1987",
+          "anchor": "july-1987",
+          "bio": "",
+          "published": true,
+          "source": "C76.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The Reveille and the Gumbo relocate to Hodges Hall basement.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c76_1.jpg",
+              "source": "C76.html",
+              "caption": "<p>“Reveille moves to Hodges, KLSU and Gumbo to follow,” The Reveille, July 23, 1987. LLMVC, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 1987",
+          "anchor": "december-1987",
+          "bio": "",
+          "published": true,
+          "source": "C77.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KLSU relocates from East Tiger Stadium to Hodges Hall.</p><p>Jenni Lawson, former KLSU music director from 1987 to 1989, describes the KLSU office in East Tiger Stadium and the move into Hodges Hall.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c77_1.jpg",
+              "source": "C77.html",
+              "caption": "<p>KLSU: Gumbo 1988. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "audio",
+              "title": "Jenni Lawson on the move to Hodges Hall",
+              "file": "lawson_jennifer_77.m4a",
+              "credit": "Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591",
+              "transcript": "<p><strong>JENNI LAWSON:</strong> That was my last semester at the station. We were in the East Stadium at the bottom. I still have my key to those offices. Basically it was like two wings, of two sections of the downstairs over near what’s now the visiting tunnel or entrance for the visiting team. On one side, as you go through the door, there was a coke room. Then the news office. Then a newsroom, which is where all the production for the news went. And then the tiny little control room, and a production room. On the other side, which had a different door there, was the traffic director’s office, the music director and chief announcer’s office. The station manager and operation direct . . . manager’s office, then a bathroom. And there was a dorm room, so sometimes we had somebody living there. We moved basically across the parking lot. I don’t think it’s the same studios they’re in now. Because we were basically on . . . If you’re in the back of Hodges Hall it was in the wing to your right and I think they’re on the wing to the left now. No?</p><p><strong>CHARLOTTE WILLCOX:</strong> They’re still on the right.</p><p><strong>LAWSON:</strong> Oh okay. But that station allowed for a really nice control room, a really nice production room next to it, very well insulated windows. There was much to-do built around the “We have bulletproof windows to the outside.” And I was like, “Is that a problem we’ve been looking at? I don’t think so. We’ve never even locked the station hardly. But now we have bulletproof windows.” And then I remember a great big newsroom and one big shared office for everybody with this chief announcer and . . . everybody was in one big office from what I remember. And then there was another big work room that, I think was off to the library. It wasn’t home. East Stadium was home. More than it should have been. [laughs]</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "January 17, 1988",
+          "anchor": "january-17-1988",
+          "bio": "",
+          "published": true,
+          "source": "C78.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KLSU returns on air from the new studio in the basement of Hodges Hall.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c77_1.jpg",
+              "source": "C78.html",
+              "caption": "<p>KLSU: Gumbo 1988. LSU Archives, LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "October 21, 1988",
+          "anchor": "october-21-1988",
+          "bio": "",
+          "published": true,
+          "source": "C79.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KLSU deejays John Arrizza and David Zimbler release compilation record of Baton Rouge music on their newly created label Martini Records.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c78_1.jpg",
+              "source": "C79.html",
+              "caption": "<p>“LSU Students’ Record Firm Promotes La. Musicians,” Advocate, November 12, 1989. LSU Libraries.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c79_1.jpg",
+              "source": "C79.html",
+              "caption": "<p>“Martini Mix,” Advocate, January 16, 1989. LSU Libraries.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Fall 1994",
+          "anchor": "fall-1994",
+          "bio": "",
+          "published": true,
+          "source": "C80.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p><strong>Fall 1994.</strong> KLSU makes a controversial format change to alternative programming and begins using a music scheduling software program called Selector.</p><p><strong>September 1994.</strong> LSU begins charging all university students a five dollar fee that goes to KLSU, thus allowing the station to pay deejays.</p><p>Andrew Nackley, a KLSU alumnus who worked at the station from 1988 to 1994, explains the station’s shift to alternative programming in the early 1990s.</p><p>Former station manager Laura Blereau comments on the KLSU alternative programming and the ensuing student backlash.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Andrew Nackley on the shift to alternative programming",
+              "file": "nackley_andrew_81a.m4a",
+              "credit": "Andrew Nackley, interviewed for Mss. 4700.2592",
+              "transcript": "<p><strong>ANDREW NACKLEY:</strong> The idea of making the station more commercially acceptable or accessible . . . Nobody ever came to us when I was there and said, “Here’s a computer print out and this is what you’re going to play.” Or even, “This is going to be an incentive cut for you to play.” That was maybe off on the margins, but I never actually saw anybody do it. That said, there were times at which they would try and nudge that toward us. And sometimes they . . . That was one way that they would hire their staff around . . . to try and . . . People like the station manager, or, I’m sorry, the faculty advisor or LSM would try and sort of work around. They would hire students who they felt would be a little bit more amenable to commercializing the station.</p><p>The Manships bought into the School of Journalism and there was a push from the ’80s to get the School of Journalism more involved with the station. So that meant that you would have sort of a more commercialized sound coming from the School of Journalism. They wanted the journalism students to sort of be front and center in terms of air personalities, in terms of music direction, entertainment, and also in journalism. And none of that really worked out for them. There was a lot of pushback to that from the students. And I think this is where, again, this is where the idea of a more commercial, Top-40 sound was coming from.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Laura Blereau on the format change and the backlash",
+              "file": "blereau_laura_81b.m4a",
+              "credit": "Laura Blereau, interviewed for Mss. 4700.2594",
+              "transcript": "<p><strong>LAURA BLEREAU:</strong> Nonprofit radio stations across the country, it was really struggling for dollars, right. I don’t know if that’s the case with KLSU, but it was part of the climate. What Darren [Gauthier] wanted to do was pay the deejays. I mean, we were getting minimum wage or something. It wasn’t lots of money. But there was this idea that the students were being controlled. The people who opposed it thought, “Oh you’re going to control the students and make them play this stuff from a computer.” Of course the computer is programmed by a human. It’s not like, you know, the singularity has occurred. But the whole thing was controversial also because of the people who were ousted. And they were all very vocal, creative people too. So you had some people who were involved in designing stickers that made it all over, like, everyone’s cars across Baton Rouge. And they were really cool stickers. They took the KLSU logo and then rearranged the letters and spelled the word “suks” S-U-K-S. And they were so popular on Chimes Street, and like, all over town. The people who made them were designers, and they were good designers. And they figured out an underground way to distribute the stickers. I actually wrote a paper when I was in journalism school here. I had a professor named Matt Reavy and we had to do a story that was basically navigating a controversy. And I was like “I’m sitting right in it.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "December 1994",
+          "anchor": "december-1994",
+          "bio": "",
+          "published": true,
+          "source": "C82.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>First “FREE KLSU” zine appears in response to the format change.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c82_1.jpg",
+              "source": "C82.html",
+              "caption": "<p>Free KLSU, December 1994 (page 1 of 2).</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c82_2.jpg",
+              "source": "C82.html",
+              "caption": "<p>Free KLSU, December 1994 (page 2 of 2).</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "1997",
+          "anchor": "1997",
+          "bio": "",
+          "published": true,
+          "source": "C83.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>KLSU starts editing audio and video with SAW editing software and abandons reel-to-reel technology.</p><p>Laura Blereau discusses the technological developments and how they changed KLSU audio production.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Laura Blereau on moving from reel-to-reel to SAW",
+              "file": "blereau_laura_84.m4a",
+              "credit": "Laura Blereau, interviewed for Mss. 4700.2594",
+              "transcript": "<p><strong>LAURA BLEREAU:</strong> The other development, I guess, would have been the technology. So we moved from reel-to-reel in the production room to SAW. And SAW was this software that you could cut digital video with, and that was a huge transformation. And at first I was like, “Oh I don’t know about this.” It turned out to be an amazing thing because you can archive things so much easier, it takes up less space. But it was a little weird to chop things up. Because I’m kind of coming at it where at WBRH, also, we were using a reel-to-reel, so I had been kind of invested in that technology. And I felt very confident in my ability to cut the tape and to pattern things in a certain way and . . . You could control things with phasing, and there were all these, like, cool tricks that I felt that I had mastered, you know. It’s always kind of fun with production. It’s so creative and . . . With the computer it was like anything was possible, but how do you do it? And it was this whole, like, brand new era.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "February 8, 2008",
+          "anchor": "february-8-2008",
+          "bio": "",
+          "published": true,
+          "source": "C84.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Jules d’Hemecourt, beloved former KLSU advisor, passes away.</p><p>Jenni Lawson describes Dr. Jules d’Hemecourt’s recording of “Cajun Night Before Christmas,” and recalls his importance to KLSU.</p><p>Dez Crawford remembers Dr. d’Hemecourt’s mentorship as the KLSU advisor.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Jenni Lawson on Dr. Jules d’Hemecourt",
+              "file": "lawson_jennifer_85b.m4a",
+              "credit": "Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591",
+              "transcript": "<p><strong>JENNI LAWSON:</strong> And such a voice, you know. I still . . . he was also Tee Jules, he did the Cajun Night Before Christmas, you know when you hear that on the radio? That’s him. He didn’t talk like that. That was an accent put on. The Cajun Twelve Days of Christmas. I think I still have the single. He signed it for me, Tee Jules. But, you know when I’m at Christmas Celebration in the Oaks here in New Orleans in City Park they play that. I hear his voice, and I’m starting to tear up now, because I hear his voice even though it’s in a Cajun accent, (in a deeper voice) and he really had this beautiful accent, talked all the time, beautiful voice, but then he did the Cajun Night Before Christmas thing. But I hear his voice and it still makes me weep a little because, you know . . . And it was just funny because my present day husband is like, “What is wrong with you? This is funny. This is hilarious.” It’s like, “I know, but it’s . . . (sniffle) It’s Dr. D.” But that’s the kind of guy he was in the J[ournalism] school and with KLSU. He was just influential, stern when he needed to be, but a very kind man, very knowledgeable and gave you credit. He gave students a lot of respect. Maybe some didn’t deserve it. But he let you know that, you know, you knew what you were doing. And it was nice.</p>"
+            },
+            {
+              "type": "audio",
+              "title": "Dez Crawford on Dr. d’Hemecourt’s mentorship",
+              "file": "crawford_dez_85c.m4a",
+              "credit": "Dez Crawford, interviewed for Mss. 4700.2593",
+              "transcript": "<p><strong>DEZ CRAWFORD:</strong> Jules was absolutely delightful, and it grieves me so much, not just that he passed, but that people like you never got to meet him. You want to get an idea of his personality, Google “Cajun Night Before” . . . not Google, YouTube “Cajun Night Before Christmas.” He was like that all the time. He was always funny, inspiring, he could be serious, and when he was serious it was like that uncle you went to when you had a problem, you know. But he was a joy to work with. And he was very hands off. He didn’t micromanage the station at all. All he wanted was to make sure that you followed the FCC rules, and he kept the station turned on in his office, you know, to listen to see. And if somebody needed a little guidance, like, “Honey, listen to me carefully, there’s no such thing as ‘the weather outside,’ we better hope the weather’s inside.” [laughs] That kind of thing. He talked about economy of language and things like that if you were a deejay. And, you know, he’d help people who were new with learning to speak efficiently. Back then, we actually had to know our music well enough so we’d know that it was like eight beats until the singing started, so when you hit the . . . when you hit that pot and turned that on, you were talking right up until the singing started. You didn’t have it all computerized now where you know you have exactly seventeen seconds to say what you need to say, you had to remember. He taught you how to pace yourself. He taught you how to be articulate. He was so patient. He was so fun. He was a fabulous teacher. I really consider myself tremendously fortunate to have had him in my life. And he treated all of his students like adults, because we were adults. He said, “You’re not kids, you’re adults!” If you were lucky and he had a barbecue, he invited the station over to his house. “I’m having a barbecue Sunday. Everybody who’s not on the air, come on over.” He was amazing.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "2015",
+          "anchor": "2015",
+          "bio": "",
+          "published": true,
+          "source": "C86.html",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p><strong>March 2015.</strong> KLSU raises $35,000 in its annual spring fundraiser.</p><p><strong>October 2015.</strong> New transmitter and antenna, purchased with fundraiser money, arrive and await installation.</p>"
+            },
+            {
+              "type": "figure",
+              "image": "c86_1.jpg",
+              "source": "C86.html",
+              "caption": "<p>The new transmitter in its crate, 2015. Photo courtesy of John Friscia.</p>",
+              "layout": "side_start"
+            },
+            {
+              "type": "figure",
+              "image": "c86_2.jpg",
+              "source": "C86.html",
+              "caption": "<p>The new transmitter unpacked, 2015. Photo courtesy of John Friscia.</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "About the Exhibition",
+      "anchor": "about",
+      "category": "",
+      "lead": null,
+      "display": "story",
+      "focus": "center",
+      "lead_caption": "",
+      "blocks": [
+        {
+          "type": "text",
+          "body": "<p>In 1915, Louisiana State University professors installed a wireless station, laying the groundwork for the campus radio station that would eventually become KLSU.</p><p>This exhibition walks through a century of campus radio and draws from newspaper articles, university archives materials and oral histories, all of which are available through LSU Libraries Special Collections. All oral history interviews from which excerpts were taken are housed with the T. Harry Williams Center for Oral History and can be accessed through LSU Libraries Special Collections, Louisiana and Lower Mississippi Valley Collections, Baton Rouge, Louisiana. For citation information for each interview, please contact Center staff through the <a href=\"https://www.lib.lsu.edu/oralhistory\">Williams Center website</a>. All other citations for materials are given in the exhibition.</p>"
+        },
+        {
+          "type": "text",
+          "body": "<h3>Acknowledgments</h3><p>The exhibition was curated by Charlotte Willcox, on staff with the T. Harry Williams Center for Oral History. Jennifer Abraham, Center Director, was responsible for concept, oversight and editing. Erin Hess, the Center’s Manuscript Processor, copy edited the text. The listening station interface was designed and installed by Kyle Tanglao, Computer Analyst, who also engineered the audio.</p><p>We appreciate the help of many other staff members throughout the planning and installation.</p>"
+        }
+      ]
+    }
+  ],
+  "alt": {
+    "c10_1.jpg": "Newspaper text quoting Dr. Guthrie on getting election returns by courier in 1924.",
+    "c11_1.jpg": "Newspaper headline “Football Fans Throughout State Prepare to Listen in on Returns.”",
+    "c11_2.jpg": "Newspaper column headlined “Broadcasting Football Game Proves Success.”",
+    "c11_3.jpg": "Typed letter on Doherty Hardware Company letterhead thanking Station KFGC for broadcasting the Tulane–LSU football game.",
+    "c12_1.jpg": "Newspaper column headlined “KFGC Loses Right to Broadcast; No Station Here Now.”",
+    "c13_1.jpg": "Newspaper text on the station’s dismantling during the move to the new campus.",
+    "c14_1.jpg": "Newspaper headline “KFGC Loses Right to Broadcast; No Station Here Now.”",
+    "c16_1.jpg": "Newspaper column headlined “Guthrie Soon to Revive Old Amateur Radio Station.”",
+    "c17_1.jpg": "Newspaper article headlined “L.S.U. Goes on the Air with Expanded Program.”",
+    "c18_1.jpg": "Newspaper article headlined “L.S.U. Radio Broadcast Series Now in Process Bring Enthusiastic Response from Alumni, Others.”",
+    "c18_2.jpg": "Newspaper text on campus broadcasts through station WJBO and the studios in the Music and Dramatic Arts building.",
+    "c19_1.jpg": "Newspaper text on Dr. Harley A. Smith organizing a Louisiana Radio Guild in 1936.",
+    "c20_1.jpg": "Newspaper column headlined “Radio Class Gives News.”",
+    "c21_1.jpg": "Newspaper article headlined “L.S.U. Goes on the Air with Expanded Program.”",
+    "c21_2.jpg": "Typed thesis page listing WJBO’s first day of network programs.",
+    "c21_3.jpg": "Typed thesis pages listing WJBO’s program schedule for November 3, 1937.",
+    "c23_1.jpg": "Newspaper article headlined “L.S.U. Goes on the Air with Expanded Program.”",
+    "c24_1.jpg": "Newspaper column headlined “University Officials Inspect, Dedicate Radio Equipment.”",
+    "c25_1.jpg": "Newspaper column headlined “Plan Series to Spur Interest in French.”",
+    "c26_1.jpg": "Newspaper page headlined “Making an Aerial Deadline,” with photos of two students at microphones.",
+    "c27_1.jpg": "Newspaper column headlined “L.S.U. Scheduled on NBC Broadcast.”",
+    "c29_1.jpg": "Newspaper column headlined “Begin Radio Forum on World at War,” listing the series’ talks.",
+    "c2_1.jpg": "The first chemistry building on LSU’s old downtown campus, a two-story building with an outside staircase.",
+    "c2_2.jpg": "Heard Hall, the physics laboratory, a two-story brick building with a tiled roof, in 1903.",
+    "c30_1.jpg": "Newspaper column headlined “Construction Is Started on Two Radio Studios.”",
+    "c31_1.jpg": "Program pages for the faculty radio forum series “The Shape of Things to Come.”",
+    "c32_1.jpg": "Newspaper article headlined “Board Plans Revised Housing and Radio Station.”",
+    "c33_1.jpg": "Newspaper column headlined “Radio Guild’s First FM Play Is Thursday.”",
+    "c34_1.jpg": "Typed letter to President W. B. Hatcher recommending members for a radio committee.",
+    "c36_1.jpg": "Newspaper column headlined “LSU’s New Radio Head of Programs Arrives.”",
+    "c37_1.jpg": "Newspaper column headlined “Radio Play Series Opens with ‘Mirage.’”",
+    "c38_1.jpg": "Newspaper column headlined “Foundation Laid for Radio Station.”",
+    "c39_1.jpg": "Newspaper article headlined “FM Station to Use UP Wire Service and Associated Transcription Library,” with a photo of a man at transcription equipment.",
+    "c39_2.jpg": "The new single-story WLSU radio station building on Dalrymple Drive, among pine trees.",
+    "c3_1.jpg": "Newspaper column headlined “Wireless Station Receives Messages from New Orleans.”",
+    "c40_1.jpg": "Newspaper text on WLSU’s temporary antenna and its new studios.",
+    "c40_2.jpg": "Newspaper column headlined “Antenna Raised for Station WLSU.”",
+    "c41_1.jpg": "Newspaper article headlined “WLSU, Pioneer FM Unit in South, Extends University Services to Off-Campus Group.”",
+    "c42_1.jpg": "Newspaper column headlined “Guthrie Soon to Revive Old Amateur Radio Station.”",
+    "c43_1.jpg": "Newspaper article headlined “WLSU Is First College Station to Broadcast a Campus Opera.”",
+    "c43_2.jpg": "Yearbook spread titled “The Opera,” with photos of costumed singers in “Tales of Hoffmann.”",
+    "c44_1.jpg": "Newspaper page headlined “Progress Marks Station WLSU’s First Anniversary,” with a photo of students at the station.",
+    "c45_1.jpg": "Newspaper article headlined “New Tape Recorder Will Permit WLSU to Rebroadcast Any Campus Activities.”",
+    "c46_1.jpg": "Newspaper column headlined “WLSU Programs Relayed by WNOE in New Orleans.”",
+    "c47_1.jpg": "Newspaper column headlined “Chemistry Series Starts on WLSU.”",
+    "c48_1.jpg": "Newspaper article headlined “WLSU Renovated to Meet Changes in Fall Operation.”",
+    "c49_1.jpg": "Newspaper article headlined “University FM Station to Tape Record Program Showing Phases of LSU Life.”",
+    "c4_1.jpg": "Newspaper page headlined “First Campus Radio Station Forgotten in Current Growth,” with photos of early radio equipment.",
+    "c50_1.jpg": "Newspaper column headlined “LSU Will Have Radio Instruction in Night Classes,” with a photo of a student at a tape recorder.",
+    "c51_1.jpg": "Newspaper article headlined “Lucile Ruby Helped Guide WLSU to New Importance.”",
+    "c52_1.jpg": "Newspaper column headlined “WLSU Closed 3 Years, But News Work Continues.”",
+    "c53_1.jpg": "Newspaper column headlined “WLSU Closed 3 Years, But News Work Continues.”",
+    "c54_1.jpg": "Newspaper obituary headlined “Dr. D. V. Guthrie Dies in Virginia; Services Slated,” with his photo.",
+    "c55_1.jpg": "Newspaper article headlined “From ‘Ham Shack’ to Wireless; History of WLSU Radio Related.”",
+    "c55_2.jpg": "Yearbook page titled “WLSU Radio,” with photos of students at the broadcast console and the station manager with advisers.",
+    "c56_1.jpg": "Newspaper column headlined “LSU Radio Station Now on Air 24 Hours a Day.”",
+    "c57_1.jpg": "Newspaper article headlined “Taylor Defends Administrators on WLSU,” with a photo of the chancellor at a microphone with students.",
+    "c58_1.jpg": "Yearbook page titled “WLSU,” with photos of students at turntables, microphones and the record library.",
+    "c59_1.jpg": "Typed campus memo from Chancellor C. G. Taylor, dated July 8, 1970, on Radio Station WLSU.",
+    "c5_1.jpg": "Newspaper text on the amateur station W5YW and the two university radio stations.",
+    "c60_1.jpg": "Typed pages of WLSU sales contract procedures.",
+    "c60_2.jpg": "Typed WLSU Campus Radio rate card of commercial time rates for 1972–73.",
+    "c61_1.jpg": "Typed letter on WLSU 660 letterhead from George M. Waldroup to Chancellor Cecil G. Taylor.",
+    "c61_2.jpg": "Typed letter on Louisiana Educational Television Authority letterhead to George M. Waldroup.",
+    "c63_1.jpg": "Federal Communications Commission notice to Louisiana State University granting its application.",
+    "c64_1.jpg": "Newspaper article headlined “WPRG Begins Broadcasting,” with a photo of three men at the station’s console.",
+    "c65_1.jpg": "Newspaper column beginning “Tigers in Stereo.”",
+    "c66_1.jpg": "Newspaper column headlined “Station’s Rights to LSU Events Challenged in Court.”",
+    "c68_1.jpg": "Yearbook page with the WPRG and KLSU logos and the word “Becomes,” and a photo of a deejay at the console.",
+    "c69_1.jpg": "Students pose on a rooftop at the base of the KLSU antenna tower.",
+    "c6_1.jpg": "Newspaper text on LSU’s federal license of April 20, 1923, to operate a broadcast transmitter.",
+    "c70_1.jpg": "Newspaper column headlined “BR Real Estate Will Soon Be Reel Estate.”",
+    "c72_1.jpg": "Newspaper column headlined “LSU Board Agrees to Study Reveille Advertising Policy.”",
+    "c73_1.jpg": "Yearbook page titled “Juke in the Box,” with photos of bands and the crowd at Alex Box Stadium.",
+    "c76_1.jpg": "Newspaper page headlined “Reveille Moves to Hodges, KLSU and Gumbo to Follow,” with a photo of a newsroom.",
+    "c77_1.jpg": "Yearbook page titled “KLSU (Spring Staff),” with a large group photo of the staff and a photo of the studio.",
+    "c78_1.jpg": "Newspaper article headlined “LSU Students’ Record Firm Promotes La. Musicians.”",
+    "c79_1.jpg": "Newspaper column headlined “Martini Mix.”",
+    "c7_1.jpg": "Newspaper magazine page headlined “Part of the Early Radio Craze,” with reproduced telegrams and applause cards.",
+    "c82_1.jpg": "Pages of the photocopied zine “Free KLSU,” with an editorial and comic panels.",
+    "c82_2.jpg": "More pages of the zine “Free KLSU,” with articles and contact forms.",
+    "c86_1.jpg": "A tall wooden crate and a plastic-wrapped cabinet on a pallet in a hallway.",
+    "c86_2.jpg": "The new gray transmitter cabinet, unpacked, on its pallet beside a pallet jack.",
+    "c8_1.jpg": "Typed program schedule of Radio Station KFGC, Louisiana State University, for January and February 1924.",
+    "c9_1.jpg": "Newspaper column headlined “Band Concert to Be Broadcasted at Physics Bldg. Fri.”",
+    "c9_2.jpg": "Western Union telegram to Louisiana State University dated January 11, 1924.",
+    "fall1915_1.jpg": "Studio portrait of a young David Vance Guthrie in a suit and high collar.",
+    "fall1915_2.jpg": "Newspaper column headlined “Wireless Station to Be Erected at L.S.U.”"
+  },
+  "audio": [
+    "steetle_ralph_22.m4a",
+    "mickelson_sig_25.m4a",
+    "woodard_lucile_36.m4a",
+    "steetle_ralph_38.m4a",
+    "woodard_lucile_41.m4a",
+    "woodard_lucile_45.m4a",
+    "woodard_lucile_52.m4a",
+    "crawford_dez_68.m4a",
+    "crawford_dez_69.m4a",
+    "lawson_jennifer_77.m4a",
+    "nackley_andrew_81a.m4a",
+    "blereau_laura_81b.m4a",
+    "blereau_laura_84.m4a",
+    "lawson_jennifer_85b.m4a",
+    "crawford_dez_85c.m4a"
+  ]
+}
