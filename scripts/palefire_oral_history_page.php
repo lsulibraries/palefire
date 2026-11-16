@@ -168,6 +168,13 @@ foreach (['field_quick_guide_intro', 'field_quick_guide_link', 'field_quick_guid
 if ($hero->hasField('field_quick_guide_title')) {
   $hero->set('field_quick_guide_title', 'Quick Start Guide');
 }
+if ($hero->hasField('field_hero_spotlight')) {
+  $hero->set('field_hero_spotlight', 0);
+  $log[] = '  Spotlight off (no warm light from the film’s edge).';
+}
+else {
+  $log[] = '  No Spotlight field yet: run palefire_hero_spotlight_setup.php first for the hero without it.';
+}
 
 if ($hero->hasField('field_hero_banners')) {
   $log[] = 'Banners (after the map banner):';

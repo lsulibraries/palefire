@@ -275,15 +275,15 @@
         knock.setAttribute('width', (box.width + pad * 2).toFixed(1));
         knock.setAttribute('height', (box.height + pad * 2).toFixed(1));
       });
-      // Over the room's middle, clear of its name, as drawn.
+      // Over the name's middle, clear of its plate, as building-map.js
+      // places it.
       const m = svg.getScreenCTM();
-      const r = hatch.getBoundingClientRect();
-      const top = Math.min(r.top, label.getBoundingClientRect().top);
+      const r = label.getBoundingClientRect();
       if (!m || !r.width) {
         return;
       }
-      const pt = new DOMPoint(r.left + r.width / 2, top).matrixTransform(m.inverse());
-      marker.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + (pt.y - 40).toFixed(1) + ')');
+      const pt = new DOMPoint(r.left + r.width / 2, r.top).matrixTransform(m.inverse());
+      marker.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + (pt.y - 50).toFixed(1) + ')');
     };
     place();
     if (document.fonts && document.fonts.ready) {

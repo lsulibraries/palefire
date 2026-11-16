@@ -5304,9 +5304,24 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
     stroke-width: 1.5px;
   }
 
-  // The room as on its location page: the hatch in the accent at full
-  // strength, its outline too.
-  .pf-map__region .pf-map__hatch {
+  // As on a location page: every room hatched and named (the names a
+  // little larger, the drawing being about half that map's size), the
+  // floors' names and the restroom and elevator marks; the hatch drawn
+  // twice as coarse (patternTransform, the template's static) so its
+  // stripes keep the map's spacing on screen. The room this page is about:
+  // its hatch in the accent at full strength, its outline in the accent,
+  // its name on a clear plate with the "here" arrow over it
+  // (js/hero-highlights.js).
+  .pf-map__hit {
+    display: none;
+  }
+
+  .pf-map__label,
+  .pf-map__knock {
+    --scale: 1.3;
+  }
+
+  .pf-map__region.is-active .pf-map__hatch {
     fill: var(--pf-map-hover);
     fill-opacity: 1;
   }
@@ -5319,37 +5334,22 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
     vector-effect: non-scaling-stroke;
   }
 
-  .pf-map__hit,
-  .pf-map__floors,
-  .pf-map__icons {
-    display: none;
-  }
-
-  .pf-map__label {
-    visibility: hidden;
-  }
-
-  // The lit room's name, raised and a little larger than on the map: the
-  // drawing is a fifth of the map's size or less. Its hatch is drawn three
-  // times coarser here (patternTransform, the template's static), so the
-  // stripes read at this size.
-  .pf-map__label.is-active {
-    --scale: 1.5;
+  .pf-map__label.is-active,
+  .pf-map__knock {
     --lift: var(--pf-map-lift);
-    visibility: visible;
+  }
+
+  .pf-map__label.is-active {
     fill: var(--pf-map-hover);
   }
 
-  // Its plate and the "here" arrow (js/hero-highlights.js), at the name's
-  // size: the knock takes the name's plane, the arrow bobs as on the
-  // location page (building-map.scss), its keyframes scaled with it.
-  .pf-map__knock {
-    --scale: 1.5;
-    --lift: var(--pf-map-lift);
+  // The other rooms' names quieter, as a location page dims them.
+  .pf-map__label:not(.is-active, .pf-map__label--floor) {
+    fill-opacity: var(--pf-map-dim-text);
   }
 
   .pf-map__here-arrow {
-    scale: 2;
+    scale: 1.4;
     fill: var(--pf-map-hover);
     stroke: none;
   }
@@ -5580,3 +5580,10 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
   }
 }
 
+
+// --- No spotlight ---------------------------------------------------------------
+// The hero's Spotlight box unticked (field_hero_spotlight, palefire.theme):
+// no warm light from the film's edge over the type's side.
+.pf-landing--no-spotlight {
+  --pf-cover-glow: 0;
+}

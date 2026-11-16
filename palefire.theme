@@ -519,6 +519,12 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
   $paragraph = $variables['paragraph'] ?? NULL;
   if ($paragraph instanceof ParagraphInterface) {
     $variables['landing']['input_id'] = 'pf-hero-' . $paragraph->id();
+    // The cover's warm light from the film's edge (_landing-features.scss,
+    // --pf-cover-glow): on unless the hero's Spotlight box is unticked
+    // (field_hero_spotlight, scripts/palefire_hero_spotlight_setup.php).
+    $variables['hero_spotlight'] = !$paragraph->hasField('field_hero_spotlight')
+      || $paragraph->get('field_hero_spotlight')->isEmpty()
+      || (bool) $paragraph->get('field_hero_spotlight')->value;
     $variables['hero_index'] = _palefire_hero_index($paragraph);
     $variables['hero_tiles'] = _palefire_hero_tiles($paragraph, $variables);
     $variables['quick_guide'] = _palefire_quick_guide($paragraph, $variables);
@@ -681,7 +687,8 @@ function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variab
     'hero_unit' => $built['here'],
     'hero_map_banner' => [
       'template' => $built['template'],
-      'spaces' => [$built['here'] => ['url' => ''] + $room],
+      // Every room, as on a location page, none a link (the banner is one).
+      'spaces' => array_map(static fn (array $space): array => ['url' => ''] + $space, $built['spaces']),
       'lit' => $built['here'],
       'title' => $room['title'],
       'floor' => $room['floor'],
