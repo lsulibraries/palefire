@@ -462,37 +462,65 @@
 
   /**
    * Archive (includes/newsletter-archive.html.twig): a card opens its issue
-   * in a dialog on the page, framed from Constant Contact's preview with no
-   * scripts, rather than in a new tab. The frame loads only when opened.
+   * in a dialog on the page. The issue comes from this page with
+   * ?read=<id> (NewsletterReview::reading(): fetched once a day, links made
+   * plain text), read in the background; if that fails, the card's own link
+   * shows it above the grid.
    */
   Drupal.behaviors.pfNewsletterArchive = {
     attach(context) {
       once('pf-nla', '[data-pf-nla]', context).forEach((root) => {
         const dialog = root.querySelector('[data-pf-nla-dialog]');
-        if (!dialog || typeof dialog.showModal !== 'function') {
+        if (!dialog || typeof dialog.showModal !== 'function' || !window.fetch || !window.DOMParser) {
           return;
         }
         const frame = dialog.querySelector('[data-pf-nla-frame]');
         const title = dialog.querySelector('[data-pf-nla-title]');
-        const own = dialog.querySelector('[data-pf-nla-own]');
+        const issues = new Map();
         let opener = null;
+        let asked = '';
         root.querySelectorAll('[data-pf-nla-open]').forEach((card) => {
-          // It opens here now, not in a new tab.
-          card.querySelectorAll('[data-pf-nla-tab]').forEach((note) => note.remove());
           card.addEventListener('click', (e) => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) {
               return;
             }
             e.preventDefault();
             opener = card;
+            asked = card.href;
             title.textContent = card.dataset.name;
             frame.title = Drupal.t('Newsletter: @name', { '@name': card.dataset.name });
-            own.href = card.href;
-            if (frame.getAttribute('src') !== card.href) {
-              frame.src = card.href;
-            }
+            dialog.classList.add('is-loading');
+            dialog.setAttribute('aria-busy', 'true');
+            frame.srcdoc = '';
             dialog.showModal();
             dialog.querySelector('[data-pf-nla-close]').focus();
+            const show = (html) => {
+              if (asked !== card.href) {
+                return;
+              }
+              frame.srcdoc = html;
+              dialog.classList.remove('is-loading');
+              dialog.removeAttribute('aria-busy');
+            };
+            if (issues.has(card.href)) {
+              show(issues.get(card.href));
+              return;
+            }
+            window.fetch(card.href, { credentials: 'same-origin' })
+              .then((response) => (response.ok ? response.text() : Promise.reject(new Error(String(response.status)))))
+              .then((page) => {
+                const found = new DOMParser().parseFromString(page, 'text/html').querySelector('[data-pf-nla-reading] iframe');
+                const html = found ? found.getAttribute('srcdoc') : '';
+                if (!html) {
+                  throw new Error('missing');
+                }
+                issues.set(card.href, html);
+                show(html);
+              })
+              .catch(() => {
+                // The page itself shows it.
+                window.location.href = card.href;
+              });
           });
         });
         // Back to the issue it was opened from. Also straight after close():

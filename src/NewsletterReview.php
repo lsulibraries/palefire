@@ -54,6 +54,11 @@ final class NewsletterReview {
   private const PREVIEW = 'https://campaignlp.constantcontact.com/em/%s/%s';
 
   /**
+   * The query argument that opens a past issue on the page (?read=<id>).
+   */
+  public const READ = 'read';
+
+  /**
    * What the template needs, from the marker's two ids.
    *
    * @return array{html: ?string, version: ?string, fetched: ?int, preview: string, form: ?array, issue: string, public: array}
@@ -195,8 +200,8 @@ final class NewsletterReview {
    *
    * The front page is the theme's capture of the email's top (FRONT). An
    * issue without one, newly added, is a cover set in type with its name
-   * and number until its capture is added. Nothing is fetched: the issues
-   * open from Constant Contact itself. The year is the one it was sent,
+   * and number until its capture is added. Nothing is fetched for the list;
+   * an issue opens on the page from ?read=<id> (reading()), links removed. The year is the one it was sent,
    * else the one in its name; issues with neither join the year before.
    *
    * @return array{items: list<array>, years: list<array{year: string, items: list<array>}>}
@@ -229,7 +234,61 @@ final class NewsletterReview {
       $years[$last]['items'][] = $item;
       $items[] = $item;
     }
-    return ['items' => $items, 'years' => $years];
+    return ['items' => $items, 'years' => $years, 'reading' => self::reading($items)];
+  }
+
+  /**
+   * The past issue ?read=<id> names, from the list, to read on the page.
+   *
+   * Fetched from its Constant Contact preview and kept a day like the other
+   * sent issues, with its links made plain text (unlink()): a past issue's
+   * links go stale, and the site shouldn't offer them. js/newsletter-review.js
+   * reads it from this page into the archive's dialog; without the script
+   * the page shows it above the issues.
+   *
+   * @return array{id: string, name: string, line: string, html: ?string}|null
+   *   NULL unless ?read= names an issue in the list; html is NULL when the
+   *   issue couldn't be fetched.
+   */
+  private static function reading(array $items): ?array {
+    $id = (string) \Drupal::request()->query->get(self::READ, '');
+    if ($id === '') {
+      return NULL;
+    }
+    foreach ($items as $item) {
+      if ($item['id'] === $id) {
+        $draft = self::draft($item['preview'], self::SENT_MAX_AGE);
+        return [
+          'id' => $id,
+          'name' => $item['name'],
+          'line' => $item['line'] ?? '',
+          'html' => $draft ? self::unlink($draft['html']) : NULL,
+        ];
+      }
+    }
+    return NULL;
+  }
+
+  /**
+   * An email with its links made plain text, as past issues are shown.
+   *
+   * Each link becomes a span with the same styling, less any underline, so
+   * the words stay where they were and nothing can be followed or looks as
+   * if it could, from the pointer or the keyboard.
+   */
+  private static function unlink(string $html): string {
+    $html = preg_replace_callback('#<a\b([^>]*)>#i', function (array $m): string {
+      $attributes = preg_replace('#\s(?:href|target|rel|download|ping|tabindex)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i', '', $m[1]);
+      return '<span data-pf-unlinked' . $attributes . '>';
+    }, $html);
+    $html = preg_replace('#</a\s*>#i', '</span>', $html);
+    // Image maps: their areas are links too.
+    $html = preg_replace('#<area\b[^>]*>#i', '', $html);
+    $html = str_replace('<base target="_blank">', '', $html);
+    // No underline left to suggest a link (over the email's inline styles).
+    $style = '<style>[data-pf-unlinked]{text-decoration:none!important;cursor:default}</style>';
+    $html = preg_replace('#</head\s*>#i', $style . '$0', $html, 1, $count);
+    return $count ? $html : $style . $html;
   }
 
   /**
@@ -279,7 +338,8 @@ final class NewsletterReview {
     foreach (array_slice(array_values($issues), 0, 2) as $issue) {
       $preview = sprintf(self::PREVIEW, $issue['account'], $issue['id']);
       $draft = self::draft($preview);
-      $sides[] = ['name' => $issue['name'], 'line' => $issue['line'], 'preview' => $preview, 'html' => $draft['html'] ?? NULL];
+      // Shown on the site: no links to follow (unlink()).
+      $sides[] = ['name' => $issue['name'], 'line' => $issue['line'], 'preview' => $preview, 'html' => isset($draft['html']) ? self::unlink($draft['html']) : NULL];
     }
     return ['before' => $sides[0], 'after' => $sides[1]];
   }

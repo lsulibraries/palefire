@@ -74,6 +74,14 @@
       });
 
       once('pf-rv', '[data-pf-rv]', context).forEach((root) => {
+        // A reviewer from now on: js/palefire.js shows Review this page on
+        // this browser's other Palefire pages.
+        try {
+          window.localStorage.setItem('pf-reviewer', '1');
+        }
+        catch (e) {
+          // Not remembered; review links still work.
+        }
         const panel = root.querySelector('[data-pf-rv-panel]');
         const opener = root.querySelector('[data-pf-rv-open]');
         const closer = root.querySelector('[data-pf-rv-close]');
@@ -93,6 +101,23 @@
           return;
         }
 
+        const forget = root.querySelector('[data-pf-rv-forget]');
+        if (forget) {
+          forget.hidden = false;
+          forget.addEventListener('click', () => {
+            try {
+              window.localStorage.removeItem('pf-reviewer');
+            }
+            catch (e) {
+              // Nothing kept.
+            }
+            forget.hidden = true;
+            Drupal.announce(Drupal.t('The Review this page button won’t show outside review mode. A review link brings it back.'));
+            if (status) {
+              status.textContent = Drupal.t('The Review this page button won’t show outside review mode. A review link brings it back.');
+            }
+          });
+        }
         root.classList.add('is-ready');
         opener.hidden = false;
         if (closer) {

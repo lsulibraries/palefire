@@ -41,6 +41,7 @@
       <p class="pf-rv__help">{{ 'Choose the pin beside a heading to tie your note to that section, or write about the page as a whole. No sign-in, and your name is optional. Thumbs count right away; notes show here only after staff approve them, with your name if you give one.'|t }}</p>
       <p class="pf-rv__tip">{% include '@palefire/includes/icon-fa.html.twig' with { name: 'cog', class: 'pf-rv__tip-icon' } only %}<span>{{ 'Text too small, or the colors hard to read? Text size and colors can be changed in Settings, the gear icon at the top of every page. Mention it in your note if the default should change.'|t }}</span></p>
       <p class="pf-rv__status" data-pf-rv-status role="status"></p>
+      <button type="button" class="pf-rv__forget" data-pf-rv-forget hidden>{{ 'Stop showing Review this page outside review mode'|t }}</button>
       <div class="pf-rv__form" data-pf-rv-form>
         {% if form %}
           {{ form }}

@@ -23,6 +23,54 @@
    * sticky top of the modular TOC sidebar, which has to track the header
    * frame by frame while it shrinks or grows.
    */
+  /**
+   * Review this page, for reviewers (Drupal\palefire\PageReview): a browser
+   * that has opened a review link (any /v2 page with ?review;
+   * js/page-review.js remembers it as pf-reviewer) gets this button on
+   * Palefire pages outside review mode, opening the page in it. Nothing is
+   * drawn or styled for anyone else. The review panel can forget it.
+   */
+  Drupal.behaviors.palefireReviewEntry = {
+    attach() {
+      let reviewer = false;
+      try {
+        reviewer = window.localStorage.getItem('pf-reviewer') === '1';
+      }
+      catch (e) {
+        reviewer = false;
+      }
+      const onV2 = () => /^\/v2(\/|$)/i.test(window.location.pathname);
+      if (!reviewer || !onV2() || document.querySelector('[data-pf-rv]') || document.querySelector('.pf-rv-entry')) {
+        return;
+      }
+      const style = document.createElement('style');
+      style.textContent = '.pf-rv-entry{position:fixed;right:max(1rem,env(safe-area-inset-right,0px));bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:1036;display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;padding:0 1.125rem;border:1px solid color-mix(in srgb,currentColor 20%,transparent);border-radius:999px;background:var(--bs-body-bg);color:var(--bs-body-color);font:600 .875rem/1.2 var(--bs-body-font-family);text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px color-mix(in srgb,#000 22%,transparent)}'
+        + '.pf-rv-entry:hover{border-color:currentColor}.pf-rv-entry:focus-visible{outline:2px solid var(--bs-link-color);outline-offset:3px}.pf-rv-entry svg{width:1rem;height:1rem}'
+        + '@media (max-width:63.98rem){.pf-rv-entry{right:auto;left:50%;translate:-50% 0}}@media (max-width:767.98px){html.pf-dock-on .pf-rv-entry{bottom:calc(1rem + var(--pf-dock-h,96px) + env(safe-area-inset-bottom,0px))}}'
+        + '@media print{.pf-rv-entry{display:none}}';
+      document.head.appendChild(style);
+      const link = document.createElement('a');
+      link.className = 'pf-rv-entry';
+      // A full page load: review mode turns Swup off (data-no-swup).
+      link.setAttribute('data-no-swup', '');
+      link.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span></span>';
+      link.lastChild.textContent = Drupal.t('Review this page');
+      // The page the reader is on now (Swup changes it without a reload).
+      const point = () => {
+        const url = new URL(window.location.href);
+        url.hash = '';
+        url.search += (url.search ? '&' : '?') + 'review';
+        link.href = url.pathname + url.search;
+        link.hidden = !onV2();
+      };
+      point();
+      ['pointerenter', 'focus', 'click'].forEach((type) => link.addEventListener(type, point));
+      document.addEventListener('swup:page:view', point);
+      window.addEventListener('popstate', point);
+      document.body.appendChild(link);
+    },
+  };
+
   Drupal.behaviors.palefireHeaderOffset = {
     attach(context) {
       once('pf-header-offset', '.pf-header', context).forEach((header) => {

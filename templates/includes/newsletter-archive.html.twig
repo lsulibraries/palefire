@@ -25,9 +25,14 @@
  * without a capture is a cover set in type. The front page is decorative
  * (aria-hidden, alt=""): the title and number name the link.
  *
- * Each sheet is a link to the issue's preview, so it works without the
- * script; js/newsletter-review.js opens the issue in a dialog on the page
- * instead, framed with no scripts, with a link to open it on its own.
+ * - reading: the issue ?read=<id> names (id, name, line, html: the email
+ *   with its links made plain text, or NULL if it couldn't be fetched), or
+ *   NULL (NewsletterReview::reading()).
+ *
+ * Each sheet is a link to this page with ?read=<id>, which shows that issue
+ * above the grid, so it works without the script; js/newsletter-review.js
+ * reads the issue from there into a dialog instead. Past issues never offer
+ * their own links: they go stale.
  */
 #}
 {{ attach_library('palefire/newsletter-review') }}
@@ -41,6 +46,19 @@
   <div class="pf-nla pf-tiles pf-tiles--covers pf-tiles--sheets{{ heading ? ' pf-nla--headed' }}{{ plain ? ' pf-nla--plain' }}" data-pf-nla data-toc-skip>
     {% if heading %}
       <h3 class="pf-nla__heading" id="{{ uid }}-heading">{{ heading }}</h3>
+    {% endif %}
+    {% if reading %}
+      <section class="pf-nla__reading" id="{{ uid }}-reading" data-pf-nla-reading aria-labelledby="{{ uid }}-reading-title" tabindex="-1">
+        <div class="pf-nla__bar">
+          <h3 class="pf-nla__title" id="{{ uid }}-reading-title">{{ reading.name }}{{ reading.line ? ' · ' ~ reading.line }}</h3>
+          <a class="pf-nla__own pf-nla__own--close" href="{{ path('<current>') }}#{{ uid }}-heading">{{ 'Close'|t }}</a>
+        </div>
+        {% if reading.html %}
+          <iframe class="pf-nla__frame" title="{{ reading.name }}" srcdoc="{{ reading.html }}" sandbox referrerpolicy="no-referrer" width="640" height="2400"></iframe>
+        {% else %}
+          <p class="pf-nla__missing">{{ 'This issue couldn’t be loaded just now. Try again in a minute.'|t }}</p>
+        {% endif %}
+      </section>
     {% endif %}
     {% if years|length > 1 %}
       <nav class="pf-nla__years" aria-label="{{ heading ? 'Past issues by year'|t : 'Issues by year'|t }}">
@@ -57,7 +75,7 @@
         <ol class="pf-tiles__list" role="list">
           {% for item in group.items %}
             <li class="pf-tiles__item">
-              <a class="pf-book" href="{{ item.preview }}" target="_blank" rel="noopener" data-pf-nla-open data-name="{{ item.name }}">
+              <a class="pf-book" href="?{{ constant('Drupal\\palefire\\NewsletterReview::READ') }}={{ item.id }}#{{ uid }}-reading" data-pf-nla-open data-name="{{ item.name }}">
                 <span class="pf-book__cover{{ item.front ? '' : ' pf-book__cover--set' }}" aria-hidden="true">
                   <span class="pf-book__object">
                     {% if item.front %}
@@ -74,7 +92,6 @@
                   <span class="pf-book__title">{{ item.line ?: item.name }}</span>
                   <span class="pf-book__imprint"><span class="visually-hidden">, </span>{{ 'No. @n'|t({ '@n': item.number }) }} · {% if item.sent %}<time datetime="{{ item.sent_iso }}">{{ item.sent }}</time>{% else %}{{ item.name }}{% endif %}</span>
                   <span class="pf-book__cta" aria-hidden="true">{{ 'Read the issue'|t }}</span>
-                  <span class="visually-hidden" data-pf-nla-tab>, {{ 'opens in a new tab'|t }}</span>
                 </span>
               </a>
             </li>
@@ -85,10 +102,9 @@
     <dialog class="pf-nla__dialog" id="{{ uid }}-dialog" aria-labelledby="{{ uid }}-dialog-title" data-pf-nla-dialog>
       <div class="pf-nla__bar">
         <p class="pf-nla__title" id="{{ uid }}-dialog-title" data-pf-nla-title></p>
-        <a class="pf-nla__own" href="#" target="_blank" rel="noopener" data-pf-nla-own>{{ 'Open on its own'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
         <button type="button" class="pf-nla__close" data-pf-nla-close aria-label="{{ 'Close'|t }}"><svg class="pf-nl-x" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 3l10 10M13 3 3 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg></button>
       </div>
-      <iframe class="pf-nla__frame" data-pf-nla-frame title="" sandbox="allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe>
+      <iframe class="pf-nla__frame" data-pf-nla-frame title="" sandbox referrerpolicy="no-referrer"></iframe>
     </dialog>
   </div>
 {% endif %}

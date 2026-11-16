@@ -338,6 +338,37 @@
   }
 }
 
+// Forgets this browser as a reviewer (js/palefire.js shows its button).
+.pf-rv__forget {
+  display: block;
+  min-height: 2.75rem;
+  margin: 0 0 .5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--pf-rv-muted);
+  font-size: .875rem;
+  text-align: start;
+  text-decoration: underline;
+  text-decoration-color: var(--pf-rv-rule);
+  text-underline-offset: .25em;
+  cursor: pointer;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:hover {
+    color: var(--pf-rv-ink);
+    text-decoration-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-rv-accent);
+    outline-offset: 2px;
+  }
+}
+
 // On this page. ---------------------------------------------------------------
 .pf-rv__public {
   margin-top: 1.5rem;

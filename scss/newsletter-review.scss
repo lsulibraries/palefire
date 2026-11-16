@@ -993,6 +993,36 @@
   background: #fff;
 }
 
+.pf-nla__dialog.is-loading .pf-nla__frame {
+  opacity: 0;
+}
+
+// The issue ?read=<id> opens, above the grid (without the script).
+.pf-nla__reading {
+  display: flex;
+  flex-direction: column;
+  height: min(85svh, 60rem);
+  margin-bottom: 2rem;
+  border: 1px solid $pf-hairline;
+
+  &:focus {
+    outline: 0;
+  }
+
+  .pf-nla__title {
+    font-size: var(--pf-mono-label, .75rem);
+  }
+}
+
+.pf-nla__own--close::after {
+  content: none;
+}
+
+.pf-nla__missing {
+  margin: 0;
+  padding: 1.25rem;
+}
+
 // Before and after: two issues under one slider. ----------------------------------
 .pf-nlc {
   --pf-nlc-cut: 50%;

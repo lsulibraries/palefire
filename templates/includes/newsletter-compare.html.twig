@@ -9,8 +9,9 @@
  * (palefire_preprocess_paragraph__guide_text(), Drupal\palefire\NewsletterReview::compare()).
  *
  * - uid: unique on the page.
- * - before, after: name, line, preview and html (the email, scripts removed;
- *   NULL if it couldn't be fetched).
+ * - before, after: name, line, preview and html (the email, scripts removed
+ *   and links made plain text; NULL if it couldn't be fetched). Neither
+ *   links to Constant Contact: an issue's own links go stale.
  *
  * Both emails are drawn whole in sandboxed frames that take no pointer (the
  * slider is the control). js/newsletter-review.js sizes them and moves the
@@ -34,8 +35,6 @@
     </div>
     <figcaption class="pf-nlc__caption" id="{{ uid }}-caption">
       {{ 'Left: @a. Right: @b. Drag across the emails or use the slider.'|t({ '@a': before.name ~ (before.line ? ', ' ~ before.line : ''), '@b': after.name ~ (after.line ? ', ' ~ after.line : '') }) }}
-      <a href="{{ before.preview }}" target="_blank" rel="noopener">{{ 'Open @name on its own'|t({ '@name': before.name }) }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
-      <a href="{{ after.preview }}" target="_blank" rel="noopener">{{ 'Open @name on its own'|t({ '@name': after.name }) }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
     </figcaption>
   </figure>
 {% endif %}
