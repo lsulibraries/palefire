@@ -496,6 +496,10 @@ HTML),
 <li>Review mode: add ?review to the end of any Palefire page’s address to leave notes and thumbs on it, section by section, with a pin beside each heading. No sign-in. Approved notes show on the page and on a hub at /v2/internal/page-review. The panel also points out that text size and colors can be changed in Settings.</li>
 <li>Approved notes now show right away on the PR timeline, the newsletter review and in review mode. Show notes is on to start; turn it off to hide them.</li>
 <li>Newsletter review: each story’s notes and thumbs open from a small chip under its Comment button, with Show more when there are more than fit before the next story.</li>
+<li>Reviewers who have opened a review link now see a small Review this page button on every Palefire page, so they never need to remember ?review. Nobody else sees it.</li>
+<li>Past newsletters on the site no longer have working links, so nobody is sent to outdated pages. The draft under review keeps its links for checking.</li>
+<li>The Reading Room page no longer has a booking button at the top: it is a walk-in room.</li>
+<li>Room pages: the photos of a room open full screen, the same way exhibition pictures do, with arrows to step through them.</li>
 </ul>
 HTML),
 ]);

@@ -429,7 +429,8 @@ viewer:
 # An image group in a guide (e.g. a donation guide's example items): its
 # pictures in the full-screen viewer, stepping through the group. Attached
 # by paragraph--exhibit-gallery.html.twig only when the group is in a
-# guide section; exhibitions use exhibition.js.
+# guide section; exhibitions use exhibition.js. Also a room's photos
+# (paragraph--location-photos.html.twig, data-pf-gallery).
 guide-gallery:
   version: 1.0.0
   js:

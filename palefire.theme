@@ -2049,6 +2049,7 @@ function _palefire_location_caption(string $name): string {
  *
  * Each Image media item in pf_location_photo (4:5 WebP), or the original
  * before the script has made the style: src, width, height, its alt text,
+ * full (the original, for the viewer) with full_width and full_height,
  * and its media name as the caption (none while the name is still a file
  * name, _palefire_location_caption()). Media items without a file are
  * left out.
@@ -2080,6 +2081,10 @@ function _palefire_location_photos(ParagraphInterface $paragraph, CacheableMetad
       'width' => (int) ($dimensions['width'] ?? 800),
       'height' => (int) ($dimensions['height'] ?? 1000),
       'alt' => (string) $item->alt,
+      // The original, for the full-screen viewer (js/guide-gallery.js).
+      'full' => $urls->generateString($uri),
+      'full_width' => (int) $item->width ?: NULL,
+      'full_height' => (int) $item->height ?: NULL,
       'caption' => _palefire_location_caption($ref->entity ? (string) $ref->entity->label() : ''),
     ];
   }
@@ -2227,11 +2232,12 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     }
     $location['map'] = $map;
     $location['uid'] = 'pf-location-' . $paragraph->id();
-    // No button at the top for a room people ask for rather than book
-    // (Event rental, For classes): its Booking section, after the rules,
-    // carries the request form, so nobody sends it before reading them.
+    // A button at the top only for a room people book online. A room
+    // people ask for (Event rental, For classes) has its form in Booking,
+    // after the rules, so nobody sends it before reading them; a walk-in
+    // room (Reading Room, Quiet Study) needs no booking to use.
     $asked = in_array($location['access'], ['rental', 'class'], TRUE);
-    $location['link'] = $asked
+    $location['link'] = $location['access'] !== 'appointment'
       ? NULL
       : _palefire_location_not_here($location['link'], $paragraph) ?? _palefire_location_booking($paragraph, NULL, '')['link'];
     // Its person to ask, once, further down (_palefire_location_contact_part()).
@@ -2785,6 +2791,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags($past['tags'])
       ->addCacheTags(NewsletterReview::cacheTags())
+      ->addCacheContexts(['url.query_args:' . NewsletterReview::READ])
       ->setCacheMaxAge(NewsletterReview::MAX_AGE)
       ->applyTo($variables);
   }
@@ -2811,6 +2818,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     $variables['newsletter_compare'] = isset($newsletter_parts['compare']) ? NewsletterReview::compare($newsletter_issues) : NULL;
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags([NewsletterReview::cacheTag()])
+      ->addCacheContexts(['url.query_args:' . NewsletterReview::READ])
       ->setCacheMaxAge(isset($newsletter_parts['compare']) ? NewsletterReview::MAX_AGE : NewsletterReview::SENT_MAX_AGE)
       ->applyTo($variables);
   }
@@ -3073,13 +3081,32 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     $variables['layout'] = $layout;
   }
   if ($variables['layout'] === 'ask') {
-    $variables['faqs'] = _palefire_ask_faqs($paragraph, $variables);
+    // On Oral History's homepage the section is the Williams Center's: its
+    // FAQs (Subcategory "Oral History", else Special Collections'), its
+    // wording (ask-special.html.twig, ask_unit) and the form mailed to the
+    // person its Who to ask names (_palefire_ask_mail_to()), not a ticket.
+    $host = _palefire_paragraph_host_node($paragraph);
+    $alias = $host ? \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $host->id()) : '';
+    $variables['ask_unit'] = preg_match('#^/v2/oralhistory(/|$)#', $alias) ? 'oral_history' : '';
+    $oral_history = $variables['ask_unit'] === 'oral_history';
+    $variables['faqs'] = _palefire_ask_faqs($paragraph, $variables, 8, $oral_history ? 'Oral History' : 'Special Collections');
     // The question form (the libanswers module: a Special Collections
-    // ticket through the LibAnswers API, Honeypot against spam). Without
-    // the module the section offers AskUs instead.
-    $variables['ask_form'] = \Drupal::moduleHandler()->moduleExists('libanswers')
-      ? \Drupal::formBuilder()->getForm('Drupal\libanswers\Form\AskForm', 2616, 'ask-special-collections')
-      : NULL;
+    // ticket through the LibAnswers API, or an email to one Staff member,
+    // Honeypot against spam). Without the module the section offers AskUs
+    // instead.
+    $variables['ask_form'] = NULL;
+    if (\Drupal::moduleHandler()->moduleExists('libanswers')) {
+      $form_class = 'Drupal\libanswers\Form\AskForm';
+      $mail_to = $oral_history && $host ? _palefire_ask_mail_to($host) : 0;
+      // A module from before its email mode takes no Staff node: then the
+      // queue, as on Special Collections.
+      if ($mail_to && (new \ReflectionMethod($form_class, 'buildForm'))->getNumberOfParameters() < 5) {
+        $mail_to = 0;
+      }
+      $variables['ask_form'] = $mail_to
+        ? \Drupal::formBuilder()->getForm($form_class, 0, 'ask-oral-history', $mail_to)
+        : \Drupal::formBuilder()->getForm($form_class, 2616, 'ask-special-collections');
+    }
     return;
   }
   if ($variables['layout'] === 'covers') {
@@ -3159,6 +3186,11 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       }
     }
   }
+  // On Oral History's own pages (under /v2/oralhistory) the gallery's
+  // frames are 21:9, every picture filling its frame (.pf-tiles--wide-frames,
+  // _tile-showcase.scss); elsewhere (/v2/special) they stay 16:9.
+  $host = $variables['whole_covers'] ? _palefire_paragraph_host_node($paragraph) : NULL;
+  $variables['wide_frames'] = $host && preg_match('#^/v2/oralhistory(/|$)#', \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $host->id()));
 
   // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)
   // spans two to five columns: its cover is the landscape crop, sized for
@@ -3240,6 +3272,46 @@ function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata
 }
 
 /**
+ * The node a paragraph is on, through any paragraphs it is nested in.
+ *
+ * A Section tab's block sits in the tab, the tab in the Section tabs, and
+ * those on the page. NULL when it isn't on a node (a library item, say).
+ */
+function _palefire_paragraph_host_node(ParagraphInterface $paragraph): ?NodeInterface {
+  $entity = $paragraph;
+  for ($depth = 0; $depth < 6 && $entity instanceof ParagraphInterface; $depth++) {
+    $entity = $entity->getParentEntity();
+  }
+  return $entity instanceof NodeInterface ? $entity : NULL;
+}
+
+/**
+ * Whom a unit homepage's Ask form mails: a published Staff node's ID, or 0.
+ *
+ * The first person in the page's Who to ask (a Staff contacts section,
+ * field_librarian), so the page names who answers and the form reaches
+ * them. The address is read from their Staff page when a question is sent
+ * (the libanswers module), never put in the page.
+ */
+function _palefire_ask_mail_to(NodeInterface $node): int {
+  if (!$node->hasField('field_scroll_section')) {
+    return 0;
+  }
+  foreach ($node->get('field_scroll_section')->referencedEntities() as $section) {
+    if ($section->bundle() !== 'staff_contacts' || !$section->hasField('field_staff_contacts')) {
+      continue;
+    }
+    foreach ($section->get('field_staff_contacts')->referencedEntities() as $contact) {
+      $person = $contact->hasField('field_librarian') ? $contact->get('field_librarian')->entity : NULL;
+      if ($person instanceof NodeInterface && $person->bundle() === 'staff' && $person->isPublished()) {
+        return (int) $person->id();
+      }
+    }
+  }
+  return 0;
+}
+
+/**
  * The FAQs for an Ask Special Collections section (Tile showcase, "ask").
  *
  * The Tiles picked in the section's Tiles field, in that order; with none
@@ -3253,6 +3325,9 @@ function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata
  * marker, palefire_preprocess_paragraph__guide_text()): every one of those
  * FAQs, in the same order.
  *
+ * $subcategory picks another unit's FAQ tiles ("Oral History" on its
+ * homepage); with none, Special Collections' stand in.
+ *
  * Each FAQ:
  * - question: the tile's title.
  * - answer: its Formatted text or Linked text (filtered, as a render
@@ -3261,7 +3336,7 @@ function _palefire_publications(ParagraphInterface $paragraph, CacheableMetadata
  * The tile's Link (the same answer on AskUs) isn't offered: it only sent
  * readers away to read the same words again.
  */
-function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?int $limit = 8): array {
+function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?int $limit = 8, string $subcategory = 'Special Collections'): array {
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $nodes = [];
   if ($paragraph && $paragraph->hasField('field_tiles')) {
@@ -3276,21 +3351,25 @@ function _palefire_ask_faqs(?ParagraphInterface $paragraph, array &$variables, ?
     $cache->addCacheTags(['node_list:tile']);
     $types = \Drupal::entityTypeManager();
     $terms = $types->getStorage('taxonomy_term')->loadByProperties(['name' => 'FAQ']);
-    if ($terms) {
+    $ids = [];
+    foreach ($terms ? array_unique([$subcategory, 'Special Collections']) : [] as $name) {
       $query = \Drupal::entityQuery('node')
         ->accessCheck(TRUE)
         ->condition('type', 'tile')
         ->condition('status', NodeInterface::PUBLISHED)
         ->condition('field_category', array_keys($terms), 'IN')
-        ->condition('field_subcategory', 'Special Collections', 'CONTAINS')
+        ->condition('field_subcategory', $name, 'CONTAINS')
         ->sort('field_tile_search_weight', 'DESC')
         ->sort('title');
       if ($limit) {
         $query->range(0, $limit);
       }
       $ids = $query->execute();
-      $nodes = $types->getStorage('node')->loadMultiple($ids);
+      if ($ids) {
+        break;
+      }
     }
+    $nodes = $ids ? $types->getStorage('node')->loadMultiple($ids) : [];
   }
 
   $faqs = [];
@@ -3401,6 +3480,10 @@ function palefire_form_libanswers_ask_form_alter(array &$form, FormStateInterfac
   ];
   $queue = (int) ($form['#libanswers_queue'] ?? $form_state->get('libanswers_queue') ?? 2616);
   [$staff, $desk, $askus] = $desks[$queue] ?? $desks[2616];
+  // Mailed to one person (Oral History's homepage, _palefire_ask_mail_to()).
+  if (!empty($form['#libanswers_mail'])) {
+    [$staff, $desk, $askus] = [t('Williams Center staff'), t('the Williams Center'), 'https://askus.lib.lsu.edu/search/?t=0&g=12395'];
+  }
   $form['#pf_staff'] = $staff;
   $form['#attributes']['data-pf-ask-to'] = (string) $desk;
   $form['#attributes']['data-pf-askus'] = $askus;

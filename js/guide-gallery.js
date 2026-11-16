@@ -1,6 +1,7 @@
 /**
  * @file
- * An image group in a guide (.pf-exhibit-group--guide): a picture opens in
+ * An image group in a guide (.pf-exhibit-group--guide), or any list marked
+ * data-pf-gallery (a room's photos, paragraph--location-photos): a picture opens in
  * the full-screen viewer (js/viewer.js) with its caption beside it, and the
  * arrows step through the rest of its group. Exhibitions do this in
  * js/exhibition.js, which a guide doesn't load.
@@ -12,6 +13,7 @@
   'use strict';
 
   const viewer = Drupal.palefireViewer;
+  const GROUP = '.pf-exhibit-group--guide, [data-pf-gallery]';
   let state = null;
 
   // The viewer's copy of a thumbnail: the size already loaded first, then
@@ -78,7 +80,7 @@
   };
 
   function open(link) {
-    const group = link.closest('.pf-exhibit-group--guide');
+    const group = link.closest(GROUP);
     state = {
       links: Array.from(group.querySelectorAll('a[data-pf-lightbox]')),
       index: 0,
@@ -88,7 +90,7 @@
 
   Drupal.behaviors.palefireGuideGallery = {
     attach(context) {
-      once('pf-guide-gallery', '.pf-exhibit-group--guide a[data-pf-lightbox]', context).forEach((link) => {
+      once('pf-guide-gallery', ':is(.pf-exhibit-group--guide, [data-pf-gallery]) a[data-pf-lightbox]', context).forEach((link) => {
         link.addEventListener('click', (event) => {
           if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !window.HTMLDialogElement) {
             return;

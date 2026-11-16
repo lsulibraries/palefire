@@ -753,6 +753,48 @@ html[data-pf-page="location"] .pf-booking__text { max-width: none; }
   }
 }
 
+// Each photo opens the viewer (js/guide-gallery.js): the exhibition
+// figure's cue, a slow 3% push in the frame and the enlarge mark in the
+// corner on hover and focus.
+.pf-location__photo-link {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  cursor: zoom-in;
+
+  img { transition: scale .9s cubic-bezier(.2, .7, .2, 1); }
+
+  &:hover img { scale: 1.03; }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-location-fg, var(--bs-body-color));
+    outline-offset: 4px;
+  }
+}
+
+.pf-location__photo-zoom {
+  position: absolute;
+  inset: .75rem .75rem auto auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: .6rem;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 80%, transparent);
+  opacity: 0;
+  transition: opacity $pf-hover-out ease;
+
+  .pf-location__photo-link:is(:hover, :focus-visible) & {
+    opacity: 1;
+    transition-duration: $pf-hover-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-location__photo-link img { transition: none; }
+  .pf-location__photo-link:hover img { scale: none; }
+}
+
 // A layout's seats ("xx seats", the room's detail named as the photo),
 // under its name in the muted tone.
 .pf-location__photo-note {
