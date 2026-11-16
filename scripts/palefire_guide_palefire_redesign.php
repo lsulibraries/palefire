@@ -461,6 +461,7 @@ HTML),
 <li>Building map on room pages: the room you are looking at now has its name in a clean band across the room, instead of a cut-out that looked torn against the room's stripes.</li>
 <li>The Lecture Hall page no longer has a Reserve button at the top, like the McIlhenny Room: the request form and the person to ask are in its Book section, after the house rules.</li>
 <li>On the Lecture Hall page, the line with the person to ask now sits at the end of House rules, instead of at the top or beside the Reserve button.</li>
+<li>Building map on room pages: the room's name now sits on a short plate shaped to the room's floor, instead of a band running the room's whole length.</li>
 </ul>
 HTML),
 ]);
