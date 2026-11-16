@@ -343,6 +343,34 @@ html.pf-a11y-motion .pf-inquiry__panel:is(:target, :focus) {
   gap: .25rem;
   align-content: start;
   padding: .875rem 1rem 1rem;
+
+  // A follow-up (data-pf-when, js/ask-form.js) waiting for its answer.
+  &[hidden] {
+    display: none;
+  }
+}
+
+// A follow-up fades in as it's asked.
+@media (prefers-reduced-motion: no-preference) {
+  .pf-inquiry__field[data-pf-when]:not([hidden]) {
+    animation: pf-inquiry-follow .35s cubic-bezier(.2, .7, .2, 1);
+  }
+}
+
+html.pf-a11y-motion .pf-inquiry__field[data-pf-when] {
+  animation: none;
+}
+
+@keyframes pf-inquiry-follow {
+  from {
+    opacity: 0;
+    translate: 0 -.25rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: none;
+  }
 }
 
 .pf-inquiry__label {

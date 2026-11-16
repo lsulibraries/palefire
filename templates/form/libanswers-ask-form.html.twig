@@ -12,13 +12,19 @@
  * Everything else (form_build_id, form_id, Honeypot's hidden field) comes
  * last, untouched.
  *
+ * Any queue: the module lists the queue's own fields (#libanswers_fields)
+ * and its follow-ups' rules (#libanswers_when); the alter adds who replies
+ * (#pf_staff). Special Collections (2616) on its page and in the Ask Us
+ * drawer, the Main Library (237) in the drawer.
+ *
  * Available variables:
  * - form: the form render array.
  */
 #}
-{% macro field(control, wide) %}
+{% macro field(control, wide, when) %}
   {% set id = control['#id'] %}
-  <div class="pf-inquiry__field{{ wide ? ' pf-inquiry__field--wide' }}">
+  <div class="pf-inquiry__field{{ wide ? ' pf-inquiry__field--wide' }}"
+    {%- if when %} data-pf-when="{{ when[0] }}" data-pf-when-value="{{ when[1] }}" hidden{% endif %}>
     <label class="pf-inquiry__label" for="{{ id }}">
       {{- control['#title'] -}}
       {%- if control['#required'] %}<span class="pf-inquiry__req" aria-hidden="true"> *</span>{% endif -%}
@@ -29,16 +35,25 @@
     {% endif %}
   </div>
 {% endmacro %}
-{% for name in ['val1', 'val2', 'pname', 'pemail'] %}
+{# The queue's own fields first, then name and email. A follow-up (asked
+   once another field has a value) is a wide cell, hidden until then. A
+   queue with an odd number of plain fields has its last one wide, so the
+   two-column grid has no empty cell. #}
+{% set fields = form['#libanswers_fields'] ?? ['val1', 'val2'] %}
+{% set when = form['#libanswers_when'] ?? {} %}
+{% set plain = fields|filter(name => form[name] and when[name] is not defined) %}
+{% for name in fields %}
   {% if form[name] %}
-    {{ _self.field(form[name], false) }}
+    {{ _self.field(form[name], when[name] is defined or (plain|length is odd and name == plain|last), when[name] ?? null) }}
   {% endif %}
 {% endfor %}
+{{ _self.field(form.pname, false) }}
+{{ _self.field(form.pemail, false) }}
 {{ _self.field(form.pquestion, true) }}
 {{ _self.field(form.pdetails, true) }}
 <p class="pf-inquiry__required">
   <span><span aria-hidden="true">* </span>{{ 'Required'|t }}</span>
-  <span>{{ 'Special Collections staff reply by email.'|t }}</span>
+  <span>{{ '@staff reply by email.'|t({'@staff': form['#pf_staff'] ?? 'Special Collections staff'|t}) }}</span>
 </p>
 {# The status is a card that rises from behind the Send bar (_ask.scss):
    after the button, as the answer to pressing it. The script writes the
@@ -53,4 +68,6 @@
     <span class="pf-inquiry__status-text"></span>
   </div>
 </div>
-{{ form|without('val1', 'val2', 'pname', 'pemail', 'pquestion', 'pdetails', 'actions') }}
+{# Everything not drawn above. `without` takes names, not a list: a queue
+   field added to the module (AskForm::QUEUE_FIELDS) goes here too. #}
+{{ form|without('val1', 'val2', 'val7', 'custom1', 'custom2', 'pname', 'pemail', 'pquestion', 'pdetails', 'actions') }}

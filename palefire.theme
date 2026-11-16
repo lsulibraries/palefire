@@ -3220,7 +3220,22 @@ function palefire_form_libanswers_ask_form_alter(array &$form, FormStateInterfac
   $form['#attributes']['class'][] = 'pf-inquiry__form';
   // Named as the panel's heading above it.
   $form['#attributes']['aria-label'] = t('Send us a question');
-  foreach (['val1', 'val2', 'pname', 'pemail', 'pquestion', 'pdetails'] as $name) {
+  // Who answers each queue, for the slip's last row and js/ask-form.js's
+  // thank-you, and where to ask instead if sending fails.
+  $desks = [
+    237 => [t('Library staff'), t('the Main Library'), 'https://askus.lib.lsu.edu/'],
+    2616 => [t('Special Collections staff'), t('Special Collections'), 'https://askus.lib.lsu.edu/special'],
+  ];
+  $queue = (int) ($form['#libanswers_queue'] ?? $form_state->get('libanswers_queue') ?? 2616);
+  [$staff, $desk, $askus] = $desks[$queue] ?? $desks[2616];
+  $form['#pf_staff'] = $staff;
+  $form['#attributes']['data-pf-ask-to'] = (string) $desk;
+  $form['#attributes']['data-pf-askus'] = $askus;
+  // The queue's own fields (the module lists them; before it did, only
+  // Special Collections' two menus), then the shared ones.
+  $fields = $form['#libanswers_fields'] ?? ['val1', 'val2'];
+  $form['#libanswers_fields'] = $fields;
+  foreach (array_merge($fields, ['pname', 'pemail', 'pquestion', 'pdetails']) as $name) {
     if (!isset($form[$name])) {
       continue;
     }
@@ -3228,6 +3243,11 @@ function palefire_form_libanswers_ask_form_alter(array &$form, FormStateInterfac
     $form[$name]['#attributes']['class'][] = 'pf-inquiry__control';
     if ($form[$name]['#type'] !== 'select') {
       $form[$name]['#attributes']['placeholder'] = ' ';
+    }
+    // A follow-up starts switched off, so it isn't sent until
+    // js/ask-form.js shows it (the template hides its cell).
+    if (isset($form['#libanswers_when'][$name])) {
+      $form[$name]['#attributes']['disabled'] = 'disabled';
     }
   }
   if (isset($form['actions']['submit'])) {

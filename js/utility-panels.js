@@ -21,10 +21,10 @@
  *   (visit-hours.js), so a location the Visit card already loaded is not
  *   requested again.
  * - Ask Us: the Main Library | Special Collections switch starts on the
- *   page's section. Each Main Library tab's LibAnswers iframe gets its src
- *   the first time it shows, so nothing loads from LibAnswers until then;
- *   the Special Collections question slip gets its form the first time
- *   that side shows (loadSlip).
+ *   page's section. Live Chat's LibAnswers iframe gets its src the first
+ *   time it shows, so nothing loads from LibAnswers until then; each
+ *   question slip (Main Library Email, Special Collections) gets its form
+ *   the first time it shows (loadSlip).
  * - Settings: saves the visitor's choices (localStorage "pf-a11y") and
  *   applies them to <html> at once. html.html.twig applies the saved
  *   copy before the first paint on every page load. Sends
@@ -161,15 +161,15 @@
     }
   }
 
-  // Special Collections: the question slip's form, fetched once from the
-  // libanswers module (the form alone, no page) the first time that side
-  // of the switch shows. Its ids are the ones the Ask Special
+  // A question slip (Main Library Email, Special Collections): its form,
+  // fetched once from the libanswers module (the form alone, no page) the
+  // first time the slip shows. Its ids are the ones the Ask Special
   // Collections section's own form has, and that form can be on the same
   // page, so they're prefixed; each label and error line follows its
   // control. js/ask-form.js takes it from there (attachBehaviors). If it
   // can't be fetched (or the module is off), the AskUs link shows.
-  function loadSlip(panel) {
-    const slip = panel.querySelector('[data-pf-ask-form]');
+  function loadSlip(shown) {
+    const slip = shown && shown.querySelector('[data-pf-ask-form]');
     if (!slip) {
       return;
     }
@@ -190,7 +190,10 @@
         if (!form) {
           throw new Error('No form');
         }
-        const own = (id) => `pf-drawer-${id}`;
+        // Per queue too: the Main Library's and Special Collections'
+        // forms share Drupal's ids.
+        const queue = url.split('/').pop();
+        const own = (id) => `pf-drawer-${queue}-${id}`;
         form.querySelectorAll('[id]').forEach((el) => {
           el.id = own(el.id);
         });
@@ -215,10 +218,9 @@
     let section = null;
     const loadShown = () => {
       const library = panel.querySelector('.pf-ask__lib.active');
-      if (library && library.querySelector('[data-pf-ask-form]')) {
-        loadSlip(panel);
-      }
-      loadFrame(library && library.querySelector('.pf-ask__pane.active'));
+      const shown = library && (library.querySelector('.pf-ask__pane.active') || library);
+      loadSlip(shown);
+      loadFrame(shown);
     };
     panel.addEventListener('show.bs.offcanvas', () => {
       const here = window.location.pathname.startsWith('/v2/special') ? 'special' : 'main';

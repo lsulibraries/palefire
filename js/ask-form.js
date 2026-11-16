@@ -2,13 +2,15 @@
  * @file
  * Ask Special Collections: the question form
  * (templates/form/libanswers-ask-form.html.twig, styled in _ask.scss).
- * Also the Ask Us drawer's copy, which utility-panels.js fetches and
- * places when the drawer first opens; it posts to its own route.
+ * Also the Ask Us drawer's copies (Main Library and Special Collections),
+ * which utility-panels.js fetches and places when first shown; each posts
+ * to its own route. The form names its desk (data-pf-ask-to) and its AskUs
+ * page (data-pf-askus); follow-up fields show as their rule allows.
  *
  * Checks the required fields and the email, then posts the form to Drupal
  * in the background, so the visitor stays on the page. The libanswers
- * module sends it on to LibAnswers as a ticket in the Special Collections
- * queue (through the API; Honeypot keeps bots out) and, for this header
+ * module sends it on to LibAnswers as a ticket in its queue (Special Collections or the Main Library)
+ * (through the API; Honeypot keeps bots out) and, for this header
  * (X-LibAnswers-Fetch), answers JSON: 200 { ok } once the ticket exists,
  * 422 { errors: { field: message } } for fields to fix, 502 when
  * LibAnswers refuses it. A failure points to AskUs instead. Without this
@@ -25,6 +27,20 @@
   'use strict';
 
   const ASKUS = 'https://askus.lib.lsu.edu/special';
+
+  // Follow-ups (a cell with data-pf-when, from the libanswers module's
+  // rules): shown, and switched on so they're sent, only while the field
+  // they follow has their value; a follow-up of a hidden one stays hidden.
+  const follow = (form) => {
+    form.querySelectorAll('[data-pf-when]').forEach((cell) => {
+      const parent = form.elements[cell.dataset.pfWhen];
+      const show = !!parent && !parent.disabled && parent.value === cell.dataset.pfWhenValue;
+      cell.hidden = !show;
+      cell.querySelectorAll('input, select, textarea').forEach((field) => {
+        field.disabled = !show;
+      });
+    });
+  };
 
   const messageFor = (field) => {
     if (field.validity.valueMissing) {
@@ -63,7 +79,7 @@
     status.dataset.kind = kind;
     if (link) {
       const a = document.createElement('a');
-      a.href = ASKUS;
+      a.href = form.dataset.pfAskus || ASKUS;
       a.textContent = Drupal.t('Ask on AskUs instead');
       words.append(' ', a, '.');
     }
@@ -151,10 +167,11 @@
       }
       const email = form.elements.pemail.value;
       form.reset();
+      follow(form);
       // Analytics: that a question was sent, never what it said
       // (Drupal.palefireTrack(), js/palefire.js).
       Drupal.palefireTrack?.('ask-form', 'sent');
-      say(form, Drupal.t('Thank you. Your question is with Special Collections; we’ll reply to @email.', { '@email': email }), 'done');
+      say(form, Drupal.t('Thank you. Your question is with @desk; we’ll reply to @email.', { '@desk': form.dataset.pfAskTo || Drupal.t('Special Collections'), '@email': email }), 'done');
     }
     catch (e) {
       say(form, Drupal.t('Sorry, your question couldn’t be sent.'), 'error', true);
@@ -187,9 +204,11 @@
           }
           send(form, event.submitter);
         });
+        follow(form);
         form.addEventListener('input', () => unsay(form));
         // Clear a field's error once it is fixed, not on every key.
         form.addEventListener('change', (event) => {
+          follow(form);
           const field = event.target;
           if (field.getAttribute('aria-invalid') === 'true' && !messageFor(field)) {
             setError(field, '');
