@@ -9,6 +9,21 @@
   "source": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/RPOE/index.html",
   "pages": [
     {
+      "title": "Timeline",
+      "anchor": "timeline",
+      "category": "",
+      "lead": null,
+      "display": "timeline",
+      "focus": "center",
+      "lead_caption": "",
+      "blocks": [
+        {
+          "type": "text",
+          "body": "<p>The exhibition’s four galleries side by side, from <em>Plessy v. Ferguson</em> in 1896 to the building LSU named for A. P. Tureaud, Sr., in 1990: the suits and students who integrated LSU, the 1953 bus boycott, civil rights in East Baton Rouge, and the nation.</p>"
+        }
+      ]
+    },
+    {
       "title": "Integrating LSU",
       "anchor": "integrating-lsu",
       "category": "",
@@ -21,12 +36,27 @@
           "type": "entry",
           "title": "The lawsuits, 1946–1953",
           "anchor": "the-lawsuits-1946-1953",
+          "date": "",
           "published": true,
           "source": "era",
           "blocks": [
             {
               "type": "text",
-              "body": "<p>LSU was integrated one school at a time, through separate suits for the law school, the graduate school and the undergraduate college. Many of the cases were argued by A. P. Tureaud, Sr.</p><p><strong>1946.</strong> <em>Hatfield Sues LSU Law.</em> Army veteran Charles J. Hatfield, III, files suit to attend LSU Law School.</p><p><strong>1951.</strong> <em>First Black Graduate.</em> Charles E. Harrington graduates from LSU with a master’s degree in education.</p>"
+              "body": "<p>LSU was integrated one school at a time, through separate suits for the law school, the graduate school and the undergraduate college. Many of the cases were argued by A. P. Tureaud, Sr.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Hatfield Sues LSU Law",
+          "anchor": "hatfield-sues-lsu-law",
+          "date": "1946",
+          "published": true,
+          "source": "lsu[0]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Army veteran Charles J. Hatfield, III, files suit to attend LSU Law School.</p>"
             }
           ]
         },
@@ -34,12 +64,13 @@
           "type": "entry",
           "title": "Southern University Law School Opens",
           "anchor": "southern-university-law-school-opens",
+          "date": "1947",
           "published": true,
           "source": "lsu[1]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1947.</strong> Southern University Law School opens and Hatfield’s case is dismissed as a result.</p>"
+              "body": "<p>Southern University Law School opens and Hatfield’s case is dismissed as a result.</p>"
             },
             {
               "type": "audio",
@@ -55,12 +86,13 @@
           "type": "entry",
           "title": "Wilson Sues LSU Law",
           "anchor": "wilson-sues-lsu-law",
+          "date": "1950",
           "published": true,
           "source": "lsu[2]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1950.</strong> Roy Samuel Wilson successfully sues to attend LSU Law School. He does not complete the program. He was represented by attorney A. P. Tureaud, Sr. Here, A. P. Tureaud, Jr., recalls his father’s relationships with the students he represented.</p>"
+              "body": "<p>Roy Samuel Wilson successfully sues to attend LSU Law School. He does not complete the program. He was represented by attorney A. P. Tureaud, Sr. Here, A. P. Tureaud, Jr., recalls his father’s relationships with the students he represented.</p>"
             },
             {
               "type": "audio",
@@ -76,6 +108,7 @@
           "type": "entry",
           "title": "LSU Law Admits Collins and Morial",
           "anchor": "lsu-law-admits-collins-and-morial",
+          "date": "1951",
           "published": true,
           "source": "lsu[3]",
           "blocks": [
@@ -88,7 +121,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1951.</strong> Robert Collins and Ernest “Dutch” Morial enroll in LSU Law School.</p>"
+              "body": "<p>Robert Collins and Ernest “Dutch” Morial enroll in LSU Law School.</p>"
             },
             {
               "type": "audio",
@@ -104,6 +137,7 @@
           "type": "entry",
           "title": "Payne Sues LSU Graduate School",
           "anchor": "payne-sues-lsu-graduate-school",
+          "date": "1951",
           "published": true,
           "source": "lsu[4]",
           "blocks": [
@@ -116,7 +150,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1951.</strong> Lutrill Payne successfully files suit to attend LSU Graduate School.</p>"
+              "body": "<p>Lutrill Payne successfully files suit to attend LSU Graduate School.</p>"
             },
             {
               "type": "audio",
@@ -130,8 +164,23 @@
         },
         {
           "type": "entry",
+          "title": "First Black Graduate",
+          "anchor": "first-black-graduate",
+          "date": "1951",
+          "published": true,
+          "source": "lsu[5]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Charles E. Harrington graduates from LSU with a master’s degree in education.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
           "title": "Foister Sues LSU Medical School",
           "anchor": "foister-sues-lsu-medical-school",
+          "date": "1952",
           "published": true,
           "source": "lsu[6]",
           "blocks": [
@@ -144,7 +193,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1952.</strong> Former army nurse Daryle E. Foister successfully sues to enroll in LSU Medical School’s Nursing Program.</p>"
+              "body": "<p>Former army nurse Daryle E. Foister successfully sues to enroll in LSU Medical School’s Nursing Program.</p>"
             }
           ]
         },
@@ -152,6 +201,7 @@
           "type": "entry",
           "title": "Tureaud Jr. Sues LSU",
           "anchor": "tureaud-jr-sues-lsu",
+          "date": "1953",
           "published": true,
           "source": "lsu[7]",
           "blocks": [
@@ -164,7 +214,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1953.</strong> A. P. Tureaud, Jr., successfully sues to enroll at LSU as an undergraduate. He later transfers to Xavier University.</p>"
+              "body": "<p>A. P. Tureaud, Jr., successfully sues to enroll at LSU as an undergraduate. He later transfers to Xavier University.</p>"
             },
             {
               "type": "audio",
@@ -180,6 +230,7 @@
           "type": "entry",
           "title": "Segregation reaffirmed, 1958",
           "anchor": "segregation-reaffirmed-1958",
+          "date": "",
           "published": true,
           "source": "era",
           "blocks": []
@@ -188,6 +239,7 @@
           "type": "entry",
           "title": "First Black SLIS Graduate",
           "anchor": "first-black-slis-graduate",
+          "date": "1958",
           "published": true,
           "source": "lsu[8]",
           "blocks": [
@@ -200,7 +252,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1958.</strong> Ollie H. Burns graduates from the School of Library and Information Science (SLIS).</p>"
+              "body": "<p>Ollie H. Burns graduates from the School of Library and Information Science (SLIS).</p>"
             }
           ]
         },
@@ -208,6 +260,7 @@
           "type": "entry",
           "title": "LSU Stands on Segregation",
           "anchor": "lsu-stands-on-segregation",
+          "date": "1958",
           "published": true,
           "source": "lsu[9]",
           "blocks": [
@@ -220,7 +273,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1958.</strong> The LSU Board of Supervisors reaffirms its formal policy of segregation.</p>"
+              "body": "<p>The LSU Board of Supervisors reaffirms its formal policy of segregation.</p>"
             }
           ]
         },
@@ -228,6 +281,7 @@
           "type": "entry",
           "title": "Undergraduates on campus, 1964–1972",
           "anchor": "undergraduates-on-campus-1964-1972",
+          "date": "",
           "published": true,
           "source": "era",
           "blocks": []
@@ -236,12 +290,13 @@
           "type": "entry",
           "title": "Undergraduates Sue to Integrate LSU",
           "anchor": "undergraduates-sue-to-integrate-lsu",
+          "date": "1964",
           "published": true,
           "source": "lsu[11]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1964.</strong> Freya Anderson Rivers, Oliver Ferlon Mack, Jr., Clifford Ray Smith, et al., successfully sue to attend LSU as undergraduates.</p>"
+              "body": "<p>Freya Anderson Rivers, Oliver Ferlon Mack, Jr., Clifford Ray Smith, et al., successfully sue to attend LSU as undergraduates.</p>"
             },
             {
               "type": "audio",
@@ -257,6 +312,7 @@
           "type": "entry",
           "title": "First African American Dorm Resident",
           "anchor": "first-african-american-dorm-resident",
+          "date": "1964/1968",
           "published": true,
           "source": "lsu[10]",
           "blocks": [
@@ -269,7 +325,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1964–1968.</strong> Maxine Crump becomes the first African American to live in an LSU dormitory.</p>"
+              "body": "<p>Maxine Crump becomes the first African American to live in an LSU dormitory.</p>"
             },
             {
               "type": "audio",
@@ -285,6 +341,7 @@
           "type": "entry",
           "title": "Harambe Established at LSU",
           "anchor": "harambe-established-at-lsu",
+          "date": "",
           "published": true,
           "source": "lsu[13]",
           "blocks": [
@@ -313,6 +370,7 @@
           "type": "entry",
           "title": "Kerry Pourciau Elected SGA President",
           "anchor": "kerry-pourciau-elected-sga-president",
+          "date": "1972",
           "published": true,
           "source": "lsu[14]",
           "blocks": [
@@ -325,7 +383,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1972.</strong> Kerry Louis Pourciau was the first African American to be elected president of the LSU Student Government Association (SGA). He later held positions with U.S. Senator Russell Long and New Orleans Mayor Ernest N. Morial. He was economic development director for the City of Baton Rouge and worked in public relations for Gulf States Utilities and the Louisiana Lottery Corporation. Pourciau passed away in 1994. In this clip, Pourciau discusses how his friend, Lora Hinton, was the first African American football player to be recruited for the LSU Tigers.</p>"
+              "body": "<p>Kerry Louis Pourciau was the first African American to be elected president of the LSU Student Government Association (SGA). He later held positions with U.S. Senator Russell Long and New Orleans Mayor Ernest N. Morial. He was economic development director for the City of Baton Rouge and worked in public relations for Gulf States Utilities and the Louisiana Lottery Corporation. Pourciau passed away in 1994. In this clip, Pourciau discusses how his friend, Lora Hinton, was the first African American football player to be recruited for the LSU Tigers.</p>"
             },
             {
               "type": "audio",
@@ -341,6 +399,7 @@
           "type": "entry",
           "title": "Alpha Kappa Alpha Established at LSU",
           "anchor": "alpha-kappa-alpha-established-at-lsu",
+          "date": "1972/1973",
           "published": true,
           "source": "lsu[12]",
           "blocks": [
@@ -353,7 +412,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1972–1973.</strong> With help from the Gamma Eta Omega chapter of Alpha Kappa Alpha Sorority, Black women at LSU establish a chapter of their own.</p>"
+              "body": "<p>With help from the Gamma Eta Omega chapter of Alpha Kappa Alpha Sorority, Black women at LSU establish a chapter of their own.</p>"
             },
             {
               "type": "audio",
@@ -369,6 +428,7 @@
           "type": "entry",
           "title": "Recognition, 1990",
           "anchor": "recognition-1990",
+          "date": "",
           "published": true,
           "source": "era",
           "blocks": []
@@ -377,6 +437,7 @@
           "type": "entry",
           "title": "LSU Names a Building for A. P. Tureaud, Sr.",
           "anchor": "lsu-names-a-building-for-a-p-tureaud-sr",
+          "date": "1990",
           "published": true,
           "source": "lsu[15]",
           "blocks": [
@@ -389,7 +450,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1990.</strong> The former Classroom Building, at South Stadium Drive and Forestry Lane, is named for civil rights lawyer A. P. Tureaud, Sr.: the first building on LSU’s campus named for a Black person.</p>"
+              "body": "<p>The former Classroom Building, at South Stadium Drive and Forestry Lane, is named for civil rights lawyer A. P. Tureaud, Sr.: the first building on LSU’s campus named for a Black person.</p>"
             }
           ]
         }
@@ -408,6 +469,7 @@
           "type": "entry",
           "title": "February: Ordinance 222",
           "anchor": "february-ordinance-222",
+          "date": "",
           "published": true,
           "source": "era",
           "blocks": []
@@ -416,6 +478,7 @@
           "type": "entry",
           "title": "Jemison Files Complaint",
           "anchor": "jemison-files-complaint",
+          "date": "1953-02-11",
           "published": true,
           "source": "bus[0]",
           "blocks": [
@@ -428,7 +491,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>February 11, 1953.</strong> The city raised bus fares from ten cents to fifteen cents. At that time, 80 percent of bus riders are African American. Reverend T. J. Jemison went to the City-Parish Council to complain about the fare increase and the fact that black people had to stand overcrowded in the back of the bus.</p>"
+              "body": "<p>The city raised bus fares from ten cents to fifteen cents. At that time, 80 percent of bus riders are African American. Reverend T. J. Jemison went to the City-Parish Council to complain about the fare increase and the fact that black people had to stand overcrowded in the back of the bus.</p>"
             },
             {
               "type": "audio",
@@ -452,12 +515,13 @@
           "type": "entry",
           "title": "Ordinance 222",
           "anchor": "ordinance-222",
+          "date": "1953-02-25",
           "published": true,
           "source": "bus[1]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>February 25, 1953.</strong> The City-Parish Council approved Ordinance 222, stating that blacks could fill the bus from the back to the front and whites could fill the bus from front to back on a first-come, first-served seating basis. The ordinance went into effect, but was widely ignored.</p>"
+              "body": "<p>The City-Parish Council approved Ordinance 222, stating that blacks could fill the bus from the back to the front and whites could fill the bus from front to back on a first-come, first-served seating basis. The ordinance went into effect, but was widely ignored.</p>"
             },
             {
               "type": "audio",
@@ -473,19 +537,16 @@
           "type": "entry",
           "title": "June: The strike and the boycott",
           "anchor": "june-the-strike-and-the-boycott",
+          "date": "",
           "published": true,
           "source": "era",
-          "blocks": [
-            {
-              "type": "text",
-              "body": "<p><strong>June 13, 1953.</strong> <em>Law Tested.</em> Reverend Jemison tests the law by sitting in the front seat of a bus. He carries a copy of Ordinance 222 in his shirt pocket.</p><p><strong>June 14, 1953.</strong> <em>Drivers Suspended.</em> Two bus drivers are suspended for not complying with Ordinance 222.</p><p><strong>June 18, 1953.</strong> <em>Boycott Announced.</em> Raymond Scott announces the bus boycott on radio station WLCS. More than 200 African Americans meet and form the United Defense League (UDL).</p>"
-            }
-          ]
+          "blocks": []
         },
         {
           "type": "entry",
           "title": "Compliance Ordered",
           "anchor": "compliance-ordered",
+          "date": "1953-06",
           "published": true,
           "source": "bus[2]",
           "blocks": [
@@ -498,7 +559,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>June 1953.</strong> Bus drivers are ordered to comply with Ordinance 222. A bus driver manhandled a black woman sitting in a front seat of one bus.</p>"
+              "body": "<p>Bus drivers are ordered to comply with Ordinance 222. A bus driver manhandled a black woman sitting in a front seat of one bus.</p>"
             },
             {
               "type": "audio",
@@ -512,8 +573,37 @@
         },
         {
           "type": "entry",
+          "title": "Law Tested",
+          "anchor": "law-tested",
+          "date": "1953-06-13",
+          "published": true,
+          "source": "bus[5]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Reverend Jemison tests the law by sitting in the front seat of a bus. He carries a copy of Ordinance 222 in his shirt pocket.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Drivers Suspended",
+          "anchor": "drivers-suspended",
+          "date": "1953-06-14",
+          "published": true,
+          "source": "bus[3]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Two bus drivers are suspended for not complying with Ordinance 222.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
           "title": "Drivers Strike",
           "anchor": "drivers-strike",
+          "date": "1953-06-15",
           "published": true,
           "source": "bus[4]",
           "blocks": [
@@ -526,7 +616,21 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>June 15, 1953.</strong> Bus drivers strike for four days in response to the enforcement of Ordinance 222.</p>"
+              "body": "<p>Bus drivers strike for four days in response to the enforcement of Ordinance 222.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Boycott Announced",
+          "anchor": "boycott-announced",
+          "date": "1953-06-18",
+          "published": true,
+          "source": "bus[6]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Raymond Scott announces the bus boycott on radio station WLCS. More than 200 African Americans meet and form the United Defense League (UDL).</p>"
             }
           ]
         },
@@ -534,6 +638,7 @@
           "type": "entry",
           "title": "Strike Ends, Boycott Begins",
           "anchor": "strike-ends-boycott-begins",
+          "date": "1953-06-19",
           "published": true,
           "source": "bus[7]",
           "blocks": [
@@ -546,7 +651,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>June 19, 1953.</strong> Bus drivers end their strike, while African Americans begin a boycott of city buses. The Free Ride System goes into effect.</p>"
+              "body": "<p>Bus drivers end their strike, while African Americans begin a boycott of city buses. The Free Ride System goes into effect.</p>"
             },
             {
               "type": "audio",
@@ -570,12 +675,13 @@
           "type": "entry",
           "title": "Mass Meetings",
           "anchor": "mass-meetings",
+          "date": "1953-06-20/1953-06-22",
           "published": true,
           "source": "bus[8]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>June 20–22, 1953.</strong> June 20: First mass meeting was held at Mt. Zion Baptist Church. Segregationists burned crosses at the church and at Reverend Jemison’s home. June 21: At the second mass meeting, the UDL collected money to purchase gasoline for the car pool. June 22: The third mass meeting is held at Memorial Stadium.</p>"
+              "body": "<p>June 20: First mass meeting was held at Mt. Zion Baptist Church. Segregationists burned crosses at the church and at Reverend Jemison’s home. June 21: At the second mass meeting, the UDL collected money to purchase gasoline for the car pool. June 22: The third mass meeting is held at Memorial Stadium.</p>"
             },
             {
               "type": "audio",
@@ -599,12 +705,22 @@
           "type": "entry",
           "title": "The compromise and after",
           "anchor": "the-compromise-and-after",
+          "date": "",
           "published": true,
           "source": "era",
+          "blocks": []
+        },
+        {
+          "type": "entry",
+          "title": "Ordinance 251",
+          "anchor": "ordinance-251",
+          "date": "1953-06-24",
+          "published": true,
+          "source": "bus[10]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>June 24, 1953.</strong> <em>Ordinance 251.</em> Ordinance 251 is passed. This reserved the first two bus seats for white people and the last two for black people. Blacks would fill the bus from back to front and whites from front to back.</p>"
+              "body": "<p>Ordinance 251 is passed. This reserved the first two bus seats for white people and the last two for black people. Blacks would fill the bus from back to front and whites from front to back.</p>"
             }
           ]
         },
@@ -612,12 +728,13 @@
           "type": "entry",
           "title": "Boycott Ends",
           "anchor": "boycott-ends",
+          "date": "1953-06-26",
           "published": true,
           "source": "bus[9]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>June 26, 1953.</strong> Jemison and other black leaders negotiate a compromise (Ordinance 251) with the City-Parish Council thus ending boycott.</p>"
+              "body": "<p>Jemison and other black leaders negotiate a compromise (Ordinance 251) with the City-Parish Council thus ending boycott.</p>"
             },
             {
               "type": "audio",
@@ -633,12 +750,13 @@
           "type": "entry",
           "title": "Struggle Continues",
           "anchor": "struggle-continues",
+          "date": "1953-07",
           "published": true,
           "source": "bus[11]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>July 1953.</strong> Many objected to the June compromise (including Johnnie Jones, Willis Reed, Dupuy Anderson, Joe Howard and others) and wanted the boycott to continue. Later, Howard was arrested for sitting next to a white man on one of two front seats on a city bus.</p>"
+              "body": "<p>Many objected to the June compromise (including Johnnie Jones, Willis Reed, Dupuy Anderson, Joe Howard and others) and wanted the boycott to continue. Later, Howard was arrested for sitting next to a white man on one of two front seats on a city bus.</p>"
             },
             {
               "type": "audio",
@@ -654,6 +772,7 @@
           "type": "entry",
           "title": "King Learns from Baton Rouge",
           "anchor": "king-learns-from-baton-rouge",
+          "date": "",
           "published": true,
           "source": "bus[12]",
           "blocks": [
@@ -693,12 +812,22 @@
           "type": "entry",
           "title": "Before 1960",
           "anchor": "before-1960",
+          "date": "",
           "published": true,
           "source": "era",
+          "blocks": []
+        },
+        {
+          "type": "entry",
+          "title": "NAACP Branch Founded",
+          "anchor": "naacp-branch-founded",
+          "date": "1920",
+          "published": true,
+          "source": "ebr[0]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1920.</strong> <em>NAACP Branch Founded.</em> African Americans organize the Baton Rouge branch of the National Association for the Advancement of Colored People (NAACP). From 1930 to 1955, prominent businessman Benjamin Stanley headed the organization. In 1940, the branch boasted 800 members.</p>"
+              "body": "<p>African Americans organize the Baton Rouge branch of the National Association for the Advancement of Colored People (NAACP). From 1930 to 1955, prominent businessman Benjamin Stanley headed the organization. In 1940, the branch boasted 800 members.</p>"
             }
           ]
         },
@@ -706,6 +835,7 @@
           "type": "entry",
           "title": "McKinley Opens",
           "anchor": "mckinley-opens",
+          "date": "1927",
           "published": true,
           "source": "ebr[1]",
           "blocks": [
@@ -718,7 +848,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1927.</strong> McKinley High School opens, attracting students from around the state. In 1928, the first class of McKinley students graduated.</p>"
+              "body": "<p>McKinley High School opens, attracting students from around the state. In 1928, the first class of McKinley students graduated.</p>"
             },
             {
               "type": "audio",
@@ -734,12 +864,13 @@
           "type": "entry",
           "title": "Discrimination in World War II",
           "anchor": "discrimination-in-world-war-ii",
+          "date": "1941/1945",
           "published": true,
           "source": "ebr[2]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1941–1945.</strong> Veteran Dupuy Anderson describes his first day on assignment at Ryan Field in Baton Rouge. Reginald Brown recounts his mother’s return from the service.</p>"
+              "body": "<p>Veteran Dupuy Anderson describes his first day on assignment at Ryan Field in Baton Rouge. Reginald Brown recounts his mother’s return from the service.</p>"
             },
             {
               "type": "audio",
@@ -763,6 +894,7 @@
           "type": "entry",
           "title": "Integrating Recreation",
           "anchor": "integrating-recreation",
+          "date": "1946-08-02",
           "published": true,
           "source": "ebr[3]",
           "blocks": [
@@ -775,7 +907,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>August 2, 1946.</strong> After several Boy Scouts drowned in the Mississippi River, the Reverend W. K. Brooks launched a fund-raising drive to build a swimming pool for African American children. The Baton Rouge Recreation and Parks Commission (now BREC) then operated swimming pools for whites only. Once completed, the black community turned their new pool over to the Parks Commission.</p>"
+              "body": "<p>After several Boy Scouts drowned in the Mississippi River, the Reverend W. K. Brooks launched a fund-raising drive to build a swimming pool for African American children. The Baton Rouge Recreation and Parks Commission (now BREC) then operated swimming pools for whites only. Once completed, the black community turned their new pool over to the Parks Commission.</p>"
             },
             {
               "type": "audio",
@@ -791,12 +923,13 @@
           "type": "entry",
           "title": "White-Only Golf Courses",
           "anchor": "white-only-golf-courses",
+          "date": "1953-09-18",
           "published": true,
           "source": "ebr[4]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>September 18, 1953.</strong> Park officials denied use of the city’s golf courses to six African Americans: Malcolm Lagarde, Willie Major, Wesley Nicholas, Allen White, Roosevelt Spencer and Alvin Scott. The six retained attorneys Johnnie Jones and Bruce Bell and filed suit to integrate the golf courses. In response, the Parks Commission built a course in a predominantly black neighborhood. The suit remained mired in the court system for nearly a decade.</p>"
+              "body": "<p>Park officials denied use of the city’s golf courses to six African Americans: Malcolm Lagarde, Willie Major, Wesley Nicholas, Allen White, Roosevelt Spencer and Alvin Scott. The six retained attorneys Johnnie Jones and Bruce Bell and filed suit to integrate the golf courses. In response, the Parks Commission built a course in a predominantly black neighborhood. The suit remained mired in the court system for nearly a decade.</p>"
             },
             {
               "type": "audio",
@@ -812,25 +945,22 @@
           "type": "entry",
           "title": "Sit-ins and marches, 1960–1962",
           "anchor": "sit-ins-and-marches-1960-1962",
+          "date": "",
           "published": true,
           "source": "era",
-          "blocks": [
-            {
-              "type": "text",
-              "body": "<p><strong>October–December 1961.</strong> <em>Garner v. Louisiana.</em> A state court convicted sit-in participants of disturbing the peace and sentenced them to four-month jail terms. In December 1961, the U.S. Supreme Court issued a ruling in their case (<i>Garner v. Louisiana</i>) and declared that their convictions violated the right to due process guaranteed by the Fourteenth Amendment. It was the only sit-in case to receive a favorable ruling by the Court.</p><p><strong>December 13, 1961.</strong> <em>25 CORE Arrests.</em> Police arrested twenty-five members of CORE, all Southern University students, for picketing downtown stores. All refused bail.</p><p><strong>January 1962.</strong> <em>SU Students Expelled.</em> Southern University expelled seven student activists. Fearing mass demonstrations, SU President Felton Clark closed campus.</p>"
-            }
-          ]
+          "blocks": []
         },
         {
           "type": "entry",
           "title": "Kress Sit-In",
           "anchor": "kress-sit-in",
+          "date": "1960-03-28",
           "published": true,
           "source": "ebr[5]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>March 28, 1960.</strong> Nearly two months after lunch counter sit-ins in Greensboro, North Carolina, eight Southern University students staged a sit-in at Kress Department Store. The following day, nine more students sat in at various locations in the city. Police arrested all of the protesters for disturbing the peace.</p>"
+              "body": "<p>Nearly two months after lunch counter sit-ins in Greensboro, North Carolina, eight Southern University students staged a sit-in at Kress Department Store. The following day, nine more students sat in at various locations in the city. Police arrested all of the protesters for disturbing the peace.</p>"
             },
             {
               "type": "audio",
@@ -846,6 +976,7 @@
           "type": "entry",
           "title": "Capitol March",
           "anchor": "capitol-march",
+          "date": "1960-03-29",
           "published": true,
           "source": "ebr[6]",
           "blocks": [
@@ -865,7 +996,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>March 29, 1960.</strong> Thousands of students marched from Southern University to the State Capitol in support of their jailed comrades. University President Felton Clark expelled the sit-in participants and closed the campus.</p>"
+              "body": "<p>Thousands of students marched from Southern University to the State Capitol in support of their jailed comrades. University President Felton Clark expelled the sit-in participants and closed the campus.</p>"
             }
           ]
         },
@@ -873,12 +1004,13 @@
           "type": "entry",
           "title": "CORE Sit-Ins",
           "anchor": "core-sit-ins",
+          "date": "1961",
           "published": true,
           "source": "ebr[7]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1961.</strong> Students at Southern University organized a Congress of Racial Equality (CORE) chapter. In December, members of the Baton Rouge chapter of CORE staged a series of sit-ins.</p>"
+              "body": "<p>Students at Southern University organized a Congress of Racial Equality (CORE) chapter. In December, members of the Baton Rouge chapter of CORE staged a series of sit-ins.</p>"
             },
             {
               "type": "audio",
@@ -892,8 +1024,37 @@
         },
         {
           "type": "entry",
+          "title": "Garner v. Louisiana",
+          "anchor": "garner-v-louisiana",
+          "date": "1961-10/1961-12",
+          "published": true,
+          "source": "ebr[8]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>A state court convicted sit-in participants of disturbing the peace and sentenced them to four-month jail terms. In December 1961, the U.S. Supreme Court issued a ruling in their case (<i>Garner v. Louisiana</i>) and declared that their convictions violated the right to due process guaranteed by the Fourteenth Amendment. It was the only sit-in case to receive a favorable ruling by the Court.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "25 CORE Arrests",
+          "anchor": "25-core-arrests",
+          "date": "1961-12-13",
+          "published": true,
+          "source": "ebr[9]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Police arrested twenty-five members of CORE, all Southern University students, for picketing downtown stores. All refused bail.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
           "title": "Cox v. Louisiana",
           "anchor": "cox-v-louisiana",
+          "date": "1961-12-15",
           "published": true,
           "source": "ebr[10]",
           "blocks": [
@@ -906,7 +1067,21 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>December 15, 1961.</strong> Nearly 4,000 students marched to the parish prison in support of the 25 jailed CORE members. National CORE representative, Reverend B. Elton Cox led a peaceful rally outside, but authorities ordered the crowd to disperse and then fired teargas. Police arrested Cox and charged him with inciting a riot. Convicted in State Court, he appealed to the U.S. Supreme Court and his case, <i>Cox v. Louisiana</i>, led to a landmark ruling upholding the right of peaceful protest.</p>"
+              "body": "<p>Nearly 4,000 students marched to the parish prison in support of the 25 jailed CORE members. National CORE representative, Reverend B. Elton Cox led a peaceful rally outside, but authorities ordered the crowd to disperse and then fired teargas. Police arrested Cox and charged him with inciting a riot. Convicted in State Court, he appealed to the U.S. Supreme Court and his case, <i>Cox v. Louisiana</i>, led to a landmark ruling upholding the right of peaceful protest.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "SU Students Expelled",
+          "anchor": "su-students-expelled",
+          "date": "1962-01",
+          "published": true,
+          "source": "ebr[11]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Southern University expelled seven student activists. Fearing mass demonstrations, SU President Felton Clark closed campus.</p>"
             }
           ]
         },
@@ -914,19 +1089,16 @@
           "type": "entry",
           "title": "Pools, stores and backlash, 1963–1964",
           "anchor": "pools-stores-and-backlash-1963-1964",
+          "date": "",
           "published": true,
           "source": "era",
-          "blocks": [
-            {
-              "type": "text",
-              "body": "<p><strong>September 6, 1963.</strong> <em>Department Store Integration.</em> Twelve downtown Baton Rouge department stores integrated their lunch counters after negotiations with the Biracial Committee, created by Mayor Jack Christian the previous May.</p><p><strong>May 7, 1964.</strong> <em>Pool Closed.</em> Fearing court-ordered integration, the Parks Commission closed City Park swimming pool.</p>"
-            }
-          ]
+          "blocks": []
         },
         {
           "type": "entry",
           "title": "City Park Pool Integration",
           "anchor": "city-park-pool-integration",
+          "date": "1963-07-24",
           "published": true,
           "source": "ebr[12]",
           "blocks": [
@@ -939,7 +1111,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>July 24, 1963.</strong> NAACP Youth Director Pearl George led a group of African Americans to swim in the white-only City Park pool.</p>"
+              "body": "<p>NAACP Youth Director Pearl George led a group of African Americans to swim in the white-only City Park pool.</p>"
             },
             {
               "type": "audio",
@@ -955,12 +1127,13 @@
           "type": "entry",
           "title": "Backlashes Against Activists",
           "anchor": "backlashes-against-activists",
+          "date": "1963-08",
           "published": true,
           "source": "ebr[13]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>August 1963.</strong> Inez Anderson, wife of Dupuy Anderson, describes persistent and personal attacks against their family’s home during her husband’s multi-pronged fight for equality.</p>"
+              "body": "<p>Inez Anderson, wife of Dupuy Anderson, describes persistent and personal attacks against their family’s home during her husband’s multi-pronged fight for equality.</p>"
             },
             {
               "type": "audio",
@@ -974,21 +1147,46 @@
         },
         {
           "type": "entry",
-          "title": "Grief and violence, 1968–1972",
-          "anchor": "grief-and-violence-1968-1972",
+          "title": "Department Store Integration",
+          "anchor": "department-store-integration",
+          "date": "1963-09-06",
           "published": true,
-          "source": "era",
+          "source": "ebr[14]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>April 7, 1968.</strong> <em>Firebombing.</em> African Americans firebombed several white-owned businesses in Baton Rouge.</p><p><strong>April 8, 1968.</strong> <em>Voluntary Curfew.</em> Fearing black citizens were planning a riot, Baton Rouge Mayor Woody Dumas ordered a voluntary curfew to begin at dusk.</p>"
+              "body": "<p>Twelve downtown Baton Rouge department stores integrated their lunch counters after negotiations with the Biracial Committee, created by Mayor Jack Christian the previous May.</p>"
             }
           ]
         },
         {
           "type": "entry",
+          "title": "Pool Closed",
+          "anchor": "pool-closed",
+          "date": "1964-05-07",
+          "published": true,
+          "source": "ebr[16]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Fearing court-ordered integration, the Parks Commission closed City Park swimming pool.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Grief and violence, 1968–1972",
+          "anchor": "grief-and-violence-1968-1972",
+          "date": "",
+          "published": true,
+          "source": "era",
+          "blocks": []
+        },
+        {
+          "type": "entry",
           "title": "King Assassinated",
           "anchor": "king-assassinated",
+          "date": "1968-04-04",
           "published": true,
           "source": "ebr[17]",
           "blocks": [
@@ -1001,7 +1199,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>April 4, 1968.</strong> A sniper assassinated Martin Luther King, Jr. in Memphis, Tennessee.</p>"
+              "body": "<p>A sniper assassinated Martin Luther King, Jr. in Memphis, Tennessee.</p>"
             }
           ]
         },
@@ -1009,6 +1207,7 @@
           "type": "entry",
           "title": "Mourning King’s Murder",
           "anchor": "mourning-kings-murder",
+          "date": "1968-04-05",
           "published": true,
           "source": "ebr[18]",
           "blocks": [
@@ -1028,7 +1227,35 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>April 5, 1968.</strong> Students marched from Southern University to the State Capitol mourning King’s murder. SU President Felton Clark closed campus to prevent further protests.</p>"
+              "body": "<p>Students marched from Southern University to the State Capitol mourning King’s murder. SU President Felton Clark closed campus to prevent further protests.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Firebombing",
+          "anchor": "firebombing",
+          "date": "1968-04-07",
+          "published": true,
+          "source": "ebr[19]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>African Americans firebombed several white-owned businesses in Baton Rouge.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Voluntary Curfew",
+          "anchor": "voluntary-curfew",
+          "date": "1968-04-08",
+          "published": true,
+          "source": "ebr[20]",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Fearing black citizens were planning a riot, Baton Rouge Mayor Woody Dumas ordered a voluntary curfew to begin at dusk.</p>"
             }
           ]
         },
@@ -1036,12 +1263,13 @@
           "type": "entry",
           "title": "Police Shoot Youth",
           "anchor": "police-shoot-youth",
+          "date": "1969",
           "published": true,
           "source": "ebr[21]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1969.</strong> Police officers shot and killed two African Americans within a matter of days. Their deaths led to marches, pickets, and small-scale rioting. Mayor Dumas placed Baton Rouge under a curfew and Governor John McKeithen mobilized the National Guard.</p>"
+              "body": "<p>Police officers shot and killed two African Americans within a matter of days. Their deaths led to marches, pickets, and small-scale rioting. Mayor Dumas placed Baton Rouge under a curfew and Governor John McKeithen mobilized the National Guard.</p>"
             },
             {
               "type": "audio",
@@ -1057,6 +1285,7 @@
           "type": "entry",
           "title": "Shootout Leaves Four Dead",
           "anchor": "shootout-leaves-four-dead",
+          "date": "1972-01-10",
           "published": true,
           "source": "ebr[22]",
           "blocks": [
@@ -1069,7 +1298,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>January 10, 1972.</strong> Black Muslims and the police engaged in a deadly confrontation in downtown Baton Rouge. The conflict ended with the deaths of two police officers, two Black Muslims, and injury to thirty-nine others.</p>"
+              "body": "<p>Black Muslims and the police engaged in a deadly confrontation in downtown Baton Rouge. The conflict ended with the deaths of two police officers, two Black Muslims, and injury to thirty-nine others.</p>"
             }
           ]
         },
@@ -1077,6 +1306,7 @@
           "type": "entry",
           "title": "SU Students Killed",
           "anchor": "su-students-killed",
+          "date": "1972-11-16",
           "published": true,
           "source": "ebr[23]",
           "blocks": [
@@ -1089,7 +1319,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>November 16, 1972.</strong> Sheriff’s deputies killed two Southern University students taking part in a rally to protest conditions at the school.</p>"
+              "body": "<p>Sheriff’s deputies killed two Southern University students taking part in a rally to protest conditions at the school.</p>"
             },
             {
               "type": "audio",
@@ -1116,6 +1346,7 @@
           "type": "entry",
           "title": "Plessy v. Ferguson",
           "anchor": "plessy-v-ferguson",
+          "date": "1896-05-18",
           "published": true,
           "source": "main[1]",
           "blocks": [
@@ -1128,7 +1359,7 @@
             },
             {
               "type": "text",
-              "body": "<p><strong>1896.</strong> The U.S. Supreme Court legitimized the principle of “separate but equal” in its <i>Plessy v. Ferguson</i> decision, beginning the Jim Crow era.</p>"
+              "body": "<p>The U.S. Supreme Court legitimized the principle of “separate but equal” in its <i>Plessy v. Ferguson</i> decision, beginning the Jim Crow era.</p>"
             }
           ]
         },
@@ -1136,12 +1367,13 @@
           "type": "entry",
           "title": "World War II",
           "anchor": "world-war-ii",
+          "date": "1941/1945",
           "published": true,
           "source": "main[0]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1941–1945.</strong> World War II (1939–1945) saw more than 100 million people serving in military units with either the Allied or Axis powers. During American involvement in the war, the number of enlisted African Americans rose from a few thousand to over one million by war’s end. Serving in segregated units in every theater, African Americans fought bravely and with distinction, while simultaneously struggling for their own civil rights at home. Although the Armed Forces’ policy of segregation continued until 1948, World War II laid the foundation for the integration of the military.</p>"
+              "body": "<p>World War II (1939–1945) saw more than 100 million people serving in military units with either the Allied or Axis powers. During American involvement in the war, the number of enlisted African Americans rose from a few thousand to over one million by war’s end. Serving in segregated units in every theater, African Americans fought bravely and with distinction, while simultaneously struggling for their own civil rights at home. Although the Armed Forces’ policy of segregation continued until 1948, World War II laid the foundation for the integration of the military.</p>"
             }
           ]
         },
@@ -1149,12 +1381,13 @@
           "type": "entry",
           "title": "Korean War",
           "anchor": "korean-war",
+          "date": "1950-06-25/1953-07-27",
           "published": true,
           "source": "main[3]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1950–1953.</strong> The Korean War (1950–1953) began nearly five years after Japan’s World War II surrender in September 1945. American administrators divided the Korean Peninsula (long ruled by Japan) along the 38th Parallel. U.S. forces occupied the southern half of the country, the Republic of Korea, while Soviet forces occupied the northern half, the Democratic People’s Republic of Korea. In June 1950, North Korean forces invaded the South and refused to withdraw, compelling President Harry Truman to authorize the utilization of the U.S. Armed Forces. As in World War II, enlisted African Americans served in Korea in all capacities. The disbanding of the historic all-black 24th Infantry Regiment during the war signified the end of segregation in the military.</p>"
+              "body": "<p>The Korean War (1950–1953) began nearly five years after Japan’s World War II surrender in September 1945. American administrators divided the Korean Peninsula (long ruled by Japan) along the 38th Parallel. U.S. forces occupied the southern half of the country, the Republic of Korea, while Soviet forces occupied the northern half, the Democratic People’s Republic of Korea. In June 1950, North Korean forces invaded the South and refused to withdraw, compelling President Harry Truman to authorize the utilization of the U.S. Armed Forces. As in World War II, enlisted African Americans served in Korea in all capacities. The disbanding of the historic all-black 24th Infantry Regiment during the war signified the end of segregation in the military.</p>"
             }
           ]
         },
@@ -1162,12 +1395,13 @@
           "type": "entry",
           "title": "Vietnam War",
           "anchor": "vietnam-war",
+          "date": "1956/1975",
           "published": true,
           "source": "main[4]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1956–1975.</strong> The Vietnam War (1956–1975) was fought between communist North Vietnam (supported by China and its allies) and the government of South Vietnam (supported by the United States and its allies). American involvement in the war was designed in part to prevent a communist takeover of South Vietnam, thus the war was a proxy conflict of the Cold War. The Vietnam War saw the highest enlistment of African Americans and marked the first fully integrated deployment of U.S. troops. During the height of the war, over 12% of service members were African American.</p>"
+              "body": "<p>The Vietnam War (1956–1975) was fought between communist North Vietnam (supported by China and its allies) and the government of South Vietnam (supported by the United States and its allies). American involvement in the war was designed in part to prevent a communist takeover of South Vietnam, thus the war was a proxy conflict of the Cold War. The Vietnam War saw the highest enlistment of African Americans and marked the first fully integrated deployment of U.S. troops. During the height of the war, over 12% of service members were African American.</p>"
             }
           ]
         },
@@ -1175,12 +1409,13 @@
           "type": "entry",
           "title": "Civil Rights Act",
           "anchor": "civil-rights-act",
+          "date": "1964",
           "published": true,
           "source": "main[5]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1964.</strong> The Civil Rights Act of 1964, the nation’s benchmark civil rights legislation, prohibits discrimination on the basis of race, skin color, religion, sex or national origin. Passage of the Act ended the application of “Jim Crow” laws, which had been upheld by the Supreme Court in the 1896 case <i>Plessy v. Ferguson</i>.</p>"
+              "body": "<p>The Civil Rights Act of 1964, the nation’s benchmark civil rights legislation, prohibits discrimination on the basis of race, skin color, religion, sex or national origin. Passage of the Act ended the application of “Jim Crow” laws, which had been upheld by the Supreme Court in the 1896 case <i>Plessy v. Ferguson</i>.</p>"
             }
           ]
         },
@@ -1188,12 +1423,13 @@
           "type": "entry",
           "title": "Voting Rights Act",
           "anchor": "voting-rights-act",
+          "date": "1965",
           "published": true,
           "source": "main[6]",
           "blocks": [
             {
               "type": "text",
-              "body": "<p><strong>1965.</strong> The Voting Rights Act of 1965, signed into law by President Lyndon B. Johnson, bans racial discrimination in voting practices by the federal government as well as by state and local governments. Designed to enforce the voting rights guaranteed by the Fourteenth and Fifteenth Amendments, Congress later amended the Act five times to expand its protections.</p>"
+              "body": "<p>The Voting Rights Act of 1965, signed into law by President Lyndon B. Johnson, bans racial discrimination in voting practices by the federal government as well as by state and local governments. Designed to enforce the voting rights guaranteed by the Fourteenth and Fifteenth Amendments, Congress later amended the Act five times to expand its protections.</p>"
             }
           ]
         }

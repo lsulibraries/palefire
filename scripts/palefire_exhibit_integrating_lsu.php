@@ -22,13 +22,15 @@
  *   path=<alias>          URL alias, e.g. path=/v2/oralhistory/exhibitions/rpoe
  *
  * The text is carried over from the listening station’s TimelineJS data
- * (main/<timeline>.jsonp) and its About page, in data/integrating-lsu.json. Three
- * galleries are walls (Display "wall"), one per timeline: Integrating LSU,
- * The 1953 Bus Boycott and East Baton Rouge. Each is split into periods:
- * an entry with a heading and no image or clip starts a sub-gallery, and
- * the timeline’s events with no picture or clip are listed, dated, in its
- * text. Every other event is an entry (photos, the date and description,
- * then each clip with its transcript). The Nation (the overview timeline’s
+ * (main/<timeline>.jsonp) and its About page, in data/integrating-lsu.json.
+ * The first gallery, Timeline (Display "timeline"), draws every dated entry
+ * of the others in date order, grouped by decade, as the station’s
+ * opening timeline did. Three galleries are walls (Display "wall"), one per
+ * timeline: Integrating LSU, The 1953 Bus Boycott and East Baton Rouge.
+ * Each is split into periods: an undated entry with a heading and no image
+ * or clip starts a sub-gallery. Every event is an entry with its date in
+ * field_entry_date (photos, the description, then each clip with its
+ * transcript); a dated event with no picture or clip hangs as a date card. The Nation (the overview timeline’s
  * national events) and About the Exhibition are stories. Changes: events
  * in date order, events shown on two timelines kept once, typos fixed,
  * speaker labels in bold, curly quotes, new alt text and captions, and
@@ -85,8 +87,8 @@ if ($audio_dir === '' || !is_dir($audio_dir)) {
 
 $data_file = __DIR__ . '/data/integrating-lsu.json';
 $data = json_decode((string) file_get_contents($data_file), TRUE);
-if (!is_array($data) || count($data['pages'] ?? []) !== 5) {
-  throw new \RuntimeException("Couldn’t read the 5 galleries from $data_file.");
+if (!is_array($data) || count($data['pages'] ?? []) !== 6) {
+  throw new \RuntimeException("Couldn’t read the 6 galleries from $data_file.");
 }
 
 $title = $data['title'];
@@ -211,7 +213,13 @@ $audio_file = function (string $relative) use (&$file_ids, $audio_dir, $fs, $aud
 $ref = fn (?int $id) => $id ? ['target_id' => $id] : NULL;
 $keep = fn (array $values) => array_filter($values, fn ($v) => $v !== NULL && $v !== '');
 
-$block = function (array $b) use (&$block, $media, $audio_file, $ref, $keep, $html, &$skipped): ?Paragraph {
+// Entry dates (field_entry_date) put entries on the Timeline gallery.
+$has_date = (bool) FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_date');
+if (!$has_date) {
+  $skipped[] = 'field_entry_date is not on Entry; run palefire_exhibit_setup.php. Entries have no dates and the timeline is empty.';
+}
+
+$block = function (array $b) use (&$block, $media, $audio_file, $ref, $keep, $html, $has_date, &$skipped): ?Paragraph {
   switch ($b['type']) {
     case 'text':
       return Paragraph::create([
@@ -252,6 +260,7 @@ $block = function (array $b) use (&$block, $media, $audio_file, $ref, $keep, $ht
         'type' => 'exhibit_entry',
         'field_block_title' => $b['title'],
         'field_section_anchor' => $b['anchor'],
+        'field_entry_date' => $has_date ? ($b['date'] ?? NULL) : NULL,
         'field_guide_blocks' => array_values(array_filter(array_map($block, $b['blocks']))),
       ]));
       if (empty($b['published'])) {

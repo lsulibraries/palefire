@@ -1,0 +1,60 @@
+// Palefire — dates on exhibition entries (field_entry_date, added
+// 2026-11-16; src/ExhibitTimeline.php reads them).
+//
+// - .pf-exhibit-entry__date: the date under an entry's heading, in the
+//   shared mono kicker (paragraph--exhibit-entry.html.twig).
+// - .pf-exhibit-card: a wall tile for a dated entry with no picture or clip
+//   (paragraph--exhibit-page.html.twig): the date set large at the lower
+//   left of a square on the swatch's surface, like a wall label without
+//   its object. On the object view's stage (js/exhibition.js) it stands in
+//   for the image.
+//
+// Only new classes, so this is inert until the markup arrives. The
+// timeline itself has its own stylesheet (scss/exhibit-timeline.scss).
+
+.pf-exhibit-entry__date {
+  @extend %pf-exhibit-kicker;
+  margin-top: .5rem;
+}
+
+.pf-exhibit-wall__tile--card .pf-exhibit-wall__frame {
+  container-type: inline-size;
+  box-shadow: inset 0 0 0 1px $pf-hairline;
+}
+
+.pf-exhibit-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(.75rem, 9cqi, 1.75rem);
+  color: var(--pf-g-heading, var(--bs-emphasis-color));
+
+  // A short accent rule over the date, as on a label.
+  &::before {
+    content: "";
+    width: 2rem;
+    height: 2px;
+    margin-bottom: .75rem;
+    background: var(--pf-exhibit-accent);
+  }
+}
+
+.pf-exhibit-card__date {
+  font-size: clamp(1.125rem, 11cqi, 2.25rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+// On the object view's stage: a square, as on the wall.
+.pf-viewer__frame--card {
+  container-type: inline-size;
+  position: relative;
+  width: min(24rem, 72vw);
+  aspect-ratio: 1;
+  background: var(--pf-exhibit-surface);
+  box-shadow: inset 0 0 0 1px $pf-hairline;
+}

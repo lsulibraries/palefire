@@ -5,6 +5,8 @@
  *
  * - title: the <h3>, a sub-link under its gallery in the TOC.
  * - anchor: the <h3>'s id, the target of links from other galleries.
+ * - date: field_entry_date (['label', 'iso']), shown under the heading;
+ *   it also puts the entry on the exhibition's timeline.
  * - Biography (field_entry_bio): js/exhibition.js shows the opening lines
  *   of a long one with a "Read the full biography" button; without the
  *   script it is shown in full.
@@ -23,6 +25,9 @@
 %}
 <article{{ attributes.addClass(classes).setAttribute('aria-labelledby', anchor) }}>
   <h3 id="{{ anchor }}" class="pf-exhibit-entry__title">{{ title }}</h3>
+  {% if date %}
+    <p class="pf-exhibit-entry__date"><time datetime="{{ date.iso }}">{{ date.label }}</time></p>
+  {% endif %}
   {% if content.field_entry_bio|render|trim %}
     <div class="pf-exhibit-bio" data-pf-exhibit-bio>
       <p class="pf-exhibit-bio__label">{{ 'Biography'|t }}</p>

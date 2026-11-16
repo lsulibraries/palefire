@@ -38,11 +38,17 @@
  *     (field_exhibit_lead_mirror; added 2026-10-30), its caption
  *     (field_exhibit_lead_caption),
  *     the Opening (field_exhibit_opener: cover, full screen then pan, or
- *     compact; all three added 2026-10-21), the Display (field_exhibit_display: story or wall)
+ *     compact; all three added 2026-10-21), the Display (field_exhibit_display: story or wall;
+ *     timeline added 2026-11-16: every dated entry of the other galleries
+ *     in date order on a vertical line, src/ExhibitTimeline.php)
  *     and a sheet size for the wall's "Actual size" (field_exhibit_sheet;
  *     both added 2026-10-21), and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
- *     sub-link), anchor, biography, and its own blocks.
+ *     sub-link), anchor, biography, and its own blocks. Date (optional,
+ *     field_entry_date, added 2026-11-16): "1953", "1953-06", "1953-06-20"
+ *     or a range with a slash ("1941/1945"). It shows over the text, puts
+ *     the entry on the exhibition's timeline, and an entry with a date but
+ *     no image or clip is a card on a wall.
  *   - exhibit_figure: one image with a caption and a layout, and (added
  *     2026-10-21) an alignment that lays a drawing over its proof in a
  *     wall's compare view (field_figure_align).
@@ -272,12 +278,21 @@ if ($opener_storage->getSetting('allowed_values') !== $opener_values) {
   echo 'Updated the Opening options (Cover, Full screen then pan, Compact)' . PHP_EOL;
 }
 $storage('paragraph', 'field_exhibit_lead_caption', 'text_long');
-$storage('paragraph', 'field_exhibit_display', 'list_string', ['allowed_values' => [
+// "timeline" added 2026-11-16; existing sites get the new option.
+$display_values = [
   'story' => 'Story: entries one after another, images beside their text',
   'wall' => 'Wall: every entry\'s image on one wall; each opens full screen with its text',
-]]);
+  'timeline' => 'Timeline: every dated entry in the other galleries, in date order by decade; each opens its entry',
+];
+$storage('paragraph', 'field_exhibit_display', 'list_string', ['allowed_values' => $display_values]);
+$display_storage = FieldStorageConfig::loadByName('paragraph', 'field_exhibit_display');
+if ($display_storage->getSetting('allowed_values') !== $display_values) {
+  $display_storage->setSetting('allowed_values', $display_values)->save();
+  echo 'Updated the Display options (Story, Wall, Timeline)' . PHP_EOL;
+}
 $storage('paragraph', 'field_exhibit_sheet', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_entry_bio', 'text_long');
+$storage('paragraph', 'field_entry_date', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
 $storage('paragraph', 'field_figure_caption', 'text_long');
 $storage('paragraph', 'field_figure_align', 'string', ['max_length' => 64]);
@@ -374,6 +389,7 @@ $page_blocks = array_merge(['guide_text', 'exhibit_entry', 'exhibit_figure', 'ex
 // exhibit_entry.
 $field('paragraph', 'exhibit_entry', 'field_block_title', ['label' => 'Heading', 'required' => TRUE, 'description' => 'e.g. "Francisco Hernández (1514-1587)". Shows as a sub-link under the gallery in the table of contents.']);
 $field('paragraph', 'exhibit_entry', 'field_section_anchor', ['label' => 'Anchor (optional)', 'description' => 'Link fragment, e.g. "hernandez", so other pages can link to #hernandez. Defaults to the heading.']);
+$field('paragraph', 'exhibit_entry', 'field_entry_date', ['label' => 'Date (optional)', 'description' => 'e.g. "1953", "1953-06", "1953-06-20", or a range with a slash: "1953-06-20/1953-06-22", "1941/1945". Shown over the text as "June 20–22, 1953". It puts the entry on the exhibition’s timeline (a gallery set to Display: Timeline); on a wall, an entry with a date but no image or clip shows as a card with its date.']);
 $field('paragraph', 'exhibit_entry', 'field_entry_bio', ['label' => 'Biography (optional)', 'description' => 'The full biography. Long ones show their opening lines with a "Read the full biography" button.']);
 $field('paragraph', 'exhibit_entry', 'field_guide_blocks', [
   'label' => 'Content',
@@ -383,6 +399,7 @@ $field('paragraph', 'exhibit_entry', 'field_guide_blocks', [
 $form('paragraph', 'exhibit_entry', [
   'field_block_title' => $textfield(0),
   'field_section_anchor' => $textfield(1),
+  'field_entry_date' => $textfield(1),
   'field_entry_bio' => $wysiwyg(2, 8),
   'field_guide_blocks' => $paragraphs_widget(3, 'Block', 'Blocks', 'guide_text'),
 ]);

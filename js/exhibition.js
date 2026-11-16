@@ -1484,6 +1484,13 @@
       }
       view.media.replaceChildren(frame);
     }
+    else if (tile.querySelector('.pf-exhibit-card')) {
+      // A dated event with no picture: its card, the date set large
+      // (_exhibit-dates.scss).
+      frame.classList.add('pf-viewer__frame--card');
+      frame.append(tile.querySelector('.pf-exhibit-card').cloneNode(true));
+      view.media.replaceChildren(frame);
+    }
     else {
       view.media.replaceChildren();
     }

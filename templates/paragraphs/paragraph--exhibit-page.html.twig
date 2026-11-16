@@ -41,7 +41,11 @@
  *   the entries away, and each tile opens its entry in the object view.
  *   Its tiles come in wall.groups: a list each, under a sub-gallery heading
  *   when an imageless entry starts one. Without the script the gallery
- *   reads as a story.
+ *   reads as a story. A dated entry with no picture or clip is a card
+ *   (tile.card): its date set large.
+ * - timeline: Display "timeline" (src/ExhibitTimeline.php), or NULL: every
+ *   dated entry of the other galleries on one rail, printed after the
+ *   gallery's own text (includes/exhibit-timeline.html.twig).
  *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
@@ -192,6 +196,9 @@
       <p class="pf-exhibit-body-title" aria-hidden="true">{{ paragraph.field_section_title.value }}</p>
     {% endif %}
     {{ content.field_guide_blocks }}
+    {% if timeline %}
+      {% include '@palefire/includes/exhibit-timeline.html.twig' with { timeline: timeline, dom_id: dom_id } only %}
+    {% endif %}
     {% if wall %}
       <div class="pf-exhibit-wall" data-pf-wall hidden
            {% if wall.sheets %}data-pf-sheets="{{ wall.sheets|json_encode }}"{% endif %}>
@@ -224,11 +231,15 @@
         <ul class="pf-exhibit-wall__list">
           {% for tile in group.tiles %}
             {% set image = tile.images|first %}
-            <li class="pf-exhibit-wall__tile{{ not image ? ' pf-exhibit-wall__tile--reel' }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+            <li class="pf-exhibit-wall__tile{{ tile.card ? ' pf-exhibit-wall__tile--card' : (not image ? ' pf-exhibit-wall__tile--reel') }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
               <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
                 <span class="pf-exhibit-wall__frame">
-                  {% if not image %}
+                  {% if tile.card %}
+                    {# A dated event with no picture: its date, set large
+                       (the label under it carries the date for everyone). #}
+                    <span class="pf-exhibit-card" aria-hidden="true"><span class="pf-exhibit-card__date">{{ tile.card.label }}</span></span>
+                  {% elseif not image %}
                     {# A clip with no picture. #}
                     {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year, deck: file_url(directory) ~ '/images/exhibit-deck.svg' } only %}
                   {% else %}
@@ -247,7 +258,9 @@
                 </span>
                 <span class="pf-exhibit-wall__label">
                   <span class="pf-exhibit-wall__name">{{ tile.title }}</span>
-                  {% if tile.tag %}
+                  {% if tile.card %}
+                    <span class="pf-exhibit-wall__tag"><time datetime="{{ tile.card.iso }}">{{ tile.card.label }}</time></span>
+                  {% elseif tile.tag %}
                     {# A clip's speaker can be long: it wraps on its own line. #}
                     <span class="pf-exhibit-wall__tag{{ tile.audio ? ' pf-exhibit-wall__tag--speaker' }}">{{ tile.tag }}</span>
                   {% elseif tile.plate %}
