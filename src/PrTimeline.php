@@ -18,7 +18,7 @@ namespace Drupal\palefire;
  * the Webform "pr_timeline" (scripts/palefire_pr_timeline_webform.php), with
  * a name or without. A thumb counts at once; a note shows on the page only
  * once staff tick its Approved box in the Webform's results, and then only
- * when the reader turns on Show notes (PublicNotes, js/public-notes.js).
+ * unless the reader turns off Show notes (PublicNotes, js/public-notes.js).
  */
 final class PrTimeline {
 

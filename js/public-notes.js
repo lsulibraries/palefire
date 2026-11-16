@@ -6,8 +6,8 @@
  *
  * Inside a [data-pf-pn-root] (data-pf-pn-key names the form's "about"
  * element, item or section):
- * - Show notes: approved notes are in the page for everyone; this hides them
- *   until the reader turns them on, and remembers the choice here.
+ * - Show notes: approved notes show to everyone; the switch hides them, and
+ *   this browser remembers the choice.
  * - Thumbs: a thumb sends itself through the page's note form
  *   ([data-pf-pn-form]) with the thing it's about filled in, at once when no
  *   note is being written; otherwise it goes with that note. Choosing the
@@ -92,7 +92,8 @@
         const notes = root.querySelectorAll('[data-pf-pn-notes]');
 
         if (toggle && notes.length) {
-          let on = read(NOTES_KEY, false) === true;
+          // Shown unless this browser turned them off.
+          let on = read(NOTES_KEY, true) !== false;
           const set = (value) => {
             on = value;
             toggle.setAttribute('aria-pressed', String(on));

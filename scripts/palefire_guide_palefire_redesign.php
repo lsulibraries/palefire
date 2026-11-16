@@ -480,6 +480,7 @@ HTML),
 <li>Exhibition title pages: the Contents button now sits right under the title, before the introduction, so it’s always on the first screen. Where the Scroll cue shows, the Begin button is gone, since the cue does the same job.</li>
 <li>Exhibition walls: the Audio only boxes for clips without a picture are now as tall as the photographs beside them.</li>
 <li>Review mode: add ?review to the end of any Palefire page’s address to leave notes and thumbs on it, section by section, with a pin beside each heading. No sign-in. Approved notes show on the page and on a hub at /v2/internal/page-review. The panel also points out that text size and colors can be changed in Settings.</li>
+<li>Approved notes now show right away on the PR timeline, the newsletter review and in review mode. Show notes is on to start; turn it off to hide them.</li>
 </ul>
 HTML),
 ]);
