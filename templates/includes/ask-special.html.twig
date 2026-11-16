@@ -21,6 +21,9 @@
  * page" (data-toc-skip on the wrapper keeps the h3s out too).
  */
 #}
+{# Oral History's homepage (ask_unit, palefire.theme): its own stamp, links
+   and AskUs group; its form mails the Williams Center's Director. #}
+{% set oral_history = ask_unit is defined and ask_unit == 'oral_history' %}
 {# Each column's parts rise in one after another on scroll (js/ask-reveal.js). #}
 {{ attach_library('palefire/ask-reveal') }}
 {% set plus = source(directory ~ '/images/bi/plus-lg.svg', ignore_missing = true) %}
@@ -54,8 +57,13 @@
     {# Further reading: the full guide (the Quick Guide's "Full guide"
        link), then every FAQ on AskUs, as buttons like Send question. #}
     <ul class="pf-inquiry__links" role="list">
-      <li><a class="pf-inquiry__button" href="/v2/special/guides/special-collections">{{ 'How to use Special Collections'|t }}{{ arrow }}</a></li>
-      <li><a class="pf-inquiry__button" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=4711">{{ 'All Special Collections FAQs'|t }}{{ arrow }}</a></li>
+      {% if oral_history %}
+        <li><a class="pf-inquiry__button" href="https://www.louisianadigitallibrary.org/lsu-thwcoh">{{ 'Listen online'|t }}{{ arrow }}</a></li>
+        <li><a class="pf-inquiry__button" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=12395">{{ 'All Oral History FAQs'|t }}{{ arrow }}</a></li>
+      {% else %}
+        <li><a class="pf-inquiry__button" href="/v2/special/guides/special-collections">{{ 'How to use Special Collections'|t }}{{ arrow }}</a></li>
+        <li><a class="pf-inquiry__button" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=4711">{{ 'All Special Collections FAQs'|t }}{{ arrow }}</a></li>
+      {% endif %}
     </ul>
   </div>
 
@@ -70,13 +78,16 @@
       <p class="pf-inquiry__slip-head">
         <span class="pf-inquiry__slip-title">{{ 'Question slip'|t }}</span>
         <span class="pf-inquiry__stamp">
-          <span>{{ 'Special Collections · Hill Memorial Library'|t }}</span>
+          <span>{{ oral_history ? 'Oral History · Hill Memorial Library'|t : 'Special Collections · Hill Memorial Library'|t }}</span>
           <time data-pf-today></time>
         </span>
       </p>
       {% if ask_form %}
         {{ attach_library('palefire/ask-form') }}
         {{ ask_form }}
+      {% elseif oral_history %}
+        <p class="pf-inquiry__intro">{{ 'Williams Center staff answer questions on AskUs, by email or chat.'|t }}</p>
+        <a class="pf-inquiry__link" href="https://askus.lib.lsu.edu/search/?t=0&amp;g=12395">{{ 'Oral History on AskUs'|t }}{{ arrow }}</a>
       {% else %}
         <p class="pf-inquiry__intro">{{ 'Special Collections staff answer questions on AskUs, by email or chat.'|t }}</p>
         <a class="pf-inquiry__link" href="https://askus.lib.lsu.edu/special">{{ 'Ask Special Collections on AskUs'|t }}{{ arrow }}</a>

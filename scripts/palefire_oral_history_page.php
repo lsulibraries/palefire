@@ -36,14 +36,16 @@
  *   follows it. The Quick Guide fields are emptied so that text shows.
  * - Banners: the Mossville History Project exhibition, the Georgetown 272
  *   tile and the podcast tile (the newest blog post comes after them).
- * - Section tabs under the hero, as on /v2/special: Listen (the Quick
- *   Start's three ways), Record ("Recording Your Own") and Explore ("Listen
- *   In", the exhibitions): the old page's Oral History, Doing Oral History
- *   and Showcase. Without the Section tabs type, Record and Explore stay
- *   sections of their own.
- * - Tile showcases: "Voices in the Collection" (finding aids, the LDL,
- *   copies, FAQs), "Recording Your Own" (the Center's services, as a
- *   ledger) and "Listen In" (the digital exhibitions and the podcast).
+ * - Section tabs under the hero, as on /v2/special: Research (the Quick
+ *   Start's three ways), Record ("Recording Your Own") and Ask us (an Ask
+ *   showcase: Oral History's FAQs beside a question form that the theme
+ *   mails to the person in Who to ask, through the libanswers module).
+ *   Without the Section tabs type, Record stays a section of its own and
+ *   there is no Ask us.
+ * - Tile showcases: "Showcase" (the digital exhibitions and the podcast,
+ *   a gallery listing, right under Browse by series), "Voices in the
+ *   Collection" (finding aids, the LDL, copies, FAQs) and "Recording Your
+ *   Own" (the Center's services, as a ledger, in its tab).
  *   The tiles are the old /oralhistory page's, by node ID; one that is
  *   missing is left out and listed.
  * - "Who to ask", with the Director of the Williams Center (the published
@@ -221,6 +223,28 @@ $layouts = FieldStorageConfig::loadByName('paragraph', 'field_tile_layout')->get
 
 $showcases = [
   [
+    'title' => 'Showcase',
+    'eyebrow' => 'Exhibitions',
+    'lede' => 'Digital exhibitions made from the Center’s interviews, from Mossville to Tiger Stadium, and What Endures, its podcast.',
+    'link' => ['uri' => 'https://oralhistory.blogs.lib.lsu.edu/podcast-library/', 'title' => 'All podcast episodes'],
+    'layout' => 'masonry',
+    'tiles' => [
+      [$mossville, 'Mossville History Project'],
+      [$exhibit('gu272', 91044), 'The Georgetown 272'],
+      [$exhibit('graphicdesign', 91043), 'History of Graphic Design in South Louisiana'],
+      [$exhibit('klsu', 50508), 'History of KLSU'],
+      [$exhibit('storm', 50506), 'Tempests: Storms in the Archives'],
+      [$exhibit('jf', 50505), 'New Orleans Jazz & Heritage Festival'],
+      [$exhibit('lsuag', 50504), 'Cooperative Extension at LSU'],
+      [$exhibit('lady', 50503), 'A Lady in the South'],
+      [$exhibit('rpoe', 50502), 'The Relentless Pursuit of “Equal”'],
+      [$exhibit('dntume', 50501), 'Do Not Tear Up My Earth'],
+      [$exhibit('football', 50500), 'Saturday Night in Tiger Stadium'],
+      [92, 'Oral History Podcast'],
+      [94, 'Oral History on Facebook'],
+    ],
+  ],
+  [
     'title' => 'Voices in the Collection',
     'eyebrow' => 'The collection',
     'lede' => 'Finding aids for every series, interviews to hear online in the Louisiana Digital Library, and copies of recordings and transcripts to order.',
@@ -248,42 +272,18 @@ $showcases = [
       [100, 'Oral History Seminars'],
     ],
   ],
-  [
-    'title' => 'Listen In',
-    'eyebrow' => 'Exhibitions',
-    'tab' => ['Explore', 'images', 'explore'],
-    'lede' => 'Digital exhibitions made from the Center’s interviews, from Mossville to Tiger Stadium, and What Endures, its podcast.',
-    'link' => ['uri' => 'https://oralhistory.blogs.lib.lsu.edu/podcast-library/', 'title' => 'All podcast episodes'],
-    'layout' => 'masonry',
-    'tiles' => [
-      [$mossville, 'Mossville History Project'],
-      [$exhibit('gu272', 91044), 'The Georgetown 272'],
-      [$exhibit('graphicdesign', 91043), 'History of Graphic Design in South Louisiana'],
-      [$exhibit('klsu', 50508), 'History of KLSU'],
-      [$exhibit('storm', 50506), 'Tempests: Storms in the Archives'],
-      [$exhibit('jf', 50505), 'New Orleans Jazz & Heritage Festival'],
-      [$exhibit('lsuag', 50504), 'Cooperative Extension at LSU'],
-      [$exhibit('lady', 50503), 'A Lady in the South'],
-      [$exhibit('rpoe', 50502), 'The Relentless Pursuit of “Equal”'],
-      [$exhibit('dntume', 50501), 'Do Not Tear Up My Earth'],
-      [$exhibit('football', 50500), 'Saturday Night in Tiger Stadium'],
-      [92, 'Oral History Podcast'],
-      [94, 'Oral History on Facebook'],
-    ],
-  ],
 ];
 
 $sections = [$hero];
-// The Section tabs under the hero, as on /v2/special: Listen (the Quick
+// The Section tabs under the hero, as on /v2/special: Research (the Quick
 // Start's three ways, "[request-paths]", _palefire_tab_has_paths()),
-// Record (the Center's services) and Explore (the exhibitions), the old
-// page's Oral History, Doing Oral History and Showcase. The theme draws
-// them under the hero's rule 01, Listen holding the Quick Start.
+// Record (the Center's services) and Ask us. The theme draws them under
+// the hero's rule 01, Research holding the Quick Start.
 $tabs_ready = \Drupal::entityTypeManager()->getStorage('paragraphs_type')->load('section_tabs')
   && FieldConfig::loadByName('paragraph', 'section_tab', 'field_guide_blocks');
 $tab_blocks = [];
 if (!$tabs_ready) {
-  $log[] = 'No Section tabs paragraph type (palefire_section_tabs_setup.php): Record and Explore stay sections of their own.';
+  $log[] = 'No Section tabs paragraph type (palefire_section_tabs_setup.php): Record stays a section of its own, and there is no Ask us.';
 }
 foreach ($showcases as $spec) {
   $layout = isset($layouts[$spec['layout']]) ? $spec['layout'] : 'grid';
@@ -337,12 +337,22 @@ if ($tabs_ready && $tab_blocks) {
     'field_tab_anchor' => $spec[2],
     'field_guide_blocks' => $blocks,
   ]);
-  $tabs = [$tab(['Listen', 'headphones', 'listen'], [Paragraph::create([
+  $tabs = [$tab(['Research', 'search', 'research'], [Paragraph::create([
     'type' => 'guide_text',
     'field_block_body' => ['value' => '<p>[request-paths]</p>', 'format' => $format],
   ])])];
   foreach ($tab_blocks as [$spec, $block]) {
     $tabs[] = $tab($spec, [$block]);
+  }
+  // Ask us: an Ask showcase with no Tiles, so the theme lists Oral
+  // History's FAQ tiles (Special Collections' when there are none) and
+  // mails the form to the person in Who to ask (palefire.theme,
+  // _palefire_ask_mail_to()); the tab names it.
+  if (isset($layouts['ask'])) {
+    $tabs[] = $tab(['Ask us', 'comments', 'ask'], [Paragraph::create(['type' => $type, 'field_tile_layout' => 'ask'])]);
+  }
+  else {
+    $log[] = 'No Ask layout on the Tile showcase (palefire_ask_section.php): no Ask us tab.';
   }
   array_splice($sections, 1, 0, [Paragraph::create([
     'type' => 'section_tabs',

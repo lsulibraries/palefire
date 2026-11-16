@@ -668,6 +668,11 @@
             record: { label: 'The Williams Center’s services'|t },
             explore: { label: 'Online exhibitions'|t },
           } %}
+          {% if oral_history %}
+            {% set tab_links = tab_links|merge({
+              ask: { label: 'Ask the Williams Center'|t, url: 'https://askus.lib.lsu.edu/search/?t=0&g=12395', text: 'Oral History FAQs'|t, external: true, hidden: ' (opens in a new tab)'|t },
+            }) %}
+          {% endif %}
           {% set tab_rules = {} %}
           {% for tab in quick_tabs.tabs %}
             {% set tab_link = tab_links[tab.id] ?? {} %}
@@ -731,6 +736,26 @@
               wide: true,
             },
           }) %}
+          {# Oral History's Ask us: questions go by email to the Williams
+             Center (the libanswers module's email mode, palefire.theme). #}
+          {% if oral_history %}
+            {% set tab_copy = tab_copy|merge({
+              ask: {
+                title: 'Ask us'|t,
+                intro: 'Questions about an interview, a series, copies or a project of your own? Start with the common questions, or write to the Williams Center.'|t,
+                notes_title: 'Before you ask'|t,
+                notes: [
+                  'Name the interview or series, with its link or number if you have one.'|t,
+                  'For copies, say whether you need the recording, the transcript or both.'|t,
+                  'Your question goes by email to the Williams Center, and the reply comes to your email.'|t,
+                ],
+                links: [
+                  guide_url ? { url: guide_url, text: 'Collections'|t },
+                  { url: 'https://www.louisianadigitallibrary.org/lsu-thwcoh', text: 'Listen online'|t },
+                ],
+              },
+            }) %}
+          {% endif %}
           {# A tab's room photo (quick_tabs.photos, _palefire_tab_photos()), as a
              framed print linking on to the tab rule's page, with its caption. #}
           {% set tab_photos = {} %}
