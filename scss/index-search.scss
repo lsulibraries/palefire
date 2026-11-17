@@ -969,6 +969,13 @@ $pf-index-bar-shadow:
   }
 }
 
+// In a movable source's row (index-search.js setUpSources), the line wraps
+// under the name and its move controls; the row draws the hairline.
+.pf-index__source > .pf-index__option-about {
+  flex: 0 0 100%;
+  border-bottom: 0;
+}
+
 @keyframes pf-index-about-in {
   from {
     opacity: 0;

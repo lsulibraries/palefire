@@ -1558,9 +1558,10 @@
       const row = document.createElement('div');
       row.className = 'pf-index__source';
       row.dataset.source = label.querySelector('input').value;
-      // A source's own narrower choices move with it, under the controls.
+      // A source's line (What are these?) and its own narrower choices move
+      // with it, under the controls.
       const subs = [];
-      for (let next = label.nextElementSibling; next && next.matches('.pf-index__option--sub'); next = next.nextElementSibling) {
+      for (let next = label.nextElementSibling; next && next.matches('.pf-index__option-about, .pf-index__option--sub'); next = next.nextElementSibling) {
         subs.push(next);
       }
       label.before(row);

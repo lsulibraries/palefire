@@ -180,6 +180,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-17:** Combined Search: in a movable source row, `.pf-index__source > .pf-index__option-about` is `flex: 0 0 100%` with no hairline of its own (the row has it), so the line wraps under the name, the up button and the grip.
+
 - **2026-11-17:** Ask Us drawer: `.pf-ask__frame` (Live Chat) is `color-scheme: light` on a `$pf-black` plate, `transparent` under `html.pf-reading-dark`, for LibAnswers' dark-theme widget (white labels). Was `$white`.
 - **2026-11-17:** Combined Search: What are these? is a toggle (`aria-pressed`, no `aria-controls`); `.pf-index__group.is-described` shows each `.pf-index__option-about` under its option. `.pf-index__about` (the panel) is gone. Chips: `flex-wrap: wrap` under `(pointer: fine)`, `max-width: 60%` and `justify-content: flex-end` from 75rem, `.pf-index__chip-label` max 13rem with an ellipsis.
 

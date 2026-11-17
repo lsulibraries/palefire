@@ -429,6 +429,7 @@ HTML),
 <ul>
 <li>What are these? had started opening an empty box: half of a change to it had gone out without the rest. It now shows a short line under each source saying what it searches, right beside its checkbox, and hides them again. The page remembers the choice in that browser, and screen readers hear each source’s line with its checkbox either way.</li>
 <li>The chosen filters in the bar above the results wrap onto a second line on a computer instead of scrolling sideways under a scrollbar; on a phone they still scroll with a finger. A long name, such as an oral history series, is shortened with an ellipsis, with the whole name on hover.</li>
+<li>Later the same day: once live, the lines showed up all together at the top of the Source list instead of under their sources, which was confusing. The part of the page that lets sources be dragged into your own order was moving each source without its line. Each line now moves with its source and sits right under its name.</li>
 </ul>
 HTML),
 ]);
