@@ -11,8 +11,8 @@
  *   changed, kept or waiting), reply (staff's answer, '' for none), replied
  *   (timestamp, 0 for none), version (the draft the note was sent on) and
  *   replied_on (the draft when answered): a status chip, a trail of
- *   versions, and the reply under the note. Changed and Kept as is fold
- *   under Resolved. For staff who can edit notes, also sid and reply_url
+ *   versions, and the reply under the note. Changed and Kept as is gather
+ *   under Resolved, open to start; the reader can fold it. For staff who can edit notes, also sid and reply_url
  *   (the note's Edit screen, which returns to #pf-note-<sid>): a Reply
  *   button, Edit reply once answered.
  * - label: what the notes are about, for screen readers.
@@ -67,7 +67,7 @@
     </ul>
   {% endif %}
   {% if resolved %}
-    <details class="pf-pn__resolved">
+    <details class="pf-pn__resolved" open>
       <summary class="pf-pn__resolved-toggle">{{ 'Resolved (@count)'|t({ '@count': resolved|length }) }}</summary>
       <ul class="pf-pn__list" role="list" aria-label="{{ 'Resolved notes on @label'|t({ '@label': label }) }}">
         {% for note in resolved %}
