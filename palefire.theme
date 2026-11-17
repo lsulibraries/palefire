@@ -3153,6 +3153,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   $style = $variables['layout'] === 'grid' ? 'tile_showcase_landscape' : 'tile_showcase_portrait';
   $covers = [];
   $covers_all = [];
+  $objects_all = [];
 
   foreach ($paragraph->get('field_tiles') as $item) {
     $node = $item->entity;
@@ -3182,13 +3183,16 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     ];
     $covers[] = $show_image ? $card['image_item'] : NULL;
     $covers_all[] = $card['image_item'];
+    $objects_all[] = $variables['layout'] === 'ledger' ? _palefire_cover_object_label($node) : NULL;
   }
 
   if ($variables['layout'] === 'ledger') {
-    // Each row's cover behind the left column while the row is hovered or
+    // Each row's cover behind the whole section while the row is hovered or
     // focused (js/ledger-photo.js): a URL in pf_location_backdrop (1920px
     // WebP, as the map's room photos), fetched only on hover. Rows without
-    // a cover, or without the style, get ''.
+    // a cover, or without the style, get ''. object: the cover's object
+    // label (_palefire_cover_object_label()), shown as its citation at the
+    // foot of the left column while it shows, or NULL.
     $photo_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
     if ($photo_style) {
       $cache->addCacheableDependency($photo_style);
@@ -3203,6 +3207,7 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
         $variables['backdrops'] = TRUE;
       }
       $variables['tiles'][$i]['backdrop'] = $backdrop;
+      $variables['tiles'][$i]['object'] = $backdrop ? $objects_all[$i] : NULL;
     }
 
     // Rows drop a leading "Special Collections" ("Research Grants"): the

@@ -848,12 +848,17 @@ $pf-ledger-break: 40rem;
 
 // The ledger's hover photos: js/ledger-photo.js adds .pf-ledger-photo to
 // the section, and .is-ledger-photo while a row's cover shows. From lg only
-// (below it the columns stack). The layer fills the left column, from the
-// screen's edge to halfway across the gap, the section's full height, and
-// fades out at its right edge into the page. Under the swatch's photo veil
-// (--pf-photo-veil, _reading-themes.scss) and the map's text tokens
-// (_building-map.scss), so every text keeps its contrast over the photo.
-.pf-ledger-photo { display: none; }
+// (below it the columns stack). The layer fills the whole section, edge to
+// edge, and fades in and out over its top and foot 4rem into the sections
+// around it. Under the swatch's photo veil (--pf-photo-veil,
+// _reading-themes.scss) and the map's text tokens (_building-map.scss), so
+// every text keeps its contrast over the photo.
+//
+// The cover's citation (.pf-ledger-photo__labels, its object label) sits
+// at the foot of the left column, in the grid's last row, and fades with
+// the photo. The labels stack in one cell, so swapping never moves a line.
+.pf-ledger-photo,
+.pf-ledger-photo__labels { display: none; }
 
 @include media-breakpoint-up(lg) {
   html[data-pf-theme] .pf-section__inner.has-ledger-photos {
@@ -862,14 +867,34 @@ $pf-ledger-break: 40rem;
 
     .pf-ledger-photo {
       position: absolute;
-      inset-block: 0;
-      inset-inline-start: 0;
+      inset: 0;
       z-index: -1;
       display: block;
-      width: calc(var(--pf-section-pad-inline, 0px) + (100% - 2 * var(--pf-section-pad-inline, 0px) - var(--pf-ledger-gap)) * 5 / 12 + var(--pf-ledger-gap) / 2);
       pointer-events: none;
-      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 10rem), transparent);
-      mask-image: linear-gradient(to right, #000 calc(100% - 10rem), transparent);
+      -webkit-mask-image: linear-gradient(transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+      mask-image: linear-gradient(transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
+    }
+
+    .pf-ledger-photo__labels {
+      display: grid;
+      grid-column: 1;
+      grid-row: -2;
+      align-self: end;
+      margin-top: 2.5rem;
+    }
+
+    .pf-ledger-photo__label {
+      grid-area: 1 / 1;
+      align-self: end;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--pf-ledger-photo-fade) ease, visibility 0s var(--pf-ledger-photo-fade);
+
+      &.is-on {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity var(--pf-ledger-photo-fade) ease, visibility 0s;
+      }
     }
 
     .pf-ledger-photo__img {
@@ -898,16 +923,17 @@ $pf-ledger-break: 40rem;
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
-  html[data-pf-theme] .pf-section__inner.has-ledger-photos .pf-ledger-photo { display: none; }
+  html[data-pf-theme] .pf-section__inner.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none; }
 }
 
-html.pf-a11y-contrast .pf-section__inner.has-ledger-photos .pf-ledger-photo { display: none !important; }
+html.pf-a11y-contrast .pf-section__inner.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-ledger-photo__img { transition: none !important; }
+  .pf-ledger-photo__img,
+  .pf-ledger-photo__label { transition: none !important; }
 }
 
-html.pf-a11y-motion .pf-ledger-photo__img { transition: none !important; }
+html.pf-a11y-motion :is(.pf-ledger-photo__img, .pf-ledger-photo__label) { transition: none !important; }
 
 @media (prefers-reduced-motion: no-preference) {
   // Once tile-reveal.js has run, as the index (see there).

@@ -1,11 +1,12 @@
 /**
  * @file
  * The ledger's hover photos (paragraph--tile-showcase.html.twig): while a
- * row with a cover is hovered or focused, its cover fills the section's
- * left column, behind the heading and lede, under the swatch's photo veil
- * (_tile-showcase.scss), as the map's room photos fill #map
- * (building-map.js). The photos are fetched once a mouse first enters the
- * ledger (or a row takes focus) and shown once decoded. A short wait
+ * row with a cover is hovered or focused, its cover fills the section
+ * under the swatch's photo veil (_tile-showcase.scss), as the map's room
+ * photos fill #map (building-map.js), and its citation (the cover's object
+ * label, when the page has one) shows at the foot of the left column. The
+ * photos are fetched once a mouse first enters the ledger (or a row takes
+ * focus) and shown once decoded. A short wait
  * before the swap keeps a sweep across the rows from flashing photos, and
  * the photo lingers a moment after the pointer leaves. Two slots crossfade.
  * Nothing happens where CSS hides the layer (under lg, more contrast,
@@ -34,6 +35,20 @@
     inner.prepend(layer);
     inner.classList.add('has-ledger-photos');
 
+    // The citations: from the ledger to the foot of the left column.
+    const labelBox = groups.parentElement.querySelector('.pf-ledger-photo__labels');
+    const labels = {};
+    if (labelBox) {
+      labelBox.querySelectorAll('[data-ledger-label]').forEach((label) => {
+        labels[label.dataset.ledgerLabel] = label;
+      });
+      inner.append(labelBox);
+      labelBox.hidden = false;
+    }
+    const cite = (url) => {
+      Object.keys(labels).forEach((key) => labels[key].classList.toggle('is-on', key === url));
+    };
+
     const ready = {};
     const load = (url) => {
       if (!ready[url]) {
@@ -54,6 +69,7 @@
       if (url === shown) return;
       if (!url) {
         slots.forEach((slot) => slot.classList.remove('is-on', 'is-prev'));
+        cite(null);
         inner.classList.remove('is-ledger-photo');
         shown = null;
         return;
@@ -71,6 +87,7 @@
           old.classList.add('is-prev');
         }
         inner.classList.add('is-ledger-photo');
+        cite(url);
         shown = url;
       });
     };

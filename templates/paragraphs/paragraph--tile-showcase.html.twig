@@ -16,7 +16,8 @@
  * - books: layout 'covers' only (_palefire_publications()): title,
  *   subtitle, author, imprint, url, image.
  * - groups: the ledger's tiles by Category: label, tiles (each with backdrop,
- *   its cover's URL behind the left column on hover, or '').
+ *   its cover's URL behind the section on hover, or '', and object, the
+ *   cover's object label, or NULL).
  * - backdrops: whether any ledger row has a backdrop.
  * - faqs: layout 'ask' only (includes/ask-special.html.twig).
  * - whole_covers: a showcase of oral history exhibitions (any card one):
@@ -195,7 +196,7 @@
       {# A group with a label is an <h3>, so its rows step down to <h4>;
          a ledger with no Categories is one group with none. #}
       {% set row_heading = groups|first.label ? 'h4' : 'h3' %}
-      {# Each row's cover behind the left column while it is hovered or
+      {# Each row's cover behind the section while it is hovered or
          focused (js/ledger-photo.js): rows without one carry no URL. #}
       {% if backdrops %}
         {{ attach_library('palefire/ledger-photo') }}
@@ -226,6 +227,18 @@
           </div>
         {% endfor %}
       </div>
+      {# The covers' citations: js/ledger-photo.js moves them to the foot
+         of the left column and shows the one whose photo shows. The photo
+         is decorative, so its citation is hidden from screen readers too. #}
+      {% if backdrops %}
+        <div class="pf-ledger-photo__labels" aria-hidden="true" hidden>
+          {% for tile in tiles|filter(tile => tile.backdrop and tile.object) %}
+            <div class="pf-ledger-photo__label" data-ledger-label="{{ tile.backdrop }}">
+              {% include '@palefire/includes/object-label.html.twig' with tile.object only %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     {% elseif layout == 'masonry' %}
       {{ attach_library('palefire/tile-views') }}
       {% set views = {
