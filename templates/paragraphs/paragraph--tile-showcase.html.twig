@@ -15,7 +15,9 @@
  *   intro as plain text; index and ledger only), image.
  * - books: layout 'covers' only (_palefire_publications()): title,
  *   subtitle, author, imprint, url, image.
- * - groups: the ledger's tiles by Category: label, tiles.
+ * - groups: the ledger's tiles by Category: label, tiles (each with backdrop,
+ *   its cover's URL behind the left column on hover, or '').
+ * - backdrops: whether any ledger row has a backdrop.
  * - faqs: layout 'ask' only (includes/ask-special.html.twig).
  * - whole_covers: a showcase of oral history exhibitions (any card one):
  *   .pf-tiles--whole, 16:9 pictures with the title under, a gallery listing.
@@ -193,7 +195,12 @@
       {# A group with a label is an <h3>, so its rows step down to <h4>;
          a ledger with no Categories is one group with none. #}
       {% set row_heading = groups|first.label ? 'h4' : 'h3' %}
-      <div class="pf-tiles__groups">
+      {# Each row's cover behind the left column while it is hovered or
+         focused (js/ledger-photo.js): rows without one carry no URL. #}
+      {% if backdrops %}
+        {{ attach_library('palefire/ledger-photo') }}
+      {% endif %}
+      <div class="pf-tiles__groups"{% if backdrops %} data-ledger-photos{% endif %}>
         {% for group in groups %}
           <div class="pf-tiles__group">
             {% if group.label %}
@@ -206,7 +213,7 @@
                    so old links land on the row. modular-toc.js keeps an id
                    it finds. #}
                 <li class="pf-tiles__item" id="{{ tile.title|clean_class|replace({'-': '', '_': ''}) }}" data-toc data-toc-label="{{ tile.title }}">
-                  <a class="pf-tile-line" href="{{ tile.url }}">
+                  <a class="pf-tile-line" href="{{ tile.url }}"{% if tile.backdrop %} data-ledger-photo="{{ tile.backdrop }}"{% endif %}>
                     <{{ row_heading }} class="pf-tile-line__title">{{ tile.title }}</{{ row_heading }}>
                     {% if tile.note %}
                       <span class="pf-tile-line__note"><span class="visually-hidden">, </span>{{ tile.note }}</span>

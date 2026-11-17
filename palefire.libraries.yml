@@ -649,3 +649,14 @@ podcast:
   dependencies:
     - core/drupal
     - core/once
+
+# The ledger's hover photos (the What Hill Holds section on /v2/special):
+# each row's cover behind the left column while the row is hovered or
+# focused. Attached by paragraph--tile-showcase.html.twig, only when a
+# ledger row has a cover.
+ledger-photo:
+  js:
+    js/ledger-photo.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

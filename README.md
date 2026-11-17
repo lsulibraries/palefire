@@ -1256,6 +1256,7 @@ and number. Add the issue to the page's list with its sent date:
 
 ## Changelog
 
+- **2026-11-17:** Ledger rows show their page’s cover behind the left column. From lg, hovering or focusing a row in a ledger tile showcase (What Hill Holds on /v2/special) fades that page’s cover in behind the heading and lede, from the screen’s edge to the middle of the gap, under the swatch’s photo veil and the map’s photo text tokens, so contrast holds; it fades out at its right edge, crossfades between rows and lingers 400ms after the pointer leaves, as the map’s room photos do. The URL is the cover in `pf_location_backdrop` (`palefire_preprocess_paragraph__tile_showcase()`), fetched once a mouse enters the ledger; rows without a cover change nothing. New library `palefire/ledger-photo` (`js/ledger-photo.js`), attached only when a row has a cover. Hidden under lg, on touch, with more contrast or forced colors; no fade with reduced motion. Why: the section’s left column was empty beside the list.
 Newest first. One line per change; the commit has the details. Entries before
 2026-10-21 are summarised by day: for the full write-ups, see this file in git
 history (`git show fa05a94:README.md`).
