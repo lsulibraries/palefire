@@ -485,6 +485,7 @@ HTML),
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
+<li>The Pause button for a page’s background film works wherever you click it, icon included.</li>
 <li>Oral History’s map: the room’s gold outline no longer runs through its name.</li>
 <li>Oral History’s Pause button for the background film works again.</li>
 <li>Oral History’s page title is now set as type, without a frame, so it reads as the page’s name rather than as a logo.</li>
@@ -547,6 +548,7 @@ HTML),
 <li>Special Collections, Written at Hill: each book now takes one column of the same grid as the guide cards above it, five across on a wide screen, so the covers line up under the cards. Next and Previous, and a flick of the shelf, stop with the books back on those columns. The fade at the shelf’s edge is narrower, so it only softens the outer edge of the end books.</li>
 <li>Special Collections, Study tab: the facts under the Quiet Study photo now come from the room’s own entry in Building spaces, the same as the room’s page, so both always agree. Seats, Wi-Fi, outlets and lighting show as soon as they are filled in there; until then nothing is shown in their place.</li>
 <li>Special Collections, Ask tab: the note about reply times now says we usually reply within two business days.</li>
+<li>Special Collections: the search at the top of the page now types out searches to try, like the Special Collections search on the search page, and Ctrl+K (⌘K on a Mac) jumps to it from anywhere on the page.</li>
 </ul>
 HTML),
 ]);

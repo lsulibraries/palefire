@@ -65,6 +65,15 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     z-index: 4; // over the landing bar (3), under the docked video button (5)
+    // The column's own box is empty and sticky over the page's left edge:
+    // it let clicks through, so what is under it while the rail is hidden
+    // (a hero's Pause button, Oral History) takes them. The rail itself
+    // and its panel take clicks as before.
+    pointer-events: none;
+
+    .pf-toc {
+      pointer-events: auto;
+    }
   }
 
   #{$pf-rail} .pf-toc {
