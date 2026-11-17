@@ -180,6 +180,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-17:** `.pf-pn__reply-link` (staff only, newsletter review notes): a 2rem text button, 0.8125rem, ringed in the muted color, with the accent underline on hover like the thumbs.
 - **2026-11-17:** Note replies on the newsletter review pages: `.pf-pn__trail` (0.75rem muted, tabular figures) opens with `.pf-pn__status`, a chip ringed in the muted color with ink 600 words and a 0.5rem square that names the status without color (hollow Open, half Waiting on someone, full Changed, struck through Kept as is), then `.pf-pn__steps` (“Sent on draft v… · Replied on v…”, the dot kept to the line before it). `.pf-pn__reply`: a 2px ink rule and a 5% tint, with “LSU Libraries replied · date” at 0.75rem/600 over 0.875rem text. `.pf-pn__resolved`: Resolved (n) as a 2.75rem summary with a turning chevron, over a hairline.
 - **2026-11-17:** Combined Search: in the holdings panel, Place hold has `target="_blank" rel="noopener"` and reads “(another site, opens in a new tab)” to screen readers (the `out()` macro’s `new_tab` argument in the module’s holdings template). It is the one button there that signs in on the catalog, whose redirects leave Back far from the results. Find in the Library, Request to view and title links stay in the same tab.
 

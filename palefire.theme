@@ -2819,7 +2819,8 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
     CacheableMetadata::createFromRenderArray($variables)
       ->addCacheTags($past['tags'])
       ->addCacheTags(NewsletterReview::cacheTags())
-      ->addCacheContexts(['url.query_args:' . NewsletterReview::READ])
+      // Staff who can edit notes get a Reply button under each one.
+      ->addCacheContexts(['url.query_args:' . NewsletterReview::READ, 'user.permissions'])
       ->setCacheMaxAge(NewsletterReview::MAX_AGE)
       ->applyTo($variables);
   }

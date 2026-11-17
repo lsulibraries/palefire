@@ -12,13 +12,15 @@
  *   (timestamp, 0 for none), version (the draft the note was sent on) and
  *   replied_on (the draft when answered): a status chip, a trail of
  *   versions, and the reply under the note. Changed and Kept as is fold
- *   under Resolved.
+ *   under Resolved. For staff who can edit notes, also sid and reply_url
+ *   (the note's Edit screen, which returns to #pf-note-<sid>): a Reply
+ *   button, Edit reply once answered.
  * - label: what the notes are about, for screen readers.
  */
 #}
 {% macro note(note) %}
   {% set statuses = { open: 'Open'|t, changed: 'Changed'|t, kept: 'Kept as is'|t, waiting: 'Waiting on someone'|t } %}
-  <li class="pf-pn__n">
+  <li class="pf-pn__n"{% if note.reply_url %} id="pf-note-{{ note.sid }}"{% endif %}>
     <p class="pf-pn__text">{{ note.comment|nl2br }}</p>
     <p class="pf-pn__who">
       {% if note.verdict in ['good', 'changes'] %}
@@ -47,6 +49,9 @@
         </p>
         <p class="pf-pn__reply-text">{{ note.reply|nl2br }}</p>
       </div>
+    {% endif %}
+    {% if note.reply_url %}
+      <a class="pf-pn__reply-link" href="{{ note.reply_url }}">{{ note.reply ? 'Edit reply'|t : 'Reply'|t }}<span class="visually-hidden"> {{ 'to the note from @name'|t({ '@name': note.name ?: 'Anonymous'|t }) }}</span></a>
     {% endif %}
   </li>
 {% endmacro %}

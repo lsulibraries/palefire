@@ -510,6 +510,7 @@ HTML),
 <li>Exhibition walls: the same events now hang beside the pictures as wall labels, with their date, heading and text, instead of date cards that opened a nearly empty window. A link to one scrolls to its label.</li>
 <li>Newsletter reviewers now get answers: staff can reply to an approved note and mark it Open, Changed, Kept as is or Waiting on someone. The reply, the status and the drafts it went through show under the note, and resolved notes fold away under Resolved.</li>
 <li>Staff have one Feedback list of every note from the newsletter, page and timeline reviews, with filters for type, status and whether it shows publicly, and can show or hide several notes at once with one click.</li>
+<li>Staff can reply to a newsletter note right from the review page: a Reply button under each note, seen only by staff, opens the reply form and brings them back to the note.</li>
 </ul>
 HTML),
   $text('Tue Nov 17: Live Chat and What are these?', <<<'HTML'

@@ -119,6 +119,7 @@
         let narrow = false;
         let returnTo = null;
         let scrolled = false;
+        let returned = false;
         let following = true;
 
         const field = (name) => panel.querySelector('[name="' + name + '"]');
@@ -377,6 +378,45 @@
             pins.append(li);
           });
           cards.forEach((entry) => fit(entry.card));
+          // Back from answering a note on its Edit screen (#pf-note-<id>):
+          // the note sits in a closed card, and maybe under Resolved, so
+          // both are opened and the note brought into view, once.
+          if (!returned && /^#pf-note-\d+$/.test(window.location.hash)) {
+            returned = true;
+            const note = root.querySelector(window.location.hash);
+            const card = note && note.closest('.pf-nlr__card');
+            const fold = note && note.closest('details');
+            if (fold) {
+              fold.open = true;
+            }
+            if (card && card.hidden) {
+              const chip = root.querySelector('[aria-controls="' + card.id + '"]');
+              if (chip) {
+                card.classList.add('is-full');
+                toggleCard(chip, card, true);
+              }
+            }
+            if (note) {
+              // Again once the email's photos have loaded and moved it,
+              // unless the reader has scrolled by then.
+              let moved = false;
+              const bring = () => {
+                if (!moved) {
+                  note.scrollIntoView({ block: 'center', behavior: 'instant' });
+                }
+              };
+              ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach((type) => window.addEventListener(type, () => {
+                moved = true;
+              }, { once: true, passive: true }));
+              bring();
+              window.addEventListener('load', () => window.setTimeout(bring, 300), { once: true });
+              window.setTimeout(bring, 1500);
+              const link = note.querySelector('.pf-pn__reply-link');
+              if (link) {
+                link.focus({ preventScroll: true });
+              }
+            }
+          }
           if (active) {
             const same = list.find((s) => s.label === active.label);
             if (same) {

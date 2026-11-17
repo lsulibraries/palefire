@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\palefire;
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Url;
 
 /**
  * A review page for an email newsletter drafted in Constant Contact.
@@ -94,9 +95,19 @@ final class NewsletterReview {
    */
   private static function publicNotes(string $issue, string $version): array {
     $notes = PublicNotes::approved(self::WEBFORM, 'section', ['issue' => $issue], ['version', 'reply', 'status', 'replied']);
+    // Staff who can edit notes answer one from its Edit screen, then come
+    // back to it here (the template's Reply button; the page varies by
+    // permissions, palefire_preprocess_paragraph__guide_text()).
+    $user = \Drupal::currentUser();
+    $staff = $user->hasPermission('edit any webform submission') || $user->hasPermission('administer webform submission');
+    $here = \Drupal::request()->getPathInfo();
     foreach ($notes as &$list) {
       foreach ($list as &$note) {
         $note = self::stamp($note, $version);
+        $note['reply_url'] = $staff ? Url::fromRoute('entity.webform_submission.edit_form', [
+          'webform' => self::WEBFORM,
+          'webform_submission' => $note['sid'],
+        ], ['query' => ['destination' => $here . '#pf-note-' . $note['sid']]])->toString() : '';
       }
       unset($note);
     }
