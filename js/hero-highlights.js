@@ -216,13 +216,14 @@
   // shows it (js/building-map.js, "Here" marker): the "here" arrow over its
   // name, and the name on a clear plate, a black rect in the room's hatch
   // mask (the stripes, clipped to the room's outline so the next room's
-  // stripes stay) and in a mask over the lines (any wall it crosses), on
-  // the name's own plane. Measured as a location page measures it: from
+  // stripes stay) and in a mask over the lines and the lit outline (any
+  // wall it crosses, gold or white, stops at the plate), on the name's own
+  // plane. Measured as a location page measures it: from
   // the letters themselves (cap height over each baseline, the first
   // glyph's left to the last glyph's right, without the trailing
   // letter-spacing), not the line box, with an even .7em margin. The
   // room is small on this drawing, so the name keeps the location page's
-  // size (_landing-features.scss) and its outline stays whole.
+  // size (_landing-features.scss).
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const markHere = (map) => {
     const svg = map.querySelector('svg');
@@ -265,7 +266,11 @@
     });
     walls.append(sheet, knocks[1]);
     mask.parentNode.insertBefore(walls, mask);
-    svg.querySelectorAll('.pf-map__lines').forEach((el) => el.setAttribute('mask', 'url(#' + walls.id + ')'));
+    svg.querySelectorAll('.pf-map__lines, .pf-map__hit').forEach((el) => {
+      if (!el.hasAttribute('mask')) {
+        el.setAttribute('mask', 'url(#' + walls.id + ')');
+      }
+    });
 
     const marker = document.createElementNS(SVG_NS, 'g');
     marker.setAttribute('class', 'pf-map__here');
