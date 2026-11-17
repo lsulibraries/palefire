@@ -3229,12 +3229,19 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
     }
   }
 
-  // A showcase of oral history exhibitions (any card one) is a gallery
-  // listing (.pf-tiles--whole): in the Grid every picture 16:9, the title
-  // and label under it on the page, no scrim. Wide covers stay whole
-  // (letterboxed); the other cards' pictures are the landscape crop
-  // (1280 x 800, from the whole file, not the 3:4 one), cut to 16:9.
-  $variables['whole_covers'] = (bool) array_filter($variables['tiles'] ?? [], static fn (array $tile): bool => !empty($tile['oral_history']));
+  // A gallery listing (.pf-tiles--whole): in the Grid every picture 16:9,
+  // the title and label under it on the page, no scrim. On Oral History's
+  // own pages (under /v2/oralhistory), any showcase with an oral history
+  // exhibition in it; elsewhere (/v2/special's exhibitions), only one whose
+  // every card is a whole wide cover, so a mixed showcase keeps its
+  // masonry cards. Wide covers stay whole (letterboxed); the other cards'
+  // pictures are the landscape crop (1280 x 800, from the whole file, not
+  // the 3:4 one), cut to 16:9.
+  $tiles = $variables['tiles'] ?? [];
+  $has_oral_history = (bool) array_filter($tiles, static fn (array $tile): bool => !empty($tile['oral_history']));
+  $host = $has_oral_history ? _palefire_paragraph_host_node($paragraph) : NULL;
+  $on_oral_history = $host && preg_match('#^/v2/oralhistory(/|$)#', \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $host->id()));
+  $variables['whole_covers'] = $on_oral_history || ($tiles && !array_filter($tiles, static fn (array $tile): bool => empty($tile['whole'])));
   if ($variables['whole_covers']) {
     foreach ($variables['tiles'] as $i => $tile) {
       if (!$tile['whole'] && !empty($covers[$i])) {
@@ -3242,11 +3249,10 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       }
     }
   }
-  // On Oral History's own pages (under /v2/oralhistory) the gallery's
-  // frames are 21:9, every picture filling its frame (.pf-tiles--wide-frames,
-  // _tile-showcase.scss); elsewhere (/v2/special) they stay 16:9.
-  $host = $variables['whole_covers'] ? _palefire_paragraph_host_node($paragraph) : NULL;
-  $variables['wide_frames'] = $host && preg_match('#^/v2/oralhistory(/|$)#', \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $host->id()));
+  // On Oral History's own pages the gallery's frames are 21:9, every
+  // picture filling its frame (.pf-tiles--wide-frames, _tile-showcase.scss);
+  // elsewhere they stay 16:9.
+  $variables['wide_frames'] = $variables['whole_covers'] && $on_oral_history;
 
   // The masonry Grid's lead card (one to four tiles, _tile-showcase.scss)
   // spans two to five columns: its cover is the landscape crop, sized for
