@@ -1802,7 +1802,7 @@
       "title": "About the Project",
       "anchor": "about",
       "category": "",
-      "lead": null,
+      "lead": "mossville-about-cover.jpg",
       "display": "story",
       "focus": "center",
       "lead_caption": "",
@@ -1819,6 +1819,7 @@
     }
   ],
   "alt": {
+    "mossville-about-cover.jpg": "The Mossville History Project sign, Come Tell Your Story, on an interview table with water bottles and a recorder.",
     "01_lenoria_ambrose.jpg": "Lenoria Ambrose with two interviewers at a table marked “Interview Station #2”.",
     "04_delma_and_christine_bennett.jpg": "Delma and Christine Bennett sit side by side in a living room during their interview.",
     "06_john_bernard.jpg": "John Bernard, in a cap and denim overalls with a clip-on microphone, talks during his interview.",
