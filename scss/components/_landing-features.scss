@@ -5731,26 +5731,24 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
   --pf-cover-glow: 0;
 }
 
-// Center mark (Oral History, landing.html.twig): the T. Harry Williams
-// Center's two rows in capitals filling a solid frame, in place of the
-// page's name, centered in the type column. Everything is measured from
-// the mark's width (container units), so it holds its shape at any size
-// without a script: the rows fill the frame's inside; the frame is as
-// thick as the name's stems (.145 of its size); the padding is two cap
-// heights of the Center line (u) and the gap between the rows three
-// quarters of one.
-// Around it, clear space like a mat: above and below as much as is left
-// at its sides ((column - mark) / 2), so the space is even on all four
-// sides; at least 36px (phones, where the mark is the column's width),
-// at most 15svh so the search stays on the first screen. The kicker
-// gives up its own margin (the hero's grid doesn't collapse margins).
-// text-box trims each row to its cap height and baseline, so the padding
-// is even to the eye.
+// Center title (Oral History, landing.html.twig): the T. Harry Williams
+// Center's name as the page's <h1>, in two weights, ExtraBold over Light,
+// both in tracked capitals and set to the same width. No frame and no
+// centering, so it reads as the page's title, not as a logo (LSU's unit
+// logos are the university's to draw; PS-10 Addendum A), and starts where
+// every other page's title starts. Sizes are measured from its width
+// (container units), so the two rows stay the same length at any size;
+// the gap between them is three quarters of the Center line's cap height.
+// Above and below, the clear space set for the mark earlier: what a
+// 30rem-wide mark would leave at its sides, at least 36px, at most 15svh
+// so the search stays on the first screen. The kicker gives up its own
+// margin (the hero's grid doesn't collapse margins).
+// text-box trims each row to its cap height and baseline.
 .pf-landing__mark {
-  --pf-mark-w: min(30rem, 100%);
+  --pf-mark-w: min(36rem, 100%);
   container-type: inline-size;
   width: var(--pf-mark-w);
-  margin: clamp(2.25rem, calc((100% - var(--pf-mark-w)) / 2), 15svh) auto;
+  margin: clamp(2.25rem, calc((100% - min(30rem, 100%)) / 2), 15svh) 0;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1;
@@ -5762,13 +5760,11 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 }
 
 // White on the dark hero, dark gray on light themes: the text color, not
-// the themes' heading color (gold on twilight), so it is set on the frame
+// the themes' heading color (gold on twilight), so it is set on the span
 // under the <h1>.
 .pf-landing__mark-frame {
   display: block;
   color: var(--bs-emphasis-color);
-  padding: 7.716cqi;
-  border: 1.255cqi solid currentColor;
 }
 
 .pf-landing__mark-name,
@@ -5781,24 +5777,24 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 }
 
 // Tracking adds room after the last letter too; the negative margin takes
-// it back so the row ends on the frame's edge.
+// it back so both rows end at the same place.
 .pf-landing__mark-name {
   margin-right: -.01em;
-  font-size: 8.655cqi;
+  font-size: 10.547cqi;
   font-weight: 800;
   letter-spacing: .01em;
 }
 
 .pf-landing__mark-line {
-  margin: 2.893cqi -.1em 0 0;
-  font-size: 5.426cqi;
+  margin: 3.526cqi -.1em 0 0;
+  font-size: 6.612cqi;
   font-weight: 300;
   letter-spacing: .1em;
 }
 
 // Light breaks up under about 20px: Regular on the narrowest phones
 // (Roboto's weights share their widths, so the row still fills).
-@container (max-width: 368px) {
+@container (max-width: 302px) {
   .pf-landing__mark-line {
     font-weight: 400;
   }
@@ -5813,11 +5809,5 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 
   .pf-landing__mark-line {
     margin-bottom: -.16em;
-  }
-}
-
-@media (forced-colors: active) {
-  .pf-landing__mark-frame {
-    border-color: CanvasText;
   }
 }
