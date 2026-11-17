@@ -727,7 +727,7 @@
               notes: [
                 'Name the collection, call number or catalog link, if you have one.'|t,
                 'Say when you plan to visit, so your materials can be ready.'|t,
-                '[Editor: the usual reply time, for example two business days.]'|t,
+                'We usually reply within two business days.'|t,
               ],
               links: [
                 guide_url ? { url: guide_url, text: 'Full guide'|t },
@@ -802,7 +802,7 @@
             {% endset %}
             {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot, wide: copy.wide ?? false } }) %}
           {% endfor %}
-          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos } only %}
+          {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos, facts: quick_tabs.facts ?? {} } only %}
         {% else %}
           {{ quick_body }}
         {% endif %}

@@ -533,6 +533,8 @@ HTML),
 <li>Special Collections Quick Start Guide: “sign in or register” under Before you visit now opens the request sign-in page in a new tab, where visitors can register as a Guest.</li>
 <li>Special Collections, Study tab: the placeholder about the Quiet Study room’s hours is gone. The room keeps the building’s hours, and visitors are asked to pack up 15 minutes before closing.</li>
 <li>Special Collections, Written at Hill: each book now takes one column of the same grid as the guide cards above it, five across on a wide screen, so the covers line up under the cards. Next and Previous, and a flick of the shelf, stop with the books back on those columns. The fade at the shelf’s edge is narrower, so it only softens the outer edge of the end books.</li>
+<li>Special Collections, Study tab: the facts under the Quiet Study photo now come from the room’s own entry in Building spaces, the same as the room’s page, so both always agree. Seats, Wi-Fi, outlets and lighting show as soon as they are filled in there; until then nothing is shown in their place.</li>
+<li>Special Collections, Ask tab: the note about reply times now says we usually reply within two business days.</li>
 </ul>
 HTML),
 ]);

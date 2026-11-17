@@ -546,6 +546,7 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
         'tabs' => $tab_variables['tabs'],
         'label' => $tab_variables['tabs_label'],
         'photos' => _palefire_tab_photos($tab_variables['tabs'], $variables),
+        'facts' => _palefire_tab_facts($tab_variables['tabs'], $variables),
       ];
     }
     $host = $paragraph;
@@ -2135,27 +2136,24 @@ function _palefire_location_backdrop(TermInterface $room, array $photos, Cacheab
 }
 
 /**
- * Room photos for the hero's tabs: by tab id, src, width, height and alt.
+ * The room each of the hero's tabs is about, by tab id.
  *
- * A tab whose id is listed below shows that room's photo in its panel, a
- * framed print over the tab's blocks (includes/section-tabs.html.twig,
- * _section-tabs.scss): the room term's photo (field_space_media) in
- * pf_location_backdrop, the one behind the room's own page. A tab without a
- * room, or a room without a photo, keeps its blocks alone. To give another
- * tab a photo, add its id and room.
+ * A tab whose id is listed below shows that room's photo and facts in its
+ * panel (_palefire_tab_photos(), _palefire_tab_facts()). To give another tab
+ * a room, add its id and the room's map key (building.space). Published
+ * rooms only; a room added or edited later redraws the hero.
+ *
+ * @return \Drupal\taxonomy\TermInterface[]
+ *   Rooms by tab id.
  */
-function _palefire_tab_photos(array $tabs, array &$variables): array {
+function _palefire_tab_rooms(array $tabs, CacheableMetadata $cache): array {
   $rooms = [
     'study' => 'hill_memorial.quiet_study',
   ];
   $wanted = array_intersect_key($rooms, array_flip(array_column($tabs, 'id')));
-  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
-  if (!$wanted || !$style) {
+  if (!$wanted) {
     return [];
   }
-  $cache = CacheableMetadata::createFromRenderArray($variables);
-  $cache->addCacheableDependency($style);
-  // A room added or given a photo later redraws the hero.
   $cache->addCacheTags(['taxonomy_term_list:building_space']);
   $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $ids = $storage->getQuery()->accessCheck(TRUE)
@@ -2167,13 +2165,111 @@ function _palefire_tab_photos(array $tabs, array &$variables): array {
   foreach ($storage->loadMultiple($ids) as $room) {
     $by_key[(string) $room->get('field_map_key')->value] = $room;
   }
-  $photos = [];
+  $found = [];
   foreach ($wanted as $tab_id => $key) {
     $room = $by_key[$key] ?? NULL;
-    if (!$room instanceof TermInterface || !$room->hasField('field_space_media')) {
+    if ($room instanceof TermInterface) {
+      $cache->addCacheableDependency($room);
+      $found[$tab_id] = $room;
+    }
+  }
+  return $found;
+}
+
+/**
+ * A detail still waiting on its value: "xx" in it ("Outlets: xx").
+ */
+function _palefire_is_placeholder(string $value): bool {
+  return (bool) preg_match('/\bxx\b/i', $value);
+}
+
+/**
+ * Room facts for the hero's tabs, by tab id: facts and specs.
+ *
+ * From the tab's room term (_palefire_tab_rooms(), the same data as the
+ * room's own page, _palefire_location_data()), so the tab and the page
+ * never disagree:
+ * - facts: term and text, a row of columns under the photo: the room's
+ *   allowed and required policies, its sound, then what isn't allowed, each
+ *   policy with its description.
+ * - specs: label and value, a ruled line under them: seats (Capacity), then
+ *   the room's details lines (Wi-Fi: eduroam), in its order.
+ * A value with "xx" in it is a placeholder and is left out. A tab without
+ * a room, or a room with none of these, gets nothing, so the tab's own
+ * text is all it shows.
+ */
+function _palefire_tab_facts(array $tabs, array &$variables): array {
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $sounds = [
+    'quiet' => [t('Quiet.'), t('Keep conversations and calls outside.')],
+    'conversation' => [t('Conversation.'), t('Talk at a low voice.')],
+    'collaborative' => [t('Collaborative.'), t('Group work and talking are welcome.')],
+  ];
+  $all = [];
+  foreach (_palefire_tab_rooms($tabs, $cache) as $tab_id => $room) {
+    $data = _palefire_location_data($room, $cache);
+    $policy = static fn (array $p): array => [
+      'term' => rtrim($p['label'], '.') . '.',
+      'text' => _palefire_is_placeholder($p['detail']) ? '' : $p['detail'],
+    ];
+    $facts = [];
+    foreach ($data['policies'] as $p) {
+      if ($p['state'] !== 'not_allowed') {
+        $facts[] = $policy($p);
+      }
+    }
+    if (isset($sounds[$data['sound']])) {
+      $facts[] = ['term' => $sounds[$data['sound']][0], 'text' => $sounds[$data['sound']][1]];
+    }
+    foreach ($data['policies'] as $p) {
+      if ($p['state'] === 'not_allowed') {
+        $facts[] = $policy($p);
+      }
+    }
+    $specs = [];
+    $capacity = $data['capacity'];
+    if ($capacity && !_palefire_is_placeholder($capacity['value'])) {
+      $specs[] = [
+        'label' => t('Seats'),
+        'value' => $capacity['about'] ? t('About @n', ['@n' => $capacity['value']]) : $capacity['value'],
+      ];
+    }
+    foreach ($data['details'] as $detail) {
+      if (!_palefire_is_placeholder($detail['value'])) {
+        $specs[] = $detail;
+      }
+    }
+    if ($facts || $specs) {
+      $all[$tab_id] = ['facts' => $facts, 'specs' => $specs];
+    }
+  }
+  $cache->applyTo($variables);
+  return $all;
+}
+
+/**
+ * Room photos for the hero's tabs: by tab id, src, width, height and alt.
+ *
+ * A tab with a room (_palefire_tab_rooms()) shows that room's photo in its
+ * panel, a framed print over the tab's blocks (includes/section-tabs.html.twig,
+ * _section-tabs.scss): the room term's photo (field_space_media) in
+ * pf_location_backdrop, the one behind the room's own page. A tab without a
+ * room, or a room without a photo, keeps its blocks alone.
+ */
+function _palefire_tab_photos(array $tabs, array &$variables): array {
+  $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('pf_location_backdrop');
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $rooms = $style ? _palefire_tab_rooms($tabs, $cache) : [];
+  if (!$rooms) {
+    $cache->applyTo($variables);
+    return [];
+  }
+  $cache->addCacheableDependency($style);
+  $photos = [];
+  foreach ($rooms as $tab_id => $room) {
+    if (!$room->hasField('field_space_media')) {
       continue;
     }
-    $cache->addCacheableDependency($room);
     $ref = $room->get('field_space_media')->first();
     $item = $ref ? _palefire_media_image_item($ref, $cache) : NULL;
     $file = $item?->entity;

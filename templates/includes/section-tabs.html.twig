@@ -30,6 +30,10 @@
  *   as a framed print, the whole of it a link to url when there is one
  *   (_palefire_tab_photos(); the hero's Study tab, the Quiet Study room).
  *   Lazy, so it loads once the panel is shown. Empty elsewhere.
+ * - facts: a room's facts by tab id (_palefire_tab_facts(), from the
+ *   room's term): facts (term, text), a row of columns under the print, and
+ *   specs (label, value), a ruled line under them, before the tab's blocks.
+ *   Empty elsewhere.
  *
  * Each tab is the whole column: its label printed above the track, its
  * face (where the key rests, with its icon) in the track, and its indicator
@@ -84,6 +88,19 @@
           </{{ tag }}>
         {%- endif -%}
       {% endset %}
+      {% set room = facts[tab.id] ?? {} %}
+      {% set room_facts %}
+        {%- if room.facts ?? false -%}
+          <ul class="pf-tabs__facts" role="list">
+            {%- for fact in room.facts %}<li><strong>{{ fact.term }}</strong>{% if fact.text %} {{ fact.text }}{% endif %}</li>{% endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if room.specs ?? false -%}
+          <dl class="pf-tabs__specs">
+            {%- for spec in room.specs %}<div><dt>{{ spec.label }}</dt><dd>{{ spec.value }}</dd></div>{% endfor -%}
+          </dl>
+        {%- endif -%}
+      {% endset %}
       <div class="pf-tabs__panel{{ photo_print|trim ? ' has-print' }}" role="tabpanel" id="{{ tab.id }}" aria-labelledby="{{ tab.id }}-tab" tabindex="0">
         {{ rules[tab.id] ?? '' }}
         {% if tab.quick and quick_panel %}
@@ -91,12 +108,12 @@
         {% elseif asides[tab.id] ?? false %}
           <div class="pf-tabs__body pf-quick-guide__panel{{ asides[tab.id].wide ? ' pf-quick-guide__panel--wide' }}">
             {{ asides[tab.id].head }}
-            <div class="pf-tabs__content pf-guide">{{ photo_print }}{{ tab.content }}</div>
+            <div class="pf-tabs__content pf-guide">{{ photo_print }}{{ room_facts }}{{ tab.content }}</div>
             {{ asides[tab.id].foot }}
           </div>
         {% else %}
           <h3 class="pf-tabs__heading">{{ tab.label }}</h3>
-          <div class="pf-tabs__body pf-guide">{{ photo_print }}{{ tab.content }}</div>
+          <div class="pf-tabs__body pf-guide">{{ photo_print }}{{ room_facts }}{{ tab.content }}</div>
         {% endif %}
       </div>
     {% endfor %}
