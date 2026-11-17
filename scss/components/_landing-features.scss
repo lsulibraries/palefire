@@ -5585,13 +5585,28 @@ html.pf-a11y-motion .pf-hero-banner__map {
 }
 
 // Folded (js/tile-views.js): two rows of the grid, five of the list, then
-// "Show all" in the switch's voice; the rest fade up in place.
+// "Show all" in the switch's voice; the rest fade up in place. Opened, it
+// reads "Show less", its arrow turned up.
 .pf-series__more {
   margin-top: clamp(1rem, 2vw, 1.5rem);
   padding-inline: 0 .875rem;
 
+  svg {
+    transition: rotate .4s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  &.is-open svg {
+    rotate: 180deg;
+  }
+
   &[hidden] {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-series__more svg {
+    transition: none;
   }
 }
 

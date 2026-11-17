@@ -21,9 +21,10 @@
  * Oral History's series (.pf-series__views, landing.html.twig) open
  * folded: two rows of the grid, or five of the list, at the columns of the
  * moment, then a "Show all" button that opens the rest in place, the first
- * of them taking focus. The fold follows the view and the width until it
- * is opened. Without this script every series shows and there is no
- * button.
+ * of them taking focus. Opened, it says "Show less" and folds them again,
+ * the page held so the button stays where it was under the pointer. The
+ * fold follows the view and the width while folded. Without this script
+ * every series shows and there is no button.
  */
 (function (Drupal, once) {
   'use strict';
@@ -114,10 +115,15 @@
     }
     button.setAttribute('aria-controls', list.id);
     button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span></span>';
-    button.querySelector('span').textContent = Drupal.t('Show all @count series', { '@count': items.length });
+    const label = button.querySelector('span');
     list.after(button);
 
     let open = false;
+    const name = () => {
+      button.setAttribute('aria-expanded', String(open));
+      button.classList.toggle('is-open', open);
+      label.textContent = open ? Drupal.t('Show less') : Drupal.t('Show all @count series', { '@count': items.length });
+    };
     const apply = () => {
       if (open) {
         return;
@@ -131,6 +137,16 @@
     };
 
     button.addEventListener('click', () => {
+      if (open) {
+        // Fold again, holding the button where it was on screen.
+        const before = button.getBoundingClientRect().top;
+        open = false;
+        items.forEach((item) => item.classList.remove('is-unfolding'));
+        apply();
+        name();
+        window.scrollBy({ top: button.getBoundingClientRect().top - before, behavior: 'instant' });
+        return;
+      }
       open = true;
       const first = items.find((item) => item.hidden);
       items.forEach((item) => {
@@ -139,13 +155,14 @@
           item.classList.add('is-unfolding');
         }
       });
-      button.remove();
+      name();
       const link = first && first.querySelector('a');
       if (link) {
         link.focus({ preventScroll: true });
       }
     });
 
+    name();
     apply();
     if ('ResizeObserver' in window) {
       new ResizeObserver(apply).observe(list);

@@ -485,6 +485,7 @@ HTML),
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
+<li>Oral History’s series: after “Show all”, a “Show less” button folds them back to two rows, keeping your place on the page.</li>
 <li>Oral History’s series start with two rows and a “Show all 39 series” button, so the exhibitions below aren’t pushed far down the page.</li>
 <li>Oral History’s series can be shown as a grid of tape reels, five across like the other sections, or as a plain list of names and counts, with the same Grid / List switch as the rest of the page.</li>
 <li>The Oral History homepage’s tabs are now Research, Record and Ask us. Ask us has Oral History’s common questions and a question form that goes straight to the Williams Center’s Director by email. The exhibitions have their own Showcase section under the series, in wide 21:9 frames.</li>
@@ -511,7 +512,7 @@ HTML),
 <li>Newsletter reviewers now get answers: staff can reply to an approved note and mark it Open, Changed, Kept as is or Waiting on someone. The reply, the status and the drafts it went through show under the note, and resolved notes gather under Resolved, shown open.</li>
 <li>Staff have one Feedback list of every note from the newsletter, page and timeline reviews, with filters for type, status and whether it shows publicly, and can show or hide several notes at once with one click.</li>
 <li>Staff can reply to a newsletter note right from the review page: a Reply button under each note, seen only by staff, opens the reply form and brings them back to the note.</li>
-<li>Newsletter review notes show at a glance on computers: each story’s notes sit open in a margin beside the email, two at a time before Show more, and the feedback form opens from the Leave feedback bar until the screen is wide enough for both. Replies are signed Kyle.</li>
+<li>Newsletter review notes show at a glance on computers: each story’s notes sit open in a margin beside the email, two at a time before Show more, with the feedback form still beside them on a laptop-size screen or larger. Replies are signed Kyle.</li>
 </ul>
 HTML),
   $text('Tue Nov 17: Live Chat and What are these?', <<<'HTML'
