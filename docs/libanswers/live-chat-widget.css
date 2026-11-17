@@ -4,18 +4,52 @@
  * Live Chat). The old site uses a different widget.
  *
  * Paste the whole file into LibAnswers > Admin > LibChat > Widgets > Modal
- * Chat (dark theme) > Custom CSS, replacing what is there, and save. It is
- * kept here as the record; the theme does not load it.
+ * Chat (dark theme) > Look & Feel > Custom CSS, replacing what is there, and
+ * save. Leave the widget's color fields blank. It is kept here as the record;
+ * the theme does not load it.
  *
  * It draws the start form as the drawer's question slips
  * (scss/components/_ask.scss): a grid of hairline cells, mono capital labels,
- * fields as one underline, and a gold Send bar. The theme draws the gold rule
- * and the stamp above the frame. Colors are Twilight's: the frame can't read
- * the page's reading color. Fonts are system ones, so nothing more loads.
+ * fields as one underline, and a Send bar. The theme draws the rule and the
+ * stamp above the frame.
+ *
+ * Light or dark follows the reading color: the theme sets the frame's
+ * color-scheme (dark on the dark swatches, light on the light ones), and a
+ * frame's prefers-color-scheme follows it. This page takes either scheme
+ * (color-scheme: light dark), so the frame stays see-through and the drawer
+ * shows behind it. Dark is Twilight's values; light is the light swatches'
+ * shared ink, with the Send bar in the heading ink, since the frame can't
+ * know which light swatch (and accent) is chosen. Fonts are system ones.
  */
 
 html {
+  --chat-text: #3d3c39;
+  --chat-label: #514f4c;
+  --chat-line: #696763;
+  --chat-rule: rgba(61, 60, 57, .2);
+  --chat-wash: rgba(61, 60, 57, .05);
+  --chat-focus: #3d3c39;
+  --chat-key: #3d3c39;
+  --chat-key-hover: #514f4c;
+  --chat-key-text: #fff;
+  --chat-menu: #f7f4ec;
+  color-scheme: light dark;
   font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --chat-text: #f8f7f9;
+    --chat-label: #bfbbc1;
+    --chat-line: #bfbbc1;
+    --chat-rule: rgba(191, 187, 193, .2);
+    --chat-wash: rgba(248, 247, 249, .05);
+    --chat-focus: #f2dc9b;
+    --chat-key: #f2dc9b;
+    --chat-key-hover: #f7e7b8;
+    --chat-key-text: #000;
+    --chat-menu: #1f1d21;
+  }
 }
 
 html,
@@ -23,7 +57,11 @@ body,
 .s-la-widget,
 .s-la-widget-embed {
   background: transparent;
-  color: #f8f7f9;
+  color: var(--chat-text);
+}
+
+body {
+  margin: 0;
 }
 
 .s-la-widget,
@@ -40,7 +78,7 @@ body,
 #s-lch-login-form {
   display: grid;
   margin: 0;
-  border-left: 1px solid rgba(191, 187, 193, .2);
+  border-left: 1px solid var(--chat-rule);
 }
 
 #s-lch-login-form .form-group {
@@ -48,14 +86,14 @@ body,
   gap: 4px;
   margin: 0;
   padding: 14px 16px 16px;
-  border-right: 1px solid rgba(191, 187, 193, .2);
-  border-bottom: 1px solid rgba(191, 187, 193, .2);
+  border-right: 1px solid var(--chat-rule);
+  border-bottom: 1px solid var(--chat-rule);
 }
 
 .s-la-widget label,
 .s-la-widget .form-label {
   margin: 0;
-  color: #bfbbc1;
+  color: var(--chat-label);
   font-family: Consolas, Monaco, monospace;
   font-size: 12px;
   font-weight: 400;
@@ -73,9 +111,9 @@ body,
   height: auto;
   padding: 8px 2px;
   border: 0 !important;
-  border-bottom: 1px solid #bfbbc1 !important;
+  border-bottom: 1px solid var(--chat-line) !important;
   border-radius: 0;
-  color: #f8f7f9;
+  color: var(--chat-text);
   background-color: transparent;
   box-shadow: none;
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -84,18 +122,33 @@ body,
   transition: border-color .2s ease, background-color .2s ease;
 }
 
+/* The menu's chevron in currentColor: a mask, so it follows the scheme. */
 .s-la-widget select.form-select {
   padding-right: 28px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8f7f9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-position: right 2px center;
-  background-repeat: no-repeat;
-  background-size: 20px;
+  background-image: none;
   appearance: none;
 }
 
+.s-la-widget .form-group:has(> select.form-select) {
+  position: relative;
+}
+
+.s-la-widget .form-group:has(> select.form-select)::after {
+  position: absolute;
+  right: 18px;
+  bottom: 28px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--chat-text);
+  content: "";
+  pointer-events: none;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 .s-la-widget select.form-select option {
-  color: #f8f7f9;
-  background: #1f1d21;
+  color: var(--chat-text);
+  background: var(--chat-menu);
 }
 
 .s-la-widget textarea.form-control,
@@ -104,23 +157,24 @@ textarea#client_question {
   resize: vertical;
 }
 
-/* Hover: the rule brightens and the field takes a faint wash. Focus: the
-   gold rule, 2px, the slips' focus. */
+/* Hover: the rule darkens or brightens and the field takes a faint wash.
+   Focus: a 2px rule in the focus color, as the slips. */
 .s-la-widget .form-control:hover,
 .s-la-widget .form-select:hover {
-  border-bottom-color: #f8f7f9 !important;
-  background-color: rgba(248, 247, 249, .05);
+  border-bottom-color: var(--chat-text) !important;
+  background-color: var(--chat-wash);
 }
 
 .s-la-widget .form-control:focus,
 .s-la-widget .form-select:focus {
   outline: 0;
-  border-bottom: 2px solid #f2dc9b !important;
-  background-color: rgba(248, 247, 249, .05);
+  border-bottom: 2px solid var(--chat-focus) !important;
+  background-color: var(--chat-wash);
   box-shadow: none;
 }
 
-/* Send: the slips' gold bar, the cell around it gone. */
+/* Send: the slips' bar, the cell around it gone. The paper plane is a mask
+   in the bar's text color. */
 #s-lch-login-form .form-group:last-child {
   padding: 0;
   border-right: 0;
@@ -128,17 +182,17 @@ textarea#client_question {
 
 .s-la-widget .btn-chat,
 button.btn-chat.btn.btn-xs.btn-fullWidth {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   min-height: 56px;
   margin: 0;
-  padding: 0 16px;
+  padding: 0 52px 0 16px;
   border: 0;
   border-radius: 0;
-  color: #000;
-  background: #f2dc9b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M21 3 3 10.5l7 3 3 7.5L21 3Zm-11 10.5L21 3'/%3E%3C/svg%3E") right 16px center / 22px no-repeat;
+  color: var(--chat-key-text);
+  background: var(--chat-key);
   font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -148,27 +202,41 @@ button.btn-chat.btn.btn-xs.btn-fullWidth {
   transition: background-color .2s ease;
 }
 
+.s-la-widget .btn-chat::after {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  background-color: currentColor;
+  content: "";
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M21 3 3 10.5l7 3 3 7.5L21 3Zm-11 10.5L21 3'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M21 3 3 10.5l7 3 3 7.5L21 3Zm-11 10.5L21 3'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 .s-la-widget .btn-chat:hover,
-.s-la-widget .btn-chat:active {
-  color: #000;
-  background-color: #f7e7b8;
+.s-la-widget .btn-chat:active,
+.s-la-widget .btn-chat:focus {
+  color: var(--chat-key-text);
+  background-color: var(--chat-key-hover);
   border: 0;
   box-shadow: none;
 }
 
 .s-la-widget .btn-chat:focus-visible {
-  outline: 2px solid #f2dc9b;
+  outline: 2px solid var(--chat-focus);
   outline-offset: 2px;
 }
 
-/* Kept from the old CSS: the chat once it starts, and other buttons. */
+/* The chat once it starts, and other buttons. */
 .s-la-widget button {
   border-radius: 0;
 }
 
 .s-la-searchform-button {
-  background-color: #f2dc9b !important;
-  color: #000 !important;
+  background-color: var(--chat-key) !important;
+  color: var(--chat-key-text) !important;
   border: 0 !important;
   font-weight: 500 !important;
 }
@@ -178,7 +246,7 @@ button.btn-chat.btn.btn-xs.btn-fullWidth {
   margin-bottom: 10px;
   padding: 0 0 10px;
   border: 0;
-  color: #f8f7f9;
+  color: var(--chat-text);
   background: transparent;
   font-family: Consolas, Monaco, monospace;
   font-size: 12px;
