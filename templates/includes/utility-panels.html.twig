@@ -47,7 +47,7 @@
 {%
   set ask_libraries = [
     { key: 'main', label: 'Main Library'|t, tabs: [
-      { key: 'chat', label: 'Live Chat'|t, icon: 'chat-dots-fill', title: 'AskUs live chat'|t, src: 'https://askus.lib.lsu.edu/chat/widget/429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d' },
+      { key: 'chat', label: 'Live Chat'|t, icon: 'chat-dots-fill', title: 'AskUs live chat'|t, stamp: 'Main Library · LSU Libraries'|t, src: 'https://askus.lib.lsu.edu/chat/widget/429e7c7707574f86749aadb93dc33dc563a788c78dfd5248c8598e2445ad575d' },
       { key: 'main', label: 'Email'|t, icon: 'envelope-fill', title: 'Email the Main Library'|t, form: '/v2/libanswers/ask/237', src: 'https://askus.lib.lsu.edu/', stamp: 'Main Library · LSU Libraries'|t, fallback: 'Ask the Main Library on AskUs'|t, cells: 5 },
     ] },
     { key: 'special', label: 'Special Collections'|t, form: '/v2/libanswers/ask/2616', src: 'https://askus.lib.lsu.edu/special', stamp: 'Special Collections · Hill Memorial Library'|t, fallback: 'Ask Special Collections on AskUs'|t, cells: 6 },
@@ -64,7 +64,6 @@
   <div class="pf-inquiry pf-ask__inquiry">
     <div class="pf-inquiry__slip" data-pf-ask-form="{{ item.form }}">
       <p class="pf-inquiry__slip-head">
-        <span class="pf-inquiry__slip-title">{{ 'Question slip'|t }}</span>
         <span class="pf-inquiry__stamp">
           <span>{{ item.stamp }}</span>
           <time data-pf-today></time>
@@ -308,8 +307,22 @@
                     {{ attach_library('palefire/ask-form') }}
                     {{ _self.slip(tab) }}
                   {% else %}
-                    {# src is set by utility-panels.js the first time this tab shows. #}
-                    <iframe class="pf-ask__frame" title="{{ tab.title }}" data-src="{{ tab.src }}" loading="lazy"></iframe>
+                    {# Live Chat: the slips' gold rule and stamp over the
+                       LibAnswers widget, whose own custom CSS draws the
+                       slip's cells (docs/libanswers/live-chat-widget.css).
+                       src and the date are set by utility-panels.js the
+                       first time this tab shows. #}
+                    <div class="pf-inquiry pf-ask__inquiry pf-ask__chat">
+                      <div class="pf-inquiry__slip">
+                        <p class="pf-inquiry__slip-head">
+                          <span class="pf-inquiry__stamp">
+                            <span>{{ tab.stamp }}</span>
+                            <time data-pf-today></time>
+                          </span>
+                        </p>
+                        <iframe class="pf-ask__frame" title="{{ tab.title }}" data-src="{{ tab.src }}" loading="lazy"></iframe>
+                      </div>
+                    </div>
                     <noscript><a href="{{ tab.src }}">{{ tab.title }}</a></noscript>
                   {% endif %}
                 </div>

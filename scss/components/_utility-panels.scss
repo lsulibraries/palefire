@@ -908,6 +908,20 @@ html.pf-reading-dark .pf-ask__frame {
   background-color: transparent;
 }
 
+// Live Chat in a slip: the slip and its widget fill the pane's height. The
+// slip is a size container (_ask.scss), so it has no width of its own and
+// takes the pane's.
+.pf-ask__chat,
+.pf-ask__chat .pf-inquiry__slip {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.pf-ask__chat .pf-inquiry__slip {
+  width: 100%;
+}
+
 // A slow breath while the form is on its way; a library's side fades up as
 // the switch turns to it.
 @media (prefers-reduced-motion: no-preference) {

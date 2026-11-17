@@ -158,6 +158,13 @@
     if (frame) {
       frame.src = frame.dataset.src;
       frame.removeAttribute('data-src');
+      // Live Chat's stamp: today's date, as the slips have it (ask-form.js).
+      const today = pane.querySelector('[data-pf-today]');
+      if (today) {
+        const now = new Date();
+        today.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        today.setAttribute('datetime', now.toISOString().slice(0, 10));
+      }
     }
   }
 

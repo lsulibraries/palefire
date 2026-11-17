@@ -1,0 +1,195 @@
+/*
+ * Live Chat widget: custom CSS for LibAnswers' "Modal Chat (dark theme)"
+ * widget (id 29010), shown only in Palefire's Ask Us drawer (Main Library >
+ * Live Chat). The old site uses a different widget.
+ *
+ * Paste the whole file into LibAnswers > Admin > LibChat > Widgets > Modal
+ * Chat (dark theme) > Custom CSS, replacing what is there, and save. It is
+ * kept here as the record; the theme does not load it.
+ *
+ * It draws the start form as the drawer's question slips
+ * (scss/components/_ask.scss): a grid of hairline cells, mono capital labels,
+ * fields as one underline, and a gold Send bar. The theme draws the gold rule
+ * and the stamp above the frame. Colors are Twilight's: the frame can't read
+ * the page's reading color. Fonts are system ones, so nothing more loads.
+ */
+
+html {
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+.s-la-widget,
+.s-la-widget-embed {
+  background: transparent;
+  color: #f8f7f9;
+}
+
+.s-la-widget,
+.s-la-widget-embed {
+  padding: 0;
+  border: 0;
+}
+
+#widget_base {
+  max-height: none;
+}
+
+/* The start form: cells with hairlines between them, as the slips. */
+#s-lch-login-form {
+  display: grid;
+  margin: 0;
+  border-left: 1px solid rgba(191, 187, 193, .2);
+}
+
+#s-lch-login-form .form-group {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  border-right: 1px solid rgba(191, 187, 193, .2);
+  border-bottom: 1px solid rgba(191, 187, 193, .2);
+}
+
+.s-la-widget label,
+.s-la-widget .form-label {
+  margin: 0;
+  color: #bfbbc1;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* Fields: one underline, no box. */
+.s-la-widget input.form-control,
+.s-la-widget textarea.form-control,
+.s-la-widget select.form-select {
+  width: 100%;
+  min-height: 44px;
+  height: auto;
+  padding: 8px 2px;
+  border: 0 !important;
+  border-bottom: 1px solid #bfbbc1 !important;
+  border-radius: 0;
+  color: #f8f7f9;
+  background-color: transparent;
+  box-shadow: none;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 16px !important;
+  line-height: 1.5;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+.s-la-widget select.form-select {
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f8f7f9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 2px center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  appearance: none;
+}
+
+.s-la-widget select.form-select option {
+  color: #f8f7f9;
+  background: #1f1d21;
+}
+
+.s-la-widget textarea.form-control,
+textarea#client_question {
+  min-height: 160px;
+  resize: vertical;
+}
+
+/* Hover: the rule brightens and the field takes a faint wash. Focus: the
+   gold rule, 2px, the slips' focus. */
+.s-la-widget .form-control:hover,
+.s-la-widget .form-select:hover {
+  border-bottom-color: #f8f7f9 !important;
+  background-color: rgba(248, 247, 249, .05);
+}
+
+.s-la-widget .form-control:focus,
+.s-la-widget .form-select:focus {
+  outline: 0;
+  border-bottom: 2px solid #f2dc9b !important;
+  background-color: rgba(248, 247, 249, .05);
+  box-shadow: none;
+}
+
+/* Send: the slips' gold bar, the cell around it gone. */
+#s-lch-login-form .form-group:last-child {
+  padding: 0;
+  border-right: 0;
+}
+
+.s-la-widget .btn-chat,
+button.btn-chat.btn.btn-xs.btn-fullWidth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  margin: 0;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  background: #f2dc9b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M21 3 3 10.5l7 3 3 7.5L21 3Zm-11 10.5L21 3'/%3E%3C/svg%3E") right 16px center / 22px no-repeat;
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  transition: background-color .2s ease;
+}
+
+.s-la-widget .btn-chat:hover,
+.s-la-widget .btn-chat:active {
+  color: #000;
+  background-color: #f7e7b8;
+  border: 0;
+  box-shadow: none;
+}
+
+.s-la-widget .btn-chat:focus-visible {
+  outline: 2px solid #f2dc9b;
+  outline-offset: 2px;
+}
+
+/* Kept from the old CSS: the chat once it starts, and other buttons. */
+.s-la-widget button {
+  border-radius: 0;
+}
+
+.s-la-searchform-button {
+  background-color: #f2dc9b !important;
+  color: #000 !important;
+  border: 0 !important;
+  font-weight: 500 !important;
+}
+
+.chatList li.nav-item button.active {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0 0 10px;
+  border: 0;
+  color: #f8f7f9;
+  background: transparent;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s-la-widget .form-control,
+  .s-la-widget .form-select,
+  .s-la-widget .btn-chat {
+    transition: none;
+  }
+}

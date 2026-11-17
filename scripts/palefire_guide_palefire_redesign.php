@@ -515,6 +515,7 @@ HTML),
 <li>Ask Us drawer: Live Chat’s form can be read again. The chat service draws white labels for a dark page, but the drawer showed it on white, so only empty boxes and the Start Chat button could be seen. It now sits on the drawer’s own dark glass, or on a dark panel when a light reading color is chosen.</li>
 <li>Combined Search: What are these? works again. It had started opening an empty box. Now it shows a short line under each source saying what it searches, and hides them again; the page remembers the choice. Long filter names in the bar above the results are shortened with an ellipsis, and the filters wrap onto a second line instead of scrolling sideways.</li>
 <li>Combined Search: those lines first showed up all together at the top of the Source list, apart from their sources. Each now sits under its own source.</li>
+<li>Ask Us drawer: Live Chat now looks like the email forms beside it, with the same gold rule, place and date, cells with fine lines, small capital labels, fields drawn as a single line and a gold Send bar. The forms in the drawer no longer have the words Question slip at the top.</li>
 </ul>
 HTML),
 ]);

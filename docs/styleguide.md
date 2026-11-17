@@ -180,6 +180,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-17:** Ask Us drawer: the slips there have no `.pf-inquiry__slip-title`; the head is the stamp alone. Live Chat sits in `.pf-ask__chat` (a `.pf-inquiry.pf-ask__inquiry` with a stamp head; flex column filling the pane, the slip `width: 100%` because it is a size container). The widget's own CSS, kept in `docs/libanswers/live-chat-widget.css`, copies the slip in fixed Twilight values: hairlines `rgba(191,187,193,.2)`, labels Consolas 12px .12em capitals `#bfbbc1`, fields a 1px `#bfbbc1` underline (2px `#f2dc9b` on focus), 16px mono text `#f8f7f9`, Send a 56px `#f2dc9b` bar with black 15px 500 text and a paper plane.
+
 - **2026-11-17:** Combined Search: in a movable source row, `.pf-index__source > .pf-index__option-about` is `flex: 0 0 100%` with no hairline of its own (the row has it), so the line wraps under the name, the up button and the grip.
 
 - **2026-11-17:** Ask Us drawer: `.pf-ask__frame` (Live Chat) is `color-scheme: light` on a `$pf-black` plate, `transparent` under `html.pf-reading-dark`, for LibAnswers' dark-theme widget (white labels). Was `$white`.
