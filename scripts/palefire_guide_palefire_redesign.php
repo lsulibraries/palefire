@@ -511,6 +511,7 @@ HTML),
 <li>Newsletter reviewers now get answers: staff can reply to an approved note and mark it Open, Changed, Kept as is or Waiting on someone. The reply, the status and the drafts it went through show under the note, and resolved notes gather under Resolved, shown open.</li>
 <li>Staff have one Feedback list of every note from the newsletter, page and timeline reviews, with filters for type, status and whether it shows publicly, and can show or hide several notes at once with one click.</li>
 <li>Staff can reply to a newsletter note right from the review page: a Reply button under each note, seen only by staff, opens the reply form and brings them back to the note.</li>
+<li>Newsletter review notes show at a glance on computers: each story’s notes sit open in a margin beside the email, two at a time before Show more, and the feedback form opens from the Leave feedback bar until the screen is wide enough for both. Replies are signed Kyle.</li>
 </ul>
 HTML),
   $text('Tue Nov 17: Live Chat and What are these?', <<<'HTML'

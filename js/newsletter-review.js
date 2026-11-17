@@ -14,24 +14,26 @@
  * the email that does, and marks it "Your story", so someone featured lands
  * on their own part. Unmatched words do nothing.
  *
- * Below 56rem the form is a popover sheet, opened from a bar at the foot of
+ * Below 79rem the form is a popover sheet, opened from a bar at the foot of
  * the screen or by a Comment button.
  *
  * A section with approved notes or thumbs gets a chip under its Comment
  * button ("2 notes · 3 thumbs"); the chip opens a card right below it with
  * that section's thumbs and notes, moved there from Notes and thumbs under
  * the draft (which keeps the whole issue and any section no longer in the
- * email). A card that would run past the next section is cut short, with
- * Show more.
+ * email). A card shows its first two notes whole, the rest behind Show
+ * more (n). In the margin beside the email the cards start open, and a long
+ * one moves the Comment buttons below it down so none overlap; with no
+ * margin they open over the email only when asked.
  */
 (function (Drupal, once, debounce) {
   'use strict';
 
-  // The form beside the email: an 18rem form and 1.5rem gap leave the email
-  // its 30rem phone width (newsletter-review.scss). It was 63rem, beside the
-  // full 600px email, which a 1440px screen with a scrollbar missed by 11px,
-  // so the form never followed there.
-  const NARROW_REM = 56;
+  // The form beside the email: an 18rem form and 1.5rem gap leave the stage
+  // its 59rem, the full email with the notes cards open in the margin
+  // (newsletter-review.scss). Narrower, the form is the sheet. It was 56rem,
+  // where the cards had no margin and covered half the email.
+  const NARROW_REM = 79;
 
   const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -117,6 +119,8 @@
         let active = null;
         let own = null;
         let narrow = false;
+        // Whether the cards had the margin beside the email last time.
+        let margin = null;
         let returnTo = null;
         let scrolled = false;
         let returned = false;
@@ -182,7 +186,8 @@
           return parts.join(' · ');
         }
 
-        // Cut short at the next section, unless Show more was chosen.
+        // The first notes shown whole, the rest behind Show more (n).
+        const SHOWN = 2;
         function fit(card) {
           const li = card.closest('.pf-nlr__pin');
           const body = card.querySelector('.pf-nlr__card-notes');
@@ -190,34 +195,46 @@
           body.style.maxHeight = '';
           body.classList.remove('is-cut');
           if (!li || card.hidden) {
+            stack();
             return;
           }
-          const room = (parseFloat(li.dataset.room) || 0) - card.offsetTop;
-          const rest = card.offsetHeight - body.offsetHeight;
-          const items = Array.from(body.querySelectorAll('.pf-pn__n'));
-          const over = body.scrollHeight > room - rest;
-          more.hidden = !over && !card.classList.contains('is-full');
-          if (!over || card.classList.contains('is-full')) {
+          // Only notes showing count: not those in a folded Resolved.
+          const items = Array.from(body.querySelectorAll('.pf-pn__n')).filter((item) => item.offsetHeight);
+          const over = items.length > SHOWN;
+          const full = card.classList.contains('is-full');
+          more.hidden = !over;
+          if (!over || full) {
             more.textContent = Drupal.t('Show less');
             more.setAttribute('aria-expanded', 'true');
+            stack();
             return;
           }
-          const max = Math.max(72, room - rest - 40);
-          body.style.maxHeight = max + 'px';
+          const last = items[SHOWN - 1].getBoundingClientRect();
+          body.style.maxHeight = Math.ceil(last.bottom - body.getBoundingClientRect().top + 8) + 'px';
           body.classList.add('is-cut');
-          // Notes not begun above the cut (a note cut partway still shows).
-          const hiddenCount = items.filter((item) => item.offsetTop + 24 > max).length;
-          more.textContent = hiddenCount ? Drupal.t('Show more (@count)', { '@count': hiddenCount }) : Drupal.t('Show more');
+          more.textContent = Drupal.t('Show more (@count)', { '@count': items.length - SHOWN });
           more.setAttribute('aria-expanded', 'false');
+          stack();
+        }
+
+        // In the margin, where cards start open: each Comment button at its
+        // section, or just below the card above it when that runs longer,
+        // so open cards never overlap. Over the email, cards open on top.
+        function stack() {
+          let below = 0;
+          pins.querySelectorAll('.pf-nlr__pin').forEach((li) => {
+            const own = parseFloat(li.dataset.top) || 0;
+            const top = margin ? Math.max(own, below) : own;
+            li.style.top = top + 'px';
+            below = top + li.offsetHeight + 12;
+          });
         }
 
         function toggleCard(chip, card, open) {
           card.hidden = !open;
           chip.setAttribute('aria-expanded', String(open));
           card.closest('.pf-nlr__pin').classList.toggle('is-open', open);
-          if (open) {
-            fit(card);
-          }
+          fit(card);
         }
 
         root.addEventListener('keydown', (e) => {
@@ -340,10 +357,24 @@
           frame.style.height = h + 'px';
           list = sections(doc, h);
           pins.querySelectorAll('.pf-nlr__pin').forEach((li) => li.remove());
+          // Cards start open in the margin beside the email (59rem stage,
+          // newsletter-review.scss); with no margin they'd cover the email,
+          // so they open only when asked. Set again only when that changes,
+          // so a card the reader closed stays closed.
+          const stage = pins.closest('.pf-nlr__stage') || root;
+          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+          const wide = stage.clientWidth >= 59 * rem;
+          if (wide !== margin) {
+            margin = wide;
+            cards.forEach((entry) => {
+              entry.card.hidden = !wide;
+            });
+          }
           list.forEach((section, i) => {
             const li = document.createElement('li');
             li.className = 'pf-nlr__pin';
-            li.style.top = (frame.offsetTop + section.top + 8) + 'px';
+            li.dataset.top = String(frame.offsetTop + section.top + 8);
+            li.style.top = li.dataset.top + 'px';
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'pf-nlr__pin-button';
@@ -372,9 +403,6 @@
               li.append(chip, entry.card);
               li.classList.toggle('is-open', !entry.card.hidden);
             }
-            // Room down to the next section's button (or the email's foot).
-            const next = i + 1 < list.length ? list[i + 1].top + 8 : h;
-            li.dataset.room = String(Math.max(0, next - section.top - 8 - 12));
             pins.append(li);
           });
           cards.forEach((entry) => fit(entry.card));

@@ -60,6 +60,11 @@ final class NewsletterReview {
   public const READ = 'read';
 
   /**
+   * Who replies to notes, shown as “Kyle replied”: the review is internal.
+   */
+  public const REPLY_BY = 'Kyle';
+
+  /**
    * What the template needs, from the marker's two ids.
    *
    * @return array{html: ?string, version: ?string, fetched: ?int, preview: string, form: ?array, issue: string, public: array}
@@ -91,7 +96,8 @@ final class NewsletterReview {
    *   Each note also has version (the draft it was sent on), status (open,
    *   changed, kept or waiting; open when staff haven't set one), reply
    *   (staff's answer, '' for none), replied (when, a timestamp, 0 for none)
-   *   and replied_on (the draft version then, '' when unknown): stamp().
+   *   and replied_on (the draft version then, '' when unknown): stamp(), and
+   *   reply_by (self::REPLY_BY).
    */
   private static function publicNotes(string $issue, string $version): array {
     $notes = PublicNotes::approved(self::WEBFORM, 'section', ['issue' => $issue], ['version', 'reply', 'status', 'replied']);
@@ -104,6 +110,7 @@ final class NewsletterReview {
     foreach ($notes as &$list) {
       foreach ($list as &$note) {
         $note = self::stamp($note, $version);
+        $note['reply_by'] = self::REPLY_BY;
         $note['reply_url'] = $staff ? Url::fromRoute('entity.webform_submission.edit_form', [
           'webform' => self::WEBFORM,
           'webform_submission' => $note['sid'],
