@@ -5729,18 +5729,24 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 // the mark's width (container units), so it holds its shape at any size
 // without a script: the rows fill the frame's inside; the frame is as
 // thick as the name's stems (.145 of its size); the padding is one cap
-// height of the Center line (u), the gap between the rows half of one,
-// and the room above and below three. text-box trims each row to its
+// height of the Center line (u) and the gap between the rows half of one.
+// The room above and below follows the column, not the mark (which stops
+// at 30rem): 8% of it, 36px to 80px, the same over and under (the
+// kicker gives up its own margin). text-box trims each row to its
 // cap height and baseline, so the padding is even to the eye.
 .pf-landing__mark {
   --pf-mark-w: min(30rem, 100%);
   container-type: inline-size;
   width: var(--pf-mark-w);
-  margin: calc(var(--pf-mark-w) * .1254) auto;
+  margin: clamp(2.25rem, 8%, 5rem) auto;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1;
   text-transform: uppercase;
+}
+
+.pf-landing__kicker:has(+ .pf-landing__mark) {
+  margin-bottom: 0;
 }
 
 // White on the dark hero, dark gray on light themes: the text color, not
