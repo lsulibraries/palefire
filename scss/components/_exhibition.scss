@@ -3699,6 +3699,25 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
   }
 }
 
+// The last gallery, when it opens on a cover (About the Project): nothing
+// follows it but the footer, so its photograph runs on to the section's
+// foot (over the empty gallery body and the section's bottom padding),
+// meeting the footer, and is not faded out at the area's foot.
+$pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last-child:has(> .pf-section__inner > .pf-gallery--cover .pf-exhibit-wall-hero)';
+
+#{$pf-last-cover} > .pf-section__inner > .pf-gallery > .pf-exhibit-wall-hero {
+  grid-row: 1 / -1;
+  margin-bottom: calc(-1 * var(--pf-section-pad-block, 0px));
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:last-child:has(> .pf-section__inner > .pf-gallery--cover .pf-exhibit-wall-hero) .pf-exhibit-wall-hero .pf-exhibit-wall-hero__frame {
+      animation-name: pf-exhibit-frame-in, none;
+    }
+  }
+}
+
 // The frame held at the screen's top while the area comes up (the entry
 // is the scrollport under the header), then fading out in place as the
 // area's foot goes by (from where the frame unsticks to the exit's end:

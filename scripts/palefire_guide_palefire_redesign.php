@@ -495,6 +495,7 @@ HTML),
 <li>Exhibition title pages: the Contents button now sits right under the title, before the introduction, so it’s always on the first screen. Where the Scroll cue shows, the Begin button is gone, since the cue does the same job.</li>
 <li>Exhibition walls: the Audio only boxes for clips without a picture are now as tall as the photographs beside them.</li>
 <li>All ten new oral history exhibitions now have read-along transcripts like Mossville’s: as a clip plays, the words light up phrase by phrase, and clicking a phrase plays from there.</li>
+<li>The last section of an exhibition, when it opens with a large photo (like Mossville’s About the Project), now keeps that photo behind its text all the way down to the footer, instead of fading it out above a plain band.</li>
 <li>Mossville’s About the Project now opens with a large photo of the project’s “Come Tell Your Story” sign on an interview table.</li>
 <li>Special Collections’ exhibitions section is back to its usual picture cards; the gallery-style list with titles under the pictures is only on the Oral History pages.</li>
 <li>On a computer screen, an exhibition section with no introduction keeps its photo full screen, with a softer shadow at the bottom behind the title. The title and the clips now scroll up together, with no pause, and the top of the first row of clips shows under the title from the start.</li>
