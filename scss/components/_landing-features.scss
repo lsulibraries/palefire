@@ -5342,6 +5342,14 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
     --scale: 1.3;
   }
 
+  // The room this page is about at the location page's size: its room is
+  // small on this drawing, and the name on its plate has to fit inside it
+  // (js/hero-highlights.js).
+  .pf-map__label.is-active,
+  .pf-map__knock {
+    --scale: 1;
+  }
+
   .pf-map__region.is-active .pf-map__hatch {
     fill: var(--pf-map-hover);
     fill-opacity: 1;
@@ -5729,7 +5737,8 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 // the mark's width (container units), so it holds its shape at any size
 // without a script: the rows fill the frame's inside; the frame is as
 // thick as the name's stems (.145 of its size); the padding is two cap
-// heights of the Center line (u) and the gap between the rows half of one.
+// heights of the Center line (u) and the gap between the rows three
+// quarters of one.
 // Around it, clear space like a mat: above and below as much as is left
 // at its sides ((column - mark) / 2), so the space is even on all four
 // sides; at least 36px (phones, where the mark is the column's width),
@@ -5781,7 +5790,7 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 }
 
 .pf-landing__mark-line {
-  margin: 1.929cqi -.1em 0 0;
+  margin: 2.893cqi -.1em 0 0;
   font-size: 5.426cqi;
   font-weight: 300;
   letter-spacing: .1em;

@@ -215,9 +215,14 @@
   // The map banner (a unit's homepage): the lit room as a location page
   // shows it (js/building-map.js, "Here" marker): the "here" arrow over its
   // name, and the name on a clear plate, a black rect in the room's hatch
-  // mask (the stripes) and in a mask over the lines (any wall it crosses),
-  // on the name's own plane (it copies the name's --x/--y). Measured from
-  // the name's own box, before its transform.
+  // mask (the stripes, clipped to the room's outline so the next room's
+  // stripes stay) and in a mask over the lines (any wall it crosses), on
+  // the name's own plane. Measured as a location page measures it: from
+  // the letters themselves (cap height over each baseline, the first
+  // glyph's left to the last glyph's right, without the trailing
+  // letter-spacing), not the line box, with an even .7em margin. The
+  // room is small on this drawing, so the name keeps the location page's
+  // size (_landing-features.scss) and its outline stays whole.
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const markHere = (map) => {
     const svg = map.querySelector('svg');
@@ -236,7 +241,16 @@
       knock.setAttribute('style', label.getAttribute('style') || '');
       return knock;
     });
-    mask.appendChild(knocks[0]);
+    const clip = document.createElementNS(SVG_NS, 'clipPath');
+    clip.id = ref[1] + '-here-clip';
+    clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
+    const outline = document.createElementNS(SVG_NS, 'path');
+    outline.setAttribute('d', hatch.getAttribute('d') || '');
+    clip.appendChild(outline);
+    const plate = document.createElementNS(SVG_NS, 'g');
+    plate.setAttribute('clip-path', 'url(#' + clip.id + ')');
+    plate.appendChild(knocks[0]);
+    mask.append(clip, plate);
     const walls = document.createElementNS(SVG_NS, 'mask');
     walls.id = ref[1] + '-here-walls';
     walls.setAttribute('maskUnits', 'userSpaceOnUse');
@@ -264,16 +278,35 @@
     svg.appendChild(marker);
 
     const place = () => {
-      const box = label.getBBox();
-      if (!box.width) {
+      const cs = getComputedStyle(label);
+      const em = parseFloat(cs.fontSize) || 62;
+      const spacing = parseFloat(cs.letterSpacing) || 0;
+      const cap = em * 0.72;
+      const pad = em * 0.7;
+      const box = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+      const lines = label.querySelectorAll('tspan');
+      (lines.length ? [...lines] : [label]).forEach((line) => {
+        const text = line.textContent;
+        for (let i = 0; i < line.getNumberOfChars() && i < text.length; i++) {
+          if (/\s/.test(text[i])) {
+            continue;
+          }
+          const start = line.getStartPositionOfChar(i);
+          const extent = line.getExtentOfChar(i);
+          box.left = Math.min(box.left, extent.x);
+          box.right = Math.max(box.right, extent.x + extent.width - spacing);
+          box.top = Math.min(box.top, start.y - cap);
+          box.bottom = Math.max(box.bottom, start.y);
+        }
+      });
+      if (!Number.isFinite(box.left)) {
         return;
       }
-      const pad = (parseFloat(getComputedStyle(label).fontSize) || 62) * 0.3;
       knocks.forEach((knock) => {
-        knock.setAttribute('x', (box.x - pad).toFixed(1));
-        knock.setAttribute('y', (box.y - pad).toFixed(1));
-        knock.setAttribute('width', (box.width + pad * 2).toFixed(1));
-        knock.setAttribute('height', (box.height + pad * 2).toFixed(1));
+        knock.setAttribute('x', (box.left - pad).toFixed(1));
+        knock.setAttribute('y', (box.top - pad).toFixed(1));
+        knock.setAttribute('width', (box.right - box.left + pad * 2).toFixed(1));
+        knock.setAttribute('height', (box.bottom - box.top + pad * 2).toFixed(1));
       });
       // Over the name's middle, clear of its plate, as building-map.js
       // places it.

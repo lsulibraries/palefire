@@ -265,13 +265,14 @@
   {% set account_url = hero ? 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll?' : '' %}
   {# Oral History: the card's button is the interviews online (the Louisiana
      Digital Library's Williams Center collection), and the line under it
-     goes to the Oral History FAQs in AskUs. #}
+     opens the page's own Ask us tab (#ask, the FAQs; js/section-tabs.js
+     opens the panel and scrolls to its tab bar). #}
   {% set account_label = 'Log in or register'|t %}
   {% set account_note = { lead: 'First time?'|t, text: 'Read the guide'|t, url: quick_guide.url|default('/v2/special/guides/special-collections'), hidden: quick_guide.url ? '' : ': How to Use Special Collections'|t, external: false } %}
   {% if hero and hero_unit == 'oral_history' %}
     {% set account_url = 'https://www.louisianadigitallibrary.org/lsu-thwcoh' %}
     {% set account_label = 'Listen online'|t %}
-    {% set account_note = { lead: 'Questions?'|t, text: 'Read the FAQs'|t, url: 'https://askus.lib.lsu.edu/search/?t=0&g=12395', hidden: ': Oral History'|t, external: true } %}
+    {% set account_note = { lead: 'Questions?'|t, text: 'Read the FAQs'|t, url: '#ask', hidden: ': Oral History'|t, external: false } %}
   {% endif %}
   {% if lead_breadcrumb %}
     <div class="pf-landing__bar">
