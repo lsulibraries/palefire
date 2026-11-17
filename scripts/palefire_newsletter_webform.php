@@ -25,12 +25,19 @@
  * exists it is left alone, so edits made in the UI are kept. replace=1 resets
  * its fields and settings to these (submissions are kept): run it with
  * replace=1 once to add the Approved box, Your take, the thumbs' vote and
- * voter, and the new thank-you (2026-11-16).
+ * voter, and the new thank-you (2026-11-16), and again to add Our reply,
+ * Status and Replied (2026-11-17).
  *
  * To approve a note: the Webform's Results tab, open the note, Edit, tick
  * "Approved to show on the review page", Save. Untick it to take it down.
- * The box is private: readers never see it, and a note can't arrive
- * approved.
+ * To answer it, on the same Edit screen: write Our reply, choose a Status
+ * (Open, Changed, Kept as is, Waiting on someone), Save. The review page
+ * shows the reply under the approved note as "LSU Libraries replied", with
+ * the date and the draft version it was given on (Replied, which the page
+ * fills in the first time it is shown after the reply changes: a theme
+ * can't run a save hook). Changed and Kept as is fold under Resolved. These
+ * boxes are private: readers never see them, and a note can't arrive
+ * approved, answered or resolved.
  *
  * The form has no page of its own: it lives on the review pages, which are
  * published but unlisted, so anyone with the link can send a note, with a
@@ -81,7 +88,8 @@ if ($existing && !$replace) {
 
 // The keys are the ones NewsletterReview::form(), js/newsletter-review.js and
 // js/public-notes.js fill in (section, issue, version, verdict, vote, voter),
-// and PublicNotes reads (comment, verdict, vote, voter, approved).
+// and PublicNotes reads (comment, verdict, vote, voter, approved), and
+// NewsletterReview reads and fills in (reply, status, replied).
 $elements = [
   'name' => [
     '#type' => 'textfield',
@@ -122,6 +130,39 @@ $elements = [
   'approved' => [
     '#type' => 'checkbox',
     '#title' => 'Approved to show on the review page',
+    '#private' => TRUE,
+    '#access_create_roles' => [],
+  ],
+  // Staff only too: an answer shown under the approved note, as LSU
+  // Libraries, and where the note stands. Notes without a status are Open.
+  'reply' => [
+    '#type' => 'textarea',
+    '#title' => 'Our reply',
+    '#description' => 'Shown under the note on the review page, as LSU Libraries, once the note is approved. Leave it empty for none.',
+    '#private' => TRUE,
+    '#access_create_roles' => [],
+    '#rows' => 3,
+    '#maxlength' => 4000,
+  ],
+  'status' => [
+    '#type' => 'radios',
+    '#title' => 'Status',
+    '#options' => [
+      'open' => 'Open',
+      'changed' => 'Changed',
+      'kept' => 'Kept as is',
+      'waiting' => 'Waiting on someone',
+    ],
+    '#default_value' => 'open',
+    '#private' => TRUE,
+    '#access_create_roles' => [],
+  ],
+  // Set by the review page, never typed: when the reply was saved, the draft
+  // version then, and a fingerprint of the reply, so a changed reply is
+  // stamped again (NewsletterReview::stamp()).
+  'replied' => [
+    '#type' => 'hidden',
+    '#title' => 'Replied (time, draft version, reply fingerprint; set by the review page)',
     '#private' => TRUE,
     '#access_create_roles' => [],
   ],

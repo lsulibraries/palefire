@@ -508,6 +508,7 @@ HTML),
 <li>Exhibitions can now have a Timeline gallery: every dated event from the other galleries in one list, in date order and grouped by decade, read top to bottom on phones and computers alike. Each event says which gallery it belongs to and opens it. Entries can carry a date, shown under their heading, and on a wall an event with no picture hangs as a card with its date. Integrating LSU opens with one, like the old listening station’s timeline.</li>
 <li>Exhibition timelines: events with only text are no longer clickable. Their few lines are shown right on the timeline, so nothing opens just to show a sentence; events with a picture or clip still open them.</li>
 <li>Exhibition walls: the same events now hang beside the pictures as wall labels, with their date, heading and text, instead of date cards that opened a nearly empty window. A link to one scrolls to its label.</li>
+<li>Newsletter reviewers now get answers: staff can reply to an approved note and mark it Open, Changed, Kept as is or Waiting on someone. The reply, the status and the drafts it went through show under the note, and resolved notes fold away under Resolved.</li>
 </ul>
 HTML),
   $text('Tue Nov 17: Live Chat and What are these?', <<<'HTML'
@@ -518,6 +519,7 @@ HTML),
 <li>Ask Us drawer: Live Chat now looks like the email forms beside it, with the same gold rule, place and date, cells with fine lines, small capital labels, fields drawn as a single line and a gold Send bar. The forms in the drawer no longer have the words Question slip at the top.</li>
 <li>Live Chat also follows light reading colors such as Cream: dark ink on the page’s own paper, instead of a black box.</li>
 <li>Combined Search: Databases searches the A–Z Databases list, so subjects count: nutrition finds 18 databases instead of 2. Show all for Research Guides and Databases now stays on the page, filtered to that source, like the other sections.</li>
+<li>Combined Search: Place hold opens the catalog in a new tab, so someone placing holds on several items keeps their results open behind it.</li>
 </ul>
 HTML),
 ]);

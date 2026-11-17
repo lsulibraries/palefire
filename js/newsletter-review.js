@@ -157,6 +157,8 @@
             }
           });
           card.append(more);
+          // Resolved (n) opened or closed: cut again (toggle doesn't bubble).
+          card.addEventListener('toggle', () => fit(card), true);
           group.hidden = true;
           cards.set(about, { card, notes, group });
         });

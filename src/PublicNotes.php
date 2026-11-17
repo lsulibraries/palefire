@@ -36,7 +36,7 @@ final class PublicNotes {
    *   Other elements to carry in each note (section, on the page review
    *   hub, where notes are keyed by page).
    *
-   * @return array<string, list<array{name: string, comment: string, verdict: string, created: int}>>
+   * @return array<string, list<array{name: string, comment: string, verdict: string, created: int, changed: int, sid: int}>>
    *   Oldest first, keyed by the note's $key value ('' for none).
    */
   public static function approved(string $webform, string $key, array $match = [], array $fields = []): array {
@@ -62,6 +62,8 @@ final class PublicNotes {
         'comment' => $comment,
         'verdict' => (string) ($data['verdict'] ?? ''),
         'created' => (int) $submission->getCreatedTime(),
+        'changed' => (int) $submission->getChangedTime(),
+        'sid' => (int) $submission->id(),
       ];
       foreach ($fields as $field) {
         $note[$field] = trim((string) ($data[$field] ?? ''));

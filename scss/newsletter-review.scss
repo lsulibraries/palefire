@@ -351,6 +351,136 @@
   }
 }
 
+// Staff answers on a note (includes/public-notes.html.twig): a status chip
+// and the versions it went through, the reply set in from the note, and
+// resolved notes folded under Resolved (n). Ink and muted only, both at text
+// contrast in either scheme; the chip's square says the status without
+// color (hollow open, half waiting, full changed, struck through kept).
+.pf-nlr .pf-pn__trail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem .625rem;
+  margin: .375rem 0 0;
+  color: var(--pf-nlr-muted);
+  font-size: .75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-nlr .pf-pn__status {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .125rem .5rem;
+  box-shadow: inset 0 0 0 1px var(--pf-nlr-muted);
+  color: var(--pf-nlr-ink);
+  font-weight: 600;
+  letter-spacing: .02em;
+  white-space: nowrap;
+
+  &::before {
+    content: "";
+    flex: none;
+    width: .5rem;
+    height: .5rem;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+  }
+}
+
+.pf-nlr .pf-pn__status--waiting::before {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+
+.pf-nlr .pf-pn__status--changed::before {
+  background: currentColor;
+}
+
+.pf-nlr .pf-pn__status--kept::before {
+  background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat;
+}
+
+.pf-nlr .pf-pn__reply {
+  margin-top: .625rem;
+  padding: .5rem .75rem;
+  border-inline-start: 2px solid var(--pf-nlr-ink);
+  background: color-mix(in srgb, var(--bs-body-color) 5%, transparent);
+}
+
+.pf-nlr .pf-pn__reply-who {
+  margin: 0;
+  color: var(--pf-nlr-ink);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.pf-nlr .pf-pn__reply-text {
+  margin: .25rem 0 0;
+  color: var(--pf-nlr-ink);
+  font-size: .875rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.pf-nlr .pf-pn__resolved {
+  margin-top: .75rem;
+  border-top: 1px solid var(--pf-nlr-rule);
+
+  &:first-child {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  > .pf-pn__list {
+    margin-top: .5rem;
+  }
+}
+
+.pf-nlr .pf-pn__resolved-toggle {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  color: var(--pf-nlr-ink);
+  font-size: .875rem;
+  font-weight: $pf-button-weight;
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  // A chevron that turns down when open.
+  &::before {
+    content: "";
+    flex: none;
+    width: .4375rem;
+    height: .4375rem;
+    border-block-end: 1.5px solid currentColor;
+    border-inline-end: 1.5px solid currentColor;
+    rotate: -45deg;
+
+    @include pf-nlr-motion {
+      transition: rotate .24s var(--pf-nlr-ease);
+    }
+  }
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: .25em;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-nlr-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pf-nlr .pf-pn__resolved[open] > .pf-pn__resolved-toggle::before {
+  rotate: 45deg;
+}
+
 .pf-nlr__card-more {
   min-height: 2.75rem;
   margin-top: .25rem;

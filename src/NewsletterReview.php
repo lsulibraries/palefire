@@ -77,7 +77,7 @@ final class NewsletterReview {
       'preview' => $preview,
       'form' => self::form($draft['version'] ?? '', strtolower($activity)),
       'issue' => strtolower($activity),
-      'public' => self::publicNotes(strtolower($activity)),
+      'public' => self::publicNotes(strtolower($activity), $draft['version'] ?? ''),
     ];
   }
 
@@ -87,9 +87,20 @@ final class NewsletterReview {
    * @return array{groups: list<array{about: string, notes: array, votes: array}>, count: int, thumbs: int}
    *   One group per story with any (the whole issue first, then in the order
    *   notes arrived), how many approved notes and how many thumbs in all.
+   *   Each note also has version (the draft it was sent on), status (open,
+   *   changed, kept or waiting; open when staff haven't set one), reply
+   *   (staff's answer, '' for none), replied (when, a timestamp, 0 for none)
+   *   and replied_on (the draft version then, '' when unknown): stamp().
    */
-  private static function publicNotes(string $issue): array {
-    $notes = PublicNotes::approved(self::WEBFORM, 'section', ['issue' => $issue]);
+  private static function publicNotes(string $issue, string $version): array {
+    $notes = PublicNotes::approved(self::WEBFORM, 'section', ['issue' => $issue], ['version', 'reply', 'status', 'replied']);
+    foreach ($notes as &$list) {
+      foreach ($list as &$note) {
+        $note = self::stamp($note, $version);
+      }
+      unset($note);
+    }
+    unset($list);
     $votes = PublicNotes::votes(self::WEBFORM, 'section', ['issue' => $issue]);
     $order = array_unique(array_merge([''], array_keys($notes), array_keys($votes)));
     $groups = [];
@@ -106,6 +117,61 @@ final class NewsletterReview {
       $thumbs += $tally['good'] + $tally['changes'];
     }
     return ['groups' => $groups, 'count' => $count, 'thumbs' => $thumbs];
+  }
+
+  /**
+   * When a note's reply was given, and on which draft.
+   *
+   * Staff write Our reply on the Webform's Edit screen, which a theme can't
+   * hook into. So the first time this page is drawn after a reply is written
+   * or changed, the note's Replied is filled in: the time the note was last
+   * saved (that edit), the draft version now, and a fingerprint of the
+   * reply, so the next change is caught. Without a draft just now, the time
+   * still shows and the stamp waits for the next drawing.
+   *
+   * @param array $note
+   *   An approved note (PublicNotes::approved()) with version, reply, status
+   *   and replied.
+   * @param string $version
+   *   The draft's version now ('' when it couldn't be fetched).
+   *
+   * @return array
+   *   The note with status, replied (timestamp, 0 for no reply) and
+   *   replied_on (version, or '').
+   */
+  private static function stamp(array $note, string $version): array {
+    $status = $note['status'] ?? '';
+    $note['status'] = in_array($status, ['open', 'changed', 'kept', 'waiting'], TRUE) ? $status : 'open';
+    // "<time> <version> <fingerprint>", as saved below.
+    $saved = explode(' ', (string) ($note['replied'] ?? ''));
+    $note['replied'] = 0;
+    $note['replied_on'] = '';
+    if (($note['reply'] ?? '') === '') {
+      return $note;
+    }
+    $mark = substr(sha1($note['reply']), 0, 8);
+    if (count($saved) === 3 && $saved[2] === $mark) {
+      $note['replied'] = (int) $saved[0];
+      $note['replied_on'] = $saved[1];
+      return $note;
+    }
+    $note['replied'] = (int) $note['changed'];
+    if ($version === '') {
+      return $note;
+    }
+    try {
+      $storage = \Drupal::entityTypeManager()->getStorage('webform_submission');
+      $submission = $storage->load($note['sid']);
+      if ($submission) {
+        $submission->setElementData('replied', $note['replied'] . ' ' . $version . ' ' . $mark);
+        $submission->save();
+        $note['replied_on'] = $version;
+      }
+    }
+    catch (\Throwable $e) {
+      // Shown without the version; tried again next time.
+    }
+    return $note;
   }
 
   /**

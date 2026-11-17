@@ -6,23 +6,69 @@
  * with Show notes (js/public-notes.js), which this browser remembers.
  *
  * - notes: each with name ('' when sent without one), comment, verdict
- *   ('good', 'changes' or '') and created (timestamp).
+ *   ('good', 'changes' or '') and created (timestamp). On the newsletter
+ *   review pages (Drupal\palefire\NewsletterReview) also status (open,
+ *   changed, kept or waiting), reply (staff's answer, '' for none), replied
+ *   (timestamp, 0 for none), version (the draft the note was sent on) and
+ *   replied_on (the draft when answered): a status chip, a trail of
+ *   versions, and the reply under the note. Changed and Kept as is fold
+ *   under Resolved.
  * - label: what the notes are about, for screen readers.
  */
 #}
-<div class="pf-pn" data-pf-pn-notes>
-  <ul class="pf-pn__list" role="list" aria-label="{{ 'Notes on @label'|t({ '@label': label }) }}">
-    {% for note in notes %}
-      <li class="pf-pn__n">
-        <p class="pf-pn__text">{{ note.comment|nl2br }}</p>
-        <p class="pf-pn__who">
-          {% if note.verdict in ['good', 'changes'] %}
-            {% include '@palefire/includes/icon-fa.html.twig' with { name: note.verdict == 'good' ? 'thumbs-up' : 'thumbs-down', class: 'pf-pn__mark' } only %}
-            <span class="visually-hidden">{{ note.verdict == 'good' ? 'Thumbs up.'|t : 'Thumbs down.'|t }} </span>
-          {% endif %}
-          {{ note.name ?: 'Anonymous'|t }}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><time datetime="{{ note.created|date('Y-m-d') }}">{{ note.created|format_date('custom', 'M j, Y') }}</time>
+{% macro note(note) %}
+  {% set statuses = { open: 'Open'|t, changed: 'Changed'|t, kept: 'Kept as is'|t, waiting: 'Waiting on someone'|t } %}
+  <li class="pf-pn__n">
+    <p class="pf-pn__text">{{ note.comment|nl2br }}</p>
+    <p class="pf-pn__who">
+      {% if note.verdict in ['good', 'changes'] %}
+        {% include '@palefire/includes/icon-fa.html.twig' with { name: note.verdict == 'good' ? 'thumbs-up' : 'thumbs-down', class: 'pf-pn__mark' } only %}
+        <span class="visually-hidden">{{ note.verdict == 'good' ? 'Thumbs up.'|t : 'Thumbs down.'|t }} </span>
+      {% endif %}
+      {{ note.name ?: 'Anonymous'|t }}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><time datetime="{{ note.created|date('Y-m-d') }}">{{ note.created|format_date('custom', 'M j, Y') }}</time>
+    </p>
+    {% if note.status is defined and statuses[note.status] is defined %}
+      <p class="pf-pn__trail">
+        <span class="pf-pn__status pf-pn__status--{{ note.status }}"><span class="visually-hidden">{{ 'Status:'|t }} </span>{{ statuses[note.status] }}</span>
+        {% if note.version or note.replied_on %}
+          {# The dot keeps to the line before it when the trail wraps. #}
+          <span class="pf-pn__steps">
+            {%- if note.version %}{{ 'Sent on draft @version'|t({ '@version': 'v' ~ note.version }) }}{% endif -%}
+            {%- if note.version and note.replied_on %}&nbsp;· {% endif -%}
+            {%- if note.replied_on %}{{ 'Replied on @version'|t({ '@version': 'v' ~ note.replied_on }) }}{% endif -%}
+          </span>
+        {% endif %}
+      </p>
+    {% endif %}
+    {% if note.reply %}
+      <div class="pf-pn__reply">
+        <p class="pf-pn__reply-who">
+          {{ 'LSU Libraries replied'|t }}{% if note.replied %}<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><time datetime="{{ note.replied|date('Y-m-d') }}">{{ note.replied|format_date('custom', 'M j') }}</time>{% endif %}
         </p>
-      </li>
-    {% endfor %}
-  </ul>
+        <p class="pf-pn__reply-text">{{ note.reply|nl2br }}</p>
+      </div>
+    {% endif %}
+  </li>
+{% endmacro %}
+{% import _self as pn %}
+{% set resolved = notes|filter(n => n.status is defined and n.status in ['changed', 'kept']) %}
+{% set current = notes|filter(n => not (n.status is defined and n.status in ['changed', 'kept'])) %}
+<div class="pf-pn" data-pf-pn-notes>
+  {% if current %}
+    <ul class="pf-pn__list" role="list" aria-label="{{ 'Notes on @label'|t({ '@label': label }) }}">
+      {% for note in current %}
+        {{ pn.note(note) }}
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if resolved %}
+    <details class="pf-pn__resolved">
+      <summary class="pf-pn__resolved-toggle">{{ 'Resolved (@count)'|t({ '@count': resolved|length }) }}</summary>
+      <ul class="pf-pn__list" role="list" aria-label="{{ 'Resolved notes on @label'|t({ '@label': label }) }}">
+        {% for note in resolved %}
+          {{ pn.note(note) }}
+        {% endfor %}
+      </ul>
+    </details>
+  {% endif %}
 </div>
