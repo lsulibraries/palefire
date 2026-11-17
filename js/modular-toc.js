@@ -1137,8 +1137,9 @@
       crumb.append(button);
       crumbList.append(crumb);
       button.addEventListener('click', openContents, { signal });
-      // The hero's Contents button (includes/landing.html.twig): the same menu.
-      bar.parentElement.querySelectorAll('[data-pf-landing-contents]').forEach((heroButton) => {
+      // The hero's Contents button (includes/landing.html.twig) and an
+      // exhibition gallery's (paragraph--exhibit-page.html.twig): the same menu.
+      new Set([...bar.parentElement.querySelectorAll('[data-pf-landing-contents]'), ...document.querySelectorAll('.pf-sections [data-pf-landing-contents]')]).forEach((heroButton) => {
         heroButton.setAttribute('aria-controls', TOC_DRAWER);
         heroButton.addEventListener('click', openContents, { signal });
         heroButton.hidden = false;

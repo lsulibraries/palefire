@@ -29,10 +29,32 @@
           <meta itemprop="position" content="{{ loop.index }}">
         </li>
       {% endfor %}
-      {# Add the current page if it is not already present. #}
+      {# Add the current page if it is not already present. An exhibition's
+         title opens a list of the exhibitions in its family
+         (exhibit_family, palefire_preprocess_breadcrumb()): a native
+         popover, so Esc, a click outside and focus are the browser's;
+         js/exhibition.js sets it under the button. #}
       {% if current_title and (not last_item or last_item.text != current_title) %}
-        <li class="breadcrumb-item active" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span itemprop="name">{{ current_title }}</span>
+        <li class="breadcrumb-item active{{ exhibit_family ? ' pf-breadcrumb__family' }}" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          {% if exhibit_family %}
+            <button type="button" class="pf-breadcrumb__toc pf-breadcrumb__switch" popovertarget="pf-exhibit-family">
+              <span class="pf-breadcrumb__section-label" itemprop="name">{{ current_title }}</span>
+              <span class="visually-hidden">{{ ', switch to another @family exhibition'|t({'@family': exhibit_family_label}) }}</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="pf-exhibit-family" id="pf-exhibit-family" popover>
+              <p class="pf-exhibit-family__label" id="pf-exhibit-family-label">{{ '@family exhibitions'|t({'@family': exhibit_family_label}) }}</p>
+              <ul class="pf-exhibit-family__list" aria-labelledby="pf-exhibit-family-label">
+                {% for item in exhibit_family %}
+                  <li>
+                    <a class="pf-exhibit-family__link" href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}>{{ item.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            <span itemprop="name">{{ current_title }}</span>
+          {% endif %}
           <meta itemprop="position" content="{{ breadcrumb|length + 1 }}">
         </li>
       {% endif %}

@@ -313,6 +313,10 @@
           {% block main_content %}
             {{ page.highlighted }}
             {{ page.content }}
+            {# An exhibition's way on: the next one in its family, and back. #}
+            {% if exhibit_end %}
+              {% include '@palefire/includes/exhibit-end.html.twig' with { end: exhibit_end } only %}
+            {% endif %}
           {% endblock %}
         </main>
 

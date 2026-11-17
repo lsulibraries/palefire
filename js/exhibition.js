@@ -2425,6 +2425,56 @@
     observer.observe(text);
   }
 
+  // The breadcrumb's exhibition switcher (navigation/breadcrumb.html.twig):
+  // a native popover, which the browser opens, closes and returns focus
+  // from. Set under its button, kept inside the screen, and following the
+  // button while open (the header's bar moves as the page scrolls).
+  function initFamily(list) {
+    const button = document.querySelector('[popovertarget="' + list.id + '"]');
+    if (!button || typeof list.showPopover !== 'function') {
+      return;
+    }
+    let frame = 0;
+    const place = () => {
+      frame = 0;
+      const box = button.getBoundingClientRect();
+      const gap = 8;
+      // Its CSS width (_exhibition.scss): it is not laid out yet when opening.
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const width = list.offsetWidth || Math.min(24 * rem, window.innerWidth - 2 * rem);
+      const start = Math.max(gap, Math.min(box.left, window.innerWidth - width - gap));
+      list.style.setProperty('--pf-family-top', Math.round(box.bottom + gap) + 'px');
+      list.style.setProperty('--pf-family-left', Math.round(start) + 'px');
+    };
+    const queue = () => {
+      if (!frame) {
+        frame = requestAnimationFrame(place);
+      }
+    };
+    let controller = null;
+    list.addEventListener('beforetoggle', (event) => {
+      if (event.newState === 'open') {
+        place();
+        controller = new AbortController();
+        window.addEventListener('scroll', queue, { passive: true, signal: controller.signal });
+        window.addEventListener('resize', queue, { passive: true, signal: controller.signal });
+        // Open on the current exhibition, so the list starts where the
+        // reader is.
+        requestAnimationFrame(() => {
+          const current = list.querySelector('[aria-current="page"]');
+          if (current) {
+            current.scrollIntoView({ block: 'nearest' });
+          }
+        });
+      }
+      else if (controller) {
+        controller.abort();
+        controller = null;
+      }
+    });
+    button.setAttribute('aria-controls', list.id);
+  }
+
   /* ---------------------------------------------------------------------
    * Behavior
    * ------------------------------------------------------------------ */
@@ -2448,6 +2498,7 @@
       once('pf-speakers', '.pf-exhibit-audio__text', context).forEach(markSpeakers);
       once('pf-audio', '[data-pf-audio]', context).forEach(initAudio);
       once('pf-exhibit-tip', '[data-pf-exhibit-tip]', context).forEach(initTip);
+      once('pf-exhibit-family', '.pf-exhibit-family[popover]', context).forEach(initFamily);
       // Biographies outside galleries (a page without the head's script).
       if (!state.pages.length) {
         once('pf-exhibit-bio', '[data-pf-exhibit-bio]', context).forEach(initBio);

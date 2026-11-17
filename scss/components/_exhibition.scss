@@ -920,6 +920,334 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
+// A gallery's Contents (paragraph--exhibit-page.html.twig): the rail's
+// panel without scrolling back to the cover. In the facts under a wall's
+// title (one more fact, after its dot) or at the end of the "In this
+// gallery" label's row; the mono label's type, the accent underline on
+// hover and focus. Hidden until js/modular-toc.js wires it.
+.pf-exhibit-contents {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  min-height: 1.5rem; // a 24px target (WCAG 2.5.8)
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bs-emphasis-color);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .3em;
+  cursor: pointer;
+  transition: text-decoration-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 1em;
+    height: 1em;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    outline-offset: 3px;
+  }
+}
+
+.pf-exhibit-wall__contents:has(> [hidden]) {
+  display: none;
+}
+
+.pf-exhibit-opener__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .25rem 1.5rem;
+  margin-bottom: .5rem;
+
+  .pf-exhibit-opener__label {
+    margin-bottom: 0;
+  }
+}
+
+// The breadcrumb's exhibition title opens its family's list
+// (navigation/breadcrumb.html.twig): a native popover, set under the
+// button by js/exhibition.js. The page's own type, not the crumbs' mono
+// caps; the current exhibition marked with the highlight's rule.
+.pf-exhibit-family {
+  position: fixed;
+  inset: auto;
+  top: var(--pf-family-top, 4rem);
+  left: var(--pf-family-left, 1rem);
+  width: min(24rem, calc(100vw - 2rem));
+  max-height: min(70svh, calc(100svh - var(--pf-family-top, 4rem) - 1rem));
+  margin: 0;
+  padding: 1rem 0 .5rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid $pf-hairline;
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, .14);
+  font: 400 1rem/1.4 var(--bs-body-font-family);
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: normal;
+}
+
+.pf-exhibit-family__label {
+  @extend %pf-exhibit-kicker;
+  padding: 0 1.25rem .5rem;
+}
+
+.pf-exhibit-family__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-exhibit-family__link {
+  display: block;
+  padding: .6rem 1.25rem;
+  border-top: 1px solid $pf-hairline;
+  font-size: .9375rem;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    background-color: var(--pf-exhibit-surface);
+    text-decoration: underline;
+    text-underline-offset: .2em;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    outline-offset: -2px;
+  }
+
+  &[aria-current="page"] {
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
+}
+
+@include pf-exhibit-motion {
+  .pf-exhibit-family {
+    transition: opacity .2s ease, translate .25s $pf-exhibit-ease, overlay .25s allow-discrete, display .25s allow-discrete;
+
+    &:not(:popover-open) {
+      opacity: 0;
+      translate: 0 -.375rem;
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        translate: 0 -.375rem;
+      }
+    }
+  }
+}
+
+// After the last gallery (includes/exhibit-end.html.twig): the next
+// exhibition in the family, as the galleries' Next placard one size up (a
+// still of it beside the title from md, the whole card one link), then
+// the way back to the family's home. On the page color, under a hairline;
+// lined up with the sections' padding.
+.pf-exhibit-end {
+  padding: clamp(2.5rem, 5vw, 4rem) var(--pf-section-pad-inline, 1.25rem) clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-end__next {
+  display: grid;
+  grid-template-areas:
+    "kicker"
+    "frame"
+    "text";
+  gap: 1rem;
+  color: var(--bs-emphasis-color);
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    outline-offset: .5rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      "kicker kicker"
+      "frame  text";
+    column-gap: clamp(2rem, 4vw, 4rem);
+    align-items: end;
+  }
+}
+
+.pf-exhibit-end__kicker {
+  @extend %pf-exhibit-kicker;
+  grid-area: kicker;
+}
+
+.pf-exhibit-end__number {
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  font-variant-numeric: tabular-nums;
+
+  // "Next exhibition · 02 / 11": the dot is decoration.
+  &::before {
+    content: "\2002\00b7\2002" / "";
+  }
+}
+
+.pf-exhibit-end__frame {
+  grid-area: frame;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--pf-exhibit-surface);
+}
+
+.pf-exhibit-end__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pf-exhibit-end__text {
+  grid-area: text;
+  display: grid;
+  gap: .5rem;
+  justify-items: start;
+}
+
+.pf-exhibit-end__title {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .15em;
+  transition: text-decoration-color $pf-hover-out ease;
+}
+
+.pf-exhibit-end__subtitle {
+  max-width: 32rem;
+  color: var(--pf-exhibit-muted);
+  text-wrap: pretty;
+}
+
+.pf-exhibit-end__go {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  margin-top: .5rem;
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  svg {
+    width: 1.25em;
+    height: 1.25em;
+    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
+}
+
+.pf-exhibit-end__next:is(:hover, :focus-visible) .pf-exhibit-end__title {
+  text-decoration-color: currentColor;
+  transition-duration: $pf-hover-in;
+}
+
+.pf-exhibit-end__back {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 2rem;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid $pf-hairline;
+  list-style: none;
+}
+
+// A family of one: only the way back, under the panel's own rule.
+.pf-exhibit-end > .pf-exhibit-end__back:nth-child(2) {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.pf-exhibit-end__home {
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  min-height: 1.5rem; // a 24px target (WCAG 2.5.8)
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bs-emphasis-color);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .3em;
+  transition: text-decoration-color $pf-hover-out ease, color $pf-hover-out ease;
+
+  svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    outline-offset: 3px;
+  }
+}
+
+@include pf-exhibit-motion {
+  .pf-exhibit-end__img {
+    transition: scale .8s $pf-exhibit-ease;
+  }
+
+  .pf-exhibit-end__next:is(:hover, :focus-visible) .pf-exhibit-end__img {
+    scale: 1.03;
+  }
+
+  .pf-exhibit-end__go svg {
+    transition: translate $pf-hover-out ease;
+  }
+
+  .pf-exhibit-end__next:is(:hover, :focus-visible) .pf-exhibit-end__go svg {
+    translate: .25rem 0;
+    transition-duration: $pf-hover-in;
+  }
+}
+
 // A link's target flashes once it is reached.
 .is-target {
   animation: pf-exhibit-flash 1.8s ease both;

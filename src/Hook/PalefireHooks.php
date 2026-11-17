@@ -327,6 +327,11 @@ class PalefireHooks {
     if (!$variables['modular_title_in_landing'] && self::stringValue($node, 'field_modular_type') === 'exhibition') {
       $variables['exhibit_head'] = $this->exhibitHead($node);
     }
+    // Exhibitions: after the last gallery, the next exhibition and the way
+    // back (includes/exhibit-end.html.twig).
+    if (self::stringValue($node, 'field_modular_type') === 'exhibition') {
+      $variables['exhibit_end'] = $this->exhibitEnd($node);
+    }
     // Showcase mode: every exhibition, under the <h1>
     // (includes/exhibit-showcase.html.twig).
     if (self::stringValue($node, 'field_modular_type') === 'showcase') {
@@ -857,6 +862,114 @@ class PalefireHooks {
       'keyfacts' => $keyfacts,
       'action' => $action,
       'cover' => $cover,
+      'cache' => $render,
+    ];
+  }
+
+  /**
+   * An exhibition's family: the exhibitions a reader moves between.
+   *
+   * Oral History's (under /v2/oralhistory/exhibitions/) are one family, and
+   * every other online exhibition (Special Collections') the other. A
+   * family lists what its showcase lists (Exhibition showcase not
+   * "hidden", a program page only when chosen), newest year first, then by
+   * title; the current page is always in it. For the breadcrumb's
+   * switcher (navigation/breadcrumb.html.twig) and the closing panel
+   * (includes/exhibit-end.html.twig). Returns:
+   * - items: title, url, current (bool) and node.
+   * - index: the current page's place in items.
+   * - parent: the family's home page (title, url).
+   * - all: the page that lists every exhibition, or NULL (Oral History's
+   *   home lists its own).
+   */
+  public static function exhibitFamily(NodeInterface $node, CacheableMetadata $cache): array {
+    $cache->addCacheTags(['node_list:' . self::MODULAR_BUNDLE])->addCacheContexts(['user.permissions']);
+    $user = \Drupal::currentUser();
+    $editor = $user->hasPermission('bypass node access') || $user->hasPermission('view any unpublished content');
+    $aliases = \Drupal::service('path_alias.manager');
+    $oral = static fn (NodeInterface $other): bool => str_starts_with($aliases->getAliasByPath('/node/' . $other->id()), '/v2/oralhistory/exhibitions/');
+    $mine = $oral($node);
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $repository = \Drupal::service('entity.repository');
+    $ids = $storage->getQuery()
+      ->accessCheck(TRUE)
+      ->condition('type', self::MODULAR_BUNDLE)
+      ->condition('field_modular_type', 'exhibition')
+      ->execute();
+
+    $items = [];
+    foreach ($storage->loadMultiple($ids) as $other) {
+      if (!$other instanceof NodeInterface) {
+        continue;
+      }
+      $current = $other->id() === $node->id();
+      $access = $other->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($access);
+      if (!$current && (!$access->isAllowed() || (!$editor && !$other->isPublished()))) {
+        continue;
+      }
+      $choice = self::stringValue($other, 'field_exhibit_showcase');
+      $program = $other->hasField('field_exhibit_action') && !$other->get('field_exhibit_action')->isEmpty();
+      if (!$current && ($choice === 'hidden' || ($choice === '' && $program) || $oral($other) !== $mine)) {
+        continue;
+      }
+      $other = $repository->getTranslationFromContext($other);
+      $items[] = [
+        'title' => $other->label(),
+        'url' => $other->toUrl()->toString(),
+        'current' => $current,
+        'year' => $other->hasField('field_exhibit_year') && !$other->get('field_exhibit_year')->isEmpty() ? (int) $other->get('field_exhibit_year')->value : 0,
+        'node' => $other,
+      ];
+    }
+    usort($items, static fn (array $a, array $b): int => [$b['year'], mb_strtolower($a['title'])] <=> [$a['year'], mb_strtolower($b['title'])]);
+    $index = 0;
+    foreach ($items as $i => $item) {
+      if ($item['current']) {
+        $index = $i;
+      }
+    }
+
+    return [
+      'items' => $items,
+      'index' => $index,
+      'parent' => $mine
+        ? ['title' => (string) t('Oral History'), 'url' => '/v2/oralhistory']
+        : ['title' => (string) t('Special Collections'), 'url' => '/v2/special'],
+      'all' => $mine ? NULL : '/v2/special/exhibitions',
+    ];
+  }
+
+  /**
+   * The closing panel after an exhibition's last gallery.
+   *
+   * The next exhibition in its family (exhibitFamily(), the last one wraps
+   * round to the first) with its cover, and the way back to the family's
+   * home (includes/exhibit-end.html.twig).
+   */
+  private function exhibitEnd(NodeInterface $node): array {
+    $cache = CacheableMetadata::createFromObject($node);
+    $family = self::exhibitFamily($node, $cache);
+    $count = count($family['items']);
+    $next = NULL;
+    if ($count > 1) {
+      $at = ($family['index'] + 1) % $count;
+      $item = $family['items'][$at];
+      $cover = _palefire_card_image_item($item['node'], $cache);
+      $next = [
+        'title' => $item['title'],
+        'url' => $item['url'],
+        'subtitle' => self::stringValue($item['node'], 'field_exhibit_subtitle'),
+        'position' => sprintf('%02d / %02d', $at + 1, $count),
+        'image' => $cover ? _palefire_exhibit_image($cover, '(min-width: 992px) 58vw, 100vw', $cache) : NULL,
+      ];
+    }
+    $render = [];
+    $cache->applyTo($render);
+    return [
+      'next' => $next,
+      'parent' => $family['parent'],
+      'all' => $family['all'],
       'cache' => $render,
     ];
   }

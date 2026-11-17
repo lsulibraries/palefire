@@ -55,6 +55,21 @@ function palefire_preprocess_breadcrumb(array &$variables) {
       $variables['#cache']['tags'] ?? [],
       $node->getCacheTags()
     );
+    // An exhibition: its title opens a list of the exhibitions in its
+    // family (PalefireHooks::exhibitFamily()), to switch between them.
+    if ($node->hasField('field_modular_type') && $node->get('field_modular_type')->value === 'exhibition') {
+      $cache = CacheableMetadata::createFromRenderArray($variables);
+      $family = PalefireHooks::exhibitFamily($node, $cache);
+      $cache->applyTo($variables);
+      if (count($family['items']) > 1) {
+        $variables['exhibit_family'] = array_map(static fn (array $item): array => [
+          'title' => $item['title'],
+          'url' => $item['url'],
+          'current' => $item['current'],
+        ], $family['items']);
+        $variables['exhibit_family_label'] = $family['parent']['title'];
+      }
+    }
   }
   // Staff profiles (a View page): the person's name, not the View's title.
   elseif (StaffDirectory::isRoute('profile')) {
