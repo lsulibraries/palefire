@@ -8,7 +8,9 @@
  * photos are fetched once a mouse first enters the ledger (or a row takes
  * focus) and shown once decoded. A short wait
  * before the swap keeps a sweep across the rows from flashing photos, and
- * the photo lingers a moment after the pointer leaves. Two slots crossfade.
+ * the photo stays while the pointer or focus is in the section (so the
+ * citation's link can be reached), lingering a moment after both leave.
+ * Two slots crossfade.
  * Nothing happens where CSS hides the layer (under lg, more contrast,
  * forced colors) or on touch, where a tap simply follows the link.
  */
@@ -107,15 +109,20 @@
     groups.addEventListener('pointerenter', (event) => {
       if (event.pointerType !== 'touch' && getComputedStyle(layer).display !== 'none') warm();
     });
+    // A row picks the photo; it stays while the pointer or focus is
+    // anywhere in the section, so its citation's View record link can be
+    // reached, and goes when both have left. A row without a cover clears it.
     lines.forEach((line) => {
       line.addEventListener('pointerenter', (event) => {
         if (event.pointerType !== 'touch') want(line.dataset.ledgerPhoto);
       });
-      line.addEventListener('pointerleave', (event) => {
-        if (event.pointerType !== 'touch' && document.activeElement !== line) want(null);
-      });
       line.addEventListener('focus', () => want(line.dataset.ledgerPhoto));
-      line.addEventListener('blur', () => want(null));
+    });
+    section.addEventListener('pointerleave', (event) => {
+      if (event.pointerType !== 'touch' && !section.contains(document.activeElement)) want(null);
+    });
+    section.addEventListener('focusout', (event) => {
+      if (!section.contains(event.relatedTarget) && !section.matches(':hover')) want(null);
     });
   }
 

@@ -25,7 +25,8 @@
  * - credit: the collection ("Louisiana and Lower Mississippi Valley
  *   Collections").
  * - call_number: "Mss. 893".
- * - url: the catalog record; "View record ↗" opens it in a new tab.
+ * - url: the catalog record; "View record ↗" opens it in a new tab, after
+ *   the call number, or on its own line when there is none.
  * - compact: TRUE for a card: maker, title, date and call number only.
  * - id: an id for the label, so a figure can point to it
  *   (aria-describedby).
@@ -51,7 +52,7 @@
       <p class="pf-object-label__line pf-object-label__size">{{ dimensions }}</p>
     {% endif %}
   {% endif %}
-  {% if (credit|default('') and not compact) or call_number|default('') %}
+  {% if (credit|default('') and not compact) or call_number|default('') or url|default('') %}
     <dl class="pf-object-label__record">
       {% if credit|default('') and not compact %}
         <div class="pf-object-label__credit">
@@ -67,6 +68,13 @@
             {% if url|default('') %}
               <a class="pf-object-label__link" href="{{ url }}" target="_blank" rel="noopener">{{ 'View record'|t }}<span class="visually-hidden">{{ ', opens in a new tab'|t }}</span></a>
             {% endif %}
+          </dd>
+        </div>
+      {% elseif url|default('') %}
+        <div class="pf-object-label__call">
+          <dt class="visually-hidden">{{ 'Record'|t }}</dt>
+          <dd>
+            <a class="pf-object-label__link" href="{{ url }}" target="_blank" rel="noopener">{{ 'View record'|t }}<span class="visually-hidden">{{ ', opens in a new tab'|t }}</span></a>
           </dd>
         </div>
       {% endif %}

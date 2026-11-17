@@ -230,10 +230,12 @@
         {% endfor %}
       </div>
       {# The covers' citations: js/ledger-photo.js moves them to the foot
-         of the left column and shows the one whose photo shows. The photo
-         is decorative, so its citation is hidden from screen readers too. #}
+         of the left column and shows the one whose photo shows, with its
+         View record link (the photo stays while the pointer is in the
+         section). Hidden ones are visibility: hidden, so only the shown
+         citation is read or reached. #}
       {% if backdrops %}
-        <div class="pf-ledger-photo__labels" aria-hidden="true" hidden>
+        <div class="pf-ledger-photo__labels" hidden>
           {% for tile in tiles|filter(tile => tile.backdrop and tile.object) %}
             <div class="pf-ledger-photo__label" data-ledger-label="{{ tile.backdrop }}">
               {% include '@palefire/includes/object-label.html.twig' with tile.object only %}

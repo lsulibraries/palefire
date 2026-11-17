@@ -7,9 +7,9 @@
  *   drush php:script scripts/palefire_exhibit_cover_label.php
  *   drush cr
  *
- * Adds four optional plain text fields to Modular page, on the form after
- * "Exhibition title image": field_exhibit_cover_maker, _title, _date and
- * _medium. With a title, the page's cover carries the label when the page is
+ * Adds five optional plain text fields to Modular page, on the form after
+ * "Exhibition title image": field_exhibit_cover_maker, _title, _date,
+ * _medium and _url (the record link, added 2026-11-17). With a title, the page's cover carries the label when the page is
  * the first of a Landing hero's banners (palefire.theme,
  * _palefire_cover_object_label()). Not shown through Manage display.
  *
@@ -37,6 +37,8 @@ $fields = [
   'field_exhibit_cover_title' => ['Cover label: title', "The picture's title. The label shows only when this is filled."],
   'field_exhibit_cover_date' => ['Cover label: date', 'When it was made: 1827–1838.'],
   'field_exhibit_cover_medium' => ['Cover label: medium', 'Its medium or edition: Folio edition, plate 21.'],
+  // Added 2026-11-17.
+  'field_exhibit_cover_url' => ['Cover label: record link', 'The picture’s own page online (https://…), linked from the label as View record: https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:61.'],
 ];
 
 foreach ($fields as $name => [$label, $description]) {

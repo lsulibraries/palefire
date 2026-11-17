@@ -763,18 +763,22 @@ function _palefire_oral_history_series(array &$variables): array {
  * A page's object label for its cover picture, or NULL.
  *
  * The values includes/object-label.html.twig takes, from the optional
- * field_exhibit_cover_* fields (scripts/palefire_exhibit_cover_label.php).
- * With no title there is no label. The caller's cache metadata already
+ * field_exhibit_cover_* fields (scripts/palefire_exhibit_cover_label.php):
+ * maker, title, date, medium, and url (the record link, https only). With
+ * no title there is no label. The caller's cache metadata already
  * depends on the node.
  */
 function _palefire_cover_object_label(NodeInterface $node): ?array {
   $node = \Drupal::service('entity.repository')->getTranslationFromContext($node);
   $label = [];
-  foreach (['maker', 'title', 'date', 'medium'] as $key) {
+  foreach (['maker', 'title', 'date', 'medium', 'url'] as $key) {
     $field = 'field_exhibit_cover_' . $key;
     if ($node->hasField($field) && !$node->get($field)->isEmpty()) {
-      $label[$key] = (string) $node->get($field)->value;
+      $label[$key] = trim((string) $node->get($field)->value);
     }
+  }
+  if (isset($label['url']) && !preg_match('#^https://[^\s"<>]+$#', $label['url'])) {
+    unset($label['url']);
   }
   return isset($label['title']) ? $label : NULL;
 }

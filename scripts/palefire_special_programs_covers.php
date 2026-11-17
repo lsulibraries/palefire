@@ -61,6 +61,7 @@ $pages = [
       'title' => 'The First Six Books of the Elements of Euclid',
       'date' => '1847',
       'medium' => 'Printed in color for William Pickering, London',
+      'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-sce:22',
     ],
   ],
   '/v2/special/programs/faculty-fellowship' => [
@@ -71,6 +72,7 @@ $pages = [
       'title' => 'Musurgia Universalis',
       'date' => '1650',
       'medium' => 'Engraved frontispiece, Rome',
+      'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-sce:82',
     ],
   ],
   '/v2/special/programs/research-grants' => [
@@ -81,6 +83,7 @@ $pages = [
       'title' => 'New Map of Louisiana, with Its Canals, Roads & Distances',
       'date' => '1850',
       'medium' => 'Map, Philadelphia. G4010 1850 .T56',
+      'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-lmp:77',
     ],
   ],
   '/v2/special/programs/summer-project' => [
@@ -90,6 +93,7 @@ $pages = [
       'maker' => 'Viela Spell',
       'title' => 'Tractor Gals',
       'medium' => 'Photograph, Crowley, Louisiana. Viela Spell Photograph Collection, Mss. 4633',
+      'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-sce:93',
     ],
   ],
 ];

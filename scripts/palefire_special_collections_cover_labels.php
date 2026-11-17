@@ -14,8 +14,9 @@
  *   drush php:script scripts/palefire_special_collections_cover_labels.php -- apply=1
  *   drush cr
  *
- * A dry run unless apply=1. Fills only empty fields (the four
- * field_exhibit_cover_* fields from palefire_exhibit_cover_label.php), so an
+ * A dry run unless apply=1. Fills only empty fields (the
+ * field_exhibit_cover_* fields from palefire_exhibit_cover_label.php; _url,
+ * the record link, from 2026-11-17: re-run that script first), so an
  * editor's own label stays. Safe to re-run. It stops, saving nothing, on a
  * page that has a newer draft than its current revision.
  */
@@ -41,12 +42,14 @@ $labels = [
     'title' => 'Steamboat Natchez',
     'date' => 'About 1885–1910',
     'medium' => 'Glass plate negative. New Orleans Scenes, Mss. 1089, 1552',
+    'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:61',
   ],
   '/v2/special/bookcollections' => [
     'maker' => 'John James Audubon (1785–1851)',
     'title' => 'American Flamingo',
     'date' => '1840–1844',
     'medium' => 'Uncolored proof for the octavo Birds of America. E. A. McIlhenny Natural History Collection, Mss. 5160',
+    'url' => 'https://louisianadigitallibrary.org/islandora/object/lsu-sc-jjadp:21',
   ],
 ];
 
