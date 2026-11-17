@@ -651,7 +651,8 @@
             </ul>
           {% else %}
             <ul role="list">
-              <li>{{ 'You don’t need to be affiliated with LSU: sign in or register as a Guest.'|t }}</li>
+              {# The request system's sign-in page, where a Guest registers. #}
+              <li>{{ 'You don’t need to be affiliated with LSU: <a href=":url" target="_blank" rel="noopener">sign in or register<span class="visually-hidden"> (opens in a new tab)</span></a> as a Guest.'|t({':url': 'https://specialcollections.lib.lsu.edu/RemoteAuth/aeon.dll'}) }}</li>
               <li>{{ 'Appointments aren’t required, but with one your materials are waiting when you arrive.'|t }}</li>
               <li>{{ 'Staff bring the materials to you in the Reading Room at Hill.'|t }}</li>
               <li>{{ 'Scans are 50 cents an item ($1 at high resolution), plus a $10 fee per order, emailed in 5–7 business days.'|t }}</li>

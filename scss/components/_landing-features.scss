@@ -3151,6 +3151,22 @@ html[data-pf-hero] .pf-landing--cover {
       transform: rotate(45deg);
     }
   }
+
+  // A link in a note (sign in or register): the full text color, underlined
+  // so it is told from the 80% text by more than color, the line thickening
+  // on hover.
+  li a {
+    color: var(--pf-section-fg, var(--bs-body-color));
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+    transition: text-decoration-thickness $pf-hover-out ease;
+
+    &:hover {
+      text-decoration-thickness: 2px;
+      transition-duration: $pf-hover-in;
+    }
+  }
 }
 
 // Under the notes: the full guide and the copy prices as square buttons on
