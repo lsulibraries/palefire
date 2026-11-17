@@ -433,6 +433,7 @@ HTML),
 <li>Later the same day: once live, the lines showed up all together at the top of the Source list instead of under their sources, which was confusing. The part of the page that lets sources be dragged into your own order was moving each source without its line. Each line now moves with its source and sits right under its name.</li>
 <li>Databases now searches the A–Z Databases list itself, so a word finds databases by their subjects as well as their names and descriptions. A librarian searching nutrition expected more than the 2 databases shown: the A–Z list files 18 under Nutrition &amp; Food Sciences, and the website’s copy of each database knew only one subject, if any. All 18 show now, in the A–Z list’s own order. If the A–Z list doesn’t answer, the website’s copy fills in, with a note saying it knows fewer subjects. A search in quotes is searched as its words there, since the A–Z list finds nothing for a quoted phrase, and the page says so.</li>
 <li>Show all for Research Guides and Databases now stays on this page, filtered to that source, as every other section does, instead of opening the guides site. A Go to link under each heading still leads to the guides site or the A–Z list.</li>
+<li>A source chosen on its own now shows its count in the Source filter, as the site’s own sources always did: Databases with nutrition says 18 beside its tick. Outside sources that aren’t chosen still show their count once their section loads, and none while only another is listed.</li>
 </ul>
 HTML),
 ]);
