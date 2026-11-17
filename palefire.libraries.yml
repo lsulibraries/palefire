@@ -290,6 +290,17 @@ exhibit-rotate:
 # by includes/landing.html.twig only for the landing hero.
 # The Special Collections first screen: the film, the Highlights' pictures in
 # turn, and the scroll cue. Attached by includes/landing.html.twig on a cover.
+# A landing hero's search field: searches to try typed into the empty field
+# and Ctrl+K to reach it, as on Combined Search. Attached by
+# includes/landing.html.twig on the Special Collections hero only.
+search-field:
+  js:
+    js/search-field.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
 hero-highlights:
   js:
     js/hero-highlights.js: {}

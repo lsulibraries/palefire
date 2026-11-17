@@ -238,7 +238,12 @@
     {# Oral History (hero_unit, _palefire_hero_map_banner()): the same mode
        with Oral histories its one source, so the results open on the
        interviews and the Source list shows that box checked. #}
+    {# Searches to try typed into the empty field and Ctrl+K to reach it, as
+       on Combined Search (js/search-field.js): the collections' search only,
+       since its examples (data/search-showcase.json, special) are theirs. #}
+    {% set search_examples = 'special' %}
     {% if hero_unit == 'oral_history' %}
+      {% set search_examples = null %}
       {% set search_sources = ['oral_histories'] %}
       {% set search_label = 'Search Oral Histories'|t %}
       {% set search_placeholder = 'Search the interviews'|t %}
@@ -408,9 +413,11 @@
         {% if not hero %}
           <svg class="pf-landing__field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
         {% endif %}
+        {% if search_examples|default(null) and not search_off %}{{ attach_library('palefire/search-field') }}{% endif %}
         <input class="pf-landing__input" type="search" id="{{ input_id }}" name="{{ landing_name }}"
                placeholder="{{ search_placeholder }}"
-               autocomplete="off" enterkeyhint="search"{{ search_off ? ' disabled' }}>
+               autocomplete="off" enterkeyhint="search"{{ search_off ? ' disabled' }}
+               {%- if search_examples|default(null) and not search_off %} data-pf-examples="{{ search_examples }}" data-pf-search-key{% endif %}>
         <button class="pf-landing__submit" type="submit"{{ search_off ? ' disabled' }}>
           <span class="pf-landing__submit-text">{{ 'Search'|t }}</span>
           {% if hero %}

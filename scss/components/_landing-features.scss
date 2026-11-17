@@ -1089,15 +1089,82 @@ html.pf-a11y-contrast .pf-landing--cover .pf-landing__lead .pf-landing__media::b
   }
 }
 
+// Ctrl K or ⌘K at the field's end (js/search-field.js), as on Combined
+// Search: for a mouse on a wide screen, in a hairline box in the
+// placeholder's color, gone while the field is focused or has words. It
+// sits between the field and the button, so it carries the field's gold
+// line on, drawn in as the field's ends.
+.pf-landing__key {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 62rem) {
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__key {
+    display: flex;
+    flex: none;
+    align-items: center;
+    padding-inline: .5rem 1rem;
+    pointer-events: none;
+    background-image: linear-gradient(var(--pf-g-accent, #{$pf-gold}), var(--pf-g-accent, #{$pf-gold}));
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: 0 2px;
+    transition: background-size .15s linear;
+
+    kbd {
+      padding: .25rem .5rem;
+      border: 1px solid #{$pf-hairline};
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: var(--pf-toc-color, #{$pf-grey-500});
+      font-family: var(--bs-font-monospace);
+      font-size: var(--pf-mono-label, .75rem);
+      font-weight: 400;
+      letter-spacing: .08em;
+      line-height: 1.4;
+      text-transform: uppercase;
+      transition: opacity .2s ease;
+    }
+  }
+
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__field:hover .pf-landing__key {
+    background-size: 100% 2px;
+    transition-delay: .3s;
+  }
+
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__field:focus-within .pf-landing__key {
+    background-size: 100% 0;
+
+    kbd {
+      opacity: 0;
+    }
+  }
+
+  .pf-landing__lead.pf-landing__lead--hero .pf-landing__input:not(:placeholder-shown) + .pf-landing__key {
+    display: none;
+  }
+}
+
+[dir="rtl"] .pf-landing__lead.pf-landing__lead--hero .pf-landing__key {
+  background-position: right bottom;
+}
+
 // Reduced motion: the gold line is there at once on hover, not drawn in.
 @media (prefers-reduced-motion: reduce) {
-  .pf-landing__lead.pf-landing__lead--hero .pf-landing__input {
+  .pf-landing__lead.pf-landing__lead--hero :is(.pf-landing__input, .pf-landing__key, .pf-landing__key kbd) {
     transition: none;
   }
 }
 
-html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero .pf-landing__input {
+html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero :is(.pf-landing__input, .pf-landing__key, .pf-landing__key kbd) {
   transition: none;
+}
+
+@media print {
+  .pf-landing__key {
+    display: none;
+  }
 }
 
 // Where the banners are five to a row, the Search button is one banner
