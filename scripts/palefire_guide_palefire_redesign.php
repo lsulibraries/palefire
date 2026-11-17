@@ -517,6 +517,7 @@ HTML),
 <li>Combined Search: those lines first showed up all together at the top of the Source list, apart from their sources. Each now sits under its own source.</li>
 <li>Ask Us drawer: Live Chat now looks like the email forms beside it, with the same gold rule, place and date, cells with fine lines, small capital labels, fields drawn as a single line and a gold Send bar. The forms in the drawer no longer have the words Question slip at the top.</li>
 <li>Live Chat also follows light reading colors such as Cream: dark ink on the page’s own paper, instead of a black box.</li>
+<li>Combined Search: Databases searches the A–Z Databases list, so subjects count: nutrition finds 18 databases instead of 2. Show all for Research Guides and Databases now stays on the page, filtered to that source, like the other sections.</li>
 </ul>
 HTML),
 ]);
