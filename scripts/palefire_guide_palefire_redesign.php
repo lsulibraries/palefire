@@ -526,6 +526,7 @@ HTML),
 <li>Combined Search: Place hold opens the catalog in a new tab, so someone placing holds on several items keeps their results open behind it.</li>
 <li>Special Collections: in What Hill Holds, pointing at a collection (or tabbing to it) now shows a picture from that collection behind the heading on the left, faded under the page color so the words stay easy to read, the way the map shows a room’s photo.</li>
 <li>Special Collections: that picture now fills the whole section, and a short credit for the item (who made it, what it is, when) appears at the bottom left while it shows. Time in the Archive works the same way once its program pages have pictures.</li>
+<li>Special Collections, Study tab: the placeholder about the Quiet Study room’s hours is gone. The room keeps the building’s hours, and visitors are asked to pack up 15 minutes before closing.</li>
 </ul>
 HTML),
 ]);
