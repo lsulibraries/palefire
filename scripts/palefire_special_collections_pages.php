@@ -242,7 +242,8 @@ foreach (json_decode((string) file_get_contents(__DIR__ . '/data/special-collect
 foreach ($lead_table as $row) {
   $alt[$row[0]] = $row[2];
 }
-$gallery = function (string $title, string $anchor, array $blocks, ?string $lead = NULL, ?string $lead_caption = NULL, string $focus = 'center') use ($keep, $ref, $media, $html, $has_display, $has_lead_caption, &$lead_table): Paragraph {
+// display: 'story' or 'wall' (each entry a tile, the text above).
+$gallery = function (string $title, string $anchor, array $blocks, ?string $lead = NULL, ?string $lead_caption = NULL, string $focus = 'center', string $display = 'story') use ($keep, $ref, $media, $html, $has_display, $has_lead_caption, &$lead_table): Paragraph {
   if ($lead === NULL && isset($lead_table[$anchor])) {
     [$lead, $lead_caption] = $lead_table[$anchor];
   }
@@ -250,7 +251,7 @@ $gallery = function (string $title, string $anchor, array $blocks, ?string $lead
     'type' => 'exhibit_page',
     'field_section_title' => $title,
     'field_section_anchor' => $anchor,
-    'field_exhibit_display' => $has_display ? 'story' : NULL,
+    'field_exhibit_display' => $has_display ? $display : NULL,
     'field_exhibit_lead' => $lead ? $ref($media($lead)) : NULL,
     'field_exhibit_lead_focus' => $lead ? $focus : NULL,
     'field_exhibit_lead_caption' => $lead && $lead_caption && $has_lead_caption ? $html('<p>' . $lead_caption . '</p>') : NULL,
@@ -314,13 +315,18 @@ HTML),
 <p>The LLMVC holds nearly a quarter of a million photographic images. The earliest is a daguerreotype portrait of Varina Davis, wife of Jefferson Davis, made around 1845. Recent acquisitions include Jamie Baldridge’s <em>The Everywhere Chronicles</em>, winner of the 2008 Lucie Award. In between is a range of material on Louisiana’s people, places and events, and on people, places and events much further afield.</p>
 <p>Many photographs are part of family papers or the records of businesses and organizations, but the LLMVC also holds studio collections: the Norman Studio (Natchez, Mississippi, about 1850–1950), Andrew D. Lytle (Baton Rouge, about 1863–1910), George François Mugnier (New Orleans, 1885–1910) and Fonville Winans (Baton Rouge). More recent is the work of Donn Young (New Orleans, about 1980–2005), salvaged after Hurricane Katrina.</p>
 HTML),
-      $group([
-        $figure('llmvc-lytle-riverfront', 'Andrew D. Lytle, the Baton Rouge riverfront about 1863, before the levee was built. Carte de visite. Andrew D. Lytle Collection.', 'center'),
-        $figure('llmvc-jackson-square', 'George François Mugnier, Bird’s-Eye View, Jackson Square and River, about 1885. Glass plate negative. Mugnier New Orleans Scenes.', 'center'),
-        $figure('llmvc-young-rivers', 'Donn Young, saxophonist James Rivers, December 17, 2003. Donn Young Photographs.', 'center'),
-      ], '140 years of Louisiana photography, from a Civil War carte de visite to a digital portrait.'),
       $text('<p>More than 20 of the photograph collections can be seen, in part, on the <a href="https://louisianadigitallibrary.org/">Louisiana Digital Library</a>.</p>'),
-    ]),
+      // The wall: one entry per studio, each opening its photograph.
+      $entry('Andrew D. Lytle', 'lytle', [
+        $figure('llmvc-lytle-riverfront', 'Andrew D. Lytle, the Baton Rouge riverfront about 1863, before the levee was built. Carte de visite. Andrew D. Lytle Collection.', 'center'),
+      ]),
+      $entry('George François Mugnier', 'mugnier', [
+        $figure('llmvc-jackson-square', 'George François Mugnier, Bird’s-Eye View, Jackson Square and River, about 1885. Glass plate negative. Mugnier New Orleans Scenes.', 'center'),
+      ]),
+      $entry('Donn Young', 'donn-young', [
+        $figure('llmvc-young-rivers', 'Donn Young, saxophonist James Rivers, December 17, 2003. Donn Young Photographs.', 'center'),
+      ]),
+    ], display: 'wall'),
 
     $gallery('Political Papers', 'political-papers', [
       $text(<<<'HTML'

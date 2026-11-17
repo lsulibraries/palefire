@@ -528,6 +528,7 @@ HTML),
 <li>Special Collections: in What Hill Holds, pointing at a collection (or tabbing to it) now shows a picture from that collection behind the heading on the left, faded under the page color so the words stay easy to read, the way the map shows a room’s photo.</li>
 <li>Special Collections: that picture now fills the whole section, and a short credit for the item (who made it, what it is, when) appears at the bottom left while it shows. Time in the Archive works the same way once its program pages have pictures.</li>
 <li>Special Collections: the picture now covers the section from edge to edge on wide screens too. Time in the Archive does the same, with a picture from the collections for each program: Byrne’s colorful Euclid for Teaching, Kircher’s book on music for the Faculty Fellowship, an 1850 map of Louisiana’s roads and steamboat routes for Research Grants, and Viela Spell’s photograph of two young women on a tractor for the Summer Project.</li>
+<li>Louisiana and Lower Mississippi Valley Collections: the three photographs in Photographs now hang on a wall, one for each studio (Lytle, Mugnier, Donn Young), whole instead of cropped, each opening full screen.</li>
 <li>Special Collections, Study tab: the placeholder about the Quiet Study room’s hours is gone. The room keeps the building’s hours, and visitors are asked to pack up 15 minutes before closing.</li>
 </ul>
 HTML),
