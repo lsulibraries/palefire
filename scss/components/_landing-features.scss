@@ -5728,17 +5728,20 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 // page's name, centered in the type column. Everything is measured from
 // the mark's width (container units), so it holds its shape at any size
 // without a script: the rows fill the frame's inside; the frame is as
-// thick as the name's stems (.145 of its size); the padding is one cap
-// height of the Center line (u) and the gap between the rows half of one.
-// The room above and below follows the column, not the mark (which stops
-// at 30rem): 8% of it, 36px to 80px, the same over and under (the
-// kicker gives up its own margin). text-box trims each row to its
-// cap height and baseline, so the padding is even to the eye.
+// thick as the name's stems (.145 of its size); the padding is two cap
+// heights of the Center line (u) and the gap between the rows half of one.
+// Around it, clear space like a mat: above and below as much as is left
+// at its sides ((column - mark) / 2), so the space is even on all four
+// sides; at least 36px (phones, where the mark is the column's width),
+// at most 15svh so the search stays on the first screen. The kicker
+// gives up its own margin (the hero's grid doesn't collapse margins).
+// text-box trims each row to its cap height and baseline, so the padding
+// is even to the eye.
 .pf-landing__mark {
   --pf-mark-w: min(30rem, 100%);
   container-type: inline-size;
   width: var(--pf-mark-w);
-  margin: clamp(2.25rem, 8%, 5rem) auto;
+  margin: clamp(2.25rem, calc((100% - var(--pf-mark-w)) / 2), 15svh) auto;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1;
@@ -5755,8 +5758,8 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 .pf-landing__mark-frame {
   display: block;
   color: var(--bs-emphasis-color);
-  padding: 4.181cqi;
-  border: 1.36cqi solid currentColor;
+  padding: 7.716cqi;
+  border: 1.255cqi solid currentColor;
 }
 
 .pf-landing__mark-name,
@@ -5772,21 +5775,21 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 // it back so the row ends on the frame's edge.
 .pf-landing__mark-name {
   margin-right: -.01em;
-  font-size: 9.379cqi;
+  font-size: 8.655cqi;
   font-weight: 800;
   letter-spacing: .01em;
 }
 
 .pf-landing__mark-line {
-  margin: 2.09cqi -.1em 0 0;
-  font-size: 5.881cqi;
+  margin: 1.929cqi -.1em 0 0;
+  font-size: 5.426cqi;
   font-weight: 300;
   letter-spacing: .1em;
 }
 
 // Light breaks up under about 20px: Regular on the narrowest phones
 // (Roboto's weights share their widths, so the row still fills).
-@container (max-width: 340px) {
+@container (max-width: 368px) {
   .pf-landing__mark-line {
     font-weight: 400;
   }
