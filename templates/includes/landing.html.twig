@@ -321,9 +321,21 @@
       {% set banner_room = (hero_map_banner ? 4 : 5) - (hero_blog ? 1 : 0) %}
       {% set title_pics = title_still ? (hero_map_banner ? [{ still: '' }] : [])|merge(hero_banners|slice(0, banner_room))|merge(hero_blog ? [hero_blog] : []) : [] %}
       {% set title_feature = title_pics ? title_pics|first.still %}
+      {# Oral History: the Center's mark in place of the page's name, its
+         two rows filling a solid frame (_landing-features.scss, "Center
+         mark"); the heading reads the Center's whole name. #}
+      {% if hero and hero_unit == 'oral_history' %}
+      <h1 class="pf-landing__mark" data-toc data-toc-label="{{ 'Landing'|t }}">
+        <span class="pf-landing__mark-frame">
+          <span class="pf-landing__mark-name">{{ 'T. Harry Williams'|t }}</span>
+          <span class="pf-landing__mark-line">{{ 'Center for Oral History'|t }}</span>
+        </span>
+      </h1>
+      {% else %}
       <h1 class="pf-modular__title pf-landing__title{{ title_still ? ' pf-landing__title--still' }}"{% if title_still %} style="--pf-title-still: url('{{ bg_poster }}'){% if title_feature %}; --pf-title-feature: url('{{ title_feature }}'){% endif %}{% for pic in title_pics %}{% if not loop.first and pic.still %}; --pf-title-pic-{{ loop.index }}: url('{{ pic.still }}'){% endif %}{% endfor %}"{% endif %}{% if hero %} data-toc data-toc-label="{{ 'Landing'|t }}"{% endif %}>
         {{- page_title -}}
       </h1>
+      {% endif %}
     {% endif %}
     {# Hero: today's hours under the title: the status as a label (a dot in
        its color and the status in small capitals), then today's hours as a

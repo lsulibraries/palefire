@@ -430,7 +430,7 @@ else {
 $page->set('title', 'Oral History');
 if ($page->hasField('field_intro')) {
   $page->set('field_intro', [
-    'value' => '<p>The T. Harry Williams Center for Oral History is the largest and most comprehensive oral history repository in Louisiana, and one of the largest in the South.</p>',
+    'value' => '<p>The largest and most comprehensive oral history repository in Louisiana, and one of the largest in the South.</p>',
     'format' => $source->get('field_intro')->format ?: 'basic_html',
   ]);
 }

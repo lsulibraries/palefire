@@ -5722,3 +5722,84 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 .pf-landing--no-spotlight {
   --pf-cover-glow: 0;
 }
+
+// Center mark (Oral History, landing.html.twig): the T. Harry Williams
+// Center's two rows in capitals filling a solid frame, in place of the
+// page's name, centered in the type column. Everything is measured from
+// the mark's width (container units), so it holds its shape at any size
+// without a script: the rows fill the frame's inside; the frame is as
+// thick as the name's stems (.145 of its size); the padding is one cap
+// height of the Center line (u), the gap between the rows half of one,
+// and the room above and below three. text-box trims each row to its
+// cap height and baseline, so the padding is even to the eye.
+.pf-landing__mark {
+  --pf-mark-w: min(30rem, 100%);
+  container-type: inline-size;
+  width: var(--pf-mark-w);
+  margin: calc(var(--pf-mark-w) * .1254) auto;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+// White on the dark hero, dark gray on light themes: the text color, not
+// the themes' heading color (gold on twilight), so it is set on the frame
+// under the <h1>.
+.pf-landing__mark-frame {
+  display: block;
+  color: var(--bs-emphasis-color);
+  padding: 4.181cqi;
+  border: 1.36cqi solid currentColor;
+}
+
+.pf-landing__mark-name,
+.pf-landing__mark-line {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  font-kerning: normal;
+  text-box: trim-both cap alphabetic;
+}
+
+// Tracking adds room after the last letter too; the negative margin takes
+// it back so the row ends on the frame's edge.
+.pf-landing__mark-name {
+  margin-right: -.01em;
+  font-size: 9.379cqi;
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+
+.pf-landing__mark-line {
+  margin: 2.09cqi -.1em 0 0;
+  font-size: 5.881cqi;
+  font-weight: 300;
+  letter-spacing: .1em;
+}
+
+// Light breaks up under about 20px: Regular on the narrowest phones
+// (Roboto's weights share their widths, so the row still fills).
+@container (max-width: 340px) {
+  .pf-landing__mark-line {
+    font-weight: 400;
+  }
+}
+
+// Without text-box, the rows' line boxes keep Roboto's room over the
+// capitals and under the baseline; take it back by hand.
+@supports not (text-box: trim-both cap alphabetic) {
+  .pf-landing__mark-name {
+    margin-top: -.13em;
+  }
+
+  .pf-landing__mark-line {
+    margin-bottom: -.16em;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-landing__mark-frame {
+    border-color: CanvasText;
+  }
+}
