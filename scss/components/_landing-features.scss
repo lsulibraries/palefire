@@ -5709,6 +5709,20 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
       pointer-events: none;
     }
 
+    // The film sits under the type (z-index -1), so the boxes the type is
+    // in (the run and the stage, transparent) are in front of its Pause
+    // button and took its clicks. They let clicks through; what is in
+    // them (the film with its button, the title, the search, the banners)
+    // takes them as before.
+    .pf-landing__run,
+    .pf-landing__stage {
+      pointer-events: none;
+    }
+
+    .pf-landing__stage > * {
+      pointer-events: auto;
+    }
+
     .pf-landing__media .pf-landing__film-bar {
       inset-inline-end: calc(var(--pf-split-film) + var(--pf-grid-gutter));
       z-index: 2;
