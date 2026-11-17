@@ -453,7 +453,11 @@
 
 .pf-nlr .pf-pn__resolved {
   margin-top: .75rem;
+  padding: 0;
+  // Only the hairline above: the site's details get a box otherwise.
+  border: 0;
   border-top: 1px solid var(--pf-nlr-rule);
+  background: none;
 
   &:first-child {
     margin-top: 0;
