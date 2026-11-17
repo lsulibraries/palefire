@@ -2401,6 +2401,12 @@ html.pf-index-docked {
   text-wrap: pretty;
 }
 
+// The same line over a chosen source's own list, where no heading holds it:
+// the Go to line follows close under it.
+.pf-index__list-about {
+  margin-bottom: .375rem;
+}
+
 // The source in view, at the start of the results bar, once its heading has
 // gone under the bar (index-search.js). Words only: screen readers have the
 // headings. Under 36rem it takes the place of the words "Results for".
