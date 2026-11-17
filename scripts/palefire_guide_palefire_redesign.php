@@ -530,6 +530,7 @@ HTML),
 <li>Special Collections: the picture now covers the section from edge to edge on wide screens too. Time in the Archive does the same, with a picture from the collections for each program: Byrne’s colorful Euclid for Teaching, Kircher’s book on music for the Faculty Fellowship, an 1850 map of Louisiana’s roads and steamboat routes for Research Grants, and Viela Spell’s photograph of two young women on a tractor for the Summer Project.</li>
 <li>Louisiana and Lower Mississippi Valley Collections: the three photographs in Photographs now hang on a wall, one for each studio (Lytle, Mugnier, Donn Young), whole instead of cropped, each opening full screen.</li>
 <li>Special Collections, Study tab: the placeholder about the Quiet Study room’s hours is gone. The room keeps the building’s hours, and visitors are asked to pack up 15 minutes before closing.</li>
+<li>Special Collections, Written at Hill: each book now takes one column of the same grid as the guide cards above it, five across on a wide screen, so the covers line up under the cards. Next and Previous, and a flick of the shelf, stop with the books back on those columns. The fade at the shelf’s edge is narrower, so it only softens the outer edge of the end books.</li>
 </ul>
 HTML),
 ]);

@@ -26,6 +26,12 @@
 $pf-tile-break-wide: 60rem;
 $pf-tile-break-two: 32rem;
 
+// The card grid (Masonry, below), shared with the book shelf (Covers) so
+// a book stands on each column: 2 columns, 3 from 36rem, 4 from 56rem, 5
+// from 72rem, with the narrow gutter and the wide one from 44rem.
+$pf-tile-grid-gap-narrow: clamp(.625rem, 2.5cqi, 1rem);
+$pf-tile-grid-gap-wide: clamp(1.25rem, 2.25vw, 2rem);
+
 .pf-tiles {
   container: pf-tiles / inline-size;
   --pf-tile-gap: 0.625rem;
@@ -863,6 +869,14 @@ $pf-ledger-break: 40rem;
 .pf-ledger-photo__labels { display: none; }
 
 @include media-breakpoint-up(lg) {
+  // A section that can show photos gets more room above and below its
+  // content, so the text never sits tight to a photo's edge. From the
+  // markup (data-ledger-photos), not the script, so nothing shifts on load.
+  // The padding token (_modular.scss), which the inner box reads.
+  .pf-section:has([data-ledger-photos]) {
+    --pf-section-pad-block: clamp(6rem, 8vw, 8.5rem);
+  }
+
   html[data-pf-theme] .pf-section.has-ledger-photos {
     --pf-ledger-photo-fade: .7s;
     isolation: isolate;
@@ -976,7 +990,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
 .pf-tiles--masonry .pf-tiles__list {
   --pf-cols: 2;
-  --pf-gap: clamp(.625rem, 2.5cqi, 1rem);
+  --pf-gap: #{$pf-tile-grid-gap-narrow};
   // An eighth of a column: Grid's lead card sizes its picture from it.
   --pf-unit: calc((100cqi - (var(--pf-cols) - 1) * var(--pf-gap)) / var(--pf-cols) / 8);
   display: grid;
@@ -992,7 +1006,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
 @container pf-tiles (min-width: 44rem) {
   .pf-tiles--masonry .pf-tiles__list {
-    --pf-gap: clamp(1.25rem, 2.25vw, 2rem);
+    --pf-gap: #{$pf-tile-grid-gap-wide};
   }
 }
 
@@ -1475,9 +1489,7 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   --pf-index-accent: var(--pf-ui-gold, var(--pf-g-accent, var(--pf-index-muted)));
   --pf-index-muted: var(--pf-section-muted, var(--bs-secondary-color));
   --pf-index-mono: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
-  --pf-cover-gap: clamp(1.5rem, 3cqi, 2.5rem);
   --pf-book-turn: -18deg;
-  --pf-shelf-glass: clamp(2rem, 6cqi, 4.5rem);
   --pf-shelf-glass-bg: var(--pf-section-bg, var(--bs-body-bg));
   position: relative;
 }
@@ -1485,9 +1497,40 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 // The shelf keeps to the gutters. It reaches 0.5rem past them, its
 // padding, so a book's turned near edge and a focus ring at either end
 // aren't cut off; the first book still lines up with the heading.
+// Each book takes one column of the card grid (Masonry) at the same
+// width, so the covers stand under the cards above them (2026-11-17).
+// The fade is the gutter wide, plus the padding: at rest it only touches
+// the outer edge of the end books.
 .pf-tiles__shelf {
+  --pf-cover-cols: 2;
+  --pf-cover-gap: #{$pf-tile-grid-gap-narrow};
+  --pf-shelf-glass: calc(var(--pf-cover-gap) + 0.5rem);
   position: relative;
   margin-inline: -0.5rem;
+}
+
+@container pf-tiles (min-width: 36rem) {
+  .pf-tiles__shelf {
+    --pf-cover-cols: 3;
+  }
+}
+
+@container pf-tiles (min-width: 44rem) {
+  .pf-tiles__shelf {
+    --pf-cover-gap: #{$pf-tile-grid-gap-wide};
+  }
+}
+
+@container pf-tiles (min-width: 56rem) {
+  .pf-tiles__shelf {
+    --pf-cover-cols: 4;
+  }
+}
+
+@container pf-tiles (min-width: 72rem) {
+  .pf-tiles__shelf {
+    --pf-cover-cols: 5;
+  }
 }
 
 .pf-tiles--covers .pf-tiles__list {
@@ -1500,8 +1543,9 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  // Snapped or focused, a book stops clear of the fade.
-  scroll-padding-inline: var(--pf-shelf-glass);
+  // Snapped, a book stops on a column of the grid: the padding's width in
+  // from the shelf's edge.
+  scroll-padding-inline: 0.5rem;
   @include pf-thin-scrollbar;
 }
 
@@ -1555,17 +1599,11 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
 
 // Positioned, so the visually hidden subtitles (absolute) are clipped by
 // the shelf instead of widening the page.
-// On phones, 45% of the shelf: "Reconstruction" fits on one line at 320.
+// One grid column wide (100cqi is the section's content width).
 .pf-tiles--covers .pf-tiles__item {
   position: relative;
-  flex: 0 0 min(45%, 10rem);
+  flex: 0 0 calc((100cqi - (var(--pf-cover-cols) - 1) * var(--pf-cover-gap)) / var(--pf-cover-cols));
   scroll-snap-align: start;
-}
-
-@container pf-tiles (min-width: #{$pf-tile-break-wide}) {
-  .pf-tiles--covers .pf-tiles__item {
-    flex-basis: 11rem;
-  }
 }
 
 // Previous / Next: square buttons on the right, above the shelf. Wide, the
