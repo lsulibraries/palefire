@@ -22,6 +22,9 @@
     const inner = groups.closest('.pf-section__inner');
     const lines = Array.from(groups.querySelectorAll('.pf-tile-line'));
     if (!inner || !lines.length) return;
+    // The photo fills the whole section, edge to edge, which can be wider
+    // and taller than its inner box (wide screens).
+    const section = inner.closest('.pf-section') || inner;
 
     const layer = document.createElement('div');
     layer.className = 'pf-ledger-photo';
@@ -32,8 +35,8 @@
       layer.append(slot);
       return slot;
     });
-    inner.prepend(layer);
-    inner.classList.add('has-ledger-photos');
+    section.prepend(layer);
+    section.classList.add('has-ledger-photos');
 
     // The citations: from the ledger to the foot of the left column.
     const labelBox = groups.parentElement.querySelector('.pf-ledger-photo__labels');
@@ -70,7 +73,7 @@
       if (!url) {
         slots.forEach((slot) => slot.classList.remove('is-on', 'is-prev'));
         cite(null);
-        inner.classList.remove('is-ledger-photo');
+        section.classList.remove('is-ledger-photo');
         shown = null;
         return;
       }
@@ -86,7 +89,7 @@
           old.classList.remove('is-on');
           old.classList.add('is-prev');
         }
-        inner.classList.add('is-ledger-photo');
+        section.classList.add('is-ledger-photo');
         cite(url);
         shown = url;
       });

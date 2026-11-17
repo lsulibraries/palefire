@@ -848,9 +848,11 @@ $pf-ledger-break: 40rem;
 
 // The ledger's hover photos: js/ledger-photo.js adds .pf-ledger-photo to
 // the section, and .is-ledger-photo while a row's cover shows. From lg only
-// (below it the columns stack). The layer fills the whole section, edge to
-// edge, and fades in and out over its top and foot 4rem into the sections
-// around it. Under the swatch's photo veil (--pf-photo-veil,
+// (below it the columns stack). The layer fills the whole section (the
+// .pf-section, full bleed, not its inner box, which wide screens cap),
+// edge to edge, the photo cropped to cover it (fill). Each slot is 12%
+// larger than the section, so the dark border most scans have around the
+// sheet or plate falls outside it. Under the swatch's photo veil (--pf-photo-veil,
 // _reading-themes.scss) and the map's text tokens (_building-map.scss), so
 // every text keeps its contrast over the photo.
 //
@@ -861,7 +863,7 @@ $pf-ledger-break: 40rem;
 .pf-ledger-photo__labels { display: none; }
 
 @include media-breakpoint-up(lg) {
-  html[data-pf-theme] .pf-section__inner.has-ledger-photos {
+  html[data-pf-theme] .pf-section.has-ledger-photos {
     --pf-ledger-photo-fade: .7s;
     isolation: isolate;
 
@@ -870,9 +872,8 @@ $pf-ledger-break: 40rem;
       inset: 0;
       z-index: -1;
       display: block;
+      overflow: hidden;
       pointer-events: none;
-      -webkit-mask-image: linear-gradient(transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
-      mask-image: linear-gradient(transparent, #000 4rem, #000 calc(100% - 4rem), transparent);
     }
 
     .pf-ledger-photo__labels {
@@ -899,7 +900,7 @@ $pf-ledger-break: 40rem;
 
     .pf-ledger-photo__img {
       position: absolute;
-      inset: 0;
+      inset: -6%;
       opacity: 0;
       background:
         linear-gradient(var(--pf-photo-veil), var(--pf-photo-veil)),
@@ -917,16 +918,16 @@ $pf-ledger-break: 40rem;
   }
 
   // Light swatches: the text over the photo in the heading color, as the map.
-  html[data-pf-theme]:not(.pf-reading-dark) .pf-section__inner.has-ledger-photos.is-ledger-photo {
+  html[data-pf-theme]:not(.pf-reading-dark) .pf-section.has-ledger-photos.is-ledger-photo {
     --pf-section-fg: var(--pf-g-heading);
   }
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
-  html[data-pf-theme] .pf-section__inner.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none; }
+  html[data-pf-theme] .pf-section.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none; }
 }
 
-html.pf-a11y-contrast .pf-section__inner.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none !important; }
+html.pf-a11y-contrast .pf-section.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-ledger-photo__img,
