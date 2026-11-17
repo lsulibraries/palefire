@@ -943,31 +943,35 @@ class PalefireHooks {
   /**
    * The closing panel after an exhibition's last gallery.
    *
-   * The next exhibition in its family (exhibitFamily(), the last one wraps
-   * round to the first) with its cover, and the way back to the family's
-   * home (includes/exhibit-end.html.twig).
+   * Every other exhibition in its family (exhibitFamily()) as an edge-to-edge
+   * grid of covers, starting with the one after it and wrapping round, so
+   * reading straight through still works; then the way back to the
+   * family's home (includes/exhibit-end.html.twig).
    */
   private function exhibitEnd(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
     $family = self::exhibitFamily($node, $cache);
     $count = count($family['items']);
-    $next = NULL;
-    if ($count > 1) {
-      $at = ($family['index'] + 1) % $count;
-      $item = $family['items'][$at];
+    $others = [];
+    // The covers' widths for the grid's columns (_exhibition.scss
+    // .pf-exhibit-end): 5 from lg, 3 from md, 2 below, fewer tiles
+    // widening to fill their row.
+    $width = static fn (int $cols): int => (int) ceil(100 / max(1, min($cols, $count - 1)));
+    $sizes = sprintf('(min-width: 992px) %dvw, (min-width: 768px) %dvw, %dvw', $width(5), $width(3), $width(2));
+    for ($step = 1; $step < $count; $step++) {
+      $item = $family['items'][($family['index'] + $step) % $count];
       $cover = _palefire_card_image_item($item['node'], $cache);
-      $next = [
+      $others[] = [
         'title' => $item['title'],
         'url' => $item['url'],
-        'subtitle' => self::stringValue($item['node'], 'field_exhibit_subtitle'),
-        'position' => sprintf('%02d / %02d', $at + 1, $count),
-        'image' => $cover ? _palefire_exhibit_image($cover, '(min-width: 992px) 58vw, 100vw', $cache) : NULL,
+        'year' => $item['year'] ?: NULL,
+        'image' => $cover ? _palefire_exhibit_image($cover, $sizes, $cache) : NULL,
       ];
     }
     $render = [];
     $cache->applyTo($render);
     return [
-      'next' => $next,
+      'others' => $others,
       'parent' => $family['parent'],
       'all' => $family['all'],
       'cache' => $render,
