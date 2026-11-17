@@ -163,7 +163,7 @@ HTML, 'callout'),
     ['running', 'Show more results', 'Long lists have a button that adds the next results under the current ones, and the pager stays for jumping ahead. A shared link, a reload or Back brings back every result shown, not only the last batch, and a Copy link button beside Go to page copies that link (Share on phones). Needs a check on production.'],
     ['running', 'Results bar', 'The count and the words searched stay in view while scrolling, under the page bar.'],
     ['running', 'Your own source order', 'Source options can be dragged or moved up with a button, and the sections follow. Each browser keeps its own order, with a Reset order button.'],
-    ['running', 'Source definitions', 'Section headings and a What are these? button in the Source filter say what each source searches, in the glossary\'s cards.'],
+    ['running', 'Source definitions', 'Section headings say what each source searches, and What are these? in the Source filter shows a line under each source, kept in each browser.'],
     ['running', 'Fuller Discovery search', 'Discovery searches Discovery directly, with Full text online, Peer reviewed, In the Libraries’ collection, EPUB e-books, Type, Language and Year published filters. Its order matches Discovery\'s own once Discovery\'s catalog records are set aside: those come from a database our Discovery connection doesn\'t search, and show in the Catalog section instead. Rows say what each result is and link to full text. Paging stops at the 300 results the service returns.'],
     ['running', 'Loading indicator and current styles', 'The vertical LSU Libraries mark shows while a search runs, at the logo\'s own weight, its rule moving end to end. The line in the search field holds still while it does, and only breathes gently while a slower section is still coming, so the mark is the one thing that moves. The page follows the latest Special Collections styles.'],
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
@@ -423,6 +423,12 @@ HTML),
 <li>The link to a section's full list (Show all Discovery results) was easy to miss: small capitals at the far right, under the last result. It's now a full-width row that closes the section: the words at the left, where the eye runs down the titles, the total and a gold arrow at the right. It sits on the same gray slab as Open online and Show location, so it reads as a button rather than another line of text, and fills in the same way when pointed at or tabbed to. Links to another site, such as See all databases, look the same with an arrow pointing up and out.</li>
 <li>Gray buttons across the site (Open online, Show location, Open PDF, Show all, and on other pages the Quick Start Guide and Visit links and the FAQ buttons) no longer flash to white with the words reversed when pointed at or tabbed to. The gray deepens a little and a thin gold line draws in along the bottom, like the line under the selected tab. The gold Search button keeps its fill.</li>
 <li>The closing rows that leave the site now name their source as the filter and heading do: See all Research Guides, See all Databases (were lowercase).</li>
+</ul>
+HTML),
+  $text('Tue Nov 17: What are these? fixed, filters that wrap', <<<'HTML'
+<ul>
+<li>What are these? had started opening an empty box: half of a change to it had gone out without the rest. It now shows a short line under each source saying what it searches, right beside its checkbox, and hides them again. The page remembers the choice in that browser, and screen readers hear each source’s line with its checkbox either way.</li>
+<li>The chosen filters in the bar above the results wrap onto a second line on a computer instead of scrolling sideways under a scrollbar; on a phone they still scroll with a finger. A long name, such as an oral history series, is shortened with an ellipsis, with the whole name on hover.</li>
 </ul>
 HTML),
 ]);

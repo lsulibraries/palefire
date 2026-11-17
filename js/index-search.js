@@ -1965,17 +1965,37 @@
     }
   };
 
-  // What are these? opens what each source searches inside the filter, above
-  // its options, and closes it again.
+  // What are these? shows each source's line (.pf-index__option-about) under
+  // its name, and hides them again: a toggle (aria-pressed), so every source is
+  // read beside its own checkbox and the list never moves out of reach. The
+  // choice is kept in this browser, and put back on the filters each search
+  // swaps in (showAbout() from attach). Screen readers have each line as its
+  // checkbox's description either way.
+  const ABOUT_KEY = 'pfIndexDescribed';
+  let described = false;
+  try {
+    described = window.localStorage.getItem(ABOUT_KEY) === '1';
+  }
+  catch (e) {
+    // Storage blocked: start hidden.
+  }
+  const showAbout = (button) => {
+    button.setAttribute('aria-pressed', String(described));
+    button.closest('.pf-index__group')?.classList.toggle('is-described', described);
+  };
   const toggleAbout = (event) => {
     const button = event.target.closest('[data-pf-index-about]');
-    const panel = button && document.getElementById(button.getAttribute('aria-controls'));
-    if (!panel) {
+    if (!button) {
       return;
     }
-    const open = button.getAttribute('aria-expanded') !== 'true';
-    button.setAttribute('aria-expanded', String(open));
-    panel.hidden = !open;
+    described = button.getAttribute('aria-pressed') !== 'true';
+    try {
+      window.localStorage.setItem(ABOUT_KEY, described ? '1' : '0');
+    }
+    catch (e) {
+      // Kept for this page only.
+    }
+    document.querySelectorAll('[data-pf-index-about]').forEach(showAbout);
   };
 
   const closeCopies = (event) => {
@@ -2030,6 +2050,7 @@
       once('pf-index-sign-in', '[data-pf-index]', context).forEach(checkSignIn);
       once('pf-index-body', '[data-pf-index-body]', context).forEach(enhance);
       once('pf-index-sources', '[data-pf-index-body]', context).forEach(setUpSources);
+      once('pf-index-about', '[data-pf-index-about]', context).forEach(showAbout);
       const late = once('pf-index-late', '[data-pf-index-late]', context).map(load);
       if (outcomeFor) {
         sendOutcome(late);

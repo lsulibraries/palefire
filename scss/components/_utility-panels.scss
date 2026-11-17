@@ -834,12 +834,17 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
     }
   }
 
-  // The widgets draw their own light form.
+  // Live Chat: LibAnswers' "Modal Chat (dark theme)" widget, white labels
+  // and see-through fields, so it needs a dark ground behind it. The
+  // frame's color-scheme matches the widget page's (light), or the browser
+  // paints the frame an opaque white under a dark page. A dark plate on
+  // light swatches; the drawer's own glass on dark ones (below).
   &__frame {
     flex: 1 1 auto;
     width: 100%;
     min-height: 28rem;
-    background-color: $white;
+    color-scheme: light;
+    background-color: $pf-black;
     border: 0;
     border-radius: 0;
   }
@@ -896,6 +901,11 @@ html.pf-reading-dark[data-pf-panel] .offcanvas-backdrop.show {
 
 html.pf-reading-dark .pf-ask__inquiry {
   --pf-section-bg: color-mix(in srgb, var(--pf-g-bg) 80%, #000);
+}
+
+// Dark swatches: the chat widget sits on the drawer's glass.
+html.pf-reading-dark .pf-ask__frame {
+  background-color: transparent;
 }
 
 // A slow breath while the form is on its way; a library's side fades up as

@@ -1905,8 +1905,10 @@ html.pf-index-docked {
   }
 }
 
-// One line: more chips than fit scroll sideways inside it, never the page.
-// The padding keeps a focused chip's outline clear of the scroll's edge.
+// With a mouse, chips that don't fit wrap to another line (no scrollbar
+// under them). On a touch screen, one line that a finger scrolls sideways
+// inside, never the page. The padding keeps a focused chip's outline clear
+// of the scroll's edge.
 .pf-index__chips {
   display: flex;
   flex: 1 1 0;
@@ -1924,6 +1926,11 @@ html.pf-index-docked {
     list-style: none;
     scrollbar-width: thin;
 
+    @media (pointer: fine) {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+
     // On a touch screen no bar under the chips: the chip cut at the screen's
     // edge shows there's more, and a finger scrolls it.
     @media (pointer: coarse) {
@@ -1935,9 +1942,16 @@ html.pf-index-docked {
     flex: none;
   }
 
+  // The chips keep their width (up to 60% of the bar) and the count gives
+  // way, so two chips sit on one line.
   @media (min-width: 75rem) {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+    max-width: 60%;
     margin-inline-start: auto;
+
+    ul {
+      justify-content: flex-end;
+    }
   }
 }
 
@@ -1965,6 +1979,15 @@ html.pf-index-docked {
     width: 1rem;
     height: 1rem;
   }
+}
+
+// A long name (an oral history series) is cut with an ellipsis; the whole
+// name is still the link's text, and its title on hover.
+.pf-index__chip-label {
+  max-width: 13rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 // On a phone (js/index-search.js) the chosen filters leave the held bar for a
