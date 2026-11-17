@@ -509,6 +509,7 @@ HTML),
 <li>Exhibition timelines: events with only text are no longer clickable. Their few lines are shown right on the timeline, so nothing opens just to show a sentence; events with a picture or clip still open them.</li>
 <li>Exhibition walls: the same events now hang beside the pictures as wall labels, with their date, heading and text, instead of date cards that opened a nearly empty window. A link to one scrolls to its label.</li>
 <li>Newsletter reviewers now get answers: staff can reply to an approved note and mark it Open, Changed, Kept as is or Waiting on someone. The reply, the status and the drafts it went through show under the note, and resolved notes fold away under Resolved.</li>
+<li>Staff have a Newsletter notes list of every note, with filters for status and whether it shows publicly, and can show or hide several notes at once with one click.</li>
 </ul>
 HTML),
   $text('Tue Nov 17: Live Chat and What are these?', <<<'HTML'

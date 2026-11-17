@@ -1,0 +1,7 @@
+name: Palefire notes
+type: module
+description: 'Show publicly and Hide from public: bulk actions for the Palefire note forms (newsletter review, page review, PR timeline) in Views Bulk Operations.'
+package: Palefire
+core_version_requirement: ^10.3 || ^11
+dependencies:
+  - webform:webform
