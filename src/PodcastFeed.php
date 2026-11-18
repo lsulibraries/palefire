@@ -119,7 +119,7 @@ final class PodcastFeed {
    *
    * latest: the newest episode; more: the next ones; profile: the account.
    * Each episode as pull() keeps it, plus kicker ("Episode 21 · May 2025"),
-   * time ("5:49") and duration (ISO 8601, for <time>).
+   * time ("5:49"), month ("May 2025") and duration (ISO 8601, for <time>).
    */
   public static function view(int $more = self::KEEP): ?array {
     $data = \Drupal::state()->get(self::STATE);
@@ -195,6 +195,7 @@ final class PodcastFeed {
     $date = \Drupal::service('date.formatter')->format($episode['date'], 'custom', 'M Y');
     $episode['time'] = self::clock($episode['length']);
     $episode['duration'] = 'PT' . intdiv($episode['length'], 60) . 'M' . ($episode['length'] % 60) . 'S';
+    $episode['month'] = $date;
     $episode['kicker'] = $episode['number'] ? t('Episode @n · @date', ['@n' => $episode['number'], '@date' => $date]) : $date;
     // Pulls from before the full description was kept have none.
     $episode += ['body' => [], 'credits' => '', 'photo' => ''];

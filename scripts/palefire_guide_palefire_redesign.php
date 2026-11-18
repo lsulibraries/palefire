@@ -580,6 +580,7 @@ HTML),
 <li>Under the tape deck, a series’ description now follows its name closely even when the name fits on one line. The reading rail at the left edge of the page now reads straight down on Oral History: the Series part no longer makes the next part of the rail look already read.</li>
 <li>What Endures: the cassette is see-through again, with the photo showing through its smoked plastic and a lighter tape window.</li>
 <li>Under Oral History’s series, the Show more button now says how many you are seeing, for example “Showing 12 of 39”. Under the tape deck, the link now says what it opens, for example “View 60 interviews”, instead of “Open series”.</li>
+<li>What Endures: the episode list is shorter (about five rows, fewer on a small screen) so the heading and its description stay on screen while you browse. Rows are a little tighter, the photo credit sits under the episode length, and the date column shows just the month.</li>
 </ul>
 HTML),
 ]);

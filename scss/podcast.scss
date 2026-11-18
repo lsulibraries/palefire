@@ -51,7 +51,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 .pf-podcast__scroll {
   --pf-podcast-fade-top: 0px;
   --pf-podcast-fade-bottom: 0px;
-  max-height: min(26rem, 64svh);
+  max-height: min(24rem, 60svh);
   margin-inline-end: -.25rem;
   padding-inline-end: .25rem;
   overflow-y: auto;
@@ -72,7 +72,9 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 
   @media (min-width: 48rem) {
-    max-height: min(30rem, 62svh);
+    // About five rows, fewer on a short screen: the head (about 31rem
+    // from the rule) and the list fit on screen together.
+    max-height: clamp(13rem, 100svh - 36rem, 22rem);
   }
 }
 
@@ -166,6 +168,10 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 
   .pf-podcast__sep {
     display: none;
+  }
+
+  .pf-podcast__row {
+    padding-block: .625rem;
   }
 
   .pf-podcast__date {
@@ -426,7 +432,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 .pf-podcast-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: clamp(1.5rem, 3vw, 2rem);
 }
 
 .pf-section .pf-podcast-head__title {
@@ -522,7 +528,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   // The name, Lede and length centered beside the cassette.
   .pf-podcast-head {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: 1fr auto auto auto 1fr auto;
+    grid-template-rows: 1fr auto auto auto 1fr;
     column-gap: $pf-podcast-gap;
     align-items: start;
   }
@@ -543,12 +549,13 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
     text-align: start;
   }
 
+  // The photo's credit right under the length, its room kept.
   .pf-podcast-head__credit {
-    grid-area: 6 / 4 / 7 / 6;
-    justify-self: end;
+    grid-area: 5 / 1 / 6 / 4;
+    justify-self: start;
     min-height: 3em;
-    margin-top: 1.5rem;
-    text-align: end;
+    margin-top: .25rem;
+    text-align: start;
   }
 
   .pf-podcast-head__tape {

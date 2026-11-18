@@ -28,9 +28,9 @@
  * "All episodes" link in its rule goes there).
  *
  * Available variables:
- * - latest: the newest episode (title, number, kicker, time, duration, mp3,
- *   cover, link, summary, body, credits, photo), or absent before the first
- *   pull.
+ * - latest: the newest episode (title, number, kicker, month, time,
+ *   duration, mp3, cover, link, summary, body, credits, photo), or absent
+ *   before the first pull.
  * - more: the next episodes, the same keys.
  * - profile: the SoundCloud account's address.
  */
@@ -61,7 +61,7 @@
               <span class="visually-hidden"> {{ '(on SoundCloud, opens in a new tab)'|t }}</span>
             </a>
             <span class="pf-podcast__row-meta">
-              <span class="pf-podcast__date">{{ episode.kicker }}</span><span class="pf-podcast__sep" aria-hidden="true"> · </span><time class="pf-podcast__time" datetime="{{ episode.duration }}">{{ episode.time }}</time>
+              <span class="pf-podcast__date">{{ episode.month ?: episode.kicker }}</span><span class="pf-podcast__sep" aria-hidden="true"> · </span><time class="pf-podcast__time" datetime="{{ episode.duration }}">{{ episode.time }}</time>
             </span>
           </div>
           {{ podcast.play(episode, false) }}
