@@ -4560,15 +4560,19 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 }
 
 // The tape deck the stage plays it on instead (images/exhibit-deck.svg,
-// drawn after a Tascam Model 32 and put in by js/exhibition.js): 1px lines
-// of the text color, each part filled with the text color at its tone
-// (.tN, N%) over the page, so it reads the same in light and dark. As
+// drawn after a Tascam Model 32 and put in by js/exhibition.js): 1px lines,
+// each part filled with the text color at its tone (.tN, N%) over the page
+// and outlined at its line tone (.sN), so it reads the same in light and
+// dark. The line tones are solid colors, not opacities, so an edge two
+// faces share is no brighter than any other. Both lists are what
+// build/exhibit-deck.js prints. As
 // large as fits; in a small stage, the top plate alone (the reels to the
 // transport keys), its foot clipped. While the clip plays the reels turn
 // (the 5" supply faster than the 7" take-up), PLAY lights and the pinch
 // roller presses the tape to the capstan; reduced motion keeps the reels
 // still and the needles at rest.
-$pf-deck-tones: 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 28, 30, 34, 60;
+$pf-deck-tones: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 28, 30, 31, 34, 60;
+$pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
 
 .pf-deck {
   --pf-deck-bg: var(--bs-body-bg);
@@ -4616,6 +4620,12 @@ $pf-deck-tones: 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22,
   @each $tone in $pf-deck-tones {
     .t#{$tone} {
       fill: color-mix(in srgb, currentColor #{$tone * 1%}, var(--pf-deck-bg));
+    }
+  }
+
+  @each $tone in $pf-deck-strokes {
+    .s#{$tone} {
+      stroke: color-mix(in srgb, currentColor #{$tone * 1%}, var(--pf-deck-bg));
     }
   }
 

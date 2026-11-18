@@ -34,11 +34,36 @@ const so = o => o === undefined ? '' : ` stroke-opacity="${o}"`;
 const G = (pts, a, open) => `<${open ? 'polyline' : 'polygon'} points="${ps(pts)}"${a ? ' ' + a : ''}/>`;
 const L = (a, b, op, extra) => G([a, b], `stroke-opacity="${op}"${extra ? ' ' + extra : ''}`, 1);
 function hull(P) { P = P.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]); const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]); const lo = [], up = []; for (const p of P) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); } for (const p of P.slice().reverse()) { while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); } lo.pop(); up.pop(); return lo.concat(up); }
-const silh = (pts3, cls) => `<polygon points="${hull(pts3.map(pr)).map(P2).join(' ')}" ${cls} stroke-opacity=".45"/>`;
-function prism(b, z0, z1, fo, sop, extra) { return silh([...Z(b, z0), ...Z(b, z1)], T(fo * .55)) + G(Z(b, z1), `${T(fo)}${extra ? ' ' + extra : ''} stroke-opacity="${sop || .65}"`); }
-const cyl = (cx, cy, r, z0, z1, fo, sop) => prism(circB(cx, cy, r), z0, z1, fo, sop);
+// A cylinder's side is the hull of its two end circles (exact for a
+// cylinder); its stroke matches the cap's, so the shared edge reads once.
+const silh = (pts3, cls, sop) => `<polygon points="${hull(pts3.map(pr)).map(P2).join(' ')}" ${cls} stroke-opacity="${sop || .45}"/>`;
+// Solids: every face is a polygon on shared corners, shaded by which way it
+// faces (front 100%, top lighter, right darker), drawn only when it faces
+// the eye, far faces first. The eye, in panel units: the projection's
+// centre of view, D in front of the panel, turned with it.
+const CAM = [410 - D * S, 450, D * C];
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cen = p => [0, 1, 2].map(k => p.reduce((t, q) => t + q[k], 0) / p.length);
+const newell = p => { const n = [0, 0, 0]; p.forEach((a, i) => { const b = p[(i + 1) % p.length]; n[0] += (a[1] - b[1]) * (a[2] + b[2]); n[1] += (a[2] - b[2]) * (a[0] + b[0]); n[2] += (a[0] - b[0]) * (a[1] + b[1]); }); const l = Math.hypot(...n) || 1; return n.map(v => v / l); };
+const shade = (fo, n) => fo * (0.78 - 0.32 * n[1] - 0.3 * n[0] + 0.22 * n[2]);
+const drawFaces = (faces, fo, sop) => faces.map(f => ({ ...f, c: cen(f.p) })).filter(f => dot(f.n, sub(CAM, f.c)) > 0)
+  .map(f => ({ ...f, d: Math.hypot(...sub(f.c, CAM)) })).sort((a, b) => b.d - a.d)
+  .map(f => G(f.p, `${T(shade(f.fo || fo, f.n))} stroke-opacity="${sop}"`)).join('');
+// A polyhedron given as faces; normals turned away from a point inside it.
+const solid = (faces, inside, fo, sop) => drawFaces(faces.map(q => { const p = q.p || q; let n = newell(p); if (dot(n, sub(cen(p), inside)) < 0) n = n.map(v => -v); return { p, n, fo: q.fo }; }), fo, sop);
+// An outline in the panel's plane pushed out from z0 to z1: its sides (the
+// outward normal from the outline's winding, so concave outlines work), then
+// its cap.
+function prism(b, z0, z1, fo, sop, extra) {
+  sop = sop || .65;
+  let A = 0; b.forEach((p, i) => { const q = b[(i + 1) % b.length]; A += p[0] * q[1] - q[0] * p[1]; });
+  const sg = Math.sign(A) || 1;
+  const sides = b.map((p, i) => { const q = b[(i + 1) % b.length], dx = q[0] - p[0], dy = q[1] - p[1], l = Math.hypot(dx, dy) || 1; return { p: [[p[0], p[1], z1], [q[0], q[1], z1], [q[0], q[1], z0], [p[0], p[1], z0]], n: [sg * dy / l, -sg * dx / l, 0] }; });
+  return drawFaces(sides, fo, sop) + G(Z(b, z1), `${T(fo)}${extra ? ' ' + extra : ''} stroke-opacity="${sop}"`);
+}
+const cyl = (cx, cy, r, z0, z1, fo, sop) => silh([...Z(circB(cx, cy, r), z0), ...Z(circB(cx, cy, r), z1)], T(fo * .55), sop || .65) + G(Z(circB(cx, cy, r), z1), `${T(fo)} stroke-opacity="${sop || .65}"`);
 const ring = (cx, cy, r, z, a) => G(Z(circB(cx, cy, r), z), a);
-function txt(x, y, z, s, sz, an, op, cls) { const a = pr([x, y, z]), b = pr([x + 1, y, z]), c = pr([x, y + 1, z]); return `<text${cls ? ` class="${cls}"` : ''} transform="matrix(${(b[0] - a[0]).toFixed(3)} ${(b[1] - a[1]).toFixed(3)} ${(c[0] - a[0]).toFixed(3)} ${(c[1] - a[1]).toFixed(3)} ${f2(a[0])} ${f2(a[1])})" fill-opacity="${op || .6}" font-size="${sz || 7}"${an && an !== 'middle' ? ` text-anchor="${an}"` : ''}>${s}</text>`; }
+function txt(x, y, z, s, sz, an, op, cls) { const zf = typeof z === 'function' ? z : () => z, a = pr([x, y, zf(y)]), b = pr([x + 1, y, zf(y)]), c = pr([x, y + 1, zf(y + 1)]); return `<text${cls ? ` class="${cls}"` : ''} transform="matrix(${(b[0] - a[0]).toFixed(3)} ${(b[1] - a[1]).toFixed(3)} ${(c[0] - a[0]).toFixed(3)} ${(c[1] - a[1]).toFixed(3)} ${f2(a[0])} ${f2(a[1])})" fill-opacity="${op || .6}" font-size="${sz || 7}"${an && an !== 'middle' ? ` text-anchor="${an}"` : ''}>${s}</text>`; }
 const scr = (x, y, z = 0) => ring(x, y, 4.5, z, 'stroke-opacity=".35"') + L([x - 3, y, z], [x + 3, y, z], .3);
 // The projection at layer z, linearised about (cx, cy): a matrix() that
 // takes a part drawn about 0,0 to the screen.
@@ -54,11 +79,13 @@ s += G([[820, 0, 0], [820, 0, -380], [820, 900, -380], [820, 900, 0]], `${T(.07)
 s += G(Z(rectB(0, 0, 820, 900), 0), 'class="bg" stroke-opacity=".6"');
 [[14, 40], [806, 40], [14, 330], [806, 330], [14, 676], [806, 676], [14, 884], [806, 884]].forEach(p => { s += scr(...p); });
 [130, 690].forEach(x => { s += ring(x, 140, 110, 0, `${T(.03)} stroke-opacity=".45"`) + ring(x, 140, 98, 0, 'stroke-opacity=".2"'); });
-s += G(Z([[4, 426], [508, 426], [508, 399], [546, 426], [814, 426], [814, 577], [4, 577]], 0), `${T(.025)} stroke-opacity=".4"`);
-const slot = (cx, cy, a1, a2) => Z([...arcB(cx, cy, 97, a1, a2), ...arcB(cx, cy, 83, a2, a1)], 0);
+// The transport plate and the control strip stand a little proud of the
+// panel, so their ends show.
+s += prism(rectB(4, 426, 810, 151), 0, 3, .025, .4);
+const slot = (cx, cy, a1, a2) => Z([...arcB(cx, cy, 97, a1, a2), ...arcB(cx, cy, 83, a2, a1)], 3);
 s += G(slot(155, 522, 186, 240), 'class="hole" stroke-opacity=".35"') + G(slot(663, 531, 296, 348), 'class="hole" stroke-opacity=".35"');
 s += cyl(617, 473, 16, 0, 4, .16, .6);
-s += G(Z([[4, 578], [808, 578], [812, 584], [812, 660], [808, 666], [4, 666]], 0), `${T(.04)} stroke-opacity=".45"`) + G(Z(rectB(36, 593, 752, 59), 0), `${T(.02)} stroke-opacity=".55"`) + L([0, 670, 0], [820, 670, 0], .25);
+s += prism(rectB(4, 578, 812, 88), 0, 2, .04, .45) + G(Z(rectB(36, 593, 752, 59), 2), `${T(.02)} stroke-opacity=".55"`) + L([0, 670, 0], [820, 670, 0], .25);
 OY = 7;
 s += txt(70, 596, 0, 'POWER', 6.5) + prism(rectB(55, 604, 30, 30), 0, 8, .14) + txt(97, 612, 0, 'ON', 5.5, 'start', .45) + txt(97, 626, 0, 'OFF', 5.5, 'start', .45);
 [['REEL', 122], ['SPEED', 160], ['EDIT', 200]].forEach(([t, x]) => { s += txt(x, 596, 0, t, 6.5) + prism(rectB(x - 5, 606, 10, 24), 0, 10, .2); });
@@ -90,7 +117,7 @@ s += brk(165, 410, 'INPUT SELECT') + brk(510, 550, 'FUNCTION') + brk(635, 715, '
 const lever = (x, t, led) => {
   const b = rectB(x - 6, 716, 12, 28);
   return txt(x, 700, 0, t, 6) + G(Z(rectB(x - 4, 703, 8, 4), 0), `class="led-${led}" stroke-opacity=".3"`) + L([x, 707, 0], [x, 716, 0], .45)
-    + silh([...Z(b, 0), ...Z(b, 14)], 'class="tan"') + G(Z(b, 14), `${T(.34)} stroke-opacity=".65"`);
+    + silh([...Z(b, 0), ...Z(b, 14)], 'class="tan"', .65) + G(Z(b, 14), `${T(.34)} stroke-opacity=".65"`);
 };
 [[165, 'ATT', 'dim'], [205, 'MIC', 'dim'], [245, 'LINE', 'dim'], [330, 'ATT', 'dim'], [370, 'MIC', 'dim'], [410, 'LINE', 'dim'], [510, 'L', 'red'], [550, 'R', 'red'], [635, 'INPUT', 'red'], [675, 'SYNC', 'amb'], [715, 'REPRO', 'grn']].forEach(a => { s += lever(...a); });
 s += txt(205, 760, 0, 'LEFT', 6.5) + txt(370, 760, 0, 'RIGHT', 6.5);
@@ -105,36 +132,36 @@ function vu(x0) {
 s += vu(130) + vu(295);
 s += txt(478, 776, 0, 'INPUT', 7) + bigKnob(530, 822) + txt(624, 776, 0, 'OUTPUT', 7) + bigKnob(678, 822);
 
-// Head block, traced from the angled photo.
-function homog(src, dst) {
-  const A = [], b = []; src.forEach(([x, y], i) => { const [u, v] = dst[i]; A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u); A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v); });
-  for (let i = 0; i < 8; i++) { let m = i; for (let r = i + 1; r < 8; r++) if (Math.abs(A[r][i]) > Math.abs(A[m][i])) m = r; [A[i], A[m]] = [A[m], A[i]]; [b[i], b[m]] = [b[m], b[i]]; for (let r = 0; r < 8; r++) if (r !== i) { const f = A[r][i] / A[i][i]; for (let c = i; c < 8; c++) A[r][c] -= f * A[i][c]; b[r] -= f * b[i]; } }
-  return [...b.map((v, i) => v / A[i][i]), 1];
-}
-const HP = homog([[115, 101], [1001, -57], [998, 1408], [108, 1257]], [[0, 0], [820, 0], [820, 900], [0, 900]]);
-const ph = ([x, y]) => { const w = HP[6] * x + HP[7] * y + HP[8]; return [(HP[0] * x + HP[1] * y + HP[2]) / w, (HP[3] * x + HP[4] * y + HP[5]) / w, 0]; };
-const PH = pts => pts.map(ph);
-const hP = (pts, a) => G(PH(pts), a), hL = (a, b, op) => G(PH([a, b]), `stroke-opacity="${op}"`, 1);
-const hT = (p, t, sz, op, cls) => { const q = ph(p); return txt(q[0], q[1], 0, t, sz, 'middle', op, cls); };
-const lx = y => 392.9 - (y - 493.6) * .4643, rx = y => 519.2 + (y - 492.3) * .3826;
-const HB = {
-  top: [[392.9, 493.6], [431.4, 487.2], [564.1, 480.8], [576.9, 482.7], [519.2, 492.3]],
-  side: [[519.2, 492.3], [576.9, 482.7], [669.9, 646.1], [669.9, 690], [600, 712], [582, 710.2], [589.7, 675], [578.8, 649.4], [560.9, 601.3]],
-  front: [[392.9, 493.6], [519.2, 492.3], [560.9, 601.3], [342.9, 601.3]],
-  roof: [[342.9, 601.3], [560.9, 601.3], [578.8, 649.4], [291.7, 649.4]],
-  band: [[291.7, 649.4], [578.8, 649.4], [589.7, 675], [582, 710.2], [253.2, 710.2], [253.2, 667.2]]
-};
-let f = '';
-f += hP(HB.side, `${T(.045)} stroke-opacity=".5"`) + hP(HB.top, `${T(.12)} stroke-opacity=".55"`);
-f += hP(HB.front, `${T(.075)} stroke-opacity=".7"`) + hL([lx(525), 525], [rx(525), 525], .35) + hL([lx(563), 563], [rx(563), 563], .35);
-f += hP(rectB(408, 527, 77, 34), 'class="hole" stroke-opacity=".5"') + hT([446.5, 550], '0:00', 12, .85, 'count');
-f += hP(rectB(375, 540, 17, 23), `${T(.3)} stroke-opacity=".6"`) + hP(rectB(507, 537, 16, 23), `${T(.3)} stroke-opacity=".6"`);
-f += hT([384, 578], 'ZERO RETURN', 6.5) + hT([515, 575], 'RESET', 6.5);
-f += hP(HB.roof, `${T(.12)} stroke-opacity=".6"`);
-f += hP(HB.band, `${T(.085)} stroke-opacity=".7"`);
-[[262.8, 676.9], [560.9, 678.2]].forEach(p => { const q = ph(p); f += scr(q[0], q[1]); });
-f += hP(rectB(309, 660, 111, 31), `${T(.03)} stroke-opacity=".6"`) + hP(rectB(420, 660, 58, 31), `${T(.18)} stroke-opacity=".6"`) + G(PH([[309, 698], [478, 698]]), 'class="gold" stroke-opacity=".85" stroke-width="2"', 1);
-f += hT([364.5, 680], 'AUDIO ONLY', 9.5, .6, 'kind') + hT([449, 681], '', 10.5, .85, 'year');
+// Head block, a solid measured off the straight-on photograph (panel units:
+// photo pixels less 92, 42). The tower with the counter leans back (its
+// face from HZ[0] out at the top to HZ[1] at its foot), a sloped roof brings
+// it forward to the cover's top edge, and the cover (the band with the name
+// plate) stands HZ[2] out, its right end chamfered.
+const HZ = [24, 38, 56];
+const zT = y => HZ[0] + (y - 315) * (HZ[1] - HZ[0]) / 85, hw = y => 64 + (y - 315) * 74 / 105;
+const onT = pts => pts.map(([x, y]) => [x, y, zT(y)]);
+let f = solid([
+  { p: [[345, 315, 0], [475, 315, 0], [475, 315, HZ[0]], [345, 315, HZ[0]]], fo: .075 },
+  { p: [[345, 315, HZ[0]], [475, 315, HZ[0]], [534, 400, HZ[1]], [286, 400, HZ[1]]], fo: .075 },
+  { p: [[286, 400, HZ[1]], [534, 400, HZ[1]], [548, 420, HZ[2]], [272, 420, HZ[2]]], fo: .12 },
+  { p: [[345, 315, HZ[0]], [286, 400, HZ[1]], [272, 420, HZ[2]], [272, 420, 0], [345, 315, 0]], fo: .075 },
+  { p: [[475, 315, HZ[0]], [534, 400, HZ[1]], [548, 420, HZ[2]], [548, 420, 0], [475, 315, 0]], fo: .075 },
+  { p: [[272, 420, 0], [548, 420, 0], [548, 420, HZ[2]], [272, 420, HZ[2]]], fo: .075 }
+], [410, 380, 10], .075, .7);
+// Along the tower's face: two seams, the counter, its two keys.
+[336, 372].forEach(y => { f += G(onT([[410 - hw(y), y], [410 + hw(y), y]]), 'stroke-opacity=".35"', 1); });
+f += G(onT(rectB(373, 340, 74, 24)), 'class="hole" stroke-opacity=".5"') + txt(410, 357, zT, '0:00', 12, 'middle', .85, 'count');
+const key = (x0, y0, w, h) => { const b = rectB(x0, y0, w, h), lo = onT(b), hi = lo.map(([x, y, z]) => [x, y, z + 4]); return solid([hi, ...b.map((_, i) => { const j = (i + 1) % 4; return [hi[i], hi[j], lo[j], lo[i]]; })], [x0 + w / 2, y0 + h / 2, zT(y0 + h / 2) + 1], .3, .6); };
+f += key(337, 349, 14, 17) + key(469, 349, 14, 17);
+f += txt(344, 380, zT, 'ZERO RETURN', 6.5) + txt(476, 380, zT, 'RESET', 6.5);
+// The cover.
+const BAND = [[233, 420], [558, 420], [558, 446], [486, 494], [486, 532], [468, 550], [278, 550], [233, 532]];
+const bx = y => y < 446 ? 558 : 558 - (y - 446) * 72 / 48, BZ0 = HZ[2];
+f += prism(BAND, 0, BZ0, .085, .7);
+[458, 475].forEach((y, i) => { f += L([233, y, BZ0], [bx(y), y, BZ0], i ? .35 : .5); });
+[[248, 447], [530, 436]].forEach(p => { f += scr(p[0], p[1], BZ0); });
+f += G(Z(rectB(298, 482, 102, 31), BZ0), `${T(.03)} stroke-opacity=".6"`) + G(Z(rectB(400, 482, 55, 31), BZ0), `${T(.18)} stroke-opacity=".6"`) + G([[298, 519, BZ0], [455, 519, BZ0]], 'class="gold" stroke-opacity=".85" stroke-width="2"', 1);
+f += txt(349, 501.5, BZ0, 'AUDIO ONLY', 9.5, 'middle', .6, 'kind') + txt(427.5, 502, BZ0, '', 10.5, 'middle', .85, 'year');
 
 // Tape path at a fixed point in the clip (the packs do not grow).
 const reels = [{ cx: 130, k: 5 / 7, hub: 44, max: 104 }, { cx: 690, k: 1, hub: 50, max: 136 }];
@@ -165,7 +192,7 @@ const P = .35, A2 = reels[0].max ** 2 - reels[0].hub ** 2;
 const rr = [Math.sqrt(reels[0].hub ** 2 + A2 * (1 - P)), Math.sqrt(reels[1].hub ** 2 + A2 * P)];
 const TP = tapePath(rr[0], rr[1]);
 const ROL = [[67, 522, 21, 0, 34, .17], [164, 483, 42, 0, 33, .15], [617, 473, 6.5, 4, 32, .28], [752, 520, 21, 0, 34, .17]];
-const RL = ROL.map(([cx, cy, r, z0, z1, fo]) => { const c0 = Z(circB(cx, cy, r), z0), c1 = Z(circB(cx, cy, r), z1); return [silh([...c0, ...c1], T(fo * .55)), G(c1, `${T(fo)} stroke-opacity=".7"`)]; });
+const RL = ROL.map(([cx, cy, r, z0, z1, fo]) => { const c0 = Z(circB(cx, cy, r), z0), c1 = Z(circB(cx, cy, r), z1); return [silh([...c0, ...c1], T(fo * .55), .7), G(c1, `${T(fo)} stroke-opacity=".7"`)]; });
 const m = RL.map(r => r[0]).join('') + rib(TP.aOut) + rib(TP.b) + rib(TP.cOut) + RL.map(r => r[1]).join('');
 
 // Pinch roller (out; CSS presses it in while the clip plays), needles at
@@ -199,7 +226,17 @@ reels.forEach(r => circB(r.cx, 140, 165 * r.k, 24).forEach(([a, b]) => { all.pus
 const pp = all.map(pr), xs = pp.map(p => p[0]), ys = pp.map(p => p[1]), pad = 14;
 const vx = Math.min(...xs) - pad, vy = Math.min(...ys) - pad, vw = Math.max(...xs) - Math.min(...xs) + pad * 2, vh = Math.max(...ys) - Math.min(...ys) + pad * 2;
 const topY = Math.max(...[0, 820].map(x => pr([x, 674, 0])[1])) + 4;
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${(s + m + f + d).replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
+const strokes = new Set();
+const body = (s + m + f + d).replace(/<(polygon|polyline|line|path)\b([^>]*?)\/>/g, (el, tag, at) => {
+  const mo = at.match(/ stroke-opacity="([\d.]+)"/);
+  if (!mo || /class="[^"]*\b(gold|needle)\b/.test(at)) return el;
+  const n = Math.round(+mo[1] * 100);
+  at = at.replace(mo[0], '');
+  if (n === 0) return '<' + tag + at + ' stroke="none"/>';
+  strokes.add(n);
+  return '<' + tag + (/class="/.test(at) ? at.replace(/class="/, () => 'class="s' + n + ' ') : ' class="s' + n + '"' + at) + '/>';
+});
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
 fs.writeFileSync(out, svg.replace(/\n+/g, '\n'));
 const sorted = [...tones].sort((a, b) => a - b);
-console.log(JSON.stringify({ bytes: svg.length, tones: sorted, aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));
+console.log(JSON.stringify({ bytes: svg.length, tones: sorted, strokes: [...strokes].sort((a, b) => a - b), aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));

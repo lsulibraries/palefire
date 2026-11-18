@@ -569,6 +569,7 @@ HTML),
 <li>Phones: those highlights are now a numbered list, like the Quick Start Guide’s steps. Each row shows its number, its category, its title and a small picture, so all five items get a picture and none is hidden. Each row draws in gently as it scrolls into view.</li>
 <li>Phones: in that list the blog post now fades back with the others when another item is pointed at or focused, and the Research / Study / Ask Us tabs follow the list more closely.</li>
 <li>What Endures has a new cassette for its title: a smoked plastic one with the title printed on it in gold, seen a little from the side so you can see its thickness, its window, screws and the engraved A in relief. It sits centered between two thin lines that fade out to the edges, a little smaller than before, with more room before the episodes. The lines draw outward and the title writes itself when you scroll to it; the reels turn while an episode plays.</li>
+<li>The tape deck that appears when an oral history clip has no picture is drawn more accurately. The block in the middle with the counter and the name plate is now a real three-dimensional shape measured from photos of the Tascam machine, so its corners meet and its sides line up with the angle of the deck. Buttons, feet and the meter frames show only the sides you would actually see, and lines where two surfaces meet are no longer drawn twice as bright.</li>
 </ul>
 HTML),
 ]);
