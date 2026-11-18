@@ -180,6 +180,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Before you visit: the note-link underline is `.pf-quick-guide__visit li a:not(.pf-quick-guide__link)`; the buttons stay plain. Cover hero before ledger photos: `.pf-section:first-child:has(.pf-landing--cover):has(+ .pf-section.has-ledger-photos) > .pf-section__inner { padding-bottom: 0 }`. Podcast: `.pf-podcast__all` only without episodes.
 - **2026-11-17:** Hero search key hint (`.pf-landing__key`, `js/search-field.js`): a `kbd` (Ctrl K / ⌘K) in a `$pf-hairline` box, mono label at `.08em` in `--pf-toc-color`, a flex item between `.pf-landing__input` and the Search button with `.5rem 1rem` inline padding, for hover/fine pointers from 62rem only; it fades out on focus and is hidden once the field has words. It carries the field’s 2px gold hover line on (`.15s linear` after `.3s`, folded to 0 on focus like the input’s). Typed examples run in the field’s own placeholder color. None with reduced motion; hidden in print.
 - **2026-11-17:** Reading rail column (`.pf-modular--toc-rail > .pf-sidebar`, lg+): `pointer-events: none` on the column, `auto` on `.pf-toc`, so the empty column never covers what is under it (the hero's Pause button).
 - **2026-11-17:** Map banner here plate: the `…-here-walls` mask is on `.pf-map__lines` and `.pf-map__hit` (as js/building-map.js), so no wall, white or the lit gold outline, crosses the name.

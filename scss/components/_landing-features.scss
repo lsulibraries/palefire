@@ -33,6 +33,13 @@
   > .pf-section__inner {
     padding-top: 0;
   }
+
+  // Before a section whose picture fills it (ledger photos, What Hill
+  // Holds), no padding under the hero either: the picture starts where the
+  // hero's own ground ends, with no band of page color between them.
+  &:has(+ .pf-section.has-ledger-photos) > .pf-section__inner {
+    padding-bottom: 0;
+  }
 }
 
 // --- Content column -----------------------------------------------------
@@ -3221,8 +3228,9 @@ html[data-pf-hero] .pf-landing--cover {
 
   // A link in a note (sign in or register): the full text color, underlined
   // so it is told from the 80% text by more than color, the line thickening
-  // on hover.
-  li a {
+  // on hover. Not the buttons under the notes (.pf-quick-guide__link, also
+  // in list items here): they stay plain.
+  li a:not(.pf-quick-guide__link) {
     color: var(--pf-section-fg, var(--bs-body-color));
     text-decoration: underline;
     text-decoration-thickness: 1px;

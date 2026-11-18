@@ -485,6 +485,7 @@ HTML),
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
+<li>Quick Start buttons are plain again (no underline); What Hill Holds’ picture now meets the top of the page’s first screen with no dark band; What Endures has one link to every episode instead of two.</li>
 <li>The Pause button for a page’s background film works wherever you click it, icon included.</li>
 <li>Oral History’s map: the room’s gold outline no longer runs through its name.</li>
 <li>Oral History’s Pause button for the background film works again.</li>
