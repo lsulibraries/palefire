@@ -316,10 +316,76 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 // over 4–5. One column (phones): the cassette centered under the Lede, square.
 // At rest it is the finished drawing. On view (is-in, js/podcast.js) the
 // cassette rises in, the title on it writes itself and the reels give a half
-// turn; while an episode plays (is-playing) the reels turn, and the tape
-// packs follow its progress (--pf-tape, 0 to 1). Motion only when allowed.
+// turn. The tape is the shown episode's length (the longest on the page a
+// full reel); while it plays (is-playing) the reels turn and the tape winds
+// across (--pf-pack-left/right, js/podcast.js). Motion only when allowed.
 .pf-section:has(.pf-podcast-head) {
   overflow-x: clip;
+}
+
+// The backdrop: the photo of the episode pointed at, focused or playing
+// (js/podcast.js sets it then), gray, under a wash of the section's color
+// that is darkest over the list and the heading, so the text keeps its
+// contrast whatever the picture. The new photo fades in over the old.
+.pf-podcast-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    opacity: 0;
+    filter: grayscale(1) contrast(.95) brightness(.9);
+  }
+
+  img.is-on {
+    opacity: .42;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, color-mix(in srgb, var(--bs-body-bg) 64%, transparent), color-mix(in srgb, var(--bs-body-bg) 84%, transparent) 50%, color-mix(in srgb, var(--bs-body-bg) 94%, transparent) 85%),
+      linear-gradient(to right, color-mix(in srgb, var(--bs-body-bg) 75%, transparent), transparent 70%);
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-podcast-backdrop {
+    display: none;
+  }
+}
+
+// The row the head shows: a faint wash from its start.
+.pf-podcast__row.is-current {
+  background: linear-gradient(to right, color-mix(in srgb, var(--bs-body-color) 6%, transparent), transparent 80%);
+}
+
+// The shown episode's length, or "Playing 2:48 / 8:01" (aria-hidden: the
+// docked bar's time is the one read out). Under the cassette in one column.
+.pf-podcast-head__read {
+  order: 1;
+  min-height: 1.5em;
+  margin: 1rem 0 0;
+  font: var(--pf-mono-label, .75rem)/1.5 var(--pf-exhibit-mono, monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--pf-exhibit-muted, var(--bs-secondary-color));
+  font-variant-numeric: tabular-nums;
+
+  &.is-playing {
+    color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  }
 }
 
 .pf-podcast-head {
@@ -341,30 +407,41 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   margin: 1.25rem 0 0;
 }
 
+// The cassette over the photo: its outline (the face and the thickness,
+// as a polygon on the drawing's 252 x 160 grid) blurs what is behind it, and
+// the smoked shell lets that through, so it reads as solid plastic.
 .pf-podcast-head__tape {
+  position: relative;
   width: min(78%, 20rem);
   justify-self: center;
   margin-top: clamp(1.75rem, 6vw, 2.5rem);
 }
 
 @media (min-width: 48rem) {
+  // The name, Lede and length centered beside the cassette.
   .pf-podcast-head {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: 1fr auto auto auto 1fr;
     column-gap: $pf-podcast-gap;
     align-items: start;
   }
 
   .pf-section .pf-podcast-head__title {
-    grid-area: 1 / 1 / 2 / 4;
-    align-self: end;
-  }
-
-  .pf-section .pf-podcast-head__lede {
     grid-area: 2 / 1 / 3 / 4;
   }
 
+  .pf-section .pf-podcast-head__lede {
+    grid-area: 3 / 1 / 4 / 4;
+  }
+
+  .pf-podcast-head__read {
+    grid-area: 4 / 1 / 5 / 4;
+    margin-top: 1.25rem;
+    text-align: start;
+  }
+
   .pf-podcast-head__tape {
-    grid-area: 1 / 4 / 3 / 6;
+    grid-area: 1 / 4 / 6 / 6;
     align-self: center;
     justify-self: stretch;
     width: auto;
@@ -373,11 +450,23 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
+.pf-podcast-head__tape::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(.8% 6.25%, 5.6% 1.25%, 99.2% 1.25%, 99.2% 93.75%, 94.4% 98.75%, .8% 98.75%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.pf-podcast-head__tape .pf-cassette {
+  position: relative;
+}
+
 $pf-cassette-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
 $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 
 .pf-cassette {
-  --pf-tape: .22;
   display: block;
   width: 100%;
   height: auto;
@@ -407,7 +496,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__shell {
-  fill: color-mix(in srgb, currentColor 10%, var(--bs-body-bg));
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 78%, transparent);
 }
 
 .pf-cassette__fine {
@@ -440,7 +529,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__inside {
-  opacity: .6;
+  opacity: .8;
 }
 
 .pf-cassette__flange {
@@ -450,20 +539,21 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__pack {
-  fill: color-mix(in srgb, #{$pf-cassette-gold} 14%, transparent);
-  stroke: color-mix(in srgb, #{$pf-cassette-gold} 55%, transparent);
-  stroke-width: .7;
+  fill: color-mix(in srgb, #{$pf-cassette-gold} 30%, transparent);
+  stroke: color-mix(in srgb, #{$pf-cassette-gold} 85%, transparent);
+  stroke-width: .8;
   transform-box: fill-box;
   transform-origin: center;
 }
 
-// 25 at full: the left pack empties to 12, the right fills from 12.
+// Drawn full (25); scaled to the tape on each (js/podcast.js: the bare hub
+// is .48). Before the script runs: a full left reel.
 .pf-cassette__pack--left {
-  transform: scale(calc((12 + 13 * (1 - var(--pf-tape))) / 25));
+  transform: scale(var(--pf-pack-left, 1));
 }
 
 .pf-cassette__pack--right {
-  transform: scale(calc((12 + 13 * var(--pf-tape)) / 25));
+  transform: scale(var(--pf-pack-right, .48));
 }
 
 .pf-cassette__hub {
@@ -576,7 +666,28 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
     .pf-cassette__pack {
-      transition: transform 1s linear;
+      transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-cassette.is-playing .pf-cassette__pack {
+      transition: transform .3s linear;
+    }
+
+    .pf-podcast-backdrop img {
+      transform: scale(1.04);
+      transition: opacity 1.1s cubic-bezier(.2, .7, .2, 1), transform 8s linear;
+    }
+
+    .pf-podcast-backdrop img.is-on {
+      transform: none;
+    }
+
+    .pf-podcast-head__tape::before {
+      transition: opacity .9s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-podcast-head__tape:has(.pf-cassette.is-waiting)::before {
+      opacity: 0;
     }
 
     .pf-cassette.is-waiting {

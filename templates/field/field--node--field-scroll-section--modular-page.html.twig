@@ -36,9 +36,20 @@
       {% if index.aside %}
         {% set item_attributes = item.attributes.addClass('pf-section--aside') %}
       {% endif %}
+      {# The podcast's head (index.mark): the name (an h2 like every
+         section's), its Lede, and the cassette mark tilted behind them at
+         the right, running off the section's edge; centered under them in
+         one column (podcast.scss). The drawing is decorative; the name is
+         the h2's own text. The section's backdrop takes the photo of the
+         episode pointed at or playing (js/podcast.js); the pictures are
+         set only then. #}
+      {% set mark = index.mark == 'cassette' and item.section.label and not item.section.title_hidden %}
       <section{{ item.attributes }}>
         {% if item.section.bg %}
           <div class="pf-section__bg" aria-hidden="true" inert>{{ item.section.bg }}</div>
+        {% endif %}
+        {% if mark %}
+          <div class="pf-podcast-backdrop" aria-hidden="true"><img alt="" decoding="async"><img alt="" decoding="async"></div>
         {% endif %}
         <div class="pf-section__inner">
           {# A walk-in room's parts have no number: the rule only when it
@@ -49,18 +60,13 @@
           {% if index.aside %}
             <div class="pf-section__head">
           {% endif %}
-          {# The podcast's head (index.mark): the name (an h2 like every
-             section's), its Lede, and the cassette mark tilted behind them
-             at the right, running off the section's edge; centered under
-             them in one column (podcast.scss). The drawing is decorative;
-             the name is the h2's own text. #}
-          {% set mark = index.mark == 'cassette' and item.section.label and not item.section.title_hidden %}
           {% if mark %}
             <div class="pf-podcast-head">
               <h2 id="{{ item.section.title_id }}" class="pf-section__title pf-podcast-head__title" tabindex="-1">{{ item.section.label }}</h2>
               {% if index.lede %}
                 <p class="pf-section__lede pf-podcast-head__lede">{{ index.lede }}</p>
               {% endif %}
+              <p class="pf-podcast-head__read" aria-hidden="true"></p>
               <div class="pf-podcast-head__tape">
                 {%- include '@palefire/includes/cassette-mark.html.twig' -%}
               </div>

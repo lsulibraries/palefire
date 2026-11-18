@@ -12,6 +12,12 @@
  * playing pauses the episode, and the other way round.
  *
  * The MP3 is requested only on Play (preload none).
+ *
+ * The section's head shows one episode: the one pointed at or focused in
+ * the list, else the one playing. Its photo (the feed's, 500px, set only
+ * then) fades in as the section's backdrop, and the cassette's tape is its
+ * length, the longest on the page a full reel; while it plays the reels
+ * turn and the tape winds across.
  */
 (function (Drupal, once) {
   'use strict';
@@ -29,18 +35,93 @@
     return h ? h + ':' + String(m).padStart(2, '0') + ':' + s : m + ':' + s;
   };
 
-  // The cassette mark (includes/cassette-mark.html.twig): its reels turn
-  // while an episode plays, its tape packs follow the episode's progress.
+  // The episode the section's head shows (includes/podcast.html.twig rows):
+  // the one pointed at or focused, else the one playing, else the newest
+  // (its tape only, no photo).
+  const view = { rows: [], longest: 1, shown: null };
+
+  const rowFor = (src) => view.rows.find((row) => {
+    const button = row.querySelector('[data-pf-podcast-src]');
+    return button && button.dataset.pfPodcastSrc === src;
+  }) || null;
+
+  const loaded = (row) => !!row && !!state.audio && rowFor(state.audio.dataset.src || '') === row;
+
+  // A tape pack's size: its area grows with the tape on it, so the radius
+  // is sqrt(hub² + (full² − hub²) × share), as a scale of the full pack
+  // (25 on the drawing's grid, the bare hub 12). The longest episode on the
+  // page fills the reel; the others are their share of it.
+  const pack = (share) => {
+    const s = Math.max(0, Math.min(1, share));
+    return (Math.sqrt(144 + 481 * s) / 25).toFixed(3);
+  };
+
+  // The cassette mark (includes/cassette-mark.html.twig): its tape is the
+  // shown episode's length, and while that episode plays the reels turn and
+  // the tape winds from the left pack to the right.
   function syncCassettes() {
     const audio = state.audio;
-    const playing = !!audio && !audio.paused;
-    const progress = audio && audio.duration ? Math.min(1, audio.currentTime / audio.duration) : null;
+    const row = view.shown;
+    const mine = loaded(row);
+    const playing = mine && !audio.paused;
+    const progress = mine && audio.duration ? Math.min(1, audio.currentTime / audio.duration) : 0;
+    const share = row ? Number(row.dataset.pfPodcastLength || 0) / view.longest : 1;
+    const time = row ? row.querySelector('time') : null;
+    const length = time ? time.textContent.trim() : '';
     document.querySelectorAll('.pf-cassette').forEach((mark) => {
       mark.classList.toggle('is-playing', playing);
-      if (progress !== null) {
-        mark.style.setProperty('--pf-tape', progress.toFixed(3));
+      mark.style.setProperty('--pf-pack-left', pack(share * (1 - progress)));
+      mark.style.setProperty('--pf-pack-right', pack(share * progress));
+      const type = mark.querySelector('.pf-cassette__type--end');
+      if (type && length) {
+        type.textContent = Drupal.t('ORAL HISTORY · @time', { '@time': length });
       }
     });
+    document.querySelectorAll('.pf-podcast-head__read').forEach((read) => {
+      read.textContent = mine ? Drupal.t('Playing @now / @total', { '@now': clock(audio.currentTime), '@total': length }) : length;
+      read.classList.toggle('is-playing', playing);
+    });
+  }
+
+  // The section's backdrop: two pictures, the new one fading in over the
+  // old once it has loaded. Nothing loads until an episode is shown.
+  function backdrop(src) {
+    document.querySelectorAll('.pf-podcast-backdrop').forEach((box) => {
+      if ((box.dataset.src || '') === src) {
+        return;
+      }
+      box.dataset.src = src;
+      const pictures = Array.from(box.querySelectorAll('img'));
+      if (!src) {
+        pictures.forEach((picture) => picture.classList.remove('is-on'));
+        return;
+      }
+      const next = pictures.find((picture) => !picture.classList.contains('is-on')) || pictures[0];
+      const reveal = () => {
+        if (box.dataset.src === src) {
+          pictures.forEach((picture) => picture.classList.toggle('is-on', picture === next));
+        }
+      };
+      next.onload = reveal;
+      next.src = src;
+      if (next.complete && next.naturalWidth) {
+        reveal();
+      }
+    });
+  }
+
+  function show(row, photo) {
+    view.shown = row;
+    view.rows.forEach((other) => other.classList.toggle('is-current', other === row && photo));
+    backdrop(row && photo ? row.dataset.pfPodcastPhoto || '' : '');
+    syncCassettes();
+  }
+
+  // Pointer and focus gone from the list: the playing episode, or the
+  // newest's tape on a bare section.
+  function rest() {
+    const playing = state.audio ? rowFor(state.audio.dataset.src || '') : null;
+    show(playing || view.rows[0] || null, !!playing);
   }
 
   // Every Play button for the episode that is loaded shows its state.
@@ -72,6 +153,7 @@
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('pf-a11y-motion');
     setTimeout(() => bar.remove(), reduced ? 0 : 600);
     syncButtons();
+    rest();
     if (trigger && trigger.isConnected) {
       trigger.focus({ preventScroll: true });
     }
@@ -191,6 +273,11 @@
     state.bar.querySelector('.pf-listen__title').textContent = button.dataset.pfPodcastTitle || '';
     state.audio.dataset.src = src;
     state.audio.src = src;
+    // The head shows it: its photo, its tape.
+    const row = rowFor(src);
+    if (row) {
+      show(row, true);
+    }
     const playing = state.audio.play();
     if (playing && playing.catch) {
       playing.catch(() => syncButtons());
@@ -218,7 +305,27 @@
         observer.observe(mark);
       });
       // The list takes focus from the bar's title.
-      once('pf-podcast-list', '#podcast', context).forEach((list) => list.setAttribute('tabindex', '-1'));
+      once('pf-podcast-list', '#podcast', context).forEach((list) => {
+        list.setAttribute('tabindex', '-1');
+        // Each row, pointed at or focused, shows its episode in the head.
+        view.rows = Array.from(list.querySelectorAll('[data-pf-podcast-length]'));
+        view.longest = Math.max(1, ...view.rows.map((row) => Number(row.dataset.pfPodcastLength) || 0));
+        view.rows.forEach((row) => {
+          row.addEventListener('mouseenter', () => show(row, true));
+          row.addEventListener('focusin', () => show(row, true));
+        });
+        list.addEventListener('mouseleave', () => {
+          if (!list.contains(document.activeElement)) {
+            rest();
+          }
+        });
+        list.addEventListener('focusout', (event) => {
+          if (!list.contains(event.relatedTarget) && !list.matches(':hover')) {
+            rest();
+          }
+        });
+        rest();
+      });
     },
   };
 })(Drupal, once);

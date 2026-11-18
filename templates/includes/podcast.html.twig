@@ -9,8 +9,11 @@
  *
  * Each row: its number, the title (a link to the episode's SoundCloud page,
  * for its comments and sharing; the newest in gold, marked Latest), the
- * date, the length, and a round Play. From 44rem of width the date and
- * length are columns of their own; narrower they sit under the title.
+ * date, the length, and a round Play. Each row carries its episode's photo
+ * and length (seconds) for js/podcast.js: pointed at, focused or playing,
+ * the section's backdrop takes the photo and the cassette's tape the length.
+ * From 44rem of width the date and length are columns of their own;
+ * narrower they sit under the title.
  *
  * Play opens the episode in the docked listening bar, the exhibitions' own
  * player (js/podcast.js); nothing loads from SoundCloud until then. Without
@@ -39,7 +42,7 @@
   {% if latest %}
     <ol class="pf-podcast__list" aria-label="{{ 'Episodes, newest first'|t }}">
       {% for episode in [latest]|merge(more ?: []) %}
-        <li class="pf-podcast__row{{ loop.first ? ' pf-podcast__row--latest' }}">
+        <li class="pf-podcast__row{{ loop.first ? ' pf-podcast__row--latest' }}" data-pf-podcast-photo="{{ episode.cover }}" data-pf-podcast-length="{{ episode.length }}">
           <span class="pf-podcast__num" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
           <div class="pf-podcast__row-text">
             <a class="pf-podcast__row-title" href="{{ episode.link }}" target="_blank" rel="noopener">
