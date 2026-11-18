@@ -853,7 +853,8 @@ $pf-ledger-break: 40rem;
 }
 
 // The ledger's hover photos: js/ledger-photo.js adds .pf-ledger-photo to
-// the section, and .is-ledger-photo while a row's cover shows. From lg only
+// the section (in a landing's Quick Start, the guide), and .is-ledger-photo
+// while a row's cover shows. From lg only
 // (below it the columns stack). The layer fills the whole section (the
 // .pf-section, full bleed, not its inner box, which wide screens cap),
 // edge to edge, the photo cropped to cover it (fill). Each slot is 12%
@@ -877,7 +878,7 @@ $pf-ledger-break: 40rem;
     --pf-section-pad-block: clamp(6rem, 8vw, 8.5rem);
   }
 
-  html[data-pf-theme] .pf-section.has-ledger-photos {
+  html[data-pf-theme] :is(.pf-section, .pf-quick-guide).has-ledger-photos {
     --pf-ledger-photo-fade: .7s;
     isolation: isolate;
 
@@ -931,17 +932,37 @@ $pf-ledger-break: 40rem;
     }
   }
 
+  // In a landing's Quick Start the photo fills the guide's band, from where
+  // the band starts; the script sets its left edge and width to the page's.
+  html[data-pf-theme] .pf-quick-guide.has-ledger-photos .pf-ledger-photo {
+    inset: var(--pf-quick-band-top, calc(var(--pf-quick-space) / 2)) auto 0;
+  }
+
+  // Its citation hangs under the panel's notes, in the band's foot, out of
+  // the flow so that showing it never moves the column.
+  html[data-pf-theme] .pf-quick-guide.has-ledger-photos {
+    .pf-quick-guide__visit:has(> .pf-ledger-photo__labels) { position: relative; }
+
+    .pf-quick-guide__visit > .pf-ledger-photo__labels {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      margin-top: 1.5rem;
+    }
+  }
+
   // Light swatches: the text over the photo in the heading color, as the map.
-  html[data-pf-theme]:not(.pf-reading-dark) .pf-section.has-ledger-photos.is-ledger-photo {
+  html[data-pf-theme]:not(.pf-reading-dark) :is(.pf-section, .pf-quick-guide).has-ledger-photos.is-ledger-photo {
     --pf-section-fg: var(--pf-g-heading);
   }
 }
 
 @media (prefers-contrast: more), (forced-colors: active) {
-  html[data-pf-theme] .pf-section.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none; }
+  html[data-pf-theme] :is(.pf-section, .pf-quick-guide).has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none; }
 }
 
-html.pf-a11y-contrast .pf-section.has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none !important; }
+html.pf-a11y-contrast :is(.pf-section, .pf-quick-guide).has-ledger-photos :is(.pf-ledger-photo, .pf-ledger-photo__labels) { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .pf-ledger-photo__img,

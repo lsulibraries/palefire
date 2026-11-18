@@ -1320,6 +1320,15 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero :is(.pf-landing__in
   }
 }
 
+// Oral History's Record tab: the Williams Center's services as paths
+// (.pf-paths--services) are short, so they never fold with the Quick Start.
+:is(.pf-quick-guide, .pf-quick-guide.is-folded) .pf-quick-guide__panel > .pf-paths.pf-paths--services {
+  max-height: none;
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
 // Phones: the Quick Start folded (js/palefire.js): its paths stop at about
 // one option under a fade, and "Show all steps" follows. The button only
 // shows while folded.

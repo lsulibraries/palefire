@@ -23,7 +23,8 @@
  *   blocks, its notes and links after), on the Quick Start's grid, the
  *   blocks across the other columns. The heading names the panel, so there
  *   is no hidden one. With wide, the heading and intro run over the
- *   blocks, which take the panel's whole width (no notes column).
+ *   blocks, which take the panel's whole width (no notes column). With
+ *   paths (markup), those take the blocks' place, as the Quick Start's do.
  *   Empty elsewhere.
  * - photos: a photo by tab id (src, width, height, alt; url, caption and
  *   link, the words at the caption's end), printed over that tab's blocks
@@ -108,7 +109,11 @@
         {% elseif asides[tab.id] ?? false %}
           <div class="pf-tabs__body pf-quick-guide__panel{{ asides[tab.id].wide ? ' pf-quick-guide__panel--wide' }}">
             {{ asides[tab.id].head }}
-            <div class="pf-tabs__content pf-guide">{{ photo_print }}{{ room_facts }}{{ tab.content }}</div>
+            {% if asides[tab.id].paths|default('')|trim %}
+              {{ asides[tab.id].paths }}
+            {% else %}
+              <div class="pf-tabs__content pf-guide">{{ photo_print }}{{ room_facts }}{{ tab.content }}</div>
+            {% endif %}
             {{ asides[tab.id].foot }}
           </div>
         {% else %}

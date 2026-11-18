@@ -13,6 +13,14 @@
  * Two slots crossfade.
  * Nothing happens where CSS hides the layer (under lg, more contrast,
  * forced colors) or on touch, where a tap simply follows the link.
+ *
+ * In a landing's Quick Start (a Section tabs panel, .pf-quick-guide) the
+ * photo fills the guide's band instead, edge to edge like the band itself:
+ * the landing's section is the whole hero, where the band covered it and
+ * only the strips above and below showed it. The band runs past the guide's
+ * column on a shadow, so the layer's left edge and width are set here from
+ * the page's width (clientWidth, without the scrollbar), so it never adds
+ * a sideways scroll.
  */
 (function (Drupal, once) {
   'use strict';
@@ -25,8 +33,10 @@
     const lines = Array.from(groups.querySelectorAll('.pf-tile-line'));
     if (!inner || !lines.length) return;
     // The photo fills the whole section, edge to edge, which can be wider
-    // and taller than its inner box (wide screens).
-    const section = inner.closest('.pf-section') || inner;
+    // and taller than its inner box (wide screens); in a Quick Start, the
+    // guide's band.
+    const guide = groups.closest('.pf-quick-guide');
+    const section = guide || inner.closest('.pf-section') || inner;
 
     const layer = document.createElement('div');
     layer.className = 'pf-ledger-photo';
@@ -39,6 +49,14 @@
     });
     section.prepend(layer);
     section.classList.add('has-ledger-photos');
+    if (guide) {
+      const fit = () => {
+        layer.style.left = (document.documentElement.getBoundingClientRect().left - guide.getBoundingClientRect().left) + 'px';
+        layer.style.width = document.documentElement.clientWidth + 'px';
+      };
+      fit();
+      new ResizeObserver(fit).observe(document.documentElement);
+    }
 
     // The citations: from the ledger to the foot of the left column.
     const labelBox = groups.parentElement.querySelector('.pf-ledger-photo__labels');
@@ -47,7 +65,8 @@
       labelBox.querySelectorAll('[data-ledger-label]').forEach((label) => {
         labels[label.dataset.ledgerLabel] = label;
       });
-      inner.append(labelBox);
+      // In a Quick Start, under the panel's notes (absolute, so nothing moves).
+      (guide && groups.closest('.pf-quick-guide__panel')?.querySelector(':scope > .pf-quick-guide__visit') || inner).append(labelBox);
       labelBox.hidden = false;
     }
     const cite = (url) => {

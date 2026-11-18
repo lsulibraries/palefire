@@ -38,7 +38,10 @@
  * - img_base: URL of images/guides/special-collections/ with a trailing
  *   slash. Without it the panels show their text only.
  * - unit: optional; 'oral_history' draws Oral History's three ways instead
- *   (the landing hero's hero_unit).
+ *   (the landing hero's hero_unit); 'oral_history_record' the Williams
+ *   Center's services, for the Record tab (.pf-paths--services).
+ *
+ * A stop's note is optional.
  */
 #}
 {% set find = {
@@ -138,7 +141,43 @@
     },
   ] %}
 {% endif %}
-<div class="pf-paths">
+{# The Williams Center's services (unit 'oral_history_record', the Record
+   tab on /v2/oralhistory), in the order a newcomer goes: D learns how,
+   E starts a project, F gets help. The letters go on from the Research
+   tab's A, B and C, so every option on the page has its own. Each stop is
+   the service's own page; the notes are those pages' own words, shortened. #}
+{% if unit|default('') == 'oral_history_record' %}
+  {% set paths = [
+    {
+      key: 'learn',
+      letter: 'D',
+      name: ['Learn'|t, 'how'|t],
+      stops: [
+        { icon: 'chalkboard-teacher', label: 'Workshops'|t, note: 'Planning to interviewing'|t, href: '/oralhistoryworkshops' },
+        { icon: 'users-class', label: 'Seminars'|t, note: 'Taught at LSU'|t, href: '/oralhistoryseminars' },
+      ],
+    },
+    {
+      key: 'project',
+      letter: 'E',
+      name: ['Start a'|t, 'project'|t],
+      stops: [
+        { icon: 'clipboard-list', label: 'Create your own'|t, note: 'Our guide to getting started'|t, href: '/createyourownoralhistory' },
+        { icon: 'handshake', label: 'Collaborate'|t, note: 'A partnership with the Center'|t, href: '/collaboratewilliamscenter' },
+      ],
+    },
+    {
+      key: 'help',
+      letter: 'F',
+      name: ['Get'|t, 'help'|t],
+      stops: [
+        { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email'|t, href: ask_href|default('https://askus.lib.lsu.edu/search/?t=0&g=12395') },
+        { icon: 'calendar-check', label: 'Consultations'|t, note: 'By appointment'|t, href: '/oralhistoryresearchconsultations' },
+      ],
+    },
+  ] %}
+{% endif %}
+<div class="pf-paths{{ unit|default('') == 'oral_history_record' ? ' pf-paths--services' }}">
   {% for path in paths %}
     {% set heading_id = 'pf-paths-' ~ uid ~ '-' ~ path.key %}
     {% if not loop.first %}
@@ -169,7 +208,7 @@
             {% else %}
               <span class="pf-paths__label">{{ stop.label }}</span>
             {% endif %}
-            <span class="pf-paths__note">{{ stop.note }}</span>
+            {% if stop.note|default('') %}<span class="pf-paths__note">{{ stop.note }}</span>{% endif %}
             {% if stop.detail is defined %}
               <div class="pf-paths__pop" id="{{ pop_id }}" popover role="dialog" aria-labelledby="{{ pop_id }}-title">
                 <div class="pf-paths__pop-head">

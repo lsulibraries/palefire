@@ -757,12 +757,24 @@
           } %}
           {# Oral History's Record and Explore. Explore is wide: its heading
              and intro over the exhibitions, which take the panel's whole
-             width (no first column, no notes or hours). Record shows the
-             field recorder (the hairline drawing, recording) under its hours. #}
+             width (no first column, no notes or hours). Record follows the
+             Research tab's Quick Start: the intro names three ways, the
+             Williams Center's services are their paths (D, E, F, going on
+             from Research's A, B, C) in place of
+             the tab's blocks, and the notes come from the services' own
+             pages. Behind it the field recorder (the hairline drawing,
+             recording) rises from the band's foot. #}
           {% set tab_copy = tab_copy|merge({
             record: {
               title: 'Record your own'|t,
-              intro: 'Plan an oral history project, learn to interview and record, or work with the Williams Center on yours, so what you record is kept.'|t,
+              intro: 'Record an oral history yourself or with the Williams Center, so what you record is kept. Choose one of <strong>three ways</strong>: learn how (D), start a project (E), or get help (F).'|t,
+              notes_title: 'Before you record'|t,
+              notes: [
+                'Workshops follow the Oral History Association’s best practices, from planning to what happens after the interview.'|t,
+                'Start small: decide what you want as a final product, then plan your timeline around it.'|t,
+                'Research consultations are by appointment, in Room 201 at Hill.'|t,
+              ],
+              paths: 'oral_history_record',
               recorder: true,
             },
             explore: {
@@ -819,17 +831,23 @@
                     </ul>
                   {% endif %}
                   {{ pf.quick_links(links, quick_hours) }}
-                  {# Decorative: on frosted glass, so it holds over a photo
-                     behind the panel. #}
-                  {% if copy.recorder %}
-                    <div class="pf-quick-guide__recorder" aria-hidden="true">
-                      {% include '@palefire/includes/recorder-line.html.twig' with { id: quick_id ~ '-recorder' } only %}
-                    </div>
-                  {% endif %}
+                </div>
+              {% endif %}
+              {# Decorative, behind the band: rises from its foot, cropped by
+                 its bottom and right edges (_landing-features.scss). #}
+              {% if copy.recorder %}
+                <div class="pf-quick-guide__specimen" aria-hidden="true">
+                  {% include '@palefire/includes/recorder-line.html.twig' with { id: quick_id ~ '-recorder' } only %}
                 </div>
               {% endif %}
             {% endset %}
-            {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot, wide: copy.wide ?? false } }) %}
+            {# A tab with paths shows them in place of its blocks. #}
+            {% set aside_paths %}
+              {% if copy.paths ?? false %}
+                {% include '@palefire/includes/guide-request-paths.html.twig' with { uid: quick_id ~ '-' ~ tab.id, ask_href: 'https://askus.lib.lsu.edu/search/?t=0&g=12395', unit: copy.paths } only %}
+              {% endif %}
+            {% endset %}
+            {% set tab_asides = tab_asides|merge({ (tab.id): { head: aside_head, foot: aside_foot, paths: aside_paths, wide: copy.wide ?? false } }) %}
           {% endfor %}
           {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos, facts: quick_tabs.facts ?? {} } only %}
         {% else %}

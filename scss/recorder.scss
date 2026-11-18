@@ -475,28 +475,77 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
   }
 }
 
-// On Oral History's Record tab (includes/landing.html.twig), under the
-// hours: the hairline recorder on frosted glass (the page color at 72% with
-// the site's glass blur), so it holds over a photo behind the panel. Its
-// faces take the page color, so it reads as a cut-out on the glass.
-.pf-quick-guide__recorder {
-  max-width: 26rem;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  padding: clamp(.75rem, 2vw, 1.25rem);
-  border: 1px solid $pf-hairline;
-  background-color: color-mix(in srgb, var(--bs-body-bg) 72%, transparent);
-  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
-  backdrop-filter: var(--pf-glass-filter, blur(26px));
+// On Oral History's Record tab (includes/landing.html.twig): the hairline
+// recorder behind the Quick Start's band, rising from its foot, wider than
+// the guide and cropped by the band's bottom edge and the screen's right
+// edge (the landing's section clips sideways, so it never scrolls). The
+// guide is a size container, so the drawing scales with it (cqi). It is
+// placed from its tab panel (which the tab switch's slide makes a
+// containing block anyway), down past the guide's foot padding to the
+// band's bottom edge. The box
+// runs far past both sides, so its mask (a fade toward the top) never cuts
+// the drawing at the guide's edges. Its faces take the band's color, so it
+// reads as a drawing on the band. The panel keeps room at its foot, so the
+// first column's last links sit above the lines' full strength. Off where
+// contrast comes first.
+.pf-section:has(.pf-quick-guide__specimen) {
+  overflow-x: clip;
+}
+
+.pf-tabs__panel:has(.pf-quick-guide__specimen) {
+  position: relative;
+}
+
+.pf-quick-guide__specimen {
+  --bs-body-bg: var(--pf-band);
+  --pf-specimen-h: 44cqi;
+  --pf-specimen-x: -24cqi;
+  --pf-specimen-w: 140cqi;
+  --pf-specimen-fade: 26%;
+
+  position: absolute;
+  inset: auto -100vmax calc(-1 * var(--pf-quick-space, 0px));
+  z-index: -1;
+  height: var(--pf-specimen-h);
+  pointer-events: none;
+  opacity: .6;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-specimen-fade));
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-specimen-fade));
 
   .pf-recorder {
+    position: absolute;
+    top: 0;
+    left: calc(100vmax + var(--pf-specimen-x));
     display: block;
-    width: 100%;
+    width: var(--pf-specimen-w);
+    max-width: none;
     height: auto;
   }
+}
 
-  @media (prefers-reduced-transparency: reduce) {
-    background-color: var(--bs-body-bg);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+.pf-quick-guide__panel:has(> .pf-quick-guide__specimen) {
+  padding-bottom: calc(var(--pf-specimen-h, 44cqi) * .8);
+}
+
+@container pf-cover (min-width: 64rem) {
+  .pf-quick-guide__specimen {
+    --pf-specimen-h: 24cqi;
+    --pf-specimen-x: -17cqi;
+    --pf-specimen-w: 108cqi;
+    --pf-specimen-fade: 18%;
   }
+
+  .pf-quick-guide__panel:has(> .pf-quick-guide__specimen) {
+    padding-bottom: 3cqi;
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  .pf-quick-guide__specimen { display: none; }
+  .pf-quick-guide__panel:has(> .pf-quick-guide__specimen) { padding-bottom: 0; }
+}
+
+html.pf-a11y-contrast {
+  .pf-quick-guide__specimen { display: none; }
+  .pf-quick-guide__panel:has(> .pf-quick-guide__specimen) { padding-bottom: 0; }
 }
