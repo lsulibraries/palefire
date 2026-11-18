@@ -6059,11 +6059,12 @@ html.pf-a11y-motion .pf-hero-banner__map {
 
 // Pull focus: under the pointer the case clears and the name and count go
 // soft and faint, as a lens with a thin depth of field racks to the reel.
-// Pointer only: a keyboard focus keeps them sharp, for the name it has
-// landed on (wide screens also name it under the deck). Forced colors
-// keep them as they are.
+// Only beside the tape deck (.has-deck, js/series-deck.js), whose caption
+// names the series in hand; without it the card is the only place to read
+// the name, so it stays sharp. Pointer only: a keyboard focus keeps them
+// sharp too. Forced colors keep them as they are.
 @media (hover: hover) and (forced-colors: none) {
-  .pf-series__link:hover:not(:focus-visible) :is(.pf-series-reel__name, .pf-series-reel__count) {
+  .pf-series.has-deck .pf-series__link:hover:not(:focus-visible) :is(.pf-series-reel__name, .pf-series-reel__count) {
     opacity: .35;
     filter: blur(2px);
   }
