@@ -6226,7 +6226,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   --pf-deck-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
   --pf-deck-lit: color-mix(in srgb, var(--pf-deck-gold) 45%, var(--pf-deck-bg));
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   flex-direction: column;
   gap: 1.25rem;
   min-height: 0;
@@ -6241,13 +6241,15 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   }
 }
 
-// The deck takes whatever height the column has left after the heading and
-// the caption (the column is the screen's height, below), drawn to fit it
-// at its bottom left (preserveAspectRatio, js/series-deck.js).
+// The deck is as wide as the column, at the drawing's own proportions,
+// and gives up height (to 12rem) only when the column would be taller than
+// the screen; then it is drawn to fit at its bottom left
+// (preserveAspectRatio, js/series-deck.js).
 .pf-series__machine {
-  flex: 1 1 0;
+  flex: 0 1 auto;
+  width: 100%;
   min-height: 12rem;
-  max-height: 40rem;
+  aspect-ratio: .8177;
 
   .pf-deck__svg {
     display: block;
@@ -6355,8 +6357,11 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       align-items: start;
     }
 
-    // Exactly the screen below the header, so all of it stays in view while
-    // the series scroll past.
+    // As tall as what it holds, never taller than the screen below the
+    // header, so all of it stays in view while the series scroll past and
+    // it leaves only when they end. (Held at the screen's height, a deck at
+    // its full size left an empty foot that met the grid's end first and
+    // pushed the deck off the top while series were still showing.)
     .pf-series__side {
       position: sticky;
       top: var(--pf-series-top);
@@ -6364,7 +6369,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       flex-direction: column;
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
       grid-column: 1 / span 2;
-      height: calc(100svh - var(--pf-series-top) - 1.5rem);
+      max-height: calc(100svh - var(--pf-series-top) - 1.5rem);
       padding-right: clamp(.5rem, 1.5vw, 1.5rem);
     }
 

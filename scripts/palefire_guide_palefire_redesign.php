@@ -583,6 +583,7 @@ HTML),
 <li>What Endures: the episode list is shorter (about five rows, fewer on a small screen) so the heading and its description stay on screen while you browse. Rows are a little tighter, the photo credit sits under the episode length, and the date column shows just the month.</li>
 <li>Ask us forms on Special Collections and Oral History: the words Question slip are gone from the top of the form, as in the Ask Us drawer. The place and today’s date stay.</li>
 <li>On the tape deck beside Oral History’s series, only the left reel (the tape being loaded) now changes with the series you point at; the right reel, the deck’s own, stays as it is.</li>
+<li>On large screens, the tape deck beside Oral History’s series now stays fully in view until the last row of series has scrolled past, instead of sliding off the top early.</li>
 </ul>
 HTML),
 ]);
