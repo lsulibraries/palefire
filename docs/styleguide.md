@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** `.pf-series__link:hover:not(:focus-visible)` (in `@media (hover: hover) and (forced-colors: none)`): `.pf-series-reel__name` and `.pf-series-reel__count` at `opacity: .35; filter: blur(2px)`; transition .5s `cubic-bezier(.2, .7, .2, 1)` under the motion guard.
 - **2026-11-18:** `.pf-series.has-deck .pf-series__side`: `max-height: calc(100svh - var(--pf-series-top) - 1.5rem)` (was `height`). `.pf-series__deck`: `flex: 0 1 auto`. `.pf-series__machine`: `flex: 0 1 auto; width: 100%; aspect-ratio: .8177; min-height: 12rem` (was `flex: 1 1 0`, `max-height: 40rem`).
 - **2026-11-18:** Series deck tape: `wind()` in `js/series-deck.js` sets the supply reel (pack0, edge0, the ribbon) to a share 0.06–1 of a full reel; pack1/edge1 stay at a few turns (4%).
 - **2026-11-18:** `.pf-inquiry__slip-title` removed: every `.pf-inquiry__slip-head` is the stamp alone.

@@ -584,6 +584,7 @@ HTML),
 <li>Ask us forms on Special Collections and Oral History: the words Question slip are gone from the top of the form, as in the Ask Us drawer. The place and today’s date stay.</li>
 <li>On the tape deck beside Oral History’s series, only the left reel (the tape being loaded) now changes with the series you point at; the right reel, the deck’s own, stays as it is.</li>
 <li>On large screens, the tape deck beside Oral History’s series now stays fully in view until the last row of series has scrolled past, instead of sliding off the top early.</li>
+<li>Pointing at a series card now pulls focus to its reel: as the frosted case clears, the name and the number of interviews go soft and faint, like a camera focusing on the reel. Tabbing to a card with the keyboard keeps its name sharp.</li>
 </ul>
 HTML),
 ]);

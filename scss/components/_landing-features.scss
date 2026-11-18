@@ -6057,10 +6057,27 @@ html.pf-a11y-motion .pf-hero-banner__map {
   transition: color .5s ease;
 }
 
+// Pull focus: under the pointer the case clears and the name and count go
+// soft and faint, as a lens with a thin depth of field racks to the reel.
+// Pointer only: a keyboard focus keeps them sharp, for the name it has
+// landed on (wide screens also name it under the deck). Forced colors
+// keep them as they are.
+@media (hover: hover) and (forced-colors: none) {
+  .pf-series__link:hover:not(:focus-visible) :is(.pf-series-reel__name, .pf-series-reel__count) {
+    opacity: .35;
+    filter: blur(2px);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
     .pf-series-reel::before {
       transition: backdrop-filter .5s cubic-bezier(.2, .7, .2, 1), -webkit-backdrop-filter .5s cubic-bezier(.2, .7, .2, 1), background .5s ease;
+    }
+
+    .pf-series-reel__name,
+    .pf-series-reel__count {
+      transition: color .5s ease, background-color .5s ease, opacity .5s cubic-bezier(.2, .7, .2, 1), filter .5s cubic-bezier(.2, .7, .2, 1);
     }
 
     .pf-series-reel__turn {
