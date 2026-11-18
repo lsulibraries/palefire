@@ -3892,6 +3892,14 @@ html[data-pf-hero] .pf-landing--cover .pf-map__stage {
   }
 }
 
+// Over the film (the video in the main column), both buttons are the
+// site's frosted glass, like the header and the dock: the moving picture
+// blurs behind them, so their labels never sit on a sharp edge.
+.pf-landing--wash .pf-landing__account-button {
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+}
+
 // Under 22rem the two buttons need this to share a row.
 @media (max-width: 22rem) {
   .pf-landing__account-actions {

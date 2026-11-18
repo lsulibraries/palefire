@@ -113,6 +113,7 @@
     let aside = false;
     let waiting = false;
     let heroWatch = null;
+    let heroInView = false;
     let current = null;
     let settleTimer = 0;
     let dupTimer = 0;
@@ -533,6 +534,11 @@
         buildList();
       }
       open = name;
+      // A panel asked for while the dock waits under the hero (the
+      // breadcrumb's Contents at the top of the page) brings the dock up
+      // first: a panel in a hidden, inert dock can't take focus, and
+      // scrolling to its current row ran the page to the bottom.
+      wait(false);
       returnTo = opener || openers[name];
       const panel = panels[name];
       panel.hidden = false;
@@ -542,7 +548,19 @@
       if (name === 'contents') {
         const cur = tocList.querySelector('[aria-current]') || tocList.querySelector('a');
         if (cur) {
-          cur.scrollIntoView({ block: 'nearest' });
+          // The current row into view inside the list only: scrollIntoView
+          // also scrolls the page when the dock is off screen.
+          let box = cur.parentElement;
+          while (box && box !== panel && box.scrollHeight <= box.clientHeight) {
+            box = box.parentElement;
+          }
+          if (box) {
+            const row = cur.getBoundingClientRect();
+            const view = box.getBoundingClientRect();
+            if (row.top < view.top || row.bottom > view.bottom) {
+              box.scrollTop += row.top - view.top - (view.height - row.height) / 2;
+            }
+          }
           cur.focus({ preventScroll: true });
         }
       }
@@ -575,6 +593,8 @@
         returnTo.focus({ preventScroll: true });
       }
       returnTo = null;
+      // Still at the top with the hero's search in view: down again.
+      wait(heroInView);
     }
 
     status.addEventListener('click', () => (open === 'hours' ? closePanel(true) : openPanel('hours', status)));
@@ -823,11 +843,13 @@
       }
       const search = document.querySelector('#swup .pf-landing--wash .pf-landing__form');
       if (!search || !('IntersectionObserver' in window)) {
+        heroInView = false;
         wait(false);
         return;
       }
       heroWatch = new IntersectionObserver((entries) => {
-        wait(!MD.matches && entries[entries.length - 1].isIntersecting);
+        heroInView = !MD.matches && entries[entries.length - 1].isIntersecting;
+        wait(heroInView);
       });
       heroWatch.observe(search);
     }

@@ -564,6 +564,7 @@ HTML),
 <li>Special Collections: its video now plays behind the title and search, faded under the page color, the way Oral History’s does, and the right-hand column shows the highlights from the start. Any landing page can choose this with a new Video setting: beside in the column (as before), or in the main column faded, in black and white, or with no filter.</li>
 <li>Landing pages: the faint gold light on the title side, which stood for light from the video beside it, now turns off by itself when the video plays in the main column.</li>
 <li>Phones: when a landing page’s video plays in the main column (Special Collections, Oral History), it now fills the whole screen like a poster, with the title, hours and search at the bottom of the screen. The hours bar at the bottom stays out of the way while the search is on screen, comes up once you scroll past it, and tucks away again when you scroll back to the top.</li>
+<li>Phones: tapping Contents at the top of Special Collections or Oral History now opens the list of sections right there; before, the list stayed hidden and the page could jump far down. On every screen, the Log in or register and Contents buttons over the video now blur the picture behind them, so their labels are easier to read.</li>
 </ul>
 HTML),
 ]);
