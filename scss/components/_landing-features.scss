@@ -1824,7 +1824,8 @@ html.pf-a11y-motion .pf-hero-banners .pf-hero-banner__link :is(.pf-hero-banner__
     margin-top: .875rem;
   }
 
-  .pf-hero-banners > .pf-hero-banner:not(.pf-hero-banner--blog) {
+  // (Not the poster hero's index, which shows the category.)
+  .pf-landing:not(.pf-landing--wash) > .pf-landing__lead .pf-hero-banners > .pf-hero-banner:not(.pf-hero-banner--blog) {
     .pf-hero-banner__label {
       @include visually-hidden;
     }
@@ -4360,6 +4361,13 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
     .pf-landing__film-caption {
       display: none;
     }
+
+    // The highlights take row 3, the frame's row on other heroes, right
+    // under the poster. (With the film spanning rows 1 and 2, the Quick
+    // Start, placed automatically, took the free row 3 and came first.)
+    .pf-hero-banners {
+      grid-row: 3;
+    }
   }
 
   // Black and white, as on wider screens. No filter (dark swatches): the
@@ -4373,14 +4381,204 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
   }
 }
 
-// The highlights' lead picture rises over the film's frame on phones
-// (below, "Back up over the film"); with the film behind the first screen
-// there is no frame there, so the list stays under the search, in its row.
+// --- Narrow, Video in the main column: the highlights as an index -----------
+// Under the poster the highlights are a Swiss index, as the Quick Start's
+// numbered steps under it (2026-11-18, option H2): the list's name
+// ("Highlights", its aria-label, so translated) on a hairline rule, then a
+// row per item: its number, its category and title (three lines at most),
+// and its picture as a 3:4 thumbnail at the row's end, all top-aligned,
+// between hairlines.
+// Every item at equal weight, each with its picture, in color, for any
+// count (the fifth shows too: the two-by-two grid hid it). The numbers and
+// the list's name are decoration (alt text ""); the link reads as before.
+// The film-rise of other heroes (below, "Scroll: the film gives way") is
+// off here. With motion, each row's hairline draws from the left and its
+// words rise in as it reaches the screen, on the row's own timeline.
+@container pf-cover (width < 44rem) {
+  #{$pf-wash-narrow} {
+    .pf-hero-banners {
+      display: block;
+      counter-reset: pf-hl;
+
+      &::before {
+        content: attr(aria-label) / "";
+        display: block;
+        margin-bottom: .25rem;
+        padding-top: 1rem;
+        border-top: 1px solid $pf-hairline;
+        font-family: var(--pf-landing-label);
+        font-size: var(--pf-mono-label);
+        font-weight: 700;
+        letter-spacing: .16em;
+        line-height: 1.5;
+        text-transform: uppercase;
+        color: var(--pf-toc-color);
+      }
+    }
+
+    .pf-hero-banners > .pf-hero-banner {
+      display: grid;
+      grid-template-columns: 2.25rem minmax(0, 1fr);
+      margin: 0;
+      counter-increment: pf-hl;
+      animation: none;
+
+      // The number, level with the category.
+      &::before {
+        content: counter(pf-hl, decimal-leading-zero) / "";
+        grid-area: 1 / 1;
+        padding-top: .875rem;
+        font-family: var(--pf-landing-label);
+        font-size: var(--pf-mono-label);
+        font-weight: 700;
+        letter-spacing: .08em;
+        line-height: 1.5;
+        font-variant-numeric: tabular-nums;
+        color: var(--pf-g-title, var(--pf-toc-active));
+      }
+
+      // The hairline under the row.
+      &::after {
+        content: "";
+        grid-area: 2 / 1 / 3 / 3;
+        height: 1px;
+        background: $pf-hairline;
+        transform-origin: 0 50%;
+      }
+
+      .pf-hero-banner__link {
+        grid-area: 1 / 2;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 4.5rem;
+        align-items: start;
+        column-gap: .875rem;
+        padding: .875rem 0;
+        aspect-ratio: auto;
+        overflow: visible;
+        color: var(--bs-heading-color, var(--pf-section-fg));
+        background: none;
+        box-shadow: none;
+
+        &::after {
+          content: none;
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--pf-g-highlight, #{$pf-gold});
+          outline-offset: 2px;
+        }
+      }
+
+      .pf-hero-banner__text {
+        grid-area: 1 / 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .3rem;
+        padding: 0;
+      }
+
+      .pf-hero-banner__label {
+        margin: 0;
+        padding: 0;
+        color: var(--pf-toc-color);
+        background: none;
+      }
+
+      .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__label {
+        color: var(--bs-heading-color, var(--pf-section-fg));
+        background: none;
+      }
+
+      .pf-hero-banner__title {
+        flex: none;
+        align-self: auto;
+        padding: 0;
+        border-bottom: 0;
+        font-size: 1.0625rem;
+        line-height: 1.3;
+        text-decoration: none;
+        color: inherit;
+        background: none;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+
+        &::after {
+          content: none;
+        }
+      }
+
+      .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__title {
+        color: var(--pf-g-title, var(--pf-toc-active));
+      }
+
+      // The thumbnail, in color from the start, still (no pan).
+      .pf-hero-banner__media {
+        --pf-banner-grey: 0;
+        --pf-banner-wait: 0;
+        position: relative;
+        inset: auto;
+        display: block;
+        grid-area: 1 / 2;
+        width: 4.5rem;
+        height: auto;
+        aspect-ratio: 3 / 4;
+        background-color: #1f1b26;
+        box-shadow: none;
+        animation: none;
+
+        img {
+          position: static;
+          height: 100%;
+          animation: none;
+        }
+      }
+
+      // The blog post with no picture: its date, small, in the thumbnail.
+      .pf-hero-banner__media--date {
+        justify-content: center;
+        gap: .125rem;
+        padding: .5rem;
+      }
+
+      .pf-hero-banner__day {
+        font-size: 1.5rem;
+      }
+
+      .pf-hero-banner__month {
+        font-size: .625rem;
+        letter-spacing: .08em;
+      }
+
+      // An episode's Play, centered on its thumbnail.
+      .pf-hero-banner__play {
+        inset: 50% .875rem auto auto;
+        translate: 0 -50%;
+      }
+    }
+  }
+}
+
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     @container pf-cover (width < 44rem) {
-      html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero .pf-hero-banners:has(> .pf-hero-banner:first-child:not(.pf-hero-banner--blog)) {
-        margin-top: 0;
+      html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero .pf-hero-banners > .pf-hero-banner {
+        &::after {
+          animation: pf-hl-draw ease-out both;
+          animation-timeline: --pf-banner-own;
+          animation-range: cover 0% cover 15%;
+        }
+
+        &::before,
+        .pf-hero-banner__link {
+          animation: pf-split-appear ease-out both;
+          animation-timeline: --pf-banner-own;
+          animation-range: cover 0% cover 18%;
+        }
+
+        .pf-hero-banner__link:focus-visible {
+          animation: none;
+        }
       }
     }
   }
@@ -5304,7 +5502,10 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     @container pf-cover (width < 44rem) {
-      #{$pf-split-moving} {
+      // Not a hero whose film is the poster (.pf-landing--wash): there is no
+      // frame to rise over, and its highlights are an index ("Narrow, Video
+      // in the main column: the highlights as an index", above).
+      html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover:not(.pf-landing--wash) > .pf-landing__lead.pf-landing__lead--hero {
         // The film's box, as a length, so the lead can be laid exactly on it.
         --pf-film-h: min((100cqi + 2 * var(--pf-section-pad-inline, 0px) - 2 * var(--pf-cover-gutter)) * 1.25, 60svh);
         --pf-film-foot: clamp(2rem, 6vw, 3rem);
