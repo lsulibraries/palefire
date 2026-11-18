@@ -70,6 +70,46 @@
   background: color-mix(in srgb, var(--bs-body-color) 8%, transparent);
 }
 
+// The picture box: the cover, and while an episode is loaded the
+// exhibitions' tape deck in its place (js/podcast.js), its top plate
+// centered in the square (.pf-deck sizes itself to its container). The two
+// cross-fade; with reduced motion they swap.
+.pf-podcast__art {
+  display: grid;
+  width: 100%;
+  max-width: 14rem;
+  aspect-ratio: 1;
+  container-type: size;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+
+  .pf-deck {
+    place-self: center;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &.is-decked {
+    .pf-podcast__cover {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .pf-deck {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-podcast__art > * {
+    transition: opacity .6s ease, visibility .6s;
+  }
+}
+
 .pf-podcast__body {
   display: grid;
   align-content: start;

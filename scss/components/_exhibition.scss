@@ -4690,7 +4690,9 @@ $pf-deck-tones: 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22,
     }
   }
 
-  .pf-viewer:has(.pf-audio.is-playing) & {
+  // Playing: in the object view, or the podcast's deck (js/podcast.js).
+  .pf-viewer:has(.pf-audio.is-playing) &,
+  .pf-deck.is-playing & {
     .key-play {
       fill: var(--pf-deck-lit);
     }
