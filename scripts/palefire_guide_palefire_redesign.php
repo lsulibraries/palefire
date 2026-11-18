@@ -617,6 +617,7 @@ HTML),
 <li>What Endures: the cassette’s two holes now go right through it, and its reels turn as the tape winds on or off for each episode you point at.</li>
 <li>What Endures: while an episode plays, the cassette stays on it; pointing at other episodes no longer changes the tape.</li>
 <li>What Endures: the cassette is now drawn like a real one, in real proportions: one tape runs from reel to reel along the bottom past the felt pad, the spools and tape packs are full size and show faintly through the smoked plastic beyond the window, the circles around the reels are gone, and all four holes in the foot now go right through.</li>
+<li>What Endures: the cassette’s window is now clear glass: the episode photo shows sharp through it, while the plastic around it stays frosted.</li>
 </ul>
 HTML),
 ]);

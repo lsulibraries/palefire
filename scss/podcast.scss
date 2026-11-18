@@ -580,15 +580,20 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 
 // The holes in the foot go through the whole cassette: the two round
 // capstan holes (cut at r 2.7, inside their lit walls) and the two square
-// guide-pin holes (inside their walls), cut from the mark and its blur by
-// one mask on the 252 x 160 box.
+// guide-pin holes (inside their walls), masked from the mark on the 252 x
+// 160 box; the blur behind is clipped there too ($pf-cassette-blur).
 $pf-cassette-holes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 252 160' preserveAspectRatio='none'%3E%3Cpath fill-rule='evenodd' d='M0 0H252V160H0ZM85.3 149a2.7 2.7 0 1 0 5.4 0a2.7 2.7 0 1 0-5.4 0ZM149.3 149a2.7 2.7 0 1 0 5.4 0a2.7 2.7 0 1 0-5.4 0ZM67.8 146H71V150.8H67.8ZM170.8 146H174V150.8H170.8Z'/%3E%3C/svg%3E");
+// The blur behind the mark: the cassette's outline, with the window and the
+// four foot holes cut out (evenodd, each joined to the outline), so the
+// photo shows sharp through them, tinted only by the window's dark. A mask
+// would not do: Chrome blurs the whole backdrop under one.
+$pf-cassette-blur: polygon(evenodd, 0.794% 6.25%, 5.556% 1.25%, 99.206% 1.25%, 99.206% 93.75%, 94.444% 98.75%, 0.794% 98.75%, 0.794% 6.25%, 6.349% 30%, 88.889% 30%, 88.889% 65%, 6.349% 65%, 6.349% 30%, 0.794% 6.25%, 35.992% 93.125%, 35.911% 93.771%, 35.678% 94.318%, 35.331% 94.684%, 34.921% 94.812%, 34.511% 94.684%, 34.163% 94.318%, 33.931% 93.771%, 33.849% 93.125%, 33.931% 92.479%, 34.163% 91.932%, 34.511% 91.566%, 34.921% 91.438%, 35.331% 91.566%, 35.678% 91.932%, 35.911% 92.479%, 35.992% 93.125%, 0.794% 6.25%, 61.389% 93.125%, 61.307% 93.771%, 61.075% 94.318%, 60.727% 94.684%, 60.317% 94.812%, 59.907% 94.684%, 59.56% 94.318%, 59.328% 93.771%, 59.246% 93.125%, 59.328% 92.479%, 59.56% 91.932%, 59.907% 91.566%, 60.317% 91.438%, 60.727% 91.566%, 61.075% 91.932%, 61.307% 92.479%, 61.389% 93.125%, 0.794% 6.25%, 26.905% 91.25%, 28.175% 91.25%, 28.175% 94.25%, 26.905% 94.25%, 26.905% 91.25%, 0.794% 6.25%, 67.778% 91.25%, 69.048% 91.25%, 69.048% 94.25%, 67.778% 94.25%, 67.778% 91.25%, 0.794% 6.25%);
 
 .pf-podcast-head__tape::before {
   content: "";
   position: absolute;
   inset: 0;
-  clip-path: polygon(.8% 6.25%, 5.6% 1.25%, 99.2% 1.25%, 99.2% 93.75%, 94.4% 98.75%, .8% 98.75%);
+  clip-path: $pf-cassette-blur;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
@@ -597,7 +602,6 @@ $pf-cassette-holes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000
   position: relative;
 }
 
-.pf-podcast-head__tape::before,
 .pf-cassette {
   -webkit-mask: $pf-cassette-holes center / 100% 100% no-repeat;
   mask: $pf-cassette-holes center / 100% 100% no-repeat;
@@ -845,8 +849,8 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   stroke-width: 1.1;
 }
 
-// The holes go through: the drawing and its blur are masked there
-// ($pf-cassette-holes), so only their rims and lit walls are drawn.
+// The holes go through: the drawing is masked there ($pf-cassette-holes)
+// and its blur clipped ($pf-cassette-blur), so only their rims and lit walls are drawn.
 .pf-cassette__hole {
   fill: none;
 }
