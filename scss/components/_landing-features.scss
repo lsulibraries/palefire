@@ -6058,11 +6058,12 @@ html.pf-a11y-motion .pf-hero-banner__map {
 
 // Pull focus: under the pointer the case clears and the name and count go
 // soft and faint, as a lens with a thin depth of field racks to the reel.
-// Pointer only: a keyboard focus keeps them sharp, for the name it has
-// landed on (wide screens also name it under the deck). Forced colors
-// keep them as they are.
+// Only beside the tape deck (.has-deck, js/series-deck.js), whose caption
+// names the series in hand; without it the card is the only place to read
+// the name, so it stays sharp. Pointer only: a keyboard focus keeps them
+// sharp too. Forced colors keep them as they are.
 @media (hover: hover) and (forced-colors: none) {
-  .pf-series__link:hover:not(:focus-visible) :is(.pf-series-reel__name, .pf-series-reel__count) {
+  .pf-series.has-deck .pf-series__link:hover:not(:focus-visible) :is(.pf-series-reel__name, .pf-series-reel__count) {
     opacity: .35;
     filter: blur(2px);
   }
@@ -6255,6 +6256,13 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   &.is-playing .pf-deck__svg .key-play {
     fill: var(--pf-deck-lit);
   }
+
+  // js/series-deck.js turns the reels itself (rotate), so they spin up and
+  // run down; the exhibitions' spin animation would hold them at 0. (The
+  // section's class too, to outweigh html:not(.pf-a11y-motion) there.)
+  .pf-series & .pf-deck__svg .spin {
+    animation: none;
+  }
 }
 
 // The deck is as wide as the column, at the drawing's own proportions,
@@ -6346,10 +6354,6 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     }
 
     .pf-series__deck.is-playing .pf-deck__svg {
-      .spin {
-        animation-play-state: running;
-      }
-
       .pinch {
         translate: -5.22px -6.33px;
       }

@@ -10,10 +10,14 @@
  * section comes near. Pointing at or focusing a series puts it on the
  * deck: the counter shows its interview count, the caption its name,
  * description and a link to them in search ("View 60 interviews"), and
- * the reels run for a moment while the tape
- * winds: the series is the tape loaded, so the supply reel (left) holds as
- * much as its card shows (its share of the largest series, by area); the
- * take-up reel (right) is the deck's own, a few turns threaded, and stays.
+ * the tape winds to it: the series is the tape loaded, so the supply reel
+ * (left) holds as much as its card shows (its share of the largest series,
+ * by area); the take-up reel (right) is the deck's own, a few turns
+ * threaded, and stays. The reels are turned here, not by CSS, so they spin
+ * up and down like a motor's: at fast wind while the tape moves (forward
+ * as the supply empties, back as it fills, longer the more it moves), then
+ * at playing speed, PLAY down and the pinch roller in, for as long as the
+ * pointer is on the series or the focus in them, slowing to a stop after.
  * At rest it shows the largest series. Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
  *
@@ -193,7 +197,6 @@
     const view = now.querySelector('.pf-series__now-view');
     let svg = null;
     let current = null;
-    let run = 0;
     let swap = 0;
     const most = Math.max(1, ...links.map((link) => number(seriesOf(link).count)));
     // How full the supply reel is: the largest series fills it, the
@@ -201,31 +204,92 @@
     const shareOf = (series) => 0.06 + 0.94 * Math.min(1, number(series.count) / most);
     // As drawn (build/exhibit-deck.js: 65% left on the supply reel).
     let share = 0.65;
-    let frame = 0;
+
+    // The motor. Playing speed is the exhibitions' deck (_exhibition.scss
+    // .spin: a turn in 5s, the take-up in 7s), counterclockwise; fast wind
+    // is WIND times that. Speeds ease toward their target (EASE seconds),
+    // so a change of speed is a spin-up or a run-down, never a jump.
+    const PLAY = [-360 / 5, -360 / 7];
+    const WIND = 9;
+    const EASE = 0.3;
+    let reels = [[], []];
+    const angle = [0, 0];
+    const speed = [0, 0];
+    let winding = null;
+    let held = false;
+    let pointerIn = false;
+    let motor = 0;
+    let last = 0;
+
+    const playing = () => {
+      deck.classList.toggle('is-playing', held && !winding);
+    };
+
+    const turn = (time) => {
+      const dt = last ? Math.min(0.05, (time - last) / 1000) : 0;
+      last = time;
+      let gear = held ? 1 : 0;
+      if (winding) {
+        const p = Math.min(1, (time - winding.begin) / winding.length);
+        share = winding.from + (winding.to - winding.from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+        wind(svg, share);
+        gear = winding.to < winding.from ? WIND : -WIND;
+        if (p >= 1) {
+          winding = null;
+          playing();
+        }
+      }
+      const k = 1 - Math.exp(-dt / EASE);
+      let moving = gear !== 0;
+      [0, 1].forEach((i) => {
+        speed[i] += (PLAY[i] * gear - speed[i]) * k;
+        angle[i] = (angle[i] + speed[i] * dt) % 360;
+        reels[i].forEach((el) => {
+          el.style.rotate = angle[i].toFixed(2) + 'deg';
+        });
+        moving = moving || Math.abs(speed[i]) > 0.5;
+      });
+      if (moving) {
+        motor = window.requestAnimationFrame(turn);
+      }
+      else {
+        motor = 0;
+        last = 0;
+        speed[0] = 0;
+        speed[1] = 0;
+      }
+    };
+
+    const run = () => {
+      if (svg && !motor && !still()) {
+        last = 0;
+        motor = window.requestAnimationFrame(turn);
+      }
+    };
+
+    const hold = (on) => {
+      if (held !== on) {
+        held = on;
+        playing();
+        run();
+      }
+    };
 
     const tape = (quiet) => {
       if (!svg || !current) {
         return;
       }
-      const from = share;
       const to = shareOf(current);
-      window.cancelAnimationFrame(frame);
       if (quiet || still()) {
+        winding = null;
         share = to;
         wind(svg, share);
         return;
       }
-      let begin = 0;
-      const step = (time) => {
-        begin = begin || time;
-        const p = Math.min(1, (time - begin) / 900);
-        share = from + (to - from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
-        wind(svg, share);
-        if (p < 1) {
-          frame = window.requestAnimationFrame(step);
-        }
-      };
-      frame = window.requestAnimationFrame(step);
+      // Longer the more tape moves: a whole reel in about two seconds.
+      winding = { from: share, to: to, begin: window.performance.now(), length: 500 + 1500 * Math.abs(to - share) };
+      playing();
+      run();
     };
 
     const counter = () => {
@@ -262,9 +326,7 @@
       }
       now.classList.add('is-swapping');
       swap = window.setTimeout(fill, 160);
-      deck.classList.add('is-playing');
-      window.clearTimeout(run);
-      run = window.setTimeout(() => deck.classList.remove('is-playing'), 1400);
+      hold(true);
     };
 
     const load = () => {
@@ -285,6 +347,7 @@
         // Fit the column's height, held to its bottom left by the caption.
         svg.setAttribute('preserveAspectRatio', 'xMinYMax meet');
         machine.append(svg);
+        reels = [Array.from(svg.querySelectorAll('.spin--0')), Array.from(svg.querySelectorAll('.spin--1'))];
         counter();
         tape(true);
       }).catch(() => {
@@ -327,6 +390,21 @@
     };
     section.addEventListener('mouseover', hand);
     section.addEventListener('focusin', hand);
+    // Plays while the pointer is on the series or the focus in them.
+    section.addEventListener('pointerenter', () => {
+      pointerIn = true;
+    });
+    section.addEventListener('pointerleave', () => {
+      pointerIn = false;
+      if (!section.contains(document.activeElement)) {
+        hold(false);
+      }
+    });
+    section.addEventListener('focusout', (event) => {
+      if (!section.contains(event.relatedTarget) && !pointerIn) {
+        hold(false);
+      }
+    });
   }
 
   Drupal.behaviors.palefireSeriesDeck = {

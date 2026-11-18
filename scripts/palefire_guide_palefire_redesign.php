@@ -589,6 +589,7 @@ HTML),
 <li>Hill Memorial map: when the map shows a room on Floor 2 highlighted (Oral History’s page, a room’s own page), the words Floor 2 are now in the same highlight color, so you can tell at a glance which floor the room is on.</li>
 <li>The soft-focus effect on series cards now happens only on wide screens, where the tape deck names the series; on smaller screens, where the card is the only place to read its name, the name stays sharp.</li>
 <li>Oral History series cards: the thin line around each reel stays the same soft gray when you point at it; only the frosted case clears.</li>
+<li>The tape deck beside Oral History’s series now runs like a real one: when you point at a series it fast-winds (forward or back) to that series’ amount of tape, then plays at normal speed for as long as you stay on the series, and winds down to a stop when you leave.</li>
 </ul>
 HTML),
 ]);
