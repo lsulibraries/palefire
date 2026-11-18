@@ -757,13 +757,11 @@
           } %}
           {# Oral History's Record and Explore. Explore is wide: its heading
              and intro over the exhibitions, which take the panel's whole
-             width (no first column, no notes or hours). Record shows the
-             field recorder (the hairline drawing, recording) under its hours. #}
+             width (no first column, no notes or hours). #}
           {% set tab_copy = tab_copy|merge({
             record: {
               title: 'Record your own'|t,
               intro: 'Plan an oral history project, learn to interview and record, or work with the Williams Center on yours, so what you record is kept.'|t,
-              recorder: true,
             },
             explore: {
               title: 'Online exhibitions'|t,
@@ -810,7 +808,7 @@
               {% if copy.intro %}<p class="pf-quick-guide__intro">{{ copy.intro }}</p>{% endif %}
             {% endset %}
             {% set aside_foot %}
-              {% if not copy.wide and (copy.notes or links or quick_hours or copy.recorder) %}
+              {% if not copy.wide and (copy.notes or links or quick_hours) %}
                 <div class="pf-quick-guide__visit">
                   {% if copy.notes %}
                     <h3 class="pf-quick-guide__visit-title">{{ copy.notes_title }}</h3>
@@ -819,13 +817,6 @@
                     </ul>
                   {% endif %}
                   {{ pf.quick_links(links, quick_hours) }}
-                  {# Decorative: on frosted glass, so it holds over a photo
-                     behind the panel. #}
-                  {% if copy.recorder %}
-                    <div class="pf-quick-guide__recorder" aria-hidden="true">
-                      {% include '@palefire/includes/recorder-line.html.twig' with { id: quick_id ~ '-recorder' } only %}
-                    </div>
-                  {% endif %}
                 </div>
               {% endif %}
             {% endset %}
