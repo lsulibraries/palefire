@@ -20,7 +20,7 @@
  *
  * Oral History's series (.pf-series__views, landing.html.twig) open
  * folded: two rows of the grid (four beside the tape deck, the stylesheet's
- * --pf-fold-rows), or five of the list, at the columns of the
+ * --pf-fold-rows), or eight of the list (twelve beside it), at the columns of the
  * moment, then a "Show more" button that opens as many again in place, the
  * first of them taking focus. Beside it, "Showing 12 of 39"
  * (.pf-series__shown, the button's description). Once it has been pressed, a second button,
@@ -101,7 +101,7 @@
   };
 
   // Rows shown while folded, by view.
-  const FOLD_ROWS = { grid: 2, list: 5 };
+  const FOLD_ROWS = { grid: 2, list: 8 };
 
   const fold = (wrapper) => {
     const list = wrapper.querySelector('.pf-series__list');

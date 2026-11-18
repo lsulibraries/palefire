@@ -602,6 +602,7 @@ HTML),
 <li>Oral History’s series: Show more is now a full-width button across the grid, with how many are showing at its end, and View interviews under the tape deck is a matching button, both in the same style as the site’s other buttons.</li>
 <li>What Endures: the heading area is shorter (a slightly smaller cassette, a little less room kept for episode descriptions), so the episode list starts higher, and small laptop screens show more of it.</li>
 <li>Oral History’s series: after Show more, a Show less button now sits right beside it, so you can fold the list back at any point, not only once every series is showing.</li>
+<li>Oral History’s series: the list view now shows more at a time (twelve beside the tape deck) with a tiny reel at the start of each row, and the Show more and Show less buttons line up with the columns of the cards above them.</li>
 </ul>
 HTML),
 ]);

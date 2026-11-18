@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Series list: `.pf-series-reel` in list view is a 1.75rem reel at the row's start (`.pf-series__row` padded 2.75rem; case, count and name hidden). List fold: 8 rows (`FOLD_ROWS.list`), 12 beside the deck (`--pf-fold-rows`). `.pf-series__fold` is `repeat(var(--pf-cols), minmax(0, 1fr))` with `gap` and `margin-top` `var(--pf-gap)`, sharing the list's column rules via `:is(.pf-series__list, .pf-series__fold)`; `.pf-series__less` takes column `-2 / -1`.
 - **2026-11-18:** Series fold: `.pf-series__less` (secondary slab, arrow up) beside `.pf-series__more` once pressed; `.pf-series__fold:has(> .pf-series__less:not([hidden]))` is `minmax(0, 1fr) auto`, one column below `@container pf-series (width < 30rem)` with Show less on row 2.
 - **2026-11-18:** Podcast head from 48rem: `.pf-podcast-head__tape` margin `1rem -8% 0 16%`; `.pf-podcast-head__about` `min-height: 11.75rem`; `.pf-podcast-head__summary` clamped to 4 lines, `__credits` to 2. `.pf-podcast__scroll` `max-height: clamp(13rem, 100svh - 33rem, 22rem)`.
 - **2026-11-18:** Series fold and deck link as slabs: `.pf-series__more` and `.pf-series__now-open` extend `%pf-button-secondary` (2.75rem, .5rem 1rem padding, .875rem arrow at the end). `.pf-series__fold` is a one-cell grid with `.pf-series__shown` over the button's end (`margin-inline-end: 2.75rem`, `pointer-events: none`). Caption height: link part 3.125rem.
