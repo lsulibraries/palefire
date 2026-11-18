@@ -3330,6 +3330,30 @@ html[data-pf-hero] .pf-landing--cover {
   }
 }
 
+// Over imagery the Quick Start's buttons (Hours and the rest) take the
+// glass, so a drawing or photo behind them blurs out under the words: the
+// Record tab's recorder (.pf-quick-guide__specimen, recorder.scss) and a
+// ledger's hover photos (.has-ledger-photos, _tile-showcase.scss). Nowhere
+// else: a backdrop filter over a flat band only costs (a layer re-sampled
+// on every scroll frame). As the landing's links plate does, the glass
+// drops under the stuck bar, where Chromium flickers one backdrop filter
+// passing under another.
+:is(.pf-quick-guide__panel:has(> .pf-quick-guide__specimen), .has-ledger-photos) .pf-quick-guide__link {
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+
+  @supports (animation-timeline: view()) {
+    animation: pf-links-unblur linear both;
+    animation-timeline: view(block calc(var(--pf-header-h, 3.5rem) + var(--pf-landing-bar-h, 2rem) + .5rem) 0px);
+    animation-range: exit-crossing 0% exit-crossing 1%;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 // The Visit buttons fill their column, the words at the start and the arrow
 // at the end.
 .pf-landing--cover .pf-visit__link {
@@ -6297,7 +6321,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 }
 
 // The caption keeps one height whatever the series: room for the label,
-// two lines of name, four of description (the longest) and the link (View
+// two lines of name, six of description (the fuller one when it fits,
+// else the short line: js/series-deck.js) and the link (View
 // N interviews), so the deck above it, which takes the rest of the column,
 // never changes size. Name and description sit together at the top, the
 // link at the foot, and whatever a shorter one leaves falls between.
@@ -6309,7 +6334,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   flex-direction: column;
   gap: .375rem;
   min-width: 0;
-  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 5.625rem + 2.5rem + 1px);
+  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 8.4375rem + 2.5rem + 1px);
 }
 
 .pf-series__now-label {
@@ -6339,7 +6364,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   color: color-mix(in srgb, currentcolor 78%, transparent);
   text-wrap: pretty;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 6;
 }
 
 .pf-series__now-open {

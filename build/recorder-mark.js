@@ -570,45 +570,78 @@ o.push(draw(extrude(FACE, bez, 0, 0.7, { capCls: 'pf-recorder__bezel', sideExtra
 const SX = 8.2, SY = 36.2, SK = 0.537;
 o.push(poly(on(FACE, rr(SX, SY, SX + 104 * SK, SY + 82 * SK, 0.8, 2), 0.7), 'pf-recorder__screen'));
 o.push(label(FACE, W / 2, 89.4, 0.7, 'LINEAR PCM RECORDER  PCM-D10'));
-const lcd = [];
-lcd.push(`<defs><clipPath id="${id}-sec"><rect x="108.4" y="114" width="11" height="10.4"/></clipPath>`
-  + `<clipPath id="${id}-ml"><rect x="31" y="85.6" width="61" height="3"/></clipPath>`
-  + `<clipPath id="${id}-mr"><rect x="31" y="97.6" width="61" height="3"/></clipPath></defs>`);
-const TL = (cls, x, y, s, anchor = 'start') => T(cls, x, y, s, anchor);
-lcd.push(TL('lcd', 26, 89, 'L'), TL('lcd', 26, 101, 'R'));
-for (const [ch, y] of [['l', 85.6], ['r', 97.6]]) {
-  lcd.push(`<g clip-path="url(#${id}-m${ch})"><path class="pf-recorder__seg" d="M31 ${f2(y + 1.5)}H92"/><rect class="pf-recorder__cover pf-recorder__cover--${ch}" x="31" y="${f2(y - 0.5)}" width="62" height="4"/><path class="pf-recorder__peak pf-recorder__peak--${ch}" d="M31.6 ${f2(y)}v3"/></g>`);
-  lcd.push(`<rect class="pf-recorder__track" x="31" y="${y}" width="61" height="3" rx=".3"/>`);
-}
-lcd.push(TL('scale', 32, 95.2, '-60'), T('scale', 46, 95.2, '-40'), T('scale', 60, 95.2, '-20'), T('scale', 70, 95.2, '-12'), T('scale', 80, 95.2, '-6'), TL('scale', 91.4, 95.2, '0', 'end'));
-lcd.push(TL('lcd', 124, 89, '-06dB', 'end'), TL('lcd', 124, 101, '-12dB', 'end'));
-lcd.push('<path class="pf-recorder__rule" d="M25 105H125M25 135H125M25 148H125"/>');
-lcd.push('<rect class="pf-recorder__badge" x="26" y="115.2" width="14" height="8" rx="1"/>', T('badge-text', 33, 121.4, 'REC'));
-lcd.push(TL('count', 108.6, 122.6, '0h12m', 'end'));
-const col = (cls, x, n) => `<g class="pf-recorder__digits pf-recorder__digits--${cls}">` + Array.from({ length: n }, (_, i) => T('count', x, 122.6 + 10.4 * i, String(i))).join('') + '</g>';
-lcd.push(`<g clip-path="url(#${id}-sec)">${col('tens', 111.3, 6)}${col('units', 116.5, 10)}</g>`);
-lcd.push(TL('lcd-s', 119.6, 122.6, 's'), TL('lcd', 124, 131, '-3h30m', 'end'));
-lcd.push('<path class="pf-recorder__lcd-line" d="M26.4 139.4h2.6l1.2 1.2v3.8h-3.8z"/>', TL('lcd', 32, 144.2, '261118_0001.wav'));
-lcd.push(TL('lcd', 26, 154.4, 'LPCM 192/24'), TL('lcd', 26, 160.6, 'S/N'));
-lcd.push('<rect class="pf-recorder__lcd-line" x="112" y="155.4" width="10" height="4.4" rx=".6"/><path class="pf-recorder__lcd-line" d="M122 156.6v2"/><path class="pf-recorder__lcd-fill" d="M113.4 156.6h4l-1.2 2h-2.8z"/>');
+// The readout, laid out flat (x 23-127, y 76-168) and set onto the screen,
+// which is flat in the middle and curves at the sides. Three strips: the
+// flat middle and each curved side, each with its own affine (the tangent
+// plane at its middle). Text and the moving meters are drawn once, on the
+// strip they mostly sit in (an item's x picks it), so nothing is cut at a
+// seam. Lines that cross a seam (the rules, the meter tracks, the REC
+// badge) are projected point by point instead (exact), so they run
+// unbroken over the curve.
 {
-  // Layout (x, y) -> face (SX + (x - 23) * SK, SY + (y - 81) * SK); the
-  // layout spans x 23-127. Each band repeats the readout under its own clip.
   const S = [SK, 0, 0, SK, SX - 23 * SK, SY - 81 * SK];
-  // Bands: the flat middle as one, each curved side as its own.
   const XF0 = W / 2 * (1 - UF), XF1 = W / 2 * (1 + UF), toL = x => 23 + (x - SX) / SK;
-  const edges = [23, toL(XF0), toL(XF1), 127], NBAND = 3, body = lcd.join('');
-  const bands = [];
-  for (let k = 0; k < NBAND; k++) {
+  const edges = [23, toL(XF0), toL(XF1), 127];
+  const mats = [0, 1, 2].map((k) => {
     const x0 = edges[k], x1 = edges[k + 1];
     const m = affine(FACE, SX + ((x0 + x1) / 2 - 23) * SK, SY + 41 * SK, 0.7);
-    const M = [m[0] * S[0] + m[2] * S[1], m[1] * S[0] + m[3] * S[1], m[0] * S[2] + m[2] * S[3], m[1] * S[2] + m[3] * S[3], m[0] * S[4] + m[2] * S[5] + m[4], m[1] * S[4] + m[3] * S[5] + m[5]];
-    const tag = `${id}-b${k}`;
-    const inner = body.split(`${id}-`).join(`${tag}-`);
-    const cx0 = k === 0 ? x0 - 2 : x0 - 0.15, cx1 = k === NBAND - 1 ? x1 + 2 : x1 + 0.15;
-    bands.push(`<g transform="${mat(M)}"><clipPath id="${tag}"><rect x="${f2(cx0)}" y="76" width="${f2(cx1 - cx0)}" height="92"/></clipPath><g clip-path="url(#${tag})">${inner}</g></g>`);
+    return [m[0] * S[0] + m[2] * S[1], m[1] * S[0] + m[3] * S[1], m[0] * S[2] + m[2] * S[3], m[1] * S[2] + m[3] * S[3], m[0] * S[4] + m[2] * S[5] + m[4], m[1] * S[4] + m[3] * S[5] + m[5]];
+  });
+  const strip = x => (x < edges[1] ? 0 : x < edges[2] ? 1 : 2);
+  const groups = [[], [], []];
+  const put = (x, html) => groups[strip(x)].push(html);
+  // Exact: a layout point onto the curved screen, 0.7 above the face.
+  const px = ([x, y]) => raw(at(FACE, SX + (x - 23) * SK, SY + (y - 81) * SK, 0.7));
+  const seg = (p, q, n) => Array.from({ length: n + 1 }, (_, i) => [p[0] + (q[0] - p[0]) * i / n, p[1] + (q[1] - p[1]) * i / n]);
+  const rrect = (x, y, w, h, r) => {
+    const out = [], arc = (cx, cy, a0) => { for (let i = 0; i <= 4; i++) { const t = a0 + i * Math.PI / 8; out.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]); } };
+    out.push(...seg([x + r, y], [x + w - r, y], Math.ceil(w)));
+    arc(x + w - r, y + r, -Math.PI / 2);
+    out.push(...seg([x + w, y + r], [x + w, y + h - r], 2));
+    arc(x + w - r, y + h - r, 0);
+    out.push(...seg([x + w - r, y + h], [x + r, y + h], Math.ceil(w)));
+    arc(x + r, y + h - r, Math.PI / 2);
+    out.push(...seg([x, y + h - r], [x, y + r], 2));
+    arc(x + r, y + r, Math.PI);
+    return out;
+  };
+  const k = Math.sqrt(Math.abs(mats[1][0] * mats[1][3] - mats[1][1] * mats[1][2]));
+  const sw = ` style="stroke-width:${f2(0.5 * k)}"`;
+  const exact = [];
+  const xline = (cls, p) => exact.push(`<polyline class="pf-recorder__${cls}"${sw} points="${p.map(px).map(P2).join(' ')}"/>`);
+  const xshape = (cls, p, stroke = true) => exact.push(`<polygon class="pf-recorder__${cls}"${stroke ? sw : ''} points="${p.map(px).map(P2).join(' ')}"/>`);
+
+  const TL = (cls, x, y, t, anchor = 'start') => T(cls, x, y, t, anchor);
+  // Clip paths for the meters and the seconds, in the layout's units: each
+  // used inside one strip's transform.
+  const defs = `<defs><clipPath id="${id}-sec"><rect x="108.4" y="114" width="11" height="10.4"/></clipPath>`
+    + `<clipPath id="${id}-ml"><rect x="31" y="85.6" width="61" height="3"/></clipPath>`
+    + `<clipPath id="${id}-mr"><rect x="31" y="97.6" width="61" height="3"/></clipPath></defs>`;
+  put(26, TL('lcd', 26, 89, 'L'));
+  put(26, TL('lcd', 26, 101, 'R'));
+  for (const [ch, y] of [['l', 85.6], ['r', 97.6]]) {
+    put(61, `<g clip-path="url(#${id}-m${ch})"><path class="pf-recorder__seg" d="M31 ${f2(y + 1.5)}H92"/><rect class="pf-recorder__cover pf-recorder__cover--${ch}" x="31" y="${f2(y - 0.5)}" width="62" height="4"/><path class="pf-recorder__peak pf-recorder__peak--${ch}" d="M31.6 ${f2(y)}v3"/></g>`);
+    xshape('track', rrect(31, y, 61, 3, 0.3));
   }
-  o.push(`<g class="pf-recorder__lcd">${bands.join('')}</g>`);
+  put(32, TL('scale', 32, 95.2, '-60'));
+  for (const [x, t] of [[46, '-40'], [60, '-20'], [70, '-12'], [80, '-6']]) put(x, T('scale', x, 95.2, t));
+  put(90, TL('scale', 91.4, 95.2, '0', 'end'));
+  put(118, TL('lcd', 124, 89, '-06dB', 'end'));
+  put(118, TL('lcd', 124, 101, '-12dB', 'end'));
+  for (const y of [105, 135, 148]) xline('rule', seg([25, y], [125, y], 50));
+  xshape('badge', rrect(26, 115.2, 14, 8, 1), false);
+  put(33, T('badge-text', 33, 121.4, 'REC'));
+  // The counter (hours and minutes, the rolling seconds, "s") as one, so
+  // its digits keep their spacing.
+  const col = (cls, x, n) => `<g class="pf-recorder__digits pf-recorder__digits--${cls}">` + Array.from({ length: n }, (_, i) => T('count', x, 122.6 + 10.4 * i, String(i))).join('') + '</g>';
+  put(100, TL('count', 108.6, 122.6, '0h12m', 'end') + `<g clip-path="url(#${id}-sec)">${col('tens', 111.3, 6)}${col('units', 116.5, 10)}</g>` + TL('lcd-s', 119.6, 122.6, 's'));
+  put(118, TL('lcd', 124, 131, '-3h30m', 'end'));
+  put(28, '<path class="pf-recorder__lcd-line" d="M26.4 139.4h2.6l1.2 1.2v3.8h-3.8z"/>');
+  put(50, TL('lcd', 32, 144.2, '261118_0001.wav'));
+  put(36, TL('lcd', 26, 154.4, 'LPCM 192/24'));
+  put(28, TL('lcd', 26, 160.6, 'S/N'));
+  put(117, '<rect class="pf-recorder__lcd-line" x="112" y="155.4" width="10" height="4.4" rx=".6"/><path class="pf-recorder__lcd-line" d="M122 156.6v2"/><path class="pf-recorder__lcd-fill" d="M113.4 156.6h4l-1.2 2h-2.8z"/>');
+  o.push(`<g class="pf-recorder__lcd">${defs}${exact.join('')}${groups.map((g, i) => (g.length ? `<g transform="${mat(mats[i])}">${g.join('')}</g>` : '')).join('')}</g>`);
 }
 // The glass: a faint sheen across its upper left.
 o.push(poly(on(FACE, [[SX + 1, SY + 1], [SX + 30, SY + 1], [SX + 12, SY + 30], [SX + 1, SY + 30]], 0.72), 'pf-recorder__sheen'));
