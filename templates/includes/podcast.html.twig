@@ -22,6 +22,8 @@
  * From 44rem of width the date and length are columns of their own;
  * narrower they sit under the title.
  *
+ * Under the list, Listen on SoundCloud: the account, as a button.
+ *
  * Play opens the episode in the docked listening bar, the exhibitions' own
  * player (js/podcast.js); nothing loads from SoundCloud until then. Without
  * a pull yet: a link to the account only (with episodes, the section's own
@@ -69,6 +71,9 @@
       {% endfor %}
     </ol>
     </div>
+    <p class="pf-podcast__listen">
+      <a class="pf-button pf-button--secondary pf-button--arrow" href="{{ profile }}" target="_blank" rel="noopener">{{ 'Listen on SoundCloud'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
+    </p>
   {% else %}
     <p class="pf-podcast__all">
       <a href="{{ profile }}" target="_blank" rel="noopener">{{ 'Every episode on SoundCloud'|t }} <span aria-hidden="true">&#8599;</span><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>

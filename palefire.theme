@@ -3914,7 +3914,7 @@ function palefire_preprocess_field(array &$variables): void {
         $item['section']['index'] = [
           'num' => sprintf('%02d', ++$count),
           'label' => t('The podcast'),
-          'lede' => t('Short episodes from the T. Harry Williams Center for Oral History.'),
+          'lede' => t('Short episodes from the T. Harry Williams Center for Oral History, drawn from more than 6,000 hours of interviews: Louisiana’s hidden stories, told by the people who lived them.'),
           'mark' => 'cassette',
           'link' => ['url' => PodcastFeed::PROFILE, 'text' => t('All episodes'), 'external' => TRUE, 'hidden' => (string) t(' (on SoundCloud, opens in a new tab)')],
         ];

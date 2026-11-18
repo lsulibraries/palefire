@@ -265,6 +265,11 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
+// Under the list: the account, as the theme's secondary button.
+.pf-podcast__listen {
+  margin: 1.5rem 0 0;
+}
+
 .pf-podcast__all {
   margin: 0;
   font: var(--pf-mono-ui, .8125rem)/1.5 var(--pf-exhibit-mono);
