@@ -49,34 +49,35 @@
 
   // A tape pack's size: its area grows with the tape on it, so the radius
   // is sqrt(hub² + (full² − hub²) × share), as a scale of the full pack
-  // (25 on the drawing's grid, the bare hub 12). The longest episode on the
+  // (46 on the drawing's grid, the bare spool 26: a real cassette's 21.6 mm
+  // spool on a 100 mm shell). The longest episode on the
   // page fills the reel; the others are their share of it.
   const pack = (share) => {
     const s = Math.max(0, Math.min(1, share));
-    return (Math.sqrt(144 + 481 * s) / 25).toFixed(3);
+    return (Math.sqrt(676 + 1440 * s) / 46).toFixed(3);
   };
 
-  // The tape between a guide roller and its pack (scale: the pack's, 1 full),
-  // on the face's grid: the run leaves the pack along their common tangent,
-  // so it curves onto the pack at any size, and its width runs back along
-  // the thickness (3, −2). The left run; the right is its mirror.
+  // The tape between a guide roller at the foot's corner and its pack
+  // (scale: the pack's, 1 full), on the face's grid: the run comes off the
+  // roller's outer side and leaves the pack along their common tangent, so
+  // it meets the pack at any size, and its width runs back along the
+  // thickness (3, −2). The left run; the right is its mirror.
   function tapeGeometry(scale, right) {
-    const r = 25 * scale;
-    const len = Math.hypot(47, 22);
-    const ux = 47 / len;
-    const uy = -22 / len;
-    const cos = (3 - r) / len;
+    const r = 46 * scale;
+    const len = Math.hypot(42, 74);
+    const ux = 42 / len;
+    const uy = -74 / len;
+    const cos = (3.5 - r) / len;
     const sin = Math.sqrt(1 - cos * cos);
     const nx = cos * ux + sin * uy;
     const ny = cos * uy - sin * ux;
     const x = (v) => +(right ? 240 - v : v).toFixed(2);
     const y = (v) => +v.toFixed(2);
-    const a = [x(23 + 3 * nx), y(90 + 3 * ny)];
+    const a = [x(28 + 3.5 * nx), y(142 + 3.5 * ny)];
     const b = [x(70 + r * nx), y(68 + r * ny)];
-    const o = x(20);
     return {
-      edge: `M${o} 96V90A3 3 0 0 ${right ? 0 : 1} ${a[0]} ${a[1]}L${b[0]} ${b[1]}`,
-      ribbon: `M${o} 96L${o} 90L${a[0]} ${a[1]}L${b[0]} ${b[1]}L${y(b[0] + 3)} ${y(b[1] - 2)}L${y(a[0] + 3)} ${y(a[1] - 2)}L${o + 3} 88L${o + 3} 94Z`,
+      edge: `M${x(28)} 145.5A3.5 3.5 0 0 ${right ? 0 : 1} ${a[0]} ${a[1]}L${b[0]} ${b[1]}`,
+      ribbon: `M${a[0]} ${a[1]}L${b[0]} ${b[1]}L${y(b[0] + 3)} ${y(b[1] - 2)}L${y(a[0] + 3)} ${y(a[1] - 2)}Z`,
     };
   }
 

@@ -578,13 +578,11 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
-// The two holes in the foot, through the whole cassette: a mask over the
-// mark and its blur, as ellipses of the 252 x 160 box (holes at 88 and 152,
-// 149, cut at r 2.7, inside the lit wall).
-$pf-cassette-hole: 1.07% 1.69%;
-$pf-cassette-holes:
-  radial-gradient($pf-cassette-hole at 34.92% 93.13%, transparent 96%, #000 100%),
-  radial-gradient($pf-cassette-hole at 60.32% 93.13%, transparent 96%, #000 100%);
+// The holes in the foot go through the whole cassette: the two round
+// capstan holes (cut at r 2.7, inside their lit walls) and the two square
+// guide-pin holes (inside their walls), cut from the mark and its blur by
+// one mask on the 252 x 160 box.
+$pf-cassette-holes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 252 160' preserveAspectRatio='none'%3E%3Cpath fill-rule='evenodd' d='M0 0H252V160H0ZM85.3 149a2.7 2.7 0 1 0 5.4 0a2.7 2.7 0 1 0-5.4 0ZM149.3 149a2.7 2.7 0 1 0 5.4 0a2.7 2.7 0 1 0-5.4 0ZM67.8 146H71V150.8H67.8ZM170.8 146H174V150.8H170.8Z'/%3E%3C/svg%3E");
 
 .pf-podcast-head__tape::before {
   content: "";
@@ -601,10 +599,8 @@ $pf-cassette-holes:
 
 .pf-podcast-head__tape::before,
 .pf-cassette {
-  -webkit-mask-image: $pf-cassette-holes;
-  -webkit-mask-composite: source-in;
-  mask-image: $pf-cassette-holes;
-  mask-composite: intersect;
+  -webkit-mask: $pf-cassette-holes center / 100% 100% no-repeat;
+  mask: $pf-cassette-holes center / 100% 100% no-repeat;
 }
 
 $pf-cassette-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
@@ -642,8 +638,9 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   stroke-width: 1.1;
 }
 
+// The back half, behind the works; the smoked front lies over them.
 .pf-cassette__shell {
-  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 40%, transparent);
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 25%, transparent);
 }
 
 .pf-cassette__fine {
@@ -679,10 +676,45 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   opacity: .8;
 }
 
-.pf-cassette__flange {
-  fill: color-mix(in srgb, currentColor 4%, transparent);
-  stroke: color-mix(in srgb, currentColor 40%, transparent);
+// The smoked front over the works, cut away at the window: the packs, the
+// tape along the foot and the pad show dimly through it.
+.pf-cassette__smoke {
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 55%, transparent);
+}
+
+.pf-cassette__window--edge {
+  fill: none;
+}
+
+// A spool: clear plastic round its drive teeth, the tape's clamp in its
+// rim (it turns with the reel).
+.pf-cassette__spool {
+  fill: color-mix(in srgb, currentColor 16%, #{$pf-cassette-ink});
+  stroke: color-mix(in srgb, currentColor 50%, transparent);
   stroke-width: .7;
+}
+
+.pf-cassette__clamp {
+  fill: color-mix(in srgb, currentColor 30%, transparent);
+  stroke: color-mix(in srgb, currentColor 45%, transparent);
+  stroke-width: .4;
+}
+
+// The felt pressure pad on its leaf spring presses the tape to the head at
+// the opening.
+.pf-cassette__ribbon--run {
+  fill: color-mix(in srgb, #{$pf-cassette-gold} 20%, transparent);
+}
+
+.pf-cassette__pad {
+  fill: color-mix(in srgb, currentColor 35%, transparent);
+  stroke: color-mix(in srgb, currentColor 50%, transparent);
+  stroke-width: .5;
+}
+
+.pf-cassette__spring {
+  stroke: color-mix(in srgb, currentColor 55%, transparent);
+  stroke-width: .6;
 }
 
 // The tape: a brown pack (solid, so the tape running off it tucks under its
@@ -767,14 +799,14 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   fill: color-mix(in srgb, currentColor 6%, transparent);
 }
 
-// Drawn full (25); scaled to the tape on each (js/podcast.js: the bare hub
-// is .48). Before the script runs: a full left reel.
+// Drawn full (46); scaled to the tape on each (js/podcast.js: the bare
+// spool is .565). Before the script runs: a full left reel.
 .pf-cassette__pack--left {
   transform: scale(var(--pf-pack-left, 1));
 }
 
 .pf-cassette__pack--right {
-  transform: scale(var(--pf-pack-right, .48));
+  transform: scale(var(--pf-pack-right, .565));
 }
 
 .pf-cassette__hub {
@@ -784,12 +816,6 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
 
 .pf-cassette__hub--ring {
   fill: color-mix(in srgb, #{$pf-cassette-ink} 50%, transparent);
-}
-
-.pf-cassette__dash {
-  stroke: color-mix(in srgb, currentColor 60%, transparent);
-  stroke-width: 1;
-  stroke-dasharray: 4 3;
 }
 
 // Relief, as seen from the upper right: a recess shows its lower and left
