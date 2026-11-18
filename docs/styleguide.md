@@ -180,6 +180,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Tile covers: every card's picture fills its 3:4 frame (responsive cover, centered crop); oral history exhibitions are no longer letterboxed (`.pf-tile--whole` is not printed).
 - **2026-11-18:** Footer versions: Oral History (`.pf-footer--oral-history`, aliases starting `/v2/oralhistory`), Special Collections (`.pf-footer--special`), Main Library. One layout; content in `includes/footer.html.twig`'s `footers` map.
 - **2026-11-18:** `.pf-tiles--wide-frames` removed: no showcase has 21:9 frames, and Oral History's pages have no gallery rule of their own; `.pf-tiles--whole` only when every card is a whole wide cover.
 - **2026-11-18:** Podcast picture box `.pf-podcast__art` (square, `container-type: size`, max 14rem): the cover and, while an episode is loaded, `.pf-deck` (top plate) stacked in one grid cell; `.is-decked` cross-fades them (.6s). `.pf-deck.is-playing` turns the reels as the object view does.

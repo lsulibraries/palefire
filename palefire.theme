@@ -3277,14 +3277,12 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       continue;
     }
     $show_image = !$rows && $card['image_item'];
-    // An oral history exhibition's cover is a wide still from its old
-    // presentation (about 16:9): shown whole, uncropped (exhibit_640, scale
-    // only), on the card's dark ground, not cut to the card's 3:4.
+    // Every cover fills its card, an oral history exhibition's wide still
+    // too (cut to the card's 3:4 from its middle, as any other picture);
+    // none is shown whole on the card's ground any more (2026-11-18).
     $oral_history = _palefire_is_oral_history_exhibition($node);
-    $whole = $show_image && $oral_history
-      && $card['image_item']->width && $card['image_item']->height
-      && $card['image_item']->width / $card['image_item']->height >= 1.4;
-    $image = $show_image ? ($whole ? _palefire_image_build($card['image_item'], ['exhibit_640'], $cache) : _palefire_responsive_cover($card['image_item'], $style, $cache)) : NULL;
+    $whole = FALSE;
+    $image = $show_image ? _palefire_responsive_cover($card['image_item'], $style, $cache) : NULL;
     $variables['tiles'][] = [
       'whole' => $whole,
       'oral_history' => $oral_history,
