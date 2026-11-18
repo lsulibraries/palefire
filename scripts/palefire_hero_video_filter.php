@@ -23,6 +23,10 @@
  *   only fading into the page at its foot: only for a film already chosen
  *   to be dark enough for white text over it. Light themes keep the veil.
  *
+ * The Spotlight is off whenever the video is in the main column (there is
+ * no film beside the title for its light to come from); its help text says
+ * so.
+ *
  * Sets Faded on the heroes of /v2/oralhistory (so it looks as it did) and
  * /v2/special, where their Video is still empty, each in a new revision of
  * its page.
@@ -108,6 +112,17 @@ if ($apply) {
   $view = $repo->getViewDisplay('paragraph', $bundle, 'default');
   if ($view->getComponent($name)) {
     $view->removeComponent($name)->save();
+  }
+}
+
+// The Spotlight (field_hero_spotlight) is off whenever the film is in the
+// main column (_landing-features.scss): its help says so.
+$spotlight = FieldConfig::loadByName('paragraph', $bundle, 'field_hero_spotlight');
+$spotlight_help = 'A warm light from the film’s edge over the title and text, when Video is Beside. Off on its own when the video plays in the main column.';
+if ($spotlight && $spotlight->getDescription() !== $spotlight_help) {
+  echo "{$prefix}Spotlight help: only when Video is Beside\n";
+  if ($apply) {
+    $spotlight->setDescription($spotlight_help)->save();
   }
 }
 

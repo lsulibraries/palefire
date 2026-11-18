@@ -560,6 +560,7 @@ HTML),
 <ul>
 <li>Room pages: each page can choose how the room’s photo behind the top looks, with a new Photo filter on its Location section. Faded (the default, how every room page looks now) shows it in color, darkened. Black and white darkens it and takes the color out, as room pages looked before Nov 9. No filter shows the photo as it is on dark reading colors, for a photo already picked to be dark enough for white text over it; light reading colors still fade it.</li>
 <li>Special Collections: its video now plays behind the title and search, faded under the page color, the way Oral History’s does, and the right-hand column shows the highlights from the start. Any landing page can choose this with a new Video setting: beside in the column (as before), or in the main column faded, in black and white, or with no filter.</li>
+<li>Landing pages: the faint gold light on the title side, which stood for light from the video beside it, now turns off by itself when the video plays in the main column.</li>
 </ul>
 HTML),
 ]);

@@ -5829,8 +5829,11 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 
 // --- No spotlight ---------------------------------------------------------------
 // The hero's Spotlight box unticked (field_hero_spotlight, palefire.theme):
-// no warm light from the film's edge over the type's side.
-.pf-landing--no-spotlight {
+// no warm light from the film's edge over the type's side. Nor with the
+// film in the main column (.pf-landing--wash, the hero's Video): no film
+// beside the type for the light to come from, whatever the box says.
+.pf-landing--no-spotlight,
+.pf-landing--wash {
   --pf-cover-glow: 0;
 }
 
