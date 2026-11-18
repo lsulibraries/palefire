@@ -609,6 +609,7 @@ HTML),
 <li>What Endures: the reels inside the cassette sit a little deeper behind the window, and the episodes are numbered from the first, so the newest has the highest number.</li>
 <li>Oral History’s homepage: the Plan your visit section is gone; the Find us highlight and today’s hours under the title already say where and when. Pointing at Find us now shows Hill Memorial’s front under the floor plan, the floors frosted over the photo as on the room pages.</li>
 <li>Oral History’s series: the tape deck now fills its column; on shorter screens its bottom fades to a faint trace behind the series name and description instead of the whole drawing shrinking.</li>
+<li>Oral History’s series: the tape deck no longer fast-forwards when you move to a smaller series; the tape simply settles to its new amount while the reels keep their calm playing speed.</li>
 </ul>
 HTML),
 ]);

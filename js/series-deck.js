@@ -13,12 +13,12 @@
  * the tape winds to it: the series is the tape loaded, so the supply reel
  * (left) holds as much as its card shows (its share of the largest series,
  * by area); the take-up reel (right) is the deck's own, a few turns
- * threaded, and stays. The reels are turned here, not by CSS, so they spin
- * up and down like a motor's: at an easy fast wind while the supply
- * empties (longer the more it moves), or held still while it fills, as if
- * a fuller reel were loaded (no rewind: it would break the page's calm),
- * then at playing speed, PLAY down and the pinch roller in, for as long as the
- * pointer is on the series or the focus in them, slowing to a stop after.
+ * threaded, and stays. The tape eases to its new level over a second; the
+ * reels never wind fast either way (it would break the page's calm). They
+ * are turned here, not by CSS, so they spin up and down like a motor's:
+ * at playing speed (PLAY down and the pinch roller in once the tape has
+ * settled) for as long as the pointer is on the series or the focus in
+ * them, slowing to a stop after.
  * At rest it shows the largest series. Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
  *
@@ -209,11 +209,10 @@
     let share = 0.65;
 
     // The motor. Playing speed is the exhibitions' deck (_exhibition.scss
-    // .spin: a turn in 5s, the take-up in 7s), counterclockwise; fast wind
-    // is WIND times that. Speeds ease toward their target (EASE seconds),
-    // so a change of speed is a spin-up or a run-down, never a jump.
+    // .spin: a turn in 5s, the take-up in 7s), counterclockwise, the only
+    // speed there is. Speeds ease toward it (EASE seconds), so a start or
+    // stop is a spin-up or a run-down, never a jump.
     const PLAY = [-360 / 5, -360 / 7];
-    const WIND = 4;
     const EASE = 0.3;
     let reels = [[], []];
     const angle = [0, 0];
@@ -237,14 +236,13 @@
         const p = Math.min(1, (time - winding.begin) / winding.length);
         share = winding.from + (winding.to - winding.from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
         wind(svg, share);
-        gear = winding.to < winding.from ? WIND : 0;
         if (p >= 1) {
           winding = null;
           playing();
         }
       }
       const k = 1 - Math.exp(-dt / EASE);
-      // Runs on while a reel fills with the reels held still.
+      // Runs on while the tape settles, whether or not the reels turn.
       let moving = gear !== 0 || winding !== null;
       [0, 1].forEach((i) => {
         speed[i] += (PLAY[i] * gear - speed[i]) * k;
@@ -291,9 +289,8 @@
         wind(svg, share);
         return;
       }
-      // Winding forward takes longer the more tape moves (a whole reel in
-      // about two seconds); a fuller reel settles in over a second.
-      winding = { from: share, to: to, begin: window.performance.now(), length: to < share ? 500 + 1500 * (share - to) : 1000 };
+      // Emptier or fuller, the tape settles in over a second.
+      winding = { from: share, to: to, begin: window.performance.now(), length: 1000 };
       playing();
       run();
     };
