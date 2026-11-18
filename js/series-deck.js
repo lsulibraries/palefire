@@ -347,8 +347,8 @@
         if (year) {
           year.textContent = '';
         }
-        // Fit the column's height, held to its bottom left by the caption.
-        svg.setAttribute('preserveAspectRatio', 'xMinYMax meet');
+        // Fit the column's height, held to its bottom (centered) by the caption.
+        svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
         machine.append(svg);
         reels = [Array.from(svg.querySelectorAll('.spin--0')), Array.from(svg.querySelectorAll('.spin--1'))];
         counter();

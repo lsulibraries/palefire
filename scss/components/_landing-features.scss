@@ -6229,8 +6229,9 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 }
 
 // Beside the tape deck (js/series-deck.js, .has-deck from 64rem): five
-// columns on the grid's gutter, the heading, intro and deck held on the
-// first two (sticky under the header and page bar, the screen's height),
+// columns on the grid's gutter, the heading and intro on the first two,
+// scrolling away with the page, and under them the deck, held there
+// (sticky under the header and page bar, no taller than the screen),
 // the series on the other three (their own container, three columns of
 // cards, four rows to each Show more) with a hairline their full length
 // down the gutter. The deck is as large as the column allows with the
@@ -6267,8 +6268,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
 // The deck is as wide as the column, at the drawing's own proportions,
 // and gives up height (to 12rem) only when the column would be taller than
-// the screen; then it is drawn to fit at its bottom left
-// (preserveAspectRatio, js/series-deck.js).
+// the screen; then it is drawn to fit at the bottom, centered in the
+// column (preserveAspectRatio, js/series-deck.js).
 .pf-series__machine {
   flex: 0 1 auto;
   width: 100%;
@@ -6377,24 +6378,30 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       align-items: start;
     }
 
-    // As tall as what it holds, never taller than the screen below the
-    // header, so all of it stays in view while the series scroll past and
-    // it leaves only when they end. (Held at the screen's height, a deck at
-    // its full size left an empty foot that met the grid's end first and
-    // pushed the deck off the top while series were still showing.)
+    // The column runs the series' length; the heading and intro scroll
+    // away with the page, and the deck stays: as tall as what it holds,
+    // never taller than the screen below the header, so all of it stays in
+    // view while the series scroll past and it leaves only when they end.
+    // (Held at the screen's height, a deck at its full size left an empty
+    // foot that met the grid's end first and pushed the deck off the top
+    // while series were still showing.)
     .pf-series__side {
-      position: sticky;
-      top: var(--pf-series-top);
       display: flex;
       flex-direction: column;
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
       grid-column: 1 / span 2;
-      max-height: calc(100svh - var(--pf-series-top) - 1.5rem);
+      align-self: stretch;
       padding-right: clamp(.5rem, 1.5vw, 1.5rem);
     }
 
     .pf-series__head {
       flex: none;
+    }
+
+    .pf-series__deck {
+      position: sticky;
+      top: var(--pf-series-top);
+      max-height: calc(100svh - var(--pf-series-top) - 1.5rem);
     }
 
     .pf-series__intro {

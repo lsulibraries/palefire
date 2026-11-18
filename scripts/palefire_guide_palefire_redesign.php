@@ -591,6 +591,7 @@ HTML),
 <li>Oral History series cards: the thin line around each reel stays the same soft gray when you point at it; only the frosted case clears.</li>
 <li>The tape deck beside Oral History’s series now runs like a real one: when you point at a series it fast-winds (forward or back) to that series’ amount of tape, then plays at normal speed for as long as you stay on the series, and winds down to a stop when you leave.</li>
 <li>The tape deck no longer rewinds: pointing at a bigger series, the reels pause while the fuller reel settles in, and winding forward to a smaller one is gentler, keeping the page calm.</li>
+<li>Beside the series, the Series heading and its intro now scroll away, so the tape deck and its caption alone stay in view, larger, with the drawing centered in its column.</li>
 </ul>
 HTML),
 ]);
