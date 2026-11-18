@@ -6248,25 +6248,33 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   font-variant-numeric: tabular-nums;
 }
 
+// The caption keeps one height whatever the series (two lines of name,
+// four of description, the longest), so the deck above it, which takes
+// the rest of the column, never changes size. The card and its
+// description (aria-describedby) carry the full text.
 .pf-series__now-name {
+  display: -webkit-box;
+  height: calc(2em * 1.15);
   margin: 0;
+  overflow: hidden;
   font: 500 clamp(1.125rem, 1.5vw, 1.4375rem)/1.15 $pf-font-display-serif;
   text-wrap: balance;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-// Three lines kept free, so the deck does not jump for a shorter one.
 .pf-series__now-text {
+  display: -webkit-box;
   max-width: 52ch;
-  min-height: 4.5em;
+  height: 6em;
   margin: .125rem 0 .25rem;
+  overflow: hidden;
   font-size: .9375rem;
   line-height: 1.5;
   color: color-mix(in srgb, currentcolor 78%, transparent);
   text-wrap: pretty;
-
-  &:empty {
-    min-height: 0;
-  }
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 
 .pf-series__now-open {
