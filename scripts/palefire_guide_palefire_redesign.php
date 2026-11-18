@@ -590,6 +590,7 @@ HTML),
 <li>The soft-focus effect on series cards now happens only on wide screens, where the tape deck names the series; on smaller screens, where the card is the only place to read its name, the name stays sharp.</li>
 <li>Oral History series cards: the thin line around each reel stays the same soft gray when you point at it; only the frosted case clears.</li>
 <li>The tape deck beside Oral History’s series now runs like a real one: when you point at a series it fast-winds (forward or back) to that series’ amount of tape, then plays at normal speed for as long as you stay on the series, and winds down to a stop when you leave.</li>
+<li>The tape deck no longer rewinds: pointing at a bigger series, the reels pause while the fuller reel settles in, and winding forward to a smaller one is gentler, keeping the page calm.</li>
 </ul>
 HTML),
 ]);

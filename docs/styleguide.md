@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Series deck motor (`js/series-deck.js`): fast wind is 4 times playing speed, forward only (supply emptying); when the supply fills, the reels run down and stay still for the 1s fill, then play. No rewind.
 - **2026-11-18:** Series deck motor: `.pf-series .pf-series__deck .pf-deck__svg .spin { animation: none }` (outweighs `html:not(.pf-a11y-motion) .pf-deck__svg .spin`); `.is-playing` no longer sets `animation-play-state`, it lights PLAY, presses the pinch roller and lifts the needles, and is on only while playing (not while winding). Rotation from `js/series-deck.js`. Focus pull again scoped to `.pf-series.has-deck`.
 - **2026-11-18:** `.pf-series-reel` border: `$pf-hairline` in every state (no hover/focus color, no border transition).
 - **2026-11-18:** Focus pull scoped to `.pf-series.has-deck .pf-series__link:hover:not(:focus-visible)`.

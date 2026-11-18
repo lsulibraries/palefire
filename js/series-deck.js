@@ -14,9 +14,10 @@
  * (left) holds as much as its card shows (its share of the largest series,
  * by area); the take-up reel (right) is the deck's own, a few turns
  * threaded, and stays. The reels are turned here, not by CSS, so they spin
- * up and down like a motor's: at fast wind while the tape moves (forward
- * as the supply empties, back as it fills, longer the more it moves), then
- * at playing speed, PLAY down and the pinch roller in, for as long as the
+ * up and down like a motor's: at an easy fast wind while the supply
+ * empties (longer the more it moves), or held still while it fills, as if
+ * a fuller reel were loaded (no rewind: it would break the page's calm),
+ * then at playing speed, PLAY down and the pinch roller in, for as long as the
  * pointer is on the series or the focus in them, slowing to a stop after.
  * At rest it shows the largest series. Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
@@ -210,7 +211,7 @@
     // is WIND times that. Speeds ease toward their target (EASE seconds),
     // so a change of speed is a spin-up or a run-down, never a jump.
     const PLAY = [-360 / 5, -360 / 7];
-    const WIND = 9;
+    const WIND = 4;
     const EASE = 0.3;
     let reels = [[], []];
     const angle = [0, 0];
@@ -233,14 +234,15 @@
         const p = Math.min(1, (time - winding.begin) / winding.length);
         share = winding.from + (winding.to - winding.from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
         wind(svg, share);
-        gear = winding.to < winding.from ? WIND : -WIND;
+        gear = winding.to < winding.from ? WIND : 0;
         if (p >= 1) {
           winding = null;
           playing();
         }
       }
       const k = 1 - Math.exp(-dt / EASE);
-      let moving = gear !== 0;
+      // Runs on while a reel fills with the reels held still.
+      let moving = gear !== 0 || winding !== null;
       [0, 1].forEach((i) => {
         speed[i] += (PLAY[i] * gear - speed[i]) * k;
         angle[i] = (angle[i] + speed[i] * dt) % 360;
@@ -286,8 +288,9 @@
         wind(svg, share);
         return;
       }
-      // Longer the more tape moves: a whole reel in about two seconds.
-      winding = { from: share, to: to, begin: window.performance.now(), length: 500 + 1500 * Math.abs(to - share) };
+      // Winding forward takes longer the more tape moves (a whole reel in
+      // about two seconds); a fuller reel settles in over a second.
+      winding = { from: share, to: to, begin: window.performance.now(), length: to < share ? 500 + 1500 * (share - to) : 1000 };
       playing();
       run();
     };
