@@ -96,7 +96,10 @@
   // the tape winds from the left pack to the right.
   function syncCassettes() {
     const audio = state.audio;
-    const row = view.shown;
+    // While an episode plays, the cassette stays on it: pointing at
+    // another row changes the head's text, not the tape.
+    const current = audio && !audio.paused ? rowFor(audio.dataset.src || '') : null;
+    const row = current || view.shown;
     const mine = loaded(row);
     const playing = mine && !audio.paused;
     const progress = mine && audio.duration ? Math.min(1, audio.currentTime / audio.duration) : 0;

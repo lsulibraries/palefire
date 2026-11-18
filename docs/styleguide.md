@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Cassette sync: while audio plays, `syncCassettes()` uses the playing row (`rowFor(audio.dataset.src)`), not `view.shown`; hover and focus still drive the head's text and backdrop.
 - **2026-11-18:** Cassette holes: `$pf-cassette-holes` masks `.pf-cassette` and `.pf-podcast-head__tape::before` (its blur), r 2.7 at (88,149) and (152,149) of 252 x 160; `.pf-cassette__hole` stays `fill: none`. Reel turn: `--pf-reel-turn` set by `syncCassettes()` (Δ left pack scale² × 720deg, not while playing), applied as `rotate` with `transition: rotate .6s` in the motion block only.
 - **2026-11-18:** Drawing ink: never pure black. The darkest ink in a drawing is `#18120d` (`$pf-cassette-ink`, `$pf-recorder-ink`), mixed toward transparency or the page background; `.pf-cassette__hole` is `fill: none`. `#000` stays only in masks.
 - **2026-11-18:** Cassette tape runs: `.pf-cassette__tape--left/right` and `.pf-cassette__ribbon--left/right`, `d` set by `drawTape()` in js/podcast.js from the pack scale (common tangent of the roller, r 3 at 23,90, and the pack, r 25 × scale at 70,68; the right mirrored). Ribbons filled with `url(#pf-cassette-fade-left/right)` (`.pf-cassette__fade-from` gold 20% from .4 → `.pf-cassette__fade-to` the pack side's color). `transition: d .6s` (.3s linear while playing) in the motion block.
