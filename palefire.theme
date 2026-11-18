@@ -2392,6 +2392,10 @@ function palefire_preprocess_paragraph__location_space(array &$variables): void 
     $cache->addCacheTags($paragraph->getParentEntity()?->getCacheTags() ?? []);
     // The backdrop's fallback: the first of the page's photos.
     $location['backdrop'] = _palefire_location_backdrop($room, array_slice($photo_list, 0, 1), $cache);
+    // Its Photo filter (palefire_location_photo_filter.php): 'mono' or
+    // 'none'; '' for Faded, the default, and pages made before the field.
+    $filter = $paragraph->hasField('field_location_photo_filter') ? (string) $paragraph->get('field_location_photo_filter')->value : '';
+    $location['photo_filter'] = in_array($filter, ['mono', 'none'], TRUE) ? $filter : '';
     $variables['location'] = $location;
   }
   $cache->applyTo($variables);

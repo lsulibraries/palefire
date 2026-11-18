@@ -556,6 +556,11 @@ HTML),
 <li>Special Collections: the search at the top of the page now types out searches to try, like the Special Collections search on the search page, and Ctrl+K (⌘K on a Mac) jumps to it from anywhere on the page.</li>
 </ul>
 HTML),
+  $text('Wed Nov 18: Room page photo filters', <<<'HTML'
+<ul>
+<li>Room pages: each page can choose how the room’s photo behind the top looks, with a new Photo filter on its Location section. Faded (the default, how every room page looks now) shows it in color, darkened. Black and white darkens it and takes the color out, as room pages looked before Nov 9. No filter shows the photo as it is on dark reading colors, for a photo already picked to be dark enough for white text over it; light reading colors still fade it.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

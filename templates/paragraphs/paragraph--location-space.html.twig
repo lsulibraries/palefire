@@ -69,7 +69,8 @@
          nothing for screen readers. #}
       {# The TOC's "Home" is the whole top (title, map and ledger), so it
          stays current until the next section. #}
-      <div class="pf-location__intro{{ location.backdrop ? ' has-backdrop' }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}{% if location.backdrop %} style="--pf-location-backdrop: url('{{ location.backdrop }}')"{% endif %}>
+      {# location.photo_filter: '' (Faded), 'mono' or 'none'. #}
+      <div class="pf-location__intro{{ location.backdrop ? ' has-backdrop' }}{{ location.backdrop and location.photo_filter ? ' pf-location__intro--photo-' ~ location.photo_filter }}"{% if toc_home_id %} id="{{ toc_home_id }}" tabindex="-1"{% endif %}{% if location.backdrop %} style="--pf-location-backdrop: url('{{ location.backdrop }}')"{% endif %}>
         <div class="pf-location__top">
           <div class="pf-location__head">
             {# As the landing's kicker: the building in the accent, then a

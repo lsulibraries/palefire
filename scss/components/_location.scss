@@ -232,7 +232,31 @@
     -webkit-mask-image: linear-gradient(#000 60%, transparent);
     mask-image: linear-gradient(#000 60%, transparent);
   }
+
+  // Black and white (Photo filter), as the whole photo.
+  &.pf-location__intro--photo-mono::before {
+    background:
+      linear-gradient(var(--pf-photo-fall), var(--pf-photo-fall-soft) 6rem, transparent 14rem),
+      $pf-location-mono-tint,
+      linear-gradient(var(--pf-photo-veil), var(--pf-photo-veil)),
+      $pf-location-mono-grey,
+      var(--pf-location-backdrop) center / cover no-repeat;
+    background-blend-mode: normal, color, normal, color, normal;
+  }
 }
+
+// Photo filter (field_location_photo_filter, set per page on its Location
+// section; palefire_location_photo_filter.php). Faded, the default, is the
+// veil described above. Black and white (--photo-mono) adds back the two
+// `color` blends used until 2026-11-09: a mid grey under the veil takes the
+// colour out, the page colour over it tints the photo to the swatch. They
+// change only hue and saturation, never lightness, so the veil's limits and
+// every contrast above hold. No filter (--photo-none) drops the veil on
+// dark swatches: the photo as it is, under the black fall only, for a
+// photo already chosen to be dark enough for the white text. Light
+// swatches keep their veil for it.
+$pf-location-mono-tint: linear-gradient(var(--pf-g-bg, #808080), var(--pf-g-bg, #808080));
+$pf-location-mono-grey: linear-gradient(#808080, #808080);
 
 .pf-location__frost { display: none; }
 
@@ -321,6 +345,25 @@ html[data-pf-theme] .pf-location__intro.has-backdrop {
       backdrop-filter: blur(12px);
     }
   }
+}
+
+// Photo filter: Black and white, fixed to the window as above. Portrait
+// screens and iOS take the whole photo's own (pf-location-backdrop-whole,
+// more specific than this).
+html[data-pf-theme] .pf-location__intro--photo-mono.has-backdrop::before {
+  background:
+    linear-gradient(transparent calc(100% - 6rem), var(--pf-section-bg, var(--bs-body-bg))),
+    linear-gradient(var(--pf-photo-fall), var(--pf-photo-fall-soft) 6rem, var(--pf-photo-fall-faint) 14rem, transparent 22rem),
+    $pf-location-mono-tint fixed,
+    linear-gradient(var(--pf-photo-veil), var(--pf-photo-veil)) fixed,
+    $pf-location-mono-grey fixed,
+    var(--pf-location-backdrop) center / cover no-repeat fixed;
+  background-blend-mode: normal, normal, color, normal, color, normal;
+}
+
+// Photo filter: No filter, dark swatches only.
+html[data-pf-theme].pf-reading-dark .pf-location__intro--photo-none.has-backdrop {
+  --pf-photo-veil: transparent;
 }
 
 // Light swatches: the text over the photo in the heading colour. Soft

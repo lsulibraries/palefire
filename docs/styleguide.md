@@ -84,10 +84,13 @@ reader's.
     section tokens, never literals.
   - LSU gold appears only on purple or dark grounds.
   - Photographs: color for what people look at (the cover, the hero
-    banners), monochrome for a backdrop behind data (the location top).
-    Both are pulled toward the swatch with the page color in the `color`
-    blend, which keeps lightness, so it never moves a contrast. Gray on a
-    banner means "not this one", so a cover never goes fully gray.
+    banners). A backdrop behind data (the location top) is veiled, and its
+    page picks the treatment (Photo filter): Faded (color under the veil,
+    the default), Black and white (the veil plus a gray and a page-color
+    `color` blend, which keep lightness, so they never move a contrast), or
+    No filter (no veil on dark swatches, for a photo chosen to be dark
+    enough). Gray on a banner means "not this one", so a cover never goes
+    fully gray.
 - **Lines:** every rule, row and frame is `$pf-hairline` (20%). A button with
   words has no line: its plate and its label identify it. Fields and wordless
   buttons keep `--pf-section-border` at 3:1.
@@ -180,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Location backdrop Photo filter (`field_location_photo_filter` on the Location section, `location.photo_filter`): `.pf-location__intro--photo-mono` brings back the gray (#808080) and `--pf-g-bg` `color`-blend layers around the veil, on the fixed and whole-photo backdrops and on every swatch; `.pf-location__intro--photo-none` sets `--pf-photo-veil: transparent` on dark swatches only (the black fall stays). No class is Faded, the 2026-11-09 look. Contrast over No filter is the editor's choice of photo, not guaranteed by the veil.
 - **2026-11-18:** Tile covers: every card's picture fills its 3:4 frame (responsive cover, centered crop); oral history exhibitions are no longer letterboxed (`.pf-tile--whole` is not printed).
 - **2026-11-18:** Footer versions: Oral History (`.pf-footer--oral-history`, aliases starting `/v2/oralhistory`), Special Collections (`.pf-footer--special`), Main Library. One layout; content in `includes/footer.html.twig`'s `footers` map.
 - **2026-11-18:** `.pf-tiles--wide-frames` removed: no showcase has 21:9 frames, and Oral History's pages have no gallery rule of their own; `.pf-tiles--whole` only when every card is a whole wide cover.
