@@ -70,13 +70,12 @@
   {# The footer's Ask link (includes/footer.html.twig) lands here. #}
   <div class="pf-inquiry__panel" id="ask-question">
     <h3 class="pf-inquiry__heading">{{ 'Send us a question'|t }}</h3>
-    {# The slip: the form set as a question slip, a ruled form with a dated
-       header (_ask.scss), so writing to staff reads apart from the browsing
-       around it. The date is today's, written by js/ask-form.js (a cached
+    {# The slip: a ruled form under a dated header, the place and today's
+       date, with no title (as the Ask Us drawer's forms; _ask.scss), so
+       writing to staff reads apart from the browsing around it. The date is today's, written by js/ask-form.js (a cached
        page would freeze one written here); without it, the place alone. #}
     <div class="pf-inquiry__slip">
       <p class="pf-inquiry__slip-head">
-        <span class="pf-inquiry__slip-title">{{ 'Question slip'|t }}</span>
         <span class="pf-inquiry__stamp">
           <span>{{ oral_history ? 'Oral History · Hill Memorial Library'|t : 'Special Collections · Hill Memorial Library'|t }}</span>
           <time data-pf-today></time>

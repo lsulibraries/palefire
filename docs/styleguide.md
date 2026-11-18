@@ -183,7 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
-- **2026-11-19:** `.pf-inquiry__slip-title` removed: every `.pf-inquiry__slip-head` is the stamp alone.
+- **2026-11-18:** `.pf-inquiry__slip-title` removed: every `.pf-inquiry__slip-head` is the stamp alone.
 - **2026-11-18:** `.pf-podcast__scroll` from 48rem: `max-height: clamp(13rem, 100svh - 36rem, 22rem)` (24rem / 60svh narrower). `.pf-podcast__row` `padding-block: .625rem` in the 44rem container. `.pf-podcast-head__credit` from 48rem: grid area 5 / 1 / 6 / 4, under the length, start-aligned, room for two lines. `.pf-podcast-head` margin-bottom clamp(1.5rem, 3vw, 2rem). `.pf-podcast__date` shows `episode.month`.
 - **2026-11-18:** `.pf-series__fold`: flex row (wrap, gap .25rem 1.5rem, `align-items: flex-start`, the old button's `margin-top`), holding `.pf-series__more` and `.pf-series__shown` (`%pf-landing-label`, `--pf-toc-color`, tabular, inline-flex centered at `min-height: 2.75rem` like `.pf-tiles__view`). Series caption: `.pf-series__now-count` removed; `.pf-series__now-open` holds `.pf-series__now-view` (“View N interviews”), `align-self: flex-start; margin-top: auto`; `.pf-series__now` height `calc(3 * var(--pf-mono-label) + 2.3 * var(--pf-now-name) + 5.625rem + 2.5rem + 1px)`.
 - **2026-11-18:** Cassette plastic: `.pf-cassette__shell` fill at 40%, `__sides` and `__end` at 55%, `__window` `$pf-cassette-dark` at 50% (all mixed with transparent), over the 20px backdrop blur.

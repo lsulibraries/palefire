@@ -191,8 +191,8 @@
   border-top: 3px solid var(--pf-inquiry-accent);
 }
 
-// "Question slip" in the FAQ questions' type; the place and today's date
-// as a stamp in the mono labels' voice. The stamp's two parts wrap as
+// The place and today's date as a stamp in the mono labels' voice (no
+// title: the heading above names the form). The stamp's two parts wrap as
 // units, so the date moves under the place whole, never split.
 .pf-inquiry__slip-head {
   display: flex;
@@ -203,13 +203,6 @@
   margin: 0;
   padding: 1rem 0;
   border-bottom: 1px solid var(--pf-inquiry-rule);
-}
-
-.pf-inquiry__slip-title {
-  color: var(--bs-heading-color, var(--pf-inquiry-fg));
-  font-size: var(--pf-inquiry-question);
-  font-weight: 500;
-  line-height: 1.3;
 }
 
 .pf-inquiry__stamp {

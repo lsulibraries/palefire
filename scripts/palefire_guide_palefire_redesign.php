@@ -581,6 +581,7 @@ HTML),
 <li>What Endures: the cassette is see-through again, with the photo showing through its smoked plastic and a lighter tape window.</li>
 <li>Under Oral History’s series, the Show more button now says how many you are seeing, for example “Showing 12 of 39”. Under the tape deck, the link now says what it opens, for example “View 60 interviews”, instead of “Open series”.</li>
 <li>What Endures: the episode list is shorter (about five rows, fewer on a small screen) so the heading and its description stay on screen while you browse. Rows are a little tighter, the photo credit sits under the episode length, and the date column shows just the month.</li>
+<li>Ask us forms on Special Collections and Oral History: the words Question slip are gone from the top of the form, as in the Ask Us drawer. The place and today’s date stay.</li>
 </ul>
 HTML),
 ]);
