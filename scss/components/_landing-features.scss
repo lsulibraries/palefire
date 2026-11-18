@@ -4556,6 +4556,19 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
         translate: 0 -50%;
       }
     }
+
+    // The blog post's row steps back with the others while a row is in
+    // hand (elsewhere on phones it is a line of text and is left out).
+    .pf-hero-banners:has(.pf-hero-banner__link:is(:hover, :focus-visible)) > .pf-hero-banner--blog:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) {
+      @include pf-banner-hushed;
+    }
+
+    // The list ends on its own hairline, so the Quick Start's tab bar
+    // follows it at 2.5rem, not the 4rem gap over an index rule, which
+    // added to the last row's foot left an empty band.
+    > .pf-quick-guide--tabs {
+      --pf-quick-tabs-gap: 2.5rem;
+    }
   }
 }
 

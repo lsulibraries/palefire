@@ -567,6 +567,7 @@ HTML),
 <li>Phones: tapping Contents at the top of Special Collections or Oral History now opens the list of sections right there; before, the list stayed hidden and the page could jump far down. On every screen, the Log in or register and Contents buttons over the video now blur the picture behind them, so their labels are easier to read.</li>
 <li>Phones: on Special Collections and Oral History the highlights are back right under the full-screen video, before the Quick Start Guide.</li>
 <li>Phones: those highlights are now a numbered list, like the Quick Start Guide’s steps. Each row shows its number, its category, its title and a small picture, so all five items get a picture and none is hidden. Each row draws in gently as it scrolls into view.</li>
+<li>Phones: in that list the blog post now fades back with the others when another item is pointed at or focused, and the Research / Study / Ask Us tabs follow the list more closely.</li>
 <li>What Endures has a new cassette for its title: a smoked plastic one with the title printed on it in gold, seen a little from the side so you can see its thickness, its window, screws and the engraved A in relief. It sits centered between two thin lines that fade out to the edges, a little smaller than before, with more room before the episodes. The lines draw outward and the title writes itself when you scroll to it; the reels turn while an episode plays.</li>
 </ul>
 HTML),
