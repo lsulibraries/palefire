@@ -831,7 +831,10 @@
          interviews Combined Search holds for it and a link to them all
          (_palefire_oral_history_series(): the module's own list and counts,
          so the two always agree). Its rule follows the Quick Start's
-         (hero_index.series, _palefire_hero_rules()). #}
+         (hero_index.series, _palefire_hero_rules()). On wide screens the
+         heading, its intro and the tape deck share a column held beside
+         the series (js/series-deck.js: the deck shows the series in hand,
+         with its count and description). #}
       {% if hero_index.series %}
         {% set series_id = input_id ~ '-series' %}
         <section class="pf-series" aria-labelledby="{{ series_id }}">
@@ -840,10 +843,30 @@
             text: 'Search them all'|t,
             hidden: ': ' ~ 'Oral histories in Combined Search'|t,
           } : {}) }}
-          <div class="pf-series__head">
-            <h2 class="pf-series__title" id="{{ series_id }}" data-toc>{{ 'Series'|t }}</h2>
-            <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
+          <div class="pf-series__split">
+          <div class="pf-series__side">
+            <div class="pf-series__head">
+              <h2 class="pf-series__title" id="{{ series_id }}" data-toc>{{ 'Series'|t }}</h2>
+              <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
+            </div>
+            {% if oral_history_series %}
+              {# The deck and its caption: decorative (each card says its
+                 name and count, and carries its description), filled and
+                 shown by js/series-deck.js on wide screens only. #}
+              {{ attach_library('palefire/series-deck') }}
+              <div class="pf-series__deck" data-pf-series-deck="{{ file_url(directory) ~ '/images/exhibit-deck.svg' }}" aria-hidden="true" hidden>
+                <div class="pf-series__machine"></div>
+                <div class="pf-series__now">
+                  <span class="pf-series__now-label">{{ 'On the deck'|t }}</span>
+                  <p class="pf-series__now-name"></p>
+                  <p class="pf-series__now-text"></p>
+                  <span class="pf-series__now-count"></span>
+                  <a class="pf-series__now-open" href="/v2/search?mode=special&amp;source%5B%5D=oral_histories" tabindex="-1">{{ 'Open series'|t }}<span aria-hidden="true"> →</span></a>
+                </div>
+              </div>
+            {% endif %}
           </div>
+          <div class="pf-series__body">
           {% if oral_history_series %}
             {# Grid / List, as the Tile showcases' (js/tile-views.js: the
                same remembered pick, data-pf-views on the wrapper). #}
@@ -864,19 +887,24 @@
                 {% for series in oral_history_series %}
                   {% set series_count = series.count == 1 ? '1 interview'|t : '@count interviews'|t({'@count': series.count|number_format}) %}
                   <li class="pf-series__item">
-                    {# Grid: a reel in its box, as an exhibition's audio-only
-                       clip (exhibit-reel.html.twig), the series on the box,
-                       its count on top. List: a ruled row, the name and the
-                       count (.pf-series__row). Either way the link's name is
-                       the hidden line. #}
-                    <a class="pf-series__link" href="{{ series.url }}">
+                    {# Grid: the deck's reel wound to the series' size behind
+                       a frosted case (series-reel.html.twig), the count on
+                       top, the name at the foot. List: a ruled row, the
+                       name and the count (.pf-series__row). Either way the
+                       link's name is the hidden line, and its description
+                       (when the theme has one) describes it. #}
+                    {% set series_text_id = series_id ~ '-' ~ loop.index %}
+                    <a class="pf-series__link" href="{{ series.url }}"{% if series.description %} aria-describedby="{{ series_text_id }}"{% endif %}>
                       <span class="visually-hidden">{{ series.name }}, {{ series_count }}</span>
-                      {% include '@palefire/includes/exhibit-reel.html.twig' with { title: series.name, kicker: series_count, year: null } only %}
+                      {% include '@palefire/includes/series-reel.html.twig' with { name: series.name, count: series_count, pack: series.pack } only %}
                       <span class="pf-series__row" aria-hidden="true">
                         <span class="pf-series__name">{{ series.name }}</span>
                         <span class="pf-series__count">{{ series_count }}</span>
                       </span>
                     </a>
+                    {% if series.description %}
+                      <span class="pf-series__text" id="{{ series_text_id }}" hidden>{{ series.description }}</span>
+                    {% endif %}
                   </li>
                 {% endfor %}
               </ul>
@@ -884,6 +912,8 @@
           {% else %}
             <p class="pf-series__intro"><a href="/v2/search?mode=special&amp;source%5B%5D=oral_histories">{{ 'Search the oral histories'|t }}</a></p>
           {% endif %}
+          </div>
+          </div>
         </section>
       {% endif %}
     {% endif %}

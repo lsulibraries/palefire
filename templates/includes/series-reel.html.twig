@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * An oral history series' card on Oral History's homepage: the tape deck's
+ * 7" reel, face on, behind a frosted case, the interview count on a band
+ * across the top and the series' name at the foot.
+ *
+ * The reel is the one on the deck (images/exhibit-deck.svg, build/
+ * exhibit-deck.js): flange 165, three windows from 142 to 64, hub 50. The
+ * tape wound on it shows the series' size (pack: its radius, from
+ * _palefire_oral_history_series(), the hub for none, 136 for the largest).
+ * Styled in _landing-features.scss (.pf-series-reel). Decorative: the
+ * card's link is named by its hidden line (landing.html.twig).
+ *
+ * Variables:
+ * - name: the series' name.
+ * - count: its interview count, as text ("12 interviews").
+ * - pack: the tape pack's radius, 50 to 136.
+ */
+#}
+<span class="pf-series-reel" aria-hidden="true">
+  <span class="pf-series-reel__count">{{ count }}</span>
+  <svg class="pf-series-reel__reel" viewBox="-170 -170 340 340" focusable="false">
+    <g class="pf-series-reel__turn">
+      <circle class="pf-series-reel__pack" r="{{ pack }}"/>
+      <circle class="pf-series-reel__core" r="50"/>
+      <path class="pf-series-reel__flange" fill-rule="evenodd" d="M165 0A165 165 0 1 1-165 0A165 165 0 1 1 165 0ZM-71 -123A142 142 0 0 1 71 -123L18.7 -61.2A64 64 0 0 0 -18.7 -61.2ZM142 0A142 142 0 0 1 71 123L43.6 46.8A64 64 0 0 0 62.4 14.4ZM-71 123A142 142 0 0 1 -142 0L-62.4 14.4A64 64 0 0 0 -43.6 46.8Z"/>
+      <circle class="pf-series-reel__hub" r="34"/>
+      <path class="pf-series-reel__spokes" d="M22 0L31 0M19.1 11L26.8 15.5M11 19.1L15.5 26.8M0 22L0 31M-11 19.1L-15.5 26.8M-19.1 11L-26.8 15.5M-22 0L-31 0M-19.1 -11L-26.8 -15.5M-11 -19.1L-15.5 -26.8M0 -22L0 -31M11 -19.1L15.5 -26.8M19.1 -11L26.8 -15.5"/>
+      <circle class="pf-series-reel__hub" r="6"/>
+    </g>
+  </svg>
+  <span class="pf-series-reel__name">{{ name }}</span>
+</span>

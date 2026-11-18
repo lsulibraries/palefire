@@ -19,7 +19,8 @@
  * drawer's "Reduce motion" (html.pf-a11y-motion): the view just changes.
  *
  * Oral History's series (.pf-series__views, landing.html.twig) open
- * folded: two rows of the grid, or five of the list, at the columns of the
+ * folded: two rows of the grid (four beside the tape deck, the stylesheet's
+ * --pf-fold-rows), or five of the list, at the columns of the
  * moment, then a "Show all" button that opens the rest in place, the first
  * of them taking focus. Opened, it says "Show less" and folds them again,
  * the page held so the button stays where it was under the pointer. The
@@ -129,7 +130,10 @@
         return;
       }
       const cols = getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
-      const shown = cols * (FOLD_ROWS[wrapper.dataset.pfView] || FOLD_ROWS.grid);
+      // The stylesheet may ask for more rows (--pf-fold-rows: the grid
+      // beside the tape deck, js/series-deck.js).
+      const rows = parseInt(getComputedStyle(list).getPropertyValue('--pf-fold-rows'), 10) || FOLD_ROWS[wrapper.dataset.pfView] || FOLD_ROWS.grid;
+      const shown = cols * rows;
       items.forEach((item, i) => {
         item.hidden = i >= shown;
       });

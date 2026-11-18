@@ -248,6 +248,15 @@ tile-views:
     - core/drupal
     - core/once
 
+# Oral History's series: the tape deck held beside them on wide screens.
+# Attached by includes/landing.html.twig with the series.
+series-deck:
+  js:
+    js/series-deck.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Staff directory (/v2/staff): search and the Department filter. Attached by
 # views-view--palefire-staff--directory.html.twig.
 staff-directory:

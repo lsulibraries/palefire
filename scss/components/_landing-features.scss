@@ -5874,16 +5874,16 @@ html.pf-a11y-motion .pf-hero-banner__map {
   color: var(--pf-section-fg, inherit);
 }
 
-// The series (exhibit-reel.html.twig, _exhibition.scss), Grid or List as
-// the Tile showcases (js/tile-views.js, data-pf-view on .pf-series__views,
-// the same remembered pick). Grid: on the showcases' columns and gutters,
-// 2, 3 from 36rem, 4 from 56rem, 5 from 72rem, each a reel in its box a
-// column wide, the series' name on the box and its interview count on top.
-// In hand the box clears a little and the reel behind it turns (it can't
-// roll out: the next box is a gutter away); its name takes the title
+// The series (series-reel.html.twig), Grid or List as the Tile showcases
+// (js/tile-views.js, data-pf-view on .pf-series__views, the same
+// remembered pick). Grid: on the showcases' columns and gutters, 2, 3 from
+// 36rem, 4 from 56rem, 5 from 72rem (three beside the deck), each card the
+// deck's reel wound to the series' size behind a frosted case, the count on
+// a faint band across the top, the name at the foot. In hand the case
+// clears, the reel turns a third of a turn and the name takes the title
 // color. List: ruled rows, the name and the count in tabular figures, one
-// column, two from 48rem, three from 72rem. The reel's mono and muted
-// tokens are the exhibition's, given here for the landing.
+// column, two from 48rem, three from 72rem. The mono and muted tokens are
+// the exhibition's, given here for the landing.
 .pf-series__list {
   --pf-exhibit-mono: var(--pf-landing-label, 'Consolas', 'Monaco', monospace);
   --pf-exhibit-muted: var(--pf-toc-color, var(--pf-g-muted, var(--bs-secondary-color)));
@@ -5928,43 +5928,154 @@ html.pf-a11y-motion .pf-hero-banner__map {
   color: var(--pf-section-fg, inherit);
   text-decoration: none;
 
-  .pf-exhibit-reel {
-    color: inherit;
-  }
-
-  // The box and the reel fill the column, one over the other; in hand
-  // neither moves.
-  :is(.pf-exhibit-reel__box, .pf-exhibit-reel__reel) {
-    left: 0;
-    width: 100%;
-    translate: 0 0;
-  }
-
-  .pf-exhibit-reel__box {
-    transition: background-color .5s ease;
-  }
-
-  // A series' name is longer than a clip's title: five lines.
-  .pf-exhibit-reel__title {
-    font-size: clamp(.9375rem, 10cqi, 1.5rem);
-    -webkit-line-clamp: 5;
-    line-clamp: 5;
-    transition: color .5s ease;
-  }
-
-  &:is(:hover, :focus-visible) {
-    .pf-exhibit-reel__box {
-      background-color: color-mix(in srgb, var(--pf-g-bg, var(--bs-body-bg)) 62%, transparent);
-    }
-
-    :is(.pf-exhibit-reel__title, .pf-series__name) {
-      color: var(--pf-g-title, var(--pf-toc-active));
-    }
+  &:is(:hover, :focus-visible) :is(.pf-series-reel__name, .pf-series__name) {
+    color: var(--pf-g-title, var(--pf-toc-active));
   }
 
   &:focus-visible {
     outline: 2px solid var(--pf-landing-accent, currentcolor);
     outline-offset: 4px;
+  }
+}
+
+// A series card (series-reel.html.twig): the reel under a frosted case
+// (::before, a 3px backdrop blur with a faint sheen from the top left),
+// the count and the name over both. The tape is a brown mixed into the
+// page, so it reads in either theme.
+.pf-series-reel {
+  --pf-series-bg: var(--pf-g-bg, var(--bs-body-bg));
+  position: absolute;
+  inset: 0;
+  container-type: inline-size;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  border: 1px solid #{$pf-hairline};
+  transition: border-color .5s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, currentcolor 7%, transparent), transparent 42%),
+      color-mix(in srgb, var(--pf-series-bg) 38%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, currentcolor 10%, transparent);
+    -webkit-backdrop-filter: blur(3px) saturate(1.1);
+    backdrop-filter: blur(3px) saturate(1.1);
+  }
+
+  .pf-series__link:is(:hover, :focus-visible) & {
+    border-color: color-mix(in srgb, currentcolor 45%, transparent);
+
+    &::before {
+      background: linear-gradient(135deg, color-mix(in srgb, currentcolor 4%, transparent), transparent 42%);
+      -webkit-backdrop-filter: blur(0) saturate(1);
+      backdrop-filter: blur(0) saturate(1);
+    }
+  }
+}
+
+.pf-series-reel__count {
+  position: relative;
+  z-index: 2;
+  padding: 4.6% 6%;
+  font: clamp(.5625rem, 4.4cqi, .75rem)/1.2 var(--pf-exhibit-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: color-mix(in srgb, currentcolor 82%, transparent);
+  background: color-mix(in srgb, #000 10%, transparent);
+  transition: background-color .5s ease;
+
+  .pf-series__link:is(:hover, :focus-visible) & {
+    background: color-mix(in srgb, #000 14%, transparent);
+  }
+}
+
+.pf-series-reel__reel {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  z-index: 0;
+  width: 99%;
+  height: auto;
+  overflow: visible;
+  translate: -50% -50%;
+
+  :is(circle, path) {
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+}
+
+.pf-series-reel__turn {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.pf-series-reel__pack {
+  fill: color-mix(in srgb, #7a604a 75%, var(--pf-series-bg));
+}
+
+.pf-series-reel__core {
+  fill: var(--pf-series-bg);
+}
+
+.pf-series-reel__flange {
+  fill: var(--pf-series-bg);
+  fill-opacity: .8;
+  stroke: color-mix(in srgb, currentcolor 26%, transparent);
+}
+
+.pf-series-reel__hub {
+  fill: color-mix(in srgb, currentcolor 6%, var(--pf-series-bg));
+  stroke: color-mix(in srgb, currentcolor 30%, transparent);
+}
+
+.pf-series-reel__spokes {
+  fill: none;
+  stroke: color-mix(in srgb, currentcolor 30%, transparent);
+}
+
+// A series' name is longer than a clip's title: five lines.
+.pf-series-reel__name {
+  position: relative;
+  z-index: 2;
+  grid-row: 3;
+  display: -webkit-box;
+  margin: 0 6% 6.5%;
+  overflow: hidden;
+  font: 500 clamp(.9375rem, 9cqi, 1.5rem)/1.12 $pf-font-display-serif;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  transition: color .5s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) {
+    .pf-series-reel::before {
+      transition: backdrop-filter .5s cubic-bezier(.2, .7, .2, 1), -webkit-backdrop-filter .5s cubic-bezier(.2, .7, .2, 1), background .5s ease;
+    }
+
+    .pf-series-reel__turn {
+      transition: rotate 1.1s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-series__link:is(:hover, :focus-visible) .pf-series-reel__turn {
+      rotate: -120deg;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-series-reel::before {
+    display: none;
   }
 }
 
@@ -5983,7 +6094,7 @@ html.pf-a11y-motion .pf-hero-banner__map {
     aspect-ratio: auto;
   }
 
-  .pf-exhibit-reel {
+  .pf-series-reel {
     display: none;
   }
 
@@ -6065,7 +6176,7 @@ html.pf-a11y-motion .pf-hero-banner__map {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-series__link :is(.pf-exhibit-reel__box, .pf-exhibit-reel__title, .pf-series__name) {
+  .pf-series__link :is(.pf-series-reel, .pf-series-reel__count, .pf-series-reel__name, .pf-series__name) {
     transition: none;
   }
 
@@ -6076,6 +6187,155 @@ html.pf-a11y-motion .pf-hero-banner__map {
 
 html.pf-a11y-motion .pf-series__item.is-unfolding {
   animation: none;
+}
+
+// Beside the tape deck (js/series-deck.js, .has-deck from 64rem): five
+// columns on the grid's gutter, the heading, intro and deck held on the
+// first two (sticky under the header and page bar) with a hairline the
+// height of the screen down the gutter, the series on the other three
+// (their own container, three columns of cards, four rows before Show
+// all). The deck is as large as the column allows and still fits on
+// screen with its caption. Its tones are the exhibitions' (.pf-deck__svg,
+// _exhibition.scss); while a series goes on it the reels run, PLAY lights,
+// the pinch roller presses in and the needles lift.
+.pf-series__deck {
+  --pf-deck-bg: var(--pf-g-bg, var(--bs-body-bg));
+  --pf-deck-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  --pf-deck-lit: color-mix(in srgb, var(--pf-deck-gold) 45%, var(--pf-deck-bg));
+  display: grid;
+  gap: 1.25rem;
+  color: var(--pf-g-fg, var(--bs-body-color));
+
+  &[hidden] {
+    display: none;
+  }
+
+  &.is-playing .pf-deck__svg .key-play {
+    fill: var(--pf-deck-lit);
+  }
+}
+
+.pf-series__machine {
+  width: min(100%, calc((100svh - var(--pf-series-top, 8rem) - 23rem) * .8177));
+  aspect-ratio: .8177;
+}
+
+.pf-series__now {
+  display: grid;
+  gap: .375rem;
+  min-width: 0;
+}
+
+.pf-series__now-label,
+.pf-series__now-count {
+  @extend %pf-landing-label;
+  color: var(--pf-toc-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-series__now-name {
+  margin: 0;
+  font: 500 clamp(1.125rem, 1.5vw, 1.4375rem)/1.15 $pf-font-display-serif;
+  text-wrap: balance;
+}
+
+// Three lines kept free, so the deck does not jump for a shorter one.
+.pf-series__now-text {
+  max-width: 52ch;
+  min-height: 4.5em;
+  margin: .125rem 0 .25rem;
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: color-mix(in srgb, currentcolor 78%, transparent);
+  text-wrap: pretty;
+
+  &:empty {
+    min-height: 0;
+  }
+}
+
+.pf-series__now-open {
+  @extend %pf-landing-label;
+  justify-self: start;
+  margin-top: .375rem;
+  padding-bottom: .3rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--pf-deck-gold);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) {
+    .pf-series__now :is(.pf-series__now-name, .pf-series__now-text) {
+      transition: opacity .2s ease;
+    }
+
+    .pf-series__now.is-swapping :is(.pf-series__now-name, .pf-series__now-text) {
+      opacity: 0;
+    }
+
+    .pf-series__deck .pf-deck__svg .needle {
+      transition: rotate .6s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-series__deck.is-playing .pf-deck__svg {
+      .spin {
+        animation-play-state: running;
+      }
+
+      .pinch {
+        translate: -5.22px -6.33px;
+      }
+
+      .needle {
+        rotate: -12deg;
+      }
+    }
+  }
+}
+
+@media (min-width: 64rem) {
+  .pf-series.has-deck {
+    --pf-series-gap: clamp(1.25rem, 2.25vw, 2rem);
+    --pf-series-top: calc(var(--pf-header-h) + 4.5rem);
+
+    .pf-series__split {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      column-gap: var(--pf-series-gap);
+      align-items: start;
+    }
+
+    .pf-series__side {
+      position: sticky;
+      top: var(--pf-series-top);
+      display: grid;
+      gap: clamp(1.5rem, 2.5vw, 2.25rem);
+      align-content: start;
+      grid-column: 1 / span 2;
+      min-height: calc(100svh - var(--pf-series-top) - 1.5rem);
+      // The hairline runs down the middle of the gutter.
+      margin-right: calc(var(--pf-series-gap) / -2);
+      padding-right: calc(var(--pf-series-gap) / 2 + clamp(.5rem, 1.5vw, 1.5rem));
+      border-right: 1px solid #{$pf-hairline};
+    }
+
+    .pf-series__intro {
+      margin-bottom: 0;
+    }
+
+    .pf-series__body {
+      container: pf-series / inline-size;
+      grid-column: 3 / span 3;
+      min-width: 0;
+    }
+
+    .pf-series__views[data-pf-view="grid"] .pf-series__list {
+      --pf-cols: 3;
+      --pf-gap: var(--pf-series-gap);
+      --pf-fold-rows: 4;
+    }
+  }
 }
 
 // The map banner in hand: the title stays solid, as under an event (the

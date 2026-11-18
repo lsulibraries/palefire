@@ -752,8 +752,14 @@ function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variab
  * series (no words, oral_histories:series:<name>). The index's list tag
  * redraws it when records change.
  *
+ * Each row also has its short description, when the theme has one
+ * (_palefire_oral_history_series_descriptions()), and the radius its tape
+ * pack is wound to on its card's reel (includes/series-reel.html.twig): the
+ * pack's area grows with the count, from the hub (50) to full (136) for the
+ * largest series.
+ *
  * @return array
- *   [name, count, url] rows, or [] without the module.
+ *   [name, count, url, description, pack] rows, or [] without the module.
  */
 function _palefire_oral_history_series(array &$variables): array {
   if (!\Drupal::hasService('palefire_search.local')) {
@@ -768,11 +774,15 @@ function _palefire_oral_history_series(array &$variables): array {
   }
   $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], ['search_api_list:bento_search']);
   $rows = [];
+  $descriptions = _palefire_oral_history_series_descriptions();
+  $max = max(1, ...array_map('intval', array_values($counts) ?: [1]));
   foreach ($counts as $name => $count) {
     if ($count > 0) {
       $rows[] = [
         'name' => (string) $name,
         'count' => (int) $count,
+        'description' => $descriptions[strtr((string) $name, ["'" => '’'])] ?? '',
+        'pack' => round(sqrt(2500 + (18496 - 2500) * min(1, $count / $max)), 1),
         'url' => '/v2/search?' . http_build_query([
           'mode' => 'special',
           'source' => ['oral_histories'],
@@ -782,6 +792,50 @@ function _palefire_oral_history_series(array &$variables): array {
     }
   }
   return $rows;
+}
+
+/**
+ * Short descriptions of the oral history series, by name.
+ *
+ * From the Williams Center's former series page (the line under each
+ * series' name), with straight apostrophes as ’ (names are matched that
+ * way). Series added since have none yet; their deck caption simply has no
+ * description (Oral History's homepage, js/series-deck.js).
+ *
+ * @return string[]
+ *   Description by series name.
+ */
+function _palefire_oral_history_series_descriptions(): array {
+  return [
+    'Acadian Handicraft Project' => 'Recollections from women involved with the Acadian Handicraft Project (1942–1962) supported by the General Education Board to sustain French language and culture in Louisiana.',
+    'Adrienne LaCour - Four Corners Series' => 'Focuses on land use patterns and community history in the predominately African American community of Four Corners, located near New Iberia, Louisiana.',
+    'Americans in Vietnam' => 'Interviews with American servicemen and Vietnamese civilians living in America around the time the Vietnam War was ending in the mid-1970s.',
+    'Baton Rouge’s LGBTQ Community: Then and Now' => 'Narratives from LGBTQ individuals in Baton Rouge, Louisiana.',
+    'Baton Rouge Blues' => 'Focusing on Baton Rouge-area blues musicians and the history of blues music in the city.',
+    'Baton Rouge History and Culture' => 'Documenting the culture and history of the city of Baton Rouge, Louisiana.',
+    'Baton Rouge Insurance Industry' => 'Interviews with insurance industry leaders in Baton Rouge.',
+    'Bayou Lafourche Oral History Project' => 'Dr. Mike Pasquier conducted these interviews to better understand the role of religion in the life of residents along Louisiana’s Bayou Lafourche.',
+    'British Voices from South Asia' => 'Experiences of Britons who lived and worked in pre-independence India, focusing on the contact of cultures and cultural identity.',
+    'Brusly Centennial Oral History Project' => 'Focusing on the history of the town of Brusly in West Baton Rouge Parish, Louisiana.',
+    'Civil Rights Series' => 'Documenting the Civil Rights Movement in Baton Rouge and surrounding parishes.',
+    'Gillis Long Series' => 'Interviews with friends and critics of Democratic Congressman Gillis Long.',
+    'History of Louisiana Cooperative Extension Services' => 'Documenting the impact of Cooperative Extension Services on the state of Louisiana.',
+    'Hurricane Betsy Survivor Stories' => 'Residents of New Orleans’ Lower Ninth Ward recall how they survived Hurricane Betsy in 1965 and the aftermath of the storm.',
+    'Louisiana Sea Grant Coastal Change Oral Histories Project' => 'South Louisiana high school students interviewed members of their communities about the effects of coastal change.',
+    'McKinley High School Oral History Project' => 'McKinley High school students, with assistance from faculty and students from LSU’s College of Education, conducted interviews on African American experiences in Baton Rouge.',
+    'Michael Mulhern Centenarians Series' => 'Centenarians recall life under slavery and service in the Spanish American War.',
+    'Military Series' => 'Documenting Louisiana’s military tradition, primarily focusing on World War II.',
+    'Perique Tobacco' => 'Documenting the cultivation and processing of Perique tobacco, one of Louisiana’s most unique agricultural products.',
+    'Political Series' => 'Focusing on Louisiana’s rich political history.',
+    'Robert Ray Cox Series' => 'Chronicles the restoration and landscaping of the gardens of the Shadows on the Teche, a historic home in New Iberia, Louisiana.',
+    'Sue Hebert Series' => 'Documenting the local history of Plaquemine, Bayou Sorrel and Bayou Chene, in the Atchafalaya Basin area of Louisiana.',
+    'University History' => 'Interviews with faculty, staff, and alumni conducted by LSU Recording Services and Williams Center staff, volunteers, and graduate students.',
+    'Various Topics' => 'Biographical and local history interviews on multiple topics.',
+    'Volunteers of America' => 'Focusing on the history of the Baton Rouge chapter of the Volunteers of America.',
+    'West Baton Rouge Parish Remembrance' => 'The history, experiences, and contributions of African Americans in West Baton Rouge Parish, Louisiana.',
+    'WJBO Radio Interviews' => 'Recordings of interviews broadcast on WJBO’s radio program "Topic Today" in the 1970s.',
+    'Women’s Council of Greater Baton Rouge' => 'Focuses on prominent Baton Rouge-area women and women’s rights activism.',
+  ];
 }
 
 /**
