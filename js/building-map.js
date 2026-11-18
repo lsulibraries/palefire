@@ -607,6 +607,11 @@
       hereRegion.setAttribute('aria-current', 'location');
       const hereLabel = labels.find((l) => l.dataset.mapLabel === hereKey);
       if (hereLabel) hereLabel.classList.add('is-here');
+      // Its floor's name in the highlight color too (data-map-floor lists
+      // the rooms on that floor).
+      root.querySelectorAll('[data-map-floor]').forEach((floor) => {
+        floor.classList.toggle('is-lit', floor.dataset.mapFloor.split(' ').includes(hereKey));
+      });
       const marker = document.createElementNS(SVG_NS, 'g');
       marker.setAttribute('class', 'pf-map__here');
       marker.setAttribute('aria-hidden', 'true');

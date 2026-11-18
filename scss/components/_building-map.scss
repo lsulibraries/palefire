@@ -488,6 +488,11 @@
    64): lightened a quarter, 5.3:1. Every other dark swatch's accent is
    4.75:1 or more. */
 html[data-pf-theme="solarized"] .pf-map__label.is-here.is-active { fill: color-mix(in srgb, var(--pf-map-hover) 75%, #fff); }
+/* The lit room's floor name (FLOOR 2) in the accent as well, so the floor
+   reads with the room. Set by the map's lit (Twig) or data-map-here
+   (building-map.js). Same color as the lit name, solarized lightened. */
+.pf-map__label--floor.is-lit { fill: var(--pf-map-hover); }
+html[data-pf-theme="solarized"] .pf-map__label--floor.is-lit { fill: color-mix(in srgb, var(--pf-map-hover) 75%, #fff); }
 /* The name's cut-out: the hatch cleared in an even margin around the here
    room's name (building-map.js sizes it from the letters), on the name's
    own angle, so the name reads on the frosted photo, not over the dots.

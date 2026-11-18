@@ -183,6 +183,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Focus pull scoped to `.pf-series.has-deck .pf-series__link:hover:not(:focus-visible)`.
+- **2026-11-18:** Map: `.pf-map__label--floor.is-lit` (fill `--pf-map-hover`) when the lit or here room is on that floor; `data-map-floor` on a floor name lists its rooms.
 - **2026-11-18:** `.pf-series__link:hover:not(:focus-visible)` (in `@media (hover: hover) and (forced-colors: none)`): `.pf-series-reel__name` and `.pf-series-reel__count` at `opacity: .35; filter: blur(2px)`; transition .5s `cubic-bezier(.2, .7, .2, 1)` under the motion guard.
 - **2026-11-18:** `.pf-series.has-deck .pf-series__side`: `max-height: calc(100svh - var(--pf-series-top) - 1.5rem)` (was `height`). `.pf-series__deck`: `flex: 0 1 auto`. `.pf-series__machine`: `flex: 0 1 auto; width: 100%; aspect-ratio: .8177; min-height: 12rem` (was `flex: 1 1 0`, `max-height: 40rem`).
 - **2026-11-18:** Series deck tape: `wind()` in `js/series-deck.js` sets the supply reel (pack0, edge0, the ribbon) to a share 0.06–1 of a full reel; pack1/edge1 stay at a few turns (4%).
@@ -214,6 +216,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 - **2026-11-18:** Footer versions: Oral History (`.pf-footer--oral-history`, aliases starting `/v2/oralhistory`), Special Collections (`.pf-footer--special`), Main Library. One layout; content in `includes/footer.html.twig`'s `footers` map.
 - **2026-11-18:** `.pf-tiles--wide-frames` removed: no showcase has 21:9 frames, and Oral History's pages have no gallery rule of their own; `.pf-tiles--whole` only when every card is a whole wide cover.
 - **2026-11-18:** Podcast picture box `.pf-podcast__art` (square, `container-type: size`, max 14rem): the cover and, while an episode is loaded, `.pf-deck` (top plate) stacked in one grid cell; `.is-decked` cross-fades them (.6s). `.pf-deck.is-playing` turns the reels as the object view does.
+- **2026-11-18:** Ledger hover photos inside a Quick Start: the layer goes in  (top , left and width set by the script to the page’s), and  hangs under  (absolute, ).
 - **2026-11-18:** Before you visit: the note-link underline is `.pf-quick-guide__visit li a:not(.pf-quick-guide__link)`; the buttons stay plain. Cover hero before ledger photos: `.pf-section:first-child:has(.pf-landing--cover):has(+ .pf-section.has-ledger-photos) > .pf-section__inner { padding-bottom: 0 }`. Podcast: `.pf-podcast__all` only without episodes.
 - **2026-11-17:** Hero search key hint (`.pf-landing__key`, `js/search-field.js`): a `kbd` (Ctrl K / ⌘K) in a `$pf-hairline` box, mono label at `.08em` in `--pf-toc-color`, a flex item between `.pf-landing__input` and the Search button with `.5rem 1rem` inline padding, for hover/fine pointers from 62rem only; it fades out on focus and is hidden once the field has words. It carries the field’s 2px gold hover line on (`.15s linear` after `.3s`, folded to 0 on focus like the input’s). Typed examples run in the field’s own placeholder color. None with reduced motion; hidden in print.
 - **2026-11-17:** Reading rail column (`.pf-modular--toc-rail > .pf-sidebar`, lg+): `pointer-events: none` on the column, `auto` on `.pf-toc`, so the empty column never covers what is under it (the hero's Pause button).
