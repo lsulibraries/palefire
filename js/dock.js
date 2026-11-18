@@ -111,6 +111,8 @@
     let hidden = false;
     let covered = false;
     let aside = false;
+    let waiting = false;
+    let heroWatch = null;
     let current = null;
     let settleTimer = 0;
     let dupTimer = 0;
@@ -121,7 +123,7 @@
     /* ---------------- On and off ---------------- */
 
     function syncInert() {
-      dock.inert = !config || hidden || covered || aside;
+      dock.inert = !config || hidden || covered || aside || waiting;
       if (tab) {
         tab.inert = covered;
       }
@@ -798,6 +800,40 @@
       tab.addEventListener('click', () => show(true));
     }
 
+    // A hero with its film as a full-screen poster (.pf-landing--wash, under
+    // 768px): the dock waits below the screen while the hero's search is
+    // in view, so the search at the poster's foot shows whole, and comes up
+    // once it has scrolled away; back at the top, it goes down again. Not
+    // while a panel is open. Separate from Hide (the user's own choice,
+    // stored): a waiting dock shows no tab.
+    function wait(on) {
+      const next = on && !open;
+      if (next === waiting) {
+        return;
+      }
+      waiting = next;
+      dock.classList.toggle('is-waiting', waiting);
+      syncInert();
+    }
+
+    function watchHero() {
+      if (heroWatch) {
+        heroWatch.disconnect();
+        heroWatch = null;
+      }
+      const search = document.querySelector('#swup .pf-landing--wash .pf-landing__form');
+      if (!search || !('IntersectionObserver' in window)) {
+        wait(false);
+        return;
+      }
+      heroWatch = new IntersectionObserver((entries) => {
+        wait(!MD.matches && entries[entries.length - 1].isIntersecting);
+      });
+      heroWatch.observe(search);
+    }
+
+    MD.addEventListener('change', watchHero);
+
     // Swipe down on the grabber or the row to hide; up on the tab to show.
     function swipe(el, down, act) {
       let start = null;
@@ -944,8 +980,14 @@
       dock.classList.add('is-hidden');
     }
 
+    watchHero();
+
     return {
-      readConfig,
+      // Each Swup visit: the new page's settings, and its hero (if any).
+      readConfig() {
+        readConfig();
+        watchHero();
+      },
       close: () => closePanel(false, true),
       openContents(opener) {
         if (!config || MD.matches || tocButton.hidden) {

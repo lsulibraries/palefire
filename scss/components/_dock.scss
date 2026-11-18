@@ -129,7 +129,7 @@ html[data-pf-dock] .offcanvas {
     transition: display 0s var(--pf-dock-dur) allow-discrete;
   }
 
-  html.pf-dock-on .pf-dock:is(.is-hidden, .is-aside) + .pf-dock-foot {
+  html.pf-dock-on .pf-dock:is(.is-hidden, .is-aside, .is-waiting) + .pf-dock-foot {
     display: none;
     transition-delay: 0s;
   }
@@ -148,7 +148,8 @@ html[data-pf-dock] .offcanvas {
     transition: transform var(--pf-dock-dur) var(--pf-dock-ease), visibility 0s;
 
     &.is-hidden,
-    &.is-aside {
+    &.is-aside,
+    &.is-waiting {
       visibility: hidden;
       transform: translateY(calc(100% + 1px));
       transition: transform var(--pf-dock-dur) var(--pf-dock-ease), visibility 0s var(--pf-dock-dur);

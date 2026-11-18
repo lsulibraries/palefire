@@ -4256,6 +4256,128 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
   }
 }
 
+// --- Narrow, Video in the main column: the film as a poster --------------------
+// A hero whose Video is a main-column option (.pf-landing--wash, its
+// variants below) shows the film on phones as the first screen itself: the
+// building whole across the top, the kicker, title, hours, intro and
+// search at the screen's foot, as an exhibition poster. The film spans the
+// type's two rows from under the header (its negative margin takes back
+// the header and the lead's top padding) and is at least a screen tall
+// (100svh, so the iOS toolbar never resizes it); the type's row is the
+// flexible one (1fr), so the slack goes above the type, which sits at its
+// foot (align-self: end), and the search ends one gutter above the
+// screen's foot. Where a screen is shorter than the type, the rows simply
+// grow and the film runs behind all of it.
+// Contrast without veiling the picture: a black band under the header
+// (75% to 8.5rem, gone by 14rem: 75% black is what holds every header,
+// breadcrumb and Pause text at 4.5:1 over a white frame, the location
+// backdrop's gray-64 ceiling), and the wash's veil (the page color at 82%,
+// as on wider screens) on the type block's ::before, fading in over the
+// 8rem above the kicker and reaching 8rem below the search, so it follows
+// the type wherever it lands. The film's foot fades into the page, so
+// the Quick Start rises out of it with no edge. The film has no stacking
+// context of its own (its pictures go under at -2, the veils at -1), so
+// its Pause button, in the band between the breadcrumb and the kicker at
+// the type's right edge, is never under a veil (WCAG 2.2.2). The hours
+// dock waits while the search is on screen (js/dock.js, .is-waiting), and
+// hides again when the search scrolls back into view.
+$pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
+
+@container pf-cover (width < 44rem) {
+  #{$pf-wash-narrow} {
+    --pf-wash-bg: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
+    --pf-wash-veil: color-mix(in srgb, var(--pf-wash-bg) 82%, transparent);
+    --pf-poster-lift: calc(var(--pf-bleed-block-start, var(--pf-header-h, 0px)) + var(--pf-cover-top, 0px));
+    grid-template-rows: minmax(0, 1fr) auto;
+    isolation: isolate;
+
+    // The type is a layer of its own (isolation), so its veil (z-index -1)
+    // lies over the film and under the type; it runs on under the search
+    // (a later layer, so above it) and its gutter.
+    .pf-landing__top {
+      align-self: end;
+      isolation: isolate;
+    }
+
+    .pf-landing__top::before {
+      content: "";
+      position: absolute;
+      inset: -8rem calc(-1 * var(--pf-cover-gutter)) -8rem;
+      z-index: -1;
+      background: linear-gradient(transparent, var(--pf-wash-veil) 8rem);
+      pointer-events: none;
+    }
+
+    // No fade as it leaves (the frame's, above): it would make the film a
+    // layer of its own, over the veil, and fade its Pause button with it.
+    .pf-landing__media {
+      position: relative;
+      grid-row: 1 / 3;
+      align-self: stretch;
+      animation: none;
+      z-index: auto;
+      height: auto;
+      min-height: 100svh;
+      max-height: none;
+      aspect-ratio: auto;
+      margin: calc(-1 * var(--pf-poster-lift)) 0 0;
+      overflow: hidden;
+    }
+
+    .pf-landing__media .pf-landing__bg-video {
+      z-index: -2;
+      object-position: 50% 40%;
+    }
+
+    .pf-landing__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(rgb(0 0 0 / .75) 8.5rem, rgb(0 0 0 / 0) 14rem),
+        linear-gradient(transparent calc(100% - var(--pf-grid-gutter)), var(--pf-wash-bg));
+      pointer-events: none;
+    }
+
+    .pf-landing__media .pf-landing__film-bar {
+      inset: calc(var(--pf-bleed-block-start, var(--pf-header-h, 0px)) + var(--pf-landing-bar-h, 0px)) var(--pf-cover-gutter) auto auto;
+      z-index: 2;
+      padding: 0;
+      color: $pf-white;
+      background-image: none;
+      pointer-events: auto;
+    }
+
+    .pf-landing__film-caption {
+      display: none;
+    }
+  }
+
+  // Black and white, as on wider screens. No filter (dark swatches): the
+  // type's veil off, the band under the header and the foot's fade kept.
+  html:root .pf-landing.pf-landing--cover.pf-landing--wash.pf-landing--wash-mono > .pf-landing__lead.pf-landing__lead--hero .pf-landing__media .pf-landing__bg-video {
+    filter: grayscale(1);
+  }
+
+  html.pf-reading-dark:root .pf-landing.pf-landing--cover.pf-landing--wash.pf-landing--wash-none > .pf-landing__lead.pf-landing__lead--hero {
+    --pf-wash-veil: transparent;
+  }
+}
+
+// The highlights' lead picture rises over the film's frame on phones
+// (below, "Back up over the film"); with the film behind the first screen
+// there is no frame there, so the list stays under the search, in its row.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @container pf-cover (width < 44rem) {
+      html:not(.pf-a11y-motion) .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero .pf-hero-banners:has(> .pf-hero-banner:first-child:not(.pf-hero-banner--blog)) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
 // --- Highlights as a compact strip (review option 3) ---------------------------
 // The Quick Start comes first, so from 44rem the banners step back to a
 // strip: one row, each item a 16:10 picture with its category and then its
