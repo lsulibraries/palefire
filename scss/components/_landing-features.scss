@@ -6084,8 +6084,12 @@ html.pf-a11y-motion .pf-hero-banner__map {
       transition: rotate 1.1s cubic-bezier(.2, .7, .2, 1);
     }
 
+    // The reel turns once the focus pull has mostly settled (its .5s ease
+    // is most of the way at .4s), so the two don't happen at once; it turns
+    // back at once when the pointer leaves.
     .pf-series__link:is(:hover, :focus-visible) .pf-series-reel__turn {
       rotate: -120deg;
+      transition-delay: .4s;
     }
   }
 }
