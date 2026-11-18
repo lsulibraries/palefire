@@ -111,6 +111,16 @@
       mark.style.setProperty('--pf-pack-right', right);
       drawTape(mark, 'left', left);
       drawTape(mark, 'right', right);
+      // Pointed at, the tape winds on or off the left pack: the reels turn
+      // by the length that moved (the pack's area, two turns for a full
+      // reel), the way a rewind turns them. Playing, they spin instead.
+      const before = Number(mark.dataset.pfPackLeft || left);
+      if (!playing) {
+        const turn = Number(mark.dataset.pfReelTurn || 0) + (left * left - before * before) * 720;
+        mark.dataset.pfReelTurn = turn.toFixed(1);
+        mark.style.setProperty('--pf-reel-turn', `${turn.toFixed(1)}deg`);
+      }
+      mark.dataset.pfPackLeft = left;
       const type = mark.querySelector('.pf-cassette__type--end');
       if (type && length) {
         type.textContent = Drupal.t('ORAL HISTORY · @time', { '@time': length });

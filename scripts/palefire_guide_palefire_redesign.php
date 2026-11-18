@@ -614,6 +614,7 @@ HTML),
 <li>What Endures: the tape inside the cassette now has depth: each run of tape is a ribbon seen at the cassette’s angle, and the reels show their sides, so they read as discs of tape.</li>
 <li>What Endures: the tape now curves smoothly onto each reel and fades into the reel’s color as it winds on, following the reels as they fill and empty.</li>
 <li>What Endures: the cassette and recorder drawings no longer use pure black; their darkest shades are a warm near-black, and the cassette’s two holes are now open.</li>
+<li>What Endures: the cassette’s two holes now go right through it, and its reels turn as the tape winds on or off for each episode you point at.</li>
 </ul>
 HTML),
 ]);

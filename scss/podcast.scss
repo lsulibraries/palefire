@@ -578,6 +578,14 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
+// The two holes in the foot, through the whole cassette: a mask over the
+// mark and its blur, as ellipses of the 252 x 160 box (holes at 88 and 152,
+// 149, cut at r 2.7, inside the lit wall).
+$pf-cassette-hole: 1.07% 1.69%;
+$pf-cassette-holes:
+  radial-gradient($pf-cassette-hole at 34.92% 93.13%, transparent 96%, #000 100%),
+  radial-gradient($pf-cassette-hole at 60.32% 93.13%, transparent 96%, #000 100%);
+
 .pf-podcast-head__tape::before {
   content: "";
   position: absolute;
@@ -589,6 +597,14 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 
 .pf-podcast-head__tape .pf-cassette {
   position: relative;
+}
+
+.pf-podcast-head__tape::before,
+.pf-cassette {
+  -webkit-mask-image: $pf-cassette-holes;
+  -webkit-mask-composite: source-in;
+  mask-image: $pf-cassette-holes;
+  mask-composite: intersect;
 }
 
 $pf-cassette-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
@@ -803,7 +819,8 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   stroke-width: 1.1;
 }
 
-// The holes go through: open, only their rims drawn.
+// The holes go through: the drawing and its blur are masked there
+// ($pf-cassette-holes), so only their rims and lit walls are drawn.
 .pf-cassette__hole {
   fill: none;
 }
@@ -950,6 +967,13 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
 
     .pf-cassette.is-playing .pf-cassette__reel {
       animation: pf-cassette-spin 3.2s linear infinite;
+    }
+
+    // As an episode is pointed at, its tape winds on or off: the reels turn
+    // by the length that moved, with the packs (js/podcast.js).
+    .pf-cassette__reel {
+      rotate: var(--pf-reel-turn, 0deg);
+      transition: rotate .6s cubic-bezier(.2, .7, .2, 1);
     }
   }
 }
