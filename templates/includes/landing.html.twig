@@ -358,7 +358,13 @@
           <span class="pf-landing__hours-dot" aria-hidden="true"></span>
           <span data-pf-hours-status>{{ 'Hours'|t }}</span>
         </span>
-        <a class="pf-landing__hours-link" href="#{{ input_id }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+        {# A unit's homepage has no Visit strip (hero_index.hours): today's
+           hours as text, with no week to go down to. #}
+        {% if hero_index.hours %}
+          <a class="pf-landing__hours-link" href="#{{ input_id }}-visit-hours" data-pf-hours-jump><span class="pf-landing__hours-today" data-pf-hours-today></span><span class="visually-hidden">{{ ', this week’s hours'|t }}</span></a>
+        {% else %}
+          <span class="pf-landing__hours-link pf-landing__hours-link--text"><span class="pf-landing__hours-today" data-pf-hours-today></span></span>
+        {% endif %}
       </p>
     {% endif %}
     {% if landing_intro %}
@@ -524,17 +530,21 @@
         <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
           {% if hero_map_banner %}
             <li class="pf-hero-banner pf-hero-banner--map">
-              {# Find us: down to Hours and directions (a unit's homepage has
-                 no map section), else the room's page. #}
-              <a class="pf-hero-banner__link" href="{{ toc_hours_id ? '#' ~ toc_hours_id : (hero_map_banner.url ?: '#' ~ (toc_map_id ?: hero_map_banner.anchor)) }}">
+              {# Find us: down to Hours and directions when the page has it,
+                 else the room's page, else directions in Google Maps (a new
+                 tab). In hand, the building's photo takes the drawing's
+                 place (.pf-hero-banner__photo, _landing-features.scss). #}
+              {% set map_out = not toc_hours_id and not hero_map_banner.url and visit.maps_url %}
+              <a class="pf-hero-banner__link" href="{{ toc_hours_id ? '#' ~ toc_hours_id : (hero_map_banner.url ?: (visit.maps_url ?: '#' ~ (toc_map_id ?: hero_map_banner.anchor))) }}"{% if map_out %} target="_blank" rel="noopener"{% endif %}>
                 <span class="pf-hero-banner__media pf-hero-banner__media--map" aria-hidden="true">
+                  <span class="pf-hero-banner__photo"></span>
                   <span class="pf-hero-banner__map">
                     {% include hero_map_banner.template with { uid: input_id ~ '-banner-map', spaces: hero_map_banner.spaces, static: true, lit: hero_map_banner.lit } only %}
                   </span>
                 </span>
                 <span class="pf-hero-banner__text">
                   <span class="pf-hero-banner__label">{{ 'Floor @n · @building'|t({ '@n': hero_map_banner.floor, '@building': hero_map_banner.building }) }}</span>
-                  <span class="pf-hero-banner__title">{{ 'Find us: @room'|t({ '@room': hero_map_banner.title }) }}</span>
+                  <span class="pf-hero-banner__title">{{ 'Find us: @room'|t({ '@room': hero_map_banner.title }) }}{% if map_out %}<span class="visually-hidden">{{ ', directions (opens in a new tab)'|t }}</span>{% endif %}</span>
                 </span>
               </a>
             </li>
@@ -632,7 +642,7 @@
         text: quick_guide.link_text ?: (oral_history ? 'Collections'|t : 'Full guide'|t),
         hidden: quick_guide.link_text or quick_guide.url ? '' : (oral_history ? ': Oral history finding aids'|t : ': How to Use Special Collections'|t),
       } : {} %}
-      {% set quick_hours = hero and visit.lid ? { href: '#' ~ input_id ~ '-visit-hours', lid: visit.lid } : {} %}
+      {% set quick_hours = hero and visit.lid and hero_index.hours ? { href: '#' ~ input_id ~ '-visit-hours', lid: visit.lid } : {} %}
       <div{% if toc_start_id %} id="{{ toc_start_id }}" tabindex="-1"{% endif %} class="pf-quick-guide{{ quick_tabs ? ' pf-quick-guide--tabs' }}" aria-labelledby="{{ quick_id }}" role="region">
         {% if not quick_tabs %}
           {{ pf.index_rule(hero_index.guide, 'Start your research'|t, guide_link) }}
@@ -966,8 +976,9 @@
 
   {# Visit strip: under the map, as wide as legend + map. On the hero it is
      a section of the page, with its own index rule: directions in Google
-     Maps at the rule's end, in a new tab. #}
-  {% if visit and hero %}
+     Maps at the rule's end, in a new tab. Not on a unit's homepage
+     (_palefire_hero_rules()): its Find us banner goes to directions. #}
+  {% if visit and hero and hero_index.hours %}
     <div class="pf-landing__directions"{% if toc_hours_id %} id="{{ toc_hours_id }}" tabindex="-1"{% endif %}>
       {{ pf.index_rule(hero_index.hours, 'Hours and directions'|t, visit.maps_url ? {
         url: visit.maps_url,
@@ -977,7 +988,7 @@
       } : {}) }}
       {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', indexed: true } only %}
     </div>
-  {% elseif visit %}
+  {% elseif visit and not hero %}
     {% include '@palefire/includes/visit-strip.html.twig' with { visit: visit, visit_id: input_id ~ '-visit', indexed: false } only %}
   {% endif %}
 

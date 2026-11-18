@@ -402,7 +402,9 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * strip). Read from the same facts the templates use: the lead shows unless
  * the map leads alone, and only with the page title or an intro (show_lead,
  * includes/landing.html.twig); the map when it is published; the Visit strip
- * when the host page has a location (_palefire_landing_visit()). The hero
+ * when the host page has a location (_palefire_landing_visit()), but not on a
+ * unit’s homepage, whose Find us banner and hours under the title say where
+ * and when. The hero
  * numbers its rules from this (_palefire_hero_index()), and
  * palefire_preprocess_field() counts on from those numbers, so no number is
  * typed by hand and they always agree.
@@ -440,12 +442,12 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
     }
   }
   // A unit's homepage (its map marks a room Here) shows the map as its Find
-  // us banner only, with no Rooms and access section.
+  // us banner only, with no Rooms and access or Hours and directions section.
   $unit = $has_map && $map->hasField('field_map_here') && trim((string) $map->get('field_map_here')->value) !== '';
   if ($has_map && !$unit) {
     $rules[] = 'rooms';
   }
-  if ($visit) {
+  if ($visit && !$unit) {
     $rules[] = 'hours';
   }
   return $rules;

@@ -607,6 +607,7 @@ HTML),
 <li>Oral History’s series: the thin line between the tape deck and the cards is gone, so the space between them does the separating, and the cards line up with the map below.</li>
 <li>What Endures: fixed the few gold dots that showed on the cassette before its handwritten title began to draw.</li>
 <li>What Endures: the reels inside the cassette sit a little deeper behind the window, and the episodes are numbered from the first, so the newest has the highest number.</li>
+<li>Oral History’s homepage: the Plan your visit section is gone; the Find us highlight and today’s hours under the title already say where and when. Pointing at Find us now shows Hill Memorial’s front under the floor plan, the floors frosted over the photo as on the room pages.</li>
 </ul>
 HTML),
 ]);

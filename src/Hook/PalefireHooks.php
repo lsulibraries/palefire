@@ -673,7 +673,9 @@ class PalefireHooks {
     $located = self::stringValue($node, 'field_hours_location') !== ''
       || self::stringValue($node, 'field_location_name') !== ''
       || self::stringValue($node, 'field_location_query') !== '';
-    if ($paragraph->bundle() === 'landing_hero' && $located && !in_array('hours', $taken, TRUE)) {
+    // Nor Hours and directions there (_palefire_hero_rules()).
+    $hours_section = $paragraph instanceof ParagraphInterface && in_array('hours', _palefire_hero_rules($paragraph), TRUE);
+    if ($paragraph->bundle() === 'landing_hero' && $located && $hours_section && !in_array('hours', $taken, TRUE)) {
       $ids['hours'] = 'hours';
     }
     return $ids;

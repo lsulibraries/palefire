@@ -332,6 +332,26 @@
     }
   };
 
+  // The map banner's frosted floors, as a location page's
+  // (js/location-plate.js): a layer under the drawing, masked to the floors'
+  // shapes (each floor's outline and every room's hit area, in the
+  // drawing's own viewBox and aspect, so it lines up wherever the drawing is
+  // letterboxed), so CSS can blur the building's photo behind exactly those
+  // and leave it clear around them (_landing-features.scss).
+  const frost = (map) => {
+    const svg = map.querySelector('svg');
+    const shapes = svg ? svg.querySelectorAll('.pf-map__floors path, .pf-map__hit') : [];
+    if (!shapes.length) {
+      return;
+    }
+    const paths = Array.from(shapes, (path) => `<path d="${path.getAttribute('d')}"/>`).join('');
+    const mask = `<svg xmlns="${SVG_NS}" viewBox="${svg.getAttribute('viewBox')}">${paths}</svg>`;
+    const layer = document.createElement('span');
+    layer.className = 'pf-hero-banner__frost';
+    layer.style.setProperty('--pf-banner-frost', `url("data:image/svg+xml,${encodeURIComponent(mask)}")`);
+    svg.before(layer);
+  };
+
   Drupal.behaviors.palefireHeroHighlights = {
     attach(context) {
       once('hero-highlights', '.pf-landing--cover .pf-landing__stage', context).forEach((stage) => {
@@ -339,7 +359,10 @@
         cue(stage);
         layOut(stage);
       });
-      once('hero-map-here', '.pf-hero-banner__map', context).forEach(markHere);
+      once('hero-map-here', '.pf-hero-banner__map', context).forEach((map) => {
+        markHere(map);
+        frost(map);
+      });
     },
   };
 })(Drupal, once);

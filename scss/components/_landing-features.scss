@@ -1320,6 +1320,12 @@ html.pf-a11y-motion .pf-landing__lead.pf-landing__lead--hero :is(.pf-landing__in
   }
 }
 
+// A unit's homepage: no Visit strip to go down to, so today's hours are
+// text in the same voice, with no underline.
+.pf-landing__hours-link--text {
+  text-decoration: none;
+}
+
 // Oral History's Record tab: the Williams Center's services as paths
 // (.pf-paths--services) are short, so they never fold with the Quick Start.
 :is(.pf-quick-guide, .pf-quick-guide.is-folded) .pf-quick-guide__panel > .pf-paths.pf-paths--services {
@@ -5841,6 +5847,91 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
   transform: scale(1.03);
 }
 
+// In hand, the building under its drawing, as a location page's map over
+// its photo (_location.scss): Hill Memorial's front (the still of Special
+// Collections' film, a copy in the theme) fades in behind the drawing,
+// under a veil of the column's color, and the floors frost over it
+// (.pf-hero-banner__frost, js/hero-highlights.js: blurred and dimmed
+// inside the floors' shapes, clear around them), so the lines keep to the
+// page's colors. The file loads only once the list is in hand (pointer or
+// focus in it), so the page's load never carries it. Decoration, in the
+// hidden media.
+.pf-hero-banner__photo {
+  position: absolute;
+  inset: 0;
+  background: center 30% / cover no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s ease-out;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--pf-hl-wash, var(--bs-body-bg)) 35%, transparent);
+  }
+}
+
+.pf-hero-banners:is(:hover, :focus-within) .pf-hero-banner__photo {
+  background-image: url("../images/hill-memorial-poster.webp");
+}
+
+// The drawing and its frost share one cell, so the mask (the drawing's
+// viewBox, fitted the same way) lies exactly under the lines.
+.pf-hero-banner__map {
+  position: relative;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+
+  > * {
+    grid-area: 1 / 1;
+  }
+
+  // Over the frost, which paints as a layer of its own.
+  > svg {
+    position: relative;
+  }
+}
+
+.pf-hero-banner__frost {
+  display: block;
+  background: color-mix(in srgb, var(--pf-hl-wash, var(--bs-body-bg)) 72%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask: var(--pf-banner-frost) center / 100% 100% no-repeat;
+  mask: var(--pf-banner-frost) center / 100% 100% no-repeat;
+  transition: opacity .6s ease-out;
+}
+
+.pf-hero-banner__link:is(:hover, :focus-visible) :is(.pf-hero-banner__photo, .pf-hero-banner__frost) {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-hero-banner__photo,
+  .pf-hero-banner__frost {
+    transition: none;
+  }
+}
+
+html.pf-a11y-motion :is(.pf-hero-banner__photo, .pf-hero-banner__frost) {
+  transition: none;
+}
+
+// More contrast: the drawing on the column's own color, no photo.
+@media (prefers-contrast: more), (forced-colors: active) {
+  .pf-hero-banner__photo,
+  .pf-hero-banner__frost {
+    display: none;
+  }
+}
+
+html.pf-a11y-contrast :is(.pf-hero-banner__photo, .pf-hero-banner__frost) {
+  display: none;
+}
+
 // The stage: the drawing fills the column's top, clear of the header and
 // the bar, over the Highlights' words (from half way down: the list and its
 // wash start there on a window the stage allows).
@@ -6449,14 +6540,19 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 // never changes size. Name and description sit together at the top, the
 // link at the foot, and whatever a shorter one leaves falls between.
 // The card and its description (aria-describedby) carry the full text.
-.pf-series__now {
+.pf-series__deck {
   --pf-now-name: clamp(1.125rem, 1.5vw, 1.4375rem);
+  --pf-now-h: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 8.4375rem + 3.125rem + 1px);
+}
+
+.pf-series__now {
+  position: relative;
   flex: none;
   display: flex;
   flex-direction: column;
   gap: .375rem;
   min-width: 0;
-  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 8.4375rem + 3.125rem + 1px);
+  height: var(--pf-now-h);
 }
 
 .pf-series__now-label {
@@ -6561,6 +6657,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     // foot that met the grid's end first and pushed the deck off the top
     // while series were still showing.)
     .pf-series__side {
+      container-type: inline-size;
       display: flex;
       flex-direction: column;
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
@@ -6573,10 +6670,36 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       flex: none;
     }
 
+    // The deck across the whole column (its two of the five), at the
+    // drawing's proportions (.8177). Where the screen is too short for it
+    // and the caption, the caption goes up over the drawing's foot (--over,
+    // just what the screen lacks) and the drawing fades out above it, the
+    // fade as long as the overlap and a fifth more, so the words sit on the
+    // page's own color. No more than 40% of the drawing goes under; on a
+    // shorter screen still, it narrows (centered) to keep to that.
     .pf-series__deck {
+      --avail: calc(100svh - var(--pf-series-top) - 1.5rem);
+      --deck-w: min(100cqw, (var(--avail) - var(--pf-now-h) - 1.25rem) * .8177 / .6);
+      --deck-h: calc(var(--deck-w) / .8177);
+      --over: max(0px, var(--deck-h) + 1.25rem + var(--pf-now-h) - var(--avail));
       position: sticky;
       top: var(--pf-series-top);
-      max-height: calc(100svh - var(--pf-series-top) - 1.5rem);
+      max-height: var(--avail);
+    }
+
+    .pf-series__machine {
+      flex: none;
+      align-self: center;
+      width: var(--deck-w);
+      height: var(--deck-h);
+      min-height: 0;
+      aspect-ratio: auto;
+      -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.2 * var(--over)), transparent calc(100% - var(--over)));
+      mask-image: linear-gradient(to bottom, #000 calc(100% - 2.2 * var(--over)), transparent calc(100% - var(--over)));
+    }
+
+    .pf-series__now {
+      margin-top: calc(-1 * var(--over));
     }
 
     .pf-series__intro {
