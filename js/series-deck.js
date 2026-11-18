@@ -11,8 +11,9 @@
  * deck: the counter shows its interview count, the caption its name,
  * description and a link to them in search ("View 60 interviews"), and
  * the reels run for a moment while the tape
- * winds: the take-up reel holds as much of it as the series' card shows
- * (its share of the largest series, by area), the supply reel the rest.
+ * winds: the series is the tape loaded, so the supply reel (left) holds as
+ * much as its card shows (its share of the largest series, by area); the
+ * take-up reel (right) is the deck's own, a few turns threaded, and stays.
  * At rest it shows the largest series. Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
  *
@@ -52,8 +53,8 @@
   };
 
   // The tape, redrawn as build/exhibit-deck.js draws it (keep the two in
-  // step): the same projection, reels and tape path, for a share P of the
-  // tape on the take-up reel. The drawing's parts carry data-tape.
+  // step): the same projection, reels and tape path, for a share of a full
+  // supply reel. The drawing's parts carry data-tape.
   const RAD = Math.PI / 180;
   const COS = Math.cos(-35 * RAD);
   const SIN = Math.sin(-35 * RAD);
@@ -149,12 +150,15 @@
     return { aIn: pts.slice(0, j + 1), aOut: pts.slice(Math.max(0, j - 1), gA + 1), b: pts.slice(gA, cD + 1), cOut: pts.slice(cD, k + 2), cIn: pts.slice(k) };
   };
 
+  // The take-up reel: a few turns of tape threaded on, whatever is loaded.
+  const TAKE_UP = Math.sqrt(50 * 50 + AREA * 0.04);
+
   const wind = (svg, share) => {
     const parts = {};
     svg.querySelectorAll('[data-tape]').forEach((el) => {
       parts[el.dataset.tape] = el;
     });
-    const radii = [Math.sqrt(44 * 44 + AREA * (1 - share)), Math.sqrt(50 * 50 + AREA * share)];
+    const radii = [Math.sqrt(44 * 44 + AREA * share), TAKE_UP];
     REELS.forEach((reel, i) => {
       if (parts['pack' + i]) {
         parts['pack' + i].setAttribute('points', pointsOf(circle(reel.cx, 140, radii[i]), 21));
@@ -192,9 +196,11 @@
     let run = 0;
     let swap = 0;
     const most = Math.max(1, ...links.map((link) => number(seriesOf(link).count)));
-    // The take-up reel's share of the tape: never quite empty or full.
-    const shareOf = (series) => 0.06 + 0.88 * Math.min(1, number(series.count) / most);
-    let share = 0.35;
+    // How full the supply reel is: the largest series fills it, the
+    // smallest still shows a few turns.
+    const shareOf = (series) => 0.06 + 0.94 * Math.min(1, number(series.count) / most);
+    // As drawn (build/exhibit-deck.js: 65% left on the supply reel).
+    let share = 0.65;
     let frame = 0;
 
     const tape = (quiet) => {
