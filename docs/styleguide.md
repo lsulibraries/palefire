@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** `@keyframes pf-cassette-write`: `0% { stroke-dashoffset: 1; opacity: 0 } .1% { opacity: 1 }`, so strokes waiting their turn (delay, `both`) paint no round caps.
 - **2026-11-18:** Series deck layout: `.pf-series.has-deck .pf-series__body` loses its `border-left` and the half-gutter margin/padding that centered it; the gutter alone separates the columns.
 - **2026-11-18:** `.pf-podcast__listen`: a `p` under `.pf-podcast__scroll` (margin-top 1.5rem) holding `a.pf-button.pf-button--secondary.pf-button--arrow` to the SoundCloud account, `target="_blank"` with a visually hidden “(opens in a new tab)”.
 - **2026-11-18:** Series list: `.pf-series-reel` in list view is a 1.75rem reel at the row's start (`.pf-series__row` padded 2.75rem; case, count and name hidden). List fold: 8 rows (`FOLD_ROWS.list`), 12 beside the deck (`--pf-fold-rows`). `.pf-series__fold` is `repeat(var(--pf-cols), minmax(0, 1fr))` with `gap` and `margin-top` `var(--pf-gap)`, sharing the list's column rules via `:is(.pf-series__list, .pf-series__fold)`; `.pf-series__less` takes column `-2 / -1`.

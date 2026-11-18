@@ -605,6 +605,7 @@ HTML),
 <li>Oral History’s series: the list view now shows more at a time (twelve beside the tape deck) with a tiny reel at the start of each row, and the Show more and Show less buttons line up with the columns of the cards above them.</li>
 <li>What Endures: a longer introduction under the heading (more than 6,000 hours of interviews, Louisiana’s hidden stories), and a Listen on SoundCloud button under the episode list.</li>
 <li>Oral History’s series: the thin line between the tape deck and the cards is gone, so the space between them does the separating, and the cards line up with the map below.</li>
+<li>What Endures: fixed the few gold dots that showed on the cassette before its handwritten title began to draw.</li>
 </ul>
 HTML),
 ]);

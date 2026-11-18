@@ -800,9 +800,16 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
   }
 }
 
+// Each stroke is hidden until it starts: an undrawn dash still paints its
+// round cap, a gold dot at the stroke's start.
 @keyframes pf-cassette-write {
-  from {
+  0% {
     stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  .1% {
+    opacity: 1;
   }
 }
 
@@ -870,6 +877,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 
       .pf-cassette__hand path {
         stroke-dashoffset: 1;
+        opacity: 0;
       }
     }
 
