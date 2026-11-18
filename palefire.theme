@@ -580,6 +580,15 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     if ($variables['hero_unit'] !== '') {
       $variables['landing_map'] = NULL;
     }
+    // Where the film plays (field_hero_video, palefire_hero_video_filter.php):
+    // '' beside, in the column; 'faded', 'mono' or 'none' in the main
+    // column. Until the field exists, Oral History keeps its faded film.
+    $variables['hero_video'] = $paragraph->hasField('field_hero_video')
+      ? (string) $paragraph->get('field_hero_video')->value
+      : (($variables['hero_unit'] ?? '') === 'oral_history' ? 'faded' : '');
+    if (!in_array($variables['hero_video'], ['faded', 'mono', 'none'], TRUE)) {
+      $variables['hero_video'] = '';
+    }
     // Oral History: the Podcast banner is the newest episode, with Play.
     if (($variables['hero_unit'] ?? '') === 'oral_history') {
       PodcastFeed::heroBanner($variables);

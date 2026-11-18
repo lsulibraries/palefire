@@ -164,7 +164,7 @@
     </div>
   {% endset %}
 {% endif %}
-<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', cover ? 'pf-landing--cover', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen', cover and bg_videos and hero_unit == 'oral_history' ? 'pf-landing--wash', hero and hero_spotlight is same as(false) ? 'pf-landing--no-spotlight') }} data-pf-landing>
+<div{{ attributes.addClass('pf-landing', hero ? 'pf-landing--hero', cover ? 'pf-landing--cover', department ? 'pf-landing--department', bg_videos ? 'has-bg-video', not show_lead and landing_map ? 'pf-landing--map-only', lead_screen ? 'pf-landing--lead-screen', cover and bg_videos and hero_video ? 'pf-landing--wash', cover and bg_videos and hero_video in ['mono', 'none'] ? 'pf-landing--wash-' ~ hero_video, hero and hero_spotlight is same as(false) ? 'pf-landing--no-spotlight') }} data-pf-landing>
 
   {% if bg_videos %}
     {{ attach_library('palefire/landing-video') }}

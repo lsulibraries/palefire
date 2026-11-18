@@ -5810,6 +5810,20 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
       display: none;
     }
   }
+
+  // The hero's Video (field_hero_video, palefire.theme): Faded is the
+  // above. Black and white takes the color out of the film (a filter on
+  // the <video>, which is not fixed, so nothing is lost by it).
+  html:root .pf-landing.pf-landing--cover.pf-landing--wash.pf-landing--wash-mono > .pf-landing__lead.pf-landing__lead--hero .pf-landing__media .pf-landing__bg-video {
+    filter: grayscale(1);
+  }
+
+  // No filter: on dark swatches the film as it is over its top half, still
+  // ending in the page at its foot. For a film chosen to be dark enough for
+  // the white type; light swatches keep the veil.
+  html.pf-reading-dark:root .pf-landing.pf-landing--cover.pf-landing--wash.pf-landing--wash-none > .pf-landing__lead.pf-landing__lead--hero .pf-landing__media::after {
+    background: linear-gradient(to bottom, transparent 50%, var(--pf-wash-bg));
+  }
 }
 
 
