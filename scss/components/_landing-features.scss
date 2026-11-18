@@ -6379,8 +6379,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 // scrolling away with the page, and under them the deck, held there
 // (sticky under the header and page bar, no taller than the screen),
 // the series on the other three (their own container, three columns of
-// cards, four rows to each Show more) with a hairline their full length
-// down the gutter. The deck is as large as the column allows with the
+// cards, four rows to each Show more), the gutter alone between them (no
+// rule: the cards have their own edges). The deck is as large as the column allows with the
 // heading and caption. Its tones are the exhibitions' (.pf-deck__svg,
 // _exhibition.scss); while a series goes on it the reels run, the tape
 // winds to the series' share, PLAY lights, the pinch roller presses in and
@@ -6583,16 +6583,10 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       margin-bottom: 0;
     }
 
-    // The hairline runs the series' full length, down the middle of the
-    // gutter.
     .pf-series__body {
       container: pf-series / inline-size;
       grid-column: 3 / span 3;
-      align-self: stretch;
       min-width: 0;
-      margin-left: calc(var(--pf-series-gap) / -2);
-      padding-left: calc(var(--pf-series-gap) / 2);
-      border-left: 1px solid #{$pf-hairline};
     }
 
     .pf-series__views[data-pf-view="grid"] :is(.pf-series__list, .pf-series__fold) {
