@@ -251,8 +251,17 @@ final class PodcastFeed {
       return $text;
     }
     $cut = mb_substr($text, 0, 220);
-    $end = max((int) mb_strrpos($cut, '. '), (int) mb_strrpos($cut, '? '), (int) mb_strrpos($cut, '! '));
-    return $end > 80 ? mb_substr($cut, 0, $end + 1) : rtrim(mb_substr($cut, 0, (int) mb_strrpos($cut, ' '))) . '…';
+    // The last sentence end: a stop before a space, but not a title's
+    // (Dr. Col. St.) or an initial's (T. Harry), which only look like one.
+    $end = 0;
+    preg_match_all('/[.?!](?=\s)/', $cut, $stops, PREG_OFFSET_CAPTURE);
+    foreach ($stops[0] as [$stop, $at]) {
+      if ($stop === '.' && preg_match('/(?:\b(?:Dr|Mr|Mrs|Ms|St|Jr|Sr|Col|Lt|Gen|Sgt|Capt|Prof|Rev|Hon)|\b[A-Z])$/', substr($cut, 0, $at))) {
+        continue;
+      }
+      $end = $at;
+    }
+    return $end > 80 ? substr($cut, 0, $end + 1) : rtrim(mb_substr($cut, 0, (int) mb_strrpos($cut, ' '))) . '…';
   }
 
 }

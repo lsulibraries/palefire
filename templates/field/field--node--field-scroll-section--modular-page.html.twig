@@ -50,13 +50,15 @@
             <div class="pf-section__head">
           {% endif %}
           {% if item.section.label %}
-            {# The podcast's heading carries its cassette mark (decorative). #}
+            {# The podcast's heading is its cassette mark, a logotype (WCAG
+               1.4.5): the drawing is hidden from assistive tech, the words
+               stay in the h2 for screen readers, the TOC and search. #}
             {% set mark = index.mark == 'cassette' and not item.section.title_hidden %}
             <h2 id="{{ item.section.title_id }}"
                 class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}{{ mark ? ' has-cassette' }}"
                 tabindex="-1">
               {%- if mark -%}
-                {% include '@palefire/includes/cassette-mark.html.twig' %}<span class="pf-section__title-text">{{ item.section.label }}</span>
+                {% include '@palefire/includes/cassette-mark.html.twig' %}<span class="visually-hidden">{{ item.section.label }}</span>
               {%- else -%}
                 {{ item.section.label }}
               {%- endif -%}
