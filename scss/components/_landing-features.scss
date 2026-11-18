@@ -6139,8 +6139,8 @@ html.pf-a11y-motion .pf-hero-banner__map {
 }
 
 // Folded (js/tile-views.js): two rows of the grid, five of the list, then
-// "Show all" in the switch's voice; the rest fade up in place. Opened, it
-// reads "Show less", its arrow turned up.
+// "Show more" in the switch's voice, each press fading up as many again in
+// place. Once all show, it reads "Show less", its arrow turned up.
 .pf-series__more {
   margin-top: clamp(1rem, 2vw, 1.5rem);
   padding-inline: 0 .875rem;
@@ -6191,19 +6191,23 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
 // Beside the tape deck (js/series-deck.js, .has-deck from 64rem): five
 // columns on the grid's gutter, the heading, intro and deck held on the
-// first two (sticky under the header and page bar) with a hairline the
-// height of the screen down the gutter, the series on the other three
-// (their own container, three columns of cards, four rows before Show
-// all). The deck is as large as the column allows and still fits on
-// screen with its caption. Its tones are the exhibitions' (.pf-deck__svg,
-// _exhibition.scss); while a series goes on it the reels run, PLAY lights,
-// the pinch roller presses in and the needles lift.
+// first two (sticky under the header and page bar, the screen's height),
+// the series on the other three (their own container, three columns of
+// cards, four rows to each Show more) with a hairline their full length
+// down the gutter. The deck is as large as the column allows with the
+// heading and caption. Its tones are the exhibitions' (.pf-deck__svg,
+// _exhibition.scss); while a series goes on it the reels run, the tape
+// winds to the series' share, PLAY lights, the pinch roller presses in and
+// the needles lift.
 .pf-series__deck {
   --pf-deck-bg: var(--pf-g-bg, var(--bs-body-bg));
   --pf-deck-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
   --pf-deck-lit: color-mix(in srgb, var(--pf-deck-gold) 45%, var(--pf-deck-bg));
-  display: grid;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   gap: 1.25rem;
+  min-height: 0;
   color: var(--pf-g-fg, var(--bs-body-color));
 
   &[hidden] {
@@ -6215,12 +6219,23 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   }
 }
 
+// The deck takes whatever height the column has left after the heading and
+// the caption (the column is the screen's height, below), drawn to fit it
+// at its bottom left (preserveAspectRatio, js/series-deck.js).
 .pf-series__machine {
-  width: min(100%, calc((100svh - var(--pf-series-top, 8rem) - 23rem) * .8177));
-  aspect-ratio: .8177;
+  flex: 1 1 0;
+  min-height: 12rem;
+  max-height: 40rem;
+
+  .pf-deck__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .pf-series__now {
+  flex: none;
   display: grid;
   gap: .375rem;
   min-width: 0;
@@ -6306,28 +6321,37 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       align-items: start;
     }
 
+    // Exactly the screen below the header, so all of it stays in view while
+    // the series scroll past.
     .pf-series__side {
       position: sticky;
       top: var(--pf-series-top);
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
-      align-content: start;
       grid-column: 1 / span 2;
-      min-height: calc(100svh - var(--pf-series-top) - 1.5rem);
-      // The hairline runs down the middle of the gutter.
-      margin-right: calc(var(--pf-series-gap) / -2);
-      padding-right: calc(var(--pf-series-gap) / 2 + clamp(.5rem, 1.5vw, 1.5rem));
-      border-right: 1px solid #{$pf-hairline};
+      height: calc(100svh - var(--pf-series-top) - 1.5rem);
+      padding-right: clamp(.5rem, 1.5vw, 1.5rem);
+    }
+
+    .pf-series__head {
+      flex: none;
     }
 
     .pf-series__intro {
       margin-bottom: 0;
     }
 
+    // The hairline runs the series' full length, down the middle of the
+    // gutter.
     .pf-series__body {
       container: pf-series / inline-size;
       grid-column: 3 / span 3;
+      align-self: stretch;
       min-width: 0;
+      margin-left: calc(var(--pf-series-gap) / -2);
+      padding-left: calc(var(--pf-series-gap) / 2);
+      border-left: 1px solid #{$pf-hairline};
     }
 
     .pf-series__views[data-pf-view="grid"] .pf-series__list {

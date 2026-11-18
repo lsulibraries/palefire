@@ -9,9 +9,11 @@
  * the exhibitions' object view plays clips on) is fetched once, as the
  * section comes near. Pointing at or focusing a series puts it on the
  * deck: the counter shows its interview count, the caption its name,
- * description and count, and the reels run for a moment. At rest it shows
- * the largest series. Reduced motion (or the Settings drawer's "Reduce
- * motion"): the caption changes, nothing runs.
+ * description and count, and the reels run for a moment while the tape
+ * winds: the take-up reel holds as much of it as the series' card shows
+ * (its share of the largest series, by area), the supply reel the rest.
+ * At rest it shows the largest series. Reduced motion (or the Settings
+ * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
  *
  * Decorative throughout: the deck and its caption are aria-hidden, and each
  * card already says its name and count and is described by its
@@ -48,7 +50,129 @@
     };
   };
 
-  const digits = (count) => String(parseInt(count.replace(/\D/g, ''), 10) || 0).padStart(4, '0').slice(-4);
+  // The tape, redrawn as build/exhibit-deck.js draws it (keep the two in
+  // step): the same projection, reels and tape path, for a share P of the
+  // tape on the take-up reel. The drawing's parts carry data-tape.
+  const RAD = Math.PI / 180;
+  const COS = Math.cos(-35 * RAD);
+  const SIN = Math.sin(-35 * RAD);
+  const EYE = 2400;
+  const pr = (x, y, z) => {
+    const X = x - 410;
+    const x1 = X * COS + z * SIN;
+    const s = EYE / (EYE - (-X * SIN + z * COS));
+    return [x1 * s, (y - 450) * s];
+  };
+  const fmt = (n) => String(Math.round(n * 10) / 10);
+  const pointsOf = (pts, z) => pts.map((p) => pr(p[0], p[1], z).map(fmt).join(',')).join(' ');
+  const circle = (cx, cy, r) => Array.from({ length: 40 }, (_, i) => [cx + r * Math.cos(i / 20 * Math.PI), cy + r * Math.sin(i / 20 * Math.PI)]);
+  const REELS = [{ cx: 130, k: 5 / 7, hub: 44 }, { cx: 690, k: 1, hub: 50 }];
+  const AREA = 104 * 104 - 44 * 44;
+
+  const tangent = (A, B) => {
+    const dx = B.c[0] - A.c[0];
+    const dy = B.c[1] - A.c[1];
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len;
+    const uy = dy / len;
+    for (const s1 of [1, -1]) {
+      for (const s2 of [1, -1]) {
+        for (const sg of [1, -1]) {
+          const r1 = s1 * A.r;
+          const r2 = s2 * B.r;
+          const cs = (r1 - r2) / len;
+          if (Math.abs(cs) <= 1) {
+            const sn = sg * Math.sqrt(1 - cs * cs);
+            const nx = ux * cs - uy * sn;
+            const ny = uy * cs + ux * sn;
+            const p1 = [A.c[0] + r1 * nx, A.c[1] + r1 * ny];
+            const p2 = [B.c[0] + r2 * nx, B.c[1] + r2 * ny];
+            const tx = p2[0] - p1[0];
+            const ty = p2[1] - p1[1];
+            const ok = (u, w) => tx * (w * -u[1]) + ty * (w * u[0]) > 0;
+            if (ok([s1 * nx, s1 * ny], A.w) && ok([s2 * nx, s2 * ny], B.w)) {
+              return [p1, p2];
+            }
+          }
+        }
+      }
+    }
+    return [A.c, B.c];
+  };
+  const segment = (a, b) => {
+    const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 6));
+    return Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n]);
+  };
+  const arc = (K, a, d) => {
+    const a0 = Math.atan2(a[1] - K.c[1], a[0] - K.c[0]);
+    let dl = Math.atan2(d[1] - K.c[1], d[0] - K.c[0]) - a0;
+    while (K.w > 0 && dl < 0) {
+      dl += 2 * Math.PI;
+    }
+    while (K.w < 0 && dl > 0) {
+      dl -= 2 * Math.PI;
+    }
+    const n = Math.max(2, Math.ceil(Math.abs(dl) * K.r / 5));
+    return Array.from({ length: n + 1 }, (_, i) => [K.c[0] + K.r * Math.cos(a0 + dl * i / n), K.c[1] + K.r * Math.sin(a0 + dl * i / n)]);
+  };
+  const tapePath = (rs, rt) => {
+    const cs = [{ c: [130, 140], r: rs, w: -1 }, { c: [67, 522], r: 22, w: -1 }, { c: [164, 483], r: 43, w: 1 }, { c: [617, 473], r: 7.5, w: -1 }, { c: [752, 520], r: 22, w: -1 }, { c: [690, 140], r: rt, w: -1 }];
+    const tg = [];
+    for (let i = 0; i < 5; i++) {
+      tg.push(tangent(cs[i], cs[i + 1]));
+    }
+    const pts = [];
+    let gA = 0;
+    let cD = 0;
+    for (let i = 0; i < 5; i++) {
+      pts.push(...segment(tg[i][0], tg[i][1]));
+      if (i < 4) {
+        if (i === 1) {
+          gA = pts.length - 1;
+        }
+        pts.push(...arc(cs[i + 1], tg[i][1], tg[i + 1][0]));
+        if (i === 2) {
+          cD = pts.length - 1;
+        }
+      }
+    }
+    const dist = (p, c) => Math.hypot(p[0] - c[0], p[1] - c[1]);
+    let j = 0;
+    while (j < gA && dist(pts[j], [130, 140]) < 165 * 5 / 7) {
+      j++;
+    }
+    let k = pts.length - 1;
+    while (k > cD && dist(pts[k], [690, 140]) < 165) {
+      k--;
+    }
+    return { aIn: pts.slice(0, j + 1), aOut: pts.slice(Math.max(0, j - 1), gA + 1), b: pts.slice(gA, cD + 1), cOut: pts.slice(cD, k + 2), cIn: pts.slice(k) };
+  };
+
+  const wind = (svg, share) => {
+    const parts = {};
+    svg.querySelectorAll('[data-tape]').forEach((el) => {
+      parts[el.dataset.tape] = el;
+    });
+    const radii = [Math.sqrt(44 * 44 + AREA * (1 - share)), Math.sqrt(50 * 50 + AREA * share)];
+    REELS.forEach((reel, i) => {
+      if (parts['pack' + i]) {
+        parts['pack' + i].setAttribute('points', pointsOf(circle(reel.cx, 140, radii[i]), 21));
+      }
+      if (parts['edge' + i]) {
+        parts['edge' + i].setAttribute('points', pointsOf(circle(reel.cx, 140, Math.max(reel.hub, radii[i] - 16 * reel.k)), 21));
+      }
+    });
+    const path = tapePath(radii[0], radii[1]);
+    Object.keys(path).forEach((key) => {
+      const pts = path[key];
+      if (parts[key] && pts.length > 1) {
+        parts[key].setAttribute('points', pointsOf(pts, 15) + ' ' + pointsOf(pts.slice().reverse(), 27));
+      }
+    });
+  };
+
+  const number = (count) => parseInt(count.replace(/\D/g, ''), 10) || 0;
+  const digits = (count) => String(number(count)).padStart(4, '0').slice(-4);
 
   function start(section) {
     const deck = section.querySelector('[data-pf-series-deck]');
@@ -66,6 +190,36 @@
     let current = null;
     let run = 0;
     let swap = 0;
+    const most = Math.max(1, ...links.map((link) => number(seriesOf(link).count)));
+    // The take-up reel's share of the tape: never quite empty or full.
+    const shareOf = (series) => 0.06 + 0.88 * Math.min(1, number(series.count) / most);
+    let share = 0.35;
+    let frame = 0;
+
+    const tape = (quiet) => {
+      if (!svg || !current) {
+        return;
+      }
+      const from = share;
+      const to = shareOf(current);
+      window.cancelAnimationFrame(frame);
+      if (quiet || still()) {
+        share = to;
+        wind(svg, share);
+        return;
+      }
+      let begin = 0;
+      const step = (time) => {
+        begin = begin || time;
+        const p = Math.min(1, (time - begin) / 900);
+        share = from + (to - from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+        wind(svg, share);
+        if (p < 1) {
+          frame = window.requestAnimationFrame(step);
+        }
+      };
+      frame = window.requestAnimationFrame(step);
+    };
 
     const counter = () => {
       if (svg && current) {
@@ -90,6 +244,7 @@
         now.classList.remove('is-swapping');
       };
       counter();
+      tape(quiet);
       window.clearTimeout(swap);
       if (quiet || still()) {
         fill();
@@ -117,14 +272,17 @@
         if (year) {
           year.textContent = '';
         }
+        // Fit the column's height, held to its bottom left by the caption.
+        svg.setAttribute('preserveAspectRatio', 'xMinYMax meet');
         machine.append(svg);
         counter();
+        tape(true);
       }).catch(() => {
         // No drawing: the caption still follows the series.
       });
     };
 
-    const largest = links.reduce((best, link) => (parseInt(seriesOf(link).count.replace(/\D/g, ''), 10) > parseInt(seriesOf(best).count.replace(/\D/g, ''), 10) ? link : best), links[0]);
+    const largest = links.reduce((best, link) => (number(seriesOf(link).count) > number(seriesOf(best).count) ? link : best), links[0]);
     put(largest, true);
 
     let loaded = false;

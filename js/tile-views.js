@@ -21,10 +21,10 @@
  * Oral History's series (.pf-series__views, landing.html.twig) open
  * folded: two rows of the grid (four beside the tape deck, the stylesheet's
  * --pf-fold-rows), or five of the list, at the columns of the
- * moment, then a "Show all" button that opens the rest in place, the first
- * of them taking focus. Opened, it says "Show less" and folds them again,
- * the page held so the button stays where it was under the pointer. The
- * fold follows the view and the width while folded. Without this script
+ * moment, then a "Show more" button that opens as many again in place, the
+ * first of them taking focus. Once all show, it says "Show less" and folds
+ * them again, the page held so the button stays where it was under the
+ * pointer. The fold follows the view and the width. Without this script
  * every series shows and there is no button.
  */
 (function (Drupal, once) {
@@ -119,54 +119,53 @@
     const label = button.querySelector('span');
     list.after(button);
 
+    // Pages of the fold shown: 1 is folded; each Show more adds one.
+    let pages = 1;
     let open = false;
     const name = () => {
       button.setAttribute('aria-expanded', String(open));
       button.classList.toggle('is-open', open);
-      label.textContent = open ? Drupal.t('Show less') : Drupal.t('Show all @count series', { '@count': items.length });
+      label.textContent = open ? Drupal.t('Show less') : Drupal.t('Show more');
     };
-    const apply = () => {
-      if (open) {
-        return;
-      }
+    const page = () => {
       const cols = getComputedStyle(list).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
       // The stylesheet may ask for more rows (--pf-fold-rows: the grid
       // beside the tape deck, js/series-deck.js).
       const rows = parseInt(getComputedStyle(list).getPropertyValue('--pf-fold-rows'), 10) || FOLD_ROWS[wrapper.dataset.pfView] || FOLD_ROWS.grid;
-      const shown = cols * rows;
+      return cols * rows;
+    };
+    const apply = () => {
+      const size = page();
+      const shown = size * pages;
       items.forEach((item, i) => {
         item.hidden = i >= shown;
       });
-      button.hidden = shown >= items.length;
+      open = shown >= items.length;
+      button.hidden = size >= items.length;
+      name();
     };
 
     button.addEventListener('click', () => {
       if (open) {
         // Fold again, holding the button where it was on screen.
         const before = button.getBoundingClientRect().top;
-        open = false;
+        pages = 1;
         items.forEach((item) => item.classList.remove('is-unfolding'));
         apply();
-        name();
         window.scrollBy({ top: button.getBoundingClientRect().top - before, behavior: 'instant' });
         return;
       }
-      open = true;
-      const first = items.find((item) => item.hidden);
-      items.forEach((item) => {
-        if (item.hidden) {
-          item.hidden = false;
-          item.classList.add('is-unfolding');
-        }
-      });
-      name();
-      const link = first && first.querySelector('a');
+      const hidden = items.filter((item) => item.hidden);
+      pages++;
+      apply();
+      const shown = hidden.filter((item) => !item.hidden);
+      shown.forEach((item) => item.classList.add('is-unfolding'));
+      const link = shown[0] && shown[0].querySelector('a');
       if (link) {
         link.focus({ preventScroll: true });
       }
     });
 
-    name();
     apply();
     if ('ResizeObserver' in window) {
       new ResizeObserver(apply).observe(list);

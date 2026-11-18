@@ -12,7 +12,10 @@
  * 0,0 in a matrix() that linearises the projection at that layer), .needle
  * (the same, about its pivot), .pinch, .key-play, .key-pause, and the
  * .count, .kind and .year text. The tape stays where it is a third of the
- * way through the clip.
+ * way through the clip; its parts carry data-tape (pack0/1 and edge0/1, the
+ * packs and their inner line; aIn, aOut, b, cOut, cIn, the ribbon from
+ * supply to take-up) so js/series-deck.js can wind it, redrawing them with
+ * a copy of this file's projection and tape path.
  *
  * Usage: node build/exhibit-deck.js [out]   (default images/exhibit-deck.svg)
  * Prints the aspect ratios _exhibition.scss needs (--pf-deck-r), the tones
@@ -187,13 +190,13 @@ function tapePath(rs, rt) {
   let k = pts.length - 1; while (k > cD && dist(pts[k], [690, 140]) < R1) k--;
   return { aIn: pts.slice(0, j + 1), aOut: pts.slice(Math.max(0, j - 1), gA + 1), b: pts.slice(gA, cD + 1), cOut: pts.slice(cD, k + 2), cIn: pts.slice(k) };
 }
-const rib = pts => pts.length < 2 ? '' : G([...pts.map(p => [p[0], p[1], 15]), ...pts.slice().reverse().map(p => [p[0], p[1], 27])], 'class="tape" stroke="none"');
+const rib = (pts, key) => pts.length < 2 ? '' : G([...pts.map(p => [p[0], p[1], 15]), ...pts.slice().reverse().map(p => [p[0], p[1], 27])], `class="tape" stroke="none" data-tape="${key}"`);
 const P = .35, A2 = reels[0].max ** 2 - reels[0].hub ** 2;
 const rr = [Math.sqrt(reels[0].hub ** 2 + A2 * (1 - P)), Math.sqrt(reels[1].hub ** 2 + A2 * P)];
 const TP = tapePath(rr[0], rr[1]);
 const ROL = [[67, 522, 21, 0, 34, .17], [164, 483, 42, 0, 33, .15], [617, 473, 6.5, 4, 32, .28], [752, 520, 21, 0, 34, .17]];
 const RL = ROL.map(([cx, cy, r, z0, z1, fo]) => { const c0 = Z(circB(cx, cy, r), z0), c1 = Z(circB(cx, cy, r), z1); return [silh([...c0, ...c1], T(fo * .55), .7), G(c1, `${T(fo)} stroke-opacity=".7"`)]; });
-const m = RL.map(r => r[0]).join('') + rib(TP.aOut) + rib(TP.b) + rib(TP.cOut) + RL.map(r => r[1]).join('');
+const m = RL.map(r => r[0]).join('') + rib(TP.aOut, 'aOut') + rib(TP.b, 'b') + rib(TP.cOut, 'cOut') + RL.map(r => r[1]).join('');
 
 // Pinch roller (out; CSS presses it in while the clip plays), needles at
 // rest, the reels.
@@ -208,8 +211,8 @@ function reel(R, tin, rp, i) {
   const flange = () => { let p = 'M' + lp(circB(0, 0, 165 * k, 64)) + 'Z'; [-90, 30, 150].forEach(a => { p += 'M' + lp([...arcB(0, 0, 142 * k, a - 30, a + 30, 12), ...arcB(0, 0, Math.max(R.hub + 12, 64 * k), a + 17, a - 17, 8)]) + 'Z'; }); return p.replace(/ /g, 'L'); };
   let h = spin(BZ, `<path d="${flange()}" class="bg flange" fill-opacity=".9" stroke-opacity=".45"/>`);
   h += cyl(cx, 140, R.hub, BZ, FZ, .04, .4);
-  h += ring(cx, 140, rp, TZ, 'class="tape" stroke-opacity="0"') + ring(cx, 140, Math.max(R.hub, rp - 16 * k), TZ, 'stroke-opacity=".22"');
-  h += rib(tin);
+  h += ring(cx, 140, rp, TZ, `class="tape" stroke-opacity="0" data-tape="pack${i}"`) + ring(cx, 140, Math.max(R.hub, rp - 16 * k), TZ, `stroke-opacity=".22" data-tape="edge${i}"`);
+  h += rib(tin, i ? 'cIn' : 'aIn');
   h += spin(FZ, `<path d="${flange()}" class="bg flange" fill-opacity=".86" stroke-opacity=".9"/>`);
   h += G(Z(circB(cx, 140, R.hub), FZ), 'stroke-opacity=".5"');
   h += cyl(cx, 140, 34, FZ, FZ + 16, .15, .75);
