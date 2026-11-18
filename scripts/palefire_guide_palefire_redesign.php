@@ -565,6 +565,8 @@ HTML),
 <li>Landing pages: the faint gold light on the title side, which stood for light from the video beside it, now turns off by itself when the video plays in the main column.</li>
 <li>Phones: when a landing page’s video plays in the main column (Special Collections, Oral History), it now fills the whole screen like a poster, with the title, hours and search at the bottom of the screen. The hours bar at the bottom stays out of the way while the search is on screen, comes up once you scroll past it, and tucks away again when you scroll back to the top.</li>
 <li>Phones: tapping Contents at the top of Special Collections or Oral History now opens the list of sections right there; before, the list stayed hidden and the page could jump far down. On every screen, the Log in or register and Contents buttons over the video now blur the picture behind them, so their labels are easier to read.</li>
+<li>Phones: on Special Collections and Oral History the highlights are back right under the full-screen video, before the Quick Start Guide.</li>
+<li>What Endures has a new cassette for its title: a smoked plastic one with the title printed on it in gold, seen a little from the side so you can see its thickness, its window, screws and the engraved A in relief. It sits centered between two thin lines that fade out to the edges, a little smaller than before, with more room before the episodes. The lines draw outward and the title writes itself when you scroll to it; the reels turn while an episode plays.</li>
 </ul>
 HTML),
 ]);

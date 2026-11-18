@@ -52,13 +52,16 @@
           {% if item.section.label %}
             {# The podcast's heading is its cassette mark, a logotype (WCAG
                1.4.5): the drawing is hidden from assistive tech, the words
-               stay in the h2 for screen readers, the TOC and search. #}
+               stay in the h2 for screen readers, the TOC and search. It is
+               centered between two hairlines that fade out to the edges. #}
             {% set mark = index.mark == 'cassette' and not item.section.title_hidden %}
             <h2 id="{{ item.section.title_id }}"
                 class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}{{ mark ? ' has-cassette' }}"
                 tabindex="-1">
               {%- if mark -%}
-                {% include '@palefire/includes/cassette-mark.html.twig' %}<span class="visually-hidden">{{ item.section.label }}</span>
+                <span class="pf-cassette-rule" aria-hidden="true"></span>
+                {%- include '@palefire/includes/cassette-mark.html.twig' -%}
+                <span class="pf-cassette-rule pf-cassette-rule--end" aria-hidden="true"></span><span class="visually-hidden">{{ item.section.label }}</span>
               {%- else -%}
                 {{ item.section.label }}
               {%- endif -%}
