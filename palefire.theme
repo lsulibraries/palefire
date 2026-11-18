@@ -3779,14 +3779,14 @@ function palefire_preprocess_field(array &$variables): void {
     }
     if (!$paragraph->hasField('field_tile_eyebrow') || $paragraph->get('field_tile_eyebrow')->isEmpty()) {
       // The podcast's section (a Guide section, no Eyebrow field): its rule
-      // in code, with the way to every episode at its end, and the cassette
-      // mark beside its heading (includes/cassette-mark.html.twig).
+      // in code, with the way to every episode at its end, a Lede, and the
+      // cassette mark in its head (includes/cassette-mark.html.twig).
       if (PodcastFeed::isSection($paragraph)) {
         $cache->addCacheableDependency($paragraph);
         $item['section']['index'] = [
           'num' => sprintf('%02d', ++$count),
           'label' => t('The podcast'),
-          'lede' => '',
+          'lede' => t('Short episodes from the T. Harry Williams Center for Oral History.'),
           'mark' => 'cassette',
           'link' => ['url' => PodcastFeed::PROFILE, 'text' => t('All episodes'), 'external' => TRUE, 'hidden' => (string) t(' (on SoundCloud, opens in a new tab)')],
         ];

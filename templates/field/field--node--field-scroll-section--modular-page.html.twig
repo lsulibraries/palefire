@@ -49,25 +49,30 @@
           {% if index.aside %}
             <div class="pf-section__head">
           {% endif %}
-          {% if item.section.label %}
-            {# The podcast's heading is its cassette mark, a logotype (WCAG
-               1.4.5): the drawing is hidden from assistive tech, the words
-               stay in the h2 for screen readers, the TOC and search. It is
-               centered between two hairlines that fade out to the edges. #}
-            {% set mark = index.mark == 'cassette' and not item.section.title_hidden %}
-            <h2 id="{{ item.section.title_id }}"
-                class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}{{ mark ? ' has-cassette' }}"
-                tabindex="-1">
-              {%- if mark -%}
-                <span class="pf-cassette-rule" aria-hidden="true"></span>
+          {# The podcast's head (index.mark): the name (an h2 like every
+             section's), its Lede, and the cassette mark tilted behind them
+             at the right, running off the section's edge; centered under
+             them in one column (podcast.scss). The drawing is decorative;
+             the name is the h2's own text. #}
+          {% set mark = index.mark == 'cassette' and item.section.label and not item.section.title_hidden %}
+          {% if mark %}
+            <div class="pf-podcast-head">
+              <h2 id="{{ item.section.title_id }}" class="pf-section__title pf-podcast-head__title" tabindex="-1">{{ item.section.label }}</h2>
+              {% if index.lede %}
+                <p class="pf-section__lede pf-podcast-head__lede">{{ index.lede }}</p>
+              {% endif %}
+              <div class="pf-podcast-head__tape">
                 {%- include '@palefire/includes/cassette-mark.html.twig' -%}
-                <span class="pf-cassette-rule pf-cassette-rule--end" aria-hidden="true"></span><span class="visually-hidden">{{ item.section.label }}</span>
-              {%- else -%}
-                {{ item.section.label }}
-              {%- endif -%}
+              </div>
+            </div>
+          {% elseif item.section.label %}
+            <h2 id="{{ item.section.title_id }}"
+                class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}"
+                tabindex="-1">
+              {{- item.section.label -}}
             </h2>
           {% endif %}
-          {% if index.lede %}
+          {% if index.lede and not mark %}
             <p class="pf-section__lede">{{ index.lede }}</p>
           {% endif %}
           {% if index.aside %}
