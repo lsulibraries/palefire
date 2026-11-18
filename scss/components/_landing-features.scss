@@ -6141,8 +6141,30 @@ html.pf-a11y-motion .pf-hero-banner__map {
 // Folded (js/tile-views.js): two rows of the grid, five of the list, then
 // "Show more" in the switch's voice, each press fading up as many again in
 // place. Once all show, it reads "Show less", its arrow turned up.
-.pf-series__more {
+// The button and, beside it, how many show of how many.
+.pf-series__fold {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1.5rem;
+  align-items: flex-start;
   margin-top: clamp(1rem, 2vw, 1.5rem);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// As tall as the button (.pf-tiles__view), its words centered the same way.
+.pf-series__shown {
+  @extend %pf-landing-label;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--pf-toc-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-series__more {
   padding-inline: 0 .875rem;
 
   svg {
@@ -6235,10 +6257,10 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 }
 
 // The caption keeps one height whatever the series: room for the label,
-// two lines of name, four of description (the longest), the count and the
-// link, so the deck above it, which takes the rest of the column, never
-// changes size. Name and description sit together at the top, the count
-// and link at the foot, and whatever a shorter one leaves falls between.
+// two lines of name, four of description (the longest) and the link (View
+// N interviews), so the deck above it, which takes the rest of the column,
+// never changes size. Name and description sit together at the top, the
+// link at the foot, and whatever a shorter one leaves falls between.
 // The card and its description (aria-describedby) carry the full text.
 .pf-series__now {
   --pf-now-name: clamp(1.125rem, 1.5vw, 1.4375rem);
@@ -6247,18 +6269,12 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   flex-direction: column;
   gap: .375rem;
   min-width: 0;
-  height: calc(4.5 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 5.625rem + 2.875rem + 1px);
+  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 5.625rem + 2.5rem + 1px);
 }
 
-.pf-series__now-label,
-.pf-series__now-count {
+.pf-series__now-label {
   @extend %pf-landing-label;
   color: var(--pf-toc-color);
-  font-variant-numeric: tabular-nums;
-}
-
-.pf-series__now-count {
-  margin-top: auto;
 }
 
 .pf-series__now-name {
@@ -6288,8 +6304,9 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
 .pf-series__now-open {
   @extend %pf-landing-label;
-  justify-self: start;
-  margin-top: .375rem;
+  align-self: flex-start;
+  margin-top: auto;
+  font-variant-numeric: tabular-nums;
   padding-bottom: .3rem;
   color: inherit;
   text-decoration: none;

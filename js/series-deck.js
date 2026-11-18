@@ -9,7 +9,8 @@
  * the exhibitions' object view plays clips on) is fetched once, as the
  * section comes near. Pointing at or focusing a series puts it on the
  * deck: the counter shows its interview count, the caption its name,
- * description and count, and the reels run for a moment while the tape
+ * description and a link to them in search ("View 60 interviews"), and
+ * the reels run for a moment while the tape
  * winds: the take-up reel holds as much of it as the series' card shows
  * (its share of the largest series, by area), the supply reel the rest.
  * At rest it shows the largest series. Reduced motion (or the Settings
@@ -184,8 +185,8 @@
     const now = deck.querySelector('.pf-series__now');
     const name = now.querySelector('.pf-series__now-name');
     const text = now.querySelector('.pf-series__now-text');
-    const count = now.querySelector('.pf-series__now-count');
     const open = now.querySelector('.pf-series__now-open');
+    const view = now.querySelector('.pf-series__now-view');
     let svg = null;
     let current = null;
     let run = 0;
@@ -239,7 +240,10 @@
       const fill = () => {
         name.textContent = series.name;
         text.textContent = series.text;
-        count.textContent = series.count;
+        // It opens the series' interviews in search: say how many.
+        if (view) {
+          view.textContent = Drupal.formatPlural(number(series.count), 'View the interview', 'View @count interviews');
+        }
         open.href = series.url;
         now.classList.remove('is-swapping');
       };

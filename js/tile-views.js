@@ -22,7 +22,8 @@
  * folded: two rows of the grid (four beside the tape deck, the stylesheet's
  * --pf-fold-rows), or five of the list, at the columns of the
  * moment, then a "Show more" button that opens as many again in place, the
- * first of them taking focus. Once all show, it says "Show less" and folds
+ * first of them taking focus. Beside it, "Showing 12 of 39"
+ * (.pf-series__shown, the button's description). Once all show, it says "Show less" and folds
  * them again, the page held so the button stays where it was under the
  * pointer. The fold follows the view and the width. Without this script
  * every series shows and there is no button.
@@ -117,7 +118,15 @@
     button.setAttribute('aria-controls', list.id);
     button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span></span>';
     const label = button.querySelector('span');
-    list.after(button);
+    // How many show of how many, beside the button and read with it.
+    const tally = document.createElement('span');
+    tally.className = 'pf-series__shown';
+    tally.id = list.id + '-shown';
+    button.setAttribute('aria-describedby', tally.id);
+    const bar = document.createElement('div');
+    bar.className = 'pf-series__fold';
+    bar.append(button, tally);
+    list.after(bar);
 
     // Pages of the fold shown: 1 is folded; each Show more adds one.
     let pages = 1;
@@ -141,7 +150,8 @@
         item.hidden = i >= shown;
       });
       open = shown >= items.length;
-      button.hidden = size >= items.length;
+      bar.hidden = size >= items.length;
+      tally.textContent = Drupal.t('Showing @shown of @total', { '@shown': Math.min(shown, items.length), '@total': items.length });
       name();
     };
 

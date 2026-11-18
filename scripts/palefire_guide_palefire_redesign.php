@@ -579,6 +579,7 @@ HTML),
 <li>What Endures: point at an episode and the heading area now tells it, with its date, its opening paragraph and who made it, and the photo’s credit appears under the cassette. Every episode is listed now, in a list that scrolls in place under the heading, so the heading stays in view. The cassette blurs the photo behind it more strongly.</li>
 <li>Under the tape deck, a series’ description now follows its name closely even when the name fits on one line. The reading rail at the left edge of the page now reads straight down on Oral History: the Series part no longer makes the next part of the rail look already read.</li>
 <li>What Endures: the cassette is see-through again, with the photo showing through its smoked plastic and a lighter tape window.</li>
+<li>Under Oral History’s series, the Show more button now says how many you are seeing, for example “Showing 12 of 39”. Under the tape deck, the link now says what it opens, for example “View 60 interviews”, instead of “Open series”.</li>
 </ul>
 HTML),
 ]);
