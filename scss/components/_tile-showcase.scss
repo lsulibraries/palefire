@@ -2161,24 +2161,6 @@ html.pf-a11y-motion .pf-tiles--reveal .pf-tiles__item > :is(.pf-tile, .pf-tile-r
   }
 }
 
-// On Oral History's own pages (.pf-tiles--wide-frames, palefire.theme):
-// 21:9 frames, every picture filling its frame (the wide covers, about
-// 2.1:1, lose a sliver top and bottom), held still over the tiles' pan
-// (html:not(.pf-a11y-motion) … img, which makes the picture taller than
-// its frame and moves it on scroll). /v2/special keeps the 16:9 above.
-html:root .pf-tiles--whole.pf-tiles--wide-frames.pf-tiles--masonry[data-pf-view="grid"] .pf-tiles__list .pf-tile {
-  .pf-tile__media {
-    aspect-ratio: 21 / 9;
-  }
-
-  .pf-tile__media img {
-    top: 0;
-    height: 100%;
-    object-fit: cover;
-    animation: none;
-  }
-}
-
 @container pf-tiles (width < 36rem) {
   .pf-tiles--whole.pf-tiles--masonry[data-pf-view="grid"] {
     .pf-tiles__list {

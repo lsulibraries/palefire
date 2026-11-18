@@ -329,13 +329,15 @@
     </div>
   </div>{# /#swup #}
 
-  {# Footer: Special Collections or Main Library (footer_special,
-     PalefireHooks::preprocessPage()). The footer region's blocks (the site
+  {# Footer: Oral History, Special Collections or Main Library
+     (footer_oral_history, footer_special, PalefireHooks::preprocessPage()). The footer region's blocks (the site
      branding) go in its bottom bar. #}
   {{ attach_library('palefire/footer') }}
   {% include '@palefire/includes/footer.html.twig' with {
     special: footer_special,
     special_root: footer_special_root,
+    oral_history: footer_oral_history,
+    oral_history_root: footer_oral_history_root,
     cache: footer_cache,
     branding: page.footer,
     base_path: base_path,

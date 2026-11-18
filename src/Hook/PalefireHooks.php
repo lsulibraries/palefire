@@ -93,6 +93,14 @@ class PalefireHooks {
   public const SPECIAL_EXTRA = ['/v2/exhibitions'];
 
   /**
+   * Alias prefix of the Oral History pages.
+   *
+   * Every page whose alias starts with it (/v2/oralhistory and anything
+   * after it) gets the Oral History footer.
+   */
+  public const ORAL_HISTORY_ROOT = '/v2/oralhistory';
+
+  /**
    * Alias of a page drawn as the 404 page, to preview it with this theme.
    *
    * Real 404s only get this theme under /v2, and say "Error 404" in a
@@ -281,13 +289,16 @@ class PalefireHooks {
     // the sub-header bar (page.html.twig).
     $variables['modular_guide'] = FALSE;
 
-    // Footer: Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the
-    // pages under them, and on Combined Search in its Special Collections
-    // mode, whose breadcrumb names Special Collections too; the Main Library
-    // everywhere else (includes/footer.html.twig).
+    // Footer: Oral History's on every alias starting with ORAL_HISTORY_ROOT;
+    // Special Collections on SPECIAL_ROOT, SPECIAL_EXTRA and the pages under
+    // them, and on Combined Search in its Special Collections mode, whose
+    // breadcrumb names Special Collections too; the Main Library everywhere
+    // else (includes/footer.html.twig).
     $alias = self::pageAlias();
     $special_page = self::isSpecialPage($alias);
-    $variables['footer_special'] = $special_page || self::isSpecialSearch();
+    $variables['footer_oral_history'] = str_starts_with($alias, self::ORAL_HISTORY_ROOT);
+    $variables['footer_oral_history_root'] = self::ORAL_HISTORY_ROOT;
+    $variables['footer_special'] = !$variables['footer_oral_history'] && ($special_page || self::isSpecialSearch());
     $variables['footer_special_root'] = self::SPECIAL_ROOT;
     // Printed by the footer, so the cache varies by path, and by the search
     // page's mode.

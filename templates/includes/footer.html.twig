@@ -1,10 +1,13 @@
 {#
 /**
  * @file
- * Site footer (page.html.twig), in two versions that lead with their own
- * building and name the other in one line: Special Collections (Hill
- * Memorial Library) on special_root and the pages under it, the Main Library
- * everywhere else. PalefireHooks::preprocessPage() sets footer_special.
+ * Site footer (page.html.twig), in three versions that lead with their own
+ * unit and name another building in one line: Oral History (the T. Harry
+ * Williams Center, at Hill Memorial Library) on every page whose alias
+ * starts with oral_history_root, Special Collections (Hill Memorial
+ * Library) on special_root and the pages under it, the Main Library
+ * everywhere else. PalefireHooks::preprocessPage() sets
+ * footer_oral_history and footer_special.
  *
  * The footer is a Swup container (js/palefire-swup.js), so it changes along
  * with the page.
@@ -28,6 +31,9 @@
  * images/bi when those are missing.
  *
  * Available variables:
+ * - oral_history: TRUE for the Oral History version.
+ * - oral_history_root: the Oral History home page's path
+ *   (PalefireHooks::ORAL_HISTORY_ROOT).
  * - special: TRUE for the Special Collections version.
  * - special_root: the Special Collections home page's path
  *   (PalefireHooks::SPECIAL_ROOT); its links start there.
@@ -38,8 +44,37 @@
 #}
 {{ cache }}
 {% set sc = special_root %}
+{% set oh = oral_history_root %}
 {%
   set footers = {
+    oral_history: {
+      kicker: 'T. Harry Williams Center for Oral History'|t,
+      heading: 'Louisiana’s voices, recorded and kept at Hill Memorial Library.'|t,
+      intro: 'The largest and most comprehensive oral history repository in Louisiana. Listen to the interviews online, or ask us about using them in your research or recording new ones.'|t,
+      cta: { label: 'Listen online'|t, url: 'https://www.louisianadigitallibrary.org/lsu-thwcoh' },
+      lid: '236',
+      place: { name: 'Hill Memorial Library'|t, query: 'Hill Memorial Library, Baton Rouge, LA' },
+      phone: '225-578-7439',
+      ask: { label: 'Ask the Williams Center'|t, url: oh ~ '#ask' },
+      other: { name: 'Main Library'|t, lid: '241', url: base_path },
+      links: [
+        { title: 'Visit'|t, items: [
+          { label: 'Oral History home'|t, url: oh },
+          { label: 'How to use Special Collections'|t, url: sc ~ '/guides/special-collections' },
+          { label: 'Oral History FAQs'|t, url: 'https://askus.lib.lsu.edu/search/?t=0&g=12395' },
+          { label: 'All library hours'|t, url: 'https://lsu.libcal.com/hours' },
+        ] },
+        { title: 'Explore'|t, items: [
+          { label: 'Interviews in the Louisiana Digital Library'|t, url: 'https://www.louisianadigitallibrary.org/lsu-thwcoh' },
+          { label: 'What Endures, the podcast'|t, url: 'https://soundcloud.com/lsu-oralhistory' },
+          { label: 'Special Collections'|t, url: sc },
+        ] },
+      ],
+      social: [
+        { label: 'Oral History on Facebook'|t, fa: 'facebook-f', bi: 'facebook', url: 'https://www.facebook.com/LSUoralhistory' },
+        { label: 'What Endures on SoundCloud'|t, fa: 'soundcloud', bi: '', url: 'https://soundcloud.com/lsu-oralhistory' },
+      ],
+    },
     special: {
       kicker: 'Special Collections'|t,
       heading: 'Rare books, manuscripts and University Archives at Hill Memorial Library.'|t,
@@ -99,8 +134,8 @@
     },
   }
 %}
-{% set f = special ? footers.special : footers.main %}
-<footer id="pf-footer" class="pf-footer mt-auto{{ special ? ' pf-footer--special' }}" data-bs-theme="dark">
+{% set f = oral_history ? footers.oral_history : (special ? footers.special : footers.main) %}
+<footer id="pf-footer" class="pf-footer mt-auto{{ special ? ' pf-footer--special' }}{{ oral_history ? ' pf-footer--oral-history' }}" data-bs-theme="dark">
   <div class="pf-footer__inner">
     <div class="pf-footer__lead">
       <p class="pf-footer__kicker">{{ f.kicker }}</p>
@@ -174,15 +209,19 @@
         {% for item in f.social %}
           {# Theme and site-library SVG files, so |raw is safe here. #}
           {% set svg = source('libraries/fontawesome-pro/svgs/brands/' ~ item.fa ~ '.svg', ignore_missing = true) %}
-          {% if svg is empty %}
+          {% if svg is empty and item.bi %}
             {% set svg = source(directory ~ '/images/bi/' ~ item.bi ~ '.svg', ignore_missing = true) %}
           {% endif %}
-          <li>
-            <a href="{{ item.url }}" class="pf-footer__social-link">
-              <span class="pf-icon" aria-hidden="true">{{ svg|raw }}</span>
-              <span class="visually-hidden">{{ item.label }}</span>
-            </a>
-          </li>
+          {# No icon on this server (SoundCloud has no Bootstrap copy): no
+             empty button. #}
+          {% if svg is not empty %}
+            <li>
+              <a href="{{ item.url }}" class="pf-footer__social-link">
+                <span class="pf-icon" aria-hidden="true">{{ svg|raw }}</span>
+                <span class="visually-hidden">{{ item.label }}</span>
+              </a>
+            </li>
+          {% endif %}
         {% endfor %}
       </ul>
     </div>
