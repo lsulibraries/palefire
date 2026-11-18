@@ -183,6 +183,8 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Drawing ink: never pure black. The darkest ink in a drawing is `#18120d` (`$pf-cassette-ink`, `$pf-recorder-ink`), mixed toward transparency or the page background; `.pf-cassette__hole` is `fill: none`. `#000` stays only in masks.
+- **2026-11-18:** Cassette tape runs: `.pf-cassette__tape--left/right` and `.pf-cassette__ribbon--left/right`, `d` set by `drawTape()` in js/podcast.js from the pack scale (common tangent of the roller, r 3 at 23,90, and the pack, r 25 × scale at 70,68; the right mirrored). Ribbons filled with `url(#pf-cassette-fade-left/right)` (`.pf-cassette__fade-from` gold 20% from .4 → `.pf-cassette__fade-to` the pack side's color). `transition: d .6s` (.3s linear while playing) in the motion block.
 - **2026-11-18:** Cassette tape in depth: depth vector (3, −2) on the face grid. `.pf-cassette__side` (circles at pack centers + depth, `pf-cassette__pack--left/right` for scale; gold 10% in #18120d, rim gold 45%), `.pf-cassette__ribbon` (quads between front and back edges, gold 18%), `.pf-cassette__tape--back` (the front path translated, gold 35%, .6), `.pf-cassette__roller--back` (no fill, 28%).
 - **2026-11-18:** Podcast (`scss/podcast.scss`): `.pf-podcast__scroll` gets `position: relative`, the containing block for the rows' `.visually-hidden` text, which otherwise escaped the scroller and added to the page's scroll height.
 - **2026-11-18:** Series deck motion (`js/series-deck.js`): `WIND` removed; the reels' one speed is `PLAY`, and a tape change (`winding`) always takes 1s.

@@ -56,6 +56,41 @@
     return (Math.sqrt(144 + 481 * s) / 25).toFixed(3);
   };
 
+  // The tape between a guide roller and its pack (scale: the pack's, 1 full),
+  // on the face's grid: the run leaves the pack along their common tangent,
+  // so it curves onto the pack at any size, and its width runs back along
+  // the thickness (3, −2). The left run; the right is its mirror.
+  function tapeGeometry(scale, right) {
+    const r = 25 * scale;
+    const len = Math.hypot(47, 22);
+    const ux = 47 / len;
+    const uy = -22 / len;
+    const cos = (3 - r) / len;
+    const sin = Math.sqrt(1 - cos * cos);
+    const nx = cos * ux + sin * uy;
+    const ny = cos * uy - sin * ux;
+    const x = (v) => +(right ? 240 - v : v).toFixed(2);
+    const y = (v) => +v.toFixed(2);
+    const a = [x(23 + 3 * nx), y(90 + 3 * ny)];
+    const b = [x(70 + r * nx), y(68 + r * ny)];
+    const o = x(20);
+    return {
+      edge: `M${o} 96V90A3 3 0 0 ${right ? 0 : 1} ${a[0]} ${a[1]}L${b[0]} ${b[1]}`,
+      ribbon: `M${o} 96L${o} 90L${a[0]} ${a[1]}L${b[0]} ${b[1]}L${y(b[0] + 3)} ${y(b[1] - 2)}L${y(a[0] + 3)} ${y(a[1] - 2)}L${o + 3} 88L${o + 3} 94Z`,
+    };
+  }
+
+  // Redraws a mark's tape runs: as attributes, and as the d property where a
+  // browser has it, so they ease with the packs (scss/podcast.scss).
+  function drawTape(mark, side, scale) {
+    const geometry = tapeGeometry(Number(scale), side === 'right');
+    mark.querySelectorAll(`.pf-cassette__tape--${side}, .pf-cassette__ribbon--${side}`).forEach((path) => {
+      const d = path.classList.contains('pf-cassette__ribbon') ? geometry.ribbon : geometry.edge;
+      path.setAttribute('d', d);
+      path.style.setProperty('d', `path("${d}")`);
+    });
+  }
+
   // The cassette mark (includes/cassette-mark.html.twig): its tape is the
   // shown episode's length, and while that episode plays the reels turn and
   // the tape winds from the left pack to the right.
@@ -70,8 +105,12 @@
     const length = time ? time.textContent.trim() : '';
     document.querySelectorAll('.pf-cassette').forEach((mark) => {
       mark.classList.toggle('is-playing', playing);
-      mark.style.setProperty('--pf-pack-left', pack(share * (1 - progress)));
-      mark.style.setProperty('--pf-pack-right', pack(share * progress));
+      const left = pack(share * (1 - progress));
+      const right = pack(share * progress);
+      mark.style.setProperty('--pf-pack-left', left);
+      mark.style.setProperty('--pf-pack-right', right);
+      drawTape(mark, 'left', left);
+      drawTape(mark, 'right', right);
       const type = mark.querySelector('.pf-cassette__type--end');
       if (type && length) {
         type.textContent = Drupal.t('ORAL HISTORY · @time', { '@time': length });

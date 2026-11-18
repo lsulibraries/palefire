@@ -22,7 +22,9 @@
 @import "variables";
 
 $pf-recorder-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-$pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
+// The drawing's darkest ink: a warm near-black, never pure black.
+$pf-recorder-ink: #18120d;
+$pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-recorder-ink});
 
 .pf-recorder {
   --pf-recorder-screen: color-mix(in srgb, currentColor 14%, var(--bs-body-bg));
@@ -78,7 +80,7 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-recorder .pf-recorder__shadow {
-  fill: color-mix(in srgb, #000 6%, transparent);
+  fill: color-mix(in srgb, #{$pf-recorder-ink} 6%, transparent);
 }
 
 .pf-recorder .pf-recorder__through {
@@ -86,7 +88,7 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-recorder .pf-recorder__hole {
-  fill: color-mix(in srgb, var(--bs-body-bg) 25%, #000);
+  fill: color-mix(in srgb, var(--bs-body-bg) 25%, #{$pf-recorder-ink});
 }
 
 .pf-recorder .pf-recorder__mesh {
@@ -95,7 +97,7 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-recorder .pf-recorder__well {
-  fill: color-mix(in srgb, var(--bs-body-bg) 45%, #000);
+  fill: color-mix(in srgb, var(--bs-body-bg) 45%, #{$pf-recorder-ink});
 }
 
 .pf-recorder .pf-recorder__glyph {

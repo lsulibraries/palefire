@@ -15,7 +15,11 @@
  * width, and its width runs back along the thickness (3, -2 here: about a
  * third of the cassette's depth): each run is a narrow band between its
  * front and back edges, and each pack and roller shows its far side behind
- * it, so the reels read as discs of tape, not circles.
+ * it, so the reels read as discs of tape, not circles. Each run leaves its
+ * pack along their common tangent, so it curves onto the pack at any size,
+ * and fades into the pack's color as it winds on; js/podcast.js redraws the
+ * runs as the packs change (drawn here for the CSS fallbacks: a full left
+ * pack, a bare right hub).
  *
  * Decorative: the h2 keeps the section's name as visually hidden text
  * (field--node--field-scroll-section--modular-page.html.twig, index.mark).
@@ -40,6 +44,14 @@
 <clipPath id="pf-cassette-foot">
 <path d="M52 150 58 120H182L188 150z"/>
 </clipPath>
+<linearGradient id="pf-cassette-fade-left" x1="0" y1="1" x2="1" y2="0">
+<stop class="pf-cassette__fade-from" offset=".4"/>
+<stop class="pf-cassette__fade-to" offset="1"/>
+</linearGradient>
+<linearGradient id="pf-cassette-fade-right" x1="1" y1="1" x2="0" y2="0">
+<stop class="pf-cassette__fade-from" offset=".4"/>
+<stop class="pf-cassette__fade-to" offset="1"/>
+</linearGradient>
 </defs>
 <rect class="pf-cassette__shell" x="2" y="2" width="236" height="148" rx="7"/>
 <rect class="pf-cassette__fine" x="6" y="6" width="228" height="140" rx="5"/>
@@ -51,9 +63,12 @@
 <circle class="pf-cassette__side pf-cassette__pack--right" cx="173" cy="66" r="25"/>
 <circle class="pf-cassette__roller pf-cassette__roller--back" cx="26" cy="88" r="3"/>
 <circle class="pf-cassette__roller pf-cassette__roller--back" cx="220" cy="88" r="3"/>
-<path class="pf-cassette__ribbon" d="M20 96V90L23 88V94zM21.5 87.4L58 68L61 66L24.5 85.4zM220 96V90L223 88V94zM218.5 87.4L182 68L185 66L221.5 85.4z"/>
-<path class="pf-cassette__tape pf-cassette__tape--back" transform="translate(3 -2)" d="M20 96V90A3 3 0 0 1 21.5 87.4L58 68M220 96V90A3 3 0 0 0 218.5 87.4L182 68"/>
-<path class="pf-cassette__tape" d="M20 96V90A3 3 0 0 1 21.5 87.4L58 68M220 96V90A3 3 0 0 0 218.5 87.4L182 68"/>
+<path class="pf-cassette__ribbon pf-cassette__ribbon--left" d="M20 96L20 90L20.7 88.08L50.8 51.99L53.8 49.99L23.7 86.08L23 88L23 94Z"/>
+<path class="pf-cassette__ribbon pf-cassette__ribbon--right" d="M220 96L220 90L218.72 87.54L176.9 58.18L179.9 56.18L221.72 85.54L223 88L223 94Z"/>
+<path class="pf-cassette__tape pf-cassette__tape--back pf-cassette__tape--left" transform="translate(3 -2)" d="M20 96V90A3 3 0 0 1 20.7 88.08L50.8 51.99"/>
+<path class="pf-cassette__tape pf-cassette__tape--back pf-cassette__tape--right" transform="translate(3 -2)" d="M220 96V90A3 3 0 0 0 218.72 87.54L176.9 58.18"/>
+<path class="pf-cassette__tape pf-cassette__tape--left" d="M20 96V90A3 3 0 0 1 20.7 88.08L50.8 51.99"/>
+<path class="pf-cassette__tape pf-cassette__tape--right" d="M220 96V90A3 3 0 0 0 218.72 87.54L176.9 58.18"/>
 <circle class="pf-cassette__roller" cx="23" cy="90" r="3"/>
 <circle class="pf-cassette__roller" cx="217" cy="90" r="3"/>
 <circle class="pf-cassette__pin" cx="23" cy="90" r="1"/>

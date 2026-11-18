@@ -592,7 +592,9 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 }
 
 $pf-cassette-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
-$pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
+// The drawing's darkest ink: a warm near-black, never pure black.
+$pf-cassette-ink: #18120d;
+$pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink});
 
 .pf-cassette {
   display: block;
@@ -639,7 +641,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__slot {
-  fill: color-mix(in srgb, #000 55%, transparent);
+  fill: color-mix(in srgb, #{$pf-cassette-ink} 55%, transparent);
   stroke: color-mix(in srgb, currentColor 30%, transparent);
   stroke-width: .5;
 }
@@ -701,9 +703,22 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
   stroke-width: .8;
 }
 
-// The tape's width between its edges, and its far edge, fainter.
-.pf-cassette__ribbon {
-  fill: color-mix(in srgb, #{$pf-cassette-gold} 18%, transparent);
+// The tape's width between its edges, fading into the pack's side as it
+// winds on, and its far edge, fainter.
+.pf-cassette__ribbon--left {
+  fill: url("#pf-cassette-fade-left");
+}
+
+.pf-cassette__ribbon--right {
+  fill: url("#pf-cassette-fade-right");
+}
+
+.pf-cassette__fade-from {
+  stop-color: color-mix(in srgb, #{$pf-cassette-gold} 20%, transparent);
+}
+
+.pf-cassette__fade-to {
+  stop-color: color-mix(in srgb, #{$pf-cassette-gold} 10%, #18120d);
 }
 
 .pf-cassette__tape--back {
@@ -752,7 +767,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__hub--ring {
-  fill: color-mix(in srgb, #000 50%, transparent);
+  fill: color-mix(in srgb, #{$pf-cassette-ink} 50%, transparent);
 }
 
 .pf-cassette__dash {
@@ -778,23 +793,24 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__shade {
-  fill: color-mix(in srgb, #000 45%, transparent);
+  fill: color-mix(in srgb, #{$pf-cassette-ink} 45%, transparent);
   stroke: color-mix(in srgb, currentColor 25%, transparent);
   stroke-width: .4;
 }
 
 .pf-cassette__pit {
-  stroke: color-mix(in srgb, #000 70%, transparent);
+  stroke: color-mix(in srgb, #{$pf-cassette-ink} 70%, transparent);
   stroke-width: 1.1;
 }
 
+// The holes go through: open, only their rims drawn.
 .pf-cassette__hole {
-  fill: color-mix(in srgb, var(--bs-body-bg) 30%, #000);
+  fill: none;
 }
 
 // The engraved A: a groove, its lit wall a thin highlight.
 .pf-cassette__groove {
-  stroke: color-mix(in srgb, #000 38%, transparent);
+  stroke: color-mix(in srgb, #{$pf-cassette-ink} 38%, transparent);
   stroke-width: 1.2;
 }
 
@@ -870,6 +886,16 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 
     .pf-cassette.is-playing :is(.pf-cassette__pack, .pf-cassette__wind, .pf-cassette__side) {
       transition: transform .3s linear;
+    }
+
+    // The tape runs ease with their packs (d, where a browser animates it).
+    .pf-cassette__tape,
+    .pf-cassette__ribbon {
+      transition: d .6s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-cassette.is-playing :is(.pf-cassette__tape, .pf-cassette__ribbon) {
+      transition: d .3s linear;
     }
 
     .pf-podcast-backdrop img {
