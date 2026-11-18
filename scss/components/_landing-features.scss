@@ -6295,6 +6295,19 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     fill: var(--pf-deck-lit);
   }
 
+  // While a series is held (pointer or focus on it, js/series-deck.js) its
+  // name under the deck is lit in the deck's gold.
+  &.is-held .pf-series__now-name {
+    color: var(--pf-deck-gold);
+  }
+
+  // Slots, sockets and the counter's window are left clear here, outlined
+  // only: the exhibitions' fill, darker than the page, stood out beside
+  // the series.
+  .pf-series & .pf-deck__svg .hole {
+    fill: none;
+  }
+
   // js/series-deck.js turns the reels itself (rotate), so they spin up and
   // run down; the exhibitions' spin animation would hold them at 0. (The
   // section's class too, to outweigh html:not(.pf-a11y-motion) there.)
@@ -6381,7 +6394,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
     .pf-series__now :is(.pf-series__now-name, .pf-series__now-text) {
-      transition: opacity .2s ease;
+      transition: opacity .2s ease, color .5s ease;
     }
 
     .pf-series__now.is-swapping :is(.pf-series__now-name, .pf-series__now-text) {

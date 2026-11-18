@@ -45,7 +45,8 @@
     return markup;
   };
 
-  // A card's series: its name, count, description and link.
+  // A card's series: its name, count, description (the fuller one, and
+  // the short line when there is one to fall back on) and link.
   const seriesOf = (link) => {
     const text = link.getAttribute('aria-describedby');
     const desc = text ? document.getElementById(text) : null;
@@ -53,6 +54,7 @@
       name: (link.querySelector('.pf-series-reel__name') || {}).textContent || '',
       count: (link.querySelector('.pf-series-reel__count') || {}).textContent || '',
       text: desc ? desc.textContent.trim() : '',
+      short: desc ? desc.getAttribute('data-pf-short') || '' : '',
       url: link.href,
     };
   };
@@ -223,6 +225,7 @@
     let last = 0;
 
     const playing = () => {
+      deck.classList.toggle('is-held', held);
       deck.classList.toggle('is-playing', held && !winding);
     };
 
@@ -312,7 +315,12 @@
       current = series;
       const fill = () => {
         name.textContent = series.name;
+        // The fuller description when it fits the caption's six lines,
+        // else the short line.
         text.textContent = series.text;
+        if (series.short && text.scrollHeight > text.clientHeight + 1) {
+          text.textContent = series.short;
+        }
         // It opens the series' interviews in search: say how many.
         if (view) {
           view.textContent = Drupal.formatPlural(number(series.count), 'View the interview', 'View @count interviews');

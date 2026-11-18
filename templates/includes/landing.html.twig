@@ -918,9 +918,11 @@
                        top, the name at the foot. List: a ruled row, the
                        name and the count (.pf-series__row). Either way the
                        link's name is the hidden line, and its description
-                       (when the theme has one) describes it. #}
+                       (the fuller one when the theme has it, else the
+                       short; the short also kept for the deck's caption)
+                       describes it. #}
                     {% set series_text_id = series_id ~ '-' ~ loop.index %}
-                    <a class="pf-series__link" href="{{ series.url }}"{% if series.description %} aria-describedby="{{ series_text_id }}"{% endif %}>
+                    <a class="pf-series__link" href="{{ series.url }}"{% if series.description or series.details %} aria-describedby="{{ series_text_id }}"{% endif %}>
                       <span class="visually-hidden">{{ series.name }}, {{ series_count }}</span>
                       {% include '@palefire/includes/series-reel.html.twig' with { name: series.name, count: series_count, pack: series.pack } only %}
                       <span class="pf-series__row" aria-hidden="true">
@@ -928,8 +930,8 @@
                         <span class="pf-series__count">{{ series_count }}</span>
                       </span>
                     </a>
-                    {% if series.description %}
-                      <span class="pf-series__text" id="{{ series_text_id }}" hidden>{{ series.description }}</span>
+                    {% if series.description or series.details %}
+                      <span class="pf-series__text" id="{{ series_text_id }}"{% if series.details and series.description %} data-pf-short="{{ series.description }}"{% endif %} hidden>{{ series.details ?: series.description }}</span>
                     {% endif %}
                   </li>
                 {% endfor %}

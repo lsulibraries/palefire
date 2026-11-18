@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Series deck caption: up to six lines of description (`-webkit-line-clamp: 6`, height for six); the fuller description when it fits, else `data-pf-short`. `.pf-series__deck.is-held .pf-series__now-name` takes `--pf-deck-gold` (color .5s with motion). `.pf-series .pf-series__deck .pf-deck__svg .hole { fill: none }`.
 - **2026-11-18:** Cassette window (`includes/cassette-mark.html.twig`): `.pf-cassette__window` 28% `$pf-cassette-dark`; new `__tape` (gold 60%, .8), `__roller` and `__pin` (guide rollers at 23,90 and 217,90 on the face grid), `__wind` (rings at r 19 and 13.5, scaled with `--pf-pack-left/right` like the packs), `__tick` (window scale), `__glint` (6% over the window). `.pf-cassette__pack` fill is solid brown (gold 18% in #241a13) so the tape tucks under it.
 - **2026-11-18:** Series card reel (`.pf-series-reel__turn`): `transition-delay: .4s` on hover and focus only, so the turn follows the focus pull; no delay on the way back.
 - **2026-11-18:** Series deck layout (`.pf-series.has-deck`, 64rem up): `.pf-series__side` stretches the series' length and is no longer sticky; `.pf-series__deck` is sticky under the header with `max-height: calc(100svh - var(--pf-series-top) - 1.5rem)`, so the heading and intro scroll away. A height-limited drawing is centered (`preserveAspectRatio="xMidYMax meet"`, js/series-deck.js).
