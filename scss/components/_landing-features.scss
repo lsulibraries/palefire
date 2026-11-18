@@ -6674,9 +6674,11 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     // drawing's proportions (.8177). Where the screen is too short for it
     // and the caption, the caption goes up over the drawing's foot (--over,
     // just what the screen lacks) and the drawing fades out above it, the
-    // fade as long as the overlap and a fifth more, so the words sit on the
-    // page's own color. No more than 40% of the drawing goes under; on a
-    // shorter screen still, it narrows (centered) to keep to that.
+    // fade starting a little above the caption and ending inside it at a
+    // trace (15%) of the drawing: enough to see the deck go on under the
+    // words, too faint to cross them. No more than 40% of the drawing goes
+    // under; on a shorter screen still, it narrows (centered) to keep to
+    // that.
     .pf-series__deck {
       --avail: calc(100svh - var(--pf-series-top) - 1.5rem);
       --deck-w: min(100cqw, (var(--avail) - var(--pf-now-h) - 1.25rem) * .8177 / .6);
@@ -6694,8 +6696,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       height: var(--deck-h);
       min-height: 0;
       aspect-ratio: auto;
-      -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.2 * var(--over)), transparent calc(100% - var(--over)));
-      mask-image: linear-gradient(to bottom, #000 calc(100% - 2.2 * var(--over)), transparent calc(100% - var(--over)));
+      -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.8 * var(--over)), rgb(0 0 0 / .15) calc(100% - .7 * var(--over)));
+      mask-image: linear-gradient(to bottom, #000 calc(100% - 1.8 * var(--over)), rgb(0 0 0 / .15) calc(100% - .7 * var(--over)));
     }
 
     .pf-series__now {
