@@ -6234,11 +6234,20 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   }
 }
 
+// The caption keeps one height whatever the series: room for the label,
+// two lines of name, four of description (the longest), the count and the
+// link, so the deck above it, which takes the rest of the column, never
+// changes size. Name and description sit together at the top, the count
+// and link at the foot, and whatever a shorter one leaves falls between.
+// The card and its description (aria-describedby) carry the full text.
 .pf-series__now {
+  --pf-now-name: clamp(1.125rem, 1.5vw, 1.4375rem);
   flex: none;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: .375rem;
   min-width: 0;
+  height: calc(4.5 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 5.625rem + 2.875rem + 1px);
 }
 
 .pf-series__now-label,
@@ -6248,16 +6257,16 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   font-variant-numeric: tabular-nums;
 }
 
-// The caption keeps one height whatever the series (two lines of name,
-// four of description, the longest), so the deck above it, which takes
-// the rest of the column, never changes size. The card and its
-// description (aria-describedby) carry the full text.
+.pf-series__now-count {
+  margin-top: auto;
+}
+
 .pf-series__now-name {
   display: -webkit-box;
-  height: calc(2em * 1.15);
+  flex: none;
   margin: 0;
   overflow: hidden;
-  font: 500 clamp(1.125rem, 1.5vw, 1.4375rem)/1.15 $pf-font-display-serif;
+  font: 500 var(--pf-now-name)/1.15 $pf-font-display-serif;
   text-wrap: balance;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -6265,8 +6274,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
 .pf-series__now-text {
   display: -webkit-box;
+  flex: none;
   max-width: 52ch;
-  height: 6em;
   margin: .125rem 0 .25rem;
   overflow: hidden;
   font-size: .9375rem;

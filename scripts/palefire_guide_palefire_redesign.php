@@ -577,6 +577,7 @@ HTML),
 <li>Oral History’s series and their tape deck, a second pass. The deck now winds its tape to the series you point at: a big series fills the right-hand reel, a small one leaves most of the tape on the left. The deck’s column now fits on the screen, so it stays fully in view while you scroll the series, and the thin line between them runs the full length of the series. Instead of showing all 39 at once, the button now says Show more and adds a few rows each time, then Show less.</li>
 <li>The tape deck beside Oral History’s series no longer grows and shrinks as you move between series: the caption under it now keeps the same height for every series.</li>
 <li>What Endures: point at an episode and the heading area now tells it, with its date, its opening paragraph and who made it, and the photo’s credit appears under the cassette. Every episode is listed now, in a list that scrolls in place under the heading, so the heading stays in view. The cassette blurs the photo behind it more strongly.</li>
+<li>Under the tape deck, a series’ description now follows its name closely even when the name fits on one line. The reading rail at the left edge of the page now reads straight down on Oral History: the Series part no longer makes the next part of the rail look already read.</li>
 </ul>
 HTML),
 ]);

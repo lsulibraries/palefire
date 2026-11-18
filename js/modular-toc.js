@@ -564,6 +564,26 @@
     let hushedAt = null; // where the jump landed (null while it glides)
     let railPeek = null; // --pf-rail-peek as last written
 
+    // What each segment stands for on the page: from its section's top to
+    // the next shown section's top (the last, to its own foot), so the rail
+    // reads straight down even where sections nest. Oral History's lead
+    // (#home) holds Start your research (the Quick Start) and, after it, the
+    // series: measured as boxes, Home ran past Start and Start showed read
+    // while Home was still being read. Now Home ends where Start begins and
+    // Start runs on to Hours. A section whose next one starts above it (out
+    // of order) keeps its own box. boxOf gives a box in page coordinates.
+    function railSpans(boxOf) {
+      const boxes = entries.map((entry) => (isShown(entry) ? boxOf(entry.section) : null));
+      return boxes.map((box, i) => {
+        if (!box || !box.height) {
+          return box;
+        }
+        const next = boxes.slice(i + 1).find((other) => other && other.height);
+        const end = next && next.top > box.top ? next.top : box.top + box.height;
+        return { top: box.top, height: Math.max(1, end - box.top) };
+      });
+    }
+
     // Weights from the sections' heights, on load and when they resize,
     // never on scroll.
     function measureRail() {
@@ -571,11 +591,16 @@
       if (destroyed || !railOn()) {
         return;
       }
+      const spans = railSpans((el) => {
+        const rect = el.getBoundingClientRect();
+        return { top: rect.top + window.scrollY, height: rect.height };
+      });
       const shown = entries.filter((entry) => !entry.li.hidden);
       shown.forEach((entry, i) => {
         // A gallery that isn't open (exhibitions) has no height: give it a
         // screen's worth, so it still has a segment to aim at.
-        const height = isShown(entry) ? entry.section.getBoundingClientRect().height : window.innerHeight;
+        const span = spans[entries.indexOf(entry)];
+        const height = isShown(entry) && span ? span.height : window.innerHeight;
         entry.li.style.setProperty('--pf-rail-w', Math.max(1, Math.round(height)));
         entry.li.style.setProperty('--pf-rail-i', i);
       });
@@ -607,10 +632,8 @@
       const head = headerHeight();
       const span = window.innerHeight - head;
       const line = head + span * ACTIVATION_LINE;
-      const fills = entries.map((entry) => {
-        const box = layout.box(entry.section);
-        return isShown(entry) && box.height ? Math.min(1, Math.max(0, (line - (box.top - window.scrollY)) / box.height)) : 0;
-      });
+      const spans = railSpans((el) => layout.box(el));
+      const fills = spans.map((box) => (box && box.height ? Math.min(1, Math.max(0, (line - (box.top - window.scrollY)) / box.height)) : 0));
       let peek = 0;
       if (active && isShown(active)) {
         const top = layout.top(active.title || active.section);
