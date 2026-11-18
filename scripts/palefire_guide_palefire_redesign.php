@@ -611,6 +611,7 @@ HTML),
 <li>Oral History’s series: the tape deck now fills its column; on shorter screens its bottom fades to a faint trace behind the series name and description instead of the whole drawing shrinking.</li>
 <li>Oral History’s series: the tape deck no longer fast-forwards when you move to a smaller series; the tape simply settles to its new amount while the reels keep their calm playing speed.</li>
 <li>Oral History: the empty band under the footer is gone. Hidden text in the podcast’s episode list was spilling out of its scrolling box and making the page longer than its content.</li>
+<li>What Endures: the tape inside the cassette now has depth: each run of tape is a ribbon seen at the cassette’s angle, and the reels show their sides, so they read as discs of tape.</li>
 </ul>
 HTML),
 ]);

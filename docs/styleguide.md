@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Cassette tape in depth: depth vector (3, −2) on the face grid. `.pf-cassette__side` (circles at pack centers + depth, `pf-cassette__pack--left/right` for scale; gold 10% in #18120d, rim gold 45%), `.pf-cassette__ribbon` (quads between front and back edges, gold 18%), `.pf-cassette__tape--back` (the front path translated, gold 35%, .6), `.pf-cassette__roller--back` (no fill, 28%).
 - **2026-11-18:** Podcast (`scss/podcast.scss`): `.pf-podcast__scroll` gets `position: relative`, the containing block for the rows' `.visually-hidden` text, which otherwise escaped the scroller and added to the page's scroll height.
 - **2026-11-18:** Series deck motion (`js/series-deck.js`): `WIND` removed; the reels' one speed is `PLAY`, and a tape change (`winding`) always takes 1s.
 - **2026-11-18:** Series deck: `.pf-series__machine` sized by `--deck-w` (the side column's `100cqw`, at the drawing's .8177) and `--over` (what the screen lacks for drawing + caption); a `mask-image` fades its foot to 15% and `.pf-series__now` rises by `--over`. The caption height is now the `--pf-now-h` token on `.pf-series__deck`.

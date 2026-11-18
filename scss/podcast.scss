@@ -677,9 +677,18 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__pack,
-.pf-cassette__wind {
+.pf-cassette__wind,
+.pf-cassette__side {
   transform-box: fill-box;
   transform-origin: center;
+}
+
+// The far side of each pack: the edge of the wound tape, darker, its rim
+// fainter, showing as a crescent up and right of the pack.
+.pf-cassette__side {
+  fill: color-mix(in srgb, #{$pf-cassette-gold} 10%, #18120d);
+  stroke: color-mix(in srgb, #{$pf-cassette-gold} 45%, transparent);
+  stroke-width: .6;
 }
 
 .pf-cassette__wind {
@@ -692,10 +701,25 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
   stroke-width: .8;
 }
 
+// The tape's width between its edges, and its far edge, fainter.
+.pf-cassette__ribbon {
+  fill: color-mix(in srgb, #{$pf-cassette-gold} 18%, transparent);
+}
+
+.pf-cassette__tape--back {
+  stroke: color-mix(in srgb, #{$pf-cassette-gold} 35%, transparent);
+  stroke-width: .6;
+}
+
 .pf-cassette__roller {
   fill: color-mix(in srgb, currentColor 12%, transparent);
   stroke: color-mix(in srgb, currentColor 50%, transparent);
   stroke-width: .6;
+}
+
+.pf-cassette__roller--back {
+  fill: none;
+  stroke: color-mix(in srgb, currentColor 28%, transparent);
 }
 
 .pf-cassette__pin {
@@ -799,7 +823,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
     stroke: CanvasText;
   }
 
-  .pf-cassette :is(.pf-cassette__sides, .pf-cassette__end, .pf-cassette__shell, .pf-cassette__window, .pf-cassette__pack) {
+  .pf-cassette :is(.pf-cassette__sides, .pf-cassette__end, .pf-cassette__shell, .pf-cassette__window, .pf-cassette__pack, .pf-cassette__side) {
     fill: Canvas;
   }
 }
@@ -839,11 +863,12 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
     .pf-cassette__pack,
-    .pf-cassette__wind {
+    .pf-cassette__wind,
+    .pf-cassette__side {
       transition: transform .6s cubic-bezier(.2, .7, .2, 1);
     }
 
-    .pf-cassette.is-playing :is(.pf-cassette__pack, .pf-cassette__wind) {
+    .pf-cassette.is-playing :is(.pf-cassette__pack, .pf-cassette__wind, .pf-cassette__side) {
       transition: transform .3s linear;
     }
 

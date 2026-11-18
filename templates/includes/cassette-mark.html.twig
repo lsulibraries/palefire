@@ -11,7 +11,11 @@
  * each pack down round a guide roller, the window's printed scale, and a
  * glint on the clear plastic. The works sit deeper than the window, so they
  * are set back along the thickness (up and right, as the sides recede) and
- * the window's left and lower walls cover a sliver of them.
+ * the window's left and lower walls cover a sliver of them. The tape has
+ * width, and its width runs back along the thickness (3, -2 here: about a
+ * third of the cassette's depth): each run is a narrow band between its
+ * front and back edges, and each pack and roller shows its far side behind
+ * it, so the reels read as discs of tape, not circles.
  *
  * Decorative: the h2 keeps the section's name as visually hidden text
  * (field--node--field-scroll-section--modular-page.html.twig, index.mark).
@@ -43,6 +47,12 @@
 <g class="pf-cassette__inside" transform="translate(1.8 -1.2)">
 <circle class="pf-cassette__flange" cx="70" cy="68" r="26"/>
 <circle class="pf-cassette__flange" cx="170" cy="68" r="26"/>
+<circle class="pf-cassette__side pf-cassette__pack--left" cx="73" cy="66" r="25"/>
+<circle class="pf-cassette__side pf-cassette__pack--right" cx="173" cy="66" r="25"/>
+<circle class="pf-cassette__roller pf-cassette__roller--back" cx="26" cy="88" r="3"/>
+<circle class="pf-cassette__roller pf-cassette__roller--back" cx="220" cy="88" r="3"/>
+<path class="pf-cassette__ribbon" d="M20 96V90L23 88V94zM21.5 87.4L58 68L61 66L24.5 85.4zM220 96V90L223 88V94zM218.5 87.4L182 68L185 66L221.5 85.4z"/>
+<path class="pf-cassette__tape pf-cassette__tape--back" transform="translate(3 -2)" d="M20 96V90A3 3 0 0 1 21.5 87.4L58 68M220 96V90A3 3 0 0 0 218.5 87.4L182 68"/>
 <path class="pf-cassette__tape" d="M20 96V90A3 3 0 0 1 21.5 87.4L58 68M220 96V90A3 3 0 0 0 218.5 87.4L182 68"/>
 <circle class="pf-cassette__roller" cx="23" cy="90" r="3"/>
 <circle class="pf-cassette__roller" cx="217" cy="90" r="3"/>
