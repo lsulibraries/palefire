@@ -307,6 +307,22 @@
       }
     };
 
+    // The fuller description when it fits the caption's six lines, else
+    // the short line. Checked again whenever the caption changes size (the
+    // deck shown, the column resized, the fonts in): hidden, it measures 0.
+    const fit = () => {
+      if (!current) {
+        return;
+      }
+      text.textContent = current.text;
+      if (current.short && text.clientHeight && text.scrollHeight > text.clientHeight + 1) {
+        text.textContent = current.short;
+      }
+    };
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(fit).observe(now);
+    }
+
     const put = (link, quiet) => {
       const series = seriesOf(link);
       if (current && current.url === series.url) {
@@ -315,12 +331,7 @@
       current = series;
       const fill = () => {
         name.textContent = series.name;
-        // The fuller description when it fits the caption's six lines,
-        // else the short line.
-        text.textContent = series.text;
-        if (series.short && text.scrollHeight > text.clientHeight + 1) {
-          text.textContent = series.short;
-        }
+        fit();
         // It opens the series' interviews in search: say how many.
         if (view) {
           view.textContent = Drupal.formatPlural(number(series.count), 'View the interview', 'View @count interviews');

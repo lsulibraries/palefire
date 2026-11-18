@@ -601,6 +601,7 @@ HTML),
 <li>Hill Memorial map: a small north arrow now lies on the drawing, in the empty space at the lower right, so you can match the building to campus. North is toward the Reading Room end; the entrance faces east.</li>
 <li>Oral History’s series: Show more is now a full-width button across the grid, with how many are showing at its end, and View interviews under the tape deck is a matching button, both in the same style as the site’s other buttons.</li>
 <li>What Endures: the heading area is shorter (a slightly smaller cassette, a little less room kept for episode descriptions), so the episode list starts higher, and small laptop screens show more of it.</li>
+<li>Oral History’s series: after Show more, a Show less button now sits right beside it, so you can fold the list back at any point, not only once every series is showing.</li>
 </ul>
 HTML),
 ]);

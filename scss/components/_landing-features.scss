@@ -6198,22 +6198,28 @@ html.pf-a11y-motion .pf-hero-banner__map {
 // the whole grid (the site's secondary button, as All library hours): the
 // words at its start, the arrow at its end, and how many show of how many
 // laid over it just before the arrow (its own element, the button's
-// description, so clicks pass through it to the button).
+// description, so clicks pass through it to the button). Once it has been
+// pressed, Show less (its arrow up) stands beside it, or under it where
+// the grid is too narrow for both and the count (the section's container,
+// or the series' own beside the deck).
 .pf-series__fold {
   display: grid;
+  gap: .625rem;
   margin-top: clamp(1rem, 2vw, 1.5rem);
+
+  &:has(> .pf-series__less:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 
   &[hidden] {
     display: none;
   }
 }
 
-.pf-series__more {
+.pf-series__more,
+.pf-series__less {
   @extend %pf-button-secondary;
-  grid-area: 1 / 1;
-  justify-content: flex-start;
   gap: .625rem;
-  width: 100%;
   min-height: 2.75rem;
   padding: .5rem 1rem;
 
@@ -6221,16 +6227,40 @@ html.pf-a11y-motion .pf-hero-banner__map {
     flex: none;
     width: .875rem;
     height: .875rem;
+    transition: translate $pf-hover-out ease;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-series__less {
+  grid-area: 1 / 2;
+}
+
+@container pf-series (width < 30rem) {
+  .pf-series__fold:has(> .pf-series__less:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-series__less {
+    grid-area: 2 / 1;
+  }
+}
+
+.pf-series__more {
+  grid-area: 1 / 1;
+  justify-content: flex-start;
+  width: 100%;
+
+  svg {
     margin-inline-start: auto;
     transition: rotate .4s cubic-bezier(.2, .7, .2, 1), translate $pf-hover-out ease;
   }
 
   &.is-open svg {
     rotate: 180deg;
-  }
-
-  &[hidden] {
-    display: none;
   }
 }
 
@@ -6251,10 +6281,14 @@ html.pf-a11y-motion .pf-hero-banner__map {
   html:not(.pf-a11y-motion) .pf-series__more:is(:hover, :focus-visible) svg {
     translate: 0 .125rem;
   }
+
+  html:not(.pf-a11y-motion) .pf-series__less:is(:hover, :focus-visible) svg {
+    translate: 0 -.125rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-series__more svg {
+  :is(.pf-series__more, .pf-series__less) svg {
     transition: none;
   }
 }

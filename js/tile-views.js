@@ -23,7 +23,8 @@
  * --pf-fold-rows), or five of the list, at the columns of the
  * moment, then a "Show more" button that opens as many again in place, the
  * first of them taking focus. Beside it, "Showing 12 of 39"
- * (.pf-series__shown, the button's description). Once all show, it says "Show less" and folds
+ * (.pf-series__shown, the button's description). Once it has been pressed, a second button,
+ * "Show less", folds them again beside it; once all show, the first one says "Show less" and folds
  * them again, the page held so the button stays where it was under the
  * pointer. The fold follows the view and the width. Without this script
  * every series shows and there is no button.
@@ -125,9 +126,18 @@
     tally.className = 'pf-series__shown';
     tally.id = list.id + '-shown';
     button.setAttribute('aria-describedby', tally.id);
+    // Once Show more has been pressed and some are still hidden, Show less
+    // beside it folds back to the first page.
+    const less = document.createElement('button');
+    less.type = 'button';
+    less.className = 'pf-series__less';
+    less.hidden = true;
+    less.setAttribute('aria-controls', list.id);
+    less.innerHTML = '<span></span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 13V3M4 7l4-4 4 4"/></svg>';
+    less.querySelector('span').textContent = Drupal.t('Show less');
     const bar = document.createElement('div');
     bar.className = 'pf-series__fold';
-    bar.append(button, tally);
+    bar.append(button, tally, less);
     list.after(bar);
 
     // Pages of the fold shown: 1 is folded; each Show more adds one.
@@ -153,18 +163,29 @@
       });
       open = shown >= items.length;
       bar.hidden = size >= items.length;
+      less.hidden = open || pages < 2;
       tally.textContent = Drupal.t('Showing @shown of @total', { '@shown': Math.min(shown, items.length), '@total': items.length });
       name();
     };
 
+    // Fold again, holding Show more where it was on screen.
+    const collapse = () => {
+      const before = button.getBoundingClientRect().top;
+      pages = 1;
+      items.forEach((item) => item.classList.remove('is-unfolding'));
+      apply();
+      window.scrollBy({ top: button.getBoundingClientRect().top - before, behavior: 'instant' });
+    };
+
+    less.addEventListener('click', () => {
+      collapse();
+      // Show less has gone: the focus goes to Show more beside it.
+      button.focus({ preventScroll: true });
+    });
+
     button.addEventListener('click', () => {
       if (open) {
-        // Fold again, holding the button where it was on screen.
-        const before = button.getBoundingClientRect().top;
-        pages = 1;
-        items.forEach((item) => item.classList.remove('is-unfolding'));
-        apply();
-        window.scrollBy({ top: button.getBoundingClientRect().top - before, behavior: 'instant' });
+        collapse();
         return;
       }
       const hidden = items.filter((item) => item.hidden);
