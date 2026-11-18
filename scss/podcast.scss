@@ -70,46 +70,6 @@
   background: color-mix(in srgb, var(--bs-body-color) 8%, transparent);
 }
 
-// The picture box: the cover, and while an episode is loaded the
-// exhibitions' tape deck in its place (js/podcast.js), its top plate
-// centered in the square (.pf-deck sizes itself to its container). The two
-// cross-fade; with reduced motion they swap.
-.pf-podcast__art {
-  display: grid;
-  width: 100%;
-  max-width: 14rem;
-  aspect-ratio: 1;
-  container-type: size;
-
-  > * {
-    grid-area: 1 / 1;
-  }
-
-  .pf-deck {
-    place-self: center;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  &.is-decked {
-    .pf-podcast__cover {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .pf-deck {
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html:not(.pf-a11y-motion) .pf-podcast__art > * {
-    transition: opacity .6s ease, visibility .6s;
-  }
-}
-
 .pf-podcast__body {
   display: grid;
   align-content: start;
@@ -347,6 +307,138 @@
           background: var(--pf-g-hover, var(--pf-exhibit-accent, var(--bs-body-color)));
         }
       }
+    }
+  }
+}
+
+// The cassette mark beside the section's heading (includes/
+// cassette-mark.html.twig): a hairline drawing, its title in gold paint
+// marker. At rest it is the finished drawing. On view (is-in, js/podcast.js)
+// the outline traces in, the title writes itself, the reels give a half turn;
+// while an episode plays (is-playing) the reels turn, and the tape packs
+// follow its progress (--pf-tape, 0 to 1). Motion only when allowed.
+.pf-section__title.has-cassette {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.pf-section__title-text {
+  min-width: 0;
+}
+
+.pf-cassette {
+  --pf-tape: .22;
+  flex: none;
+  width: clamp(5.5rem, 4rem + 7vw, 10rem);
+  height: auto;
+  overflow: visible;
+  color: var(--bs-body-color);
+
+  * {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.pf-cassette__edge {
+  stroke: color-mix(in srgb, currentColor 70%, transparent);
+  stroke-width: 1.3;
+}
+
+.pf-cassette__mid,
+.pf-cassette__hub {
+  stroke: color-mix(in srgb, currentColor 50%, transparent);
+  stroke-width: 1;
+}
+
+.pf-cassette__hub {
+  stroke: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+.pf-cassette__fine {
+  stroke: color-mix(in srgb, currentColor 25%, transparent);
+  stroke-width: 1;
+}
+
+.pf-cassette__pack {
+  stroke: color-mix(in srgb, var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold})) 45%, transparent);
+  stroke-dasharray: 1.5 2;
+}
+
+.pf-cassette__pack--left {
+  transform-origin: 92px 77px;
+  transform: scale(calc(1 - .5 * var(--pf-tape)));
+}
+
+.pf-cassette__pack--right {
+  transform-origin: 148px 77px;
+  transform: scale(calc(.5 + .5 * var(--pf-tape)));
+}
+
+.pf-cassette__tape {
+  stroke: color-mix(in srgb, var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold})) 60%, transparent);
+  stroke-width: 1.2;
+}
+
+.pf-cassette__hand {
+  stroke: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  stroke-width: 1.5;
+}
+
+.pf-cassette__draw,
+.pf-cassette__hand path {
+  stroke-dasharray: 1;
+}
+
+@keyframes pf-cassette-write {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes pf-cassette-settle {
+  to {
+    transform: rotate(-180deg);
+  }
+}
+
+@keyframes pf-cassette-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) {
+    .pf-cassette__pack {
+      transition: transform 1s linear;
+    }
+
+    .pf-cassette.is-waiting {
+      .pf-cassette__draw,
+      .pf-cassette__hand path {
+        stroke-dashoffset: 1;
+      }
+    }
+
+    .pf-cassette.is-in {
+      .pf-cassette__draw {
+        animation: pf-cassette-write 1.1s var(--d) cubic-bezier(.6, 0, .3, 1) both;
+      }
+
+      .pf-cassette__hand path {
+        animation: pf-cassette-write .9s calc(var(--i) * .45s + 1.5s) linear both;
+      }
+
+      .pf-cassette__hub {
+        animation: pf-cassette-settle 1.4s 4.2s cubic-bezier(.3, .6, .3, 1) both;
+      }
+    }
+
+    .pf-cassette.is-playing .pf-cassette__hub {
+      animation: pf-cassette-spin 3.2s linear infinite;
     }
   }
 }

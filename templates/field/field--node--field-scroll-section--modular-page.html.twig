@@ -50,9 +50,17 @@
             <div class="pf-section__head">
           {% endif %}
           {% if item.section.label %}
+            {# The podcast's heading carries its cassette mark (decorative). #}
+            {% set mark = index.mark == 'cassette' and not item.section.title_hidden %}
             <h2 id="{{ item.section.title_id }}"
-                class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}"
-                tabindex="-1">{{ item.section.label }}</h2>
+                class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}{{ mark ? ' has-cassette' }}"
+                tabindex="-1">
+              {%- if mark -%}
+                {% include '@palefire/includes/cassette-mark.html.twig' %}<span class="pf-section__title-text">{{ item.section.label }}</span>
+              {%- else -%}
+                {{ item.section.label }}
+              {%- endif -%}
+            </h2>
           {% endif %}
           {% if index.lede %}
             <p class="pf-section__lede">{{ index.lede }}</p>

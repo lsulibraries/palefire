@@ -11,20 +11,12 @@
  * that played it. One clip at a time on the page: an exhibition clip
  * playing pauses the episode, and the other way round.
  *
- * While an episode is loaded, the newest one's picture box shows the
- * exhibitions' tape deck (images/exhibit-deck.svg, fetched on the first
- * Play, inline so the theme colors it) instead of the cover: labeled What
- * Endures and the episode's year, its counter the episode's time, its
- * reels turning while it plays and PAUSE lit while it waits part-way
- * (_exhibition.scss .pf-deck, scss/podcast.scss). Closing the bar brings
- * the cover back. Decorative: the bar is the player.
- *
  * The MP3 is requested only on Play (preload none).
  */
 (function (Drupal, once) {
   'use strict';
 
-  const state = { bar: null, audio: null, trigger: null, year: '' };
+  const state = { bar: null, audio: null, trigger: null };
 
   const clock = (seconds) => {
     if (!isFinite(seconds) || seconds < 0) {
@@ -37,67 +29,23 @@
     return h ? h + ':' + String(m).padStart(2, '0') + ':' + s : m + ':' + s;
   };
 
-  // The deck follows the episode that is loaded.
-  function syncDeck() {
-    const art = document.querySelector('.pf-podcast__art');
-    const deck = art && art.querySelector('.pf-deck');
-    if (!deck) {
-      return;
-    }
+  // The cassette mark (includes/cassette-mark.html.twig): its reels turn
+  // while an episode plays, its tape packs follow the episode's progress.
+  function syncCassettes() {
     const audio = state.audio;
-    art.classList.toggle('is-decked', !!audio);
-    deck.classList.toggle('is-playing', !!audio && !audio.paused);
-    deck.classList.toggle('is-paused', !!audio && audio.paused && audio.currentTime > 0 && !audio.ended);
-    if (audio) {
-      const time = clock(audio.currentTime);
-      deck.querySelector('.count').textContent = time.length < 5 ? '0' + time : time;
-      deck.querySelector('.year').textContent = state.year;
-    }
-  }
-
-  let deckMarkup = null;
-
-  function deckIn() {
-    const art = document.querySelector('.pf-podcast__art[data-pf-deck]');
-    if (!art || art.querySelector('.pf-deck') || !window.fetch || !window.DOMParser) {
-      syncDeck();
-      return;
-    }
-    deckMarkup = deckMarkup || fetch(art.dataset.pfDeck).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
+    const playing = !!audio && !audio.paused;
+    const progress = audio && audio.duration ? Math.min(1, audio.currentTime / audio.duration) : null;
+    document.querySelectorAll('.pf-cassette').forEach((mark) => {
+      mark.classList.toggle('is-playing', playing);
+      if (progress !== null) {
+        mark.style.setProperty('--pf-tape', progress.toFixed(3));
       }
-      return response.text();
-    });
-    deckMarkup.then((markup) => {
-      const svg = new DOMParser().parseFromString(markup, 'image/svg+xml').documentElement;
-      if (svg.localName !== 'svg') {
-        throw new Error('exhibit-deck.svg');
-      }
-      if (art.querySelector('.pf-deck')) {
-        return;
-      }
-      const deck = document.createElement('div');
-      deck.className = 'pf-deck';
-      deck.setAttribute('aria-hidden', 'true');
-      deck.append(document.importNode(svg, true));
-      art.append(deck);
-      const kind = deck.querySelector('.kind');
-      kind.textContent = Drupal.t('What Endures').toLocaleUpperCase();
-      // Pressed to its box, as a longer word is on the exhibitions' deck.
-      if (kind.getComputedTextLength() > 88) {
-        kind.setAttribute('textLength', '88');
-        kind.setAttribute('lengthAdjust', 'spacingAndGlyphs');
-      }
-      syncDeck();
-    }).catch(() => {
-      deckMarkup = null;
     });
   }
 
   // Every Play button for the episode that is loaded shows its state.
   function syncButtons() {
-    syncDeck();
+    syncCassettes();
     const audio = state.audio;
     const src = audio ? audio.dataset.src : '';
     document.querySelectorAll('[data-pf-podcast-src]').forEach((button) => {
@@ -175,11 +123,11 @@
     };
     ['play', 'pause', 'timeupdate', 'durationchange', 'ended'].forEach((type) => audio.addEventListener(type, () => {
       sync();
-      if (type === 'timeupdate') {
-        syncDeck();
+      if (type !== 'timeupdate') {
+        syncButtons();
       }
       else {
-        syncButtons();
+        syncCassettes();
       }
     }));
     // One clip at a time: this one pauses the page's others.
@@ -243,8 +191,6 @@
     state.bar.querySelector('.pf-listen__title').textContent = button.dataset.pfPodcastTitle || '';
     state.audio.dataset.src = src;
     state.audio.src = src;
-    state.year = ((button.dataset.pfPodcastKicker || '').match(/\d{4}/) || [''])[0];
-    deckIn();
     const playing = state.audio.play();
     if (playing && playing.catch) {
       playing.catch(() => syncButtons());
@@ -255,6 +201,21 @@
     attach(context) {
       once('pf-podcast', '[data-pf-podcast-src]', context).forEach((button) => {
         button.addEventListener('click', () => start(button));
+      });
+      // The cassette draws itself once, when it comes into view.
+      once('pf-cassette', '.pf-cassette', context).forEach((mark) => {
+        if (!('IntersectionObserver' in window)) {
+          return;
+        }
+        // Undrawn until then (only where motion is allowed: podcast.scss).
+        mark.classList.add('is-waiting');
+        const observer = new IntersectionObserver((entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            mark.classList.replace('is-waiting', 'is-in');
+            observer.disconnect();
+          }
+        }, { threshold: 0.6 });
+        observer.observe(mark);
       });
       // The list takes focus from the bar's title.
       once('pf-podcast-list', '#podcast', context).forEach((list) => list.setAttribute('tabindex', '-1'));
