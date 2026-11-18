@@ -47,10 +47,12 @@ if (!FieldStorageConfig::loadByName('paragraph', $name)) {
     'entity_type' => 'paragraph',
     'type' => 'list_string',
     'settings' => [
+      // Key => label: ListItemBase turns these into value/label pairs
+      // itself (pairs here were nested twice and refused).
       'allowed_values' => [
-        ['value' => 'faded', 'label' => 'Faded'],
-        ['value' => 'mono', 'label' => 'Black and white'],
-        ['value' => 'none', 'label' => 'No filter'],
+        'faded' => 'Faded',
+        'mono' => 'Black and white',
+        'none' => 'No filter',
       ],
     ],
   ])->save();
