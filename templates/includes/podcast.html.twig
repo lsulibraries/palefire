@@ -10,7 +10,8 @@
  * Every episode the pull kept, in a box that scrolls in place under the
  * head, so the head stays in view.
  *
- * Each row: its number, the title (a link to the episode's SoundCloud page,
+ * Each row: its number (counted from the first episode, so the newest has
+ * the highest; the feed's own episode numbers repeat and skip), the title (a link to the episode's SoundCloud page,
  * for its comments and sharing; the newest in gold, marked Latest), the
  * date, the length, and a round Play. Each row carries its episode's photo
  * and length (seconds) for js/podcast.js: pointed at, focused or playing,
@@ -51,10 +52,11 @@
 <div class="pf-podcast" id="podcast">
   {% if latest %}
     <div class="pf-podcast__scroll">
-    <ol class="pf-podcast__list" aria-label="{{ 'Episodes, newest first'|t }}">
+    <ol class="pf-podcast__list" reversed aria-label="{{ 'Episodes, newest first'|t }}">
       {% for episode in [latest]|merge(more ?: []) %}
-        <li class="pf-podcast__row{{ loop.first ? ' pf-podcast__row--latest' }}" data-pf-podcast-photo="{{ episode.cover }}" data-pf-podcast-length="{{ episode.length }}" data-pf-podcast-kicker="{{ episode.kicker }}" data-pf-podcast-about="{{ episode.body|first ?: episode.summary }}" data-pf-podcast-credits="{{ episode.credits }}" data-pf-podcast-credit="{{ episode.photo }}">
-          <span class="pf-podcast__num" aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+        {% set num = '%02d'|format(loop.length - loop.index0) %}
+        <li class="pf-podcast__row{{ loop.first ? ' pf-podcast__row--latest' }}" data-pf-podcast-photo="{{ episode.cover }}" data-pf-podcast-length="{{ episode.length }}" data-pf-podcast-kicker="{{ num }} · {{ episode.month ?: episode.kicker }}" data-pf-podcast-about="{{ episode.body|first ?: episode.summary }}" data-pf-podcast-credits="{{ episode.credits }}" data-pf-podcast-credit="{{ episode.photo }}">
+          <span class="pf-podcast__num" aria-hidden="true">{{ num }}</span>
           <div class="pf-podcast__row-text">
             <a class="pf-podcast__row-title" href="{{ episode.link }}" target="_blank" rel="noopener">
               {%- if loop.first -%}<span class="visually-hidden">{{ 'Latest episode:'|t }} </span>{%- endif -%}

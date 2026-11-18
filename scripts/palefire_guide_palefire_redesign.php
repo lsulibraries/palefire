@@ -606,6 +606,7 @@ HTML),
 <li>What Endures: a longer introduction under the heading (more than 6,000 hours of interviews, Louisiana’s hidden stories), and a Listen on SoundCloud button under the episode list.</li>
 <li>Oral History’s series: the thin line between the tape deck and the cards is gone, so the space between them does the separating, and the cards line up with the map below.</li>
 <li>What Endures: fixed the few gold dots that showed on the cassette before its handwritten title began to draw.</li>
+<li>What Endures: the reels inside the cassette sit a little deeper behind the window, and the episodes are numbered from the first, so the newest has the highest number.</li>
 </ul>
 HTML),
 ]);
