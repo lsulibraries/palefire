@@ -47,10 +47,14 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 // Every episode scrolls in place under the head, which stays in view to
 // tell the one pointed at. The box fades at an edge with more beyond it
 // (.is-scrolled, .is-more from js/podcast.js). A little padding at the end
-// keeps the Play buttons' focus rings inside it.
+// keeps the Play buttons' focus rings inside it. Positioned, so it holds
+// the rows' absolutely placed screen-reader text: placed against the
+// section instead, that text went uncut past the box's foot and stretched
+// the page under the footer (2026-11-18).
 .pf-podcast__scroll {
   --pf-podcast-fade-top: 0px;
   --pf-podcast-fade-bottom: 0px;
+  position: relative;
   max-height: min(24rem, 60svh);
   margin-inline-end: -.25rem;
   padding-inline-end: .25rem;

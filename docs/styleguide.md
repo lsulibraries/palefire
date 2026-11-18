@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Podcast (`scss/podcast.scss`): `.pf-podcast__scroll` gets `position: relative`, the containing block for the rows' `.visually-hidden` text, which otherwise escaped the scroller and added to the page's scroll height.
 - **2026-11-18:** Series deck motion (`js/series-deck.js`): `WIND` removed; the reels' one speed is `PLAY`, and a tape change (`winding`) always takes 1s.
 - **2026-11-18:** Series deck: `.pf-series__machine` sized by `--deck-w` (the side column's `100cqw`, at the drawing's .8177) and `--over` (what the screen lacks for drawing + caption); a `mask-image` fades its foot to 15% and `.pf-series__now` rises by `--over`. The caption height is now the `--pf-now-h` token on `.pf-series__deck`.
 - **2026-11-18:** `.pf-cassette__inside` carries `transform="translate(1.8 -1.2)"` (set back along the thickness; `__tick` moved out of it, onto the window). `.pf-podcast__list` is `<ol reversed>`; `.pf-podcast__num` is `loop.length - loop.index0`, two digits; rows' `data-pf-podcast-kicker` is that number · the month.
