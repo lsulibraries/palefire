@@ -6193,14 +6193,14 @@ html.pf-a11y-motion .pf-hero-banner__map {
 }
 
 // Folded (js/tile-views.js): two rows of the grid, five of the list, then
-// "Show more" in the switch's voice, each press fading up as many again in
-// place. Once all show, it reads "Show less", its arrow turned up.
-// The button and, beside it, how many show of how many.
+// "Show more", each press fading up as many again in place. Once all show,
+// it reads "Show less", its arrow turned up. The button is a slab across
+// the whole grid (the site's secondary button, as All library hours): the
+// words at its start, the arrow at its end, and how many show of how many
+// laid over it just before the arrow (its own element, the button's
+// description, so clicks pass through it to the button).
 .pf-series__fold {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .25rem 1.5rem;
-  align-items: flex-start;
+  display: grid;
   margin-top: clamp(1rem, 2vw, 1.5rem);
 
   &[hidden] {
@@ -6208,21 +6208,21 @@ html.pf-a11y-motion .pf-hero-banner__map {
   }
 }
 
-// As tall as the button (.pf-tiles__view), its words centered the same way.
-.pf-series__shown {
-  @extend %pf-landing-label;
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  color: var(--pf-toc-color);
-  font-variant-numeric: tabular-nums;
-}
-
 .pf-series__more {
-  padding-inline: 0 .875rem;
+  @extend %pf-button-secondary;
+  grid-area: 1 / 1;
+  justify-content: flex-start;
+  gap: .625rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: .5rem 1rem;
 
   svg {
-    transition: rotate .4s cubic-bezier(.2, .7, .2, 1);
+    flex: none;
+    width: .875rem;
+    height: .875rem;
+    margin-inline-start: auto;
+    transition: rotate .4s cubic-bezier(.2, .7, .2, 1), translate $pf-hover-out ease;
   }
 
   &.is-open svg {
@@ -6231,6 +6231,25 @@ html.pf-a11y-motion .pf-hero-banner__map {
 
   &[hidden] {
     display: none;
+  }
+}
+
+// Before the arrow: the button's end padding, the arrow and a gap.
+.pf-series__shown {
+  @extend %pf-landing-label;
+  position: relative;
+  grid-area: 1 / 1;
+  align-self: center;
+  justify-self: end;
+  margin-inline-end: 2.75rem;
+  color: var(--pf-toc-color);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-series__more:is(:hover, :focus-visible) svg {
+    translate: 0 .125rem;
   }
 }
 
@@ -6347,7 +6366,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   flex-direction: column;
   gap: .375rem;
   min-width: 0;
-  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 8.4375rem + 2.5rem + 1px);
+  height: calc(3 * var(--pf-mono-label, .75rem) + 2.3 * var(--pf-now-name) + 8.4375rem + 3.125rem + 1px);
 }
 
 .pf-series__now-label {
@@ -6380,15 +6399,30 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   -webkit-line-clamp: 6;
 }
 
+// A slab across the caption (the site's secondary button), the words at
+// its start and the arrow at its end.
 .pf-series__now-open {
-  @extend %pf-landing-label;
-  align-self: flex-start;
+  @extend %pf-button-secondary;
+  flex: none;
+  align-self: stretch;
+  gap: .625rem;
   margin-top: auto;
+  min-height: 2.75rem;
+  padding: .5rem 1rem;
   font-variant-numeric: tabular-nums;
-  padding-bottom: .3rem;
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid var(--pf-deck-gold);
+
+  svg {
+    flex: none;
+    width: .875rem;
+    height: .875rem;
+    transition: translate $pf-hover-out ease;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) .pf-series__now-open:is(:hover, :focus-visible) svg {
+    translate: .125rem 0;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
