@@ -72,9 +72,9 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 
   @media (min-width: 48rem) {
-    // About five rows, fewer on a short screen: the head (about 31rem
+    // About five rows, fewer on a short screen: the head (about 28rem
     // from the rule) and the list fit on screen together.
-    max-height: clamp(13rem, 100svh - 36rem, 22rem);
+    max-height: clamp(13rem, 100svh - 33rem, 22rem);
   }
 }
 
@@ -480,7 +480,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   overflow: hidden;
   font-size: .9375rem;
   line-height: 1.6;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
 }
 
@@ -495,7 +495,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 .pf-podcast-head__credits {
   display: -webkit-box;
   overflow: hidden;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
@@ -537,10 +537,11 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
     grid-area: 2 / 1 / 3 / 4;
   }
 
-  // A fixed height, so the list doesn't move as the head tells episodes.
+  // Room for the longest episode it can tell (the kicker, four lines and
+  // two of credits), so the list doesn't move as the head tells episodes.
   .pf-podcast-head__about {
     grid-area: 3 / 1 / 4 / 4;
-    min-height: 14.5rem;
+    min-height: 11.75rem;
   }
 
   .pf-podcast-head__read {
@@ -563,7 +564,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
     align-self: center;
     justify-self: stretch;
     width: auto;
-    margin: 1.5rem -10% 0 8%;
+    margin: 1rem -8% 0 16%;
     transform: rotate(-8deg);
   }
 }

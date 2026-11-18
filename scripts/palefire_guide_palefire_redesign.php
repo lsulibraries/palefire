@@ -597,9 +597,10 @@ HTML),
 <li>Beside the series, the Series heading and its intro now scroll away, so the tape deck and its caption alone stay in view, larger, with the drawing centered in its column.</li>
 <li>On a series card, the reel now waits a moment before it turns, so the name softening out of focus comes first and the two don’t happen at once.</li>
 <li>What Endures: the cassette’s window is lighter and shows its works: the tape running from each reel round the guide rollers, the wound tape on the reels, a printed scale and a glint on the plastic.</li>
-<li>Series now carry their fuller descriptions from the old series page: the caption under the tape deck shows one when it fits (Insurance reads in full), screen readers hear it on every card, the series’ name lights gold while you’re on it, and the deck’s darkest slots are left clear so they no longer stand out.</li>
+<li>Every series now has a description (the fuller ones from the old series page, and new short and fuller lines for the eleven that had none). The caption under the tape deck shows one when it fits (Insurance reads in full), screen readers hear it on every card, the series’ name lights gold while you’re on it, and the deck’s darkest slots are left clear so they no longer stand out.</li>
 <li>Hill Memorial map: a small north arrow now lies on the drawing, in the empty space at the lower right, so you can match the building to campus. North is toward the Reading Room end; the entrance faces east.</li>
 <li>Oral History’s series: Show more is now a full-width button across the grid, with how many are showing at its end, and View interviews under the tape deck is a matching button, both in the same style as the site’s other buttons.</li>
+<li>What Endures: the heading area is shorter (a slightly smaller cassette, a little less room kept for episode descriptions), so the episode list starts higher, and small laptop screens show more of it.</li>
 </ul>
 HTML),
 ]);

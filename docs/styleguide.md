@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-18:** Podcast head from 48rem: `.pf-podcast-head__tape` margin `1rem -8% 0 16%`; `.pf-podcast-head__about` `min-height: 11.75rem`; `.pf-podcast-head__summary` clamped to 4 lines, `__credits` to 2. `.pf-podcast__scroll` `max-height: clamp(13rem, 100svh - 33rem, 22rem)`.
 - **2026-11-18:** Series fold and deck link as slabs: `.pf-series__more` and `.pf-series__now-open` extend `%pf-button-secondary` (2.75rem, .5rem 1rem padding, .875rem arrow at the end). `.pf-series__fold` is a one-cell grid with `.pf-series__shown` over the button's end (`margin-inline-end: 2.75rem`, `pointer-events: none`). Caption height: link part 3.125rem.
 - **2026-11-18:** Map north arrow `.pf-map__north`: floor-plane transform (`--pf-map-rotate`, `--pf-map-skew-floor`), shaft stroke `--pf-map-line`, head and N (72px, 600) in `--pf-map-floor-ink`.
 - **2026-11-18:** Series deck caption: up to six lines of description (`-webkit-line-clamp: 6`, height for six); the fuller description when it fits, else `data-pf-short`. `.pf-series__deck.is-held .pf-series__now-name` takes `--pf-deck-gold` (color .5s with motion). `.pf-series .pf-series__deck .pf-deck__svg .hole { fill: none }`.
