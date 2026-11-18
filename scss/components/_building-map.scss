@@ -214,6 +214,18 @@
   transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px - var(--lift, 0px))) rotate(var(--pf-map-rotate)) skewX(var(--skew)) scale(var(--scale, 1));
 }
 .pf-map__label--floor, .pf-map__icon { --skew: var(--pf-map-skew-floor); }
+/* North arrow (hill-memorial-map.svg.twig): flat on the ground like the
+   floor names, in their gray, a hairline shaft and a narrow head, the N
+   in the floor names' type. Decorative; the map's label says it. */
+.pf-map__north {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px)) rotate(var(--pf-map-rotate)) skewX(var(--pf-map-skew-floor));
+  pointer-events: none;
+}
+.pf-map__north-shaft { fill: none; stroke: var(--pf-map-floor-ink); stroke-width: var(--pf-map-line); }
+.pf-map__north-head, .pf-map__north-n { fill: var(--pf-map-floor-ink); }
+.pf-map__north-n { font-family: inherit; font-size: 72px; font-weight: 600; }
 /* Elevator arrows sit a little inside the shaft rather than filling it.
    Map only: the legend draws the same fragment in its own <svg>. */
 .pf-map__icon--elevator { --scale: .68; }
