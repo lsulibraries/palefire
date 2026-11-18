@@ -110,10 +110,52 @@
     });
   }
 
+  // The head tells the episode pointed at, focused or playing: its number
+  // and date, first paragraph and credits in place of the Lede, and its
+  // photo's credit under the cassette. Back to the Lede at rest.
+  let told = null;
+  function tell(row) {
+    if (row === told) {
+      return;
+    }
+    told = row;
+    const data = row ? row.dataset : {};
+    document.querySelectorAll('.pf-podcast-head').forEach((head) => {
+      const episode = head.querySelector('.pf-podcast-head__episode');
+      const lede = head.querySelector('.pf-podcast-head__lede');
+      const credit = head.querySelector('.pf-podcast-head__credit');
+      if (episode) {
+        if (row) {
+          episode.querySelector('.pf-podcast-head__kicker').textContent = data.pfPodcastKicker || '';
+          episode.querySelector('.pf-podcast-head__summary').textContent = data.pfPodcastAbout || '';
+          const credits = episode.querySelector('.pf-podcast-head__credits');
+          credits.textContent = data.pfPodcastCredits || '';
+          credits.hidden = !data.pfPodcastCredits;
+          episode.classList.remove('is-swapped');
+          // Restart the fade-in for each episode.
+          void episode.offsetWidth;
+          episode.classList.add('is-swapped');
+        }
+        episode.hidden = !row;
+        if (lede) {
+          lede.hidden = !!row;
+        }
+      }
+      if (credit) {
+        // The text stays while the line fades out.
+        if (row && data.pfPodcastCredit) {
+          credit.textContent = data.pfPodcastCredit;
+        }
+        credit.classList.toggle('is-on', !!(row && data.pfPodcastCredit));
+      }
+    });
+  }
+
   function show(row, photo) {
     view.shown = row;
     view.rows.forEach((other) => other.classList.toggle('is-current', other === row && photo));
     backdrop(row && photo ? row.dataset.pfPodcastPhoto || '' : '');
+    tell(row && photo ? row : null);
     syncCassettes();
   }
 
@@ -314,6 +356,18 @@
           row.addEventListener('mouseenter', () => show(row, true));
           row.addEventListener('focusin', () => show(row, true));
         });
+        // The episodes scroll in place under the head; the box fades at an
+        // edge with more beyond it.
+        const box = list.querySelector('.pf-podcast__scroll');
+        if (box) {
+          const edges = () => {
+            box.classList.toggle('is-scrolled', box.scrollTop > 2);
+            box.classList.toggle('is-more', box.scrollTop + box.clientHeight < box.scrollHeight - 2);
+          };
+          box.addEventListener('scroll', edges, { passive: true });
+          window.addEventListener('resize', edges, { passive: true });
+          edges();
+        }
         list.addEventListener('mouseleave', () => {
           if (!list.contains(document.activeElement)) {
             rest();

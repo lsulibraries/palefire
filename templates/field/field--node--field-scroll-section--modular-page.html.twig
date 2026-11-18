@@ -63,10 +63,19 @@
           {% if mark %}
             <div class="pf-podcast-head">
               <h2 id="{{ item.section.title_id }}" class="pf-section__title pf-podcast-head__title" tabindex="-1">{{ item.section.label }}</h2>
-              {% if index.lede %}
-                <p class="pf-section__lede pf-podcast-head__lede">{{ index.lede }}</p>
-              {% endif %}
+              {# The Lede, or the episode pointed at (js/podcast.js). #}
+              <div class="pf-podcast-head__about">
+                {% if index.lede %}
+                  <p class="pf-section__lede pf-podcast-head__lede">{{ index.lede }}</p>
+                {% endif %}
+                <div class="pf-podcast-head__episode" aria-live="polite" hidden>
+                  <p class="pf-podcast-head__kicker"></p>
+                  <p class="pf-podcast-head__summary"></p>
+                  <p class="pf-podcast-head__credits"></p>
+                </div>
+              </div>
               <p class="pf-podcast-head__read" aria-hidden="true"></p>
+              <p class="pf-podcast-head__credit" aria-hidden="true"></p>
               <div class="pf-podcast-head__tape">
                 {%- include '@palefire/includes/cassette-mark.html.twig' -%}
               </div>

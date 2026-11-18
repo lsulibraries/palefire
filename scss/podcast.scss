@@ -42,7 +42,42 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+// Every episode scrolls in place under the head, which stays in view to
+// tell the one pointed at. The box fades at an edge with more beyond it
+// (.is-scrolled, .is-more from js/podcast.js). A little padding at the end
+// keeps the Play buttons' focus rings inside it.
+.pf-podcast__scroll {
+  --pf-podcast-fade-top: 0px;
+  --pf-podcast-fade-bottom: 0px;
+  max-height: min(26rem, 64svh);
+  margin-inline-end: -.25rem;
+  padding-inline-end: .25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: $pf-hairline transparent;
   border-top: 1px solid $pf-hairline;
+  border-bottom: 1px solid $pf-hairline;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
+
+  &.is-scrolled {
+    --pf-podcast-fade-top: 1.5rem;
+  }
+
+  &.is-more {
+    --pf-podcast-fade-bottom: 3rem;
+  }
+
+  @media (min-width: 48rem) {
+    max-height: min(30rem, 62svh);
+  }
+}
+
+.pf-podcast__row:last-child {
+  border-bottom: 0;
 }
 
 .pf-podcast__row {
@@ -400,11 +435,77 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   margin: 0;
 }
 
-.pf-section .pf-podcast-head__lede {
+.pf-podcast-head__about {
   position: relative;
   z-index: 1;
+}
+
+.pf-section .pf-podcast-head__lede {
   max-width: 28rem;
   margin: 1.25rem 0 0;
+}
+
+// The episode the head tells: number and date in gold, its first paragraph
+// (up to five lines) and its credits in small type.
+.pf-podcast-head__episode {
+  display: grid;
+  gap: .6rem;
+  max-width: 34rem;
+  margin-top: 1.25rem;
+
+  &[hidden] {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.pf-podcast-head__kicker {
+  font: var(--pf-mono-label, .75rem)/1.4 var(--pf-exhibit-mono, monospace);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+}
+
+.pf-podcast-head__summary {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: .9375rem;
+  line-height: 1.6;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.pf-podcast-head__credits,
+.pf-podcast-head__credit {
+  font: .6875rem/1.6 var(--pf-exhibit-mono, monospace);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--pf-exhibit-muted, var(--bs-secondary-color));
+}
+
+.pf-podcast-head__credits {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+// The backdrop photo's credit, under the cassette while it is shown.
+.pf-podcast-head__credit {
+  position: relative;
+  z-index: 1;
+  order: 2;
+  margin: .5rem 0 0;
+  font-size: .625rem;
+  text-align: center;
+  opacity: 0;
+
+  &.is-on {
+    opacity: 1;
+  }
 }
 
 // The cassette over the photo: its outline (the face and the thickness,
@@ -421,7 +522,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   // The name, Lede and length centered beside the cassette.
   .pf-podcast-head {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-rows: 1fr auto auto auto 1fr auto;
     column-gap: $pf-podcast-gap;
     align-items: start;
   }
@@ -430,14 +531,24 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
     grid-area: 2 / 1 / 3 / 4;
   }
 
-  .pf-section .pf-podcast-head__lede {
+  // A fixed height, so the list doesn't move as the head tells episodes.
+  .pf-podcast-head__about {
     grid-area: 3 / 1 / 4 / 4;
+    min-height: 14.5rem;
   }
 
   .pf-podcast-head__read {
     grid-area: 4 / 1 / 5 / 4;
     margin-top: 1.25rem;
     text-align: start;
+  }
+
+  .pf-podcast-head__credit {
+    grid-area: 6 / 4 / 7 / 6;
+    justify-self: end;
+    min-height: 3em;
+    margin-top: 1.5rem;
+    text-align: end;
   }
 
   .pf-podcast-head__tape {
@@ -455,8 +566,8 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   position: absolute;
   inset: 0;
   clip-path: polygon(.8% 6.25%, 5.6% 1.25%, 99.2% 1.25%, 99.2% 93.75%, 94.4% 98.75%, .8% 98.75%);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
 .pf-podcast-head__tape .pf-cassette {
@@ -686,6 +797,18 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
       transition: opacity .9s cubic-bezier(.2, .7, .2, 1);
     }
 
+    .pf-podcast-head__episode.is-swapped {
+      animation: pf-podcast-tell .5s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-podcast-head__credit {
+      transition: opacity .8s cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .pf-podcast__scroll {
+      scroll-behavior: smooth;
+    }
+
     .pf-podcast-head__tape:has(.pf-cassette.is-waiting)::before {
       opacity: 0;
     }
@@ -713,5 +836,12 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
     .pf-cassette.is-playing .pf-cassette__reel {
       animation: pf-cassette-spin 3.2s linear infinite;
     }
+  }
+}
+
+@keyframes pf-podcast-tell {
+  from {
+    opacity: 0;
+    transform: translateY(.4rem);
   }
 }

@@ -97,7 +97,7 @@ final class PodcastFeed {
         'cover' => self::cover((string) ($it->image?->attributes()['href'] ?? '')) ?: $show,
         'link' => str_starts_with($link, 'https://soundcloud.com/') ? $link : self::PROFILE,
         'summary' => self::summary((string) ($item->description ?? $it->summary)),
-      ];
+      ] + self::parts((string) ($item->description ?? $it->summary));
     }
     if (!$episodes) {
       throw new \RuntimeException('The podcast feed has no episodes.');
@@ -121,7 +121,7 @@ final class PodcastFeed {
    * Each episode as pull() keeps it, plus kicker ("Episode 21 · May 2025"),
    * time ("5:49") and duration (ISO 8601, for <time>).
    */
-  public static function view(int $more = 5): ?array {
+  public static function view(int $more = self::KEEP): ?array {
     $data = \Drupal::state()->get(self::STATE);
     if (!is_array($data) || empty($data['episodes'])) {
       return NULL;
@@ -196,6 +196,8 @@ final class PodcastFeed {
     $episode['time'] = self::clock($episode['length']);
     $episode['duration'] = 'PT' . intdiv($episode['length'], 60) . 'M' . ($episode['length'] % 60) . 'S';
     $episode['kicker'] = $episode['number'] ? t('Episode @n · @date', ['@n' => $episode['number'], '@date' => $date]) : $date;
+    // Pulls from before the full description was kept have none.
+    $episode += ['body' => [], 'credits' => '', 'photo' => ''];
     return $episode;
   }
 
@@ -240,6 +242,43 @@ final class PodcastFeed {
   private static function plain(string $text): string {
     $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     return trim(preg_replace('/\s+/u', ' ', $text));
+  }
+
+  /**
+   * The description in parts: body (its paragraphs), credits (who wrote,
+   * hosted, produced and engineered it) and photo (the cover's credit). The
+   * contact line every episode repeats and the copyright line are left out.
+   */
+  private static function parts(string $text): array {
+    $parts = ['body' => [], 'credits' => '', 'photo' => ''];
+    $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    foreach (preg_split('/\R\s*\R/u', $text) as $paragraph) {
+      $paragraph = self::curly(trim(preg_replace('/\s+/u', ' ', $paragraph)));
+      if ($paragraph === '') {
+        continue;
+      }
+      if (preg_match('/^Photo\b/i', $paragraph)) {
+        $parts['photo'] = $paragraph;
+      }
+      elseif (preg_match('/To learn more|To access the entire interview|contact the director|^(This podcast is )?copyright/i', $paragraph)) {
+        continue;
+      }
+      elseif (preg_match('/\b(produced by|producer|hosted by|audio-engineered)\b/i', $paragraph)) {
+        $parts['credits'] = trim(preg_replace('/\s*(This podcast is )?copyright(ed)?\b.*$/i', '', $paragraph));
+      }
+      else {
+        $parts['body'][] = $paragraph;
+      }
+    }
+    return $parts;
+  }
+
+  /**
+   * Straight quotes as curly ones.
+   */
+  private static function curly(string $text): string {
+    $text = preg_replace('/(^|[\s(“])"/u', '$1“', $text);
+    return str_replace(['"', "'"], ['”', '’'], $text);
   }
 
   /**
