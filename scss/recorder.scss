@@ -1,0 +1,502 @@
+// Palefire — the field recorder mark (includes/recorder-mark.html.twig,
+// drawn by build/recorder-mark.js): a Sony PCM-D10 as a solid in
+// perspective, lying on its back with the XLR end toward the viewer, the
+// cassette mark's companion (scss/podcast.scss). Its own entry
+// (css/recorder.css, library palefire/recorder), attached by the include,
+// so only pages that show it load it.
+//
+// Faces are tones, tN: the text color at N% over the page; outlines are
+// solid tones too, sN, so an edge two faces share never reads twice as
+// bright. The drawing's units are millimeters of the projected model.
+//
+// It records in an endless loop while motion is allowed: the level meters
+// move (a cover in the screen's color slides off a segmented bar), their
+// peak ticks hold, the -20 and -12 dB lamps answer them, the REC lamp
+// sends out a slow ring and the counter's seconds tick (two digit columns
+// stepping behind a clip). Transforms and opacity only. Reduced motion, or
+// the site's own Reduce motion setting: the still drawing at 0h12m34s.
+//
+// No literal colors but the three lamps: the swatch's tokens.
+
+@use "sass:math";
+@import "variables";
+
+$pf-recorder-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+$pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
+
+.pf-recorder {
+  --pf-recorder-screen: color-mix(in srgb, currentColor 14%, var(--bs-body-bg));
+  --pf-recorder-red: #d8443a;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  color: var(--bs-body-color);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  polygon,
+  polyline,
+  path {
+    fill: none;
+  }
+
+  text {
+    stroke: none;
+  }
+}
+
+// Faces: filled and edged in their own tone, so neighbors meet without a
+// seam.
+@for $i from 1 through 28 {
+  .pf-recorder .t#{$i * 2} {
+    fill: color-mix(in srgb, currentColor math.percentage(math.div($i * 2, 100)), var(--bs-body-bg));
+    stroke: color-mix(in srgb, currentColor math.percentage(math.div($i * 2, 100)), var(--bs-body-bg));
+    stroke-width: .2;
+  }
+}
+
+@each $s in 22, 25, 30, 35, 40, 45, 50, 55, 60, 70 {
+  .pf-recorder .s#{$s} {
+    fill: none;
+    stroke: color-mix(in srgb, currentColor math.percentage(math.div($s, 100)), var(--bs-body-bg));
+    stroke-width: .3;
+  }
+}
+
+.pf-recorder .s70 {
+  stroke-width: .42;
+}
+
+// The gold collars, lit to shaded.
+@each $g, $mix in (1: 26%, 2: 40%, 3: 54%) {
+  .pf-recorder .g#{$g} {
+    fill: color-mix(in srgb, currentColor #{$mix}, color-mix(in srgb, #{$pf-recorder-gold} 70%, var(--bs-body-bg)));
+    stroke: color-mix(in srgb, currentColor #{$mix}, color-mix(in srgb, #{$pf-recorder-gold} 70%, var(--bs-body-bg)));
+    stroke-width: .15;
+  }
+}
+
+.pf-recorder .pf-recorder__shadow {
+  fill: color-mix(in srgb, #000 6%, transparent);
+}
+
+.pf-recorder .pf-recorder__through {
+  fill: var(--bs-body-bg);
+}
+
+.pf-recorder .pf-recorder__hole {
+  fill: color-mix(in srgb, var(--bs-body-bg) 25%, #000);
+}
+
+.pf-recorder .pf-recorder__mesh {
+  stroke: color-mix(in srgb, currentColor 45%, var(--bs-body-bg));
+  stroke-width: .5;
+}
+
+.pf-recorder .pf-recorder__well {
+  fill: color-mix(in srgb, var(--bs-body-bg) 45%, #000);
+}
+
+.pf-recorder .pf-recorder__glyph {
+  fill: color-mix(in srgb, currentColor 75%, transparent);
+}
+
+.pf-recorder .pf-recorder__rec {
+  fill: var(--pf-recorder-red);
+}
+
+.pf-recorder .pf-recorder__rec-glow {
+  fill: none;
+  stroke: var(--pf-recorder-red);
+  stroke-width: .35;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+// The lamps: -20 dB green, -12 dB amber, OVER and +48V dark.
+.pf-recorder .pf-recorder__lamp {
+  fill: $pf-recorder-dark;
+}
+
+.pf-recorder .pf-recorder__lamp--grn {
+  fill: #48b46a;
+}
+
+.pf-recorder .pf-recorder__lamp--amb {
+  fill: #e3a33b;
+  opacity: .3;
+}
+
+// The display: a dark bezel, the backlit screen, a sheen on the glass.
+.pf-recorder .pf-recorder__bezel {
+  fill: $pf-recorder-dark;
+  stroke: $pf-recorder-dark;
+  stroke-width: .2;
+}
+
+.pf-recorder .pf-recorder__screen,
+.pf-recorder .pf-recorder__cover {
+  fill: var(--pf-recorder-screen);
+}
+
+.pf-recorder .pf-recorder__sheen {
+  fill: color-mix(in srgb, var(--bs-body-bg) 18%, transparent);
+}
+
+.pf-recorder__lcd {
+  color: color-mix(in srgb, currentColor 85%, transparent);
+}
+
+.pf-recorder .pf-recorder__track,
+.pf-recorder .pf-recorder__lcd-line,
+.pf-recorder .pf-recorder__rule {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: .5;
+}
+
+.pf-recorder .pf-recorder__rule {
+  stroke-opacity: .35;
+}
+
+.pf-recorder .pf-recorder__lcd-fill,
+.pf-recorder .pf-recorder__badge {
+  fill: currentColor;
+}
+
+.pf-recorder .pf-recorder__seg {
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: butt;
+  stroke-dasharray: 1.8 .74;
+}
+
+.pf-recorder .pf-recorder__peak {
+  stroke: currentColor;
+  stroke-width: .9;
+  stroke-linecap: butt;
+}
+
+.pf-recorder__lcd text {
+  fill: currentColor;
+  font: 500 4.4px/1 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+}
+
+.pf-recorder .pf-recorder__scale {
+  font-size: 2.8px;
+  fill-opacity: .7;
+}
+
+.pf-recorder .pf-recorder__count {
+  font-size: 9.4px;
+  font-weight: 600;
+}
+
+.pf-recorder .pf-recorder__lcd-s {
+  font-size: 5.6px;
+}
+
+.pf-recorder .pf-recorder__lcd .pf-recorder__badge-text {
+  fill: var(--pf-recorder-screen);
+  font: 700 5px/1 var(--bs-body-font-family);
+  letter-spacing: .04em;
+}
+
+// The printing on the case, in millimeters.
+.pf-recorder__tiny,
+.pf-recorder__micro,
+.pf-recorder__label {
+  fill: color-mix(in srgb, currentColor 55%, transparent);
+  font: 500 1.4px/1 var(--bs-body-font-family);
+  letter-spacing: .06em;
+}
+
+.pf-recorder .pf-recorder__micro {
+  font-size: 1.05px;
+}
+
+.pf-recorder .pf-recorder__label {
+  font-size: 1.8px;
+}
+
+.pf-recorder .pf-recorder__micro--rec {
+  fill: var(--pf-recorder-red);
+}
+
+// The dial's scales: white print on the black rings.
+.pf-recorder .pf-recorder__dialnum {
+  fill: color-mix(in srgb, var(--bs-body-bg) 8%, currentColor);
+  font: 600 1.7px/1 var(--bs-body-font-family);
+}
+
+.pf-recorder__maker {
+  fill: color-mix(in srgb, currentColor 80%, transparent);
+  // Sony's mark is a wide bold serif with even strokes: Georgia's bold is
+  // the nearest everyday face (no web font), stretched in the drawing.
+  font: 700 3px/1 Georgia, "Times New Roman", serif;
+  letter-spacing: .03em;
+}
+
+// At rest: the meters part way up, the counter at 34 seconds.
+.pf-recorder__cover--l {
+  transform: translateX(44px);
+}
+
+.pf-recorder__cover--r {
+  transform: translateX(40px);
+}
+
+.pf-recorder__peak--l {
+  transform: translateX(51px);
+}
+
+.pf-recorder__peak--r {
+  transform: translateX(48px);
+}
+
+.pf-recorder__digits--tens {
+  transform: translateY(-31.2px);
+}
+
+.pf-recorder__digits--units {
+  transform: translateY(-41.6px);
+}
+
+// The hairline version (recorder-line.html.twig), drawn like the tape deck:
+// every face the page color, 1px lines at the creases and outlines (.e,
+// found from the model) and the shared outlines (.sN), no tones. Sockets,
+// wells, the bezel and the screen are outlined instead of filled; print,
+// lamps and the readout stay as they are.
+.pf-recorder.pf-recorder--line {
+  .f,
+  .pf-recorder__gold,
+  .pf-recorder__well,
+  .pf-recorder__hole,
+  .pf-recorder__bezel,
+  .pf-recorder__screen,
+  .pf-recorder__through {
+    fill: var(--bs-body-bg);
+    stroke: var(--bs-body-bg);
+    stroke-width: .12;
+  }
+
+  .pf-recorder__hole,
+  .pf-recorder__well,
+  .pf-recorder__bezel,
+  .pf-recorder__screen {
+    stroke: color-mix(in srgb, currentColor 45%, var(--bs-body-bg));
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .e {
+    fill: none;
+    stroke: color-mix(in srgb, currentColor 60%, var(--bs-body-bg));
+  }
+
+  :is(.e, [class^="s"]) {
+    stroke-width: 1;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .pf-recorder__sheen {
+    display: none;
+  }
+
+  --pf-recorder-screen: var(--bs-body-bg);
+}
+
+// Windows High Contrast: faces in the page color, outlines and print in the
+// text color.
+@media (forced-colors: active) {
+  .pf-recorder :is([class^="t"], .f, .pf-recorder__bezel, .pf-recorder__screen, .pf-recorder__cover, .pf-recorder__through, [class*="pf-recorder__gold"]) {
+    fill: Canvas;
+    stroke: Canvas;
+  }
+
+  .pf-recorder :is([class^="s"], .e, .pf-recorder__track, .pf-recorder__rule, .pf-recorder__lcd-line, .pf-recorder__seg, .pf-recorder__peak, .pf-recorder__mesh, .pf-recorder__rec-glow) {
+    stroke: CanvasText;
+  }
+
+  .pf-recorder text,
+  .pf-recorder :is(.pf-recorder__glyph, .pf-recorder__badge, .pf-recorder__lcd-fill, .pf-recorder__hole, .pf-recorder__well, .pf-recorder__rec, .pf-recorder__lamp) {
+    fill: CanvasText;
+  }
+
+  .pf-recorder .pf-recorder__lcd .pf-recorder__badge-text {
+    fill: Canvas;
+  }
+
+  .pf-recorder :is(.pf-recorder__shadow, .pf-recorder__sheen) {
+    display: none;
+  }
+}
+
+// Recording: levels in px of the meter's 61 (0 empty, 61 full).
+@keyframes pf-recorder-level-l {
+  0%, 100% { transform: translateX(38px); }
+  8% { transform: translateX(47px); }
+  14% { transform: translateX(34px); }
+  22% { transform: translateX(43px); }
+  30% { transform: translateX(51px); }
+  36% { transform: translateX(37px); }
+  44% { transform: translateX(29px); }
+  52% { transform: translateX(45px); }
+  60% { transform: translateX(40px); }
+  68% { transform: translateX(54px); }
+  74% { transform: translateX(38px); }
+  82% { transform: translateX(29px); }
+  90% { transform: translateX(42px); }
+}
+
+@keyframes pf-recorder-level-r {
+  0%, 100% { transform: translateX(35px); }
+  10% { transform: translateX(42px); }
+  17% { transform: translateX(31px); }
+  26% { transform: translateX(48px); }
+  33% { transform: translateX(39px); }
+  41% { transform: translateX(44px); }
+  50% { transform: translateX(28px); }
+  58% { transform: translateX(37px); }
+  66% { transform: translateX(46px); }
+  72% { transform: translateX(52px); }
+  80% { transform: translateX(36px); }
+  91% { transform: translateX(30px); }
+}
+
+// The peak ticks hold the loudest recent level, then fall back.
+@keyframes pf-recorder-peak-l {
+  0% { transform: translateX(46.4px); }
+  30% { transform: translateX(50.4px); }
+  68% { transform: translateX(53.4px); }
+  92% { transform: translateX(46.4px); }
+}
+
+@keyframes pf-recorder-peak-r {
+  0% { transform: translateX(41.4px); }
+  26% { transform: translateX(47.4px); }
+  72% { transform: translateX(51.4px); }
+  94% { transform: translateX(41.4px); }
+}
+
+// -12 dB lights on the loud moments, -20 dB drops out on the quiet ones.
+@keyframes pf-recorder-amb-l {
+  0%, 26%, 34%, 64%, 73%, 100% { opacity: .3; }
+  30%, 68% { opacity: 1; }
+}
+
+@keyframes pf-recorder-amb-r {
+  0%, 22%, 30%, 68%, 77%, 100% { opacity: .3; }
+  26%, 72% { opacity: 1; }
+}
+
+@keyframes pf-recorder-grn-l {
+  0%, 40%, 48%, 78%, 86%, 100% { opacity: 1; }
+  44%, 82% { opacity: .35; }
+}
+
+@keyframes pf-recorder-grn-r {
+  0%, 46%, 54%, 87%, 95%, 100% { opacity: 1; }
+  50%, 91% { opacity: .35; }
+}
+
+@keyframes pf-recorder-ring {
+  0% {
+    opacity: .7;
+    transform: scale(1);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes pf-recorder-tens {
+  from { transform: translateY(0); }
+  to { transform: translateY(-62.4px); }
+}
+
+@keyframes pf-recorder-units {
+  from { transform: translateY(0); }
+  to { transform: translateY(-104px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.pf-a11y-motion) {
+    .pf-recorder__cover--l {
+      animation: pf-recorder-level-l 2.6s linear infinite;
+    }
+
+    .pf-recorder__cover--r {
+      animation: pf-recorder-level-r 3.1s linear infinite;
+    }
+
+    .pf-recorder__peak--l {
+      animation: pf-recorder-peak-l 2.6s steps(1, end) infinite;
+    }
+
+    .pf-recorder__peak--r {
+      animation: pf-recorder-peak-r 3.1s steps(1, end) infinite;
+    }
+
+    .pf-recorder__lamp--amb.pf-recorder__lamp--l {
+      animation: pf-recorder-amb-l 2.6s ease-out infinite;
+    }
+
+    .pf-recorder__lamp--amb.pf-recorder__lamp--r {
+      animation: pf-recorder-amb-r 3.1s ease-out infinite;
+    }
+
+    .pf-recorder__lamp--grn.pf-recorder__lamp--l {
+      animation: pf-recorder-grn-l 2.6s ease-out infinite;
+    }
+
+    .pf-recorder__lamp--grn.pf-recorder__lamp--r {
+      animation: pf-recorder-grn-r 3.1s ease-out infinite;
+    }
+
+    .pf-recorder__rec-glow {
+      animation: pf-recorder-ring 2.4s cubic-bezier(.2, .7, .2, 1) infinite;
+    }
+
+    // Started at 34 seconds; a full minute loops back to 12m00s.
+    .pf-recorder__digits--tens {
+      animation: pf-recorder-tens 60s steps(6, end) -34s infinite;
+    }
+
+    .pf-recorder__digits--units {
+      animation: pf-recorder-units 10s steps(10, end) -4s infinite;
+    }
+  }
+}
+
+// On Oral History's Record tab (includes/landing.html.twig), under the
+// hours: the hairline recorder on frosted glass (the page color at 72% with
+// the site's glass blur), so it holds over a photo behind the panel. Its
+// faces take the page color, so it reads as a cut-out on the glass.
+.pf-quick-guide__recorder {
+  max-width: 26rem;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(.75rem, 2vw, 1.25rem);
+  border: 1px solid $pf-hairline;
+  background-color: color-mix(in srgb, var(--bs-body-bg) 72%, transparent);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+
+  .pf-recorder {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    background-color: var(--bs-body-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

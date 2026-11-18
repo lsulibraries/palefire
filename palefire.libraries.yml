@@ -670,6 +670,15 @@ podcast:
     - core/drupal
     - core/once
 
+# The field recorder mark (includes/recorder-mark.html.twig, drawn by
+# build/recorder-mark.js): a Sony PCM-D10 in hairlines, recording in a loop.
+# Attached by that include. Styles: its own entry (scss/recorder.scss).
+recorder:
+  version: 1.0.0
+  css:
+    component:
+      css/recorder.css: {}
+
 # The ledger's hover photos (the What Hill Holds section on /v2/special):
 # each row's cover behind the left column while the row is hovered or
 # focused. Attached by paragraph--tile-showcase.html.twig, only when a
