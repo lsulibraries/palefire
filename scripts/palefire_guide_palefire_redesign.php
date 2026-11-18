@@ -593,6 +593,7 @@ HTML),
 <li>The tape deck no longer rewinds: pointing at a bigger series, the reels pause while the fuller reel settles in, and winding forward to a smaller one is gentler, keeping the page calm.</li>
 <li>Beside the series, the Series heading and its intro now scroll away, so the tape deck and its caption alone stay in view, larger, with the drawing centered in its column.</li>
 <li>On a series card, the reel now waits a moment before it turns, so the name softening out of focus comes first and the two don’t happen at once.</li>
+<li>What Endures: the cassette’s window is lighter and shows its works: the tape running from each reel round the guide rollers, the wound tape on the reels, a printed scale and a glint on the plastic.</li>
 </ul>
 HTML),
 ]);

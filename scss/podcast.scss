@@ -642,7 +642,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 // Through the window: the reels behind the smoked plastic, quieter than
 // everything on the outside.
 .pf-cassette__window {
-  fill: color-mix(in srgb, $pf-cassette-dark 50%, transparent);
+  fill: color-mix(in srgb, $pf-cassette-dark 28%, transparent);
   stroke: color-mix(in srgb, currentColor 50%, transparent);
   stroke-width: .8;
 }
@@ -657,12 +657,49 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
   stroke-width: .7;
 }
 
+// The tape: a brown pack (solid, so the tape running off it tucks under its
+// edge), its wound layers as faint rings, a gold rim. The rings scale with
+// their pack.
 .pf-cassette__pack {
-  fill: color-mix(in srgb, #{$pf-cassette-gold} 30%, transparent);
+  fill: color-mix(in srgb, #{$pf-cassette-gold} 18%, #241a13);
   stroke: color-mix(in srgb, #{$pf-cassette-gold} 85%, transparent);
   stroke-width: .8;
+}
+
+.pf-cassette__pack,
+.pf-cassette__wind {
   transform-box: fill-box;
   transform-origin: center;
+}
+
+.pf-cassette__wind {
+  stroke: color-mix(in srgb, #{$pf-cassette-gold} 22%, transparent);
+  stroke-width: .5;
+}
+
+.pf-cassette__tape {
+  stroke: color-mix(in srgb, #{$pf-cassette-gold} 60%, transparent);
+  stroke-width: .8;
+}
+
+.pf-cassette__roller {
+  fill: color-mix(in srgb, currentColor 12%, transparent);
+  stroke: color-mix(in srgb, currentColor 50%, transparent);
+  stroke-width: .6;
+}
+
+.pf-cassette__pin {
+  fill: color-mix(in srgb, currentColor 45%, transparent);
+}
+
+// The window's printed scale and the glint on its clear plastic.
+.pf-cassette__tick {
+  stroke: color-mix(in srgb, currentColor 35%, transparent);
+  stroke-width: .5;
+}
+
+.pf-cassette__glint {
+  fill: color-mix(in srgb, currentColor 6%, transparent);
 }
 
 // Drawn full (25); scaled to the tape on each (js/podcast.js: the bare hub
@@ -752,7 +789,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
     stroke: CanvasText;
   }
 
-  .pf-cassette :is(.pf-cassette__sides, .pf-cassette__end, .pf-cassette__shell, .pf-cassette__window) {
+  .pf-cassette :is(.pf-cassette__sides, .pf-cassette__end, .pf-cassette__shell, .pf-cassette__window, .pf-cassette__pack) {
     fill: Canvas;
   }
 }
@@ -784,11 +821,12 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
-    .pf-cassette__pack {
+    .pf-cassette__pack,
+    .pf-cassette__wind {
       transition: transform .6s cubic-bezier(.2, .7, .2, 1);
     }
 
-    .pf-cassette.is-playing .pf-cassette__pack {
+    .pf-cassette.is-playing :is(.pf-cassette__pack, .pf-cassette__wind) {
       transition: transform .3s linear;
     }
 
