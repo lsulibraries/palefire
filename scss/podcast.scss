@@ -592,12 +592,13 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 // The thickness: the top lit, the end in shade, the outline round both.
+// All of the plastic is smoked: the blurred photo shows through it.
 .pf-cassette__sides {
-  fill: color-mix(in srgb, currentColor 18%, var(--bs-body-bg));
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 18%, var(--bs-body-bg)) 55%, transparent);
 }
 
 .pf-cassette__end {
-  fill: color-mix(in srgb, currentColor 6%, var(--bs-body-bg));
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 6%, var(--bs-body-bg)) 55%, transparent);
 }
 
 .pf-cassette__edge,
@@ -607,7 +608,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 }
 
 .pf-cassette__shell {
-  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 78%, transparent);
+  fill: color-mix(in srgb, color-mix(in srgb, currentColor 10%, var(--bs-body-bg)) 40%, transparent);
 }
 
 .pf-cassette__fine {
@@ -634,7 +635,7 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #000);
 // Through the window: the reels behind the smoked plastic, quieter than
 // everything on the outside.
 .pf-cassette__window {
-  fill: $pf-cassette-dark;
+  fill: color-mix(in srgb, $pf-cassette-dark 50%, transparent);
   stroke: color-mix(in srgb, currentColor 50%, transparent);
   stroke-width: .8;
 }
