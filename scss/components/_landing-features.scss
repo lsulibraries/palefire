@@ -4319,10 +4319,13 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 // Contrast without veiling the picture: a black band under the header
 // (75% to 8.5rem, gone by 14rem: 75% black is what holds every header,
 // breadcrumb and Pause text at 4.5:1 over a white frame, the location
-// backdrop's gray-64 ceiling), and the wash's veil (the page color at 82%,
-// as on wider screens) on the type block's ::before, fading in over the
-// 8rem above the kicker and reaching 8rem below the search, so it follows
-// the type wherever it lands. The film's foot fades into the page, so
+// backdrop's gray-64 ceiling), and the wash's veil on the type block's
+// ::before: the page color at 66% (82% under High contrast), eased in over
+// the 12rem above the kicker and reaching 8rem below the search, so it
+// follows the type wherever it lands and the film still shows through it.
+// 66% holds the white type at 4.7:1 over a white frame; the kicker's
+// softer grays (the Libraries and the building) need 82% or more, so on
+// phones both take the full text color; the gold rule still parts them. The film's foot fades into the page, so
 // the Quick Start rises out of it with no edge. The film has no stacking
 // context of its own (its pictures go under at -2, the veils at -1), so
 // its Pause button, in the band between the breadcrumb and the kicker at
@@ -4332,9 +4335,14 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
 
 @container pf-cover (width < 44rem) {
+  html.pf-a11y-contrast #{$pf-wash-narrow} {
+    --pf-wash-alpha: 82%;
+  }
+
   #{$pf-wash-narrow} {
     --pf-wash-bg: var(--pf-cover-bg, var(--pf-g-bg, var(--bs-body-bg)));
-    --pf-wash-veil: color-mix(in srgb, var(--pf-wash-bg) 82%, transparent);
+    --pf-wash-alpha: 66%;
+    --pf-wash-veil: color-mix(in srgb, var(--pf-wash-bg) var(--pf-wash-alpha), transparent);
     --pf-poster-lift: calc(var(--pf-bleed-block-start, var(--pf-header-h, 0px)) + var(--pf-cover-top, 0px));
     grid-template-rows: minmax(0, 1fr) auto;
     isolation: isolate;
@@ -4350,10 +4358,20 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
     .pf-landing__top::before {
       content: "";
       position: absolute;
-      inset: -8rem calc(-1 * var(--pf-cover-gutter)) -8rem;
+      inset: -12rem calc(-1 * var(--pf-cover-gutter)) -8rem;
       z-index: -1;
-      background: linear-gradient(transparent, var(--pf-wash-veil) 8rem);
+      background: linear-gradient(
+        transparent,
+        color-mix(in srgb, var(--pf-wash-bg) calc(var(--pf-wash-alpha) * .12), transparent) 3rem,
+        color-mix(in srgb, var(--pf-wash-bg) calc(var(--pf-wash-alpha) * .45), transparent) 6rem,
+        color-mix(in srgb, var(--pf-wash-bg) calc(var(--pf-wash-alpha) * .82), transparent) 9rem,
+        var(--pf-wash-veil) 12rem);
       pointer-events: none;
+    }
+
+    .pf-landing__kicker,
+    .pf-landing__kicker-place {
+      color: var(--bs-emphasis-color);
     }
 
     // No fade as it leaves (the frame's, above): it would make the film a
@@ -6953,11 +6971,12 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
 // the gap between them is three quarters of the Center line's cap height.
 // Above and below, the clear space set for the mark earlier: what a
 // 30rem-wide mark would leave at its sides, at least 36px, at most 15svh
-// so the search stays on the first screen. The kicker gives up its own
+// so the search stays on the first screen. On phones it takes at most 86%
+// of the column, so the name never runs gutter to gutter. The kicker gives up its own
 // margin (the hero's grid doesn't collapse margins).
 // text-box trims each row to its cap height and baseline.
 .pf-landing__mark {
-  --pf-mark-w: min(36rem, 100%);
+  --pf-mark-w: min(36rem, 86%);
   container-type: inline-size;
   width: var(--pf-mark-w);
   margin: clamp(2.25rem, calc((100% - min(30rem, 100%)) / 2), 15svh) 0;
