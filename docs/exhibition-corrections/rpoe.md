@@ -30,7 +30,7 @@ How the old station maps to the new page:
 | The 1953 Bus Boycott / Mass Meetings | June 20th: … June 21st: … June 22nd: | June 20: … June 21: … June 22: |
 | The 1953 Bus Boycott / King Learns from Baton Rouge (transcript) | always, everytime, anytime in violation | always, every time, anytime in violation |
 | The 1953 Bus Boycott / King Learns from Baton Rouge (transcript) | saw that difference That the church house | saw that difference. That the church house |
-| East Baton Rouge / Integrating Recreation (transcript) | rather than have us integrate that pool, they closed it | …they closed it. *(period added)* |
+| East Baton Rouge / Integrating Recreation (transcript) | rather than have us integrate that pool, they closed it | rather than have us integrate that pool, they closed it. (period added) |
 | East Baton Rouge / White-Only Golf Courses | in a predominately black neighborhood | in a predominantly black neighborhood |
 | East Baton Rouge / Kress Sit-In | nine more students sat-in at various locations | nine more students sat in at various locations |
 | East Baton Rouge / CORE Sit-Ins | In Decemeber, members | In December, members |

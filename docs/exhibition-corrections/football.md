@@ -147,14 +147,14 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
 
 ### About the Exhibition (old About and Acknowledgements pages)
 
-- “Tiger Stadium from its completion in 1924 to the 1970.” → “…to the 1970s.”
+- “Tiger Stadium from its completion in 1924 to the 1970.” → “Tiger Stadium from its completion in 1924 to the 1970s.”
 - “Bert Jones, “the Ruston Rifle;” among others” → “Bert Jones, “the Ruston Rifle”; among others”.
 - “whether it pertains to The Game, Facilities, and/or football Culture” → “whether it pertains to the game, the facilities, or football culture”.
 - “tell the story of LSU History” → “tell the story of LSU history”.
 - “Click to hear:” list → “Listen for”, each item capitalized; “winning the 1958 National championship” → “national championship”.
 - “please visit /special/williams/” → a link named “T. Harry Williams Center for Oral History”.
 - The Louisiana Digital Library address http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP → a link to https://louisianadigitallibrary.org/ (the old CONTENTdm address is retired).
-- “ACKNOWLEDGEMENTS” → “Acknowledgments”; “Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens” → “…Student Assistant; and Rebecca Stephens” (the list uses semicolons).
+- “ACKNOWLEDGEMENTS” → “Acknowledgments”; “Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens” → “Katie Blanchard, Public Services Student Assistant; and Rebecca Stephens” (the list uses semicolons).
 
 ### Restored to the speaker’s words
 

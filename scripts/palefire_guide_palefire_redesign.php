@@ -721,6 +721,11 @@ HTML),
 <li>Thirteen likely typing slips keep their fix but are marked on the Exhibition Migration Review for checking against the recordings.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Exhibition Migration Review shows whole passages', <<<'HTML'
+<ul>
+<li>On the Exhibition Migration Review, the After column now shows the full new wording instead of “…” shorthand, which had made small spelling fixes look like cut words. Text that was taken out says “Removed”.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

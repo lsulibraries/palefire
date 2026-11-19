@@ -48,7 +48,7 @@ after that. Interviewers keep the surname only, because only surnames are known.
 - Heading: "Reflections on Oral History with Jo "Cool" Davis" → "Field Notes: Reflections on Oral
   History with Jo “Cool” Davis" (the "Field Notes" label came from the old menu)
 - "it struck both Charlotte and I" → "it struck both Charlotte and me"
-- "shook both my and Charlotte's hands, motioned for us" → "…hands, and motioned for us"
+- "shook both my and Charlotte's hands, motioned for us" → "shook both my and Charlotte’s hands, and motioned for us"
 - "t-shirt" / "t-shirts" → "T-shirt" / "T-shirts"
 - "Jo "Cool" Davis" (nested double quotes) → "“Jo ‘Cool’ Davis”"
 - "tell his tale - all of it" → "tell his tale—all of it"
@@ -67,7 +67,7 @@ after that. Interviewers keep the surname only, because only surnames are known.
 - Heading: "Review of Number Our Days" → "Interview Reflections: A Review of *Number Our Days*" (label
   from the old menu; book title in italics throughout)
 - "not only to the strength of the Jewish people, but as a testament also to the enduring nature" →
-  "…but also to the enduring nature"
+  "not only to the strength of the Jewish people, but also to the enduring nature"
 - "As Myerhoff takes one of her main informant, Schmuel's, advice, "Let people surprise you," (41)" →
   "As Myerhoff takes the advice of one of her main informants, Schmuel, “Let people surprise you” (41),"
 - "experience. She nimbly weaves" → "experience. Myerhoff nimbly weaves"

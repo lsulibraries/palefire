@@ -25,7 +25,7 @@ Not listed: markup, whitespace, double spaces and curly vs straight quotes. Spea
 ### Clip titles
 
 - Places › c17: "Mossville’s post office." (clip page) → "Mossville’s post office"
-- Places › c37: "…remembering Pete Moss' honecomb in the school chimney" (old menu) → "…honeycomb…"
+- Places › c37: "…remembering Pete Moss' honecomb in the school chimney" (old menu) → "…remembering Pete Moss’ honeycomb in the school chimney"
 - Politics & Integration › c51: "Jacob Rigmaidenand Josh Rigmaiden as Mayors of Mossville" (old menu) → "Jacob Rigmaiden and Josh Rigmaiden as Mayors of Mossville"
 - The Old Ways › c14: "Subsistence Living" (old menu) → "Subsistence living"
 - The Old Ways › c23: "Home Remedies" (old menu) → "Home remedies"
@@ -36,13 +36,13 @@ Not listed: markup, whitespace, double spaces and curly vs straight quotes. Spea
 - Education › c12: "The diference between teaching at Mossville and Westwood Elementary…" → "The difference…" (old menu and clip page, 2×)
 - Education › c40: "…inspired him to stay on the Honor Roll" (old menu) → "…honor roll"
 - Church › c47: "Mount Zion, Willow Springs Churches" (old menu) → "Mount Zion and Willow Springs Churches"
-- Church › c44: "Her Mother kept the Morning Star Cemetery in good condition" (old menu) → "Her mother kept…"
+- Church › c44: "Her Mother kept the Morning Star Cemetery in good condition" (old menu) → "Her mother kept the Morning Star Cemetery in good condition"
 - Church › c28: "Grandparents’ home, a holy place" (old menu) → "His grandparents’ home was a holy place"
 - Church › c74: "Pew Rallies" (old menu) → "Pew rallies"
 - Family & Community › c75: "Kinship and Community" (old menu) → "Kinship and community"
 - Family & Community › c67: "It takes a village…" / "It takes a village..." (old menu / clip page) → "It takes a village"
 - Work › c59: "Plants as part of the community." (old menu) → "Plants as part of the community"
-- Health & Environment › c29: "Running down Old Spanish Trail at night during plant explosions" (old menu) → "…after plant explosions" (to match the clip page)
+- Health & Environment › c29: "Running down Old Spanish Trail at night during plant explosions" (old menu) → "Running down Old Spanish Trail at night after plant explosions" (to match the clip page)
 - Health & Environment › c61: "Incidents at the nearby plants" (old menu) → "Incidents at the nearby plant" (to match the clip page)
 - Health & Environment › c46: "The perserverence of Mossvillians" → "The perseverance of Mossvillians" (old menu and clip page, 2×)
 

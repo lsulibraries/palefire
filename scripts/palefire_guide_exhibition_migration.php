@@ -225,7 +225,7 @@ $section('Cooperative Extension at LSU', [
 <tr><th scope="row">C9 Coreil</th><td><del>turtle exclusive devices</del></td><td><ins>turtle excluder devices</ins> <em>TEDs, the devices the rule required; check against the recording</em></td></tr>
 <tr><th scope="row">C9 Coreil</th><td><del>these VHS radios</del></td><td><ins>these VHF radios</ins> <em>marine radio; check against the recording</em></td></tr>
 <tr><th scope="row">C9 Coreil</th><td><del>Governor [Buddy]Roemer, and he asked Roemier "Pull them back</del></td><td><ins>Governor [Buddy] Roemer, and he asked Roemer, “Pull them back</ins></td></tr>
-<tr><th scope="row">C12 Loupe</th><td><del>my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane</del></td><td><ins>… in sugarcane … in sugarcane</ins></td></tr>
+<tr><th scope="row">C12 Loupe</th><td><del>my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane</del></td><td><ins>my specialty as an agronomist, in sugarcane … my PhD actually in sugarcane</ins></td></tr>
 </tbody>
 </table>
 <h4>Narrators (biographies, from badon/howell/richardson/loupe/eubanks/cochran/coreil/roberts.html)</h4>
@@ -235,7 +235,7 @@ $section('Cooperative Extension at LSU', [
 <tr><th scope="row">Richardson</th><td><del>earned a B.S degree in 1966</del></td><td><ins>earned a B.S. degree in 1966</ins></td></tr>
 <tr><th scope="row">Richardson</th><td><del>recognized twice as and Outstanding Teacher</del></td><td><ins>recognized twice as an Outstanding Teacher</ins></td></tr>
 <tr><th scope="row">Richardson</th><td><del>He currently serves as Director of Louisiana Cooperative Extension Service and LSU Vice-President for Agriculture and Dean for the College of Agriculture</del></td><td><ins>At the time of the interview, he served as Director of the Louisiana Cooperative Extension Service, LSU Vice President for Agriculture, and Dean of the College of Agriculture</ins></td></tr>
-<tr><th scope="row">Loupe</th><td><del>In 1978, he was selected as director of Louisiana Cooperative Extension Services</del></td><td><ins>… director of the Louisiana Cooperative Extension Service</ins></td></tr>
+<tr><th scope="row">Loupe</th><td><del>In 1978, he was selected as director of Louisiana Cooperative Extension Services</del></td><td><ins>In 1978, he was selected as director of the Louisiana Cooperative Extension Service</ins></td></tr>
 <tr><th scope="row">Loupe</th><td><del>American Society of Sugarcane Technologies</del></td><td><ins>American Society of Sugar Cane Technologists</ins></td></tr>
 <tr><th scope="row">Eubanks</th><td><del>L.E. Eubanks</del></td><td><ins>L. E. Eubanks</ins></td></tr>
 <tr><th scope="row">Cochran</th><td><del>born on December 10, 1933 in Darbun</del></td><td><ins>born on December 10, 1933, in Darbun</ins></td></tr>
@@ -257,21 +257,21 @@ $section('Cooperative Extension at LSU', [
 <tr><th scope="row">Pickles and Preserves</th><td><del>Woman displaying cabinet of pickled …</del></td><td><ins>Woman displaying a cabinet of pickled …</ins></td></tr>
 <tr><th scope="row">Mary Mims</th><td><del>Image from McGinty, Garnie William. Mary Williams Mims: … Ruston, La.: G. McGinty, 1978. S544.3 .L7 M33 1978 Middleton</del></td><td><ins>Image from Garnie William McGinty, <em>Mary Williams Mims: …</em> (Ruston, La.: G. McGinty, 1978). Middleton Library, S544.3 .L7 M33 1978</ins></td></tr>
 <tr><th scope="row">E. S. Richardson</th><td><del>Richardson was the Supervisor of …</del></td><td><ins><strong>E. S.</strong> Richardson was the Supervisor of …</ins> <em>initials from the inscription</em></td></tr>
-<tr><th scope="row">Clyde Mobley</th><td><del>c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection</del></td><td><ins>… in Bienville Parish. By 1917, she … LSU Photograph Collection</ins></td></tr>
+<tr><th scope="row">Clyde Mobley</th><td><del>c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection</del></td><td><ins>c. 1925 … in Bienville Parish. By 1917, she … LSU Photograph Collection</ins></td></tr>
 <tr><th scope="row">Health Checks</th><td><del>c.1942</del></td><td><ins>c. 1942</ins></td></tr>
 <tr><th scope="row">Future Office of Agricultural Extension</th><td><del>Sign stating ''Future Office of Agricultural Extension,'' c.1946</del></td><td><ins>Sign stating “Future Office of Agricultural Extension,” c. 1946</ins></td></tr>
 <tr><th scope="row">Hog Cholera</th><td><del>Image include pigs grazing in a field and entrails of animals afflicted with hog cholera/swine typhoid, n.d</del></td><td><ins>Pigs grazing in a field and the entrails of animals with hog cholera and swine typhoid, n.d</ins></td></tr>
-<tr><th scope="row">Captions with a line break (Zola Cosby)</th><td><del>…cabbages, 1927.⏎Rapides Parish</del></td><td><ins>one line</ins></td></tr>
+<tr><th scope="row">Captions with a line break (Zola Cosby)</th><td><del>…cabbages, 1927.⏎Rapides Parish</del></td><td><ins>…cabbages, 1927. Rapides Parish</ins> <em>one line</em></td></tr>
 </tbody>
 </table>
 <h4>Intro and About (about.html; about2.html is an unlinked duplicate)</h4>
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">Intro</th><td><del>featuring oral histories from LSU Libraries T. Harry Williams Center</del></td><td><ins>… from LSU Libraries’ T. Harry Williams Center</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>featuring oral histories from LSU Libraries T. Harry Williams Center</del></td><td><ins>featuring oral histories from LSU Libraries’ T. Harry Williams Center</ins></td></tr>
 <tr><th scope="row">Intro</th><td><del>is presented in conjunction with</del></td><td><ins>was presented in conjunction with</ins> <em>past tense; the exhibition has closed</em></td></tr>
 <tr><th scope="row">Intro</th><td><del>The oral history listening station includes</del></td><td><ins>The listening station includes</ins></td></tr>
-<tr><th scope="row">Intro</th><td><del>earning money by sewing ladies clothing</del></td><td><ins>… sewing ladies’ clothing</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>earning money by sewing ladies clothing</del></td><td><ins>earning money by sewing ladies’ clothing</ins></td></tr>
 <tr><th scope="row">About</th><td><del>The gallery exhibit examines … Covering two floors, this exhibition includes … from every major collection including: … Selected items highlight … and cover topics</del></td><td><ins>The gallery exhibition examined … Covering two floors, it included … from every major collection: … Selected items highlighted … and covered topics</ins></td></tr>
 <tr><th scope="row">About</th><td><del>socio-economic groups</del></td><td><ins>socioeconomic groups</ins></td></tr>
 <tr><th scope="row">About</th><td><del>Links page: six icon/QR links</del> <em>Interviews, Williams Center, Exhibitions, LSU Libraries, LSU AgCenter, LSU College of Agriculture</em></td><td><ins>Three text links: the Cooperative Extension interviews (lib.lsu.edu/oralhistory/collections?field_series_value=13), LSU AgCenter, LSU College of Agriculture (www.coa.lsu.edu now redirects to <a href="https://www.lsu.edu/agriculture/">https://www.lsu.edu/agriculture/</a>, so it links there). The QR codes are dropped</ins></td></tr>
@@ -474,7 +474,7 @@ $section('Do Not Tear Up My Earth', [
 <tr><th scope="row">About / book</th><td><del>Recently, the University Press of Mississippi published…</del></td><td><ins>The University Press of Mississippi has since published… <em>("Recently" was dated; the book came out in 2013)</em></ins></td></tr>
 <tr><th scope="row">About / opening</th><td><del>…an updated presentation originally created by the T. Harry Williams Center (THWCOH) in 2001, that features oral history excerpts…</del></td><td><ins>…an updated presentation, first created by the T. Harry Williams Center for Oral History in 2001, of excerpts… <em>(abbreviation dropped, comma splice fixed)</em></ins></td></tr>
 <tr><th scope="row">About / book</th><td><del>…authored by Peggy Frankland with Susan Tucker. The book provides insights on the roots of this important social movement amidst Louisiana's growing oil boom…</del></td><td><ins>…by Peggy Frankland with Susan Tucker. The book traces the roots of this social movement amid Louisiana’s growing oil boom…</ins></td></tr>
-<tr><th scope="row">About / holdings</th><td><del>All of the oral histories used in the book are housed with The T. Harry Williams Center… In addition, LSU Libraries Special Collections is the repository for…</del></td><td><ins>…are held by the T. Harry Williams Center… LSU Libraries Special Collections is also the repository for…</ins></td></tr>
+<tr><th scope="row">About / holdings</th><td><del>All of the oral histories used in the book are housed with The T. Harry Williams Center… In addition, LSU Libraries Special Collections is the repository for…</del></td><td><ins>All of the oral histories used in the book are held by the T. Harry Williams Center for Oral History, a division of LSU Libraries Special Collections. LSU Libraries Special Collections is also the repository for…</ins></td></tr>
 <tr><th scope="row">Intro (title page)</th><td><del>Frankland's ultimate goal was to gather stories to eventually write a book on the subject to document the valuable historical and cultural information that is often left out of mainstream history… the majority of whom were women. Frankland's work was aided by a grant…</del></td><td><ins>Her goal was to gather stories for a book that would document the historical and cultural information so often left out of mainstream history… most of them women. The work was aided by a grant… <em>(tightened; the facts are unchanged)</em></ins></td></tr>
 </tbody>
 </table>
@@ -608,7 +608,7 @@ $section('Georgetown 272', [
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">c2, c8</th><td><del>Mélisande Short-Colomb by Hannah Richards, <strong>2017</strong></del></td><td><ins>…interviewed by Hannah Richards, <strong>2018</strong></ins> <em>c21 and every photo of this interview say 2018; see To verify</em></td></tr>
+<tr><th scope="row">c2, c8</th><td><del>Mélisande Short-Colomb by Hannah Richards, <strong>2017</strong></del></td><td><ins>Mélisande Short-Colomb, interviewed by Hannah Richards, <strong>2018</strong></ins> <em>c21 and every photo of this interview say 2018; see To verify</em></td></tr>
 <tr><th scope="row">c10</th><td><del>JESSICA TILSON by T, 2017 4700.2740 Tape 4712</del></td><td><ins>Jessica Tilson, interviewed by Thailandria Daniels, 2017</ins> <em>the interviewer’s name was cut off; the accession and tape numbers were dropped</em></td></tr>
 <tr><th scope="row">c14</th><td><del>CLARA CLAYTON by Russell Wilder, 2017</del></td><td><ins>Clara Ann Clayton, interviewed by Russell Wilder, 2017</ins></td></tr>
 <tr><th scope="row">c17</th><td><del>RASHAAD JACKSON by Staci Shelby on April 5, 2017</del></td><td><ins>Rashaad Jackson, interviewed by Staci Shelby, April 5, 2017</ins></td></tr>
@@ -671,8 +671,8 @@ $section('Georgetown 272', [
 <tr><th scope="row">c15</th><td><del>Being a dedication , dedicating</del></td><td><ins>Being a dedication, dedicating</ins></td></tr>
 <tr><th scope="row">c15</th><td><del>acknowledgement</del> <em>twice</em></td><td><ins>acknowledgment</ins></td></tr>
 <tr><th scope="row">c16</th><td><del>tenants of the Catholic church</del></td><td><ins>tenets of the Catholic Church</ins></td></tr>
-<tr><th scope="row">c16</th><td><del>it kind of rocks the center of your core because who you think you are</del></td><td><ins>…because [of] who you think you are</ins></td></tr>
-<tr><th scope="row">c18</th><td><del>ROYAL:</del> <em>speaker label</em></td><td><ins>label dropped</ins> <em>one speaker</em></td></tr>
+<tr><th scope="row">c16</th><td><del>it kind of rocks the center of your core because who you think you are</del></td><td><ins>it kind of rocks the center of your core because [of] who you think you are</ins></td></tr>
+<tr><th scope="row">c18</th><td><del>ROYAL:</del> <em>speaker label</em></td><td><em>Removed</em> <em>label dropped: only one speaker</em></td></tr>
 <tr><th scope="row">c19</th><td><del>What are we doing - who are we sacrificing</del></td><td><ins>What are we doing—who are we sacrificing</ins></td></tr>
 <tr><th scope="row">c20</th><td><del>great-great-great-great-great grandfather</del></td><td><ins>great-great-great-great-great-grandfather</ins></td></tr>
 <tr><th scope="row">c21</th><td><del>for me to come here and paid to do this</del></td><td><ins>for me to come here and [be] paid to do this</ins></td></tr>
@@ -750,7 +750,7 @@ $section('Georgetown 272', [
 <tr><th scope="row">Bernadine Poole</th><td><del>T.A. Levy High School</del></td><td><ins>T. A. Levy High School</ins></td></tr>
 <tr><th scope="row">Bernadine Poole</th><td><del>researching her lineage with regards to the Georgetown 272</del></td><td><ins>researching her lineage and its ties to the Georgetown 272</ins></td></tr>
 <tr><th scope="row">Bernadine Poole</th><td><del>IT Support Spec 2</del></td><td><ins>IT Support Specialist 2</ins></td></tr>
-<tr><th scope="row">Bernadine Poole</th><td><del>Poole is unmarried, and she has no children</del></td><td><ins>sentence dropped</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>Poole is unmarried, and she has no children</del></td><td><em>Removed</em> <em>sentence dropped; see To verify</em></td></tr>
 <tr><th scope="row">Adam Rothman</th><td><del>19th century U.S history</del></td><td><ins>nineteenth-century U.S. history</ins></td></tr>
 <tr><th scope="row">Adam Rothman</th><td><del>Beyond Freedom's Reach…</del></td><td><ins><em>Beyond Freedom’s Reach…</em></ins> <em>italic</em></td></tr>
 <tr><th scope="row">Adam Rothman</th><td><del>Government Documents Roundtable</del></td><td><ins>Government Documents Round Table</ins></td></tr>
@@ -1061,7 +1061,7 @@ $section('History of Graphic Design in South Louisiana', [
 <tr><th scope="row">Biography</th><td><del>founded the Peter Meyer advertising agency</del></td><td><ins>founded Peter A. Mayer Advertising</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>at their job</del></td><td><ins>at their jobs</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>the destruction of a primary competitor</del></td><td><ins>the downfall of a primary competitor</ins></td></tr>
-<tr><th scope="row">Caption</th><td><del>the ca. 1969opening</del></td><td><ins>the year dropped</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Caption</th><td><del>the ca. 1969opening</del></td><td><ins>the opening</ins> <em>year dropped; see To verify</em></td></tr>
 </tbody>
 </table>
 <h4>About the Project</h4>
@@ -1584,8 +1584,9 @@ $section('A Lady in the South', [
 <tr><th scope="row">Intro</th><td><del>school teachers</del></td><td><ins>schoolteachers</ins></td></tr>
 <tr><th scope="row">Intro</th><td><del>a reform measure to improve the economic hardships of the Great Depression</del></td><td><ins>a reform measure to ease the economic hardships of the Great Depression</ins></td></tr>
 <tr><th scope="row">Intro</th><td><del>Franklin Roosevelt's New Deal</del></td><td><ins>Franklin Roosevelt’s New Deal</ins></td></tr>
-<tr><th scope="row">Howell bio</th><td><del>“(pictured top left)”, “enrolled in School of Home Economics at LSU from 1939-1942”</del></td><td><ins>(pictured …)” removed; “enrolled in the School of Home Economics at LSU from 1939 to 1942</ins></td></tr>
-<tr><th scope="row">Clark bio</th><td><del>(pictured bottom left)</del></td><td><ins>Removed</ins></td></tr>
+<tr><th scope="row">Howell bio</th><td><del>(pictured top left)</del></td><td><em>Removed</em></td></tr>
+<tr><th scope="row">Howell bio</th><td><del>enrolled in School of Home Economics at LSU from 1939-1942</del></td><td><ins>enrolled in the School of Home Economics at LSU from 1939 to 1942</ins></td></tr>
+<tr><th scope="row">Clark bio</th><td><del>(pictured bottom left)</del></td><td><em>Removed</em></td></tr>
 <tr><th scope="row">Clark bio</th><td><del>“Teaching Certification”, “Home Management and Child Development”, “a Home Residence instructor”</del></td><td><ins>“teaching certification”, “home management and child development”, “a home residence instructor”</ins></td></tr>
 <tr><th scope="row">Clark bio</th><td><del>School of Home Economics; first as an instructor</del></td><td><ins>School of Home Economics, first as an instructor</ins></td></tr>
 <tr><th scope="row">Clark bio</th><td><del>lived in Pakistan for a total of four years where she helped with the founding of and instructed in a women's college in Karachi</del></td><td><ins>lived in Pakistan for a total of four years, where she helped found and taught at a women’s college in Karachi</ins></td></tr>
@@ -1758,7 +1759,7 @@ $section('Mossville History Project', [
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
 <tr><th scope="row">Places › c17</th><td><del>Mossville’s post office.</del> <em>clip page</em></td><td><ins>Mossville’s post office</ins></td></tr>
-<tr><th scope="row">Places › c37</th><td><del>…remembering Pete Moss' honecomb in the school chimney</del> <em>old menu</em></td><td><ins>…honeycomb…</ins></td></tr>
+<tr><th scope="row">Places › c37</th><td><del>…remembering Pete Moss' honecomb in the school chimney</del> <em>old menu</em></td><td><ins>…remembering Pete Moss’ honeycomb in the school chimney</ins></td></tr>
 <tr><th scope="row">Politics &amp; Integration › c51</th><td><del>Jacob Rigmaidenand Josh Rigmaiden as Mayors of Mossville</del> <em>old menu</em></td><td><ins>Jacob Rigmaiden and Josh Rigmaiden as Mayors of Mossville</ins></td></tr>
 <tr><th scope="row">The Old Ways › c14</th><td><del>Subsistence Living</del> <em>old menu</em></td><td><ins>Subsistence living</ins></td></tr>
 <tr><th scope="row">The Old Ways › c23</th><td><del>Home Remedies</del> <em>old menu</em></td><td><ins>Home remedies</ins></td></tr>
@@ -1769,13 +1770,13 @@ $section('Mossville History Project', [
 <tr><th scope="row">Education › c12</th><td><del>The diference between teaching at Mossville and Westwood Elementary…</del></td><td><ins>The difference…</ins> <em>old menu and clip page, 2×</em></td></tr>
 <tr><th scope="row">Education › c40</th><td><del>…inspired him to stay on the Honor Roll</del> <em>old menu</em></td><td><ins>…honor roll</ins></td></tr>
 <tr><th scope="row">Church › c47</th><td><del>Mount Zion, Willow Springs Churches</del> <em>old menu</em></td><td><ins>Mount Zion and Willow Springs Churches</ins></td></tr>
-<tr><th scope="row">Church › c44</th><td><del>Her Mother kept the Morning Star Cemetery in good condition</del> <em>old menu</em></td><td><ins>Her mother kept…</ins></td></tr>
+<tr><th scope="row">Church › c44</th><td><del>Her Mother kept the Morning Star Cemetery in good condition</del> <em>old menu</em></td><td><ins>Her mother kept the Morning Star Cemetery in good condition</ins></td></tr>
 <tr><th scope="row">Church › c28</th><td><del>Grandparents’ home, a holy place</del> <em>old menu</em></td><td><ins>His grandparents’ home was a holy place</ins></td></tr>
 <tr><th scope="row">Church › c74</th><td><del>Pew Rallies</del> <em>old menu</em></td><td><ins>Pew rallies</ins></td></tr>
 <tr><th scope="row">Family &amp; Community › c75</th><td><del>Kinship and Community</del> <em>old menu</em></td><td><ins>Kinship and community</ins></td></tr>
 <tr><th scope="row">Family &amp; Community › c67</th><td><del>"It takes a village…" / "It takes a village..."</del> <em>old menu / clip page</em></td><td><ins>It takes a village</ins></td></tr>
 <tr><th scope="row">Work › c59</th><td><del>Plants as part of the community.</del> <em>old menu</em></td><td><ins>Plants as part of the community</ins></td></tr>
-<tr><th scope="row">Health &amp; Environment › c29</th><td><del>Running down Old Spanish Trail at night during plant explosions</del> <em>old menu</em></td><td><ins>…after plant explosions</ins> <em>to match the clip page</em></td></tr>
+<tr><th scope="row">Health &amp; Environment › c29</th><td><del>Running down Old Spanish Trail at night during plant explosions</del> <em>old menu</em></td><td><ins>Running down Old Spanish Trail at night after plant explosions</ins> <em>to match the clip page</em></td></tr>
 <tr><th scope="row">Health &amp; Environment › c61</th><td><del>Incidents at the nearby plants</del> <em>old menu</em></td><td><ins>Incidents at the nearby plant</ins> <em>to match the clip page</em></td></tr>
 <tr><th scope="row">Health &amp; Environment › c46</th><td><del>The perserverence of Mossvillians</del></td><td><ins>The perseverance of Mossvillians</ins> <em>old menu and clip page, 2×</em></td></tr>
 </tbody>
@@ -2014,7 +2015,7 @@ $section('New Orleans Jazz & Heritage Festival', [
 <tbody>
 <tr><th scope="row">Heading</th><td><del>Reflections on Oral History with Jo "Cool" Davis</del></td><td><ins>Field Notes: Reflections on Oral History with Jo “Cool” Davis</ins> <em>the "Field Notes" label came from the old menu</em></td></tr>
 <tr><th scope="row"></th><td><del>it struck both Charlotte and I</del></td><td><ins>it struck both Charlotte and me</ins></td></tr>
-<tr><th scope="row"></th><td><del>shook both my and Charlotte's hands, motioned for us</del></td><td><ins>…hands, and motioned for us</ins></td></tr>
+<tr><th scope="row"></th><td><del>shook both my and Charlotte's hands, motioned for us</del></td><td><ins>shook both my and Charlotte’s hands, and motioned for us</ins></td></tr>
 <tr><th scope="row"></th><td><del>"t-shirt" / "t-shirts"</del></td><td><ins>"T-shirt" / "T-shirts"</ins></td></tr>
 <tr><th scope="row"></th><td><del>Jo "Cool" Davis</del> <em>nested double quotes</em></td><td><ins>“Jo ‘Cool’ Davis”</ins></td></tr>
 <tr><th scope="row"></th><td><del>tell his tale - all of it</del></td><td><ins>tell his tale—all of it</ins></td></tr>
@@ -2039,7 +2040,7 @@ $section('New Orleans Jazz & Heritage Festival', [
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
 <tr><th scope="row">Heading</th><td><del>Review of Number Our Days</del></td><td><ins>Interview Reflections: A Review of <em>Number Our Days</em></ins> <em>label from the old menu; book title in italics throughout</em></td></tr>
-<tr><th scope="row"></th><td><del>not only to the strength of the Jewish people, but as a testament also to the enduring nature</del></td><td><ins>…but also to the enduring nature</ins></td></tr>
+<tr><th scope="row"></th><td><del>not only to the strength of the Jewish people, but as a testament also to the enduring nature</del></td><td><ins>not only to the strength of the Jewish people, but also to the enduring nature</ins></td></tr>
 <tr><th scope="row"></th><td><del>As Myerhoff takes one of her main informant, Schmuel's, advice, "Let people surprise you," (41)</del></td><td><ins>As Myerhoff takes the advice of one of her main informants, Schmuel, “Let people surprise you” (41),</ins></td></tr>
 <tr><th scope="row"></th><td><del>experience. She nimbly weaves</del></td><td><ins>experience. Myerhoff nimbly weaves</ins></td></tr>
 <tr><th scope="row"></th><td><del>Each other the elder's individual personalities are allowed to shine</del></td><td><ins>Each of the elders’ individual personalities is allowed to shine</ins></td></tr>
@@ -2142,7 +2143,7 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 <tr><th scope="row">The 1953 Bus Boycott / Mass Meetings</th><td><del>June 20th: … June 21st: … June 22nd:</del></td><td><ins>June 20: … June 21: … June 22:</ins></td></tr>
 <tr><th scope="row">The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</th><td><del>always, everytime, anytime in violation</del></td><td><ins>always, every time, anytime in violation</ins></td></tr>
 <tr><th scope="row">The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</th><td><del>saw that difference That the church house</del></td><td><ins>saw that difference. That the church house</ins></td></tr>
-<tr><th scope="row">East Baton Rouge / Integrating Recreation (transcript)</th><td><del>rather than have us integrate that pool, they closed it</del></td><td><ins>…they closed it. <em>(period added)</em></ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Integrating Recreation (transcript)</th><td><del>rather than have us integrate that pool, they closed it</del></td><td><ins>rather than have us integrate that pool, they closed it.</ins> <em>period added</em></td></tr>
 <tr><th scope="row">East Baton Rouge / White-Only Golf Courses</th><td><del>in a predominately black neighborhood</del></td><td><ins>in a predominantly black neighborhood</ins></td></tr>
 <tr><th scope="row">East Baton Rouge / Kress Sit-In</th><td><del>nine more students sat-in at various locations</del></td><td><ins>nine more students sat in at various locations</ins></td></tr>
 <tr><th scope="row">East Baton Rouge / CORE Sit-Ins</th><td><del>In Decemeber, members</del></td><td><ins>In December, members</ins></td></tr>
@@ -2733,7 +2734,7 @@ $section('Saturday Night in Tiger Stadium', [
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><td><del>Tiger Stadium from its completion in 1924 to the 1970.</del></td><td><ins>…to the 1970s.</ins></td></tr>
+<tr><td><del>Tiger Stadium from its completion in 1924 to the 1970.</del></td><td><ins>Tiger Stadium from its completion in 1924 to the 1970s.</ins></td></tr>
 <tr><td><del>Bert Jones, “the Ruston Rifle;” among others</del></td><td><ins>Bert Jones, “the Ruston Rifle”; among others</ins></td></tr>
 <tr><td><del>whether it pertains to The Game, Facilities, and/or football Culture</del></td><td><ins>whether it pertains to the game, the facilities, or football culture</ins></td></tr>
 <tr><td><del>tell the story of LSU History</del></td><td><ins>tell the story of LSU history</ins></td></tr>
@@ -2747,7 +2748,7 @@ $section('Saturday Night in Tiger Stadium', [
 <tr><td><del>please visit /special/williams/</del></td><td><ins>a link named “T. Harry Williams Center for Oral History”</ins></td></tr>
 <tr><td><del>The Louisiana Digital Library address <a href="http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP">http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP</a></del></td><td><ins>a link to <a href="https://louisianadigitallibrary.org/">https://louisianadigitallibrary.org/</a></ins> <em>the old CONTENTdm address is retired</em></td></tr>
 <tr><td><del>ACKNOWLEDGEMENTS</del></td><td><ins>Acknowledgments</ins></td></tr>
-<tr><td><del>Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens</del></td><td><ins>…Student Assistant; and Rebecca Stephens</ins> <em>the list uses semicolons</em></td></tr>
+<tr><td><del>Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens</del></td><td><ins>Katie Blanchard, Public Services Student Assistant; and Rebecca Stephens</ins> <em>the list uses semicolons</em></td></tr>
 </tbody>
 </table>
 <h4>Restored to the speaker’s words</h4>
@@ -3341,7 +3342,7 @@ $section('Tempests: Storms in the Archives', [
 <tbody>
 <tr><th scope="row"></th><td><del>Peoples' memories extend</del></td><td><ins>People’s memories extend</ins></td></tr>
 <tr><th scope="row"></th><td><del>“their consequences--rural and urban”, “rapid change--sometimes”, “turn up the volume--make some noise”</del></td><td><ins>em dashes</ins> <em>“—”</em></td></tr>
-<tr><th scope="row"></th><td><del>“For more information about the exhibition, visit <a href="https://lib.lsu.edu/exhibitions.”">https://lib.lsu.edu/exhibitions.”</a></del></td><td><ins>… visit LSU Libraries Exhibitions.</ins> <em>linked</em></td></tr>
+<tr><th scope="row"></th><td><del>“For more information about the exhibition, visit <a href="https://lib.lsu.edu/exhibitions.”">https://lib.lsu.edu/exhibitions.”</a></del></td><td><ins>For more information about the exhibition, visit LSU Libraries Exhibitions.</ins> <em>linked</em></td></tr>
 <tr><th scope="row"></th><td><del>“please contact Center staff at <a href="http://www.lib.lsu.edu/oralhistory/.”">http://www.lib.lsu.edu/oralhistory/.”</a></del></td><td><ins>please contact Center staff.</ins> <em>“Center staff” links to <a href="https://lib.lsu.edu/oralhistory">https://lib.lsu.edu/oralhistory</a></em></td></tr>
 <tr><th scope="row"></th><td><del>“For details, see : <a href="https://lib.lsu.edu/oralhistory/collections”">https://lib.lsu.edu/oralhistory/collections”</a></del></td><td><ins>For details, see the Williams Center collections.</ins> <em>linked</em></td></tr>
 <tr><th scope="row">Collections list</th><td><del>Pointe Coupee : Voices in the Storm</del></td><td><ins>Pointe Coupee: Voices in the Storm</ins></td></tr>

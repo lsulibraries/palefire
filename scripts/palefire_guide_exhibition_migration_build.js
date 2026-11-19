@@ -154,7 +154,9 @@ const table = (rows) => {
   const body = rows.map((r) => '<tr>'
     + (withWhere ? `<th scope="row">${r.where}</th>` : '')
     + `<td><del>${r.before}</del>${r.beforeNote ? ` <em>${r.beforeNote}</em>` : ''}</td>`
-    + `<td><ins>${r.after}</ins>${r.note ? ` <em>${r.note}</em>` : ''}</td></tr>`).join('\n');
+    // "—" in a draft means the text was taken out: the cell says so.
+    + (r.after === '—' ? '<td><em>Removed</em>' : `<td><ins>${r.after}</ins>`)
+    + `${r.note ? ` <em>${r.note}</em>` : ''}</td></tr>`).join('\n');
   return `<table>\n<thead><tr>${head}</tr></thead>\n<tbody>\n${body}\n</tbody>\n</table>`;
 };
 let tableRows = 0;

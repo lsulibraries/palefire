@@ -82,7 +82,7 @@ The same captions are reused as the gallery lead captions (see 3).
 
 - “Peoples' memories extend” → “People’s memories extend”.
 - “their consequences--rural and urban”, “rapid change--sometimes”, “turn up the volume--make some noise” → em dashes (“—”).
-- “For more information about the exhibition, visit https://lib.lsu.edu/exhibitions.” → “… visit LSU Libraries Exhibitions.” (linked).
+- “For more information about the exhibition, visit https://lib.lsu.edu/exhibitions.” → “For more information about the exhibition, visit LSU Libraries Exhibitions.” (linked)
 - “please contact Center staff at http://www.lib.lsu.edu/oralhistory/.” → “please contact Center staff.” (“Center staff” links to https://lib.lsu.edu/oralhistory).
 - “For details, see : https://lib.lsu.edu/oralhistory/collections” → “For details, see the Williams Center collections.” (linked).
 - Collections list: “Pointe Coupee : Voices in the Storm” → “Pointe Coupee: Voices in the Storm”; “"I Remember: An Art Show of Environmental Significance,"" CWPPRA” (doubled closing quote) → ““I Remember: An Art Show of Environmental Significance,” CWPPRA”. The list is now a bulleted list.

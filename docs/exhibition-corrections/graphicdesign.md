@@ -124,7 +124,7 @@ italics, and small comma fixes.
   worked” → “television, where he worked”; “founded the Peter Meyer advertising agency” → “founded Peter A. Mayer
   Advertising”; “at their job” → “at their jobs”; “the destruction of a primary competitor” → “the downfall of a
   primary competitor”.
-- Caption: “the ca. 1969opening” → the year dropped (see To verify).
+- Caption: “the ca. 1969opening” → “the opening” (year dropped; see To verify).
 
 ### About the Project
 - “AIGA New Orleans Chapter” → “AIGA New Orleans”; “south Louisiana–AIGA” (en dash used as a colon) → “south

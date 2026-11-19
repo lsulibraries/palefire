@@ -96,8 +96,9 @@ Changes made throughout, not listed one by one below:
 | Intro | “school teachers” | “schoolteachers” |
 | Intro | “a reform measure to improve the economic hardships of the Great Depression” | “a reform measure to ease the economic hardships of the Great Depression” |
 | Intro | “Franklin Roosevelt's New Deal” | “Franklin Roosevelt’s New Deal” |
-| Howell bio | “(pictured top left)”, “enrolled in School of Home Economics at LSU from 1939-1942” | “(pictured …)” removed; “enrolled in the School of Home Economics at LSU from 1939 to 1942” |
-| Clark bio | “(pictured bottom left)” | Removed |
+| Howell bio | “(pictured top left)” | — |
+| Howell bio | “enrolled in School of Home Economics at LSU from 1939-1942” | “enrolled in the School of Home Economics at LSU from 1939 to 1942” |
+| Clark bio | “(pictured bottom left)” | — |
 | Clark bio | “Teaching Certification”, “Home Management and Child Development”, “a Home Residence instructor” | “teaching certification”, “home management and child development”, “a home residence instructor” |
 | Clark bio | “School of Home Economics; first as an instructor” | “School of Home Economics, first as an instructor” |
 | Clark bio | “lived in Pakistan for a total of four years where she helped with the founding of and instructed in a women's college in Karachi” | “lived in Pakistan for a total of four years, where she helped found and taught at a women’s college in Karachi” |

@@ -39,7 +39,7 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 | C9 Coreil | turtle exclusive devices | turtle excluder devices (TEDs, the devices the rule required; check against the recording) |
 | C9 Coreil | these VHS radios | these VHF radios (marine radio; check against the recording) |
 | C9 Coreil | Governor [Buddy]Roemer, and he asked Roemier "Pull them back. | Governor [Buddy] Roemer, and he asked Roemer, “Pull them back. |
-| C12 Loupe | my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane | … in sugarcane … in sugarcane |
+| C12 Loupe | my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane | my specialty as an agronomist, in sugarcane … my PhD actually in sugarcane |
 
 ### Narrators (biographies, from badon/howell/richardson/loupe/eubanks/cochran/coreil/roberts.html)
 | Where | Old | New |
@@ -47,7 +47,7 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 | Richardson | earned a B.S degree in 1966 | earned a B.S. degree in 1966 |
 | Richardson | recognized twice as and Outstanding Teacher | recognized twice as an Outstanding Teacher |
 | Richardson | He currently serves as Director of Louisiana Cooperative Extension Service and LSU Vice-President for Agriculture and Dean for the College of Agriculture. | At the time of the interview, he served as Director of the Louisiana Cooperative Extension Service, LSU Vice President for Agriculture, and Dean of the College of Agriculture. |
-| Loupe | In 1978, he was selected as director of Louisiana Cooperative Extension Services. | … director of the Louisiana Cooperative Extension Service. |
+| Loupe | In 1978, he was selected as director of Louisiana Cooperative Extension Services. | In 1978, he was selected as director of the Louisiana Cooperative Extension Service. |
 | Loupe | American Society of Sugarcane Technologies | American Society of Sugar Cane Technologists |
 | Eubanks | L.E. Eubanks | L. E. Eubanks |
 | Cochran | born on December 10, 1933 in Darbun | born on December 10, 1933, in Darbun |
@@ -67,19 +67,19 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 | Pickles and Preserves | Woman displaying cabinet of pickled … | Woman displaying a cabinet of pickled … |
 | Mary Mims | Image from McGinty, Garnie William. Mary Williams Mims: … Ruston, La.: G. McGinty, 1978. S544.3 .L7 M33 1978 Middleton | Image from Garnie William McGinty, *Mary Williams Mims: …* (Ruston, La.: G. McGinty, 1978). Middleton Library, S544.3 .L7 M33 1978. |
 | E. S. Richardson | Richardson was the Supervisor of … | **E. S.** Richardson was the Supervisor of … (initials from the inscription) |
-| Clyde Mobley | c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection | … in Bienville Parish. By 1917, she … LSU Photograph Collection |
+| Clyde Mobley | c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection | c. 1925 … in Bienville Parish. By 1917, she … LSU Photograph Collection |
 | Health Checks | c.1942 | c. 1942 |
 | Future Office of Agricultural Extension | Sign stating ''Future Office of Agricultural Extension,'' c.1946 | Sign stating “Future Office of Agricultural Extension,” c. 1946 |
 | Hog Cholera | Image include pigs grazing in a field and entrails of animals afflicted with hog cholera/swine typhoid, n.d. | Pigs grazing in a field and the entrails of animals with hog cholera and swine typhoid, n.d. |
-| Captions with a line break (Zola Cosby) | "…cabbages, 1927.⏎Rapides Parish" | one line |
+| Captions with a line break (Zola Cosby) | "…cabbages, 1927.⏎Rapides Parish" | …cabbages, 1927. Rapides Parish (one line) |
 
 ### Intro and About (about.html; about2.html is an unlinked duplicate)
 | Where | Old | New |
 |---|---|---|
-| Intro | featuring oral histories from LSU Libraries T. Harry Williams Center | … from LSU Libraries’ T. Harry Williams Center |
+| Intro | featuring oral histories from LSU Libraries T. Harry Williams Center | featuring oral histories from LSU Libraries’ T. Harry Williams Center |
 | Intro | is presented in conjunction with | was presented in conjunction with (past tense; the exhibition has closed) |
 | Intro | The oral history listening station includes | The listening station includes |
-| Intro | earning money by sewing ladies clothing | … sewing ladies’ clothing |
+| Intro | earning money by sewing ladies clothing | earning money by sewing ladies’ clothing |
 | About | The gallery exhibit examines … Covering two floors, this exhibition includes … from every major collection including: … Selected items highlight … and cover topics | The gallery exhibition examined … Covering two floors, it included … from every major collection: … Selected items highlighted … and covered topics |
 | About | socio-economic groups | socioeconomic groups |
 | About | Links page: six icon/QR links (Interviews, Williams Center, Exhibitions, LSU Libraries, LSU AgCenter, LSU College of Agriculture) | Three text links: the Cooperative Extension interviews (lib.lsu.edu/oralhistory/collections?field_series_value=13), LSU AgCenter, LSU College of Agriculture (www.coa.lsu.edu now redirects to https://www.lsu.edu/agriculture/, so it links there). The QR codes are dropped. |
