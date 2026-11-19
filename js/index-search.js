@@ -566,10 +566,14 @@
     }
   };
 
-  // A form's address, leaving out the default sort and empty years.
+  // A form's address, leaving out the default sort (the first on offer:
+  // Newest first for News and Notes, else Relevance) and empty years.
   const addressOf = (form) => {
     const params = new URLSearchParams(new FormData(form));
-    if (params.get('sort') === 'relevance') {
+    // The page's Sort menu, even from the search box's form, whose hidden
+    // sort field is only there when it isn't the default.
+    const sort = document.getElementById('pf-index-sort');
+    if (sort && sort.options.length && params.get('sort') === sort.options[0].value) {
       params.delete('sort');
     }
     ['from', 'to'].forEach((name) => {

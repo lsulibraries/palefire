@@ -632,6 +632,11 @@ HTML),
 <li>Combined Search: oral histories searched on their own keep their Show location panels. When the catalog is slow to answer on a first search, the page asks again for the rows it missed instead of leaving them without one.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: News and Notes newest first', <<<'HTML'
+<ul>
+<li>Combined Search: News and Notes results start with the newest story, in its own list and in its section under All. Relevance and Oldest first are still in the Sort menu.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

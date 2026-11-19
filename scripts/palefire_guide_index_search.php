@@ -451,6 +451,13 @@ HTML),
 <li>Now the answer says when some records didn’t arrive in time, and the page asks again for those rows, up to twice, before giving up on them. Records already found are kept on the server for a day, so the second answer comes quickly. Live tests: jazz found 12 of 20 at first and all 20 on the second ask; plantation 16, then 20.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: News and Notes newest first', <<<'HTML'
+<ul>
+<li>News and Notes results now start with the newest story, by each article’s date. Sorted by relevance, a search for library opened with posts from 2017 and 2021 ahead of this month’s.</li>
+<li>Its section under All is newest first too, and so is its Show all list. Relevance and Oldest first are still in the Sort menu, and a sort someone chooses stays through new searches.</li>
+<li>Every other source still starts on Relevance.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
