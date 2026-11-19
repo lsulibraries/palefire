@@ -930,6 +930,7 @@
       view.scale.className = 'pf-exhibit-object__scale';
       view.scale.hidden = true;
       view.panel.append(view.scale);
+      phoneParts(view);
       // The pinned top row's height, under which a clip's player pins:
       // measured when a clip is shown (panelAudio()) and as it resizes.
       if (window.ResizeObserver) {
@@ -947,10 +948,68 @@
     return view;
   }
 
+  // An oral history clip on a phone or tablet (below lg, _exhibition.scss):
+  // the transcript takes the whole screen over the photo's wash, the photo
+  // a thumbnail beside the title that shows it whole (is-photo), with a
+  // way back to the transcript; the arrows, gone with the stage, beside
+  // the count. Hidden from lg, where the photo stands beside the panel.
+  const ICON_PREV = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M10 3 5 8l5 5"/></svg>';
+  const ICON_NEXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="m6 3 5 5-5 5"/></svg>';
+  const ICON_WHOLE = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5l-5 5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>';
+
+  function phoneParts(view) {
+    const top = view.panel.querySelector('.pf-viewer__top');
+    const steps = document.createElement('span');
+    steps.className = 'pf-exhibit-phone-steps';
+    [[-1, ICON_PREV, Drupal.t('Previous')], [1, ICON_NEXT, Drupal.t('Next')]].forEach(([delta, svg, name]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-exhibit-phone-step';
+      button.innerHTML = svg + '<span class="visually-hidden">' + name + '</span>';
+      button.addEventListener('click', () => view.steps[delta < 0 ? 0 : 1].click());
+      steps.append(button);
+    });
+    steps.insertBefore(view.count, steps.lastChild);
+    top.prepend(steps);
+    view.phoneSteps = steps;
+
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'pf-exhibit-thumb';
+    thumb.hidden = true;
+    thumb.innerHTML = '<img alt="" width="72" height="92" decoding="async"><span class="pf-exhibit-thumb__name" aria-hidden="true">' + ICON_WHOLE + Drupal.t('Photo') + '</span><span class="visually-hidden">' + Drupal.t('Show photo') + '</span>';
+    thumb.addEventListener('click', () => showPhoto(view, true));
+    view.title.before(thumb);
+    view.thumb = thumb;
+
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'pf-viewer__tool pf-exhibit-back';
+    back.innerHTML = ICON_PREV + '<span>' + Drupal.t('Transcript') + '</span>';
+    back.setAttribute('aria-label', Drupal.t('Back to the transcript'));
+    back.addEventListener('click', () => showPhoto(view, false));
+    view.stage.querySelector('.pf-viewer__tools').prepend(back);
+    view.back = back;
+  }
+
+  function showPhoto(view, on) {
+    view.dialog.classList.toggle('is-photo', on);
+    (on ? view.back : view.thumb).focus({ preventScroll: true });
+  }
+
   // An oral history clip's stage: its photo blurred into a wash behind it
   // (_exhibition.scss), fading in after the image and crossfading as the
   // view steps. src: the tile's loaded image, or null for none (objects).
+  // Below lg the same photo is the panel's thumbnail (phoneParts()).
   function setWash(view, src) {
+    view.dialog.classList.toggle('is-clip', !!src);
+    view.dialog.classList.remove('is-photo');
+    if (view.thumb) {
+      view.thumb.hidden = !src;
+      if (src) {
+        view.thumb.querySelector('img').src = src;
+      }
+    }
     view.stage.querySelectorAll('.pf-exhibit-wash:not(.is-leaving)').forEach((layer) => {
       layer.classList.add('is-leaving');
       layer.classList.remove('is-shown');
@@ -1545,6 +1604,225 @@
     // on through the exhibition while it plays.
     const clip = !!view.body.querySelector('[data-pf-audio] audio');
     viewer.sync({ steps: n, hide: clip, extra: clip ? [keepButton(view)] : [] });
+    view.phoneSteps.querySelectorAll('button').forEach((b) => {
+      b.hidden = n < 2;
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+   * Full interviews (includes/exhibit-interviews.html.twig): a card opens
+   * its interview in the object view as a clip opens, a tape at a time:
+   * the portrait on the stage (on phones the thumbnail over its wash), the
+   * name, the tape, the player, and the typed transcript, lit phrase by
+   * phrase as it plays. The transcript is the tape's WebVTT file
+   * (data-pf-timings, scripts/palefire_interviews_vtt.py), whose cues are
+   * its words in order, each paragraph's first marked with its speaker
+   * (<v NAME>) or <c.p>. The arrows step through every tape on the page.
+   * ------------------------------------------------------------------ */
+
+  const interviews = { list: null, index: 0, opener: null };
+
+  const interviewHandler = {
+    step: (delta) => fillInterview(interviews.index + delta),
+    close: () => viewer.close(interviewPhoto(true)),
+    closed: interviewClosed,
+  };
+
+  // The card's portrait, or null; on screen only, for the morph back.
+  function interviewPhoto(onScreen) {
+    const link = interviews.list && interviews.list[interviews.index];
+    const img = link && link.closest('[data-pf-interview]').querySelector('.pf-interview__photo img');
+    return img && (!onScreen || viewer.inSight(img, headerOffset())) ? img : null;
+  }
+
+  function openInterview(tape, opener) {
+    objectView();
+    interviews.list = Array.from(document.querySelectorAll('[data-pf-interview] a[data-pf-tape]'));
+    interviews.opener = opener;
+    const photo = tape.closest('[data-pf-interview]').querySelector('.pf-interview__photo img');
+    viewer.show(interviewHandler, () => fillInterview(interviews.list.indexOf(tape)), { from: photo, kind: 'exhibit' });
+  }
+
+  function interviewClosed() {
+    if (wallState.view) {
+      stopAudio(wallState.view);
+      setWash(wallState.view, null);
+    }
+    const opener = interviews.opener;
+    interviews.list = null;
+    interviews.opener = null;
+    if (opener && opener.isConnected) {
+      opener.focus({ preventScroll: true });
+    }
+  }
+
+  // The transcript's paragraphs from the tape's cues: [{who, words}].
+  const interviewTexts = new Map();
+
+  function interviewText(url) {
+    if (!interviewTexts.has(url)) {
+      const entities = { amp: '&', lt: '<', gt: '>', nbsp: ' ' };
+      const decode = (s) => s.replace(/&(amp|lt|gt|nbsp);/g, (match, name) => entities[name]);
+      interviewTexts.set(url, fetch(url)
+        .then((response) => (response.ok ? response.text() : ''))
+        .then((vtt) => {
+          const paras = [];
+          vtt.replace(/\r\n?/g, '\n').split(/\n{2,}/).forEach((block) => {
+            const lines = block.split('\n');
+            const at = lines.findIndex((line) => line.includes('-->'));
+            if (at < 0) {
+              return;
+            }
+            const raw = lines.slice(at + 1).join(' ');
+            const voice = raw.match(/^<v ([^>]*)>/);
+            const words = decode(raw.replace(/<[^>]*>/g, '')).trim();
+            if (voice || raw.startsWith('<c.p>') || !paras.length) {
+              paras.push({ who: voice ? decode(voice[1]).trim() : '', words: [] });
+            }
+            if (words) {
+              paras[paras.length - 1].words.push(words);
+            }
+          });
+          return paras;
+        })
+        .catch(() => []));
+    }
+    return interviewTexts.get(url);
+  }
+
+  function fillInterview(index) {
+    const view = objectView();
+    const list = interviews.list;
+    const n = list.length;
+    interviews.index = (index + n) % n;
+    const tape = list[interviews.index];
+    const card = tape.closest('[data-pf-interview]');
+    const tapes = Array.from(card.querySelectorAll('a[data-pf-tape]'));
+    const name = card.querySelector('.pf-interview__name').textContent.trim();
+    const photo = card.querySelector('.pf-interview__photo img');
+    stopAudio(view);
+    view.dialog.removeAttribute('aria-label');
+    view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
+    view.title.hidden = false;
+
+    // The portrait, or the card's initials, on the stage.
+    const frame = document.createElement('div');
+    frame.className = 'pf-viewer__frame';
+    if (photo) {
+      const img = mediaImg(photo.parentElement, 'pf-viewer__img pf-viewer__zoomable', photo);
+      img.alt = Drupal.t('Photo of @name', { '@name': name });
+      if (photo.getAttribute('width')) {
+        img.width = parseInt(photo.getAttribute('width'), 10);
+        img.height = parseInt(photo.getAttribute('height'), 10);
+      }
+      frame.append(img);
+    }
+    else {
+      const initials = card.querySelector('.pf-interview__initials');
+      if (initials) {
+        frame.append(initials.cloneNode(true));
+      }
+    }
+    view.media.replaceChildren(frame);
+
+    // Which tape, under the name.
+    view.title.textContent = name;
+    const which = [tape.dataset.pfTape, tape.dataset.pfLength].filter(Boolean).join(' · ');
+    const label = document.createElement('p');
+    label.textContent = tapes.length > 1
+      ? Drupal.t('Tape @n of @total', { '@n': tapes.indexOf(tape) + 1, '@total': tapes.length }) + ' · ' + which
+      : which;
+    view.label.replaceChildren(label);
+    view.label.hidden = false;
+
+    // A clip's own parts, so the panel sets them as it sets a clip's.
+    const clip = document.createElement('div');
+    clip.className = 'pf-exhibit-audio';
+    clip.setAttribute('role', 'group');
+    const kicker = document.createElement('p');
+    kicker.className = 'pf-exhibit-label__kicker';
+    kicker.textContent = Drupal.t('Listen');
+    clip.append(kicker);
+    const credit = [card.dataset.pfBy, card.dataset.pfAccession].filter(Boolean).join(' · ');
+    if (credit) {
+      const p = document.createElement('p');
+      p.className = 'pf-exhibit-audio__credit';
+      p.textContent = credit;
+      clip.append(p);
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'pf-audio';
+    wrap.dataset.pfAudio = '';
+    const audio = document.createElement('audio');
+    audio.className = 'pf-audio__native';
+    audio.controls = true;
+    audio.preload = 'none';
+    const source = document.createElement('source');
+    source.src = tape.href;
+    source.type = 'audio/mpeg';
+    audio.append(source);
+    wrap.append(audio);
+    clip.append(wrap);
+    const url = tape.dataset.pfTimings;
+    const folded = document.createElement('details');
+    folded.className = 'pf-exhibit-audio__transcript';
+    const text = document.createElement('div');
+    text.className = 'pf-exhibit-audio__text pf-guide-prose';
+    folded.append(text);
+    if (url) {
+      wrap.dataset.pfTimings = url;
+      clip.append(folded);
+    }
+    else {
+      const none = document.createElement('p');
+      none.className = 'pf-exhibit-audio__credit';
+      none.textContent = Drupal.t('This tape has no transcript.');
+      clip.append(none);
+    }
+
+    const show = () => {
+      view.body.replaceChildren(clip);
+      panelAudio(view);
+      view.panel.scrollTop = 0;
+    };
+    view.body.replaceChildren();
+    if (url) {
+      const at = interviews.index;
+      view.panel.setAttribute('aria-busy', 'true');
+      interviewText(url).then((paras) => {
+        if (interviews.list !== list || interviews.index !== at) {
+          return;
+        }
+        paras.forEach((para) => {
+          const p = document.createElement('p');
+          if (para.who) {
+            const who = document.createElement('strong');
+            who.textContent = para.who + ':';
+            p.append(who, ' ');
+          }
+          p.append(para.words.join(' '));
+          text.append(p);
+        });
+        view.panel.removeAttribute('aria-busy');
+        show();
+      });
+    }
+    else {
+      show();
+    }
+
+    setWash(view, photo ? (photo.currentSrc || photo.getAttribute('src')) : null);
+    if (!photo) {
+      // No portrait: still the text over the screen on phones, no thumbnail.
+      view.dialog.classList.add('is-clip');
+    }
+    view.scale.hidden = true;
+    view.scale.replaceChildren();
+    view.count.textContent = Drupal.t('@n of @total', { '@n': interviews.index + 1, '@total': n });
+    viewer.sync({ steps: n });
+    view.phoneSteps.querySelectorAll('button').forEach((b) => {
+      b.hidden = n < 2;
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -2492,6 +2770,19 @@
           }
           event.preventDefault();
           openPictures(link, null, null);
+        });
+      });
+      once('pf-interview', '[data-pf-interview]', context).forEach((card) => {
+        card.addEventListener('click', (event) => {
+          const link = event.target.closest('a');
+          if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !window.HTMLDialogElement) {
+            return;
+          }
+          const tape = link.matches('[data-pf-tape]') ? link : card.querySelector('a[data-pf-tape]');
+          if (tape) {
+            event.preventDefault();
+            openInterview(tape, link);
+          }
         });
       });
       once('pf-exhibit-out', '.pf-main a[href]', context).forEach(markOutside);

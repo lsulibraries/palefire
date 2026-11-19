@@ -5216,6 +5216,213 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
   }
 }
 
+// An oral history clip below lg (js/exhibition.js phoneParts()): the
+// transcript leads. The panel takes the whole screen over the stage, which
+// is only the photo's wash behind it; the photo is a thumbnail beside the
+// title, and shows whole over everything (is-photo) until Transcript takes
+// it away. From lg nothing here shows: the photo stands beside the panel.
+.pf-exhibit-thumb,
+.pf-exhibit-phone-step,
+.pf-exhibit-back {
+  display: none;
+}
+
+// The count, between the phone's arrows when they show.
+.pf-exhibit-phone-steps {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
+}
+
+@include media-breakpoint-down(lg) {
+  .pf-viewer--exhibit.is-clip[open]:not(.is-side, .is-full) {
+    grid-template-rows: minmax(0, 1fr);
+
+    .pf-viewer__stage {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    // Behind the text, only the wash: the frame, arrows and tools wait for
+    // the photo to be asked for.
+    .pf-viewer__stage > :not(.pf-exhibit-wash) {
+      visibility: hidden;
+    }
+
+    .pf-viewer__panel {
+      position: relative;
+      z-index: 1;
+      grid-row: 1;
+      background: transparent;
+      border-top: 0;
+    }
+
+    // The way out and the arrows, in the top row now the stage's are gone.
+    .pf-viewer__close {
+      display: inline-flex;
+    }
+
+    .pf-exhibit-phone-step {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      padding: 0;
+      color: var(--bs-body-color);
+      background: none;
+      border: 1px solid $pf-hairline;
+      transition: color .3s ease;
+
+      &:hover {
+        color: var(--pf-viewer-accent);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--pf-viewer-accent);
+        outline-offset: 2px;
+      }
+
+      &[hidden] {
+        display: none;
+      }
+
+      svg {
+        width: 1rem;
+      }
+    }
+
+    // The thumbnail: the photo, its name in the stage buttons' voice over
+    // its foot. The title and caption run beside it, the clip under both.
+    .pf-exhibit-thumb:not([hidden]) {
+      position: relative;
+      display: block;
+      float: left;
+      width: 4.5rem;
+      height: 5.75rem;
+      margin: .2rem 1rem 0 0;
+      padding: 0;
+      overflow: hidden;
+      background: var(--pf-viewer-surface);
+      border: 1px solid $pf-hairline;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        @include pf-viewer-motion {
+          transition: transform .6s $pf-viewer-ease;
+        }
+      }
+
+      &:hover img {
+        transform: scale(1.05);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--pf-viewer-accent);
+        outline-offset: 2px;
+      }
+    }
+
+    .pf-exhibit-thumb__name {
+      position: absolute;
+      inset: auto 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .3rem;
+      padding: .3rem 0;
+      font: 700 .625rem/1 var(--pf-viewer-mono);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0, 0, 0, .65);
+
+      svg {
+        width: .65rem;
+      }
+    }
+
+    // The panel is a flex column: the thumbnail, title and caption share
+    // one block so the text can run beside the float.
+    .pf-viewer__panel {
+      display: block;
+
+      > * + * {
+        margin-top: 1.25rem;
+      }
+
+      > .pf-viewer__top + * {
+        margin-top: 0;
+      }
+
+      > .pf-exhibit-thumb + .pf-viewer__title {
+        margin-top: 0;
+      }
+
+      > .pf-viewer__title {
+        min-height: 0;
+      }
+
+      > .pf-viewer__body {
+        clear: both;
+      }
+    }
+
+    .pf-viewer__top {
+      margin-bottom: 1rem;
+    }
+
+    .pf-viewer__label {
+      margin-top: .5rem;
+    }
+
+    // The photo, asked for: the stage over everything, the photo whole,
+    // Transcript first among its tools; the arrows and the fold sit out.
+    &.is-photo {
+      .pf-viewer__stage {
+        z-index: 2;
+        background: var(--bs-body-bg);
+      }
+
+      .pf-viewer__stage > :not(.pf-exhibit-wash) {
+        visibility: visible;
+      }
+
+      .pf-viewer__step,
+      .pf-viewer__info,
+      .pf-viewer__hide,
+      .pf-viewer__shut {
+        display: none;
+      }
+
+      .pf-exhibit-back {
+        display: grid;
+        grid-auto-flow: column;
+        gap: .5rem;
+        width: auto;
+        padding-inline: .8rem;
+        font: var(--pf-mono-ui)/1.5 var(--pf-viewer-mono);
+        letter-spacing: .12em;
+        text-transform: uppercase;
+
+        svg {
+          width: .9rem;
+        }
+      }
+
+      .pf-viewer__tools {
+        right: auto;
+        left: max(.5rem, env(safe-area-inset-left, 0px));
+      }
+    }
+  }
+}
+
 .pf-exhibit-object__scale {
   display: grid;
   gap: 0.6rem;

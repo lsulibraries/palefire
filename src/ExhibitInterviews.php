@@ -13,9 +13,11 @@ use Drupal\media\MediaInterface;
  * A guide text paragraph that is only "[interviews:<set>]" draws every
  * narrator of data/<set>-interviews.json (includes/exhibit-interviews.html.twig):
  * a portrait, the name, interviewer and accession number, then each tape
- * with its length, the exhibition's player and its summary and transcript
- * (PDFs). The recordings stream from where they already are on the server,
- * and nothing loads until Play.
+ * with its length. A card opens the interview in the exhibition's object
+ * view (js/exhibition.js), a tape at a time, with its typed transcript
+ * timed phrase by phrase (transcripts/<set>-interviews/<tape>.vtt). The
+ * recordings stream from where they already are on the server, and nothing
+ * loads until Play.
  *
  * Portraits are Image media named "<Set> interviews: <file>", imported by
  * the set's script (scripts/palefire_exhibit_mossville_interviews.php); a
@@ -47,6 +49,8 @@ final class ExhibitInterviews {
       return NULL;
     }
     $data = json_decode((string) file_get_contents($file), TRUE);
+    $theme = \Drupal::service('extension.list.theme')->getPath('palefire');
+    $base = \Drupal::request()->getBasePath();
     if (!is_array($data) || empty($data['narrators'])) {
       return NULL;
     }
@@ -81,11 +85,6 @@ final class ExhibitInterviews {
         $photo = $item ? _palefire_exhibit_image($item, '(min-width: 75rem) 20rem, (min-width: 36rem) 45vw, 100vw', $cache) : NULL;
       }
 
-      // One summary for every tape (the usual case) is the narrator's;
-      // otherwise each tape links its own.
-      $summaries = array_values(array_unique(array_filter(array_column($narrator['tapes'], 'summary'))));
-      $shared = count($summaries) === 1 && count(array_filter(array_column($narrator['tapes'], 'summary'))) === count($narrator['tapes']);
-
       $tapes = [];
       foreach ($narrator['tapes'] as $tape) {
         $tape_count++;
@@ -95,8 +94,7 @@ final class ExhibitInterviews {
           'length' => self::length((int) ($tape['seconds'] ?? 0)),
           'note' => $tape['note'] ?? '',
           'audio' => !empty($tape['audio']) ? $data['files'] . '/audio/' . rawurlencode($tape['audio']) : NULL,
-          'transcript' => !empty($tape['transcript']) ? $data['files'] . '/transcript/' . rawurlencode($tape['transcript']) : NULL,
-          'summary' => !$shared && !empty($tape['summary']) ? $data['summaries'] . '/' . rawurlencode($tape['summary']) : NULL,
+          'timings' => self::timings($theme, $base, $set, (string) $tape['tape']),
         ];
       }
 
@@ -107,7 +105,6 @@ final class ExhibitInterviews {
         'interviewers' => $narrator['interviewers'],
         'accessions' => $narrator['accessions'],
         'photo' => $photo,
-        'summary' => $shared ? $data['summaries'] . '/' . rawurlencode($summaries[0]) : NULL,
         'tapes' => $tapes,
       ];
     }
@@ -118,6 +115,18 @@ final class ExhibitInterviews {
       'tape_count' => $tape_count,
       'hours' => (int) round($seconds / 3600),
     ];
+  }
+
+  /**
+   * A tape's timed transcript, or NULL: transcripts/<set>-interviews/<tape>.vtt
+   * in the theme (scripts/palefire_interviews_vtt.py), the typed transcript's
+   * own words and order, one cue a phrase. Its date in the address, so a
+   * re-timed file is fetched anew.
+   */
+  private static function timings(string $theme, string $base, string $set, string $tape): ?string {
+    $path = $theme . '/transcripts/' . $set . '-interviews/' . $tape . '.vtt';
+    $file = DRUPAL_ROOT . '/' . $path;
+    return preg_match('/^[A-Za-z0-9-]+$/', $tape) && is_file($file) ? $base . '/' . $path . '?v=' . filemtime($file) : NULL;
   }
 
   /**

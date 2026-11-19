@@ -152,8 +152,33 @@ echo "Portraits: {$counts['have']} already in place, {$counts['import']} to impo
 
 $galleries = $node->get('field_scroll_section')->referencedEntities();
 $anchors = array_map(fn ($p) => $p->hasField('field_section_anchor') ? (string) $p->get('field_section_anchor')->value : '', $galleries);
+// Already there: only its opening text brought up to date (the PDFs gave
+// way to the transcript in the object view, 2026-11-19).
+$iv_old = 'Here is each one in full, with its summary and transcript.';
+$iv_new = 'Here is each one in full, with its transcript.';
 if (in_array('interviews', $anchors, TRUE)) {
-  echo 'The Full Interviews is already on the page; left as it is.' . PHP_EOL;
+  $gallery = $galleries[array_search('interviews', $anchors, TRUE)];
+  foreach ($gallery->get('field_guide_blocks')->referencedEntities() as $block) {
+    if ($block->bundle() !== 'guide_text' || !$block->hasField('field_block_body')) {
+      continue;
+    }
+    $value = (string) $block->get('field_block_body')->value;
+    if (!str_contains($value, $iv_old)) {
+      continue;
+    }
+    echo 'The Full Interviews is on the page; its opening text says “' . $iv_new . '” in place of “' . $iv_old . '”.' . PHP_EOL;
+    if ($apply) {
+      $block->set('field_block_body', ['value' => str_replace($iv_old, $iv_new, $value), 'format' => $block->get('field_block_body')->format]);
+      $block->setNewRevision(TRUE);
+      $block->save();
+      $node->setNewRevision(TRUE);
+      $node->setRevisionLogMessage('The Full Interviews: opening text without the PDFs (palefire_exhibit_mossville_interviews.php).');
+      $node->save();
+      echo 'Saved.' . PHP_EOL;
+    }
+    return;
+  }
+  echo 'The Full Interviews is already on the page, its text up to date; left as it is.' . PHP_EOL;
   return;
 }
 
@@ -170,7 +195,7 @@ if ($format === NULL || !isset($formats[$format])) {
   throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
 }
 
-$body = '<p>The clips in this exhibition come from these interviews, recorded from 2015 to 2017 by the T. Harry Williams Center for Oral History with the Imperial Calcasieu Museum. Here is each one in full, with its summary and transcript.</p>'
+$body = '<p>The clips in this exhibition come from these interviews, recorded from 2015 to 2017 by the T. Harry Williams Center for Oral History with the Imperial Calcasieu Museum. Here is each one in full, with its transcript.</p>'
   . '<p>[interviews:mossville]</p>';
 
 $at = array_search('about', $anchors, TRUE);
