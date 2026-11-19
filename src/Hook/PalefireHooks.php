@@ -1043,9 +1043,6 @@ class PalefireHooks {
     $editor = $user->hasPermission('bypass node access') || $user->hasPermission('view any unpublished content');
     $nodes = \Drupal::entityTypeManager()->getStorage('node');
     $repository = \Drupal::service('entity.repository');
-    $plain = fn (NodeInterface $node, string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
-      ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags((string) $node->get($field)->value))))
-      : '';
     $visible = function (NodeInterface $node) use ($cache, $editor): bool {
       $access = $node->access('view', NULL, TRUE);
       $cache->addCacheableDependency($node)->addCacheableDependency($access);
@@ -1144,29 +1141,14 @@ class PalefireHooks {
         $note = $on_view_note(self::stringValue($article, 'field_exhibit_where'), $view);
       }
 
-      // The summary: the credit line as text (it names the collection and
-      // curator), else the start of the intro.
-      $blurb = $plain($node, 'field_exhibit_credit') ?: $plain($node, 'field_intro');
-
+      $card = self::exhibitionCard($node, $cache);
       $items[] = [
-        'title' => $node->label(),
-        'url' => $node->toUrl()->toString(),
-        'cta' => (string) $this->t('Enter the exhibition'),
-        'digital' => TRUE,
-        'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
-        'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) $this->t('Exhibition'),
-        'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($view['year'] ?? NULL),
-        'blurb' => Unicode::truncate($blurb, 240, TRUE, TRUE),
-        'when' => '',
+        'year' => $card['year'] ?? ($view['year'] ?? NULL),
         'post' => $post,
+        'physical' => (bool) $post,
         'featured' => $featured,
         'note' => $featured ? $note : '',
-        'unpublished' => !$node->isPublished(),
-        // Its title page's face, as in exhibitHead().
-        'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans',
-        'cover' => $image($node, 'field_exhibit_cover'),
-        'changed' => (int) $node->getChangedTime(),
-      ];
+      ] + $card;
     }
 
     // Physical exhibitions: the category's posts not already paired.
@@ -1221,6 +1203,7 @@ class PalefireHooks {
           'post' => NULL,
           'featured' => $featured,
           'note' => $featured ? $note : '',
+          'physical' => TRUE,
           'unpublished' => !$post->isPublished(),
           'title_style' => 'sans',
           'cover' => $image($post, 'field_image'),
@@ -1240,6 +1223,60 @@ class PalefireHooks {
       'items' => $items,
       'featured' => count(array_filter($items, fn (array $item): bool => $item['featured'])),
       'cache' => $render,
+    ];
+  }
+
+  /**
+   * One online exhibition as the showcase band shows it.
+   *
+   * The Exhibitions page's band (showcase(), which adds its physical
+   * exhibition, featuring and dates) and a tile showcase of oral history
+   * exhibitions (palefire_preprocess_paragraph__tile_showcase(), in its
+   * editors' order) share it (includes/exhibit-carousel.html.twig).
+   *
+   * physical: it has a physical exhibition post (field_exhibit_physical_post)
+   * the visitor may see, so it was shown in the building too.
+   *
+   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, when: string, post: null, physical: bool, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
+   */
+  public static function exhibitionCard(NodeInterface $node, CacheableMetadata $cache): array {
+    $plain = fn (string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
+      ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags((string) $node->get($field)->value))))
+      : '';
+    // The summary: the credit line as text (it names the collection and
+    // curator), else the start of the intro.
+    $blurb = $plain('field_exhibit_credit') ?: $plain('field_intro');
+    $cover = NULL;
+    if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()
+      && ($item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache))) {
+      // Sizes are set in the template.
+      $cover = _palefire_exhibit_image($item, '', $cache);
+    }
+    $physical = FALSE;
+    if ($node->hasField('field_exhibit_physical_post') && ($post = $node->get('field_exhibit_physical_post')->entity) instanceof NodeInterface) {
+      $access = $post->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($post)->addCacheableDependency($access);
+      $physical = $access->isAllowed() && $post->isPublished();
+    }
+    return [
+      'title' => $node->label(),
+      'url' => $node->toUrl()->toString(),
+      'cta' => (string) t('Enter the exhibition'),
+      'digital' => TRUE,
+      'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
+      'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) t('Exhibition'),
+      'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
+      'blurb' => Unicode::truncate($blurb, 240, TRUE, TRUE),
+      'when' => '',
+      'post' => NULL,
+      'physical' => $physical,
+      'featured' => FALSE,
+      'note' => '',
+      'unpublished' => !$node->isPublished(),
+      // Its title page's face, as in exhibitHead().
+      'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans',
+      'cover' => $cover,
+      'changed' => (int) $node->getChangedTime(),
     ];
   }
 

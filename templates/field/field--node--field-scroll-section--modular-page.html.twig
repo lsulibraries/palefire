@@ -36,6 +36,11 @@
       {% if index.aside %}
         {% set item_attributes = item.attributes.addClass('pf-section--aside') %}
       {% endif %}
+      {# A tile showcase drawn as the exhibitions band: it holds the band's
+         faded plate (palefire_modular_preprocess_field()). #}
+      {% if item.section.exhibitions %}
+        {% set item_attributes = item.attributes.addClass('pf-section--exhibitions') %}
+      {% endif %}
       {# The podcast's head (index.mark): the name (an h2 like every
          section's), its Lede, and the cassette mark tilted behind them at
          the right, running off the section's edge; centered under them in

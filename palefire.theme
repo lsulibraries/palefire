@@ -1440,6 +1440,32 @@ function _palefire_page_outline(NodeInterface $node, CacheableMetadata $cache): 
 }
 
 /**
+ * Whether a Tile showcase lists only oral history exhibitions (two or more).
+ *
+ * Such a showcase is drawn as the exhibitions band
+ * (palefire_preprocess_paragraph__tile_showcase(), and its section's class
+ * in palefire_modular_preprocess_field()). Remembered per paragraph: both
+ * ask on the same request.
+ */
+function _palefire_oral_history_exhibition_tiles(ParagraphInterface $paragraph): bool {
+  $known = &drupal_static(__FUNCTION__, []);
+  $key = $paragraph->id() . ':' . $paragraph->getRevisionId();
+  if (!isset($known[$key])) {
+    $count = 0;
+    $all = $paragraph->hasField('field_tiles');
+    foreach ($all ? $paragraph->get('field_tiles') : [] as $item) {
+      if (!$item->entity instanceof NodeInterface || !_palefire_is_oral_history_exhibition($item->entity)) {
+        $all = FALSE;
+        break;
+      }
+      $count++;
+    }
+    $known[$key] = $all && $count > 1;
+  }
+  return $known[$key];
+}
+
+/**
  * Whether a node is an oral history exhibition: its address is under
  * /v2/oralhistory/exhibitions/ (scripts/palefire_oral_history_exhibit_paths.php).
  */
@@ -3544,6 +3570,29 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
   }
 
   $cache = CacheableMetadata::createFromRenderArray($variables);
+
+  // Every item an oral history exhibition (Showcase on Oral History's
+  // homepage): the Exhibitions page's band instead of cards
+  // (includes/exhibit-carousel.html.twig), in the editors' order, the
+  // same canvases, plate and summaries. Any other item keeps the layout.
+  $exhibitions = [];
+  if (_palefire_oral_history_exhibition_tiles($paragraph)) {
+    foreach ($paragraph->get('field_tiles') as $item) {
+      $node = $item->entity;
+      $access = $node->access('view', NULL, TRUE);
+      $cache->addCacheableDependency($node)->addCacheableDependency($access);
+      if ($access->isAllowed() && $node->isPublished()) {
+        $exhibitions[] = PalefireHooks::exhibitionCard(\Drupal::service('entity.repository')->getTranslationFromContext($node), $cache);
+      }
+    }
+  }
+  if (count($exhibitions) > 1) {
+    $variables['layout'] = 'exhibitions';
+    $variables['exhibitions'] = $exhibitions;
+    $variables['carousel_id'] = 'pf-carousel-' . $paragraph->id();
+    $cache->applyTo($variables);
+    return;
+  }
   $style = $variables['layout'] === 'grid' ? 'tile_showcase_landscape' : 'tile_showcase_portrait';
   $covers = [];
   $covers_all = [];
@@ -4085,6 +4134,11 @@ function palefire_preprocess_field(array &$variables): void {
         'text' => $text !== '' ? $text : t('See all'),
         'external' => $url->isExternal(),
       ];
+    }
+    // A tile showcase drawn as the exhibitions band: its section holds the
+    // band's faded plate (.pf-section--exhibitions, _exhibit-showcase.scss).
+    if ($paragraph->bundle() === 'tile_showcase' && _palefire_oral_history_exhibition_tiles($paragraph)) {
+      $item['section']['exhibitions'] = TRUE;
     }
     $lede = $paragraph->hasField('field_tile_lede') ? trim((string) $paragraph->get('field_tile_lede')->value) : '';
     $item['section']['index'] = [
@@ -4752,6 +4806,8 @@ function _palefire_exhibit_image(FieldItemInterface $image, string $sizes, Cache
   $src = $candidates ? ($candidates[array_keys($candidates)[min(1, count($candidates) - 1)]]) : $original;
   return [
     'src' => $src,
+    // The smallest version (640 wide): the showcase band's faded plate.
+    'small' => $candidates ? reset($candidates) : $original,
     'srcset' => $srcset,
     'sizes' => $sizes,
     'width' => $width,

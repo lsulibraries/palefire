@@ -1,14 +1,17 @@
 // Exhibitions showcase (includes/exhibit-showcase.html.twig): a Modular
-// page in "showcase" mode. A depth carousel, then a table of every
+// page in "showcase" mode. The exhibitions band, then a table of every
 // exhibition. Script: js/exhibit-showcase.js.
 //
-// The carousel: the covers stand in one row going back into the page, to
-// the right. --pf-d is a cover's place in the row (0 = the front, the one
-// shown); each step back moves it along by --pf-showcase-step and away by
-// --pf-showcase-depth, and the last ones fade out. Sizes come from the
-// stage's own width (container query units), so it fits beside the TOC
-// and at 400% zoom. Only transform and opacity move, inside a box of fixed
-// height: no layout shift.
+// The band (includes/exhibit-carousel.html.twig, also Oral History's
+// Showcase, .pf-showcase--embed): gallery-wrapped canvases on a rail that
+// scrolls sideways and snaps, the shown exhibition's picture faded behind
+// the whole band. Each canvas has depth: two edges, turned 90° into the
+// wall, carry the picture's own edge, and the rail is seen from one point
+// (its perspective, over the first canvas), so the canvases to the side
+// show an edge, and the edges change as the rail moves. Nothing is tilted.
+// Sizes come from the stage's own width (container query units), so it
+// fits beside the TOC and at 400% zoom. No layout shift: the rail's height
+// is the canvases'.
 //
 // Type and controls are the exhibitions' own: mono labels, the
 // exhibition button (.pf-exhibit-button, _exhibition.scss) for "Enter",
@@ -111,7 +114,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // Mono labels, as on the exhibitions' title pages.
-.pf-showcase__kicker,
+.pf-showcase__tag,
 .pf-showcase__count,
 .pf-showcase__upnext-label,
 .pf-showcase-list thead th,
@@ -128,7 +131,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // A cover with no image yet: the landing tiles' hatching.
-.pf-showcase__card.is-blank {
+.pf-showcase__card.is-blank .pf-showcase__face {
   background:
     pf-hatch(rgb(255 255 255 / .07)),
     linear-gradient(160deg, #3b3346, #17141c);
@@ -225,58 +228,83 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 .pf-showcase__stage {
-  --pf-showcase-room: 2.5rem; // above and below the cover: its shadow and lift
-  // The room hangs outside the box, so the cover itself sits on the grid.
+  --pf-showcase-room: 2.5rem; // above and below the canvas: its shadow
+  // The room hangs outside the box, so the canvas itself sits on the grid.
   margin-block: calc(-1 * var(--pf-showcase-room));
+  min-width: 0;
   container: pf-showcase / inline-size;
-  // The row runs off to the right: clipped there, fading out.
-  overflow: hidden;
-  mask-image: linear-gradient(to right, #000 80%, transparent);
+  // The rail runs off to the right, fading out.
+  mask-image: linear-gradient(to right, #000 78%, transparent);
 }
 
-.pf-showcase__scene {
-  --pf-showcase-w: min(60cqi, 20rem);
-  --pf-showcase-step: calc(var(--pf-showcase-w) * .5);
-  --pf-showcase-depth: 9rem;
-  position: relative;
-  height: calc(var(--pf-showcase-w) * 4 / 3 + 2 * var(--pf-showcase-room, 2.5rem));
-  perspective: 1600px;
-  perspective-origin: 30% 45%;
-  transform-style: preserve-3d;
-  touch-action: pan-y;
+[dir="rtl"] .pf-showcase__stage {
+  mask-image: linear-gradient(to left, #000 78%, transparent);
+}
+
+// The rail: scrolls sideways (hidden scrollbar: the buttons, dots and
+// keys browse it), snaps each canvas to its start, and its end padding
+// lets the last canvas reach the start too. The eye stands in front of
+// the first canvas (perspective-origin), so the shown one is square on.
+.pf-showcase__rail {
+  --pf-showcase-w: min(62cqi, 19rem);
+  --pf-showcase-gap: clamp(1rem, 5cqi, 1.75rem);
+  --pf-showcase-depth: 1.375rem; // the canvas's depth
+  display: flex;
+  gap: var(--pf-showcase-gap);
+  padding-block: var(--pf-showcase-room);
+  padding-inline-end: calc(100% - var(--pf-showcase-w));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  perspective: 50rem;
+  perspective-origin: calc(var(--pf-showcase-w) / 2) 50%;
+  cursor: grab;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+  }
+
+  // Moving: the canvases ignore the pointer (js/drag-glide.js).
+  &.is-moving .pf-showcase__card {
+    pointer-events: none;
+  }
+}
+
+[dir="rtl"] .pf-showcase__rail {
+  perspective-origin: calc(100% - var(--pf-showcase-w) / 2) 50%;
 }
 
 @container pf-showcase (min-width: 36rem) {
-  .pf-showcase__scene {
-    --pf-showcase-w: min(50cqi, 26rem);
-    --pf-showcase-depth: 11rem;
+  .pf-showcase__rail {
+    --pf-showcase-w: min(44cqi, 21rem);
+    --pf-showcase-depth: 1.625rem;
   }
 }
 
 .pf-showcase__card {
-  --pf-d: 0;
-  --pf-x: calc(var(--pf-d) * var(--pf-showcase-step));
-  --pf-z: calc(var(--pf-d) * -1 * var(--pf-showcase-depth));
-  --pf-turn: -16deg;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  z-index: calc(100 - var(--pf-d));
-  width: var(--pf-showcase-w);
+  position: relative;
+  flex: 0 0 var(--pf-showcase-w);
   aspect-ratio: 3 / 4;
+  scroll-snap-align: start;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+// Its shadow on the wall: a box-shadow, painted once with the face (no
+// blurred layer to repaint as the rail scrolls).
+.pf-showcase__face {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   background: var(--pf-showcase-blank);
-  box-shadow: 1.25rem 2.25rem 1.5rem rgba($pf-black, .1);
-  cursor: pointer;
-  transform: translate3d(var(--pf-x), -50%, var(--pf-z)) rotateY(var(--pf-turn));
-  transform-origin: 0 50%;
-  // From the fourth cover back they fade, gone by the sixth.
-  opacity: clamp(0, 1 - (var(--pf-d) - 3) * .45, 1);
-  transition:
-    transform .95s $pf-showcase-ease,
-    opacity .7s $pf-showcase-ease,
-    box-shadow .7s $pf-showcase-ease;
+  box-shadow: 1rem 1.75rem 2rem -.75rem rgba($pf-black, .45);
 
   img {
     display: block;
@@ -285,36 +313,149 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
     object-fit: cover;
   }
 
-  &.is-active {
-    --pf-turn: -4deg;
-    box-shadow: 1.5rem 2.75rem 2.5rem rgba($pf-black, .18);
+  // The canvases not shown sit a step back into the band's color.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--pf-showcase-bg) 40%, transparent);
+    transition: opacity .6s $pf-showcase-ease;
+    pointer-events: none;
   }
 
-  // Next: the front cover steps off toward you and to the left, then
-  // (.is-jump, no transition) waits at the back of the row and fades in.
-  // Previous plays it backwards.
-  &.is-leaving {
-    --pf-x: calc(var(--pf-showcase-w) * -.7);
-    --pf-z: 10rem;
-    --pf-turn: 8deg;
+  .is-active > &::after {
     opacity: 0;
-    transition:
-      transform .55s $pf-showcase-ease-out,
-      opacity .45s $pf-showcase-ease-out;
-  }
-
-  &.is-jump {
-    opacity: 0;
-    transition: none;
   }
 }
 
-// A cover behind comes a little forward under the pointer: it can be
-// clicked to bring it to the front.
 @media (hover: hover) {
-  .pf-showcase__card:hover {
-    --pf-z: calc(var(--pf-d) * -1 * var(--pf-showcase-depth) + 2rem);
+  .pf-showcase__card:hover > .pf-showcase__face::after {
+    opacity: .45;
   }
+}
+
+// The edges: the picture again, as wide as the face, showing only its
+// own edge strip, folded back 90° into the wall (so it reads mirrored, as
+// a mirror wrap does) and shaded as a side away from the light.
+.pf-showcase__edge {
+  position: absolute;
+  top: 0;
+  width: var(--pf-showcase-depth);
+  height: 100%;
+  overflow: hidden;
+  background: var(--pf-showcase-blank);
+
+  img {
+    position: absolute;
+    top: 0;
+    width: var(--pf-showcase-w);
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba($pf-black, .55), rgba($pf-black, .3));
+  }
+}
+
+.pf-showcase__edge--start {
+  left: 0;
+  transform-origin: left center;
+  transform: rotateY(90deg);
+
+  img {
+    left: 0;
+  }
+}
+
+.pf-showcase__edge--end {
+  right: 0;
+  transform-origin: right center;
+  transform: rotateY(-90deg);
+
+  img {
+    right: 0;
+  }
+
+  &::after {
+    background: linear-gradient(90deg, rgba($pf-black, .3), rgba($pf-black, .55));
+  }
+}
+
+// The plate: the shown exhibition's picture behind the whole band (on
+// Oral History, the whole section), under washes of the band's own color,
+// nearly solid behind the text, so the text keeps its contrast whatever
+// the picture. Two layers crossfade (js/exhibit-showcase.js). Decorative:
+// off where contrast comes first.
+.pf-showcase__carousel {
+  position: relative;
+  isolation: isolate;
+}
+
+.pf-showcase__plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(var(--pf-showcase-bg), transparent 18%, transparent 72%, var(--pf-showcase-bg)),
+      color-mix(in srgb, var(--pf-showcase-bg) 80%, transparent);
+  }
+
+  @include media-breakpoint-up(lg) {
+    &::after {
+      background:
+        linear-gradient(var(--pf-showcase-bg), transparent 18%, transparent 72%, var(--pf-showcase-bg)),
+        linear-gradient(to right, var(--pf-showcase-bg) 8%, color-mix(in srgb, var(--pf-showcase-bg) 88%, transparent) 36%, color-mix(in srgb, var(--pf-showcase-bg) 52%, transparent) 72%, color-mix(in srgb, var(--pf-showcase-bg) 64%, transparent));
+    }
+  }
+}
+
+[dir="rtl"] .pf-showcase__plate::after {
+  transform: scaleX(-1);
+}
+
+.pf-showcase__plate-img {
+  position: absolute;
+  inset: -3%;
+  background: center / cover no-repeat;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+
+  &.is-on {
+    opacity: .34;
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  .pf-showcase__plate {
+    display: none;
+  }
+}
+
+.pf-a11y-contrast .pf-showcase__plate {
+  display: none;
+}
+
+// Oral History's Showcase: the plate fills the section, not just the
+// band inside its padding.
+.pf-section--exhibitions {
+  position: relative;
+  isolation: isolate;
+}
+
+.pf-showcase--embed .pf-showcase__carousel {
+  position: static;
 }
 
 // On a cover the label is black on white (21:1) whatever the page.
@@ -368,6 +509,23 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
       transform .7s $pf-showcase-ease .15s,
       visibility 0s;
   }
+}
+
+// Tags under the subtitle: the year, a kicker that isn't plain
+// "Exhibition", "Also a physical exhibition", Unpublished. Square, in a
+// hairline, the mono label voice.
+.pf-showcase__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-showcase__tag {
+  padding: .1875rem .5625rem;
+  border: 1px solid var(--pf-showcase-line);
 }
 
 .pf-showcase__draft {
@@ -500,6 +658,10 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   min-width: 0;
   margin: 0 0 0 1.25rem;
   line-height: 1.3;
+}
+
+.pf-showcase__upnext.is-last {
+  visibility: hidden;
 }
 
 .pf-showcase__upnext-title {
@@ -799,11 +961,11 @@ td .pf-showcase-list__when {
 }
 
 // Reduced motion (the OS setting; the Settings drawer's
-// html.pf-a11y-motion stops every transition already): the covers keep
-// their places and the shown one changes with a short fade.
+// html.pf-a11y-motion stops every transition already): the plate and the
+// canvases change with a short fade (the rail jumps, js/drag-glide.js).
 @media (prefers-reduced-motion: reduce) {
-  .pf-showcase__card,
-  .pf-showcase__card.is-leaving {
+  .pf-showcase__plate-img,
+  .pf-showcase__face::after {
     transition: opacity .2s linear;
   }
 

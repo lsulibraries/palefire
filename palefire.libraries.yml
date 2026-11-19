@@ -189,6 +189,14 @@ tile-reveal:
     - core/drupal
     - core/once
 
+# Grab-and-fling for a sideways row (Drupal.palefireDragGlide): the Covers
+# shelf and the exhibitions band. Only as a dependency of those two.
+drag-glide:
+  js:
+    js/drag-glide.js: {}
+  dependencies:
+    - core/drupal
+
 # The Covers shelf's Previous / Next buttons. Attached by
 # paragraph--tile-showcase.html.twig, Covers layout only.
 book-shelf:
@@ -197,6 +205,7 @@ book-shelf:
   dependencies:
     - core/drupal
     - core/once
+    - palefire/drag-glide
 
 # Ask Special Collections: each column's parts rise in on scroll, one after
 # another. Attached by templates/includes/ask-special.html.twig.
@@ -548,15 +557,17 @@ exhibition:
     - palefire/global
     - palefire/viewer
 
-# Exhibitions showcase (includes/exhibit-showcase.html.twig): the depth
-# carousel and the index plate. Attached by that template only, on a
-# Modular page in showcase mode.
+# The exhibitions band (includes/exhibit-carousel.html.twig: the canvas
+# rail, plate and summaries) and the Exhibitions page's table switch.
+# Attached by the band's template, on the Exhibitions page and a tile
+# showcase of oral history exhibitions.
 exhibit-showcase:
   js:
     js/exhibit-showcase.js: {}
   dependencies:
     - core/drupal
     - core/once
+    - palefire/drag-glide
 
 # Site footer (includes/footer.html.twig): starts the footer's LibCal hours
 # once it nears the viewport. Attached by page.html.twig on every page.

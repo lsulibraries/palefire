@@ -739,6 +739,18 @@ HTML),
 <li>The drawing of recording formats moved from the Research tab to the Ask us tab.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Exhibitions as canvases on a gallery wall', <<<'HTML'
+<ul>
+<li>The Exhibitions page and Oral History’s Showcase now show exhibitions the same way: as canvases with real depth, their edges wrapped like a printed canvas, on a row you can drag and fling. The shown exhibition’s picture fades in behind the whole band.</li>
+<li>Each exhibition’s year is a small framed tag above its description, and one that also had a show in the building says so.</li>
+<li>On Oral History the exhibitions keep the order editors give them in the Showcase section.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Exhibitions that were also in the building', <<<'HTML'
+<ul>
+<li>Eight online exhibitions that also had a show in Hill Memorial Library now say so, and link to the news post about that show: Occult Science, AVES, Saturday Night in Tiger Stadium, Integrating LSU, A Lady in the South, Cooperative Extension, Tempests and Georgetown 272.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

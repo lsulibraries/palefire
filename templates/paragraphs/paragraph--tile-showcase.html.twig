@@ -99,6 +99,19 @@
 {% if layout == 'ask' %}
   {# Ask Special Collections: FAQs and the question form, not cards. #}
   {% include '@palefire/includes/ask-special.html.twig' %}
+{% elseif layout == 'exhibitions' %}
+  {# Every item an oral history exhibition (Showcase on Oral History's
+     homepage): the Exhibitions page's band, under the section's own
+     heading, so each title is an <h3>. Its faded plate fills the section
+     (_exhibit-showcase.scss, .pf-section--exhibitions). #}
+  <div{{ attributes.addClass('pf-showcase', 'pf-showcase--embed') }} data-pf-showcase data-toc-skip>
+    {% include '@palefire/includes/exhibit-carousel.html.twig' with {
+      items: exhibitions,
+      id: carousel_id,
+      label: 'Exhibitions'|t,
+      heading: 'h3',
+    } only %}
+  </div>
 {% elseif layout == 'covers' and books %}
   {# Covers: books from the collections' readers on one shelf, each its
      cover (or a jacket set in type when it has none) drawn as a book, its

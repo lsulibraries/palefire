@@ -1,117 +1,120 @@
 /**
  * @file
- * Exhibitions showcase (includes/exhibit-showcase.html.twig).
+ * Exhibitions showcase (includes/exhibit-showcase.html.twig) and the
+ * exhibitions band it shares with Oral History's Showcase
+ * (includes/exhibit-carousel.html.twig).
  *
- * The carousel: --pf-d on each cover is its place in the row (0 = front);
- * CSS moves it there (_exhibit-showcase.scss). The row moves one way:
- * - Next: the front cover steps off (.is-leaving), then jumps to the back
- *   unseen (.is-jump) and fades in there.
- * - Previous: the back cover jumps out in front (.is-jump + .is-leaving)
- *   and steps in.
- * A dot jumps several places, the same way. The arrows, dots, ← → (while
- * focus is in the carousel) and a swipe move it; a click on the front
- * cover opens its exhibition, one behind comes forward. Beside the
- * arrows, the title that Next brings (decorative; the change itself is
- * announced politely). Nothing moves by itself.
+ * The band: the canvases sit on a rail that scrolls sideways and snaps to
+ * each one; the canvas at the rail's start is the one shown. Swipe and
+ * trackpad scroll it natively; a mouse grabs and flings it
+ * (Drupal.palefireDragGlide, js/drag-glide.js), and Previous / Next, the
+ * dots, ← → (while focus is in the band) and a click on a canvas glide it
+ * to a canvas. The shown one's summary, count, dot and the title Next
+ * brings follow the scroll as it goes; the plate (its picture behind the
+ * band) and the polite announcement wait until the rail comes to rest, so
+ * a fling past six canvases fetches one picture and says one thing. A
+ * click on the shown canvas opens its exhibition. Nothing moves by itself.
  *
  * The table's switch (All, Digital, Physical) hides the other rows and
  * says how many are shown; the rows shown fade in, one after another.
  *
  * Reduced motion (the OS setting or the Settings drawer's
- * html.pf-a11y-motion): covers take their places at once and fade, and
+ * html.pf-a11y-motion): the rail jumps to a canvas instead of gliding, and
  * rows appear without fading.
  */
 (function (Drupal, once) {
   'use strict';
 
-  const LEAVE = 500; // .is-leaving's transition, a little less
+  const SETTLE = 160; // ms without a scroll: the rail is at rest
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
   const pad = (n) => String(n).padStart(2, '0');
 
   function carousel(root) {
     const region = root.querySelector('[data-pf-showcase-carousel]');
-    const scene = root.querySelector('[data-pf-showcase-scene]');
+    const rail = root.querySelector('[data-pf-showcase-scene]');
     const cards = Array.from(root.querySelectorAll('[data-pf-showcase-card]'));
     const summaries = Array.from(root.querySelectorAll('[data-pf-showcase-summary]'));
     const dots = Array.from(root.querySelectorAll('[data-pf-showcase-go]'));
+    const plates = Array.from(root.querySelectorAll('[data-pf-showcase-plate]'));
     const number = root.querySelector('[data-pf-showcase-n]');
     const live = root.querySelector('[data-pf-showcase-live]');
     const upnext = root.querySelector('[data-pf-showcase-upnext]');
+    const nextButton = root.querySelector('[data-pf-showcase-next]');
+    const prevButton = root.querySelector('[data-pf-showcase-prev]');
     const total = cards.length;
-    if (total < 2 || !region || !scene) {
+    if (total < 2 || !region || !rail || !Drupal.palefireDragGlide) {
       return;
     }
 
     let current = 0;
-    const timers = new Map();
-    const place = (k) => (k - current + total) % total;
-    const setPlace = (card, d) => {
-      card.style.setProperty('--pf-d', d);
-      card.classList.toggle('is-active', d === 0);
-    };
-    // Off with the transition: the cover is moved where it can't be seen.
-    const jump = (card, d, leaving) => {
-      card.classList.add('is-jump');
-      card.classList.toggle('is-leaving', leaving);
-      setPlace(card, d);
-      void card.offsetWidth;
-      card.classList.remove('is-jump', 'is-leaving');
-    };
-    // A cover still on its way out when the next change comes: finish now.
-    const settle = () => {
-      timers.forEach((timer, card) => {
-        clearTimeout(timer);
-        jump(card, place(cards.indexOf(card)), false);
-      });
-      timers.clear();
-    };
+    let plateOn = 1;
+    let plateShown = '';
+    let near = false;
 
-    const go = (target, forward) => {
-      target = (target + total) % total;
-      if (target === current) {
-        return;
+    // Each canvas's place on the rail, from the first one's (the rail's
+    // end padding lets the last one reach the start too). Measured once
+    // and again only when the rail changes size, not on every scroll.
+    let offsets = null;
+    const offset = (k) => {
+      if (!offsets) {
+        offsets = cards.map((card) => Math.abs(card.offsetLeft - cards[0].offsetLeft));
       }
-      settle();
-      const before = cards.map((card, k) => place(k));
-      current = target;
-      const quick = reduceMotion();
-
+      return offsets[k];
+    };
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        offsets = null;
+      }).observe(rail);
+    }
+    const maxScroll = () => rail.scrollWidth - rail.clientWidth;
+    const rtl = () => getComputedStyle(rail).direction === 'rtl';
+    const indexAt = () => {
+      const x = Math.abs(rail.scrollLeft);
+      let best = 0;
       cards.forEach((card, k) => {
-        const d = place(k);
-        if (quick) {
-          setPlace(card, d);
-        }
-        else if (forward && d > before[k]) {
-          // Was in front of the new front cover: off, then to the back.
-          card.classList.remove('is-active');
-          card.classList.add('is-leaving');
-          timers.set(card, setTimeout(() => {
-            timers.delete(card);
-            jump(card, place(k), false);
-          }, LEAVE));
-        }
-        else if (!forward && d < before[k]) {
-          // Comes round from the back: in at the front, then steps in.
-          card.classList.add('is-jump', 'is-leaving');
-          setPlace(card, d);
-          void card.offsetWidth;
-          card.classList.remove('is-jump', 'is-leaving');
-        }
-        else {
-          setPlace(card, d);
+        if (Math.abs(offset(k) - x) < Math.abs(offset(best) - x)) {
+          best = k;
         }
       });
+      return best;
+    };
 
-      summaries.forEach((summary, k) => summary.classList.toggle('is-active', k === current));
-      dots.forEach((dot, k) => dot.setAttribute('aria-current', String(k === current)));
+    // The summary and its companions: at once, as the rail moves.
+    const show = (k) => {
+      current = k;
+      cards.forEach((card, i) => card.classList.toggle('is-active', i === k));
+      summaries.forEach((summary, i) => summary.classList.toggle('is-active', i === k));
+      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === k)));
       if (number) {
-        number.textContent = pad(current + 1);
+        number.textContent = pad(k + 1);
       }
       if (upnext) {
-        upnext.textContent = summaries[(current + 1) % total].dataset.title;
+        upnext.parentElement.classList.toggle('is-last', k === total - 1);
+        upnext.textContent = k < total - 1 ? summaries[k + 1].dataset.title : '';
       }
-      if (live) {
+      if (prevButton && nextButton) {
+        prevButton.disabled = k === 0;
+        nextButton.disabled = k === total - 1;
+      }
+    };
+
+    // The plate and the announcement: once the rail is at rest. The plate
+    // waits, too, until the band nears the screen, so a page that never
+    // scrolls down to it never fetches a picture for it.
+    let said = 0;
+    const rest = () => {
+      const url = cards[current].dataset.plate || '';
+      if (near && plates.length === 2 && url !== plateShown) {
+        plateShown = url;
+        const next = plates[1 - plateOn];
+        next.style.backgroundImage = url ? `url("${url}")` : '';
+        next.classList.add('is-on');
+        plates[plateOn].classList.remove('is-on');
+        plateOn = 1 - plateOn;
+      }
+      if (live && said !== current) {
+        said = current;
         live.textContent = Drupal.t('Exhibition @n of @total: @title', {
           '@n': current + 1,
           '@total': total,
@@ -119,58 +122,57 @@
         });
       }
     };
-    const next = () => go(current + 1, true);
-    const prev = () => go(current - 1, false);
 
-    const nextButton = root.querySelector('[data-pf-showcase-next]');
-    const prevButton = root.querySelector('[data-pf-showcase-prev]');
+    const glider = Drupal.palefireDragGlide(rail, {
+      item: '[data-pf-showcase-card]',
+      // While it moves the canvases ignore the pointer (no hover lift
+      // flickering across them).
+      onMoving: (on) => rail.classList.toggle('is-moving', on),
+      onDrag: (on) => rail.classList.toggle('is-dragging', on),
+    });
+    const go = (k) => {
+      k = Math.max(0, Math.min(total - 1, k));
+      const x = Math.min(maxScroll(), offset(k));
+      glider.glideTo(rtl() ? -x : x);
+    };
+
+    let frame = 0;
+    let timer = 0;
+    rail.addEventListener('scroll', () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const k = indexAt();
+        if (k !== current) {
+          show(k);
+        }
+      });
+      clearTimeout(timer);
+      timer = setTimeout(rest, SETTLE);
+    }, { passive: true });
+
     if (nextButton && prevButton) {
-      nextButton.addEventListener('click', next);
-      prevButton.addEventListener('click', prev);
+      nextButton.addEventListener('click', () => go(current + 1));
+      prevButton.addEventListener('click', () => go(current - 1));
     }
-    dots.forEach((dot, k) => dot.addEventListener('click', () => go(k, k > current)));
+    dots.forEach((dot, k) => dot.addEventListener('click', () => go(k)));
 
     region.addEventListener('keydown', (event) => {
-      if (event.altKey || event.ctrlKey || event.metaKey) {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, textarea, select')) {
         return;
       }
-      if (event.key === 'ArrowRight') {
+      const back = rtl() ? 'ArrowRight' : 'ArrowLeft';
+      const ahead = rtl() ? 'ArrowLeft' : 'ArrowRight';
+      if (event.key === ahead || event.key === back) {
         event.preventDefault();
-        next();
-      }
-      else if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        prev();
+        go(current + (event.key === ahead ? 1 : -1));
       }
     });
 
-    // Swipe (the arrows are the single-pointer way, WCAG 2.5.7), and a
-    // click: the front cover opens its exhibition, one behind comes forward.
-    let startX = null;
-    let swiped = false;
-    scene.addEventListener('pointerdown', (event) => {
-      startX = event.clientX;
-      swiped = false;
-    });
-    scene.addEventListener('pointerup', (event) => {
-      if (startX === null) {
-        return;
-      }
-      const dx = event.clientX - startX;
-      startX = null;
-      if (Math.abs(dx) > 40) {
-        swiped = true;
-        if (dx < 0) {
-          next();
-        }
-        else {
-          prev();
-        }
-      }
-    });
-    scene.addEventListener('click', (event) => {
+    // A click (not the end of a drag, which drag-glide.js swallows): the
+    // shown canvas opens its exhibition, another glides to the start.
+    rail.addEventListener('click', (event) => {
       const card = event.target.closest('[data-pf-showcase-card]');
-      if (swiped || !card) {
+      if (!card) {
         return;
       }
       const k = cards.indexOf(card);
@@ -178,9 +180,21 @@
         window.location.href = card.dataset.url;
       }
       else {
-        go(k, true);
+        go(k);
       }
     });
+
+    show(indexAt());
+    if ('IntersectionObserver' in window) {
+      const watch = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          watch.disconnect();
+          near = true;
+          rest();
+        }
+      }, { rootMargin: '400px 0px' });
+      watch.observe(region);
+    }
   }
 
   function filter(root) {
