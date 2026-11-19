@@ -1,0 +1,551 @@
+# Saturday Night in Tiger Stadium: migration corrections
+
+Old exhibition: https://lib.lsu.edu/sites/all/files/oralhistory/presentations/football/index.html (local copy in `_reference/Oralhistory Exhibitions/presentations/football/`, identical to the live pages). New page: built by `scripts/palefire_exhibit_tiger_stadium.php` from `scripts/data/tiger-stadium.json`.
+
+Locations are *gallery / entry title (old page)*. The Narrators are the old Biographies and Citations pages.
+
+## 1. Corrected
+
+### Applied throughout
+
+- Straight quotes and apostrophes → curly ones (“ ” ‘ ’) in all text.
+- Speaker labels in transcripts: title case → capitals, as on the other oral history exhibitions, e.g. “John Ferguson:” → “JOHN FERGUSON:”, “Ferguson:” → “FERGUSON:”, “C. Barney:” → “C. BARNEY:”. The old pages used 74 different label forms; each keeps its wording.
+- Image citations: “Name: citation” → “Name. Citation.”, with “Stave Franz” → “Steve Franz” (the Carl Maddox photo, two entries), “LD3118.G8” and “LD 3118 .G8” → “LD3118 .G8”, “LLMVC” spelled out, and a missing final period added.
+- Biography citations: the “∙” between John Ferguson’s two citations, and between Tyler LaFauci’s, → “; ”.
+- Hyphens used as dashes (“ - ”, “ -- ”) → em dashes; number ranges (“41 - 0”, “1893 - 1993”) → en dashes.
+
+### Speaker labels
+
+- Facilities / Tiger Stadium’s early design (faalbertstdizier.html): “Hebert” → “HEBERT:” (colon was missing).
+- Facilities / Tiger Stadium’s early design (faalbertstdizier.html): “St. Dizier” → “ST. DIZIER:” (colon was missing).
+- Big Games / 1944 Orange Bowl (biggamecharlesbarney.html): “Abraham:” started mid-paragraph; it now starts its own paragraph.
+- Players & Teams / Ready for an integrated team (ptkerrypourciau.html): “Maxine Crump:” started mid-paragraph; it now starts its own paragraph.
+- Players & Teams / Ready for an integrated team (ptkerrypourciau.html): “Pourciau:” started mid-paragraph; it now starts its own paragraph.
+- Players & Teams / Finishing as a player despite injury (ptlorahinton1.html): “Hinton:” appeared twice in a row (“As a player, yeah.” then “So that’s kind of the way…”); the second label removed.
+
+### Wording and spelling
+
+- **Big Games / 1944 Orange Bowl (biggamecharlesbarney.html)**
+  - “…And we beat ‘em good. [laug…” → “…And we beat ’em good. [laug…”
+- **Big Games / LSU v. Tulane, 1949 (biggamegaynelltinsley.html)**
+  - “As it say, it’s just” → “As I say, it’s just”
+- **Big Games / LSU v. Miami, 1958 (biggamebudjohnson.html)**
+  - “41 - 0.” → “41–0.”
+- **Big Games / The 1958 Championship (biggamecarlmaddox.html)**
+  - “bigger now then it was” → “bigger now than it was”
+- **Big Games / LSU v. USC, 1979 (biggamejohnferguson.html)**
+  - “times -- in” → “times—in”
+  - “ways -- for” → “ways—for”
+- **Big Games / The 1988 Earthquake Game (biggametomhodson.html)**
+  - “Geology department” → “Geology Department”
+- **Players & Teams / Scholarships and jobs for players (ptgaynelltinsley.html)**
+  - “job would be back at home” → “job would be back at home.”
+- **Players & Teams / Pursuing an education (ptabemickal.html)**
+  - “high top leather shoes” → “high-top leather shoes”
+- **Players & Teams / Free football tickets for students (ptalfredglassell.html)**
+  - “…might hurt ‘em. And so, he…” → “…might hurt ’em. And so, he…”
+- **Players & Teams / Playing Georgia twice (ptthomasruffin.html)**
+  - “I forgot was it was” → “I forgot what it was”
+  - “cancelled” → “canceled”
+  - “sort of duel thing” → “sort of dual thing”
+- **Players & Teams / Why he came to LSU (ptmerleschexnaildre1.html)**
+  - “four year letterman” → “four-year letterman”
+- **Players & Teams / The origin of the Chinese Bandits (ptmerleschexnaildre2.html)**
+  - “were description of” → “were descriptions of”
+  - “played like Chinese Bandits”.” → “played like Chinese Bandits.””
+  - “1893 - 1993*],” → “1893–1993*],”
+- **Players & Teams / Players who were fun to watch (ptjohnferguson.html)**
+  - “years - though” → “years—though”
+  - “[1993] - made” → “[1993]—made”
+- **Players & Teams / His junior season and the offensive line (ptcharlesalexander.html)**
+  - “two quarterback system” → “two-quarterback system”
+  - “all of sudden it turns” → “all of a sudden it turns”
+- **Players & Teams / Ready for an integrated team (ptkerrypourciau.html)**
+  - “twenty-years ago” → “twenty years ago”
+- **Coaching & Practice / Huey Long and Coach Biff Jones butt heads (cpjackgremillion.html)**
+  - “paid ...?” → “paid . . . ?”
+  - “Kansas. . . He” → “Kansas . . . He”
+  - “…ed up there ‘til his death.…” → “…ed up there ’til his death.…”
+- **Coaching & Practice / Choosing LSU over other offers (cpabemickal.html)**
+  - “kind of lead me” → “kind of led me”
+  - “a close knit” → “a close-knit”
+- **Coaching & Practice / Coach Dietzel’s discipline (cpcarlmaddox1.html)**
+  - “assigned. . . to” → “assigned . . . to”
+- **Coaching & Practice / Position coach Jerry Stovall (cpcharlesalexander.html)**
+  - “I’LL write” → “I’ll write”
+- **Facilities / Where Mike came from, and a prank by Tulane (faoscarrichard.html)**
+  - “a dime a piece?” → “a dime apiece?”
+  - “About five-thousand” → “About five thousand”
+  - “Five-thousand students” → “Five thousand students”
+  - “…probably in ‘34. I think [C…” → “…probably in ’34. I think [C…”
+  - “Tulane Students” → “Tulane students”
+  - “tiger when in there” → “tiger went in there”
+- **Facilities / How weight training changed LSU football (fabudjohnson.html)**
+  - “Bob Petit” → “Bob Pettit”
+  - “195 pound back to the basket center” → “195-pound back-to-the-basket center”
+  - “here -- he’s” → “here—he’s”
+  - “business -- I” → “business—I”
+- **Culture / Celebrating a win in Baton Rouge (cujessecoates02.html)**
+  - “…out 1925 or ‘26 or somethin…” → “…out 1925 or ’26 or somethin…”
+- **Culture / Traveling to games by rail and car (cubillyheroman.html)**
+  - “when they went the [1944] Orange Bowl [played in Miami, FL, against Texas A&M.” → “when they went to the [1944] Orange Bowl [played in Miami, Florida, against Texas A&M].”
+- **Culture / Huey Long tries to make Mickal a state senator (cuabemickal.html)**
+  - “benefitting” → “benefiting”
+  - “over an hour; telling” → “over an hour, telling”
+  - “never on out schedule” → “never on our schedule”
+  - “hit the campus; he’d” → “hit the campus, he’d”
+- **Culture / ROTC in pajamas at Homecoming (cujackgremillion.html)**
+  - “days - it's” → “days—it’s”
+  - “now - used” → “now—used”
+- **Culture / The notoriety that came with winning (cuguskinchen01.html)**
+  - “front of Life Magazine” → “front of *Life* magazine”
+- **Culture / The genesis of “Hey, Fightin’ Tigers!” (cubudjohnson.html)**
+  - “called Wildcat.” → “called *Wildcat*.”
+- **Culture / Broadcasts that marketed LSU (cujohnferguson02.html)**
+  - “1960s and 70s” → “1960s and ’70s”
+- **Culture / Fans who motivate the team (cucharlesalexander.html)**
+  - “days -- which” → “days—which”
+  - “back -- the” → “back—the”
+- **Culture / A new dean looks for tickets (cumargaretjameson.html)**
+  - “biggest to do” → “biggest to-do”
+- **Culture / Game nights and meeting Billy Cannon (curogerogden.html)**
+  - “Louisiana -- you” → “Louisiana—you”
+  - “then -- was” → “then—was”
+  - “…ed going in ‘55 or ‘56. So…” → “…ed going in ’55 or ’56. So…”
+  - “…g in ‘55 or ‘56. So I was l…” → “…g in ’55 or ’56. So I was l…”
+  - “people -- except” → “people—except”
+  - “fans -- act” → “fans—act”
+- **The Narrators / Charles Alexander (biocharlesalexander.html)**
+  - “twenty seven” → “twenty-seven”
+  - “first round draft” → “first-round draft”
+- **The Narrators / Charles Barney (biocharlesbarney.html)**
+  - “Pacific Theatre” → “Pacific Theater”
+- **The Narrators / Alfred Glassell (bioalfredglassell.html)**
+  - “theatres” → “theaters”
+  - “was a also a” → “was also a”
+  - “First City Nation Bank” → “First City National Bank”
+- **The Narrators / Tom Hodson (biotomhodson.html)**
+  - “Tiger’s success” → “Tigers’ success”
+- **The Narrators / Bud Johnson (biobudjohnson.html)**
+  - “Prior that that” → “Prior to that”
+  - “Athletics ,” → “Athletics,”
+- **The Narrators / Tyler LaFauci (biotylerlafauci.html)**
+  - “Lafauci” → “LaFauci”
+  - “three year career” → “three-year career”
+- **The Narrators / Oliver Mack (bioolivermack.html)**
+  - “parents moved Baton Rouge” → “parents moved to Baton Rouge”
+- **The Narrators / Abe Mickal (bioabemickal.html)**
+  - “was all SEC” → “was All-SEC”
+- **The Narrators / Roger & Carrie Richardson (biorcrichardson.html)**
+  - “interview by John Fiser” → “interview by Jack Fiser”
+
+### Credit lines and names
+
+- Players & Teams / Finishing as a player despite injury and Teammates standing up to racism (ptlorahinton1.html, ptlorahinton2.html): “interviewed by Mary Price, 1993” → “interviewed by Mary Hebert, 1993”. The transcripts’ labels (HEBERT) and Hinton’s biography citation both say Mary Hebert.
+- The Narrators / Roger & Carrie Richardson: citation “interview by John Fiser” → “interview by Jack Fiser”, as the clip credit and John Hunter’s citation have it.
+- Big Games / 1944 Orange Bowl: “Charles Barney, with wife, Frances, and daughter, Merilyn interviewed by…” → “Charles Barney, with his wife, Frances, and daughter, Merilyn, interviewed by…”.
+- Coaching & Practice / The character of Coach Moore and Facilities / Eating well during wartime rationing: “Charles Barney and wife Frances” / “Charles Barney, and wife Frances” → “Charles Barney and his wife, Frances”.
+- Facilities / Hamilton Johnston and the design of Tiger Stadium: “Roger & Carrie Richardson” → “Roger and Carrie Richardson”.
+- Coaching & Practice / Choosing LSU over other offers (cpabemickal.html): the old credit’s bold ran on past the name (“**Abe Mickal, interviewed by…**”); now plain like the others.
+- Biographies index: “Shexnaildre, Merle” → Schexnaildre; Players & Teams tile alt “Tyler La Fauci” → Tyler LaFauci.
+
+### About the Exhibition (old About and Acknowledgements pages)
+
+- “Tiger Stadium from its completion in 1924 to the 1970.” → “…to the 1970s.”
+- “Bert Jones, “the Ruston Rifle;” among others” → “Bert Jones, “the Ruston Rifle”; among others”.
+- “whether it pertains to The Game, Facilities, and/or football Culture” → “whether it pertains to the game, the facilities, or football culture”.
+- “tell the story of LSU History” → “tell the story of LSU history”.
+- “Click to hear:” list → “Listen for”, each item capitalized; “winning the 1958 National championship” → “national championship”.
+- “please visit /special/williams/” → a link named “T. Harry Williams Center for Oral History”.
+- The Louisiana Digital Library address http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP → a link to https://louisianadigitallibrary.org/ (the old CONTENTdm address is retired).
+- “ACKNOWLEDGEMENTS” → “Acknowledgments”; “Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens” → “…Student Assistant; and Rebecca Stephens” (the list uses semicolons).
+
+## 2. To verify
+
+- Players & Teams / Ready for an integrated team: clip credit says “Kerry Pourciau, interviewed by Maxine Crump, 1994”; his biography citation says 1993. Left as 1994.
+- Players & Teams / Finishing as a player… and Teammates standing up to racism: Mary Price → Mary Hebert (see list 1). Confirm the interviewer.
+- The Narrators / Jesse Coates: “head of the department from 1955 through 1967 and again from 1960-70” overlaps. Left as written.
+- The Narrators / Tom Hodson: says Hodson led LSU to two SEC Championships, “first as a freshman in 1986 and then as a junior in 1988.” Left as written.
+- The Narrators / Bud Johnson: “served as president of SEC Sports Publicity Director’s Association” (apostrophe placement) and “Louisiana Sports Writer’s Association’s”. Left as written.
+- The Narrators / Margaret Jameson: citation “Jameson, M. Margaret”. Left as written.
+- The Narrators / Alfred Glassell: “has led marine expeditions” (present tense for someone who died in 2008). Left as written.
+- Culture / Fan support after a loss (cuguskinchen02.html): the image file is named mikeiiarriving (Mike II arriving), but the clip is about fans greeting the team at the airport. The image and its new caption follow the file name; confirm what the photo shows.
+- Culture / ROTC in pajamas at Homecoming: photo file pajamafootball shows students cheering at night; whether they are in pajamas can’t be seen at this size.
+- Facilities / Hamilton Johnston and the design of Tiger Stadium: the photo (file tigerstadium1936) is an aerial of a full stadium with letters on the field; no citation or date in the old exhibition.
+- Coaching & Practice / Coach Moore’s scrimmages: photo file moorecoates shows Bernie Moore (left, per the old title) with an older man the old exhibition doesn’t name (the file name suggests a Coates); no citation.
+- Culture / Huey Long tries to make Mickal a state senator: photo file hueyhouston (Huey Long leading a band on a city street, perhaps Houston); no citation.
+- Players & Teams / Finishing as a player despite injury: the photo is an action shot at the line of scrimmage, credited “Lora Hinton”; which player is Hinton isn’t clear.
+- Coaching & Practice / McClendon’s small but aggressive players: “[football coach at Miami University]” is the old bracket note for Bo Schembechler (Miami University, Ohio). Left as written.
+- Spoken grammar left as said throughout (e.g. “might of”, “had have been”, “Texas University”, “was million dollar band”, “a great integral in the university”).
+- Exhibition year 2013: inferred from the title (“120 Years of LSU Football”, 1893 + 120) and the latest interview (Bud Johnson, 2013). The old site gives no date.
+- Physical exhibition note: “First shown in LSU Libraries Special Collections with a touchscreen listening station.” The old site gives no venue or dates.
+- 17 clip photos had no citation in the old exhibition: Charles Barney, Bud Johnson, Alfred Glassell, Kerry Pourciau, Moore with Coates (?), Martin Broussard, the 1936 aerial, Mike’s keeper, the second Alvin Roy ad, Huey Long with the band, the night-game crowd, the 1958 champions, Mike II arriving, the placekick, game-day attire, the homecoming display, Margaret Jameson. The 14 Lagniappe photos had no captions or sources either.
+- Merle Schexnaildre’s cited portrait (schexnaildre_dream, Gumbo 1959) is only 302 px; a better scan would help.
+
+## 3. New wording to check
+
+### Page
+
+- Title: “Saturday Night in Tiger Stadium” (from the old title graphic).
+- Subtitle: “Reflections on 120 years of LSU football” (old graphic: “Reflections on 120 Years of LSU Football”).
+- Credit: “A University Archives and T. Harry Williams Center for Oral History exhibition, LSU Libraries Special Collections. Curated by Barry Cowan, Jennifer A. Cramer and Erin Hess, from the Center’s University History, LSU Athletics Collection.”
+- Introduction: “For more than a century, LSU football has drawn Louisiana together on fall Saturday nights. In over sixty brief clips from the T. Harry Williams Center for Oral History’s University History, LSU Athletics Collection, former players, coaches, broadcasters, administrators, students and fans remember the big games, the players and teams, coaching and practice, Tiger Stadium itself, and the culture that grew up around the game.”
+- Introduction: “Photographs from the University Archives show LSU’s first All-Americans, Gaynell Tinsley and Marvin “Moose” Stewart; “Miracle” Abe Mickal; Gus Kinchen and Merle Schexnaildre of the legendary Chinese Bandits; Bert Jones, “the Ruston Rifle”; and the stadium from its completion in 1924 to the 1970s.”
+- Year: 2013. Physical note: “First shown in LSU Libraries Special Collections with a touchscreen listening station.”
+- Cover image: 1944team01.jpg (the game photo behind the old title graphic).
+
+### Gallery names
+
+- Big Games, Players & Teams, Coaching & Practice (old “The Game” menu), Facilities, Culture: as on the old site. Lagniappe: old Photos section’s Lagniappe page. New: “The Narrators” (old “Biographies and Citations”), “About the Exhibition” (old “About”).
+- Lagniappe introduction: “A little something extra: photographs of the band, the cheerleaders, Mike the Tiger and the Tulane rivalry, chosen from the hundred the touchscreen offered as lagniappe.”
+
+### Entry titles (old page header → new title)
+
+- **Big Games**
+  - “Marvin Stewart, Former Player, on the dramatic game against TCU” → “1936 Sugar Bowl”
+  - “Charles Barney, Former Player, on the close game against Texas A&M” → “1944 Orange Bowl”
+  - “Bud Johnson, Director of the Andonie Museum, on Y.A. Tittle's (pictured) fabled interception” → “LSU v. Ole Miss, 1947”
+  - “Gaynell Tinsley, Former Player & Later Head Coach, on an unexpected win for LSU” → “LSU v. Tulane, 1949”
+  - “Bud Johnson, Director of the Andonie Museum, on fan base growing quickly after this big win” → “LSU v. Miami, 1958”
+  - “Carl Maddox, Former Coaching Staff & Athletic Director, on the personal impact of winning the Championship” → “The 1958 Championship”
+  - “Bert Jones, Former Player, on the final plays of this historic game” → “LSU v. Ole Miss, 1972”
+  - “John Ferguson, Former Voice of the Tigers, on a favorite game” → “LSU v. USC, 1979”
+  - “Tom Hodson and David Browndyke, Former Players, on the famous LSU v. Auburn game” → “The 1988 Earthquake Game”
+- **Players & Teams**
+  - “Marvin Stewart, Former Player, playing both offense and defense” → “Playing both offense and defense”
+  - “Gaynell Tinsley, Former Player & Later Head Coach, on scholarship coverage and jobs for players” → “Scholarships and jobs for players”
+  - “Abe Mickal, Former Player, on pursuing an education” → “Pursuing an education”
+  - “Alfred Glassell, Former SGA President, on free football tickets for students” → “Free football tickets for students”
+  - “Thomas Ruffin, Alumnus, on LSU's team (pictured) playing Georgia twice” → “Playing Georgia twice”
+  - “Merle Schexnaildre, Former Player, on football being his primary motivation to attend LSU” → “Why he came to LSU”
+  - “Merle Schexnaildre, Former Player, on the origin of the Chinese Bandits (pictured)” → “The origin of the Chinese Bandits”
+  - “Gus Kinchen, Former Player, on playing defensive end for the Chinese Bandits” → “Defensive end for the Chinese Bandits”
+  - “John Ferguson, Former Voice of the Tigers, on fun to watch players” → “Players who were fun to watch”
+  - “Charles Alexander, Former Player, on his junior year season and the o-line” → “His junior season and the offensive line”
+  - “Tyler LaFauci, Former Player, on the importance of a calm demeanor” → “The importance of a calm demeanor”
+  - “Lora Hinton, Former Player, on wanting to finish as a player despite injury” → “Finishing as a player despite injury”
+  - “Kerry Pourciau, Former SGA President, on LSU being ready for an integrated team” → “Ready for an integrated team”
+  - “Lora Hinton, Former Player, on teammates standing up to racism” → “Teammates standing up to racism”
+- **Coaching & Practice**
+  - “Jack Gremillion, Alumnus, on Huey Long and Coach Biff Jones (pictured) butting heads” → “Huey Long and Coach Biff Jones butt heads”
+  - “Marvin Stewart, Former Player, on player preparation changing over the years” → “How player preparation has changed”
+  - “Abe Mickal, Former Player, on choosing LSU over other schools' offers” → “Choosing LSU over other offers”
+  - “Marvin Stewart, Former Player, on Coach Moore's (pictured left) scrimmages” → “Coach Moore’s scrimmages”
+  - “Charles Barney, Former Player, on the character of Coach Moore (pictured)” → “The character of Coach Moore”
+  - “Carl Maddox, Former Coaching Staff & Athletic Director, on Coach Dietzel's (pictured) discipline” → “Coach Dietzel’s discipline”
+  - “Carl Maddox, Former Coaching Staff & Athletic Director, on recruiting and a talented walk-on player” → “Recruiting, and a talented walk-on”
+  - “Merle Schexnaildre, Former Player, on the importance of every team member” → “Every team member matters”
+  - “John Hunter, 14th President of LSU; 1st Head of LSU System, on hiring Coach McClendon (pictured right) before Kentucky could” → “Hiring Coach McClendon before Kentucky could”
+  - “Bud Johnson, Director of the Andonie Museum, on Charles McClendon’s small but aggressive players (pictured)” → “McClendon’s small but aggressive players”
+  - “Charles Alexander, Former Player, on position coach Jerry Stovall (pictured as player)” → “Position coach Jerry Stovall”
+  - “Martin Broussard, Former Athletic Trainer, on rule changes being beneficial” → “Rule changes for the better”
+- **Facilities**
+  - “Albert St. Dizier, Alumnus, on Tiger Stadium's early design” → “Tiger Stadium’s early design”
+  - “Roger & Carrie Richardson, Alumni, on Carrie's father, Hamilton Johnston, helping design Tiger Stadium” → “Hamilton Johnston and the design of Tiger Stadium”
+  - “Oscar Richard, Alumnus, on Mike's origin and a prank by Tulane” → “Where Mike came from, and a prank by Tulane”
+  - “Charles Barney, Former Player, on players eating well even during WWII rationing” → “Eating well during wartime rationing”
+  - “Bud Johnson, Director of the Andonie Museum, on how weight training impacted LSU football” → “How weight training changed LSU football”
+  - “Ray Roy, Personal Trainer, on his brother, Alvin, getting LSU players weight training” → “Alvin Roy brings weight training to LSU”
+  - “John Ferguson, Former Voice of the Tigers, on capturing the audible atmosphere of the stadium” → “Capturing the sound of the stadium”
+  - “Sheryl Campbell, Alumna, on the roar of the stadium” → “The roar of the stadium”
+  - “Charles Alexander, Former Player, on being close with his college teammates” → “Close with his college teammates”
+  - “Martin Broussard, Former Athletic Trainer, on fan support being there, even in a losing season” → “Fans who stay, even in a losing season”
+- **Culture**
+  - “Jesse Coates, Longtime Professor, an origin story about the team's colors” → “How LSU got its colors”
+  - “Jesse Coates, Longtime Professor, on excitement in Baton Rouge after a win” → “Celebrating a win in Baton Rouge”
+  - “Cecil Taylor, First Chancellor of LSU, on pomp and circumstance on game day” → “Pomp and circumstance on game day”
+  - “Billy Heroman, Alumnus, on traveling to games by rail and car” → “Traveling to games by rail and car”
+  - “Abe Mickal, Former Player, on Huey Long's attempt to elect Mickal state senator” → “Huey Long tries to make Mickal a state senator”
+  - “Jack Gremillion, Alumnus, on ROTC groups wearing pajamas to Homecoming” → “ROTC in pajamas at Homecoming”
+  - “Bautista Martinez, LSU Fan, on sneaking out of Carville Leprosarium to attend games” → “Slipping out of Carville to see the Tigers”
+  - “Oliver Mack, Alumnus, on listening to LSU games on the radio” → “Listening to LSU on the radio”
+  - “Gus Kinchen, Former Player, on the notoriety that came with LSU's success” → “The notoriety that came with winning”
+  - “Gus Kinchen, Former Player, on fan support after a loss” → “Fan support after a loss”
+  - “John Ferguson, Former Voice of the Tigers, on becoming the Voice of the Tigers” → “Becoming the Voice of the Tigers”
+  - “Bud Johnson, Director of the Andonie Museum, on the genesis of "Hey, Fightin' Tigers!"” → “The genesis of “Hey, Fightin’ Tigers!””
+  - “Sheryl Campbell, Alumna, on rivalries with Ole Miss and Alabama” → “Rivalries with Ole Miss and Alabama”
+  - “Sheryl Campbell, Alumna, on football players taking a ballroom dance class” → “Football players in ballroom dance class”
+  - “John Ferguson, Former Voice of the Tigers, on broadcasts as a way to market LSU” → “Broadcasts that marketed LSU”
+  - “Sheryl Campbell, Alumna, on proper attire for game day” → “Proper attire for game day”
+  - “Charles Alexander, Former Player, on fans' support being motivating” → “Fans who motivate the team”
+  - “Margaret Jameson, Former Dean of Women, on the difficulty of obtaining tickets upon arrival as Dean” → “A new dean looks for tickets”
+  - “Roger Ogden, Former SGA President, on the excitement of attending games and meeting Billy Cannon” → “Game nights and meeting Billy Cannon”
+
+Big Games titles are the game names on the old tiles (the old tile for Bud Johnson’s 1958 clip reads “LSU v. U of Miami, 1958”).
+
+### Clip credit lines
+
+Old “-- Name, interviewed by …” lines → “Name, interviewed by …” (no dash, no bold); changes are in list 1.
+
+### Captions (old citation → new caption) and alt text (all new)
+
+- **marvinstewart01.jpg** (Big Games / 1936 Sugar Bowl; Players & Teams / Playing both offense and defense; Coaching & Practice / How player preparation has changed)
+  - Old caption: “Marvin Stewart: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Marvin “Moose” Stewart. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Marvin Stewart, in a dark LSU jersey, crouches over the ball in a center’s stance in the stadium.”
+- **charlesbarney.jpg** (Big Games / 1944 Orange Bowl)
+  - Old caption: none
+  - New caption: “Charles Barney.”
+  - Alt text: “Charles Barney as a young man in a Navy sailor’s uniform.”
+- **yatittle01.jpg** (Big Games / LSU v. Ole Miss, 1947)
+  - Old caption: “Y.A. Tittle: Steve Franz, LSU Sports Information.”
+  - New caption: “Y.A. Tittle. Steve Franz, LSU Sports Information.”
+  - Alt text: “Y.A. Tittle, number 25, poses about to throw a pass in front of empty stands.”
+- **gaynelltinsley01.jpg** (Big Games / LSU v. Tulane, 1949; Players & Teams / Scholarships and jobs for players)
+  - Old caption: “Gaynell Tinsley: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Gaynell Tinsley. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Gaynell Tinsley in a lineman’s three-point stance on the practice field; the photo is signed.”
+- **budjohnson.jpg** (Big Games / LSU v. Miami, 1958)
+  - Old caption: none
+  - New caption: “Bud Johnson.”
+  - Alt text: “Bud Johnson stands in front of a museum wall celebrating LSU’s 1958 national champions.”
+- **carlmaddox01.jpg** (Big Games / The 1958 Championship; Coaching & Practice / Recruiting, and a talented walk-on)
+  - Old caption: “Carl Maddox: Stave Franz, LSU Sports Information.”
+  - New caption: “Carl Maddox. Steve Franz, LSU Sports Information.”
+  - Alt text: “Carl Maddox, in a suit and tie, smiles in a wood-paneled office.”
+- **bertjones01.jpg** (Big Games / LSU v. Ole Miss, 1972)
+  - Old caption: “Bert Jones: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Bert Jones. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Bert Jones in his LSU jersey on the sideline.”
+- **johnferguson01.jpg** (Big Games / LSU v. USC, 1979; Players & Teams / Players who were fun to watch; Facilities / Capturing the sound of the stadium; Culture / Becoming the Voice of the Tigers; Culture / Broadcasts that marketed LSU)
+  - Old caption: “John Ferguson: Steve Franz, LSU Sports Information.”
+  - New caption: “John Ferguson. Steve Franz, LSU Sports Information.”
+  - Alt text: “John Ferguson in a headset at the microphone in the press box, beside other broadcasters.”
+- **tomhodson01.jpg** (Big Games / The 1988 Earthquake Game)
+  - Old caption: “Tommy Hodson: Steve Franz, LSU Sports Information.”
+  - New caption: “Tommy Hodson. Steve Franz, LSU Sports Information.”
+  - Alt text: “Tommy Hodson, number 13 in purple and gold, sets to pass in front of a packed crowd.”
+- **abemickal01.jpg** (Players & Teams / Pursuing an education)
+  - Old caption: “Abe Mickal: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, Baton Rouge, LA.”
+  - New caption: “Abe Mickal. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Portrait of Abe Mickal in a suit and tie, signed in the corner.”
+- **alfredglassell.jpg** (Players & Teams / Free football tickets for students)
+  - Old caption: none
+  - New caption: “Alfred Glassell.”
+  - Alt text: “Yearbook portrait of Alfred Glassell in an oval frame.”
+- **1944team01.jpg** (Players & Teams / Playing Georgia twice; Facilities / Eating well during wartime rationing; Culture / Traveling to games by rail and car)
+  - Old caption: “1944 Team: *Gumbo*, 1944. LD3118.G8 University Archives.”
+  - New caption: “The 1944 team in action. *Gumbo*, 1944. LD3118 .G8, University Archives.”
+  - Alt text: “An LSU ball carrier, number 17, cuts upfield past defenders in front of a full stadium.”
+- **schexnaildre_dream.jpg** (Players & Teams / Why he came to LSU; Coaching & Practice / Every team member matters)
+  - Old caption: “Merle Schexnaildre: *Gumbo*, 1959. LD3118 .G8 University Archives”
+  - New caption: “Merle Schexnaildre. *Gumbo*, 1959. LD3118 .G8, University Archives.”
+  - Alt text: “Merle Schexnaildre in jersey number 43.”
+- **merleschexnaildre02.jpg** (Players & Teams / The origin of the Chinese Bandits)
+  - Old caption: “Chinese Bandits: Sugar Bowl Program, 1959 GV 958 .L65 L66 LLMVC”
+  - New caption: “The Chinese Bandits. Sugar Bowl program, 1959. GV958 .L65 L66, Louisiana and Lower Mississippi Valley Collections, LSU Libraries.”
+  - Alt text: “A program page of twelve portraits headed “LSU Chinese Bandits,” Merle Schexnaildre among them.”
+- **guskinchen01.jpg** (Players & Teams / Defensive end for the Chinese Bandits; Culture / The notoriety that came with winning)
+  - Old caption: “Gus Kinchen: Steve Franz, LSU Sports Information.”
+  - New caption: “Gus Kinchen. Steve Franz, LSU Sports Information.”
+  - Alt text: “Gus Kinchen, jersey number 81, looks off to the side.”
+- **charlesalexander01.jpg** (Players & Teams / His junior season and the offensive line; Facilities / Close with his college teammates)
+  - Old caption: “Charles Alexander: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Charles Alexander. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Charles Alexander, number 4, runs with the ball through a gap in the line.”
+- **tylerlafauci01.jpg** (Players & Teams / The importance of a calm demeanor)
+  - Old caption: “Tyler LaFauci: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Tyler LaFauci. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Tyler LaFauci, number 64, poses charging forward in the stadium.”
+- **lorahinton02.jpg** (Players & Teams / Finishing as a player despite injury)
+  - Old caption: “Lora Hinton: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Lora Hinton. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “LSU runs a play at the line of scrimmage in front of a crowded sideline.”
+- **kerrypourciau.jpg** (Players & Teams / Ready for an integrated team)
+  - Old caption: none
+  - New caption: “Kerry Pourciau.”
+  - Alt text: “Kerry Pourciau, in a leather jacket, speaks to a crowd of students.”
+- **lorahinton01.jpg** (Players & Teams / Teammates standing up to racism)
+  - Old caption: “Lora Hinton: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Lora Hinton. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Portrait of Lora Hinton in a suit and tie.”
+- **biffjones.jpg** (Coaching & Practice / Huey Long and Coach Biff Jones butt heads)
+  - Old caption: “Biff Jones: *Gumbo*, 1934. LD 3118 .G8 University Archives.”
+  - New caption: “Coach Biff Jones. *Gumbo*, 1934. LD3118 .G8, University Archives.”
+  - Alt text: “Coach Biff Jones in a sweater on the practice field.”
+- **abemickal02.jpg** (Coaching & Practice / Choosing LSU over other offers)
+  - Old caption: “Abe Mickal: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Abe Mickal. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Abe Mickal, in a leather-patched practice jersey, throws a pass in front of a campus building.”
+- **moorecoates.jpg** (Coaching & Practice / Coach Moore’s scrimmages)
+  - Old caption: none
+  - New caption: “Coach Bernie Moore, left.”
+  - Alt text: “Coach Bernie Moore, left, in a suit, talks with an older man.”
+- **berniemoore01.jpg** (Coaching & Practice / The character of Coach Moore)
+  - Old caption: “Bernie Moore: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Coach Bernie Moore. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Coach Bernie Moore in a hat and tie sits on a wooden chair at practice.”
+- **pauldietzel01.jpg** (Coaching & Practice / Coach Dietzel’s discipline)
+  - Old caption: “Paul Dietzel: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Coach Paul Dietzel. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Portrait of Coach Paul Dietzel in a plaid jacket and tie.”
+- **mcclendondietzel01.jpg** (Coaching & Practice / Hiring Coach McClendon before Kentucky could)
+  - Old caption: “McClendon and Dietzel: Charles East Papers, Mss. 3471, Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Charles McClendon, right, and Paul Dietzel. Charles East Papers, Mss. 3471, Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Two coaches in white shirts stand on the sideline in front of the crowd.”
+- **1968team01.jpg** (Coaching & Practice / McClendon’s small but aggressive players)
+  - Old caption: “1968 Team: Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “The 1968 team. Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “The 1968 team in rows on the field of Tiger Stadium, the empty stands behind them.”
+- **jerrystovall01.jpg** (Coaching & Practice / Position coach Jerry Stovall)
+  - Old caption: “Jerry Stovall: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Jerry Stovall as a player. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Jerry Stovall, number 21, carries the ball past a tackler.”
+- **martinbroussard.jpg** (Coaching & Practice / Rule changes for the better; Facilities / Fans who stay, even in a losing season)
+  - Old caption: none
+  - New caption: “Martin Broussard.”
+  - Alt text: “Martin Broussard smiles, looking off camera.”
+- **stadium1925.jpg** (Facilities / Tiger Stadium’s early design)
+  - Old caption: “Stadium 1925: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Tiger Stadium, 1925. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “A tinted postcard of the new stadium’s two open stands on a green field, labeled “Louisiana State University Stadium, Baton Rouge, La.””
+- **tigerstadium1936.jpg** (Facilities / Hamilton Johnston and the design of Tiger Stadium)
+  - Old caption: none
+  - New caption: “Tiger Stadium from the air, full for a game.”
+  - Alt text: “Aerial view of the horseshoe stadium packed with spectators, letters marked on the field.”
+- **miketrainer.jpg** (Facilities / Where Mike came from, and a prank by Tulane)
+  - Old caption: none
+  - New caption: “A keeper reaches into Mike the Tiger’s cage.”
+  - Alt text: “A man in a pith helmet crouches beside a cage, reaching in to a tiger lying behind the bars.”
+- **alvinroy01.jpg** (Facilities / How weight training changed LSU football)
+  - Old caption: “Ad for Alvin Roy: *Daily Reveille*, September 11, 1958. Microfilm 632 University Archives.”
+  - New caption: “An advertisement for Alvin Roy’s Health Studios. *Daily Reveille*, September 11, 1958. Microfilm 632, University Archives.”
+  - Alt text: “Newspaper advertisement headed “You’ll Enjoy Being Handsome!” with a drawing of a bodybuilder, offering one week free at Alvin Roy’s.”
+- **alvinroy02.jpg** (Facilities / Alvin Roy brings weight training to LSU)
+  - Old caption: none
+  - New caption: “Another Alvin Roy advertisement.”
+  - Alt text: “Narrow newspaper advertisement: “Girls go for men with lifeguard shoulders!” from Alvin Roy’s.”
+- **stadium60s.jpg** (Facilities / The roar of the stadium; Culture / Slipping out of Carville to see the Tigers)
+  - Old caption: “Stadium roar (60s): LSU Police Department Records, RG #A0205, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Tiger Stadium in the 1960s. LSU Police Department Records, RG #A0205, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Aerial view of the full stadium surrounded by acres of parked cars.”
+- **1902team.jpg** (Culture / How LSU got its colors)
+  - Old caption: “1902 Team: LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “The 1902 team. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “The 1902 team, in striped jerseys, poses in front of an ivy wall above a mount signed with the players’ names.”
+- **cadetstiger.jpg** (Culture / Celebrating a win in Baton Rouge)
+  - Old caption: “Cadets loading tiger onto train: Department of Military Science Records, RG #A0602, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Cadets loading a tiger onto a train. Department of Military Science Records, RG #A0602, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Uniformed cadets gathered on a railroad platform beside a passenger car.”
+- **hullabaloo.jpg** (Culture / Pomp and circumstance on game day)
+  - Old caption: “Hullabaloo in the ‘30s: Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Hullabaloo in the ’30s. Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “A smiling drum major and two majorettes in white uniforms and plumed hats.”
+- **hueyhouston.jpg** (Culture / Huey Long tries to make Mickal a state senator)
+  - Old caption: none
+  - New caption: “Huey P. Long at the head of the band.”
+  - Alt text: “Huey P. Long, in a light suit and holding his hat, strides ahead of uniformed band members on a city street.”
+- **pajamafootball.jpg** (Culture / ROTC in pajamas at Homecoming)
+  - Old caption: none
+  - New caption: “Students cheering at a night game.”
+  - Alt text: “Students in the stands at night, arms raised, cheering.”
+- **1958champs.jpg** (Culture / Listening to LSU on the radio)
+  - Old caption: none
+  - New caption: “LSU Tigers, 1958 national champions.”
+  - Alt text: “Team photo of the 1958 squad in the stadium, captioned “LSU Tigers, 1958 National Champions.””
+- **mikeiiarriving.jpg** (Culture / Fan support after a loss)
+  - Old caption: none
+  - New caption: “A crowd gathers as Mike II arrives on campus.”
+  - Alt text: “A crowd of men surrounds a truck on the campus lawn, Memorial Tower behind.”
+- **majortiger.jpg** (Culture / The genesis of “Hey, Fightin’ Tigers!”)
+  - Old caption: “Drum Major with tiger: Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “The drum major and a costumed tiger lead the band. Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “A majorette, two drum majors and a costumed tiger lead the band down a road.”
+- **olemiss.jpg** (Culture / Rivalries with Ole Miss and Alabama)
+  - Old caption: “Go to Hell Ole Miss: Gumbo, 1971. LD 3118 .G8 University Archives.”
+  - New caption: “A “Go to Hell Ole Miss” banner. *Gumbo*, 1971. LD3118 .G8, University Archives.”
+  - Alt text: “Fans in the stands hold up a Confederate battle flag painted “Go to Hell Ole Miss.””
+- **moreaukick.jpg** (Culture / Football players in ballroom dance class)
+  - Old caption: none
+  - New caption: “A placekick.”
+  - Alt text: “A placekick from the hold, players blocking at the line.”
+- **attire.jpg** (Culture / Proper attire for game day)
+  - Old caption: none
+  - New caption: “Dressed for game day.”
+  - Alt text: “Five young women in 1960s suits and dresses stand among trees.”
+- **homecomingdecorations.jpg** (Culture / Fans who motivate the team)
+  - Old caption: none
+  - New caption: “A homecoming display.”
+  - Alt text: “A homecoming display in front of a house: a giant tiger beside a “Tiger Gumbo” recipe board listing the season’s opponents.”
+- **margaretjamesonhr.jpg** (Culture / A new dean looks for tickets)
+  - Old caption: none
+  - New caption: “Margaret Jameson in her office.”
+  - Alt text: “Margaret Jameson at her desk, talking with a young man seated across from her.”
+- **cannondietzel01.jpg** (Culture / Game nights and meeting Billy Cannon)
+  - Old caption: “Cannon, Dietzel, etc: Charles East Papers, Mss. 3471, Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.”
+  - New caption: “Billy Cannon, Coach Paul Dietzel and teammates. Charles East Papers, Mss. 3471, Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.”
+  - Alt text: “Four players in practice jerseys talk with Coach Dietzel, the stadium behind them.”
+- **lagn001.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Four students pose with a stuffed tiger.”
+  - Alt text: “Four young women sit on a stone ledge beside a large stuffed tiger.”
+- **lagn003.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Cheerleaders run an LSU–Tulane banner down the field.”
+  - Alt text: “Two cheerleaders in white carry an LSU and Tulane banner along the sideline before a full stadium.”
+- **lagn008.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “A rivalry display: the tiger and the Tulane goat.”
+  - Alt text: “A papier-mâché tiger faces a goat marked “TU” under a palm tree.”
+- **lagn032.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Raising money for a new cage for Mike the Tiger.”
+  - Alt text: “Two students sit at a table outside the stadium gates beside a sign: “Help Build a New Cage for Mike the Tiger. Please give what you can.””
+- **lagn036.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Tiger Stadium after its enclosure.”
+  - Alt text: “The stadium’s exterior, a continuous wall of arches, across an open field.”
+- **lagn038.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Mike the Tiger’s cage.”
+  - Alt text: “A barred enclosure beside a small building with a weathervane.”
+- **lagn050.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “LSU v. Tulane from the air.”
+  - Alt text: “Aerial view of the stadium crowded for an LSU–Tulane game, cars parked all around it.”
+- **lagn051.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “The band in front of Memorial Tower.”
+  - Alt text: “The uniformed band seated with its instruments on the steps of Memorial Tower.”
+- **lagn054.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “A kick line in Tiger Stadium.”
+  - Alt text: “A line of dancers high-kicking on the field of the empty stadium.”
+- **lagn078.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “The band spells out a formation at halftime.”
+  - Alt text: “The band in formation on the field between packed stands.”
+- **lagn087.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Mike the Tiger.”
+  - Alt text: “Close-up of a tiger lying down, tongue out.”
+- **lagn094.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “A birthday cake for Mike.”
+  - Alt text: “People gather around a large cake in front of a cage spelling “MIKE.””
+- **lagn095.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: “Mike’s cage on the field.”
+  - Alt text: “Students ride on top of Mike the Tiger’s cage wagon as it is towed around the stadium field.”
+- **lagn099.jpg** (Lagniappe)
+  - Old caption: none (Lagniappe photo)
+  - New caption: ““Here lies Tulane’s goat.””
+  - Alt text: “A student in a sailor’s collar holds a book beside a mock grave cross reading “Here lies Tulane’s goat.””
+
+### Lead images (gallery headers; caption = that image’s caption above)
+
+- Big Games: tomhodson01.jpg — “Tommy Hodson. Steve Franz, LSU Sports Information.”
+- Players & Teams: charlesalexander01.jpg — “Charles Alexander. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+- Coaching & Practice: mcclendondietzel01.jpg — “Charles McClendon, right, and Paul Dietzel. Charles East Papers, Mss. 3471, Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.”
+- Facilities: stadium60s.jpg — “Tiger Stadium in the 1960s. LSU Police Department Records, RG #A0205, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+- Culture: majortiger.jpg — “The drum major and a costumed tiger lead the band. Office of Public Relations Records, RG #A0020, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
+- Lagniappe: lagn050.jpg — “LSU v. Tulane from the air.”
+- The Narrators and About the Exhibition have no lead image.
+
+### The Narrators
+
+- Each biography now starts with the name as a heading and the role from the old page header in bold, e.g. “Former Voice of the Tigers”. The old pages’ portrait images are not repeated here.
+
+### About the Exhibition
+
+- Two paragraphs of the old touchscreen text now open with bold run-in heads: “The University Archives collections.” and “The T. Harry Williams Center for Oral History’s University History, LSU Athletics Collection.” (old: headings “ON THE TOUCHSCREEN”, “The University Archives Collections:” …).

@@ -1,0 +1,29 @@
+<h3>Where they came from</h3>
+<ul>
+<li><strong>Oral history exhibitions</strong> (eleven, from the T. Harry Williams Center for Oral History): the old listening stations at lib.lsu.edu/sites/all/files/oralhistory/presentations/&lt;folder&gt;. Each now lives at /v2/oralhistory/exhibitions/&lt;folder&gt;, the old folder’s name in lowercase, so the old and new addresses are easy to match.</li>
+<li><strong>Special Collections exhibitions</strong>: AVES, Occult Science and the Audubon exhibition from the Wayback Machine’s copies of the old exhibitions blog and pages; the LSU Union Art Gallery from its showcase on the staging site. They live under /v2/special/exhibitions.</li>
+</ul>
+<h3>Text</h3>
+<ul>
+<li>Carried over word for word, then corrected only where listed in each exhibition’s Corrected list.</li>
+<li>Text the old pages had saved in the wrong character encoding (letters such as “DufourÃÂ¢s”) was decoded back to the original characters exactly.</li>
+<li>Straight quotes and apostrophes became curly ones (’ “ ”), and date ranges use an en dash (1939–1942). These are not listed one by one.</li>
+<li>Oral history transcripts: each speaker’s turn starts a new paragraph, with the speaker’s full name in bold capitals (as on the Mossville History Project), not a first name or initials.</li>
+<li>Captions come from each exhibition’s own Pictures or credits pages where they had them, since those give fuller citations than the slides did.</li>
+<li>Every image has new alt text written for people who use screen readers. Alt text is listed under New wording to check.</li>
+</ul>
+<h3>Audio</h3>
+<p>Every clip was prepared the same way, so all the exhibitions sound alike and none is noticeably quieter than another (scripts/palefire_exhibit_media.py):</p>
+<ul>
+<li><strong>Mono.</strong> Speech needs only one channel, and a mono file is half the size. A stereo file whose second channel is silent or much quieter (20 dB or more) keeps its live channel instead of being mixed down at half volume.</li>
+<li><strong>Loudness −16 LUFS</strong> (integrated), measured and corrected in two passes, with peaks held under −1.5 dBTP and a loudness range of 11 LU. This is close to what podcasts use. It was −18 LUFS until Mon 16 Nov 2026, when it was raised so the clips aren’t quieter than other sites’ audio. Browsers don’t level volume between sites.</li>
+<li><strong>AAC at 64 kbps, 44.1 kHz, in .m4a files.</strong> This is plenty for speech, plays in every current browser, and keeps files small, so clips start quickly on a phone.</li>
+<li><strong>Read-along timing.</strong> Each clip has a WebVTT timing file beside it, so its transcript lights up phrase by phrase as it plays and a click on a phrase plays from there. The timing was matched to the published transcript, whose words are always the ones shown. There are 230 files for the ten newer exhibitions, plus Mossville’s.</li>
+<li>A few old pages played the wrong recording for a clip. Those are noted in their exhibition’s list, with the clip that now plays.</li>
+</ul>
+<h3>Images</h3>
+<ul>
+<li><strong>Oral history exhibitions:</strong> masters at 2,560 pixels on the long side (never enlarged), sRGB JPEG at quality 85, with camera and editing metadata removed.</li>
+<li><strong>Special Collections exhibitions:</strong> made from the 4K scans where they exist (at most 3,840 pixels on the long side), showing the whole sheet where the old pages showed a crop. Each exhibition’s list notes where an image couldn’t be found at full size.</li>
+<li>On the page, each image is served as WebP at the size the screen needs (640, 1,280, 1,920 or 2,560 pixels wide) and loads only as it comes into view.</li>
+</ul>

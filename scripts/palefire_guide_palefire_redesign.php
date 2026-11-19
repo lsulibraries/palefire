@@ -688,6 +688,11 @@ HTML),
 <li>The Center’s name no longer runs from edge to edge of the screen; it has room on the right.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Exhibition Migration Review guide', <<<'HTML'
+<ul>
+<li>A new guide page, Exhibition Migration Review, lists every change made to the online exhibitions when they moved to the new site: each correction to the old text (old → new), the questions that still need a curator’s answer, the wording written new such as alt text and captions, and how the audio and images were prepared (mono, leveled to −16 LUFS, AAC). One section per exhibition. It starts unpublished.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
