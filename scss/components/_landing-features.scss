@@ -4319,22 +4319,28 @@ $pf-split: 'html .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landing__l
 // foot (align-self: end), and the search ends one gutter above the
 // screen's foot. Where a screen is shorter than the type, the rows simply
 // grow and the film runs behind all of it.
-// Contrast without veiling the picture: a black band under the header
-// (75% to 8.5rem, gone by 14rem: 75% black is what holds every header,
-// breadcrumb and Pause text at 4.5:1 over a white frame, the location
-// backdrop's gray-64 ceiling), and the wash's veil on the type block's
-// ::before: the page color at 66% (82% under High contrast), eased in over
-// the 12rem above the kicker and reaching 8rem below the search, so it
-// follows the type wherever it lands and the film still shows through it.
-// 66% holds the white type at 4.7:1 over a white frame; the kicker's
-// softer grays (the Libraries and the building) need 82% or more, so on
-// phones both take the full text color; the gold rule still parts them. The film's foot fades into the page, so
+// The film stays put behind the highlights too: it spans the index's row
+// as well, and its pictures are fixed to the screen (clip-path, not
+// overflow, holds a fixed picture to its box), so the index scrolls over
+// a still-running film and the page closes over it after the last row.
+// Contrast without veiling the picture: under the header and the bar, the
+// wider screens' wash (pf-cover-top-wash(), the page color at 70%, eased
+// out over 6rem), with the bar's words in the full text color (white at
+// 5:1 over a white frame); and the wash's veil from the kicker down: the
+// type block's ::before, the page color at 66% (82% under High contrast),
+// eased in over the 12rem above the kicker, then the lead's ::after on in
+// one piece under the search and the index (rows 2 and 3), so the film
+// still shows through. 66% holds the white type at 4.7:1 over a white
+// frame; the grays (the kicker, the building, the index's labels) need
+// 82% or more, so on phones they take the full text color; the gold rule
+// and numbers still part them. The film's foot fades into the page, so
 // the Quick Start rises out of it with no edge. The film has no stacking
 // context of its own (its pictures go under at -2, the veils at -1), so
-// its Pause button, in the band between the breadcrumb and the kicker at
-// the type's right edge, is never under a veil (WCAG 2.2.2). The hours
-// dock waits while the search is on screen (js/dock.js, .is-waiting), and
-// hides again when the search scrolls back into view.
+// its Pause button, an icon at the bar's right end (the breadcrumb makes
+// room for it while the hero is on screen), is never under a veil
+// (WCAG 2.2.2). The hours dock waits while the search is on screen
+// (js/dock.js, .is-waiting), and hides again when the search scrolls back
+// into view.
 $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landing__lead.pf-landing__lead--hero';
 
 @container pf-cover (width < 44rem) {
@@ -4361,7 +4367,7 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
     .pf-landing__top::before {
       content: "";
       position: absolute;
-      inset: -12rem calc(-1 * var(--pf-cover-gutter)) -8rem;
+      inset: -12rem calc(-1 * var(--pf-cover-gutter)) 0;
       z-index: -1;
       background: linear-gradient(
         transparent,
@@ -4372,16 +4378,38 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
       pointer-events: none;
     }
 
+    // The veil on under the search and the index: one box over rows 2
+    // and 3 (the lead's one column is the screen's width) and the gutter
+    // above the search. Layer 0: over the film (its clip-path makes it a
+    // layer of its own), under the type, the search and the index (1).
+    &::after {
+      content: "";
+      grid-row: 2 / 4;
+      grid-column: 1 / -1;
+      z-index: 0;
+      margin-top: calc(-1 * var(--pf-grid-gutter));
+      background: var(--pf-wash-veil);
+      pointer-events: none;
+    }
+
     .pf-landing__kicker,
-    .pf-landing__kicker-place {
+    .pf-landing__kicker-place,
+    .pf-hero-banners::before,
+    .pf-hero-banners > .pf-hero-banner .pf-hero-banner__label {
       color: var(--bs-emphasis-color);
+    }
+
+    // Room round the title, at most 3.5rem so the search stays on the
+    // first screen.
+    .pf-landing__top > :is(.pf-landing__title, .pf-landing__mark) {
+      margin-block: clamp(2.5rem, 6svh, 3.5rem);
     }
 
     // No fade as it leaves (the frame's, above): it would make the film a
     // layer of its own, over the veil, and fade its Pause button with it.
     .pf-landing__media {
       position: relative;
-      grid-row: 1 / 3;
+      grid-row: 1 / 4;
       align-self: stretch;
       animation: none;
       z-index: auto;
@@ -4390,10 +4418,17 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
       max-height: none;
       aspect-ratio: auto;
       margin: calc(-1 * var(--pf-poster-lift)) 0 0;
-      overflow: hidden;
+      overflow: visible;
+      clip-path: inset(0);
     }
 
+    // A screen tall at its tallest (lvh), so the iOS toolbar coming and
+    // going never resizes it.
     .pf-landing__media .pf-landing__bg-video {
+      position: fixed;
+      inset: 0 auto auto 0;
+      height: 100vh;
+      height: 100lvh;
       z-index: -2;
       object-position: 50% 40%;
     }
@@ -4404,18 +4439,33 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
       inset: 0;
       z-index: -1;
       background:
-        linear-gradient(rgb(0 0 0 / .75) 8.5rem, rgb(0 0 0 / 0) 14rem),
+        pf-cover-top-wash($fade: 6),
         linear-gradient(transparent calc(100% - var(--pf-grid-gutter)), var(--pf-wash-bg));
       pointer-events: none;
     }
 
+    // Pause in the bar's row, at its right end, as an icon (the word would
+    // crowd a long breadcrumb); its name is still read, and the clip's
+    // progress still fills under it.
     .pf-landing__media .pf-landing__film-bar {
-      inset: calc(var(--pf-bleed-block-start, var(--pf-header-h, 0px)) + var(--pf-landing-bar-h, 0px)) var(--pf-cover-gutter) auto auto;
+      inset: var(--pf-bleed-block-start, var(--pf-header-h, 0px)) calc(var(--pf-cover-gutter) - .75rem) auto auto;
       z-index: 2;
+      height: var(--pf-landing-bar-h, 2rem);
       padding: 0;
       color: $pf-white;
       background-image: none;
       pointer-events: auto;
+    }
+
+    .pf-landing__film-bar .pf-landing__bg-toggle {
+      justify-content: center;
+      width: 2.75rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .pf-landing__film-bar .pf-landing__bg-toggle .pf-landing__bg-toggle-word {
+      display: none;
     }
 
     .pf-landing__film-caption {
@@ -4438,6 +4488,45 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
 
   html.pf-reading-dark:root .pf-landing.pf-landing--cover.pf-landing--wash.pf-landing--wash-none > .pf-landing__lead.pf-landing__lead--hero {
     --pf-wash-veil: transparent;
+  }
+}
+
+// The bar over the poster: its words in the full text color (the wash under
+// them is the wider screens' 70%), and, while the hero is on screen, room
+// at its end for the film's Pause.
+@container pf-cover (width < 44rem) {
+  .pf-landing.pf-landing--cover.pf-landing--wash .pf-landing__bar {
+    --pf-toc-color: var(--bs-emphasis-color);
+    color: var(--bs-emphasis-color);
+  }
+
+  :root:not(.pf-hero-past) .pf-landing.pf-landing--cover.pf-landing--wash .pf-landing__bar .pf-breadcrumb--lead {
+    margin-inline-end: 2.5rem;
+  }
+
+  // The Find us map across the row, under its words: the drawing at a
+  // size to read, not a thumbnail.
+  #{$pf-wash-narrow} .pf-hero-banners > .pf-hero-banner.pf-hero-banner--map {
+    .pf-hero-banner__link {
+      grid-area: 1 / 1 / 2 / 3;
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 1rem;
+    }
+
+    .pf-hero-banner__text {
+      grid-area: 1 / 1;
+      padding-inline-start: 2.25rem;
+    }
+
+    .pf-hero-banner__media {
+      grid-area: 2 / 1;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .pf-hero-banner__map {
+      padding: 6% 16%;
+    }
   }
 }
 

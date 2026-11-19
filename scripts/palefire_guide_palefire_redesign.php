@@ -684,7 +684,7 @@ HTML),
 HTML),
   $text('Thu Nov 19: Oral History opening screen on phones', <<<'HTML'
 <ul>
-<li>On a phone, the dark shading behind the Center’s name is lighter and starts more gradually, so the film shows through instead of sitting behind a gray slab. The small label above the name is now full white so it stays easy to read.</li>
+<li>On a phone, the dark shading behind the Center’s name is lighter and starts more gradually, so the film shows through instead of sitting behind a gray slab. The small labels above the name (LSU Libraries, Hill Memorial Library) are now full white so they stay easy to read.</li>
 <li>The Center’s name no longer runs from edge to edge of the screen; it has room on the right.</li>
 </ul>
 HTML),
@@ -697,6 +697,14 @@ HTML),
 <ul>
 <li>Mossville History Project: 21 photo captions no longer read “Photo. Photo by…”, a slip from the move. The Family & Community photo of Vera Payne is now captioned with her name instead of Lenoria Ambrose’s, and two photos in Work now name who is in them.</li>
 <li>History of KLSU: a missing space in one transcript (“gone, or the station?”).</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Opening screen on phones, tidied', <<<'HTML'
+<ul>
+<li>Oral History and Special Collections on a phone: the dark band at the top is gone. The shading under the menu and breadcrumb now matches the wider screens, and the Pause button sits at the end of the breadcrumb line instead of on a row of its own.</li>
+<li>More space above and below the page’s title.</li>
+<li>The film now stays in place behind the list of highlights (or the page’s sections) as you scroll, and the page closes over it after the last one.</li>
+<li>Oral History’s Find us map is shown full width instead of as a small thumbnail.</li>
 </ul>
 HTML),
 ]);
