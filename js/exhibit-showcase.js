@@ -109,8 +109,6 @@
       cards.forEach((card, i) => card.classList.toggle('is-active', i === k));
       summaries.forEach((summary, i) => summary.classList.toggle('is-active', i === k));
       captions.forEach((caption, i) => caption.classList.toggle('is-active', i === k));
-      // The eye stands in front of the shown canvas, whatever its width.
-      rail.style.setProperty('--pf-showcase-ar', cards[k].style.getPropertyValue('--pf-showcase-ar') || '.75');
       if (meter) {
         meter.style.transform = `scaleX(${(k + 1) / total})`;
       }

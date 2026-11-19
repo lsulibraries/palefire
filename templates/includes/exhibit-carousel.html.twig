@@ -14,8 +14,7 @@
  *   carry the picture's own edge, mirrored, as a printer wraps a canvas
  *   round its stretcher, and the rail is seen from one point, so the
  *   canvases to the side show an edge (_exhibit-showcase.scss). Every
- *   canvas is one height, as wide as its picture's proportions make it,
- *   so the whole picture shows.
+ *   canvas is 3:4, its picture cropped about its focus point.
  * - The footnote: under the canvas, the shown cover's object label
  *   (includes/object-label.html.twig, compact), where the exhibition's
  *   Cover label fields have a title.
@@ -23,8 +22,8 @@
  *   the band, faded under the band's color, crossfading as it changes.
  * - The summary, as a wall label: a line over the title (Featured and its
  *   note, a kicker that isn't plain "Exhibition", Unpublished), the title,
- *   subtitle, the start of the intro and the credit line under it, then
- *   the facts at its foot, label over value, four slots every exhibition
+ *   subtitle, the start of the intro (else the credit line), then the
+ *   facts at its foot, label over value, four slots every exhibition
  *   keeps ("—" where it has none): Year; Clips; Listening (the clips'
  *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips());
  *   In the building (the title page's treasure chest and a link to the
@@ -101,14 +100,11 @@
       </div>
     {% endif %}
 
-    {# Each canvas in its picture's own proportions (width over height),
-       all one height; 3:4 with no picture or no size. #}
-    {% set ratios = items|map(ex => ex.cover and ex.cover.width and ex.cover.height ? (ex.cover.width / ex.cover.height)|round(4) : 0.75) %}
     {% set captioned = items|filter(ex => ex.object)|length > 0 %}
     <div class="pf-showcase__stage{{ captioned ? ' pf-showcase__stage--captioned' }}">
-      <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" style="--pf-showcase-ar: {{ ratios|first }}; --pf-showcase-last-ar: {{ ratios|last }}" data-pf-showcase-scene>
+      <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" data-pf-showcase-scene>
         {% for ex in items %}
-          <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" style="--pf-showcase-ar: {{ ratios[loop.index0] }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
+          <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
             {% if ex.cover %}
               <span class="pf-showcase__edge pf-showcase__edge--start">{{ pf.picture(ex.cover, false) }}</span>
               <span class="pf-showcase__face">{{ pf.picture(ex.cover, loop.first) }}</span>
@@ -154,7 +150,6 @@
               <{{ heading }} class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</{{ heading }}>
               {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
               {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
-              {% if ex.credit %}<p class="pf-showcase__credit">{{ ex.credit }}</p>{% endif %}
               <dl class="pf-showcase__facts">
                 <div class="pf-showcase__fact">
                   <dt>{{ 'Year'|t }}</dt>

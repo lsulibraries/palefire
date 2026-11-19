@@ -1206,7 +1206,6 @@ class PalefireHooks {
           'note' => $featured ? $note : '',
           'physical' => TRUE,
           'show' => ['url' => ''] + self::physicalShow($post),
-          'credit' => '',
           'clips' => NULL,
           'object' => NULL,
           'unpublished' => !$post->isPublished(),
@@ -1243,20 +1242,20 @@ class PalefireHooks {
    * the visitor may see, so it was shown in the building too; show is that
    * post's address, place and dates (physicalShow()), else NULL.
    *
-   * blurb: the start of the intro (else the credit line); credit: the
-   * credit line under it, '' when it is the blurb. object: its cover's
+   * blurb: the start of the intro (else the credit line), 180 characters.
+   * object: its cover's
    * object label (_palefire_cover_object_label()), or NULL.
    *
-   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, credit: string, when: string, post: null, physical: bool, show: ?array, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
+   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, when: string, post: null, physical: bool, show: ?array, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
    */
   public static function exhibitionCard(NodeInterface $node, CacheableMetadata $cache): array {
     $plain = fn (string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
       // A space for each paragraph's or line's end, so they don't run together.
       ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags(preg_replace('#</(p|div|li|h[1-6]|blockquote)>|<br\s*/?>#i', ' ', (string) $node->get($field)->value)))))
       : '';
-    // The description: the start of the intro, and the credit line (it
-    // names the collection and curator) under it; with no intro, the
-    // credit is the description.
+    // The description: the start of the intro, short enough that the
+    // summary keeps to the canvas's height; with no intro, the credit line
+    // (it names the collection and curator).
     $intro = $plain('field_intro');
     $credit = $plain('field_exhibit_credit');
     $cover = NULL;
@@ -1281,8 +1280,7 @@ class PalefireHooks {
       'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
       'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) t('Exhibition'),
       'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($show['year'] ?? NULL),
-      'blurb' => Unicode::truncate($intro ?: $credit, 240, TRUE, TRUE),
-      'credit' => $intro !== '' ? Unicode::truncate($credit, 240, TRUE, TRUE) : '',
+      'blurb' => Unicode::truncate($intro ?: $credit, 180, TRUE, TRUE),
       'when' => '',
       'post' => NULL,
       'physical' => (bool) $show,

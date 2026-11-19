@@ -790,6 +790,12 @@ HTML),
 <li>Off the Walls, Online on the Special Collections homepage is now the same band, and the band’s section title and line of text are gone on it and on Oral History: the numbered rule already names the section.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Portrait canvases again, and the title level with the picture', <<<'HTML'
+<ul>
+<li>The pictures in the band are portrait again, all the same shape, like a row of works on a wall. A wide picture is cropped around its focus; the whole picture is on the exhibition’s own page.</li>
+<li>The credit line under each description is gone (it is on every exhibition’s title page), and the description is a little shorter, so the title lines up with the top of the picture again.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

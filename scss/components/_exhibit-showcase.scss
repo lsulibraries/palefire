@@ -172,7 +172,8 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 // (--pf-grid-gutter). The summary takes two columns at the left, the
 // canvases the rest. Three rows hold still whichever summary is shown
 // (summaries differ in length): the canvases beside the summary's label,
-// its facts on the canvas's foot; Enter on the line of the arrows; the
+// the title level with the canvas's top and the facts with its foot
+// (below it where a label runs taller, at the narrower widths); Enter on the line of the arrows; the
 // count and progress line under the arrows. The summaries share the rows
 // (subgrid), so the tallest label sets the first. The scene's room for
 // the shadow (above and below the canvas) hangs outside the row.
@@ -201,7 +202,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
     .pf-showcase__stage {
       grid-column: 3 / -1;
       grid-row: 2;
-      align-self: end;
+      align-self: start;
     }
 
     // Its summaries, arrows and progress line become cells of this grid.
@@ -272,27 +273,24 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 
 // The rail: scrolls sideways (hidden scrollbar: the buttons and keys
 // browse it), snaps each canvas to its start, and its end padding lets
-// the last canvas reach the start too. Every canvas is one height
-// (--pf-showcase-h, a 3:4 canvas's at the old width) and as wide as its
-// picture's proportions (--pf-showcase-ar, set on each in the template),
-// so the whole picture shows; a very wide one stops at 92% of the stage
-// and crops a little. The eye stands in front of the shown canvas
-// (perspective-origin: the rail's --pf-showcase-ar follows it,
-// js/exhibit-showcase.js), so the shown one is square on.
+// the last canvas reach the start too. Every canvas is 3:4, portrait, a
+// row of hung works; a picture of another shape is cropped about its
+// focus point (object-position). The eye stands in front of the first
+// canvas (perspective-origin), so the shown one is square on.
 .pf-showcase__rail {
-  --pf-showcase-h: min(82.6667cqi, 25.3333rem);
+  --pf-showcase-w: min(62cqi, 19rem);
   --pf-showcase-gap: clamp(1rem, 5cqi, 1.75rem);
   --pf-showcase-depth: 1.375rem; // the canvas's depth
   display: flex;
   gap: var(--pf-showcase-gap);
   padding-block: var(--pf-showcase-room);
-  padding-inline-end: calc(100% - min(var(--pf-showcase-h) * var(--pf-showcase-last-ar, .75), 92cqi));
+  padding-inline-end: calc(100% - var(--pf-showcase-w));
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   perspective: 50rem;
-  perspective-origin: calc(min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi) / 2) 50%;
+  perspective-origin: calc(var(--pf-showcase-w) / 2) 50%;
   cursor: grab;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -312,22 +310,20 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 [dir="rtl"] .pf-showcase__rail {
-  perspective-origin: calc(100% - min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi) / 2) 50%;
+  perspective-origin: calc(100% - var(--pf-showcase-w) / 2) 50%;
 }
 
 @container pf-showcase (min-width: 36rem) {
   .pf-showcase__rail {
-    --pf-showcase-h: min(58.6667cqi, 28rem);
+    --pf-showcase-w: min(44cqi, 21rem);
     --pf-showcase-depth: 1.625rem;
   }
 }
 
-// Its width, read by its edges' pictures too.
 .pf-showcase__card {
-  --pf-showcase-w: min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi);
   position: relative;
   flex: 0 0 var(--pf-showcase-w);
-  height: var(--pf-showcase-h);
+  aspect-ratio: 3 / 4;
   scroll-snap-align: start;
   transform-style: preserve-3d;
   cursor: pointer;
@@ -593,8 +589,8 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   }
 }
 
-// The label: the line over the title, title, subtitle, description,
-// credit and facts, as a wall label. Wide, the facts sit at its foot.
+// The label: the line over the title, title, subtitle, description and
+// facts, as a wall label. Wide, the facts sit at its foot.
 // The facts' container (not the summaries: a container can't be a
 // subgrid).
 .pf-showcase__label {
@@ -620,14 +616,6 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   padding: .1875rem .5rem;
   color: var(--pf-showcase-fg);
   border: 1px solid var(--pf-showcase-line);
-}
-
-// The credit line under the description: who made it, a size down.
-.pf-showcase__credit {
-  max-width: 52ch;
-  color: var(--pf-showcase-muted);
-  font-size: .8125rem;
-  line-height: 1.55;
 }
 
 // The facts, label over value: four slots every exhibition keeps, so the
