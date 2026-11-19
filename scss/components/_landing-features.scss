@@ -6898,6 +6898,25 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
   }
 }
 
+// On the stage a section's row goes down the page, so its arrow in hand
+// points down and drops into place, where a highlight's points on and
+// slides in from the left. (Not the podcast's row: its Play holds the
+// arrow's place.)
+@media (min-height: 40rem) {
+  @container pf-cover (min-width: 44rem) {
+    #{$pf-stage} .pf-hero-banners--toc > .pf-hero-banner--toc:not(.pf-hero-banner--episode) {
+      .pf-hero-banner__text::after {
+        content: "\2193" / "";
+        translate: 0 calc(-50% - .375rem);
+      }
+
+      .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__text::after {
+        translate: 0 -50%;
+      }
+    }
+  }
+}
+
 // --- No spotlight ---------------------------------------------------------------
 // The hero's Spotlight box unticked (field_hero_spotlight, palefire.theme):
 // no warm light from the film's edge over the type's side. Nor with the
