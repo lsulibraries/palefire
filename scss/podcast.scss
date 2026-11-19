@@ -44,51 +44,15 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   list-style: none;
 }
 
-// Every episode scrolls in place under the head, which stays in view to
-// tell the one pointed at. The box fades at an edge with more beyond it
-// (.is-scrolled, .is-more from js/podcast.js). A little padding at the end
-// keeps the Play buttons' focus rings inside it. Positioned, so it holds
-// the rows' absolutely placed screen-reader text: placed against the
-// section instead, that text went uncut past the box's foot and stretched
-// the page under the footer (2026-11-18).
-.pf-podcast__scroll {
-  --pf-podcast-fade-top: 0px;
-  --pf-podcast-fade-bottom: 0px;
+// Five episodes to a page (js/podcast.js), so the list keeps one height
+// and the head beside it stays in view. A hairline over the first row;
+// every row closes with its own. Positioned, so it holds the rows'
+// absolutely placed screen-reader text (2026-11-18). The script holds its
+// height at the tallest page's (min-height), so a short last page moves
+// nothing under it.
+.pf-podcast__episodes {
   position: relative;
-  max-height: min(24rem, 60svh);
-  // The box reaches .75rem left of the list, so a row's wash can start
-  // before its number (the scroll box clips anything outside it); its
-  // hairlines are drawn from the list's edge, where the borders were.
-  margin-inline: -.75rem -.25rem;
-  padding-block: 1px;
-  padding-inline: .75rem .25rem;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: $pf-hairline transparent;
-  background:
-    linear-gradient($pf-hairline, $pf-hairline) left .75rem top / calc(100% - .75rem) 1px no-repeat,
-    linear-gradient($pf-hairline, $pf-hairline) left .75rem bottom / calc(100% - .75rem) 1px no-repeat;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
-
-  &.is-scrolled {
-    --pf-podcast-fade-top: 1.5rem;
-  }
-
-  &.is-more {
-    --pf-podcast-fade-bottom: 3rem;
-  }
-
-  @media (min-width: 48rem) {
-    // About five rows, fewer on a short screen: the head (about 28rem
-    // from the rule) and the list fit on screen together.
-    max-height: clamp(13rem, 100svh - 33rem, 22rem);
-  }
-}
-
-.pf-podcast__row:last-child {
-  border-bottom: 0;
+  border-top: 1px solid $pf-hairline;
 }
 
 .pf-podcast__row {
@@ -274,9 +238,105 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
-// Under the list: the account, as the theme's secondary button.
+// Under the list: the pager (newer, older, the page's number) and the
+// account, as the theme's secondary button; on one line where they fit.
+.pf-podcast__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
 .pf-podcast__listen {
-  margin: 1.5rem 0 0;
+  margin: 0;
+}
+
+.pf-podcast__pager {
+  display: flex;
+  align-items: center;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Square, joined, a thin drawn arrow: the exhibitions showcase's buttons
+// (_exhibit-showcase.scss), a size down. Text and fill swap on hover.
+.pf-podcast__page {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    color $pf-hover-out ease,
+    background-color $pf-hover-out ease,
+    opacity $pf-hover-out ease;
+
+  + .pf-podcast__page {
+    margin-inline-start: -1px; // one shared line between the two
+  }
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: translate $pf-hover-out ease;
+  }
+
+  &:hover:not(:disabled) {
+    position: relative;
+    color: var(--bs-body-bg);
+    background: var(--bs-body-color);
+    transition-duration: $pf-hover-in;
+
+    svg {
+      translate: calc(var(--pf-podcast-nudge, 1) * .1875rem) 0;
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &[data-pf-podcast-page="-1"] {
+    --pf-podcast-nudge: -1;
+  }
+
+  &:focus-visible {
+    position: relative;
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+
+  // At an end: the line stays (the pair keeps its shape), the arrow dims.
+  &:disabled {
+    cursor: default;
+
+    svg {
+      opacity: .35;
+    }
+  }
+}
+
+[dir="rtl"] .pf-podcast__page svg {
+  transform: scaleX(-1);
+}
+
+.pf-podcast__count {
+  margin: 0 0 0 1rem;
+  font: var(--pf-mono-label, .75rem)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  color: var(--pf-exhibit-muted);
+  font-variant-numeric: tabular-nums;
+
+  [data-pf-podcast-n] {
+    color: var(--bs-body-color);
+  }
 }
 
 .pf-podcast__all {
@@ -977,9 +1037,6 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
       transition: opacity .8s cubic-bezier(.2, .7, .2, 1);
     }
 
-    .pf-podcast__scroll {
-      scroll-behavior: smooth;
-    }
 
     .pf-podcast-head__tape:has(.pf-cassette.is-waiting)::before {
       opacity: 0;

@@ -38,7 +38,9 @@
   // The episode the section's head shows (includes/podcast.html.twig rows):
   // the one pointed at or focused, else the one playing, else the newest
   // (its tape only, no photo).
-  const view = { rows: [], longest: 1, shown: null };
+  const view = { rows: [], longest: 1, shown: null, page: 0, turn: null };
+  const PER_PAGE = 5;
+  const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('pf-a11y-motion');
 
   const rowFor = (src) => view.rows.find((row) => {
     const button = row.querySelector('[data-pf-podcast-src]');
@@ -330,6 +332,10 @@
       }
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       list.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+      const row = rowFor(audio.dataset.src || '');
+      if (row && view.turn) {
+        view.turn(Math.floor(view.rows.indexOf(row) / PER_PAGE), false, true);
+      }
       const current = list.querySelector('[data-pf-podcast-src="' + CSS.escape(audio.dataset.src || '') + '"]');
       (current || list).focus({ preventScroll: true });
     });
@@ -379,6 +385,115 @@
     }
   }
 
+  // Five episodes to a page (includes/podcast.html.twig), so the head that
+  // tells the one pointed at stays in view beside the list. The arrows page
+  // newer and older; the count says the page (read out politely). Focus
+  // stays on the arrow pressed, so it can be pressed again; at an end it
+  // goes to the other. The playing episode keeps the head wherever its page
+  // is. The box holds the tallest page's height, so nothing under it moves.
+  function pages(list) {
+    const pager = list.querySelector('[data-pf-podcast-pager]');
+    const box = list.querySelector('.pf-podcast__episodes');
+    const count = Math.ceil(view.rows.length / PER_PAGE);
+    if (!pager || !box || count < 2) {
+      return;
+    }
+    const buttons = Array.from(pager.querySelectorAll('[data-pf-podcast-page]'));
+    const number = pager.querySelector('[data-pf-podcast-n]');
+    const said = pager.querySelector('[data-pf-podcast-said]');
+    const pad = (n) => String(n).padStart(2, '0');
+    const on = (page) => view.rows.filter((row, i) => Math.floor(i / PER_PAGE) === page);
+    let moving = null;
+    let target = null;
+
+    // Every page laid out in turn, the box held at the tallest.
+    const hold = () => {
+      box.style.minHeight = '';
+      let tallest = 0;
+      for (let page = 0; page < count; page++) {
+        view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== page; });
+        tallest = Math.max(tallest, box.offsetHeight);
+      }
+      view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== view.page; });
+      box.style.minHeight = tallest + 'px';
+    };
+
+    const set = (page, announce) => {
+      view.page = page;
+      view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== page; });
+      number.textContent = pad(page + 1);
+      if (announce) {
+        const rows = on(page);
+        said.textContent = Drupal.t('Page @page of @count, episodes @first to @last', {
+          '@page': page + 1,
+          '@count': count,
+          '@first': rows[0].querySelector('.pf-podcast__num').textContent,
+          '@last': rows[rows.length - 1].querySelector('.pf-podcast__num').textContent,
+        });
+      }
+      buttons.forEach((button) => {
+        const step = Number(button.dataset.pfPodcastPage);
+        const end = step < 0 ? page === 0 : page === count - 1;
+        if (end && document.activeElement === button) {
+          buttons.find((other) => other !== button).focus();
+        }
+        button.disabled = end;
+      });
+      // The head let go of a row now out of sight (none playing).
+      if (view.shown && view.shown.hidden && !(state.audio && !state.audio.paused)) {
+        rest();
+      }
+    };
+
+    // Out to one side, in from the other, a row at a time (at once without
+    // motion, or when the bar asks for the playing episode's page).
+    view.turn = (page, announce, now) => {
+      page = Math.max(0, Math.min(count - 1, page));
+      if (moving) {
+        moving.cancel();
+        moving = null;
+      }
+      target = null;
+      if (page === view.page) {
+        return;
+      }
+      const toward = page > view.page ? 1 : -1;
+      if (now || reduceMotion() || !box.animate) {
+        set(page, announce);
+        return;
+      }
+      target = page;
+      const ease = 'cubic-bezier(.2, .7, .2, 1)';
+      const list = box.firstElementChild;
+      moving = list.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(' + (-toward * 12) + 'px)' }], { duration: 160, easing: 'ease-in', fill: 'forwards' });
+      moving.onfinish = () => {
+        moving.cancel();
+        moving = null;
+        target = null;
+        set(page, announce);
+        on(page).forEach((row, i) => {
+          row.animate([{ opacity: 0, transform: 'translateX(' + (toward * 16) + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: i * 40, easing: ease, fill: 'backwards' });
+        });
+      };
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => view.turn((target === null ? view.page : target) + Number(button.dataset.pfPodcastPage), true));
+    });
+    pager.hidden = false;
+    set(0, false);
+    hold();
+    // Again once the type has loaded (the rows' heights change with it).
+    if (document.fonts) {
+      document.fonts.ready.then(hold);
+    }
+    let wait = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(wait);
+      wait = requestAnimationFrame(hold);
+    }, { passive: true });
+  }
+
   Drupal.behaviors.palefirePodcast = {
     attach(context) {
       once('pf-podcast', '[data-pf-podcast-src]', context).forEach((button) => {
@@ -409,18 +524,7 @@
           row.addEventListener('mouseenter', () => show(row, true));
           row.addEventListener('focusin', () => show(row, true));
         });
-        // The episodes scroll in place under the head; the box fades at an
-        // edge with more beyond it.
-        const box = list.querySelector('.pf-podcast__scroll');
-        if (box) {
-          const edges = () => {
-            box.classList.toggle('is-scrolled', box.scrollTop > 2);
-            box.classList.toggle('is-more', box.scrollTop + box.clientHeight < box.scrollHeight - 2);
-          };
-          box.addEventListener('scroll', edges, { passive: true });
-          window.addEventListener('resize', edges, { passive: true });
-          edges();
-        }
+        pages(list);
         list.addEventListener('mouseleave', () => {
           if (!list.contains(document.activeElement)) {
             rest();

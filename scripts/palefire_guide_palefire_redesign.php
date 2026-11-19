@@ -482,7 +482,6 @@ HTML),
 <li>On the Oral History homepage, the exhibition cards open the new exhibitions and show their whole pictures, and the small map at the top is drawn as on a location page, every room named, with the Oral History room in gold stripes, a clear label and a bobbing arrow. Landing heroes have a new Spotlight box for the warm light beside the film; Oral History has it off.</li>
 <li>The oral history exhibition cards use the same pictures as the old Oral History page’s Showcase, so they’re recognizable at a glance. The exhibitions’ own title pages keep their large covers.</li>
 <li>The Oral History homepage has tabs under its intro, Listen, Record and Explore, like the old page’s three parts, and its series are shown as tape reels in their boxes, each rolling out when you point at it. Explore shows the online exhibitions across the full width as film stills, each with its title underneath.</li>
-<li>On Special Collections and Oral History, the Quick Start’s diamonds light up in gold again, one after another, every time you come back to their tab, not only the first time.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
@@ -647,11 +646,6 @@ HTML),
 <ul>
 <li>Oral History’s Quick Start: a faint hairline drawing of the formats the interviews were recorded on (a tape reel, a cassette, two clear MiniDiscs and the memory cards) now lies behind the foot of the Research panel, under options A, B and C, as the recorder lies behind the Record tab. It has no labels, since the recordings are digitized and not handed out, and it rises gently into place as it scrolls into view unless motion is reduced.</li>
 <li>Oral History’s Quick Start: the formats drawing now stands on a corner of a table instead of in a row, on a tidy grid at the table’s angle (the cassette and MiniDiscs side by side, the reel behind them, the cards in front, one even gap between all), larger, rising out of the panel’s bottom right corner and cropped by the band’s edges, so it reads as a background and not as another row of content.</li>
-</ul>
-HTML),
-  $text('Thu Nov 19: Series descriptions editable in Drupal', <<<'HTML'
-<ul>
-<li>Oral History’s series descriptions (the short line on each card and in the tape deck’s caption, and the fuller one) can now be edited by content editors in Drupal, as terms in an Oral history series vocabulary, one per series, seeded with the current text. Until a term is edited, or if it is cleared, the site keeps showing the text built into the theme. Editors can be assigned to series so they show in My Content.</li>
 </ul>
 HTML),
 ]);

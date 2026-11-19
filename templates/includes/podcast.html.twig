@@ -7,8 +7,11 @@
  * Episodes from Drupal\palefire\PodcastFeed, nightly from SoundCloud's
  * podcast feed. Shown after a guide text whose paragraph is "[podcast]".
  *
- * Every episode the pull kept, in a box that scrolls in place under the
- * head, so the head stays in view.
+ * Every episode the pull kept, five to a page (js/podcast.js), so the list
+ * keeps one height and the head that tells the episode pointed at stays in
+ * view beside it. Under the list, two joined arrows page through it, newer
+ * and older, with the page's number. Without the script every episode
+ * shows and the arrows stay hidden.
  *
  * Each row: its number (counted from the first episode, so the newest has
  * the highest; the feed's own episode numbers repeat and skip), the title (a link to the episode's SoundCloud page,
@@ -51,9 +54,10 @@
 {{ attach_library('palefire/podcast') }}
 <div class="pf-podcast" id="podcast">
   {% if latest %}
-    <div class="pf-podcast__scroll">
+    {% set episodes = [latest]|merge(more ?: []) %}
+    <div class="pf-podcast__episodes" id="pf-podcast-episodes">
     <ol class="pf-podcast__list" reversed aria-label="{{ 'Episodes, newest first'|t }}">
-      {% for episode in [latest]|merge(more ?: []) %}
+      {% for episode in episodes %}
         {% set num = '%02d'|format(loop.length - loop.index0) %}
         <li class="pf-podcast__row{{ loop.first ? ' pf-podcast__row--latest' }}" data-pf-podcast-photo="{{ episode.cover }}" data-pf-podcast-length="{{ episode.length }}" data-pf-podcast-kicker="{{ num }} · {{ episode.month ?: episode.kicker }}" data-pf-podcast-about="{{ episode.body|first ?: episode.summary }}" data-pf-podcast-credits="{{ episode.credits }}" data-pf-podcast-credit="{{ episode.photo }}">
           <span class="pf-podcast__num" aria-hidden="true">{{ num }}</span>
@@ -73,9 +77,24 @@
       {% endfor %}
     </ol>
     </div>
+    <div class="pf-podcast__foot">
+    {% if episodes|length > 5 %}
+      <div class="pf-podcast__pager" role="group" aria-label="{{ 'Episode pages'|t }}" data-pf-podcast-pager hidden>
+        <button type="button" class="pf-podcast__page" data-pf-podcast-page="-1" aria-controls="pf-podcast-episodes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M21 12H3.5M10 5.5 3.5 12l6.5 6.5"/></svg>
+          <span class="visually-hidden">{{ 'Newer episodes'|t }}</span>
+        </button>
+        <button type="button" class="pf-podcast__page" data-pf-podcast-page="1" aria-controls="pf-podcast-episodes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5"/></svg>
+          <span class="visually-hidden">{{ 'Older episodes'|t }}</span>
+        </button>
+        <p class="pf-podcast__count" aria-live="polite"><span class="visually-hidden" data-pf-podcast-said></span><span aria-hidden="true"><span data-pf-podcast-n>01</span> / {{ '%02d'|format((episodes|length / 5)|round(0, 'ceil')) }}</span></p>
+      </div>
+    {% endif %}
     <p class="pf-podcast__listen">
       <a class="pf-button pf-button--secondary pf-button--arrow" href="{{ profile }}" target="_blank" rel="noopener">{{ 'Listen on SoundCloud'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
     </p>
+    </div>
   {% else %}
     <p class="pf-podcast__all">
       <a href="{{ profile }}" target="_blank" rel="noopener">{{ 'Every episode on SoundCloud'|t }} <span aria-hidden="true">&#8599;</span><span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>
