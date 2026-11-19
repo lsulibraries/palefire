@@ -613,10 +613,8 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   min-width: 0;
   visibility: hidden;
   opacity: 0;
-  transform: translateY(.5rem);
   transition:
     opacity .35s ease,
-    transform .5s $pf-showcase-ease,
     visibility 0s .35s;
 
   > * {
@@ -626,11 +624,35 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   &.is-active {
     visibility: visible;
     opacity: 1;
-    transform: none;
     transition:
       opacity .5s ease .15s,
-      transform .7s $pf-showcase-ease .15s,
       visibility 0s;
+  }
+
+  // Stepping through (js): the old summary steps aside the way the band
+  // moves, the new one comes in from the side it travels toward
+  // (--pf-showcase-dir: 1 forward, -1 back), as the section tabs' panels
+  // do; the text column never moves up or down.
+  &.is-leaving {
+    animation: pf-showcase-leave .12s ease-in forwards;
+  }
+
+  &.is-entering {
+    animation: pf-showcase-enter .45s $pf-showcase-ease .1s both;
+  }
+}
+
+@keyframes pf-showcase-leave {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--pf-showcase-dir, 1) * -12px));
+  }
+}
+
+@keyframes pf-showcase-enter {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--pf-showcase-dir, 1) * 24px));
   }
 }
 
@@ -778,10 +800,27 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   line-height: 1.4;
 }
 
+// The description: up to five lines in one column. Wide, it takes the
+// room the label has left (adding none to its row: no height of its own,
+// three lines at least) and js sets --pf-showcase-lines to the whole lines that
+// fit, so a short label shows more.
 .pf-showcase__blurb {
+  display: -webkit-box;
   max-width: 44ch;
+  overflow: hidden;
   color: var(--pf-showcase-muted);
   line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--pf-showcase-lines, 5);
+
+  @include media-breakpoint-up(lg) {
+    flex: 1 1 0;
+    height: 0;
+    min-height: 4.8em;
+    -webkit-line-clamp: var(--pf-showcase-lines, 3);
+    // Chrome paints the lines past the clamp into the spare room: cut them.
+    clip-path: inset(0 0 calc(100% - var(--pf-showcase-lines, 3) * 1.6em) 0);
+  }
 }
 
 // Enter (or Read about it): a slab the label's full width, as tall as
@@ -1169,9 +1208,9 @@ td .pf-showcase-list__when {
     transition: opacity .2s linear;
   }
 
-  .pf-showcase__summary,
-  .pf-showcase__summary.is-active {
-    transform: none;
+  .pf-showcase__summary.is-leaving,
+  .pf-showcase__summary.is-entering {
+    animation: none;
   }
 
   .pf-showcase__meter-fill {

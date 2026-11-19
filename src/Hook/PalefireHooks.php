@@ -1180,10 +1180,12 @@ class PalefireHooks {
 
         // Excerpt: About Text, else the body's summary or text, as on the
         // landing's blog card (_palefire_blog_posts()).
-        $blurb = '';
+        $blurb = $lede = '';
         foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
           if ($blurb === '' && $post->hasField($field) && !$post->get($field)->isEmpty()) {
-            $blurb = _palefire_plain_excerpt((string) $post->get($field)->first()->{$property}, 240);
+            $source = (string) $post->get($field)->first()->{$property};
+            $blurb = _palefire_plain_excerpt($source, 240);
+            $lede = _palefire_plain_excerpt($source, 600);
           }
         }
         $year = $view['year'] ?? NULL;
@@ -1200,6 +1202,7 @@ class PalefireHooks {
           'kicker' => (string) $this->t('Physical exhibition'),
           'year' => $year ?: (int) date('Y', (int) $post->getCreatedTime()),
           'blurb' => $blurb,
+          'lede' => $lede,
           'when' => $when($where, $view),
           'post' => NULL,
           'featured' => $featured,
@@ -1242,11 +1245,13 @@ class PalefireHooks {
    * the visitor may see, so it was shown in the building too; show is that
    * post's address, place and dates (physicalShow()), else NULL.
    *
-   * blurb: the start of the intro (else the credit line), 180 characters.
+   * blurb: the start of the intro (else the credit line), 180 characters;
+   * lede: the same up to 600, for the band, which shows as many whole lines
+   * as its label has room for.
    * object: its cover's
    * object label (_palefire_cover_object_label()), or NULL.
    *
-   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, when: string, post: null, physical: bool, show: ?array, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
+   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, lede: string, when: string, post: null, physical: bool, show: ?array, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
    */
   public static function exhibitionCard(NodeInterface $node, CacheableMetadata $cache): array {
     $plain = fn (string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
@@ -1281,6 +1286,7 @@ class PalefireHooks {
       'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) t('Exhibition'),
       'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($show['year'] ?? NULL),
       'blurb' => Unicode::truncate($intro ?: $credit, 180, TRUE, TRUE),
+      'lede' => Unicode::truncate($intro ?: $credit, 600, TRUE, TRUE),
       'when' => '',
       'post' => NULL,
       'physical' => (bool) $show,

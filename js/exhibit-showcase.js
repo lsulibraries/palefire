@@ -37,6 +37,7 @@
     const rail = root.querySelector('[data-pf-showcase-scene]');
     const cards = Array.from(root.querySelectorAll('[data-pf-showcase-card]'));
     const summaries = Array.from(root.querySelectorAll('[data-pf-showcase-summary]'));
+    const blurbs = Array.from(root.querySelectorAll('[data-pf-showcase-blurb]'));
     const meter = root.querySelector('[data-pf-showcase-meter]');
     const captions = Array.from(root.querySelectorAll('[data-pf-showcase-caption]'));
     const plates = Array.from(root.querySelectorAll('[data-pf-showcase-plate]'));
@@ -101,10 +102,48 @@
       plateOn = 1 - plateOn;
     };
 
+    // Each description: as many whole lines as its box holds where the
+    // box is sized by the label (wide, it grows into the label), else the
+    // CSS's own.
+    const fit = () => {
+      blurbs.forEach((blurb) => {
+        const style = getComputedStyle(blurb);
+        if (!(parseFloat(style.flexGrow) > 0)) {
+          blurb.style.removeProperty('--pf-showcase-lines');
+          return;
+        }
+        const line = parseFloat(style.lineHeight) || 1;
+        blurb.style.setProperty('--pf-showcase-lines', String(Math.max(3, Math.floor((blurb.clientHeight + 1) / line))));
+      });
+    };
+    if (blurbs.length && 'ResizeObserver' in window) {
+      const watch = new ResizeObserver(fit);
+      blurbs.forEach((blurb) => watch.observe(blurb));
+    }
+
+    // The summary steps sideways the way the band moves (none with reduced
+    // motion, or when the same one is shown again).
+    const step = (k) => {
+      if (k === current || reduceMotion()) {
+        return;
+      }
+      const dir = (k > current ? 1 : -1) * (rtl() ? -1 : 1);
+      region.style.setProperty('--pf-showcase-dir', String(dir));
+      summaries.forEach((summary) => summary.classList.remove('is-leaving', 'is-entering'));
+      // Restart the animations where a fling passes a summary again.
+      void region.offsetWidth;
+      summaries[current].classList.add('is-leaving');
+      summaries[k].classList.add('is-entering');
+    };
+    summaries.forEach((summary) => {
+      summary.addEventListener('animationend', () => summary.classList.remove('is-leaving', 'is-entering'));
+    });
+
     // The summary and its companions: at once, as the rail moves.
     const show = (k) => {
       clearTimeout(plateTimer);
       plateTimer = setTimeout(plate, PLATE_DELAY);
+      step(k);
       current = k;
       cards.forEach((card, i) => card.classList.toggle('is-active', i === k));
       summaries.forEach((summary, i) => summary.classList.toggle('is-active', i === k));

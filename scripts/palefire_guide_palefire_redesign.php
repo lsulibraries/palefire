@@ -836,6 +836,12 @@ HTML),
 <li>The opening screen’s column can now be a table of contents, as on Oral History: the News and events row names the next event and its forecast.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Longer descriptions, and a sideways step', <<<'HTML'
+<ul>
+<li>Each exhibition’s description in the band now uses whatever room is left beside the picture, so a short title shows more of its introduction, ending in “…” on a whole line. The pictures keep their height.</li>
+<li>Moving between exhibitions, the text now slides sideways in the direction you’re going, the way the Oral History tabs do, instead of bobbing up and down.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

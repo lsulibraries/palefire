@@ -149,7 +149,9 @@
               {% endif %}
               <{{ heading }} class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</{{ heading }}>
               {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
-              {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
+              {# As many whole lines as the label has room for (js). #}
+              {% set lede = ex.lede|default(ex.blurb) %}
+              {% if lede %}<p class="pf-showcase__blurb" data-pf-showcase-blurb>{{ lede }}</p>{% endif %}
               <dl class="pf-showcase__facts">
                 <div class="pf-showcase__fact">
                   <dt>{{ 'Year'|t }}</dt>
