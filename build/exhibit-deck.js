@@ -70,7 +70,10 @@ function prism(b, z0, z1, fo, sop, extra) {
 }
 const cyl = (cx, cy, r, z0, z1, fo, sop) => silh([...Z(circB(cx, cy, r), z0), ...Z(circB(cx, cy, r), z1)], T(fo * .55), sop || .65) + G(Z(circB(cx, cy, r), z1), `${T(fo)} stroke-opacity="${sop || .65}"`);
 const ring = (cx, cy, r, z, a) => G(Z(circB(cx, cy, r), z), a);
-function txt(x, y, z, s, sz, an, op, cls) { const zf = typeof z === 'function' ? z : () => z, a = pr([x, y, zf(y)]), b = pr([x + 1, y, zf(y)]), c = pr([x, y + 1, zf(y + 1)]); return `<text${cls ? ` class="${cls}"` : ''} transform="matrix(${(b[0] - a[0]).toFixed(3)} ${(b[1] - a[1]).toFixed(3)} ${(c[0] - a[0]).toFixed(3)} ${(c[1] - a[1]).toFixed(3)} ${f2(a[0])} ${f2(a[1])})" fill-opacity="${op || .6}" font-size="${sz || 7}"${an && an !== 'middle' ? ` text-anchor="${an}"` : ''}>${s}</text>`; }
+// Text set flat on its face: the projection taken as a matrix at its
+// anchor (central differences 5 either way, to four places, the origin to
+// two), so a row of labels sits on one line in perspective.
+function txt(x, y, z, s, sz, an, op, cls) { const zf = typeof z === 'function' ? z : () => z, h = 5, a = pr([x, y, zf(y)]), xa = pr([x + h, y, zf(y)]), xb = pr([x - h, y, zf(y)]), ya = pr([x, y + h, zf(y + h)]), yb = pr([x, y - h, zf(y - h)]), m = [(xa[0] - xb[0]) / (2 * h), (xa[1] - xb[1]) / (2 * h), (ya[0] - yb[0]) / (2 * h), (ya[1] - yb[1]) / (2 * h)].map(v => v.toFixed(4)); return `<text${cls ? ` class="${cls}"` : ''} transform="matrix(${m.join(' ')} ${a[0].toFixed(2)} ${a[1].toFixed(2)})" fill-opacity="${op || .6}" font-size="${sz || 7}"${an && an !== 'middle' ? ` text-anchor="${an}"` : ''}>${s}</text>`; }
 const scr = (x, y, z = 0) => ring(x, y, 4.5, z, 'stroke-opacity=".35"') + L([x - 3, y, z], [x + 3, y, z], .3);
 // The projection at layer z, linearised about (cx, cy): a matrix() that
 // takes a part drawn about 0,0 to the screen.
@@ -125,12 +128,18 @@ s += txt(65, 692, 0, 'PHONES', 6.5) + scale(65, 722, 15, false) + cyl(65, 722, 1
 s += txt(65, 880, 0, 'MIC', 6.5);
 const brk = (x1, x2, t) => txt((x1 + x2) / 2, 681, 0, t, 7) + G([[x1 - 4, 692, 0], [x1 - 4, 686, 0], [x2 + 4, 686, 0], [x2 + 4, 692, 0]], 'stroke-opacity=".45"', 1);
 s += brk(165, 410, 'INPUT SELECT') + brk(510, 550, 'FUNCTION') + brk(635, 715, 'OUTPUT SELECT');
-const lever = (x, t, led) => {
-  const b = rectB(x - 6, 716, 12, 28);
-  return txt(x, 700, 0, t, 6) + G(Z(rectB(x - 4, 703, 8, 4), 0), `class="led-${led}" stroke-opacity=".3"`) + L([x, 707, 0], [x, 716, 0], .45)
-    + silh([...Z(b, 0), ...Z(b, 14)], 'class="tan"', .65) + G(Z(b, 14), `${T(.34)} stroke-opacity=".65"`);
+// A push switch with its lamp; on, the lamp is lit (.led-on) in a faint
+// halo (#pf-led-<color>). Set as for playing tapes into a digitizer, the
+// usual work: INPUT SELECT on LINE, OUTPUT SELECT on REPRO (off the
+// playback head), and FUNCTION's record-ready L and R off.
+const lever = (x, t, led, on) => {
+  // Latched in, an engaged switch stands 6 out of its 14, about 40%.
+  const b = rectB(x - 6, 716, 12, 28), dz = on ? 6 : 14;
+  const halo = on ? G(Z(rectB(x - 8, 700, 16, 10), 0), `class="led-halo" fill="url(#pf-led-${led})" stroke="none"`) : '';
+  return txt(x, 700, 0, t, 6) + halo + G(Z(rectB(x - 4, 703, 8, 4), 0), `class="led-${led}${on ? ' led-on' : ''}" stroke-opacity=".3"`) + L([x, 707, 0], [x, 716, 0], .45)
+    + silh([...Z(b, 0), ...Z(b, dz)], 'class="tan"', .65) + G(Z(b, dz), `${T(.34)} stroke-opacity=".65"`);
 };
-[[165, 'ATT', 'dim'], [205, 'MIC', 'dim'], [245, 'LINE', 'dim'], [330, 'ATT', 'dim'], [370, 'MIC', 'dim'], [410, 'LINE', 'dim'], [510, 'L', 'red'], [550, 'R', 'red'], [635, 'INPUT', 'red'], [675, 'SYNC', 'amb'], [715, 'REPRO', 'grn']].forEach(a => { s += lever(...a); });
+[[165, 'ATT', 'dim'], [205, 'MIC', 'dim'], [245, 'LINE', 'dim', 1], [330, 'ATT', 'dim'], [370, 'MIC', 'dim'], [410, 'LINE', 'dim', 1], [510, 'L', 'red'], [550, 'R', 'red'], [635, 'INPUT', 'red'], [675, 'SYNC', 'amb'], [715, 'REPRO', 'grn', 1]].forEach(a => { s += lever(...a); });
 s += txt(205, 760, 0, 'LEFT', 6.5) + txt(370, 760, 0, 'RIGHT', 6.5);
 // Each meter's window, kept to clip its needle (the pivot sits under the
 // window's foot, behind the cover, so a needle drawn whole showed its tail
@@ -262,7 +271,7 @@ const body = (s + m + f + d).replace(/<(polygon|polyline|line|path)\b([^>]*?)\/>
   strokes.add(n);
   return '<' + tag + (/class="/.test(at) ? at.replace(/class="/, () => 'class="s' + n + ' ') : ' class="s' + n + '"' + at) + '/>';
 });
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient>${vuWindows.map((p, i) => `<clipPath id="pf-vu-window-${i}"><polygon points="${p}"/></clipPath>`).join('')}</defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient>${['dim', 'grn'].map(c => `<radialGradient id="pf-led-${c}"><stop class="led-glow led-glow--${c}" offset="0"/><stop class="led-glow led-glow--${c}" offset="1"/></radialGradient>`).join('')}${vuWindows.map((p, i) => `<clipPath id="pf-vu-window-${i}"><polygon points="${p}"/></clipPath>`).join('')}</defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
 fs.writeFileSync(out, svg.replace(/\n+/g, '\n'));
 const sorted = [...tones].sort((a, b) => a - b);
 console.log(JSON.stringify({ bytes: svg.length, tones: sorted, strokes: [...strokes].sort((a, b) => a - b), aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));

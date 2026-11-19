@@ -4610,9 +4610,13 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
     vector-effect: non-scaling-stroke;
   }
 
+  // Unhinted: each label is drawn in its own perspective matrix, and a
+  // glyph snapped to the pixel grid in one stepped off its neighbors'
+  // baseline, so the small print looked wiggly.
   text {
     fill: currentColor;
     stroke: none;
+    text-rendering: geometricPrecision;
   }
 
   @each $tone in $pf-deck-tones {
@@ -4672,6 +4676,32 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
 
   .led-grn {
     fill: #387a4e;
+  }
+
+  // Lit lamps (build/exhibit-deck.js: LINE and REPRO, as set for playback
+  // into a digitizer), a dim glow round each.
+  .led-dim.led-on {
+    fill: #b8823e;
+  }
+
+  .led-grn.led-on {
+    fill: #4f9a68;
+  }
+
+  .led-glow {
+    stop-opacity: .3;
+
+    + .led-glow {
+      stop-opacity: 0;
+    }
+  }
+
+  .led-glow--dim {
+    stop-color: #b8823e;
+  }
+
+  .led-glow--grn {
+    stop-color: #4f9a68;
   }
 
   .needle {

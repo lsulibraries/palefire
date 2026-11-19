@@ -483,7 +483,6 @@ HTML),
 <li>The oral history exhibition cards use the same pictures as the old Oral History page’s Showcase, so they’re recognizable at a glance. The exhibitions’ own title pages keep their large covers.</li>
 <li>The Oral History homepage has tabs under its intro, Listen, Record and Explore, like the old page’s three parts, and its series are shown as tape reels in their boxes, each rolling out when you point at it. Explore shows the online exhibitions across the full width as film stills, each with its title underneath.</li>
 <li>On Special Collections and Oral History, the Quick Start’s diamonds light up in gold again, one after another, every time you come back to their tab, not only the first time.</li>
-<li>Oral History’s Ask us tab has the same speech-bubbles icon as Special Collections’.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
@@ -659,11 +658,6 @@ HTML),
   $text('Thu Nov 19: Background video saves battery and data', <<<'HTML'
 <ul>
 <li>The opening video on landing pages now also pauses while you’re on another browser tab and picks up again when you come back, and the next clip in a playlist only starts downloading once the video has been on screen. It already paused when scrolled out of view.</li>
-</ul>
-HTML),
-  $text('Thu Nov 19: Oral History hero column lists the page', <<<'HTML'
-<ul>
-<li>The column beside the title on Oral History’s homepage now works as the page’s contents: under the Find us map, numbered rows for the Quick Start, the Series, the exhibitions and What Endures (with the newest episode and its Play button), each jumping down to its section with the same number its heading carries. The map stays up while you move down the list; only the podcast row brings up a picture of its own. Find us now opens directions, since it used to link back to the page itself. A new box on the Landing hero, Contents in the column, switches any hero between this and the usual highlights; Oral History has it ticked.</li>
 </ul>
 HTML),
 ]);
