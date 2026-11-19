@@ -21,6 +21,9 @@
  *   that stays fresher than results can. A late section's mark waits up to
  *   HOLDINGS_GRACE_MS for them, so quick ones arrive with the rows; slower ones
  *   fill a placeholder of the same height. If they fail, the row has no line.
+ *   When the answer says some didn't arrive in time (X-Palefire-Holdings:
+ *   partial), the rows still empty ask again, up to HOLDINGS_RETRIES times,
+ *   before their places are removed.
  * - Source options can be put in the visitor's own order, by dragging or with
  *   an up button, and the sections follow. It's kept in this browser, and only
  *   a preference: without storage or this file, the page's own order stands.
@@ -46,6 +49,7 @@
 
   const TIMEOUT_MS = 20000;
   const HOLDINGS_TIMEOUT_MS = 10000;
+  const HOLDINGS_RETRIES = 2;
   // How long a late section's mark waits for its Catalog copies, at most.
   const HOLDINGS_GRACE_MS = 500;
   const ORDER_KEY = 'pf-index-source-order';
@@ -93,10 +97,16 @@
       const response = await fetch(url, { signal: controller.signal });
       if (response.ok) {
         template.innerHTML = await response.text();
+        // Some records didn't arrive in time: worth asking again.
+        template.dataset.partial = response.headers.get('X-Palefire-Holdings') === 'partial' ? 'true' : '';
+      }
+      else {
+        template.dataset.partial = 'true';
       }
     }
     catch (error) {
-      // Left empty.
+      // Left empty, and worth asking again while the rows are still shown.
+      template.dataset.partial = 'true';
     }
     finally {
       window.clearTimeout(timer);
@@ -130,28 +140,42 @@
     summary.hidden = false;
   };
 
+  // One row's place filled from its part of an answer. false: nothing for it.
+  const fillPlace = (place, found) => {
+    if (!found) {
+      return false;
+    }
+    place.replaceChildren(...found.childNodes);
+    place.classList.add('is-loaded');
+    // The list only knows the first box of a run. Its call number comes last.
+    const meta = place.closest('.pf-index-row')?.querySelector('.pf-index-row__meta');
+    const { pfIndexCall: call, pfIndexCallFirst: first } = found.dataset;
+    if (meta && call && first && meta.textContent.endsWith(first)) {
+      meta.textContent = meta.textContent.slice(0, -first.length) + call;
+    }
+    fillSummary(place, found.dataset.pfIndexSummary);
+    return true;
+  };
+
   // Fills each row's place from one answer, and removes the places left empty.
   // pending: an answer already asked for (load() starts it early).
   const loadHoldings = async (rows, pending = null) => {
     // Now: a list that's being added to hands these rows on while this waits.
-    const places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
+    let places = [...rows.querySelectorAll('[data-pf-index-holdings]')];
     rows.setAttribute('aria-busy', 'true');
-    const template = await (pending || fetchHoldings(rows.dataset.pfIndexHoldingsUrl, rows));
+    let template = await (pending || fetchHoldings(rows.dataset.pfIndexHoldingsUrl, rows));
+    const foundFor = (place) => template.content.querySelector(`[data-pf-index-holdings-for="${CSS.escape(place.dataset.pfIndexHoldings)}"]`);
+    for (let retry = 0; retry < HOLDINGS_RETRIES && template.dataset.partial === 'true' && rows.isConnected; retry++) {
+      // The rows found so far are filled now; the rest wait for another answer.
+      places = places.filter((place) => !fillPlace(place, foundFor(place)));
+      if (!places.length) {
+        break;
+      }
+      template = await fetchHoldings(rows.dataset.pfIndexHoldingsUrl, rows);
+    }
     rows.removeAttribute('aria-busy');
     places.forEach((place) => {
-      const found = template.content.querySelector(`[data-pf-index-holdings-for="${CSS.escape(place.dataset.pfIndexHoldings)}"]`);
-      if (found) {
-        place.replaceChildren(...found.childNodes);
-        place.classList.add('is-loaded');
-        // The list only knows the first box of a run. Its call number comes last.
-        const meta = place.closest('.pf-index-row')?.querySelector('.pf-index-row__meta');
-        const { pfIndexCall: call, pfIndexCallFirst: first } = found.dataset;
-        if (meta && call && first && meta.textContent.endsWith(first)) {
-          meta.textContent = meta.textContent.slice(0, -first.length) + call;
-        }
-        fillSummary(place, found.dataset.pfIndexSummary);
-      }
-      else {
+      if (!fillPlace(place, foundFor(place))) {
         place.remove();
       }
     });
