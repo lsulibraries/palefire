@@ -76,6 +76,7 @@
    Its ids are random: the page's form and the Ask Us drawer's copy (each
    its own response) can share the form's #id. #}
 {% set confirm_id = 'pf-ask-confirm-' ~ random(100000, 999999) %}
+{% set plane = source('libraries/fontawesome-pro/svgs/light/paper-plane.svg', ignore_missing = true) %}
 <dialog class="pf-ask-confirm" id="{{ confirm_id }}" tabindex="-1" aria-labelledby="{{ confirm_id }}-title" aria-describedby="{{ confirm_id }}-text">
   <div class="pf-ask-confirm__sheet">
     <h2 class="pf-ask-confirm__title" id="{{ confirm_id }}-title">{{ 'Before you send'|t }}</h2>
@@ -101,7 +102,12 @@
     </div>
     <div class="pf-ask-confirm__actions">
       <button type="button" class="pf-button--secondary pf-ask-confirm__cancel" data-pf-confirm="cancel">{{ 'Cancel'|t }}</button>
-      <button type="button" class="pf-button--primary pf-button--arrow pf-ask-confirm__agree" data-pf-confirm="agree">{{ 'Agree and send'|t }}</button>
+      {# The Send key's paper plane (input--submit--libanswers.html.twig), or
+         the theme's arrow without the server's Font Awesome files. #}
+      <button type="button" class="pf-button--primary{{ plane ? '' : ' pf-button--arrow' }} pf-ask-confirm__agree" data-pf-confirm="agree">
+        {{- 'Agree and send'|t -}}
+        {%- if plane %}<span class="pf-ask-confirm__plane" aria-hidden="true">{{ plane|raw }}</span>{% endif -%}
+      </button>
     </div>
   </div>
 </dialog>

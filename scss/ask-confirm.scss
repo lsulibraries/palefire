@@ -47,7 +47,8 @@
 }
 
 .pf-ask-confirm__sheet {
-  padding: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+  --pf-confirm-pad: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+  padding: var(--pf-confirm-pad);
 }
 
 .pf-ask-confirm__title {
@@ -78,14 +79,14 @@
   list-style: none;
   border-bottom: 1px solid #{$pf-hairline};
 
-  // The icon in a column of its own at the start, on the first line's
-  // middle; the words beside it.
+  // The icon in a column of its own at the start, centered on the row;
+  // the words beside it.
   li {
     display: grid;
     grid-template-columns: auto 1fr;
-    column-gap: .875rem;
-    align-items: start;
-    padding-block: .75rem;
+    column-gap: 1.125rem;
+    align-items: center;
+    padding-block: 1rem;
     border-top: 1px solid #{$pf-hairline};
   }
 
@@ -97,20 +98,20 @@
 
 // Duotone (includes/icon-fa) in the accent, as the form's status icons are:
 // both tones gold, the secondary at the file's own 40% (.fa-secondary). A
-// fixed 1.25rem box, so the robot (wider than tall) and the hashtag line
-// up. Decorative (aria-hidden).
+// fixed 2rem box, so the robot (wider than tall) and the hashtag line up.
+// Decorative (aria-hidden).
 .pf-ask-confirm__icon {
   display: flex;
   justify-content: center;
-  width: 1.25rem;
-  height: 1.5em; // the first line's height, so it sits on that line
+  width: 2rem;
+  height: 2rem;
   align-items: center;
   color: var(--pf-inquiry-accent, #{$pf-gold});
 
   svg {
     display: block;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     fill: currentColor;
   }
 }
@@ -128,25 +129,71 @@
   line-height: 1.5;
 }
 
-// Side by side, Agree last; on a phone both take the full width, Agree on
-// top, where the thumb lands first.
+// The buttons: a bar flush across the sheet's foot, as the form's Send key
+// runs across the slip's. Cancel takes the width; Agree and send is only as
+// wide as its words, so agreeing is a deliberate reach. On a phone they
+// stack, each the full width, Agree on top (wrap-reverse). 3.5rem tall, as
+// the Send key. Focus: an inset ring in the words' color (an outside one
+// would be cut by the dialog's edge), over the buttons' own wipe.
 .pf-ask-confirm__actions {
   display: flex;
   flex-wrap: wrap-reverse;
-  gap: .75rem;
-  justify-content: flex-end;
-  margin-top: .5rem;
+  margin: .5rem calc(-1 * var(--pf-confirm-pad)) calc(-1 * var(--pf-confirm-pad));
 
   > button {
-    flex: 1 1 12rem;
+    flex: 1 1 100%;
+    min-height: 3.5rem;
     margin: 0;
     cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: -6px;
+    }
   }
 }
 
+// Agree's paper plane, as on the form's Send key (_ask.scss): Light, in the
+// words' color, nudged up and out on hover and focus where motion is allowed.
+.pf-ask-confirm__plane {
+  display: block;
+  flex: none;
+
+  svg {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-ask-confirm__plane svg {
+    transition: transform .3s ease-out;
+  }
+
+  .pf-ask-confirm__agree:is(:hover, :focus-visible) .pf-ask-confirm__plane svg {
+    transform: translate(.2rem, -.2rem);
+  }
+}
+
+html.pf-a11y-motion .pf-ask-confirm__plane svg {
+  transition: none;
+  transform: none;
+}
+
 @media (min-width: 36rem) {
-  .pf-ask-confirm__actions > button {
-    flex: 0 0 auto;
+  .pf-ask-confirm__actions {
+    flex-wrap: nowrap;
+
+    > .pf-ask-confirm__cancel {
+      flex: 1 1 auto;
+    }
+
+    > .pf-ask-confirm__agree {
+      flex: 0 0 auto;
+      padding-inline: 1.75rem;
+    }
   }
 }
 
