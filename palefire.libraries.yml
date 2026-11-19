@@ -230,8 +230,12 @@ section-tabs:
 # LibAnswers in the background. Attached by
 # templates/includes/ask-special.html.twig and by the Ask Us drawer
 # (templates/includes/utility-panels.html.twig), whose copy of the form
-# arrives when the drawer opens.
+# arrives when the drawer opens. Its CSS is the "Before you send" dialog
+# (scss/ask-confirm.scss), which the form opens before it sends.
 ask-form:
+  css:
+    component:
+      css/ask-confirm.css: {}
   js:
     js/ask-form.js: {}
   dependencies:

@@ -68,6 +68,28 @@
     <span class="pf-inquiry__status-text"></span>
   </div>
 </div>
+{# Before you send: js/ask-form.js opens this (showModal()) once the fields
+   check out, and only "Agree and send" sends the form. A closed <dialog>
+   isn't drawn, so without the script the form posts as before. The buttons
+   are type="button", so neither submits the form by itself; the classes are
+   the theme's buttons (_buttons.scss), the frame scss/ask-confirm.scss.
+   Its ids are random: the page's form and the Ask Us drawer's copy (each
+   its own response) can share the form's #id. #}
+{% set confirm_id = 'pf-ask-confirm-' ~ random(100000, 999999) %}
+<dialog class="pf-ask-confirm" id="{{ confirm_id }}" tabindex="-1" aria-labelledby="{{ confirm_id }}-title" aria-describedby="{{ confirm_id }}-text">
+  <div class="pf-ask-confirm__sheet">
+    <h2 class="pf-ask-confirm__title" id="{{ confirm_id }}-title">{{ 'Before you send'|t }}</h2>
+    <div class="pf-ask-confirm__body" id="{{ confirm_id }}-text">
+      <p class="pf-ask-confirm__text">{{ 'Please ask in your own words. AI tools often invent titles, collections and records we don’t hold. @staff may <strong>follow up by phone</strong> or <strong>ask to meet in person</strong> to confirm what you need before we begin.'|t({'@staff': form['#pf_staff'] ?? 'Special Collections staff'|t}) }}</p>
+      <p class="pf-ask-confirm__warn">{{ 'Be especially wary of specific numbers: call numbers, collection numbers, box and folder numbers. AI tools make these up often. If a number came from one, check it in our catalog or tell us where you found it.'|t }}</p>
+      <p class="pf-ask-confirm__pledge">{{ 'I confirm the details in my question are accurate to the best of my knowledge.'|t }}</p>
+    </div>
+    <div class="pf-ask-confirm__actions">
+      <button type="button" class="pf-button--secondary pf-ask-confirm__cancel" data-pf-confirm="cancel">{{ 'Cancel'|t }}</button>
+      <button type="button" class="pf-button--primary pf-button--arrow pf-ask-confirm__agree" data-pf-confirm="agree">{{ 'Agree and send'|t }}</button>
+    </div>
+  </div>
+</dialog>
 {# Everything not drawn above. `without` takes names, not a list: a queue
    field added to the module (AskForm::QUEUE_FIELDS) goes here too. #}
 {{ form|without('val1', 'val2', 'val7', 'custom1', 'custom2', 'pname', 'pemail', 'pquestion', 'pdetails', 'actions') }}

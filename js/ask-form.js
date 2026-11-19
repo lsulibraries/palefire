@@ -7,7 +7,9 @@
  * to its own route. The form names its desk (data-pf-ask-to) and its AskUs
  * page (data-pf-askus); follow-up fields show as their rule allows.
  *
- * Checks the required fields and the email, then posts the form to Drupal
+ * Checks the required fields and the email, asks the visitor to agree to
+ * "Before you send" (a modal <dialog>: ask in your own words, staff may
+ * follow up to confirm), then posts the form to Drupal
  * in the background, so the visitor stays on the page. The libanswers
  * module sends it on to LibAnswers as a ticket in its queue (Special Collections or the Main Library)
  * (through the API; Honeypot keeps bots out) and, for this header
@@ -183,6 +185,60 @@
     }
   };
 
+  // Before you send (.pf-ask-confirm, in the form's template): a modal
+  // <dialog> with a statement against AI-written requests. Only "Agree and
+  // send" sends; Cancel, Escape and a click on the backdrop close it and
+  // put focus back on Send. Escape stops here, so the Ask Us drawer
+  // (Bootstrap's offcanvas, which also closes on Escape) stays open.
+  // Without showModal() (very old browsers) the form simply sends.
+  const confirmThen = (form, submitter) => {
+    const dialog = form.querySelector('.pf-ask-confirm');
+    if (!dialog || typeof dialog.showModal !== 'function') {
+      send(form, submitter);
+      return;
+    }
+    dialog.pfSubmitter = submitter;
+    dialog.returnValue = '';
+    dialog.showModal();
+    // The dialog itself, not Agree: its name and statement are read first,
+    // and the Enter that pressed Send (or a held key repeating) can't agree
+    // at once. Tab reaches Cancel, then Agree. On a short phone screen the
+    // sheet scrolls, so it opens at its top, the title showing.
+    dialog.focus({ preventScroll: true });
+    dialog.scrollTop = 0;
+  };
+
+  const wireConfirm = (form) => {
+    const dialog = form.querySelector('.pf-ask-confirm');
+    if (!dialog) {
+      return;
+    }
+    dialog.addEventListener('click', (event) => {
+      const choice = event.target.closest('[data-pf-confirm]')?.dataset.pfConfirm;
+      if (choice) {
+        dialog.close(choice);
+      }
+      // The backdrop: a click on the dialog itself, outside its sheet.
+      else if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+      }
+    });
+    dialog.addEventListener('close', () => {
+      if (dialog.returnValue === 'agree') {
+        send(form, dialog.pfSubmitter);
+      }
+      else {
+        form.querySelector('.pf-inquiry__submit')?.focus();
+      }
+      dialog.pfSubmitter = null;
+    });
+  };
+
   Drupal.behaviors.palefireAskForm = {
     attach(context) {
       once('pf-inquiry-form', '.pf-inquiry__form', context).forEach((form) => {
@@ -202,8 +258,9 @@
             showErrors(form, invalid);
             return;
           }
-          send(form, event.submitter);
+          confirmThen(form, event.submitter);
         });
+        wireConfirm(form);
         follow(form);
         form.addEventListener('input', () => unsay(form));
         // Clear a field's error once it is fixed, not on every key.

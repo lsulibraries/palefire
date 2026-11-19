@@ -1,0 +1,144 @@
+// Palefire — Ask: "Before you send" (.pf-ask-confirm in
+// templates/form/libanswers-ask-form.html.twig, opened by js/ask-form.js).
+// Its own entry point (css/ask-confirm.css, in library palefire/ask-form),
+// so only pages with the question form load it.
+//
+// A modal <dialog> in the top layer: a square sheet on the section's color
+// with a hairline frame and the slip's gold rule along its top, the title
+// in the labels' mono capitals, the statement, the pledge under a hairline,
+// then Cancel (secondary) and Agree and send (primary): the theme's own
+// buttons (.pf-button--*, _buttons.scss, in style.css). It rises a little
+// and fades in; no motion, it's simply there.
+//
+// No literal colors but the backdrop's dim: the form's tokens (_ask.scss),
+// which the dialog inherits from the form it sits in.
+
+@import "variables";
+
+.pf-ask-confirm {
+  width: min(100% - 2rem, 33rem);
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #{$pf-hairline};
+  border-top: 3px solid var(--pf-inquiry-accent, #{$pf-gold});
+  border-radius: 0;
+  color: var(--pf-inquiry-fg, var(--bs-body-color));
+  background-color: var(--pf-inquiry-bg, var(--bs-body-bg));
+  box-shadow: 0 1.5rem 4rem rgb(18 18 18 / .22);
+
+  &::backdrop {
+    background-color: rgb(18 18 18 / .55);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.pf-ask-confirm__sheet,
+.pf-ask-confirm__body {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.pf-ask-confirm__sheet {
+  padding: clamp(1.5rem, 1rem + 2.5vw, 2.5rem);
+}
+
+.pf-ask-confirm__title {
+  margin: 0;
+  color: var(--pf-inquiry-muted, var(--bs-secondary-color));
+  font-family: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+  font-size: var(--pf-mono-label, .75rem);
+  font-weight: 400;
+  letter-spacing: .12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.pf-ask-confirm__text,
+.pf-ask-confirm__warn,
+.pf-ask-confirm__pledge {
+  margin: 0;
+  font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
+  line-height: 1.55;
+}
+
+// The statement in the text color; only what staff may do stands out, in
+// the headings' color and weight.
+.pf-ask-confirm__text strong {
+  color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
+  font-weight: 700;
+}
+
+// The warning about numbers: set off by the accent rule at its start, as
+// the guides' callouts are, its words in the text color.
+.pf-ask-confirm__warn {
+  padding-inline-start: 1rem;
+  border-inline-start: 2px solid var(--pf-inquiry-accent, #{$pf-gold});
+}
+
+.pf-ask-confirm__pledge {
+  padding-top: 1.25rem;
+  border-top: 1px solid #{$pf-hairline};
+}
+
+// Side by side, Agree last; on a phone both take the full width, Agree on
+// top, where the thumb lands first.
+.pf-ask-confirm__actions {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  gap: .75rem;
+  justify-content: flex-end;
+  margin-top: .5rem;
+
+  > button {
+    flex: 1 1 12rem;
+    margin: 0;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 36rem) {
+  .pf-ask-confirm__actions > button {
+    flex: 0 0 auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-ask-confirm {
+    border-color: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pf-ask-confirm[open] {
+    animation: pf-ask-confirm-in .4s cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .pf-ask-confirm[open]::backdrop {
+    animation: pf-ask-confirm-dim .3s ease-out;
+  }
+}
+
+html.pf-a11y-motion .pf-ask-confirm[open],
+html.pf-a11y-motion .pf-ask-confirm[open]::backdrop {
+  animation: none;
+}
+
+@keyframes pf-ask-confirm-in {
+  from {
+    opacity: 0;
+    transform: translateY(.75rem);
+  }
+}
+
+@keyframes pf-ask-confirm-dim {
+  from {
+    opacity: 0;
+  }
+}
