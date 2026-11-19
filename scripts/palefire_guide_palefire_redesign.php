@@ -751,6 +751,11 @@ HTML),
 <li>Eight online exhibitions that also had a show in Hill Memorial Library now say so, and link to the news post about that show: Occult Science, AVES, Saturday Night in Tiger Stadium, Integrating LSU, A Lady in the South, Cooperative Extension, Tempests and Georgetown 272.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Reels now load for everyone', <<<'HTML'
+<ul>
+<li>The film behind Oral History’s Quick Start, and the recorder drawing in its Record tab, weren’t loading for visitors because of a wrong file address. Both load now.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

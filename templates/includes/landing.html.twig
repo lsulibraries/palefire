@@ -906,7 +906,7 @@
                  js/recorder-defer.js). #}
               {% if copy.recorder %}
                 {{ attach_library('palefire/recorder-defer') }}
-                <div class="pf-quick-guide__specimen" aria-hidden="true" data-pf-recorder-src="{{ base_path ~ directory }}/images/recorder-line.svg"></div>
+                <div class="pf-quick-guide__specimen" aria-hidden="true" data-pf-recorder-src="{{ file_url(directory) }}/images/recorder-line.svg"></div>
               {% endif %}
               {# Oral History's Ask us: the formats its interviews were
                  recorded on, a hairline still life
@@ -940,7 +940,8 @@
            guide, so the button comes after the panels in tab order. #}
         {% if oral_history and quick_tabs %}
           {{ attach_library('palefire/band-reel') }}
-          {% set reel_base = base_path ~ directory %}
+          {# file_url: root-relative (/themes/…), so it holds under /v2/. #}
+          {% set reel_base = file_url(directory) %}
           <div class="pf-quick-guide__reel" aria-hidden="true" data-pf-band-reel>
             <video muted loop playsinline preload="none" tabindex="-1" width="1280" height="720"
                    poster="{{ reel_base }}/images/oral-history-reel.webp"
