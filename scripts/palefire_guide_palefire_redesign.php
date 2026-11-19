@@ -762,6 +762,11 @@ HTML),
 <li>The picture now changes with the exhibition being described, right away, instead of a second or two later.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: How much there is to hear', <<<'HTML'
+<ul>
+<li>Each exhibition with oral history clips now says how many it has, how long they run in all, and how long one runs on average, in small tags beside its year. The lengths come from the audio files themselves, so a new or replaced clip counts without anyone typing a number.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

@@ -18,7 +18,9 @@
  *   the band, faded under the band's color, crossfading as it changes.
  * - The summary: any Featured label, the title, subtitle, a row of tags
  *   (the year; the kicker when it isn't plain "Exhibition"; "Also a
- *   physical exhibition" when it has a physical show; Unpublished), the
+ *   physical exhibition" when it has a physical show; its clips: how
+ *   many, their total and average length, from
+ *   PalefireHooks::exhibitionClips(); Unpublished), the
  *   blurb and Enter.
  * - Browsing: the square Previous / Next (the non-drag way, WCAG 2.5.7),
  *   the next title beside them, the count and dots, ← → while focus is in
@@ -112,11 +114,16 @@
             <{{ heading }} class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</{{ heading }}>
             {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
             {% set plain_kicker = ex.kicker == 'Exhibition'|t %}
-            {% if ex.year or not plain_kicker or ex.physical or ex.unpublished %}
+            {% if ex.year or not plain_kicker or ex.physical or ex.clips.count or ex.unpublished %}
               <ul class="pf-showcase__tags" role="list">
                 {% if ex.year %}<li class="pf-showcase__tag"><span class="visually-hidden">{{ 'Year'|t }}: </span>{{ ex.year }}</li>{% endif %}
                 {% if not plain_kicker %}<li class="pf-showcase__tag">{{ ex.kicker }}</li>{% endif %}
                 {% if ex.physical %}<li class="pf-showcase__tag">{{ 'Also a physical exhibition'|t }}</li>{% endif %}
+                {% if ex.clips.count %}
+                  <li class="pf-showcase__tag">{% trans %}1 clip{% plural ex.clips.count %}{{ count }} clips{% endtrans %}</li>
+                  {% if ex.clips.total %}<li class="pf-showcase__tag"><time datetime="{{ ex.clips.total.iso }}">{{ ex.clips.total.text }}</time> {{ 'total'|t }}</li>{% endif %}
+                  {% if ex.clips.average and ex.clips.count > 1 %}<li class="pf-showcase__tag"><span class="visually-hidden">{{ 'Average clip length'|t }}: </span><time datetime="{{ ex.clips.average.iso }}">{{ ex.clips.average.text }}</time><span aria-hidden="true"> {{ 'average'|t }}</span></li>{% endif %}
+                {% endif %}
                 {% if ex.unpublished %}<li class="pf-showcase__tag pf-showcase__draft">{{ 'Unpublished'|t }}</li>{% endif %}
               </ul>
             {% endif %}

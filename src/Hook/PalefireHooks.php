@@ -1277,7 +1277,161 @@ class PalefireHooks {
       'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans',
       'cover' => $cover,
       'changed' => (int) $node->getChangedTime(),
+      'clips' => self::exhibitionClips($node),
     ];
+  }
+
+  /**
+   * An exhibition's clips: how many a visitor can play, and how long.
+   *
+   * Counts the published Exhibition: Audio blocks in its galleries and their
+   * entries. Each clip's length comes from its own file (an M4A's movie
+   * header), so nobody types it in. Kept in the cache per node and last
+   * change, so a page of cards reads each file once, until an edit.
+   *
+   * @return array{count: int, total: ?array, average: ?array}
+   *   The count, and the total and average lengths (text and an ISO 8601
+   *   duration for <time>), which are NULL unless every clip's length is
+   *   known.
+   */
+  public static function exhibitionClips(NodeInterface $node): array {
+    $cid = 'palefire:exhibit_clips:' . $node->id() . ':' . $node->getChangedTime();
+    $bin = \Drupal::cache();
+    if ($hit = $bin->get($cid)) {
+      $found = $hit->data;
+    }
+    else {
+      $found = ['count' => 0, 'timed' => 0, 'seconds' => 0.0];
+      $walk = function (iterable $items) use (&$walk, &$found): void {
+        foreach ($items as $item) {
+          $block = $item->entity ?? NULL;
+          if (!$block instanceof ParagraphInterface || !$block->isPublished()) {
+            continue;
+          }
+          if ($block->bundle() === 'exhibit_audio') {
+            $file = $block->hasField('field_audio_file') ? $block->get('field_audio_file')->entity : NULL;
+            if ($file instanceof FileInterface) {
+              $found['count']++;
+              $length = self::mediaSeconds($file->getFileUri());
+              if ($length !== NULL) {
+                $found['timed']++;
+                $found['seconds'] += $length;
+              }
+            }
+          }
+          elseif ($block->hasField('field_guide_blocks')) {
+            $walk($block->get('field_guide_blocks'));
+          }
+        }
+      };
+      if ($node->hasField('field_scroll_section')) {
+        $walk($node->get('field_scroll_section'));
+      }
+      $bin->set($cid, $found, Cache::PERMANENT, ['node:' . $node->id()]);
+    }
+
+    $count = (int) $found['count'];
+    $known = $count > 0 && $found['timed'] === $count;
+    $total = (int) round($found['seconds']);
+    $average = $known ? (int) round($found['seconds'] / $count) : 0;
+    return [
+      'count' => $count,
+      'total' => $known ? self::totalLength($total) : NULL,
+      'average' => $known ? [
+        'text' => intdiv($average, 60) . ':' . str_pad((string) ($average % 60), 2, '0', STR_PAD_LEFT),
+        'iso' => 'PT' . intdiv($average, 60) . 'M' . ($average % 60) . 'S',
+      ] : NULL,
+    ];
+  }
+
+  /**
+   * A total length in hours and minutes: "1 hr 12 min", "47 min".
+   */
+  private static function totalLength(int $seconds): array {
+    $minutes = max(1, (int) round($seconds / 60));
+    $hours = intdiv($minutes, 60);
+    $rest = $minutes % 60;
+    $text = $hours
+      ? ($rest ? t('@h hr @m min', ['@h' => $hours, '@m' => $rest]) : t('@h hr', ['@h' => $hours]))
+      : t('@m min', ['@m' => $minutes]);
+    return [
+      'text' => (string) $text,
+      'iso' => 'PT' . ($hours ? $hours . 'H' : '') . $rest . 'M',
+    ];
+  }
+
+  /**
+   * A clip's length in seconds, from its MP4/M4A movie header, or NULL.
+   *
+   * Walks the file's top-level boxes to moov, then moov's to mvhd, and reads
+   * its timescale and duration: a handful of small reads, wherever moov
+   * sits. Any other format (or a broken file) gives NULL.
+   */
+  private static function mediaSeconds(string $uri): ?float {
+    $path = \Drupal::service('file_system')->realpath($uri);
+    $handle = $path && is_readable($path) ? @fopen($path, 'rb') : FALSE;
+    if (!$handle) {
+      return NULL;
+    }
+    try {
+      // The [start, end] of the first box of $type between $from and $to.
+      $box = function (int $from, int $to, string $type) use ($handle): ?array {
+        $at = $from;
+        for ($i = 0; $i < 64 && $at + 8 <= $to; $i++) {
+          fseek($handle, $at);
+          $head = (string) fread($handle, 8);
+          if (strlen($head) < 8) {
+            return NULL;
+          }
+          $size = unpack('N', $head)[1];
+          $body = $at + 8;
+          if ($size === 1) {
+            $large = (string) fread($handle, 8);
+            if (strlen($large) < 8) {
+              return NULL;
+            }
+            $size = unpack('J', $large)[1];
+            $body += 8;
+          }
+          elseif ($size === 0) {
+            $size = $to - $at;
+          }
+          if ($size < $body - $at) {
+            return NULL;
+          }
+          if (substr($head, 4, 4) === $type) {
+            return [$body, min($to, $at + $size)];
+          }
+          $at += $size;
+        }
+        return NULL;
+      };
+      $moov = $box(0, (int) filesize($path), 'moov');
+      $mvhd = $moov ? $box($moov[0], $moov[1], 'mvhd') : NULL;
+      if (!$mvhd) {
+        return NULL;
+      }
+      fseek($handle, $mvhd[0]);
+      $header = (string) fread($handle, 32);
+      if ($header !== '' && ord($header[0]) === 1) {
+        if (strlen($header) < 32) {
+          return NULL;
+        }
+        $scale = unpack('N', substr($header, 20, 4))[1];
+        $length = unpack('J', substr($header, 24, 8))[1];
+      }
+      else {
+        if (strlen($header) < 20) {
+          return NULL;
+        }
+        $scale = unpack('N', substr($header, 12, 4))[1];
+        $length = unpack('N', substr($header, 16, 4))[1];
+      }
+      return $scale > 0 ? $length / $scale : NULL;
+    }
+    finally {
+      fclose($handle);
+    }
   }
 
   /**
