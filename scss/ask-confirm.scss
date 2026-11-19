@@ -78,7 +78,13 @@
   list-style: none;
   border-bottom: 1px solid #{$pf-hairline};
 
+  // The icon in a column of its own at the start, on the first line's
+  // middle; the words beside it.
   li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: .875rem;
+    align-items: start;
     padding-block: .75rem;
     border-top: 1px solid #{$pf-hairline};
   }
@@ -86,6 +92,32 @@
   strong {
     color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
     font-weight: 700;
+  }
+}
+
+// Duotone (includes/icon-fa) in the accent, as the form's status icons are:
+// both tones gold, the secondary at the file's own 40% (.fa-secondary). A
+// fixed 1.25rem box, so the robot (wider than tall) and the hashtag line
+// up. Decorative (aria-hidden).
+.pf-ask-confirm__icon {
+  display: flex;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.5em; // the first line's height, so it sits on that line
+  align-items: center;
+  color: var(--pf-inquiry-accent, #{$pf-gold});
+
+  svg {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-ask-confirm__icon {
+    color: CanvasText;
   }
 }
 

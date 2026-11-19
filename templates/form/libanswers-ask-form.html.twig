@@ -81,11 +81,21 @@
     <h2 class="pf-ask-confirm__title" id="{{ confirm_id }}-title">{{ 'Before you send'|t }}</h2>
     <div class="pf-ask-confirm__body" id="{{ confirm_id }}-text">
       <p class="pf-ask-confirm__lead">{{ 'Please ask in your own words.'|t }}</p>
-      {# Three points, each led by its gist in bold, so a glance reads them. #}
+      {# Three points, each led by its gist in bold, so a glance reads them,
+         with a Font Awesome Pro duotone icon (includes/icon-fa: the server's
+         libraries/fontawesome-pro, never in this repo; without it, none). #}
+      {% set points = [
+        {icon: 'robot', text: '<strong>AI tools invent sources.</strong> They often name titles, collections and records we don’t hold.'|t},
+        {icon: 'hashtag', text: '<strong>Check every number.</strong> AI often makes up call, collection, box and folder numbers. Look them up in our catalog first.'|t},
+        {icon: 'phone', text: '<strong>We may call or meet with you</strong> to confirm what you need before we begin.'|t},
+      ] %}
       <ul class="pf-ask-confirm__points">
-        <li>{{ '<strong>AI tools invent sources.</strong> They often name titles, collections and records we don’t hold.'|t }}</li>
-        <li>{{ '<strong>Check every number.</strong> AI often makes up call, collection, box and folder numbers. Look them up in our catalog first.'|t }}</li>
-        <li>{{ '<strong>We may call or meet with you</strong> to confirm what you need before we begin.'|t }}</li>
+        {% for point in points %}
+          <li>
+            {%- include '@palefire/includes/icon-fa.html.twig' with { name: point.icon, class: 'pf-ask-confirm__icon' } only -%}
+            <span>{{ point.text }}</span>
+          </li>
+        {% endfor %}
       </ul>
       <p class="pf-ask-confirm__pledge">{{ 'I confirm my question is accurate to the best of my knowledge.'|t }}</p>
     </div>
