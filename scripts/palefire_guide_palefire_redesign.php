@@ -704,7 +704,8 @@ HTML),
 <li>Oral History and Special Collections on a phone: the dark band at the top is gone. The shading under the menu and breadcrumb now matches the wider screens, and the Pause button sits at the end of the breadcrumb line instead of on a row of its own.</li>
 <li>More space above and below the page’s title.</li>
 <li>The film now stays in place behind the list of highlights (or the page’s sections) as you scroll, and the page closes over it after the last one.</li>
-<li>Oral History’s Find us map is shown full width instead of as a small thumbnail.</li>
+<li>Oral History’s Find us map is shown full width instead of as a small thumbnail, drawn straight on the film with its floors frosted, as on the room pages.</li>
+<li>The latest episode’s play button is now a small, quiet icon in the corner of its picture.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Exhibition Migration Review as tables', <<<'HTML'

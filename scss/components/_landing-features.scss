@@ -4518,14 +4518,22 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
       padding-inline-start: 2.25rem;
     }
 
+    // No plate of its own: the drawing on the veiled film, its floors
+    // frosted over it as a location page's are over its photo
+    // (.pf-hero-banner__frost, js/hero-highlights.js), at all times.
     .pf-hero-banner__media {
       grid-area: 2 / 1;
       width: 100%;
       aspect-ratio: 16 / 9;
+      background: none;
     }
 
     .pf-hero-banner__map {
       padding: 6% 16%;
+    }
+
+    .pf-hero-banner__frost {
+      opacity: 1;
     }
   }
 }
@@ -4699,10 +4707,30 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
         letter-spacing: .08em;
       }
 
-      // An episode's Play, centered on its thumbnail.
+      // An episode's Play, small in its thumbnail's corner, in one color
+      // as the podcast's rows have it: the text color on a disc of the
+      // page's at 72% (so it reads on any picture), a 60% ring (a UI
+      // edge, 3:1); in hand or playing, the colors swap. 2rem, over
+      // WCAG 2.5.8's 24px.
       .pf-hero-banner__play {
-        inset: 50% .875rem auto auto;
-        translate: 0 -50%;
+        inset: auto .375rem 1.25rem auto;
+        translate: none;
+        width: 2rem;
+        height: 2rem;
+        color: var(--bs-emphasis-color);
+        background: color-mix(in srgb, var(--pf-wash-bg) 72%, transparent);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, currentcolor 60%, transparent);
+
+        svg {
+          width: .75rem;
+          height: .75rem;
+        }
+
+        &:is(:hover, :focus-visible),
+        &.is-playing {
+          color: var(--pf-wash-bg);
+          background: var(--bs-emphasis-color);
+        }
       }
     }
 
