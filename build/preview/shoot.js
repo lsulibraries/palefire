@@ -4,29 +4,16 @@
 // measurements (scrollWidth vs clientWidth for sideways scroll, boxes,
 // backdrop filter) and writes rec-<width>.png to outdir.
 // node build/preview/shoot.js <absolute outdir> [widths, default 1440,1024,768,320]
-const { spawn } = require('child_process'), fs = require('fs'), path = require('path');
+// Edge is started through edge.js, which closes it however this script ends.
+const fs = require('fs'), path = require('path');
+const { launch } = require('./edge');
 const out = process.argv[2];
 const widths = (process.argv[3] || '1440,1024,768,320').split(',').map(Number);
-const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
-const ud = path.resolve(out, 'ud-shoot-' + Date.now());
-const port = 9333;
-const proc = spawn(edge, ['--headless=new', '--disable-gpu', '--remote-debugging-port=' + port, '--user-data-dir=' + ud, '--disable-renderer-backgrounding', '--disable-background-timer-throttling', '--disable-backgrounding-occluded-windows', '--hide-scrollbars', '--no-first-run', '--no-default-browser-check', 'about:blank'], { stdio: 'ignore' });
-proc.on('error', (e) => console.error('spawn', e));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+let edge;
 (async () => {
-  let ws;
-  for (let i = 0; i < 80; i++) {
-    try {
-      const list = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
-      const pg = list.find((t) => t.type === 'page');
-      if (pg) { ws = new WebSocket(pg.webSocketDebuggerUrl); break; }
-    } catch (e) { if (i === 79) console.error(String(e)); }
-    await sleep(400);
-  }
-  await new Promise((r) => ws.addEventListener('open', r));
-  let id = 0; const wait = {};
-  ws.addEventListener('message', (m) => { const d = JSON.parse(m.data); if (d.id && wait[d.id]) { wait[d.id](d); delete wait[d.id]; } });
-  const send = (method, params = {}) => new Promise((r) => { const i = ++id; wait[i] = r; ws.send(JSON.stringify({ id: i, method, params })); });
+  edge = await launch({ port: 9333, maxMs: 10 * 60 * 1000, args: ['--disable-renderer-backgrounding', '--disable-background-timer-throttling', '--disable-backgrounding-occluded-windows', '--hide-scrollbars'] });
+  const { ws, send } = await edge.page();
   const ev = async (expr) => (await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true })).result?.result?.value;
   await send('Page.enable'); await send('Page.bringToFront');
   for (const w of widths) {
@@ -39,5 +26,5 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const shot = await send('Page.captureScreenshot', { format: 'png' });
     fs.writeFileSync(path.join(out, `rec-${w}.png`), Buffer.from(shot.result.data, 'base64'));
   }
-  ws.close(); proc.kill();
-})().catch((e) => { console.error(e); proc.kill(); process.exit(1); });
+  ws.close(); edge.close();
+})().catch((e) => { console.error(e); process.exit(1); });
