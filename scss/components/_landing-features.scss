@@ -6498,6 +6498,21 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   }
 }
 
+// The easter egg (js/series-deck.js): PLAY, PAUSE and STOP answer the
+// pointer, going in as pressed (--pf-key-press, from the drawing); PAUSE
+// lights while it holds.
+.pf-series__deck .pf-deck__svg .key {
+  cursor: pointer;
+
+  &.is-down {
+    translate: var(--pf-key-press);
+  }
+}
+
+.pf-series__deck.is-paused .pf-deck__svg .key-pause {
+  fill: var(--pf-deck-lit);
+}
+
 .pf-series__deck.is-held .pf-deck__svg {
   .vu-lamp {
     opacity: 1;
@@ -6651,6 +6666,10 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
     .pf-series__deck .pf-deck__svg .vu-lamp {
       transition: opacity .6s ease;
+    }
+
+    .pf-series__deck .pf-deck__svg .key {
+      transition: translate .12s ease-out;
     }
 
     .pf-series__deck.is-playing .pf-deck__svg .pinch {

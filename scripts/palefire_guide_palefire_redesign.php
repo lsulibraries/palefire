@@ -623,6 +623,7 @@ HTML),
 <li>The tape deck’s level meters: the needles no longer poke out below their windows, and the round caps they pivot from are quieter.</li>
 <li>What Endures: the highlight on a pointed-at episode now starts a little before its number, and the episode photos behind the section show their own color, faded under the page color like the location pages’ photos.</li>
 <li>The tape deck now threads the tape properly: it passes over the capstan, and the rubber pinch roller closes on it when a series plays. The series name under the deck is always gold.</li>
+<li>Oral History’s series: a small surprise on the tape deck. Its PLAY, PAUSE and STOP keys can be clicked, and PLAY keeps the reels turning after you move away.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

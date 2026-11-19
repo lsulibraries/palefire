@@ -12,7 +12,9 @@
  * 0,0 in a matrix() that linearises the projection at that layer), .needle
  * (the same, about its pivot; .vu-lamp over the meter's face is its light,
  * a hidden bulb at the window's bottom center, the #pf-vu-lamp gradient,
- * drawn out (opacity 0) until the theme turns it on), .pinch, .key-play, .key-pause, and the
+ * drawn out (opacity 0) until the theme turns it on), .pinch, .key-play, .key-pause
+ * (STOP, PLAY and PAUSE are each a g.key, .key--stop/play/pause, with
+ * --pf-key-press the way the key goes in when pressed), and the
  * .count, .kind and .year text. The tape stays where it is a third of the
  * way through the clip; its parts carry data-tape (pack0/1 and edge0/1, the
  * packs and their inner line; aIn, aOut, b, cOut, cIn, the ribbon from
@@ -96,6 +98,9 @@ s += txt(70, 596, 0, 'POWER', 6.5) + prism(rectB(55, 604, 30, 30), 0, 8, .14) + 
 [['REEL', 122], ['SPEED', 160], ['EDIT', 200]].forEach(([t, x]) => { s += txt(x, 596, 0, t, 6.5) + prism(rectB(x - 5, 606, 10, 24), 0, 10, .2); });
 s += txt(275, 596, 0, 'PITCH CONT', 6.5) + cyl(262, 621, 13, 0, 16, .16, .65) + txt(290, 616, 0, 'PULL ON', 5, 'start', .45);
 s += txt(358, 596, 0, '▲CUE', 6.5) + prism(rectB(352, 610, 10, 22), 0, 10, .18) + G(Z(rectB(384, 600, 26, 26), 0), 'class="hole" stroke-opacity=".45"');
+// A transport key in its own group, with the projected way in (5 deep) for
+// the theme to press it.
+const keyG = (name, cx, inner) => { const a = pr([cx, 620, 8]), b = pr([cx, 620, 3]); return `<g class="key key--${name}" style="--pf-key-press: ${(b[0] - a[0]).toFixed(2)}px ${(b[1] - a[1]).toFixed(2)}px">${inner}</g>`; };
 const tri = (pts, cx, cy) => G(pts.map(([x, y]) => [cx + x, cy + y, 0]), `${T(.6)} stroke-opacity=".5"`);
 for (let i = 0; i < 4; i++) {
   const x = 450 + i * 52, cx = x + 25;
@@ -103,9 +108,10 @@ for (let i = 0; i < 4; i++) {
   if (i === 1) s += tri([[0, -3], [6, 0], [0, 3]], cx - 5, 595) + tri([[0, -3], [6, 0], [0, 3]], cx + 1, 595);
   if (i === 2) s += txt(cx, 598, 0, 'STOP', 6.5);
   if (i === 3) s += tri([[-3, -3], [4, 0], [-3, 3]], cx, 595);
-  s += i === 3 ? prism(rectB(x, 605, 50, 30), 0, 8, .13, .65).replace(/(<polygon[^>]*)class="t13"/g, '$1class="key-play"') : prism(rectB(x, 605, 50, 30), 0, 8, .13, .65);
+  const k = i === 3 ? prism(rectB(x, 605, 50, 30), 0, 8, .13, .65).replace(/(<polygon[^>]*)class="t13"/g, '$1class="key-play"') : prism(rectB(x, 605, 50, 30), 0, 8, .13, .65);
+  s += i === 2 ? keyG('stop', cx, k) : i === 3 ? keyG('play', cx, k) : k;
 }
-s += txt(696, 596, 0, 'PAUSE', 6.5) + prism(rectB(672, 605, 48, 30), 0, 8, .08, .65).replace(/class="t8"/, 'class="key-pause"') + txt(750, 596, 0, 'RECORD', 6.5) + prism(rectB(726, 605, 48, 30), 0, 8, .08) + ring(750, 620, 3, 8, 'stroke-opacity=".5"');
+s += txt(696, 596, 0, 'PAUSE', 6.5) + keyG('pause', 696, prism(rectB(672, 605, 48, 30), 0, 8, .08, .65).replace(/class="t8"/, 'class="key-pause"')) + txt(750, 596, 0, 'RECORD', 6.5) + prism(rectB(726, 605, 48, 30), 0, 8, .08) + ring(750, 620, 3, 8, 'stroke-opacity=".5"');
 OY = 0;
 function scale(cx, cy, r, lab) { let h = ''; for (let i = 0; i <= 10; i++) { const a = (-225 + i * 27) * RAD; h += L([cx + r * Math.cos(a), cy + r * Math.sin(a), 0], [cx + (r + 5) * Math.cos(a), cy + (r + 5) * Math.sin(a), 0], .5); if (lab && i % 2 === 0) h += txt(cx + (r + 13) * Math.cos(a), cy + (r + 13) * Math.sin(a) + 3, 0, i, 7, 'middle', .5); } return h; }
 function bigKnob(cx, cy) {

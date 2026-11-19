@@ -21,7 +21,13 @@
  * them, slowing to a stop after. The meters light and their needles rise
  * to playing level and wander slowly about it, each channel its own way,
  * then sink back to rest.
- * At rest it shows the largest series. Reduced motion (or the Settings
+ * At rest it shows the largest series.
+ *
+ * An easter egg, for the pointer only (the deck stays hidden from assistive
+ * tech and out of the tab order; nothing here is needed): its PLAY, PAUSE
+ * and STOP keys work. PLAY keeps it playing after the pointer leaves, PAUSE
+ * holds the reels and needles where they are (again to go on), STOP lets it
+ * run down there and then; pointing at a series takes over again. Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, the meters
  * light with their needles at playing level (CSS), nothing runs.
  *
@@ -232,6 +238,9 @@
     const speed = [0, 0];
     let winding = null;
     let held = false;
+    // The keys: PLAY latches it on, PAUSE holds it still.
+    let latched = false;
+    let paused = false;
     let pointerIn = false;
     let motor = 0;
     let last = 0;
@@ -239,12 +248,13 @@
     const playing = () => {
       deck.classList.toggle('is-held', held);
       deck.classList.toggle('is-playing', held && !winding);
+      deck.classList.toggle('is-paused', held && paused);
     };
 
     const turn = (time) => {
       const dt = last ? Math.min(0.05, (time - last) / 1000) : 0;
       last = time;
-      let gear = held ? 1 : 0;
+      let gear = held && !paused ? 1 : 0;
       if (winding) {
         const p = Math.min(1, (time - winding.begin) / winding.length);
         share = winding.from + (winding.to - winding.from) * (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
@@ -268,6 +278,9 @@
       const kn = 1 - Math.exp(-dt / NEEDLE_EASE);
       const s = time / 1000;
       needles.forEach((el, i) => {
+        if (paused) {
+          return;
+        }
         const to = held ? NEEDLE_PLAY + 3.5 * Math.sin(s * 2.1 + i * 2.4) + 2 * Math.sin(s * 4.2 + i * 1.1) : NEEDLE_REST;
         needle[i] += (to - needle[i]) * kn;
         el.style.rotate = needle[i].toFixed(2) + 'deg';
@@ -298,11 +311,15 @@
     };
 
     const hold = (on) => {
+      if (!on) {
+        latched = false;
+        paused = false;
+      }
       if (held !== on) {
         held = on;
-        playing();
-        run();
       }
+      playing();
+      run();
     };
 
     const tape = (quiet) => {
@@ -438,9 +455,39 @@
       const link = event.target.closest('.pf-series__link');
       if (link && section.classList.contains('has-deck')) {
         put(link, false);
+        // A series pointed at plays, after STOP or PAUSE too.
+        if (!held || paused) {
+          paused = false;
+          hold(true);
+        }
       }
     };
     section.addEventListener('mouseover', hand);
+    // The keys (pointer only): each goes in as it is pressed.
+    machine.addEventListener('click', (event) => {
+      const key = event.target.closest('.key');
+      if (!key || !current) {
+        return;
+      }
+      key.classList.add('is-down');
+      window.setTimeout(() => key.classList.remove('is-down'), 160);
+      if (key.classList.contains('key--play')) {
+        paused = false;
+        hold(true);
+        latched = true;
+      }
+      else if (key.classList.contains('key--pause')) {
+        if (held) {
+          paused = !paused;
+          latched = true;
+          playing();
+          run();
+        }
+      }
+      else {
+        hold(false);
+      }
+    });
     section.addEventListener('focusin', hand);
     // Plays while the pointer is on the series or the focus in them.
     section.addEventListener('pointerenter', () => {
@@ -448,12 +495,12 @@
     });
     section.addEventListener('pointerleave', () => {
       pointerIn = false;
-      if (!section.contains(document.activeElement)) {
+      if (!latched && !section.contains(document.activeElement)) {
         hold(false);
       }
     });
     section.addEventListener('focusout', (event) => {
-      if (!section.contains(event.relatedTarget) && !pointerIn) {
+      if (!latched && !section.contains(event.relatedTarget) && !pointerIn) {
         hold(false);
       }
     });
