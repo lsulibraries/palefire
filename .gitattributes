@@ -15,5 +15,6 @@
 *.ttf binary
 *.otf binary
 *.mp4 binary
+*.webm binary
 *.pdf binary
 *.zip binary

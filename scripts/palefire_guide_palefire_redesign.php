@@ -731,6 +731,12 @@ HTML),
 <li>On the Exhibition Migration Review, the After column now shows the full new wording instead of “…” shorthand, which had made small spelling fixes look like cut words. Text that was taken out says “Removed”.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Reels turning behind the Quick Start', <<<'HTML'
+<ul>
+<li>Oral History’s Quick Start now has a film of a reel-to-reel deck turning behind it, across the full width, kept dark so all the text reads as clearly as before. It only loads and plays while the guide is on screen, a Pause button sits at its bottom right, and it starts paused for anyone who has asked for less motion.</li>
+<li>The drawing of recording formats moved from the Research tab to the Ask us tab.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
