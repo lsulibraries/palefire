@@ -1,0 +1,58 @@
+{
+  "_about": "Transcript edits that changed the words a speaker says, put back as the old transcripts had them (2026-11-19). Each pair is [current text, restored text]; spelling and punctuation fixes stay. Used by palefire_exhibit_transcript_restores.php; the exhibitions' data files already carry them.",
+  "cooperative-extension": [
+    ["the sea turtle population was crashing", "the sea turtles population was crashing"],
+    ["But when I got there, it was just scary", "But when I go there, it was just scary"],
+    ["they were artisanal fishermen", "they were artisanal fisherman"]
+  ],
+  "georgetown-272": [
+    ["It’s almost as if there had been", "It’s as almost as if there had been"],
+    ["on the whole, and as individuals as well", "on the whole, and individuals as well"],
+    ["sit in at the Woolworth store", "sit in at Woolworth store"],
+    ["who’s my grandfather’s name", "who’s my grandfather name"],
+    ["they were looking house to house", "they were looking in house to house"],
+    ["need to take ownership. It needs", "need to take ownership of. It needs"],
+    ["any conversations with anybody about my Americanness", "any conversations about anybody about my Americanness"],
+    ["We still had to use the back door", "We still had to still use the back door"],
+    ["finding that you’re a direct descendant has impacted your feelings toward America’s", "finding that your direct descendant has impacted your feelings towards America’s"],
+    ["just . . . you know, more family", "just . . . ya know, more family"],
+    ["had to be, not just to make it", "had to be to not just to make it"],
+    ["I used to tell my white friends, “I’m more American than you! Your family came in the 1800s and I was already here.”", "I used have my white friends—I’m more American than you! Your family came in the 1800s and I was already here."],
+    ["You just have to kind of shake it off", "You just have to kinda shake it off"],
+    ["rename one of their buildings for Isaac Hawkins", "rename one of their buildings Isaac Hawkins"],
+    ["one of the things I asked for when the president came", "one of the things I asked when the president came"],
+    ["It’s my understanding that part of what’s going to happen", "It’s my understanding that there’s a part of what’s going to happen"],
+    ["Protestant churches of all denominations", "Protestant churches of all denomination"],
+    ["the school, the Society of Jesus, and the Pope", "the school, Society of Jesus, and the Pope"],
+    ["one of the reasons we study history", "one of the reason we study history"],
+    ["Do I subscribe to and support that?", "Do I subscribe and support that?"],
+    ["large concentrations of descendants", "large compilations of descendants"],
+    ["hold on into the time of Jim Crow", "hold on into the time Jim Crow"]
+  ],
+  "graphic-design": [
+    ["this huge fundraising gathering, people that were going to take part", "this huge gathering of fundraising. People that were going to take part"],
+    ["I can remember on a couple of occasions", "I could remember on a couple of occasions"],
+    ["I had to open the deceased’s eyes", "I had to open the deceased eyes"],
+    ["you couldn’t do that these days", "you couldn’t do that in these days"],
+    ["Regional manager says", "Regional managers says"],
+    ["society editor of the [Times-]Picayune", "society editor of [Times-]Picayune"],
+    ["Okay, that’s a big one.", "Okay, that a big one."],
+    ["they had no agency", "they had no agents"]
+  ],
+  "integrating-lsu": [
+    ["about two weeks after we had been in school", "about two weeks we after we had been in school"]
+  ],
+  "jazzfest": [
+    ["People come and look at you and talk to you", "People come and look at to you and talk to you"]
+  ],
+  "tiger-stadium": [
+    ["were descriptions of", "were description of"],
+    ["all of a sudden it turns", "all of sudden it turns"],
+    ["when they went to the [1944] Orange Bowl", "when they went the [1944] Orange Bowl"]
+  ],
+  "tempests": [
+    ["Florida has hurricanes", "Florida has a hurricanes"],
+    ["something bad in 1927", "something bad in in 1927"],
+    ["So the answer to that is, elevate your camp", "So the answer to that is, elevate you camp"]
+  ]
+}

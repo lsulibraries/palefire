@@ -28,7 +28,7 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
 - **Big Games / 1944 Orange Bowl (biggamecharlesbarney.html)**
   - “…And we beat ‘em good. [laug…” → “…And we beat ’em good. [laug…”
 - **Big Games / LSU v. Tulane, 1949 (biggamegaynelltinsley.html)**
-  - “As it say, it’s just” → “As I say, it’s just”
+  - “As it say, it’s just” → “As I say, it’s just” (check against the recording)
 - **Big Games / LSU v. Miami, 1958 (biggamebudjohnson.html)**
   - “41 - 0.” → “41–0.”
 - **Big Games / The 1958 Championship (biggamecarlmaddox.html)**
@@ -45,13 +45,12 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
 - **Players & Teams / Free football tickets for students (ptalfredglassell.html)**
   - “…might hurt ‘em. And so, he…” → “…might hurt ’em. And so, he…”
 - **Players & Teams / Playing Georgia twice (ptthomasruffin.html)**
-  - “I forgot was it was” → “I forgot what it was”
+  - “I forgot was it was” → “I forgot what it was” (check against the recording)
   - “cancelled” → “canceled”
   - “sort of duel thing” → “sort of dual thing”
 - **Players & Teams / Why he came to LSU (ptmerleschexnaildre1.html)**
   - “four year letterman” → “four-year letterman”
 - **Players & Teams / The origin of the Chinese Bandits (ptmerleschexnaildre2.html)**
-  - “were description of” → “were descriptions of”
   - “played like Chinese Bandits”.” → “played like Chinese Bandits.””
   - “1893 - 1993*],” → “1893–1993*],”
 - **Players & Teams / Players who were fun to watch (ptjohnferguson.html)**
@@ -59,7 +58,6 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
   - “[1993] - made” → “[1993]—made”
 - **Players & Teams / His junior season and the offensive line (ptcharlesalexander.html)**
   - “two quarterback system” → “two-quarterback system”
-  - “all of sudden it turns” → “all of a sudden it turns”
 - **Players & Teams / Ready for an integrated team (ptkerrypourciau.html)**
   - “twenty-years ago” → “twenty years ago”
 - **Coaching & Practice / Huey Long and Coach Biff Jones butt heads (cpjackgremillion.html)**
@@ -79,7 +77,7 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
   - “Five-thousand students” → “Five thousand students”
   - “…probably in ‘34. I think [C…” → “…probably in ’34. I think [C…”
   - “Tulane Students” → “Tulane students”
-  - “tiger when in there” → “tiger went in there”
+  - “tiger when in there” → “tiger went in there” (check against the recording)
 - **Facilities / How weight training changed LSU football (fabudjohnson.html)**
   - “Bob Petit” → “Bob Pettit”
   - “195 pound back to the basket center” → “195-pound back-to-the-basket center”
@@ -87,12 +85,10 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
   - “business -- I” → “business—I”
 - **Culture / Celebrating a win in Baton Rouge (cujessecoates02.html)**
   - “…out 1925 or ‘26 or somethin…” → “…out 1925 or ’26 or somethin…”
-- **Culture / Traveling to games by rail and car (cubillyheroman.html)**
-  - “when they went the [1944] Orange Bowl [played in Miami, FL, against Texas A&M.” → “when they went to the [1944] Orange Bowl [played in Miami, Florida, against Texas A&M].”
 - **Culture / Huey Long tries to make Mickal a state senator (cuabemickal.html)**
   - “benefitting” → “benefiting”
   - “over an hour; telling” → “over an hour, telling”
-  - “never on out schedule” → “never on our schedule”
+  - “never on out schedule” → “never on our schedule” (check against the recording)
   - “hit the campus; he’d” → “hit the campus, he’d”
 - **Culture / ROTC in pajamas at Homecoming (cujackgremillion.html)**
   - “days - it's” → “days—it’s”
@@ -127,7 +123,7 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
 - **The Narrators / Tom Hodson (biotomhodson.html)**
   - “Tiger’s success” → “Tigers’ success”
 - **The Narrators / Bud Johnson (biobudjohnson.html)**
-  - “Prior that that” → “Prior to that”
+  - “Prior that that” → “Prior to that” (check against the recording)
   - “Athletics ,” → “Athletics,”
 - **The Narrators / Tyler LaFauci (biotylerlafauci.html)**
   - “Lafauci” → “LaFauci”
@@ -159,6 +155,14 @@ Locations are *gallery / entry title (old page)*. The Narrators are the old Biog
 - “please visit /special/williams/” → a link named “T. Harry Williams Center for Oral History”.
 - The Louisiana Digital Library address http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP → a link to https://louisianadigitallibrary.org/ (the old CONTENTdm address is retired).
 - “ACKNOWLEDGEMENTS” → “Acknowledgments”; “Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens” → “…Student Assistant; and Rebecca Stephens” (the list uses semicolons).
+
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- Players & Teams / The origin of the Chinese Bandits: “were description of”, as the speaker said it. The first build had changed it (descriptions).
+- Players & Teams / His junior season and the offensive line: “all of sudden it turns”, as the speaker said it. The first build had changed it (all of a sudden).
+- Culture / Traveling to games by rail and car: “when they went the [1944] Orange Bowl”, as the speaker said it. The first build had changed it (went to the).
 
 ## 2. To verify
 

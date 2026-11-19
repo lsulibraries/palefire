@@ -20,7 +20,6 @@ How the old station maps to the new page:
 | Integrating LSU / Tureaud Jr. Sues LSU | A. P. Tureaud, Junior successfully sues | A. P. Tureaud, Jr., successfully sues |
 | Integrating LSU / Tureaud Jr. Sues LSU (transcript) | We were playing racquet ball | We were playing racquetball |
 | Integrating LSU / Wilson Sues LSU Law | Here, Tureaud, Jr. recalls his father’s relationships | Here, A. P. Tureaud, Jr., recalls his father’s relationships |
-| Integrating LSU / Undergraduates Sue to Integrate LSU (transcript) | about two weeks we after we had been in school | about two weeks after we had been in school |
 | Integrating LSU / Undergraduates Sue to Integrate LSU (transcript) | who’s only choice might be LSU | whose only choice might be LSU |
 | Integrating LSU / Kerry Pourciau Elected SGA President (transcript) | well over twenty-years ago | well over twenty years ago |
 | Integrating LSU / Kerry Pourciau Elected SGA President | In 1972, Kerry Louis Pourciau was the first… | Kerry Louis Pourciau was the first… *(the year is now the entry’s date)* |
@@ -36,7 +35,7 @@ How the old station maps to the new page:
 | East Baton Rouge / Kress Sit-In | nine more students sat-in at various locations | nine more students sat in at various locations |
 | East Baton Rouge / CORE Sit-Ins | In Decemeber, members | In December, members |
 | East Baton Rouge / Cox v. Louisiana | National CORE represntative | National CORE representative |
-| East Baton Rouge / Backlashes Against Activists (transcript) | There was a hole it the picture glass window | There was a hole in the picture glass window |
+| East Baton Rouge / Backlashes Against Activists (transcript) | There was a hole it the picture glass window | There was a hole in the picture glass window (check against the recording) |
 | East Baton Rouge / Backlashes Against Activists (transcript) | Every time he was involved in , like when | Every time he was involved in, like when |
 | East Baton Rouge / Police Shoot Youth | Their deaths lead to marches | Their deaths led to marches |
 | The Nation / Vietnam War | the first fully-integrated deployment | the first fully integrated deployment |
@@ -115,6 +114,12 @@ Every event now has its own date, shown under its heading and used for the Timel
 | Two names in one credit (e.g. "Reverend T.J. Jemison and Olivia Huey") | One credit per clip, each naming its own speaker |
 | Pearl Payne / Freya Anderson Rivers / Johnnie Jones (King clip) / A. P. Tureaud, Jr. (two clips) | The interviewer added where the transcript names one: "interviewed by Jennifer Abraham", "by Maxine Crump", "by Beth Smith", "by Rachel Emanuel-Wallace" |
 | "Esso photo courtesy of Ernest Richie" (in the clip credit) | Moved to the Esso photo’s caption |
+
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- Integrating LSU / Undergraduates Sue to Integrate LSU: “about two weeks we after we had been in school”, as the speaker said it. The first build had changed it (two weeks after we).
 
 ## 2. To verify
 

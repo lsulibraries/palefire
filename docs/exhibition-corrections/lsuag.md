@@ -36,12 +36,9 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 | C5 Eubanks | Made mostly ladies clothes. | Made mostly ladies’ clothes. |
 | C7 Cochran | heated air applied to the sugar cane | heated air applied to the sugarcane |
 | C7 Cochran | some of the farmer . . .the extension people | some of the farmer . . . the extension people |
-| C9 Coreil | the sea turtles population was crashing | the sea turtle population was crashing |
-| C9 Coreil | turtle exclusive devices | turtle excluder devices (TEDs, the devices the rule required) |
-| C9 Coreil | But when I go there, it was just scary | But when I got there, it was just scary (transcription slip; check against the audio) |
-| C9 Coreil | these VHS radios | these VHF radios (marine radio) |
+| C9 Coreil | turtle exclusive devices | turtle excluder devices (TEDs, the devices the rule required; check against the recording) |
+| C9 Coreil | these VHS radios | these VHF radios (marine radio; check against the recording) |
 | C9 Coreil | Governor [Buddy]Roemer, and he asked Roemier "Pull them back. | Governor [Buddy] Roemer, and he asked Roemer, “Pull them back. |
-| C10 Roberts | they were artisanal fisherman | they were artisanal fishermen |
 | C12 Loupe | my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane | … in sugarcane … in sugarcane |
 
 ### Narrators (biographies, from badon/howell/richardson/loupe/eubanks/cochran/coreil/roberts.html)
@@ -102,6 +99,14 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 - The C6 photo (young men with dairy cattle, c6.png at 1900 px) was replaced by its higher-resolution scan in the same folder (Incentive_Loupe.tif, 5272 px). The scan's crop shows a little more at the top.
 - The C2 clip photo and the "Home Demonstration Class" picture are the same file in both places; it's imported once and used twice.
 
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- C9 Coreil: “the sea turtles population was crashing”, as the speaker said it. The first build had changed it (the sea turtle population).
+- C9 Coreil: “But when I go there, it was just scary”, as the speaker said it. The first build had changed it (when I got there).
+- C10 Roberts: “they were artisanal fisherman”, as the speaker said it. The first build had changed it (artisanal fishermen).
+
 ## 2. To verify
 
 **Identity and credits of photos**
@@ -117,7 +122,6 @@ Throughout, apostrophes and quotation marks became typographic (’ “ ”), an
 
 **Transcripts: left as spoken or as transcribed, but doubtful**
 - **C3**: "The Farmer’s Almanac is one of best predictors": possibly "*The Old Farmer’s Almanac*" or "Farmers’ Almanac". The words "one of [the] best" were left as spoken.
-- **C9**: "when I go there" → "when I got there" is my reading. Confirm on the audio.
 - **C9**: "talking to the national fisheries services": the agency is the National Marine Fisheries Service. Left as spoken.
 - **C9**: "Randy Roach, who’s now mayor of Lake Charles" is true as of the 2014 interview. Left as spoken.
 - **C9**: "It’s something that I hoped to never to have to do again" was left as spoken.

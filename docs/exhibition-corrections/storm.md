@@ -65,17 +65,14 @@ The same captions are reused as the gallery lead captions (see 3).
 - Audrey and the Marsh, 1950s / “Red Cross relief work after Hurricane Audrey” (old page C7.html): “- that were so poor that they couldn't afford a funeral -” → “—that were so poor that they couldn't afford a funeral—”
 - Betsy, 1965 / “Long-term effects of Betsy on the Lower Ninth Ward” (old page C11.html): “We sent . . We sent” → “We sent . . . We sent”
 - Betsy, 1965 / “Surviving in the floodwaters of Hurricane Betsy” (old page C12.html): “a little bit of a flooding. So” → “a little bit of a flooding." So”
-- Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina” (old page C16.html): “Florida has a hurricanes” → “Florida has hurricanes”
-- Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them” → “five or six of them”
+- Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them” → “five or six of them” (check against the recording)
 - Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “memories - I was” → “memories—I was”
-- Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “something bad in in 1927” → “something bad in 1927”
 - Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “drainage districts formed. and” → “drainage districts formed, and”
 - Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexico.Love when” → “Gulf of Mexico. Love when”
 - Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexicom hoss!” → “Gulf of Mexico, hoss!”
-- Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “elevate you camp” → “elevate your camp”
 - Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “- if you want to build, you got to elevate your camp up -” → “—if you want to build, you got to elevate your camp up—”
 - Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “St. P&#233;” → “St. Pé” (speaker label)
-- Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored” → “things we could lose if we weren't restored”
+- Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored” → “things we could lose if we weren't restored” (check against the recording)
 - Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “we lost everything".” → “we lost everything."”
 - Katrina and Rita, 2005 / “Escaping through the roof in Katrina and being rescued by a Good Samaritan” (old page C20.html): “that was way passed” → “that was way past”
 - Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “came though” → “came through”
@@ -91,6 +88,14 @@ The same captions are reused as the gallery lead captions (see 3).
 - Collections list: “Pointe Coupee : Voices in the Storm” → “Pointe Coupee: Voices in the Storm”; “"I Remember: An Art Show of Environmental Significance,"" CWPPRA” (doubled closing quote) → ““I Remember: An Art Show of Environmental Significance,” CWPPRA”. The list is now a bulleted list.
 - Lower Ninth Ward text: the link on “Lower Ninth Ward Living Museum” (http://l9livingmuseum.org/wp/?page_id=131, now a domain for sale) was removed, and the sentence “If you are interested in gaining access to the database please email contact@livingmuseum.org.” was dropped (see 2).
 - The About and Acknowledgements pages are now one gallery, About the Exhibition, with the headings “The collections”, “Lower Ninth Ward Oral History Archive” and “Acknowledgments”.
+
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina”: “Florida has a hurricanes”, as the speaker said it. The first build had changed it (Florida has hurricanes).
+- Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car”: “something bad in in 1927”, as the speaker said it. The first build had changed it (bad in 1927).
+- Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie”: “So the answer to that is, elevate you camp”, as the speaker said it. The first build had changed it (elevate your camp).
 
 ## 2. To verify
 

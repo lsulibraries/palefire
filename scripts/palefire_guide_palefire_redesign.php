@@ -715,6 +715,12 @@ HTML),
 <li>Long web addresses in guide text now wrap on a phone instead of pushing the page sideways.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Transcripts back to the speakers’ words', <<<'HTML'
+<ul>
+<li>In seven oral history exhibitions, 41 transcript passages that had been tidied during the move are back to what the speaker actually said, such as “It’s as almost as if” and “ya know”. Spelling and punctuation fixes stay.</li>
+<li>Thirteen likely typing slips keep their fix but are marked on the Exhibition Migration Review for checking against the recordings.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

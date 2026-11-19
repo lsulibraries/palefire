@@ -222,12 +222,9 @@ $section('Cooperative Extension at LSU', [
 <tr><th scope="row">C5 Eubanks</th><td><del>Made mostly ladies clothes</del></td><td><ins>Made mostly ladies’ clothes</ins></td></tr>
 <tr><th scope="row">C7 Cochran</th><td><del>heated air applied to the sugar cane</del></td><td><ins>heated air applied to the sugarcane</ins></td></tr>
 <tr><th scope="row">C7 Cochran</th><td><del>some of the farmer . . .the extension people</del></td><td><ins>some of the farmer . . . the extension people</ins></td></tr>
-<tr><th scope="row">C9 Coreil</th><td><del>the sea turtles population was crashing</del></td><td><ins>the sea turtle population was crashing</ins></td></tr>
-<tr><th scope="row">C9 Coreil</th><td><del>turtle exclusive devices</del></td><td><ins>turtle excluder devices</ins> <em>TEDs, the devices the rule required</em></td></tr>
-<tr><th scope="row">C9 Coreil</th><td><del>But when I go there, it was just scary</del></td><td><ins>But when I got there, it was just scary</ins> <em>transcription slip; check against the audio</em></td></tr>
-<tr><th scope="row">C9 Coreil</th><td><del>these VHS radios</del></td><td><ins>these VHF radios</ins> <em>marine radio</em></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>turtle exclusive devices</del></td><td><ins>turtle excluder devices</ins> <em>TEDs, the devices the rule required; check against the recording</em></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>these VHS radios</del></td><td><ins>these VHF radios</ins> <em>marine radio; check against the recording</em></td></tr>
 <tr><th scope="row">C9 Coreil</th><td><del>Governor [Buddy]Roemer, and he asked Roemier "Pull them back</del></td><td><ins>Governor [Buddy] Roemer, and he asked Roemer, “Pull them back</ins></td></tr>
-<tr><th scope="row">C10 Roberts</th><td><del>they were artisanal fisherman</del></td><td><ins>they were artisanal fishermen</ins></td></tr>
 <tr><th scope="row">C12 Loupe</th><td><del>my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane</del></td><td><ins>… in sugarcane … in sugarcane</ins></td></tr>
 </tbody>
 </table>
@@ -294,6 +291,12 @@ $section('Cooperative Extension at LSU', [
 <ul><li>The C6 photo (young men with dairy cattle, c6.png at 1900 px) was replaced by its higher-resolution scan in the same folder (Incentive_Loupe.tif, 5272 px). The scan's crop shows a little more at the top.
 </li><li>The C2 clip photo and the "Home Demonstration Class" picture are the same file in both places; it's imported once and used twice.
 </li></ul>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>C9 Coreil: “the sea turtles population was crashing”, as the speaker said it. The first build had changed it (the sea turtle population).
+</li><li>C9 Coreil: “But when I go there, it was just scary”, as the speaker said it. The first build had changed it (when I got there).
+</li><li>C10 Roberts: “they were artisanal fisherman”, as the speaker said it. The first build had changed it (artisanal fishermen).
+</li></ul>
 <h3>To verify</h3>
 <p><strong>Identity and credits of photos</strong></p>
 <ul><li><strong>Robert Badon portrait</strong> (badon.png): a young soldier in a World War I uniform. The old bio page showed it unlabeled; the caption now says "Robert Badon in uniform." Is it Badon?
@@ -308,30 +311,15 @@ $section('Cooperative Extension at LSU', [
 </li></ul>
 <p><strong>Transcripts: left as spoken or as transcribed, but doubtful</strong></p>
 <ul><li><strong>C3</strong>: "The Farmer’s Almanac is one of best predictors": possibly "<em>The Old Farmer’s Almanac</em>" or "Farmers’ Almanac". The words "one of [the] best" were left as spoken.
-</li></ul>
-<table>
-<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
-<tbody>
-<tr><th scope="row">C9</th><td><del>when I go there</del></td><td><ins>"when I got there" is my reading. Confirm on the audio</ins></td></tr>
-</tbody>
-</table>
-<ul><li><strong>C9</strong>: "talking to the national fisheries services": the agency is the National Marine Fisheries Service. Left as spoken.
-</li>
-<li><strong>C9</strong>: "Randy Roach, who’s now mayor of Lake Charles" is true as of the 2014 interview. Left as spoken.
-</li>
-<li><strong>C9</strong>: "It’s something that I hoped to never to have to do again" was left as spoken.
-</li>
-<li><strong>C2</strong>: "We were the Julia Childs of the day" was left as spoken.
-</li>
-<li><strong>C11</strong>: "the internet don’t work in a disaster" was left as spoken.
-</li>
-<li><strong>C8</strong>: "Tommy [?]" is an unknown surname, kept from the old transcript.
-</li>
-<li><strong>C12</strong>: "If they could get the [?] of the school board" is an unknown word, kept.
-</li>
-<li><strong>C6</strong>: "John A. Cox", the director Loupe succeeded, is unverified.
-</li>
-<li><strong>C10</strong>: "Asian oriented" is the speaker's wording, kept.
+</li><li><strong>C9</strong>: "talking to the national fisheries services": the agency is the National Marine Fisheries Service. Left as spoken.
+</li><li><strong>C9</strong>: "Randy Roach, who’s now mayor of Lake Charles" is true as of the 2014 interview. Left as spoken.
+</li><li><strong>C9</strong>: "It’s something that I hoped to never to have to do again" was left as spoken.
+</li><li><strong>C2</strong>: "We were the Julia Childs of the day" was left as spoken.
+</li><li><strong>C11</strong>: "the internet don’t work in a disaster" was left as spoken.
+</li><li><strong>C8</strong>: "Tommy [?]" is an unknown surname, kept from the old transcript.
+</li><li><strong>C12</strong>: "If they could get the [?] of the school board" is an unknown word, kept.
+</li><li><strong>C6</strong>: "John A. Cox", the director Loupe succeeded, is unverified.
+</li><li><strong>C10</strong>: "Asian oriented" is the speaker's wording, kept.
 </li></ul>
 <p><strong>Bios and records</strong></p>
 <ul><li><strong>Richardson bio</strong>: "He attended Dearing public schools". The town near Kennett, Missouri, is spelled <strong>Deering</strong>; probably a typo, but it was left as written.
@@ -663,51 +651,30 @@ $section('Georgetown 272', [
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">c1</th><td><del>It’s as almost as if</del></td><td><ins>It’s almost as if</ins></td></tr>
 <tr><th scope="row">c2</th><td><del>We as descendants. While</del></td><td><ins>We as descendants . . . While</ins></td></tr>
-<tr><th scope="row">c2</th><td><del>on the whole and individuals as well</del></td><td><ins>on the whole, and as individuals as well <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c4</th><td><del>mausoleum type deal</del></td><td><ins>mausoleum-type deal</ins></td></tr>
 <tr><th scope="row">c4</th><td><del>Look y’all need</del></td><td><ins>Look, y’all need</ins></td></tr>
 <tr><th scope="row">c5</th><td><del>[Evelyn’s sister in law]</del></td><td><ins>[Evelyn’s sister-in-law]</ins></td></tr>
-<tr><th scope="row">c5</th><td><del>sit in at Woolworth Store</del></td><td><ins>sit in at the Woolworth store <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c5</th><td><del>they were sitting-in</del></td><td><ins>they were sitting in</ins></td></tr>
 <tr><th scope="row">c6</th><td><del>then president John Kennedy</del></td><td><ins>then-president John Kennedy</ins></td></tr>
 <tr><th scope="row">c6</th><td><del>etcetera</del></td><td><ins>et cetera</ins></td></tr>
-<tr><th scope="row">c6</th><td><del>who’s my grandfather name</del></td><td><ins>who’s my grandfather’s name <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c6</th><td><del>they were looking in house to house</del></td><td><ins>they were looking house to house <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c6</th><td><del>CBS Evening News</del></td><td><ins><em>CBS Evening News</em></ins> <em>italic</em></td></tr>
 <tr><th scope="row">c7</th><td><del>Wrong finger pointing</del></td><td><ins>Wrong finger-pointing</ins></td></tr>
-<tr><th scope="row">c7</th><td><del>the ones that need to take ownership of</del></td><td><ins>the ones that need to take ownership. <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c8</th><td><del>American born woman</del></td><td><ins>American-born woman</ins></td></tr>
-<tr><th scope="row">c8</th><td><del>any conversations about anybody about my Americanness</del></td><td><ins>any conversations with anybody about my Americanness <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c10</th><td><del>We still had to still use the back door</del></td><td><ins>We still had to use the back door <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c10</th><td><del>my friends in the north</del></td><td><ins>my friends in the North</ins></td></tr>
 <tr><th scope="row">c10</th><td><del>So why didn’t yall</del></td><td><ins>So why didn’t y’all</ins></td></tr>
 <tr><th scope="row">c11</th><td><del>Earle in Atlanta, was sending</del></td><td><ins>Earle in Atlanta was sending</ins></td></tr>
-<tr><th scope="row">c11</th><td><del>and I stared reading it</del></td><td><ins>and I started reading it</ins></td></tr>
-<tr><th scope="row">c12</th><td><del>Do you think finding that your direct descendant has impacted your feelings towards America’s foundation?</del></td><td><ins>Do you think finding that you’re a direct descendant has impacted your feelings toward America’s foundation? <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c12</th><td><del>ya know</del></td><td><ins>you know <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c12</th><td><del>how mentally and physically strong these 272 people had to be to not just to make it</del></td><td><ins>…had to be, not just to make it</ins></td></tr>
-<tr><th scope="row">c13</th><td><del>I used have my white friends—I'm more American than you! Your family came in the 1800's and I was already here</del></td><td><ins>I used to tell my white friends, “I’m more American than you! Your family came in the 1800s and I was already here.” <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c11</th><td><del>and I stared reading it</del></td><td><ins>and I started reading it</ins> <em>check against the recording</em></td></tr>
 <tr><th scope="row">c14</th><td><del>I can't go b Looack and say</del></td><td><ins>I can’t go back and say</ins></td></tr>
 <tr><th scope="row">c14</th><td><del>great-great grandfathers</del></td><td><ins>great-great-grandfathers</ins></td></tr>
-<tr><th scope="row">c14</th><td><del>You just have to kinda shake it off</del></td><td><ins>You just have to kind of shake it off <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c14</th><td><del>But, it just give you</del></td><td><ins>But it just give you</ins></td></tr>
-<tr><th scope="row">c15</th><td><del>rename one of their buildings Isaac Hawkins</del></td><td><ins>rename one of their buildings for Isaac Hawkins <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c15</th><td><del>one of the things I asked when the president came</del></td><td><ins>one of the things I asked for when the president came <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c15</th><td><del>Being a dedication , dedicating</del></td><td><ins>Being a dedication, dedicating</ins></td></tr>
-<tr><th scope="row">c15</th><td><del>there’s a part of what’s going to happen on the eighteenth is there’s going to be</del></td><td><ins>part of what’s going to happen on the eighteenth is there’s going to be <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c15</th><td><del>acknowledgement</del> <em>twice</em></td><td><ins>acknowledgment</ins></td></tr>
 <tr><th scope="row">c16</th><td><del>tenants of the Catholic church</del></td><td><ins>tenets of the Catholic Church</ins></td></tr>
 <tr><th scope="row">c16</th><td><del>it kind of rocks the center of your core because who you think you are</del></td><td><ins>…because [of] who you think you are</ins></td></tr>
-<tr><th scope="row">c17</th><td><del>Protestant churches of all denomination, non-religious people</del></td><td><ins>Protestant churches of all denominations, nonreligious people</ins></td></tr>
-<tr><th scope="row">c18</th><td><del>the school, society of Jesus, and the Pope</del></td><td><ins>the school, the Society of Jesus, and the Pope</ins></td></tr>
 <tr><th scope="row">c18</th><td><del>ROYAL:</del> <em>speaker label</em></td><td><ins>label dropped</ins> <em>one speaker</em></td></tr>
-<tr><th scope="row">c19</th><td><del>one of the reason we study history</del></td><td><ins>one of the reasons we study history</ins></td></tr>
 <tr><th scope="row">c19</th><td><del>What are we doing - who are we sacrificing</del></td><td><ins>What are we doing—who are we sacrificing</ins></td></tr>
-<tr><th scope="row">c20</th><td><del>Do I subscribe and support that?</del></td><td><ins>Do I subscribe to and support that? <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c20</th><td><del>great-great-great-great-great grandfather</del></td><td><ins>great-great-great-great-great-grandfather</ins></td></tr>
-<tr><th scope="row">c21</th><td><del>communities where there are large compilations of descendants</del></td><td><ins>…large concentrations of descendants <strong>(audio)</strong></ins></td></tr>
 <tr><th scope="row">c21</th><td><del>for me to come here and paid to do this</del></td><td><ins>for me to come here and [be] paid to do this</ins></td></tr>
 <tr><th scope="row">c21</th><td><del>this opportunity [attend university]</del></td><td><ins>this opportunity [to attend university]</ins></td></tr>
 <tr><th scope="row">c21</th><td><del>descendant communities; especially</del></td><td><ins>descendant communities, especially</ins></td></tr>
@@ -715,8 +682,7 @@ $section('Georgetown 272', [
 <tr><th scope="row">c22</th><td><del>KKK era intimidation</del></td><td><ins>KKK-era intimidation</ins></td></tr>
 <tr><th scope="row">c22</th><td><del>a few moments of reconstruction</del></td><td><ins>a few moments of Reconstruction</ins></td></tr>
 <tr><th scope="row">c22</th><td><del>Plessy/Ferguson</del></td><td><ins>Plessy v. Ferguson</ins></td></tr>
-<tr><th scope="row">c22</th><td><del>hold on into the time Jim Crowe</del></td><td><ins>hold on into the time of Jim Crow <strong>(audio)</strong></ins></td></tr>
-<tr><th scope="row">c22</th><td><del>who we are as hand beings</del></td><td><ins>who we are as human beings</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>who we are as hand beings</del></td><td><ins>who we are as human beings</ins> <em>check against the recording</em></td></tr>
 <tr><th scope="row">c22</th><td><del>So that, we continue</del></td><td><ins>So that we continue</ins></td></tr>
 <tr><th scope="row">c23</th><td><del>the transparency--Let us communicate</del></td><td><ins>the transparency—let us communicate</ins></td></tr>
 <tr><th scope="row">c23</th><td><del>research and archives that, we're not coming</del></td><td><ins>research and archives, that we’re not coming</ins></td></tr>
@@ -819,6 +785,31 @@ $section('Georgetown 272', [
 <tr><th scope="row">Mary Williams Wagner</th><td><del>democratic campaigns</del></td><td><ins>Democratic campaigns</ins></td></tr>
 </tbody>
 </table>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>c1: “It’s as almost as if”, as the speaker said it. The first build had changed it (It’s almost as if).
+</li><li>c2: “on the whole, and individuals as well”, as the speaker said it. The first build had changed it (and as individuals).
+</li><li>c5: “sit in at Woolworth store”, as the speaker said it. The first build had changed it (at the Woolworth store).
+</li><li>c6: “who’s my grandfather name”, as the speaker said it. The first build had changed it (grandfather’s name).
+</li><li>c6: “they were looking in house to house”, as the speaker said it. The first build had changed it (looking house to house).
+</li><li>c7: “the ones that need to take ownership of”, as the speaker said it. The first build had changed it (take ownership.).
+</li><li>c8: “any conversations about anybody about my Americanness”, as the speaker said it. The first build had changed it (with anybody).
+</li><li>c10: “We still had to still use the back door”, as the speaker said it. The first build had changed it (had to use).
+</li><li>c12: “Do you think finding that your direct descendant has impacted your feelings towards America’s foundation?”, as the speaker said it. The first build had changed it (that you’re a direct descendant … toward).
+</li><li>c12: “ya know”, as the speaker said it. The first build had changed it (you know).
+</li><li>c12: “had to be to not just to make it”, as the speaker said it. The first build had changed it (had to be, not just).
+</li><li>c13: “I used have my white friends—I’m more American than you!”, as the speaker said it. The first build had changed it (I used to tell my white friends, “I’m more American …”).
+</li><li>c14: “You just have to kinda shake it off”, as the speaker said it. The first build had changed it (kind of).
+</li><li>c15: “rename one of their buildings Isaac Hawkins”, as the speaker said it. The first build had changed it (for Isaac Hawkins).
+</li><li>c15: “one of the things I asked when the president came”, as the speaker said it. The first build had changed it (asked for).
+</li><li>c15: “there’s a part of what’s going to happen on the eighteenth”, as the speaker said it. The first build had changed it (part of what’s).
+</li><li>c17: “Protestant churches of all denomination”, as the speaker said it. The first build had changed it (denominations).
+</li><li>c18: “the school, Society of Jesus, and the Pope”, as the speaker said it. The first build had changed it (the school, the Society of Jesus).
+</li><li>c19: “one of the reason we study history”, as the speaker said it. The first build had changed it (reasons).
+</li><li>c20: “Do I subscribe and support that?”, as the speaker said it. The first build had changed it (subscribe to and support).
+</li><li>c21: “communities where there are large compilations of descendants”, as the speaker said it. The first build had changed it (concentrations).
+</li><li>c22: “hold on into the time Jim Crow”, as the speaker said it. The first build had changed it (the time of Jim Crow).
+</li></ul>
 <h3>To verify</h3>
 <p><strong>Recordings</strong></p>
 <ul><li><strong>c18, Karran Harper Royal.</strong> There is no recording, either in the old audio folder or on the live server; the old page’s player is <code>&lt;audio src="#"&gt;</code>. The entry is built unpublished. Does the center have this clip?
@@ -953,9 +944,8 @@ $section('History of Graphic Design in South Louisiana', [
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">Transcript</th><td><del>the Institution of Politics at Loyola</del></td><td><ins>the Institute of Politics at Loyola</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>the Institution of Politics at Loyola</del></td><td><ins>the Institute of Politics at Loyola</ins> <em>check against the recording</em></td></tr>
 <tr><th scope="row">Transcript</th><td><del>a republican or a democrat</del></td><td><ins>a Republican or a Democrat</ins></td></tr>
-<tr><th scope="row">Transcript</th><td><del>this huge gathering of fundraising. People that were going to take part</del></td><td><ins>this huge fundraising gathering, people that were going to take part</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>a well known regional branding company</del></td><td><ins>a well-known regional branding company</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>The New Orleans Jazz &amp; Heritage Festival and Foundation, Inc. logo</del></td><td><ins>the logo of the New Orleans Jazz &amp; Heritage Festival and Foundation, Inc.</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>8 ½, Annie Hall, Citizen Kane, Godfather I and II</del></td><td><ins>8½, Annie Hall, Citizen Kane, and The Godfather I and II</ins></td></tr>
@@ -997,9 +987,6 @@ $section('History of Graphic Design in South Louisiana', [
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">Transcript</th><td><del>I could remember on a couple of occasions</del></td><td><ins>I can remember on a couple of occasions</ins></td></tr>
-<tr><th scope="row">Transcript</th><td><del>I had to open the deceased eyes</del></td><td><ins>the deceased’s eyes</ins></td></tr>
-<tr><th scope="row">Transcript</th><td><del>you couldn’t do that in these days</del></td><td><ins>you couldn’t do that these days</ins></td></tr>
 <tr><th scope="row">Transcript</th><td><del>[Times] Picayune</del></td><td><ins>[Times-]Picayune</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>I would align characters (set type)</del> <em>first person in a third-person biography</em></td><td><ins>he would align characters (set type)</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>at Fortier High School in 1936-1940</del></td><td><ins>from 1936 to 1940</ins></td></tr>
@@ -1065,11 +1052,8 @@ $section('History of Graphic Design in South Louisiana', [
 <table>
 <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><th scope="row">Transcript</th><td><del>Regional managers says</del></td><td><ins>Regional manager says</ins></td></tr>
 <tr><th scope="row">Transcript</th><td><del>sixty nine</del></td><td><ins>sixty-nine</ins></td></tr>
-<tr><th scope="row">Transcript</th><td><del>society editor of [Times] Picayune</del></td><td><ins>of the [Times-]Picayune</ins></td></tr>
-<tr><th scope="row">Transcript, second clip</th><td><del>Okay, that a big one.</del></td><td><ins>Okay, that’s a big one.</ins></td></tr>
-<tr><th scope="row">Transcript, second clip</th><td><del>they had no agents</del></td><td><ins>they had no agency</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>society editor of [Times] Picayune</del></td><td><ins>society editor of [Times-]Picayune</ins></td></tr>
 <tr><th scope="row">Transcript, second clip</th><td><del>I said can we talk that was the only-</del></td><td><ins>I said, “Can we talk?” That was the only—</ins></td></tr>
 <tr><th scope="row">Transcript, second clip</th><td><del>I said, got to visit every Popeye’s location</del></td><td><ins>I said, “Got to visit every Popeyes location”</ins></td></tr>
 <tr><th scope="row">Biography</th><td><del>Fauche Highschool</del></td><td><ins>Fauche High School</ins> <em>see To verify</em></td></tr>
@@ -1107,6 +1091,17 @@ $section('History of Graphic Design in South Louisiana', [
 <h4>Links removed</h4>
 <ul><li>Michael Deas biography: michaeldeas.com (no longer answers).
 </li><li>Kenny Harrison biography: plaidpup.com (no longer answers).
+</li></ul>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>Tom Varisco: “this huge gathering of fundraising. People that were going to take part”, as the speaker said it. The first build had changed it (this huge fundraising gathering, people).
+</li><li>Gus Levy: “I could remember on a couple of occasions”, as the speaker said it. The first build had changed it (I can remember).
+</li><li>Gus Levy: “I had to open the deceased eyes”, as the speaker said it. The first build had changed it (the deceased’s eyes).
+</li><li>Gus Levy: “you couldn’t do that in these days”, as the speaker said it. The first build had changed it (do that these days).
+</li><li>Peter A. Mayer: “Regional managers says”, as the speaker said it. The first build had changed it (Regional manager says).
+</li><li>Peter A. Mayer: “society editor of [Times-]Picayune”, as the speaker said it. The first build had changed it (of the [Times-]Picayune).
+</li><li>Peter A. Mayer, second clip: “Okay, that a big one.”, as the speaker said it. The first build had changed it (that’s a big one).
+</li><li>Peter A. Mayer, second clip: “they had no agents”, as the speaker said it. The first build had changed it (no agency).
 </li></ul>
 <h3>To verify</h3>
 <ul><li><strong>Speaker in the Cain and Hurdlik clip.</strong> Relabeled Paulette Hurdlik from the words alone (“what you just heard Kathy describe”); confirm by listening. The old sidebar also credits the quote to Kathy Cain.
@@ -2001,7 +1996,6 @@ $section('New Orleans Jazz & Heritage Festival', [
 <tr><th scope="row">Geraldine Vaucresson</th><td><del>my great grandmother</del></td><td><ins>my great-grandmother</ins></td></tr>
 <tr><th scope="row">Patrick Gallagher</th><td><del>Guillain-Barre syndrome</del></td><td><ins>Guillain-Barré syndrome</ins></td></tr>
 <tr><th scope="row"></th><td><del>Joseph "Cool" Davis: "come down south. . . to see"</del></td><td><ins>come down south . . . to see</ins></td></tr>
-<tr><th scope="row"></th><td><del>Joseph "Cool" Davis: "People come and look at to you"</del></td><td><ins>People come and look at you</ins></td></tr>
 <tr><th scope="row">Terrence Osborne</th><td><del>missing closing quote added: "…so, can I get two weekends? [laughs]"</del></td><td><ins>…so, can I get two weekends?” [laughs]</ins></td></tr>
 <tr><th scope="row">Terrence Osborne</th><td><del>I had to - even if I did the poster - I had to</del></td><td><ins>I had to—even if I did the poster—I had to</ins></td></tr>
 <tr><th scope="row">All clips</th><td><del>straight quotes</del></td><td><ins>typographic (curly) quotes</ins></td></tr>
@@ -2059,6 +2053,10 @@ $section('New Orleans Jazz & Heritage Festival', [
 <tr><th scope="row"></th><td><del>the context of the lives' struggles - from poverty</del></td><td><ins>the context of their lives’ struggles—from poverty</ins></td></tr>
 </tbody>
 </table>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>Joseph “Cool” Davis: “People come and look at to you”, as the speaker said it. The first build had changed it (look at you).
+</li></ul>
 <h3>To verify</h3>
 <ul><li><strong>Interviewers' full names.</strong> Only surnames appear in the transcripts: Nguyen (Vaucresson), Bauer (Gallagher), Donner (Huang), Pontiff (Giroir) and Roux (Osborne). The Davis interviewers appear only as "Charlotte" and the unnamed author of the field notes. The Boudreaux clip has no interviewer at all. Because the names are incomplete, clip credits read "Name, Tape No. ####" instead of "interviewed by…".
 </li><li><strong>Authors of the fieldwork texts.</strong> The questions are credited in the old menu only as "Wilcox and Breashears", which reads as Wilcox (student) and Breashears (narrator). The field notes and the review have no named author.
@@ -2134,7 +2132,6 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 <tr><th scope="row">Integrating LSU / Tureaud Jr. Sues LSU</th><td><del>A. P. Tureaud, Junior successfully sues</del></td><td><ins>A. P. Tureaud, Jr., successfully sues</ins></td></tr>
 <tr><th scope="row">Integrating LSU / Tureaud Jr. Sues LSU (transcript)</th><td><del>We were playing racquet ball</del></td><td><ins>We were playing racquetball</ins></td></tr>
 <tr><th scope="row">Integrating LSU / Wilson Sues LSU Law</th><td><del>Here, Tureaud, Jr. recalls his father’s relationships</del></td><td><ins>Here, A. P. Tureaud, Jr., recalls his father’s relationships</ins></td></tr>
-<tr><th scope="row">Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</th><td><del>about two weeks we after we had been in school</del></td><td><ins>about two weeks after we had been in school</ins></td></tr>
 <tr><th scope="row">Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</th><td><del>who’s only choice might be LSU</del></td><td><ins>whose only choice might be LSU</ins></td></tr>
 <tr><th scope="row">Integrating LSU / Kerry Pourciau Elected SGA President (transcript)</th><td><del>well over twenty-years ago</del></td><td><ins>well over twenty years ago</ins></td></tr>
 <tr><th scope="row">Integrating LSU / Kerry Pourciau Elected SGA President</th><td><del>In 1972, Kerry Louis Pourciau was the first…</del></td><td><ins>Kerry Louis Pourciau was the first… <em>(the year is now the entry’s date)</em></ins></td></tr>
@@ -2150,7 +2147,7 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 <tr><th scope="row">East Baton Rouge / Kress Sit-In</th><td><del>nine more students sat-in at various locations</del></td><td><ins>nine more students sat in at various locations</ins></td></tr>
 <tr><th scope="row">East Baton Rouge / CORE Sit-Ins</th><td><del>In Decemeber, members</del></td><td><ins>In December, members</ins></td></tr>
 <tr><th scope="row">East Baton Rouge / Cox v. Louisiana</th><td><del>National CORE represntative</del></td><td><ins>National CORE representative</ins></td></tr>
-<tr><th scope="row">East Baton Rouge / Backlashes Against Activists (transcript)</th><td><del>There was a hole it the picture glass window</del></td><td><ins>There was a hole in the picture glass window</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Backlashes Against Activists (transcript)</th><td><del>There was a hole it the picture glass window</del></td><td><ins>There was a hole in the picture glass window</ins> <em>check against the recording</em></td></tr>
 <tr><th scope="row">East Baton Rouge / Backlashes Against Activists (transcript)</th><td><del>Every time he was involved in , like when</del></td><td><ins>Every time he was involved in, like when</ins></td></tr>
 <tr><th scope="row">East Baton Rouge / Police Shoot Youth</th><td><del>Their deaths lead to marches</del></td><td><ins>Their deaths led to marches</ins></td></tr>
 <tr><th scope="row">The Nation / Vietnam War</th><td><del>the first fully-integrated deployment</del></td><td><ins>the first fully integrated deployment</ins></td></tr>
@@ -2232,6 +2229,10 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 <li><strong>Pearl Payne / Freya Anderson Rivers / Johnnie Jones (King clip) / A. P. Tureaud, Jr. (two clips)</strong>: The interviewer added where the transcript names one: "interviewed by Jennifer Abraham", "by Maxine Crump", "by Beth Smith", "by Rachel Emanuel-Wallace"</li>
 <li><strong>"Esso photo courtesy of Ernest Richie" (in the clip credit)</strong>: Moved to the Esso photo’s caption</li>
 </ul>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>Integrating LSU / Undergraduates Sue to Integrate LSU: “about two weeks we after we had been in school”, as the speaker said it. The first build had changed it (two weeks after we).
+</li></ul>
 <h3>To verify</h3>
 <ul><li><strong>Harambe Established at LSU:</strong> the old timeline dated it 1964–1968, the same span it gave the dorm and the undergraduate suit, so it looked copied. It now has no date and stays off the Timeline. What year was Harambe founded?
 </li><li><strong>Struggle Continues:</strong> dated July 1953 on the bus timeline, but October 1953 on the separate 1953 timeline. July is kept.
@@ -2419,7 +2420,7 @@ $section('Saturday Night in Tiger Stadium', [
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><td><del>As it say, it’s just</del></td><td><ins>As I say, it’s just</ins></td></tr>
+<tr><td><del>As it say, it’s just</del></td><td><ins>As I say, it’s just</ins> <em>check against the recording</em></td></tr>
 </tbody>
 </table>
 </li><li><strong>Big Games / LSU v. Miami, 1958 (biggamebudjohnson.html)</strong>
@@ -2476,7 +2477,7 @@ $section('Saturday Night in Tiger Stadium', [
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><td><del>I forgot was it was</del></td><td><ins>I forgot what it was</ins></td></tr>
+<tr><td><del>I forgot was it was</del></td><td><ins>I forgot what it was</ins> <em>check against the recording</em></td></tr>
 <tr><td><del>cancelled</del></td><td><ins>canceled</ins></td></tr>
 <tr><td><del>sort of duel thing</del></td><td><ins>sort of dual thing</ins></td></tr>
 </tbody>
@@ -2492,7 +2493,6 @@ $section('Saturday Night in Tiger Stadium', [
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><td><del>were description of</del></td><td><ins>were descriptions of</ins></td></tr>
 <tr><td><del>played like Chinese Bandits”.</del></td><td><ins>played like Chinese Bandits.”</ins></td></tr>
 <tr><td><del>1893 - 1993*],</del></td><td><ins>1893–1993*],</ins></td></tr>
 </tbody>
@@ -2510,7 +2510,6 @@ $section('Saturday Night in Tiger Stadium', [
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
 <tr><td><del>two quarterback system</del></td><td><ins>two-quarterback system</ins></td></tr>
-<tr><td><del>all of sudden it turns</del></td><td><ins>all of a sudden it turns</ins></td></tr>
 </tbody>
 </table>
 </li><li><strong>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html)</strong>
@@ -2560,7 +2559,7 @@ $section('Saturday Night in Tiger Stadium', [
 <tr><td><del>Five-thousand students</del></td><td><ins>Five thousand students</ins></td></tr>
 <tr><td><del>…probably in ‘34. I think [C…</del></td><td><ins>…probably in ’34. I think [C…</ins></td></tr>
 <tr><td><del>Tulane Students</del></td><td><ins>Tulane students</ins></td></tr>
-<tr><td><del>tiger when in there</del></td><td><ins>tiger went in there</ins></td></tr>
+<tr><td><del>tiger when in there</del></td><td><ins>tiger went in there</ins> <em>check against the recording</em></td></tr>
 </tbody>
 </table>
 </li><li><strong>Facilities / How weight training changed LSU football (fabudjohnson.html)</strong>
@@ -2580,20 +2579,13 @@ $section('Saturday Night in Tiger Stadium', [
 <tr><td><del>…out 1925 or ‘26 or somethin…</del></td><td><ins>…out 1925 or ’26 or somethin…</ins></td></tr>
 </tbody>
 </table>
-</li><li><strong>Culture / Traveling to games by rail and car (cubillyheroman.html)</strong>
-<table>
-<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
-<tbody>
-<tr><td><del>when they went the [1944] Orange Bowl [played in Miami, FL, against Texas A&amp;M.</del></td><td><ins>when they went to the [1944] Orange Bowl [played in Miami, Florida, against Texas A&amp;M].</ins></td></tr>
-</tbody>
-</table>
 </li><li><strong>Culture / Huey Long tries to make Mickal a state senator (cuabemickal.html)</strong>
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
 <tr><td><del>benefitting</del></td><td><ins>benefiting</ins></td></tr>
 <tr><td><del>over an hour; telling</del></td><td><ins>over an hour, telling</ins></td></tr>
-<tr><td><del>never on out schedule</del></td><td><ins>never on our schedule</ins></td></tr>
+<tr><td><del>never on out schedule</del></td><td><ins>never on our schedule</ins> <em>check against the recording</em></td></tr>
 <tr><td><del>hit the campus; he’d</del></td><td><ins>hit the campus, he’d</ins></td></tr>
 </tbody>
 </table>
@@ -2688,7 +2680,7 @@ $section('Saturday Night in Tiger Stadium', [
 <table>
 <thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
 <tbody>
-<tr><td><del>Prior that that</del></td><td><ins>Prior to that</ins></td></tr>
+<tr><td><del>Prior that that</del></td><td><ins>Prior to that</ins> <em>check against the recording</em></td></tr>
 <tr><td><del>Athletics ,</del></td><td><ins>Athletics,</ins></td></tr>
 </tbody>
 </table>
@@ -2758,6 +2750,12 @@ $section('Saturday Night in Tiger Stadium', [
 <tr><td><del>Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens</del></td><td><ins>…Student Assistant; and Rebecca Stephens</ins> <em>the list uses semicolons</em></td></tr>
 </tbody>
 </table>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>Players &amp; Teams / The origin of the Chinese Bandits: “were description of”, as the speaker said it. The first build had changed it (descriptions).
+</li><li>Players &amp; Teams / His junior season and the offensive line: “all of sudden it turns”, as the speaker said it. The first build had changed it (all of a sudden).
+</li><li>Culture / Traveling to games by rail and car: “when they went the [1944] Orange Bowl”, as the speaker said it. The first build had changed it (went to the).
+</li></ul>
 <h3>To verify</h3>
 <ul><li>Players &amp; Teams / Ready for an integrated team: clip credit says “Kerry Pourciau, interviewed by Maxine Crump, 1994”; his biography citation says 1993. Left as 1994.
 </li></ul>
@@ -3323,17 +3321,14 @@ $section('Tempests: Storms in the Archives', [
 <tr><td><del>Audrey and the Marsh, 1950s / “Red Cross relief work after Hurricane Audrey” (old page C7.html): “- that were so poor that they couldn't afford a funeral -”</del></td><td><ins>—that were so poor that they couldn't afford a funeral—</ins></td></tr>
 <tr><td><del>Betsy, 1965 / “Long-term effects of Betsy on the Lower Ninth Ward” (old page C11.html): “We sent . . We sent”</del></td><td><ins>We sent . . . We sent</ins></td></tr>
 <tr><td><del>Betsy, 1965 / “Surviving in the floodwaters of Hurricane Betsy” (old page C12.html): “a little bit of a flooding. So”</del></td><td><ins>a little bit of a flooding." So</ins></td></tr>
-<tr><td><del>Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina” (old page C16.html): “Florida has a hurricanes”</del></td><td><ins>Florida has hurricanes</ins></td></tr>
-<tr><td><del>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them”</del></td><td><ins>five or six of them</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them”</del></td><td><ins>five or six of them</ins> <em>check against the recording</em></td></tr>
 <tr><td><del>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “memories - I was”</del></td><td><ins>memories—I was</ins></td></tr>
-<tr><td><del>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “something bad in in 1927”</del></td><td><ins>something bad in 1927</ins></td></tr>
 <tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “drainage districts formed. and”</del></td><td><ins>drainage districts formed, and</ins></td></tr>
 <tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexico.Love when”</del></td><td><ins>Gulf of Mexico. Love when</ins></td></tr>
 <tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexicom hoss!”</del></td><td><ins>Gulf of Mexico, hoss!</ins></td></tr>
-<tr><td><del>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “elevate you camp”</del></td><td><ins>elevate your camp</ins></td></tr>
 <tr><td><del>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “- if you want to build, you got to elevate your camp up -”</del></td><td><ins>—if you want to build, you got to elevate your camp up—</ins></td></tr>
 <tr><td><del>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “St. P&amp;#233;”</del></td><td><ins>St. Pé</ins> <em>speaker label</em></td></tr>
-<tr><td><del>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored”</del></td><td><ins>things we could lose if we weren't restored</ins></td></tr>
+<tr><td><del>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored”</del></td><td><ins>things we could lose if we weren't restored</ins> <em>check against the recording</em></td></tr>
 <tr><td><del>Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “we lost everything".”</del></td><td><ins>we lost everything."</ins></td></tr>
 <tr><td><del>Katrina and Rita, 2005 / “Escaping through the roof in Katrina and being rescued by a Good Samaritan” (old page C20.html): “that was way passed”</del></td><td><ins>that was way past</ins></td></tr>
 <tr><td><del>Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “came though”</del></td><td><ins>came through</ins></td></tr>
@@ -3356,6 +3351,12 @@ $section('Tempests: Storms in the Archives', [
 <ul><li>Lower Ninth Ward text: the link on “Lower Ninth Ward Living Museum” (<a href="http://l9livingmuseum.org/wp/?page_id=131">http://l9livingmuseum.org/wp/?page_id=131</a>, now a domain for sale) was removed, and the sentence “If you are interested in gaining access to the database please email contact@livingmuseum.org.” was dropped (see 2).
 </li>
 <li>The About and Acknowledgements pages are now one gallery, About the Exhibition, with the headings “The collections”, “Lower Ninth Ward Oral History Archive” and “Acknowledgments”.
+</li></ul>
+<h4>Restored to the speaker’s words</h4>
+<p>These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.</p>
+<ul><li>Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina”: “Florida has a hurricanes”, as the speaker said it. The first build had changed it (Florida has hurricanes).
+</li><li>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car”: “something bad in in 1927”, as the speaker said it. The first build had changed it (bad in 1927).
+</li><li>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie”: “So the answer to that is, elevate you camp”, as the speaker said it. The first build had changed it (elevate your camp).
 </li></ul>
 <h3>To verify</h3>
 <ul><li><strong>Betsy, 1965 / “Learning to evacuate after getting caught once in Hurricane Betsy”.</strong> The old page gives no interviewer, year or accession number for George Miller: its credit line is the photo credit. His photo is by David Breidenbach like the 2007 Pointe Coupee interviews (accession 4700.19xx), but that’s a guess. Credit is the name only until someone supplies the rest.

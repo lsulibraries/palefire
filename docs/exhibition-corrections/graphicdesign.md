@@ -37,10 +37,8 @@ italics, and small comma fixes.
   “He and mama” → “He and Mama”.
 
 ### The Interviews: Tom Varisco
-- Transcript: “the Institution of Politics at Loyola” → “the Institute of Politics at Loyola”.
+- Transcript: “the Institution of Politics at Loyola” → “the Institute of Politics at Loyola”. (check against the recording)
 - Transcript: “a republican or a democrat” → “a Republican or a Democrat”.
-- Transcript: “this huge gathering of fundraising. People that were going to take part” → “this huge fundraising
-  gathering, people that were going to take part”.
 - Biography: “a well known regional branding company” → “a well-known regional branding company”; “The New Orleans
   Jazz & Heritage Festival and Foundation, Inc. logo” → “the logo of the New Orleans Jazz & Heritage Festival and
   Foundation, Inc.”; “8 ½, Annie Hall, Citizen Kane, Godfather I and II” → “8½, Annie Hall, Citizen Kane, and The
@@ -71,9 +69,7 @@ italics, and small comma fixes.
   “Pulitzer Prize–winning”.
 
 ### The Interviews: Gus Levy
-- Transcript: “I could remember on a couple of occasions” → “I can remember on a couple of occasions”; “I had to open
-  the deceased eyes” → “the deceased’s eyes”; “you couldn’t do that in these days” → “you couldn’t do that these
-  days”; “[Times] Picayune” → “[Times-]Picayune”.
+- Transcript: “[Times] Picayune” → “[Times-]Picayune”.
 - Biography: “I would align characters (set type)” (first person in a third-person biography) → “he would align
   characters (set type)”.
 - Biography: “at Fortier High School in 1936-1940” → “from 1936 to 1940”; “divided-up between advertising,
@@ -121,10 +117,8 @@ italics, and small comma fixes.
   “organizedand”) fixed; “nursing facility/community” → “retirement community”.
 
 ### The Interviews: Peter A. Mayer
-- Transcript: “Regional managers says” → “Regional manager says”; “sixty nine” → “sixty-nine”; “society editor of
-  [Times] Picayune” → “of the [Times-]Picayune”.
-- Transcript, second clip: “Okay, that a big one.” → “Okay, that’s a big one.”; “they had no agents” → “they had no
-  agency”; “I said can we talk that was the only-” → “I said, “Can we talk?” That was the only—”; “I said, got to
+- Transcript: “sixty nine” → “sixty-nine”; “society editor of [Times] Picayune” → “society editor of [Times-]Picayune”.
+- Transcript, second clip: “I said can we talk that was the only-” → “I said, “Can we talk?” That was the only—”; “I said, got to
   visit every Popeye’s location” → “I said, “Got to visit every Popeyes location””.
 - Biography: “Fauche Highschool” → “Fauche High School” (see To verify); “the new field of television in where he
   worked” → “television, where he worked”; “founded the Peter Meyer advertising agency” → “founded Peter A. Mayer
@@ -146,6 +140,19 @@ italics, and small comma fixes.
 ### Links removed
 - Michael Deas biography: michaeldeas.com (no longer answers).
 - Kenny Harrison biography: plaidpup.com (no longer answers).
+
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- Tom Varisco: “this huge gathering of fundraising. People that were going to take part”, as the speaker said it. The first build had changed it (this huge fundraising gathering, people).
+- Gus Levy: “I could remember on a couple of occasions”, as the speaker said it. The first build had changed it (I can remember).
+- Gus Levy: “I had to open the deceased eyes”, as the speaker said it. The first build had changed it (the deceased’s eyes).
+- Gus Levy: “you couldn’t do that in these days”, as the speaker said it. The first build had changed it (do that these days).
+- Peter A. Mayer: “Regional managers says”, as the speaker said it. The first build had changed it (Regional manager says).
+- Peter A. Mayer: “society editor of [Times-]Picayune”, as the speaker said it. The first build had changed it (of the [Times-]Picayune).
+- Peter A. Mayer, second clip: “Okay, that a big one.”, as the speaker said it. The first build had changed it (that’s a big one).
+- Peter A. Mayer, second clip: “they had no agents”, as the speaker said it. The first build had changed it (no agency).
 
 ## 2. To verify
 

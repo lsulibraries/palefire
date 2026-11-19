@@ -34,7 +34,6 @@ after that. Interviewers keep the surname only, because only surnames are known.
 - Geraldine Vaucresson: "my great grandmother" → "my great-grandmother"
 - Patrick Gallagher: "Guillain-Barre syndrome" → "Guillain-Barré syndrome"
 - Joseph "Cool" Davis: "come down south. . . to see" → "come down south . . . to see"
-- Joseph "Cool" Davis: "People come and look at to you" → "People come and look at you"
 - Terrence Osborne: missing closing quote added: "…so, can I get two weekends? [laughs]" →
   "…so, can I get two weekends?” [laughs]"
 - Terrence Osborne: "I had to - even if I did the poster - I had to" → "I had to—even if I did the
@@ -82,6 +81,12 @@ after that. Interviewers keep the surname only, because only surnames are known.
 - "the elder's community" → "the elders’ community"
 - "veritable goldmines" → "veritable gold mines"
 - "the context of the lives' struggles - from poverty" → "the context of their lives’ struggles—from poverty"
+
+### Restored to the speaker’s words
+
+These transcript edits changed what the speaker said, so the old wording is back (2026-11-19). Spelling and punctuation fixes stay.
+
+- Joseph “Cool” Davis: “People come and look at to you”, as the speaker said it. The first build had changed it (look at you).
 
 ## 2. To verify
 
