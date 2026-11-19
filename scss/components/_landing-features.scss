@@ -304,7 +304,10 @@ html.pf-bar-pinned .pf-sections > .pf-section:first-child:has(.pf-landing > .pf-
       display: none;
     }
 
-    > :nth-last-child(2) {
+    // li, not a bare :nth-last-child(2): a :has() rule ending in a
+    // compound with no type or class makes Chrome restyle the whole page
+    // whenever any :has() might change (see _exhibition.scss).
+    > li:nth-last-child(2) {
       min-width: 4em;
     }
 

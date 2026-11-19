@@ -2012,15 +2012,22 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
     column-gap: clamp(2rem, 4vw, 4rem);
     align-items: start;
     max-width: none;
-
-    > * {
-      grid-column: 1 / -1;
-    }
+    --pf-gallery-row: 1 / -1;
 
     > .pf-exhibit-entry--text {
       grid-column: auto;
     }
   }
+}
+
+// Every other block takes the whole row: the gallery above sets
+// --pf-gallery-row, read here. Not `> *` under the :has() rule: Chrome keeps
+// one invalidation set for all :has() rules, and a rule ending in a compound
+// with no type or class (*, :nth-last-child()) makes it restyle the
+// whole subtree, so every class or [hidden] change named in any :has()
+// restyled the entire page (about 2,000 elements on /v2/oralhistory, 2026-11-19).
+.pf-gallery__body > * {
+  grid-column: var(--pf-gallery-row, auto);
 }
 
 @include media-breakpoint-up(xl) {

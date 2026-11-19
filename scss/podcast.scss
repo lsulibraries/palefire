@@ -66,6 +66,12 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 }
 
 .pf-podcast__num,
+// Off its page (js/podcast.js pages the list with this class, not [hidden]).
+// Important, as Bootstrap's [hidden] is: the rows set their own display.
+.pf-podcast__row--off {
+  display: none !important;
+}
+
 .pf-podcast__row-meta {
   font: var(--pf-mono-label, .75rem)/1.5 var(--pf-exhibit-mono);
   letter-spacing: .12em;

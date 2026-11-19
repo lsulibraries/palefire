@@ -40,6 +40,7 @@
   // (its tape only, no photo).
   const view = { rows: [], longest: 1, shown: null, page: 0, turn: null };
   const PER_PAGE = 3;
+  const OFF = 'pf-podcast__row--off';
   const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('pf-a11y-motion');
 
   const rowFor = (src) => view.rows.find((row) => {
@@ -406,21 +407,28 @@
     let moving = null;
     let target = null;
 
+    // A row off its page: a class, not the hidden attribute. [hidden] is
+    // tested inside :has() elsewhere in the stylesheet, so toggling it made
+    // Chrome re-check every :has() up the page and restyle the whole page
+    // (about 2,000 elements) on each pass of hold(): 9 passes, 0.9s at 4x
+    // CPU on load (2026-11-19). No :has() names this class.
+    const off = (row, away) => row.classList.toggle(OFF, away);
+
     // Every page laid out in turn, the box held at the tallest.
     const hold = () => {
       box.style.minHeight = '';
       let tallest = 0;
       for (let page = 0; page < count; page++) {
-        view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== page; });
+        view.rows.forEach((row, i) => off(row, Math.floor(i / PER_PAGE) !== page));
         tallest = Math.max(tallest, box.offsetHeight);
       }
-      view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== view.page; });
+      view.rows.forEach((row, i) => off(row, Math.floor(i / PER_PAGE) !== view.page));
       box.style.minHeight = tallest + 'px';
     };
 
     const set = (page, announce) => {
       view.page = page;
-      view.rows.forEach((row, i) => { row.hidden = Math.floor(i / PER_PAGE) !== page; });
+      view.rows.forEach((row, i) => off(row, Math.floor(i / PER_PAGE) !== page));
       number.textContent = pad(page + 1);
       if (announce) {
         const rows = on(page);
@@ -442,7 +450,7 @@
         button.disabled = end;
       });
       // The head let go of a row now out of sight (none playing).
-      if (view.shown && view.shown.hidden && !(state.audio && !state.audio.paused)) {
+      if (view.shown && view.shown.classList.contains(OFF) && !(state.audio && !state.audio.paused)) {
         rest();
       }
     };
