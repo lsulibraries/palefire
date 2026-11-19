@@ -72,6 +72,7 @@ Where: *Gallery / Entry (old slide file)*. Galleries are the call signs; entries
 
 ### Transcripts
 
+- WJBO / May 1947 (C38), clip "Ralph Steetle on building WLSU" transcript: "So the building is gone,or the station?" → "So the building is gone, or the station?" (fixed 2026-11-19)
 - WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
 - WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do.""" → "a lot easier to do.""
 - WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building" → "Music and Dramatic Arts building"
@@ -146,7 +147,7 @@ Left as written (or chosen without a source) and worth a curator’s check:
 - **“Professor Emerita”**: the old descriptions called Lucile Ruby Woodard “Professor Emeritus of Speech”; changed to Emerita. Revert if LSU’s title was Emeritus.
 - **Lucile Ruby Woodard**: the old text spelled her first name both Lucile and Lucille; now Lucile everywhere (her interview and the 1955 Reveille headline use Lucile).
 - **WLSU / October 18, 1947 (C40)**: “damage from Hurricane George.” Kept as written; please confirm the storm’s name, since 1947 Atlantic hurricanes weren’t officially named.
-- **Transcripts**: kept as spoken (“y’all broadcasted,” “all the sudden,” “tampered with wire recorders,” “cut digital video”). One typo is still in the built text: **WJBO / May 1947 (C38)**, “Ralph Steetle on building WLSU”: “So the building is gone,or the station?” needs a space after the comma (fix in the editor, or in data/klsu.json before the build). Also Andrew Nackley: “bought into the School of Journalism and there was a push” has no comma before “and”; kept.
+- **Transcripts**: kept as spoken (“y’all broadcasted,” “all the sudden,” “tampered with wire recorders,” “cut digital video”). Also Andrew Nackley: “bought into the School of Journalism and there was a push” has no comma before “and”; kept.
 - **Dez Crawford (C68)**: “Wisconsin La Crosse State University” (the speaker’s name for UW–La Crosse; only the city’s spelling was corrected).
 - **Entry dates**: kept as on the slides, including approximate ones (Fall 1915, Spring 1936). The nav menu and slide labels sometimes differed only by commas; the slide label was used.
 - **Not carried over** (section 1, Structure): the unused BlueDucks audio and four unused photos. Confirm none were meant for the exhibition.

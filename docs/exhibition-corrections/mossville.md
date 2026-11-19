@@ -48,6 +48,9 @@ Not listed: markup, whitespace, double spaces and curly vs straight quotes. Spea
 
 ### Photo captions
 
+- "Photo. Photo by" → "Photo by" (fixed 2026-11-19; the migration had doubled "Photo." where the old caption had two spaces before its credit). Clip captions, 17×: Places › c16, c27; Politics & Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family & Community › c48; Work › c19, c55, c43; Health & Environment › c65; Mossville Moving › c36. Gallery lead captions, 4×: Politics & Integration, Education, Family & Community, Work.
+- Family & Community › c48 and the gallery’s lead caption: "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015." → "Vera Payne, 2015." (fixed 2026-11-19). The photo is of Vera Payne; the old caption named the wrong person.
+- Work › c55: "Photo by Kyle Tanglao." → "John Bernard. Photo by Kyle Tanglao."; Work › c43: → "Delma and Christine Bennett. Photo by Kyle Tanglao." (fixed 2026-11-19)
 - "By Kyle Tanglao" → "Photo by Kyle Tanglao" (4×: Heritage › c1, c2; Places › c5; Church › c71)
 - Education › c25: "Della Dotson, 2015. By Stephanie Dragoon." → "Della Dotson, 2015. Photo by Stephanie Dragoon."
 - Heritage › c4: "George Braxton, 2015. By Kyle Tanglao." (the caption belonged to a different photo) → "Old Spanish Trail map: the Southern Borderland Trunkline from California to Florida."
@@ -97,17 +100,13 @@ Not listed: markup, whitespace, double spaces and curly vs straight quotes. Spea
 
 ### Introduced in migration
 
-- **"Photo. Photo by" stutter.** Where the old caption had a double space before the credit, the migrated caption repeats "Photo." Example: "LaSalle Williams, 2016.  Photo by Kyle Tanglao." → "LaSalle Williams, 2016. Photo. Photo by Kyle Tanglao."
-  - Clip captions, 17×: Places › c16, c27; Politics & Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family & Community › c48; Work › c19, c55, c43; Health & Environment › c65; Mossville Moving › c36.
-  - Gallery lead captions, 4×: Politics & Integration, Education, Family & Community, Work.
-- Work › c55 and c43: the caption is now just "Photo. Photo by Kyle Tanglao." It doesn't name John Bernard or Delma and Christine Bennett, although the build script says captions were named. Work › c45, "Photo by Kyle Tanglao, 2015.", doesn't name the narrator either.
+- Work › c45: the caption "Photo by Kyle Tanglao, 2015." doesn’t name the narrator.
 - Church › c74: the new caption drops the old photo credit "Photo by Kyle Tanglao". Work › c33 now uses the same caption, with no credit (it had no old caption).
 - Places › c17: the old caption's "2015" was dropped. The new caption has no date.
 - Church › c28: the caption year changed from 2016 to 2015 (now the same caption as c76), but the c28 credit still says 2016.
 
 ### Kept from the old text
 
-- Family & Community › c48: the caption "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015…" sits on a photo of Vera Payne (35_vera_payne.jpg, and its new alt text says Vera Payne). The same mismatch is the Family & Community gallery lead caption.
 - Interviewers and years that don't agree across clips:
   - Vera Payne: c48 credits Chelsea Arseneault, while c2 and c47 credit Doug Mungin (all 2015). The c47 and c48 audio files are both "vera_payne_update".
   - Butch Lemelle, interviewed by Jennifer A. Cramer: c3 and c28 say 2016, c76 says 2015.
@@ -175,7 +174,7 @@ Please check the sources for these:
   - The Old Ways: c53
   - Education: c52, which is unpublished
   - Church: c47
-  - Family & Community: c48, the mismatched caption noted above
+  - Family & Community: c48
   - Work: c19
   - Health & Environment: c30
   - Mossville Moving: c6

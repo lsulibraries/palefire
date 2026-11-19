@@ -1045,7 +1045,8 @@ $section('History of KLSU', [
 </li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" description: "Christmas,"and" → "Christmas," and"
 </li></ul>
 <h4>Transcripts</h4>
-<ul><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
+<ul><li>WJBO / May 1947 (C38), clip "Ralph Steetle on building WLSU" transcript: "So the building is gone,or the station?" → "So the building is gone, or the station?" (fixed 2026-11-19)
+</li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
 </li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do.""" → "a lot easier to do.""
 </li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building" → "Music and Dramatic Arts building"
 </li><li>WLSU, 1947–1973 / Summer 1949 (C45.html), clip "Lucile Ruby Woodard on discs and magnetic tape" transcript: "fifteen-inch wax disks" → "fifteen-inch wax discs"
@@ -1113,7 +1114,7 @@ $section('History of KLSU', [
 </li><li><strong>“Professor Emerita”</strong>: the old descriptions called Lucile Ruby Woodard “Professor Emeritus of Speech”; changed to Emerita. Revert if LSU’s title was Emeritus.
 </li><li><strong>Lucile Ruby Woodard</strong>: the old text spelled her first name both Lucile and Lucille; now Lucile everywhere (her interview and the 1955 Reveille headline use Lucile).
 </li><li><strong>WLSU / October 18, 1947 (C40)</strong>: “damage from Hurricane George.” Kept as written; please confirm the storm’s name, since 1947 Atlantic hurricanes weren’t officially named.
-</li><li><strong>Transcripts</strong>: kept as spoken (“y’all broadcasted,” “all the sudden,” “tampered with wire recorders,” “cut digital video”). One typo is still in the built text: <strong>WJBO / May 1947 (C38)</strong>, “Ralph Steetle on building WLSU”: “So the building is gone,or the station?” needs a space after the comma (fix in the editor, or in data/klsu.json before the build). Also Andrew Nackley: “bought into the School of Journalism and there was a push” has no comma before “and”; kept.
+</li><li><strong>Transcripts</strong>: kept as spoken (“y’all broadcasted,” “all the sudden,” “tampered with wire recorders,” “cut digital video”). Also Andrew Nackley: “bought into the School of Journalism and there was a push” has no comma before “and”; kept.
 </li><li><strong>Dez Crawford (C68)</strong>: “Wisconsin La Crosse State University” (the speaker’s name for UW–La Crosse; only the city’s spelling was corrected).
 </li><li><strong>Entry dates</strong>: kept as on the slides, including approximate ones (Fall 1915, Spring 1936). The nav menu and slide labels sometimes differed only by commas; the slide label was used.
 </li><li><strong>Not carried over</strong> (section 1, Structure): the unused BlueDucks audio and four unused photos. Confirm none were meant for the exhibition.
@@ -1528,7 +1529,10 @@ $section('Mossville History Project', [
 </li><li>Health &amp; Environment › c46: "The perserverence of Mossvillians" → "The perseverance of Mossvillians" (old menu and clip page, 2×)
 </li></ul>
 <h4>Photo captions</h4>
-<ul><li>"By Kyle Tanglao" → "Photo by Kyle Tanglao" (4×: Heritage › c1, c2; Places › c5; Church › c71)
+<ul><li>"Photo. Photo by" → "Photo by" (fixed 2026-11-19; the migration had doubled "Photo." where the old caption had two spaces before its credit). Clip captions, 17×: Places › c16, c27; Politics &amp; Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family &amp; Community › c48; Work › c19, c55, c43; Health &amp; Environment › c65; Mossville Moving › c36. Gallery lead captions, 4×: Politics &amp; Integration, Education, Family &amp; Community, Work.
+</li><li>Family &amp; Community › c48 and the gallery’s lead caption: "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015." → "Vera Payne, 2015." (fixed 2026-11-19). The photo is of Vera Payne; the old caption named the wrong person.
+</li><li>Work › c55: "Photo by Kyle Tanglao." → "John Bernard. Photo by Kyle Tanglao."; Work › c43: → "Delma and Christine Bennett. Photo by Kyle Tanglao." (fixed 2026-11-19)
+</li><li>"By Kyle Tanglao" → "Photo by Kyle Tanglao" (4×: Heritage › c1, c2; Places › c5; Church › c71)
 </li><li>Education › c25: "Della Dotson, 2015. By Stephanie Dragoon." → "Della Dotson, 2015. Photo by Stephanie Dragoon."
 </li><li>Heritage › c4: "George Braxton, 2015. By Kyle Tanglao." (the caption belonged to a different photo) → "Old Spanish Trail map: the Southern Borderland Trunkline from California to Florida."
 </li><li>Heritage › c31: "Mossville, 1932 Map. LSU Cartographic Information Center" → "Map of Mossville, 1932. LSU Cartographic Information Center."
@@ -1573,18 +1577,13 @@ $section('Mossville History Project', [
 </li></ul>
 <h3>To verify</h3>
 <h4>Introduced in migration</h4>
-<ul><li><strong>"Photo. Photo by" stutter.</strong> Where the old caption had a double space before the credit, the migrated caption repeats "Photo." Example: "LaSalle Williams, 2016.  Photo by Kyle Tanglao." → "LaSalle Williams, 2016. Photo. Photo by Kyle Tanglao."
-<ul><li>Clip captions, 17×: Places › c16, c27; Politics &amp; Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family &amp; Community › c48; Work › c19, c55, c43; Health &amp; Environment › c65; Mossville Moving › c36.
-</li><li>Gallery lead captions, 4×: Politics &amp; Integration, Education, Family &amp; Community, Work.
-</li></ul>
-</li><li>Work › c55 and c43: the caption is now just "Photo. Photo by Kyle Tanglao." It doesn't name John Bernard or Delma and Christine Bennett, although the build script says captions were named. Work › c45, "Photo by Kyle Tanglao, 2015.", doesn't name the narrator either.
+<ul><li>Work › c45: the caption "Photo by Kyle Tanglao, 2015." doesn’t name the narrator.
 </li><li>Church › c74: the new caption drops the old photo credit "Photo by Kyle Tanglao". Work › c33 now uses the same caption, with no credit (it had no old caption).
 </li><li>Places › c17: the old caption's "2015" was dropped. The new caption has no date.
 </li><li>Church › c28: the caption year changed from 2016 to 2015 (now the same caption as c76), but the c28 credit still says 2016.
 </li></ul>
 <h4>Kept from the old text</h4>
-<ul><li>Family &amp; Community › c48: the caption "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015…" sits on a photo of Vera Payne (35_vera_payne.jpg, and its new alt text says Vera Payne). The same mismatch is the Family &amp; Community gallery lead caption.
-</li><li>Interviewers and years that don't agree across clips:
+<ul><li>Interviewers and years that don't agree across clips:
 <ul><li>Vera Payne: c48 credits Chelsea Arseneault, while c2 and c47 credit Doug Mungin (all 2015). The c47 and c48 audio files are both "vera_payne_update".
 </li><li>Butch Lemelle, interviewed by Jennifer A. Cramer: c3 and c28 say 2016, c76 says 2015.
 </li><li>Hal McMillin: c65 says 2016, c36 says 2015, and the c65 caption says 2015.
@@ -1651,7 +1650,7 @@ $section('Mossville History Project', [
 </li><li>The Old Ways: c53
 </li><li>Education: c52, which is unpublished
 </li><li>Church: c47
-</li><li>Family &amp; Community: c48, the mismatched caption noted above
+</li><li>Family &amp; Community: c48
 </li><li>Work: c19
 </li><li>Health &amp; Environment: c30
 </li><li>Mossville Moving: c6

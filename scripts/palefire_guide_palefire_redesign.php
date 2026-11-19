@@ -693,6 +693,12 @@ HTML),
 <li>A new guide page, Exhibition Migration Review, lists every change made to the online exhibitions when they moved to the new site: each correction to the old text (old → new), the questions that still need a curator’s answer, the wording written new such as alt text and captions, and how the audio and images were prepared (mono, leveled to −16 LUFS, AAC). One section per exhibition. It starts unpublished.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Mossville and KLSU fixes', <<<'HTML'
+<ul>
+<li>Mossville History Project: 21 photo captions no longer read “Photo. Photo by…”, a slip from the move. The Family & Community photo of Vera Payne is now captioned with her name instead of Lenoria Ambrose’s, and two photos in Work now name who is in them.</li>
+<li>History of KLSU: a missing space in one transcript (“gone, or the station?”).</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
