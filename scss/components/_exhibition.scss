@@ -4679,29 +4679,13 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
   }
 
   // Lit lamps (build/exhibit-deck.js: LINE and REPRO, as set for playback
-  // into a digitizer), a dim glow round each.
+  // into a digitizer); the dim glow round each is the drawing's own.
   .led-dim.led-on {
     fill: #b8823e;
   }
 
   .led-grn.led-on {
     fill: #4f9a68;
-  }
-
-  .led-glow {
-    stop-opacity: .3;
-
-    + .led-glow {
-      stop-opacity: 0;
-    }
-  }
-
-  .led-glow--dim {
-    stop-color: #b8823e;
-  }
-
-  .led-glow--grn {
-    stop-color: #4f9a68;
   }
 
   .needle {

@@ -629,6 +629,7 @@ HTML),
 <li>What Endures: the episodes now come five to a page instead of in a small scrolling box. Arrows under the list step through the pages, and the episode you point at still shows at the top of the section.</li>
 <li>The tape deck is now set up the way archives digitize: the LINE and REPRO switches are pressed in with softly lit lamps, and the record switches are off. Its small labels are also straighter.</li>
 <li>The tape deck’s lit lamps no longer show a dark square around them.</li>
+<li>The tape deck’s lit lamps no longer show a dark square around them.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

@@ -129,7 +129,8 @@ s += txt(65, 880, 0, 'MIC', 6.5);
 const brk = (x1, x2, t) => txt((x1 + x2) / 2, 681, 0, t, 7) + G([[x1 - 4, 692, 0], [x1 - 4, 686, 0], [x2 + 4, 686, 0], [x2 + 4, 692, 0]], 'stroke-opacity=".45"', 1);
 s += brk(165, 410, 'INPUT SELECT') + brk(510, 550, 'FUNCTION') + brk(635, 715, 'OUTPUT SELECT');
 // A push switch with its lamp; on, the lamp is lit (.led-on) in a faint
-// halo (#pf-led-<color>). Set as for playing tapes into a digitizer, the
+// halo (#pf-led-<color>, its colors in the drawing itself: a gradient
+// waiting on the stylesheet drew black). Set as for playing tapes into a digitizer, the
 // usual work: INPUT SELECT on LINE, OUTPUT SELECT on REPRO (off the
 // playback head), and FUNCTION's record-ready L and R off.
 const lever = (x, t, led, on) => {
@@ -271,7 +272,7 @@ const body = (s + m + f + d).replace(/<(polygon|polyline|line|path)\b([^>]*?)\/>
   strokes.add(n);
   return '<' + tag + (/class="/.test(at) ? at.replace(/class="/, () => 'class="s' + n + ' ') : ' class="s' + n + '"' + at) + '/>';
 });
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient>${['dim', 'grn'].map(c => `<radialGradient id="pf-led-${c}"><stop class="led-glow led-glow--${c}" offset="0"/><stop class="led-glow led-glow--${c}" offset="1"/></radialGradient>`).join('')}${vuWindows.map((p, i) => `<clipPath id="pf-vu-window-${i}"><polygon points="${p}"/></clipPath>`).join('')}</defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient>${[['dim', '#b8823e'], ['grn', '#4f9a68']].map(([c, hex]) => `<radialGradient id="pf-led-${c}"><stop offset="0" stop-color="${hex}" stop-opacity=".3"/><stop offset="1" stop-color="${hex}" stop-opacity="0"/></radialGradient>`).join('')}${vuWindows.map((p, i) => `<clipPath id="pf-vu-window-${i}"><polygon points="${p}"/></clipPath>`).join('')}</defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
 fs.writeFileSync(out, svg.replace(/\n+/g, '\n'));
 const sorted = [...tones].sort((a, b) => a - b);
 console.log(JSON.stringify({ bytes: svg.length, tones: sorted, strokes: [...strokes].sort((a, b) => a - b), aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));
