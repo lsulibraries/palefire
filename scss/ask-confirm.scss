@@ -5,7 +5,8 @@
 //
 // A modal <dialog> in the top layer: a square sheet on the section's color
 // with a hairline frame and the slip's gold rule along its top, the title
-// in the labels' mono capitals, the statement, the pledge under a hairline,
+// in the labels' mono capitals, a one-line lead, three points as hairline
+// rows (each led by its gist in bold), the pledge,
 // then Cancel (secondary) and Agree and send (primary): the theme's own
 // buttons (.pf-button--*, _buttons.scss, in style.css). It rises a little
 // and fades in; no motion, it's simply there.
@@ -60,31 +61,39 @@
   text-transform: uppercase;
 }
 
-.pf-ask-confirm__text,
-.pf-ask-confirm__warn,
+// The lead: the one thing asked, in the headings' color and a size up.
+.pf-ask-confirm__lead {
+  margin: 0;
+  color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
+  font-size: clamp(1.125rem, 1.05rem + .35vw, 1.3125rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+// The points: rows on the hairline, as the hours rows are, no bullets. Each
+// opens with its gist in bold, so the three read at a glance.
+.pf-ask-confirm__points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid #{$pf-hairline};
+
+  li {
+    padding-block: .75rem;
+    border-top: 1px solid #{$pf-hairline};
+  }
+
+  strong {
+    color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
+    font-weight: 700;
+  }
+}
+
+.pf-ask-confirm__points li,
 .pf-ask-confirm__pledge {
   margin: 0;
-  font-size: clamp(1rem, .95rem + .2vw, 1.0625rem);
-  line-height: 1.55;
-}
-
-// The statement in the text color; only what staff may do stands out, in
-// the headings' color and weight.
-.pf-ask-confirm__text strong {
-  color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
-  font-weight: 700;
-}
-
-// The warning about numbers: set off by the accent rule at its start, as
-// the guides' callouts are, its words in the text color.
-.pf-ask-confirm__warn {
-  padding-inline-start: 1rem;
-  border-inline-start: 2px solid var(--pf-inquiry-accent, #{$pf-gold});
-}
-
-.pf-ask-confirm__pledge {
-  padding-top: 1.25rem;
-  border-top: 1px solid #{$pf-hairline};
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 // Side by side, Agree last; on a phone both take the full width, Agree on
