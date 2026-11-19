@@ -23,6 +23,11 @@
  *   have chosen another tab it would name the wrong one.
  * - Find in page opens a hidden panel where the browser supports
  *   hidden="until-found" (its beforematch event).
+ * - The request paths' diamonds (the Quick Start on /v2/special and
+ *   /v2/oralhistory): each time their panel is chosen, the accent glow runs
+ *   its sequence again on every option already revealed
+ *   (js/section-reveal.js), not the reveal itself. .is-rewound clears the
+ *   animation for one frame so it starts over (_guide.scss).
  *
  * - Haptics (Android Chrome and others with navigator.vibrate; not iOS): a
  *   10ms tap when a tab is chosen by tap, key or drag, and a 5ms tick as a
@@ -147,6 +152,18 @@
       ], { duration: GLIDE_MS, easing: 'cubic-bezier(.22, 1, .36, 1)' });
     }
 
+    // The diamonds' glow, again (above). Hidden panels stay laid out
+    // (until-found), so their animations never restart by themselves.
+    function replayPaths(panel) {
+      const lines = panel.querySelectorAll('.pf-paths--reveal .pf-paths__line.is-revealed');
+      if (!lines.length) {
+        return;
+      }
+      lines.forEach((line) => line.classList.add('is-rewound'));
+      void panel.offsetWidth;
+      lines.forEach((line) => line.classList.remove('is-rewound'));
+    }
+
     function show(panel, dir) {
       // Measured first: mid-glide, this is the height it has reached.
       const before = root.offsetHeight;
@@ -166,6 +183,7 @@
         void panel.offsetWidth;
         panel.classList.add('is-entering');
         glideFrom(before);
+        replayPaths(panel);
       }
     }
 

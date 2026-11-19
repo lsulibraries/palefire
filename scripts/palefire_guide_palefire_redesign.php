@@ -482,6 +482,7 @@ HTML),
 <li>On the Oral History homepage, the exhibition cards open the new exhibitions and show their whole pictures, and the small map at the top is drawn as on a location page, every room named, with the Oral History room in gold stripes, a clear label and a bobbing arrow. Landing heroes have a new Spotlight box for the warm light beside the film; Oral History has it off.</li>
 <li>The oral history exhibition cards use the same pictures as the old Oral History page’s Showcase, so they’re recognizable at a glance. The exhibitions’ own title pages keep their large covers.</li>
 <li>The Oral History homepage has tabs under its intro, Listen, Record and Explore, like the old page’s three parts, and its series are shown as tape reels in their boxes, each rolling out when you point at it. Explore shows the online exhibitions across the full width as film stills, each with its title underneath.</li>
+<li>On Special Collections and Oral History, the Quick Start’s diamonds light up in gold again, one after another, every time you come back to their tab, not only the first time.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
@@ -624,6 +625,7 @@ HTML),
 <li>What Endures: the highlight on a pointed-at episode now starts a little before its number, and the episode photos behind the section show their own color, faded under the page color like the location pages’ photos.</li>
 <li>The tape deck now threads the tape properly: it passes over the capstan, and the rubber pinch roller closes on it when a series plays. The series name under the deck is always gold.</li>
 <li>Oral History’s series: a small surprise on the tape deck. Its PLAY, PAUSE and STOP keys can be clicked, and PLAY keeps the reels turning after you move away.</li>
+<li>What Endures: the episodes now come five to a page instead of in a small scrolling box. Arrows under the list step through the pages, and the episode you point at still shows at the top of the section.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

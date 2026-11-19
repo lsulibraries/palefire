@@ -502,6 +502,17 @@ html:not(.pf-reading-dark) .pf-tabs {
   }
 }
 
+// Back to a tab that holds the request paths (js/section-tabs.js): for
+// one frame the diamonds' glow (_guide.scss) has no animation, so it runs
+// its sequence again from the start. The stops and the line stay as they
+// are. As specific as the glow's rules, so it wins by coming later.
+.pf-paths--reveal .pf-paths__line.is-revealed.is-rewound .pf-paths__stop {
+  .pf-paths__icon::before,
+  .pf-paths__icon .fa-secondary {
+    animation: none;
+  }
+}
+
 // "Find in page" can open a hidden panel (hidden="until-found", js adds
 // .has-find where the browser supports it): Bootstrap's [hidden] rule would
 // otherwise keep it display:none. Its contents take no room, but its own
