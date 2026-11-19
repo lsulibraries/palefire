@@ -707,6 +707,13 @@ HTML),
 <li>Oral History’s Find us map is shown full width instead of as a small thumbnail.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Exhibition Migration Review as tables', <<<'HTML'
+<ul>
+<li>The Exhibition Migration Review now shows each correction as a row of a table: where it is, the old text (grayed and struck through) and the new text side by side, so the changes are easy to scan. On a phone each correction is a short card labeled Before and After.</li>
+<li>The review now covers only the eleven oral history exhibitions.</li>
+<li>Long web addresses in guide text now wrap on a phone instead of pushing the page sideways.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

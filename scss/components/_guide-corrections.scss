@@ -1,0 +1,122 @@
+// Guide text: a corrections table (Where | Before | After), as on the
+// Exhibition Migration Review. Text formats drop classes, so the table is
+// marked by its cells: the old text in <del>, the new in <ins>, a note in
+// <em> after it. The Where column is optional.
+// Wide: three columns on hairlines, no box; the old text muted with a faint
+// strike, the new at full strength. Phones: each row stacks as a card (place,
+// then Before and After labeled), so long sentences never scroll sideways.
+
+// Long words and bare URLs wrap instead of widening the page on a phone.
+.pf-guide-prose {
+  overflow-wrap: break-word;
+}
+
+.pf-guide-prose table:has(td > del) {
+  min-width: 0;
+  table-layout: fixed;
+  border: 0;
+  border-top: 1px solid $pf-hairline;
+
+  th,
+  td {
+    border-bottom: 1px solid $pf-hairline;
+  }
+
+  thead th {
+    background: none;
+  }
+
+  // No box, so the text lines up with the prose on both edges.
+  tr > :first-child {
+    padding-inline-start: 0;
+  }
+
+  tr > :last-child {
+    padding-inline-end: 0;
+  }
+
+  // Where takes a quarter; Before and After split the rest.
+  thead th:nth-last-child(3) {
+    width: 24%;
+  }
+
+  tbody th {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  del {
+    color: var(--pf-guide-muted);
+    text-decoration-line: line-through;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  ins {
+    color: var(--bs-emphasis-color);
+    text-decoration: none;
+  }
+
+  del + em,
+  ins + em {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8125rem;
+    font-style: normal;
+    color: var(--pf-guide-muted);
+  }
+
+  @include media-breakpoint-down(md) {
+    display: block;
+    font-size: 1rem;
+
+    thead {
+      @include visually-hidden;
+    }
+
+    tbody,
+    tr,
+    th,
+    td {
+      display: block;
+    }
+
+    tr {
+      padding: 1rem 0;
+      border-bottom: 1px solid $pf-hairline;
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    tbody th {
+      margin-bottom: 0.6rem;
+    }
+
+    td + td {
+      margin-top: 0.6rem;
+    }
+
+    td::before {
+      display: block;
+      margin-bottom: 0.15rem;
+      font: 700 var(--pf-mono-label)/1.5 var(--pf-guide-mono);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--pf-guide-muted);
+    }
+
+    td:nth-of-type(1)::before {
+      content: "Before";
+    }
+
+    td:nth-of-type(2)::before {
+      content: "After";
+    }
+  }
+}

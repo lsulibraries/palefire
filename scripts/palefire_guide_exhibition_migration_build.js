@@ -1,8 +1,7 @@
 // Builds scripts/palefire_guide_exhibition_migration.php (the Exhibition
 // Migration Review guide) from docs/exhibition-corrections: _purpose.html,
-// _process.html, one <folder>.md per oral history exhibition and
-// _special.md, wrapped in palefire_guide_palefire_redesign.php's setup and
-// build code. Run from the repo root after changing any of them:
+// _process.html and one <folder>.md per oral history exhibition, wrapped
+// in palefire_guide_palefire_redesign.php's setup and build code. Run from the repo root after changing any of them:
 //   node scripts/palefire_guide_exhibition_migration_build.js
 const fs = require('fs');
 const REPO = process.cwd();
@@ -95,6 +94,89 @@ function toHtml(md, shift) {
   return out.join('\n');
 }
 
+// ---- Corrections as tables -----------------------------------------------
+// A list item "Where: “old” → “new” (note)" becomes a table row: the place
+// as the row header, the old text in <del>, the new in <ins>, a closing
+// note in <em> after it. Runs of such items in a list become one table
+// (Where | Before | After; no Where column when no row has one), and other
+// items stay list items around it. Text formats drop classes, so <del> and
+// <ins> mark the table for _guide-corrections.scss; if the format strips
+// them the text is kept and the table still reads.
+const QUOTE = /^[“"]([\s\S]*)[”"]$/;
+const unquote = (s) => {
+  s = s.trim();
+  const m = s.match(QUOTE);
+  // Leave “a” / “b” and “a”, “b” as they are.
+  return m && !/[”"]\s*(?:[,/;]|and|or)\s*[“"]/.test(m[1]) ? m[1] : s;
+};
+// Several pairs in one item (“a” → “b”; “c” → “d”) give a row each, with
+// the same place; an item that doesn't split cleanly stays a list item.
+const rowsOf = (item) => {
+  let text = item.trim();
+  let where = '';
+  const w = text.match(/^((?:(?![“"”])[\s\S])*?):\s+([\s\S]*)$/);
+  if (w && w[1].length <= 160 && !w[1].includes('→') && !/<(?!\/?strong>)/.test(w[1])) {
+    where = w[1].replace(/<\/?strong>/g, '').trim();
+    text = w[2];
+  }
+  const pairs = text.split(/(?<=[”"](?:\s*\([^()]*\))?)\s*;\s*(?=[“"])/);
+  const rows = pairs.map((p) => rowOf(p, where));
+  return rows.every(Boolean) ? rows : null;
+};
+const rowOf = (item, where) => {
+  const sides = item.trim().split(' → ');
+  if (sides.length !== 2) return null;
+  let [left, right] = sides;
+  // A closing parenthesis (with any nested pairs) on either side is a note:
+  // where the old text was (“old menu”), or how often, or what to check.
+  const split = (text) => {
+    text = text.trim().replace(/[.;]$/, '');
+    if (text.endsWith(')')) {
+      let depth = 0;
+      for (let i = text.length - 1; i >= 0; i--) {
+        if (text[i] === ')') depth++;
+        else if (text[i] === '(' && --depth === 0) {
+          if (i > 0) return [text.slice(0, i).trim().replace(/([”"])[.;]$/, '$1'), text.slice(i + 1, -1).trim()];
+          break;
+        }
+      }
+    }
+    return [text.replace(/([”"])[.;]$/, '$1'), ''];
+  };
+  const [before, beforeNote] = split(left);
+  const [after, note] = split(right);
+  if (!before || !after) return null;
+  return { where, before: unquote(before), beforeNote, after: unquote(after), note };
+};
+const table = (rows) => {
+  const withWhere = rows.some((r) => r.where);
+  const head = (withWhere ? '<th scope="col">Where</th>' : '') + '<th scope="col">Before</th><th scope="col">After</th>';
+  const body = rows.map((r) => '<tr>'
+    + (withWhere ? `<th scope="row">${r.where}</th>` : '')
+    + `<td><del>${r.before}</del>${r.beforeNote ? ` <em>${r.beforeNote}</em>` : ''}</td>`
+    + `<td><ins>${r.after}</ins>${r.note ? ` <em>${r.note}</em>` : ''}</td></tr>`).join('\n');
+  return `<table>\n<thead><tr>${head}</tr></thead>\n<tbody>\n${body}\n</tbody>\n</table>`;
+};
+let tableRows = 0;
+const corrections = (html) => html.replace(/<ul>((?:(?!<\/?ul>)[\s\S])*?)<\/ul>/g, (all, inner) => {
+  const items = inner.trim().replace(/^<li>/, '').replace(/<\/li>$/, '').split(/<\/li>\s*<li>/);
+  const parts = [];
+  for (const item of items) {
+    const rows = rowsOf(item);
+    const last = parts[parts.length - 1];
+    if (rows && last && last.rows) last.rows.push(...rows);
+    else if (rows) parts.push({ rows });
+    else if (last && last.items) last.items.push(item);
+    else parts.push({ items: [item] });
+  }
+  if (!parts.some((p) => p.rows)) return all;
+  return parts.map((p) => {
+    if (p.items) return '<ul><li>' + p.items.join('</li>\n<li>') + '</li></ul>';
+    tableRows += p.rows.length;
+    return table(p.rows);
+  }).join('\n');
+});
+
 // ---- Exhibitions ------------------------------------------------------------
 const OH = 'https://lib.lsu.edu/sites/all/files/oralhistory/presentations/';
 const oral = [
@@ -112,14 +194,9 @@ for (const [file, folder] of oral) {
   // and some run on to a second line); the live address goes first instead.
   md = md.replace(/^New page:.*(\n(?!\s*\n|[A-Z#|*-]).*)*\n?/m, '');
   const head = `<p>Now at <a href="/v2/oralhistory/exhibitions/${folder}">/v2/oralhistory/exhibitions/${folder}</a>.</p>\n`;
-  sections.push({ title, html: head + toHtml(md, 1), family: 'oral' });
+  sections.push({ title, html: head + corrections(toHtml(md, 1)), family: 'oral' });
 }
 sections.sort((a, b) => a.title.replace(/^(The|A) /, '').localeCompare(b.title.replace(/^(The|A) /, '')));
-const special = fs.readFileSync(`${dir}/_special.md`, 'utf8').replace(/\r/g, '').split(/^### /m).slice(1);
-for (const part of special) {
-  const title = part.split('\n')[0].trim();
-  sections.push({ title, html: toHtml(part.split('\n').slice(1).join('\n'), -1), family: 'special' });
-}
 
 // ---- PHP ---------------------------------------------------------------------
 const phpString = (s) => "'" + s.replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
@@ -136,7 +213,8 @@ let tail = src.slice(tailStart);
 const doc = `/**
  * @file
  * Guide page: "Exhibition Migration Review", every change made to the text,
- * audio and images of the online exhibitions when they moved to Palefire,
+ * audio and images of the eleven oral history exhibitions when they moved
+ * to Palefire,
  * for curators to check: what was corrected (old → new), what to verify,
  * and what was written new. As a Modular page in guide mode. Run
  * palefire_guide_setup.php and palefire_guide_blocks_setup.php first.
@@ -155,16 +233,32 @@ const doc = `/**
  * path=<alias> (default /v2/guides/exhibition-migration-review).
  *
  * The exhibitions' sections come from docs/exhibition-corrections/*.md,
- * written by the sessions that built each exhibition (tables there are
- * lists here, so no text format has to allow <table>).
+ * written by the sessions that built each exhibition. Each old → new
+ * correction becomes a table row (Where | Before | After), the old text in
+ * <del> and the new in <ins>, styled by _guide-corrections.scss.
  */`;
 head = head.replace(/\/\*\*[\s\S]*?\*\//, doc);
 head = head.replace("$title = 'Palefire Redesign Project';", "$title = 'Exhibition Migration Review';");
-head = head.replace(/^\$intro = .*$/m, "$intro = '<p>Every change made to the online exhibitions when they moved to the new site: corrections to the old text, things to check, wording written new, and how the audio and images were prepared. For curators and editors to review, one exhibition at a time.</p>';");
+head = head.replace(/^\$intro = .*$/m, "$intro = '<p>Every change made to the oral history exhibitions of the T. Harry Williams Center when they moved to the new site: corrections to the old text, things to check, wording written new, and how the audio and images were prepared. For curators and editors to review, one exhibition at a time.</p>';");
 if (!head.includes('Exhibition Migration Review') || !head.includes("$intro = '<p>Every change")) throw new Error('head replace');
 tail = tail.replace(/palefire_guide_palefire_redesign\.php build/g, 'palefire_guide_exhibition_migration.php build');
 tail = tail.replace("'/v2/guides/palefire-redesign-project'", "'/v2/guides/exhibition-migration-review'");
 tail = tail.replace('Subjects are left empty on purpose: this\n// is a project record, not a research guide.', 'Subjects are left empty on purpose: this\n// is a review list, not a research guide.');
+// The corrections tables need <table>, <del>, <ins> and <em>: warn in the
+// dry run if the format strips them (the text stays, unstyled).
+const tagCheck = `$html_filter = $formats[$format]->filters('filter_html');
+if ($html_filter && $html_filter->status) {
+  $allowed = (string) ($html_filter->settings['allowed_html'] ?? '');
+  foreach (['table', 'thead', 'del', 'ins', 'em'] as $tag) {
+    if (!preg_match('/<' . $tag . '[\\s>]/', $allowed)) {
+      echo "Warning: the $format format strips <$tag>, so the corrections tables lose their styling. Allow it in the format." . PHP_EOL;
+    }
+  }
+}
+`;
+const formatEnd = "  throw new \\RuntimeException(\"Text format '$format' not found.\");\n}\n";
+if (!head.includes(formatEnd)) throw new Error('format check not found');
+head = head.replace(formatEnd, () => formatEnd + tagCheck);
 if (!tail.includes('exhibition-migration-review') || !tail.includes('palefire_guide_exhibition_migration.php build')) throw new Error('tail replace');
 
 const process_html = fs.readFileSync(dir + '/_process.html', 'utf8').replace(/\r/g, '').trim();
@@ -175,4 +269,4 @@ for (const s of sections) {
   body += `$section(${phpString(s.title)}, [\n  $text(NULL, ${nowdoc(s.html)}),\n]);\n\n`;
 }
 fs.writeFileSync('scripts/palefire_guide_exhibition_migration.php', head + body + tail);
-console.log('sections:', sections.map((s) => s.title).join(' | '));
+console.log('table rows:', tableRows); console.log('sections:', sections.map((s) => s.title).join(' | '));

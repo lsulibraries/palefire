@@ -3,7 +3,8 @@
 /**
  * @file
  * Guide page: "Exhibition Migration Review", every change made to the text,
- * audio and images of the online exhibitions when they moved to Palefire,
+ * audio and images of the eleven oral history exhibitions when they moved
+ * to Palefire,
  * for curators to check: what was corrected (old → new), what to verify,
  * and what was written new. As a Modular page in guide mode. Run
  * palefire_guide_setup.php and palefire_guide_blocks_setup.php first.
@@ -22,8 +23,9 @@
  * path=<alias> (default /v2/guides/exhibition-migration-review).
  *
  * The exhibitions' sections come from docs/exhibition-corrections/*.md,
- * written by the sessions that built each exhibition (tables there are
- * lists here, so no text format has to allow <table>).
+ * written by the sessions that built each exhibition. Each old → new
+ * correction becomes a table row (Where | Before | After), the old text in
+ * <del> and the new in <ins>, styled by _guide-corrections.scss.
  */
 declare(strict_types=1);
 
@@ -75,6 +77,15 @@ if ($format === NULL) {
 if (!isset($formats[$format])) {
   throw new \RuntimeException("Text format '$format' not found.");
 }
+$html_filter = $formats[$format]->filters('filter_html');
+if ($html_filter && $html_filter->status) {
+  $allowed = (string) ($html_filter->settings['allowed_html'] ?? '');
+  foreach (['table', 'thead', 'del', 'ins', 'em'] as $tag) {
+    if (!preg_match('/<' . $tag . '[\s>]/', $allowed)) {
+      echo "Warning: the $format format strips <$tag>, so the corrections tables lose their styling. Allow it in the format." . PHP_EOL;
+    }
+  }
+}
 
 // Content helpers: plain arrays, so a dry run creates nothing and the
 // fingerprint covers exactly what the page will say. ------------------------
@@ -123,7 +134,7 @@ $stats = fn (?string $heading, array $items) => [
   'items' => $items,
 ];
 
-$intro = '<p>Every change made to the online exhibitions when they moved to the new site: corrections to the old text, things to check, wording written new, and how the audio and images were prepared. For curators and editors to review, one exhibition at a time.</p>';
+$intro = '<p>Every change made to the oral history exhibitions of the T. Harry Williams Center when they moved to the new site: corrections to the old text, things to check, wording written new, and how the audio and images were prepared. For curators and editors to review, one exhibition at a time.</p>';
 
 // Sections. ----------------------------------------------------------------
 
@@ -143,16 +154,13 @@ HTML),
 $section('How the exhibitions were moved', [
   $text(NULL, <<<'HTML'
 <h3>Where they came from</h3>
-<ul>
-<li><strong>Oral history exhibitions</strong> (eleven, from the T. Harry Williams Center for Oral History): the old listening stations at lib.lsu.edu/sites/all/files/oralhistory/presentations/&lt;folder&gt;. Each now lives at /v2/oralhistory/exhibitions/&lt;folder&gt;, the old folder’s name in lowercase, so the old and new addresses are easy to match.</li>
-<li><strong>Special Collections exhibitions</strong>: AVES, Occult Science and the Audubon exhibition from the Wayback Machine’s copies of the old exhibitions blog and pages; the LSU Union Art Gallery from its showcase on the staging site. They live under /v2/special/exhibitions.</li>
-</ul>
+<p>The eleven exhibitions of the T. Harry Williams Center for Oral History were the old listening stations at lib.lsu.edu/sites/all/files/oralhistory/presentations/&lt;folder&gt;. Each now lives at /v2/oralhistory/exhibitions/&lt;folder&gt;, the old folder’s name in lowercase, so the old and new addresses are easy to match.</p>
 <h3>Text</h3>
 <ul>
 <li>Carried over word for word, then corrected only where listed in each exhibition’s Corrected list.</li>
 <li>Text the old pages had saved in the wrong character encoding (letters such as “DufourÃÂ¢s”) was decoded back to the original characters exactly.</li>
 <li>Straight quotes and apostrophes became curly ones (’ “ ”), and date ranges use an en dash (1939–1942). These are not listed one by one.</li>
-<li>Oral history transcripts: each speaker’s turn starts a new paragraph, with the speaker’s full name in bold capitals (as on the Mossville History Project), not a first name or initials.</li>
+<li>Transcripts: each speaker’s turn starts a new paragraph, with the speaker’s full name in bold capitals (as on the Mossville History Project), not a first name or initials.</li>
 <li>Captions come from each exhibition’s own Pictures or credits pages where they had them, since those give fuller citations than the slides did.</li>
 <li>Every image has new alt text written for people who use screen readers. Alt text is listed under New wording to check.</li>
 </ul>
@@ -167,8 +175,7 @@ $section('How the exhibitions were moved', [
 </ul>
 <h3>Images</h3>
 <ul>
-<li><strong>Oral history exhibitions:</strong> masters at 2,560 pixels on the long side (never enlarged), sRGB JPEG at quality 85, with camera and editing metadata removed.</li>
-<li><strong>Special Collections exhibitions:</strong> made from the 4K scans where they exist (at most 3,840 pixels on the long side), showing the whole sheet where the old pages showed a crop. Each exhibition’s list notes where an image couldn’t be found at full size.</li>
+<li>Masters at 2,560 pixels on the long side (never enlarged), sRGB JPEG at quality 85, with camera and editing metadata removed.</li>
 <li>On the page, each image is served as WebP at the size the screen needs (640, 1,280, 1,920 or 2,560 pixels wide) and loads only as it comes into view.</li>
 </ul>
 HTML),
@@ -182,78 +189,97 @@ $section('Cooperative Extension at LSU', [
 <p>Throughout, apostrophes and quotation marks became typographic (’ “ ”), and date ranges use an en dash (1939–1942). These aren't listed one by one.</p>
 <h3>Corrected</h3>
 <h4>Clip titles (Oral Histories)</h4>
-<ul>
-<li><strong>C5 (Eubanks)</strong>: 4-H Gave Gina First Sewing Machine → 4-H Gave Gina <strong>Her</strong> First Sewing Machine</li>
-<li><strong>C6 (Loupe)</strong>: Incentive for Sheep and Swine Building → Incentive for <strong>the</strong> Sheep and Swine Building</li>
-<li><strong>C10 (Roberts)</strong>: Increase in Vietnamese Fisherman (page heading) → Increase in Vietnamese Fishermen (as in the old menu)</li>
-<li><strong>C11 (Coreil)</strong>: Disaster Recovery (page heading) / On Disaster Recovery (menu) → On Disaster Recovery</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">C5 (Eubanks)</th><td><del>4-H Gave Gina First Sewing Machine</del></td><td><ins>4-H Gave Gina <strong>Her</strong> First Sewing Machine</ins></td></tr>
+<tr><th scope="row">C6 (Loupe)</th><td><del>Incentive for Sheep and Swine Building</del></td><td><ins>Incentive for <strong>the</strong> Sheep and Swine Building</ins></td></tr>
+<tr><th scope="row">C10 (Roberts)</th><td><del>Increase in Vietnamese Fisherman</del> <em>page heading</em></td><td><ins>Increase in Vietnamese Fishermen</ins> <em>as in the old menu</em></td></tr>
+<tr><th scope="row">C11 (Coreil)</th><td><del>Disaster Recovery (page heading) / On Disaster Recovery</del> <em>menu</em></td><td><ins>On Disaster Recovery</ins></td></tr>
+</tbody>
+</table>
 <h4>Speaker labels (all transcripts)</h4>
-<ul><li>"<strong>Pamela Dean</strong>: … <strong>Dean</strong>:" (full name on the first turn, then the surname) → every turn labeled with the full name in bold capitals, as on Mossville: <strong>PAMELA DEAN:</strong>, <strong>ROBERT BADON:</strong>, and so on.
-</li><li>C3: "<strong>Jen Cramer</strong>" → <strong>JENNIFER A. CRAMER</strong>
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del><strong>Pamela Dean</strong>: … <strong>Dean</strong>:</del> <em>full name on the first turn, then the surname</em></td><td><ins>every turn labeled with the full name in bold capitals, as on Mossville: <strong>PAMELA DEAN:</strong>, <strong>ROBERT BADON:</strong>, and so on</ins></td></tr>
+<tr><th scope="row">C3</th><td><del><strong>Jen Cramer</strong></del></td><td><ins><strong>JENNIFER A. CRAMER</strong></ins></td></tr>
+</tbody>
+</table>
 <h4>Transcripts</h4>
-<ul>
-<li><strong>C1 Badon</strong>: a ten-thousand acre sugar cane farm → a ten-thousand-acre sugarcane farm</li>
-<li><strong>C3 Richardson</strong>: the old wives tale → the old wives’ tale</li>
-<li><strong>C4 Loupe</strong>: You had a plow-you followed a mule → You had a plow—you followed a mule</li>
-<li><strong>C4 Loupe</strong>: during World Wwar II → during World War II</li>
-<li><strong>C4 Loupe</strong>: managing farms.Then that brought in → managing farms. Then that brought in</li>
-<li><strong>C4 Loupe</strong>: Oh completely. → Oh, completely.</li>
-<li><strong>C4 Loupe</strong>: Well number one, telephones. → Well, number one, telephones.</li>
-<li><strong>C4 Loupe</strong>: it was alright for me to call a county agent in x parish → it was all right for me to call a county agent in X Parish</li>
-<li><strong>C5 Eubanks</strong>: Oh it's been long. → Oh, it’s been long.</li>
-<li><strong>C5 Eubanks</strong>: Made mostly ladies clothes. → Made mostly ladies’ clothes.</li>
-<li><strong>C7 Cochran</strong>: heated air applied to the sugar cane → heated air applied to the sugarcane</li>
-<li><strong>C7 Cochran</strong>: some of the farmer . . .the extension people → some of the farmer . . . the extension people</li>
-<li><strong>C9 Coreil</strong>: the sea turtles population was crashing → the sea turtle population was crashing</li>
-<li><strong>C9 Coreil</strong>: turtle exclusive devices → turtle excluder devices (TEDs, the devices the rule required)</li>
-<li><strong>C9 Coreil</strong>: But when I go there, it was just scary → But when I got there, it was just scary (transcription slip; check against the audio)</li>
-<li><strong>C9 Coreil</strong>: these VHS radios → these VHF radios (marine radio)</li>
-<li><strong>C9 Coreil</strong>: Governor [Buddy]Roemer, and he asked Roemier "Pull them back. → Governor [Buddy] Roemer, and he asked Roemer, “Pull them back.</li>
-<li><strong>C10 Roberts</strong>: they were artisanal fisherman → they were artisanal fishermen</li>
-<li><strong>C12 Loupe</strong>: my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane → … in sugarcane … in sugarcane</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">C1 Badon</th><td><del>a ten-thousand acre sugar cane farm</del></td><td><ins>a ten-thousand-acre sugarcane farm</ins></td></tr>
+<tr><th scope="row">C3 Richardson</th><td><del>the old wives tale</del></td><td><ins>the old wives’ tale</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>You had a plow-you followed a mule</del></td><td><ins>You had a plow—you followed a mule</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>during World Wwar II</del></td><td><ins>during World War II</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>managing farms.Then that brought in</del></td><td><ins>managing farms. Then that brought in</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>Oh completely</del></td><td><ins>Oh, completely</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>Well number one, telephones</del></td><td><ins>Well, number one, telephones</ins></td></tr>
+<tr><th scope="row">C4 Loupe</th><td><del>it was alright for me to call a county agent in x parish</del></td><td><ins>it was all right for me to call a county agent in X Parish</ins></td></tr>
+<tr><th scope="row">C5 Eubanks</th><td><del>Oh it's been long</del></td><td><ins>Oh, it’s been long</ins></td></tr>
+<tr><th scope="row">C5 Eubanks</th><td><del>Made mostly ladies clothes</del></td><td><ins>Made mostly ladies’ clothes</ins></td></tr>
+<tr><th scope="row">C7 Cochran</th><td><del>heated air applied to the sugar cane</del></td><td><ins>heated air applied to the sugarcane</ins></td></tr>
+<tr><th scope="row">C7 Cochran</th><td><del>some of the farmer . . .the extension people</del></td><td><ins>some of the farmer . . . the extension people</ins></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>the sea turtles population was crashing</del></td><td><ins>the sea turtle population was crashing</ins></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>turtle exclusive devices</del></td><td><ins>turtle excluder devices</ins> <em>TEDs, the devices the rule required</em></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>But when I go there, it was just scary</del></td><td><ins>But when I got there, it was just scary</ins> <em>transcription slip; check against the audio</em></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>these VHS radios</del></td><td><ins>these VHF radios</ins> <em>marine radio</em></td></tr>
+<tr><th scope="row">C9 Coreil</th><td><del>Governor [Buddy]Roemer, and he asked Roemier "Pull them back</del></td><td><ins>Governor [Buddy] Roemer, and he asked Roemer, “Pull them back</ins></td></tr>
+<tr><th scope="row">C10 Roberts</th><td><del>they were artisanal fisherman</del></td><td><ins>they were artisanal fishermen</ins></td></tr>
+<tr><th scope="row">C12 Loupe</th><td><del>my specialty as an agronomist, in sugar cane … my PhD actually in sugar cane</del></td><td><ins>… in sugarcane … in sugarcane</ins></td></tr>
+</tbody>
+</table>
 <h4>Narrators (biographies, from badon/howell/richardson/loupe/eubanks/cochran/coreil/roberts.html)</h4>
-<ul>
-<li><strong>Richardson</strong>: earned a B.S degree in 1966 → earned a B.S. degree in 1966</li>
-<li><strong>Richardson</strong>: recognized twice as and Outstanding Teacher → recognized twice as an Outstanding Teacher</li>
-<li><strong>Richardson</strong>: He currently serves as Director of Louisiana Cooperative Extension Service and LSU Vice-President for Agriculture and Dean for the College of Agriculture. → At the time of the interview, he served as Director of the Louisiana Cooperative Extension Service, LSU Vice President for Agriculture, and Dean of the College of Agriculture.</li>
-<li><strong>Loupe</strong>: In 1978, he was selected as director of Louisiana Cooperative Extension Services. → … director of the Louisiana Cooperative Extension Service.</li>
-<li><strong>Loupe</strong>: American Society of Sugarcane Technologies → American Society of Sugar Cane Technologists</li>
-<li><strong>Eubanks</strong>: L.E. Eubanks → L. E. Eubanks</li>
-<li><strong>Cochran</strong>: born on December 10, 1933 in Darbun → born on December 10, 1933, in Darbun</li>
-<li><strong>Cochran</strong>: a bachelor's of science in agricultural engineering → a bachelor of science in agricultural engineering</li>
-<li><strong>Coreil</strong>: a PhD in vocation education → a PhD in vocational education</li>
-<li><strong>Coreil</strong>: involved in Louisiana Cooperative Extension Services → involved in the Louisiana Cooperative Extension Service</li>
-<li><strong>Coreil</strong>: Director of Louisiana Cooperative Extension Services → Director of the Louisiana Cooperative Extension Service</li>
-<li><strong>All eight</strong>: "[Name]'s interview is housed in …" plus the citation, as two paragraphs → Moved into the entry's catalog-record block, after the citation: "[Surname]’s interview is housed in …"</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Richardson</th><td><del>earned a B.S degree in 1966</del></td><td><ins>earned a B.S. degree in 1966</ins></td></tr>
+<tr><th scope="row">Richardson</th><td><del>recognized twice as and Outstanding Teacher</del></td><td><ins>recognized twice as an Outstanding Teacher</ins></td></tr>
+<tr><th scope="row">Richardson</th><td><del>He currently serves as Director of Louisiana Cooperative Extension Service and LSU Vice-President for Agriculture and Dean for the College of Agriculture</del></td><td><ins>At the time of the interview, he served as Director of the Louisiana Cooperative Extension Service, LSU Vice President for Agriculture, and Dean of the College of Agriculture</ins></td></tr>
+<tr><th scope="row">Loupe</th><td><del>In 1978, he was selected as director of Louisiana Cooperative Extension Services</del></td><td><ins>… director of the Louisiana Cooperative Extension Service</ins></td></tr>
+<tr><th scope="row">Loupe</th><td><del>American Society of Sugarcane Technologies</del></td><td><ins>American Society of Sugar Cane Technologists</ins></td></tr>
+<tr><th scope="row">Eubanks</th><td><del>L.E. Eubanks</del></td><td><ins>L. E. Eubanks</ins></td></tr>
+<tr><th scope="row">Cochran</th><td><del>born on December 10, 1933 in Darbun</del></td><td><ins>born on December 10, 1933, in Darbun</ins></td></tr>
+<tr><th scope="row">Cochran</th><td><del>a bachelor's of science in agricultural engineering</del></td><td><ins>a bachelor of science in agricultural engineering</ins></td></tr>
+<tr><th scope="row">Coreil</th><td><del>a PhD in vocation education</del></td><td><ins>a PhD in vocational education</ins></td></tr>
+<tr><th scope="row">Coreil</th><td><del>involved in Louisiana Cooperative Extension Services</del></td><td><ins>involved in the Louisiana Cooperative Extension Service</ins></td></tr>
+<tr><th scope="row">Coreil</th><td><del>Director of Louisiana Cooperative Extension Services</del></td><td><ins>Director of the Louisiana Cooperative Extension Service</ins></td></tr>
+<tr><th scope="row">All eight</th><td><del>"[Name]'s interview is housed in …" plus the citation, as two paragraphs</del></td><td><ins>Moved into the entry's catalog-record block, after the citation: "[Surname]’s interview is housed in …"</ins></td></tr>
+</tbody>
+</table>
 <h4>Pictures (captions from pictures.html)</h4>
-<ul>
-<li><strong>Visitors from Indonesia</strong>: Agent has noted on back of photograph → Agent has noted on the back of the photograph</li>
-<li><strong>William Rufus Dodson</strong>: c.1916 … he was soon appointed the first dean the College of Agriculture → c. 1916 … He was soon appointed the first dean of the College of Agriculture</li>
-<li><strong>W. H. Balis</strong>: Balis served as … and supervised the boys' pig clubs. → <strong>W. H.</strong> Balis served as … and supervised the boys’ pig clubs. (initials read from the portrait's inscription; see list 2)</li>
-<li><strong>Eat Right and Be Physically Fit</strong>: c.1936 → c. 1936</li>
-<li><strong>Pickles and Preserves</strong>: Woman displaying cabinet of pickled … → Woman displaying a cabinet of pickled …</li>
-<li><strong>Mary Mims</strong>: Image from McGinty, Garnie William. Mary Williams Mims: … Ruston, La.: G. McGinty, 1978. S544.3 .L7 M33 1978 Middleton → Image from Garnie William McGinty, <em>Mary Williams Mims: …</em> (Ruston, La.: G. McGinty, 1978). Middleton Library, S544.3 .L7 M33 1978.</li>
-<li><strong>E. S. Richardson</strong>: Richardson was the Supervisor of … → <strong>E. S.</strong> Richardson was the Supervisor of … (initials from the inscription)</li>
-<li><strong>Clyde Mobley</strong>: c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection → … in Bienville Parish. By 1917, she … LSU Photograph Collection</li>
-<li><strong>Health Checks</strong>: c.1942 → c. 1942</li>
-<li><strong>Future Office of Agricultural Extension</strong>: Sign stating ''Future Office of Agricultural Extension,'' c.1946 → Sign stating “Future Office of Agricultural Extension,” c. 1946</li>
-<li><strong>Hog Cholera</strong>: Image include pigs grazing in a field and entrails of animals afflicted with hog cholera/swine typhoid, n.d. → Pigs grazing in a field and the entrails of animals with hog cholera and swine typhoid, n.d.</li>
-<li><strong>Captions with a line break (Zola Cosby)</strong>: "…cabbages, 1927.⏎Rapides Parish" → one line</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Visitors from Indonesia</th><td><del>Agent has noted on back of photograph</del></td><td><ins>Agent has noted on the back of the photograph</ins></td></tr>
+<tr><th scope="row">William Rufus Dodson</th><td><del>c.1916 … he was soon appointed the first dean the College of Agriculture</del></td><td><ins>c. 1916 … He was soon appointed the first dean of the College of Agriculture</ins></td></tr>
+<tr><th scope="row">W. H. Balis</th><td><del>Balis served as … and supervised the boys' pig clubs</del></td><td><ins><strong>W. H.</strong> Balis served as … and supervised the boys’ pig clubs.</ins> <em>initials read from the portrait's inscription; see list 2</em></td></tr>
+<tr><th scope="row">Eat Right and Be Physically Fit</th><td><del>c.1936</del></td><td><ins>c. 1936</ins></td></tr>
+<tr><th scope="row">Pickles and Preserves</th><td><del>Woman displaying cabinet of pickled …</del></td><td><ins>Woman displaying a cabinet of pickled …</ins></td></tr>
+<tr><th scope="row">Mary Mims</th><td><del>Image from McGinty, Garnie William. Mary Williams Mims: … Ruston, La.: G. McGinty, 1978. S544.3 .L7 M33 1978 Middleton</del></td><td><ins>Image from Garnie William McGinty, <em>Mary Williams Mims: …</em> (Ruston, La.: G. McGinty, 1978). Middleton Library, S544.3 .L7 M33 1978</ins></td></tr>
+<tr><th scope="row">E. S. Richardson</th><td><del>Richardson was the Supervisor of …</del></td><td><ins><strong>E. S.</strong> Richardson was the Supervisor of …</ins> <em>initials from the inscription</em></td></tr>
+<tr><th scope="row">Clyde Mobley</th><td><del>c. 1925 … in Bienville Parish. by 1917, she … LSU Photographic Collection</del></td><td><ins>… in Bienville Parish. By 1917, she … LSU Photograph Collection</ins></td></tr>
+<tr><th scope="row">Health Checks</th><td><del>c.1942</del></td><td><ins>c. 1942</ins></td></tr>
+<tr><th scope="row">Future Office of Agricultural Extension</th><td><del>Sign stating ''Future Office of Agricultural Extension,'' c.1946</del></td><td><ins>Sign stating “Future Office of Agricultural Extension,” c. 1946</ins></td></tr>
+<tr><th scope="row">Hog Cholera</th><td><del>Image include pigs grazing in a field and entrails of animals afflicted with hog cholera/swine typhoid, n.d</del></td><td><ins>Pigs grazing in a field and the entrails of animals with hog cholera and swine typhoid, n.d</ins></td></tr>
+<tr><th scope="row">Captions with a line break (Zola Cosby)</th><td><del>…cabbages, 1927.⏎Rapides Parish</del></td><td><ins>one line</ins></td></tr>
+</tbody>
+</table>
 <h4>Intro and About (about.html; about2.html is an unlinked duplicate)</h4>
-<ul>
-<li><strong>Intro</strong>: featuring oral histories from LSU Libraries T. Harry Williams Center → … from LSU Libraries’ T. Harry Williams Center</li>
-<li><strong>Intro</strong>: is presented in conjunction with → was presented in conjunction with (past tense; the exhibition has closed)</li>
-<li><strong>Intro</strong>: The oral history listening station includes → The listening station includes</li>
-<li><strong>Intro</strong>: earning money by sewing ladies clothing → … sewing ladies’ clothing</li>
-<li><strong>About</strong>: The gallery exhibit examines … Covering two floors, this exhibition includes … from every major collection including: … Selected items highlight … and cover topics → The gallery exhibition examined … Covering two floors, it included … from every major collection: … Selected items highlighted … and covered topics</li>
-<li><strong>About</strong>: socio-economic groups → socioeconomic groups</li>
-<li><strong>About</strong>: Links page: six icon/QR links (Interviews, Williams Center, Exhibitions, LSU Libraries, LSU AgCenter, LSU College of Agriculture) → Three text links: the Cooperative Extension interviews (lib.lsu.edu/oralhistory/collections?field_series_value=13), LSU AgCenter, LSU College of Agriculture (www.coa.lsu.edu now redirects to <a href="https://www.lsu.edu/agriculture/">https://www.lsu.edu/agriculture/</a>, so it links there). The QR codes are dropped.</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Intro</th><td><del>featuring oral histories from LSU Libraries T. Harry Williams Center</del></td><td><ins>… from LSU Libraries’ T. Harry Williams Center</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>is presented in conjunction with</del></td><td><ins>was presented in conjunction with</ins> <em>past tense; the exhibition has closed</em></td></tr>
+<tr><th scope="row">Intro</th><td><del>The oral history listening station includes</del></td><td><ins>The listening station includes</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>earning money by sewing ladies clothing</del></td><td><ins>… sewing ladies’ clothing</ins></td></tr>
+<tr><th scope="row">About</th><td><del>The gallery exhibit examines … Covering two floors, this exhibition includes … from every major collection including: … Selected items highlight … and cover topics</del></td><td><ins>The gallery exhibition examined … Covering two floors, it included … from every major collection: … Selected items highlighted … and covered topics</ins></td></tr>
+<tr><th scope="row">About</th><td><del>socio-economic groups</del></td><td><ins>socioeconomic groups</ins></td></tr>
+<tr><th scope="row">About</th><td><del>Links page: six icon/QR links</del> <em>Interviews, Williams Center, Exhibitions, LSU Libraries, LSU AgCenter, LSU College of Agriculture</em></td><td><ins>Three text links: the Cooperative Extension interviews (lib.lsu.edu/oralhistory/collections?field_series_value=13), LSU AgCenter, LSU College of Agriculture (www.coa.lsu.edu now redirects to <a href="https://www.lsu.edu/agriculture/">https://www.lsu.edu/agriculture/</a>, so it links there). The QR codes are dropped</ins></td></tr>
+</tbody>
+</table>
 <h4>Acknowledgments (acknowledgements.html)</h4>
 <ul>
 <li><strong>Acknowledgements:</strong>: Acknowledgments (American spelling)</li>
@@ -282,16 +308,30 @@ $section('Cooperative Extension at LSU', [
 </li></ul>
 <p><strong>Transcripts: left as spoken or as transcribed, but doubtful</strong></p>
 <ul><li><strong>C3</strong>: "The Farmer’s Almanac is one of best predictors": possibly "<em>The Old Farmer’s Almanac</em>" or "Farmers’ Almanac". The words "one of [the] best" were left as spoken.
-</li><li><strong>C9</strong>: "when I go there" → "when I got there" is my reading. Confirm on the audio.
-</li><li><strong>C9</strong>: "talking to the national fisheries services": the agency is the National Marine Fisheries Service. Left as spoken.
-</li><li><strong>C9</strong>: "Randy Roach, who’s now mayor of Lake Charles" is true as of the 2014 interview. Left as spoken.
-</li><li><strong>C9</strong>: "It’s something that I hoped to never to have to do again" was left as spoken.
-</li><li><strong>C2</strong>: "We were the Julia Childs of the day" was left as spoken.
-</li><li><strong>C11</strong>: "the internet don’t work in a disaster" was left as spoken.
-</li><li><strong>C8</strong>: "Tommy [?]" is an unknown surname, kept from the old transcript.
-</li><li><strong>C12</strong>: "If they could get the [?] of the school board" is an unknown word, kept.
-</li><li><strong>C6</strong>: "John A. Cox", the director Loupe succeeded, is unverified.
-</li><li><strong>C10</strong>: "Asian oriented" is the speaker's wording, kept.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">C9</th><td><del>when I go there</del></td><td><ins>"when I got there" is my reading. Confirm on the audio</ins></td></tr>
+</tbody>
+</table>
+<ul><li><strong>C9</strong>: "talking to the national fisheries services": the agency is the National Marine Fisheries Service. Left as spoken.
+</li>
+<li><strong>C9</strong>: "Randy Roach, who’s now mayor of Lake Charles" is true as of the 2014 interview. Left as spoken.
+</li>
+<li><strong>C9</strong>: "It’s something that I hoped to never to have to do again" was left as spoken.
+</li>
+<li><strong>C2</strong>: "We were the Julia Childs of the day" was left as spoken.
+</li>
+<li><strong>C11</strong>: "the internet don’t work in a disaster" was left as spoken.
+</li>
+<li><strong>C8</strong>: "Tommy [?]" is an unknown surname, kept from the old transcript.
+</li>
+<li><strong>C12</strong>: "If they could get the [?] of the school board" is an unknown word, kept.
+</li>
+<li><strong>C6</strong>: "John A. Cox", the director Loupe succeeded, is unverified.
+</li>
+<li><strong>C10</strong>: "Asian oriented" is the speaker's wording, kept.
 </li></ul>
 <p><strong>Bios and records</strong></p>
 <ul><li><strong>Richardson bio</strong>: "He attended Dearing public schools". The town near Kennett, Missouri, is spelled <strong>Deering</strong>; probably a typo, but it was left as written.
@@ -403,39 +443,53 @@ $section('Do Not Tear Up My Earth', [
 <h3>Corrected</h3>
 <p>Each transcript is the old page's quote, which is the whole clip (5–32 seconds). The words are unchanged; only spelling, punctuation and quotation marks were fixed.</p>
 <h4>Transcripts</h4>
-<ul>
-<li><strong>Awakening / The same family (Vinton)</strong>: I guess I've always thought of us all belonging to the same family, really." → I guess I’ve always thought of us all belonging to the same family, really. <em>(stray closing quotation mark removed)</em></li>
-<li><strong>Awakening / We deserve better (Bourg)</strong>: You know for a state that I love so much and to be proud to be from it's probably one of the most polluted… And the people of Louisiana really, we deserve better than that and we need to get better than that. → You know, for a state that I love so much, and to be proud to be from, it’s probably one of the most polluted… And the people of Louisiana really, we deserve better than that, and we need to get better than that. <em>(commas added)</em></li>
-<li><strong>Awakening / Running from the plant (Ramirez)</strong>: We've been having problems with the plant early on because I remember when it would explode, we didn't have an alarm but the whistle to go off, but the police would come in, I say police but the sheriffs would come and they would tell us… barefooted and we were running Old Spanish Trail where gators were, they had gators in there… swamp land.” → We’ve been having problems with the plant early on, because I remember when it would explode, we didn’t have an alarm but the whistle to go off. But the police would come in, I say police but the sheriffs would come, and they would tell us… barefooted, and we were running Old Spanish Trail where gators were. They had gators in there… swamp land. <em>(sentences split, commas added, stray closing quotation mark removed)</em></li>
-<li><strong>Hysterical Housewives / Hysterical housewives, raving idiots (Subra)</strong>: …not a clue about what was going on.‘How dare these people come in here… when we're trying to do our job? → …not a clue about what was going on. “How dare these people come in here… when we’re trying to do our job?” <em>(missing space added; the unclosed single quotation mark is now a closed pair of double quotation marks)</em></li>
-<li><strong>Hysterical Housewives / A meddlesome housewife (Tutweiler)</strong>: …and I kind of liked it because that's what I was. I was a housewife, I had a baby on my hip and I was certainly going to meddle if they were going to meddle with me which is, you know… → …and I kind of liked it, because that’s what I was. I was a housewife, I had a baby on my hip, and I was certainly going to meddle if they were going to meddle with me, which is, you know… <em>(commas added)</em></li>
-<li><strong>Why Women? / A mother’s child (Jackson)</strong>: …more stronger than a man and once you mess with a mother's child… → …more stronger than a man, and once you mess with a mother’s child… <em>(comma added; "more stronger" kept as spoken)</em></li>
-<li><strong>Why Women? / I wasn’t backing off (Baudoin)</strong>: I think a woman is going to take an issue and it's not going away because when you get . . . I wasn't backing off and so certainly I think… cleaned up or straightened up, or closed… → I think a woman is going to take an issue and it’s not going away, because when you get . . . I wasn’t backing off. And so certainly I think… cleaned up, or straightened up, or closed… <em>(new sentence and commas added)</em></li>
-<li><strong>Why Women? / Don’t tear up My Earth (Goldsmith)</strong>: …for us to take care of and we're not the ones… I have a very strong belief in God and this was God's message to me that you don't tear up My Earth, it was given to you. → …for us to take care of, and we’re not the ones… I have a very strong belief in God, and this was God’s message to me: that you don’t tear up My Earth, it was given to you. <em>(commas and colon added)</em></li>
-<li><strong>All transcripts</strong>: Straight apostrophes (') → Curly apostrophes (’)</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Awakening / The same family (Vinton)</th><td><del>I guess I've always thought of us all belonging to the same family, really."</del></td><td><ins>I guess I’ve always thought of us all belonging to the same family, really. <em>(stray closing quotation mark removed)</em></ins></td></tr>
+<tr><th scope="row">Awakening / We deserve better (Bourg)</th><td><del>You know for a state that I love so much and to be proud to be from it's probably one of the most polluted… And the people of Louisiana really, we deserve better than that and we need to get better than that</del></td><td><ins>You know, for a state that I love so much, and to be proud to be from, it’s probably one of the most polluted… And the people of Louisiana really, we deserve better than that, and we need to get better than that. <em>(commas added)</em></ins></td></tr>
+<tr><th scope="row">Awakening / Running from the plant (Ramirez)</th><td><del>We've been having problems with the plant early on because I remember when it would explode, we didn't have an alarm but the whistle to go off, but the police would come in, I say police but the sheriffs would come and they would tell us… barefooted and we were running Old Spanish Trail where gators were, they had gators in there… swamp land.”</del></td><td><ins>We’ve been having problems with the plant early on, because I remember when it would explode, we didn’t have an alarm but the whistle to go off. But the police would come in, I say police but the sheriffs would come, and they would tell us… barefooted, and we were running Old Spanish Trail where gators were. They had gators in there… swamp land. <em>(sentences split, commas added, stray closing quotation mark removed)</em></ins></td></tr>
+<tr><th scope="row">Hysterical Housewives / Hysterical housewives, raving idiots (Subra)</th><td><del>…not a clue about what was going on.‘How dare these people come in here… when we're trying to do our job?</del></td><td><ins>…not a clue about what was going on. “How dare these people come in here… when we’re trying to do our job?” <em>(missing space added; the unclosed single quotation mark is now a closed pair of double quotation marks)</em></ins></td></tr>
+<tr><th scope="row">Hysterical Housewives / A meddlesome housewife (Tutweiler)</th><td><del>…and I kind of liked it because that's what I was. I was a housewife, I had a baby on my hip and I was certainly going to meddle if they were going to meddle with me which is, you know…</del></td><td><ins>…and I kind of liked it, because that’s what I was. I was a housewife, I had a baby on my hip, and I was certainly going to meddle if they were going to meddle with me, which is, you know… <em>(commas added)</em></ins></td></tr>
+<tr><th scope="row">Why Women? / A mother’s child (Jackson)</th><td><del>…more stronger than a man and once you mess with a mother's child…</del></td><td><ins>…more stronger than a man, and once you mess with a mother’s child… <em>(comma added; "more stronger" kept as spoken)</em></ins></td></tr>
+<tr><th scope="row">Why Women? / I wasn’t backing off (Baudoin)</th><td><del>I think a woman is going to take an issue and it's not going away because when you get . . . I wasn't backing off and so certainly I think… cleaned up or straightened up, or closed…</del></td><td><ins>I think a woman is going to take an issue and it’s not going away, because when you get . . . I wasn’t backing off. And so certainly I think… cleaned up, or straightened up, or closed… <em>(new sentence and commas added)</em></ins></td></tr>
+<tr><th scope="row">Why Women? / Don’t tear up My Earth (Goldsmith)</th><td><del>…for us to take care of and we're not the ones… I have a very strong belief in God and this was God's message to me that you don't tear up My Earth, it was given to you</del></td><td><ins>…for us to take care of, and we’re not the ones… I have a very strong belief in God, and this was God’s message to me: that you don’t tear up My Earth, it was given to you. <em>(commas and colon added)</em></ins></td></tr>
+<tr><th scope="row">All transcripts</th><td><del>Straight apostrophes</del> <em>'</em></td><td><ins>Curly apostrophes</ins> <em>’</em></td></tr>
+</tbody>
+</table>
 <h4>Speaker labels</h4>
 <p>The old italic label after each quote is now split. Name and place go in the audio credit and the portrait caption. Their work goes in a sentence in the portrait caption. "LA" was dropped from places, since every place is in Louisiana.</p>
-<ul>
-<li><strong>Vinton</strong>: Sister Helen Vinton, New Iberia, LA: Implemented Buffer Zone for Pesticides → Sister Helen Vinton, New Iberia. Put a buffer zone for pesticides in place.</li>
-<li><strong>Bourg</strong>: Lorna Bourg, New Iberia, LA: Established Buffer Zones for Pesticides → Lorna Bourg, New Iberia. Established buffer zones for pesticides.</li>
-<li><strong>Robert</strong>: Theresa Robert, Burnside, LA: Responsible for the IT Decision → Theresa Robert, Burnside. Responsible for the IT decision.</li>
-<li><strong>Ramirez</strong>: Debra Ramirez, Lake Charles, LA: Home Adjacent to Petro Chemical Plants; Fought Several Petro Chemical Companies Regarding Ground Water Contamination → Debra Ramirez, Lake Charles. Lived next to petrochemical plants and fought several petrochemical companies over groundwater contamination. <em>("Petro Chemical" → "petrochemical", "Ground Water" → "groundwater")</em></li>
-<li><strong>Subra</strong>: Wilma Subra, New Iberia, LA: Responsible for Organizing and Representing, Furnished Technical Data to Numerous Groups → Wilma Subra, New Iberia. Organized and represented communities, and furnished technical data to numerous groups. <em>("communities" added: the old label left "organizing and representing" without an object)</em></li>
-<li><strong>Tutweiler</strong>: Mary Tutweiler, New Iberia, LA: Prevented Creation of a Commercial Solid Waste Landfill → Mary Tutweiler, New Iberia. Prevented the creation of a commercial solid waste landfill.</li>
-<li><strong>Jackson</strong>: Rose Jackson, Belle Chasse, LA: Fights Issues in Chemical Corridor, Battled Hazardous Waste Landfill → Rose Jackson, Belle Chasse. Fights issues in the chemical corridor; battled a hazardous waste landfill.</li>
-<li><strong>Baudoin</strong>: Clara Baudoin, House of Representatives, Carencro, LA: Baudoin and Flo Gossen were Responsible for the Closure of a Commercial Solid Waste Landfill → Clara Baudoin, Carencro. Member of the Louisiana House of Representatives. With Flo Gossen, she brought about the closure of a commercial solid waste landfill.</li>
-<li><strong>Goldsmith</strong>: Shirley Goldsmith, Founded CLEAN; One of First Activists to Emerge in LA; Stopped Ocean Incinerator; Closed Willow Springs Landfill → Shirley Goldsmith. Founded CLEAN and was one of the first activists to emerge in Louisiana. Stopped an ocean incinerator and closed the Willow Springs Landfill.</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Vinton</th><td><del>Sister Helen Vinton, New Iberia, LA: Implemented Buffer Zone for Pesticides</del></td><td><ins>Sister Helen Vinton, New Iberia. Put a buffer zone for pesticides in place</ins></td></tr>
+<tr><th scope="row">Bourg</th><td><del>Lorna Bourg, New Iberia, LA: Established Buffer Zones for Pesticides</del></td><td><ins>Lorna Bourg, New Iberia. Established buffer zones for pesticides</ins></td></tr>
+<tr><th scope="row">Robert</th><td><del>Theresa Robert, Burnside, LA: Responsible for the IT Decision</del></td><td><ins>Theresa Robert, Burnside. Responsible for the IT decision</ins></td></tr>
+</tbody>
+</table>
+<ul><li><strong>Ramirez</strong>: Debra Ramirez, Lake Charles, LA: Home Adjacent to Petro Chemical Plants; Fought Several Petro Chemical Companies Regarding Ground Water Contamination → Debra Ramirez, Lake Charles. Lived next to petrochemical plants and fought several petrochemical companies over groundwater contamination. <em>("Petro Chemical" → "petrochemical", "Ground Water" → "groundwater")</em></li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Subra</th><td><del>Wilma Subra, New Iberia, LA: Responsible for Organizing and Representing, Furnished Technical Data to Numerous Groups</del></td><td><ins>Wilma Subra, New Iberia. Organized and represented communities, and furnished technical data to numerous groups. <em>("communities" added: the old label left "organizing and representing" without an object)</em></ins></td></tr>
+<tr><th scope="row">Tutweiler</th><td><del>Mary Tutweiler, New Iberia, LA: Prevented Creation of a Commercial Solid Waste Landfill</del></td><td><ins>Mary Tutweiler, New Iberia. Prevented the creation of a commercial solid waste landfill</ins></td></tr>
+<tr><th scope="row">Jackson</th><td><del>Rose Jackson, Belle Chasse, LA: Fights Issues in Chemical Corridor, Battled Hazardous Waste Landfill</del></td><td><ins>Rose Jackson, Belle Chasse. Fights issues in the chemical corridor; battled a hazardous waste landfill</ins></td></tr>
+<tr><th scope="row">Baudoin</th><td><del>Clara Baudoin, House of Representatives, Carencro, LA: Baudoin and Flo Gossen were Responsible for the Closure of a Commercial Solid Waste Landfill</del></td><td><ins>Clara Baudoin, Carencro. Member of the Louisiana House of Representatives. With Flo Gossen, she brought about the closure of a commercial solid waste landfill</ins></td></tr>
+<tr><th scope="row">Goldsmith</th><td><del>Shirley Goldsmith, Founded CLEAN; One of First Activists to Emerge in LA; Stopped Ocean Incinerator; Closed Willow Springs Landfill</del></td><td><ins>Shirley Goldsmith. Founded CLEAN and was one of the first activists to emerge in Louisiana. Stopped an ocean incinerator and closed the Willow Springs Landfill</ins></td></tr>
+</tbody>
+</table>
 <h4>About text</h4>
-<ul>
-<li><strong>About / contact link</strong>: mailto subject "Do Not Tear Up This Earth" → "Do Not Tear Up My Earth"</li>
-<li><strong>About / book</strong>: Recently, the University Press of Mississippi published… → The University Press of Mississippi has since published… <em>("Recently" was dated; the book came out in 2013)</em></li>
-<li><strong>About / opening</strong>: …an updated presentation originally created by the T. Harry Williams Center (THWCOH) in 2001, that features oral history excerpts… → …an updated presentation, first created by the T. Harry Williams Center for Oral History in 2001, of excerpts… <em>(abbreviation dropped, comma splice fixed)</em></li>
-<li><strong>About / book</strong>: …authored by Peggy Frankland with Susan Tucker. The book provides insights on the roots of this important social movement amidst Louisiana's growing oil boom… → …by Peggy Frankland with Susan Tucker. The book traces the roots of this social movement amid Louisiana’s growing oil boom…</li>
-<li><strong>About / holdings</strong>: All of the oral histories used in the book are housed with The T. Harry Williams Center… In addition, LSU Libraries Special Collections is the repository for… → …are held by the T. Harry Williams Center… LSU Libraries Special Collections is also the repository for…</li>
-<li><strong>Intro (title page)</strong>: Frankland's ultimate goal was to gather stories to eventually write a book on the subject to document the valuable historical and cultural information that is often left out of mainstream history… the majority of whom were women. Frankland's work was aided by a grant… → Her goal was to gather stories for a book that would document the historical and cultural information so often left out of mainstream history… most of them women. The work was aided by a grant… <em>(tightened; the facts are unchanged)</em></li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">About / contact link</th><td><del>mailto subject "Do Not Tear Up This Earth"</del></td><td><ins>Do Not Tear Up My Earth</ins></td></tr>
+<tr><th scope="row">About / book</th><td><del>Recently, the University Press of Mississippi published…</del></td><td><ins>The University Press of Mississippi has since published… <em>("Recently" was dated; the book came out in 2013)</em></ins></td></tr>
+<tr><th scope="row">About / opening</th><td><del>…an updated presentation originally created by the T. Harry Williams Center (THWCOH) in 2001, that features oral history excerpts…</del></td><td><ins>…an updated presentation, first created by the T. Harry Williams Center for Oral History in 2001, of excerpts… <em>(abbreviation dropped, comma splice fixed)</em></ins></td></tr>
+<tr><th scope="row">About / book</th><td><del>…authored by Peggy Frankland with Susan Tucker. The book provides insights on the roots of this important social movement amidst Louisiana's growing oil boom…</del></td><td><ins>…by Peggy Frankland with Susan Tucker. The book traces the roots of this social movement amid Louisiana’s growing oil boom…</ins></td></tr>
+<tr><th scope="row">About / holdings</th><td><del>All of the oral histories used in the book are housed with The T. Harry Williams Center… In addition, LSU Libraries Special Collections is the repository for…</del></td><td><ins>…are held by the T. Harry Williams Center… LSU Libraries Special Collections is also the repository for…</ins></td></tr>
+<tr><th scope="row">Intro (title page)</th><td><del>Frankland's ultimate goal was to gather stories to eventually write a book on the subject to document the valuable historical and cultural information that is often left out of mainstream history… the majority of whom were women. Frankland's work was aided by a grant…</del></td><td><ins>Her goal was to gather stories for a book that would document the historical and cultural information so often left out of mainstream history… most of them women. The work was aided by a grant… <em>(tightened; the facts are unchanged)</em></ins></td></tr>
+</tbody>
+</table>
 <h4>Photos</h4>
 <p>The old page's photos had a 6 px black frame (black lines with a transparent gap) baked into the image. It was cropped off; nothing else in the pictures changed.</p>
 <h3>To verify</h3>
@@ -511,128 +565,165 @@ $section('Georgetown 272', [
 <h3>Corrected</h3>
 <h4>House style, applied everywhere (not listed one by one below)</h4>
 <ul><li>Straight quotes and apostrophes changed to curly ones: <code>'</code> → <code>’</code>, <code>"</code> → <code>“ ”</code>.
-</li><li><code>--</code> and <code>-</code> used as dashes → <code>—</code> (em dash). <code>...</code> → <code>. . .</code> (spaced ellipsis, as in the Mossville exhibition).
-</li><li>Commas added after introductory words and before “because” or “and” clauses where the sense needs a pause (“Well when” → “Well, when”, “You know it’s” → “You know, it’s”). Every entry except c1 has some of these.
-</li><li>“Civil Rights” / “Civil Rights Movement” → “civil rights” / “civil rights movement” (lowercase) in titles and transcripts.
-</li><li>Clip titles in sentence case, with no closing period.
-</li><li>Speaker labels in bold on their own paragraphs: the full name the first time (“KARLY JOHNSON:”, “MARY WILLIAMS WAGNER:”), the surname after that.
-</li><li>Tape timestamps removed from transcripts: [36:11] (c11), [18:33] (c14), [36:08] (c15), [02:12] (c18).
-</li><li>The old pages’ broken paragraph-break characters (<code>&lt;br /&gt;?&lt;br /&gt;</code> in c11, <code>&lt;/br?&gt;</code> in c23) became normal paragraph breaks.
-</li><li>“Link to Biography” links dropped. Each narrator’s biography now sits on their entry. On the old site every link but c1’s pointed nowhere, and c3’s opened Maxine Crump’s bio.
-</li><li>Credit lines: “Name by Interviewer, Year” → “Name, interviewed by Interviewer, Year”. All-caps names are now written normally (“TONY CLAYTON” → “Tony Clayton”).
-</li><li>Captions: “X being interviewed by Y” → “X is interviewed by Y”. Dates moved before “Photo by”. “LA” → “Louisiana”. “Jennifer Cramer” → “Jennifer A. Cramer” (c7, c22).
+</li>
+<li><code>--</code> and <code>-</code> used as dashes → <code>—</code> (em dash). <code>...</code> → <code>. . .</code> (spaced ellipsis, as in the Mossville exhibition).
+</li>
+<li>Commas added after introductory words and before “because” or “and” clauses where the sense needs a pause (“Well when” → “Well, when”, “You know it’s” → “You know, it’s”). Every entry except c1 has some of these.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>“Civil Rights” / “Civil Rights Movement”</del></td><td><ins>“civil rights” / “civil rights movement” (lowercase) in titles and transcripts</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Clip titles in sentence case, with no closing period.
+</li>
+<li>Speaker labels in bold on their own paragraphs: the full name the first time (“KARLY JOHNSON:”, “MARY WILLIAMS WAGNER:”), the surname after that.
+</li>
+<li>Tape timestamps removed from transcripts: [36:11] (c11), [18:33] (c14), [36:08] (c15), [02:12] (c18).
+</li>
+<li>The old pages’ broken paragraph-break characters (<code>&lt;br /&gt;?&lt;br /&gt;</code> in c11, <code>&lt;/br?&gt;</code> in c23) became normal paragraph breaks.
+</li>
+<li>“Link to Biography” links dropped. Each narrator’s biography now sits on their entry. On the old site every link but c1’s pointed nowhere, and c3’s opened Maxine Crump’s bio.
+</li>
+<li>Credit lines: “Name by Interviewer, Year” → “Name, interviewed by Interviewer, Year”. All-caps names are now written normally (“TONY CLAYTON” → “Tony Clayton”).
+</li>
+<li>Captions: “X being interviewed by Y” → “X is interviewed by Y”. Dates moved before “Photo by”. “LA” → “Louisiana”. “Jennifer Cramer” → “Jennifer A. Cramer” (c7, c22).
 </li></ul>
 <h4>Menus and gallery names</h4>
-<ul>
-<li><strong>Menu</strong>: DESCENDANTS’ DISCOVERY (all caps, with a stray trailing space) → Descendants’ Discovery</li>
-<li><strong>Gallery</strong>: Enslaved/Segregated → Enslaved and Segregated</li>
-<li><strong>Gallery</strong>: Jesuits &amp; Georgetown → Jesuits and Georgetown</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Menu</th><td><del>DESCENDANTS’ DISCOVERY</del> <em>all caps, with a stray trailing space</em></td><td><ins>Descendants’ Discovery</ins></td></tr>
+<tr><th scope="row">Gallery</th><td><del>Enslaved/Segregated</del></td><td><ins>Enslaved and Segregated</ins></td></tr>
+<tr><th scope="row">Gallery</th><td><del>Jesuits &amp; Georgetown</del></td><td><ins>Jesuits and Georgetown</ins></td></tr>
+</tbody>
+</table>
 <h4>Clip titles</h4>
-<ul>
-<li><strong>c2</strong>: The reality of the American Chattel System of Slavery. → The reality of the American chattel system of slavery</li>
-<li><strong>c4</strong>: Priest who tried to integrate church seating → The priest who tried to integrate church seating</li>
-<li><strong>c5</strong>: Sister In Law punished for Civil Rights Activities → Sister-in-law punished for civil rights activities</li>
-<li><strong>c6</strong>: The attempted lynching and escape of Civil Rights Speaker, James Farmer, in Plaquemine, Louisiana → The attempted lynching and escape of civil rights speaker James Farmer in Plaquemine, Louisiana</li>
-<li><strong>c9</strong>: …boundaries of their Catholic Church → …boundaries of their Catholic church</li>
-<li><strong>c13</strong>: I'm more American than you! → “I’m more American than you!”</li>
-<li><strong>c14</strong>: The frustration of not knowing your history. → The frustration of not knowing your history</li>
-<li><strong>c15</strong>: Looking for acknowledgement, not apologies → Looking for acknowledgment, not apologies</li>
-<li><strong>c18</strong>: Need to involve descendants on what reconcilliation looks like → Involve descendants in what reconciliation looks like</li>
-<li><strong>c19</strong>: How can we look with new eyes at our own deed? → How can we look with new eyes at our own deeds? (the transcript says “deeds”)</li>
-<li><strong>c22</strong>: We need to open up for critical research into where we are going as a nation → We need to open up critical research into where we are going as a nation</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c2</th><td><del>The reality of the American Chattel System of Slavery</del></td><td><ins>The reality of the American chattel system of slavery</ins></td></tr>
+<tr><th scope="row">c4</th><td><del>Priest who tried to integrate church seating</del></td><td><ins>The priest who tried to integrate church seating</ins></td></tr>
+<tr><th scope="row">c5</th><td><del>Sister In Law punished for Civil Rights Activities</del></td><td><ins>Sister-in-law punished for civil rights activities</ins></td></tr>
+<tr><th scope="row">c6</th><td><del>The attempted lynching and escape of Civil Rights Speaker, James Farmer, in Plaquemine, Louisiana</del></td><td><ins>The attempted lynching and escape of civil rights speaker James Farmer in Plaquemine, Louisiana</ins></td></tr>
+<tr><th scope="row">c9</th><td><del>…boundaries of their Catholic Church</del></td><td><ins>…boundaries of their Catholic church</ins></td></tr>
+<tr><th scope="row">c13</th><td><del>I'm more American than you!</del></td><td><ins>I’m more American than you!</ins></td></tr>
+<tr><th scope="row">c14</th><td><del>The frustration of not knowing your history</del></td><td><ins>The frustration of not knowing your history</ins></td></tr>
+<tr><th scope="row">c15</th><td><del>Looking for acknowledgement, not apologies</del></td><td><ins>Looking for acknowledgment, not apologies</ins></td></tr>
+<tr><th scope="row">c18</th><td><del>Need to involve descendants on what reconcilliation looks like</del></td><td><ins>Involve descendants in what reconciliation looks like</ins></td></tr>
+<tr><th scope="row">c19</th><td><del>How can we look with new eyes at our own deed?</del></td><td><ins>How can we look with new eyes at our own deeds?</ins> <em>the transcript says “deeds”</em></td></tr>
+<tr><th scope="row">c22</th><td><del>We need to open up for critical research into where we are going as a nation</del></td><td><ins>We need to open up critical research into where we are going as a nation</ins></td></tr>
+</tbody>
+</table>
 <h4>Credit lines (beyond the format change)</h4>
-<ul>
-<li><strong>c2, c8</strong>: Mélisande Short-Colomb by Hannah Richards, <strong>2017</strong> → …interviewed by Hannah Richards, <strong>2018</strong> (c21 and every photo of this interview say 2018; see To verify)</li>
-<li><strong>c10</strong>: JESSICA TILSON by T, 2017 4700.2740 Tape 4712 → Jessica Tilson, interviewed by Thailandria Daniels, 2017 (the interviewer’s name was cut off; the accession and tape numbers were dropped)</li>
-<li><strong>c14</strong>: CLARA CLAYTON by Russell Wilder, 2017 → Clara Ann Clayton, interviewed by Russell Wilder, 2017</li>
-<li><strong>c17</strong>: RASHAAD JACKSON by Staci Shelby on April 5, 2017 → Rashaad Jackson, interviewed by Staci Shelby, April 5, 2017</li>
-<li><strong>c18</strong>: KARRAN HARPER-ROYAL by Hannah Richards, 2018 → Karran Harper Royal, interviewed by Hannah Richards, 2018 (no hyphen, as in her biography heading)</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c2, c8</th><td><del>Mélisande Short-Colomb by Hannah Richards, <strong>2017</strong></del></td><td><ins>…interviewed by Hannah Richards, <strong>2018</strong></ins> <em>c21 and every photo of this interview say 2018; see To verify</em></td></tr>
+<tr><th scope="row">c10</th><td><del>JESSICA TILSON by T, 2017 4700.2740 Tape 4712</del></td><td><ins>Jessica Tilson, interviewed by Thailandria Daniels, 2017</ins> <em>the interviewer’s name was cut off; the accession and tape numbers were dropped</em></td></tr>
+<tr><th scope="row">c14</th><td><del>CLARA CLAYTON by Russell Wilder, 2017</del></td><td><ins>Clara Ann Clayton, interviewed by Russell Wilder, 2017</ins></td></tr>
+<tr><th scope="row">c17</th><td><del>RASHAAD JACKSON by Staci Shelby on April 5, 2017</del></td><td><ins>Rashaad Jackson, interviewed by Staci Shelby, April 5, 2017</ins></td></tr>
+<tr><th scope="row">c18</th><td><del>KARRAN HARPER-ROYAL by Hannah Richards, 2018</del></td><td><ins>Karran Harper Royal, interviewed by Hannah Richards, 2018</ins> <em>no hyphen, as in her biography heading</em></td></tr>
+</tbody>
+</table>
 <h4>Photos and captions the old pages had wrong</h4>
-<ul>
-<li><strong>c18 (Jesuits and Georgetown)</strong>: Photo DSC00952 captioned “Rashaad Jackson being interviewed by Staci Shelby at LSU. Photo by Tia Jones, April 5, 2017.” (c17’s caption) → “Karran Harper Royal, 2018.” The photo shows her, not Rashaad Jackson.</li>
-<li><strong>c23 (Future Hopes)</strong>: c22’s Whitney Plantation photo, captioned “Rev. Leroy Baker and Onita Estes-Hicks, Georgetown University, 2017. Photo by Adelle M. Banks. From: Religious News Service April 18, 2017” → The photo that caption describes (<code>Leroy Baker webRNS-GEORGETOWN-SLAVERY5-041817.jpg</code>, in the old photos folder but unused), captioned “Rev. Leroy Baker and Onita Estes-Hicks at Georgetown University, April 18, 2017. Photo by Adelle M. Banks, Religion News Service.” (“Religious News Service” → “Religion News Service”)</li>
-<li><strong>c24 (Future Hopes)</strong>: Photo of Jessica Tilson and Jonathan Earle, captioned with c23’s Leroy Baker caption → “Jessica Tilson and Jonathan Earle, dean of the LSU Honors College.”</li>
-<li><strong>c5 (Civil Rights)</strong>: MorrisInterview_1 (491 px, also used on c3) → MorrisInterview_2 (1024 px, same sitting), same caption</li>
-<li><strong>c10</strong>: “Jessica Tilson being interview by…” → “Jessica Tilson is interviewed by…”</li>
-<li><strong>c4</strong>: “…at Southern University. Photos by Shaya Khorsandi, April, 2017” → “…at Southern University, April 2017. Photo by Shaya Khorsandi.”</li>
-<li><strong>c11, c16</strong>: “Mary Williams Wagner speaking to Karly Johnson . Photo by Bret Fulmer, 2017” → “Mary Williams Wagner speaks with Karly Johnson, 2017. Photo by Bret Fulmer.”</li>
-<li><strong>c13</strong>: “…at LSU’s Laville Honors House home by Hannah Richards…” → “…by Hannah Richards at LSU’s Laville Honors House…” (“home” dropped)</li>
-<li><strong>c14</strong>: “Clara Clayton, 2017.” → “Clara Ann Clayton, 2017.”</li>
-<li><strong>c7</strong>: “Maxine Crump guest lectures LSU and Georgetown Students, 2017.” → “Maxine Crump gives a guest lecture to LSU and Georgetown students, 2017.”</li>
-<li><strong>c22</strong>: “Dr. Ibrahima Seck gives tour of Whitney Plantation to LSU and Georgetown students” → “Dr. Ibrahima Seck gives LSU and Georgetown students a tour of Whitney Plantation”</li>
-<li><strong>c20</strong>: “Tony Clayton sitting in his home office” → “Tony Clayton in his home office”</li>
-<li><strong>c8, c21</strong>: “…in her Georgetown University dorm…” → “…in her Georgetown University dorm room…”</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c18 (Jesuits and Georgetown)</th><td><del>Photo DSC00952 captioned “Rashaad Jackson being interviewed by Staci Shelby at LSU. Photo by Tia Jones, April 5, 2017.”</del> <em>c17’s caption</em></td><td><ins>“Karran Harper Royal, 2018.” The photo shows her, not Rashaad Jackson</ins></td></tr>
+</tbody>
+</table>
+<ul><li><strong>c23 (Future Hopes)</strong>: c22’s Whitney Plantation photo, captioned “Rev. Leroy Baker and Onita Estes-Hicks, Georgetown University, 2017. Photo by Adelle M. Banks. From: Religious News Service April 18, 2017” → The photo that caption describes (<code>Leroy Baker webRNS-GEORGETOWN-SLAVERY5-041817.jpg</code>, in the old photos folder but unused), captioned “Rev. Leroy Baker and Onita Estes-Hicks at Georgetown University, April 18, 2017. Photo by Adelle M. Banks, Religion News Service.” (“Religious News Service” → “Religion News Service”)</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c24 (Future Hopes)</th><td><del>Photo of Jessica Tilson and Jonathan Earle, captioned with c23’s Leroy Baker caption</del></td><td><ins>Jessica Tilson and Jonathan Earle, dean of the LSU Honors College.</ins></td></tr>
+<tr><th scope="row">c5 (Civil Rights)</th><td><del>MorrisInterview_1</del> <em>491 px, also used on c3</em></td><td><ins>MorrisInterview_2 (1024 px, same sitting), same caption</ins></td></tr>
+<tr><th scope="row">c10</th><td><del>Jessica Tilson being interview by…</del></td><td><ins>Jessica Tilson is interviewed by…</ins></td></tr>
+<tr><th scope="row">c4</th><td><del>…at Southern University. Photos by Shaya Khorsandi, April, 2017</del></td><td><ins>…at Southern University, April 2017. Photo by Shaya Khorsandi.</ins></td></tr>
+<tr><th scope="row">c11, c16</th><td><del>Mary Williams Wagner speaking to Karly Johnson . Photo by Bret Fulmer, 2017</del></td><td><ins>Mary Williams Wagner speaks with Karly Johnson, 2017. Photo by Bret Fulmer.</ins></td></tr>
+<tr><th scope="row">c13</th><td><del>…at LSU’s Laville Honors House home by Hannah Richards…</del></td><td><ins>…by Hannah Richards at LSU’s Laville Honors House…</ins> <em>“home” dropped</em></td></tr>
+<tr><th scope="row">c14</th><td><del>Clara Clayton, 2017.</del></td><td><ins>Clara Ann Clayton, 2017.</ins></td></tr>
+<tr><th scope="row">c7</th><td><del>Maxine Crump guest lectures LSU and Georgetown Students, 2017.</del></td><td><ins>Maxine Crump gives a guest lecture to LSU and Georgetown students, 2017.</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>Dr. Ibrahima Seck gives tour of Whitney Plantation to LSU and Georgetown students</del></td><td><ins>Dr. Ibrahima Seck gives LSU and Georgetown students a tour of Whitney Plantation</ins></td></tr>
+<tr><th scope="row">c20</th><td><del>Tony Clayton sitting in his home office</del></td><td><ins>Tony Clayton in his home office</ins></td></tr>
+<tr><th scope="row">c8, c21</th><td><del>…in her Georgetown University dorm…</del></td><td><ins>…in her Georgetown University dorm room…</ins></td></tr>
+</tbody>
+</table>
 <h4>Audio</h4>
-<ul>
-<li><strong>c11 Is this really us?</strong>: Played <code>Wagner_Mary_Williams_1.mp3</code>, the same file as c16 → <code>Wagner_Mary_Williams_correct.mp3</code> (unused on the old site; its 71 s fits c11’s longer transcript). <strong>Not checked by ear.</strong></li>
-<li><strong>c18</strong>: <code>&lt;audio src="#"&gt;</code>: no recording → Entry built unpublished, its transcript kept in a text block (see To verify)</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c11 Is this really us?</th><td><del>Played <code>Wagner_Mary_Williams_1.mp3</code>, the same file as c16</del></td><td><ins><code>Wagner_Mary_Williams_correct.mp3</code> (unused on the old site; its 71 s fits c11’s longer transcript). <strong>Not checked by ear.</strong></ins></td></tr>
+<tr><th scope="row">c18</th><td><del><code>&lt;audio src="#"&gt;</code>: no recording</del></td><td><ins>Entry built unpublished, its transcript kept in a text block</ins> <em>see To verify</em></td></tr>
+</tbody>
+</table>
 <h4>Transcript wording</h4>
-<ul>
-<li><strong>c1</strong>: It’s as almost as if → It’s almost as if</li>
-<li><strong>c2</strong>: We as descendants. While → We as descendants . . . While</li>
-<li><strong>c2</strong>: on the whole and individuals as well → on the whole, and as individuals as well <strong>(audio)</strong></li>
-<li><strong>c4</strong>: mausoleum type deal → mausoleum-type deal</li>
-<li><strong>c4</strong>: Look y’all need → Look, y’all need</li>
-<li><strong>c5</strong>: [Evelyn’s sister in law] → [Evelyn’s sister-in-law]</li>
-<li><strong>c5</strong>: sit in at Woolworth Store → sit in at the Woolworth store <strong>(audio)</strong></li>
-<li><strong>c5</strong>: they were sitting-in → they were sitting in</li>
-<li><strong>c6</strong>: then president John Kennedy → then-president John Kennedy</li>
-<li><strong>c6</strong>: etcetera → et cetera</li>
-<li><strong>c6</strong>: who’s my grandfather name → who’s my grandfather’s name <strong>(audio)</strong></li>
-<li><strong>c6</strong>: they were looking in house to house → they were looking house to house <strong>(audio)</strong></li>
-<li><strong>c6</strong>: CBS Evening News → <em>CBS Evening News</em> (italic)</li>
-<li><strong>c7</strong>: Wrong finger pointing. → Wrong finger-pointing.</li>
-<li><strong>c7</strong>: the ones that need to take ownership of. → the ones that need to take ownership. <strong>(audio)</strong></li>
-<li><strong>c8</strong>: American born woman → American-born woman</li>
-<li><strong>c8</strong>: any conversations about anybody about my Americanness → any conversations with anybody about my Americanness <strong>(audio)</strong></li>
-<li><strong>c10</strong>: We still had to still use the back door → We still had to use the back door <strong>(audio)</strong></li>
-<li><strong>c10</strong>: my friends in the north → my friends in the North</li>
-<li><strong>c10</strong>: So why didn’t yall → So why didn’t y’all</li>
-<li><strong>c11</strong>: Earle in Atlanta, was sending → Earle in Atlanta was sending</li>
-<li><strong>c11</strong>: and I stared reading it → and I started reading it</li>
-<li><strong>c12</strong>: Do you think finding that your direct descendant has impacted your feelings towards America’s foundation? → Do you think finding that you’re a direct descendant has impacted your feelings toward America’s foundation? <strong>(audio)</strong></li>
-<li><strong>c12</strong>: ya know → you know <strong>(audio)</strong></li>
-<li><strong>c12</strong>: how mentally and physically strong these 272 people had to be to not just to make it → …had to be, not just to make it</li>
-<li><strong>c13</strong>: I used have my white friends—I'm more American than you! Your family came in the 1800's and I was already here. → I used to tell my white friends, “I’m more American than you! Your family came in the 1800s and I was already here.” <strong>(audio)</strong></li>
-<li><strong>c14</strong>: I can't go b Looack and say → I can’t go back and say</li>
-<li><strong>c14</strong>: great-great grandfathers → great-great-grandfathers</li>
-<li><strong>c14</strong>: You just have to kinda shake it off → You just have to kind of shake it off <strong>(audio)</strong></li>
-<li><strong>c14</strong>: But, it just give you → But it just give you</li>
-<li><strong>c15</strong>: rename one of their buildings Isaac Hawkins → rename one of their buildings for Isaac Hawkins <strong>(audio)</strong></li>
-<li><strong>c15</strong>: one of the things I asked when the president came → one of the things I asked for when the president came <strong>(audio)</strong></li>
-<li><strong>c15</strong>: Being a dedication , dedicating → Being a dedication, dedicating</li>
-<li><strong>c15</strong>: there’s a part of what’s going to happen on the eighteenth is there’s going to be → part of what’s going to happen on the eighteenth is there’s going to be <strong>(audio)</strong></li>
-<li><strong>c15</strong>: acknowledgement (twice) → acknowledgment</li>
-<li><strong>c16</strong>: tenants of the Catholic church → tenets of the Catholic Church</li>
-<li><strong>c16</strong>: it kind of rocks the center of your core because who you think you are → …because [of] who you think you are</li>
-<li><strong>c17</strong>: Protestant churches of all denomination, non-religious people → Protestant churches of all denominations, nonreligious people</li>
-<li><strong>c18</strong>: the school, society of Jesus, and the Pope → the school, the Society of Jesus, and the Pope</li>
-<li><strong>c18</strong>: ROYAL: (speaker label) → label dropped (one speaker)</li>
-<li><strong>c19</strong>: one of the reason we study history → one of the reasons we study history</li>
-<li><strong>c19</strong>: What are we doing - who are we sacrificing → What are we doing—who are we sacrificing</li>
-<li><strong>c20</strong>: Do I subscribe and support that? → Do I subscribe to and support that? <strong>(audio)</strong></li>
-<li><strong>c20</strong>: great-great-great-great-great grandfather → great-great-great-great-great-grandfather</li>
-<li><strong>c21</strong>: communities where there are large compilations of descendants → …large concentrations of descendants <strong>(audio)</strong></li>
-<li><strong>c21</strong>: for me to come here and paid to do this → for me to come here and [be] paid to do this</li>
-<li><strong>c21</strong>: this opportunity [attend university] → this opportunity [to attend university]</li>
-<li><strong>c21</strong>: descendant communities; especially → descendant communities, especially</li>
-<li><strong>c22</strong>: Jim Crowe (twice) → Jim Crow</li>
-<li><strong>c22</strong>: KKK era intimidation → KKK-era intimidation</li>
-<li><strong>c22</strong>: a few moments of reconstruction → a few moments of Reconstruction</li>
-<li><strong>c22</strong>: Plessy/Ferguson → Plessy v. Ferguson</li>
-<li><strong>c22</strong>: hold on into the time Jim Crowe → hold on into the time of Jim Crow <strong>(audio)</strong></li>
-<li><strong>c22</strong>: who we are as hand beings → who we are as human beings</li>
-<li><strong>c22</strong>: So that, we continue → So that we continue</li>
-<li><strong>c23</strong>: the transparency--Let us communicate → the transparency—let us communicate</li>
-<li><strong>c23</strong>: research and archives that, we're not coming → research and archives, that we’re not coming</li>
-<li><strong>c23</strong>: non-academic → nonacademic</li>
-<li><strong>c24</strong>: [background noise of river barge traffic]. → [background noise of river barge traffic]</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">c1</th><td><del>It’s as almost as if</del></td><td><ins>It’s almost as if</ins></td></tr>
+<tr><th scope="row">c2</th><td><del>We as descendants. While</del></td><td><ins>We as descendants . . . While</ins></td></tr>
+<tr><th scope="row">c2</th><td><del>on the whole and individuals as well</del></td><td><ins>on the whole, and as individuals as well <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c4</th><td><del>mausoleum type deal</del></td><td><ins>mausoleum-type deal</ins></td></tr>
+<tr><th scope="row">c4</th><td><del>Look y’all need</del></td><td><ins>Look, y’all need</ins></td></tr>
+<tr><th scope="row">c5</th><td><del>[Evelyn’s sister in law]</del></td><td><ins>[Evelyn’s sister-in-law]</ins></td></tr>
+<tr><th scope="row">c5</th><td><del>sit in at Woolworth Store</del></td><td><ins>sit in at the Woolworth store <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c5</th><td><del>they were sitting-in</del></td><td><ins>they were sitting in</ins></td></tr>
+<tr><th scope="row">c6</th><td><del>then president John Kennedy</del></td><td><ins>then-president John Kennedy</ins></td></tr>
+<tr><th scope="row">c6</th><td><del>etcetera</del></td><td><ins>et cetera</ins></td></tr>
+<tr><th scope="row">c6</th><td><del>who’s my grandfather name</del></td><td><ins>who’s my grandfather’s name <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c6</th><td><del>they were looking in house to house</del></td><td><ins>they were looking house to house <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c6</th><td><del>CBS Evening News</del></td><td><ins><em>CBS Evening News</em></ins> <em>italic</em></td></tr>
+<tr><th scope="row">c7</th><td><del>Wrong finger pointing</del></td><td><ins>Wrong finger-pointing</ins></td></tr>
+<tr><th scope="row">c7</th><td><del>the ones that need to take ownership of</del></td><td><ins>the ones that need to take ownership. <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c8</th><td><del>American born woman</del></td><td><ins>American-born woman</ins></td></tr>
+<tr><th scope="row">c8</th><td><del>any conversations about anybody about my Americanness</del></td><td><ins>any conversations with anybody about my Americanness <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c10</th><td><del>We still had to still use the back door</del></td><td><ins>We still had to use the back door <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c10</th><td><del>my friends in the north</del></td><td><ins>my friends in the North</ins></td></tr>
+<tr><th scope="row">c10</th><td><del>So why didn’t yall</del></td><td><ins>So why didn’t y’all</ins></td></tr>
+<tr><th scope="row">c11</th><td><del>Earle in Atlanta, was sending</del></td><td><ins>Earle in Atlanta was sending</ins></td></tr>
+<tr><th scope="row">c11</th><td><del>and I stared reading it</del></td><td><ins>and I started reading it</ins></td></tr>
+<tr><th scope="row">c12</th><td><del>Do you think finding that your direct descendant has impacted your feelings towards America’s foundation?</del></td><td><ins>Do you think finding that you’re a direct descendant has impacted your feelings toward America’s foundation? <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c12</th><td><del>ya know</del></td><td><ins>you know <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c12</th><td><del>how mentally and physically strong these 272 people had to be to not just to make it</del></td><td><ins>…had to be, not just to make it</ins></td></tr>
+<tr><th scope="row">c13</th><td><del>I used have my white friends—I'm more American than you! Your family came in the 1800's and I was already here</del></td><td><ins>I used to tell my white friends, “I’m more American than you! Your family came in the 1800s and I was already here.” <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c14</th><td><del>I can't go b Looack and say</del></td><td><ins>I can’t go back and say</ins></td></tr>
+<tr><th scope="row">c14</th><td><del>great-great grandfathers</del></td><td><ins>great-great-grandfathers</ins></td></tr>
+<tr><th scope="row">c14</th><td><del>You just have to kinda shake it off</del></td><td><ins>You just have to kind of shake it off <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c14</th><td><del>But, it just give you</del></td><td><ins>But it just give you</ins></td></tr>
+<tr><th scope="row">c15</th><td><del>rename one of their buildings Isaac Hawkins</del></td><td><ins>rename one of their buildings for Isaac Hawkins <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c15</th><td><del>one of the things I asked when the president came</del></td><td><ins>one of the things I asked for when the president came <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c15</th><td><del>Being a dedication , dedicating</del></td><td><ins>Being a dedication, dedicating</ins></td></tr>
+<tr><th scope="row">c15</th><td><del>there’s a part of what’s going to happen on the eighteenth is there’s going to be</del></td><td><ins>part of what’s going to happen on the eighteenth is there’s going to be <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c15</th><td><del>acknowledgement</del> <em>twice</em></td><td><ins>acknowledgment</ins></td></tr>
+<tr><th scope="row">c16</th><td><del>tenants of the Catholic church</del></td><td><ins>tenets of the Catholic Church</ins></td></tr>
+<tr><th scope="row">c16</th><td><del>it kind of rocks the center of your core because who you think you are</del></td><td><ins>…because [of] who you think you are</ins></td></tr>
+<tr><th scope="row">c17</th><td><del>Protestant churches of all denomination, non-religious people</del></td><td><ins>Protestant churches of all denominations, nonreligious people</ins></td></tr>
+<tr><th scope="row">c18</th><td><del>the school, society of Jesus, and the Pope</del></td><td><ins>the school, the Society of Jesus, and the Pope</ins></td></tr>
+<tr><th scope="row">c18</th><td><del>ROYAL:</del> <em>speaker label</em></td><td><ins>label dropped</ins> <em>one speaker</em></td></tr>
+<tr><th scope="row">c19</th><td><del>one of the reason we study history</del></td><td><ins>one of the reasons we study history</ins></td></tr>
+<tr><th scope="row">c19</th><td><del>What are we doing - who are we sacrificing</del></td><td><ins>What are we doing—who are we sacrificing</ins></td></tr>
+<tr><th scope="row">c20</th><td><del>Do I subscribe and support that?</del></td><td><ins>Do I subscribe to and support that? <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c20</th><td><del>great-great-great-great-great grandfather</del></td><td><ins>great-great-great-great-great-grandfather</ins></td></tr>
+<tr><th scope="row">c21</th><td><del>communities where there are large compilations of descendants</del></td><td><ins>…large concentrations of descendants <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c21</th><td><del>for me to come here and paid to do this</del></td><td><ins>for me to come here and [be] paid to do this</ins></td></tr>
+<tr><th scope="row">c21</th><td><del>this opportunity [attend university]</del></td><td><ins>this opportunity [to attend university]</ins></td></tr>
+<tr><th scope="row">c21</th><td><del>descendant communities; especially</del></td><td><ins>descendant communities, especially</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>Jim Crowe</del> <em>twice</em></td><td><ins>Jim Crow</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>KKK era intimidation</del></td><td><ins>KKK-era intimidation</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>a few moments of reconstruction</del></td><td><ins>a few moments of Reconstruction</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>Plessy/Ferguson</del></td><td><ins>Plessy v. Ferguson</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>hold on into the time Jim Crowe</del></td><td><ins>hold on into the time of Jim Crow <strong>(audio)</strong></ins></td></tr>
+<tr><th scope="row">c22</th><td><del>who we are as hand beings</del></td><td><ins>who we are as human beings</ins></td></tr>
+<tr><th scope="row">c22</th><td><del>So that, we continue</del></td><td><ins>So that we continue</ins></td></tr>
+<tr><th scope="row">c23</th><td><del>the transparency--Let us communicate</del></td><td><ins>the transparency—let us communicate</ins></td></tr>
+<tr><th scope="row">c23</th><td><del>research and archives that, we're not coming</del></td><td><ins>research and archives, that we’re not coming</ins></td></tr>
+<tr><th scope="row">c23</th><td><del>non-academic</del></td><td><ins>nonacademic</ins></td></tr>
+<tr><th scope="row">c24</th><td><del>[background noise of river barge traffic]</del></td><td><ins>[background noise of river barge traffic]</ins></td></tr>
+</tbody>
+</table>
 <h4>Introduction (from about.html)</h4>
 <ul>
 <li><strong>Georgetown University in Washington D.C.</strong>: Georgetown University in Washington, D.C.</li>
@@ -659,72 +750,75 @@ $section('Georgetown 272', [
 </ul>
 <h4>Biographies (from the Biographies menu)</h4>
 <p>Applied to every bio: “currently” dropped where it adds nothing, numbers spelled out in running text (“13-year” → “thirteen-year”, “16th” → “sixteenth”), “Month Nth, Year” → “Month N, Year”, and light rewording for grammar. The changes:</p>
-<ul>
-<li><strong>Leroy Baker</strong>: heading “Leroy Bakery” → Leroy Baker</li>
-<li><strong>Leroy Baker</strong>: And is the descendant of great, great, great grandson of Nace and Biby Butler sold by Jesuit priest, Thomas F. Mulledy, to Jesse Batey → He is the great-great-great-grandson of Nace and Biby Butler, sold by the Jesuit priest Thomas F. Mulledy to Jesse Batey</li>
-<li><strong>Leroy Baker</strong>: to pursue his priesthood → to pursue the priesthood</li>
-<li><strong>Leroy Baker</strong>: Baker aas the first African-American allowed in the New Orleans Athletic Club in the 1980s. Spent most of working career → Baker was the first African American allowed in the New Orleans Athletic Club, in the 1980s. He spent most of his working career</li>
-<li><strong>Leroy Baker</strong>: Lee is currently in 16th year of teaching at Archbishop Rummel High School as a theology teacher, and will soon start teaching higher learning at Tulane University. Found out in 2004 family reunion → Lee is in his sixteenth year of teaching theology at Archbishop Rummel High School and will soon start teaching at Tulane University. He found out at a 2004 family reunion</li>
-<li><strong>Clara Ann Clayton</strong>: Valero, California → Vallejo, California (see To verify)</li>
-<li><strong>Clara Ann Clayton</strong>: moved up to Port Allen … where she still resides to this day → moved to Port Allen … where she still lives</li>
-<li><strong>Clara Ann Clayton</strong>: multiple masonic societies, including Eastern Star → several Masonic societies, including the Eastern Star</li>
-<li><strong>Tony Clayton</strong>: June 6th in 1963 → June 6, 1963</li>
-<li><strong>Tony Clayton</strong>: B.S in Political Science → B.S. in political science</li>
-<li><strong>Tony Clayton</strong>: his curre¬¬nt wife, Paula Clayton → his wife, Paula Clayton (stray characters removed)</li>
-<li><strong>Tony Clayton</strong>: serves on Southern University’s Board of Advisors, a position he has held for twenty years → has served on Southern University’s Board of Advisors for twenty years</li>
-<li><strong>Maxine Crump</strong>: the Dialogue on Race Series Louisiana → the Dialogue on Race Louisiana series</li>
-<li><strong>Maxine Crump</strong>: one of the 272 slaves sold by Georgetown University → one of the 272 enslaved people sold by Georgetown</li>
-<li><strong>Maxine Crump</strong>: the New York Times article that initially broke the story → the <em>New York Times</em> article that first broke the story</li>
-<li><strong>Maxine Crump</strong>: the Vice President of → the vice president of</li>
-<li><strong>Michelle Harrington</strong>: Catholic High in Pointe Coupe Parish → Catholic High in Pointe Coupee Parish</li>
-<li><strong>Michelle Harrington</strong>: started as a part-time receptionist with then WRBT-TV → started as a part-time receptionist at what was then WRBT-TV</li>
-<li><strong>Michelle Harrington</strong>: Program Director, Station Manager → program director, station manager</li>
-<li><strong>Rashaad Jackson</strong>: Katherine Jackson Nee Coleman → Katherine Jackson (née Coleman)</li>
-<li><strong>Rashaad Jackson</strong>: New Orleans Center of Science and Mathematics → New Orleans Center for Science and Mathematics</li>
-<li><strong>Delores Johnson</strong>: working with her sister, Mary, and others → working with her sister Mary and others</li>
-<li><strong>Delores Johnson</strong>: Johnson has several children, including one son, and grandchildren. → Johnson has several children and grandchildren. (“including one son” dropped; see To verify)</li>
-<li><strong>Delores Johnson</strong>: non-profit → nonprofit</li>
-<li><strong>Carolyn Morris</strong>: Master’s in Music Education → master’s in music education</li>
-<li><strong>Carolyn Morris</strong>: vice-principal → vice principal</li>
-<li><strong>Ethel Murphy</strong>: Shady Brook high school → Shady Brook High School</li>
-<li><strong>Bernadine Poole</strong>: a building that has since been turned into a bar room → a building that has since become a bar</li>
-<li><strong>Bernadine Poole</strong>: T.A. Levy High School → T. A. Levy High School</li>
-<li><strong>Bernadine Poole</strong>: researching her lineage with regards to the Georgetown 272 → researching her lineage and its ties to the Georgetown 272</li>
-<li><strong>Bernadine Poole</strong>: IT Support Spec 2 → IT Support Specialist 2</li>
-<li><strong>Bernadine Poole</strong>: Poole is unmarried, and she has no children. → sentence dropped (see To verify)</li>
-<li><strong>Adam Rothman</strong>: 19th century U.S history → nineteenth-century U.S. history</li>
-<li><strong>Adam Rothman</strong>: Beyond Freedom's Reach… → <em>Beyond Freedom’s Reach…</em> (italic)</li>
-<li><strong>Adam Rothman</strong>: Government Documents Roundtable → Government Documents Round Table</li>
-<li><strong>Adam Rothman</strong>: Adam served on → Rothman served on</li>
-<li><strong>Karran Harper Royal</strong>: August 2nd 1963 → August 2, 1963</li>
-<li><strong>Karran Harper Royal</strong>: the New Orleans Projects → the New Orleans projects</li>
-<li><strong>Karran Harper Royal</strong>: Batten’s Disease → Batten disease</li>
-<li><strong>Karran Harper Royal</strong>: a Special Educational advocate in the New Orleans School Area → a special education advocate in New Orleans</li>
-<li><strong>Karran Harper Royal</strong>: Executive Director → executive director</li>
-<li><strong>Karran Harper Royal</strong>: to reconnect her and the families torn apart → to reconnect the families torn apart</li>
-<li><strong>Mélisande Short-Colomb</strong>: St. Elmo Bauduit Short Senior → St. Elmo Bauduit Short Sr.</li>
-<li><strong>Mélisande Short-Colomb</strong>: She received her high school diploma and graduated from college. → She graduated from high school and college.</li>
-<li><strong>Mélisande Short-Colomb</strong>: has been a working as a professional culinarian → has worked as a professional culinarian</li>
-<li><strong>Mélisande Short-Colomb</strong>: Judy Riffel from the Georgetown memory project → Judy Riffel of the Georgetown Memory Project</li>
-<li><strong>Mélisande Short-Colomb</strong>: Her three times maternal great-grandparents Mary-Ellen Queen and Abraham Mahoney → Her great-great-great-grandparents on her mother’s side, Mary Ellen Queen and Abraham Mahoney (see To verify)</li>
-<li><strong>Mélisande Short-Colomb</strong>: arrived in Louisiana abroad a boat called the Uncas → arrived in Louisiana aboard a ship called the <em>Uncas</em></li>
-<li><strong>Mélisande Short-Colomb</strong>: She participates in geological seminars → She takes part in genealogical seminars</li>
-<li><strong>Mélisande Short-Colomb</strong>: the ‘GU 272 Descendants Association → the GU272 Descendants Association</li>
-<li><strong>Mélisande Short-Colomb</strong>: granted Legacy Status → granted legacy status</li>
-<li><strong>Debra Tilson</strong>: Mrs. Debra Tilson → Debra Tilson</li>
-<li><strong>Debra Tilson</strong>: aided by the amateur genealogist work of Millie → aided by the amateur genealogy of her daughter Jessica (“Millie”) (see To verify)</li>
-<li><strong>Jessica Tilson</strong>: November 19th, 1981 → November 19, 1981</li>
-<li><strong>Jessica Tilson</strong>: the flood in the Summer of 2016 → the flood of summer 2016</li>
-<li><strong>Jessica Tilson</strong>: dropped out to assist her daughter with her gymnastic career → left to support her daughter’s gymnastics career</li>
-<li><strong>Jessica Tilson</strong>: aspires to enter law school → hopes to go to law school</li>
-<li><strong>Jessica Tilson</strong>: early 2000’s → early 2000s</li>
-<li><strong>Jessica Tilson</strong>: working with the GU 272 to help discover more descendants → working with GU272 descendants to find more of their kin (see To verify)</li>
-<li><strong>Mary Williams Wagner</strong>: lead her to Hawaii → led her to Hawaii</li>
-<li><strong>Mary Williams Wagner</strong>: joined Oahu’s police department … Maui’s police department → joined the Oahu police department … the Maui police department</li>
-<li><strong>Mary Williams Wagner</strong>: After divorcing her husband of five years → After divorcing (“of five years” dropped; see To verify)</li>
-<li><strong>Mary Williams Wagner</strong>: Records and Identification Section Manager → Records and Identification Section manager</li>
-<li><strong>Mary Williams Wagner</strong>: democratic campaigns → Democratic campaigns</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Leroy Baker</th><td><del>heading “Leroy Bakery”</del></td><td><ins>Leroy Baker</ins></td></tr>
+<tr><th scope="row">Leroy Baker</th><td><del>And is the descendant of great, great, great grandson of Nace and Biby Butler sold by Jesuit priest, Thomas F. Mulledy, to Jesse Batey</del></td><td><ins>He is the great-great-great-grandson of Nace and Biby Butler, sold by the Jesuit priest Thomas F. Mulledy to Jesse Batey</ins></td></tr>
+<tr><th scope="row">Leroy Baker</th><td><del>to pursue his priesthood</del></td><td><ins>to pursue the priesthood</ins></td></tr>
+<tr><th scope="row">Leroy Baker</th><td><del>Baker aas the first African-American allowed in the New Orleans Athletic Club in the 1980s. Spent most of working career</del></td><td><ins>Baker was the first African American allowed in the New Orleans Athletic Club, in the 1980s. He spent most of his working career</ins></td></tr>
+<tr><th scope="row">Leroy Baker</th><td><del>Lee is currently in 16th year of teaching at Archbishop Rummel High School as a theology teacher, and will soon start teaching higher learning at Tulane University. Found out in 2004 family reunion</del></td><td><ins>Lee is in his sixteenth year of teaching theology at Archbishop Rummel High School and will soon start teaching at Tulane University. He found out at a 2004 family reunion</ins></td></tr>
+<tr><th scope="row">Clara Ann Clayton</th><td><del>Valero, California</del></td><td><ins>Vallejo, California</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Clara Ann Clayton</th><td><del>moved up to Port Allen … where she still resides to this day</del></td><td><ins>moved to Port Allen … where she still lives</ins></td></tr>
+<tr><th scope="row">Clara Ann Clayton</th><td><del>multiple masonic societies, including Eastern Star</del></td><td><ins>several Masonic societies, including the Eastern Star</ins></td></tr>
+<tr><th scope="row">Tony Clayton</th><td><del>June 6th in 1963</del></td><td><ins>June 6, 1963</ins></td></tr>
+<tr><th scope="row">Tony Clayton</th><td><del>B.S in Political Science</del></td><td><ins>B.S. in political science</ins></td></tr>
+<tr><th scope="row">Tony Clayton</th><td><del>his curre¬¬nt wife, Paula Clayton</del></td><td><ins>his wife, Paula Clayton</ins> <em>stray characters removed</em></td></tr>
+<tr><th scope="row">Tony Clayton</th><td><del>serves on Southern University’s Board of Advisors, a position he has held for twenty years</del></td><td><ins>has served on Southern University’s Board of Advisors for twenty years</ins></td></tr>
+<tr><th scope="row">Maxine Crump</th><td><del>the Dialogue on Race Series Louisiana</del></td><td><ins>the Dialogue on Race Louisiana series</ins></td></tr>
+<tr><th scope="row">Maxine Crump</th><td><del>one of the 272 slaves sold by Georgetown University</del></td><td><ins>one of the 272 enslaved people sold by Georgetown</ins></td></tr>
+<tr><th scope="row">Maxine Crump</th><td><del>the New York Times article that initially broke the story</del></td><td><ins>the <em>New York Times</em> article that first broke the story</ins></td></tr>
+<tr><th scope="row">Maxine Crump</th><td><del>the Vice President of</del></td><td><ins>the vice president of</ins></td></tr>
+<tr><th scope="row">Michelle Harrington</th><td><del>Catholic High in Pointe Coupe Parish</del></td><td><ins>Catholic High in Pointe Coupee Parish</ins></td></tr>
+<tr><th scope="row">Michelle Harrington</th><td><del>started as a part-time receptionist with then WRBT-TV</del></td><td><ins>started as a part-time receptionist at what was then WRBT-TV</ins></td></tr>
+<tr><th scope="row">Michelle Harrington</th><td><del>Program Director, Station Manager</del></td><td><ins>program director, station manager</ins></td></tr>
+<tr><th scope="row">Rashaad Jackson</th><td><del>Katherine Jackson Nee Coleman</del></td><td><ins>Katherine Jackson</ins> <em>née Coleman</em></td></tr>
+<tr><th scope="row">Rashaad Jackson</th><td><del>New Orleans Center of Science and Mathematics</del></td><td><ins>New Orleans Center for Science and Mathematics</ins></td></tr>
+<tr><th scope="row">Delores Johnson</th><td><del>working with her sister, Mary, and others</del></td><td><ins>working with her sister Mary and others</ins></td></tr>
+<tr><th scope="row">Delores Johnson</th><td><del>Johnson has several children, including one son, and grandchildren</del></td><td><ins>Johnson has several children and grandchildren.</ins> <em>“including one son” dropped; see To verify</em></td></tr>
+<tr><th scope="row">Delores Johnson</th><td><del>non-profit</del></td><td><ins>nonprofit</ins></td></tr>
+<tr><th scope="row">Carolyn Morris</th><td><del>Master’s in Music Education</del></td><td><ins>master’s in music education</ins></td></tr>
+<tr><th scope="row">Carolyn Morris</th><td><del>vice-principal</del></td><td><ins>vice principal</ins></td></tr>
+<tr><th scope="row">Ethel Murphy</th><td><del>Shady Brook high school</del></td><td><ins>Shady Brook High School</ins></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>a building that has since been turned into a bar room</del></td><td><ins>a building that has since become a bar</ins></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>T.A. Levy High School</del></td><td><ins>T. A. Levy High School</ins></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>researching her lineage with regards to the Georgetown 272</del></td><td><ins>researching her lineage and its ties to the Georgetown 272</ins></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>IT Support Spec 2</del></td><td><ins>IT Support Specialist 2</ins></td></tr>
+<tr><th scope="row">Bernadine Poole</th><td><del>Poole is unmarried, and she has no children</del></td><td><ins>sentence dropped</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Adam Rothman</th><td><del>19th century U.S history</del></td><td><ins>nineteenth-century U.S. history</ins></td></tr>
+<tr><th scope="row">Adam Rothman</th><td><del>Beyond Freedom's Reach…</del></td><td><ins><em>Beyond Freedom’s Reach…</em></ins> <em>italic</em></td></tr>
+<tr><th scope="row">Adam Rothman</th><td><del>Government Documents Roundtable</del></td><td><ins>Government Documents Round Table</ins></td></tr>
+<tr><th scope="row">Adam Rothman</th><td><del>Adam served on</del></td><td><ins>Rothman served on</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>August 2nd 1963</del></td><td><ins>August 2, 1963</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>the New Orleans Projects</del></td><td><ins>the New Orleans projects</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>Batten’s Disease</del></td><td><ins>Batten disease</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>a Special Educational advocate in the New Orleans School Area</del></td><td><ins>a special education advocate in New Orleans</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>Executive Director</del></td><td><ins>executive director</ins></td></tr>
+<tr><th scope="row">Karran Harper Royal</th><td><del>to reconnect her and the families torn apart</del></td><td><ins>to reconnect the families torn apart</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>St. Elmo Bauduit Short Senior</del></td><td><ins>St. Elmo Bauduit Short Sr</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>She received her high school diploma and graduated from college</del></td><td><ins>She graduated from high school and college</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>has been a working as a professional culinarian</del></td><td><ins>has worked as a professional culinarian</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>Judy Riffel from the Georgetown memory project</del></td><td><ins>Judy Riffel of the Georgetown Memory Project</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>Her three times maternal great-grandparents Mary-Ellen Queen and Abraham Mahoney</del></td><td><ins>Her great-great-great-grandparents on her mother’s side, Mary Ellen Queen and Abraham Mahoney</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>arrived in Louisiana abroad a boat called the Uncas</del></td><td><ins>arrived in Louisiana aboard a ship called the <em>Uncas</em></ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>She participates in geological seminars</del></td><td><ins>She takes part in genealogical seminars</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>the ‘GU 272 Descendants Association</del></td><td><ins>the GU272 Descendants Association</ins></td></tr>
+<tr><th scope="row">Mélisande Short-Colomb</th><td><del>granted Legacy Status</del></td><td><ins>granted legacy status</ins></td></tr>
+<tr><th scope="row">Debra Tilson</th><td><del>Mrs. Debra Tilson</del></td><td><ins>Debra Tilson</ins></td></tr>
+<tr><th scope="row">Debra Tilson</th><td><del>aided by the amateur genealogist work of Millie</del></td><td><ins>aided by the amateur genealogy of her daughter Jessica (“Millie”)</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>November 19th, 1981</del></td><td><ins>November 19, 1981</ins></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>the flood in the Summer of 2016</del></td><td><ins>the flood of summer 2016</ins></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>dropped out to assist her daughter with her gymnastic career</del></td><td><ins>left to support her daughter’s gymnastics career</ins></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>aspires to enter law school</del></td><td><ins>hopes to go to law school</ins></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>early 2000’s</del></td><td><ins>early 2000s</ins></td></tr>
+<tr><th scope="row">Jessica Tilson</th><td><del>working with the GU 272 to help discover more descendants</del></td><td><ins>working with GU272 descendants to find more of their kin</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Mary Williams Wagner</th><td><del>lead her to Hawaii</del></td><td><ins>led her to Hawaii</ins></td></tr>
+<tr><th scope="row">Mary Williams Wagner</th><td><del>joined Oahu’s police department … Maui’s police department</del></td><td><ins>joined the Oahu police department … the Maui police department</ins></td></tr>
+<tr><th scope="row">Mary Williams Wagner</th><td><del>After divorcing her husband of five years</del></td><td><ins>After divorcing</ins> <em>“of five years” dropped; see To verify</em></td></tr>
+<tr><th scope="row">Mary Williams Wagner</th><td><del>Records and Identification Section Manager</del></td><td><ins>Records and Identification Section manager</ins></td></tr>
+<tr><th scope="row">Mary Williams Wagner</th><td><del>democratic campaigns</del></td><td><ins>Democratic campaigns</ins></td></tr>
+</tbody>
+</table>
 <h3>To verify</h3>
 <p><strong>Recordings</strong></p>
 <ul><li><strong>c18, Karran Harper Royal.</strong> There is no recording, either in the old audio folder or on the live server; the old page’s player is <code>&lt;audio src="#"&gt;</code>. The entry is built unpublished. Does the center have this clip?
@@ -827,82 +921,188 @@ $section('History of Graphic Design in South Louisiana', [
 <p>Throughout, without listing each one: curly quotes and apostrophes, “. . .” for “…” and “...”, speaker labels in bold capitals (full name first, then surname; “Interviewer:” → “INTERVIEWER:”), titles of publications and films in italics, and small comma fixes.</p>
 <h3>Corrected</h3>
 <h4>Names (everywhere they appear)</h4>
-<ul><li>“Micheal Deas” → “Michael Deas” (clip title on c6, biography heading).
-</li><li>“Justin Sheals”, “Shiel’s”, “Justin Shiels” → “Justin Shiels” (menu, biography).
-</li><li>“Peter A. Meyer” / “Meyer” → “Peter A. Mayer” / “Mayer” (clip title, transcripts, biography, caption). The agency, its website (peteramayer.com), the audio file name and the photographed clipping all read Mayer.
-</li><li>“Popeye’s” → “Popeyes” (Peter A. Mayer, second clip).
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Micheal Deas</del></td><td><ins>Michael Deas</ins> <em>clip title on c6, biography heading</em></td></tr>
+<tr><td><del>“Justin Sheals”, “Shiel’s”, “Justin Shiels”</del></td><td><ins>Justin Shiels</ins> <em>menu, biography</em></td></tr>
+<tr><td><del>“Peter A. Meyer” / “Meyer”</del></td><td><ins>“Peter A. Mayer” / “Mayer” (clip title, transcripts, biography, caption). The agency, its website (peteramayer.com), the audio file name and the photographed clipping all read Mayer</ins></td></tr>
+<tr><td><del>Popeye’s</del></td><td><ins>Popeyes</ins> <em>Peter A. Mayer, second clip</em></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Mary Borne</h4>
-<ul><li>Biography: “Mary Serena Gibbons A/K/A Ms. Weenie was born in 1916 in planes countryside Louisiana near Baton Rouge” → “Mary Serena Gibbons, known as Miss Weenie, was born in 1916 in the countryside near Baton Rouge” (see To verify).
-</li><li>Biography: “life long nickname came from her brother’s pronouncement of her as teeny weeny” → “lifelong nickname came from her brother, who called her “teeny weeny””.
-</li><li>Biography: “Mrs. Borne A/K/A Miss Weenie, was included in this … project” → “Mrs. Borne was included in the … project”.
-</li><li>Biography, added from the sidebar teaser (which had the typos “educataion” and “dificulties”): “This recording is from her 2010 oral history session, when she was 94 years old; her quiet voice reflects her age at the time.”
-</li><li>Caption: “literally down the bayou in South West Louisiana” → “literally down the bayou in south Louisiana” (Thibodaux is not in southwest Louisiana).
-</li><li>Transcript: “Interviewer: And after you graduated from twelfth grade what did you do?” → comma added after “grade”; “He and mama” → “He and Mama”.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Biography</th><td><del>Mary Serena Gibbons A/K/A Ms. Weenie was born in 1916 in planes countryside Louisiana near Baton Rouge</del></td><td><ins>Mary Serena Gibbons, known as Miss Weenie, was born in 1916 in the countryside near Baton Rouge</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Biography</th><td><del>life long nickname came from her brother’s pronouncement of her as teeny weeny</del></td><td><ins>lifelong nickname came from her brother, who called her “teeny weeny”</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Mrs. Borne A/K/A Miss Weenie, was included in this … project</del></td><td><ins>Mrs. Borne was included in the … project</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Biography, added from the sidebar teaser (which had the typos “educataion” and “dificulties”): “This recording is from her 2010 oral history session, when she was 94 years old; her quiet voice reflects her age at the time.”
 </li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Caption</th><td><del>literally down the bayou in South West Louisiana</del></td><td><ins>literally down the bayou in south Louisiana</ins> <em>Thibodaux is not in southwest Louisiana</em></td></tr>
+<tr><th scope="row">Transcript</th><td><del>Interviewer: And after you graduated from twelfth grade what did you do?</del></td><td><ins>comma added after “grade”</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>He and mama</del></td><td><ins>He and Mama</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Tom Varisco</h4>
-<ul><li>Transcript: “the Institution of Politics at Loyola” → “the Institute of Politics at Loyola”.
-</li><li>Transcript: “a republican or a democrat” → “a Republican or a Democrat”.
-</li><li>Transcript: “this huge gathering of fundraising. People that were going to take part” → “this huge fundraising gathering, people that were going to take part”.
-</li><li>Biography: “a well known regional branding company” → “a well-known regional branding company”; “The New Orleans Jazz &amp; Heritage Festival and Foundation, Inc. logo” → “the logo of the New Orleans Jazz &amp; Heritage Festival and Foundation, Inc.”; “8 ½, Annie Hall, Citizen Kane, Godfather I and II” → “8½, Annie Hall, Citizen Kane, and The Godfather I and II”.
-</li><li>Biography, added from the sidebar: originally from Lafayette, calls himself a “design director”, opened his New Orleans studio more than thirty years before the 2010 recording.
-</li><li>Caption: “And they have things to Say.” → “And they have things to say.”; “Artist Book Collection @ Paper Machine” → “Artist Book Collection at Paper Machine”.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>the Institution of Politics at Loyola</del></td><td><ins>the Institute of Politics at Loyola</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>a republican or a democrat</del></td><td><ins>a Republican or a Democrat</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>this huge gathering of fundraising. People that were going to take part</del></td><td><ins>this huge fundraising gathering, people that were going to take part</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>a well known regional branding company</del></td><td><ins>a well-known regional branding company</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>The New Orleans Jazz &amp; Heritage Festival and Foundation, Inc. logo</del></td><td><ins>the logo of the New Orleans Jazz &amp; Heritage Festival and Foundation, Inc.</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>8 ½, Annie Hall, Citizen Kane, Godfather I and II</del></td><td><ins>8½, Annie Hall, Citizen Kane, and The Godfather I and II</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Biography, added from the sidebar: originally from Lafayette, calls himself a “design director”, opened his New Orleans studio more than thirty years before the 2010 recording.
 </li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Caption</th><td><del>And they have things to Say.</del></td><td><ins>And they have things to say.</ins></td></tr>
+<tr><th scope="row">Caption</th><td><del>Artist Book Collection @ Paper Machine</del></td><td><ins>Artist Book Collection at Paper Machine</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Don Smith</h4>
-<ul><li>Transcript: “Don Smith:I said look, I’m a college graduate but” → “DON SMITH: I said, look, I’m a college graduate, but”.
-</li><li>Biography: “drew a P-38, WWII fighter plane on his school looseleaf binder” → “drew a P-38, a World War II fighter plane, on his school loose-leaf binder”.
-</li><li>Biography: “the Famous Artist School” → “the Famous Artists School”.
-</li><li>Biography: “his fine art and long-advertising career … Such as the February 1962 magazine illustration, “Waterhole”.” → “his fine art and long advertising career … such as the February 1962 cover illustration “Waterhole.””
-</li><li>Caption: “Photograph of Don Smith in his studio, ca 1961.” → “Don Smith in his studio, ca. 1961.”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>Don Smith:I said look, I’m a college graduate but</del></td><td><ins>DON SMITH: I said, look, I’m a college graduate, but</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>drew a P-38, WWII fighter plane on his school looseleaf binder</del></td><td><ins>drew a P-38, a World War II fighter plane, on his school loose-leaf binder</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>the Famous Artist School</del></td><td><ins>the Famous Artists School</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>his fine art and long-advertising career … Such as the February 1962 magazine illustration, “Waterhole”.</del></td><td><ins>his fine art and long advertising career … such as the February 1962 cover illustration “Waterhole.”</ins></td></tr>
+<tr><th scope="row">Caption</th><td><del>Photograph of Don Smith in his studio, ca 1961.</del></td><td><ins>Don Smith in his studio, ca. 1961.</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Kenny Harrison</h4>
-<ul><li>Transcript: “Went to the School of Visual Arts. In Manhattan studying first fine arts.” → “Went to the School of Visual Arts in Manhattan, studying first fine arts.”
-</li><li>Transcript: “like an arts geared school” → “like an arts-geared school”.
-</li><li>Biography: “developed lots of techniques”, “lots of rejections” → “many techniques”, “many rejections”; “He ascribes his background in drawing to being able to adapt to the computer” → “he credits his background in drawing with his ability to adapt to the computer”; “up and coming” → “up-and-coming”; “Pulitzer Prize-winning” → “Pulitzer Prize–winning”.
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>Went to the School of Visual Arts. In Manhattan studying first fine arts.</del></td><td><ins>Went to the School of Visual Arts in Manhattan, studying first fine arts.</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>like an arts geared school</del></td><td><ins>like an arts-geared school</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>“developed lots of techniques”, “lots of rejections”</del></td><td><ins>“many techniques”, “many rejections”</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>He ascribes his background in drawing to being able to adapt to the computer</del></td><td><ins>he credits his background in drawing with his ability to adapt to the computer</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>up and coming</del></td><td><ins>up-and-coming</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Pulitzer Prize-winning</del></td><td><ins>Pulitzer Prize–winning</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Gus Levy</h4>
-<ul><li>Transcript: “I could remember on a couple of occasions” → “I can remember on a couple of occasions”; “I had to open the deceased eyes” → “the deceased’s eyes”; “you couldn’t do that in these days” → “you couldn’t do that these days”; “[Times] Picayune” → “[Times-]Picayune”.
-</li><li>Biography: “I would align characters (set type)” (first person in a third-person biography) → “he would align characters (set type)”.
-</li><li>Biography: “at Fortier High School in 1936-1940” → “from 1936 to 1940”; “divided-up between advertising, promotion, and editorial art staff” → “divided between the advertising, promotion, and editorial art staffs”; “uptown” → “Uptown”; “cast-type” → “cast type”.
-</li><li>Biography: “Levy got a job as the art director at the New Orleans Godwin Advertising firm” → “Levy became art director at the Godwin Advertising firm in New Orleans”; “Their big clients include” → “included”.
-</li><li>Caption: “the 250thAnniversary” (run-together) and the quoted series title reworded (see New wording).
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>I could remember on a couple of occasions</del></td><td><ins>I can remember on a couple of occasions</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>I had to open the deceased eyes</del></td><td><ins>the deceased’s eyes</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>you couldn’t do that in these days</del></td><td><ins>you couldn’t do that these days</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>[Times] Picayune</del></td><td><ins>[Times-]Picayune</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>I would align characters (set type)</del> <em>first person in a third-person biography</em></td><td><ins>he would align characters (set type)</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>at Fortier High School in 1936-1940</del></td><td><ins>from 1936 to 1940</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>divided-up between advertising, promotion, and editorial art staff</del></td><td><ins>divided between the advertising, promotion, and editorial art staffs</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>uptown</del></td><td><ins>Uptown</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>cast-type</del></td><td><ins>cast type</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Levy got a job as the art director at the New Orleans Godwin Advertising firm</del></td><td><ins>Levy became art director at the Godwin Advertising firm in New Orleans</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Their big clients include</del></td><td><ins>included</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Caption: “the 250thAnniversary” (run-together) and the quoted series title reworded (see New wording).
 </li></ul>
 <h4>The Interviews: Michael Deas</h4>
-<ul><li>Transcript: “its gonna stay put because its basic capitalism” → “it’s gonna stay put, because it’s basic capitalism”; “good old fashioned” → “good old-fashioned”; “(laughs)” → “[laughs]”.
-</li><li>Biography: “the Ogden Museum of Art” → “the Ogden Museum of Southern Art”; “where he currently resides” → “where he lives today”; “His painting and drawing methods are not reliant on digital technology” → “do not rely on digital technology”.
-</li><li>Caption: “oil on paper, 6 x 9” → “oil on paper, 6 x 9 in.”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>its gonna stay put because its basic capitalism</del></td><td><ins>it’s gonna stay put, because it’s basic capitalism</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>good old fashioned</del></td><td><ins>good old-fashioned</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>(laughs)</del></td><td><ins>[laughs]</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>the Ogden Museum of Art</del></td><td><ins>the Ogden Museum of Southern Art</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>where he currently resides</del></td><td><ins>where he lives today</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>His painting and drawing methods are not reliant on digital technology</del></td><td><ins>do not rely on digital technology</ins></td></tr>
+<tr><th scope="row">Caption</th><td><del>oil on paper, 6 x 9</del></td><td><ins>oil on paper, 6 x 9 in.</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Justin Shiels</h4>
-<ul><li>Biography: “Shiel’s black race is integral to his work” → “Shiels’s identity as a Black man is integral to his work”.
-</li><li>Biography: “He moved to attend Loyola University New Orleans and graduated in 2007 with a major in graphic design and video concentration” → “He moved to New Orleans to attend Loyola University and graduated in 2007, majoring in graphic design with a concentration in video”.
-</li><li>Biography: “Their church was a Southern Baptist, but not traditional because it was pro-gay” → “Their church was Southern Baptist, but not traditional: it was pro-gay”.
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Biography</th><td><del>Shiel’s black race is integral to his work</del></td><td><ins>Shiels’s identity as a Black man is integral to his work</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>He moved to attend Loyola University New Orleans and graduated in 2007 with a major in graphic design and video concentration</del></td><td><ins>He moved to New Orleans to attend Loyola University and graduated in 2007, majoring in graphic design with a concentration in video</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Their church was a Southern Baptist, but not traditional because it was pro-gay</del></td><td><ins>Their church was Southern Baptist, but not traditional: it was pro-gay</ins></td></tr>
+</tbody>
+</table>
 <h4>The Interviews: Kathy Cain and Paulette Hurdlik</h4>
-<ul><li>Transcript speaker: “Kathy Cain:” → “PAULETTE HURDLIK:” (the speaker says “based on what you just heard Kathy describe”; see To verify).
-</li><li>Transcript: the question’s quotation marks didn’t match (“"what would you say … designer”) → “What would you say the percentage of engineer and the percentage of art is in being a designer?”; “80%” → “80 percent”.
-</li><li>Biography: “were recording in December of 2009” → “were recorded in December 2009”; “To their memory, they were the first” → “To their knowledge, theirs was the first”; “Paulette and Kathy wound up co-president of ADDA” → “became co-presidents of ADDA”; “The New Orleans chapter of AIGA New Orleans Chapter was chartered in 1997” → “AIGA New Orleans was chartered in 1997”.
-</li><li>Caption: “Kenny Harrisonand Tom Varisco”, “roster.Item 22.” (run-together) → fixed; “the Caine/Hurdlik recording” → “the Cain and Hurdlik recording”; “other HGD-SL subject memberships” → “two other narrators in this exhibition”.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript speaker</th><td><del>Kathy Cain:</del></td><td><ins>PAULETTE HURDLIK:</ins> <em>the speaker says “based on what you just heard Kathy describe”; see To verify</em></td></tr>
+<tr><th scope="row">Transcript</th><td><del>the question’s quotation marks didn’t match</del> <em>“"what would you say … designer”</em></td><td><ins>What would you say the percentage of engineer and the percentage of art is in being a designer?</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>80%</del></td><td><ins>80 percent</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>were recording in December of 2009</del></td><td><ins>were recorded in December 2009</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>To their memory, they were the first</del></td><td><ins>To their knowledge, theirs was the first</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Paulette and Kathy wound up co-president of ADDA</del></td><td><ins>became co-presidents of ADDA</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>The New Orleans chapter of AIGA New Orleans Chapter was chartered in 1997</del></td><td><ins>AIGA New Orleans was chartered in 1997</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Caption: “Kenny Harrisonand Tom Varisco”, “roster.Item 22.” (run-together) → fixed; “the Caine/Hurdlik recording” → “the Cain and Hurdlik recording”; “other HGD-SL subject memberships” → “two other narrators in this exhibition”.
 </li></ul>
 <h4>The Interviews: Byron Levy</h4>
-<ul><li>Transcript: “British Guinea South America” → “British Guiana, South America”.
-</li><li>Biography: “the 1961 studio/visual slideshow presentation” → “the 1961 audio/visual slide show” (as about.html describes it); “Ted Drell, and, Gus Levy” → “Ted Drell, and Gus Levy”.
-</li><li>Biography: “technically-minded salespersons” → “technically minded salespeople”.
-</li><li>Caption: “watercolor drawings” → “art” (one image is a print signed 1/1); run-together words (“taken.He”, “organizedand”) fixed; “nursing facility/community” → “retirement community”.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>British Guinea South America</del></td><td><ins>British Guiana, South America</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>the 1961 studio/visual slideshow presentation</del></td><td><ins>the 1961 audio/visual slide show</ins> <em>as about.html describes it</em></td></tr>
+<tr><th scope="row">Biography</th><td><del>Ted Drell, and, Gus Levy</del></td><td><ins>Ted Drell, and Gus Levy</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>technically-minded salespersons</del></td><td><ins>technically minded salespeople</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Caption: “watercolor drawings” → “art” (one image is a print signed 1/1); run-together words (“taken.He”, “organizedand”) fixed; “nursing facility/community” → “retirement community”.
 </li></ul>
 <h4>The Interviews: Peter A. Mayer</h4>
-<ul><li>Transcript: “Regional managers says” → “Regional manager says”; “sixty nine” → “sixty-nine”; “society editor of [Times] Picayune” → “of the [Times-]Picayune”.
-</li><li>Transcript, second clip: “Okay, that a big one.” → “Okay, that’s a big one.”; “they had no agents” → “they had no agency”; “I said can we talk that was the only-” → “I said, “Can we talk?” That was the only—”; “I said, got to visit every Popeye’s location” → “I said, “Got to visit every Popeyes location””.
-</li><li>Biography: “Fauche Highschool” → “Fauche High School” (see To verify); “the new field of television in where he worked” → “television, where he worked”; “founded the Peter Meyer advertising agency” → “founded Peter A. Mayer Advertising”; “at their job” → “at their jobs”; “the destruction of a primary competitor” → “the downfall of a primary competitor”.
-</li><li>Caption: “the ca. 1969opening” → the year dropped (see To verify).
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Transcript</th><td><del>Regional managers says</del></td><td><ins>Regional manager says</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>sixty nine</del></td><td><ins>sixty-nine</ins></td></tr>
+<tr><th scope="row">Transcript</th><td><del>society editor of [Times] Picayune</del></td><td><ins>of the [Times-]Picayune</ins></td></tr>
+<tr><th scope="row">Transcript, second clip</th><td><del>Okay, that a big one.</del></td><td><ins>Okay, that’s a big one.</ins></td></tr>
+<tr><th scope="row">Transcript, second clip</th><td><del>they had no agents</del></td><td><ins>they had no agency</ins></td></tr>
+<tr><th scope="row">Transcript, second clip</th><td><del>I said can we talk that was the only-</del></td><td><ins>I said, “Can we talk?” That was the only—</ins></td></tr>
+<tr><th scope="row">Transcript, second clip</th><td><del>I said, got to visit every Popeye’s location</del></td><td><ins>I said, “Got to visit every Popeyes location”</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>Fauche Highschool</del></td><td><ins>Fauche High School</ins> <em>see To verify</em></td></tr>
+<tr><th scope="row">Biography</th><td><del>the new field of television in where he worked</del></td><td><ins>television, where he worked</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>founded the Peter Meyer advertising agency</del></td><td><ins>founded Peter A. Mayer Advertising</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>at their job</del></td><td><ins>at their jobs</ins></td></tr>
+<tr><th scope="row">Biography</th><td><del>the destruction of a primary competitor</del></td><td><ins>the downfall of a primary competitor</ins></td></tr>
+<tr><th scope="row">Caption</th><td><del>the ca. 1969opening</del></td><td><ins>the year dropped</ins> <em>see To verify</em></td></tr>
+</tbody>
+</table>
 <h4>About the Project</h4>
-<ul><li>“AIGA New Orleans Chapter” → “AIGA New Orleans”; “south Louisiana–AIGA” (en dash used as a colon) → “south Louisiana: AIGA”.
-</li><li>“Ca. 2006” → “Around 2006”; “terminated ca. 2017” → “taken down around 2017”; “The project captured fifteen oral histories” → “recorded fifteen oral histories”.
-</li><li>“re-mastered” → “remastered”; “slide show” used throughout.
-</li><li>Heading “Acknowledgements” → “Acknowledgments”.
-</li><li>Thanks list: “Elizabeth Kelly” appeared twice → once.
-</li><li>PRINT link updated to the magazine’s current address (printmag.com/design-culture/graphic-design-history-new-orleans/).
-</li><li>The old Introduction (“History seems to know a lot …”, “Meet the fathers and daughters …”) is now the page intro.
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>AIGA New Orleans Chapter</del></td><td><ins>AIGA New Orleans</ins></td></tr>
+<tr><td><del>south Louisiana–AIGA</del> <em>en dash used as a colon</em></td><td><ins>south Louisiana: AIGA</ins></td></tr>
+<tr><td><del>Ca. 2006</del></td><td><ins>Around 2006</ins></td></tr>
+<tr><td><del>terminated ca. 2017</del></td><td><ins>taken down around 2017</ins></td></tr>
+<tr><td><del>The project captured fifteen oral histories</del></td><td><ins>recorded fifteen oral histories</ins></td></tr>
+</tbody>
+</table>
+<ul><li>“re-mastered” → “remastered”; “slide show” used throughout.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del>Heading “Acknowledgements”</del></td><td><ins>Acknowledgments</ins></td></tr>
+<tr><th scope="row">Thanks list</th><td><del>“Elizabeth Kelly” appeared twice</del></td><td><ins>once</ins></td></tr>
+</tbody>
+</table>
+<ul><li>PRINT link updated to the magazine’s current address (printmag.com/design-culture/graphic-design-history-new-orleans/).
+</li>
+<li>The old Introduction (“History seems to know a lot …”, “Meet the fathers and daughters …”) is now the page intro.
 </li></ul>
 <h4>Links removed</h4>
 <ul><li>Michael Deas biography: michaeldeas.com (no longer answers).
@@ -1001,101 +1201,126 @@ $section('History of KLSU', [
 </li><li>Not carried over: draft slides linked from nowhere (C3_m, C4_m, C7_m, C7_m2, C26a, C80b, C82b); <code>acknowledgements.html</code> and <code>lsuag.html</code> (pages from the Tempests exhibition); the unused audio/BlueDucks_FourFlossFiveSix and photos 38_1.jpg, c82_1f.jpg, squarelogo.jpg and “1950 Oct 30 Chemistry Series Starts on WLSU.jpg” (a copy of c47_1).
 </li></ul>
 <h4>Entry titles (dates)</h4>
-<ul><li>KFGC, 1915–1934 / Fall 1915 (C1.html): entry title "FALL 1915" → "Fall 1915"
-</li><li>KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html): entry title "January 4, 1924 8:15 PM" → "January 4, 1924, 8:15 p.m."
-</li><li>KFGC, 1915–1934 / November 27, 1924 (C11.html): entry title "Jim Olander" → "November 27, 1924"
-</li><li>KFGC, 1915–1934 / 1926–1931 (C14.html): entry title "January 15, 1926" → "1926–1931"
-</li><li>WJBO, 1934–1947 / November 5, 1941–May 6, 1942 (C29.html): entry title "November 5, 1941 - May 6, 1942" → "November 5, 1941–May 6, 1942"
-</li><li>WLSU, 1947–1973 / Winter 1947–1948 (C42.html): entry title "Winter 1947-1948" → "Winter 1947–1948"
-</li><li>WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): entry title "November 15, 1965 3:00PM" → "November 15, 1965, 3:00 p.m."
-</li><li>KLSU, 1983–2015 / 2015 (C86.html): entry title "October 2015" → "2015"
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">KFGC, 1915–1934 / Fall 1915 (C1.html)</th><td><del>entry title "FALL 1915"</del></td><td><ins>Fall 1915</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html)</th><td><del>entry title "January 4, 1924 8:15 PM"</del></td><td><ins>January 4, 1924, 8:15 p.m.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / November 27, 1924 (C11.html)</th><td><del>entry title "Jim Olander"</del></td><td><ins>November 27, 1924</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / 1926–1931 (C14.html)</th><td><del>entry title "January 15, 1926"</del></td><td><ins>1926–1931</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / November 5, 1941–May 6, 1942 (C29.html)</th><td><del>entry title "November 5, 1941 - May 6, 1942"</del></td><td><ins>November 5, 1941–May 6, 1942</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / Winter 1947–1948 (C42.html)</th><td><del>entry title "Winter 1947-1948"</del></td><td><ins>Winter 1947–1948</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html)</th><td><del>entry title "November 15, 1965 3:00PM"</del></td><td><ins>November 15, 1965, 3:00 p.m.</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / 2015 (C86.html)</th><td><del>entry title "October 2015"</del></td><td><ins>2015</ins></td></tr>
+</tbody>
+</table>
 <h4>Event text</h4>
-<ul><li>KFGC, 1915–1934 / July 19, 1923 (C7.html): "KFGC granted a" → "KFGC is granted a"
-</li><li>KFGC, 1915–1934 / July 19, 1923 (C7.html): "from Department of" → "from the Department of"
-</li><li>KFGC, 1915–1934 / February 1924 (C10.html): "KFGC broadcasts the election of governor Hewitt Bouanchaud, who ran against Henry Fuqua and Huey P. Long." → "KFGC broadcasts the returns of the governor’s race between Hewitt Bouanchaud, Henry Fuqua and Huey P. Long."
-</li><li>KFGC, 1915–1934 / March 15, 1934 (C16.html): "lead by" → "led by"
-</li><li>WJBO, 1934–1947 / February 15, 1937 (C20.html): "broadcast first show" → "broadcast their first show"
-</li><li>WJBO, 1934–1947 / November 6, 1939 (C26.html): "newscasts began" → "newscasts begin"
-</li><li>WJBO, 1934–1947 / November 6, 1939 (C26.html): "Sponsored by Daily Reveille" → "Sponsored by the Daily Reveille"
-</li><li>WJBO, 1934–1947 / July 1, 1942 (C30.html): "Completion of two" → "LSU completes two"
-</li><li>WJBO, 1934–1947 / Fall 1946 (C36.html): "Lucille Ruby Woodard" → "Lucile Ruby Woodard"
-</li><li>WLSU, 1947–1973 / October 16, 1947 (C39.html): "WLSU on air at 91.7 megacycles with 1,000 watt frequency." → "WLSU goes on the air at 91.7 megacycles with 1,000 watts of power."
-</li><li>WLSU, 1947–1973 / October 18, 1947 (C40.html): "WLSU staff raised" → "WLSU staff raise"
-</li><li>WLSU, 1947–1973 / October 18, 1947 (C40.html): "which was delayed" → "which is delayed"
-</li><li>WLSU, 1947–1973 / March 15, 1948 (C43.html): "WLSU first college FM station" → "WLSU becomes the first college FM station"
-</li><li>WLSU, 1947–1973 / September 17, 1950 (C46.html): "Weekly program "WLSU speaks" and daily programs" → "The programs are the weekly "WLSU Speaks" and the daily"
-</li><li>WLSU, 1947–1973 / Fall 1955 (C51.html): "By this time WLSU had many more student workers and broadcasting hours had doubled." → "By this time WLSU has many more student workers, and its broadcasting hours have doubled."
-</li><li>WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): "donated equipment which allowed" → "donated the equipment that allowed"
-</li><li>WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): "closed circuit" → "closed-circuit"
-</li><li>WLSU, 1947–1973 / 1973 (C61.html): "Edwards and the Louisiana Educational Television Authority (LETA) requesting" → "Edwards and the Louisiana Educational Television Authority (LETA), requesting"
-</li><li>WLSU, 1947–1973 / 1973 (C61.html): "denies university funding and support citing" → "denies university funding and support, citing"
-</li><li>KLSU, 1983–2015 / October 24, 1983 (C70.html): "Power increases from 8 watts to 5,000 watts and changed from 107.3 FM to 91.1 FM." → "Power increases from 8 watts to 5,000 watts, and the station moves from 107.3 FM to 91.1 FM."
-</li><li>KLSU, 1983–2015 / November 29, 1984 (C72.html): "to The Manship School" → "to the Manship School"
-</li><li>KLSU, 1983–2015 / Fall 1994 (C80.html): "controversial format change" → "a controversial format change"
-</li><li>KLSU, 1983–2015 / 1997 (C83.html): "reel-to-reel technology" → "reel-to-reel technology."
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">KFGC, 1915–1934 / July 19, 1923 (C7.html)</th><td><del>KFGC granted a</del></td><td><ins>KFGC is granted a</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / July 19, 1923 (C7.html)</th><td><del>from Department of</del></td><td><ins>from the Department of</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / February 1924 (C10.html)</th><td><del>KFGC broadcasts the election of governor Hewitt Bouanchaud, who ran against Henry Fuqua and Huey P. Long.</del></td><td><ins>KFGC broadcasts the returns of the governor’s race between Hewitt Bouanchaud, Henry Fuqua and Huey P. Long.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / March 15, 1934 (C16.html)</th><td><del>lead by</del></td><td><ins>led by</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / February 15, 1937 (C20.html)</th><td><del>broadcast first show</del></td><td><ins>broadcast their first show</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / November 6, 1939 (C26.html)</th><td><del>newscasts began</del></td><td><ins>newscasts begin</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / November 6, 1939 (C26.html)</th><td><del>Sponsored by Daily Reveille</del></td><td><ins>Sponsored by the Daily Reveille</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / July 1, 1942 (C30.html)</th><td><del>Completion of two</del></td><td><ins>LSU completes two</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / Fall 1946 (C36.html)</th><td><del>Lucille Ruby Woodard</del></td><td><ins>Lucile Ruby Woodard</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / October 16, 1947 (C39.html)</th><td><del>WLSU on air at 91.7 megacycles with 1,000 watt frequency.</del></td><td><ins>WLSU goes on the air at 91.7 megacycles with 1,000 watts of power.</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / October 18, 1947 (C40.html)</th><td><del>WLSU staff raised</del></td><td><ins>WLSU staff raise</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / October 18, 1947 (C40.html)</th><td><del>which was delayed</del></td><td><ins>which is delayed</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / March 15, 1948 (C43.html)</th><td><del>WLSU first college FM station</del></td><td><ins>WLSU becomes the first college FM station</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / September 17, 1950 (C46.html)</th><td><del>Weekly program "WLSU speaks" and daily programs</del></td><td><ins>The programs are the weekly "WLSU Speaks" and the daily</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / Fall 1955 (C51.html)</th><td><del>By this time WLSU had many more student workers and broadcasting hours had doubled.</del></td><td><ins>By this time WLSU has many more student workers, and its broadcasting hours have doubled.</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html)</th><td><del>donated equipment which allowed</del></td><td><ins>donated the equipment that allowed</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html)</th><td><del>closed circuit</del></td><td><ins>closed-circuit</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / 1973 (C61.html)</th><td><del>Edwards and the Louisiana Educational Television Authority (LETA) requesting</del></td><td><ins>Edwards and the Louisiana Educational Television Authority (LETA), requesting</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / 1973 (C61.html)</th><td><del>denies university funding and support citing</del></td><td><ins>denies university funding and support, citing</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / October 24, 1983 (C70.html)</th><td><del>Power increases from 8 watts to 5,000 watts and changed from 107.3 FM to 91.1 FM.</del></td><td><ins>Power increases from 8 watts to 5,000 watts, and the station moves from 107.3 FM to 91.1 FM.</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / November 29, 1984 (C72.html)</th><td><del>to The Manship School</del></td><td><ins>to the Manship School</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / Fall 1994 (C80.html)</th><td><del>controversial format change</del></td><td><ins>a controversial format change</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / 1997 (C83.html)</th><td><del>reel-to-reel technology</del></td><td><ins>reel-to-reel technology.</ins></td></tr>
+</tbody>
+</table>
 <h4>Clip descriptions</h4>
-<ul><li>WJBO, 1934–1947 / Fall 1946 (C36.html), clip "Lucile Ruby Woodard on the beginnings of LSU radio" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
-</li><li>WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "Program Director details" → "Program Director, details"
-</li><li>WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
-</li><li>WLSU, 1947–1973 / June 1957 (C52.html), clip "Lucile Ruby Woodard on the end of WLSU" description: "Lucille Ruby" → "Lucile Ruby"
-</li><li>KLSU, 1983–2015 / Fall 1983 (C69.html), clip "Dez Crawford on building the tower" description: "she and and a" → "she and a"
-</li><li>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" description: "a KLSU alumni" → "a KLSU alumnus"
-</li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" description: "Christmas,"and" → "Christmas," and"
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>WJBO, 1934–1947 / Fall 1946 (C36.html), clip "Lucile Ruby Woodard on the beginnings of LSU radio" description: "LSU Professor Emeritus of Speech"</del></td><td><ins>LSU Professor Emerita of Speech</ins></td></tr>
+<tr><td><del>WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "Program Director details"</del></td><td><ins>Program Director, details</ins></td></tr>
+<tr><td><del>WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "LSU Professor Emeritus of Speech"</del></td><td><ins>LSU Professor Emerita of Speech</ins></td></tr>
+<tr><td><del>WLSU, 1947–1973 / June 1957 (C52.html), clip "Lucile Ruby Woodard on the end of WLSU" description: "Lucille Ruby"</del></td><td><ins>Lucile Ruby</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / Fall 1983 (C69.html), clip "Dez Crawford on building the tower" description: "she and and a"</del></td><td><ins>she and a</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" description: "a KLSU alumni"</del></td><td><ins>a KLSU alumnus</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" description: "Christmas,"and"</del></td><td><ins>Christmas," and</ins></td></tr>
+</tbody>
+</table>
 <h4>Transcripts</h4>
-<ul><li>WJBO / May 1947 (C38), clip "Ralph Steetle on building WLSU" transcript: "So the building is gone,or the station?" → "So the building is gone, or the station?" (fixed 2026-11-19)
-</li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
-</li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do.""" → "a lot easier to do.""
-</li><li>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building" → "Music and Dramatic Arts building"
-</li><li>WLSU, 1947–1973 / Summer 1949 (C45.html), clip "Lucile Ruby Woodard on discs and magnetic tape" transcript: "fifteen-inch wax disks" → "fifteen-inch wax discs"
-</li><li>KLSU, 1983–2015 / May 31, 1983 (C68.html), clip "Dez Crawford on winning back the KLSU call letters" transcript: "Lacrosse" → "La Crosse"
-</li><li>KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "to-do built around the," → "to-do built around the"
-</li><li>KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "bullet proof" → "bulletproof"
-</li><li>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "school of Journalism" → "School of Journalism"
-</li><li>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "from the 80s" → "from the ’80s"
-</li><li>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Laura Blereau on the format change and the backlash" transcript: ""I'm sitting right in it"." → ""I'm sitting right in it.""
-</li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" transcript: "Night before Christmas" → "Night Before Christmas"
-</li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "when you hit the. . . .when" → "when you hit the . . . when"
-</li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "barbeque" → "barbecue"
-</li><li>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "Youtube" → "YouTube"
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>WJBO / May 1947 (C38), clip "Ralph Steetle on building WLSU" transcript: "So the building is gone,or the station?"</del></td><td><ins>So the building is gone, or the station?</ins> <em>fixed 2026-11-19</em></td></tr>
+<tr><td><del>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''"</del></td><td><ins>'What's the purpose of this?'</ins></td></tr>
+<tr><td><del>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do."""</del></td><td><ins>a lot easier to do."</ins></td></tr>
+<tr><td><del>WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building"</del></td><td><ins>Music and Dramatic Arts building</ins></td></tr>
+<tr><td><del>WLSU, 1947–1973 / Summer 1949 (C45.html), clip "Lucile Ruby Woodard on discs and magnetic tape" transcript: "fifteen-inch wax disks"</del></td><td><ins>fifteen-inch wax discs</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / May 31, 1983 (C68.html), clip "Dez Crawford on winning back the KLSU call letters" transcript: "Lacrosse"</del></td><td><ins>La Crosse</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "to-do built around the,"</del></td><td><ins>to-do built around the</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "bullet proof"</del></td><td><ins>bulletproof</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "school of Journalism"</del></td><td><ins>School of Journalism</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "from the 80s"</del></td><td><ins>from the ’80s</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Laura Blereau on the format change and the backlash" transcript: ""I'm sitting right in it"."</del></td><td><ins>"I'm sitting right in it."</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" transcript: "Night before Christmas"</del></td><td><ins>Night Before Christmas</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "when you hit the. . . .when"</del></td><td><ins>when you hit the . . . when</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "barbeque"</del></td><td><ins>barbecue</ins></td></tr>
+<tr><td><del>KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "Youtube"</del></td><td><ins>YouTube</ins></td></tr>
+</tbody>
+</table>
 <h4>Captions</h4>
 <p>Old = the label under the image on the slide (or the lightbox title where the slide had none).</p>
-<ul><li>KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_1.jpg: "Dr. David Vance Guthrie" → "David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA."
-</li><li>KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_2.jpg: "Reveille Oct 6, 1915." → "“Wireless Station to Be Erected at L.S.U.,” The Reveille, October 6, 1915. Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA."
-</li><li>KFGC, 1915–1934 / February 1916 (C2.html), c2_1.jpg: "The first chemistry building 1899" → "The first chemistry building, L.S.U., old campus, 1899, a50000007, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
-</li><li>KFGC, 1915–1934 / February 1916 (C2.html), c2_2.jpg: "Physics Laboratory Heard Hall 1903" → "Physics Laboratory, Heard Hall, 1903, a50000030, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
-</li><li>KFGC, 1915–1934 / March 1916 (C3.html), c3_1.jpg: "Wireless Station Receives Messages From New Orleans. The Reveille, March 2, 1916. LLMVC, LSU Libraries." → "“Wireless Station Receives Messages From New Orleans,” The Reveille, March 2, 1916. LLMVC, LSU Libraries."
-</li><li>KFGC, 1915–1934 / April 1917 (C4.html), c4_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-</li><li>KFGC, 1915–1934 / 1923 (C5.html), c5_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-</li><li>KFGC, 1915–1934 / April 20, 1923 (C6.html), c6_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-</li><li>KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html), c8_1.jpg: "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSUA, LSU Libraries." → "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries."
-</li><li>WJBO, 1934–1947 / 1936 (C19.html), c19_1.jpg: ""L.S.U. Goes on the Air With Expanded Program," Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries." <strong>(different source)</strong>
-</li><li>WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_2.jpg: "Colbert Thesis page with Program Schedule" → "Program schedule. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
-</li><li>WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_3.jpg: "Program schedule from Wednesday Nov. 3, 1937" → "Program schedule for Wednesday, November 3, 1937. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
-</li><li>WJBO, 1934–1947 / November 6, 1939 (C26.html), c26_1.jpg: ""Making an Aerial Deadline,"" The Reveille, November 3, 1939. LLMVC, LSU Libraries." → "“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries."
-</li><li>WLSU, 1947–1973 / March 15, 1948 (C43.html), c43_2.jpg: "Tales of Hoffman: Gumbo, 1948. LSU Archives, LSU Libraries." → "“Tales of Hoffmann,” Gumbo, 1948. LSU Archives, LSU Libraries."
-</li><li>WLSU, 1947–1973 / January 1966 (C56.html), c56_1.jpg: "LSU Radio Station Now On Air 24 Hours a Day," State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“LSU Radio Station Now On Air 24 Hours a Day,” State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries."
-</li><li>WLSU, 1947–1973 / 1973 (C61.html), c61_2.jpg: "Louisiana Educational Television Authority Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data." → "Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data."
-</li><li>KLSU, 1983–2015 / October 21, 1988 (C79.html), c78_1.jpg: ""LSU students record firm promotes La. musicians," Advocate, Nov 12, 1989. LSU Libraries" → "“LSU Students’ Record Firm Promotes La. Musicians,” Advocate, November 12, 1989. LSU Libraries."
-</li><li>KLSU, 1983–2015 / December 1994 (C82.html), c82_1.jpg: "Free KLSU [part 1 of 2]" → "Free KLSU, December 1994 (page 1 of 2)."
-</li><li>KLSU, 1983–2015 / December 1994 (C82.html), c82_2.jpg: "Free KLSU [part 2 of 2]" → "Free KLSU, December 1994 (page 2 of 2)."
-</li><li>KLSU, 1983–2015 / 2015 (C86.html), c86_1.jpg: "Transmitter in box. Photo courtesy of John Friscia." → "The new transmitter in its crate, 2015. Photo courtesy of John Friscia."
-</li><li>KLSU, 1983–2015 / 2015 (C86.html), c86_2.jpg: "Transmitter out of box. Photo courtesy of John Friscia." → "The new transmitter unpacked, 2015. Photo courtesy of John Friscia."
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_1.jpg</th><td><del>Dr. David Vance Guthrie</del></td><td><ins>David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_2.jpg</th><td><del>Reveille Oct 6, 1915.</del></td><td><ins>“Wireless Station to Be Erected at L.S.U.,” The Reveille, October 6, 1915. Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / February 1916 (C2.html), c2_1.jpg</th><td><del>The first chemistry building 1899</del></td><td><ins>The first chemistry building, L.S.U., old campus, 1899, a50000007, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / February 1916 (C2.html), c2_2.jpg</th><td><del>Physics Laboratory Heard Hall 1903</del></td><td><ins>Physics Laboratory, Heard Hall, 1903, a50000030, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / March 1916 (C3.html), c3_1.jpg</th><td><del>Wireless Station Receives Messages From New Orleans. The Reveille, March 2, 1916. LLMVC, LSU Libraries.</del></td><td><ins>“Wireless Station Receives Messages From New Orleans,” The Reveille, March 2, 1916. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / April 1917 (C4.html), c4_1.jpg</th><td><del>The Reveille, March 31, 1938.</del></td><td><ins>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / 1923 (C5.html), c5_1.jpg</th><td><del>The Reveille, March 31, 1938.</del></td><td><ins>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / April 20, 1923 (C6.html), c6_1.jpg</th><td><del>The Reveille, March 31, 1938.</del></td><td><ins>“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html), c8_1.jpg</th><td><del>Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSUA, LSU Libraries.</del></td><td><ins>Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / 1936 (C19.html), c19_1.jpg</th><td><del>"L.S.U. Goes on the Air With Expanded Program," Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</del></td><td><ins>"“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries." <strong>(different source)</strong></ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_2.jpg</th><td><del>Colbert Thesis page with Program Schedule</del></td><td><ins>Program schedule. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_3.jpg</th><td><del>Program schedule from Wednesday Nov. 3, 1937</del></td><td><ins>Program schedule for Wednesday, November 3, 1937. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WJBO, 1934–1947 / November 6, 1939 (C26.html), c26_1.jpg</th><td><del>"Making an Aerial Deadline,"" The Reveille, November 3, 1939. LLMVC, LSU Libraries.</del></td><td><ins>“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / March 15, 1948 (C43.html), c43_2.jpg</th><td><del>Tales of Hoffman: Gumbo, 1948. LSU Archives, LSU Libraries.</del></td><td><ins>“Tales of Hoffmann,” Gumbo, 1948. LSU Archives, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / January 1966 (C56.html), c56_1.jpg</th><td><del>LSU Radio Station Now On Air 24 Hours a Day," State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</del></td><td><ins>“LSU Radio Station Now On Air 24 Hours a Day,” State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries.</ins></td></tr>
+<tr><th scope="row">WLSU, 1947–1973 / 1973 (C61.html), c61_2.jpg</th><td><del>Louisiana Educational Television Authority Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data.</del></td><td><ins>Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data.</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / October 21, 1988 (C79.html), c78_1.jpg</th><td><del>"LSU students record firm promotes La. musicians," Advocate, Nov 12, 1989. LSU Libraries</del></td><td><ins>“LSU Students’ Record Firm Promotes La. Musicians,” Advocate, November 12, 1989. LSU Libraries.</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / December 1994 (C82.html), c82_1.jpg</th><td><del>Free KLSU [part 1 of 2]</del></td><td><ins>Free KLSU, December 1994 (page 1 of 2).</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / December 1994 (C82.html), c82_2.jpg</th><td><del>Free KLSU [part 2 of 2]</del></td><td><ins>Free KLSU, December 1994 (page 2 of 2).</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / 2015 (C86.html), c86_1.jpg</th><td><del>Transmitter in box. Photo courtesy of John Friscia.</del></td><td><ins>The new transmitter in its crate, 2015. Photo courtesy of John Friscia.</ins></td></tr>
+<tr><th scope="row">KLSU, 1983–2015 / 2015 (C86.html), c86_2.jpg</th><td><del>Transmitter out of box. Photo courtesy of John Friscia.</del></td><td><ins>The new transmitter unpacked, 2015. Photo courtesy of John Friscia.</ins></td></tr>
+</tbody>
+</table>
 <h4>About the Exhibition (from about.html)</h4>
-<ul><li>"This exhibit walks through a century of campus radio evolution" → "This exhibition walks through a century of campus radio"
-</li><li>"university archives materials, and oral histories-all of which" → "university archives materials and oral histories, all of which"
-</li><li>"housed with the Williams Center for Oral History" → "housed with the T. Harry Williams Center for Oral History"
-</li><li>"For specific citation information regarding each interview, please contact Center staff at <a href="http://www.lib.lsu.edu/oralhistory">http://www.lib.lsu.edu/oralhistory</a> ." → "For citation information for each interview, please contact Center staff through the Williams Center website." (linked to <a href="https://www.lib.lsu.edu/oralhistory">https://www.lib.lsu.edu/oralhistory</a>)
-</li><li>"All other citations for materials are contained within the exhibit." → "All other citations for materials are given in the exhibition."
-</li><li>"on staff with the Williams Center for Oral History" → "on staff with the T. Harry Williams Center for Oral History"
-</li><li>"Jennifer Abraham , Center Director, was responsible for concept, oversight, and editing." → "Jennifer Abraham, Center Director, was responsible for concept, oversight and editing."
-</li><li>"Erin Hess, the Center's Manuscript Processor copy edited text." → "Erin Hess, the Center’s Manuscript Processor, copy edited the text."
-</li><li>"We appreciate the help of many other staff members for their assistance throughout various stages of planning and installation." → "We appreciate the help of many other staff members throughout the planning and installation."
-</li><li>The About text is split into the About section and an “Acknowledgments” heading (curator and credits).
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>This exhibit walks through a century of campus radio evolution</del></td><td><ins>This exhibition walks through a century of campus radio</ins></td></tr>
+<tr><td><del>university archives materials, and oral histories-all of which</del></td><td><ins>university archives materials and oral histories, all of which</ins></td></tr>
+<tr><td><del>housed with the Williams Center for Oral History</del></td><td><ins>housed with the T. Harry Williams Center for Oral History</ins></td></tr>
+<tr><td><del>For specific citation information regarding each interview, please contact Center staff at <a href="http://www.lib.lsu.edu/oralhistory">http://www.lib.lsu.edu/oralhistory</a> .</del></td><td><ins>For citation information for each interview, please contact Center staff through the Williams Center website.</ins> <em>linked to <a href="https://www.lib.lsu.edu/oralhistory">https://www.lib.lsu.edu/oralhistory</a></em></td></tr>
+<tr><td><del>All other citations for materials are contained within the exhibit.</del></td><td><ins>All other citations for materials are given in the exhibition.</ins></td></tr>
+<tr><td><del>on staff with the Williams Center for Oral History</del></td><td><ins>on staff with the T. Harry Williams Center for Oral History</ins></td></tr>
+<tr><td><del>Jennifer Abraham , Center Director, was responsible for concept, oversight, and editing.</del></td><td><ins>Jennifer Abraham, Center Director, was responsible for concept, oversight and editing.</ins></td></tr>
+<tr><td><del>Erin Hess, the Center's Manuscript Processor copy edited text.</del></td><td><ins>Erin Hess, the Center’s Manuscript Processor, copy edited the text.</ins></td></tr>
+<tr><td><del>We appreciate the help of many other staff members for their assistance throughout various stages of planning and installation.</del></td><td><ins>We appreciate the help of many other staff members throughout the planning and installation.</ins></td></tr>
+</tbody>
+</table>
+<ul><li>The About text is split into the About section and an “Acknowledgments” heading (curator and credits).
 </li></ul>
 <h3>To verify</h3>
 <p>Left as written (or chosen without a source) and worth a curator’s check:</p>
@@ -1266,108 +1491,132 @@ $section('A Lady in the South', [
 <p>New structure: two walls of clips, <strong>Dorothy Colvin Howell</strong> (8) and <strong>A.B. Clark</strong> (7), then <strong>History</strong>, <strong>From the Scrapbook</strong> and <strong>About the Exhibition</strong> as stories. The old “Photos” grid is folded into these galleries.</p>
 <p>Changes made throughout, not listed one by one below:</p>
 <ul><li>Straight quotes became typographic quotes and apostrophes (’ “ ”).
-</li><li>Hyphen dates became en-dash ranges (1935-1945 → 1935–1945).
-</li><li>Sign-offs at the end of transcripts (“- Dorothy Howell”, “– A.B. Clark”) were dropped, because each player has a credit line.
-</li><li>Speaker labels are in bold, one paragraph per turn, followed by a colon (“<strong>Dorothy Howell:</strong>”).
-</li><li>Long transcripts are split into paragraphs at natural breaks.
-</li><li>“Home Management House(s)/Residence(s)” is in lowercase when it is generic (“the home management houses”). It keeps its capitals in names (“the Helen Carter House”) and in the bios’ “the Home Management House”.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Hyphen dates became en-dash ranges (1935-1945</del></td><td><ins>1935–1945)</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Sign-offs at the end of transcripts (“- Dorothy Howell”, “– A.B. Clark”) were dropped, because each player has a credit line.
+</li>
+<li>Speaker labels are in bold, one paragraph per turn, followed by a colon (“<strong>Dorothy Howell:</strong>”).
+</li>
+<li>Long transcripts are split into paragraphs at natural breaks.
+</li>
+<li>“Home Management House(s)/Residence(s)” is in lowercase when it is generic (“the home management houses”). It keeps its capitals in names (“the Helen Carter House”) and in the bios’ “the Home Management House”.
 </li></ul>
 <h3>Corrected</h3>
 <h4>Dorothy Colvin Howell wall</h4>
-<ul>
-<li><strong>A lady in the South</strong>: “Well, women in my generation--there weren’t” → “Well, women in my generation . . . there weren’t”</li>
-<li><strong>More than cooking and sewing</strong>: “Didn't you have to take chemistry” → “Didn’t you have to take chemistry”</li>
-<li><strong>Orange-crate furniture</strong>: “you had to learn about food preparation was a big part of the expense” → “you had to learn about food preparation, [which] was a big part of the expense”</li>
-<li><strong>Orange-crate furniture</strong>: “And that’s when home economics developed was to be able to make” → “And that’s when home economics developed, was to be able to make”</li>
-<li><strong>Orange-crate furniture</strong>: “men’s worn out trousers” → “men’s worn-out trousers”</li>
-<li><strong>Orange-crate furniture</strong>: “we upholstered. We padded it” → “we upholstered [it]. We padded it”</li>
-<li><strong>Orange-crate furniture</strong>: “slip covers” → “slipcovers”</li>
-<li><strong>Cooking within your income</strong>: “Oh, here’s one; Cooking Within Your Income.” → “Oh, here’s one: <em>Cooking Within Your Income</em>.”</li>
-<li><strong>Cooking within your income</strong>: “how you managed the money at the end of the preparation you had to stay in the budget.” → “how you managed the money. At the end of the preparation you had to stay in the budget.”</li>
-<li><strong>The rolling ironer</strong>: “you put your sheets through it all the sheets were ironed.” → “you put your sheets through it; all the sheets were ironed.”</li>
-<li><strong>Company once a week</strong>: “All linen table cloths.” → “All linen tablecloths.”</li>
-<li><strong>Company once a week</strong>: “All china, the china’s still in the Human Ecology building” → “All china; the china’s still in the Human Ecology building”</li>
-<li><strong>Company once a week</strong>: “I helped Miss [?] , , , it was not my job” → “I helped Miss [?] . . . it was not my job”</li>
-<li><strong>Part of LSU’s history</strong>: “the skills that I had learned at LSU that were useful all my life” → “the skills that I had learned at LSU were useful all my life”</li>
-<li><strong>Part of LSU’s history</strong>: “I think they're [the Home Management Houses] involved” → “I think they’re [the home management houses] involved”</li>
-<li><strong>Part of LSU’s history</strong>: Signed “- A.B. Clark” on the old page → Credited to <strong>Dorothy Colvin Howell</strong>. The audio file is <code>Howell.significance.mp3</code>, and the About essay quotes these words as Howell’s.</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">A lady in the South</th><td><del>Well, women in my generation--there weren’t</del></td><td><ins>Well, women in my generation . . . there weren’t</ins></td></tr>
+<tr><th scope="row">More than cooking and sewing</th><td><del>Didn't you have to take chemistry</del></td><td><ins>Didn’t you have to take chemistry</ins></td></tr>
+<tr><th scope="row">Orange-crate furniture</th><td><del>you had to learn about food preparation was a big part of the expense</del></td><td><ins>you had to learn about food preparation, [which] was a big part of the expense</ins></td></tr>
+<tr><th scope="row">Orange-crate furniture</th><td><del>And that’s when home economics developed was to be able to make</del></td><td><ins>And that’s when home economics developed, was to be able to make</ins></td></tr>
+<tr><th scope="row">Orange-crate furniture</th><td><del>men’s worn out trousers</del></td><td><ins>men’s worn-out trousers</ins></td></tr>
+<tr><th scope="row">Orange-crate furniture</th><td><del>we upholstered. We padded it</del></td><td><ins>we upholstered [it]. We padded it</ins></td></tr>
+<tr><th scope="row">Orange-crate furniture</th><td><del>slip covers</del></td><td><ins>slipcovers</ins></td></tr>
+<tr><th scope="row">Cooking within your income</th><td><del>Oh, here’s one; Cooking Within Your Income.</del></td><td><ins>Oh, here’s one: <em>Cooking Within Your Income</em>.</ins></td></tr>
+<tr><th scope="row">Cooking within your income</th><td><del>how you managed the money at the end of the preparation you had to stay in the budget.</del></td><td><ins>how you managed the money. At the end of the preparation you had to stay in the budget.</ins></td></tr>
+<tr><th scope="row">The rolling ironer</th><td><del>you put your sheets through it all the sheets were ironed.</del></td><td><ins>you put your sheets through it; all the sheets were ironed.</ins></td></tr>
+<tr><th scope="row">Company once a week</th><td><del>All linen table cloths.</del></td><td><ins>All linen tablecloths.</ins></td></tr>
+<tr><th scope="row">Company once a week</th><td><del>All china, the china’s still in the Human Ecology building</del></td><td><ins>All china; the china’s still in the Human Ecology building</ins></td></tr>
+<tr><th scope="row">Company once a week</th><td><del>I helped Miss [?] , , , it was not my job</del></td><td><ins>I helped Miss [?] . . . it was not my job</ins></td></tr>
+<tr><th scope="row">Part of LSU’s history</th><td><del>the skills that I had learned at LSU that were useful all my life</del></td><td><ins>the skills that I had learned at LSU were useful all my life</ins></td></tr>
+<tr><th scope="row">Part of LSU’s history</th><td><del>I think they're [the Home Management Houses] involved</del></td><td><ins>I think they’re [the home management houses] involved</ins></td></tr>
+<tr><th scope="row">Part of LSU’s history</th><td><del>Signed “- A.B. Clark” on the old page</del></td><td><ins>Credited to <strong>Dorothy Colvin Howell</strong>. The audio file is <code>Howell.significance.mp3</code>, and the About essay quotes these words as Howell’s</ins></td></tr>
+</tbody>
+</table>
 <h4>A.B. Clark wall</h4>
-<ul>
-<li><strong>Catching a ride to campus</strong>: “hold up two fingers or three fingers, they could take two people or three people and we always hoped” → “hold up two fingers or three fingers, [meaning] they could take two people or three people, and we always hoped”</li>
-<li><strong>The home ec table was closer</strong>: “Junior or senior year, I can’t remember which,.” → “Junior or senior year, I can’t remember which.”</li>
-<li><strong>Grating carrots in wartime</strong>: “was the head of the department then and it was over in Prescott Hall” → “was the head of the department then, and it was over in Prescott Hall”</li>
-<li><strong>Grating carrots in wartime</strong>: “When Clara Tucker, came, just things popped” → “When Clara Tucker came, things just popped”</li>
-<li><strong>Grating carrots in wartime</strong>: “It was Smith Hall at that time they had it in the basement” → “It was Smith Hall at that time; they had it in the basement”</li>
-<li><strong>My father’s advice</strong>: “an eleven year school” → “an eleven-year school”</li>
-<li><strong>Babies in the house at Tennessee</strong>: “at [University of] Tennessee” → “at [the University of] Tennessee”</li>
-<li><strong>Babies in the house at Tennessee</strong>: “LSU's program” → “LSU’s program”</li>
-<li><strong>Babies in the house at Tennessee</strong>: “difficult . . . but” (broken across a line as “difficult . / . . but”) → “difficult . . . but”</li>
-<li><strong>Couples in the Morris House</strong>: “I lived as an instructor” → “I lived [in the house] as an instructor”</li>
-<li><strong>Couples in the Morris House</strong>: “home management residence.And it was difficult” → “home management residence. And it was difficult”</li>
-<li><strong>Couples in the Morris House</strong>: “because the looked at it” → “because they looked at it”</li>
-<li><strong>Couples in the Morris House</strong>: “this boy drying — we didn’t have dishwashers then — drying the dishes and he had” → “this boy drying (we didn’t have dishwashers then), drying the dishes, and he had”</li>
-<li><strong>Couples in the Morris House</strong>: “Oh this is a quicker way” → “Oh, this is a quicker way”</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Catching a ride to campus</th><td><del>hold up two fingers or three fingers, they could take two people or three people and we always hoped</del></td><td><ins>hold up two fingers or three fingers, [meaning] they could take two people or three people, and we always hoped</ins></td></tr>
+<tr><th scope="row">The home ec table was closer</th><td><del>Junior or senior year, I can’t remember which,.</del></td><td><ins>Junior or senior year, I can’t remember which.</ins></td></tr>
+<tr><th scope="row">Grating carrots in wartime</th><td><del>was the head of the department then and it was over in Prescott Hall</del></td><td><ins>was the head of the department then, and it was over in Prescott Hall</ins></td></tr>
+<tr><th scope="row">Grating carrots in wartime</th><td><del>When Clara Tucker, came, just things popped</del></td><td><ins>When Clara Tucker came, things just popped</ins></td></tr>
+<tr><th scope="row">Grating carrots in wartime</th><td><del>It was Smith Hall at that time they had it in the basement</del></td><td><ins>It was Smith Hall at that time; they had it in the basement</ins></td></tr>
+<tr><th scope="row">My father’s advice</th><td><del>an eleven year school</del></td><td><ins>an eleven-year school</ins></td></tr>
+<tr><th scope="row">Babies in the house at Tennessee</th><td><del>at [University of] Tennessee</del></td><td><ins>at [the University of] Tennessee</ins></td></tr>
+<tr><th scope="row">Babies in the house at Tennessee</th><td><del>LSU's program</del></td><td><ins>LSU’s program</ins></td></tr>
+<tr><th scope="row">Babies in the house at Tennessee</th><td><del>difficult . . . but</del> <em>broken across a line as “difficult . / . . but”</em></td><td><ins>difficult . . . but</ins></td></tr>
+<tr><th scope="row">Couples in the Morris House</th><td><del>I lived as an instructor</del></td><td><ins>I lived [in the house] as an instructor</ins></td></tr>
+<tr><th scope="row">Couples in the Morris House</th><td><del>home management residence.And it was difficult</del></td><td><ins>home management residence. And it was difficult</ins></td></tr>
+<tr><th scope="row">Couples in the Morris House</th><td><del>because the looked at it</del></td><td><ins>because they looked at it</ins></td></tr>
+<tr><th scope="row">Couples in the Morris House</th><td><del>this boy drying — we didn’t have dishwashers then — drying the dishes and he had</del></td><td><ins>this boy drying (we didn’t have dishwashers then), drying the dishes, and he had</ins></td></tr>
+<tr><th scope="row">Couples in the Morris House</th><td><del>Oh this is a quicker way</del></td><td><ins>Oh, this is a quicker way</ins></td></tr>
+</tbody>
+</table>
 <h4>History</h4>
-<ul>
-<li><strong>1st text</strong>: “The national importance of vocational education in general grew” → “The national importance of vocational education grew”</li>
-<li><strong>1st text</strong>: “Agricultural Extension agencies” → “agricultural extension agencies”</li>
-<li><strong>2nd text</strong>: “The history of Home Management at LSU” → “The history of home management at LSU”</li>
-<li><strong>2nd text</strong>: “black and white” → “Black and white”</li>
-<li><strong>2nd text</strong>: “home-making skills” → “homemaking skills”</li>
-<li><strong>PWA text</strong>: “provided federal funds that assisted to replace dilapidated schools and expand one-room school houses” → “provided federal funds that helped replace dilapidated schools and expand one-room schoolhouses”</li>
-<li><strong>PWA text</strong>: “the addition and repair of new buildings” → “the addition and repair of buildings”</li>
-<li><strong>PWA text</strong>: “served as a laboratory for teaching” → “served as laboratories for teaching”</li>
-<li><strong>Southern University text</strong>: “offers a promising future research avenue.” → “offers a promising avenue for future research.”</li>
-<li><strong>1915 text</strong>: “LSU Women's Home Economics Program” → “LSU Women’s Home Economics Program”</li>
-<li><strong>1915 text</strong>: “LSU's historic Home Economics Department’s goals were later modified” → “The goals of LSU’s historic Home Economics Department were later modified”</li>
-<li><strong>Postwar text</strong>: “the Home Ec program” → “the home economics program”</li>
-<li><strong>Postwar text</strong>: “a campus parking garage, which is located in that part of campus which is still comprised of historic buildings” → “a campus parking garage, in a part of campus that still holds historic buildings”</li>
-<li><strong>Huey Long text</strong>: “LSU Home Economics graduate student, Katherine Pierce Green, noted” → “LSU home economics graduate student Katherine Pierce Green noted”</li>
-<li><strong>Huey Long text</strong>: “Notably absent southern states are” → “Notably absent southern states were”</li>
-<li><strong>Huey Long text</strong>: “Franklin Roosevelt's New Deal and his massive public works programs” → “Franklin Roosevelt’s New Deal and its massive public works programs”</li>
-<li><strong>Long’s vision text</strong>: “Seed money received from revenue gained from the sale of the capital grounds” → “Seed money from the sale of the Capitol grounds”</li>
-<li><strong>Long’s vision text</strong>: “Music and Dramatic Arts building” → “Music and Dramatic Arts Building”</li>
-<li><strong>Leche text</strong>: “Richard Leche became governor and he repaired the relationship” → “Richard Leche became governor and repaired the relationship”</li>
-<li><strong>Leche text</strong>: “The WPA also aided campus growth, and their contributions include” → “The WPA also aided campus growth, and its contributions include”</li>
-<li><strong>State funds text</strong>: “several facilities including … the two Home Management Houses: Helen Carter and Agnes Morris, to replace” → “several facilities, including … the two home management houses, Helen Carter and Agnes Morris, to replace”</li>
-<li><strong>1930s–40s women text</strong>: “LSU Law School.)” → “LSU Law School).”</li>
-<li><strong>1930s–40s women text</strong>: “a curriculum of domestic science to take on nutrition” → “a curriculum of domestic science taking on nutrition”</li>
-<li><strong>1930s–40s women text</strong>: “child care and development” → “childcare and development”</li>
-<li><strong>Last text</strong>: “Dr. Pamela Rabelais Vinci” → “Dr. Pamela Rabalais Vinci”, the spelling used in the old Acknowledgments</li>
-<li><strong>Last text</strong>: “please peruse the oral history portion of this kiosk … You can find out more about the individual photographs and images here.” → “listen to Dorothy Colvin Howell and A.B. Clark.” The links now go to the two walls. The “kiosk” and “here” links pointed to old page anchors.</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">1st text</th><td><del>The national importance of vocational education in general grew</del></td><td><ins>The national importance of vocational education grew</ins></td></tr>
+<tr><th scope="row">1st text</th><td><del>Agricultural Extension agencies</del></td><td><ins>agricultural extension agencies</ins></td></tr>
+<tr><th scope="row">2nd text</th><td><del>The history of Home Management at LSU</del></td><td><ins>The history of home management at LSU</ins></td></tr>
+<tr><th scope="row">2nd text</th><td><del>black and white</del></td><td><ins>Black and white</ins></td></tr>
+<tr><th scope="row">2nd text</th><td><del>home-making skills</del></td><td><ins>homemaking skills</ins></td></tr>
+<tr><th scope="row">PWA text</th><td><del>provided federal funds that assisted to replace dilapidated schools and expand one-room school houses</del></td><td><ins>provided federal funds that helped replace dilapidated schools and expand one-room schoolhouses</ins></td></tr>
+<tr><th scope="row">PWA text</th><td><del>the addition and repair of new buildings</del></td><td><ins>the addition and repair of buildings</ins></td></tr>
+<tr><th scope="row">PWA text</th><td><del>served as a laboratory for teaching</del></td><td><ins>served as laboratories for teaching</ins></td></tr>
+<tr><th scope="row">Southern University text</th><td><del>offers a promising future research avenue.</del></td><td><ins>offers a promising avenue for future research.</ins></td></tr>
+<tr><th scope="row">1915 text</th><td><del>LSU Women's Home Economics Program</del></td><td><ins>LSU Women’s Home Economics Program</ins></td></tr>
+<tr><th scope="row">1915 text</th><td><del>LSU's historic Home Economics Department’s goals were later modified</del></td><td><ins>The goals of LSU’s historic Home Economics Department were later modified</ins></td></tr>
+<tr><th scope="row">Postwar text</th><td><del>the Home Ec program</del></td><td><ins>the home economics program</ins></td></tr>
+<tr><th scope="row">Postwar text</th><td><del>a campus parking garage, which is located in that part of campus which is still comprised of historic buildings</del></td><td><ins>a campus parking garage, in a part of campus that still holds historic buildings</ins></td></tr>
+<tr><th scope="row">Huey Long text</th><td><del>LSU Home Economics graduate student, Katherine Pierce Green, noted</del></td><td><ins>LSU home economics graduate student Katherine Pierce Green noted</ins></td></tr>
+<tr><th scope="row">Huey Long text</th><td><del>Notably absent southern states are</del></td><td><ins>Notably absent southern states were</ins></td></tr>
+<tr><th scope="row">Huey Long text</th><td><del>Franklin Roosevelt's New Deal and his massive public works programs</del></td><td><ins>Franklin Roosevelt’s New Deal and its massive public works programs</ins></td></tr>
+<tr><th scope="row">Long’s vision text</th><td><del>Seed money received from revenue gained from the sale of the capital grounds</del></td><td><ins>Seed money from the sale of the Capitol grounds</ins></td></tr>
+<tr><th scope="row">Long’s vision text</th><td><del>Music and Dramatic Arts building</del></td><td><ins>Music and Dramatic Arts Building</ins></td></tr>
+<tr><th scope="row">Leche text</th><td><del>Richard Leche became governor and he repaired the relationship</del></td><td><ins>Richard Leche became governor and repaired the relationship</ins></td></tr>
+<tr><th scope="row">Leche text</th><td><del>The WPA also aided campus growth, and their contributions include</del></td><td><ins>The WPA also aided campus growth, and its contributions include</ins></td></tr>
+<tr><th scope="row">State funds text</th><td><del>several facilities including … the two Home Management Houses: Helen Carter and Agnes Morris, to replace</del></td><td><ins>several facilities, including … the two home management houses, Helen Carter and Agnes Morris, to replace</ins></td></tr>
+<tr><th scope="row">1930s–40s women text</th><td><del>LSU Law School.)</del></td><td><ins>LSU Law School).</ins></td></tr>
+<tr><th scope="row">1930s–40s women text</th><td><del>a curriculum of domestic science to take on nutrition</del></td><td><ins>a curriculum of domestic science taking on nutrition</ins></td></tr>
+<tr><th scope="row">1930s–40s women text</th><td><del>child care and development</del></td><td><ins>childcare and development</ins></td></tr>
+<tr><th scope="row">Last text</th><td><del>Dr. Pamela Rabelais Vinci</del></td><td><ins>“Dr. Pamela Rabalais Vinci”, the spelling used in the old Acknowledgments</ins></td></tr>
+<tr><th scope="row">Last text</th><td><del>please peruse the oral history portion of this kiosk … You can find out more about the individual photographs and images here.</del></td><td><ins>“listen to Dorothy Colvin Howell and A.B. Clark.” The links now go to the two walls. The “kiosk” and “here” links pointed to old page anchors</ins></td></tr>
+</tbody>
+</table>
 <h4>Page intro and About the Exhibition</h4>
-<ul>
-<li><strong>Intro</strong>: “Founded in 1915, LSU's Women’s Home Economics Program” → “Founded in 1915, LSU’s Women’s Home Economics Program”</li>
-<li><strong>Intro</strong>: “school teachers” → “schoolteachers”</li>
-<li><strong>Intro</strong>: “a reform measure to improve the economic hardships of the Great Depression” → “a reform measure to ease the economic hardships of the Great Depression”</li>
-<li><strong>Intro</strong>: “Franklin Roosevelt's New Deal” → “Franklin Roosevelt’s New Deal”</li>
-<li><strong>Howell bio</strong>: “(pictured top left)”, “enrolled in School of Home Economics at LSU from 1939-1942” → “(pictured …)” removed; “enrolled in the School of Home Economics at LSU from 1939 to 1942”</li>
-<li><strong>Clark bio</strong>: “(pictured bottom left)” → Removed</li>
-<li><strong>Clark bio</strong>: “Teaching Certification”, “Home Management and Child Development”, “a Home Residence instructor” → “teaching certification”, “home management and child development”, “a home residence instructor”</li>
-<li><strong>Clark bio</strong>: “School of Home Economics; first as an instructor” → “School of Home Economics, first as an instructor”</li>
-<li><strong>Clark bio</strong>: “lived in Pakistan for a total of four years where she helped with the founding of and instructed in a women's college in Karachi” → “lived in Pakistan for a total of four years, where she helped found and taught at a women’s college in Karachi”</li>
-<li><strong>In their words</strong>: “point of view."" (double closing quote) → “point of view.”</li>
-<li><strong>In their words</strong>: “a group of couples that lived in the Morris House — three couples.” → “a group of couples that lived in the Morris House, three couples.”</li>
-<li><strong>In their words</strong>: “in a situation like that. . . .Now that was” → “in a situation like that. . . . Now that was”</li>
-<li><strong>In their words</strong>: “The Home Economics students continued internships” → “Home economics students continued internships”</li>
-<li><strong>In their words</strong>: “Oral history excerpts in this exhibit” → “Oral history excerpts in this exhibition”</li>
-<li><strong>In their words</strong>: “please contact Jennifer A. Cramer, Director, … jabrah1@lsu.edu” (mailto link broken: <code>Home%Management</code>) → “contact the T. Harry Williams Center for Oral History”; the name, email and link were dropped</li>
-<li><strong>Acknowledgments</strong>: “Angie Juban, Interviewer (2004) THWCOH” → “Angie Juban, Interviewer (2004), THWCOH”</li>
-<li><strong>Acknowledgments</strong>: Home page: “Lecture Hall Exhibition: COOPERATIVE EXTENSION: CELEBRATING 100 YEARS: A Preview of the Fall 2014 Exhibition curated by …” → “Presented in conjunction with the Hill Memorial Library Lecture Hall exhibition <em>Cooperative Extension: Celebrating 100 Years</em>, a preview of the fall 2014 exhibition curated by …” (moved to Acknowledgments)</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Intro</th><td><del>Founded in 1915, LSU's Women’s Home Economics Program</del></td><td><ins>Founded in 1915, LSU’s Women’s Home Economics Program</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>school teachers</del></td><td><ins>schoolteachers</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>a reform measure to improve the economic hardships of the Great Depression</del></td><td><ins>a reform measure to ease the economic hardships of the Great Depression</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>Franklin Roosevelt's New Deal</del></td><td><ins>Franklin Roosevelt’s New Deal</ins></td></tr>
+<tr><th scope="row">Howell bio</th><td><del>“(pictured top left)”, “enrolled in School of Home Economics at LSU from 1939-1942”</del></td><td><ins>(pictured …)” removed; “enrolled in the School of Home Economics at LSU from 1939 to 1942</ins></td></tr>
+<tr><th scope="row">Clark bio</th><td><del>(pictured bottom left)</del></td><td><ins>Removed</ins></td></tr>
+<tr><th scope="row">Clark bio</th><td><del>“Teaching Certification”, “Home Management and Child Development”, “a Home Residence instructor”</del></td><td><ins>“teaching certification”, “home management and child development”, “a home residence instructor”</ins></td></tr>
+<tr><th scope="row">Clark bio</th><td><del>School of Home Economics; first as an instructor</del></td><td><ins>School of Home Economics, first as an instructor</ins></td></tr>
+<tr><th scope="row">Clark bio</th><td><del>lived in Pakistan for a total of four years where she helped with the founding of and instructed in a women's college in Karachi</del></td><td><ins>lived in Pakistan for a total of four years, where she helped found and taught at a women’s college in Karachi</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>point of view."</del> <em>double closing quote</em></td><td><ins>point of view.</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>a group of couples that lived in the Morris House — three couples.</del></td><td><ins>a group of couples that lived in the Morris House, three couples.</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>in a situation like that. . . .Now that was</del></td><td><ins>in a situation like that. . . . Now that was</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>The Home Economics students continued internships</del></td><td><ins>Home economics students continued internships</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>Oral history excerpts in this exhibit</del></td><td><ins>Oral history excerpts in this exhibition</ins></td></tr>
+<tr><th scope="row">In their words</th><td><del>please contact Jennifer A. Cramer, Director, … jabrah1@lsu.edu</del> <em>mailto link broken: <code>Home%Management</code></em></td><td><ins>“contact the T. Harry Williams Center for Oral History”; the name, email and link were dropped</ins></td></tr>
+<tr><th scope="row">Acknowledgments</th><td><del>Angie Juban, Interviewer (2004) THWCOH</del></td><td><ins>Angie Juban, Interviewer (2004), THWCOH</ins></td></tr>
+<tr><th scope="row">Acknowledgments</th><td><del>Home page: “Lecture Hall Exhibition: COOPERATIVE EXTENSION: CELEBRATING 100 YEARS: A Preview of the Fall 2014 Exhibition curated by …”</del></td><td><ins>Presented in conjunction with the Hill Memorial Library Lecture Hall exhibition <em>Cooperative Extension: Celebrating 100 Years</em>, a preview of the fall 2014 exhibition curated by …</ins> <em>moved to Acknowledgments</em></td></tr>
+</tbody>
+</table>
 <h4>Captions (old lightbox titles)</h4>
-<ul>
-<li><strong>hist_17</strong>: “Original Home manamgement Cottage, … sale of Capital Grounds, 1934” (alt: “… 1939”) → “The original home management cottage, on today’s Infirmary Road, built with funds from the sale of the Capitol grounds, 1934.”</li>
-<li><strong>LoC photos</strong>: “FSA-OWI Collection: LC-USF34-053820-D ” (trailing space, colon) → “FSA/OWI Collection, LC-USF34-053820-D.” (the same for all five)</li>
-<li><strong>Scrapbook photos</strong>: “Scrapbook Photo Courtesy of Human Ecology Department” / “Picture from Scrapbook, courtesy of Human Ecology Department.” → “Scrapbook photo courtesy of the Human Ecology Department.”</li>
-<li><strong>Gumbo photos</strong>: “LSU Gumbo, 1939” / “Gumbo, 1939” → “<em>LSU Gumbo</em>, 1939.” (yearbook title in italics, the same form throughout)</li>
-<li><strong>hist_19</strong>: “University Bulletin, Vol. 31, April, 1939.” → “Campus map. <em>University Bulletin</em>, vol. 31, April 1939.”</li>
-<li><strong>hist_24</strong>: “Contemporary photo of Helen Carter House. Photograph by A. Juban.” → “The Helen Carter House before it was razed in 2011. Photo by Angie Juban.”</li>
-<li><strong>hist_22</strong>: “Hanging laundry outside of the Helen Carter House, ca. 1943.” → “Hanging laundry outside the Helen Carter House, ca. 1943. Scrapbook photo courtesy of the Human Ecology Department.”</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">hist_17</th><td><del>Original Home manamgement Cottage, … sale of Capital Grounds, 1934</del> <em>alt: “… 1939”</em></td><td><ins>The original home management cottage, on today’s Infirmary Road, built with funds from the sale of the Capitol grounds, 1934.</ins></td></tr>
+<tr><th scope="row">LoC photos</th><td><del>FSA-OWI Collection: LC-USF34-053820-D </del> <em>trailing space, colon</em></td><td><ins>FSA/OWI Collection, LC-USF34-053820-D.</ins> <em>the same for all five</em></td></tr>
+<tr><th scope="row">Scrapbook photos</th><td><del>“Scrapbook Photo Courtesy of Human Ecology Department” / “Picture from Scrapbook, courtesy of Human Ecology Department.”</del></td><td><ins>Scrapbook photo courtesy of the Human Ecology Department.</ins></td></tr>
+<tr><th scope="row">Gumbo photos</th><td><del>“LSU Gumbo, 1939” / “Gumbo, 1939”</del></td><td><ins><em>LSU Gumbo</em>, 1939.</ins> <em>yearbook title in italics, the same form throughout</em></td></tr>
+<tr><th scope="row">hist_19</th><td><del>University Bulletin, Vol. 31, April, 1939.</del></td><td><ins>Campus map. <em>University Bulletin</em>, vol. 31, April 1939.</ins></td></tr>
+<tr><th scope="row">hist_24</th><td><del>Contemporary photo of Helen Carter House. Photograph by A. Juban.</del></td><td><ins>The Helen Carter House before it was razed in 2011. Photo by Angie Juban.</ins></td></tr>
+<tr><th scope="row">hist_22</th><td><del>Hanging laundry outside of the Helen Carter House, ca. 1943.</del></td><td><ins>Hanging laundry outside the Helen Carter House, ca. 1943. Scrapbook photo courtesy of the Human Ecology Department.</ins></td></tr>
+</tbody>
+</table>
 <h3>To verify</h3>
 <ul><li><strong>Howell interview year.</strong> It is unknown, so her credit reads “Dorothy Colvin Howell, interviewed by Jennifer Abraham” with no year. Jennifer Abraham is Jennifer A. Cramer’s earlier name, and the old transcripts label her “Jennifer Abraham”.
 </li><li><strong>Clark interviewer and year.</strong> The credit “A.B. Clark, interviewed by Angie Juban, 2004” comes from “Angie Juban, Interviewer (2004)” in the Acknowledgments, plus Juban asking the questions in the Tennessee clip. Please confirm that all seven Clark clips come from that interview.
@@ -1493,88 +1742,119 @@ $section('Mossville History Project', [
 <p>Not listed: markup, whitespace, double spaces and curly vs straight quotes. Speaker labels are now bold on their own paragraphs, but no label text changed. Apart from c52, every transcript matches the old one word for word.</p>
 <h3>Corrected</h3>
 <h4>Credit lines (all clips)</h4>
-<ul><li>All 70 clips › credit: "&lt;Narrator&gt; by &lt;Interviewer&gt;, &lt;year&gt;." → "&lt;Narrator&gt;, interviewed by &lt;Interviewer&gt;, &lt;year&gt;" (format only, 70×; the stray comma in "Arthur Kenneth Lee, by" (c38) and "LaSalle Williams, by" (c27) is gone)
-</li><li>Interviewer name: "Chelsea Areseneault" → "Chelsea Arseneault" (4×: Heritage › c31, Politics &amp; Integration › c22, The Old Ways › c14 credits; Education › c12 caption)
-</li><li>Interviewer name: "Chelsea Aresneault" → "Chelsea Arseneault" (3×: The Old Ways › c15, c49, c50)
-</li><li>Interviewer name: "Chelsea Arsenault" → "Chelsea Arseneault" (The Old Ways › c53)
-</li><li>Interviewer name: "Chelsea Arseneualt" → "Chelsea Arseneault" (Mossville Moving › c36)
-</li><li>Interviewer name: "Stpehanie Dragoon" → "Stephanie Dragoon" (Mossville Moving › c57)
-</li><li>Interviewer name: "Douglas Mungin" → "Doug Mungin" (2×: Family &amp; Community › c58, Health &amp; Environment › c46)
-</li><li>Interviewer name: "Jennifer Cramer" → "Jennifer A. Cramer" (Heritage › c3)
-</li><li>Narrator name: "Joesph Charles" → "Joseph Charles" (Education › c11 credit)
-</li><li>Narrator name: "Elaine Robison" → "Elaine Robinson" (Politics &amp; Integration › c22: credit, old menu line and caption, 3×)
-</li><li>Narrator name: "Huber “Mickey” Smith, Sr." → "Huber “Mickey” Smith Sr." (comma removed: c17 and c20 credits, plus old menu lines for c17, c20, c24, c6; 6×)
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">All 70 clips › credit</th><td><del>&lt;Narrator&gt; by &lt;Interviewer&gt;, &lt;year&gt;.</del></td><td><ins>&lt;Narrator&gt;, interviewed by &lt;Interviewer&gt;, &lt;year&gt;</ins> <em>format only, 70×; the stray comma in "Arthur Kenneth Lee, by" (c38) and "LaSalle Williams, by" (c27) is gone</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Chelsea Areseneault</del></td><td><ins>Chelsea Arseneault</ins> <em>4×: Heritage › c31, Politics &amp; Integration › c22, The Old Ways › c14 credits; Education › c12 caption</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Chelsea Aresneault</del></td><td><ins>Chelsea Arseneault</ins> <em>3×: The Old Ways › c15, c49, c50</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Chelsea Arsenault</del></td><td><ins>Chelsea Arseneault</ins> <em>The Old Ways › c53</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Chelsea Arseneualt</del></td><td><ins>Chelsea Arseneault</ins> <em>Mossville Moving › c36</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Stpehanie Dragoon</del></td><td><ins>Stephanie Dragoon</ins> <em>Mossville Moving › c57</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Douglas Mungin</del></td><td><ins>Doug Mungin</ins> <em>2×: Family &amp; Community › c58, Health &amp; Environment › c46</em></td></tr>
+<tr><th scope="row">Interviewer name</th><td><del>Jennifer Cramer</del></td><td><ins>Jennifer A. Cramer</ins> <em>Heritage › c3</em></td></tr>
+<tr><th scope="row">Narrator name</th><td><del>Joesph Charles</del></td><td><ins>Joseph Charles</ins> <em>Education › c11 credit</em></td></tr>
+<tr><th scope="row">Narrator name</th><td><del>Elaine Robison</del></td><td><ins>Elaine Robinson</ins> <em>Politics &amp; Integration › c22: credit, old menu line and caption, 3×</em></td></tr>
+<tr><th scope="row">Narrator name</th><td><del>Huber “Mickey” Smith, Sr.</del></td><td><ins>Huber “Mickey” Smith Sr.</ins> <em>comma removed: c17 and c20 credits, plus old menu lines for c17, c20, c24, c6; 6×</em></td></tr>
+</tbody>
+</table>
 <h4>Clip titles</h4>
-<ul><li>Places › c17: "Mossville’s post office." (clip page) → "Mossville’s post office"
-</li><li>Places › c37: "…remembering Pete Moss' honecomb in the school chimney" (old menu) → "…honeycomb…"
-</li><li>Politics &amp; Integration › c51: "Jacob Rigmaidenand Josh Rigmaiden as Mayors of Mossville" (old menu) → "Jacob Rigmaiden and Josh Rigmaiden as Mayors of Mossville"
-</li><li>The Old Ways › c14: "Subsistence Living" (old menu) → "Subsistence living"
-</li><li>The Old Ways › c23: "Home Remedies" (old menu) → "Home remedies"
-</li><li>The Old Ways › c18: "Selling Pecans" (old menu) → "Selling pecans"
-</li><li>The Old Ways › c50: "Folk Remedies for ailments and injuries." (old menu) → "Folk Remedies for ailments and injuries"
-</li><li>Education › c52: "Sharing lunches underneath the two-room School house" (clip page) → "Sharing lunches underneath the two-room schoolhouse"
-</li><li>Education › c62: "Attending all black school aided her education and confidence" (old menu) → "Attending an all-black school aided her education and confidence"
-</li><li>Education › c12: "The diference between teaching at Mossville and Westwood Elementary…" → "The difference…" (old menu and clip page, 2×)
-</li><li>Education › c40: "…inspired him to stay on the Honor Roll" (old menu) → "…honor roll"
-</li><li>Church › c47: "Mount Zion, Willow Springs Churches" (old menu) → "Mount Zion and Willow Springs Churches"
-</li><li>Church › c44: "Her Mother kept the Morning Star Cemetery in good condition" (old menu) → "Her mother kept…"
-</li><li>Church › c28: "Grandparents’ home, a holy place" (old menu) → "His grandparents’ home was a holy place"
-</li><li>Church › c74: "Pew Rallies" (old menu) → "Pew rallies"
-</li><li>Family &amp; Community › c75: "Kinship and Community" (old menu) → "Kinship and community"
-</li><li>Family &amp; Community › c67: "It takes a village…" / "It takes a village..." (old menu / clip page) → "It takes a village"
-</li><li>Work › c59: "Plants as part of the community." (old menu) → "Plants as part of the community"
-</li><li>Health &amp; Environment › c29: "Running down Old Spanish Trail at night during plant explosions" (old menu) → "…after plant explosions" (to match the clip page)
-</li><li>Health &amp; Environment › c61: "Incidents at the nearby plants" (old menu) → "Incidents at the nearby plant" (to match the clip page)
-</li><li>Health &amp; Environment › c46: "The perserverence of Mossvillians" → "The perseverance of Mossvillians" (old menu and clip page, 2×)
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Places › c17</th><td><del>Mossville’s post office.</del> <em>clip page</em></td><td><ins>Mossville’s post office</ins></td></tr>
+<tr><th scope="row">Places › c37</th><td><del>…remembering Pete Moss' honecomb in the school chimney</del> <em>old menu</em></td><td><ins>…honeycomb…</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c51</th><td><del>Jacob Rigmaidenand Josh Rigmaiden as Mayors of Mossville</del> <em>old menu</em></td><td><ins>Jacob Rigmaiden and Josh Rigmaiden as Mayors of Mossville</ins></td></tr>
+<tr><th scope="row">The Old Ways › c14</th><td><del>Subsistence Living</del> <em>old menu</em></td><td><ins>Subsistence living</ins></td></tr>
+<tr><th scope="row">The Old Ways › c23</th><td><del>Home Remedies</del> <em>old menu</em></td><td><ins>Home remedies</ins></td></tr>
+<tr><th scope="row">The Old Ways › c18</th><td><del>Selling Pecans</del> <em>old menu</em></td><td><ins>Selling pecans</ins></td></tr>
+<tr><th scope="row">The Old Ways › c50</th><td><del>Folk Remedies for ailments and injuries.</del> <em>old menu</em></td><td><ins>Folk Remedies for ailments and injuries</ins></td></tr>
+<tr><th scope="row">Education › c52</th><td><del>Sharing lunches underneath the two-room School house</del> <em>clip page</em></td><td><ins>Sharing lunches underneath the two-room schoolhouse</ins></td></tr>
+<tr><th scope="row">Education › c62</th><td><del>Attending all black school aided her education and confidence</del> <em>old menu</em></td><td><ins>Attending an all-black school aided her education and confidence</ins></td></tr>
+<tr><th scope="row">Education › c12</th><td><del>The diference between teaching at Mossville and Westwood Elementary…</del></td><td><ins>The difference…</ins> <em>old menu and clip page, 2×</em></td></tr>
+<tr><th scope="row">Education › c40</th><td><del>…inspired him to stay on the Honor Roll</del> <em>old menu</em></td><td><ins>…honor roll</ins></td></tr>
+<tr><th scope="row">Church › c47</th><td><del>Mount Zion, Willow Springs Churches</del> <em>old menu</em></td><td><ins>Mount Zion and Willow Springs Churches</ins></td></tr>
+<tr><th scope="row">Church › c44</th><td><del>Her Mother kept the Morning Star Cemetery in good condition</del> <em>old menu</em></td><td><ins>Her mother kept…</ins></td></tr>
+<tr><th scope="row">Church › c28</th><td><del>Grandparents’ home, a holy place</del> <em>old menu</em></td><td><ins>His grandparents’ home was a holy place</ins></td></tr>
+<tr><th scope="row">Church › c74</th><td><del>Pew Rallies</del> <em>old menu</em></td><td><ins>Pew rallies</ins></td></tr>
+<tr><th scope="row">Family &amp; Community › c75</th><td><del>Kinship and Community</del> <em>old menu</em></td><td><ins>Kinship and community</ins></td></tr>
+<tr><th scope="row">Family &amp; Community › c67</th><td><del>"It takes a village…" / "It takes a village..."</del> <em>old menu / clip page</em></td><td><ins>It takes a village</ins></td></tr>
+<tr><th scope="row">Work › c59</th><td><del>Plants as part of the community.</del> <em>old menu</em></td><td><ins>Plants as part of the community</ins></td></tr>
+<tr><th scope="row">Health &amp; Environment › c29</th><td><del>Running down Old Spanish Trail at night during plant explosions</del> <em>old menu</em></td><td><ins>…after plant explosions</ins> <em>to match the clip page</em></td></tr>
+<tr><th scope="row">Health &amp; Environment › c61</th><td><del>Incidents at the nearby plants</del> <em>old menu</em></td><td><ins>Incidents at the nearby plant</ins> <em>to match the clip page</em></td></tr>
+<tr><th scope="row">Health &amp; Environment › c46</th><td><del>The perserverence of Mossvillians</del></td><td><ins>The perseverance of Mossvillians</ins> <em>old menu and clip page, 2×</em></td></tr>
+</tbody>
+</table>
 <h4>Photo captions</h4>
-<ul><li>"Photo. Photo by" → "Photo by" (fixed 2026-11-19; the migration had doubled "Photo." where the old caption had two spaces before its credit). Clip captions, 17×: Places › c16, c27; Politics &amp; Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family &amp; Community › c48; Work › c19, c55, c43; Health &amp; Environment › c65; Mossville Moving › c36. Gallery lead captions, 4×: Politics &amp; Integration, Education, Family &amp; Community, Work.
-</li><li>Family &amp; Community › c48 and the gallery’s lead caption: "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015." → "Vera Payne, 2015." (fixed 2026-11-19). The photo is of Vera Payne; the old caption named the wrong person.
-</li><li>Work › c55: "Photo by Kyle Tanglao." → "John Bernard. Photo by Kyle Tanglao."; Work › c43: → "Delma and Christine Bennett. Photo by Kyle Tanglao." (fixed 2026-11-19)
-</li><li>"By Kyle Tanglao" → "Photo by Kyle Tanglao" (4×: Heritage › c1, c2; Places › c5; Church › c71)
-</li><li>Education › c25: "Della Dotson, 2015. By Stephanie Dragoon." → "Della Dotson, 2015. Photo by Stephanie Dragoon."
-</li><li>Heritage › c4: "George Braxton, 2015. By Kyle Tanglao." (the caption belonged to a different photo) → "Old Spanish Trail map: the Southern Borderland Trunkline from California to Florida."
-</li><li>Heritage › c31: "Mossville, 1932 Map. LSU Cartographic Information Center" → "Map of Mossville, 1932. LSU Cartographic Information Center."
-</li><li>Places › c17: "Memory Map of Mossville drawn by Huber " Mickey" Smith, 2015." (broken quote, so the old page showed only "Memory Map of Mossville drawn by Huber") → "Memory map of Mossville drawn by Huber “Mickey” Smith Sr."
-</li><li>Politics &amp; Integration › c9: "A segregated cafe Durham, North Carolina. Photo by Jack Delano, 1940. Library of Congress." → "A segregated café in Durham, North Carolina, 1940. Photo by Jack Delano, Library of Congress."
-</li><li>Politics &amp; Integration › c10: "Jackie Robinson, baseball card, 1953. Robinson was 1st African American to play MLB, 1947. National Museum of American History, coll.545." → "Jackie Robinson’s 1953 Topps baseball card. In 1947 Robinson became the first African American to play in Major League Baseball. National Museum of American History."
-</li><li>Politics &amp; Integration › c7: "Christine Bennet, 2015." → "Christine Bennett, 2015."
-</li><li>Politics &amp; Integration › c76: "Butch and Leona Lemelle, 2015." → "Butch and Leona Lemelle with interviewer Jennifer A. Cramer, 2015."
-</li><li>Politics &amp; Integration › c20 and The Old Ways › c24: "Huber “Mickey” Smith, 2015, by Kyle Tanglao" → "Huber “Mickey” Smith Sr., 2015. Photo by Kyle Tanglao." (2×)
-</li><li>Mossville Moving › c6: "Huber Smith, 2015. Photo by Kyle Tanglao." → "Huber “Mickey” Smith Sr., 2015. Photo by Kyle Tanglao."
-</li><li>The Old Ways › c53: "Photo by Kyle Tanglao." → "Lillian Washington. Photo by Kyle Tanglao."
-</li><li>The Old Ways › c23: "Common home remedy" → "A bottle of castor oil, a common home remedy."
-</li><li>Education › c11: "Photo by Warren K. Leffler, 1957. Library of Congress, Prints and Photograph Division." → "An integrated high school classroom, 1957. Photo by Warren K. Leffler, Library of Congress, Prints and Photographs Division."
-</li><li>Education › c40: "Kenneth Lee being interviewe by Doug Mungin. Photo by Kat Donner." → "Arthur Kenneth Lee being interviewed by Doug Mungin. Photo by Kat Donner."
-</li><li>Education › c73: "Lenoria Ambrose, 2015." → "Lenoria Ambrose with her interviewers, 2015."
-</li><li>Church › c44: "Gravesite at Mt. Zion Baptist Church. Photo by Lane Lefort." → "A grave at Mt. Zion Baptist Church. Photo by Lane Lefort."
-</li><li>Church › c28: "Butch Lemelle, 2016." → "Butch and Leona Lemelle with interviewer Jennifer A. Cramer, 2015." (year changed, see To verify)
-</li><li>Church › c74: "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015. Photo by Kyle Tanglao." → "Lenoria Ambrose, interviewed by Chelsea Arseneault and Teresha Ussin, 2015." (photo credit dropped, see To verify)
-</li><li>Family &amp; Community › c75: "Photo by Lane Lefort, 2015." → "Braxton Lane, Mossville, 2015. Photo by Lane Lefort."
-</li><li>Family &amp; Community › c67: "Photo by Lane Lefort, 2015." → "The Jacob Rigmaiden Center, 2015. Photo by Lane Lefort."
-</li><li>Captions that were only a photo credit now name the subject and year ("Photo by X." → "&lt;Name&gt;, &lt;year&gt;. Photo by X."), 9×: Family &amp; Community › c58 (Kevin Fondel Sr., 2015), c35 (Theresa Lee, 2016), c60 (Brenda Cole Jones, 2016); Work › c59 (Kevin Fondel Sr., 2015); Health &amp; Environment › c39 (Arthur Kenneth Lee, 2015), c69 (Haki Vincent, 2016); Mossville Moving › c63 (Arthur Kenneth Lee, 2015), c64 (Theresa Lee, 2017), c54 (Shirley Andrus and Carolyn Marshall, 2015)
-</li><li>Work › c45: "Photo by Kyle Tanglao" → "Photo by Kyle Tanglao, 2015."
-</li><li>Health &amp; Environment › c30: "Mossville satellite image" → "Satellite view of Mossville and the plants beside it, 2017. Imagery © Google."
-</li><li>Health &amp; Environment › c29: "Debra Ramirez, Lake Charles, LA: Home Adjacent to Petro Chemical Plants; Fought Several Petro Chemical Companies Regarding Ground Water Contamination" → "Debra Ramirez of Lake Charles, Louisiana, whose home adjoined petrochemical plants. She fought several companies over groundwater contamination."
-</li><li>Mossville Moving › c41: "Slide presentation from Wilma Subra. Toxic Release Inventory Report. <a href="http://www.dscej.org/images/pdfs/2015TRIRegionalWorkshop/WilmaSubraPresentation.pdf"">http://www.dscej.org/images/pdfs/2015TRIRegionalWorkshop/WilmaSubraPresentation.pdf"</a> → "Dioxin levels in blood samples, from Wilma Subra’s 2015 Toxic Release Inventory presentation." (URL dropped)
-</li><li>A final period was added to 2 captions that were otherwise unchanged: Places › c38 ("…Photo by Jamie Digilormo"), Church › c47 ("…Photo by Lane Lefort")
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del>Photo. Photo by</del></td><td><ins>"Photo by" (fixed 2026-11-19; the migration had doubled "Photo." where the old caption had two spaces before its credit). Clip captions, 17×: Places › c16, c27; Politics &amp; Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family &amp; Community › c48; Work › c19, c55, c43; Health &amp; Environment › c65; Mossville Moving › c36. Gallery lead captions, 4×: Politics &amp; Integration, Education, Family &amp; Community, Work</ins></td></tr>
+<tr><th scope="row">Family &amp; Community › c48 and the gallery’s lead caption</th><td><del>Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015.</del></td><td><ins>"Vera Payne, 2015." (fixed 2026-11-19). The photo is of Vera Payne; the old caption named the wrong person</ins></td></tr>
+<tr><th scope="row">Work › c55</th><td><del>Photo by Kyle Tanglao.</del></td><td><ins>John Bernard. Photo by Kyle Tanglao.</ins> <em>fixed 2026-11-19</em></td></tr>
+<tr><th scope="row">Work › c43</th><td><del>Photo by Kyle Tanglao.</del></td><td><ins>Delma and Christine Bennett. Photo by Kyle Tanglao.</ins> <em>fixed 2026-11-19</em></td></tr>
+<tr><th scope="row"></th><td><del>By Kyle Tanglao</del></td><td><ins>Photo by Kyle Tanglao</ins> <em>4×: Heritage › c1, c2; Places › c5; Church › c71</em></td></tr>
+<tr><th scope="row">Education › c25</th><td><del>Della Dotson, 2015. By Stephanie Dragoon.</del></td><td><ins>Della Dotson, 2015. Photo by Stephanie Dragoon.</ins></td></tr>
+<tr><th scope="row">Heritage › c4</th><td><del>George Braxton, 2015. By Kyle Tanglao.</del> <em>the caption belonged to a different photo</em></td><td><ins>Old Spanish Trail map: the Southern Borderland Trunkline from California to Florida.</ins></td></tr>
+<tr><th scope="row">Heritage › c31</th><td><del>Mossville, 1932 Map. LSU Cartographic Information Center</del></td><td><ins>Map of Mossville, 1932. LSU Cartographic Information Center.</ins></td></tr>
+<tr><th scope="row">Places › c17</th><td><del>Memory Map of Mossville drawn by Huber " Mickey" Smith, 2015.</del> <em>broken quote, so the old page showed only "Memory Map of Mossville drawn by Huber"</em></td><td><ins>Memory map of Mossville drawn by Huber “Mickey” Smith Sr.</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c9</th><td><del>A segregated cafe Durham, North Carolina. Photo by Jack Delano, 1940. Library of Congress.</del></td><td><ins>A segregated café in Durham, North Carolina, 1940. Photo by Jack Delano, Library of Congress.</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c10</th><td><del>Jackie Robinson, baseball card, 1953. Robinson was 1st African American to play MLB, 1947. National Museum of American History, coll.545.</del></td><td><ins>Jackie Robinson’s 1953 Topps baseball card. In 1947 Robinson became the first African American to play in Major League Baseball. National Museum of American History.</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c7</th><td><del>Christine Bennet, 2015.</del></td><td><ins>Christine Bennett, 2015.</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c76</th><td><del>Butch and Leona Lemelle, 2015.</del></td><td><ins>Butch and Leona Lemelle with interviewer Jennifer A. Cramer, 2015.</ins></td></tr>
+<tr><th scope="row">Politics &amp; Integration › c20 and The Old Ways › c24</th><td><del>Huber “Mickey” Smith, 2015, by Kyle Tanglao</del></td><td><ins>Huber “Mickey” Smith Sr., 2015. Photo by Kyle Tanglao.</ins> <em>2×</em></td></tr>
+<tr><th scope="row">Mossville Moving › c6</th><td><del>Huber Smith, 2015. Photo by Kyle Tanglao.</del></td><td><ins>Huber “Mickey” Smith Sr., 2015. Photo by Kyle Tanglao.</ins></td></tr>
+<tr><th scope="row">The Old Ways › c53</th><td><del>Photo by Kyle Tanglao.</del></td><td><ins>Lillian Washington. Photo by Kyle Tanglao.</ins></td></tr>
+<tr><th scope="row">The Old Ways › c23</th><td><del>Common home remedy</del></td><td><ins>A bottle of castor oil, a common home remedy.</ins></td></tr>
+<tr><th scope="row">Education › c11</th><td><del>Photo by Warren K. Leffler, 1957. Library of Congress, Prints and Photograph Division.</del></td><td><ins>An integrated high school classroom, 1957. Photo by Warren K. Leffler, Library of Congress, Prints and Photographs Division.</ins></td></tr>
+<tr><th scope="row">Education › c40</th><td><del>Kenneth Lee being interviewe by Doug Mungin. Photo by Kat Donner.</del></td><td><ins>Arthur Kenneth Lee being interviewed by Doug Mungin. Photo by Kat Donner.</ins></td></tr>
+<tr><th scope="row">Education › c73</th><td><del>Lenoria Ambrose, 2015.</del></td><td><ins>Lenoria Ambrose with her interviewers, 2015.</ins></td></tr>
+<tr><th scope="row">Church › c44</th><td><del>Gravesite at Mt. Zion Baptist Church. Photo by Lane Lefort.</del></td><td><ins>A grave at Mt. Zion Baptist Church. Photo by Lane Lefort.</ins></td></tr>
+<tr><th scope="row">Church › c28</th><td><del>Butch Lemelle, 2016.</del></td><td><ins>Butch and Leona Lemelle with interviewer Jennifer A. Cramer, 2015.</ins> <em>year changed, see To verify</em></td></tr>
+<tr><th scope="row">Church › c74</th><td><del>Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015. Photo by Kyle Tanglao.</del></td><td><ins>Lenoria Ambrose, interviewed by Chelsea Arseneault and Teresha Ussin, 2015.</ins> <em>photo credit dropped, see To verify</em></td></tr>
+<tr><th scope="row">Family &amp; Community › c75</th><td><del>Photo by Lane Lefort, 2015.</del></td><td><ins>Braxton Lane, Mossville, 2015. Photo by Lane Lefort.</ins></td></tr>
+<tr><th scope="row">Family &amp; Community › c67</th><td><del>Photo by Lane Lefort, 2015.</del></td><td><ins>The Jacob Rigmaiden Center, 2015. Photo by Lane Lefort.</ins></td></tr>
+<tr><th scope="row"></th><td><del>Captions that were only a photo credit now name the subject and year ("Photo by X."</del></td><td><ins>"&lt;Name&gt;, &lt;year&gt;. Photo by X."), 9×: Family &amp; Community › c58 (Kevin Fondel Sr., 2015), c35 (Theresa Lee, 2016), c60 (Brenda Cole Jones, 2016); Work › c59 (Kevin Fondel Sr., 2015); Health &amp; Environment › c39 (Arthur Kenneth Lee, 2015), c69 (Haki Vincent, 2016); Mossville Moving › c63 (Arthur Kenneth Lee, 2015), c64 (Theresa Lee, 2017), c54</ins> <em>Shirley Andrus and Carolyn Marshall, 2015</em></td></tr>
+<tr><th scope="row">Work › c45</th><td><del>Photo by Kyle Tanglao</del></td><td><ins>Photo by Kyle Tanglao, 2015.</ins></td></tr>
+<tr><th scope="row">Health &amp; Environment › c30</th><td><del>Mossville satellite image</del></td><td><ins>Satellite view of Mossville and the plants beside it, 2017. Imagery © Google.</ins></td></tr>
+<tr><th scope="row">Health &amp; Environment › c29</th><td><del>Debra Ramirez, Lake Charles, LA: Home Adjacent to Petro Chemical Plants; Fought Several Petro Chemical Companies Regarding Ground Water Contamination</del></td><td><ins>Debra Ramirez of Lake Charles, Louisiana, whose home adjoined petrochemical plants. She fought several companies over groundwater contamination.</ins></td></tr>
+<tr><th scope="row">Mossville Moving › c41</th><td><del>"Slide presentation from Wilma Subra. Toxic Release Inventory Report. <a href="http://www.dscej.org/images/pdfs/2015TRIRegionalWorkshop/WilmaSubraPresentation.pdf"">http://www.dscej.org/images/pdfs/2015TRIRegionalWorkshop/WilmaSubraPresentation.pdf"</a></del></td><td><ins>Dioxin levels in blood samples, from Wilma Subra’s 2015 Toxic Release Inventory presentation.</ins> <em>URL dropped</em></td></tr>
+</tbody>
+</table>
+<ul><li>A final period was added to 2 captions that were otherwise unchanged: Places › c38 ("…Photo by Jamie Digilormo"), Church › c47 ("…Photo by Lane Lefort")
 </li></ul>
 <h4>Transcript</h4>
-<ul><li>Education › c52: "Coming soon." → "Transcript to come."
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Education › c52</th><td><del>Coming soon.</del></td><td><ins>Transcript to come.</ins></td></tr>
+</tbody>
+</table>
 <h4>About the Project</h4>
 <ul><li>The old About page's opening paragraph is now the exhibition intro, split into two paragraphs. Its sentences "By 2017, the majority…" and "The purpose of the collection…" moved from the second old paragraph into the intro.
-</li><li>Intro: "Calcasieu Parish, Louisiana and many residents" → "Calcasieu Parish, Louisiana, and many residents"; "“Shoat’s Prairie” when it was renamed" → "“Shoat’s Prairie”, when it was renamed"
-</li><li>"Patrons can access the interviews here at the Listening Station, online via the LSU Digital Library site, through the Reading Room at the LSU Libraries Special Collections, and by visiting the Imperial Calcasieu Museum and McNeese University Archives, where copies are also available." → "The full interviews are available through the LSU Digital Library, the Reading Room at LSU Libraries Special Collections, the Imperial Calcasieu Museum and the McNeese State University Archives."
-</li><li>Removed: the "Navigation of the Listening Station…" paragraph ("…Drag two fingers to scroll."), the paragraph beginning "History, Culture, and Economy are comprised of over 70 brief, diverse clips…", and the "Digital Library section…" paragraph. That paragraph repeated the 59 collections / 67 people / 90 hours figures and ended "About provides information on the background and scope of the project."
-</li><li>Removed: "We appreciate the help of many other staff members for their assistance throughout various stages of planning and installation."
-</li><li>"Imperial Calcasieu Museum under the direction of Susan Reed and the Williams Center" → "Imperial Calcasieu Museum, under the direction of Susan Reed, and the Williams Center" (this sentence moved into the Acknowledgments, after the curators sentence)
-</li><li>"Center Graduate Assistants who engineered the audio." (a sentence fragment) → "Center Graduate Assistants, engineered the audio."
-</li><li>"Special thanks, in particular to Chelsea, … collections processing made this entire endeavor possible." → "Special thanks, in particular, to Chelsea, … collections processing, made this entire endeavor possible."
-</li><li>"Acknowledgments:" run-in label → "Acknowledgments" heading
-</li><li>Gallery name: "About" → "About the Project"
 </li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Intro</th><td><del>Calcasieu Parish, Louisiana and many residents</del></td><td><ins>Calcasieu Parish, Louisiana, and many residents</ins></td></tr>
+<tr><th scope="row">Intro</th><td><del>“Shoat’s Prairie” when it was renamed</del></td><td><ins>“Shoat’s Prairie”, when it was renamed</ins></td></tr>
+<tr><th scope="row"></th><td><del>Patrons can access the interviews here at the Listening Station, online via the LSU Digital Library site, through the Reading Room at the LSU Libraries Special Collections, and by visiting the Imperial Calcasieu Museum and McNeese University Archives, where copies are also available.</del></td><td><ins>The full interviews are available through the LSU Digital Library, the Reading Room at LSU Libraries Special Collections, the Imperial Calcasieu Museum and the McNeese State University Archives.</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Removed: the "Navigation of the Listening Station…" paragraph ("…Drag two fingers to scroll."), the paragraph beginning "History, Culture, and Economy are comprised of over 70 brief, diverse clips…", and the "Digital Library section…" paragraph. That paragraph repeated the 59 collections / 67 people / 90 hours figures and ended "About provides information on the background and scope of the project."
+</li>
+<li>Removed: "We appreciate the help of many other staff members for their assistance throughout various stages of planning and installation."
+</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del>Imperial Calcasieu Museum under the direction of Susan Reed and the Williams Center</del></td><td><ins>Imperial Calcasieu Museum, under the direction of Susan Reed, and the Williams Center</ins> <em>this sentence moved into the Acknowledgments, after the curators sentence</em></td></tr>
+<tr><th scope="row"></th><td><del>Center Graduate Assistants who engineered the audio.</del> <em>a sentence fragment</em></td><td><ins>Center Graduate Assistants, engineered the audio.</ins></td></tr>
+<tr><th scope="row"></th><td><del>Special thanks, in particular to Chelsea, … collections processing made this entire endeavor possible.</del></td><td><ins>Special thanks, in particular, to Chelsea, … collections processing, made this entire endeavor possible.</ins></td></tr>
+<tr><th scope="row"></th><td><del>"Acknowledgments:" run-in label</del></td><td><ins>"Acknowledgments" heading</ins></td></tr>
+<tr><th scope="row">Gallery name</th><td><del>About</del></td><td><ins>About the Project</ins></td></tr>
+</tbody>
+</table>
 <h3>To verify</h3>
 <h4>Introduced in migration</h4>
 <ul><li>Work › c45: the caption "Photo by Kyle Tanglao, 2015." doesn’t name the narrator.
@@ -1626,11 +1906,19 @@ $section('Mossville History Project', [
 <h4>Credits and facts added in new captions</h4>
 <p>Please check the sources for these:</p>
 <ul><li>c4: "Southern Borderland Trunkline from California to Florida". The map has no source credit.
-</li><li>c30: "2017. Imagery © Google."
-</li><li>c10: "Topps", with "coll.545" dropped.
-</li><li>c41: the source URL was dropped.
-</li><li>About: "McNeese University" → "McNeese State University".
+</li>
+<li>c30: "2017. Imagery © Google."
+</li>
+<li>c10: "Topps", with "coll.545" dropped.
+</li>
+<li>c41: the source URL was dropped.
 </li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">About</th><td><del>McNeese University</del></td><td><ins>McNeese State University</ins></td></tr>
+</tbody>
+</table>
 <h3>New wording to check</h3>
 <ul><li>Exhibition subtitle: "Oral histories of a Calcasieu Parish community"
 </li><li>Exhibition credit line: "A collaboration between the Imperial Calcasieu Museum and the T. Harry Williams Center for Oral History, LSU Libraries. Curated by Jennifer A. Cramer and Erin Hess. Grant funding provided by Sasol."
@@ -1684,63 +1972,93 @@ $section('New Orleans Jazz & Heritage Festival', [
 <p>The page has three galleries: <strong>Voices of the Festival</strong> (7 clip entries), <strong>Memory Maps</strong> (3 drawings) and <strong>In the Field</strong> (3 text blocks).</p>
 <h3>Corrected</h3>
 <h4>Exhibition title</h4>
-<ul><li>Page <code>&lt;title&gt;</code> on the old About, Home, Pictures and Acknowledgements pages: "TEMPESTS: Storms in the Archives" → "New Orleans Jazz &amp; Heritage Festival". Those four pages were copies of the Tempests exhibition's pages and are <strong>not carried over</strong>.
-</li><li>Old clip pages C14–C41 (Tempests clips left in the folder, not linked from the jf menu) and the orphan page <code>I1.html</code> (broken image link <code>../photos/Memory1.jpg</code>) were <strong>not carried over</strong>.
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Page <code>&lt;title&gt;</code> on the old About, Home, Pictures and Acknowledgements pages: "TEMPESTS: Storms in the Archives"</del></td><td><ins>"New Orleans Jazz &amp; Heritage Festival". Those four pages were copies of the Tempests exhibition's pages and are <strong>not carried over</strong></ins></td></tr>
+</tbody>
+</table>
+<ul><li>Old clip pages C14–C41 (Tempests clips left in the folder, not linked from the jf menu) and the orphan page <code>I1.html</code> (broken image link <code>../photos/Memory1.jpg</code>) were <strong>not carried over</strong>.
 </li></ul>
 <h4>Voices of the Festival: speaker labels</h4>
 <p>In every clip, speaker labels are now bold, with the narrator's full name on first use and the surname after that. Interviewers keep the surname only, because only surnames are known.</p>
-<ul><li>Geraldine Vaucresson: "VAUCRESSON:" (first) → "GERALDINE VAUCRESSON:"
-</li><li>Patrick Gallagher: "GALLAGHER:" (first) → "PATRICK GALLAGHER:". The second "GALLAGHER:" label, in the very next paragraph with no one speaking in between, was removed.
-</li><li>Joseph "Cool" Davis: "DAVIS:" → "JOSEPH “COOL” DAVIS:"
-</li><li>Tanya Huang: "HUANG:" → "TANYA HUANG:"
-</li><li>Philip Giroir: "GIROIR:" (first) → "PHILIP GIROIR:"
-</li><li>Terrence Osborne: "OSBORNE:" → "TERRENCE OSBORNE:"
-</li><li>Wynoka Boudreaux: "BOUDREAX:" (misspelled) → "WYNOKA BOUDREAUX:"
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Geraldine Vaucresson</th><td><del>VAUCRESSON:</del> <em>first</em></td><td><ins>GERALDINE VAUCRESSON:</ins></td></tr>
+<tr><th scope="row">Patrick Gallagher</th><td><del>GALLAGHER:</del> <em>first</em></td><td><ins>"PATRICK GALLAGHER:". The second "GALLAGHER:" label, in the very next paragraph with no one speaking in between, was removed</ins></td></tr>
+<tr><th scope="row"></th><td><del>Joseph "Cool" Davis: "DAVIS:"</del></td><td><ins>JOSEPH “COOL” DAVIS:</ins></td></tr>
+<tr><th scope="row">Tanya Huang</th><td><del>HUANG:</del></td><td><ins>TANYA HUANG:</ins></td></tr>
+<tr><th scope="row">Philip Giroir</th><td><del>GIROIR:</del> <em>first</em></td><td><ins>PHILIP GIROIR:</ins></td></tr>
+<tr><th scope="row">Terrence Osborne</th><td><del>OSBORNE:</del></td><td><ins>TERRENCE OSBORNE:</ins></td></tr>
+<tr><th scope="row">Wynoka Boudreaux</th><td><del>BOUDREAX:</del> <em>misspelled</em></td><td><ins>WYNOKA BOUDREAUX:</ins></td></tr>
+</tbody>
+</table>
 <h4>Voices of the Festival: transcript text</h4>
-<ul><li>Geraldine Vaucresson: "my great grandmother" → "my great-grandmother"
-</li><li>Patrick Gallagher: "Guillain-Barre syndrome" → "Guillain-Barré syndrome"
-</li><li>Joseph "Cool" Davis: "come down south. . . to see" → "come down south . . . to see"
-</li><li>Joseph "Cool" Davis: "People come and look at to you" → "People come and look at you"
-</li><li>Terrence Osborne: missing closing quote added: "…so, can I get two weekends? [laughs]" → "…so, can I get two weekends?” [laughs]"
-</li><li>Terrence Osborne: "I had to - even if I did the poster - I had to" → "I had to—even if I did the poster—I had to"
-</li><li>All clips: straight quotes → typographic (curly) quotes.
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Geraldine Vaucresson</th><td><del>my great grandmother</del></td><td><ins>my great-grandmother</ins></td></tr>
+<tr><th scope="row">Patrick Gallagher</th><td><del>Guillain-Barre syndrome</del></td><td><ins>Guillain-Barré syndrome</ins></td></tr>
+<tr><th scope="row"></th><td><del>Joseph "Cool" Davis: "come down south. . . to see"</del></td><td><ins>come down south . . . to see</ins></td></tr>
+<tr><th scope="row"></th><td><del>Joseph "Cool" Davis: "People come and look at to you"</del></td><td><ins>People come and look at you</ins></td></tr>
+<tr><th scope="row">Terrence Osborne</th><td><del>missing closing quote added: "…so, can I get two weekends? [laughs]"</del></td><td><ins>…so, can I get two weekends?” [laughs]</ins></td></tr>
+<tr><th scope="row">Terrence Osborne</th><td><del>I had to - even if I did the poster - I had to</del></td><td><ins>I had to—even if I did the poster—I had to</ins></td></tr>
+<tr><th scope="row">All clips</th><td><del>straight quotes</del></td><td><ins>typographic (curly) quotes</ins></td></tr>
+</tbody>
+</table>
 <h4>Voices of the Festival: captions</h4>
-<ul><li>Gallagher: "Patrick Gallagher." → "Patrick Gallagher, Tape No. 4298." Every caption now follows the pattern "Name, Tape No. ####." (see section 3).
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Gallagher</th><td><del>Patrick Gallagher.</del></td><td><ins>Patrick Gallagher, Tape No. 4298." Every caption now follows the pattern "Name, Tape No. ####.</ins> <em>see section 3</em></td></tr>
+</tbody>
+</table>
 <h4>In the Field: Field Notes (old C12.html)</h4>
-<ul><li>Heading: "Reflections on Oral History with Jo "Cool" Davis" → "Field Notes: Reflections on Oral History with Jo “Cool” Davis" (the "Field Notes" label came from the old menu)
-</li><li>"it struck both Charlotte and I" → "it struck both Charlotte and me"
-</li><li>"shook both my and Charlotte's hands, motioned for us" → "…hands, and motioned for us"
-</li><li>"t-shirt" / "t-shirts" → "T-shirt" / "T-shirts"
-</li><li>"Jo "Cool" Davis" (nested double quotes) → "“Jo ‘Cool’ Davis”"
-</li><li>"tell his tale - all of it" → "tell his tale—all of it"
-</li><li>"Jazzfest" (twice) → "Jazz Fest"
-</li><li>"Potential follow-up questions:" with typed numbers "1. 2. 3." → a bold label followed by a numbered list
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Heading</th><td><del>Reflections on Oral History with Jo "Cool" Davis</del></td><td><ins>Field Notes: Reflections on Oral History with Jo “Cool” Davis</ins> <em>the "Field Notes" label came from the old menu</em></td></tr>
+<tr><th scope="row"></th><td><del>it struck both Charlotte and I</del></td><td><ins>it struck both Charlotte and me</ins></td></tr>
+<tr><th scope="row"></th><td><del>shook both my and Charlotte's hands, motioned for us</del></td><td><ins>…hands, and motioned for us</ins></td></tr>
+<tr><th scope="row"></th><td><del>"t-shirt" / "t-shirts"</del></td><td><ins>"T-shirt" / "T-shirts"</ins></td></tr>
+<tr><th scope="row"></th><td><del>Jo "Cool" Davis</del> <em>nested double quotes</em></td><td><ins>“Jo ‘Cool’ Davis”</ins></td></tr>
+<tr><th scope="row"></th><td><del>tell his tale - all of it</del></td><td><ins>tell his tale—all of it</ins></td></tr>
+<tr><th scope="row"></th><td><del>Jazzfest</del> <em>twice</em></td><td><ins>Jazz Fest</ins></td></tr>
+<tr><th scope="row"></th><td><del>Potential follow-up questions:" with typed numbers "1. 2. 3.</del></td><td><ins>a bold label followed by a numbered list</ins></td></tr>
+</tbody>
+</table>
 <h4>In the Field: Questions for Dwayne Breashears (old C11.html)</h4>
-<ul><li>"childhood/adolescence" → "childhood or adolescence"
-</li><li>"Program Director" (twice) → "program director"
-</li><li>"What kind of genres" → "What kinds of genres"
-</li><li>"OZ's place" → "WWOZ’s place"
-</li><li>The question "Did you have any influential family members… radio and music? Did you have a mentor figure…" was split into two list items.
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>childhood/adolescence</del></td><td><ins>childhood or adolescence</ins></td></tr>
+<tr><td><del>Program Director</del> <em>twice</em></td><td><ins>program director</ins></td></tr>
+<tr><td><del>What kind of genres</del></td><td><ins>What kinds of genres</ins></td></tr>
+<tr><td><del>OZ's place</del></td><td><ins>WWOZ’s place</ins></td></tr>
+</tbody>
+</table>
+<ul><li>The question "Did you have any influential family members… radio and music? Did you have a mentor figure…" was split into two list items.
 </li></ul>
 <h4>In the Field: review of <em>Number Our Days</em> (old C13.html)</h4>
-<ul><li>Heading: "Review of Number Our Days" → "Interview Reflections: A Review of <em>Number Our Days</em>" (label from the old menu; book title in italics throughout)
-</li><li>"not only to the strength of the Jewish people, but as a testament also to the enduring nature" → "…but also to the enduring nature"
-</li><li>"As Myerhoff takes one of her main informant, Schmuel's, advice, "Let people surprise you," (41)" → "As Myerhoff takes the advice of one of her main informants, Schmuel, “Let people surprise you” (41),"
-</li><li>"experience. She nimbly weaves" → "experience. Myerhoff nimbly weaves"
-</li><li>"Each other the elder's individual personalities are allowed to shine" → "Each of the elders’ individual personalities is allowed to shine"
-</li><li>"not merely 'for color,'" → "not merely “for color,”"
-</li><li>"these people lives" → "these people’s lives"
-</li><li>"would have lack authenticity" → "would have lacked authenticity"
-</li><li>"the loving eye in which she gazed as her subjects" → "the loving eye with which she gazed at her subjects"
-</li><li>"the elder's monologues" → "the elders’ monologues"
-</li><li>"the elder's community" → "the elders’ community"
-</li><li>"veritable goldmines" → "veritable gold mines"
-</li><li>"the context of the lives' struggles - from poverty" → "the context of their lives’ struggles—from poverty"
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Heading</th><td><del>Review of Number Our Days</del></td><td><ins>Interview Reflections: A Review of <em>Number Our Days</em></ins> <em>label from the old menu; book title in italics throughout</em></td></tr>
+<tr><th scope="row"></th><td><del>not only to the strength of the Jewish people, but as a testament also to the enduring nature</del></td><td><ins>…but also to the enduring nature</ins></td></tr>
+<tr><th scope="row"></th><td><del>As Myerhoff takes one of her main informant, Schmuel's, advice, "Let people surprise you," (41)</del></td><td><ins>As Myerhoff takes the advice of one of her main informants, Schmuel, “Let people surprise you” (41),</ins></td></tr>
+<tr><th scope="row"></th><td><del>experience. She nimbly weaves</del></td><td><ins>experience. Myerhoff nimbly weaves</ins></td></tr>
+<tr><th scope="row"></th><td><del>Each other the elder's individual personalities are allowed to shine</del></td><td><ins>Each of the elders’ individual personalities is allowed to shine</ins></td></tr>
+<tr><th scope="row"></th><td><del>not merely 'for color,'</del></td><td><ins>not merely “for color,”</ins></td></tr>
+<tr><th scope="row"></th><td><del>these people lives</del></td><td><ins>these people’s lives</ins></td></tr>
+<tr><th scope="row"></th><td><del>would have lack authenticity</del></td><td><ins>would have lacked authenticity</ins></td></tr>
+<tr><th scope="row"></th><td><del>the loving eye in which she gazed as her subjects</del></td><td><ins>the loving eye with which she gazed at her subjects</ins></td></tr>
+<tr><th scope="row"></th><td><del>the elder's monologues</del></td><td><ins>the elders’ monologues</ins></td></tr>
+<tr><th scope="row"></th><td><del>the elder's community</del></td><td><ins>the elders’ community</ins></td></tr>
+<tr><th scope="row"></th><td><del>veritable goldmines</del></td><td><ins>veritable gold mines</ins></td></tr>
+<tr><th scope="row"></th><td><del>the context of the lives' struggles - from poverty</del></td><td><ins>the context of their lives’ struggles—from poverty</ins></td></tr>
+</tbody>
+</table>
 <h3>To verify</h3>
 <ul><li><strong>Interviewers' full names.</strong> Only surnames appear in the transcripts: Nguyen (Vaucresson), Bauer (Gallagher), Donner (Huang), Pontiff (Giroir) and Roux (Osborne). The Davis interviewers appear only as "Charlotte" and the unnamed author of the field notes. The Boudreaux clip has no interviewer at all. Because the names are incomplete, clip credits read "Name, Tape No. ####" instead of "interviewed by…".
 </li><li><strong>Authors of the fieldwork texts.</strong> The questions are credited in the old menu only as "Wilcox and Breashears", which reads as Wilcox (student) and Breashears (narrator). The field notes and the review have no named author.
@@ -1808,34 +2126,37 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 </li></ul>
 <h3>Corrected</h3>
 <h4>Typos and spelling (in the event text, unless noted)</h4>
-<ul>
-<li><strong>Integrating LSU / LSU Stands on Segregation (headline)</strong>: LSU Stands on Segretation → LSU Stands on Segregation</li>
-<li><strong>Integrating LSU / First Black Graduate</strong>: a Master’s Degree in Education → a master’s degree in education</li>
-<li><strong>Integrating LSU / Tureaud Jr. Sues LSU</strong>: A. P. Tureaud, Junior successfully sues → A. P. Tureaud, Jr., successfully sues</li>
-<li><strong>Integrating LSU / Tureaud Jr. Sues LSU (transcript)</strong>: We were playing racquet ball → We were playing racquetball</li>
-<li><strong>Integrating LSU / Wilson Sues LSU Law</strong>: Here, Tureaud, Jr. recalls his father’s relationships → Here, A. P. Tureaud, Jr., recalls his father’s relationships</li>
-<li><strong>Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</strong>: about two weeks we after we had been in school → about two weeks after we had been in school</li>
-<li><strong>Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</strong>: who’s only choice might be LSU → whose only choice might be LSU</li>
-<li><strong>Integrating LSU / Kerry Pourciau Elected SGA President (transcript)</strong>: well over twenty-years ago → well over twenty years ago</li>
-<li><strong>Integrating LSU / Kerry Pourciau Elected SGA President</strong>: In 1972, Kerry Louis Pourciau was the first… → Kerry Louis Pourciau was the first… <em>(the year is now the entry’s date)</em></li>
-<li><strong>The 1953 Bus Boycott / Compliance Ordered</strong>: A bus driver ’man handled’ a black woman → A bus driver manhandled a black woman</li>
-<li><strong>The 1953 Bus Boycott / Boycott Announced</strong>: the United Defense Leage (UDL) → the United Defense League (UDL)</li>
-<li><strong>The 1953 Bus Boycott / Strike Ends, Boycott Begins (transcript label)</strong>: Alemenia Freeman → Almenia Freeman</li>
-<li><strong>The 1953 Bus Boycott / Struggle Continues (credit)</strong>: Almenia Freeman, activitst → Almenia Freeman, activist</li>
-<li><strong>The 1953 Bus Boycott / Mass Meetings</strong>: June 20th: … June 21st: … June 22nd: → June 20: … June 21: … June 22:</li>
-<li><strong>The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</strong>: always, everytime, anytime in violation → always, every time, anytime in violation</li>
-<li><strong>The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</strong>: saw that difference That the church house → saw that difference. That the church house</li>
-<li><strong>East Baton Rouge / Integrating Recreation (transcript)</strong>: rather than have us integrate that pool, they closed it → …they closed it. <em>(period added)</em></li>
-<li><strong>East Baton Rouge / White-Only Golf Courses</strong>: in a predominately black neighborhood → in a predominantly black neighborhood</li>
-<li><strong>East Baton Rouge / Kress Sit-In</strong>: nine more students sat-in at various locations → nine more students sat in at various locations</li>
-<li><strong>East Baton Rouge / CORE Sit-Ins</strong>: In Decemeber, members → In December, members</li>
-<li><strong>East Baton Rouge / Cox v. Louisiana</strong>: National CORE represntative → National CORE representative</li>
-<li><strong>East Baton Rouge / Backlashes Against Activists (transcript)</strong>: There was a hole it the picture glass window → There was a hole in the picture glass window</li>
-<li><strong>East Baton Rouge / Backlashes Against Activists (transcript)</strong>: Every time he was involved in , like when → Every time he was involved in, like when</li>
-<li><strong>East Baton Rouge / Police Shoot Youth</strong>: Their deaths lead to marches → Their deaths led to marches</li>
-<li><strong>The Nation / Vietnam War</strong>: the first fully-integrated deployment → the first fully integrated deployment</li>
-<li><strong>The Nation / World War II, Korean War, Vietnam War</strong>: (1939 – 1945), (1950 –1953), (1956 – 1975) → (1939–1945), (1950–1953), (1956–1975)</li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Integrating LSU / LSU Stands on Segregation (headline)</th><td><del>LSU Stands on Segretation</del></td><td><ins>LSU Stands on Segregation</ins></td></tr>
+<tr><th scope="row">Integrating LSU / First Black Graduate</th><td><del>a Master’s Degree in Education</del></td><td><ins>a master’s degree in education</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Tureaud Jr. Sues LSU</th><td><del>A. P. Tureaud, Junior successfully sues</del></td><td><ins>A. P. Tureaud, Jr., successfully sues</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Tureaud Jr. Sues LSU (transcript)</th><td><del>We were playing racquet ball</del></td><td><ins>We were playing racquetball</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Wilson Sues LSU Law</th><td><del>Here, Tureaud, Jr. recalls his father’s relationships</del></td><td><ins>Here, A. P. Tureaud, Jr., recalls his father’s relationships</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</th><td><del>about two weeks we after we had been in school</del></td><td><ins>about two weeks after we had been in school</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Undergraduates Sue to Integrate LSU (transcript)</th><td><del>who’s only choice might be LSU</del></td><td><ins>whose only choice might be LSU</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Kerry Pourciau Elected SGA President (transcript)</th><td><del>well over twenty-years ago</del></td><td><ins>well over twenty years ago</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Kerry Pourciau Elected SGA President</th><td><del>In 1972, Kerry Louis Pourciau was the first…</del></td><td><ins>Kerry Louis Pourciau was the first… <em>(the year is now the entry’s date)</em></ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / Compliance Ordered</th><td><del>A bus driver ’man handled’ a black woman</del></td><td><ins>A bus driver manhandled a black woman</ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / Boycott Announced</th><td><del>the United Defense Leage</del> <em>UDL</em></td><td><ins>the United Defense League</ins> <em>UDL</em></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / Strike Ends, Boycott Begins (transcript label)</th><td><del>Alemenia Freeman</del></td><td><ins>Almenia Freeman</ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / Struggle Continues (credit)</th><td><del>Almenia Freeman, activitst</del></td><td><ins>Almenia Freeman, activist</ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / Mass Meetings</th><td><del>June 20th: … June 21st: … June 22nd:</del></td><td><ins>June 20: … June 21: … June 22:</ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</th><td><del>always, everytime, anytime in violation</del></td><td><ins>always, every time, anytime in violation</ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / King Learns from Baton Rouge (transcript)</th><td><del>saw that difference That the church house</del></td><td><ins>saw that difference. That the church house</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Integrating Recreation (transcript)</th><td><del>rather than have us integrate that pool, they closed it</del></td><td><ins>…they closed it. <em>(period added)</em></ins></td></tr>
+<tr><th scope="row">East Baton Rouge / White-Only Golf Courses</th><td><del>in a predominately black neighborhood</del></td><td><ins>in a predominantly black neighborhood</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Kress Sit-In</th><td><del>nine more students sat-in at various locations</del></td><td><ins>nine more students sat in at various locations</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / CORE Sit-Ins</th><td><del>In Decemeber, members</del></td><td><ins>In December, members</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Cox v. Louisiana</th><td><del>National CORE represntative</del></td><td><ins>National CORE representative</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Backlashes Against Activists (transcript)</th><td><del>There was a hole it the picture glass window</del></td><td><ins>There was a hole in the picture glass window</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Backlashes Against Activists (transcript)</th><td><del>Every time he was involved in , like when</del></td><td><ins>Every time he was involved in, like when</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Police Shoot Youth</th><td><del>Their deaths lead to marches</del></td><td><ins>Their deaths led to marches</ins></td></tr>
+<tr><th scope="row">The Nation / Vietnam War</th><td><del>the first fully-integrated deployment</del></td><td><ins>the first fully integrated deployment</ins></td></tr>
+<tr><th scope="row">The Nation / World War II, Korean War, Vietnam War</th><td><del>(1939 – 1945), (1950 –1953),</del> <em>1956 – 1975</em></td><td><ins>(1939–1945), (1950–1953),</ins> <em>1956–1975</em></td></tr>
+</tbody>
+</table>
 <h4>Headlines (entry titles)</h4>
 <ul>
 <li><strong>SU Law School Opens</strong>: Southern University Law School Opens</li>
@@ -1851,20 +2172,23 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 </ul>
 <h4>Dates</h4>
 <p>Every event now has its own date, shown under its heading and used for the Timeline gallery’s order.</p>
-<ul>
-<li><strong>East Baton Rouge / SU Students Killed</strong>: November 17, 1972 → November 16, 1972 <em>(the day of the shooting; the newspaper front page shown is from the 17th)</em></li>
-<li><strong>The Nation / Plessy v. Ferguson</strong>: April 13 – May 18, 1896 → May 18, 1896 <em>(the decision)</em></li>
-<li><strong>East Baton Rouge / Kress Sit-In</strong>: March 28–29, 1960 → March 28, 1960</li>
-<li><strong>East Baton Rouge / Capitol March</strong>: March 29–30, 1960 → March 29, 1960</li>
-<li><strong>East Baton Rouge / 25 CORE Arrests</strong>: December 13–14, 1961 → December 13, 1961</li>
-<li><strong>East Baton Rouge / Garner v. Louisiana</strong>: October 18 – December 11, 1961 → October–December 1961</li>
-<li><strong>East Baton Rouge / SU Students Expelled</strong>: January 16–18, 1962 → January 1962</li>
-<li><strong>East Baton Rouge / Backlashes Against Activists</strong>: August 1, 1963 → August 1963</li>
-<li><strong>Integrating LSU / Undergraduates Sue to Integrate LSU</strong>: 1964–1968 → 1964</li>
-<li><strong>The Nation / Vietnam War</strong>: December 1956 – April 30, 1975 → 1956–1975</li>
-<li><strong>Integrating LSU / Harambe Established at LSU</strong>: 1964–1968 → no date <em>(see To verify)</em></li>
-<li><strong>The 1953 Bus Boycott / King Learns from Baton Rouge</strong>: July 1953 → no date <em>(it describes a comparison, not an event)</em></li>
-</ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">East Baton Rouge / SU Students Killed</th><td><del>November 17, 1972</del></td><td><ins>November 16, 1972 <em>(the day of the shooting; the newspaper front page shown is from the 17th)</em></ins></td></tr>
+<tr><th scope="row">The Nation / Plessy v. Ferguson</th><td><del>April 13 – May 18, 1896</del></td><td><ins>May 18, 1896 <em>(the decision)</em></ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Kress Sit-In</th><td><del>March 28–29, 1960</del></td><td><ins>March 28, 1960</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Capitol March</th><td><del>March 29–30, 1960</del></td><td><ins>March 29, 1960</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / 25 CORE Arrests</th><td><del>December 13–14, 1961</del></td><td><ins>December 13, 1961</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Garner v. Louisiana</th><td><del>October 18 – December 11, 1961</del></td><td><ins>October–December 1961</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / SU Students Expelled</th><td><del>January 16–18, 1962</del></td><td><ins>January 1962</ins></td></tr>
+<tr><th scope="row">East Baton Rouge / Backlashes Against Activists</th><td><del>August 1, 1963</del></td><td><ins>August 1963</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Undergraduates Sue to Integrate LSU</th><td><del>1964–1968</del></td><td><ins>1964</ins></td></tr>
+<tr><th scope="row">The Nation / Vietnam War</th><td><del>December 1956 – April 30, 1975</del></td><td><ins>1956–1975</ins></td></tr>
+<tr><th scope="row">Integrating LSU / Harambe Established at LSU</th><td><del>1964–1968</del></td><td><ins>no date <em>(see To verify)</em></ins></td></tr>
+<tr><th scope="row">The 1953 Bus Boycott / King Learns from Baton Rouge</th><td><del>July 1953</del></td><td><ins>no date <em>(it describes a comparison, not an event)</em></ins></td></tr>
+</tbody>
+</table>
 <h4>Events merged or reordered</h4>
 <ul><li><strong>Kept once:</strong> these events were on both the overview timeline and a local one. Each now appears once, on the local wall. The texts were the same unless noted.
 <ul><li>Wilson Sues LSU Law
@@ -1883,9 +2207,13 @@ $section('The Relentless Pursuit of “Equal”: Integrating LSU', [
 </li></ul>
 <h4>Speaker labels and transcripts</h4>
 <ul><li>In a transcript with more than one speaker, each label is in bold. A speaker gets their full name the first time, then only their surname:
-<ul><li>"A.P. Tureaud, Jr.:" → "<strong>A. P. TUREAUD, JR.:</strong>", then "<strong>TUREAUD:</strong>"
-</li><li>Freya Anderson Rivers’ clip: "RIVERS:" / "CRUMP:" → "<strong>FREYA ANDERSON RIVERS:</strong>" / "<strong>MAXINE CRUMP:</strong>" the first time
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del>A.P. Tureaud, Jr.:</del></td><td><ins><strong>A. P. TUREAUD, JR.:</strong>", then "<strong>TUREAUD:</strong></ins></td></tr>
+<tr><th scope="row">Freya Anderson Rivers’ clip</th><td><del>"RIVERS:" / "CRUMP:"</del></td><td><ins>"<strong>FREYA ANDERSON RIVERS:</strong>" / "<strong>MAXINE CRUMP:</strong>" the first time</ins></td></tr>
+</tbody>
+</table>
 </li><li>In a transcript with only one speaker, the label is dropped, because the credit names them (for example "Dupuy Anderson: The night before the boycott…").
 </li><li>A picture placed inside Maxine Crump’s transcript was taken out. It is the entry’s figure instead.
 </li><li><strong>Initials:</strong> "A.P.", "T.J.", "W.K." → "A. P.", "T. J.", "W. K."
@@ -2045,214 +2373,433 @@ $section('Saturday Night in Tiger Stadium', [
 <p>Locations are <em>gallery / entry title (old page)</em>. The Narrators are the old Biographies and Citations pages.</p>
 <h3>Corrected</h3>
 <h4>Applied throughout</h4>
-<ul><li>Straight quotes and apostrophes → curly ones (“ ” ‘ ’) in all text.
-</li><li>Speaker labels in transcripts: title case → capitals, as on the other oral history exhibitions, e.g. “John Ferguson:” → “JOHN FERGUSON:”, “Ferguson:” → “FERGUSON:”, “C. Barney:” → “C. BARNEY:”. The old pages used 74 different label forms; each keeps its wording.
-</li><li>Image citations: “Name: citation” → “Name. Citation.”, with “Stave Franz” → “Steve Franz” (the Carl Maddox photo, two entries), “LD3118.G8” and “LD 3118 .G8” → “LD3118 .G8”, “LLMVC” spelled out, and a missing final period added.
-</li><li>Biography citations: the “∙” between John Ferguson’s two citations, and between Tyler LaFauci’s, → “; ”.
-</li><li>Hyphens used as dashes (“ - ”, “ -- ”) → em dashes; number ranges (“41 - 0”, “1893 - 1993”) → en dashes.
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Straight quotes and apostrophes</del></td><td><ins>curly ones (“ ” ‘ ’) in all text</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Speaker labels in transcripts: title case → capitals, as on the other oral history exhibitions, e.g. “John Ferguson:” → “JOHN FERGUSON:”, “Ferguson:” → “FERGUSON:”, “C. Barney:” → “C. BARNEY:”. The old pages used 74 different label forms; each keeps its wording.
+</li>
+<li>Image citations: “Name: citation” → “Name. Citation.”, with “Stave Franz” → “Steve Franz” (the Carl Maddox photo, two entries), “LD3118.G8” and “LD 3118 .G8” → “LD3118 .G8”, “LLMVC” spelled out, and a missing final period added.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Biography citations</th><td><del>the “∙” between John Ferguson’s two citations, and between Tyler LaFauci’s,</del></td><td><ins>; </ins></td></tr>
+</tbody>
+</table>
+<ul><li>Hyphens used as dashes (“ - ”, “ -- ”) → em dashes; number ranges (“41 - 0”, “1893 - 1993”) → en dashes.
 </li></ul>
 <h4>Speaker labels</h4>
-<ul><li>Facilities / Tiger Stadium’s early design (faalbertstdizier.html): “Hebert” → “HEBERT:” (colon was missing).
-</li><li>Facilities / Tiger Stadium’s early design (faalbertstdizier.html): “St. Dizier” → “ST. DIZIER:” (colon was missing).
-</li><li>Big Games / 1944 Orange Bowl (biggamecharlesbarney.html): “Abraham:” started mid-paragraph; it now starts its own paragraph.
-</li><li>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html): “Maxine Crump:” started mid-paragraph; it now starts its own paragraph.
-</li><li>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html): “Pourciau:” started mid-paragraph; it now starts its own paragraph.
-</li><li>Players &amp; Teams / Finishing as a player despite injury (ptlorahinton1.html): “Hinton:” appeared twice in a row (“As a player, yeah.” then “So that’s kind of the way…”); the second label removed.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Facilities / Tiger Stadium’s early design (faalbertstdizier.html)</th><td><del>Hebert</del></td><td><ins>HEBERT:</ins> <em>colon was missing</em></td></tr>
+<tr><th scope="row">Facilities / Tiger Stadium’s early design (faalbertstdizier.html)</th><td><del>St. Dizier</del></td><td><ins>ST. DIZIER:</ins> <em>colon was missing</em></td></tr>
+</tbody>
+</table>
+<ul><li>Big Games / 1944 Orange Bowl (biggamecharlesbarney.html): “Abraham:” started mid-paragraph; it now starts its own paragraph.
+</li>
+<li>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html): “Maxine Crump:” started mid-paragraph; it now starts its own paragraph.
+</li>
+<li>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html): “Pourciau:” started mid-paragraph; it now starts its own paragraph.
+</li>
+<li>Players &amp; Teams / Finishing as a player despite injury (ptlorahinton1.html): “Hinton:” appeared twice in a row (“As a player, yeah.” then “So that’s kind of the way…”); the second label removed.
 </li></ul>
 <h4>Wording and spelling</h4>
 <ul><li><strong>Big Games / 1944 Orange Bowl (biggamecharlesbarney.html)</strong>
-<ul><li>“…And we beat ‘em good. [laug…” → “…And we beat ’em good. [laug…”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>…And we beat ‘em good. [laug…</del></td><td><ins>…And we beat ’em good. [laug…</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Big Games / LSU v. Tulane, 1949 (biggamegaynelltinsley.html)</strong>
-<ul><li>“As it say, it’s just” → “As I say, it’s just”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>As it say, it’s just</del></td><td><ins>As I say, it’s just</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Big Games / LSU v. Miami, 1958 (biggamebudjohnson.html)</strong>
-<ul><li>“41 - 0.” → “41–0.”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>41 - 0.</del></td><td><ins>41–0.</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Big Games / The 1958 Championship (biggamecarlmaddox.html)</strong>
-<ul><li>“bigger now then it was” → “bigger now than it was”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>bigger now then it was</del></td><td><ins>bigger now than it was</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Big Games / LSU v. USC, 1979 (biggamejohnferguson.html)</strong>
-<ul><li>“times -- in” → “times—in”
-</li><li>“ways -- for” → “ways—for”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>times -- in</del></td><td><ins>times—in</ins></td></tr>
+<tr><td><del>ways -- for</del></td><td><ins>ways—for</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Big Games / The 1988 Earthquake Game (biggametomhodson.html)</strong>
-<ul><li>“Geology department” → “Geology Department”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Geology department</del></td><td><ins>Geology Department</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Scholarships and jobs for players (ptgaynelltinsley.html)</strong>
-<ul><li>“job would be back at home” → “job would be back at home.”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>job would be back at home</del></td><td><ins>job would be back at home.</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Pursuing an education (ptabemickal.html)</strong>
-<ul><li>“high top leather shoes” → “high-top leather shoes”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>high top leather shoes</del></td><td><ins>high-top leather shoes</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Free football tickets for students (ptalfredglassell.html)</strong>
-<ul><li>“…might hurt ‘em. And so, he…” → “…might hurt ’em. And so, he…”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>…might hurt ‘em. And so, he…</del></td><td><ins>…might hurt ’em. And so, he…</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Playing Georgia twice (ptthomasruffin.html)</strong>
-<ul><li>“I forgot was it was” → “I forgot what it was”
-</li><li>“cancelled” → “canceled”
-</li><li>“sort of duel thing” → “sort of dual thing”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>I forgot was it was</del></td><td><ins>I forgot what it was</ins></td></tr>
+<tr><td><del>cancelled</del></td><td><ins>canceled</ins></td></tr>
+<tr><td><del>sort of duel thing</del></td><td><ins>sort of dual thing</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Why he came to LSU (ptmerleschexnaildre1.html)</strong>
-<ul><li>“four year letterman” → “four-year letterman”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>four year letterman</del></td><td><ins>four-year letterman</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / The origin of the Chinese Bandits (ptmerleschexnaildre2.html)</strong>
-<ul><li>“were description of” → “were descriptions of”
-</li><li>“played like Chinese Bandits”.” → “played like Chinese Bandits.””
-</li><li>“1893 - 1993*],” → “1893–1993*],”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>were description of</del></td><td><ins>were descriptions of</ins></td></tr>
+<tr><td><del>played like Chinese Bandits”.</del></td><td><ins>played like Chinese Bandits.”</ins></td></tr>
+<tr><td><del>1893 - 1993*],</del></td><td><ins>1893–1993*],</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Players who were fun to watch (ptjohnferguson.html)</strong>
-<ul><li>“years - though” → “years—though”
-</li><li>“[1993] - made” → “[1993]—made”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>years - though</del></td><td><ins>years—though</ins></td></tr>
+<tr><td><del>[1993] - made</del></td><td><ins>[1993]—made</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / His junior season and the offensive line (ptcharlesalexander.html)</strong>
-<ul><li>“two quarterback system” → “two-quarterback system”
-</li><li>“all of sudden it turns” → “all of a sudden it turns”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>two quarterback system</del></td><td><ins>two-quarterback system</ins></td></tr>
+<tr><td><del>all of sudden it turns</del></td><td><ins>all of a sudden it turns</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams / Ready for an integrated team (ptkerrypourciau.html)</strong>
-<ul><li>“twenty-years ago” → “twenty years ago”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>twenty-years ago</del></td><td><ins>twenty years ago</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Coaching &amp; Practice / Huey Long and Coach Biff Jones butt heads (cpjackgremillion.html)</strong>
-<ul><li>“paid ...?” → “paid . . . ?”
-</li><li>“Kansas. . . He” → “Kansas . . . He”
-</li><li>“…ed up there ‘til his death.…” → “…ed up there ’til his death.…”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>paid ...?</del></td><td><ins>paid . . . ?</ins></td></tr>
+<tr><td><del>Kansas. . . He</del></td><td><ins>Kansas . . . He</ins></td></tr>
+<tr><td><del>…ed up there ‘til his death.…</del></td><td><ins>…ed up there ’til his death.…</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Coaching &amp; Practice / Choosing LSU over other offers (cpabemickal.html)</strong>
-<ul><li>“kind of lead me” → “kind of led me”
-</li><li>“a close knit” → “a close-knit”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>kind of lead me</del></td><td><ins>kind of led me</ins></td></tr>
+<tr><td><del>a close knit</del></td><td><ins>a close-knit</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Coaching &amp; Practice / Coach Dietzel’s discipline (cpcarlmaddox1.html)</strong>
-<ul><li>“assigned. . . to” → “assigned . . . to”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>assigned. . . to</del></td><td><ins>assigned . . . to</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Coaching &amp; Practice / Position coach Jerry Stovall (cpcharlesalexander.html)</strong>
-<ul><li>“I’LL write” → “I’ll write”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>I’LL write</del></td><td><ins>I’ll write</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Facilities / Where Mike came from, and a prank by Tulane (faoscarrichard.html)</strong>
-<ul><li>“a dime a piece?” → “a dime apiece?”
-</li><li>“About five-thousand” → “About five thousand”
-</li><li>“Five-thousand students” → “Five thousand students”
-</li><li>“…probably in ‘34. I think [C…” → “…probably in ’34. I think [C…”
-</li><li>“Tulane Students” → “Tulane students”
-</li><li>“tiger when in there” → “tiger went in there”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>a dime a piece?</del></td><td><ins>a dime apiece?</ins></td></tr>
+<tr><td><del>About five-thousand</del></td><td><ins>About five thousand</ins></td></tr>
+<tr><td><del>Five-thousand students</del></td><td><ins>Five thousand students</ins></td></tr>
+<tr><td><del>…probably in ‘34. I think [C…</del></td><td><ins>…probably in ’34. I think [C…</ins></td></tr>
+<tr><td><del>Tulane Students</del></td><td><ins>Tulane students</ins></td></tr>
+<tr><td><del>tiger when in there</del></td><td><ins>tiger went in there</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Facilities / How weight training changed LSU football (fabudjohnson.html)</strong>
-<ul><li>“Bob Petit” → “Bob Pettit”
-</li><li>“195 pound back to the basket center” → “195-pound back-to-the-basket center”
-</li><li>“here -- he’s” → “here—he’s”
-</li><li>“business -- I” → “business—I”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Bob Petit</del></td><td><ins>Bob Pettit</ins></td></tr>
+<tr><td><del>195 pound back to the basket center</del></td><td><ins>195-pound back-to-the-basket center</ins></td></tr>
+<tr><td><del>here -- he’s</del></td><td><ins>here—he’s</ins></td></tr>
+<tr><td><del>business -- I</del></td><td><ins>business—I</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Celebrating a win in Baton Rouge (cujessecoates02.html)</strong>
-<ul><li>“…out 1925 or ‘26 or somethin…” → “…out 1925 or ’26 or somethin…”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>…out 1925 or ‘26 or somethin…</del></td><td><ins>…out 1925 or ’26 or somethin…</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Traveling to games by rail and car (cubillyheroman.html)</strong>
-<ul><li>“when they went the [1944] Orange Bowl [played in Miami, FL, against Texas A&amp;M.” → “when they went to the [1944] Orange Bowl [played in Miami, Florida, against Texas A&amp;M].”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>when they went the [1944] Orange Bowl [played in Miami, FL, against Texas A&amp;M.</del></td><td><ins>when they went to the [1944] Orange Bowl [played in Miami, Florida, against Texas A&amp;M].</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Huey Long tries to make Mickal a state senator (cuabemickal.html)</strong>
-<ul><li>“benefitting” → “benefiting”
-</li><li>“over an hour; telling” → “over an hour, telling”
-</li><li>“never on out schedule” → “never on our schedule”
-</li><li>“hit the campus; he’d” → “hit the campus, he’d”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>benefitting</del></td><td><ins>benefiting</ins></td></tr>
+<tr><td><del>over an hour; telling</del></td><td><ins>over an hour, telling</ins></td></tr>
+<tr><td><del>never on out schedule</del></td><td><ins>never on our schedule</ins></td></tr>
+<tr><td><del>hit the campus; he’d</del></td><td><ins>hit the campus, he’d</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / ROTC in pajamas at Homecoming (cujackgremillion.html)</strong>
-<ul><li>“days - it's” → “days—it’s”
-</li><li>“now - used” → “now—used”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>days - it's</del></td><td><ins>days—it’s</ins></td></tr>
+<tr><td><del>now - used</del></td><td><ins>now—used</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / The notoriety that came with winning (cuguskinchen01.html)</strong>
-<ul><li>“front of Life Magazine” → “front of <em>Life</em> magazine”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>front of Life Magazine</del></td><td><ins>front of <em>Life</em> magazine</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / The genesis of “Hey, Fightin’ Tigers!” (cubudjohnson.html)</strong>
-<ul><li>“called Wildcat.” → “called <em>Wildcat</em>.”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>called Wildcat.</del></td><td><ins>called <em>Wildcat</em>.</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Broadcasts that marketed LSU (cujohnferguson02.html)</strong>
-<ul><li>“1960s and 70s” → “1960s and ’70s”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>1960s and 70s</del></td><td><ins>1960s and ’70s</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Fans who motivate the team (cucharlesalexander.html)</strong>
-<ul><li>“days -- which” → “days—which”
-</li><li>“back -- the” → “back—the”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>days -- which</del></td><td><ins>days—which</ins></td></tr>
+<tr><td><del>back -- the</del></td><td><ins>back—the</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / A new dean looks for tickets (cumargaretjameson.html)</strong>
-<ul><li>“biggest to do” → “biggest to-do”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>biggest to do</del></td><td><ins>biggest to-do</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture / Game nights and meeting Billy Cannon (curogerogden.html)</strong>
-<ul><li>“Louisiana -- you” → “Louisiana—you”
-</li><li>“then -- was” → “then—was”
-</li><li>“…ed going in ‘55 or ‘56. So…” → “…ed going in ’55 or ’56. So…”
-</li><li>“…g in ‘55 or ‘56. So I was l…” → “…g in ’55 or ’56. So I was l…”
-</li><li>“people -- except” → “people—except”
-</li><li>“fans -- act” → “fans—act”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Louisiana -- you</del></td><td><ins>Louisiana—you</ins></td></tr>
+<tr><td><del>then -- was</del></td><td><ins>then—was</ins></td></tr>
+<tr><td><del>…ed going in ‘55 or ‘56. So…</del></td><td><ins>…ed going in ’55 or ’56. So…</ins></td></tr>
+<tr><td><del>…g in ‘55 or ‘56. So I was l…</del></td><td><ins>…g in ’55 or ’56. So I was l…</ins></td></tr>
+<tr><td><del>people -- except</del></td><td><ins>people—except</ins></td></tr>
+<tr><td><del>fans -- act</del></td><td><ins>fans—act</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Charles Alexander (biocharlesalexander.html)</strong>
-<ul><li>“twenty seven” → “twenty-seven”
-</li><li>“first round draft” → “first-round draft”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>twenty seven</del></td><td><ins>twenty-seven</ins></td></tr>
+<tr><td><del>first round draft</del></td><td><ins>first-round draft</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Charles Barney (biocharlesbarney.html)</strong>
-<ul><li>“Pacific Theatre” → “Pacific Theater”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Pacific Theatre</del></td><td><ins>Pacific Theater</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Alfred Glassell (bioalfredglassell.html)</strong>
-<ul><li>“theatres” → “theaters”
-</li><li>“was a also a” → “was also a”
-</li><li>“First City Nation Bank” → “First City National Bank”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>theatres</del></td><td><ins>theaters</ins></td></tr>
+<tr><td><del>was a also a</del></td><td><ins>was also a</ins></td></tr>
+<tr><td><del>First City Nation Bank</del></td><td><ins>First City National Bank</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Tom Hodson (biotomhodson.html)</strong>
-<ul><li>“Tiger’s success” → “Tigers’ success”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Tiger’s success</del></td><td><ins>Tigers’ success</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Bud Johnson (biobudjohnson.html)</strong>
-<ul><li>“Prior that that” → “Prior to that”
-</li><li>“Athletics ,” → “Athletics,”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Prior that that</del></td><td><ins>Prior to that</ins></td></tr>
+<tr><td><del>Athletics ,</del></td><td><ins>Athletics,</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Tyler LaFauci (biotylerlafauci.html)</strong>
-<ul><li>“Lafauci” → “LaFauci”
-</li><li>“three year career” → “three-year career”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Lafauci</del></td><td><ins>LaFauci</ins></td></tr>
+<tr><td><del>three year career</del></td><td><ins>three-year career</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Oliver Mack (bioolivermack.html)</strong>
-<ul><li>“parents moved Baton Rouge” → “parents moved to Baton Rouge”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>parents moved Baton Rouge</del></td><td><ins>parents moved to Baton Rouge</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Abe Mickal (bioabemickal.html)</strong>
-<ul><li>“was all SEC” → “was All-SEC”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>was all SEC</del></td><td><ins>was All-SEC</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>The Narrators / Roger &amp; Carrie Richardson (biorcrichardson.html)</strong>
-<ul><li>“interview by John Fiser” → “interview by Jack Fiser”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>interview by John Fiser</del></td><td><ins>interview by Jack Fiser</ins></td></tr>
+</tbody>
+</table>
 </li></ul>
 <h4>Credit lines and names</h4>
-<ul><li>Players &amp; Teams / Finishing as a player despite injury and Teammates standing up to racism (ptlorahinton1.html, ptlorahinton2.html): “interviewed by Mary Price, 1993” → “interviewed by Mary Hebert, 1993”. The transcripts’ labels (HEBERT) and Hinton’s biography citation both say Mary Hebert.
-</li><li>The Narrators / Roger &amp; Carrie Richardson: citation “interview by John Fiser” → “interview by Jack Fiser”, as the clip credit and John Hunter’s citation have it.
-</li><li>Big Games / 1944 Orange Bowl: “Charles Barney, with wife, Frances, and daughter, Merilyn interviewed by…” → “Charles Barney, with his wife, Frances, and daughter, Merilyn, interviewed by…”.
-</li><li>Coaching &amp; Practice / The character of Coach Moore and Facilities / Eating well during wartime rationing: “Charles Barney and wife Frances” / “Charles Barney, and wife Frances” → “Charles Barney and his wife, Frances”.
-</li><li>Facilities / Hamilton Johnston and the design of Tiger Stadium: “Roger &amp; Carrie Richardson” → “Roger and Carrie Richardson”.
-</li><li>Coaching &amp; Practice / Choosing LSU over other offers (cpabemickal.html): the old credit’s bold ran on past the name (“<strong>Abe Mickal, interviewed by…</strong>”); now plain like the others.
-</li><li>Biographies index: “Shexnaildre, Merle” → Schexnaildre; Players &amp; Teams tile alt “Tyler La Fauci” → Tyler LaFauci.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Players &amp; Teams / Finishing as a player despite injury and Teammates standing up to racism (ptlorahinton1.html, ptlorahinton2.html)</th><td><del>interviewed by Mary Price, 1993</del></td><td><ins>“interviewed by Mary Hebert, 1993”. The transcripts’ labels (HEBERT) and Hinton’s biography citation both say Mary Hebert</ins></td></tr>
+<tr><th scope="row">The Narrators / Roger &amp; Carrie Richardson</th><td><del>citation “interview by John Fiser”</del></td><td><ins>“interview by Jack Fiser”, as the clip credit and John Hunter’s citation have it</ins></td></tr>
+<tr><th scope="row">Big Games / 1944 Orange Bowl</th><td><del>Charles Barney, with wife, Frances, and daughter, Merilyn interviewed by…</del></td><td><ins>Charles Barney, with his wife, Frances, and daughter, Merilyn, interviewed by…</ins></td></tr>
+<tr><th scope="row">Coaching &amp; Practice / The character of Coach Moore and Facilities / Eating well during wartime rationing</th><td><del>“Charles Barney and wife Frances” / “Charles Barney, and wife Frances”</del></td><td><ins>Charles Barney and his wife, Frances</ins></td></tr>
+<tr><th scope="row">Facilities / Hamilton Johnston and the design of Tiger Stadium</th><td><del>Roger &amp; Carrie Richardson</del></td><td><ins>Roger and Carrie Richardson</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Coaching &amp; Practice / Choosing LSU over other offers (cpabemickal.html): the old credit’s bold ran on past the name (“<strong>Abe Mickal, interviewed by…</strong>”); now plain like the others.
+</li>
+<li>Biographies index: “Shexnaildre, Merle” → Schexnaildre; Players &amp; Teams tile alt “Tyler La Fauci” → Tyler LaFauci.
 </li></ul>
 <h4>About the Exhibition (old About and Acknowledgements pages)</h4>
-<ul><li>“Tiger Stadium from its completion in 1924 to the 1970.” → “…to the 1970s.”
-</li><li>“Bert Jones, “the Ruston Rifle;” among others” → “Bert Jones, “the Ruston Rifle”; among others”.
-</li><li>“whether it pertains to The Game, Facilities, and/or football Culture” → “whether it pertains to the game, the facilities, or football culture”.
-</li><li>“tell the story of LSU History” → “tell the story of LSU history”.
-</li><li>“Click to hear:” list → “Listen for”, each item capitalized; “winning the 1958 National championship” → “national championship”.
-</li><li>“please visit /special/williams/” → a link named “T. Harry Williams Center for Oral History”.
-</li><li>The Louisiana Digital Library address <a href="http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP">http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP</a> → a link to <a href="https://louisianadigitallibrary.org/">https://louisianadigitallibrary.org/</a> (the old CONTENTdm address is retired).
-</li><li>“ACKNOWLEDGEMENTS” → “Acknowledgments”; “Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens” → “…Student Assistant; and Rebecca Stephens” (the list uses semicolons).
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Tiger Stadium from its completion in 1924 to the 1970.</del></td><td><ins>…to the 1970s.</ins></td></tr>
+<tr><td><del>Bert Jones, “the Ruston Rifle;” among others</del></td><td><ins>Bert Jones, “the Ruston Rifle”; among others</ins></td></tr>
+<tr><td><del>whether it pertains to The Game, Facilities, and/or football Culture</del></td><td><ins>whether it pertains to the game, the facilities, or football culture</ins></td></tr>
+<tr><td><del>tell the story of LSU History</del></td><td><ins>tell the story of LSU history</ins></td></tr>
+</tbody>
+</table>
+<ul><li>“Click to hear:” list → “Listen for”, each item capitalized; “winning the 1958 National championship” → “national championship”.
 </li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>please visit /special/williams/</del></td><td><ins>a link named “T. Harry Williams Center for Oral History”</ins></td></tr>
+<tr><td><del>The Louisiana Digital Library address <a href="http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP">http://cdm16313.contentdm.oclc.org/cdm/landingpage/collection/LSU_UAP</a></del></td><td><ins>a link to <a href="https://louisianadigitallibrary.org/">https://louisianadigitallibrary.org/</a></ins> <em>the old CONTENTdm address is retired</em></td></tr>
+<tr><td><del>ACKNOWLEDGEMENTS</del></td><td><ins>Acknowledgments</ins></td></tr>
+<tr><td><del>Katie Blanchard, Public Services Student Assistant, and Rebecca Stephens</del></td><td><ins>…Student Assistant; and Rebecca Stephens</ins> <em>the list uses semicolons</em></td></tr>
+</tbody>
+</table>
 <h3>To verify</h3>
 <ul><li>Players &amp; Teams / Ready for an integrated team: clip credit says “Kerry Pourciau, interviewed by Maxine Crump, 1994”; his biography citation says 1993. Left as 1994.
-</li><li>Players &amp; Teams / Finishing as a player… and Teammates standing up to racism: Mary Price → Mary Hebert (see list 1). Confirm the interviewer.
-</li><li>The Narrators / Jesse Coates: “head of the department from 1955 through 1967 and again from 1960-70” overlaps. Left as written.
-</li><li>The Narrators / Tom Hodson: says Hodson led LSU to two SEC Championships, “first as a freshman in 1986 and then as a junior in 1988.” Left as written.
-</li><li>The Narrators / Bud Johnson: “served as president of SEC Sports Publicity Director’s Association” (apostrophe placement) and “Louisiana Sports Writer’s Association’s”. Left as written.
-</li><li>The Narrators / Margaret Jameson: citation “Jameson, M. Margaret”. Left as written.
-</li><li>The Narrators / Alfred Glassell: “has led marine expeditions” (present tense for someone who died in 2008). Left as written.
-</li><li>Culture / Fan support after a loss (cuguskinchen02.html): the image file is named mikeiiarriving (Mike II arriving), but the clip is about fans greeting the team at the airport. The image and its new caption follow the file name; confirm what the photo shows.
-</li><li>Culture / ROTC in pajamas at Homecoming: photo file pajamafootball shows students cheering at night; whether they are in pajamas can’t be seen at this size.
-</li><li>Facilities / Hamilton Johnston and the design of Tiger Stadium: the photo (file tigerstadium1936) is an aerial of a full stadium with letters on the field; no citation or date in the old exhibition.
-</li><li>Coaching &amp; Practice / Coach Moore’s scrimmages: photo file moorecoates shows Bernie Moore (left, per the old title) with an older man the old exhibition doesn’t name (the file name suggests a Coates); no citation.
-</li><li>Culture / Huey Long tries to make Mickal a state senator: photo file hueyhouston (Huey Long leading a band on a city street, perhaps Houston); no citation.
-</li><li>Players &amp; Teams / Finishing as a player despite injury: the photo is an action shot at the line of scrimmage, credited “Lora Hinton”; which player is Hinton isn’t clear.
-</li><li>Coaching &amp; Practice / McClendon’s small but aggressive players: “[football coach at Miami University]” is the old bracket note for Bo Schembechler (Miami University, Ohio). Left as written.
-</li><li>Spoken grammar left as said throughout (e.g. “might of”, “had have been”, “Texas University”, “was million dollar band”, “a great integral in the university”).
-</li><li>Exhibition year 2013: inferred from the title (“120 Years of LSU Football”, 1893 + 120) and the latest interview (Bud Johnson, 2013). The old site gives no date.
-</li><li>Physical exhibition note: “First shown in LSU Libraries Special Collections with a touchscreen listening station.” The old site gives no venue or dates.
-</li><li>17 clip photos had no citation in the old exhibition: Charles Barney, Bud Johnson, Alfred Glassell, Kerry Pourciau, Moore with Coates (?), Martin Broussard, the 1936 aerial, Mike’s keeper, the second Alvin Roy ad, Huey Long with the band, the night-game crowd, the 1958 champions, Mike II arriving, the placekick, game-day attire, the homecoming display, Margaret Jameson. The 14 Lagniappe photos had no captions or sources either.
-</li><li>Merle Schexnaildre’s cited portrait (schexnaildre_dream, Gumbo 1959) is only 302 px; a better scan would help.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Players &amp; Teams / Finishing as a player… and Teammates standing up to racism</th><td><del>Mary Price</del></td><td><ins>Mary Hebert (see list 1). Confirm the interviewer</ins></td></tr>
+</tbody>
+</table>
+<ul><li>The Narrators / Jesse Coates: “head of the department from 1955 through 1967 and again from 1960-70” overlaps. Left as written.
+</li>
+<li>The Narrators / Tom Hodson: says Hodson led LSU to two SEC Championships, “first as a freshman in 1986 and then as a junior in 1988.” Left as written.
+</li>
+<li>The Narrators / Bud Johnson: “served as president of SEC Sports Publicity Director’s Association” (apostrophe placement) and “Louisiana Sports Writer’s Association’s”. Left as written.
+</li>
+<li>The Narrators / Margaret Jameson: citation “Jameson, M. Margaret”. Left as written.
+</li>
+<li>The Narrators / Alfred Glassell: “has led marine expeditions” (present tense for someone who died in 2008). Left as written.
+</li>
+<li>Culture / Fan support after a loss (cuguskinchen02.html): the image file is named mikeiiarriving (Mike II arriving), but the clip is about fans greeting the team at the airport. The image and its new caption follow the file name; confirm what the photo shows.
+</li>
+<li>Culture / ROTC in pajamas at Homecoming: photo file pajamafootball shows students cheering at night; whether they are in pajamas can’t be seen at this size.
+</li>
+<li>Facilities / Hamilton Johnston and the design of Tiger Stadium: the photo (file tigerstadium1936) is an aerial of a full stadium with letters on the field; no citation or date in the old exhibition.
+</li>
+<li>Coaching &amp; Practice / Coach Moore’s scrimmages: photo file moorecoates shows Bernie Moore (left, per the old title) with an older man the old exhibition doesn’t name (the file name suggests a Coates); no citation.
+</li>
+<li>Culture / Huey Long tries to make Mickal a state senator: photo file hueyhouston (Huey Long leading a band on a city street, perhaps Houston); no citation.
+</li>
+<li>Players &amp; Teams / Finishing as a player despite injury: the photo is an action shot at the line of scrimmage, credited “Lora Hinton”; which player is Hinton isn’t clear.
+</li>
+<li>Coaching &amp; Practice / McClendon’s small but aggressive players: “[football coach at Miami University]” is the old bracket note for Bo Schembechler (Miami University, Ohio). Left as written.
+</li>
+<li>Spoken grammar left as said throughout (e.g. “might of”, “had have been”, “Texas University”, “was million dollar band”, “a great integral in the university”).
+</li>
+<li>Exhibition year 2013: inferred from the title (“120 Years of LSU Football”, 1893 + 120) and the latest interview (Bud Johnson, 2013). The old site gives no date.
+</li>
+<li>Physical exhibition note: “First shown in LSU Libraries Special Collections with a touchscreen listening station.” The old site gives no venue or dates.
+</li>
+<li>17 clip photos had no citation in the old exhibition: Charles Barney, Bud Johnson, Alfred Glassell, Kerry Pourciau, Moore with Coates (?), Martin Broussard, the 1936 aerial, Mike’s keeper, the second Alvin Roy ad, Huey Long with the band, the night-game crowd, the 1958 champions, Mike II arriving, the placekick, game-day attire, the homecoming display, Margaret Jameson. The 14 Lagniappe photos had no captions or sources either.
+</li>
+<li>Merle Schexnaildre’s cited portrait (schexnaildre_dream, Gumbo 1959) is only 302 px; a better scan would help.
 </li></ul>
 <h3>New wording to check</h3>
 <h4>Page</h4>
@@ -2270,79 +2817,99 @@ $section('Saturday Night in Tiger Stadium', [
 </li></ul>
 <h4>Entry titles (old page header → new title)</h4>
 <ul><li><strong>Big Games</strong>
-<ul><li>“Marvin Stewart, Former Player, on the dramatic game against TCU” → “1936 Sugar Bowl”
-</li><li>“Charles Barney, Former Player, on the close game against Texas A&amp;M” → “1944 Orange Bowl”
-</li><li>“Bud Johnson, Director of the Andonie Museum, on Y.A. Tittle's (pictured) fabled interception” → “LSU v. Ole Miss, 1947”
-</li><li>“Gaynell Tinsley, Former Player &amp; Later Head Coach, on an unexpected win for LSU” → “LSU v. Tulane, 1949”
-</li><li>“Bud Johnson, Director of the Andonie Museum, on fan base growing quickly after this big win” → “LSU v. Miami, 1958”
-</li><li>“Carl Maddox, Former Coaching Staff &amp; Athletic Director, on the personal impact of winning the Championship” → “The 1958 Championship”
-</li><li>“Bert Jones, Former Player, on the final plays of this historic game” → “LSU v. Ole Miss, 1972”
-</li><li>“John Ferguson, Former Voice of the Tigers, on a favorite game” → “LSU v. USC, 1979”
-</li><li>“Tom Hodson and David Browndyke, Former Players, on the famous LSU v. Auburn game” → “The 1988 Earthquake Game”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Marvin Stewart, Former Player, on the dramatic game against TCU</del></td><td><ins>1936 Sugar Bowl</ins></td></tr>
+<tr><td><del>Charles Barney, Former Player, on the close game against Texas A&amp;M</del></td><td><ins>1944 Orange Bowl</ins></td></tr>
+<tr><td><del>Bud Johnson, Director of the Andonie Museum, on Y.A. Tittle's (pictured) fabled interception</del></td><td><ins>LSU v. Ole Miss, 1947</ins></td></tr>
+<tr><td><del>Gaynell Tinsley, Former Player &amp; Later Head Coach, on an unexpected win for LSU</del></td><td><ins>LSU v. Tulane, 1949</ins></td></tr>
+<tr><td><del>Bud Johnson, Director of the Andonie Museum, on fan base growing quickly after this big win</del></td><td><ins>LSU v. Miami, 1958</ins></td></tr>
+<tr><td><del>Carl Maddox, Former Coaching Staff &amp; Athletic Director, on the personal impact of winning the Championship</del></td><td><ins>The 1958 Championship</ins></td></tr>
+<tr><td><del>Bert Jones, Former Player, on the final plays of this historic game</del></td><td><ins>LSU v. Ole Miss, 1972</ins></td></tr>
+<tr><td><del>John Ferguson, Former Voice of the Tigers, on a favorite game</del></td><td><ins>LSU v. USC, 1979</ins></td></tr>
+<tr><td><del>Tom Hodson and David Browndyke, Former Players, on the famous LSU v. Auburn game</del></td><td><ins>The 1988 Earthquake Game</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Players &amp; Teams</strong>
-<ul><li>“Marvin Stewart, Former Player, playing both offense and defense” → “Playing both offense and defense”
-</li><li>“Gaynell Tinsley, Former Player &amp; Later Head Coach, on scholarship coverage and jobs for players” → “Scholarships and jobs for players”
-</li><li>“Abe Mickal, Former Player, on pursuing an education” → “Pursuing an education”
-</li><li>“Alfred Glassell, Former SGA President, on free football tickets for students” → “Free football tickets for students”
-</li><li>“Thomas Ruffin, Alumnus, on LSU's team (pictured) playing Georgia twice” → “Playing Georgia twice”
-</li><li>“Merle Schexnaildre, Former Player, on football being his primary motivation to attend LSU” → “Why he came to LSU”
-</li><li>“Merle Schexnaildre, Former Player, on the origin of the Chinese Bandits (pictured)” → “The origin of the Chinese Bandits”
-</li><li>“Gus Kinchen, Former Player, on playing defensive end for the Chinese Bandits” → “Defensive end for the Chinese Bandits”
-</li><li>“John Ferguson, Former Voice of the Tigers, on fun to watch players” → “Players who were fun to watch”
-</li><li>“Charles Alexander, Former Player, on his junior year season and the o-line” → “His junior season and the offensive line”
-</li><li>“Tyler LaFauci, Former Player, on the importance of a calm demeanor” → “The importance of a calm demeanor”
-</li><li>“Lora Hinton, Former Player, on wanting to finish as a player despite injury” → “Finishing as a player despite injury”
-</li><li>“Kerry Pourciau, Former SGA President, on LSU being ready for an integrated team” → “Ready for an integrated team”
-</li><li>“Lora Hinton, Former Player, on teammates standing up to racism” → “Teammates standing up to racism”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Marvin Stewart, Former Player, playing both offense and defense</del></td><td><ins>Playing both offense and defense</ins></td></tr>
+<tr><td><del>Gaynell Tinsley, Former Player &amp; Later Head Coach, on scholarship coverage and jobs for players</del></td><td><ins>Scholarships and jobs for players</ins></td></tr>
+<tr><td><del>Abe Mickal, Former Player, on pursuing an education</del></td><td><ins>Pursuing an education</ins></td></tr>
+<tr><td><del>Alfred Glassell, Former SGA President, on free football tickets for students</del></td><td><ins>Free football tickets for students</ins></td></tr>
+<tr><td><del>Thomas Ruffin, Alumnus, on LSU's team (pictured) playing Georgia twice</del></td><td><ins>Playing Georgia twice</ins></td></tr>
+<tr><td><del>Merle Schexnaildre, Former Player, on football being his primary motivation to attend LSU</del></td><td><ins>Why he came to LSU</ins></td></tr>
+<tr><td><del>Merle Schexnaildre, Former Player, on the origin of the Chinese Bandits (pictured)</del></td><td><ins>The origin of the Chinese Bandits</ins></td></tr>
+<tr><td><del>Gus Kinchen, Former Player, on playing defensive end for the Chinese Bandits</del></td><td><ins>Defensive end for the Chinese Bandits</ins></td></tr>
+<tr><td><del>John Ferguson, Former Voice of the Tigers, on fun to watch players</del></td><td><ins>Players who were fun to watch</ins></td></tr>
+<tr><td><del>Charles Alexander, Former Player, on his junior year season and the o-line</del></td><td><ins>His junior season and the offensive line</ins></td></tr>
+<tr><td><del>Tyler LaFauci, Former Player, on the importance of a calm demeanor</del></td><td><ins>The importance of a calm demeanor</ins></td></tr>
+<tr><td><del>Lora Hinton, Former Player, on wanting to finish as a player despite injury</del></td><td><ins>Finishing as a player despite injury</ins></td></tr>
+<tr><td><del>Kerry Pourciau, Former SGA President, on LSU being ready for an integrated team</del></td><td><ins>Ready for an integrated team</ins></td></tr>
+<tr><td><del>Lora Hinton, Former Player, on teammates standing up to racism</del></td><td><ins>Teammates standing up to racism</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Coaching &amp; Practice</strong>
-<ul><li>“Jack Gremillion, Alumnus, on Huey Long and Coach Biff Jones (pictured) butting heads” → “Huey Long and Coach Biff Jones butt heads”
-</li><li>“Marvin Stewart, Former Player, on player preparation changing over the years” → “How player preparation has changed”
-</li><li>“Abe Mickal, Former Player, on choosing LSU over other schools' offers” → “Choosing LSU over other offers”
-</li><li>“Marvin Stewart, Former Player, on Coach Moore's (pictured left) scrimmages” → “Coach Moore’s scrimmages”
-</li><li>“Charles Barney, Former Player, on the character of Coach Moore (pictured)” → “The character of Coach Moore”
-</li><li>“Carl Maddox, Former Coaching Staff &amp; Athletic Director, on Coach Dietzel's (pictured) discipline” → “Coach Dietzel’s discipline”
-</li><li>“Carl Maddox, Former Coaching Staff &amp; Athletic Director, on recruiting and a talented walk-on player” → “Recruiting, and a talented walk-on”
-</li><li>“Merle Schexnaildre, Former Player, on the importance of every team member” → “Every team member matters”
-</li><li>“John Hunter, 14th President of LSU; 1st Head of LSU System, on hiring Coach McClendon (pictured right) before Kentucky could” → “Hiring Coach McClendon before Kentucky could”
-</li><li>“Bud Johnson, Director of the Andonie Museum, on Charles McClendon’s small but aggressive players (pictured)” → “McClendon’s small but aggressive players”
-</li><li>“Charles Alexander, Former Player, on position coach Jerry Stovall (pictured as player)” → “Position coach Jerry Stovall”
-</li><li>“Martin Broussard, Former Athletic Trainer, on rule changes being beneficial” → “Rule changes for the better”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Jack Gremillion, Alumnus, on Huey Long and Coach Biff Jones (pictured) butting heads</del></td><td><ins>Huey Long and Coach Biff Jones butt heads</ins></td></tr>
+<tr><td><del>Marvin Stewart, Former Player, on player preparation changing over the years</del></td><td><ins>How player preparation has changed</ins></td></tr>
+<tr><td><del>Abe Mickal, Former Player, on choosing LSU over other schools' offers</del></td><td><ins>Choosing LSU over other offers</ins></td></tr>
+<tr><td><del>Marvin Stewart, Former Player, on Coach Moore's (pictured left) scrimmages</del></td><td><ins>Coach Moore’s scrimmages</ins></td></tr>
+<tr><td><del>Charles Barney, Former Player, on the character of Coach Moore (pictured)</del></td><td><ins>The character of Coach Moore</ins></td></tr>
+<tr><td><del>Carl Maddox, Former Coaching Staff &amp; Athletic Director, on Coach Dietzel's (pictured) discipline</del></td><td><ins>Coach Dietzel’s discipline</ins></td></tr>
+<tr><td><del>Carl Maddox, Former Coaching Staff &amp; Athletic Director, on recruiting and a talented walk-on player</del></td><td><ins>Recruiting, and a talented walk-on</ins></td></tr>
+<tr><td><del>Merle Schexnaildre, Former Player, on the importance of every team member</del></td><td><ins>Every team member matters</ins></td></tr>
+<tr><td><del>John Hunter, 14th President of LSU; 1st Head of LSU System, on hiring Coach McClendon (pictured right) before Kentucky could</del></td><td><ins>Hiring Coach McClendon before Kentucky could</ins></td></tr>
+<tr><td><del>Bud Johnson, Director of the Andonie Museum, on Charles McClendon’s small but aggressive players (pictured)</del></td><td><ins>McClendon’s small but aggressive players</ins></td></tr>
+<tr><td><del>Charles Alexander, Former Player, on position coach Jerry Stovall (pictured as player)</del></td><td><ins>Position coach Jerry Stovall</ins></td></tr>
+<tr><td><del>Martin Broussard, Former Athletic Trainer, on rule changes being beneficial</del></td><td><ins>Rule changes for the better</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Facilities</strong>
-<ul><li>“Albert St. Dizier, Alumnus, on Tiger Stadium's early design” → “Tiger Stadium’s early design”
-</li><li>“Roger &amp; Carrie Richardson, Alumni, on Carrie's father, Hamilton Johnston, helping design Tiger Stadium” → “Hamilton Johnston and the design of Tiger Stadium”
-</li><li>“Oscar Richard, Alumnus, on Mike's origin and a prank by Tulane” → “Where Mike came from, and a prank by Tulane”
-</li><li>“Charles Barney, Former Player, on players eating well even during WWII rationing” → “Eating well during wartime rationing”
-</li><li>“Bud Johnson, Director of the Andonie Museum, on how weight training impacted LSU football” → “How weight training changed LSU football”
-</li><li>“Ray Roy, Personal Trainer, on his brother, Alvin, getting LSU players weight training” → “Alvin Roy brings weight training to LSU”
-</li><li>“John Ferguson, Former Voice of the Tigers, on capturing the audible atmosphere of the stadium” → “Capturing the sound of the stadium”
-</li><li>“Sheryl Campbell, Alumna, on the roar of the stadium” → “The roar of the stadium”
-</li><li>“Charles Alexander, Former Player, on being close with his college teammates” → “Close with his college teammates”
-</li><li>“Martin Broussard, Former Athletic Trainer, on fan support being there, even in a losing season” → “Fans who stay, even in a losing season”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Albert St. Dizier, Alumnus, on Tiger Stadium's early design</del></td><td><ins>Tiger Stadium’s early design</ins></td></tr>
+<tr><td><del>Roger &amp; Carrie Richardson, Alumni, on Carrie's father, Hamilton Johnston, helping design Tiger Stadium</del></td><td><ins>Hamilton Johnston and the design of Tiger Stadium</ins></td></tr>
+<tr><td><del>Oscar Richard, Alumnus, on Mike's origin and a prank by Tulane</del></td><td><ins>Where Mike came from, and a prank by Tulane</ins></td></tr>
+<tr><td><del>Charles Barney, Former Player, on players eating well even during WWII rationing</del></td><td><ins>Eating well during wartime rationing</ins></td></tr>
+<tr><td><del>Bud Johnson, Director of the Andonie Museum, on how weight training impacted LSU football</del></td><td><ins>How weight training changed LSU football</ins></td></tr>
+<tr><td><del>Ray Roy, Personal Trainer, on his brother, Alvin, getting LSU players weight training</del></td><td><ins>Alvin Roy brings weight training to LSU</ins></td></tr>
+<tr><td><del>John Ferguson, Former Voice of the Tigers, on capturing the audible atmosphere of the stadium</del></td><td><ins>Capturing the sound of the stadium</ins></td></tr>
+<tr><td><del>Sheryl Campbell, Alumna, on the roar of the stadium</del></td><td><ins>The roar of the stadium</ins></td></tr>
+<tr><td><del>Charles Alexander, Former Player, on being close with his college teammates</del></td><td><ins>Close with his college teammates</ins></td></tr>
+<tr><td><del>Martin Broussard, Former Athletic Trainer, on fan support being there, even in a losing season</del></td><td><ins>Fans who stay, even in a losing season</ins></td></tr>
+</tbody>
+</table>
 </li><li><strong>Culture</strong>
-<ul><li>“Jesse Coates, Longtime Professor, an origin story about the team's colors” → “How LSU got its colors”
-</li><li>“Jesse Coates, Longtime Professor, on excitement in Baton Rouge after a win” → “Celebrating a win in Baton Rouge”
-</li><li>“Cecil Taylor, First Chancellor of LSU, on pomp and circumstance on game day” → “Pomp and circumstance on game day”
-</li><li>“Billy Heroman, Alumnus, on traveling to games by rail and car” → “Traveling to games by rail and car”
-</li><li>“Abe Mickal, Former Player, on Huey Long's attempt to elect Mickal state senator” → “Huey Long tries to make Mickal a state senator”
-</li><li>“Jack Gremillion, Alumnus, on ROTC groups wearing pajamas to Homecoming” → “ROTC in pajamas at Homecoming”
-</li><li>“Bautista Martinez, LSU Fan, on sneaking out of Carville Leprosarium to attend games” → “Slipping out of Carville to see the Tigers”
-</li><li>“Oliver Mack, Alumnus, on listening to LSU games on the radio” → “Listening to LSU on the radio”
-</li><li>“Gus Kinchen, Former Player, on the notoriety that came with LSU's success” → “The notoriety that came with winning”
-</li><li>“Gus Kinchen, Former Player, on fan support after a loss” → “Fan support after a loss”
-</li><li>“John Ferguson, Former Voice of the Tigers, on becoming the Voice of the Tigers” → “Becoming the Voice of the Tigers”
-</li><li>“Bud Johnson, Director of the Andonie Museum, on the genesis of "Hey, Fightin' Tigers!"” → “The genesis of “Hey, Fightin’ Tigers!””
-</li><li>“Sheryl Campbell, Alumna, on rivalries with Ole Miss and Alabama” → “Rivalries with Ole Miss and Alabama”
-</li><li>“Sheryl Campbell, Alumna, on football players taking a ballroom dance class” → “Football players in ballroom dance class”
-</li><li>“John Ferguson, Former Voice of the Tigers, on broadcasts as a way to market LSU” → “Broadcasts that marketed LSU”
-</li><li>“Sheryl Campbell, Alumna, on proper attire for game day” → “Proper attire for game day”
-</li><li>“Charles Alexander, Former Player, on fans' support being motivating” → “Fans who motivate the team”
-</li><li>“Margaret Jameson, Former Dean of Women, on the difficulty of obtaining tickets upon arrival as Dean” → “A new dean looks for tickets”
-</li><li>“Roger Ogden, Former SGA President, on the excitement of attending games and meeting Billy Cannon” → “Game nights and meeting Billy Cannon”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Jesse Coates, Longtime Professor, an origin story about the team's colors</del></td><td><ins>How LSU got its colors</ins></td></tr>
+<tr><td><del>Jesse Coates, Longtime Professor, on excitement in Baton Rouge after a win</del></td><td><ins>Celebrating a win in Baton Rouge</ins></td></tr>
+<tr><td><del>Cecil Taylor, First Chancellor of LSU, on pomp and circumstance on game day</del></td><td><ins>Pomp and circumstance on game day</ins></td></tr>
+<tr><td><del>Billy Heroman, Alumnus, on traveling to games by rail and car</del></td><td><ins>Traveling to games by rail and car</ins></td></tr>
+<tr><td><del>Abe Mickal, Former Player, on Huey Long's attempt to elect Mickal state senator</del></td><td><ins>Huey Long tries to make Mickal a state senator</ins></td></tr>
+<tr><td><del>Jack Gremillion, Alumnus, on ROTC groups wearing pajamas to Homecoming</del></td><td><ins>ROTC in pajamas at Homecoming</ins></td></tr>
+<tr><td><del>Bautista Martinez, LSU Fan, on sneaking out of Carville Leprosarium to attend games</del></td><td><ins>Slipping out of Carville to see the Tigers</ins></td></tr>
+<tr><td><del>Oliver Mack, Alumnus, on listening to LSU games on the radio</del></td><td><ins>Listening to LSU on the radio</ins></td></tr>
+<tr><td><del>Gus Kinchen, Former Player, on the notoriety that came with LSU's success</del></td><td><ins>The notoriety that came with winning</ins></td></tr>
+<tr><td><del>Gus Kinchen, Former Player, on fan support after a loss</del></td><td><ins>Fan support after a loss</ins></td></tr>
+<tr><td><del>John Ferguson, Former Voice of the Tigers, on becoming the Voice of the Tigers</del></td><td><ins>Becoming the Voice of the Tigers</ins></td></tr>
+<tr><td><del>Bud Johnson, Director of the Andonie Museum, on the genesis of "Hey, Fightin' Tigers!"</del></td><td><ins>The genesis of “Hey, Fightin’ Tigers!”</ins></td></tr>
+<tr><td><del>Sheryl Campbell, Alumna, on rivalries with Ole Miss and Alabama</del></td><td><ins>Rivalries with Ole Miss and Alabama</ins></td></tr>
+<tr><td><del>Sheryl Campbell, Alumna, on football players taking a ballroom dance class</del></td><td><ins>Football players in ballroom dance class</ins></td></tr>
+<tr><td><del>John Ferguson, Former Voice of the Tigers, on broadcasts as a way to market LSU</del></td><td><ins>Broadcasts that marketed LSU</ins></td></tr>
+<tr><td><del>Sheryl Campbell, Alumna, on proper attire for game day</del></td><td><ins>Proper attire for game day</ins></td></tr>
+<tr><td><del>Charles Alexander, Former Player, on fans' support being motivating</del></td><td><ins>Fans who motivate the team</ins></td></tr>
+<tr><td><del>Margaret Jameson, Former Dean of Women, on the difficulty of obtaining tickets upon arrival as Dean</del></td><td><ins>A new dean looks for tickets</ins></td></tr>
+<tr><td><del>Roger Ogden, Former SGA President, on the excitement of attending games and meeting Billy Cannon</del></td><td><ins>Game nights and meeting Billy Cannon</ins></td></tr>
+</tbody>
+</table>
 </li></ul>
 <p>Big Games titles are the game names on the old tiles (the old tile for Bud Johnson’s 1958 clip reads “LSU v. U of Miami, 1958”).</p>
 <h4>Clip credit lines</h4>
@@ -2690,82 +3257,105 @@ $section('Tempests: Storms in the Archives', [
 <h3>Corrected</h3>
 <h4>Entry titles</h4>
 <p>Old title is the clip page’s heading; where the old side menu said something different, that is given too. Rewordings that go beyond a typo or case fix are also listed under 3.</p>
-<ul><li>The Old Storms, 1893–1926: “a woman and her three children perish in the 1926 storm” → “A woman and her three children perish in the 1926 storm”
-</li><li>The Old Storms, 1893–1926: “1926 hurricane and the demise of one family's shrimping platforms” → “The 1926 hurricane and the end of one family’s shrimping platforms”
-</li><li>Audrey and the Marsh, 1950s: “Hurricanes Flossy and Betsy; Riding out storms in the Coast Guard station” → “Hurricanes Flossy and Betsy; riding out storms in the Coast Guard station”
-</li><li>Audrey and the Marsh, 1950s: “Impact of Hurricane Audrey on marsh grass, erosion” → “The impact of Hurricane Audrey on marsh grass and erosion”
-</li><li>Audrey and the Marsh, 1950s: “Remembers her Red Cross relief effort experiences after Hurricane Audrey” → “Red Cross relief work after Hurricane Audrey”
-</li><li>Betsy, 1965: “Long term effects of Betsy on Lower Ninth Ward” (side menu: “Long term effects of Betsy on the Lower Ninth Ward”) → “Long-term effects of Betsy on the Lower Ninth Ward”
-</li><li>Betsy, 1965: “Hurricanes in the 1960s; Experiencing the eye wall in Betsy” → “Hurricanes in the 1960s; experiencing the eye wall in Betsy”
-</li><li>Betsy, 1965: “Surviving Hurricane Betsy; The impacts of Camille and Katrina” → “Surviving Hurricane Betsy; the impacts of Camille and Katrina”
-</li><li>Betsy, 1965: “Riding out Hurricane Besty in Westwego” → “Riding out Hurricane Betsy in Westwego”
-</li><li>Living with the Coast: “Terrebonne Parish drainage issues during storms over last 150 years” → “Terrebonne Parish drainage issues during storms over the last 150 years”
-</li><li>Living with the Coast: “Danger of slow moving storms to barrier islands” → “The danger of slow-moving storms to barrier islands”
-</li><li>Living with the Coast: “Importance of coastal restoration for preserving Louisiana's culture” → “The importance of coastal restoration for preserving Louisiana’s culture”
-</li><li>Living with the Coast: “Grand Isle Mayor on convincing people to evacuate for a hurricane” → “Grand Isle’s mayor on convincing people to evacuate for a hurricane”
-</li><li>Living with the Coast: “Improved oyster harvest after Hurricane Andrew” → “An improved oyster harvest after Hurricane Andrew”
-</li><li>Living with the Coast: “Coastal restoration projects; Transformation of the coastline by Katrina” → “Coastal restoration projects; the transformation of the coastline by Katrina”
-</li><li>Katrina and Rita, 2005: “Emotional trauma of being displaced” → “The emotional trauma of being displaced”
-</li><li>Katrina and Rita, 2005: “Evacuation of Riverbend Nursing Home in Kentwood, LA, during Katrina” (side menu: “Evacuation of Riverbend Nursing Home in Kentwood”) → “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina”
-</li><li>Katrina and Rita, 2005: “Hospital's preparedness for Hurricane Katrina” → “A hospital’s preparedness for Hurricane Katrina”
-</li><li>Katrina and Rita, 2005: “Loss of livestock after Hurricanes Rita and Ike” → “The loss of livestock after Hurricanes Rita and Ike”
-</li><li>About the Exhibition: “Lower 9th Ward Oral History Archive Clips” (side menu: “LOWER 9TH WARD ORAL HISTORY ARCHIVE”) → heading “Lower Ninth Ward Oral History Archive”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">The Old Storms, 1893–1926</th><td><del>a woman and her three children perish in the 1926 storm</del></td><td><ins>A woman and her three children perish in the 1926 storm</ins></td></tr>
+<tr><th scope="row">The Old Storms, 1893–1926</th><td><del>1926 hurricane and the demise of one family's shrimping platforms</del></td><td><ins>The 1926 hurricane and the end of one family’s shrimping platforms</ins></td></tr>
+<tr><th scope="row">Audrey and the Marsh, 1950s</th><td><del>Hurricanes Flossy and Betsy; Riding out storms in the Coast Guard station</del></td><td><ins>Hurricanes Flossy and Betsy; riding out storms in the Coast Guard station</ins></td></tr>
+<tr><th scope="row">Audrey and the Marsh, 1950s</th><td><del>Impact of Hurricane Audrey on marsh grass, erosion</del></td><td><ins>The impact of Hurricane Audrey on marsh grass and erosion</ins></td></tr>
+<tr><th scope="row">Audrey and the Marsh, 1950s</th><td><del>Remembers her Red Cross relief effort experiences after Hurricane Audrey</del></td><td><ins>Red Cross relief work after Hurricane Audrey</ins></td></tr>
+<tr><th scope="row">Betsy, 1965</th><td><del>Long term effects of Betsy on Lower Ninth Ward</del> <em>side menu: “Long term effects of Betsy on the Lower Ninth Ward”</em></td><td><ins>Long-term effects of Betsy on the Lower Ninth Ward</ins></td></tr>
+<tr><th scope="row">Betsy, 1965</th><td><del>Hurricanes in the 1960s; Experiencing the eye wall in Betsy</del></td><td><ins>Hurricanes in the 1960s; experiencing the eye wall in Betsy</ins></td></tr>
+<tr><th scope="row">Betsy, 1965</th><td><del>Surviving Hurricane Betsy; The impacts of Camille and Katrina</del></td><td><ins>Surviving Hurricane Betsy; the impacts of Camille and Katrina</ins></td></tr>
+<tr><th scope="row">Betsy, 1965</th><td><del>Riding out Hurricane Besty in Westwego</del></td><td><ins>Riding out Hurricane Betsy in Westwego</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Terrebonne Parish drainage issues during storms over last 150 years</del></td><td><ins>Terrebonne Parish drainage issues during storms over the last 150 years</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Danger of slow moving storms to barrier islands</del></td><td><ins>The danger of slow-moving storms to barrier islands</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Importance of coastal restoration for preserving Louisiana's culture</del></td><td><ins>The importance of coastal restoration for preserving Louisiana’s culture</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Grand Isle Mayor on convincing people to evacuate for a hurricane</del></td><td><ins>Grand Isle’s mayor on convincing people to evacuate for a hurricane</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Improved oyster harvest after Hurricane Andrew</del></td><td><ins>An improved oyster harvest after Hurricane Andrew</ins></td></tr>
+<tr><th scope="row">Living with the Coast</th><td><del>Coastal restoration projects; Transformation of the coastline by Katrina</del></td><td><ins>Coastal restoration projects; the transformation of the coastline by Katrina</ins></td></tr>
+<tr><th scope="row">Katrina and Rita, 2005</th><td><del>Emotional trauma of being displaced</del></td><td><ins>The emotional trauma of being displaced</ins></td></tr>
+<tr><th scope="row">Katrina and Rita, 2005</th><td><del>Evacuation of Riverbend Nursing Home in Kentwood, LA, during Katrina</del> <em>side menu: “Evacuation of Riverbend Nursing Home in Kentwood”</em></td><td><ins>Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina</ins></td></tr>
+<tr><th scope="row">Katrina and Rita, 2005</th><td><del>Hospital's preparedness for Hurricane Katrina</del></td><td><ins>A hospital’s preparedness for Hurricane Katrina</ins></td></tr>
+<tr><th scope="row">Katrina and Rita, 2005</th><td><del>Loss of livestock after Hurricanes Rita and Ike</del></td><td><ins>The loss of livestock after Hurricanes Rita and Ike</ins></td></tr>
+<tr><th scope="row">About the Exhibition</th><td><del>Lower 9th Ward Oral History Archive Clips</del> <em>side menu: “LOWER 9TH WARD ORAL HISTORY ARCHIVE”</em></td><td><ins>heading “Lower Ninth Ward Oral History Archive”</ins></td></tr>
+</tbody>
+</table>
 <h4>Captions</h4>
-<ul><li>The Old Storms, 1893–1926 / “Rigaud’s grandmother survived the storm of 1893, but lost her parents” (old page audio.html): “Grand Isle, center, "General Reconnaissance of the Gulf Coast'" 1853. NOAA.” → “Grand Isle, center, “General Reconnaissance of the Gulf Coast,” 1853. NOAA.”
-</li><li>The Old Storms, 1893–1926 / “The 1926 hurricane and the end of one family’s shrimping platforms” (old page C3.html): “Seabreeze Pass, "Barataria Bay to Terrebonne LA," 1908. NOAA.” → “Seabreeze Pass, “Barataria Bay to Terrebonne LA,” 1908. NOAA.”
-</li><li>Audrey and the Marsh, 1950s / “The impact of Hurricane Audrey on marsh grass and erosion” (old page C5.html): “Marsh die-back observed in Terrebonne Basin, LA. USGS.” → “Marsh die-back observed in Terrebonne Basin, Louisiana. USGS.”
-</li><li>Audrey and the Marsh, 1950s / “Drought, fire, and storms in the marshlands around Grand Chenier” (old page C6.html): “Grand Chenier, Mermentau River, "Constance Bayou to Calcasieu Pass," 1928. NOAA.” → “Grand Chenier, Mermentau River, “Constance Bayou to Calcasieu Pass,” 1928. NOAA.”
-</li><li>Betsy, 1965 / “The seriousness of Betsy, as men prayed” (old page C9.html): “Archbishop Philip Hannan after Hurricane Betsy hits Lousiana. CNS photo by Frank J. Methe, Clarion Herald, 1965.” → “Archbishop Philip Hannan after Hurricane Betsy hit Louisiana. CNS photo by Frank J. Methe, Clarion Herald, 1965.”
-</li><li>Betsy, 1965 / “Grand Isle rebuilds after Hurricanes Betsy and Katrina” (old page C10.html): “Hurricane Betsy damage in Grand Isle, LA, 1965. U.S. Army Corps of Engineers, Louisiana Digital Library.” → “Hurricane Betsy damage in Grand Isle, Louisiana, 1965. U.S. Army Corps of Engineers, Louisiana Digital Library.”
-</li><li>Betsy, 1965 / “National Guard relief efforts after Betsy; President Johnson helping evacuees” (old page C19.html): “President Lyndon Johnson speaks with William Marshall who rode out Betsy on St. Claude Avenue. Times Picayune, September 11, 1965.” → “President Lyndon Johnson speaks with William Marshall, who rode out Betsy on St. Claude Avenue. Times-Picayune, September 11, 1965.”
-</li><li>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “Mathew Thiel.” → “Matthew Thiel.”
-</li><li>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “Elevated camp in Cocodrie, LA. 2004. Louisiana State Archives” → “Elevated camp in Cocodrie, Louisiana, 2004. Louisiana State Archives.”
-</li><li>Living with the Coast / “The danger of slow-moving storms to barrier islands” (old page C24.html): “Storm tracks, 1957-2008. NOAA.” → “Storm tracks, 1957–2008. NOAA.”
-</li><li>Living with the Coast / “Small storms that hit Grand Isle seem to intensify” (old page C25.html): “Grand Isle 1939 nautical chart from the US Coast &amp; Geodetic Survey. NOAA.” → “Grand Isle, 1939 nautical chart from the U.S. Coast and Geodetic Survey. NOAA.”
-</li><li>Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “Post-Katrina Grande Isle, 2005. NOAA.” → “Grand Isle after Katrina, 2005. NOAA.”
-</li><li>Katrina and Rita, 2005 / “Human kindness kept him from giving up after losing so much in Katrina” (old page C39.html): “Victor Cusher.Photo by David Breidenbach.” → “Victor Cusher. Photo by David Breidenbach.” (the portrait now comes first, the FEMA photo second; that caption is unchanged)
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>The Old Storms, 1893–1926 / “Rigaud’s grandmother survived the storm of 1893, but lost her parents” (old page audio.html): “Grand Isle, center, "General Reconnaissance of the Gulf Coast'" 1853. NOAA.”</del></td><td><ins>Grand Isle, center, “General Reconnaissance of the Gulf Coast,” 1853. NOAA.</ins></td></tr>
+<tr><td><del>The Old Storms, 1893–1926 / “The 1926 hurricane and the end of one family’s shrimping platforms” (old page C3.html): “Seabreeze Pass, "Barataria Bay to Terrebonne LA," 1908. NOAA.”</del></td><td><ins>Seabreeze Pass, “Barataria Bay to Terrebonne LA,” 1908. NOAA.</ins></td></tr>
+<tr><td><del>Audrey and the Marsh, 1950s / “The impact of Hurricane Audrey on marsh grass and erosion” (old page C5.html): “Marsh die-back observed in Terrebonne Basin, LA. USGS.”</del></td><td><ins>Marsh die-back observed in Terrebonne Basin, Louisiana. USGS.</ins></td></tr>
+<tr><td><del>Audrey and the Marsh, 1950s / “Drought, fire, and storms in the marshlands around Grand Chenier” (old page C6.html): “Grand Chenier, Mermentau River, "Constance Bayou to Calcasieu Pass," 1928. NOAA.”</del></td><td><ins>Grand Chenier, Mermentau River, “Constance Bayou to Calcasieu Pass,” 1928. NOAA.</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “The seriousness of Betsy, as men prayed” (old page C9.html): “Archbishop Philip Hannan after Hurricane Betsy hits Lousiana. CNS photo by Frank J. Methe, Clarion Herald, 1965.”</del></td><td><ins>Archbishop Philip Hannan after Hurricane Betsy hit Louisiana. CNS photo by Frank J. Methe, Clarion Herald, 1965.</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Grand Isle rebuilds after Hurricanes Betsy and Katrina” (old page C10.html): “Hurricane Betsy damage in Grand Isle, LA, 1965. U.S. Army Corps of Engineers, Louisiana Digital Library.”</del></td><td><ins>Hurricane Betsy damage in Grand Isle, Louisiana, 1965. U.S. Army Corps of Engineers, Louisiana Digital Library.</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “National Guard relief efforts after Betsy; President Johnson helping evacuees” (old page C19.html): “President Lyndon Johnson speaks with William Marshall who rode out Betsy on St. Claude Avenue. Times Picayune, September 11, 1965.”</del></td><td><ins>President Lyndon Johnson speaks with William Marshall, who rode out Betsy on St. Claude Avenue. Times-Picayune, September 11, 1965.</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “Mathew Thiel.”</del></td><td><ins>Matthew Thiel.</ins></td></tr>
+<tr><td><del>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “Elevated camp in Cocodrie, LA. 2004. Louisiana State Archives”</del></td><td><ins>Elevated camp in Cocodrie, Louisiana, 2004. Louisiana State Archives.</ins></td></tr>
+<tr><td><del>Living with the Coast / “The danger of slow-moving storms to barrier islands” (old page C24.html): “Storm tracks, 1957-2008. NOAA.”</del></td><td><ins>Storm tracks, 1957–2008. NOAA.</ins></td></tr>
+<tr><td><del>Living with the Coast / “Small storms that hit Grand Isle seem to intensify” (old page C25.html): “Grand Isle 1939 nautical chart from the US Coast &amp; Geodetic Survey. NOAA.”</del></td><td><ins>Grand Isle, 1939 nautical chart from the U.S. Coast and Geodetic Survey. NOAA.</ins></td></tr>
+<tr><td><del>Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “Post-Katrina Grande Isle, 2005. NOAA.”</del></td><td><ins>Grand Isle after Katrina, 2005. NOAA.</ins></td></tr>
+<tr><td><del>Katrina and Rita, 2005 / “Human kindness kept him from giving up after losing so much in Katrina” (old page C39.html): “Victor Cusher.Photo by David Breidenbach.”</del></td><td><ins>Victor Cusher. Photo by David Breidenbach.</ins> <em>the portrait now comes first, the FEMA photo second; that caption is unchanged</em></td></tr>
+</tbody>
+</table>
 <p>The same captions are reused as the gallery lead captions (see 3).</p>
 <h4>Names and credit lines</h4>
-<ul><li>Hurricanes Flossy and Betsy: “Russel Crosby” (old credit line and side menu) → “Russell Crosby”, as in the transcript’s own speaker label and the audio file name.
-</li><li>Evacuating Riverbend Nursing Home: speaker label “Cathy Chauvin” → “KATHY CHAUVIN”, to match the credit line and caption (“Daryl and Kathy Chauvin”).
-</li><li>Grandfather rode out Betsy: caption “Mathew Thiel.” → “Matthew Thiel.”, to match the credit line and speaker label.
-</li><li>Returning to New Orleans after Katrina: speaker label “Dr. Frank Minyard” → “FRANK MINYARD” (the credit line keeps “Dr. Frank Minyard”).
-</li><li>Importance of coastal restoration: “Kerry St. P&amp;#233;” (an HTML code shown in the old text) → “Kerry St. Pé”.
-</li><li>Learning to evacuate (George Miller): the old credit line repeated the photo credit (“George Miller. Photo by David Breidenbach.”) → credit is now just “George Miller” (see 2).
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Hurricanes Flossy and Betsy</th><td><del>Russel Crosby</del> <em>old credit line and side menu</em></td><td><ins>“Russell Crosby”, as in the transcript’s own speaker label and the audio file name</ins></td></tr>
+<tr><th scope="row">Evacuating Riverbend Nursing Home</th><td><del>speaker label “Cathy Chauvin”</del></td><td><ins>“KATHY CHAUVIN”, to match the credit line and caption</ins> <em>“Daryl and Kathy Chauvin”</em></td></tr>
+<tr><th scope="row">Grandfather rode out Betsy</th><td><del>caption “Mathew Thiel.”</del></td><td><ins>“Matthew Thiel.”, to match the credit line and speaker label</ins></td></tr>
+<tr><th scope="row">Returning to New Orleans after Katrina</th><td><del>speaker label “Dr. Frank Minyard”</del></td><td><ins>FRANK MINYARD</ins> <em>the credit line keeps “Dr. Frank Minyard”</em></td></tr>
+<tr><th scope="row">Importance of coastal restoration</th><td><del>Kerry St. P&amp;#233;</del> <em>an HTML code shown in the old text</em></td><td><ins>Kerry St. Pé</ins></td></tr>
+<tr><th scope="row">Learning to evacuate (George Miller)</th><td><del>the old credit line repeated the photo credit</del> <em>“George Miller. Photo by David Breidenbach.”</em></td><td><ins>credit is now just “George Miller”</ins> <em>see 2</em></td></tr>
+</tbody>
+</table>
 <h4>Transcripts</h4>
-<ul><li>The Old Storms, 1893–1926 / “A woman and her three children perish in the 1926 storm” (old page C2.html): “"Oh no," she said. I can't go,"” → “"Oh no," she said. "I can't go,"”
-</li><li>Audrey and the Marsh, 1950s / “Drought, fire, and storms in the marshlands around Grand Chenier” (old page C6.html): “trapping.There” → “trapping. There”
-</li><li>Audrey and the Marsh, 1950s / “Red Cross relief work after Hurricane Audrey” (old page C7.html): “- that were so poor that they couldn't afford a funeral -” → “—that were so poor that they couldn't afford a funeral—”
-</li><li>Betsy, 1965 / “Long-term effects of Betsy on the Lower Ninth Ward” (old page C11.html): “We sent . . We sent” → “We sent . . . We sent”
-</li><li>Betsy, 1965 / “Surviving in the floodwaters of Hurricane Betsy” (old page C12.html): “a little bit of a flooding. So” → “a little bit of a flooding." So”
-</li><li>Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina” (old page C16.html): “Florida has a hurricanes” → “Florida has hurricanes”
-</li><li>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them” → “five or six of them”
-</li><li>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “memories - I was” → “memories—I was”
-</li><li>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “something bad in in 1927” → “something bad in 1927”
-</li><li>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “drainage districts formed. and” → “drainage districts formed, and”
-</li><li>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexico.Love when” → “Gulf of Mexico. Love when”
-</li><li>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexicom hoss!” → “Gulf of Mexico, hoss!”
-</li><li>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “elevate you camp” → “elevate your camp”
-</li><li>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “- if you want to build, you got to elevate your camp up -” → “—if you want to build, you got to elevate your camp up—”
-</li><li>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “St. P&amp;#233;” → “St. Pé” (speaker label)
-</li><li>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored” → “things we could lose if we weren't restored”
-</li><li>Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “we lost everything".” → “we lost everything."”
-</li><li>Katrina and Rita, 2005 / “Escaping through the roof in Katrina and being rescued by a Good Samaritan” (old page C20.html): “that was way passed” → “that was way past”
-</li><li>Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “came though” → “came through”
-</li><li>Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “I never though ice” → “I never thought ice”
-</li></ul>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>The Old Storms, 1893–1926 / “A woman and her three children perish in the 1926 storm” (old page C2.html): “"Oh no," she said. I can't go,"”</del></td><td><ins>"Oh no," she said. "I can't go,"</ins></td></tr>
+<tr><td><del>Audrey and the Marsh, 1950s / “Drought, fire, and storms in the marshlands around Grand Chenier” (old page C6.html): “trapping.There”</del></td><td><ins>trapping. There</ins></td></tr>
+<tr><td><del>Audrey and the Marsh, 1950s / “Red Cross relief work after Hurricane Audrey” (old page C7.html): “- that were so poor that they couldn't afford a funeral -”</del></td><td><ins>—that were so poor that they couldn't afford a funeral—</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Long-term effects of Betsy on the Lower Ninth Ward” (old page C11.html): “We sent . . We sent”</del></td><td><ins>We sent . . . We sent</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Surviving in the floodwaters of Hurricane Betsy” (old page C12.html): “a little bit of a flooding. So”</del></td><td><ins>a little bit of a flooding." So</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Surviving Hurricane Betsy; the impacts of Camille and Katrina” (old page C16.html): “Florida has a hurricanes”</del></td><td><ins>Florida has hurricanes</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “five of six of them”</del></td><td><ins>five or six of them</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Riding out Hurricane Betsy in Westwego” (old page C18.html): “memories - I was”</del></td><td><ins>memories—I was</ins></td></tr>
+<tr><td><del>Betsy, 1965 / “Grandfather rode out Betsy with his dog in the car” (old page C30.html): “something bad in in 1927”</del></td><td><ins>something bad in 1927</ins></td></tr>
+<tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “drainage districts formed. and”</del></td><td><ins>drainage districts formed, and</ins></td></tr>
+<tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexico.Love when”</del></td><td><ins>Gulf of Mexico. Love when</ins></td></tr>
+<tr><td><del>Living with the Coast / “Terrebonne Parish drainage issues during storms over the last 150 years” (old page C22.html): “Gulf of Mexicom hoss!”</del></td><td><ins>Gulf of Mexico, hoss!</ins></td></tr>
+<tr><td><del>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “elevate you camp”</del></td><td><ins>elevate your camp</ins></td></tr>
+<tr><td><del>Living with the Coast / “After the storm, moving away or elevating camps in Cocodrie” (old page C23.html): “- if you want to build, you got to elevate your camp up -”</del></td><td><ins>—if you want to build, you got to elevate your camp up—</ins></td></tr>
+<tr><td><del>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “St. P&amp;#233;”</del></td><td><ins>St. Pé</ins> <em>speaker label</em></td></tr>
+<tr><td><del>Living with the Coast / “The importance of coastal restoration for preserving Louisiana’s culture” (old page C27.html): “things we could use if we weren't restored”</del></td><td><ins>things we could lose if we weren't restored</ins></td></tr>
+<tr><td><del>Living with the Coast / “Grand Isle’s mayor on convincing people to evacuate for a hurricane” (old page C28.html): “we lost everything".”</del></td><td><ins>we lost everything."</ins></td></tr>
+<tr><td><del>Katrina and Rita, 2005 / “Escaping through the roof in Katrina and being rescued by a Good Samaritan” (old page C20.html): “that was way passed”</del></td><td><ins>that was way past</ins></td></tr>
+<tr><td><del>Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “came though”</del></td><td><ins>came through</ins></td></tr>
+<tr><td><del>Katrina and Rita, 2005 / “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina” (old page C35.html): “I never though ice”</del></td><td><ins>I never thought ice</ins></td></tr>
+</tbody>
+</table>
 <h4>About the Exhibition</h4>
-<ul><li>“Peoples' memories extend” → “People’s memories extend”.
-</li><li>“their consequences--rural and urban”, “rapid change--sometimes”, “turn up the volume--make some noise” → em dashes (“—”).
-</li><li>“For more information about the exhibition, visit <a href="https://lib.lsu.edu/exhibitions.”">https://lib.lsu.edu/exhibitions.”</a> → “… visit LSU Libraries Exhibitions.” (linked).
-</li><li>“please contact Center staff at <a href="http://www.lib.lsu.edu/oralhistory/.”">http://www.lib.lsu.edu/oralhistory/.”</a> → “please contact Center staff.” (“Center staff” links to <a href="https://lib.lsu.edu/oralhistory">https://lib.lsu.edu/oralhistory</a>).
-</li><li>“For details, see : <a href="https://lib.lsu.edu/oralhistory/collections”">https://lib.lsu.edu/oralhistory/collections”</a> → “For details, see the Williams Center collections.” (linked).
-</li><li>Collections list: “Pointe Coupee : Voices in the Storm” → “Pointe Coupee: Voices in the Storm”; “"I Remember: An Art Show of Environmental Significance,"" CWPPRA” (doubled closing quote) → ““I Remember: An Art Show of Environmental Significance,” CWPPRA”. The list is now a bulleted list.
-</li><li>Lower Ninth Ward text: the link on “Lower Ninth Ward Living Museum” (<a href="http://l9livingmuseum.org/wp/?page_id=131">http://l9livingmuseum.org/wp/?page_id=131</a>, now a domain for sale) was removed, and the sentence “If you are interested in gaining access to the database please email contact@livingmuseum.org.” was dropped (see 2).
-</li><li>The About and Acknowledgements pages are now one gallery, About the Exhibition, with the headings “The collections”, “Lower Ninth Ward Oral History Archive” and “Acknowledgments”.
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row"></th><td><del>Peoples' memories extend</del></td><td><ins>People’s memories extend</ins></td></tr>
+<tr><th scope="row"></th><td><del>“their consequences--rural and urban”, “rapid change--sometimes”, “turn up the volume--make some noise”</del></td><td><ins>em dashes</ins> <em>“—”</em></td></tr>
+<tr><th scope="row"></th><td><del>“For more information about the exhibition, visit <a href="https://lib.lsu.edu/exhibitions.”">https://lib.lsu.edu/exhibitions.”</a></del></td><td><ins>… visit LSU Libraries Exhibitions.</ins> <em>linked</em></td></tr>
+<tr><th scope="row"></th><td><del>“please contact Center staff at <a href="http://www.lib.lsu.edu/oralhistory/.”">http://www.lib.lsu.edu/oralhistory/.”</a></del></td><td><ins>please contact Center staff.</ins> <em>“Center staff” links to <a href="https://lib.lsu.edu/oralhistory">https://lib.lsu.edu/oralhistory</a></em></td></tr>
+<tr><th scope="row"></th><td><del>“For details, see : <a href="https://lib.lsu.edu/oralhistory/collections”">https://lib.lsu.edu/oralhistory/collections”</a></del></td><td><ins>For details, see the Williams Center collections.</ins> <em>linked</em></td></tr>
+<tr><th scope="row">Collections list</th><td><del>Pointe Coupee : Voices in the Storm</del></td><td><ins>Pointe Coupee: Voices in the Storm</ins></td></tr>
+<tr><th scope="row">Collections list</th><td><del>"I Remember: An Art Show of Environmental Significance,"" CWPPRA</del> <em>doubled closing quote</em></td><td><ins>““I Remember: An Art Show of Environmental Significance,” CWPPRA”. The list is now a bulleted list</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Lower Ninth Ward text: the link on “Lower Ninth Ward Living Museum” (<a href="http://l9livingmuseum.org/wp/?page_id=131">http://l9livingmuseum.org/wp/?page_id=131</a>, now a domain for sale) was removed, and the sentence “If you are interested in gaining access to the database please email contact@livingmuseum.org.” was dropped (see 2).
+</li>
+<li>The About and Acknowledgements pages are now one gallery, About the Exhibition, with the headings “The collections”, “Lower Ninth Ward Oral History Archive” and “Acknowledgments”.
 </li></ul>
 <h3>To verify</h3>
 <ul><li><strong>Betsy, 1965 / “Learning to evacuate after getting caught once in Hurricane Betsy”.</strong> The old page gives no interviewer, year or accession number for George Miller: its credit line is the photo credit. His photo is by David Breidenbach like the 2007 Pointe Coupee interviews (accession 4700.19xx), but that’s a guess. Credit is the name only until someone supplies the rest.
@@ -2802,12 +3392,17 @@ $section('Tempests: Storms in the Archives', [
 </li><li><strong>About the Exhibition</strong> (text only)
 </li></ul>
 <h4>Reworded entry titles</h4>
-<ul><li>“1926 hurricane and the demise of one family's shrimping platforms” → “The 1926 hurricane and the end of one family’s shrimping platforms”
-</li><li>“Remembers her Red Cross relief effort experiences after Hurricane Audrey” → “Red Cross relief work after Hurricane Audrey”
-</li><li>“Grand Isle Mayor on convincing people to evacuate for a hurricane” → “Grand Isle’s mayor on convincing people to evacuate for a hurricane”
-</li><li>“Evacuation of Riverbend Nursing Home in Kentwood, LA, during Katrina” → “Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina”
-</li><li>“Hospital's preparedness for Hurricane Katrina” → “A hospital’s preparedness for Hurricane Katrina”
-</li><li>Articles added at the start: “The impact of…”, “The danger of…”, “The importance of…”, “The emotional trauma of…”, “The loss of livestock…”, “An improved oyster harvest…”.
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>1926 hurricane and the demise of one family's shrimping platforms</del></td><td><ins>The 1926 hurricane and the end of one family’s shrimping platforms</ins></td></tr>
+<tr><td><del>Remembers her Red Cross relief effort experiences after Hurricane Audrey</del></td><td><ins>Red Cross relief work after Hurricane Audrey</ins></td></tr>
+<tr><td><del>Grand Isle Mayor on convincing people to evacuate for a hurricane</del></td><td><ins>Grand Isle’s mayor on convincing people to evacuate for a hurricane</ins></td></tr>
+<tr><td><del>Evacuation of Riverbend Nursing Home in Kentwood, LA, during Katrina</del></td><td><ins>Evacuating Riverbend Nursing Home to Kentwood, Louisiana, during Katrina</ins></td></tr>
+<tr><td><del>Hospital's preparedness for Hurricane Katrina</del></td><td><ins>A hospital’s preparedness for Hurricane Katrina</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Articles added at the start: “The impact of…”, “The danger of…”, “The importance of…”, “The emotional trauma of…”, “The loss of livestock…”, “An improved oyster harvest…”.
 </li></ul>
 <h4>New captions</h4>
 <ul><li>Stills from the three videos: “Yancy Welch, 2012. From the video interview.”; “Kerry St. Pé, 2012. From the video interview.”; “Buddy Daisy and Earl Melancon, 2012. From the video interview.”
@@ -2901,96 +3496,15 @@ $section('Tempests: Storms in the Archives', [
 </li></ul>
 <h4>About the Exhibition</h4>
 <ul><li>New headings: “The collections”, “Lower Ninth Ward Oral History Archive”, “Acknowledgments”.
-</li><li>Link text: “LSU Libraries Exhibitions”, “Center staff”, “Williams Center collections”.
-</li><li>Lower Ninth Ward: “Included in the video are Karen Frank, Ward "Mack" McClendon, Deborah Harris, Percy Robinson, and Elijah Johnson.” → “The listening station’s video of clips from the archive featured Karen Frank, Ward “Mack” McClendon, Deborah Harris, Percy Robinson, and Elijah Johnson.” (the video itself is no longer shown).
+</li>
+<li>Link text: “LSU Libraries Exhibitions”, “Center staff”, “Williams Center collections”.
 </li></ul>
-HTML),
-]);
-
-$section('AVES', [
-  $text(NULL, <<<'HTML'
-<p>Migrated from the Wayback Machine's copy of exhibitions.blogs.lib.lsu.edu/?p=5206 and its 53 "Read more" pop-ups. Live page: /v2/special/exhibitions/aves. Fixed in <code>scripts/data/aves.json</code> and on the live page by <code>scripts/palefire_exhibit_aves_typos.php</code>.</p>
-<h3>Corrected</h3>
-<p>Names (entry titles, so also the contents and "In this gallery"):</p>
-<ul><li>"Alcide d’Orbigny(1802-1857)" → "Alcide d’Orbigny (1802-1857)"
-</li><li>"John Gould 1804-1881)" → "John Gould (1804-1881)"
-</li><li>"Robert Schomburgk 1804-1865)" → "Robert Schomburgk (1804-1865)"
-</li><li>"William Phelps, Jr.(1902-1988)" → "William Phelps, Jr. (1902-1988)"
-</li><li>"Louis Jean Pierre Vieillot (1610-1644)" → "Louis Jean Pierre Vieillot (1748-1831)"
-</li><li>"Francis L. De LaPorte" → "Francis L. de Laporte"
-</li></ul>
-<p>Text:</p>
-<ul><li>"tyrant- flycatchers" → "tyrant-flycatchers"; "fast- growing" → "fast-growing"; "ninety- three" → "ninety-three"
-</li><li>"Markgraf’s <em>Historia naturalis Brasiliae,</em> (Leiden" → "Markgraf’s <em>Historia naturalis Brasiliae</em> (Leiden"
-</li><li>"hummingbirds;and", "rooms,artificial", "mammals,and", "setting,and" → a space added after the punctuation
-</li><li>"*…habitudes.*Rio" → a space before "Rio"
-</li><li>"to the base camp," (end of paragraph) → "to the base camp."
-</li><li>"passes rapidly from from blossom" → "passes rapidly from blossom"
-</li><li>Dash spacing: "jail– “a putrid", "of the world –that", "and others– who", "ornithologists– Ridgway", "perfect mentor– I" → a space on both sides of each dash
-</li><li>"(Weimer, 1825-33)" and "(Weimer, 1822-1831)" → "Weimar"
-</li><li>"Charles Chubbs’s" → "Charles Chubb’s"
-</li></ul>
-<h3>New wording to check</h3>
-<ul><li>17 exhibition images had no 4K file and were left for editors to add. Unused 4K plates and photographs became the galleries' decorative lead images.
-</li></ul>
-HTML),
-]);
-
-$section('Occult Science and Philosophy in the Renaissance', [
-  $text(NULL, <<<'HTML'
-<p>Migrated from the Wayback Machine's copy of exhibitions.blogs.lib.lsu.edu/?p=1257&amp;all=1 (the 2011 online exhibition). Live page: /v2/special/exhibitions/occult.</p>
-<h3>Corrected</h3>
-<ul><li>"Amboise Paré" → "Ambroise Paré"
-</li><li>Missing spaces and line breaks in the catalog records and the Index
-</li><li>Felgenhauer filed under F in the Index
-</li><li>"Middleton" → "Main Library" (as on AVES)
-</li></ul>
-<h3>To verify</h3>
-<ul><li>Defoe: the catalog record says Oxford: D. A. Talboys, 1840, but the scan (and its folder, BF 1601 D3 1728) is the London, 1728 title page.
-</li></ul>
-<h3>New wording to check</h3>
-<ul><li>Image captions, gallery lead captions, alt text, the credit line and the physical exhibition note.
-</li></ul>
-HTML),
-]);
-
-$section('John James Audubon in Louisiana', [
-  $text(NULL, <<<'HTML'
-<p>Migrated from the Wayback Machine (lib.lsu.edu/exhibitions/john-james-audubon) and, for the 78 bird and manuscript pages it never captured, the students' copy (/audubon, nodes 437-520). Live page: /v2/special/exhibitions/audubon.</p>
-<h3>Corrected</h3>
-<ul><li>Spacing and punctuation: spaces around "[now" and "vol. 1"; missing periods and commas; " : " and " ;" in the readings; straight quotes and spaced hyphens set as curly quotes and dashes.
-</li><li>"FIeld" → "Field"; "Sociey" → "Society"
-</li><li>Headings use the 2021 menu names. The students' titles had "Boneparte", "Prarie" and "Flamigo".
-</li><li>Agreed with the editors: six Latin names (Psittacus, Sylvia childrenii, Sylvia roscoe, Haematopus palliatus, Ictinia mississippiensis, Picus querulus), "Susanne Low", and Heitman's pages 44-53.
-</li></ul>
-<h3>To verify</h3>
-<ul><li>Three octavo citations give "Philadelphia: J. B. Chevalier, 1856" (Pine Creeping Wood-warbler, Wood Duck, Yellow-throated Vireo). The 1856 edition was not Chevalier's.
-</li></ul>
-<h3>New wording to check</h3>
-<ul><li>Gallery lead captions, alt text, the credit line and the physical exhibition note.
-</li></ul>
-HTML),
-]);
-
-$section('LSU Union Art Gallery: Building Community Through Art, 1964–2016', [
-  $text(NULL, <<<'HTML'
-<p>Migrated from the six-page showcase at /lsu-unionartgallery (on libstage only).</p>
-<h3>Corrected</h3>
-<ul><li>Text encoding: apostrophes and quotes saved wrongly up to four times over were decoded exactly to ’ “ ”.
-</li><li>"Clyde Connel" → "Clyde Connell" (as in its own captions)
-</li><li>"Judi Stalh" → "Judi Stahl" (as elsewhere)
-</li><li>"gallery talk aby" → "gallery talk by"
-</li><li>The missing closing quotation mark on "Humor in the Jugular Vein"
-</li><li>Trailing periods on some captions
-</li></ul>
-<h3>To verify (left as written)</h3>
-<ul><li>One artist appears as "Claude Roberts Trevithick", "Claudia Roberts" and "Claudia Robert Trevnthick".
-</li><li>"Pamela Micheal"
-</li><li>The "Transparent Motifs" heading sits over a "Transparent Motives" flyer.
-</li></ul>
-<h3>New wording to check</h3>
-<ul><li>The credit line, and the cover's caption and alt text (Janice Sachse, <em>Noon in My Garden</em>). The other gallery leads use the old covers' alt text as their caption.
-</li></ul>
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Lower Ninth Ward</th><td><del>Included in the video are Karen Frank, Ward "Mack" McClendon, Deborah Harris, Percy Robinson, and Elijah Johnson.</del></td><td><ins>The listening station’s video of clips from the archive featured Karen Frank, Ward “Mack” McClendon, Deborah Harris, Percy Robinson, and Elijah Johnson.</ins> <em>the video itself is no longer shown</em></td></tr>
+</tbody>
+</table>
 HTML),
 ]);
 

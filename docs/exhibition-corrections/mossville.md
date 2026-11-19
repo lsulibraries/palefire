@@ -50,7 +50,8 @@ Not listed: markup, whitespace, double spaces and curly vs straight quotes. Spea
 
 - "Photo. Photo by" → "Photo by" (fixed 2026-11-19; the migration had doubled "Photo." where the old caption had two spaces before its credit). Clip captions, 17×: Places › c16, c27; Politics & Integration › c8; The Old Ways › c15, c18, c49, c50; Education › c52, c66, c26; Church › c70; Family & Community › c48; Work › c19, c55, c43; Health & Environment › c65; Mossville Moving › c36. Gallery lead captions, 4×: Politics & Integration, Education, Family & Community, Work.
 - Family & Community › c48 and the gallery’s lead caption: "Lenoria Ambrose interviewed by Chelsea Arseneault and Teresha Ussin, 2015." → "Vera Payne, 2015." (fixed 2026-11-19). The photo is of Vera Payne; the old caption named the wrong person.
-- Work › c55: "Photo by Kyle Tanglao." → "John Bernard. Photo by Kyle Tanglao."; Work › c43: → "Delma and Christine Bennett. Photo by Kyle Tanglao." (fixed 2026-11-19)
+- Work › c55: "Photo by Kyle Tanglao." → "John Bernard. Photo by Kyle Tanglao." (fixed 2026-11-19)
+- Work › c43: "Photo by Kyle Tanglao." → "Delma and Christine Bennett. Photo by Kyle Tanglao." (fixed 2026-11-19)
 - "By Kyle Tanglao" → "Photo by Kyle Tanglao" (4×: Heritage › c1, c2; Places › c5; Church › c71)
 - Education › c25: "Della Dotson, 2015. By Stephanie Dragoon." → "Della Dotson, 2015. Photo by Stephanie Dragoon."
 - Heritage › c4: "George Braxton, 2015. By Kyle Tanglao." (the caption belonged to a different photo) → "Old Spanish Trail map: the Southern Borderland Trunkline from California to Florida."

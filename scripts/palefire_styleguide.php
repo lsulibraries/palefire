@@ -280,6 +280,16 @@ HTML),
 <li>Bulleted lists for everything else.</li>
 </ol>
 HTML),
+  $note('<p><strong>Corrections table</strong>: a table whose Before cells hold struck-out text (&lt;del&gt;) and After cells inserted text (&lt;ins&gt;). The old text is muted, the new at full strength, and a note in italics drops below either. On a phone each row stacks, labeled Before and After. Used by the Exhibition Migration Review; the Where column is optional.</p>'),
+  $text(<<<'HTML'
+<table>
+<thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><th scope="row">Places › c17</th><td><del>Mossville’s post office.</del> <em>clip page</em></td><td><ins>Mossville’s post office</ins></td></tr>
+<tr><th scope="row">Work › c55</th><td><del>Photo. Photo by Kyle Tanglao.</del></td><td><ins>John Bernard. Photo by Kyle Tanglao.</ins> <em>fixed 2026-11-19</em></td></tr>
+</tbody>
+</table>
+HTML),
   $note('<p><strong>' . $label('exhibit_citation') . '</strong>: the book\'s record, set like a museum label.</p>'),
   $citation('<p>Müller-Brockmann, Josef. <em>Grid Systems in Graphic Design.</em> Niggli, 1981. (Sample record for this guide.)</p>'),
   $note('<p><strong>' . $label('exhibit_entry') . '</strong>: a person or book inside a gallery. Its heading is a link under the gallery in the table of contents; a long biography folds behind "Read the full biography". Date (optional) shows under the heading, puts the entry on the exhibition’s Timeline, and on a wall an entry with a date and no image or clip hangs as a label, its words read in place.</p>'),
