@@ -1,17 +1,18 @@
 // Palefire — the recording formats still life (includes/still-life.html.twig,
 // drawn by build/still-life.js): a tape reel, a cassette, two clear
-// MiniDiscs and the memory cards, laid out like specimens in hairlines. Its
+// MiniDiscs and the memory cards on a corner of a table, in hairlines. Its
 // own entry (css/still-life.css, library palefire/still-life), attached by
 // the include, so only the page that shows it loads it.
 //
 // On Oral History's Quick Start (includes/landing.html.twig), behind the
-// band's foot as the Record tab's recorder is (recorder.scss): faint, faded
-// toward the top, its faces in the band's color, so it reads as a drawing
-// on the band and not as something on offer (the recordings are digitized).
-// On wide screens it lies under options A, B and C; on phones it runs off
-// the right edge (the section clips sideways, so it never scrolls). The
-// guide is a size container, so it scales with it (cqi). Decorative: off
-// where contrast comes first.
+// band's bottom right corner as the Record tab's recorder is
+// (recorder.scss): larger than the space it fills, cropped by the band's
+// bottom edge and the screen's right edge (the section clips sideways, so
+// it never scrolls), faded toward the top and the left, so it rises out of
+// the corner. Faint, its faces in the band's color, so it reads as a
+// drawing on the band and not as something on offer (the recordings are
+// digitized). The guide is a size container, so it scales with it (cqi).
+// Decorative: off where contrast comes first.
 //
 // While motion is allowed it rises into place as it scrolls into view (a
 // scroll-driven timeline: no script, nothing loops).
@@ -27,71 +28,78 @@
   padding-bottom: var(--pf-still-room);
 }
 
+// The box runs from the band's bottom edge up to the drawing's top, far past
+// both sides, and clips what the drawing drops below the band.
 .pf-quick-guide__still {
   --bs-body-bg: var(--pf-band);
-  --pf-still-x: -6cqi;
-  --pf-still-w: 150cqi;
-  --pf-still-lift: 1.25rem;
-  --pf-still-fade: 35%;
+  --pf-still-w: 108cqi; // the drawing's width (its height is .51 of it)
+  --pf-still-bleed: 26cqi; // past the guide's right edge (the reel may crop)
+  --pf-still-drop: 12cqi; // below the band's bottom edge, cropped
+  --pf-still-top: 50%; // the fade from the top
+  --pf-still-left: 45%; // the fade from the left
 
   position: absolute;
   inset: auto -100vmax calc(-1 * var(--pf-quick-space, 0px));
   z-index: -1;
-  // The drawing's height (its viewBox is about 5 to 1) and its lift.
-  height: calc(var(--pf-still-w) * .2 + var(--pf-still-lift));
+  height: calc(var(--pf-still-w) * .51 - var(--pf-still-drop));
+  overflow: hidden;
   pointer-events: none;
   opacity: .6;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-still-fade));
-  mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-still-fade));
 
   .pf-still {
     position: absolute;
-    bottom: var(--pf-still-lift);
-    left: calc(100vmax + var(--pf-still-x));
+    right: calc(100vmax - var(--pf-still-bleed));
+    bottom: calc(-1 * var(--pf-still-drop));
     display: block;
     width: var(--pf-still-w);
     max-width: none;
     height: auto;
     overflow: visible;
     color: var(--bs-body-color);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-still-top)), linear-gradient(to right, transparent, #000 var(--pf-still-left));
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-still-top)), linear-gradient(to right, transparent, #000 var(--pf-still-left));
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 }
 
 // Room at the panel's foot, so its last links sit above the lines.
 .pf-quick-guide__panel {
-  --pf-still-room: 26cqi;
+  --pf-still-room: 34cqi;
 }
 
-// Tablets: the four across the guide.
+// Tablets.
 @container pf-cover (min-width: 36rem) {
   .pf-quick-guide__panel {
-    --pf-still-room: 19cqi;
+    --pf-still-room: 24cqi;
   }
 
   .pf-quick-guide__still {
-    --pf-still-x: 0cqi;
-    --pf-still-w: 100cqi;
-    --pf-still-lift: 1.5rem;
+    --pf-still-w: 70cqi;
+    --pf-still-bleed: 14cqi;
+    --pf-still-drop: 8cqi;
   }
 }
 
+// Wide: under options B and C, rising behind their last stops.
 @container pf-cover (min-width: 64rem) {
   .pf-quick-guide__panel {
     --pf-still-room: 0px;
   }
 
   .pf-quick-guide__still {
-    --pf-still-x: 25.5cqi;
-    --pf-still-w: 74cqi;
-    --pf-still-lift: 1.5rem;
-    --pf-still-fade: 30%;
+    --pf-still-w: 50cqi;
+    --pf-still-bleed: 9cqi;
+    --pf-still-drop: 5cqi;
+    --pf-still-top: 55%;
+    --pf-still-left: 40%;
   }
 }
 
 @container pf-cover (min-width: 80rem) {
   .pf-quick-guide__still {
-    --pf-still-x: 40.5cqi;
-    --pf-still-w: 59.5cqi;
+    --pf-still-w: 48cqi;
+    --pf-still-bleed: 13cqi;
   }
 }
 

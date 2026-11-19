@@ -1,9 +1,11 @@
 /**
  * Draws templates/includes/still-life.html.twig: the formats the Center's
- * interviews were recorded on, laid out like specimens on a table, oldest
- * to newest left to right: a 5-inch tape reel, a cassette, two clear
- * MiniDiscs squared one on the other, and the digital recorders' memory
- * cards (CompactFlash, Memory Stick Pro Duo, SD, microSD) as one block. A
+ * interviews were recorded on, on a corner of a table: a 5-inch tape reel
+ * at the back, a cassette before it, two clear MiniDiscs squared one on
+ * the other and the digital recorders' memory cards (CompactFlash, Memory
+ * Stick Pro Duo, SD, microSD) as one block nearest, each square to the
+ * rest, with clear gaps between (PLACES; STILL_PLACES in the environment
+ * tries others). A
  * hairline drawing in true perspective from the field recorder's camera
  * (build/recorder-mark.js: turned 50 degrees, looking down 44), so the two
  * drawings agree.
@@ -39,9 +41,9 @@ const raw = ([x, y, z]) => {
   return [u * s, sy * s];
 };
 const CAM = [D * Math.cos(PH) * Math.sin(TH), D * Math.cos(PH) * Math.cos(TH), D * Math.sin(PH)];
-// The objects' line across the table (toward the viewer, mm) and the gap
-// between objects (screen units).
-const ROW = 0, GAP = 30;
+// The table's line for an object placed without a depth (toward the
+// viewer, mm).
+const ROW = 0;
 // A place on the table by screen across (u) and toward the viewer (v).
 const at = (u, v) => [u * Math.cos(TH) + v * Math.sin(TH), -u * Math.sin(TH) + v * Math.cos(TH)];
 
@@ -425,35 +427,7 @@ const sdcard = (u, v = ROW) => {
   mark(fr, rrect(-11.4, Y - 5.4, -10.4, Y - 1.4, 0.3), H, 'pf-still__gold');
 };
 
-// ---- Scene: laid out, not strewn. --------------------------------------------
-// Each object square to the same axes (the recorder's camera sees them all
-// turned alike), all on one line across the table, oldest to newest, with
-// equal gaps between their drawn edges: measured from a trial drawing of
-// each, since a line across the screen keeps one scale in this view. Their
-// front edges share one line, set back from the table's edge.
-const measure = (draw) => {
-  const keepSvg = svg, keepBox = bbox.slice(), keepClip = clipN;
-  svg = [];
-  bbox.splice(0, 4, Infinity, Infinity, -Infinity, -Infinity);
-  draw(0);
-  const box = [bbox[0], bbox[2], bbox[3]];
-  svg = keepSvg;
-  bbox.splice(0, 4, ...keepBox);
-  clipN = keepClip;
-  return box;
-};
-// A row's places: each item's across (u) and toward the viewer (v), so the
-// drawn edges have equal gaps and every front edge meets the lowest.
-const scale = D / (D - ROW * Math.cos(PH));
-const layout = (draws, gap) => {
-  const boxes = draws.map(measure);
-  const total = boxes.reduce((t, [l, r]) => t + r - l, 0) + gap * (draws.length - 1);
-  let cursor = -total / 2;
-  const us = boxes.map(([l, r]) => { const u = (cursor - l) / scale; cursor += r - l + gap; return u; });
-  const foot = Math.max(...boxes.map(bx => bx[2]));
-  const vs = boxes.map(bx => (foot - bx[2]) / (Math.sin(PH) * scale));
-  return { us, vs, total };
-};
+// ---- Scene: a corner of the table. -------------------------------------------
 // The cards as one block about a MiniDisc's size (some 70 x 74 mm): two rows
 // in the cards' own plan, CompactFlash and Memory Stick, then SD and
 // microSD, each square to the rest with even gaps; drawn far to near.
@@ -463,10 +437,26 @@ const cards = (u, v = ROW) => {
     .sort((p, q) => p[2] - q[2]);
   place.forEach(([draw, pu, pv]) => draw(pu, pv));
 };
-// The four, oldest to newest.
+// A corner of the table, on a grid square to the objects (their own plan,
+// mm) with one gap (GRID) throughout: the cassette and the MiniDiscs side
+// by side on one row, the reel on the row behind with its right edge on
+// the MiniDiscs', the cards on the row in front with their left edge on
+// the cassette's. Drawn far to near, so nearer ones cover farther.
+// STILL_PLACES in the environment tries other places ([x, y] each).
+const GRID = 12;
+const CAS = [100.4 / 2, 63.8 / 2], MD = [36, 34], REEL = 63.5;
+// The cards' block (cards() offsets and sizes): x -34 to 35, y -35 to 39.
+const CARDS = { x0: -34, y0: -35 };
+const PLACES = JSON.parse(process.env.STILL_PLACES || 'null') || [
+  [CAS[0] + GRID + MD[0] * 2 - REEL, -CAS[1] - GRID - REEL],
+  [0, 0],
+  [CAS[0] + GRID + MD[0], 0],
+  [-CAS[0] - CARDS.x0, CAS[1] + GRID - CARDS.y0],
+];
+// A place in the plan, on the screen's terms (across, toward the viewer).
+const onScreen = ([x, y]) => [x * Math.cos(TH) - y * Math.sin(TH), x * Math.sin(TH) + y * Math.cos(TH)];
 const items = [reel, cassette, stack, cards];
-const L = layout(items, GAP);
-items.forEach((draw, i) => draw(L.us[i], ROW + L.vs[i]));
+items.map((draw, i) => [draw, ...onScreen(PLACES[i])]).sort((p, q) => p[2] - q[2]).forEach(([draw, u, v]) => draw(u, v));
 
 // ---- Output. ------------------------------------------------------------------
 // Lines of one kind in a row merge into one path: one color, drawn in the
@@ -483,11 +473,11 @@ const vb = [bbox[0] - pad, bbox[1] - pad, bbox[2] - bbox[0] + pad * 2, bbox[3] -
 const head = `{#
 /**
  * @file
- * The formats the Center's interviews were recorded on, laid out on a
- * table like specimens, oldest to newest left to right: a 5-inch tape reel,
- * a cassette, two clear MiniDiscs squared one on the other, and the digital
- * recorders' memory cards (CompactFlash, Memory Stick Pro Duo, SD,
- * microSD). A hairline drawing in true perspective from the field
+ * The formats the Center's interviews were recorded on, on a corner of a
+ * table, each square to the rest: a 5-inch tape reel at the back, a
+ * cassette before it, two clear MiniDiscs squared one on the other and the
+ * digital recorders' memory cards (CompactFlash, Memory Stick Pro Duo, SD,
+ * microSD) nearest. A hairline drawing in true perspective from the field
  * recorder's camera (recorder-line.html.twig), drawn behind Oral History's
  * Quick Start as the recorder is behind its Record tab.
  *

@@ -642,6 +642,7 @@ HTML),
   $text('Thu Nov 19: Recording formats behind the Quick Start', <<<'HTML'
 <ul>
 <li>Oral History’s Quick Start: a faint hairline drawing of the formats the interviews were recorded on (a tape reel, a cassette, two clear MiniDiscs and the memory cards) now lies behind the foot of the Research panel, under options A, B and C, as the recorder lies behind the Record tab. It has no labels, since the recordings are digitized and not handed out, and it rises gently into place as it scrolls into view unless motion is reduced.</li>
+<li>Oral History’s Quick Start: the formats drawing now stands on a corner of a table instead of in a row, on a tidy grid at the table’s angle (the cassette and MiniDiscs side by side, the reel behind them, the cards in front, one even gap between all), larger, rising out of the panel’s bottom right corner and cropped by the band’s edges, so it reads as a background and not as another row of content.</li>
 </ul>
 HTML),
 ]);
