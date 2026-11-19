@@ -1444,6 +1444,22 @@ html.pf-a11y-motion .pf-tile-line:is(:hover, :focus-visible) .pf-tile-line__arro
   }
 }
 
+// Over a grid (js/tile-views.js): the switch spans its last column
+// (--pf-views-w, a card's width), the two buttons sharing it, their
+// hairlines one rule the column's width; never narrower than the buttons,
+// which close up (.25rem a side) to fit a column of about 8.5rem.
+.pf-tiles__views--column {
+  width: fit-content;
+  min-width: var(--pf-views-w);
+  margin-left: auto;
+
+  .pf-tiles__view {
+    flex: 1 0 auto;
+    justify-content: center;
+    padding-inline: .25rem;
+  }
+}
+
 .pf-tiles__view {
   @extend %pf-landing-label;
   display: inline-flex;

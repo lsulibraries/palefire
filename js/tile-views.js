@@ -18,6 +18,12 @@
  * page transitions' own. None with prefers-reduced-motion or the Settings
  * drawer's "Reduce motion" (html.pf-a11y-motion): the view just changes.
  *
+ * The switch spans one column of the grid under it, the last, where it
+ * stands (--pf-views-w, .pf-tiles__views--column): as wide as a card at the
+ * columns of the moment, never narrower than its two buttons. It is
+ * measured in the Grid; the List keeps that width until the page is
+ * resized, and opened on the List the switch is as wide as its buttons.
+ *
  * Oral History's series (.pf-series__views, landing.html.twig) open
  * folded: two rows of the grid (four beside the tape deck, the stylesheet's
  * --pf-fold-rows), or eight of the list (twelve beside it), at the columns of the
@@ -98,6 +104,41 @@
         item.style.viewTransitionClass = '';
       });
     });
+  };
+
+  // The grids a switch stands over.
+  const GRIDS = '.pf-tiles__list, .pf-series__list, .pf-exhibit-group__grid';
+
+  const span = (wrapper, group) => {
+    const grid = wrapper.querySelector(GRIDS);
+    if (!grid) {
+      return;
+    }
+    const measure = (resized) => {
+      if (wrapper.dataset.pfView !== 'grid') {
+        if (resized) {
+          group.style.removeProperty('--pf-views-w');
+          group.classList.remove('pf-tiles__views--column');
+        }
+        return;
+      }
+      const tracks = getComputedStyle(grid).gridTemplateColumns.split(' ').map(parseFloat).filter((w) => w > 0);
+      if (tracks.length) {
+        group.style.setProperty('--pf-views-w', tracks[tracks.length - 1] + 'px');
+        group.classList.add('pf-tiles__views--column');
+      }
+    };
+    measure(false);
+    if ('ResizeObserver' in window) {
+      let width = grid.clientWidth;
+      new ResizeObserver(() => {
+        if (grid.clientWidth !== width) {
+          width = grid.clientWidth;
+          measure(true);
+        }
+      }).observe(grid);
+    }
+    new MutationObserver(() => measure(false)).observe(wrapper, { attributes: true, attributeFilter: ['data-pf-view'] });
   };
 
   // Rows shown while folded, by view.
@@ -216,6 +257,7 @@
         wrapper.dataset.pfViewReady = '';
         set(wrapper, stored(keyOf(wrapper)) || 'grid');
         group.hidden = false;
+        span(wrapper, group);
         group.querySelectorAll('[data-pf-view]').forEach((button) => {
           button.addEventListener('click', () => change(wrapper, button.dataset.pfView));
         });
