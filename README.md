@@ -1256,6 +1256,7 @@ and number. Add the issue to the page's list with its sent date:
 
 ## Changelog
 
+- **2026-11-19:** Table of contents: the Section tabs that a Landing hero draws in its Quick Start (`_palefire_hero_tabs()`) are no longer listed (`PalefireHooks::preprocessPalefireModularToc()` drops the item whose id is that section’s anchor). The section itself is left out of the page, so on Oral History its rail link, “Oral History” to `#oral-history`, went nowhere.
 - **2026-11-19:** Table of contents: Oral History’s Browse by series is a TOC section now, as the Quick Start is (`PalefireHooks::heroTocIds()` `series`, `toc_series_id`, the `.pf-series` section’s id `series`), so the rail, the breadcrumb’s Contents menu and the hero’s Contents button list “02 Browse by series” between 01 and 03. Its heading no longer opts in with `data-toc`. Why: the menu jumped from 01 to 03.
 - **2026-11-19:** Tape deck: the LINE and REPRO lamps now light and go dark with the meters. While a series plays, its lamps and their glow come on; at rest, after STOP, or when the pointer leaves, they are dark again, though the switches stay pressed in.
 - **2026-11-19:** Tape deck: no dark boxes round the lit lamps. The glows' colors lived in the stylesheet, so wherever the drawing loaded ahead of it (as on the live site until the cache was cleared) the gradient fell back to black. The colors now sit in the drawing itself (`stop-color`, `stop-opacity`), and the stylesheet rules for them are gone.

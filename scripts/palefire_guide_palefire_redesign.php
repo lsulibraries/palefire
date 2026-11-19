@@ -669,6 +669,7 @@ HTML),
 <ul>
 <li>The column beside the title on Oral History’s homepage now works as the page’s contents: under the Find us map, numbered rows for the Quick Start, the Series, the exhibitions and What Endures (with the newest episode and its Play button), each jumping down to its section with the same number its heading carries. The map stays up while you move down the list; only the podcast row brings up a picture of its own. Find us now opens directions, since it used to link back to the page itself. A new box on the Landing hero, Contents in the column, switches any hero between this and the usual highlights; Oral History has it ticked.</li>
 <li>The page’s Contents menu (in the breadcrumb and beside the search) now lists Browse by series as 02, between the Quick Start and the exhibitions; it used to skip from 01 to 03.</li>
+<li>The table of contents on the left no longer has an “Oral History” link that went nowhere (it pointed at the tabs the Quick Start already shows).</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Tape deck lamps restored', <<<'HTML'

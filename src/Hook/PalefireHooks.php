@@ -576,6 +576,17 @@ class PalefireHooks {
     // "Home" (the lead panel) and "Map" (the building map) at the top. The
     // landing prints the same ids (palefire_preprocess_paragraph__bento_search()).
     $ids = $node ? self::heroTocIds($node) : [];
+    // The Section tabs a Landing hero draws in its Quick Start
+    // (\_palefire_hero_tabs()) are left out of the page
+    // (palefire_preprocess_field()), so their link would go nowhere: not
+    // listed (Oral History's "Oral History").
+    $hero = $node && ($uuid = self::titleLandingUuid($node)) ? \Drupal::service('entity.repository')->loadEntityByUuid('paragraph', $uuid) : NULL;
+    $tabs = $hero instanceof ParagraphInterface && $hero->bundle() === 'landing_hero' ? \_palefire_hero_tabs($hero) : NULL;
+    if ($tabs && !empty($variables['items'])) {
+      $custom = self::stringValue($tabs, 'field_section_anchor');
+      $gone = self::slug($custom !== '' ? $custom : self::stringValue($tabs, 'field_section_title'));
+      $variables['items'] = array_values(array_filter($variables['items'], static fn ($item): bool => $gone === '' || !is_array($item) || ($item['id'] ?? '') !== $gone));
+    }
     $extra = [];
     if (!empty($ids['home'])) {
       $extra[] = ['id' => $ids['home'], 'label' => $this->t('Home')];
