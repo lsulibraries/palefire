@@ -186,19 +186,41 @@
         setState();
         first.classList.add('is-current');
         first.src = sources[0];
-        preload();
+        // The next clip loads only once the landing has first been in view,
+        // so a visitor who never scrolls to it (or opens the page in a
+        // background tab) doesn't download it.
+        let warmed = false;
+        const warm = () => {
+          if (warmed) return;
+          warmed = true;
+          preload();
+        };
         // Watch the landing box, not the media layer, where the layer is
         // position: fixed: it always covers the viewport, so it never
         // reported leaving it and the clip kept playing off screen. In the
         // hero's cover band (.pf-landing--cover) the layer scrolls with the
         // page, so it is watched itself: the clip stops once the band has
         // gone, not when the whole landing has.
+        // In view means on screen and in the visible tab: a hidden tab
+        // pauses the clip and showing it again resumes it (unless the
+        // visitor paused it themselves).
         const cover = wrap.closest('.pf-landing--cover');
-        new IntersectionObserver(([e]) => {
-          inView = e.isIntersecting;
-          if (inView) play();
+        let onScreen = false;
+        const sync = () => {
+          inView = onScreen && !document.hidden;
+          if (inView) {
+            warm();
+            play();
+          }
           else pauseAll();
+        };
+        new IntersectionObserver(([e]) => {
+          onScreen = e.isIntersecting;
+          sync();
         }, { threshold: cover ? 0 : 0.25 }).observe(cover ? wrap : landing);
+        document.addEventListener('visibilitychange', () => {
+          if (wrap.isConnected) sync();
+        });
       });
     },
   };
