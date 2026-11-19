@@ -798,9 +798,12 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
       'title' => $card['title'],
       'url' => $card['url'],
       'label' => $card['label'],
-      'image' => $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL,
-      'still' => _palefire_hero_banner_still($card['image_item'] ?? NULL, $cache),
-      'object' => _palefire_cover_object_label($node),
+      // The stage's picture: the page's Background image when it has one
+      // (_palefire_backdrop_item()), else its cover. The cover's object
+      // label names the cover only.
+      'image' => $card['backdrop_item'] ? _palefire_responsive_cover($card['backdrop_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL,
+      'still' => _palefire_hero_banner_still($card['backdrop_item'] ?? NULL, $cache),
+      'object' => _palefire_backdrop_item($node, $cache) ? NULL : _palefire_cover_object_label($node),
     ];
     if (count($banners) === 5) {
       break;
@@ -1020,9 +1023,9 @@ function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata 
   $posts = _palefire_blog_posts($paragraph, 1, $cache);
   $post_item = NULL;
   if ($post = $posts[0] ?? NULL) {
-    $post_item = $post['image_item'];
-    $post['image'] = $post_item ? _palefire_responsive_cover($post_item, 'tile_showcase_portrait', $cache, '(min-width: 64rem) 10rem, 5.5rem') : NULL;
-    unset($post['image_item']);
+    $post_item = $post['backdrop_item'];
+    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache, '(min-width: 64rem) 10rem, 5.5rem') : NULL;
+    unset($post['image_item'], $post['backdrop_item']);
     $data['blog'] = $post;
   }
 
@@ -1171,7 +1174,8 @@ function _palefire_news_exhibit_feature(CacheableMetadata $cache): ?array {
         $text = _palefire_plain_excerpt((string) $node->get($field)->first()->{$property}, 240);
       }
     }
-    $image = $node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL;
+    $image = _palefire_backdrop_item($node, $cache)
+      ?? ($node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL);
     return [
       'type' => 'exhibit',
       'kind' => (string) t('On view now'),
@@ -1552,9 +1556,9 @@ function _palefire_hero_blog_banner(ParagraphInterface $paragraph, array &$varia
   $posts = _palefire_blog_posts($paragraph, 1, $cache);
   $post = $posts[0] ?? NULL;
   if ($post) {
-    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL;
-    $post['still'] = _palefire_hero_banner_still($post['image_item'], $cache);
-    unset($post['image_item']);
+    $post['image'] = $post['backdrop_item'] ? _palefire_responsive_cover($post['backdrop_item'], 'tile_showcase_portrait', $cache, PALEFIRE_HERO_BANNER_SIZES) : NULL;
+    $post['still'] = _palefire_hero_banner_still($post['backdrop_item'], $cache);
+    unset($post['image_item'], $post['backdrop_item']);
   }
   $cache->applyTo($variables);
   return $post;
@@ -1705,6 +1709,7 @@ function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, Cacheab
       }
     }
 
+    $image_item = $node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL;
     $posts[] = [
       'title' => $node->label(),
       'url' => $url->getGeneratedUrl(),
@@ -1714,7 +1719,10 @@ function _palefire_blog_posts(ParagraphInterface $paragraph, int $limit, Cacheab
       'excerpt' => $excerpt,
       'day' => $formatter->format($timestamp, 'custom', 'j'),
       'month' => $formatter->format($timestamp, 'custom', 'M Y'),
-      'image_item' => $node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL,
+      'image_item' => $image_item,
+      // Where the post's picture fills a background on hover
+      // (_palefire_backdrop_item()).
+      'backdrop_item' => _palefire_backdrop_item($node, $cache) ?? $image_item,
     ];
   }
   return $posts;
@@ -1841,7 +1849,8 @@ function _palefire_node_card(NodeInterface $node, CacheableMetadata $cache, int 
     'label' => _palefire_card_label($labels),
     'labels' => $labels,
     'note' => $note,
-    'image_item' => _palefire_card_image_item($node, $cache),
+    'image_item' => $image_item = _palefire_card_image_item($node, $cache),
+    'backdrop_item' => _palefire_backdrop_item($node, $cache) ?? $image_item,
   ];
 }
 
@@ -1938,6 +1947,24 @@ function _palefire_exhibition_tiles(ParagraphInterface $paragraph): bool {
 function _palefire_is_oral_history_exhibition(NodeInterface $node): bool {
   $alias = \Drupal::service('path_alias.manager')->getAliasByPath('/node/' . $node->id());
   return str_starts_with($alias, '/v2/oralhistory/exhibitions/');
+}
+
+/**
+ * A page's Background image item, or NULL.
+ *
+ * field_backdrop_image (Media: Image, scripts/palefire_backdrop_image_setup.php)
+ * on an Article or a Modular page: the picture shown when one of its links
+ * fills a background on hover or focus, in place of its cover or its
+ * Image. News and events' feature, the ledger's rows, the hero's
+ * Highlights and From the stacks' stage read it (backdrop_item from
+ * _palefire_node_card() and _palefire_blog_posts()); cards and thumbnails
+ * keep the cover.
+ */
+function _palefire_backdrop_item(NodeInterface $node, CacheableMetadata $cache): ?FieldItemInterface {
+  if (!$node->hasField('field_backdrop_image') || $node->get('field_backdrop_image')->isEmpty()) {
+    return NULL;
+  }
+  return _palefire_media_image_item($node->get('field_backdrop_image')->first(), $cache);
 }
 
 /**
@@ -4103,8 +4130,10 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
       'outline' => !$rows && !$image ? _palefire_page_outline($node, $cache) : [],
     ];
     $covers[] = $show_image ? $card['image_item'] : NULL;
-    $covers_all[] = $card['image_item'];
-    $objects_all[] = $variables['layout'] === 'ledger' ? _palefire_cover_object_label($node) : NULL;
+    // Behind the section: the Background image first (_palefire_backdrop_item()),
+    // whose citation the cover's object label is not.
+    $covers_all[] = $card['backdrop_item'];
+    $objects_all[] = $variables['layout'] === 'ledger' && !_palefire_backdrop_item($node, $cache) ? _palefire_cover_object_label($node) : NULL;
   }
 
   if ($variables['layout'] === 'ledger') {
@@ -4757,8 +4786,8 @@ function palefire_preprocess_paragraph__landing_stacks(array &$variables): void 
       if (!$card) {
         continue;
       }
-      $card['image'] = $card['image_item'] ? _palefire_responsive_cover($card['image_item'], 'tile_showcase_portrait', $cache) : NULL;
-      unset($card['image_item']);
+      $card['image'] = $card['backdrop_item'] ? _palefire_responsive_cover($card['backdrop_item'], 'tile_showcase_portrait', $cache) : NULL;
+      unset($card['image_item'], $card['backdrop_item']);
       $variables['feature'] = $card;
       break;
     }
@@ -4783,8 +4812,8 @@ function palefire_preprocess_paragraph__landing_stacks(array &$variables): void 
   // Each post's picture for the stage (the section's large picture, which
   // shows the item under the pointer), in the feature's portrait style.
   foreach (_palefire_blog_posts($paragraph, 3, $cache) as $post) {
-    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache) : NULL;
-    unset($post['image_item']);
+    $post['image'] = $post['backdrop_item'] ? _palefire_responsive_cover($post['backdrop_item'], 'tile_showcase_portrait', $cache) : NULL;
+    unset($post['image_item'], $post['backdrop_item']);
     $variables['posts'][] = $post;
   }
   $cache->applyTo($variables);

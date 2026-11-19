@@ -857,6 +857,13 @@ HTML),
 <li>The contents list beside the opening screen and the page’s side contents show it in the same place.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: A background picture of your choosing', <<<'HTML'
+<ul>
+<li>Articles and pages have a new optional field, Background image, under the page’s own picture on the edit form.</li>
+<li>Where pointing at a link fills the screen with the page’s picture (News and events, the highlights beside the opening screen, lists of pages, From the stacks), this picture is used instead. Pick a wide picture, at least 1920 pixels across.</li>
+<li>Left empty, nothing changes: the page’s cover or Image is used as before. Cards and small pictures always keep the cover.</li>
+</ul>
+HTML),
   $text('Thu Nov 19: Longer descriptions, and a sideways step', <<<'HTML'
 <ul>
 <li>Each exhibition’s description in the band now uses whatever room is left beside the picture, so a short title shows more of its introduction, ending in “…” on a whole line. The pictures keep their height.</li>
