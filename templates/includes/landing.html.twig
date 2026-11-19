@@ -960,10 +960,13 @@
          interviews Combined Search holds for it and a link to them all
          (_palefire_oral_history_series(): the module's own list and counts,
          so the two always agree). Its rule follows the Quick Start's
-         (hero_index.series, _palefire_hero_rules()). On wide screens the
-         heading, its intro and the tape deck share a column held beside
-         the series (js/series-deck.js: the deck shows the series in hand,
-         with its count and description). #}
+         (hero_index.series, _palefire_hero_rules()). The rule names the
+         section and each series describes itself (on wide screens in the
+         deck's caption too), so the heading is visually hidden (still the
+         section's h2 and the TOC's target) and there is no intro, as on the
+         exhibitions band. On wide screens the tape deck has a column held
+         beside the series (js/series-deck.js: the deck shows the series in
+         hand, with its count and description). #}
       {% if hero_index.series %}
         {% set series_id = input_id ~ '-series' %}
         {# A section of the TOC (toc_series_id), as the Quick Start is: the
@@ -974,12 +977,9 @@
             text: 'Search them all'|t,
             hidden: ': ' ~ 'Oral histories in Combined Search'|t,
           } : {}) }}
+          <h2 class="pf-series__title visually-hidden" id="{{ series_id }}"{% if not toc_series_id %} data-toc{% endif %}>{{ 'Series'|t }}</h2>
           <div class="pf-series__split">
           <div class="pf-series__side">
-            <div class="pf-series__head">
-              <h2 class="pf-series__title" id="{{ series_id }}"{% if not toc_series_id %} data-toc{% endif %}>{{ 'Series'|t }}</h2>
-              <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
-            </div>
             {% if oral_history_series %}
               {# The deck and its caption: decorative (each card says its
                  name and count, and carries its description), filled and

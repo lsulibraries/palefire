@@ -6846,8 +6846,10 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       align-items: start;
     }
 
-    // The column runs the series' length; the heading and intro scroll
-    // away with the page, and the deck stays: as tall as what it holds,
+    // The column runs the series' length, the deck level with the first
+    // row of cards (down past the Grid / List row: .pf-tiles__view's
+    // 2.75rem and .pf-tiles__views' margin), and the deck stays: as tall
+    // as what it holds,
     // never taller than the screen below the header, so all of it stays in
     // view while the series scroll past and it leaves only when they end.
     // (Held at the screen's height, a deck at its full size left an empty
@@ -6860,11 +6862,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       gap: clamp(1.5rem, 2.5vw, 2.25rem);
       grid-column: 1 / span 2;
       align-self: stretch;
+      padding-top: calc(2.75rem + clamp(1rem, 2vw, 1.5rem));
       padding-right: clamp(.5rem, 1.5vw, 1.5rem);
-    }
-
-    .pf-series__head {
-      flex: none;
     }
 
     // The deck across the whole column (its two of the five), at the
@@ -6899,10 +6898,6 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
     .pf-series__now {
       margin-top: calc(-1 * var(--over));
-    }
-
-    .pf-series__intro {
-      margin-bottom: 0;
     }
 
     .pf-series__body {

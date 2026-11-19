@@ -637,6 +637,7 @@ HTML),
 <li>The tape deck’s lit lamps no longer show a dark square around them.</li>
 <li>The tape deck’s switch lamps now turn off with the meters when it stops.</li>
 <li>What Endures: three episodes to a page now, so the list stays short enough to see together with the cassette and the episode’s description.</li>
+<li>Oral History’s series no longer repeat a “Series” heading and intro (kept for screen readers); the tape deck moves up level with the first cards.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
