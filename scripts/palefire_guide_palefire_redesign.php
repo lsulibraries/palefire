@@ -487,6 +487,7 @@ HTML),
 <li>The sliding key on the tab bars now covers the other icons as it moves, like a real key on top of its track.</li>
 <li>The tab you choose now lights up just as the key lands on it, like a switch clicking into place.</li>
 <li>The Oral History homepage loads faster: the tape recorder drawing behind the Record tab now loads only when you open that tab, and it’s about half as complex as before, with no visible difference.</li>
+<li>On Oral History’s Record tab, Workshops, Seminars, Create your own, Collaborate and Consultations now open their details right on the page, like the Special Collections Quick Start, instead of sending you to the old site.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
@@ -677,6 +678,12 @@ HTML),
   $text('Thu Nov 19: Tape deck lamps restored', <<<'HTML'
 <ul>
 <li>Oral History’s tape deck: the lit LINE and REPRO lamps and the sharper small print are back. Two changes saved seconds apart had left them out of the site’s stylesheet.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Oral History opening screen on phones', <<<'HTML'
+<ul>
+<li>On a phone, the dark shading behind the Center’s name is lighter and starts more gradually, so the film shows through instead of sitting behind a gray slab. The small label above the name is now full white so it stays easy to read.</li>
+<li>The Center’s name no longer runs from edge to edge of the screen; it has room on the right.</li>
 </ul>
 HTML),
 ]);

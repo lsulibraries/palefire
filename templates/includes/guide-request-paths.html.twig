@@ -14,14 +14,15 @@
  * the list's own numbering gives the order.
  *
  * A stop with `detail` has a "how" panel: its label is a button that opens a
- * popover with a sentence or two and, when it has `shots`, screenshots of
+ * popover with a sentence or two (or a list of paragraphs) and, when it has `shots`, screenshots of
  * the catalog and request system (images/guides/special-collections/). The
  * popover is native (popover / popovertarget), so it needs no script:
  * clicking or tapping the label, Enter or Space opens it; Esc, the close
  * button or a click outside closes it. Screenshots load only when opened.
  *
  * A panel with `cta` ("Find Item") ends its text with a full-width link
- * there (the catalog), in a new tab so the guide stays open behind it.
+ * there (the catalog), in a new tab so the guide stays open behind it;
+ * `newtab: false` keeps it in place (an email address).
  *
  * A screenshot with `mark` ({x, y, w, h}, percent of the image) has a gold
  * ring over the control to click, drawn in as the panel opens; its alt text
@@ -144,8 +145,11 @@
 {# The Williams Center's services (unit 'oral_history_record', the Record
    tab on /v2/oralhistory), in the order a newcomer goes: D learns how,
    E starts a project, F gets help. The letters go on from the Research
-   tab's A, B and C, so every option on the page has its own. Each stop is
-   the service's own page; the notes are those pages' own words, shortened. #}
+   tab's A, B and C, so every option on the page has its own. Each service
+   opens in place, as the Research tab's steps do, with the words of its
+   page on the old site (/oralhistoryworkshops and the rest, where they sat
+   in a tile you had to open); the notes are those words, shortened. Reach
+   out stays a link to the question form, as on /v2/special. #}
 {% if unit|default('') == 'oral_history_record' %}
   {% set paths = [
     {
@@ -153,8 +157,14 @@
       letter: 'D',
       name: ['Learn'|t, 'how'|t],
       stops: [
-        { icon: 'chalkboard-teacher', label: 'Workshops'|t, note: 'Planning to interviewing'|t, href: '/oralhistoryworkshops' },
-        { icon: 'users-class', label: 'Seminars'|t, note: 'Taught at LSU'|t, href: '/oralhistoryseminars' },
+        {
+          icon: 'chalkboard-teacher', label: 'Workshops'|t, note: 'Planning to interviewing'|t,
+          detail: 'Are you interested in learning about oral history best practices? At our workshops, you will learn about project planning, doing background research, conducting interviews, and what happens to the interview afterward, all based on best practices established by the Oral History Association.'|t,
+        },
+        {
+          icon: 'users-class', label: 'Seminars'|t, note: 'Taught at LSU'|t,
+          detail: 'Please stay tuned for announcements on upcoming oral history seminars taught at LSU.'|t,
+        },
       ],
     },
     {
@@ -162,8 +172,21 @@
       letter: 'E',
       name: ['Start a'|t, 'project'|t],
       stops: [
-        { icon: 'clipboard-list', label: 'Create your own'|t, note: 'Our guide to getting started'|t, href: '/createyourownoralhistory' },
-        { icon: 'handshake', label: 'Collaborate'|t, note: 'A partnership with the Center'|t, href: '/collaboratewilliamscenter' },
+        {
+          icon: 'clipboard-list', label: 'Create your own'|t, note: 'Our guide to getting started'|t,
+          detail: [
+            'If you would like to do your own oral history project but are not sure where to start, take our advice. Start small and manageable and go from there. Think about what you want as a final product and what resources are available to you, and arrange your timeline, your goals, and your action items around that.'|t,
+            'We are happy to provide project planning advice via a consultation and/or training. If you would like to take it to another level and think partnering with the Williams Center could work for you, see Collaborate, the next step.'|t,
+          ],
+        },
+        {
+          icon: 'handshake', label: 'Collaborate'|t, note: 'A partnership with the Center'|t,
+          detail: [
+            'Finding like-minded organizations is the first step in creating meaningful partnerships, which is at the heart of the Center’s mission to document Louisiana’s diverse cultural history. We rely on your expertise about your subject, and in return, we provide leadership, expertise, and educational tools for oral history best practices.'|t,
+            'When partnering with the Williams Center, there are a variety of potential relationships to explore. The Center offers the following services, which vary case by case depending on the needs of the project and available resources: training, consultations, equipment loans, and collaboration on resource-seeking and presentation. Partners are responsible for providing interviews that meet the Center’s collection development criteria. If they are able to provide transcription or indexing of interviews, this will speed up the Center’s ability to process and provide public access to those interviews.'|t,
+            'To that end, Williams Center staff will advise on best practices and will loan digital field recorders that record audio in preservation-quality format (.wav). The Center will preserve the master files and create compressed user copies for access. We are also able to partner with additional repositories to ensure that several copies of the interview collections exist via multiple access points.'|t,
+          ],
+        },
       ],
     },
     {
@@ -172,7 +195,11 @@
       name: ['Get'|t, 'help'|t],
       stops: [
         { icon: 'comments-alt', label: 'Reach out'|t, note: 'AskUs or email'|t, href: ask_href|default('https://askus.lib.lsu.edu/search/?t=0&g=12395') },
-        { icon: 'calendar-check', label: 'Consultations'|t, note: 'By appointment'|t, href: '/oralhistoryresearchconsultations' },
+        {
+          icon: 'calendar-check', label: 'Consultations'|t, note: 'By appointment'|t,
+          detail: 'Are you incorporating oral history into your research? If you are interested in learning more about using our existing primary sources or creating new oral history interviews for your research or curriculum, contact Williams Center Director Jennifer Abraham Cramer to schedule a consultation.'|t,
+          cta: { href: 'mailto:jabrah1@lsu.edu', label: 'Email Jennifer Abraham Cramer'|t, newtab: false },
+        },
       ],
     },
   ] %}
@@ -219,11 +246,14 @@
                     <span aria-hidden="true">{{ source('libraries/fontawesome-pro/svgs/light/times.svg', ignore_missing = true)|raw }}</span>
                   </button>
                 </div>
-                <p class="pf-paths__pop-text">{{ stop.detail }}</p>
+                {% for text in stop.detail is iterable ? stop.detail : [stop.detail] %}
+                  <p class="pf-paths__pop-text">{{ text }}</p>
+                {% endfor %}
                 {% if stop.cta is defined %}
-                  <a class="pf-paths__cta" href="{{ stop.cta.href }}" target="_blank" rel="noopener">
+                  {% set newtab = stop.cta.newtab ?? true %}
+                  <a class="pf-paths__cta" href="{{ stop.cta.href }}"{% if newtab %} target="_blank" rel="noopener"{% endif %}>
                     {{- stop.cta.label -}}
-                    <span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>
+                    {% if newtab %}<span class="visually-hidden">{{ ' (opens in a new tab)'|t }}</span>{% endif %}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M8 7h9v9"/></svg>
                   </a>
                 {% endif %}
