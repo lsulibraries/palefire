@@ -96,6 +96,9 @@
          pf-reading-dark plus Bootstrap's data-bs-theme="dark" follow
          whether it is dark (_reading-themes.scss).
          The old "Dark guides" switch (dark) reads as Night.
+      pf-js names a page with JavaScript before any script loads, so
+      controls a footer script finishes (the Section tabs) can be drawn
+      finished from the first paint instead of appearing late.
       2. Page fade-in (progressive enhancement). Only hides the page when JS
          is available; CSS (base/_fade.scss) has a 3s failsafe that reveals
          the page even if DOMContentLoaded never fires. Skipped when the OS
@@ -106,6 +109,7 @@
     <script>
       (function (d, w) {
         var h = d.documentElement, s = {};
+        h.classList.add('pf-js');
         try { s = JSON.parse(w.localStorage.getItem('pf-a11y')) || {}; } catch (e) {}
         if (/^(115|130|150)$/.test(s.size)) { h.setAttribute('data-pf-text-size', s.size); }
         ['font', 'spacing', 'underline', 'reader', 'contrast', 'solid', 'focus', 'motion', 'pausevideo'].forEach(function (k) {

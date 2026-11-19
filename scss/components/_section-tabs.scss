@@ -50,8 +50,11 @@
 // High contrast (Settings or the OS) and forced colors flatten it: no
 // shadows, solid outlines on the track and the key, labels at full text.
 //
-// Without JS (no .is-ready): no tablist; every panel shows under its own
-// heading, in order.
+// Without JS (no html.pf-js): no tablist; every panel shows under its own
+// heading, in order. With it the control is drawn finished from the first
+// paint (the first panel shown, the key on the first tab), not when the
+// footer script adds .is-ready, so nothing pops in or shifts. (.is-ready
+// still shows it too, should this CSS go out before html.html.twig.)
 
 // The control's sizes, also read by the hero's Quick Start, whose band's
 // top edge runs through the track's centre line (_landing-features.scss).
@@ -135,7 +138,7 @@ html:not(.pf-reading-dark) .pf-tabs {
   display: none;
 }
 
-.pf-tabs.is-ready > .pf-tabs__list {
+:is(.pf-js .pf-tabs, .pf-tabs.is-ready) > .pf-tabs__list {
   position: relative;
   display: grid;
   grid-template-columns: repeat(var(--pf-tabs-count, 3), minmax(0, 1fr));
@@ -147,7 +150,7 @@ html:not(.pf-reading-dark) .pf-tabs {
 
 // A control, not a banner: capped on wide screens, aligned with the heading.
 @include media-breakpoint-up(lg) {
-  .pf-tabs.is-ready > .pf-tabs__list {
+  :is(.pf-js .pf-tabs, .pf-tabs.is-ready) > .pf-tabs__list {
     max-width: calc(var(--pf-tabs-count, 3) * 13.333rem);
   }
 }
@@ -170,13 +173,16 @@ html:not(.pf-reading-dark) .pf-tabs {
   z-index: 2;
   top: calc(var(--pf-tabs-label-h) + var(--pf-tabs-gap));
   left: 0;
-  width: 0;
+  // On the first tab until the script measures (the list's grid: its
+  // padding, then equal columns .25rem apart).
+  width: calc((100% - 2 * var(--pf-tabs-gap) - (var(--pf-tabs-count, 3) - 1) * .25rem) / var(--pf-tabs-count, 3));
   height: calc(var(--pf-tabs-key-h) + 2px);
   border-radius: var(--pf-tabs-key-r);
   // The page's color; its face catches a little of the upper-left light.
   background: linear-gradient(145deg, color-mix(in srgb, var(--pf-tabs-light) 45%, var(--pf-tabs-bg)), var(--pf-tabs-bg) 70%);
   box-shadow: var(--pf-tabs-raise);
   pointer-events: none;
+  transform: translateX(var(--pf-tabs-gap));
   transition: transform .45s var(--pf-tabs-ease), width .45s var(--pf-tabs-ease);
 
   &.is-instant,
@@ -419,8 +425,41 @@ html:not(.pf-reading-dark) .pf-tabs {
   font-size: 1.25rem;
 }
 
-.pf-tabs.is-ready .pf-tabs__heading {
+:is(.pf-js .pf-tabs, .pf-tabs.is-ready) .pf-tabs__heading {
   @include visually-hidden;
+}
+
+// The Quick Start's bar before the script, as _landing-features.scss sets it
+// once .is-ready comes: no room above, centered from md.
+.pf-js .pf-quick-guide > .pf-tabs > .pf-tabs__list {
+  margin-top: 0;
+}
+
+@include media-breakpoint-up(md) {
+  .pf-js .pf-quick-guide > .pf-tabs > .pf-tabs__list {
+    max-width: calc(var(--pf-tabs-count, 3) * 13.333rem);
+    margin-inline: auto;
+  }
+}
+
+// Before the script: only the first panel; the rest folded away unseen.
+// If the script never comes, they unfold after 4s, so nothing is lost
+// (collapsed, not display: none, which would run no animation).
+.pf-js .pf-tabs:not(.is-ready) > .pf-tabs__panel ~ .pf-tabs__panel {
+  position: absolute;
+  max-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  animation: pf-tabs-failsafe 0s 4s forwards;
+}
+
+@keyframes pf-tabs-failsafe {
+  to {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    visibility: visible;
+  }
 }
 
 // A panel's blocks keep the guides' reading measure (.pf-guide, 52rem), but

@@ -683,7 +683,7 @@ HTML),
 HTML),
   $text('Thu Nov 19: Oral History opening screen on phones', <<<'HTML'
 <ul>
-<li>On a phone, the dark shading behind the Center’s name is lighter and starts more gradually, so the film shows through instead of sitting behind a gray slab. The small labels above the name (LSU Libraries, Hill Memorial Library) are now full white so they stay easy to read.</li>
+<li>On a phone, the dark shading behind the Center’s name is lighter and starts more gradually, so the film shows through instead of sitting behind a gray slab. The small label above the name is now full white so it stays easy to read.</li>
 <li>The Center’s name no longer runs from edge to edge of the screen; it has room on the right.</li>
 </ul>
 HTML),

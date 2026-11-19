@@ -44,7 +44,10 @@
  * and the Light outline printed on the key while it is on, crossfading as
  * the key arrives.
  *
- * Without JS there is no tablist (.is-ready shows it): every panel shows,
+ * With JS (html.pf-js, set in <head>) the tablist and the first panel are
+ * drawn from the first paint, the key resting on the first tab (its size
+ * from --pf-tabs-count), before js/section-tabs.js adds .is-ready.
+ * Without JS there is no tablist: every panel shows,
  * each under its own heading (an h3, visually hidden once the tabs work, so
  * a screen reader still hears it at the top of the panel).
  */
@@ -52,7 +55,7 @@
 {% if tabs %}
   {{ attach_library('palefire/section-tabs') }}
   {% set attributes = attributes ?: create_attribute() %}
-  <div{{ attributes.addClass('pf-tabs') }} data-pf-tabs>
+  <div{{ attributes.addClass('pf-tabs').setAttribute('style', '--pf-tabs-count: ' ~ tabs|length) }} data-pf-tabs>
     <div class="pf-tabs__list" role="tablist" aria-label="{{ tabs_label }}" data-pf-track="section-tabs">
       <span class="pf-tabs__rail" aria-hidden="true"></span>
       <span class="pf-tabs__key is-instant" aria-hidden="true"></span>
