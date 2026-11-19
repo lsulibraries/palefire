@@ -6515,9 +6515,21 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   fill: var(--pf-deck-lit);
 }
 
+// The switches set in (LINE and REPRO, as for playback into a digitizer,
+// build/exhibit-deck.js) light with the meters: lamp and its halo (the
+// halo's color is the drawing's own), dark again once it stops.
 .pf-series__deck.is-held .pf-deck__svg {
-  .vu-lamp {
+  .vu-lamp,
+  .led-halo {
     opacity: 1;
+  }
+
+  .led-dim.led-on {
+    fill: #b8823e;
+  }
+
+  .led-grn.led-on {
+    fill: #4f9a68;
   }
 
   .needle {
@@ -6666,8 +6678,12 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       opacity: 0;
     }
 
-    .pf-series__deck .pf-deck__svg .vu-lamp {
+    .pf-series__deck .pf-deck__svg :is(.vu-lamp, .led-halo) {
       transition: opacity .6s ease;
+    }
+
+    .pf-series__deck .pf-deck__svg .led-on {
+      transition: fill .6s ease;
     }
 
     .pf-series__deck .pf-deck__svg .key {

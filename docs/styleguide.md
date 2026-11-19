@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-19:** Tape deck lamps: `.led-halo` is drawn at `opacity="0"` (like `.vu-lamp`), and the `.led-on` fills moved from `_exhibition.scss` to `.pf-series__deck.is-held` in `_landing-features.scss`, fading in and out over .6s with the meters (no fade with reduced motion).
 - **2026-11-19:** Tape deck lamps: `#pf-led-dim`/`#pf-led-grn` carry their stops' color and opacity as attributes in `images/exhibit-deck.svg`; the `.led-glow` rules are removed from `_exhibition.scss`.
 - **2026-11-19:** Contents in the column, arrow: on the stage `.pf-hero-banner--toc:not(.pf-hero-banner--episode) .pf-hero-banner__text::after` is `"\2193"` at `translate: 0 calc(-50% - .375rem)`, settling to `0 -50%` in hand (the row arrow’s .3s ease-out; none with reduced motion).
 - **2026-11-19:** Landing hero, Contents in the column (`.pf-hero-banners--toc`, `.pf-hero-banner--toc`): rows reuse the stage’s row styles (label, title, hairline, arrow in hand); `.pf-hero-banner__num` leads the title in the mono label voice (`--pf-landing-label`, `--pf-mono-label`, 700, .08em, tabular, `vertical-align: .125em`, `margin-right: .75em`) in `--pf-g-title`/`--pf-toc-active`. On the stage the resting picture (`.is-shown`) and its plate stay unless the link in hand has its own `.pf-hero-banner__media`. Under 44rem on `.pf-landing--wash` the row’s `::before` is `attr(data-pf-num)` (none on the map row) and the in-title number is hidden. List label "On this page".

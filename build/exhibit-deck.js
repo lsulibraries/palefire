@@ -128,15 +128,17 @@ s += txt(65, 692, 0, 'PHONES', 6.5) + scale(65, 722, 15, false) + cyl(65, 722, 1
 s += txt(65, 880, 0, 'MIC', 6.5);
 const brk = (x1, x2, t) => txt((x1 + x2) / 2, 681, 0, t, 7) + G([[x1 - 4, 692, 0], [x1 - 4, 686, 0], [x2 + 4, 686, 0], [x2 + 4, 692, 0]], 'stroke-opacity=".45"', 1);
 s += brk(165, 410, 'INPUT SELECT') + brk(510, 550, 'FUNCTION') + brk(635, 715, 'OUTPUT SELECT');
-// A push switch with its lamp; on, the lamp is lit (.led-on) in a faint
-// halo (#pf-led-<color>, its colors in the drawing itself: a gradient
-// waiting on the stylesheet drew black). Set as for playing tapes into a digitizer, the
+// A push switch with its lamp; on, the switch stays in and its lamp
+// (.led-on) has a faint halo (#pf-led-<color>), both dark (halo opacity 0)
+// until the theme powers the deck, as with the meters' lamps (the halo's
+// colors are the drawing's own: a gradient waiting on the stylesheet
+// drew black). Set as for playing tapes into a digitizer, the
 // usual work: INPUT SELECT on LINE, OUTPUT SELECT on REPRO (off the
 // playback head), and FUNCTION's record-ready L and R off.
 const lever = (x, t, led, on) => {
   // Latched in, an engaged switch stands 6 out of its 14, about 40%.
   const b = rectB(x - 6, 716, 12, 28), dz = on ? 6 : 14;
-  const halo = on ? G(Z(rectB(x - 8, 700, 16, 10), 0), `class="led-halo" fill="url(#pf-led-${led})" stroke="none"`) : '';
+  const halo = on ? G(Z(rectB(x - 8, 700, 16, 10), 0), `class="led-halo" fill="url(#pf-led-${led})" stroke="none" opacity="0"`) : '';
   return txt(x, 700, 0, t, 6) + halo + G(Z(rectB(x - 4, 703, 8, 4), 0), `class="led-${led}${on ? ' led-on' : ''}" stroke-opacity=".3"`) + L([x, 707, 0], [x, 716, 0], .45)
     + silh([...Z(b, 0), ...Z(b, dz)], 'class="tan"', .65) + G(Z(b, dz), `${T(.34)} stroke-opacity=".65"`);
 };

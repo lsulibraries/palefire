@@ -1256,6 +1256,7 @@ and number. Add the issue to the page's list with its sent date:
 
 ## Changelog
 
+- **2026-11-19:** Tape deck: the LINE and REPRO lamps now light and go dark with the meters. While a series plays, its lamps and their glow come on; at rest, after STOP, or when the pointer leaves, they are dark again, though the switches stay pressed in.
 - **2026-11-19:** Tape deck: no dark boxes round the lit lamps. The glows' colors lived in the stylesheet, so wherever the drawing loaded ahead of it (as on the live site until the cache was cleared) the gradient fell back to black. The colors now sit in the drawing itself (`stop-color`, `stop-opacity`), and the stylesheet rules for them are gone.
 - **2026-11-19:** Contents in the column: on the stage a section’s row shows a down arrow in hand (↓, dropping into place) instead of the highlights’ right arrow (→, sliding in), so it says the click scrolls down the page rather than opening another; the podcast’s row keeps its Play. Why: a right arrow read as going somewhere else.
 - **2026-11-19:** `css/style.css` rebuilt from the committed Sass. The Contents-column commit (f495a09) carried a `style.css` compiled before the tape deck's digitizing styles (cb4abe8) landed, so the lit LINE and REPRO lamps (`.led-dim.led-on`, `.led-grn.led-on`, `.led-glow*`) and the deck print's `text-rendering: geometricPrecision` were missing on the live page. The Sass was intact; only those rules change.
