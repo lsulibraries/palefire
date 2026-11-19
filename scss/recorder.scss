@@ -338,6 +338,12 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-recorder-ink}
 }
 
 // Recording: levels in px of the meter's 61 (0 empty, 61 full).
+@keyframes pf-recorder-arrive {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes pf-recorder-level-l {
   0%, 100% { transform: translateX(38px); }
   8% { transform: translateX(47px); }
@@ -430,6 +436,12 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-recorder-ink}
 
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
+    // The Record tab's recorder arrives after its panel opens
+    // (js/recorder-defer.js): it fades in rather than appearing.
+    .pf-quick-guide__specimen > .pf-recorder {
+      animation: pf-recorder-arrive .6s ease-out;
+    }
+
     .pf-recorder__cover--l {
       animation: pf-recorder-level-l 2.6s linear infinite;
     }

@@ -23,7 +23,12 @@
  * segmented bar), their peak ticks, the -20/-12 dB lamps, the REC lamp and
  * the counter's seconds (two digit columns stepping behind a clip).
  *
- * Usage: node build/recorder-mark.js [out]
+ * Usage: node build/recorder-mark.js [--line] [out]
+ *
+ * --line also writes images/recorder-line.svg (or [out].svg): the same
+ * drawing as a plain file, its clip paths under the default id, which
+ * js/recorder-defer.js inserts once the Record tab's panel comes near view,
+ * so the page doesn't carry it on every load.
  */
 const fs = require('fs');
 const path = require('path');
@@ -114,6 +119,9 @@ const tone = (n, extra = 0) => {
 // path. Faces too thin to see are dropped.
 const area2 = q => { let A = 0; q.forEach((p, i) => { const r = q[(i + 1) % q.length]; A += p[0] * r[1] - r[0] * p[1]; }); return Math.abs(A) / 2; };
 const CREASE = Math.cos(28 * RAD);
+// How far a 1px line reaches past its path, in drawing units (the drawing
+// is about 2px a unit, so half a pixel is .25; doubled to be safe).
+const PAD = 0.5;
 const drawLine = faces => {
   const key = p => p.map(v => Math.round(v * 1000)).join(',');
   const all = faces.map(f => {
@@ -148,14 +156,84 @@ const drawLine = faces => {
     if (!owned.has(owner)) owned.set(owner, []);
     owned.get(owner).push(e);
   }
-  const runs = [];
-  const add = (cls, d) => { if (runs.length && runs[runs.length - 1].cls === cls) runs[runs.length - 1].d += d; else runs.push({ cls, d }); };
+  // Far to near, each face then the edges it owns.
+  const items = [];
+  const item = (cls, q, closed) => {
+    const xs = q.map(p => p[0]), ys = q.map(p => p[1]);
+    items.push({ cls, q, closed, box: [Math.min(...xs) - PAD, Math.min(...ys) - PAD, Math.max(...xs) + PAD, Math.max(...ys) + PAD] });
+  };
   for (const i of order) {
     const f = all[i];
-    if (area2(f.p.map(raw)) > 0.004) add(f.cls || 'f', 'M' + dense(f.p).map(p => P2(raw(p))).join('L') + 'Z');
-    for (const e of owned.get(i) || []) add('e', 'M' + dense([e.a, e.b], false).map(p => P2(raw(p))).join('L'));
+    if (area2(f.p.map(raw)) > 0.004) {
+      // One way round (counterclockwise on the page), so faces merged into
+      // one path never cancel each other out where they overlap (nonzero).
+      let q = dense(f.p).map(raw);
+      let A = 0;
+      q.forEach((p, k) => { const r = q[(k + 1) % q.length]; A += p[0] * r[1] - r[0] * p[1]; });
+      if (A > 0) q = q.reverse();
+      item(f.cls || 'f', q, true);
+    }
+    for (const e of owned.get(i) || []) item('e', dense([e.a, e.b], false).map(raw), false);
   }
-  return runs.map(r => `<path class="${r.cls}" d="${r.d}"/>`).join('');
+  // Painted in layers, not one element at a time (2026-11-19: 1,800
+  // elements here weighed down the page). Each part's layer is one above
+  // the highest earlier part of the other class it overlaps (by box), and
+  // no lower than an earlier one of its own class it overlaps: so whatever
+  // covered what still does, and within a layer no face and edge overlap.
+  // Each layer is then one path of faces and one of edges.
+  const boxHit = (a, b) => a[0] <= b[2] && b[0] <= a[2] && a[1] <= b[3] && b[1] <= a[3];
+  // A face and an edge overlap where the edge runs inside the face or
+  // within PAD of its outline; anything else by box (cautious).
+  const inside = (p, q) => {
+    let c = false;
+    for (let i = 0, j = q.length - 1; i < q.length; j = i++) {
+      if ((q[i][1] > p[1]) !== (q[j][1] > p[1]) && p[0] < (q[j][0] - q[i][0]) * (p[1] - q[i][1]) / (q[j][1] - q[i][1]) + q[i][0]) c = !c;
+    }
+    return c;
+  };
+  const segDist = (p, a, b) => {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy;
+    const t = L2 ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2)) : 0;
+    return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy);
+  };
+  const cross2 = (a, b, c, d) => {
+    const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]));
+    return o(a, b, c) !== o(a, b, d) && o(c, d, a) !== o(c, d, b);
+  };
+  const near = (face, edge) => {
+    const q = face.q, E = edge.q;
+    if (E.some(p => inside(p, q))) return true;
+    for (let i = 0; i < E.length - 1; i++) {
+      for (let k = 0; k < q.length; k++) {
+        const a = q[k], b = q[(k + 1) % q.length];
+        if (cross2(E[i], E[i + 1], a, b) || segDist(E[i], a, b) <= PAD || segDist(E[i + 1], a, b) <= PAD || segDist(a, E[i], E[i + 1]) <= PAD) return true;
+      }
+    }
+    return false;
+  };
+  const hit = (x, y) => {
+    if (!boxHit(x.box, y.box)) return false;
+    if (x.cls === 'e' && y.closed) return near(y, x);
+    if (y.cls === 'e' && x.closed) return near(x, y);
+    return true;
+  };
+  const layers = [];
+  items.forEach((it, k) => {
+    let L = 0;
+    for (let j = 0; j < k; j++) {
+      const o = items[j];
+      if (o.layer + 1 > L && (o.cls === it.cls ? boxHit(it.box, o.box) : hit(it, o))) L = Math.max(L, o.cls === it.cls ? o.layer : o.layer + 1);
+    }
+    it.layer = L;
+    (layers[L] = layers[L] || []).push(it);
+  });
+  const out = [];
+  layers.forEach(layer => {
+    const by = new Map();
+    layer.forEach(it => by.set(it.cls, (by.get(it.cls) || '') + 'M' + it.q.map(P2).join('L') + (it.closed ? 'Z' : '')));
+    [...by.keys()].sort((x, y) => (x === 'e') - (y === 'e')).forEach(cls => out.push(`<path class="${cls}" d="${by.get(cls)}"/>`));
+  });
+  return out.join('');
 };
 const draw = (faces, extra = 0) => {
   if (LINE) return drawLine(faces);
@@ -721,6 +799,12 @@ const head = `{#
 <svg class="pf-recorder${LINE ? ' pf-recorder--line' : ''}" viewBox="${vb.join(' ')}" width="${Math.round(vb[2] * 2)}" height="${Math.round(vb[3] * 2)}" aria-hidden="true" focusable="false">
 `;
 fs.writeFileSync(out, head + o.join('\n') + '\n</svg>\n');
+if (LINE) {
+  const file = args[0] ? args[0] + '.svg' : path.join(__dirname, '../images/recorder-line.svg');
+  const svg = head.slice(head.indexOf('<svg')).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+  fs.writeFileSync(file, '<!-- Drawn by build/recorder-mark.js (its line option); inserted by js/recorder-defer.js. -->\n' + (svg + o.join('\n') + '\n</svg>\n').split('{{ id }}').join('pf-recorder'));
+  console.log('wrote', path.relative(process.cwd(), file), (fs.statSync(file).size / 1024).toFixed(1) + ' kB');
+}
 const used = new Set((o.join('').match(/class="[^"]*"/g) || []).join(' ').match(/\b[tsg]\d+\b/g));
 console.log('wrote', (fs.statSync(out).size / 1024).toFixed(1) + ' kB', 'viewBox', vb.join(' '));
 console.log('classes', [...used].sort((a, b) => a[0].localeCompare(b[0]) || a.slice(1) - b.slice(1)).join(' '));

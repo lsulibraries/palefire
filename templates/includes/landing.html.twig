@@ -908,11 +908,13 @@
                 </div>
               {% endif %}
               {# Decorative, behind the band: rises from its foot, cropped by
-                 its bottom and right edges (_landing-features.scss). #}
+                 its bottom and right edges (scss/recorder.scss). Drawn when
+                 the panel comes near view, not with the page: the drawing
+                 is about 190 kB (images/recorder-line.svg,
+                 js/recorder-defer.js). #}
               {% if copy.recorder %}
-                <div class="pf-quick-guide__specimen" aria-hidden="true">
-                  {% include '@palefire/includes/recorder-line.html.twig' with { id: quick_id ~ '-recorder' } only %}
-                </div>
+                {{ attach_library('palefire/recorder-defer') }}
+                <div class="pf-quick-guide__specimen" aria-hidden="true" data-pf-recorder-src="{{ base_path ~ directory }}/images/recorder-line.svg"></div>
               {% endif %}
             {% endset %}
             {# A tab with paths shows them in place of its blocks. #}

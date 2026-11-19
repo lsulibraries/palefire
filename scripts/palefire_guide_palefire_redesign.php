@@ -486,6 +486,7 @@ HTML),
 <li>Oral History’s Ask us tab has the same speech-bubbles icon as Special Collections’.</li>
 <li>The sliding key on the tab bars now covers the other icons as it moves, like a real key on top of its track.</li>
 <li>The tab you choose now lights up just as the key lands on it, like a switch clicking into place.</li>
+<li>The Oral History homepage loads faster: the tape recorder drawing behind the Record tab now loads only when you open that tab, and it’s about half as complex as before, with no visible difference.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>

@@ -679,6 +679,18 @@ recorder:
     component:
       css/recorder.css: {}
 
+# The Record tab's recorder, fetched and drawn once its panel comes near
+# view (images/recorder-line.svg; js/recorder-defer.js). Attached by
+# includes/landing.html.twig.
+recorder-defer:
+  version: 1.0.0
+  js:
+    js/recorder-defer.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/recorder
+
 # In the collection (includes/still-life.html.twig, drawn by
 # build/still-life.js): the recording formats in hairlines, each over its
 # caption, on Oral History's Quick Start. Attached by that include. Styles:
