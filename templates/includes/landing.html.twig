@@ -57,6 +57,7 @@
  *   accordion under the search (includes/landing-exhibits.html.twig) when
  *   the paragraph has Tiles (hero_tiles).
  * - toc_start_id: id for the TOC's "Start your research" (the Quick Start).
+ * - toc_series_id: id for the TOC's "Browse by series" (Oral History).
  * - toc_hours_id: id for the TOC's "Hours and directions" (the Visit strip).
  * - toc_home_id, toc_map_id: ids for the TOC's "Home" (the lead) and "Map"
  *   (the map) links, when this landing opens the page
@@ -542,7 +543,7 @@
       {% if hero_toc %}
         {% set hero_rows = {
           guide: { label: 'Start your research'|t, title: quick_guide.title|default('Quick Guide'|t), url: '#' ~ (toc_start_id ?: input_id ~ '-quick-guide') },
-          series: { label: 'Browse by series'|t, title: 'Series'|t, url: '#' ~ input_id ~ '-series' },
+          series: { label: 'Browse by series'|t, title: 'Series'|t, url: '#' ~ (toc_series_id ?: input_id ~ '-series') },
           rooms: { label: 'Rooms and access'|t, title: 'Map'|t, url: toc_map_id ? '#' ~ toc_map_id : '' },
           hours: { label: 'Hours and directions'|t, title: 'Visit'|t, url: toc_hours_id ? '#' ~ toc_hours_id : '' },
         } %}
@@ -937,7 +938,9 @@
          with its count and description). #}
       {% if hero_index.series %}
         {% set series_id = input_id ~ '-series' %}
-        <section class="pf-series" aria-labelledby="{{ series_id }}">
+        {# A section of the TOC (toc_series_id), as the Quick Start is: the
+           menu reads its number and name from its rule. #}
+        <section class="pf-series"{% if toc_series_id %} id="{{ toc_series_id }}" tabindex="-1"{% endif %} aria-labelledby="{{ series_id }}">
           {{ pf.index_rule(hero_index.series, 'Browse by series'|t, oral_history_series ? {
             url: '/v2/search?mode=special&source%5B%5D=oral_histories',
             text: 'Search them all'|t,
@@ -946,7 +949,7 @@
           <div class="pf-series__split">
           <div class="pf-series__side">
             <div class="pf-series__head">
-              <h2 class="pf-series__title" id="{{ series_id }}" data-toc>{{ 'Series'|t }}</h2>
+              <h2 class="pf-series__title" id="{{ series_id }}"{% if not toc_series_id %} data-toc{% endif %}>{{ 'Series'|t }}</h2>
               <p class="pf-series__intro">{{ 'The interviews are kept in series: a project, a place or a theme recorded over time. Open one for every interview in it.'|t }}</p>
             </div>
             {% if oral_history_series %}

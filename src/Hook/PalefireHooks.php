@@ -583,6 +583,9 @@ class PalefireHooks {
     if (!empty($ids['start'])) {
       $extra[] = ['id' => $ids['start'], 'label' => $this->t('Start your research')];
     }
+    if (!empty($ids['series'])) {
+      $extra[] = ['id' => $ids['series'], 'label' => $this->t('Browse by series')];
+    }
     if (!empty($ids['map'])) {
       // With Hours and directions beside it, the map is the rooms' section.
       $extra[] = ['id' => $ids['map'], 'label' => !empty($ids['hours']) ? $this->t('Rooms and access') : $this->t('Map')];
@@ -638,14 +641,15 @@ class PalefireHooks {
    *
    * home: the lead panel's id, when the landing has no section title of its
    * own (with one, palefire_modular already lists it). start: the Quick
-   * Start, when a Landing hero shows it. map: the building
+   * Start, when a Landing hero shows it. series: Browse by series, when it
+   * shows that too (Oral History, _palefire_hero_rules()). map: the building
    * map's wrapper, when the landing has a map. hours: the Hours and directions
    * section, when the page has a location (a Landing hero only; other
    * landings have no such section). Fixed ids, so the links read #home, #map
    * and #hours; a section anchored with one of them keeps it, and the landing
    * then gets none.
    *
-   * @return array{home?: string, start?: string, map?: string, hours?: string}
+   * @return array{home?: string, start?: string, series?: string, map?: string, hours?: string}
    */
   public static function heroTocIds(NodeInterface $node): array {
     $uuid = self::titleLandingUuid($node);
@@ -663,6 +667,9 @@ class PalefireHooks {
     }
     if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && !in_array('start', $taken, TRUE) && in_array('guide', \_palefire_hero_rules($paragraph), TRUE)) {
       $ids['start'] = 'start';
+    }
+    if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && !in_array('series', $taken, TRUE) && in_array('series', _palefire_hero_rules($paragraph), TRUE)) {
+      $ids['series'] = 'series';
     }
     // No map section on a unit's homepage (a landing hero whose map marks a
     // room Here, \_palefire_hero_rules()): its map is the Find us banner.

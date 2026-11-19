@@ -375,6 +375,7 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
   $variables['toc_home_id'] = NULL;
   $variables['toc_map_id'] = NULL;
   $variables['toc_start_id'] = NULL;
+  $variables['toc_series_id'] = NULL;
   $variables['toc_hours_id'] = NULL;
   $variables['lead_breadcrumb'] = NULL;
   $variables['map_only'] = FALSE;
@@ -1586,6 +1587,7 @@ function _palefire_landing_visit(array &$variables, ParagraphInterface $paragrap
     $ids = PalefireHooks::heroTocIds($host);
     $variables['toc_home_id'] = $ids['home'] ?? NULL;
     $variables['toc_start_id'] = $ids['start'] ?? NULL;
+    $variables['toc_series_id'] = $ids['series'] ?? NULL;
     $variables['toc_map_id'] = $ids['map'] ?? NULL;
     $variables['toc_hours_id'] = $ids['hours'] ?? NULL;
     // The breadcrumb at the top of the lead panel (PalefireHooks::
