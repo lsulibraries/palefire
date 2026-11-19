@@ -430,7 +430,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   inset: -3%;
   background: center / cover no-repeat;
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity .6s ease;
 
   &.is-on {
     opacity: .34;
@@ -448,7 +448,9 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // Oral History's Showcase: the plate fills the section, not just the
-// band inside its padding.
+// band inside its padding. The band is no layer of its own here, so the
+// plate sits under the section's index rule, heading and lede too, not
+// over them.
 .pf-section--exhibitions {
   position: relative;
   isolation: isolate;
@@ -456,6 +458,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 
 .pf-showcase--embed .pf-showcase__carousel {
   position: static;
+  isolation: auto;
 }
 
 // On a cover the label is black on white (21:1) whatever the page.

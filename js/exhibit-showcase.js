@@ -9,10 +9,10 @@
  * trackpad scroll it natively; a mouse grabs and flings it
  * (Drupal.palefireDragGlide, js/drag-glide.js), and Previous / Next, the
  * dots, ← → (while focus is in the band) and a click on a canvas glide it
- * to a canvas. The shown one's summary, count, dot and the title Next
- * brings follow the scroll as it goes; the plate (its picture behind the
- * band) and the polite announcement wait until the rail comes to rest, so
- * a fling past six canvases fetches one picture and says one thing. A
+ * to a canvas. The shown one's summary, count, dot, the title Next brings
+ * and the plate (its picture behind the band) follow the scroll as it goes,
+ * the plate a moment behind so a fling past six canvases fetches one
+ * picture; the polite announcement waits until the rail comes to rest. A
  * click on the shown canvas opens its exhibition. Nothing moves by itself.
  *
  * The table's switch (All, Digital, Physical) hides the other rows and
@@ -26,6 +26,7 @@
   'use strict';
 
   const SETTLE = 160; // ms without a scroll: the rail is at rest
+  const PLATE_DELAY = 100; // ms after the shown exhibition last changed
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => motion.matches || document.documentElement.classList.contains('pf-a11y-motion');
   const pad = (n) => String(n).padStart(2, '0');
@@ -80,8 +81,28 @@
       return best;
     };
 
+    // The plate: the shown exhibition's picture, changing with its summary,
+    // a moment after the last change (so a fling past six canvases fetches
+    // one picture). It waits, too, until the band nears the screen, so a
+    // page that never scrolls down to it never fetches one.
+    let plateTimer = 0;
+    const plate = () => {
+      const url = cards[current].dataset.plate || '';
+      if (!near || plates.length !== 2 || url === plateShown) {
+        return;
+      }
+      plateShown = url;
+      const next = plates[1 - plateOn];
+      next.style.backgroundImage = url ? `url("${url}")` : '';
+      next.classList.add('is-on');
+      plates[plateOn].classList.remove('is-on');
+      plateOn = 1 - plateOn;
+    };
+
     // The summary and its companions: at once, as the rail moves.
     const show = (k) => {
+      clearTimeout(plateTimer);
+      plateTimer = setTimeout(plate, PLATE_DELAY);
       current = k;
       cards.forEach((card, i) => card.classList.toggle('is-active', i === k));
       summaries.forEach((summary, i) => summary.classList.toggle('is-active', i === k));
@@ -99,20 +120,9 @@
       }
     };
 
-    // The plate and the announcement: once the rail is at rest. The plate
-    // waits, too, until the band nears the screen, so a page that never
-    // scrolls down to it never fetches a picture for it.
+    // The announcement: once the rail is at rest, so a fling says one thing.
     let said = 0;
     const rest = () => {
-      const url = cards[current].dataset.plate || '';
-      if (near && plates.length === 2 && url !== plateShown) {
-        plateShown = url;
-        const next = plates[1 - plateOn];
-        next.style.backgroundImage = url ? `url("${url}")` : '';
-        next.classList.add('is-on');
-        plates[plateOn].classList.remove('is-on');
-        plateOn = 1 - plateOn;
-      }
       if (live && said !== current) {
         said = current;
         live.textContent = Drupal.t('Exhibition @n of @total: @title', {
@@ -190,7 +200,7 @@
         if (entries.some((entry) => entry.isIntersecting)) {
           watch.disconnect();
           near = true;
-          rest();
+          plate();
         }
       }, { rootMargin: '400px 0px' });
       watch.observe(region);

@@ -756,6 +756,12 @@ HTML),
 <li>The film behind Oral History’s Quick Start, and the recorder drawing in its Record tab, weren’t loading for visitors because of a wrong file address. Both load now.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Showcase heading back in front', <<<'HTML'
+<ul>
+<li>On Oral History, the picture behind the exhibitions had slipped in front of the Showcase heading and its line of text, so they looked faded. They’re back on top.</li>
+<li>The picture now changes with the exhibition being described, right away, instead of a second or two later.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
