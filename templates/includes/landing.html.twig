@@ -698,6 +698,15 @@
             visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
           ]|filter(link => link), quick_hours) }}
         </div>
+        {# Oral History: the formats its interviews were recorded on, a
+           hairline still life (includes/still-life.html.twig) behind the
+           band's foot, as the Record tab's recorder is (scss/still-life.scss).
+           Decorative: the recordings are digitized, not handed out. #}
+        {% if oral_history %}
+          <div class="pf-quick-guide__still" aria-hidden="true">
+            {% include '@palefire/includes/still-life.html.twig' with { id: quick_id ~ '-still' } only %}
+          </div>
+        {% endif %}
         {% endset %}
         {% if quick_tabs %}
           {# The tab bar first, on the band's top edge (_landing-features.scss),

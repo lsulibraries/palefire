@@ -679,6 +679,16 @@ recorder:
     component:
       css/recorder.css: {}
 
+# In the collection (includes/still-life.html.twig, drawn by
+# build/still-life.js): the recording formats in hairlines, each over its
+# caption, on Oral History's Quick Start. Attached by that include. Styles:
+# its own entry (scss/still-life.scss).
+still-life:
+  version: 1.0.0
+  css:
+    component:
+      css/still-life.css: {}
+
 # The ledger's hover photos (the What Hill Holds section on /v2/special):
 # each row's cover behind the left column while the row is hovered or
 # focused. Attached by paragraph--tile-showcase.html.twig, only when a

@@ -638,6 +638,11 @@ HTML),
 <li>Combined Search: News and Notes results start with the newest story, in its own list and in its section under All. Relevance and Oldest first are still in the Sort menu.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Recording formats behind the Quick Start', <<<'HTML'
+<ul>
+<li>Oral History’s Quick Start: a faint hairline drawing of the formats the interviews were recorded on (a tape reel, a cassette, two clear MiniDiscs and the memory cards) now lies behind the foot of the Research panel, under options A, B and C, as the recorder lies behind the Record tab. It has no labels, since the recordings are digitized and not handed out, and it rises gently into place as it scrolls into view unless motion is reduced.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
