@@ -96,6 +96,12 @@
   }
 }
 
+// The visitor's name in the pledge (js/ask-form.js), as the points' gists.
+.pf-ask-confirm__pledge strong {
+  color: var(--pf-inquiry-strong, var(--bs-emphasis-color));
+  font-weight: 700;
+}
+
 // Duotone (includes/icon-fa) in the accent, as the form's status icons are:
 // both tones gold, the secondary at the file's own 40% (.fa-secondary). A
 // fixed 2rem box, so the robot (wider than tall) and the hashtag line up.

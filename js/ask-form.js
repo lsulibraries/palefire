@@ -199,6 +199,14 @@
     }
     dialog.pfSubmitter = submitter;
     dialog.returnValue = '';
+    // The pledge in the visitor's own name, as typed in the form (required,
+    // so there by now); the template's wording stays if it's blank.
+    // Drupal.t() escapes @name, so the markup is safe to set.
+    const pledge = dialog.querySelector('.pf-ask-confirm__pledge');
+    const name = form.elements.pname?.value.trim();
+    if (pledge && name) {
+      pledge.innerHTML = Drupal.t('I, <strong>@name</strong>, confirm my question is accurate to the best of my knowledge.', { '@name': name });
+    }
     dialog.showModal();
     // The dialog itself, not Agree: its name and statement are read first,
     // and the Enter that pressed Send (or a held key repeating) can't agree

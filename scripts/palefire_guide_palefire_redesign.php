@@ -725,6 +725,7 @@ HTML),
 <ul>
 <li>Pressing Send on an Ask form now opens a short confirmation first: please ask in your own words, then three quick points, each with a two-tone icon and starting in bold: AI tools invent sources, check every number (call, collection, box and folder numbers) in our catalog, and we may call or meet with you to confirm what you need. The question is sent only after you choose Agree and send; Cancel or Escape goes back to the form.</li>
 <li>The two buttons run across the bottom of the box like the form’s Send bar, and Agree and send has the same paper plane as Send.</li>
+<li>The closing line uses the name typed in the form: “I, (your name), confirm my question is accurate to the best of my knowledge.”</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Exhibition Migration Review shows whole passages', <<<'HTML'
