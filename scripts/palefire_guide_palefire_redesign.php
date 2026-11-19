@@ -767,6 +767,12 @@ HTML),
 <li>Each exhibition with oral history clips now says how many it has, how long they run in all, and how long one runs on average, in small tags beside its year. The lengths come from the audio files themselves, so a new or replaced clip counts without anyone typing a number.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: The treasure chest, and facts at the foot', <<<'HTML'
+<ul>
+<li>An exhibition that also had a show in the building now shows the same treasure chest its title page uses, instead of the words.</li>
+<li>The small facts (year, the chest, clips and how long they run) now sit under the description, just above Enter the exhibition, like the line at the foot of a museum label.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

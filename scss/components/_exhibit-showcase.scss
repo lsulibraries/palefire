@@ -531,6 +531,27 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   border: 1px solid var(--pf-showcase-line);
 }
 
+// A physical show: the title page's treasure chest, in the accent, in a
+// square as tall as the word tags.
+.pf-showcase__tag--icon {
+  display: flex;
+  align-items: center;
+  padding-inline: .375rem;
+}
+
+.pf-showcase__tag-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--pf-exhibit-accent);
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+}
+
 .pf-showcase__draft {
   color: var(--pf-showcase-fg);
 }
