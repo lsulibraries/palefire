@@ -370,9 +370,10 @@ if ($tabs_ready && $tab_blocks) {
   // Ask us: an Ask showcase with no Tiles, so the theme lists Oral
   // History's FAQ tiles (Special Collections' when there are none) and
   // mails the form to the person in Who to ask (palefire.theme,
-  // _palefire_ask_mail_to()); the tab names it.
+  // _palefire_ask_mail_to()); the tab names it. Its icon is /v2/special's
+  // and the utility menu's Ask icon (palefire_section_tabs_research.php).
   if (isset($layouts['ask'])) {
-    $tabs[] = $tab(['Ask us', 'comments', 'ask'], [Paragraph::create(['type' => $type, 'field_tile_layout' => 'ask'])]);
+    $tabs[] = $tab(['Ask us', 'duotone/comments-alt', 'ask'], [Paragraph::create(['type' => $type, 'field_tile_layout' => 'ask'])]);
   }
   else {
     $log[] = 'No Ask layout on the Tile showcase (palefire_ask_section.php): no Ask us tab.';
