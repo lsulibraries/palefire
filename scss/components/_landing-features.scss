@@ -6477,11 +6477,30 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 // winds to the series' share, PLAY lights, the pinch roller presses in,
 // the meters light and their needles lift and drift (js/series-deck.js;
 // with reduced motion they hold at playing level).
-// Held: the meters' lamps on, a faint warmth on their faces, and the
-// needles at playing level (the script moves them from there, inline).
+// The meters' lamps: a small hidden bulb at the bottom center of each
+// window (.vu-lamp, build/exhibit-deck.js), its light warmest at the foot
+// and gone before the scale's top. Held: the lamps on and the needles at
+// playing level (the script moves them from there, inline).
+.pf-series__deck .pf-deck__svg {
+  .vu-lamp__core {
+    stop-color: var(--pf-deck-gold);
+    stop-opacity: .16;
+  }
+
+  .vu-lamp__mid {
+    stop-color: var(--pf-deck-gold);
+    stop-opacity: .05;
+  }
+
+  .vu-lamp__edge {
+    stop-color: var(--pf-deck-gold);
+    stop-opacity: 0;
+  }
+}
+
 .pf-series__deck.is-held .pf-deck__svg {
-  .vu-face {
-    fill: color-mix(in srgb, var(--pf-deck-gold) 18%, var(--pf-deck-bg));
+  .vu-lamp {
+    opacity: 1;
   }
 
   .needle {
@@ -6634,8 +6653,8 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       opacity: 0;
     }
 
-    .pf-series__deck .pf-deck__svg .vu-face {
-      transition: fill .6s ease;
+    .pf-series__deck .pf-deck__svg .vu-lamp {
+      transition: opacity .6s ease;
     }
 
     .pf-series__deck.is-playing .pf-deck__svg .pinch {

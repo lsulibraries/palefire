@@ -619,6 +619,7 @@ HTML),
 <li>What Endures: the cassette is now drawn like a real one, in real proportions: one tape runs from reel to reel along the bottom past the felt pad, the spools and tape packs are full size and show faintly through the smoked plastic beyond the window, the circles around the reels are gone, and all four holes in the foot now go right through.</li>
 <li>What Endures: the cassette’s window is now clear glass: the episode photo shows sharp through it, while the plastic around it stays frosted.</li>
 <li>Oral History’s series: the tape deck’s two level meters now light up softly and their needles drift gently while a series plays, then settle back when you move away.</li>
+<li>Oral History’s series: the tape deck’s level meters now glow softly from a hidden bulb at the bottom of each window instead of being tinted all over.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

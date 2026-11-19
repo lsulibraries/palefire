@@ -10,8 +10,9 @@
  * colors: tN = the text color at N% over the page, bg, hole, tape, gold,
  * tan, led-*. Parts that move: .spin (reel flanges and spokes, drawn about
  * 0,0 in a matrix() that linearises the projection at that layer), .needle
- * (the same, about its pivot; .vu-face is the meter's face behind it, for a
- * lamp), .pinch, .key-play, .key-pause, and the
+ * (the same, about its pivot; .vu-lamp over the meter's face is its light,
+ * a hidden bulb at the window's bottom center, the #pf-vu-lamp gradient,
+ * drawn out (opacity 0) until the theme turns it on), .pinch, .key-play, .key-pause, and the
  * .count, .kind and .year text. The tape stays where it is a third of the
  * way through the clip; its parts carry data-tape (pack0/1 and edge0/1, the
  * packs and their inner line; aIn, aOut, b, cOut, cIn, the ribbon from
@@ -127,7 +128,8 @@ const lever = (x, t, led) => {
 s += txt(205, 760, 0, 'LEFT', 6.5) + txt(370, 760, 0, 'RIGHT', 6.5);
 function vu(x0) {
   const cx = x0 + 74, py = 852, z = 3;
-  let h = prism(rectB(x0, 768, 148, 92), 0, z, .04, .6) + G(Z(rectB(x0 + 9, 775, 130, 68), z), `class="vu-face ${T(.09).slice(7)} stroke-opacity=".4"`);
+  let h = prism(rectB(x0, 768, 148, 92), 0, z, .04, .6) + G(Z(rectB(x0 + 9, 775, 130, 68), z), `${T(.09)} stroke-opacity=".4"`)
+    + G(Z(rectB(x0 + 9, 775, 130, 68), z), 'class="vu-lamp" fill="url(#pf-vu-lamp)" stroke="none" opacity="0"');
   h += G(Z(arcB(cx, py, 60, -128, -74), z), 'stroke-opacity=".5"', 1) + G(Z(arcB(cx, py, 60, -74, -52, 6), z), 'class="gold" stroke-opacity=".8" stroke-width="2"', 1);
   [['20', -126], ['10', -115], ['7', -107], ['5', -100], ['3', -93], ['0', -74], ['3', -56]].forEach(([t, a]) => { const r = a * RAD; h += txt(cx + 69 * Math.cos(r), py + 69 * Math.sin(r) + 2, z, t, 6.5, 'middle', .55) + L([cx + 60 * Math.cos(r), py + 60 * Math.sin(r), z], [cx + 64 * Math.cos(r), py + 64 * Math.sin(r), z], .5); });
   h += txt(cx, 826, z, 'VU', 10, 'middle', .6) + G(Z(arcB(cx, 843, 13, 180, 360, 10), z), `${T(.15)} stroke-opacity=".5"`);
@@ -240,7 +242,7 @@ const body = (s + m + f + d).replace(/<(polygon|polyline|line|path)\b([^>]*?)\/>
   strokes.add(n);
   return '<' + tag + (/class="/.test(at) ? at.replace(/class="/, () => 'class="s' + n + ' ') : ' class="s' + n + '"' + at) + '/>';
 });
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient></defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
 fs.writeFileSync(out, svg.replace(/\n+/g, '\n'));
 const sorted = [...tones].sort((a, b) => a - b);
 console.log(JSON.stringify({ bytes: svg.length, tones: sorted, strokes: [...strokes].sort((a, b) => a - b), aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));
