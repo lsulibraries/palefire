@@ -412,8 +412,9 @@ function palefire_preprocess_paragraph__bento_search(array &$variables): void {
  * typed by hand and they always agree.
  *
  * @return string[]
- *   Rule keys: 'guide', 'series' (Oral History only), 'rooms', 'hours',
- *   those the hero shows.
+ *   Rule keys: 'guide', 'series' (Oral History only), 'news' (the page's
+ *   News and events, _palefire_hero_news()), 'rooms', 'hours', those the
+ *   hero shows.
  */
 function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   $map = $paragraph->hasField('field_bento_map') ? $paragraph->get('field_bento_map')->entity : NULL;
@@ -446,6 +447,11 @@ function _palefire_hero_rules(ParagraphInterface $paragraph): array {
   // A unit's homepage (its map marks a room Here) shows the map as its Find
   // us banner only, with no Rooms and access or Hours and directions section.
   $unit = $has_map && $map->hasField('field_map_here') && trim((string) $map->get('field_map_here')->value) !== '';
+  // The page's News and events, drawn by the hero between the Quick Start
+  // and the map (_palefire_hero_news()), on a hero that has more than it.
+  if (!$unit && ($rules || $has_map || $visit) && $host instanceof NodeInterface && _palefire_page_news($host)) {
+    $rules[] = 'news';
+  }
   if ($has_map && !$unit) {
     $rules[] = 'rooms';
   }
@@ -504,6 +510,114 @@ function _palefire_hero_tabs(ParagraphInterface $hero): ?ParagraphInterface {
     }
   }
   return NULL;
+}
+
+/**
+ * The first published News and events section on a page, or NULL.
+ */
+function _palefire_page_news(NodeInterface $host): ?ParagraphInterface {
+  if (!$host->hasField('field_scroll_section')) {
+    return NULL;
+  }
+  foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
+    if ($section instanceof ParagraphInterface && $section->bundle() === 'news_events' && $section->isPublished()) {
+      return $section;
+    }
+  }
+  return NULL;
+}
+
+/**
+ * The page's News and events that the landing hero draws, or NULL.
+ *
+ * Its part 02, between the Quick Start and Rooms and access (the news rule,
+ * _palefire_hero_rules()): the section moves up into the hero wherever it
+ * sits on the page, and palefire_preprocess_field() leaves it out below,
+ * as with the Section tabs (_palefire_hero_tabs()).
+ */
+function _palefire_hero_news(ParagraphInterface $hero): ?ParagraphInterface {
+  if (!in_array('news', _palefire_hero_rules($hero), TRUE)) {
+    return NULL;
+  }
+  $host = $hero;
+  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+    $host = $host->getParentEntity();
+  }
+  return $host instanceof NodeInterface ? _palefire_page_news($host) : NULL;
+}
+
+/**
+ * A scroll section's id on its page, as palefire_modular prints it.
+ *
+ * ModularSections::describe() (its Section anchor, else its title, made
+ * unique on the page); the same made from the title alone without it.
+ */
+function _palefire_section_id(NodeInterface $host, ParagraphInterface $section): string {
+  $modular = '\Drupal\palefire_modular\ModularSections';
+  if (class_exists($modular)) {
+    $id = $modular::describe($host)[$section->id()]['id'] ?? '';
+    if ($id !== '') {
+      return $id;
+    }
+  }
+  $anchor = $section->hasField('field_section_anchor') ? trim((string) $section->get('field_section_anchor')->value) : '';
+  $title = $section->hasField('field_section_title') ? trim((string) $section->get('field_section_title')->value) : '';
+  return Html::getId($anchor !== '' ? $anchor : ($title !== '' ? $title : $section->bundle()));
+}
+
+/**
+ * The hero's part 02 (_palefire_hero_news()), for includes/landing.html.twig.
+ *
+ * The section's own id (so its links and the TOC still land on it), its
+ * title (the part's h2), Eyebrow (the rule's label), Lede and link (the
+ * rule's end, as palefire_preprocess_field() gives any section), the
+ * section rendered (paragraph--news-events.html.twig, with its library)
+ * and row: the hero column's contents row (_palefire_news_next()).
+ */
+function _palefire_hero_news_part(ParagraphInterface $hero, array &$variables): ?array {
+  $news = _palefire_hero_news($hero);
+  $host = $news ? $news->getParentEntity() : NULL;
+  if (!$news || !$host instanceof NodeInterface) {
+    return NULL;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables)->addCacheableDependency($news);
+  $id = _palefire_section_id($host, $news);
+  $title = $news->hasField('field_section_title') ? trim((string) $news->get('field_section_title')->value) : '';
+  $title = $title !== '' ? $title : (string) t('News and events');
+  $eyebrow = $news->hasField('field_tile_eyebrow') ? trim((string) $news->get('field_tile_eyebrow')->value) : '';
+  $link = NULL;
+  if ($news->hasField('field_tile_link') && !$news->get('field_tile_link')->isEmpty()) {
+    try {
+      $link_item = $news->get('field_tile_link')->first();
+      $url = $link_item->getUrl();
+      $generated = $url->toString(TRUE);
+      $cache->addCacheableDependency($generated);
+      $text = trim(preg_replace('/[\s\x{2192}]+$/u', '', (string) $link_item->title));
+      $link = [
+        'url' => $generated->getGeneratedUrl(),
+        'text' => $text !== '' ? $text : t('See all'),
+        'external' => $url->isExternal(),
+      ];
+    }
+    catch (\Exception) {
+      // No usable URL: the rule goes without its link.
+    }
+  }
+  $next = _palefire_news_next($news, $cache);
+  $cache->applyTo($variables);
+  return [
+    'id' => $id,
+    'title' => $title,
+    'eyebrow' => $eyebrow !== '' ? $eyebrow : $title,
+    'lede' => $news->hasField('field_tile_lede') ? trim((string) $news->get('field_tile_lede')->value) : '',
+    'link' => $link,
+    'content' => \Drupal::entityTypeManager()->getViewBuilder('paragraph')->view($news),
+    'row' => [
+      'label' => $next ? $next['label'] : ($eyebrow !== '' ? $eyebrow : $title),
+      'title' => $next ? $next['title'] : $title,
+      'url' => '#' . $id,
+    ],
+  ];
 }
 
 /**
@@ -598,6 +712,8 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       PodcastFeed::heroBanner($variables);
     }
     $variables['oral_history_series'] = isset($variables['hero_index']['series']) ? _palefire_oral_history_series($variables) : [];
+    // Part 02: the page's News and events (_palefire_hero_news_part()).
+    $variables['hero_news'] = isset($variables['hero_index']['news']) ? _palefire_hero_news_part($paragraph, $variables) : NULL;
     // Contents in the column (field_hero_toc,
     // scripts/palefire_hero_toc_setup.php): the page's sections in place of
     // the Highlights. Until the field exists, Oral History has them.
@@ -716,7 +832,8 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
   }
   $cache = CacheableMetadata::createFromRenderArray($variables);
   $anchors = PalefireHooks::sectionData($host);
-  $drawn = _palefire_hero_tabs($hero)?->id();
+  // Sections the hero draws: its own rows (includes/landing.html.twig).
+  $drawn = array_filter([_palefire_hero_tabs($hero)?->id(), _palefire_hero_news($hero)?->id()]);
   $episode = NULL;
   foreach ($variables['hero_banners'] ?? [] as $banner) {
     if (!empty($banner['episode'])) {
@@ -736,7 +853,7 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
       $after = $after || $section->uuid() === $hero->uuid();
       continue;
     }
-    if ($section->id() === $drawn) {
+    if (in_array($section->id(), $drawn, TRUE)) {
       continue;
     }
     $cache->addCacheableDependency($section);
@@ -4421,7 +4538,9 @@ function _palefire_lead_cover(FieldItemInterface $image, string $sizes, Cacheabl
  * _palefire_hero_index()), then each section with an Eyebrow, in order.
  * The link's text drops a trailing arrow typed by hand: the rule draws
  * its own. A Section tabs section the hero's Quick Start draws
- * (_palefire_hero_tabs()) is left out, and takes no number.
+ * (_palefire_hero_tabs()) is left out, and takes no number; so is the News
+ * and events the hero draws as its part 02 (_palefire_hero_news()), which
+ * takes the hero's number.
  */
 function palefire_preprocess_field(array &$variables): void {
   if (($variables['field_name'] ?? '') !== 'field_scroll_section' || empty($variables['items'])) {
@@ -4434,8 +4553,12 @@ function palefire_preprocess_field(array &$variables): void {
   $drawn = [];
   foreach ($variables['items'] as $item) {
     $paragraph = $item['content']['#paragraph'] ?? NULL;
-    if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero' && ($tabs = _palefire_hero_tabs($paragraph))) {
-      $drawn[] = $tabs->id();
+    if ($paragraph instanceof ParagraphInterface && $paragraph->bundle() === 'landing_hero') {
+      foreach ([_palefire_hero_tabs($paragraph), _palefire_hero_news($paragraph)] as $section) {
+        if ($section) {
+          $drawn[] = $section->id();
+        }
+      }
     }
   }
   foreach ($variables['items'] as $key => &$item) {
@@ -4447,7 +4570,8 @@ function palefire_preprocess_field(array &$variables): void {
       $count += count(_palefire_hero_index($paragraph));
       continue;
     }
-    // Its Quick Start draws the page's Section tabs: not again here.
+    // The hero draws the page's Section tabs (in its Quick Start) and its
+    // News and events (part 02): not again here.
     if (in_array($paragraph->id(), $drawn, TRUE)) {
       $hide[] = $key;
       continue;

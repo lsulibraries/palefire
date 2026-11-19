@@ -850,6 +850,13 @@ HTML),
 <li>With neither, the blog and Instagram posts sit side by side on their own.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: News and events moves up to 02', <<<'HTML'
+<ul>
+<li>On Special Collections, News and events is now part 02 of the opening screen, right after the Quick Start and before the map: Rooms and access is 03, Hours and directions 04.</li>
+<li>Nothing to edit: the section stays where it is in the page’s sections, and the opening screen draws it in its new place. Its title, Eyebrow, Lede and calendar link work as before.</li>
+<li>The contents list beside the opening screen and the page’s side contents show it in the same place.</li>
+</ul>
+HTML),
   $text('Thu Nov 19: Longer descriptions, and a sideways step', <<<'HTML'
 <ul>
 <li>Each exhibition’s description in the band now uses whatever room is left beside the picture, so a short title shows more of its introduction, ending in “…” on a whole line. The pictures keep their height.</li>

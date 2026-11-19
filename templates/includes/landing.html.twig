@@ -544,6 +544,7 @@
         {% set hero_rows = {
           guide: { label: 'Start your research'|t, title: quick_guide.title|default('Quick Guide'|t), url: '#' ~ (toc_start_id ?: input_id ~ '-quick-guide') },
           series: { label: 'Browse by series'|t, title: 'Series'|t, url: '#' ~ (toc_series_id ?: input_id ~ '-series') },
+          news: hero_news.row|default({}),
           rooms: { label: 'Rooms and access'|t, title: 'Map'|t, url: toc_map_id ? '#' ~ toc_map_id : '' },
           hours: { label: 'Hours and directions'|t, title: 'Visit'|t, url: toc_hours_id ? '#' ~ toc_hours_id : '' },
         } %}
@@ -1025,6 +1026,22 @@
       {% endif %}
     {% endif %}
   </div>
+  {% endif %}
+
+  {# Part 02: the page's News and events (_palefire_hero_news_part()), drawn
+     here between the Quick Start and the map, with the section's own id,
+     heading and Lede; the section itself is left out further down the page.
+     The part is the backdrop's frame and the news' size container
+     (news-events.scss). #}
+  {% if hero and hero_news %}
+    <section class="pf-landing__news" id="{{ hero_news.id }}" aria-labelledby="{{ hero_news.id }}-title">
+      {{ pf.index_rule(hero_index.news, hero_news.eyebrow, hero_news.link ?: {}) }}
+      <h2 id="{{ hero_news.id }}-title" class="pf-section__title" tabindex="-1">{{ hero_news.title }}</h2>
+      {% if hero_news.lede %}
+        <p class="pf-section__lede">{{ hero_news.lede }}</p>
+      {% endif %}
+      {{ hero_news.content }}
+    </section>
   {% endif %}
 
   {% if landing_map %}

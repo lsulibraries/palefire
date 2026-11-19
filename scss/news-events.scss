@@ -21,12 +21,13 @@ $pf-news-wash: var(--bs-body-bg);
 // runs edge to edge: the inner column gives up its positioning here, and
 // everything in it is lifted above the backdrop instead. The section is
 // also the size container: one on .pf-news would hold the backdrop in
-// (size containment makes a containing block).
-.pf-section:has(> .pf-section__inner .pf-news) {
+// (size containment makes a containing block). Not the landing hero's
+// section, where the part is the frame (below).
+.pf-section:has(> .pf-section__inner .pf-news):not(:has(.pf-landing__news)) {
   container: pf-news / inline-size;
 }
 
-.pf-section:has(> .pf-section__inner .pf-news__backdrop) {
+.pf-section:has(> .pf-section__inner .pf-news__backdrop):not(:has(.pf-landing__news)) {
   overflow: clip;
 
   > .pf-section__inner {
@@ -44,6 +45,44 @@ $pf-news-wash: var(--bs-body-bg);
   > :not(.pf-news__backdrop) {
     position: relative;
     z-index: 1;
+  }
+}
+
+// The landing hero's part 02 (includes/landing.html.twig): the part is the
+// frame and the size container. It runs the hero section's full width, so
+// the backdrop does too, its text in the hero's column (the lead's inset
+// from md, as the map's wrapper, _landing-hero.scss). With a backdrop the
+// space above the rule is padding, inside the picture.
+.pf-landing__news {
+  --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace);
+
+  position: relative;
+  container: pf-news / inline-size;
+  margin: var(--pf-hero-gap, clamp(3rem, 7vw, 6rem)) calc(-1 * var(--pf-section-pad-inline, 0px)) 0;
+  padding-inline: var(--pf-section-pad-inline, 1rem);
+  scroll-margin-top: 5rem;
+
+  > .pf-index-rule {
+    margin-bottom: var(--pf-hero-rule-gap, clamp(1.25rem, 2.5vw, 2rem));
+  }
+
+  > .pf-section__title {
+    margin-bottom: .75rem;
+  }
+
+  > :not(.pf-news) {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:has(.pf-news__backdrop) {
+    margin-top: 0;
+    padding-block: var(--pf-hero-gap, clamp(3rem, 7vw, 6rem));
+    overflow: clip;
+  }
+
+  @media (min-width: 768px) {
+    padding-inline: var(--pf-hero-inset, var(--pf-section-pad-inline, 1rem));
   }
 }
 

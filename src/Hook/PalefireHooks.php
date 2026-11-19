@@ -587,6 +587,21 @@ class PalefireHooks {
       $gone = self::slug($custom !== '' ? $custom : self::stringValue($tabs, 'field_section_title'));
       $variables['items'] = array_values(array_filter($variables['items'], static fn ($item): bool => $gone === '' || !is_array($item) || ($item['id'] ?? '') !== $gone));
     }
+    // The News and events the hero draws as its part 02
+    // (\_palefire_hero_news()): listed in that place, after the Quick Start.
+    $news = NULL;
+    $drawn_news = $hero instanceof ParagraphInterface && $hero->bundle() === 'landing_hero' ? \_palefire_hero_news($hero) : NULL;
+    if ($drawn_news && $node && !empty($variables['items'])) {
+      $news_id = \_palefire_section_id($node, $drawn_news);
+      foreach ($variables['items'] as $i => $item) {
+        if (is_array($item) && ($item['id'] ?? '') === $news_id) {
+          $news = $item;
+          unset($variables['items'][$i]);
+          $variables['items'] = array_values($variables['items']);
+          break;
+        }
+      }
+    }
     $extra = [];
     if (!empty($ids['home'])) {
       $extra[] = ['id' => $ids['home'], 'label' => $this->t('Home')];
@@ -596,6 +611,9 @@ class PalefireHooks {
     }
     if (!empty($ids['series'])) {
       $extra[] = ['id' => $ids['series'], 'label' => $this->t('Browse by series')];
+    }
+    if ($news) {
+      $extra[] = $news;
     }
     if (!empty($ids['map'])) {
       // With Hours and directions beside it, the map is the rooms' section.
